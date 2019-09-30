@@ -8,7 +8,8 @@ import {
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
-  ADD_GRANULE_LAYER_DATES
+  ADD_GRANULE_LAYER_DATES,
+  UPDATE_GRANULE_LAYER_DATES
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -156,6 +157,16 @@ export function layerReducer(state = initialState, action) {
         [layerGroupStr]: { $splice: [[action.index, 1]] }
       });
     case ADD_GRANULE_LAYER_DATES:
+      return update(state, {
+        granuleLayers: {
+          [action.activeKey]: {
+            [action.id]: {
+              $set: action.dates
+            }
+          }
+        }
+      });
+    case UPDATE_GRANULE_LAYER_DATES:
       return update(state, {
         granuleLayers: {
           [action.activeKey]: {

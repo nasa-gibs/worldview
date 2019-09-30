@@ -97,9 +97,19 @@ export function mapui(models, config, store, ui) {
    */
   const subscribeToStore = function(action) {
     switch (action.type) {
-      case layerConstants.ADD_GRANULE_LAYER_DATES: {
-        // TODO: add update granule function tied into - reloadLayers AND createLayer - use options for updated granule date array
-        return;
+      case layerConstants.UPDATE_GRANULE_LAYER_DATES: {
+        const granuleOptions = {
+          id: action.id,
+          reset: null
+        };
+        return reloadLayers(self.selected, granuleOptions);
+      }
+      case layerConstants.RESET_GRANULE_LAYER_DATES: {
+        const granuleOptions = {
+          id: action.id,
+          reset: action.id
+        };
+        return reloadLayers(self.selected, granuleOptions);
       }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
@@ -336,10 +346,12 @@ export function mapui(models, config, store, ui) {
    * @static
    *
    * @param {object} map - Openlayers Map obj
-   *
+   * @param {Object} granuleOptions (optional: only used for granule layers)
+     * @param {Boolean} granuleDates - array of granule dates
+     * @param {Boolean} id - layer id
    * @returns {void}
    */
-  var reloadLayers = self.reloadLayers = function(map) {
+  var reloadLayers = self.reloadLayers = function(map, granuleOptions) {
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -358,15 +370,14 @@ export function mapui(models, config, store, ui) {
         },
         state
       );
-      lodashEach(defs, function(def) {
+      lodashEach(defs, def => {
         if (isGraticule(def, proj.id)) {
           addGraticule(def.opacity, layerGroupStr);
         } else {
-          map.addLayer(createLayer(def));
-          // const isGranule = !!(def.tags && def.tags.contains('granule'));
-          // if (isGranule) {
-          // TODO: create granule list used in layer settings - add logic for update here?
-          // }
+          // update granule date order and reset
+          const granuleReset = granuleOptions && granuleOptions.reset === def.id;
+          const granuleDates = !granuleReset ? state.layers.granuleLayers[layerGroupStr][def.id] : false;
+          map.addLayer(createLayer(def, {}, granuleDates));
         }
       });
     } else {

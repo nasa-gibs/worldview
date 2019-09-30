@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Scrollbar from '../../util/scrollbar';
 
+const gridConstant = 8;
+
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
   return result;
 };
 
-const gridConstant = 8;
-
 const getItemStyle = (isDragging, draggableStyle) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
   userSelect: 'none',
-  padding: gridConstant * 2,
+  padding: gridConstant / 2,
+  height: gridConstant * 3,
   margin: `0 0 ${gridConstant}px 0`,
   background: isDragging ? '#00457B' : 'grey',
   ...draggableStyle
@@ -38,23 +41,64 @@ class GranuleLayerDateList extends PureComponent {
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
+  // handle update on complete granule item drag
   onDragEnd = (result) => {
-    const { items } = this.state;
-    const { addGranuleLayerDates, def } = this.props;
-
-    // dropped outside the list
+    const { updateGranuleLayerDates, def } = this.props;
+    // dropped granule outside the list
     if (!result.destination) {
       return;
     }
-    const reorderedItems = reorder(
-      items,
+    const reorderedItems = this.reorderItems(
       result.source.index,
       result.destination.index
     );
-    addGranuleLayerDates(items, def.id);
+    updateGranuleLayerDates(reorderedItems, def.id);
+    this.setItems(reorderedItems);
+  }
+
+  // move granule item to top of list
+  moveToTop = (e, sourceIndex) => {
+    e.preventDefault();
+    const { updateGranuleLayerDates, def } = this.props;
+    const reorderedItems = this.reorderItems(
+      sourceIndex,
+      0
+    );
+    updateGranuleLayerDates(reorderedItems, def.id);
+    this.setItems(reorderedItems);
+  }
+
+  // reorder granule items based on source and target index
+  reorderItems = (sourceIndex, destinationIndex) => {
+    const { items } = this.state;
+    const reorderedItems = reorder(
+      items,
+      sourceIndex,
+      destinationIndex
+    );
+    return reorderedItems;
+  }
+
+  // reset granule order
+  onClickReset = (e) => {
+    e.preventDefault();
+    const { resetGranuleLayerDates, def } = this.props;
+    resetGranuleLayerDates(def.id);
+  }
+
+  // set local granule item state
+  setItems = (items) => {
     this.setState({
-      items: reorderedItems
+      items: items
     });
+  }
+
+  componentDidMount() {
+    this.setItems(this.props.granuleDates);
+  }
+
+  componentDidUpdate() {
+    this.setItems(this.props.granuleDates);
   }
 
   render() {
@@ -66,7 +110,12 @@ class GranuleLayerDateList extends PureComponent {
     const droppableId = `droppable-granule-date-list-${def.id}`;
     return (
       <div className="layer-granule-date-draggable-list">
-        <h2 className="wv-header">Granule Layer Date Order</h2>
+        <h2 className="wv-header">
+          Granule Layer Date Order
+          <span style={{ float: 'right' }}>
+            <button onClick={(e) => this.onClickReset(e)}>RESET</button>
+          </span>
+        </h2>
         <Scrollbar style={{ maxHeight: '500px' }} needsScrollBar={needsScrollBar} >
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Droppable droppableId={droppableId}>
@@ -88,7 +137,19 @@ class GranuleLayerDateList extends PureComponent {
                             provided.draggableProps.style
                           )}
                         >
-                          {item} - {index}
+                          <div>
+                            {item}
+                          </div>
+                          <div>
+                            {index > 0
+                              ? <button
+                                style={{ background: '#555', color: '#eee' }}
+                                onClick={(e) => this.moveToTop(e, index)}>
+                                  TO TOP
+                              </button>
+                              : null
+                            }
+                          </div>
                         </div>
                       )}
                     </Draggable>
@@ -105,9 +166,10 @@ class GranuleLayerDateList extends PureComponent {
 }
 
 GranuleLayerDateList.propTypes = {
-  addGranuleLayerDates: PropTypes.func,
   def: PropTypes.object,
-  granuleDates: PropTypes.array
+  granuleDates: PropTypes.array,
+  resetGranuleLayerDates: PropTypes.func,
+  updateGranuleLayerDates: PropTypes.func
 };
 
 export default GranuleLayerDateList;

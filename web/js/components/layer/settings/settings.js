@@ -35,7 +35,8 @@ import {
   getVectorStyle
 } from '../../../modules/vector-styles/selectors';
 import {
-  addGranuleLayerDates,
+  updateGranuleLayerDates,
+  resetGranuleLayerDates,
   setOpacity
 } from '../../../modules/layers/actions';
 
@@ -251,7 +252,8 @@ class LayerSettings extends React.Component {
       layer,
       palettedAllowed,
       granuleLayerDates,
-      addGranuleLayerDates
+      resetGranuleLayerDates,
+      updateGranuleLayerDates
     } = this.props;
 
     if (layer.type !== 'vector') {
@@ -275,7 +277,8 @@ class LayerSettings extends React.Component {
           ? <GranuleLayerDateList
             def={layer}
             granuleDates={granuleLayerDates}
-            addGranuleLayerDates={addGranuleLayerDates}
+            updateGranuleLayerDates={updateGranuleLayerDates}
+            resetGranuleLayerDates={resetGranuleLayerDates}
           /> : null}
         {renderCustomizations}
       </React.Fragment>
@@ -343,8 +346,11 @@ const mapDispatchToProps = dispatch => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  addGranuleLayerDates: (dates, id) => {
-    dispatch(addGranuleLayerDates(dates, id));
+  updateGranuleLayerDates: (dates, id) => {
+    dispatch(updateGranuleLayerDates(dates, id));
+  },
+  resetGranuleLayerDates: (id) => {
+    dispatch(resetGranuleLayerDates(id));
   }
 });
 
@@ -360,7 +366,6 @@ LayerSettings.defaultProps = {
   title: null
 };
 LayerSettings.propTypes = {
-  addGranuleLayerDates: PropTypes.func,
   canvas: PropTypes.object,
   clearCustomPalette: PropTypes.func,
   clearStyle: PropTypes.func,
@@ -379,11 +384,13 @@ LayerSettings.propTypes = {
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
+  resetGranuleLayerDates: PropTypes.func,
   setCustomPalette: PropTypes.func,
   setFilterRange: PropTypes.func,
   setOpacity: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   title: PropTypes.string,
+  updateGranuleLayerDates: PropTypes.func,
   vectorStyles: PropTypes.object
 };

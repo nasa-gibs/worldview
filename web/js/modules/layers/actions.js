@@ -16,7 +16,8 @@ import {
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
-  ADD_GRANULE_LAYER_DATES
+  UPDATE_GRANULE_LAYER_DATES,
+  RESET_GRANULE_LAYER_DATES
 } from './constants';
 import { selectProduct } from '../data/actions';
 
@@ -143,15 +144,26 @@ export function removeLayer(id) {
     });
   };
 }
-export function addGranuleLayerDates(dates, id) {
+export function updateGranuleLayerDates(dates, id) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeString = compare.activeString;
     dispatch({
-      type: ADD_GRANULE_LAYER_DATES,
+      type: UPDATE_GRANULE_LAYER_DATES,
       id,
       activeKey: activeString,
       dates
+    });
+  };
+}
+export function resetGranuleLayerDates(id) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    const activeString = compare.activeString;
+    dispatch({
+      type: RESET_GRANULE_LAYER_DATES,
+      id,
+      activeKey: activeString
     });
   };
 }
