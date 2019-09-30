@@ -3,7 +3,7 @@
         "GOES-East_ABI_Air_Mass": {
             "id":       "GOES-East_ABI_Air_Mass",
             "title":    "Air Mass (10 minute)",
-            "subtitle": "GOES-East/ABI",
+            "subtitle": "GOES East/ABI",
             "description": "goes/GOES-East_ABI_Air_Mass",
             "group":    "overlays",
             "tags":     "geostationary geo",
