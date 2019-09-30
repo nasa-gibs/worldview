@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from util import dict_merge
 from copy import deepcopy
@@ -31,14 +31,12 @@ def wmts_dict_merge(target, *args):
           if projectionKey in conf_projections:
             if 'source' in conf_projections[projectionKey]:
               if source != conf_projections[projectionKey]['source']:
-                print(output_file, "Skipping", k, "merge because of source mismatch")
-                return target
+                print(prog, "Skipping", k, "merge because of source mismatch")
+                continue
       if k in target and isinstance(target[k], dict):
           dict_merge(target[k], v, conf[k])
       else:
           target[k] = dict_merge(v, conf[k])
-    else:
-      target[k] = deepcopy(v)
   return target
 
 # MAIN
@@ -65,7 +63,7 @@ for file in os.listdir(input_dir):
       file_count += 1
       with open(os.path.join(input_dir, file)) as fp:
           data = json.load(fp)
-      wmts_dict_merge(new_conf['layers'], data, output_data)
+      new_conf['layers'] = wmts_dict_merge(new_conf['layers'], data, output_data)
       dict_merge(new_conf["sources"], data['sources'], output_data['sources'])
   except Exception as e:
       sys.stderr.write("ERROR: %s: %s\n" %
