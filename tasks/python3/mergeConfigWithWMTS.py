@@ -24,6 +24,7 @@ def wmts_dict_merge(target, *args):
     return obj
   for k, v in obj.items():
     if k in conf and isinstance(conf[k], dict):
+      foundSourceMisMatch = False
       if 'projections' in v and 'projections' in conf[k]:
         conf_projections = conf[k]['projections']
         for projectionKey, projection in v['projections'].items():
@@ -31,8 +32,10 @@ def wmts_dict_merge(target, *args):
           if projectionKey in conf_projections:
             if 'source' in conf_projections[projectionKey]:
               if source != conf_projections[projectionKey]['source']:
-                print(prog, "Skipping", k, "merge because of source mismatch")
+                foundSourceMisMatch = True
                 continue
+      if foundSourceMisMatch:
+        continue
       if k in target and isinstance(target[k], dict):
           dict_merge(target[k], v, conf[k])
       else:
@@ -64,12 +67,12 @@ for file in os.listdir(input_dir):
       with open(os.path.join(input_dir, file)) as fp:
           data = json.load(fp)
       new_conf['layers'] = wmts_dict_merge(new_conf['layers'], data, output_data)
-      dict_merge(new_conf["sources"], data['sources'], output_data['sources'])
+      new_conf["sources"] = dict_merge(new_conf["sources"], data['sources'], output_data['sources'])
   except Exception as e:
       sys.stderr.write("ERROR: %s: %s\n" %
                         (os.path.join(input_dir, file), str(e)))
       sys.exit(1)
-dict_merge(new_conf, output_data)
+new_conf = dict_merge(new_conf, output_data)
 json_options = {}
 json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
