@@ -6,7 +6,7 @@ import { Portal } from 'react-portal';
  * A react component, Builds a rather specific
  * interactive widget
  *
- * @class OpacitySlider
+ * @class AlertComponent
  * @extends React.Component
  */
 export default class AlertComponent extends React.Component {
