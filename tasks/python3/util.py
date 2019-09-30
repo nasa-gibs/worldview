@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+# dict_merge from
+# http://blog.impressiver.com/post/31434674390/deep-merge-multiple-python-dicts
 def dict_merge(target, *args):
   # Merge multiple dicts
   if len(args) > 1:
