@@ -52,7 +52,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-95.39338920697065,18.474628038194595,-62.18831108197065,34.453143663194595&t=2019-09-01-T17%3A00%3A00Z&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T17%3A00%3A00Z&ae=2019-09-01-T23%3A20%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(opacity=0.96),MODIS_Terra_CorrectedReflectance_TrueColor&al=true&av=9&ab=on"
+          "stepLink": "v=-95.39338920697065,17.70570720628043,-62.18831108197065,35.22206449510876&t=2019-09-01-T17%3A00%3A00Z&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T17%3A00%3A00Z&ae=2019-09-01-T23%3A20%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden,opacity=0.96),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=9&ab=on"
         },
         {
           "description": "step006.html",
