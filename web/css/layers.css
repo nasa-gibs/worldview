@@ -166,6 +166,7 @@
 
 .layers-all {
   height: 100%;
+  margin-top: -5px;
 }
 
 .layers-all .layers-all-layer {
@@ -258,6 +259,9 @@
 .layer-date-range .layer-date-ranges-button:hover,
 .layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]):hover {
   color: #9df;
+}
+.layer-info-modal .layer-metadata {
+  padding-right: 10px;
 }
 
 .layer-description .layer-title,
@@ -500,11 +504,6 @@
 .layers-all .iCheck-checkbox {
   float: right;
   margin-top: 0.5em;
-}
-
-/* Layer Options */
-.layer-info-wrap {
-  position: fixed;
 }
 
 .layer-info-settings-modal {

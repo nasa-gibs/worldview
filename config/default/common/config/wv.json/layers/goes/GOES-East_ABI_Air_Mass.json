@@ -2,16 +2,16 @@
     "layers": {
         "GOES-East_ABI_Air_Mass": {
             "id":       "GOES-East_ABI_Air_Mass",
-            "title":    "Air Mass (ABI, GOES-East)",
-            "subtitle":    "GOES-East / ABI",
+            "title":    "Air Mass (10 minute)",
+            "subtitle": "GOES East/ABI",
             "description": "goes/GOES-East_ABI_Air_Mass",
-            "tags":     "GOES subdaily",
             "group":    "overlays",
+            "tags":     "geostationary geo",
             "layergroup": [
-              "GOES"
+              "goes"
             ],
-            "inactive": true,
-            "period": "subdaily"
+            "product":  "",
+            "wrapadjacentdays": true
         }
     }
 }

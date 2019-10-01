@@ -51,6 +51,45 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   };
 
   /**
+   * Return a layer, or layergroup, created with the supplied function
+   * @param {*} createLayerFunc
+   * @param {*} def
+   * @param {*} options
+   * @param {*} attributes
+   * @param {*} wrapLayer
+   */
+  const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
+    const state = store.getState();
+    const layer = createLayerFunc(def, options, null, state);
+    if (!wrapLayer) {
+      return layer;
+    }
+    const layerNext = createLayerFunc(def, options, 1, state);
+    const layerPrior = createLayerFunc(def, options, -1, state);
+    layer.wv = layerPrior.wv = layerNext.wv = attributes;
+    return new OlLayerGroup({
+      layers: [layer, layerNext, layerPrior]
+    });
+  };
+
+  /**
+   * For subdaily layers, if the layer date is within 30 minutes of current
+   * time, set expiration to ten minutes from now
+   */
+  const getCacheOptions = (period, date, state) => {
+    const tenMin = 10 * 60000;
+    const thirtyMin = 30 * 60000;
+    const now = new Date().getTime();
+    const recentTime = Math.abs(now - date.getTime()) < thirtyMin;
+    if (period !== 'subdaily' || !recentTime) {
+      return {};
+    }
+    return {
+      expirationAbsolute: new Date(now + tenMin)
+    };
+  };
+
+  /**
    * Find index for date string to add to sorted array of date strings
    *
    * @method getIndexForSortedInsert
@@ -133,15 +172,15 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.createLayer = (def, options, updatedGranules) => {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
-    group = options.group || 'active';
+    const group = options.group || 'active';
     const isActive = group === 'active';
     const activeKey = isActive ? 'active' : 'activeB';
-    date = self.closestDate(def, options);
-    key = self.layerKey(def, options, state);
-    proj = state.proj.selected;
+    let date = self.closestDate(def, options);
+    const key = self.layerKey(def, options, state);
+    const proj = state.proj.selected;
     const isGranule = !!(def.tags && def.tags.contains('granule'));
+    let layer;
     if (isGranule) {
       layer = self.granuleCache.getItem(key);
     } else {
@@ -151,18 +190,36 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     if (!layer) {
       // layer is not in the cache
       if (!date) date = options.date || state.date[activeDateStr];
-      attributes = {
+      const cacheOptions = getCacheOptions(def.period, date, state);
+      const attributes = {
         id: def.id,
-        key: key,
-        date: date,
+        key,
+        date,
         proj: proj.id,
-        def: def,
-        group: group
+        def,
+        group
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
-      if (def.type === 'wmts') {
-        let createdLayer = createLayerWMTS(def, options, null, state);
+
+      const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
+      switch (def.type) {
+        case 'wmts':
+          layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'vector':
+          layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+          break;
+        case 'wms':
+          layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        default:
+          throw new Error('Unknown layer type: ' + def.type);
+      }
+
+
+      // if (def.type === 'wmts') {
+      //   let createdLayer = createLayerWMTS(def, options, null, state);
         if (isGranule) {
           // add to granule layer date table
           // TODO: second part of conditional necessary for comparison mode granule loading last 20
@@ -229,64 +286,27 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
             });
             self.granuleLayers[def.id][activeKey].sortedDates = dateArray;
           }
-          createdLayer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes);
+          layer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes);
           self.granuleLayers.isInitGranuleLoaded[group] = true;
-        }
-        layer = createdLayer;
+          // layer = createdLayer;
+        // }
+        // layer = createdLayer;
 
-        if (
-          proj.id === 'geographic' &&
-          (def.wrapadjacentdays === true || def.wrapX)
-        ) {
-          layerNext = createLayerWMTS(def, options, 1, state);
-          layerPrior = createLayerWMTS(def, options, -1, state);
-
-          layer.wv = attributes;
-          layerPrior.wv = attributes;
-          layerNext.wv = attributes;
-
-          layer = new OlLayerGroup({
-            layers: [layer, layerNext, layerPrior]
-          });
-        }
-      } else if (def.type === 'vector') {
-        layer = createLayerVector(def, options, null, state);
-        if (
-          proj.id === 'geographic' &&
-          (def.wrapadjacentdays === true || def.wrapX)
-        ) {
-          layerNext = createLayerVector(def, options, 1, state);
-          layerPrior = createLayerVector(def, options, -1, state);
-
-          layer.wv = attributes;
-          layerPrior.wv = attributes;
-          layerNext.wv = attributes;
-
-          layer = new OlLayerGroup({
-            layers: [layer, layerNext, layerPrior]
-          });
-        }
-      } else if (def.type === 'wms') {
-        layer = createLayerWMS(def, options, null, state);
-        if (
-          proj.id === 'geographic' &&
-          (def.wrapadjacentdays === true || def.wrapX)
-        ) {
-          layerNext = createLayerWMS(def, options, 1, state);
-          layerPrior = createLayerWMS(def, options, -1, state);
-
-          layer.wv = attributes;
-          layerPrior.wv = attributes;
-          layerNext.wv = attributes;
-
-          layer = new OlLayerGroup({
-            layers: [layer, layerNext, layerPrior]
-          });
-        }
-      } else {
-        throw new Error('Unknown layer type: ' + def.type);
-      }
-      if (isGranule) {
+      //   const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
+      //   switch (def.type) {
+      //     case 'wmts':
+      //       layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+      //       break;
+      //     case 'vector':
+      //       layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+      //       break;
+      //     case 'wms':
+      //       layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+      //       break;
+      //     default:
+      //       throw new Error('Unknown layer type: ' + def.type);
+      //   }
+      // if (isGranule) {
         const inCache = self.granuleCache.getItem(key);
         if (!inCache) {
           layer.wv = attributes;
@@ -295,7 +315,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         }
       } else {
         layer.wv = attributes;
-        cache.setItem(key, layer);
+        cache.setItem(key, layer, cacheOptions);
         layer.setVisible(false);
       }
     }

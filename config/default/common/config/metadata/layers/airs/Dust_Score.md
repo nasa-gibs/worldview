@@ -1,8 +1,28 @@
-### AIRS Dust Score (Ocean, Day | Night)
-Temporal coverage: 28 January 2016 - present (day); 9 February 2016 - present (night)
+### Dust Score (L2, Day | Night)
+Temporal coverage: 30 August 2002 - Present
 
-The AIRS Dust Score (Ocean, Day | Night) layer indicates the level of atmospheric aerosols in the Earth’s atmosphere over the ocean. The numerical scale is a qualitative representation of the presence of dust in the atmosphere, an indication of where large dust storms may form and the areas that may be affected. Pixels where the dust score is less than 360 are not shown in Worldview/Global Imagery Browse Services (GIBS).
+#### Description
+Dust score is determined from multiple tests that compare radiances in select AIRS spectral channels. Radiances measured in channels that are sensitive to dust are compared to radiances measured in channels that are not sensitive to dust. The differences between several pairs of channels are represented as a dust score. Higher scores indicate more certainty that dust is present. Dust is probable when the score is above 380. AIRS dust can also be a proxy for volcanic ash. Dust products derived from AIRS observations can indicate the possibility of volcanic activity, but more detailed analysis is required to confirm the presence of volcanic clouds or estimate the composition and quantity of materials in the clouds.
 
-The Atmospheric Infrared Sounder (AIRS) is an instrument on board the Aqua satellite. The AIRS Dust Score science parameter is a parameter of the AIRS Level 1B Infrared quality assurance subset (AIRIBQAP_NRT). The imagery resolution is 2 km, sensor resolution is 45 km and the temporal resolution is daily.
+#### Image Resolution
+Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
 
-References: [GES DISC - AIRIBQAP_NRT: AIRS/Aqua L1B Near Real Time (NRT) Infrared (IR) quality assurance subset V005](https://disc.gsfc.nasa.gov/datasets/AIRIBQAP_NRT_V005/summary?AIRIBQAP_NRT); [GES DISC - Near Real-Time Data](https://disc.gsfc.nasa.gov/information/glossary?title=Near%20Real-Time%20Data); [New Featured Article on AIRS Dust Score](https://disc.gsfc.nasa.gov/information/news?title=New%20Featured%20Article%20on%20AIRS%20Dust%20Score); [April dust storm surges through China from the Taklimakan Desert](https://disc.gsfc.nasa.gov/information/news?title=April%20dust%20storm%20surges%20through%20China%20from%20the%20Taklimakan%20Desert)
+#### Data Product
+Image initially produced with NRT data. Science quality image replaces NRT when available.  
+Near Real-Time Product: `AIRS2SUP_NRT` (AIRS-Only Level 2 Near Real-Time Product)  
+Science Quality Product: `AIRS2SUP` (AIRS-Only Level 2 Standard Product)  
+Field name: `dust_score`   
+Resolution: 13.5 km/pixel at nadir  
+
+#### Coverage
+Spatial Coverage: Global  
+Overpasses: Twice daily (day and night)  
+Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
+
+#### References
+Data Product: [AIRS2SUP_V006](https://disc.gsfc.nasa.gov/datasets/AIRS2SUP_V006/summary)
+
+#### About AIRS
+AIRS, in conjunction with the Advanced Microwave Sounding Unit (AMSU), senses emitted infrared and microwave radiation from Earth to provide a three-dimensional look at Earth's weather and climate. Working in tandem, the two instruments make simultaneous observations down to Earth's surface. With more than 2,000 channels sensing different regions of the atmosphere, the system creates a global, three-dimensional map of atmospheric temperature and humidity, cloud amounts and heights, greenhouse gas concentrations and many other atmospheric phenomena. Launched into Earth orbit in 2002, the AIRS and AMSU instruments fly onboard NASA's Aqua spacecraft and are managed by NASA's Jet Propulsion Laboratory in Pasadena, California.
+
+More information about AIRS can be found at [https://airs.jpl.nasa.gov](https://airs.jpl.nasa.gov).

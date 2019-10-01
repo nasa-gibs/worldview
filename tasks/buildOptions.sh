@@ -68,7 +68,7 @@ fi
 # Run extractConfigFromWMTS.py script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
     "$PYTHON_SCRIPTS_DIR/extractConfigFromWMTS.py" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
-        "$BUILD_DIR/config/wv.json/_wmts" "$BUILD_DIR/colormaps"
+        "$BUILD_DIR/_wmts" "$BUILD_DIR/colormaps"
 fi
 
 # # Run processVectorStyles.py and move vectorstyles where we want them
@@ -129,6 +129,8 @@ for config in $configs; do
     esac
 done
 
+"$PYTHON_SCRIPTS_DIR/mergeConfigWithWMTS.py" "$BUILD_DIR/_wmts" \
+    "$DEST_DIR/config/wv.json"
 # Copy brand files from build to dest
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"

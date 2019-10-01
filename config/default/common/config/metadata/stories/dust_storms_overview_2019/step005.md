@@ -1,0 +1,5 @@
+Dust storms can also occur in Alaska!  Here you can see fine-grained loess blowing off the Copper River Valley in southern Alaska. The dust is created when glacial ice moves over underlying rock. This erodes and pulverizes the rock and turns it into a fine powder, which is sometimes called "glacial flour". These dust storms usually occur in late fall. This is when rivers levels are low, snow has not yet fallen and the dried, loess-rich mud is exposed to the wind. Turn on and off the Aerosol Optical Depth 3km (3km, Land and Ocean) layer from MODIS instrument on board the Aqua satellite to see how the dust affects the aerosol optical depth.
+
+These high-latitude dust storms often contribute to phytoplankton blooms. Learn more about scientists' work in this field in the article from NASA's Earth Observatory - [Connecting the Dots Between Dust, Phytoplankton, and Ice Cores](https://earthobservatory.nasa.gov/images/91267/connecting-the-dots-between-dust-phytoplankton-and-ice-cores).
+
+References: [NASA Earth Observatory: Dust Coats Copper River Valley](https://earthobservatory.nasa.gov/images/91303/dust-coats-copper-river-valley)

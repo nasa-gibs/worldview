@@ -1,17 +1,17 @@
 {
-  "layers": {
-      "Himawari_AHI_Band13_Clean_Infrared": {
-          "id":       "Himawari_AHI_Band13_Clean_Infrared",
-          "title":    "Clean Infrared (10.3 µm, Band 13, AHI, Himawari)",
-          "subtitle":    "Himawari / AHI",
-          "description": "himawari/Himawari_AHI_Band13_Clean_Infrared",
-          "tags":     "Himawari subdaily",
-          "group":    "overlays",
-          "layergroup": [
-            "Himawari"
-          ],
-          "inactive": true,
-          "period": "subdaily"
-      }
-  }
+    "layers": {
+        "Himawari_AHI_Band13_Clean_Infrared": {
+            "id":       "Himawari_AHI_Band13_Clean_Infrared",
+            "title":    "Clean Infrared (10.3 µm, Band 13, 10 minute)",
+            "subtitle": "Himawari-8/AHI",
+            "description": "himawari/Himawari_AHI_Band13_Clean_Infrared",
+            "group":    "overlays",
+            "tags":     "geostationary geo",
+            "layergroup": [
+              "himawari"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+        }
+    }
 }

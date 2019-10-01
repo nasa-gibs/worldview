@@ -25,26 +25,33 @@ try {
   Nightwatch.bs_local = bs_local = new browserstack.Local();
   bs_local.start({
     key: process.env.BROWSERSTACK_ACCESS_KEY,
+    localIdentifier: ('wvtester19234' + process.env.BROWSERSTACK_USER).replace(/[^a-zA-Z0-9]/g, ''),
     force: 'true' // if you want to kill existing ports
-  }, function (error) {
+  }, function(error) {
     if (error) throw new Error(error);
 
     console.log('Connected. Running tests...');
     console.log('Go to https://www.browserstack.com/automate to view tests in progress.');
-    Nightwatch.cli(function (argv) {
+    Nightwatch.cli(function(argv) {
       var envString = environment_names.join(',');
       argv.e = envString;
       argv.env = envString;
       Nightwatch.CliRunner(argv)
-        .setup(null, function () {
-          // Code to stop browserstack local after end of parallel test
-          bs_local.stop(function () {
+        .setup(null, function() {
+          bs_local.stop(function() {
             process.exit();
           });
         })
-        .runTests(function () {
-          // Code to stop browserstack local after end of single test
-          bs_local.stop(function () {});
+        .runTests(function() {
+          bs_local.stop(function() {
+            if (bs_local.pid && process) {
+              // Code to stop browserstack local after end of parallel test
+              process.exit();
+            }
+          });
+        }).catch(err => {
+          console.error(err);
+          process.exit();
         });
     });
   });

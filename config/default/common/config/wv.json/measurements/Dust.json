@@ -11,8 +11,8 @@
                     "description": "airs/Dust_Score",
                     "image": "",
                     "settings": [
-                        "AIRS_Dust_Score_Ocean_Day",
-                        "AIRS_Dust_Score_Ocean_Night",
+                        "AIRS_L2_Dust_Score_Day",
+                        "AIRS_L2_Dust_Score_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]

@@ -32,9 +32,10 @@ import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
 class ProductPicker extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       listType: props.listType,
-      categoryType: Object.keys(props.categoryConfig)[0],
+      categoryType: Object.keys(props.categoryConfig)[1],
       category: props.category,
       selectedMeasurement: null,
       filteredRows: props.filteredRows,
@@ -51,24 +52,34 @@ class ProductPicker extends React.Component {
    */
   runSearch(value) {
     const { filterProjections, filterSearch, allLayers } = this.props;
+    const { categoryType } = this.state;
     const val = value.toLowerCase();
+    let newState;
+
+    // Search cleared
     if (val.length === 0) {
-      this.setState({
+      newState = {
         filteredRows: [],
         listType: 'category',
         inputValue: ''
-      });
+      };
+      if (categoryType === 'featured') {
+        this.toggleFeatureTab(newState);
+        return;
+      }
+    // Search with terms
     } else {
       const terms = val.split(/ +/);
-      const filteredRows = allLayers.filter(function(layer) {
+      const filteredRows = allLayers.filter((layer) => {
         return !(filterProjections(layer) || filterSearch(layer, val, terms));
       });
-      this.setState({
+      newState = {
         filteredRows: filteredRows,
         listType: 'search',
         inputValue: value
-      });
+      };
     }
+    this.setState(newState);
   }
 
   /**
@@ -103,6 +114,22 @@ class ProductPicker extends React.Component {
     }
   }
 
+  toggleFeatureTab = (partialState) => {
+    const categoryType = 'featured';
+    const { categoryConfig, measurementConfig } = this.props;
+    const category = categoryConfig[categoryType].All;
+    const selectedMeasurement = category.measurements[0];
+    const selectedMeasurementId = measurementConfig[selectedMeasurement].id;
+
+    this.setState({
+      ...partialState,
+      categoryType,
+      category,
+      listType: 'measurements',
+      selectedMeasurement: selectedMeasurementId
+    });
+  }
+
   /**
    * Update category type in which to sort
    * e.g. Hazards and disasters or science
@@ -110,9 +137,16 @@ class ProductPicker extends React.Component {
    * @param {String} key | categoryType identifier
    */
   sort(key) {
-    this.setState({
-      categoryType: key
-    });
+    if (key === 'featured') {
+      this.toggleFeatureTab();
+    } else {
+      this.setState({
+        categoryType: key,
+        listType: 'category',
+        selectedMeasurement: null
+      });
+    }
+
     googleTagManager.pushEvent({
       event: 'layers_meta_category',
       layers: {
@@ -146,8 +180,13 @@ class ProductPicker extends React.Component {
       isMobile,
       onToggle
     } = this.props;
-    const isCategoryDisplay =
-      listType === 'category' && selectedProjection === 'geographic';
+    const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
+    const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
+    const categoryKeys = [
+      'hazards and disasters',
+      'scientific',
+      'featured'
+    ];
 
     return (
       <React.Fragment>
@@ -169,24 +208,20 @@ class ProductPicker extends React.Component {
 
         <ModalBody>
           <div id="layer-modal-content" className="layer-modal-content">
-            {isCategoryDisplay ? (
+            {showCategoryTabs && (
               <Nav tabs id="categories-nav" className="categories-nav">
-                {Object.keys(categoryConfig).map(sortKey => (
+                {categoryKeys.map(sortKey => (
                   <NavItem
                     key={sortKey}
                     className="layer-category-navigation"
                     active={sortKey === categoryType}
                   >
                     <NavLink onClick={this.sort.bind(this, sortKey)}>
-                      {sortKey === 'scientific'
-                        ? 'Science Disciplines'
-                        : sortKey}
+                      {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
                     </NavLink>
                   </NavItem>
                 ))}
               </Nav>
-            ) : (
-              ''
             )}
 
             <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
@@ -276,6 +311,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(onToggle());
   }
 });
+
 function mapStateToProps(state, ownProps) {
   const { config, browser, proj, layers, compare } = state;
   const { screenWidth, screenHeight } = browser;

@@ -26,9 +26,9 @@ module.exports = {
 
     client
       .useCss()
-      .moveToElement(draggerA, -20, 20)
+      .moveToElement(draggerA, 15, 15)
       .mouseButtonDown(0)
-      .moveToElement(draggerB, -100, 0)
+      .moveToElement(draggerB, 100, 30)
       .mouseButtonUp(0)
       .pause(2000);
     client.getValue(dateSelectorDayInput, function(dayResult) {
@@ -42,7 +42,7 @@ module.exports = {
     client.assert.cssClassPresent(localSelectors.aTab, 'active');
     client
       .useCss()
-      .moveToElement(draggerB, -20, 20)
+      .moveToElement(draggerB, 20, 20)
       .mouseButtonDown(0)
       .mouseButtonUp(0);
     // Reference labels were not active in A but are in B
@@ -58,7 +58,7 @@ module.exports = {
     client.useCss().assert.containsText(localSelectors.bTab, '2018-08-16');
     client
       .useCss()
-      .moveToElement(draggerB, -20, 20)
+      .moveToElement(draggerB, 20, 20)
       .mouseButtonDown(0)
       .moveToElement(draggerA, -100, 0)
       .mouseButtonUp(0)

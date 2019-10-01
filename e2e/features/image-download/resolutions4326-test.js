@@ -1,6 +1,6 @@
 const { zoomIn } = require('../../reuseables/zoom');
 const { bookmark } = require('../../reuseables/bookmark');
-
+const { normalizeViewport } = require('../../reuseables/normalize-viewport');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
@@ -21,6 +21,7 @@ module.exports = {
   },
 
   'In geographic, top two zoom levels are 10km': function(c) {
+    normalizeViewport(c, 1024, 768);
     bookmark(c, startParams);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="40"]').to.be.selected;

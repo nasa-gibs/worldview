@@ -1,0 +1,23 @@
+{
+  "categories": {
+      "featured": {
+          "All": {
+              "title": "All",
+              "placement": "first",
+              "id": "featured-all",
+              "description": "",
+              "measurements": [
+                "Geostationary",
+                "Corrected Reflectance",
+                "Fires and Thermal Anomalies",
+                "Precipitation Rate - Featured",
+                "Population Density",
+                "Earth at Night",
+                "Land Surface Temperature",
+                "Sea Surface Temperature - Featured",
+                "Orbital Track"
+              ]
+          }
+      }
+  }
+}
