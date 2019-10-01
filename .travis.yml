@@ -7,8 +7,6 @@ matrix:
       python: '3.7'
       sudo: required
       before_install:
-        - sudo apt-get update
-        - sudo apt-get install -y libgif-dev
         - python --version
         - python3 --version
         - nvm install 8.15.1
@@ -19,37 +17,19 @@ matrix:
       python: '3.7'
       sudo: required
       before_install:
-        - sudo apt-get update
-        - sudo apt-get install -y libgif-dev
         - python --version
         - python3 --version
         - nvm install lts/*
     - os: osx
       language: node_js
       node_js: '8.15.1'
-      before_install:
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install pkg-config cairo libffi
-      before_cache:
-        - brew cleanup
-      cache:
-        directories:
-          - $HOME/Library/Caches/Homebrew
     - os: osx
       language: node_js
       node_js: lts/* # latest LTS Node.js release
-      before_install:
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install pkg-config cairo libffi python3
-      before_cache:
-        - brew cleanup
-      cache:
-        directories:
-          - $HOME/Library/Caches/Homebrew
     - os: windows
       language: node_js
       node_js: '8.15.1'
       before_install:
-        - GTKDIR="c:/GTK"
-        - GTKFILE="$HOME/GTK_TEMP/gtk.zip"
         - choco install python3
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
         - python --version
@@ -57,23 +37,15 @@ matrix:
         - pip install virtualenv
         - python -m venv $HOME/venv
         - source $HOME/venv/Scripts/activate
-        - if [ ! -f "$GTKFILE" ]; then curl -o $GTKFILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
-        - if [ ! -d "$GTKDIR" ]; then mkdir $GTKDIR; fi
-        - if [ ! "$(ls -A $GTKDIR)" ]; then unzip $GTKFILE -d $GTKDIR; fi
       cache:
         directories:
-          - c:/GTK
-          - $HOME/GTK_TEMP
           - $HOME/venv
-          - $HOME/.node-gyp
           - c:/Python37
           - c:/Python37/Scripts
     - os: windows
       language: node_js
       node_js: lts/* # latest LTS Node.js release
       before_install:
-        - GTKDIR="c:/GTK"
-        - GTKFILE="$HOME/GTK_TEMP/gtk.zip"
         - choco install python3
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
         - python --version
@@ -81,15 +53,9 @@ matrix:
         - pip install virtualenv
         - python -m venv $HOME/venv
         - source $HOME/venv/Scripts/activate
-        - if [ ! -f "$GTKFILE" ]; then curl -o $GTKFILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
-        - if [ ! -d "$GTKDIR" ]; then mkdir $GTKDIR; fi
-        - if [ ! "$(ls -A $GTKDIR)" ]; then unzip $GTKFILE -d $GTKDIR; fi
       cache:
         directories:
-          - c:/GTK
-          - $HOME/GTK_TEMP
           - $HOME/venv
-          - $HOME/.node-gyp
           - c:/Python37
           - c:/Python37/Scripts
 
