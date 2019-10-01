@@ -9,8 +9,8 @@
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
-          "title": "",
-          "link": ""
+          "title": "Now Available in Worldview: Earth Every 10 Minutes",
+          "link": "https://earthdata.nasa.gov"
         }
       ],
       "steps": [
@@ -44,13 +44,13 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-93.6687580338324,18.074163862096903,-60.463679908832404,34.0526794870969&t=2019-09-01-T17%3A00%3A00Z&z=5&ics=true&ici=5&icd=10&as=2019-09-01-T11%3A00%3A00Z&ae=2019-09-01-T17%3A00%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&ab=on"
+          "stepLink": "v=-93.6687580338324,18.074163862096903,-60.463679908832404,34.0526794870969&t=2019-09-01-T17%3A00%3A00Z&z=5&ics=true&ici=5&icd=10&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
         },
         {
           "description": "step005.html",
           "transition": {
-            "element": "animation",
-            "action": "play"
+            "element": "",
+            "action": ""
           },
           "stepLink": "v=-95.39338920697065,18.474628038194595,-62.18831108197065,34.453143663194595&t=2019-09-01-T17%3A00%3A00Z&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T17%3A00%3A00Z&ae=2019-09-01-T23%3A20%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(opacity=0.96),MODIS_Terra_CorrectedReflectance_TrueColor&al=true&av=9&ab=on"
         },
