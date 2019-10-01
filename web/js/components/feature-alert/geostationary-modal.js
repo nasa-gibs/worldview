@@ -13,24 +13,15 @@ class GeostationaryModalBody extends React.Component {
 
     return (
       <div className="compare-dialog">
-        <p>
-            Our latest release includes a number of new layers for geostationary products.  These new layers
-            can be found in the new &quot;Featured&quot; tab of the &quot;Add Layers&quot; menu.
-        </p>
-        <p>
-          Geostationary products are updated more frequently than others.  For example, the
-          set of geostationary layers included in this release are updated in increments of 10 minutes.
-        </p>
-        <p>
-            To take full advantage of this, the time (and timescale) of the timeline can now be set
-            down to the hour and minute whenever any geostatinary products are in
-            the current list of overlays.
-        </p>
-        <p> For an optimal experience, try setting the timeline interval time to a custom interval of 10 minutes.</p>
-        <p>
-            Of course, the animation tool has also been updated to allow adjustments down to the hours and minutes as well.
-            Click below to setup an animation to see geostationary in action!
-        </p>
+        <p>Our latest release includes new layers from geostationary satellites – GOES East, GOES West and Himawari-8. Find these new layers in the new “Featured” tab of the “Add Layers” menu.</p>
+
+        <p>These geostationary layers are updated much more frequently than other imagery in Worldview. For example, the set of geostationary layers included in this release are updated every 10 minutes.</p>
+
+        <p>The time (and timescale) of the timeline can now be set down to the hour and minute whenever any geostationary products are in the current list of overlays.</p>
+
+        <p>For an optimal experience, set the time increment in the custom interval selector to 10 minute.</p>
+
+        <p>The animation tool has also been updated to allow adjustments down to the hours and minute. Click “Play” in the animation widget to see the geostationary imagery in action!</p>
         <Button
           className="btn-lg btn-primary mx-auto w-100"
           onClick={prepareAnimate}>Try it!
