@@ -53,8 +53,6 @@ The following are required to install and run Worldview:
   - macOS users should use homebrew to install **Python v3**
     - `brew install python`
 
-- Necessary `node-canvas` [dependencies for your Operating System](https://github.com/Automattic/node-canvas#compiling)
-
 Windows users will also need the following:
 
 - [Git Bash](https://git-scm.com/downloads), or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/)
