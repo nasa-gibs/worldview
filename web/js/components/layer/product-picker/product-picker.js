@@ -32,16 +32,12 @@ import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
 class ProductPicker extends React.Component {
   constructor(props) {
     super(props);
-    const categoryType = Object.keys(props.categoryConfig)[0];
-    const category = props.categoryConfig[categoryType].All;
-    const selectedMeasurement = category.measurements[0];
-    const selectedMeasurementId = props.measurementConfig[selectedMeasurement].id;
 
     this.state = {
-      listType: 'measurements',
-      categoryType,
-      category,
-      selectedMeasurement: selectedMeasurementId,
+      listType: props.listType,
+      categoryType: Object.keys(props.categoryConfig)[1],
+      category: props.category,
+      selectedMeasurement: null,
       filteredRows: props.filteredRows,
       inputValue: ''
     };
@@ -187,9 +183,9 @@ class ProductPicker extends React.Component {
     const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
     const categoryKeys = [
-      'featured',
       'hazards and disasters',
-      'scientific'
+      'scientific',
+      'featured'
     ];
 
     return (
