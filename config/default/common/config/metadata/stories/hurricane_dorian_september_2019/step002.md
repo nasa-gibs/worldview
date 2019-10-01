@@ -1,0 +1,3 @@
+Here we see Hurricane Dorian at 18:30 UTC in a Red Visible imagery layer from GOES East, at roughly the same time as the image captured by the VIIRS instrument on board the joint NASA/NOAA Suomi-NPP satellite. Turn on and off the Red Visible layer to see the VIIRS Corrected Reflectance image underneath. Note the slight apparent shift in the clouds, this may be due to differences in the satellite angle between the polar orbiting and geostationary satellite.
+
+The Red Visible (0.64um, Band 2) layer from the Geostationary Operational Environmental Satellites (GOES) East is used mostly to monitor the evolution of clouds throughout the daylight hours. The GOES East satellite is centered on 75.2 degrees W covering the Conterminous US, Canada, Central and South America. 

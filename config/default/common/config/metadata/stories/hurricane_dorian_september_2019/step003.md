@@ -1,0 +1,1 @@
+Hurricane Dorian made landfall at 16:40 UTC as a category 5 hurricane. Click the "Play" button to view an animation of the storm with the GOES East Red Visible layer. The animation starts at 11:00 UTC, or 7am local time, showing the storm moving westward as the sun is rising and the storm making landfall on the Abaco Islands, Bahamas at 16:40 UTC. 
