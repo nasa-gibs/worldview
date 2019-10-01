@@ -39,22 +39,22 @@ export default class AlertComponent extends React.Component {
             onClick={this.props.onClick}
           >
             <span>
-              {this.props.iconClassName ? (
+              {this.props.iconClassName && (
                 <i className={this.props.iconClassName} />
-              ) : (
-                ''
               )}
               {this.props.message}
-              {this.props.onClick ? (
+              {this.props.onClick && (
                 <span>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read More...
                 </span>
-              ) : null}
+              )}
             </span>
           </div>
-          <div className="close-alert" onClick={this.props.onDismiss}>
-            <i className="fa fa-times exit fa-1x" />
-          </div>
+          {this.props.onDismiss && (
+            <div className="close-alert" onClick={this.props.onDismiss}>
+              <i className="fa fa-times exit fa-1x" />
+            </div>
+          )}
         </Alert>
       </Portal>
     );

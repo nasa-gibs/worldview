@@ -9,21 +9,24 @@ import util from '../../util/util';
 class FeaturedAlert extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showAlert: true
-    };
-    this.dismissAlert = this.dismissAlert.bind(this);
 
+    let alertHasBeenShown;
     if (util.browser.localStorage) {
-      // const hideAlertTime = localStorage.getItem('featured-alert');
+      alertHasBeenShown = localStorage.getItem('featured-alert:geostationary');
     }
+
+    this.state = {
+      showAlert: !alertHasBeenShown
+    };
+    this.readMore = this.readMore.bind(this);
   }
 
-  dismissAlert() {
+  readMore() {
     if (util.browser.localStorage) {
-      localStorage.setItem('featured-alert', new Date());
+      localStorage.setItem('featured-alert:geostationary', true);
     }
     this.setState({ showAlert: false });
+    this.props.showModal();
   }
 
   render() {
@@ -33,9 +36,7 @@ class FeaturedAlert extends React.Component {
         <AlertUtil
           isOpen={showAlert}
           iconClassName='fa fa-layer-group fa-fw'
-          onClick={this.props.showModal.bind(this)}
-          // TODO consider hiding the close button if no onDismiss prop supplied
-          onDismiss={this.dismissAlert}
+          onClick={this.readMore}
           message="Check out our new geostationary layers!"
         />
       </>
@@ -49,11 +50,9 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('geostationary_info', {
         headerText: 'New - Geostationary Layers',
         backdrop: false,
-        size: 'lg',
+        size: 'md',
         wrapClassName: 'clickable-behind-modal',
-        bodyComponent: GeostationaryModalBody,
-        desktopOnly: true,
-        isDraggable: true
+        bodyComponent: GeostationaryModalBody
       })
     );
   }
