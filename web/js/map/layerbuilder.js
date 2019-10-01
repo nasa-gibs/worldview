@@ -517,12 +517,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const sourceWMTS = new OlSourceWMTS(sourceOptions);
-    // ! test of 'tileloadend'
-    sourceWMTS.on('tileloadend', function() {
-      console.log('tileloadend');
-      return 'tileloadend';
-    });
-
     // ! conditionally set extent for tile here if granule and cmr data is available
     // const isGranule = !!(def.tags && def.tags.contains('granule'));
     // if (isGranule) {

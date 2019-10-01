@@ -148,7 +148,7 @@ export function mapui(models, config, store, ui) {
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.CLEAR_CUSTOM:
-        return updateLookup();
+        return reloadLayers();
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
@@ -550,8 +550,26 @@ export function mapui(models, config, store, ui) {
           if (name === 'LayerGroup') {
             const layerGroup = layersCollection[layerIndex];
             const layerGroupCollection = layerGroup.getLayers().getArray();
-            if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
-              layerGroup.setOpacity(action.opacity);
+            if (compare && compare.active) {
+              for (const layerIndex in layerGroupCollection) {
+                const name = layerGroupCollection[layerIndex].constructor.name;
+                if (name === 'LayerGroup' && !layerGroupCollection[layerIndex].wv) {
+                  const layerGroup = layerGroupCollection[layerIndex];
+                  const tileLayer = layerGroup.getLayers().getArray();
+                  // inner tile layer
+                  if (tileLayer[0].wv && def.id === tileLayer[0].wv.id) {
+                    if (tileLayer[0].wv.group === activeStr) {
+                      layerGroup.setOpacity(action.opacity);
+                    }
+                  }
+                }
+              }
+            } else {
+              if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
+                if (layerGroupCollection[0].wv.group === activeStr) {
+                  layerGroup.setOpacity(action.opacity);
+                }
+              }
             }
           }
         }
@@ -718,21 +736,6 @@ export function mapui(models, config, store, ui) {
   };
 
   /*
-   * Update layers for the correct Date
-   *
-   * @method updateLookup
-   * @static
-   *
-   *
-   * @returns {void}
-   *
-   * @todo Check if this function can be combined with updateLayerOrder
-   */
-  var updateLookup = function(layerId) {
-    reloadLayers();
-  };
-
-  /*
    * Get a layer object from id
    *
    * @method findlayer
@@ -751,10 +754,12 @@ export function mapui(models, config, store, ui) {
       }
     });
 
-    if (!layer && layers.length && layers[0].get('granule')) {
+    if (!layer && layers.length && (layers[0].get('group') || layers[0].get('granule'))) {
       let olGroupLayer;
+      const layerKey = `${def.id}-${layerGroupStr}`;
       lodashEach(layers, layerGroup => {
-        if (layerGroup.get('layerId') === `${def.id}-${layerGroupStr}`) {
+        if (layerGroup.get('layerId') === layerKey ||
+          layerGroup.get('group') === layerGroupStr) {
           olGroupLayer = layerGroup;
         }
       });
