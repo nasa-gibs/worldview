@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Scrollbar from '../../util/scrollbar';
-
+import { isConditional } from '../../../modules/vector-styles/util';
 class VectorStyleSelect extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +16,7 @@ class VectorStyleSelect extends React.Component {
    */
   onChangeVectorStyle(vectorStyleId) {
     const { layer, clearStyle, setStyle, groupName } = this.props;
-    setTimeout(function() {
+    setTimeout(function () {
       if (vectorStyleId === layer.id) {
         clearStyle(layer, vectorStyleId, groupName);
       } else {
@@ -33,15 +33,72 @@ class VectorStyleSelect extends React.Component {
   customLegend(styleLayerObject) {
     const { activeVectorStyle } = this.state;
     var description = styleLayerObject['source-description'] || styleLayerObject.id;
-
-    return this.renderSelectorItemSingle(
-      styleLayerObject,
+    const isConditionalStyling = styleLayerObject.paint ? isConditional(styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color']) : false;
+    console.log(isConditionalStyling);
+    return isConditionalStyling ? this.renderSelectorItemMulti(styleLayerObject,
       styleLayerObject.id,
       description,
-      activeVectorStyle === styleLayerObject.id
-    );
+      activeVectorStyle === styleLayerObject.id) :
+      this.renderSelectorItemSingle(
+        styleLayerObject,
+        styleLayerObject.id,
+        description,
+        activeVectorStyle === styleLayerObject.id
+      );
   }
+  renderSelectorItemMulti(vectorStyle, vectorStyleId, description, isSelected) {
+    const caseDefaultClassName =
+      'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
+    const checkedClassName = isSelected ? 'checked' : '';
+    let array = Array.from(vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color'] || vectorStyle.paint['fill-color']);
+    array.shift()
+    let organizedArray = [];
+    let identifier = '';
+    let temp = [];
+    let chunk = 2;
+    // https://stackoverflow.com/a/8495740/4589331
+    for (let i = 0, j = array.length; i < j; i += chunk) {
+      temp = array.slice(i, i + chunk);
+      if (temp.length === 2) {
+        let obj = {};
+        if (temp[0].length === 3 &&
+          typeof temp[0][2] === "string" &&
+          typeof temp[1] === "string"
+        ) {
 
+          obj.label = temp[0][2];
+          obj.color = temp[1];
+          organizedArray.push(obj)
+        } else {
+          console.warn('Irregular conditional');
+        }
+      } else if (temp.length === 1 && typeof temp[0] === "string") {
+        organizedArray.push({ label: 'Default', color: temp[0] })
+      } else {
+        console.warn('Irregular conditional');
+      }
+    }
+    console.log(organizedArray)
+    return organizedArray.map((obj, i) => (
+      <div key={vectorStyleId + i} className={caseDefaultClassName + checkedClassName}>
+        <input
+          id={'wv-palette-radio-' + vectorStyleId + '-' + i}
+          type="radio"
+          name="wv-palette-radio" />
+        <label htmlFor={'wv-palette-radio-' + vectorStyleId + '-' + i}>
+
+          <span
+            className="wv-palettes-class"
+            style={{ backgroundColor: obj.color }}
+          >
+            &nbsp;
+              </span>
+          <span className="wv-palette-label">{obj.label}</span>
+        </label>
+      </div>
+    )
+    )
+  }
   /**
    * Render classification customs when there is only one
    * Color in colormap
@@ -52,7 +109,7 @@ class VectorStyleSelect extends React.Component {
    */
   renderSelectorItemSingle(vectorStyle, vectorStyleId, description, isSelected) {
     const color = vectorStyle.paint
-      ? vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color']
+      ? vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color'] || vectorStyle.paint['fill-color']
       : 'rgb(255, 255, 255)';
     const caseDefaultClassName =
       'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
@@ -84,7 +141,7 @@ class VectorStyleSelect extends React.Component {
     var vectorStyle = vectorStyles[vectorStyleId];
     var vectorStyleLayers = vectorStyle.layers;
 
-    var uniqueStyleLayers = vectorStyleLayers.filter(function(a) {
+    var uniqueStyleLayers = vectorStyleLayers.filter(function (a) {
       if (!this[a.id]) {
         this[a.id] = true;
         return true;
