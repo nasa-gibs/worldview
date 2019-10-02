@@ -5,6 +5,7 @@
   }
   & p {
     margin-bottom: 10px;
+    line-height: 16px;
   }
   & button {
     background: #295f92;
