@@ -39,3 +39,6 @@ export function getMinValue(v) {
 export function getMaxValue(v) {
   return v.length ? v[v.length - 1] : v;
 }
+export function isConditional(item) {
+  return Array.isArray(item) && item[0] === 'case';
+}
