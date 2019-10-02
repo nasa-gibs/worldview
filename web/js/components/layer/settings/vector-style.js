@@ -16,7 +16,7 @@ class VectorStyleSelect extends React.Component {
    */
   onChangeVectorStyle(vectorStyleId) {
     const { layer, clearStyle, setStyle, groupName } = this.props;
-    setTimeout(function () {
+    setTimeout(function() {
       if (vectorStyleId === layer.id) {
         clearStyle(layer, vectorStyleId, groupName);
       } else {
@@ -139,7 +139,7 @@ class VectorStyleSelect extends React.Component {
     var vectorStyle = vectorStyles[vectorStyleId];
     var vectorStyleLayers = vectorStyle.layers;
 
-    var uniqueStyleLayers = vectorStyleLayers.filter(function (a) {
+    var uniqueStyleLayers = vectorStyleLayers.filter(function(a) {
       if (!this[a.id]) {
         this[a.id] = true;
         return true;
