@@ -16,7 +16,7 @@ class GeostationaryModalBody extends React.Component {
   render() {
     return (
       <div className="geostationary-modal">
-        <img src="images/geostationary.gif" className="mx-auto"/>
+        <img src="images/geostationary.gif"/>
         <p>
           Our latest release includes new layers from geostationary satellites –
           GOES East, GOES West and Himawari-8. Find these new layers in the new
@@ -71,8 +71,10 @@ const mapDispatchToProps = (dispatch) => ({
       'ab=on&as=2019-09-01-T16%3A00%3A00Z&ae=2019-09-01-T17%3A40%3A00Z&al=true'
     ];
     const urlParams = paramArr.reduce((prev, curr) => prev + curr, '');
-    const location = getLocation(urlParams);
-    dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+    dispatch({
+      type: 'REDUX-LOCATION-POP-ACTION',
+      payload: getLocation(urlParams)
+    });
   }
 });
 
