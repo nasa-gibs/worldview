@@ -15,7 +15,8 @@ class GeostationaryModalBody extends React.Component {
 
   render() {
     return (
-      <div className="compare-dialog">
+      <div className="geostationary-modal">
+        <img src="images/geostationary.gif" className="mx-auto"/>
         <p>
           Our latest release includes new layers from geostationary satellites –
           GOES East, GOES West and Himawari-8. Find these new layers in the new
@@ -42,7 +43,7 @@ class GeostationaryModalBody extends React.Component {
         </p>
 
         <Button
-          className="btn-lg btn-primary mx-auto w-100"
+          className="btn btn-lg"
           onClick={this.tryIt.bind(this)}>
             Try it!
         </Button>
