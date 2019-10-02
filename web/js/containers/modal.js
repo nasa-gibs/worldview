@@ -93,14 +93,15 @@ class ModalContainer extends Component {
     const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
+    const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
+    const DraggableWrap = ({ condition, wrapper, children }) => condition ? wrapper(children) : children;
     const toggleWithClose = () => {
       onToggle();
       if (onClose && isOpen) {
         onClose();
       }
     };
-    const DraggableWrap = ({ condition, wrapper, children }) =>
-      condition ? wrapper(children) : children;
+
     if (isMobile && isOpen && desktopOnly) {
       toggleWithClose();
     }
@@ -113,45 +114,39 @@ class ModalContainer extends Component {
           <Modal
             isOpen={isOpen}
             toggle={toggleWithClose}
-            backdrop={backdrop && type !== 'selection'}
+            backdrop={backdrop}
             id={lowerCaseId}
             size={size}
-            className={
-              isTemplateModal
-                ? 'template-modal'
-                : modalClassName || 'default-modal'
-            }
+            className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
             autoFocus={autoFocus || false}
             style={style}
             wrapClassName={wrapClassName + ' ' + lowerCaseId}
             modalTransition={{ timeout: timeout || 100 }}
           >
-            {CompletelyCustomModal ? (
-              <CompletelyCustomModal {...customProps} />
-            ) : (
-              <DetectOuterClick
-                onClick={toggleWithClose}
-                disabled={!isOpen || type === 'selection' || clickableBehindModal}
-              >
-                {headerComponent || headerText ? (
-                  <ModalHeader toggle={toggleWithClose}>
-                    {headerComponent ? <headerComponent /> : headerText || ''}
-                  </ModalHeader>
-                ) : (
-                  ''
-                )}
-                <ModalBody>
-                  {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-                  {BodyComponent ? (
-                    <BodyComponent {...bodyComponentProps} screenHeight={screenHeight} />
-                  ) : isTemplateModal ? (
-                    this.getTemplateBody()
-                  ) : (
-                    bodyText || ''
+            {CompletelyCustomModal
+              ? (<CompletelyCustomModal {...customProps} />)
+              : (
+                <DetectOuterClick
+                  onClick={toggleWithClose}
+                  disabled={allowOuterClick}
+                >
+                  {(headerComponent || headerText) && (
+                    <ModalHeader toggle={toggleWithClose}>
+                      {headerComponent ? <headerComponent /> : headerText || ''}
+                    </ModalHeader>
                   )}
-                </ModalBody>
-              </DetectOuterClick>
-            )}
+                  <ModalBody>
+                    {bodyHeader && <h3>{bodyHeader}</h3>}
+                    {BodyComponent
+                      ? (
+                        <BodyComponent {...bodyComponentProps}
+                          screenHeight={screenHeight}
+                          closeModal={toggleWithClose}/>
+                      )
+                      : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
+                  </ModalBody>
+                </DetectOuterClick>
+              )}
           </Modal>
         </DraggableWrap>
       </ErrorBoundary>

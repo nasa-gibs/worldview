@@ -9,24 +9,20 @@ import util from '../../util/util';
 class FeaturedAlert extends React.Component {
   constructor(props) {
     super(props);
-
     let alertHasBeenShown;
     if (util.browser.localStorage) {
       alertHasBeenShown = localStorage.getItem('featured-alert:geostationary');
     }
-
     this.state = {
       showAlert: !alertHasBeenShown
     };
-    this.readMore = this.readMore.bind(this);
   }
 
-  readMore() {
+  dismissAlert() {
     if (util.browser.localStorage) {
       localStorage.setItem('featured-alert:geostationary', true);
     }
     this.setState({ showAlert: false });
-    this.props.showModal();
   }
 
   render() {
@@ -36,7 +32,8 @@ class FeaturedAlert extends React.Component {
         <AlertUtil
           isOpen={showAlert}
           iconClassName='fa fa-layer-group fa-fw'
-          onClick={this.readMore}
+          onClick={this.props.showModal.bind(this)}
+          onDismiss={this.dismissAlert.bind(this)}
           message="Check out our new geostationary layers!"
         />
       </>
@@ -52,6 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
         backdrop: false,
         size: 'md',
         wrapClassName: 'clickable-behind-modal',
+        clickableBehindModal: true,
         bodyComponent: GeostationaryModalBody
       })
     );
