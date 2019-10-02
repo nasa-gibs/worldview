@@ -31,7 +31,7 @@ const CUSTOM_MODAL_PROPS = {
     headerText: null,
     type: 'toolbar',
     modalClassName: 'toolbar-list-modal toolbar-projection-modal toolbar-modal',
-    backdrop: true,
+    backdrop: false,
     bodyComponent: Projection,
     wrapClassName: 'toolbar_modal_outer toolbar_modal_outer'
   },
