@@ -1,0 +1,19 @@
+.geostationary-modal {
+  & img {
+    display: block;
+    margin: 0 auto 10px;
+  }
+  & p {
+    margin-bottom: 10px;
+  }
+  & button {
+    background: #295f92;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    display: block;
+    &:hover {
+      background: #295f92;
+    }
+  }
+}

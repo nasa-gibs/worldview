@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch) => ({
   showModal: () => {
     dispatch(
       openCustomContent('geostationary_info', {
-        headerText: 'New - Geostationary Layers',
+        headerText: 'New: Geostationary Layers',
         backdrop: false,
         size: 'md',
         wrapClassName: 'clickable-behind-modal',
