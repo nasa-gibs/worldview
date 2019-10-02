@@ -65,7 +65,9 @@
   border: 0;
   border-radius: 0;
 }
-
+.tour-start .scrollbar-visible .modal-body {
+  padding-right: 10px;
+}
 .tour-start .modal-header {
   color: #fff;
   background-color: #00457b;
