@@ -23,9 +23,8 @@ class GeostationaryModalBody extends React.Component {
           “Featured” tab of the “Add Layers” menu.
         </p>
         <p>
-          These geostationary layers are updated much more frequently than
-          other imagery in Worldview. For example, the set of geostationary
-          layers included in this release are updated every 10 minutes.
+          These geostationary layers have a much higher temporal frequency than other
+          imagery in Worldview - A new image is available every 10 minutes!
         </p>
         <p>
           To take full advantage of this, the time (and timescale) of the timeline
