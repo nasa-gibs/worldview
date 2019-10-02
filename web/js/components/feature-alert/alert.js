@@ -28,15 +28,13 @@ class FeaturedAlert extends React.Component {
   render() {
     const { showAlert } = this.state;
     return (
-      <>
-        <AlertUtil
-          isOpen={showAlert}
-          iconClassName='fa fa-layer-group fa-fw'
-          onClick={this.props.showModal.bind(this)}
-          onDismiss={this.dismissAlert.bind(this)}
-          message="Check out our new geostationary layers!"
-        />
-      </>
+      <AlertUtil
+        isOpen={showAlert}
+        iconClassName='fa fa-layer-group fa-fw'
+        onClick={this.props.showModal.bind(this)}
+        onDismiss={this.dismissAlert.bind(this)}
+        message="Check out our new geostationary layers!"
+      />
     );
   }
 }
@@ -57,7 +55,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 FeaturedAlert.propTypes = {
-  buildDate: PropTypes.number,
   showModal: PropTypes.func
 };
 
