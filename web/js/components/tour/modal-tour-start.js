@@ -12,6 +12,7 @@ import {
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
 import util from '../../util/util';
+import Scrollbars from '../util/scrollbar';
 
 class ModalStart extends React.Component {
   constructor(props) {
@@ -74,14 +75,19 @@ class ModalStart extends React.Component {
         <ModalHeader toggle={this.props.endTour} charCode="">
           Welcome to Worldview!
         </ModalHeader>
-        <ModalBody>
-          <TourIntro toggleModalStart={this.props.toggleModalStart} />
-          <TourBoxes
-            stories={this.props.stories}
-            storyOrder={this.props.storyOrder}
-            selectTour={this.props.selectTour}
-          />
-        </ModalBody>
+        <Scrollbars style={{ maxHeight: this.props.height - 200 + 'px' }}>
+
+          <ModalBody>
+
+            <TourIntro toggleModalStart={this.props.toggleModalStart} />
+            <TourBoxes
+              stories={this.props.stories}
+              storyOrder={this.props.storyOrder}
+              selectTour={this.props.selectTour}
+            />
+
+          </ModalBody>
+        </Scrollbars >
         {util.browser.localStorage && (
           <ModalFooter>
             <InputGroup>
