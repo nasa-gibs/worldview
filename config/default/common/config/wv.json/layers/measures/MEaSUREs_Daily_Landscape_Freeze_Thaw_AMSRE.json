@@ -11,7 +11,11 @@
             ],
             "product": "NSIDC-0477",
             "inactive": true,
-
+            "projections": {
+                "geographic": {
+                    "source": "GIBS:geographic"
+                }
+            },
             "palette": {
                 "immutable": true
             }

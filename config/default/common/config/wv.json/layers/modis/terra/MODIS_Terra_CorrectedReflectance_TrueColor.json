@@ -1,13 +1,18 @@
 {
     "layers": {
         "MODIS_Terra_CorrectedReflectance_TrueColor": {
-            "id":       "MODIS_Terra_CorrectedReflectance_TrueColor",
-            "title":    "Corrected Reflectance (True Color)",
+            "id": "MODIS_Terra_CorrectedReflectance_TrueColor",
+            "title": "Corrected Reflectance (True Color)",
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_CorrectedReflectance_TrueColor",
-            "tags":     "natural color cr",
-            "group":    "baselayers",
-            "wrapadjacentdays": true
+            "tags": "natural color cr",
+            "group": "baselayers",
+            "wrapadjacentdays": true,
+            "projections": {
+                "geographic": {
+                    "source": "GIBS:geographic"
+                }
+            }
         }
     }
 }
