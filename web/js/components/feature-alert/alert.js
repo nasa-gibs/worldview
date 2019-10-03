@@ -45,10 +45,11 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('geostationary_info', {
         headerText: 'New: Geostationary Layers',
         backdrop: false,
-        size: 'md',
-        wrapClassName: 'clickable-behind-modal',
+        size: 'lg',
+        wrapClassName: '',
         clickableBehindModal: true,
-        bodyComponent: GeostationaryModalBody
+        bodyComponent: GeostationaryModalBody,
+        scrollable: true
       })
     );
   }
