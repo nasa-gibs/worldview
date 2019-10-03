@@ -10,7 +10,12 @@
               "viirs"
             ],
             "group":    "baselayers",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "projections": {
+                "geographic": {
+                    "source": "GIBS:geographic"
+                }
+            }
         }
     }
 }
