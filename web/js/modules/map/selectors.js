@@ -5,40 +5,22 @@ import { promiseLayerGroup } from './util';
  * @return {object}      Promise.all
  */
 export function promiseImageryForTime(date, layers, state) {
-  var viewState;
-  var frameState;
-  var pixelRatio;
-  var promiseArray;
   const map = state.map;
-  var cache = map.ui.cache;
-  var mapUi = map.ui;
-  var selectedMap = map.ui.selected;
-  frameState = selectedMap.frameState_; // OL object describing the current map frame
+  const cache = map.ui.cache;
+  const mapUi = map.ui;
+  const selectedMap = map.ui.selected;
+  const { pixelRatio, viewState } = selectedMap.frameState_; // OL object describing the current map frame
 
-  pixelRatio = frameState.pixelRatio;
-  viewState = frameState.viewState;
-  promiseArray = layers.map(function(def) {
-    var key;
-    var layer;
+  const promiseArray = layers.map(def => {
+    const key = mapUi.layerKey(def, { date }, state);
+    let layer = cache.getItem(key);
 
-    key = mapUi.layerKey(
-      def,
-      {
-        date: date
-      },
-      state
-    );
-    layer = cache.getItem(key);
-    if (layer) {
-      cache.removeItem(key);
+    if (!layer) {
+      layer = mapUi.createLayer(def, { date, precache: true });
     }
-    layer = mapUi.createLayer(def, {
-      date: date,
-      precache: true
-    });
     return promiseLayerGroup(layer, viewState, pixelRatio, selectedMap, def);
   });
-  return new Promise(function(resolve) {
+  return new Promise(resolve => {
     Promise.all(promiseArray).then(function() {
       resolve(date);
     });
