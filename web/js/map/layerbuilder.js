@@ -217,7 +217,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day, proj) => {
     let extent, origin;
-    const daySetLimits = [];
 
     switch (day) {
       case 1:
@@ -240,19 +239,24 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     // If number of set limits doens't match sets, we are assuming this product
     // crosses the antimeridian and don't have a reliable way to calculate a single
     // extent based on multiple set limits.
-    if (!matrixSetLimits || setlimitsLen !== resolutionLen) {
+    if (!matrixSetLimits || setlimitsLen !== resolutionLen || day) {
       return { origin, extent };
     }
 
     const limitIndex = resolutionLen - 1;
     const resolution = matrixSet.resolutions[limitIndex];
-    const setLimits = day ? daySetLimits[limitIndex] : matrixSetLimits[limitIndex];
     const tileWidth = matrixSet.tileSize[0] * resolution;
     const tileHeight = matrixSet.tileSize[1] * resolution;
-    const minX = extent[0] + (setLimits.minTileCol * tileWidth);
-    const minY = extent[3] - ((setLimits.maxTileRow + 1) * tileHeight);
-    const maxX = extent[0] + ((setLimits.maxTileCol + 1) * tileWidth);
-    const maxY = extent[3] - (setLimits.minTileRow * tileHeight);
+    const {
+      minTileCol,
+      maxTileRow,
+      maxTileCol,
+      minTileRow
+    } = matrixSetLimits[limitIndex];
+    const minX = extent[0] + (minTileCol * tileWidth);
+    const minY = extent[3] - ((maxTileRow + 1) * tileHeight);
+    const maxX = extent[0] + ((maxTileCol + 1) * tileWidth);
+    const maxY = extent[3] - (minTileRow * tileHeight);
 
     return {
       origin,
