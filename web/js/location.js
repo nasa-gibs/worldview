@@ -236,6 +236,28 @@ const getParameters = function(config, parameters) {
         }
       }
     },
+    i: {
+      stateKey: 'date.interval',
+      initialState: 3,
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          let interval = currentItemState;
+          // check if subdaily timescale zoom to determine if reset is needed
+          if (interval > 3) {
+            const { layers, compare } = state;
+            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            if (!hasSubdailyLayers) {
+              interval = 3; // reset to day
+            }
+          }
+          return interval === 3 ? undefined : interval.toString();
+        },
+        parse: str => {
+          return str ? Number(str) : 3;
+        }
+      }
+    },
     ics: {
       stateKey: 'date.customSelected',
       initialState: false,

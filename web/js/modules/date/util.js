@@ -15,11 +15,13 @@ export function serializeDate(date) {
     'Z'
   );
 }
+
 export function getActiveTime(state) {
   const { compare, date } = state;
   const activeStr = compare.isCompareA ? 'selected' : 'selectedB';
   return date[activeStr];
 }
+
 export function tryCatchDate(str, initialState) {
   try {
     return util.parseDateUTC(str);
@@ -28,6 +30,7 @@ export function tryCatchDate(str, initialState) {
     return initialState;
   }
 }
+
 /**
  * Checks the date provided against the active layers.
  *
@@ -45,6 +48,14 @@ export function getLayersActiveAtDate(layers, date) {
   });
   return arra;
 }
+
+/**
+ *
+ * @param {*} parameters
+ * @param {*} stateFromLocation
+ * @param {*} state
+ * @param {*} config
+ */
 export function mapLocationToDateState(
   parameters,
   stateFromLocation,
@@ -52,14 +63,9 @@ export function mapLocationToDateState(
   config
 ) {
   const appNow = get(state, 'date.appNow');
-  const interval =
-    get(stateFromLocation, 'date.interval') || get(state, 'date.interval');
-  const selectedZoom =
-    get(stateFromLocation, 'date.selectedZoom') ||
-    get(state, 'date.selectedZoom');
-  const isCustom =
-    get(stateFromLocation, 'date.customSelected') ||
-    get(state, 'date.customSelected');
+  const interval = get(stateFromLocation, 'date.interval') || get(state, 'date.interval');
+  const selectedZoom = get(stateFromLocation, 'date.selectedZoom') || get(state, 'date.selectedZoom');
+  const isCustom = get(stateFromLocation, 'date.customSelected') || get(state, 'date.customSelected');
   const timeScaleChangeUnit = timeScaleFromNumberKey[interval];
   const timeScale = timeScaleFromNumberKey[selectedZoom.toString()];
   // legacy time permalink
@@ -77,7 +83,7 @@ export function mapLocationToDateState(
   // update interval selectedzoom level as default interval
   if (timeScale !== timeScaleChangeUnit && !isCustom) {
     const defaultValues = {
-      interval: timeScaleToNumberKey[timeScale],
+      interval,
       delta: 1,
       customSelected: false
     };
