@@ -274,7 +274,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              left: isHoveringLegend ? 0 : xOffset + 0.5,
+              left: isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden'
             }}
           />
