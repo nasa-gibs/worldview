@@ -90,12 +90,14 @@ class AnimationWidget extends React.Component {
       speed: props.speed,
       isSliding: false,
       isGifActive: false,
+      hoverGif: false,
       customIntervalModalOpen: false
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
     this.onLoop = this.onLoop.bind(this);
     this.openGif = this.openGif.bind(this);
+    this.toggleHoverGif = this.toggleHoverGif.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -288,20 +290,24 @@ class AnimationWidget extends React.Component {
     this.props.changeCustomInterval(delta, timeScale);
   };
 
+  toggleHoverGif() {
+    const hoverState = this.state.hoverGif;
+    this.setState({ hoverGif: !hoverState });
+  }
+
   renderToolTip() {
     const { numberOfFrames } = this.props;
+    const { hoverGif } = this.state;
     const elemExists = document.querySelector('#create-gif-button');
-    const showTooltip = elemExists && numberOfFrames >= 40;
+    const showTooltip = elemExists && hoverGif && numberOfFrames >= 40;
     return (
-      <>
-        <Tooltip
-          placement="right"
-          isOpen={showTooltip}
-          target="create-gif-button">
+      <Tooltip
+        placement="right"
+        isOpen={showTooltip}
+        target="create-gif-button">
           Too many frames were selected. <br/>
           Please request less than 40 frames if you would like to generate a GIF.
-        </Tooltip>
-      </>
+      </Tooltip>
     );
   }
 
@@ -416,10 +422,10 @@ class AnimationWidget extends React.Component {
             <a
               id="create-gif-button"
               title={!gifDisabled ? 'Create Animated GIF' : ''}
-              className={
-                gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'
-              }
+              className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
               onClick={this.openGif}
+              onMouseOver={this.toggleHoverGif}
+              onMouseOut={this.toggleHoverGif}
             >
               <i
                 id="wv-animation-widget-file-video-icon"
@@ -525,6 +531,7 @@ function mapStateToProps(state) {
     timeScaleFromNumberKey[useInterval],
     customSelected && customDelta ? customDelta : delta
   );
+  console.log(numberOfFrames);
 
   return {
     animationCustomModalOpen,
