@@ -19,6 +19,7 @@ export default class VectorMetaTooltip extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <Fragment key={this.props.index}>
         <span href="#" id={'tooltip-' + this.props.index}><i className="fa fa-info vector-info-icon"></i></span>

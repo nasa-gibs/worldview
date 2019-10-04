@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
 import VectorMetaTooltip from './tooltip';
+import { find as lodashFind } from 'lodash';
 
 export default class VectorMetaTable extends React.Component {
   constructor(props) {
@@ -17,51 +18,43 @@ export default class VectorMetaTable extends React.Component {
   render() {
     var header, data;
     const { metaFeatures, metaLegend } = this.state;
-    if (
-      metaFeatures &&
-      (typeof metaFeatures === 'object' && metaFeatures !== null)
-    ) {
-      header = Object.entries(metaFeatures).map(([featureId, i], x) => {
-        var tooltipDescription;
-        Object.values(metaLegend.mvt_properties).forEach(property => {
-          if (property && property.Description && (property.Identifier.toLowerCase() === featureId.toLowerCase())) {
-            tooltipDescription = property.Description;
-          }
-        });
-        return (
-          <th key={x} index={x} className={(tooltipDescription ? 'pr-4' : 'pr-0')}>
-            {featureId}
-            {tooltipDescription &&
-              <VectorMetaTooltip index={x} description={tooltipDescription} />
-            }
-          </th>
-        );
-      });
-
-      data = Object.entries(metaFeatures).map(([featureId, i], x) => (
-        <th key={x} index={x}>
-          {i}
-        </th>
-      ));
-    }
-
+    console.log(metaFeatures)
+    console.log(metaLegend)
     return (
-      <Table dark striped bordered size="sm">
-        <thead>
-          <tr>
-            {header}
-          </tr>
-        </thead>
+      <Table size="sm">
         <tbody>
-          <tr>
-            {data}
-          </tr>
+          {Object.entries(metaFeatures).map(([featureId, i], index) => {
+            console.log(metaLegend.mvt_properties);
+            const properties = lodashFind(metaLegend.mvt_properties, { Identifier: featureId });
+            // Object.values(metaLegend.mvt_properties).forEach(property => {
+            //   if (property && property.Description && (property.Identifier.toLowerCase() === featureId.toLowerCase())) {
+            //     tooltipDescription = property.Description;
+            //   }
+            // })
+            console.log(properties && properties.Description ? properties.Description : properties);
+            return (
+              <tr>
+                <td>
+                  {properties ? properties.Title || featureId : featureId}
+                </td>
+                <td>
+                  {i}
+                </td>
+                {properties && properties.Description ? (
+                  <td>
+                    <VectorMetaTooltip index={index} description={properties.Description} />
+                  </td>
+                ) : ''
+                }
+              </tr>
+
+            )
+          })}
         </tbody>
-      </Table>
-    );
+      </Table >
+    )
   }
 }
-
 VectorMetaTable.propTypes = {
   metaFeatures: PropTypes.object.isRequired,
   metaLegend: PropTypes.object.isRequired

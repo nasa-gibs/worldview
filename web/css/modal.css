@@ -11,6 +11,9 @@
 .clickable-behind-modal .modal {
   position: inherit;
 }
+.modal-dialog .modal-header .close:hover {
+  color: #fff;
+}
 .draggable-modal .modal {
   position: fixed;
 }
@@ -38,18 +41,28 @@
   list-style-type: disc;
   margin: 2px 0 2px 20px;
 }
-.modal-dialog.light .modal-content {
-  background-color: #dcdcdc;
-}
-.modal-dialog .modal-header .close:hover {
-  color: #fff;
-}
-.modal-dialog.light .modal-header .close:hover {
-  color: #000;
-}
+
 .dynamic-modal.modal-dialog {
   position: absolute;
 }
 .notify .modal-footer {
   border: none;
+}
+
+/* light modal styling */
+.modal-dialog.light .modal-content {
+  background-color: #dcdcdc;
+  color: #000
+}
+.modal-dialog.light .modal-header{
+  color: #343a40;
+}
+.modal-dialog.light .modal-header .close {
+  color: #000;
+}
+.modal-dialog.light .modal-header .close:hover {
+  color: #000;
+}
+.modal-dialog.light .modal-content .modal-body{
+background: #eee;
 }

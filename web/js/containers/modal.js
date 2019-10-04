@@ -48,11 +48,11 @@ class ModalContainer extends Component {
     return bodyTemplate.isLoading ? (
       <span> Loading </span>
     ) : (
-      <div
-        id="template-content"
-        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-      />
-    );
+        <div
+          id="template-content"
+          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+        />
+      );
   }
 
   render() {
@@ -142,7 +142,7 @@ class ModalContainer extends Component {
                       ? (
                         <BodyComponent {...bodyComponentProps}
                           screenHeight={screenHeight}
-                          closeModal={toggleWithClose}/>
+                          closeModal={toggleWithClose} />
                       )
                       : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
                   </ModalBody>
