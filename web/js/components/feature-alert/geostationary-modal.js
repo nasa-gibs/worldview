@@ -29,7 +29,6 @@ class GeostationaryModalBody extends React.Component {
                  GOES East / ABI Red Visible (0.64 µm, Band 2, 10 minute)
               </figcaption>
             </figure>
-            // <img src="images/geostationary.gif" className="img-fluid"/>
           }
         </Col>
         <Col lg="6" md="12">
