@@ -54,7 +54,14 @@ class Tour extends React.Component {
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
-    if (currentStory && currentStoryIndex !== -1) this.fetchMetadata(currentStory, 0);
+  }
+
+  componentDidMount() {
+    const { currentStory, currentStoryIndex, currentStoryId } = this.state;
+    // If app loads with tour link at step other than 1, restart that tour story
+    if (currentStory && currentStoryIndex !== -1) {
+      this.selectTour(null, currentStory, 1, currentStoryId);
+    }
   }
 
   toggleModalStart(e) {
