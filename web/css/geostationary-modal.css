@@ -3,9 +3,15 @@
     display: block;
     margin: 0 auto 10px;
   }
+  & .figure {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+  }
   & .figure-caption {
     font-style: italic;
     text-align: center;
+    margin-bottom: 10px;
   }
   & p {
     margin-bottom: 10px;
