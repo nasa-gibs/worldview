@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Button } from 'reactstrap';
 import Scrollbar from '../../util/scrollbar';
 
 const gridConstant = 8;
@@ -12,15 +13,16 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const getItemStyle = (isDragging, draggableStyle) => ({
+const getItemStyle = (isDragging, isHover, isLastMovedItem, draggableStyle) => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   userSelect: 'none',
-  padding: gridConstant / 2,
+  paddingLeft: gridConstant / 2,
   height: gridConstant * 3,
   margin: `0 0 ${gridConstant}px 0`,
-  background: isDragging ? '#00457B' : 'grey',
+  background: isDragging ? '#00457B' : isHover ? '#0087f1' : 'grey',
+  outline: isLastMovedItem ? '3px solid #007BFF' : 'none',
   ...draggableStyle
 });
 
@@ -35,8 +37,10 @@ class GranuleLayerDateList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      hoveredItem: null,
+      lastMovedItem: null,
+      sorted: true,
       items: this.props.granuleDates
-      // items: ["2019-01-01T23:06:00Z", "2019-01-01T23:00:00Z", "2019-01-01T22:54:00Z", "2019-01-01T22:48:00Z", "2019-01-01T22:42:00Z", "2019-01-01T22:36:00Z", "2019-01-01T22:30:00Z", "2019-01-01T22:24:00Z", "2019-01-01T22:18:00Z", "2019-01-01T22:12:00Z", "2019-01-01T22:06:00Z", "2019-01-01T22:00:00Z", "2019-01-01T21:54:00Z", "2019-01-01T21:48:00Z", "2019-01-01T21:42:00Z", "2019-01-01T21:36:00Z", "2019-01-01T21:30:00Z", "2019-01-01T21:24:00Z", "2019-01-01T21:18:00Z", "2019-01-01T21:12:00Z", "2019-01-01T21:06:00Z"]
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
@@ -53,11 +57,11 @@ class GranuleLayerDateList extends PureComponent {
       result.destination.index
     );
     updateGranuleLayerDates(reorderedItems, def.id);
-    this.setItems(reorderedItems);
+    // this.setItems(reorderedItems);
   }
 
   // move granule item to top of list
-  moveToTop = (e, sourceIndex) => {
+  moveToTop = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
     const { updateGranuleLayerDates, def } = this.props;
     const reorderedItems = this.reorderItems(
@@ -65,8 +69,41 @@ class GranuleLayerDateList extends PureComponent {
       0
     );
     updateGranuleLayerDates(reorderedItems, def.id);
-    this.setItems(reorderedItems);
+    // this.setItems(reorderedItems);
+    this.setState({
+      lastMovedItem: granuleDate
+    });
   }
+
+
+    // move granule item to top of list
+    moveUp = (e, sourceIndex, granuleDate) => {
+      e.preventDefault();
+      const { updateGranuleLayerDates, def } = this.props;
+      const reorderedItems = this.reorderItems(
+        sourceIndex,
+        sourceIndex - 1
+      );
+      updateGranuleLayerDates(reorderedItems, def.id);
+      this.setState({
+        lastMovedItem: granuleDate
+      });
+    }
+
+
+      // move granule item to top of list
+    moveDown = (e, sourceIndex, granuleDate) => {
+      e.preventDefault();
+      const { updateGranuleLayerDates, def } = this.props;
+      const reorderedItems = this.reorderItems(
+        sourceIndex,
+        sourceIndex + 1
+      );
+      updateGranuleLayerDates(reorderedItems, def.id);
+      this.setState({
+        lastMovedItem: granuleDate
+      });
+    }
 
   // reorder granule items based on source and target index
   reorderItems = (sourceIndex, destinationIndex) => {
@@ -93,16 +130,54 @@ class GranuleLayerDateList extends PureComponent {
     });
   }
 
-  componentDidMount() {
-    this.setItems(this.props.granuleDates);
+  // handle mouse over item
+  handleMouseOverItem = (granuleDate, index) => {
+
+    this.setState({
+      hoveredItem: granuleDate
+    });
   }
 
-  componentDidUpdate() {
-    this.setItems(this.props.granuleDates);
+  // handle mouse leave item
+  handleMouseLeaveItem = (granuleDate, index) => {
+
+    this.setState({
+      hoveredItem: null
+    });
+  }
+
+  // determine if grnaule dates are in order - used for RESET button toggle
+  checkGranuleDateSorting = (granuleDates) => {
+    let sorted = true;
+    for (let i = 0; i < granuleDates.length - 1; i++) {
+      if (granuleDates[i] < granuleDates[i + 1]) {
+        sorted = false;
+        break;
+      }
+    }
+    if (this.state.sorted !== sorted) {
+      this.setState({
+        sorted
+      });
+    }
+  }
+
+  componentDidMount() {
+    const { granuleDates } = this.props;
+    this.setItems(granuleDates);
+    this.checkGranuleDateSorting(granuleDates);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { granuleDates } = this.props;
+    if (JSON.stringify(granuleDates) !== JSON.stringify(prevProps.granuleDates)) {
+      this.setItems(granuleDates);
+      this.checkGranuleDateSorting(granuleDates);
+    }
   }
 
   render() {
-    const { items } = this.state;
+    const { items, sorted } = this.state;
     const { def } = this.props;
     const maxNumItemsNoScrollNeeded = 8;
     const granuleDateLength = items.length;
@@ -113,7 +188,12 @@ class GranuleLayerDateList extends PureComponent {
         <h2 className="wv-header">
           Granule Layer Date Order
           <span style={{ float: 'right' }}>
-            <button onClick={(e) => this.onClickReset(e)}>RESET</button>
+            <Button onClick={(e) => this.onClickReset(e)}
+              block={false} style={{ lineHeight: '6px' }}
+              disabled={sorted}
+              color={sorted ? 'secondary' : 'primary'}>
+              RESET
+            </Button>
           </span>
         </h2>
         <Scrollbar style={{ maxHeight: '500px' }} needsScrollBar={needsScrollBar} >
@@ -128,12 +208,16 @@ class GranuleLayerDateList extends PureComponent {
                   {items.map((item, index) => (
                     <Draggable key={item} draggableId={item} index={index}>
                       {(provided, snapshot) => (
-                        <div
+                        <div className="granule-date-item"
+                          onMouseEnter={() => this.handleMouseOverItem(item, index)}
+                          onMouseLeave={() => this.handleMouseLeaveItem(item, index)}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={getItemStyle(
                             snapshot.isDragging,
+                            this.state.hoveredItem === item,
+                            this.state.lastMovedItem === item,
                             provided.draggableProps.style
                           )}
                         >
@@ -141,11 +225,27 @@ class GranuleLayerDateList extends PureComponent {
                             {item}
                           </div>
                           <div>
+                            {index < items.length - 1
+                              ? <button
+                                style={{ background: '#555', color: '#eee' }}
+                                onClick={(e) => this.moveDown(e, index, item)}>
+                                {'\u2BC6'}
+                              </button>
+                              : null
+                            }
                             {index > 0
                               ? <button
                                 style={{ background: '#555', color: '#eee' }}
-                                onClick={(e) => this.moveToTop(e, index)}>
-                                  TO TOP
+                                onClick={(e) => this.moveUp(e, index, item)}>
+                                {'\u2BC5'}
+                              </button>
+                              : null
+                            }
+                            {index > 0
+                              ? <button
+                                style={{ background: '#555', color: '#eee' }}
+                                onClick={(e) => this.moveToTop(e, index, item)}>
+                                  TOP
                               </button>
                               : null
                             }
