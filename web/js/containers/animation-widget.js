@@ -424,8 +424,8 @@ class AnimationWidget extends React.Component {
               title={!gifDisabled ? 'Create Animated GIF' : ''}
               className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
               onClick={this.openGif}
-              onMouseOver={this.toggleHoverGif}
-              onMouseOut={this.toggleHoverGif}
+              onMouseEnter={this.toggleHoverGif}
+              onMouseLeave={this.toggleHoverGif}
             >
               <i
                 id="wv-animation-widget-file-video-icon"
