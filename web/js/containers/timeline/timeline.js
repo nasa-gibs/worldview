@@ -458,10 +458,15 @@ class Timeline extends React.Component {
   * @param {Boolean} modalOpen - is custom interval modal open
   * @returns {void}
   */
-  setTimeScaleIntervalChangeUnit = (timeScale, modalOpen) => {
+  setTimeScaleIntervalChangeUnit = (timeScale, openModal) => {
     let delta;
     const { customIntervalZoomLevel, customIntervalValue } = this.props;
     const customSelected = timeScale === 'custom';
+
+    if (openModal) {
+      this.toggleCustomIntervalModal(openModal);
+      return;
+    }
 
     if (customSelected && customIntervalZoomLevel && customIntervalValue) {
       timeScale = customIntervalZoomLevel;
@@ -471,7 +476,6 @@ class Timeline extends React.Component {
       delta = 1;
     }
     this.props.selectInterval(delta, timeScale, customSelected);
-    this.toggleCustomIntervalModal(modalOpen);
   };
 
   /**

@@ -33,11 +33,11 @@ class TimeScaleIntervalChange extends PureComponent {
   }
 
   // handle click of timescale intervals
-  handleClickInterval = (timescale, openDialog = false) => {
+  handleClickInterval = (timescale, openModal = false) => {
     // send props function to change timescale interval throughout app
     this.setState({
       toolTipHovered: false
-    }, this.props.setTimeScaleIntervalChangeUnit(timescale, openDialog));
+    }, this.props.setTimeScaleIntervalChangeUnit(timescale, openModal));
   }
 
   // individual linking timescale handlers

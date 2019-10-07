@@ -199,10 +199,15 @@ class AnimationWidget extends React.Component {
    * @return {void}
    */
 
-  onIntervalSelect(timeScale, modalOpen) {
+  onIntervalSelect(timeScale, openModal) {
     let delta;
     const { customInterval, customDelta } = this.props;
     const customSelected = timeScale === 'custom';
+
+    if (openModal) {
+      this.toggleCustomIntervalModal(openModal);
+      return;
+    }
 
     if (customSelected && customInterval && customDelta) {
       timeScale = customInterval;
@@ -212,7 +217,6 @@ class AnimationWidget extends React.Component {
       delta = 1;
     }
     this.props.onIntervalSelect(delta, timeScale, customSelected);
-    this.toggleCustomIntervalModal(modalOpen);
   }
 
   /*
