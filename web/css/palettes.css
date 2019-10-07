@@ -144,14 +144,14 @@
 
 .wv-palettes-panel .wv-running-bar::before {
   top: -1px;
-  left: -4.25px;
+  left: -5px;
   border-left: 5.5px solid transparent;
   border-right: 5.5px solid transparent;
   border-top: 5.5px solid #000;
 }
 
 .wv-palettes-panel .wv-running-bar::after {
-  left: -3.25px;
+  left: -4px;
   border-left: 4.5px solid transparent;
   border-right: 4.5px solid transparent;
   border-top: 4px solid #dedede;
