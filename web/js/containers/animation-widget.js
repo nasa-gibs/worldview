@@ -531,7 +531,6 @@ function mapStateToProps(state) {
     timeScaleFromNumberKey[useInterval],
     customSelected && customDelta ? customDelta : delta
   );
-  console.log(numberOfFrames);
 
   return {
     animationCustomModalOpen,
