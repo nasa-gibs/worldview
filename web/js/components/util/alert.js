@@ -30,28 +30,36 @@ export default class AlertComponent extends React.Component {
   }
 
   render() {
+    const {
+      title,
+      message,
+      iconClassName,
+      isOpen,
+      onDismiss,
+      onClick
+    } = this.props;
     return (
       <Portal node={document && document.getElementById('wv-content')}>
-        <Alert className="wv-alert" isOpen={this.props.isOpen}>
+        <Alert className="wv-alert" isOpen={isOpen}>
           <div
             className="alert-content"
-            title={this.props.title}
-            onClick={this.props.onClick}
+            title={title}
+            onClick={onClick}
           >
-            <span>
-              {this.props.iconClassName && (
-                <i className={this.props.iconClassName} />
+            {iconClassName && (
+              <i className={'wv-alert-icon ' + iconClassName} />
+            )}
+            <div className="wv-alert-message">
+              <div>
+                {message}
+              </div>
+              {onClick && (
+                <span className="wv-alert-read-more">Read More...</span>
               )}
-              {this.props.message}
-              {this.props.onClick && (
-                <span>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read More...
-                </span>
-              )}
-            </span>
+            </div>
           </div>
-          {this.props.onDismiss && (
-            <div className="close-alert" onClick={this.props.onDismiss}>
+          {onDismiss && (
+            <div className="close-alert" onClick={onDismiss}>
               <i className="fa fa-times exit fa-1x" />
             </div>
           )}

@@ -349,6 +349,13 @@
   }
 }
 
+@media only screen and (max-device-width: 420px) {
+  .wv-alert,
+  .notify-alert {
+    left: 10px !important;
+  }
+}
+
 .notify-alert i {
   font-size: 1.4em;
   -webkit-box-sizing: border-box;
