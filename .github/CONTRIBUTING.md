@@ -75,7 +75,7 @@ Improve contributing docs and consolidate them in the standard location https://
 
 Please see our [Roadmap](https://github.com/nasa-gibs/worldview/projects/7) for
 an overview of what we're planning. We also track the progress of [Worldview](https://github.com/nasa-gibs/worldview)
-using the public [GitHub Projects Board](https://github.com/orgs/nasa-gibs/projects/1).
+using the public [ZenHub Projects Board](https://app.zenhub.com/workspaces/worldview-591b38dffb1c761edb0bc54a/board).
 
 We use GitHub labels to organize issues we're working on. Here are the labels
 we use, along with descriptions of what they mean. Click on the headings or badges below to see the GitHub issues tagged with each label.
@@ -84,13 +84,25 @@ we use, along with descriptions of what they mean. Click on the headings or badg
 
 Things that appear to be broken or are not working as intended.
 
+### [`documentation` ![Issues tagged with 'documentation' ](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/documentation.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation)
+
+An issue that requires an update to our documentation.
+
 ### [`enhancement` ![Issues tagged with 'enhancement' ](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/enhancement.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
 
 An enhancement to an existing feature.
 
+### [`Epic` ![Issues tagged with 'Epic' ](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/Epic.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3AEpic)
+
+A large objective consisting of multiple issues.
+
 ### [`external dependency` ![Issues tagged with 'external dependency'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/external%20dependency.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen%20is%3Aissue%20label%3A%22external%20dependency%22)
 
 Issues that are waiting on something out of our control.
+
+### [`good first issue` ![Issues tagged with 'good first issue'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/good%20first%20issue.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22good%20first%20issue%22)
+
+These issues might be a good place to start if you want to contribute for the first time.
 
 ### [`help wanted` ![Issues tagged with 'help wanted'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/help%20wanted.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22help%20wanted%22)
 
@@ -100,25 +112,45 @@ These issues might be a good place to start if you want to contribute.
 
 These are ideas, user stories, or feature requests that don't yet qualify as a new feature, probably because the specifics haven't been worked out yet.
 
+### [`invalid` ![Issues tagged with 'invalid'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/invalid.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Ainvalid)
+
+These are issues that are no longer relevant or are not considered valid issues. 
+
+### [`investigate` ![Issues tagged with 'investigate'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/investigate.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Ainvestigate)
+
+These are issues that require further investigation to be considered as valid issues. 
+
 ### [`new feature` ![Issues tagged with 'new feature'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/new%20feature.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22new%20feature%22)
 
 These are new features to be developed at some point in the future.
 
-### [`ready for development` ![Issues tagged with 'ready for development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/ready%20for%20development.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22ready%20for%20development%22)
+### [`project management` ![Issues tagged with 'project management'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/project%20management.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22project%20management%22)
 
-These are issues that are "on deck" for development. We're planning to work on these next.
+These are issues that require changes outside of the code repository.
 
-### [`testing` ![Issues tagged with 'testing'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/testing.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Atesting)
+### [`question` ![Issues tagged with 'question'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/question.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aquestion)
 
-These are issues that have a PR ready to resolve them, and are just waiting to be fully tested.
+These are questions related to a problem and/or issues that require further investigation. 
+
+### [`quickfix` ![Issues tagged with 'quickfix'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/quickfix.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aquickfix)
+
+These are issues which require minimal effort to address.
+
+### [`security` ![Issues tagged with 'security'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/security.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Asecurity)
+
+These are issues which address a known vulnerability.
+
+### [`SIT` ![Issues tagged with 'SIT'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/SIT.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3ASIT)
+
+These are issues which were found during systems integration testing (SIT).
 
 ### [`technical` ![Issues tagged with 'technical'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/technical.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Atechnical)
 
 These issues are related to our technical implementation (refactoring, dependency changes, etc.), they're developer focused, and don't directly add new features for end users.
 
-### [`under development` ![Issues tagged with 'under development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/under%20development.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22under%20development%22)
+### [`UAT` ![Issues tagged with 'UAT'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/UAT.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3AUAT)
 
-These are ideas, user stories, or feature requests that don't yet qualify as a new feature, probably because the specifics haven't been worked out yet.
+These are issues which were found during user acceptance testing (UAT).
 
 ### [`wontfix` ![Issues tagged with 'wontfix'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/wontfix.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Awontfix)
 
