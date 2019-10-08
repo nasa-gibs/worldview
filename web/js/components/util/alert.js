@@ -50,12 +50,7 @@ export default class AlertComponent extends React.Component {
               <i className={'wv-alert-icon ' + iconClassName} />
             )}
             <div className="wv-alert-message">
-              <div>
-                {message}
-              </div>
-              {onClick && (
-                <span className="wv-alert-read-more">Read More...</span>
-              )}
+              {message} {onClick ? ' Read More...' : ''}
             </div>
           </div>
           {onDismiss && (

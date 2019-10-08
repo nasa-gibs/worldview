@@ -349,7 +349,7 @@
   }
 }
 
-@media only screen and (max-device-width: 420px) {
+@media only screen and (max-width: 420px) {
   .wv-alert,
   .notify-alert {
     left: 10px !important;

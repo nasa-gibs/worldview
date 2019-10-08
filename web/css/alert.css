@@ -36,19 +36,5 @@
   display: flex;
   align-items: center;
   min-height: 40px;
-}
-.wv-alert-message {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.wv-alert-read-more {
-  min-width: 100px;
-  text-align: right;
-}
-@media screen and (max-device-width: 420px) {
-  .wv-alert-read-more {
-    min-width: 0;
-    text-align: left;
-  }
+  height: 20px; /* IE11 vertical align fix */
 }
