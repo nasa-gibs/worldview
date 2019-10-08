@@ -41,7 +41,7 @@ const CUSTOM_MODAL_PROPS = {
     backdrop: false,
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
     clickableBehindModal: true,
-    wrapClassName: 'clickable-behind-modal toolbar_modal_outer',
+    wrapClassName: 'toolbar_modal_outer',
     bodyComponent: ShareLinks
   },
   TOOLBAR_INFO: {
@@ -55,11 +55,12 @@ const CUSTOM_MODAL_PROPS = {
   TOOLBAR_SNAPSHOT: {
     headerText: 'Take a Snapshot',
     backdrop: false,
-    wrapClassName: 'clickable-behind-modal toolbar_modal_outer',
+    wrapClassName: 'toolbar_modal_outer',
     type: 'selection',
     modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
     bodyComponent: ImageDownload,
-    desktopOnly: true
+    desktopOnly: true,
+    clickableBehindModal: true
   }
 };
 class toolbarContainer extends Component {

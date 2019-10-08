@@ -94,6 +94,7 @@ class ModalContainer extends Component {
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
+    const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const DraggableWrap = ({ condition, wrapper, children }) => condition ? wrapper(children) : children;
     const toggleWithClose = () => {
       onToggle();
@@ -120,7 +121,7 @@ class ModalContainer extends Component {
             className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
             autoFocus={autoFocus || false}
             style={style}
-            wrapClassName={wrapClassName + ' ' + lowerCaseId}
+            wrapClassName={modalWrapClass + ' ' + lowerCaseId}
             modalTransition={{ timeout: timeout || 100 }}
           >
             {CompletelyCustomModal

@@ -344,7 +344,7 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Options',
         backdrop: false,
         bodyComponent: LayerSettings,
-        wrapClassName: 'clickable-behind-modal',
+        clickableBehindModal: true,
         modalClassName: ' layer-info-settings-modal layer-settings-modal',
         timeout: 150,
         bodyComponentProps: {
@@ -363,7 +363,7 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Description',
         backdrop: false,
         bodyComponent: LayerInfo,
-        wrapClassName: 'clickable-behind-modal',
+        clickableBehindModal: true,
         modalClassName: ' layer-info-settings-modal layer-info-modal',
         timeout: 150,
         bodyComponentProps: {

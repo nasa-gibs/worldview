@@ -109,7 +109,8 @@ class GIF extends Component {
       <Modal
         backdrop={false}
         isOpen={true}
-        wrapClassName={'clickable-behind-modal toolbar_modal_outer'}
+        clickableBehindModal={true}
+        wrapClassName={'toolbar_modal_outer'}
         className={'gif-modal dynamic-modal'}
         style={this.getStyle(this.state)}
         toggle={onClose}
