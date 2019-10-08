@@ -10,12 +10,12 @@ Fixes # .
 
 ## Checklist
 
-_Put an `x` in the boxes that apply. You can also fill these out after creating the PR. If you're unsure about any of them, don't hesitate to ask. We're here to help! This is simply a reminder of what we are going to look for before merging your code._
+_Please review the items below. If you're unsure about any of them, don't hesitate to ask. We're here to help! This is simply a reminder of what we are going to look for before merging your code._
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/nasa-gibs/worldview/blob/master/.github/CONTRIBUTING.md) doc
-- [ ] I have added necessary documentation (if applicable)
-- [ ] I have added tests that prove my fix is effective or that my feature works (if applicable)
-- [ ] Any dependent changes have been merged and published in downstream modules (if applicable)
+- I have read the [CONTRIBUTING](https://github.com/nasa-gibs/worldview/blob/master/.github/CONTRIBUTING.md) doc
+- I have added necessary documentation (if applicable)
+- I have added tests that prove my fix is effective or that my feature works (if applicable)
+- Any dependent changes have been merged and published in downstream modules (if applicable)
 
 ## Further comments
 
