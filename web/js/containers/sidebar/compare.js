@@ -119,7 +119,7 @@ const mapDispatchToProps = dispatch => ({
         headerText: 'You are now in comparison mode',
         backdrop: false,
         size: 'lg',
-        wrapClassName: 'clickable-behind-modal',
+        clickableBehindModal: true,
         bodyComponent: CompareAlertModalBody,
         desktopOnly: true
       })

@@ -543,7 +543,13 @@ class PlayAnimation extends React.Component {
   renderSpinner() {
     const { onClose } = this.props;
     return (
-      <Modal isOpen={true} toggle={onClose} size="sm" backdrop={false}>
+      <Modal
+        isOpen={true}
+        toggle={onClose}
+        size="sm"
+        backdrop={false}
+        wrapClassName={'clickable-behind-modal'}
+      >
         <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
         <ModalBody>
           <div style={{ minHeight: 50 }}>
