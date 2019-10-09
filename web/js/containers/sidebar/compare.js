@@ -48,7 +48,7 @@ class CompareCase extends React.Component {
             isOpen={true}
             onClick={openAlertModal}
             onDismiss={this.dismissAlert}
-            message="You are now in comparison mode"
+            message="You are now in comparison mode."
           />
         ) : (
           ''
