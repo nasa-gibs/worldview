@@ -33,8 +33,16 @@
   margin-left: 5px;
 }
 .alert-content {
+  padding-right: 3px;
   display: flex;
   align-items: center;
   min-height: 40px;
-  height: 20px; /* IE11 vertical align fix */
+  width: 100%;
+}
+
+/* IE11 align-items center fix */
+.alert-content::after {
+  content: '';
+  min-height: inherit;
+  font-size: 0;
 }
