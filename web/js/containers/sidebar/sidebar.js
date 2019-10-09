@@ -28,7 +28,7 @@ import {
 const getActiveTabs = function(config) {
   const features = config.features;
   return {
-    download: features.dataDownload,
+    download: features.dataDownload && !util.browser.touchDevice,
     layers: true,
     events: features.naturalEvents
   };
@@ -173,7 +173,7 @@ class Sidebar extends React.Component {
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     const naturalEventsFeatureActive = config.features.naturalEvents;
-    const dataDownloadFeatureActive = config.features.dataDownload;
+    const dataDownloadFeatureActive = config.features.dataDownload && !util.browser.touchDevice;
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
