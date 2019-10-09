@@ -21,8 +21,6 @@ export function promiseImageryForTime(date, layers, state) {
     return promiseLayerGroup(layer, viewState, pixelRatio, selectedMap, def);
   });
   return new Promise(resolve => {
-    Promise.all(promiseArray).then(function() {
-      resolve(date);
-    });
+    Promise.all(promiseArray).then(() => resolve(date));
   });
 }
