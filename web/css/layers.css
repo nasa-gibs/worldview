@@ -166,7 +166,6 @@
 
 .layers-all {
   height: 100%;
-  margin-top: -5px;
 }
 
 .layers-all .layers-all-layer {
@@ -181,6 +180,9 @@
   background: rgba(0, 0, 0, 0.85);
   padding-left: 1.2em;
   line-height: 0;
+}
+.layers-all .layers-all-layer:first-of-type {
+  margin-top: 0;
 }
 
 .layers-all .layers-all-layer .layers-all-layer-icon {
