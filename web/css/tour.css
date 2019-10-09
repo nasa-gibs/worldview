@@ -65,6 +65,11 @@
   border: 0;
   border-radius: 0;
 }
+
+.tour-in-progress .modal-content {
+  height: 350px;
+}
+
 .tour-start .scrollbar-visible .modal-body {
   padding-right: 10px;
 }
