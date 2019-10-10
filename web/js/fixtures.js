@@ -14,7 +14,7 @@ var fixtures = {
   light_blue: 'f0f0ffff',
   dark_blue: '000040'
 };
-fixtures.getState = function () {
+fixtures.getState = function() {
   return {
     compare: initialCompareState,
     config: fixtures.config(),
@@ -37,6 +37,7 @@ fixtures.getState = function () {
               },
               legend: {
                 tooltips: ['0', '1', '2'],
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 minLabel: '0',
                 maxLabel: '2',
                 refs: ['0', '1', '2']
@@ -56,6 +57,7 @@ fixtures.getState = function () {
               },
               legend: {
                 tooltips: ['0', '1', '2'],
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 minLabel: '0',
                 maxLabel: '2',
                 refs: ['0', '1', '2']
@@ -184,7 +186,7 @@ fixtures.getState = function () {
   };
 };
 
-fixtures.config = function () {
+fixtures.config = function() {
   return {
     pageLoadTime: new Date(),
     now: new Date(),
@@ -365,12 +367,15 @@ fixtures.config = function () {
               entries: {
                 type: 'scale',
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
-                values: [0, 1, 2]
+                values: [0, 1, 2],
+                refs: ['0', '1', '2']
+
               },
               legend: {
                 tooltips: ['0', '1', '2'],
                 minLabel: '0',
-                maxLabel: '2'
+                maxLabel: '2',
+                refs: ['0', '1', '2']
               }
             }
           ]
@@ -382,12 +387,15 @@ fixtures.config = function () {
               entries: {
                 type: 'scale',
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
-                values: [0, 1, 2]
+                values: [0, 1, 2],
+                refs: ['0', '1', '2']
+
               },
               legend: {
                 tooltips: ['0', '1', '2'],
                 minLabel: '0',
-                maxLabel: '2'
+                maxLabel: '2',
+                refs: ['0', '1', '2']
               }
             }
           ]

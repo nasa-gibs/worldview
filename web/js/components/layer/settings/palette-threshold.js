@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
-import { getFirstIndexFromRef } from '../../../modules/palettes/util'
+import { getFirstIndexFromRef } from '../../../modules/palettes/util';
 import { Checkbox } from '../../util/checkbox';
 
 class ThresholdSelect extends React.Component {

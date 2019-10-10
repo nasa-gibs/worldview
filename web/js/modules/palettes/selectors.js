@@ -109,10 +109,10 @@ export function getCustomPalette(paletteId, customsPaletteConfig) {
   }
   return palette;
 }
-var useLookup = function (layerId, palettesObj, state) {
+var useLookup = function(layerId, palettesObj, state) {
   var use = false;
   var active = palettesObj[layerId].maps;
-  lodashEach(active, function (palette, index) {
+  lodashEach(active, function(palette, index) {
     if (palette.custom) {
       use = true;
       return false;
@@ -138,7 +138,7 @@ export function getLookup(layerId, groupstr, state) {
   groupstr = groupstr || state.compare.activeString;
   return state.palettes[groupstr][layerId].lookup;
 }
-var updateLookup = function (layerId, palettesObj, state) {
+var updateLookup = function(layerId, palettesObj, state) {
   let newPalettes = palettesObj;
   if (!useLookup(layerId, newPalettes, state)) {
     delete newPalettes[layerId];
@@ -146,7 +146,7 @@ var updateLookup = function (layerId, palettesObj, state) {
   }
   var lookup = {};
   var active = newPalettes[layerId].maps;
-  lodashEach(active, function (palette, index) {
+  lodashEach(active, function(palette, index) {
     var oldLegend = palette.legend;
     var entries = palette.entries;
     const refs = oldLegend.refs;
@@ -172,7 +172,7 @@ var updateLookup = function (layerId, palettesObj, state) {
     var sourceCount = source.length;
     var targetCount = target.length;
     var appliedLegends = [];
-    lodashEach(source, function (color, index) {
+    lodashEach(source, function(color, index) {
       var targetColor;
       if (index < min || index > max) {
         targetColor = '00000000';
@@ -230,7 +230,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
   var values = getPalette(layerId, index, groupStr, state).entries.values;
   var result;
-  lodashEach(values, function (check, index) {
+  lodashEach(values, function(check, index) {
     var min = getMinValue(check);
     var max = getMaxValue(check);
     if (type === 'min' && value === min) {
@@ -335,12 +335,12 @@ export function clearCustomSelector(layerId, index, palettes, state) {
   }); // remove custom key
   return updateLookup(layerId, newPalettes, state);
 }
-var prepare = function (layerId, palettesObj, state) {
+var prepare = function(layerId, palettesObj, state) {
   var newPalettes = lodashCloneDeep(palettesObj);
   if (!newPalettes[layerId]) newPalettes[layerId] = {};
   var active = newPalettes[layerId];
   active.maps = active.maps || [];
-  lodashEach(getRenderedPalette(layerId, undefined, state).maps, function (
+  lodashEach(getRenderedPalette(layerId, undefined, state).maps, function(
     palette,
     index
   ) {
