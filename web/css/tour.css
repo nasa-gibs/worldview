@@ -428,9 +428,9 @@
 .tour-in-progress .modal-body {
   color: #fff;
   padding: 16px 20px;
-  height: 248px;
   overflow-y: scroll;
   border-bottom: 2px solid #fff;
+  -ms-flex: 1 1 25px;
 }
 
 .tour-in-progress .modal-body p {
