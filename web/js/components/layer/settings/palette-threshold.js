@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
-
+import { getFirstIndexFromRef } from '../../../modules/palettes/util'
 import { Checkbox } from '../../util/checkbox';
 
 class ThresholdSelect extends React.Component {
   constructor(props) {
     super(props);
+    const { start, end, palette, legend } = props;
     this.state = {
-      start: props.start,
-      end: props.end,
+      start: start ? getFirstIndexFromRef(palette.entries.refs[start], legend.refs) : start,
+      end: end ? getFirstIndexFromRef(palette.entries.refs[end], legend.refs) : start,
       squashed: props.squashed,
       activeDragger: 'start'
     };
@@ -22,13 +23,16 @@ class ThresholdSelect extends React.Component {
    * @param {Boolean} boo
    */
   updateSquash(boo) {
-    const { setRange, layerId, index, groupName } = this.props;
+    const { setRange, layerId, index, groupName, palette, legend } = this.props;
     const { start, end, squashed } = this.state;
     const isSquashed = !squashed;
+    const startIndex = legend.refs[start];
+    const endIndex = legend.refs[end];
+
     setRange(
       layerId,
-      parseFloat(start),
-      parseFloat(end),
+      parseFloat(getFirstIndexFromRef(startIndex, palette.entries.refs)),
+      parseFloat(getFirstIndexFromRef(endIndex, palette.entries.refs)),
       isSquashed,
       index,
       groupName
@@ -41,11 +45,13 @@ class ThresholdSelect extends React.Component {
    * @param {Array} thresholdArray | Array of start/end indexs for colormap
    */
   updateThreshold(thresholdArray) {
-    const { layerId, index, groupName } = this.props;
+    const { layerId, index, groupName, palette, legend } = this.props;
     const { start, end } = this.state;
-
     const newStart = Math.ceil(Number(thresholdArray[0]));
     const newEnd = Math.ceil(Number(thresholdArray[1]));
+    const startRef = legend.refs[newStart];
+    const endRef = legend.refs[newEnd];
+
     if (newStart !== start && newEnd !== end) {
       this.setState({
         start: newStart,
@@ -63,10 +69,11 @@ class ThresholdSelect extends React.Component {
       return;
     }
     // Update local state on every range-selector change but debounce threshold model update
+
     this.debounceSetRange(
       layerId,
-      parseFloat(newStart),
-      parseFloat(newEnd),
+      parseFloat(getFirstIndexFromRef(startRef, palette.entries.refs)),
+      parseFloat(getFirstIndexFromRef(endRef, palette.entries.refs)),
       this.state.squashed,
       index,
       groupName

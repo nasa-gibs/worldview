@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
-import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
+import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas, getFirstIndexFromRef } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
 
 class PaletteLegend extends React.Component {
@@ -237,8 +237,8 @@ class PaletteLegend extends React.Component {
     }
     var min = legend.minLabel || legend.tooltips[0];
     var max = legend.maxLabel || legend.tooltips[toolTipLength];
-    min = palette.min ? legend.tooltips[palette.min] : min;
-    max = palette.max ? legend.tooltips[palette.max] : max;
+    min = palette.min ? legend.tooltips[getFirstIndexFromRef(palette.entries.refs[palette.min], legend.refs)] : min;
+    max = palette.max ? legend.tooltips[getFirstIndexFromRef(palette.entries.refs[palette.max], legend.refs)] : max;
 
     min = legend.units ? min + ' ' + legend.units : min;
     max = legend.units ? max + ' ' + legend.units : max;
@@ -253,8 +253,8 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-          ''
-        )}
+            ''
+          )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
@@ -375,8 +375,8 @@ class PaletteLegend extends React.Component {
                     )}
                 </div>
               ) : (
-                ''
-              )}
+                  ''
+                )}
             </React.Fragment>
           );
         })}
