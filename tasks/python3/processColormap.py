@@ -44,76 +44,6 @@ def match_legend(entry, legends):
     except ValueError as e:
         raise ValueError("Invalid reference: %s" % entry["@ref"])
 
-# function returns a max or
-# min value from a list
-def get_extreme(extreme_list, extreme):
-    if(extreme == "max"):
-        if "+INF" in extreme_list:
-            return 'infinity'
-        else:
-            return max(extreme_list)
-    else:
-        if "-INF" in extreme_list:
-            return "neg-infinity"
-        else:
-            return min(extreme_list)
-
-# Adds tooltip string to selected
-# indexes that need to be replace.
-def apply_tooltip(tooltip, tooltip_list, index_list):
-    for index in index_list:
-        tooltip_list[index] = tooltip
-    return tooltip_list
-
-# to combines data values of corresponding
-# colors
-def replace_duplicates(duplicates, tooltip_list, entries):
-    dup_color_list = list(set(duplicates)) #removes array duplicates
-    for n, color in enumerate(dup_color_list): # loops through duplicate colors
-        min_list = []
-        max_list = []
-        index_list = []
-
-        for index, entry in enumerate(entries):
-            if(color == entry["@rgb"]):
-                # get min
-                value = entry['@value']
-                value = value.split(',')
-                if(len(value) > 1):
-                    value[0] = value[0].replace("[", "")
-                    min_list += [value[0]] # adds value to min array
-                    # get max
-                    value[1] = value[1].replace(")", "")
-                    max_list += [value[1]] # adds value to max array
-                    # add index
-                else:
-                    min_list += [value[0]] # adds value to min array
-                    max_list += [value[0]] # adds value to max array
-                index_list += [index]
-
-        # get max and min values
-        max_value = get_extreme(max_list, "max")
-        min_value = get_extreme(min_list, "min")
-        sep = ' - '
-        # handle infinity values
-        if(max_value == "infinity" or min_value == "neg-infinity"):
-            if(min_value == "neg-infinity"):
-                tooltip = '< ' + max_value
-            else:
-                tooltip = '>= ' + min_value
-        # zero range delta
-        elif min_value == max_value:
-            tooltip = min_value
-        # two different none-infinity values
-        # in range
-        else:
-            tooltip = min_value + sep + max_value
-
-        tooltip_list =  apply_tooltip(tooltip, tooltip_list, index_list)
-
-
-    return tooltip_list
-
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
 
@@ -134,28 +64,24 @@ def process_entries(colormap):
     values = []
     ticks = []
     tooltips = []
-    matches = []
-
+    legend_colors = []
+    refs_list = []
+    ref_skip_list = []
     color_format = "{0:02x}{1:02x}{2:02x}{3:02x}"
     for index, entry in enumerate(entries):
         legend = match_legend(entry, legends)
         if (legend == "false"):
+            ref_skip_list += [entry['@ref']]
             continue
         r,g,b = entry["@rgb"].split(",")
         a = 0 if entry.get("@transparent", "false") == "true" else 255
         if a == 0:
+            ref_skip_list += [entry['@ref']]
             continue
+        if "@ref" not in entry:
+            raise KeyError("No ref in legend")
+        refs_list += [entry['@ref']]
         colors += [color_format.format(int(r), int(g), int(b), a)]
-        if "@tooltip" not in legend:
-            raise KeyError("No tooltips in legend")
-        tooltip = legend["@tooltip"]
-        if (index > 0):
-            if (entry["@rgb"] == entries[index-1]["@rgb"]):
-                if (map_type == "continuous") or (map_type == "discrete"):
-                    matches += [entry["@rgb"]]
-        tooltips += [tooltip]
-        if "@showTick" in legend:
-            ticks.append(index)
         if (map_type == "continuous") or (map_type == "discrete"):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
@@ -170,20 +96,36 @@ def process_entries(colormap):
                 values += [new_items]
             except ValueError as e:
                 raise ValueError("Invalid value: %s" % entry["@value"])
-    if (len(matches) > 0 and len(tooltips) > 0):
-        tooltips = replace_duplicates(matches, tooltips, entries)
+    skip_index = 0
+    id_list = []
+    for index, entry in enumerate(legends):
+        if entry['@id'] in ref_skip_list:
+            skip_index = skip_index + 1
+            continue
+        r,g,b = entry["@rgb"].split(",")
+        legend_colors += [color_format.format(int(r), int(g), int(b), 255)]
+        if "@tooltip" not in entry:
+            raise KeyError("No tooltips in legend")
+        tooltips += [entry["@tooltip"]]
+        if "@id" not in entry:
+            raise KeyError("No id in legend")
+        id_list += [entry['@id']]
+        if "@showTick" in entry:
+           ticks += [index - skip_index]
 
     result = {
         "type": map_type,
         "entries": {
             "type": map_type,
             "colors": colors,
+            "refs": refs_list
         },
         "legend": {
-            "tooltips": tooltips,
-            "colors": colors,
+            "colors": legend_colors,
             "type": map_type,
-            "ticks": ticks
+            "tooltips": tooltips,
+            "ticks": ticks,
+            "refs": id_list
         }
     }
     if (map_type == "continuous") or (map_type == "discrete"):
