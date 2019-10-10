@@ -171,6 +171,7 @@ function mapStateToProps(state) {
     bodyTemplate = state[template];
     isTemplateModal = true;
   }
+  const isMobile = state.browser.lessThan.medium;
 
   return {
     isOpen: isOpen,
@@ -178,8 +179,8 @@ function mapStateToProps(state) {
     headerText,
     isCustom,
     id,
-    isMobile: state.browser.lessThan.medium,
-    screenHeight: state.browser.screenHeight,
+    isMobile,
+    screenHeight: isMobile ? undefined : state.browser.screenHeight,
     bodyTemplate,
     isTemplateModal,
     customProps
