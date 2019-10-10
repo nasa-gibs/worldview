@@ -113,8 +113,8 @@ class LayerSettings extends React.Component {
                 palette={palette}
               />
             ) : (
-                ''
-              )}
+              ''
+            )}
             <Palette
               setCustomPalette={setCustomPalette}
               groupName={groupName}

@@ -45,7 +45,7 @@ export function getCheckerboard() {
 
 export function palettesTranslate(source, target) {
   var translation = [];
-  lodashEach(source, function (color, index) {
+  lodashEach(source, function(color, index) {
     var sourcePercent = index / source.length;
     var targetIndex = Math.floor(sourcePercent * target.length);
     translation.push(target[targetIndex]);
@@ -134,7 +134,7 @@ export function drawTicksOnCanvas(ctx, legend, width) {
 }
 export function lookup(sourcePalette, targetPalette) {
   var lookup = {};
-  lodashEach(sourcePalette.colors, function (sourceColor, index) {
+  lodashEach(sourcePalette.colors, function(sourceColor, index) {
     var source =
       parseInt(sourceColor.substring(0, 2), 16) +
       ',' +
@@ -296,7 +296,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     return [];
   }
 }
-const createPaletteAttributeObject = function (def, value, attrObj, count) {
+const createPaletteAttributeObject = function(def, value, attrObj, count) {
   const key = attrObj.key;
   const attrArray = attrObj.array;
   let hasAtLeastOnePair = attrObj.isActive;
@@ -333,7 +333,7 @@ export function loadPalettes(permlinkState, state) {
     ];
   }
   lodashEach(stateArray, stateObj => {
-    lodashEach(state.layers[stateObj.groupStr], function (layerDef) {
+    lodashEach(state.layers[stateObj.groupStr], function(layerDef) {
       if (layerDef.palette) {
         var layerId = layerDef.id;
         var min = [];
@@ -341,7 +341,7 @@ export function loadPalettes(permlinkState, state) {
         var squash = [];
         var count = 0;
         if (layerDef.custom) {
-          lodashEach(layerDef.custom, function (value, index) {
+          lodashEach(layerDef.custom, function(value, index) {
             try {
               const newPalettes = setCustomSelector(
                 layerId,
@@ -359,7 +359,7 @@ export function loadPalettes(permlinkState, state) {
           });
         }
         if (layerDef.min) {
-          lodashEach(layerDef.min, function (value, index) {
+          lodashEach(layerDef.min, function(value, index) {
             try {
               min.push(
                 findPaletteExtremeIndex(
@@ -377,7 +377,7 @@ export function loadPalettes(permlinkState, state) {
           });
         }
         if (layerDef.max) {
-          lodashEach(layerDef.max, function (value, index) {
+          lodashEach(layerDef.max, function(value, index) {
             try {
               max.push(
                 findPaletteExtremeIndex(
