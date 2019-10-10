@@ -36,7 +36,7 @@
   padding-right: 3px;
   display: flex;
   align-items: center;
-  min-height: 40px;
+  height: 40px;
   width: 100%;
 }
 
