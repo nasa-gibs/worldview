@@ -1,22 +1,29 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-const ANIMATION_DELAY = 500;
+const ANIMATION_DELAY = 200; // interval firing to trigger parent level arrow change
+const CLICK_TIMEOUT_DELAY = 500; // wait before click becomes a delay
 
+var mouseHoldCheckTimer = null;
+var isMouseHolding = false;
+// left/right arrow intervals
+const intervals = {
+  left: 0,
+  right: 0
+};
 class DateChangeArrows extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.leftInterval = 0;
-    this.rightInterval = 0;
-  }
-
   /**
   * @desc repeatedly call while mouse down - decrement date
   * @returns {void}
   */
   leftArrowDown = () => {
     this.props.leftArrowDown();
-    this.leftInterval = setTimeout(this.leftArrowDown, ANIMATION_DELAY);
+    mouseHoldCheckTimer = setTimeout(function() {
+      mouseHoldCheckTimer = null;
+      isMouseHolding = true;
+      // set interval for holding arrow down
+      intervals.left = setInterval(this.props.leftArrowDown, ANIMATION_DELAY);
+    }.bind(this), CLICK_TIMEOUT_DELAY);
   }
 
   /**
@@ -25,7 +32,12 @@ class DateChangeArrows extends PureComponent {
   */
   rightArrowDown = () => {
     this.props.rightArrowDown();
-    this.rightInterval = setTimeout(this.rightArrowDown, ANIMATION_DELAY);
+    mouseHoldCheckTimer = setTimeout(function() {
+      mouseHoldCheckTimer = null;
+      isMouseHolding = true;
+      // set interval for holding arrow down
+      intervals.right = setInterval(this.props.rightArrowDown, ANIMATION_DELAY);
+    }.bind(this), CLICK_TIMEOUT_DELAY);
   }
 
   /**
@@ -33,7 +45,12 @@ class DateChangeArrows extends PureComponent {
   * @returns {void}
   */
   leftArrowUp = () => {
-    clearTimeout(this.leftInterval);
+    if (mouseHoldCheckTimer) {
+      clearTimeout(mouseHoldCheckTimer);
+    } else if (isMouseHolding) {
+      isMouseHolding = false;
+    }
+    clearInterval(intervals.left);
     this.props.leftArrowUp();
   }
 
@@ -42,8 +59,18 @@ class DateChangeArrows extends PureComponent {
   * @returns {void}
   */
   rightArrowUp = () => {
-    clearTimeout(this.rightInterval);
+    if (mouseHoldCheckTimer) {
+      clearTimeout(mouseHoldCheckTimer);
+    } else if (isMouseHolding) {
+      isMouseHolding = false;
+    }
+    clearInterval(intervals.right);
     this.props.rightArrowUp();
+  }
+
+  componentWillUnmount() {
+    clearInterval(intervals.left);
+    clearInterval(intervals.right);
   }
 
   render() {
