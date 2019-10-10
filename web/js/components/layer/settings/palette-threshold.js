@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
-import { getFirstIndexFromRef } from '../../../modules/palettes/util';
 import { Checkbox } from '../../util/checkbox';
 
 class ThresholdSelect extends React.Component {
@@ -10,8 +9,8 @@ class ThresholdSelect extends React.Component {
     super(props);
     const { start, end, palette, legend } = props;
     this.state = {
-      start: start ? getFirstIndexFromRef(palette.entries.refs[start], legend.refs) : start,
-      end: end ? getFirstIndexFromRef(palette.entries.refs[end], legend.refs) : start,
+      start: start ? legend.refs.indexOf(palette.entries.refs[start]) : start,
+      end: end ? legend.refs.indexOf(palette.entries.refs[end]) : start,
       squashed: props.squashed,
       activeDragger: 'start'
     };
@@ -31,8 +30,8 @@ class ThresholdSelect extends React.Component {
 
     setRange(
       layerId,
-      parseFloat(getFirstIndexFromRef(startIndex, palette.entries.refs)),
-      parseFloat(getFirstIndexFromRef(endIndex, palette.entries.refs)),
+      parseFloat(palette.entries.refs.indexOf(startIndex)),
+      parseFloat(palette.entries.refs.indexOf(endIndex)),
       isSquashed,
       index,
       groupName
@@ -72,8 +71,8 @@ class ThresholdSelect extends React.Component {
 
     this.debounceSetRange(
       layerId,
-      parseFloat(getFirstIndexFromRef(startRef, palette.entries.refs)),
-      parseFloat(getFirstIndexFromRef(endRef, palette.entries.refs)),
+      parseFloat(palette.entries.refs.indexOf(startRef)),
+      parseFloat(palette.entries.refs.indexOf(endRef)),
       this.state.squashed,
       index,
       groupName

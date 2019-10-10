@@ -219,9 +219,6 @@ export function isSupported() {
   var browser = util.browser;
   return !(browser.ie || !browser.webWorkers || !browser.cors);
 }
-export function getFirstIndexFromRef(ref, array) {
-  return array.indexOf(ref);
-}
 /**
  * Serialize palette info for layer
  *
