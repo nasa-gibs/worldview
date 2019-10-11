@@ -1030,7 +1030,7 @@ export function mapui(models, config, store, ui) {
             clickableBehindModal: true,
             desktopOnly: true,
             wrapClassName: 'vector-modal-wrap',
-            modalClassName: 'vector-modal',
+            modalClassName: 'vector-modal light',
             bodyComponent: VectorMetaTable,
             bodyComponentProps: {
               metaTitle: metaTitle,
