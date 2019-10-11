@@ -12,7 +12,11 @@
             ],
             "product":  "MOD06_L2_DAY",
             "wrapadjacentdays": true,
-
+            "projections": {
+                "geographic": {
+                    "source": "GIBS:geographic"
+                }
+            },
             "palette": {
                 "recommended":  ["blue_4"]
             }

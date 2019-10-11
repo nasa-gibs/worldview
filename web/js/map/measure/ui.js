@@ -35,7 +35,7 @@ export function measure(map, mapUiEvents, store) {
   let unitOfMeasure = 'km';
   let useGreatCircle = false;
   const self = {};
-  const source = new OlVectorSource();
+  const source = new OlVectorSource({ wrapX: false });
   const projection = map.getView().getProjection().getCode();
   const areaBgFill = new OlStyleFill({
     color: 'rgba(213, 78, 33, 0.1)'

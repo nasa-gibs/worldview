@@ -36,21 +36,18 @@ class PlayAnimation extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false;
+    this.queue.queue = [];
     if (this.interval) {
       clearInterval(this.interval);
     }
   }
 
-  /*
+  /**
    * Determines whether to start at
    * current date or to start at the
    * selected start date
    *
-   * @method getStartDate
-   * @static
-   *
    * @returns {string} ISO string Date
-   *
    */
   getStartDate() {
     const { endDate, startDate, currentDate } = this.props;
@@ -60,19 +57,15 @@ class PlayAnimation extends React.Component {
     return util.toISOStringSeconds(startDate);
   }
 
-  /*
+  /**
    * Gets the last date that should be added
    * to the queuer
-   *
-   * @method getLastBufferDateStr
-   * @static
    *
    * @param currentDate {object} JS date
    * @param startDate {object} JS date
    * @param endDate {object} JS date
    *
    * @returns {string} Date string
-   *
    */
   getLastBufferDateStr = function(currentDate, startDate, endDate) {
     const { queueLength, loop } = this.props;
@@ -93,19 +86,13 @@ class PlayAnimation extends React.Component {
     return util.toISOStringSeconds(day);
   };
 
-  /*
+  /**
    * adds dates to precache queuer
-   *
-   * @method initialPreload
-   * @static
    *
    * @param currentDate {object} JS date
    * @param startDate {object} JS date
    * @param endDate {object} JS date
    * @param lastToQueue {string} date String
-   *
-   * @returns {void}
-   *
    */
   initialPreload(currentDate, startDate, endDate, lastToQueue) {
     const { queueLength, selectDate, togglePlaying } = this.props;
@@ -125,18 +112,12 @@ class PlayAnimation extends React.Component {
     }
   }
 
-  /*
+  /**
    * Gets the last date that should be added
    * to the queuer
    *
-   * @method checkShouldPlay
-   * @static
-   *
    * @param currentPlayingDateJSDate {object} JS date
    *  that is currently being shown
-   *
-   * @returns {void}
-   *
    */
   checkShouldPlay = function(isLoopStart) {
     const { startDate, endDate, hasCustomPalettes } = this.props;
@@ -163,18 +144,12 @@ class PlayAnimation extends React.Component {
     this.shiftCache();
   };
 
-  /*
+  /**
    * Gets the last date that should be added
    * to the queuer
    *
-   * @method checkShouldLoop
-   * @static
-   *
    * @param currentPlayingDateJSDate {object} JS date
    *  that is currently being shown
-   *
-   * @returns {void}
-   *
    */
   checkShouldLoop(currentPlayingDateJSDate) {
     const { loop, startDate, queueLength, togglePlaying } = this.props;
@@ -190,17 +165,12 @@ class PlayAnimation extends React.Component {
     }
   }
 
-  /*
+  /**
    * Determines what dates should
    * be queued
    *
-   * @method checkQueue
-   * @static
-   *
    * @param bufferLength {number} number
    * @param index {string}
-   * @returns {void}
-   *
    */
   checkQueue(bufferLength, index) {
     const {
@@ -238,15 +208,8 @@ class PlayAnimation extends React.Component {
     }
   }
 
-  /*
+  /**
    * Clears precache
-   *
-   * @method clearCache
-   * @static
-   *
-   *
-   * @returns {void}
-   *
    */
   clearCache() {
     this.preloadObject = {};
@@ -254,19 +217,13 @@ class PlayAnimation extends React.Component {
     this.inQueueObject = {};
   }
 
-  /*
+  /**
    * Gets next date based on current
    * increments
-   *
-   * @method nextDate
-   * @static
-   *
    * @param date {object} JS date obj
    *
    * @returns {object} JS Date
-   *
    */
-
   nextDate(date) {
     const { interval, delta } = this.props;
     return util.dateAdd(date, interval, delta);
@@ -276,15 +233,9 @@ class PlayAnimation extends React.Component {
    * Custom date queuer created for
    * custom colormaps
    *
-   * @method customQueuer
-   * @static
-   *
    * @param currentDate {object} JS date
    * @param startDate {object} JS date
    * @param endDate {object} JS date
-   *
-   * @returns {void}
-   *
    */
   customQueuer(currentDate, startDate, endDate) {
     var nextDateStr;
@@ -304,16 +255,9 @@ class PlayAnimation extends React.Component {
   }
 
   /*
-   * Add date to loading Queue
-   * obj
-   *
-   * @method addToInQueue
-   * @static
+   * Add date to loading Queue obj
    *
    * @param date {object} JS date obj
-   *
-   * @returns {void}
-   *
    */
   addToInQueue(date) {
     var strDate = util.toISOStringSeconds(date);
@@ -321,17 +265,9 @@ class PlayAnimation extends React.Component {
     this.preloadedArray.push(strDate);
   }
 
-  /*
+  /**
    * removes item from cache after it has
    * been played and quelimit reached
-   *
-   *
-   *
-   * @method shiftCache
-   * @static
-   *
-   * @returns {void}
-   *
    */
   shiftCache() {
     const { queueLength, canPreloadAll } = this.props;
@@ -348,17 +284,10 @@ class PlayAnimation extends React.Component {
     }
   }
 
-  /*
-   *
-   * @method getNextBufferDate
-   * @static
-   *
+  /**
    * @param currentDate {object} JS date
    * @param startDate {object} JS date
    * @param endDate {object} JS date
-   *
-   * @returns {object} JS Date
-   *
    */
   getNextBufferDate(currentDate, startDate, endDate) {
     const strDate = this.preloadedArray[this.preloadedArray.length - 1];
@@ -370,18 +299,11 @@ class PlayAnimation extends React.Component {
     return nextDate;
   }
 
-  /*
-   * Verifies that date is
-   * valid and adds it to queuer
-   *
-   * @method addItemToQueue
-   * @static
+  /**
+   * Verifies that date is valid and adds it to queuer
    *
    * @param startDate {object} JS date
    * @param endDate {object} JS date
-   *
-   * @returns {void}
-   *
    */
   addItemToQueue(currentDate, startDate, endDate) {
     const { queueLength } = this.props;
@@ -399,19 +321,11 @@ class PlayAnimation extends React.Component {
     }
   }
 
-  /*
-   * checks if this date is in array of
-   * dates that need to play in future
-   * within buffer length
-   *
-   *
-   * @method isInToPlayGroup
-   * @static
+  /**
+   * checks if this date is in array of dates that need
+   * to play in future within buffer length
    *
    * @param testDate {string} JS date string
-   *
-   * @returns {boolean}
-   *
    */
   isInToPlayGroup(testDate) {
     const { startDate, endDate, loop, queueLength } = this.props;
@@ -435,28 +349,22 @@ class PlayAnimation extends React.Component {
     return false;
   }
 
-  /*
-   * Gets next date based on current
-   * increments
-   *
-   * @method nextDate
-   * @static
-   *
+  /**
+   * Gets next date based on current increments
    * @param date {object} JS date obj
    *
    * @returns {object} JS Date
-   *
    */
   addDate(date) {
     const { layers, promiseImageryForTime } = this.props;
     const activeLayers = getLayersActiveAtDate(layers, date);
     const strDate = util.toISOStringSeconds(date);
-    if (this.inQueueObject[strDate] || this.preloadObject[strDate]) return;
+    if (this.inQueueObject[strDate] || this.preloadObject[strDate]) {
+      return;
+    }
     this.addToInQueue(date);
     this.queue
-      .add(function() {
-        return promiseImageryForTime(date, activeLayers);
-      })
+      .add(() => promiseImageryForTime(date, activeLayers))
       .then(date => {
         if (this.mounted) {
           this.preloadObject[strDate] = date;
@@ -468,17 +376,10 @@ class PlayAnimation extends React.Component {
       });
   }
 
-  /*
-   * removes loader and starts the
-   * animation
-   *
-   * @method play
-   * @static
+  /**
+   * removes loader and starts the animation
    *
    * @param index {string} date string
-   *
-   * @returns {void}
-   *
    */
   play(dateStr) {
     const { togglePlaying } = this.props;
@@ -490,16 +391,10 @@ class PlayAnimation extends React.Component {
     }
   }
 
-  /*
-   * function that loops through frames
-   * at a specified time interval
-   *
-   * @method animate
-   * @static
+  /**
+   * loops through frame at a specified time interval
    *
    * @param index {string} Date string
-   * @returns {void}
-   *
    */
   animate(index) {
     const { selectDate, endDate, queueLength, speed } = this.props;
@@ -543,7 +438,13 @@ class PlayAnimation extends React.Component {
   renderSpinner() {
     const { onClose } = this.props;
     return (
-      <Modal isOpen={true} toggle={onClose} size="sm" backdrop={false}>
+      <Modal
+        isOpen={true}
+        toggle={onClose}
+        size="sm"
+        backdrop={false}
+        wrapClassName={'clickable-behind-modal'}
+      >
         <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
         <ModalBody>
           <div style={{ minHeight: 50 }}>

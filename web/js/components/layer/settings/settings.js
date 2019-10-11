@@ -115,6 +115,7 @@ class LayerSettings extends React.Component {
                 layerId={layer.id}
                 squashed={!!palette.squash}
                 index={i}
+                palette={palette}
               />
             ) : (
               ''
@@ -194,6 +195,7 @@ class LayerSettings extends React.Component {
             squashed={!!palette.squash}
             groupName={groupName}
             index={0}
+            palette={palette}
           />
         }
         <Palette

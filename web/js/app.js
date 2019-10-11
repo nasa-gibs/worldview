@@ -15,6 +15,7 @@ import Modal from './containers/modal';
 // Other
 import Brand from './brand';
 import MeasureButton from './components/measure-tool/measure-button';
+import FeatureAlert from './components/feature-alert/alert';
 
 // actions
 import { calculateResponsiveState } from 'redux-responsive';
@@ -76,6 +77,7 @@ import '../css/modal.css';
 import '../css/measure.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
+import '../css/geostationary-modal.css';
 import '../pages/css/document.css';
 import { keyPress } from './modules/key-press/actions';
 
@@ -103,6 +105,7 @@ class App extends React.Component {
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
+        <FeatureAlert />
         <Sidebar />
         {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />

@@ -75,13 +75,28 @@ def process_layer(gc_layer, wv_layers, colormaps):
         if dimension["ows:Identifier"] == "Time":
             wv_layer = process_temporal(wv_layer, dimension["Value"])
     # Extract matrix set
-    matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
+    matrixSetLink = gc_layer["TileMatrixSetLink"]
+    matrixSet = matrixSetLink["TileMatrixSet"]
+
     wv_layer["projections"] = {
         entry["projection"]: {
             "source": entry["source"],
-            "matrixSet": matrixSet
+            "matrixSet": matrixSet,
         }
     }
+
+    if "TileMatrixSetLimits" in matrixSetLink and matrixSetLink["TileMatrixSetLimits"] is not None:
+        matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]["TileMatrixLimits"]
+        mappedSetLimits = []
+        for setLimit in matrixSetLimits:
+            mappedSetLimits.append({
+                "tileMatrix": setLimit["TileMatrix"],
+                "minTileRow": int(setLimit["MinTileRow"]),
+                "maxTileRow": int(setLimit["MaxTileRow"]),
+                "minTileCol": int(setLimit["MinTileCol"]),
+                "maxTileCol": int(setLimit["MaxTileCol"]),
+            })
+        wv_layer["projections"][entry["projection"]]["matrixSetLimits"] = mappedSetLimits;
 
     # Vector data links
     if "ows:Metadata" in gc_layer and gc_layer["ows:Metadata"] is not None:
@@ -192,20 +207,32 @@ def process_entry(entry, colormaps):
                         ident, str(e)))
 
     def process_matrix_set(gc_matrix_set):
+        tileMatrixArr = gc_matrix_set["TileMatrix"]
         ident = gc_matrix_set["ows:Identifier"]
-        zoom_levels = len(gc_matrix_set["TileMatrix"])
+        zoom_levels = len(tileMatrixArr)
         resolutions = []
+        formattedTileMatrixArr = []
         max_resolution = entry["maxResolution"]
         for zoom in range(0, zoom_levels):
             resolutions = resolutions + [max_resolution / (2 ** zoom)]
+
+        # We are assuming that width/heights are the same for every matrix and excluding
+        # the "TileWidth", "TileHeight" properties here
+        for tileMatrix in tileMatrixArr:
+            formattedTileMatrixArr.append({
+                "matrixWidth": int(tileMatrix["MatrixWidth"]),
+                "matrixHeight": int(tileMatrix["MatrixHeight"]),
+            })
+
         wv_matrix_sets[ident] = {
             "id": ident,
             "maxResolution": max_resolution,
             "resolutions": resolutions,
             "tileSize": [
-                int(gc_matrix_set["TileMatrix"][0]["TileWidth"]),
-                int(gc_matrix_set["TileMatrix"][0]["TileHeight"])
-            ]
+                int(tileMatrixArr[0]["TileWidth"]),
+                int(tileMatrixArr[0]["TileHeight"])
+            ],
+            "tileMatrices": formattedTileMatrixArr
         }
 
     if(type(gc_contents["TileMatrixSet"]) is OrderedDict):

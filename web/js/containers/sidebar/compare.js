@@ -48,7 +48,7 @@ class CompareCase extends React.Component {
             isOpen={true}
             onClick={openAlertModal}
             onDismiss={this.dismissAlert}
-            message="You are now in comparison mode"
+            message="You are now in comparison mode."
           />
         ) : (
           ''
@@ -119,7 +119,7 @@ const mapDispatchToProps = dispatch => ({
         headerText: 'You are now in comparison mode',
         backdrop: false,
         size: 'lg',
-        wrapClassName: 'clickable-behind-modal',
+        clickableBehindModal: true,
         bodyComponent: CompareAlertModalBody,
         desktopOnly: true
       })

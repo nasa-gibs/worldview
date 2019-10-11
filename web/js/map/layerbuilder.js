@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates */
 import util from '../util/util';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
@@ -35,7 +36,7 @@ import { ADD_GRANULE_LAYER_DATES } from '../modules/layers/constants';
 const GRANULE_COUNT = 20;
 
 export function mapLayerBuilder(models, config, cache, ui, store) {
-  var self = {};
+  const self = {};
 
   self.init = function() {
     self.extentLayers = [];
@@ -470,6 +471,63 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     return [layerId, projId, date, style, activeGroupStr].join(':');
   };
+
+  /**
+   * Determine the extent based on TileMatrixSetLimits defined in GetCapabilities response
+   * @param {*} matrixSet - from GetCapabilities
+   * @param {*} matrixSetLimits - from GetCapabilities
+   * @param {*} day
+   * @param {*} proj - current projection
+   */
+  const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day, proj) => {
+    let extent, origin;
+
+    switch (day) {
+      case 1:
+        extent = [-250, -90, -180, 90];
+        origin = [-540, 90];
+        break;
+      case -1:
+        extent = [180, -90, 250, 90];
+        origin = [180, 90];
+        break;
+      default:
+        extent = proj.maxExtent;
+        origin = [extent[0], extent[3]];
+        break;
+    }
+
+    const resolutionLen = matrixSet.resolutions.length;
+    const setlimitsLen = matrixSetLimits && matrixSetLimits.length;
+
+    // If number of set limits doens't match sets, we are assuming this product
+    // crosses the antimeridian and don't have a reliable way to calculate a single
+    // extent based on multiple set limits.
+    if (!matrixSetLimits || setlimitsLen !== resolutionLen || day) {
+      return { origin, extent };
+    }
+
+    const limitIndex = resolutionLen - 1;
+    const resolution = matrixSet.resolutions[limitIndex];
+    const tileWidth = matrixSet.tileSize[0] * resolution;
+    const tileHeight = matrixSet.tileSize[1] * resolution;
+    const {
+      minTileCol,
+      maxTileRow,
+      maxTileCol,
+      minTileRow
+    } = matrixSetLimits[limitIndex];
+    const minX = extent[0] + (minTileCol * tileWidth);
+    const minY = extent[3] - ((maxTileRow + 1) * tileHeight);
+    const maxX = extent[0] + ((maxTileCol + 1) * tileWidth);
+    const maxY = extent[3] - (minTileRow * tileHeight);
+
+    return {
+      origin,
+      extent: [minX, minY, maxX, maxY]
+    };
+  };
+
   /**
    * Create a new WMTS Layer
    * @method createLayerWMTS
@@ -478,40 +536,18 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers WMTS layer
    */
-  var createLayerWMTS = function(def, options, day, state) {
+  const createLayerWMTS = function(def, options, day, state) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    var proj, source, matrixSet, matrixIds, urlParameters, date, extent, start;
-    proj = state.proj.selected;
-    source = config.sources[def.source];
-    extent = proj.maxExtent;
-    start = [proj.maxExtent[0], proj.maxExtent[3]];
+    const proj = state.proj.selected;
+    const source = config.sources[def.source];
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
     }
-    matrixSet = source.matrixSets[def.matrixSet];
+    const matrixSet = source.matrixSets[def.matrixSet];
     if (!matrixSet) {
       throw new Error(def.id + ': Undefined matrix set: ' + def.matrixSet);
     }
-    if (typeof def.matrixIds === 'undefined') {
-      matrixIds = [];
-      lodashEach(matrixSet.resolutions, function(resolution, index) {
-        matrixIds.push(index);
-      });
-    } else {
-      matrixIds = def.matrixIds;
-    }
-
-    if (day) {
-      if (day === 1) {
-        extent = [-250, -90, -180, 90];
-        start = [-540, 90];
-      } else {
-        extent = [180, -90, 250, 90];
-        start = [180, 90];
-      }
-    }
-
-    date = options.date || state.date[activeDateStr];
+    let date = options.date || state.date[activeDateStr];
     if (def.period === 'subdaily') {
       date = self.closestDate(def, options);
       date = new Date(date.getTime());
@@ -519,10 +555,19 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     if (day && def.period !== 'subdaily') {
       date = util.dateAdd(date, 'day', day);
     }
-
-    urlParameters =
-      '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-    var sourceOptions = {
+    const { tileMatrices, resolutions, tileSize } = matrixSet;
+    const { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
+    const sizes = tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+    const tileGridOptions = {
+      origin,
+      extent,
+      sizes,
+      resolutions,
+      matrixIds: def.matrixIds || resolutions.map((set, index) => index),
+      tileSize: tileSize[0]
+    };
+    const urlParameters = '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
+    const sourceOptions = {
       url: source.url + urlParameters,
       layer: def.layer || def.id,
       cacheSize: 4096,
@@ -530,12 +575,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       format: def.format,
       transition: 0,
       matrixSet: matrixSet.id,
-      tileGrid: new OlTileGridWMTS({
-        origin: start,
-        resolutions: matrixSet.resolutions,
-        matrixIds: matrixIds,
-        tileSize: matrixSet.tileSize[0]
-      }),
+      tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
       style: typeof def.style === 'undefined' ? 'default' : def.style
     };
@@ -566,7 +606,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers Vector layer
    */
-  var createLayerVector = function(def, options, day, state) {
+  const createLayerVector = function(def, options, day, state) {
     const { proj, compare } = state;
     var date, urlParameters, extent, source, matrixSet, matrixIds, start;
     const selectedProj = proj.selected;
@@ -671,7 +711,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers WMS layer
    */
-  var createLayerWMS = function(def, options, day, state) {
+  const createLayerWMS = function(def, options, day, state) {
     const { proj, compare } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const selectedProj = proj.selected;

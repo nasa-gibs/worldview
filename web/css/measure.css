@@ -5,10 +5,11 @@
   padding: 6px 10px;
 }
 
-.modal-dialog.toolbar-modal.measure-tool-modal {
-  top: unset;
+.modal-dialog.measure-tool-modal {
+  position: absolute;
   right: 10px;
   bottom: 151px;
+
   & .modal-body {
     padding: 8px 0 0;
     & div {
@@ -30,7 +31,7 @@
   .wv-measure-button {
     bottom: 10px;
   }
-  .modal-dialog.toolbar-modal.measure-tool-modal {
+  .modal-dialog.measure-tool-modal {
     bottom: 55px;
     margin: 0;
   }

@@ -12,7 +12,12 @@
               "modis_terra"
             ],
             "product":  "MOD04_L2",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "projections": {
+                "geographic": {
+                    "source": "GIBS:geographic"
+                }
+            }
         }
     }
 }

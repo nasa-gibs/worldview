@@ -54,7 +54,14 @@ class Tour extends React.Component {
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
-    if (currentStory && currentStoryIndex !== -1) this.fetchMetadata(currentStory, 0);
+  }
+
+  componentDidMount() {
+    const { currentStory, currentStoryIndex, currentStoryId } = this.state;
+    // If app loads with tour link at step other than 1, restart that tour story
+    if (currentStory && currentStoryIndex !== -1) {
+      this.selectTour(null, currentStory, 1, currentStoryId);
+    }
   }
 
   toggleModalStart(e) {
@@ -105,7 +112,7 @@ class Tour extends React.Component {
     var errorMessage = '<p>There was an error loading this description.</p>';
     var uri = `${origin}${pathname}config/metadata/stories/${
       currentStory.id
-    }/${description}`;
+      }/${description}`;
     this.setState({
       isLoadingMeta: true,
       metaLoaded: false,
@@ -189,9 +196,9 @@ class Tour extends React.Component {
         newStep,
         currentStory.steps.length,
         currentStory.steps[newStep - 1].stepLink +
-          '&tr=' +
-          currentStoryId +
-          transition,
+        '&tr=' +
+        currentStoryId +
+        transition,
         this.props.config,
         this.props.renderedPalettes
       );
@@ -218,9 +225,9 @@ class Tour extends React.Component {
         newStep,
         currentStory.steps.length,
         currentStory.steps[newStep - 1].stepLink +
-          '&tr=' +
-          currentStoryId +
-          transition,
+        '&tr=' +
+        currentStoryId +
+        transition,
         this.props.config,
         this.props.renderedPalettes
       );
@@ -316,6 +323,7 @@ class Tour extends React.Component {
                 stories={stories}
                 storyOrder={storyOrder}
                 modalStart={modalStart}
+                height={screenHeight}
                 checked={
                   util.browser.localStorage
                     ? !!localStorage.getItem('hideTour')

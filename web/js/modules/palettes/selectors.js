@@ -149,13 +149,15 @@ var updateLookup = function(layerId, palettesObj, state) {
   lodashEach(active, function(palette, index) {
     var oldLegend = palette.legend;
     var entries = palette.entries;
+    const refs = oldLegend.refs;
     var legend = {
-      colors: [],
+      colors: oldLegend.colors,
       minLabel: oldLegend.minLabel,
       maxLabel: oldLegend.maxLabel,
       tooltips: oldLegend.tooltips,
       ticks: oldLegend.ticks,
       units: oldLegend.units,
+      refs: refs,
       type: entries.type,
       title: entries.title,
       id: oldLegend.id
@@ -167,9 +169,9 @@ var updateLookup = function(layerId, palettesObj, state) {
 
     var min = palette.min || 0;
     var max = palette.max || source.length;
-
     var sourceCount = source.length;
     var targetCount = target.length;
+    var appliedLegends = [];
     lodashEach(source, function(color, index) {
       var targetColor;
       if (index < min || index > max) {
@@ -191,7 +193,13 @@ var updateLookup = function(layerId, palettesObj, state) {
         }
         targetColor = target[targetIndex];
       }
-      legend.colors.push(targetColor);
+      const colormapRef = entries.refs[index];
+      const refIndex = refs.indexOf(colormapRef);
+
+      if (~refIndex && !appliedLegends.includes(colormapRef)) {
+        appliedLegends.push(colormapRef);
+        legend.colors[refIndex] = targetColor;
+      }
       var lookupSource =
         lodashParseInt(color.substring(0, 2), 16) +
         ',' +

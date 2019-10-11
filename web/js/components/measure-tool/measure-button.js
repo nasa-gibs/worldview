@@ -10,7 +10,7 @@ import googleTagManager from 'googleTagManager';
 const MEASURE_MENU_PROPS = {
   headerText: null,
   type: 'toolbar',
-  modalClassName: 'measure-tool-modal toolbar-modal',
+  modalClassName: 'measure-tool-modal',
   backdrop: false,
   bodyComponent: MeasureMenu,
   touchDevice: false,

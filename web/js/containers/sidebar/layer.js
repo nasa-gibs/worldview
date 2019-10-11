@@ -344,6 +344,8 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Options',
         backdrop: false,
         bodyComponent: LayerSettings,
+        // Using clickableBehindModal: true here causes an issue where switching sidebar
+        // tabs does not close this modal
         wrapClassName: 'clickable-behind-modal',
         modalClassName: ' layer-info-settings-modal layer-settings-modal',
         timeout: 150,
@@ -363,6 +365,8 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Description',
         backdrop: false,
         bodyComponent: LayerInfo,
+        // Using clickableBehindModal: true here causes an issue where switching sidebar
+        // tabs does not close this modal
         wrapClassName: 'clickable-behind-modal',
         modalClassName: ' layer-info-settings-modal layer-info-modal',
         timeout: 150,

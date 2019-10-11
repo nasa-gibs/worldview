@@ -8,15 +8,10 @@
   border: none;
   z-index: 100;
 }
-.wv-alert div {
-  display: inline-block;
-  padding: 11px;
-  &.close-alert {
-    padding: 11px 2px;
-  }
+.wv-alert .close-alert {
+  padding: 11px 2px;
 }
 .wv-alert div:hover {
-  display: inline-block;
   background-color: #ddd;
   color: #333;
 }
@@ -32,4 +27,22 @@
 }
 .wv-alert div:hover .exit {
   color: #333;
+}
+.wv-alert-icon {
+  padding-left: 3px;
+  margin-left: 5px;
+}
+.alert-content {
+  padding-right: 3px;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  width: 100%;
+}
+
+/* IE11 align-items center fix */
+.alert-content::after {
+  content: '';
+  min-height: inherit;
+  font-size: 0;
 }

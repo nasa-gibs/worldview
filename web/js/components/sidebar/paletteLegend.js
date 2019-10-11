@@ -237,8 +237,8 @@ class PaletteLegend extends React.Component {
     }
     var min = legend.minLabel || legend.tooltips[0];
     var max = legend.maxLabel || legend.tooltips[toolTipLength];
-    min = palette.min ? legend.tooltips[palette.min] : min;
-    max = palette.max ? legend.tooltips[palette.max] : max;
+    min = palette.min ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
+    max = palette.max ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
 
     min = legend.units ? min + ' ' + legend.units : min;
     max = legend.units ? max + ' ' + legend.units : max;
@@ -274,7 +274,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              left: isHoveringLegend ? 0 : xOffset + 0.5,
+              left: isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden'
             }}
           />

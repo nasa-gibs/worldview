@@ -66,6 +66,13 @@
   border-radius: 0;
 }
 
+.tour-in-progress .modal-content {
+  height: 350px;
+}
+
+.tour-start .scrollbar-visible .modal-body {
+  padding-right: 10px;
+}
 .tour-start .modal-header {
   color: #fff;
   background-color: #00457b;
@@ -421,9 +428,9 @@
 .tour-in-progress .modal-body {
   color: #fff;
   padding: 16px 20px;
-  height: 248px;
   overflow-y: scroll;
   border-bottom: 2px solid #fff;
+  -ms-flex: 1 1 25px;
 }
 
 .tour-in-progress .modal-body p {
@@ -760,7 +767,7 @@
 
   /* .tour-start */
   .tour-start .modal-dialog {
-    max-width: 618px;
+    max-width: 624px;
   }
 
   .tour-start .modal-body .tour-box {

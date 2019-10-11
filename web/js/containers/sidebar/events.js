@@ -182,7 +182,7 @@ const mapDispatchToProps = dispatch => ({
         headerText: 'Events may not be visible at all times.',
         backdrop: false,
         size: 'lg',
-        wrapClassName: 'clickable-behind-modal',
+        clickableBehindModal: true,
         bodyComponent: EventsAlertModalBody,
         desktopOnly: true
       })
