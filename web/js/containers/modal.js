@@ -122,7 +122,8 @@ class ModalContainer extends Component {
             autoFocus={autoFocus || false}
             style={style}
             wrapClassName={modalWrapClass + ' ' + lowerCaseId}
-            modalTransition={{ timeout: timeout || 100 }}
+            modalTransition={{ timeout: isDraggable ? 0 : timeout || 100 }}
+            fade={!isDraggable}
           >
             {CompletelyCustomModal
               ? (<CompletelyCustomModal {...customProps} />)
