@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 const ANIMATION_DELAY = 200; // interval firing to trigger parent level arrow change
 const CLICK_TIMEOUT_DELAY = 500; // wait before click becomes a delay
 
-var mouseHoldCheckTimer = null;
-var isMouseHolding = false;
+let mouseHoldCheckTimer = null;
+let isMouseHolding = false;
 // left/right arrow intervals
 const intervals = {
   left: 0,
