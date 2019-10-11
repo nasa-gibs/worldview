@@ -40,7 +40,11 @@ export default class AlertComponent extends React.Component {
     } = this.props;
     return (
       <Portal node={document && document.getElementById('wv-content')}>
-        <Alert className="wv-alert" isOpen={isOpen}>
+        <Alert
+          id={this.props.id}
+          className="wv-alert"
+          isOpen={isOpen}
+        >
           <div
             className="alert-content"
             title={title}
@@ -54,7 +58,7 @@ export default class AlertComponent extends React.Component {
             </div>
           </div>
           {onDismiss && (
-            <div className="close-alert" onClick={onDismiss}>
+            <div id={`${this.props.id}-close`} className="close-alert" onClick={onDismiss}>
               <i className="fa fa-times exit fa-1x" />
             </div>
           )}
@@ -69,6 +73,7 @@ AlertComponent.defaultProps = {
 };
 AlertComponent.propTypes = {
   iconClassName: PropTypes.string,
+  id: PropTypes.string,
   isOpen: PropTypes.bool,
   message: PropTypes.string,
   onClick: PropTypes.func,
