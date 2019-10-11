@@ -1,0 +1,1 @@
+VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT

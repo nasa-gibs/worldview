@@ -1,5 +1,8 @@
 {
     "layerOrder": [
+        "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
+        "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT",
+        "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT",
         "VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule_v1_NRT",
         "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT",
         "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT",
@@ -75,7 +78,7 @@
         "GOES-East_ABI_Air_Mass",
         "GOES-West_ABI_Air_Mass",
         "Himawari_AHI_Air_Mass",
-        
+
         "GHRSST_L4_G1SST_Sea_Surface_Temperature",
         "GHRSST_L4_MUR_Sea_Surface_Temperature",
         "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",

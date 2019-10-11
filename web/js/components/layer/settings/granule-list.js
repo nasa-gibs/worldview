@@ -57,7 +57,6 @@ class GranuleLayerDateList extends PureComponent {
       result.destination.index
     );
     updateGranuleLayerDates(reorderedItems, def.id);
-    // this.setItems(reorderedItems);
   }
 
   // move granule item to top of list
@@ -69,41 +68,38 @@ class GranuleLayerDateList extends PureComponent {
       0
     );
     updateGranuleLayerDates(reorderedItems, def.id);
-    // this.setItems(reorderedItems);
     this.setState({
       lastMovedItem: granuleDate
     });
   }
 
+  // move granule item to top of list
+  moveUp = (e, sourceIndex, granuleDate) => {
+    e.preventDefault();
+    const { updateGranuleLayerDates, def } = this.props;
+    const reorderedItems = this.reorderItems(
+      sourceIndex,
+      sourceIndex - 1
+    );
+    updateGranuleLayerDates(reorderedItems, def.id);
+    this.setState({
+      lastMovedItem: granuleDate
+    });
+  }
 
-    // move granule item to top of list
-    moveUp = (e, sourceIndex, granuleDate) => {
-      e.preventDefault();
-      const { updateGranuleLayerDates, def } = this.props;
-      const reorderedItems = this.reorderItems(
-        sourceIndex,
-        sourceIndex - 1
-      );
-      updateGranuleLayerDates(reorderedItems, def.id);
-      this.setState({
-        lastMovedItem: granuleDate
-      });
-    }
-
-
-      // move granule item to top of list
-    moveDown = (e, sourceIndex, granuleDate) => {
-      e.preventDefault();
-      const { updateGranuleLayerDates, def } = this.props;
-      const reorderedItems = this.reorderItems(
-        sourceIndex,
-        sourceIndex + 1
-      );
-      updateGranuleLayerDates(reorderedItems, def.id);
-      this.setState({
-        lastMovedItem: granuleDate
-      });
-    }
+  // move granule item to top of list
+  moveDown = (e, sourceIndex, granuleDate) => {
+    e.preventDefault();
+    const { updateGranuleLayerDates, def } = this.props;
+    const reorderedItems = this.reorderItems(
+      sourceIndex,
+      sourceIndex + 1
+    );
+    updateGranuleLayerDates(reorderedItems, def.id);
+    this.setState({
+      lastMovedItem: granuleDate
+    });
+  }
 
   // reorder granule items based on source and target index
   reorderItems = (sourceIndex, destinationIndex) => {
@@ -132,7 +128,6 @@ class GranuleLayerDateList extends PureComponent {
 
   // handle mouse over item
   handleMouseOverItem = (granuleDate, index) => {
-
     this.setState({
       hoveredItem: granuleDate
     });
@@ -140,7 +135,6 @@ class GranuleLayerDateList extends PureComponent {
 
   // handle mouse leave item
   handleMouseLeaveItem = (granuleDate, index) => {
-
     this.setState({
       hoveredItem: null
     });
@@ -226,7 +220,7 @@ class GranuleLayerDateList extends PureComponent {
                           </div>
                           <div>
                             {index < items.length - 1
-                              ? <button
+                              ? <button className="granule-date-item-up-button"
                                 style={{ background: '#555', color: '#eee' }}
                                 onClick={(e) => this.moveDown(e, index, item)}>
                                 {'\u2BC6'}
@@ -234,7 +228,7 @@ class GranuleLayerDateList extends PureComponent {
                               : null
                             }
                             {index > 0
-                              ? <button
+                              ? <button className="granule-date-item-down-button"
                                 style={{ background: '#555', color: '#eee' }}
                                 onClick={(e) => this.moveUp(e, index, item)}>
                                 {'\u2BC5'}
@@ -242,7 +236,7 @@ class GranuleLayerDateList extends PureComponent {
                               : null
                             }
                             {index > 0
-                              ? <button
+                              ? <button className="granule-date-item-top-button"
                                 style={{ background: '#555', color: '#eee' }}
                                 onClick={(e) => this.moveToTop(e, index, item)}>
                                   TOP

@@ -41,8 +41,16 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     self.extentLayers = [];
     self.granuleLayers = {
       isInitGranuleLoaded: {
-        active: false,
-        activeB: false
+        active: {
+          arctic: false,
+          geographic: false,
+          antarctic: false
+        },
+        activeB: {
+          arctic: false,
+          geographic: false,
+          antarctic: false
+        }
       }
     };
     // granule cache since clearingLayers/reordering layers may require many granule requests
@@ -217,96 +225,95 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           throw new Error('Unknown layer type: ' + def.type);
       }
 
-
       // if (def.type === 'wmts') {
       //   let createdLayer = createLayerWMTS(def, options, null, state);
-        if (isGranule) {
-          // add to granule layer date table
-          // TODO: second part of conditional necessary for comparison mode granule loading last 20
-          // TODO: or whatever GRANULE_COUNT is set at. May want to optimize this logic
+      if (isGranule) {
+        // add to granule layer date table
+        // TODO: second part of conditional necessary for comparison mode granule loading last 20
+        // TODO: or whatever GRANULE_COUNT is set at. May want to optimize this logic
 
-          // flag initial load of granule
-          // get start date based on 00:00 UTC or defined start date
-          // const startDate = def.startDate;
-          // const zeroStartDate = new Date(startDate).setUTCHours(0, 0, 0, 0);
-          // const zeroedStartDate = new Date(zeroStartDate);
-          // const startDateForGranuleDay = zeroedStartDate < new Date(startDate)
-          //   ? zeroedStartDate
-          //   : new Date(startDate);
+        // flag initial load of granule
+        // get start date based on 00:00 UTC or defined start date
+        // const startDate = def.startDate;
+        // const zeroStartDate = new Date(startDate).setUTCHours(0, 0, 0, 0);
+        // const zeroedStartDate = new Date(zeroStartDate);
+        // const startDateForGranuleDay = zeroedStartDate < new Date(startDate)
+        //   ? zeroedStartDate
+        //   : new Date(startDate);
 
-          // createLayers for entire date based on dateRanges[0].dateInterval
-          const dateInterval = Number(def.dateRanges[0].dateInterval);
-          const granuleDayTimes = [];
+        // createLayers for entire date based on dateRanges[0].dateInterval
+        const dateInterval = Number(def.dateRanges[0].dateInterval);
+        const granuleDayTimes = [];
 
-          // ! TEST USING 20 FOR INIT LOAD SEEMS UI FRIENDLY
-          // ! 100 + and it's noticeably slower to blocking
-          const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * GRANULE_COUNT)));
+        // ! TEST USING 20 FOR INIT LOAD SEEMS UI FRIENDLY
+        // ! 100 + and it's noticeably slower to blocking
+        const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * GRANULE_COUNT)));
 
-          // add dates to granuleDayTimes array
-          const minuteDifference = util.minuteDiff(startDateForGranuleDay, date);
-          for (let i = 0; i <= minuteDifference; i += dateInterval) {
-            const granuleTime = new Date(
-              startDateForGranuleDay.getFullYear(),
-              startDateForGranuleDay.getMonth(),
-              startDateForGranuleDay.getDate(),
-              startDateForGranuleDay.getHours(),
-              startDateForGranuleDay.getMinutes() + i,
-              0
-            ).toISOString().split('.')[0] + 'Z';
-            if (self.granuleLayers.isInitGranuleLoaded[group]) {
-              if (self.granuleLayers[def.id]) {
-                if (!self.granuleLayers[def.id][activeKey].dates[granuleTime]) {
-                  granuleDayTimes.push(granuleTime);
-                }
-              } else {
+        // add dates to granuleDayTimes array
+        const minuteDifference = util.minuteDiff(startDateForGranuleDay, date);
+        for (let i = 0; i <= minuteDifference; i += dateInterval) {
+          const granuleTime = new Date(
+            startDateForGranuleDay.getFullYear(),
+            startDateForGranuleDay.getMonth(),
+            startDateForGranuleDay.getDate(),
+            startDateForGranuleDay.getHours(),
+            startDateForGranuleDay.getMinutes() + i,
+            0
+          ).toISOString().split('.')[0] + 'Z';
+          if (self.granuleLayers.isInitGranuleLoaded[group][proj.id]) {
+            if (self.granuleLayers[def.id]) {
+              if (!self.granuleLayers[def.id][activeKey].dates[granuleTime]) {
                 granuleDayTimes.push(granuleTime);
               }
             } else {
               granuleDayTimes.push(granuleTime);
             }
-          }
-          if (self.granuleLayers[def.id] === undefined) {
-            const activeGranuleDayTimes = isActive ? granuleDayTimes : [];
-            const activeBGranuleDayTimes = !isActive ? granuleDayTimes : [];
-            self.granuleLayers[def.id] = {
-              active: {
-                sortedDates: activeGranuleDayTimes,
-                dates: {}
-              },
-              activeB: {
-                sortedDates: activeBGranuleDayTimes,
-                dates: {}
-              }
-            };
           } else {
-            // add sorted dates to granule layer store
-            const dateArray = [...self.granuleLayers[def.id][activeKey].sortedDates];
-            lodashEach(granuleDayTimes, (granuleDayTime) => {
-              dateArray.splice(getIndexForSortedInsert(dateArray, granuleDayTime), 0, granuleDayTime);
-            });
-            self.granuleLayers[def.id][activeKey].sortedDates = dateArray;
+            granuleDayTimes.push(granuleTime);
           }
-          layer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes);
-          self.granuleLayers.isInitGranuleLoaded[group] = true;
-          // layer = createdLayer;
+        }
+        if (self.granuleLayers[def.id] === undefined) {
+          const activeGranuleDayTimes = isActive ? granuleDayTimes : [];
+          const activeBGranuleDayTimes = !isActive ? granuleDayTimes : [];
+          self.granuleLayers[def.id] = {
+            active: {
+              sortedDates: activeGranuleDayTimes,
+              dates: {}
+            },
+            activeB: {
+              sortedDates: activeBGranuleDayTimes,
+              dates: {}
+            }
+          };
+        } else {
+          // add sorted dates to granule layer store
+          const dateArray = [...self.granuleLayers[def.id][activeKey].sortedDates];
+          lodashEach(granuleDayTimes, (granuleDayTime) => {
+            dateArray.splice(getIndexForSortedInsert(dateArray, granuleDayTime), 0, granuleDayTime);
+          });
+          self.granuleLayers[def.id][activeKey].sortedDates = dateArray;
+        }
+        layer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes);
+        self.granuleLayers.isInitGranuleLoaded[group][proj.id] = true;
+        // layer = createdLayer;
         // }
         // layer = createdLayer;
 
-      //   const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
-      //   switch (def.type) {
-      //     case 'wmts':
-      //       layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
-      //       break;
-      //     case 'vector':
-      //       layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
-      //       break;
-      //     case 'wms':
-      //       layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
-      //       break;
-      //     default:
-      //       throw new Error('Unknown layer type: ' + def.type);
-      //   }
-      // if (isGranule) {
+        //   const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
+        //   switch (def.type) {
+        //     case 'wmts':
+        //       layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+        //       break;
+        //     case 'vector':
+        //       layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+        //       break;
+        //     case 'wms':
+        //       layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+        //       break;
+        //     default:
+        //       throw new Error('Unknown layer type: ' + def.type);
+        //   }
+        // if (isGranule) {
         const inCache = self.granuleCache.getItem(key);
         if (!inCache) {
           layer.wv = attributes;
