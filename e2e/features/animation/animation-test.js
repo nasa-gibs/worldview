@@ -28,8 +28,8 @@ module.exports = {
           .click('.wv-animation-widget-header .timeline-interval #interval-custom-static');
         client.pause(1000);
         client.useCss().assert.elementPresent('#wv-animation-widget .custom-interval-widget');
-        client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', 'CUSTOM');
-        client.useCss().assert.containsText('#timeline #current-interval', 'CUSTOM');
+        client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', '1 DAY');
+        client.useCss().assert.containsText('#timeline #current-interval', '1 DAY');
       }
     );
   },
