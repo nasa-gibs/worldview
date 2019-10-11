@@ -26,17 +26,11 @@ export default class VectorMetaTable extends React.Component {
             const properties = lodashFind(metaLegend.mvt_properties, { Identifier: featureId });
             return (
               <tr key={'vector-row-' + index}>
-                <td>
-                  {properties ? properties.Title || featureId : featureId}
-                </td>
-                <td>
-                  {i}
-                </td>
+                <td>{properties ? properties.Title || featureId : featureId}</td>
+                <td>{i}</td>
                 {properties && properties.Description ? (
-                  <td>
-                    <VectorMetaTooltip index={index} description={properties.Description} />
-                  </td>
-                ) : ''
+                  <td><VectorMetaTooltip index={index} description={properties.Description} /></td>
+                ) : undefined
                 }
               </tr>
             )
