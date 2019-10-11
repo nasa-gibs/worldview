@@ -51,6 +51,7 @@ import '../css/toolbar.css';
 import '../css/notifications.css';
 import '../css/sidebar-panel.css';
 import '../css/button.css';
+import '../css/modal.css';
 import '../css/checkbox.css';
 import '../css/map.css';
 import '../css/link.css';
@@ -72,7 +73,6 @@ import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
 import '../css/mobile.css';
-import '../css/modal.css';
 import '../css/measure.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
@@ -137,12 +137,12 @@ class App extends React.Component {
     config = self.props.config;
     config.parameters = state;
 
-    const main = function() {
+    const main = function () {
       const models = self.props.models;
 
       // Load any additional scripts as needed
       if (config.scripts) {
-        lodashEach(config.scripts, function(script) {
+        lodashEach(config.scripts, function (script) {
           $.getScript(script);
         });
       }
@@ -154,10 +154,10 @@ class App extends React.Component {
       if (Brand.release()) {
         console.info(
           Brand.NAME +
-            ' - Version ' +
-            Brand.VERSION +
-            ' - ' +
-            Brand.BUILD_TIMESTAMP
+          ' - Version ' +
+          Brand.VERSION +
+          ' - ' +
+          Brand.BUILD_TIMESTAMP
         );
       } else {
         console.warn('Development version');

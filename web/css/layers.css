@@ -696,9 +696,9 @@
 .custom-layer-dialog .modal-title {
   width: 100%;
 }
-
-.custom-layer-dialog .modal-body {
+.custom-layer-dialog.light .modal-content .modal-body {
   padding: 0 0 0 13px;
+  background-color: #dcdcdc;
 }
 
 .custom-layer-dialog .category-masonry-case {

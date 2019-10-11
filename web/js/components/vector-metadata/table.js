@@ -18,22 +18,14 @@ export default class VectorMetaTable extends React.Component {
   render() {
     var header, data;
     const { metaFeatures, metaLegend } = this.state;
-    console.log(metaFeatures)
-    console.log(metaLegend)
+
     return (
       <Table size="sm">
         <tbody>
           {Object.entries(metaFeatures).map(([featureId, i], index) => {
-            console.log(metaLegend.mvt_properties);
             const properties = lodashFind(metaLegend.mvt_properties, { Identifier: featureId });
-            // Object.values(metaLegend.mvt_properties).forEach(property => {
-            //   if (property && property.Description && (property.Identifier.toLowerCase() === featureId.toLowerCase())) {
-            //     tooltipDescription = property.Description;
-            //   }
-            // })
-            console.log(properties && properties.Description ? properties.Description : properties);
             return (
-              <tr>
+              <tr key={'vector-row-' + index}>
                 <td>
                   {properties ? properties.Title || featureId : featureId}
                 </td>
@@ -47,11 +39,10 @@ export default class VectorMetaTable extends React.Component {
                 ) : ''
                 }
               </tr>
-
             )
           })}
         </tbody>
-      </Table >
+      </Table>
     )
   }
 }
