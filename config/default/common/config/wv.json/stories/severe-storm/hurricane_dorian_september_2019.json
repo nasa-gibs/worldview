@@ -4,13 +4,17 @@
       "id": "hurricane_dorian_september_2019",
       "type": "severe-storm",
       "title": "Hurricane Dorian (September 2019)",
-      "description": "Explore Hurricane Dorian with imagery from Geostationary satellites like GOES East!",
+      "description": "Explore Hurricane Dorian with imagery from Geostationary satellites like GOES-East!",
       "backgroundImage": "dorian_background.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
-          "title": "GIBS Blog: View the Earth Every 10 Minutes with Geostationary Imagery!",
+          "title": "View the Earth Every 10 Minutes with Geostationary Imagery! (GIBS Blog)",
           "link": "https://wiki.earthdata.nasa.gov/display/GIBS/2019/10/16/View+the+Earth+Every+10+Minutes+with+Geostationary+Imagery"
+        },
+        {
+          "title": "Now Available in NASA Worldview: Earth Every 10 Minutes (Earthdata)",
+          "link": "https://earthdata.nasa.gov/learn/articles/geostationary-in-worldview"
         }
       ],
       "steps": [

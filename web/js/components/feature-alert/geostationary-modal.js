@@ -26,7 +26,7 @@ class GeostationaryModalBody extends React.Component {
             <figure className="figure">
               <img src="images/geostationary.gif" className="figure-img img-fluid rounded" />
               <figcaption className="figure-caption mx-auto">
-                 GOES East / ABI Red Visible (0.64 µm, Band 2, 10 minute)
+                 GOES-East / ABI Red Visible (0.64 µm, Band 2, 10 minute)
               </figcaption>
             </figure>
           }
@@ -34,7 +34,7 @@ class GeostationaryModalBody extends React.Component {
         <Col lg="6" md="12">
           <p>
             Our latest release includes new layers from geostationary satellites –
-            GOES East, GOES West and Himawari-8. Find these new layers in the new
+            GOES-East, GOES-West and Himawari-8. Find these new layers in the new
             “Featured” tab of the “Add Layers” menu.
           </p>
           <p>
