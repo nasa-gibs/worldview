@@ -14,7 +14,7 @@ matrix:
         - npm run start &
         - |
           if [[ $TRAVIS_PULL_REQUEST_BRANCH =~ ^dependabot\/ ]]; then
-            npm run browserstack
+            travis_wait 60 npm run browserstack
           else
             npm run e2e:headless:chrome
           fi
