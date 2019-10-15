@@ -2,7 +2,7 @@
 Relative humidity of the air in units of percent at the 500 hPa pressure level, approximately 5500 meters (18,000 feet) above sea level. Relative humidity is the ratio of the amount of water vapor in air to the total amount of water vapor the air can hold at specified temperature and pressure. Warm air can hold more water vapor than cold air, so the same amount of water vapor results in higher relative humidity in cool air than in warm air. AIRS relative humidity is derived from AIRS temperature and water vapor and is calculated as the fraction of retrieved humidity mixing ratio and temperature-dependent saturation mixing ratios.  The 500 hPa pressure level is near the divide between upper and lower halves of atmospheric mass and is often referred to as a steering level. Many midlatitude weather systems between this level and the Earth's surface move in roughly the same direction as winds at the 500 hPa level.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
+32 km/pixel (AIRS Level 2 data is nominally 45 km/pixel at the equator and the data has been resampled into a 32 km/pixel visualization.)
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  
