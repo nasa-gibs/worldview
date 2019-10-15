@@ -2,7 +2,7 @@
 Air temperature in units of kelvin at the 850 hPa pressure, approximately 1500 meters (5000 feet) above sea level and often just above the boundary layer. This temperature is often used by forecasters because the air is less affected by heating from Earth's surface than air at the surface. At this level the diurnal (daily) cycle in temperature is generally negligible, therefore temperature at 850 hPa can be used to distinguish the frontal zones between warm and cold air masses.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
+32 km/pixel (AIRS Level 2 data is nominally 45 km/pixel at the equator and the data has been resampled into a 32 km/pixel visualization.)
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  

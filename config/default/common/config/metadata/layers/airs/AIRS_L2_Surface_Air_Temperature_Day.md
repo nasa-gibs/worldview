@@ -2,7 +2,7 @@
 Temperature of the air in units of kelvin two meters above sea level. Near-surface air temperature is an essential climate variable widely used in studies of meteorology, climate, and environmental health applications.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
+32 km/pixel (AIRS Level 2 data is nominally 45 km/pixel at the equator and the data has been resampled into a 32 km/pixel visualization.)
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  
