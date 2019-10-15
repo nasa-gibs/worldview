@@ -1,5 +1,28 @@
 matrix:
   include:
+
+    - os: osx
+      name: 'Node.js lts/* - E2E / Browserstack'
+      language: node_js
+      node_js: lts/* # latest LTS Node.js release
+      addons:
+        chrome: stable
+      before_install:
+         - "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &"
+      script:
+        - npm run build
+        - npm run start &
+        - |
+          if [[ $TRAVIS_PULL_REQUEST_BRANCH =~ ^dependabot\/ ]]; then
+            npm run browserstack
+          else
+            npm run e2e:headless:chrome
+          fi
+
+    - os: osx
+      language: node_js
+      node_js: '8.15.1'
+
     - os: linux
       dist: xenial
       language: python
@@ -10,6 +33,7 @@ matrix:
         - python --version
         - python3 --version
         - nvm install 8.15.1
+
     - os: linux
       dist: xenial
       language: python
@@ -20,12 +44,7 @@ matrix:
         - python --version
         - python3 --version
         - nvm install lts/*
-    - os: osx
-      language: node_js
-      node_js: '8.15.1'
-    - os: osx
-      language: node_js
-      node_js: lts/* # latest LTS Node.js release
+
     - os: windows
       language: node_js
       node_js: '8.15.1'
@@ -42,6 +61,7 @@ matrix:
           - $HOME/venv
           - c:/Python37
           - c:/Python37/Scripts
+
     - os: windows
       language: node_js
       node_js: lts/* # latest LTS Node.js release
