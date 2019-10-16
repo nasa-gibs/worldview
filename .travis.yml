@@ -16,7 +16,7 @@ matrix:
         - npm run build
         - npm run start &
         - |
-          if [[ $TRAVIS_PULL_REQUEST_BRANCH =~ ^dependabot\/ ]]; then
+          if [[ $TRAVIS_BRANCH =~ ^dependabot\/ ]]; then
             travis_wait 60 npm run browserstack
           else
             npm run e2e:headless:chrome
@@ -29,17 +29,6 @@ matrix:
     - os: linux
       dist: xenial
       language: python
-      node_js: '8.15.1'
-      python: '3.7'
-      sudo: required
-      before_install:
-        - python --version
-        - python3 --version
-        - nvm install 8.15.1
-
-    - os: linux
-      dist: xenial
-      language: python
       node_js: 'lts/*'
       python: '3.7'
       sudo: required
@@ -47,6 +36,17 @@ matrix:
         - python --version
         - python3 --version
         - nvm install lts/*
+
+    - os: linux
+      dist: xenial
+      language: python
+      node_js: '8.15.1'
+      python: '3.7'
+      sudo: required
+      before_install:
+        - python --version
+        - python3 --version
+        - nvm install 8.15.1
 
     - os: windows
       language: node_js
