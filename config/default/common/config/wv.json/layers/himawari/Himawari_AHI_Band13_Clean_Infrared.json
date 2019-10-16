@@ -11,7 +11,7 @@
               "himawari"
             ],
             "product":  "",
-            "wrapadjacentdays": true
+            "wrapX": true
         }
     }
 }
