@@ -24,6 +24,7 @@ matrix:
           else
             npm run e2e:headless:chrome
           fi
+      after_script:
         - sleep 10
 
     - os: osx
