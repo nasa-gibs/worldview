@@ -172,9 +172,7 @@ export function layerReducer(state = initialState, action) {
         granuleLayers: {
           [action.activeKey]: {
             [action.proj]: {
-              [action.id]: {
-                $set: action.dates
-              }
+              [action.id]: { $set: { dates: action.dates, count: action.count } }
             }
           }
         }
@@ -184,9 +182,7 @@ export function layerReducer(state = initialState, action) {
         granuleLayers: {
           [action.activeKey]: {
             [action.proj]: {
-              [action.id]: {
-                $set: action.dates
-              }
+              [action.id]: { $set: { dates: action.dates, count: action.count } }
             }
           }
         }

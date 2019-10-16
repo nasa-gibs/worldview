@@ -376,8 +376,14 @@ export function mapui(models, config, store, ui) {
         } else {
           // update granule date order and reset
           const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-          const granuleDates = !granuleReset ? state.layers.granuleLayers[layerGroupStr][proj.id][def.id] : false;
-          map.addLayer(createLayer(def, {}, granuleDates));
+          let granuleDates;
+          let granuleCount;
+          if (state.layers.granuleLayers[layerGroupStr][proj.id][def.id]) {
+            granuleDates = !granuleReset ? state.layers.granuleLayers[layerGroupStr][proj.id][def.id].dates : false;
+            granuleCount = state.layers.granuleLayers[layerGroupStr][proj.id][def.id].count;
+          }
+          const granuleLayerParam = { granuleDates, granuleCount };
+          map.addLayer(createLayer(def, {}, granuleLayerParam));
         }
       });
     } else {

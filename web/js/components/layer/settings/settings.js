@@ -8,6 +8,7 @@ import Palette from './palette';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-list';
+import GranuleCountSlider from './granule-count';
 import {
   getCheckerboard,
   palettesTranslate
@@ -254,6 +255,7 @@ class LayerSettings extends React.Component {
       layer,
       palettedAllowed,
       projection,
+      granuleLayerCount,
       granuleLayerDates,
       resetGranuleLayerDates,
       updateGranuleLayerDates
@@ -277,13 +279,24 @@ class LayerSettings extends React.Component {
           layer={layer}
         />
         {granuleLayerDates
-          ? <GranuleLayerDateList
-            def={layer}
-            projection={projection}
-            granuleDates={granuleLayerDates}
-            updateGranuleLayerDates={updateGranuleLayerDates}
-            resetGranuleLayerDates={resetGranuleLayerDates}
-          /> : null}
+          ? <React.Fragment>
+            <GranuleCountSlider
+              start={granuleLayerCount}
+              projection={projection}
+              granuleDates={granuleLayerDates}
+              granuleCount={granuleLayerCount}
+              updateGranuleLayerDates={updateGranuleLayerDates}
+              layer={layer}
+            />
+            <GranuleLayerDateList
+              def={layer}
+              projection={projection}
+              granuleDates={granuleLayerDates}
+              granuleCount={granuleLayerCount}
+              updateGranuleLayerDates={updateGranuleLayerDates}
+              resetGranuleLayerDates={resetGranuleLayerDates}
+            />
+          </React.Fragment> : null}
         {renderCustomizations}
       </React.Fragment>
     );
@@ -298,7 +311,8 @@ function mapStateToProps(state, ownProps) {
 
   return {
     projection,
-    granuleLayerDates: layers.granuleLayers[groupName][projection][ownProps.layer.id],
+    granuleLayerDates: layers.granuleLayers[groupName][projection][ownProps.layer.id].dates,
+    granuleLayerCount: layers.granuleLayers[groupName][projection][ownProps.layer.id].count,
     paletteOrder: config.paletteOrder,
     groupName,
     customPalettesIsActive: !!config.features.customPalettes,
@@ -352,8 +366,8 @@ const mapDispatchToProps = dispatch => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  updateGranuleLayerDates: (dates, id, projection) => {
-    dispatch(updateGranuleLayerDates(dates, id, projection));
+  updateGranuleLayerDates: (dates, id, projection, count) => {
+    dispatch(updateGranuleLayerDates(dates, id, projection, count));
   },
   resetGranuleLayerDates: (id, projection) => {
     dispatch(resetGranuleLayerDates(id, projection));
@@ -382,6 +396,7 @@ LayerSettings.propTypes = {
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
   getVectorStyle: PropTypes.func,
+  granuleLayerCount: PropTypes.number,
   granuleLayerDates: PropTypes.array,
   groupName: PropTypes.string,
   index: PropTypes.number,

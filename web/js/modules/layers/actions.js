@@ -144,7 +144,7 @@ export function removeLayer(id) {
     });
   };
 }
-export function updateGranuleLayerDates(dates, id, projection) {
+export function updateGranuleLayerDates(dates, id, projection, count) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeString = compare.activeString;
@@ -153,7 +153,8 @@ export function updateGranuleLayerDates(dates, id, projection) {
       id,
       activeKey: activeString,
       dates,
-      proj: projection
+      proj: projection,
+      count
     });
   };
 }
