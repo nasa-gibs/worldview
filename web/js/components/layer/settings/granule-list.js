@@ -47,7 +47,7 @@ class GranuleLayerDateList extends PureComponent {
 
   // handle update on complete granule item drag
   onDragEnd = (result) => {
-    const { updateGranuleLayerDates, def } = this.props;
+    const { updateGranuleLayerDates, def, projection } = this.props;
     // dropped granule outside the list
     if (!result.destination) {
       return;
@@ -56,18 +56,18 @@ class GranuleLayerDateList extends PureComponent {
       result.source.index,
       result.destination.index
     );
-    updateGranuleLayerDates(reorderedItems, def.id);
+    updateGranuleLayerDates(reorderedItems, def.id, projection);
   }
 
   // move granule item to top of list
   moveToTop = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, def } = this.props;
+    const { updateGranuleLayerDates, def, projection } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       0
     );
-    updateGranuleLayerDates(reorderedItems, def.id);
+    updateGranuleLayerDates(reorderedItems, def.id, projection);
     this.setState({
       lastMovedItem: granuleDate
     });
@@ -76,12 +76,12 @@ class GranuleLayerDateList extends PureComponent {
   // move granule item to top of list
   moveUp = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, def } = this.props;
+    const { updateGranuleLayerDates, def, projection } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       sourceIndex - 1
     );
-    updateGranuleLayerDates(reorderedItems, def.id);
+    updateGranuleLayerDates(reorderedItems, def.id, projection);
     this.setState({
       lastMovedItem: granuleDate
     });
@@ -90,12 +90,12 @@ class GranuleLayerDateList extends PureComponent {
   // move granule item to top of list
   moveDown = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, def } = this.props;
+    const { updateGranuleLayerDates, def, projection } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       sourceIndex + 1
     );
-    updateGranuleLayerDates(reorderedItems, def.id);
+    updateGranuleLayerDates(reorderedItems, def.id, projection);
     this.setState({
       lastMovedItem: granuleDate
     });
@@ -115,8 +115,8 @@ class GranuleLayerDateList extends PureComponent {
   // reset granule order
   onClickReset = (e) => {
     e.preventDefault();
-    const { resetGranuleLayerDates, def } = this.props;
-    resetGranuleLayerDates(def.id);
+    const { resetGranuleLayerDates, def, projection } = this.props;
+    resetGranuleLayerDates(def.id, projection);
   }
 
   // set local granule item state
@@ -262,6 +262,7 @@ class GranuleLayerDateList extends PureComponent {
 GranuleLayerDateList.propTypes = {
   def: PropTypes.object,
   granuleDates: PropTypes.array,
+  projection: PropTypes.string,
   resetGranuleLayerDates: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func
 };

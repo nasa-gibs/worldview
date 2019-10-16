@@ -253,6 +253,7 @@ class LayerSettings extends React.Component {
       customPalettesIsActive,
       layer,
       palettedAllowed,
+      projection,
       granuleLayerDates,
       resetGranuleLayerDates,
       updateGranuleLayerDates
@@ -278,6 +279,7 @@ class LayerSettings extends React.Component {
         {granuleLayerDates
           ? <GranuleLayerDateList
             def={layer}
+            projection={projection}
             granuleDates={granuleLayerDates}
             updateGranuleLayerDates={updateGranuleLayerDates}
             resetGranuleLayerDates={resetGranuleLayerDates}
@@ -289,12 +291,14 @@ class LayerSettings extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { config, palettes, compare, layers } = state;
+  const { config, palettes, compare, layers, proj } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
+  const projection = proj.id;
 
   return {
-    granuleLayerDates: layers.granuleLayers[groupName][ownProps.layer.id],
+    projection,
+    granuleLayerDates: layers.granuleLayers[groupName][projection][ownProps.layer.id],
     paletteOrder: config.paletteOrder,
     groupName,
     customPalettesIsActive: !!config.features.customPalettes,
@@ -348,11 +352,11 @@ const mapDispatchToProps = dispatch => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  updateGranuleLayerDates: (dates, id) => {
-    dispatch(updateGranuleLayerDates(dates, id));
+  updateGranuleLayerDates: (dates, id, projection) => {
+    dispatch(updateGranuleLayerDates(dates, id, projection));
   },
-  resetGranuleLayerDates: (id) => {
-    dispatch(resetGranuleLayerDates(id));
+  resetGranuleLayerDates: (id, projection) => {
+    dispatch(resetGranuleLayerDates(id, projection));
   }
 });
 
@@ -386,6 +390,7 @@ LayerSettings.propTypes = {
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
+  projection: PropTypes.string,
   resetGranuleLayerDates: PropTypes.func,
   setCustomPalette: PropTypes.func,
   setFilterRange: PropTypes.func,

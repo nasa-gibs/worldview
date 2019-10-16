@@ -36,7 +36,18 @@ export const initialState = {
   hoveredLayer: '',
   layerConfig: {},
   startingLayers: [],
-  granuleLayers: { active: [], activeB: [] }
+  granuleLayers: {
+    active: {
+      arctic: [],
+      geographic: [],
+      antarctic: []
+    },
+    activeB: {
+      arctic: [],
+      geographic: [],
+      antarctic: []
+    }
+  }
 };
 export function getInitialState(config) {
   return lodashAssign({}, initialState, {
@@ -160,8 +171,10 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         granuleLayers: {
           [action.activeKey]: {
-            [action.id]: {
-              $set: action.dates
+            [action.proj]: {
+              [action.id]: {
+                $set: action.dates
+              }
             }
           }
         }
@@ -170,8 +183,10 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         granuleLayers: {
           [action.activeKey]: {
-            [action.id]: {
-              $set: action.dates
+            [action.proj]: {
+              [action.id]: {
+                $set: action.dates
+              }
             }
           }
         }

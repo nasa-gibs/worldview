@@ -376,7 +376,7 @@ export function mapui(models, config, store, ui) {
         } else {
           // update granule date order and reset
           const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-          const granuleDates = !granuleReset ? state.layers.granuleLayers[layerGroupStr][def.id] : false;
+          const granuleDates = !granuleReset ? state.layers.granuleLayers[layerGroupStr][proj.id][def.id] : false;
           map.addLayer(createLayer(def, {}, granuleDates));
         }
       });
