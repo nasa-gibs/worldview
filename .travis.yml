@@ -17,11 +17,13 @@ matrix:
         - npm run start &
         - |
           # Run when PR opened with 'dependabot' in branch name
-          if [[ $TRAVIS_PULL_REQUEST_BRANCH =~ ^dependabot\/ ||  $TRAVIS_BRANCH =~ ^dependabot\/ ]]; then
+          if [[ $TRAVIS_PULL_REQUEST_BRANCH =~ ^dependabot\/ || $TRAVIS_BRANCH =~ ^dependabot\/ ]]; then
             travis_wait 60 npm run browserstack
           else
             npm run e2e:headless:chrome
           fi
+        after_script:
+          - sleep 10
 
     - os: osx
       language: node_js
