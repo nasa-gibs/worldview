@@ -14,7 +14,7 @@
             "palette": {
                 "immutable": true
             },
-            "wrapadjacentdays": true
+            "wrapX": true
         }
     }
 }

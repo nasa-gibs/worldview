@@ -11,7 +11,7 @@
               "goes"
             ],
             "product":  "",
-            "wrapadjacentdays": true
+            "wrapX": true
         }
     }
 }
