@@ -11,6 +11,9 @@
               "goes"
             ],
             "product":  "",
+            "palette": {
+                "immutable": true
+            },
             "wrapadjacentdays": true
         }
     }
