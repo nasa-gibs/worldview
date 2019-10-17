@@ -82,7 +82,7 @@ const mapStateToProps = (state, ownProps) => {
 const getLocation = (isMobile) => {
   const paramArr = [
     'p=geographic&',
-    'l=Reference_Labels,Reference_Features(hidden),Coastlines(hidden),GOES-East_ABI_Band2_Red_Visible,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&',
+    'l=Reference_Labels,Reference_Features(hidden),Coastlines(hidden),GOES-East_ABI_Band2_Red_Visible_1km,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&',
     't=2019-09-01-T16%3A00%3A00Z&',
     'v=-84.25409131402579,21.881949559541848,-69.48846631402579,30.213980809541848&',
     'z=4&ics=true&ici=5&icd=10'

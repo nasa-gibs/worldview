@@ -39,16 +39,16 @@
         "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
         "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
 
-        "GOES-East_ABI_Band2_Red_Visible",
-        "GOES-West_ABI_Band2_Red_Visible",
-        "Himawari_AHI_Band3_Red_Visible",
+        "GOES-East_ABI_Band2_Red_Visible_1km",
+        "GOES-West_ABI_Band2_Red_Visible_1km",
+        "Himawari_AHI_Band3_Red_Visible_1km",
         "GOES-East_ABI_Band13_Clean_Infrared",
         "GOES-West_ABI_Band13_Clean_Infrared",
         "Himawari_AHI_Band13_Clean_Infrared",
         "GOES-East_ABI_Air_Mass",
         "GOES-West_ABI_Air_Mass",
         "Himawari_AHI_Air_Mass",
-        
+
         "GHRSST_L4_G1SST_Sea_Surface_Temperature",
         "GHRSST_L4_MUR_Sea_Surface_Temperature",
         "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
