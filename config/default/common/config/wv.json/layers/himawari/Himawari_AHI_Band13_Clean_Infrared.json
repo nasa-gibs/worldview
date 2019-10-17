@@ -11,6 +11,9 @@
               "himawari"
             ],
             "product":  "",
+            "palette": {
+                "immutable": true
+            },
             "wrapadjacentdays": true
         }
     }
