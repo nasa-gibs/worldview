@@ -9,7 +9,7 @@
             "to": "gibs-arctic.xml"
         },
         {
-            "from": "https://sit.gibs.earthdata.nasa.gov/wmts/epsg3413/nrt/wmts.cgi?request=GetCapabilities",
+            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg3413/nrt/wmts.cgi?request=GetCapabilities",
             "to": "gibs-arctic-nrt.xml"
         },
         {
@@ -17,7 +17,7 @@
             "to": "gibs-antarctic.xml"
         },
         {
-            "from": "https://sit.gibs.earthdata.nasa.gov/wmts/epsg3031/nrt/wmts.cgi?request=GetCapabilities",
+            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg3031/nrt/wmts.cgi?request=GetCapabilities",
             "to": "gibs-antarctic-nrt.xml"
         }
     ],
