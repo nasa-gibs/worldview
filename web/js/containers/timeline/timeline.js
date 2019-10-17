@@ -1057,16 +1057,16 @@ class Timeline extends React.Component {
                     />
                     : null
                   }
-
-                  {/* custom interval selector */}
-                  <CustomIntervalSelectorWidget
-                    customDelta={customIntervalValue}
-                    customIntervalZoomLevel={customIntervalZoomLevel}
-                    changeCustomInterval={this.changeCustomInterval}
-                    customIntervalModalOpen={timelineCustomModalOpen}
-                    hasSubdailyLayers={hasSubdailyLayers}
-                  />
                 </div>
+
+                {/* custom interval selector */}
+                <CustomIntervalSelectorWidget
+                  customDelta={customIntervalValue}
+                  customIntervalZoomLevel={customIntervalZoomLevel}
+                  changeCustomInterval={this.changeCustomInterval}
+                  customIntervalModalOpen={timelineCustomModalOpen}
+                  hasSubdailyLayers={hasSubdailyLayers}
+                />
 
                 {/* Zoom Level Change */}
                 <AxisTimeScaleChange
