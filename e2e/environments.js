@@ -10,8 +10,8 @@ const capabilities = createCapabilities(
     {
       browser: 'firefox',
       browser_version: ['69.0'],
-      os: ['Windows', 'OS X'],
-      os_version: ['10', 'Mojave']
+      os: ['OS X'],
+      os_version: ['Mojave']
     }
     // {
     //   browser: 'safari',
