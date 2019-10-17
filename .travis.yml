@@ -13,7 +13,7 @@ matrix:
       before_install:
          - "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &"
       script:
-        - npm run build
+        - IGNORE_ERRORS=true npm run build
         - npm run start &
         - |
           # Run when PR opened with 'dependabot' in branch name
