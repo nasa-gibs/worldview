@@ -1,5 +1,46 @@
+env:
+  global:
+    - MOZ_HEADLESS=1
 matrix:
+  allow_failures:
+    - os: windows
+
   include:
+
+    - os: osx
+      name: 'Node.js lts/* - E2E'
+      language: node_js
+      node_js: lts/* # latest LTS Node.js release
+      addons:
+        chrome: stable
+      before_install:
+         - "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &"
+      script:
+        - npm run build
+        - npm run start &
+        - npm run e2e:headless:chrome
+
+    - os: osx
+      language: node_js
+      node_js: '8.15.1'
+
+    - os: linux
+      dist: xenial
+      language: python
+      node_js: 'lts/*'
+      python: '3.7'
+      sudo: required
+      addons:
+        firefox: latest
+      before_install:
+        - python --version
+        - python3 --version
+        - nvm install lts/*
+      script:
+        - npm run build
+        - npm run start &
+        - npm run e2e:headless:firefox
+
     - os: linux
       dist: xenial
       language: python
@@ -10,22 +51,7 @@ matrix:
         - python --version
         - python3 --version
         - nvm install 8.15.1
-    - os: linux
-      dist: xenial
-      language: python
-      node_js: 'lts/*'
-      python: '3.7'
-      sudo: required
-      before_install:
-        - python --version
-        - python3 --version
-        - nvm install lts/*
-    - os: osx
-      language: node_js
-      node_js: '8.15.1'
-    - os: osx
-      language: node_js
-      node_js: lts/* # latest LTS Node.js release
+
     - os: windows
       language: node_js
       node_js: '8.15.1'
@@ -42,6 +68,7 @@ matrix:
           - $HOME/venv
           - c:/Python37
           - c:/Python37/Scripts
+
     - os: windows
       language: node_js
       node_js: lts/* # latest LTS Node.js release
