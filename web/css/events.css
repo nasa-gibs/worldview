@@ -315,10 +315,7 @@
 
 .wv-alert,
 .notify-alert {
-  position: absolute;
-  top: 60px !important;
-  right: 10px !important;
-  left: auto !important;
+  position: relative;
   color: #fff;
   background: #282828;
   border: #282828;

@@ -35,6 +35,7 @@ class FeaturedAlert extends React.Component {
         onClick={this.props.showModal.bind(this)}
         onDismiss={this.dismissAlert.bind(this)}
         message="Check out our new geostationary layers!"
+        noPortal={true}
       />
     );
   }

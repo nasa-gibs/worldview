@@ -105,7 +105,9 @@ class App extends React.Component {
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
-        <FeatureAlert />
+        <div id="wv-alert-container" className="wv-alert-container">
+          <FeatureAlert />
+        </div>
         <Sidebar />
         {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
