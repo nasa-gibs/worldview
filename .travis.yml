@@ -67,7 +67,7 @@ matrix:
       language: node_js
       node_js: lts/* # latest LTS Node.js release
       before_install:
-        - choco install python3
+        - choco install python --version 3.7.5
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
         - python --version
         - python -m ensurepip
@@ -84,7 +84,7 @@ matrix:
       language: node_js
       node_js: '8.15.1'
       before_install:
-        - choco install python3
+        - choco install python --version 3.7.5
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
         - python --version
         - python -m ensurepip
