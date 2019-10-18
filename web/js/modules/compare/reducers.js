@@ -24,7 +24,8 @@ export function compareReducer(state = initialCompareState, action) {
     }
     case TOGGLE_ON_OFF:
       return lodashAssign({}, state, {
-        active: !state.active
+        active: !state.active,
+        bStatesInitiated: true
       });
     case CHANGE_MODE:
       return lodashAssign({}, state, {
