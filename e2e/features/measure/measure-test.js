@@ -26,7 +26,7 @@ module.exports = {
   },
   'Initiating a measurement causes an alert to show and sidebar to collapse': function(client) {
     client.useCss().click(measureDistanceBtn);
-    client.waitForElementVisible('.wv-alert', TIME_LIMIT);
+    client.waitForElementVisible('#measurement-alert', TIME_LIMIT);
     client.useCss().assert.elementPresent(sidebarContainer);
     client.useCss().assert.cssProperty(
       sidebarContainer,
@@ -42,7 +42,7 @@ module.exports = {
           .mouseButtonDown(2)
           .mouseButtonUp(2);
         client.pause(300);
-        client.expect.element('.wv-alert').to.not.be.present;
+        client.expect.element('#measurement-alert').to.not.be.present;
         client.expect.element(sidebarContainer)
           .to.have.css('max-height').which.does.not.equal('0px');
       });
@@ -53,7 +53,7 @@ module.exports = {
     client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       client.useCss().click(measureDistanceBtn);
       client.pause(300);
-      client.waitForElementVisible('.wv-alert', TIME_LIMIT);
+      client.waitForElementVisible('#measurement-alert', TIME_LIMIT);
       client.moveToElement('#wv-map-geographic', 300, 100)
         .mouseButtonClick(0);
       client.pause(300);
