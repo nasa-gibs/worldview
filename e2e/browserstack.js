@@ -29,34 +29,33 @@ try {
     force: 'true' // if you want to kill existing ports
   }, function(error) {
     if (error) throw new Error(error);
-
     console.log('Connected. Running tests...');
     console.log('Go to https://www.browserstack.com/automate to view tests in progress.');
-    Nightwatch.cli(function(argv) {
+
+    Nightwatch.cli(argv => {
       var envString = environment_names.join(',');
       argv.e = envString;
       argv.env = envString;
       Nightwatch.CliRunner(argv)
-        .setup(null, function() {
-          bs_local.stop(function() {
-            process.exit();
+        .setup(null, () => {
+          bs_local.stop(() => {
+            process.exitCode = 0;
           });
         })
-        .runTests(function() {
-          bs_local.stop(function() {
+        .runTests(() => {
+          bs_local.stop(() => {
             if (bs_local.pid && process) {
-              // Code to stop browserstack local after end of parallel test
-              process.exit();
+              process.exitCode = 0;
             }
           });
         }).catch(err => {
           console.error(err);
-          process.exit();
+          process.exitCode = 1;
         });
     });
   });
 } catch (ex) {
   console.log('There was an error while starting the test runner:\n\n');
   process.stderr.write(ex.stack + '\n');
-  process.exit(2);
+  process.exitCode = 1;
 }
