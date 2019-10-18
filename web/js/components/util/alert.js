@@ -29,7 +29,7 @@ export default class AlertComponent extends React.Component {
     }
   }
 
-  render() {
+  renderAlert() {
     const {
       title,
       message,
@@ -39,34 +39,44 @@ export default class AlertComponent extends React.Component {
       onClick
     } = this.props;
     return (
-      <Portal node={document && document.getElementById('wv-content')}>
-        <Alert
-          id={this.props.id}
-          className="wv-alert"
-          isOpen={isOpen}
+      <Alert
+        id={this.props.id}
+        className="wv-alert"
+        isOpen={isOpen}
+      >
+        <div
+          className="alert-content"
+          title={title}
+          onClick={onClick}
         >
-          <div
-            className="alert-content"
-            title={title}
-            onClick={onClick}
-          >
-            {iconClassName && (
-              <i className={'wv-alert-icon ' + iconClassName} />
-            )}
-            <div className="wv-alert-message">
-              {message}
-            </div>
-          </div>
-          {onDismiss && (
-            <div id={`${this.props.id}-close`} className="close-alert" onClick={onDismiss}>
-              <i className="fa fa-times exit fa-1x" />
-            </div>
+          {iconClassName && (
+            <i className={'wv-alert-icon ' + iconClassName} />
           )}
-        </Alert>
-      </Portal>
+          <div className="wv-alert-message">
+            {message}
+          </div>
+        </div>
+        {onDismiss && (
+          <div id={`${this.props.id}-close`} className="close-alert" onClick={onDismiss}>
+            <i className="fa fa-times exit fa-1x" />
+          </div>
+        )}
+      </Alert>
     );
   }
+
+  render() {
+    console.log(this.props.noPortal);
+    return this.props.noPortal
+      ? (this.renderAlert())
+      : (
+        <Portal node={document && document.getElementById('wv-alert-container')}>
+          {this.renderAlert()}
+        </Portal>
+      );
+  }
 }
+
 AlertComponent.defaultProps = {
   iconClassName: 'fas fa-exclamation-triangle fa-1x',
   title: ''
@@ -76,6 +86,7 @@ AlertComponent.propTypes = {
   id: PropTypes.string,
   isOpen: PropTypes.bool,
   message: PropTypes.string,
+  noPortal: PropTypes.bool,
   onClick: PropTypes.func,
   onDismiss: PropTypes.func,
   timeout: PropTypes.number,
