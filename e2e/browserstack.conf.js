@@ -23,7 +23,8 @@ const nightwatchConfig = {
     build: 'wv-nightwatch-' + timeStamp,
     applicationCacheEnabled: false,
     webStorageEnabled: false,
-    marionette: true
+    marionette: true,
+    project: 'Worldview'
   },
   test_settings: {
     default: {},
