@@ -8,7 +8,7 @@ matrix:
   include:
 
     - os: osx
-      name: 'Node.js lts/* - E2E'
+      name: 'Node.js lts/* - Chrome E2E'
       language: node_js
       node_js: lts/* # latest LTS Node.js release
       addons:
@@ -25,6 +25,7 @@ matrix:
       node_js: '8.15.1'
 
     - os: linux
+      name: 'Node.js lts/* - Firefox E2E'
       dist: xenial
       language: python
       node_js: 'lts/*'
@@ -54,7 +55,7 @@ matrix:
 
     - os: windows
       language: node_js
-      node_js: '8.15.1'
+      node_js: lts/* # latest LTS Node.js release
       before_install:
         - choco install python3
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
@@ -69,9 +70,9 @@ matrix:
           - c:/Python37
           - c:/Python37/Scripts
 
-    - os: windows
+  - os: windows
       language: node_js
-      node_js: lts/* # latest LTS Node.js release
+      node_js: '8.15.1'
       before_install:
         - choco install python3
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
