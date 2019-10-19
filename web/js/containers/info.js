@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import {
+  closeModal,
   requestTemplate,
   renderTemplate,
   openCustomContent
@@ -17,6 +18,8 @@ import { startTour, endTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
 import Notifications from '../containers/notifications';
+
+import { startFloatMode } from './../map/util';
 
 class InfoList extends Component {
   getNotificationListItem(obj) {
@@ -49,7 +52,10 @@ class InfoList extends Component {
       config,
       startTour,
       isTourActive,
-      isMobile
+      isMobile,
+      projection,
+      closeModal,
+      map
     } = this.props;
     const feedbackAction = isMobile
       ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
@@ -86,6 +92,17 @@ class InfoList extends Component {
         }
       }
     ];
+    if (projection === 'geographic') {
+      arr.push({
+        text: 'Float Mode',
+        iconClass: 'ui-icon fab fa-fly fa-fw',
+        id: 'float_mode_info_item',
+        onClick: () => {
+          closeModal();
+          startFloatMode(map.ui.selected, 26000, [0, 40], true);
+        }
+      });
+    }
     if (
       config.features.tour &&
       config.stories &&
@@ -128,7 +145,9 @@ function mapStateToProps(state) {
     notifications: state.notifications,
     config: state.config,
     models: state.models,
-    isMobile: state.browser.lessThan.medium
+    isMobile: state.browser.lessThan.medium,
+    map: state.map,
+    projection: state.proj.id
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -175,6 +194,9 @@ const mapDispatchToProps = dispatch => ({
       );
       dispatch(renderTemplate('About', 'modalAboutPage'));
     }
+  },
+  closeModal: () => {
+    dispatch(closeModal());
   }
 });
 

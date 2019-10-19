@@ -198,3 +198,25 @@
   background: url('../images/map/latlon.png') no-repeat;
   background-position: -14px;
 }
+
+.stop-float-mode-button {
+  position: absolute;
+  top: 10px;
+  left: 260px;
+  font-size: 38px;
+  line-height: 50px;
+  text-align: center;
+  width: 38px;
+  height: 55px;
+  opacity: 0.5;
+  z-index: 100;
+  background: rgba(40, 40, 40, 0.85);
+  color: #fff;
+  transition: all 0.5s linear 0s;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+}
+
+.stop-float-mode-button:hover {
+  opacity: 1.0;
+}

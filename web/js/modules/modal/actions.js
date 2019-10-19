@@ -59,3 +59,8 @@ export function onToggle() {
     type: TOGGLE
   };
 }
+export function closeModal() {
+  return {
+    type: CLOSE
+  };
+}
