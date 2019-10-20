@@ -1,3 +1,4 @@
+import {linear} from 'ol/easing';
 // count used for init tile caching
 let count = 0;
 // save zoom level dependent durations and 'last' duration if user changes zoom
@@ -208,7 +209,8 @@ export const startFloatMode = (map, duration, center, start) => {
   setTimeout(() => {
     view.animate({
       duration: duration / distanceCoef,
-      center: center
+      center: center,
+      easing: linear
     }, () => startFloatMode(map, duration, getRandomCoords(coords, center)));
   }, count === 1 ? 1000 : 10);
 };

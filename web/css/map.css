@@ -270,7 +270,6 @@
   position: relative;
   animation: floatright 6s infinite;
   animation-timing-function: linear;
-  /* transition: opacity 1s linear 0s; */
 }
 
 @keyframes floatright {
