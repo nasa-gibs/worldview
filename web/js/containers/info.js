@@ -19,7 +19,7 @@ import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
 import Notifications from '../containers/notifications';
 
-import { startFloatMode } from './../map/util';
+import { startFloatMode } from './../map/floatmode';
 
 class InfoList extends Component {
   getNotificationListItem(obj) {
@@ -99,7 +99,8 @@ class InfoList extends Component {
         id: 'float_mode_info_item',
         onClick: () => {
           closeModal();
-          startFloatMode(map.ui.selected, 26000, [0, 40], true);
+          // initialize float mode - selected map, 25 seconds, target geographic coordinates, and boolean flag for first func invoke
+          startFloatMode(map.ui.selected, 25000, [0, 40], true);
         }
       });
     }
@@ -207,13 +208,16 @@ export default connect(
 
 InfoList.propTypes = {
   aboutClick: PropTypes.func,
+  closeModal: PropTypes.func,
   config: PropTypes.object,
   feedbackIsInitiated: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
+  map: PropTypes.object,
   models: PropTypes.object,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
+  projection: PropTypes.string,
   sendFeedback: PropTypes.func,
   startTour: PropTypes.func
 };

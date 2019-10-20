@@ -937,7 +937,9 @@ export function mapui(models, config, store, ui) {
           duration: animationDuration
         })
       ],
-      loadTilesWhileAnimating: true
+      maxTilesLoading: 32,
+      loadTilesWhileAnimating: true,
+      loadTilesWhileInteracting: true
     });
     map.wv = {
       small: false,

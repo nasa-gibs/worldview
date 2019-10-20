@@ -215,8 +215,75 @@
   transition: all 0.5s linear 0s;
   cursor: pointer;
   border-top-right-radius: 5px;
+  animation-name: highlight;
+  animation-duration: 4s;
+  animation-timing-function: linear;
+  animation-iteration-count: 2;
+  border: 2px solid none;
 }
 
 .stop-float-mode-button:hover {
-  opacity: 1.0;
+  opacity: 1;
+}
+
+@keyframes highlight {
+  0% {
+    opacity: 1;
+    border: 2px solid #fff;
+    background: rgba(40, 40, 40, 0.9);
+  }
+  100% {
+    opacity: 0.5;
+    border: 2px solid none;
+    background: rgba(40, 40, 40, 0.85);
+  }
+}
+
+.float-mode-init-message-container {
+  height: 180px;
+  width: 320px;
+  margin: 20% auto;
+  background: rgba(40, 40, 40, 0.85);
+  color: #fff;
+  border-radius: 5px;
+  padding: 15px;
+  border: 4px solid #fff;
+}
+
+.float-mode-init-message-header {
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+}
+
+.float-mode-init-message-text {
+  text-align: center;
+  margin-top: 15px;
+  color: #999;
+}
+
+.float-mode-init-message-icon {
+  font-size: 50px;
+  height: 75px;
+  padding: 10px;
+  position: relative;
+  animation: floatright 6s infinite;
+  animation-timing-function: linear;
+  /* transition: opacity 1s linear 0s; */
+}
+
+@keyframes floatright {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  90% {
+    left: 225px;
+    opacity: 1;
+  }
+  100% {
+    left: 225px;
+    opacity: 0;
+  }
 }
