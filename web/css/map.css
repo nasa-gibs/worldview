@@ -201,12 +201,13 @@
 
 .stop-float-mode-button {
   position: absolute;
+  padding-right: 6px;
   top: 10px;
   left: 260px;
   font-size: 38px;
   line-height: 50px;
   text-align: center;
-  width: 38px;
+  width: 37px;
   height: 55px;
   opacity: 0.5;
   z-index: 100;
