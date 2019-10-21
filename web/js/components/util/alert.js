@@ -66,7 +66,6 @@ export default class AlertComponent extends React.Component {
   }
 
   render() {
-    console.log(this.props.noPortal);
     return this.props.noPortal
       ? (this.renderAlert())
       : (
