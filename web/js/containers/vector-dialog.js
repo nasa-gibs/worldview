@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
+import Scrollbars from '../components/util/scrollbar';
 
 import VectorMetaTable from '../components/vector-metadata/table';
 
@@ -16,7 +17,7 @@ class VectorDialog extends React.Component {
     this.setState({ activeIndex });
   }
   render() {
-    const { toggleWithClose, customProps } = this.props;
+    const { toggleWithClose, customProps, height } = this.props;
     const { vectorMetaObject } = customProps;
     const { activeIndex } = this.state;
     let navArray = [];
@@ -48,7 +49,9 @@ class VectorDialog extends React.Component {
           </Nav>
         </ ModalHeader>
         <ModalBody>
-          <VectorMetaTable metaArray={activeMetaArray} title={keyArray[activeIndex]} />
+          <Scrollbars style={{ maxHeight: height + 'px' }}>
+            <VectorMetaTable metaArray={activeMetaArray} title={keyArray[activeIndex]} />
+          </ Scrollbars>
         </ModalBody>
       </React.Fragment>
     )
@@ -56,11 +59,13 @@ class VectorDialog extends React.Component {
 }
 
 
-const mapDispatchToProps = dispatch => ({
-
-});
-
-export default VectorDialog;
+function mapStateToProps(state) {
+  return { height: state.browser.screenHeight }
+};
+export default connect(
+  mapStateToProps,
+  null
+)(VectorDialog);
 VectorDialog.propTypes = {
   vectorMetaArray: PropTypes.Array,
   toggleWithClose: PropTypes.func
