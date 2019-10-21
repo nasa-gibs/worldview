@@ -53,6 +53,7 @@ import {
 } from 'lodash';
 import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
+import { granuleFootprint } from './granule/ui';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -66,6 +67,7 @@ export function mapui(models, config, store, ui) {
   var precache = mapPrecacheTile(models, config, cache, self);
   var compareMapUi = mapCompare(config, store);
   var measureTools = {};
+  var granuleFootprints = {};
   var dataRunner = (self.runningdata = new MapRunningData(
     models,
     compareMapUi,
@@ -110,6 +112,16 @@ export function mapui(models, config, store, ui) {
           reset: action.id
         };
         return reloadLayers(self.selected, granuleOptions);
+      }
+      case layerConstants.TOGGLE_HOVERED_GRANULE: {
+        const state = store.getState();
+        let geometry;
+        const hoverGranule = action.hoveredGranule;
+        if (hoverGranule) {
+          const { activeString, projection, id, granuleDate } = hoverGranule;
+          geometry = state.layers.granuleLayers[activeString][projection][id].geometry[granuleDate];
+        }
+        return granuleFootprintDraw(geometry);
       }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
@@ -378,11 +390,13 @@ export function mapui(models, config, store, ui) {
           const granuleReset = granuleOptions && granuleOptions.reset === def.id;
           let granuleDates;
           let granuleCount;
+          let geometry;
           if (state.layers.granuleLayers[layerGroupStr][proj.id][def.id]) {
             granuleDates = !granuleReset ? state.layers.granuleLayers[layerGroupStr][proj.id][def.id].dates : false;
             granuleCount = state.layers.granuleLayers[layerGroupStr][proj.id][def.id].count;
+            geometry = state.layers.granuleLayers[layerGroupStr][proj.id][def.id].geometry;
           }
-          const granuleLayerParam = { granuleDates, granuleCount };
+          const granuleLayerParam = { granuleDates, granuleCount, geometry };
           map.addLayer(createLayer(def, {}, granuleLayerParam));
         }
       });
@@ -941,6 +955,11 @@ export function mapui(models, config, store, ui) {
     }
   };
 
+  const granuleFootprintDraw = (granuleGeometry) => {
+    const proj = self.selected.getView().getProjection().getCode();
+    granuleFootprints[proj].drawFootprint(granuleGeometry, proj);
+  };
+
   /*
    * Updates the extents of OpenLayers map
    *
@@ -1131,6 +1150,7 @@ export function mapui(models, config, store, ui) {
       };
     });
     measureTools[proj.crs] = measure(map, self.events, store);
+    granuleFootprints[proj.crs] = granuleFootprint(map, self.events, store);
 
     return map;
   };

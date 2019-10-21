@@ -17,7 +17,9 @@ import {
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
   UPDATE_GRANULE_LAYER_DATES,
-  RESET_GRANULE_LAYER_DATES
+  RESET_GRANULE_LAYER_DATES,
+  UPDATE_GRANULE_CMR_GEOMETRY,
+  TOGGLE_HOVERED_GRANULE
 } from './constants';
 import { selectProduct } from '../data/actions';
 
@@ -144,6 +146,19 @@ export function removeLayer(id) {
     });
   };
 }
+export function updateGranuleCMRGeometry(id, projection, geometry) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    const activeString = compare.activeString;
+    dispatch({
+      type: UPDATE_GRANULE_CMR_GEOMETRY,
+      id,
+      activeKey: activeString,
+      proj: projection,
+      geometry
+    });
+  };
+}
 export function updateGranuleLayerDates(dates, id, projection, count) {
   return (dispatch, getState) => {
     const { compare } = getState();
@@ -167,6 +182,20 @@ export function resetGranuleLayerDates(id, projection) {
       id,
       activeKey: activeString,
       proj: projection
+    });
+  };
+}
+export function toggleHoveredGranule(id, projection, granuleDate) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    const activeString = compare.activeString;
+    const hoveredGranule = granuleDate ? { granuleDate, activeString, projection, id } : null;
+    dispatch({
+      type: TOGGLE_HOVERED_GRANULE,
+      hoveredGranule,
+      projection,
+      id,
+      activeString
     });
   };
 }

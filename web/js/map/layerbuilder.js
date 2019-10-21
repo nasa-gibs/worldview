@@ -30,30 +30,13 @@ import {
 } from '../modules/layers/util';
 import { ADD_GRANULE_LAYER_DATES } from '../modules/layers/constants';
 
-// TODO: temp granule count, maybe move to parent func?
-// number of granules to request in the past including current time
-const GRANULE_COUNT = 20;
-
 export function mapLayerBuilder(models, config, cache, ui, store) {
   const self = {};
 
   self.init = function() {
     self.extentLayers = [];
     self.proj = null;
-    self.granuleLayers = {
-      isInitGranuleLoaded: {
-        active: {
-          arctic: false,
-          geographic: false,
-          antarctic: false
-        },
-        activeB: {
-          arctic: false,
-          geographic: false,
-          antarctic: false
-        }
-      }
-    };
+    self.granuleLayers = {};
   };
 
   /**
@@ -127,10 +110,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} proj - Layer projection
    * @param {object} state - App state
    * @param {object} attributes - Layer specs
-   * @param {object} cacheOptions - cache options
    * @returns {array} collection of OpenLayers TileLayers
    */
-  const createGranuleDayLayers = (granuleDayTimes, def, proj, state, attributes, cacheOptions) => {
+  const createGranuleDayLayers = (granuleDayTimes, def, proj, state, attributes) => {
     const granuleLayers = granuleDayTimes.map(granuleDateISO => {
       const group = attributes.group || state.compare.activeDateStr;
       const granuleISOKey = `${def.id}:${proj.id}:${granuleDateISO}::${group}`;
@@ -151,7 +133,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         attributes.date = granuleISODateType;
         createdLayer.wv = attributes;
         // save to cache and push
-        cache.setItem(granuleISOKey, createdLayer, cacheOptions);
+        cache.setItem(granuleISOKey, createdLayer, getCacheOptions(def.period, new Date(granuleDateISO)));
         createdLayer.setVisible(false);
         // can set opacity for individual granules here and still control group opacity from the sidebar
         // createdLayer.setOpacity(0.2);
@@ -183,7 +165,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   const processGranuleLayer = (def, date, proj, isActive, activeKey, dateInterval, granuleCount) => {
     // createLayers for trailing date range using granuleCount based on interval from dateRanges[0].dateInterval
     const granuleDayTimes = [];
-    // const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * GRANULE_COUNT)));
     const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * granuleCount)));
 
     // add dates to granuleDayTimes array
@@ -267,10 +248,19 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.createLayer = (def, options, granuleLayerParam) => {
     const state = store.getState();
 
-    const updatedGranules = granuleLayerParam && granuleLayerParam.granuleDates;
     let granuleCount = (granuleLayerParam && granuleLayerParam.granuleCount) || 20;
+    let updatedGranules;
+    if (granuleLayerParam && granuleLayerParam.granuleDates && granuleLayerParam.granuleDates.length) {
+      if (granuleLayerParam.granuleDates.length !== granuleLayerParam.granuleCount) {
+        updatedGranules = false;
+      } else {
+        updatedGranules = granuleLayerParam.granuleDates;
+      }
+    } else {
+      updatedGranules = false;
+    }
 
-    console.log(granuleLayerParam, granuleCount)
+    const geometry = granuleLayerParam && granuleLayerParam.geometry;
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
     const group = options.group || 'active';
@@ -283,7 +273,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const isGranule = !!(def.tags && def.tags.contains('granule'));
     let layer = cache.getItem(key);
     let granuleDayTimes = updatedGranules || [];
-console.log(cache, key, layer)
     if (!layer || isGranule) {
       // layer is not in the cache OR is a granule layer
       if (!date) date = options.date || state.date[activeDateStr];
@@ -323,8 +312,7 @@ console.log(cache, key, layer)
           }
           granuleDayTimes = processGranuleLayer(def, date, proj, isActive, activeKey, dateInterval, granuleCount);
         }
-        layer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes, cacheOptions);
-        self.granuleLayers.isInitGranuleLoaded[group][proj.id] = true;
+        layer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes);
       } else {
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
@@ -362,7 +350,8 @@ console.log(cache, key, layer)
         id: def.id,
         activeKey: activeKey,
         proj: proj.id,
-        count: granuleCount
+        count: granuleCount,
+        geometry: geometry
       });
       self.proj = proj.id;
     }

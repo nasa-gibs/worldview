@@ -38,6 +38,8 @@ import {
 import {
   updateGranuleLayerDates,
   resetGranuleLayerDates,
+  updateGranuleCMRGeometry,
+  toggleHoveredGranule,
   setOpacity
 } from '../../../modules/layers/actions';
 
@@ -257,8 +259,11 @@ class LayerSettings extends React.Component {
       projection,
       granuleLayerCount,
       granuleLayerDates,
+      granuleCMRGeometry,
       resetGranuleLayerDates,
-      updateGranuleLayerDates
+      updateGranuleCMRGeometry,
+      updateGranuleLayerDates,
+      toggleHoveredGranule
     } = this.props;
 
     if (layer.type !== 'vector') {
@@ -293,8 +298,11 @@ class LayerSettings extends React.Component {
               projection={projection}
               granuleDates={granuleLayerDates}
               granuleCount={granuleLayerCount}
+              updateGranuleCMRGeometry={updateGranuleCMRGeometry}
               updateGranuleLayerDates={updateGranuleLayerDates}
               resetGranuleLayerDates={resetGranuleLayerDates}
+              toggleHoveredGranule={toggleHoveredGranule}
+              granuleCMRGeometry={granuleCMRGeometry}
             />
           </React.Fragment> : null}
         {renderCustomizations}
@@ -309,10 +317,22 @@ function mapStateToProps(state, ownProps) {
   const groupName = compare.activeString;
   const projection = proj.id;
 
+  const isGranuleLayer = layers.granuleLayers[groupName][projection][ownProps.layer.id];
+  let granuleLayerDates;
+  let granuleLayerCount;
+  let granuleCMRGeometry;
+  if (isGranuleLayer) {
+    granuleLayerDates = layers.granuleLayers[groupName][projection][ownProps.layer.id].dates;
+    granuleLayerCount = layers.granuleLayers[groupName][projection][ownProps.layer.id].count;
+    granuleCMRGeometry = layers.granuleLayers[groupName][projection][ownProps.layer.id].geometry;
+  }
+
   return {
+    map: state.map.ui,
     projection,
-    granuleLayerDates: layers.granuleLayers[groupName][projection][ownProps.layer.id].dates,
-    granuleLayerCount: layers.granuleLayers[groupName][projection][ownProps.layer.id].count,
+    granuleLayerDates,
+    granuleLayerCount: granuleLayerCount || 20,
+    granuleCMRGeometry,
     paletteOrder: config.paletteOrder,
     groupName,
     customPalettesIsActive: !!config.features.customPalettes,
@@ -366,11 +386,17 @@ const mapDispatchToProps = dispatch => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
+  updateGranuleCMRGeometry: (id, projection, geometry) => {
+    dispatch(updateGranuleCMRGeometry(id, projection, geometry));
+  },
   updateGranuleLayerDates: (dates, id, projection, count) => {
     dispatch(updateGranuleLayerDates(dates, id, projection, count));
   },
   resetGranuleLayerDates: (id, projection) => {
     dispatch(resetGranuleLayerDates(id, projection));
+  },
+  toggleHoveredGranule: (id, projection, granuleDate) => {
+    dispatch(toggleHoveredGranule(id, projection, granuleDate));
   }
 });
 
@@ -413,6 +439,8 @@ LayerSettings.propTypes = {
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   title: PropTypes.string,
+  toggleHoveredGranule: PropTypes.func,
+  updateGranuleCMRGeometry: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func,
   vectorStyles: PropTypes.object
 };
