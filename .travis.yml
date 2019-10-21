@@ -8,7 +8,7 @@ cache:
   npm: true
   pip: true
 
-install: npm install
+install: npm ci
 
 script:
   - npm test
