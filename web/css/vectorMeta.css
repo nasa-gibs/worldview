@@ -40,13 +40,14 @@
 }
 .vector-modal .vector-info-icon {
   font-size: 8px;
-  border: 1px solid #495057;
+  border: 1px solid #666666;
   width: 13px;
   height: 13px;
   text-align: center;
   border-radius: 50%;
   padding-top: 1px;
-  margin-right: 10px;
+  margin-left: 8px;
+  color: #666666;
 }
 
 .vector-modal .vector-info-icon:hover {

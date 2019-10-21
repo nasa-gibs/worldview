@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
 import Scrollbars from '../components/util/scrollbar';
-
 import VectorMetaTable from '../components/vector-metadata/table';
 
 class VectorDialog extends React.Component {
@@ -40,7 +39,7 @@ class VectorDialog extends React.Component {
       i++;
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
-    console.log(activeMetaArray);
+
     return (
       <React.Fragment>
         <ModalHeader toggle={toggleWithClose}>
@@ -48,11 +47,13 @@ class VectorDialog extends React.Component {
             {navArray}
           </Nav>
         </ ModalHeader>
+
         <ModalBody>
-          <Scrollbars style={{ maxHeight: height + 'px' }}>
+          <Scrollbars style={{ maxHeight: height + 'px' }} name='thing'>
             <VectorMetaTable metaArray={activeMetaArray} title={keyArray[activeIndex]} />
           </ Scrollbars>
         </ModalBody>
+
       </React.Fragment>
     )
   }
