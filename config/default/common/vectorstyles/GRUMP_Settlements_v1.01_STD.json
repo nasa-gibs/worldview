@@ -19,7 +19,16 @@
       "paint": {
         "circle-radius": {
           "base": 2,
-          "stops": [[12, 1], [22, 7]]
+          "stops": [
+            [
+              12,
+              1
+            ],
+            [
+              22,
+              7
+            ]
+          ]
         },
         "circle-color": "rgb(103, 236, 0)"
       }

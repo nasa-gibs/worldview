@@ -19,17 +19,136 @@
       "paint": {
         "circle-radius": {
           "base": 2,
-          "stops": [[12, 1], [22, 7]]
+          "stops": [
+            [
+              12,
+              1
+            ],
+            [
+              22,
+              7
+            ]
+          ]
         },
-        "circle-color": ["case",
-          ["==", ["get", "MAIN_USE"], "Fisheries"], "rgb(152, 230, 0)",
-          ["==", ["get", "MAIN_USE"], "Flood control"], "rgb(168, 0, 0)",
-          ["==", ["get", "MAIN_USE"], "Hydroelectricity"], "rgb(230, 230, 0)",
-          ["==", ["get", "MAIN_USE"], "Irrigation"], "rgb(137, 112, 68)",
-          ["==", ["get", "MAIN_USE"], "Navigation"], "rgb(230, 152, 0)",
-          ["==", ["get", "MAIN_USE"], "Other"], "rgb(255, 190, 232)",
-          ["==", ["get", "MAIN_USE"], "Recreation"], "rgb(132, 0, 168)",
-          ["==", ["get", "MAIN_USE"], "Water supply"], "rgb(38, 115, 0)",
+        "circle-stroke-color": "rgb(255, 255, 255)",
+        "circle-stroke-width": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "selected"
+            ],
+            "true"
+          ],
+          2,
+          [
+            "==",
+            [
+              "get",
+              "selected"
+            ],
+            "false"
+          ],
+          0,
+          0
+        ],
+        "circle-opacity": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "selected"
+            ],
+            "true"
+          ],
+          0.5,
+          [
+            "==",
+            [
+              "get",
+              "selected"
+            ],
+            "false"
+          ],
+          1,
+          1
+        ],
+        "circle-color": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Fisheries"
+          ],
+          "rgb(152, 230, 0)",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Flood control"
+          ],
+          "rgb(168, 0, 0)",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Hydroelectricity"
+          ],
+          "rgb(230, 230, 0)",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Irrigation"
+          ],
+          "rgb(137, 112, 68)",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Navigation"
+          ],
+          "rgb(230, 152, 0)",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Other"
+          ],
+          "rgb(255, 190, 232)",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Recreation"
+          ],
+          "rgb(132, 0, 168)",
+          [
+            "==",
+            [
+              "get",
+              "MAIN_USE"
+            ],
+            "Water supply"
+          ],
+          "rgb(38, 115, 0)",
           "rgb(255, 255, 255)"
         ]
       }
