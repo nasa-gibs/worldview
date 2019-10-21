@@ -13,14 +13,16 @@ install: npm install
 script: npm test
 
 matrix:
+  fast_finish: true # don't wait for allowed failures to determine overall build status
   allow_failures:
     - os: windows
+    - node_js: lts/*
 
   include:
     - os: osx
-      name: 'Node.js lts/* Chrome E2E'
+      name: 'Node.js 10.16.3 - Chrome E2E'
       language: node_js
-      node_js: lts/* # latest LTS Node.js release
+      node_js: '10.16.3'
       addons:
         chrome: stable
       before_install:
@@ -32,13 +34,20 @@ matrix:
 
     - os: osx
       language: node_js
+      node_js: lts/* # latest LTS Node.js release
+      script:
+        - npm test
+        - npm run build
+
+    - os: osx
+      language: node_js
       node_js: '8.15.1'
 
     - os: linux
-      name: 'Node.js lts/* Firefox E2E'
+      name: 'Node.js 10.16.3 - Firefox E2E'
       dist: xenial
       language: python
-      node_js: 'lts/*'
+      node_js: '10.16.3'
       python: '3.7'
       sudo: required
       addons:
@@ -46,11 +55,25 @@ matrix:
       before_install:
         - python --version
         - python3 --version
-        - nvm install lts/*
+        - nvm install 10.16.3
       script:
         - npm run build
         - npm run start &
         - npm run e2e:headless:firefox
+
+    - os: linux
+      dist: xenial
+      language: python
+      node_js: 'lts/*'
+      python: '3.7'
+      sudo: required
+      before_install:
+        - python --version
+        - python3 --version
+        - nvm install lts/*
+      script:
+        - npm test
+        - npm run build
 
     - os: linux
       dist: xenial
