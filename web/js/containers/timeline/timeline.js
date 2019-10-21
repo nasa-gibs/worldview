@@ -680,7 +680,8 @@ class Timeline extends React.Component {
       dateB,
       isAnimationPlaying,
       isAnimationWidgetOpen,
-      isGifActive
+      isGifActive,
+      hasSubdailyLayers
     } = this.props;
 
     // handle update animation positioning and local state from play button/gif creation
@@ -702,11 +703,33 @@ class Timeline extends React.Component {
       }
     }
 
+    // if user adds a subdaily layer (and none were active) adjust the time backwards if needed
+    // and change the time scale to hourly
+    if (hasSubdailyLayers && !prevProps.hasSubdailyLayers) {
+      this.moveSelectedDateBackwards();
+      this.changeTimeScale(4);
+    }
+
     if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
       this.updateDraggerTimeState(dateA, false);
     }
     if (dateB !== prevProps.dateB && dateB !== this.state.draggerTimeStateB) {
       this.updateDraggerTimeState(dateB, true);
+    }
+  }
+
+  /**
+   * If a user adds a subdaily layer and the current selected time is too recent
+   * it is likely they will see no layer content.  Here we are moving the selected time
+   * backwards for them to attempt to avoid this scenario
+   */
+  moveSelectedDateBackwards() {
+    const { selectedDate } = this.props;
+    const fortyMinutes = 40 * 60000;
+    const now = new Date().getTime();
+    const isRecent = Math.abs(now - selectedDate.getTime()) < fortyMinutes;
+    if (isRecent) {
+      this.onDateChange(now - fortyMinutes);
     }
   }
 
@@ -1057,16 +1080,16 @@ class Timeline extends React.Component {
                     />
                     : null
                   }
-
-                  {/* custom interval selector */}
-                  <CustomIntervalSelectorWidget
-                    customDelta={customIntervalValue}
-                    customIntervalZoomLevel={customIntervalZoomLevel}
-                    changeCustomInterval={this.changeCustomInterval}
-                    customIntervalModalOpen={timelineCustomModalOpen}
-                    hasSubdailyLayers={hasSubdailyLayers}
-                  />
                 </div>
+
+                {/* custom interval selector */}
+                <CustomIntervalSelectorWidget
+                  customDelta={customIntervalValue}
+                  customIntervalZoomLevel={customIntervalZoomLevel}
+                  changeCustomInterval={this.changeCustomInterval}
+                  customIntervalModalOpen={timelineCustomModalOpen}
+                  hasSubdailyLayers={hasSubdailyLayers}
+                />
 
                 {/* Zoom Level Change */}
                 <AxisTimeScaleChange

@@ -11,7 +11,10 @@
               "himawari"
             ],
             "product":  "",
-            "wrapadjacentdays": true
+            "palette": {
+                "immutable": true
+            },
+            "wrapX": true
         }
     }
 }

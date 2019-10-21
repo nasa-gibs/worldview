@@ -11,8 +11,7 @@
               "multi-mission_imerg"
             ],
             "product": 	"GPM_3IMERGDF",
-            "group":    "overlays",
-            "inactive":   "true"
+            "group":    "overlays"
         }
     }
 }

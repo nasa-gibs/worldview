@@ -110,6 +110,7 @@ class Events extends React.Component {
       <React.Fragment>
         {showAlert && this.state.showAlert ? (
           <AlertUtil
+            id={'event-alert'}
             isOpen={true}
             onClick={openAlertModal}
             onDismiss={this.dismissAlert}

@@ -2,7 +2,7 @@
 Cloud top altitude is the log-pressure altitude calculated from the retrieved AIRS cloud top pressure assuming a surface pressure of 1000 hPa and a scale height of 6 kilometers. These are the approximate altitudes where clouds have infrared optical depths of unity. AIRS can sense up to two cloud decks in a column of atmosphere, but in this plot only the higher of the two decks is depicted.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
+32 km/pixel (AIRS Level 2 `PCldTopStd` is nominally 13.5km/pixel, the data has been resampled into a 32 km/pixel visualization.)
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  

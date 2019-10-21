@@ -2,7 +2,7 @@
 Sulfur dioxide (SO2) brightness temperature difference is calculated by subtracting brightness temperature values reported in two AIRS channels, one that is sensitive to SO2 and one that is not. A large difference implies greater SO2 absorption. Note that clouds can block the detection of the SO2 signal by the AIRS instrument. Sulfur dioxide can also be emitted from volcanic eruptions. Volcanic SO2 absorbs the energy in passing infrared wavelengths of light, or radiances, in transit from the surface of the Earth to space. This absorption is controlled by the types and quantities of the components within the plume, together with other factors such as cloud cover, surface temperature and emissivity.  
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
+32 km/pixel (AIRS Level 2 `BT_diff_SO2` data is nominally 13.5 km/pixel, the data has been resampled into a 32 km/pixel visualization.)
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  

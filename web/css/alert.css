@@ -1,3 +1,9 @@
+.wv-alert-container {
+  position: absolute;
+  top: 60px !important;
+  right: 10px !important;
+  left: auto !important;
+}
 .wv-alert {
   display: flex;
   align-items: center;
@@ -7,6 +13,7 @@
   padding: 0;
   border: none;
   z-index: 100;
+  margin-bottom: 5px;
 }
 .wv-alert .close-alert {
   padding: 11px 2px;
@@ -36,7 +43,7 @@
   padding-right: 3px;
   display: flex;
   align-items: center;
-  min-height: 40px;
+  height: 40px;
   width: 100%;
 }
 
