@@ -126,7 +126,7 @@ class ModalContainer extends Component {
             fade={!isDraggable}
           >
             {CompletelyCustomModal
-              ? (<CompletelyCustomModal {...customProps} />)
+              ? (<CompletelyCustomModal {...customProps} toggleWithClose={toggleWithClose} />)
               : (
                 <DetectOuterClick
                   onClick={toggleWithClose}

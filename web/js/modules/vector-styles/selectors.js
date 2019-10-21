@@ -9,6 +9,7 @@ import {
 import { getMinValue, getMaxValue } from './util';
 import update from 'immutability-helper';
 import stylefunction from 'ol-mapbox-style/stylefunction';
+import { Stroke, Style, Fill } from 'ol/style';
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -53,7 +54,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
   var values = getVectorStyle(layerId, index, groupStr, state).entries.values;
   var result;
-  lodashEach(values, function(check, index) {
+  lodashEach(values, function (check, index) {
     var min = getMinValue(check);
     var max = getMaxValue(check);
     if (type === 'min' && value === min) {
@@ -73,7 +74,8 @@ export function setRange(layerId, props, index, palettes, state) {
   return (layerId, props, index, palettes, state);
 }
 
-export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, selected) {
+  selected = selected || {};
   var styleFunction;
   var layerId = def.id;
   var glStyle = vectorStyles[layerId];
@@ -99,7 +101,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
               : null;
       }
     }
-    lodashEach(activeLayers, function(def) {
+    lodashEach(activeLayers, function (def) {
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
       }
@@ -124,11 +126,10 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
 
   // Apply mapbox-gl styles
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
-
   // Filter Orbit Tracks
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
-    layer.setStyle(function(feature, resolution) {
+    layer.setStyle(function (feature, resolution) {
       var minute;
       var minutes = feature.get('label');
       if (minutes) {
@@ -137,6 +138,21 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
         return styleFunction(feature, resolution);
       }
+    });
+  } else if (glStyle.name === 'SEDAC' && selected.id && selected.id.includes(def.vectorData.id)) {
+    const selectedFeatures = selected.features;
+    const featureIdentifier = def['feature-id'];
+    layer.setStyle(function (feature, resolution) {
+      const selectedFeature = selectedFeatures.includes(feature.get(featureIdentifier));
+      if (selectedFeature && !selected.reset) {
+        console.log(selectedFeature);
+        return styleFunction(feature, resolution, { selected: 'true' });
+      } else if (selectedFeature && selected.reset) {
+        return styleFunction(feature, resolution, { selected: 'false' });
+      } else {
+        return styleFunction(feature, resolution);
+      }
+
     });
   }
   return vectorStyleId;
@@ -183,7 +199,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
-    layer.setStyle(function(feature, resolution) {
+    layer.setStyle(function (feature, resolution) {
       var minute;
       var minutes = feature.get('label');
       if (minutes) {
