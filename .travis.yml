@@ -10,7 +10,9 @@ cache:
 
 install: npm install
 
-script: npm test
+script:
+  - npm test
+  - npm run build
 
 matrix:
   fast_finish: true # don't wait for allowed failures to determine overall build status
@@ -35,9 +37,6 @@ matrix:
     - os: osx
       language: node_js
       node_js: lts/* # latest LTS Node.js release
-      script:
-        - npm test
-        - npm run build
 
     - os: osx
       language: node_js
@@ -71,9 +70,6 @@ matrix:
         - python --version
         - python3 --version
         - nvm install lts/*
-      script:
-        - npm test
-        - npm run build
 
     - os: linux
       dist: xenial
