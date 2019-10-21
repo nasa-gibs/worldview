@@ -24,9 +24,21 @@
 .vector-modal .modal-body table th {
   position: relative;
 }
-
+.vector-modal .modal-header {
+  padding-bottom: 0;
+}
+.vector-modal .nav-item.active {
+  background: #f8f9fa;
+}
+.vector-modal .active .nav-link {
+  border: 1px solid #a5a6a7;
+  border-bottom: none;
+}
+.vector-modal .nav-link {
+  border: 1px solid #fff;
+  border-bottom: none;
+}
 .vector-modal .vector-info-icon {
-  position: absolute;
   font-size: 8px;
   border: 1px solid #495057;
   width: 13px;
@@ -34,8 +46,7 @@
   text-align: center;
   border-radius: 50%;
   padding-top: 1px;
-  margin-top: 0;
-  right: 10px;
+  margin-right: 10px;
 }
 
 .vector-modal .vector-info-icon:hover {

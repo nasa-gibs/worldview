@@ -9,38 +9,56 @@ export default class VectorMetaTable extends React.Component {
     super(props);
     this.state = {
       tooltipOpen: false,
-      metaFeatures: this.props.metaFeatures,
-      metaLegend: this.props.metaLegend
     };
   }
   shouldComponentUpdate(nextProps) {
-    if (this.props.metaLegend && nextProps.metaLegend && this.props.metaLegend.id === nextProps.metaLegend.id) {
+    if (this.props.title && nextProps.title && this.props.title === nextProps.title) {
       return false;
     } else {
       return true;
     }
   }
   render() {
-    var header, data;
-    const { metaFeatures, metaLegend } = this.state;
-    return (
-      <Table size="sm">
-        <tbody>
-          {Object.entries(metaFeatures).map(([featureId, i], index) => {
-            const properties = lodashFind(metaLegend.mvt_properties, { Identifier: featureId });
-            return (
-              <tr key={'vector-row-' + index}>
-                <td>{properties ? properties.Title || featureId : featureId}</td>
-                <td>{i}</td>
-                {properties && properties.Description ? (
-                  <td><VectorMetaTooltip index={index} description={properties.Description} /></td>
-                ) : undefined
-                }
+    const { metaArray, title } = this.props;
+    return metaArray.map((obj, metaIndex) => {
+      const metaFeatures = obj.features;
+      const metaLegend = obj.legend;
+      title
+      return (
+        <div>
+          <Table size="sm">
+            <thead>
+              <tr>
+                <th>{obj.title || (title + ' ' + (metaIndex + 1))}</th>
               </tr>
-            )
-          })}
-        </tbody>
-      </Table>
+            </thead>
+            <tbody>
+              {Object.entries(metaFeatures).map(([featureId, i], index) => {
+                const properties = lodashFind(metaLegend.mvt_properties, { Identifier: featureId });
+                return (
+                  <tr key={'vector-row-' + title + '-' + (metaIndex + index)}>
+
+                    <td>
+                      {properties && properties.Description ? (
+                        <VectorMetaTooltip id={title + '-' + (metaIndex + index)} index={index} description={properties.Description} />
+                      ) : undefined
+                      }
+                      <span>{properties ? properties.Title || featureId : featureId}</span>
+
+                    </td>
+                    <td>
+                      <span>{i}</span>
+                      {properties && properties.Units ? (<span>{' ' + properties.Units} </span>) : undefined}
+                    </td>
+
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        </div >
+      )
+    }
     )
   }
 }

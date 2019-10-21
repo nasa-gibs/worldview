@@ -19,15 +19,17 @@ export default class VectorMetaTooltip extends React.Component {
   }
 
   render() {
+    const { id, index, description } = this.props;
+    const elId = 'tooltip-' + id + '-' + this.props.index;
     return (
-      <Fragment key={this.props.index}>
-        <span href="#" id={'tooltip-' + this.props.index}><i className="fa fa-info vector-info-icon"></i></span>
+      <Fragment key={id + index}>
+        <span href="#" id={elId}><i className="fa fa-info vector-info-icon"></i></span>
         <Tooltip
-          dangerouslySetInnerHTML={{ __html: this.props.description }}
+          dangerouslySetInnerHTML={{ __html: description }}
           boundariesElement="window"
           placement="top"
           isOpen={this.state.tooltipOpen}
-          target={'tooltip-' + this.props.index}
+          target={elId}
           toggle={this.toggle}
           fade={false}
         >
