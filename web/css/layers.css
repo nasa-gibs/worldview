@@ -580,6 +580,21 @@
   width: 266px;
 }
 
+.granule-date-item-up-button,
+.granule-date-item-down-button,
+.granule-date-item-top-button {
+  background: #555;
+  color: #eee;
+}
+
+.granule-date-item-up-button:hover,
+.granule-date-item-down-button:hover,
+.granule-date-item-top-button:hover {
+  background: #eee;
+  color: #555;
+  /* color: #0087f1; */
+}
+
 /** inline-block extra spacing */
 .wv-palette-selector .wv-checkbox input {
   margin-left: 6px;
