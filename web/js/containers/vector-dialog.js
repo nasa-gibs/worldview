@@ -60,7 +60,7 @@ class VectorDialog extends React.Component {
 
 
 function mapStateToProps(state) {
-  return { height: state.browser.screenHeight }
+  return { height: state.browser.screenHeight - 200 }
 };
 export default connect(
   mapStateToProps,
