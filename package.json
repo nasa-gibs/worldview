@@ -111,7 +111,7 @@
     "jest": "^24.9.0",
     "mini-css-extract-plugin": "^0.4.1",
     "moment": "^2.19.3",
-    "moment-locales-webpack-plugin": "^1.0.7",
+    "moment-locales-webpack-plugin": "^1.1.0",
     "nightwatch": "^1.2.2",
     "node-fetch": "^2.1.2",
     "node-sass": "^4.9.2",
