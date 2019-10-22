@@ -283,16 +283,16 @@ class GranuleLayerDateList extends PureComponent {
                             </div>
                             <div>
                               {index < items.length - 1
-                                ? <button className="granule-date-item-up-button"
+                                ? <button className="granule-date-item-down-button"
                                   onClick={(e) => this.moveDown(e, index, item)}>
-                                  {'\u2BC6'}
+                                  <i className='fa fa-arrow-circle-down fa-fw'></i>
                                 </button>
                                 : null
                               }
                               {index > 0
-                                ? <button className="granule-date-item-down-button"
+                                ? <button className="granule-date-item-up-button"
                                   onClick={(e) => this.moveUp(e, index, item)}>
-                                  {'\u2BC5'}
+                                  <i className='fa fa-arrow-circle-up fa-fw'></i>
                                 </button>
                                 : null
                               }

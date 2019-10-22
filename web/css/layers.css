@@ -580,9 +580,14 @@
   width: 266px;
 }
 
+.granule-date-item {
+  flex-wrap: wrap;
+}
+
 .granule-date-item-up-button,
 .granule-date-item-down-button,
 .granule-date-item-top-button {
+  padding: 3px;
   background: #555;
   color: #eee;
 }
@@ -592,7 +597,6 @@
 .granule-date-item-top-button:hover {
   background: #eee;
   color: #555;
-  /* color: #0087f1; */
 }
 
 /** inline-block extra spacing */
