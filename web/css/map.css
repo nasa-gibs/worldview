@@ -26,7 +26,7 @@
 }
 
 .wv-map-zoom i {
-  padding: 17px 14px;
+  padding: 15px 14px;
   display: block;
   line-height: normal;
 }
@@ -38,13 +38,13 @@
 }
 
 .wv-map-zoom-in {
-  top: 135px;
+  top: 150px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
 
 .wv-map-zoom-out {
-  top: 180px;
+  top: 195px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -56,7 +56,7 @@
 }
 
 .wv-map-rotate-left {
-  top: 247px;
+  top: 251px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
