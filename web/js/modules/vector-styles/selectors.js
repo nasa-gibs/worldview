@@ -6,10 +6,9 @@ import {
 import {
   getLayers
 } from '../layers/selectors';
-import { getMinValue, getMaxValue } from './util';
+import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import update from 'immutability-helper';
 import stylefunction from 'ol-mapbox-style/stylefunction';
-import { Stroke, Style, Fill } from 'ol/style';
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -135,7 +134,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
       if (minutes) {
         minute = minutes.split(':');
       }
-      if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+      if ((minute && minute[1] % 5 === 0) || feature.getType() === 'LineString') {
         return styleFunction(feature, resolution);
       }
     });
@@ -145,9 +144,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     layer.setStyle(function (feature, resolution) {
       const selectedFeature = selectedFeatures.includes(feature.get(featureIdentifier));
       if (selectedFeature && !selected.reset) {
-        return styleFunction(feature, resolution, { selected: 'true' });
-      } else if (selectedFeature && selected.reset) {
-        return styleFunction(feature, resolution, { selected: 'false' });
+        return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {
         return styleFunction(feature, resolution);
       }
@@ -204,10 +201,11 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       if (minutes) {
         minute = minutes.split(':');
       }
-      if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+      if ((minute && minute[1] % 5 === 0) || feature.getType() === 'LineString') {
         return styleFunction(feature, resolution);
       }
     });
   }
   return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } });
 }
+

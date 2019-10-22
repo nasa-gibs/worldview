@@ -1,4 +1,4 @@
-import { groupBy, chain as lodashChain, throttle as lodashThrottle, forOwn as lodashForOwn, each as lodashEach, findIndex as lodashFindIndex } from 'lodash';
+import { groupBy, orderBy as lodashOrderBy, throttle as lodashThrottle, forOwn as lodashForOwn, each as lodashEach, findIndex as lodashFindIndex } from 'lodash';
 import util from '../util/util';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
@@ -998,19 +998,22 @@ export function mapui(models, config, store, ui) {
       const state = store.getState();
       const vectorStyles = config.vectorStyles;
       map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+        console.log(feature, layer)
         const def = lodashGet(layer, 'wv.def');
         if (!def) return;
 
         if (def.vectorData && def.vectorData.id && def.title) {
-          const features = feature.getProperties();
+          let features = feature.getProperties();
           const vectorDataId = def.vectorData.id;
           const data = config.vectorData[vectorDataId];
+          const sortArray = def['feature-sort-order'] || [];
           const obj = {
             legend: data,
-            features: features,
+            features: features, //orderObjectToArray(features, sortArray),
             id: vectorDataId,
             title: def['feature-title'] ? features[def['feature-title']] : '',
-            featureId: vectorDataId + features[def['feature-id']]
+            featureId: vectorDataId + features[def['feature-id']],
+            sortOrder: def['feature-sort-order']
           };
           metaArray.push(obj);
           selectedIdArray.push(vectorDataId);
@@ -1037,7 +1040,7 @@ export function mapui(models, config, store, ui) {
             customProps: { vectorMetaObject: dialogObject },
             onClose: () => {
               defs.forEach((def) => {
-                setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state, { id: selectedIdArray, features: selectedFeatures, reset: true })
+                setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state)
               })
             }
           }
@@ -1211,4 +1214,19 @@ export function mapui(models, config, store, ui) {
 
   init();
   return self;
+}
+function orderObjectToArray(obj, sortValues) {
+  let newArray = [];
+  for (let i = 0, len = sortValues.length; i < len; i++) {
+    const sortKey = sortValues[i];
+    const property = obj[sortKey];
+    if (property) {
+      newArray.push(obj[sortKey]);
+      delete obj[sortKey];
+    }
+  }
+  for (k in obj) {
+    newArray.push(newArray);
+  }
+  return newArray;
 }
