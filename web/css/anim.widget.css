@@ -1,14 +1,16 @@
+.wv-animation-widget-wrapper {
+  position: absolute;
+  bottom: 125px;
+  left: 40%;
+}
 .wv-animation-widget {
   width: 334px;
   border-radius: 8px;
-  height: 134px;
+  height: 136px;
   background: #212121;
-  position: absolute;
-  transform: translateX(-50%);
-  -webkit-transform: translate(-50%);
-  bottom: 125px;
-  left: 50%;
   color: #fff;
+  padding: 1px 0;
+  cursor: move;
   & .wv-animation-widget-header {
     display: block;
     text-align: center;
@@ -81,10 +83,12 @@
     position: relative;
     width: 152px;
   }
-  & i.wv-close {
+  & i.fa {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    &.wv-close {
+      top: 5px;
+      right: 7px;
+    }
     &:hover {
       color: #999;
       cursor: pointer;
