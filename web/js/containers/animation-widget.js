@@ -52,6 +52,7 @@ import { clearRotate } from '../modules/map/actions';
 import { clearGraticule } from '../modules/layers/actions';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { Tooltip } from 'reactstrap';
+import Draggable from 'react-draggable';
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;
@@ -98,12 +99,30 @@ class AnimationWidget extends React.Component {
     this.onLoop = this.onLoop.bind(this);
     this.openGif = this.openGif.bind(this);
     this.toggleHoverGif = this.toggleHoverGif.bind(this);
+    this.handleDragStart = this.handleDragStart.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
     if (props.speed !== state.speed && !state.isSliding) {
       return { speed: props.speed };
     } else return null;
+  }
+
+  /**
+   * Prevent drag when interacting with child elements (e.g. buttons)
+   * Only allow drag when targeting "background" elements
+   * @param {*} e
+   * @param {*} data
+   */
+  handleDragStart(e, data) {
+    const draggableTargets = [
+      'wv-animation-widget',
+      'wv-animation-widget-header',
+      'wv-anim-dates-case',
+      'thru-label'
+    ];
+    const { classList } = e.target;
+    return draggableTargets.some(tClass => classList.contains(tClass));
   }
 
   getPromise(bool, type, action, title) {
@@ -344,137 +363,149 @@ class AnimationWidget extends React.Component {
       animationCustomModalOpen,
       hasSubdailyLayers
     } = this.props;
-    if (!isActive) {
-      return '';
-    } else if (isGifActive) {
-      return <GifContainer onClose={toggleGif} />;
-    } else {
-      const maxLength = getMaxQueueLength(this.state.speed);
-      const queueLength = getQueueLength(
-        startDate,
-        endDate,
-        this.state.speed,
-        interval,
-        delta
-      );
-      const gifDisabled = numberOfFrames >= 40;
 
-      return (
-        <ErrorBoundary>
-          {isPlaying ? (
-            <PlayQueue
-              endDate={endDate}
-              loop={looping}
-              isPlaying={isPlaying}
-              currentDate={currentDate}
-              canPreloadAll={queueLength <= maxLength}
-              startDate={startDate}
-              hasCustomPalettes={hasCustomPalettes}
-              map={map}
-              maxQueueLength={maxLength}
-              queueLength={queueLength}
-              layers={layers}
-              interval={interval}
-              delta={delta}
-              speed={this.state.speed}
-              selectDate={selectDate}
-              togglePlaying={onPushPause}
-              promiseImageryForTime={promiseImageryForTime}
-              onClose={onPushPause}
-            />
-          ) : null}
-          <div
-            id="wv-animation-widget"
-            className={'wv-animation-widget' + (subDailyMode ? ' subdaily' : '')}
-          >
-            <div className="wv-animation-widget-header">
-              {'Animate Map in '}
-              <TimeScaleIntervalChange
-                setTimeScaleIntervalChangeUnit={this.onIntervalSelect}
-                customIntervalZoomLevel={timeScaleFromNumberKey[customInterval]}
-                customSelected={customSelected}
+    if (!isActive) {
+      return null;
+    }
+    if (isGifActive) {
+      return <GifContainer onClose={toggleGif} />;
+    }
+    const maxLength = getMaxQueueLength(this.state.speed);
+    const queueLength = getQueueLength(
+      startDate,
+      endDate,
+      this.state.speed,
+      interval,
+      delta
+    );
+    const gifDisabled = numberOfFrames >= 40;
+
+    return (
+      <ErrorBoundary>
+        {isPlaying && (
+          <PlayQueue
+            endDate={endDate}
+            loop={looping}
+            isPlaying={isPlaying}
+            currentDate={currentDate}
+            canPreloadAll={queueLength <= maxLength}
+            startDate={startDate}
+            hasCustomPalettes={hasCustomPalettes}
+            map={map}
+            maxQueueLength={maxLength}
+            queueLength={queueLength}
+            layers={layers}
+            interval={interval}
+            delta={delta}
+            speed={this.state.speed}
+            selectDate={selectDate}
+            togglePlaying={onPushPause}
+            promiseImageryForTime={promiseImageryForTime}
+            onClose={onPushPause}
+          />
+        )}
+        <Draggable bounds="body" onStart={this.handleDragStart}>
+          <div className="wv-animation-widget-wrapper">
+            <div
+              id="wv-animation-widget"
+              className={'wv-animation-widget' + (subDailyMode ? ' subdaily' : '')}
+            >
+              <div className="wv-animation-widget-header">
+                {'Animate Map in '}
+                <TimeScaleIntervalChange
+                  setTimeScaleIntervalChangeUnit={this.onIntervalSelect}
+                  customIntervalZoomLevel={timeScaleFromNumberKey[customInterval]}
+                  customSelected={customSelected}
+                  customDelta={customDelta}
+                  timeScaleChangeUnit={interval}
+                  hasSubdailyLayers={hasSubdailyLayers}
+                />
+                {' Increments'}
+              </div>
+
+              <PlayButton
+                playing={isPlaying}
+                play={this.onPushPlay}
+                pause={onPushPause}
+              />
+              <LoopButton looping={looping} onLoop={this.onLoop} />
+
+              {/* FPS slider */}
+              <div className="wv-slider-case">
+                <Slider
+                  className="input-range"
+                  step={0.5}
+                  max={10}
+                  min={0.5}
+                  value={this.state.speed}
+                  onChange={num => this.setState({ speed: num })}
+                  handle={RangeHandle}
+                  onBeforeChange={() => this.setState({ isSliding: true })}
+                  onAfterChange={() => {
+                    this.setState({ isSliding: false });
+                    this.props.onSlide(this.state.speed);
+                  }}
+                />
+                <span className="wv-slider-label">{sliderLabel}</span>
+              </div>
+
+              {/* Create Gif */}
+              <a
+                id="create-gif-button"
+                title={!gifDisabled ? 'Create Animated GIF' : ''}
+                className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
+                onClick={this.openGif}
+                onMouseEnter={this.toggleHoverGif}
+                onMouseLeave={this.toggleHoverGif}
+              >
+                <i
+                  id="wv-animation-widget-file-video-icon"
+                  className="fas fa-file-video wv-animation-widget-icon"
+                />
+              </a>
+              {this.renderToolTip()}
+
+              {/* From/To Date/Time Selection */}
+              <div className="wv-anim-dates-case">
+                <TimeSelector
+                  id="start"
+                  idSuffix="animation-widget-start"
+                  width="120"
+                  height="30"
+                  date={startDate}
+                  onDateChange={this.onDateChange}
+                  maxDate={endDate}
+                  minDate={minDate}
+                  subDailyMode={subDailyMode}
+                />
+                <div className="thru-label">To</div>
+                <TimeSelector
+                  id="end"
+                  idSuffix="animation-widget-end"
+                  width="120"
+                  height="30"
+                  date={endDate}
+                  onDateChange={this.onDateChange}
+                  maxDate={maxDate}
+                  minDate={startDate}
+                  subDailyMode={subDailyMode}
+                />
+              </div>
+              <i className="fa fa-times wv-close" onClick={this.props.onClose} />
+
+              {/* Custom time interval selection */}
+              <CustomIntervalSelectorWidget
                 customDelta={customDelta}
-                timeScaleChangeUnit={interval}
+                customIntervalZoomLevel={customInterval}
+                customIntervalModalOpen={animationCustomModalOpen}
+                changeCustomInterval={this.changeCustomInterval}
                 hasSubdailyLayers={hasSubdailyLayers}
               />
-              {' Increments'}
             </div>
-
-            <PlayButton
-              playing={isPlaying}
-              play={this.onPushPlay}
-              pause={onPushPause}
-            />
-            <LoopButton looping={looping} onLoop={this.onLoop} />
-            <div className="wv-slider-case">
-              <Slider
-                className="input-range"
-                step={0.5}
-                max={10}
-                min={0.5}
-                value={this.state.speed}
-                onChange={num => this.setState({ speed: num })}
-                handle={RangeHandle}
-                onBeforeChange={() => this.setState({ isSliding: true })}
-                onAfterChange={() => {
-                  this.setState({ isSliding: false });
-                  this.props.onSlide(this.state.speed);
-                }}
-              />
-              <span className="wv-slider-label">{sliderLabel}</span>
-            </div>
-            <a
-              id="create-gif-button"
-              title={!gifDisabled ? 'Create Animated GIF' : ''}
-              className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
-              onClick={this.openGif}
-              onMouseEnter={this.toggleHoverGif}
-              onMouseLeave={this.toggleHoverGif}
-            >
-              <i
-                id="wv-animation-widget-file-video-icon"
-                className="fas fa-file-video wv-animation-widget-icon"
-              />
-            </a>
-            {this.renderToolTip()}
-            <div className="wv-anim-dates-case">
-              <TimeSelector
-                id="start"
-                idSuffix="animation-widget-start"
-                width="120"
-                height="30"
-                date={startDate}
-                onDateChange={this.onDateChange}
-                maxDate={endDate}
-                minDate={minDate}
-                subDailyMode={subDailyMode}
-              />
-              <div className="thru-label">To</div>
-
-              <TimeSelector
-                id="end"
-                idSuffix="animation-widget-end"
-                width="120"
-                height="30"
-                date={endDate}
-                onDateChange={this.onDateChange}
-                maxDate={maxDate}
-                minDate={startDate}
-                subDailyMode={subDailyMode}
-              />
-            </div>
-            <i className="fa fa-times wv-close" onClick={this.props.onClose} />
-            <CustomIntervalSelectorWidget
-              customDelta={customDelta}
-              customIntervalZoomLevel={customInterval}
-              customIntervalModalOpen={animationCustomModalOpen}
-              changeCustomInterval={this.changeCustomInterval}
-              hasSubdailyLayers={hasSubdailyLayers}
-            />
           </div>
-        </ErrorBoundary>
-      );
-    }
+        </Draggable>
+      </ErrorBoundary>
+    );
   }
 }
 function mapStateToProps(state) {
