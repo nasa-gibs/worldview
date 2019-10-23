@@ -1,7 +1,24 @@
 .wv-animation-widget-wrapper {
   position: absolute;
-  bottom: 125px;
+  bottom: 88px;
   left: 40%;
+  z-index: 100;
+  &.minimized {
+    bottom: 80px;
+    left: 242px;
+    &.subdaily {
+      left: 347px;
+    }
+  }
+}
+.wv-animation-widget-wrapper-minimized {
+  position: absolute;
+  z-index: 100;
+  bottom: 80px;
+  left: 242px;
+  &.subdaily {
+    left: 347px;
+  }
 }
 .wv-animation-widget {
   width: 334px;
@@ -11,9 +28,13 @@
   color: #fff;
   padding: 1px 0;
   cursor: move;
+  &.minimized {
+    height: 52px;
+    width: 80px;
+    background: rgba(40, 40, 40, 0.85);
+  }
   & .wv-animation-widget-header {
     display: block;
-    text-align: center;
     margin-bottom: 10px;
     text-transform: capitalize;
     & .interval-btn-container,
@@ -23,7 +44,7 @@
     }
     & .wv-tooltip {
       bottom: 128px;
-      left: 44%;
+      left: 27%;
       position: absolute;
       border-bottom: 8px solid transparent;
       width: 100px;
@@ -56,11 +77,18 @@
   }
   &.subdaily {
     width: 460px;
+    & .wv-animation-widget-header {
+      display: block;
+      text-align: center;
+    }
     & .input-range {
       width: 278px;
     }
     & .custom-interval-widget {
       left: 113px;
+    }
+    & .wv-tooltip {
+      left: 44%;
     }
   }
   & .wv-slider-case {
@@ -86,8 +114,16 @@
   & i.fa {
     position: absolute;
     &.wv-close {
-      top: 5px;
-      right: 7px;
+      top: 9px;
+      right: 9px;
+    }
+    &.wv-minimize {
+      top: 9px;
+      right: 29px;
+    }
+    &.wv-expand {
+      right: 8px;
+      bottom: 9px;
     }
     &:hover {
       color: #999;
