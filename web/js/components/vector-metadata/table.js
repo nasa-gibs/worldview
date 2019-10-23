@@ -40,9 +40,11 @@ export default class VectorMetaTable extends React.Component {
                     const featureId = properties.Identifier;
                     const value = metaFeatures[featureId];
                     const id = util.cleanId(String(title + '-' + (metaIndex + index)));
+                    if (!value) return undefined;
                     return (
                       <tr key={'vector-row-' + id}>
                         <td>
+
                           {properties && properties.Description ? (
                             <VectorMetaTooltip id={id} index={index} description={properties.Description} />
                           ) : undefined
