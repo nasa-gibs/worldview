@@ -87,6 +87,7 @@ const RangeHandle = props => {
 class AnimationWidget extends React.Component {
   constructor(props) {
     super(props);
+    const halfWidgetWidth = 115;
     this.state = {
       speed: props.speed,
       isSliding: false,
@@ -94,7 +95,7 @@ class AnimationWidget extends React.Component {
       hoverGif: false,
       customIntervalModalOpen: false,
       widgetPosition: {
-        x: props.screenWidth / 2 - 115,
+        x: props.screenWidth / 2 - halfWidgetWidth,
         y: 0
       },
       collapsed: false,
@@ -408,12 +409,9 @@ class AnimationWidget extends React.Component {
     } = this.props;
     const { speed } = this.state;
     const gifDisabled = numberOfFrames >= 40;
-    // const defaultPosition = { x: '-50%', y: 0 };
-
     return (
       <Draggable
         bounds="body"
-        // defaultPosition={defaultPosition}
         position={this.state.widgetPosition}
         onDrag={this.onExpandedDrag}
         onStart={this.handleDragStart}>
@@ -540,7 +538,6 @@ class AnimationWidget extends React.Component {
       delta,
       interval
     } = this.props;
-
     const { speed, collapsed } = this.state;
     const maxLength = getMaxQueueLength(speed);
     const queueLength = getQueueLength(
@@ -797,6 +794,7 @@ AnimationWidget.propTypes = {
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
   promiseImageryForTime: PropTypes.func,
+  screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
   speed: PropTypes.number,
