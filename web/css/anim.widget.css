@@ -1,7 +1,9 @@
 .wv-animation-widget-wrapper {
   position: absolute;
   bottom: 88px;
-  left: 40%;
+  /* left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translate(-50%); */
   z-index: 100;
   &.minimized {
     bottom: 80px;
@@ -9,15 +11,6 @@
     &.subdaily {
       left: 347px;
     }
-  }
-}
-.wv-animation-widget-wrapper-minimized {
-  position: absolute;
-  z-index: 100;
-  bottom: 80px;
-  left: 242px;
-  &.subdaily {
-    left: 347px;
   }
 }
 .wv-animation-widget {
@@ -35,7 +28,7 @@
   }
   & .wv-animation-widget-header {
     display: block;
-    margin-bottom: 10px;
+    margin: 7px 0 10px 20px;
     text-transform: capitalize;
     & .interval-btn-container,
     & .interval-btn.interval-btn-active {

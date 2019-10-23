@@ -93,6 +93,10 @@ class AnimationWidget extends React.Component {
       isGifActive: false,
       hoverGif: false,
       customIntervalModalOpen: false,
+      widgetPosition: {
+        x: props.screenWidth / 2 - 115,
+        y: 0
+      },
       collapsed: false,
       collapsedWidgePosition: { x: 0, y: 0 }
     };
@@ -104,6 +108,7 @@ class AnimationWidget extends React.Component {
     this.handleDragStart = this.handleDragStart.bind(this);
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onCollapsedDrag = this.onCollapsedDrag.bind(this);
+    this.onExpandedDrag = this.onExpandedDrag.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -113,9 +118,7 @@ class AnimationWidget extends React.Component {
   }
 
   toggleCollapse() {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
+    this.setState({ collapsed: !this.state.collapsed });
   }
 
   /**
@@ -134,6 +137,11 @@ class AnimationWidget extends React.Component {
     const { classList } = e.target;
     return draggableTargets.some(tClass => classList.contains(tClass));
   }
+
+  onExpandedDrag(e, position) {
+    const { x, y } = position;
+    this.setState({ widgetPosition: { x, y } });
+  };
 
   onCollapsedDrag(e, position) {
     const { x, y } = position;
@@ -349,13 +357,174 @@ class AnimationWidget extends React.Component {
     );
   }
 
-  render() {
+  renderCollapsedWidget() {
+    const {
+      isPlaying,
+      onPushPause,
+      hasSubdailyLayers
+    } = this.props;
+    return (
+      <Draggable
+        bounds="body"
+        onStart={this.handleDragStart}
+        position={this.state.collapsedWidgePosition}
+        onDrag={this.onCollapsedDrag}>
+        <div
+          className={'wv-animation-widget-wrapper minimized' + (hasSubdailyLayers ? ' subdaily' : '')}>
+          <div
+            id="wv-animation-widget"
+            className={'wv-animation-widget minimized'}>
+            <PlayButton
+              playing={isPlaying}
+              play={this.onPushPlay}
+              pause={onPushPause}
+            />
+            <i className="fa fa-external-link-square-alt wv-expand" onClick={this.toggleCollapse} />
+            <i className="fa fa-times wv-close" onClick={this.props.onClose} />
+          </div>
+        </div>
+      </Draggable>
+    );
+  }
+
+  renderExpandedWidget() {
     const {
       looping,
       isPlaying,
       maxDate,
       minDate,
       sliderLabel,
+      startDate,
+      endDate,
+      onPushPause,
+      subDailyMode,
+      interval,
+      customSelected,
+      customDelta,
+      customInterval,
+      numberOfFrames,
+      animationCustomModalOpen,
+      hasSubdailyLayers
+    } = this.props;
+    const { speed } = this.state;
+    const gifDisabled = numberOfFrames >= 40;
+    // const defaultPosition = { x: '-50%', y: 0 };
+
+    return (
+      <Draggable
+        bounds="body"
+        // defaultPosition={defaultPosition}
+        position={this.state.widgetPosition}
+        onDrag={this.onExpandedDrag}
+        onStart={this.handleDragStart}>
+        <div className="wv-animation-widget-wrapper">
+          <div
+            id="wv-animation-widget"
+            className={'wv-animation-widget' + (subDailyMode ? ' subdaily' : '')}
+          >
+            <div className="wv-animation-widget-header">
+              {'Animate Map in '}
+              <TimeScaleIntervalChange
+                setTimeScaleIntervalChangeUnit={this.onIntervalSelect}
+                customIntervalZoomLevel={timeScaleFromNumberKey[customInterval]}
+                customSelected={customSelected}
+                customDelta={customDelta}
+                timeScaleChangeUnit={interval}
+                hasSubdailyLayers={hasSubdailyLayers}
+              />
+              {' Increments'}
+            </div>
+
+            <PlayButton
+              playing={isPlaying}
+              play={this.onPushPlay}
+              pause={onPushPause}
+            />
+            <LoopButton looping={looping} onLoop={this.onLoop} />
+
+            {/* FPS slider */}
+            <div className="wv-slider-case">
+              <Slider
+                className="input-range"
+                step={0.5}
+                max={10}
+                min={0.5}
+                value={this.state.speed}
+                onChange={num => this.setState({ speed: num })}
+                handle={RangeHandle}
+                onBeforeChange={() => this.setState({ isSliding: true })}
+                onAfterChange={() => {
+                  this.setState({ isSliding: false });
+                  this.props.onSlide(speed);
+                }}
+              />
+              <span className="wv-slider-label">{sliderLabel}</span>
+            </div>
+
+            {/* Create Gif */}
+            <a
+              id="create-gif-button"
+              title={!gifDisabled ? 'Create Animated GIF' : ''}
+              className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
+              onClick={this.openGif}
+              onMouseEnter={this.toggleHoverGif}
+              onMouseLeave={this.toggleHoverGif}
+            >
+              <i
+                id="wv-animation-widget-file-video-icon"
+                className="fas fa-file-video wv-animation-widget-icon"
+              />
+            </a>
+            {this.renderToolTip()}
+
+            {/* From/To Date/Time Selection */}
+            <div className="wv-anim-dates-case">
+              <TimeSelector
+                id="start"
+                idSuffix="animation-widget-start"
+                width="120"
+                height="30"
+                date={startDate}
+                onDateChange={this.onDateChange}
+                maxDate={endDate}
+                minDate={minDate}
+                subDailyMode={subDailyMode}
+              />
+              <div className="thru-label">To</div>
+              <TimeSelector
+                id="end"
+                idSuffix="animation-widget-end"
+                width="120"
+                height="30"
+                date={endDate}
+                onDateChange={this.onDateChange}
+                maxDate={maxDate}
+                minDate={startDate}
+                subDailyMode={subDailyMode}
+              />
+            </div>
+
+            <i className="fa fa-minus wv-minimize" onClick={this.toggleCollapse} />
+            <i className="fa fa-times wv-close" onClick={this.props.onClose} />
+
+            {/* Custom time interval selection */}
+            <CustomIntervalSelectorWidget
+              customDelta={customDelta}
+              customIntervalZoomLevel={customInterval}
+              customIntervalModalOpen={animationCustomModalOpen}
+              changeCustomInterval={this.changeCustomInterval}
+              hasSubdailyLayers={hasSubdailyLayers}
+            />
+          </div>
+        </div>
+      </Draggable>
+    );
+  }
+
+  render() {
+    const {
+      looping,
+      isPlaying,
       startDate,
       endDate,
       onPushPause,
@@ -368,18 +537,19 @@ class AnimationWidget extends React.Component {
       currentDate,
       toggleGif,
       isGifActive,
-      subDailyMode,
       delta,
-      interval,
-      customSelected,
-      customDelta,
-      customInterval,
-      numberOfFrames,
-      animationCustomModalOpen,
-      hasSubdailyLayers
+      interval
     } = this.props;
 
     const { speed, collapsed } = this.state;
+    const maxLength = getMaxQueueLength(speed);
+    const queueLength = getQueueLength(
+      startDate,
+      endDate,
+      speed,
+      interval,
+      delta
+    );
 
     if (!isActive) {
       return null;
@@ -387,73 +557,6 @@ class AnimationWidget extends React.Component {
     if (isGifActive) {
       return <GifContainer onClose={toggleGif} />;
     }
-    if (collapsed) {
-      const maxLength = getMaxQueueLength(speed);
-      const queueLength = getQueueLength(
-        startDate,
-        endDate,
-        speed,
-        interval,
-        delta
-      );
-
-      return (
-        <ErrorBoundary>
-          {isPlaying && (
-            <PlayQueue
-              endDate={endDate}
-              loop={looping}
-              isPlaying={isPlaying}
-              currentDate={currentDate}
-              canPreloadAll={queueLength <= maxLength}
-              startDate={startDate}
-              hasCustomPalettes={hasCustomPalettes}
-              map={map}
-              maxQueueLength={maxLength}
-              queueLength={queueLength}
-              layers={layers}
-              interval={interval}
-              delta={delta}
-              speed={speed}
-              selectDate={selectDate}
-              togglePlaying={onPushPause}
-              promiseImageryForTime={promiseImageryForTime}
-              onClose={onPushPause}
-            />
-          )}
-          <Draggable
-            bounds="body"
-            onStart={this.handleDragStart}
-            position={this.state.collapsedWidgePosition}
-            onDrag={this.onCollapsedDrag}>
-            <div id="wv-anim-minimized" className={'wv-animation-widget-wrapper-minimized' + (hasSubdailyLayers ? ' subdaily' : '')}>
-              <div
-                id="wv-animation-widget"
-                className={'wv-animation-widget minimized'}>
-                <PlayButton
-                  playing={isPlaying}
-                  play={this.onPushPlay}
-                  pause={onPushPause}
-                />
-                <i className="fa fa-external-link-square-alt wv-expand" onClick={this.toggleCollapse} />
-                <i className="fa fa-times wv-close" onClick={this.props.onClose} />
-              </div>
-            </div>
-          </Draggable>
-        </ErrorBoundary>
-      );
-    }
-
-    const maxLength = getMaxQueueLength(this.state.speed);
-    const queueLength = getQueueLength(
-      startDate,
-      endDate,
-      this.state.speed,
-      interval,
-      delta
-    );
-    const gifDisabled = numberOfFrames >= 40;
-
     return (
       <ErrorBoundary>
         {isPlaying && (
@@ -478,108 +581,9 @@ class AnimationWidget extends React.Component {
             onClose={onPushPause}
           />
         )}
-        <Draggable bounds="body" onStart={this.handleDragStart}>
-          <div id="wv-anim-widget" className="wv-animation-widget-wrapper">
-            <div
-              id="wv-animation-widget"
-              className={'wv-animation-widget' + (subDailyMode ? ' subdaily' : '')}
-            >
-              <div className="wv-animation-widget-header">
-                {'Animate Map in '}
-                <TimeScaleIntervalChange
-                  setTimeScaleIntervalChangeUnit={this.onIntervalSelect}
-                  customIntervalZoomLevel={timeScaleFromNumberKey[customInterval]}
-                  customSelected={customSelected}
-                  customDelta={customDelta}
-                  timeScaleChangeUnit={interval}
-                  hasSubdailyLayers={hasSubdailyLayers}
-                />
-                {' Increments'}
-              </div>
 
-              <PlayButton
-                playing={isPlaying}
-                play={this.onPushPlay}
-                pause={onPushPause}
-              />
-              <LoopButton looping={looping} onLoop={this.onLoop} />
+        {collapsed ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
 
-              {/* FPS slider */}
-              <div className="wv-slider-case">
-                <Slider
-                  className="input-range"
-                  step={0.5}
-                  max={10}
-                  min={0.5}
-                  value={this.state.speed}
-                  onChange={num => this.setState({ speed: num })}
-                  handle={RangeHandle}
-                  onBeforeChange={() => this.setState({ isSliding: true })}
-                  onAfterChange={() => {
-                    this.setState({ isSliding: false });
-                    this.props.onSlide(this.state.speed);
-                  }}
-                />
-                <span className="wv-slider-label">{sliderLabel}</span>
-              </div>
-
-              {/* Create Gif */}
-              <a
-                id="create-gif-button"
-                title={!gifDisabled ? 'Create Animated GIF' : ''}
-                className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
-                onClick={this.openGif}
-                onMouseEnter={this.toggleHoverGif}
-                onMouseLeave={this.toggleHoverGif}
-              >
-                <i
-                  id="wv-animation-widget-file-video-icon"
-                  className="fas fa-file-video wv-animation-widget-icon"
-                />
-              </a>
-              {this.renderToolTip()}
-
-              {/* From/To Date/Time Selection */}
-              <div className="wv-anim-dates-case">
-                <TimeSelector
-                  id="start"
-                  idSuffix="animation-widget-start"
-                  width="120"
-                  height="30"
-                  date={startDate}
-                  onDateChange={this.onDateChange}
-                  maxDate={endDate}
-                  minDate={minDate}
-                  subDailyMode={subDailyMode}
-                />
-                <div className="thru-label">To</div>
-                <TimeSelector
-                  id="end"
-                  idSuffix="animation-widget-end"
-                  width="120"
-                  height="30"
-                  date={endDate}
-                  onDateChange={this.onDateChange}
-                  maxDate={maxDate}
-                  minDate={startDate}
-                  subDailyMode={subDailyMode}
-                />
-              </div>
-
-              <i className="fa fa-minus wv-minimize" onClick={this.toggleCollapse} />
-              <i className="fa fa-times wv-close" onClick={this.props.onClose} />
-
-              {/* Custom time interval selection */}
-              <CustomIntervalSelectorWidget
-                customDelta={customDelta}
-                customIntervalZoomLevel={customInterval}
-                customIntervalModalOpen={animationCustomModalOpen}
-                changeCustomInterval={this.changeCustomInterval}
-                hasSubdailyLayers={hasSubdailyLayers}
-              />
-            </div>
-          </div>
-        </Draggable>
       </ErrorBoundary>
     );
   }
@@ -644,6 +648,7 @@ function mapStateToProps(state) {
   );
 
   return {
+    screenWidth: browser.screenWidth,
     animationCustomModalOpen,
     customSelected,
     startDate,
