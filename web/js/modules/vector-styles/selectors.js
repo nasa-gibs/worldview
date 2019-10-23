@@ -140,9 +140,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     });
   } else if (glStyle.name === 'SEDAC' && selected.id && selected.id.includes(def.vectorData.id)) {
     const selectedFeatures = selected.features;
-    const featureIdentifier = def['feature-id'];
     layer.setStyle(function (feature, resolution) {
-      const selectedFeature = selectedFeatures.includes(feature.get(featureIdentifier));
+      const selectedFeature = selectedFeatures.includes(feature.ol_uid);
       if (selectedFeature && !selected.reset) {
         return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {

@@ -23,6 +23,9 @@ class VectorDialog extends React.Component {
     let keyArray = [];
     let i = 0;
     for (let [key, value] of Object.entries(vectorMetaObject)) {
+      const stringLength = 20;
+      const title = (value[0].title || key);
+      const titleText = title.length > stringLength ? title.substring(0, stringLength) + '...' : title;
       const index = i;
       keyArray.push(key);
       navArray.push(
@@ -31,8 +34,8 @@ class VectorDialog extends React.Component {
           className="vector-meta-nav-item"
           active={activeIndex === i}
         >
-          <NavLink onClick={() => this.updateIndex(index)}>
-            {key + ' [' + (value.length) + ']'}
+          <NavLink onClick={() => this.updateIndex(index)} title={title}>
+            {titleText + ' [' + (value.length) + ']'}
           </NavLink>
         </NavItem>
       )

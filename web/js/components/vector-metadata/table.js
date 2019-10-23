@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
 import VectorMetaTooltip from './tooltip';
-import { find as lodashFind } from 'lodash';
+import util from '../../util/util';
 
 export default class VectorMetaTable extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class VectorMetaTable extends React.Component {
           const metaLegend = obj.legend;
           const title = obj.featureTitle
           return (
-            <div key={title + '_' + metaIndex}>
+            <div key={util.encodeId(title + '_' + metaIndex)}>
               <Table size="sm">
                 <thead>
                   <tr>
@@ -39,14 +39,15 @@ export default class VectorMetaTable extends React.Component {
                   {metaLegend.map((properties, index) => {
                     const featureId = properties.Identifier;
                     const value = metaFeatures[featureId];
+                    const id = util.cleanId(String(title + '-' + (metaIndex + index)));
                     return (
-                      <tr key={'vector-row-' + title + '-' + (metaIndex + index)}>
+                      <tr key={'vector-row-' + id}>
                         <td>
                           {properties && properties.Description ? (
-                            <VectorMetaTooltip id={title + '-' + (metaIndex + index)} index={index} description={properties.Description} />
+                            <VectorMetaTooltip id={id} index={index} description={properties.Description} />
                           ) : undefined
                           }
-                          <div class='vector-feature-name-cell' >{properties.Title ? properties.Title : featureId}</div>
+                          <div className='vector-feature-name-cell' >{properties.Title ? properties.Title : featureId}</div>
                         </td>
                         <td>
                           <span >{value}</span>

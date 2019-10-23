@@ -1004,18 +1004,20 @@ export function mapui(models, config, store, ui) {
           let features = feature.getProperties();
           const vectorDataId = def.vectorData.id;
           const data = config.vectorData[vectorDataId];
+          const properties = data.mvt_properties;
+          const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+
           const obj = {
-            legend: data.mvt_properties,
+            legend: properties,
             // features: orderObjectToArray(features, data.mvt_properties),
             features: features,
             id: vectorDataId,
             title: def.title || def.id,
-            featureId: vectorDataId + features[def['feature-id']],
-            featureTitle: features['Identify']
+            featureTitle: features[titleKey]
           };
           metaArray.push(obj);
           selectedIdArray.push(vectorDataId);
-          selectedFeatures.push(features[def['feature-id']]);
+          selectedFeatures.push(feature.ol_uid);
           defs.push(def);
         }
       });
