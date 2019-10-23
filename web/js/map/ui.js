@@ -998,22 +998,20 @@ export function mapui(models, config, store, ui) {
       const state = store.getState();
       const vectorStyles = config.vectorStyles;
       map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-        console.log(feature, layer)
         const def = lodashGet(layer, 'wv.def');
         if (!def) return;
-
         if (def.vectorData && def.vectorData.id && def.title) {
           let features = feature.getProperties();
           const vectorDataId = def.vectorData.id;
           const data = config.vectorData[vectorDataId];
-          const sortArray = def['feature-sort-order'] || [];
           const obj = {
-            legend: data,
-            features: features, //orderObjectToArray(features, sortArray),
+            legend: data.mvt_properties,
+            // features: orderObjectToArray(features, data.mvt_properties),
+            features: features,
             id: vectorDataId,
-            title: def['feature-title'] ? features[def['feature-title']] : '',
+            title: def.title || def.id,
             featureId: vectorDataId + features[def['feature-id']],
-            sortOrder: def['feature-sort-order']
+            featureTitle: features['Identify']
           };
           metaArray.push(obj);
           selectedIdArray.push(vectorDataId);
@@ -1040,7 +1038,7 @@ export function mapui(models, config, store, ui) {
             customProps: { vectorMetaObject: dialogObject },
             onClose: () => {
               defs.forEach((def) => {
-                setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state)
+                setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state, { id: selectedIdArray, features: selectedFeatures, reset: true })
               })
             }
           }
@@ -1214,19 +1212,4 @@ export function mapui(models, config, store, ui) {
 
   init();
   return self;
-}
-function orderObjectToArray(obj, sortValues) {
-  let newArray = [];
-  for (let i = 0, len = sortValues.length; i < len; i++) {
-    const sortKey = sortValues[i];
-    const property = obj[sortKey];
-    if (property) {
-      newArray.push(obj[sortKey]);
-      delete obj[sortKey];
-    }
-  }
-  for (k in obj) {
-    newArray.push(newArray);
-  }
-  return newArray;
 }
