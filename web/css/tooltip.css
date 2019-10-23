@@ -60,6 +60,8 @@
   white-space: nowrap;
   user-select: none;
   padding-left: 8px;
+  position: relative;
+  z-index: 101;
 }
 
 .date-tooltip-day {

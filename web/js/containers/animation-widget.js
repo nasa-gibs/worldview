@@ -92,7 +92,9 @@ class AnimationWidget extends React.Component {
       isSliding: false,
       isGifActive: false,
       hoverGif: false,
-      customIntervalModalOpen: false
+      customIntervalModalOpen: false,
+      collapsed: false,
+      collapsedWidgePosition: { x: 0, y: 0 }
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
@@ -100,12 +102,20 @@ class AnimationWidget extends React.Component {
     this.openGif = this.openGif.bind(this);
     this.toggleHoverGif = this.toggleHoverGif.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
+    this.toggleCollapse = this.toggleCollapse.bind(this);
+    this.onCollapsedDrag = this.onCollapsedDrag.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
     if (props.speed !== state.speed && !state.isSliding) {
       return { speed: props.speed };
     } else return null;
+  }
+
+  toggleCollapse() {
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
   }
 
   /**
@@ -124,6 +134,11 @@ class AnimationWidget extends React.Component {
     const { classList } = e.target;
     return draggableTargets.some(tClass => classList.contains(tClass));
   }
+
+  onCollapsedDrag(e, position) {
+    const { x, y } = position;
+    this.setState({ collapsedWidgePosition: { x, y } });
+  };
 
   getPromise(bool, type, action, title) {
     const { notify } = this.props;
@@ -364,12 +379,71 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers
     } = this.props;
 
+    const { speed, collapsed } = this.state;
+
     if (!isActive) {
       return null;
     }
     if (isGifActive) {
       return <GifContainer onClose={toggleGif} />;
     }
+    if (collapsed) {
+      const maxLength = getMaxQueueLength(speed);
+      const queueLength = getQueueLength(
+        startDate,
+        endDate,
+        speed,
+        interval,
+        delta
+      );
+
+      return (
+        <ErrorBoundary>
+          {isPlaying && (
+            <PlayQueue
+              endDate={endDate}
+              loop={looping}
+              isPlaying={isPlaying}
+              currentDate={currentDate}
+              canPreloadAll={queueLength <= maxLength}
+              startDate={startDate}
+              hasCustomPalettes={hasCustomPalettes}
+              map={map}
+              maxQueueLength={maxLength}
+              queueLength={queueLength}
+              layers={layers}
+              interval={interval}
+              delta={delta}
+              speed={speed}
+              selectDate={selectDate}
+              togglePlaying={onPushPause}
+              promiseImageryForTime={promiseImageryForTime}
+              onClose={onPushPause}
+            />
+          )}
+          <Draggable
+            bounds="body"
+            onStart={this.handleDragStart}
+            position={this.state.collapsedWidgePosition}
+            onDrag={this.onCollapsedDrag}>
+            <div id="wv-anim-minimized" className={'wv-animation-widget-wrapper-minimized' + (hasSubdailyLayers ? ' subdaily' : '')}>
+              <div
+                id="wv-animation-widget"
+                className={'wv-animation-widget minimized'}>
+                <PlayButton
+                  playing={isPlaying}
+                  play={this.onPushPlay}
+                  pause={onPushPause}
+                />
+                <i className="fa fa-external-link-square-alt wv-expand" onClick={this.toggleCollapse} />
+                <i className="fa fa-times wv-close" onClick={this.props.onClose} />
+              </div>
+            </div>
+          </Draggable>
+        </ErrorBoundary>
+      );
+    }
+
     const maxLength = getMaxQueueLength(this.state.speed);
     const queueLength = getQueueLength(
       startDate,
@@ -397,7 +471,7 @@ class AnimationWidget extends React.Component {
             layers={layers}
             interval={interval}
             delta={delta}
-            speed={this.state.speed}
+            speed={speed}
             selectDate={selectDate}
             togglePlaying={onPushPause}
             promiseImageryForTime={promiseImageryForTime}
@@ -405,7 +479,7 @@ class AnimationWidget extends React.Component {
           />
         )}
         <Draggable bounds="body" onStart={this.handleDragStart}>
-          <div className="wv-animation-widget-wrapper">
+          <div id="wv-anim-widget" className="wv-animation-widget-wrapper">
             <div
               id="wv-animation-widget"
               className={'wv-animation-widget' + (subDailyMode ? ' subdaily' : '')}
@@ -491,6 +565,8 @@ class AnimationWidget extends React.Component {
                   subDailyMode={subDailyMode}
                 />
               </div>
+
+              <i className="fa fa-minus wv-minimize" onClick={this.toggleCollapse} />
               <i className="fa fa-times wv-close" onClick={this.props.onClose} />
 
               {/* Custom time interval selection */}
@@ -721,6 +797,7 @@ AnimationWidget.propTypes = {
   speed: PropTypes.number,
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
+  toggleCollapse: PropTypes.func,
   toggleCustomModal: PropTypes.func,
   toggleGif: PropTypes.func
 };
