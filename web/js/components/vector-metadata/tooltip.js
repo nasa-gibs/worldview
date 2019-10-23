@@ -22,9 +22,9 @@ export default class VectorMetaTooltip extends React.Component {
   render() {
     const { id, index, description } = this.props;
     const elId = util.cleanId(String('tooltip' + id + index));
-    console.log(elId)
+
     return (
-      <Fragment key={elId}>
+      <div className='vector-info-tooltip-case' key={elId}>
         <span href="#" id={elId}><i className="fa fa-info vector-info-icon"></i></span>
         <Tooltip
           dangerouslySetInnerHTML={{ __html: description }}
@@ -36,7 +36,7 @@ export default class VectorMetaTooltip extends React.Component {
           fade={false}
         >
         </Tooltip>
-      </Fragment>
+      </div>
     );
   }
 }
