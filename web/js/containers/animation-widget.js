@@ -380,7 +380,7 @@ class AnimationWidget extends React.Component {
               play={this.onPushPlay}
               pause={onPushPause}
             />
-            <i className="fa fa-external-link-square-alt wv-expand" onClick={this.toggleCollapse} />
+            <i className="fa fa-chevron-up wv-expand" onClick={this.toggleCollapse} />
             <i className="fa fa-times wv-close" onClick={this.props.onClose} />
           </div>
         </div>
@@ -502,7 +502,7 @@ class AnimationWidget extends React.Component {
               />
             </div>
 
-            <i className="fa fa-minus wv-minimize" onClick={this.toggleCollapse} />
+            <i className="fa fa-chevron-down wv-minimize" onClick={this.toggleCollapse} />
             <i className="fa fa-times wv-close" onClick={this.props.onClose} />
 
             {/* Custom time interval selection */}

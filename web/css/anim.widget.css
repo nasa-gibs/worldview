@@ -4,7 +4,7 @@
   z-index: 100;
   &.minimized {
     bottom: 80px;
-    left: 242px;
+    left: 10px;
     &.subdaily {
       left: 347px;
     }
