@@ -1,7 +1,14 @@
 import {
-  assign as lodashAssign
+  assign as lodashAssign,
+  find as lodashFind,
+  get as lodashGet,
+  groupBy as lodashGroupBy
 } from 'lodash';
 import { Stroke, Style, Fill, Circle } from 'ol/style';
+import vectorDialog from '../../containers/vector-dialog';
+import { setStyleFunction } from './selectors';
+import { openCustomContent } from '../modal/actions';
+import { selectVectorFeatures } from './actions';
 
 export function getVectorStyleAttributeArray(layer) {
   var isCustomActive = false;
@@ -83,4 +90,76 @@ export function selectedStyleFunction(feature, styleArray) {
         return style;
     }
   });
+}
+export function onMapClickGetVectorFeatures(e, map, store) {
+  let metaArray = [];
+  let selected = {};
+  let defs = [];
+  const state = store.getState();
+  const lastSelection = state.vectorStyles.selected;
+  const config = state.config;
+  // const vectorStyles = config.vectorStyles;
+  map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+    const def = lodashGet(layer, 'wv.def');
+    if (!def) return;
+
+    if (def.vectorData && def.vectorData.id && def.title) {
+      const layerId = def.id;
+      if (!selected[layerId]) selected[layerId] = [];
+      let features = feature.getProperties();
+      const vectorDataId = def.vectorData.id;
+      const data = config.vectorData[vectorDataId];
+      const properties = data.mvt_properties;
+      const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+
+      const obj = {
+        legend: properties,
+        features: features,
+        id: vectorDataId,
+        title: def.title || def.id,
+        featureTitle: features[titleKey]
+      };
+      metaArray.push(obj);
+      selected[layerId].push(feature.ol_uid);
+    }
+  });
+  if (Object.entries(selected).length || Object.entries(lastSelection).length) {
+    store.dispatch(selectVectorFeatures(selected));
+  }
+  if (metaArray.length) {
+    store.dispatch(openCustomContent('Vector-dialog' + e.pixel[0] + e.pixel[1],
+      {
+        backdrop: false,
+        clickableBehindModal: true,
+        desktopOnly: true,
+        isDraggable: true,
+        wrapClassName: 'vector-modal-wrap',
+        modalClassName: 'vector-modal light',
+        CompletelyCustomModal: vectorDialog,
+        customProps: { vectorMetaObject: lodashGroupBy(metaArray, 'id') },
+        onClose: () => {
+          store.dispatch(selectVectorFeatures({}));
+        }
+      }
+    ));
+  };
+}
+export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
+  const vectorStyles = state.config.vectorStyles
+  for (let [key, featureIdArray] of Object.entries(selectionObj)) {
+    const def = lodashFind(layers, { id: key });
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state, { type, features: featureIdArray });
+    if (lastSelection[key]) delete lastSelection[key];
+  }
+  for (let [key] of Object.entries(lastSelection)) {
+    const def = lodashFind(layers, { id: key });
+    setStyleFunction(
+      def,
+      def.vectorStyle.id,
+      vectorStyles,
+      null,
+      state
+    );
+  }
+
 }

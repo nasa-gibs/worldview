@@ -51,6 +51,7 @@ import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from 
 import { getLeadingExtent } from '../modules/map/util';
 import vectorDialog from '../containers/vector-dialog';
 import { setSelected } from '../modules/vector-styles/actions';
+import { onMapClickGetVectorFeatures, updateVectorSelection } from '../modules/vector-styles/util';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -88,7 +89,7 @@ export function mapui(models, config, store, ui) {
   self.layerKey = layerBuilder.layerKey;
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
-
+  self.selectedVectors = {};
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -138,6 +139,15 @@ export function mapui(models, config, store, ui) {
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
+      case vectorStyleConstants.SET_SELECTED_VECTORS:
+        let newSelection = action.payload;
+        let state = store.getState();
+        let { compare, layers } = state;
+        let activeLayerStr = compare.activeString;
+        let lastSelection = self.selectedVectors;
+        updateVectorSelection(action.payload, lastSelection, layers[activeLayerStr], 'selection', state);
+        self.selectedVectors = newSelection;
+        return;
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
       case USE_GREAT_CIRCLE:
@@ -990,63 +1000,7 @@ export function mapui(models, config, store, ui) {
       if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
-    map.on('click', function (e) {
-      let metaArray = [];
-      let selectedIdArray = [];
-      let selectedFeatures = [];
-      let defs = [];
-      const state = store.getState();
-      const vectorStyles = config.vectorStyles;
-      map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-        const def = lodashGet(layer, 'wv.def');
-        if (!def) return;
-        if (def.vectorData && def.vectorData.id && def.title) {
-          let features = feature.getProperties();
-          const vectorDataId = def.vectorData.id;
-          const data = config.vectorData[vectorDataId];
-          const properties = data.mvt_properties;
-          const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-
-          const obj = {
-            legend: properties,
-            // features: orderObjectToArray(features, data.mvt_properties),
-            features: features,
-            id: vectorDataId,
-            title: def.title || def.id,
-            featureTitle: features[titleKey]
-          };
-          metaArray.push(obj);
-          selectedIdArray.push(vectorDataId);
-          selectedFeatures.push(feature.ol_uid);
-          defs.push(def);
-        }
-      });
-      if (metaArray.length) {
-        //https://stackoverflow.com/a/23600960/4589331
-        const dialogObject = groupBy(metaArray, 'id');
-        defs.forEach((def) => {
-          setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state, { id: selectedIdArray, features: selectedFeatures });
-        })
-
-        store.dispatch(openCustomContent('Vector-dialog' + e.pixel[0] + e.pixel[1],
-          {
-            backdrop: false,
-            clickableBehindModal: true,
-            desktopOnly: true,
-            isDraggable: true,
-            wrapClassName: 'vector-modal-wrap',
-            modalClassName: 'vector-modal light',
-            CompletelyCustomModal: vectorDialog,
-            customProps: { vectorMetaObject: dialogObject },
-            onClose: () => {
-              defs.forEach((def) => {
-                setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state, { id: selectedIdArray, features: selectedFeatures, reset: true })
-              })
-            }
-          }
-        ));
-      };
-    });
+    map.on('click', (e) => onMapClickGetVectorFeatures(e, map, store));
     measureTools[proj.crs] = measure(map, self.events, store);
 
     return map;

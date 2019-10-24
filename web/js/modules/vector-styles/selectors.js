@@ -73,8 +73,8 @@ export function setRange(layerId, props, index, palettes, state) {
   return (layerId, props, index, palettes, state);
 }
 
-export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, selected) {
-  selected = selected || {};
+export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, interactionsObject) {
+  interactionsObject = interactionsObject || {};
   var styleFunction;
   var layerId = def.id;
   var glStyle = vectorStyles[layerId];
@@ -126,6 +126,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   // Apply mapbox-gl styles
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   // Filter Orbit Tracks
+  console.log('lol')
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
     layer.setStyle(function (feature, resolution) {
@@ -138,11 +139,12 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
         return styleFunction(feature, resolution);
       }
     });
-  } else if (glStyle.name === 'SEDAC' && selected.id && selected.id.includes(def.vectorData.id)) {
-    const selectedFeatures = selected.features;
+  } else if (glStyle.name === 'SEDAC' && interactionsObject.type === 'selection' && interactionsObject.features.length) {
+    const selectedFeatures = interactionsObject.features;
+
     layer.setStyle(function (feature, resolution) {
       const selectedFeature = selectedFeatures.includes(feature.ol_uid);
-      if (selectedFeature && !selected.reset) {
+      if (selectedFeature) {
         return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {
         return styleFunction(feature, resolution);
