@@ -4,15 +4,6 @@
   position: relative;
 }
 
-/* perfect scrollbars */
-.wv-palette-selector .ps__scrollbar-y-rail {
-  background-color: transparent;
-}
-
-.wv-palette-selector .ps__scrollbar-y {
-  background: #ccc;
-}
-
 .wv-palette-selector-row {
   background: #eee;
   padding: 0.5em;
