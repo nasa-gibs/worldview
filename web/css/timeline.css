@@ -345,7 +345,7 @@ button:focus {
   background: rgba(40, 40, 40, 0.85);
   position: absolute;
   top: -54px;
-  left: 0;
+  left: 85px;
   color: #fff;
   border-bottom: thin solid #444;
 }
