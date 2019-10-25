@@ -8,7 +8,6 @@
       "type": "vector",
       "tags": "vector vectors",
       "group": "overlays",
-      "feature-id": "GRAND_ID",
       "layergroup": [
         "vector"
       ],

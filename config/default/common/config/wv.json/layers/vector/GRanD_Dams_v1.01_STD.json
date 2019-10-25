@@ -7,8 +7,6 @@
       "description": "vector/GRanD_Dams_v1.01_STD",
       "type": "vector",
       "tags": "vector vectors",
-      "feature-id": "GRAND_ID",
-      "feature-title": "DAM_NAME",
       "group": "overlays",
       "layergroup": [
         "vector"
