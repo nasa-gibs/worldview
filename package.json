@@ -138,7 +138,7 @@
     "selenium-server-standalone-jar": "^3.141.59",
     "shelljs": "^0.8.2",
     "showdown": "^1.8.6",
-    "stylelint": "^10.1.0",
+    "stylelint": "^11.1.1",
     "tar": "^5.0.2",
     "uglify-js": "^3.4.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
