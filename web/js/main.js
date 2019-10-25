@@ -1,8 +1,6 @@
 /* global DEBUG */
 // IE11 corejs polyfills container
-import 'core-js/es5';
-import 'core-js/es6';
-import 'core-js/es7';
+import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 // IE11 corejs polyfills container
 import 'whatwg-fetch';
