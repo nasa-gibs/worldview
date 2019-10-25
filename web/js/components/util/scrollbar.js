@@ -2,31 +2,44 @@ import React, { useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 
+/**
+ * Wrapper component for SimpleBar
+ * @param {number} props.scrollBarVerticalTop - location to scroll to
+ */
 export default function Scrollbars(props) {
   const ref = useRef();
-  let scrollbarVisible;
+
+  /**
+   * Add/remove the scrollbar-visible class if content is overflowing
+   * @param {*} simpleBar
+   */
+  const toggleVisibleClass = (simpleBar) => {
+    const { contentEl, contentWrapperEl } = simpleBar;
+    if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
+      contentEl.classList.add('scrollbar-visible');
+    } else {
+      contentEl.classList.remove('scrollbar-visible');
+    }
+  };
+
+  /**
+   * Set the scrollTop position based on props.scrollBarVerticalTop
+   * @param {*} simpleBar
+   */
+  const setScrollTop = (simpleBar) => {
+    const { contentWrapperEl } = simpleBar;
+    if (contentWrapperEl) {
+      const verticalTop = Math.floor(props.scrollBarVerticalTop);
+      contentWrapperEl.scrollTop = verticalTop !== 0 ? verticalTop : 0;
+    }
+  };
 
   useLayoutEffect(() => {
     if (!ref || !ref.current) {
       return;
     }
-    // if (ref.current.recalculate) {
-    //   // TODO do we need to recalculate??
-    //   ref.current.recalculate();
-    // }
-
-    const { contentEl, contentWrapperEl } = ref.current;
-    if (contentEl) {
-      const verticalTop = Math.floor(props.scrollBarVerticalTop);
-      scrollbarVisible = contentEl.offsetHeight > contentWrapperEl.offsetHeight;
-      contentWrapperEl.scrollTop = verticalTop !== 0 ? verticalTop : 0;
-
-      if (scrollbarVisible) {
-        contentEl.classList.add('scrollbar-visible');
-      } else {
-        contentEl.classList.remove('scrollbar-visible');
-      }
-    }
+    toggleVisibleClass(ref.current);
+    setScrollTop(ref.current);
   });
 
   return (
