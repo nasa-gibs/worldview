@@ -98,7 +98,6 @@ export function onMapClickGetVectorFeatures(e, map, store) {
   const state = store.getState();
   const lastSelection = state.vectorStyles.selected;
   const config = state.config;
-  // const vectorStyles = config.vectorStyles;
   map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
@@ -111,16 +110,17 @@ export function onMapClickGetVectorFeatures(e, map, store) {
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
       const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-
+      const title = features[titleKey];
+      if (selected[layerId].includes(title)) return
       const obj = {
         legend: properties,
         features: features,
         id: vectorDataId,
         title: def.title || def.id,
-        featureTitle: features[titleKey]
+        featureTitle: title
       };
       metaArray.push(obj);
-      selected[layerId].push(feature.ol_uid);
+      selected[layerId].push(title);
     }
   });
   if (Object.entries(selected).length || Object.entries(lastSelection).length) {

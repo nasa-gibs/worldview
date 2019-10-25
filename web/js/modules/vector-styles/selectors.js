@@ -1,7 +1,8 @@
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
-  each as lodashEach
+  each as lodashEach,
+  find as lodashFind
 } from 'lodash';
 import {
   getLayers
@@ -126,7 +127,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
   // Apply mapbox-gl styles
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   // Filter Orbit Tracks
-  console.log('lol')
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
     layer.setStyle(function (feature, resolution) {
@@ -143,7 +143,11 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state,
     const selectedFeatures = interactionsObject.features;
 
     layer.setStyle(function (feature, resolution) {
-      const selectedFeature = selectedFeatures.includes(feature.ol_uid);
+      const data = state.config.vectorData[def.vectorData.id];
+      const properties = data.mvt_properties;
+      const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+      const id = feature.getProperties()[titleKey];
+      const selectedFeature = selectedFeatures.includes(id);
       if (selectedFeature) {
         return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {
