@@ -3,13 +3,15 @@ import {
   CLEAR_VECTORSTYLE,
   SET_VECTORSTYLE,
   SET_FILTER_RANGE,
-  SET_SELECTED_VECTORS
+  SET_SELECTED_VECTORS,
+  SET_HOVERED_VECTORS
 } from './constants';
 export const defaultVectorStyleState = {
   custom: {},
   active: {},
   activeB: {},
-  selected: {}
+  selected: {},
+  hovered: {}
 };
 export function getInitialVectorStyleState(config) {
   const custom = lodashGet(config, 'vectorStyles') || {};
@@ -36,6 +38,10 @@ export function vectorStyleReducer(state = defaultVectorStyleState, action) {
     case SET_SELECTED_VECTORS:
       return lodashAssign({}, state, {
         selected: action.payload
+      });
+    case SET_HOVERED_VECTORS:
+      return lodashAssign({}, state, {
+        hovered: action.payload
       });
     default:
       return state;

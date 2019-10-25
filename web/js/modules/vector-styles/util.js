@@ -2,13 +2,14 @@ import {
   assign as lodashAssign,
   find as lodashFind,
   get as lodashGet,
-  groupBy as lodashGroupBy
+  groupBy as lodashGroupBy,
+  isEqual as lodashIsEqual
 } from 'lodash';
 import { Stroke, Style, Fill, Circle } from 'ol/style';
 import vectorDialog from '../../containers/vector-dialog';
 import { setStyleFunction } from './selectors';
 import { openCustomContent } from '../modal/actions';
-import { selectVectorFeatures } from './actions';
+import { selectVectorFeatures, hoverVectorFeatures } from './actions';
 
 export function getVectorStyleAttributeArray(layer) {
   var isCustomActive = false;
@@ -94,7 +95,6 @@ export function selectedStyleFunction(feature, styleArray) {
 export function onMapClickGetVectorFeatures(e, map, store) {
   let metaArray = [];
   let selected = {};
-  let defs = [];
   const state = store.getState();
   const lastSelection = state.vectorStyles.selected;
   const config = state.config;
@@ -144,11 +144,36 @@ export function onMapClickGetVectorFeatures(e, map, store) {
     ));
   };
 }
+export function onMapHoverGetVectorFeatures(pixels, map, store) {
+  let selected = {};
+  const state = store.getState()
+  const lastSelection = state.vectorStyles.hovered;
+  const config = state.config;
+  map.forEachFeatureAtPixel(pixels, function (feature, layer) {
+    const def = lodashGet(layer, 'wv.def');
+    if (!def) return;
+    if (def.vectorData && def.vectorData.id && def.title) {
+      const layerId = def.id;
+      if (!selected[layerId]) selected[layerId] = [];
+      let features = feature.getProperties();
+      const vectorDataId = def.vectorData.id;
+      const data = config.vectorData[vectorDataId];
+      const properties = data.mvt_properties;
+      const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+      const title = features[titleKey];
+      if (!selected[layerId].includes(title)) selected[layerId].push(title);
+    }
+  });
+  if (lodashIsEqual(lastSelection, selected)) return;
+  if (Object.entries(selected).length || Object.entries(lastSelection).length) {
+    store.dispatch(hoverVectorFeatures(selected));
+  }
+}
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
   const vectorStyles = state.config.vectorStyles
   for (let [key, featureIdArray] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
-    setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state, { type, features: featureIdArray });
+    setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (let [key] of Object.entries(lastSelection)) {

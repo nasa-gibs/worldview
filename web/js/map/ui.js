@@ -51,7 +51,7 @@ import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from 
 import { getLeadingExtent } from '../modules/map/util';
 import vectorDialog from '../containers/vector-dialog';
 import { setSelected } from '../modules/vector-styles/actions';
-import { onMapClickGetVectorFeatures, updateVectorSelection } from '../modules/vector-styles/util';
+import { onMapClickGetVectorFeatures, updateVectorSelection, onMapHoverGetVectorFeatures } from '../modules/vector-styles/util';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -90,6 +90,7 @@ export function mapui(models, config, store, ui) {
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
   self.selectedVectors = {};
+  self.hoveredVectors = {};
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -140,13 +141,15 @@ export function mapui(models, config, store, ui) {
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
       case vectorStyleConstants.SET_SELECTED_VECTORS:
+      case vectorStyleConstants.SET_HOVERED_VECTORS:
+        const type = action.type === vectorStyleConstants.SET_SELECTED_VECTORS ? 'selection' : 'hovered';
         let newSelection = action.payload;
         let state = store.getState();
         let { compare, layers } = state;
         let activeLayerStr = compare.activeString;
-        let lastSelection = self.selectedVectors;
-        updateVectorSelection(action.payload, lastSelection, layers[activeLayerStr], 'selection', state);
-        self.selectedVectors = newSelection;
+        let lastSelectionStr = type === 'selection' ? 'selectedVectors' : 'hoveredVectors';
+        updateVectorSelection(action.payload, self[lastSelectionStr], layers[activeLayerStr], type, state);
+        self[lastSelectionStr] = newSelection;
         return;
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
@@ -1127,6 +1130,7 @@ export function mapui(models, config, store, ui) {
         return;
       }
       pixels = map.getEventPixel(e.originalEvent);
+      onMapHoverGetVectorFeatures(pixels, map, store)
       coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
