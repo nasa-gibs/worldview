@@ -1,14 +1,11 @@
-
 /***************** simple-scrollbar customizations ***********************/
+.simplebar-scrollbar {
+  right: 0;
+  width: 9px;
+}
+
 .simplebar-track .simplebar-scrollbar::before {
   background-color: #999;
   border-radius: 0;
-  width: 9px;
-}
-.scrollbar-hidden .simplebar-scrollbar {
-  display: none;
-}
-.scrollbar-visible .simplebar-track .simplebar-scrollbar::before {
   opacity: 0.8;
-  border-radius: 0;
 }

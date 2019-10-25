@@ -517,6 +517,7 @@
   bottom: auto;
   border-radius: 6px;
   position: absolute;
+  width: 500px;
 }
 
 .layer-settings-modal .modal-title {
