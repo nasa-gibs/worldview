@@ -102,7 +102,8 @@ class AnimationWidget extends React.Component {
         y: 0
       },
       collapsed: false,
-      collapsedWidgetPosition: { x: 0, y: 0 }
+      collapsedWidgetPosition: { x: 0, y: 0 },
+      userHasMovedWidget: false
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
@@ -116,14 +117,13 @@ class AnimationWidget extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { widgetPosition } = this.state;
+    const { userHasMovedWidget } = this.state;
     const { subDailyMode, screenWidth } = this.props;
     const subdailyChange = subDailyMode !== prevProps.subDailyMode;
-    const origYPosition = widgetPosition.y === 0;
 
     // If toggling between subdaily/regular mode and widget hasn't been manually moved
     // yet, try to keep it centered
-    if (subdailyChange && origYPosition) {
+    if (subdailyChange && !userHasMovedWidget) {
       const useWidth = subDailyMode ? subdailyWidgetWidth : widgetWidth;
       this.setState({
         widgetPosition: {
@@ -163,12 +163,18 @@ class AnimationWidget extends React.Component {
 
   onExpandedDrag(e, position) {
     const { x, y } = position;
-    this.setState({ widgetPosition: { x, y } });
+    this.setState({
+      userHasMovedWidget: true,
+      widgetPosition: { x, y }
+    });
   };
 
   onCollapsedDrag(e, position) {
     const { x, y } = position;
-    this.setState({ collapsedWidgetPosition: { x, y } });
+    this.setState({
+      userHasMovedWidget: true,
+      collapsedWidgetPosition: { x, y }
+    });
   };
 
   getPromise(bool, type, action, title) {
