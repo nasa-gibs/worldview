@@ -77,6 +77,9 @@ const RangeHandle = props => {
   );
 };
 
+const widgetWidth = 334;
+const subdailyWidgetWidth = 460;
+
 /*
  * A react component, Builds a rather specific
  * interactive widget
@@ -87,7 +90,7 @@ const RangeHandle = props => {
 class AnimationWidget extends React.Component {
   constructor(props) {
     super(props);
-    const halfWidgetWidth = 115;
+    const halfWidgetWidth = (props.subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
     this.state = {
       speed: props.speed,
       isSliding: false,
@@ -95,11 +98,11 @@ class AnimationWidget extends React.Component {
       hoverGif: false,
       customIntervalModalOpen: false,
       widgetPosition: {
-        x: props.screenWidth / 2 - halfWidgetWidth,
+        x: (props.screenWidth / 2) - halfWidgetWidth,
         y: 0
       },
       collapsed: false,
-      collapsedWidgePosition: { x: 0, y: 0 }
+      collapsedWidgetPosition: { x: 0, y: 0 }
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
@@ -110,6 +113,25 @@ class AnimationWidget extends React.Component {
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onCollapsedDrag = this.onCollapsedDrag.bind(this);
     this.onExpandedDrag = this.onExpandedDrag.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { widgetPosition } = this.state;
+    const { subDailyMode, screenWidth } = this.props;
+    const subdailyChange = subDailyMode !== prevProps.subDailyMode;
+    const origYPosition = widgetPosition.y === 0;
+
+    // If toggling between subdaily/regular mode and widget hasn't been manually moved
+    // yet, try to keep it centered
+    if (subdailyChange && origYPosition) {
+      const useWidth = subDailyMode ? subdailyWidgetWidth : widgetWidth;
+      this.setState({
+        widgetPosition: {
+          x: (screenWidth / 2) - (useWidth / 2),
+          y: 0
+        }
+      });
+    }
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -146,7 +168,7 @@ class AnimationWidget extends React.Component {
 
   onCollapsedDrag(e, position) {
     const { x, y } = position;
-    this.setState({ collapsedWidgePosition: { x, y } });
+    this.setState({ collapsedWidgetPosition: { x, y } });
   };
 
   getPromise(bool, type, action, title) {
@@ -368,7 +390,7 @@ class AnimationWidget extends React.Component {
       <Draggable
         bounds="body"
         onStart={this.handleDragStart}
-        position={this.state.collapsedWidgePosition}
+        position={this.state.collapsedWidgetPosition}
         onDrag={this.onCollapsedDrag}>
         <div
           className={'wv-animation-widget-wrapper minimized' + (hasSubdailyLayers ? ' subdaily' : '')}>

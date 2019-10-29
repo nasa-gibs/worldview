@@ -5,9 +5,6 @@
   &.minimized {
     bottom: 80px;
     left: 10px;
-    &.subdaily {
-      left: 347px;
-    }
   }
 }
 .wv-animation-widget {
@@ -25,7 +22,8 @@
   }
   & .wv-animation-widget-header {
     display: block;
-    margin: 7px 0 10px 20px;
+    margin: 7px 45px 10px 5px;
+    text-align: center;
     text-transform: capitalize;
     & .interval-btn-container,
     & .interval-btn.interval-btn-active {
@@ -34,7 +32,7 @@
     }
     & .wv-tooltip {
       bottom: 128px;
-      left: 27%;
+      left: 35%;
       position: absolute;
       border-bottom: 8px solid transparent;
       width: 100px;
@@ -78,7 +76,7 @@
       left: 113px;
     }
     & .wv-tooltip {
-      left: 44%;
+      left: 39%;
     }
   }
   & .wv-slider-case {
