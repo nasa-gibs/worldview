@@ -24,9 +24,7 @@ import {
   setStyleFunction
 } from '../modules/vector-styles/selectors';
 import {
-  nearestInterval,
-  datesinDateRanges,
-  prevDateInDateRange
+  nearestInterval
 } from '../modules/layers/util';
 
 export function mapLayerBuilder(models, config, cache, ui, store) {
