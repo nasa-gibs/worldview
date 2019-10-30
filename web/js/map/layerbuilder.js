@@ -260,7 +260,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       updatedGranules = false;
     }
 
-    const geometry = granuleLayerParam && granuleLayerParam.geometry;
+    let geometry = granuleLayerParam && granuleLayerParam.geometry;
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
     const group = options.group || 'active';
@@ -344,6 +344,10 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       layer.set('layerId', `${def.id}-${activeKey}`);
       self.granuleLayers[def.id][proj.id][activeKey].order = includedDates;
       // make available for layer settings
+      const storedLayer = state.layers.granuleLayers[activeKey][proj.id][def.id];
+      if (storedLayer && storedLayer.geometry) {
+        geometry = geometry || storedLayer.geometry;
+      }
       store.dispatch({
         type: ADD_GRANULE_LAYER_DATES,
         dates: includedDates,

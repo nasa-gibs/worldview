@@ -411,7 +411,7 @@ export function mapui(models, config, store, ui) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
       lodashEach(stateArray, arr => {
-        map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state));
+        map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state, granuleOptions));
       });
       compareMapUi.create(map, compareState.mode);
     }
@@ -421,7 +421,7 @@ export function mapui(models, config, store, ui) {
    * Create a Layergroup given the date and layerGroups
    * @param {Array} arr | Array of date/layer group strings
    */
-  var getCompareLayerGroup = function(arr, layersState, projId, state) {
+  var getCompareLayerGroup = function(arr, layersState, projId, state, granuleOptions) {
     return new OlLayerGroup({
       layers: getLayers(
         layersState[arr[0]],
@@ -436,10 +436,24 @@ export function mapui(models, config, store, ui) {
           return true;
         })
         .map(def => {
+          const granuleReset = granuleOptions && granuleOptions.reset === def.id;
+          const previouslyCachedGranule = state.layers.granuleLayers[arr[0]][projId][def.id];
+          let granuleDates;
+          let granuleCount;
+          let geometry;
+          if (previouslyCachedGranule) {
+            granuleDates = !granuleReset ? previouslyCachedGranule.dates : false;
+            granuleCount = previouslyCachedGranule.count;
+            geometry = previouslyCachedGranule.geometry;
+          }
+          const granuleLayerParam = { granuleDates, granuleCount, geometry };
+          console.log(granuleLayerParam)
+
+          //TODO: verify date is valid for granules
           return createLayer(def, {
             date: state.date[arr[1]],
             group: arr[0]
-          });
+          }, granuleLayerParam);
         }),
       group: arr[0],
       date: arr[1]
@@ -566,14 +580,14 @@ export function mapui(models, config, store, ui) {
       if (isGranule) {
         var layersCollection = self.selected.getLayers().getArray();
         for (const layerIndex in layersCollection) {
-          const name = layersCollection[layerIndex].constructor.name;
-          if (name === 'LayerGroup') {
+          const isTile = layersCollection[layerIndex].type === 'TILE';
+          if (!isTile) {
             const layerGroup = layersCollection[layerIndex];
             const layerGroupCollection = layerGroup.getLayers().getArray();
             if (compare && compare.active) {
               for (const layerIndex in layerGroupCollection) {
-                const name = layerGroupCollection[layerIndex].constructor.name;
-                if (name === 'LayerGroup' && !layerGroupCollection[layerIndex].wv) {
+                const isTile = layerGroupCollection[layerIndex].type === 'TILE';
+                if (!isTile && !layerGroupCollection[layerIndex].wv) {
                   const layerGroup = layerGroupCollection[layerIndex];
                   const tileLayer = layerGroup.getLayers().getArray();
                   // inner tile layer
@@ -811,8 +825,9 @@ export function mapui(models, config, store, ui) {
     const isGranule = !!(def.tags && def.tags.contains('granule'));
     if (isGranule) {
       for (const layerIndex in layers) {
-        const name = layers[layerIndex].constructor.name;
-        if (name === 'LayerGroup') {
+        const isTile = layers[layerIndex].type === 'TILE';
+        // if not TILE type, it is a granule LayerGroup
+        if (!isTile) {
           const layerGroup = layers[layerIndex];
           const layerGroupCollection = layerGroup.getLayers().getArray();
           if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {

@@ -230,6 +230,7 @@ class GranuleLayerDateList extends PureComponent {
   }
 
   render() {
+    console.log(this.state, this.props)
     const { items, sorted } = this.state;
     const { def } = this.props;
     const maxNumItemsNoScrollNeeded = 8;
