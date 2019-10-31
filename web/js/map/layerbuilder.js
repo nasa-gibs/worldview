@@ -24,9 +24,7 @@ import {
   setStyleFunction
 } from '../modules/vector-styles/selectors';
 import {
-  nearestInterval,
-  datesinDateRanges,
-  prevDateInDateRange
+  nearestInterval
 } from '../modules/layers/util';
 
 export function mapLayerBuilder(models, config, cache, ui, store) {
@@ -141,11 +139,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.closestDate = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    const dateArray = def.availableDates || [];
     let date = options.date || new Date(state.date[activeDateStr]);
-    const zoomGreaterThanEqPeriod = (def.period === 'daily' && state.date.selectedZoom >= 3) ||
-                                  (def.period === 'monthly' && state.date.selectedZoom >= 2) ||
-                                  (def.period === 'yearly' && state.date.selectedZoom >= 1);
 
     if (def.period === 'subdaily') {
       date = nearestInterval(def, date);
@@ -155,22 +149,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         : util.clearTimeUTC(date);
     }
 
-    if (
-      !options.precache &&
-      state.animation.isPlaying === false &&
-      state.date.selectedZoom !== 0 &&
-      zoomGreaterThanEqPeriod
-    ) {
-      date = prevDateInDateRange(def, date, dateArray);
-      // Is current "rounded" previous date in the array of available dates
-      const dateInArray = dateArray.some((arrDate) => date.getTime() === arrDate.getTime());
-
-      if (date && !dateInArray) {
-        // Then, update layer object with new array of dates
-        def.availableDates = datesinDateRanges(def, date);
-        date = prevDateInDateRange(def, date, def.availableDates);
-      }
-    }
     return date;
   };
 
