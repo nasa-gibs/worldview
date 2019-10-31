@@ -18,19 +18,34 @@
       "type": "circle",
       "paint": {
         "circle-radius": {
-          "base": 2,
+          "base": 1,
           "stops": [
             [
               12,
               1
             ],
             [
+              21,
+              2
+            ],
+            [
               22,
-              7
+              2.5
+            ],
+            [
+              23,
+              4
+            ],
+            [
+              24,
+              5
             ]
           ]
         },
-        "circle-color": "rgb(103, 236, 0)"
+        "circle-color": "rgb(103, 236, 0)",
+        "circle-stroke-color": "rgba(0,0,0,0.7)",
+        "circle-opacity": 0.7,
+        "circle-stroke-width": 0.3
       }
     }
   ]
