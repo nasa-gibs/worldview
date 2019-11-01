@@ -142,12 +142,11 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   } else if (glStyle.name === 'SEDAC' &&
     ((selected[layerId] && selected[layerId].length))) {
     const selectedFeatures = selected[layerId];
+
     layer.setStyle(function (feature, resolution) {
       const data = state.config.vectorData[def.vectorData.id];
-      const properties = data.mvt_properties;
-      const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-      const id = feature.getProperties()[titleKey];
-      if (selectedFeatures && selectedFeatures.includes(id)) {
+      const features = feature.getProperties();
+      if (def.uniqueIdenitifier && selectedFeatures && selectedFeatures.includes(features[def.uniqueIdenitifier])) {
         return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {
         return styleFunction(feature, resolution);

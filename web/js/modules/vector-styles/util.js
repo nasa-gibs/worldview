@@ -103,7 +103,6 @@ export function onMapClickGetVectorFeatures(e, map, store) {
   map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
-
     if (def.vectorData && def.vectorData.id && def.title) {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];
@@ -112,6 +111,7 @@ export function onMapClickGetVectorFeatures(e, map, store) {
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
       const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+      const featureId = features[def.uniqueIdenitifier];
       const title = features[titleKey];
       if (selected[layerId].includes(title)) return
       const obj = {
@@ -122,7 +122,7 @@ export function onMapClickGetVectorFeatures(e, map, store) {
         featureTitle: title
       };
       metaArray.push(obj);
-      selected[layerId].push(title);
+      selected[layerId].push(featureId);
     }
   });
 
