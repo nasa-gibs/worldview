@@ -82,7 +82,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   var layerState = state.layers;
   const activeLayerStr = state.compare.activeString;
   const selected = state.vectorStyles.selected;
-  const hovered = state.vectorStyles.hovered;
   var activeLayers = getLayers(
     layerState[activeLayerStr],
     {},
@@ -141,18 +140,14 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   } else if (glStyle.name === 'SEDAC' &&
-    ((selected[layerId] && selected[layerId].length) ||
-      (hovered[layerId] && hovered[layerId].length))) {
+    ((selected[layerId] && selected[layerId].length))) {
     const selectedFeatures = selected[layerId];
-    const hoveredFeatures = hovered[layerId];
     layer.setStyle(function (feature, resolution) {
       const data = state.config.vectorData[def.vectorData.id];
       const properties = data.mvt_properties;
       const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
       const id = feature.getProperties()[titleKey];
       if (selectedFeatures && selectedFeatures.includes(id)) {
-        return selectedStyleFunction(feature, styleFunction(feature, resolution));
-      } else if (hoveredFeatures && hoveredFeatures.includes(id)) {
         return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {
         return styleFunction(feature, resolution);

@@ -103,9 +103,3 @@ export function selectVectorFeatures(payload) {
     payload
   }
 }
-export function hoverVectorFeatures(payload) {
-  return {
-    type: SET_HOVERED_VECTORS,
-    payload
-  }
-}

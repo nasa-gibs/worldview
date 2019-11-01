@@ -136,38 +136,13 @@ export function onMapClickGetVectorFeatures(e, map, store) {
         wrapClassName: 'vector-modal-wrap',
         modalClassName: 'vector-modal light',
         CompletelyCustomModal: vectorDialog,
-        customProps: { vectorMetaObject: lodashGroupBy(metaArray, 'id') },
+        customProps: { vectorMetaObject: lodashGroupBy(metaArray, 'id'), width: 500, offsetTop: 100 },
         onClose: () => {
           store.dispatch(selectVectorFeatures({}));
         }
       }
     ));
   };
-}
-export function onMapHoverGetVectorFeatures(pixels, map, store) {
-  let selected = {};
-  const state = store.getState()
-  const lastSelection = state.vectorStyles.hovered;
-  const config = state.config;
-  map.forEachFeatureAtPixel(pixels, function (feature, layer) {
-    const def = lodashGet(layer, 'wv.def');
-    if (!def) return;
-    if (def.vectorData && def.vectorData.id && def.title) {
-      const layerId = def.id;
-      if (!selected[layerId]) selected[layerId] = [];
-      let features = feature.getProperties();
-      const vectorDataId = def.vectorData.id;
-      const data = config.vectorData[vectorDataId];
-      const properties = data.mvt_properties;
-      const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-      const title = features[titleKey];
-      if (!selected[layerId].includes(title)) selected[layerId].push(title);
-    }
-  });
-  if (lodashIsEqual(lastSelection, selected)) return;
-  if (Object.entries(selected).length || Object.entries(lastSelection).length) {
-    store.dispatch(hoverVectorFeatures(selected));
-  }
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
   const vectorStyles = state.config.vectorStyles
