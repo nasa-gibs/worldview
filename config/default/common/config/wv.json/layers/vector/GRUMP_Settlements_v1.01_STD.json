@@ -11,6 +11,7 @@
       "layergroup": [
         "vector"
       ],
+      "uniqueIdenitifier": "Latlongid",
       "inactive": true,
       "vectorStyle": {
         "id": "GRUMP_Settlements_v1.01_STD"

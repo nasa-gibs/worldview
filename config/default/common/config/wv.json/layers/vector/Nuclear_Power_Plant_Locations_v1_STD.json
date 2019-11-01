@@ -12,6 +12,7 @@
         "vector"
       ],
       "inactive": true,
+      "uniqueIdenitifier": "Plant",
       "vectorStyle": {
         "id": "Nuclear_Power_Plant_Locations_v1_STD"
       },

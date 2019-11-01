@@ -17,64 +17,7 @@
       "source-description": "Default",
       "type": "circle",
       "paint": {
-        "circle-radius": {
-          "base": 2,
-          "stops": [
-            [
-              12,
-              1
-            ],
-            [
-              22,
-              7
-            ]
-          ]
-        },
-        "circle-stroke-color": "rgb(255, 255, 255)",
-        "circle-stroke-width": [
-          "case",
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "true"
-          ],
-          2,
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "false"
-          ],
-          0,
-          0
-        ],
-        "circle-opacity": [
-          "case",
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "true"
-          ],
-          0.5,
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "false"
-          ],
-          1,
-          1
-        ],
+        "circle-radius": 1,
         "circle-color": [
           "case",
           [

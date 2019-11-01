@@ -18,50 +18,8 @@
       "type": "fill",
       "paint": {
         "fill-color": "rgb(0, 77, 168)",
-        "fill-opacity": [
-          "case",
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "true"
-          ],
-          0.5,
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "false"
-          ],
-          1,
-          1
-        ],
-        "fill-outline-color": [
-          "case",
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "true"
-          ],
-          "rgb(255, 255, 255)",
-          [
-            "==",
-            [
-              "get",
-              "selected"
-            ],
-            "false"
-          ],
-          "rgb(0, 77, 168)",
-          "rgb(0, 77, 168)"
-        ]
+        "fill-opacity": 1,
+        "fill-outline-color": "rgb(0, 77, 168)"
       }
     }
   ]

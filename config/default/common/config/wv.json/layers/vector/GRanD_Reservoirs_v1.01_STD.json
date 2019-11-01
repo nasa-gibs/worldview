@@ -11,6 +11,7 @@
       "layergroup": [
         "vector"
       ],
+      "uniqueIdenitifier": "GRAND_ID",
       "inactive": true,
       "vectorStyle": {
         "id": "GRanD_Reservoirs_v1.01_STD"
