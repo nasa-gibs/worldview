@@ -32,12 +32,13 @@ class ModalContainer extends Component {
     this.onResize = this.onResize.bind(this);
   }
   getStyle(state, props) {
+    const isResizable = props.isResizable;
     return {
       left: props.offsetLeft,
       right: props.offsetRight,
       top: props.offsetTop,
-      width: state.width || props.width,
-      height: state.height || props.height
+      width: isResizable ? state.width : props.width,
+      height: isResizable ? state.height : props.height
     };
   }
   onResize(e, { size }) {
@@ -147,11 +148,11 @@ class ModalContainer extends Component {
                 toggleWithClose={toggleFunction} />)
               : (
                 <DetectOuterClick
-                  onClick={() => toggleFunction}
+                  onClick={toggleFunction}
                   disabled={allowOuterClick}
                 >
                   {(headerComponent || headerText) && (
-                    <ModalHeader toggle={() => toggleFunction}>
+                    <ModalHeader toggle={toggleFunction}>
                       {headerComponent ? <headerComponent /> : headerText || ''}
                     </ModalHeader>
                   )}
@@ -161,7 +162,7 @@ class ModalContainer extends Component {
                       ? (
                         <BodyComponent {...bodyComponentProps}
                           screenHeight={screenHeight}
-                          closeModal={() => toggleFunction} />
+                          closeModal={toggleFunction} />
                       )
                       : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
                   </ModalBody>
