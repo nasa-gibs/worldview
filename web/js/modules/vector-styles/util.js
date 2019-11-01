@@ -98,6 +98,8 @@ export function onMapClickGetVectorFeatures(e, map, store) {
   const state = store.getState();
   const lastSelection = state.vectorStyles.selected;
   const config = state.config;
+  const dialogId = 'vector_dialog' + e.pixel[0] + e.pixel[1];
+  const modalState = state.modal;
   map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
@@ -123,11 +125,12 @@ export function onMapClickGetVectorFeatures(e, map, store) {
       selected[layerId].push(title);
     }
   });
-  if (Object.entries(selected).length || Object.entries(lastSelection).length) {
+
+  if (Object.entries(selected).length || (Object.entries(lastSelection).length && !(modalState.id.includes('vector_dialog') && modalState.isOpen))) {
     store.dispatch(selectVectorFeatures(selected));
   }
   if (metaArray.length) {
-    store.dispatch(openCustomContent('Vector-dialog' + e.pixel[0] + e.pixel[1],
+    store.dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
         clickableBehindModal: true,
