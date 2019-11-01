@@ -14,12 +14,24 @@ class DateSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: null
+      tab: null,
+      year: null,
+      month: null,
+      day: null,
+      hour: null,
+      minute: null
     };
     this.updateDate = this.updateDate.bind(this);
     this.setFocusedTab = this.setFocusedTab.bind(this);
     this.changeTab = this.changeTab.bind(this);
     this.blur = this.blur.bind(this);
+  }
+
+  // add pending timeunit input
+  updateTimeUnitInput = (timeUnit, input) => {
+    this.setState({
+      [timeUnit]: input
+    });
   }
 
   blur() {
@@ -54,8 +66,39 @@ class DateSelector extends Component {
     });
   }
 
-  updateDate(date, type) {
-    this.props.onDateChange(date, this.props.id);
+  updateDate(date) {
+    const { year, month, day, hour, minute } = this.state;
+    console.log(year, month, day);
+    if (year) {
+      date = new Date(new Date(date).setUTCFullYear(year));
+    }
+    if (month) {
+      const realMonth = util.stringInArray(util.monthStringArray, month);
+      date = new Date(new Date(date).setUTCMonth(realMonth));
+    }
+    if (day) {
+      date = new Date(new Date(date).setUTCDate(day));
+    }
+    if (hour) {
+      date = new Date(new Date(date).setUTCHours(hour));
+    }
+    if (minute) {
+      date = new Date(new Date(date).setUTCMinutes(minute));
+    }
+    console.log(date);
+
+    // updateDate at this stage can still be invalid with pending timeunit changes
+    if (date > this.props.minDate && date <= this.props.maxDate) {
+      this.props.onDateChange(date, this.props.id);
+      // clear the pending timeunit inputs
+      this.setState({
+        year: null,
+        month: null,
+        day: null,
+        hour: null,
+        minute: null
+      });
+    }
   }
 
   shouldComponentUpdate(prevProps, prevState) {
@@ -153,6 +196,7 @@ class DateSelector extends Component {
           minDate={minDate}
           blur={this.blur}
           fontSize={fontSize}
+          updateTimeUnitInput={this.updateTimeUnitInput}
         />
         <DateInputColumn
           step={1}
@@ -169,6 +213,7 @@ class DateSelector extends Component {
           minDate={minDate}
           blur={this.blur}
           fontSize={fontSize}
+          updateTimeUnitInput={this.updateTimeUnitInput}
         />
         <DateInputColumn
           step={1}
@@ -185,6 +230,7 @@ class DateSelector extends Component {
           minDate={minDate}
           blur={this.blur}
           fontSize={fontSize}
+          updateTimeUnitInput={this.updateTimeUnitInput}
         />
         {this.renderSubdaily()}
       </div>

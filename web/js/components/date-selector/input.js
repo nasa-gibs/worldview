@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import util from '../../util/util';
 
 /*
- * A react component, is a draggable svg
- * group. It is a parent component that
- * rerenders when child elements are dragged
+ * DateInputColumn used in DateSelector within
+ * Timeline and AnimationWidget
  *
- * @class TimelineRangeSelector
+ * @class DateInputColumn
  */
 class DateInputColumn extends Component {
   constructor(props) {
@@ -15,16 +14,10 @@ class DateInputColumn extends Component {
     this.state = {
       value: this.props.value,
       selected: false,
-      valid: true
+      valid: true,
+      size: null
     };
     this.inputs = [];
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.blur = this.blur.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.onClickUp = this.onClickUp.bind(this);
-    this.onClickDown = this.onClickDown.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -34,12 +27,25 @@ class DateInputColumn extends Component {
     if (this.props.value !== prevProps.value) {
       this.updateValue();
     }
+    // TODO: sometimes valid false state is retained for a valid input
+    if (!this.state.valid && (!prevState.selected || !this.state.selected)) {
+      const date = this.props.date.toISOString();
+      const prevDate = prevProps.date.toISOString();
+      if (date !== prevDate) {
+        this.updateValue();
+        this.resetValidSelected();
+      }
+    }
   }
 
-  UNSAFE_componentWillMount() {
-    var size;
-    var type;
-    type = this.props.type;
+  componentDidMount() {
+    this.updateValue();
+    this.setTextSize();
+  }
+
+  setTextSize = () => {
+    const { type } = this.props;
+    let size;
     if (type === 'year') {
       size = '4';
     } else if (type === 'day') {
@@ -47,11 +53,9 @@ class DateInputColumn extends Component {
     } else {
       size = 3;
     }
-    this.size = size;
-  }
-
-  componentDidMount() {
-    this.updateValue();
+    this.setState({
+      size: size
+    });
   }
 
   // update input value
@@ -61,19 +65,25 @@ class DateInputColumn extends Component {
     });
   }
 
-  onKeyPress(e) {
-    var kc = e.keyCode;
-    if (
-      kc === 9 || // tab
-      kc === 13
-    ) {
-      // enter
+  // reset valid and selected state
+  resetValidSelected = () => {
+    this.setState({
+      valid: true,
+      selected: false
+    });
+  }
+
+  onKeyPress = (e) => {
+    // check tab and enter key code
+    var keyCode = e.keyCode;
+    var entered = keyCode === 13 || keyCode === 9;
+    if (entered) {
       e.preventDefault();
       e.stopPropagation();
     }
   }
 
-  onKeyUp(e) {
+  onKeyUp = (e) => {
     var keyCode = e.keyCode;
     var value = e.target.value;
     var newDate;
@@ -102,25 +112,10 @@ class DateInputColumn extends Component {
           return;
         }
       }
-      switch (this.props.type) {
-        case 'year':
-          newDate = this.yearValidation(value);
-          break;
-        case 'month':
-          newDate = this.monthValidation(value);
-          break;
-        case 'day':
-          newDate = this.dayValidation(value);
-          break;
-        case 'hour':
-          newDate = this.hourValidation(value);
-          break;
-        case 'minute':
-          newDate = this.minuteValidation(value);
-          break;
-      }
+      newDate = this.validateBasedOnType(value);
       if (newDate) {
-        this.props.updateDate(newDate, this.props.type);
+        //TODO: IS THIS NECESSARY ANYMORE WITH NEW BLUR UPDATEDATE INVOKE?
+        // this.props.updateDate(newDate, this.props.type);
         if (entered) {
           if (shiftTab) {
             // shift-tabbed - move backward
@@ -131,6 +126,13 @@ class DateInputColumn extends Component {
           }
         }
       } else if (entered) {
+        if (shiftTab) {
+          // shift-tabbed - move backward
+          this.previousTab();
+        } else {
+          // entered or tabbed - move forward
+          this.nextTab();
+        }
         this.setState({
           valid: false
         });
@@ -138,29 +140,51 @@ class DateInputColumn extends Component {
     }
   }
 
-  onClickUp() {
+  onClickUp = () => {
     this.rollDate(1);
     this.setState({
       valid: true
     });
   }
 
-  onClickDown() {
+  onClickDown = () => {
     this.rollDate(-1);
     this.setState({
       valid: true
     });
   }
 
-  yearValidation(input) {
+  validateBasedOnType = (value) => {
+    let newDate;
+    switch (this.props.type) {
+      case 'year':
+        newDate = this.yearValidation(value);
+        break;
+      case 'month':
+        newDate = this.monthValidation(value);
+        break;
+      case 'day':
+        newDate = this.dayValidation(value);
+        break;
+      case 'hour':
+        newDate = this.hourValidation(value);
+        break;
+      case 'minute':
+        newDate = this.minuteValidation(value);
+        break;
+    }
+    return newDate;
+  }
+
+  yearValidation = (input) => {
     var newDate;
     if (input > 1000 && input < 9999) {
       newDate = new Date(new Date(this.props.date).setUTCFullYear(input));
-      return this.validateDate(newDate);
+      return this.validateDate(newDate, input);
     }
   }
 
-  monthValidation(input) {
+  monthValidation = (input) => {
     var newDate;
     if (!isNaN(input) && input < 13 && input > 0) {
       newDate = new Date(new Date(this.props.date).setUTCMonth(input - 1));
@@ -168,20 +192,20 @@ class DateInputColumn extends Component {
         this.setState({
           value: util.monthStringArray[input - 1]
         });
-        return this.validateDate(newDate);
+        return this.validateDate(newDate, input);
       }
     } else {
       const realMonth = util.stringInArray(util.monthStringArray, input);
       if (realMonth !== false) {
         newDate = new Date(new Date(this.props.date).setUTCMonth(realMonth));
-        return this.validateDate(newDate);
+        return this.validateDate(newDate, input);
       } else {
         return false;
       }
     }
   }
 
-  dayValidation(input) {
+  dayValidation = (input) => {
     var newDate;
     var maxDate;
     var currentDate = this.props.date;
@@ -194,27 +218,27 @@ class DateInputColumn extends Component {
 
     if (input > 0 && input <= maxDate) {
       newDate = new Date(new Date(currentDate).setUTCDate(input));
-      return this.validateDate(newDate);
+      return this.validateDate(newDate, input);
     }
   }
 
-  hourValidation(input) {
+  hourValidation = (input) => {
     var newDate;
     if (input >= 0 && input <= 23) {
       newDate = new Date(new Date(this.props.date).setUTCHours(input));
-      return this.validateDate(newDate);
+      return this.validateDate(newDate, input);
     }
   }
 
-  minuteValidation(input) {
+  minuteValidation = (input) => {
     var newDate;
     if (input >= 0 && input <= 59) {
       newDate = new Date(new Date(this.props.date).setUTCMinutes(input));
-      return this.validateDate(newDate);
+      return this.validateDate(newDate, input);
     }
   }
 
-  rollDate(amt) {
+  rollDate = (amt) => {
     var newDate = util.rollDate(
       this.props.date,
       this.props.type,
@@ -230,44 +254,62 @@ class DateInputColumn extends Component {
    * https://stackoverflow.com/a/40261505/4589331
    * @param {Object} e | Event Object
    */
-  handleFocus(e) {
+  handleFocus = (e) => {
     e.target.select();
     this.setState({ selected: true });
     this.props.setFocusedTab(this.props.tabIndex);
   }
 
-  blur() {
+  blur = (e) => {
+    const { blur, updateDate, type } = this.props;
+    // check for valid date on blur
+    let value = e.target.value;
+    const newDate = this.validateBasedOnType(value);
+    let valid = !!newDate;
+
+    if (newDate) {
+      updateDate(newDate, type);
+    }
+    // reset to previous valid value with mouse click outside input
+    if (!valid && !e.relatedTarget && document.activeElement.className !== 'button-input-group') {
+      valid = true;
+      value = this.props.value;
+    }
+
     this.setState({
-      value: this.props.value,
-      valid: true,
+      value,
+      valid,
       selected: false
     });
 
-    this.props.blur();
+    blur();
   }
 
-  onChange(e) {
+  onChange = (e) => {
     this.setState({
       value: e.target.value.toUpperCase()
     });
   }
 
-  nextTab() {
+  nextTab = () => {
     this.props.changeTab(this.props.tabIndex + 1);
   }
 
-  previousTab() {
+  previousTab = () => {
     this.props.changeTab(this.props.tabIndex - 1);
   }
 
-  validateDate(date) {
+  validateDate = (date, input) => {
+    let validDate = false;
     if (date > this.props.minDate && date <= this.props.maxDate) {
       this.setState({
         valid: true
       });
-      return date;
+      input = null;
+      validDate = date;
     }
-    return false;
+    this.props.updateTimeUnitInput(this.props.type, input);
+    return validDate;
   }
 
   render() {
@@ -294,8 +336,8 @@ class DateInputColumn extends Component {
           ref={input => {
             this.inputs[this.props.tabIndex] = input;
           }}
-          size={this.size}
-          maxLength={this.size}
+          size={this.state.size}
+          maxLength={this.state.size}
           className="button-input-group"
           id={this.props.inputId}
           value={this.state.value}
@@ -338,6 +380,7 @@ DateInputColumn.propTypes = {
   tabIndex: PropTypes.number,
   type: PropTypes.string,
   updateDate: PropTypes.func,
+  updateTimeUnitInput: PropTypes.func,
   value: PropTypes.node
 };
 
