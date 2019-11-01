@@ -139,7 +139,11 @@ export function onMapClickGetVectorFeatures(e, map, store) {
         wrapClassName: 'vector-modal-wrap',
         modalClassName: 'vector-modal light',
         CompletelyCustomModal: vectorDialog,
-        customProps: { vectorMetaObject: lodashGroupBy(metaArray, 'id'), width: 500, offsetTop: 100 },
+        isDraggable: true,
+        isResizable: true,
+        vectorMetaObject: lodashGroupBy(metaArray, 'id'),
+        width: 500,
+        height: 300,
         onClose: () => {
           store.dispatch(selectVectorFeatures({}));
         }

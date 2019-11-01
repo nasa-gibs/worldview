@@ -39,6 +39,7 @@ import '../../node_modules/rc-slider/dist/rc-slider.css';
 import '../../node_modules/simplebar/dist/simplebar.css';
 import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import 'react-image-crop/dist/ReactCrop.css';
+import 'react-resizable/css/styles.css';
 // App CSS
 import '../css/fonts.css';
 import '../css/alert.css';

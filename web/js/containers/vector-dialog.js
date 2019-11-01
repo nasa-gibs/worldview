@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
 import Scrollbars from '../components/util/scrollbar';
 import VectorMetaTable from '../components/vector-metadata/table';
+import { ResizableBox, Resizable } from 'react-resizable';
 
 class VectorDialog extends React.Component {
   constructor(props) {
@@ -15,9 +16,9 @@ class VectorDialog extends React.Component {
     if (activeIndex === this.state.activeIndex) return;
     this.setState({ activeIndex });
   }
+
   render() {
-    const { toggleWithClose, customProps, height } = this.props;
-    const { vectorMetaObject } = customProps;
+    const { toggleWithClose, vectorMetaObject, height } = this.props;
     const { activeIndex } = this.state;
     let navArray = [];
     let keyArray = [];
@@ -44,7 +45,7 @@ class VectorDialog extends React.Component {
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
 
     return (
-      <React.Fragment>
+      <div className='draggable-modal-content'>
         <ModalHeader toggle={toggleWithClose}>
           <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
             {navArray}
@@ -52,19 +53,18 @@ class VectorDialog extends React.Component {
         </ ModalHeader>
 
         <ModalBody>
-          <Scrollbars style={{ maxHeight: height + 'px' }} name='thing'>
+          <Scrollbars style={{ maxHeight: height - 50 + 'px' }} name='thing'>
             <VectorMetaTable metaArray={activeMetaArray} title={keyArray[activeIndex]} />
           </ Scrollbars>
         </ModalBody>
-
-      </React.Fragment>
+      </div>
     )
   }
 }
 
 
 function mapStateToProps(state) {
-  return { height: state.browser.screenHeight - 200 }
+  return {}
 };
 export default connect(
   mapStateToProps,
