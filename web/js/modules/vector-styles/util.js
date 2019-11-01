@@ -126,9 +126,7 @@ export function onMapClickGetVectorFeatures(e, map, store) {
     }
   });
 
-  if (Object.entries(selected).length || (Object.entries(lastSelection).length && !(modalState.id.includes('vector_dialog') && modalState.isOpen))) {
-    store.dispatch(selectVectorFeatures(selected));
-  }
+
   if (metaArray.length) {
     store.dispatch(openCustomContent(dialogId,
       {
@@ -149,6 +147,9 @@ export function onMapClickGetVectorFeatures(e, map, store) {
         }
       }
     ));
+    if (Object.entries(selected).length || (Object.entries(lastSelection).length && !(modalState.id.includes('vector_dialog') && modalState.isOpen))) {
+      store.dispatch(selectVectorFeatures(selected));
+    }
   };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
