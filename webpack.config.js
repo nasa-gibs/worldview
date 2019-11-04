@@ -100,7 +100,7 @@ module.exports = {
         uglifyOptions: {
           ecma: 5, // dependent on ie11 support
           compress: true,
-          mangle: true,
+          mangle: false,
           topLevel: true,
           safari10: true,
           output: {
