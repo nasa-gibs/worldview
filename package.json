@@ -30,7 +30,7 @@
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
     "build": "run-s clean getcapabilities build:config build:dev",
     "build:dev": "cross-env NODE_ENV=development webpack",
-    "build:config": "bash -c 'tasks/buildOptions.sh' && node ./tasks/config.js",
+    "build:config": "run-s getcapabilities && bash -c 'tasks/buildOptions.sh' && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "clean": "node ./tasks/clean.js",
     "dist": "run-s clean getcapabilities build:config build:prod && node ./tasks/dist.js",
