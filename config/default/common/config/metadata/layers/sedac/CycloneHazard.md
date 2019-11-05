@@ -3,14 +3,14 @@ The Cyclone Hazard: Frequency and Distribution layer indicates the relative dist
 
 The SEDAC Cyclone Hazard: Frequency and Distribution layer is a 2.5 minute grid based on more than 1,600 storm tracks for the period 1 January 1980 through 31 December 2000 for the Atlantic, Pacific, and Indian Oceans that were assembled and modeled at UNEP/GRID-Geneva PreView. Wind speeds around storm tracks were modeled using Holland's model (1997) to assess the grid cells likely to have been exposed to high wind levels. Post-modeling, the cells were divided into deciles, 10 classes consisting of approximately equal number of grid cells. The higher the value of the grid cell, the higher the decile ranking and the greater the frequency of the hazard relative to other cells.
 
-References: [doi:10.7927/H4CZ353K](https://dx.doi.org/10.7927/H4CZ353K)
+References: [doi:10.7927/H4CZ353K](https://doi.org/10.7927/H4CZ353K)
 
 ### Cyclone Hazard: Mortality Risk
 The Cyclone Hazard: Mortality Risk layer indicates the global cyclone mortality risks and distribution for the period 1981-2000. The information displayed in Worldview/Global Imagery Browse Services (GIBS) reflects the decile within which the risk lies, ranging from low to high mortality risk: 1st to 10th decile.
 
 Global Cyclone Mortality Risks and Distribution is a 2.5 minute grid of global cyclone mortality risks. Gridded Population of the World, Version 3 (GPWv3) data provide a baseline estimation of population per grid cell from which to estimate potential mortality loss. Mortality loss estimates per hazard event are calculated using regional, hazard-specific mortality records of the Emergency Events Database (EM-DAT) that span the 20 years between 1981 and 2000. Data regarding the frequency and distribution of cyclone hazard are obtained from the Global Cyclone Hazard Frequency and Distribution data set. In order to more accurately reflect the confidence associated with the data and procedures, the potential mortality estimate range is classified into deciles, 10 classes of an approximately equal number of grid cells, providing a relative estimate of cyclone-based mortality risks.
 
-References: [doi:10.7927/H4862DC5](https://dx.doi.org/10.7927/H4862DC5)
+References: [doi:10.7927/H4862DC5](https://doi.org/10.7927/H4862DC5)
 
 ### Cyclone Hazard: Economic Risk
 The Cyclone Hazard: Economic Risk layer indicates the the proportional economic impacts of global cyclone hazard  for the period 1981-2000. The information displayed in Worldview/Global Imagery Browse Services (GIBS) reflects the decile within which the risk lies, ranging from low to high economic risk: 1st to 10th decile.

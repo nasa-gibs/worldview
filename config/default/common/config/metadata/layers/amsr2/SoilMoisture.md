@@ -25,7 +25,7 @@ The LPRM is based on a forward radiative transfer model to retrieve surface soil
 
 Input data are from the AMSR2 spatial-resolution-matched brightness temperatures (L1SGRTBR) product, nighttime passes, as processed using LPRM (i.e., LPRM/AMSR2/GCOM-W1 Level 2 product, `LPRM_AMSR2_SOILM2_V001`).
 
-References: [doi:10.5067/M5DTR2QUYLS2](https://dx.doi.org/10.5067/M5DTR2QUYLS2); [doi:10.5067/CGDEOBASZ178](https://dx.doi.org/10.5067/CGDEOBASZ178)
+References: [doi:10.5067/M5DTR2QUYLS2](https://doi.org/10.5067/M5DTR2QUYLS2); [doi:10.5067/CGDEOBASZ178](https://doi.org/10.5067/CGDEOBASZ178)
 
 ### AMSR2 LPRM  Surface Soil Moisture C1-band (Downscaled, Day | Night, Daily)
 Temporal Coverage: 03 July 2012 - present
@@ -36,4 +36,4 @@ The LPRM is based on a forward radiative transfer model to retrieve surface soil
 
 Input data are from the AMSR2 spatial-resolution-matched brightness temperatures (L1SGRTBR) product, daytime passes, as processed using LPRM (i.e., LPRM/AMSR2/GCOM-W1 Downscaled Level 2 product, `LPRM_AMSR2_DS_SOILM2_V001`).
 
-References: [doi:10.5067/B0GHODHJLDA8](https://dx.doi.org/10.5067/B0GHODHJLDA8); [doi:10.5067/SITUTTDUKYZE](https://dx.doi.org/10.5067/SITUTTDUKYZE)
+References: [doi:10.5067/B0GHODHJLDA8](https://doi.org/10.5067/B0GHODHJLDA8); [doi:10.5067/SITUTTDUKYZE](https://doi.org/10.5067/SITUTTDUKYZE)

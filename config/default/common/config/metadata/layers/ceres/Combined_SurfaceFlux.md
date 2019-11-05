@@ -13,7 +13,7 @@ Data parameters:
 `Untuned_Total_Sky_LW_Surface_Up` - Untuned Longwave Surface Flux (Monthly, Up, All-Sky)  
 `Untuned_Clear_Sky_LW_Surface_Up` - Untuned Longwave Surface Flux (Monthly, Up, Clear-Sky)   
 `Untuned_Total_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, All-Sky)  
-`Untuned_Clear_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, Clear-Sky)  
+`Untuned_Clear_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, Clear-Sky)    
 `Untuned_Total_Sky_SW_Surface_Up` - Untuned Shortwave Surface Flux (Monthly, Up, All-Sky)  
 `Untuned_Clear_Sky_SW_Surface_Up` - Untuned Shortwave Surface Flux (Monthly, Up, Clear-Sky)  
 
@@ -29,7 +29,7 @@ The Diffuse | Direct Shortwave Surface Flux (All-Sky | Clear-Sky) layers are ava
 
 Data parameters:  
 `Total_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, All-Sky)  
-`Clear_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)  
+`Clear_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)    
 `Total_Sky_SW_Surface_Flux_Direct` - Direct Shortwave Surface Flux (Monthly, All-Sky)  
 `Clear_Sky_SW_Surface_Flux_Direct` - Direct Shortwave Surface Flux (Monthly, Clear-Sky)  
 

@@ -10,5 +10,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The CERES Surface Net Shortwave Flux (Monthly, Energy Balanced and Filled, Clear-Sky) layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameters: `Sfc_net_sw_clr_mon`
+Data parameters: `Sfc_net_sw_clr_mon`  
 Data product: `CERES_EBAF-SFC_Edition4.0`

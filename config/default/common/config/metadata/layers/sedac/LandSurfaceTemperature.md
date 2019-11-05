@@ -5,7 +5,7 @@ The Global Urban Heat Island (UHI) Data Set, 2013, estimates the land surface te
 
 For most regions, the UHI data set provides the average daytime maximum (1:30 p.m. overpass) and average nighttime minimum (1:30 a.m. overpass) temperatures in urban and rural areas, and the urban-rural temperature differences, derived from LST data representing a 40-day time-span during July-August (Julian days 185-224) in the northern hemisphere and January-February (Julian days 001-040) in the southern hemisphere. LST grid cells with missing values resulting from high cloud cover in tropical regions were filled with daytime maximum and nighttime minimum LST values from April-May 2013 in the northern hemisphere and December 2013-January 2014 in the southern hemisphere, where available. Some data gaps remain in areas where data were insufficient (e.g., Central Africa).
 
-References: [doi: 10.7927/H4H70CRF](https://dx.doi.org/10.7927/H4H70CRF)
+References: [doi: 10.7927/H4H70CRF](https://doi.org/10.7927/H4H70CRF)
 
 ### Summer Daytime | Nighttime Minimum Land Surface Temperature
 The Global Summer Land Surface Temperature (LST) Grids, 2013, represent daytime maximum temperature and nighttime minimum temperature in degree Celsius at a spatial resolution of 30 arc-seconds (~1 km) during summer months of the northern and southern hemisphere for the year 2013. The grids are produced using Aqua Level-3 Moderate Resolution Imaging Spectroradiometer (MODIS) Version 5 global daytime and nighttime LST 8-day composite data (MYD11A2).
@@ -14,4 +14,4 @@ For most regions, the LST grids provide the daytime maximum (1:30 p.m. overpass)
 
 The purpose of the data set is to provide raster representations of global summer daytime maximum and nighttime minimum surface temperature for studies related to human health and climate change.
 
-References: [doi: 10.7927/H408638T](https://dx.doi.org/10.7927/H408638T)
+References: [doi: 10.7927/H408638T](https://doi.org/10.7927/H408638T)

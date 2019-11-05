@@ -2,4 +2,4 @@ The Anthropogenic Biomes layer is a part of the Anthropogenic Biomes of the Worl
 
 The purpose of the data set is to provide information on global land use for research on human-environment interactions.
 
-References: [doi:10.7927//H4H12ZXD](https://dx.doi.org/10.7927/H4H12ZXD)
+References: [doi:10.7927//H4H12ZXD](https://doi.org/10.7927/H4H12ZXD)

@@ -2,4 +2,4 @@ The Cyclone Hazard: Mortality Risk layer indicates the global cyclone mortality 
 
 Global Cyclone Mortality Risks and Distribution is a 2.5 minute grid of global cyclone mortality risks. Gridded Population of the World, Version 3 (GPWv3) data provide a baseline estimation of population per grid cell from which to estimate potential mortality loss. Mortality loss estimates per hazard event are calculated using regional, hazard-specific mortality records of the Emergency Events Database (EM-DAT) that span the 20 years between 1981 and 2000. Data regarding the frequency and distribution of cyclone hazard are obtained from the Global Cyclone Hazard Frequency and Distribution data set. In order to more accurately reflect the confidence associated with the data and procedures, the potential mortality estimate range is classified into deciles, 10 classes of an approximately equal number of grid cells, providing a relative estimate of cyclone-based mortality risks.
 
-References: [doi:10.7927/H4862DC5](https://dx.doi.org/10.7927/H4862DC5)
+References: [doi:10.7927/H4862DC5](https://doi.org/10.7927/H4862DC5)

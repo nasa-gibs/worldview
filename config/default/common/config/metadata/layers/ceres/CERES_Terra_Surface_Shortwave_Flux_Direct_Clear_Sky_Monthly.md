@@ -4,5 +4,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The Direct Shortwave Surface Flux (Clear-Sky) layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: `Total_Sky_SW_Surface_Flux_Direct`  
+Data parameter: `Total_Sky_SW_Surface_Flux_Direct`    
 Data product: `CER_SYN1deg-Month_Terra-MODIS_Edition4A`

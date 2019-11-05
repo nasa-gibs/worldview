@@ -8,10 +8,10 @@ The CERES TOA Longwave | Shortwave | Window-Region Flux (Monthly, Clear-Sky) lay
 
 Data parameters:  
 `LW_TOA_Total_Sky` - TOA Longwave Flux, Monthly means, All-Sky conditions  
-`LW_TOA_Clear_Sky`  - TOA Longwave Flux, Monthly means, Clear-Sky conditions  
+`LW_TOA_Clear_Sky`  - TOA Longwave Flux, Monthly means, Clear-Sky conditions    
 `SW_TOA_Total_Sky` - TOA Shortwave Flux, Monthly means, All-Sky conditions  
 `SW_TOA_Clear_Sky` - TOA Shortwave Flux, Monthly means, Clear-Sky conditions  
-`WN_TOA_Total_Sky` - TOA Window-Region Flux, Monthly means, All-Sky conditions  
-`WN_TOA_Clear_Sky` - TOA Window-Region Flux, Monthly means, Clear-Sky conditions  
+`WN_TOA_Total_Sky` - TOA Window-Region Flux, Monthly means, All-Sky conditions    
+`WN_TOA_Clear_Sky` - TOA Window-Region Flux, Monthly means, Clear-Sky conditions    
 
 Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition4A`

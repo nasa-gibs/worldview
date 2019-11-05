@@ -4,5 +4,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The Untuned Shortwave Surface Flux (Monthly, Down, All-Sky) layer is available from the CERES instruments on the Terra and Aqua satellites. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: `Untuned_Total_Sky_SW_Surface_Down` 
+Data parameter: `Untuned_Total_Sky_SW_Surface_Down`  
 Data product: `CER_SYN1deg-Month_Terra-MODIS_Edition4A`

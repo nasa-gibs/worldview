@@ -2,4 +2,4 @@ The Croplands layer is part of the Global Agricultural Lands, v1 (2000) data set
 
 The purpose of the data set is to provide data on the extent of croplands for research on human-environment interactions.
 
-References: [doi: 10.7927/H4C8276G](https://dx.doi.org/10.7927/H4C8276G)
+References: [doi: 10.7927/H4C8276G](https://doi.org/10.7927/H4C8276G)

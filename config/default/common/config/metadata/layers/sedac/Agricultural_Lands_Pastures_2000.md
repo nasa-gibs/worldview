@@ -2,4 +2,4 @@ The Global Pastures layer is part of the Global Agricultural Lands, v1 (2000) da
 
 The purpose of the data set is to provide data on the extent of pasturelands for research on human-environment interactions.
 
-References: [doi: 10.7927/H47H1GGR](https://dx.doi.org/10.7927/H47H1GGR)
+References: [doi: 10.7927/H47H1GGR](https://doi.org/10.7927/H47H1GGR)

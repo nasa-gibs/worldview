@@ -2,4 +2,4 @@ The Last of the Wild, 1995-2004 layer of the Last of the Wild Project, Version 2
 
 The purpose of the data set is to provide an updated map of wild areas in geographic projection which can be used in wildlife conservation planning, natural resource management, and research on human-environment interactions.
 
-References: [doi: 10.7927/H4348H83](https://dx.doi.org/10.7927/H4348H83)
+References: [doi: 10.7927/H4348H83](https://doi.org/10.7927/H4348H83)

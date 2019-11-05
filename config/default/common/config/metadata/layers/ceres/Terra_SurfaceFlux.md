@@ -11,7 +11,7 @@ The CERES Surface CRE Net Longwave | Shortwave | Total Flux layers are available
 
 Data parameters:  
 `sfc_cre_net_lw_mon` - Surface CRE Net Longwave Flux, Monthly means  
-`sfc_cre_net_sw_mon` - Surface CRE Net Shortwave Flux, Monthly means  
+`sfc_cre_net_sw_mon` - Surface CRE Net Shortwave Flux, Monthly means    
 `sfc_cre_net_tot_mon` - Surface CRE Net Total Flux, Monthly means  
 
 Data product: `CERES_EBAF-Sfc_Edition4.0`
@@ -31,13 +31,13 @@ The CERES Longwave | Shortwave Flux (Monthly, Energy Balanced and Filled, Up | D
 
 Data parameters:  
 `Sfc_lw_up_all_mon` - Surface Longwave Flux Up, Monthly Means, All-Sky conditions  
-`Sfc_lw_up_clr_mon` - Surface Longwave Flux Up, Monthly Means, Clear-Sky conditions  
-`Sfc_lw_down_all_mon` - Surface Longwave Flux Down, Monthly Means, All-Sky conditions  
-`Sfc_lw_down_clr_mon` - Surface Longwave Flux Down, Monthly Means, Clear-Sky conditions  
+`Sfc_lw_up_clr_mon` - Surface Longwave Flux Up, Monthly Means, Clear-Sky conditions    
+`Sfc_lw_down_all_mon` - Surface Longwave Flux Down, Monthly Means, All-Sky conditions    
+`Sfc_lw_down_clr_mon` - Surface Longwave Flux Down, Monthly Means, Clear-Sky conditions    
 `Sfc_sw_up_all_mon` - Surface Shortwave Flux Up, Monthly Means, All-Sky conditions  
 `Sfc_sw_up_clr_mon` - Surface Shortwave Flux Up, Monthly Means, Clear-Sky conditions  
 `Sfc_sw_down_all_mon` - Surface Shortwave Flux Down, Monthly Means, All-Sky conditions  
-`Sfc_sw_down_clr_mon` - Surface Shortwave Flux Down, Monthly Means, Clear-Sky conditions
+`Sfc_sw_down_clr_mon` - Surface Shortwave Flux Down, Monthly Means, Clear-Sky conditions  
 
 Data product: `CERES_EBAF-SFC_Edition4.0`
 
@@ -58,9 +58,9 @@ The CERES Surface Net Longwave | Shortwave | Total Flux (Monthly, Energy Balance
 
 Data parameters:  
 `Sfc_net_lw_all_mon` - Surface Net Longwave Flux, Monthly Means, All-Sky conditions  
-`Sfc_net_lw_clr_mon` - Surface Net Longwave Flux, Monthly Means, Clear-Sky conditions  
+`Sfc_net_lw_clr_mon` - Surface Net Longwave Flux, Monthly Means, Clear-Sky conditions    
 `Sfc_net_sw_all_mon` - Surface Net Shortwave Flux, Monthly Means, All-Sky conditions  
-`Sfc_net_sw_clr_mon` - Surface Net Shortwave Flux, Monthly Means, Clear-Sky conditions  
+`Sfc_net_sw_clr_mon` - Surface Net Shortwave Flux, Monthly Means, Clear-Sky conditions   
 `Sfc_net_tot_all_mon` - Surface Net Total Flux, Monthly Means, All-Sky conditions  
 `Sfc_net_tot_clr_mon` - Surface Net Total Flux, Monthly Means, Clear-Sky conditions  
 
@@ -82,7 +82,7 @@ Data parameters:
 `Untuned_Total_Sky_LW_Surface_Up` - Untuned Longwave Surface Flux (Monthly, Up, All-Sky)  
 `Untuned_Clear_Sky_LW_Surface_Up` - Untuned Longwave Surface Flux (Monthly, Up, Clear-Sky)   
 `Untuned_Total_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, All-Sky)  
-`Untuned_Clear_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, Clear-Sky)  
+`Untuned_Clear_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, Clear-Sky)   
 `Untuned_Total_Sky_SW_Surface_Up` - Untuned Shortwave Surface Flux (Monthly, Up, All-Sky)  
 
 Data product: `CER_SYN1deg-Month_Terra-MODIS_Edition4A`
@@ -98,7 +98,7 @@ The Diffuse | Direct Shortwave Surface Flux (All-Sky | Clear-Sky) layers are ava
 
 Data parameters:  
 `Total_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, All-Sky)  
-`Clear_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)  
+`Clear_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)    
 `Total_Sky_SW_Surface_Flux_Direct` - Direct Shortwave Surface Flux (Monthly, All-Sky)  
 `Clear_Sky_SW_Surface_Flux_Direct` - Direct Shortwave Surface Flux (Monthly, Clear-Sky)  
 
