@@ -54,7 +54,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
   var values = getVectorStyle(layerId, index, groupStr, state).entries.values;
   var result;
-  lodashEach(values, function (check, index) {
+  lodashEach(values, function(check, index) {
     var min = getMinValue(check);
     var max = getMaxValue(check);
     if (type === 'min' && value === min) {
@@ -101,7 +101,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
               : null;
       }
     }
-    lodashEach(activeLayers, function (def) {
+    lodashEach(activeLayers, function(def) {
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
       }
@@ -129,7 +129,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   // Filter Orbit Tracks
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
-    layer.setStyle(function (feature, resolution) {
+    layer.setStyle(function(feature, resolution) {
       var minute;
       var minutes = feature.get('label');
       if (minutes) {
@@ -143,18 +143,17 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     ((selected[layerId] && selected[layerId].length))) {
     const selectedFeatures = selected[layerId];
 
-    layer.setStyle(function (feature, resolution) {
+    layer.setStyle(function(feature, resolution) {
       const data = state.config.vectorData[def.vectorData.id];
       const properties = data.mvt_properties;
       const features = feature.getProperties();
-      const idKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+      const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
       const uniqueIdentifier = features[idKey];
       if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
         return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {
         return styleFunction(feature, resolution);
       }
-
     });
   }
   return vectorStyleId;
@@ -201,7 +200,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
-    layer.setStyle(function (feature, resolution) {
+    layer.setStyle(function(feature, resolution) {
       var minute;
       var minutes = feature.get('label');
       if (minutes) {
@@ -214,4 +213,3 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
   }
   return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } });
 }
-

@@ -3,8 +3,7 @@ import {
   CLEAR_VECTORSTYLE,
   SET_VECTORSTYLE,
   SET_FILTER_RANGE,
-  SET_SELECTED_VECTORS,
-  SET_HOVERED_VECTORS
+  SET_SELECTED_VECTORS
 } from './constants';
 export const defaultVectorStyleState = {
   custom: {},

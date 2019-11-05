@@ -12,6 +12,7 @@ class VectorDialog extends React.Component {
     this.state = { activeIndex: 0 };
     this.updateIndex = this.updateIndex.bind(this);
   }
+
   updateIndex(activeIndex) {
     if (activeIndex === this.state.activeIndex) return;
     this.setState({ activeIndex });
@@ -20,10 +21,10 @@ class VectorDialog extends React.Component {
   render() {
     const { toggleWithClose, vectorMetaObject, height } = this.props;
     const { activeIndex } = this.state;
-    let navArray = [];
-    let keyArray = [];
+    const navArray = [];
+    const keyArray = [];
     let i = 0;
-    for (let [key, value] of Object.entries(vectorMetaObject)) {
+    for (const [key, value] of Object.entries(vectorMetaObject)) {
       const stringLength = 20;
       const title = (value[0].title || key);
       const titleText = title.length > stringLength ? title.substring(0, stringLength) + '...' : title;
@@ -39,7 +40,7 @@ class VectorDialog extends React.Component {
             {titleText + ' [' + (value.length) + ']'}
           </NavLink>
         </NavItem>
-      )
+      );
       i++;
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
@@ -58,19 +59,18 @@ class VectorDialog extends React.Component {
           </ Scrollbars>
         </ModalBody>
       </div>
-    )
+    );
   }
 }
 
-
 function mapStateToProps(state) {
-  return {}
+  return {};
 };
 export default connect(
   mapStateToProps,
   null
 )(VectorDialog);
 VectorDialog.propTypes = {
-  vectorMetaArray: PropTypes.Array,
-  toggleWithClose: PropTypes.func
+  toggleWithClose: PropTypes.func,
+  vectorMetaArray: PropTypes.Array
 };

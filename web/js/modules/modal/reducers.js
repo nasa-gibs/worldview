@@ -4,7 +4,8 @@ import {
   OPEN_BASIC,
   RENDER_TEMPLATE,
   ABOUT_PAGE_REQUEST,
-  CLOSE
+  CLOSE,
+  CHANGE_CURSOR
 } from './constants';
 import { requestReducer } from '../core/reducers';
 import { assign as lodashAssign } from 'lodash';

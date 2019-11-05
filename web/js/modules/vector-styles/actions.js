@@ -2,8 +2,7 @@ import {
   SET_FILTER_RANGE,
   CLEAR_VECTORSTYLE,
   SET_VECTORSTYLE,
-  SET_SELECTED_VECTORS,
-  SET_HOVERED_VECTORS
+  SET_SELECTED_VECTORS
 } from './constants';
 import {
   setRange as setRangeSelector,
@@ -101,5 +100,5 @@ export function selectVectorFeatures(payload) {
   return {
     type: SET_SELECTED_VECTORS,
     payload
-  }
+  };
 }

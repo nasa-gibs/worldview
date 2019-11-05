@@ -101,7 +101,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAnimationWidgetActive, isTourActive, locationKey } = this.props;
+    const { isAnimationWidgetActive, isTourActive, locationKey, mapIsClickable } = this.props;
+    const mapClasses = mapIsClickable ? 'wv-map' + ' cursor-pointer' : 'wv-map';
+
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
@@ -112,7 +114,7 @@ class App extends React.Component {
         {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
-        <div id="wv-map" className="wv-map" />
+        <div id="wv-map" className={mapClasses} />
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <div id="dlMap" />
@@ -182,7 +184,8 @@ function mapStateToProps(state, ownProps) {
     parameters: state.parameters,
     models: ownProps.models,
     mapMouseEvents: ownProps.mapMouseEvents,
-    locationKey: state.location.key
+    locationKey: state.location.key,
+    mapIsClickable: state.map.isClickable
   };
 }
 const mapDispatchToProps = dispatch => ({

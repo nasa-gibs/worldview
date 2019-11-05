@@ -8,9 +8,10 @@ export default class VectorMetaTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tooltipOpen: false,
+      tooltipOpen: false
     };
   }
+
   shouldComponentUpdate(nextProps) {
     if (this.props.title && nextProps.title && this.props.title === nextProps.title) {
       return false;
@@ -18,6 +19,7 @@ export default class VectorMetaTable extends React.Component {
       return true;
     }
   }
+
   render() {
     const { metaArray } = this.props;
 
@@ -26,7 +28,7 @@ export default class VectorMetaTable extends React.Component {
         {metaArray.map((obj, metaIndex) => {
           const metaFeatures = obj.features;
           const metaLegend = obj.legend;
-          const title = obj.featureTitle
+          const title = obj.featureTitle;
           return (
             <div key={util.encodeId(title + '_' + metaIndex)}>
               <Table size="sm">
@@ -57,15 +59,15 @@ export default class VectorMetaTable extends React.Component {
                         </td>
 
                       </tr>
-                    )
+                    );
                   })}
                 </tbody>
               </Table>
             </div>
-          )
+          );
         })
         }
-      </div>)
+      </div>);
   }
 }
 VectorMetaTable.propTypes = {

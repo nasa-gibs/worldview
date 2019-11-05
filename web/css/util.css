@@ -208,3 +208,6 @@ button[data-tooltip] {
   display: table;
   clear: both;
 }
+.cursor-pointer {
+  cursor: pointer;
+}

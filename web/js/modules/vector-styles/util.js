@@ -2,14 +2,9 @@ import {
   assign as lodashAssign,
   find as lodashFind,
   get as lodashGet,
-  groupBy as lodashGroupBy,
-  isEqual as lodashIsEqual
 } from 'lodash';
 import { Stroke, Style, Fill, Circle } from 'ol/style';
-import vectorDialog from '../../containers/vector-dialog';
 import { setStyleFunction } from './selectors';
-import { openCustomContent } from '../modal/actions';
-import { selectVectorFeatures, hoverVectorFeatures } from './actions';
 
 export function getVectorStyleAttributeArray(layer) {
   var isCustomActive = false;
@@ -71,7 +66,7 @@ export function selectedCircleStyle(style) {
 }
 export function selectedPolygonStyle(style) {
   const fill = style.getFill();
-  const color = fill.getColor().replace(/[^,]+(?=\))/, '0.5')
+  const color = fill.getColor().replace(/[^,]+(?=\))/, '0.5');
   const stroke = style.getStroke();
   stroke.setColor('white');
   stroke.setWidth(0.5);
@@ -92,30 +87,27 @@ export function selectedStyleFunction(feature, styleArray) {
     }
   });
 }
-export function onMapClickGetVectorFeatures(e, map, store) {
-  let metaArray = [];
-  let selected = {};
-  const state = store.getState();
-  const lastSelection = state.vectorStyles.selected;
+export function onMapClickGetVectorFeatures(pixels, map, state) {
+  const metaArray = [];
+  const selected = {};
   const config = state.config;
-  const dialogId = 'vector_dialog' + e.pixel[0] + e.pixel[1];
-  const modalState = state.modal;
-  map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+  map.forEachFeatureAtPixel(pixels, function (feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
     if (def.vectorData && def.vectorData.id && def.title) {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];
-      let features = feature.getProperties();
+      const features = feature.getProperties();
       const vectorDataId = def.vectorData.id;
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
-      const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-      const titleKey = lodashFind(properties, { IsTitle: "True" })['Identifier'];
+      const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
+      const titleObj = lodashFind(properties, { IsLabel: 'True' });
+      const titleKey = titleObj.Identifier
 
       const uniqueIdentifier = features[uniqueIdentifierKey];
-      const title = features[titleKey];
-      if (selected[layerId].includes(uniqueIdentifier)) return
+      const title = titleKey ? features[titleKey] : 'Unknown title';
+      if (selected[layerId].includes(uniqueIdentifier)) return;
       const obj = {
         legend: properties,
         features: features,
@@ -127,41 +119,16 @@ export function onMapClickGetVectorFeatures(e, map, store) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
-
-
-  if (metaArray.length) {
-    store.dispatch(openCustomContent(dialogId,
-      {
-        backdrop: false,
-        clickableBehindModal: true,
-        desktopOnly: true,
-        isDraggable: true,
-        wrapClassName: 'vector-modal-wrap',
-        modalClassName: 'vector-modal light',
-        CompletelyCustomModal: vectorDialog,
-        isDraggable: true,
-        isResizable: true,
-        vectorMetaObject: lodashGroupBy(metaArray, 'id'),
-        width: 500,
-        height: 300,
-        onClose: () => {
-          store.dispatch(selectVectorFeatures({}));
-        }
-      }
-    ));
-    if (Object.entries(selected).length || (Object.entries(lastSelection).length && !(modalState.id.includes('vector_dialog') && modalState.isOpen))) {
-      store.dispatch(selectVectorFeatures(selected));
-    }
-  };
+  return { selected, metaArray };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
-  const vectorStyles = state.config.vectorStyles
-  for (let [key, featureIdArray] of Object.entries(selectionObj)) {
+  const vectorStyles = state.config.vectorStyles;
+  for (const [key, featureIdArray] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state);
     if (lastSelection[key]) delete lastSelection[key];
   }
-  for (let [key] of Object.entries(lastSelection)) {
+  for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
     setStyleFunction(
       def,
@@ -171,5 +138,4 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
       state
     );
   }
-
 }

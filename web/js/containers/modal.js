@@ -11,12 +11,11 @@ import Draggable from 'react-draggable';
 import { ResizableBox, Resizable } from 'react-resizable';
 const InteractionWrap = ({ condition, wrapper, children }) => condition ? wrapper(children) : children;
 const toggleWithClose = (onToggle, onClose, isOpen) => {
-
   if (onClose && isOpen) {
     return () => {
       onToggle();
       onClose();
-    }
+    };
   } else {
     return onToggle;
   }
@@ -31,6 +30,7 @@ class ModalContainer extends Component {
     };
     this.onResize = this.onResize.bind(this);
   }
+
   getStyle(state, props) {
     const isResizable = props.isResizable;
     return {
@@ -41,25 +41,28 @@ class ModalContainer extends Component {
       height: isResizable ? state.height : props.height
     };
   }
+
   onResize(e, { size }) {
     e.stopPropagation();
     this.setState({
       width: size.width, height: size.height
     });
   }
+
   getTemplateBody() {
     const { bodyTemplate } = this.props;
     return bodyTemplate.isLoading ? (
       <span> Loading </span>
     ) : (
-        <div
-          id="template-content"
-          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-        />
-      );
+      <div
+        id="template-content"
+        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+      />
+    );
   }
+
   setDimensions(updatedState) {
-    this.setState(updatedState)
+    this.setState(updatedState);
   }
 
   render() {

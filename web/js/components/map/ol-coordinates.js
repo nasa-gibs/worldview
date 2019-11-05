@@ -3,6 +3,14 @@ import PropTypes from 'prop-types';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { transform } from 'ol/proj';
+import vectorDialog from '../../containers/vector-dialog';
+import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
+import { openCustomContent } from '../../modules/modal/actions';
+import { selectVectorFeatures } from '../../modules/vector-styles/actions';
+import { connect } from 'react-redux';
+import { groupBy as lodashGroupBy } from 'lodash';
+import { changeCursor } from '../../modules/map/actions';
+
 
 class OlCoordinates extends React.Component {
   constructor(props) {
@@ -17,20 +25,44 @@ class OlCoordinates extends React.Component {
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
     this.changeFormat = this.changeFormat.bind(this);
+    this.mouseClick = this.mouseClick.bind(this);
     this.registerMouseListeners();
   }
 
   registerMouseListeners() {
     this.props.mouseEvents.on('mousemove', this.mouseMove);
     this.props.mouseEvents.on('mouseout', this.mouseOut);
+    this.props.mouseEvents.on('click', this.mouseClick);
+  }
+
+  mouseClick(e, map) {
+    const pixels = map.getEventPixel(e)
+    const { lastSelection, openVectorDiaglog, selectVectorFeatures, modalStateId, getDialogObject } = this.props;
+    const clickObj = getDialogObject(pixels, map);
+    const metaArray = clickObj.metaArray;
+    const selected = clickObj.selected;
+    const dialogId = 'vector_dialog' + pixels[0] + pixels[1];
+    if (metaArray.length) {
+      openVectorDiaglog(dialogId, metaArray);
+    }
+    if (Object.entries(selected).length || (Object.entries(lastSelection).length && !(modalStateId.includes('vector_dialog') && modalState.isOpen))) {
+      selectVectorFeatures(selected);
+    }
   }
 
   mouseMove(event, map, crs) {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
+    const { isShowingClick, changeCursor } = this.props;
     if (!coord) {
       this.clearCoord();
       return;
+    }
+    const hasFeatures = map.hasFeatureAtPixel(pixels);
+    if (hasFeatures && !isShowingClick) {
+      changeCursor(true);
+    } else if (!hasFeatures && isShowingClick) {
+      changeCursor(false);
     }
 
     const pcoord = transform(coord, crs, 'EPSG:4326');
@@ -89,9 +121,48 @@ class OlCoordinates extends React.Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => ({
+  selectVectorFeatures: (features) => {
+    dispatch(selectVectorFeatures(features));
+  },
+  changeCursor: (bool) => {
+    dispatch(changeCursor(bool))
+  },
 
+  openVectorDiaglog: (dialogId, metaArray) => {
+    dispatch(openCustomContent(dialogId,
+      {
+        backdrop: false,
+        clickableBehindModal: true,
+        desktopOnly: true,
+        isDraggable: true,
+        wrapClassName: 'vector-modal-wrap',
+        modalClassName: 'vector-modal light',
+        CompletelyCustomModal: vectorDialog,
+        isDraggable: true,
+        isResizable: true,
+        vectorMetaObject: lodashGroupBy(metaArray, 'id'),
+        width: 500,
+        height: 300,
+        onClose: () => {
+          dispatch(selectVectorFeatures({}));
+        }
+      }
+    ));
+  }
+});
+function mapStateToProps(state) {
+  return {
+    modalStateId: state.modal.id,
+    isShowingClick: state.map.isClickable,
+    getDialogObject: (pixels, map) => { return onMapClickGetVectorFeatures(pixels, map, state); },
+    lastSelected: state.vectorStyles.selected
+  };
+}
 OlCoordinates.propTypes = {
   mouseEvents: PropTypes.object.isRequired
 };
-
-export default OlCoordinates;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OlCoordinates);
