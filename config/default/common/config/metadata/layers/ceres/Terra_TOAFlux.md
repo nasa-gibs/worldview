@@ -9,11 +9,11 @@ The CERES TOA Longwave | Shortwave | Window-Region Flux (Monthly, All-Sky | Clea
 
 Data parameters:  
 `LW_TOA_Total_Sky` - TOA Longwave Flux, Monthly Means, All-Sky conditions  
-`LW_TOA_Clear_Sky` - TOA Longwave Flux, Monthly Means, Clear-Sky conditions  
+`LW_TOA_Clear_Sky` - TOA Longwave Flux, Monthly Means, Clear-Sky conditions    
 `SW_TOA_Total_Sky` - TOA Shortwave Flux, Monthly Means, All-Sky conditions  
-`SW_TOA_Clear_Sky` - TOA Shortwave Flux, Monthly Means, Clear-Sky conditions  
-`WN_TOA_Total_Sky` - TOA Window-Region Flux, Monthly Means, All-Sky conditions  
-`WN_TOA_Clear_Sky` - TOA Window-Region Flux, Monthly Means, Clear-Sky conditions
+`SW_TOA_Clear_Sky` - TOA Shortwave Flux, Monthly Means, Clear-Sky conditions   
+`WN_TOA_Total_Sky` - TOA Window-Region Flux, Monthly Means, All-Sky conditions    
+`WN_TOA_Clear_Sky` - TOA Window-Region Flux, Monthly Means, Clear-Sky conditions  
 
 Data product: `CER_SYN1deg-Month_Terra-MODIS_Edition4A`
 
@@ -34,9 +34,9 @@ The CERES Longwave | Shortwave | Net Flux (Monthly, Energy Balanced and Filled, 
 
 Data parameters:  
 `toa_lw_all_mon` - TOA Longwave Flux, Monthly means, All-Sky conditions  
-`toa_lw_clr_mon` - TOA Longwave Flux, Monthly means, Clear-Sky conditions  
+`toa_lw_clr_mon` - TOA Longwave Flux, Monthly means, Clear-Sky conditions    
 `toa_sw_all_mon` - TOA Shortwave Flux, Monthly means, All-Sky conditions  
-`toa_sw_clr_mon` - TOA Shortwave Flux, Monthly means, Clear-Sky conditions  
+`toa_sw_clr_mon` - TOA Shortwave Flux, Monthly means, Clear-Sky conditions   
 `toa_net_all_mon` - TOA Net Flux, Monthly means, All-Sky conditions  
 `toa_net_clr_mon` - TOA Net Flux, Monthly means, Clear-Sky conditions  
 
@@ -57,7 +57,7 @@ The CERES Longwave | Shortwave | Net Flux (Monthly, Energy Balanced and Filled) 
 
 Data parameters:  
 `toa_cre_lw_mon` - TOA CRE Longwave Flux, Monthly Means  
-`toa_cre_sw_mon` - TOA CRE Shortwave Flux, Monthly Means  
+`toa_cre_sw_mon` - TOA CRE Shortwave Flux, Monthly Means   
 `toa_cre_net_mon` - TOA CRE Net Flux, Monthly Means  
 
 Data product: `CERES_EBAF-SFC_Edition4.0`
