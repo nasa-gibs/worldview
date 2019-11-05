@@ -8,12 +8,15 @@ import { requestAction } from '../core/actions';
 import update from 'immutability-helper';
 
 export function selectProduct(id) {
-  return {
-    type: SELECT_PRODUCT,
-    id: id
-  };
+  return (dispatch, getState) => {
+    if (getState().data.selectedProduct !== id) {
+      dispatch({
+        type: SELECT_PRODUCT,
+        id: id
+      });
+    }
+  }
 }
-
 export function dataQuery(location) {
   return (dispatch, getData) => {
     return requestAction(dispatch, DATA_QUERY, location, 'application/json');

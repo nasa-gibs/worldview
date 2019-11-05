@@ -68,8 +68,7 @@ class Data extends React.Component {
     const dataArray = Object.entries(products);
     if (dataArray.length > 0 && !selectedProduct && isActive) {
       findProductToSelect(activeLayers, selectedProduct);
-    }
-    if (selectedProduct && !doesSelectedExist(activeLayers, selectedProduct)) {
+    } else if (selectedProduct && !doesSelectedExist(activeLayers, selectedProduct)) {
       findProductToSelect(activeLayers, selectedProduct);
     }
     return (
@@ -124,7 +123,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   findProductToSelect: (products, selectedProduct) => {
     const newSelection = findAvailableProduct(products);
-
     if (newSelection) {
       dispatch(selectProduct(newSelection));
     }
