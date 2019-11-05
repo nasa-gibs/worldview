@@ -17,7 +17,7 @@
       "source-description": "Default",
       "type": "circle",
       "paint": {
-        "circle-radius": 1,
+        "circle-radius": 1.5,
         "circle-color": [
           "case",
           [

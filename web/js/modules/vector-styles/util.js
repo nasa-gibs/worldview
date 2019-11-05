@@ -110,10 +110,12 @@ export function onMapClickGetVectorFeatures(e, map, store) {
       const vectorDataId = def.vectorData.id;
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
-      const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-      const featureId = features[def.uniqueIdenitifier];
+      const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+      const titleKey = lodashFind(properties, { IsTitle: true })['Identifier'];
+
+      const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = features[titleKey];
-      if (selected[layerId].includes(title)) return
+      if (selected[layerId].includes(uniqueIdentifier)) return
       const obj = {
         legend: properties,
         features: features,
@@ -122,7 +124,7 @@ export function onMapClickGetVectorFeatures(e, map, store) {
         featureTitle: title
       };
       metaArray.push(obj);
-      selected[layerId].push(featureId);
+      selected[layerId].push(uniqueIdentifier);
     }
   });
 
