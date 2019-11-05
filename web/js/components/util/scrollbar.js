@@ -30,7 +30,9 @@ export default function Scrollbars(props) {
     const { contentWrapperEl } = simpleBar;
     if (contentWrapperEl) {
       const verticalTop = Math.floor(props.scrollBarVerticalTop);
-      contentWrapperEl.scrollTop = verticalTop !== 0 ? verticalTop : 0;
+      contentWrapperEl.scrollTop = verticalTop !== 0
+        ? verticalTop
+        : contentWrapperEl.scrollTop;
     }
   };
 
