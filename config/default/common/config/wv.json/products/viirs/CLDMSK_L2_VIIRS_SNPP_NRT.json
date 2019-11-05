@@ -1,0 +1,11 @@
+{
+    "products": {
+        "CLDMSK_L2_VIIRS_SNPP_NRT": {
+            "name": "VIIRS/SNPP Cloud Mask L2 6-Min Swath 750m (NRT)",
+            "handler": "VIIRSSwathDay",
+            "query": {
+                "shortName": "CLDMSK_L2_VIIRS_SNPP_NRT"
+            }
+        }
+    }
+}
