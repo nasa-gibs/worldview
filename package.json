@@ -139,7 +139,7 @@
     "showdown": "^1.8.6",
     "stylelint": "^11.1.1",
     "tar": "^5.0.2",
-    "uglify-js": "^3.6.5",
+    "uglify-js": "^3.6.7",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^2.1.0",
     "webpack": "^4.39.3",
