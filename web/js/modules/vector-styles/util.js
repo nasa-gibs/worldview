@@ -111,7 +111,7 @@ export function onMapClickGetVectorFeatures(e, map, store) {
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
       const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-      const titleKey = lodashFind(properties, { IsTitle: true })['Identifier'];
+      const titleKey = lodashFind(properties, { IsTitle: "True" })['Identifier'];
 
       const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = features[titleKey];

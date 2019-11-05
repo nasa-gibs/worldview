@@ -147,8 +147,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       const data = state.config.vectorData[def.vectorData.id];
       const properties = data.mvt_properties;
       const features = feature.getProperties();
-      const titleKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
-      const uniqueIdentifier = features[titleKey];
+      const idKey = lodashFind(properties, { Function: 'Identify' })['Identifier'];
+      const uniqueIdentifier = features[idKey];
       if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
         return selectedStyleFunction(feature, styleFunction(feature, resolution));
       } else {
