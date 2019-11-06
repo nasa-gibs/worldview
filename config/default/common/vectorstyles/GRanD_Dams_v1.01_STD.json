@@ -17,7 +17,19 @@
       "source-description": "Default",
       "type": "circle",
       "paint": {
-        "circle-radius": 1.5,
+        "circle-radius": {
+          "base": 2,
+          "stops": [
+            [
+              12,
+              1
+            ],
+            [
+              22,
+              7
+            ]
+          ]
+        },
         "circle-color": [
           "case",
           [
