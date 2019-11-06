@@ -8,6 +8,8 @@ export default class VectorMetaTooltip extends React.Component {
     super(props);
 
     this.toggle = this.toggle.bind(this);
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
     this.state = {
       tooltipOpen: false
     };
@@ -18,21 +20,29 @@ export default class VectorMetaTooltip extends React.Component {
       tooltipOpen: !this.state.tooltipOpen
     });
   }
-
+  mouseEnter() {
+    this.setState({
+      tooltipOpen: true
+    });
+  }
+  mouseLeave() {
+    this.setState({
+      tooltipOpen: false
+    });
+  }
   render() {
     const { id, index, description } = this.props;
     const elId = util.cleanId(String('tooltip' + id + index));
 
     return (
-      <div className='vector-info-tooltip-case' key={elId}>
-        <span href="#" id={elId}><i className="fa fa-info vector-info-icon"></i></span>
+      <div className='vector-info-tooltip-case' onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} key={elId}>
+        <div id={elId} className='sub-case' ><i className="fa fa-info vector-info-icon cursor-pointer"></i></div>
         <Tooltip
           dangerouslySetInnerHTML={{ __html: description }}
           boundariesElement="window"
-          placement="top"
+          placement="right"
           isOpen={this.state.tooltipOpen}
           target={elId}
-          toggle={this.toggle}
           fade={false}
         >
         </Tooltip>

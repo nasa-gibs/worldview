@@ -44,6 +44,11 @@
 .vector-info-tooltip-case {
   position: relative;
 }
+.vector-info-tooltip-case .sub-case {
+  position: absolute;
+  width: 15px;
+  height: 10px;
+}
 .vector-modal .vector-info-icon {
   position: absolute;
   font-size: 8px;
