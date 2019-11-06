@@ -26,7 +26,7 @@ import {
   expandSidebar
 } from '../../modules/sidebar/actions';
 
-const getActiveTabs = function (config) {
+const getActiveTabs = function(config) {
   const features = config.features;
   return {
     download: features.dataDownload,
@@ -34,7 +34,7 @@ const getActiveTabs = function (config) {
     events: features.naturalEvents
   };
 };
-const resetWorldview = function (e) {
+const resetWorldview = function(e) {
   e.preventDefault();
   if (window.location.search === '') return; // Nothing to reset
   var msg =
@@ -287,7 +287,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(changeTab(str));
   },
   onTabClick: (str, activeStr) => {
-    if(str === activeStr) return;
+    if (str === activeStr) return;
     googleTagManager.pushEvent({
       event: str + '_tab'
     });

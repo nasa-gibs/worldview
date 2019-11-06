@@ -16,7 +16,7 @@ export function changeTab(str) {
         activeTab: str
       });
     }
-  }
+  };
 }
 export function toggleSidebarCollapse(str) {
   return (dispatch, getState) => {

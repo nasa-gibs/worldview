@@ -15,7 +15,7 @@ export function selectProduct(id) {
         id: id
       });
     }
-  }
+  };
 }
 export function dataQuery(location) {
   return (dispatch, getData) => {
