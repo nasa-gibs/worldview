@@ -79,6 +79,7 @@ const RangeHandle = props => {
 
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
+const maxFrames = 40;
 
 /*
  * A react component, Builds a rather specific
@@ -200,7 +201,7 @@ class AnimationWidget extends React.Component {
       endDate
     } = this.zeroDates();
 
-    if (numberOfFrames >= 40) {
+    if (numberOfFrames >= maxFrames) {
       return;
     }
 
@@ -374,7 +375,7 @@ class AnimationWidget extends React.Component {
     const { numberOfFrames } = this.props;
     const { hoverGif } = this.state;
     const elemExists = document.querySelector('#create-gif-button');
-    const showTooltip = elemExists && hoverGif && numberOfFrames >= 40;
+    const showTooltip = elemExists && hoverGif && numberOfFrames >= maxFrames;
     return (
       <Tooltip
         placement="right"
@@ -436,7 +437,7 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers
     } = this.props;
     const { speed } = this.state;
-    const gifDisabled = numberOfFrames >= 40;
+    const gifDisabled = numberOfFrames >= maxFrames;
     return (
       <Draggable
         bounds="body"
@@ -669,7 +670,8 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     timeScaleFromNumberKey[useInterval],
-    customSelected && customDelta ? customDelta : delta
+    customSelected && customDelta ? customDelta : delta,
+    maxFrames
   );
 
   return {

@@ -444,13 +444,17 @@ export default (function(self) {
     return newDate;
   };
 
-  self.getNumberOfDays = function(start, end, interval, increment) {
+  self.getNumberOfDays = function(start, end, interval, increment, maxToCheck) {
     increment = increment || 1;
     var i = 1;
     var currentDate = start;
     while (currentDate < end) {
       i++;
       currentDate = self.dateAdd(currentDate, interval, increment);
+      // if checking for a max number limit, break out after reaching it
+      if (maxToCheck && i >= maxToCheck) {
+        return i;
+      }
     }
     return i;
   };
