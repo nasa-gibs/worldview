@@ -38,7 +38,8 @@ class ModalContainer extends Component {
       right: props.offsetRight,
       top: props.offsetTop,
       width: isResizable ? state.width : props.width,
-      height: isResizable ? state.height : props.height
+      height: isResizable ? state.height : props.height,
+      maxHeight: isResizable ? state.height : props.height
     };
   }
 
@@ -54,16 +55,13 @@ class ModalContainer extends Component {
     return bodyTemplate.isLoading ? (
       <span> Loading </span>
     ) : (
-      <div
-        id="template-content"
-        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-      />
-    );
+        <div
+          id="template-content"
+          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+        />
+      );
   }
 
-  setDimensions(updatedState) {
-    this.setState(updatedState);
-  }
 
   render() {
     const {
@@ -147,7 +145,7 @@ class ModalContainer extends Component {
             fade={!isDraggable}
           >
             {CompletelyCustomModal
-              ? (<CompletelyCustomModal key={'custom_' + lowerCaseId} setDimensions={this.setDimensions.bind(this)} height={this.state.height} width={this.state.width} {...customProps}
+              ? (<CompletelyCustomModal key={'custom_' + lowerCaseId} modalHeight={this.state.height} modalWidth={this.state.width} {...customProps}
                 toggleWithClose={toggleFunction} />)
               : (
                 <DetectOuterClick
