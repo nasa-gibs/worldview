@@ -40,7 +40,8 @@ export default class VectorMetaTable extends React.Component {
                 <tbody>
                   {metaLegend.map((properties, index) => {
                     const featureId = properties.Identifier;
-                    const value = metaFeatures[featureId];
+                    const hasValueMap = !!properties.ValueMap;
+                    const value = properties.ValueMap ? properties.ValueMap[metaFeatures[featureId]] : metaFeatures[featureId];
                     const id = util.cleanId(String(title + '-' + (metaIndex + index)));
                     if (!value) return undefined;
                     return (
