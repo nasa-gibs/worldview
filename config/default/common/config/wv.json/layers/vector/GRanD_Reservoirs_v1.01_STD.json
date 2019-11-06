@@ -8,6 +8,7 @@
       "type": "vector",
       "tags": "vector vectors",
       "group": "overlays",
+      "downloadId": "GRanD_Reservoirs",
       "layergroup": [
         "vector"
       ],
