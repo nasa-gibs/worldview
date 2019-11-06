@@ -9,7 +9,7 @@
 .vector-modal .modal-body {
   overflow-x: scroll;
   overflow-y: visible;
-  padding: 0;
+  padding: 0 0 7px;
 }
 
 .vector-modal .modal-body table {
