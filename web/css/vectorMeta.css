@@ -16,8 +16,8 @@
   margin: 0;
 }
 
-.vector-modal .modal-body table th,
-.vector-modal .modal-body table td {
+.vector-modal table th,
+.vector-modal table .vector-feature-name-cell {
   text-transform: capitalize;
 }
 
