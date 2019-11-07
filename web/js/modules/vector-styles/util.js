@@ -50,13 +50,13 @@ export function isConditional(item) {
 export function selectedCircleStyle(style) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
-  const radius = styleImage.getRadius() * 1.25;
+  const radius = styleImage.getRadius() * 2;
   return new Style({
     image: new Circle({
       radius: radius,
       stroke: new Stroke({
         color: 'white',
-        width: 1
+        width: 2
       }),
       fill: new Fill({
         color: fill.getColor().replace(/[^,]+(?=\))/, '0.5')
