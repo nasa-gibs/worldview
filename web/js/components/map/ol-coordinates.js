@@ -32,7 +32,7 @@ class OlCoordinates extends React.Component {
   registerMouseListeners() {
     this.props.mouseEvents.on('mousemove', this.mouseMove);
     this.props.mouseEvents.on('mouseout', this.mouseOut);
-    this.props.mouseEvents.on('click', this.mouseClick);
+    this.props.mouseEvents.on('singleclick', this.mouseClick);
   }
 
   mouseClick(e, map) {
