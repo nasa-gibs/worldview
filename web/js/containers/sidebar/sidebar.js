@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Layers from './layers';
 import Events from './events';
 import Data from './data';
+import { get as lodashGet } from 'lodash';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
 import { TabContent, TabPane } from 'reactstrap';
@@ -75,11 +76,11 @@ class Sidebar extends React.Component {
 
   updateDimensions() {
     const { subComponentHeight } = this.state;
+    const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
     const { isMobile, screenHeight } = this.props;
     if (!isMobile && this.iconElement) {
       const iconHeight = this.iconElement.clientHeight;
       const topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);
-      const footerHeight = this.footerElement.clientHeight;
       const tabHeight = 32;
       const basePadding = 110;
       const newHeight =
@@ -96,7 +97,6 @@ class Sidebar extends React.Component {
       }
     } else {
       const tabHeight = 32;
-      const footerHeight = this.footerElement.clientHeight;
       const newHeight = screenHeight - (tabHeight + footerHeight);
       // See note above
       if (Math.abs(subComponentHeight - newHeight) > 1) {
@@ -286,7 +286,8 @@ const mapDispatchToProps = dispatch => ({
   changeTab: str => {
     dispatch(changeTab(str));
   },
-  onTabClick: str => {
+  onTabClick: (str, activeStr) => {
+    if (str === activeStr) return;
     googleTagManager.pushEvent({
       event: str + '_tab'
     });
