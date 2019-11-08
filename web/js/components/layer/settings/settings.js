@@ -5,6 +5,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { connect } from 'react-redux';
 import Opacity from './opacity';
 import Palette from './palette';
+import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import {
@@ -269,6 +270,7 @@ class LayerSettings extends React.Component {
           layer={layer}
         />
         {renderCustomizations}
+        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer}/>}
       </React.Fragment>
     );
   }

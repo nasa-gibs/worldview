@@ -603,6 +603,15 @@
   margin-top: 0;
 }
 
+.layer-orbit-tracks .wv-checkbox {
+  margin: 10px 0 10px 10px;
+  & label {
+    display: inline;
+    text-transform: capitalize;
+    margin-left: 5px;
+  }
+}
+
 .layer-settings-modal .wv-header.wv-color-palette-label {
   margin-bottom: 0.5em;
 }

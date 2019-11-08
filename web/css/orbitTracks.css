@@ -1,0 +1,43 @@
+.wv-orbit-track-layers {
+  border-top: 1px solid #333;
+}
+
+.wv-orbit-track {
+  padding: 5px;
+
+  &.not-visible {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  & .wv-orbit-track-vis-toggle {
+    display: inline-block;
+    background: transparent;
+    border: none;
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  & .wv-palettes-panel {
+    display: inline-block;
+  }
+
+  & .wv-palettes-legend {
+    display: inline-block;
+    & .wv-palettes-class {
+      display: inline-block;
+      &:hover {
+        cursor: default;
+      }
+    }
+    & .wv-running-category-label-case {
+      display: none;
+    }
+  }
+
+  & .wv-orbit-track-label {
+    display: inline-block;
+    text-transform: capitalize;
+    font-size: 11px;
+  }
+}
