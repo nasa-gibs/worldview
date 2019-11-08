@@ -17,6 +17,10 @@
       "vectorStyle": {
         "id": "GRanD_Reservoirs_v1.01_STD"
       },
+      "palette": {
+        "id": "GRanD_Reservoirs",
+        "immutable": true
+      },
       "period": "daily"
     }
   }

@@ -12,6 +12,12 @@
       "layergroup": [
         "vector"
       ],
+      "palette": {
+        "id": "GRanD_Dams",
+        "immutable": true,
+        "styleProperty": "MAIN_USE",
+        "unclassified": "Not Classified"
+      },
       "uniqueIdenitifier": "GRAND_ID",
       "inactive": true,
       "vectorStyle": {

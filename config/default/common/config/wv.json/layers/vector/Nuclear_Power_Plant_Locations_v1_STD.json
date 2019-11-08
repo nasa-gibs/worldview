@@ -17,6 +17,10 @@
       "vectorStyle": {
         "id": "Nuclear_Power_Plant_Locations_v1_STD"
       },
+      "palette": {
+        "id": "Nuclear_Power_Plant_Locations",
+        "immutable": true
+      },
       "period": "daily"
     }
   }

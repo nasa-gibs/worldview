@@ -17,6 +17,10 @@
       "vectorStyle": {
         "id": "GRUMP_Settlements_v1.01_STD"
       },
+      "palette": {
+        "id": "GRUMP_Settlements",
+        "immutable": true
+      },
       "period": "daily"
     }
   }

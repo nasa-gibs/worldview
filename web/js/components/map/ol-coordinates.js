@@ -36,7 +36,7 @@ class OlCoordinates extends React.Component {
   }
 
   mouseClick(e, map) {
-    const pixels = map.getEventPixel(e)
+    const pixels = e.pixel;
     const { lastSelected, openVectorDiaglog, selectVectorFeatures, modalStateId, getDialogObject } = this.props;
     const clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
