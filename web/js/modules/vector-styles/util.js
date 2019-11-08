@@ -5,6 +5,20 @@ import {
 } from 'lodash';
 import { Stroke, Style, Fill, Circle } from 'ol/style';
 import { setStyleFunction } from './selectors';
+import {
+  expression, Color,
+  function as fn,
+  latest as spec,
+  featureFilter as createFilter,
+  deref as derefLayers
+} from '@mapbox/mapbox-gl-style-spec';
+import { color } from 'onecolor';
+import util from '../../util/util';
+
+
+const isExpression = expression.isExpression;
+const createPropertyExpression = expression.createPropertyExpression;
+
 
 export function getVectorStyleAttributeArray(layer) {
   var isCustomActive = false;
@@ -87,10 +101,73 @@ export function selectedStyleFunction(feature, styleArray) {
     }
   });
 }
+export function getColor() { }
+export function getConditionalColors(color) {
+  const array = Array.from(color);
+  array.shift();
+  let colors = [];
+  let labels = [];
+  let temp = [];
+  const chunk = 2;
+  // https://stackoverflow.com/a/8495740/4589331
+  for (let i = 0, j = array.length; i < j; i += chunk) {
+    temp = array.slice(i, i + chunk);
+    if (temp.length === 2) {
+      if (temp[0].length === 3 &&
+        typeof temp[0][2] === 'string' &&
+        typeof temp[1] === 'string'
+      ) {
+        labels.push(temp[0][2]);
+        colors.push(temp[1])
+      } else {
+        console.warn('Irregular conditional');
+      }
+    } else if (temp.length === 1 && typeof temp[0] === 'string') {
+      labels.push('Default');
+      colors.push(temp[0])
+    } else {
+      console.warn('Irregular conditional');
+    }
+  }
+  return { colors, labels }
+}
+export function getPaletteForStyle(layer, layerstyleLayerObject) {
+  const styleLayerObject = layerstyleLayerObject.layers[0];
+  const color = styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color']
+  const isConditionalStyling = styleLayerObject.paint ? isExpression(color) : false;
+  let colors = [];
+  let labels = [];
+  if (isConditionalStyling) {
+    const expressionObj = getConditionalColors(color);
+    colors = expressionObj.colors;
+    labels = expressionObj.labels;
+  } else {
+    colors.push(color);
+    labels.push(layer.title);
+  }
+  return [{
+    colors: colors,
+    type: "classification",
+    tooltips: labels,
+    title: layer.title,
+    id: layer.id + '0_legend'
+  }]
+}
 export function onMapClickGetVectorFeatures(pixels, map, state) {
   const metaArray = [];
   const selected = {};
   const config = state.config;
+  const { screenHeight, screenWidth } = state.browser;
+  const x = pixels[0];
+  const isOnLeft = screenWidth - x >= screenWidth / 2;
+  const modalWidth = 445;
+  let offsetLeft = isOnLeft ? x + 20 : x - modalWidth - 20;
+  if (offsetLeft < 0) {
+    offsetLeft = 20
+  } else if (offsetLeft + modalWidth > screenWidth) {
+    offsetLeft = screenWidth - modalWidth - 20;
+  }
+
   map.forEachFeatureAtPixel(pixels, function (feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
@@ -119,7 +196,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
-  return { selected, metaArray };
+  return { selected, metaArray, offsetLeft };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
   const vectorStyles = state.config.vectorStyles;

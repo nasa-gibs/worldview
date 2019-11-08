@@ -28,19 +28,21 @@ class ModalContainer extends Component {
       height: props.customProps.height,
       isDraggable: props.isDraggable
     };
+    this._style = {}
     this.onResize = this.onResize.bind(this);
   }
 
   getStyle(state, props) {
     const isResizable = props.isResizable;
-    return {
-      left: props.offsetLeft,
+    this._style = {
+      left: props.offsetLeft || this._style.left,
       right: props.offsetRight,
       top: props.offsetTop,
       width: isResizable ? state.width : props.width,
       height: isResizable ? state.height : props.height,
       maxHeight: isResizable ? state.height : props.height
-    };
+    }
+    return this._style;
   }
 
   onResize(e, { size }) {
@@ -119,7 +121,7 @@ class ModalContainer extends Component {
               disabled={!isDraggable}
             >
               <Resizable className="resize-box" resizeHandles={['se']}
-                width={this.state.width || 500} height={this.state.height || 300} minConstraints={[250, 250]}
+                width={this.state.width || newProps.width} height={this.state.height || newProps.height} minConstraints={[250, 250]}
                 maxConstraints={[495, screenHeight]}
                 handleSize={[8, 8]}
                 onResize={this.onResize}
@@ -145,7 +147,7 @@ class ModalContainer extends Component {
             fade={!isDraggable}
           >
             {CompletelyCustomModal
-              ? (<CompletelyCustomModal key={'custom_' + lowerCaseId} modalHeight={this.state.height} modalWidth={this.state.width} {...customProps}
+              ? (<CompletelyCustomModal key={'custom_' + lowerCaseId} modalHeight={this.state.height || newProps.height} modalWidth={this.state.width || newProps.width} {...customProps}
                 toggleWithClose={toggleFunction} />)
               : (
                 <DetectOuterClick

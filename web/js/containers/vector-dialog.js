@@ -19,7 +19,7 @@ class VectorDialog extends React.Component {
   }
 
   render() {
-    const { toggleWithClose, vectorMetaObject, modalHeight } = this.props;
+    const { toggleWithClose, vectorMetaObject, modalHeight, modalWidth } = this.props;
     const { activeIndex } = this.state;
     const navArray = [];
     const keyArray = [];
@@ -46,7 +46,7 @@ class VectorDialog extends React.Component {
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
 
     return (
-      <div className='draggable-modal-content'>
+      <div className='draggable-modal-content' >
         <ModalHeader toggle={toggleWithClose}>
           <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
             {navArray}

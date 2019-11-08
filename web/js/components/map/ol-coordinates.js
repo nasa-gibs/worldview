@@ -37,15 +37,18 @@ class OlCoordinates extends React.Component {
 
   mouseClick(e, map) {
     const pixels = e.pixel;
-    const { lastSelected, openVectorDiaglog, selectVectorFeatures, modalStateId, getDialogObject } = this.props;
+    const { lastSelected, openVectorDiaglog, selectVectorFeatures, modalState, getDialogObject } = this.props;
     const clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
     const selected = clickObj.selected || {};
+    const offsetLeft = clickObj.offsetLeft || 10;
     const dialogId = 'vector_dialog' + pixels[0] + pixels[1];
+    const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
+
     if (metaArray.length) {
-      openVectorDiaglog(dialogId, metaArray);
+      openVectorDiaglog(dialogId, metaArray, isVectorModalOpen ? undefined : offsetLeft);
     }
-    if (Object.entries(selected).length || (Object.entries(lastSelected).length && !(modalStateId.includes('vector_dialog') && modalState.isOpen))) {
+    if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       selectVectorFeatures(selected);
     }
   }
@@ -129,7 +132,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(changeCursor(bool))
   },
 
-  openVectorDiaglog: (dialogId, metaArray) => {
+  openVectorDiaglog: (dialogId, metaArray, offsetLeft) => {
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -142,8 +145,9 @@ const mapDispatchToProps = dispatch => ({
         isDraggable: true,
         isResizable: true,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
-        width: 500,
+        width: 445,
         height: 300,
+        offsetLeft,
         onClose: () => {
           dispatch(selectVectorFeatures({}));
         }
@@ -153,7 +157,7 @@ const mapDispatchToProps = dispatch => ({
 });
 function mapStateToProps(state) {
   return {
-    modalStateId: state.modal.id,
+    modalState: state.modal,
     isShowingClick: state.map.isClickable,
     getDialogObject: (pixels, map) => { return onMapClickGetVectorFeatures(pixels, map, state); },
     lastSelected: state.vectorStyles.selected

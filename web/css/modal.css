@@ -17,14 +17,8 @@
 .draggable-modal .modal {
   position: fixed;
 }
-.react-draggable.modal-dialog.vector-modal {
+.react-draggable.modal-dialog {
   position: absolute;
-  left: 50%;
-  width: 500px;
-  height: 160px;
-  margin-left: -250px;
-  margin-top: 10px;
-  margin-bottom: 0;
 }
 .template-modal.modal-dialog {
   max-width: 625px;

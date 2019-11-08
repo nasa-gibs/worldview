@@ -1,3 +1,8 @@
+.vector-modal {
+  width: 445px;
+  height: 300px;
+  position: absolute;
+}
 .vector-modal .close {
   opacity: 1;
 }
