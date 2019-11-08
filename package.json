@@ -192,7 +192,7 @@
     "redux-thunk": "^2.3.0",
     "simplebar-react": "^2.0.4",
     "supercluster": "6.0.2",
-    "web-streams-polyfill": "^1.3.2",
+    "web-streams-polyfill": "^2.0.6",
     "whatwg-fetch": "^3.0.0"
   },
   "browser": {
