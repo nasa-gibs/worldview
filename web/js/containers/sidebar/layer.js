@@ -19,6 +19,7 @@ import {
   removeLayer,
   layerHover
 } from '../../modules/layers/actions';
+import OrbitTrack from './orbit-track';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -28,6 +29,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   top: null,
   left: null
 });
+
 class Layer extends React.Component {
   constructor(props) {
     super(props);
@@ -116,6 +118,7 @@ class Layer extends React.Component {
 
   render() {
     const {
+      tracksForLayer,
       layerGroupName,
       onRemoveClick,
       toggleVisibility,
@@ -233,9 +236,21 @@ class Layer extends React.Component {
                 >
                   <i className="fa fa-info wv-layers-info-icon" />
                 </a>
+
                 <h4 title={name.title}>{names.title}</h4>
                 <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
                 {hasPalette ? this.getPaletteLegend() : ''}
+
+                {tracksForLayer.length > 0 && (
+                  <div className="wv-orbit-track-layers">
+                    {tracksForLayer.map(track => {
+                      return (
+                        <OrbitTrack key={track.id} trackLayer={track}/>
+                      );
+                    })}
+                  </div>
+                )}
+
               </div>
             </li>
           ) : (
@@ -281,6 +296,7 @@ Layer.propTypes = {
   requestPalette: PropTypes.func,
   runningObject: PropTypes.object,
   toggleVisibility: PropTypes.func,
+  tracksForLayer: PropTypes.array,
   zot: PropTypes.number
 };
 function mapStateToProps(state, ownProps) {
@@ -293,17 +309,20 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
-  const { palettes, config, map } = state;
+  const { palettes, config, map, layers } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
-  const paletteLegends =
-    hasPalette && renderedPalettes[paletteName]
-      ? getPaletteLegends(layer.id, layerGroupName, state)
-      : [];
+  const paletteLegends = hasPalette && renderedPalettes[paletteName]
+    ? getPaletteLegends(layer.id, layerGroupName, state)
+    : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
+  const tracksForLayer = layers.active.filter(activeLayer => {
+    return (layer.tracks || []).some(track => activeLayer.id === track);
+  });
 
   return {
+    tracksForLayer,
     layer,
     isDisabled,
     isVisible,
