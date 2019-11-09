@@ -156,7 +156,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
   const metaArray = [];
   const selected = {};
   const config = state.config;
-  const { screenHeight, screenWidth } = state.browser;
+  const { screenWidth } = state.browser;
   const x = pixels[0];
   const isOnLeft = screenWidth - x >= screenWidth / 2;
   const modalWidth = 445;

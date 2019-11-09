@@ -28,21 +28,20 @@ class ModalContainer extends Component {
       height: props.customProps.height,
       isDraggable: props.isDraggable
     };
-    this._style = {}
     this.onResize = this.onResize.bind(this);
   }
 
   getStyle(state, props) {
     const isResizable = props.isResizable;
-    this._style = {
-      left: props.offsetLeft || this._style.left,
+    return {
+      left: props.offsetLeft,
       right: props.offsetRight,
       top: props.offsetTop,
       width: isResizable ? state.width : props.width,
       height: isResizable ? state.height : props.height,
       maxHeight: isResizable ? state.height : props.height
     }
-    return this._style;
+
   }
 
   onResize(e, { size }) {
