@@ -42,7 +42,7 @@ class OlCoordinates extends React.Component {
     const metaArray = clickObj.metaArray || [];
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
-    const dialogId = 'vector_dialog' + pixels[0] + pixels[1];
+    const dialogId = 'vector_dialog';
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
 
     if (metaArray.length) {
@@ -148,6 +148,7 @@ const mapDispatchToProps = dispatch => ({
         width: 445,
         height: 300,
         offsetLeft,
+        timeout: 150,
         onClose: () => {
           dispatch(selectVectorFeatures({}));
         }

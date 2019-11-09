@@ -101,7 +101,6 @@ export function selectedStyleFunction(feature, styleArray) {
     }
   });
 }
-export function getColor() { }
 export function getConditionalColors(color) {
   const array = Array.from(color);
   array.shift();

@@ -101,7 +101,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAnimationWidgetActive, isTourActive, locationKey, mapIsClickable } = this.props;
+    const { isAnimationWidgetActive, isTourActive, locationKey, mapIsClickable, modalId } = this.props;
     const mapClasses = mapIsClickable ? 'wv-map' + ' cursor-pointer' : 'wv-map';
 
     return (
@@ -124,7 +124,7 @@ class App extends React.Component {
         </div>
         <MeasureButton />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
-        <Modal />
+        <Modal key={modalId} />
         <ErrorBoundary>
           <Debug parameters={this.props.parameters} />
         </ErrorBoundary>
@@ -185,7 +185,8 @@ function mapStateToProps(state, ownProps) {
     models: ownProps.models,
     mapMouseEvents: ownProps.mapMouseEvents,
     locationKey: state.location.key,
-    mapIsClickable: state.map.isClickable
+    mapIsClickable: state.map.isClickable,
+    modalId: state.modal.id
   };
 }
 const mapDispatchToProps = dispatch => ({
