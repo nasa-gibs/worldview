@@ -43,29 +43,6 @@ class PlayAnimation extends React.Component {
   }
 
   /**
-   * Clear out value for time unit one step below playback interval
-   * This essentially snaps the playback interval to the correct value so that
-   * the current datetime is properly snapped to the start datetime.  This avoids
-   * issues where the first playback is not in sync with subsequent loops due to a
-   * non-snapped initial current time.
-   *
-   * @param {*} date
-   * @param {*} interval
-   */
-  zeroForInterval(date, interval) {
-    switch (interval) {
-      case 'day':
-        return new Date(date.setUTCHours(0));
-      case 'hour':
-        return new Date(date.setUTCMinutes(0));
-      case 'minute':
-        return new Date(date.setUTCSeconds(0));
-      default:
-        return date;
-    }
-  }
-
-  /**
    * Determines whether to start at
    * current date or to start at the
    * selected start date
@@ -73,9 +50,8 @@ class PlayAnimation extends React.Component {
    * @returns {string} ISO string Date
    */
   getStartDate() {
-    const { endDate, startDate, currentDate, interval } = this.props;
-    const zeroedDate = this.zeroForInterval(currentDate, interval);
-    const nextDate = this.nextDate(zeroedDate);
+    const { endDate, startDate, currentDate } = this.props;
+    const nextDate = this.nextDate(currentDate);
 
     if (currentDate > startDate && nextDate < endDate) {
       return util.toISOStringSeconds(nextDate);

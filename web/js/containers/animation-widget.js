@@ -231,7 +231,7 @@ class AnimationWidget extends React.Component {
     );
   }
 
-  /*
+  /**
    * Sets a new state to say whether or not
    * the animation should loop
    *
@@ -261,7 +261,7 @@ class AnimationWidget extends React.Component {
     }
   }
 
-  /*
+  /**
    * Changes selected default or custom interval in header and
    * changes left/right date arrow increments
    *
@@ -293,7 +293,7 @@ class AnimationWidget extends React.Component {
     this.props.onIntervalSelect(delta, timeScale, customSelected);
   }
 
-  /*
+  /**
    * update global store startDate, endDate, and isPlaying
    *
    * @method onPushPlay
@@ -313,7 +313,7 @@ class AnimationWidget extends React.Component {
     onPushPlay();
   }
 
-  /*
+  /**
    * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
    * subdaily intervals retain hours and minutes
    *
@@ -344,6 +344,48 @@ class AnimationWidget extends React.Component {
       startDate,
       endDate
     };
+  }
+
+  /**
+   * Clear out, or "snap", the value for the time unit one step below playback interval.
+   * For example, clear hours if interval is set to day.
+   * This essentially snaps the current date time to: (startDate + (n * interval))
+   * so that the current datetime is properly snapped to the start datetime upon looping.
+   * This avoids issues where the first playback is not in sync with subsequent playbacks
+   * due to an offset initial current datetime.
+   *
+   * @param {*} currentDate - current app date/time
+   * @param {*} startDate - animation start date
+   * @param {*} interval - animation interval
+   * @returns {date}
+   */
+  zeroForInterval(currentDate, startDate, interval) {
+    let adjustedDate;
+    let monthOfYear;
+    let dayOfMonth;
+    let minutes;
+
+    switch (interval) {
+      case 'year':
+        monthOfYear = startDate.getUTCMonth();
+        dayOfMonth = startDate.getUTCDate();
+        adjustedDate = new Date(currentDate.setUTCMonth(monthOfYear));
+        adjustedDate = new Date(adjustedDate.setUTCDate(dayOfMonth));
+        return new Date(adjustedDate.setUTCHours(0, 0, 0, 0));
+      case 'month':
+        dayOfMonth = startDate.getUTCDate();
+        adjustedDate = new Date(currentDate.setUTCDate(dayOfMonth));
+        return new Date(adjustedDate.setUTCHours(0, 0, 0, 0));
+      case 'day':
+        return new Date(currentDate.setUTCHours(0, 0, 0, 0));
+      case 'hour':
+        minutes = startDate.getUTCMinutes();
+        return new Date(currentDate.setUTCMinutes(minutes, 0, 0));
+      case 'minute':
+        return new Date(currentDate.setUTCSeconds(0, 0));
+      default:
+        return currentDate;
+    }
   }
 
   /**
@@ -576,6 +618,11 @@ class AnimationWidget extends React.Component {
       interval,
       delta
     );
+    const snappedCurrentDate = this.zeroForInterval(
+      currentDate,
+      startDate,
+      interval
+    );
 
     if (!isActive) {
       return null;
@@ -587,12 +634,12 @@ class AnimationWidget extends React.Component {
       <ErrorBoundary>
         {isPlaying && (
           <PlayQueue
-            endDate={endDate}
             loop={looping}
             isPlaying={isPlaying}
-            currentDate={currentDate}
             canPreloadAll={queueLength <= maxLength}
+            currentDate={snappedCurrentDate}
             startDate={startDate}
+            endDate={endDate}
             hasCustomPalettes={hasCustomPalettes}
             map={map}
             maxQueueLength={maxLength}
