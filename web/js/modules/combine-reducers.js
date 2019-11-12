@@ -40,6 +40,8 @@ import { imageDownloadReducer } from './image-download/reducers';
 import measureReducer from './measure/reducers';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
+import uiReducers from './ui/reducers';
+
 function lastAction(state = null, action) {
   return action;
 }
@@ -127,7 +129,8 @@ const reducers = {
   notificationsRequest,
   lastAction: lastAction,
   location: locationReducer,
-  measure: measureReducer
+  measure: measureReducer,
+  ui: uiReducers
 };
 const appReducer = combineReducers(reducers);
 /**

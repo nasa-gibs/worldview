@@ -196,11 +196,10 @@ class Sidebar extends React.Component {
             ref={el => {
               this.sideBarCase = el;
             }}
-            style={
-              isCollapsed
-                ? { maxHeight: '0' }
-                : { maxHeight: screenHeight + 'px' }
-            }
+            style={{
+              maxHeight: isCollapsed ? '0' : screenHeight + 'px',
+              display: this.props.isDistractionFreeModeActive ? 'none' : 'block'
+            }}
             onWheel={wheelCallBack}
           >
             <NavCase
@@ -257,9 +256,11 @@ function mapStateToProps(state) {
     modal,
     measure,
     animation,
-    events
+    events,
+    ui
   } = state;
   const { screenHeight } = browser;
+  const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
@@ -279,7 +280,8 @@ function mapStateToProps(state) {
     isDataDisabled: events.isAnimatingToEvent,
     isCollapsed: isMobile ? mobileCollapsed : (isCollapsed || shouldBeCollapsed),
     tabTypes,
-    config
+    config,
+    isDistractionFreeModeActive
   };
 }
 const mapDispatchToProps = dispatch => ({

@@ -30,6 +30,7 @@ import { measure } from './measure/ui';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { TOGGLE_DISTRACTION_FREE_MODE } from '../modules/ui/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { openCustomContent } from '../modules/modal/actions';
 import { CHANGE_UNITS, USE_GREAT_CIRCLE } from '../modules/measure/constants';
@@ -97,6 +98,23 @@ export function mapui(models, config, store, ui) {
    */
   const subscribeToStore = function(action) {
     switch (action.type) {
+      case TOGGLE_DISTRACTION_FREE_MODE: {
+        var map = self.selected;
+        if (action.isDistractionFreeModeActive) {
+          map.removeControl(map.wv.scaleImperial);
+          map.removeControl(map.wv.scaleMetric);
+          $('#' + map.getTarget() + ' .select-wrapper').hide();
+          $('.wv-map-zoom-in').hide();
+          $('.wv-map-zoom-out').hide();
+        } else {
+          map.addControl(map.wv.scaleImperial);
+          map.addControl(map.wv.scaleMetric);
+          $('#' + map.getTarget() + ' .select-wrapper').show();
+          $('.wv-map-zoom-in').show();
+          $('.wv-map-zoom-out').show();
+        }
+        return;
+      }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);

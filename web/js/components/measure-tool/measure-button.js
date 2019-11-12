@@ -67,6 +67,7 @@ class MeasureButton extends React.Component {
         />}
 
         <Button
+          style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}
           id="wv-measure-button"
           className="wv-measure-button wv-toolbar-button"
           title="Measure distances &amp; areas"
@@ -82,7 +83,8 @@ class MeasureButton extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    isActive: state.measure.isActive
+    isActive: state.measure.isActive,
+    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive
   };
 };
 const mapDispatchToProps = dispatch => ({

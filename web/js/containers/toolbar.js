@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ButtonToolbar, Button } from 'reactstrap';
 import { openCustomContent, onToggle } from '../modules/modal/actions';
+import { toggleDistractionFreeMode } from '../modules/ui/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
@@ -138,74 +139,91 @@ class toolbarContainer extends Component {
       : ' wv-status-hide';
     return (
       <ErrorBoundary>
-        <ButtonToolbar id="wv-toolbar" className={'wv-toolbar'}>
-          <Button
-            id="wv-link-button"
-            className="wv-toolbar-button"
-            title="Share this map"
-            onClick={() =>
-              openModal(
-                'TOOLBAR_SHARE_LINK',
-                CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK
-              )
-            }
-          >
-            <i className="fas fa-share-square fa-2x" />
-          </Button>
-          {config.ui && config.ui.projections ? (
-            <Button
-              id="wv-proj-button"
+        <ButtonToolbar
+          id="wv-toolbar"
+          className={'wv-toolbar'}
+        >
+          {/* add custom distraction free mode icon, template, modal ? */}
+          { this.props.isDistractionFreeModeActive
+            ? <Button
+              id="wv-link-button"
               className="wv-toolbar-button"
-              title="Switch projection"
-              onClick={() =>
-                openModal(
-                  'TOOLBAR_PROJECTION',
-                  CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION
-                )
-              }
+              title="Toggle Distraction Free Mode"
+              onClick={() => this.props.toggleDistractionFreeMode() }
             >
-              <i className="fas fa-globe-asia fa-2x" />{' '}
+              <i className="fas fa-share-square fa-2x" />
             </Button>
-          ) : (
-            ''
-          )}
-          <Button
-            id="wv-image-button"
-            className={
-              isImageDownloadActive
-                ? 'wv-toolbar-button'
-                : 'wv-toolbar-button disabled'
-            }
-            disabled={!isImageDownloadActive}
-            title={
-              isCompareActive
-                ? 'You must exit comparison mode to use the snapshot feature'
-                : !isImageDownloadActive
-                  ? 'You must exit data download mode to use the snapshot feature'
-                  : 'Take a snapshot'
-            }
-            onClick={this.openImageDownload}
-          >
-            <i className="fa fa-camera fa-2x" />{' '}
-          </Button>
-          <Button
-            id="wv-info-button"
-            title="Information"
-            className={'wv-toolbar-button' + notificationClass}
-            onClick={() =>
-              openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)
-            }
-            data-content={notificationContentNumber}
-          >
-            <i className="fa fa-info-circle fa-2x" />{' '}
-          </Button>
+            : <React.Fragment>
+              <Button
+                id="wv-link-button"
+                className="wv-toolbar-button"
+                title="Share this map"
+                onClick={() =>
+                  openModal(
+                    'TOOLBAR_SHARE_LINK',
+                    CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK
+                  )
+                }
+              >
+                <i className="fas fa-share-square fa-2x" />
+              </Button>
+              {config.ui && config.ui.projections ? (
+                <Button
+                  id="wv-proj-button"
+                  className="wv-toolbar-button"
+                  title="Switch projection"
+                  onClick={() =>
+                    openModal(
+                      'TOOLBAR_PROJECTION',
+                      CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION
+                    )
+                  }
+                >
+                  <i className="fas fa-globe-asia fa-2x" />{' '}
+                </Button>
+              ) : (
+                ''
+              )}
+              <Button
+                id="wv-image-button"
+                className={
+                  isImageDownloadActive
+                    ? 'wv-toolbar-button'
+                    : 'wv-toolbar-button disabled'
+                }
+                disabled={!isImageDownloadActive}
+                title={
+                  isCompareActive
+                    ? 'You must exit comparison mode to use the snapshot feature'
+                    : !isImageDownloadActive
+                      ? 'You must exit data download mode to use the snapshot feature'
+                      : 'Take a snapshot'
+                }
+                onClick={this.openImageDownload}
+              >
+                <i className="fa fa-camera fa-2x" />{' '}
+              </Button>
+              <Button
+                id="wv-info-button"
+                title="Information"
+                className={'wv-toolbar-button' + notificationClass}
+                onClick={() =>
+                  openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)
+                }
+                data-content={notificationContentNumber}
+              >
+                <i className="fa fa-info-circle fa-2x" />{' '}
+              </Button>
+            </React.Fragment>
+          }
         </ButtonToolbar>
       </ErrorBoundary>
     );
   }
 }
 function mapStateToProps(state) {
-  const { notifications, palettes, compare, map, layers, proj, data } = state;
+  const { notifications, palettes, compare, map, layers, proj, data, ui } = state;
+  const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
   const { number, type } = notifications;
   const activeString = compare.activeString;
   const activeLayersForProj = getLayers(
@@ -235,10 +253,14 @@ function mapStateToProps(state) {
         lodashFind(layers[activeString], { id: 'Graticule' }) || {},
         'visible'
       )
-    )
+    ),
+    isDistractionFreeModeActive
   };
 }
 const mapDispatchToProps = dispatch => ({
+  toggleDistractionFreeMode: () => {
+    dispatch(toggleDistractionFreeMode());
+  },
   openModal: (key, customParams) => {
     dispatch(openCustomContent(key, customParams));
   },

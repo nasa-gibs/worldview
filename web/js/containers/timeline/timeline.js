@@ -897,7 +897,7 @@ class Timeline extends React.Component {
     const isTimelineHidden = timelineHidden || hideTimeline;
     const chevronDirection = isTimelineHidden ? 'left' : 'right';
     return (
-      <div className="timeline-container">
+      <div className="timeline-container" style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}>
         {initialLoadComplete
           ? <ErrorBoundary>
             {isSmallScreen
@@ -1120,7 +1120,8 @@ function mapStateToProps(state) {
     animation,
     sidebar,
     modal,
-    tour
+    tour,
+    ui
   } = state;
   let {
     customSelected,
@@ -1137,6 +1138,7 @@ function mapStateToProps(state) {
   const { screenWidth, lessThan } = browser;
   const { isCompareA, activeString } = compare;
   const isCompareModeActive = compare.active;
+  const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
   const isSmallScreen = lessThan.medium;
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
 
@@ -1223,7 +1225,8 @@ function mapStateToProps(state) {
     isDataDownload: sidebar.activeTab === 'download',
     isAnimationPlaying: animation.isPlaying,
     isGifActive: animation.gifActive,
-    timelineCustomModalOpen
+    timelineCustomModalOpen,
+    isDistractionFreeModeActive
   };
 }
 

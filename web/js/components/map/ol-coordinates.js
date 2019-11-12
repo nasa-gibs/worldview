@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { transform } from 'ol/proj';
@@ -77,7 +78,7 @@ class OlCoordinates extends React.Component {
     }
 
     return (
-      <div>
+      <div style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}>
         <Coordinates
           format={this.state.format}
           latitude={this.state.latitude}
@@ -90,8 +91,18 @@ class OlCoordinates extends React.Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive
+  };
+}
+
 OlCoordinates.propTypes = {
   mouseEvents: PropTypes.object.isRequired
 };
 
-export default OlCoordinates;
+// export default OlCoordinates;
+
+export default connect(
+  mapStateToProps
+)(OlCoordinates);
