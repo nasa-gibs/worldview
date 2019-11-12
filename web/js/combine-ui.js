@@ -13,7 +13,7 @@ import naturalEventsUI from './map/natural-events/ui';
 export function combineUi(models, config, MapMouseEvents, store) {
   const ui = {};
   ui.events = util.events();
-  const subscribeToStore = function () {
+  const subscribeToStore = function() {
     const state = store.getState();
     const action = state.lastAction;
     return ui.events.trigger('last-action', action);
@@ -24,7 +24,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
   ui.supportsPassive = false;
   try {
     var opts = Object.defineProperty({}, 'passive', {
-      get: function () {
+      get: function() {
         ui.supportsPassive = true;
       }
     });
@@ -41,7 +41,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
   }
   registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
   // Sink all focus on inputs if click unhandled
-  $(document).click(function (event) {
+  $(document).click(function(event) {
     if (event.target.nodeName !== 'INPUT') {
       $('input').blur();
     }

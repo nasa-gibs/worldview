@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import { groupBy as lodashGroupBy } from 'lodash';
 import { changeCursor } from '../../modules/map/actions';
 
-
 class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
@@ -130,7 +129,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(selectVectorFeatures(features));
   },
   changeCursor: (bool) => {
-    dispatch(changeCursor(bool))
+    dispatch(changeCursor(bool));
   },
 
   openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop) => {
@@ -143,9 +142,7 @@ const mapDispatchToProps = dispatch => ({
         wrapClassName: 'vector-modal-wrap',
         modalClassName: 'vector-modal light',
         CompletelyCustomModal: vectorDialog,
-        isDraggable: true,
         isResizable: true,
-        offsetTop: 100,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: 445,
         height: 300,

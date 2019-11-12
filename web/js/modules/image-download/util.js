@@ -141,9 +141,9 @@ export function imageUtilCalculateResolution(
  */
 export function imageUtilGetLayers(products, proj) {
   var layers = [];
-  lodashEach(products, function (layer) {
+  lodashEach(products, function(layer) {
     if (layer.downloadId) {
-      layers.push(layer.downloadId)
+      layers.push(layer.downloadId);
     } else if (layer.projections[proj].layer) {
       layers.push(layer.projections[proj].layer);
     } else {

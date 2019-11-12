@@ -140,12 +140,12 @@ class App extends React.Component {
     config = self.props.config;
     config.parameters = state;
 
-    const main = function () {
+    const main = function() {
       const models = self.props.models;
 
       // Load any additional scripts as needed
       if (config.scripts) {
-        lodashEach(config.scripts, function (script) {
+        lodashEach(config.scripts, function(script) {
           $.getScript(script);
         });
       }

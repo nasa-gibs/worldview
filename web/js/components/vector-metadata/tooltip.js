@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import util from '../../util/util';
@@ -20,16 +20,19 @@ export default class VectorMetaTooltip extends React.Component {
       tooltipOpen: !this.state.tooltipOpen
     });
   }
+
   mouseEnter() {
     this.setState({
       tooltipOpen: true
     });
   }
+
   mouseLeave() {
     this.setState({
       tooltipOpen: false
     });
   }
+
   render() {
     const { id, index, description } = this.props;
     const elId = util.cleanId(String('tooltip' + id + index));

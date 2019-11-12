@@ -1,12 +1,10 @@
 import {
   assign as lodashAssign,
   find as lodashFind,
-  get as lodashGet,
+  get as lodashGet
 } from 'lodash';
 import { Stroke, Style, Fill, Circle } from 'ol/style';
 import { setStyleFunction } from './selectors';
-
-
 
 export function getVectorStyleAttributeArray(layer) {
   var isCustomActive = false;
@@ -92,8 +90,8 @@ export function selectedStyleFunction(feature, styleArray) {
 export function getConditionalColors(color) {
   const array = Array.from(color);
   array.shift();
-  let colors = [];
-  let labels = [];
+  const colors = [];
+  const labels = [];
   let temp = [];
   const chunk = 2;
   // https://stackoverflow.com/a/8495740/4589331
@@ -105,23 +103,23 @@ export function getConditionalColors(color) {
         typeof temp[1] === 'string'
       ) {
         labels.push(temp[0][2]);
-        colors.push(temp[1])
+        colors.push(temp[1]);
       } else {
         console.warn('Irregular conditional');
       }
     } else if (temp.length === 1 && typeof temp[0] === 'string') {
       labels.push('Default');
-      colors.push(temp[0])
+      colors.push(temp[0]);
     } else {
       console.warn('Irregular conditional');
     }
   }
-  return { colors, labels }
+  return { colors, labels };
 }
 export function getPaletteForStyle(layer, layerstyleLayerObject) {
   const styleLayerObject = layerstyleLayerObject.layers[0];
-  const color = styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color']
-  const isConditionalStyling = styleLayerObject.paint ? isExpression(color) : false;
+  const color = styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color'];
+  const isConditionalStyling = styleLayerObject.paint ? isConditional(color) : false;
   let colors = [];
   let labels = [];
   if (isConditionalStyling) {
@@ -134,11 +132,11 @@ export function getPaletteForStyle(layer, layerstyleLayerObject) {
   }
   return [{
     colors: colors,
-    type: "classification",
+    type: 'classification',
     tooltips: labels,
     title: layer.title,
     id: layer.id + '0_legend'
-  }]
+  }];
 }
 export function onMapClickGetVectorFeatures(pixels, map, state) {
   const metaArray = [];
@@ -146,9 +144,8 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
   const config = state.config;
   const { screenWidth, screenHeight } = state.browser;
   const x = pixels[0];
-  const y = pixels[1]
+  const y = pixels[1];
   const isOnLeft = screenWidth - x >= screenWidth / 2;
-  const isOnTop = screenHeight - y >= screenHeight / 2;
   const modalWidth = 445;
   const modalHeight = 300;
   let offsetLeft = isOnLeft ? x + 20 : x - modalWidth - 20;
@@ -165,7 +162,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
     offsetTop = y - modalHeight;
   }
 
-  map.forEachFeatureAtPixel(pixels, function (feature, layer) {
+  map.forEachFeatureAtPixel(pixels, function(feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
     if (def.vectorData && def.vectorData.id && def.title) {
@@ -177,7 +174,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
       const properties = data.mvt_properties;
       const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
       const titleObj = lodashFind(properties, { IsLabel: 'True' });
-      const titleKey = titleObj.Identifier
+      const titleKey = titleObj.Identifier;
 
       const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = titleKey ? features[titleKey] : 'Unknown title';
@@ -197,7 +194,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
   const vectorStyles = state.config.vectorStyles;
-  for (const [key, featureIdArray] of Object.entries(selectionObj)) {
+  for (const [key] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state);

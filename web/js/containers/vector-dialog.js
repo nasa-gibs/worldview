@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
 import Scrollbars from '../components/util/scrollbar';
 import VectorMetaTable from '../components/vector-metadata/table';
-import { ResizableBox, Resizable } from 'react-resizable';
 
 class VectorDialog extends React.Component {
   constructor(props) {
@@ -19,7 +18,7 @@ class VectorDialog extends React.Component {
   }
 
   render() {
-    const { toggleWithClose, vectorMetaObject, modalHeight, modalWidth } = this.props;
+    const { toggleWithClose, vectorMetaObject, modalHeight } = this.props;
     const { activeIndex } = this.state;
     const navArray = [];
     const keyArray = [];

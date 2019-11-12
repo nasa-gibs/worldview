@@ -8,7 +8,7 @@ import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
 import Draggable from 'react-draggable';
-import { ResizableBox, Resizable } from 'react-resizable';
+import { Resizable } from 'react-resizable';
 const InteractionWrap = ({ condition, wrapper, children }) => condition ? wrapper(children) : children;
 const toggleWithClose = (onToggle, onClose, isOpen) => {
   if (onClose && isOpen) {
@@ -40,8 +40,7 @@ class ModalContainer extends Component {
       width: isResizable ? state.width : props.width,
       height: isResizable ? state.height : props.height,
       maxHeight: isResizable ? state.height : props.height
-    }
-
+    };
   }
 
   onResize(e, { size }) {
@@ -56,13 +55,12 @@ class ModalContainer extends Component {
     return bodyTemplate.isLoading ? (
       <span> Loading </span>
     ) : (
-        <div
-          id="template-content"
-          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-        />
-      );
+      <div
+        id="template-content"
+        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+      />
+    );
   }
-
 
   render() {
     const {

@@ -1,5 +1,8 @@
 import {
-  groupBy, orderBy as lodashOrderBy, throttle as lodashThrottle, forOwn as lodashForOwn, each as lodashEach, findIndex as lodashFindIndex,
+  throttle as lodashThrottle,
+  forOwn as lodashForOwn,
+  each as lodashEach,
+  findIndex as lodashFindIndex,
   get as lodashGet,
   debounce as lodashDebounce,
   cloneDeep as lodashCloneDeep,
@@ -34,7 +37,6 @@ import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
-import { openCustomContent } from '../modules/modal/actions';
 import { CHANGE_UNITS, USE_GREAT_CIRCLE } from '../modules/measure/constants';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
@@ -50,9 +52,8 @@ import { datesinDateRanges } from '../modules/layers/util';
 
 import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
-import vectorDialog from '../containers/vector-dialog';
-import { setSelected } from '../modules/vector-styles/actions';
-import { onMapClickGetVectorFeatures, updateVectorSelection, onMapHoverGetVectorFeatures } from '../modules/vector-styles/util';
+
+import { updateVectorSelection } from '../modules/vector-styles/util';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -140,7 +141,7 @@ export function mapui(models, config, store, ui) {
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
-      case vectorStyleConstants.SET_SELECTED_VECTORS:
+      case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
         const newSelection = action.payload;
         const state = store.getState();
@@ -149,6 +150,7 @@ export function mapui(models, config, store, ui) {
         updateVectorSelection(action.payload, self.selectedVectors, layers[activeLayerStr], type, state);
         self.selectedVectors = newSelection;
         return;
+      }
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
       case USE_GREAT_CIRCLE:

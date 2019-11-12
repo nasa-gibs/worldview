@@ -18,7 +18,7 @@ export function MapRunningData(models, compareUi, store) {
   /**
    * Clear running data value
    */
-  self.clearAll = function () {
+  self.clearAll = function() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
       store.dispatch(clearRunningDataAction());
@@ -31,7 +31,7 @@ export function MapRunningData(models, compareUi, store) {
    * @param {Array} coords | Coordinates of hover point
    * @param {Object} layerAttributes | Layer Properties
    */
-  var isFromActiveCompareRegion = function (map, coords, layerAttributes) {
+  var isFromActiveCompareRegion = function(map, coords, layerAttributes) {
     var compareModel = store.getState().compare;
     if (compareModel && compareModel.active) {
       if (compareModel.mode !== 'swipe') {
@@ -65,9 +65,8 @@ export function MapRunningData(models, compareUi, store) {
    * @return {Void}
    *
    */
-  self.newPoint = function (coords, map) {
+  self.newPoint = function(coords, map) {
     const state = store.getState();
-    const vectorStyles = state.config.vectorStyles;
     var activeLayerObj = {};
     map.forEachFeatureAtPixel(coords, (feature, layer) => {
       if (!layer.wv || !layer.wv.def) return;
@@ -78,21 +77,20 @@ export function MapRunningData(models, compareUi, store) {
       const paletteLegends = getPalette(layerId, undefined, undefined, state);
       const legend = paletteLegends.legend;
 
-      if (!identifier && legend.colors.length > 1) return
+      if (!identifier && legend.colors.length > 1) return;
       if (identifier) {
         const properties = feature.getProperties();
         const value = properties[identifier] || def.palette.unclassified;
         if (!value) return;
-        const tooltips = legend.tooltips.map(function (c) { return c.toLowerCase().replace(/\s/g, ''); });
+        const tooltips = legend.tooltips.map(function(c) { return c.toLowerCase().replace(/\s/g, ''); });
         const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
         color = legend.colors[colorIndex];
       } else if (legend.colors.length === 1) {
         color = legend.colors[0];
       }
       activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: color };
-    })
-    map.forEachLayerAtPixel(coords, function (layer, data) {
-
+    });
+    map.forEachLayerAtPixel(coords, function(layer, data) {
       if (!layer.wv) return;
       var paletteHex;
       var paletteLegends;
