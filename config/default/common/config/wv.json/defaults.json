@@ -2,11 +2,29 @@
     "defaults": {
         "projection": "geographic",
         "startingLayers": [
-            {"id": "Nuclear_Power_Plant_Locations_v1_STD", "hidden": "true"},
-            {"id": "GRanD_Dams_v1.01_STD", "hidden": "true"},
-            {"id": "GRanD_Reservoirs_v1.01_STD", "hidden": "true"},
-            {"id": "GRUMP_Settlements_v1.01_STD", "hidden": "true"},
-            {"id": "BlueMarble_ShadedRelief_Bathymetry"}
+            {
+                "id": "Nuclear_Power_Plant_Locations_v1_STD",
+                "hidden": "true"
+            },
+            {
+                "id": "GRanD_Dams_v1.01_STD",
+                "hidden": "true"
+            },
+            {
+                "id": "GRanD_Reservoirs_v1.01_STD",
+                "hidden": "true"
+            },
+            {
+                "id": "GRUMP_Settlements_v1.01_STD",
+                "hidden": "true"
+            },
+            {
+                "id": "GRUMP_Settlements_v2.01_STD",
+                "hidden": "true"
+            },
+            {
+                "id": "BlueMarble_ShadedRelief_Bathymetry"
+            }
         ]
     }
 }
