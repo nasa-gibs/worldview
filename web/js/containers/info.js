@@ -7,6 +7,7 @@ import {
   renderTemplate,
   openCustomContent
 } from '../modules/modal/actions';
+import { toggleDistractionFreeMode } from '../modules/ui/actions';
 import { ABOUT_PAGE_REQUEST } from '../modules/modal/constants';
 import IconList from '../components/util/list';
 import { onClickFeedback } from '../modules/feedback/util';
@@ -84,6 +85,14 @@ class InfoList extends Component {
         onClick: () => {
           aboutClick();
         }
+      },
+      {
+        text: 'Distraction Free',
+        iconClass: 'ui-icon far fa-eye fa-fw',
+        id: 'distraction_free_info_item',
+        onClick: () => {
+          this.props.toggleDistractionFreeMode();
+        }
       }
     ];
     if (
@@ -132,6 +141,9 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = dispatch => ({
+  toggleDistractionFreeMode: () => {
+    dispatch(toggleDistractionFreeMode());
+  },
   sendFeedback: isInitiated => {
     onClickFeedback(isInitiated);
     if (!isInitiated) {

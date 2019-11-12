@@ -151,7 +151,7 @@ class toolbarContainer extends Component {
               title="Toggle Distraction Free Mode"
               onClick={() => this.props.toggleDistractionFreeMode() }
             >
-              <i className="fas fa-share-square fa-2x" />
+              <i className="far fa-eye fa-2x" />
             </Button>
             : <React.Fragment>
               <Button

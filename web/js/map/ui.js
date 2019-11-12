@@ -101,12 +101,14 @@ export function mapui(models, config, store, ui) {
       case TOGGLE_DISTRACTION_FREE_MODE: {
         var map = self.selected;
         if (action.isDistractionFreeModeActive) {
+          // hide map scale and zoom buttons
           map.removeControl(map.wv.scaleImperial);
           map.removeControl(map.wv.scaleMetric);
           $('#' + map.getTarget() + ' .select-wrapper').hide();
           $('.wv-map-zoom-in').hide();
           $('.wv-map-zoom-out').hide();
         } else {
+          // show map scale and zoom buttons
           map.addControl(map.wv.scaleImperial);
           map.addControl(map.wv.scaleMetric);
           $('#' + map.getTarget() + ' .select-wrapper').show();
