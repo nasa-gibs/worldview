@@ -5,19 +5,7 @@ import {
 } from 'lodash';
 import { Stroke, Style, Fill, Circle } from 'ol/style';
 import { setStyleFunction } from './selectors';
-import {
-  expression, Color,
-  function as fn,
-  latest as spec,
-  featureFilter as createFilter,
-  deref as derefLayers
-} from '@mapbox/mapbox-gl-style-spec';
-import { color } from 'onecolor';
-import util from '../../util/util';
 
-
-const isExpression = expression.isExpression;
-const createPropertyExpression = expression.createPropertyExpression;
 
 
 export function getVectorStyleAttributeArray(layer) {
@@ -201,11 +189,13 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
   const vectorStyles = state.config.vectorStyles;
   for (const [key, featureIdArray] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
+    if (!def) return;
     setStyleFunction(def, def.vectorStyle.id, vectorStyles, null, state);
     if (lastSelection[key]) delete lastSelection[key];
   }
   for (const [key] of Object.entries(lastSelection)) {
     const def = lodashFind(layers, { id: key });
+    if (!def) return;
     setStyleFunction(
       def,
       def.vectorStyle.id,
