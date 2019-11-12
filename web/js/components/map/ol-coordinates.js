@@ -42,11 +42,12 @@ class OlCoordinates extends React.Component {
     const metaArray = clickObj.metaArray || [];
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
+    const offsetTop = clickObj.offsetTop || 100;
     const dialogId = 'vector_dialog' + pixels[0] + pixels[1];
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
 
     if (metaArray.length) {
-      openVectorDiaglog(dialogId, metaArray, offsetLeft);
+      openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop);
     }
     if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       selectVectorFeatures(selected);
@@ -132,7 +133,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(changeCursor(bool))
   },
 
-  openVectorDiaglog: (dialogId, metaArray, offsetLeft) => {
+  openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop) => {
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -149,6 +150,7 @@ const mapDispatchToProps = dispatch => ({
         width: 445,
         height: 300,
         offsetLeft,
+        offsetTop,
         timeout: 150,
         onClose: () => {
           dispatch(selectVectorFeatures({}));

@@ -144,15 +144,25 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
   const metaArray = [];
   const selected = {};
   const config = state.config;
-  const { screenWidth } = state.browser;
+  const { screenWidth, screenHeight } = state.browser;
   const x = pixels[0];
+  const y = pixels[1]
   const isOnLeft = screenWidth - x >= screenWidth / 2;
+  const isOnTop = screenHeight - y >= screenHeight / 2;
   const modalWidth = 445;
+  const modalHeight = 300;
   let offsetLeft = isOnLeft ? x + 20 : x - modalWidth - 20;
+  let offsetTop = y - (modalHeight / 2);
+
   if (offsetLeft < 0) {
-    offsetLeft = 20
+    offsetLeft = 20;
   } else if (offsetLeft + modalWidth > screenWidth) {
     offsetLeft = screenWidth - modalWidth - 20;
+  }
+  if (offsetTop < 0) {
+    offsetTop = 20;
+  } else if (offsetTop + modalHeight > screenHeight) {
+    offsetTop = y - modalHeight;
   }
 
   map.forEachFeatureAtPixel(pixels, function (feature, layer) {
@@ -183,7 +193,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
-  return { selected, metaArray, offsetLeft };
+  return { selected, metaArray, offsetLeft, offsetTop };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
   const vectorStyles = state.config.vectorStyles;
