@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Settlements_2">
+    <Entries>
+      <ColorMapEntry rgb="0, 123, 255" transparent="false" ref="1" />
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="0, 123, 255" id="1" tooltip="Settlement" showLabel="true" />
+    </Legend>
+  </ColorMap>
+</ColorMaps>

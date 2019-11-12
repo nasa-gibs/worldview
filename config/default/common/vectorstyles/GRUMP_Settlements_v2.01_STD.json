@@ -26,11 +26,11 @@
             ],
             [
               22,
-              7
+              5
             ]
           ]
         },
-        "circle-color": "rgb(103, 236, 0)",
+        "circle-color": "rgb(0, 123, 255)",
         "circle-stroke-color": "rgba(0,0,0,0.7)",
         "circle-opacity": 0.7,
         "circle-stroke-width": 0.3
