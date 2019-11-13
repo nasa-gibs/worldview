@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Isotropic Kernel Parameters": {
+            "id": "isotropic-kernel-parameters",
+            "title":    "Isotropic Kernel Parameters",
+            "subtitle": "Terra and Aqua/MODIS",
+            "sources": {
+                "Terra and Aqua/MODIS": {
+                    "id": "terra-aqua-modis",
+                    "title": "Terra and Aqua/MODIS",
+                    "description": "modis/combined/IsotropicKernelParameters",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day"
+                    ]
+                }
+            }
+        }
+    }
+}

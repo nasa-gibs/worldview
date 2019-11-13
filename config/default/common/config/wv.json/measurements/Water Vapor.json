@@ -44,7 +44,7 @@
                   "Terra and Aqua/MODIS": {
                       "id": "terra-aqua-modis",
                       "title": "Terra and Aqua / MODIS",
-                      "description": "modis/WaterVapor",
+                      "description": "modis/combined/WaterVapor",
                       "image": "",
                       "settings": [
                           "MODIS_Combined_MAIAC_L2G_ColumnWaterVapor"

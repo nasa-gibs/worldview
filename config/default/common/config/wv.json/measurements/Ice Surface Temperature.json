@@ -3,7 +3,7 @@
         "Ice Surface Temperature": {
             "id": "ice-surface-temperature",
             "title":    "Ice Surface Temperature",
-            "subtitle": "MODIS/Aqua, MODIS/Terra",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
             "sources": {
                     "Aqua/MODIS": {
                         "id": "aqua-modis",
