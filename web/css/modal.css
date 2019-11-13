@@ -46,9 +46,9 @@
 /* light modal styling */
 .modal-dialog.light .modal-content {
   background-color: #dcdcdc;
-  color: #000
+  color: #000;
 }
-.modal-dialog.light .modal-header{
+.modal-dialog.light .modal-header {
   color: #343a40;
 }
 .modal-dialog.light .modal-header .close {
@@ -57,6 +57,6 @@
 .modal-dialog.light .modal-header .close:hover {
   color: #000;
 }
-.modal-dialog.light .modal-body{
-background: #eee;
+.modal-dialog.light .modal-body {
+  background: #eee;
 }

@@ -1,17 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Coordinates from './coordinates';
-import util from '../../util/util';
-import { transform } from 'ol/proj';
-import vectorDialog from '../../containers/vector-dialog';
-import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
-import { openCustomContent } from '../../modules/modal/actions';
-import { selectVectorFeatures } from '../../modules/vector-styles/actions';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Coordinates from '../components/map/coordinates';
+import util from '../util/util';
+import { transform } from 'ol/proj';
+import vectorDialog from './vector-dialog';
+import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
+import { openCustomContent } from '../modules/modal/actions';
+import { selectVectorFeatures } from '../modules/vector-styles/actions';
 import { groupBy as lodashGroupBy } from 'lodash';
-import { changeCursor } from '../../modules/map/actions';
+import { changeCursor } from '../modules/map/actions';
 
-class OlCoordinates extends React.Component {
+export class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

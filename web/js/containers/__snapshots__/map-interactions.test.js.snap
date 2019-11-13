@@ -2,6 +2,32 @@
 
 exports[`clears coordinates when mouse moves off the map 1`] = `<div />`;
 
+exports[`if there is a feature at pixel dispatch changeCursor action 1`] = `
+<div>
+  <div
+    className="wv-coords-map wv-coords-map-btn"
+    onClick={[Function]}
+  >
+    <span
+      className="map-coord"
+    >
+      90.0000°, -45.0000°
+       
+      EPSG:3413
+    </span>
+    <div
+      className="coord-btn"
+    >
+      <i
+        className="coord-switch"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`if there is a feature at pixel on click get dialod 1`] = `null`;
+
 exports[`reprojects (0,0) to (-45, 90) for EPSG:3413 1`] = `
 <div>
   <div

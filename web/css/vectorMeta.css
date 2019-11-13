@@ -57,15 +57,15 @@
 .vector-modal .vector-info-icon {
   position: absolute;
   font-size: 8px;
-  border: 1px solid #666666;
+  border: 1px solid #666;
   width: 13px;
   height: 13px;
   text-align: center;
   border-radius: 50%;
   padding-top: 1px;
   margin-right: 10px;
-  display:inline-block;
-  color: #666666;
+  display: inline-block;
+  color: #666;
 }
 
 .vector-modal .vector-info-icon:hover {

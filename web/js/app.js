@@ -5,7 +5,7 @@ import { each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
 // Utils
 import util from './util/util';
-import OlCoordinates from './components/map/ol-coordinates';
+import OlCoordinates from './containers/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';

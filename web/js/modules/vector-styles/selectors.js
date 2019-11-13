@@ -10,7 +10,6 @@ import {
 import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import update from 'immutability-helper';
 import stylefunction from 'ol-mapbox-style/stylefunction';
-
 /**
  * Gets a single colormap (entries / legend combo)
  *
