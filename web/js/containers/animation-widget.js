@@ -580,9 +580,6 @@ class AnimationWidget extends React.Component {
       delta
     );
 
-    console.log('start:', startDate);
-    console.log('  end:', endDate);
-
     const snappedCurrentDate = snapToIntervalDelta(
       currentDate,
       startDate,

@@ -32,10 +32,6 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
     dateArray.push(tempDate);
     tempDate = new Date(nextMoment);
   }
-
-  console.log(dateArray);
-  console.log('NEW CURRENT:', currentDate || startDate);
-  console.log('*******************************************************');
   return currentDate || startDate;
 }
 
