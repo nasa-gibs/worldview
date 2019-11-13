@@ -2,6 +2,42 @@ import { round as lodashRound, get as lodashGet } from 'lodash';
 import canvg from 'canvg-browser';
 import util from '../../util/util';
 import update from 'immutability-helper';
+import moment from 'moment';
+
+/**
+ * Snap the value for the date/time to the closest previous playback step so that
+ * th date/time properly syncs when looping. This avoids issues where the
+ * first playback is not in sync with subsequent playbacks due to the current
+ * time not being snapped to a proper step (when calculated from startDate).
+ *
+ * @param {*} currDate
+ * @param {*} startDate
+ * @param {*} endDate
+ * @param {*} interval
+ * @param {*} delta
+ */
+export function snapToIntervalDelta(currDate, startDate, endDate, interval, delta) {
+  // moment pluralizes: 'days', 'hours', etc
+  const units = interval + 's';
+  const dateArray = [];
+  let tempDate = startDate;
+  let currentDate, prevMoment, nextMoment;
+
+  while (tempDate <= endDate) {
+    prevMoment = moment.utc(tempDate);
+    nextMoment = moment.utc(tempDate).add(delta, units);
+    if (currDate >= prevMoment && currDate <= nextMoment) {
+      currentDate = new Date(prevMoment);
+    }
+    dateArray.push(tempDate);
+    tempDate = new Date(nextMoment);
+  }
+
+  console.log(dateArray);
+  console.log('NEW CURRENT:', currentDate || startDate);
+  console.log('*******************************************************');
+  return currentDate || startDate;
+}
 
 export function getStampProps(
   stampWidthRatio,
@@ -42,6 +78,7 @@ export function getStampProps(
   }
   return { stampHeight: stampHeight, dateStamp: dateStamp };
 }
+
 export function svgToPng(svgURL, stampHeight) {
   var newImage;
   var canvasEl = document.createElement('canvas');
@@ -58,6 +95,7 @@ export function svgToPng(svgURL, stampHeight) {
 
   return newImage;
 }
+
 /**
  * Returns the queueLength based on the play speed selected
  * @method getMaxQueueLength
@@ -86,6 +124,7 @@ export function getMaxQueueLength(speed) {
   }
   return queueLength;
 }
+
 /*
  * default queueLength
  *
@@ -111,6 +150,7 @@ export function getQueueLength(startDate, endDate, speed, interval, delta) {
   }
   return i;
 }
+
 export function mapLocationToAnimationState(
   parameters,
   stateFromLocation,

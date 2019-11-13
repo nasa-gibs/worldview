@@ -29,7 +29,11 @@ import {
   timeScaleToNumberKey,
   customModalType
 } from '../modules/date/constants';
-import { getQueueLength, getMaxQueueLength } from '../modules/animation/util';
+import {
+  getQueueLength,
+  getMaxQueueLength,
+  snapToIntervalDelta
+} from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
   getLayers
@@ -272,7 +276,6 @@ class AnimationWidget extends React.Component {
    *
    * @return {void}
    */
-
   onIntervalSelect(timeScale, openModal) {
     let delta;
     const { customInterval, customDelta } = this.props;
@@ -344,48 +347,6 @@ class AnimationWidget extends React.Component {
       startDate,
       endDate
     };
-  }
-
-  /**
-   * Clear out, or "snap", the value for the time unit one step below playback interval.
-   * For example, clear hours if interval is set to day.
-   * This essentially snaps the current date time to: (startDate + (n * interval))
-   * so that the current datetime is properly snapped to the start datetime upon looping.
-   * This avoids issues where the first playback is not in sync with subsequent playbacks
-   * due to an offset initial current datetime.
-   *
-   * @param {*} currentDate - current app date/time
-   * @param {*} startDate - animation start date
-   * @param {*} interval - animation interval
-   * @returns {date}
-   */
-  zeroForInterval(currentDate, startDate, interval) {
-    let adjustedDate;
-    let monthOfYear;
-    let dayOfMonth;
-    let minutes;
-
-    switch (interval) {
-      case 'year':
-        monthOfYear = startDate.getUTCMonth();
-        dayOfMonth = startDate.getUTCDate();
-        adjustedDate = new Date(currentDate.setUTCMonth(monthOfYear));
-        adjustedDate = new Date(adjustedDate.setUTCDate(dayOfMonth));
-        return new Date(adjustedDate.setUTCHours(0, 0, 0, 0));
-      case 'month':
-        dayOfMonth = startDate.getUTCDate();
-        adjustedDate = new Date(currentDate.setUTCDate(dayOfMonth));
-        return new Date(adjustedDate.setUTCHours(0, 0, 0, 0));
-      case 'day':
-        return new Date(currentDate.setUTCHours(0, 0, 0, 0));
-      case 'hour':
-        minutes = startDate.getUTCMinutes();
-        return new Date(currentDate.setUTCMinutes(minutes, 0, 0));
-      case 'minute':
-        return new Date(currentDate.setUTCSeconds(0, 0));
-      default:
-        return currentDate;
-    }
   }
 
   /**
@@ -618,10 +579,16 @@ class AnimationWidget extends React.Component {
       interval,
       delta
     );
-    const snappedCurrentDate = this.zeroForInterval(
+
+    console.log('start:', startDate);
+    console.log('  end:', endDate);
+
+    const snappedCurrentDate = snapToIntervalDelta(
       currentDate,
       startDate,
-      interval
+      endDate,
+      interval,
+      delta
     );
 
     if (!isActive) {
