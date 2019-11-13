@@ -163,7 +163,7 @@
     "file-saver": "^2.0.2",
     "history": "^4.7.2",
     "icheck": "^1.0.2",
-    "immutability-helper": "^2.9.0",
+    "immutability-helper": "^3.0.1",
     "jquery": "^3.0.0",
     "jquery-bridget": "^2.0.1",
     "jquery-jcrop": "^0.9.13",
