@@ -4,4 +4,4 @@ The Moderate Resolution Imaging Spectroradiometer (MODIS) is a 36-band visible t
 
 Ice Surface Temperature (IST) is useful for understanding snow metamorphosis and melt, the rate of sea ice growth, and air–sea heat exchange.
 
-References: [doi: 10.5067/MODIS/MYD29P1D.006](http://dx.doi.org/10.5067/MODIS/MYD29P1D.006)
+References: [doi: 10.5067/MODIS/MYD29P1D.006](https://doi.org/10.5067/MODIS/MYD29P1D.006)

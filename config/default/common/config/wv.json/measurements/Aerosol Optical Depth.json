@@ -53,8 +53,8 @@
                     "description": "modis/combined/Aerosol_Combined",
                     "image": "",
                     "settings": [
-                        "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth",
-                        "MODIS_Combined_Value_Added_AOD"
+                        "MODIS_Combined_Value_Added_AOD",
+                        "MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth"
                     ]
                 },
                 "Terra/MISR": {
