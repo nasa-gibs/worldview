@@ -35,4 +35,4 @@ The MODIS L3 SST 9km layer shows global nighttime sea surface temperature (SST) 
 
 References: Details of the [algorithm](https://oceancolor.gsfc.nasa.gov/atbd/sst4/) can be found at Ocean Biology Processing Group (OBPG) website.
 
-P. J. Minnett et al., "Sea-surface temperature measurements from the Moderate-Resolution Imaging Spectroradiometer (MODIS) on Aqua and Terra," IGARSS 2004. 2004 IEEE International Geoscience and Remote Sensing Symposium, Anchorage, AK, 2004, pp. 4576-4579 vol.7. [doi: 10.1109/IGARSS.2004.1370173](http://dx.doi.org/10.1109/IGARSS.2004.1370173).
+P. J. Minnett et al., "Sea-surface temperature measurements from the Moderate-Resolution Imaging Spectroradiometer (MODIS) on Aqua and Terra," IGARSS 2004. 2004 IEEE International Geoscience and Remote Sensing Symposium, Anchorage, AK, 2004, pp. 4576-4579 vol.7. [doi: 10.1109/IGARSS.2004.1370173](https://doi.org/10.1109/IGARSS.2004.1370173).

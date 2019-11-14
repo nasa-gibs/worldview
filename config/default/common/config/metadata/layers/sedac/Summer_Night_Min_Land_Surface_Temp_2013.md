@@ -4,4 +4,4 @@ For most regions, the LST grids provide the daytime maximum (1:30 p.m. overpass)
 
 The purpose of the data set is to provide raster representations of global summer daytime maximum and nighttime minimum surface temperature for studies related to human health and climate change.
 
-References: [doi: 10.7927/H408638T](https://dx.doi.org/10.7927/H408638T)
+References: [doi: 10.7927/H408638T](https://doi.org/10.7927/H408638T)

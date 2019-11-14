@@ -1,10 +1,10 @@
 {
     "layers": {
-        "MODIS_Aqua_L3_SurfaceReflectance_Bands143_Daily": {
-            "id":       "MODIS_Aqua_L3_SurfaceReflectance_Bands143_Daily",
+        "MODIS_Aqua_L2G_SurfaceReflectance_Bands143_Daily": {
+            "id":       "MODIS_Aqua_L2G_SurfaceReflectance_Bands143_Daily",
             "title":    "Land Surface Reflectance (L2G, Daily, True Color)",
             "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_SurfaceReflectance_Bands143_Daily",
+            "description": "modis/aqua/MODIS_Aqua_L2G_SurfaceReflectance_Bands143_Daily",
             "tags":     "lsr 143 true color",
             "group":    "baselayers",
             "layergroup": [

@@ -4,4 +4,4 @@ The AMSR2 instrument is a conically scanning passive microwave radiometer. This 
 
 This product uses the JAXA AMSR2 Level-1R input TBs which are calibrated (unified) across the JAXA AMSR-E and AMSR2 Level-1R products. Source data for this layer provides Southern Hemisphere data that utilizes a different, older algorithm and browse imagery is not currently available.
 
-References: [doi: 10.5067/43NH9LHM9YRK](https://dx.doi.org/10.5067/43NH9LHM9YRK)
+References: [doi: 10.5067/43NH9LHM9YRK](https://doi.org/10.5067/43NH9LHM9YRK)

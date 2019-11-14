@@ -6,4 +6,4 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The CERES Incoming Solar Flux (Monthly, Energy Balanced and Filled) layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data product: `CERES_EBAF-SFC_Edition4.0`
+Data product: `CERES_EBAF-SFC_Edition4.0`  

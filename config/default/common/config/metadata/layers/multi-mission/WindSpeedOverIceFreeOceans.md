@@ -5,7 +5,7 @@ The RSS Wind Speed over Ice-Free Oceans layer indicates the average wind speed w
 
 The Special Sensor Microwave/Imager (SSM/I) is a seven channel passive microwave radiometer operating at four frequencies and dual-polarization. The Special Sensor Microwave Imager Sounder (SSMIS) is also a microwave radiometer that includes a sounder. The Advanced Microwave Scanning Radiometer - Earth Observing System (AMSR-E) is a twelve-channel, six-frequency, total power passive-microwave radiometer. The Advanced Microwave Scanning Radiometer 2 (AMSR2) is a remote sensing instrument measuring weak microwave emissions from the surface and the atmosphere of the Earth providing microwave emission and scattering intensity measurements. Finally, WindSat is a polarimetric microwave radiometer which measures ocean surface wind vectors.
 
-References: [GHRC: RSS Monthly 1-Deg Merged Wind Climatology NetCDF V7R01](http://dx.doi.org/10.5067/MEASURES/MULTIPLE/WIND_CLIMATOLOGY/DATA302);
+References: [GHRC: RSS Monthly 1-Deg Merged Wind Climatology NetCDF V7R01](https://doi.org/10.5067/MEASURES/MULTIPLE/WIND_CLIMATOLOGY/DATA302);
 [RSS: Merged Wind Speed 1-deg Monthly Climate Product](http://www.remss.com/measurements/wind/wspd-1-deg-product);
 [RSS: AMSR2/AMSRE](http://www.remss.com/missions/amsr);
 [RSS: SSMI/SSMIS](http://www.remss.com/missions/ssmi/);

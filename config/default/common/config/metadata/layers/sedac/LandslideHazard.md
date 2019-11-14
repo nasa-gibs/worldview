@@ -3,4 +3,4 @@ The Landslide Hazard: Frequency and Distribution layer indicates the relative di
 
 The purpose of the data set is to provide a means of assessing the relative distribution and frequency of global landslide hazard.
 
-References: [doi: 10.7927/H4P848VZ](https://dx.doi.org/10.7927/H4P848VZ)
+References: [doi: 10.7927/H4P848VZ](https://doi.org/10.7927/H4P848VZ)
