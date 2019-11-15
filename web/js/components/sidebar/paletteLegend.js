@@ -316,8 +316,15 @@ class PaletteLegend extends React.Component {
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
       : 'wv-palettes-legend wv-palettes-classes';
     const singleKey = legend.colors.length === 1;
-    const isOrbitTrack = layer.track && layer.daynight;
-    const trackLabel = isOrbitTrack && legend.tooltips && legend.tooltips[0] + ' - ' + layer.track + ' / ' + layer.daynight;
+    let orbitTrackDescriptor;
+    if (layer.daynight && layer.track) {
+      orbitTrackDescriptor = `${layer.track} /  ${layer.daynight}`;
+    } else if (layer.track) {
+      orbitTrackDescriptor = layer.track;
+    } else if (layer.daynight) {
+      orbitTrackDescriptor = layer.daynight;
+    }
+    const trackLabel = layer.track && legend.tooltips && `${legend.tooltips[0]} - ${orbitTrackDescriptor}`;
 
     return (
       <div className={legendClass} key={legend.id + '_' + legendIndex}>
@@ -343,7 +350,7 @@ class PaletteLegend extends React.Component {
                 ? (
                   <div className="wv-running-category-label-case">
                     <span className="wv-running-category-label">
-                      {isOrbitTrack ? trackLabel : legend.title}
+                      {layer.track ? trackLabel : legend.title}
                     </span>
                   </div>
                 ) : (

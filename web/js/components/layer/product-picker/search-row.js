@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import lodashStartCase from 'lodash/startCase';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import util from '../../../util/util.js';
 /**
@@ -435,8 +436,8 @@ class LayerRow extends React.Component {
     const { layer } = this.props;
     const { title, track, daynight, description, subtitle, metadata } = layer;
     let listItems;
+    let orbitTrackDescriptor;
     let headerClass = 'layers-all-header has-checkbox';
-    const isTrackLayer = track && daynight;
 
     if (layer.dateRanges && layer.dateRanges.length > 1) {
       const firstDateRange = true;
@@ -447,14 +448,20 @@ class LayerRow extends React.Component {
     }
     if (checked) headerClass += ' checked';
 
-    const layerTitle = isTrackLayer
-      ? `${title} (${track}/${daynight})`
-      : title;
+    if (daynight && track) {
+      orbitTrackDescriptor = `${lodashStartCase(track)} / ${lodashStartCase(daynight)}`;
+    } else if (track) {
+      orbitTrackDescriptor = lodashStartCase(track);
+    } else if (daynight) {
+      orbitTrackDescriptor = lodashStartCase(daynight);
+    }
+
+    const layerTitle = !track ? title : `${title} (${orbitTrackDescriptor})`;
 
     return (
       <div className="layers-all-layer">
         <div className={headerClass} onClick={() => this.toggleCheck()}>
-          <h3 className={isTrackLayer ? 'capitalize' : ''}>
+          <h3>
             {layerTitle}
             {description && (
               <i
