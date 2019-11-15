@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_OCO-2_Ascending": {
       "id": "OrbitTracks_OCO-2_Ascending",
-      "title": "OCO-2 Orbital Track & Overpass Time (Ascending/Day)",
+      "title": "OCO-2 - Orbit Track & Time",
       "subtitle": "OCO-2 / Space-Track.org",
       "description": "",
       "group": "overlays",

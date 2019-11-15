@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_ICESAT-2_Ascending": {
       "id": "OrbitTracks_ICESAT-2_Ascending",
-      "title": "ICESAT-2 Orbital Tracks (Ascending/Day)",
+      "title": "ICESAT-2 - Orbit Track & Time",
       "subtitle": "ICESAT-2 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ICESAT-2_Ascending",
       "tags": "tracks",

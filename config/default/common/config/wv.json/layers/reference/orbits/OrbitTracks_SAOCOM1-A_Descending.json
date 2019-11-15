@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_SAOCOM1-A_Descending": {
       "id": "OrbitTracks_SAOCOM1-A_Descending",
-      "title": "SAOCOM-1A Orbital Track & Overpass Time (Descending/Night)",
+      "title": "SAOCOM-1A - Orbit Track & Time",
       "subtitle": "SAOCOM-1A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_SAOCOM1-A_Descending",
       "group": "overlays",
