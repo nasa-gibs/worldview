@@ -1,31 +1,22 @@
 {
     "layers": {
         "GRanD_Dams": {
-            "id":       "GRanD_Dams",
-            "title":    "Dams",
+            "id": "GRanD_Dams",
+            "title": "Dams",
             "subtitle": "Global Reservoir and Dam Database (GRanD), v1.01",
             "description": "sedac/GRanD_Dams",
-            "group":    "overlays",
-            "format":   "image/png",
-            "tileSize": [512, 512],
-            "type":     "wms",
+            "group": "overlays",
+            "tags": "vectors",
+            "type": "vector",
             "layergroup": [
-              "sedac"
+                "sedac",
+                "vector"
             ],
-            "product":  "CIESIN_SEDAC_GRanD_DAMS",
-
-            "projections": {
-                "arctic": {
-                    "source": "GIBS:wms:arctic"
-                },
-                "geographic": {
-                    "source": "GIBS:wms"
-                }
-            },
-
             "palette": {
-                "id":           "GRanD_Dams",
-                "immutable":    true
+                "id": "GRanD_Dams",
+                "immutable": true,
+                "styleProperty": "MAIN_USE",
+                "unclassified": "Not Classified"
             },
             "wrapX": true
         }

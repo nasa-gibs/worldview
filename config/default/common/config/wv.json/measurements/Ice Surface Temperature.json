@@ -13,8 +13,8 @@
                         "settings": [
                             "MODIS_Aqua_Ice_Surface_Temp_Day",
                             "MODIS_Aqua_Ice_Surface_Temp_Night",
-                            "MODIS_Terra_L3_Ice_Surface_Temp_Daily_Day",
-                            "MODIS_Terra_L3_Ice_Surface_Temp_Daily_Night",
+                            "MODIS_Aqua_L3_Ice_Surface_Temp_Daily_Day",
+                            "MODIS_Aqua_L3_Ice_Surface_Temp_Daily_Night",
                             "OrbitTracks_Aqua_Descending",
                             "OrbitTracks_Aqua_Ascending"
                         ]

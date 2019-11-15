@@ -1,15 +1,15 @@
 {
     "wv-options-fetch": [
         {
-            "from": "http://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/std/wmts.cgi?request=GetCapabilities",
+            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-geographic.xml"
         },
         {
-            "from": "http://uat.gibs.earthdata.nasa.gov/wmts/epsg3413/std/wmts.cgi?request=GetCapabilities",
+            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-arctic.xml"
         },
         {
-            "from": "http://uat.gibs.earthdata.nasa.gov/wmts/epsg3031/std/wmts.cgi?request=GetCapabilities",
+            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-antarctic.xml"
         }
     ],
