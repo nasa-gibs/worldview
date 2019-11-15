@@ -5,7 +5,7 @@ import { each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
 // Utils
 import util from './util/util';
-import OlCoordinates from './containers/map-interactions';
+import MapInteractions from './containers/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
@@ -106,7 +106,7 @@ class App extends React.Component {
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
-        <OlCoordinates mouseEvents={mapMouseEvents} />
+        <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
         </div>

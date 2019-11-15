@@ -7,5 +7,5 @@ test('Set a selected Vector', () => {
     payload: { some_layer_id: ['some_feature_id'] }
   });
 
-  expect(response.selected['some_layer_id'][0]).toEqual('some_feature_id');
+  expect(response.selected.some_layer_id[0]).toEqual('some_feature_id');
 });

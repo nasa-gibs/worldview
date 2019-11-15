@@ -454,7 +454,6 @@ export default (function(self) {
     return newDate;
   };
 
-
   self.getNumberOfDays = function(start, end, interval, increment, maxToCheck) {
     increment = increment || 1;
     var i = 1;
