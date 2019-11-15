@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_ISS_Ascending": {
       "id": "OrbitTracks_ISS_Ascending",
-      "title": "ISS Orbital Track & Overpass Time (Ascending)",
+      "title": "ISS - Orbit Track & Time",
       "subtitle": "Int'l Space Station / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ISS_Ascending",
       "tags": "iss international tracks",
