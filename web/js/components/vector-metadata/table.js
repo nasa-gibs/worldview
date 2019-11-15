@@ -40,7 +40,11 @@ export default class VectorMetaTable extends React.Component {
                 <tbody>
                   {metaLegend.map((properties, index) => {
                     const featureId = properties.Identifier;
-                    const value = properties.ValueMap ? properties.ValueMap[metaFeatures[featureId]] : metaFeatures[featureId];
+                    const isIntegerToStyle = properties.Function !== 'Identify' && (properties.DataType === 'int');
+                    const value = properties.ValueMap
+                      ? properties.ValueMap[metaFeatures[featureId]]
+                      : isIntegerToStyle ? metaFeatures[featureId].toLocaleString('en')
+                        : metaFeatures[featureId];
                     const id = util.cleanId(String(title + '-' + (metaIndex + index)));
                     if (!value) return undefined;
                     return (
@@ -71,6 +75,6 @@ export default class VectorMetaTable extends React.Component {
   }
 }
 VectorMetaTable.propTypes = {
-  metaFeatures: PropTypes.object.isRequired,
-  metaLegend: PropTypes.object.isRequired
+  metaArray: PropTypes.array,
+  title: PropTypes.string
 };

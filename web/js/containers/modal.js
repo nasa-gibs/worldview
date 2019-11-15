@@ -26,20 +26,24 @@ class ModalContainer extends Component {
     this.state = {
       width: props.customProps.width,
       height: props.customProps.height,
-      isDraggable: props.isDraggable
+      isDraggable: props.isDraggable,
+      offsetLeft: props.customProps.offsetLeft,
+      offsetTop: props.customProps.offsetTop,
+      offsetRight: props.customProps.offsetRight
     };
     this.onResize = this.onResize.bind(this);
   }
 
-  getStyle(state, props) {
-    const isResizable = props.isResizable;
+  getStyle() {
+    const { offsetLeft, offsetRight, offsetTop, width, height } = this.state;
+
     return {
-      left: props.offsetLeft,
-      right: props.offsetRight,
-      top: props.offsetTop,
-      width: isResizable ? state.width : props.width,
-      height: isResizable ? state.height : props.height,
-      maxHeight: isResizable ? state.height : props.height
+      left: offsetLeft,
+      right: offsetRight,
+      top: offsetTop,
+      width: width,
+      height: height,
+      maxHeight: height
     };
   }
 
@@ -98,12 +102,11 @@ class ModalContainer extends Component {
       isResizable
     } = newProps;
 
-    const style = this.getStyle(this.state, newProps);
+    const style = this.getStyle();
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
-
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
     if (isMobile && isOpen && desktopOnly) {
       toggleFunction();
@@ -229,5 +232,6 @@ ModalContainer.propTypes = {
   isDraggable: PropTypes.bool,
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
-  isTemplateModal: PropTypes.bool
+  isTemplateModal: PropTypes.bool,
+  screenHeight: PropTypes.number
 };

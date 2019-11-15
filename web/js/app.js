@@ -101,12 +101,12 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAnimationWidgetActive, isTourActive, locationKey, mapIsClickable, modalId } = this.props;
-    const mapClasses = mapIsClickable ? 'wv-map' + ' cursor-pointer' : 'wv-map';
+    const { isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents } = this.props;
 
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
+        <OlCoordinates mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
         </div>
@@ -114,7 +114,6 @@ class App extends React.Component {
         {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
-        <div id="wv-map" className={mapClasses} />
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <div id="dlMap" />
@@ -123,7 +122,7 @@ class App extends React.Component {
           {isAnimationWidgetActive ? <AnimationWidget /> : null}
         </div>
         <MeasureButton />
-        <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
+
         <Modal key={modalId} />
         <ErrorBoundary>
           <Debug parameters={this.props.parameters} />
@@ -185,7 +184,6 @@ function mapStateToProps(state, ownProps) {
     models: ownProps.models,
     mapMouseEvents: ownProps.mapMouseEvents,
     locationKey: state.location.key,
-    mapIsClickable: state.map.isClickable,
     modalId: state.modal.id
   };
 }

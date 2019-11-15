@@ -70,6 +70,8 @@ export default connect(
   null
 )(VectorDialog);
 VectorDialog.propTypes = {
+  modalHeight: PropTypes.number,
   toggleWithClose: PropTypes.func,
-  vectorMetaArray: PropTypes.Array
+  vectorMetaArray: PropTypes.array,
+  vectorMetaObject: PropTypes.object
 };

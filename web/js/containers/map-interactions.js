@@ -1,55 +1,46 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Coordinates from '../components/map/coordinates';
-import util from '../util/util';
-import { transform } from 'ol/proj';
+import OlCoordinates from '../components/map/ol-coordinates';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
-import { openCustomContent } from '../modules/modal/actions';
+import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures } from '../modules/vector-styles/actions';
 import { groupBy as lodashGroupBy } from 'lodash';
 import { changeCursor } from '../modules/map/actions';
 
-export class OlCoordinates extends React.Component {
+export class MapInteractions extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hasMouse: false,
-      latitude: null,
-      longitude: null,
-      crs: null,
-      format: null
-    };
     this.mouseMove = this.mouseMove.bind(this);
-    this.mouseOut = this.mouseOut.bind(this);
-    this.changeFormat = this.changeFormat.bind(this);
-    this.mouseClick = this.mouseClick.bind(this);
+    this.singleClick = this.singleClick.bind(this);
     this.registerMouseListeners();
   }
 
   registerMouseListeners() {
     this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('mouseout', this.mouseOut);
-    this.props.mouseEvents.on('singleclick', this.mouseClick);
+    this.props.mouseEvents.on('singleclick', this.singleClick);
   }
 
-  mouseClick(e, map) {
+  singleClick(e, map) {
+    const { lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject } = this.props;
+    const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
-    const { lastSelected, openVectorDiaglog, selectVectorFeatures, modalState, getDialogObject } = this.props;
     const clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
-    const dialogId = 'vector_dialog' + pixels[0] + pixels[1];
-    const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
+    const dialogId = isVectorModalOpen ? modalState.id : 'vector_dialog' + pixels[0] + pixels[1];
 
     if (metaArray.length) {
       openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop);
     }
     if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       selectVectorFeatures(selected);
+    } else if (isVectorModalOpen && !Object.entries(selected).length) {
+      onCloseModal();
+      selectVectorFeatures({});
     }
   }
 
@@ -67,60 +58,17 @@ export class OlCoordinates extends React.Component {
     } else if (!hasFeatures && isShowingClick) {
       changeCursor(false);
     }
-
-    const pcoord = transform(coord, crs, 'EPSG:4326');
-    const [lon, lat] = pcoord;
-    if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
-      this.clearCoord();
-      return;
-    }
-
-    this.setState({
-      hasMouse: true,
-      format: util.getCoordinateFormat(),
-      latitude: pcoord[1],
-      longitude: pcoord[0],
-      crs
-    });
-  }
-
-  mouseOut(event) {
-    if (event.relatedTarget && event.relatedTarget.classList) {
-      const cl = event.relatedTarget.classList;
-      // Ignore when the mouse goes over the coordinate display. Clearing
-      // the coordinates in this situation causes a flicker.
-      if (cl.contains('map-coord')) {
-        return;
-      }
-    }
-    this.clearCoord();
-  }
-
-  clearCoord() {
-    this.setState({ latitude: null, longitude: null });
-  }
-
-  changeFormat(format) {
-    util.setCoordinateFormat(format);
-    this.setState({ format });
   }
 
   render() {
-    // Don't render until a mouse is being used
-    if (!this.state.hasMouse) {
-      return null;
-    }
+    const { isShowingClick, mouseEvents } = this.props;
+    const mapClasses = isShowingClick ? 'wv-map' + ' cursor-pointer' : 'wv-map';
 
     return (
-      <div>
-        <Coordinates
-          format={this.state.format}
-          latitude={this.state.latitude}
-          longitude={this.state.longitude}
-          crs={this.state.crs}
-          onFormatChange={this.changeFormat}
-        />
-      </div>
+      <React.Fragment>
+        <div id="wv-map" className={mapClasses} />
+        <OlCoordinates mouseEvents={mouseEvents} />
+      </React.Fragment>
     );
   }
 }
@@ -131,7 +79,9 @@ const mapDispatchToProps = dispatch => ({
   changeCursor: (bool) => {
     dispatch(changeCursor(bool));
   },
-
+  onCloseModal: () => {
+    dispatch(onClose());
+  },
   openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop) => {
     dispatch(openCustomContent(dialogId,
       {
@@ -164,10 +114,18 @@ function mapStateToProps(state) {
     lastSelected: state.vectorStyles.selected
   };
 }
-OlCoordinates.propTypes = {
-  mouseEvents: PropTypes.object.isRequired
+MapInteractions.propTypes = {
+  changeCursor: PropTypes.func.isRequired,
+  getDialogObject: PropTypes.func.isRequired,
+  isShowingClick: PropTypes.bool.isRequired,
+  modalState: PropTypes.object.isRequired,
+  mouseEvents: PropTypes.object.isRequired,
+  onCloseModal: PropTypes.func.isRequired,
+  openVectorDiaglog: PropTypes.func.isRequired,
+  selectVectorFeatures: PropTypes.func.isRequired,
+  lastSelected: PropTypes.object
 };
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(OlCoordinates);
+)(MapInteractions);
