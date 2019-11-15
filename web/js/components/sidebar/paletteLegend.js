@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import util from '../../util/util';
 import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
+import { Tooltip } from 'reactstrap';
 
 class PaletteLegend extends React.Component {
   constructor(props) {
@@ -16,14 +17,10 @@ class PaletteLegend extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(props) {
-    let setState = false;
-    if (props.isRunningData !== this.state.isRunningData) {
-      setState = true;
-    }
-    if (props.colorHex !== this.state.colorHex) {
-      setState = true;
-    }
-    if (setState) {
+    if (
+      props.colorHex !== this.state.colorHex ||
+      props.isRunningData !== this.state.isRunningData
+    ) {
       this.setState({
         isRunningData: props.isRunningData,
         colorHex: props.colorHex
@@ -311,72 +308,52 @@ class PaletteLegend extends React.Component {
    * @param {Object} legend | Legend Object
    * @param {Number} index | Legend Index
    */
-  renderClasses(legend, index) {
+  renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex } = this.state;
-    const { width } = this.props;
-    const boxWidth = 17; // width (13) + margin (4)
-    const len = legend.colors.length;
-    const maxInRow = Math.round((this.state.width - 8) / boxWidth);
-    var rowEndIndex = 0;
-    var isEndOfRow = false;
-    var legendObj, textWidth;
-    if (isRunningData && colorHex) {
-      legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
-      if (legendObj) {
-        textWidth = util.getTextWidth(legendObj.label, 'Lucida Sans');
-      }
-    }
+    const { layer, isSubLayer } = this.props;
+    const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
+    const legendClass = activeKeyObj
+      ? 'wv-running wv-palettes-legend wv-palettes-classes'
+      : 'wv-palettes-legend wv-palettes-classes';
+    const singleKey = legend.colors.length === 1;
+    const isOrbitTrack = layer.track && layer.daynight;
+    const trackLabel = isOrbitTrack && legend.tooltips && legend.tooltips[0] + ' - ' + layer.track + ' / ' + layer.daynight;
+
     return (
-      <div
-        className={
-          legendObj
-            ? 'wv-running wv-palettes-legend wv-palettes-classes'
-            : 'wv-palettes-legend wv-palettes-classes'
-        }
-        key={legend.id + '_' + index}
-      >
-        {legend.colors.map((color, index) => {
-          rowEndIndex = isEndOfRow ? index : rowEndIndex;
-          isEndOfRow = index === maxInRow - 1 || index === len - 1;
+      <div className={legendClass} key={legend.id + '_' + legendIndex}>
+        {legend.colors.map((color, keyIndex) => {
+          const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;
+          const palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
+          const keyId = layer.id + legend.id + '-color-' + keyIndex + '-sublayer-' + isSubLayer;
+          const keyLabel = activeKeyObj ? activeKeyObj.label : '';
+
           return (
-            <React.Fragment key={legend.id + '-color-' + index}>
+            <React.Fragment key={keyId}>
               <span
-                className={
-                  legendObj && legendObj.index === index
-                    ? 'wv-active wv-palettes-class'
-                    : 'wv-palettes-class'
-                }
+                id={keyId}
+                className={palletteClass}
                 style={{ backgroundColor: util.hexToRGBA(color) }}
                 onMouseMove={this.onMove.bind(this, color)}
                 onMouseEnter={this.onMouseEnter.bind(this)}
                 onMouseLeave={this.hideValue.bind(this)}
                 dangerouslySetInnerHTML={{ __html: '&nbsp' }}
               />
-              {isEndOfRow ? (
-                <div className="wv-running-category-label-case">
-                  {isRunningData &&
-                    legendObj &&
-                    (legendObj.index >= rowEndIndex && // legend is in this row
-                      legendObj.index <= index) ? (
-                      <span
-                        className="wv-running-category-label"
-                        style={this.getClassLabelStyle(
-                          legendObj.index,
-                          boxWidth,
-                          textWidth,
-                          width,
-                          rowEndIndex
-                        )}
-                      >
-                        {legendObj ? legendObj.label : ''}
-                      </span>
-                    ) : (
-                      ''
-                    )}
-                </div>
-              ) : (
-                ''
-              )}
+
+              {singleKey && !isSubLayer
+                ? (
+                  <div className="wv-running-category-label-case">
+                    <span className="wv-running-category-label">
+                      {isOrbitTrack ? trackLabel : legend.title}
+                    </span>
+                  </div>
+                ) : (
+                  <Tooltip
+                    placement="bottom"
+                    isOpen={isActiveKey}
+                    target={keyId}>
+                    {keyLabel}
+                  </Tooltip>
+                )}
             </React.Fragment>
           );
         })}
@@ -437,6 +414,7 @@ PaletteLegend.propTypes = {
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
   isRunningDataEnabled: PropTypes.bool,
+  isSubLayer: PropTypes.bool,
   layer: PropTypes.object,
   paletteId: PropTypes.string,
   paletteLegends: PropTypes.array,
