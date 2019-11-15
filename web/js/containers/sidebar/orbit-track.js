@@ -8,14 +8,12 @@ import {
   getPaletteLegends
 } from '../../modules/palettes/selectors';
 import { requestPalette } from '../../modules/palettes/actions';
-import { toggleVisibility } from '../../modules/layers/actions';
 
 class OrbitTrack extends React.Component {
   getPaletteLegend = () => {
     const {
       trackLayer,
       paletteLegends,
-      checkerBoardPattern,
       getPalette,
       renderedPalette,
       requestPalette,
@@ -28,8 +26,8 @@ class OrbitTrack extends React.Component {
           layer={trackLayer}
           getPalette={getPalette}
           paletteLegends={paletteLegends}
-          checkerBoardPattern={checkerBoardPattern}
           isMobile={isMobile}
+          isSubLayer={true}
         />
       );
     } else if (!isLoading) {
@@ -38,30 +36,15 @@ class OrbitTrack extends React.Component {
   }
 
   render() {
-    const {
-      trackLayer,
-      toggleVisibility,
-      hasPalette
-    } = this.props;
-
-    const { id, visible, daynight, track } = trackLayer;
-    const iconClass = !visible ? 'fa fa-eye-slash' : 'fa fa-eye';
-    const containerClasses = 'wv-orbit-track ' + (!visible ? 'not-visible' : '');
-    const buttonClasses = 'wv-orbit-track-vis-toggle ' + (!visible ? 'not-visible' : '');
+    const { trackLayer, hasPalette } = this.props;
+    const containerClasses = 'wv-orbit-track ' + (!trackLayer.visible ? 'not-visible' : '');
 
     return (
       <div className={containerClasses}>
-        <button
-          className={buttonClasses}
-          onClick={() => toggleVisibility(id, !visible)}
-        >
-          <i className={iconClass} />
-        </button>
-
         {hasPalette ? this.getPaletteLegend() : ''}
-
+        <i className='fa fa-satellite'/>
         <span className='wv-orbit-track-label'>
-          {track + ' / ' + daynight}
+          {trackLayer.track + ' / ' + trackLayer.daynight}
         </span>
       </div>
     );
@@ -69,7 +52,6 @@ class OrbitTrack extends React.Component {
 }
 
 OrbitTrack.propTypes = {
-  checkerBoardPattern: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
   isLoading: PropTypes.bool,
@@ -78,7 +60,6 @@ OrbitTrack.propTypes = {
   paletteLegends: PropTypes.array,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,
-  toggleVisibility: PropTypes.func,
   trackLayer: PropTypes.object
 };
 
@@ -112,9 +93,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  toggleVisibility: (id, isVisible) => {
-    dispatch(toggleVisibility(id, isVisible));
-  },
   requestPalette: (id) => {
     dispatch(requestPalette(id));
   }

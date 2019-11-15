@@ -431,28 +431,31 @@ class LayerRow extends React.Component {
   }
 
   render() {
-    var { checked, isMetadataExpanded, isDateRangesExpanded } = this.state;
+    const { checked, isMetadataExpanded, isDateRangesExpanded } = this.state;
+    const { layer } = this.props;
+    const { title, track, daynight, description, subtitle, metadata } = layer;
+    let listItems;
+    let headerClass = 'layers-all-header has-checkbox';
+    const isTrackLayer = track && daynight;
 
-    var { layer } = this.props;
-    var { title, description, subtitle, metadata } = layer;
-    var listItems;
-    var headerClass = 'layers-all-header has-checkbox';
     if (layer.dateRanges && layer.dateRanges.length > 1) {
       const firstDateRange = true;
-
       var dateRanges = this.dateOverlap(layer.period, layer.dateRanges);
-
       if (dateRanges.overlap === false) {
         listItems = this.getListItems(layer, firstDateRange);
       }
     }
     if (checked) headerClass += ' checked';
 
+    const layerTitle = isTrackLayer
+      ? `${title} (${track}/${daynight})`
+      : title;
+
     return (
       <div className="layers-all-layer">
         <div className={headerClass} onClick={() => this.toggleCheck()}>
-          <h3>
-            {title}
+          <h3 className={isTrackLayer ? 'capitalize' : ''}>
+            {layerTitle}
             {description && (
               <i
                 className="fa fa-info-circle"

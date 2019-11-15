@@ -3,7 +3,7 @@
 }
 
 .wv-orbit-track {
-  padding: 5px;
+  padding-top: 4px;
 
   &.not-visible {
     background: rgba(0, 0, 0, 0.5);
@@ -26,12 +26,6 @@
     display: inline-block;
     & .wv-palettes-class {
       display: inline-block;
-      &:hover {
-        cursor: default;
-      }
-    }
-    & .wv-running-category-label-case {
-      display: none;
     }
   }
 
@@ -39,5 +33,6 @@
     display: inline-block;
     text-transform: capitalize;
     font-size: 11px;
+    margin-left: 4px;
   }
 }
