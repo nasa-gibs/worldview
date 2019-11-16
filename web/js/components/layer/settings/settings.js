@@ -100,7 +100,7 @@ class LayerSettings extends React.Component {
           <TabPane key={legend.id + 'pane'} tabId={i}>
             {legend.type !== 'classification' ? (
               <PaletteThreshold
-                key={layer.id + i + `_threshold`}
+                key={layer.id + i + '_threshold'}
                 legend={legend}
                 setRange={setThresholdRange}
                 min={0}
@@ -114,8 +114,8 @@ class LayerSettings extends React.Component {
                 palette={palette}
               />
             ) : (
-                ''
-              )}
+              ''
+            )}
             <Palette
               setCustomPalette={setCustomPalette}
               groupName={groupName}
@@ -180,7 +180,7 @@ class LayerSettings extends React.Component {
       <React.Fragment>
         {legend.type !== 'classification' &&
           <PaletteThreshold
-            key={layer.id + `0_threshold`}
+            key={layer.id + '0_threshold'}
             legend={legend}
             setRange={setThresholdRange}
             min={0}

@@ -7,7 +7,7 @@ import { Checkbox } from '../../util/checkbox';
 class ThresholdSelect extends React.Component {
   constructor(props) {
     super(props);
-    const { start, end, palette, legend, squashed } = props;
+    const { start, end, squashed } = props;
     this.state = {
       start,
       end,
