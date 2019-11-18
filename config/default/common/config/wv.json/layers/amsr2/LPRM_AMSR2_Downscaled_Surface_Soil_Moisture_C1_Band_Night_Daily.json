@@ -10,7 +10,10 @@
             "layergroup": [
               "amsr2"
             ],
-            "product":  "LPRM_AMSR2_DS_D_SOILM3"
+            "product":  "LPRM_AMSR2_DS_D_SOILM3",
+            "tracks": [
+            "OrbitTracks_GCOM-W1_Descending"
+             ]
         }
     }
 }

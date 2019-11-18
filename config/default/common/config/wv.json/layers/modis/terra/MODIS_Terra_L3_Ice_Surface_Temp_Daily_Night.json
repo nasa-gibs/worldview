@@ -12,7 +12,10 @@
               "modis_terra"
             ],
             "product":  "MOD29P1N",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "tracks": [
+            "OrbitTracks_Terra_Ascending"
+             ]
         }
     }
 }
