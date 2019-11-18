@@ -10,7 +10,10 @@
               "omi"
             ],
             "product":  "OMUVBd",
-            "tags":     "ai"
+            "tags":     "ai",
+            "tracks": [
+            "OrbitTracks_Aura_Ascending"
+            ]
         }
     }
 }

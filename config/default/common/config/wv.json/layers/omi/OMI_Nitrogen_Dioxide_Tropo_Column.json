@@ -10,7 +10,10 @@
               "omi"
             ],
             "product":  "OMNO2d",
-            "tags":     "no2"
+            "tags":     "no2",
+            "tracks": [
+            "OrbitTracks_Aura_Ascending"
+            ]
 
         }
     }

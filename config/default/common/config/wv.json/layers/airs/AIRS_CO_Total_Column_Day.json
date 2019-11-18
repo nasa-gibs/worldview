@@ -14,7 +14,10 @@
             ],
             "palette": {
                 "recommended": ["red_1"]
-            }
+            },
+            "tracks": [
+            "OrbitTracks_Aqua_Ascending"
+            ]
         }
     }
 }
