@@ -23,7 +23,8 @@ export class MapInteractions extends React.Component {
   }
 
   singleClick(e, map) {
-    const { lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject } = this.props;
+    const { lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject, measureIsActive } = this.props;
+    if (measureIsActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
     const clickObj = getDialogObject(pixels, map);
@@ -47,13 +48,13 @@ export class MapInteractions extends React.Component {
   mouseMove(event, map, crs) {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
-    const { isShowingClick, changeCursor } = this.props;
+    const { isShowingClick, changeCursor, measureIsActive } = this.props;
     if (!coord) {
       this.clearCoord();
       return;
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
-    if (hasFeatures && !isShowingClick) {
+    if (hasFeatures && !isShowingClick && !measureIsActive) {
       changeCursor(true);
     } else if (!hasFeatures && isShowingClick) {
       changeCursor(false);
@@ -107,17 +108,20 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 function mapStateToProps(state) {
+  const { modal, map, measure, vectorStyles } = state;
   return {
-    modalState: state.modal,
-    isShowingClick: state.map.isClickable,
+    modalState: modal,
+    isShowingClick: map.isClickable,
     getDialogObject: (pixels, map) => { return onMapClickGetVectorFeatures(pixels, map, state); },
-    lastSelected: state.vectorStyles.selected
+    lastSelected: vectorStyles.selected,
+    measureIsActive: measure.isActive
   };
 }
 MapInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
+  measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,
   mouseEvents: PropTypes.object.isRequired,
   onCloseModal: PropTypes.func.isRequired,
