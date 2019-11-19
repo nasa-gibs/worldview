@@ -162,7 +162,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
     offsetTop = y - modalHeight;
   }
 
-  map.forEachFeatureAtPixel(pixels, function(feature, layer) {
+  map.forEachFeatureAtPixel(pixels, function (feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
     if (def.vectorData && def.vectorData.id && def.title) {
@@ -185,6 +185,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
         id: vectorDataId,
         title: def.title || def.id,
         featureTitle: title
+
       };
       metaArray.push(obj);
       selected[layerId].push(uniqueIdentifier);

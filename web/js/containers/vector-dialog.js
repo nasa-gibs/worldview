@@ -18,7 +18,7 @@ class VectorDialog extends React.Component {
   }
 
   render() {
-    const { toggleWithClose, vectorMetaObject, modalHeight } = this.props;
+    const { toggleWithClose, vectorMetaObject, modalHeight, dialogKey } = this.props;
     const { activeIndex } = this.state;
     const navArray = [];
     const keyArray = [];
@@ -54,7 +54,7 @@ class VectorDialog extends React.Component {
 
         <ModalBody>
           <Scrollbars style={{ maxHeight: modalHeight - 70 + 'px' }} >
-            <VectorMetaTable metaArray={activeMetaArray} title={keyArray[activeIndex]} />
+            <VectorMetaTable id={dialogKey} metaArray={activeMetaArray} title={keyArray[activeIndex]} />
           </ Scrollbars>
         </ModalBody>
       </div>

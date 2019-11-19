@@ -13,7 +13,7 @@ export default class VectorMetaTable extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.title && nextProps.title && this.props.title === nextProps.title) {
+    if (this.props.id && nextProps.id && this.props.id === nextProps.id) {
       return false;
     } else {
       return true;

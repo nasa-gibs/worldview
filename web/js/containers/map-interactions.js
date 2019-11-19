@@ -94,6 +94,7 @@ const mapDispatchToProps = dispatch => ({
         modalClassName: 'vector-modal light',
         CompletelyCustomModal: vectorDialog,
         isResizable: true,
+        dialogKey: new Date().getUTCMilliseconds(),
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: 445,
         height: 300,
