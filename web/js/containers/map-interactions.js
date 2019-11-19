@@ -12,7 +12,6 @@ import { changeCursor } from '../modules/map/actions';
 export class MapInteractions extends React.Component {
   constructor(props) {
     super(props);
-    this.mouseMove = this.mouseMove.bind(this);
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
     this.registerMouseListeners();

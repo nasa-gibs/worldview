@@ -27,6 +27,7 @@ beforeEach(() => {
       openVectorDiaglog={openVectorDiaglog}
       selectVectorFeatures={selectVectorFeatures}
       lastSelected={{}}
+      measureIsActive={false}
       onCloseModal={jest.fn()}
       modalState={{ id: [], isOpen: false }}
     />,
@@ -48,7 +49,7 @@ beforeEach(() => {
 test('if there is a feature at pixel dispatch changeCursor action', () => {
   map.hasFeatureAtPixel = () => true;
   events.trigger('mousemove', {}, map, 'EPSG:3413');
-  expect(changeCursor.mock.calls.length).toBe(1);
+  doAsync(() => expect(changeCursor.mock.calls.length).toBe(1));
 });
 test('if there is a feature at pixel on click get dialog', () => {
   events.trigger('singleclick', { pixel: [0, 0] }, map, 'EPSG:4326');
@@ -59,13 +60,18 @@ test('if there is a feature at pixel on click get dialog', () => {
 test('if there is not a feature at pixel do not dispatch changeCursor action', () => {
   map.hasFeatureAtPixel = () => false;
   events.trigger('mousemove', { pixel: [0, 0] }, map, 'EPSG:4326');
-  expect(changeCursor.mock.calls.length).toBe(0);
+  doAsync(() => expect(changeCursor.mock.calls.length).toBe(0));
 });
 test('Check that hover changes', () => {
   map.hasFeatureAtPixel = () => false;
   events.trigger('mousemove', { pixel: [0, 0] }, map, 'EPSG:4326');
-  expect(changeCursor.mock.calls.length).toBe(0);
+  doAsync(() => expect(changeCursor.mock.calls.length).toBe(0));
 });
 test('Check that cursor-hover class is not present', () => {
   expect(component.toJSON()).toMatchSnapshot();
 });
+function doAsync(c) {
+  setTimeout(() => {
+    c(true);
+  }, 10);
+}
