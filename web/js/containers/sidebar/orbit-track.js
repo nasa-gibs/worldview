@@ -19,16 +19,17 @@ class OrbitTrack extends React.Component {
       renderedPalette,
       requestPalette,
       isLoading,
-      isMobile
+      isMobile,
+      parentLayer
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
       return (
         <PaletteLegend
           layer={trackLayer}
+          parentLayer={parentLayer}
           getPalette={getPalette}
           paletteLegends={paletteLegends}
           isMobile={isMobile}
-          isSubLayer={true}
         />
       );
     } else if (!isLoading) {
@@ -59,6 +60,7 @@ OrbitTrack.propTypes = {
   isMobile: PropTypes.bool,
   palette: PropTypes.object,
   paletteLegends: PropTypes.array,
+  parentLayer: PropTypes.object,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,
   trackLayer: PropTypes.object
