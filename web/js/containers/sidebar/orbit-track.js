@@ -8,6 +8,7 @@ import {
   getPaletteLegends
 } from '../../modules/palettes/selectors';
 import { requestPalette } from '../../modules/palettes/actions';
+import { getOrbitTrackTitle } from '../../modules/layers/util';
 
 class OrbitTrack extends React.Component {
   getPaletteLegend = () => {
@@ -44,7 +45,7 @@ class OrbitTrack extends React.Component {
         {hasPalette ? this.getPaletteLegend() : ''}
         <i className='fa fa-satellite'/>
         <span className='wv-orbit-track-label'>
-          {trackLayer.track + ' / ' + trackLayer.daynight}
+          {getOrbitTrackTitle(trackLayer)}
         </span>
       </div>
     );

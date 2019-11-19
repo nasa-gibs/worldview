@@ -4,6 +4,7 @@ import util from '../../util/util';
 import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
 import { Tooltip } from 'reactstrap';
+import { getOrbitTrackTitle } from '../../modules/layers/util';
 
 class PaletteLegend extends React.Component {
   constructor(props) {
@@ -316,15 +317,10 @@ class PaletteLegend extends React.Component {
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
       : 'wv-palettes-legend wv-palettes-classes';
     const singleKey = legend.colors.length === 1;
-    let orbitTrackDescriptor;
-    if (layer.daynight && layer.track) {
-      orbitTrackDescriptor = `${layer.track} /  ${layer.daynight}`;
-    } else if (layer.track) {
-      orbitTrackDescriptor = layer.track;
-    } else if (layer.daynight) {
-      orbitTrackDescriptor = layer.daynight;
-    }
-    const trackLabel = layer.track && legend.tooltips && `${legend.tooltips[0]} - ${orbitTrackDescriptor}`;
+    const legendTooltip = legend.tooltips && legend.tooltips.length ? legend.tooltips[0] : '';
+    const trackLabel = layer.track && legendTooltip
+      ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
+      : getOrbitTrackTitle(layer);
 
     return (
       <div className={legendClass} key={legend.id + '_' + legendIndex}>
