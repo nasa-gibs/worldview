@@ -257,6 +257,10 @@
 
         "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly",
         "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual",
+        "Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual",
+        "Landsat_WELD_CorrectedReflectance_Bands157_Global_Monthly",
+        "Landsat_WELD_CorrectedReflectance_Bands743_Global_Annual",
+        "Landsat_WELD_CorrectedReflectance_Bands743_Global_Monthly",
         "Landsat_WELD_NDVI_Global_Monthly",
         "Landsat_WELD_NDVI_Global_Annual",
         "Landsat_WELD_CorrectedReflectance_TrueColor_Alaska_Monthly",

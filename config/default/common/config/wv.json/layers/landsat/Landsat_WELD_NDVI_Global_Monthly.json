@@ -11,8 +11,7 @@
               "landsat"
             ],
             "product":  "",
-            "inactive": true,
-            "wrapadjacentdays": true
+            "inactive": true
         }
     }
 }

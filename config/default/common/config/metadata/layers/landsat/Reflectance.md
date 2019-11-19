@@ -9,6 +9,12 @@ The sensor resolution is 30 m, the imagery resolution is 31.25 m and the tempora
 
 References: [Global Web-Enabled Landsat Data](http://globalmonitoring.sdstate.edu/projects/weldglobal/gweld.html)
 
+### Corrected Reflectance (Bands 1-5-7, Global, Annual | Monthly)
+Temporal coverage: Annual: December 2008 - December 2010; Monthly: December 2008 - November 2011
+
+### Corrected Reflectance (Bands 7-4-3, Global, Annual | Monthly)
+Temporal coverage: Annual: December 2008 - December 2010; Monthly: December 2008 - November 2011
+
 ### TOA Reflectance (True Color, Alaska, Annual | Monthly | Seasonal, V1.5)
 Temporal coverage: Annual: 2002 - 2011; Seasonal: December 2002 - November 2012; Monthly: December 2002 - November 2012
 
