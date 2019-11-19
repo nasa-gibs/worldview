@@ -6,13 +6,14 @@ import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures } from '../modules/vector-styles/actions';
-import { groupBy as lodashGroupBy } from 'lodash';
+import { groupBy as lodashGroupBy, debounce as lodashDebounce } from 'lodash';
 import { changeCursor } from '../modules/map/actions';
 
 export class MapInteractions extends React.Component {
   constructor(props) {
     super(props);
     this.mouseMove = this.mouseMove.bind(this);
+    this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
     this.registerMouseListeners();
   }
@@ -75,7 +76,9 @@ export class MapInteractions extends React.Component {
 }
 const mapDispatchToProps = dispatch => ({
   selectVectorFeatures: (features) => {
-    dispatch(selectVectorFeatures(features));
+    setTimeout(() => {
+      dispatch(selectVectorFeatures(features));
+    }, 1);
   },
   changeCursor: (bool) => {
     dispatch(changeCursor(bool));
@@ -101,9 +104,11 @@ const mapDispatchToProps = dispatch => ({
         height: 300,
         offsetLeft,
         offsetTop,
-        timeout: 150,
+        timeout: 0,
         onClose: () => {
-          dispatch(selectVectorFeatures({}));
+          setTimeout(() => {
+            dispatch(selectVectorFeatures({}));
+          }, 1);
         }
       }
     ));

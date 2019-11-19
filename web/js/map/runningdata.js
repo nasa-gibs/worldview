@@ -68,7 +68,7 @@ export function MapRunningData(models, compareUi, store) {
   self.newPoint = function(coords, map) {
     const state = store.getState();
     var activeLayerObj = {};
-    const [lon, lat] = coord;
+    const [lon, lat] = coords;
     if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
       map.forEachFeatureAtPixel(coords, (feature, layer) => {
         if (!layer.wv || !layer.wv.def) return;
