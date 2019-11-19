@@ -31,6 +31,7 @@
 }
 .vector-modal .modal-header {
   padding-bottom: 0;
+  cursor: move;
 }
 .vector-modal .nav-item.active {
   background: #f8f9fa;

@@ -99,7 +99,8 @@ class ModalContainer extends Component {
       desktopOnly,
       size,
       isDraggable,
-      isResizable
+      isResizable,
+      dragHandle
     } = newProps;
 
     const style = this.getStyle();
@@ -117,7 +118,7 @@ class ModalContainer extends Component {
           condition={isDraggable || isResizable}
           wrapper={children =>
             <Draggable
-              handle=".draggable-modal-content"
+              handle={dragHandle}
               disabled={!isDraggable}
             >
               <Resizable className="resize-box" resizeHandles={['se']}
