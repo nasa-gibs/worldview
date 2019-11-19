@@ -15,7 +15,7 @@ import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
-import closestTo from 'date-fns/closest_to';
+import closestIndexTo from 'date-fns/closest_index_to';
 import isBefore from 'date-fns/is_before';
 import isEqual from 'date-fns/is_equal';
 import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
@@ -54,7 +54,8 @@ export function nearestInterval(def, date) {
    */
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
-  const currentDate = new Date(date.getTime());
+  // const currentDate = new Date(date.getTime());
+  const currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
 
   if (!dateArray ||
       (def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
@@ -68,7 +69,17 @@ export function prevDateInDateRange(def, date, dateArray) {
     }
   });
 
-  const closestDate = closestTo(currentDate, closestAvailableDates);
+  // use closet date index to find closest date in filtered closestAvailableDates
+  const closestDateIndex = closestIndexTo(currentDate, closestAvailableDates);
+  const closestDate = closestAvailableDates[closestDateIndex];
+  def.previousDate = closestDate || null;
+
+  // check for potential next date in function passed dateArray
+  const nextClosestDate = dateArray[closestDateIndex + 1];
+  def.nextDate = nextClosestDate || null;
+
+  console.log(currentDate, closestDate, nextClosestDate)
+
   return closestDate ? new Date(closestDate.getTime()) : date;
 };
 
@@ -85,17 +96,20 @@ export function datesinDateRanges(def, date) {
   let currentDate = new Date(date.getTime());
 
   lodashEach(def.dateRanges, (dateRange) => {
-    const { dateInterval } = dateRange;
+    let { dateInterval } = dateRange;
+    dateInterval = Number(dateInterval);
     let yearDifference;
     let monthDifference;
     let dayDifference;
     let minuteDifference;
-    let minDate = new Date(dateRange.startDate);
-    let maxDate = new Date(dateRange.endDate);
+    // default to startDate/endDate if defined in the layer def
+    let minDate = new Date(def.startDate || dateRange.startDate);
+    let maxDate = new Date(def.endDate || dateRange.endDate);
     // Offset timezone
-    minDate = new Date(minDate.getTime() - (minDate.getTimezoneOffset() * 60000));
-    maxDate = new Date(maxDate.getTime() - (maxDate.getTimezoneOffset() * 60000));
-
+    if (def.period !== 'yearly') {
+      minDate = new Date(minDate.getTime() - (minDate.getTimezoneOffset() * 60000));
+      maxDate = new Date(maxDate.getTime() - (maxDate.getTimezoneOffset() * 60000));
+    }
     const maxYear = maxDate.getUTCFullYear();
     const maxMonth = maxDate.getUTCMonth();
     const maxDay = maxDate.getUTCDate();
@@ -118,7 +132,7 @@ export function datesinDateRanges(def, date) {
         yearDifference = util.yearDiff(minDate, maxYearDate);
       }
       for (i = 0; i <= (yearDifference + 1); i++) {
-        dateArray.push(new Date(minYear + dateInterval, minMonth, minDay));
+        dateArray.push(new Date(minYear + i * dateInterval, minMonth, minDay));
       }
     // Monthly layers
     } else if (def.period === 'monthly') {
@@ -126,15 +140,18 @@ export function datesinDateRanges(def, date) {
         monthDifference = util.monthDiff(minDate, maxMonthDate);
       }
       for (i = 0; i <= (monthDifference + 1); i++) {
-        dateArray.push(new Date(minYear, minMonth + i, minDay));
+        dateArray.push(new Date(minYear, minMonth + i * dateInterval, minDay));
       }
     // Daily layers
     } else if (def.period === 'daily') {
       if (currentDate >= minDate && currentDate <= maxDayDate) {
         dayDifference = util.dayDiff(minDate, maxDayDate);
+        // handle non-1 day intervals to prevent over pushing unused dates to dateArray
+        dayDifference = Math.ceil(dayDifference / dateInterval);
       }
+      console.log(dateInterval, dayDifference)
       for (i = 0; i <= (dayDifference + 1); i++) {
-        dateArray.push(new Date(minYear, minMonth, minDay + i));
+        dateArray.push(new Date(minYear, minMonth, minDay + i * dateInterval));
       }
     // Subdaily layers
     } else if (def.period === 'subdaily') {
@@ -163,6 +180,7 @@ export function datesinDateRanges(def, date) {
       }
     }
   });
+  console.log(def, dateArray)
   return dateArray;
 };
 
