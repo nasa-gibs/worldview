@@ -12,7 +12,7 @@
             ],
             "product":  "",
             "inactive": true,
-            "wrapadjacentdays": true
+            "wrapX": true
         }
     }
 }
