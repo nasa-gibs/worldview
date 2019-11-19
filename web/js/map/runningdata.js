@@ -68,28 +68,31 @@ export function MapRunningData(models, compareUi, store) {
   self.newPoint = function(coords, map) {
     const state = store.getState();
     var activeLayerObj = {};
-    map.forEachFeatureAtPixel(coords, (feature, layer) => {
-      if (!layer.wv || !layer.wv.def) return;
-      let color;
-      const def = layer.wv.def;
-      const identifier = def.palette.styleProperty;
-      const layerId = def.id;
-      const paletteLegends = getPalette(layerId, undefined, undefined, state);
-      const legend = paletteLegends.legend;
+    const [lon, lat] = coord;
+    if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
+      map.forEachFeatureAtPixel(coords, (feature, layer) => {
+        if (!layer.wv || !layer.wv.def) return;
+        let color;
+        const def = layer.wv.def;
+        const identifier = def.palette.styleProperty;
+        const layerId = def.id;
+        const paletteLegends = getPalette(layerId, undefined, undefined, state);
+        const legend = paletteLegends.legend;
 
-      if (!identifier && legend.colors.length > 1) return;
-      if (identifier) {
-        const properties = feature.getProperties();
-        const value = properties[identifier] || def.palette.unclassified;
-        if (!value) return;
-        const tooltips = legend.tooltips.map(function(c) { return c.toLowerCase().replace(/\s/g, ''); });
-        const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
-        color = legend.colors[colorIndex];
-      } else if (legend.colors.length === 1) {
-        color = legend.colors[0];
-      }
-      activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: color };
-    });
+        if (!identifier && legend.colors.length > 1) return;
+        if (identifier) {
+          const properties = feature.getProperties();
+          const value = properties[identifier] || def.palette.unclassified;
+          if (!value) return;
+          const tooltips = legend.tooltips.map(function(c) { return c.toLowerCase().replace(/\s/g, ''); });
+          const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
+          color = legend.colors[colorIndex];
+        } else if (legend.colors.length === 1) {
+          color = legend.colors[0];
+        }
+        activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: color };
+      });
+    }
     map.forEachLayerAtPixel(coords, function(layer, data) {
       if (!layer.wv) return;
       var paletteHex;
