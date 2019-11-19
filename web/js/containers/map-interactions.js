@@ -49,8 +49,8 @@ export class MapInteractions extends React.Component {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
     const { isShowingClick, changeCursor, measureIsActive } = this.props;
-    if (!coord) {
-      this.clearCoord();
+    const [lon, lat] = coord;
+    if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
       return;
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
