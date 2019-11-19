@@ -70,6 +70,7 @@ class LayerRow extends React.Component {
     const { projection } = this.state;
     const OrbitSourceList = [];
     const LayerSouceList = [];
+    let orbitTitle = '';
 
     source.settings.forEach(setting => {
       const layer = layerConfig[setting];
@@ -82,13 +83,14 @@ class LayerRow extends React.Component {
           layer.layergroup &&
           layer.layergroup.indexOf('reference_orbits') !== -1
         ) {
+          orbitTitle = getOrbitTrackTitle(layer);
           OrbitSourceList.push(
             <MeasurementLayerRow
               measurementId={measurement.id}
               key={measurement.id + layer.id}
               checked={!!lodashFind(activeLayers, { id: layer.id })}
               layerId={layer.id}
-              title={getOrbitTrackTitle(layer)}
+              title={orbitTitle}
               removeLayer={removeLayer}
               addLayer={addLayer}
             />
