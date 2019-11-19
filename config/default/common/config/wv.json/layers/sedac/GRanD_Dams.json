@@ -12,13 +12,15 @@
                 "sedac",
                 "vector"
             ],
+            "vectorStyle": {
+                "id": "GRanD_Dams"
+            },
             "palette": {
                 "id": "GRanD_Dams",
                 "immutable": true,
                 "styleProperty": "MAIN_USE",
                 "unclassified": "Not Classified"
-            },
-            "wrapX": true
+            }
         }
     }
 }
