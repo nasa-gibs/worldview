@@ -96,7 +96,7 @@ export function mapui(models, config, store, ui) {
    * Suscribe to redux store and listen for
    * specific action types
    */
-  const subscribeToStore = function (action) {
+  const subscribeToStore = function(action) {
     switch (action.type) {
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
@@ -168,10 +168,10 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var init = function () {
+  var init = function() {
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
-    lodashForOwn(config.projections, function (proj) {
+    lodashForOwn(config.projections, function(proj) {
       var map = createMap(proj);
       self.proj[proj.id] = map;
     });
@@ -189,7 +189,7 @@ export function mapui(models, config, store, ui) {
     updateProjection(true);
   };
 
-  const flyToNewExtent = function (extent, rotation) {
+  const flyToNewExtent = function(extent, rotation) {
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
     const coordinates = [coordinateX, coordinateY];
@@ -210,7 +210,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateProjection = function (start) {
+  var updateProjection = function(start) {
     const state = store.getState();
     const { proj } = state;
     if (self.selected) {
@@ -273,7 +273,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var onResize = function () {
+  var onResize = function() {
     var map = self.selected;
     if (map.small !== util.browser.small) {
       if (util.browser.small) {
@@ -297,7 +297,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var hideMap = function (map) {
+  var hideMap = function(map) {
     $('#' + map.getTarget()).hide();
   };
   /*
@@ -310,7 +310,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var showMap = function (map) {
+  var showMap = function(map) {
     $('#' + map.getTarget()).show();
   };
   /*
@@ -323,12 +323,12 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var clearLayers = function (map) {
+  var clearLayers = function(map) {
     var activeLayers = map
       .getLayers()
       .getArray()
       .slice(0);
-    lodashEach(activeLayers, function (mapLayer) {
+    lodashEach(activeLayers, function(mapLayer) {
       map.removeLayer(mapLayer);
     });
     removeGraticule('active');
@@ -346,7 +346,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var reloadLayers = self.reloadLayers = function (map) {
+  var reloadLayers = self.reloadLayers = function(map) {
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -365,7 +365,7 @@ export function mapui(models, config, store, ui) {
         },
         state
       );
-      lodashEach(defs, function (def) {
+      lodashEach(defs, function(def) {
         if (isGraticule(def, proj.id)) {
           addGraticule(def.opacity, layerGroupStr);
         } else {
@@ -393,7 +393,7 @@ export function mapui(models, config, store, ui) {
    * Create a Layergroup given the date and layerGroups
    * @param {Array} arr | Array of date/layer group strings
    */
-  var getCompareLayerGroup = function (arr, layersState, projId, state) {
+  var getCompareLayerGroup = function(arr, layersState, projId, state) {
     return new OlLayerGroup({
       layers: getLayers(
         layersState[arr[0]],
@@ -426,15 +426,15 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateLayerVisibilities = function () {
+  var updateLayerVisibilities = function() {
     const state = store.getState();
     var renderable;
     var layers = self.selected.getLayers();
     var layersState = state.layers;
     var activeGroupStr = state.compare.activeString;
     var activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    var updateGraticules = function (defs, groupName) {
-      lodashEach(defs, function (def) {
+    var updateGraticules = function(defs, groupName) {
+      lodashEach(defs, function(def) {
         if (isGraticule(def, state.proj.id)) {
           renderable = isRenderableLayer(
             def.id,
@@ -450,7 +450,7 @@ export function mapui(models, config, store, ui) {
         }
       });
     };
-    layers.forEach(function (layer) {
+    layers.forEach(function(layer) {
       var group = layer.get('group');
       // Not in A|B
       if (layer.wv) {
@@ -494,7 +494,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateOpacity = function (action) {
+  var updateOpacity = function(action) {
     const state = store.getState();
     const { layers, compare, proj } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
@@ -523,7 +523,7 @@ export function mapui(models, config, store, ui) {
    * @returns {void}
    */
 
-  var addLayer = function (def, date, activeLayers) {
+  var addLayer = function(def, date, activeLayers) {
     const state = store.getState();
     const { compare, layers, proj } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
@@ -571,7 +571,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var removeLayer = function (action) {
+  var removeLayer = function(action) {
     const state = store.getState();
     const { compare, proj } = state;
     const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
@@ -600,7 +600,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateDate = self.updateDate = function () {
+  var updateDate = self.updateDate = function() {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;
@@ -624,7 +624,7 @@ export function mapui(models, config, store, ui) {
               : null;
       }
     }
-    lodashEach(activeLayers, function (def) {
+    lodashEach(activeLayers, function(def) {
       const layerName = def.layer || def.id;
 
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
@@ -677,7 +677,7 @@ export function mapui(models, config, store, ui) {
    *
    * @todo Check if this function can be combined with updateLayerOrder
    */
-  var updateLookup = function (layerId) {
+  var updateLookup = function(layerId) {
     reloadLayers();
   };
 
@@ -692,7 +692,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {object} Layer object
    */
-  var findLayer = function (def, layerGroupStr) {
+  var findLayer = function(def, layerGroupStr) {
     var layers = self.selected.getLayers().getArray();
     var layer = lodashFind(layers, {
       wv: {
@@ -728,7 +728,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {number} Index of layer in OpenLayers layer array
    */
-  var findLayerIndex = function (def, layerGroup) {
+  var findLayerIndex = function(def, layerGroup) {
     layerGroup = layerGroup || self.selected;
     var layers = layerGroup.getLayers().getArray();
 
@@ -753,7 +753,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {boolean}
    */
-  var isGraticule = function (def, proj) {
+  var isGraticule = function(def, proj) {
     return (
       def.projections[proj].type === 'graticule' || def.type === 'graticule'
     );
@@ -770,7 +770,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var addGraticule = function (opacity, groupStr) {
+  var addGraticule = function(opacity, groupStr) {
     groupStr = groupStr || 'active';
     opacity = opacity || 0.5;
     var graticule = self.selected['graticule-' + groupStr];
@@ -802,7 +802,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var removeGraticule = function (groupStr) {
+  var removeGraticule = function(groupStr) {
     groupStr = groupStr || 'active';
     var graticule = self.selected['graticule-' + groupStr];
     if (graticule) {
@@ -812,7 +812,7 @@ export function mapui(models, config, store, ui) {
   };
 
   var triggerExtent = lodashThrottle(
-    function () {
+    function() {
       self.events.trigger('extent');
     },
     500,
@@ -830,7 +830,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateExtent = function () {
+  var updateExtent = function() {
     const map = self.selected;
     const view = map.getView();
     const extent = view.calculateExtent(map.getSize());
@@ -877,7 +877,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {object} OpenLayers Map Object
    */
-  var createMap = function (proj, dateSelected) {
+  var createMap = function(proj, dateSelected) {
     const state = store.getState();
     const { date, compare } = state;
     const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
@@ -977,11 +977,11 @@ export function mapui(models, config, store, ui) {
     map.getView().on('change:center', lodashDebounce(updateExtent, 300));
     map.getView().on('change:resolution', lodashDebounce(updateExtent, 300));
     map.getView().on('change:rotation', lodashThrottle(onRotate, 300));
-    map.on('pointerdrag', function () {
+    map.on('pointerdrag', function() {
       self.mapIsbeingDragged = true;
       self.events.trigger('drag');
     });
-    map.getView().on('propertychange', function (e) {
+    map.getView().on('propertychange', function(e) {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
@@ -989,9 +989,9 @@ export function mapui(models, config, store, ui) {
           break;
       }
     });
-    map.on('moveend', function (e) {
+    map.on('moveend', function(e) {
       self.events.trigger('moveend');
-      setTimeout(function () {
+      setTimeout(function() {
         self.mapIsbeingDragged = false;
         self.mapIsbeingZoomed = false;
       }, 200);
@@ -1021,7 +1021,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var createZoomButtons = function (map, proj) {
+  var createZoomButtons = function(map, proj) {
     var $map = $('#' + map.getTarget());
 
     var $zoomOut = $('<div></div>')
@@ -1068,7 +1068,7 @@ export function mapui(models, config, store, ui) {
      * @returns {void}
      *
      */
-    var onZoomChange = function () {
+    var onZoomChange = function() {
       var maxZoom = proj.resolutions.length;
       var zoom = map.getView().getZoom();
       if (zoom === 0) {
@@ -1083,13 +1083,13 @@ export function mapui(models, config, store, ui) {
       }
     };
 
-    map.getView().on('change:resolution', function () {
+    map.getView().on('change:resolution', function() {
       onZoomChange();
       self.events.trigger('movestart');
     });
     onZoomChange();
   };
-  var onRotate = function (val) {
+  var onRotate = function(val) {
     rotation.updateRotation(val);
     updateExtent();
   };
@@ -1109,7 +1109,7 @@ export function mapui(models, config, store, ui) {
    *
    * @todo move this component to another Location
    */
-  var createMousePosSel = function (map, proj) {
+  var createMousePosSel = function(map, proj) {
     var hoverThrottle;
 
     function onMouseMove(e) {
@@ -1155,7 +1155,7 @@ export function mapui(models, config, store, ui) {
       if (!self.mapIsbeingDragged && !self.mapIsbeingZoomed) dataRunner.newPoint(pixels, map);
     }
     $(map.getViewport())
-      .mouseout(function (e) {
+      .mouseout(function(e) {
         if (
           $(e.relatedTarget).hasClass('map-coord') ||
           $(e.relatedTarget).hasClass('coord-btn')
