@@ -7,6 +7,7 @@ import {
   findIndex as lodashFindIndex,
   each as lodashEach,
   isNaN as lodashIsNaN,
+  startCase as lodashStartCase,
   isArray
 } from 'lodash';
 
@@ -21,6 +22,16 @@ import isEqual from 'date-fns/is_equal';
 import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
 import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
 import lastDayOfYear from 'date-fns/last_day_of_year';
+
+export function getOrbitTrackTitle(def) {
+  if (def.daynight && def.track) {
+    return lodashStartCase(def.track) + '/' + lodashStartCase(def.daynight);
+  } else if (def.track) {
+    return lodashStartCase(def.track);
+  } else if (def.daynight) {
+    return lodashStartCase(def.daynight);
+  }
+}
 
 /**
    * For subdaily layers, round the time down to nearest interval.

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashValues from 'lodash/values';
 import lodashFind from 'lodash/find';
-import lodashStartCase from 'lodash/startCase';
+import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import {
   TabContent,
   TabPane,
@@ -70,7 +70,6 @@ class LayerRow extends React.Component {
     const { projection } = this.state;
     const OrbitSourceList = [];
     const LayerSouceList = [];
-    let orbitTitle = '';
 
     source.settings.forEach(setting => {
       const layer = layerConfig[setting];
@@ -83,24 +82,13 @@ class LayerRow extends React.Component {
           layer.layergroup &&
           layer.layergroup.indexOf('reference_orbits') !== -1
         ) {
-          if (layer.daynight && layer.track) {
-            orbitTitle =
-              lodashStartCase(layer.track) +
-              '/' +
-              lodashStartCase(layer.daynight);
-          } else if (layer.track) {
-            orbitTitle = lodashStartCase(layer.track);
-          } else if (layer.day) {
-            orbitTitle = lodashStartCase(layer.daynight);
-          }
-
           OrbitSourceList.push(
             <MeasurementLayerRow
               measurementId={measurement.id}
               key={measurement.id + layer.id}
               checked={!!lodashFind(activeLayers, { id: layer.id })}
               layerId={layer.id}
-              title={orbitTitle}
+              title={getOrbitTrackTitle(layer)}
               removeLayer={removeLayer}
               addLayer={addLayer}
             />

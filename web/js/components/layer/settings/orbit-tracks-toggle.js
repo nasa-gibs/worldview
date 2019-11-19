@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Checkbox } from '../../util/checkbox';
 import { addLayer, removeLayer } from '../../../modules/layers/actions';
+import { getOrbitTrackTitle } from '../../../modules/layers/util';
 
 class OrbitTracksToggle extends React.Component {
   render() {
@@ -16,17 +17,17 @@ class OrbitTracksToggle extends React.Component {
     return (
       <div className="layer-orbit-tracks settings-component">
         <h2 className="wv-header"> Orbit Tracks </h2>
-        { trackLayers.map(({ id, track, daynight }) => {
+        { trackLayers.map(layer => {
+          const { id } = layer;
           const isEnabled = activeLayers.some(l => l.id === id);
           const onCheck = () => isEnabled ? removeLayer(id) : addLayer(id);
-          const label = track + ' / ' + daynight;
           return (
             <Checkbox
               key={id}
               title="Enable/disable orbit tracks for this layer"
               checked={isEnabled}
               onCheck={onCheck}
-              label={label}
+              label={getOrbitTrackTitle(layer)}
             />
           );
         }) }

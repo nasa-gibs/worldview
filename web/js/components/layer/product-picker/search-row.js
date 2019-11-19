@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import lodashStartCase from 'lodash/startCase';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import util from '../../../util/util.js';
+import { getOrbitTrackTitle } from '../../../modules/layers/util';
 /**
  * A single layer search result row
  * @class LayerRow
@@ -434,9 +434,8 @@ class LayerRow extends React.Component {
   render() {
     const { checked, isMetadataExpanded, isDateRangesExpanded } = this.state;
     const { layer } = this.props;
-    const { title, track, daynight, description, subtitle, metadata } = layer;
+    const { title, track, description, subtitle, metadata } = layer;
     let listItems;
-    let orbitTrackDescriptor;
     let headerClass = 'layers-all-header has-checkbox';
 
     if (layer.dateRanges && layer.dateRanges.length > 1) {
@@ -447,16 +446,7 @@ class LayerRow extends React.Component {
       }
     }
     if (checked) headerClass += ' checked';
-
-    if (daynight && track) {
-      orbitTrackDescriptor = `${lodashStartCase(track)} / ${lodashStartCase(daynight)}`;
-    } else if (track) {
-      orbitTrackDescriptor = lodashStartCase(track);
-    } else if (daynight) {
-      orbitTrackDescriptor = lodashStartCase(daynight);
-    }
-
-    const layerTitle = !track ? title : `${title} (${orbitTrackDescriptor})`;
+    const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
 
     return (
       <div className="layers-all-layer">
