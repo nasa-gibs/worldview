@@ -243,7 +243,15 @@ class Layer extends React.Component {
 
                 {tracksForLayer.length > 0 && (
                   <div className="wv-orbit-track-layers">
-                    {tracksForLayer.map(track => (<OrbitTrack key={track.id} trackLayer={track}/>))}
+                    {tracksForLayer.map(track => {
+                      return (
+                        <OrbitTrack
+                          key={track.id}
+                          trackLayer={track}
+                          parentLayer={layer}
+                        />
+                      );
+                    })}
                   </div>
                 )}
               </div>
