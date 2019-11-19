@@ -208,41 +208,43 @@ class Layer extends React.Component {
                 <b>!</b>
               </div>
               <div className="layer-main">
-                <a
-                  id={'close' + layerGroupName + util.encodeId(layer.id)}
-                  title={'Remove Layer'}
-                  className="button wv-layers-close"
-                  onClick={() => onRemoveClick(layer.id)}
-                >
-                  <i className="fa fa-times" />
-                </a>
-                <a
-                  title={'Layer options for ' + names.title}
-                  className={
-                    isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'
-                  }
-                  onMouseDown={this.stopPropagation}
-                  onClick={() => onOptionsClick(layer, names.title)}
-                >
-                  <i className="fas fa-sliders-h wv-layers-options-icon" />
-                </a>
-                <a
-                  title={'Layer description for ' + names.title}
-                  className={
-                    isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
-                  }
-                  onMouseDown={this.stopPropagation}
-                  onClick={() => onInfoClick(layer, names.title)}
-                >
-                  <i className="fa fa-info wv-layers-info-icon" />
-                </a>
+                <div className="layer-info">
+                  <a
+                    id={'close' + layerGroupName + util.encodeId(layer.id)}
+                    title={'Remove Layer'}
+                    className="button wv-layers-close"
+                    onClick={() => onRemoveClick(layer.id)}
+                  >
+                    <i className="fa fa-times" />
+                  </a>
+                  <a
+                    title={'Layer options for ' + names.title}
+                    className={
+                      isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'
+                    }
+                    onMouseDown={this.stopPropagation}
+                    onClick={() => onOptionsClick(layer, names.title)}
+                  >
+                    <i className="fas fa-sliders-h wv-layers-options-icon" />
+                  </a>
+                  <a
+                    title={'Layer description for ' + names.title}
+                    className={
+                      isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
+                    }
+                    onMouseDown={this.stopPropagation}
+                    onClick={() => onInfoClick(layer, names.title)}
+                  >
+                    <i className="fa fa-info wv-layers-info-icon" />
+                  </a>
 
-                <h4 title={name.title}>{names.title}</h4>
-                <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-                {hasPalette ? this.getPaletteLegend() : ''}
+                  <h4 title={name.title}>{names.title}</h4>
+                  <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+                  {hasPalette ? this.getPaletteLegend() : ''}
+                </div>
 
                 {tracksForLayer.length > 0 && (
-                  <div className="wv-orbit-track-layers">
+                  <div className="layer-tracks">
                     {tracksForLayer.map(track => {
                       return (
                         <OrbitTrack
