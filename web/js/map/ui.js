@@ -1,7 +1,13 @@
-import lodashFindIndex from 'lodash/findIndex';
-import lodashEach from 'lodash/each';
-import lodashForOwn from 'lodash/forOwn';
-import lodashThrottle from 'lodash/throttle';
+import {
+  throttle as lodashThrottle,
+  forOwn as lodashForOwn,
+  each as lodashEach,
+  findIndex as lodashFindIndex,
+  get as lodashGet,
+  debounce as lodashDebounce,
+  cloneDeep as lodashCloneDeep,
+  find as lodashFind
+} from 'lodash';
 import util from '../util/util';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
@@ -31,9 +37,7 @@ import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
-import { openCustomContent } from '../modules/modal/actions';
 import { CHANGE_UNITS, USE_GREAT_CIRCLE } from '../modules/measure/constants';
-import VectorMetaTable from '../components/vector-metadata/table';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -45,14 +49,11 @@ import {
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
 import { datesinDateRanges } from '../modules/layers/util';
-import {
-  get as lodashGet,
-  debounce as lodashDebounce,
-  cloneDeep as lodashCloneDeep,
-  find as lodashFind
-} from 'lodash';
+
 import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
+
+import { updateVectorSelection } from '../modules/vector-styles/util';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -90,7 +91,7 @@ export function mapui(models, config, store, ui) {
   self.layerKey = layerBuilder.layerKey;
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
-
+  self.selectedVectors = {};
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -140,6 +141,16 @@ export function mapui(models, config, store, ui) {
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
+      case vectorStyleConstants.SET_SELECTED_VECTORS: {
+        const type = 'selection';
+        const newSelection = action.payload;
+        const state = store.getState();
+        const { compare, layers } = state;
+        const activeLayerStr = compare.activeString;
+        updateVectorSelection(action.payload, self.selectedVectors, layers[activeLayerStr], type, state);
+        self.selectedVectors = newSelection;
+        return;
+      }
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
       case USE_GREAT_CIRCLE:
@@ -992,56 +1003,6 @@ export function mapui(models, config, store, ui) {
       if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
-    map.on('click', function(e) {
-      var metaTitle;
-      var def;
-      var metaArray = [];
-
-      map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-        def = lodashGet(layer, 'wv.def');
-        if (!def) return;
-        metaTitle = def.title;
-        if (def.vectorData && def.vectorData.id) {
-          const features = feature.getProperties();
-          const vectorDataId = def.vectorData.id;
-          const data = config.vectorData[vectorDataId];
-          const obj = {
-            legend: data,
-            features: features
-          };
-          metaArray.push(obj);
-        }
-      });
-
-      var uniqueMeta = metaArray
-        .map(e => e.layer)
-        .map((e, i, final) => final.indexOf(e) === i && i)
-        .filter(e => metaArray[e]).map(e => metaArray[e]);
-
-      if (uniqueMeta.length) {
-        const vectorPointMeta = uniqueMeta[0];
-        const vectorDataId = def.vectorData.id;
-        const legend = vectorPointMeta.legend;
-        const features = vectorPointMeta.features;
-        store.dispatch(openCustomContent('Vector' + vectorDataId,
-          {
-            headerText: metaTitle,
-            backdrop: false,
-            clickableBehindModal: true,
-            desktopOnly: true,
-            wrapClassName: 'vector-modal-wrap',
-            modalClassName: 'vector-modal',
-            bodyComponent: VectorMetaTable,
-            bodyComponentProps: {
-              metaTitle: metaTitle,
-              metaFeatures: features,
-              metaLegend: legend
-            },
-            isDraggable: true
-          }
-        ));
-      };
-    });
     measureTools[proj.crs] = measure(map, self.events, store);
 
     return map;
@@ -1157,9 +1118,9 @@ export function mapui(models, config, store, ui) {
       const state = store.getState();
       if (compareMapUi && compareMapUi.dragging) return;
       // if mobile return
-      if (util.browser.small) {
-        return;
-      }
+      if (util.browser.small) return;
+      // if measure is active return
+      if (state.measure.isActive) return;
       // if over coords return
       if (
         $(e.relatedTarget).hasClass('map-coord') ||

@@ -110,6 +110,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.9.0",
+    "jest-canvas-mock": "^2.2.0",
     "mini-css-extract-plugin": "^0.8.0",
     "moment": "^2.19.3",
     "moment-locales-webpack-plugin": "^1.0.7",
@@ -186,6 +187,7 @@
     "react-mobile-datepicker": "^4.0.1",
     "react-portal": "^4.2.0",
     "react-redux": "^7.1.3",
+    "react-resizable": "^1.9.0",
     "reactstrap": "^8.0.1",
     "redux": "^4.0.4",
     "redux-responsive": "^4.3.8",
@@ -215,7 +217,7 @@
       "^googleTagManager$": "<rootDir>/web/js/components/util/google-tag-manager.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(ol)/)"
+      "node_modules/(?!(ol|ol-mapbox-style|@mapbox)/)"
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/build/"

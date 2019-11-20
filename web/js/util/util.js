@@ -393,7 +393,17 @@ export default (function(self) {
     timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes()));
     return timeToReturn;
   };
-
+  /**
+   * Remove spaces and combine value
+   *
+   * @method cleanId
+   * @static
+   * @param str {String} String
+   * @return {string} cleaned str
+   */
+  self.cleanId = function(str) {
+    return str.replace(/\W/g, '_');
+  };
   /**
    * Sets a date to UTC midnight.
    *

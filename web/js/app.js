@@ -5,7 +5,7 @@ import { each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
 // Utils
 import util from './util/util';
-import OlCoordinates from './components/map/ol-coordinates';
+import MapInteractions from './containers/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
@@ -39,6 +39,7 @@ import '../../node_modules/rc-slider/dist/rc-slider.css';
 import '../../node_modules/simplebar/dist/simplebar.css';
 import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import 'react-image-crop/dist/ReactCrop.css';
+import 'react-resizable/css/styles.css';
 // App CSS
 import '../css/fonts.css';
 import '../css/alert.css';
@@ -51,6 +52,7 @@ import '../css/toolbar.css';
 import '../css/notifications.css';
 import '../css/sidebar-panel.css';
 import '../css/button.css';
+import '../css/modal.css';
 import '../css/checkbox.css';
 import '../css/map.css';
 import '../css/link.css';
@@ -72,7 +74,6 @@ import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
 import '../css/mobile.css';
-import '../css/modal.css';
 import '../css/measure.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
@@ -100,10 +101,12 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAnimationWidgetActive, isTourActive, locationKey } = this.props;
+    const { isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents } = this.props;
+
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
+        <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
         </div>
@@ -111,7 +114,6 @@ class App extends React.Component {
         {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
-        <div id="wv-map" className="wv-map" />
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <div id="dlMap" />
@@ -120,8 +122,8 @@ class App extends React.Component {
           {isAnimationWidgetActive ? <AnimationWidget /> : null}
         </div>
         <MeasureButton />
-        <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
-        <Modal />
+
+        <Modal key={modalId} />
         <ErrorBoundary>
           <Debug parameters={this.props.parameters} />
         </ErrorBoundary>
@@ -154,10 +156,10 @@ class App extends React.Component {
       if (Brand.release()) {
         console.info(
           Brand.NAME +
-            ' - Version ' +
-            Brand.VERSION +
-            ' - ' +
-            Brand.BUILD_TIMESTAMP
+          ' - Version ' +
+          Brand.VERSION +
+          ' - ' +
+          Brand.BUILD_TIMESTAMP
         );
       } else {
         console.warn('Development version');
@@ -181,7 +183,8 @@ function mapStateToProps(state, ownProps) {
     parameters: state.parameters,
     models: ownProps.models,
     mapMouseEvents: ownProps.mapMouseEvents,
-    locationKey: state.location.key
+    locationKey: state.location.key,
+    modalId: state.modal.id
   };
 }
 const mapDispatchToProps = dispatch => ({
