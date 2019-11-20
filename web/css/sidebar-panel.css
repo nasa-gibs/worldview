@@ -381,6 +381,7 @@ li.item.productsitem.inmotion,
 .productsitem {
   & .layer-info {
     background-color: #ccc;
+    min-height: 40px;
   }
   & .layer-main {
     width: auto;
