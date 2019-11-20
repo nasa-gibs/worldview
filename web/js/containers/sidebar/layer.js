@@ -322,7 +322,7 @@ function mapStateToProps(state, ownProps) {
     ? getPaletteLegends(layer.id, layerGroupName, state)
     : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
-  const tracksForLayer = layers.active.filter(activeLayer => {
+  const tracksForLayer = layers[layerGroupName].filter(activeLayer => {
     return (layer.tracks || []).some(track => activeLayer.id === track);
   });
 
