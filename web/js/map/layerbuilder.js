@@ -89,6 +89,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     options = options || {};
     const group = options.group || null;
     let date = self.closestDate(def, options);
+    if (date) {
+      options.date = date;
+    }
     const key = self.layerKey(def, options, state);
     const proj = state.proj.selected;
     let layer = cache.getItem(key);
@@ -140,7 +143,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.closestDate = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    let date = options.date || new Date(state.date[activeDateStr]);
+    const stateCurrentDate = new Date(state.date[activeDateStr]);
+    let date = options.date || stateCurrentDate;
 
     // need to get previous available date to prevent unecessary requests
     let dateRange;
