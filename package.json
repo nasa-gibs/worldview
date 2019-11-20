@@ -160,7 +160,7 @@
     "bootstrap": "4.3.1",
     "cachai": "^1.0.2",
     "canvg-browser": "^1.0.0",
-    "date-fns": "^1.29.0",
+    "date-fns": "^2.8.0",
     "file-saver": "^2.0.2",
     "history": "^4.7.2",
     "icheck": "^1.0.2",
