@@ -16,12 +16,10 @@ import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
-import closestTo from 'date-fns/closest_to';
+import closestIndexTo from 'date-fns/closest_index_to';
 import isBefore from 'date-fns/is_before';
 import isEqual from 'date-fns/is_equal';
 import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
-import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
-import lastDayOfYear from 'date-fns/last_day_of_year';
 
 export function getOrbitTrackTitle(def) {
   if (def.daynight && def.track) {
@@ -66,10 +64,11 @@ export function nearestInterval(def, date) {
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
   const currentDate = new Date(date.getTime());
+  const currentDateOffsetCheck = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
 
   if (!dateArray ||
-      (def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
-      (def.period === 'yearly' && ((currentDate.getDate() === 1 && currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) {
+      (def.period === 'monthly' && isFirstDayOfMonth(currentDateOffsetCheck)) ||
+      (def.period === 'yearly' && (currentDateOffsetCheck.getDate() === 1 && currentDateOffsetCheck.getMonth() === 0))) {
     return date;
   }
 
@@ -79,7 +78,15 @@ export function prevDateInDateRange(def, date, dateArray) {
     }
   });
 
-  const closestDate = closestTo(currentDate, closestAvailableDates);
+  // use closest date index to find closest date in filtered closestAvailableDates
+  const closestDateIndex = closestIndexTo(currentDate, closestAvailableDates);
+  const closestDate = closestAvailableDates[closestDateIndex];
+  def.previousDate = closestDate || null;
+
+  // check for potential next date in function passed dateArray
+  const nextClosestDate = dateArray[closestDateIndex + 1];
+  def.nextDate = nextClosestDate || null;
+
   return closestDate ? new Date(closestDate.getTime()) : date;
 };
 
@@ -96,59 +103,65 @@ export function datesinDateRanges(def, date) {
   let currentDate = new Date(date.getTime());
 
   lodashEach(def.dateRanges, (dateRange) => {
-    const { dateInterval } = dateRange;
+    let { dateInterval } = dateRange;
+    dateInterval = Number(dateInterval);
     let yearDifference;
     let monthDifference;
     let dayDifference;
     let minuteDifference;
     let minDate = new Date(dateRange.startDate);
-    let maxDate = new Date(dateRange.endDate);
-    // Offset timezone
-    minDate = new Date(minDate.getTime() - (minDate.getTimezoneOffset() * 60000));
-    maxDate = new Date(maxDate.getTime() - (maxDate.getTimezoneOffset() * 60000));
+    const maxDate = new Date(dateRange.endDate);
 
     const maxYear = maxDate.getUTCFullYear();
     const maxMonth = maxDate.getUTCMonth();
     const maxDay = maxDate.getUTCDate();
-    const maxHours = maxDate.getUTCHours();
-    const maxMinutes = maxDate.getUTCMinutes();
     const minYear = minDate.getUTCFullYear();
     const minMonth = minDate.getUTCMonth();
     const minDay = minDate.getUTCDate();
-    const minMinutes = minDate.getUTCMinutes();
-
-    const maxYearDate = new Date(maxYear + 1, maxMonth, maxDay);
-    const maxMonthDate = new Date(maxYear, maxMonth + 1, maxDay);
-    const maxDayDate = new Date(maxYear, maxMonth, maxDay + 1);
-    let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateInterval);
 
     let i;
     // Yearly layers
     if (def.period === 'yearly') {
+      const maxYearDate = new Date(maxYear + dateInterval, maxMonth, maxDay);
       if (currentDate >= minDate && currentDate <= maxYearDate) {
         yearDifference = util.yearDiff(minDate, maxYearDate);
       }
       for (i = 0; i <= (yearDifference + 1); i++) {
-        dateArray.push(new Date(minYear + dateInterval, minMonth, minDay));
+        let year = new Date(minYear + i * dateInterval, minMonth, minDay);
+        year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
+        dateArray.push(year);
       }
     // Monthly layers
     } else if (def.period === 'monthly') {
+      const maxMonthDate = new Date(maxYear, maxMonth + dateInterval, maxDay);
       if (currentDate >= minDate && currentDate <= maxMonthDate) {
         monthDifference = util.monthDiff(minDate, maxMonthDate);
       }
       for (i = 0; i <= (monthDifference + 1); i++) {
-        dateArray.push(new Date(minYear, minMonth + i, minDay));
+        let month = new Date(minYear, minMonth + i * dateInterval, minDay);
+        month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
+        dateArray.push(month);
       }
     // Daily layers
     } else if (def.period === 'daily') {
+      const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateInterval);
       if (currentDate >= minDate && currentDate <= maxDayDate) {
         dayDifference = util.dayDiff(minDate, maxDayDate);
+        // handle non-1 day intervals to prevent over pushing unused dates to dateArray
+        dayDifference = Math.ceil(dayDifference / dateInterval);
       }
       for (i = 0; i <= (dayDifference + 1); i++) {
-        dateArray.push(new Date(minYear, minMonth, minDay + i));
+        let day = new Date(minYear, minMonth, minDay + i * dateInterval);
+        day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
+        dateArray.push(day);
       }
     // Subdaily layers
     } else if (def.period === 'subdaily') {
+      const maxHours = maxDate.getUTCHours();
+      const maxMinutes = maxDate.getUTCMinutes();
+      const minMinutes = minDate.getUTCMinutes();
+      let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateInterval);
+
       const currentDateOffset = currentDate.getTimezoneOffset() * 60000;
       const hourBeforeCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
       const hourAfterCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));

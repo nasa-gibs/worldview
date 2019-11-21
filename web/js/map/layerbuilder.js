@@ -13,6 +13,7 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import { lookupFactory } from '../ol/lookupimagetile';
+import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import {
   isActive as isPaletteActive,
   getKey as getPaletteKeys,
@@ -88,6 +89,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     options = options || {};
     const group = options.group || null;
     let date = self.closestDate(def, options);
+    if (date) {
+      options.date = date;
+    }
     const key = self.layerKey(def, options, state);
     const proj = state.proj.selected;
     let layer = cache.getItem(key);
@@ -139,14 +143,38 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.closestDate = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    let date = options.date || new Date(state.date[activeDateStr]);
+    const stateCurrentDate = new Date(state.date[activeDateStr]);
+    let date = options.date || stateCurrentDate;
+
+    // need to get previous available date to prevent unecessary requests
+    let dateRange;
+    let previousDateFromRange;
+    if (def.previousDate && def.nextDate) {
+      const dateTime = date.getTime();
+      const previousDateTime = def.previousDate.getTime();
+      const nextDateTime = def.nextDate.getTime();
+      // if current date is outside previous and next dates avaiable, recheck range
+      if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
+        dateRange = datesinDateRanges(def, date);
+        previousDateFromRange = prevDateInDateRange(def, date, dateRange);
+      } else {
+        previousDateFromRange = def.previousDate;
+      }
+    } else {
+      dateRange = datesinDateRanges(def, date);
+      previousDateFromRange = prevDateInDateRange(def, date, dateRange);
+    }
 
     if (def.period === 'subdaily') {
       date = nearestInterval(def, date);
     } else {
-      date = options.date
-        ? util.clearTimeUTC(new Date(date.getTime()))
-        : util.clearTimeUTC(date);
+      if (previousDateFromRange) {
+        date = util.clearTimeUTC(previousDateFromRange);
+      } else {
+        date = options.date
+          ? util.clearTimeUTC(new Date(date.getTime()))
+          : util.clearTimeUTC(date);
+      }
     }
 
     return date;
