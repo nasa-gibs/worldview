@@ -116,26 +116,90 @@ class Layer extends React.Component {
     e.preventDefault();
   }
 
+  renderControls() {
+    const {
+      layer,
+      layerGroupName,
+      names,
+      isMobile,
+      onRemoveClick,
+      onInfoClick,
+      onOptionsClick
+    } = this.props;
+    const { title } = names;
+    return (
+      <>
+        <a
+          id={'close' + layerGroupName + util.encodeId(layer.id)}
+          title={'Remove Layer'}
+          className="button wv-layers-close"
+          onClick={() => onRemoveClick(layer.id)}
+        >
+          <i className="fa fa-times" />
+        </a>
+        <a
+          title={'Layer options for ' + title}
+          className={isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'}
+          onMouseDown={this.stopPropagation}
+          onClick={() => onOptionsClick(layer, title)}
+        >
+          <i className="fas fa-sliders-h wv-layers-options-icon" />
+        </a>
+        <a
+          title={'Layer description for ' + title}
+          className={isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'}
+          onMouseDown={this.stopPropagation}
+          onClick={() => onInfoClick(layer, title)}
+        >
+          <i className="fa fa-info wv-layers-info-icon" />
+        </a>
+      </>
+    );
+  };
+
   render() {
     const {
-      tracksForLayer,
       layerGroupName,
-      onRemoveClick,
       toggleVisibility,
-      onInfoClick,
       hover,
       layer,
       isDisabled,
       isVisible,
       layerClasses,
       names,
-      isMobile,
       index,
-      onOptionsClick,
       hasPalette,
       zot,
-      isInProjection
+      isInProjection,
+      tracksForLayer
     } = this.props;
+
+    const containerClass = isDisabled
+      ? layerClasses + ' disabled layer-hidden'
+      : !isVisible
+        ? layerClasses + ' layer-hidden'
+        : zot
+          ? layerClasses + ' layer-enabled layer-visible zotted'
+          : layerClasses + ' layer-enabled layer-visible';
+    const visibilityToggleClass = isDisabled
+      ? visibilityButtonClasses + ' layer-hidden'
+      : !isVisible
+        ? visibilityButtonClasses + ' layer-hidden'
+        : visibilityButtonClasses + ' layer-enabled layer-visible';
+    const visibilityTitle = !isVisible && !isDisabled
+      ? 'Show Layer'
+      : isDisabled
+        ? this.getDisabledTitle(layer)
+        : 'Hide Layer';
+    const visibilityIconClass = isDisabled
+      ? 'fas fa-ban layer-eye-icon'
+      : !isVisible
+        ? 'far fa-eye-slash layer-eye-icon'
+        : 'far fa-eye layer-eye-icon';
+
+    const zotTitle = zot
+      ? 'Layer is overzoomed by ' + zot.toString() + 'x its maximum zoom level'
+      : '';
 
     return (
       <Draggable
@@ -146,103 +210,41 @@ class Layer extends React.Component {
         {(provided, snapshot) => {
           return isInProjection ? (
             <li
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
               id={layerGroupName + '-' + util.encodeId(layer.id)}
+              className={containerClass}
               style={getItemStyle(
                 snapshot.isDragging,
                 provided.draggableProps.style
               )}
-              className={
-                isDisabled
-                  ? layerClasses + ' disabled layer-hidden'
-                  : !isVisible
-                    ? layerClasses + ' layer-hidden'
-                    : zot
-                      ? layerClasses + ' layer-enabled layer-visible zotted'
-                      : layerClasses + ' layer-enabled layer-visible'
-              }
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
               onMouseEnter={() => hover(layer.id, true)}
               onMouseLeave={() => hover(layer.id, false)}
             >
               <a
-                className={
-                  isDisabled
-                    ? visibilityButtonClasses + ' layer-hidden'
-                    : !isVisible
-                      ? visibilityButtonClasses + ' layer-hidden'
-                      : visibilityButtonClasses + ' layer-enabled layer-visible'
-                }
+                className={visibilityToggleClass}
                 id={'hide' + util.encodeId(layer.id)}
                 onClick={() => toggleVisibility(layer.id, !isVisible)}
-                title={
-                  !isVisible && !isDisabled
-                    ? 'Show Layer'
-                    : isDisabled
-                      ? this.getDisabledTitle(layer)
-                      : 'Hide Layer'
-                }
+                title={visibilityTitle}
               >
-                <i
-                  className={
-                    isDisabled
-                      ? 'fas fa-ban layer-eye-icon'
-                      : !isVisible
-                        ? 'far fa-eye-slash layer-eye-icon'
-                        : 'far fa-eye layer-eye-icon'
-                  }
-                />
+                <i className={visibilityIconClass} />
               </a>
 
               <div
                 className={'zot'}
-                title={
-                  zot
-                    ? 'Layer is overzoomed by ' +
-                    zot.toString() +
-                    'x its maximum zoom level'
-                    : ''
-                }
+                title={zotTitle}
               >
                 <b>!</b>
               </div>
+
               <div className="layer-main">
                 <div className="layer-info">
-                  <a
-                    id={'close' + layerGroupName + util.encodeId(layer.id)}
-                    title={'Remove Layer'}
-                    className="button wv-layers-close"
-                    onClick={() => onRemoveClick(layer.id)}
-                  >
-                    <i className="fa fa-times" />
-                  </a>
-                  <a
-                    title={'Layer options for ' + names.title}
-                    className={
-                      isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'
-                    }
-                    onMouseDown={this.stopPropagation}
-                    onClick={() => onOptionsClick(layer, names.title)}
-                  >
-                    <i className="fas fa-sliders-h wv-layers-options-icon" />
-                  </a>
-                  <a
-                    title={'Layer description for ' + names.title}
-                    className={
-                      isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
-                    }
-                    onMouseDown={this.stopPropagation}
-                    onClick={() => onInfoClick(layer, names.title)}
-                  >
-                    <i className="fa fa-info wv-layers-info-icon" />
-                  </a>
-
+                  {this.renderControls()}
                   <h4 title={name.title}>{names.title}</h4>
                   <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
                   {hasPalette ? this.getPaletteLegend() : ''}
                 </div>
-
                 {tracksForLayer.length > 0 && (
                   <div className="layer-tracks">
                     {tracksForLayer.map(track => {
