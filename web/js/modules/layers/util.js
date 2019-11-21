@@ -19,8 +19,6 @@ import closestIndexTo from 'date-fns/closest_index_to';
 import isBefore from 'date-fns/is_before';
 import isEqual from 'date-fns/is_equal';
 import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
-import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
-import lastDayOfYear from 'date-fns/last_day_of_year';
 
 /**
    * For subdaily layers, round the time down to nearest interval.
@@ -55,10 +53,11 @@ export function nearestInterval(def, date) {
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
   const currentDate = new Date(date.getTime());
+  const currentDateOffsetCheck = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
 
   if (!dateArray ||
-      (def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
-      (def.period === 'yearly' && ((currentDate.getDate() === 1 && currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) {
+      (def.period === 'monthly' && isFirstDayOfMonth(currentDateOffsetCheck)) ||
+      (def.period === 'yearly' && (currentDateOffsetCheck.getDate() === 1 && currentDateOffsetCheck.getMonth() === 0))) {
     return date;
   }
 
@@ -68,7 +67,7 @@ export function prevDateInDateRange(def, date, dateArray) {
     }
   });
 
-  // use closet date index to find closest date in filtered closestAvailableDates
+  // use closest date index to find closest date in filtered closestAvailableDates
   const closestDateIndex = closestIndexTo(currentDate, closestAvailableDates);
   const closestDate = closestAvailableDates[closestDateIndex];
   def.previousDate = closestDate || null;
