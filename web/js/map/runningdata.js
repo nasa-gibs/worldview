@@ -71,7 +71,7 @@ export function MapRunningData(models, compareUi, store) {
     const [lon, lat] = map.getCoordinateFromPixel(pixels);
     if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
       map.forEachFeatureAtPixel(pixels, (feature, layer) => {
-        if (!layer.wv || !layer.wv.def) return;
+        if (!layer.wv || !layer.wv.def || !isFromActiveCompareRegion(map, pixels, layer.wv)) return;
         let color;
         const def = layer.wv.def;
         const identifier = def.palette.styleProperty;
