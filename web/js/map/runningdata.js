@@ -67,8 +67,6 @@ export function MapRunningData(models, compareUi, store) {
    */
   self.newPoint = function(pixels, map) {
     const state = store.getState();
-    const compareState = state.compare || {};
-    const layerGroupName = compareState.active && compareState.activeString;
     const activeLayerObj = {};
     const [lon, lat] = map.getCoordinateFromPixel(pixels);
     if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
@@ -94,8 +92,7 @@ export function MapRunningData(models, compareUi, store) {
         }
         activeLayerObj[layerId] = {
           paletteLegends,
-          paletteHex: color,
-          layerGroupName
+          paletteHex: color
         };
       });
     }
@@ -106,8 +103,7 @@ export function MapRunningData(models, compareUi, store) {
       if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
         activeLayerObj[def.id] = {
           paletteLegends: getPalette(def.id, undefined, undefined, state),
-          paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3]),
-          layerGroupName
+          paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3])
         };
       }
     });
