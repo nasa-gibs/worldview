@@ -311,7 +311,7 @@ class PaletteLegend extends React.Component {
    */
   renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex } = this.state;
-    const { layer, parentLayer } = this.props;
+    const { layer, parentLayer, layerGroupName } = this.props;
     const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
@@ -329,7 +329,7 @@ class PaletteLegend extends React.Component {
           const palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
           const isSubLayer = !!parentLayer;
           const parentLayerId = isSubLayer ? parentLayer.id : '';
-          const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId;
+          const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId + layerGroupName;
           const keyLabel = activeKeyObj ? activeKeyObj.label : '';
 
           return (
@@ -421,6 +421,7 @@ PaletteLegend.propTypes = {
   isRunningDataEnabled: PropTypes.bool,
   isSubLayer: PropTypes.bool,
   layer: PropTypes.object,
+  layerGroupName: PropTypes.string,
   paletteId: PropTypes.string,
   paletteLegends: PropTypes.array,
   parentLayer: PropTypes.object,

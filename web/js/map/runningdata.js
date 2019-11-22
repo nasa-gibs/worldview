@@ -67,7 +67,9 @@ export function MapRunningData(models, compareUi, store) {
    */
   self.newPoint = function(pixels, map) {
     const state = store.getState();
-    var activeLayerObj = {};
+    const compareState = state.compare || {};
+    const layerGroupName = compareState.active && compareState.activeString;
+    const activeLayerObj = {};
     const [lon, lat] = map.getCoordinateFromPixel(pixels);
     if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
       map.forEachFeatureAtPixel(pixels, (feature, layer) => {
@@ -84,30 +86,29 @@ export function MapRunningData(models, compareUi, store) {
           const properties = feature.getProperties();
           const value = properties[identifier] || def.palette.unclassified;
           if (!value) return;
-          const tooltips = legend.tooltips.map(function(c) { return c.toLowerCase().replace(/\s/g, ''); });
+          const tooltips = legend.tooltips.map(c => c.toLowerCase().replace(/\s/g, ''));
           const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
           color = legend.colors[colorIndex];
         } else if (legend.colors.length === 1) {
           color = legend.colors[0];
         }
-        activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: color };
+        activeLayerObj[layerId] = {
+          paletteLegends,
+          paletteHex: color,
+          layerGroupName
+        };
       });
     }
     map.forEachLayerAtPixel(pixels, function(layer, data) {
       if (!layer.wv) return;
-      var paletteHex;
-      var paletteLegends;
-      var layerId;
-      const def = layer.wv.def;
+      const { def } = layer.wv;
       if (!isFromActiveCompareRegion(map, pixels, layer.wv)) return;
-      if (
-        (def.palette) &&
-        !lodashGet(layer, 'wv.def.disableHoverValue')
-      ) {
-        layerId = def.id;
-        paletteLegends = getPalette(layerId, undefined, undefined, state);
-        paletteHex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
-        activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: paletteHex };
+      if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
+        activeLayerObj[def.id] = {
+          paletteLegends: getPalette(def.id, undefined, undefined, state),
+          paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3]),
+          layerGroupName
+        };
       }
     });
     if (!lodashIsEqual(activeLayerObj, dataObj)) {

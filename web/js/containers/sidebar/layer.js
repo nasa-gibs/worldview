@@ -41,7 +41,9 @@ class Layer extends React.Component {
 
   getPaletteLegend = () => {
     const {
+      compare,
       layer,
+      layerGroupName,
       runningObject,
       paletteLegends,
       checkerBoardPattern,
@@ -54,11 +56,14 @@ class Layer extends React.Component {
       isMobile
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
-      const isRunningData = !!runningObject;
+      const isRunningData = compare.active
+        ? (runningObject || {}).layerGroupName === layerGroupName
+        : !!runningObject;
       const colorHex = isRunningData ? runningObject.paletteHex : null;
       return (
         <PaletteLegend
           layer={layer}
+          layerGroupName={layerGroupName}
           paletteId={palette.id}
           getPalette={getPalette}
           paletteLegends={paletteLegends}
@@ -280,6 +285,7 @@ Layer.defaultProps = {
 };
 Layer.propTypes = {
   checkerBoardPattern: PropTypes.object,
+  compare: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
   hover: PropTypes.func,
@@ -316,7 +322,7 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
-  const { palettes, config, map, layers } = state;
+  const { palettes, config, map, layers, compare } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
@@ -329,6 +335,7 @@ function mapStateToProps(state, ownProps) {
   });
 
   return {
+    compare,
     tracksForLayer,
     layer,
     isDisabled,
