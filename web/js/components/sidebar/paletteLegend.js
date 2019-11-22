@@ -331,6 +331,9 @@ class PaletteLegend extends React.Component {
           const parentLayerId = isSubLayer ? parentLayer.id : '';
           const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId + layerGroupName;
           const keyLabel = activeKeyObj ? activeKeyObj.label : '';
+          const tooltipText = singleKey
+            ? layer.track ? trackLabel : legendTooltip
+            : keyLabel;
 
           return (
             <React.Fragment key={keyId}>
@@ -344,21 +347,22 @@ class PaletteLegend extends React.Component {
                 dangerouslySetInnerHTML={{ __html: '&nbsp' }}
               />
 
-              {singleKey && !isSubLayer
-                ? (
-                  <div className="wv-running-category-label-case">
-                    <span className="wv-running-category-label">
-                      {layer.track ? trackLabel : legend.title}
-                    </span>
-                  </div>
-                ) : (
-                  <Tooltip
-                    placement="bottom"
-                    isOpen={isActiveKey}
-                    target={keyId}>
-                    {keyLabel}
-                  </Tooltip>
-                )}
+              {singleKey && !isSubLayer && (
+                <div className="wv-running-category-label-case">
+                  <span className="wv-running-category-label">
+                    {layer.track ? trackLabel : legendTooltip}
+                  </span>
+                </div>
+              )}
+
+              {(
+                <Tooltip
+                  placement={singleKey ? 'right' : 'bottom'}
+                  isOpen={isActiveKey}
+                  target={keyId}>
+                  {tooltipText}
+                </Tooltip>
+              )}
             </React.Fragment>
           );
         })}
