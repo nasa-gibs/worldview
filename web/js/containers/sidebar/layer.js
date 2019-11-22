@@ -57,7 +57,7 @@ class Layer extends React.Component {
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
       const isRunningData = compare.active
-        ? (runningObject || {}).layerGroupName === layerGroupName
+        ? compare.activeString === layerGroupName && !!runningObject
         : !!runningObject;
       const colorHex = isRunningData ? runningObject.paletteHex : null;
       return (
