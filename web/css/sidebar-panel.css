@@ -226,10 +226,6 @@ img.hideReg {
   left: -999em !important;
 }
 
-.jspPane {
-  margin-left: 0 !important;
-}
-
 .sidebar-panel li.item.productsitem,
 li.item.productsitem.inmotion,
 .sidebar-panel li.itemstatic {
