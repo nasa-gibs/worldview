@@ -145,7 +145,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const stateCurrentDate = new Date(state.date[activeDateStr]);
     let date = options.date || stateCurrentDate;
-
+    if (state.animation.isPlaying) return date;
     // need to get previous available date to prevent unecessary requests
     let dateRange;
     let previousDateFromRange;
