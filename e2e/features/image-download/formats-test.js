@@ -58,7 +58,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Swtich to arctic, is PNG': function(c) {
+  'Switch to arctic, is PNG': function(c) {
     switchProjection(c, 'arctic');
     openImageDownloadPanel(c);
     clickDownload(c);

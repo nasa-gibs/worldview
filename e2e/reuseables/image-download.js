@@ -2,8 +2,8 @@ const TIME_LIMIT = 10000;
 
 module.exports = {
   openImageDownloadPanel: function(c) {
-    c.click('#wv-image-button');
     c.waitForElementVisible('#wv-image-button', TIME_LIMIT);
+    c.click('#wv-image-button');
     c.pause(250);
   },
 
