@@ -140,24 +140,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-
-
-  // self.closestDate = function(def, options) {
-  //   const state = store.getState();
-  //   const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-  //   let date = options.date || new Date(state.date[activeDateStr]);
-
-  //   if (def.period === 'subdaily') {
-  //     date = nearestInterval(def, date);
-  //   } else {
-  //     date = options.date
-  //       ? util.clearTimeUTC(new Date(date.getTime()))
-  //       : util.clearTimeUTC(date);
-  //   }
-
-  //   return date;
-  // };
-
   self.closestDate = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
@@ -165,7 +147,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     let date = options.date || stateCurrentDate;
     let previousDateFromRange;
     if (!state.animation.isPlaying) {
-
       // need to get previous available date to prevent unecessary requests
       let dateRange;
       // let previousDateFromRange;
