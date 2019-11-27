@@ -140,29 +140,50 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
+
+
+  // self.closestDate = function(def, options) {
+  //   const state = store.getState();
+  //   const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+  //   let date = options.date || new Date(state.date[activeDateStr]);
+
+  //   if (def.period === 'subdaily') {
+  //     date = nearestInterval(def, date);
+  //   } else {
+  //     date = options.date
+  //       ? util.clearTimeUTC(new Date(date.getTime()))
+  //       : util.clearTimeUTC(date);
+  //   }
+
+  //   return date;
+  // };
+
   self.closestDate = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const stateCurrentDate = new Date(state.date[activeDateStr]);
     let date = options.date || stateCurrentDate;
-    if (state.animation.isPlaying) return date;
-    // need to get previous available date to prevent unecessary requests
-    let dateRange;
     let previousDateFromRange;
-    if (def.previousDate && def.nextDate) {
-      const dateTime = date.getTime();
-      const previousDateTime = def.previousDate.getTime();
-      const nextDateTime = def.nextDate.getTime();
-      // if current date is outside previous and next dates avaiable, recheck range
-      if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
+    if (!state.animation.isPlaying) {
+
+      // need to get previous available date to prevent unecessary requests
+      let dateRange;
+      // let previousDateFromRange;
+      if (def.previousDate && def.nextDate) {
+        const dateTime = date.getTime();
+        const previousDateTime = def.previousDate.getTime();
+        const nextDateTime = def.nextDate.getTime();
+        // if current date is outside previous and next dates avaiable, recheck range
+        if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
+          dateRange = datesinDateRanges(def, date);
+          previousDateFromRange = prevDateInDateRange(def, date, dateRange);
+        } else {
+          previousDateFromRange = def.previousDate;
+        }
+      } else {
         dateRange = datesinDateRanges(def, date);
         previousDateFromRange = prevDateInDateRange(def, date, dateRange);
-      } else {
-        previousDateFromRange = def.previousDate;
       }
-    } else {
-      dateRange = datesinDateRanges(def, date);
-      previousDateFromRange = prevDateInDateRange(def, date, dateRange);
     }
 
     if (def.period === 'subdaily') {
