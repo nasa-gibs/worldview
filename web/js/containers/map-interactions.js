@@ -23,7 +23,7 @@ export class MapInteractions extends React.Component {
   }
 
   singleClick(e, map) {
-    const { lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject, measureIsActive } = this.props;
+    const { lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject, measureIsActive, isMobile } = this.props;
     if (measureIsActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
@@ -35,7 +35,7 @@ export class MapInteractions extends React.Component {
     const dialogId = isVectorModalOpen ? modalState.id : 'vector_dialog' + pixels[0] + pixels[1];
 
     if (metaArray.length) {
-      openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop);
+      openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
     }
     if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       selectVectorFeatures(selected);
@@ -85,7 +85,7 @@ const mapDispatchToProps = dispatch => ({
   onCloseModal: () => {
     dispatch(onClose());
   },
-  openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop) => {
+  openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -99,7 +99,7 @@ const mapDispatchToProps = dispatch => ({
         dragHandle: '.modal-header',
         dialogKey: new Date().getUTCMilliseconds(),
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
-        width: 445,
+        width: isMobile ? 250 : 445,
         height: 300,
         offsetLeft,
         offsetTop,
@@ -114,13 +114,14 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 function mapStateToProps(state) {
-  const { modal, map, measure, vectorStyles } = state;
+  const { modal, map, measure, vectorStyles, browser } = state;
   return {
     modalState: modal,
     isShowingClick: map.isClickable,
     getDialogObject: (pixels, map) => { return onMapClickGetVectorFeatures(pixels, map, state); },
     lastSelected: vectorStyles.selected,
-    measureIsActive: measure.isActive
+    measureIsActive: measure.isActive,
+    isMobile: browser.lessThan.medium
   };
 }
 MapInteractions.propTypes = {
@@ -133,6 +134,7 @@ MapInteractions.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   openVectorDiaglog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
+  isMobile: PropTypes.bool,
   lastSelected: PropTypes.object
 };
 export default connect(
