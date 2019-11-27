@@ -11,7 +11,8 @@
                     "description": "viirs/ClearSkyConfidence",
                     "image": "",
                     "settings": [
-                        "VIIRS_SNPP_Clear_Sky_Confidence_Day"
+                        "VIIRS_SNPP_Clear_Sky_Confidence_Day",
+                        "VIIRS_SNPP_Clear_Sky_Confidence_Night"
                     ]
                 }
             }
