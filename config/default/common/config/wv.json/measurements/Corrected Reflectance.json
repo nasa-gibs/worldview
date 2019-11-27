@@ -51,13 +51,7 @@
                        "Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual",
                        "Landsat_WELD_CorrectedReflectance_Bands157_Global_Monthly",
                        "Landsat_WELD_CorrectedReflectance_Bands743_Global_Annual",
-                       "Landsat_WELD_CorrectedReflectance_Bands743_Global_Monthly",
-                       "Landsat_WELD_CorrectedReflectance_TrueColor_Alaska_Monthly",
-                       "Landsat_WELD_CorrectedReflectance_TrueColor_Alaska_Seasonal",
-                       "Landsat_WELD_CorrectedReflectance_TrueColor_Alaska_Annual",
-                       "Landsat_WELD_CorrectedReflectance_TrueColor_CONUS_Monthly",
-                	   "Landsat_WELD_CorrectedReflectance_TrueColor_CONUS_Seasonal",
-                       "Landsat_WELD_CorrectedReflectance_TrueColor_CONUS_Annual"
+                       "Landsat_WELD_CorrectedReflectance_Bands743_Global_Monthly"
                     ]
                 }
             }
