@@ -142,11 +142,13 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
   const metaArray = [];
   const selected = {};
   const config = state.config;
-  const { screenWidth, screenHeight } = state.browser;
+  const { screenWidth, screenHeight, lessThan } = state.browser;
+  const isMobile = lessThan.medium;
+
   const x = pixels[0];
   const y = pixels[1];
   const isOnLeft = screenWidth - x >= screenWidth / 2;
-  const modalWidth = 445;
+  const modalWidth = isMobile ? 250 : 445;
   const modalHeight = 300;
   let offsetLeft = isOnLeft ? x + 20 : x - modalWidth - 20;
   let offsetTop = y - (modalHeight / 2);
