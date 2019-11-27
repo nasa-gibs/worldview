@@ -5,12 +5,12 @@
             "title":    "Aerosol Index (PyroCumuloNimbus)",
             "subtitle": "Suomi NPP / OMPS",
             "description": "omps/OMPS_Aerosol_Index_PyroCumuloNimbus",
-            "tags":     "ai PyroCb",
+            "tags":     "ai PyroCb flammagenitus",
             "group":    "overlays",
             "layergroup": [
               "omps"
             ],
-            "product":  "NMTO3",
+            "product":  "OMPS_NPP_NMMIEAI_L2",
             "tracks": [
             "OrbitTracks_Suomi_NPP_Ascending"
             ]
