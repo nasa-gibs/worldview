@@ -42,6 +42,7 @@
         "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
         "VIIRS_SNPP_Clear_Sky_Confidence_Day",
+        "VIIRS_SNPP_Clear_Sky_Confidence_Night",
 
         "GOES-East_ABI_Band2_Red_Visible_1km",
         "GOES-West_ABI_Band2_Red_Visible_1km",
