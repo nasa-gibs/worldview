@@ -67,8 +67,8 @@ export function prevDateInDateRange(def, date, dateArray) {
   const currentDateOffsetCheck = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
 
   if (!dateArray ||
-      (def.period === 'monthly' && isFirstDayOfMonth(currentDateOffsetCheck)) ||
-      (def.period === 'yearly' && (currentDateOffsetCheck.getDate() === 1 && currentDateOffsetCheck.getMonth() === 0))) {
+    (def.period === 'monthly' && isFirstDayOfMonth(currentDateOffsetCheck)) ||
+    (def.period === 'yearly' && (currentDateOffsetCheck.getDate() === 1 && currentDateOffsetCheck.getMonth() === 0))) {
     return date;
   }
 
@@ -81,13 +81,10 @@ export function prevDateInDateRange(def, date, dateArray) {
   // use closest date index to find closest date in filtered closestAvailableDates
   const closestDateIndex = closestIndexTo(currentDate, closestAvailableDates);
   const closestDate = closestAvailableDates[closestDateIndex];
-  def.previousDate = closestDate || null;
 
   // check for potential next date in function passed dateArray
   const nextClosestDate = dateArray[closestDateIndex + 1];
-  def.nextDate = nextClosestDate || null;
-
-  return closestDate ? new Date(closestDate.getTime()) : date;
+  return { previous: closestDate ? new Date(closestDate.getTime()) : date, next: nextClosestDate || null };
 };
 
 /**
@@ -131,7 +128,7 @@ export function datesinDateRanges(def, date) {
         year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
         dateArray.push(year);
       }
-    // Monthly layers
+      // Monthly layers
     } else if (def.period === 'monthly') {
       const maxMonthDate = new Date(maxYear, maxMonth + dateInterval, maxDay);
       if (currentDate >= minDate && currentDate <= maxMonthDate) {
@@ -142,7 +139,7 @@ export function datesinDateRanges(def, date) {
         month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
         dateArray.push(month);
       }
-    // Daily layers
+      // Daily layers
     } else if (def.period === 'daily') {
       const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateInterval);
       if (currentDate >= minDate && currentDate <= maxDayDate) {
@@ -155,7 +152,7 @@ export function datesinDateRanges(def, date) {
         day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
         dateArray.push(day);
       }
-    // Subdaily layers
+      // Subdaily layers
     } else if (def.period === 'subdaily') {
       const maxHours = maxDate.getUTCHours();
       const maxMinutes = maxDate.getUTCMinutes();
@@ -300,7 +297,7 @@ export function dateOverlap(period, dateRanges) {
         previousEnd = new Date(
           previousEnd.setTime(
             previousEnd.getTime() +
-              (previous.dateInterval * 86400000 - 86400000)
+            (previous.dateInterval * 86400000 - 86400000)
           )
         );
       }

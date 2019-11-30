@@ -48,7 +48,6 @@ import {
   getLayers,
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
-import { datesinDateRanges } from '../modules/layers/util';
 
 import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
@@ -99,7 +98,7 @@ export function mapui(models, config, store, ui) {
   const subscribeToStore = function(action) {
     switch (action.type) {
       case layerConstants.ADD_LAYER: {
-        const def = lodashFind(action.layers, { id: action.id });
+        const def = lodashCloneDeep(lodashFind(action.layers, { id: action.id }));
         return addLayer(def);
       }
       case CLEAR_ROTATE:
@@ -539,7 +538,6 @@ export function mapui(models, config, store, ui) {
     if (isGraticule(def, proj.id)) {
       addGraticule(def.opacity, activeLayerStr);
     } else {
-      def.availableDates = datesinDateRanges(def, date);
       if (firstLayer && firstLayer.get('group')) {
         // Find which map layer-group is the active LayerGroup
         // and add layer to layerGroup in correct location
@@ -634,18 +632,21 @@ export function mapui(models, config, store, ui) {
       if (compare && compare.active) {
         if (layerGroup && layerGroup.getLayers().getArray().length) {
           const index = findLayerIndex(def, layerGroup);
+          const layerValue = self.selected.getLayers().getArray()[index];
           layerGroup.getLayers().setAt(
             index,
             createLayer(def, {
               group: activeLayerStr,
-              date: state.date[activeDate]
+              date: state.date[activeDate],
+              previousLayer: layerValue ? layerValue.wv : null
             })
           );
           compareMapUi.update(activeLayerStr);
         }
       } else {
         const index = findLayerIndex(def);
-        self.selected.getLayers().setAt(index, createLayer(def));
+        const layerValue = self.selected.getLayers().getArray()[index];
+        self.selected.getLayers().setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         var vectorStyles = config.vectorStyles;
