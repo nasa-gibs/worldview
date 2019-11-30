@@ -98,7 +98,7 @@ export function mapui(models, config, store, ui) {
   const subscribeToStore = function(action) {
     switch (action.type) {
       case layerConstants.ADD_LAYER: {
-        const def = lodashCloneDeep(lodashFind(action.layers, { id: action.id }));
+        const def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
       }
       case CLEAR_ROTATE:
