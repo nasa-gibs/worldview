@@ -50,7 +50,8 @@ class InfoList extends Component {
       config,
       startTour,
       isTourActive,
-      isMobile
+      isMobile,
+      toggleDistractionFreeMode
     } = this.props;
     const feedbackAction = isMobile
       ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
@@ -91,7 +92,7 @@ class InfoList extends Component {
         iconClass: 'ui-icon far fa-eye fa-fw',
         id: 'distraction_free_info_item',
         onClick: () => {
-          this.props.toggleDistractionFreeMode();
+          toggleDistractionFreeMode();
         }
       }
     ];
@@ -205,5 +206,6 @@ InfoList.propTypes = {
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
   sendFeedback: PropTypes.func,
-  startTour: PropTypes.func
+  startTour: PropTypes.func,
+  toggleDistractionFreeMode: PropTypes.func
 };

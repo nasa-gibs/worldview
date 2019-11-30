@@ -131,8 +131,10 @@ class toolbarContainer extends Component {
       notificationType,
       notificationContentNumber,
       config,
+      isDistractionFreeModeActive,
       isImageDownloadActive,
-      isCompareActive
+      isCompareActive,
+      toggleDistractionFreeMode
     } = this.props;
     const notificationClass = notificationType
       ? ' wv-status-' + notificationType
@@ -143,13 +145,12 @@ class toolbarContainer extends Component {
           id="wv-toolbar"
           className={'wv-toolbar'}
         >
-          {/* add custom distraction free mode icon, template, modal ? */}
-          { this.props.isDistractionFreeModeActive
+          { isDistractionFreeModeActive
             ? <Button
-              id="wv-link-button"
+              id="wv-distraction-free-mode-button"
               className="wv-toolbar-button"
               title="Toggle Distraction Free Mode"
-              onClick={() => this.props.toggleDistractionFreeMode() }
+              onClick={() => toggleDistractionFreeMode() }
             >
               <i className="far fa-eye fa-2x" />
             </Button>
@@ -310,11 +311,13 @@ toolbarContainer.propTypes = {
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
   isRotated: PropTypes.bool,
   notificationContentNumber: PropTypes.number,
   notificationType: PropTypes.string,
   notify: PropTypes.func,
   openModal: PropTypes.func,
-  requestNotifications: PropTypes.func
+  requestNotifications: PropTypes.func,
+  toggleDistractionFreeMode: PropTypes.func
 };
