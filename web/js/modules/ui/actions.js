@@ -1,11 +1,17 @@
 import { TOGGLE_DISTRACTION_FREE_MODE } from './constants';
+import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
 export function toggleDistractionFreeMode() {
   return (dispatch, getState) => {
-    const newisDistractionFreeModeActive = getState().ui.isDistractionFreeModeActive;
+    const { modal, ui } = getState();
+    const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
+    const modalIsOpen = modal.isOpen;
     dispatch({
       type: TOGGLE_DISTRACTION_FREE_MODE,
-      isDistractionFreeModeActive: !newisDistractionFreeModeActive
+      isDistractionFreeModeActive: !isDistractionFreeModeActive
     });
+    if (!isDistractionFreeModeActive && modalIsOpen) {
+      dispatch({ type: CLOSE_MODAL });
+    }
   };
 }

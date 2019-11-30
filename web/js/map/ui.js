@@ -101,7 +101,8 @@ export function mapui(models, config, store, ui) {
     switch (action.type) {
       case TOGGLE_DISTRACTION_FREE_MODE: {
         var map = self.selected;
-        if (action.isDistractionFreeModeActive) {
+        const isDistractionFreeModeActive = store.getState().ui.isDistractionFreeModeActive;
+        if (isDistractionFreeModeActive) {
           // hide map scale and zoom buttons
           map.removeControl(map.wv.scaleImperial);
           map.removeControl(map.wv.scaleMetric);

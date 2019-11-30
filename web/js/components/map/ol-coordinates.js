@@ -78,11 +78,7 @@ class OlCoordinates extends React.Component {
     }
 
     return (
-<<<<<<< HEAD
-      <div style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}>
-=======
-      <div id='ol-coords-case'>
->>>>>>> 28e21d4e34e20f0d482a19167d6163b9066d85f7
+      <div id='ol-coords-case' style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}>
         <Coordinates
           format={this.state.format}
           latitude={this.state.latitude}
