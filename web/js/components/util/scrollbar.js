@@ -40,7 +40,7 @@ export default function Scrollbars(props) {
     if (!ref || !ref.current) {
       return;
     }
-    toggleVisibleClass(ref.current);
+    setTimeout(() => { toggleVisibleClass(ref.current); }, 100);
     setScrollTop(ref.current);
   });
 

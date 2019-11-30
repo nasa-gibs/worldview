@@ -13,7 +13,10 @@
 
             "palette": {
                 "recommended":  ["blue_4"]
-            }
+            },
+            "tracks": [
+            "OrbitTracks_Aura_Ascending"
+            ]
         }
     }
 }

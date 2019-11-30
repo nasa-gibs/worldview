@@ -12,7 +12,10 @@
               "modis_aqua"
             ],
             "product":  "MYD04_3K",
-            "wrapadjacentdays": true
-            }
+            "wrapadjacentdays": true,
+            "tracks": [
+            "OrbitTracks_Aqua_Ascending"
+            ]
         }
     }
+}

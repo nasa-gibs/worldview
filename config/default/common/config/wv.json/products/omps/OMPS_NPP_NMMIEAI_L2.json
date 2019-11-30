@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMPS_NPP_NMMIEAI_L2": {
+            "name": "OMPS-NPP L2 NM Aerosol Index swath orbital",
+            "handler": "List",
+            "query": {
+                "shortName": ["OMPS_NPP_NMMIEAI_L2"]
+            }
+        }
+    }
+}

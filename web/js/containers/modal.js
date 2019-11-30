@@ -8,39 +8,50 @@ import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
 import Draggable from 'react-draggable';
-
+import { Resizable } from 'react-resizable';
+const InteractionWrap = ({ condition, wrapper, children }) => condition ? wrapper(children) : children;
+const toggleWithClose = (onToggle, onClose, isOpen) => {
+  if (onClose && isOpen) {
+    return () => {
+      onToggle();
+      onClose();
+    };
+  } else {
+    return onToggle;
+  }
+};
 class ModalContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      offsetTop: props.customProps.offsetTop,
-      offsetLeft: props.customProps.offsetLeft,
       width: props.customProps.width,
-      isDraggable: props.isDraggable
+      height: props.customProps.height,
+      isDraggable: props.isDraggable,
+      offsetLeft: props.customProps.offsetLeft,
+      offsetTop: props.customProps.offsetTop,
+      offsetRight: props.customProps.offsetRight
+    };
+    this.onResize = this.onResize.bind(this);
+  }
+
+  getStyle() {
+    const { offsetLeft, offsetRight, offsetTop, width, height } = this.state;
+
+    return {
+      left: offsetLeft,
+      right: offsetRight,
+      top: offsetTop,
+      width: width,
+      height: height,
+      maxHeight: height
     };
   }
 
-  // static getDerivedStateFromProps(newProps, state) {
-  //   const customProps = newProps.customProps;
-  //   if (
-  //     customProps.width !== state.width ||
-  //     customProps.offsetLeft !== state.offsetLeft ||
-  //     customProps.offsetRight !== state.offsetRight
-  //   ) {
-  //     return {
-  //       width: customProps.width,
-  //       offsetLeft: customProps.offsetLeft,
-  //       offsetRight: customProps.offsetRight
-  //     };
-  //   } else return null;
-  // }
-  getStyle(props) {
-    return {
-      left: props.offsetLeft,
-      right: props.offsetRight,
-      top: props.offsetTop,
-      maxWidth: props.width
-    };
+  onResize(e, { size }) {
+    e.stopPropagation();
+    this.setState({
+      width: size.width, height: size.height
+    });
   }
 
   getTemplateBody() {
@@ -85,54 +96,68 @@ class ModalContainer extends Component {
       CompletelyCustomModal,
       bodyComponentProps,
       timeout,
-      isDraggable,
       desktopOnly,
-      size
+      size,
+      isDraggable,
+      isResizable,
+      dragHandle
     } = newProps;
 
-    const style = this.getStyle(newProps);
+    const style = this.getStyle();
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
-    const DraggableWrap = ({ condition, wrapper, children }) => condition ? wrapper(children) : children;
-    const toggleWithClose = () => {
-      onToggle();
-      if (onClose && isOpen) {
-        onClose();
-      }
-    };
-
+    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
     if (isMobile && isOpen && desktopOnly) {
-      toggleWithClose();
+      toggleFunction();
     }
     return (
       <ErrorBoundary>
-        <DraggableWrap
-          condition={isDraggable}
-          wrapper={children => <Draggable>{children}</Draggable>}
+        <InteractionWrap
+          condition={isDraggable || isResizable}
+          wrapper={children =>
+            <Draggable
+              handle={dragHandle}
+              disabled={!isDraggable}
+            >
+              <Resizable className="resize-box" resizeHandles={['se']}
+                width={this.state.width || newProps.width} height={this.state.height || newProps.height} minConstraints={[250, 250]}
+                maxConstraints={[495, screenHeight]}
+                handleSize={[8, 8]}
+                onResize={this.onResize}
+                draggableOpts={{ disabled: !isResizable }}
+              >
+                {children}
+              </Resizable>
+            </Draggable>
+          }
+
         >
           <Modal
             isOpen={isOpen}
-            toggle={toggleWithClose}
+            toggle={toggleFunction}
             backdrop={backdrop}
+            onExit={onClose}
             id={lowerCaseId}
             size={size}
             className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
             autoFocus={autoFocus || false}
             style={style}
             wrapClassName={modalWrapClass + ' ' + lowerCaseId}
-            modalTransition={{ timeout: timeout || 100 }}
+            modalTransition={{ timeout: isDraggable ? 0 : timeout || 100 }}
+            fade={!isDraggable}
           >
             {CompletelyCustomModal
-              ? (<CompletelyCustomModal {...customProps} />)
+              ? (<CompletelyCustomModal key={'custom_' + lowerCaseId} modalHeight={this.state.height || newProps.height} modalWidth={this.state.width || newProps.width} {...customProps}
+                toggleWithClose={toggleFunction} />)
               : (
                 <DetectOuterClick
-                  onClick={toggleWithClose}
+                  onClick={toggleFunction}
                   disabled={allowOuterClick}
                 >
                   {(headerComponent || headerText) && (
-                    <ModalHeader toggle={toggleWithClose}>
+                    <ModalHeader toggle={toggleFunction}>
                       {headerComponent ? <headerComponent /> : headerText || ''}
                     </ModalHeader>
                   )}
@@ -142,15 +167,15 @@ class ModalContainer extends Component {
                       ? (
                         <BodyComponent {...bodyComponentProps}
                           screenHeight={screenHeight}
-                          closeModal={toggleWithClose}/>
+                          closeModal={toggleFunction} />
                       )
                       : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
                   </ModalBody>
                 </DetectOuterClick>
               )}
           </Modal>
-        </DraggableWrap>
-      </ErrorBoundary>
+        </InteractionWrap >
+      </ErrorBoundary >
     );
   }
 }
@@ -181,6 +206,7 @@ function mapStateToProps(state) {
     id,
     isMobile,
     screenHeight: isMobile ? undefined : state.browser.screenHeight,
+    screenWidth: isMobile ? undefined : state.browser.screenWidth,
     bodyTemplate,
     isTemplateModal,
     customProps
@@ -197,7 +223,7 @@ export default connect(
   mapDispatchToProps
 )(ModalContainer);
 ModalContainer.defaultProps = {
-  customProps: { width: 500, offsetTop: 0, offsetLeft: 0 }
+  customProps: {}
 };
 ModalContainer.propTypes = {
   bodyTemplate: PropTypes.object,
@@ -207,5 +233,6 @@ ModalContainer.propTypes = {
   isDraggable: PropTypes.bool,
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
-  isTemplateModal: PropTypes.bool
+  isTemplateModal: PropTypes.bool,
+  screenHeight: PropTypes.number
 };

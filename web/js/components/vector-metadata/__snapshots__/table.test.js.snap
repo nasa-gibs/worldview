@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Check that there is not popup 1`] = `
+<div>
+  <div>
+    <table
+      className="table table-sm"
+    >
+      <thead>
+        <tr>
+          <th>
+            Choclococha
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div
+              className="vector-feature-name-cell"
+            >
+              GRAND_ID
+            </div>
+          </td>
+          <td>
+            <span>
+              4886
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`If there is a valuemap, use valuemap 1`] = `
+<div>
+  <div>
+    <table
+      className="table table-sm"
+    >
+      <thead>
+        <tr>
+          <th>
+            Choclococha
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div
+              className="vector-feature-name-cell"
+            >
+              GRAND_ID
+            </div>
+          </td>
+          <td>
+            <span>
+              4886
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div
+              className="vector-feature-name-cell"
+            >
+              Urborrur
+            </div>
+          </td>
+          <td>
+            <span>
+              Urban
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;

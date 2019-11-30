@@ -42,6 +42,11 @@ export function mapLocationToProjState(parameters, stateFromLocation, state) {
         proj: { $set: newProjState }
       });
     }
+  } else {
+    const selected = lodashGet(state, 'config.projections.geographic');
+    stateFromLocation = update(stateFromLocation, {
+      proj: { selected: { $set: selected } }
+    });
   }
   return stateFromLocation;
 }

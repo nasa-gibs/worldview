@@ -10,7 +10,10 @@
             "layergroup": [
               "mls"
             ],
-            "product":  "ML2SO2"
+            "product":  "ML2SO2",
+             "tracks": [
+            "OrbitTracks_Aura_Descending"
+            ]
         }
     }
 }

@@ -3,4 +3,4 @@ The Ground Level NO2, 1996 - 1998 and the Ground Level NO2, 2010 - 2012 layers a
 
 The purpose of the data set is to provide a continuous surface of NO2 concentrations for health and environmental research.
 
-References: [doi:10.7927/H4JW8BTT](https://dx.doi.org/10.7927/H4JW8BTT)
+References: [doi:10.7927/H4JW8BTT](https://doi.org/10.7927/H4JW8BTT)

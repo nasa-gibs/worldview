@@ -66,8 +66,6 @@ export default class Crop extends React.Component {
         <Cropper
           crop={crop}
           src={TRANSPARENT_GIF}
-          minWidth={2}
-          minHeight={2}
           style={{
             background:
               crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',

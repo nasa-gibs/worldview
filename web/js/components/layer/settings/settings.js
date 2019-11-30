@@ -5,6 +5,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { connect } from 'react-redux';
 import Opacity from './opacity';
 import Palette from './palette';
+import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import {
@@ -82,8 +83,8 @@ class LayerSettings extends React.Component {
       );
       const palette = getPalette(layer.id, i);
       const max = legend.colors.length - 1;
-      const start = palette.min || 0;
-      const end = palette.max || max;
+      const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
+      const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
       if (
         legend.type !== 'continuous' &&
@@ -100,6 +101,7 @@ class LayerSettings extends React.Component {
           <TabPane key={legend.id + 'pane'} tabId={i}>
             {legend.type !== 'classification' ? (
               <PaletteThreshold
+                key={layer.id + i + '_threshold'}
                 legend={legend}
                 setRange={setThresholdRange}
                 min={0}
@@ -168,18 +170,18 @@ class LayerSettings extends React.Component {
     const palette = getPalette(layer.id, 0);
     const legend = getPaletteLegend(layer.id, 0);
     const max = palette.legend.colors.length - 1;
-    const start = palette.min || 0;
-    const end = palette.max || max;
+    const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
+    const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
       return '';
     }
-
     return (
       <React.Fragment>
         {legend.type !== 'classification' &&
           <PaletteThreshold
+            key={layer.id + '0_threshold'}
             legend={legend}
             setRange={setThresholdRange}
             min={0}
@@ -256,7 +258,7 @@ class LayerSettings extends React.Component {
           ? this.renderCustomPalettes()
           : '';
     } else {
-      renderCustomizations = this.renderVectorStyles();
+      renderCustomizations = ''; // this.renderVectorStyles(); for future
     }
 
     if (!layer.id) return '';
@@ -268,6 +270,7 @@ class LayerSettings extends React.Component {
           layer={layer}
         />
         {renderCustomizations}
+        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer}/>}
       </React.Fragment>
     );
   }

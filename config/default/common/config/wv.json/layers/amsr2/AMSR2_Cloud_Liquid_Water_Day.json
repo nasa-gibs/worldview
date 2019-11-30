@@ -10,7 +10,10 @@
             "layergroup": [
               "amsr2"
             ],
-            "product":  "A2_RainOcn_NRT"
+            "product":  "A2_RainOcn_NRT",
+            "tracks": [
+            "OrbitTracks_GCOM-W1_Ascending"
+             ]
         }
     }
 }

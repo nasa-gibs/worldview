@@ -10,7 +10,10 @@
             "layergroup": [
               "mopitt"
             ],
-            "product":  "MOP03J"
+            "product":  "MOP03J",
+            "tracks": [
+            "OrbitTracks_Terra_Ascending"
+             ]
         }
     }
 }

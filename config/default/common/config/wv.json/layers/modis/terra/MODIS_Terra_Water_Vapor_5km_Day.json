@@ -15,7 +15,10 @@
 
             "palette": {
                 "recommended":  ["blue_1"]
-            }
+            },
+            "tracks": [
+            "OrbitTracks_Terra_Descending"
+             ]
         }
     }
 }

@@ -10,7 +10,11 @@
             "layergroup": [
 		          "mopitt"
             ],
-            "product":  "MOP02R_NRT"
+            "product":  "MOP02R_NRT",
+            "tracks": [
+                "OrbitTracks_Terra_Ascending",
+                "OrbitTracks_Terra_Descending"
+            ]
         }
     }
 }

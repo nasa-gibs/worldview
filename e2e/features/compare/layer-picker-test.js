@@ -5,6 +5,7 @@ const aodCombinedValueId = 'MODIS_Combined_Value_Added_AOD';
 const aodCheckBox =
   '#checkbox-case-MODIS_Combined_Value_Added_AOD .wv-checkbox';
 const aodIndexCheckbox = '#checkbox-case-OMI_Aerosol_Index .wv-checkbox';
+const TIME_LIMIT = 10000;
 
 module.exports = {
   before: function(client) {
@@ -34,6 +35,8 @@ module.exports = {
         );
       }
     );
+    client.waitForElementNotPresent('#layer_picker_component', TIME_LIMIT);
+    client.pause(250);
   },
   'Toggle compare mode to Active state B': function(client) {
     client.click(selectors.bTab + ' .productsIcon');

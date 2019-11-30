@@ -4,5 +4,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The Surface UV Index (Monthly, All-Sky) layer is available from the CERES instruments on the Terra and Aqua satellites. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: `Total_Sky_Surface_UV_Index`
+Data parameter: `Total_Sky_Surface_UV_Index`  
 Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition4A`

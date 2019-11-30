@@ -181,6 +181,7 @@
   padding-left: 1.2em;
   line-height: 0;
 }
+
 .layers-all .layers-all-layer:first-of-type {
   margin-top: 0;
 }
@@ -190,6 +191,9 @@
   top: 50%;
   left: auto;
   right: 1.2em;
+}
+.layers-all-layer .nav-item {
+  color: #fff;
 }
 
 .layer-picker-list-case .source-metadata h3 {
@@ -599,6 +603,15 @@
   margin-top: 0;
 }
 
+.layer-orbit-tracks .wv-checkbox {
+  margin: 10px 0 10px 10px;
+  & label {
+    display: inline;
+    text-transform: capitalize;
+    margin-left: 5px;
+  }
+}
+
 .layer-settings-modal .wv-header.wv-color-palette-label {
   margin-bottom: 0.5em;
 }
@@ -696,9 +709,9 @@
 .custom-layer-dialog .modal-title {
   width: 100%;
 }
-
-.custom-layer-dialog .modal-body {
+.custom-layer-dialog.light .modal-content .modal-body {
   padding: 0 0 0 13px;
+  background-color: #dcdcdc;
 }
 
 .custom-layer-dialog .category-masonry-case {

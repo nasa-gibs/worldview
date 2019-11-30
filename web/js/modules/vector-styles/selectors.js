@@ -1,15 +1,15 @@
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
-  each as lodashEach
+  each as lodashEach,
+  find as lodashFind
 } from 'lodash';
 import {
   getLayers
 } from '../layers/selectors';
-import { getMinValue, getMaxValue } from './util';
+import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import update from 'immutability-helper';
 import stylefunction from 'ol-mapbox-style/stylefunction';
-
 /**
  * Gets a single colormap (entries / legend combo)
  *
@@ -80,6 +80,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   var olMap = lodashGet(state, 'map.ui.selected');
   var layerState = state.layers;
   const activeLayerStr = state.compare.activeString;
+  const selected = state.vectorStyles.selected;
   var activeLayers = getLayers(
     layerState[activeLayerStr],
     {},
@@ -124,7 +125,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
 
   // Apply mapbox-gl styles
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
-
   // Filter Orbit Tracks
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
@@ -134,7 +134,23 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       if (minutes) {
         minute = minutes.split(':');
       }
-      if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+      if ((minute && minute[1] % 5 === 0) || feature.getType() === 'LineString') {
+        return styleFunction(feature, resolution);
+      }
+    });
+  } else if (glStyle.name === 'SEDAC' &&
+    ((selected[layerId] && selected[layerId].length))) {
+    const selectedFeatures = selected[layerId];
+
+    layer.setStyle(function(feature, resolution) {
+      const data = state.config.vectorData[def.vectorData.id];
+      const properties = data.mvt_properties;
+      const features = feature.getProperties();
+      const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
+      const uniqueIdentifier = features[idKey];
+      if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
+        return selectedStyleFunction(feature, styleFunction(feature, resolution));
+      } else {
         return styleFunction(feature, resolution);
       }
     });
@@ -189,7 +205,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       if (minutes) {
         minute = minutes.split(':');
       }
-      if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+      if ((minute && minute[1] % 5 === 0) || feature.getType() === 'LineString') {
         return styleFunction(feature, resolution);
       }
     });

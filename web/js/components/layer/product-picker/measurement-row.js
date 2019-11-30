@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashValues from 'lodash/values';
 import lodashFind from 'lodash/find';
-import lodashStartCase from 'lodash/startCase';
+import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import {
   TabContent,
   TabPane,
@@ -83,17 +83,7 @@ class LayerRow extends React.Component {
           layer.layergroup &&
           layer.layergroup.indexOf('reference_orbits') !== -1
         ) {
-          if (layer.daynight && layer.track) {
-            orbitTitle =
-              lodashStartCase(layer.track) +
-              '/' +
-              lodashStartCase(layer.daynight);
-          } else if (layer.track) {
-            orbitTitle = lodashStartCase(layer.track);
-          } else if (layer.day) {
-            orbitTitle = lodashStartCase(layer.daynight);
-          }
-
+          orbitTitle = getOrbitTrackTitle(layer);
           OrbitSourceList.push(
             <MeasurementLayerRow
               measurementId={measurement.id}
