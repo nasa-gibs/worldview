@@ -7,10 +7,10 @@ These images are called true color or natural color because the combination of w
 
 The sensor resolution is 30 m with an imagery resolution is 31.25 m. The temporal availability for the annual layer is 1998 - 2001 and December 1998 - November 2001 for the monthly layer.
 
-### Corrected Reflectance (Bands 1-5-7, Global, Annual | Monthly)
+### Surface Reflectance (Bands 1-5-7, Global, Annual | Monthly)
 Temporal coverage: Annual: 1998 - 2001; Monthly: December 1998 - November 2001
 
-### Corrected Reflectance (Bands 7-4-3, Global, Annual | Monthly)
+### Surface Reflectance (Bands 7-4-3, Global, Annual | Monthly)
 Temporal coverage: Annual: 1998 - 2001; Monthly: December 1998 - November 2001
 
 References: [LP DAAC GWELDYR Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDYR.031); [LP DAAC GWELDMO Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)

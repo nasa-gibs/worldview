@@ -1,0 +1,11 @@
+{
+    "products": {
+        "GWELDMO": {
+            "name": "NASA Global Web-Enabled Landsat Data Monthly Global 30 m V031",
+            "handler": "WELDGranuleFootprints",
+            "query": {
+                "shortName": "GWELDMO"
+            }
+        }
+    }
+}
