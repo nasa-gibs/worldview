@@ -9,7 +9,9 @@ import {
   runningData as runningDataAction,
   clearRunningData as clearRunningDataAction
 } from '../modules/map/actions';
-
+import {
+  isFromActiveCompareRegion
+} from '../modules/compare/util';
 export function MapRunningData(models, compareUi, store) {
   var self;
 
@@ -23,34 +25,6 @@ export function MapRunningData(models, compareUi, store) {
       dataObj = {};
       store.dispatch(clearRunningDataAction());
     }
-  };
-  /**
-   * When in A|B only show Running-data from active side of Map while in swipe mode -
-   * No other modes will allow for running-data
-   * @param {Object} map | OL map object
-   * @param {Array} coords | Coordinates of hover point
-   * @param {Object} layerAttributes | Layer Properties
-   */
-  var isFromActiveCompareRegion = function(map, coords, layerAttributes) {
-    var compareModel = store.getState().compare;
-    if (compareModel && compareModel.active) {
-      if (compareModel.mode !== 'swipe') {
-        return false;
-      } else {
-        const swipeOffset = Math.floor(compareUi.getOffset());
-
-        if (compareModel.isCompareA) {
-          if (coords[0] > swipeOffset || layerAttributes.group !== 'active') {
-            return false;
-          }
-        } else {
-          if (coords[0] < swipeOffset || layerAttributes.group !== 'activeB') {
-            return false;
-          }
-        }
-      }
-    }
-    return true;
   };
   /*
    * Compare old and new arrays to determine which Layers need to be
@@ -69,9 +43,14 @@ export function MapRunningData(models, compareUi, store) {
     const state = store.getState();
     const activeLayerObj = {};
     const [lon, lat] = map.getCoordinateFromPixel(pixels);
+    let swipeOffset;
+    if (compareUi && state.compare.active) {
+      swipeOffset = Math.floor(compareUi.getOffset());
+    }
+
     if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
       map.forEachFeatureAtPixel(pixels, (feature, layer) => {
-        if (!layer.wv || !layer.wv.def || !isFromActiveCompareRegion(map, pixels, layer.wv)) return;
+        if (!layer.wv || !layer.wv.def || !isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
         let color;
         const def = layer.wv.def;
         const identifier = def.palette.styleProperty;
@@ -99,7 +78,7 @@ export function MapRunningData(models, compareUi, store) {
     map.forEachLayerAtPixel(pixels, function(layer, data) {
       if (!layer.wv) return;
       const { def } = layer.wv;
-      if (!isFromActiveCompareRegion(map, pixels, layer.wv)) return;
+      if (!isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
       if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
         activeLayerObj[def.id] = {
           paletteLegends: getPalette(def.id, undefined, undefined, state),
