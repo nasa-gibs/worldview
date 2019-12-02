@@ -1070,12 +1070,12 @@ export function mapui(models, config, store, ui) {
      *
      */
     var onZoomChange = function() {
-      var maxZoom = proj.resolutions.length;
-      var zoom = map.getView().getZoom();
+      const { numZoomLevels } = proj;
+      const zoom = map.getView().getZoom();
       if (zoom === 0) {
         $zoomIn.button('enable');
         $zoomOut.button('disable');
-      } else if (zoom === maxZoom) {
+      } else if (zoom === numZoomLevels) {
         $zoomIn.button('disable');
         $zoomOut.button('enable');
       } else {
