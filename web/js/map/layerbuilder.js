@@ -167,7 +167,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           previousLayerDate = previous;
           nextLayerDate = next;
         } else {
-          previousDateFromRange = def.previousDate;
+          previousDateFromRange = previousLayer.previousDate;
         }
       } else {
         dateRange = datesinDateRanges(def, date);
