@@ -155,7 +155,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     if (!state.animation.isPlaying) {
       // need to get previous available date to prevent unecessary requests
       let dateRange;
-      // let previousDateFromRange;
       if (previousLayer.previousDate && previousLayer.nextDate) {
         const dateTime = date.getTime();
         const previousDateTime = previousLayer.previousDate.getTime();
