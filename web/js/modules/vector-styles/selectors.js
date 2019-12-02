@@ -101,10 +101,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     }
     lodashEach(activeLayers, function(def) {
-      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
-        return;
-      }
-
       if (state.compare && state.compare.active) {
         if (layerGroup && layerGroup.getLayers().getArray().length) {
           lodashEach(layerGroup.getLayers().getArray(), subLayer => {
@@ -195,7 +191,6 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       }
     });
   }
-
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
