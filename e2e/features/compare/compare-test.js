@@ -82,7 +82,7 @@ module.exports = {
     client.click('#closeactiveMODIS_Terra_CorrectedReflectance_TrueColor');
     client.pause(100);
     client.expect.element(ModisTruecolorLayerA).to.not.be.present;
-    client.expect.element(ModisTruecolorLayerB).to.not.be.visible;
+    client.expect.element(ModisTruecolorLayerB).to.not.be.present;
     client.click(localSelectors.bTab);
     client.waitForElementVisible(ModisTruecolorLayerB, TIME_LIMIT);
   },
