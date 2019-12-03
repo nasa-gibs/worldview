@@ -5,7 +5,7 @@ import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/pal
 import lodashIsNumber from 'lodash/isNumber';
 import { Tooltip } from 'reactstrap';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
-import VisibilitySensor from 'react-visibility-sensor';
+import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
 
 class PaletteLegend extends React.Component {
   constructor(props) {
