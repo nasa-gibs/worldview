@@ -137,7 +137,11 @@ module.exports = {
             compact: false // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
           }
         },
-        exclude: [/\.test\.js$/, /fixtures\.js$/, /core-js/]
+        exclude: [
+          /\.test\.js$/,
+          /fixtures\.js$/,
+          /core-js/,
+          /node_modules\/react-visibility-sensor\/.*/]
       },
       {
         test: require.resolve('jquery'), // expose globally for jQuery plugins
