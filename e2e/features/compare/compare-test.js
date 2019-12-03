@@ -99,7 +99,7 @@ module.exports = {
       client.click(toggleButton);
       client.pause(100);
       client.expect.element(collapsedToggleButton).to.be.visible;
-      client.expect.element(toggleButton).to.not.be.visible;
+      client.waitForElementNotPresent(toggleButton, TIME_LIMIT);
       client.useCss().assert.containsText(collapsedToggleButton, 'Layers (6)');
       client.click(collapsedToggleButton);
       client.pause(100);
