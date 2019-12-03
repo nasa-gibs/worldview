@@ -140,8 +140,8 @@ module.exports = {
         exclude: [
           /\.test\.js$/,
           /fixtures\.js$/,
-          /core-js/,
-          /node_modules\/react-visibility-sensor\/.*/]
+          /core-js/
+        ]
       },
       {
         test: require.resolve('jquery'), // expose globally for jQuery plugins
