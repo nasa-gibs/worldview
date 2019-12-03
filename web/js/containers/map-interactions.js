@@ -93,6 +93,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(onClose());
   },
   openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
+    const dialogKey = new Date().getUTCMilliseconds();
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -104,7 +105,8 @@ const mapDispatchToProps = dispatch => ({
         CompletelyCustomModal: vectorDialog,
         isResizable: true,
         dragHandle: '.modal-header',
-        dialogKey: new Date().getUTCMilliseconds(),
+        dialogKey,
+        key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: isMobile ? 250 : 445,
         height: 300,
@@ -150,7 +152,8 @@ MapInteractions.propTypes = {
   selectVectorFeatures: PropTypes.func.isRequired,
   compareState: PropTypes.object,
   isMobile: PropTypes.bool,
-  lastSelected: PropTypes.object
+  lastSelected: PropTypes.object,
+  swipeOffset: PropTypes.number
 };
 export default connect(
   mapStateToProps,
