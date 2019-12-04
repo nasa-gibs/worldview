@@ -11,14 +11,14 @@
             ],
             "group":    "baselayers",
             "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Suomi_NPP_Ascending"
+            ],
             "projections": {
                 "geographic": {
                     "source": "GIBS:geographic"
                 }
-            },
-            "tracks": [
-                "OrbitTracks_Suomi_NPP_Ascending"
-            ]
+            }
         }
     }
 }
