@@ -30,7 +30,9 @@ export default function Scrollbars(props) {
     const { contentWrapperEl } = simpleBar;
     if (contentWrapperEl) {
       const verticalTop = Math.floor(props.scrollBarVerticalTop);
-      contentWrapperEl.scrollTop = verticalTop !== 0 ? verticalTop : 0;
+      contentWrapperEl.scrollTop = verticalTop !== 0
+        ? verticalTop
+        : contentWrapperEl.scrollTop;
     }
   };
 
@@ -38,7 +40,7 @@ export default function Scrollbars(props) {
     if (!ref || !ref.current) {
       return;
     }
-    toggleVisibleClass(ref.current);
+    setTimeout(() => { toggleVisibleClass(ref.current); }, 100);
     setScrollTop(ref.current);
   });
 

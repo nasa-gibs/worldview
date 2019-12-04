@@ -13,9 +13,6 @@ import { timeScaleOptions } from '../../modules/date/constants';
  * @class TimelineRangeSelector
  */
 class TimelineRangeSelector extends React.Component {
-  /*
-   * @constructor
-   */
   constructor(props) {
     super(props);
     this.state = {
@@ -23,10 +20,6 @@ class TimelineRangeSelector extends React.Component {
       endLocation: props.endLocation,
       deltaStart: 0
     };
-
-    this.onRangeDrag = this.onRangeDrag.bind(this);
-    this.onItemDrag = this.onItemDrag.bind(this);
-    this.onDragStop = this.onDragStop.bind(this);
   }
 
   /*
@@ -43,36 +36,38 @@ class TimelineRangeSelector extends React.Component {
    *
    * @return {void}
    */
-  onItemDrag(deltaX, id) {
-    var startX;
-    var endX;
+  onItemDrag = (deltaX, id) => {
+    const { endLocation, startLocation } = this.state;
+    const { max, pinWidth } = this.props;
+    let startX;
+    let endX;
 
     if (id === 'start') {
-      startX = deltaX + this.state.startLocation;
-      endX = this.state.endLocation;
+      startX = deltaX + startLocation;
+      endX = endLocation;
       if (startX < 0 || startX > endX) {
         return;
       }
-      if (startX + this.props.pinWidth >= endX) {
-        if (startX + this.props.pinWidth >= this.props.max.width) {
+      if (startX + pinWidth >= endX) {
+        if (startX + pinWidth >= max.width) {
           return;
         } else {
-          endX = startX + this.props.pinWidth;
+          endX = startX + pinWidth;
         }
       }
     } else if (id === 'end') {
-      startX = this.state.startLocation;
-      endX = deltaX + this.state.endLocation;
-      if (endX > this.props.max.width || startX > endX) {
+      startX = startLocation;
+      endX = deltaX + endLocation;
+      if (endX > max.width || startX > endX) {
         return;
       }
-      if (startX + 2 * this.props.pinWidth >= endX) {
-        startX = endX - this.props.pinWidth;
+      if (startX + 2 * pinWidth >= endX) {
+        startX = endX - pinWidth;
       }
     } else {
-      startX = deltaX + this.state.startLocation;
-      endX = deltaX + this.state.endLocation;
-      if (endX >= this.props.max.width || startX < 0) {
+      startX = deltaX + startLocation;
+      endX = deltaX + endLocation;
+      if (endX >= max.width || startX < 0) {
         return;
       }
     }
@@ -91,8 +86,9 @@ class TimelineRangeSelector extends React.Component {
    *
    * @return {void}
    */
-  onDragStop() {
-    this.animationDraggerPositionUpdate(this.state.startLocation, this.state.endLocation, false);
+  onDragStop = () => {
+    const { endLocation, startLocation } = this.state;
+    this.animationDraggerPositionUpdate(startLocation, endLocation, false);
   }
 
   /*
@@ -105,7 +101,7 @@ class TimelineRangeSelector extends React.Component {
    *
    * @return {void}
    */
-  onRangeDrag(d, deltaStart) {
+  onRangeDrag = (d, deltaStart) => {
     const startLocation = this.state.startLocation + d;
     const endLocation = this.state.endLocation + d;
     this.setState({
@@ -258,61 +254,89 @@ class TimelineRangeSelector extends React.Component {
    * @method render
    */
   render() {
+    const { endLocation, deltaStart, startLocation } = this.state;
+    const {
+      axisWidth,
+      endColor,
+      endLocationDate,
+      endTriangleColor,
+      max,
+      pinWidth,
+      rangeColor,
+      rangeOpacity,
+      startColor,
+      startLocationDate,
+      startTriangleColor,
+      timelineEndDateLimit,
+      timelineStartDateLimit,
+      timeScale
+    } = this.props;
     return (
       <svg
         id="wv-timeline-range-selector"
         className="wv-timeline-range-selector"
-        width={this.props.axisWidth}
+        width={axisWidth}
         height={75}
       >
         <DraggerRange
-          opacity={this.props.rangeOpacity}
-          startLocation={this.state.startLocation}
-          endLocation={this.state.endLocation}
-          startLocationDate={this.props.startLocationDate}
-          endLocationDate={this.props.endLocationDate}
-          timelineStartDateLimit={this.props.timelineStartDateLimit}
-          timelineEndDateLimit={this.props.timelineEndDateLimit}
-          deltaStart={this.state.deltaStart}
-          max={this.props.max}
+          opacity={rangeOpacity}
+          startLocation={startLocation}
+          endLocation={endLocation}
+          startLocationDate={startLocationDate}
+          endLocationDate={endLocationDate}
+          timelineStartDateLimit={timelineStartDateLimit}
+          timelineEndDateLimit={timelineEndDateLimit}
+          timeScale={timeScale}
+          deltaStart={deltaStart}
+          max={max}
           height={64}
-          width={this.props.pinWidth}
-          color={this.props.rangeColor}
+          width={pinWidth}
+          color={rangeColor}
           draggerID="range-selector-range"
           onDrag={this.onRangeDrag}
           onStop={this.onDragStop}
           id="range"
         />
         <Dragger
-          position={this.state.startLocation}
-          color={this.props.startColor}
-          width={this.props.pinWidth}
+          position={startLocation}
+          color={startColor}
+          width={pinWidth}
           height={45}
           onDrag={this.onItemDrag}
           onStop={this.onDragStop}
-          max={this.props.max.width}
+          max={max.width}
           draggerID="range-selector-dragger-1"
-          backgroundColor={this.props.startTriangleColor}
+          backgroundColor={startTriangleColor}
           first={true}
           id="start"
         />
         <Dragger
-          max={this.props.max.width}
-          position={this.state.endLocation}
-          color={this.props.endColor}
-          width={this.props.pinWidth}
+          max={max.width}
+          position={endLocation}
+          color={endColor}
+          width={pinWidth}
           height={45}
           first={false}
           draggerID="range-selector-dragger-2"
           onDrag={this.onItemDrag}
           onStop={this.onDragStop}
-          backgroundColor={this.props.endTriangleColor}
+          backgroundColor={endTriangleColor}
           id="end"
         />
       </svg>
     );
   }
 }
+
+TimelineRangeSelector.defaultProps = {
+  pinWidth: 5,
+  rangeOpacity: 0.3,
+  rangeColor: '#45bdff',
+  startColor: '#40a9db',
+  startTriangleColor: '#fff',
+  endColor: '#295f92',
+  endTriangleColor: '#4b7aab'
+};
 
 TimelineRangeSelector.propTypes = {
   axisWidth: PropTypes.number,

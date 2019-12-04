@@ -6,5 +6,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The CERES Surface CRE Net Longwave Flux layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: `sfc_cre_net_lw_mon`
+Data parameter: `sfc_cre_net_lw_mon`  
 Data product: `CERES_EBAF-Sfc_Edition4.0`

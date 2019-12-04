@@ -3,7 +3,7 @@ The DMSP-F8 Rain Rate Over Oceans layer indicates the rain rate in millimeters p
 The F08 spacecraft is flown by the DMSP on two operational polar orbiting platforms and had an orbit that was near-circular, sun-synchronous, and near-polar with an altitude of about 860 ± 25 kilometers. The SSM/I sensor consisted of 7 separate total-power radiometers measuring the intensity of radiation coming from its Earth-viewing reflector operating at four different frequencies: 19.35, 22.235, 37, and 85.5 gigahertz.
 
 References:
-[RSS SSM/I Ocean Product Grids 3-DAY Average from DMSP F8 NetCDF](http://dx.doi.org/10.5067/MEASURES/DMSP-F8/SSMI/DATA302);
+[RSS SSM/I Ocean Product Grids 3-DAY Average from DMSP F8 NetCDF](https://doi.org/10.5067/MEASURES/DMSP-F8/SSMI/DATA302);
 [Wentz. F., A Well Calibrated Ocean Algorithm for SSM/I, Remote Sensing Systems](http://images.remss.com/papers/ssmi.pdf);
 [Wentz, F., SSM/I Version-7 Calibration Report, Remote Sensing Systems, 2013](http://images.remss.com/papers/tech_reports/2012_Wentz_011012_Version-7_SSMI_Calibration.pdf);
 [SSM/I and SSMIS Data in NetCDF User's Guide, Global Hydrology Research Center, The University of Alabama in Huntsville, 2012.](https://ghrc.nsstc.nasa.gov/pub/doc/ssmi_netcdf/SSMI_Data_in_NetCDF.docx)

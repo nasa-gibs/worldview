@@ -29,7 +29,11 @@ import {
   timeScaleToNumberKey,
   customModalType
 } from '../modules/date/constants';
-import { getQueueLength, getMaxQueueLength } from '../modules/animation/util';
+import {
+  getQueueLength,
+  getMaxQueueLength,
+  snapToIntervalDelta
+} from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
   getLayers
@@ -79,6 +83,7 @@ const RangeHandle = props => {
 
 const widgetWidth = 334;
 const subdailyWidgetWidth = 460;
+const maxFrames = 40;
 
 /*
  * A react component, Builds a rather specific
@@ -200,7 +205,7 @@ class AnimationWidget extends React.Component {
       endDate
     } = this.zeroDates();
 
-    if (numberOfFrames >= 40) {
+    if (numberOfFrames >= maxFrames) {
       return;
     }
 
@@ -230,7 +235,7 @@ class AnimationWidget extends React.Component {
     );
   }
 
-  /*
+  /**
    * Sets a new state to say whether or not
    * the animation should loop
    *
@@ -260,7 +265,7 @@ class AnimationWidget extends React.Component {
     }
   }
 
-  /*
+  /**
    * Changes selected default or custom interval in header and
    * changes left/right date arrow increments
    *
@@ -271,7 +276,6 @@ class AnimationWidget extends React.Component {
    *
    * @return {void}
    */
-
   onIntervalSelect(timeScale, openModal) {
     let delta;
     const { customInterval, customDelta } = this.props;
@@ -292,7 +296,7 @@ class AnimationWidget extends React.Component {
     this.props.onIntervalSelect(delta, timeScale, customSelected);
   }
 
-  /*
+  /**
    * update global store startDate, endDate, and isPlaying
    *
    * @method onPushPlay
@@ -312,7 +316,7 @@ class AnimationWidget extends React.Component {
     onPushPlay();
   }
 
-  /*
+  /**
    * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
    * subdaily intervals retain hours and minutes
    *
@@ -374,7 +378,7 @@ class AnimationWidget extends React.Component {
     const { numberOfFrames } = this.props;
     const { hoverGif } = this.state;
     const elemExists = document.querySelector('#create-gif-button');
-    const showTooltip = elemExists && hoverGif && numberOfFrames >= 40;
+    const showTooltip = elemExists && hoverGif && numberOfFrames >= maxFrames;
     return (
       <Tooltip
         placement="right"
@@ -436,7 +440,7 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers
     } = this.props;
     const { speed } = this.state;
-    const gifDisabled = numberOfFrames >= 40;
+    const gifDisabled = numberOfFrames >= maxFrames;
     return (
       <Draggable
         bounds="body"
@@ -576,6 +580,14 @@ class AnimationWidget extends React.Component {
       delta
     );
 
+    const snappedCurrentDate = snapToIntervalDelta(
+      currentDate,
+      startDate,
+      endDate,
+      interval,
+      delta
+    );
+
     if (!isActive) {
       return null;
     }
@@ -586,12 +598,12 @@ class AnimationWidget extends React.Component {
       <ErrorBoundary>
         {isPlaying && (
           <PlayQueue
-            endDate={endDate}
             loop={looping}
             isPlaying={isPlaying}
-            currentDate={currentDate}
             canPreloadAll={queueLength <= maxLength}
+            currentDate={snappedCurrentDate}
             startDate={startDate}
+            endDate={endDate}
             hasCustomPalettes={hasCustomPalettes}
             map={map}
             maxQueueLength={maxLength}
@@ -669,7 +681,8 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     timeScaleFromNumberKey[useInterval],
-    customSelected && customDelta ? customDelta : delta
+    customSelected && customDelta ? customDelta : delta,
+    maxFrames
   );
 
   return {

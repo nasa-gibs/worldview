@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * A scrollable list of layers
- * @class LayerList
+ * A checkbox component
+ * @class Checkbox
  * @extends React.Component
  */
 export class Checkbox extends React.Component {

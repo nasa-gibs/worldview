@@ -11,17 +11,14 @@
 .clickable-behind-modal .modal {
   position: inherit;
 }
+.modal-dialog .modal-header .close:hover {
+  color: #fff;
+}
 .draggable-modal .modal {
   position: fixed;
 }
-.react-draggable.modal-dialog.vector-modal {
+.react-draggable.modal-dialog {
   position: absolute;
-  left: 50%;
-  width: 500px;
-  height: 160px;
-  margin-left: -250px;
-  margin-top: 10px;
-  margin-bottom: 0;
 }
 .template-modal.modal-dialog {
   max-width: 625px;
@@ -38,18 +35,28 @@
   list-style-type: disc;
   margin: 2px 0 2px 20px;
 }
-.modal-dialog.light .modal-content {
-  background-color: #dcdcdc;
-}
-.modal-dialog .modal-header .close:hover {
-  color: #fff;
-}
-.modal-dialog.light .modal-header .close:hover {
-  color: #000;
-}
+
 .dynamic-modal.modal-dialog {
   position: absolute;
 }
 .notify .modal-footer {
   border: none;
+}
+
+/* light modal styling */
+.modal-dialog.light .modal-content {
+  background-color: #dcdcdc;
+  color: #000;
+}
+.modal-dialog.light .modal-header {
+  color: #343a40;
+}
+.modal-dialog.light .modal-header .close {
+  color: #000;
+}
+.modal-dialog.light .modal-header .close:hover {
+  color: #000;
+}
+.modal-dialog.light .modal-body {
+  background: #eee;
 }

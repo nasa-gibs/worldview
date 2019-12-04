@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AERDB_L2_VIIRS_SNPP_NRT": {
+            "name": "VIIRS/SNPP Deep Blue Aerosol L2 6-Min Swath 6 km",
+            "handler": "VIIRSSwathDay",
+            "query": {
+                "shortName": "AERDB_L2_VIIRS_SNPP_NRT"
+            }
+        }
+    }
+}

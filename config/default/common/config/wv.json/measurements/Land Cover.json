@@ -3,7 +3,7 @@
         "Land Cover": {
             "id": "land-cover",
             "title":    "Land Cover",
-            "subtitle": "Aqua and Terra/MODIS, Terra/MODIS, Landsat WELD, SEDAC",
+            "subtitle": "Aqua and Terra/MODIS, Terra/MODIS, SEDAC",
             "sources": {
                   "Aqua and Terra/MODIS": {
                       "id": "aqua-terra-modis",
@@ -23,15 +23,6 @@
                         "MODIS_Terra_L3_Land_Water_Mask"
                       ]
                   },
-                "Landsat/WELD": {
-                    "id": "landsat-weld",
-                    "title": "Landsat/WELD",
-                    "description": "landsat/LandCover",
-                    "image": "",
-                    "settings": [
-                        "Landsat_WELD_CONUS_5_Year_Tree_Cover"
-                    ]
-                },
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",

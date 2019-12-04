@@ -10,7 +10,10 @@
               "modis",
               "modis_terra"
             ],
-            "product":  "MOD021KM_NIGHT"
+            "product":  "MOD021KM_NIGHT",
+            "tracks": [
+            "OrbitTracks_Terra_Ascending"
+             ]
         }
     }
 }

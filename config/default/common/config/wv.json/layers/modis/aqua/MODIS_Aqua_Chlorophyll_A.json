@@ -9,7 +9,10 @@
             "layergroup": [
               "modis",
               "modis_aqua"
-            ]
+            ],
+            "tracks": [
+            "OrbitTracks_Aqua_Ascending"
+             ]
         }
     }
 }

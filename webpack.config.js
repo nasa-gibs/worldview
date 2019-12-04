@@ -100,7 +100,7 @@ module.exports = {
         uglifyOptions: {
           ecma: 5, // dependent on ie11 support
           compress: true,
-          mangle: true,
+          mangle: false,
           topLevel: true,
           safari10: true,
           output: {
@@ -137,7 +137,11 @@ module.exports = {
             compact: false // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
           }
         },
-        exclude: [/\.test\.js$/, /fixtures\.js$/, /core-js/]
+        exclude: [
+          /\.test\.js$/,
+          /fixtures\.js$/,
+          /core-js/
+        ]
       },
       {
         test: require.resolve('jquery'), // expose globally for jQuery plugins

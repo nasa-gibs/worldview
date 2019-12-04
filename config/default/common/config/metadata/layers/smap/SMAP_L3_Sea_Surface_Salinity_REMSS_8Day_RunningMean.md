@@ -3,4 +3,4 @@ While the NASA SMAP (Soil Moisture Active Passive) mission was designed principa
 
 References:  Meissner, T. and F. J. Wentz, 2019: Remote Sensing Systems SMAP Ocean Surface Salinities, Version 4.0 validated release. Remote Sensing Systems, Santa Rosa, CA, USA.
 
-NASA Salinity Continuity Project. 2019. RSS SMAP Level 3 Sea Surface Salinity Standard Mapped Image 8-Day Running Mean V4.0 Validated Dataset. Ver. 4.0. PO.DAAC, CA, USA. [doi: 10.5067/SMP40-3SPCS](https://dx.doi.org/10.5067/SMP40-3SPCS)
+NASA Salinity Continuity Project. 2019. RSS SMAP Level 3 Sea Surface Salinity Standard Mapped Image 8-Day Running Mean V4.0 Validated Dataset. Ver. 4.0. PO.DAAC, CA, USA. [doi: 10.5067/SMP40-3SPCS](https://doi.org/10.5067/SMP40-3SPCS)

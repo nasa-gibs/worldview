@@ -10,7 +10,10 @@
               "modis",
               "modis_aqua"
             ],
-            "product":  "MYD29"
+            "product":  "MYD29",
+            "tracks": [
+            "OrbitTracks_Aqua_Descending"
+             ]
         }
     }
 }

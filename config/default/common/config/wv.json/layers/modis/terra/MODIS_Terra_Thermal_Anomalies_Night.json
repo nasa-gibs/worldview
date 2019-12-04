@@ -30,7 +30,10 @@
       "palette": {
         "id": "MODIS_Terra_Thermal_Anomalies_All",
         "immutable": "true"
-      }
+      },
+      "tracks": [
+      "OrbitTracks_Terra_Ascending"
+       ]
     }
   }
 }

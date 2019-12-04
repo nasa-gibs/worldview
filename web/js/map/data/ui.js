@@ -98,12 +98,15 @@ export function dataUi(store, ui, config) {
     const dataState = state.data;
     const { compare, layers, proj } = state;
     const activeLayers = getLayers(layers[compare.activeString], { proj: proj.id });
-
     if (state.sidebar.activeTab !== 'download') {
       return;
     }
-
-    if (!dataState.selectedProduct || (dataState.selectedProduct && !doesSelectedExist(activeLayers, dataState.selectedProduct))) {
+    const products = getDataProductsFromActiveLayers(
+      activeLayers,
+      config,
+      proj.id
+    );
+    if (!dataState.selectedProduct || (dataState.selectedProduct && !doesSelectedExist(Object.entries(products), dataState.selectedProduct))) {
       self.events.trigger(self.EVENT_QUERY_RESULTS, {
         meta: {},
         granules: []
@@ -273,7 +276,7 @@ export function dataUi(store, ui, config) {
     uiIndicator.hide(indicators);
     wvui.notify(
       'No results received yet. This may be due to a ' +
-        'connectivity issue. Please try again later.'
+      'connectivity issue. Please try again later.'
     );
   };
 
@@ -654,10 +657,10 @@ var dataUiDownloadListPanel = function(config, store) {
     $.each(links, function(index, link) {
       elements.push(
         "<li class='link'><a href='" +
-          link.href +
-          "' target='_blank'>" +
-          link.title +
-          '</a></li>'
+        link.href +
+        "' target='_blank'>" +
+        link.title +
+        '</a></li>'
       );
     });
     elements.push('</ul>');
@@ -670,24 +673,24 @@ var dataUiDownloadListPanel = function(config, store) {
       elements = [
         "<tr data-granule='" + granule.id + "'>",
         "<td><input type='button' class='remove' " +
-          "data-granule='" +
-          granule.id +
-          "' " +
-          "value='X'></input></td>",
+        "data-granule='" +
+        granule.id +
+        "' " +
+        "value='X'></input></td>",
         '<td><nobr><ul><li>' + granule.label + '</li></ul></nobr></td>',
         "<td class='wv-data-granule-link'>" +
-          linksText(granule.links) +
-          '</td>',
+        linksText(granule.links) +
+        '</td>',
         '</tr>'
       ];
     } else {
       elements = [
         "<tr data-granule='" + granule.id + "'>",
         "<td><input type='button' class='remove' " +
-          "data-granule='" +
-          granule.id +
-          "' " +
-          "value='X'></input></td>",
+        "data-granule='" +
+        granule.id +
+        "' " +
+        "value='X'></input></td>",
         "<td colspan='2'>" + linksText(granule.links) + '</td>',
         '</tr>'
       ];
@@ -848,17 +851,17 @@ var dataUiSelectionListPanel = function(dataUi, results, store) {
       var selected = dataState.selectedGranules[granule.id] ? "checked='true'" : '';
       elements.push(
         '<tr>' +
-          '<td>' +
-          "<input type='checkbox' value='" +
-          granule.id +
-          "' " +
-          selected +
-          '>' +
-          '</td>' +
-          "<td class='label'>" +
-          granule.label +
-          '</td>' +
-          '</tr>'
+        '<td>' +
+        "<input type='checkbox' value='" +
+        granule.id +
+        "' " +
+        selected +
+        '>' +
+        '</td>' +
+        "<td class='label'>" +
+        granule.label +
+        '</td>' +
+        '</tr>'
       );
     });
     var text = elements.join('\n');

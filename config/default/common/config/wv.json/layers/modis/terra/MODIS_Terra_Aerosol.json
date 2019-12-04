@@ -16,7 +16,10 @@
             "projections": {
                 "geographic": {
                     "source": "GIBS:geographic"
-                }
+                },
+                "tracks": [
+                "OrbitTracks_Terra_Descending"
+                 ]
             }
         }
     }

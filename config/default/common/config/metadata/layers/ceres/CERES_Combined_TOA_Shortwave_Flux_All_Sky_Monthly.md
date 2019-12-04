@@ -4,5 +4,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The CERES TOA Shortwave Flux (Monthly, All-Sky) layer is available from the CERES instruments on the Terra and Aqua satellites. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: `SW_TOA_Total_Sky`
+Data parameter: `SW_TOA_Total_Sky`  
 Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition4A`

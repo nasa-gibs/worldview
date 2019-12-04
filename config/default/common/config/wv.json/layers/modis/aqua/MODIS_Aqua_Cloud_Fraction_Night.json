@@ -10,7 +10,10 @@
               "modis",
               "modis_aqua"
             ],
-            "product":  "MYD06_L2_NIGHT"
+            "product":  "MYD06_L2_NIGHT",
+            "tracks": [
+            "OrbitTracks_Aqua_Descending"
+             ]
         }
     }
 }

@@ -141,10 +141,10 @@ module.exports = {
     );
   },
   'Layer info dialog works after clicking into B mode': function(client) {
-    client
-      .click(correctedReflectanceOptionsPanelHeader + ' .close')
-      .pause(1000);
+    client.click(correctedReflectanceOptionsPanelHeader + ' .close');
+    client.waitForElementNotPresent('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header', TIME_LIMIT);
     client.click(correctedReflectanceBLayer + ' .wv-layers-info');
+    client.pause(500);
     client.waitForElementVisible(
       correctedReflectanceInfoPanel + ' .layer-metadata',
       TIME_LIMIT,

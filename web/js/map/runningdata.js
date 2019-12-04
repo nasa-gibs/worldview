@@ -9,7 +9,9 @@ import {
   runningData as runningDataAction,
   clearRunningData as clearRunningDataAction
 } from '../modules/map/actions';
-
+import {
+  isFromActiveCompareRegion
+} from '../modules/compare/util';
 export function MapRunningData(models, compareUi, store) {
   var self;
 
@@ -24,66 +26,64 @@ export function MapRunningData(models, compareUi, store) {
       store.dispatch(clearRunningDataAction());
     }
   };
-  /**
-   * When in A|B only show Running-data from active side of Map while in swipe mode -
-   * No other modes will allow for running-data
-   * @param {Object} map | OL map object
-   * @param {Array} coords | Coordinates of hover point
-   * @param {Object} layerAttributes | Layer Properties
-   */
-  var isFromActiveCompareRegion = function(map, coords, layerAttributes) {
-    var compareModel = store.getState().compare;
-    if (compareModel && compareModel.active) {
-      if (compareModel.mode !== 'swipe') {
-        return false;
-      } else {
-        const swipeOffset = Math.floor(compareUi.getOffset());
-
-        if (compareModel.isCompareA) {
-          if (coords[0] > swipeOffset || layerAttributes.group !== 'active') {
-            return false;
-          }
-        } else {
-          if (coords[0] < swipeOffset || layerAttributes.group !== 'activeB') {
-            return false;
-          }
-        }
-      }
-    }
-    return true;
-  };
   /*
    * Compare old and new arrays to determine which Layers need to be
    * removed
    *
    * @method LayersToRemove
    *
-   * @param {Array} coords - Array of coordinate values
+   * @param {Array} pixels - Array of pixels values
    *
    * @param {Object} map - OpenLayers Map Object
    *
    * @return {Void}
    *
    */
-  self.newPoint = function(coords, map) {
+  self.newPoint = function(pixels, map) {
     const state = store.getState();
-    var activeLayerObj = {};
-    map.forEachLayerAtPixel(coords, function(layer, data) {
-      var paletteHex;
-      var paletteLegends;
-      var layerId;
-      if (!layer.wv) {
-        return;
-      }
-      if (!isFromActiveCompareRegion(map, coords, layer.wv)) return;
-      if (
-        layer.wv.def.palette &&
-        !lodashGet(layer, 'wv.def.disableHoverValue')
-      ) {
-        layerId = layer.wv.id;
-        paletteLegends = getPalette(layerId, undefined, undefined, state);
-        paletteHex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
-        activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: paletteHex };
+    const activeLayerObj = {};
+    const [lon, lat] = map.getCoordinateFromPixel(pixels);
+    let swipeOffset;
+    if (compareUi && state.compare.active) {
+      swipeOffset = Math.floor(compareUi.getOffset());
+    }
+
+    if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
+      map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+        if (!layer.wv || !layer.wv.def || !isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
+        let color;
+        const def = layer.wv.def;
+        const identifier = def.palette.styleProperty;
+        const layerId = def.id;
+        const paletteLegends = getPalette(layerId, undefined, undefined, state);
+        const legend = paletteLegends.legend;
+
+        if (!identifier && legend.colors.length > 1) return;
+        if (identifier) {
+          const properties = feature.getProperties();
+          const value = properties[identifier] || def.palette.unclassified;
+          if (!value) return;
+          const tooltips = legend.tooltips.map(c => c.toLowerCase().replace(/\s/g, ''));
+          const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
+          color = legend.colors[colorIndex];
+        } else if (legend.colors.length === 1) {
+          color = legend.colors[0];
+        }
+        activeLayerObj[layerId] = {
+          paletteLegends,
+          paletteHex: color
+        };
+      });
+    }
+    map.forEachLayerAtPixel(pixels, function(layer, data) {
+      if (!layer.wv) return;
+      const { def } = layer.wv;
+      if (!isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
+      if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
+        activeLayerObj[def.id] = {
+          paletteLegends: getPalette(def.id, undefined, undefined, state),
+          paletteHex: util.rgbaToHex(data[0], data[1], data[2], data[3])
+        };
       }
     });
     if (!lodashIsEqual(activeLayerObj, dataObj)) {

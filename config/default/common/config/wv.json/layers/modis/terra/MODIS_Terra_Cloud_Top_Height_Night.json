@@ -10,7 +10,10 @@
               "modis",
               "modis_terra"
             ],
-            "product":  "MOD06_L2_NIGHT"
+            "product":  "MOD06_L2_NIGHT",
+            "tracks": [
+            "OrbitTracks_Terra_Ascending"
+             ]
             }
         }
     }

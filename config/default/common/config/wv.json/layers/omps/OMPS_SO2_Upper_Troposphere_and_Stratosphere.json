@@ -10,7 +10,10 @@
             "layergroup": [
               "omps"
             ],
-            "product":  "NMSO2-PCA-L2"
+            "product":  "NMSO2-PCA-L2",
+             "tracks": [
+            "OrbitTracks_Suomi_NPP_Ascending"
+            ]
         }
     }
 }

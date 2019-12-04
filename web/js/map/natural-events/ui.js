@@ -309,8 +309,11 @@ export default function naturalEventsUI(ui, config, store, models) {
   self.deselectEvent = function() {
     self.selected = {};
     naturalEventMarkers.remove(self.markers);
-    self.markers = naturalEventMarkers.draw();
-    naturalEventsTrack.update(null);
+    const state = store.getState();
+    if (state.events.active) {
+      self.markers = naturalEventMarkers.draw();
+      naturalEventsTrack.update(null);
+    }
     store.dispatch(deselectEventAction);
     self.events.trigger('change');
   };

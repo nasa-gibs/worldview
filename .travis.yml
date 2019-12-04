@@ -30,7 +30,7 @@ matrix:
       before_install:
          - "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &"
       script:
-        - npm run build
+        - npm run build:ci
         - npm run start &
         - npm run e2e:headless:chrome
 
@@ -56,7 +56,7 @@ matrix:
         - python3 --version
         - nvm install 10.16.3
       script:
-        - npm run build
+        - npm run build:ci
         - npm run start &
         - npm run e2e:headless:firefox
 
