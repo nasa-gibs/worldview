@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 
 class CollapsedButton extends React.Component {
   render() {
-    const { isCollapsed, numberOfLayers, onclick } = this.props;
+    const { isCollapsed, isDistractionFreeModeActive, numberOfLayers, onclick } = this.props;
 
     return (
       <div
         id="productsHoldertoggleButtonHolder"
         className="toggleButtonHolder"
-        style={!isCollapsed ? { display: 'none' } : {}}
+        style={!isCollapsed || isDistractionFreeModeActive ? { display: 'none' } : {}}
       >
         <a
           id="accordionTogglerButton"
@@ -25,6 +25,7 @@ class CollapsedButton extends React.Component {
 }
 CollapsedButton.propTypes = {
   isCollapsed: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onclick: PropTypes.func
 };

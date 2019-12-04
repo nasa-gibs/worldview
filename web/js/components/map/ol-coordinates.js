@@ -72,13 +72,14 @@ class OlCoordinates extends React.Component {
   }
 
   render() {
+    const { isDistractionFreeModeActive } = this.props;
     // Don't render until a mouse is being used
     if (!this.state.hasMouse) {
       return null;
     }
 
     return (
-      <div id='ol-coords-case' style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}>
+      <div id='ol-coords-case' style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}>
         <Coordinates
           format={this.state.format}
           latitude={this.state.latitude}
@@ -98,7 +99,8 @@ function mapStateToProps(state) {
 }
 
 OlCoordinates.propTypes = {
-  mouseEvents: PropTypes.object.isRequired
+  mouseEvents: PropTypes.object.isRequired,
+  isDistractionFreeModeActive: PropTypes.bool
 };
 
 // export default OlCoordinates;

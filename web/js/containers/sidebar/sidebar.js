@@ -164,6 +164,7 @@ class Sidebar extends React.Component {
       screenHeight,
       isCollapsed,
       isCompareMode,
+      isDistractionFreeModeActive,
       activeTab,
       tabTypes,
       isMobile,
@@ -189,6 +190,7 @@ class Sidebar extends React.Component {
             isCollapsed={isCollapsed}
             onclick={this.toggleSidebar.bind(this)}
             numberOfLayers={numberOfLayers}
+            isDistractionFreeModeActive={isDistractionFreeModeActive}
           />
           <div
             id="productsHolder"
@@ -198,7 +200,7 @@ class Sidebar extends React.Component {
             }}
             style={{
               maxHeight: isCollapsed ? '0' : screenHeight + 'px',
-              display: this.props.isDistractionFreeModeActive ? 'none' : 'block'
+              display: isDistractionFreeModeActive ? 'none' : 'block'
             }}
             onWheel={wheelCallBack}
           >
@@ -333,6 +335,7 @@ Sidebar.propTypes = {
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
   numberOfLayers: PropTypes.number,

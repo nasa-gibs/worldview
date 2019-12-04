@@ -847,6 +847,7 @@ class Timeline extends React.Component {
       customIntervalValue,
       customIntervalZoomLevel,
       isAnimationPlaying,
+      isDistractionFreeModeActive,
       isCompareModeActive,
       axisWidth,
       timelineEndDateLimit,
@@ -897,7 +898,7 @@ class Timeline extends React.Component {
     const isTimelineHidden = timelineHidden || hideTimeline;
     const chevronDirection = isTimelineHidden ? 'left' : 'right';
     return (
-      <div className="timeline-container" style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}>
+      <div className="timeline-container" style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}>
         {initialLoadComplete
           ? <ErrorBoundary>
             {isSmallScreen
@@ -1306,6 +1307,7 @@ Timeline.propTypes = {
   isAnimationWidgetOpen: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
   isDataDownload: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   isTourActive: PropTypes.bool,

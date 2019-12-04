@@ -52,7 +52,8 @@ class MeasureButton extends React.Component {
   }
 
   render() {
-    const showAlert = this.props.isActive && this.state.showAlert;
+    const { isActive, isDistractionFreeModeActive } = this.props;
+    const showAlert = isActive && this.state.showAlert;
     const message = this.state.isTouchDevice ? mobileHelpMsg : helpMsg;
 
     return (
@@ -67,7 +68,7 @@ class MeasureButton extends React.Component {
         />}
 
         <Button
-          style={{ display: this.props.isDistractionFreeModeActive ? 'none' : 'block' }}
+          style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}
           id="wv-measure-button"
           className="wv-measure-button wv-toolbar-button"
           title="Measure distances &amp; areas"
@@ -100,5 +101,6 @@ export default connect(
 
 MeasureButton.propTypes = {
   isActive: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   openModal: PropTypes.func
 };
