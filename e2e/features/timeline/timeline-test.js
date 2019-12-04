@@ -2,6 +2,8 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
 const dateSelectorDayInput = '#date-selector-main .input-wrapper-day input';
+const dateSelectorMonthInput = '#date-selector-main .input-wrapper-month input';
+const dateSelectorYearInput = '#date-selector-main .input-wrapper-year input';
 const TIME_LIMIT = 20000;
 
 module.exports = {
@@ -161,6 +163,27 @@ module.exports = {
     client.url(client.globals.url + localQuerystrings.knownDate);
     client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
     client.assert.cssClassNotPresent('#right-arrow-group', 'button-disabled');
+  },
+
+  // verify user can temporarily input incorrect day values in date selector
+  'Allow invalid day values in date selector': client => {
+    client.url(client.globals.url + '?t=2019-02-22');
+    client
+      .click(dateSelectorDayInput)
+      .setValue(dateSelectorDayInput, [31, client.Keys.ENTER]);
+    client.assert.cssClassPresent(dateSelectorDayInput, 'invalid-input');
+  },
+
+  // verify user can change year on invalid date to a valid one and remove invalid-input class
+  'Allow invalid year to valid year values in date selector': client => {
+    client.url(client.globals.url + '?t=2019-02-22');
+    client
+      .click(dateSelectorYearInput)
+      .setValue(dateSelectorYearInput, [2020, client.Keys.ENTER]);
+    client.setValue(dateSelectorMonthInput, ['MAR', client.Keys.ENTER]);
+    client.setValue(dateSelectorDayInput, [31, client.Keys.ENTER]);
+    client.setValue(dateSelectorYearInput, [2019, client.Keys.ENTER]);
+    client.assert.cssClassNotPresent(dateSelectorYearInput, 'invalid-input');
   },
 
   after: client => {
