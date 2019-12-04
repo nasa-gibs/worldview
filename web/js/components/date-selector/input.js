@@ -21,19 +21,39 @@ class DateInputColumn extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.focused) {
-      this.inputs[this.props.tabIndex].focus();
+    const { focused, hold, minDate, maxDate, tabIndex } = this.props;
+    const { valid, value } = this.state;
+    const date = this.props.date.toISOString();
+    const prevDate = prevProps.date.toISOString();
+
+    if (focused) {
+      this.inputs[tabIndex].focus();
     }
-    if (this.props.value !== prevProps.value) {
+    if (this.props.value !== prevProps.value && valid) {
       this.updateValue();
     }
-    // TODO: sometimes valid false state is retained for a valid input
-    if (!this.state.valid && (!prevState.selected || !this.state.selected)) {
-      const date = this.props.date.toISOString();
-      const prevDate = prevProps.date.toISOString();
-      if (date !== prevDate) {
-        this.updateValue();
-        this.resetValidSelected();
+
+    if (!valid) {
+      if (hold) {
+        const checkValidValue = this.validateBasedOnType(value, true);
+        if (checkValidValue === null || date !== prevDate) {
+          this.updateValue();
+          this.resetValidSelected();
+        }
+      } else {
+        if (date !== prevDate) {
+          const dateWithinRange = this.props.date > minDate && this.props.date <= maxDate;
+          if (dateWithinRange) {
+            this.updateValue();
+            this.resetValidSelected();
+          }
+        } else {
+          this.validateBasedOnType(value, true);
+        }
+      }
+    } else {
+      if (value !== prevState.value) {
+        this.validateBasedOnType(value, true);
       }
     }
   }
@@ -75,8 +95,8 @@ class DateInputColumn extends Component {
 
   onKeyPress = (e) => {
     // check tab and enter key code
-    var keyCode = e.keyCode;
-    var entered = keyCode === 13 || keyCode === 9;
+    const keyCode = e.keyCode;
+    const entered = keyCode === 13 || keyCode === 9;
     if (entered) {
       e.preventDefault();
       e.stopPropagation();
@@ -84,11 +104,10 @@ class DateInputColumn extends Component {
   }
 
   onKeyUp = (e) => {
-    var keyCode = e.keyCode;
-    var value = e.target.value;
-    var newDate;
-    var shiftTab;
-    var entered = keyCode === 13 || keyCode === 9;
+    const { type } = this.props;
+    const keyCode = e.keyCode;
+    const entered = keyCode === 13 || keyCode === 9;
+    let shiftTab;
 
     // shift down when tab pressed
     if (e.shiftKey && keyCode === 9) {
@@ -107,25 +126,12 @@ class DateInputColumn extends Component {
       return;
     }
     if (e.type === 'focusout' || entered) {
-      if (this.props.type === 'year' || this.props.type === 'day') {
+      if (type === 'year' || type === 'day') {
         if (!((keyCode >= 48 && keyCode <= 57) || entered || keyCode === 8)) {
           return;
         }
       }
-      newDate = this.validateBasedOnType(value);
-      if (newDate) {
-        //TODO: IS THIS NECESSARY ANYMORE WITH NEW BLUR UPDATEDATE INVOKE?
-        // this.props.updateDate(newDate, this.props.type);
-        if (entered) {
-          if (shiftTab) {
-            // shift-tabbed - move backward
-            this.previousTab();
-          } else {
-            // entered or tabbed - move forward
-            this.nextTab();
-          }
-        }
-      } else if (entered) {
+      if (entered) {
         if (shiftTab) {
           // shift-tabbed - move backward
           this.previousTab();
@@ -133,30 +139,22 @@ class DateInputColumn extends Component {
           // entered or tabbed - move forward
           this.nextTab();
         }
-        this.setState({
-          valid: false
-        });
       }
     }
   }
 
   onClickUp = () => {
     this.rollDate(1);
-    this.setState({
-      valid: true
-    });
   }
 
   onClickDown = () => {
     this.rollDate(-1);
-    this.setState({
-      valid: true
-    });
   }
 
-  validateBasedOnType = (value) => {
+  validateBasedOnType = (value, stateCheck) => {
+    const { type, updateTimeUnitInput } = this.props;
     let newDate;
-    switch (this.props.type) {
+    switch (type) {
       case 'year':
         newDate = this.yearValidation(value);
         break;
@@ -173,80 +171,104 @@ class DateInputColumn extends Component {
         newDate = this.minuteValidation(value);
         break;
     }
+
+    if (newDate !== null && !stateCheck) {
+      updateTimeUnitInput(type, value);
+    }
     return newDate;
   }
 
   yearValidation = (input) => {
-    var newDate;
+    const date = new Date(this.props.date);
     if (input > 1000 && input < 9999) {
-      newDate = new Date(new Date(this.props.date).setUTCFullYear(input));
+      const newDate = new Date(date.setUTCFullYear(input));
       return this.validateDate(newDate, input);
     }
+    return null;
   }
 
   monthValidation = (input) => {
+    const date = new Date(this.props.date);
     var newDate;
     if (!isNaN(input) && input < 13 && input > 0) {
-      newDate = new Date(new Date(this.props.date).setUTCMonth(input - 1));
+      newDate = new Date(date.setUTCMonth(input - 1));
       if (newDate) {
         this.setState({
           value: util.monthStringArray[input - 1]
         });
         return this.validateDate(newDate, input);
       }
+      return null;
     } else {
       const realMonth = util.stringInArray(util.monthStringArray, input);
       if (realMonth !== false) {
-        newDate = new Date(new Date(this.props.date).setUTCMonth(realMonth));
-        return this.validateDate(newDate, input);
+        const day = date.getUTCDate();
+        const zeroDay = new Date(date.setUTCDate(1));
+
+        const zeroAddMonth = new Date(zeroDay.setUTCMonth(realMonth));
+        const zeroAddedMonthNumber = zeroAddMonth.getUTCMonth();
+
+        const addDay = new Date(zeroAddMonth.setUTCDate(day));
+        const addedDayMonthNumber = addDay.getUTCMonth();
+
+        if (addedDayMonthNumber !== zeroAddedMonthNumber) {
+          return false;
+        }
+        return this.validateDate(addDay, input);
       } else {
-        return false;
+        return null;
       }
     }
   }
 
   dayValidation = (input) => {
-    var newDate;
-    var maxDate;
-    var currentDate = this.props.date;
+    const date = new Date(this.props.date);
+    const standardMaxDateForMonth = 31;
 
-    maxDate = new Date(
-      currentDate.getYear(),
-      currentDate.getMonth() + 1,
-      0
-    ).getDate();
+    if (input > 0 && input <= standardMaxDateForMonth) {
+      const actualMaxDateForMonth = new Date(
+        date.getYear(),
+        date.getMonth() + 1,
+        0
+      ).getDate();
 
-    if (input > 0 && input <= maxDate) {
-      newDate = new Date(new Date(currentDate).setUTCDate(input));
+      if (input > actualMaxDateForMonth) {
+        return false;
+      }
+      const newDate = new Date(date.setUTCDate(input));
       return this.validateDate(newDate, input);
     }
+    return null;
   }
 
   hourValidation = (input) => {
-    var newDate;
+    const date = new Date(this.props.date);
     if (input >= 0 && input <= 23) {
-      newDate = new Date(new Date(this.props.date).setUTCHours(input));
+      const newDate = new Date(date.setUTCHours(input));
       return this.validateDate(newDate, input);
     }
+    return null;
   }
 
   minuteValidation = (input) => {
-    var newDate;
+    const date = new Date(this.props.date);
     if (input >= 0 && input <= 59) {
-      newDate = new Date(new Date(this.props.date).setUTCMinutes(input));
+      const newDate = new Date(date.setUTCMinutes(input));
       return this.validateDate(newDate, input);
     }
+    return null;
   }
 
   rollDate = (amt) => {
-    var newDate = util.rollDate(
-      this.props.date,
-      this.props.type,
+    const { date, minDate, maxDate, type, updateDate } = this.props;
+    const newDate = util.rollDate(
+      date,
+      type,
       amt,
-      this.props.minDate,
-      this.props.maxDate
+      minDate,
+      maxDate
     );
-    this.props.updateDate(newDate, this.props.type, amt);
+    updateDate(newDate, true);
   }
 
   /**
@@ -255,30 +277,30 @@ class DateInputColumn extends Component {
    * @param {Object} e | Event Object
    */
   handleFocus = (e) => {
+    const { setFocusedTab, tabIndex } = this.props;
     e.target.select();
     this.setState({ selected: true });
-    this.props.setFocusedTab(this.props.tabIndex);
+    setFocusedTab(tabIndex);
   }
 
   blur = (e) => {
-    const { blur, updateDate, type } = this.props;
+    const { blur, type, updateTimeUnitInput } = this.props;
+    const { valid } = this.state;
     // check for valid date on blur
     let value = e.target.value;
     const newDate = this.validateBasedOnType(value);
-    let valid = !!newDate;
+    let validDate = !!newDate;
 
     if (newDate) {
-      updateDate(newDate, type);
-    }
-    // reset to previous valid value with mouse click outside input
-    if (!valid && !e.relatedTarget && document.activeElement.className !== 'button-input-group') {
-      valid = true;
+      updateTimeUnitInput(type, value);
+    } else if (newDate === null) {
       value = this.props.value;
+      validDate = valid;
     }
 
     this.setState({
       value,
-      valid,
+      valid: validDate,
       selected: false
     });
 
@@ -292,40 +314,44 @@ class DateInputColumn extends Component {
   }
 
   nextTab = () => {
-    this.props.changeTab(this.props.tabIndex + 1);
+    const { changeTab, tabIndex } = this.props;
+    changeTab(tabIndex + 1);
   }
 
   previousTab = () => {
-    this.props.changeTab(this.props.tabIndex - 1);
+    const { changeTab, tabIndex } = this.props;
+    changeTab(tabIndex - 1);
   }
 
-  validateDate = (date, input) => {
+  validateDate = (date) => {
+    const { minDate, maxDate } = this.props;
     let validDate = false;
-    if (date > this.props.minDate && date <= this.props.maxDate) {
+    if (date > minDate && date <= maxDate) {
       this.setState({
         valid: true
       });
-      input = null;
       validDate = date;
     }
-    this.props.updateTimeUnitInput(this.props.type, input);
     return validDate;
   }
 
   render() {
+    const { fontSize, inputId, tabIndex, type } = this.props;
+    const { selected, size, valid, value } = this.state;
+
+    const containerClassName = `input-wrapper ${selected ? 'selected ' : ''}input-wrapper-${type}`;
+    const containerBorderStyle = valid ? {} : { borderColor: '#ff0000' };
+    const inputClassName = `button-input-group${valid ? '' : ' invalid-input'}`;
+    const fontSizeStyle = fontSize ? { fontSize: fontSize + 'px' } : {};
     return (
       <div
-        className={
-          this.state.selected
-            ? 'input-wrapper selected' + ' input-wrapper-' + this.props.type
-            : 'input-wrapper ' + 'input-wrapper-' + this.props.type
-        }
-        style={this.state.valid ? {} : { borderColor: '#ff0000' }}
+        className={containerClassName}
+        style={containerBorderStyle}
       >
         <div
           onClick={this.onClickUp}
           className="date-arrows date-arrow-up"
-          data-interval={this.props.type}
+          data-interval={type}
         >
           <svg width="25" height="8">
             <path d="M 12.5,0 25,8 0,8 z" className="uparrow" />
@@ -334,28 +360,25 @@ class DateInputColumn extends Component {
         <input
           type="text"
           ref={input => {
-            this.inputs[this.props.tabIndex] = input;
+            this.inputs[tabIndex] = input;
           }}
-          size={this.state.size}
-          maxLength={this.state.size}
-          className="button-input-group"
-          id={this.props.inputId}
-          value={this.state.value}
-          tabIndex={this.props.tabIndex}
+          size={size}
+          maxLength={size}
+          className={inputClassName}
+          id={inputId}
+          value={value}
+          tabIndex={tabIndex}
           onKeyUp={this.onKeyUp}
-          onKeyDown={this.onKeyPress /* currently not working */}
+          onKeyDown={this.onKeyPress}
           onChange={this.onChange}
-          style={
-            this.props.fontSize ? { fontSize: this.props.fontSize + 'px' } : {}
-          }
-          step={this.props.step}
+          style={fontSizeStyle}
           onBlur={this.blur}
           onFocus={this.handleFocus}
         />
         <div
           onClick={this.onClickDown}
           className="date-arrows date-arrow-down"
-          data-interval={this.props.type}
+          data-interval={type}
         >
           <svg width="25" height="8">
             <path d="M 12.5,0 25,8 0,8 z" className="downarrow" />
@@ -372,11 +395,11 @@ DateInputColumn.propTypes = {
   date: PropTypes.object,
   focused: PropTypes.bool,
   fontSize: PropTypes.number,
+  hold: PropTypes.bool,
   inputId: PropTypes.string,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   setFocusedTab: PropTypes.func,
-  step: PropTypes.number,
   tabIndex: PropTypes.number,
   type: PropTypes.string,
   updateDate: PropTypes.func,
