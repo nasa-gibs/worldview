@@ -5,7 +5,7 @@ import {
 } from 'lodash';
 import { Stroke, Style, Fill, Circle } from 'ol/style';
 import { setStyleFunction } from './selectors';
-
+import { isFromActiveCompareRegion } from '../compare/util';
 export function getVectorStyleAttributeArray(layer) {
   var isCustomActive = false;
   var isMinActive = false;
@@ -138,7 +138,7 @@ export function getPaletteForStyle(layer, layerstyleLayerObject) {
     id: layer.id + '0_legend'
   }];
 }
-export function onMapClickGetVectorFeatures(pixels, map, state) {
+export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const metaArray = [];
   const selected = {};
   const config = state.config;
@@ -167,6 +167,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state) {
   map.forEachFeatureAtPixel(pixels, function(feature, layer) {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
+    if (!isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
     if (def.vectorData && def.vectorData.id && def.title) {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];

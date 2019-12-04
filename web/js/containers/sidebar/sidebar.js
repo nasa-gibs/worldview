@@ -202,44 +202,48 @@ class Sidebar extends React.Component {
             }}
             onWheel={wheelCallBack}
           >
-            <NavCase
-              activeTab={activeTab}
-              onTabClick={onTabClick}
-              tabTypes={tabTypes}
-              isMobile={isMobile}
-              toggleSidebar={this.toggleSidebar.bind(this)}
-              isCompareMode={isCompareMode}
-              isDataDisabled={isDataDisabled}
-            />
-            <TabContent activeTab={activeTab}>
-              <TabPane tabId="layers">
-                {this.getProductsToRender(activeTab, isCompareMode)}
-              </TabPane>
-              <TabPane tabId="events">
-                {naturalEventsFeatureActive
-                  ? <Events
-                    isActive={activeTab === 'events'}
-                    height={subComponentHeight}
-                  />
-                  : null
-                }
-              </TabPane>
-              <TabPane tabId="download">
-                {dataDownloadFeatureActive
-                  ? <Data
-                    isActive={activeTab === 'download'}
-                    height={subComponentHeight}
-                    tabTypes={tabTypes}
-                  />
-                  : null
-                }
-              </TabPane>
-              <footer
-                ref={footerElement => (this.footerElement = footerElement)}
-              >
-                <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
-              </footer>
-            </TabContent>
+            {!isCollapsed && (
+              <>
+                <NavCase
+                  activeTab={activeTab}
+                  onTabClick={onTabClick}
+                  tabTypes={tabTypes}
+                  isMobile={isMobile}
+                  toggleSidebar={this.toggleSidebar.bind(this)}
+                  isCompareMode={isCompareMode}
+                  isDataDisabled={isDataDisabled}
+                />
+                <TabContent activeTab={activeTab}>
+                  <TabPane tabId="layers">
+                    {this.getProductsToRender(activeTab, isCompareMode)}
+                  </TabPane>
+                  <TabPane tabId="events">
+                    {naturalEventsFeatureActive
+                      ? <Events
+                        isActive={activeTab === 'events'}
+                        height={subComponentHeight}
+                      />
+                      : null
+                    }
+                  </TabPane>
+                  <TabPane tabId="download">
+                    {dataDownloadFeatureActive
+                      ? <Data
+                        isActive={activeTab === 'download'}
+                        height={subComponentHeight}
+                        tabTypes={tabTypes}
+                      />
+                      : null
+                    }
+                  </TabPane>
+                  <footer
+                    ref={footerElement => (this.footerElement = footerElement)}
+                  >
+                    <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
+                  </footer>
+                </TabContent>
+              </>
+            )}
           </div>
         </section>
       </ErrorBoundary>

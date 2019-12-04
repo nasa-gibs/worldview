@@ -5,6 +5,7 @@ import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/pal
 import lodashIsNumber from 'lodash/isNumber';
 import { Tooltip } from 'reactstrap';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
+import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
 
 class PaletteLegend extends React.Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class PaletteLegend extends React.Component {
       isRunningData: props.isRunningData,
       colorHex: props.colorHex,
       isHoveringCanvas: props.isHoveringCanvas,
-      width: this.props.width
+      width: this.props.width,
+      scrollContainerEl: null
     };
   }
 
@@ -31,6 +33,11 @@ class PaletteLegend extends React.Component {
 
   componentDidMount() {
     this.updateCanvas();
+    this.setState(() => {
+      return {
+        scrollContainerEl: document.querySelector('#productsHolder .simplebar-wrapper')
+      };
+    });
   }
 
   componentDidUpdate() {
@@ -310,7 +317,7 @@ class PaletteLegend extends React.Component {
    * @param {Number} index | Legend Index
    */
   renderClasses(legend, legendIndex) {
-    const { isRunningData, colorHex } = this.state;
+    const { isRunningData, colorHex, scrollContainerEl } = this.state;
     const { layer, parentLayer, layerGroupName } = this.props;
     const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
@@ -323,50 +330,58 @@ class PaletteLegend extends React.Component {
       : getOrbitTrackTitle(layer);
 
     return (
-      <div className={legendClass} key={legend.id + '_' + legendIndex}>
-        {legend.colors.map((color, keyIndex) => {
-          const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;
-          const palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
-          const isSubLayer = !!parentLayer;
-          const parentLayerId = isSubLayer ? parentLayer.id : '';
-          const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId + layerGroupName;
-          const keyLabel = activeKeyObj ? activeKeyObj.label : '';
-          const tooltipText = singleKey
-            ? layer.track ? trackLabel : legendTooltip
-            : keyLabel;
+      <VisibilitySensor
+        key={legend.id + '-' + legendIndex + 'vis-sensor'}
+        containment={scrollContainerEl}
+        partialVisibility={true}
+      >
+        { ({ isVisible }) => (
+          <div className={legendClass} key={legend.id + '_' + legendIndex}>
+            {legend.colors.map((color, keyIndex) => {
+              const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;
+              const palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
+              const isSubLayer = !!parentLayer;
+              const parentLayerId = isSubLayer ? parentLayer.id : '';
+              const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId + layerGroupName;
+              const keyLabel = activeKeyObj ? activeKeyObj.label : '';
+              const tooltipText = singleKey
+                ? layer.track ? trackLabel : legendTooltip
+                : keyLabel;
 
-          return (
-            <React.Fragment key={keyId}>
-              <span
-                id={keyId}
-                className={palletteClass}
-                style={{ backgroundColor: util.hexToRGBA(color) }}
-                onMouseMove={this.onMove.bind(this, color)}
-                onMouseEnter={this.onMouseEnter.bind(this)}
-                onMouseLeave={this.hideValue.bind(this)}
-                dangerouslySetInnerHTML={{ __html: '&nbsp' }}
-              />
+              return (
+                <React.Fragment key={keyId}>
+                  <span
+                    id={keyId}
+                    className={palletteClass}
+                    style={{ backgroundColor: util.hexToRGBA(color) }}
+                    onMouseMove={this.onMove.bind(this, color)}
+                    onMouseEnter={this.onMouseEnter.bind(this)}
+                    onMouseLeave={this.hideValue.bind(this)}
+                    dangerouslySetInnerHTML={{ __html: '&nbsp' }}
+                  />
 
-              {singleKey && !isSubLayer && (
-                <div className="wv-running-category-label-case">
-                  <span className="wv-running-category-label">
-                    {layer.track ? trackLabel : legendTooltip}
-                  </span>
-                </div>
-              )}
+                  {singleKey && !isSubLayer && (
+                    <div className="wv-running-category-label-case">
+                      <span className="wv-running-category-label">
+                        {layer.track ? trackLabel : legendTooltip}
+                      </span>
+                    </div>
+                  )}
 
-              {(
-                <Tooltip
-                  placement={singleKey ? 'right' : 'bottom'}
-                  isOpen={isActiveKey}
-                  target={keyId}>
-                  {tooltipText}
-                </Tooltip>
-              )}
-            </React.Fragment>
-          );
-        })}
-      </div>
+                  {isVisible && (
+                    <Tooltip
+                      placement={singleKey ? 'right' : 'bottom'}
+                      isOpen={isActiveKey}
+                      target={keyId}>
+                      {tooltipText}
+                    </Tooltip>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
+      </VisibilitySensor>
     );
   }
 

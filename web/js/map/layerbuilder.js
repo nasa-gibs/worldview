@@ -88,7 +88,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
     const group = options.group || null;
-    let date = self.closestDate(def, options);
+    const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
+    let date = closestDate;
     if (date) {
       options.date = date;
     }
@@ -106,7 +107,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         date,
         proj: proj.id,
         def,
-        group
+        group,
+        nextDate,
+        previousDate
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
@@ -140,29 +143,39 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  self.closestDate = function(def, options) {
+  self.getRequestDates = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const stateCurrentDate = new Date(state.date[activeDateStr]);
+    const previousLayer = options.previousLayer || {};
     let date = options.date || stateCurrentDate;
-    if (state.animation.isPlaying) return date;
-    // need to get previous available date to prevent unecessary requests
-    let dateRange;
     let previousDateFromRange;
-    if (def.previousDate && def.nextDate) {
-      const dateTime = date.getTime();
-      const previousDateTime = def.previousDate.getTime();
-      const nextDateTime = def.nextDate.getTime();
-      // if current date is outside previous and next dates avaiable, recheck range
-      if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
-        dateRange = datesinDateRanges(def, date);
-        previousDateFromRange = prevDateInDateRange(def, date, dateRange);
+    let previousLayerDate = previousLayer.previousDate;
+    let nextLayerDate = previousLayer.nextDate;
+    if (!state.animation.isPlaying) {
+      // need to get previous available date to prevent unecessary requests
+      let dateRange;
+      if (previousLayer.previousDate && previousLayer.nextDate) {
+        const dateTime = date.getTime();
+        const previousDateTime = previousLayer.previousDate.getTime();
+        const nextDateTime = previousLayer.nextDate.getTime();
+        // if current date is outside previous and next dates avaiable, recheck range
+        if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
+          dateRange = datesinDateRanges(def, date);
+          const { next, previous } = prevDateInDateRange(def, date, dateRange);
+          previousDateFromRange = previous;
+          previousLayerDate = previous;
+          nextLayerDate = next;
+        } else {
+          previousDateFromRange = previousLayer.previousDate;
+        }
       } else {
-        previousDateFromRange = def.previousDate;
+        dateRange = datesinDateRanges(def, date);
+        const { next, previous } = prevDateInDateRange(def, date, dateRange);
+        previousDateFromRange = previous;
+        previousLayerDate = previous;
+        nextLayerDate = next;
       }
-    } else {
-      dateRange = datesinDateRanges(def, date);
-      previousDateFromRange = prevDateInDateRange(def, date, dateRange);
     }
 
     if (def.period === 'subdaily') {
@@ -177,7 +190,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       }
     }
 
-    return date;
+    return { closestDate: date, previousDate: previousLayerDate, nextDate: nextLayerDate };
   };
 
   /**
@@ -202,7 +215,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     // every date.
     if (def.period) {
       date = util.toISOStringSeconds(
-        util.roundTimeOneMinute(self.closestDate(def, options))
+        util.roundTimeOneMinute(self.getRequestDates(def, options).closestDate)
       );
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
@@ -291,7 +304,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     let date = options.date || state.date[activeDateStr];
     if (def.period === 'subdaily') {
-      date = self.closestDate(def, options);
+      date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
     if (day && def.period !== 'subdaily') {

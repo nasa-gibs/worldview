@@ -8,6 +8,7 @@ import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures } from '../modules/vector-styles/actions';
 import { groupBy as lodashGroupBy, debounce as lodashDebounce } from 'lodash';
 import { changeCursor } from '../modules/map/actions';
+import { isFromActiveCompareRegion } from '../modules/compare/util';
 
 export class MapInteractions extends React.Component {
   constructor(props) {
@@ -48,14 +49,20 @@ export class MapInteractions extends React.Component {
   mouseMove(event, map, crs) {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
-    const { isShowingClick, changeCursor, measureIsActive } = this.props;
+    const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset } = this.props;
     const [lon, lat] = coord;
     if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
       return;
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
-      changeCursor(true);
+      let isActiveLayer = false;
+      map.forEachFeatureAtPixel(pixels, function(feature, layer) {
+        if (isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
+          isActiveLayer = true;
+        }
+      });
+      if (isActiveLayer) changeCursor(true);
     } else if (!hasFeatures && isShowingClick) {
       changeCursor(false);
     }
@@ -86,6 +93,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(onClose());
   },
   openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
+    const dialogKey = new Date().getUTCMilliseconds();
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -97,7 +105,8 @@ const mapDispatchToProps = dispatch => ({
         CompletelyCustomModal: vectorDialog,
         isResizable: true,
         dragHandle: '.modal-header',
-        dialogKey: new Date().getUTCMilliseconds(),
+        dialogKey,
+        key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: isMobile ? 250 : 445,
         height: 300,
@@ -114,14 +123,21 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 function mapStateToProps(state) {
-  const { modal, map, measure, vectorStyles, browser } = state;
+  const { modal, map, measure, vectorStyles, browser, compare } = state;
+  let swipeOffset;
+  if (compare.active && compare.mode === 'swipe') {
+    const percentOffset = state.compare.value || 50;
+    swipeOffset = browser.screenWidth * (percentOffset / 100);
+  }
   return {
     modalState: modal,
     isShowingClick: map.isClickable,
-    getDialogObject: (pixels, map) => { return onMapClickGetVectorFeatures(pixels, map, state); },
+    getDialogObject: (pixels, map) => onMapClickGetVectorFeatures(pixels, map, state, swipeOffset),
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
-    isMobile: browser.lessThan.medium
+    isMobile: browser.lessThan.medium,
+    compareState: compare,
+    swipeOffset
   };
 }
 MapInteractions.propTypes = {
@@ -134,8 +150,10 @@ MapInteractions.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   openVectorDiaglog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
+  compareState: PropTypes.object,
   isMobile: PropTypes.bool,
-  lastSelected: PropTypes.object
+  lastSelected: PropTypes.object,
+  swipeOffset: PropTypes.number
 };
 export default connect(
   mapStateToProps,

@@ -264,7 +264,6 @@
         "Landsat_WELD_CorrectedReflectance_Bands743_Global_Monthly",
         "Landsat_WELD_NDVI_Global_Monthly",
         "Landsat_WELD_NDVI_Global_Annual",
-        "Landsat_WELD_CONUS_5_Year_Tree_Cover",
 
         "IMERG_Rain_Rate",
         "IMERG_Snow_Rate",
