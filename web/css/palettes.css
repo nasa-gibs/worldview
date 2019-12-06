@@ -1,16 +1,7 @@
 .wv-palette-selector {
   width: 280px;
-  height: 200px;
+  height: 220px;
   position: relative;
-}
-
-/* perfect scrollbars */
-.wv-palette-selector .ps__scrollbar-y-rail {
-  background-color: transparent;
-}
-
-.wv-palette-selector .ps__scrollbar-y {
-  background: #ccc;
 }
 
 .wv-palette-selector-row {
@@ -115,15 +106,16 @@
   transition-delay: 0s, 0s;
 }
 
-.sidebar-panel div .wv-palettes-panel .wv-running-category-label {
-  bottom: 1px;
-  visibility: hidden;
-  display: block;
-}
-.wv-running-category-label-case {
+.sidebar-panel div .wv-palettes-panel .wv-running-category-label-case {
   min-height: 15px;
-  margin: 3px 0 0;
+  margin: 3px 0 0 4px;
   width: 100%;
+  display: inline;
+  text-transform: capitalize;
+
+  & .wv-running-category-label {
+    bottom: 1px;
+  }
 }
 .wv-palettes-panel .wv-running-bar {
   top: 0;
@@ -201,7 +193,7 @@
   width: 13px;
   display: inline-block;
   border: 1px solid #000;
-  margin: 0 2px;
+  margin: 0 2px 4px;
 }
 .wv-running .wv-palettes-class {
   opacity: 0.25;

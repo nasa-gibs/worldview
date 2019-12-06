@@ -17,7 +17,7 @@ class Layers extends React.Component {
       layerSplit
     } = this.props;
     const outterClass = 'layer-container sidebar-panel';
-    return (
+    return isActive && (
       <Scrollbars style={{ maxHeight: height + 'px' }}>
         <div
           className={isActive ? outterClass : 'hidden ' + outterClass}

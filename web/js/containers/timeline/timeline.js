@@ -1027,13 +1027,7 @@ class Timeline extends React.Component {
                       endLocationDate={animationEndLocationDate}
                       updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
                       max={rangeSelectorMax}
-                      pinWidth={5}
-                      rangeOpacity={0.3}
-                      rangeColor={'#45bdff'}
-                      startColor={'#40a9db'}
-                      startTriangleColor={'#fff'}
-                      endColor={'#295f92'}
-                      endTriangleColor={'#4b7aab'} />
+                    />
                     : null
                   }
 

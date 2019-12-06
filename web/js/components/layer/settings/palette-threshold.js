@@ -7,11 +7,11 @@ import { Checkbox } from '../../util/checkbox';
 class ThresholdSelect extends React.Component {
   constructor(props) {
     super(props);
-    const { start, end, palette, legend } = props;
+    const { start, end, squashed } = props;
     this.state = {
-      start: start ? legend.refs.indexOf(palette.entries.refs[start]) : start,
-      end: end ? legend.refs.indexOf(palette.entries.refs[end]) : start,
-      squashed: props.squashed,
+      start,
+      end,
+      squashed,
       activeDragger: 'start'
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
@@ -50,7 +50,6 @@ class ThresholdSelect extends React.Component {
     const newEnd = Math.ceil(Number(thresholdArray[1]));
     const startRef = legend.refs[newStart];
     const endRef = legend.refs[newEnd];
-
     if (newStart !== start && newEnd !== end) {
       this.setState({
         start: newStart,
@@ -91,6 +90,7 @@ class ThresholdSelect extends React.Component {
       end === legend.tooltips.length - 1 && legend.maxLabel
         ? legend.maxLabel + ' ' + units
         : legend.tooltips[end] + ' ' + units;
+
     return (
       <div className="layer-threshold-select settings-component">
         <h2 className="wv-header">Thresholds</h2>

@@ -193,7 +193,7 @@ button:focus {
   }
 
   & .animate-button {
-    margin-top: 10px;
+    margin: 10px 0 0 10px;
     height: 40px;
     width: 40px;
   }
@@ -345,9 +345,12 @@ button:focus {
   background: rgba(40, 40, 40, 0.85);
   position: absolute;
   top: -54px;
-  left: 0;
+  left: 85px;
   color: #fff;
   border-bottom: thin solid #444;
+  &.subdaily {
+    left: 189px;
+  }
 }
 
 .custom-interval-widget i.wv-close {

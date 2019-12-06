@@ -58,6 +58,7 @@ class MeasureButton extends React.Component {
     return (
       <>
         {showAlert && <AlertUtil
+          id={'measurement-alert'}
           isOpen={true}
           iconClassName='fa fa-ruler fa-fw'
           title='Measure Tool'

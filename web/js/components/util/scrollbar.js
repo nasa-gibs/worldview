@@ -1,64 +1,66 @@
-import React from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
-import ScrollBar from 'simplebar';
-export default class SimpleBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      needsScrollBar: false
-    };
-  }
+import SimpleBarReact from 'simplebar-react';
 
-  componentDidMount() {
-    const element = this.caseEl;
-    this.scrollBar = new ScrollBar(element);
-    this.content = this.scrollBar.getScrollElement();
-  }
-
-  componentDidUpdate() {
-    this.updateBoolean();
-    // scroll to vertical axis point - note: 0 would be no scroll
-    const verticalTop = Math.floor(this.props.scrollBarVerticalTop);
-    if (verticalTop !== 0) {
-      this.content.scrollTop = verticalTop;
-    }
-  }
+/**
+ * Wrapper component for SimpleBar
+ * @param {number} props.scrollBarVerticalTop - location to scroll to
+ */
+export default function Scrollbars(props) {
+  const ref = useRef();
 
   /**
-   * Use offsetHeight to determine if scrollbar should be visible
-   * https://stackoverflow.com/a/42026562/4589331
+   * Add/remove the scrollbar-visible class if content is overflowing
+   * @param {*} simpleBar
    */
-  updateBoolean() {
-    const element = this.content;
-    const hasOverflowingChildren = element.offsetHeight + 1 < element.scrollHeight;
-    if (this.state.needsScrollBar !== hasOverflowingChildren) {
-      this.setState({ needsScrollBar: hasOverflowingChildren });
+  const toggleVisibleClass = (simpleBar) => {
+    const { contentEl, contentWrapperEl } = simpleBar;
+    if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
+      contentEl.classList.add('scrollbar-visible');
+    } else {
+      contentEl.classList.remove('scrollbar-visible');
     }
-  }
+  };
 
-  render() {
-    return (
-      <div
-        style={this.props.style}
-        ref={el => {
-          this.caseEl = el;
-        }}
-        className={
-          this.state.needsScrollBar ? 'scrollbar-visible' : 'scrollbar-hidden'
-        }
-      >
-        {this.props.children}
-      </div>
-    );
-  }
+  /**
+   * Set the scrollTop position based on props.scrollBarVerticalTop
+   * @param {*} simpleBar
+   */
+  const setScrollTop = (simpleBar) => {
+    const { contentWrapperEl } = simpleBar;
+    if (contentWrapperEl) {
+      const verticalTop = Math.floor(props.scrollBarVerticalTop);
+      contentWrapperEl.scrollTop = verticalTop !== 0
+        ? verticalTop
+        : contentWrapperEl.scrollTop;
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (!ref || !ref.current) {
+      return;
+    }
+    setTimeout(() => { toggleVisibleClass(ref.current); }, 100);
+    setScrollTop(ref.current);
+  });
+
+  return (
+    <SimpleBarReact
+      autoHide={false}
+      style={props.style}
+      ref={ref}
+    >
+      {props.children}
+    </SimpleBarReact>
+  );
 }
 
-SimpleBar.propTypes = {
+Scrollbars.propTypes = {
   children: PropTypes.node,
   scrollBarVerticalTop: PropTypes.number,
   style: PropTypes.object
 };
 
-SimpleBar.defaultProps = {
+Scrollbars.defaultProps = {
   scrollBarVerticalTop: 0
 };

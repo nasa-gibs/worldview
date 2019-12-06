@@ -20,7 +20,7 @@ module.exports = {
   knownDate: '?t=2019-07-22',
 
   // timeline
-  subdailyLayerIntervalTimescale: '?t=2019-10-04-T09%3A46%3A32Z&z=4&i=4&l=GOES-East_ABI_Band2_Red_Visible,Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor',
+  subdailyLayerIntervalTimescale: '?t=2019-10-04-T09%3A46%3A32Z&z=4&i=4&l=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor',
 
   // events
   eventsTabActive: '?e=true',

@@ -64,5 +64,11 @@ function registerMapMouseHandlers(maps, events) {
     element.addEventListener('mouseout', event => {
       events.trigger('mouseout', event, map, crs);
     });
+    map.on('singleclick', event => {
+      events.trigger('singleclick', event, map, crs);
+    });
+    element.addEventListener('click', event => {
+      events.trigger('click', event, map, crs);
+    });
   });
 }

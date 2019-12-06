@@ -12,7 +12,9 @@
             ],
             "product":  "MOD05_L2_DAY",
             "wrapadjacentdays": true,
-
+            "tracks": [
+                "OrbitTracks_Terra_Descending"
+            ],
             "palette": {
                 "recommended":  ["blue_1"]
             }

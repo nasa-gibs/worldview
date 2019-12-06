@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_Terra_Descending": {
       "id": "OrbitTracks_Terra_Descending",
-      "title": "Terra Orbital Track & Overpass Time (Descending/Day)",
+      "title": "Terra - Orbit Track & Time",
       "subtitle": "Terra / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Terra_Descending",
       "group": "overlays",

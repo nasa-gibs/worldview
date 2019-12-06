@@ -1,9 +1,13 @@
+.vector-modal {
+  width: 445px;
+  height: 300px;
+  position: absolute;
+}
 .vector-modal .close {
   opacity: 1;
 }
 
 .vector-modal .modal-title {
-  color: #fff;
   font-weight: 800;
 }
 
@@ -17,27 +21,52 @@
   margin: 0;
 }
 
-.vector-modal .modal-body table th,
-.vector-modal .modal-body table td {
+.vector-modal table th,
+.vector-modal table .vector-feature-name-cell {
   text-transform: capitalize;
 }
 
 .vector-modal .modal-body table th {
   position: relative;
 }
-
+.vector-modal .modal-header {
+  padding-bottom: 0;
+  cursor: move;
+}
+.vector-modal .nav-item.active {
+  background: #f8f9fa;
+}
+.vector-modal .active .nav-link {
+  border: 1px solid #a5a6a7;
+  border-bottom: none;
+}
+.vector-modal .nav-link {
+  border: 1px solid #fff;
+  border-bottom: none;
+}
+.vector-modal .vector-feature-name-cell {
+  margin-left: 20px;
+}
+.vector-info-tooltip-case {
+  position: relative;
+}
+.vector-info-tooltip-case .sub-case {
+  position: absolute;
+  width: 15px;
+  height: 10px;
+}
 .vector-modal .vector-info-icon {
   position: absolute;
   font-size: 8px;
-  border: 1px solid #fff;
+  border: 1px solid #666;
   width: 13px;
   height: 13px;
   text-align: center;
   border-radius: 50%;
   padding-top: 1px;
-  margin-top: 0;
-  top: 0;
-  right: 0;
+  margin-right: 10px;
+  display: inline-block;
+  color: #666;
 }
 
 .vector-modal .vector-info-icon:hover {

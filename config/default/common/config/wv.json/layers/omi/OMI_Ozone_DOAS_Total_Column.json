@@ -10,7 +10,10 @@
               "omi"
             ],
             "product":  "OMDOAO3e",
-            "tags":     "Differential Absorption Spectroscopy"
+            "tags":     "Differential Absorption Spectroscopy",
+            "tracks": [
+            "OrbitTracks_Aura_Ascending"
+            ]
 
         }
     }

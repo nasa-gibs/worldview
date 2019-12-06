@@ -1,11 +1,9 @@
 import 'jquery-ui-bundle/jquery-ui';
 import loadingIndicator from './indicator';
-import { uiInfo } from './info';
 
 export default (function(self) {
   // Export other ui methods
-  self.loadingIndicator = loadingIndicator;
-  self.info = uiInfo;
+  self.indicator = loadingIndicator;
   /**
    * General error handler.
    *
@@ -111,88 +109,6 @@ export default (function(self) {
     return $alert;
   };
 
-  /**
-   * Asks the end user a yes or no question in a dialog box.
-   *
-   * @method ask
-   * @static
-   *
-   * @param [spec.header="Notice"] {string} Header text to be displayed in
-   * the dialog box.
-   *
-   * @param [spec.message="Are you sure?"] {string} Message text to be
-   * displayed in the dialog box.
-   *
-   * @param [spec.okButton="OK"] {string} Text to be used in the no button.
-   *
-   * @param [spec.cancelButton="Cancel"] {string} Text to be used in the yes
-   * button.
-   *
-   * @param [spec.onOk] {function} Function to execute when the OK button is
-   * pressed. If not specified, the dialog box simply closes.
-   *
-   * @parma [spec.onCancel] {function} Function to execute when the Cancel
-   * button is pressed. If not specified, the dialog box simply closes.
-   */
-  self.ask = function(spec) {
-    var $dialog = self.getDialog('wv-dialog-ask');
-    var cancelText = spec.cancelButton || 'Cancel';
-    var okText = spec.okButton || 'OK';
-    var buttons = {};
-    buttons[cancelText] = function() {
-      $(this).dialog('close');
-      if (spec.onCancel) {
-        spec.onCancel();
-      }
-    };
-    buttons[okText] = function() {
-      $(this).dialog('close');
-      if (spec.onOk) {
-        spec.onOk();
-      }
-    };
-    $dialog
-      .dialog({
-        title: spec.header || 'Notice',
-        resizable: false,
-        modal: true,
-        buttons: buttons,
-        dialogClass: spec.class || '',
-        closeText: ''
-      })
-      .html(spec.message)
-      .on('dialogclose', function() {
-        if (spec.onCancel) {
-          spec.onCancel();
-        }
-      });
-  };
-
-  /**
-   * Displays a message to the end user that the feature is not supported
-   * in this web browser.
-   *
-   * @method unsupported
-   * @static
-   *
-   * @param {String} [featureName] If specified, the message will state
-   * "The <featureName> feature is not supported...". Otherwise  it will
-   * state "This feature..."
-   */
-  self.unsupported = function(featureName) {
-    var prefix;
-    if (!featureName) {
-      prefix = 'This feature';
-    } else {
-      prefix = 'The ' + featureName + ' feature';
-    }
-    self.notify(
-      prefix +
-        ' is not supported with your web ' +
-        'browser. Upgrade or try again in a different browser.'
-    );
-  };
-
   var getComponent = function(marker) {
     var $element = $('<div></div>').addClass(marker);
     $('body').append($element);
@@ -230,37 +146,6 @@ export default (function(self) {
   self.getDialog = function(marker) {
     self.close(marker);
     return getComponent(marker || 'wv-dialog', closeDialog);
-  };
-
-  self.getMenu = function(marker) {
-    self.close();
-    return getComponent(marker || 'wv-menu', closeMenu);
-  };
-
-  self.closeDialog = function() {
-    self.close();
-  };
-
-  self.positionMenu = function($menuItems, pos) {
-    var position = function() {
-      $menuItems.menu().position(pos);
-    };
-    position();
-    $(window).resize(position);
-    $menuItems.on('hide', function() {
-      $(window).off('resize', position);
-    });
-  };
-
-  self.positionDialog = function($dialog, pos) {
-    var position = function() {
-      $dialog.dialog('option', 'position', pos);
-    };
-    position();
-    $(window).resize(position);
-    $dialog.on('dialogclose', function() {
-      $(window).off('resize', position);
-    });
   };
 
   return self;

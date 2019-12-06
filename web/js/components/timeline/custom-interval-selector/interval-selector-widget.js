@@ -50,7 +50,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
     return customIntervalModalOpen && (
       <div
         onKeyDown={this.handleKeyPress}
-        className="custom-interval-widget"
+        className={'custom-interval-widget ' + (hasSubdailyLayers ? 'subdaily' : '')}
         tabIndex={0}
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >

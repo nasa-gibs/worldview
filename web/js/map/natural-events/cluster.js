@@ -1,57 +1,41 @@
-import superCluster from 'supercluster';
+import Supercluster from 'supercluster';
 import lodashRound from 'lodash/round';
 
 /**
- * Create superCLuster Object - Uses map and reduce
+ * Create Supercluster Object - Uses map and reduce
  * operations to create a timespan on each clustered
  * object
  *
  * @return {void}
  */
-export function naturalEventsClusterCreateObject() {
-  return superCluster({
+export const naturalEventsClusterCreateObject = () => {
+  return new Supercluster({
     radius: 60, // pixel radius where points are clustered
     maxZoom: 12,
-    initial: function() {
-      return {
-        startDate: null,
-        endDate: null
-      };
-    },
-    map: function(props) {
-      return {
-        startDate: props.date,
-        endDate: props.date
-      };
-    },
-    reduce: function(accumulated, properties) {
-      var newDate = properties.startDate;
-      var pastStartDate = accumulated.startDate;
-      var pastEndDate = accumulated.endDate;
+    map: (props) => ({ startDate: props.date, endDate: props.date }),
+    reduce: (accumulated, properties) => {
+      const newDate = properties.startDate;
+      const pastStartDate = accumulated.startDate;
+      const pastEndDate = accumulated.endDate;
       if (!pastEndDate) {
         accumulated.startDate = newDate;
         accumulated.endDate = newDate;
       } else {
+        const newDateFormatted = new Date(newDate).getTime();
         accumulated.startDate =
-          Date.parse(new Date(pastStartDate)) > Date.parse(new Date(newDate))
+          new Date(pastStartDate).getTime() > newDateFormatted
             ? newDate
             : pastStartDate;
         accumulated.endDate =
-          Date.parse(new Date(pastEndDate)) < Date.parse(new Date(newDate))
+          new Date(pastEndDate).getTime() < newDateFormatted
             ? newDate
             : pastEndDate;
       }
     },
-    setPolar: function() {
-      this.radius = 30;
-      this.maxZoom = 7;
-    },
-    setGeo: function() {
-      this.radius = 60;
-      this.maxZoom = 12;
-    }
+    setPolar: () => ({ radius: 30, maxZoom: 7 }),
+    setGeo: () => ({ radius: 60, maxZoom: 12 })
   });
-}
+};
 /**
  * Create a geoJSON point out of a point
  *
@@ -60,7 +44,7 @@ export function naturalEventsClusterCreateObject() {
  * @param  {String} date
  * @return {Object} geoJSON point
  */
-export function naturalEventsClusterPointToGeoJSON(id, coordinates, date) {
+export const naturalEventsClusterPointToGeoJSON = (id, coordinates, date) => {
   return {
     type: 'Feature',
     properties: {
@@ -73,34 +57,34 @@ export function naturalEventsClusterPointToGeoJSON(id, coordinates, date) {
       coordinates: coordinates
     }
   };
-}
+};
 /**
  * @param  {Array}
  * @return {void}
  */
-export function naturalEventsClusterSort(clusterArray) {
-  const newArray = clusterArray.sort(function(a, b) {
-    var firstDate = a.properties.date || a.properties.startDate;
-    var secondDate = b.properties.date || b.properties.startDate;
+export const naturalEventsClusterSort = (clusterArray) => {
+  const newArray = clusterArray.sort((a, b) => {
+    const firstDate = a.properties.date || a.properties.startDate;
+    const secondDate = b.properties.date || b.properties.startDate;
 
     return new Date(secondDate) - new Date(firstDate);
   });
   return newArray;
-}
+};
 /**
- * Load points given superCluster Object
+ * Load points given Supercluster Object
  *
  * @param  {Object} superClusterObj
  * @param  {Array} pointArray
  * @param  {number} zoomLevel
  * @return {Object}
  */
-export function naturalEventsClusterGetPoints(
+export const naturalEventsClusterGetPoints = (
   superClusterObj,
   pointArray,
   zoomLevel,
   extent
-) {
+) => {
   superClusterObj.load(pointArray);
   return superClusterObj.getClusters(extent, lodashRound(zoomLevel));
-}
+};

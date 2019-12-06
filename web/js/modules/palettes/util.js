@@ -5,6 +5,7 @@ import {
   get as lodashGet,
   size as lodashSize,
   findIndex as lodashFindIndex,
+  split as lodashSplit,
   isArray
 } from 'lodash';
 import { PALETTE_STRINGS_PERMALINK_ARRAY } from './constants';
@@ -246,10 +247,10 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
         lodashSize(lodashGet(paletteDef, 'entries.values')) ||
         lodashSize(lodashGet(paletteDef, 'entries.colors'));
       const maxValue = paletteDef.max
-        ? paletteDef.entries.values[paletteDef.max || entryLength]
+        ? lodashSplit(paletteDef.entries.values[paletteDef.max || entryLength], ',', 1)
         : undefined;
       const minValue = paletteDef.min
-        ? paletteDef.entries.values[paletteDef.min || 0]
+        ? lodashSplit(paletteDef.entries.values[paletteDef.min || 0], ',', 1)
         : undefined;
       palObj = createPaletteAttributeObject(
         paletteDef,

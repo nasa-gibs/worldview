@@ -8,7 +8,9 @@
             "tags":     "co",
             "group":    "overlays",
             "product":  "AIRX2RET_DAY",
-
+            "tracks": [
+                "OrbitTracks_Aqua_Ascending"
+            ],
             "layergroup": [
               "airs"
             ],

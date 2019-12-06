@@ -77,7 +77,7 @@ class OlCoordinates extends React.Component {
     }
 
     return (
-      <div>
+      <div id='ol-coords-case'>
         <Coordinates
           format={this.state.format}
           latitude={this.state.latitude}

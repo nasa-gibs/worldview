@@ -68,8 +68,7 @@ class Data extends React.Component {
     const dataArray = Object.entries(products);
     if (dataArray.length > 0 && !selectedProduct && isActive) {
       findProductToSelect(activeLayers, selectedProduct);
-    }
-    if (selectedProduct && !doesSelectedExist(activeLayers, selectedProduct)) {
+    } else if (selectedProduct && !doesSelectedExist(dataArray, selectedProduct)) {
       findProductToSelect(activeLayers, selectedProduct);
     }
     return (
@@ -77,7 +76,7 @@ class Data extends React.Component {
         <div id="wv-data">
           <div className="wv-datalist sidebar-panel content">
             <div id="wv-datacontent">
-              {dataArray.map(product => {
+              {dataArray.map((product, i) => {
                 return (
                   <Products
                     key={product[0]}
@@ -124,7 +123,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   findProductToSelect: (products, selectedProduct) => {
     const newSelection = findAvailableProduct(products);
-
     if (newSelection) {
       dispatch(selectProduct(newSelection));
     }
@@ -145,7 +143,6 @@ function mapStateToProps(state, ownProps) {
     config,
     proj.id
   );
-
   return {
     counts,
     selectedProduct,

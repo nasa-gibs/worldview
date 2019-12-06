@@ -10,6 +10,9 @@
               "omi"
             ],
             "product":  "OMCLDRR",
+            "tracks": [
+                "OrbitTracks_Aura_Ascending"
+            ],
 
             "palette": {
                 "recommended":  ["blue_4"]

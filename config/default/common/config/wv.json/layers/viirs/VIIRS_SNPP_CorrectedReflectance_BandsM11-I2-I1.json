@@ -10,7 +10,10 @@
               "viirs"
             ],
             "group":    "baselayers",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Suomi_NPP_Ascending"
+             ]
         }
     }
 }

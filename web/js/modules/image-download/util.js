@@ -142,7 +142,9 @@ export function imageUtilCalculateResolution(
 export function imageUtilGetLayers(products, proj) {
   var layers = [];
   lodashEach(products, function(layer) {
-    if (layer.projections[proj].layer) {
+    if (layer.downloadId) {
+      layers.push(layer.downloadId);
+    } else if (layer.projections[proj].layer) {
       layers.push(layer.projections[proj].layer);
     } else {
       layers.push(layer.id);
@@ -228,11 +230,11 @@ export function bboxWMS13(lonlats, crs) {
   if (crs === 'EPSG:4326') {
     return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
       lonlats[1][0]
-    }`;
+      }`;
   } else {
     return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${
       lonlats[1][1]
-    }`;
+      }`;
   }
 }
 
@@ -249,13 +251,13 @@ export function getDimensions(projection, bounds, resolution) {
   const conversionFactor = imageUtilGetConversionFactor(projection);
   const imgWidth = Math.round(
     Math.abs(bounds[1][0] - bounds[0][0]) /
-      conversionFactor /
-      Number(resolution)
+    conversionFactor /
+    Number(resolution)
   );
   const imgHeight = Math.round(
     Math.abs(bounds[1][1] - bounds[0][1]) /
-      conversionFactor /
-      Number(resolution)
+    conversionFactor /
+    Number(resolution)
   );
   return { width: imgWidth, height: imgHeight };
 }

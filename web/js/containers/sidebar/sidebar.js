@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Layers from './layers';
 import Events from './events';
 import Data from './data';
+import { get as lodashGet } from 'lodash';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
 import { TabContent, TabPane } from 'reactstrap';
@@ -75,11 +76,11 @@ class Sidebar extends React.Component {
 
   updateDimensions() {
     const { subComponentHeight } = this.state;
+    const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
     const { isMobile, screenHeight } = this.props;
     if (!isMobile && this.iconElement) {
       const iconHeight = this.iconElement.clientHeight;
       const topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);
-      const footerHeight = this.footerElement.clientHeight;
       const tabHeight = 32;
       const basePadding = 110;
       const newHeight =
@@ -96,7 +97,6 @@ class Sidebar extends React.Component {
       }
     } else {
       const tabHeight = 32;
-      const footerHeight = this.footerElement.clientHeight;
       const newHeight = screenHeight - (tabHeight + footerHeight);
       // See note above
       if (Math.abs(subComponentHeight - newHeight) > 1) {
@@ -203,44 +203,48 @@ class Sidebar extends React.Component {
             }
             onWheel={wheelCallBack}
           >
-            <NavCase
-              activeTab={activeTab}
-              onTabClick={onTabClick}
-              tabTypes={tabTypes}
-              isMobile={isMobile}
-              toggleSidebar={this.toggleSidebar.bind(this)}
-              isCompareMode={isCompareMode}
-              isDataDisabled={isDataDisabled}
-            />
-            <TabContent activeTab={activeTab}>
-              <TabPane tabId="layers">
-                {this.getProductsToRender(activeTab, isCompareMode)}
-              </TabPane>
-              <TabPane tabId="events">
-                {naturalEventsFeatureActive
-                  ? <Events
-                    isActive={activeTab === 'events'}
-                    height={subComponentHeight}
-                  />
-                  : null
-                }
-              </TabPane>
-              <TabPane tabId="download">
-                {dataDownloadFeatureActive
-                  ? <Data
-                    isActive={activeTab === 'download'}
-                    height={subComponentHeight}
-                    tabTypes={tabTypes}
-                  />
-                  : null
-                }
-              </TabPane>
-              <footer
-                ref={footerElement => (this.footerElement = footerElement)}
-              >
-                <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
-              </footer>
-            </TabContent>
+            {!isCollapsed && (
+              <>
+                <NavCase
+                  activeTab={activeTab}
+                  onTabClick={onTabClick}
+                  tabTypes={tabTypes}
+                  isMobile={isMobile}
+                  toggleSidebar={this.toggleSidebar.bind(this)}
+                  isCompareMode={isCompareMode}
+                  isDataDisabled={isDataDisabled}
+                />
+                <TabContent activeTab={activeTab}>
+                  <TabPane tabId="layers">
+                    {this.getProductsToRender(activeTab, isCompareMode)}
+                  </TabPane>
+                  <TabPane tabId="events">
+                    {naturalEventsFeatureActive
+                      ? <Events
+                        isActive={activeTab === 'events'}
+                        height={subComponentHeight}
+                      />
+                      : null
+                    }
+                  </TabPane>
+                  <TabPane tabId="download">
+                    {dataDownloadFeatureActive
+                      ? <Data
+                        isActive={activeTab === 'download'}
+                        height={subComponentHeight}
+                        tabTypes={tabTypes}
+                      />
+                      : null
+                    }
+                  </TabPane>
+                  <footer
+                    ref={footerElement => (this.footerElement = footerElement)}
+                  >
+                    <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
+                  </footer>
+                </TabContent>
+              </>
+            )}
           </div>
         </section>
       </ErrorBoundary>
@@ -286,7 +290,8 @@ const mapDispatchToProps = dispatch => ({
   changeTab: str => {
     dispatch(changeTab(str));
   },
-  onTabClick: str => {
+  onTabClick: (str, activeStr) => {
+    if (str === activeStr) return;
     googleTagManager.pushEvent({
       event: str + '_tab'
     });

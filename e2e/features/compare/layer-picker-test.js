@@ -5,6 +5,7 @@ const aodCombinedValueId = 'MODIS_Combined_Value_Added_AOD';
 const aodCheckBox =
   '#checkbox-case-MODIS_Combined_Value_Added_AOD .wv-checkbox';
 const aodIndexCheckbox = '#checkbox-case-OMI_Aerosol_Index .wv-checkbox';
+const TIME_LIMIT = 10000;
 
 module.exports = {
   before: function(client) {
@@ -34,13 +35,15 @@ module.exports = {
         );
       }
     );
+    client.waitForElementNotPresent('#layer_picker_component', TIME_LIMIT);
+    client.pause(250);
   },
   'Toggle compare mode to Active state B': function(client) {
     client.click(selectors.bTab + ' .productsIcon');
     client.waitForElementVisible('#activeB-Coastlines', client.globals.timeout);
   },
   'Verify that AOD layer is not visible': function(client) {
-    client.expect.element('#active-' + aodCombinedValueId).to.not.be.visible;
+    client.expect.element('#active-' + aodCombinedValueId).to.not.be.present;
   },
   'Add AOD index layer to Active state B and verify it has been added': function(
     client
@@ -62,9 +65,7 @@ module.exports = {
           client.expect.element(
             '#activeB-' + aodCombinedValueId
           ).to.not.be.present;
-          client.expect.element(
-            '#active-' + aodCombinedValueId
-          ).to.not.be.visible;
+          client.expect.element('#active-' + aodCombinedValueId).to.not.be.present;
         });
       }
     );
@@ -79,7 +80,7 @@ module.exports = {
       '#active-' + aodCombinedValueId,
       client.globals.timeout,
       function() {
-        client.expect.element('#activeB-OMI_Aerosol_Index').to.not.be.visible;
+        client.expect.element('#activeB-OMI_Aerosol_Index').to.not.be.present;
         client.expect.element('#activeA-OMI_Aerosol_Index').to.not.be.present;
       }
     );

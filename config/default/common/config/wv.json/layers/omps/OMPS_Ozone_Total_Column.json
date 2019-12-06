@@ -10,7 +10,10 @@
             "layergroup": [
               "omps"
             ],
-            "product":  "NMTO3"
+            "product":  "NMTO3",
+            "tracks": [
+            "OrbitTracks_Suomi_NPP_Ascending"
+             ]
         }
     }
 }

@@ -226,10 +226,6 @@ img.hideReg {
   left: -999em !important;
 }
 
-.jspPane {
-  margin-left: 0 !important;
-}
-
 .sidebar-panel li.item.productsitem,
 li.item.productsitem.inmotion,
 .sidebar-panel li.itemstatic {
@@ -309,7 +305,7 @@ li.item.productsitem.inmotion,
   margin-top: 3px;
 }
 
-i.wv-layers-options-icon {
+.layer-info i.wv-layers-options-icon {
   width: 12px;
   height: 12px;
   position: absolute;
@@ -378,20 +374,25 @@ i.wv-layers-options-icon {
   margin-left: -5px;
 }
 
-.productsitem .layer-main {
-  width: auto;
-  background-color: #ccc;
-  margin-left: 31px;
-  cursor: default;
-  min-height: 40px;
-  overflow: hidden;
+.productsitem {
+  & .layer-info {
+    background-color: #ccc;
+    min-height: 40px;
+  }
+  & .layer-main {
+    width: auto;
+    margin-left: 31px;
+    cursor: default;
+    min-height: 40px;
+    overflow: hidden;
+  }
 }
 
 .productsitem.zotted .layer-main {
   margin-left: 42px;
 }
 
-.productsitem.layer-hidden .layer-main,
+.productsitem.layer-hidden .layer-info,
 .productsitem.layer-hidden a.hdanchor {
   background: rgba(255, 255, 255, 0.2);
 }
@@ -400,8 +401,8 @@ i.wv-layers-options-icon {
   background: rgba(255, 255, 255, 1);
 }
 
-.productsitem.layer-hidden .layer-main h4,
-.productsitem.layer-hidden .layer-main p {
+.productsitem.layer-hidden .layer-info h4,
+.productsitem.layer-hidden .layer-info p {
   color: #999;
 }
 

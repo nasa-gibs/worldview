@@ -132,6 +132,11 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   return layers;
 }
 
+/**
+ * Reset to starting layers
+ * @param {*} startingLayers
+ * @param {*} layerConfig
+ */
 export function resetLayers(startingLayers, layerConfig) {
   let layers = [];
   if (startingLayers) {
@@ -142,6 +147,12 @@ export function resetLayers(startingLayers, layerConfig) {
   return layers;
 }
 
+/**
+ *
+ * @param {*} config
+ * @param {*} layerId
+ * @param {*} projId
+ */
 export function getTitles(config, layerId, projId) {
   try {
     var title, subtitle, tags;
@@ -169,10 +180,17 @@ export function getTitles(config, layerId, projId) {
   }
 }
 
+/**
+ *
+ * @param {*} layers
+ * @param {*} spec
+ * @param {*} state
+ */
 export function getLayers(layers, spec, state) {
   spec = spec || {};
-  var baselayers = forGroup('baselayers', spec, layers, state);
-  var overlays = forGroup('overlays', spec, layers, state);
+  const baselayers = forGroup('baselayers', spec, layers, state);
+  const overlays = forGroup('overlays', spec, layers, state);
+
   if (spec.group === 'baselayers') {
     return baselayers;
   }
@@ -180,10 +198,7 @@ export function getLayers(layers, spec, state) {
     return overlays;
   }
   if (spec.group === 'all') {
-    return {
-      baselayers: baselayers,
-      overlays: overlays
-    };
+    return { baselayers, overlays };
   }
   if (spec.group) {
     throw new Error('Invalid layer group: ' + spec.group);
@@ -384,37 +399,30 @@ export function moveBefore(sourceId, targetId, layers) {
   return layers;
 }
 
+/**
+ * Determine if a layer should be rendered if it would be visible
+ *
+ * @param {*} id
+ * @param {*} activeLayers
+ * @param {*} date
+ * @param {*} state
+ */
 export function isRenderable(id, activeLayers, date, state) {
   const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
   date = date || state.date[activeDateStr];
-  var def = lodashFind(activeLayers, {
-    id: id
-  });
-  if (!def) {
-    return false;
-  }
-  if (!available(id, date, activeLayers, state.config)) {
-    return false;
-  }
+  const def = lodashFind(activeLayers, { id });
+  const notAvailable = !available(id, date, activeLayers, state.config);
 
-  if (!def.visible || def.opacity === 0) {
+  if (!def || notAvailable || !def.visible || def.opacity === 0) {
     return false;
   }
-
   if (def.group === 'overlays') {
     return true;
   }
-
-  var obscured = false;
+  let obscured = false;
   lodashEach(
-    getLayers(
-      activeLayers,
-      {
-        group: 'baselayers'
-      },
-      state
-    ),
-    function(otherDef) {
+    getLayers(activeLayers, { group: 'baselayers' }, state),
+    (otherDef) => {
       if (otherDef.id === def.id) {
         return false;
       }

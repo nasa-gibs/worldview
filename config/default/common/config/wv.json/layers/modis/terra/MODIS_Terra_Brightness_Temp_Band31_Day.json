@@ -12,6 +12,9 @@
             ],
             "product":  "MOD021KM_DAY",
             "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Terra_Descending"
+            ],
             "projections": {
                 "geographic": {
                     "source": "GIBS:geographic"

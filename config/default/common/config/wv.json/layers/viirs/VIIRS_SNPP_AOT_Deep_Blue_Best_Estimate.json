@@ -11,7 +11,10 @@
               "viirs"
             ],
             "product":  "AERDB_L2_VIIRS_SNPP_NRT",
-            "wrapadjacentdays": true
-        }
+            "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Suomi_NPP_Ascending"
+            ]
+         }
     }
 }

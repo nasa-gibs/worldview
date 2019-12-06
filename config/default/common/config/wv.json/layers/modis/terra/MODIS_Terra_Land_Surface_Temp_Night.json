@@ -12,7 +12,9 @@
               "modis_terra"
             ],
             "product":  "MOD11_L2_NIGHT",
-
+            "tracks": [
+                "OrbitTracks_Terra_Ascending"
+            ],
             "palette": {
                 "recommended": ["rainbow_1", "purple_2"]
             }
