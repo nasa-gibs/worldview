@@ -12,49 +12,20 @@ class DateInputColumn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value,
+      value: '',
       selected: false,
-      valid: true,
       size: null
     };
     this.inputs = [];
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { focused, hold, minDate, maxDate, tabIndex } = this.props;
-    const { valid, value } = this.state;
-    const date = this.props.date.toISOString();
-    const prevDate = prevProps.date.toISOString();
-
+  componentDidUpdate(prevProps) {
+    const { focused, tabIndex, value } = this.props;
     if (focused) {
       this.inputs[tabIndex].focus();
     }
-    if (this.props.value !== prevProps.value && valid) {
+    if (value !== prevProps.value) {
       this.updateValue();
-    }
-
-    if (!valid) {
-      if (hold) {
-        const checkValidValue = this.validateBasedOnType(value, true);
-        if (checkValidValue === null || date !== prevDate) {
-          this.updateValue();
-          this.resetValidSelected();
-        }
-      } else {
-        if (date !== prevDate) {
-          const dateWithinRange = this.props.date > minDate && this.props.date <= maxDate;
-          if (dateWithinRange) {
-            this.updateValue();
-            this.resetValidSelected();
-          }
-        } else {
-          this.validateBasedOnType(value, true);
-        }
-      }
-    } else {
-      if (value !== prevState.value) {
-        this.validateBasedOnType(value, true);
-      }
     }
   }
 
@@ -67,7 +38,7 @@ class DateInputColumn extends Component {
     const { type } = this.props;
     let size;
     if (type === 'year') {
-      size = '4';
+      size = 4;
     } else if (type === 'day') {
       size = 2;
     } else {
@@ -80,17 +51,8 @@ class DateInputColumn extends Component {
 
   // update input value
   updateValue = () => {
-    this.setState({
-      value: this.props.value
-    });
-  }
-
-  // reset valid and selected state
-  resetValidSelected = () => {
-    this.setState({
-      valid: true,
-      selected: false
-    });
+    const { value } = this.props;
+    this.setState({ value });
   }
 
   onKeyPress = (e) => {
@@ -151,7 +113,7 @@ class DateInputColumn extends Component {
     this.rollDate(-1);
   }
 
-  validateBasedOnType = (value, stateCheck) => {
+  validateBasedOnType = (value) => {
     const { type, updateTimeUnitInput } = this.props;
     let newDate;
     switch (type) {
@@ -160,6 +122,10 @@ class DateInputColumn extends Component {
         break;
       case 'month':
         newDate = this.monthValidation(value);
+        // transform month number to string (e.g., 3 -> 'MAR')
+        if (newDate !== null && !isNaN(value)) {
+          value = util.monthStringArray[value - 1];
+        }
         break;
       case 'day':
         newDate = this.dayValidation(value);
@@ -172,7 +138,13 @@ class DateInputColumn extends Component {
         break;
     }
 
-    if (newDate !== null && !stateCheck) {
+    // add leading '0' to single string number
+    if (newDate !== null && value.length === 1) {
+      value = '0' + value;
+    }
+
+    // update parent level time unit type value
+    if (newDate !== null) {
       updateTimeUnitInput(type, value);
     }
     return newDate;
@@ -182,7 +154,7 @@ class DateInputColumn extends Component {
     const date = new Date(this.props.date);
     if (input > 1000 && input < 9999) {
       const newDate = new Date(date.setUTCFullYear(input));
-      return this.validateDate(newDate, input);
+      return this.validateDate(newDate);
     }
     return null;
   }
@@ -193,10 +165,7 @@ class DateInputColumn extends Component {
     if (!isNaN(input) && input < 13 && input > 0) {
       newDate = new Date(date.setUTCMonth(input - 1));
       if (newDate) {
-        this.setState({
-          value: util.monthStringArray[input - 1]
-        });
-        return this.validateDate(newDate, input);
+        return this.validateDate(newDate);
       }
       return null;
     } else {
@@ -214,7 +183,7 @@ class DateInputColumn extends Component {
         if (addedDayMonthNumber !== zeroAddedMonthNumber) {
           return false;
         }
-        return this.validateDate(addDay, input);
+        return this.validateDate(addDay);
       } else {
         return null;
       }
@@ -236,7 +205,7 @@ class DateInputColumn extends Component {
         return false;
       }
       const newDate = new Date(date.setUTCDate(input));
-      return this.validateDate(newDate, input);
+      return this.validateDate(newDate);
     }
     return null;
   }
@@ -245,7 +214,7 @@ class DateInputColumn extends Component {
     const date = new Date(this.props.date);
     if (input >= 0 && input <= 23) {
       const newDate = new Date(date.setUTCHours(input));
-      return this.validateDate(newDate, input);
+      return this.validateDate(newDate);
     }
     return null;
   }
@@ -254,7 +223,7 @@ class DateInputColumn extends Component {
     const date = new Date(this.props.date);
     if (input >= 0 && input <= 59) {
       const newDate = new Date(date.setUTCMinutes(input));
-      return this.validateDate(newDate, input);
+      return this.validateDate(newDate);
     }
     return null;
   }
@@ -284,27 +253,26 @@ class DateInputColumn extends Component {
   }
 
   blur = (e) => {
-    const { blur, type, updateTimeUnitInput } = this.props;
-    const { valid } = this.state;
+    const { setFocusedTab, type } = this.props;
     // check for valid date on blur
-    let value = e.target.value;
-    const newDate = this.validateBasedOnType(value);
-    let validDate = !!newDate;
+    const inputValue = e.target.value;
+    const newDate = this.validateBasedOnType(inputValue);
+    let value = newDate === null
+      ? this.props.value
+      : inputValue;
 
-    if (newDate) {
-      updateTimeUnitInput(type, value);
-    } else if (newDate === null) {
-      value = this.props.value;
-      validDate = valid;
+    if (type === 'month' && !isNaN(value)) {
+      value = util.monthStringArray[value - 1];
+    } else if (value.length === 1) {
+      value = '0' + value;
     }
 
     this.setState({
       value,
-      valid: validDate,
       selected: false
     });
 
-    blur();
+    setFocusedTab(null);
   }
 
   onChange = (e) => {
@@ -325,23 +293,19 @@ class DateInputColumn extends Component {
 
   validateDate = (date) => {
     const { minDate, maxDate } = this.props;
-    let validDate = false;
     if (date > minDate && date <= maxDate) {
-      this.setState({
-        valid: true
-      });
-      validDate = date;
+      return date;
     }
-    return validDate;
+    return false;
   }
 
   render() {
-    const { fontSize, inputId, tabIndex, type } = this.props;
-    const { selected, size, valid, value } = this.state;
+    const { fontSize, inputId, tabIndex, type, isValid } = this.props;
+    const { selected, size, value } = this.state;
 
     const containerClassName = `input-wrapper ${selected ? 'selected ' : ''}input-wrapper-${type}`;
-    const containerBorderStyle = valid ? {} : { borderColor: '#ff0000' };
-    const inputClassName = `button-input-group${valid ? '' : ' invalid-input'}`;
+    const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
+    const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
     const fontSizeStyle = fontSize ? { fontSize: fontSize + 'px' } : {};
     return (
       <div
@@ -390,13 +354,12 @@ class DateInputColumn extends Component {
 }
 
 DateInputColumn.propTypes = {
-  blur: PropTypes.func,
   changeTab: PropTypes.func,
   date: PropTypes.object,
   focused: PropTypes.bool,
   fontSize: PropTypes.number,
-  hold: PropTypes.bool,
   inputId: PropTypes.string,
+  isValid: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   setFocusedTab: PropTypes.func,

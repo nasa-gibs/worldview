@@ -13,30 +13,50 @@ class DateSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      lastTab: null,
       tab: null,
       year: null,
       month: null,
       day: null,
       hour: null,
-      minute: null
+      minute: null,
+      yearValid: true,
+      monthValid: true,
+      dayValid: true,
+      hourValid: true,
+      minuteValid: true
     };
   }
 
-  // add pending timeunit input
+  /**
+  * @desc add individual timeunit input
+  *
+  * @param {String} timeUnit
+  * @param {String / Number} input
+  * @returns {void}
+  */
   updateTimeUnitInput = (timeUnit, input) => {
     this.setState({
       [timeUnit]: input
     }, this.updateDate);
   }
 
-  blur = () => {
-    this.setState({ tab: null });
-  }
-
+  /**
+  * @desc set focused tab
+  *
+  * @param {Number} input
+  * @returns {void}
+  */
   setFocusedTab = (tab) => {
     this.setState({ tab });
   }
 
+  /**
+  * @desc change tab
+  *
+  * @param {Number} index
+  * @returns {void}
+  */
   changeTab = (index) => {
     const { subDailyMode } = this.props;
     const { tab } = this.state;
@@ -59,28 +79,31 @@ class DateSelector extends Component {
       }
     }
     this.setState({
-      tab: nextTab
+      tab: nextTab,
+      lastTab: this.state.tab
     });
   }
 
   /**
-  * @desc update date with potential temporarily invalid dates
+  * @desc check valid date with potential temporarily invalid dates
   * @desc Example: temporary invalid date example would be starting with FEB 22
   * @desc changing to invalid FEB 31 (31 is a valid day, but invalid for FEB),
-  * @desc and finally changing to valid OCT 31 - temp values are retained for this
+  * @desc and changing to valid OCT 31 - temp values are retained until valid date
   *
   * @param {String} date
   * @param {Boolean} isRollDate
-  * @returns {void}
+  * @returns {Object Date or Boolean} valid date or false
   */
-  updateDate = (date = this.props.date, isRollDate) => {
-    const { minDate, maxDate, id, onDateChange } = this.props;
+  updateDateCheck = (date, isRollDate) => {
+    const { minDate, maxDate } = this.props;
     const { year, month, day, hour, minute } = this.state;
+    const timePrefix = ['year', 'month', 'day', 'hour', 'minute'];
+    const tabToCheck = timePrefix[this.state.lastTab - 1];
     const inputDate = new Date(date);
     const tempDay = day || date.getUTCDate();
     let dateWithinRange;
-    let updatedDate;
     let validDate = true;
+    let triggeredInvalid = false;
 
     if (isRollDate) {
       dateWithinRange = inputDate > minDate && inputDate <= maxDate;
@@ -91,33 +114,44 @@ class DateSelector extends Component {
       // in the event other inputs are invalid, temp values remain without date change
       if (year) {
         date = new Date(new Date(date).setUTCFullYear(year));
+        if (tabToCheck === 'year') {
+          const yearDateWithinRange = date < minDate || date > maxDate;
+          triggeredInvalid = yearDateWithinRange;
+        }
       }
-
       if (day && !month) {
-        const maxDate = new Date(
-          date.getYear(),
-          date.getMonth() + 1,
+        const maxDayDate = new Date(
+          date.getUTCFullYear(),
+          date.getUTCMonth() + 1,
           0
         ).getDate();
 
-        if (day <= maxDate) {
+        let dateCheck;
+        if (day <= maxDayDate) {
           date = new Date(new Date(date).setUTCDate(day));
+          dateCheck = new Date(new Date(inputDate).setUTCDate(day));
         } else {
-          date = new Date(new Date(date).setUTCDate(maxDate));
+          date = new Date(new Date(date).setUTCDate(maxDayDate));
           validDate = false;
+          dateCheck = new Date(new Date(inputDate).setUTCDate(maxDayDate));
+        }
+
+        if (tabToCheck === 'day') {
+          const dayDateWithinRange = !validDate || (dateCheck < minDate || dateCheck > maxDate);
+          triggeredInvalid = dayDateWithinRange;
         }
       }
 
       if (month) {
         const realMonth = util.stringInArray(util.monthStringArray, month);
         const maxDatePrev = new Date(
-          date.getYear(),
-          date.getMonth() + 1,
+          date.getUTCFullYear(),
+          date.getUTCMonth() + 1,
           0
         ).getDate();
 
         const maxDateNew = new Date(
-          date.getYear(),
+          date.getUTCFullYear(),
           realMonth + 1,
           0
         ).getDate();
@@ -126,26 +160,60 @@ class DateSelector extends Component {
           validDate = false;
         }
 
+        let dateCheck;
         if (day && month) {
+          dateCheck = new Date(inputDate);
           date = new Date(new Date(date).setUTCDate(1));
           date = new Date(new Date(date).setUTCMonth(realMonth));
+          dateCheck = new Date(new Date(dateCheck).setUTCDate(1));
+          dateCheck = new Date(new Date(dateCheck).setUTCMonth(realMonth));
         } else {
+          const maxDayDate = new Date(
+            date.getUTCFullYear(),
+            date.getUTCMonth() + 1,
+            0
+          ).getDate();
+
+          if (inputDate.getDate() > maxDayDate) {
+            validDate = false;
+          }
+          dateCheck = new Date(new Date(inputDate).setUTCMonth(realMonth));
           date = new Date(new Date(date).setUTCMonth(realMonth));
+        }
+
+        if (tabToCheck === 'month') {
+          const monthDateWithinRange = !validDate || (dateCheck < minDate || dateCheck > maxDate);
+          triggeredInvalid = monthDateWithinRange;
         }
       }
 
       if (day && month) {
-        const maxDate = new Date(
-          date.getYear(),
-          date.getMonth() + 1,
+        const maxDayDate = new Date(
+          date.getUTCFullYear(),
+          date.getUTCMonth() + 1,
           0
         ).getDate();
 
-        if (day <= maxDate) {
+        let dateCheck;
+        if (day <= maxDayDate) {
+          dateCheck = new Date(inputDate);
+          const realMonth = util.stringInArray(util.monthStringArray, month);
           date = new Date(new Date(date).setUTCDate(day));
+          dateCheck = new Date(new Date(date).setUTCDate(1));
+          dateCheck = new Date(new Date(dateCheck).setUTCMonth(realMonth));
+          dateCheck = new Date(new Date(dateCheck).setUTCDate(day));
         } else {
-          date = new Date(new Date(date).setUTCDate(maxDate));
+          date = new Date(new Date(date).setUTCDate(maxDayDate));
           validDate = false;
+          dateCheck = new Date(new Date(inputDate).setUTCDate(maxDayDate));
+        }
+
+        if (tabToCheck === 'month') {
+          const monthDateWithinRange = !validDate || (dateCheck < minDate || dateCheck > maxDate);
+          triggeredInvalid = monthDateWithinRange;
+        } else if (tabToCheck === 'day') {
+          const dayDateWithinRange = !validDate || (dateCheck < minDate || dateCheck > maxDate);
+          triggeredInvalid = dayDateWithinRange;
         }
       }
 
@@ -156,24 +224,54 @@ class DateSelector extends Component {
       if (minute) {
         date = new Date(new Date(date).setUTCMinutes(minute));
       }
-
-      // updateDate at this stage can still be invalid with pending timeunit changes
       dateWithinRange = date > minDate && date <= maxDate;
-      updatedDate = date.toISOString() !== this.props.date.toISOString();
-      if (!dateWithinRange && updatedDate) {
-        date = inputDate;
-      }
     }
 
-    if (validDate && (isRollDate || (dateWithinRange && updatedDate))) {
-      onDateChange(date, id);
+    // updateDate at this stage can still be invalid with pending timeunit changes
+    const updatedDate = date.toISOString() !== this.props.date.toISOString();
+    const newDateWithinRange = dateWithinRange && updatedDate;
+    if (validDate && (isRollDate || newDateWithinRange)) {
+      return date;
+    } else {
+      // only set invalid if updated and tabToCheck was offending invalid value
+      if (updatedDate) {
+        const timeValid = `${tabToCheck}Valid`;
+        // time specific validation (e.g., 'yearValid') for use in inputs
+        this.setState({
+          [timeValid]: !triggeredInvalid
+        });
+      } else {
+        return date;
+      }
+      return false;
+    }
+  }
+
+  /**
+  * @desc update date with newDate if valid from check and then reset temp time values
+  *
+  * @param {String} date
+  * @param {Boolean} isRollDate
+  * @returns {void}
+  */
+  updateDate = (date = this.props.date, isRollDate = false) => {
+    const { id, onDateChange } = this.props;
+    const newDate = this.updateDateCheck(date, isRollDate);
+
+    if (newDate) {
+      onDateChange(newDate, id);
       // clear the pending timeunit inputs
       this.setState({
         year: null,
         month: null,
         day: null,
         hour: null,
-        minute: null
+        minute: null,
+        yearValid: true,
+        monthValid: true,
+        dayValid: true,
+        hourValid: true,
+        minuteValid: true
       });
     }
   }
@@ -185,9 +283,32 @@ class DateSelector extends Component {
       maxDate,
       minDate
     } = this.props;
+    const {
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      yearValid,
+      monthValid,
+      dayValid,
+      hourValid,
+      minuteValid,
+      tab
+    } = this.state;
 
     const updateCheck = (
-      this.state.tab === prevState.tab &&
+      year === prevState.year &&
+      month === prevState.month &&
+      day === prevState.day &&
+      hour === prevState.hour &&
+      minute === prevState.minute &&
+      yearValid === prevState.yearValid &&
+      monthValid === prevState.monthValid &&
+      dayValid === prevState.dayValid &&
+      hourValid === prevState.hourValid &&
+      minuteValid === prevState.minuteValid &&
+      tab === prevState.tab &&
       date.getTime() === prevProps.date.getTime() &&
       subDailyMode === prevProps.subDailyMode &&
       maxDate.getTime() === prevProps.maxDate.getTime() &&
@@ -205,16 +326,26 @@ class DateSelector extends Component {
       idSuffix,
       subDailyMode
     } = this.props;
-    const { tab } = this.state;
+    const {
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      yearValid,
+      monthValid,
+      dayValid,
+      hourValid,
+      minuteValid,
+      tab
+    } = this.state;
     const sharedProps = {
-      hold: tab === null,
       date,
       updateDate: this.updateDate,
       setFocusedTab: this.setFocusedTab,
       changeTab: this.changeTab,
       maxDate,
       minDate,
-      blur: this.blur,
       fontSize,
       updateTimeUnitInput: this.updateTimeUnitInput
     };
@@ -222,46 +353,51 @@ class DateSelector extends Component {
       <div className="wv-date-selector-widget">
         <DateInputColumn
           {...sharedProps}
-          value={date.getUTCFullYear()}
           type="year"
-          inputId={idSuffix ? 'year-' + idSuffix : ''}
+          inputId={'year-' + idSuffix}
+          value={year || date.getUTCFullYear()}
           tabIndex={1}
           focused={tab === 1}
+          isValid={yearValid}
         />
         <DateInputColumn
           {...sharedProps}
-          value={util.monthStringArray[date.getUTCMonth()]}
           type="month"
-          inputId={idSuffix ? 'month-' + idSuffix : ''}
+          inputId={'month-' + idSuffix}
+          value={month || util.monthStringArray[date.getUTCMonth()]}
           tabIndex={2}
           focused={tab === 2}
+          isValid={monthValid}
         />
         <DateInputColumn
           {...sharedProps}
           type="day"
-          value={util.pad(date.getUTCDate(), 2, '0')}
+          inputId={'day-' + idSuffix}
+          value={day || util.pad(date.getUTCDate(), 2, '0')}
           tabIndex={3}
-          inputId={idSuffix ? 'day-' + idSuffix : ''}
           focused={tab === 3}
+          isValid={dayValid}
         />
         { subDailyMode && (
           <React.Fragment>
             <DateInputColumn
               {...sharedProps}
               type="hour"
-              inputId={idSuffix ? 'hour-' + idSuffix : ''}
-              value={util.pad(date.getUTCHours(), 2, '0')}
+              inputId={'hour-' + idSuffix}
+              value={hour || util.pad(date.getUTCHours(), 2, '0')}
               tabIndex={4}
               focused={tab === 4}
+              isValid={hourValid}
             />
             <div className="input-time-divider">:</div>
             <DateInputColumn
               {...sharedProps}
               type="minute"
-              value={util.pad(date.getUTCMinutes(), 2, '0')}
-              inputId={idSuffix ? 'minute-' + idSuffix : ''}
+              value={minute || util.pad(date.getUTCMinutes(), 2, '0')}
+              inputId={'minute-' + idSuffix}
               tabIndex={5}
               focused={tab === 5}
+              isValid={minuteValid}
             />
             <div className="input-time-zmark">Z</div>
           </React.Fragment>
