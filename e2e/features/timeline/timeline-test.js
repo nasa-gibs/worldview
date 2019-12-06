@@ -183,6 +183,8 @@ module.exports = {
     client.setValue(dateSelectorMonthInput, ['MAR', client.Keys.ENTER]);
     client.setValue(dateSelectorDayInput, [31, client.Keys.ENTER]);
     client.setValue(dateSelectorYearInput, [2019, client.Keys.ENTER]);
+    client.assert.cssClassNotPresent(dateSelectorDayInput, 'invalid-input');
+    client.assert.cssClassNotPresent(dateSelectorMonthInput, 'invalid-input');
     client.assert.cssClassNotPresent(dateSelectorYearInput, 'invalid-input');
   },
 
