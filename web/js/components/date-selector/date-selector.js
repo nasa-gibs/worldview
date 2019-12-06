@@ -13,7 +13,7 @@ class DateSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastTab: null,
+      previousTab: null,
       tab: null,
       year: null,
       month: null,
@@ -45,10 +45,20 @@ class DateSelector extends Component {
   * @desc set focused tab
   *
   * @param {Number} input
+  * @param {Boolean} detect if mouse click out of date selector
   * @returns {void}
   */
-  setFocusedTab = (tab) => {
-    this.setState({ tab });
+  setFocusedTab = (focusedTab, mouseClickMap) => {
+    const { tab, previousTab } = this.state;
+    let prevTab = previousTab;
+    // need to set previous tab since not retained from mouse click off map
+    if (mouseClickMap || prevTab === null) {
+      prevTab = tab;
+    }
+    this.setState({
+      tab: focusedTab,
+      previousTab: prevTab
+    });
   }
 
   /**
@@ -80,7 +90,7 @@ class DateSelector extends Component {
     }
     this.setState({
       tab: nextTab,
-      lastTab: this.state.tab
+      previousTab: this.state.tab
     });
   }
 
@@ -96,9 +106,9 @@ class DateSelector extends Component {
   */
   updateDateCheck = (date, isRollDate) => {
     const { minDate, maxDate } = this.props;
-    const { year, month, day, hour, minute } = this.state;
+    const { year, month, day, hour, minute, previousTab } = this.state;
     const timePrefix = ['year', 'month', 'day', 'hour', 'minute'];
-    const tabToCheck = timePrefix[this.state.lastTab - 1];
+    const tabToCheck = timePrefix[previousTab - 1];
     const inputDate = new Date(date);
     const tempDay = day || date.getUTCDate();
     let dateWithinRange;
@@ -233,15 +243,22 @@ class DateSelector extends Component {
     if (validDate && (isRollDate || newDateWithinRange)) {
       return date;
     } else {
-      // only set invalid if updated and tabToCheck was offending invalid value
+      // set invalid if updated and tabToCheck was offending invalid value
+      const timeValid = `${tabToCheck}Valid`;
       if (updatedDate) {
-        const timeValid = `${tabToCheck}Valid`;
         // time specific validation (e.g., 'yearValid') for use in inputs
         this.setState({
           [timeValid]: !triggeredInvalid
         });
       } else {
-        return date;
+        // input not invalid, but some other input is, so add more invalids
+        this.setState({
+          [timeValid]: false
+        });
+        // reverting from invalid date back to same valid date edge case
+        if (!triggeredInvalid && validDate) {
+          return date;
+        }
       }
       return false;
     }
