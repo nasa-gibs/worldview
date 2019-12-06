@@ -915,8 +915,8 @@ class Timeline extends React.Component {
                   <div id="date-selector-main">
                     <DateSelector
                       id={draggerSelected}
+                      idSuffix={'timeline'}
                       date={new Date(selectedDate)}
-                      draggerSelected={draggerSelected}
                       onDateChange={this.onDateChange}
                       maxDate={new Date(timelineEndDateLimit)}
                       minDate={new Date(timelineStartDateLimit)}
