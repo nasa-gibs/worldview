@@ -11,13 +11,12 @@
             ],
             "product":  "OMAERUV",
             "tags":     "ai",
-
+            "tracks": [
+                "OrbitTracks_Aura_Ascending"
+            ],
             "palette": {
                 "recommended":  ["orange_1"]
-            },
-            "tracks": [
-            "OrbitTracks_Aura_Ascending"
-            ]
+            }
         }
     }
 }

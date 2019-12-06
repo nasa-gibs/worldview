@@ -12,14 +12,14 @@
                 "modis_aqua"
             ],
             "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Aqua_Ascending"
+            ],
             "projections": {
                 "geographic": {
                     "source": "GIBS:geographic"
                 }
-            },
-            "tracks": [
-                "OrbitTracks_Aqua_Ascending"
-            ]
+            }
         }
     }
 }

@@ -11,13 +11,12 @@
               "modis_aqua"
             ],
             "product":  "MYD06_L2_NIGHT",
-
+            "tracks": [
+                "OrbitTracks_Aqua_Descending"
+                 ],
             "palette": {
                 "recommended":  ["blue_4"]
-            },
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-             ]
+            }
         }
     }
 }

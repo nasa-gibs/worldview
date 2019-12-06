@@ -11,13 +11,12 @@
               "modis_terra"
             ],
             "product":  "MOD06_L2_NIGHT",
-
+            "tracks": [
+                "OrbitTracks_Terra_Ascending"
+            ],
             "palette": {
                 "recommended":  ["blue_4"]
-            },
-            "tracks": [
-            "OrbitTracks_Terra_Ascending"
-             ]
+            }
         }
     }
 }
