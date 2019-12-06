@@ -914,6 +914,7 @@ class Timeline extends React.Component {
                 >
                   <div id="date-selector-main">
                     <DateSelector
+                      id={draggerSelected}
                       date={new Date(selectedDate)}
                       draggerSelected={draggerSelected}
                       onDateChange={this.onDateChange}
