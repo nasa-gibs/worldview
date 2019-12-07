@@ -133,8 +133,7 @@ class toolbarContainer extends Component {
       config,
       isDistractionFreeModeActive,
       isImageDownloadActive,
-      isCompareActive,
-      toggleDistractionFreeMode
+      isCompareActive
     } = this.props;
     const notificationClass = notificationType
       ? ' wv-status-' + notificationType
@@ -145,16 +144,8 @@ class toolbarContainer extends Component {
           id="wv-toolbar"
           className={'wv-toolbar'}
         >
-          { isDistractionFreeModeActive
-            ? <Button
-              id="wv-distraction-free-mode-button"
-              className="wv-toolbar-button"
-              title="Toggle Distraction Free Mode"
-              onClick={() => toggleDistractionFreeMode() }
-            >
-              <i className="far fa-eye fa-2x" />
-            </Button>
-            : <React.Fragment>
+          { !isDistractionFreeModeActive && (
+            <React.Fragment>
               <Button
                 id="wv-link-button"
                 className="wv-toolbar-button"
@@ -204,19 +195,19 @@ class toolbarContainer extends Component {
               >
                 <i className="fa fa-camera fa-2x" />{' '}
               </Button>
-              <Button
-                id="wv-info-button"
-                title="Information"
-                className={'wv-toolbar-button' + notificationClass}
-                onClick={() =>
-                  openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)
-                }
-                data-content={notificationContentNumber}
-              >
-                <i className="fa fa-info-circle fa-2x" />{' '}
-              </Button>
             </React.Fragment>
-          }
+          )}
+          <Button
+            id="wv-info-button"
+            title="Information"
+            className={'wv-toolbar-button' + notificationClass}
+            onClick={() =>
+              openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)
+            }
+            data-content={notificationContentNumber}
+          >
+            <i className="fa fa-info-circle fa-2x" />{' '}
+          </Button>
         </ButtonToolbar>
       </ErrorBoundary>
     );
