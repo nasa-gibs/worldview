@@ -12,6 +12,9 @@
             ],
             "product":  "MOD06_L2_DAY",
             "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Terra_Descending"
+            ],
             "projections": {
                 "geographic": {
                     "source": "GIBS:geographic"
@@ -19,10 +22,7 @@
             },
             "palette": {
                 "recommended":  ["blue_4"]
-            },
-            "tracks": [
-            "OrbitTracks_Terra_Descending"
-             ]
+            }
         }
     }
 }

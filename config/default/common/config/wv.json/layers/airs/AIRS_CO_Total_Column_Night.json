@@ -8,16 +8,15 @@
             "tags":     "co",
             "group":    "overlays",
             "product":  "AIRX2RET_NIGHT",
-
+            "tracks": [
+                "OrbitTracks_Aqua_Ascending"
+            ],
             "layergroup": [
               "airs"
             ],
             "palette": {
                 "recommended": ["red_1"]
-            },
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-            ]
+            }
         }
     }
 }
