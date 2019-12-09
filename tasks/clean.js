@@ -6,7 +6,8 @@ const dirs = [
   'build',
   'dist',
   'web/brand',
-  'web/config'
+  'web/config',
+  'config/default/release/gc'
 ];
 
 dirs.forEach((dir) => {
