@@ -26,7 +26,7 @@ import {
   expandSidebar
 } from '../../modules/sidebar/actions';
 
-const getActiveTabs = function(config) {
+const getActiveTabs = function (config) {
   const features = config.features;
   return {
     download: features.dataDownload,
@@ -34,7 +34,7 @@ const getActiveTabs = function(config) {
     events: features.naturalEvents
   };
 };
-const resetWorldview = function(e) {
+const resetWorldview = function (e) {
   e.preventDefault();
   if (window.location.search === '') return; // Nothing to reset
   var msg =
@@ -82,7 +82,7 @@ class Sidebar extends React.Component {
       const iconHeight = this.iconElement.clientHeight;
       const topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);
       const tabHeight = 32;
-      const basePadding = 110;
+      const basePadding = 130;
       const newHeight =
         screenHeight -
         (iconHeight + topOffset + tabHeight + basePadding + footerHeight) -
