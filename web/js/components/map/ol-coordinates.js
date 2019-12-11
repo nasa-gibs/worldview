@@ -32,12 +32,19 @@ class OlCoordinates extends React.Component {
       this.clearCoord();
       return;
     }
-
-    const pcoord = transform(coord, crs, 'EPSG:4326');
-    const [lon, lat] = pcoord;
+    let pcoord = transform(coord, crs, 'EPSG:4326');
+    let [lon, lat] = pcoord;
     if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
-      this.clearCoord();
-      return;
+      if (lon > 180 && lon < 250 && crs === 'EPSG:4326') {
+        lon = lon - 360;
+        pcoord = [lon, lat]
+      } else if (lon < -180 && lon > -250 && crs === 'EPSG:4326') {
+        lon = 360 + lon;
+        pcoord = [lon, lat]
+      } else {
+        this.clearCoord();
+        return;
+      }
     }
 
     this.setState({
