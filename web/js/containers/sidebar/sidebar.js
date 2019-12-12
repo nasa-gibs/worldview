@@ -82,7 +82,7 @@ class Sidebar extends React.Component {
       const iconHeight = this.iconElement.clientHeight;
       const topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);
       const tabHeight = 32;
-      const basePadding = 110;
+      const basePadding = 130;
       const newHeight =
         screenHeight -
         (iconHeight + topOffset + tabHeight + basePadding + footerHeight) -
