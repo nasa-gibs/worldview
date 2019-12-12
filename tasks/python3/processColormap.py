@@ -172,7 +172,6 @@ def process_file(id, xml):
     json_options["separators"] = (',', ': ')
 
     output_file = os.path.join(output_dir, id + ".json")
-    # print('I YIELD M\'LORD!!!', id)
     with open(output_file, "w") as fp:
         json.dump(data, fp, **json_options)
 
