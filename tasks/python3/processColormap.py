@@ -172,6 +172,7 @@ def process_file(id, xml):
     json_options["separators"] = (',', ': ')
 
     output_file = os.path.join(output_dir, id + ".json")
+    # print('I YIELD M\'LORD!!!', id)
     with open(output_file, "w") as fp:
         json.dump(data, fp, **json_options)
 
@@ -192,8 +193,8 @@ with ProcessPoolExecutor() as writeExecutor:
             (id, xml) = future.result()
             writeExecutor.submit(process_file, id, xml)
         except Exception as e:
-                sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
-                error_count += 1
+            sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
+            error_count += 1
 
 print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
 
