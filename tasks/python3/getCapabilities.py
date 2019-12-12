@@ -2,7 +2,6 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from optparse import OptionParser
-from datetime import datetime
 from collections import OrderedDict
 import os
 import sys
@@ -136,7 +135,7 @@ def process_colormaps():
     sys.stdout.flush()
     if not os.path.exists(colormaps_dir):
         os.makedirs(colormaps_dir)
-    with ThreadPoolExecutor(max_workers=20) as executor:
+    with ThreadPoolExecutor() as executor:
         for link in colormaps.values():
             executor.submit(process_single_colormap, link)
 
@@ -182,7 +181,7 @@ def process_vectordata():
 
 tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
-    with ThreadPoolExecutor(max_workers=3) as executor:
+    with ThreadPoolExecutor() as executor:
         for entry in config["wv-options-fetch"]:
             try:
                 remote_count += 1
