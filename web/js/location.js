@@ -499,6 +499,9 @@ export function getParamObject(
     getParameters(config, parameters)
   );
   return {
-    global: obj
+    global: obj,
+    RLSCONFIG: {
+      queryParser: (q) => (q.match(/^.*?(?==)|[^=\n\r].*$/gm))
+    }
   };
 }
