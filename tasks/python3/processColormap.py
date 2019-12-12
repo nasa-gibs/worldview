@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from concurrent.futures import  ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 from optparse import OptionParser
 import os
 import re
@@ -180,12 +180,12 @@ file_count = 0
 error_count = 0
 futures = []
 
-with ProcessPoolExecutor(max_workers=100) as readExecutor:
+with ProcessPoolExecutor() as readExecutor:
     for root, dirs, files in os.walk(input_dir):
         for file in files:
             input_file = os.path.join(root, file)
             futures.append(readExecutor.submit(read_file, input_file))
-with ProcessPoolExecutor(max_workers=100) as writeExecutor:
+with ProcessPoolExecutor() as writeExecutor:
     for future in futures:
         try:
             file_count += 1
