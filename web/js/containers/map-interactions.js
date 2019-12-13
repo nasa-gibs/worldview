@@ -58,6 +58,9 @@ export class MapInteractions extends React.Component {
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixels, function(feature, layer) {
+        if (!layer) {
+          return;
+        }
         if (isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
