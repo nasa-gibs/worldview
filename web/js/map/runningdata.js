@@ -50,9 +50,9 @@ export function MapRunningData(models, compareUi, store) {
 
     if (!(lon < -180 || lon > 180 || lat < -90 || lat > 90)) {
       map.forEachFeatureAtPixel(pixels, (feature, layer) => {
-        if (!layer.wv || !layer.wv.def || !isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
+        const def = lodashGet(layer, 'wv.def');
+        if (!def || !isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
         let color;
-        const def = layer.wv.def;
         const identifier = def.palette.styleProperty;
         const layerId = def.id;
         const paletteLegends = getPalette(layerId, undefined, undefined, state);
