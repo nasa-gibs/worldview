@@ -109,11 +109,13 @@ module.exports = {
     client.click(zoomOutButton);
     client.click(zoomOutButton);
     client.click(zoomOutButton);
+    client.click(zoomOutButton);
     client.expect
       .element('#indicator')
       .to.not.be.visible.after(client.globals.timeout);
 
     // Zoom in data point granule selection button is not visible and indicator reappears
+    client.click(zoomInButton);
     client.click(zoomInButton);
     client.expect
       .element('#indicator')
