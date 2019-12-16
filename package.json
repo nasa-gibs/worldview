@@ -162,6 +162,7 @@
     "canvg-browser": "^1.0.0",
     "date-fns": "^1.29.0",
     "file-saver": "^2.0.2",
+    "geographiclib": "^1.50.0",
     "history": "^4.7.2",
     "icheck": "^1.0.2",
     "immutability-helper": "^2.9.0",

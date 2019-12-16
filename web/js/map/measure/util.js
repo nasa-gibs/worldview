@@ -1,14 +1,19 @@
-import { MultiLineString as OlGeomMultiLineString, Polygon as OlGeomPolygon } from 'ol/geom';
-import { getArea as OlSphereGetArea, getLength as OlSphereGetLength } from 'ol/sphere';
 import {
-  area as TurfArea,
-  polygon as TurfPolygon,
+  MultiLineString as OlGeomMultiLineString,
+  Polygon as OlGeomPolygon
+} from 'ol/geom';
+import {
+  getLength as OlSphereGetLength
+} from 'ol/sphere';
+import {
   rhumbDistance as TurfRhumbDistance,
   point as TurfPoint
 } from '@turf/turf';
 import arc from 'arc';
+import geographiclib from 'geographiclib';
 
-const referenceProjection = 'EPSG:4326';
+const geod = geographiclib.Geodesic.WGS84;
+const geographicProj = 'EPSG:4326';
 const metersPerKilometer = 1000;
 const ftPerMile = 5280;
 const sqFtPerSqMile = 27878400;
@@ -23,7 +28,8 @@ const getArcLine = (p1, p2) => {
   const start = { x: p1[0], y: p1[1] };
   const end = { x: p2[0], y: p2[1] };
   const arcGen = new arc.GreatCircle(start, end);
-  return arcGen.Arc(arcLineResolution, { offset: 10 });
+  // Offset is the number of degrees within dateline to split the line
+  return arcGen.Arc(arcLineResolution, { offset: 30 });
 };
 
 /**
@@ -33,14 +39,14 @@ const getArcLine = (p1, p2) => {
  */
 export function transformLineStringArc(geom, projection) {
   const coords = [];
-  const transformedGeom = geom.clone().transform(projection, referenceProjection);
+  const transformedGeom = geom.clone().transform(projection, geographicProj);
 
   transformedGeom.forEachSegment((segStart, segEnd) => {
     getArcLine(segStart, segEnd).geometries.forEach((arcGeom) => {
       coords.push(arcGeom.coords);
     });
   });
-  return new OlGeomMultiLineString(coords).transform(referenceProjection, projection);
+  return new OlGeomMultiLineString(coords).transform(geographicProj, projection);
 };
 
 /**
@@ -50,7 +56,7 @@ export function transformLineStringArc(geom, projection) {
  */
 export function transformPolygonArc(geom, projection) {
   let coords = [];
-  const transformedGeom = geom.clone().transform(projection, referenceProjection);
+  const transformedGeom = geom.clone().transform(projection, geographicProj);
   const polyCoords = transformedGeom.getCoordinates()[0];
   for (let i = 0; i < polyCoords.length - 1; i++) {
     const arcLine = getArcLine(polyCoords[i], polyCoords[i + 1]);
@@ -58,7 +64,7 @@ export function transformPolygonArc(geom, projection) {
       coords = coords.concat(arcGeom.coords);
     });
   }
-  return new OlGeomPolygon([coords]).transform(referenceProjection, projection);
+  return new OlGeomPolygon([coords]).transform(geographicProj, projection);
 };
 
 /**
@@ -90,9 +96,8 @@ export function getFormattedLength(line, projection, unitOfMeasure, useGreatCirc
    * @return {String} - The formatted area measurement
    */
 export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCircle) {
-  const metricArea = useGreatCircle
-    ? OlSphereGetArea(polygon, { projection })
-    : getRhumbLineArea(polygon, projection);
+  const transformedPoly = polygon.clone().transform(projection, geographicProj);
+  const metricArea = getGeographicLibArea(transformedPoly);
 
   if (unitOfMeasure === 'km') {
     return metricArea > 10000
@@ -108,13 +113,30 @@ export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCir
 };
 
 /**
+ * Calculate area of a polygon with GeographicLib library
+ * @param {*} polygon
+ * @param {*} projection
+ */
+export function getGeographicLibArea(polygon) {
+  const coordinates = polygon.getCoordinates()[0];
+  if (coordinates.length < 3) return 0;
+  const geoPoly = geod.Polygon(false);
+  coordinates.forEach(coord => {
+    // flip lat/lon position
+    geoPoly.AddPoint(coord[1], coord[0]);
+  });
+  const { area } = geoPoly.Compute(false, true);
+  return Math.abs(area);
+}
+
+/**
  *
  */
 export function getRhumbLineDistance(lineString, projection) {
   let distance = 0;
   let transformedLine = lineString;
-  if (projection !== referenceProjection) {
-    transformedLine = lineString.clone().transform(projection, referenceProjection);
+  if (projection !== geographicProj) {
+    transformedLine = lineString.clone().transform(projection, geographicProj);
   }
   transformedLine.forEachSegment((segStart, segEnd) => {
     const p1 = TurfPoint(segStart);
@@ -123,22 +145,6 @@ export function getRhumbLineDistance(lineString, projection) {
   });
   return distance * metersPerKilometer;
 };
-
-/**
- *
- */
-export function getRhumbLineArea(polygon, projection) {
-  let transformedPoly = polygon;
-  if (projection !== referenceProjection) {
-    transformedPoly = polygon.clone().transform(projection, referenceProjection);
-  }
-  const coords = polygon.getCoordinates()[0];
-  if (coords.length < 4) {
-    return 0;
-  }
-  const poly = TurfPolygon(transformedPoly.getCoordinates());
-  return TurfArea(poly);
-}
 
 /**
  * Convert and format raw measurements to two decimal points
