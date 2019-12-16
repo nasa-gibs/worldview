@@ -39,10 +39,11 @@ class DateInputColumn extends Component {
     let size;
     if (type === 'year') {
       size = 4;
-    } else if (type === 'day') {
-      size = 2;
-    } else {
+    } else if (type === 'month') {
       size = 3;
+    } else {
+      // day, hour, minute
+      size = 2;
     }
     this.setState({
       size: size
@@ -253,7 +254,7 @@ class DateInputColumn extends Component {
   }
 
   blur = (e) => {
-    const { setFocusedTab, type } = this.props;
+    const { setFocusedTab, tabIndex, type } = this.props;
     // check for valid date on blur
     const inputValue = e.target.value;
     const newDate = this.validateBasedOnType(inputValue);
@@ -273,12 +274,13 @@ class DateInputColumn extends Component {
     });
 
     // mouse click on to map
-    let mouseClickMap = false;
-    if (e.relatedTarget === null) {
-      mouseClickMap = true;
-    }
+    // let mouseClickMap = false;
+    // if (e.relatedTarget === null) {
+    //   mouseClickMap = true;
+    // }
 
-    setFocusedTab(null, mouseClickMap);
+    // setFocusedTab(null, tabIndex, mouseClickMap);
+    setFocusedTab(null, tabIndex);
   }
 
   onChange = (e) => {
@@ -289,12 +291,12 @@ class DateInputColumn extends Component {
 
   nextTab = () => {
     const { changeTab, tabIndex } = this.props;
-    changeTab(tabIndex + 1);
+    changeTab(tabIndex + 1, tabIndex);
   }
 
   previousTab = () => {
     const { changeTab, tabIndex } = this.props;
-    changeTab(tabIndex - 1);
+    changeTab(tabIndex - 1, tabIndex);
   }
 
   validateDate = (date) => {
