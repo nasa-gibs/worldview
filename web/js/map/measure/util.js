@@ -2,14 +2,6 @@ import {
   MultiLineString as OlGeomMultiLineString,
   Polygon as OlGeomPolygon
 } from 'ol/geom';
-import {
-  getLength as OlSphereGetLength
-} from 'ol/sphere';
-import {
-  rhumbDistance as TurfRhumbDistance,
-  point as TurfPoint
-} from '@turf/turf';
-import arc from 'arc';
 import geographiclib from 'geographiclib';
 
 const geod = geographiclib.Geodesic.WGS84;
@@ -21,17 +13,6 @@ const sqMeterPerKilometer = 1000000;
 const metersToFeet = (meters) => meters * 3.28084;
 const squareMetersToFeet = (sqMeters) => sqMeters * 10.76391;
 
-const getArcLine = (p1, p2) => {
-// The number of additional coordinate points to add to a LineString when
-// converting it to conform to a great circle arc.
-  const arcLineResolution = 50;
-  const start = { x: p1[0], y: p1[1] };
-  const end = { x: p2[0], y: p2[1] };
-  const arcGen = new arc.GreatCircle(start, end);
-  // Offset is the number of degrees within dateline to split the line
-  return arcGen.Arc(arcLineResolution, { offset: 30 });
-};
-
 /**
  * Transforms a LineString of two points to a MultiLineString of multiple points
  * applying a great circle arc transformation
@@ -39,14 +20,18 @@ const getArcLine = (p1, p2) => {
  */
 export function transformLineStringArc(geom, projection) {
   const coords = [];
+  const distance = 10000; // meters between segments
   const transformedGeom = geom.clone().transform(projection, geographicProj);
-
   transformedGeom.forEachSegment((segStart, segEnd) => {
-    getArcLine(segStart, segEnd).geometries.forEach((arcGeom) => {
-      coords.push(arcGeom.coords);
-    });
+    const line = geod.InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
+    const n = Math.ceil(line.s13 / distance);
+    for (let i = 0; i <= n; ++i) {
+      const s = Math.min(distance * i, line.s13);
+      const r = line.Position(s, geographiclib.Geodesic.LONG_UNROLL);
+      coords.push([r.lon2, r.lat2]);
+    }
   });
-  return new OlGeomMultiLineString(coords).transform(geographicProj, projection);
+  return new OlGeomMultiLineString([coords]).transform(geographicProj, projection);
 };
 
 /**
@@ -55,15 +40,24 @@ export function transformLineStringArc(geom, projection) {
  * @param {*} geom - the geometry object to apply great circle arc transformation to
  */
 export function transformPolygonArc(geom, projection) {
-  let coords = [];
+  const coords = [];
   const transformedGeom = geom.clone().transform(projection, geographicProj);
+  const distance = 10000; // meters between segments
   const polyCoords = transformedGeom.getCoordinates()[0];
   for (let i = 0; i < polyCoords.length - 1; i++) {
-    const arcLine = getArcLine(polyCoords[i], polyCoords[i + 1]);
-    arcLine.geometries.forEach((arcGeom) => {
-      coords = coords.concat(arcGeom.coords);
-    });
-  }
+    const line = geod.InverseLine(
+      polyCoords[i][1],
+      polyCoords[i][0],
+      polyCoords[i + 1][1],
+      polyCoords[i + 1][0]
+    );
+    const n = Math.ceil(line.s13 / distance);
+    for (let j = 0; j <= n; ++j) {
+      const s = Math.min(distance * j, line.s13);
+      const r = line.Position(s, geographiclib.Geodesic.LONG_UNROLL);
+      coords.push([r.lon2, r.lat2]);
+    }
+  };
   return new OlGeomPolygon([coords]).transform(geographicProj, projection);
 };
 
@@ -72,11 +66,9 @@ export function transformPolygonArc(geom, projection) {
    * @param {*} line
    * @return {String} - The formatted distance measurement
    */
-export function getFormattedLength(line, projection, unitOfMeasure, useGreatCircle) {
-  const metricLength = useGreatCircle
-    ? OlSphereGetLength(line, { projection })
-    : getRhumbLineDistance(line, projection);
-
+export function getFormattedLength(line, projection, unitOfMeasure) {
+  const transformedLine = line.clone().transform(projection, geographicProj);
+  const metricLength = getGeographicLibDistance(transformedLine);
   if (unitOfMeasure === 'km') {
     return metricLength > 100
       ? `${roundAndLocale(metricLength, metersPerKilometer)} km`
@@ -95,10 +87,9 @@ export function getFormattedLength(line, projection, unitOfMeasure, useGreatCirc
    * @param {*} polygon
    * @return {String} - The formatted area measurement
    */
-export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCircle) {
+export function getFormattedArea(polygon, projection, unitOfMeasure) {
   const transformedPoly = polygon.clone().transform(projection, geographicProj);
   const metricArea = getGeographicLibArea(transformedPoly);
-
   if (unitOfMeasure === 'km') {
     return metricArea > 10000
       ? `${roundAndLocale(metricArea, sqMeterPerKilometer)} km<sup>2</sup>`
@@ -129,22 +120,14 @@ export function getGeographicLibArea(polygon) {
   return Math.abs(area);
 }
 
-/**
- *
- */
-export function getRhumbLineDistance(lineString, projection) {
-  let distance = 0;
-  let transformedLine = lineString;
-  if (projection !== geographicProj) {
-    transformedLine = lineString.clone().transform(projection, geographicProj);
-  }
-  transformedLine.forEachSegment((segStart, segEnd) => {
-    const p1 = TurfPoint(segStart);
-    const p2 = TurfPoint(segEnd);
-    distance += TurfRhumbDistance(p1, p2);
+export function getGeographicLibDistance(line) {
+  let totalDistance = 0;
+  line.forEachSegment((segStart, segEnd) => {
+    const r = geod.Inverse(segStart[1], segStart[0], segEnd[1], segEnd[0]);
+    totalDistance += r.s12;
   });
-  return distance * metersPerKilometer;
-};
+  return totalDistance;
+}
 
 /**
  * Convert and format raw measurements to two decimal points
