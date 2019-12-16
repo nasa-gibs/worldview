@@ -33,7 +33,6 @@ export function measure(map, mapUiEvents, store) {
   let allMeasureTooltips = {};
   let allGeometries = {};
   let unitOfMeasure = 'km';
-  let useGreatCircle = false;
   const self = {};
   const source = new OlVectorSource({ wrapX: false });
   const projection = map.getView().getProjection().getCode();
@@ -148,9 +147,6 @@ export function measure(map, mapUiEvents, store) {
    */
   function styleGeometryFn(feature) {
     const geometry = feature.getGeometry();
-    if (!useGreatCircle) {
-      return geometry;
-    }
     if (geometry instanceof OlLineString) {
       return transformLineStringArc(geometry, projection);
     }
@@ -169,10 +165,10 @@ export function measure(map, mapUiEvents, store) {
   function setMeasurementTooltip(geometry, element) {
     let measurement;
     if (geometry instanceof OlGeomPolygon) {
-      measurement = getFormattedArea(geometry, projection, unitOfMeasure, useGreatCircle);
+      measurement = getFormattedArea(geometry, projection, unitOfMeasure);
     }
     if (geometry instanceof OlLineString) {
-      measurement = getFormattedLength(geometry, projection, unitOfMeasure, useGreatCircle);
+      measurement = getFormattedLength(geometry, projection, unitOfMeasure);
     }
     element.innerHTML = measurement;
   }
@@ -233,14 +229,6 @@ export function measure(map, mapUiEvents, store) {
    */
   self.changeUnits = (unit) => {
     unitOfMeasure = unit;
-    recalculateAllMeasurements();
-  };
-
-  /**
-   * Convert all measurements to use great circle arcs
-   */
-  self.useGreatCircleMeasurements = (value) => {
-    useGreatCircle = value;
     recalculateAllMeasurements();
   };
 
