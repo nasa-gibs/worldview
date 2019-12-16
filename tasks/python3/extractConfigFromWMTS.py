@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from datetime import datetime, date, timedelta
 import json
 from optparse import OptionParser

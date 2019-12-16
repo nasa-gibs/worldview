@@ -181,27 +181,28 @@ def process_vectordata():
 
 futures = []
 tolerant = config.get("tolerant", False)
-if "wv-options-fetch" in config:
-    with ThreadPoolExecutor() as executor:
-        for entry in config["wv-options-fetch"]:
-            futures.append(executor.submit(process_remote, entry))
-    for future in futures:
-        try:
-            remote_count += 1
-            future.result()
-        except Exception as e:
-            if tolerant:
-                warning_count += 1
-                sys.stderr.write("%s:   WARN: %s\n" % (prog, str(e)))
-            else:
-                error_count += 1
-                sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
-    if colormaps:
-        process_colormaps()
-    if vectorstyles:
-        process_vectorstyles()
-    if vectordata:
-        process_vectordata()
+if __name__ == "__main__":
+    if "wv-options-fetch" in config:
+        with ThreadPoolExecutor() as executor:
+            for entry in config["wv-options-fetch"]:
+                futures.append(executor.submit(process_remote, entry))
+        for future in futures:
+            try:
+                remote_count += 1
+                future.result()
+            except Exception as e:
+                if tolerant:
+                    warning_count += 1
+                    sys.stderr.write("%s:   WARN: %s\n" % (prog, str(e)))
+                else:
+                    error_count += 1
+                    sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
+        if colormaps:
+            process_colormaps()
+        if vectorstyles:
+            process_vectorstyles()
+        if vectordata:
+            process_vectordata()
 
 print("%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count))
 

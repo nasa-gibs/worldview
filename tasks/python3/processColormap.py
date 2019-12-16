@@ -179,21 +179,21 @@ def process_file(id, xml):
 file_count = 0
 error_count = 0
 futures = []
-
-with ProcessPoolExecutor() as readExecutor:
-    for root, dirs, files in os.walk(input_dir):
-        for file in files:
-            input_file = os.path.join(root, file)
-            futures.append(readExecutor.submit(read_file, input_file))
-with ProcessPoolExecutor() as writeExecutor:
-    for future in futures:
-        try:
-            file_count += 1
-            (id, xml) = future.result()
-            writeExecutor.submit(process_file, id, xml)
-        except Exception as e:
-            sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, id, str(e)))
-            error_count += 1
+if __name__ == "__main__":
+    with ProcessPoolExecutor() as readExecutor:
+        for root, dirs, files in os.walk(input_dir):
+            for file in files:
+                input_file = os.path.join(root, file)
+                futures.append(readExecutor.submit(read_file, input_file))
+    with ProcessPoolExecutor() as writeExecutor:
+        for future in futures:
+            try:
+                file_count += 1
+                (id, xml) = future.result()
+                writeExecutor.submit(process_file, id, xml)
+            except Exception as e:
+                sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, id, str(e)))
+                error_count += 1
 
 print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
 
