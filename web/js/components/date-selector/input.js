@@ -273,13 +273,6 @@ class DateInputColumn extends Component {
       selected: false
     });
 
-    // mouse click on to map
-    // let mouseClickMap = false;
-    // if (e.relatedTarget === null) {
-    //   mouseClickMap = true;
-    // }
-
-    // setFocusedTab(null, tabIndex, mouseClickMap);
     setFocusedTab(null, tabIndex);
   }
 
