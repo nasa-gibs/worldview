@@ -42,22 +42,16 @@ class DateSelector extends Component {
   }
 
   /**
-  * @desc set focused tab
+  * @desc set focused tab and previous tab
   *
-  * @param {Number} input
-  * @param {Boolean} detect if mouse click out of date selector
+  * @param {Number} tab - input
+  * @param {Number} previousTab - input
   * @returns {void}
   */
-  setFocusedTab = (focusedTab, mouseClickMap) => {
-    const { tab, previousTab } = this.state;
-    let prevTab = previousTab;
-    // need to set previous tab since not retained from mouse click off map
-    if (mouseClickMap || prevTab === null) {
-      prevTab = tab;
-    }
+  setFocusedTab = (tab, previousTab = this.state.previousTab) => {
     this.setState({
-      tab: focusedTab,
-      previousTab: prevTab
+      tab,
+      previousTab
     });
   }
 
@@ -65,9 +59,10 @@ class DateSelector extends Component {
   * @desc change tab
   *
   * @param {Number} index
+  * @param {Number} previousTab
   * @returns {void}
   */
-  changeTab = (index) => {
+  changeTab = (index, previousTab) => {
     const { subDailyMode } = this.props;
     const { tab } = this.state;
     let nextTab = index;
@@ -90,7 +85,7 @@ class DateSelector extends Component {
     }
     this.setState({
       tab: nextTab,
-      previousTab: this.state.tab
+      previousTab
     });
   }
 
@@ -229,12 +224,24 @@ class DateSelector extends Component {
 
       if (hour) {
         date = new Date(new Date(date).setUTCHours(hour));
+        if (tabToCheck === 'hour') {
+          const hourDateWithinRange = date < minDate || date > maxDate;
+          triggeredInvalid = hourDateWithinRange;
+        }
       }
 
       if (minute) {
         date = new Date(new Date(date).setUTCMinutes(minute));
+        if (tabToCheck === 'minute') {
+          const minuteDateWithinRange = date < minDate || date > maxDate;
+          triggeredInvalid = minuteDateWithinRange;
+        }
       }
-      dateWithinRange = date > minDate && date <= maxDate;
+
+      const dateTime = date.getTime();
+      const mindDateTime = minDate.getTime();
+      const maxDateTime = maxDate.getTime();
+      dateWithinRange = dateTime >= mindDateTime && dateTime <= maxDateTime;
     }
 
     // updateDate at this stage can still be invalid with pending timeunit changes
@@ -246,9 +253,10 @@ class DateSelector extends Component {
       // set invalid if updated and tabToCheck was offending invalid value
       const timeValid = `${tabToCheck}Valid`;
       if (updatedDate) {
+        const timeValidation = !triggeredInvalid;
         // time specific validation (e.g., 'yearValid') for use in inputs
         this.setState({
-          [timeValid]: !triggeredInvalid
+          [timeValid]: timeValidation
         });
       } else {
         // input not invalid, but some other input is, so add more invalids
@@ -277,20 +285,29 @@ class DateSelector extends Component {
 
     if (newDate) {
       onDateChange(newDate, id);
-      // clear the pending timeunit inputs
-      this.setState({
-        year: null,
-        month: null,
-        day: null,
-        hour: null,
-        minute: null,
-        yearValid: true,
-        monthValid: true,
-        dayValid: true,
-        hourValid: true,
-        minuteValid: true
-      });
+      // clear the pending timeunit inputs and reset validation
+      this.clearTimeValuesAndValidation();
     }
+  }
+
+  /**
+  * @desc clear temp time values and reset time validation booleans
+  *
+  * @returns {void}
+  */
+  clearTimeValuesAndValidation = () => {
+    this.setState({
+      year: null,
+      month: null,
+      day: null,
+      hour: null,
+      minute: null,
+      yearValid: true,
+      monthValid: true,
+      dayValid: true,
+      hourValid: true,
+      minuteValid: true
+    });
   }
 
   shouldComponentUpdate(prevProps, prevState) {
@@ -332,6 +349,34 @@ class DateSelector extends Component {
       minDate.getTime() === prevProps.minDate.getTime()
     );
     return !updateCheck;
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      date,
+      id,
+      minDate,
+      maxDate
+    } = this.props;
+    const {
+      year,
+      month,
+      day,
+      hour,
+      minute
+    } = this.state;
+
+    // parent arrow clicks should override any temporary values within date selector
+    if (prevProps.date.getTime() !== date.getTime()) {
+      this.clearTimeValuesAndValidation();
+    }
+    // handle animation start/end date limit changes and pending invalid -> valid dates
+    const minDateChangeEndUpdate = id === 'end' && prevProps.minDate.toISOString() !== minDate.toISOString();
+    const maxDateChangeStartUpdate = id === 'start' && prevProps.maxDate.toISOString() !== maxDate.toISOString();
+    const anyPendingTimeUnits = year || month || day || hour || minute;
+    if ((minDateChangeEndUpdate || maxDateChangeStartUpdate) && anyPendingTimeUnits) {
+      this.updateDate();
+    }
   }
 
   render() {
