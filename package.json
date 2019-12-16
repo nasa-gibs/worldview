@@ -175,7 +175,7 @@
     "promise-queue": "2.2.5",
     "react": "16.11.x",
     "react-beautiful-dnd": "^12.1.1",
-    "react-copy-to-clipboard": "^5.0.1",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.12.0",
     "react-draggable": "^4.1.0",
     "react-image-crop": "^8.2.1",
