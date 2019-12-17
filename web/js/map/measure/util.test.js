@@ -53,8 +53,6 @@ test('area measurement that includes coordinates outisde of "normal" extents ret
   expect(normalTriArea).toBe(shiftedTriArea);
 });
 
-
-
 test('two different lines, one which crosses the antimeridian, are the same length', () => {
   // Crosses anti-meridian
   const line1 = [[-120, -80], [120, -80]];
@@ -100,4 +98,38 @@ test('lines which are the same numbers of degrees apart, at different poles, and
   expect(lineString1Miles).toBe(lineString2Miles);
   expect(lineString1Miles).toBe(lineString3Miles);
   expect(lineString1Miles).toBe(lineString4Miles);
+});
+
+/**
+ * Check for equality across ant-meridian to left and right of standard extents (-180, -90, 180, 90)
+ */
+test('lines which cross the anti-meridian outside of "normal" extents' +
+     ' are the same length as equal distances within extents', () => {
+  const line1 = [[-50, 0], [0, 0]]; // normal
+  const line2 = [[-230, 0], [-180, 0]]; // outside left
+  const line3 = [[180, 0], [230, 0]]; // outside right
+
+  const lineString1 = new LineString(line1);
+  const lineString2 = new LineString(line2);
+  const lineString3 = new LineString(line3);
+
+  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
+  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
+  const lineString3Km = getFormattedLength(lineString3, 'EPSG:4326', kilos);
+
+  expect(lineString1Km).toBe(lineString2Km);
+  expect(lineString1Km).toBe(lineString3Km);
+});
+
+test('always use the shortest distance between two points if within normal extents', () => {
+  const line1 = [[-60, 0], [-10, 0]]; // normal
+  const line2 = [[-130, 0], [180, 0]]; // "long" distance coordinates
+
+  const lineString1 = new LineString(line1);
+  const lineString2 = new LineString(line2);
+
+  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
+  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
+
+  expect(lineString1Km).toBe(lineString2Km);
 });
