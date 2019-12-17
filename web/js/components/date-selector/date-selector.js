@@ -106,14 +106,11 @@ class DateSelector extends Component {
     const tabToCheck = timePrefix[previousTab - 1];
     const inputDate = new Date(date);
     const tempDay = day || date.getUTCDate();
-    let dateWithinRange;
     let validDate = true;
     let triggeredInvalid = false;
 
     if (isRollDate) {
-      dateWithinRange = inputDate > minDate && inputDate <= maxDate;
       date = inputDate;
-      validDate = true;
     } else {
       // conditional logic allows temporary place holder values to be validated
       // in the event other inputs are invalid, temp values remain without date change
@@ -136,8 +133,8 @@ class DateSelector extends Component {
           date = new Date(new Date(date).setUTCDate(day));
           dateCheck = new Date(new Date(inputDate).setUTCDate(day));
         } else {
-          date = new Date(new Date(date).setUTCDate(maxDayDate));
           validDate = false;
+          date = new Date(new Date(date).setUTCDate(maxDayDate));
           dateCheck = new Date(new Date(inputDate).setUTCDate(maxDayDate));
         }
 
@@ -167,9 +164,9 @@ class DateSelector extends Component {
 
         let dateCheck;
         if (day && month) {
-          dateCheck = new Date(inputDate);
           date = new Date(new Date(date).setUTCDate(1));
           date = new Date(new Date(date).setUTCMonth(realMonth));
+          dateCheck = new Date(inputDate);
           dateCheck = new Date(new Date(dateCheck).setUTCDate(1));
           dateCheck = new Date(new Date(dateCheck).setUTCMonth(realMonth));
         } else {
@@ -201,15 +198,15 @@ class DateSelector extends Component {
 
         let dateCheck;
         if (day <= maxDayDate) {
-          dateCheck = new Date(inputDate);
           const realMonth = util.stringInArray(util.monthStringArray, month);
           date = new Date(new Date(date).setUTCDate(day));
+          dateCheck = new Date(inputDate);
           dateCheck = new Date(new Date(date).setUTCDate(1));
           dateCheck = new Date(new Date(dateCheck).setUTCMonth(realMonth));
           dateCheck = new Date(new Date(dateCheck).setUTCDate(day));
         } else {
-          date = new Date(new Date(date).setUTCDate(maxDayDate));
           validDate = false;
+          date = new Date(new Date(date).setUTCDate(maxDayDate));
           dateCheck = new Date(new Date(inputDate).setUTCDate(maxDayDate));
         }
 
@@ -225,7 +222,7 @@ class DateSelector extends Component {
       if (hour) {
         date = new Date(new Date(date).setUTCHours(hour));
         if (tabToCheck === 'hour') {
-          const hourDateWithinRange = date < minDate || date > maxDate;
+          const hourDateWithinRange = !validDate || (date < minDate || date > maxDate);
           triggeredInvalid = hourDateWithinRange;
         }
       }
@@ -233,19 +230,20 @@ class DateSelector extends Component {
       if (minute) {
         date = new Date(new Date(date).setUTCMinutes(minute));
         if (tabToCheck === 'minute') {
-          const minuteDateWithinRange = date < minDate || date > maxDate;
+          const minuteDateWithinRange = !validDate || (date < minDate || date > maxDate);
           triggeredInvalid = minuteDateWithinRange;
         }
       }
-
-      const dateTime = date.getTime();
-      const mindDateTime = minDate.getTime();
-      const maxDateTime = maxDate.getTime();
-      dateWithinRange = dateTime >= mindDateTime && dateTime <= maxDateTime;
     }
 
+    // check if date is within min/max range
+    const dateTime = date.getTime();
+    const minDateTime = minDate.getTime();
+    const maxDateTime = maxDate.getTime();
+    const dateWithinRange = dateTime >= minDateTime && dateTime <= maxDateTime;
+
     // updateDate at this stage can still be invalid with pending timeunit changes
-    const updatedDate = date.toISOString() !== this.props.date.toISOString();
+    const updatedDate = date.getTime() !== this.props.date.getTime();
     const newDateWithinRange = dateWithinRange && updatedDate;
     if (validDate && (isRollDate || newDateWithinRange)) {
       return date;
@@ -371,8 +369,8 @@ class DateSelector extends Component {
       this.clearTimeValuesAndValidation();
     }
     // handle animation start/end date limit changes and pending invalid -> valid dates
-    const minDateChangeEndUpdate = id === 'end' && prevProps.minDate.toISOString() !== minDate.toISOString();
-    const maxDateChangeStartUpdate = id === 'start' && prevProps.maxDate.toISOString() !== maxDate.toISOString();
+    const minDateChangeEndUpdate = id === 'end' && prevProps.minDate.getTime() !== minDate.getTime();
+    const maxDateChangeStartUpdate = id === 'start' && prevProps.maxDate.getTime() !== maxDate.getTime();
     const anyPendingTimeUnits = year || month || day || hour || minute;
     if ((minDateChangeEndUpdate || maxDateChangeStartUpdate) && anyPendingTimeUnits) {
       this.updateDate();
