@@ -18,7 +18,8 @@
             },
             "vectorStyle": {
                 "id": "Nuclear_Power_Plant_Locations"
-            }
+            },
+            "wrapX": true
         }
     }
 }
