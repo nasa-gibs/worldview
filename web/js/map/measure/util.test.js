@@ -1,14 +1,12 @@
 import {
-  getFormattedArea
-  // getFormattedLength
+  getFormattedArea,
+  getFormattedLength
 } from './util';
-// import { getArea as OlSphereGetArea } from 'ol/sphere';
-import { Polygon } from 'ol/geom';
+import { Polygon, LineString } from 'ol/geom';
 import { registerProjections } from '../../fixtures';
 
 beforeEach(registerProjections);
-
-// const miles = 'mi';
+const miles = 'mi';
 const kilos = 'km';
 
 /**
@@ -24,9 +22,13 @@ test('two different triangles of the same size return the same measurement', () 
   const tri1poly = new Polygon([tri1]);
   const tri2poly = new Polygon([tri2]);
 
-  const tri1Area = getFormattedArea(tri1poly, 'EPSG:4326', kilos, greatCircleMeasure);
-  const tri2Area = getFormattedArea(tri2poly, 'EPSG:4326', kilos, greatCircleMeasure);
-  expect(tri1Area).toBe(tri2Area);
+  const tri1AreaKm = getFormattedArea(tri1poly, 'EPSG:4326', kilos, greatCircleMeasure);
+  const tri2AreaKm = getFormattedArea(tri2poly, 'EPSG:4326', kilos, greatCircleMeasure);
+  const tri1AreaMiles = getFormattedArea(tri1poly, 'EPSG:4326', miles, greatCircleMeasure);
+  const tri2AreaMiles = getFormattedArea(tri2poly, 'EPSG:4326', miles, greatCircleMeasure);
+
+  expect(tri1AreaKm).toBe(tri2AreaKm);
+  expect(tri1AreaMiles).toBe(tri2AreaMiles);
 });
 
 /**
@@ -49,25 +51,53 @@ test('area measurement that includes coordinates outisde of "normal" extents ret
   const shiftedTriArea = getFormattedArea(shiftedTriPoly, 'EPSG:4326', kilos, true);
   expect(normalTriArea).toBe(geoTriArea);
   expect(normalTriArea).toBe(shiftedTriArea);
-  console.log(normalTriArea);
 });
 
-// test('two triangles of the same size return the same Rhumb line area measurement', () => {
-//   const tri1poly = new Polygon([tri1]);
-//   const tri2poly = new Polygon([tri2]);
 
-//   const tri1Area = getRhumbLineArea(tri1poly, 'EPSG:4326');
-//   const tri2Area = getRhumbLineArea(tri2poly, 'EPSG:4326');
-//   console.log('Triangle 1: ', tri1Area);
-//   console.log('Triangle 2: ', tri2Area);
 
-//   expect(tri1Area).toBe(tri2Area);
-// });
+test('two different lines, one which crosses the antimeridian, are the same length', () => {
+  // Crosses anti-meridian
+  const line1 = [[-120, -80], [120, -80]];
+  const line2 = [[-60, -80], [60, -80]];
+  const lineString1 = new LineString(line1);
+  const lineString2 = new LineString(line2);
 
-// test('polygon with same coordinates in different projections should return the same measurement', () => {
-//   const greatCircleMeasure = true;
-//   const tri1poly = new Polygon([tri1]);
-//   const proj1Area = getFormattedArea(tri1poly, 'EPSG:3413', kilos, greatCircleMeasure);
-//   const proj2Area = getFormattedArea(tri1poly, 'EPSG:4326', kilos, greatCircleMeasure);
-//   expect(proj1Area).toBe(proj2Area);
-// });
+  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
+  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
+
+  const lineString1Miles = getFormattedLength(lineString1, 'EPSG:4326', miles);
+  const lineString2Miles = getFormattedLength(lineString2, 'EPSG:4326', miles);
+
+  expect(lineString1Km).toBe(lineString2Km);
+  expect(lineString1Miles).toBe(lineString2Miles);
+});
+
+test('lines which are the same numbers of degrees apart, at different poles, and which cross the poles, are the same length', () => {
+  const line1 = [[-30, -80], [150, -80]];
+  const line2 = [[60, -80], [-120, -80]];
+  const line3 = [[-30, 80], [150, 80]];
+  const line4 = [[60, 80], [-120, 80]];
+
+  const lineString1 = new LineString(line1);
+  const lineString2 = new LineString(line2);
+  const lineString3 = new LineString(line3);
+  const lineString4 = new LineString(line4);
+
+  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
+  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
+  const lineString3Km = getFormattedLength(lineString3, 'EPSG:4326', kilos);
+  const lineString4Km = getFormattedLength(lineString4, 'EPSG:4326', kilos);
+
+  const lineString1Miles = getFormattedLength(lineString1, 'EPSG:4326', miles);
+  const lineString2Miles = getFormattedLength(lineString2, 'EPSG:4326', miles);
+  const lineString3Miles = getFormattedLength(lineString3, 'EPSG:4326', miles);
+  const lineString4Miles = getFormattedLength(lineString4, 'EPSG:4326', miles);
+
+  expect(lineString1Km).toBe(lineString2Km);
+  expect(lineString1Km).toBe(lineString3Km);
+  expect(lineString1Km).toBe(lineString4Km);
+
+  expect(lineString1Miles).toBe(lineString2Miles);
+  expect(lineString1Miles).toBe(lineString3Miles);
+  expect(lineString1Miles).toBe(lineString4Miles);
+});
