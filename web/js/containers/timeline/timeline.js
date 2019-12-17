@@ -353,7 +353,9 @@ class Timeline extends React.Component {
       timeScaleChangeUnit,
       selectedDate,
       rightArrowDisabled,
-      leftArrowDisabled
+      leftArrowDisabled,
+      timelineEndDateLimit,
+      timelineStartDateLimit
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
@@ -363,7 +365,9 @@ class Timeline extends React.Component {
     delta = Number(delta * signconstant); // determine if negative or positive change
     const disabled = signconstant > 0 ? rightArrowDisabled : leftArrowDisabled;
     if (!disabled) {
-      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate));
+      const minDate = new Date(timelineStartDateLimit);
+      const maxDate = new Date(timelineEndDateLimit);
+      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate, minDate, maxDate));
     }
     this.setState({ isArrowDown: true });
   };
@@ -1343,31 +1347,45 @@ const getEndTime = (layers, config) => {
  * @param  {Number} delta Date and direction to change
  * @param  {Number} increment Zoom level of change
  *                  e.g. months, minutes, years, days
+ * @param  {Object} prevDate JS Date Object
+ * @param  {Object} minDate timelineStartDateLimit JS Date Object
+ * @param  {Object} maxDate timelineEndDateLimit JS Date Object
  * @return {Object} JS Date Object
  */
-const getNextTimeSelection = (delta, increment, prevDate) => {
+const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDate) => {
+  let date;
   switch (increment) {
     case 'year':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta)
       );
+      break;
     case 'month':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta)
       );
+      break;
     case 'day':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta)
       );
+      break;
     case 'hour':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta)
       );
+      break;
     case 'minute':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta)
       );
   }
+  if (date < minDate) {
+    return minDate;
+  } else if (date > maxDate) {
+    return maxDate;
+  }
+  return date;
 };
 
 // check if left arrow should be disabled on predicted decrement
@@ -1377,9 +1395,14 @@ const checkLeftArrowDisabled = (
   timeScaleChangeUnit,
   timelineStartDateLimit
 ) => {
-  const nextDecrementDate = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  const isSameOrBefore = new Date(nextDecrementDate.format()) < new Date(timelineStartDateLimit);
-  return isSameOrBefore;
+  const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
+  const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
+  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
+  const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
+
+  const nextDecrementDateTime = nextDecrementDate.getTime();
+  const minMinusDeltaDateTime = minMinusDeltaDate.getTime();
+  return nextDecrementDateTime <= minMinusDeltaDateTime;
 };
 
 // check if right arrow should be disabled on predicted increment
@@ -1391,6 +1414,10 @@ const checkRightArrowDisabled = (
 ) => {
   const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
   const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
-  const endOfTimelineDate = new Date(timelineEndDateLimit);
-  return nextIncrementDate > endOfTimelineDate;
+  const maxPlusDeltaMoment = moment.utc(timelineEndDateLimit).add(delta, timeScaleChangeUnit);
+  const maxPlusDeltaDate = new Date(maxPlusDeltaMoment.seconds(0).format());
+
+  const nextIncrementDateTime = nextIncrementDate.getTime();
+  const maxPlusDeltaDateTime = maxPlusDeltaDate.getTime();
+  return nextIncrementDateTime >= maxPlusDeltaDateTime;
 };
