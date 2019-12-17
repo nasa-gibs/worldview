@@ -33,7 +33,6 @@ module.exports = {
   measureAreaBtn: '#measure-area-button',
   clearMeasurementsBtn: '#clear-measurements-button',
   unitOfMeasureToggle: '.measure-unit-toggle .custom-control-label',
-  greatCircleToggle: '#great-circle-toggle',
   measurementTooltip: '.tooltip-measure.tooltip-static',
 
   // timeline
