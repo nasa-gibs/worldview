@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Arrow from '../util/arrow';
 import util from '../../util/util';
 
 /*
@@ -301,9 +302,20 @@ class DateInputColumn extends Component {
   }
 
   render() {
-    const { fontSize, inputId, tabIndex, type, isValid } = this.props;
-    const { selected, size, value } = this.state;
+    const {
+      fontSize,
+      inputId,
+      isValid,
+      tabIndex,
+      type
+    } = this.props;
+    const {
+      selected,
+      size,
+      value
+    } = this.state;
 
+    // conditional styling
     const containerClassName = `input-wrapper ${selected ? 'selected ' : ''}input-wrapper-${type}`;
     const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
     const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
@@ -313,15 +325,11 @@ class DateInputColumn extends Component {
         className={containerClassName}
         style={containerBorderStyle}
       >
-        <div
+        <Arrow
+          direction='up'
           onClick={this.onClickUp}
-          className="date-arrows date-arrow-up"
-          data-interval={type}
-        >
-          <svg width="25" height="8">
-            <path d="M 12.5,0 25,8 0,8 z" className="uparrow" />
-          </svg>
-        </div>
+          type={type}
+        />
         <input
           type="text"
           ref={input => {
@@ -340,15 +348,11 @@ class DateInputColumn extends Component {
           onBlur={this.blur}
           onFocus={this.handleFocus}
         />
-        <div
+        <Arrow
+          direction='down'
           onClick={this.onClickDown}
-          className="date-arrows date-arrow-down"
-          data-interval={type}
-        >
-          <svg width="25" height="8">
-            <path d="M 12.5,0 25,8 0,8 z" className="downarrow" />
-          </svg>
-        </div>
+          type={type}
+        />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeTooltip from './axis-timescale-change-tooltip';
+import Arrow from '../../util/arrow';
 
 /*
  * Up/down arrows for changing timeScale, also wrapper for tooltip
@@ -32,22 +33,16 @@ class AxisTimeScaleChangeControls extends PureComponent {
           changeTimeScale={changeTimeScale}
           hasSubdailyLayers={hasSubdailyLayers}
         />
-        <div
+        <Arrow
+          direction='up'
           onClick={this.onClickUp}
-          className="date-arrows date-arrow-up"
-        >
-          <svg width="25" height="8">
-            <path d="M 12.5,0 25,8 0,8 z" className="uparrow" />
-          </svg>
-        </div>
-        <div
+          type='zoom-level-up'
+        />
+        <Arrow
+          direction='down'
           onClick={this.onClickDown}
-          className="date-arrows date-arrow-down"
-        >
-          <svg width="25" height="8">
-            <path d="M 12.5,0 25,8 0,8 z" className="downarrow" />
-          </svg>
-        </div>
+          type='zoom-level-down'
+        />
       </div>
     );
   }
