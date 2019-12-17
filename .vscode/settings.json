@@ -1,10 +1,12 @@
 {
   "files.trimTrailingWhitespace": true,
-  "eslint.autoFixOnSave": true,
   "[javascript]": {
     "editor.tabSize": 2
   },
   "[json]": {
     "editor.tabSize": 2
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
   }
 }
