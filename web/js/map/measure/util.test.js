@@ -18,14 +18,13 @@ test('two different triangles of the same size return the same measurement', () 
   const tri1 = [[0, 90], [-150, 80], [150, 80], [0, 90]];
   // triangle does NOT anti-meridian
   const tri2 = [[0, 90], [-150, 80], [-90, 80], [0, 90]];
-  const greatCircleMeasure = false;
   const tri1poly = new Polygon([tri1]);
   const tri2poly = new Polygon([tri2]);
 
-  const tri1AreaKm = getFormattedArea(tri1poly, 'EPSG:4326', kilos, greatCircleMeasure);
-  const tri2AreaKm = getFormattedArea(tri2poly, 'EPSG:4326', kilos, greatCircleMeasure);
-  const tri1AreaMiles = getFormattedArea(tri1poly, 'EPSG:4326', miles, greatCircleMeasure);
-  const tri2AreaMiles = getFormattedArea(tri2poly, 'EPSG:4326', miles, greatCircleMeasure);
+  const tri1AreaKm = getFormattedArea(tri1poly, 'EPSG:4326', kilos);
+  const tri2AreaKm = getFormattedArea(tri2poly, 'EPSG:4326', kilos);
+  const tri1AreaMiles = getFormattedArea(tri1poly, 'EPSG:4326', miles);
+  const tri2AreaMiles = getFormattedArea(tri2poly, 'EPSG:4326', miles);
 
   expect(tri1AreaKm).toBe(tri2AreaKm);
   expect(tri1AreaMiles).toBe(tri2AreaMiles);
@@ -46,9 +45,9 @@ test('area measurement that includes coordinates outisde of "normal" extents ret
   const geoTriPoly = new Polygon([geoTri1]);
   const shiftedTriPoly = new Polygon([shiftedTri1]);
 
-  const normalTriArea = getFormattedArea(normalTriPoly, 'EPSG:4326', kilos, true);
-  const geoTriArea = getFormattedArea(geoTriPoly, 'EPSG:4326', kilos, true);
-  const shiftedTriArea = getFormattedArea(shiftedTriPoly, 'EPSG:4326', kilos, true);
+  const normalTriArea = getFormattedArea(normalTriPoly, 'EPSG:4326', kilos);
+  const geoTriArea = getFormattedArea(geoTriPoly, 'EPSG:4326', kilos);
+  const shiftedTriArea = getFormattedArea(shiftedTriPoly, 'EPSG:4326', kilos);
   expect(normalTriArea).toBe(geoTriArea);
   expect(normalTriArea).toBe(shiftedTriArea);
 });
