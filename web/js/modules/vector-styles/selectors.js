@@ -122,7 +122,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   let layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer]
   lodashEach(layerArray, layerInLayerGroup => {
     // Apply mapbox-gl styles
-    const isYesterdayWrappedLayer = layerInLayerGroup.getExtent()[0] === 180;
+    const extentStartX = layerInLayerGroup.getExtent()[0];
+    const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
 
     styleFunction = stylefunction(layerInLayerGroup, glStyle, vectorStyleId);
     // Filter Orbit Tracks
@@ -135,7 +136,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
           minute = minutes.split(':');
         }
         if (((minute && minute[1] % 5 === 0) || feature.getType() === 'LineString')
-          && shouldRenderFeature(feature, isYesterdayWrappedLayer)) {
+          && shouldRenderFeature(feature, acceptableExtent)) {
           return styleFunction(feature, resolution);
         }
       });
@@ -149,7 +150,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         const features = feature.getProperties();
         const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
         const uniqueIdentifier = features[idKey];
-        if (shouldRenderFeature(feature, isYesterdayWrappedLayer)) {
+        if (shouldRenderFeature(feature, acceptableExtent)) {
           if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
             return selectedStyleFunction(feature, styleFunction(feature, resolution));
           } else {
@@ -157,9 +158,9 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
           }
         }
       });
-    } else if (isYesterdayWrappedLayer) {
+    } else if (acceptableExtent) {
       layerInLayerGroup.setStyle(function (feature, resolution) {
-        if (shouldRenderFeature(feature, isYesterdayWrappedLayer)) {
+        if (shouldRenderFeature(feature, acceptableExtent)) {
           return styleFunction(feature, resolution);
         }
       });
@@ -167,10 +168,10 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   });
   return vectorStyleId;
 }
-const shouldRenderFeature = (feature, isYesterdayWrappedLayer) => {
-  if (!isYesterdayWrappedLayer) return true;
+const shouldRenderFeature = (feature, acceptableExtent) => {
+  if (!acceptableExtent) return true;
   const midpoint = feature.getFlatCoordinates();
-  if (containsCoordinate([-180, -90, -110, 90], midpoint)) return true;
+  if (containsCoordinate(acceptableExtent, midpoint)) return true;
   return false;
 
 }

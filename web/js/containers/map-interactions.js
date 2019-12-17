@@ -51,13 +51,13 @@ export class MapInteractions extends React.Component {
     const coord = map.getCoordinateFromPixel(pixels);
     const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset } = this.props;
     const [lon, lat] = coord;
-    if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
+    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
-      map.forEachFeatureAtPixel(pixels, function(feature, layer) {
+      map.forEachFeatureAtPixel(pixels, function (feature, layer) {
         if (!layer) {
           return;
         }
