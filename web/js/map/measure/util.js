@@ -4,7 +4,7 @@ import {
 } from 'ol/geom';
 import geographiclib from 'geographiclib';
 
-const geod = geographiclib.Geodesic.WGS84;
+const { Inverse, InverseLine, Polygon } = geographiclib.Geodesic.WGS84;
 const geographicProj = 'EPSG:4326';
 const metersPerKilometer = 1000;
 const ftPerMile = 5280;
@@ -23,7 +23,7 @@ export function transformLineStringArc(geom, projection) {
   const distance = 10000; // meters between segments
   const transformedGeom = geom.clone().transform(projection, geographicProj);
   transformedGeom.forEachSegment((segStart, segEnd) => {
-    const line = geod.InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
+    const line = InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
     const n = Math.ceil(line.s13 / distance);
     for (let i = 0; i <= n; ++i) {
       const s = Math.min(distance * i, line.s13);
@@ -45,7 +45,7 @@ export function transformPolygonArc(geom, projection) {
   const distance = 10000; // meters between segments
   const polyCoords = transformedGeom.getCoordinates()[0];
   for (let i = 0; i < polyCoords.length - 1; i++) {
-    const line = geod.InverseLine(
+    const line = InverseLine(
       polyCoords[i][1],
       polyCoords[i][0],
       polyCoords[i + 1][1],
@@ -106,12 +106,12 @@ export function getFormattedArea(polygon, projection, unitOfMeasure) {
 /**
  * Calculate area of a polygon with GeographicLib library
  * @param {*} polygon
- * @param {*} projection
+ * @returns {Number} - area in square meters
  */
 export function getGeographicLibArea(polygon) {
   const coordinates = polygon.getCoordinates()[0];
   if (coordinates.length < 3) return 0;
-  const geoPoly = geod.Polygon(false);
+  const geoPoly = Polygon(false);
   coordinates.forEach(coord => {
     // flip lat/lon position
     geoPoly.AddPoint(coord[1], coord[0]);
@@ -120,10 +120,15 @@ export function getGeographicLibArea(polygon) {
   return Math.abs(area);
 }
 
+/**
+ * Calculate distance of a line with GeographicLib library
+ * @param {*} polygon
+ * @returns {Number} - distance in meters
+ */
 export function getGeographicLibDistance(line) {
   let totalDistance = 0;
   line.forEachSegment((segStart, segEnd) => {
-    const r = geod.Inverse(segStart[1], segStart[0], segEnd[1], segEnd[0]);
+    const r = Inverse(segStart[1], segStart[0], segEnd[1], segEnd[0]);
     totalDistance += r.s12;
   });
   return totalDistance;
