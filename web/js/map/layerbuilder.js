@@ -450,8 +450,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           }
         });
       }
-      setStyleFunction(def, vectorStyleId, vectorStyles, layer, state, day);
-      if (day) { }
+      setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
     }
 
     return layer;
