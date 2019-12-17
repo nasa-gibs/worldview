@@ -175,7 +175,7 @@ export function measure(map, mapUiEvents, store) {
 
   /**
    * Go through every tooltip and recalculate the measurement based on
-   * current settings of unit of measurement and great circle
+   * current settings of unit of measurement
    */
   function recalculateAllMeasurements() {
     for (const id in allMeasureTooltips) {
