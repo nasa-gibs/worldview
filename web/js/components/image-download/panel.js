@@ -57,7 +57,7 @@ export default class ImageResSelection extends React.Component {
       { width, height },
       time,
       fileType,
-      isWorldfile
+      fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile
     );
 
     if (url) {
@@ -119,10 +119,9 @@ export default class ImageResSelection extends React.Component {
   _renderWorldfileSelect() {
     if (this.props.worldFileOptions) {
       const value = this.state.isWorldfile ? 1 : 0;
-
       return (
         <div className="wv-image-header">
-          {this.state.fileType === 'image/kmz' ? (
+          {this.state.fileType === 'application/vnd.google-earth.kmz' ? (
             <select disabled>
               <option value={0}>No</option>
             </select>
