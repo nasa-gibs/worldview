@@ -87,8 +87,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     isTouchDevice: state.modal.customProps.touchDevice,
     map: state.map,
-    units: state.measure.units,
-    useGreatCircleMeasurements: state.measure.useGreatCircleMeasurements
+    units: state.measure.units
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => ({

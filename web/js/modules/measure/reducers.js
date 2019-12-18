@@ -3,8 +3,7 @@ import { CHANGE_UNITS, TOGGLE_MEASURE_ACTIVE } from './constants';
 
 const defaultState = {
   isActive: false,
-  units: 'km',
-  useGreatCircleMeasurements: false
+  units: 'km'
 };
 
 export default function measureReducer(state = defaultState, action) {
