@@ -86,9 +86,6 @@ export function measure(map, mapUiEvents, store) {
   ];
 
   function terminateDraw() {
-    setTimeout(() => {
-      mapUiEvents.trigger('enable-click-zoom');
-    }, 500);
     sketch = null;
     measureTooltipElement = null;
     store.dispatch(toggleMeasureActive(false));
@@ -96,6 +93,7 @@ export function measure(map, mapUiEvents, store) {
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
+    mapUiEvents.trigger('enable-click-zoom');
   }
 
   function createMeasureTooltip(geom) {

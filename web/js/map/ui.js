@@ -37,7 +37,7 @@ import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
-import { CHANGE_UNITS, USE_GREAT_CIRCLE } from '../modules/measure/constants';
+import { CHANGE_UNITS } from '../modules/measure/constants';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -152,8 +152,6 @@ export function mapui(models, config, store, ui) {
       }
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
-      case USE_GREAT_CIRCLE:
-        return useGreatCircleMeasurements(action.value);
       case SELECT_DATE:
         return updateDate();
     }
@@ -179,10 +177,12 @@ export function mapui(models, config, store, ui) {
     self.events.on('measure-distance', measureDistance);
     self.events.on('measure-area', measureArea);
     self.events.on('disable-click-zoom', () => {
-      self.selected.removeInteraction(doubleClickZoom);
+      doubleClickZoom.setActive(false);
     });
     self.events.on('enable-click-zoom', () => {
-      self.selected.addInteraction(doubleClickZoom);
+      setTimeout(() => {
+        doubleClickZoom.setActive(true);
+      }, 100);
     });
     ui.events.on('last-action', subscribeToStore);
     updateProjection(true);
@@ -857,12 +857,6 @@ export function mapui(models, config, store, ui) {
   const toggleMeasurementUnits = (units) => {
     for (const proj in measureTools) {
       measureTools[proj].changeUnits(units);
-    }
-  };
-
-  const useGreatCircleMeasurements = (value) => {
-    for (const proj in measureTools) {
-      measureTools[proj].useGreatCircleMeasurements(value);
     }
   };
 
