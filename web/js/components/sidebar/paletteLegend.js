@@ -266,6 +266,7 @@ class PaletteLegend extends React.Component {
             id={layer.id + '-' + legend.id + index + 'colorbar'}
             width={width}
             height={24}
+            style={{ width: width }}
             ref={this['canvas_' + index]}
             onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
             onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
@@ -335,7 +336,7 @@ class PaletteLegend extends React.Component {
         containment={scrollContainerEl}
         partialVisibility={true}
       >
-        { ({ isVisible }) => (
+        {({ isVisible }) => (
           <div className={legendClass} key={legend.id + '_' + legendIndex}>
             {legend.colors.map((color, keyIndex) => {
               const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;

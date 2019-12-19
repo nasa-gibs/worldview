@@ -53,7 +53,8 @@ class Layer extends React.Component {
       requestPalette,
       isCustomPalette,
       isLoading,
-      isMobile
+      isMobile,
+      zot
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
       const isRunningData = compare.active
@@ -66,6 +67,7 @@ class Layer extends React.Component {
           layerGroupName={layerGroupName}
           paletteId={palette.id}
           getPalette={getPalette}
+          width={zot ? 220 : 231}
           paletteLegends={paletteLegends}
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
