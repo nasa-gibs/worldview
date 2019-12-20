@@ -512,8 +512,6 @@ class AnimationWidget extends React.Component {
               <TimeSelector
                 id="start"
                 idSuffix="animation-widget-start"
-                width="120"
-                height="30"
                 date={startDate}
                 onDateChange={this.onDateChange}
                 maxDate={endDate}
@@ -524,8 +522,6 @@ class AnimationWidget extends React.Component {
               <TimeSelector
                 id="end"
                 idSuffix="animation-widget-end"
-                width="120"
-                height="30"
                 date={endDate}
                 onDateChange={this.onDateChange}
                 maxDate={maxDate}
