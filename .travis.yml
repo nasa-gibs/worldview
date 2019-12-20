@@ -38,10 +38,12 @@ matrix:
     - os: osx
       language: node_js
       node_js: lts/* # latest LTS Node.js release
+      osx_image: xcode11.2
 
     - os: osx
       language: node_js
       node_js: '8.15.1'
+      osx_image: xcode11.2
 
     - os: linux
       name: 'Node.js 10.16.3 - Firefox E2E'
