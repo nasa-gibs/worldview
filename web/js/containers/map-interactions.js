@@ -57,7 +57,7 @@ export class MapInteractions extends React.Component {
     const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
-      map.forEachFeatureAtPixel(pixels, function (feature, layer) {
+      map.forEachFeatureAtPixel(pixels, function(feature, layer) {
         if (!layer) {
           return;
         }
