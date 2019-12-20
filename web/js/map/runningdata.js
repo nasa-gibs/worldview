@@ -53,7 +53,6 @@ export function MapRunningData(models, compareUi, store) {
       const def = lodashGet(layer, 'wv.def');
       if (!def) return;
       const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
-      console.log(isWrapped);
       const isRenderedFeature = isWrapped ? (lon > -250 || lon < 250 || lat > -90 || lat < 90) : true;
       if (!isRenderedFeature || !isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
       let color;
