@@ -6,7 +6,7 @@ import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures } from '../modules/vector-styles/actions';
-import { groupBy as lodashGroupBy, debounce as lodashDebounce } from 'lodash';
+import { groupBy as lodashGroupBy, debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import { changeCursor } from '../modules/map/actions';
 import { isFromActiveCompareRegion } from '../modules/compare/util';
 
@@ -49,19 +49,20 @@ export class MapInteractions extends React.Component {
   mouseMove(event, map, crs) {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
-    const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset } = this.props;
+    const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj } = this.props;
     const [lon, lat] = coord;
-    if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
+    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixels, function(feature, layer) {
-        if (!layer) {
-          return;
-        }
-        if (isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
+        const def = lodashGet(layer, 'wv.def');
+        if (!def) return;
+        const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
+        const isRenderedFeature = isWrapped ? (lon > -250 || lon < 250 || lat > -90 || lat < 90) : true;
+        if (isRenderedFeature && isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
@@ -126,7 +127,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 function mapStateToProps(state) {
-  const { modal, map, measure, vectorStyles, browser, compare } = state;
+  const { modal, map, measure, vectorStyles, browser, compare, proj } = state;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
@@ -140,7 +141,8 @@ function mapStateToProps(state) {
     measureIsActive: measure.isActive,
     isMobile: browser.lessThan.medium,
     compareState: compare,
-    swipeOffset
+    swipeOffset,
+    proj
   };
 }
 MapInteractions.propTypes = {
@@ -156,6 +158,7 @@ MapInteractions.propTypes = {
   compareState: PropTypes.object,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
+  proj: PropTypes.object,
   swipeOffset: PropTypes.number
 };
 export default connect(

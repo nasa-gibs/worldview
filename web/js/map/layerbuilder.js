@@ -356,13 +356,14 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const createLayerVector = function(def, options, day, state) {
     const { proj, compare } = state;
-    var date, urlParameters, extent, source, matrixSet, matrixIds, start;
+    var date, urlParameters, gridExtent, source, matrixSet, matrixIds, start, layerExtent;
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeGroupStr = options.group ? options.group : compare.activeString;
 
     source = config.sources[def.source];
-    extent = selectedProj.maxExtent;
+    gridExtent = selectedProj.maxExtent;
+    layerExtent = gridExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
 
     if (!source) {
@@ -383,11 +384,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
     if (day) {
       if (day === 1) {
-        extent = [-250, -90, -180, 90];
-        start = [-540, 90];
+        layerExtent = [-250, -90, -180, 90];
+        start = [-180, 90];
+        gridExtent = [110, -90, 180, 90];
       } else {
-        extent = [180, -90, 250, 90];
-        start = [180, 90];
+        gridExtent = [-180, -90, -110, 90];
+        layerExtent = [180, -90, 250, 90];
+        start = [-180, 90];
       }
     }
 
@@ -416,19 +419,22 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     var sourceOptions = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
+      day: day,
       format: new MVT(),
       matrixSet: tms,
+      wrapX: true,
       tileGrid: new OlTileGridTileGrid({
-        extent: extent,
-        origin: start,
+        extent: gridExtent,
         resolutions: matrixSet.resolutions,
-        tileSize: matrixSet.tileSize
+        tileSize: matrixSet.tileSize,
+        origin: start
       })
     });
 
     var layer = new LayerVectorTile({
-      extent: extent,
+      extent: layerExtent,
       source: sourceOptions
+
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
