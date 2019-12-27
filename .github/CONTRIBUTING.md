@@ -42,9 +42,9 @@ our style guides automatically:
 
 #### VS Code
 
-* [AtomLinter](https://code.visualstudio.com/)
+* [Vscode](https://code.visualstudio.com/)
 * [`vscode-eslint`](https://github.com/microsoft/vscode-eslint)
-* [`linter-stylelint`](https://github.com/stylelint/vscode-stylelint)
+* [`vscode-stylelint`](https://github.com/stylelint/vscode-stylelint)
 
 #### Atom
 
