@@ -20,10 +20,11 @@ If you want to submit your own contributions, follow these steps:
 
 * Fork the Worldview repo.
 * Create a new branch from the branch you'd like to contribute to.
-* *Note:* If you're not branching from an existing feature branch, create your branch from `development` for new features or  `master` for urgent bug fixes.
+* *Note:* If you're not branching from an existing feature branch, create your branch from `develop` for the majority of contributions. Branching from `master` is reserved for urgent patches.
 * If an issue doesn't already exist, [submit one](#submitting-an-issue).
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the `nasa-gibs/worldview` repo.
 * Be sure to [mention the issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes [#480](https://github.com/nasa-gibs/worldview/issues/480)".
+* Make sure to set the base branch to `develop`.
 * Upon submission of a pull request, the Worldview development team will review the code.
 * The request will then either be merged, declined, or an adjustment to the code will be requested.
 
@@ -38,6 +39,12 @@ Please lint your code with `npm run lint`. Our style rules are defined in
 [Standard JS Rules](https://github.com/standard/standard#the-rules), with
 semi-colons. You can install linting plugins in your editor to check against
 our style guides automatically:
+
+#### VS Code
+
+* [AtomLinter](https://code.visualstudio.com/)
+* [`vscode-eslint`](https://github.com/microsoft/vscode-eslint)
+* [`linter-stylelint`](https://github.com/stylelint/vscode-stylelint)
 
 #### Atom
 
@@ -114,11 +121,11 @@ These are ideas, user stories, or feature requests that don't yet qualify as a n
 
 ### [`invalid` ![Issues tagged with 'invalid'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/invalid.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Ainvalid)
 
-These are issues that are no longer relevant or are not considered valid issues. 
+These are issues that are no longer relevant or are not considered valid issues.
 
 ### [`investigate` ![Issues tagged with 'investigate'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/investigate.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Ainvestigate)
 
-These are issues that require further investigation to be considered as valid issues. 
+These are issues that require further investigation to be considered as valid issues.
 
 ### [`new feature` ![Issues tagged with 'new feature'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/new%20feature.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22new%20feature%22)
 
@@ -130,7 +137,7 @@ These are issues that require changes outside of the code repository.
 
 ### [`question` ![Issues tagged with 'question'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/question.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aquestion)
 
-These are questions related to a problem and/or issues that require further investigation. 
+These are questions related to a problem and/or issues that require further investigation.
 
 ### [`quickfix` ![Issues tagged with 'quickfix'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/quickfix.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aquickfix)
 
