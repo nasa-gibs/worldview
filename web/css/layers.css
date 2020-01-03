@@ -58,6 +58,43 @@
   height: 230px;
   overflow: hidden;
   margin-bottom: 10px;
+
+  & h3 {
+    font-size: 18px;
+    line-height: 18px;
+
+    & .layer-category-name {
+      display: block;
+      width: 100%;
+      line-height: 20px;
+      padding: 10px;
+      color: #fff;
+      background: rgba(51, 51, 51, 0.6);
+    }
+    & .layer-category-name:hover {
+      background: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  & .layer-category-item {
+    list-style: none;
+    & .layer-category-name {
+      display: block;
+      padding: 7px 10px;
+      width: 100%;
+      color: #fff;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -o-box-sizing: border-box;
+    }
+    & .layer-category-name:hover {
+      background: rgba(255, 255, 255, 0.6);
+    }
+  }
 }
 
 .category-background-cover {
@@ -65,50 +102,12 @@
   background: rgba(0, 0, 0, 0.4);
 }
 
-.layer-category h3 {
-  font-size: 20px;
-  line-height: 20px;
-}
-
-.layer-category h3 .layer-category-name {
-  display: block;
-  width: 100%;
-  line-height: 20px;
-  padding: 10px;
-  color: #fff;
-  background: rgba(51, 51, 51, 0.6);
-}
-
-.layer-category h3 .layer-category-name:hover {
-  background: rgba(255, 255, 255, 0.6);
-}
-
-.layer-category .layer-category-item {
-  list-style: none;
-}
-
-.layer-category .layer-category-item .layer-category-name {
-  display: block;
-  padding: 7px 10px;
-  width: 100%;
-  color: #fff;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -o-box-sizing: border-box;
-}
-
-.layer-category .layer-category-item .layer-category-name:hover {
-  background: rgba(255, 255, 255, 0.6);
-}
-
 /* Categories view */
+
+/*
 .layer-modal-content .categories-nav {
   margin-right: 13px;
-}
+} */
 
 .layer-modal-content .categories-nav .nav-item {
   height: 31px;
@@ -205,7 +204,7 @@
 .layers-all-header > h3,
 .measurement-row-header > h3 {
   color: #ddd;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 100%;
   position: relative;
   display: block;
@@ -687,35 +686,35 @@
 }
 
 .custom-layer-dialog {
-  width: 978px;
-  max-width: 978px;
+  width: 1200px;
+  max-width: 1200px;
   background-color: #e8e8e8;
+
+  & .product-outter-list-case {
+    width: 100%;
+    padding: 0 13px 13px 0;
+  }
+  & .modal-header {
+    border-bottom: none;
+  }
+  & .modal-header .close {
+    font-size: 30px;
+    color: #000;
+  }
+  & .modal-title {
+    width: 100%;
+  }
+  & .category-masonry-case {
+    overflow: hidden;
+  }
+  & .back-button {
+    margin-right: 10px;
+  }
 }
 
-.custom-layer-dialog .product-outter-list-case {
-  width: 963px;
-  padding: 0 13px 13px 0;
-}
-
-.custom-layer-dialog .modal-header {
-  border-bottom: none;
-}
-
-.custom-layer-dialog .modal-header .close {
-  font-size: 30px;
-  color: #000;
-}
-
-.custom-layer-dialog .modal-title {
-  width: 100%;
-}
 .custom-layer-dialog.light .modal-content .modal-body {
   padding: 0 0 0 13px;
   background-color: #dcdcdc;
-}
-
-.custom-layer-dialog .category-masonry-case {
-  overflow: hidden;
 }
 
 .layer-bread-crumb .breadcrumb {
@@ -724,17 +723,9 @@
   margin-right: 10px;
 }
 
-.custom-layer-dialog .back-button {
-  margin-right: 10px;
-}
-
 @media (max-width: 1024px) {
   .custom-layer-dialog {
-    width: 658px;
-  }
-
-  .custom-layer-dialog .product-outter-list-case {
-    width: 643px;
+    width: 95%;
   }
 }
 
@@ -747,13 +738,13 @@
 
   .custom-layer-dialog {
     width: auto;
+
+    & .product-outter-list-case {
+      width: 100%;
+    }
   }
 
   .layer-category {
-    width: 100%;
-  }
-
-  .custom-layer-dialog .product-outter-list-case {
     width: 100%;
   }
 
@@ -767,3 +758,39 @@
     margin: 0 12px 0 0;
   }
 }
+
+.results-text {
+  text-align: right;
+  font-size: 15px;
+  margin: 10px 15px;
+}
+
+.layer-filters {
+  width: 20%;
+  float: left;
+
+  & .filter-controls {
+    background-color: #333;
+    margin-right: 13px;
+    color: #eee;
+    padding: 10px;
+    & .custom-control {
+      margin-top: 10px;
+      & .custom-control-label {
+        color: #eee;
+      }
+    }
+  }
+}
+
+.layer-list {
+  width: 80%;
+  float: left;
+}
+
+/* .layer-detail {
+  width: 40%;
+  height: 100%;
+  background-color: #333;
+  float: left;
+} */
