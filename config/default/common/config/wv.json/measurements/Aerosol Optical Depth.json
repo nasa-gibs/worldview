@@ -3,7 +3,7 @@
         "Aerosol Optical Depth": {
             "id": "aerosol-optical-depth",
             "title":    "Aerosol Optical Depth",
-            "subtitle": "Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi-NPP/VIIRS, MERRA-2",
+            "subtitle": "Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, MERRA-2",
             "sources": {
                 "Aura/OMI": {
                     "id": "aura-omi",
@@ -78,9 +78,9 @@
                       "SWDB_Aerosol_Angstrom_Exponent_Monthly"
                     ]
                   },
-                  "Suomi-NPP/VIIRS": {
+                  "Suomi NPP/VIIRS": {
                       "id": "suomi-npp-viirs",
-                      "title": "Suomi-NPP/VIIRS",
+                      "title": "Suomi NPP/VIIRS",
                       "description": "viirs/Aerosol",
                       "image": "",
                       "settings": [
