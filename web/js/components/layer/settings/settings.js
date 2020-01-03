@@ -8,6 +8,7 @@ import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
+
 import {
   getCheckerboard,
   palettesTranslate
@@ -35,6 +36,7 @@ import {
   getVectorStyle
 } from '../../../modules/vector-styles/selectors';
 import { setOpacity } from '../../../modules/layers/actions';
+import ClassificationToggle from './classification-toggle';
 
 class LayerSettings extends React.Component {
   constructor(props) {
@@ -114,9 +116,8 @@ class LayerSettings extends React.Component {
                 index={i}
                 palette={palette}
               />
-            ) : (
-              ''
-            )}
+            ) : null
+            }
             <Palette
               setCustomPalette={setCustomPalette}
               groupName={groupName}
@@ -175,7 +176,7 @@ class LayerSettings extends React.Component {
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
-      return '';
+      return (<ClassificationToggle legend={legend} />);
     }
     return (
       <React.Fragment>
@@ -270,7 +271,7 @@ class LayerSettings extends React.Component {
           layer={layer}
         />
         {renderCustomizations}
-        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer}/>}
+        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
       </React.Fragment>
     );
   }
