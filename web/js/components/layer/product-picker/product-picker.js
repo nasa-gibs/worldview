@@ -21,8 +21,9 @@ import {
   hasMeasurementSource
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
+import { datesinDateRanges } from '../../../modules/layers/util.js';
 
-import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
+import { ModalBody, ModalHeader, Nav, NavItem, NavLink, Form } from 'reactstrap';
 
 /*
  * A scrollable list of layers
@@ -39,7 +40,8 @@ class ProductPicker extends React.Component {
       category: props.category,
       selectedMeasurement: null,
       filteredRows: props.filteredRows,
-      inputValue: ''
+      inputValue: '',
+      filterByAvailable: true
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
   }
@@ -51,8 +53,13 @@ class ProductPicker extends React.Component {
    * @param e | onChange event object
    */
   runSearch(value) {
-    const { filterProjections, filterSearch, allLayers } = this.props;
-    const { categoryType } = this.state;
+    const {
+      filterProjections,
+      filterSearch,
+      filterByDate,
+      allLayers
+    } = this.props;
+    const { categoryType, filterByAvailable } = this.state;
     const val = value.toLowerCase();
     let newState;
 
@@ -70,9 +77,14 @@ class ProductPicker extends React.Component {
     // Search with terms
     } else {
       const terms = val.split(/ +/);
-      const filteredRows = allLayers.filter((layer) => {
-        return !(filterProjections(layer) || filterSearch(layer, val, terms));
+      const filteredRows = allLayers.filter(layer => {
+        return !(
+          filterProjections(layer) ||
+          filterSearch(layer, val, terms) ||
+          (filterByAvailable && !filterByDate(layer))
+        );
       });
+
       newState = {
         filteredRows: filteredRows,
         listType: 'search',
@@ -155,13 +167,19 @@ class ProductPicker extends React.Component {
     });
   }
 
-  render() {
+  toggleFilterByAvailable() {
+    const { inputValue, filterByAvailable } = this.state;
+    this.setState({ filterByAvailable: !filterByAvailable });
+    this.runSearch(inputValue);
+  }
+
+  renderLayerList() {
     const {
       filteredRows,
+      filterByAvailable,
       listType,
       categoryType,
       category,
-      inputValue,
       selectedMeasurement
     } = this.state;
     const {
@@ -173,12 +191,74 @@ class ProductPicker extends React.Component {
       removeLayer,
       addLayer,
       hasMeasurementSetting,
-      layerConfig,
+      layerConfig
+    } = this.props;
+
+    return (
+      <>
+        <div className="layer-filters">
+          <div className="filter-controls">
+            <Form>
+            Filter by availability:
+              <div className="custom-control custom-switch">
+                <input
+                  id="unit-toggle"
+                  className="custom-control-input"
+                  type="checkbox"
+                  onChange={this.toggleFilterByAvailable.bind(this)}
+                  defaultChecked={filterByAvailable}/>
+                <label className="custom-control-label" htmlFor="unit-toggle">
+                  {filterByAvailable ? 'On' : 'Off'}
+                </label>
+              </div>
+            </Form>
+          </div>
+          <div className="results-text">
+          Showing {filteredRows.length} results
+          </div>
+        </div>
+
+        <div className="layer-list">
+          <div className="product-outter-list-case">
+            <LayerList
+              addLayer={addLayer}
+              removeLayer={removeLayer}
+              activeLayers={activeLayers}
+              hasMeasurementSource={hasMeasurementSource}
+              selectedProjection={selectedProjection}
+              filteredRows={filteredRows}
+              hasMeasurementSetting={hasMeasurementSetting}
+              measurementConfig={measurementConfig}
+              layerConfig={layerConfig}
+              listType={listType}
+              category={category}
+              categoryConfig={categoryConfig[categoryType]}
+              selectedMeasurement={selectedMeasurement}
+              updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
+            />
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  render() {
+    const {
+      listType,
+      categoryType,
+      category,
+      inputValue
+    } = this.state;
+    const {
+      selectedProjection,
       modalView,
       height,
       width,
       isMobile,
-      onToggle
+      onToggle,
+      categoryConfig,
+      measurementConfig,
+      hasMeasurementSource
     } = this.props;
     const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
@@ -189,7 +269,7 @@ class ProductPicker extends React.Component {
     ];
 
     return (
-      <React.Fragment>
+      <>
         <ModalHeader toggle={onToggle}>
           <ProductPickerHeader
             selectedProjection={selectedProjection}
@@ -208,58 +288,43 @@ class ProductPicker extends React.Component {
 
         <ModalBody>
           <div id="layer-modal-content" className="layer-modal-content">
-            {showCategoryTabs && (
-              <Nav tabs id="categories-nav" className="categories-nav">
-                {categoryKeys.map(sortKey => (
-                  <NavItem
-                    key={sortKey}
-                    className="layer-category-navigation"
-                    active={sortKey === categoryType}
-                  >
-                    <NavLink onClick={this.sort.bind(this, sortKey)}>
-                      {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
-                    </NavLink>
-                  </NavItem>
-                ))}
-              </Nav>
-            )}
-
-            <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
-              <div className="product-outter-list-case">
-                {isCategoryDisplay ? (
-                  <CategoryList
-                    categories={lodashValues(categoryConfig[categoryType])}
-                    measurementConfig={measurementConfig}
-                    drawMeasurements={this.drawMeasurements.bind(this)}
-                    hasMeasurementSource={hasMeasurementSource}
-                    categoryType={categoryType}
-                    width={width}
-                  />
-                ) : (
-                  <LayerList
-                    addLayer={addLayer}
-                    removeLayer={removeLayer}
-                    activeLayers={activeLayers}
-                    hasMeasurementSource={hasMeasurementSource}
-                    selectedProjection={selectedProjection}
-                    filteredRows={filteredRows}
-                    hasMeasurementSetting={hasMeasurementSetting}
-                    measurementConfig={measurementConfig}
-                    layerConfig={layerConfig}
-                    listType={listType}
-                    category={category}
-                    categoryConfig={categoryConfig[categoryType]}
-                    selectedMeasurement={selectedMeasurement}
-                    updateSelectedMeasurement={this.updateSelectedMeasurement.bind(
-                      this
-                    )}
-                  />
-                )}
-              </div>
-            </Scrollbars>
+            {showCategoryTabs
+              ? (
+                <>
+                  <Nav id="categories-nav" className="categories-nav">
+                    {categoryKeys.map(sortKey => (
+                      <NavItem
+                        key={sortKey}
+                        className="layer-category-navigation"
+                        active={sortKey === categoryType}
+                      >
+                        <NavLink onClick={this.sort.bind(this, sortKey)}>
+                          {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
+                        </NavLink>
+                      </NavItem>
+                    ))}
+                  </Nav>
+                  <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
+                    <div className="product-outter-list-case">
+                      {isCategoryDisplay && (
+                        <CategoryList
+                          categories={lodashValues(categoryConfig[categoryType])}
+                          measurementConfig={measurementConfig}
+                          drawMeasurements={this.drawMeasurements.bind(this)}
+                          hasMeasurementSource={hasMeasurementSource}
+                          categoryType={categoryType}
+                          width={width}
+                        />
+                      )}
+                    </div>
+                  </Scrollbars>
+                </>
+              )
+              : this.renderLayerList()
+            }
           </div>
         </ModalBody>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -276,6 +341,7 @@ ProductPicker.propTypes = {
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
   drawMeasurements: PropTypes.func,
+  filterByDate: PropTypes.func,
   filteredRows: PropTypes.array,
   filterProjections: PropTypes.func,
   filterSearch: PropTypes.func,
@@ -313,7 +379,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function mapStateToProps(state, ownProps) {
-  const { config, browser, proj, layers, compare } = state;
+  const { config, browser, proj, layers, compare, date } = state;
   const { screenWidth, screenHeight } = browser;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
   const height = screenHeight - 100;
@@ -335,14 +401,17 @@ function mapStateToProps(state, ownProps) {
     filterProjections: layer => {
       return !layer.projections[proj.id];
     },
-    hasMeasurementSetting: (current, source) => {
-      return hasMeasurementSetting(current, source, config, proj.id);
-    },
     filterSearch: (layer, val, terms) => {
       return filterSearch(layer, val, terms, config, proj.id);
     },
+    filterByDate: (layer) => {
+      return filterByDate(layer, date.selected);
+    },
     hasMeasurementSource: current => {
       return hasMeasurementSource(current, config, proj.id);
+    },
+    hasMeasurementSetting: (current, source) => {
+      return hasMeasurementSetting(current, source, config, proj.id);
     }
   };
 }
@@ -381,4 +450,20 @@ const filterSearch = function(layer, val, terms, config, projId) {
     if (filtered) return false;
   });
   return filtered;
+};
+
+/**
+  *
+  * @param {*} layer - layer definition
+  * @param {*} date - current selected app date
+  */
+const filterByDate = (layer, date) => {
+  const availableDates = datesinDateRanges(layer, date);
+  if (layer.endDate && layer.inactive) {
+    return date < new Date(layer.endDate) && date > new Date(layer.startDate);
+  }
+  if (!availableDates.length && !layer.endDate && !layer.inactive) {
+    return date > new Date(layer.startDate);
+  }
+  return availableDates.length > 0;
 };
