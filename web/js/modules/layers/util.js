@@ -262,6 +262,7 @@ export function toggleVisibility(id, layers) {
 
   return update(layers, { [index]: { visible: { $set: visibility } } });
 }
+
 export function removeLayer(id, layers) {
   var index = lodashFindIndex(layers, {
     id: id
@@ -271,6 +272,7 @@ export function removeLayer(id, layers) {
   }
   return update(layers, { $splice: [[index, 1]] });
 }
+
 // this function takes an array of date ranges in this format:
 // [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
 // the array is first sorted, and then checked for any overlap
