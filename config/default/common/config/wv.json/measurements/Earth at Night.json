@@ -5,7 +5,7 @@
             "title":    "Earth at Night",
             "subtitle": "Suomi NPP / VIIRS",
             "sources": {
-                "SuomiNPP/VIIRS": {
+                "Suomi NPP/VIIRS": {
                     "id": "npp-viirs",
                     "title": "Suomi NPP / VIIRS",
                     "description": "viirs/EarthAtNight",
