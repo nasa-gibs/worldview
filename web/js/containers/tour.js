@@ -11,7 +11,7 @@ import {
 } from '../modules/palettes/util';
 import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
-import {onClose as closeModal} from '../modules/modal/actions';
+import { onClose as closeModal } from '../modules/modal/actions';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import { layersParse12 } from '../modules/layers/util';
