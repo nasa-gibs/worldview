@@ -205,6 +205,11 @@
 .wv-palettes-class:hover {
   cursor: crosshair;
 }
+/* Bootstrap overrides */
+.wv-palettes-class .tooltip {
+  z-index: 1040;
+}
+/* ********* end ********** */
 
 .wv-palettes-class-detail {
   margin: 2px 5px 4px 0;
@@ -241,3 +246,4 @@
   width: 100%;
   text-align: center;
 }
+
