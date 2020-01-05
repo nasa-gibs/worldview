@@ -133,6 +133,7 @@ export function mapui(models, config, store, ui) {
         return updateProjection();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
+      case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
         return updateLookup();
       case vectorStyleConstants.SET_FILTER_RANGE:

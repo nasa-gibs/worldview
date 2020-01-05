@@ -9,7 +9,6 @@ button[data-tooltip] {
 [data-tooltip] {
   position: relative;
 }
-
 [data-tooltip]::before,
 [data-tooltip]::after {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
@@ -210,4 +209,9 @@ button[data-tooltip] {
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.checker-board-pattern {
+  background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
+  background-size: 5px 5px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }

@@ -4,13 +4,15 @@ import {
   SET_THRESHOLD_RANGE_AND_SQUASH,
   CLEAR_CUSTOM,
   SET_CUSTOM,
+  SET_DISABLED_CLASSIFICATION,
   LOADED_CUSTOM_PALETTES
 } from './constants';
 import { forOwn as lodashForOwn } from 'lodash';
 import {
   setRange as setRangeSelector,
   setCustomSelector,
-  clearCustomSelector
+  clearCustomSelector,
+  setDisabledSelector
 } from './selectors';
 /**
  * Request palette using core request utility
@@ -128,7 +130,7 @@ export function clearCustoms() {
     const groupName = compare.activeString;
     const activePalettes = palettes[groupName];
     const props = { squash: undefined, min: undefined, max: undefined };
-    lodashForOwn(activePalettes, function(value, key) {
+    lodashForOwn(activePalettes, function (value, key) {
       activePalettes[key].maps.forEach((colormap, index) => {
         if (colormap.custom) {
           dispatch(clearCustomPalette(key, index, groupName));
@@ -153,5 +155,22 @@ export function loadedCustomPalettes(customs) {
 }
 // TODO
 export function setToggledClassification(layerId, classIndex, index, groupName) {
-
-}
+  return (dispatch, getState) => {
+    const state = getState();
+    const newActivePalettesObj = setDisabledSelector(
+      layerId,
+      classIndex,
+      index,
+      state.palettes[groupName],
+      state
+    );
+    dispatch({
+      type: SET_DISABLED_CLASSIFICATION,
+      groupName: groupName,
+      activeString: groupName,
+      layerId,
+      palettes: newActivePalettesObj,
+      props: { disabled: classIndex }
+    });
+  };
+};

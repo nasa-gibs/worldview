@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 // https://upmostly.com/tutorials/build-a-react-switch-toggle-component
 const Switch = (props) => {
-  const { color, active, toggle, label } = props;
-  const style = color && active ? { backgroundColor: '#' + color } : {};
+  const { color, id, active, toggle, label } = props;
+  const [isActive, toggleActive] = useState(active);
+  const style = color && isActive ? { backgroundColor: '#' + color } : {};
   return (
     <div className='react-switch'>
       <div className='react-switch-case switch-col'>
         <input
           className="react-switch-checkbox"
-          id={`react-switch-new`}
+          id={id}
           type="checkbox"
-          checked={active}
-          onChange={toggle}
+          checked={isActive}
+          onChange={() => {
+            toggle()
+            toggleActive(!isActive)
+          }}
         />
         <label
           className="react-switch-label"
-          htmlFor={`react-switch-new`}
+          htmlFor={id}
           style={style}
         >
           <span className={`react-switch-button`} />

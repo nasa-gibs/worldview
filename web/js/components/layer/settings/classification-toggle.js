@@ -5,9 +5,17 @@ import Switch from '../../util/switch';
 import Scrollbar from '../../util/scrollbar';
 
 class ClassificationToggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: props.active
+    };
+  }
   render() {
-    const { layer, legend, toggle } = this.props;
+    const { legend, toggle } = this.props;
     const tooltips = legend.tooltips;
+
+
     return (
       <div className="layer-classification-toggle settings-component">
         <h2 className="wv-header">Category Enable/Disable</h2>
@@ -15,8 +23,16 @@ class ClassificationToggle extends React.Component {
           {legend.colors.map((color, index) => {
             const id = legend.id + index;
             const tooltip = tooltips[index];
+            const inActive = legend.disabled && legend.disabled.contains(index);
             return (
-              <Switch key={id} color={color} label={tooltip} active={true} toggle={() => toggle(index)} />
+              <Switch
+                id={id}
+                key={id}
+                color={color}
+                label={tooltip}
+                active={!inActive}
+                toggle={() => toggle(index)}
+              />
             );
           })}
         </Scrollbar>

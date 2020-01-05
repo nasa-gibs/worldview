@@ -109,10 +109,10 @@ export function getCustomPalette(paletteId, customsPaletteConfig) {
   }
   return palette;
 }
-var useLookup = function(layerId, palettesObj, state) {
+var useLookup = function (layerId, palettesObj, state) {
   var use = false;
   var active = palettesObj[layerId].maps;
-  lodashEach(active, function(palette, index) {
+  lodashEach(active, function (palette, index) {
     if (palette.custom) {
       use = true;
       return false;
@@ -129,6 +129,8 @@ var useLookup = function(layerId, palettesObj, state) {
         use = true;
         return false;
       }
+    } else if (palette.legend.colors.length > 1) {
+      use = true;
     }
   });
   return use;
@@ -138,15 +140,16 @@ export function getLookup(layerId, groupstr, state) {
   groupstr = groupstr || state.compare.activeString;
   return state.palettes[groupstr][layerId].lookup;
 }
-var updateLookup = function(layerId, palettesObj, state) {
+var updateLookup = function (layerId, palettesObj, state) {
   let newPalettes = palettesObj;
   if (!useLookup(layerId, newPalettes, state)) {
     delete newPalettes[layerId];
     return newPalettes;
   }
+
   var lookup = {};
   var active = newPalettes[layerId].maps;
-  lodashEach(active, function(palette, index) {
+  lodashEach(active, function (palette, index) {
     var oldLegend = palette.legend;
     var entries = palette.entries;
     const refs = oldLegend.refs;
@@ -172,9 +175,13 @@ var updateLookup = function(layerId, palettesObj, state) {
     var sourceCount = source.length;
     var targetCount = target.length;
     var appliedLegends = [];
-    lodashEach(source, function(color, index) {
+    var disabled = palette.disabled || [];
+    lodashEach(source, function (color, index) {
       var targetColor;
-      if (index < min || index > max) {
+      if (index < min || index > max || disabled.includes(index)) {
+        if (disabled.includes(index)) {
+          console.log(disabled)
+        }
         targetColor = '00000000';
       } else {
         var sourcePercent, targetIndex;
@@ -230,7 +237,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
   var values = getPalette(layerId, index, groupStr, state).entries.values;
   var result;
-  lodashEach(values, function(check, index) {
+  lodashEach(values, function (check, index) {
     var min = getMinValue(check);
     var max = getMaxValue(check);
     if (type === 'min' && value === min) {
@@ -284,6 +291,31 @@ export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   return state.palettes[group][layerId];
 }
+export function setDisabledSelector(
+  layerId,
+  classIndex,
+  index,
+  palettes,
+  state
+) {
+  let newPalettes = prepare(layerId, palettes, state);
+  let legend = getPalette(layerId, index, undefined, state);
+  let oldDisabled = legend.disabled || [];
+  const indexOf = oldDisabled.indexOf(classIndex);
+  indexOf !== -1 ? oldDisabled.splice(indexOf, 1) : oldDisabled.push(classIndex);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled: oldDisabled
+          }
+        }
+      }
+    }
+  });
+  return updateLookup(layerId, newPalettes, state);
+}
 export function setRange(layerId, props, index, palettes, state) {
   let min = props.min;
   let max = props.max;
@@ -335,12 +367,12 @@ export function clearCustomSelector(layerId, index, palettes, state) {
   }); // remove custom key
   return updateLookup(layerId, newPalettes, state);
 }
-var prepare = function(layerId, palettesObj, state) {
+var prepare = function (layerId, palettesObj, state) {
   var newPalettes = lodashCloneDeep(palettesObj);
   if (!newPalettes[layerId]) newPalettes[layerId] = {};
   var active = newPalettes[layerId];
   active.maps = active.maps || [];
-  lodashEach(getRenderedPalette(layerId, undefined, state).maps, function(
+  lodashEach(getRenderedPalette(layerId, undefined, state).maps, function (
     palette,
     index
   ) {
