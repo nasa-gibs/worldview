@@ -24,7 +24,8 @@ import {
 import {
   setThresholdRangeAndSquash,
   setCustomPalette,
-  clearCustomPalette
+  clearCustomPalette,
+  setToggledClassification
 } from '../../../modules/palettes/actions';
 import {
   setFilterRange,
@@ -163,7 +164,8 @@ class LayerSettings extends React.Component {
       setThresholdRange,
       paletteOrder,
       groupName,
-      layer
+      layer,
+      toggleClassification
     } = this.props;
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
@@ -176,7 +178,7 @@ class LayerSettings extends React.Component {
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
-      return (<ClassificationToggle legend={legend} />);
+      return (<ClassificationToggle toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
     }
     return (
       <React.Fragment>
@@ -311,6 +313,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = dispatch => ({
+  toggleClassification: (layerId, classIndex, index, groupName) => {
+    dispatch(
+      setToggledClassification(layerId, classIndex, index, groupName)
+    );
+  },
   setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
       setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)

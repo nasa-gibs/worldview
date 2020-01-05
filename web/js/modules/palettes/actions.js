@@ -151,3 +151,7 @@ export function loadedCustomPalettes(customs) {
     custom: customs
   };
 }
+// TODO
+export function setToggledClassification(layerId, classIndex, index, groupName) {
+
+}

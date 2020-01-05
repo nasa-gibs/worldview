@@ -1,29 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CustomInput } from 'reactstrap';
-import { Checkbox } from '../../util/checkbox';
+// import { CustomInput } from 'reactstrap';
+import Switch from '../../util/switch';
+import Scrollbar from '../../util/scrollbar';
 
 class ClassificationToggle extends React.Component {
-
   render() {
-    const { layer, legend } = this.props;
+    const { layer, legend, toggle } = this.props;
     const tooltips = legend.tooltips;
     return (
       <div className="layer-classification-toggle settings-component">
         <h2 className="wv-header">Category Enable/Disable</h2>
-        {legend.colors.map((color, index) => {
-          const id = legend.id + index;
-          const tooltip = tooltips[index];
-          return (
-            // <CustomInput key={id} type="switch" id={id} name={tooltip + ' switch'} label={tooltip} />
-            <Checkbox
-              key={id}
-              title={tooltip}
-              checked={false}
-              label={tooltip}
-            />
-          );
-        })}
+        <Scrollbar style={{ maxHeight: '200px' }}>
+          {legend.colors.map((color, index) => {
+            const id = legend.id + index;
+            const tooltip = tooltips[index];
+            return (
+              <Switch key={id} color={color} label={tooltip} active={true} toggle={() => toggle(index)} />
+            );
+          })}
+        </Scrollbar>
       </div>
     );
 
