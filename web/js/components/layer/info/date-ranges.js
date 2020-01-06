@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import { ListGroup, ListGroupItem } from 'reactstrap';
+import Scrollbar from '../../util/scrollbar';
 
 export class DateRanges extends React.Component {
   constructor(props) {
@@ -236,7 +237,7 @@ export class DateRanges extends React.Component {
   }
 
   render() {
-    const { layer } = this.props;
+    const { layer, screenHeight } = this.props;
     const { showRanges } = this.state;
     const style = showRanges ? { display: 'block' } : { display: 'none' };
     return (
@@ -257,16 +258,18 @@ export class DateRanges extends React.Component {
           <div>
             <p>Date Ranges:</p>
           </div>
-          <ListGroup
-            className="layer-date-ranges"
-            id="layer-settings-date-range-list"
-          >
-            {layer.dateRanges.map((dateRange, i) => (
-              <ListGroupItem key={i + layer.id + '-range-item'}>
-                {this.renderListItem(layer, dateRange, i)}
-              </ListGroupItem>
-            ))}
-          </ListGroup>
+          <Scrollbar style={{ maxHeight: screenHeight - 400 + 'px' }}>
+            <ListGroup
+              className="layer-date-ranges"
+              id="layer-settings-date-range-list"
+            >
+              {layer.dateRanges.map((dateRange, i) => (
+                <ListGroupItem key={i + layer.id + '-range-item'}>
+                  {this.renderListItem(layer, dateRange, i)}
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+          </Scrollbar>
         </div>
       </React.Fragment>
     );
@@ -278,5 +281,6 @@ const renderListGroupItem = function(range) {
 
 DateRanges.propTypes = {
   dateRanges: PropTypes.object,
-  layer: PropTypes.object
+  layer: PropTypes.object,
+  screenHeight: PropTypes.number
 };
