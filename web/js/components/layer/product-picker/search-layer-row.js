@@ -183,7 +183,6 @@ class LayerRow extends React.Component {
                 )}
               </p>
             )}
-            
             {isDateRangesExpanded && (
               <div className="layer-date-wrap">
                 <p>Date Ranges:</p>

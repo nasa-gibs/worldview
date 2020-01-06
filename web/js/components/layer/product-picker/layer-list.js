@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SearchLayerRow from './search-row';
-import CategoryLayerRow from './measurement-row';
+import SearchLayerRow from './search-layer-row';
+import CategoryLayerRow from './category-layer-row';
 import util from '../../../util/util';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 
@@ -166,7 +166,7 @@ class LayerList extends React.Component {
     const { expandedMetadataLayers, expandedDateRangesLayers } = this.state;
     var { addLayer, removeLayer, activeLayers } = this.props;
     return filteredRows.length < 1 ? (
-      <div>No results.</div>
+      <div className="no-results"> No results. </div>
     ) : (
       filteredRows.map(layer => {
         var isEnabled = activeLayers.some(l => l.id === layer.id);
