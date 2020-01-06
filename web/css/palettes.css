@@ -194,6 +194,7 @@
   display: inline-block;
   border: 1px solid #000;
   margin: 0 2px 4px;
+  position: relative;
 }
 .wv-running .wv-palettes-class {
   opacity: 0.25;
@@ -244,4 +245,12 @@
 .wv-legend-buttons {
   width: 100%;
   text-align: center;
+}
+.disabled-classification:before {
+  border-top: 1px solid rgb(252, 3, 3);
+  content: '';
+  position: absolute;
+  right: 0; left: -50%;
+  transform: rotate(-45deg);
+  transform-origin: 100% 0;
 }

@@ -13,9 +13,8 @@ class ClassificationToggle extends React.Component {
   }
 
   render() {
-    const { legend, toggle } = this.props;
+    const { legend, toggle, palette } = this.props;
     const tooltips = legend.tooltips;
-
     return (
       <div className="layer-classification-toggle settings-component">
         <h2 className="wv-header">Category Enable/Disable</h2>
@@ -23,7 +22,7 @@ class ClassificationToggle extends React.Component {
           {legend.colors.map((color, index) => {
             const id = legend.id + index;
             const tooltip = tooltips[index];
-            const inActive = legend.disabled && legend.disabled.contains(index);
+            const inActive = palette.disabled && palette.disabled.includes(index);
             return (
               <Switch
                 id={id}

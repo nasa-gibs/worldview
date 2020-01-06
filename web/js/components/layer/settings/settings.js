@@ -121,7 +121,7 @@ class LayerSettings extends React.Component {
             ) : null
             }
             {(legend.type === 'classification' && legend.colors.length > 1) ? (
-              <ClassificationToggle toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
+              <ClassificationToggle palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
             ) : null
             }
             <Palette
@@ -183,7 +183,7 @@ class LayerSettings extends React.Component {
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
-      return (<ClassificationToggle toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
+      return (<ClassificationToggle palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
     }
     return (
       <React.Fragment>

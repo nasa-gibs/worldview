@@ -258,8 +258,8 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-          ''
-        )}
+            ''
+          )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
@@ -319,7 +319,7 @@ class PaletteLegend extends React.Component {
    */
   renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
-    const { layer, parentLayer, layerGroupName } = this.props;
+    const { layer, parentLayer, layerGroupName, getPalette } = this.props;
     const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
@@ -329,7 +329,7 @@ class PaletteLegend extends React.Component {
     const trackLabel = layer.track && legendTooltip
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
-
+    const palette = getPalette(layer.id, legendIndex);
     return (
       <VisibilitySensor
         key={legend.id + '-' + legendIndex + 'vis-sensor'}
@@ -345,16 +345,17 @@ class PaletteLegend extends React.Component {
               const parentLayerId = isSubLayer ? parentLayer.id : '';
               const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId + layerGroupName;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
+
+              const inActive = palette.disabled && palette.disabled.includes(keyIndex);
               const tooltipText = singleKey
                 ? layer.track ? trackLabel : legendTooltip
                 : keyLabel;
-
               return (
                 <React.Fragment key={keyId}>
                   <span
                     id={keyId}
-                    className={color === '00000000' ? palletteClass + ' checker-board-pattern' : palletteClass}
-                    style={color === '00000000' ? {} : { backgroundColor: util.hexToRGBA(color) }}
+                    className={inActive ? palletteClass + ' disabled-classification' : palletteClass}
+                    style={{ backgroundColor: util.hexToRGBA(color) }}
                     onMouseMove={this.onMove.bind(this, color)}
                     onMouseEnter={this.onMouseEnter.bind(this)}
                     onMouseLeave={this.hideValue.bind(this)}
@@ -397,6 +398,7 @@ class PaletteLegend extends React.Component {
         this['canvas_' + index] = React.createRef();
         return this.renderScale(colorMap, index, paletteLegends.length > 1);
       } else if (colorMap.type === 'classification') {
+        console.log(paletteLegends)
         return this.renderClasses(colorMap, index);
       }
     });
