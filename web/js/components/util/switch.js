@@ -13,7 +13,9 @@ const Switch = (props) => {
           type="checkbox"
           checked={isActive}
           onChange={() => {
-            toggle();
+            setTimeout(function() {
+              toggle(); // wait for css animation to complete before firing action
+            }, 200);
             toggleActive(!isActive);
           }}
         />
