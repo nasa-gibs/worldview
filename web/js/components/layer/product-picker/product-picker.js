@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LayerList from './list';
+import LayerList from './layer-list';
 import CategoryList from './category-list';
 import ProductPickerHeader from './header';
 import {
@@ -22,7 +22,7 @@ import {
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
 import { datesinDateRanges } from '../../../modules/layers/util.js';
-
+import MetadataDetail from './metadata-detail';
 import { ModalBody, ModalHeader, Nav, NavItem, NavLink, Form } from 'reactstrap';
 
 /*
@@ -41,7 +41,8 @@ class ProductPicker extends React.Component {
       selectedMeasurement: null,
       filteredRows: props.filteredRows,
       inputValue: '',
-      filterByAvailable: true
+      filterByAvailable: true,
+      selectedLayer: null
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
   }
@@ -103,8 +104,8 @@ class ProductPicker extends React.Component {
   drawMeasurements(category, selectedMeasurement) {
     this.setState({
       listType: 'measurements',
-      selectedMeasurement: selectedMeasurement,
-      category: category
+      selectedMeasurement,
+      category
     });
     googleTagManager.pushEvent({
       event: 'layers_category',
@@ -173,6 +174,41 @@ class ProductPicker extends React.Component {
     this.runSearch(inputValue);
   }
 
+  showMetadataForLayer(layer) {
+    this.setState({
+      selectedLayer: layer
+    });
+  }
+
+  renderLayerCategoriesMenu() {
+    const { categoryType, category } = this.state;
+    const { categoryConfig } = this.props;
+    const categories = categoryConfig[categoryType];
+
+    return (
+      <div className="layer-categories-list">
+        <h4> {categoryType} </h4>
+        <ul >
+
+          {Object.keys(categories).map((categoryName, idx) => {
+          // const firstMeasurementInCategory = category.measurements[0];
+          // const selectedMeasurement = measurementConfig[firstMeasurementInCategory].id;
+            const selectCategory = categories[categoryName];
+
+            return (
+              <li
+                key={idx}
+                onClick={() => this.drawMeasurements(selectCategory)}
+                className={category.title === categoryName ? 'selected' : ''}>
+                {categoryName}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
   renderLayerList() {
     const {
       filteredRows,
@@ -180,7 +216,8 @@ class ProductPicker extends React.Component {
       listType,
       categoryType,
       category,
-      selectedMeasurement
+      selectedMeasurement,
+      selectedLayer
     } = this.state;
     const {
       categoryConfig,
@@ -191,52 +228,68 @@ class ProductPicker extends React.Component {
       removeLayer,
       addLayer,
       hasMeasurementSetting,
-      layerConfig
+      layerConfig,
+      height
     } = this.props;
 
     return (
       <>
-        <div className="layer-filters">
-          <div className="filter-controls">
-            <Form>
-            Filter by availability:
-              <div className="custom-control custom-switch">
-                <input
-                  id="unit-toggle"
-                  className="custom-control-input"
-                  type="checkbox"
-                  onChange={this.toggleFilterByAvailable.bind(this)}
-                  defaultChecked={filterByAvailable}/>
-                <label className="custom-control-label" htmlFor="unit-toggle">
-                  {filterByAvailable ? 'On' : 'Off'}
-                </label>
+        <div className="layer-filters-container">
+          {listType === 'search' ? (
+            <>
+              <div className="filter-controls">
+                <h3>Filters</h3>
+                <Form>
+
+                  <div className="custom-control custom-switch">
+                    <input
+                      id="unit-toggle"
+                      className="custom-control-input"
+                      type="checkbox"
+                      onChange={this.toggleFilterByAvailable.bind(this)}
+                      defaultChecked={filterByAvailable}/>
+                    <label className="custom-control-label" htmlFor="unit-toggle">
+                      Filter by availability
+                    </label>
+                  </div>
+                </Form>
               </div>
-            </Form>
-          </div>
-          <div className="results-text">
-          Showing {filteredRows.length} results
-          </div>
+              <div className="results-text">
+                Showing {filteredRows.length} results
+              </div>
+            </>
+          ) : (
+            this.renderLayerCategoriesMenu()
+          )}
         </div>
 
-        <div className="layer-list">
-          <div className="product-outter-list-case">
-            <LayerList
-              addLayer={addLayer}
-              removeLayer={removeLayer}
-              activeLayers={activeLayers}
-              hasMeasurementSource={hasMeasurementSource}
-              selectedProjection={selectedProjection}
-              filteredRows={filteredRows}
-              hasMeasurementSetting={hasMeasurementSetting}
-              measurementConfig={measurementConfig}
-              layerConfig={layerConfig}
-              listType={listType}
-              category={category}
-              categoryConfig={categoryConfig[categoryType]}
-              selectedMeasurement={selectedMeasurement}
-              updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
-            />
-          </div>
+        <div className="layer-list-container">
+          <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
+            <div className="product-outter-list-case">
+              <LayerList
+                addLayer={addLayer}
+                removeLayer={removeLayer}
+                activeLayers={activeLayers}
+                hasMeasurementSource={hasMeasurementSource}
+                selectedProjection={selectedProjection}
+                filteredRows={filteredRows}
+                hasMeasurementSetting={hasMeasurementSetting}
+                measurementConfig={measurementConfig}
+                layerConfig={layerConfig}
+                listType={listType}
+                category={category}
+                categoryConfig={categoryConfig[categoryType]}
+                selectedMeasurement={selectedMeasurement}
+                updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
+                showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
+              />
+            </div>
+          </Scrollbars>
+        </div>
+        <div className="layer-detail-container layers-all">
+          <MetadataDetail
+            layer={selectedLayer}>
+          </MetadataDetail>
         </div>
       </>
     );
