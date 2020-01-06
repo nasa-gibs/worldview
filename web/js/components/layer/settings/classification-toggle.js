@@ -11,10 +11,10 @@ class ClassificationToggle extends React.Component {
       active: props.active
     };
   }
+
   render() {
     const { legend, toggle } = this.props;
     const tooltips = legend.tooltips;
-
 
     return (
       <div className="layer-classification-toggle settings-component">
@@ -38,7 +38,6 @@ class ClassificationToggle extends React.Component {
         </Scrollbar>
       </div>
     );
-
   }
 }
 ClassificationToggle.defaultProps = {

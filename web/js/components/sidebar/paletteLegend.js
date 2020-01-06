@@ -258,8 +258,8 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-            ''
-          )}
+          ''
+        )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
@@ -348,17 +348,12 @@ class PaletteLegend extends React.Component {
               const tooltipText = singleKey
                 ? layer.track ? trackLabel : legendTooltip
                 : keyLabel;
-              const checkerBoardPattern = {
-                backgroundImage: 'linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%)',
-                backgroundSize: '20px 20px',
-                backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
-              }
-              console.log(color === '00000000')
+
               return (
                 <React.Fragment key={keyId}>
                   <span
                     id={keyId}
-                    className={color === '00000000' ? palletteClass + ' checker-board-pattern': palletteClass}
+                    className={color === '00000000' ? palletteClass + ' checker-board-pattern' : palletteClass}
                     style={color === '00000000' ? {} : { backgroundColor: util.hexToRGBA(color) }}
                     onMouseMove={this.onMove.bind(this, color)}
                     onMouseEnter={this.onMouseEnter.bind(this)}

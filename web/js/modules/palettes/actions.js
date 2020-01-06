@@ -130,7 +130,7 @@ export function clearCustoms() {
     const groupName = compare.activeString;
     const activePalettes = palettes[groupName];
     const props = { squash: undefined, min: undefined, max: undefined };
-    lodashForOwn(activePalettes, function (value, key) {
+    lodashForOwn(activePalettes, function(value, key) {
       activePalettes[key].maps.forEach((colormap, index) => {
         if (colormap.custom) {
           dispatch(clearCustomPalette(key, index, groupName));

@@ -13,8 +13,8 @@ const Switch = (props) => {
           type="checkbox"
           checked={isActive}
           onChange={() => {
-            toggle()
-            toggleActive(!isActive)
+            toggle();
+            toggleActive(!isActive);
           }}
         />
         <label
@@ -22,7 +22,7 @@ const Switch = (props) => {
           htmlFor={id}
           style={style}
         >
-          <span className={`react-switch-button`} />
+          <span className={'react-switch-button'} />
         </label>
 
       </div>

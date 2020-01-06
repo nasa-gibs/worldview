@@ -66,7 +66,8 @@ class LayerSettings extends React.Component {
       palettesTranslate,
       groupName,
       setThresholdRange,
-      layer
+      layer,
+      toggleClassification
     } = this.props;
     const { activeIndex } = this.state;
     const navElements = [];
@@ -117,6 +118,10 @@ class LayerSettings extends React.Component {
                 index={i}
                 palette={palette}
               />
+            ) : null
+            }
+            {(legend.type === 'classification' && legend.colors.length > 1) ? (
+              <ClassificationToggle toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
             ) : null
             }
             <Palette
