@@ -47,10 +47,6 @@
   position: absolute;
 }
 
-.layer-categories {
-  height: 100%;
-}
-
 .layer-category {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.75);
@@ -179,6 +175,12 @@
   background: rgba(0, 0, 0, 0.85);
   padding-left: 1.2em;
   line-height: 0;
+
+  &.selected {
+    border-bottom-right-radius: 25px;
+    background: #444;
+    border: 2px solid #d54f21;
+  }
 }
 
 .layers-all .layers-all-layer:first-of-type {
@@ -204,12 +206,13 @@
 .layers-all-header > h3,
 .measurement-row-header > h3 {
   color: #ddd;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 100%;
   position: relative;
   display: block;
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
+  margin-right: 45px;
 }
 
 .layers-all .layers-all-layer h5 {
@@ -218,7 +221,7 @@
   line-height: 100%;
   font-weight: 400;
   margin-top: 3px;
-  margin-right: 50px;
+  margin-right: 45px;
   font-style: italic;
 }
 
@@ -304,7 +307,7 @@
 /* Layer search rows */
 .layers-all-header {
   cursor: pointer;
-  padding-right: 66px;
+  padding-left: 30px;
   padding-top: 0.5em;
 }
 
@@ -316,7 +319,7 @@
   border: 2px solid #d54f21;
   position: absolute;
   top: 7px;
-  right: 10px;
+  left: 10px;
   text-align: center;
   font-size: 15px;
   line-height: 20px;
@@ -331,10 +334,10 @@
 .layers-all-header .fa {
   position: absolute;
   color: #ddd;
-  font-size: 14px;
-  padding: 12px 16px;
-  margin-left: -8px;
-  margin-top: -8px;
+  font-size: 18px;
+  padding: 12px;
+  right: 0;
+  top: 0;
 }
 
 .layers-all-layer .fa:hover {
@@ -692,7 +695,7 @@
 
   & .product-outter-list-case {
     width: 100%;
-    padding: 0 13px 13px 0;
+    padding: 0 11px 13px 0;
   }
   & .modal-header {
     border-bottom: none;
@@ -713,7 +716,7 @@
 }
 
 .custom-layer-dialog.light .modal-content .modal-body {
-  padding: 0 0 0 13px;
+  padding: 0;
   background-color: #dcdcdc;
 }
 
@@ -758,39 +761,106 @@
     margin: 0 12px 0 0;
   }
 }
+.no-results {
+  font-size: 20px;
+}
 
 .results-text {
   text-align: right;
-  font-size: 15px;
+  font-size: 16px;
   margin: 10px 15px;
 }
 
-.layer-filters {
+.layer-filters-container {
   width: 20%;
   float: left;
 
   & .filter-controls {
     background-color: #333;
-    margin-right: 13px;
+    margin: 0 5px;
     color: #eee;
-    padding: 10px;
+    padding: 10px 8px 15px;
+    & h3 {
+      color: #eee;
+      font-weight: 600;
+      font-size: 18px;
+      margin: 0 0 15px;
+    }
     & .custom-control {
+      display: inline;
       margin-top: 10px;
       & .custom-control-label {
         color: #eee;
       }
     }
   }
+
+  & .layer-categories-list {
+    & h4 {
+      text-transform: capitalize;
+      font-size: 18px;
+      margin: 0 10px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    & ul {
+      margin: 10px;
+    }
+    & li {
+      padding: 7px 5px;
+      cursor: pointer;
+      font-size: 14px;
+
+      &.selected {
+        background-color: #d54e21;
+        color: #fff;
+        text-shadow: 1px 1px 1px #666;
+        &:hover {
+          background-color: #d54e21;
+          color: #fff;
+          text-shadow: none;
+        }
+      }
+      &:hover {
+        color: #333;
+        background-color: #eee;
+      }
+    }
+  }
 }
 
-.layer-list {
-  width: 80%;
+.layer-list-container {
+  width: 40%;
   float: left;
 }
 
-/* .layer-detail {
+.layer-detail-container {
   width: 40%;
   height: 100%;
-  background-color: #333;
+  min-height: 800px;
   float: left;
-} */
+
+  & .no-layer-selected {
+    font-weight: 500;
+    font-size: 20px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  & .layers-all-layer {
+    padding: 5px 10px;
+    margin: 0 11px 0 2px;
+  }
+  & .layers-all-header {
+    cursor: default;
+    padding-left: 0;
+
+    & h3 {
+      font-size: 20px;
+      margin: 5px;
+    }
+    & h5 {
+      font-size: 14px;
+      margin: 0 5px;
+    }
+  }
+}

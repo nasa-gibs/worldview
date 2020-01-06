@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SearchLayerRow from './search-layer-row';
 import CategoryLayerRow from './category-layer-row';
+
 import util from '../../../util/util';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 
@@ -18,6 +19,7 @@ class LayerList extends React.Component {
       expandedDateRangesLayers: [],
       sourceMetadata: {},
       expandedMeasurements: props.expandedMeasurements,
+      selectedLayer: null,
       selectedProjection: props.selectedProjection
     };
   }
@@ -32,23 +34,32 @@ class LayerList extends React.Component {
    * Toggles expansion of metadata for a layer given that layer's ID and makes
    * an AJAX request for the metadata if it's missing
    *
-   * @method toggleMetadataExpansion
+   * @method showLayerMetadata
    * @param {string} layer - the layer to be toggled
    * @return {void}
    */
-  toggleMetadataExpansion(layerId) {
+  showLayerMetadata(layerId) {
     var { expandedMetadataLayers } = this.state;
-    var { filteredRows } = this.props;
-    var isMetadataExpanded = expandedMetadataLayers.find(id => id === layerId);
+    var { filteredRows, showMetadataForLayer } = this.props;
+    const isMetadataExpanded = expandedMetadataLayers.find(id => id === layerId);
+    const layer = filteredRows.find(l => l.id === layerId);
+
     if (isMetadataExpanded) {
       expandedMetadataLayers.splice(expandedMetadataLayers.indexOf(layerId), 1);
       expandedMetadataLayers = expandedMetadataLayers.filter(
         id => id !== layerId
       );
+      showMetadataForLayer(layer);
+      this.setState({
+        selectedLayer: layerId
+      });
     } else {
       expandedMetadataLayers.push(layerId);
-      this.setState({ expandedMetadataLayers: expandedMetadataLayers });
-      var layer = filteredRows.find(l => l.id === layerId);
+      this.setState({
+        expandedMetadataLayers: expandedMetadataLayers,
+        selectedLayer: layerId
+      });
+
       if (!layer.metadata) {
         var { origin, pathname } = window.location;
         var errorMessage = '<p>There was an error loading layer metadata.</p>';
@@ -65,7 +76,10 @@ class LayerList extends React.Component {
             );
             layer.metadata = isMetadataSnippet ? body : errorMessage;
             this.setState({ layers: filteredRows });
+            showMetadataForLayer(layer);
           });
+      } else {
+        showMetadataForLayer(layer);
       }
     }
   }
@@ -153,7 +167,6 @@ class LayerList extends React.Component {
                 getSourceMetadata={this.getSourceMetadata.bind(this)}
                 updateSelectedMeasurement={updateSelectedMeasurement}
                 activeMeasurementIndex={activeMeasurementIndex}
-                toggleMetadataExpansion={id => this.toggleMetadataExpansion(id)}
               />
             );
           }
@@ -163,25 +176,31 @@ class LayerList extends React.Component {
   }
 
   renderSearchList(filteredRows) {
-    const { expandedMetadataLayers, expandedDateRangesLayers } = this.state;
-    var { addLayer, removeLayer, activeLayers } = this.props;
+    const {
+      expandedMetadataLayers,
+      expandedDateRangesLayers,
+      selectedLayer
+    } = this.state;
+    const { addLayer, removeLayer, activeLayers } = this.props;
+
     return filteredRows.length < 1 ? (
       <div className="no-results"> No results. </div>
     ) : (
       filteredRows.map(layer => {
-        var isEnabled = activeLayers.some(l => l.id === layer.id);
-        var isMetadataExpanded = expandedMetadataLayers.includes(layer.id);
-        var isDateRangesExpanded = expandedDateRangesLayers.includes(layer.id);
+        const isEnabled = activeLayers.some(l => l.id === layer.id);
+        const isMetadataExpanded = expandedMetadataLayers.includes(layer.id);
+        const isMetadataShowing = isMetadataExpanded && layer.id === selectedLayer;
+        const isDateRangesExpanded = expandedDateRangesLayers.includes(layer.id);
         return (
           <SearchLayerRow
             key={layer.id}
             layer={layer}
             isEnabled={isEnabled}
-            isMetadataExpanded={isMetadataExpanded}
+            isMetadataShowing={isMetadataShowing}
             isDateRangesExpanded={isDateRangesExpanded}
             onState={addLayer}
             offState={removeLayer}
-            toggleMetadataExpansion={id => this.toggleMetadataExpansion(id)}
+            showLayerMetadata={id => this.showLayerMetadata(id)}
             toggleDateRangesExpansion={id => this.toggleDateRangesExpansion(id)}
           />
         );
