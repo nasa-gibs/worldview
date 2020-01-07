@@ -1,9 +1,4 @@
 
-/* Bootstrap override */
-.tooltip {
-  z-index: 1040;
-}
-
 .wv-tooltip-case {
   display: inline-block;
   position: relative;

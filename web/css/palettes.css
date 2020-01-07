@@ -206,6 +206,10 @@
   cursor: crosshair;
 }
 
+.wv-palette-tooltip .tooltip {
+  z-index: 1040;
+}
+
 .wv-palettes-class-detail {
   margin: 2px 5px 4px 0;
 }
