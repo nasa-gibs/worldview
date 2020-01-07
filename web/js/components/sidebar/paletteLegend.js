@@ -398,7 +398,6 @@ class PaletteLegend extends React.Component {
         this['canvas_' + index] = React.createRef();
         return this.renderScale(colorMap, index, paletteLegends.length > 1);
       } else if (colorMap.type === 'classification') {
-        console.log(paletteLegends);
         return this.renderClasses(colorMap, index);
       }
     });

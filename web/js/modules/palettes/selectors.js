@@ -342,6 +342,29 @@ export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   return state.palettes[group][layerId];
 }
+export function initDisabledSelector(
+  layerId,
+  disabledStr,
+  index,
+  palettes,
+  state
+) {
+  const disabled = disabledStr.split('-');
+  for (var i = 0; i < disabled.length; i++) { disabled[i] = +disabled[i]; }
+  let newPalettes = prepare(layerId, palettes, state);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled
+          }
+        }
+      }
+    }
+  });
+  return toggleLookup(layerId, newPalettes, state);
+}
 export function setDisabledSelector(
   layerId,
   classIndex,

@@ -164,13 +164,19 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
       state.palettes[groupName],
       state
     );
+    let hasDisabled = false;
+    newActivePalettesObj[layerId].maps.forEach(colorMap => {
+      if (colorMap.disabled && colorMap.disabled.length) {
+        hasDisabled = true;
+      }
+    });
     dispatch({
       type: SET_DISABLED_CLASSIFICATION,
       groupName: groupName,
       activeString: groupName,
       layerId,
       palettes: newActivePalettesObj,
-      props: { disabled: classIndex }
+      props: { disabled: hasDisabled }
     });
   };
 };

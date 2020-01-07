@@ -228,8 +228,7 @@ export function serializeLayers(currentLayers, state, groupName) {
         value: def.opacity
       });
     }
-
-    if (def.palette && (def.custom || def.min || def.max || def.squash)) {
+    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
@@ -461,7 +460,7 @@ const createLayerArrayFromState = function(state, config) {
       lodashEachRight(state, function(layerDef) {
         let hidden = false;
         let opacity = 1.0;
-        let max, min, squash, custom;
+        let max, min, squash, custom, disabled;
         if (!config.layers[layerDef.id]) {
           console.warn('No such layer: ' + layerDef.id);
           return;
@@ -473,6 +472,10 @@ const createLayerArrayFromState = function(state, config) {
           if (attr.id === 'opacity') {
             opacity = util.clamp(parseFloat(attr.value), 0, 1);
             if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+          }
+          if (attr.id === 'disabled') {
+            const values = util.toArray(attr.value.split(';'));
+            disabled = values;
           }
           if (attr.id === 'max' && typeof attr.value === 'string') {
             const maxArray = [];
@@ -539,7 +542,8 @@ const createLayerArrayFromState = function(state, config) {
             ...(isArray(custom) && { custom }),
             ...(isArray(min) && { min }),
             ...(isArray(squash) && { squash }),
-            ...(isArray(max) && { max })
+            ...(isArray(max) && { max }),
+            ...(isArray(disabled) && { disabled })
           },
           layerArray,
           config.layers

@@ -12,7 +12,8 @@ import {
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
-  SET_THRESHOLD_RANGE_AND_SQUASH
+  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_DISABLED_CLASSIFICATION
 } from '../palettes/constants';
 import {
   CLEAR_VECTORSTYLE,
@@ -67,7 +68,8 @@ export function layerReducer(state = initialState, action) {
           [action.index]: { visible: { $set: action.visible } }
         }
       });
-    case SET_THRESHOLD_RANGE_AND_SQUASH: {
+    case SET_THRESHOLD_RANGE_AND_SQUASH:
+    case SET_DISABLED_CLASSIFICATION: {
       const layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });

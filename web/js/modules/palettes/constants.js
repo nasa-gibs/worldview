@@ -16,6 +16,7 @@ export const PALETTE_STRINGS_PERMALINK_ARRAY = [
   'palette',
   'squash',
   'min',
-  'max'
+  'max',
+  'disabled'
 ];
-export const CUSTOM_PALETTE_TYPE_ARRAY = ['custom', 'squash', 'min', 'max'];
+export const CUSTOM_PALETTE_TYPE_ARRAY = ['custom', 'squash', 'min', 'max', 'disabled'];
