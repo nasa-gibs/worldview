@@ -258,8 +258,8 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-          ''
-        )}
+            ''
+          )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
@@ -342,8 +342,8 @@ class PaletteLegend extends React.Component {
               const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;
               const palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
-              const parentLayerId = isSubLayer ? parentLayer.id : '';
-              const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId + layerGroupName;
+              const parentLayerId = isSubLayer ? '-' + parentLayer.id : '';
+              const keyId = legend.id + '-color' + parentLayerId + '-' + layerGroupName + keyIndex;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
 
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
