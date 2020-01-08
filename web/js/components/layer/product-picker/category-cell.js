@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
  * @class LayerList
  * @extends React.Component
  */
-class Category extends React.Component {
+class CategoryCell extends React.Component {
   render() {
     const {
       category,
@@ -114,7 +114,7 @@ var interestCssName = function(name) {
     return name;
   }
 };
-Category.propTypes = {
+CategoryCell.propTypes = {
   category: PropTypes.object,
   categoryType: PropTypes.string,
   drawMeasurements: PropTypes.func,
@@ -122,4 +122,4 @@ Category.propTypes = {
   measurementConfig: PropTypes.object
 };
 
-export default Category;
+export default CategoryCell;

@@ -157,7 +157,7 @@ class LayerRow extends React.Component {
   renderSourceContent(measurement, source) {
     return (
       <TabContent
-        className="col-md-9 col-sm-12"
+        className=""
         id={measurement.id + '-' + source.id}
       >
         <TabPane>
@@ -205,7 +205,7 @@ class LayerRow extends React.Component {
     let validActiveIndex = activeSourceIndex;
 
     const Tabs = (
-      <Nav vertical className="source-tabs col-md-3 col-sm-12">
+      <Nav vertical className="source-tabs">
         {sources
           .sort((a, b) => a.title.localeCompare(b.title))
           .map((source, index) => {
@@ -230,11 +230,9 @@ class LayerRow extends React.Component {
     const Content = this.renderSourceContent(measurement, sources[validActiveIndex]);
 
     return (
-      <div className="container">
-        <Row>
-          {Tabs}
-          {Content}
-        </Row>
+      <div className="measure-row-contents">
+        {Tabs}
+        {Content}
       </div>
     );
   }
