@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util.js';
-import { ListGroup, ListGroupItem } from 'reactstrap';
 import Scrollbars from '../../util/scrollbar';
 
 class MeasurementMetadataDetail extends React.Component {
@@ -35,7 +34,9 @@ class MeasurementMetadataDetail extends React.Component {
     const { source, height } = this.props;
     const { sourceMetaData } = this.state;
     if (!source) {
-      return (<div> Select a source. </div>);
+      return (
+        <h3 className="no-results"> No item selected </h3>
+      );
     }
     const { description, title } = source;
 

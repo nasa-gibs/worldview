@@ -140,7 +140,7 @@ class LayerList extends React.Component {
     const { addLayer, removeLayer, activeLayers } = this.props;
 
     return filteredRows.length < 1 ? (
-      <div className="no-results"> No results. </div>
+      <h3 className="no-results"> No results found. </h3>
     ) : (
       filteredRows.map(layer => {
         const isEnabled = activeLayers.some(l => l.id === layer.id);
