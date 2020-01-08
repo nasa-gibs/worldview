@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
-import CategoryList from './category-list';
+import CategoryGrid from './category-grid';
 import ProductPickerHeader from './header';
 import {
   toLower as lodashToLower,
@@ -394,9 +394,9 @@ class ProductPicker extends React.Component {
                     ))}
                   </Nav>
                   <Scrollbars style={{ maxHeight: height + 'px' }}>
-                    <div className="product-outter-list-case">
-                      {isCategoryDisplay && (
-                        <CategoryList
+                    <div>
+                      {isCategoryDisplay ? (
+                        <CategoryGrid
                           categories={lodashValues(categoryConfig[categoryType])}
                           measurementConfig={measurementConfig}
                           drawMeasurements={this.drawMeasurements.bind(this)}
@@ -404,7 +404,7 @@ class ProductPicker extends React.Component {
                           categoryType={categoryType}
                           width={width}
                         />
-                      )}
+                      ) : this.renderLayerList()}
                     </div>
                   </Scrollbars>
                 </>
