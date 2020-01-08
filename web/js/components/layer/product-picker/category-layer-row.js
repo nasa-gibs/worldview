@@ -47,7 +47,8 @@ class LayerRow extends React.Component {
       measurement,
       activeLayers,
       removeLayer,
-      addLayer
+      addLayer,
+      selectedDate
     } = this.props;
     const { projection } = this.state;
     const OrbitSourceList = [];
@@ -71,10 +72,11 @@ class LayerRow extends React.Component {
               measurementId={measurement.id}
               key={measurement.id + layer.id}
               checked={!!lodashFind(activeLayers, { id: layer.id })}
-              layerId={layer.id}
+              layer={layer}
               title={orbitTitle}
               removeLayer={removeLayer}
               addLayer={addLayer}
+              selectedDate={selectedDate}
             />
           );
         } else {
@@ -83,10 +85,11 @@ class LayerRow extends React.Component {
               measurementId={measurement.id}
               key={measurement.id + layer.id}
               checked={!!lodashFind(activeLayers, { id: layer.id })}
-              layerId={layer.id}
+              layer={layer}
               title={layer.title}
               removeLayer={removeLayer}
               addLayer={addLayer}
+              selectedDate={selectedDate}
             />
           );
         }
@@ -285,6 +288,7 @@ LayerRow.propTypes = {
   measurement: PropTypes.object,
   projection: PropTypes.string,
   removeLayer: PropTypes.func,
+  selectedDate: PropTypes.object,
   setSourceIndex: PropTypes.func,
   sourceMetadata: PropTypes.object,
   updateSelectedMeasurement: PropTypes.func

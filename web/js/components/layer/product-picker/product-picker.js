@@ -21,10 +21,19 @@ import {
   hasMeasurementSource
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
-import { datesinDateRanges } from '../../../modules/layers/util.js';
+import { availableAtDate } from '../../../modules/layers/util.js';
 import LayerMetadataDetail from './layer-metadata-detail';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
-import { ModalBody, ModalHeader, Nav, NavItem, NavLink, Form } from 'reactstrap';
+import {
+  ModalBody,
+  ModalHeader,
+  Nav,
+  NavItem,
+  NavLink,
+  Form,
+  Tooltip
+} from 'reactstrap';
+import moment from 'moment';
 
 /*
  * A scrollable list of layers
@@ -44,7 +53,8 @@ class ProductPicker extends React.Component {
       filteredRows: props.filteredRows,
       inputValue: '',
       filterByAvailable: true,
-      selectedLayer: null
+      selectedLayer: null,
+      tooltipFilterAvailableOpen: false
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
   }
@@ -59,7 +69,7 @@ class ProductPicker extends React.Component {
     const {
       filterProjections,
       filterSearch,
-      filterByDate,
+      selectedDate,
       allLayers
     } = this.props;
     const { categoryType, filterByAvailable } = this.state;
@@ -84,7 +94,7 @@ class ProductPicker extends React.Component {
         return !(
           filterProjections(layer) ||
           filterSearch(layer, val, terms) ||
-          (filterByAvailable && !filterByDate(layer))
+          (filterByAvailable && !availableAtDate(layer, selectedDate))
         );
       });
 
@@ -184,10 +194,59 @@ class ProductPicker extends React.Component {
     this.setState({ measurementSourceIndex });
   }
 
-  renderLayerList() {
+  toggleTooltip() {
+    this.setState({
+      tooltipFilterAvailableOpen: !this.state.tooltipFilterAvailableOpen
+    });
+  }
+
+  renderLayerFilters() {
     const {
       filteredRows,
       filterByAvailable,
+      tooltipFilterAvailableOpen
+    } = this.state;
+    const { selectedDate } = this.props;
+    const diplayDate = moment(selectedDate).format('YYYY MMM DD');
+
+    return (
+      <div className="layer-filters-container">
+        <div className="filter-controls">
+          <h3>Filters</h3>
+          <Form>
+            <div className="custom-control custom-switch">
+              <input
+                id="unit-toggle"
+                className="custom-control-input"
+                type="checkbox"
+                onChange={this.toggleFilterByAvailable.bind(this)}
+                defaultChecked={filterByAvailable}/>
+              <label className="custom-control-label" htmlFor="unit-toggle">
+                Filter by availability
+              </label>
+              <i id="availability-filter" className="fa fa-info-circle" />
+              <Tooltip
+                placement="right"
+                isOpen={tooltipFilterAvailableOpen}
+                target="availability-filter"
+                toggle={this.toggleTooltip.bind(this)}>
+                  If enabled, only show results which would be visible at the
+                  currently selected date: <br/>
+                <span style={{ fontFamily: 'monospace' }}> {diplayDate} </span>
+              </Tooltip>
+            </div>
+          </Form>
+        </div>
+        <div className="results-text">
+          Showing {filteredRows.length} results
+        </div>
+      </div>
+    );
+  }
+
+  renderLayerList() {
+    const {
+      filteredRows,
       listType,
       categoryType,
       category,
@@ -198,6 +257,7 @@ class ProductPicker extends React.Component {
     const {
       categoryConfig,
       selectedProjection,
+      selectedDate,
       activeLayers,
       measurementConfig,
       hasMeasurementSource,
@@ -226,29 +286,7 @@ class ProductPicker extends React.Component {
 
     return (
       <>
-        {listType === 'search' &&
-          <div className="layer-filters-container">
-            <div className="filter-controls">
-              <h3>Filters</h3>
-              <Form>
-                <div className="custom-control custom-switch">
-                  <input
-                    id="unit-toggle"
-                    className="custom-control-input"
-                    type="checkbox"
-                    onChange={this.toggleFilterByAvailable.bind(this)}
-                    defaultChecked={filterByAvailable}/>
-                  <label className="custom-control-label" htmlFor="unit-toggle">
-                    Filter by availability
-                  </label>
-                </div>
-              </Form>
-            </div>
-            <div className="results-text">
-              Showing {filteredRows.length} results
-            </div>
-          </div>
-        }
+        {listType === 'search' && this.renderLayerFilters() }
 
         <div className={listContainerClass}>
           <Scrollbars style={{ maxHeight: height + 'px' }}>
@@ -262,6 +300,7 @@ class ProductPicker extends React.Component {
                 category={category}
                 categoryConfig={categoryConfig[categoryType]}
                 selectedProjection={selectedProjection}
+                selectedDate={selectedDate}
                 filteredRows={filteredRows}
                 hasMeasurementSetting={hasMeasurementSetting}
                 hasMeasurementSource={hasMeasurementSource}
@@ -407,6 +446,7 @@ ProductPicker.propTypes = {
   modalView: PropTypes.string,
   onToggle: PropTypes.func,
   removeLayer: PropTypes.func,
+  selectedDate: PropTypes.object,
   selectedProjection: PropTypes.string,
   width: PropTypes.number
 };
@@ -442,6 +482,7 @@ function mapStateToProps(state, ownProps) {
     categoryConfig: config.categories,
     measurementConfig: config.measurements,
     layerConfig: config.layers,
+    selectedDate: date.selected,
     height,
     width,
     allLayers,
@@ -454,9 +495,6 @@ function mapStateToProps(state, ownProps) {
     },
     filterSearch: (layer, val, terms) => {
       return filterSearch(layer, val, terms, config, proj.id);
-    },
-    filterByDate: (layer) => {
-      return filterByDate(layer, date.selected);
     },
     hasMeasurementSource: current => {
       return hasMeasurementSource(current, config, proj.id);
@@ -501,20 +539,4 @@ const filterSearch = function(layer, val, terms, config, projId) {
     if (filtered) return false;
   });
   return filtered;
-};
-
-/**
-  *
-  * @param {*} layer - layer definition
-  * @param {*} date - current selected app date
-  */
-const filterByDate = (layer, date) => {
-  const availableDates = datesinDateRanges(layer, date);
-  if (layer.endDate && layer.inactive) {
-    return date < new Date(layer.endDate) && date > new Date(layer.startDate);
-  }
-  if (!availableDates.length && !layer.endDate && !layer.inactive) {
-    return date > new Date(layer.startDate);
-  }
-  return availableDates.length > 0;
 };

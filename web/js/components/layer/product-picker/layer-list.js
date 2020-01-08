@@ -13,7 +13,7 @@ class LayerList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expandedMetadataLayers: [],
+      loadedMetadataLayers: [],
       expandedDateRangesLayers: [],
       expandedMeasurements: props.expandedMeasurements,
       selectedLayer: null,
@@ -30,14 +30,14 @@ class LayerList extends React.Component {
    * @return {void}
    */
   showLayerMetadata(layerId) {
-    var { expandedMetadataLayers } = this.state;
+    var { loadedMetadataLayers } = this.state;
     var { filteredRows, showMetadataForLayer } = this.props;
-    const isMetadataExpanded = expandedMetadataLayers.find(id => id === layerId);
+    const isMetadataExpanded = loadedMetadataLayers.find(id => id === layerId);
     const layer = filteredRows.find(l => l.id === layerId);
 
     if (isMetadataExpanded) {
-      expandedMetadataLayers.splice(expandedMetadataLayers.indexOf(layerId), 1);
-      expandedMetadataLayers = expandedMetadataLayers.filter(
+      loadedMetadataLayers.splice(loadedMetadataLayers.indexOf(layerId), 1);
+      loadedMetadataLayers = loadedMetadataLayers.filter(
         id => id !== layerId
       );
       showMetadataForLayer(layer);
@@ -45,9 +45,9 @@ class LayerList extends React.Component {
         selectedLayer: layerId
       });
     } else {
-      expandedMetadataLayers.push(layerId);
+      loadedMetadataLayers.push(layerId);
       this.setState({
-        expandedMetadataLayers: expandedMetadataLayers,
+        loadedMetadataLayers: loadedMetadataLayers,
         selectedLayer: layerId
       });
 
@@ -92,7 +92,8 @@ class LayerList extends React.Component {
       hasMeasurementSetting,
       updateSelectedMeasurement,
       categoryConfig,
-      setSourceIndex
+      setSourceIndex,
+      selectedDate
     } = this.props;
 
     const categoryToUse = category || categoryConfig.All;
@@ -121,6 +122,7 @@ class LayerList extends React.Component {
                 isSelected={isSelected}
                 updateSelectedMeasurement={updateSelectedMeasurement}
                 setSourceIndex={setSourceIndex}
+                selectedDate={selectedDate}
               />
             );
           }
@@ -131,7 +133,7 @@ class LayerList extends React.Component {
 
   renderSearchList(filteredRows) {
     const {
-      expandedMetadataLayers,
+      loadedMetadataLayers,
       expandedDateRangesLayers,
       selectedLayer
     } = this.state;
@@ -142,7 +144,7 @@ class LayerList extends React.Component {
     ) : (
       filteredRows.map(layer => {
         const isEnabled = activeLayers.some(l => l.id === layer.id);
-        const isMetadataExpanded = expandedMetadataLayers.includes(layer.id);
+        const isMetadataExpanded = loadedMetadataLayers.includes(layer.id);
         const isMetadataShowing = isMetadataExpanded && layer.id === selectedLayer;
         const isDateRangesExpanded = expandedDateRangesLayers.includes(layer.id);
         return (
@@ -191,9 +193,11 @@ LayerList.propTypes = {
   listType: PropTypes.string,
   measurementConfig: PropTypes.object,
   removeLayer: PropTypes.func,
+  selectedDate: PropTypes.object,
   selectedMeasurement: PropTypes.string,
   selectedProjection: PropTypes.string,
   setSourceIndex: PropTypes.func,
+  showMetadataForLayer: PropTypes.func,
   updateSelectedMeasurement: PropTypes.func
 };
 

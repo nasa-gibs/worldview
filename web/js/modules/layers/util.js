@@ -17,6 +17,23 @@ import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
 
+/**
+  *
+  * @param {*} def - layer definition
+  * @param {*} date - current selected app date
+  * @returns {Boolean} - True if layer is available at date, otherwise false
+  */
+export function availableAtDate(def, date) {
+  const availableDates = datesinDateRanges(def, date);
+  if (def.endDate && def.inactive) {
+    return date < new Date(def.endDate) && date > new Date(def.startDate);
+  }
+  if (!availableDates.length && !def.endDate && !def.inactive) {
+    return date > new Date(def.startDate);
+  }
+  return availableDates.length > 0;
+};
+
 export function getOrbitTrackTitle(def) {
   if (def.daynight && def.track) {
     return lodashStartCase(def.track) + '/' + lodashStartCase(def.daynight);
