@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SearchLayerRow from './search-layer-row';
 import CategoryLayerRow from './category-layer-row';
-
-import util from '../../../util/util';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 
 /*
@@ -17,17 +15,10 @@ class LayerList extends React.Component {
     this.state = {
       expandedMetadataLayers: [],
       expandedDateRangesLayers: [],
-      sourceMetadata: {},
       expandedMeasurements: props.expandedMeasurements,
       selectedLayer: null,
       selectedProjection: props.selectedProjection
     };
-  }
-
-  toggleMeasurementExpansion(measurementId) {
-    var { expandedMeasurements } = this.state;
-    if (expandedMeasurements.measurementId) {
-    }
   }
 
   /*
@@ -84,45 +75,9 @@ class LayerList extends React.Component {
     }
   }
 
-  getSourceMetadata(source) {
-    if (source.description) {
-      util.get('config/metadata/layers/' + source.description + '.html').then(data => {
-        if (data) {
-          const sourceMetadata = this.state.sourceMetadata;
-          sourceMetadata[source.description] = { data: data };
-          this.setState({ sourceMetaData: sourceMetadata });
-        }
-      });
-    }
-  }
-
-  /*
-   * Toggles expansion of date ranges for a layer given that layer's ID
-   *
-   * @method toggleDateRangesExpansion
-   * @param {string} layer - The layer being toggled
-   * @return {void}
-   */
-  toggleDateRangesExpansion(layerId) {
-    var { expandedDateRangesLayers } = this.state;
-    var isDateRangesExpanded = expandedDateRangesLayers.find(
-      id => id === layerId
-    );
-    if (isDateRangesExpanded) {
-      expandedDateRangesLayers = expandedDateRangesLayers.filter(
-        id => id !== layerId
-      );
-    } else {
-      expandedDateRangesLayers.push(layerId);
-      this.setState({ expandedDateRangesLayers: expandedDateRangesLayers });
-    }
-  }
-
   renderCategoryList() {
     const {
-      expandedMeasurements,
-      activeMeasurementIndex,
-      sourceMetadata
+      expandedMeasurements
     } = this.state;
     const {
       measurementConfig,
@@ -136,7 +91,8 @@ class LayerList extends React.Component {
       selectedMeasurement,
       hasMeasurementSetting,
       updateSelectedMeasurement,
-      categoryConfig
+      categoryConfig,
+      setSourceIndex
     } = this.props;
 
     const categoryToUse = category || categoryConfig.All;
@@ -155,7 +111,6 @@ class LayerList extends React.Component {
                 activeLayers={activeLayers}
                 category={categoryToUse}
                 measurement={current}
-                sourceMetadata={sourceMetadata}
                 measurementConfig={measurementConfig}
                 layerConfig={layerConfig}
                 isExpanded={isMeasurementExpanded}
@@ -164,9 +119,8 @@ class LayerList extends React.Component {
                 removeLayer={removeLayer}
                 projection={selectedProjection}
                 isSelected={isSelected}
-                getSourceMetadata={this.getSourceMetadata.bind(this)}
                 updateSelectedMeasurement={updateSelectedMeasurement}
-                activeMeasurementIndex={activeMeasurementIndex}
+                setSourceIndex={setSourceIndex}
               />
             );
           }
@@ -218,13 +172,8 @@ class LayerList extends React.Component {
       </div>
     );
   }
-
-  _setListRef(ref) {
-    this._layerList = ref;
-  }
 }
 LayerList.defaultProps = {
-  activeMeasurementIndex: 0,
   expandedMeasurements: {},
   listType: 'search'
 };
@@ -244,6 +193,7 @@ LayerList.propTypes = {
   removeLayer: PropTypes.func,
   selectedMeasurement: PropTypes.string,
   selectedProjection: PropTypes.string,
+  setSourceIndex: PropTypes.func,
   updateSelectedMeasurement: PropTypes.func
 };
 

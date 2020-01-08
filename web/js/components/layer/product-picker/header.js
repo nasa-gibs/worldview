@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import {
   InputGroup,
   Input,
-  Button
+  Button,
+  Breadcrumb,
+  BreadcrumbItem
 } from 'reactstrap';
 
 import util from '../../../util/util';
@@ -65,7 +67,7 @@ class ProductPickerHeader extends React.Component {
         {isBreadCrumb ? (
           <React.Fragment>
             {BackButton}
-            {/* <Breadcrumb tag="nav" className="layer-bread-crumb">
+            <Breadcrumb tag="nav" className="layer-bread-crumb">
               <BreadcrumbItem
                 tag="a"
                 title="Back to Layer Categories"
@@ -81,7 +83,7 @@ class ProductPickerHeader extends React.Component {
                     ? category.title
                     : ''}
               </BreadcrumbItem>
-            </Breadcrumb> */}
+            </Breadcrumb>
           </React.Fragment>
         ) : isSearching ? (
           <React.Fragment>{BackButton}</React.Fragment>
