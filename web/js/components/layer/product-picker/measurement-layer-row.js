@@ -42,12 +42,14 @@ class MeasurementLayerRow extends React.Component {
     const layerIsAvailable = availableAtDate(layer, selectedDate);
     const diplayDate = moment(selectedDate).format('YYYY MMM DD');
     const listItemClass = !layerIsAvailable ? 'unavailable' : '';
+    // Replace periods in id since period causes issue with tooltip targeting
+    const itemElementId = 'checkbox-case-' + layer.id.split('.').join('-');
 
     return (
       <ListGroupItem
         key={measurementId + '-' + layer.id}
         onClick={this.onClick.bind(this)}
-        id={'checkbox-case-' + layer.id}
+        id={itemElementId}
         className={listItemClass}
       >
         <Checkbox
@@ -63,7 +65,7 @@ class MeasurementLayerRow extends React.Component {
               <Tooltip
                 placement="top"
                 isOpen={tooltipOpen}
-                target={'checkbox-case-' + layer.id}
+                target={itemElementId}
                 toggle={this.toggleTooltip.bind(this)}>
                     This layer has no visible content at the currently selected date: <br/>
                 <span style={{ fontFamily: 'monospace' }}> {diplayDate} </span>
