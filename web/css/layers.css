@@ -39,7 +39,7 @@
 .layer-modal-content {
   overflow: auto;
   position: relative;
-  padding-top: 3px;
+  padding: 5px 0;
 }
 
 .stamp {
@@ -49,7 +49,7 @@
 
 .layer-category {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: #333;
   width: 310px;
   height: 230px;
   overflow: hidden;
@@ -165,19 +165,20 @@
 
 .layers-all .layers-all-layer {
   margin-top: 5px;
-  padding: 0 0 0.5em 0.7em;
+  padding: 0 0 0.5em 1.2em;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
   border: 0;
   position: relative;
-  background: rgba(0, 0, 0, 0.85);
-  padding-left: 1.2em;
+  background: #333;
   line-height: 0;
 
+  &.measurement-row {
+    padding: 0 0 0 8px;
+  }
   &.selected {
-    border-bottom-right-radius: 25px;
     background: #444;
     border: 2px solid #d54f21;
   }
@@ -206,13 +207,16 @@
 .layers-all-header > h3,
 .measurement-row-header > h3 {
   color: #ddd;
-  font-size: 15px;
+  font-size: 18px;
   line-height: 100%;
   position: relative;
   display: block;
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   margin-right: 45px;
+}
+.layers-all-header > h3 {
+  font-size: 15px;
 }
 
 .layers-all .layers-all-layer h5 {
@@ -225,16 +229,10 @@
   font-style: italic;
 }
 
-.layer-description,
-.source-metadata {
-  padding-top: 11px;
-}
-
 .layers-all .layers-all-layer .source-metadata {
-  margin-top: 10px;
+  margin-top: 15px;
   border-top-width: 1px;
   color: #ddd;
-  padding-right: 1.2em;
 }
 
 .layer-date-wrap {
@@ -305,7 +303,7 @@
 }
 
 /* Layer search rows */
-.layers-all-header {
+.layer-list-container .layers-all-header {
   cursor: pointer;
   padding-left: 30px;
   padding-top: 0.5em;
@@ -412,11 +410,13 @@
 }
 
 .measurement-row .source-nav-item {
-  margin-left: 10px;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   font-weight: 300;
+  & .nav-link {
+    padding: 8px 5px;
+  }
 }
 
 .measurement-row .source-nav-item:hover {
@@ -426,6 +426,7 @@
 
 .measurement-row > .container {
   margin-top: 10px;
+  padding-bottom: 5px;
 }
 
 .measurement-row .source-nav-item.active {
@@ -444,12 +445,12 @@
 .measurement-row .source-sub-group .list-group-item {
   background: transparent;
   border-color: transparent;
-  padding: 6px 10px;
+  padding: 6px 5px;
   cursor: pointer;
-}
 
-.measurement-row .source-sub-group .list-group-item:hover {
-  background: #ffffff4d;
+  &:hover {
+    background: #ffffff4d;
+  }
 }
 
 .measurement-row .source-sub-group .wv-checkbox {
@@ -695,7 +696,7 @@
 
   & .product-outter-list-case {
     width: 100%;
-    padding: 0 11px 13px 0;
+    padding: 0 11px 5px 0;
   }
   & .modal-header {
     border-bottom: none;
@@ -776,15 +777,18 @@
   float: left;
 
   & .filter-controls {
+    min-height: 150px;
     background-color: #333;
     margin: 0 5px;
     color: #eee;
     padding: 10px 8px 15px;
     & h3 {
-      color: #eee;
-      font-weight: 600;
+      color: #ddd;
       font-size: 18px;
-      margin: 0 0 15px;
+      line-height: 100%;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+      margin: 0 0 20px;
     }
     & .custom-control {
       display: inline;
@@ -795,7 +799,7 @@
     }
   }
 
-  & .layer-categories-list {
+  /* & .layer-categories-list {
     & h4 {
       text-transform: capitalize;
       font-size: 18px;
@@ -826,19 +830,38 @@
         background-color: #eee;
       }
     }
-  }
+  } */
 }
 
 .layer-list-container {
-  width: 40%;
   float: left;
+  &.search {
+    width: 40%;
+  }
+  &.browse {
+    width: 50%;
+    padding-left: 5px;
+  }
 }
 
 .layer-detail-container {
-  width: 40%;
   height: 100%;
-  min-height: 800px;
   float: left;
+  padding-right: 2px;
+
+  &.search {
+    width: 40%;
+  }
+  &.browse {
+    width: 50%;
+
+    & h2 {
+      color: #eee;
+      font-size: 24px;
+      margin: 10px 0;
+      font-weight: 400;
+    }
+  }
 
   & .no-layer-selected {
     font-weight: 500;
@@ -848,11 +871,12 @@
   }
   & .layers-all-layer {
     padding: 5px 10px;
+    margin: 0 5px 0 2px;
+  }
+  & .scrollbar-visible .layers-all-layer {
     margin: 0 11px 0 2px;
   }
   & .layers-all-header {
-    cursor: default;
-    padding-left: 0;
 
     & h3 {
       font-size: 20px;

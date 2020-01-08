@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import CategoryList from './category-list';
@@ -9,10 +10,9 @@ import {
   each as lodashEach,
   includes as lodashIncludes
 } from 'lodash';
+import lodashDebounce from 'lodash/debounce';
 import Scrollbars from '../../util/scrollbar';
 import googleTagManager from 'googleTagManager';
-import lodashDebounce from 'lodash/debounce';
-import { connect } from 'react-redux';
 import { addLayer, removeLayer } from '../../../modules/layers/actions';
 import {
   getLayersForProjection,
@@ -22,7 +22,8 @@ import {
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
 import { datesinDateRanges } from '../../../modules/layers/util.js';
-import MetadataDetail from './metadata-detail';
+import LayerMetadataDetail from './layer-metadata-detail';
+import MeasurementMetadataDetail from './measurement-metadata-detail';
 import { ModalBody, ModalHeader, Nav, NavItem, NavLink, Form } from 'reactstrap';
 
 /*
@@ -39,6 +40,7 @@ class ProductPicker extends React.Component {
       categoryType: Object.keys(props.categoryConfig)[1],
       category: props.category,
       selectedMeasurement: null,
+      measurementSourceIndex: 0,
       filteredRows: props.filteredRows,
       inputValue: '',
       filterByAvailable: true,
@@ -174,39 +176,12 @@ class ProductPicker extends React.Component {
     this.runSearch(inputValue);
   }
 
-  showMetadataForLayer(layer) {
-    this.setState({
-      selectedLayer: layer
-    });
+  showMetadataForLayer(selectedLayer) {
+    this.setState({ selectedLayer });
   }
 
-  renderLayerCategoriesMenu() {
-    const { categoryType, category } = this.state;
-    const { categoryConfig } = this.props;
-    const categories = categoryConfig[categoryType];
-
-    return (
-      <div className="layer-categories-list">
-        <h4> {categoryType} </h4>
-        <ul >
-
-          {Object.keys(categories).map((categoryName, idx) => {
-          // const firstMeasurementInCategory = category.measurements[0];
-          // const selectedMeasurement = measurementConfig[firstMeasurementInCategory].id;
-            const selectCategory = categories[categoryName];
-
-            return (
-              <li
-                key={idx}
-                onClick={() => this.drawMeasurements(selectCategory)}
-                className={category.title === categoryName ? 'selected' : ''}>
-                {categoryName}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
+  setSourceIndex(measurementSourceIndex) {
+    this.setState({ measurementSourceIndex });
   }
 
   renderLayerList() {
@@ -217,7 +192,8 @@ class ProductPicker extends React.Component {
       categoryType,
       category,
       selectedMeasurement,
-      selectedLayer
+      selectedLayer,
+      measurementSourceIndex
     } = this.state;
     const {
       categoryConfig,
@@ -232,64 +208,85 @@ class ProductPicker extends React.Component {
       height
     } = this.props;
 
+    const listContainerClass = listType === 'search'
+      ? 'layer-list-container search'
+      : 'layer-list-container browse';
+    const detailContainerClass = listType === 'search'
+      ? 'layer-detail-container layers-all search'
+      : 'layer-detail-container layers-all browse';
+
+    let currentMeasurement;
+    Object.keys(measurementConfig).forEach(measureName => {
+      if (measurementConfig[measureName].id === selectedMeasurement) {
+        currentMeasurement = measurementConfig[measureName];
+      }
+    });
+    const sources = currentMeasurement && lodashValues(currentMeasurement.sources);
+    const currentMeasureSource = sources && sources[measurementSourceIndex];
+
     return (
       <>
-        <div className="layer-filters-container">
-          {listType === 'search' ? (
-            <>
-              <div className="filter-controls">
-                <h3>Filters</h3>
-                <Form>
+        {listType === 'search' &&
+          <div className="layer-filters-container">
+            <div className="filter-controls">
+              <h3>Filters</h3>
+              <Form>
+                <div className="custom-control custom-switch">
+                  <input
+                    id="unit-toggle"
+                    className="custom-control-input"
+                    type="checkbox"
+                    onChange={this.toggleFilterByAvailable.bind(this)}
+                    defaultChecked={filterByAvailable}/>
+                  <label className="custom-control-label" htmlFor="unit-toggle">
+                    Filter by availability
+                  </label>
+                </div>
+              </Form>
+            </div>
+            <div className="results-text">
+              Showing {filteredRows.length} results
+            </div>
+          </div>
+        }
 
-                  <div className="custom-control custom-switch">
-                    <input
-                      id="unit-toggle"
-                      className="custom-control-input"
-                      type="checkbox"
-                      onChange={this.toggleFilterByAvailable.bind(this)}
-                      defaultChecked={filterByAvailable}/>
-                    <label className="custom-control-label" htmlFor="unit-toggle">
-                      Filter by availability
-                    </label>
-                  </div>
-                </Form>
-              </div>
-              <div className="results-text">
-                Showing {filteredRows.length} results
-              </div>
-            </>
-          ) : (
-            this.renderLayerCategoriesMenu()
-          )}
-        </div>
-
-        <div className="layer-list-container">
-          <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
+        <div className={listContainerClass}>
+          <Scrollbars style={{ maxHeight: height + 'px' }}>
             <div className="product-outter-list-case">
               <LayerList
                 addLayer={addLayer}
                 removeLayer={removeLayer}
                 activeLayers={activeLayers}
-                hasMeasurementSource={hasMeasurementSource}
-                selectedProjection={selectedProjection}
-                filteredRows={filteredRows}
-                hasMeasurementSetting={hasMeasurementSetting}
-                measurementConfig={measurementConfig}
                 layerConfig={layerConfig}
                 listType={listType}
                 category={category}
                 categoryConfig={categoryConfig[categoryType]}
+                selectedProjection={selectedProjection}
+                filteredRows={filteredRows}
+                hasMeasurementSetting={hasMeasurementSetting}
+                hasMeasurementSource={hasMeasurementSource}
+                measurementConfig={measurementConfig}
                 selectedMeasurement={selectedMeasurement}
                 updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
                 showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
+                setSourceIndex={index => this.setSourceIndex(index)}
               />
             </div>
           </Scrollbars>
         </div>
-        <div className="layer-detail-container layers-all">
-          <MetadataDetail
-            layer={selectedLayer}>
-          </MetadataDetail>
+
+        <div className={detailContainerClass}>
+          {listType === 'search' ? (
+            <LayerMetadataDetail
+              layer={selectedLayer}
+              height={height}>
+            </LayerMetadataDetail>
+          ) : (
+            <MeasurementMetadataDetail
+              source={currentMeasureSource}
+              height={height}>
+            </MeasurementMetadataDetail>
+          )}
         </div>
       </>
     );
@@ -357,7 +354,7 @@ class ProductPicker extends React.Component {
                       </NavItem>
                     ))}
                   </Nav>
-                  <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
+                  <Scrollbars style={{ maxHeight: height + 'px' }}>
                     <div className="product-outter-list-case">
                       {isCategoryDisplay && (
                         <CategoryList
@@ -393,6 +390,7 @@ ProductPicker.propTypes = {
   categories: PropTypes.array,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
+  currentMeasureSource: PropTypes.func,
   drawMeasurements: PropTypes.func,
   filterByDate: PropTypes.func,
   filteredRows: PropTypes.array,
@@ -435,7 +433,7 @@ function mapStateToProps(state, ownProps) {
   const { config, browser, proj, layers, compare, date } = state;
   const { screenWidth, screenHeight } = browser;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const height = screenHeight - 100;
+  const height = screenHeight - 140;
   const width = getModalWidth(screenWidth);
   const allLayers = getLayersForProjection(config, proj.id);
   const activeLayers = layers[activeString];

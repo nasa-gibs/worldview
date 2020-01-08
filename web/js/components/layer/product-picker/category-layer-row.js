@@ -25,32 +25,14 @@ class LayerRow extends React.Component {
     this.state = {
       isSelected: props.isSelected,
       projection: props.projection,
-      activeSourceIndex: 0,
-      isMetadataExpanded: false
+      activeSourceIndex: 0
     };
   }
 
-  /**
-   * Toggle switch for the metadata info button and close arrow
-   * @method toggleMetadataButtons
-   * @return {void}
-   */
-  toggleMetadataExpansion() {
-    this.setState({ isMetadataExpanded: !this.state.isMetadataExpanded });
-  }
-
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { isEnabled, isMetadataExpanded, isDateRangesExpanded } = this.state;
-    if (
-      nextProps.checked !== isEnabled ||
-      nextProps.isMetadataExpanded !== isMetadataExpanded ||
-      nextProps.isDateRangesExpanded !== isDateRangesExpanded
-    ) {
-      this.setState({
-        checked: nextProps.isEnabled,
-        isMetadataExpanded: nextProps.isMetadataExpanded,
-        isDateRangesExpanded: nextProps.isDateRangesExpanded
-      });
+    const { isEnabled } = this.state;
+    if (nextProps.checked !== isEnabled) {
+      this.setState({ checked: nextProps.isEnabled });
     }
   }
 
@@ -158,49 +140,9 @@ class LayerRow extends React.Component {
     }
   }
 
-  /**
-   * Request metadata if row is active and
-   * hide metadata when too many chars
-   * @param {Object} source | Source Object
-   */
-  renderSourceMetaData(source) {
-    const { sourceMetadata, getSourceMetadata } = this.props;
-    const { isMetadataExpanded } = this.state;
-    // Simple test to see if theres a link to some metadata
-    if (source.description) {
-      if (sourceMetadata[source.description]) {
-        const data = sourceMetadata[source.description].data;
-        const doesMetaDataNeedExpander = data.length >= 1000;
-        const isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
-        return (
-          <div>
-            <div
-              className={
-                isMetaVisible ? 'source-metadata ' : 'source-metadata overflow'
-              }
-              dangerouslySetInnerHTML={{ __html: data }}
-            />
-            {doesMetaDataNeedExpander ? (
-              <div
-                className="metadata-more"
-                onClick={() => this.toggleMetadataExpansion()}
-              >
-                <span
-                  className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}
-                >
-                  {isMetadataExpanded ? '^' : '...'}
-                </span>
-              </div>
-            ) : (
-              ''
-            )}
-          </div>
-        );
-      } else {
-        getSourceMetadata(source);
-        return <div className="text-white">loading Metadata </div>;
-      }
-    }
+  onClickSource(index) {
+    this.setState({ activeSourceIndex: index });
+    this.props.setSourceIndex(index);
   }
 
   /**
@@ -217,7 +159,6 @@ class LayerRow extends React.Component {
       >
         <TabPane>
           {this.renderSourceSettings(source)}
-          {this.renderSourceMetaData(source)}
         </TabPane>
       </TabContent>
     );
@@ -241,16 +182,11 @@ class LayerRow extends React.Component {
             : 'source-nav-item'
         }
       >
-        <NavLink onClick={() => this.setState({ activeSourceIndex: index })}>
+        <NavLink onClick={() => this.onClickSource(index)}>
           {source.title}
         </NavLink>
       </NavItem>
     );
-  }
-
-  toggleRowExpansion() {
-    const { isSelected } = this.state;
-    this.setState({ isSelected: !isSelected });
   }
 
   /**
@@ -276,16 +212,10 @@ class LayerRow extends React.Component {
                 minValidIndex = index;
               }
               // if activeSourceIndex is less than first valid index, make minValidIndex active tab
-              validActiveIndex =
-                minValidIndex > activeSourceIndex
-                  ? minValidIndex
-                  : activeSourceIndex;
-              return this.renderSourceTabs(
-                measurement,
-                source,
-                index,
-                validActiveIndex
-              );
+              validActiveIndex = minValidIndex > activeSourceIndex
+                ? minValidIndex
+                : activeSourceIndex;
+              return this.renderSourceTabs(measurement, source, index, validActiveIndex);
             } else {
               return '';
             }
@@ -294,10 +224,8 @@ class LayerRow extends React.Component {
     );
 
     // content set as minValidIndex if activeSourceIndex is not valid
-    const Content = this.renderSourceContent(
-      measurement,
-      sources[validActiveIndex]
-    );
+    const Content = this.renderSourceContent(measurement, sources[validActiveIndex]);
+
     return (
       <div className="container">
         <Row>
@@ -323,9 +251,7 @@ class LayerRow extends React.Component {
         key={category.id + '-' + measurement.id}
       >
         <div
-          onClick={() => {
-            updateSelectedMeasurement(id);
-          }}
+          onClick={() => updateSelectedMeasurement(id) }
           className="measurement-row-header"
         >
           <h3>{measurement.title}</h3>
@@ -359,6 +285,7 @@ LayerRow.propTypes = {
   measurement: PropTypes.object,
   projection: PropTypes.string,
   removeLayer: PropTypes.func,
+  setSourceIndex: PropTypes.func,
   sourceMetadata: PropTypes.object,
   updateSelectedMeasurement: PropTypes.func
 };
