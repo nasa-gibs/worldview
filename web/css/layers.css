@@ -449,20 +449,34 @@
   cursor: pointer;
 
   &:hover {
-    background: #ffffff4d;
+    background: #444;
   }
-}
+  & .wv-checkbox {
+    color: #fff;
+    font: 400 13px/13px 'Open Sans', sans-serif;
+    display: inline;
 
-.measurement-row .source-sub-group .wv-checkbox {
-  color: #fff;
-  font: 400 13px/13px 'Open Sans', sans-serif;
-}
-
-.measurement-row .wv-checkbox label {
-  display: inline;
-  color: #ddd;
-  padding-left: 5px;
-  pointer-events: none;
+    & label {
+      display: inline;
+      color: #ddd;
+      padding-left: 5px;
+      font-size: 12px;
+      pointer-events: none;
+    }
+  }
+  &.unavailable {
+    &:hover {
+      background: #3a3a3a;
+    }
+    & .fa {
+      display: inline;
+      color: #999;
+      margin: 0 0 0 2px;
+    }
+    & .wv-checkbox label {
+      color: #999;
+    }
+  }
 }
 
 .layers-all .metadata-more,
@@ -796,6 +810,10 @@
       & .custom-control-label {
         color: #eee;
       }
+    }
+    & .fa {
+      color: #eee;
+      margin-left: 10px;
     }
   }
 

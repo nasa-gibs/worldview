@@ -41,7 +41,7 @@ export class Checkbox extends React.Component {
 
   render() {
     const { checked } = this.state;
-    const { isRound, color, classNames, id, name, title, label } = this.props;
+    const { isRound, color, classNames, id, name, title, label, children } = this.props;
     const roundClassName = isRound ? 'wv-checkbox-round ' : '';
     const defaultClassName = 'wv-checkbox ';
     const checkedClassName = checked ? 'checked ' : '';
@@ -59,6 +59,7 @@ export class Checkbox extends React.Component {
           className={classNames}
           onChange={this.handleChange.bind(this)}
         />
+        {children}
         <label htmlFor={id}>{label}</label>
       </div>
     );
