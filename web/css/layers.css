@@ -174,10 +174,12 @@
   position: relative;
   background-color: #333;
   line-height: 0;
+  transition: background-color 500ms linear;
 
   &:hover {
     background-color: #3a3a3a;
     transition: background-color 100ms linear;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   }
 
   &.measurement-row {
@@ -187,9 +189,12 @@
     }
   }
   &.selected {
-    transition: background-color 250ms linear;
-    background: #444;
-    border: 1px solid #d54f21;
+    transition: background-color 300ms linear;
+    background: #2a2a2a;
+    border-left: 5px solid #d54f21;
+    &:hover {
+      box-shadow: none;
+    }
     & .layers-all-header > h3 {
       color: #fff;
     }
@@ -222,13 +227,15 @@
 .layers-all-header > h3,
 .measurement-row-header > h3 {
   color: #ddd;
-  font-size: 18px;
   line-height: 100%;
   position: relative;
   display: block;
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   margin-right: 45px;
+}
+.measurement-row-header > h3 {
+  font-size: 18px;
 }
 .layers-all-header > h3 {
   font-size: 15px;
@@ -239,12 +246,10 @@
   margin: 3px 0 5px;
   font-size: 14px;
 }
-.layer-detail-container {
-  .layers-all-header > h4 {
-    color: #ccc;
-    margin: 3px 0 6px 5px;
-    font-size: 15px;
-  }
+.layer-detail-container .layers-all-header > h4 {
+  color: #ccc;
+  margin: 3px 0 6px 5px;
+  font-size: 15px;
 }
 
 .layers-all .layers-all-layer h5 {
@@ -344,6 +349,9 @@
   cursor: pointer;
   padding-left: 30px;
   padding-top: 0.5em;
+  & > h3, & > h4, & > h5 {
+    user-select: none;
+  }
 }
 
 .layers-all-header.has-checkbox::before {
