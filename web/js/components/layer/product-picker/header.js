@@ -35,7 +35,7 @@ class ProductPickerHeader extends React.Component {
    */
   revertToInitialScreen(e) {
     e.preventDefault();
-    this.props.updateListState('category');
+    this.props.updateListState();
     this.setState({ inputValue: '' });
   }
 

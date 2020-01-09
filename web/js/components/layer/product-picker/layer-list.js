@@ -13,72 +13,50 @@ class LayerList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadedMetadataLayers: [],
-      expandedDateRangesLayers: [],
-      expandedMeasurements: props.expandedMeasurements,
-      selectedLayer: null,
+      selectedLayerId: null,
       selectedProjection: props.selectedProjection
     };
   }
 
-  /*
-   * Toggles expansion of metadata for a layer given that layer's ID and makes
-   * an AJAX request for the metadata if it's missing
+  /**
+   * Loads metadata for layer (if not previously loaded) and
+   * triggers showing in layer dietal area
    *
-   * @method showLayerMetadata
-   * @param {string} layer - the layer to be toggled
+   * @param {string} layerId - the layer id to show metadata for
    * @return {void}
    */
   showLayerMetadata(layerId) {
-    var { loadedMetadataLayers } = this.state;
-    var { filteredRows, showMetadataForLayer } = this.props;
-    const isMetadataExpanded = loadedMetadataLayers.find(id => id === layerId);
+    const { selectedLayerId } = this.state;
+    const { filteredRows, showMetadataForLayer } = this.props;
     const layer = filteredRows.find(l => l.id === layerId);
 
-    if (isMetadataExpanded) {
-      loadedMetadataLayers.splice(loadedMetadataLayers.indexOf(layerId), 1);
-      loadedMetadataLayers = loadedMetadataLayers.filter(
-        id => id !== layerId
-      );
-      showMetadataForLayer(layer);
-      this.setState({
-        selectedLayer: layerId
-      });
-    } else {
-      loadedMetadataLayers.push(layerId);
-      this.setState({
-        loadedMetadataLayers: loadedMetadataLayers,
-        selectedLayer: layerId
-      });
+    if (selectedLayerId === layerId) {
+      return;
+    }
+    this.setState({
+      selectedLayerId: layerId
+    });
 
-      if (!layer.metadata) {
-        var { origin, pathname } = window.location;
-        var errorMessage = '<p>There was an error loading layer metadata.</p>';
-        var uri = `${origin}${pathname}config/metadata/layers/${
-          layer.description
-        }.html`;
-        fetch(uri)
-          .then(res => (res.ok ? res.text() : errorMessage))
-          .then(body => {
-            // Check that we have a metadata html snippet, rather than a fully
-            // formed HTML file. Also avoid executing any script or style tags.
-            var isMetadataSnippet = !body.match(
-              /<(head|body|html|style|script)[^>]*>/i
-            );
-            layer.metadata = isMetadataSnippet ? body : errorMessage;
-            this.setState({ layers: filteredRows });
-            showMetadataForLayer(layer);
-          });
-      } else {
-        showMetadataForLayer(layer);
-      }
+    if (!layer.metadata) {
+      const { origin, pathname } = window.location;
+      const errorMessage = '<p>There was an error loading layer metadata.</p>';
+      const uri = `${origin}${pathname}config/metadata/layers/${layer.description}.html`;
+      fetch(uri)
+        .then(res => (res.ok ? res.text() : errorMessage))
+        .then(body => {
+          // Check that we have a metadata html snippet, rather than a fully
+          // formed HTML file. Also avoid executing any script or style tags.
+          const isMetadataSnippet = !body.match(/<(head|body|html|style|script)[^>]*>/i);
+          layer.metadata = isMetadataSnippet ? body : errorMessage;
+          this.setState({ layers: filteredRows });
+          showMetadataForLayer(layer);
+        });
+    } else {
+      showMetadataForLayer(layer);
     }
   }
 
   renderCategoryList() {
-    const {
-      expandedMeasurements
-    } = this.state;
     const {
       measurementConfig,
       layerConfig,
@@ -100,9 +78,8 @@ class LayerList extends React.Component {
     return (
       <div id={categoryToUse.id + '-list'}>
         {categoryToUse.measurements.map((measurement, index) => {
-          var current = measurementConfig[measurement];
-          var isMeasurementExpanded = !!expandedMeasurements[current.id];
-          var isSelected = selectedMeasurement === current.id;
+          const current = measurementConfig[measurement];
+          const isSelected = selectedMeasurement === current.id;
           if (hasMeasurementSource(current)) {
             return (
               <CategoryLayerRow
@@ -114,7 +91,6 @@ class LayerList extends React.Component {
                 measurement={current}
                 measurementConfig={measurementConfig}
                 layerConfig={layerConfig}
-                isExpanded={isMeasurementExpanded}
                 hasMeasurementSetting={hasMeasurementSetting}
                 addLayer={addLayer}
                 removeLayer={removeLayer}
@@ -132,11 +108,7 @@ class LayerList extends React.Component {
   }
 
   renderSearchList(filteredRows) {
-    const {
-      loadedMetadataLayers,
-      expandedDateRangesLayers,
-      selectedLayer
-    } = this.state;
+    const { selectedLayerId } = this.state;
     const { addLayer, removeLayer, activeLayers } = this.props;
 
     return filteredRows.length < 1 ? (
@@ -144,16 +116,13 @@ class LayerList extends React.Component {
     ) : (
       filteredRows.map(layer => {
         const isEnabled = activeLayers.some(l => l.id === layer.id);
-        const isMetadataExpanded = loadedMetadataLayers.includes(layer.id);
-        const isMetadataShowing = isMetadataExpanded && layer.id === selectedLayer;
-        const isDateRangesExpanded = expandedDateRangesLayers.includes(layer.id);
+        const isMetadataShowing = layer.id === selectedLayerId;
         return (
           <SearchLayerRow
             key={layer.id}
             layer={layer}
             isEnabled={isEnabled}
             isMetadataShowing={isMetadataShowing}
-            isDateRangesExpanded={isDateRangesExpanded}
             onState={addLayer}
             offState={removeLayer}
             showLayerMetadata={id => this.showLayerMetadata(id)}

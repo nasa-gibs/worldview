@@ -48,12 +48,12 @@ class ProductPicker extends React.Component {
       listType: props.listType,
       categoryType: Object.keys(props.categoryConfig)[1],
       category: props.category,
+      selectedLayer: null,
       selectedMeasurement: null,
       measurementSourceIndex: 0,
       filteredRows: props.filteredRows,
       inputValue: '',
       filterByAvailable: true,
-      selectedLayer: null,
       tooltipFilterAvailableOpen: false
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
@@ -133,9 +133,15 @@ class ProductPicker extends React.Component {
    */
   updateSelectedMeasurement(id) {
     if (this.state.selectedMeasurement !== id) {
-      this.setState({ selectedMeasurement: id });
+      this.setState({
+        selectedMeasurement: id,
+        measurementSourceIndex: 0
+      });
     } else {
-      this.setState({ selectedMeasurement: null });
+      this.setState({
+        selectedMeasurement: null,
+        measurementSourceIndex: 0
+      });
     }
   }
 
@@ -184,6 +190,15 @@ class ProductPicker extends React.Component {
     const { inputValue, filterByAvailable } = this.state;
     this.setState({ filterByAvailable: !filterByAvailable });
     this.runSearch(inputValue);
+  }
+
+  revertSearchState() {
+    this.setState({
+      listType: 'category',
+      inputValue: '',
+      selectedLayer: null,
+      selectedMeasurement: null
+    });
   }
 
   showMetadataForLayer(selectedLayer) {
@@ -281,7 +296,8 @@ class ProductPicker extends React.Component {
         currentMeasurement = measurementConfig[measureName];
       }
     });
-    const sources = currentMeasurement && lodashValues(currentMeasurement.sources);
+    const sources = currentMeasurement && lodashValues(currentMeasurement.sources)
+      .sort((a, b) => a.title.localeCompare(b.title));
     const currentMeasureSource = sources && sources[measurementSourceIndex];
 
     return (
@@ -370,9 +386,7 @@ class ProductPicker extends React.Component {
             modalView={modalView}
             width={width}
             runSearch={this.runSearch.bind(this)}
-            updateListState={str => {
-              this.setState({ listType: str, inputValue: '' });
-            }}
+            updateListState={this.revertSearchState.bind(this)}
           />
         </ModalHeader>
 

@@ -10,8 +10,7 @@ class LayerRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: props.isEnabled,
-      isDateRangesExpanded: props.isDateRangesExpanded
+      checked: props.isEnabled
     };
   }
 
@@ -40,6 +39,12 @@ class LayerRow extends React.Component {
     showLayerMetadata(layer.id);
   }
 
+  /**
+   * Spit the layer name and details (which are foundi in parentheses)
+   * onto separate lines
+   *
+   * @param {*} title - the full layer title
+   */
   renderSplitTitle(title) {
     const splitIdx = title.indexOf('(');
     const attrs = title.slice(splitIdx);
@@ -56,8 +61,7 @@ class LayerRow extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
-      checked: nextProps.isEnabled,
-      isDateRangesExpanded: nextProps.isDateRangesExpanded
+      checked: nextProps.isEnabled
     });
   }
 
@@ -85,9 +89,7 @@ class LayerRow extends React.Component {
   }
 }
 LayerRow.propTypes = {
-  isDateRangesExpanded: PropTypes.bool,
   isEnabled: PropTypes.bool,
-  isMetadataExpanded: PropTypes.bool,
   isMetadataShowing: PropTypes.bool,
   layer: PropTypes.object,
   offState: PropTypes.func,
