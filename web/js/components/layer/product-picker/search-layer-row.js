@@ -29,21 +29,34 @@ class LayerRow extends React.Component {
   }
 
   /**
-   * Toggle switch for the metadata info button and close arrow
-   * @method toggleMetadataButtons
+   * Show metadata for this layer
+   * @method showMetadata
    * @param {e} event
    * @return {void}
    */
-  toggleMetadataButtons(e) {
+  showMetadata(e) {
     e.stopPropagation(); // Prevent layer from being activated
     const { layer, showLayerMetadata } = this.props;
     showLayerMetadata(layer.id);
   }
 
+  renderSplitTitle(title) {
+    const splitIdx = title.indexOf('(');
+    const attrs = title.slice(splitIdx);
+    const titleName = title.slice(0, splitIdx - 1);
+    return splitIdx < 0 || title.length < 40
+      ? <h3> {title} </h3>
+      : (
+        <>
+          <h3> {titleName} </h3>
+          <h4> {attrs} </h4>
+        </>
+      );
+  }
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       checked: nextProps.isEnabled,
-      isMetadataExpanded: nextProps.isMetadataExpanded,
       isDateRangesExpanded: nextProps.isDateRangesExpanded
     });
   }
@@ -61,15 +74,10 @@ class LayerRow extends React.Component {
     return (
       <div className={rowClass}>
         <div className={headerClass} onClick={() => this.toggleCheck()}>
-          <h3>
-            {layerTitle}
-          </h3>
+          {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
           {subtitle && <h5>{subtitle}</h5>}
           {description && (
-            <i
-              className="fa fa-info-circle"
-              onClick={e => this.toggleMetadataButtons(e)}
-            />
+            <i className="fa fa-info-circle" onClick={e => this.showMetadata(e)} />
           )}
         </div>
       </div>

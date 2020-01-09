@@ -172,15 +172,30 @@
   box-sizing: border-box;
   border: 0;
   position: relative;
-  background: #333;
+  background-color: #333;
   line-height: 0;
+
+  &:hover {
+    background-color: #3a3a3a;
+    transition: background-color 100ms linear;
+  }
 
   &.measurement-row {
     padding: 0 0 0 8px;
+    &:hover {
+      background-color: #333;
+    }
   }
   &.selected {
+    transition: background-color 250ms linear;
     background: #444;
-    border: 2px solid #d54f21;
+    border: 1px solid #d54f21;
+    & .layers-all-header > h3 {
+      color: #fff;
+    }
+    & .layers-all-header > h5 {
+      color: #aaa;
+    }
   }
 }
 
@@ -217,6 +232,19 @@
 }
 .layers-all-header > h3 {
   font-size: 15px;
+}
+
+.layers-all-header > h4 {
+  color: #ccc;
+  margin: 3px 0 5px;
+  font-size: 14px;
+}
+.layer-detail-container {
+  .layers-all-header > h4 {
+    color: #ccc;
+    margin: 3px 0 6px 5px;
+    font-size: 15px;
+  }
 }
 
 .layers-all .layers-all-layer h5 {
@@ -287,6 +315,15 @@
   font-weight: 700;
 }
 
+.source-metadata h3 {
+  font-weight: 500;
+  margin: 10px 0 5px;
+  font-size: 14px;
+  line-height: 16px;
+  padding-top: 15px;
+  border-top: 1px solid #555;
+}
+
 .layer-description .layer-title,
 .layer-modal .source-metadata h3 {
   display: block;
@@ -336,6 +373,23 @@
   padding: 12px;
   right: 0;
   top: 0;
+  &:hover {
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+    right: 1px;
+    top: -1px;
+    transition: color 100ms linear;
+  }
+}
+.selected .fa {
+  color: #888;
+  transition: color 250ms linear;
+  &:hover {
+    color: #888;
+    text-shadow: none;
+    right: 0;
+    top: 0;
+  }
 }
 
 .layers-all-layer .fa:hover {
@@ -446,7 +500,7 @@
 }
 
 .measurement-row .source-nav-item.active {
-  border-left: 10px solid #d54e21;
+  border-left: 6px solid #d54e21;
   margin-left: 0;
   color: #000;
   cursor: text;
@@ -800,7 +854,19 @@
   }
 }
 .no-results {
-  font-size: 20px;
+  margin-top: 50px;
+  & h3 {
+    font-size: 20px;
+    margin: 20px auto;
+    text-align: center;
+    font-weight: 300;
+  }
+  & h5 {
+    font-size: 16px;
+    margin: 20px auto;
+    text-align: center;
+    font-weight: 300;
+  }
 }
 
 .results-text {
@@ -880,6 +946,9 @@ h3.no-results {
   & .layers-all-layer {
     padding: 5px 10px;
     margin: 0 5px 0 2px;
+    &:hover {
+      background-color: #333;
+    }
   }
   & .scrollbar-visible .layers-all-layer {
     margin: 0 11px 0 2px;
