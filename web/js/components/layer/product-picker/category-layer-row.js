@@ -9,7 +9,6 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Row,
   ListGroup
 } from 'reactstrap';
 import MeasurementLayerRow from './measurement-layer-row';
@@ -149,32 +148,12 @@ class LayerRow extends React.Component {
   }
 
   /**
-   * Render measurement content for selected source in
-   * `TabPane`
-   * @param {Object} measurement | Measurement Object
-   * @param {Object} source | Source Object
-   */
-  renderSourceContent(measurement, source) {
-    return (
-      <TabContent
-        className=""
-        id={measurement.id + '-' + source.id}
-      >
-        <TabPane>
-          {this.renderSourceSettings(source)}
-        </TabPane>
-      </TabContent>
-    );
-  }
-
-  /**
    * Render Possible sources for measurement
-   * @param {Object} measurement | Measurement Object
    * @param {Object} source | Source Object
    * @param {Number} index | Index of measurement
    * @param {Number} activeSourceIndex | Index of active measurement
    */
-  renderSourceTabs(measurement, source, index, activeSourceIndex) {
+  renderSourceTabs(source, index, activeSourceIndex) {
     return (
       <NavItem
         key={source.id + index}
@@ -204,35 +183,32 @@ class LayerRow extends React.Component {
     let minValidIndex = -1;
     let validActiveIndex = activeSourceIndex;
 
-    const Tabs = (
-      <Nav vertical className="source-tabs">
-        {sources
-          .sort((a, b) => a.title.localeCompare(b.title))
-          .map((source, index) => {
-            if (hasMeasurementSetting(measurement, source)) {
-              // only set minValidIndex once to find init active tab/content
-              if (minValidIndex < 0) {
-                minValidIndex = index;
-              }
-              // if activeSourceIndex is less than first valid index, make minValidIndex active tab
-              validActiveIndex = minValidIndex > activeSourceIndex
-                ? minValidIndex
-                : activeSourceIndex;
-              return this.renderSourceTabs(measurement, source, index, validActiveIndex);
-            } else {
-              return '';
-            }
-          })}
-      </Nav>
-    );
-
-    // content set as minValidIndex if activeSourceIndex is not valid
-    const Content = this.renderSourceContent(measurement, sources[validActiveIndex]);
-
     return (
       <div className="measure-row-contents">
-        {Tabs}
-        {Content}
+        <Nav vertical className="source-tabs">
+          {sources
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .map((source, index) => {
+              if (hasMeasurementSetting(measurement, source)) {
+                // only set minValidIndex once to find init active tab/content
+                if (minValidIndex < 0) {
+                  minValidIndex = index;
+                }
+                // if activeSourceIndex is less than first valid index, make minValidIndex active tab
+                validActiveIndex = minValidIndex > activeSourceIndex
+                  ? minValidIndex
+                  : activeSourceIndex;
+                return this.renderSourceTabs(source, index, validActiveIndex);
+              } else {
+                return '';
+              }
+            })}
+        </Nav>
+        <TabContent id={measurement.id + '-' + sources[validActiveIndex].id}>
+          <TabPane>
+            {this.renderSourceSettings(sources[validActiveIndex])}
+          </TabPane>
+        </TabContent>
       </div>
     );
   }
