@@ -25,6 +25,10 @@ import util from '../../util/util';
   */
 export function availableAtDate(def, date) {
   const availableDates = datesinDateRanges(def, date);
+  // Some vector layers
+  if (!def.startDate && !def.dateRanges) {
+    return true;
+  }
   if (def.endDate && def.inactive) {
     return date < new Date(def.endDate) && date > new Date(def.startDate);
   }
