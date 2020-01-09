@@ -322,6 +322,7 @@ class ProductPicker extends React.Component {
             </LayerMetadataDetail>
           ) : (
             <MeasurementMetadataDetail
+              categoryTitle={category.title}
               source={currentMeasureSource}
               height={height}>
             </MeasurementMetadataDetail>

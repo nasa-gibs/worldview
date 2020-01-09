@@ -31,18 +31,20 @@ class MeasurementMetadataDetail extends React.Component {
    * @param {Object} source | Source Object
    */
   render() {
-    const { source, height } = this.props;
+    const { source, height, categoryTitle } = this.props;
     const { sourceMetaData } = this.state;
     if (!source) {
       return (
-        <h3 className="no-results"> No item selected </h3>
+        <div className="no-results">
+          <h3> {categoryTitle} </h3>
+          <h5> (Select a measurement) </h5>
+        </div>
       );
     }
     const { description, title } = source;
 
     if (sourceMetaData[description]) {
       const { data } = sourceMetaData[description];
-
       return (
         <Scrollbars style={{ maxHeight: height + 'px' }}>
           <div className="layers-all-layer">
@@ -57,12 +59,17 @@ class MeasurementMetadataDetail extends React.Component {
       );
     } else {
       this.getSourceMetadata(source);
-      return <div className="text-white">Loading metadata ... </div>;
+      return (
+        <div className="no-results">
+          <h5>Loading metadata ... </h5>
+        </div>
+      );
     }
   }
 }
 
 MeasurementMetadataDetail.propTypes = {
+  categoryTitle: PropTypes.string,
   height: PropTypes.number,
   source: PropTypes.object
 };
