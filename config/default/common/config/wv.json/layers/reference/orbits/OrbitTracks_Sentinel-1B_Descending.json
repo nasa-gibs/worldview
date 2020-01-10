@@ -5,7 +5,7 @@
       "title": "Sentinel-1B - Orbit Track & Time",
       "subtitle": "Sentinel-1B / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-1B_Descending",
-      "tags": "tracks",
+      "tags": "tracks obits descending day",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",

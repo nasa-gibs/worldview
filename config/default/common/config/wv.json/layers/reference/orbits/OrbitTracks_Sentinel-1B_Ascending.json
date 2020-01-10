@@ -5,7 +5,7 @@
       "title": "Sentinel-1B - Orbit Track & Time",
       "subtitle": "Sentinel-1B / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-1B_Ascending",
-      "tags": "tracks",
+      "tags": "tracks orbits ascending night",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",
