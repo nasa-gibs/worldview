@@ -28,7 +28,7 @@
         "id": "OrbitTracks_CYGNSS_Ascending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks orbits ascending"
     }
   }
 }
