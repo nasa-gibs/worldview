@@ -35,7 +35,7 @@
         "id": "OrbitTracks_GOSAT_Ascending",
         "immutable": true
       },
-      "tags": "tracks orbits ascending day"
+      "tags": "tracks day"
     }
   }
 }

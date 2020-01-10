@@ -5,7 +5,7 @@
       "title": "ICESAT-2 - Orbit Track & Time",
       "subtitle": "ICESAT-2 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ICESAT-2_Ascending",
-      "tags": "tracks orbits ascending day",
+      "tags": "tracks day",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",

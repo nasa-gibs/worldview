@@ -35,7 +35,7 @@
         "id": "OrbitTracks_GPM_Descending",
         "immutable": true
       },
-      "tags": "tracks orbits descending"
+      "tags": "tracks descending"
     }
   }
 }
