@@ -35,7 +35,7 @@
         "id": "OrbitTracks_Landsat-7_Ascending",
         "immutable": true
       },
-      "tags": "tracks orbits ascending night"
+      "tags": "tracks night"
     }
   }
 }

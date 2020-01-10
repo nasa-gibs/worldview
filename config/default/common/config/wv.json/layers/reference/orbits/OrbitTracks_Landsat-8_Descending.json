@@ -36,7 +36,7 @@
         "id": "OrbitTracks_Landsat-8_Descending",
         "immutable": true
       },
-      "tags": "tracks orbits descending day"
+      "tags": "tracks day"
     }
   }
 }

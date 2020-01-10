@@ -6,7 +6,7 @@
       "subtitle": "Suomi-NPP / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Suomi_NPP_Ascending",
       "group": "overlays",
-      "tags": "snpp s-npp tracks orbits ascending day",
+      "tags": "snpp s-npp tracks day",
       "format": "image/png",
       "type": "wms",
       "tileSize": [
