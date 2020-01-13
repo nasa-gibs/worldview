@@ -1,0 +1,1 @@
+As the fire season has progressed, fires have spread further down the coast. Press the "Play" button to watch smoke emitted by fires in the state of Victoria dramatically increase in the time between 11:30pm, 3 January to 4:30pm, 4 January UTC (10:30am, 4 January to 3:30am, 5 January AEDT) in this Red Visible imagery layer from the Himawari-8 geostationary satellite.
