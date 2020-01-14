@@ -449,8 +449,6 @@
         "AMSRE_Sea_Ice_Concentration_25km",
         "AMSRE_Snow_Depth_Over_Ice",
 
-        "AIRS_CO_Total_Column_Day",
-        "AIRS_CO_Total_Column_Night",
         "AIRS_Precipitation_Day",
         "AIRS_Precipitation_Night",
         "AIRS_Prata_SO2_Index_Day",
