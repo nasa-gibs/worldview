@@ -1,4 +1,4 @@
-The MODIS Cloud Water Path indicates the amount of water in the atmosphere above a unit surface area of the earth. It is measured in grams per square meter (g/m<sup>2</sup>) and is globally retrieved for liquid and ice cloud phases. This layer is the Column Water Path retrieved using Band 7 (2.1 μm). Cloud water path forms a link between radiative and hydrological properties of the Earth’s climate system.
+The MODIS Cloud Water Path indicates the amount of water in the atmosphere above a unit surface area of the Earth. It is measured in grams per square meter (g/m<sup>2</sup>) and is globally retrieved for liquid and ice cloud phases. This layer is the Column Water Path retrieved using Band 7 (2.1 μm). Cloud water path forms a link between radiative and hydrological properties of the Earth’s climate system.
 
 The MODIS Cloud Water Path layers available are: (1) the MODIS Cloud Water Path layer is the Column Water Path retrieved using Band 7 (2.1 μm); and (2) the MODIS Cloud Water Path PCL (partly cloudy) layer is the Column Water Path retrieved using Band 7 (2.1 μm) for pixels classified as either partly cloudy from 250 m cloud mask test or 1 km cloud edges.
 

@@ -2,7 +2,7 @@
 Temporal coverage: 30 August 2002 - Present
 
 #### Description
-Air temperature in units of kelvin at the 500 hPa pressure level, approximately 5500 meters (18,000 feet) above sea level. The 500 hPa pressure level is near the divide between upper and lower halves of atmospheric mass and is often referred to as a steering level. Many midlatitude weather systems between this level and the Earth's surface move in roughly the same direction as winds at the 500 hPa level.
+Air temperature in units of Kelvin (K) at the 500 hPa pressure level, approximately 5500 meters (18,000 feet) above sea level. The 500 hPa pressure level is near the divide between upper and lower halves of atmospheric mass and is often referred to as a steering level. Many midlatitude weather systems between this level and the Earth's surface move in roughly the same direction as winds at the 500 hPa level.
 
 #### Image Resolution
 Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
@@ -26,7 +26,7 @@ Data Product: [AIRS2RET_V006](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_V006/
 Temporal coverage: 30 August 2002 - Present
 
 #### Description
-Air temperature in units of kelvin at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Roughly one third of the mass of Earth's atmosphere is found between Earth's surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
+Air temperature in units of Kelvin (K) at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Roughly one third of the mass of Earth's atmosphere is found between Earth's surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
 
 #### Image Resolution
 Nominal equatorial image resolution 31.25 km/pixel
@@ -50,7 +50,7 @@ Data Product: [AIRS2RET_V006](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_V006/
 Temporal coverage: 30 August 2002 - Present
 
 #### Description
-Air temperature in units of kelvin at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Roughly one third of the mass of Earth's atmosphere is found between Earth's surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
+Air temperature in units of Kelvin (K) at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Roughly one third of the mass of Earth's atmosphere is found between Earth's surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
 
 #### Image Resolution
 Nominal equatorial image resolution 31.25 km/pixel
@@ -74,7 +74,7 @@ Data Product: [AIRS2RET_V006](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_V006/
 Temporal coverage: 30 August 2002 - Present
 
 #### Description
-Temperature of the air in units of kelvin two meters above sea level. Near-surface air temperature is an essential climate variable widely used in studies of meteorology, climate, and environmental health applications.
+Temperature of the air in units of Kelvin (K) two meters above sea level. Near-surface air temperature is an essential climate variable widely used in studies of meteorology, climate, and environmental health applications.
 
 #### Image Resolution
 Nominal equatorial image resolution 31.25 km/pixel
@@ -98,7 +98,7 @@ Data Product: [AIRS2RET_V006](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_V006/
 Temporal coverage: 30 August 2002 - Present
 
 #### Description
-Temperature of the solid or liquid surface of Earth in units of kelvin. Skin temperature refers to the temperature of the surface layer of the Earth, in contrast to the air temperature above the ground. Unlike temperatures in the atmosphere at higher altitudes, surface skin temperature can experience large changes between day and night due to solar heating.
+Temperature of the solid or liquid surface of the Earth in units of Kelvin (K). Skin temperature refers to the temperature of the surface layer of the Earth, in contrast to the air temperature above the ground. Unlike temperatures in the atmosphere at higher altitudes, surface skin temperature can experience large changes between day and night due to solar heating.
 
 #### Image Resolution
 Nominal equatorial image resolution 31.25 km/pixel
