@@ -16,10 +16,6 @@ import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
-import closestIndexTo from 'date-fns/closest_index_to';
-import isBefore from 'date-fns/is_before';
-import isEqual from 'date-fns/is_equal';
-import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
 
 export function getOrbitTrackTitle(def) {
   if (def.daynight && def.track) {
@@ -63,28 +59,41 @@ export function nearestInterval(def, date) {
    */
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
-  const currentDate = new Date(date.getTime());
-  const currentDateOffsetCheck = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
+  const currentDateValue = date.getTime();
+  const currentDate = new Date(currentDateValue);
+  const currentDateOffsetCheck = new Date(currentDateValue + (currentDate.getTimezoneOffset() * 60000));
+
+  const isFirstDayOfMonth = currentDateOffsetCheck.getDate() === 1;
+  const isFirstDayOfYear = currentDateOffsetCheck.getMonth() === 0;
+
+  const isMonthPeriod = def.period === 'monthly';
+  const isYearPeriod = def.period === 'yearly';
 
   if (!dateArray ||
-    (def.period === 'monthly' && isFirstDayOfMonth(currentDateOffsetCheck)) ||
-    (def.period === 'yearly' && (currentDateOffsetCheck.getDate() === 1 && currentDateOffsetCheck.getMonth() === 0))) {
+    (isMonthPeriod && isFirstDayOfMonth) ||
+    (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
     return date;
   }
 
+  // populate closestAvailableDates if rangeDate is before or equal to input date
   lodashEach(dateArray, (rangeDate) => {
-    if (isBefore(rangeDate, currentDate) || isEqual(rangeDate, currentDate)) {
+    const rangeDateValue = rangeDate.getTime();
+    const isRangeDateBefore = rangeDateValue < currentDateValue;
+    const isRangeDateEqual = rangeDateValue === currentDateValue;
+
+    if (isRangeDateBefore || isRangeDateEqual) {
       closestAvailableDates.push(rangeDate);
     }
   });
 
   // use closest date index to find closest date in filtered closestAvailableDates
-  const closestDateIndex = closestIndexTo(currentDate, closestAvailableDates);
+  const closestDateIndex = util.closestToIndex(closestAvailableDates, currentDateValue);
   const closestDate = closestAvailableDates[closestDateIndex];
 
   // check for potential next date in function passed dateArray
-  const nextClosestDate = dateArray[closestDateIndex + 1];
-  return { previous: closestDate ? new Date(closestDate.getTime()) : date, next: nextClosestDate || null };
+  const next = dateArray[closestDateIndex + 1] || null;
+  const previous = closestDate ? new Date(closestDate.getTime()) : date;
+  return { previous, next };
 };
 
 /**

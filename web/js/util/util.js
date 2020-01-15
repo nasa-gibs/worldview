@@ -1112,6 +1112,27 @@ export default (function(self) {
   };
 
   /**
+   * Find closest index for currentDateValue from array of dates
+   * @param {Array} dateArray | Array of date objects
+   * @param {Number} currentDateValue | Number of milliseconds from date object
+   * @return {Number}
+   */
+  self.closestToIndex = (dateArray, currentDateValue) => {
+    let closestDateIndex;
+    let minDistance;
+    dateArray.forEach((date, index) => {
+      const dateValue = date.getTime();
+      var distance = Math.abs(currentDateValue - dateValue);
+      if (closestDateIndex === undefined || distance < minDistance) {
+        closestDateIndex = index;
+        minDistance = distance;
+      }
+    });
+
+    return closestDateIndex;
+  };
+
+  /**
    * Find index value of string in array
    * @param {Array} arra | Array of strings
    * @param {String} value | String to return index of
