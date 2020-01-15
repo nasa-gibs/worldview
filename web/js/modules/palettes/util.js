@@ -334,7 +334,6 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
  */
 export function loadPalettes(permlinkState, state) {
   var stateArray = [{ stateStr: 'l', groupStr: 'active' }];
-  const palettes = state.palettes;
   if (!isSupported()) {
     return state;
   }
@@ -352,6 +351,7 @@ export function loadPalettes(permlinkState, state) {
         var max = [];
         var squash = [];
         var count = 0;
+        console.log(layerDef);
         if (layerDef.custom) {
           lodashEach(layerDef.custom, function(value, index) {
             try {
@@ -416,7 +416,7 @@ export function loadPalettes(permlinkState, state) {
                 layerId,
                 value,
                 index,
-                palettes[stateObj.groupStr],
+                state.palettes[stateObj.groupStr],
                 state
               );
               state = update(state, {

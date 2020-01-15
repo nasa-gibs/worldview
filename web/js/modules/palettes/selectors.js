@@ -342,6 +342,27 @@ export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   return state.palettes[group][layerId];
 }
+export function refreshDisabledSelector(
+  layerId,
+  disabled,
+  index,
+  palettes,
+  state
+) {
+  let newPalettes = prepare(layerId, palettes, state);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled
+          }
+        }
+      }
+    }
+  });
+  return toggleLookup(layerId, newPalettes, state);
+}
 export function initDisabledSelector(
   layerId,
   disabledStr,
@@ -382,7 +403,7 @@ export function setDisabledSelector(
       maps: {
         [index]: {
           $merge: {
-            disabled: oldDisabled
+            disabled: isNaN(classIndex) ? [] : oldDisabled
           }
         }
       }

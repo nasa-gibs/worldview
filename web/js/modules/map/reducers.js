@@ -7,7 +7,8 @@ import {
   UPDATE_MAP_ROTATION,
   RENDERED,
   FITTED_TO_LEADING_EXTENT,
-  CHANGE_CURSOR
+  CHANGE_CURSOR,
+  REFRESH_ROTATE
 } from './constants';
 import update from 'immutability-helper';
 const INITIAL_STATE = {
@@ -39,6 +40,7 @@ export default function mapReducer(state = INITIAL_STATE, action) {
         rotation: action.rotation
       });
     case UPDATE_MAP_ROTATION:
+    case REFRESH_ROTATE:
       return update(state, { rotation: { $set: action.rotation } });
     case RENDERED:
       return lodashAssign({}, state, {
