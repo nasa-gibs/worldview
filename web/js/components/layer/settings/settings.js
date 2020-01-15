@@ -67,7 +67,8 @@ class LayerSettings extends React.Component {
       groupName,
       setThresholdRange,
       layer,
-      toggleClassification
+      toggleClassification,
+      screenHeight
     } = this.props;
     const { activeIndex } = this.state;
     const navElements = [];
@@ -121,7 +122,7 @@ class LayerSettings extends React.Component {
             ) : null
             }
             {(legend.type === 'classification' && legend.colors.length > 1) ? (
-              <ClassificationToggle palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
+              <ClassificationToggle height={Math.ceil(screenHeight / 2)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
             ) : null
             }
             <Palette
@@ -170,7 +171,8 @@ class LayerSettings extends React.Component {
       paletteOrder,
       groupName,
       layer,
-      toggleClassification
+      toggleClassification,
+      screenHeight
     } = this.props;
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
@@ -183,7 +185,7 @@ class LayerSettings extends React.Component {
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
-      return (<ClassificationToggle palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
+      return (<ClassificationToggle height={Math.ceil(screenHeight / 2)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
     }
     return (
       <React.Fragment>
@@ -285,13 +287,14 @@ class LayerSettings extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { config, palettes, compare } = state;
+  const { config, palettes, compare, browser } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
 
   return {
     paletteOrder: config.paletteOrder,
     groupName,
+    screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
     palettesTranslate,
@@ -379,6 +382,7 @@ LayerSettings.propTypes = {
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
+  screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setFilterRange: PropTypes.func,
   setOpacity: PropTypes.func,

@@ -258,8 +258,8 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-            ''
-          )}
+          ''
+        )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
