@@ -9,24 +9,28 @@
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
-          "title": "Earth Observatory - Explosive Fire Activity in Australia",
+          "title": "NASA Earth Observatory - Explosive Fire Activity in Australia",
           "link": "https://earthobservatory.nasa.gov/images/146125/explosive-fire-activity-in-australia"
         },
         {
-          "title": "Fires and Smoke Engulf Southeastern Australia",
+          "title": "NASA Earth Observatory - Fires and Smoke Engulf Southeastern Australia",
           "link": "https://earthobservatory.nasa.gov/images/146110/fires-and-smoke-engulf-southeastern-australia"
         },
         {
-          "title": "Earthdata - Wildfires Data Pathfinder",
+          "title": "NASA Earthdata - Wildfires Data Pathfinder",
           "link": "https://earthdata.nasa.gov/learn/pathfinders/wildfire-data-pathfinder"
         },
         {
-          "title": "Earthdata - Wildfires Toolkit",
+          "title": "NASA Earthdata - Wildfires Toolkit",
           "link": "https://earthdata.nasa.gov/learn/toolkits/wildfires"
         },
         {
-          "title": "Earthdata - Fire Information for Resource Management System (FIRMS) - Download MODIS/VIIRS Fire Data",
+          "title": "NASA Earthdata - Fire Information for Resource Management System (FIRMS) - Download MODIS/VIIRS Fire Data",
           "link": "https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms"
+        },
+        {
+          "title": "NASA Disasters Program - Australia Fires 2020",
+          "link": "https://disasters.nasa.gov/australia-fires-2020"
         }
       ],
       "steps": [
