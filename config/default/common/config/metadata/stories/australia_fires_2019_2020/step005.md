@@ -1,1 +1,1 @@
-Dramatic burning also occurred on Kangaroo Island. View this animation of  false color imagery of Bands 7-2-1 from MODIS/Aqua for 3 January 2020 and 12 January 2020. Almost half of the island burned in that period.
+Dramatic burning also occurred on Kangaroo Island. View this animation of false color imagery comprised of Bands 7-2-1 from the Moderate Resolution Imaging Spectroradiometer (MODIS) instrument on board the Aqua satellite for 3 January 2020 and 12 January 2020. Almost a third of the island burned in that 9-day period.
