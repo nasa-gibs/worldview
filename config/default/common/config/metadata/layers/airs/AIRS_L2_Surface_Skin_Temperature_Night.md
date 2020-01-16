@@ -1,5 +1,5 @@
 #### Description
-Temperature of the solid or liquid surface of the Earth in units of  (K). Skin temperature refers to the temperature of the surface layer of the Earth, in contrast to the air temperature above the ground. Unlike temperatures in the atmosphere at higher altitudes, surface skin temperature can experience large changes between day and night due to solar heating.
+Temperature of the solid or liquid surface of the Earth in units of Kelvin (K). Skin temperature refers to the temperature of the surface layer of the Earth, in contrast to the air temperature above the ground. Unlike temperatures in the atmosphere at higher altitudes, surface skin temperature can experience large changes between day and night due to solar heating.
 
 #### Image Resolution
 32 km/pixel (AIRS Level 2 data is nominally 45 km/pixel at the equator and the data has been resampled into a 32 km/pixel visualization.)
