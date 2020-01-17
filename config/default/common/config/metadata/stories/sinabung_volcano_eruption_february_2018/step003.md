@@ -1,1 +1,1 @@
-<p>Let's see what other imagery layers can tell us more about this eruption. Here we've turned on the Sulfur Dioxide (Prata Algorithm) layer from Aqua/AIRS. It shows the column amounts of Sulfur Dioxide found in the atmosphere and is measured in Dobson Units.</p>
+Let's see what other imagery layers can tell us more about this eruption. Here we've turned on the Sulfur Dioxide (Prata Algorithm) layer from Aqua/AIRS. It shows the column amounts of Sulfur Dioxide found in the atmosphere and is measured in Dobson Units.
