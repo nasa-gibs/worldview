@@ -11,7 +11,6 @@
               "viirs"
             ],
             "product":  "CLDMSK_L2_VIIRS_SNPP_NRT",
-            "wrapadjacentdays": true,
             "tracks": [
                 "OrbitTracks_Suomi_NPP_Descending"
             ]
