@@ -3,6 +3,7 @@ import {
   find as lodashFind,
   get as lodashGet
 } from 'lodash';
+
 import { Stroke, Style, Fill, Circle } from 'ol/style';
 import { setStyleFunction } from './selectors';
 import { isFromActiveCompareRegion } from '../compare/util';
@@ -46,11 +47,33 @@ export function getMaxValue(v) {
 export function isConditional(item) {
   return Array.isArray(item) && item[0] === 'case';
 }
-
-export function selectedCircleStyle(style) {
+export function adjustCircleRadius(style) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
-  const radius = styleImage.getRadius() * 2;
+  const radius = styleImage.getRadius() * 0.6;
+  return new Style({
+    image: new Circle({
+      radius: radius,
+      fill: fill
+    })
+  });
+}
+export function getOrbitPointStyles(feature, styleArray) {
+  return styleArray.map((style) => {
+    const type = feature.getType();
+    switch (type) {
+      case 'Point':
+        return adjustCircleRadius(style);
+      default:
+        return style;
+    }
+  });
+};
+export function selectedCircleStyle(style, size) {
+  size = size || 2;
+  const styleImage = style.getImage();
+  const fill = styleImage.getFill();
+  const radius = styleImage.getRadius() * size;
   return new Style({
     image: new Circle({
       radius: radius,
@@ -64,6 +87,7 @@ export function selectedCircleStyle(style) {
     })
   });
 }
+
 export function selectedPolygonStyle(style) {
   const fill = style.getFill();
   const color = fill.getColor().replace(/[^,]+(?=\))/, '0.5');
@@ -73,13 +97,22 @@ export function selectedPolygonStyle(style) {
   fill.setColor(color);
   return style;
 }
-export function selectedStyleFunction(feature, styleArray) {
+export function offsetLineStringStyle(feature, styleArray) {
+  return styleArray.map(style => {
+    const text = style.getText();
+    if (text) {
+      text.setOffsetX(25);
+    }
+    return style;
+  });
+}
+export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
     const type = feature.getType();
     switch (type) {
       case 'Point':
-        return selectedCircleStyle(style);
+        return selectedCircleStyle(style, size);
       case 'Polygon':
         return selectedPolygonStyle(style);
       default:
@@ -137,6 +170,12 @@ export function getPaletteForStyle(layer, layerstyleLayerObject) {
     title: layer.title,
     id: layer.id + '0_legend'
   }];
+}
+export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
+  if (acceptableExtent) {
+    return (lon > acceptableExtent[0] && lon < acceptableExtent[2]);
+  }
+  return wrap === -1 ? (lon < 250 && lon > 180) : wrap === 1 ? (lon > -250 && lon < -180) : false;
 }
 export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const metaArray = [];

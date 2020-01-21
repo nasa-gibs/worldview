@@ -420,9 +420,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       url: source.url + urlParameters,
       layer: layerName,
       day: day,
-      format: new MVT(),
+      format: new MVT({}),
       matrixSet: tms,
-      wrapX: true,
+      wrapX: !!(day === 1 || day === -1),
       tileGrid: new OlTileGridTileGrid({
         extent: gridExtent,
         resolutions: matrixSet.resolutions,
@@ -433,8 +433,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
     var layer = new LayerVectorTile({
       extent: layerExtent,
-      source: sourceOptions
-
+      source: sourceOptions,
+      renderMode: 'image'
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
@@ -452,7 +452,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       }
       setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
     }
-
+    layer.wrap = day;
     return layer;
   };
 
