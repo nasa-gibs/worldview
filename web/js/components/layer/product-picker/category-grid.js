@@ -21,7 +21,7 @@ class CategoryGrid extends React.Component {
     } = this.props;
     const masonryOptions = {
       transitionDuration: '0.6s',
-      columnWidth: 310,
+      columnWidth: width >= 630 ? 310 : width - 26,
       gutter: 10
     };
     categories.map(item => {

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import CategoryGrid from './category-grid';
 import ProductPickerHeader from './header';
+import LayerFilters from './layer-filters';
 import {
   toLower as lodashToLower,
   values as lodashValues,
@@ -29,11 +30,8 @@ import {
   ModalHeader,
   Nav,
   NavItem,
-  NavLink,
-  Form,
-  Tooltip
+  NavLink
 } from 'reactstrap';
-import moment from 'moment';
 
 /*
  * A scrollable list of layers
@@ -54,9 +52,31 @@ class ProductPicker extends React.Component {
       filteredRows: props.filteredRows,
       inputValue: '',
       filterByAvailable: true,
-      tooltipFilterAvailableOpen: false
+      tooltipFilterAvailableOpen: false,
+      modalElement: null
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
+  }
+
+  componentDidMount() {
+    const modalElement = document.getElementById('layer_picker_component');
+    modalElement.classList.add('category-width');
+    this.setState({ modalElement });
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { listType, modalElement } = this.state;
+    if (prevState.listType === listType) {
+      return;
+    }
+    if (listType === 'category') {
+      modalElement.classList.remove('browse-search-width');
+      modalElement.classList.add('category-width');
+    }
+    if (listType === 'search' || listType === 'measurements') {
+      modalElement.classList.remove('category-width');
+      modalElement.classList.add('browse-search-width');
+    }
   }
 
   /**
@@ -192,6 +212,9 @@ class ProductPicker extends React.Component {
     this.runSearch(inputValue);
   }
 
+  /**
+   * When using "back" button or clearing search field, unset selections
+   */
   revertSearchState() {
     this.setState({
       listType: 'category',
@@ -201,62 +224,35 @@ class ProductPicker extends React.Component {
     });
   }
 
+  /**
+   * When in "search" mode
+   * @param {*} selectedLayer - the layer for which to show metadata
+   */
   showMetadataForLayer(selectedLayer) {
     this.setState({ selectedLayer });
   }
 
+  /**
+   * When in "browse" measurement mode
+   * @param {*} measurementSourceIndex -  the index of the source for which to show metadata
+   */
   setSourceIndex(measurementSourceIndex) {
     this.setState({ measurementSourceIndex });
   }
 
-  toggleTooltip() {
-    this.setState({
-      tooltipFilterAvailableOpen: !this.state.tooltipFilterAvailableOpen
+  getCurrentMeasureSource() {
+    const { measurementConfig } = this.props;
+    const { selectedMeasurement, measurementSourceIndex } = this.state;
+
+    let currentMeasurement;
+    Object.keys(measurementConfig).forEach(measureName => {
+      if (measurementConfig[measureName].id === selectedMeasurement) {
+        currentMeasurement = measurementConfig[measureName];
+      }
     });
-  }
-
-  renderLayerFilters() {
-    const {
-      filteredRows,
-      filterByAvailable,
-      tooltipFilterAvailableOpen
-    } = this.state;
-    const { selectedDate } = this.props;
-    const diplayDate = moment(selectedDate).format('YYYY MMM DD');
-
-    return (
-      <div className="layer-filters-container">
-        <div className="filter-controls">
-          <h3>Filters</h3>
-          <Form>
-            <div className="custom-control custom-switch">
-              <input
-                id="unit-toggle"
-                className="custom-control-input"
-                type="checkbox"
-                onChange={this.toggleFilterByAvailable.bind(this)}
-                defaultChecked={filterByAvailable}/>
-              <label className="custom-control-label" htmlFor="unit-toggle">
-                Filter by availability
-              </label>
-              <i id="availability-filter" className="fa fa-info-circle" />
-              <Tooltip
-                placement="right"
-                isOpen={tooltipFilterAvailableOpen}
-                target="availability-filter"
-                toggle={this.toggleTooltip.bind(this)}>
-                  If enabled, only show results which would be visible at the
-                  currently selected date: <br/>
-                <span style={{ fontFamily: 'monospace' }}> {diplayDate} </span>
-              </Tooltip>
-            </div>
-          </Form>
-        </div>
-        <div className="results-text">
-          Showing {filteredRows.length} results
-        </div>
-      </div>
-    );
+    const sources = currentMeasurement && lodashValues(currentMeasurement.sources)
+      .sort((a, b) => a.title.localeCompare(b.title));
+    return sources && sources[measurementSourceIndex];
   }
 
   renderLayerList() {
@@ -267,7 +263,7 @@ class ProductPicker extends React.Component {
       category,
       selectedMeasurement,
       selectedLayer,
-      measurementSourceIndex
+      filterByAvailable
     } = this.state;
     const {
       categoryConfig,
@@ -290,19 +286,18 @@ class ProductPicker extends React.Component {
       ? 'layer-detail-container layers-all search'
       : 'layer-detail-container layers-all browse';
 
-    let currentMeasurement;
-    Object.keys(measurementConfig).forEach(measureName => {
-      if (measurementConfig[measureName].id === selectedMeasurement) {
-        currentMeasurement = measurementConfig[measureName];
-      }
-    });
-    const sources = currentMeasurement && lodashValues(currentMeasurement.sources)
-      .sort((a, b) => a.title.localeCompare(b.title));
-    const currentMeasureSource = sources && sources[measurementSourceIndex];
+    const currentMeasureSource = this.getCurrentMeasureSource();
 
     return (
       <>
-        {listType === 'search' && this.renderLayerFilters() }
+        {listType === 'search' &&
+          <LayerFilters
+            selectedDate={selectedDate}
+            numResults={filteredRows.length}
+            filterByAvailable={filterByAvailable}
+            toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}
+          />
+        }
 
         <div className={listContainerClass}>
           <Scrollbars style={{ maxHeight: height + 'px' }}>
@@ -550,7 +545,7 @@ const filterSearch = function(layer, val, terms, config, projId) {
       !lodashIncludes(lodashToLower(names.title), term) &&
       !lodashIncludes(lodashToLower(names.subtitle), term) &&
       !lodashIncludes(lodashToLower(names.tags), term) &&
-      !lodashIncludes(lodashToLower(config.layers[layer.id].id), term);
+      !lodashIncludes(lodashToLower(layer.id, term));
     if (filtered) return false;
   });
   return filtered;
