@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import util from '../../../util/util.js';
 import Scrollbars from '../../util/scrollbar';
@@ -7,9 +8,18 @@ class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDateRangesExpanded: false,
+      isMetadataExpanded: false,
       sourceMetaData: {}
     };
+  }
+
+  /**
+   * Toggle switch for the metadata info button and close arrow
+   * @method toggleMetadataButtons
+   * @return {void}
+   */
+  toggleMetadataExpansion() {
+    this.setState({ isMetadataExpanded: !this.state.isMetadataExpanded });
   }
 
   getSourceMetadata() {
@@ -25,12 +35,46 @@ class MeasurementMetadataDetail extends React.Component {
     }
   }
 
-  /**
-   * Request metadata if row is active and
-   * hide metadata when too many chars
-   * @param {Object} source | Source Object
-   */
-  render() {
+  renderMobile() {
+    const { source } = this.props;
+    const { isMetadataExpanded, sourceMetaData } = this.state;
+    const description = source && source.description;
+
+    if (description) {
+      if (sourceMetaData[description]) {
+        const { data } = sourceMetaData[description];
+        const doesMetaDataNeedExpander = data.length >= 1000;
+        const isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
+        return (
+          <div>
+            <div
+              className={ isMetaVisible ? 'source-metadata ' : 'source-metadata overflow' }
+              dangerouslySetInnerHTML={{ __html: data }}
+            />
+            {doesMetaDataNeedExpander && (
+              <div
+                className="metadata-more"
+                onClick={() => this.toggleMetadataExpansion()}
+              >
+                <span className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}>
+                  {isMetadataExpanded ? '^' : '...'}
+                </span>
+              </div>
+            )}
+          </div>
+        );
+      } else {
+        this.getSourceMetadata(source);
+        return (
+          <div className="no-results">
+            <h5>Loading metadata ... </h5>
+          </div>
+        );
+      }
+    }
+  }
+
+  renderDesktop() {
     const { source, height, categoryTitle } = this.props;
     const { sourceMetaData } = this.state;
     if (!source) {
@@ -66,11 +110,17 @@ class MeasurementMetadataDetail extends React.Component {
       );
     }
   }
+
+  render() {
+    const { isMobile } = this.props;
+    return (isMobile ? this.renderMobile() : this.renderDesktop());
+  }
 }
 
 MeasurementMetadataDetail.propTypes = {
   categoryTitle: PropTypes.string,
   height: PropTypes.number,
+  isMobile: PropTypes.bool,
   source: PropTypes.object
 };
 

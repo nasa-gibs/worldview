@@ -940,10 +940,16 @@
   float: left;
   &.search {
     width: 40%;
+    &.mobile {
+      width: 100%;
+    }
   }
   &.browse {
     width: 50%;
     padding-left: 5px;
+    &.mobile {
+      width: 100%;
+    }
   }
 }
 

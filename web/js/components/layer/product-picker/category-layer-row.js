@@ -12,6 +12,7 @@ import {
   ListGroup
 } from 'reactstrap';
 import MeasurementLayerRow from './measurement-layer-row';
+import MeasurementMetadataDetail from './measurement-metadata-detail';
 
 /**
  * A single layer search result row
@@ -24,6 +25,7 @@ class LayerRow extends React.Component {
     this.state = {
       isSelected: props.isSelected,
       projection: props.projection,
+      isMetadataExpanded: false,
       activeSourceIndex: 0
     };
   }
@@ -175,7 +177,12 @@ class LayerRow extends React.Component {
    * Render content when Active
    */
   renderContent() {
-    const { hasMeasurementSetting, measurement } = this.props;
+    const {
+      hasMeasurementSetting,
+      measurement,
+      isMobile,
+      currentMeasureSource
+    } = this.props;
     const { activeSourceIndex } = this.state;
     const sources = lodashValues(measurement.sources);
 
@@ -207,6 +214,12 @@ class LayerRow extends React.Component {
         <TabContent id={measurement.id + '-' + sources[validActiveIndex].id}>
           <TabPane>
             {this.renderSourceSettings(sources[validActiveIndex])}
+            {isMobile &&
+              <MeasurementMetadataDetail
+                source={currentMeasureSource}
+                isMobile={isMobile}
+              />
+            }
           </TabPane>
         </TabContent>
       </div>
