@@ -266,6 +266,7 @@ class ProductPicker extends React.Component {
       filterByAvailable
     } = this.state;
     const {
+      isMobile,
       categoryConfig,
       selectedProjection,
       selectedDate,
@@ -280,8 +281,8 @@ class ProductPicker extends React.Component {
     } = this.props;
 
     const listContainerClass = listType === 'search'
-      ? 'layer-list-container search'
-      : 'layer-list-container browse';
+      ? isMobile ? 'layer-list-container search mobile' : 'layer-list-container search'
+      : isMobile ? 'layer-list-container browse mobile' : 'layer-list-container browse';
     const detailContainerClass = listType === 'search'
       ? 'layer-detail-container layers-all search'
       : 'layer-detail-container layers-all browse';
@@ -303,6 +304,7 @@ class ProductPicker extends React.Component {
           <Scrollbars style={{ maxHeight: height + 'px' }}>
             <div className="product-outter-list-case">
               <LayerList
+                isMobile={isMobile}
                 addLayer={addLayer}
                 removeLayer={removeLayer}
                 activeLayers={activeLayers}
@@ -320,12 +322,13 @@ class ProductPicker extends React.Component {
                 updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
                 showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
                 setSourceIndex={index => this.setSourceIndex(index)}
+                currentMeasureSource={currentMeasureSource}
               />
             </div>
           </Scrollbars>
         </div>
 
-        <div className={detailContainerClass}>
+        {!isMobile && <div className={detailContainerClass}>
           {listType === 'search' ? (
             <LayerMetadataDetail
               layer={selectedLayer}
@@ -338,7 +341,7 @@ class ProductPicker extends React.Component {
               height={height}>
             </MeasurementMetadataDetail>
           )}
-        </div>
+        </div>}
       </>
     );
   }

@@ -58,6 +58,7 @@ class LayerList extends React.Component {
 
   renderCategoryList() {
     const {
+      isMobile,
       measurementConfig,
       layerConfig,
       addLayer,
@@ -71,7 +72,8 @@ class LayerList extends React.Component {
       updateSelectedMeasurement,
       categoryConfig,
       setSourceIndex,
-      selectedDate
+      selectedDate,
+      currentMeasureSource
     } = this.props;
 
     const categoryToUse = category || categoryConfig.All;
@@ -99,6 +101,8 @@ class LayerList extends React.Component {
                 updateSelectedMeasurement={updateSelectedMeasurement}
                 setSourceIndex={setSourceIndex}
                 selectedDate={selectedDate}
+                isMobile={isMobile}
+                currentMeasureSource={currentMeasureSource}
               />
             );
           }
