@@ -122,6 +122,10 @@ async function upload() {
       cd ${root}/${name} &&
       tar xf ${worldview} --warning=no-unknown-keyword --strip-components=1 --touch`;
     result = await ssh.execCommand(cmd);
+    // Set permissions for Grou and Other for Read and Execute for images, config metadata, and brand
+    cmd = `chmod -R go+xr ${root}/${name}/config
+        && chmod -R go+xr ${root}/${name}/images
+        && chmod -R go+xr ${root}/${name}/brand`;
     process.stdout.write(result.stdout);
     process.stderr.write(result.stderr);
     ssh.dispose();
