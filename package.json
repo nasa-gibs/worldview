@@ -189,7 +189,7 @@
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^2.3.0",
     "simplebar-react": "^2.0.8",
-    "supercluster": "6.0.2",
+    "supercluster": "7.0.0",
     "web-streams-polyfill": "^2.0.6",
     "whatwg-fetch": "^3.0.0"
   },
