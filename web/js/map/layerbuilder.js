@@ -415,14 +415,14 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       '&Version=1.0.0' +
       '&FORMAT=application%2Fvnd.mapbox-vector-tile' +
       '&TileMatrix={z}&TileCol={x}&TileRow={y}';
-
+    const wrapX = !!(day === 1 || day === -1);
     var sourceOptions = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
       day: day,
-      format: new MVT({}),
+      format: new MVT(),
       matrixSet: tms,
-      wrapX: !!(day === 1 || day === -1),
+      wrapX: wrapX,
       tileGrid: new OlTileGridTileGrid({
         extent: gridExtent,
         resolutions: matrixSet.resolutions,
@@ -434,7 +434,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     var layer = new LayerVectorTile({
       extent: layerExtent,
       source: sourceOptions,
-      renderMode: 'image'
+      renderMode: wrapX ? 'image' : 'hybrid' // Todo: revert to just 'image' when styles are updated
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
