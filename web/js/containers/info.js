@@ -72,7 +72,7 @@ class InfoList extends Component {
         href: 'https://github.com/nasa-gibs/worldview'
       },
       {
-        text: 'Whats new',
+        text: 'What\'s new',
         iconClass: 'ui-icon fa fa-flag fa-fw',
         id: 'whats_new_info_item',
         href: 'https://github.com/nasa-gibs/worldview/releases'
