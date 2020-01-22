@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 
@@ -36,11 +36,11 @@ export default function Scrollbars(props) {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!ref || !ref.current) {
       return;
     }
-    setTimeout(() => { toggleVisibleClass(ref.current); }, 100);
+    setTimeout(() => { toggleVisibleClass(ref.current); }, 50);
     setScrollTop(ref.current);
   });
 
