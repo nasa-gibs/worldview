@@ -5,8 +5,12 @@ import {
   Input,
   Button,
   Breadcrumb,
-  BreadcrumbItem
+  BreadcrumbItem,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu
 } from 'reactstrap';
+import LayerFilters from './layer-filters';
 
 import util from '../../../util/util';
 
@@ -46,50 +50,66 @@ class ProductPickerHeader extends React.Component {
 
   render() {
     const isAutoFocus = !util.browser.touchDevice;
-    const { selectedProjection, listType, category, width } = this.props;
+    const {
+      selectedProjection,
+      selectedDate,
+      listType,
+      category,
+      width,
+      toggleFilterByAvailable,
+      filterByAvailable
+    } = this.props;
     const categoryId = category && category.id;
     const isBreadCrumb = categoryId !== 'featured-all' &&
       selectedProjection === 'geographic' &&
       listType !== 'category' &&
       width > 650;
     const isSearching = listType === 'search';
-    const BackButton = (
-      <Button
-        className="back-button"
-        color="secondary"
-        onClick={this.revertToInitialScreen.bind(this)}
-      >
-        <i className="fa fa-arrow-left" />{' '}
-      </Button>
-    );
+
     return (
       <InputGroup id="layer-search" className="layer-search">
-        {isBreadCrumb ? (
-          <React.Fragment>
-            {BackButton}
-            <Breadcrumb tag="nav" className="layer-bread-crumb">
-              <BreadcrumbItem
-                tag="a"
-                title="Back to Layer Categories"
-                href="#"
-                onClick={this.revertToInitialScreen.bind(this)}
-              >
-                Categories
-              </BreadcrumbItem>
-              <BreadcrumbItem active tag="span">
-                {listType === 'search'
-                  ? 'Search Results'
-                  : category
-                    ? category.title
-                    : ''}
-              </BreadcrumbItem>
-            </Breadcrumb>
-          </React.Fragment>
-        ) : isSearching ? (
-          <React.Fragment>{BackButton}</React.Fragment>
-        ) : (
-          ''
-        )}
+        <Button
+          className="back-button"
+          color="secondary"
+          onClick={this.revertToInitialScreen.bind(this)}
+        >
+          <i className="fa fa-arrow-left" />{' '}
+        </Button>
+
+        {isBreadCrumb &&
+          <Breadcrumb tag="nav" className="layer-bread-crumb">
+            <BreadcrumbItem
+              tag="a"
+              title="Back to Layer Categories"
+              href="#"
+              onClick={this.revertToInitialScreen.bind(this)}
+            >
+              Categories
+            </BreadcrumbItem>
+            <BreadcrumbItem active tag="span">
+              {listType === 'search'
+                ? 'Search Results'
+                : category
+                  ? category.title
+                  : ''}
+            </BreadcrumbItem>
+          </Breadcrumb>
+        }
+
+        {isSearching &&
+          <UncontrolledDropdown>
+            <DropdownToggle className="filter-button" caret>
+              <i className="fas fa-filter"></i>
+            </DropdownToggle>
+            <DropdownMenu>
+              <LayerFilters
+                selectedDate={selectedDate}
+                filterByAvailable={filterByAvailable}
+                toggleFilterByAvailable={toggleFilterByAvailable}
+              />
+            </DropdownMenu>
+          </UncontrolledDropdown>
+        }
 
         <Input
           onChange={this.handleChange.bind(this)}

@@ -20,7 +20,7 @@ class LayerList extends React.Component {
 
   /**
    * Loads metadata for layer (if not previously loaded) and
-   * triggers showing in layer dietal area
+   * triggers showing in layer detail area
    *
    * @param {string} layerId - the layer id to show metadata for
    * @return {void}
@@ -115,9 +115,7 @@ class LayerList extends React.Component {
     const { selectedLayerId } = this.state;
     const { addLayer, removeLayer, activeLayers } = this.props;
 
-    return filteredRows.length < 1 ? (
-      <h3 className="no-results"> No results found. </h3>
-    ) : (
+    return (
       filteredRows.map(layer => {
         const isEnabled = activeLayers.some(l => l.id === layer.id);
         const isMetadataShowing = layer.id === selectedLayerId;

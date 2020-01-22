@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import CategoryGrid from './category-grid';
 import ProductPickerHeader from './header';
-import LayerFilters from './layer-filters';
+
 import {
   toLower as lodashToLower,
   values as lodashValues,
@@ -52,7 +52,6 @@ class ProductPicker extends React.Component {
       filteredRows: props.filteredRows,
       inputValue: '',
       filterByAvailable: true,
-      tooltipFilterAvailableOpen: false,
       modalElement: null
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
@@ -262,8 +261,7 @@ class ProductPicker extends React.Component {
       categoryType,
       category,
       selectedMeasurement,
-      selectedLayer,
-      filterByAvailable
+      selectedLayer
     } = this.state;
     const {
       isMobile,
@@ -276,32 +274,35 @@ class ProductPicker extends React.Component {
       removeLayer,
       addLayer,
       hasMeasurementSetting,
-      layerConfig,
-      height
+      height,
+      layerConfig
     } = this.props;
 
-    const listContainerClass = listType === 'search'
-      ? isMobile ? 'layer-list-container search mobile' : 'layer-list-container search'
-      : isMobile ? 'layer-list-container browse mobile' : 'layer-list-container browse';
-    const detailContainerClass = listType === 'search'
-      ? 'layer-detail-container layers-all search'
+    const isSearching = listType === 'search';
+    const currentMeasureSource = this.getCurrentMeasureSource();
+    const listHeight = isMobile && isSearching ? height / 2 : height;
+    const listContainerClass = isSearching
+      ? isMobile
+        ? 'layer-list-container search mobile'
+        : 'layer-list-container search'
+      : isMobile
+        ? 'layer-list-container browse mobile'
+        : 'layer-list-container browse';
+    const detailContainerClass = isSearching
+      ? isMobile
+        ? 'layer-detail-container layers-all search mobile'
+        : 'layer-detail-container layers-all search'
       : 'layer-detail-container layers-all browse';
 
-    const currentMeasureSource = this.getCurrentMeasureSource();
-
-    return (
+    return filteredRows.length ? (
       <>
-        {listType === 'search' &&
-          <LayerFilters
-            selectedDate={selectedDate}
-            numResults={filteredRows.length}
-            filterByAvailable={filterByAvailable}
-            toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}
-          />
+        { isSearching &&
+            <div className="results-text">
+              Showing {filteredRows.length} layers
+            </div>
         }
-
         <div className={listContainerClass}>
-          <Scrollbars style={{ maxHeight: height + 'px' }}>
+          <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
             <div className="product-outter-list-case">
               <LayerList
                 isMobile={isMobile}
@@ -328,21 +329,26 @@ class ProductPicker extends React.Component {
           </Scrollbars>
         </div>
 
-        {!isMobile && <div className={detailContainerClass}>
-          {listType === 'search' ? (
+        <div className={detailContainerClass}>
+          {isSearching ? (
             <LayerMetadataDetail
               layer={selectedLayer}
-              height={height}>
+              height={listHeight}>
             </LayerMetadataDetail>
-          ) : (
+          ) : !isMobile && (
             <MeasurementMetadataDetail
               categoryTitle={category.title}
               source={currentMeasureSource}
               height={height}>
             </MeasurementMetadataDetail>
           )}
-        </div>}
+        </div>
       </>
+    ) : (
+      <div className="no-results">
+        <i className="fas fa-5x fa-meteor"></i>
+        <h3> No matching layers found! </h3>
+      </div>
     );
   }
 
@@ -351,7 +357,8 @@ class ProductPicker extends React.Component {
       listType,
       categoryType,
       category,
-      inputValue
+      inputValue,
+      filterByAvailable
     } = this.state;
     const {
       selectedProjection,
@@ -362,7 +369,8 @@ class ProductPicker extends React.Component {
       onToggle,
       categoryConfig,
       measurementConfig,
-      hasMeasurementSource
+      hasMeasurementSource,
+      selectedDate
     } = this.props;
     const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
@@ -377,6 +385,8 @@ class ProductPicker extends React.Component {
         <ModalHeader toggle={onToggle}>
           <ProductPickerHeader
             selectedProjection={selectedProjection}
+            selectedDate={selectedDate}
+            filterByAvailable={filterByAvailable}
             listType={listType}
             inputValue={inputValue}
             isMobile={isMobile}
@@ -385,6 +395,7 @@ class ProductPicker extends React.Component {
             width={width}
             runSearch={this.runSearch.bind(this)}
             updateListState={this.revertSearchState.bind(this)}
+            toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}
           />
         </ModalHeader>
 
@@ -406,7 +417,7 @@ class ProductPicker extends React.Component {
                       </NavItem>
                     ))}
                   </Nav>
-                  <Scrollbars style={{ maxHeight: height + 'px' }}>
+                  <Scrollbars style={{ maxHeight: (height - 80) + 'px' }}>
                     <div>
                       {isCategoryDisplay ? (
                         <CategoryGrid
@@ -485,8 +496,9 @@ const mapDispatchToProps = dispatch => ({
 function mapStateToProps(state, ownProps) {
   const { config, browser, proj, layers, compare, date } = state;
   const { screenWidth, screenHeight } = browser;
+  const isMobile = browser.lessThan.medium;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const height = screenHeight - 140;
+  const height = screenHeight - (isMobile ? 100 : 140);
   const width = getModalWidth(screenWidth);
   const allLayers = getLayersForProjection(config, proj.id);
   const activeLayers = layers[activeString];
@@ -496,13 +508,13 @@ function mapStateToProps(state, ownProps) {
     measurementConfig: config.measurements,
     layerConfig: config.layers,
     selectedDate: date.selected,
+    isMobile,
     height,
     width,
     allLayers,
     filteredRows: allLayers,
     activeLayers,
     selectedProjection: proj.id,
-    isMobile: browser.lessThan.medium,
     filterProjections: layer => {
       return !layer.projections[proj.id];
     },

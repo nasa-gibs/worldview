@@ -40,6 +40,7 @@
   overflow: auto;
   position: relative;
   padding: 5px 0;
+  min-height: 300px;
 }
 
 .stamp {
@@ -190,13 +191,14 @@
   }
   &.selected {
     transition: background-color 300ms linear;
-    background: #2a2a2a;
-    border-left: 5px solid #d54f21;
+    background: #222;
+    border-left: 8px solid #d54f21;
     &:hover {
       box-shadow: none;
     }
     & .layers-all-header > h3 {
       color: #fff;
+      font-weight: 500;
     }
     & .layers-all-header > h5 {
       color: #aaa;
@@ -783,10 +785,11 @@
 
 .custom-layer-dialog {
   background-color: #dcdcdc;
+  margin: 5px auto;
 
   &.category-width {
     width: 978px;
-    max-width: 978px;
+    max-width: 95%;
     & .modal-body {
       padding: 0 0 0 11px;
     }
@@ -823,6 +826,18 @@
   }
   & .modal-body {
     padding: 0;
+  }
+}
+
+.layer-search {
+  & .dropdown {
+    margin-right: 10px;
+  }
+  & .dropdown-menu {
+    padding: 2px;
+  }
+  & .filter-button {
+    background-color: #d54e21;
   }
 }
 
@@ -882,7 +897,7 @@
   }
 }
 
-.no-results {
+.no-selection {
   margin-top: 50px;
   & h3 {
     font-size: 20px;
@@ -899,19 +914,20 @@
 }
 
 .results-text {
-  text-align: right;
-  font-size: 16px;
-  margin: 10px 15px;
+  text-align: left;
+  font-size: 14px;
+  padding: 5px 10px;
+  background: #ddd;
+  margin-bottom: 5px;
+  margin-top: -10px;
 }
 
 .layer-filters-container {
-  width: 20%;
-  float: left;
 
   & .filter-controls {
-    min-height: 150px;
+    min-height: 110px;
+    min-width: 230px;
     background-color: #333;
-    margin: 0 5px;
     color: #eee;
     padding: 10px 8px 15px;
     & h3 {
@@ -938,26 +954,34 @@
 
 .layer-list-container {
   float: left;
+  padding: 0 2px 0 5px;
+
   &.search {
-    width: 40%;
+    width: 50%;
     &.mobile {
       width: 100%;
     }
   }
   &.browse {
     width: 50%;
-    padding-left: 5px;
     &.mobile {
       width: 100%;
     }
   }
 }
-
-h3.no-results {
-  font-weight: 500;
-  font-size: 20px;
-  margin: 20px auto;
+.no-results {
   text-align: center;
+  margin-top: 40px;
+  & .fas {
+    color: #777;
+  }
+  & h3 {
+    font-weight: 500;
+    font-size: 20px;
+    margin: 40px auto 0;
+    text-align: center;
+    color: #777;
+  }
 }
 
 .layer-detail-container {
@@ -966,7 +990,13 @@ h3.no-results {
   padding-right: 2px;
 
   &.search {
-    width: 40%;
+    width: 50%;
+    &.mobile {
+      width: 100%;
+      margin-top: 10px;
+      min-height: 200px;
+      padding-left: 2px;
+    }
   }
   &.browse {
     width: 50%;
