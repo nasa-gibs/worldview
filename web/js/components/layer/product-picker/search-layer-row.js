@@ -49,7 +49,7 @@ class LayerRow extends React.Component {
     const splitIdx = title.indexOf('(');
     const attrs = title.slice(splitIdx);
     const titleName = title.slice(0, splitIdx - 1);
-    return splitIdx < 0 || title.length < 40
+    return splitIdx < 0
       ? <h3> {title} </h3>
       : (
         <>
