@@ -80,7 +80,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink":  "v=93.90282913243107,-56.91836123487405,195.01220413243107,-7.840236234874048&t=2020-01-05-T17%3A22%3A29Z&l=OMPS_Aerosol_Index_PyroCumuloNimbus(opacity=0.60,min=1.5,max=19.25,squash=true),Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+          "stepLink":  "v=78.18571067651742,-66.83229979196913,227.94342094169116,6.070585552396697&t=2020-01-06-T00%3A00%3A00Z&l=OMPS_Aerosol_Index_PyroCumuloNimbus(opacity=0.60,min=1.5,max=19.25,squash=true),Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
         },
         {
           "description": "step007.html",
