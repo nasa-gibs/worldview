@@ -26,7 +26,6 @@ class ProductPickerHeader extends React.Component {
     const { tooltipFilterAvailableOpen } = this.state;
     const {
       selectedDate,
-      numResults,
       filterByAvailable,
       toggleFilterByAvailable
     } = this.props;
@@ -59,9 +58,6 @@ class ProductPickerHeader extends React.Component {
               </Tooltip>
             </div>
           </Form>
-        </div>
-        <div className="results-text">
-          Showing {numResults} results
         </div>
       </div>
     );

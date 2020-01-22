@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import util from '../../../util/util.js';
 import Scrollbars from '../../util/scrollbar';
@@ -35,85 +34,81 @@ class MeasurementMetadataDetail extends React.Component {
     }
   }
 
-  renderMobile() {
-    const { source } = this.props;
-    const { isMetadataExpanded, sourceMetaData } = this.state;
-    const description = source && source.description;
-
-    if (description) {
-      if (sourceMetaData[description]) {
-        const { data } = sourceMetaData[description];
-        const doesMetaDataNeedExpander = data.length >= 1000;
-        const isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
-        return (
-          <div>
-            <div
-              className={ isMetaVisible ? 'source-metadata ' : 'source-metadata overflow' }
-              dangerouslySetInnerHTML={{ __html: data }}
-            />
-            {doesMetaDataNeedExpander && (
-              <div
-                className="metadata-more"
-                onClick={() => this.toggleMetadataExpansion()}
-              >
-                <span className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}>
-                  {isMetadataExpanded ? '^' : '...'}
-                </span>
-              </div>
-            )}
+  renderMobile(data) {
+    const { isMetadataExpanded } = this.state;
+    const doesMetaDataNeedExpander = data.length >= 1000;
+    const isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
+    return (
+      <div>
+        <div
+          className={ isMetaVisible ? 'source-metadata ' : 'source-metadata overflow' }
+          dangerouslySetInnerHTML={{ __html: data }}
+        />
+        {doesMetaDataNeedExpander && (
+          <div
+            className="metadata-more"
+            onClick={() => this.toggleMetadataExpansion()}
+          >
+            <span className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}>
+              {isMetadataExpanded ? '^' : '...'}
+            </span>
           </div>
-        );
-      } else {
-        this.getSourceMetadata(source);
-        return (
-          <div className="no-results">
-            <h5>Loading metadata ... </h5>
-          </div>
-        );
-      }
-    }
+        )}
+      </div>
+    );
   }
 
-  renderDesktop() {
-    const { source, height, categoryTitle } = this.props;
+  renderDesktop(data) {
+    const { height, source } = this.props;
+    const { title } = source;
+
+    return (
+      <Scrollbars style={{ maxHeight: height + 'px' }}>
+        <div className="layers-all-layer">
+          <div className="layers-all-header">
+            <h3>{title}</h3>
+          </div>
+          <div className="source-metadata">
+            <div dangerouslySetInnerHTML={{ __html: data }} />
+          </div>
+        </div>
+      </Scrollbars>
+    );
+  }
+
+  render() {
+    const { isMobile, source, categoryTitle } = this.props;
     const { sourceMetaData } = this.state;
-    if (!source) {
+
+    if (!isMobile && !source) {
       return (
-        <div className="no-results">
+        <div className="no-selection">
           <h3> {categoryTitle} </h3>
           <h5> (Select a measurement) </h5>
         </div>
       );
     }
-    const { description, title } = source;
 
-    if (sourceMetaData[description]) {
-      const { data } = sourceMetaData[description];
+    const description = source && source.description;
+    if (!description) {
       return (
-        <Scrollbars style={{ maxHeight: height + 'px' }}>
-          <div className="layers-all-layer">
-            <div className="layers-all-header">
-              <h3>{title}</h3>
-            </div>
-            <div className="source-metadata">
-              <div dangerouslySetInnerHTML={{ __html: data }} />
-            </div>
-          </div>
-        </Scrollbars>
+        <div className="no-selection">
+          <h5>No metadata found</h5>
+        </div>
       );
-    } else {
+    }
+
+    const data = sourceMetaData[description] && sourceMetaData[description].data;
+    if (!data) {
       this.getSourceMetadata(source);
       return (
-        <div className="no-results">
+        <div className="no-selection">
           <h5>Loading metadata ... </h5>
         </div>
       );
     }
-  }
 
-  render() {
-    const { isMobile } = this.props;
-    return (isMobile ? this.renderMobile() : this.renderDesktop());
+    return (isMobile ? this.renderMobile(data) : this.renderDesktop(data));
   }
 }
 
