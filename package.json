@@ -84,7 +84,7 @@
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "browserstack-capabilities": "^0.7.0",
-    "browserstack-local": "^1.4.2",
+    "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
     "chromedriver": "^78.0.1",
     "clean-webpack-plugin": "^3.0.0",
