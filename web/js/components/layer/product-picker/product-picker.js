@@ -498,7 +498,7 @@ function mapStateToProps(state, ownProps) {
   const { screenWidth, screenHeight } = browser;
   const isMobile = browser.lessThan.medium;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const height = screenHeight - (isMobile ? 100 : 140);
+  const height = screenHeight - (isMobile ? 100 : 170);
   const width = getModalWidth(screenWidth);
   const allLayers = getLayersForProjection(config, proj.id);
   const activeLayers = layers[activeString];

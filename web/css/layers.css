@@ -866,8 +866,13 @@
   }
 }
 
-@media (max-width: 700px) {
-
+@media (max-width: 740px) {
+  .modal-header {
+    padding: 5px 10px;
+  }
+  .layer-modal-content > .results-text {
+    font-size: 12px !important;
+  }
   .custom-layer-dialog {
     width: auto;
 
@@ -913,13 +918,14 @@
   }
 }
 
-.results-text {
+.layer-modal-content .results-text {
   text-align: left;
   font-size: 14px;
   padding: 5px 10px;
   background: #ddd;
   margin-bottom: 5px;
   margin-top: -10px;
+  font-weight: 500;
 }
 
 .layer-filters-container {
