@@ -44,7 +44,7 @@ class ProductPickerHeader extends React.Component {
                 onChange={toggleFilterByAvailable}
                 defaultChecked={filterByAvailable}/>
               <label className="custom-control-label" htmlFor="unit-toggle">
-                Filter by availability
+                Hide unavailable
               </label>
               <i id="availability-filter" className="fa fa-info-circle" />
               <Tooltip

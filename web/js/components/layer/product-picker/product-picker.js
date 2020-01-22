@@ -91,7 +91,7 @@ class ProductPicker extends React.Component {
       selectedDate,
       allLayers
     } = this.props;
-    const { categoryType, filterByAvailable } = this.state;
+    const { categoryType, filterByAvailable, selectedLayer } = this.state;
     const val = value.toLowerCase();
     let newState;
 
@@ -100,7 +100,8 @@ class ProductPicker extends React.Component {
       newState = {
         filteredRows: [],
         listType: 'category',
-        inputValue: ''
+        inputValue: '',
+        selectedLayer: null
       };
       if (categoryType === 'featured') {
         this.toggleFeatureTab(newState);
@@ -116,11 +117,14 @@ class ProductPicker extends React.Component {
           (filterByAvailable && !availableAtDate(layer, selectedDate))
         );
       });
+      const selectedLayerInResults = selectedLayer &&
+        !!filteredRows.find(layer => layer.id === selectedLayer.id);
 
       newState = {
         filteredRows: filteredRows,
         listType: 'search',
-        inputValue: value
+        inputValue: value,
+        selectedLayer: selectedLayerInResults ? selectedLayer : null
       };
     }
     this.setState(newState);
@@ -294,11 +298,11 @@ class ProductPicker extends React.Component {
         : 'layer-detail-container layers-all search'
       : 'layer-detail-container layers-all browse';
 
-    return filteredRows.length ? (
+    return filteredRows.length || !isSearching ? (
       <>
         { isSearching &&
             <div className="results-text">
-              Showing {filteredRows.length} layers
+              Showing {filteredRows.length} layers:
             </div>
         }
         <div className={listContainerClass}>
@@ -373,7 +377,7 @@ class ProductPicker extends React.Component {
       selectedDate
     } = this.props;
     const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
-    const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
+    const showCategoryTabs = (isCategoryDisplay || categoryType === 'featured') && !inputValue;
     const categoryKeys = [
       'hazards and disasters',
       'scientific',
@@ -417,9 +421,9 @@ class ProductPicker extends React.Component {
                       </NavItem>
                     ))}
                   </Nav>
-                  <Scrollbars style={{ maxHeight: (height - 80) + 'px' }}>
-                    <div>
-                      {isCategoryDisplay ? (
+                  {isCategoryDisplay ? (
+                    <Scrollbars style={{ maxHeight: (height - 80) + 'px' }}>
+                      <div className="product-outter-list-case">
                         <CategoryGrid
                           categories={lodashValues(categoryConfig[categoryType])}
                           measurementConfig={measurementConfig}
@@ -428,9 +432,9 @@ class ProductPicker extends React.Component {
                           categoryType={categoryType}
                           width={width}
                         />
-                      ) : this.renderLayerList()}
-                    </div>
-                  </Scrollbars>
+                      </div>
+                    </Scrollbars>
+                  ) : this.renderLayerList()}
                 </>
               )
               : this.renderLayerList()
