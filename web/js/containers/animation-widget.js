@@ -139,12 +139,6 @@ class AnimationWidget extends React.Component {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.speed !== state.speed && !state.isSliding) {
-      return { speed: props.speed };
-    } else return null;
-  }
-
   toggleCollapse() {
     this.setState({ collapsed: !this.state.collapsed });
   }
@@ -484,8 +478,8 @@ class AnimationWidget extends React.Component {
                 handle={RangeHandle}
                 onBeforeChange={() => this.setState({ isSliding: true })}
                 onAfterChange={() => {
-                  this.setState({ isSliding: false });
                   this.props.onSlide(speed);
+                  this.setState({ isSliding: false });
                 }}
               />
               <span className="wv-slider-label">{sliderLabel}</span>
