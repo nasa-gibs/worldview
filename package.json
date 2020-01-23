@@ -155,7 +155,7 @@
     "@entryline/gifstream": "^1.2.0",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "bluebird": "3.7.1",
-    "bootstrap": "4.3.1",
+    "bootstrap": "4.4.1",
     "cachai": "^1.0.2",
     "canvg-browser": "^1.0.0",
     "file-saver": "^2.0.2",
