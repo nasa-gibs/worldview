@@ -1043,4 +1043,8 @@
       margin: 0 5px;
     }
   }
+  & .layer-preview {
+    margin-top: 15px;
+    max-height: 400px;
+  }
 }

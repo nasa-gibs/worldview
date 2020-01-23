@@ -337,11 +337,12 @@ class ProductPicker extends React.Component {
           {isSearching ? (
             <LayerMetadataDetail
               layer={selectedLayer}
-              height={listHeight}>
+              height={listHeight}
+              selectedProjection={selectedProjection}>
             </LayerMetadataDetail>
           ) : !isMobile && (
             <MeasurementMetadataDetail
-              categoryTitle={category.title}
+              categoryTitle={category && category.title}
               source={currentMeasureSource}
               height={height}>
             </MeasurementMetadataDetail>
