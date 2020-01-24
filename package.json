@@ -42,6 +42,7 @@
     "docker:reimage": "docker rmi -f worldview && docker build --no-cache -t worldview .",
     "docker:restart": "run-s docker:stop docker:start",
     "docker:shell": "docker exec -it worldview /bin/bash ; true",
+    "docker:shellwin": "winpty docker exec -it worldview //bin/bash",
     "docker:start": "docker run --rm --name worldview --mount type=bind,source=\"$(pwd)\",target=/build --mount type=volume,target=/build/node_modules -p 3128:3000 -d worldview",
     "docker:stop": "docker stop -t 1 worldview ; true",
     "e2e": "run-s --continue-on-error --silent e2e:gui:*",
