@@ -56,6 +56,7 @@
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
     "lint:js": "eslint .",
+    "notes": "node ./tasks/releaseNotes.js",
     "preinstall": "node tasks/checkNodeVersion.js",
     "postinstall": "npm run python",
     "python": "run-script-os",
