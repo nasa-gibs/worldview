@@ -136,6 +136,7 @@ ThresholdSelect.propTypes = {
   legend: PropTypes.object,
   max: PropTypes.number,
   min: PropTypes.number,
+  palette: PropTypes.object,
   setRange: PropTypes.func,
   squashed: PropTypes.bool,
   start: PropTypes.number

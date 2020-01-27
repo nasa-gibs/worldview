@@ -127,5 +127,6 @@ class LayerInfo extends React.Component {
 export default LayerInfo;
 
 LayerInfo.propTypes = {
-  layer: PropTypes.object
+  layer: PropTypes.object,
+  screenHeight: PropTypes.number
 };

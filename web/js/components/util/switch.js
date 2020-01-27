@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
 // https://upmostly.com/tutorials/build-a-react-switch-toggle-component
 const Switch = (props) => {
   const { color, id, active, toggle, label } = props;
@@ -32,5 +34,11 @@ const Switch = (props) => {
     </div>
   );
 };
-
+Switch.propTypes = {
+  active: PropTypes.bool,
+  color: PropTypes.string,
+  id: PropTypes.string,
+  label: PropTypes.string,
+  toggle: PropTypes.func
+};
 export default Switch;

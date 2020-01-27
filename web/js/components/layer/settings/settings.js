@@ -392,5 +392,6 @@ LayerSettings.propTypes = {
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   title: PropTypes.string,
+  toggleClassification: PropTypes.func,
   vectorStyles: PropTypes.object
 };

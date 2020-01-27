@@ -351,7 +351,6 @@ export function loadPalettes(permlinkState, state) {
         var max = [];
         var squash = [];
         var count = 0;
-        console.log(layerDef);
         if (layerDef.custom) {
           lodashEach(layerDef.custom, function(value, index) {
             try {

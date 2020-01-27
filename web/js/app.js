@@ -206,6 +206,7 @@ App.propTypes = {
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
   mapMouseEvents: PropTypes.object,
+  modalId: PropTypes.string,
   parameters: PropTypes.object,
   state: PropTypes.object
 };

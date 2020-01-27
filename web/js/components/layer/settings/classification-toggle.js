@@ -42,9 +42,14 @@ ClassificationToggle.defaultProps = {
   start: 100
 };
 ClassificationToggle.propTypes = {
+  active: PropTypes.bool,
+  height: PropTypes.number,
   layer: PropTypes.object,
+  legend: PropTypes.object,
+  palette: PropTypes.object,
   setOpacity: PropTypes.func,
-  start: PropTypes.number
+  start: PropTypes.number,
+  toggle: PropTypes.func
 };
 
 export default ClassificationToggle;
