@@ -9,7 +9,6 @@ button[data-tooltip] {
 [data-tooltip] {
   position: relative;
 }
-
 [data-tooltip]::before,
 [data-tooltip]::after {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";

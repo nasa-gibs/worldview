@@ -67,6 +67,7 @@ import '../css/dataDownload.css';
 import '../css/sidebar.css';
 import '../css/layers.css';
 import '../css/scrollbar.css';
+import '../css/switch.css';
 import '../css/timeline.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
@@ -205,6 +206,7 @@ App.propTypes = {
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
   mapMouseEvents: PropTypes.object,
+  modalId: PropTypes.string,
   parameters: PropTypes.object,
   state: PropTypes.object
 };
