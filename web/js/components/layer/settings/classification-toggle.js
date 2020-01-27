@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { CustomInput } from 'reactstrap';
 import Switch from '../../util/switch';
 import Scrollbar from '../../util/scrollbar';
 
@@ -27,7 +26,7 @@ class ClassificationToggle extends React.Component {
               <Switch
                 id={id}
                 key={id}
-                color={color}
+                color={color.substring(0, 6)}
                 label={tooltip}
                 active={!inActive}
                 toggle={() => toggle(index)}
