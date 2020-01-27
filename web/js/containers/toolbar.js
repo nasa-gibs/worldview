@@ -82,7 +82,6 @@ class toolbarContainer extends Component {
 
   openImageDownload() {
     const { openModal, hasCustomPalette, isRotated, hasGraticule, activePalettes, rotation, refreshStateAfterImageDownload } = this.props;
-    console.log(hasCustomPalette, activePalettes);
     this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice').then(
       () => {
         this.getPromise(
@@ -246,7 +245,6 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = dispatch => ({
   refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule) => {
-    console.log(activePalettes, rotation, isGraticule);
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
     }
