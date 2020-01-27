@@ -118,7 +118,7 @@ class App extends React.Component {
         <div id="dlMap" />
         <Timeline key={locationKey || '1'} />
         <div id="wv-animation-widet-case">
-          {isAnimationWidgetActive ? <AnimationWidget /> : null}
+          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
 
