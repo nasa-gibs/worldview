@@ -1,0 +1,15 @@
+{
+ "CALIPSO_Wide_Field_Camera_Radiance_v3-02": "2019-10-12T00:00:00Z",
+ "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day": "2019-12-19T00:00:00Z",
+
+ "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day": "2019-02-01T00:00:00Z",
+ "MOPITT_CO_Monthly_Total_Column_Day": "2019-02-01T00:00:00Z",
+ "MOPITT_CO_Monthly_Total_Column_Night": "2019-02-01T00:00:00Z",
+ "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Night": "2019-02-01T00:00:00Z",
+ "MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct": "2019-12-01T00:00:00Z",
+
+ "MODIS_Aqua_Thermal_Anomalies_Day": "2019-08-01T00:00:00Z",
+ "MODIS_Aqua_Thermal_Anomalies_Night": "2019-08-01T00:00:00Z",
+ "MODIS_Terra_Thermal_Anomalies_Day": "2019-08-01T00:00:00Z",
+ "MODIS_Terra_Thermal_Anomalies_Night": "2019-08-01T00:00:00Z"
+}
