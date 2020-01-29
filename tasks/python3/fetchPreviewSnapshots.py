@@ -8,17 +8,6 @@ import os
 import sys
 import shutil
 
-
-# Coastlines Only sizes
-# arctic_bad_size = 28726
-# antarctic_bad_size = 5988
-# geographic_bad_size = 34598
-
-# SCAR/OSM Land_Water_Map Only
-arctic_bad_size = 13544
-antarctic_bad_size = 4060
-geographic_bad_size = 12088
-
 override_dates_dict = {}
 bad_snapshots = []
 total_layer_count = 0
@@ -28,8 +17,7 @@ snapshotsUrl = 'https://wvs.earthdata.nasa.gov/api/v1/snapshot?'
 param_dict = {
   'base': {
     'REQUEST': 'GetSnapshot',
-    'FORMAT': 'image/jpeg',
-    'OPACITIES': '0.50,1'
+    'FORMAT': 'image/jpeg'
   },
   'geographic': {
     'BBOX': '-90,-180,90,180',
@@ -50,6 +38,12 @@ param_dict = {
     'HEIGHT': '512'
   }
 }
+# These layers should not be combined with the reference layer
+standalone_layers = [
+  'Coastlines',
+  'Reference_Features',
+  'Reference_Labels'
+]
 root_img_dir = './build/options-build/preview-images/'
 dest_img_dir = './web/images/layers/previews/'
 # reference_layer = 'Coastlines'
@@ -58,6 +52,37 @@ reference_layers = {
   'arctic': 'OSM_Land_Water_Map',
   'antarctic': 'SCAR_Land_Water_Map'
 }
+current = datetime.now()
+
+
+def show_progress():
+  global complete_layer_count, total_layer_count
+  complete_layer_count += 1
+  percent_complete = round((complete_layer_count / total_layer_count) * 100, 1)
+  sys.stdout.write('\r')
+  sys.stdout.write('Progress: ' + str(percent_complete) + '%')
+  sys.stdout.flush()
+
+
+def track_bad_snapshots(layer_id, projection, request_url, size):
+  global bad_snapshots
+  # Coastlines Only sizes
+  # arctic_bad_size = 28726
+  # antarctic_bad_size = 5988
+  # geographic_bad_size = 34598
+
+  # SCAR/OSM Land_Water_Map Only
+  arctic_bad_size = 9949
+  antarctic_bad_size = 4060
+  geographic_bad_size = 12088
+
+  # A blank snapshot with only reference_layer in each projection
+  if (size == geographic_bad_size or size == arctic_bad_size or size == antarctic_bad_size):
+    bad_snapshots.append({
+      'id': layer_id,
+      'projection': projection,
+      'url': request_url
+    })
 
 
 def prepare_dirs():
@@ -77,36 +102,42 @@ def prepare_dirs():
 
 
 def get_best_date(projection, period, date_ranges):
-  last_range_idx = len(date_ranges) - 1
-  start_date = date_ranges[last_range_idx].get('startDate')
-  end_date = date_ranges[last_range_idx].get('endDate')
+  global current
+  last_range = date_ranges[len(date_ranges) - 1]
+  start_date = last_range.get('startDate')
+  end_date = last_range.get('endDate')
   parsed_start_date = datetime.strptime(start_date, time_format)
   parsed_end_date = datetime.strptime(end_date, time_format)
-  interval = int(date_ranges[last_range_idx]['dateInterval'])
+  p_year = parsed_end_date.year
+  p_month = parsed_end_date.month
+  interval = int(last_range.get('dateInterval'))
+  altered_date = None
 
   # Handle daily layers
   if (period == "daily"):
-    # Go back a few more days for single day layers
+    # Go back a few more days for single day layers since something
+    # too recent may not be processed yet
     if (interval == 1):
       interval = 3
-
     altered_date = parsed_end_date - timedelta(days=interval)
 
-    if (altered_date >= parsed_start_date):
-      date = datetime.strftime(altered_date, time_format)
+  # Choose a good daylight month for arctic
+  if projection == "arctic" and p_month not in [4, 5, 6, 7, 8, 9]:
+    if p_year == current.year and current.month < 4:
+      altered_date = parsed_end_date.replace(day=1, month=6, year=current.year-1)
     else:
-      date = end_date
+      altered_date = parsed_end_date.replace(month=6)
 
-  # Go back ~6 months for arctic layers
-  elif (projection == "arctic"):
-    altered_date = parsed_end_date - timedelta(weeks=26)
+  # Choose a good daylight month for antarctic
+  if projection == "antarctic" and p_month not in [10, 11, 12, 1, 2]:
+    ########################
+    # TODO handle "bad" months for antarctic
+    ########################
+    altered_date = parsed_end_date.replace(month=12)
 
-    if (altered_date >= parsed_start_date):
-      date = datetime.strftime(altered_date, time_format)
-    else:
-      date = end_date
-
-  # For everything else just use the end date of the last range
+  # Make sure modified date isn't out of layer date range
+  if altered_date and altered_date >= parsed_start_date:
+    date = datetime.strftime(altered_date, time_format)
   else:
     date = end_date
 
@@ -130,21 +161,24 @@ def get_time_param(projection, layer_id, layer, params):
 
 
 def get_snapshots(layer):
-  global complete_layer_count, total_layer_count
-
   for projection, proj_dict in layer['projections'].items():
     reference_layer = reference_layers[projection]
-    # Somtimes a layer id is provided per projection (e.g. Land Mask layers)
+
+    # Sometimes a layer id is provided per projection (e.g. Land Mask layers)
     if (proj_dict.get('layer')):
       layer_id = proj_dict.get('layer')
     else:
       layer_id = layer['id']
+
     params = { **param_dict['base'], **param_dict[projection] }
     get_time_param(projection, layer_id, layer, params)
 
-    params['LAYERS'] = layer_id
-    if (layer_id is not reference_layer):
+    if (layer_id is not reference_layer and layer_id not in standalone_layers):
       params['LAYERS'] = (reference_layer + ',' + layer_id)
+      params['OPACITIES'] = '0.50,1'
+    else:
+      params['LAYERS'] = layer_id
+
     file_name = root_img_dir + projection + '/' + layer_id + '.jpg'
     dest_file_name = dest_img_dir + projection + '/' + layer_id + '.jpg'
 
@@ -153,30 +187,15 @@ def get_snapshots(layer):
     #   continue
 
     try:
-      with open(file_name, 'xb') as imageFile:
+      with open(file_name, 'xb') as image_file:
         image_req = requests.get(snapshotsUrl, params=params)
-        imageFile.write(image_req.content)
-        size = imageFile.tell()
-        complete_layer_count += 1
-        percent_complete = round((complete_layer_count / total_layer_count)*100, 1)
-        sys.stdout.write('\r')
-        sys.stdout.write('Progress: ' + str(percent_complete) + '%')
-        sys.stdout.flush()
-
+        image_file.write(image_req.content)
+        show_progress()
         if (layer_id == reference_layers[projection]):
           continue
-
-        # A blank snapshot with only reference_layer in each projection
-        if (size == geographic_bad_size or size == arctic_bad_size or size == antarctic_bad_size):
-          bad_snapshots.append({
-            'id': layer_id,
-            'projection': projection,
-            'url': image_req.url
-          })
-
+        track_bad_snapshots(layer_id, projection, image_req.url, image_file.tell())
     except Exception as e:
       print(e)
-
 
 
 if __name__ == "__main__":
@@ -204,7 +223,7 @@ if __name__ == "__main__":
     except Exception as e:
       print(e)
 
-  print('\rWARNING: The number of "blank" snapshots was:', len(bad_snapshots))
+  print('\nWARNING: The number of "blank" snapshots was:', len(bad_snapshots))
   for bad_layer in bad_snapshots:
-    print(bad_layer['projection'], ' ', bad_layer['id'])
-    print(bad_layer['url'] + '\n')
+    print('\n' + bad_layer['projection'], ' ', bad_layer['id'])
+    print(bad_layer['url'])
