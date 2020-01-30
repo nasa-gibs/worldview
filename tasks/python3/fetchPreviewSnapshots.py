@@ -178,7 +178,7 @@ def get_snapshots(layer):
       continue
 
     try:
-      with open(file_name, 'xb') as image_file:
+      with open(dest_file_name, 'xb') as image_file:
         image_req = requests.get(snapshots_url, params=params)
         image_file.write(image_req.content)
         print('\n')
