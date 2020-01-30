@@ -358,24 +358,22 @@
   }
 }
 
-.layers-all-header.has-checkbox::before {
-  content: '';
-  display: block;
-  height: 24px;
-  width: 24px;
-  border: 2px solid #d54f21;
-  position: absolute;
-  top: 7px;
-  left: 10px;
-  text-align: center;
-  font-size: 15px;
-  line-height: 20px;
-}
-
-.layers-all-header.has-checkbox.checked::before {
-  color: #fff;
-  content: '\2713';
-  background-color: #d54f21;
+.layers-all-layer.search-row {
+  padding: 0 0 0.5em;
+  .layers-all-header {
+    padding: 0 0 0 45px;
+  }
+  & .wv-checkbox {
+    top: 14px;
+    left: 10px;
+    cursor: pointer;
+  }
+  & .wv-checkbox:hover:not(.checked)::before {
+    background-color: #444;
+  }
+  & .wv-checkbox:not(.checked)::before {
+    background-color: #333;
+  }
 }
 
 .layers-all-header .fa {

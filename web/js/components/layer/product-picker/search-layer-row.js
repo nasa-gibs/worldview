@@ -69,21 +69,28 @@ class LayerRow extends React.Component {
     const { checked } = this.state;
     const { layer, isMetadataShowing } = this.props;
     const { title, track, description, subtitle } = layer;
-    let headerClass = 'layers-all-header has-checkbox';
-
-    if (checked) headerClass += ' checked';
     const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
     const rowClass = isMetadataShowing
       ? 'search-row layers-all-layer selected'
       : 'search-row layers-all-layer';
+    const checkboxClass = checked ? 'wv-checkbox checked' : 'wv-checkbox';
 
     return (
       <div className={rowClass}>
-        <div className={headerClass} onClick={() => this.toggleCheck()}>
+        <input
+          type="checkbox"
+          id={layer.id + '-checkbox'}
+          title={title}
+          name={name}
+          checked={checked}
+          className={checkboxClass}
+          onChange={this.toggleCheck.bind(this)}
+        />
+        <div className="layers-all-header" onClick={e => this.showMetadata(e)}>
           {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
           {subtitle && <h5>{subtitle}</h5>}
           {description && (
-            <i className="fa fa-info-circle" onClick={e => this.showMetadata(e)} />
+            <i className="fa fa-info-circle" />
           )}
         </div>
       </div>
