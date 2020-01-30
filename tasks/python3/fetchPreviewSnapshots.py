@@ -196,7 +196,7 @@ if __name__ == "__main__":
   prepare_dirs()
 
   # Allow manual configuration of layer ID to specific date to generate desired preview
-  with open('./tasks/python3/previewLayerOverrides.json', 'rt') as overrides_json:
+  with open('./config/default/common/previewLayerOverrides.json', 'rt') as overrides_json:
     override_dates_dict = json.load(overrides_json)
 
   with open('./build/options/config/wv.json', 'rt') as wv_json:
