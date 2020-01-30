@@ -297,6 +297,8 @@ class ProductPicker extends React.Component {
         ? 'layer-detail-container layers-all search mobile'
         : 'layer-detail-container layers-all search'
       : 'layer-detail-container layers-all browse';
+    const selectedLayerActive = selectedLayer &&
+      activeLayers.some(layer => layer.id === selectedLayer.id);
 
     return filteredRows.length || !isSearching ? (
       <>
@@ -337,6 +339,9 @@ class ProductPicker extends React.Component {
           {isSearching ? (
             <LayerMetadataDetail
               layer={selectedLayer}
+              isActive={selectedLayerActive}
+              addLayer={addLayer}
+              removeLayer={removeLayer}
               height={listHeight}
               selectedProjection={selectedProjection}>
             </LayerMetadataDetail>
