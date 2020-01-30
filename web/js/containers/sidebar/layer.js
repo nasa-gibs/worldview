@@ -20,6 +20,7 @@ import {
   layerHover
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
+import moment from 'moment';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -81,36 +82,32 @@ class Layer extends React.Component {
     }
   }
 
+  formatDisabledTitleDate = (date, period) => {
+    var dateString;
+
+    if (period === 'subdaily') {
+      dateString = moment(util.parseDate(date)).format('DD MMMM YYYY HH:mm') + 'Z';
+    } else {
+      dateString = moment(util.parseDate(date)).format('DD MMMM YYYY');
+    }
+
+    return dateString;
+  }
+
   getDisabledTitle = (layer) => {
-    var startDate, endDate;
-    if (layer.startDate && layer.endDate) {
-      startDate = util.parseDate(layer.startDate);
-      endDate = util.parseDate(layer.endDate);
-      if (layer.period !== 'subdaily') {
-        startDate =
-          startDate.getDate() +
-          ' ' +
-          util.giveMonth(startDate) +
-          ' ' +
-          startDate.getFullYear();
-        endDate =
-          endDate.getDate() +
-          ' ' +
-          util.giveMonth(endDate) +
-          ' ' +
-          endDate.getFullYear();
-      }
+    let startDate, endDate;
+
+    if (layer.startDate) {
+      startDate = this.formatDisabledTitleDate(layer.startDate, layer.period);
+    }
+
+    if (layer.endDate) {
+      endDate = this.formatDisabledTitleDate(layer.endDate, layer.period);
+    }
+
+    if (startDate && endDate) {
       return 'Data available between ' + startDate + ' - ' + endDate;
-    } else if (layer.startDate) {
-      startDate = util.parseDate(layer.startDate);
-      if (layer.period !== 'subdaily') {
-        startDate =
-          startDate.getDate() +
-          ' ' +
-          util.giveMonth(startDate) +
-          ' ' +
-          startDate.getFullYear();
-      }
+    } else if (startDate) {
       return 'Data available between ' + startDate + ' - Present';
     } else {
       return 'No data on selected date for this layer';
