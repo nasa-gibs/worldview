@@ -13,7 +13,7 @@ bad_snapshots = []
 total_layer_count = 0
 complete_layer_count = 0
 time_format = "%Y-%m-%dT%H:%M:%SZ"
-snapshotsUrl = 'https://wvs.earthdata.nasa.gov/api/v1/snapshot?'
+snapshots_url = ''
 param_dict = {
   'base': {
     'REQUEST': 'GetSnapshot',
@@ -40,13 +40,13 @@ param_dict = {
 }
 # These layers should not be combined with the reference layer
 standalone_layers = [
+  'Graticule',
   'Coastlines',
   'Reference_Features',
   'Reference_Labels'
 ]
 root_img_dir = './build/options-build/preview-images/'
 dest_img_dir = './web/images/layers/previews/'
-# reference_layer = 'Coastlines'
 reference_layers = {
   'geographic': 'OSM_Land_Water_Map',
   'arctic': 'OSM_Land_Water_Map',
@@ -55,29 +55,23 @@ reference_layers = {
 current = datetime.now()
 
 
-def show_progress():
+def increment_progress():
   global complete_layer_count, total_layer_count
   complete_layer_count += 1
   percent_complete = round((complete_layer_count / total_layer_count) * 100, 1)
-  sys.stdout.write('\r')
-  sys.stdout.write('Progress: ' + str(percent_complete) + '%')
-  sys.stdout.flush()
+  # sys.stdout.write('\r')
+  # sys.stdout.write('Progress: ' + str(percent_complete) + '%')
+  # sys.stdout.flush()
 
 
 def track_bad_snapshots(layer_id, projection, request_url, size):
   global bad_snapshots
-  # Coastlines Only sizes
-  # arctic_bad_size = 28726
-  # antarctic_bad_size = 5988
-  # geographic_bad_size = 34598
-
-  # SCAR/OSM Land_Water_Map Only
+  # File sizes with SCAR/OSM Land_Water_Map layer only
   arctic_bad_size = 9949
   antarctic_bad_size = 4060
   geographic_bad_size = 12088
 
-  # A blank snapshot with only reference_layer in each projection
-  if (size == geographic_bad_size or size == arctic_bad_size or size == antarctic_bad_size):
+  if size in [ geographic_bad_size, arctic_bad_size, antarctic_bad_size ]:
     bad_snapshots.append({
       'id': layer_id,
       'projection': projection,
@@ -89,10 +83,8 @@ def prepare_dirs():
   geo_path = root_img_dir + 'geographic'
   arctic_path = root_img_dir + 'arctic'
   antarctic_path = root_img_dir + 'antarctic'
-
   if (os.path.exists(root_img_dir)):
     shutil.rmtree(root_img_dir)
-
   if not (os.path.exists(geo_path)):
     os.makedirs(geo_path)
   if not (os.path.exists(arctic_path)):
@@ -123,16 +115,14 @@ def get_best_date(projection, period, date_ranges):
 
   # Choose a good daylight month for arctic
   if projection == "arctic" and p_month not in [4, 5, 6, 7, 8, 9]:
-    if p_year == current.year and current.month < 4:
+    if p_year == current.year and current.month < 6:
       altered_date = parsed_end_date.replace(day=1, month=6, year=current.year-1)
     else:
-      altered_date = parsed_end_date.replace(month=6)
+      altered_date = parsed_end_date.replace(day=1, month=6)
 
   # Choose a good daylight month for antarctic
   if projection == "antarctic" and p_month not in [10, 11, 12, 1, 2]:
-    ########################
     # TODO handle "bad" months for antarctic
-    ########################
     altered_date = parsed_end_date.replace(month=12)
 
   # Make sure modified date isn't out of layer date range
@@ -183,19 +173,23 @@ def get_snapshots(layer):
     dest_file_name = dest_img_dir + projection + '/' + layer_id + '.jpg'
 
     # Only get images that we don't have already
-    # if (os.path.exists(dest_file_name)):
-    #   continue
+    if (os.path.exists(dest_file_name)):
+      increment_progress()
+      continue
 
     try:
       with open(file_name, 'xb') as image_file:
-        image_req = requests.get(snapshotsUrl, params=params)
+        image_req = requests.get(snapshots_url, params=params)
         image_file.write(image_req.content)
-        show_progress()
+        print('\n')
+        print('Status: ', image_req.status_code)
+        print('URL: ', image_req.url)
+        increment_progress()
         if (layer_id == reference_layers[projection]):
           continue
         track_bad_snapshots(layer_id, projection, image_req.url, image_file.tell())
     except Exception as e:
-      print(e)
+      print('ERROR:', e)
 
 
 if __name__ == "__main__":
@@ -208,6 +202,8 @@ if __name__ == "__main__":
   with open('./build/options/config/wv.json', 'rt') as wv_json:
     wv_json_dict = json.load(wv_json)
     layers = wv_json_dict['layers']
+    snapshots_url = wv_json_dict['features']['imageDownload']['url']
+
     for layer in layers.values():
       for proj in layer['projections']:
         total_layer_count += 1
@@ -223,7 +219,9 @@ if __name__ == "__main__":
     except Exception as e:
       print(e)
 
+if len(bad_snapshots) > 0:
   print('\nWARNING: The number of "blank" snapshots was:', len(bad_snapshots))
   for bad_layer in bad_snapshots:
-    print('\n' + bad_layer['projection'], ' ', bad_layer['id'])
+    print('\n' + bad_layer['projection'])
+    print(bad_layer['id'])
     print(bad_layer['url'])
