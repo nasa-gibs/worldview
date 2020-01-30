@@ -50,6 +50,7 @@ class ProductPicker extends React.Component {
       selectedMeasurement: null,
       measurementSourceIndex: 0,
       filteredRows: props.filteredRows,
+      searchResultRows: null,
       inputValue: '',
       filterByAvailable: true,
       modalElement: null
@@ -110,18 +111,19 @@ class ProductPicker extends React.Component {
     // Search with terms
     } else {
       const terms = val.split(/ +/);
-      const filteredRows = allLayers.filter(layer => {
-        return !(
-          filterProjections(layer) ||
-          filterSearch(layer, val, terms) ||
-          (filterByAvailable && !availableAtDate(layer, selectedDate))
-        );
+      const searchResultRows = allLayers.filter(layer => {
+        return !(filterProjections(layer) || filterSearch(layer, val, terms));
       });
+      const filteredRows = searchResultRows.filter(layer => {
+        return !(filterByAvailable && !availableAtDate(layer, selectedDate));
+      });
+
       const selectedLayerInResults = selectedLayer &&
         !!filteredRows.find(layer => layer.id === selectedLayer.id);
 
       newState = {
-        filteredRows: filteredRows,
+        filteredRows,
+        searchResultRows,
         listType: 'search',
         inputValue: value,
         selectedLayer: selectedLayerInResults ? selectedLayer : null
@@ -261,6 +263,7 @@ class ProductPicker extends React.Component {
   renderLayerList() {
     const {
       filteredRows,
+      searchResultRows,
       listType,
       categoryType,
       category,
@@ -282,6 +285,7 @@ class ProductPicker extends React.Component {
       layerConfig
     } = this.props;
 
+    const numRowsFilteredOut = searchResultRows.length - filteredRows.length;
     const isSearching = listType === 'search';
     const currentMeasureSource = this.getCurrentMeasureSource();
     const listHeight = isMobile && isSearching ? height / 2 : height;
@@ -304,7 +308,11 @@ class ProductPicker extends React.Component {
       <>
         { isSearching &&
             <div className="results-text">
-              Showing {filteredRows.length} layers:
+              Showing {filteredRows.length} results.
+
+              {numRowsFilteredOut > 0 &&
+                <span>({numRowsFilteredOut} layers are hidden by filters)</span>
+              }
             </div>
         }
         <div className={listContainerClass}>
@@ -357,7 +365,15 @@ class ProductPicker extends React.Component {
     ) : (
       <div className="no-results">
         <i className="fas fa-5x fa-meteor"></i>
-        <h3> No matching layers found! </h3>
+        <h3> No layers found! </h3>
+        {numRowsFilteredOut > 0 &&
+          <p>
+            {numRowsFilteredOut} result(s) are being filtered out.
+            <a className="remove-filters" onClick={this.toggleFilterByAvailable.bind(this)}>
+              Remove filters?
+            </a>
+          </p>
+        }
       </div>
     );
   }
