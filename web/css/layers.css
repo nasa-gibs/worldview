@@ -380,7 +380,7 @@
   position: absolute;
   color: #ddd;
   font-size: 18px;
-  padding: 12px;
+  padding: 9px 12px;
   right: 0;
   top: 0;
   &:hover {
@@ -932,6 +932,9 @@
   margin-bottom: 5px;
   margin-top: -10px;
   font-weight: 500;
+  & span {
+    margin-left: 20px;
+  }
 }
 
 .layer-filters-container {
@@ -992,9 +995,13 @@
   & h3 {
     font-weight: 500;
     font-size: 20px;
-    margin: 40px auto 0;
+    margin: 40px auto 15px;
     text-align: center;
     color: #777;
+  }
+  a.remove-filters {
+    color: #007bff;
+    margin-left: 5px;
   }
 }
 
