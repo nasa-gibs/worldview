@@ -73,7 +73,9 @@ class LayerRow extends React.Component {
 
     if (checked) headerClass += ' checked';
     const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
-    const rowClass = isMetadataShowing ? 'layers-all-layer selected' : 'layers-all-layer';
+    const rowClass = isMetadataShowing
+      ? 'search-row layers-all-layer selected'
+      : 'search-row layers-all-layer';
 
     return (
       <div className={rowClass}>
