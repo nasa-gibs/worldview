@@ -267,7 +267,7 @@
 }
 
 .layers-all .layers-all-layer .source-metadata {
-  margin-top: 15px;
+  margin-top: 10px;
   border-top-width: 1px;
   color: #ddd;
 }
@@ -364,7 +364,7 @@
     padding: 0 0 0 45px;
   }
   & .wv-checkbox {
-    top: 14px;
+    top: 10px;
     left: 10px;
     cursor: pointer;
   }
@@ -1046,5 +1046,11 @@
   & .layer-preview {
     margin-top: 15px;
     max-height: 400px;
+  }
+  .add-to-map-btn {
+    margin: 5px auto 0;
+    width: 200px;
+    background-color: #d54e21;
+    border-color: #b55a3c;
   }
 }
