@@ -29,7 +29,7 @@ class ProductPickerHeader extends React.Component {
       filterByAvailable,
       toggleFilterByAvailable
     } = this.props;
-    const diplayDate = moment(selectedDate).format('YYYY MMM DD');
+    const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
 
     return (
       <div className="layer-filters-container">
