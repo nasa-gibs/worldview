@@ -85,19 +85,17 @@ class Layer extends React.Component {
   formatDisabledTitleDate = (date, period) => {
     var dateString;
 
-    switch (period) {
-      case 'subdaily':
-        dateString = moment(util.parseDate(date)).format('DD MMMM YYYY HH:mm') + 'Z';
-        break;
-      default:
-        dateString = moment(util.parseDate(date)).format('DD MMMM YYYY');
+    if (period === 'subdaily') {
+      dateString = moment(util.parseDate(date)).format('DD MMMM YYYY HH:mm') + 'Z';
+    } else {
+      dateString = moment(util.parseDate(date)).format('DD MMMM YYYY');
     }
 
     return dateString;
   }
 
   getDisabledTitle = (layer) => {
-    var startDate = null; var endDate = null;
+    let startDate, endDate;
 
     if (layer.startDate) {
       startDate = this.formatDisabledTitleDate(layer.startDate, layer.period);
