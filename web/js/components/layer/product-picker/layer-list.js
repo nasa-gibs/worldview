@@ -19,6 +19,27 @@ class LayerList extends React.Component {
   }
 
   /**
+   * Handle selecting/showing metadata when there is only a single search result
+   */
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { selectedLayer } = this.props;
+    if (selectedLayer && prevProps.selectedLayer !== selectedLayer) {
+      this.showLayerMetadata(selectedLayer.id);
+    }
+  }
+
+  /**
+   * Handle selecting/showing metadata when there is only a single search result
+   */
+  componentDidMount() {
+    const { selectedLayer } = this.props;
+    const { selectedLayerId } = this.state;
+    if (selectedLayer && selectedLayer.id !== selectedLayerId) {
+      this.showLayerMetadata(selectedLayer.id);
+    }
+  }
+
+  /**
    * Loads metadata for layer (if not previously loaded) and
    * triggers showing in layer detail area
    *
@@ -156,15 +177,18 @@ LayerList.propTypes = {
   addLayer: PropTypes.func,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
+  currentMeasureSource: PropTypes.object,
   expandedMeasurements: PropTypes.object,
   filteredRows: PropTypes.array,
   hasMeasurementSetting: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
+  isMobile: PropTypes.bool,
   layerConfig: PropTypes.object,
   listType: PropTypes.string,
   measurementConfig: PropTypes.object,
   removeLayer: PropTypes.func,
   selectedDate: PropTypes.object,
+  selectedLayer: PropTypes.object,
   selectedMeasurement: PropTypes.string,
   selectedProjection: PropTypes.string,
   setSourceIndex: PropTypes.func,
