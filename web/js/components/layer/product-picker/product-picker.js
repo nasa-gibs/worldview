@@ -584,17 +584,22 @@ const getModalWidth = function(width) {
 };
 
 // Takes the terms and returns true if the layer isnt part of search
-const filterSearch = function(layer, val, terms, config, projId) {
+const filterSearch = (layer, val, terms, config, projId) => {
   if (!val) return false;
-  var filtered = false;
 
-  var names = getTitles(config, layer.id, projId);
-  lodashEach(terms, function(term, index) {
+  let filtered = false;
+  const names = getTitles(config, layer.id, projId);
+  const title = lodashToLower(names.title);
+  const subtitle = lodashToLower(names.subtitle);
+  const tags = lodashToLower(names.tags);
+  const layerId = lodashToLower(layer.id);
+
+  lodashEach(terms, (term) => {
     filtered =
-      !lodashIncludes(lodashToLower(names.title), term) &&
-      !lodashIncludes(lodashToLower(names.subtitle), term) &&
-      !lodashIncludes(lodashToLower(names.tags), term) &&
-      !lodashIncludes(lodashToLower(layer.id, term));
+      !lodashIncludes(title, term) &&
+      !lodashIncludes(subtitle, term) &&
+      !lodashIncludes(tags, term) &&
+      !lodashIncludes(layerId, term);
     if (filtered) return false;
   });
   return filtered;
