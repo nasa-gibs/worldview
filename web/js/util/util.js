@@ -1,10 +1,3 @@
-/* global ntptEventTag */
-
-/* The ntptEventTag global variable is defined by
- * https://earthdata.nasa.gov/lib/ntpagetag.js
- * which is included via config.scripts in web/config/wv.json
-*/
-
 import {
   isObject as lodashIsObject,
   each as lodashEach,
@@ -972,14 +965,6 @@ export default (function(self) {
       const charCode = Number.parseInt(match.substring(2, 4), 16);
       return String.fromCharCode(charCode);
     });
-  };
-
-  self.metrics = function() {
-    if (window.ntptEventTag) {
-      ntptEventTag.apply(null, arguments);
-    } else {
-      console.log('no metrics');
-    }
   };
 
   self.key = {
