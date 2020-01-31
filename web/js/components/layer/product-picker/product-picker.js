@@ -293,8 +293,11 @@ class ProductPicker extends React.Component {
     } = this.props;
 
     const isSearching = listType === 'search';
-    const currentMeasureSource = this.getCurrentMeasureSource();
-    const listHeight = isMobile && isSearching ? height / 2 : height;
+    const listHeight = isMobile && isSearching
+      ? selectedLayer
+        ? height / 2
+        : height
+      : height;
     const listContainerClass = isSearching
       ? isMobile
         ? 'layer-list-container search mobile'
@@ -302,13 +305,7 @@ class ProductPicker extends React.Component {
       : isMobile
         ? 'layer-list-container browse mobile'
         : 'layer-list-container browse';
-    const detailContainerClass = isSearching
-      ? isMobile
-        ? 'layer-detail-container layers-all search mobile'
-        : 'layer-detail-container layers-all search'
-      : 'layer-detail-container layers-all browse';
-    const selectedLayerActive = selectedLayer &&
-      activeLayers.some(layer => layer.id === selectedLayer.id);
+
     const numRowsFilteredOut = isSearching && searchResultRows.length - filteredRows.length;
 
     return filteredRows.length || !isSearching ? (
@@ -345,30 +342,12 @@ class ProductPicker extends React.Component {
                 updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
                 showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
                 setSourceIndex={index => this.setSourceIndex(index)}
-                currentMeasureSource={currentMeasureSource}
+                currentMeasureSource={this.getCurrentMeasureSource()}
               />
             </div>
           </Scrollbars>
         </div>
-
-        <div className={detailContainerClass}>
-          {isSearching ? (
-            <LayerMetadataDetail
-              layer={selectedLayer}
-              isActive={selectedLayerActive}
-              addLayer={addLayer}
-              removeLayer={removeLayer}
-              height={listHeight}
-              selectedProjection={selectedProjection}>
-            </LayerMetadataDetail>
-          ) : !isMobile && (
-            <MeasurementMetadataDetail
-              categoryTitle={category && category.title}
-              source={currentMeasureSource}
-              height={height}>
-            </MeasurementMetadataDetail>
-          )}
-        </div>
+        { this.renderDetails(listHeight) }
       </>
     ) : (
       <div className="no-results">
@@ -384,6 +363,51 @@ class ProductPicker extends React.Component {
         }
       </div>
     );
+  }
+
+  renderDetails(listHeight) {
+    const { category, listType, selectedLayer } = this.state;
+    const {
+      height,
+      isMobile,
+      activeLayers,
+      addLayer,
+      removeLayer,
+      selectedProjection
+    } = this.props;
+    const isSearching = listType === 'search';
+    const selectedLayerActive = selectedLayer &&
+      activeLayers.some(layer => layer.id === selectedLayer.id);
+    const detailContainerClass = isSearching
+      ? isMobile
+        ? 'layer-detail-container layers-all search mobile'
+        : 'layer-detail-container layers-all search'
+      : 'layer-detail-container layers-all browse';
+
+    if (isSearching) {
+      return isMobile && !selectedLayer ? null : (
+        <div className={detailContainerClass}>
+          <LayerMetadataDetail
+            layer={selectedLayer}
+            isActive={selectedLayerActive}
+            addLayer={addLayer}
+            removeLayer={removeLayer}
+            height={listHeight}
+            selectedProjection={selectedProjection}>
+          </LayerMetadataDetail>
+        </div>
+      );
+    } else {
+      return !isMobile && (
+        <div className={detailContainerClass}>
+          <MeasurementMetadataDetail
+            categoryTitle={category && category.title}
+            source={this.getCurrentMeasureSource()}
+            height={height}>
+          </MeasurementMetadataDetail>
+        </div>
+      );
+    }
   }
 
   render() {
@@ -452,7 +476,7 @@ class ProductPicker extends React.Component {
                     ))}
                   </Nav>
                   {isCategoryDisplay ? (
-                    <Scrollbars style={{ maxHeight: (height - 80) + 'px' }}>
+                    <Scrollbars style={{ maxHeight: (height - 40) + 'px' }}>
                       <div className="product-outter-list-case">
                         <CategoryGrid
                           categories={lodashValues(categoryConfig[categoryType])}
@@ -532,7 +556,7 @@ function mapStateToProps(state, ownProps) {
   const { screenWidth, screenHeight } = browser;
   const isMobile = browser.lessThan.medium;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const height = screenHeight - (isMobile ? 100 : 170);
+  const height = screenHeight - (isMobile ? 80 : 170);
   const width = getModalWidth(screenWidth);
   const allLayers = getLayersForProjection(config, proj.id);
   const activeLayers = layers[activeString];
