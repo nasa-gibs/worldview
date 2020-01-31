@@ -95,6 +95,7 @@ class ProductPicker extends React.Component {
     const { categoryType, filterByAvailable, selectedLayer } = this.state;
     const val = value.toLowerCase();
     let newState;
+    let newSelectedLayer;
 
     // Search cleared
     if (val.length === 0) {
@@ -121,12 +122,18 @@ class ProductPicker extends React.Component {
       const selectedLayerInResults = selectedLayer &&
         !!filteredRows.find(layer => layer.id === selectedLayer.id);
 
+      if (filteredRows.length === 1) {
+        newSelectedLayer = filteredRows[0];
+      } else if (selectedLayerInResults) {
+        newSelectedLayer = selectedLayer;
+      }
+
       newState = {
         filteredRows,
         searchResultRows,
         listType: 'search',
         inputValue: value,
-        selectedLayer: selectedLayerInResults ? selectedLayer : null
+        selectedLayer: newSelectedLayer
       };
     }
     this.setState(newState);
@@ -285,7 +292,6 @@ class ProductPicker extends React.Component {
       layerConfig
     } = this.props;
 
-    const numRowsFilteredOut = searchResultRows.length - filteredRows.length;
     const isSearching = listType === 'search';
     const currentMeasureSource = this.getCurrentMeasureSource();
     const listHeight = isMobile && isSearching ? height / 2 : height;
@@ -303,6 +309,7 @@ class ProductPicker extends React.Component {
       : 'layer-detail-container layers-all browse';
     const selectedLayerActive = selectedLayer &&
       activeLayers.some(layer => layer.id === selectedLayer.id);
+    const numRowsFilteredOut = isSearching && searchResultRows.length - filteredRows.length;
 
     return filteredRows.length || !isSearching ? (
       <>
@@ -329,6 +336,7 @@ class ProductPicker extends React.Component {
                 categoryConfig={categoryConfig[categoryType]}
                 selectedProjection={selectedProjection}
                 selectedDate={selectedDate}
+                selectedLayer={selectedLayer}
                 filteredRows={filteredRows}
                 hasMeasurementSetting={hasMeasurementSetting}
                 hasMeasurementSource={hasMeasurementSource}
