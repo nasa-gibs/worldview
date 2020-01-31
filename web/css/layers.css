@@ -786,6 +786,7 @@
 .custom-layer-dialog {
   background-color: #dcdcdc;
   margin: 5px auto;
+  border-radius: 3px;
 
   &.category-width {
     width: 978px;
@@ -879,7 +880,12 @@
     font-size: 12px !important;
   }
   .custom-layer-dialog {
-    width: auto;
+    &.browse-search-width, &.category-width {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      margin: 0;
+    }
 
     & .product-outter-list-case {
       width: 100%;
@@ -1015,7 +1021,6 @@
     &.mobile {
       width: 100%;
       margin-top: 10px;
-      min-height: 200px;
       padding-left: 2px;
     }
   }
