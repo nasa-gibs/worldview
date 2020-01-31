@@ -1056,8 +1056,18 @@
   }
   .add-to-map-btn {
     margin: 5px auto 0;
-    width: 200px;
-    background-color: #d54e21;
+    min-width: 145px;
+    background-color: transparent;
     border-color: #b55a3c;
+    border-width: 2px;
+    .fa {
+      margin-right: 10px;
+    }
+    &:hover:not(.is-active) {
+      background-color: #b55a3c;
+    }
+    &.is-active {
+      background-color: #d54e21;
+    }
   }
 }
