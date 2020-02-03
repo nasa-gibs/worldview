@@ -16,4 +16,4 @@ The Moderate Resolution Imaging Spectroradiometer (MODIS) is a 36-band visible t
 
 Sea Ice data is useful for marine navigation, environmental monitoring, and climate forecasting.
 
-References:  [doi: 10.5067/MODIS/MOD29P1D.006](https://doi.org/10.5067/MODIS/MOD29P1D.00); [doi: 10.5067/MODIS/MYD29P1D.006](https://doi.org/10.5067/MODIS/MYD29P1D.006)
+References:  [doi: 10.5067/MODIS/MOD29P1D.006](https://doi.org/10.5067/MODIS/MOD29P1D.006); [doi: 10.5067/MODIS/MYD29P1D.006](https://doi.org/10.5067/MODIS/MYD29P1D.006)
