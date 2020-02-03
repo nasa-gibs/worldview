@@ -48,7 +48,8 @@ class ProductPicker extends React.Component {
 
     this.state = {
       modalElement: null,
-      listScrollRef: React.createRef()
+      listScrollRef: React.createRef(),
+      listScrollTop: props.listScrollTop || 0
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
   }
@@ -270,6 +271,7 @@ class ProductPicker extends React.Component {
   }
 
   renderLayerList() {
+    const { listScrollRef, listScrollTop } = this.state;
     const {
       isMobile,
       categoryConfig,
@@ -290,15 +292,14 @@ class ProductPicker extends React.Component {
       category,
       selectedMeasurement,
       selectedLayer,
-      listScrollTop,
       updateScrollPosition
     } = this.props;
 
-    const { listScrollRef } = this.state;
     const debouncedUpdateScroll = lodashDebounce(() => {
       const { scrollTop } = listScrollRef.current.contentWrapperEl;
       updateScrollPosition(scrollTop);
     }, 500);
+
     const isSearching = listType === 'search';
     const listHeight = isMobile && isSearching
       ? selectedLayer
@@ -313,8 +314,6 @@ class ProductPicker extends React.Component {
       : isMobile
         ? 'layer-list-container browse mobile'
         : 'layer-list-container browse';
-
-    console.log('ahhhhh rendeirng!');
 
     return filteredRows.length || !isSearching ? (
       <>
@@ -549,6 +548,7 @@ ProductPicker.propTypes = {
   selectedLayer: PropTypes.object,
   selectedMeasurement: PropTypes.string,
   selectedProjection: PropTypes.string,
+  update: PropTypes.func,
   updateScrollPosition: PropTypes.func,
   width: PropTypes.number
 };
