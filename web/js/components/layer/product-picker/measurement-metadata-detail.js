@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util.js';
-import Scrollbars from '../../util/scrollbar';
 
 class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
@@ -59,20 +58,17 @@ class MeasurementMetadataDetail extends React.Component {
   }
 
   renderDesktop(data) {
-    const { height, source } = this.props;
+    const { source } = this.props;
     const { title } = source;
-
     return (
-      <Scrollbars style={{ maxHeight: height + 'px' }}>
-        <div className="layers-all-layer">
-          <div className="layers-all-header">
-            <h3>{title}</h3>
-          </div>
-          <div className="source-metadata">
-            <div dangerouslySetInnerHTML={{ __html: data }} />
-          </div>
+      <div className="layers-all-layer">
+        <div className="layers-all-header">
+          <h3>{title}</h3>
         </div>
-      </Scrollbars>
+        <div className="source-metadata">
+          <div dangerouslySetInnerHTML={{ __html: data }} />
+        </div>
+      </div>
     );
   }
 
@@ -114,7 +110,6 @@ class MeasurementMetadataDetail extends React.Component {
 
 MeasurementMetadataDetail.propTypes = {
   categoryTitle: PropTypes.string,
-  height: PropTypes.number,
   isMobile: PropTypes.bool,
   source: PropTypes.object
 };

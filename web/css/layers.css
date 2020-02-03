@@ -37,7 +37,6 @@
 }
 
 .layer-modal-content {
-  overflow: auto;
   position: relative;
   padding: 5px 0;
   min-height: 300px;
@@ -784,9 +783,7 @@
 }
 
 .custom-layer-dialog {
-  background-color: #dcdcdc;
   margin: 5px auto;
-  border-radius: 3px;
 
   &.category-width {
     width: 978px;
