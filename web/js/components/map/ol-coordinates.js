@@ -34,19 +34,19 @@ class OlCoordinates extends React.Component {
     }
     let pcoord = transform(coord, crs, 'EPSG:4326');
     let [lon, lat] = pcoord;
-    if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
-      if (lon > 180 && lon < 250 && crs === 'EPSG:4326') {
-        lon = lon - 360;
-        pcoord = [lon, lat];
-      } else if (lon < -180 && lon > -250 && crs === 'EPSG:4326') {
-        lon = 360 + lon;
+    if (Math.abs(lat) > 90) {
+      this.clearCoord();
+      return;
+    }
+    if (Math.abs(lon) > 180) {
+      if (crs === 'EPSG:4326') {
+        lon = util.normalizeWrappedLongitude(lon);
         pcoord = [lon, lat];
       } else {
         this.clearCoord();
         return;
       }
     }
-
     this.setState({
       hasMouse: true,
       format: util.getCoordinateFormat(),

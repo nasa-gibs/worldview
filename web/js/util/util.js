@@ -1035,7 +1035,17 @@ export default (function(self) {
         coord[0].toFixed(4) + '°';
     }
   };
-
+  /**
+   * map openlayers provided longitude value to be between -180 && 180
+   *
+   * @param {longitude} number map longitude value
+   * @return normalized longitude value
+   */
+  self.normalizeWrappedLongitude = function(longitude) {
+    const negative = longitude < 0;
+    const value = longitude % 360;
+    return negative && value < -180 ? value + 360 : !negative && value > 180 ? value - 360 : value;
+  };
   // Allows simple printf functionality with strings
   // arguments array contains all args passed. String must be formatted
   // so that first replacement starts with "{1}"
