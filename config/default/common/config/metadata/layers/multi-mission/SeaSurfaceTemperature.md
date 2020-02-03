@@ -4,9 +4,9 @@ The Group for High Resolution Sea Surface Temperature (GHRSST) layers are the â€
 ### Sea Surface Temperature (L4, G1SST)
 Temporal coverage: 21 June 2010 - 8 December 2019
 
-**Notice:** The GHRSST Sea Surface Temperature (L4, G1SST) has been producing poor quality SST results since 9 December 2019. The imagery has been removed from 9 December 2019 to present. We advise users to consider using the **GHRSST Sea Surface Temperature (L4, MUR)** layer, which provides comparable data at the same spatial sampling and coverage as G1SST.
+**29 January 2020 Notice:** The GHRSST Sea Surface Temperature (L4, G1SST) has been producing poor quality SST results since 9 December 2019. The imagery has been removed from 9 December 2019 to present. We advise users to consider using the **GHRSST Sea Surface Temperature (L4, MUR)** layer, which provides comparable data at the same spatial sampling and coverage as G1SST.
 
-Read more about the [data outage.](https://podaac.jpl.nasa.gov/announcements/2020-01-29_G1SST_Data_Outage_Alert)
+Read more about the [data outage](https://podaac.jpl.nasa.gov/announcements/2020-01-29_G1SST_Data_Outage_Alert) (29 January 2020).
 
 The GHRSST Sea Surface Temperature Level 4, G1SST sea surface temperature analysis product is created using a multi-scale two-dimensional variational (MS-2DVAR) blending algorithm on a global 0.009 degree grid. The Global 1 km SST (G1SST) analysis uses satellite data from sensors that include the Advanced Very High Resolution Radiometer (AVHRR), the Advanced Along Track Scanning Radiometer (AATSR), the Spinning Enhanced Visible and Infrared Imager (SEVIRI), the Advanced Microwave Scanning Radiometer-EOS (AMSRE), the Tropical Rainfall Measuring Mission Microwave Imager (TMI), the Moderate Resolution Imaging Spectroradiometer (MODIS), the Geostationary Operational Environmental Satellite (GOES) Imager, the Multi-Functional Transport Satellite 1R (MTSAT-1R) radiometer, and in situ data from drifting and moored buoys. The imagery resolution is 1 km, and the temporal resolution is daily.
 
