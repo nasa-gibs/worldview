@@ -83,9 +83,11 @@ class ProductPicker extends React.Component {
       filterSearch,
       selectedDate,
       allLayers,
+      categoryType,
+      filterByAvailable,
+      selectedLayer,
       update
     } = this.props;
-    const { categoryType, filterByAvailable, selectedLayer } = this.state;
     const val = value.toLowerCase();
     let newState;
     let newSelectedLayer;
@@ -160,7 +162,7 @@ class ProductPicker extends React.Component {
    */
   updateSelectedMeasurement(id) {
     const { update } = this.props;
-    if (this.state.selectedMeasurement !== id) {
+    if (this.props.selectedMeasurement !== id) {
       update({
         selectedMeasurement: id,
         measurementSourceIndex: 0
