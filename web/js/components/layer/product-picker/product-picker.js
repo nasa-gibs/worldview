@@ -32,6 +32,7 @@ import {
   NavItem,
   NavLink
 } from 'reactstrap';
+import { updateProductPicker } from '../../../modules/product-picker/actions';
 
 /*
  * A scrollable list of layers
@@ -43,17 +44,6 @@ class ProductPicker extends React.Component {
     super(props);
 
     this.state = {
-      listType: props.listType,
-      categoryType: Object.keys(props.categoryConfig)[1],
-      category: props.category,
-      selectedLayer: null,
-      selectedMeasurement: null,
-      measurementSourceIndex: 0,
-      filteredRows: props.filteredRows,
-      searchResultRows: null,
-      numRowsFilteredOut: null,
-      inputValue: '',
-      filterByAvailable: true,
       modalElement: null
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
@@ -66,7 +56,8 @@ class ProductPicker extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { listType, modalElement } = this.state;
+    const { modalElement } = this.state;
+    const { listType } = this.props;
     if (prevState.listType === listType) {
       return;
     }
@@ -91,7 +82,8 @@ class ProductPicker extends React.Component {
       filterProjections,
       filterSearch,
       selectedDate,
-      allLayers
+      allLayers,
+      update
     } = this.props;
     const { categoryType, filterByAvailable, selectedLayer } = this.state;
     const val = value.toLowerCase();
@@ -138,7 +130,7 @@ class ProductPicker extends React.Component {
         selectedLayer: newSelectedLayer
       };
     }
-    this.setState(newState);
+    update(newState);
   }
 
   /**
@@ -148,7 +140,8 @@ class ProductPicker extends React.Component {
    * @param {String} selectedMeasurement | Measurement ID
    */
   drawMeasurements(category, selectedMeasurement) {
-    this.setState({
+    const { update } = this.props;
+    update({
       listType: 'measurements',
       selectedMeasurement,
       category
@@ -166,13 +159,14 @@ class ProductPicker extends React.Component {
    * @param {String} id | Measurement ID
    */
   updateSelectedMeasurement(id) {
+    const { update } = this.props;
     if (this.state.selectedMeasurement !== id) {
-      this.setState({
+      update({
         selectedMeasurement: id,
         measurementSourceIndex: 0
       });
     } else {
-      this.setState({
+      update({
         selectedMeasurement: null,
         measurementSourceIndex: 0
       });
@@ -180,13 +174,14 @@ class ProductPicker extends React.Component {
   }
 
   toggleFeatureTab = (partialState) => {
+    const { update } = this.props;
     const categoryType = 'featured';
     const { categoryConfig, measurementConfig } = this.props;
     const category = categoryConfig[categoryType].All;
     const selectedMeasurement = category.measurements[0];
     const selectedMeasurementId = measurementConfig[selectedMeasurement].id;
 
-    this.setState({
+    update({
       ...partialState,
       categoryType,
       category,
@@ -205,7 +200,7 @@ class ProductPicker extends React.Component {
     if (key === 'featured') {
       this.toggleFeatureTab();
     } else {
-      this.setState({
+      this.props.update({
         categoryType: key,
         listType: 'category',
         selectedMeasurement: null
@@ -221,8 +216,8 @@ class ProductPicker extends React.Component {
   }
 
   toggleFilterByAvailable() {
-    const { inputValue, filterByAvailable } = this.state;
-    this.setState({ filterByAvailable: !filterByAvailable });
+    const { inputValue, filterByAvailable, update } = this.props;
+    update({ filterByAvailable: !filterByAvailable });
     this.runSearch(inputValue);
   }
 
@@ -230,7 +225,7 @@ class ProductPicker extends React.Component {
    * When using "back" button or clearing search field, unset selections
    */
   revertSearchState() {
-    this.setState({
+    this.props.update({
       listType: 'category',
       inputValue: '',
       selectedLayer: null,
@@ -243,7 +238,7 @@ class ProductPicker extends React.Component {
    * @param {*} selectedLayer - the layer for which to show metadata
    */
   showMetadataForLayer(selectedLayer) {
-    this.setState({ selectedLayer });
+    this.props.update({ selectedLayer });
   }
 
   /**
@@ -251,12 +246,11 @@ class ProductPicker extends React.Component {
    * @param {*} measurementSourceIndex -  the index of the source for which to show metadata
    */
   setSourceIndex(measurementSourceIndex) {
-    this.setState({ measurementSourceIndex });
+    this.props.update({ measurementSourceIndex });
   }
 
   getCurrentMeasureSource() {
-    const { measurementConfig } = this.props;
-    const { selectedMeasurement, measurementSourceIndex } = this.state;
+    const { measurementConfig, selectedMeasurement, measurementSourceIndex } = this.props;
 
     let currentMeasurement;
     Object.keys(measurementConfig).forEach(measureName => {
@@ -271,15 +265,6 @@ class ProductPicker extends React.Component {
 
   renderLayerList() {
     const {
-      filteredRows,
-      numRowsFilteredOut,
-      listType,
-      categoryType,
-      category,
-      selectedMeasurement,
-      selectedLayer
-    } = this.state;
-    const {
       isMobile,
       categoryConfig,
       selectedProjection,
@@ -291,7 +276,14 @@ class ProductPicker extends React.Component {
       addLayer,
       hasMeasurementSetting,
       height,
-      layerConfig
+      layerConfig,
+      filteredRows,
+      numRowsFilteredOut,
+      listType,
+      categoryType,
+      category,
+      selectedMeasurement,
+      selectedLayer
     } = this.props;
 
     const isSearching = listType === 'search';
@@ -369,13 +361,15 @@ class ProductPicker extends React.Component {
   }
 
   renderDetails(listHeight) {
-    const { category, listType, selectedLayer } = this.state;
     const {
       isMobile,
       activeLayers,
       addLayer,
       removeLayer,
-      selectedProjection
+      selectedProjection,
+      category,
+      listType,
+      selectedLayer
     } = this.props;
     const isSearching = listType === 'search';
     const selectedLayerActive = selectedLayer &&
@@ -416,13 +410,6 @@ class ProductPicker extends React.Component {
 
   render() {
     const {
-      listType,
-      categoryType,
-      category,
-      inputValue,
-      filterByAvailable
-    } = this.state;
-    const {
       selectedProjection,
       modalView,
       height,
@@ -432,7 +419,12 @@ class ProductPicker extends React.Component {
       categoryConfig,
       measurementConfig,
       hasMeasurementSource,
-      selectedDate
+      selectedDate,
+      listType,
+      categoryType,
+      category,
+      inputValue,
+      filterByAvailable
     } = this.props;
     const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = (isCategoryDisplay || categoryType === 'featured') && !inputValue;
@@ -504,10 +496,6 @@ class ProductPicker extends React.Component {
   }
 }
 
-ProductPicker.defaultProps = {
-  category: null,
-  listType: 'category'
-};
 ProductPicker.propTypes = {
   activeLayers: PropTypes.array,
   addLayer: PropTypes.func,
@@ -552,11 +540,22 @@ const mapDispatchToProps = dispatch => ({
   },
   onToggle: () => {
     dispatch(onToggle());
+  },
+  update: (state) => {
+    dispatch(updateProductPicker(state));
   }
 });
 
 function mapStateToProps(state, ownProps) {
-  const { config, browser, proj, layers, compare, date } = state;
+  const {
+    config,
+    browser,
+    proj,
+    layers,
+    compare,
+    date,
+    productPicker
+  } = state;
   const { screenWidth, screenHeight } = browser;
   const isMobile = browser.lessThan.medium;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
@@ -574,9 +573,19 @@ function mapStateToProps(state, ownProps) {
     height,
     width,
     allLayers,
-    filteredRows: allLayers,
+    filteredRows: productPicker.filteredRows || allLayers,
     activeLayers,
     selectedProjection: proj.id,
+    listType: productPicker.listType,
+    category: productPicker.category,
+    categoryType: productPicker.categoryType,
+    selectedLayer: productPicker.selectedLayer,
+    selectedMeasurement: productPicker.selectedMeasurement,
+    measurementSourceIndex: productPicker.measurementSourceIndex,
+    searchResultRows: productPicker.searchResultRows,
+    numRowsFilteredOut: productPicker.numRowsFilteredOut,
+    inputValue: productPicker.inputValue,
+    filterByAvailable: productPicker.filterByAvailable,
     filterProjections: layer => {
       return !layer.projections[proj.id];
     },
