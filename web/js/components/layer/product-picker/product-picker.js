@@ -51,6 +51,7 @@ class ProductPicker extends React.Component {
       measurementSourceIndex: 0,
       filteredRows: props.filteredRows,
       searchResultRows: null,
+      numRowsFilteredOut: null,
       inputValue: '',
       filterByAvailable: true,
       modalElement: null
@@ -131,6 +132,7 @@ class ProductPicker extends React.Component {
       newState = {
         filteredRows,
         searchResultRows,
+        numRowsFilteredOut: searchResultRows.length - filteredRows.length,
         listType: 'search',
         inputValue: value,
         selectedLayer: newSelectedLayer
@@ -270,7 +272,7 @@ class ProductPicker extends React.Component {
   renderLayerList() {
     const {
       filteredRows,
-      searchResultRows,
+      numRowsFilteredOut,
       listType,
       categoryType,
       category,
@@ -298,6 +300,7 @@ class ProductPicker extends React.Component {
         ? height / 2
         : height
       : height;
+    const containerClass = isMobile ? 'search-container mobile' : 'search-container';
     const listContainerClass = isSearching
       ? isMobile
         ? 'layer-list-container search mobile'
@@ -305,8 +308,6 @@ class ProductPicker extends React.Component {
       : isMobile
         ? 'layer-list-container browse mobile'
         : 'layer-list-container browse';
-
-    const numRowsFilteredOut = isSearching && searchResultRows.length - filteredRows.length;
 
     return filteredRows.length || !isSearching ? (
       <>
@@ -319,50 +320,52 @@ class ProductPicker extends React.Component {
               }
             </div>
         }
-        <div className={listContainerClass}>
-          <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
-            <div className="product-outter-list-case">
-              <LayerList
-                isMobile={isMobile}
-                addLayer={addLayer}
-                removeLayer={removeLayer}
-                activeLayers={activeLayers}
-                layerConfig={layerConfig}
-                listType={listType}
-                category={category}
-                categoryConfig={categoryConfig[categoryType]}
-                selectedProjection={selectedProjection}
-                selectedDate={selectedDate}
-                selectedLayer={selectedLayer}
-                filteredRows={filteredRows}
-                hasMeasurementSetting={hasMeasurementSetting}
-                hasMeasurementSource={hasMeasurementSource}
-                measurementConfig={measurementConfig}
-                selectedMeasurement={selectedMeasurement}
-                updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
-                showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
-                setSourceIndex={index => this.setSourceIndex(index)}
-                currentMeasureSource={this.getCurrentMeasureSource()}
-              />
-            </div>
-          </Scrollbars>
+        <div className={containerClass}>
+          <div className={listContainerClass}>
+            <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
+              <div className="product-outter-list-case">
+                <LayerList
+                  isMobile={isMobile}
+                  addLayer={addLayer}
+                  removeLayer={removeLayer}
+                  activeLayers={activeLayers}
+                  layerConfig={layerConfig}
+                  listType={listType}
+                  category={category}
+                  categoryConfig={categoryConfig[categoryType]}
+                  selectedProjection={selectedProjection}
+                  selectedDate={selectedDate}
+                  selectedLayer={selectedLayer}
+                  filteredRows={filteredRows}
+                  hasMeasurementSetting={hasMeasurementSetting}
+                  hasMeasurementSource={hasMeasurementSource}
+                  measurementConfig={measurementConfig}
+                  selectedMeasurement={selectedMeasurement}
+                  updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
+                  showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
+                  setSourceIndex={index => this.setSourceIndex(index)}
+                  currentMeasureSource={this.getCurrentMeasureSource()}
+                />
+              </div>
+            </Scrollbars>
+          </div>
+          { this.renderDetails(listHeight) }
         </div>
-        { this.renderDetails(listHeight) }
-      </>
-    ) : (
-      <div className="no-results">
-        <i className="fas fa-5x fa-meteor"></i>
-        <h3> No layers found! </h3>
-        {numRowsFilteredOut > 0 &&
+      </>)
+      : (
+        <div className="no-results">
+          <i className="fas fa-5x fa-meteor"></i>
+          <h3> No layers found! </h3>
+          {numRowsFilteredOut > 0 &&
           <p>
             {numRowsFilteredOut} result(s) are being filtered out.
             <a className="remove-filters" onClick={this.toggleFilterByAvailable.bind(this)}>
               Remove filters?
             </a>
           </p>
-        }
-      </div>
-    );
+          }
+        </div>
+      );
   }
 
   renderDetails(listHeight) {
