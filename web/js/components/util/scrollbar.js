@@ -49,7 +49,7 @@ export default function Scrollbars(props) {
     return function cleanUp() {
       contentWrapperEl.removeEventListener('scroll', props.onScroll);
     };
-  });
+  }, [props.scrollBarVerticalTop]);
 
   return (
     <SimpleBarReact
@@ -68,6 +68,7 @@ Scrollbars.propTypes = {
   className: PropTypes.string,
   onScroll: PropTypes.func,
   scrollBarVerticalTop: PropTypes.number,
+  scrollRef: PropTypes.object,
   style: PropTypes.object
 };
 
