@@ -7,7 +7,7 @@ import SimpleBarReact from 'simplebar-react';
  * @param {number} props.scrollBarVerticalTop - location to scroll to
  */
 export default function Scrollbars(props) {
-  const ref = useRef();
+  const ref = props.scrollRef || useRef();
 
   /**
    * Add/remove the scrollbar-visible class if content is overflowing
@@ -40,14 +40,22 @@ export default function Scrollbars(props) {
     if (!ref || !ref.current) {
       return;
     }
+    const { contentWrapperEl } = ref.current;
+    if (props.onScroll) {
+      contentWrapperEl.addEventListener('scroll', props.onScroll);
+    }
     setTimeout(() => { toggleVisibleClass(ref.current); }, 50);
     setScrollTop(ref.current);
+    return function cleanUp() {
+      contentWrapperEl.removeEventListener('scroll', props.onScroll);
+    };
   });
 
   return (
     <SimpleBarReact
       autoHide={false}
       style={props.style}
+      className={props.className}
       ref={ref}
     >
       {props.children}
@@ -57,6 +65,8 @@ export default function Scrollbars(props) {
 
 Scrollbars.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
+  onScroll: PropTypes.func,
   scrollBarVerticalTop: PropTypes.number,
   style: PropTypes.object
 };

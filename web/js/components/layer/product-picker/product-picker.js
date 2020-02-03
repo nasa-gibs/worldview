@@ -32,7 +32,10 @@ import {
   NavItem,
   NavLink
 } from 'reactstrap';
-import { updateProductPicker } from '../../../modules/product-picker/actions';
+import {
+  updateProductPicker,
+  updateListScrollTop
+} from '../../../modules/product-picker/actions';
 
 /*
  * A scrollable list of layers
@@ -44,7 +47,8 @@ class ProductPicker extends React.Component {
     super(props);
 
     this.state = {
-      modalElement: null
+      modalElement: null,
+      listScrollRef: React.createRef()
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
   }
@@ -285,9 +289,16 @@ class ProductPicker extends React.Component {
       categoryType,
       category,
       selectedMeasurement,
-      selectedLayer
+      selectedLayer,
+      listScrollTop,
+      updateScrollPosition
     } = this.props;
 
+    const { listScrollRef } = this.state;
+    const debouncedUpdateScroll = lodashDebounce(() => {
+      const { scrollTop } = listScrollRef.current.contentWrapperEl;
+      updateScrollPosition(scrollTop);
+    }, 500);
     const isSearching = listType === 'search';
     const listHeight = isMobile && isSearching
       ? selectedLayer
@@ -303,6 +314,8 @@ class ProductPicker extends React.Component {
         ? 'layer-list-container browse mobile'
         : 'layer-list-container browse';
 
+    console.log('ahhhhh rendeirng!');
+
     return filteredRows.length || !isSearching ? (
       <>
         { isSearching &&
@@ -316,7 +329,11 @@ class ProductPicker extends React.Component {
         }
         <div className={containerClass}>
           <div className={listContainerClass}>
-            <Scrollbars style={{ maxHeight: listHeight - 2 + 'px' }}>
+            <Scrollbars
+              style={{ maxHeight: listHeight - 2 + 'px' }}
+              scrollRef={listScrollRef}
+              scrollBarVerticalTop={listScrollTop}
+              onScroll={debouncedUpdateScroll}>
               <div className="product-outter-list-case">
                 <LayerList
                   isMobile={isMobile}
@@ -505,25 +522,34 @@ ProductPicker.propTypes = {
   categories: PropTypes.array,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
+  categoryType: PropTypes.string,
   currentMeasureSource: PropTypes.func,
   drawMeasurements: PropTypes.func,
-  filterByDate: PropTypes.func,
+  filterByAvailable: PropTypes.bool,
   filteredRows: PropTypes.array,
   filterProjections: PropTypes.func,
   filterSearch: PropTypes.func,
   hasMeasurementSetting: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
   height: PropTypes.number,
+  inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   layerConfig: PropTypes.object,
+  listScrollTop: PropTypes.number,
   listType: PropTypes.string,
   measurementConfig: PropTypes.object,
   measurements: PropTypes.object,
+  measurementSourceIndex: PropTypes.number,
   modalView: PropTypes.string,
+  numRowsFilteredOut: PropTypes.number,
   onToggle: PropTypes.func,
   removeLayer: PropTypes.func,
+  searchResultRows: PropTypes.array,
   selectedDate: PropTypes.object,
+  selectedLayer: PropTypes.object,
+  selectedMeasurement: PropTypes.string,
   selectedProjection: PropTypes.string,
+  updateScrollPosition: PropTypes.func,
   width: PropTypes.number
 };
 
@@ -543,8 +569,11 @@ const mapDispatchToProps = dispatch => ({
   onToggle: () => {
     dispatch(onToggle());
   },
-  update: (state) => {
-    dispatch(updateProductPicker(state));
+  updateScrollPosition: (scrollTop) => {
+    dispatch(updateListScrollTop(scrollTop));
+  },
+  update: (partialState) => {
+    dispatch(updateProductPicker(partialState));
   }
 });
 
@@ -579,6 +608,7 @@ function mapStateToProps(state, ownProps) {
     activeLayers,
     selectedProjection: proj.id,
     listType: productPicker.listType,
+    listScrollTop: productPicker.listScrollTop,
     category: productPicker.category,
     categoryType: productPicker.categoryType,
     selectedLayer: productPicker.selectedLayer,
