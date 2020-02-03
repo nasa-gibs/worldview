@@ -322,7 +322,7 @@ class ProductPicker extends React.Component {
         }
         <div className={containerClass}>
           <div className={listContainerClass}>
-            <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
+            <Scrollbars style={{ maxHeight: listHeight - 2 + 'px' }}>
               <div className="product-outter-list-case">
                 <LayerList
                   isMobile={isMobile}
@@ -371,7 +371,6 @@ class ProductPicker extends React.Component {
   renderDetails(listHeight) {
     const { category, listType, selectedLayer } = this.state;
     const {
-      height,
       isMobile,
       activeLayers,
       addLayer,
@@ -390,24 +389,26 @@ class ProductPicker extends React.Component {
     if (isSearching) {
       return isMobile && !selectedLayer ? null : (
         <div className={detailContainerClass}>
-          <LayerMetadataDetail
-            layer={selectedLayer}
-            isActive={selectedLayerActive}
-            addLayer={addLayer}
-            removeLayer={removeLayer}
-            height={listHeight}
-            selectedProjection={selectedProjection}>
-          </LayerMetadataDetail>
+          <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
+            <LayerMetadataDetail
+              layer={selectedLayer}
+              isActive={selectedLayerActive}
+              addLayer={addLayer}
+              removeLayer={removeLayer}
+              selectedProjection={selectedProjection}>
+            </LayerMetadataDetail>
+          </Scrollbars>
         </div>
       );
     } else {
       return !isMobile && (
         <div className={detailContainerClass}>
-          <MeasurementMetadataDetail
-            categoryTitle={category && category.title}
-            source={this.getCurrentMeasureSource()}
-            height={height}>
-          </MeasurementMetadataDetail>
+          <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
+            <MeasurementMetadataDetail
+              categoryTitle={category && category.title}
+              source={this.getCurrentMeasureSource()}>
+            </MeasurementMetadataDetail>
+          </Scrollbars>
         </div>
       );
     }
