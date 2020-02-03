@@ -33,6 +33,10 @@
         "MODIS_Terra_L3_Land_Water_Mask",
         "MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual",
 
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
+
         "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
         "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
         "VIIRS_SNPP_DayNightBand_ENCC",
