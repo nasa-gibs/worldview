@@ -1,7 +1,7 @@
 {
     "products": {
-        "GHRSST_L4G1SST_LL": {
-            "name": "JPL_OUROCEAN-L4UHfnd-GLOB-G1SST/v1",
+        "JPL_OUROCEAN-L4UHfnd-GLOB-G1SST": {
+            "name": "GHRSST Level 4 G1SST Global Foundation Sea Surface Temperature Analysis",
             "handler": "List",
             "query": {
                 "shortName": "JPL_OUROCEAN-L4UHfnd-GLOB-G1SST"
