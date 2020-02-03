@@ -1,0 +1,37 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Thermal_Anomalies_375m_All": {
+      "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+      "title": "Fires and Thermal Anomalies (Day  and Night, 375m)",
+      "subtitle": "NOAA-20/ VIIRS",
+      "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+      "tags": "hotspot noaa20 jpss1 jpss",
+      "layergroup": ["viirs"],
+      "product": [],
+      "group": "overlays",
+      "format": "image/png",
+      "period": "daily",
+      "wrapadjacentdays": true,
+
+      "tileSize": [512, 512],
+      "type": "wms",
+
+      "transition": "true",
+      "startDate": "2020-01-19",
+
+      "projections": {
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+
+      "palette": {
+        "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+        "immutable": "true"
+      }
+    }
+  }
+}
