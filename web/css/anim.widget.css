@@ -280,6 +280,10 @@ a .wv-animation-widget-icon {
   font-weight: 400;
 }
 
+#download-gif-button {
+  margin: 10px;
+}
+
 .gif-download-grid .grid-child {
   width: 190px;
   font-size: 12px;
@@ -318,6 +322,10 @@ a .wv-animation-widget-icon {
   line-height: 30px;
   color: #000;
   font-size: 15px;
+}
+
+.gif-results-dialog {
+  padding-bottom: 7px;
 }
 
 .wv-gif-progress {
