@@ -800,7 +800,7 @@
   }
   &.browse-search-width {
     width: 95%;
-    max-width: 1400px;
+    max-width: 1200px;
     & .product-outter-list-case {
       width: 100%;
       padding: 0 11px 5px 0;
@@ -860,7 +860,7 @@
     }
     &.browse-search-width {
       width: 95%;
-      max-width: 1000px;
+      max-width: 1200px;
     }
 
     & .category-masonry-case {
@@ -975,21 +975,18 @@
   }
 }
 
-.layer-list-container {
-  float: left;
-  padding: 0 2px 0 5px;
-
-  &.search {
-    width: 40%;
-    &.mobile {
-      width: 100%;
-    }
+.search-container {
+  display: flex;
+  &.mobile {
+    flex-direction: column;
   }
-  &.browse {
-    width: 50%;
-    &.mobile {
-      width: 100%;
-    }
+}
+
+.layer-list-container {
+  padding: 0 2px 0 5px;
+  flex-grow: 1;
+  &.search:not(.mobile) {
+    max-width: 400px;
   }
 }
 .no-results {
@@ -1012,21 +1009,17 @@
 }
 
 .layer-detail-container {
-  height: 100%;
-  float: left;
   padding-right: 2px;
 
   &.search {
-    width: 60%;
+    flex-grow: 1;
     &.mobile {
-      width: 100%;
       margin-top: 10px;
       padding-left: 2px;
     }
   }
   &.browse {
-    width: 50%;
-
+    flex-basis: 50%;
     & h2 {
       color: #eee;
       font-size: 24px;
