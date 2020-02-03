@@ -8,7 +8,6 @@ import {
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import PropTypes from 'prop-types';
-import util from '../../util/util';
 import googleTagManager from 'googleTagManager';
 
 const MAX_DIMENSION_SIZE = 8200;
@@ -61,7 +60,6 @@ export default class ImageResSelection extends React.Component {
     );
 
     if (url) {
-      util.metrics('lc=' + encodeURIComponent(dlURL));
       window.open(dlURL, '_blank');
     } else {
       console.log(url);

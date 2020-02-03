@@ -22,7 +22,6 @@
         }
     },
     "scripts": [
-        "https://earthdata.nasa.gov/lib/ntpagetag.js",
         "https://fbm.earthdata.nasa.gov/for/worldview/feedback.js"
     ]
 }
