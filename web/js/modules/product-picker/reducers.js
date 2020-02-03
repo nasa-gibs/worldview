@@ -1,5 +1,6 @@
 import {
-  UPDATE_PRODUCT_PICKER
+  UPDATE_PRODUCT_PICKER,
+  UPDATE_LIST_SCROLL_TOP
 } from './constants';
 
 import { assign as lodashAssign } from 'lodash';
@@ -14,7 +15,8 @@ export const productPickerState = {
   searchResultRows: undefined,
   numRowsFilteredOut: undefined,
   inputValue: '',
-  filterByAvailable: true
+  filterByAvailable: true,
+  listScrollTop: 0
 };
 
 export function getInitialState(config) {
@@ -27,6 +29,10 @@ export function productPickerReducer(state = productPickerState, action) {
   switch (action.type) {
     case UPDATE_PRODUCT_PICKER:
       return lodashAssign({}, state, action.value);
+    case UPDATE_LIST_SCROLL_TOP:
+      return lodashAssign({}, state, {
+        listScrollTop: action.value
+      });
     default:
       return state;
   }
