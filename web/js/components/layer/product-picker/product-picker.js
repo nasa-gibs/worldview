@@ -48,7 +48,6 @@ class ProductPicker extends React.Component {
 
     this.state = {
       modalElement: null,
-      listScrollRef: React.createRef(),
       listScrollTop: props.listScrollTop || 0
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
@@ -134,7 +133,8 @@ class ProductPicker extends React.Component {
         numRowsFilteredOut: searchResultRows.length - filteredRows.length,
         listType: 'search',
         inputValue: value,
-        selectedLayer: newSelectedLayer
+        selectedLayer: newSelectedLayer,
+        listScrollTop: 0
       };
     }
     update(newState);
@@ -236,7 +236,8 @@ class ProductPicker extends React.Component {
       listType: 'category',
       inputValue: '',
       selectedLayer: null,
-      selectedMeasurement: null
+      selectedMeasurement: null,
+      listScrollTop: 0
     });
   }
 
@@ -256,6 +257,7 @@ class ProductPicker extends React.Component {
     this.props.update({ measurementSourceIndex });
   }
 
+  // TODO don't call on every render
   getCurrentMeasureSource() {
     const { measurementConfig, selectedMeasurement, measurementSourceIndex } = this.props;
 
@@ -271,7 +273,7 @@ class ProductPicker extends React.Component {
   }
 
   renderLayerList() {
-    const { listScrollRef, listScrollTop } = this.state;
+    // const { listScrollTop } = this.state;
     const {
       isMobile,
       categoryConfig,
@@ -292,12 +294,12 @@ class ProductPicker extends React.Component {
       category,
       selectedMeasurement,
       selectedLayer,
-      updateScrollPosition
+      updateScrollPosition,
+      listScrollTop
     } = this.props;
 
-    const debouncedUpdateScroll = lodashDebounce(() => {
-      const { scrollTop } = listScrollRef.current.contentWrapperEl;
-      updateScrollPosition(scrollTop);
+    const debouncedOnScroll = lodashDebounce((contentWrapperEl) => {
+      updateScrollPosition(contentWrapperEl.scrollTop);
     }, 500);
 
     const isSearching = listType === 'search';
@@ -330,9 +332,8 @@ class ProductPicker extends React.Component {
           <div className={listContainerClass}>
             <Scrollbars
               style={{ maxHeight: listHeight - 2 + 'px' }}
-              scrollRef={listScrollRef}
               scrollBarVerticalTop={listScrollTop}
-              onScroll={debouncedUpdateScroll}>
+              onScroll={debouncedOnScroll}>
               <div className="product-outter-list-case">
                 <LayerList
                   isMobile={isMobile}

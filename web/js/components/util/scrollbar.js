@@ -1,55 +1,60 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 
 /**
  * Wrapper component for SimpleBar
- * @param {number} props.scrollBarVerticalTop - location to scroll to
  */
 export default function Scrollbars(props) {
-  const ref = props.scrollRef || useRef();
+  const ref = useRef();
+  const [scrollTop, updateScrollTop] = useState(0);
 
   /**
-   * Add/remove the scrollbar-visible class if content is overflowing
-   * @param {*} simpleBar
+   *  - Set scroll top when prop changes
+   *  - Add/remove 'scrollbar-visible' class based on content size
    */
-  const toggleVisibleClass = (simpleBar) => {
-    const { contentEl, contentWrapperEl } = simpleBar;
-    if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
-      contentEl.classList.add('scrollbar-visible');
-    } else {
-      contentEl.classList.remove('scrollbar-visible');
-    }
-  };
-
-  /**
-   * Set the scrollTop position based on props.scrollBarVerticalTop
-   * @param {*} simpleBar
-   */
-  const setScrollTop = (simpleBar) => {
-    const { contentWrapperEl } = simpleBar;
-    if (contentWrapperEl) {
-      const verticalTop = Math.floor(props.scrollBarVerticalTop);
-      contentWrapperEl.scrollTop = verticalTop !== 0
-        ? verticalTop
-        : contentWrapperEl.scrollTop;
-    }
-  };
-
   useEffect(() => {
     if (!ref || !ref.current) {
       return;
     }
-    const { contentWrapperEl } = ref.current;
-    if (props.onScroll) {
-      contentWrapperEl.addEventListener('scroll', props.onScroll);
-    }
-    setTimeout(() => { toggleVisibleClass(ref.current); }, 50);
-    setScrollTop(ref.current);
-    return function cleanUp() {
-      contentWrapperEl.removeEventListener('scroll', props.onScroll);
+    function setScrollTop() {
+      const { contentWrapperEl } = ref.current;
+      if (contentWrapperEl) {
+        const verticalTop = props.scrollBarVerticalTop;
+        updateScrollTop(verticalTop);
+        contentWrapperEl.scrollTop = verticalTop;
+      }
     };
+    function toggleVisibleClass() {
+      const { contentEl, contentWrapperEl } = ref.current;
+      if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
+        contentEl.classList.add('scrollbar-visible');
+      } else {
+        contentEl.classList.remove('scrollbar-visible');
+      }
+    };
+    setScrollTop();
+    setTimeout(() => { toggleVisibleClass(); }, 50);
   }, [props.scrollBarVerticalTop]);
+
+  /**
+   * Handle register/deregister of scroll event listener
+   */
+  useEffect(() => {
+    if (!props.onScroll) return;
+    const { contentWrapperEl } = ref && ref.current;
+
+    function scrollListener() {
+      // Avoid calling event listener when we are setting scrollTop manually
+      if (contentWrapperEl.scrollTop !== scrollTop) {
+        props.onScroll(contentWrapperEl);
+      }
+    }
+    contentWrapperEl.addEventListener('scroll', scrollListener);
+    return function cleanUp() {
+      contentWrapperEl.removeEventListener('scroll', scrollListener);
+    };
+  });
 
   return (
     <SimpleBarReact
@@ -68,7 +73,6 @@ Scrollbars.propTypes = {
   className: PropTypes.string,
   onScroll: PropTypes.func,
   scrollBarVerticalTop: PropTypes.number,
-  scrollRef: PropTypes.object,
   style: PropTypes.object
 };
 
