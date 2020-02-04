@@ -1034,7 +1034,7 @@ class Timeline extends React.Component {
                     timelineStartDateLimit={timelineStartDateLimit}
                     timelineEndDateLimit={timelineEndDateLimit}
                     frontDate={frontDate}
-                    backDate={backDate}s
+                    backDate={backDate}
                     dateA={dateA}
                     dateB={dateB}
                     hoverTime={hoverTime}
