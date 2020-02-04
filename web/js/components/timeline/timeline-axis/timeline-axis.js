@@ -26,7 +26,12 @@ class TimelineAxis extends Component {
       currentTimeRange: null,
       gridWidth: 12,
       wheelZoom: false,
-      mouseDown: false
+      mouseDown: false,
+      hitRightBound: false,
+      hitLeftBound: false,
+      updatedTimeScale: false,
+      wheelType: null,
+      clientXOnDrag: 0
     };
     // axis
     this.handleDrag = this.handleDrag.bind(this);
@@ -83,6 +88,10 @@ class TimelineAxis extends Component {
       const endLimitYear = new Date(timelineEndDateLimit).getUTCFullYear() + 1;
       const startLimitYear = new Date(timelineStartDateLimit).getUTCFullYear();
       gridNumber = endLimitYear - startLimitYear;
+    } else if (timeScale === 'month') {
+      const endLimitMonthAdded = moment.utc(timelineEndDateLimit).startOf('month').add(1, 'month');
+      const monthTotal = moment.utc(endLimitMonthAdded).diff(timelineStartDateLimit, 'months');
+      gridNumber = monthTotal;
     }
 
     // this is the middle on the axis based on number of tiles determined from width of axis and gridwidth
@@ -105,9 +114,12 @@ class TimelineAxis extends Component {
 
     // use input date or hoverTime
     const hoverTimeDate = inputDate ? moment.utc(inputDate) : moment.utc(hoverTimeString);
-    let hoverTimeZero = hoverTimeDate.clone().startOf(timeScale);
-    if (timeScale === 'year') {
+    let hoverTimeZero;
+    const isYearOrMonth = timeScale === 'year' || timeScale === 'month';
+    if (isYearOrMonth) {
       hoverTimeZero = moment.utc(timelineStartDateLimit);
+    } else {
+      hoverTimeZero = hoverTimeDate.clone().startOf(timeScale);
     }
     const hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
 
@@ -148,16 +160,19 @@ class TimelineAxis extends Component {
     let gridsToSubtract = offSetHalved + offSetGridsDiff;
     let gridsToAdd = offSetHalved - offSetGridsDiff;
 
-    // determine if changing timeScale from greater to lesser (e.g., 'year' to 'month')
-    const greaterToLesserTimescale = timeScale && previousTimeScale
-      ? timeScaleToNumberKey[timeScale] < timeScaleToNumberKey[previousTimeScale]
-      : null;
-    if (greaterToLesserTimescale) {
-      // determine how far hoverTime date is from end to compensate for bounds correction
-      const hoverTimeToEndDateLimit = moment.utc(timelineEndDateLimit).diff(hoverTimeDate, timeScale);
-      if (hoverTimeToEndDateLimit < offSetHalved) {
-        gridsToSubtract = gridsToSubtract + (offSetHalved - hoverTimeToEndDateLimit) - offSetGrids;
-        gridsToAdd = gridsToAdd - (offSetHalved - hoverTimeToEndDateLimit) + offSetGrids;
+    if (!isYearOrMonth) {
+      // determine if changing timeScale from greater to lesser (e.g., 'year' to 'month')
+      const greaterToLesserTimescale = timeScale && previousTimeScale
+        ? timeScaleToNumberKey[timeScale] < timeScaleToNumberKey[previousTimeScale]
+        : null;
+
+      if (greaterToLesserTimescale) {
+        // determine how far hoverTime date is from end to compensate for bounds correction
+        const hoverTimeToEndDateLimit = moment.utc(timelineEndDateLimit).diff(hoverTimeDate, timeScale);
+        if (hoverTimeToEndDateLimit < offSetHalved) {
+          gridsToSubtract = gridsToSubtract + (offSetHalved - hoverTimeToEndDateLimit) - offSetGrids;
+          gridsToAdd = gridsToAdd - (offSetHalved - hoverTimeToEndDateLimit) + offSetGrids;
+        }
       }
     }
 
@@ -200,15 +215,17 @@ class TimelineAxis extends Component {
     // axisWidthInput conditional in place to handle resize centering of position
     if (axisWidthInput) {
       position = midPoint;
+    } else if (timeScale === 'year') {
+      position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2);
+    } else if (timeScale === 'month') {
+      const pixelsToAddToDraggerNew = Math.abs(frontDate.diff(hoverTimeDate, timeScale, true) * gridWidth);
+      const positionModified = pixelsToAddToDraggerNew - pixelsToAdd + 2;
+      position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2) - positionModified;
     } else {
-      if (timeScale === 'year') {
-        position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2);
-      } else {
-        // - (offSetGridsDiff * gridWidth) to compensate off center zooming repositioning
-        position = midPoint - (timelineAxisWidth / 2 - hoverLeftOffset).toFixed(10) - offSetGridsDiff * gridWidth;
-        if (gridNumber % 2 !== 0) { // handle odd number gridNumber grid offset
-          position += gridWidth / 2;
-        }
+      // - (offSetGridsDiff * gridWidth) to compensate off center zooming repositioning
+      position = midPoint - (timelineAxisWidth / 2 - hoverLeftOffset).toFixed(10) - offSetGridsDiff * gridWidth;
+      if (gridNumber % 2 !== 0) { // handle odd number gridNumber grid offset
+        position += gridWidth / 2;
       }
     }
 
@@ -217,7 +234,7 @@ class TimelineAxis extends Component {
     const diffFromEndDateLimit = frontDate.diff(timelineEndDateLimit, timeScale);
     let leftBound = diffFromEndDateLimit * gridWidth + midPoint + timelineAxisWidth;
     let rightBound = diffFromStartDateLimit * gridWidth + midPoint * 1.5 + timelineAxisWidth * 0.25;
-    if (timeScale === 'year') {
+    if (isYearOrMonth) {
       leftBound = diffFromEndDateLimit * gridWidth + pixelsToAdd + 2 + timelineAxisWidth * 0.80;
       rightBound = timelineAxisWidth * 0.25 + pixelsToAdd + 2;
     }
@@ -269,8 +286,10 @@ class TimelineAxis extends Component {
       dragSentinelCount: boundsDiff,
       leftBound,
       rightBound,
-      wheelZoom: false
-    }, this.props.updatePositioning(updatePositioningArguments, timeScale === 'year' ? hoverTime : hoverTimeString));
+      wheelZoom: false,
+      hitLeftBound: false,
+      hitRightBound: false
+    }, this.props.updatePositioning(updatePositioningArguments, isYearOrMonth ? hoverTime : hoverTimeString));
   }
 
   /**
@@ -290,16 +309,20 @@ class TimelineAxis extends Component {
     let startDate;
     let endDate;
 
-    if (timeScale === 'year') {
-      dayZeroed = moment.utc(inputDate).startOf('year');
-      const endLimitYear = new Date(timelineEndDateLimit).getUTCFullYear() + 1;
+    // year and month are static - full range
+    const isYearOrMonth = timeScale === 'year' || timeScale === 'month';
+    if (isYearOrMonth) {
       const startLimitYear = new Date(timelineStartDateLimit).getUTCFullYear();
+      dayZeroed = moment.utc(inputDate).startOf('year');
       startDate = dayZeroed.year(startLimitYear);
-      endDate = dayZeroed.clone().year(endLimitYear);
+      if (timeScale === 'year') {
+        const endLimitYear = new Date(timelineEndDateLimit).getUTCFullYear() + 1;
+        endDate = dayZeroed.clone().year(endLimitYear);
+      } else if (timeScale === 'month') {
+        endDate = moment.utc(timelineEndDateLimit).startOf('month').add(1, 'month');
+      }
     } else {
-      if (timeScale === 'month') {
-        dayZeroed = moment.utc(inputDate).startOf('month');
-      } else if (timeScale === 'day') {
+      if (timeScale === 'day') {
         dayZeroed = moment.utc(inputDate).startOf('day');
       } else if (timeScale === 'hour') {
         dayZeroed = moment.utc(inputDate).startOf('hour');
@@ -309,6 +332,7 @@ class TimelineAxis extends Component {
       startDate = dayZeroed.clone().subtract(subtract, timeScale);
       endDate = dayZeroed.clone().add(add, timeScale);
     }
+
     const timeRangeArray = getTimeRange(
       startDate,
       endDate,
@@ -928,7 +952,7 @@ class TimelineAxis extends Component {
     animationStartLocation = animationStartLocation + deltaX;
     animationEndLocation = animationEndLocation + deltaX;
     // update not necessary for year since all years are displayed
-    if (timeScale === 'year') {
+    if (timeScale === 'year' || timeScale === 'month') {
       const frontDate = this.state.currentTimeRange[0].rawDate;
       const backDate = this.state.currentTimeRange[this.state.currentTimeRange.length - 1].rawDate;
       const updatePositioningArguments = {
@@ -949,7 +973,7 @@ class TimelineAxis extends Component {
         dragSentinelCount: dragSentinelCount + deltaX
       });
       this.props.updatePositioning(updatePositioningArguments);
-    } else { // handle all timescale other than year
+    } else { // handle all timescale other than year and month
       if (deltaX > 0) { // dragging right - exposing past dates
         if (dragSentinelCount + deltaX > dragSentinelChangeNumber) {
           // handle over drag the necessitates multiple axis updates
@@ -1281,6 +1305,7 @@ TimelineAxis.propTypes = {
   changeTimeScale: PropTypes.func,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
+  debounceChangeTimeScaleWheel: PropTypes.func,
   draggerPosition: PropTypes.number,
   draggerPositionB: PropTypes.number,
   draggerSelected: PropTypes.string,

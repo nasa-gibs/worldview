@@ -113,8 +113,24 @@ class Timeline extends React.Component {
     this.debounceOnUpdateEndDate = lodashDebounce(this.props.onUpdateEndDate, 30);
     this.debounceOnUpdateStartAndEndDate = lodashDebounce(this.props.onUpdateStartAndEndDate, 30);
 
+    // change timescale
+    this.debounceWheelTime = 60;
+
+    // IE11 specific - increase wheel timing to handle performance issues
+    if (window.navigator.userAgent.match(/Trident\/7\./)) {
+      this.debounceWheelTime = 2500;
+    }
+
+    this.debounceChangeTimeScaleWheel = lodashDebounce(this.throttleChangeTimeScaleWheel, this.debounceWheelTime, { leading: true, trailing: false });
+    this.throttleChangeTimeScaleWheelFire = lodashThrottle(this.changeTimeScaleScroll, 200, { leading: true, trailing: false });
+
     // application relative now time
     this.appNowUpdateInterval = 0;
+  }
+
+  // chain throttled timescale wheel change call after debounce for smoother UX
+  throttleChangeTimeScaleWheel = (e) => {
+    this.throttleChangeTimeScaleWheelFire(e);
   }
 
   // HOVER TIME
