@@ -113,8 +113,24 @@ class Timeline extends React.Component {
     this.debounceOnUpdateEndDate = lodashDebounce(this.props.onUpdateEndDate, 30);
     this.debounceOnUpdateStartAndEndDate = lodashDebounce(this.props.onUpdateStartAndEndDate, 30);
 
+    // change timescale
+    this.debounceWheelTime = 60;
+
+    // IE11 specific - increase wheel timing to handle performance issues
+    if (window.navigator.userAgent.match(/Trident\/7\./)) {
+      this.debounceWheelTime = 2500;
+    }
+
+    this.debounceChangeTimeScaleWheel = lodashDebounce(this.throttleChangeTimeScaleWheel, this.debounceWheelTime, { leading: true, trailing: false });
+    this.throttleChangeTimeScaleWheelFire = lodashThrottle(this.changeTimeScaleScroll, 200, { leading: true, trailing: false });
+
     // application relative now time
     this.appNowUpdateInterval = 0;
+  }
+
+  // chain throttled timescale wheel change call after debounce for smoother UX
+  throttleChangeTimeScaleWheel = (e) => {
+    this.throttleChangeTimeScaleWheelFire(e);
   }
 
   // HOVER TIME
@@ -396,8 +412,12 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   handleKeyDown = (e) => {
+    const { isTimelineDragging } = this.state;
+    const { hasSubdailyLayers, timeScale } = this.props;
     // prevent left/right arrows changing date within inputs
-    if (e.target.tagName !== 'INPUT' && !e.ctrlKey && !e.metaKey && !this.state.isTimelineDragging) {
+    if (e.target.tagName !== 'INPUT' && e.target.className !== 'rc-slider-handle' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
+      const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+      const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
       // left arrow
       if (e.keyCode === 37) {
         e.preventDefault();
@@ -406,6 +426,18 @@ class Timeline extends React.Component {
       } else if (e.keyCode === 39) {
         e.preventDefault();
         this.throttleIncrementDate();
+      // up arrow
+      } else if (e.keyCode === 38) {
+        e.preventDefault();
+        if (timeScaleNumber > 1) {
+          this.changeTimeScale(timeScaleNumber - 1);
+        }
+      // down arrow
+      } else if (e.keyCode === 40) {
+        e.preventDefault();
+        if (timeScaleNumber < maxTimeScaleNumber) {
+          this.changeTimeScale(timeScaleNumber + 1);
+        }
       }
     }
   };
@@ -443,8 +475,40 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   changeTimeScale = (timeScale) => {
+    this.setState({
+      showHoverLine: false,
+      showDraggerTime: false
+    });
     this.props.changeTimeScale(timeScale);
   };
+
+  /**
+  * @desc changes timeScale with wheel scroll - throttled invocations
+  * y axis change - change timescale scroll (e.g. from 'day' to 'month')
+  * @param {Event} wheel scroll event
+  * @returns {void}
+  */
+  changeTimeScaleScroll = (e) => {
+    const {
+      timeScale,
+      hasSubdailyLayers
+    } = this.props;
+    const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+    const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
+
+    // handle time scale change on y axis wheel event
+    // wheel zoom out
+    if (e.deltaY > 0) {
+      if (timeScaleNumber > 1) {
+        this.changeTimeScale(timeScaleNumber - 1);
+      }
+      // wheel zoom in
+    } else {
+      if (timeScaleNumber < maxTimeScaleNumber) {
+        this.changeTimeScale(timeScaleNumber + 1);
+      }
+    }
+  }
 
   /**
   * @desc handle SET of custom time scale panel
@@ -724,7 +788,7 @@ class Timeline extends React.Component {
 
   /**
    * If a user adds a subdaily layer and the current selected time is too recent
-   * it is likely they will see no layer content.  Here we are moving the selected time
+   * it is likely they will see no layer content. Here we are moving the selected time
    * backwards for them to attempt to avoid this scenario
    */
   moveSelectedDateBackwards() {
@@ -985,7 +1049,7 @@ class Timeline extends React.Component {
                     animationEndLocation={animationEndLocation}
                     animStartLocationDate={animStartLocationDate}
                     animEndLocationDate={animEndLocationDate}
-                    changeTimeScale={this.changeTimeScale}
+                    debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
                     updatePositioning={this.updatePositioning}
                     updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
                     updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
