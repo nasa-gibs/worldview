@@ -711,7 +711,7 @@ class TimelineAxis extends Component {
     const deltaXAbs = Math.abs(e.deltaX);
 
     // determine more dominant scroll direction for diagonal cases
-    const yTypeChangeScroll = deltaYAbs !== 0 && deltaYAbs > 5 && deltaYAbs > deltaXAbs * 2;
+    const yTypeChangeScroll = deltaYAbs !== 0 && deltaYAbs >= 3 && deltaYAbs > deltaXAbs * 2;
     const xTypeChangePan = deltaXAbs !== 0 && deltaXAbs > deltaYAbs;
 
     if (yTypeChangeScroll) {
