@@ -66,87 +66,32 @@ class LayerRow extends React.Component {
    * @return {string}       Return a string with temporal range information
    */
   dateRangeText(layer) {
-    var startDate, startDateId, endDate, endDateId;
-    var dateRange = '';
-    if (layer.startDate) {
-      startDate = util.parseDate(layer.startDate);
-      if (layer.period === 'subdaily') {
-        startDate =
-          startDate.getDate() +
-          ' ' +
-          util.giveMonth(startDate) +
-          ' ' +
-          startDate.getFullYear() +
-          ' ' +
-          util.pad(startDate.getHours(), 2, '0') +
-          ':' +
-          util.pad(startDate.getMinutes(), 2, '0');
-      } else if (layer.period === 'yearly') {
-        startDate = startDate.getFullYear();
-      } else if (layer.period === 'monthly') {
-        startDate = util.giveMonth(startDate) + ' ' + startDate.getFullYear();
-      } else {
-        startDate =
-          startDate.getDate() +
-          ' ' +
-          util.giveMonth(startDate) +
-          ' ' +
-          startDate.getFullYear();
-      }
-      if (layer.id) startDateId = layer.id + '-startDate';
+    let startDate, startDateId, endDate, endDateId;
 
-      if (layer.endDate) {
-        endDate = util.parseDate(layer.endDate);
-        if (endDate <= util.today() && !layer.inactive) {
-          endDate = 'Present';
-        } else {
-          if (layer.period === 'subdaily') {
-            endDate =
-              endDate.getDate() +
-              ' ' +
-              util.giveMonth(endDate) +
-              ' ' +
-              endDate.getFullYear() +
-              ' ' +
-              util.pad(endDate.getHours(), 2, '0') +
-              ':' +
-              util.pad(endDate.getMinutes(), 2, '0');
-          } else if (layer.period === 'yearly') {
-            endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
-            endDate = endDate.getFullYear();
-          } else if (layer.period === 'monthly') {
-            endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
-            endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
-          } else {
-            if (
-              layer.dateRanges &&
-              layer.dateRanges.slice(-1)[0].dateInterval !== '1'
-            ) {
-              endDate = new Date(endDate.setTime(endDate.getTime() - 86400000));
-            }
-            endDate =
-              endDate.getDate() +
-              ' ' +
-              util.giveMonth(endDate) +
-              ' ' +
-              endDate.getFullYear();
-          }
-        }
-      } else {
-        endDate = 'Present';
-      }
-      if (layer.id) endDateId = layer.id + '-endDate';
-      dateRange =
-        'Temporal coverage: <span class="layer-date-start" id=' +
-        startDateId +
-        '>' +
-        startDate +
-        '</span> - <span class="layer-end-date" id=' +
-        endDateId +
-        '>' +
-        endDate +
-        '</span>';
+    if (layer.startDate) {
+      startDateId = layer.id + '-startDate';
+      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
     }
+
+    if (layer.endDate) {
+      endDateId = layer.id + '-endDate';
+      endDate = util.parseDate(layer.endDate);
+
+      if (endDate <= util.today() && !layer.inactive) {
+        endDate = 'Present';
+      } else {
+        endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
+      }
+    } else {
+      endDate = 'Present';
+    }
+
+    const dateRange =
+    `
+      Temporal coverage:
+      <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
+      <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>
+    `;
 
     return dateRange;
   }

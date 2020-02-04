@@ -20,7 +20,6 @@ import {
   layerHover
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
-import moment from 'moment';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -82,27 +81,15 @@ class Layer extends React.Component {
     }
   }
 
-  formatDisabledTitleDate = (date, period) => {
-    var dateString;
-
-    if (period === 'subdaily') {
-      dateString = moment(util.parseDate(date)).format('DD MMMM YYYY HH:mm') + 'Z';
-    } else {
-      dateString = moment(util.parseDate(date)).format('DD MMMM YYYY');
-    }
-
-    return dateString;
-  }
-
   getDisabledTitle = (layer) => {
     let startDate, endDate;
 
     if (layer.startDate) {
-      startDate = this.formatDisabledTitleDate(layer.startDate, layer.period);
+      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
     }
 
     if (layer.endDate) {
-      endDate = this.formatDisabledTitleDate(layer.endDate, layer.period);
+      endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
     }
 
     if (startDate && endDate) {
