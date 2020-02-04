@@ -106,12 +106,10 @@ class LayerRow extends React.Component {
 
         if (l.startDate) {
           listItemStartDate = util.coverageDateFormatter('START-DATE', l.startDate, layer.period);
-          console.log(listItemStartDate);
         }
 
         if (l.endDate) {
           listItemEndDate = util.coverageDateFormatter('END-DATE', l.endDate, layer.period);
-          console.log(listItemStartDate);
         }
 
         return (
