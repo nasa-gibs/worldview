@@ -1042,9 +1042,9 @@ export default (function(self) {
    * @return normalized longitude value
    */
   self.normalizeWrappedLongitude = function(longitude) {
-    const negative = longitude < 0;
-    const value = longitude % 360;
-    return negative && value < -180 ? value + 360 : !negative && value > 180 ? value - 360 : value;
+    const isNegative = longitude < 0;
+    const remainder = longitude % 360;
+    return isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
   };
   // Allows simple printf functionality with strings
   // arguments array contains all args passed. String must be formatted
