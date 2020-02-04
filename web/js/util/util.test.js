@@ -389,6 +389,14 @@ describe('formatDM', () => {
   });
 });
 
+test('Convert wrapped longitude to value between -180 & 180', () => {
+  expect(util.normalizeWrappedLongitude(-181)).toBe(179);
+  expect(util.normalizeWrappedLongitude(181)).toBe(-179);
+  expect(util.normalizeWrappedLongitude(-721)).toBe(-1);
+  expect(util.normalizeWrappedLongitude(721)).toBe(1);
+  expect(util.normalizeWrappedLongitude(541)).toBe(-179);
+  expect(util.normalizeWrappedLongitude(-541)).toBe(179);
+});
 describe('encodeId/decodeId', () => {
   const tests = [
     { decoded: '', encoded: '' },

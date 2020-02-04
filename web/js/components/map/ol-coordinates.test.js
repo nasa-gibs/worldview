@@ -28,7 +28,13 @@ test('shows coordinates of (10, 20) when moving the mouse', () => {
   expect(component.toJSON()).toMatchSnapshot();
 });
 
-test('shows 10°00.000\'N, 20°00.000\'E when set to degrees and minutes format', () => {
+test('shows coordinates of (-160, 20) when moving the mouse over wrapped', () => {
+  map.getCoordinateFromPixel = () => [200, 20];
+  events.trigger('mousemove', {}, map, 'EPSG:4326');
+  expect(component.toJSON()).toMatchSnapshot();
+});
+
+test('shows 20°00.000\'N, 10°00.000\'E when set to degrees and minutes format', () => {
   util.setCoordinateFormat('latlon-dm');
   map.getCoordinateFromPixel = () => [10, 20];
   events.trigger('mousemove', {}, map, 'EPSG:4326');
