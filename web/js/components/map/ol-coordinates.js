@@ -39,7 +39,7 @@ class OlCoordinates extends React.Component {
       return;
     }
     if (Math.abs(lon) > 180) {
-      if (crs === 'EPSG:4326') {
+      if (crs === 'EPSG:4326' && Math.abs(lon) < 250) {
         lon = util.normalizeWrappedLongitude(lon);
         pcoord = [lon, lat];
       } else {
