@@ -873,6 +873,9 @@
   .modal-header {
     padding: 5px 10px;
   }
+  .layer-modal-content {
+    padding-bottom: 0;
+  }
   .layer-modal-content > .results-text {
     font-size: 12px !important;
   }
@@ -933,7 +936,7 @@
   padding: 5px 10px;
   background: #ddd;
   margin-bottom: 5px;
-  margin-top: -10px;
+  margin-top: -8px;
   font-weight: 500;
   & span {
     margin-left: 20px;
@@ -1019,8 +1022,13 @@
   &.search {
     flex-grow: 1;
     &.mobile {
-      margin-top: 10px;
+      border-top: 3px solid #d54e21;
       padding-left: 2px;
+      background: #333;
+      background-image: linear-gradient(#111, #333 35%);
+      & .layers-all-layer {
+        background: transparent;
+      }
     }
   }
   &.browse {
