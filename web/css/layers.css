@@ -386,23 +386,10 @@
   padding: 9px 12px;
   right: 0;
   top: 0;
-  &:hover {
-    color: #fff;
-    text-shadow: 1px 1px 2px #000;
-    right: 1px;
-    top: -1px;
-    transition: color 100ms linear;
-  }
 }
 .selected .fa {
   color: #888;
   transition: color 250ms linear;
-  &:hover {
-    color: #888;
-    text-shadow: none;
-    right: 0;
-    top: 0;
-  }
 }
 
 .layers-all-layer .fa:hover {
@@ -918,22 +905,6 @@
   }
 }
 
-.no-selection {
-  margin-top: 50px;
-  & h3 {
-    font-size: 20px;
-    margin: 20px auto;
-    text-align: center;
-    font-weight: 300;
-  }
-  & h5 {
-    font-size: 16px;
-    margin: 20px auto;
-    text-align: center;
-    font-weight: 300;
-  }
-}
-
 .layer-modal-content .results-text {
   text-align: left;
   font-size: 14px;
@@ -1004,8 +975,9 @@
 .no-results {
   text-align: center;
   margin-top: 40px;
-  & .fas {
+  & .fa, .fas {
     color: #777;
+    font-size: 100px;
   }
   & h3 {
     font-weight: 500;
@@ -1013,6 +985,12 @@
     margin: 40px auto 15px;
     text-align: center;
     color: #777;
+  }
+  & h5 {
+    font-size: 16px;
+    margin: 20px auto;
+    text-align: center;
+    font-weight: 300;
   }
   a.remove-filters {
     color: #007bff;
