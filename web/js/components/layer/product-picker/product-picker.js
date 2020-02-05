@@ -47,7 +47,7 @@ class ProductPicker extends React.Component {
     super(props);
 
     this.state = {
-      modalElement: null,
+      modalElement: undefined,
       listScrollTop: props.listScrollTop || 0
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
@@ -170,13 +170,35 @@ class ProductPicker extends React.Component {
     if (this.props.selectedMeasurement !== id) {
       update({
         selectedMeasurement: id,
-        measurementSourceIndex: 0
+        selectedMeasurementSourceIndex: 0
       });
     } else {
       update({
         selectedMeasurement: null,
-        measurementSourceIndex: 0
+        selectedMeasurementSourceIndex: 0
       });
+    }
+  }
+
+  /**
+   * When in "browse" measurement mode
+   * @param {*} selectedMeasurementSourceIndex -  the index of the source for which to show metadata
+   */
+  setSourceIndex(index) {
+    const { update } = this.props;
+    update({
+      selectedMeasurementSourceIndex: index
+    });
+  }
+
+  getSelectedMeasurementSource() {
+    const { selectedMeasurement, selectedMeasurementSourceIndex } = this.props;
+    const measurements = Object.values(this.props.measurementConfig);
+    const currentMeasurement = measurements.find(measure => measure.id === selectedMeasurement);
+    if (currentMeasurement) {
+      const sources = Object.values(currentMeasurement.sources)
+        .sort((a, b) => a.title.localeCompare(b.title));
+      return sources && sources[selectedMeasurementSourceIndex];
     }
   }
 
@@ -237,6 +259,7 @@ class ProductPicker extends React.Component {
       inputValue: '',
       selectedLayer: null,
       selectedMeasurement: null,
+      selectedMeasurementSourceIndex: 0,
       listScrollTop: 0
     });
   }
@@ -249,31 +272,7 @@ class ProductPicker extends React.Component {
     this.props.update({ selectedLayer });
   }
 
-  /**
-   * When in "browse" measurement mode
-   * @param {*} measurementSourceIndex -  the index of the source for which to show metadata
-   */
-  setSourceIndex(measurementSourceIndex) {
-    this.props.update({ measurementSourceIndex });
-  }
-
-  // TODO don't call on every render
-  getCurrentMeasureSource() {
-    const { measurementConfig, selectedMeasurement, measurementSourceIndex } = this.props;
-
-    let currentMeasurement;
-    Object.keys(measurementConfig).forEach(measureName => {
-      if (measurementConfig[measureName].id === selectedMeasurement) {
-        currentMeasurement = measurementConfig[measureName];
-      }
-    });
-    const sources = currentMeasurement && lodashValues(currentMeasurement.sources)
-      .sort((a, b) => a.title.localeCompare(b.title));
-    return sources && sources[measurementSourceIndex];
-  }
-
   renderLayerList() {
-    // const { listScrollTop } = this.state;
     const {
       isMobile,
       categoryConfig,
@@ -282,6 +281,7 @@ class ProductPicker extends React.Component {
       activeLayers,
       measurementConfig,
       hasMeasurementSource,
+      selectedMeasurementSourceIndex,
       removeLayer,
       addLayer,
       hasMeasurementSetting,
@@ -355,7 +355,7 @@ class ProductPicker extends React.Component {
                   updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
                   showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
                   setSourceIndex={index => this.setSourceIndex(index)}
-                  currentMeasureSource={this.getCurrentMeasureSource()}
+                  selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
                 />
               </div>
             </Scrollbars>
@@ -419,7 +419,7 @@ class ProductPicker extends React.Component {
           <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
             <MeasurementMetadataDetail
               categoryTitle={category && category.title}
-              source={this.getCurrentMeasureSource()}>
+              source={this.getSelectedMeasurementSource()}>
             </MeasurementMetadataDetail>
           </Scrollbars>
         </div>
@@ -523,7 +523,6 @@ ProductPicker.propTypes = {
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
   categoryType: PropTypes.string,
-  currentMeasureSource: PropTypes.func,
   drawMeasurements: PropTypes.func,
   filterByAvailable: PropTypes.bool,
   filteredRows: PropTypes.array,
@@ -539,7 +538,6 @@ ProductPicker.propTypes = {
   listType: PropTypes.string,
   measurementConfig: PropTypes.object,
   measurements: PropTypes.object,
-  measurementSourceIndex: PropTypes.number,
   modalView: PropTypes.string,
   numRowsFilteredOut: PropTypes.number,
   onToggle: PropTypes.func,
@@ -548,6 +546,8 @@ ProductPicker.propTypes = {
   selectedDate: PropTypes.object,
   selectedLayer: PropTypes.object,
   selectedMeasurement: PropTypes.string,
+  selectedMeasurementSource: PropTypes.object,
+  selectedMeasurementSourceIndex: PropTypes.number,
   selectedProjection: PropTypes.string,
   update: PropTypes.func,
   updateScrollPosition: PropTypes.func,
@@ -597,6 +597,7 @@ function mapStateToProps(state, ownProps) {
   const activeLayers = layers[activeString];
 
   return {
+    ...productPicker,
     categoryConfig: config.categories,
     measurementConfig: config.measurements,
     layerConfig: config.layers,
@@ -605,20 +606,8 @@ function mapStateToProps(state, ownProps) {
     height,
     width,
     allLayers,
-    filteredRows: productPicker.filteredRows || allLayers,
     activeLayers,
     selectedProjection: proj.id,
-    listType: productPicker.listType,
-    listScrollTop: productPicker.listScrollTop,
-    category: productPicker.category,
-    categoryType: productPicker.categoryType,
-    selectedLayer: productPicker.selectedLayer,
-    selectedMeasurement: productPicker.selectedMeasurement,
-    measurementSourceIndex: productPicker.measurementSourceIndex,
-    searchResultRows: productPicker.searchResultRows,
-    numRowsFilteredOut: productPicker.numRowsFilteredOut,
-    inputValue: productPicker.inputValue,
-    filterByAvailable: productPicker.filterByAvailable,
     filterProjections: layer => {
       return !layer.projections[proj.id];
     },

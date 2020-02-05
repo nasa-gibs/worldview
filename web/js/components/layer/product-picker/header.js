@@ -68,32 +68,33 @@ class ProductPickerHeader extends React.Component {
 
     return (
       <InputGroup id="layer-search" className="layer-search">
-        <Button
-          className="back-button"
-          color="secondary"
-          onClick={this.revertToInitialScreen.bind(this)}
-        >
-          <i className="fa fa-arrow-left" />{' '}
-        </Button>
-
         {isBreadCrumb &&
-          <Breadcrumb tag="nav" className="layer-bread-crumb">
-            <BreadcrumbItem
-              tag="a"
-              title="Back to Layer Categories"
-              href="#"
+          <>
+            <Button
+              className="back-button"
+              color="secondary"
               onClick={this.revertToInitialScreen.bind(this)}
             >
-              Categories
-            </BreadcrumbItem>
-            <BreadcrumbItem active tag="span">
-              {listType === 'search'
-                ? 'Search Results'
-                : category
-                  ? category.title
-                  : ''}
-            </BreadcrumbItem>
-          </Breadcrumb>
+              <i className="fa fa-arrow-left" />{' '}
+            </Button>
+            <Breadcrumb tag="nav" className="layer-bread-crumb">
+              <BreadcrumbItem
+                tag="a"
+                title="Back to Layer Categories"
+                href="#"
+                onClick={this.revertToInitialScreen.bind(this)}
+              >
+                Categories
+              </BreadcrumbItem>
+              <BreadcrumbItem active tag="span">
+                {listType === 'search'
+                  ? 'Search Results'
+                  : category
+                    ? category.title
+                    : ''}
+              </BreadcrumbItem>
+            </Breadcrumb>
+          </>
         }
 
         {isSearching &&
@@ -127,12 +128,15 @@ class ProductPickerHeader extends React.Component {
 
 ProductPickerHeader.propTypes = {
   category: PropTypes.object,
+  filterByAvailable: PropTypes.bool,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   listType: PropTypes.string,
   modalView: PropTypes.string,
   runSearch: PropTypes.func,
+  selectedDate: PropTypes.object,
   selectedProjection: PropTypes.string,
+  toggleFilterByAvailable: PropTypes.func,
   updateListState: PropTypes.func,
   width: PropTypes.number
 };

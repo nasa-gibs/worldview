@@ -15,26 +15,18 @@ import MeasurementLayerRow from './measurement-layer-row';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 
 /**
- * A single layer search result row
- * @class LayerRow
+ * A single category result row
+ * @class CategoryLayerRow
  * @extends React.Component
  */
-class LayerRow extends React.Component {
+class CategoryLayerRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isSelected: props.isSelected,
       projection: props.projection,
-      isMetadataExpanded: false,
-      activeSourceIndex: 0
+      isMetadataExpanded: false
     };
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { isEnabled } = this.state;
-    if (nextProps.checked !== isEnabled) {
-      this.setState({ checked: nextProps.isEnabled });
-    }
   }
 
   /**
@@ -137,16 +129,11 @@ class LayerRow extends React.Component {
    */
   onClickLayer(id) {
     const { removeLayer, addLayer, activeLayers } = this.props;
-    if (lodashFind(activeLayers, { id: id })) {
+    if (lodashFind(activeLayers, { id })) {
       removeLayer(id);
     } else {
       addLayer(id);
     }
-  }
-
-  onClickSource(index) {
-    this.setState({ activeSourceIndex: index });
-    this.props.setSourceIndex(index);
   }
 
   /**
@@ -156,6 +143,7 @@ class LayerRow extends React.Component {
    * @param {Number} activeSourceIndex | Index of active measurement
    */
   renderSourceTabs(source, index, activeSourceIndex) {
+    const { setSourceIndex } = this.props;
     return (
       <NavItem
         key={source.id + index}
@@ -166,7 +154,7 @@ class LayerRow extends React.Component {
             : 'source-nav-item'
         }
       >
-        <NavLink onClick={() => this.onClickSource(index)}>
+        <NavLink onClick={() => setSourceIndex(index)}>
           {source.title}
         </NavLink>
       </NavItem>
@@ -181,14 +169,13 @@ class LayerRow extends React.Component {
       hasMeasurementSetting,
       measurement,
       isMobile,
-      currentMeasureSource
+      selectedMeasurementSourceIndex
     } = this.props;
-    const { activeSourceIndex } = this.state;
     const sources = lodashValues(measurement.sources);
 
     // set first valid index to handle invalid activeSourceIndex indexes after projection change
     let minValidIndex = -1;
-    let validActiveIndex = activeSourceIndex;
+    let validActiveIndex = selectedMeasurementSourceIndex;
 
     return (
       <div className="measure-row-contents">
@@ -202,10 +189,10 @@ class LayerRow extends React.Component {
                   minValidIndex = index;
                 }
                 // if activeSourceIndex is less than first valid index, make minValidIndex active tab
-                validActiveIndex = minValidIndex > activeSourceIndex
+                validActiveIndex = minValidIndex > selectedMeasurementSourceIndex
                   ? minValidIndex
-                  : activeSourceIndex;
-                return this.renderSourceTabs(source, index, validActiveIndex);
+                  : selectedMeasurementSourceIndex;
+                return this.renderSourceTabs(source, index, selectedMeasurementSourceIndex);
               } else {
                 return '';
               }
@@ -216,7 +203,7 @@ class LayerRow extends React.Component {
             {this.renderSourceSettings(sources[validActiveIndex])}
             {isMobile &&
               <MeasurementMetadataDetail
-                source={currentMeasureSource}
+                source={sources[validActiveIndex]}
                 isMobile={isMobile}
               />
             }
@@ -259,7 +246,7 @@ class LayerRow extends React.Component {
     );
   }
 }
-LayerRow.propTypes = {
+CategoryLayerRow.propTypes = {
   activeLayers: PropTypes.array,
   addLayer: PropTypes.func,
   category: PropTypes.object,
@@ -267,18 +254,17 @@ LayerRow.propTypes = {
   getSourceMetadata: PropTypes.func,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
-  isDateRangesExpanded: PropTypes.bool,
-  isEnabled: PropTypes.bool,
-  isMetadataExpanded: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isSelected: PropTypes.bool,
   layerConfig: PropTypes.object,
   measurement: PropTypes.object,
   projection: PropTypes.string,
   removeLayer: PropTypes.func,
   selectedDate: PropTypes.object,
+  selectedMeasurementSourceIndex: PropTypes.number,
   setSourceIndex: PropTypes.func,
   sourceMetadata: PropTypes.object,
   updateSelectedMeasurement: PropTypes.func
 };
 
-export default LayerRow;
+export default CategoryLayerRow;

@@ -8,15 +8,15 @@ import { assign as lodashAssign } from 'lodash';
 export const productPickerState = {
   listType: 'category',
   category: undefined,
-  selectedLayer: undefined,
-  selectedMeasurement: undefined,
-  measurementSourceIndex: 0,
-  filteredRows: undefined,
+  filteredRows: [],
   searchResultRows: undefined,
   numRowsFilteredOut: undefined,
   inputValue: '',
   filterByAvailable: true,
-  listScrollTop: 0
+  listScrollTop: 0,
+  selectedLayer: undefined,
+  selectedMeasurement: undefined,
+  selectedMeasurementSourceIndex: 0
 };
 
 export function getInitialState(config) {

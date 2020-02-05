@@ -94,7 +94,7 @@ class LayerList extends React.Component {
       categoryConfig,
       setSourceIndex,
       selectedDate,
-      currentMeasureSource
+      selectedMeasurementSourceIndex
     } = this.props;
 
     const categoryToUse = category || categoryConfig.All;
@@ -119,11 +119,11 @@ class LayerList extends React.Component {
                 removeLayer={removeLayer}
                 projection={selectedProjection}
                 isSelected={isSelected}
-                updateSelectedMeasurement={updateSelectedMeasurement}
-                setSourceIndex={setSourceIndex}
                 selectedDate={selectedDate}
                 isMobile={isMobile}
-                currentMeasureSource={currentMeasureSource}
+                updateSelectedMeasurement={updateSelectedMeasurement}
+                setSourceIndex={setSourceIndex}
+                selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
               />
             );
           }
@@ -190,6 +190,7 @@ LayerList.propTypes = {
   selectedDate: PropTypes.object,
   selectedLayer: PropTypes.object,
   selectedMeasurement: PropTypes.string,
+  selectedMeasurementSourceIndex: PropTypes.number,
   selectedProjection: PropTypes.string,
   setSourceIndex: PropTypes.func,
   showMetadataForLayer: PropTypes.func,
