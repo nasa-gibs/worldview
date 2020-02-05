@@ -177,7 +177,7 @@
 }
 
 .layer-list-container .layers-all-layer {
-  transition: background-color 500ms linear;
+  transition: background-color 300ms ease-out;
   top: 0;
   left: 0;
   &.measurement-row {
@@ -187,14 +187,15 @@
     top: 0;
     left: 0;
     transition: all 200ms linear;
-    background: #222;
-    border-left: 8px solid #d54f21;
+    background: #ddd;
+    border-left: 6px solid #d54f21;
     & .layers-all-header > h3 {
-      color: #fff;
+      color: #000;
       font-weight: 500;
     }
-    & .layers-all-header > h5 {
-      color: #aaa;
+    & .layers-all-header > h4,
+    .layers-all-header > h5 {
+      color: #333;
     }
   }
   &:hover:not(.selected) {
@@ -362,20 +363,17 @@
 }
 
 .layers-all-layer.search-row {
-  padding: 0 0 0.5em;
+  padding: 8px 5px;
   .layers-all-header {
     padding: 0 0 0 45px;
   }
   & .wv-checkbox {
-    top: 10px;
-    left: 10px;
+    left: 8px;
     cursor: pointer;
+    float: left;
   }
   & .wv-checkbox:hover:not(.checked)::before {
-    background-color: #444;
-  }
-  & .wv-checkbox:not(.checked)::before {
-    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -902,6 +900,15 @@
     font-size: 11px;
     padding: 1px 7px;
     margin: 0 12px 0 0;
+  }
+  & .layers-all-layer .search-row .wv-checkbox {
+    left: 4px;
+    &::before {
+      font-size: 20px;
+      line-height: 25px;
+      height: 30px;
+      width: 30px;
+    }
   }
 }
 

@@ -77,19 +77,20 @@ class LayerRow extends React.Component {
 
     return (
       <div className={rowClass}>
-        <input
-          type="checkbox"
-          id={layer.id + '-checkbox'}
-          title={title}
-          name={name}
-          checked={checked}
-          className={checkboxClass}
-          onChange={this.toggleCheck.bind(this)}
-        />
+        <div className={checkboxClass}>
+          <input
+            type="checkbox"
+            id={layer.id + '-checkbox'}
+            title={title}
+            name={name}
+            checked={checked}
+            onChange={this.toggleCheck.bind(this)}
+          />
+        </div>
         <div className="layers-all-header" onClick={e => this.showMetadata(e)}>
           {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
           {subtitle && <h5>{subtitle}</h5>}
-          {description && (
+          {description && !isMetadataShowing && (
             <i className="fa fa-info-circle" />
           )}
         </div>
