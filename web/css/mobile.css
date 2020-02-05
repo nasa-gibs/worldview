@@ -12,7 +12,6 @@
     position: absolute !important;
     overflow: hidden;
     background: rgb(38, 43, 49);
-    border-radius: 0 10px 10px 0;
     top: 0;
     z-index: 1000;
   }
