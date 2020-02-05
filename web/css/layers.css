@@ -174,15 +174,19 @@
   position: relative;
   background-color: #333;
   line-height: 0;
-  transition: background-color 500ms linear;
 }
 
 .layer-list-container .layers-all-layer {
+  transition: background-color 500ms linear;
+  top: 0;
+  left: 0;
   &.measurement-row {
     padding: 0 0 0 8px;
   }
   &.search-row.selected {
-    transition: background-color 300ms linear;
+    top: 0;
+    left: 0;
+    transition: all 200ms linear;
     background: #222;
     border-left: 8px solid #d54f21;
     & .layers-all-header > h3 {
@@ -194,10 +198,10 @@
     }
   }
   &:hover:not(.selected) {
-    background-color: #3a3a3a;
+    transition: all 100ms linear;
+    background-color: #3f3f3f;
   }
   &.search-row:hover:not(.selected) {
-    transition: background-color 100ms linear;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
     top: -1px;
     left: -1px;
@@ -800,7 +804,7 @@
     max-width: 1200px;
     & .product-outter-list-case {
       width: 100%;
-      padding: 0 11px 5px 0;
+      padding: 0 11px 5px 5px;
     }
   }
 
@@ -991,7 +995,7 @@
 }
 
 .layer-list-container {
-  padding: 0 2px 0 5px;
+  padding: 0 2px 0 0;
   flex-grow: 1;
   &.search:not(.mobile) {
     max-width: 400px;
