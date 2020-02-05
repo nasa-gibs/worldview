@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Tooltip } from 'reactstrap';
 
 // https://upmostly.com/tutorials/build-a-react-switch-toggle-component
 const Switch = (props) => {
-  const { color, id, active, toggle, label } = props;
+  const {
+    id,
+    color,
+    active,
+    toggle,
+    label,
+    tooltip
+  } = props;
   const [isActive, toggleActive] = useState(active);
-  const style = color && isActive ? { backgroundColor: '#' + color } : {};
+  const [tooltipOpen, toggleTooltip] = useState(false);
+  const activeColor = color || '007BFF';
+  const style = isActive ? { backgroundColor: '#' + activeColor } : {};
+
   return (
     <div className='react-switch'>
       <div className='react-switch-case switch-col'>
@@ -15,9 +26,8 @@ const Switch = (props) => {
           type="checkbox"
           checked={isActive}
           onChange={() => {
-            setTimeout(function() {
-              toggle(); // wait for css animation to complete before firing action
-            }, 200);
+            // wait for css animation to complete before firing action
+            setTimeout(toggle, 200);
             toggleActive(!isActive);
           }}
         />
@@ -28,9 +38,22 @@ const Switch = (props) => {
         >
           <span className={'react-switch-button'} />
         </label>
-
       </div>
-      <div className='react-switch-label-case switch-col'>{label}</div>
+      <div className='react-switch-label-case switch-col'>
+        {label}
+        {tooltip &&
+          <>
+            <i id="availability-filter" className="fa fa-info-circle" />
+            <Tooltip
+              placement="right"
+              isOpen={tooltipOpen}
+              target="availability-filter"
+              toggle={() => { toggleTooltip(!tooltipOpen); }}>
+              {tooltip}
+            </Tooltip>
+          </>
+        }
+      </div>
     </div>
   );
 };
@@ -39,6 +62,7 @@ Switch.propTypes = {
   color: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
-  toggle: PropTypes.func
+  toggle: PropTypes.func,
+  tooltip: PropTypes.object
 };
 export default Switch;
