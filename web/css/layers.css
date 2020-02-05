@@ -972,6 +972,14 @@
   }
 }
 
+.filter-tooltip {
+  & .display-date {
+    font-size: 14px;
+    font-family: monospace;
+    margin: 5px;
+  }
+}
+
 .search-container {
   display: flex;
   &.mobile {
