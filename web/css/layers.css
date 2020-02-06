@@ -108,7 +108,7 @@
 .layer-modal-content .categories-nav .nav-item {
   height: 31px;
   line-height: 35px;
-  margin: 0 12px 0 0;
+  margin: 0 8px 0 0;
   color: #383838;
   background: #fff;
 }
@@ -865,6 +865,9 @@
 }
 
 @media (max-width: 740px) {
+  .modal-content {
+    border-radius: 0;
+  }
   .modal-header {
     padding: 5px 10px;
   }

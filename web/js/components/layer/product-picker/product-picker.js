@@ -49,6 +49,7 @@ class ProductPicker extends React.Component {
 
     this.state = {
       modalElement: undefined,
+      headerElement: undefined,
       listScrollTop: props.listScrollTop || 0
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
@@ -56,8 +57,12 @@ class ProductPicker extends React.Component {
 
   componentDidMount() {
     const modalElement = document.getElementById('layer_picker_component');
+    const headerElement = modalElement.querySelector('.modal-header');
     modalElement.classList.add('category-width');
-    this.setState({ modalElement });
+    this.setState({
+      modalElement,
+      headerElement
+    });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -274,6 +279,7 @@ class ProductPicker extends React.Component {
   }
 
   renderLayerList() {
+    const { headerElement } = this.state;
     const {
       isMobile,
       categoryConfig,
@@ -286,7 +292,7 @@ class ProductPicker extends React.Component {
       removeLayer,
       addLayer,
       hasMeasurementSetting,
-      height,
+      screenHeight,
       layerConfig,
       filteredRows,
       numRowsFilteredOut,
@@ -299,16 +305,21 @@ class ProductPicker extends React.Component {
       listScrollTop
     } = this.props;
 
+    const isSearching = listType === 'search';
     const debouncedOnScroll = lodashDebounce((contentWrapperEl) => {
       updateScrollPosition(contentWrapperEl.scrollTop);
     }, 500);
+    const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight : 0;
+    let listHeight, detailHeight;
+    if (isMobile) {
+      detailHeight = selectedLayer ? bodyHeight / 2 : bodyHeight;
+      listHeight = selectedLayer
+        ? (bodyHeight / 2) - 10
+        : bodyHeight - 8;
+    } else {
+      detailHeight = listHeight = bodyHeight - 80;
+    }
 
-    const isSearching = listType === 'search';
-    const listHeight = isMobile && isSearching
-      ? selectedLayer
-        ? height / 2
-        : height
-      : height;
     const containerClass = isMobile ? 'search-container mobile' : 'search-container';
     const listContainerClass = isSearching
       ? isMobile
@@ -323,7 +334,10 @@ class ProductPicker extends React.Component {
         <div className={containerClass}>
           <div className={listContainerClass}>
             <Scrollbars
-              style={{ maxHeight: listHeight - 2 + 'px' }}
+              style={{
+                maxHeight: listHeight + 'px',
+                minHeight: listHeight + 'px'
+              }}
               scrollBarVerticalTop={listScrollTop}
               onScroll={debouncedOnScroll}>
               <div className="product-outter-list-case">
@@ -352,11 +366,11 @@ class ProductPicker extends React.Component {
               </div>
             </Scrollbars>
           </div>
-          { this.renderDetails(listHeight) }
+          { this.renderDetails(detailHeight) }
         </div>
       </>)
       : (
-        <div className="no-results">
+        <div className="no-results" style={{ height: bodyHeight - 50 + 'px' }}>
           <i className="fas fa-5x fa-meteor"></i>
           <h3> No layers found! </h3>
           {numRowsFilteredOut > 0 &&
@@ -371,7 +385,7 @@ class ProductPicker extends React.Component {
       );
   }
 
-  renderDetails(listHeight) {
+  renderDetails(height) {
     const {
       isMobile,
       activeLayers,
@@ -394,7 +408,7 @@ class ProductPicker extends React.Component {
     if (isSearching) {
       return isMobile && !selectedLayer ? null : (
         <div className={detailContainerClass}>
-          <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
+          <Scrollbars style={{ maxHeight: height + 'px' }}>
             <LayerMetadataDetail
               layer={selectedLayer}
               isActive={selectedLayerActive}
@@ -408,7 +422,7 @@ class ProductPicker extends React.Component {
     } else {
       return !isMobile && (
         <div className={detailContainerClass}>
-          <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
+          <Scrollbars style={{ maxHeight: height + 'px' }}>
             <MeasurementMetadataDetail
               categoryTitle={category && category.title}
               source={this.getSelectedMeasurementSource()}>
@@ -420,10 +434,11 @@ class ProductPicker extends React.Component {
   }
 
   render() {
+    const { headerElement } = this.state;
     const {
       selectedProjection,
       modalView,
-      height,
+      screenHeight,
       width,
       isMobile,
       onToggle,
@@ -446,6 +461,9 @@ class ProductPicker extends React.Component {
       'scientific',
       'featured'
     ];
+    const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight - 38 : 0;
+    const listHeight = isMobile ? bodyHeight : bodyHeight - 50;
+
     const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
     const filterTooltipContent =
       <div className="filter-tooltip">
@@ -511,7 +529,7 @@ class ProductPicker extends React.Component {
                     ))}
                   </Nav>
                   {isCategoryDisplay ? (
-                    <Scrollbars style={{ maxHeight: (height - 40) + 'px' }}>
+                    <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
                       <div className="product-outter-list-case">
                         <CategoryGrid
                           categories={lodashValues(categoryConfig[categoryType])}
@@ -550,7 +568,6 @@ ProductPicker.propTypes = {
   filterSearch: PropTypes.func,
   hasMeasurementSetting: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  height: PropTypes.number,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   layerConfig: PropTypes.object,
@@ -562,6 +579,7 @@ ProductPicker.propTypes = {
   numRowsFilteredOut: PropTypes.number,
   onToggle: PropTypes.func,
   removeLayer: PropTypes.func,
+  screenHeight: PropTypes.number,
   searchResultRows: PropTypes.array,
   selectedDate: PropTypes.object,
   selectedLayer: PropTypes.object,
@@ -611,7 +629,6 @@ function mapStateToProps(state, ownProps) {
   const { screenWidth, screenHeight } = browser;
   const isMobile = browser.lessThan.medium;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const height = screenHeight - (isMobile ? 80 : 170);
   const width = getModalWidth(screenWidth);
   const allLayers = getLayersForProjection(config, proj.id);
   const activeLayers = layers[activeString];
@@ -623,7 +640,7 @@ function mapStateToProps(state, ownProps) {
     layerConfig: config.layers,
     selectedDate: date.selected,
     isMobile,
-    height,
+    screenHeight,
     width,
     allLayers,
     activeLayers,
