@@ -78,9 +78,10 @@ class MeasurementMetadataDetail extends React.Component {
 
     if (!isMobile && !source) {
       return (
-        <div className="no-selection">
+        <div className="no-results">
+          <i className="fa fa-map" aria-hidden="true"></i>
           <h3> {categoryTitle} </h3>
-          <h5> (Select a measurement) </h5>
+          <h5> Select a measurement to view details here!</h5>
         </div>
       );
     }
@@ -88,8 +89,9 @@ class MeasurementMetadataDetail extends React.Component {
     const description = source && source.description;
     if (!description) {
       return (
-        <div className="no-selection">
-          <h5>No metadata found</h5>
+        <div className="no-results">
+          <i className="fa fa-meteor" aria-hidden="true"></i>
+          <h3> No metadata found. </h3>
         </div>
       );
     }
@@ -98,8 +100,8 @@ class MeasurementMetadataDetail extends React.Component {
     if (!data) {
       this.getSourceMetadata(source);
       return (
-        <div className="no-selection">
-          <h5>Loading metadata ... </h5>
+        <div className="no-results">
+          <h3> Loading metadata ... </h3>
         </div>
       );
     }
