@@ -310,14 +310,16 @@ class ProductPicker extends React.Component {
       updateScrollPosition(contentWrapperEl.scrollTop);
     }, 500);
     const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight : 0;
-    let listHeight, detailHeight;
+    let listHeight, listMinHeight, detailHeight;
     if (isMobile) {
       detailHeight = selectedLayer ? bodyHeight / 2 : bodyHeight;
       listHeight = selectedLayer
         ? (bodyHeight / 2) - 10
         : bodyHeight - 8;
+      listMinHeight = listHeight;
     } else {
       detailHeight = listHeight = bodyHeight - 80;
+      listMinHeight = 300;
     }
 
     const containerClass = isMobile ? 'search-container mobile' : 'search-container';
@@ -336,7 +338,7 @@ class ProductPicker extends React.Component {
             <Scrollbars
               style={{
                 maxHeight: listHeight + 'px',
-                minHeight: listHeight + 'px'
+                minHeight: listMinHeight + 'px'
               }}
               scrollBarVerticalTop={listScrollTop}
               onScroll={debouncedOnScroll}>
@@ -370,7 +372,7 @@ class ProductPicker extends React.Component {
         </div>
       </>)
       : (
-        <div className="no-results" style={{ height: bodyHeight - 50 + 'px' }}>
+        <div className="no-results" style={{ height: listMinHeight - 45 + 'px' }}>
           <i className="fas fa-5x fa-meteor"></i>
           <h3> No layers found! </h3>
           {numRowsFilteredOut > 0 &&
