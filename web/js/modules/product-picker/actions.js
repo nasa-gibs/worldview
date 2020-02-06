@@ -18,8 +18,9 @@ export function updateListScrollTop(value) {
   };
 }
 
-export function resetProductPickerState() {
+export function resetProductPickerState(value) {
   return {
-    type: RESET_STATE
+    type: RESET_STATE,
+    value
   };
 }
