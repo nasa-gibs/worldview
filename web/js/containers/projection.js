@@ -76,7 +76,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateProjection: (id, config) => {
     dispatch(changeProjection(id));
-    dispatch(resetProductPickerState());
+    dispatch(resetProductPickerState(id));
   },
   onCloseModal: () => {
     dispatch(onToggle());

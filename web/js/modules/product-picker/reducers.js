@@ -4,7 +4,11 @@ import {
   RESET_STATE
 } from './constants';
 
-import { assign as lodashAssign } from 'lodash';
+const projToListType = {
+  arctic: 'measurements',
+  antarctic: 'measurements',
+  geographic: 'category'
+};
 
 export const productPickerState = {
   listType: 'category',
@@ -21,7 +25,7 @@ export const productPickerState = {
 };
 
 export function getInitialState(config) {
-  return lodashAssign({}, productPickerState, {
+  return Object.assign({}, productPickerState, {
     categoryType: Object.keys(config.categories)[1]
   });
 };
@@ -29,13 +33,15 @@ export function getInitialState(config) {
 export function productPickerReducer(state = productPickerState, action) {
   switch (action.type) {
     case UPDATE_PRODUCT_PICKER:
-      return lodashAssign({}, state, action.value);
+      return Object.assign({}, state, action.value);
     case UPDATE_LIST_SCROLL_TOP:
-      return lodashAssign({}, state, {
+      return Object.assign({}, state, {
         listScrollTop: action.value
       });
     case RESET_STATE:
-      return lodashAssign({}, state, productPickerState);
+      var listType = projToListType[action.value];
+      var newState = Object.assign({}, productPickerState, { listType });
+      return Object.assign({}, state, newState);
     default:
       return state;
   }
