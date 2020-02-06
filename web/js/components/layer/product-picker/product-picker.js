@@ -314,7 +314,7 @@ class ProductPicker extends React.Component {
     if (isMobile) {
       detailHeight = selectedLayer ? bodyHeight / 2 : bodyHeight;
       listHeight = selectedLayer
-        ? (bodyHeight / 2) - 10
+        ? (bodyHeight / 2) - 12
         : bodyHeight - 8;
       listMinHeight = listHeight;
     } else {
