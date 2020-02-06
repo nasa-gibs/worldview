@@ -59,12 +59,12 @@ class ProductPickerHeader extends React.Component {
       filterByAvailable,
       isMobile
     } = this.props;
-    const categoryId = category && category.id;
-    const isBreadCrumb = categoryId !== 'featured-all' &&
-      selectedProjection === 'geographic' &&
-      listType !== 'category' &&
-      width > 650;
     const isSearching = listType === 'search';
+    const categoryId = category && category.id;
+    const showBackButton = categoryId !== 'featured-all' &&
+      selectedProjection === 'geographic' &&
+      listType !== 'category';
+    const isBreadCrumb = showBackButton && !isSearching && width > 650;
     const BreadcrubEl =
       <Breadcrumb tag="nav" className="layer-bread-crumb">
         <BreadcrumbItem
@@ -83,7 +83,7 @@ class ProductPickerHeader extends React.Component {
     return (
       <>
         <InputGroup id="layer-search" className="layer-search">
-          {isBreadCrumb &&
+          {showBackButton &&
           <>
             <Button
               className="back-button"
@@ -92,7 +92,7 @@ class ProductPickerHeader extends React.Component {
             >
               <i className="fa fa-arrow-left" />{' '}
             </Button>
-            {!isSearching && BreadcrubEl}
+            {isBreadCrumb && BreadcrubEl}
           </>
           }
           {isSearching && isMobile &&
