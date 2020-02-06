@@ -38,7 +38,7 @@
 
 .layer-modal-content {
   position: relative;
-  padding: 5px 0;
+  padding-bottom: 5px;
   min-height: 300px;
 }
 
@@ -103,6 +103,7 @@
 .layer-modal-content .categories-nav {
   margin: auto;
   max-width: 960px;
+  padding-top: 5px;
 }
 
 .layer-modal-content .categories-nav .nav-item {
@@ -794,7 +795,7 @@
     max-width: 978px;
     & .product-outter-list-case {
       width: 100%;
-      padding: 0 11px 5px 5px;
+      padding: 5px 11px 5px 5px;
     }
   }
 
@@ -804,8 +805,8 @@
     max-width: 960px;
   }
   & .modal-header {
-    padding: 8px 10px 2px 8px;
-    border-bottom: none;
+    padding: 8px 10px;
+    border-bottom: 1px solid #bbb;
     & .close {
       font-size: 30px;
       color: #000;
@@ -867,12 +868,13 @@
 @media (max-width: 740px) {
   .modal-content {
     border-radius: 0;
+    border: none;
   }
   .modal-header {
     padding: 5px 10px;
   }
   .layer-modal-content {
-    padding-bottom: 0;
+    padding: 0;
   }
   .layer-modal-content > .results-text {
     font-size: 12px !important;
@@ -922,15 +924,14 @@
 }
 
 .header-filter-container {
-  padding: 7px 0;
+  padding: 8px 0 0;
   .header-filters {
     width: 200px;
     position: absolute;
   }
   .results-text {
-    text-align: left;
+    text-align: right;
     font-size: 13px;
-    margin-left: 180px;
     font-weight: 500;
     & span {
       margin-left: 5px;
@@ -938,7 +939,6 @@
     }
   }
 }
-
 
 .layer-filters-container {
 
@@ -993,6 +993,9 @@
   &.search:not(.mobile) {
     max-width: 400px;
   }
+  &.mobile {
+    background-image: linear-gradient(360deg, #aaa, #ddd 15%);
+  }
 }
 .no-results {
   text-align: center;
@@ -1026,10 +1029,10 @@
   &.search {
     flex-grow: 1;
     &.mobile {
-      border-top: 3px solid #d54e21;
+      border-top: 5px solid #d54e21;
       padding-left: 2px;
       background: #333;
-      background-image: linear-gradient(#222 10%, #333 35%);
+      background-image: linear-gradient(#aaa, #ddd 15%);
       & .layers-all-layer {
         background: transparent;
       }
@@ -1047,8 +1050,18 @@
   & .layers-all-layer {
     padding: 5px 10px;
     margin: 0 5px 0 2px;
+    background-color: transparent;
+    & h3, h4 {
+      color: #333;
+    }
+    & h5 {
+      color: #666;
+    }
+    & .source-metadata p, .source-metadata span {
+      color: #333;
+    }
     &:hover {
-      background-color: #333;
+      background-color: transparent;
     }
   }
   & .scrollbar-visible .layers-all-layer {
@@ -1059,6 +1072,7 @@
     & h3 {
       font-size: 20px;
       margin: 5px;
+      font-weight: 500px;
     }
     & h5 {
       font-size: 14px;
@@ -1075,6 +1089,7 @@
     background-color: transparent;
     border-color: #b55a3c;
     border-width: 2px;
+    color: #333;
     .fa {
       margin-right: 10px;
     }
@@ -1082,6 +1097,7 @@
       background-color: #b55a3c;
     }
     &.is-active {
+      color: #fff;
       background-color: #d54e21;
     }
   }
