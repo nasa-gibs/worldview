@@ -1,6 +1,7 @@
 import {
   UPDATE_PRODUCT_PICKER,
-  UPDATE_LIST_SCROLL_TOP
+  UPDATE_LIST_SCROLL_TOP,
+  RESET_STATE
 } from './constants';
 
 import { assign as lodashAssign } from 'lodash';
@@ -33,6 +34,8 @@ export function productPickerReducer(state = productPickerState, action) {
       return lodashAssign({}, state, {
         listScrollTop: action.value
       });
+    case RESET_STATE:
+      return lodashAssign({}, state, productPickerState);
     default:
       return state;
   }
