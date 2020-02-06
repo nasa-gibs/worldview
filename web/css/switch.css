@@ -12,6 +12,9 @@
 }
 .react-switch-label-case {
   width: 80%;
+  .fa {
+    margin-left: 5px;
+  }
 }
 .react-switch-checkbox {
   height: 0;

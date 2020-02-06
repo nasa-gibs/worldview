@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import LayerList from './layer-list';
 import CategoryGrid from './category-grid';
 import ProductPickerHeader from './header';
-
+import Switch from '../../util/switch';
 import {
   toLower as lodashToLower,
   values as lodashValues,
@@ -319,15 +320,6 @@ class ProductPicker extends React.Component {
 
     return filteredRows.length || !isSearching ? (
       <>
-        { isSearching &&
-            <div className="results-text">
-              Showing {filteredRows.length} results.
-
-              {numRowsFilteredOut > 0 &&
-                <span>({numRowsFilteredOut} layers are hidden by filters)</span>
-              }
-            </div>
-        }
         <div className={containerClass}>
           <div className={listContainerClass}>
             <Scrollbars
@@ -443,7 +435,9 @@ class ProductPicker extends React.Component {
       categoryType,
       category,
       inputValue,
-      filterByAvailable
+      filterByAvailable,
+      filteredRows,
+      numRowsFilteredOut
     } = this.props;
     const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = (isCategoryDisplay || categoryType === 'featured') && !inputValue;
@@ -452,6 +446,13 @@ class ProductPicker extends React.Component {
       'scientific',
       'featured'
     ];
+    const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
+    const filterTooltipContent =
+      <div className="filter-tooltip">
+        If enabled, only show results which would be visible
+        at the currently selected date: <br />
+        <div className="display-date"> {diplayDate} </div>
+      </div>;
 
     return (
       <>
@@ -459,7 +460,6 @@ class ProductPicker extends React.Component {
           <ProductPickerHeader
             selectedProjection={selectedProjection}
             selectedDate={selectedDate}
-            filterByAvailable={filterByAvailable}
             listType={listType}
             inputValue={inputValue}
             isMobile={isMobile}
@@ -468,8 +468,28 @@ class ProductPicker extends React.Component {
             width={width}
             runSearch={this.runSearch.bind(this)}
             updateListState={this.revertSearchState.bind(this)}
-            toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}
-          />
+            filterByAvailable={filterByAvailable}
+            toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}>
+            {listType === 'search' && !isMobile &&
+              <div className='header-filter-container'>
+                <div className='header-filters'>
+                  <Switch
+                    id="unavailable-toggle"
+                    label="Hide unavailable"
+                    active={filterByAvailable}
+                    toggle={this.toggleFilterByAvailable.bind(this)}
+                    tooltip={filterTooltipContent}>
+                  </Switch>
+                </div>
+                <div className="results-text">
+                  Showing {filteredRows.length} results
+                  {numRowsFilteredOut > 0 &&
+                    <span>({numRowsFilteredOut} hidden by filters)</span>
+                  }
+                </div>
+              </div>
+            }
+          </ProductPickerHeader>
         </ModalHeader>
 
         <ModalBody>

@@ -11,7 +11,6 @@ import {
   DropdownMenu
 } from 'reactstrap';
 import LayerFilters from './layer-filters';
-
 import util from '../../../util/util';
 
 /*
@@ -57,7 +56,8 @@ class ProductPickerHeader extends React.Component {
       category,
       width,
       toggleFilterByAvailable,
-      filterByAvailable
+      filterByAvailable,
+      isMobile
     } = this.props;
     const categoryId = category && category.id;
     const isBreadCrumb = categoryId !== 'featured-all' &&
@@ -65,10 +65,25 @@ class ProductPickerHeader extends React.Component {
       listType !== 'category' &&
       width > 650;
     const isSearching = listType === 'search';
+    const BreadcrubEl =
+      <Breadcrumb tag="nav" className="layer-bread-crumb">
+        <BreadcrumbItem
+          tag="a"
+          title="Back to Layer Categories"
+          href="#"
+          onClick={this.revertToInitialScreen.bind(this)}
+        >
+        Categories
+        </BreadcrumbItem>
+        <BreadcrumbItem active tag="span">
+          {category && category.title}
+        </BreadcrumbItem>
+      </Breadcrumb>;
 
     return (
-      <InputGroup id="layer-search" className="layer-search">
-        {isBreadCrumb &&
+      <>
+        <InputGroup id="layer-search" className="layer-search">
+          {isBreadCrumb &&
           <>
             <Button
               className="back-button"
@@ -77,51 +92,36 @@ class ProductPickerHeader extends React.Component {
             >
               <i className="fa fa-arrow-left" />{' '}
             </Button>
-            <Breadcrumb tag="nav" className="layer-bread-crumb">
-              <BreadcrumbItem
-                tag="a"
-                title="Back to Layer Categories"
-                href="#"
-                onClick={this.revertToInitialScreen.bind(this)}
-              >
-                Categories
-              </BreadcrumbItem>
-              <BreadcrumbItem active tag="span">
-                {listType === 'search'
-                  ? 'Search Results'
-                  : category
-                    ? category.title
-                    : ''}
-              </BreadcrumbItem>
-            </Breadcrumb>
+            {!isSearching && BreadcrubEl}
           </>
-        }
+          }
+          {isSearching && isMobile &&
+            <UncontrolledDropdown>
+              <DropdownToggle className="filter-button" caret>
+                <i className="fas fa-filter"></i>
+              </DropdownToggle>
+              <DropdownMenu>
+                <LayerFilters
+                  selectedDate={selectedDate}
+                  filterByAvailable={filterByAvailable}
+                  toggleFilterByAvailable={toggleFilterByAvailable}
+                />
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          }
 
-        {isSearching &&
-          <UncontrolledDropdown>
-            <DropdownToggle className="filter-button" caret>
-              <i className="fas fa-filter"></i>
-            </DropdownToggle>
-            <DropdownMenu>
-              <LayerFilters
-                selectedDate={selectedDate}
-                filterByAvailable={filterByAvailable}
-                toggleFilterByAvailable={toggleFilterByAvailable}
-              />
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        }
-
-        <Input
-          onChange={this.handleChange.bind(this)}
-          id="layers-search-input"
-          value={this.state.inputValue}
-          placeholder="Search"
-          innerRef={c => (this._input = c)}
-          type="search"
-          autoFocus={isAutoFocus}
-        />
-      </InputGroup>
+          <Input
+            onChange={this.handleChange.bind(this)}
+            id="layers-search-input"
+            value={this.state.inputValue}
+            placeholder="Search"
+            innerRef={c => (this._input = c)}
+            type="search"
+            autoFocus={isAutoFocus}
+          />
+        </InputGroup>
+        {this.props.children}
+      </>
     );
   }
 }

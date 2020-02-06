@@ -178,23 +178,29 @@
 
 .layer-list-container .layers-all-layer {
   transition: background-color 300ms ease-out;
-  top: 0;
   left: 0;
+  border: 1px solid #222;
   &.measurement-row {
     padding: 0 0 0 8px;
   }
   &.search-row.selected {
-    top: 0;
     left: 0;
-    transition: all 200ms linear;
+    transition: left 100ms ease,
+      background 300ms linear,
+      border 200ms linear;
     background: #ddd;
     border-left: 6px solid #d54f21;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
     & .layers-all-header > h3 {
+      transition: all 300ms ease;
       color: #000;
       font-weight: 500;
     }
     & .layers-all-header > h4,
     .layers-all-header > h5 {
+      transition: all 300ms ease;
       color: #333;
     }
   }
@@ -204,7 +210,6 @@
   }
   &.search-row:hover:not(.selected) {
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-    top: -1px;
     left: -1px;
     & .layers-all-header h3 {
       color: #fff;
@@ -786,7 +791,7 @@
   }
   &.browse-search-width {
     width: 95%;
-    max-width: 1200px;
+    max-width: 978px;
     & .product-outter-list-case {
       width: 100%;
       padding: 0 11px 5px 5px;
@@ -799,11 +804,12 @@
     max-width: 960px;
   }
   & .modal-header {
+    padding: 8px 10px 2px 8px;
     border-bottom: none;
-  }
-  & .modal-header .close {
-    font-size: 30px;
-    color: #000;
+    & .close {
+      font-size: 30px;
+      color: #000;
+    }
   }
   & .modal-title {
     width: 100%;
@@ -846,7 +852,7 @@
     }
     &.browse-search-width {
       width: 95%;
-      max-width: 1200px;
+      max-width: 978px;
     }
 
     & .category-masonry-case {
@@ -912,18 +918,24 @@
   }
 }
 
-.layer-modal-content .results-text {
-  text-align: left;
-  font-size: 14px;
-  padding: 5px 10px;
-  background: #ddd;
-  margin-bottom: 5px;
-  margin-top: -8px;
-  font-weight: 500;
-  & span {
-    margin-left: 20px;
+.header-filter-container {
+  padding: 7px 0;
+  .header-filters {
+    width: 200px;
+    position: absolute;
+  }
+  .results-text {
+    text-align: left;
+    font-size: 13px;
+    margin-left: 180px;
+    font-weight: 500;
+    & span {
+      margin-left: 5px;
+      color: #777;
+    }
   }
 }
+
 
 .layer-filters-container {
 
@@ -1014,7 +1026,7 @@
       border-top: 3px solid #d54e21;
       padding-left: 2px;
       background: #333;
-      background-image: linear-gradient(#111, #333 35%);
+      background-image: linear-gradient(#222 10%, #333 35%);
       & .layers-all-layer {
         background: transparent;
       }
