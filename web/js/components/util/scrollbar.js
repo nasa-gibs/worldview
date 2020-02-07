@@ -19,10 +19,10 @@ export default function Scrollbars(props) {
     }
     function setScrollTop() {
       const { contentWrapperEl } = ref.current;
+      const { scrollBarVerticalTop } = props;
       if (contentWrapperEl) {
-        const verticalTop = props.scrollBarVerticalTop;
-        updateScrollTop(verticalTop);
-        contentWrapperEl.scrollTop = verticalTop;
+        updateScrollTop(scrollBarVerticalTop);
+        contentWrapperEl.scrollTop = scrollBarVerticalTop;
       }
     };
     function toggleVisibleClass() {
@@ -33,8 +33,8 @@ export default function Scrollbars(props) {
         contentEl.classList.remove('scrollbar-visible');
       }
     };
-    setScrollTop();
-    setTimeout(() => { toggleVisibleClass(); }, 50);
+    setTimeout(setScrollTop, 100);
+    setTimeout(toggleVisibleClass, 100);
   }, [props.scrollBarVerticalTop]);
 
   /**
@@ -43,7 +43,6 @@ export default function Scrollbars(props) {
   useEffect(() => {
     if (!props.onScroll) return;
     const { contentWrapperEl } = ref && ref.current;
-
     function scrollListener() {
       // Avoid calling event listener when we are setting scrollTop manually
       if (contentWrapperEl.scrollTop !== scrollTop) {
