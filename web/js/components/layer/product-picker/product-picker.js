@@ -634,7 +634,7 @@ function mapStateToProps(state, ownProps) {
   const isMobile = browser.lessThan.medium;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
   const width = getModalWidth(screenWidth);
-  const allLayers = getLayersForProjection(config, proj.id);
+  const allLayers = getLayersForProjection(state);
   const activeLayers = layers[activeString];
 
   return {
@@ -656,9 +656,11 @@ function mapStateToProps(state, ownProps) {
       return filterSearch(layer, val, terms, config, proj.id);
     },
     hasMeasurementSource: current => {
+      console.log('mmkay');
       return hasMeasurementSource(current, config, proj.id);
     },
     hasMeasurementSetting: (current, source) => {
+      console.log('setting');
       return hasMeasurementSetting(current, source, config, proj.id);
     }
   };
