@@ -419,7 +419,8 @@ class ProductPicker extends React.Component {
               isActive={selectedLayerActive}
               addLayer={addLayer}
               removeLayer={removeLayer}
-              selectedProjection={selectedProjection}>
+              selectedProjection={selectedProjection}
+              showMetadataForLayer={this.showMetadataForLayer.bind(this)}>
             </LayerMetadataDetail>
           </Scrollbars>
         </div>
