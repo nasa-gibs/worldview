@@ -178,30 +178,31 @@
 }
 
 .layer-list-container .layers-all-layer {
-  transition: background-color 300ms ease-out;
+  transition: background-color 200ms ease-out;
   left: 0;
   border: 1px solid #222;
   &.measurement-row {
     padding: 0 0 0 8px;
   }
+  &.search-row {
+    border-left: 6px solid transparent;
+  }
   &.search-row.selected {
     left: 0;
-    transition: left 100ms ease,
-      background 300ms linear,
-      border 200ms linear;
-    background: #ddd;
+    transition: background 200ms linear, border 200ms linear;
+    background: #eee;
     border-left: 6px solid #d54f21;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
     & .layers-all-header > h3 {
-      transition: all 300ms ease;
+      transition: all 200ms ease;
       color: #000;
       font-weight: 500;
     }
     & .layers-all-header > h4,
     .layers-all-header > h5 {
-      transition: all 300ms ease;
+      transition: all 200ms ease;
       color: #333;
     }
   }
@@ -371,10 +372,10 @@
 .layers-all-layer.search-row {
   padding: 8px 5px;
   .layers-all-header {
-    padding: 0 0 0 45px;
+    padding: 0 0 0 40px;
   }
   & .wv-checkbox {
-    left: 8px;
+    left: 3px;
     cursor: pointer;
     float: left;
   }
@@ -1068,11 +1069,11 @@
     margin: 0 11px 0 2px;
   }
   & .layers-all-header {
-
+    min-height: 58px;
     & h3 {
       font-size: 20px;
       margin: 5px;
-      font-weight: 500px;
+      font-weight: 500;
     }
     & h5 {
       font-size: 14px;
@@ -1080,7 +1081,7 @@
     }
   }
   & .layer-preview {
-    margin-top: 15px;
+    margin-top: 5px;
     max-height: 400px;
   }
   .add-to-map-btn {
