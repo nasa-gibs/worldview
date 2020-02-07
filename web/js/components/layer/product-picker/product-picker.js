@@ -5,7 +5,7 @@ import moment from 'moment';
 import LayerList from './layer-list';
 import CategoryGrid from './category-grid';
 import ProductPickerHeader from './header';
-import Switch from '../../util/switch';
+import FilterUnavailable from './filterUnavailable';
 import {
   toLower as lodashToLower,
   values as lodashValues,
@@ -469,13 +469,6 @@ class ProductPicker extends React.Component {
     const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight - 38 : 0;
     const listHeight = isMobile ? bodyHeight : bodyHeight - 50;
 
-    const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
-    const filterTooltipContent =
-      <div className="filter-tooltip">
-        If enabled, only show results visible on the currently selected date: <br />
-        <div className="display-date"> {diplayDate} </div>
-      </div>;
-
     return (
       <>
         <ModalHeader toggle={onToggle}>
@@ -495,13 +488,11 @@ class ProductPicker extends React.Component {
             {listType === 'search' && !isMobile &&
               <div className='header-filter-container'>
                 <div className='header-filters'>
-                  <Switch
-                    id="unavailable-toggle"
-                    label="Hide unavailable"
-                    active={filterByAvailable}
-                    toggle={this.toggleFilterByAvailable.bind(this)}
-                    tooltip={filterTooltipContent}>
-                  </Switch>
+                  <FilterUnavailable
+                    selectedDate={selectedDate}
+                    filterByAvailable={filterByAvailable}
+                    toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}>
+                  </FilterUnavailable>
                 </div>
                 <div className="results-text">
                   Showing {filteredRows.length} results
@@ -656,11 +647,9 @@ function mapStateToProps(state, ownProps) {
       return filterSearch(layer, val, terms, config, proj.id);
     },
     hasMeasurementSource: current => {
-      console.log('mmkay');
       return hasMeasurementSource(current, config, proj.id);
     },
     hasMeasurementSetting: (current, source) => {
-      console.log('setting');
       return hasMeasurementSetting(current, source, config, proj.id);
     }
   };

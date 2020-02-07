@@ -128,6 +128,7 @@ class ProductPickerHeader extends React.Component {
 
 ProductPickerHeader.propTypes = {
   category: PropTypes.object,
+  children: PropTypes.node,
   filterByAvailable: PropTypes.bool,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
