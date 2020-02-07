@@ -275,6 +275,9 @@ class ProductPicker extends React.Component {
    * @param {*} selectedLayer - the layer for which to show metadata
    */
   showMetadataForLayer(selectedLayer) {
+    if (!selectedLayer) {
+
+    }
     this.props.update({ selectedLayer });
   }
 
