@@ -312,13 +312,13 @@ class ProductPicker extends React.Component {
     const debouncedOnScroll = lodashDebounce((contentWrapperEl) => {
       updateScrollPosition(contentWrapperEl.scrollTop);
     }, 500);
+    const detailTopBorderSize = 5;
     const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight : 0;
     let listHeight, listMinHeight, detailHeight;
+
     if (isMobile) {
-      detailHeight = selectedLayer ? bodyHeight / 2 : bodyHeight;
-      listHeight = selectedLayer
-        ? (bodyHeight / 2) - 12
-        : bodyHeight - 8;
+      detailHeight = !selectedLayer ? 0 : (bodyHeight * 0.6) - detailTopBorderSize;
+      listHeight = selectedLayer ? bodyHeight * 0.4 : bodyHeight;
       listMinHeight = listHeight;
     } else {
       detailHeight = listHeight = bodyHeight - 80;
