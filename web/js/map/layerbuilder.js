@@ -307,7 +307,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
-    if (day && def.period !== 'subdaily') {
+    if (day && def.wrapadjacentdays && def.period !== 'subdaily') {
       date = util.dateAdd(date, 'day', day);
     }
     const { tileMatrices, resolutions, tileSize } = matrixSet;
@@ -398,7 +398,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     var tms = def.matrixSet;
 
     date = options.date || state.date[activeDateStr];
-    if (day) {
+    if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
 
@@ -524,7 +524,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     urlParameters = '';
 
     date = options.date || state.date[activeDateStr];
-    if (day) {
+    if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
     urlParameters =
