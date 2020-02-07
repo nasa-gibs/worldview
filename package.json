@@ -190,6 +190,7 @@
     "redux": "^4.0.4",
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "simplebar-react": "^2.0.8",
     "supercluster": "7.0.0",
     "web-streams-polyfill": "^2.0.6",
