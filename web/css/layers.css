@@ -384,7 +384,7 @@
   }
 }
 
-.layers-all-header .fa {
+.search-row .layers-all-header .fa {
   position: absolute;
   color: #ddd;
   font-size: 18px;
@@ -1078,6 +1078,17 @@
     & h5 {
       font-size: 14px;
       margin: 0 5px;
+    }
+    & .close-details {
+      background-color: transparent;
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: none;
+      font-size: 20px;
+    }
+    & .close-details .fa {
+      color: #666;
     }
   }
   & .layer-preview {
