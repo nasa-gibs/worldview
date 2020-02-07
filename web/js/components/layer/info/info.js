@@ -33,33 +33,8 @@ class LayerInfo extends React.Component {
     }
   }
 
-  configureDate(period, layerDate, dateRanges) {
-    let date = util.parseDate(layerDate);
-    if (period === 'subdaily') {
-      date =
-        date.getDate() +
-        ' ' +
-        util.giveMonth(date) +
-        ' ' +
-        date.getFullYear() +
-        ' ' +
-        util.pad(date.getHours(), 2, '0') +
-        ':' +
-        util.pad(date.getMinutes(), 2, '0');
-    } else if (period === 'yearly') {
-      date = new Date(date.setFullYear(date.getFullYear() - 1));
-      date = date.getFullYear();
-    } else if (period === 'monthly') {
-      date = new Date(date.setMonth(date.getMonth() - 1));
-      date = util.giveMonth(date) + ' ' + date.getFullYear();
-    } else {
-      if (dateRanges && dateRanges.slice(-1)[0].dateInterval !== '1') {
-        date = new Date(date.setTime(date.getTime() - 86400000));
-      }
-      date =
-        date.getDate() + ' ' + util.giveMonth(date) + ' ' + date.getFullYear();
-    }
-    return date;
+  configureTemporalDate(dateType, date, period) {
+    return util.coverageDateFormatter(dateType, date, period);
   }
 
   render() {
@@ -77,21 +52,13 @@ class LayerInfo extends React.Component {
             <span id={layerId + '-startDate'} className="layer-date-start">
               {layer.startDate
                 ? 'Temporal coverage: ' +
-                this.configureDate(
-                  layer.period,
-                  layer.startDate,
-                  layer.dateRanges
-                )
+                this.configureTemporalDate('START-DATE', layer.startDate, layer.period)
                 : ''}
             </span>
             <span id={layerId + '-endDate'} className="layer-date-end">
               {layer.startDate && layer.endDate
                 ? ' - ' +
-                this.configureDate(
-                  layer.period,
-                  layer.endDate,
-                  layer.dateRanges
-                )
+                this.configureTemporalDate('END-DATE', layer.endDate, layer.period)
                 : layer.startDate
                   ? ' - Present'
                   : ''}

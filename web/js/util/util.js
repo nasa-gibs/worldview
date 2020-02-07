@@ -8,6 +8,7 @@ import browser from './browser';
 import { events } from './events';
 import load from './load';
 import Cache from 'cachai';
+import moment from 'moment';
 
 export default (function(self) {
   var canvas = null;
@@ -284,6 +285,33 @@ export default (function(self) {
       throw new Error('Invalid date: ' + dateAsString);
     }
     return date;
+  };
+
+  self.coverageDateFormatter = function(dateType, date, period) {
+    let dateString;
+    date = this.parseDate(date);
+
+    switch (period) {
+      case 'subdaily':
+        dateString = moment(date).format('DD MMMM YYYY HH:mm') + 'Z';
+        break;
+
+      case 'yearly':
+        if (dateType === 'END-DATE') date.setFullYear(date.getFullYear() - 1);
+        dateString = moment(date).format('YYYY');
+        break;
+
+      case 'monthly':
+        if (dateType === 'END-DATE') date.setMonth(date.getMonth() - 1);
+        dateString = moment(date).format('MMMM YYYY');
+        break;
+
+      default:
+        dateString = moment(date).format('DD MMMM YYYY');
+        break;
+    }
+
+    return dateString;
   };
 
   /**
