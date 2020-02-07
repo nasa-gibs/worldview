@@ -33,10 +33,19 @@ class LayerRow extends React.Component {
    * @param {e} event
    * @return {void}
    */
-  showMetadata(e) {
-    e.stopPropagation(); // Prevent layer from being activated
-    const { layer, showLayerMetadata } = this.props;
-    showLayerMetadata(layer.id);
+  toggleShowMetadata() {
+    const {
+      layer,
+      showLayerMetadata,
+      isMetadataShowing,
+      isMobile
+    } = this.props;
+    if (!isMetadataShowing) {
+      showLayerMetadata(layer.id);
+    } else if (isMobile) {
+      // Allow click to deselect on mobile
+      showLayerMetadata(null);
+    }
   }
 
   /**
@@ -87,7 +96,7 @@ class LayerRow extends React.Component {
             onChange={this.toggleCheck.bind(this)}
           />
         </div>
-        <div className="layers-all-header" onClick={e => this.showMetadata(e)}>
+        <div className="layers-all-header" onClick={this.toggleShowMetadata.bind(this)}>
           {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
           {subtitle && <h5>{subtitle}</h5>}
           {description && !isMetadataShowing && (
@@ -101,6 +110,7 @@ class LayerRow extends React.Component {
 LayerRow.propTypes = {
   isEnabled: PropTypes.bool,
   isMetadataShowing: PropTypes.bool,
+  isMobile: PropTypes.bool,
   layer: PropTypes.object,
   offState: PropTypes.func,
   onState: PropTypes.func,

@@ -51,6 +51,13 @@ class LayerList extends React.Component {
     const { filteredRows, showMetadataForLayer } = this.props;
     const layer = filteredRows.find(l => l.id === layerId);
 
+    if (!layerId) {
+      this.setState({
+        selectedLayerId: layerId
+      });
+      showMetadataForLayer(null);
+      return;
+    }
     if (selectedLayerId === layerId) {
       return;
     }
@@ -134,12 +141,12 @@ class LayerList extends React.Component {
 
   renderSearchList(filteredRows) {
     const { selectedLayerId } = this.state;
-    const { addLayer, removeLayer, activeLayers } = this.props;
+    const { addLayer, removeLayer, activeLayers, isMobile } = this.props;
 
     return (
       filteredRows.map(layer => {
         const isEnabled = activeLayers.some(l => l.id === layer.id);
-        const isMetadataShowing = layer.id === selectedLayerId;
+        const isMetadataShowing = selectedLayerId && layer.id === selectedLayerId;
         return (
           <SearchLayerRow
             key={layer.id}
@@ -148,6 +155,7 @@ class LayerList extends React.Component {
             isMetadataShowing={isMetadataShowing}
             onState={addLayer}
             offState={removeLayer}
+            isMobile={isMobile}
             showLayerMetadata={id => this.showLayerMetadata(id)}
             toggleDateRangesExpansion={id => this.toggleDateRangesExpansion(id)}
           />

@@ -1095,6 +1095,7 @@
       margin-right: 10px;
     }
     &:hover:not(.is-active) {
+      color: #fff;
       background-color: #b55a3c;
     }
     &.is-active {
