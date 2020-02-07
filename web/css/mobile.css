@@ -46,10 +46,30 @@
   }
 
   a.staticLayers:not([href]):not([tabindex]) {
-    width: 100px;
+    height: 45px;
+    width: 56px;
     background-image: none;
     border-radius: 5px;
-    top: 55px;
+    top: 58px;
+    & .fa {
+      font-size: 33px;
+      position: absolute;
+      left: 10px;
+      top: 5px;
+      color: #fff;
+    }
+    & span.layer-count {
+      color: #fff;
+      z-index: 9999;
+      position: absolute;
+      left: 17px;
+      top: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      background: #333;
+      border-radius: 50%;
+      padding: 5px;
+    }
   }
 
   a.staticLayers:not([href]):not([tabindex]):hover {
