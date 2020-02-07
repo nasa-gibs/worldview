@@ -469,8 +469,7 @@ class ProductPicker extends React.Component {
     const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
     const filterTooltipContent =
       <div className="filter-tooltip">
-        If enabled, only show results which would be visible
-        at the currently selected date: <br />
+        If enabled, only show results visible on the currently selected date: <br />
         <div className="display-date"> {diplayDate} </div>
       </div>;
 
