@@ -905,13 +905,29 @@ class Timeline extends React.Component {
         {initialLoadComplete
           ? <ErrorBoundary>
             {isSmallScreen
-              ? <MobileDatePicker
-                date={selectedDate}
-                startDateLimit={timelineStartDateLimit}
-                endDateLimit={timelineEndDateLimit}
-                onDateChange={this.onDateChange}
-                hasSubdailyLayers={hasSubdailyLayers}
-              />
+              ? <div id="timeline-header">
+                <div id="date-selector-main">
+                  <MobileDatePicker
+                    date={selectedDate}
+                    startDateLimit={timelineStartDateLimit}
+                    endDateLimit={timelineEndDateLimit}
+                    onDateChange={this.onDateChange}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                  />
+                </div>
+                <div className="mobile-date-change-arrows-btn">
+                  <div id="zoom-buttons-group">
+                    <DateChangeArrows
+                      leftArrowDown={this.throttleDecrementDate}
+                      leftArrowUp={this.stopLeftArrow}
+                      leftArrowDisabled={leftArrowDisabled}
+                      rightArrowDown={this.throttleIncrementDate}
+                      rightArrowUp={this.stopRightArrow}
+                      rightArrowDisabled={rightArrowDisabled}
+                    />
+                  </div>
+                </div>
+              </div>
               : <section id="timeline" className="timeline-inner clearfix">
                 <div id="timeline-header"
                   className={hasSubdailyLayers ? 'subdaily' : ''}
