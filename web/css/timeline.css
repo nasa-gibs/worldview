@@ -641,6 +641,18 @@ button:focus {
   cursor: pointer;
 }
 
+/* Mobile date change arrows */
+.mobile-date-change-arrows-btn {
+  position: absolute;
+  left: 120px;
+  bottom: 10px;
+  background: rgba(40, 40, 40, 0.85);
+  border: thin solid #333;
+  padding: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .datepicker-header,
 .datepicker-navbar-btn {
   font-weight: 700;
