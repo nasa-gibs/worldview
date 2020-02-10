@@ -10,21 +10,14 @@ import 'whatwg-fetch'; // fetch() polyfill for IE
  * @extends React.Component
  */
 class LayerList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedLayerId: null,
-      selectedProjection: props.selectedProjection
-    };
-  }
-
   /**
    * Handle selecting/showing metadata when there is only a single search result
    */
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { selectedLayer } = this.props;
-    if (selectedLayer && prevProps.selectedLayer !== selectedLayer) {
-      this.showLayerMetadata(selectedLayer.id);
+    if (prevProps.selectedLayer !== selectedLayer) {
+      const id = selectedLayer ? selectedLayer.id : null;
+      this.showLayerMetadata(id);
     }
   }
 
@@ -33,8 +26,7 @@ class LayerList extends React.Component {
    */
   componentDidMount() {
     const { selectedLayer } = this.props;
-    const { selectedLayerId } = this.state;
-    if (selectedLayer && selectedLayer.id !== selectedLayerId) {
+    if (selectedLayer && selectedLayer.id) {
       this.showLayerMetadata(selectedLayer.id);
     }
   }
@@ -47,23 +39,20 @@ class LayerList extends React.Component {
    * @return {void}
    */
   showLayerMetadata(layerId) {
-    const { selectedLayerId } = this.state;
-    const { filteredRows, showMetadataForLayer } = this.props;
+    const {
+      filteredRows,
+      selectedLayer,
+      showMetadataForLayer
+    } = this.props;
     const layer = filteredRows.find(l => l.id === layerId);
 
     if (!layerId) {
-      this.setState({
-        selectedLayerId: layerId
-      });
       showMetadataForLayer(null);
       return;
     }
-    if (selectedLayerId === layerId) {
+    if (selectedLayer && selectedLayer.id === layerId) {
       return;
     }
-    this.setState({
-      selectedLayerId: layerId
-    });
 
     if (!layer.metadata) {
       const { origin, pathname } = window.location;
@@ -76,7 +65,6 @@ class LayerList extends React.Component {
           // formed HTML file. Also avoid executing any script or style tags.
           const isMetadataSnippet = !body.match(/<(head|body|html|style|script)[^>]*>/i);
           layer.metadata = isMetadataSnippet ? body : errorMessage;
-          this.setState({ layers: filteredRows });
           showMetadataForLayer(layer);
         });
     } else {
@@ -140,13 +128,18 @@ class LayerList extends React.Component {
   }
 
   renderSearchList(filteredRows) {
-    const { selectedLayerId } = this.state;
-    const { addLayer, removeLayer, activeLayers, isMobile } = this.props;
+    const {
+      addLayer,
+      removeLayer,
+      selectedLayer,
+      activeLayers,
+      isMobile
+    } = this.props;
 
     return (
       filteredRows.map(layer => {
         const isEnabled = activeLayers.some(l => l.id === layer.id);
-        const isMetadataShowing = selectedLayerId && layer.id === selectedLayerId;
+        const isMetadataShowing = selectedLayer && layer.id === selectedLayer.id;
         return (
           <SearchLayerRow
             key={layer.id}
@@ -176,7 +169,6 @@ class LayerList extends React.Component {
   }
 }
 LayerList.defaultProps = {
-  expandedMeasurements: {},
   listType: 'search'
 };
 LayerList.propTypes = {
@@ -186,7 +178,6 @@ LayerList.propTypes = {
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
   currentMeasureSource: PropTypes.object,
-  expandedMeasurements: PropTypes.object,
   filteredRows: PropTypes.array,
   hasMeasurementSetting: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
