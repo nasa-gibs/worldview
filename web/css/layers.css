@@ -1029,14 +1029,29 @@
 
   &.search {
     flex-grow: 1;
+    & .layers-all-layer {
+      background: transparent;
+      & h3, h4 {
+        color: #333;
+      }
+      & h5 {
+        color: #666;
+      }
+      & .source-metadata p,
+      .source-metadata span,
+      .source-metadata div,
+      .source-metadata code {
+        color: #333;
+      }
+      &:hover {
+        background-color: transparent;
+      }
+    }
     &.mobile {
       border-top: 5px solid #d54e21;
       padding-left: 2px;
       background: #333;
       background-image: linear-gradient(#aaa, #ddd 15%);
-      & .layers-all-layer {
-        background: transparent;
-      }
     }
   }
   &.browse {
@@ -1051,25 +1066,14 @@
   & .layers-all-layer {
     padding: 5px 10px;
     margin: 0 5px 0 2px;
-    background-color: transparent;
-    & h3, h4 {
-      color: #333;
-    }
-    & h5 {
-      color: #666;
-    }
-    & .source-metadata p, .source-metadata span {
-      color: #333;
-    }
-    &:hover {
-      background-color: transparent;
-    }
   }
   & .scrollbar-visible .layers-all-layer {
     margin: 0 11px 0 2px;
   }
-  & .layers-all-header {
+  &.search .layers-all-header {
     min-height: 58px;
+  }
+  & .layers-all-header {
     & h3 {
       font-size: 20px;
       margin: 5px;
@@ -1094,6 +1098,7 @@
   & .layer-preview {
     margin-top: 5px;
     max-height: 400px;
+    border: 1px solid #ddd;
   }
   .add-to-map-btn {
     margin: 5px auto 0;
