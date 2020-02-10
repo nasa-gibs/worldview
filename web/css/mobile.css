@@ -61,14 +61,14 @@
     & span.layer-count {
       color: #fff;
       z-index: 9999;
-      position: absolute;
-      left: 17px;
-      top: 12px;
+      position: relative;
+      top: 10px;
       font-size: 18px;
       font-weight: 600;
       background: #333;
       border-radius: 50%;
-      padding: 5px;
+      padding: 0 5px;
+      text-align: center;
     }
   }
 
