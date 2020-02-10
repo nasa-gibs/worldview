@@ -123,7 +123,7 @@ class LayerMetadataDetail extends React.Component {
         </div>
       );
     }
-    const { layer, selectedProjection, isActive, showMetadataForLayer } = this.props;
+    const { layer, selectedProjection, isActive } = this.props;
     const { title, subtitle, track, metadata } = layer;
     const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
     const previewUrl = 'images/layers/previews/' + selectedProjection + '/' + layer.id + '.jpg';
