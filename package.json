@@ -89,7 +89,7 @@
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^78.0.1",
+    "chromedriver": "^80.0.0",
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "^3.6.4",
     "cross-env": "^6.0.2",
