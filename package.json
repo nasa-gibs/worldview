@@ -52,6 +52,7 @@
     "e2e:headless:chrome": "npx nightwatch -e chromeHeadless",
     "e2e:headless:firefox": "npx nightwatch -e firefoxHeadless",
     "getcapabilities": "bash -c 'FETCH_GC=1 tasks/buildOptions.sh'",
+    "generatePreviews": "python3 tasks/python3/fetchPreviewSnapshots.py",
     "linkcheck": "node ./tasks/linkcheck",
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
