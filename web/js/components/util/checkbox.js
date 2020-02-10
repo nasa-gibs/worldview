@@ -74,6 +74,7 @@ Checkbox.defaultProps = {
 
 Checkbox.propTypes = {
   checked: PropTypes.bool,
+  children: PropTypes.node,
   classNames: PropTypes.string,
   color: PropTypes.string,
   id: PropTypes.string,
