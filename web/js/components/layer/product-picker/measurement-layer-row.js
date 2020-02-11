@@ -67,7 +67,7 @@ class MeasurementLayerRow extends React.Component {
                 isOpen={tooltipOpen}
                 target={itemElementId}
                 toggle={this.toggleTooltip.bind(this)}>
-                    This layer has no visible content at the currently selected date: <br/>
+                    This layer has no visible content on the selected date: <br/>
                 <span style={{ fontFamily: 'monospace' }}> {diplayDate} </span>
               </Tooltip>
             </>

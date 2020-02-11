@@ -17,8 +17,7 @@ const FilterUnavailable = (props) => {
   const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
   const tooltipContent =
     <div className="filter-tooltip">
-      If enabled, only show results which would be visible
-      at the currently selected date: <br />
+      When enabled, only show results available on the selected date: <br />
       <div className="display-date"> {diplayDate} </div>
     </div>;
 
