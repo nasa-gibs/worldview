@@ -1040,8 +1040,13 @@
       & .source-metadata p,
       .source-metadata span,
       .source-metadata div,
-      .source-metadata code {
+      .source-metadata code,
+      .list-group-item {
         color: #333;
+        background: transparent;
+      }
+      .source-metadata a {
+        color: #0056b3;
       }
       &:hover {
         background-color: transparent;
