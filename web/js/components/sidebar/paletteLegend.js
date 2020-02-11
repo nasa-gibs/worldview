@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import util from '../../util/util';
 import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
+import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
@@ -40,8 +41,11 @@ class PaletteLegend extends React.Component {
     });
   }
 
-  componentDidUpdate() {
-    this.updateCanvas();
+  componentDidUpdate(prevProps) {
+    // Only updates when layer options/settings have changed
+    if (!lodashIsEqual(this.props.layer, prevProps.layer)) {
+      this.updateCanvas();
+    }
   }
 
   /**
