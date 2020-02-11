@@ -4,14 +4,9 @@ import requests
 from datetime import datetime
 from datetime import timedelta
 import json
-import os
-import sys
-import shutil
 
 override_dates_dict = {}
 bad_snapshots = []
-total_layer_count = 0
-complete_layer_count = 0
 time_format = "%Y-%m-%dT%H:%M:%SZ"
 snapshots_url = ''
 param_dict = {
@@ -45,7 +40,6 @@ standalone_layers = [
   'Reference_Features',
   'Reference_Labels'
 ]
-root_img_dir = './build/options-build/preview-images/'
 dest_img_dir = './web/images/layers/previews/'
 reference_layers = {
   'geographic': 'OSM_Land_Water_Map',
@@ -53,15 +47,6 @@ reference_layers = {
   'antarctic': 'SCAR_Land_Water_Map'
 }
 current = datetime.now()
-
-
-def increment_progress():
-  global complete_layer_count, total_layer_count
-  complete_layer_count += 1
-  percent_complete = round((complete_layer_count / total_layer_count) * 100, 1)
-  # sys.stdout.write('\r')
-  # sys.stdout.write('Progress: ' + str(percent_complete) + '%')
-  # sys.stdout.flush()
 
 
 def track_bad_snapshots(layer_id, projection, request_url, size):
@@ -77,20 +62,6 @@ def track_bad_snapshots(layer_id, projection, request_url, size):
       'projection': projection,
       'url': request_url
     })
-
-
-def prepare_dirs():
-  geo_path = root_img_dir + 'geographic'
-  arctic_path = root_img_dir + 'arctic'
-  antarctic_path = root_img_dir + 'antarctic'
-  if (os.path.exists(root_img_dir)):
-    shutil.rmtree(root_img_dir)
-  if not (os.path.exists(geo_path)):
-    os.makedirs(geo_path)
-  if not (os.path.exists(arctic_path)):
-    os.makedirs(arctic_path)
-  if not (os.path.exists(antarctic_path)):
-    os.makedirs(antarctic_path)
 
 
 def get_best_date(projection, period, date_ranges):
@@ -169,22 +140,20 @@ def get_snapshots(layer):
     else:
       params['LAYERS'] = layer_id
 
-    file_name = root_img_dir + projection + '/' + layer_id + '.jpg'
     dest_file_name = dest_img_dir + projection + '/' + layer_id + '.jpg'
 
     # Only get images that we don't have already
     if (os.path.exists(dest_file_name)):
-      increment_progress()
       continue
 
     try:
       with open(dest_file_name, 'xb') as image_file:
         image_req = requests.get(snapshots_url, params=params)
         image_file.write(image_req.content)
-        print('\n')
-        print('Status: ', image_req.status_code)
+        status_text = 'SUCCESS' if image_req.status_code is 200 else 'ERROR'
+        print('\nResult: ', status_text, '-', image_req.status_code)
+        print('Layer:', layer_id)
         print('URL: ', image_req.url)
-        increment_progress()
         if (layer_id == reference_layers[projection]):
           continue
         track_bad_snapshots(layer_id, projection, image_req.url, image_file.tell())
@@ -193,7 +162,6 @@ def get_snapshots(layer):
 
 
 if __name__ == "__main__":
-  prepare_dirs()
 
   # Allow manual configuration of layer ID to specific date to generate desired preview
   with open('./config/default/common/previewLayerOverrides.json', 'rt') as overrides_json:
@@ -203,10 +171,6 @@ if __name__ == "__main__":
     wv_json_dict = json.load(wv_json)
     layers = wv_json_dict['layers']
     snapshots_url = wv_json_dict['features']['imageDownload']['url']
-
-    for layer in layers.values():
-      for proj in layer['projections']:
-        total_layer_count += 1
 
   futures = []
   with ThreadPoolExecutor() as executor:
