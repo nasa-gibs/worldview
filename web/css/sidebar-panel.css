@@ -8,6 +8,9 @@
   height: 28px;
   width: 28px;
   background: none no-repeat scroll left;
+  & .layer-count {
+    margin-left: 5px;
+  }
 }
 .toggleIconHolder {
   position: absolute;

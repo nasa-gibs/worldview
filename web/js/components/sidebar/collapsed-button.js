@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 class CollapsedButton extends React.Component {
   render() {
-    const { isCollapsed, numberOfLayers, onclick } = this.props;
+    const {
+      isMobile,
+      isCollapsed,
+      numberOfLayers,
+      onclick
+    } = this.props;
 
     return (
       <div
@@ -18,9 +23,18 @@ class CollapsedButton extends React.Component {
           onClick={onclick}
         >
           <i className="fa fa-layer-group" aria-hidden="true"></i>
-          <span className='layer-count'>
-            {numberOfLayers.toString()}
-          </span>
+          {isMobile
+            ? (
+              <span className='layer-count mobile'>
+                {numberOfLayers.toString()}
+              </span>
+            )
+            : (
+              <span className='layer-count '>
+                {numberOfLayers.toString()} Layers
+              </span>
+            )
+          }
         </a>
       </div>
     );
@@ -28,6 +42,7 @@ class CollapsedButton extends React.Component {
 }
 CollapsedButton.propTypes = {
   isCollapsed: PropTypes.bool,
+  isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onclick: PropTypes.func
 };
