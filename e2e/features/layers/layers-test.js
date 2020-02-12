@@ -1,12 +1,13 @@
 const skipTour = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const TIME_LIMIT = 10000;
+const LAYER_TITLE = 'Total Aerosol Optical Thickness Scattering 550nm';
 
 module.exports = {
-  before: function(client) {
+  before: (client) => {
     skipTour.loadAndSkipTour(client, TIME_LIMIT);
   },
-  'Toggle layer Info': function(client) {
+  'Toggle layer Info': (client) => {
     client.click(localSelectors.infoButton);
     client.waitForElementVisible(localSelectors.infoDialog, 1000, function(e) {
       client.click(localSelectors.infoButton).pause(100);
@@ -15,7 +16,7 @@ module.exports = {
       client.expect.element(localSelectors.infoDialog).to.be.present;
     });
   },
-  'Toggle Layer Options': function(client) {
+  'Toggle Layer Options': (client) => {
     client.click(localSelectors.optionsButton);
     client.waitForElementVisible(localSelectors.optionsDialog, 1000, function(
       e
@@ -26,67 +27,62 @@ module.exports = {
       client.expect.element(localSelectors.optionsDialog).to.be.present;
     });
   },
-  'Finding VIIRs Corrected Reflectance layer with search': function(client) {
+  'Finding layer by ID with search': (client) => {
     client.click(localSelectors.addLayers);
     client.waitForElementVisible(
       localSelectors.layersSearchField,
       TIME_LIMIT,
-      function(e) {
+      (e) => {
         client.setValue(
           localSelectors.layersSearchField,
-          'VIIRS_SNPP_Corrected'
+          'MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly'
         );
         client.waitForElementVisible(
-          localSelectors.sourceInfoIcon,
+          '.search-row.layers-all-layer',
           TIME_LIMIT,
-          function(e) {
+          (e) => {
             client
               .useCss()
               .assert.containsText(
                 localSelectors.layersAll,
-                'Corrected Reflectance (True Color)'
+                LAYER_TITLE
               );
             client
               .useCss()
               .assert.containsText(
                 localSelectors.layersAll,
-                'Suomi NPP / VIIRS'
+                'MERRA-2'
               );
           }
         );
       }
     );
   },
-  'Verify Corrected Reflectance Layer is selected': function(client) {
-    client.assert.cssClassPresent(localSelectors.layerHeader, 'checked');
+  'Verify details show about selected layer are visible when selected': (client) => {
+    client.waitForElementVisible('.layer-detail-container', TIME_LIMIT, (e) => {
+      client
+        .useCss()
+        .expect.element('.layer-detail-container .layers-all-header')
+        .text.contains(LAYER_TITLE);
+      client
+        .useCss()
+        .expect.element('.source-metadata .layer-date-range').to.be.present;
+    });
   },
-  'Open And Close info about Layer found in search': function(client) {
-    client
-      .useCss()
-      .expect.element(localSelectors.layersAll)
-      .text.not.contains('(VIIRS) Corrected Reflectance');
-    client.click(localSelectors.sourceInfoIcon).pause(2000);
-    client
-      .useCss()
-      .assert.containsText(
-        localSelectors.layersAll,
-        '(VIIRS) Corrected Reflectance'
-      );
-    client
-      .useCss()
-      .moveToElement(localSelectors.sourceMetadataCloseButton, 10, 10);
-    client.click(localSelectors.sourceMetadataCloseButton);
-    client
-      .useCss()
-      .expect.element(localSelectors.layersAll)
-      .text.not.contains('(VIIRS) Corrected Reflectance');
+  'Verify "Add layer" button toggles checkbox': (client) => {
+    client.waitForElementVisible('.layer-detail-container', TIME_LIMIT, (e) => {
+      client.click('.layer-detail-container .add-to-map-btn').pause(250);
+      client
+        .useCss()
+        .expect.element('.search-row.layers-all-layer .wv-checkbox.checked').to.be.present;
+    });
   },
-  'Click breadcrumb to return to main selection': function(client) {
+  'Click back button to return to main selection': (client) => {
     client.waitForElementVisible(
-      localSelectors.backToCategories,
+      '#layer-search .back-button',
       TIME_LIMIT,
-      function(e) {
-        client.click(localSelectors.backToCategories);
+      (e) => {
+        client.click('#layer-search .back-button');
         client.waitForElementVisible(
           localSelectors.aerosolOpticalDepth,
           TIME_LIMIT
@@ -94,30 +90,31 @@ module.exports = {
       }
     );
   },
-  'Close Layer modal': function(client) {
+  'Close Layer modal': (client) => {
     client.click(localSelectors.layersModalCloseButton).pause(2000);
     client.useCss().expect.element(localSelectors.layersAll).to.not.be.present;
   },
-  'Browsing Layers by Category: Aerosol Optical Depth': function(client) {
+  'Browsing Layers by Category: Aerosol Optical Depth': (client) => {
     client.click(localSelectors.addLayers).pause(2000);
     client.click(localSelectors.aerosolOpticalDepth);
-    client.waitForElementVisible(localSelectors.headerForAOD, 20000, function(
-      e
-    ) {
+    client.waitForElementVisible(
+      localSelectors.headerForAOD,
+      20000,
+      (e) => {
       // This is a very slow process
       /* Not found
       client.click('[aria-labelledby="accordion-legacy-all-aerosol-optical-depth"] > ul > li:nth-child(3) > a')
         .pause(1000);
         */
-      client
-        .useCss()
-        .assert.containsText(
-          '#modisterraandaquacombinedvalueaddedaerosolopticaldepth',
-          'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth'
-        );
-    });
+        client
+          .useCss()
+          .assert.containsText(
+            '#modisterraandaquacombinedvalueaddedaerosolopticaldepth',
+            'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth'
+          );
+      });
   },
-  after: function(client) {
+  after: (client) => {
     client.end();
   }
 };

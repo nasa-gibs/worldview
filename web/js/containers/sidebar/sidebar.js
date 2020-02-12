@@ -186,6 +186,7 @@ class Sidebar extends React.Component {
             onWheel={wheelCallBack}
           />
           <CollapsedButton
+            isMobile={isMobile}
             isCollapsed={isCollapsed}
             onclick={this.toggleSidebar.bind(this)}
             numberOfLayers={numberOfLayers}

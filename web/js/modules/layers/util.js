@@ -17,6 +17,27 @@ import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
 
+/**
+  *
+  * @param {*} def - layer definition
+  * @param {*} date - current selected app date
+  * @returns {Boolean} - True if layer is available at date, otherwise false
+  */
+export function availableAtDate(def, date) {
+  const availableDates = datesinDateRanges(def, date);
+  // Some vector layers
+  if (!def.startDate && !def.dateRanges) {
+    return true;
+  }
+  if (def.endDate && def.inactive) {
+    return date < new Date(def.endDate) && date > new Date(def.startDate);
+  }
+  if (!availableDates.length && !def.endDate && !def.inactive) {
+    return date > new Date(def.startDate);
+  }
+  return availableDates.length > 0;
+};
+
 export function getOrbitTrackTitle(def) {
   if (def.daynight && def.track) {
     return lodashStartCase(def.track) + '/' + lodashStartCase(def.daynight);
@@ -262,6 +283,7 @@ export function toggleVisibility(id, layers) {
 
   return update(layers, { [index]: { visible: { $set: visibility } } });
 }
+
 export function removeLayer(id, layers) {
   var index = lodashFindIndex(layers, {
     id: id
@@ -271,6 +293,7 @@ export function removeLayer(id, layers) {
   }
   return update(layers, { $splice: [[index, 1]] });
 }
+
 // this function takes an array of date ranges in this format:
 // [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
 // the array is first sorted, and then checked for any overlap

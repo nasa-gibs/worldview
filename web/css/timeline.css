@@ -632,18 +632,23 @@ button:focus {
   background: rgba(40, 40, 40, 0.85);
   color: #fff;
   border: thin solid #333;
-  font-size: 17px;
-  font-family: 'Open Sans', sans-serif;
-  padding: 3px;
+  font-size: 23px;
+  padding: 13px 8px;
   border-radius: 5px;
-  line-height: 25px;
   white-space: nowrap;
   cursor: pointer;
+  height: 42px;
+  font-family: 'Roboto Mono', monospace;
 }
-
-.datepicker-header,
-.datepicker-navbar-btn {
-  font-weight: 700;
+.datepicker-modal {
+  & div, li {
+    font-family: 'Roboto Mono', monospace;
+  }
+  .datepicker-header,
+  .datepicker-navbar-btn {
+    font-weight: 700;
+    font-size: 18px;
+  }
 }
 
 .datepicker.android-dark .datepicker-header {
