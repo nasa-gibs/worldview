@@ -55,9 +55,8 @@ class LayerList extends React.Component {
     }
 
     if (!layer.metadata) {
-      const { origin, pathname } = window.location;
       const errorMessage = '<p>There was an error loading layer metadata.</p>';
-      const uri = `${origin}${pathname}config/metadata/layers/${layer.description}.html`;
+      const uri = `config/metadata/layers/${layer.description}.html`;
       fetch(uri)
         .then(res => (res.ok ? res.text() : errorMessage))
         .then(body => {
