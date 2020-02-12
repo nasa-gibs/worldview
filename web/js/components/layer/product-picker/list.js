@@ -50,9 +50,8 @@ class LayerList extends React.Component {
       this.setState({ expandedMetadataLayers: expandedMetadataLayers });
       var layer = filteredRows.find(l => l.id === layerId);
       if (!layer.metadata) {
-        var { origin, pathname } = window.location;
         var errorMessage = '<p>There was an error loading layer metadata.</p>';
-        var uri = `${origin}${pathname}config/metadata/layers/${
+        var uri = `config/metadata/layers/${
           layer.description
         }.html`;
         fetch(uri)
