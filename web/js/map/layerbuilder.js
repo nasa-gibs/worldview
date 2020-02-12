@@ -312,7 +312,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     const { tileMatrices, resolutions, tileSize } = matrixSet;
     const { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
-    const sizes = tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
     const tileGridOptions = {
       origin,
       extent,
