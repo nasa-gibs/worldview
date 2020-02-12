@@ -11,6 +11,9 @@ You will need to [create your own authentication token](https://github.com/githu
 ```
 github_changelog_generator -u nasa-gibs -p worldview
 --no-author --bugs-label '## Technical Updates / Bugs:'
+--enhancement-label '## Implemented enhancements:'
+--issues-label '## Closed issues:'
+--pr-label '## Merged pull requests:'
 --security-label '## External Dependency Updates:'
 --security-labels 'external dependency'
 --removed-label '## Story Changes:'
@@ -25,6 +28,9 @@ github_changelog_generator -u nasa-gibs -p worldview
 docker run -it --rm -v /${PWD}:/wkDir
 ferrarimarco/github-changelog-generator -u nasa-gibs -p worldview
 --no-author --bugs-label '## Technical Updates / Bugs:'
+--enhancement-label '## Implemented enhancements:'
+--issues-label '## Closed issues:'
+--pr-label '## Merged pull requests:'
 --security-label '## External Dependency Updates:'
 --security-labels 'external dependency'
 --removed-label '## Story Changes:'
