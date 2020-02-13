@@ -480,11 +480,10 @@ class TimelineAxis extends Component {
       draggerSelected,
       draggerTimeState,
       draggerTimeStateB,
-      timeScale,
-      axisWidth
+      timeScale
     } = this.props;
     const time = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
-    this.updateScale(time, timeScale, axisWidth, 0.50);
+    this.updateScale(time, timeScale, false, 0.50);
   }
 
   componentDidUpdate(prevProps) {
