@@ -48,6 +48,7 @@ module.exports = {
   categoriesNav: '#categories-nav',
   // layersAll: '#layers-all',
   allCategoryHeader: '#legacy-all .layer-category-name',
+  floodsCategoryHeader: '#floods .layer-category-name',
   layersAll: '.layers-all-layer',
 
   layerBrowseList: '.layer-list-container.browse',
@@ -73,5 +74,6 @@ module.exports = {
   weldReflectanceCheckboxContainer: '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly',
   weldUnavailableTooltipIcon: '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly #availability-info',
   unavailableFilterToggle: '.header-filter-container .react-switch-label',
-  unavailableFilterTooltipIcon: '.header-filter-container #availability-filter'
+  unavailableFilterTooltipIcon: '.header-filter-container #availability-filter',
+  scienceDisciplinesTab: '#categories-nav .nav-item:nth-child(2)'
 };
