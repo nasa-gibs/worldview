@@ -650,6 +650,18 @@ button:focus {
   }
 }
 
+/* Mobile date change arrows */
+.mobile-date-change-arrows-btn {
+  position: absolute;
+  left: 120px;
+  bottom: 10px;
+  background: rgba(40, 40, 40, 0.85);
+  border: thin solid #333;
+  padding: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .datepicker.android-dark .datepicker-header {
   color: #fff !important;
   border-bottom: 2px solid #00457b !important;
