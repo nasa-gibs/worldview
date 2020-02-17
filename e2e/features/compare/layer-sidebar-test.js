@@ -13,29 +13,17 @@ module.exports = {
   },
   'Add AOD Layer to Layer Group A': (client) => {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
-    client.waitForElementVisible(
-      selectors.swipeDragger,
-      client.globals.timeout,
-      () => {
-        client.click(selectors.addLayers);
-        client.waitForElementVisible(
-          selectors.aerosolOpticalDepth,
-          client.globals.timeout,
-          () => {
-            client.click(selectors.aerosolOpticalDepth);
-            client.waitForElementVisible(aodCheckBox, client.globals.timeout,
-              () => {
-                client.click(aodCheckBox);
-                client.waitForElementVisible(
-                  '#active-' + aodCombinedValueId,
-                  client.globals.timeout
-                );
-                client.click(selectors.layersModalCloseButton);
-              });
-          }
-        );
-      }
-    );
+    client.waitForElementVisible(selectors.swipeDragger, client.globals.timeout, () => {
+      client.click(selectors.addLayers);
+      client.waitForElementVisible(selectors.aerosolOpticalDepth, client.globals.timeout, () => {
+        client.click(selectors.aerosolOpticalDepth);
+        client.waitForElementVisible(aodCheckBox, client.globals.timeout, () => {
+          client.click(aodCheckBox);
+          client.waitForElementVisible('#active-' + aodCombinedValueId, client.globals.timeout);
+          client.click(selectors.layersModalCloseButton);
+        });
+      });
+    });
     client.waitForElementNotPresent('#layer_picker_component', TIME_LIMIT);
     client.pause(250);
   },
