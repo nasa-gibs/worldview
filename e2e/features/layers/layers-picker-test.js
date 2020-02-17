@@ -232,6 +232,7 @@ module.exports = {
     client.url(client.globals.url + '?t=2020-2-14');
     client.click(addLayers);
     client.setValue(layersSearchField, 'grace');
+    client.pause(500);
     client.waitForElementVisible('.no-results', TIME_LIMIT, (e) => {
       client.assert.containsText('.no-results', 'No layers found!');
       client.click('.remove-filters');
@@ -258,11 +259,10 @@ module.exports = {
     client.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
       client.expect.elements(layersSearchRow).count.to.equal(10);
       client.assert.containsText(layerResultsCountText, 'Showing 10 results(5 hidden by filters)');
-      // TODO enable after fix
-      // client.click(layerPickerBackButton);
-      // client.click(addLayers).waitForElementVisible(layerBrowseList, TIME_LIMIT, (e) => {
-      //   client.expect(layerBrowseDetail).to.be.present;
-      // });
+      client.click(layerPickerBackButton);
+      client.waitForElementVisible(layerBrowseList, TIME_LIMIT, (e) => {
+        client.expect.element(layerBrowseDetail).to.be.present;
+      });
       client.click(layersModalCloseButton);
     });
   },
