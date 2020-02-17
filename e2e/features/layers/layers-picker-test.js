@@ -231,15 +231,16 @@ module.exports = {
   'When no results returned due to filters, help text shows and user can click to remove all': (client) => {
     client.url(client.globals.url + '?t=2020-2-14');
     client.click(addLayers);
-    client.setValue(layersSearchField, 'grace');
-    client.pause(500);
-    client.waitForElementVisible('.no-results', TIME_LIMIT, (e) => {
-      client.assert.containsText('.no-results', 'No layers found!');
-      client.click('.remove-filters');
-      client.waitForElementVisible(layersSearchRow, TIME_LIMIT, (e) => {
-        client.expect.elements(layersSearchRow).count.to.equal(1);
-        client.assert.containsText(layerDetailHeader, 'Liquid Water Equivalent Thickness');
-        client.click(layersModalCloseButton);
+    client.waitForElementVisible(layersSearchField, TIME_LIMIT, (e) => {
+      client.setValue(layersSearchField, 'grace');
+      client.waitForElementVisible('.no-results', TIME_LIMIT, (e) => {
+        client.assert.containsText('.no-results', 'No layers found!');
+        client.click('.remove-filters');
+        client.waitForElementVisible(layersSearchRow, TIME_LIMIT, (e) => {
+          client.expect.elements(layersSearchRow).count.to.equal(1);
+          client.assert.containsText(layerDetailHeader, 'Liquid Water Equivalent Thickness');
+          client.click(layersModalCloseButton);
+        });
       });
     });
   },
