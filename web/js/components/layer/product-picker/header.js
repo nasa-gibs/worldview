@@ -61,9 +61,10 @@ class ProductPickerHeader extends React.Component {
     } = this.props;
     const isSearching = listType === 'search';
     const categoryId = category && category.id;
-    const showBackButton = categoryId !== 'featured-all' &&
+    const showBackButton = isSearching ||
+      (categoryId !== 'featured-all' &&
       selectedProjection === 'geographic' &&
-      listType !== 'category';
+      listType !== 'category');
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
     const BreadcrubEl =
       <Breadcrumb tag="nav" className="layer-bread-crumb">
