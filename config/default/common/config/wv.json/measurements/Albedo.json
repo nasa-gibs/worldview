@@ -11,7 +11,7 @@
                     "description": "modis/Albedo",
                     "image": "",
                     "settings": [
-                        "MODIS_Combined_L3_Albedo_Daily"
+                        "MODIS_Combined_L3_White_Sky_Albedo_Daily"
                     ]
                 }
             }
