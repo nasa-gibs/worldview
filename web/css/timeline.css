@@ -632,11 +632,11 @@ button:focus {
   color: #fff;
   border: thin solid #333;
   font-size: 23px;
-  padding: 13px 8px;
+  padding: 14px 8px;
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer;
-  height: 42px;
+  height: 44px;
   font-family: 'Roboto Mono', monospace;
 }
 .datepicker-modal {
@@ -656,7 +656,7 @@ button:focus {
   white-space: nowrap;
   background: rgba(40, 40, 40, 0.85);
   border: thin solid #333;
-  padding: 3px;
+  padding: 1px;
   border-radius: 5px;
   cursor: pointer;
 }
