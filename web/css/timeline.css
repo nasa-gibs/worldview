@@ -653,8 +653,7 @@ button:focus {
 /* Mobile date change arrows */
 .mobile-date-change-arrows-btn {
   position: absolute;
-  left: 120px;
-  bottom: 10px;
+  white-space: nowrap;
   background: rgba(40, 40, 40, 0.85);
   border: thin solid #333;
   padding: 3px;
