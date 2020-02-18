@@ -103,8 +103,11 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec, layers, layerConfig, overlayLength) {
+export function addLayer(id, spec, layers, layerConfig, overlayLength, projection) {
   layers = lodashCloneDeep(layers);
+  if (projection) {
+    layers = layers.filter(layer => layer.projections[projection]);
+  }
   if (
     lodashFind(layers, {
       id: id
