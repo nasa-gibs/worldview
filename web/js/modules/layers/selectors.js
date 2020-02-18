@@ -133,7 +133,8 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   if (def.group === 'overlays') {
     layers.unshift(def);
   } else {
-    layers.splice(overlayLength, 0, def);
+    const overlaysLength = overlayLength || layers.filter(layer => layer.group === 'overlays').length;
+    layers.splice(overlaysLength, 0, def);
   }
   return layers;
 }
