@@ -659,6 +659,7 @@ button:focus {
   padding: 1px;
   border-radius: 5px;
   cursor: pointer;
+  height: 44px;
 }
 
 .datepicker.android-dark .datepicker-header {
