@@ -60,9 +60,8 @@
     }
     & span.layer-count {
       color: #fff;
-      z-index: 9999;
       position: relative;
-      top: 10px;
+      top: 9px;
       font-size: 18px;
       font-weight: 600;
       background: #333;

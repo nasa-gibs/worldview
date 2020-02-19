@@ -427,8 +427,8 @@
 
 .tour-in-progress .modal-body {
   color: #fff;
-  padding: 16px 20px;
-  overflow-y: scroll;
+  padding: 0;
+  overflow-y: auto;
   border-bottom: 2px solid #fff;
   -ms-flex: 1 1 25px;
 }
@@ -437,7 +437,11 @@
   font-size: 13px;
   line-height: 20px;
   font-weight: 400;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
+}
+
+.tour-in-progress .modal-body > div {
+  padding: 12px 8px 6px 12px;
 }
 
 .tour-in-progress .modal-body a {
@@ -470,7 +474,7 @@
 
 .tour-in-progress .modal-footer {
   border-radius: 0 0 0 8px;
-  padding: 12px;
+  padding: 0;
   min-height: 52px;
 }
 
@@ -540,6 +544,7 @@
   width: 220px;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin: 0 auto;
 }
 
 .tour-in-progress .step-previous {

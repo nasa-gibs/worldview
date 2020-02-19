@@ -228,7 +228,6 @@ button:focus {
 
 #zoom-buttons-group {
   position: relative;
-  width: 86px;
 }
 
 .button-action-group {
@@ -633,11 +632,11 @@ button:focus {
   color: #fff;
   border: thin solid #333;
   font-size: 23px;
-  padding: 13px 8px;
+  padding: 14px 8px;
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer;
-  height: 42px;
+  height: 44px;
   font-family: 'Roboto Mono', monospace;
 }
 .datepicker-modal {
@@ -649,6 +648,18 @@ button:focus {
     font-weight: 700;
     font-size: 18px;
   }
+}
+
+/* Mobile date change arrows */
+.mobile-date-change-arrows-btn {
+  position: absolute;
+  white-space: nowrap;
+  background: rgba(40, 40, 40, 0.85);
+  border: thin solid #333;
+  padding: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 44px;
 }
 
 .datepicker.android-dark .datepicker-header {

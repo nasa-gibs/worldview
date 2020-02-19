@@ -103,8 +103,11 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec, layers, layerConfig, overlayLength) {
+export function addLayer(id, spec, layers, layerConfig, overlayLength, projection) {
   layers = lodashCloneDeep(layers);
+  if (projection) {
+    layers = layers.filter(layer => layer.projections[projection]);
+  }
   if (
     lodashFind(layers, {
       id: id
@@ -133,7 +136,8 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   if (def.group === 'overlays') {
     layers.unshift(def);
   } else {
-    layers.splice(overlayLength, 0, def);
+    const overlaysLength = overlayLength || layers.filter(layer => layer.group === 'overlays').length;
+    layers.splice(overlaysLength, 0, def);
   }
   return layers;
 }

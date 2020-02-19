@@ -927,6 +927,8 @@ class Timeline extends React.Component {
       hideTimeline,
       timeScale,
       isSmallScreen,
+      isScreenWidthLessThan350,
+      isScreenWidthLessThan450,
       toggleActiveCompareState,
       parentOffset,
       isTourActive,
@@ -962,24 +964,60 @@ class Timeline extends React.Component {
       hasMoved
     } = this.state;
     const selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    // timeline open/closed styling
     const isTimelineHidden = timelineHidden || hideTimeline;
     const chevronDirection = isTimelineHidden ? 'left' : 'right';
+    // handle mobile size styling
+    const mobileLeft = hasSubdailyLayers
+      ? isScreenWidthLessThan450
+        ? '10px'
+        : '277px'
+      : isScreenWidthLessThan350
+        ? '10px'
+        : '180px';
+    const mobileBottom = (hasSubdailyLayers && isScreenWidthLessThan450) || isScreenWidthLessThan350
+      ? '65px'
+      : '10px';
     return (
       <div className="timeline-container">
-        {initialLoadComplete
-          ? <ErrorBoundary>
+        {initialLoadComplete &&
+          <ErrorBoundary>
             {isSmallScreen
-              ? <MobileDatePicker
-                date={selectedDate}
-                startDateLimit={timelineStartDateLimit}
-                endDateLimit={timelineEndDateLimit}
-                onDateChange={this.onDateChange}
-                hasSubdailyLayers={hasSubdailyLayers}
-              />
+            /* Mobile Timeline Size */
+              ? <div id="timeline-header">
+                <div id="date-selector-main">
+                  <MobileDatePicker
+                    date={selectedDate}
+                    startDateLimit={timelineStartDateLimit}
+                    endDateLimit={timelineEndDateLimit}
+                    onDateChange={this.onDateChange}
+                    hasSubdailyLayers={hasSubdailyLayers}
+                  />
+                </div>
+                <div className="mobile-date-change-arrows-btn"
+                  style={{
+                    left: mobileLeft,
+                    bottom: mobileBottom
+                  }}
+                >
+                  <div id="zoom-buttons-group">
+                    <DateChangeArrows
+                      leftArrowDown={this.throttleDecrementDate}
+                      leftArrowUp={this.stopLeftArrow}
+                      leftArrowDisabled={leftArrowDisabled}
+                      rightArrowDown={this.throttleIncrementDate}
+                      rightArrowUp={this.stopRightArrow}
+                      rightArrowDisabled={rightArrowDisabled}
+                    />
+                  </div>
+                </div>
+              </div>
+              /* Normal Timeline Size */
               : <section id="timeline" className="timeline-inner clearfix">
                 <div id="timeline-header"
                   className={hasSubdailyLayers ? 'subdaily' : ''}
                 >
+                  {/* Date Selector, Interval, Arrow Controls */}
                   <div id="date-selector-main">
                     <DateSelector
                       id={draggerSelected}
@@ -1013,7 +1051,13 @@ class Timeline extends React.Component {
                   <AnimationButton
                     clickAnimationButton={this.clickAnimationButton}
                     disabled={animationDisabled}
-                    title={isCompareModeActive ? 'Animation feature is deactivated when Compare feature is active' : isDataDownload ? 'Animation feature is deactivated when Data Download feature is active' : ''}
+                    title={
+                      isCompareModeActive
+                        ? 'Animation feature is deactivated when Compare feature is active'
+                        : isDataDownload
+                          ? 'Animation feature is deactivated when Data Download feature is active'
+                          : ''
+                    }
                   />
                 </div>
 
@@ -1081,8 +1125,8 @@ class Timeline extends React.Component {
                     this.state.animationStartLocation &&
                     this.state.animationStartLocationDate &&
                     this.state.animationEndLocation &&
-                    this.state.animationEndLocationDate
-                    ? <TimelineRangeSelector
+                    this.state.animationEndLocationDate &&
+                    <TimelineRangeSelector
                       axisWidth={axisWidth}
                       position={position}
                       transformX={transformX}
@@ -1097,11 +1141,10 @@ class Timeline extends React.Component {
                       updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
                       max={rangeSelectorMax}
                     />
-                    : null
                   }
 
-                  {frontDate
-                    ? <DraggerContainer
+                  {frontDate &&
+                    <DraggerContainer
                       axisWidth={axisWidth}
                       position={position}
                       transformX={transformX}
@@ -1124,11 +1167,10 @@ class Timeline extends React.Component {
                       isCompareModeActive={isCompareModeActive}
                       isDraggerDragging={isDraggerDragging}
                       isAnimationPlaying={isAnimationPlaying}
-                    />
-                    : null }
+                    /> }
 
-                  {!isTimelineDragging
-                    ? <DateToolTip
+                  {!isTimelineDragging &&
+                    <DateToolTip
                       axisWidth={axisWidth}
                       leftOffset={leftOffset}
                       hoverTime={hoverTime}
@@ -1141,11 +1183,10 @@ class Timeline extends React.Component {
                       showDraggerTime={showDraggerTime}
                       showHoverLine={showHoverLine}
                     />
-                    : null
                   }
                 </div>
 
-                {/* custom interval selector */}
+                {/* Custom Interval Selector Widget */}
                 <CustomIntervalSelectorWidget
                   customDelta={customIntervalValue}
                   customIntervalZoomLevel={customIntervalZoomLevel}
@@ -1154,7 +1195,7 @@ class Timeline extends React.Component {
                   hasSubdailyLayers={hasSubdailyLayers}
                 />
 
-                {/* Zoom Level Change */}
+                {/* Zoom Level Change Controls */}
                 <AxisTimeScaleChange
                   timeScale={timeScale}
                   changeTimeScale={this.changeTimeScale}
@@ -1172,7 +1213,7 @@ class Timeline extends React.Component {
               </section>
             }
           </ErrorBoundary>
-          : null }
+        }
       </div>
     );
   }
@@ -1207,6 +1248,8 @@ function mapStateToProps(state) {
   const { isCompareA, activeString } = compare;
   const isCompareModeActive = compare.active;
   const isSmallScreen = lessThan.medium;
+  const isScreenWidthLessThan350 = screenWidth < 350;
+  const isScreenWidthLessThan450 = screenWidth < 450;
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
 
   // handle reset of timescale and intervals if not subdaily
@@ -1260,6 +1303,8 @@ function mapStateToProps(state) {
     appNow,
     isTourActive: tour.active,
     isSmallScreen,
+    isScreenWidthLessThan350,
+    isScreenWidthLessThan450,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
     customSelected,
@@ -1373,6 +1418,8 @@ Timeline.propTypes = {
   isCompareModeActive: PropTypes.bool,
   isDataDownload: PropTypes.bool,
   isGifActive: PropTypes.bool,
+  isScreenWidthLessThan350: PropTypes.bool,
+  isScreenWidthLessThan450: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
