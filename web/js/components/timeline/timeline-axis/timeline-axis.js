@@ -48,14 +48,13 @@ class TimelineAxis extends Component {
   /**
   * @desc main function to update axis scale, time range, grids tiles/text, dragger A/B positions, animation start/end draggers
   * @param {String} inputDate
-  * @param {String} timeScale
-  * @param {Number} axisWidthInput
+  * @param {String} updatedTimeScale
   * @param {Number} leftOffsetFixedCoeff
   * @param {Boolean} hoverChange
   * @param {String} previousTimeScale - limited use for hover timeScale change
   * @returns {void}
   */
-  updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange, previousTimeScale) => {
+  updateScale = (inputDate, timeScale, leftOffsetFixedCoeff, hoverChange, previousTimeScale) => {
     const {
       dateA,
       dateB,
@@ -73,11 +72,11 @@ class TimelineAxis extends Component {
     } = this.props;
     const options = timeScaleOptions[timeScale].timeAxis;
     const gridWidth = options.gridWidth;
-    const timelineAxisWidth = axisWidthInput || axisWidth;
+    const timelineAxisWidth = axisWidth;
     const hoverLeftOffset = leftOffsetFixedCoeff
       ? timelineAxisWidth * leftOffsetFixedCoeff
       : leftOffset === 0
-        ? timelineAxisWidth * 0.80
+        ? timelineAxisWidth * 0.8
         : leftOffset;
 
     const numberOfVisibleTiles = Number((timelineAxisWidth / gridWidth).toFixed(8));
@@ -211,10 +210,7 @@ class TimelineAxis extends Component {
 
     // get axis position
     let position;
-    // axisWidthInput conditional in place to handle resize centering of position
-    if (axisWidthInput) {
-      position = midPoint;
-    } else if (timeScale === 'year') {
+    if (timeScale === 'year') {
       position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2);
     } else if (timeScale === 'month') {
       const pixelsToAddToDraggerNew = Math.abs(frontDate.diff(hoverTimeDate, timeScale, true) * gridWidth);
@@ -234,7 +230,7 @@ class TimelineAxis extends Component {
     let leftBound = diffFromEndDateLimit * gridWidth + midPoint + timelineAxisWidth;
     let rightBound = diffFromStartDateLimit * gridWidth + midPoint * 1.5 + timelineAxisWidth * 0.25;
     if (isYearOrMonth) {
-      leftBound = diffFromEndDateLimit * gridWidth + pixelsToAdd + 2 + timelineAxisWidth * 0.80;
+      leftBound = diffFromEndDateLimit * gridWidth + pixelsToAdd + 2 + timelineAxisWidth * 0.8;
       rightBound = timelineAxisWidth * 0.25 + pixelsToAdd + 2;
     }
 
@@ -483,7 +479,7 @@ class TimelineAxis extends Component {
       timeScale
     } = this.props;
     const time = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
-    this.updateScale(time, timeScale, false, 0.50);
+    this.updateScale(time, timeScale, 0.5);
   }
 
   componentDidUpdate(prevProps) {
@@ -511,23 +507,23 @@ class TimelineAxis extends Component {
       if (this.state.wheelZoom === true) {
         draggerDate = hoverTime;
       } else {
-        leftOffset = 0.80;
+        leftOffset = 0.8;
       }
       // add updateTimeScale flag to indicate showHover should not fire immediately
       this.setState({
         updatedTimeScale: true
       });
-      this.updateScale(draggerDate, timeScale, null, leftOffset, true, prevProps.timeScale);
+      this.updateScale(draggerDate, timeScale, leftOffset, true, prevProps.timeScale);
     }
 
     // update axis on browser width change
     if (axisWidth !== prevProps.axisWidth) {
-      this.updateScale(draggerDate, timeScale, axisWidth, 0.80);
+      this.updateScale(draggerDate, timeScale, 0.5);
     }
 
     // update scale if end time limit has changed (e.g. time has elapsed since the app was started)
     if (timelineEndDateLimit !== prevProps.timelineEndDateLimit && !isAnimationPlaying && !isDraggerDragging && !isTimelineDragging) {
-      this.updateScale(draggerDate, timeScale, null, 0.50);
+      this.updateScale(draggerDate, timeScale, 0.5);
     }
 
     // handle switching A/B dragger axis focus if switched from A/B sidebar tabs
@@ -552,7 +548,7 @@ class TimelineAxis extends Component {
       const selectedDate = draggerSelected === 'selected' ? dateA : dateB;
       const draggerCheck = this.checkDraggerMoveOrUpdateScale(selectedDate);
       if (!draggerCheck.withinRange) {
-        this.updateScale(selectedDate, timeScale, null, 0.5);
+        this.updateScale(selectedDate, timeScale, 0.5);
       }
     } else {
       // handle dragger and potential axis updates
@@ -586,7 +582,7 @@ class TimelineAxis extends Component {
       if (previousDate === draggerTime) {
         // handle tour url date change
         if (isTourActive && !isAnimationPlaying) {
-          this.updateScale(date, timeScale, null, 0.5);
+          this.updateScale(date, timeScale, 0.5);
         } else {
           // handle animation dragger update
           const draggerCheck = this.checkDraggerMoveOrUpdateScale(previousDate, isDraggerB);
@@ -673,7 +669,7 @@ class TimelineAxis extends Component {
           ? 0.5
           : 0.25
         : 0.75;
-    this.updateScale(date, timeScale, null, leftOffsetFixedCoeff);
+    this.updateScale(date, timeScale, leftOffsetFixedCoeff);
   }
 
   // #### Drag/mouse handlers ####
