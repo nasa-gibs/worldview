@@ -395,7 +395,8 @@ class ProductPicker extends React.Component {
       selectedProjection,
       category,
       listType,
-      selectedLayer
+      selectedLayer,
+      showPreviewImage
     } = this.props;
     const isSearching = listType === 'search';
     const selectedLayerActive = selectedLayer &&
@@ -416,6 +417,7 @@ class ProductPicker extends React.Component {
               addLayer={addLayer}
               removeLayer={removeLayer}
               selectedProjection={selectedProjection}
+              showPreviewImage={showPreviewImage}
               showMetadataForLayer={this.showMetadataForLayer.bind(this)}>
             </LayerMetadataDetail>
           </Scrollbars>
@@ -579,6 +581,7 @@ ProductPicker.propTypes = {
   selectedMeasurementSource: PropTypes.object,
   selectedMeasurementSourceIndex: PropTypes.number,
   selectedProjection: PropTypes.string,
+  showPreviewImage: PropTypes.bool,
   update: PropTypes.func,
   updateScrollPosition: PropTypes.func,
   width: PropTypes.number
@@ -637,6 +640,7 @@ function mapStateToProps(state, ownProps) {
     allLayers,
     activeLayers,
     selectedProjection: proj.id,
+    showPreviewImage: config.features.previewSnapshots,
     filterProjections: layer => {
       return !layer.projections[proj.id];
     },
