@@ -4,9 +4,12 @@ import requests
 from datetime import datetime
 from datetime import timedelta
 import json
+import os
 
 override_dates_dict = {}
 bad_snapshots = []
+total_success_count = 0
+total_failure_count = 0
 time_format = "%Y-%m-%dT%H:%M:%SZ"
 snapshots_url = ''
 param_dict = {
@@ -49,18 +52,20 @@ reference_layers = {
 current = datetime.now()
 
 
-def track_bad_snapshots(layer_id, projection, request_url, size):
+def track_bad_snapshots(layer_id, projection, request, img_file):
   global bad_snapshots
+
   # File sizes with SCAR/OSM Land_Water_Map layer only
   arctic_bad_size = 9949
   antarctic_bad_size = 4060
   geographic_bad_size = 12088
+  size = img_file.tell()
 
   if size in [ geographic_bad_size, arctic_bad_size, antarctic_bad_size ]:
     bad_snapshots.append({
       'id': layer_id,
       'projection': projection,
-      'url': request_url
+      'url': request.url
     })
 
 
@@ -122,41 +127,52 @@ def get_time_param(projection, layer_id, layer, params):
 
 
 def get_snapshots(layer):
+  global total_failure_count
+  global total_success_count
   for projection, proj_dict in layer['projections'].items():
     reference_layer = reference_layers[projection]
 
     # Sometimes a layer id is provided per projection (e.g. Land Mask layers)
+    # We need to use this layer id to request the layer from WVS/GIBS
+    # But, we need to use the WV id as the file name (since that's how we will look up the image in WV)
     if (proj_dict.get('layer')):
-      layer_id = proj_dict.get('layer')
+      gibs_layer_id = proj_dict.get('layer')
+      wv_layer_id = layer['id']
     else:
-      layer_id = layer['id']
+      gibs_layer_id = wv_layer_id = layer['id']
 
     params = { **param_dict['base'], **param_dict[projection] }
-    get_time_param(projection, layer_id, layer, params)
+    get_time_param(projection, wv_layer_id, layer, params)
 
-    if (layer_id is not reference_layer and layer_id not in standalone_layers):
-      params['LAYERS'] = (reference_layer + ',' + layer_id)
+    if (gibs_layer_id is not reference_layer and gibs_layer_id not in standalone_layers):
+      params['LAYERS'] = (reference_layer + ',' + gibs_layer_id)
       params['OPACITIES'] = '0.50,1'
     else:
-      params['LAYERS'] = layer_id
+      params['LAYERS'] = gibs_layer_id
 
-    dest_file_name = dest_img_dir + projection + '/' + layer_id + '.jpg'
+    dest_file_name = dest_img_dir + projection + '/' + wv_layer_id + '.jpg'
 
     # Only get images that we don't have already
     if (os.path.exists(dest_file_name)):
       continue
 
     try:
-      with open(dest_file_name, 'xb') as image_file:
-        image_req = requests.get(snapshots_url, params=params)
-        image_file.write(image_req.content)
-        status_text = 'SUCCESS' if image_req.status_code is 200 else 'ERROR'
-        print('\nResult: ', status_text, '-', image_req.status_code)
-        print('Layer:', layer_id)
-        print('URL: ', image_req.url)
-        if (layer_id == reference_layers[projection]):
-          continue
-        track_bad_snapshots(layer_id, projection, image_req.url, image_file.tell())
+      image_req = requests.get(snapshots_url, params=params)
+      if image_req.status_code is 200:
+        status_text = 'SUCCESS'
+        total_success_count += 1
+        with open(dest_file_name, 'xb') as image_file:
+          image_file.write(image_req.content)
+          if (gibs_layer_id == reference_layers[projection]):
+            continue
+          track_bad_snapshots(wv_layer_id, projection, image_req, image_file)
+      else:
+        total_failure_count += 1
+        status_text = 'ERROR'
+      print('\nResult: ', status_text, '-', image_req.status_code)
+      print('Layer:', wv_layer_id)
+      print('URL: ', image_req.url)
+
     except Exception as e:
       print('ERROR:', e)
 
@@ -189,3 +205,10 @@ if len(bad_snapshots) > 0:
     print('\n' + bad_layer['projection'])
     print(bad_layer['id'])
     print(bad_layer['url'])
+
+if total_success_count > 0:
+  print('\nSuccessfully retrieved', total_success_count, 'snapshots!')
+if total_failure_count > 0:
+  print('\nWARNING: Failed to retrieve', total_failure_count ,'snapshots!')
+if total_failure_count is 0 and total_success_count is 0:
+  print('\nNo snapshots were retrieved.  All layers found in wv.json have existing preview images!')
