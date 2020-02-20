@@ -4,9 +4,13 @@ Some of these features require CGI scripts to execute on your server. In order f
 to function, make sure your server is configured to allow the execution of
 CGI files. Next, enable these features in your configuration file.
 
+## Layer Preview Images
+
+By default during the build process we try to fetch images of layers from our Snapshots application to show as previews in the layer picker component.  However, this will only work for layers that are present in NASA GIBS (Global Imagery Browse Service).  If you are serving your own layers, you will likely wish to disable this feature by setting `"previewSnapshots": false` in `config/default/common/features.json`.
+
 ## Natural Events
 
-This feature provides natural events queried by Earth Observatory Natural Event Tracker (EONET) by default. To enable, edit `options/common/features.json` and set:
+This feature provides natural events queried by Earth Observatory Natural Event Tracker (EONET) by default. To enable, edit `config/default/common/features.json` and set:
 
 ```
 "naturalEvents": {
@@ -20,14 +24,14 @@ to disable, set:
 ## Data Download
 
 This feature uses CGI scripts to query the CMR API on the server. To enable,
-edit `options/common/features.json` and set `"dataDownload": true`.
+edit `config/default/common/features.json` and set `"dataDownload": true`.
 
 ## URL Shortening
 
 This feature uses
 [bit.ly](http://bit.ly) to shorten links. Follow these steps to enable it:
 
-* Edit `options/common/features.json` and set `"urlShortening": true`.
+* Edit `config/default/common/features.json` and set `"urlShortening": true`.
 * Get a login and API key from [bit.ly](http://bit.ly).
 * Create `build/options/bitly.json` with the following contents (replacing `your_login` and `your_key` with the appropriate values);
 
