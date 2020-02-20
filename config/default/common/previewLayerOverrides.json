@@ -65,5 +65,8 @@
   "SSMI_DMSP_F11_Water_Vapor_Over_Oceans_Ascending": "2000-04-21T00:00:00Z",
   "SSMI_DMSP_F11_Water_Vapor_Over_Oceans_Descending": "2000-04-21T00:00:00Z",
   "SSMI_DMSP_F11_Wind_Speed_Over_Oceans_Ascending": "2000-04-21T00:00:00Z",
-  "SSMI_DMSP_F11_Wind_Speed_Over_Oceans_Descending": "2000-04-21T00:00:00Z"
+  "SSMI_DMSP_F11_Wind_Speed_Over_Oceans_Descending": "2000-04-21T00:00:00Z",
+  "VIIRS_NOAA20_Thermal_Anomalies_375m_All": "2020-01-29T00:00:00Z",
+  "VIIRS_NOAA20_Thermal_Anomalies_375m_Day": "2020-01-29T00:00:00Z",
+  "VIIRS_NOAA20_Thermal_Anomalies_375m_Night": "2020-01-29T00:00:00Z"
 }
