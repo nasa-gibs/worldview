@@ -1,10 +1,19 @@
+#!/usr/bin/env python
+
 from concurrent.futures import ThreadPoolExecutor
-from time import sleep
+from optparse import OptionParser
 import requests
 from datetime import datetime
 from datetime import timedelta
 import json
 import os
+import sys
+
+prog = os.path.basename(__file__)
+parser = OptionParser(usage="Usage: %s <wv.json> <overrides_file>" % prog)
+(options, args) = parser.parse_args()
+wv_json_file = args[0]
+overrides_file = args[1]
 
 override_dates_dict = {}
 bad_snapshots = []
@@ -169,24 +178,28 @@ def get_snapshots(layer):
       else:
         total_failure_count += 1
         status_text = 'ERROR'
-      print('\nResult: ', status_text, '-', image_req.status_code)
-      print('Layer:', wv_layer_id)
-      print('URL: ', image_req.url)
+      print("\n%s: Result: %s - %s" % (prog, status_text, image_req.status_code))
+      print("%s: Layer: %s" % (prog, wv_layer_id))
+      print("%s: URL: %s" % (prog, image_req.url))
 
     except Exception as e:
-      print('ERROR:', e)
+      print("%s ERROR: %s" % (prog, e))
 
 
 if __name__ == "__main__":
 
   # Allow manual configuration of layer ID to specific date to generate desired preview
-  with open('./config/default/common/previewLayerOverrides.json', 'rt') as overrides_json:
+  with open(overrides_file, 'rt') as overrides_json:
     override_dates_dict = json.load(overrides_json)
 
-  with open('./build/options/config/wv.json', 'rt') as wv_json:
+  with open(wv_json_file, 'rt') as wv_json:
     wv_json_dict = json.load(wv_json)
     layers = wv_json_dict['layers']
     snapshots_url = wv_json_dict['features']['imageDownload']['url']
+    fetch_snapshots = wv_json_dict['features']['previewSnapshots']
+    if not fetch_snapshots:
+      print("%s: Layer preview fetching disabled.  Exiting." % prog)
+      sys.exit()
 
   futures = []
   with ThreadPoolExecutor() as executor:
@@ -197,18 +210,17 @@ if __name__ == "__main__":
       # Need to call result() on each future to catch any raised exceptions
       f.result()
     except Exception as e:
-      print(e)
+      print("%s:" % (e))
 
 if len(bad_snapshots) > 0:
-  print('\nWARNING: The number of "blank" snapshots was:', len(bad_snapshots))
+  print("\n%s: WARNING: %s snapshots returned no content.  See below for details: " % (prog, len(bad_snapshots)))
   for bad_layer in bad_snapshots:
-    print('\n' + bad_layer['projection'])
-    print(bad_layer['id'])
-    print(bad_layer['url'])
+    print("\n\t Layer: %s" % bad_layer['id'])
+    print("\t URL: %s" % (bad_layer['url']))
 
 if total_success_count > 0:
-  print('\nSuccessfully retrieved', total_success_count, 'snapshots!')
+  print('\n%s: Successfully retrieved %s snapshots!' % (prog, total_success_count))
 if total_failure_count > 0:
-  print('\nWARNING: Failed to retrieve', total_failure_count ,'snapshots!')
+  print('\n%s: WARNING: Failed to retrieve %s snapshots!' % (prog, total_failure_count))
 if total_failure_count is 0 and total_success_count is 0:
-  print('\nNo snapshots were retrieved.  All layers found in wv.json have existing preview images!')
+  print('\n%s: No snapshots were retrieved.  All layers found in wv.json have existing preview images!' % (prog))

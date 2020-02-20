@@ -123,13 +123,14 @@ class LayerMetadataDetail extends React.Component {
         </div>
       );
     }
-    const { layer, selectedProjection, isActive } = this.props;
+    const { layer, selectedProjection, isActive, showPreviewImage } = this.props;
     const { title, subtitle, track, metadata } = layer;
     const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
     const previewUrl = 'images/layers/previews/' + selectedProjection + '/' + layer.id + '.jpg';
     const buttonText = isActive ? 'Remove Layer' : 'Add Layer';
     const btnClass = isActive ? 'add-to-map-btn text-center is-active' : 'add-to-map-btn text-center';
     const btnIconClass = isActive ? 'fa fa-minus' : 'fa fa-plus';
+
     return (
       <div className="layers-all-layer">
         <div className="layers-all-header">
@@ -141,11 +142,13 @@ class LayerMetadataDetail extends React.Component {
             </Button>
           */}
         </div>
-        <div className="text-center">
-          <a href={previewUrl} rel="noopener noreferrer" target="_blank">
-            <img className="img-fluid layer-preview" src={previewUrl} />
-          </a>
-        </div>
+        {showPreviewImage &&
+          <div className="text-center">
+            <a href={previewUrl} rel="noopener noreferrer" target="_blank">
+              <img className="img-fluid layer-preview" src={previewUrl} />
+            </a>
+          </div>
+        }
         <div className="text-center">
           <Button className={btnClass} onClick={this.toggleLayer.bind(this)}>
             <i className={btnIconClass} aria-hidden="true"></i>
@@ -167,7 +170,8 @@ LayerMetadataDetail.propTypes = {
   layer: PropTypes.object,
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,
-  showMetadataForLayer: PropTypes.func
+  showMetadataForLayer: PropTypes.func,
+  showPreviewImage: PropTypes.bool
 };
 
 export default LayerMetadataDetail;
