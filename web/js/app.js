@@ -154,7 +154,7 @@ class App extends React.Component {
         // get user ip address using https://www.ipify.org/ api
         const response = await fetch('https://api.ipify.org?format=json');
         const json = await response.json();
-        const ipAddress = await json.ip;
+        const ipAddress = json.ip;
 
         googleTagManager.pushEvent({
           event: 'ipAddress',
