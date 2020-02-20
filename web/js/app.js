@@ -139,7 +139,19 @@ class App extends React.Component {
     config = self.props.config;
     config.parameters = state;
 
-    const main = async function() {
+    // get user IP address for GTM/GA using https://www.ipify.org/ API
+    const getIpAddress = async() => {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const json = await response.json();
+      const ipAddress = json.ip;
+
+      googleTagManager.pushEvent({
+        event: 'ipAddress',
+        ipAddress: ipAddress
+      });
+    };
+
+    const main = function() {
       const models = self.props.models;
 
       // Load any additional scripts as needed
@@ -150,16 +162,7 @@ class App extends React.Component {
       }
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
-
-        // get user ip address using https://www.ipify.org/ api
-        const response = await fetch('https://api.ipify.org?format=json');
-        const json = await response.json();
-        const ipAddress = json.ip;
-
-        googleTagManager.pushEvent({
-          event: 'ipAddress',
-          ipAddress: ipAddress
-        });
+        getIpAddress();
       }
 
       // Console notifications
