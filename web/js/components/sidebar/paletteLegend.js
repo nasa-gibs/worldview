@@ -16,6 +16,7 @@ class PaletteLegend extends React.Component {
       colorHex: props.colorHex,
       isHoveringCanvas: props.isHoveringCanvas,
       width: this.props.width,
+
       scrollContainerEl: null
     };
   }
@@ -42,8 +43,8 @@ class PaletteLegend extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Only updates when layer options/settings have changed
-    if (!lodashIsEqual(this.props.layer, prevProps.layer)) {
+    // Only updates when layer options/settings have changed or if ZOT changes the width of the palette
+    if (!lodashIsEqual(this.props.layer, prevProps.layer) || (prevProps.width !== this.props.width)) {
       this.updateCanvas();
     }
   }
