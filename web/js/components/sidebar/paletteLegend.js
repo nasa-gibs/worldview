@@ -42,7 +42,7 @@ class PaletteLegend extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     // Only updates when layer options/settings have changed or if ZOT changes the width of the palette
     if (!lodashIsEqual(this.props.layer, prevProps.layer) || (prevProps.width !== this.props.width)) {
       this.updateCanvas();
