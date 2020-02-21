@@ -16,7 +16,7 @@ module.exports = {
     client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
   },
 
-  // verify timescale is expanded and can be opened/closed
+  // verify timescale is expanded by default and can be opened/closed
   'Timeline is expanded by default and closes/reopen on clicking timeline chevrons': client => {
     client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
     client.expect.element('#timeline-footer').to.be.visible;
@@ -33,10 +33,42 @@ module.exports = {
     client.end();
   },
 
+  // verify default MMM YYYY format is displayed on axis
+  'verify default MMM YYYY format is displayed on axis': client => {
+    client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
+    client.assert.elementPresent('.axis-grid-text-day');
+    client.assert.elementPresent('.axis-grid-text-year');
+  },
+
   // verify default 1 day interval
   'Interval defaults to 1 DAY': client => {
     client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
     client.assert.containsText('#current-interval', '1 DAY');
+  },
+
+  // change to month zoom level
+  'Change to month zoom level and axis changes': client => {
+    client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
+    client
+      .click('.zoom-level-change div.date-arrows.date-arrow-up')
+      .pause(500);
+    client.assert.elementPresent('.axis-grid-text-month');
+    client.assert.elementNotPresent('.axis-grid-text-day');
+    client.assert.containsText('#current-zoom', 'MONTH');
+  },
+
+  // change to year zoom level
+  'Change to year zoom level and axis changes': client => {
+    client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
+    client
+      .click('.zoom-level-change div.date-arrows.date-arrow-up')
+      .pause(500);
+    client
+      .click('.zoom-level-change div.date-arrows.date-arrow-up')
+      .pause(500);
+    client.assert.elementPresent('.axis-grid-text-year');
+    client.assert.elementNotPresent('.axis-grid-text-month');
+    client.assert.containsText('#current-zoom', 'YEAR');
   },
 
   // verify subdaily default year, month, day, hour, minute, and custom intervals
@@ -147,13 +179,13 @@ module.exports = {
   },
 
   // verify default left arrow enabled since loaded on current day
-  'Left timeline arrow will not be disabled': client => {
+  'Left timeline arrow will not be disabled by default': client => {
     client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
     client.assert.cssClassNotPresent('#left-arrow-group', 'button-disabled');
   },
 
   // verify default right arrow disabled since loaded on current day
-  'Right timeline arrow will be disabled': client => {
+  'Right timeline arrow will be disabled by default': client => {
     client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
     client.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
   },
