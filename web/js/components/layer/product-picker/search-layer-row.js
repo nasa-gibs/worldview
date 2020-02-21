@@ -85,7 +85,7 @@ class LayerRow extends React.Component {
     const checkboxClass = checked ? 'wv-checkbox checked' : 'wv-checkbox';
 
     return (
-      <div className={rowClass}>
+      <div id={layer.id + '-search-row'} className={rowClass}>
         <div className={checkboxClass}>
           <input
             type="checkbox"

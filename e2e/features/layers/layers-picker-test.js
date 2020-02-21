@@ -1,6 +1,7 @@
+const { assertCategories } = require('../../reuseables/layer-picker.js');
+
 const skipTour = require('../../reuseables/skip-tour.js');
 const layersSearchField = 'input#layers-search-input';
-const categoriesContainer = '.category-masonry-case';
 const categoriesNav = '#categories-nav';
 const allCategoryHeader = '#legacy-all .layer-category-name';
 const layersAll = '.layers-all-layer';
@@ -24,31 +25,13 @@ const correctedReflectanceCheckboxContainer = '#checkbox-case-MODIS_Aqua_Correct
 const correctedReflectanceChecked = '#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor .wv-checkbox.checked';
 const weldReflectanceCheckboxContainer = '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly';
 const weldUnavailableTooltipIcon = '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly #availability-info';
-const unavailableFilterToggle = '.header-filter-container .react-switch-label';
+const unavailableFilterToggle = '[for=unavailable-toggle]';
 const unavailableFilterTooltipIcon = '.header-filter-container #availability-filter';
 const scienceDisciplinesTab = '#categories-nav .nav-item:nth-child(2)';
 const aodSidebarLayer = '#active-MODIS_Combined_Value_Added_AOD';
 const aodMAIACSidebarLayer = '#active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
 const projectionButton = '#wv-proj-button';
 const TIME_LIMIT = 10000;
-
-const assertCategories = (client) => {
-  return () => {
-    client.expect.element(categoriesContainer).to.be.present;
-    client.expect.element('#legacy-all').to.be.present;
-    client.expect.element('#air-quality').to.be.present;
-    client.expect.element('#ash-plumes').to.be.present;
-    client.expect.element('#drought').to.be.present;
-    client.expect.element('#fires').to.be.present;
-    client.expect.element('#floods').to.be.present;
-    client.expect.element('#shipping').to.be.present;
-    client.expect.element('#dust-storms').to.be.present;
-    client.expect.element('#severe-storms').to.be.present;
-    client.expect.element('#smoke-plumes').to.be.present;
-    client.expect.element('#vegetation').to.be.present;
-    client.expect.element('#legacy-other').to.be.present;
-  };
-};
 
 module.exports = {
   before: (client) => {
