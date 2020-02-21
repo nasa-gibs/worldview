@@ -17,7 +17,7 @@
       "type": "wms",
 
       "transition": "true",
-      "startDate": "2020-01-19",
+      "startDate": "2020-01-29",
 
       "projections": {
         "arctic": {
