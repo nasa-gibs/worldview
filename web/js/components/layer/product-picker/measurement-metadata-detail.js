@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util.js';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMap, faMeteor } from '@fortawesome/free-solid-svg-icons';
+
 class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -79,7 +82,7 @@ class MeasurementMetadataDetail extends React.Component {
     if (!isMobile && !source) {
       return (
         <div className="no-results">
-          <i className="fa fa-map" aria-hidden="true"></i>
+          <FontAwesomeIcon icon={faMap} />
           <h3> {categoryTitle} </h3>
           <h5> Select a measurement to view details here!</h5>
         </div>
@@ -90,7 +93,7 @@ class MeasurementMetadataDetail extends React.Component {
     if (!description) {
       return (
         <div className="no-results">
-          <i className="fa fa-meteor" aria-hidden="true"></i>
+          <FontAwesomeIcon icon={faMeteor} />
           <h3> No metadata found. </h3>
         </div>
       );

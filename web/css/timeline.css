@@ -21,6 +21,7 @@ button:focus {
 }
 
 #timeline-header {
+  position: relative;
   margin-top: 2px;
   min-width: 310px;
   display: inline-block;
@@ -161,12 +162,13 @@ button:focus {
   }
   & .button-action-group svg {
     position: absolute;
+  }
+  & #zoom-buttons-group .button-action-group svg {
     top: 50%;
     margin-top: -15px;
     left: 50%;
     margin-left: -12px;
   }
-
   & #left-arrow-group {
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
@@ -193,17 +195,15 @@ button:focus {
   }
 
   & .animate-button {
-    margin: 10px 0 0 10px;
+    position: absolute;
     height: 40px;
-    width: 40px;
+    width: 50px;
+    top: 18px;
+    right: 15px;
+    padding-left: 3px;
   }
-  & .animate-button .wv-animate {
-    color: #fff;
-    font-size: 2.5em;
-    margin: 5px 0 0 2px;
-  }
-  & .animate-button:hover .wv-animate {
-    color: #1a1a1a;
+  & .animate-button:hover svg.wv-animate path {
+    fill: #1a1a1a;
   }
   & .animate-button.wv-disabled-button {
     cursor: auto;
@@ -352,13 +352,13 @@ button:focus {
   }
 }
 
-.custom-interval-widget i.wv-close {
+.custom-interval-widget svg.svg-inline--fa {
   position: absolute;
   top: 5px;
   right: 5px;
 }
 
-.custom-interval-widget i.wv-close:hover {
+.custom-interval-widget svg.svg-inline--fa.wv-close:hover {
   color: #999;
   cursor: pointer;
 }

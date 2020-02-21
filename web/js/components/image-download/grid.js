@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../util/button';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 /*
  * A table that updates with image
  * data
@@ -18,7 +21,7 @@ export default class ResolutionTable extends React.Component {
           id="wv-image-size"
           className="wv-image-size wv-image-size-invalid grid-child"
         >
-          <i className="fa fa-times fa-fw" />
+          <FontAwesomeIcon icon={faTimes} fixedWidth />
           <span>{'~' + size + 'MB'}</span>
         </div>
       );

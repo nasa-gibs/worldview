@@ -99,7 +99,7 @@
     position: relative;
     width: 152px;
   }
-  & i.fa {
+  & svg.svg-inline--fa {
     position: absolute;
     &.wv-close {
       top: 9px;

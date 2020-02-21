@@ -383,7 +383,7 @@
   }
 }
 
-.search-row .layers-all-header .fa {
+.search-row .layers-all-header svg.svg-inline--fa {
   position: absolute;
   color: #ddd;
   font-size: 18px;
@@ -391,12 +391,12 @@
   right: 0;
   top: 0;
 }
-.selected .fa {
+.selected svg.svg-inline--fa {
   color: #888;
   transition: color 250ms linear;
 }
 
-.layers-all-layer .fa:hover {
+.layers-all-layer svg.svg-inline--fa:hover {
   cursor: pointer;
 }
 
@@ -553,7 +553,10 @@
     }
   }
   &.unavailable {
-    & .fa {
+    &:hover {
+      background: #3a3a3a;
+    }
+    & svg.svg-inline--fa {
       display: inline;
       color: #999;
       margin: 0 0 0 2px;
@@ -955,7 +958,7 @@
         padding: 2px;
       }
     }
-    & .fa {
+    & svg.svg-inline--fa {
       color: #eee;
       padding: 2px;
       margin-left: 6px;
@@ -994,7 +997,7 @@
 .no-results {
   text-align: center;
   margin-top: 40px;
-  & .fa, .fas {
+  & svg.svg-inline--fa {
     color: #777;
     font-size: 100px;
   }
@@ -1088,7 +1091,7 @@
       border: none;
       font-size: 20px;
     }
-    & .close-details .fa {
+    & .close-details svg.svg-inline--fa {
       color: #666;
     }
   }
@@ -1104,7 +1107,7 @@
     border-color: #b55a3c;
     border-width: 2px;
     color: #333;
-    .fa {
+    svg.svg-inline--fa {
       margin-right: 10px;
     }
     &:hover:not(.is-active) {

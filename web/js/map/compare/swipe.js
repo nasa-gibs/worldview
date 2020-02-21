@@ -2,6 +2,8 @@ import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
 
+import { faIconArrowsAltHSVGDomEl } from '../../map/fa-map-icons';
+
 var swipeOffset = null;
 var line = null;
 var bottomLayers = [];
@@ -139,7 +141,6 @@ var addLineOverlay = function(map) {
   var lineCaseEl = document.createElement('div');
   var draggerEl = document.createElement('div');
   var draggerCircleEl = document.createElement('div');
-  var iconEl = document.createElement('i');
   var firstLabel = document.createElement('span');
   var secondLabel = document.createElement('span');
   var windowWidth = util.browser.dimensions[0];
@@ -150,13 +151,12 @@ var addLineOverlay = function(map) {
   firstLabel.appendChild(document.createTextNode('A'));
   secondLabel.appendChild(document.createTextNode('B'));
 
-  iconEl.className = 'fas fa-arrows-alt-h';
   draggerEl.className = 'ab-swipe-dragger';
   lineCaseEl.className = 'ab-swipe-line';
   lineCaseEl.appendChild(firstLabel);
   lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(draggerCircleEl);
-  draggerCircleEl.appendChild(iconEl);
+  draggerCircleEl.insertAdjacentHTML('beforeend', faIconArrowsAltHSVGDomEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe

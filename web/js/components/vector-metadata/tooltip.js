@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import util from '../../util/util';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfo } from '@fortawesome/free-solid-svg-icons';
+
 export default class VectorMetaTooltip extends React.Component {
   constructor(props) {
     super(props);
@@ -38,8 +41,15 @@ export default class VectorMetaTooltip extends React.Component {
     const elId = util.cleanId(String('tooltip' + id + index));
 
     return (
-      <div className='vector-info-tooltip-case' onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} key={elId}>
-        <div id={elId} className='sub-case' ><i className="fa fa-info vector-info-icon cursor-pointer"></i></div>
+      <div
+        className='vector-info-tooltip-case'
+        onMouseEnter={this.mouseEnter}
+        onMouseLeave={this.mouseLeave}
+        key={elId}
+      >
+        <div id={elId} className='sub-case'>
+          <FontAwesomeIcon icon={faInfo} className="vector-info-icon cursor-pointer" />
+        </div>
         <Tooltip
           dangerouslySetInnerHTML={{ __html: description }}
           boundariesElement="window"

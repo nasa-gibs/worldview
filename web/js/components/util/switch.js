@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
 // https://upmostly.com/tutorials/build-a-react-switch-toggle-component
 const Switch = (props) => {
   const {
@@ -43,7 +46,7 @@ const Switch = (props) => {
         {label}
         {tooltip &&
           <>
-            <i id="availability-filter" className="fa fa-info-circle" />
+            <FontAwesomeIcon icon={faInfoCircle} id="availability-filter" />
             <Tooltip
               placement="right"
               isOpen={tooltipOpen}

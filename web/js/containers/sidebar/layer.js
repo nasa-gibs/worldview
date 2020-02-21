@@ -21,6 +21,10 @@ import {
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faSlidersH, faInfo, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
@@ -126,7 +130,7 @@ class Layer extends React.Component {
           className="button wv-layers-close"
           onClick={() => onRemoveClick(layer.id)}
         >
-          <i className="fa fa-times" />
+          <FontAwesomeIcon icon={faTimes} fixedWidth />
         </a>
         <a
           title={'Layer options for ' + title}
@@ -134,7 +138,7 @@ class Layer extends React.Component {
           onMouseDown={this.stopPropagation}
           onClick={() => onOptionsClick(layer, title)}
         >
-          <i className="fas fa-sliders-h wv-layers-options-icon" />
+          <FontAwesomeIcon icon={faSlidersH} className="wv-layers-options-icon" />
         </a>
         <a
           title={'Layer description for ' + title}
@@ -142,7 +146,7 @@ class Layer extends React.Component {
           onMouseDown={this.stopPropagation}
           onClick={() => onInfoClick(layer, title)}
         >
-          <i className="fa fa-info wv-layers-info-icon" />
+          <FontAwesomeIcon icon={faInfo} className="wv-layers-info-icon" />
         </a>
       </>
     );
@@ -183,10 +187,10 @@ class Layer extends React.Component {
         ? this.getDisabledTitle(layer)
         : 'Hide Layer';
     const visibilityIconClass = isDisabled
-      ? 'fas fa-ban layer-eye-icon'
+      ? faBan
       : !isVisible
-        ? 'far fa-eye-slash layer-eye-icon'
-        : 'far fa-eye layer-eye-icon';
+        ? faEyeSlash
+        : faEye;
 
     const zotTitle = zot
       ? 'Layer is overzoomed by ' + zot.toString() + 'x its maximum zoom level'
@@ -219,7 +223,7 @@ class Layer extends React.Component {
                 onClick={() => toggleVisibility(layer.id, !isVisible)}
                 title={visibilityTitle}
               >
-                <i className={visibilityIconClass} />
+                <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
               </a>
 
               <div

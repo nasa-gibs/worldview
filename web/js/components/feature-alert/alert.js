@@ -27,7 +27,7 @@ class FeaturedAlert extends React.Component {
     //   <AlertUtil
     //     id={'geostationary-alert'}
     //     isOpen={showAlert}
-    //     iconClassName='fa fa-layer-group fa-fw'
+    //     iconClassName='faLayerGroup'
     //     onClick={this.props.showModal.bind(this)}
     //     onDismiss={this.dismissAlert.bind(this)}
     //     message="Check out our new geostationary layers!"

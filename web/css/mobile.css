@@ -51,7 +51,7 @@
     background-image: none;
     border-radius: 5px;
     top: 58px;
-    & .fa {
+    & svg.svg-inline--fa {
       font-size: 33px;
       position: absolute;
       left: 10px;

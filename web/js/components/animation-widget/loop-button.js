@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRetweet } from '@fortawesome/free-solid-svg-icons';
+
 /*
  * @class LoopButton
  * @extends React.Component
@@ -17,7 +20,7 @@ class LoopButton extends React.Component {
         }
         onClick={this.props.onLoop}
       >
-        <i className="fa fa-retweet wv-animation-widget-icon" />
+        <FontAwesomeIcon icon={faRetweet} className="wv-animation-widget-icon" />
       </a>
     );
   }

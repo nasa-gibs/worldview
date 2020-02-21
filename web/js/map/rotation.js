@@ -1,6 +1,7 @@
 import 'jquery-ui-bundle/jquery-ui';
 import util from '../util/util';
 import { debounce } from 'lodash';
+import { faIconUndoSVGDomEl, faIconRedoSVGDomEl } from './fa-map-icons';
 
 export function MapRotate(ui, models, store) {
   this.evts = util.events();
@@ -41,7 +42,8 @@ export function MapRotate(ui, models, store) {
         'title',
         'You may also rotate by holding Alt and dragging the mouse'
       );
-    var $lefticon = $('<i></i>').addClass('fa fa-undo');
+    // var $lefticon = $('<svg></svg>').addClass('fa fa-undo');
+    var $lefticon = $(faIconUndoSVGDomEl);
 
     var $rotateRightButton = $('<button></button>')
       .addClass('wv-map-rotate-right wv-map-zoom')
@@ -49,7 +51,8 @@ export function MapRotate(ui, models, store) {
         'title',
         'You may also rotate by holding Alt and dragging the mouse'
       );
-    var $righticon = $('<i></i>').addClass('fas fa-redo');
+    // var $righticon = $('<i></i>').addClass('fas fa-redo');
+    var $righticon = $(faIconRedoSVGDomEl);
 
     var $resetButton = $('<button></button>')
       .addClass('wv-map-reset-rotation wv-map-zoom')

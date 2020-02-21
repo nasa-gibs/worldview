@@ -7,6 +7,9 @@ import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
 import googleTagManager from 'googleTagManager';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRuler } from '@fortawesome/free-solid-svg-icons';
+
 const MEASURE_MENU_PROPS = {
   headerText: null,
   type: 'toolbar',
@@ -60,7 +63,7 @@ class MeasureButton extends React.Component {
         {showAlert && <AlertUtil
           id={'measurement-alert'}
           isOpen={true}
-          iconClassName='fa fa-ruler fa-fw'
+          iconClassName='faRuler'
           title='Measure Tool'
           message={message}
           onDismiss={this.dismissAlert}
@@ -73,7 +76,7 @@ class MeasureButton extends React.Component {
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
         >
-          <i className="fas fa-ruler fa-2x"></i>{' '}
+          <FontAwesomeIcon icon={faRuler} size='2x' />
         </Button>
       </>
     );

@@ -26,16 +26,15 @@ import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 
 // Dependency CSS
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.css';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.min.css';
+import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css';
 import '../../node_modules/icheck/skins/square/grey.css';
 import '../../node_modules/icheck/skins/square/red.css';
 import '../../node_modules/icheck/skins/line/red.css';
 import '../../node_modules/ol/ol.css';
-import '../../node_modules/rc-slider/dist/rc-slider.css';
-import '../../node_modules/simplebar/dist/simplebar.css';
-import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
+import '../../node_modules/rc-slider/dist/rc-slider.min.css';
+import '../../node_modules/simplebar/dist/simplebar.min.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import 'react-resizable/css/styles.css';
 // App CSS

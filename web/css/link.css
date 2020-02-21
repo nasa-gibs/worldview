@@ -120,28 +120,24 @@
   height: 48px;
   line-height: 48px;
   width: 48px;
-  font-size: 24px;
+  font-size: 26px;
   text-align: center;
   cursor: pointer;
   text-decoration: none;
 }
 
-.social-share .facebook {
+.social-share .social-icon-container-facebook {
   background-color: #3b5998;
 }
 
-.social-share .twitter {
+.social-share .social-icon-container-twitter {
   background-color: #00aced;
 }
 
-.social-share .reddit {
+.social-share .social-icon-container-reddit-alien {
   background-color: #ff5700;
 }
 
-.social-share .fa-google-plus {
-  background-color: #d34836;
-}
-
-.social-share .email {
+.social-share .social-icon-container-email {
   background-color: #505050;
 }
