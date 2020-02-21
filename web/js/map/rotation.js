@@ -42,7 +42,6 @@ export function MapRotate(ui, models, store) {
         'title',
         'You may also rotate by holding Alt and dragging the mouse'
       );
-    // var $lefticon = $('<svg></svg>').addClass('fa fa-undo');
     var $lefticon = $(faIconUndoSVGDomEl);
 
     var $rotateRightButton = $('<button></button>')
@@ -51,7 +50,6 @@ export function MapRotate(ui, models, store) {
         'title',
         'You may also rotate by holding Alt and dragging the mouse'
       );
-    // var $righticon = $('<i></i>').addClass('fas fa-redo');
     var $righticon = $(faIconRedoSVGDomEl);
 
     var $resetButton = $('<button></button>')
