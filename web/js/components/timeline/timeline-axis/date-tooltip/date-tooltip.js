@@ -81,22 +81,26 @@ class DateToolTip extends PureComponent {
     return (
       <React.Fragment>
         { (showDraggerToolTip || showHoverToolTip) &&
-          <div
-            className="date-tooltip"
-            style={{
-              transform: `translate(${toolTipLeftOffest}px, -100px)`,
-              display: toolTipDisplay,
-              width: hasSubdailyLayers ? '232px' : '165px'
-            }}
-          >
-            { toolTipDate } <span className="date-tooltip-day">({ toolTipDayOfYear })</span>
-          </div>
+        <div
+          className="date-tooltip"
+          style={{
+            transform: `translate(${toolTipLeftOffest}px, -100px)`,
+            display: toolTipDisplay,
+            width: hasSubdailyLayers
+              ? toolTipDayOfYear >= 100
+                ? '239px'
+                : '232px'
+              : '165px'
+          }}
+        >
+          { toolTipDate } <span className="date-tooltip-day">({ toolTipDayOfYear })</span>
+        </div>
         }
       </React.Fragment>
     );
   }
 }
-
+// 237px
 DateToolTip.propTypes = {
   axisWidth: PropTypes.number,
   draggerPosition: PropTypes.number,
