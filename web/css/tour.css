@@ -216,6 +216,8 @@
   padding: 0 4px 4px;
 }
 
+
+
 /* .tour-in-progress */
 .tour-in-progress .modal {
   left: auto;
@@ -476,6 +478,7 @@
   border-radius: 0 0 0 8px;
   padding: 0;
   min-height: 52px;
+  justify-content: center;
 }
 
 .tour-in-progress .modal-body,
@@ -544,7 +547,6 @@
   width: 220px;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 0 auto;
 }
 
 .tour-in-progress .step-previous {
@@ -558,7 +560,7 @@
 .tour-in-progress .step-counter {
   color: #fff;
   width: 132px;
-  margin: auto;
+  margin: 6px auto;
   text-align: center;
 }
 
