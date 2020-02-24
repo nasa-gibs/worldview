@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
-
+import { debounce } from 'lodash';
 /**
  * Wrapper component for SimpleBar
  */
@@ -9,28 +9,26 @@ export default function Scrollbars(props) {
   const ref = useRef();
   const [scrollTop, updateScrollTop] = useState(0);
 
-  useEffect(() => {
+  /**
+   * Add/remove 'scrollbar-visible' class based on content size
+   */
+  useLayoutEffect(() => {
     if (!ref || !ref.current) {
       return;
     }
+    const { contentEl, contentWrapperEl } = ref.current;
     function toggleVisibleClass() {
-      const { contentEl, contentWrapperEl } = ref.current;
       if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
         contentEl.classList.add('scrollbar-visible');
       } else {
         contentEl.classList.remove('scrollbar-visible');
       }
     };
-    setTimeout(toggleVisibleClass, 200);
-    // If scroll content is being loaded asynchronously,
-    // we don't have a reliable way to know when to re-check.
-    // So, this is a clumsy safeguard.
-    setTimeout(toggleVisibleClass, 600);
+    debounce(toggleVisibleClass, 100)();
   });
 
   /**
-   *  - Set scroll top when prop changes
-   *  - Add/remove 'scrollbar-visible' class based on content size
+   *  Set scroll top when prop changes
    */
   useEffect(() => {
     if (!ref || !ref.current) {
@@ -86,5 +84,5 @@ Scrollbars.propTypes = {
 };
 
 Scrollbars.defaultProps = {
-  scrollBarVerticalTop: 0
 };
+scrollBarVerticalTop: 0;
