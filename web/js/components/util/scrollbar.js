@@ -9,6 +9,25 @@ export default function Scrollbars(props) {
   const ref = useRef();
   const [scrollTop, updateScrollTop] = useState(0);
 
+  useEffect(() => {
+    if (!ref || !ref.current) {
+      return;
+    }
+    function toggleVisibleClass() {
+      const { contentEl, contentWrapperEl } = ref.current;
+      if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
+        contentEl.classList.add('scrollbar-visible');
+      } else {
+        contentEl.classList.remove('scrollbar-visible');
+      }
+    };
+    setTimeout(toggleVisibleClass, 200);
+    // If scroll content is being loaded asynchronously,
+    // we don't have a reliable way to know when to re-check.
+    // So, this is a clumsy safeguard.
+    setTimeout(toggleVisibleClass, 600);
+  });
+
   /**
    *  - Set scroll top when prop changes
    *  - Add/remove 'scrollbar-visible' class based on content size
@@ -25,16 +44,7 @@ export default function Scrollbars(props) {
         contentWrapperEl.scrollTop = scrollBarVerticalTop;
       }
     };
-    function toggleVisibleClass() {
-      const { contentEl, contentWrapperEl } = ref.current;
-      if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
-        contentEl.classList.add('scrollbar-visible');
-      } else {
-        contentEl.classList.remove('scrollbar-visible');
-      }
-    };
     setTimeout(setScrollTop, 100);
-    setTimeout(toggleVisibleClass, 100);
   }, [props.scrollBarVerticalTop]);
 
   /**
