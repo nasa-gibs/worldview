@@ -1027,31 +1027,32 @@
 .layer-detail-container {
   padding-right: 2px;
 
+  & .layers-all-layer {
+    background: transparent;
+    & h3, h4 {
+      color: #555;
+    }
+    & h5 {
+      color: #666;
+    }
+    & .source-metadata p,
+    .source-metadata span,
+    .source-metadata div,
+    .source-metadata code,
+    .list-group-item {
+      color: #333;
+      background: transparent;
+    }
+    .source-metadata a {
+      color: #0056b3;
+    }
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
   &.search {
     flex-grow: 1;
-    & .layers-all-layer {
-      background: transparent;
-      & h3, h4 {
-        color: #333;
-      }
-      & h5 {
-        color: #666;
-      }
-      & .source-metadata p,
-      .source-metadata span,
-      .source-metadata div,
-      .source-metadata code,
-      .list-group-item {
-        color: #333;
-        background: transparent;
-      }
-      .source-metadata a {
-        color: #0056b3;
-      }
-      &:hover {
-        background-color: transparent;
-      }
-    }
     &.mobile {
       border-top: 5px solid #d54e21;
       padding-left: 2px;
