@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { debounce } from 'lodash';
+
 /**
  * Wrapper component for SimpleBar
  */
@@ -84,5 +85,5 @@ Scrollbars.propTypes = {
 };
 
 Scrollbars.defaultProps = {
+  scrollBarVerticalTop: 0
 };
-scrollBarVerticalTop: 0;
