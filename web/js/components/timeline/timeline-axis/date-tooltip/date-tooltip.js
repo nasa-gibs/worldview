@@ -100,7 +100,7 @@ class DateToolTip extends PureComponent {
     );
   }
 }
-// 237px
+
 DateToolTip.propTypes = {
   axisWidth: PropTypes.number,
   draggerPosition: PropTypes.number,
