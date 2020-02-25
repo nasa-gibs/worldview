@@ -467,12 +467,14 @@
   }
   & .source-tabs {
     width: 35%;
+    border-right: 3px solid #d54e21;
   }
   & .tab-content {
     width: 65%;
     background: #eee;
-    border-bottom: 3px solid #3f3f3f;
-    border-right: 3px solid #3f3f3f;
+    border-top: 3px solid #d54e21;
+    border-right: 3px solid #d54e21;
+    border-bottom: 3px solid #d54e21;
   }
   h3.source-orbits-title {
     color: #444;
@@ -508,7 +510,10 @@
   }
   &.active {
     border-left: 6px solid #d54e21;
-    margin-left: 0;
+    border-top: 3px solid #d54e21;
+    border-bottom: 3px solid #d54e21;
+    border-right: transparent;
+    margin-right: -3px;
     color: #000;
     background: #eee;
     &:hover {
