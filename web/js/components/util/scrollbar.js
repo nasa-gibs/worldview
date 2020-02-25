@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { debounce } from 'lodash';
@@ -13,7 +13,7 @@ export default function Scrollbars(props) {
   /**
    * Add/remove 'scrollbar-visible' class based on content size
    */
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!ref || !ref.current) {
       return;
     }
@@ -25,7 +25,15 @@ export default function Scrollbars(props) {
         contentEl.classList.remove('scrollbar-visible');
       }
     };
-    debounce(toggleVisibleClass, 100)();
+    debounce(() => {
+      toggleVisibleClass();
+      // If scrollbar contents are loaded asynchronously, we need to delay
+      // comparing content/wrapper offsetHeights until the content has loaded.
+      // It would be better to call this after some event or callback rather
+      // than just guessing 800ms is long enough for content to load but this
+      // seems to work pretty well enough for now.
+      setTimeout(toggleVisibleClass, 800);
+    }, 50, { leading: true, trailing: true })();
   });
 
   /**
