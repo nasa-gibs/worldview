@@ -473,7 +473,6 @@
     width: 65%;
     background: #eee;
     border-top: 3px solid #d54e21;
-    border-right: 3px solid #d54e21;
     border-bottom: 3px solid #d54e21;
   }
   h3.source-orbits-title {
@@ -906,6 +905,9 @@
     margin-top: 10px;
     padding-top: 5px;
   }
+  .measurement-row .tab-content {
+    border-right: 3px solid #d54e21;
+  }
 
   .layer-category {
     width: 100%;
@@ -998,6 +1000,9 @@
 .layer-list-container {
   padding: 0 2px 0 0;
   flex-grow: 1;
+  &.browse {
+    border-right: 1px solid #ccc;
+  }
   &.search:not(.mobile) {
     max-width: 400px;
   }
