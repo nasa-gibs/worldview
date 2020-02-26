@@ -643,10 +643,14 @@ button:focus {
   & div, li {
     font-family: 'Roboto Mono', monospace;
   }
-  .datepicker-header,
+  & .datepicker-header,
   .datepicker-navbar-btn {
     font-weight: 700;
     font-size: 18px;
+  }
+  .datepicker .datepicker-navbar-btn:hover {
+    background: #ccc;
+    color: #333;
   }
 }
 
@@ -678,8 +682,4 @@ button:focus {
 
 .datepicker.android-dark .datepicker-scroll li.disabled {
   color: rgb(88, 88, 88) !important;
-}
-
-.datepicker-navbar-btn:hover {
-  background: #fff;
 }
