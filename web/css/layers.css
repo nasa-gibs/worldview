@@ -528,7 +528,7 @@
 }
 
 .measurement-row .source-metadata.overflow {
-  height: 100px;
+  height: 300px;
   overflow: hidden;
 }
 
