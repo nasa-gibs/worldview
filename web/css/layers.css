@@ -181,8 +181,8 @@
   left: 0;
 
   &.measurement-row {
+    padding: 0;
     border-right: 1px solid #eee;
-    padding: 0 0 0 8px;
   }
   &.search-row {
     border-left: 6px solid transparent;
@@ -467,13 +467,11 @@
   }
   & .source-tabs {
     width: 35%;
-    border-right: 3px solid #d54e21;
+    padding-left: 4px;
   }
   & .tab-content {
     width: 65%;
     background: #eee;
-    border-top: 3px solid #d54e21;
-    border-bottom: 3px solid #d54e21;
   }
   h3.source-orbits-title {
     color: #444;
@@ -483,7 +481,7 @@
 }
 
 .measurement-row .measurement-row-header {
-  padding: 5px 0;
+  padding: 5px 8px;
   position: relative;
   cursor: pointer;
   & .arrow-icon {
@@ -504,10 +502,10 @@
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   font-weight: 300;
-  padding: 8px 5px;
+  padding: 8px 6px;
   &.active {
-    padding: 5px;
-    border: 3px solid #d54e21;
+    padding-left: 4px;
+    border-left: 4px solid #d54e21;
     border-right: transparent;
     margin-right: -3px;
     color: #000;
@@ -570,12 +568,14 @@
 .layers-all .metadata-more,
 .measurement-row .metadata-more {
   display: block;
-  height: 20px;
+  height: 22px;
+  background: #333;
+  border-top: 2px solid #d54e21;
+  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.35);
 }
 
 .layers-all .metadata-more:hover,
 .layer-modal-content .measurement-row .metadata-more:hover {
-  background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
 }
 
@@ -590,8 +590,9 @@
   font-size: 22px;
   text-align: center;
   font-weight: 800;
+  width: 60px;
   &.up {
-    line-height: 26px;
+    line-height: 23px;
   }
 }
 
@@ -888,13 +889,6 @@
       width: 100%;
       padding: 0 10px 0 0;
     }
-  }
-
-  .measurement-row .source-settings {
-    margin-top: 5px;
-  }
-  .measurement-row .tab-content {
-    border-right: 3px solid #d54e21;
   }
 
   .layer-category {

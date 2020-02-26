@@ -23,8 +23,7 @@ class CategoryLayerRow extends React.Component {
     super(props);
     this.state = {
       isSelected: props.isSelected,
-      projection: props.projection,
-      isMetadataExpanded: false
+      projection: props.projection
     };
   }
 
@@ -219,9 +218,12 @@ class CategoryLayerRow extends React.Component {
       id,
       isSelected
     } = this.props;
+    const className = isSelected
+      ? 'measurement-row layers-all-layer selected'
+      : 'measurement-row layers-all-layer';
     return (
       <div
-        className="measurement-row layers-all-layer"
+        className={className}
         id={'accordion-' + category.id + '-' + measurement.id}
         key={category.id + '-' + measurement.id}
       >
