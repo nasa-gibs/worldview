@@ -40,7 +40,7 @@ class MeasurementLayerRow extends React.Component {
     const { layer, measurementId, title, selectedDate } = this.props;
     const { checked, tooltipOpen } = this.state;
     const layerIsAvailable = availableAtDate(layer, selectedDate);
-    const diplayDate = moment(selectedDate).format('YYYY MMM DD');
+    const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
     const listItemClass = !layerIsAvailable ? 'unavailable' : '';
     // Replace periods in id since period causes issue with tooltip targeting
     const itemElementId = 'checkbox-case-' + layer.id.split('.').join('-');
