@@ -55,6 +55,7 @@ export default class VectorMetaTooltip extends React.Component {
 }
 
 VectorMetaTooltip.propTypes = {
+  id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   description: PropTypes.string
 };

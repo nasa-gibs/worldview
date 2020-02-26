@@ -67,6 +67,7 @@ import '../css/dataDownload.css';
 import '../css/sidebar.css';
 import '../css/layers.css';
 import '../css/scrollbar.css';
+import '../css/switch.css';
 import '../css/timeline.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
@@ -118,7 +119,7 @@ class App extends React.Component {
         <div id="dlMap" />
         <Timeline key={locationKey || '1'} />
         <div id="wv-animation-widet-case">
-          {isAnimationWidgetActive ? <AnimationWidget /> : null}
+          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
 
@@ -138,6 +139,18 @@ class App extends React.Component {
     config = self.props.config;
     config.parameters = state;
 
+    // get user IP address for GTM/GA using https://www.ipify.org/ API
+    const getIpAddress = async() => {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const json = await response.json();
+      const ipAddress = json.ip;
+
+      googleTagManager.pushEvent({
+        event: 'ipAddress',
+        ipAddress: ipAddress
+      });
+    };
+
     const main = function() {
       const models = self.props.models;
 
@@ -149,6 +162,7 @@ class App extends React.Component {
       }
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
+        getIpAddress();
       }
 
       // Console notifications
@@ -205,6 +219,7 @@ App.propTypes = {
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
   mapMouseEvents: PropTypes.object,
+  modalId: PropTypes.string,
   parameters: PropTypes.object,
   state: PropTypes.object
 };

@@ -49,7 +49,7 @@ import {
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
 
-import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from '../modules/map/constants';
+import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
 
 import { updateVectorSelection } from '../modules/vector-styles/util';
@@ -103,6 +103,8 @@ export function mapui(models, config, store, ui) {
       }
       case CLEAR_ROTATE:
         return rotation.reset(self.selected);
+      case REFRESH_ROTATE:
+        return rotation.setRotation(action.rotation, 500, self.selected);
       case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(action, 'payload.query.map.extent');
@@ -133,6 +135,7 @@ export function mapui(models, config, store, ui) {
         return updateProjection();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
+      case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
         return updateLookup();
       case vectorStyleConstants.SET_FILTER_RANGE:

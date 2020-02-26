@@ -110,9 +110,8 @@ class Tour extends React.Component {
 
   fetchMetadata(currentStory, stepIndex) {
     var description = currentStory.steps[stepIndex].description;
-    var { origin, pathname } = window.location;
     var errorMessage = '<p>There was an error loading this description.</p>';
-    var uri = `${origin}${pathname}config/metadata/stories/${
+    var uri = `config/metadata/stories/${
       currentStory.id
       }/${description}`;
     this.setState({

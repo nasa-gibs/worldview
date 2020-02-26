@@ -33,6 +33,10 @@
         "MODIS_Terra_L3_Land_Water_Mask",
         "MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual",
 
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
+
         "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
         "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
         "VIIRS_SNPP_DayNightBand_ENCC",
@@ -72,7 +76,7 @@
         "MODIS_Aqua_AOD_Deep_Blue_Combined",
         "MODIS_Terra_AOD_Deep_Blue_Land",
         "MODIS_Aqua_AOD_Deep_Blue_Land",
-        "MODIS_Combined_L3_Albedo_Daily",
+        "MODIS_Combined_L3_White_Sky_Albedo_Daily",
         "MODIS_Terra_Brightness_Temp_Band31_Day",
         "MODIS_Terra_Brightness_Temp_Band31_Night",
         "MODIS_Aqua_Brightness_Temp_Band31_Day",
@@ -920,6 +924,8 @@
         "OrbitTracks_CYGNSS_Descending",
         "OrbitTracks_Calipso_Ascending",
         "OrbitTracks_Calipso_Descending",
+        "OrbitTracks_CloudSat_Ascending",
+        "OrbitTracks_CloudSat_Descending",
         "OrbitTracks_GCOM-C_Ascending",
         "OrbitTracks_GCOM-C_Descending",
         "OrbitTracks_GCOM-W1_Ascending",

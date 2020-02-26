@@ -101,7 +101,7 @@
           "always"
         ],
         "react/no-danger": "warn",
-        "react/prop-types": "warn",
+        "react/prop-types": "error",
         "react/no-did-update-set-state": "warn",
         "react/no-render-return-value": "warn",
         "react/sort-prop-types": [

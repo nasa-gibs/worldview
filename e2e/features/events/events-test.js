@@ -107,8 +107,6 @@ module.exports = {
       globalSelectors.notifyMessage,
       TIME_LIMIT,
       function() {
-        // Close the geostationary alert since it obscures the event alert
-        client.click('#geostationary-alert-close').pause(500);
         client.assert.containsText(
           globalSelectors.notifyMessage,
           'Events may not be visible at all times'

@@ -251,4 +251,10 @@ export function MapRotate(ui, models, store) {
       duration: duration
     });
   };
+  this.setRotation = function(val, duration, map) {
+    map.getView().animate({
+      rotation: val,
+      duration: duration
+    });
+  };
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeProjection } from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
+import { resetProductPickerState } from '../modules/product-picker/actions';
 import IconList from '../components/util/list';
 import { get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
@@ -75,6 +76,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateProjection: (id, config) => {
     dispatch(changeProjection(id));
+    dispatch(resetProductPickerState(id));
   },
   onCloseModal: () => {
     dispatch(onToggle());

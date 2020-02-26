@@ -21,7 +21,8 @@ class AnimationButton extends PureComponent {
 
 AnimationButton.propTypes = {
   clickAnimationButton: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  title: PropTypes.string
 };
 
 export default AnimationButton;

@@ -75,7 +75,7 @@ class InfoList extends Component {
         text: 'What\'s new',
         iconClass: 'ui-icon fa fa-flag fa-fw',
         id: 'whats_new_info_item',
-        href: 'https://github.com/nasa-gibs/worldview/releases'
+        href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS'
       },
       {
         text: 'About',

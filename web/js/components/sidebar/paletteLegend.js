@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import util from '../../util/util';
 import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
+import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
@@ -15,6 +16,7 @@ class PaletteLegend extends React.Component {
       colorHex: props.colorHex,
       isHoveringCanvas: props.isHoveringCanvas,
       width: this.props.width,
+
       scrollContainerEl: null
     };
   }
@@ -40,8 +42,11 @@ class PaletteLegend extends React.Component {
     });
   }
 
-  componentDidUpdate() {
-    this.updateCanvas();
+  componentDidUpdate(prevProps) {
+    // Only updates when layer options/settings have changed or if ZOT changes the width of the palette
+    if (!lodashIsEqual(this.props.layer, prevProps.layer) || (prevProps.width !== this.props.width)) {
+      this.updateCanvas();
+    }
   }
 
   /**
@@ -319,7 +324,7 @@ class PaletteLegend extends React.Component {
    */
   renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
-    const { layer, parentLayer, layerGroupName } = this.props;
+    const { layer, parentLayer, layerGroupName, getPalette } = this.props;
     const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
@@ -329,7 +334,7 @@ class PaletteLegend extends React.Component {
     const trackLabel = layer.track && legendTooltip
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
-
+    const palette = getPalette(layer.id, legendIndex);
     return (
       <VisibilitySensor
         key={legend.id + '-' + legendIndex + 'vis-sensor'}
@@ -342,18 +347,19 @@ class PaletteLegend extends React.Component {
               const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;
               const palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
-              const parentLayerId = isSubLayer ? parentLayer.id : '';
-              const keyId = layer.id + '-' + legend.id + '-color-' + keyIndex + parentLayerId + layerGroupName;
+              const parentLayerId = isSubLayer ? '-' + parentLayer.id : '';
+              const keyId = legend.id + '-color' + parentLayerId + '-' + layerGroupName + keyIndex;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
+
+              const inActive = palette.disabled && palette.disabled.includes(keyIndex);
               const tooltipText = singleKey
                 ? layer.track ? trackLabel : legendTooltip
                 : keyLabel;
-
               return (
                 <React.Fragment key={keyId}>
                   <span
                     id={keyId}
-                    className={palletteClass}
+                    className={inActive ? palletteClass + ' disabled-classification' : palletteClass}
                     style={{ backgroundColor: util.hexToRGBA(color) }}
                     onMouseMove={this.onMove.bind(this, color)}
                     onMouseEnter={this.onMouseEnter.bind(this)}

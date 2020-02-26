@@ -17,15 +17,16 @@ import {
   STATUS_REQUEST_URL,
   REQUEST_NOTIFICATIONS
 } from '../modules/notifications/constants';
-import { clearCustoms } from '../modules/palettes/actions';
-import { clearRotate } from '../modules/map/actions';
-import { clearGraticule } from '../modules/layers/actions';
+import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
+import { clearRotate, refreshRotation } from '../modules/map/actions';
+import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import { Notify } from '../components/image-download/notify';
 import Promise from 'bluebird';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
 Promise.config({ cancellation: true });
+
 const CUSTOM_MODAL_PROPS = {
   TOOLBAR_PROJECTION: {
     headerText: null,
@@ -80,7 +81,7 @@ class toolbarContainer extends Component {
   }
 
   openImageDownload() {
-    const { openModal, hasCustomPalette, isRotated, hasGraticule } = this.props;
+    const { openModal, hasCustomPalette, isRotated, hasGraticule, activePalettes, rotation, refreshStateAfterImageDownload } = this.props;
     this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice').then(
       () => {
         this.getPromise(
@@ -97,7 +98,7 @@ class toolbarContainer extends Component {
           ).then(() => {
             openModal(
               'TOOLBAR_SNAPSHOT',
-              CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT
+              Object.assign({}, CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT, { onClose: () => refreshStateAfterImageDownload(hasCustomPalette ? activePalettes : undefined, rotation, hasGraticule) })
             );
           });
         });
@@ -215,20 +216,24 @@ function mapStateToProps(state) {
   );
   const isCompareActive = compare.active;
   const isDataDownloadActive = data.active;
+  const activePalettes = palettes[activeString];
   return {
     notificationType: type,
     notificationContentNumber: number,
     config: state.config,
+    rotation: map.rotation,
+    activePalettes,
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected') &&
-        !isCompareActive &&
-        !isDataDownloadActive
+      !isCompareActive &&
+      !isDataDownloadActive
     ),
     isCompareActive,
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
-      palettes[activeString]
+      activePalettes
     ),
+
     isRotated: Boolean(map.rotation !== 0),
     hasGraticule: Boolean(
       lodashGet(
@@ -239,8 +244,22 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = dispatch => ({
-  openModal: (key, customParams) => {
-    dispatch(openCustomContent(key, customParams));
+  refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule) => {
+    if (activePalettes) {
+      dispatch(refreshPalettes(activePalettes));
+    }
+    if (rotation) {
+      dispatch(refreshRotation(rotation));
+    }
+    if (isGraticule) {
+      dispatch(refreshGraticule(isGraticule));
+    }
+  },
+  openModal: (key, customParams, actions) => {
+    dispatch(openCustomContent(
+      key,
+      customParams
+    ));
   },
   notify: (type, action, title) => {
     return new Promise((resolve, reject, cancel) => {
@@ -284,6 +303,7 @@ export default connect(
 )(toolbarContainer);
 
 toolbarContainer.propTypes = {
+  activePalettes: PropTypes.object,
   config: PropTypes.object,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
@@ -294,5 +314,7 @@ toolbarContainer.propTypes = {
   notificationType: PropTypes.string,
   notify: PropTypes.func,
   openModal: PropTypes.func,
-  requestNotifications: PropTypes.func
+  refreshStateAfterImageDownload: PropTypes.func,
+  requestNotifications: PropTypes.func,
+  rotation: PropTypes.number
 };

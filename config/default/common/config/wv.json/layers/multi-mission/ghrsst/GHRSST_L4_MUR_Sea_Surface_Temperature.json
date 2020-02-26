@@ -10,7 +10,7 @@
               "multi-mission",
               "multi-mission_ghrsst"
             ],
-            "product": 	"GHRSST_L4MUR_LL",
+            "product": 	"MUR-JPL-L4-GLOB-v4.1",
             "group":    "overlays",
             "wrapadjacentdays": true
         }

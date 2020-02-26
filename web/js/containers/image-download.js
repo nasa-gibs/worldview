@@ -98,6 +98,8 @@ class ImageDownloadContainer extends Component {
         isGeoProjection,
         proj.selected.resolutions
       );
+    const boxTopLongitude = Math.abs(geolonlat1[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat1[0]) : geolonlat1[0];
+    const boxBottomLongitude = Math.abs(geolonlat2[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat2[0]) : geolonlat2[0];
     return (
       <ErrorBoundary>
         <Panel
@@ -135,8 +137,8 @@ class ImageDownloadContainer extends Component {
             width: x2 - x
           }}
           coordinates={{
-            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
+            bottomLeft: util.formatCoordinate([boxTopLongitude, geolonlat1[1]]),
+            topRight: util.formatCoordinate([boxBottomLongitude, geolonlat2[1]])
           }}
           showCoordinates={true}
         />

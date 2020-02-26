@@ -228,7 +228,6 @@ button:focus {
 
 #zoom-buttons-group {
   position: relative;
-  width: 86px;
 }
 
 .button-action-group {
@@ -632,13 +631,27 @@ button:focus {
   background: rgba(40, 40, 40, 0.85);
   color: #fff;
   border: thin solid #333;
-  font-size: 17px;
-  font-family: 'Open Sans', sans-serif;
-  padding: 3px;
+  font-size: 23px;
+  padding: 14px 8px;
   border-radius: 5px;
-  line-height: 25px;
   white-space: nowrap;
   cursor: pointer;
+  height: 44px;
+  font-family: 'Roboto Mono', monospace;
+}
+.datepicker-modal {
+  & div, li {
+    font-family: 'Roboto Mono', monospace;
+  }
+  & .datepicker-header,
+  .datepicker-navbar-btn {
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .datepicker .datepicker-navbar-btn:hover {
+    background: #ccc;
+    color: #333;
+  }
 }
 
 /* Mobile date change arrows */
@@ -656,6 +669,13 @@ button:focus {
 .datepicker-header,
 .datepicker-navbar-btn {
   font-weight: 700;
+  white-space: nowrap;
+  background: rgba(40, 40, 40, 0.85);
+  border: thin solid #333;
+  padding: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 44px;
 }
 
 .datepicker.android-dark .datepicker-header {
@@ -674,8 +694,4 @@ button:focus {
 
 .datepicker.android-dark .datepicker-scroll li.disabled {
   color: rgb(88, 88, 88) !important;
-}
-
-.datepicker-navbar-btn:hover {
-  background: #fff;
 }

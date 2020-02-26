@@ -8,6 +8,7 @@ import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
+
 import {
   getCheckerboard,
   palettesTranslate
@@ -23,7 +24,8 @@ import {
 import {
   setThresholdRangeAndSquash,
   setCustomPalette,
-  clearCustomPalette
+  clearCustomPalette,
+  setToggledClassification
 } from '../../../modules/palettes/actions';
 import {
   setFilterRange,
@@ -35,6 +37,7 @@ import {
   getVectorStyle
 } from '../../../modules/vector-styles/selectors';
 import { setOpacity } from '../../../modules/layers/actions';
+import ClassificationToggle from './classification-toggle';
 
 class LayerSettings extends React.Component {
   constructor(props) {
@@ -63,7 +66,9 @@ class LayerSettings extends React.Component {
       palettesTranslate,
       groupName,
       setThresholdRange,
-      layer
+      layer,
+      toggleClassification,
+      screenHeight
     } = this.props;
     const { activeIndex } = this.state;
     const navElements = [];
@@ -86,7 +91,13 @@ class LayerSettings extends React.Component {
       const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
-      if (
+      if (legend.type === 'classification' && legend.colors.length > 1) {
+        paneItemEl = (
+          <TabPane key={legend.id + 'pane'} tabId={i}>
+            <ClassificationToggle height={Math.ceil(screenHeight / 3)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
+          </TabPane>
+        );
+      } else if (
         legend.type !== 'continuous' &&
         legend.type !== 'discrete' &&
         legend.colors.length > 1
@@ -114,9 +125,9 @@ class LayerSettings extends React.Component {
                 index={i}
                 palette={palette}
               />
-            ) : (
-              ''
-            )}
+            ) : null
+            }
+
             <Palette
               setCustomPalette={setCustomPalette}
               groupName={groupName}
@@ -162,7 +173,9 @@ class LayerSettings extends React.Component {
       setThresholdRange,
       paletteOrder,
       groupName,
-      layer
+      layer,
+      toggleClassification,
+      screenHeight
     } = this.props;
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
@@ -175,7 +188,7 @@ class LayerSettings extends React.Component {
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
-      return '';
+      return (<ClassificationToggle height={Math.ceil(screenHeight / 2)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
     }
     return (
       <React.Fragment>
@@ -270,20 +283,21 @@ class LayerSettings extends React.Component {
           layer={layer}
         />
         {renderCustomizations}
-        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer}/>}
+        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
       </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state, ownProps) {
-  const { config, palettes, compare } = state;
+  const { config, palettes, compare, browser } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
 
   return {
     paletteOrder: config.paletteOrder,
     groupName,
+    screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
     palettesTranslate,
@@ -310,6 +324,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = dispatch => ({
+  toggleClassification: (layerId, classIndex, index, groupName) => {
+    dispatch(
+      setToggledClassification(layerId, classIndex, index, groupName)
+    );
+  },
   setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
       setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
@@ -366,11 +385,13 @@ LayerSettings.propTypes = {
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
+  screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setFilterRange: PropTypes.func,
   setOpacity: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   title: PropTypes.string,
+  toggleClassification: PropTypes.func,
   vectorStyles: PropTypes.object
 };

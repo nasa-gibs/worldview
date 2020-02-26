@@ -32,7 +32,7 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   }
   return (
     <React.Fragment>
-      <text className="axis-grid-text" x="0" y="42"
+      <text className={`axis-grid-text axis-grid-text-${item.timeScale}`} x="0" y="42"
         fill={item.withinRange ? 'white' : ''}
         transform={`translate(${(index * gridWidth) + xOffsetAdded}, 20)`}
         clipPath="url(#textDisplay)"

@@ -12,9 +12,9 @@ const tileRectTimeScaleOptions = {
       lineLengthY: (item) => {
         const timeScaleUnit = item.dateObject.minutes;
         const lineLengthY = timeScaleUnit === 0 ||
-            timeScaleUnit === 15 ||
-            timeScaleUnit === 30 ||
-            timeScaleUnit === 45 ? 62 : timeScaleUnit % 5 === 0 ? 20 : 10;
+          timeScaleUnit === 15 ||
+          timeScaleUnit === 30 ||
+          timeScaleUnit === 45 ? 62 : timeScaleUnit % 5 === 0 ? 20 : 10;
         return lineLengthY;
       }
     };
@@ -116,6 +116,7 @@ TileRect.propTypes = {
   gridWidth: PropTypes.number,
   index: PropTypes.number,
   item: PropTypes.object,
+  showHover: PropTypes.func,
   timeScale: PropTypes.string
 };
 
