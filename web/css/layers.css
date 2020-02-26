@@ -182,7 +182,6 @@
 
   &.measurement-row {
     padding: 0;
-    border-right: 1px solid #eee;
   }
   &.search-row {
     border-left: 6px solid transparent;
@@ -454,7 +453,7 @@
   & .measure-row-contents {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin: 5px -1px 0 0;
     & .source-metadata {
       padding: 5px;
       & h1, h2, h3, h4, h5 {
