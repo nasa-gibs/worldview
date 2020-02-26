@@ -8,7 +8,6 @@ import {
   TabPane,
   Nav,
   NavItem,
-  NavLink,
   ListGroup
 } from 'reactstrap';
 import MeasurementLayerRow from './measurement-layer-row';
@@ -148,15 +147,14 @@ class CategoryLayerRow extends React.Component {
       <NavItem
         key={source.id + index}
         id={source.id + '-' + index + '-source-Nav'}
+        onClick={() => setSourceIndex(index)}
         className={
           index === activeSourceIndex
             ? 'active source-nav-item'
             : 'source-nav-item'
         }
       >
-        <NavLink onClick={() => setSourceIndex(index)}>
-          {source.title}
-        </NavLink>
+        {source.title}
       </NavItem>
     );
   }

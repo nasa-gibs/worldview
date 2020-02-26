@@ -38,8 +38,7 @@
 
 .layer-modal-content {
   position: relative;
-  padding-bottom: 5px;
-  min-height: 300px;
+  min-height: 400px;
 }
 
 .stamp {
@@ -182,6 +181,7 @@
   left: 0;
 
   &.measurement-row {
+    border-right: 1px solid #eee;
     padding: 0 0 0 8px;
   }
   &.search-row {
@@ -504,13 +504,10 @@
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   font-weight: 300;
-  & .nav-link {
-    padding: 8px 5px;
-  }
+  padding: 8px 5px;
   &.active {
-    border-left: 6px solid #d54e21;
-    border-top: 3px solid #d54e21;
-    border-bottom: 3px solid #d54e21;
+    padding: 5px;
+    border: 3px solid #d54e21;
     border-right: transparent;
     margin-right: -3px;
     color: #000;
@@ -518,11 +515,15 @@
     &:hover {
       color: #000;
       background: #eee;
+      cursor: default;
     }
   }
   &:hover {
     color: #eee;
     background: #504d4d;
+  }
+  & .nav-link {
+    padding: 0;
   }
 }
 
@@ -570,13 +571,6 @@
 .measurement-row .metadata-more {
   display: block;
   height: 20px;
-  line-height: 20px;
-  border-top: 1px solid #d54e21;
-}
-
-.layers-all .metadata-more {
-  cursor: pointer;
-  margin-top: 4px;
 }
 
 .layers-all .metadata-more:hover,
@@ -588,21 +582,17 @@
 .layers-all .metadata-more .ellipsis,
 .measurement-row .ellipsis {
   display: block;
-  height: 12px;
-  width: 40px;
+  height: 20px;
   background: #d54e21 none repeat scroll 0 0;
   color: #fff;
-  line-height: 0;
+  line-height: 7px;
   margin: 0 auto;
-  font-size: 1.5em;
+  font-size: 22px;
   text-align: center;
-  font-weight: 700;
-}
-
-.layers-all .metadata-more .ellipsis.up,
-.layer-modal-content .measurement-row .metadata-more .ellipsis.up {
-  font-size: 1em;
-  line-height: 1em;
+  font-weight: 800;
+  &.up {
+    line-height: 26px;
+  }
 }
 
 .layers-all .iCheck-checkbox {
@@ -901,9 +891,7 @@
   }
 
   .measurement-row .source-settings {
-    border-top: 1px solid #d54e21;
-    margin-top: 10px;
-    padding-top: 5px;
+    margin-top: 5px;
   }
   .measurement-row .tab-content {
     border-right: 3px solid #d54e21;
