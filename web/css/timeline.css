@@ -664,17 +664,6 @@ button:focus {
   padding: 3px;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.datepicker-header,
-.datepicker-navbar-btn {
-  font-weight: 700;
-  white-space: nowrap;
-  background: rgba(40, 40, 40, 0.85);
-  border: thin solid #333;
-  padding: 1px;
-  border-radius: 5px;
-  cursor: pointer;
   height: 44px;
 }
 
