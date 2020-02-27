@@ -155,8 +155,7 @@ class toolbarContainer extends Component {
               )
             }
           >
-            {/* <FontAwesomeIcon icon={faShareSquare} size='2x' /> */}
-            <FontAwesomeIcon icon={faArrowsAltH} />
+            <FontAwesomeIcon icon={faShareSquare} size='2x' />
           </Button>
           {config.ui && config.ui.projections ? (
             <Button

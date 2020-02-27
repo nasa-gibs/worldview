@@ -198,8 +198,8 @@ button:focus {
     position: absolute;
     height: 40px;
     width: 50px;
-    top: 18px;
-    right: 15px;
+    top: 11px;
+    right: 24px;
     padding-left: 3px;
   }
   & .animate-button:hover svg.wv-animate path {
