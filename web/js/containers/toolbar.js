@@ -27,7 +27,7 @@ import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareSquare, faArrowsAltH, faGlobeAsia, faCamera, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faShareSquare, faGlobeAsia, faCamera, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 Promise.config({ cancellation: true });
 
