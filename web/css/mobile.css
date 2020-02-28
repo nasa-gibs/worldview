@@ -141,8 +141,4 @@
   #selected-category .ui-tabs-panel li.measurement-settings-item {
     margin-left: 0;
   }
-
-  .notify-alert {
-    visibility: hidden;
-  }
 }

@@ -48,6 +48,9 @@ export default class AlertComponent extends React.Component {
       onDismiss,
       onClick
     } = this.props;
+    const icon = iconClassName
+      ? alertIcons[iconClassName] || faExclamationTriangle
+      : faExclamationTriangle;
     return (
       <Alert
         id={this.props.id}
@@ -59,9 +62,7 @@ export default class AlertComponent extends React.Component {
           title={title}
           onClick={onClick}
         >
-          {iconClassName && (
-            <FontAwesomeIcon icon={alertIcons[iconClassName] || faExclamationTriangle} className="wv-alert-icon" size="1x" />
-          )}
+          <FontAwesomeIcon icon={icon} className="wv-alert-icon" size="1x" />
           <div className="wv-alert-message">
             {message}
           </div>

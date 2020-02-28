@@ -777,6 +777,10 @@
   border-color: #666;
 }
 
+.sidebar-panel li.item a {
+  color: #22a;
+}
+
 .custom-layer-dialog {
   margin: 5px auto;
 

@@ -55,7 +55,7 @@ export function MapRotate(ui, models, store) {
     var $resetButton = $('<button></button>')
       .addClass('wv-map-reset-rotation wv-map-zoom')
       .attr('title', 'Click to reset')
-      .attr('style', 'width: 43px');
+      .attr('style', 'width: 42px');
 
     $rotateLeftButton.append($lefticon);
     $rotateRightButton.append($righticon);

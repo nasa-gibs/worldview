@@ -17,7 +17,7 @@
       & .form-check-label {
         margin-left: 24px;
       }
-      & i {
+      & svg.svg-inline--fa {
         margin-left: 5px;
       }
       & .form-check-input {

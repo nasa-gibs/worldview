@@ -88,6 +88,8 @@ class LayerRow extends React.Component {
       : 'search-row layers-all-layer';
     const checkboxClass = checked ? 'wv-checkbox checked' : 'wv-checkbox';
 
+    console.log(description, isMetadataShowing);
+
     return (
       <div id={layer.id + '-search-row'} className={rowClass}>
         <div className={checkboxClass}>

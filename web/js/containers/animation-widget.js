@@ -504,7 +504,7 @@ class AnimationWidget extends React.Component {
               onMouseEnter={this.toggleHoverGif}
               onMouseLeave={this.toggleHoverGif}
             >
-              <FontAwesomeIcon icon={faFileVideo} className='wv-animation-widget-icon' />
+              <FontAwesomeIcon icon={faFileVideo} id="wv-animation-widget-file-video-icon" className='wv-animation-widget-icon' />
             </a>
             {this.renderToolTip()}
 

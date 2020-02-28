@@ -21,7 +21,6 @@ button:focus {
 }
 
 #timeline-header {
-  position: relative;
   margin-top: 2px;
   min-width: 310px;
   display: inline-block;
@@ -224,6 +223,10 @@ button:focus {
   & .button-action-group svg path {
     fill: #fff;
   }
+}
+
+.timeline-header-desktop {
+  position: relative;
 }
 
 #zoom-buttons-group {
@@ -624,6 +627,10 @@ button:focus {
 }
 
 /* Mobile date picker */
+.timeline-header-mobile {
+  position: static;
+}
+
 .mobile-date-picker-select-btn {
   position: absolute;
   left: 10px;
