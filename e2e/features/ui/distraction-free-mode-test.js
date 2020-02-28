@@ -12,14 +12,12 @@ module.exports = {
     client.pause(300);
     client.sendKeys('body', [client.Keys.SHIFT, 'd', client.Keys.NULL]);
     client.pause(300);
-    client.waitForElementPresent('#wv-distraction-free-mode-button', TIME_LIMIT);
 
     client.waitForElementNotVisible('.timeline-container', TIME_LIMIT);
     client.waitForElementNotVisible(localSelectors.sidebarContainer, TIME_LIMIT);
     client.waitForElementNotPresent('#wv-link-button', TIME_LIMIT);
     client.waitForElementNotPresent('#wv-proj-button', TIME_LIMIT);
     client.waitForElementNotPresent('#wv-image-button', TIME_LIMIT);
-    client.waitForElementNotPresent('#wv-info-button', TIME_LIMIT);
     client.waitForElementNotVisible(localSelectors.measureBtn, TIME_LIMIT);
     client.waitForElementNotVisible('.wv-map-zoom-in', TIME_LIMIT);
     client.waitForElementNotVisible('.wv-map-zoom-out', TIME_LIMIT);
@@ -32,14 +30,12 @@ module.exports = {
     client.pause(300);
     client.sendKeys('body', [client.Keys.SHIFT, 'd', client.Keys.NULL]);
     client.pause(300);
-    client.waitForElementNotPresent('#wv-distraction-free-mode-button', TIME_LIMIT);
 
     client.waitForElementVisible('.timeline-container', TIME_LIMIT);
     client.waitForElementVisible(localSelectors.sidebarContainer, TIME_LIMIT);
     client.waitForElementVisible('#wv-link-button', TIME_LIMIT);
     client.waitForElementPresent('#wv-proj-button', TIME_LIMIT);
     client.waitForElementPresent('#wv-image-button', TIME_LIMIT);
-    client.waitForElementPresent('#wv-info-button', TIME_LIMIT);
     client.waitForElementVisible(localSelectors.measureBtn, TIME_LIMIT);
     client.waitForElementPresent('.wv-map-zoom-in', TIME_LIMIT);
     client.waitForElementPresent('.wv-map-zoom-out', TIME_LIMIT);
