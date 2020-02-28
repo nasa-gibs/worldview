@@ -62,7 +62,7 @@ To run tests for both browsers in sequence: `npm run e2e`.
 
 | Parameter | Type | Value | Description |
 | --------- | ----- | ----- | ----------- |
-| `mockCMR` | boolean | *`true` or `false`* | Do not query CMR and fetch the static JSON file found at mock/cmr.cgi-X |
+| `mockCMR` | string | example:*`modis_grid` (X mock CMR to use)*  | Do not query CMR and fetch the static JSON file found at mock/cmr.cgi-X |
 | `timeoutCMR` | ms | *`N`* | Override the CMR timeout value in milliseconds |
 | `mockEvents` | String | *`20170530`* | Use the static JSON file with event feeds found at mock/events\_data.json-X |
 | `mockEvents` | String | *`20170530`*| Use the static JSON file with categories feeds found at mock/categories\_data.json-X |

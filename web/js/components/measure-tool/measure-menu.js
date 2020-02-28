@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
-import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
-import { Form, FormGroup, Label, Input, Tooltip } from 'reactstrap';
+import { changeUnits } from '../../modules/measure/actions';
+import { Form } from 'reactstrap';
 
 const OPTIONS_ARRAY = [
   {
@@ -32,8 +32,7 @@ class MeasureMenu extends Component {
     super(props);
     this.state = {
       showAlert: false,
-      tooltipOpen: false,
-      useGreatCircleMeasurements: props.useGreatCircleMeasurements
+      tooltipOpen: false
     };
     this.tooltipToggle = this.tooltipToggle.bind(this);
   }
@@ -50,11 +49,6 @@ class MeasureMenu extends Component {
     this.props.onToggleUnits(units);
   }
 
-  useGreatCircle(evt) {
-    const { checked } = evt.target;
-    this.props.onToggleUseGreatCircle(checked);
-  }
-
   tooltipToggle() {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
@@ -67,26 +61,6 @@ class MeasureMenu extends Component {
     return (
       <>
         <Form>
-          <FormGroup check>
-            <Label check>
-              <Input
-                id="great-circle-toggle"
-                type="checkbox"
-                onChange={this.useGreatCircle.bind(this)}
-                defaultChecked={this.props.useGreatCircleMeasurements}
-              />
-              {' '} Use Great Circle
-            </Label>
-            <i id="great-circle-info" className="fas fa-info-circle"></i>
-            <Tooltip
-              placement="top"
-              isOpen={this.state.tooltipOpen}
-              target="great-circle-info"
-              toggle={this.tooltipToggle}>
-              If enabled, lines will be drawn as great circle arcs which represent
-              the shortest real world distance between two points.
-            </Tooltip>
-          </FormGroup>
           <div className="measure-unit-toggle custom-control custom-switch">
             <input
               id="unit-toggle"
@@ -113,16 +87,12 @@ const mapStateToProps = (state, ownProps) => {
   return {
     isTouchDevice: state.modal.customProps.touchDevice,
     map: state.map,
-    units: state.measure.units,
-    useGreatCircleMeasurements: state.measure.useGreatCircleMeasurements
+    units: state.measure.units
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onToggleUnits: (units) => {
     dispatch(changeUnits(units));
-  },
-  onToggleUseGreatCircle: (value) => {
-    dispatch(useGreatCircle(value));
   },
   onCloseModal: (eventName) => {
     dispatch(onToggle());
@@ -139,7 +109,5 @@ MeasureMenu.propTypes = {
   map: PropTypes.object,
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,
-  onToggleUseGreatCircle: PropTypes.func,
-  units: PropTypes.string,
-  useGreatCircleMeasurements: PropTypes.bool
+  units: PropTypes.string
 };

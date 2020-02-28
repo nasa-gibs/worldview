@@ -12,7 +12,6 @@
     position: absolute !important;
     overflow: hidden;
     background: rgb(38, 43, 49);
-    border-radius: 0 10px 10px 0;
     top: 0;
     z-index: 1000;
   }
@@ -47,10 +46,30 @@
   }
 
   a.staticLayers:not([href]):not([tabindex]) {
-    width: 100px;
+    height: 45px;
+    width: 56px;
     background-image: none;
     border-radius: 5px;
-    top: 55px;
+    top: 58px;
+    & .fa {
+      font-size: 33px;
+      position: absolute;
+      left: 10px;
+      top: 5px;
+      color: #fff;
+    }
+    & span.layer-count {
+      color: #fff;
+      position: relative;
+      top: 9px;
+      font-size: 18px;
+      font-weight: 600;
+      background: #333;
+      border-radius: 50%;
+      padding: 0 5px;
+      text-align: center;
+      margin-left: 0;
+    }
   }
 
   a.staticLayers:not([href]):not([tabindex]):hover {

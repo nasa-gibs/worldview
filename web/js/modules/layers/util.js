@@ -16,10 +16,27 @@ import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
-import closestIndexTo from 'date-fns/closest_index_to';
-import isBefore from 'date-fns/is_before';
-import isEqual from 'date-fns/is_equal';
-import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
+
+/**
+  *
+  * @param {*} def - layer definition
+  * @param {*} date - current selected app date
+  * @returns {Boolean} - True if layer is available at date, otherwise false
+  */
+export function availableAtDate(def, date) {
+  const availableDates = datesinDateRanges(def, date);
+  // Some vector layers
+  if (!def.startDate && !def.dateRanges) {
+    return true;
+  }
+  if (def.endDate && def.inactive) {
+    return date < new Date(def.endDate) && date > new Date(def.startDate);
+  }
+  if (!availableDates.length && !def.endDate && !def.inactive) {
+    return date > new Date(def.startDate);
+  }
+  return availableDates.length > 0;
+};
 
 export function getOrbitTrackTitle(def) {
   if (def.daynight && def.track) {
@@ -63,28 +80,41 @@ export function nearestInterval(def, date) {
    */
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
-  const currentDate = new Date(date.getTime());
-  const currentDateOffsetCheck = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
+  const currentDateValue = date.getTime();
+  const currentDate = new Date(currentDateValue);
+  const currentDateOffsetCheck = new Date(currentDateValue + (currentDate.getTimezoneOffset() * 60000));
+
+  const isFirstDayOfMonth = currentDateOffsetCheck.getDate() === 1;
+  const isFirstDayOfYear = currentDateOffsetCheck.getMonth() === 0;
+
+  const isMonthPeriod = def.period === 'monthly';
+  const isYearPeriod = def.period === 'yearly';
 
   if (!dateArray ||
-    (def.period === 'monthly' && isFirstDayOfMonth(currentDateOffsetCheck)) ||
-    (def.period === 'yearly' && (currentDateOffsetCheck.getDate() === 1 && currentDateOffsetCheck.getMonth() === 0))) {
+    (isMonthPeriod && isFirstDayOfMonth) ||
+    (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
     return date;
   }
 
+  // populate closestAvailableDates if rangeDate is before or equal to input date
   lodashEach(dateArray, (rangeDate) => {
-    if (isBefore(rangeDate, currentDate) || isEqual(rangeDate, currentDate)) {
+    const rangeDateValue = rangeDate.getTime();
+    const isRangeDateBefore = rangeDateValue < currentDateValue;
+    const isRangeDateEqual = rangeDateValue === currentDateValue;
+
+    if (isRangeDateBefore || isRangeDateEqual) {
       closestAvailableDates.push(rangeDate);
     }
   });
 
   // use closest date index to find closest date in filtered closestAvailableDates
-  const closestDateIndex = closestIndexTo(currentDate, closestAvailableDates);
+  const closestDateIndex = util.closestToIndex(closestAvailableDates, currentDateValue);
   const closestDate = closestAvailableDates[closestDateIndex];
 
   // check for potential next date in function passed dateArray
-  const nextClosestDate = dateArray[closestDateIndex + 1];
-  return { previous: closestDate ? new Date(closestDate.getTime()) : date, next: nextClosestDate || null };
+  const next = dateArray[closestDateIndex + 1] || null;
+  const previous = closestDate ? new Date(closestDate.getTime()) : date;
+  return { previous, next };
 };
 
 /**
@@ -150,6 +180,12 @@ export function datesinDateRanges(def, date) {
       for (i = 0; i <= (dayDifference + 1); i++) {
         let day = new Date(minYear, minMonth, minDay + i * dateInterval);
         day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
+        if (dateArray.length > 0) {
+          // prevent earlier dates from being added after later dates while building dateArray
+          if (day < dateArray[dateArray.length - 1]) {
+            continue;
+          }
+        }
         dateArray.push(day);
       }
       // Subdaily layers
@@ -213,8 +249,7 @@ export function serializeLayers(currentLayers, state, groupName) {
         value: def.opacity
       });
     }
-
-    if (def.palette && (def.custom || def.min || def.max || def.squash)) {
+    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
@@ -248,6 +283,7 @@ export function toggleVisibility(id, layers) {
 
   return update(layers, { [index]: { visible: { $set: visibility } } });
 }
+
 export function removeLayer(id, layers) {
   var index = lodashFindIndex(layers, {
     id: id
@@ -257,6 +293,7 @@ export function removeLayer(id, layers) {
   }
   return update(layers, { $splice: [[index, 1]] });
 }
+
 // this function takes an array of date ranges in this format:
 // [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
 // the array is first sorted, and then checked for any overlap
@@ -446,7 +483,7 @@ const createLayerArrayFromState = function(state, config) {
       lodashEachRight(state, function(layerDef) {
         let hidden = false;
         let opacity = 1.0;
-        let max, min, squash, custom;
+        let max, min, squash, custom, disabled;
         if (!config.layers[layerDef.id]) {
           console.warn('No such layer: ' + layerDef.id);
           return;
@@ -458,6 +495,10 @@ const createLayerArrayFromState = function(state, config) {
           if (attr.id === 'opacity') {
             opacity = util.clamp(parseFloat(attr.value), 0, 1);
             if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+          }
+          if (attr.id === 'disabled') {
+            const values = util.toArray(attr.value.split(';'));
+            disabled = values;
           }
           if (attr.id === 'max' && typeof attr.value === 'string') {
             const maxArray = [];
@@ -524,7 +565,8 @@ const createLayerArrayFromState = function(state, config) {
             ...(isArray(custom) && { custom }),
             ...(isArray(min) && { min }),
             ...(isArray(squash) && { squash }),
-            ...(isArray(max) && { max })
+            ...(isArray(max) && { max }),
+            ...(isArray(disabled) && { disabled })
           },
           layerArray,
           config.layers

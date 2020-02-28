@@ -65,7 +65,7 @@ export class GifResults extends Component {
             <img src={blobURL} width={imgElWidth} height={imgElHeight} />
             <div
               className="gif-results-dialog"
-              style={{ height: imgElHeight, minHeight: 210 }}
+              style={{ minHeight: 210 }}
             >
               <div>
                 <div>

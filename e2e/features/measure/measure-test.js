@@ -11,8 +11,7 @@ const {
   measureMenu,
   measurementTooltip,
   sidebarContainer,
-  unitOfMeasureToggle,
-  greatCircleToggle
+  unitOfMeasureToggle
 } = localSelectors;
 
 module.exports = {
@@ -101,21 +100,6 @@ module.exports = {
           const pass = elResult.value.includes('mi');
           client.assert.ok(pass);
         });
-      });
-    }
-  },
-  'Toggling great circle changes the measurement value': async function(client) {
-    if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
-      const measureTooltips = await client.elements('css selector', measurementTooltip);
-      const elPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
-      const initMeasureValues = await Promise.all(elPromises).then(elem => elem.map(el => el.value));
-
-      await client.click(greatCircleToggle);
-      const updatedElPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
-      const updatedValues = await Promise.all(updatedElPromises).then(elem => elem.map(el => el.value));
-      updatedValues.forEach((value, index) => {
-        const prevValue = initMeasureValues[index];
-        client.assert.ok(value !== prevValue);
       });
     }
   },

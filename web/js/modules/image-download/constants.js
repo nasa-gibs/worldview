@@ -49,10 +49,10 @@ const PALETTE_WARNING =
 
 const GRATICLE_WARNING =
   'The graticule layer cannot be used to take a snapshot. Would you ' +
-  'like to hide this layer?';
+  'like to temporarily hide this layer?';
 
 const ROTATE_WARNING =
-  'Image may not be downloaded when rotated. Would you like to reset rotation?';
+  'Image may not be downloaded when rotated. Would you like to temporarily reset rotation?';
 
 export const notificationWarnings = {
   palette: PALETTE_WARNING,

@@ -8,6 +8,7 @@
 
 .wv-toolbar-button {
   font-size: 14.3px;
+  height: 44px;
   display: inline-block;
   margin: 0 0 0 4px;
   background: rgba(40, 40, 40, 0.85);

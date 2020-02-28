@@ -15,6 +15,7 @@
             "vectorStyle": {
                 "id": "GRanD_Dams"
             },
+            "wrapX": true,
             "palette": {
                 "id": "GRanD_Dams",
                 "immutable": true,

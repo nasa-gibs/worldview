@@ -1,10 +1,3 @@
-/* global ntptEventTag */
-
-/* The ntptEventTag global variable is defined by
- * https://earthdata.nasa.gov/lib/ntpagetag.js
- * which is included via config.scripts in web/config/wv.json
-*/
-
 import {
   isObject as lodashIsObject,
   each as lodashEach,
@@ -15,6 +8,7 @@ import browser from './browser';
 import { events } from './events';
 import load from './load';
 import Cache from 'cachai';
+import moment from 'moment';
 
 export default (function(self) {
   var canvas = null;
@@ -291,6 +285,33 @@ export default (function(self) {
       throw new Error('Invalid date: ' + dateAsString);
     }
     return date;
+  };
+
+  self.coverageDateFormatter = function(dateType, date, period) {
+    let dateString;
+    date = this.parseDate(date);
+
+    switch (period) {
+      case 'subdaily':
+        dateString = moment(date).format('DD MMMM YYYY HH:mm') + 'Z';
+        break;
+
+      case 'yearly':
+        if (dateType === 'END-DATE') date.setFullYear(date.getFullYear() - 1);
+        dateString = moment(date).format('YYYY');
+        break;
+
+      case 'monthly':
+        if (dateType === 'END-DATE') date.setMonth(date.getMonth() - 1);
+        dateString = moment(date).format('MMMM YYYY');
+        break;
+
+      default:
+        dateString = moment(date).format('DD MMMM YYYY');
+        break;
+    }
+
+    return dateString;
   };
 
   /**
@@ -974,14 +995,6 @@ export default (function(self) {
     });
   };
 
-  self.metrics = function() {
-    if (window.ntptEventTag) {
-      ntptEventTag.apply(null, arguments);
-    } else {
-      console.log('no metrics');
-    }
-  };
-
   self.key = {
     LEFT: 37,
     RIGHT: 39,
@@ -1050,7 +1063,17 @@ export default (function(self) {
         coord[0].toFixed(4) + '°';
     }
   };
-
+  /**
+   * map openlayers provided longitude value to be between -180 && 180
+   *
+   * @param {longitude} number map longitude value
+   * @return normalized longitude value
+   */
+  self.normalizeWrappedLongitude = function(longitude) {
+    const isNegative = longitude < 0;
+    const remainder = longitude % 360;
+    return isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+  };
   // Allows simple printf functionality with strings
   // arguments array contains all args passed. String must be formatted
   // so that first replacement starts with "{1}"
@@ -1109,6 +1132,27 @@ export default (function(self) {
     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
     var minuteDiff = Math.ceil(timeDiff / (60000));
     return minuteDiff;
+  };
+
+  /**
+   * Find closest index for currentDateValue from array of dates
+   * @param {Array} dateArray | Array of date objects
+   * @param {Number} currentDateValue | Number of milliseconds from date object
+   * @return {Number}
+   */
+  self.closestToIndex = (dateArray, currentDateValue) => {
+    let closestDateIndex;
+    let minDistance;
+    dateArray.forEach((date, index) => {
+      const dateValue = date.getTime();
+      var distance = Math.abs(currentDateValue - dateValue);
+      if (closestDateIndex === undefined || distance < minDistance) {
+        closestDateIndex = index;
+        minDistance = distance;
+      }
+    });
+
+    return closestDateIndex;
   };
 
   /**

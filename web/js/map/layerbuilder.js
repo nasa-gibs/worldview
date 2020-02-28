@@ -307,12 +307,12 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
-    if (day && def.period !== 'subdaily') {
+    if (day && def.wrapadjacentdays && def.period !== 'subdaily') {
       date = util.dateAdd(date, 'day', day);
     }
     const { tileMatrices, resolutions, tileSize } = matrixSet;
     const { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
-    const sizes = tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
     const tileGridOptions = {
       origin,
       extent,
@@ -356,13 +356,14 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const createLayerVector = function(def, options, day, state) {
     const { proj, compare } = state;
-    var date, urlParameters, extent, source, matrixSet, matrixIds, start;
+    var date, urlParameters, gridExtent, source, matrixSet, matrixIds, start, layerExtent;
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeGroupStr = options.group ? options.group : compare.activeString;
 
     source = config.sources[def.source];
-    extent = selectedProj.maxExtent;
+    gridExtent = selectedProj.maxExtent;
+    layerExtent = gridExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
 
     if (!source) {
@@ -383,11 +384,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
     if (day) {
       if (day === 1) {
-        extent = [-250, -90, -180, 90];
-        start = [-540, 90];
+        layerExtent = [-250, -90, -180, 90];
+        start = [-180, 90];
+        gridExtent = [110, -90, 180, 90];
       } else {
-        extent = [180, -90, 250, 90];
-        start = [180, 90];
+        gridExtent = [-180, -90, -110, 90];
+        layerExtent = [180, -90, 250, 90];
+        start = [-180, 90];
       }
     }
 
@@ -395,7 +398,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     var tms = def.matrixSet;
 
     date = options.date || state.date[activeDateStr];
-    if (day) {
+    if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
 
@@ -412,23 +415,26 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       '&Version=1.0.0' +
       '&FORMAT=application%2Fvnd.mapbox-vector-tile' +
       '&TileMatrix={z}&TileCol={x}&TileRow={y}';
-
+    const wrapX = !!(day === 1 || day === -1);
     var sourceOptions = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
+      day: day,
       format: new MVT(),
       matrixSet: tms,
+      wrapX: wrapX,
       tileGrid: new OlTileGridTileGrid({
-        extent: extent,
-        origin: start,
+        extent: gridExtent,
         resolutions: matrixSet.resolutions,
-        tileSize: matrixSet.tileSize
+        tileSize: matrixSet.tileSize,
+        origin: start
       })
     });
 
     var layer = new LayerVectorTile({
-      extent: extent,
-      source: sourceOptions
+      extent: layerExtent,
+      source: sourceOptions,
+      renderMode: wrapX ? 'image' : 'hybrid' // Todo: revert to just 'image' when styles are updated
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
@@ -446,7 +452,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       }
       setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
     }
-
+    layer.wrap = day;
     return layer;
   };
 
@@ -518,7 +524,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     urlParameters = '';
 
     date = options.date || state.date[activeDateStr];
-    if (day) {
+    if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
     urlParameters =

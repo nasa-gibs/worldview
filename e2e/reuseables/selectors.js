@@ -33,7 +33,6 @@ module.exports = {
   measureAreaBtn: '#measure-area-button',
   clearMeasurementsBtn: '#clear-measurements-button',
   unitOfMeasureToggle: '.measure-unit-toggle .custom-control-label',
-  greatCircleToggle: '#great-circle-toggle',
   measurementTooltip: '.tooltip-measure.tooltip-static',
 
   // timeline
@@ -44,17 +43,7 @@ module.exports = {
   optionsButton: '.wv-layers-options',
   infoDialog: '.layer-info-settings-modal',
   optionsDialog: '.layer-info-settings-modal',
-  layersSearchField: 'input#layers-search-input',
-  // layersAll: '#layers-all',
-  layersAll: '.layers-all-layer',
-  sourceInfoIcon: '.layers-all-layer .fa-info-circle',
-  layerHeader: '.layers-all-header',
   addLayers: '#layers-add',
-  layerModal: '#layer-modal-main',
-  sourceMetadataCloseButton: '.source-metadata .metadata-more',
   layersModalCloseButton: '.custom-layer-dialog .modal-header .close',
-  aerosolOpticalDepth:
-    '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth',
-  backToCategories: 'a.breadcrumb-item',
-  headerForAOD: '#accordion-legacy-all-aerosol-optical-depth'
+  aerosolOpticalDepth: '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth'
 };

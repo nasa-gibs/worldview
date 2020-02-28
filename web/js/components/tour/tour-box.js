@@ -14,9 +14,8 @@ class TourBox extends React.Component {
 
   UNSAFE_componentWillMount() {
     if (this.props.backgroundImage) {
-      const { origin, pathname } = window.location;
       this.setState({
-        styles: { backgroundImage: `url(${origin}${pathname}config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
+        styles: { backgroundImage: `url(config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
       });
     }
   }
@@ -24,9 +23,8 @@ class TourBox extends React.Component {
   onMouseOver(e) {
     e.preventDefault();
     if (this.props.backgroundImageHover) {
-      const { origin, pathname } = window.location;
       this.setState({
-        styles: { backgroundImage: `url(${origin}${pathname}config/metadata/stories/${this.props.storyId}/${this.props.backgroundImageHover})` }
+        styles: { backgroundImage: `url(config/metadata/stories/${this.props.storyId}/${this.props.backgroundImageHover})` }
       });
     }
   }
@@ -34,9 +32,8 @@ class TourBox extends React.Component {
   onMouseOut(e) {
     e.preventDefault();
     if (this.props.backgroundImage) {
-      const { origin, pathname } = window.location;
       this.setState({
-        styles: { backgroundImage: `url(${origin}${pathname}config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
+        styles: { backgroundImage: `url(config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
       });
     }
   }

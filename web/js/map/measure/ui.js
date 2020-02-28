@@ -33,7 +33,6 @@ export function measure(map, mapUiEvents, store) {
   let allMeasureTooltips = {};
   let allGeometries = {};
   let unitOfMeasure = 'km';
-  let useGreatCircle = false;
   const self = {};
   const source = new OlVectorSource({ wrapX: false });
   const projection = map.getView().getProjection().getCode();
@@ -87,9 +86,6 @@ export function measure(map, mapUiEvents, store) {
   ];
 
   function terminateDraw() {
-    setTimeout(() => {
-      mapUiEvents.trigger('enable-click-zoom');
-    }, 500);
     sketch = null;
     measureTooltipElement = null;
     store.dispatch(toggleMeasureActive(false));
@@ -97,6 +93,7 @@ export function measure(map, mapUiEvents, store) {
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
+    mapUiEvents.trigger('enable-click-zoom');
   }
 
   function createMeasureTooltip(geom) {
@@ -148,9 +145,6 @@ export function measure(map, mapUiEvents, store) {
    */
   function styleGeometryFn(feature) {
     const geometry = feature.getGeometry();
-    if (!useGreatCircle) {
-      return geometry;
-    }
     if (geometry instanceof OlLineString) {
       return transformLineStringArc(geometry, projection);
     }
@@ -169,17 +163,17 @@ export function measure(map, mapUiEvents, store) {
   function setMeasurementTooltip(geometry, element) {
     let measurement;
     if (geometry instanceof OlGeomPolygon) {
-      measurement = getFormattedArea(geometry, projection, unitOfMeasure, useGreatCircle);
+      measurement = getFormattedArea(geometry, projection, unitOfMeasure);
     }
     if (geometry instanceof OlLineString) {
-      measurement = getFormattedLength(geometry, projection, unitOfMeasure, useGreatCircle);
+      measurement = getFormattedLength(geometry, projection, unitOfMeasure);
     }
     element.innerHTML = measurement;
   }
 
   /**
    * Go through every tooltip and recalculate the measurement based on
-   * current settings of unit of measurement and great circle
+   * current settings of unit of measurement
    */
   function recalculateAllMeasurements() {
     for (const id in allMeasureTooltips) {
@@ -233,14 +227,6 @@ export function measure(map, mapUiEvents, store) {
    */
   self.changeUnits = (unit) => {
     unitOfMeasure = unit;
-    recalculateAllMeasurements();
-  };
-
-  /**
-   * Convert all measurements to use great circle arcs
-   */
-  self.useGreatCircleMeasurements = (value) => {
-    useGreatCircle = value;
     recalculateAllMeasurements();
   };
 

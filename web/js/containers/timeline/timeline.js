@@ -116,8 +116,24 @@ class Timeline extends React.Component {
     this.debounceOnUpdateEndDate = lodashDebounce(this.props.onUpdateEndDate, 30);
     this.debounceOnUpdateStartAndEndDate = lodashDebounce(this.props.onUpdateStartAndEndDate, 30);
 
+    // change timescale
+    this.debounceWheelTime = 60;
+
+    // IE11 specific - increase wheel timing to handle performance issues
+    if (window.navigator.userAgent.match(/Trident\/7\./)) {
+      this.debounceWheelTime = 2500;
+    }
+
+    this.debounceChangeTimeScaleWheel = lodashDebounce(this.throttleChangeTimeScaleWheel, this.debounceWheelTime, { leading: true, trailing: false });
+    this.throttleChangeTimeScaleWheelFire = lodashThrottle(this.changeTimeScaleScroll, 200, { leading: true, trailing: false });
+
     // application relative now time
     this.appNowUpdateInterval = 0;
+  }
+
+  // chain throttled timescale wheel change call after debounce for smoother UX
+  throttleChangeTimeScaleWheel = (e) => {
+    this.throttleChangeTimeScaleWheelFire(e);
   }
 
   // HOVER TIME
@@ -356,7 +372,9 @@ class Timeline extends React.Component {
       timeScaleChangeUnit,
       selectedDate,
       rightArrowDisabled,
-      leftArrowDisabled
+      leftArrowDisabled,
+      timelineEndDateLimit,
+      timelineStartDateLimit
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
@@ -366,7 +384,9 @@ class Timeline extends React.Component {
     delta = Number(delta * signconstant); // determine if negative or positive change
     const disabled = signconstant > 0 ? rightArrowDisabled : leftArrowDisabled;
     if (!disabled) {
-      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate));
+      const minDate = new Date(timelineStartDateLimit);
+      const maxDate = new Date(timelineEndDateLimit);
+      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate, minDate, maxDate));
     }
     this.setState({ isArrowDown: true });
   };
@@ -395,8 +415,12 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   handleKeyDown = (e) => {
+    const { isTimelineDragging } = this.state;
+    const { hasSubdailyLayers, timeScale } = this.props;
     // prevent left/right arrows changing date within inputs
-    if (e.target.tagName !== 'INPUT' && !e.ctrlKey && !e.metaKey && !this.state.isTimelineDragging) {
+    if (e.target.tagName !== 'INPUT' && e.target.className !== 'rc-slider-handle' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
+      const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+      const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
       // left arrow
       if (e.keyCode === 37) {
         e.preventDefault();
@@ -405,6 +429,18 @@ class Timeline extends React.Component {
       } else if (e.keyCode === 39) {
         e.preventDefault();
         this.throttleIncrementDate();
+      // up arrow
+      } else if (e.keyCode === 38) {
+        e.preventDefault();
+        if (timeScaleNumber > 1) {
+          this.changeTimeScale(timeScaleNumber - 1);
+        }
+      // down arrow
+      } else if (e.keyCode === 40) {
+        e.preventDefault();
+        if (timeScaleNumber < maxTimeScaleNumber) {
+          this.changeTimeScale(timeScaleNumber + 1);
+        }
       }
     }
   };
@@ -442,8 +478,40 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   changeTimeScale = (timeScale) => {
+    this.setState({
+      showHoverLine: false,
+      showDraggerTime: false
+    });
     this.props.changeTimeScale(timeScale);
   };
+
+  /**
+  * @desc changes timeScale with wheel scroll - throttled invocations
+  * y axis change - change timescale scroll (e.g. from 'day' to 'month')
+  * @param {Event} wheel scroll event
+  * @returns {void}
+  */
+  changeTimeScaleScroll = (e) => {
+    const {
+      timeScale,
+      hasSubdailyLayers
+    } = this.props;
+    const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+    const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
+
+    // handle time scale change on y axis wheel event
+    // wheel zoom out
+    if (e.deltaY > 0) {
+      if (timeScaleNumber > 1) {
+        this.changeTimeScale(timeScaleNumber - 1);
+      }
+      // wheel zoom in
+    } else {
+      if (timeScaleNumber < maxTimeScaleNumber) {
+        this.changeTimeScale(timeScaleNumber + 1);
+      }
+    }
+  }
 
   /**
   * @desc handle SET of custom time scale panel
@@ -723,7 +791,7 @@ class Timeline extends React.Component {
 
   /**
    * If a user adds a subdaily layer and the current selected time is too recent
-   * it is likely they will see no layer content.  Here we are moving the selected time
+   * it is likely they will see no layer content. Here we are moving the selected time
    * backwards for them to attempt to avoid this scenario
    */
   moveSelectedDateBackwards() {
@@ -869,6 +937,8 @@ class Timeline extends React.Component {
       hideTimeline,
       timeScale,
       isSmallScreen,
+      isScreenWidthLessThan350,
+      isScreenWidthLessThan450,
       toggleActiveCompareState,
       parentOffset,
       isTourActive,
@@ -905,8 +975,20 @@ class Timeline extends React.Component {
       hasMoved
     } = this.state;
     const selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    // timeline open/closed styling
     const isTimelineHidden = timelineHidden || hideTimeline;
     const chevronDirection = isTimelineHidden ? 'left' : 'right';
+    // handle mobile size styling
+    const mobileLeft = hasSubdailyLayers
+      ? isScreenWidthLessThan450
+        ? '10px'
+        : '277px'
+      : isScreenWidthLessThan350
+        ? '10px'
+        : '180px';
+    const mobileBottom = (hasSubdailyLayers && isScreenWidthLessThan450) || isScreenWidthLessThan350
+      ? '65px'
+      : '10px';
     return (
       <React.Fragment>
         {isDistractionFreeModeActive
@@ -928,24 +1010,49 @@ class Timeline extends React.Component {
           style={{
             display: isDistractionFreeModeActive && !isHoverOverDistractionFreeTimeUI ? 'none' : 'block'
           }}>
-          {initialLoadComplete
-            ? <ErrorBoundary>
+          {initialLoadComplete &&
+            <ErrorBoundary>
               {isSmallScreen
-                ? <MobileDatePicker
-                  date={selectedDate}
-                  startDateLimit={timelineStartDateLimit}
-                  endDateLimit={timelineEndDateLimit}
-                  onDateChange={this.onDateChange}
-                  hasSubdailyLayers={hasSubdailyLayers}
-                />
+              /* Mobile Timeline Size */
+                ? <div id="timeline-header">
+                  <div id="date-selector-main">
+                    <MobileDatePicker
+                      date={selectedDate}
+                      startDateLimit={timelineStartDateLimit}
+                      endDateLimit={timelineEndDateLimit}
+                      onDateChange={this.onDateChange}
+                      hasSubdailyLayers={hasSubdailyLayers}
+                    />
+                  </div>
+                  <div className="mobile-date-change-arrows-btn"
+                    style={{
+                      left: mobileLeft,
+                      bottom: mobileBottom
+                    }}
+                  >
+                    <div id="zoom-buttons-group">
+                      <DateChangeArrows
+                        leftArrowDown={this.throttleDecrementDate}
+                        leftArrowUp={this.stopLeftArrow}
+                        leftArrowDisabled={leftArrowDisabled}
+                        rightArrowDown={this.throttleIncrementDate}
+                        rightArrowUp={this.stopRightArrow}
+                        rightArrowDisabled={rightArrowDisabled}
+                      />
+                    </div>
+                  </div>
+                </div>
+                /* Normal Timeline Size */
                 : <section id="timeline" className="timeline-inner clearfix">
                   <div id="timeline-header"
                     className={hasSubdailyLayers ? 'subdaily' : ''}
                   >
+                    {/* Date Selector, Interval, Arrow Controls */}
                     <div id="date-selector-main">
                       <DateSelector
+                        id={draggerSelected}
+                        idSuffix={'timeline'}
                         date={new Date(selectedDate)}
-                        draggerSelected={draggerSelected}
                         onDateChange={this.onDateChange}
                         maxDate={new Date(timelineEndDateLimit)}
                         minDate={new Date(timelineStartDateLimit)}
@@ -974,7 +1081,13 @@ class Timeline extends React.Component {
                     <AnimationButton
                       clickAnimationButton={this.clickAnimationButton}
                       disabled={animationDisabled}
-                      title={isCompareModeActive ? 'Animation feature is deactivated when Compare feature is active' : isDataDownload ? 'Animation feature is deactivated when Data Download feature is active' : ''}
+                      title={
+                        isCompareModeActive
+                          ? 'Animation feature is deactivated when Compare feature is active'
+                          : isDataDownload
+                            ? 'Animation feature is deactivated when Data Download feature is active'
+                            : ''
+                      }
                     />
                   </div>
 
@@ -1010,7 +1123,7 @@ class Timeline extends React.Component {
                       animationEndLocation={animationEndLocation}
                       animStartLocationDate={animStartLocationDate}
                       animEndLocationDate={animEndLocationDate}
-                      changeTimeScale={this.changeTimeScale}
+                      debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
                       updatePositioning={this.updatePositioning}
                       updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
                       updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
@@ -1042,8 +1155,8 @@ class Timeline extends React.Component {
                       this.state.animationStartLocation &&
                       this.state.animationStartLocationDate &&
                       this.state.animationEndLocation &&
-                      this.state.animationEndLocationDate
-                      ? <TimelineRangeSelector
+                      this.state.animationEndLocationDate &&
+                      <TimelineRangeSelector
                         axisWidth={axisWidth}
                         position={position}
                         transformX={transformX}
@@ -1058,11 +1171,10 @@ class Timeline extends React.Component {
                         updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
                         max={rangeSelectorMax}
                       />
-                      : null
                     }
 
-                    {frontDate
-                      ? <DraggerContainer
+                    {frontDate &&
+                      <DraggerContainer
                         axisWidth={axisWidth}
                         position={position}
                         transformX={transformX}
@@ -1085,11 +1197,10 @@ class Timeline extends React.Component {
                         isCompareModeActive={isCompareModeActive}
                         isDraggerDragging={isDraggerDragging}
                         isAnimationPlaying={isAnimationPlaying}
-                      />
-                      : null }
+                      /> }
 
-                    {!isTimelineDragging
-                      ? <DateToolTip
+                    {!isTimelineDragging &&
+                      <DateToolTip
                         axisWidth={axisWidth}
                         leftOffset={leftOffset}
                         hoverTime={hoverTime}
@@ -1102,11 +1213,10 @@ class Timeline extends React.Component {
                         showDraggerTime={showDraggerTime}
                         showHoverLine={showHoverLine}
                       />
-                      : null
                     }
                   </div>
 
-                  {/* custom interval selector */}
+                  {/* Custom Interval Selector Widget */}
                   <CustomIntervalSelectorWidget
                     customDelta={customIntervalValue}
                     customIntervalZoomLevel={customIntervalZoomLevel}
@@ -1115,7 +1225,7 @@ class Timeline extends React.Component {
                     hasSubdailyLayers={hasSubdailyLayers}
                   />
 
-                  {/* Zoom Level Change */}
+                  {/* Zoom Level Change Controls */}
                   <AxisTimeScaleChange
                     timeScale={timeScale}
                     changeTimeScale={this.changeTimeScale}
@@ -1133,7 +1243,6 @@ class Timeline extends React.Component {
                 </section>
               }
             </ErrorBoundary>
-            : null
           }
         </div>
       </React.Fragment>
@@ -1172,6 +1281,8 @@ function mapStateToProps(state) {
   const isCompareModeActive = compare.active;
   const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
   const isSmallScreen = lessThan.medium;
+  const isScreenWidthLessThan350 = screenWidth < 350;
+  const isScreenWidthLessThan450 = screenWidth < 450;
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
 
   // handle reset of timescale and intervals if not subdaily
@@ -1225,6 +1336,8 @@ function mapStateToProps(state) {
     appNow,
     isTourActive: tour.active,
     isSmallScreen,
+    isScreenWidthLessThan350,
+    isScreenWidthLessThan450,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
     customSelected,
@@ -1340,6 +1453,8 @@ Timeline.propTypes = {
   isDataDownload: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
+  isScreenWidthLessThan350: PropTypes.bool,
+  isScreenWidthLessThan450: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
@@ -1379,31 +1494,45 @@ const getEndTime = (layers, config) => {
  * @param  {Number} delta Date and direction to change
  * @param  {Number} increment Zoom level of change
  *                  e.g. months, minutes, years, days
+ * @param  {Object} prevDate JS Date Object
+ * @param  {Object} minDate timelineStartDateLimit JS Date Object
+ * @param  {Object} maxDate timelineEndDateLimit JS Date Object
  * @return {Object} JS Date Object
  */
-const getNextTimeSelection = (delta, increment, prevDate) => {
+const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDate) => {
+  let date;
   switch (increment) {
     case 'year':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta)
       );
+      break;
     case 'month':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta)
       );
+      break;
     case 'day':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta)
       );
+      break;
     case 'hour':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta)
       );
+      break;
     case 'minute':
-      return new Date(
+      date = new Date(
         new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta)
       );
   }
+  if (date < minDate) {
+    return minDate;
+  } else if (date > maxDate) {
+    return maxDate;
+  }
+  return date;
 };
 
 // check if left arrow should be disabled on predicted decrement
@@ -1413,9 +1542,14 @@ const checkLeftArrowDisabled = (
   timeScaleChangeUnit,
   timelineStartDateLimit
 ) => {
-  const nextDecrementDate = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  const isSameOrBefore = new Date(nextDecrementDate.format()) < new Date(timelineStartDateLimit);
-  return isSameOrBefore;
+  const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
+  const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
+  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
+  const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
+
+  const nextDecrementDateTime = nextDecrementDate.getTime();
+  const minMinusDeltaDateTime = minMinusDeltaDate.getTime();
+  return nextDecrementDateTime <= minMinusDeltaDateTime;
 };
 
 // check if right arrow should be disabled on predicted increment
@@ -1427,6 +1561,10 @@ const checkRightArrowDisabled = (
 ) => {
   const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
   const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
-  const endOfTimelineDate = new Date(timelineEndDateLimit);
-  return nextIncrementDate > endOfTimelineDate;
+  const maxPlusDeltaMoment = moment.utc(timelineEndDateLimit).add(delta, timeScaleChangeUnit);
+  const maxPlusDeltaDate = new Date(maxPlusDeltaMoment.seconds(0).format());
+
+  const nextIncrementDateTime = nextIncrementDate.getTime();
+  const maxPlusDeltaDateTime = maxPlusDeltaDate.getTime();
+  return nextIncrementDateTime >= maxPlusDeltaDateTime;
 };

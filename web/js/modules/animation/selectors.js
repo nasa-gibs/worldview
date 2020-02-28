@@ -4,7 +4,7 @@ import {
   imageUtilGetCoordsFromPixelValues,
   getDownloadUrl
 } from '../image-download/util';
-import { getLayers } from '../layers/selectors';
+import { getLayers, hasSubDaily } from '../layers/selectors';
 import { timeScaleFromNumberKey } from '../date/constants';
 /*
  * loops through dates and created image
@@ -31,21 +31,21 @@ export function getImageArray(
   const a = [];
   const fromDate = new Date(startDate);
   const toDate = new Date(endDate);
+  const isSubDaily = hasSubDaily(layers[activeString]);
   let current = fromDate;
   let j = 0;
   let src;
   let strDate;
   let products;
   const useDelta = customSelected && customDelta ? customDelta : delta;
-  const useInterval = customSelected ? customInterval : interval;
   const increment = customSelected
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
 
   while (current <= toDate) {
     j++;
-    if (useInterval > 3) {
-      strDate = util.toISOStringSeconds(current);
+    if (isSubDaily) {
+      strDate = util.toISOStringMinutes(current);
     } else {
       strDate = util.toISOStringDate(current);
     }

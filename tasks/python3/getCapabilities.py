@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
+from concurrent.futures import ThreadPoolExecutor
 from optparse import OptionParser
-from datetime import datetime
 from collections import OrderedDict
 import os
 import sys
@@ -115,24 +115,29 @@ def process_remote(entry):
         print(('error: %s: %s' % (url, str(e))))
         print((str(traceback.format_exc())))
 
+# Fetch a single colormap and write to file
+def process_single_colormap(link):
+    try:
+        response = http.request("GET", link)
+        contents = response.data
+        output_file = os.path.join(colormaps_dir, os.path.basename(link))
+        with open(output_file, "w") as fp:
+            fp.write(contents.decode('utf-8'))
+    except Exception as e:
+        sys.stderr.write("%s:   WARN: Unable to fetch %s: %s\n" %
+            (prog, link, str(e)))
+        global warning_count
+        warning_count += 1
+
 # Fetch every colormap from the API and write response to file system
 def process_colormaps():
-    print("%s: Fetching %d colormaps" % (prog, len(colormaps)))
+    print("%s: Fetching %d colormaps..." % (prog, len(colormaps)))
     sys.stdout.flush()
     if not os.path.exists(colormaps_dir):
         os.makedirs(colormaps_dir)
-    for link in list(colormaps.values()):
-        try:
-            response = http.request("GET", link)
-            contents = response.data
-            output_file = os.path.join(colormaps_dir, os.path.basename(link))
-            with open(output_file, "w") as fp:
-                fp.write(contents.decode('utf-8'))
-        except Exception as e:
-            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s\n" %
-                (prog, link, str(e)))
-            global warning_count
-            warning_count += 1
+    with ThreadPoolExecutor() as executor:
+        for link in colormaps.values():
+            executor.submit(process_single_colormap, link)
 
 # Fetch every vectorstyle from the API and write response to file system
 def process_vectorstyles():
@@ -174,25 +179,30 @@ def process_vectordata():
             global warning_count
             warning_count += 1
 
+futures = []
 tolerant = config.get("tolerant", False)
-if "wv-options-fetch" in config:
-    for entry in config["wv-options-fetch"]:
-        try:
-            remote_count += 1
-            process_remote(entry)
-        except Exception as e:
-            if tolerant:
-                warning_count += 1
-                sys.stderr.write("%s:   WARN: %s\n" % (prog, str(e)))
-            else:
-                error_count += 1
-                sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
-    if colormaps:
-        process_colormaps()
-    if vectorstyles:
-        process_vectorstyles()
-    if vectordata:
-        process_vectordata()
+if __name__ == "__main__":
+    if "wv-options-fetch" in config:
+        with ThreadPoolExecutor() as executor:
+            for entry in config["wv-options-fetch"]:
+                futures.append(executor.submit(process_remote, entry))
+        for future in futures:
+            try:
+                remote_count += 1
+                future.result()
+            except Exception as e:
+                if tolerant:
+                    warning_count += 1
+                    sys.stderr.write("%s:   WARN: %s\n" % (prog, str(e)))
+                else:
+                    error_count += 1
+                    sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
+        if colormaps:
+            process_colormaps()
+        if vectorstyles:
+            process_vectorstyles()
+        if vectordata:
+            process_vectordata()
 
 print("%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count))
 

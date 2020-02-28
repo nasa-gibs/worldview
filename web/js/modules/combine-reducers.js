@@ -38,6 +38,10 @@ import dataDownloadReducer from './data/reducers';
 import { get as lodashGet, assign as lodashAssign } from 'lodash';
 import { imageDownloadReducer } from './image-download/reducers';
 import measureReducer from './measure/reducers';
+import {
+  productPickerReducer,
+  getInitialState as getProductPickerInitialState
+} from './product-picker/reducers';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
 import uiReducers from './ui/reducers';
@@ -89,6 +93,7 @@ export function getInitialState(models, config, parameters) {
     requestedEventSources: eventRequestResponse(eventsIgnoreArray),
     requestedEventCategories: eventRequestResponse(eventsIgnoreArray),
     palettes: getInitialPaletteState(config),
+    productPicker: getProductPickerInitialState(config),
     vectorStyles: getInitialVectorStyleState(config)
   };
 }
@@ -130,7 +135,8 @@ const reducers = {
   lastAction: lastAction,
   location: locationReducer,
   measure: measureReducer,
-  ui: uiReducers
+  ui: uiReducers,
+  productPicker: productPickerReducer
 };
 const appReducer = combineReducers(reducers);
 /**

@@ -11,8 +11,6 @@
                     "description": "airs/CarbonMonoxide",
                     "image": "",
                     "settings": [
-                        "AIRS_CO_Total_Column_Day",
-                        "AIRS_CO_Total_Column_Night",
                         "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
                         "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Night",
                         "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day",

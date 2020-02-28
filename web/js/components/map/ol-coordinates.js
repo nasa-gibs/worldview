@@ -33,14 +33,21 @@ class OlCoordinates extends React.Component {
       this.clearCoord();
       return;
     }
-
-    const pcoord = transform(coord, crs, 'EPSG:4326');
-    const [lon, lat] = pcoord;
-    if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
+    let pcoord = transform(coord, crs, 'EPSG:4326');
+    let [lon, lat] = pcoord;
+    if (Math.abs(lat) > 90) {
       this.clearCoord();
       return;
     }
-
+    if (Math.abs(lon) > 180) {
+      if (crs === 'EPSG:4326' && Math.abs(lon) < 250) {
+        lon = util.normalizeWrappedLongitude(lon);
+        pcoord = [lon, lat];
+      } else {
+        this.clearCoord();
+        return;
+      }
+    }
     this.setState({
       hasMouse: true,
       format: util.getCoordinateFormat(),

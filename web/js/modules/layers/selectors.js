@@ -12,6 +12,31 @@ import {
 } from 'lodash';
 import update from 'immutability-helper';
 import util from '../../util/util';
+import { createSelector } from 'reselect';
+
+const getConfig = state => state.config;
+const getProjection = state => state.proj && state.proj.id;
+
+export const getLayersForProjection = createSelector(
+  [getConfig, getProjection],
+  (config, projection) => {
+    const filteredRows = lodashValues(config.layers)
+      // Only use the layers for the active projection
+      .filter(layer => layer.projections[projection])
+      .map(layer => {
+        // If there is metadata for the current projection, use that
+        const projectionMeta = layer.projections[projection];
+        if (projectionMeta.title) layer.title = projectionMeta.title;
+        if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
+        // Decode HTML entities in the subtitle
+        if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
+        return layer;
+      });
+    return lodashSortBy(filteredRows, layer => {
+      return lodashIndexOf(config.layerOrder, layer.id);
+    });
+  }
+);
 
 export function hasMeasurementSource(current, config, projId) {
   var hasSource;
@@ -56,26 +81,6 @@ export function hasMeasurementSetting(current, source, config, projId) {
   return hasSetting;
 }
 
-export function getLayersForProjection(config, projection) {
-  var filteredRows = lodashValues(config.layers)
-    .filter(function(layer) {
-      // Only use the layers for the active projection
-      return layer.projections[projection];
-    })
-    .map(function(layer) {
-      // If there is metadata for the current projection, use that
-      var projectionMeta = layer.projections[projection];
-      if (projectionMeta.title) layer.title = projectionMeta.title;
-      if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
-      // Decode HTML entities in the subtitle
-      if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
-      return layer;
-    });
-  return lodashSortBy(filteredRows, function(layer) {
-    return lodashIndexOf(config.layerOrder, layer.id);
-  });
-}
-
 var decodeHtml = function(html) {
   var txt = document.createElement('textarea');
   txt.innerHTML = html;
@@ -98,8 +103,11 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec, layers, layerConfig, overlayLength) {
+export function addLayer(id, spec, layers, layerConfig, overlayLength, projection) {
   layers = lodashCloneDeep(layers);
+  if (projection) {
+    layers = layers.filter(layer => layer.projections[projection]);
+  }
   if (
     lodashFind(layers, {
       id: id
@@ -117,6 +125,7 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   def.custom = spec.custom || undefined;
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
+  def.disabled = spec.disabled || undefined;
 
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
@@ -127,7 +136,8 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   if (def.group === 'overlays') {
     layers.unshift(def);
   } else {
-    layers.splice(overlayLength, 0, def);
+    const overlaysLength = overlayLength || layers.filter(layer => layer.group === 'overlays').length;
+    layers.splice(overlaysLength, 0, def);
   }
   return layers;
 }

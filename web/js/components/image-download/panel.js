@@ -8,7 +8,6 @@ import {
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import PropTypes from 'prop-types';
-import util from '../../util/util';
 import googleTagManager from 'googleTagManager';
 
 const MAX_DIMENSION_SIZE = 8200;
@@ -57,11 +56,10 @@ export default class ImageResSelection extends React.Component {
       { width, height },
       time,
       fileType,
-      isWorldfile
+      fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile
     );
 
     if (url) {
-      util.metrics('lc=' + encodeURIComponent(dlURL));
       window.open(dlURL, '_blank');
     } else {
       console.log(url);
@@ -119,10 +117,9 @@ export default class ImageResSelection extends React.Component {
   _renderWorldfileSelect() {
     if (this.props.worldFileOptions) {
       const value = this.state.isWorldfile ? 1 : 0;
-
       return (
         <div className="wv-image-header">
-          {this.state.fileType === 'image/kmz' ? (
+          {this.state.fileType === 'application/vnd.google-earth.kmz' ? (
             <select disabled>
               <option value={0}>No</option>
             </select>

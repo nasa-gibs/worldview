@@ -1,84 +1,77 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Arrow from '../util/arrow';
 import util from '../../util/util';
 
 /*
- * A react component, is a draggable svg
- * group. It is a parent component that
- * rerenders when child elements are dragged
+ * DateInputColumn used in DateSelector within
+ * Timeline and AnimationWidget
  *
- * @class TimelineRangeSelector
+ * @class DateInputColumn
  */
 class DateInputColumn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value,
+      value: '',
       selected: false,
-      valid: true
+      size: null
     };
     this.inputs = [];
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.blur = this.blur.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.onClickUp = this.onClickUp.bind(this);
-    this.onClickDown = this.onClickDown.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.focused) {
-      this.inputs[this.props.tabIndex].focus();
+  componentDidUpdate(prevProps) {
+    const { focused, tabIndex, value } = this.props;
+    if (focused) {
+      this.inputs[tabIndex].focus();
     }
-    if (this.props.value !== prevProps.value) {
+    if (value !== prevProps.value) {
       this.updateValue();
     }
   }
 
-  UNSAFE_componentWillMount() {
-    var size;
-    var type;
-    type = this.props.type;
-    if (type === 'year') {
-      size = '4';
-    } else if (type === 'day') {
-      size = 2;
-    } else {
-      size = 3;
-    }
-    this.size = size;
-  }
-
   componentDidMount() {
     this.updateValue();
+    this.setTextSize();
+  }
+
+  setTextSize = () => {
+    const { type } = this.props;
+    let size;
+    if (type === 'year') {
+      size = 4;
+    } else if (type === 'month') {
+      size = 3;
+    } else {
+      // day, hour, minute
+      size = 2;
+    }
+    this.setState({
+      size: size
+    });
   }
 
   // update input value
   updateValue = () => {
-    this.setState({
-      value: this.props.value
-    });
+    const { value } = this.props;
+    this.setState({ value });
   }
 
-  onKeyPress(e) {
-    var kc = e.keyCode;
-    if (
-      kc === 9 || // tab
-      kc === 13
-    ) {
-      // enter
+  onKeyPress = (e) => {
+    // check tab and enter key code
+    const keyCode = e.keyCode;
+    const entered = keyCode === 13 || keyCode === 9;
+    if (entered) {
       e.preventDefault();
       e.stopPropagation();
     }
   }
 
-  onKeyUp(e) {
-    var keyCode = e.keyCode;
-    var value = e.target.value;
-    var newDate;
-    var shiftTab;
-    var entered = keyCode === 13 || keyCode === 9;
+  onKeyUp = (e) => {
+    const { type } = this.props;
+    const keyCode = e.keyCode;
+    const entered = keyCode === 13 || keyCode === 9;
+    let shiftTab;
 
     // shift down when tab pressed
     if (e.shiftKey && keyCode === 9) {
@@ -97,132 +90,156 @@ class DateInputColumn extends Component {
       return;
     }
     if (e.type === 'focusout' || entered) {
-      if (this.props.type === 'year' || this.props.type === 'day') {
+      if (type === 'year' || type === 'day') {
         if (!((keyCode >= 48 && keyCode <= 57) || entered || keyCode === 8)) {
           return;
         }
       }
-      switch (this.props.type) {
-        case 'year':
-          newDate = this.yearValidation(value);
-          break;
-        case 'month':
-          newDate = this.monthValidation(value);
-          break;
-        case 'day':
-          newDate = this.dayValidation(value);
-          break;
-        case 'hour':
-          newDate = this.hourValidation(value);
-          break;
-        case 'minute':
-          newDate = this.minuteValidation(value);
-          break;
-      }
-      if (newDate) {
-        this.props.updateDate(newDate, this.props.type);
-        if (entered) {
-          if (shiftTab) {
-            // shift-tabbed - move backward
-            this.previousTab();
-          } else {
-            // entered or tabbed - move forward
-            this.nextTab();
-          }
+      if (entered) {
+        if (shiftTab) {
+          // shift-tabbed - move backward
+          this.previousTab();
+        } else {
+          // entered or tabbed - move forward
+          this.nextTab();
         }
-      } else if (entered) {
-        this.setState({
-          valid: false
-        });
       }
     }
   }
 
-  onClickUp() {
+  onClickUp = () => {
     this.rollDate(1);
-    this.setState({
-      valid: true
-    });
   }
 
-  onClickDown() {
+  onClickDown = () => {
     this.rollDate(-1);
-    this.setState({
-      valid: true
-    });
   }
 
-  yearValidation(input) {
-    var newDate;
+  validateBasedOnType = (value) => {
+    const { type, updateTimeUnitInput } = this.props;
+    let newDate;
+    switch (type) {
+      case 'year':
+        newDate = this.yearValidation(value);
+        break;
+      case 'month':
+        newDate = this.monthValidation(value);
+        // transform month number to string (e.g., 3 -> 'MAR')
+        if (newDate !== null && !isNaN(value)) {
+          value = util.monthStringArray[value - 1];
+        }
+        break;
+      case 'day':
+        newDate = this.dayValidation(value);
+        break;
+      case 'hour':
+        newDate = this.hourValidation(value);
+        break;
+      case 'minute':
+        newDate = this.minuteValidation(value);
+        break;
+    }
+
+    // add leading '0' to single string number
+    if (newDate !== null && value.length === 1) {
+      value = '0' + value;
+    }
+
+    // update parent level time unit type value
+    if (newDate !== null) {
+      updateTimeUnitInput(type, value);
+    }
+    return newDate;
+  }
+
+  yearValidation = (input) => {
+    const date = new Date(this.props.date);
     if (input > 1000 && input < 9999) {
-      newDate = new Date(new Date(this.props.date).setUTCFullYear(input));
+      const newDate = new Date(date.setUTCFullYear(input));
       return this.validateDate(newDate);
     }
+    return null;
   }
 
-  monthValidation(input) {
+  monthValidation = (input) => {
+    const date = new Date(this.props.date);
     var newDate;
     if (!isNaN(input) && input < 13 && input > 0) {
-      newDate = new Date(new Date(this.props.date).setUTCMonth(input - 1));
+      newDate = new Date(date.setUTCMonth(input - 1));
       if (newDate) {
-        this.setState({
-          value: util.monthStringArray[input - 1]
-        });
         return this.validateDate(newDate);
       }
+      return null;
     } else {
       const realMonth = util.stringInArray(util.monthStringArray, input);
       if (realMonth !== false) {
-        newDate = new Date(new Date(this.props.date).setUTCMonth(realMonth));
-        return this.validateDate(newDate);
+        const day = date.getUTCDate();
+        const zeroDay = new Date(date.setUTCDate(1));
+
+        const zeroAddMonth = new Date(zeroDay.setUTCMonth(realMonth));
+        const zeroAddedMonthNumber = zeroAddMonth.getUTCMonth();
+
+        const addDay = new Date(zeroAddMonth.setUTCDate(day));
+        const addedDayMonthNumber = addDay.getUTCMonth();
+
+        if (addedDayMonthNumber !== zeroAddedMonthNumber) {
+          return false;
+        }
+        return this.validateDate(addDay);
       } else {
-        return false;
+        return null;
       }
     }
   }
 
-  dayValidation(input) {
-    var newDate;
-    var maxDate;
-    var currentDate = this.props.date;
+  dayValidation = (input) => {
+    const date = new Date(this.props.date);
+    const standardMaxDateForMonth = 31;
 
-    maxDate = new Date(
-      currentDate.getYear(),
-      currentDate.getMonth() + 1,
-      0
-    ).getDate();
+    if (input > 0 && input <= standardMaxDateForMonth) {
+      const actualMaxDateForMonth = new Date(
+        date.getYear(),
+        date.getMonth() + 1,
+        0
+      ).getDate();
 
-    if (input > 0 && input <= maxDate) {
-      newDate = new Date(new Date(currentDate).setUTCDate(input));
+      if (input > actualMaxDateForMonth) {
+        return false;
+      }
+      const newDate = new Date(date.setUTCDate(input));
       return this.validateDate(newDate);
     }
+    return null;
   }
 
-  hourValidation(input) {
-    var newDate;
+  hourValidation = (input) => {
+    const date = new Date(this.props.date);
     if (input >= 0 && input <= 23) {
-      newDate = new Date(new Date(this.props.date).setUTCHours(input));
+      const newDate = new Date(date.setUTCHours(input));
       return this.validateDate(newDate);
     }
+    return null;
   }
 
-  minuteValidation(input) {
-    var newDate;
+  minuteValidation = (input) => {
+    const date = new Date(this.props.date);
     if (input >= 0 && input <= 59) {
-      newDate = new Date(new Date(this.props.date).setUTCMinutes(input));
+      const newDate = new Date(date.setUTCMinutes(input));
       return this.validateDate(newDate);
     }
+    return null;
   }
 
-  rollDate(amt) {
-    var newDate = util.rollDate(
-      this.props.date,
-      this.props.type,
+  rollDate = (amt) => {
+    const { date, minDate, maxDate, type, updateDate } = this.props;
+    const newDate = util.rollDate(
+      date,
+      type,
       amt,
-      this.props.minDate,
-      this.props.maxDate
+      minDate,
+      maxDate
     );
-    this.props.updateDate(newDate, this.props.type, amt);
+    updateDate(newDate, true);
   }
 
   /**
@@ -230,114 +247,131 @@ class DateInputColumn extends Component {
    * https://stackoverflow.com/a/40261505/4589331
    * @param {Object} e | Event Object
    */
-  handleFocus(e) {
+  handleFocus = (e) => {
+    const { setFocusedTab, tabIndex } = this.props;
     e.target.select();
     this.setState({ selected: true });
-    this.props.setFocusedTab(this.props.tabIndex);
+    setFocusedTab(tabIndex);
   }
 
-  blur() {
+  blur = (e) => {
+    const { setFocusedTab, tabIndex, type } = this.props;
+    // check for valid date on blur
+    const inputValue = e.target.value;
+    const newDate = this.validateBasedOnType(inputValue);
+    let value = newDate === null
+      ? this.props.value
+      : inputValue;
+
+    if (type === 'month' && !isNaN(value)) {
+      value = util.monthStringArray[value - 1];
+    } else if (value.length === 1) {
+      value = '0' + value;
+    }
+
     this.setState({
-      value: this.props.value,
-      valid: true,
+      value,
       selected: false
     });
 
-    this.props.blur();
+    setFocusedTab(null, tabIndex);
   }
 
-  onChange(e) {
+  onChange = (e) => {
     this.setState({
       value: e.target.value.toUpperCase()
     });
   }
 
-  nextTab() {
-    this.props.changeTab(this.props.tabIndex + 1);
+  nextTab = () => {
+    const { changeTab, tabIndex } = this.props;
+    changeTab(tabIndex + 1, tabIndex);
   }
 
-  previousTab() {
-    this.props.changeTab(this.props.tabIndex - 1);
+  previousTab = () => {
+    const { changeTab, tabIndex } = this.props;
+    changeTab(tabIndex - 1, tabIndex);
   }
 
-  validateDate(date) {
-    if (date > this.props.minDate && date <= this.props.maxDate) {
-      this.setState({
-        valid: true
-      });
+  validateDate = (date) => {
+    const { minDate, maxDate } = this.props;
+    if (date > minDate && date <= maxDate) {
       return date;
     }
     return false;
   }
 
   render() {
+    const {
+      fontSize,
+      inputId,
+      isValid,
+      tabIndex,
+      type
+    } = this.props;
+    const {
+      selected,
+      size,
+      value
+    } = this.state;
+
+    // conditional styling
+    const containerClassName = `input-wrapper ${selected ? 'selected ' : ''}input-wrapper-${type}`;
+    const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
+    const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
+    const fontSizeStyle = fontSize ? { fontSize: fontSize + 'px' } : {};
     return (
       <div
-        className={
-          this.state.selected
-            ? 'input-wrapper selected' + ' input-wrapper-' + this.props.type
-            : 'input-wrapper ' + 'input-wrapper-' + this.props.type
-        }
-        style={this.state.valid ? {} : { borderColor: '#ff0000' }}
+        className={containerClassName}
+        style={containerBorderStyle}
       >
-        <div
+        <Arrow
+          direction='up'
           onClick={this.onClickUp}
-          className="date-arrows date-arrow-up"
-          data-interval={this.props.type}
-        >
-          <svg width="25" height="8">
-            <path d="M 12.5,0 25,8 0,8 z" className="uparrow" />
-          </svg>
-        </div>
+          type={type}
+        />
         <input
           type="text"
           ref={input => {
-            this.inputs[this.props.tabIndex] = input;
+            this.inputs[tabIndex] = input;
           }}
-          size={this.size}
-          maxLength={this.size}
-          className="button-input-group"
-          id={this.props.inputId}
-          value={this.state.value}
-          tabIndex={this.props.tabIndex}
+          size={size}
+          maxLength={size}
+          className={inputClassName}
+          id={inputId}
+          value={value}
+          tabIndex={tabIndex}
           onKeyUp={this.onKeyUp}
-          onKeyDown={this.onKeyPress /* currently not working */}
+          onKeyDown={this.onKeyPress}
           onChange={this.onChange}
-          style={
-            this.props.fontSize ? { fontSize: this.props.fontSize + 'px' } : {}
-          }
-          step={this.props.step}
+          style={fontSizeStyle}
           onBlur={this.blur}
           onFocus={this.handleFocus}
         />
-        <div
+        <Arrow
+          direction='down'
           onClick={this.onClickDown}
-          className="date-arrows date-arrow-down"
-          data-interval={this.props.type}
-        >
-          <svg width="25" height="8">
-            <path d="M 12.5,0 25,8 0,8 z" className="downarrow" />
-          </svg>
-        </div>
+          type={type}
+        />
       </div>
     );
   }
 }
 
 DateInputColumn.propTypes = {
-  blur: PropTypes.func,
   changeTab: PropTypes.func,
   date: PropTypes.object,
   focused: PropTypes.bool,
   fontSize: PropTypes.number,
   inputId: PropTypes.string,
+  isValid: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   setFocusedTab: PropTypes.func,
-  step: PropTypes.number,
   tabIndex: PropTypes.number,
   type: PropTypes.string,
   updateDate: PropTypes.func,
+  updateTimeUnitInput: PropTypes.func,
   value: PropTypes.node
 };
 

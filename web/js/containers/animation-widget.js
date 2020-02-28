@@ -51,9 +51,9 @@ import {
 } from '../modules/animation/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import { onToggle, openCustomContent } from '../modules/modal/actions';
-import { clearCustoms } from '../modules/palettes/actions';
-import { clearRotate } from '../modules/map/actions';
-import { clearGraticule } from '../modules/layers/actions';
+import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
+import { clearRotate, refreshRotation } from '../modules/map/actions';
+import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { Tooltip } from 'reactstrap';
 import Draggable from 'react-draggable';
@@ -139,12 +139,6 @@ class AnimationWidget extends React.Component {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.speed !== state.speed && !state.isSliding) {
-      return { speed: props.speed };
-    } else return null;
-  }
-
   toggleCollapse() {
     this.setState({ collapsed: !this.state.collapsed });
   }
@@ -198,7 +192,10 @@ class AnimationWidget extends React.Component {
       hasCustomPalettes,
       isRotated,
       hasGraticule,
-      numberOfFrames
+      rotation,
+      activePalettes,
+      numberOfFrames,
+      refreshStateAfterGif
     } = this.props;
     const {
       startDate,
@@ -228,6 +225,10 @@ class AnimationWidget extends React.Component {
             googleTagManager.pushEvent({
               event: 'GIF_create_animated_button'
             });
+            this.onCloseGif = () => {
+              refreshStateAfterGif(hasCustomPalettes ? activePalettes : undefined, rotation, hasGraticule);
+              toggleGif();
+            };
             toggleGif();
           });
         });
@@ -384,8 +385,8 @@ class AnimationWidget extends React.Component {
         placement="right"
         isOpen={showTooltip}
         target="create-gif-button">
-          Too many frames were selected. <br/>
-          Please request less than 40 frames if you would like to generate a GIF.
+        Too many frames were selected. <br />
+        Please request less than 40 frames if you would like to generate a GIF.
       </Tooltip>
     );
   }
@@ -484,8 +485,8 @@ class AnimationWidget extends React.Component {
                 handle={RangeHandle}
                 onBeforeChange={() => this.setState({ isSliding: true })}
                 onAfterChange={() => {
-                  this.setState({ isSliding: false });
                   this.props.onSlide(speed);
+                  this.setState({ isSliding: false });
                 }}
               />
               <span className="wv-slider-label">{sliderLabel}</span>
@@ -512,8 +513,6 @@ class AnimationWidget extends React.Component {
               <TimeSelector
                 id="start"
                 idSuffix="animation-widget-start"
-                width="120"
-                height="30"
                 date={startDate}
                 onDateChange={this.onDateChange}
                 maxDate={endDate}
@@ -524,8 +523,6 @@ class AnimationWidget extends React.Component {
               <TimeSelector
                 id="end"
                 idSuffix="animation-widget-end"
-                width="120"
-                height="30"
                 date={endDate}
                 onDateChange={this.onDateChange}
                 maxDate={maxDate}
@@ -565,7 +562,6 @@ class AnimationWidget extends React.Component {
       map,
       selectDate,
       currentDate,
-      toggleGif,
       isGifActive,
       delta,
       interval
@@ -592,7 +588,7 @@ class AnimationWidget extends React.Component {
       return null;
     }
     if (isGifActive) {
-      return <GifContainer onClose={toggleGif} />;
+      return <GifContainer onClose={this.onCloseGif} />;
     }
     return (
       <ErrorBoundary>
@@ -657,9 +653,10 @@ function mapStateToProps(state) {
     { proj: proj.id },
     state
   );
+  const activePalettes = palettes[activeStr];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
-    palettes[activeStr]
+    activePalettes
   );
   const minDate = new Date(config.startDate);
   const maxDate = appNow;
@@ -684,13 +681,14 @@ function mapStateToProps(state) {
     customSelected && customDelta ? customDelta : delta,
     maxFrames
   );
-
+  const rotation = map.rotation;
   return {
     screenWidth: browser.screenWidth,
     animationCustomModalOpen,
     customSelected,
     startDate,
     endDate,
+    activePalettes,
     currentDate: date[activeDateStr],
     minDate,
     maxDate,
@@ -714,7 +712,8 @@ function mapStateToProps(state) {
     },
     isGifActive: gifActive,
     isCompareActive: compare.active,
-    isRotated: Boolean(map.rotation !== 0),
+    isRotated: Boolean(rotation !== 0),
+    rotation,
     hasGraticule: Boolean(
       lodashGet(
         lodashFind(layers[activeStr], { id: 'Graticule' }) || {},
@@ -766,6 +765,17 @@ const mapDispatchToProps = dispatch => ({
   toggleGif: () => {
     dispatch(toggleComponentGifActive());
   },
+  refreshStateAfterGif: (activePalettes, rotation, isGraticule) => {
+    if (activePalettes) {
+      dispatch(refreshPalettes(activePalettes));
+    }
+    if (rotation) {
+      dispatch(refreshRotation(rotation));
+    }
+    if (isGraticule) {
+      dispatch(refreshGraticule(isGraticule));
+    }
+  },
   toggleCustomModal: (open, toggleBy) => {
     dispatch(toggleCustomModal(open, toggleBy));
   },
@@ -800,6 +810,7 @@ RangeHandle.propTypes = {
   value: PropTypes.number
 };
 AnimationWidget.propTypes = {
+  activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   changeCustomInterval: PropTypes.func,
   currentDate: PropTypes.object,
@@ -835,6 +846,8 @@ AnimationWidget.propTypes = {
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
   promiseImageryForTime: PropTypes.func,
+  refreshStateAfterGif: PropTypes.func,
+  rotation: PropTypes.number,
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,

@@ -2,7 +2,7 @@ False Color: Red = M3, Green = I3, Blue = M11
 
 This combination is used to map snow and ice. Snow and ice are very reflective in the visible part of the spectrum (Band M3), and very absorbent in Bands I3 and M11 (short-wave infrared, or SWIR). This band combination is good for distinguishing liquid water from frozen water, for example, clouds over snow, ice cloud versus water cloud; or floods from dense vegetation.
 
-The Visible Infrared Imaging Radiometer Suite (VIIRS) Corrected Reflectance imagery is available only as near real-time imagery. The VIIRS instrument in on board the joint NASA/NOAA Suomi-National Polar orbiting Partnership (S-NPP) satellite. The imagery can be visualized in Worldview and the Global Imagery Browse Services (GIBS). The sensor resolution is 750 m and 375 m (M Bands are 750 m, I Bands are 375 m), imagery resolution is 250 m, and the  temporal resolution is daily.
+The Visible Infrared Imaging Radiometer Suite (VIIRS) Corrected Reflectance imagery is available only as near real-time imagery. The VIIRS instrument in on board the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite. The imagery can be visualized in Worldview and the Global Imagery Browse Services (GIBS). The sensor resolution is 750 m and 375 m (M Bands are 750 m, I Bands are 375 m), imagery resolution is 250 m, and the  temporal resolution is daily.
 
 #### Snow and Ice
 Since the only visible light used in these images (Band M3) is assigned to red, snow and ice appear bright red. The more ice, the stronger the absorption in the SWIR bands, and the more red the color. Thick ice and snow appear vivid red (or dark pink), while small ice crystals in high-level clouds will appear pinkish.

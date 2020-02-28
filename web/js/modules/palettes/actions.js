@@ -4,14 +4,18 @@ import {
   SET_THRESHOLD_RANGE_AND_SQUASH,
   CLEAR_CUSTOM,
   SET_CUSTOM,
+  SET_DISABLED_CLASSIFICATION,
   LOADED_CUSTOM_PALETTES
 } from './constants';
 import { forOwn as lodashForOwn } from 'lodash';
 import {
   setRange as setRangeSelector,
   setCustomSelector,
-  clearCustomSelector
+  clearCustomSelector,
+  refreshDisabledSelector,
+  setDisabledSelector
 } from './selectors';
+
 /**
  * Request palette using core request utility
  *
@@ -136,6 +140,9 @@ export function clearCustoms() {
         if (colormap.max || colormap.min || colormap.squash) {
           dispatch(setThresholdRangeAndSquash(key, props, index, groupName));
         }
+        if (colormap.disabled) {
+          dispatch(setToggledClassification(key, undefined, index, groupName));
+        }
       });
     });
   };
@@ -149,5 +156,75 @@ export function loadedCustomPalettes(customs) {
   return {
     type: LOADED_CUSTOM_PALETTES,
     custom: customs
+  };
+}
+export function setToggledClassification(layerId, classIndex, index, groupName) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const newActivePalettesObj = setDisabledSelector(
+      layerId,
+      classIndex,
+      index,
+      state.palettes[groupName],
+      state
+    );
+    let hasDisabled = false;
+    newActivePalettesObj[layerId].maps.forEach(colorMap => {
+      if (colorMap.disabled && colorMap.disabled.length) {
+        hasDisabled = true;
+      }
+    });
+    dispatch({
+      type: SET_DISABLED_CLASSIFICATION,
+      groupName: groupName,
+      activeString: groupName,
+      layerId,
+      palettes: newActivePalettesObj,
+      props: { disabled: hasDisabled }
+    });
+  };
+};
+export function refreshDisabledClassification(layerId, disabledArray, index, groupName) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const newActivePalettesObj = refreshDisabledSelector(
+      layerId,
+      disabledArray,
+      index,
+      state.palettes[groupName],
+      state
+    );
+    let hasDisabled = false;
+    newActivePalettesObj[layerId].maps.forEach(colorMap => {
+      if (colorMap.disabled && colorMap.disabled.length) {
+        hasDisabled = true;
+      }
+    });
+    dispatch({
+      type: SET_DISABLED_CLASSIFICATION,
+      groupName: groupName,
+      activeString: groupName,
+      layerId,
+      palettes: newActivePalettesObj,
+      props: { disabled: hasDisabled }
+    });
+  };
+};
+export function refreshPalettes(activePalettes) {
+  return (dispatch, getState) => {
+    const groupName = getState().compare.activeString;
+    lodashForOwn(activePalettes, function(value, key) {
+      activePalettes[key].maps.forEach((colormap, index) => {
+        if (colormap.custom) {
+          dispatch(setCustomPalette(key, colormap.custom, index, groupName));
+        }
+        if (colormap.max || colormap.min || colormap.squash) {
+          dispatch(setThresholdRangeAndSquash(key, { squash: colormap.squash, min: colormap.min, max: colormap.max }, index, groupName));
+        }
+        if (colormap.disabled) {
+          dispatch(refreshDisabledClassification(key, colormap.disabled, index, groupName));
+        }
+      });
+    });
   };
 }

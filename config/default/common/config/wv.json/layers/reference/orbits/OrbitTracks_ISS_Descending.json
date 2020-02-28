@@ -5,7 +5,7 @@
       "title": "ISS - Orbit Track & Time",
       "subtitle": "Int'l Space Station / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ISS_Descending",
-      "tags": "iss international tracks",
+      "tags": "international tracks",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",

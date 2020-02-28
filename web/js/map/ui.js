@@ -38,7 +38,7 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { TOGGLE_DISTRACTION_FREE_MODE } from '../modules/ui/constants';
 import { SELECT_DATE } from '../modules/date/constants';
-import { CHANGE_UNITS, USE_GREAT_CIRCLE } from '../modules/measure/constants';
+import { CHANGE_UNITS } from '../modules/measure/constants';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -50,7 +50,7 @@ import {
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
 
-import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from '../modules/map/constants';
+import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
 
 import { updateVectorSelection } from '../modules/vector-styles/util';
@@ -124,6 +124,8 @@ export function mapui(models, config, store, ui) {
       }
       case CLEAR_ROTATE:
         return rotation.reset(self.selected);
+      case REFRESH_ROTATE:
+        return rotation.setRotation(action.rotation, 500, self.selected);
       case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(action, 'payload.query.map.extent');
@@ -154,6 +156,7 @@ export function mapui(models, config, store, ui) {
         return updateProjection();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
+      case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
         return updateLookup();
       case vectorStyleConstants.SET_FILTER_RANGE:
@@ -173,8 +176,6 @@ export function mapui(models, config, store, ui) {
       }
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
-      case USE_GREAT_CIRCLE:
-        return useGreatCircleMeasurements(action.value);
       case SELECT_DATE:
         return updateDate();
     }
@@ -200,10 +201,12 @@ export function mapui(models, config, store, ui) {
     self.events.on('measure-distance', measureDistance);
     self.events.on('measure-area', measureArea);
     self.events.on('disable-click-zoom', () => {
-      self.selected.removeInteraction(doubleClickZoom);
+      doubleClickZoom.setActive(false);
     });
     self.events.on('enable-click-zoom', () => {
-      self.selected.addInteraction(doubleClickZoom);
+      setTimeout(() => {
+        doubleClickZoom.setActive(true);
+      }, 100);
     });
     ui.events.on('last-action', subscribeToStore);
     updateProjection(true);
@@ -881,12 +884,6 @@ export function mapui(models, config, store, ui) {
     }
   };
 
-  const useGreatCircleMeasurements = (value) => {
-    for (const proj in measureTools) {
-      measureTools[proj].useGreatCircleMeasurements(value);
-    }
-  };
-
   /*
    * Updates the extents of OpenLayers map
    *
@@ -1138,6 +1135,7 @@ export function mapui(models, config, store, ui) {
       var coords;
       var pixels;
       const state = store.getState();
+      if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
       // if mobile return
       if (util.browser.small) return;
@@ -1154,14 +1152,6 @@ export function mapui(models, config, store, ui) {
       coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
-      if (Math.abs(coords[0]) > 180) {
-        if (coords[0] > 0) {
-          coords[0] = coords[0] - 360;
-        } else {
-          coords[0] = coords[0] + 360;
-        }
-      }
-
       // setting a limit on running-data retrievel
       if (self.mapIsbeingDragged || util.browser.small) {
         return;
@@ -1174,7 +1164,7 @@ export function mapui(models, config, store, ui) {
       var isMapAnimating = state.animation.isPlaying;
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
 
-      if (!self.mapIsbeingDragged && !self.mapIsbeingZoomed) dataRunner.newPoint(pixels, map);
+      dataRunner.newPoint(pixels, map);
     }
     $(map.getViewport())
       .mouseout(function(e) {

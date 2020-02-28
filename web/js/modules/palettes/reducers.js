@@ -11,7 +11,8 @@ import {
   SET_THRESHOLD_RANGE_AND_SQUASH,
   LOADED_CUSTOM_PALETTES,
   BULK_PALETTE_RENDERING_SUCCESS,
-  CLEAR_CUSTOM
+  CLEAR_CUSTOM,
+  SET_DISABLED_CLASSIFICATION
 } from './constants';
 import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 import update from 'immutability-helper';
@@ -63,6 +64,7 @@ export function paletteReducer(state = defaultPaletteState, action) {
       });
     case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_CUSTOM:
+    case SET_DISABLED_CLASSIFICATION:
     case CLEAR_CUSTOM:
       return lodashAssign({}, state, {
         [groupName]: action.palettes || {}

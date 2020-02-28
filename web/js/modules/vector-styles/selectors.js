@@ -4,12 +4,15 @@ import {
   each as lodashEach,
   find as lodashFind
 } from 'lodash';
+
 import {
   getLayers
 } from '../layers/selectors';
 import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import update from 'immutability-helper';
+import { containsCoordinate } from 'ol/extent';
 import stylefunction from 'ol-mapbox-style/stylefunction';
+
 /**
  * Gets a single colormap (entries / legend combo)
  *
@@ -74,6 +77,7 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  const { compare } = state;
   var styleFunction;
   var layerId = def.id;
   var glStyle = vectorStyles[layerId];
@@ -88,9 +92,10 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   ).reverse();
   var layerGroups;
   var layerGroup;
+
   if (olMap) {
     layerGroups = olMap.getLayers().getArray();
-    if (state.compare && state.compare.active) {
+    if (compare && compare.active) {
       if (layerGroups.length === 2) {
         layerGroup =
           layerGroups[0].get('group') === activeLayerStr
@@ -101,7 +106,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     }
     lodashEach(activeLayers, function(def) {
-      if (state.compare && state.compare.active) {
+      if (compare && compare.active) {
         if (layerGroup && layerGroup.getLayers().getArray().length) {
           lodashEach(layerGroup.getLayers().getArray(), subLayer => {
             if (subLayer.wv && (subLayer.wv.id === layerId)) {
@@ -118,42 +123,62 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
+  const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
+  lodashEach(layerArray, layerInLayerGroup => {
+    // Apply mapbox-gl styles
+    const extentStartX = layerInLayerGroup.getExtent()[0];
+    const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
 
-  // Apply mapbox-gl styles
-  styleFunction = stylefunction(layer, glStyle, vectorStyleId);
-  // Filter Orbit Tracks
-  if (glStyle.name === 'Orbit Tracks') {
-    // Filter time by 5 mins
-    layer.setStyle(function(feature, resolution) {
-      var minute;
-      var minutes = feature.get('label');
-      if (minutes) {
-        minute = minutes.split(':');
-      }
-      if ((minute && minute[1] % 5 === 0) || feature.getType() === 'LineString') {
-        return styleFunction(feature, resolution);
-      }
-    });
-  } else if (glStyle.name === 'SEDAC' &&
-    ((selected[layerId] && selected[layerId].length))) {
-    const selectedFeatures = selected[layerId];
+    styleFunction = stylefunction(layerInLayerGroup, glStyle, vectorStyleId);
+    // Filter Orbit Tracks
+    if (glStyle.name === 'Orbit Tracks' &&
+      (selected[layerId] && selected[layerId].length)) {
+      const selectedFeatures = selected[layerId];
+      layerInLayerGroup.setStyle(function(feature, resolution) {
+        const data = state.config.vectorData[def.vectorData.id];
+        const properties = data.mvt_properties;
+        const features = feature.getProperties();
+        const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
+        const minutes = feature.get('label');
+        const uniqueIdentifier = features[idKey];
+        if (shouldRenderFeature(feature, acceptableExtent)) {
+          if (minutes && uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
+            return selectedStyleFunction(feature, styleFunction(feature, resolution), 1.5);
+          } else {
+            return styleFunction(feature, resolution);
+          }
+        } else {
+          return styleFunction(feature, resolution);
+        }
+      });
+    } else if ((glStyle.name === 'SEDAC') &&
+      (selected[layerId] && selected[layerId].length)) {
+      const selectedFeatures = selected[layerId];
 
-    layer.setStyle(function(feature, resolution) {
-      const data = state.config.vectorData[def.vectorData.id];
-      const properties = data.mvt_properties;
-      const features = feature.getProperties();
-      const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
-      const uniqueIdentifier = features[idKey];
-      if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
-        return selectedStyleFunction(feature, styleFunction(feature, resolution));
-      } else {
-        return styleFunction(feature, resolution);
-      }
-    });
-  }
+      layerInLayerGroup.setStyle(function(feature, resolution) {
+        const data = state.config.vectorData[def.vectorData.id];
+        const properties = data.mvt_properties;
+        const features = feature.getProperties();
+        const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
+        const uniqueIdentifier = features[idKey];
+        if (shouldRenderFeature(feature, acceptableExtent)) {
+          if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
+            return selectedStyleFunction(feature, styleFunction(feature, resolution));
+          } else {
+            return styleFunction(feature, resolution);
+          }
+        }
+      });
+    }
+  });
   return vectorStyleId;
 }
-
+const shouldRenderFeature = (feature, acceptableExtent) => {
+  if (!acceptableExtent) return true;
+  const midpoint = feature.getFlatCoordinates ? feature.getFlatCoordinates() : feature.getGeometry().getFlatCoordinates();
+  if (containsCoordinate(acceptableExtent, midpoint)) return true;
+  return false;
+};
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {

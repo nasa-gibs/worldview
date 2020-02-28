@@ -1,7 +1,7 @@
 ### Air Temperature (Monthly, Near Surface, Primary Forcing Data)
 Temporal Coverage: 1 January 1979 - present (Monthly)
 
-This NLDAS Near Surface Air Temperature parameter is one of the land-surface forcing fields included in the North America Land Data Assimilation System Phase 2 (NLDAS-2) primary forcing monthly 0.125 degree data product.  NLDAS-2 primary forcing Air Temperature data are derived from the analysis fields of the NCEP North American Regional Reanalysis (NARR). The NLDAS monthly Air Temperature data are generated through temporal averaging of the hourly data. The data are in unit “K” (Kelvin).
+This NLDAS Near Surface Air Temperature parameter is one of the land-surface forcing fields included in the North America Land Data Assimilation System Phase 2 (NLDAS-2) primary forcing monthly 0.125 degree data product.  NLDAS-2 primary forcing Air Temperature data are derived from the analysis fields of the NCEP North American Regional Reanalysis (NARR). The NLDAS monthly Air Temperature data are generated through temporal averaging of the hourly data. The data are in units of Kelvin (K).
 
 The NLDAS Near Surface Air Temperature is a science variable that indicates the kinetic energy of the air near the surface of the Earth. The data can be used for supporting research and applications related to global water and energy cycle, drought and flood, climate variability, land surface assimilation, etc.
 

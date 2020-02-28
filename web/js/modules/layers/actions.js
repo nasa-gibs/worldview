@@ -53,7 +53,7 @@ export function addLayer(id, spec) {
   spec = spec || {};
   return (dispatch, getState) => {
     const state = getState();
-    const { layers, compare } = state;
+    const { layers, compare, proj } = state;
 
     const activeString = compare.activeString;
     const layerObj = getLayersSelector(
@@ -66,7 +66,8 @@ export function addLayer(id, spec) {
       spec,
       layers[activeString],
       layers.layerConfig,
-      layerObj.overlays.length || 0
+      layerObj.overlays.length || 0,
+      proj.id
     );
 
     dispatch({
@@ -78,8 +79,13 @@ export function addLayer(id, spec) {
   };
 }
 export function clearGraticule() {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(toggleVisibility('Graticule', false));
+  };
+}
+export function refreshGraticule() {
+  return (dispatch) => {
+    dispatch(toggleVisibility('Graticule', true));
   };
 }
 export function initSecondLayerGroup() {

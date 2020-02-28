@@ -13,7 +13,8 @@ import {
   setCustomSelector,
   getCount,
   setRange as setRangeSelector,
-  findIndex as findPaletteExtremeIndex
+  findIndex as findPaletteExtremeIndex,
+  initDisabledSelector
 } from './selectors';
 import util from '../../util/util';
 import Promise from 'bluebird';
@@ -237,12 +238,15 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     let minObj = lodashAssign({}, { key: 'min', array: [] }, DEFAULT_OBJ);
     let maxObj = lodashAssign({}, { key: 'max', array: [] }, DEFAULT_OBJ);
     let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
+    let disabledObj = lodashAssign({}, { key: 'disabled', array: [] }, DEFAULT_OBJ);
     const attrArray = [];
     for (var i = 0; i < count; i++) {
       if (!palettes[layerId].maps[i]) {
         console.warn('NO PALETTE');
       }
+
       const paletteDef = palettes[layerId].maps[i];
+
       const entryLength =
         lodashSize(lodashGet(paletteDef, 'entries.values')) ||
         lodashSize(lodashGet(paletteDef, 'entries.colors'));
@@ -252,6 +256,10 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
       const minValue = paletteDef.min
         ? lodashSplit(paletteDef.entries.values[paletteDef.min || 0], ',', 1)
         : undefined;
+      const disabledValue = paletteDef.disabled && paletteDef.disabled.length
+        ? paletteDef.disabled.join('-')
+        : undefined;
+
       palObj = createPaletteAttributeObject(
         paletteDef,
         paletteDef.custom,
@@ -277,9 +285,15 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
         squashObj,
         count
       );
+      disabledObj = createPaletteAttributeObject(
+        paletteDef,
+        disabledValue,
+        disabledObj,
+        count
+      );
     }
 
-    [palObj, minObj, maxObj, squashObj].forEach(obj => {
+    [palObj, minObj, maxObj, squashObj, disabledObj].forEach(obj => {
       if (obj.isActive) {
         attrArray.push({
           id: obj.key === 'custom' ? 'palette' : obj.key,
@@ -287,7 +301,6 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
         });
       }
     });
-
     return attrArray;
   } catch (e) {
     console.warn('Error parsing palette: ' + e);
@@ -395,7 +408,24 @@ export function loadPalettes(permlinkState, state) {
         if (layerDef.squash) {
           squash = layerDef.squash;
         }
-
+        if (layerDef.disabled) {
+          lodashEach(layerDef.disabled, function(value, index) {
+            try {
+              const newPalettes = initDisabledSelector(
+                layerId,
+                value,
+                index,
+                state.palettes[stateObj.groupStr],
+                state
+              );
+              state = update(state, {
+                palettes: { [stateObj.groupStr]: { $set: newPalettes } }
+              });
+            } catch (error) {
+              console.warn(' Invalid palette: ' + value);
+            }
+          });
+        }
         if (min.length > 0 || max.length > 0) {
           count = getCount(layerId, state);
           for (var i = 0; i < count; i++) {

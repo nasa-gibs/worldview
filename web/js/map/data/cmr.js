@@ -62,8 +62,6 @@ export function dataCmrClient(spec, store) {
     }
     queryParameters.data.pageSize = '1000';
     var deferred = $.Deferred();
-    var metrics = 'ev=data-download&' + $.param(queryParameters.data, true);
-    util.metrics(metrics);
     ns.ajax
       .submit(queryParameters)
       .done(function(data) {

@@ -88,6 +88,8 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 - [Testing](doc/testing.md)
 - [Uploading](doc/upload.md)
 - [Docker](doc/docker.md)
+- [Release Notes](doc/release_notes.md)
+- [Changelog](CHANGELOG.md)
 
 ## Contact
 
@@ -98,7 +100,7 @@ Contact us via GitHub or by sending an email to
 
 We welcome your contributions! Feel free to [open an issue](https://github.com/nasa-gibs/worldview/issues/new) or [submit a PR](https://github.com/nasa-gibs/worldview/compare).
 
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more contribution guidelines.
+Please review [CONTRIBUTING.md](.github/CONTRIBUTING.md) for contribution guidelines before getting started.
 
 Worldview and NASA follow the [Contributor Covenant Code of Conduct](.github/CODE_OF_CONDUCT.md).
 
