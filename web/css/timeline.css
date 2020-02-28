@@ -193,6 +193,11 @@ button:focus {
     fill: #333;
   }
 
+  & #animate-button {
+    width: 100%;
+    height: 100%;
+  }
+
   & .animate-button {
     position: absolute;
     height: 40px;
