@@ -297,6 +297,8 @@ export function mapui(models, config, store, ui) {
    * @returns {void}
    */
   var onResize = function() {
+    const state = store.getState();
+    const isDistractionFreeModeActive = state.ui.isDistractionFreeModeActive;
     var map = self.selected;
     if (map.small !== util.browser.small) {
       if (util.browser.small) {
@@ -304,9 +306,11 @@ export function mapui(models, config, store, ui) {
         map.removeControl(map.wv.scaleMetric);
         $('#' + map.getTarget() + ' .select-wrapper').hide();
       } else {
-        map.addControl(map.wv.scaleImperial);
-        map.addControl(map.wv.scaleMetric);
-        $('#' + map.getTarget() + ' .select-wrapper').show();
+        if (!isDistractionFreeModeActive) {
+          map.addControl(map.wv.scaleImperial);
+          map.addControl(map.wv.scaleMetric);
+          $('#' + map.getTarget() + ' .select-wrapper').show();
+        }
       }
     }
   };

@@ -29,7 +29,7 @@ class DistractionFreeTimeUI extends PureComponent {
     } else {
       displayDate = dateFirstHalfYMD.join(' ');
     }
-// TODO: CREATE HEIGHT SPECIFIC CONTAINER FOR HOVER EFFECT SMOOTHER UX
+
     return (
       <div
         className="distraction-free-date"

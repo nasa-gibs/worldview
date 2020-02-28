@@ -182,6 +182,7 @@ class Sidebar extends React.Component {
             href="/"
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
+            className={`${isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}`}
             onClick={resetWorldview}
             ref={iconElement => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}

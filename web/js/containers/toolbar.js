@@ -201,7 +201,7 @@ class toolbarContainer extends Component {
           <Button
             id="wv-info-button"
             title="Information"
-            className={'wv-toolbar-button' + notificationClass}
+            className={`wv-toolbar-button${notificationClass} ${isDistractionFreeModeActive ? 'wv-info-button-distraction-free-mode' : ''}`}
             onClick={() =>
               openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)
             }
@@ -329,12 +329,8 @@ toolbarContainer.propTypes = {
   notificationType: PropTypes.string,
   notify: PropTypes.func,
   openModal: PropTypes.func,
-<<<<<<< HEAD
-  requestNotifications: PropTypes.func,
-  toggleDistractionFreeMode: PropTypes.func
-=======
   refreshStateAfterImageDownload: PropTypes.func,
   requestNotifications: PropTypes.func,
-  rotation: PropTypes.number
->>>>>>> 60e4c9e9df1235501d5b1bc95a31cb0be79969b9
+  rotation: PropTypes.number,
+  toggleDistractionFreeMode: PropTypes.func
 };
