@@ -387,9 +387,8 @@
   position: absolute;
   color: #ddd;
   font-size: 18px;
-  padding: 9px 12px;
-  right: 0;
-  top: 0;
+  right: 10px;
+  top: 10px;
 }
 .selected svg.svg-inline--fa {
   color: #888;
@@ -553,9 +552,6 @@
     }
   }
   &.unavailable {
-    &:hover {
-      background: #3a3a3a;
-    }
     & svg.svg-inline--fa {
       display: inline;
       color: #999;
