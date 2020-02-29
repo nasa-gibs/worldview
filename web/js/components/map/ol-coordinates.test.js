@@ -1,8 +1,8 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import util from '../../util/util';
-import OlCoordinates from './ol-coordinates';
+import { OlCoordinates } from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
+import renderer from 'react-test-renderer';
 
 let events;
 let component;
@@ -11,7 +11,12 @@ let map;
 beforeEach(() => {
   registerProjections();
   events = util.events();
-  component = renderer.create(<OlCoordinates mouseEvents={events} />);
+  component = renderer.create(
+    <OlCoordinates
+      mouseEvents={events}
+      distractionFreeMode={false}
+    />
+  );
   map = {
     getEventPixel: jest.fn(),
     getCoordinateFromPixel: () => [0, 0]

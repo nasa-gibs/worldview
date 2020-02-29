@@ -9,7 +9,7 @@ const formatOrder = {
   'latlon-dms': 'latlon-dd'
 };
 
-class Coordinates extends React.Component {
+export class Coordinates extends React.Component {
   constructor(props) {
     super(props);
     this.changeFormat = this.changeFormat.bind(this);

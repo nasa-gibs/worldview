@@ -73,13 +73,20 @@ export class MapInteractions extends React.Component {
   }
 
   render() {
-    const { isShowingClick, mouseEvents } = this.props;
+    const {
+      isDistractionFreeModeActive,
+      isShowingClick,
+      mouseEvents
+    } = this.props;
     const mapClasses = isShowingClick ? 'wv-map' + ' cursor-pointer' : 'wv-map';
 
     return (
       <React.Fragment>
         <div id="wv-map" className={mapClasses} />
-        <OlCoordinates mouseEvents={mouseEvents} />
+        <OlCoordinates
+          mouseEvents={mouseEvents}
+          isDistractionFreeModeActive={isDistractionFreeModeActive}
+        />
       </React.Fragment>
     );
   }
@@ -127,7 +134,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 function mapStateToProps(state) {
-  const { modal, map, measure, vectorStyles, browser, compare, proj } = state;
+  const { modal, map, measure, vectorStyles, browser, compare, proj, ui } = state;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
@@ -136,6 +143,7 @@ function mapStateToProps(state) {
   return {
     modalState: modal,
     isShowingClick: map.isClickable,
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     getDialogObject: (pixels, map) => onMapClickGetVectorFeatures(pixels, map, state, swipeOffset),
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
@@ -148,6 +156,7 @@ function mapStateToProps(state) {
 MapInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
+  isDistractionFreeModeActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,

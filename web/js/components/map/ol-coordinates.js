@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { transform } from 'ol/proj';
 
-class OlCoordinates extends React.Component {
+export class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -99,19 +98,9 @@ class OlCoordinates extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive
-  };
-}
-
 OlCoordinates.propTypes = {
   mouseEvents: PropTypes.object.isRequired,
   isDistractionFreeModeActive: PropTypes.bool
 };
 
-// export default OlCoordinates;
-
-export default connect(
-  mapStateToProps
-)(OlCoordinates);
+export default OlCoordinates;

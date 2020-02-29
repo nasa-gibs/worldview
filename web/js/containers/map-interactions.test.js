@@ -30,6 +30,7 @@ beforeEach(() => {
       measureIsActive={false}
       onCloseModal={jest.fn()}
       modalState={{ id: [], isOpen: false }}
+      isDistractionFreeModeActive={false}
     />,
     {
       createNodeMock: (element) => {

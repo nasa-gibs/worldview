@@ -3,12 +3,22 @@
 exports[`clears coordinates when mouse moves off the map 1`] = `
 <div
   id="ol-coords-case"
+  style={
+    Object {
+      "display": "block",
+    }
+  }
 />
 `;
 
 exports[`reprojects (0,0) to (-45, 90) for EPSG:3413 1`] = `
 <div
   id="ol-coords-case"
+  style={
+    Object {
+      "display": "block",
+    }
+  }
 >
   <div
     className="wv-coords-map wv-coords-map-btn"
@@ -35,6 +45,11 @@ exports[`reprojects (0,0) to (-45, 90) for EPSG:3413 1`] = `
 exports[`shows 20°00.000'N, 10°00.000'E when set to degrees and minutes format 1`] = `
 <div
   id="ol-coords-case"
+  style={
+    Object {
+      "display": "block",
+    }
+  }
 >
   <div
     className="wv-coords-map wv-coords-map-btn"
@@ -61,6 +76,11 @@ exports[`shows 20°00.000'N, 10°00.000'E when set to degrees and minutes format
 exports[`shows coordinates of (-160, 20) when moving the mouse over wrapped 1`] = `
 <div
   id="ol-coords-case"
+  style={
+    Object {
+      "display": "block",
+    }
+  }
 >
   <div
     className="wv-coords-map wv-coords-map-btn"
@@ -87,6 +107,11 @@ exports[`shows coordinates of (-160, 20) when moving the mouse over wrapped 1`] 
 exports[`shows coordinates of (10, 20) when moving the mouse 1`] = `
 <div
   id="ol-coords-case"
+  style={
+    Object {
+      "display": "block",
+    }
+  }
 >
   <div
     className="wv-coords-map wv-coords-map-btn"
