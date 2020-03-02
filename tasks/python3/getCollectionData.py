@@ -114,4 +114,5 @@ with open(input_file, 'rt') as concept_id_map:
 collection_data = process_requests(wv_product_dict)
 
 with open(output_file, "w") as fp:
-  json.dump({ 'collections': collection_data }, fp)
+  # Format of this object will determine how this data is combined into wv.json
+  json.dump({ 'layers': collection_data }, fp)
