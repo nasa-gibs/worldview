@@ -22,20 +22,20 @@ import {
 
 // icons used with List by passing string as prop iconClass
 const listIcons = {
-  faArrowCircleDown: faArrowCircleDown,
-  faArrowCircleUp: faArrowCircleUp,
-  faBolt: faBolt,
-  faCircle: faCircle,
-  faCode: faCode,
-  faEnvelope: faEnvelope,
-  faExclamationCircle: faExclamationCircle,
-  faFile: faFile,
-  faFlag: faFlag,
-  faGift: faGift,
-  faRuler: faRuler,
-  faRulerCombined: faRulerCombined,
-  faTrash: faTrash,
-  faTruck: faTruck
+  faArrowCircleDown,
+  faArrowCircleUp,
+  faBolt,
+  faCircle,
+  faCode,
+  faEnvelope,
+  faExclamationCircle,
+  faFile,
+  faFlag,
+  faGift,
+  faRuler,
+  faRulerCombined,
+  faTrash,
+  faTruck
 };
 
 /*
