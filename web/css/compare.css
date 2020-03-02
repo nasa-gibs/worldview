@@ -34,7 +34,7 @@
 .ab-swipe-dragger:hover {
   transform: scale(1.2);
 }
-.ab-swipe-dragger i {
+.ab-swipe-dragger svg.svg-inline--fa {
   font-size: 26px;
   margin-top: 11px;
 }

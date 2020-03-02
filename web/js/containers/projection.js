@@ -11,19 +11,22 @@ import googleTagManager from 'googleTagManager';
 const DEFAULT_PROJ_ARRAY = [
   {
     text: 'Arctic',
-    iconClass: 'ui-icon icon-large fa fa-arrow-circle-up fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faArrowCircleUp',
     id: 'change-arctic-button',
     key: 'arctic'
   },
   {
     text: 'Geographic',
-    iconClass: 'ui-icon icon-large fa fa-circle fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faCircle',
     id: 'change-geographic-button',
     key: 'geographic'
   },
   {
     text: 'Antarctic',
-    iconClass: 'ui-icon icon-large fa fa-arrow-circle-down fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faArrowCircleDown',
     id: 'change-antarctic-button',
     key: 'antarctic'
   }
@@ -32,7 +35,8 @@ const getInfoArray = function(projArray) {
   return projArray.map(el => {
     return {
       text: el.name,
-      iconClass: el.style + ' ui-icon icon-large',
+      iconClass: ' ui-icon icon-large',
+      iconName: el.style,
       id: 'change-' + el.id + '-button',
       key: el.id
     };

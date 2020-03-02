@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
 /**
  * A single layer search result row
  * @class LayerRow
@@ -100,7 +104,7 @@ class LayerRow extends React.Component {
           {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
           {subtitle && <h5>{subtitle}</h5>}
           {description && !isMetadataShowing && (
-            <i className="fa fa-info-circle" />
+            <FontAwesomeIcon icon={faInfoCircle} />
           )}
         </div>
       </div>

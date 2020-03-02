@@ -53,6 +53,7 @@ import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRES
 import { getLeadingExtent } from '../modules/map/util';
 
 import { updateVectorSelection } from '../modules/vector-styles/util';
+import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -1025,10 +1026,7 @@ export function mapui(models, config, store, ui) {
     var $zoomOut = $('<div></div>')
       .addClass('wv-map-zoom-out')
       .addClass('wv-map-zoom');
-    var $outIcon = $('<i></i>')
-      .addClass('fa')
-      .addClass('fa-minus')
-      .addClass('fa-1x');
+    var $outIcon = $(faIconMinusSVGDomEl);
     $zoomOut.append($outIcon);
     $map.append($zoomOut);
     $zoomOut.button({
@@ -1042,10 +1040,7 @@ export function mapui(models, config, store, ui) {
     var $zoomIn = $('<div></div>')
       .addClass('wv-map-zoom-in')
       .addClass('wv-map-zoom');
-    var $inIcon = $('<i></i>')
-      .addClass('fa')
-      .addClass('fa-plus')
-      .addClass('fa-1x');
+    var $inIcon = $(faIconPlusSVGDomEl);
     $zoomIn.append($inIcon);
     $map.append($zoomIn);
     $zoomIn.button({

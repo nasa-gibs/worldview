@@ -9,19 +9,22 @@ import { Form } from 'reactstrap';
 const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
-    iconClass: 'ui-icon icon-large fa fa-ruler fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faRuler',
     id: 'measure-distance-button',
     key: 'measure-distance'
   },
   {
     text: 'Measure area',
-    iconClass: 'ui-icon icon-large fa fa-ruler-combined fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faRulerCombined',
     id: 'measure-area-button',
     key: 'measure-area'
   },
   {
     text: 'Remove Measurements',
-    iconClass: 'ui-icon icon-large fa fa-trash fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faTrash',
     id: 'clear-measurements-button',
     key: 'measure-clear'
   }

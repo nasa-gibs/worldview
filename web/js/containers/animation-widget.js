@@ -58,6 +58,9 @@ import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { Tooltip } from 'reactstrap';
 import Draggable from 'react-draggable';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronUp, faChevronDown, faTimes, faFileVideo } from '@fortawesome/free-solid-svg-icons';
+
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;
 
@@ -413,8 +416,8 @@ class AnimationWidget extends React.Component {
               play={this.onPushPlay}
               pause={onPushPause}
             />
-            <i className="fa fa-chevron-up wv-expand" onClick={this.toggleCollapse} />
-            <i className="fa fa-times wv-close" onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faChevronUp} className='wv-expand' onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon={faTimes} className='wv-close' onClick={this.props.onClose} />
           </div>
         </div>
       </Draggable>
@@ -501,10 +504,7 @@ class AnimationWidget extends React.Component {
               onMouseEnter={this.toggleHoverGif}
               onMouseLeave={this.toggleHoverGif}
             >
-              <i
-                id="wv-animation-widget-file-video-icon"
-                className="fas fa-file-video wv-animation-widget-icon"
-              />
+              <FontAwesomeIcon icon={faFileVideo} id="wv-animation-widget-file-video-icon" className='wv-animation-widget-icon' />
             </a>
             {this.renderToolTip()}
 
@@ -530,9 +530,8 @@ class AnimationWidget extends React.Component {
                 subDailyMode={subDailyMode}
               />
             </div>
-
-            <i className="fa fa-chevron-down wv-minimize" onClick={this.toggleCollapse} />
-            <i className="fa fa-times wv-close" onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faChevronDown} className='wv-minimize' onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon={faTimes} className='wv-close' onClick={this.props.onClose} />
 
             {/* Custom time interval selection */}
             <CustomIntervalSelectorWidget

@@ -4,6 +4,9 @@ import { getOrbitTrackTitle, dateOverlap } from '../../../modules/layers/util';
 import util from '../../../util/util.js';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
+
 class LayerMetadataDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -117,7 +120,7 @@ class LayerMetadataDetail extends React.Component {
     if (!this.props.layer) {
       return (
         <div className="no-results">
-          <i className="fa fa-globe-americas" aria-hidden="true"></i>
+          <FontAwesomeIcon icon={faGlobeAmericas} />
           <h3> No layer selected. </h3>
           <h5> Select a layer to view details here!</h5>
         </div>
@@ -129,16 +132,15 @@ class LayerMetadataDetail extends React.Component {
     const previewUrl = 'images/layers/previews/' + selectedProjection + '/' + layer.id + '.jpg';
     const buttonText = isActive ? 'Remove Layer' : 'Add Layer';
     const btnClass = isActive ? 'add-to-map-btn text-center is-active' : 'add-to-map-btn text-center';
-    const btnIconClass = isActive ? 'fa fa-minus' : 'fa fa-plus';
-
+    const btnIconClass = isActive ? faMinus : faPlus;
     return (
       <div className="layers-all-layer">
         <div className="layers-all-header">
           {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
           {subtitle && <h5>{subtitle}</h5>}
-          {/*
+          {/* NOTE - NEED TO ADD faChevronDown TO FONT AWESOME IMPORT ABOVE FROM '@fortawesome/free-solid-svg-icons'
             <Button className="close-details" onClick={() => showMetadataForLayer(null)}>
-              <i className="fa fa-chevron-down" aria-hidden="true"></i>
+              <FontAwesomeIcon icon={faChevronDown} />
             </Button>
           */}
         </div>
@@ -151,7 +153,7 @@ class LayerMetadataDetail extends React.Component {
         }
         <div className="text-center">
           <Button className={btnClass} onClick={this.toggleLayer.bind(this)}>
-            <i className={btnIconClass} aria-hidden="true"></i>
+            <FontAwesomeIcon icon={btnIconClass} />
             {buttonText}
           </Button>
         </div>

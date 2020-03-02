@@ -18,6 +18,7 @@ import { getLayers } from '../../modules/layers/selectors';
 import { getDataProductsFromActiveLayers, doesSelectedExist } from '../../modules/data/selectors';
 import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
+import { faIconInfoCircleSVGDomEl } from '../fa-map-icons';
 
 export function dataUi(store, ui, config) {
   var queryActive = false;
@@ -425,7 +426,7 @@ var dataUiBulkDownloadPage = (function() {
 var dataUiDownloadListPanel = function(config, store) {
   var NOTICE =
     "<div id='wv-data-selection-notice'>" +
-    "<i class='icon fa fa-info-circle fa-3x'></i>" +
+    faIconInfoCircleSVGDomEl +
     "<p class='text'>" +
     'Some items you have selected require a profile with ' +
     'Earthdata Login to download. ' +
@@ -466,14 +467,6 @@ var dataUiDownloadListPanel = function(config, store) {
     $('a.wget').click(showWgetPage);
     $('a.curl').click(showCurlPage);
 
-    $dialog.find('.dd-collapse').accordion({
-      collapsible: true,
-      active: false,
-      icons: {
-        header: 'fas fa-caret-right fa-fw',
-        activeHeader: 'fa fa-caret-down fa-fw'
-      }
-    });
     $dialog.on('dialogclose', function() {
       self.events.trigger('close');
     });
@@ -740,7 +733,7 @@ var dataUiDownloadListPanel = function(config, store) {
 
   var bulkDownloadText = function() {
     var bulk =
-      "<div class='bulk dd-collapse'>" +
+      "<div class='bulk'>" +
       '<h5>Bulk Download</h5>' +
       "<ul class='BulkDownload'>" +
       "<li><a class='link wget'>List of Links</a>: " +

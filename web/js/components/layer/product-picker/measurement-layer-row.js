@@ -5,6 +5,8 @@ import { Checkbox } from '../../util/checkbox';
 import { availableAtDate } from '../../../modules/layers/util';
 import moment from 'moment';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
 /*
  * A scrollable list of layers
  * @class LayerList
@@ -61,7 +63,7 @@ class MeasurementLayerRow extends React.Component {
         >
           {!layerIsAvailable &&
             <>
-              <i id="availability-info" className="fa fa-ban" />
+              <FontAwesomeIcon icon={faBan} id="availability-info" />
               <Tooltip
                 placement="top"
                 isOpen={tooltipOpen}

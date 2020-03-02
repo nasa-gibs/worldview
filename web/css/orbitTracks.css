@@ -5,14 +5,14 @@
 .wv-orbit-track {
   padding-top: 4px;
   background-color: #ccc;
-  & i {
+  & svg.svg-inline--fa {
     color: #333;
   }
 
   &.not-visible {
     background: rgba(255, 255, 255, 0.2);
     color: #999;
-    & i {
+    & svg.svg-inline--fa {
       color: #999;
     }
   }

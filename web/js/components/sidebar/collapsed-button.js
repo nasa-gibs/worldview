@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+
 class CollapsedButton extends React.Component {
   render() {
     const {
@@ -22,7 +25,7 @@ class CollapsedButton extends React.Component {
           title="Show Layer Selector"
           onClick={onclick}
         >
-          <i className="fa fa-layer-group" aria-hidden="true"></i>
+          <FontAwesomeIcon icon={faLayerGroup} />
           {isMobile
             ? (
               <span className='layer-count mobile'>

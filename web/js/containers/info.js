@@ -21,16 +21,15 @@ import Notifications from '../containers/notifications';
 class InfoList extends Component {
   getNotificationListItem(obj) {
     const { number, type, object } = this.props.notifications;
-    const baseIconclass = 'ui-icon fa fa-fw fa-';
 
     return {
       text: 'Notifications',
-      iconClass:
-        type === 'message'
-          ? baseIconclass + 'gift'
-          : type === 'outage'
-            ? baseIconclass + 'exclamation-circle'
-            : baseIconclass + 'bolt',
+      iconClass: 'ui-icon',
+      iconName: type === 'message'
+        ? 'faGift'
+        : type === 'outage'
+          ? 'faExclamationCircle'
+          : 'faBolt',
       id: 'notifications_info_item',
       badge: number,
       className: type ? type + '-notification' : '',
@@ -61,25 +60,29 @@ class InfoList extends Component {
     const arr = [
       {
         text: 'Send feedback',
-        iconClass: 'ui-icon fa fa-envelope fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faEnvelope',
         id: 'send_feedback_info_item',
         ...feedbackAction
       },
       {
         text: 'Source Code',
-        iconClass: 'ui-icon fa fa-code fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faCode',
         id: 'source_code_info_item',
         href: 'https://github.com/nasa-gibs/worldview'
       },
       {
         text: 'What\'s new',
-        iconClass: 'ui-icon fa fa-flag fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faFlag',
         id: 'whats_new_info_item',
         href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS'
       },
       {
         text: 'About',
-        iconClass: 'ui-icon fa fa-file fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faFile',
         id: 'about_info_item',
         onClick: () => {
           aboutClick();
@@ -95,7 +98,8 @@ class InfoList extends Component {
     ) {
       const exploreWorlviewObj = {
         text: 'Explore Worldview',
-        iconClass: 'ui-icon fa fa-truck fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faTruck',
         id: 'start_tour_info_item',
         onClick: () => {
           startTour(isTourActive);

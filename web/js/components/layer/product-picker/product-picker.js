@@ -37,6 +37,9 @@ import {
   updateListScrollTop
 } from '../../../modules/product-picker/actions';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMeteor } from '@fortawesome/free-solid-svg-icons';
+
 /*
  * A scrollable list of layers
  * @class LayerList
@@ -372,7 +375,7 @@ class ProductPicker extends React.Component {
       </>)
       : (
         <div className="no-results" style={{ height: listMinHeight - 45 + 'px' }}>
-          <i className="fas fa-5x fa-meteor"></i>
+          <FontAwesomeIcon icon={faMeteor} size='5x' />
           <h3> No layers found! </h3>
           {numRowsFilteredOut > 0 &&
           <p>
