@@ -116,8 +116,8 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
 fi
 
 # Run getCollectionData.py to fetch collection metadata
-if [ -e "$OPT_DIR/$OPT_SUBDIR/conceptIds.json" ] ; then
-    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$OPT_DIR/$OPT_SUBDIR/conceptIds.json" \
+if [ -e "$BUILD_DIR/config/wv.json/conceptIds.json" ] ; then
+    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/conceptIds.json" \
         "$BUILD_DIR/config/wv.json/collections.json"
 fi
 
@@ -141,10 +141,11 @@ done
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
-"$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
-    "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
-
 # Validate the options build
 "$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
+
+# Fetch preview imagese from WV Snapshots for any layers which they are missing
+"$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
+    "$OPT_DIR/common/previewLayerOverrides.json"
 
 exit 0
