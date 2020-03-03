@@ -111,7 +111,7 @@ def process_requests(wv_product_dict):
 
 #MAIN
 with open(input_file, 'rt') as concept_id_map:
-  wv_product_dict = json.load(concept_id_map)
+  wv_product_dict = json.load(concept_id_map).get('layers')
   print('%s: Fetching collection data for %s layers...' % (prog, len(wv_product_dict)))
 
 collection_data = process_requests(wv_product_dict)
