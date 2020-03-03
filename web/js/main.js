@@ -63,8 +63,6 @@ window.onload = () => {
         ? util.parseDateUTC(parameters.now) || new Date()
         : new Date();
 
-      config.pageLoadTime = new Date('February 15, 2020 22:00:00');
-
       config.initialDate = config.pageLoadTime.getUTCHours() < 3
         ? new Date((config.pageLoadTime).setUTCDate(config.pageLoadTime.getUTCDate() - 1))
         : config.pageLoadTime;
