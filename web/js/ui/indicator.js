@@ -6,15 +6,15 @@ import lodashIsEmpty from 'lodash/isEmpty';
 import lodashLast from 'lodash/last';
 
 export default (function() {
-  var self = {};
+  const self = {};
 
-  var $indicator;
-  var $icon;
-  var $message;
+  let $indicator;
+  let $icon;
+  let $message;
 
   self.active = [];
 
-  var init = function() {
+  const init = function() {
     $indicator = $('<div></div>')
       .attr('id', 'indicator');
     $icon = $('<img />');
@@ -29,11 +29,11 @@ export default (function() {
 
   self.show = function(message, icon) {
     self._show(message, icon);
-    var id = lodashUniqueId();
+    const id = lodashUniqueId();
     self.active.push({
-      id: id,
-      message: message,
-      icon: icon
+      id,
+      message,
+      icon,
     });
     return id;
   };
@@ -42,15 +42,15 @@ export default (function() {
     if (lodashIsString(hides)) {
       hides = [hides];
     }
-    lodashEach(hides, function(id) {
+    lodashEach(hides, (id) => {
       lodashRemove(self.active, {
-        id: id
+        id,
       });
     });
     if (lodashIsEmpty(self.active)) {
       self._hide();
     } else {
-      var def = lodashLast(self.active);
+      const def = lodashLast(self.active);
       self._show(def.message, def.icon);
     }
   };
@@ -106,11 +106,11 @@ export default (function() {
 
   self.delayed = function(promise, delay) {
     delay = delay || 1000;
-    var id;
-    var timeout = setTimeout(function() {
+    let id;
+    const timeout = setTimeout(() => {
       id = self.loading();
     }, delay);
-    promise.always(function() {
+    promise.always(() => {
       clearTimeout(timeout);
       if (id) {
         self.hide(id);
@@ -119,4 +119,4 @@ export default (function() {
   };
 
   return self;
-})();
+}());

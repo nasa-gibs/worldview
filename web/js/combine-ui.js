@@ -23,10 +23,10 @@ export function combineUi(models, config, MapMouseEvents, store) {
   ui.map.animate = mapAnimate(config, ui, store);
   ui.supportsPassive = false;
   try {
-    var opts = Object.defineProperty({}, 'passive', {
-      get: function() {
+    const opts = Object.defineProperty({}, 'passive', {
+      get() {
         ui.supportsPassive = true;
-      }
+      },
     });
     window.addEventListener('testPassive', null, opts);
     window.removeEventListener('testPassive', null, opts);
@@ -41,7 +41,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
   }
   registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
   // Sink all focus on inputs if click unhandled
-  $(document).click(function(event) {
+  $(document).click((event) => {
     if (event.target.nodeName !== 'INPUT') {
       $('input').blur();
     }
@@ -52,22 +52,22 @@ export function combineUi(models, config, MapMouseEvents, store) {
   return ui;
 }
 function registerMapMouseHandlers(maps, events) {
-  Object.values(maps).forEach(map => {
+  Object.values(maps).forEach((map) => {
     const element = map.getTargetElement();
     const crs = map
       .getView()
       .getProjection()
       .getCode();
-    element.addEventListener('mousemove', event => {
+    element.addEventListener('mousemove', (event) => {
       events.trigger('mousemove', event, map, crs);
     });
-    element.addEventListener('mouseout', event => {
+    element.addEventListener('mouseout', (event) => {
       events.trigger('mouseout', event, map, crs);
     });
-    map.on('singleclick', event => {
+    map.on('singleclick', (event) => {
       events.trigger('singleclick', event, map, crs);
     });
-    element.addEventListener('click', event => {
+    element.addEventListener('click', (event) => {
       events.trigger('click', event, map, crs);
     });
   });

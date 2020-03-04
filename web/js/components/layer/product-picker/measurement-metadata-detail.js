@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import util from '../../../util/util.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap, faMeteor } from '@fortawesome/free-solid-svg-icons';
+import util from '../../../util/util.js';
 
 class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isMetadataExpanded: false,
-      sourceMetaData: {}
+      sourceMetaData: {},
     };
   }
 
@@ -26,7 +26,7 @@ class MeasurementMetadataDetail extends React.Component {
   getSourceMetadata() {
     const { source } = this.props;
     if (source.description) {
-      util.get('config/metadata/layers/' + source.description + '.html').then(data => {
+      util.get(`config/metadata/layers/${source.description}.html`).then((data) => {
         if (data) {
           const { sourceMetaData } = this.state;
           sourceMetaData[source.description] = { data };
@@ -43,7 +43,7 @@ class MeasurementMetadataDetail extends React.Component {
     return (
       <div>
         <div
-          className={ isMetaVisible ? 'source-metadata ' : 'source-metadata overflow' }
+          className={isMetaVisible ? 'source-metadata ' : 'source-metadata overflow'}
           dangerouslySetInnerHTML={{ __html: data }}
         />
         {doesMetaDataNeedExpander && (
@@ -83,7 +83,11 @@ class MeasurementMetadataDetail extends React.Component {
       return (
         <div className="no-results">
           <FontAwesomeIcon icon={faMap} />
-          <h3> {categoryTitle} </h3>
+          <h3>
+            {' '}
+            {categoryTitle}
+            {' '}
+          </h3>
           <h5> Select a measurement to view details here!</h5>
         </div>
       );
@@ -109,14 +113,14 @@ class MeasurementMetadataDetail extends React.Component {
       );
     }
 
-    return (isMobile ? this.renderMobile(data) : this.renderDesktop(data));
+    return isMobile ? this.renderMobile(data) : this.renderDesktop(data);
   }
 }
 
 MeasurementMetadataDetail.propTypes = {
   categoryTitle: PropTypes.string,
   isMobile: PropTypes.bool,
-  source: PropTypes.object
+  source: PropTypes.object,
 };
 
 export default MeasurementMetadataDetail;

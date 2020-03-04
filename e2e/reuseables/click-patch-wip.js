@@ -1,14 +1,14 @@
 module.exports = {
-  customMouseEvent: function(client, selector, offsetX, offsetY, eventType) {
+  customMouseEvent(client, selector, offsetX, offsetY, eventType) {
     eventType = eventType || 'dblclick';
-    client.execute(function(obj) {
-      var { eventType, selector, offsetX, offsetY } = obj;
-      var el = document.querySelector(selector || 'body');
+    client.execute((obj) => {
+      const { eventType, selector, offsetX, offsetY } = obj;
+      const el = document.querySelector(selector || 'body');
       function simulate(element, eventName) {
-        var options = extend(defaultOptions, arguments[2] || {});
-        var oEvent; var eventType = null;
+        const options = extend(defaultOptions, arguments[2] || {});
+        let oEvent; let eventType = null;
 
-        for (var name in eventMatchers) {
+        for (const name in eventMatchers) {
           if (eventMatchers[name].test(eventName)) { eventType = name; break; }
         }
 
@@ -27,15 +27,15 @@ module.exports = {
         } else {
           options.clientX = options.pointerX;
           options.clientY = options.pointerY;
-          var evt = document.createEventObject();
+          const evt = document.createEventObject();
           oEvent = extend(evt, options);
-          element.fireEvent('on' + eventName, oEvent);
+          element.fireEvent(`on${eventName}`, oEvent);
         }
         return element;
       }
 
       function extend(destination, source) {
-        for (var property in source) { destination[property] = source[property]; }
+        for (const property in source) { destination[property] = source[property]; }
         return destination;
       }
 
@@ -55,7 +55,7 @@ module.exports = {
         cancelable: true
       };
       return simulate(el, eventType, { pointerX: offsetX, pointerY: offsetY });
-    }, [{ eventType: eventType, selector: selector, offsetX: offsetX, offsetY: offsetY }], function(result) {
+    }, [{ eventType, selector, offsetX, offsetY }], (result) => {
     });
   }
 };

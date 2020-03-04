@@ -8,7 +8,9 @@ import { dataMap } from './map';
 import uiIndicator from '../../ui/indicator';
 import util from '../../util/util';
 import wvui from '../../ui/ui';
-import { REL_DATA, REL_METADATA, REL_BROWSE, DATA_EXTS } from './cmr';
+import {
+  REL_DATA, REL_METADATA, REL_BROWSE, DATA_EXTS,
+} from './cmr';
 import * as DATA_CONSTANTS from '../../modules/data/constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import { toggleGranule } from '../../modules/data/actions';
@@ -21,22 +23,22 @@ import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import { faIconInfoCircleSVGDomEl } from '../fa-map-icons';
 
 export function dataUi(store, ui, config) {
-  var queryActive = false;
-  var mapController = null;
-  var selectionListPanel = null;
-  var downloadListPanel = null;
-  var lastResults = null;
-  var maps = ui.map;
-  var queryExecuting = false;
-  var nextQuery = null;
+  let queryActive = false;
+  let mapController = null;
+  let selectionListPanel = null;
+  let downloadListPanel = null;
+  let lastResults = null;
+  const maps = ui.map;
+  let queryExecuting = false;
+  let nextQuery = null;
 
-  var indicators = {
+  const indicators = {
     query: null,
     noneInView: null,
-    noResults: null
+    noResults: null,
   };
 
-  var self = {};
+  const self = {};
   self.events = util.events();
   self.EVENT_QUERY = 'query';
   self.EVENT_QUERY_RESULTS = 'queryResults';
@@ -79,16 +81,18 @@ export function dataUi(store, ui, config) {
   };
   var updateLayers = function() {
     const state = store.getState();
-    const { layers, compare, proj, data } = state;
-    const activeString = compare.activeString;
+    const {
+      layers, compare, proj, data,
+    } = state;
+    const { activeString } = compare;
     const activeLayers = getLayers(layers[activeString], { proj: proj.id }, state);
 
     // If a layer was removed and the product no longer exists,
     // remove any selected items in that product
     // FIXME: This is a hack for now and should be cleaned up when
     // everything changes to models.
-    var products = getDataProductsFromActiveLayers(activeLayers, config, proj.id);
-    lodashEach(data.selectedGranules, function(selected) {
+    const products = getDataProductsFromActiveLayers(activeLayers, config, proj.id);
+    lodashEach(data.selectedGranules, (selected) => {
       if (!products[selected.product] && !lodashFind(layers[activeString], { product: selected.product })) {
         store.dispatch(toggleGranule(selected));
       }
@@ -105,45 +109,45 @@ export function dataUi(store, ui, config) {
     const products = getDataProductsFromActiveLayers(
       activeLayers,
       config,
-      proj.id
+      proj.id,
     );
     if (!dataState.selectedProduct || (dataState.selectedProduct && !doesSelectedExist(Object.entries(products), dataState.selectedProduct))) {
       self.events.trigger(self.EVENT_QUERY_RESULTS, {
         meta: {},
-        granules: []
+        granules: [],
       });
       return;
     }
 
-    var productConfig = config.products[dataState.selectedProduct];
+    const productConfig = config.products[dataState.selectedProduct];
     if (!productConfig) {
-      throw Error('Product not defined: ' + dataState.selectedProduct);
+      throw Error(`Product not defined: ${dataState.selectedProduct}`);
     }
 
-    var handlerFactory = dataHandlerGetByName(productConfig.handler);
-    var handler = handlerFactory(config, store);
+    const handlerFactory = dataHandlerGetByName(productConfig.handler);
+    const handler = handlerFactory(config, store);
     handler.events
-      .on('query', function() {
+      .on('query', () => {
         self.events.trigger(self.EVENT_QUERY);
       })
-      .on('results', function(results) {
+      .on('results', (results) => {
         queryExecuting = false;
         if (self.active && !nextQuery) {
           self.events.trigger(self.EVENT_QUERY_RESULTS, results);
         }
         if (nextQuery) {
-          var q = nextQuery;
+          const q = nextQuery;
           nextQuery = null;
           executeQuery(q);
         }
       })
-      .on('error', function(textStatus, errorThrown) {
+      .on('error', (textStatus, errorThrown) => {
         queryExecuting = false;
         if (self.active) {
           self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
         }
       })
-      .on('timeout', function() {
+      .on('timeout', () => {
         queryExecuting = false;
         if (self.active) {
           self.events.trigger(self.EVENT_QUERY_TIMEOUT);
@@ -165,7 +169,7 @@ export function dataUi(store, ui, config) {
       nextQuery = handler;
     }
   };
-  var init = function() {
+  const init = function() {
     ui.events.on('last-action', subscribeToStore);
     ui.map.events.on('extent', self.onViewChange);
     self.events.on('query', onQuery)
@@ -179,18 +183,18 @@ export function dataUi(store, ui, config) {
   self.onViewChange = function(results) {
     results = results || lastResults;
     const state = store.getState();
-    var map = ui.map.selected;
+    const map = ui.map.selected;
     if (!state.data.active || queryActive || !results) {
       return;
     }
     if (results.granules.length === 0) {
       return;
     }
-    var hasCentroids = false;
-    var inView = false;
-    var extent = map.getView().calculateExtent(map.getSize());
-    var crs = state.proj.selected.crs;
-    lodashEach(results.granules, function(granule) {
+    let hasCentroids = false;
+    let inView = false;
+    const extent = map.getView().calculateExtent(map.getSize());
+    const { crs } = state.proj.selected;
+    lodashEach(results.granules, (granule) => {
       if (granule.centroid && granule.centroid[crs]) {
         hasCentroids = true;
         if (olExtent.intersects(extent, granule.centroid[crs].getExtent())) {
@@ -250,7 +254,7 @@ export function dataUi(store, ui, config) {
     queryActive = false;
     lastResults = results;
     uiIndicator.hide(indicators);
-    var hasResults = true;
+    let hasResults = true;
     if (dataState.selectedProduct !== null && results.granules.length === 0) {
       indicators.noData = uiIndicator.noData(indicators);
       hasResults = false;
@@ -267,7 +271,7 @@ export function dataUi(store, ui, config) {
     if (status !== 'abort') {
       console.error('Unable to search', status, error);
       wvui.notify(
-        'Unable to search at this time.<br/><br/>Please try ' + 'again later.'
+        'Unable to search at this time.<br/><br/>Please try ' + 'again later.',
       );
     }
   };
@@ -276,8 +280,8 @@ export function dataUi(store, ui, config) {
     queryActive = false;
     uiIndicator.hide(indicators);
     wvui.notify(
-      'No results received yet. This may be due to a ' +
-      'connectivity issue. Please try again later.'
+      'No results received yet. This may be due to a '
+      + 'connectivity issue. Please try again later.',
     );
   };
 
@@ -287,7 +291,7 @@ export function dataUi(store, ui, config) {
     }
     if (!downloadListPanel) {
       downloadListPanel = dataUiDownloadListPanel(config, store);
-      downloadListPanel.events.on('close', function() {
+      downloadListPanel.events.on('close', () => {
         if (selectionListPanel) {
           selectionListPanel.setVisible(true);
         }
@@ -297,10 +301,8 @@ export function dataUi(store, ui, config) {
   };
 
   self.showUnavailableReason = function() {
-    var headerMsg =
-      "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
-    var bodyMsg =
-      'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.<br><br> Data download will not work for "Terra and Aqua" Fires, select Terra only Fires and/or Aqua only Fires to download the associated data files.';
+    const headerMsg = "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
+    const bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.<br><br> Data download will not work for "Terra and Aqua" Fires, select Terra only Fires and/or Aqua only Fires to download the associated data files.';
 
     wvui.notify(headerMsg + bodyMsg, 'Notice', 600);
   };
@@ -309,26 +311,26 @@ export function dataUi(store, ui, config) {
   return self;
 }
 
-var dataUiBulkDownloadPage = (function() {
-  var ns = {};
-  var pages = {
+const dataUiBulkDownloadPage = (function() {
+  const ns = {};
+  const pages = {
     wget: 'pages/wget.html',
-    curl: 'pages/curl.html'
+    curl: 'pages/curl.html',
   };
 
   ns.show = function(selection, type) {
-    var nonce = Date.now();
-    var page = window.open(pages[type] + '?v=' + nonce, 'Worldview_' + nonce);
+    const nonce = Date.now();
+    const page = window.open(`${pages[type]}?v=${nonce}`, `Worldview_${nonce}`);
 
-    var loaded = false;
+    let loaded = false;
     page.onload = function() {
       if (!loaded) {
         fillPage(page, selection, type);
         loaded = true;
       }
     };
-    var checkCount = 0;
-    var timer = setInterval(function() {
+    let checkCount = 0;
+    var timer = setInterval(() => {
       checkCount++;
       if (loaded) {
         clearInterval(timer);
@@ -346,34 +348,34 @@ var dataUiBulkDownloadPage = (function() {
   };
 
   var fillPage = function(page, selection, type) {
-    var downloadLinks = [];
-    var hosts = {};
-    var indirectLinks = [];
-    $.each(selection, function(index, product) {
-      $.each(product.list, function(index2, granule) {
-        var netrc = '';
+    const downloadLinks = [];
+    const hosts = {};
+    const indirectLinks = [];
+    $.each(selection, (index, product) => {
+      $.each(product.list, (index2, granule) => {
+        let netrc = '';
         if (granule.urs) {
           netrc = '--netrc ';
         }
-        $.each(granule.links, function(index2, link) {
+        $.each(granule.links, (index2, link) => {
           if (!link.data) {
             return;
           }
           if (product.noBulkDownload) {
             indirectLinks.push(
-              "<li><a href='" + link.href + "'>" + link.href + '</a></li>'
+              `<li><a href='${link.href}'>${link.href}</a></li>`,
             );
             return;
           }
           if (type === 'curl') {
-            downloadLinks.push('curl --remote-name ' + netrc + link.href);
+            downloadLinks.push(`curl --remote-name ${netrc}${link.href}`);
           } else {
             downloadLinks.push(link.href);
           }
           if (granule.urs) {
             // Get the hostname from the URL, the text between
             // the double slash and the first slash after that
-            var host = /\/\/([^/]*)\//.exec(link.href);
+            const host = /\/\/([^/]*)\//.exec(link.href);
             if (host) {
               hosts[host[1]] = true;
             }
@@ -381,65 +383,59 @@ var dataUiBulkDownloadPage = (function() {
         });
       });
     });
-    var links = page.document.getElementById('links');
+    const links = page.document.getElementById('links');
     if (!links) return false;
-    links.innerHTML = '<pre>' + downloadLinks.join('\n') + '</pre>';
+    links.innerHTML = `<pre>${downloadLinks.join('\n')}</pre>`;
 
-    var netrcEntries = [];
-    var hostnames = [];
-    $.each(hosts, function(host) {
+    const netrcEntries = [];
+    const hostnames = [];
+    $.each(hosts, (host) => {
       netrcEntries.push(
-        'machine ' + host + ' login URS_USER ' + 'password URS_PASSWORD'
+        `machine ${host} login URS_USER ` + 'password URS_PASSWORD',
       );
       hostnames.push(host);
     });
     if (netrcEntries.length > 0) {
-      page.document.getElementById('netrc').innerHTML =
-        '<pre>' + netrcEntries.join('\n') + '</pre>';
-      page.document.getElementById('bulk-password-notice').style.display =
-        'block';
-      page.document.getElementById('netrc-instructions').style.display =
-        'block';
-      var instructions = page.document.getElementById(
-        'fdm-password-instructions'
+      page.document.getElementById('netrc').innerHTML = `<pre>${netrcEntries.join('\n')}</pre>`;
+      page.document.getElementById('bulk-password-notice').style.display = 'block';
+      page.document.getElementById('netrc-instructions').style.display = 'block';
+      const instructions = page.document.getElementById(
+        'fdm-password-instructions',
       );
       if (instructions) {
         instructions.style.display = 'block';
       }
-      var machineNames = page.document.getElementById('fdm-machine-names');
+      const machineNames = page.document.getElementById('fdm-machine-names');
       if (machineNames) {
-        machineNames.innerHTML = '<pre>' + hostnames.join('\n') + '</pre>';
+        machineNames.innerHTML = `<pre>${hostnames.join('\n')}</pre>`;
       }
     }
     if (indirectLinks.length > 0) {
-      page.document.getElementById('indirect-instructions').style.display =
-        'block';
-      page.document.getElementById('indirect').innerHTML =
-        '<ul>' + indirectLinks.join('\n') + '</ul>';
+      page.document.getElementById('indirect-instructions').style.display = 'block';
+      page.document.getElementById('indirect').innerHTML = `<ul>${indirectLinks.join('\n')}</ul>`;
     }
     return true;
   };
 
   return ns;
-})();
+}());
 
 var dataUiDownloadListPanel = function(config, store) {
-  var NOTICE =
-    "<div id='wv-data-selection-notice'>" +
-    faIconInfoCircleSVGDomEl +
-    "<p class='text'>" +
-    'Some items you have selected require a profile with ' +
-    'Earthdata Login to download. ' +
-    'It is simple and free to sign up! ' +
-    "<a href='https://urs.earthdata.nasa.gov/users/new' target='urs'>" +
-    'Click to register for a profile.</a>' +
-    '</p>' +
-    '</div>';
+  const NOTICE = `<div id='wv-data-selection-notice'>${
+    faIconInfoCircleSVGDomEl
+  }<p class='text'>`
+    + 'Some items you have selected require a profile with '
+    + 'Earthdata Login to download. '
+    + 'It is simple and free to sign up! '
+    + '<a href=\'https://urs.earthdata.nasa.gov/users/new\' target=\'urs\'>'
+    + 'Click to register for a profile.</a>'
+    + '</p>'
+    + '</div>';
 
-  var selection;
-  var self = {};
-  var urs = false;
-  var $dialog;
+  let selection;
+  const self = {};
+  let urs = false;
+  let $dialog;
 
   self.events = util.events();
 
@@ -451,9 +447,9 @@ var dataUiDownloadListPanel = function(config, store) {
       width: 650,
       height: 500,
       autoOpen: false,
-      closeText: ''
+      closeText: '',
     });
-    var $bottomPane = $('<div></div>')
+    const $bottomPane = $('<div></div>')
       .attr('id', 'wv-data-bulk-download-links')
       .addClass('ui-dialog-buttonpane')
       .addClass('ui-widget-content')
@@ -467,7 +463,7 @@ var dataUiDownloadListPanel = function(config, store) {
     $('a.wget').click(showWgetPage);
     $('a.curl').click(showCurlPage);
 
-    $dialog.on('dialogclose', function() {
+    $dialog.on('dialogclose', () => {
       self.events.trigger('close');
     });
     self.refresh();
@@ -477,8 +473,7 @@ var dataUiDownloadListPanel = function(config, store) {
     const dataState = store.getState().data;
     selection = reformatSelection(dataState);
     $('#wv-data-selection').html(bodyText(selection));
-    var bulkVisible =
-      isBulkDownloadable() && lodashSize(dataState.selectedGranules) !== 0;
+    const bulkVisible = isBulkDownloadable() && lodashSize(dataState.selectedGranules) !== 0;
     if (bulkVisible) {
       $('wv-data-bulk-download-links').show();
     } else {
@@ -490,14 +485,14 @@ var dataUiDownloadListPanel = function(config, store) {
   };
 
   self.hide = function() {
-    var $d = $('.ui-dialog');
+    const $d = $('.ui-dialog');
     if ($d.length !== 0) {
       $d.hide();
     }
   };
 
   self.visible = function() {
-    var $d = $('.ui-dialog');
+    const $d = $('.ui-dialog');
     if ($d.length !== 0) {
       return $d.is(':visible');
     }
@@ -505,37 +500,37 @@ var dataUiDownloadListPanel = function(config, store) {
   };
 
   var reformatSelection = function(dataState) {
-    var selection = {};
+    const selection = {};
 
     urs = false;
-    $.each(dataState.selectedGranules, function(key, granule) {
+    $.each(dataState.selectedGranules, (key, granule) => {
       if (granule.urs) {
         urs = true;
       }
       if (!selection[granule.product]) {
-        var productConfig = config.products[granule.product];
+        const productConfig = config.products[granule.product];
         selection[granule.product] = {
           name: productConfig.name,
           granules: [granule],
           counts: {},
-          noBulkDownload: productConfig.noBulkDownload || false
+          noBulkDownload: productConfig.noBulkDownload || false,
         };
       } else {
         selection[granule.product].granules.push(granule);
       }
 
-      var product = selection[granule.product];
+      const product = selection[granule.product];
 
       // For each link that looks like metadata, see if that link is
       // repeated in all granules for that product. If so, we want to
       // bump that up to product level instead of at the granule level.
-      $.each(granule.links, function(index, link) {
+      $.each(granule.links, (index, link) => {
         // Formerly relied on metadata being correctly marked as data
         // via the cmr.REL_DATA constant;  unfortunately this wasn't
         // the case in practice so the following workaround was
         // implemented to check the link's file extension to see if
         // it looks like a data file
-        var hrefExt = link.href
+        let hrefExt = link.href
           .toLowerCase()
           .split('.')
           .slice(-1);
@@ -543,8 +538,8 @@ var dataUiDownloadListPanel = function(config, store) {
           hrefExt = hrefExt[0];
         }
         if (
-          (DATA_EXTS.indexOf(hrefExt) === -1 && link.rel !== REL_BROWSE) ||
-          link.rel === REL_METADATA
+          (DATA_EXTS.indexOf(hrefExt) === -1 && link.rel !== REL_BROWSE)
+          || link.rel === REL_METADATA
         ) {
           if (!product.counts[link.href]) {
             product.counts[link.href] = 1;
@@ -555,7 +550,7 @@ var dataUiDownloadListPanel = function(config, store) {
       });
     });
 
-    $.each(selection, function(key, product) {
+    $.each(selection, (key, product) => {
       product.links = [];
       product.list = [];
 
@@ -571,25 +566,25 @@ var dataUiDownloadListPanel = function(config, store) {
       // is probably important? Is there a case when a link appears
       // every other granule instead?
       if (product.granules.length > 1) {
-        var granule = product.granules[0];
-        $.each(granule.links, function(index, link) {
-          var count = product.counts[link.href];
+        const granule = product.granules[0];
+        $.each(granule.links, (index, link) => {
+          const count = product.counts[link.href];
           if (count % product.granules.length === 0) {
             product.links.push(reformatLink(link));
           }
         });
       }
 
-      $.each(product.granules, function(index, granule) {
-        var item = {
+      $.each(product.granules, (index, granule) => {
+        const item = {
           id: granule.id,
           label: granule.downloadLabel || granule.label,
           links: [],
-          urs: granule.urs
+          urs: granule.urs,
         };
-        $.each(granule.links, function(index, link) {
+        $.each(granule.links, (index, link) => {
           // Skip this link if now at the product level
-          var count = product.counts[link.href];
+          const count = product.counts[link.href];
           if (count % product.granules.length === 0 && count !== 1) {
             return;
           }
@@ -601,7 +596,7 @@ var dataUiDownloadListPanel = function(config, store) {
         });
         product.list.push(item);
       });
-      product.list.sort(function(a, b) {
+      product.list.sort((a, b) => {
         if (a.label > b.label) {
           return 1;
         }
@@ -616,8 +611,8 @@ var dataUiDownloadListPanel = function(config, store) {
   };
 
   var isBulkDownloadable = function() {
-    var result = false;
-    $.each(selection, function(index, product) {
+    let result = false;
+    $.each(selection, (index, product) => {
       if (!product.noBulkDownload) {
         result = true;
       }
@@ -627,7 +622,7 @@ var dataUiDownloadListPanel = function(config, store) {
 
   var reformatLink = function(link) {
     // For title, take it if found, otherwise, use the basename of the URI
-    var titleVal = link.title;
+    let titleVal = link.title;
     if (!link.title) {
       titleVal = link.href.split('/').slice(-1);
 
@@ -640,64 +635,64 @@ var dataUiDownloadListPanel = function(config, store) {
     return {
       href: link.href,
       title: titleVal,
-      data: link.rel === REL_DATA
+      data: link.rel === REL_DATA,
     };
   };
 
-  var linksText = function(links) {
-    var elements = [];
+  const linksText = function(links) {
+    const elements = [];
     elements.push('<ul>');
-    $.each(links, function(index, link) {
+    $.each(links, (index, link) => {
       elements.push(
-        "<li class='link'><a href='" +
-        link.href +
-        "' target='_blank'>" +
-        link.title +
-        '</a></li>'
+        `<li class='link'><a href='${
+          link.href
+        }' target='_blank'>${
+          link.title
+        }</a></li>`,
       );
     });
     elements.push('</ul>');
     return elements.join('\n');
   };
 
-  var granuleText = function(product, granule) {
-    var elements;
+  const granuleText = function(product, granule) {
+    let elements;
     if (product.name !== granule.label) {
       elements = [
-        "<tr data-granule='" + granule.id + "'>",
-        "<td><input type='button' class='remove' " +
-        "data-granule='" +
-        granule.id +
-        "' " +
-        "value='X'></input></td>",
-        '<td><nobr><ul><li>' + granule.label + '</li></ul></nobr></td>',
-        "<td class='wv-data-granule-link'>" +
-        linksText(granule.links) +
-        '</td>',
-        '</tr>'
+        `<tr data-granule='${granule.id}'>`,
+        `${"<td><input type='button' class='remove' "
+        + "data-granule='"}${
+          granule.id
+        }' `
+        + 'value=\'X\'></input></td>',
+        `<td><nobr><ul><li>${granule.label}</li></ul></nobr></td>`,
+        `<td class='wv-data-granule-link'>${
+          linksText(granule.links)
+        }</td>`,
+        '</tr>',
       ];
     } else {
       elements = [
-        "<tr data-granule='" + granule.id + "'>",
-        "<td><input type='button' class='remove' " +
-        "data-granule='" +
-        granule.id +
-        "' " +
-        "value='X'></input></td>",
-        "<td colspan='2'>" + linksText(granule.links) + '</td>',
-        '</tr>'
+        `<tr data-granule='${granule.id}'>`,
+        `${"<td><input type='button' class='remove' "
+        + "data-granule='"}${
+          granule.id
+        }' `
+        + 'value=\'X\'></input></td>',
+        `<td colspan='2'>${linksText(granule.links)}</td>`,
+        '</tr>',
       ];
     }
     return elements.join('\n');
   };
 
-  var productText = function(product) {
-    var elements = ['<h3>' + product.name + '</h3>'];
+  const productText = function(product) {
+    const elements = [`<h3>${product.name}</h3>`];
 
     elements.push('<h5>Selected Data</h5>');
     elements.push('<table>');
 
-    $.each(product.list, function(index, item) {
+    $.each(product.list, (index, item) => {
       elements.push(granuleText(product, item));
     });
     elements.push('</table>');
@@ -718,51 +713,50 @@ var dataUiDownloadListPanel = function(config, store) {
     if (lodashSize(dataState.selectedGranules) === 0) {
       return '<br/><h3>Selection Empty</h3>';
     }
-    var elements = [];
+    const elements = [];
     if (urs) {
       elements.push(NOTICE);
     }
-    var products = [];
-    $.each(selection, function(key, product) {
+    const products = [];
+    $.each(selection, (key, product) => {
       products.push(productText(product));
     });
     elements.push(products.join('<br/><br/><br/>'));
-    var text = elements.join('');
+    const text = elements.join('');
     return text;
   };
 
   var bulkDownloadText = function() {
-    var bulk =
-      "<div class='bulk'>" +
-      '<h5>Bulk Download</h5>' +
-      "<ul class='BulkDownload'>" +
-      "<li><a class='link wget'>List of Links</a>: " +
-      'for wget or download managers that accept a list of ' +
-      'URLs</li>' +
-      "<li><a class='link curl'>List of cURL Commands</a>: " +
-      'can be copied and pasted to ' +
-      'a terminal window to download using cURL.</li>' +
-      '</ul>' +
-      '</div>';
+    const bulk = "<div class='bulk'>"
+      + '<h5>Bulk Download</h5>'
+      + "<ul class='BulkDownload'>"
+      + "<li><a class='link wget'>List of Links</a>: "
+      + 'for wget or download managers that accept a list of '
+      + 'URLs</li>'
+      + "<li><a class='link curl'>List of cURL Commands</a>: "
+      + 'can be copied and pasted to '
+      + 'a terminal window to download using cURL.</li>'
+      + '</ul>'
+      + '</div>';
     return bulk;
   };
 
   var showWgetPage = function() {
     googleTagManager.pushEvent({
-      event: 'data_download_list_wget'
+      event: 'data_download_list_wget',
     });
     dataUiBulkDownloadPage.show(selection, 'wget');
   };
 
   var showCurlPage = function() {
     googleTagManager.pushEvent({
-      event: 'data_download_list_curl'
+      event: 'data_download_list_curl',
     });
     dataUiBulkDownloadPage.show(selection, 'curl');
   };
 
   var removeGranule = function() {
-    var id = $(this).attr('data-granule');
+    const id = $(this).attr('data-granule');
     const dataState = store.getState().data;
     store.dispatch(toggleGranule(dataState.selectedGranules[id]));
     onHoverOut.apply(this);
@@ -772,7 +766,7 @@ var dataUiDownloadListPanel = function(config, store) {
     const dataState = store.getState().data;
     self.events.trigger(
       'hoverOver',
-      dataState.selectedGranules[$(this).attr('data-granule')]
+      dataState.selectedGranules[$(this).attr('data-granule')],
     );
   };
 
@@ -780,7 +774,7 @@ var dataUiDownloadListPanel = function(config, store) {
     const dataState = store.getState().data;
     self.events.trigger(
       'hoverOut',
-      dataState.selectedGranules[$(this).attr('data-granule')]
+      dataState.selectedGranules[$(this).attr('data-granule')],
     );
   };
 
@@ -788,10 +782,10 @@ var dataUiDownloadListPanel = function(config, store) {
 };
 
 var dataUiSelectionListPanel = function(dataUi, results, store) {
-  var self = {};
-  var granules = {};
-  var $dialog;
-  var init = function() {
+  const self = {};
+  const granules = {};
+  let $dialog;
+  const init = function() {
     dataUi.events.on('granuleUnselect', onGranuleUnselect);
   };
 
@@ -804,25 +798,25 @@ var dataUiSelectionListPanel = function(dataUi, results, store) {
         title: 'Select data',
         width: 400,
         height: 400,
-        closeText: ''
+        closeText: '',
       });
     $('button.ui-dialog-titlebar-close').hide();
 
-    $.each(results.granules, function(index, granule) {
+    $.each(results.granules, (index, granule) => {
       granules[granule.id] = granule;
     });
     $('#wv-data-list input').on('click', toggleSelection);
   };
 
   self.hide = function() {
-    var $d = $('.ui-dialog');
+    const $d = $('.ui-dialog');
     if ($d.length !== 0) {
       $d.hide();
     }
   };
 
   self.visible = function() {
-    var $d = $('.ui-dialog');
+    const $d = $('.ui-dialog');
     if ($d.length !== 0) {
       return $d.is(':visible');
     }
@@ -837,43 +831,43 @@ var dataUiSelectionListPanel = function(dataUi, results, store) {
     }
   };
 
-  var resultsText = function() {
-    var elements = [];
+  const resultsText = function() {
+    const elements = [];
     const dataState = store.getState().data;
-    $.each(results.granules, function(index, granule) {
-      var selected = dataState.selectedGranules[granule.id] ? "checked='true'" : '';
+    $.each(results.granules, (index, granule) => {
+      const selected = dataState.selectedGranules[granule.id] ? "checked='true'" : '';
       elements.push(
-        '<tr>' +
-        '<td>' +
-        "<input type='checkbox' value='" +
-        granule.id +
-        "' " +
-        selected +
-        '>' +
-        '</td>' +
-        "<td class='label'>" +
-        granule.label +
-        '</td>' +
-        '</tr>'
+        `${'<tr>'
+        + '<td>'
+        + "<input type='checkbox' value='"}${
+          granule.id
+        }' ${
+          selected
+        }>`
+        + '</td>'
+        + `<td class='label'>${
+          granule.label
+        }</td>`
+        + '</tr>',
       );
     });
-    var text = elements.join('\n');
+    const text = elements.join('\n');
     return text;
   };
 
   var bodyText = function() {
-    var elements = ["<div'>", '<table>', resultsText(), '</table>', '</div>'];
-    var text = elements.join('\n') + '<br/>';
+    const elements = ["<div'>", '<table>', resultsText(), '</table>', '</div>'];
+    const text = `${elements.join('\n')}<br/>`;
     return text;
   };
 
   var toggleSelection = function() {
-    var granule = granules[$(this).attr('value')];
+    const granule = granules[$(this).attr('value')];
     store.dispatch(toggleGranule(granule));
   };
 
   var onGranuleUnselect = function(granule) {
-    $("#wv-data-list input[value='" + granule.id + "']").removeAttr('checked');
+    $(`#wv-data-list input[value='${granule.id}']`).removeAttr('checked');
   };
 
   init();

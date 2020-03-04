@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Nav } from 'reactstrap';
 import CustomNavItem from './nav-item';
+
 const tabClasses = 'sidebar-tab';
 class NavCase extends React.Component {
   renderDataDownload() {
@@ -11,13 +12,13 @@ class NavCase extends React.Component {
       isCompareMode,
       onTabClick,
       activeTab,
-      isDataDisabled
+      isDataDisabled,
     } = this.props;
     if (tabTypes.download) {
       return (
         <CustomNavItem
           isMobile={isMobile}
-          shouldHideInMobile={true}
+          shouldHideInMobile
           isDisabled={!!isCompareMode || isDataDisabled}
           onTabClick={onTabClick}
           text="Data"
@@ -31,10 +32,10 @@ class NavCase extends React.Component {
           }
           className={
             activeTab === 'download'
-              ? tabClasses + ' third-tab active'
+              ? `${tabClasses} third-tab active`
               : isCompareMode
-                ? tabClasses + ' third-tab disabled'
-                : tabClasses + ' third-tab'
+                ? `${tabClasses} third-tab disabled`
+                : `${tabClasses} third-tab`
           }
         />
       );
@@ -47,7 +48,7 @@ class NavCase extends React.Component {
       isMobile,
       isCompareMode,
       onTabClick,
-      activeTab
+      activeTab,
     } = this.props;
     if (tabTypes.events) {
       return (
@@ -67,10 +68,10 @@ class NavCase extends React.Component {
           }
           className={
             activeTab === 'events'
-              ? tabClasses + ' second-tab active'
+              ? `${tabClasses} second-tab active`
               : isCompareMode
-                ? tabClasses + ' second-tab disabled'
-                : tabClasses + ' second-tab'
+                ? `${tabClasses} second-tab disabled`
+                : `${tabClasses} second-tab`
           }
         />
       );
@@ -78,7 +79,9 @@ class NavCase extends React.Component {
   }
 
   render() {
-    const { isMobile, onTabClick, activeTab, toggleSidebar } = this.props;
+    const {
+      isMobile, onTabClick, activeTab, toggleSidebar,
+    } = this.props;
 
     return (
       <Nav tabs className="main-nav">
@@ -93,8 +96,8 @@ class NavCase extends React.Component {
           title="Layers"
           className={
             activeTab === 'layers'
-              ? tabClasses + ' first-tab active'
-              : tabClasses + ' first-tab'
+              ? `${tabClasses} first-tab active`
+              : `${tabClasses} first-tab`
           }
         />
         {this.renderEvents()}
@@ -118,7 +121,7 @@ NavCase.propTypes = {
   isMobile: PropTypes.bool,
   onTabClick: PropTypes.func,
   tabTypes: PropTypes.object,
-  toggleSidebar: PropTypes.func
+  toggleSidebar: PropTypes.func,
 };
 
 export default NavCase;

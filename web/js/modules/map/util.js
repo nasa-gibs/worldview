@@ -1,20 +1,21 @@
-import { encode } from '../link/util';
 import * as olExtent from 'ol/extent';
 import {
   each as lodashEach,
   isUndefined as lodashIsUndefined,
   map as lodashMap,
   get as lodashGet,
-  isEqual as lodashIsEqual
+  isEqual as lodashIsEqual,
 } from 'lodash';
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 import Promise from 'bluebird';
+import { encode } from '../link/util';
+
 export function getMapParameterSetup(
   parameters,
   config,
   models,
   legacyState,
-  errors
+  errors,
 ) {
   models.map.load(legacyState, errors);
   const leadingExtent = getLeadingExtent(config.pageLoadTime);
@@ -26,51 +27,44 @@ export function getMapParameterSetup(
       options: {
         delimiter: ',',
         serializeNeedsGlobalState: true,
-        parse: state => {
-          var extent = lodashMap(state.split(','), function(str) {
-            return parseFloat(str);
-          });
-          var valid = mapIsExtentValid(extent);
+        parse: (state) => {
+          const extent = lodashMap(state.split(','), (str) => parseFloat(str));
+          const valid = mapIsExtentValid(extent);
           if (!valid) {
             errors.push({
-              message: 'Invalid extent: ' + state
+              message: `Invalid extent: ${state}`,
             });
             return leadingExtent;
-          } else {
-            return extent;
           }
+          return extent;
         },
         serialize: (currentItemState, currentState) => {
           const rendered = lodashGet(currentState, 'map.rendered');
           if (!rendered) return undefined;
           const actualLeadingExtent = lodashGet(
             currentState,
-            'map.leadingExtent'
+            'map.leadingExtent',
           );
           const extent = mapIsExtentValid(currentItemState)
             ? currentItemState
             : leadingExtent;
           if (lodashIsEqual(actualLeadingExtent, extent)) return undefined;
           return encode(extent);
-        }
-      }
+        },
+      },
     },
     r: {
       stateKey: 'map.rotation',
       initialState: 0,
       options: {
         serializeNeedsGlobalState: true,
-        parse: state => {
-          return !isNaN(state) ? state * (Math.PI / 180.0) : 0;
-        },
-        serialize: (currentItemState, currentState) => {
-          return currentItemState &&
-            currentState.proj.selected.id !== 'geographic'
-            ? (currentItemState * (180.0 / Math.PI)).toPrecision(6)
-            : undefined;
-        }
-      }
-    }
+        parse: (state) => (!isNaN(state) ? state * (Math.PI / 180.0) : 0),
+        serialize: (currentItemState, currentState) => (currentItemState
+            && currentState.proj.selected.id !== 'geographic'
+          ? (currentItemState * (180.0 / Math.PI)).toPrecision(6)
+          : undefined),
+      },
+    },
   };
 }
 /**
@@ -88,11 +82,11 @@ export function mapIsExtentValid(extent) {
   if (lodashIsUndefined(extent)) {
     return false;
   }
-  var valid = true;
+  let valid = true;
   if (extent.toArray) {
     extent = extent.toArray();
   }
-  lodashEach(extent, function(value) {
+  lodashEach(extent, (value) => {
     if (isNaN(value)) {
       valid = false;
       return false;
@@ -116,7 +110,7 @@ export function mapIsExtentValid(extent) {
  * @returns {object} Extent Array
  */
 export function getLeadingExtent(loadtime) {
-  var curHour = loadtime.getUTCHours();
+  let curHour = loadtime.getUTCHours();
 
   // For earlier hours when data is still being filled in, force a far eastern perspective
   if (curHour < 3) {
@@ -126,11 +120,11 @@ export function getLeadingExtent(loadtime) {
   }
 
   // Compute east/west bounds
-  var minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
-  var maxLon = minLon + 159.328125;
+  const minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
+  const maxLon = minLon + 159.328125;
 
-  var minLat = -46.546875;
-  var maxLat = 53.015625;
+  const minLat = -46.546875;
+  const maxLat = 53.015625;
 
   return [minLon, minLat, maxLon, maxLat];
 }
@@ -147,9 +141,10 @@ export function getLeadingExtent(loadtime) {
  * @return {object}            Promise.all
  */
 export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
-  var extent;
-  return new Promise(function(resolve, reject) {
-    var layers, layerPromiseArray;
+  let extent;
+  return new Promise((resolve, reject) => {
+    let layers; let
+      layerPromiseArray;
     // Current layer's 3 layer array (prev, current, next days)
     layers = layer.values_.layers;
     if (layer.values_.layers) {
@@ -159,14 +154,14 @@ export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
     }
     // Calculate the extent of each layer in the layer group
     // and create a promiseTileLayer for prev, current, next day
-    layerPromiseArray = layers.map(function(layer) {
+    layerPromiseArray = layers.map((layer) => {
       extent = calculateExtent(
         layer.getExtent(),
-        map.getView().calculateExtent(map.getSize())
+        map.getView().calculateExtent(map.getSize()),
       );
       return promiseTileLayer(layer, extent, viewState, pixelRatio);
     });
-    Promise.all(layerPromiseArray).then(function() {
+    Promise.all(layerPromiseArray).then(() => {
       resolve('resolve layer group');
     });
   });
@@ -185,13 +180,13 @@ export function calculateExtent(extent, viewportExtent) {
   if (extent[1] < -180) {
     // Previous day
     extent = getExtent(viewportExtent, extent);
-    extent[1] = extent[1] + 360;
-    extent[3] = extent[3] + 360;
+    extent[1] += 360;
+    extent[3] += 360;
   } else if (extent[1] > 180) {
     // Next day
     extent = getExtent(viewportExtent, extent);
-    extent[1] = extent[1] - 360;
-    extent[3] = extent[3] - 360;
+    extent[1] -= 360;
+    extent[3] -= 360;
   } else {
     // Current day (within map extent)
     extent = getExtent(extent, viewportExtent);
@@ -224,8 +219,9 @@ var getExtent = function(extent1, extent2) {
  * @return {object}            promise
  */
 var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
-  var renderer, tileSource, currentZ, i, tileGrid, projection;
-  return new Promise(function(resolve, reject) {
+  let renderer; let tileSource; let currentZ; let i; let tileGrid; let
+    projection;
+  return new Promise((resolve, reject) => {
     if (!extent) {
       resolve('resolve tile layer');
     }
@@ -241,16 +237,16 @@ var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
       tileGrid = tileSource.getTileGridForProjection(projection);
       currentZ = tileGrid.getZForResolution(
         viewState.resolution,
-        renderer.zDirection
+        renderer.zDirection,
       );
-      tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-        var tile;
+      tileGrid.forEachTileCoord(extent, currentZ, (tileCoord) => {
+        let tile;
         tile = tileSource.getTile(
           tileCoord[0],
           tileCoord[1],
           tileCoord[2],
           pixelRatio,
-          projection
+          projection,
         );
         tile.load();
 
@@ -263,7 +259,7 @@ var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
               resolve();
             }
           } else {
-            console.error('No response for tile request ' + layer.wv.key);
+            console.error(`No response for tile request ${layer.wv.key}`);
             resolve(); // some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
           }
           this.un('tileloadend', loader); // remove event listeners from memory

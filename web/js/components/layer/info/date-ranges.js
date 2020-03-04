@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import util from '../../../util/util';
 import { ListGroup, ListGroupItem } from 'reactstrap';
+import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
 import { dateOverlap } from '../../../modules/layers/util';
 
@@ -9,7 +9,7 @@ export class DateRanges extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showRanges: false
+      showRanges: false,
     };
   }
 
@@ -17,7 +17,7 @@ export class DateRanges extends React.Component {
     return layer.dateRanges
       .slice(0)
       .reverse()
-      .map(l => {
+      .map((l) => {
         let listItemStartDate;
         let listItemEndDate;
 
@@ -30,8 +30,8 @@ export class DateRanges extends React.Component {
         }
 
         return (
-          <ListGroupItem key={l.startDate + ' - ' + l.endDate}>
-            {listItemStartDate + ' - ' + listItemEndDate}
+          <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>
+            {`${listItemStartDate} - ${listItemEndDate}`}
           </ListGroupItem>
         );
       });
@@ -45,14 +45,14 @@ export class DateRanges extends React.Component {
     let listItems;
 
     if (layer.dateRanges && layer.dateRanges.length > 1) {
-      var dateRanges = dateOverlap(layer.period, layer.dateRanges);
+      const dateRanges = dateOverlap(layer.period, layer.dateRanges);
       if (dateRanges.overlap === false) {
         listItems = this.renderListItem(layer);
       }
     }
 
     return (
-      <React.Fragment>
+      <>
         <sup
           className="layer-date-ranges-button"
           onClick={() => {
@@ -69,13 +69,13 @@ export class DateRanges extends React.Component {
           <div>
             <p>Date Ranges:</p>
           </div>
-          <Scrollbar style={{ maxHeight: screenHeight - 400 + 'px' }}>
+          <Scrollbar style={{ maxHeight: `${screenHeight - 400}px` }}>
             <ListGroup className="layer-date-ranges" id="layer-settings-date-range-list">
               {listItems}
             </ListGroup>
           </Scrollbar>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -83,5 +83,5 @@ export class DateRanges extends React.Component {
 DateRanges.propTypes = {
   dateRanges: PropTypes.object,
   layer: PropTypes.object,
-  screenHeight: PropTypes.number
+  screenHeight: PropTypes.number,
 };

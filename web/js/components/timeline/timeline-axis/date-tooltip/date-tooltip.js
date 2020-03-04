@@ -18,8 +18,8 @@ const getToolTipTime = (time, hasSubdailyLayers) => {
   }
 
   const hourMinSecZ = timeSplit[1].split(':');
-  const hourMinZ = [hourMinSecZ[0], hourMinSecZ[1]].join(':') + 'Z';
-  const yearMonthDayHourMin = yearMonthDay + ' ' + hourMinZ;
+  const hourMinZ = `${[hourMinSecZ[0], hourMinSecZ[1]].join(':')}Z`;
+  const yearMonthDayHourMin = `${yearMonthDay} ${hourMinZ}`;
 
   // if subdaily, return YEAR-MON-DAY HOUR-MIN-Z / 2020-02-15 18:00Z
   return yearMonthDayHourMin;
@@ -44,7 +44,7 @@ class DateToolTip extends PureComponent {
       draggerTimeStateB,
       hoverTime,
       showHoverLine,
-      axisWidth
+      axisWidth,
     } = this.props;
     // checks for dragger and hover handled by parent
     const showDraggerToolTip = !!(showDraggerTime && draggerTimeState);
@@ -79,8 +79,9 @@ class DateToolTip extends PureComponent {
       toolTipDisplay = 'block';
     }
     return (
-      <React.Fragment>
-        { (showDraggerToolTip || showHoverToolTip) &&
+      <>
+        { (showDraggerToolTip || showHoverToolTip)
+        && (
         <div
           className="date-tooltip"
           style={{
@@ -90,13 +91,19 @@ class DateToolTip extends PureComponent {
               ? toolTipDayOfYear >= 100
                 ? '239px'
                 : '232px'
-              : '165px'
+              : '165px',
           }}
         >
-          { toolTipDate } <span className="date-tooltip-day">({ toolTipDayOfYear })</span>
+          { toolTipDate }
+          {' '}
+          <span className="date-tooltip-day">
+            (
+            { toolTipDayOfYear }
+            )
+          </span>
         </div>
-        }
-      </React.Fragment>
+        )}
+      </>
     );
   }
 }
@@ -112,7 +119,7 @@ DateToolTip.propTypes = {
   hoverTime: PropTypes.string,
   leftOffset: PropTypes.number,
   showDraggerTime: PropTypes.bool,
-  showHoverLine: PropTypes.bool
+  showHoverLine: PropTypes.bool,
 };
 
 export default DateToolTip;

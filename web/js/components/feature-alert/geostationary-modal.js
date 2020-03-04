@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { history } from '../../main';
 import update from 'immutability-helper';
 import {
   Button,
   Row,
-  Col
+  Col,
 } from 'reactstrap';
+import { history } from '../../main';
 
 class GeostationaryModalBody extends React.Component {
   tryIt() {
@@ -22,14 +22,15 @@ class GeostationaryModalBody extends React.Component {
     return (
       <Row className="geostationary-modal">
         <Col lg="6" md="12">
-          {!isMobile &&
+          {!isMobile
+            && (
             <figure className="figure">
               <img src="images/geostationary.gif" className="figure-img img-fluid rounded" />
               <figcaption className="figure-caption mx-auto">
-                 GOES-East / ABI Red Visible (0.64 µm, Band 2, 10 minute)
+                GOES-East / ABI Red Visible (0.64 µm, Band 2, 10 minute)
               </figcaption>
             </figure>
-          }
+            )}
         </Col>
         <Col lg="6" md="12">
           <p>
@@ -53,19 +54,21 @@ class GeostationaryModalBody extends React.Component {
 
           {isMobile
             ? <p> Click below to see geostationary in action! </p>
-            : <p>
+            : (
+              <p>
                 The animation tool has also been updated to allow adjustments down to
                 the hour and minute. Click below to set up an animation to see
                 geostationary in action!
-            </p>
-          }
+              </p>
+            )}
 
         </Col>
 
         <Button
           className="btn btn-lg"
-          onClick={this.tryIt.bind(this)}>
-            Try it!
+          onClick={this.tryIt.bind(this)}
+        >
+          Try it!
         </Button>
 
       </Row>
@@ -73,11 +76,9 @@ class GeostationaryModalBody extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    isMobile: state.browser.lessThan.medium
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  isMobile: state.browser.lessThan.medium,
+});
 
 const getLocation = (isMobile) => {
   const paramArr = [
@@ -85,7 +86,7 @@ const getLocation = (isMobile) => {
     'l=Reference_Labels,Reference_Features(hidden),Coastlines(hidden),GOES-East_ABI_Band2_Red_Visible_1km,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&',
     't=2019-09-01-T16%3A00%3A00Z&',
     'v=-84.25409131402579,21.881949559541848,-69.48846631402579,30.213980809541848&',
-    'z=4&ics=true&ici=5&icd=10'
+    'z=4&ics=true&ici=5&icd=10',
   ];
 
   if (!isMobile) {
@@ -94,7 +95,7 @@ const getLocation = (isMobile) => {
   const urlParams = paramArr.reduce((prev, curr) => prev + curr, '');
   const search = urlParams.split('/?').pop();
   const location = update(history.location, {
-    search: { $set: search }
+    search: { $set: search },
   });
   return location;
 };
@@ -103,18 +104,18 @@ const mapDispatchToProps = (dispatch) => ({
   prepareAnimate: (isMobile) => {
     dispatch({
       type: 'REDUX-LOCATION-POP-ACTION',
-      payload: getLocation(isMobile)
+      payload: getLocation(isMobile),
     });
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(GeostationaryModalBody);
 
 GeostationaryModalBody.propTypes = {
   closeModal: PropTypes.func,
   isMobile: PropTypes.bool,
-  prepareAnimate: PropTypes.func
+  prepareAnimate: PropTypes.func,
 };

@@ -33,9 +33,9 @@ for (const line of lines) {
 const colormap = {
   [id]: {
     id,
-    name: name,
-    colors
-  }
+    name,
+    colors,
+  },
 };
 fs.writeFileSync(jsonFile, JSON.stringify(colormap));
 
@@ -44,7 +44,7 @@ function hex(dec) {
   dec = Number.parseInt(dec);
   let h = dec.toString(16);
   if (h.length === 1) {
-    h = '0' + h;
+    h = `0${h}`;
   }
   return h;
-};
+}

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getOrbitTrackTitle } from '../../../modules/layers/util';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { getOrbitTrackTitle } from '../../../modules/layers/util';
 
 /**
  * A single layer search result row
@@ -14,7 +14,7 @@ class LayerRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: props.isEnabled
+      checked: props.isEnabled,
     };
   }
 
@@ -24,8 +24,8 @@ class LayerRow extends React.Component {
    * @return {void}
    */
   toggleCheck() {
-    var { checked } = this.state;
-    var { onState, offState, layer } = this.props;
+    const { checked } = this.state;
+    const { onState, offState, layer } = this.props;
     if (checked) offState(layer.id);
     if (!checked) onState(layer.id);
     this.setState({ checked: !checked });
@@ -42,7 +42,7 @@ class LayerRow extends React.Component {
       layer,
       showLayerMetadata,
       isMetadataShowing,
-      isMobile
+      isMobile,
     } = this.props;
     if (!isMetadataShowing) {
       showLayerMetadata(layer.id);
@@ -63,25 +63,41 @@ class LayerRow extends React.Component {
     const attrs = title.slice(splitIdx);
     const titleName = title.slice(0, splitIdx - 1);
     return splitIdx < 0
-      ? <h3> {title} </h3>
+      ? (
+        <h3>
+          {' '}
+          {title}
+          {' '}
+        </h3>
+      )
       : (
         <>
-          <h3> {titleName} </h3>
-          <h4> {attrs} </h4>
+          <h3>
+            {' '}
+            {titleName}
+            {' '}
+          </h3>
+          <h4>
+            {' '}
+            {attrs}
+            {' '}
+          </h4>
         </>
       );
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
-      checked: nextProps.isEnabled
+      checked: nextProps.isEnabled,
     });
   }
 
   render() {
     const { checked } = this.state;
     const { layer, isMetadataShowing } = this.props;
-    const { title, track, description, subtitle } = layer;
+    const {
+      title, track, description, subtitle,
+    } = layer;
     const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
     const rowClass = isMetadataShowing
       ? 'search-row layers-all-layer selected'
@@ -89,11 +105,11 @@ class LayerRow extends React.Component {
     const checkboxClass = checked ? 'wv-checkbox checked' : 'wv-checkbox';
 
     return (
-      <div id={layer.id + '-search-row'} className={rowClass}>
+      <div id={`${layer.id}-search-row`} className={rowClass}>
         <div className={checkboxClass}>
           <input
             type="checkbox"
-            id={layer.id + '-checkbox'}
+            id={`${layer.id}-checkbox`}
             title={title}
             name={name}
             checked={checked}
@@ -119,7 +135,7 @@ LayerRow.propTypes = {
   offState: PropTypes.func,
   onState: PropTypes.func,
   showLayerMetadata: PropTypes.func,
-  toggleDateRangesExpansion: PropTypes.func
+  toggleDateRangesExpansion: PropTypes.func,
 };
 
 export default LayerRow;

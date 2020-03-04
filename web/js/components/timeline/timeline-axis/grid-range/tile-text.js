@@ -20,9 +20,9 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   }
   if (item.timeScale === 'hour') {
     const timeScaleUnit = item.dateObject.hours;
-    dateText = timeScaleUnit === 12 ||
-      timeScaleUnit === 6 ||
-      timeScaleUnit === 18
+    dateText = timeScaleUnit === 12
+      || timeScaleUnit === 6
+      || timeScaleUnit === 18
       ? `${timeScaleUnit}:00`
       : item.date;
   }
@@ -31,8 +31,11 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
     xOffsetAdded = 5;
   }
   return (
-    <React.Fragment>
-      <text className={`axis-grid-text axis-grid-text-${item.timeScale}`} x="0" y="42"
+    <>
+      <text
+        className={`axis-grid-text axis-grid-text-${item.timeScale}`}
+        x="0"
+        y="42"
         fill={item.withinRange ? 'white' : ''}
         transform={`translate(${(index * gridWidth) + xOffsetAdded}, 20)`}
         clipPath="url(#textDisplay)"
@@ -40,23 +43,22 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
         {dateText}
       </text>
       {item.timeScale === 'day'
-        ? <text className="axis-grid-text axis-grid-text-year" x="0" y="42"
-          fill={item.withinRange ? '#cccccc' : ''}
-          transform={`translate(${(index * gridWidth) + xOffsetAdded + 40}, 20)`}
-          clipPath="url(#textDisplay)"
-        >
-          {dateTextYear}
-        </text>
-        : null
-      }
-    </React.Fragment>
+        ? (
+          <text
+            className="axis-grid-text axis-grid-text-year"
+            x="0"
+            y="42"
+            fill={item.withinRange ? '#cccccc' : ''}
+            transform={`translate(${(index * gridWidth) + xOffsetAdded + 40}, 20)`}
+            clipPath="url(#textDisplay)"
+          >
+            {dateTextYear}
+          </text>
+        )
+        : null}
+    </>
   );
 };
 
-const TileText = ({ item, index, gridWidth }) => {
-  return (
-    axisScaleTextElementWrapper(item, index, gridWidth)
-  );
-};
-
+const TileText = ({ item, index, gridWidth }) => axisScaleTextElementWrapper(item, index, gridWidth);
 export default TileText;

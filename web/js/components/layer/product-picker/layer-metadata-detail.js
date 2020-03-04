@@ -1,22 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getOrbitTrackTitle, dateOverlap } from '../../../modules/layers/util';
-import util from '../../../util/util.js';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
+import util from '../../../util/util.js';
+import { getOrbitTrackTitle, dateOverlap } from '../../../modules/layers/util';
 
 class LayerMetadataDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDateRangesExpanded: false
+      isDateRangesExpanded: false,
     };
   }
 
   toggleLayer() {
-    const { addLayer, removeLayer, isActive, layer } = this.props;
+    const {
+      addLayer, removeLayer, isActive, layer,
+    } = this.props;
     if (isActive) {
       removeLayer(layer.id);
     } else {
@@ -38,7 +40,7 @@ class LayerMetadataDetail extends React.Component {
     return layer.dateRanges
       .slice(0)
       .reverse()
-      .map(l => {
+      .map((l) => {
         let listItemStartDate;
         let listItemEndDate;
 
@@ -51,8 +53,8 @@ class LayerMetadataDetail extends React.Component {
         }
 
         return (
-          <ListGroupItem key={l.startDate + ' - ' + l.endDate}>
-            {listItemStartDate + ' - ' + listItemEndDate}
+          <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>
+            {`${listItemStartDate} - ${listItemEndDate}`}
           </ListGroupItem>
         );
       });
@@ -61,7 +63,8 @@ class LayerMetadataDetail extends React.Component {
   renderLayerDates() {
     const { layer } = this.props;
     const { isDateRangesExpanded } = this.state;
-    let listItems, dateRanges;
+    let listItems; let
+      dateRanges;
 
     if (layer.dateRanges && layer.dateRanges.length > 1) {
       dateRanges = dateOverlap(layer.period, layer.dateRanges);
@@ -77,14 +80,14 @@ class LayerMetadataDetail extends React.Component {
             <span
               dangerouslySetInnerHTML={{ __html: dateRangeText(layer) }}
             />
-            {layer.dateRanges &&
-              layer.dateRanges.length > 1 &&
-              dateRanges.overlap === false && (
+            {layer.dateRanges
+              && layer.dateRanges.length > 1
+              && dateRanges.overlap === false && (
               <a
                 id="layer-date-ranges-button"
                 title="View all date ranges"
                 className="layer-date-ranges-button"
-                onClick={e => this.toggleDateRanges(e)}
+                onClick={(e) => this.toggleDateRanges(e)}
               >
                 {' '}
                 <sup>*View Dates</sup>
@@ -107,11 +110,25 @@ class LayerMetadataDetail extends React.Component {
     const attrs = title.slice(splitIdx);
     const titleName = title.slice(0, splitIdx - 1);
     return splitIdx < 0
-      ? <h3> {title} </h3>
+      ? (
+        <h3>
+          {' '}
+          {title}
+          {' '}
+        </h3>
+      )
       : (
         <>
-          <h3> {titleName} </h3>
-          <h4> {attrs} </h4>
+          <h3>
+            {' '}
+            {titleName}
+            {' '}
+          </h3>
+          <h4>
+            {' '}
+            {attrs}
+            {' '}
+          </h4>
         </>
       );
   }
@@ -126,10 +143,14 @@ class LayerMetadataDetail extends React.Component {
         </div>
       );
     }
-    const { layer, selectedProjection, isActive, showPreviewImage } = this.props;
-    const { title, subtitle, track, metadata } = layer;
+    const {
+      layer, selectedProjection, isActive, showPreviewImage,
+    } = this.props;
+    const {
+      title, subtitle, track, metadata,
+    } = layer;
     const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
-    const previewUrl = 'images/layers/previews/' + selectedProjection + '/' + layer.id + '.jpg';
+    const previewUrl = `images/layers/previews/${selectedProjection}/${layer.id}.jpg`;
     const buttonText = isActive ? 'Remove Layer' : 'Add Layer';
     const btnClass = isActive ? 'add-to-map-btn text-center is-active' : 'add-to-map-btn text-center';
     const btnIconClass = isActive ? faMinus : faPlus;
@@ -144,13 +165,14 @@ class LayerMetadataDetail extends React.Component {
             </Button>
           */}
         </div>
-        {showPreviewImage &&
+        {showPreviewImage
+          && (
           <div className="text-center">
             <a href={previewUrl} rel="noopener noreferrer" target="_blank">
               <img className="img-fluid layer-preview" src={previewUrl} />
             </a>
           </div>
-        }
+          )}
         <div className="text-center">
           <Button className={btnClass} onClick={this.toggleLayer.bind(this)}>
             <FontAwesomeIcon icon={btnIconClass} />
@@ -173,7 +195,7 @@ LayerMetadataDetail.propTypes = {
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,
   showMetadataForLayer: PropTypes.func,
-  showPreviewImage: PropTypes.bool
+  showPreviewImage: PropTypes.bool,
 };
 
 export default LayerMetadataDetail;
@@ -187,15 +209,16 @@ export default LayerMetadataDetail;
    * @return {string}       Return a string with temporal range information
    */
 const dateRangeText = (layer) => {
-  let startDate, startDateId, endDate, endDateId;
+  let startDate; let startDateId; let endDate; let
+    endDateId;
 
   if (layer.startDate) {
-    startDateId = layer.id + '-startDate';
+    startDateId = `${layer.id}-startDate`;
     startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
   }
 
   if (layer.endDate) {
-    endDateId = layer.id + '-endDate';
+    endDateId = `${layer.id}-endDate`;
     endDate = util.parseDate(layer.endDate);
 
     if (endDate <= util.today() && !layer.inactive) {
@@ -207,8 +230,7 @@ const dateRangeText = (layer) => {
     endDate = 'Present';
   }
 
-  const dateRange =
-    `
+  const dateRange = `
       Temporal coverage:
       <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
       <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>

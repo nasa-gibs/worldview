@@ -15,7 +15,7 @@ class DateInputColumn extends Component {
     this.state = {
       value: '',
       selected: false,
-      size: null
+      size: null,
     };
     this.inputs = [];
   }
@@ -47,7 +47,7 @@ class DateInputColumn extends Component {
       size = 2;
     }
     this.setState({
-      size: size
+      size,
     });
   }
 
@@ -59,7 +59,7 @@ class DateInputColumn extends Component {
 
   onKeyPress = (e) => {
     // check tab and enter key code
-    const keyCode = e.keyCode;
+    const { keyCode } = e;
     const entered = keyCode === 13 || keyCode === 9;
     if (entered) {
       e.preventDefault();
@@ -69,7 +69,7 @@ class DateInputColumn extends Component {
 
   onKeyUp = (e) => {
     const { type } = this.props;
-    const keyCode = e.keyCode;
+    const { keyCode } = e;
     const entered = keyCode === 13 || keyCode === 9;
     let shiftTab;
 
@@ -142,7 +142,7 @@ class DateInputColumn extends Component {
 
     // add leading '0' to single string number
     if (newDate !== null && value.length === 1) {
-      value = '0' + value;
+      value = `0${value}`;
     }
 
     // update parent level time unit type value
@@ -163,33 +163,31 @@ class DateInputColumn extends Component {
 
   monthValidation = (input) => {
     const date = new Date(this.props.date);
-    var newDate;
+    let newDate;
     if (!isNaN(input) && input < 13 && input > 0) {
       newDate = new Date(date.setUTCMonth(input - 1));
       if (newDate) {
         return this.validateDate(newDate);
       }
       return null;
-    } else {
-      const realMonth = util.stringInArray(util.monthStringArray, input);
-      if (realMonth !== false) {
-        const day = date.getUTCDate();
-        const zeroDay = new Date(date.setUTCDate(1));
-
-        const zeroAddMonth = new Date(zeroDay.setUTCMonth(realMonth));
-        const zeroAddedMonthNumber = zeroAddMonth.getUTCMonth();
-
-        const addDay = new Date(zeroAddMonth.setUTCDate(day));
-        const addedDayMonthNumber = addDay.getUTCMonth();
-
-        if (addedDayMonthNumber !== zeroAddedMonthNumber) {
-          return false;
-        }
-        return this.validateDate(addDay);
-      } else {
-        return null;
-      }
     }
+    const realMonth = util.stringInArray(util.monthStringArray, input);
+    if (realMonth !== false) {
+      const day = date.getUTCDate();
+      const zeroDay = new Date(date.setUTCDate(1));
+
+      const zeroAddMonth = new Date(zeroDay.setUTCMonth(realMonth));
+      const zeroAddedMonthNumber = zeroAddMonth.getUTCMonth();
+
+      const addDay = new Date(zeroAddMonth.setUTCDate(day));
+      const addedDayMonthNumber = addDay.getUTCMonth();
+
+      if (addedDayMonthNumber !== zeroAddedMonthNumber) {
+        return false;
+      }
+      return this.validateDate(addDay);
+    }
+    return null;
   }
 
   dayValidation = (input) => {
@@ -200,7 +198,7 @@ class DateInputColumn extends Component {
       const actualMaxDateForMonth = new Date(
         date.getYear(),
         date.getMonth() + 1,
-        0
+        0,
       ).getDate();
 
       if (input > actualMaxDateForMonth) {
@@ -231,13 +229,15 @@ class DateInputColumn extends Component {
   }
 
   rollDate = (amt) => {
-    const { date, minDate, maxDate, type, updateDate } = this.props;
+    const {
+      date, minDate, maxDate, type, updateDate,
+    } = this.props;
     const newDate = util.rollDate(
       date,
       type,
       amt,
       minDate,
-      maxDate
+      maxDate,
     );
     updateDate(newDate, true);
   }
@@ -266,12 +266,12 @@ class DateInputColumn extends Component {
     if (type === 'month' && !isNaN(value)) {
       value = util.monthStringArray[value - 1];
     } else if (value.length === 1) {
-      value = '0' + value;
+      value = `0${value}`;
     }
 
     this.setState({
       value,
-      selected: false
+      selected: false,
     });
 
     setFocusedTab(null, tabIndex);
@@ -279,7 +279,7 @@ class DateInputColumn extends Component {
 
   onChange = (e) => {
     this.setState({
-      value: e.target.value.toUpperCase()
+      value: e.target.value.toUpperCase(),
     });
   }
 
@@ -307,32 +307,32 @@ class DateInputColumn extends Component {
       inputId,
       isValid,
       tabIndex,
-      type
+      type,
     } = this.props;
     const {
       selected,
       size,
-      value
+      value,
     } = this.state;
 
     // conditional styling
     const containerClassName = `input-wrapper ${selected ? 'selected ' : ''}input-wrapper-${type}`;
     const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
     const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
-    const fontSizeStyle = fontSize ? { fontSize: fontSize + 'px' } : {};
+    const fontSizeStyle = fontSize ? { fontSize: `${fontSize}px` } : {};
     return (
       <div
         className={containerClassName}
         style={containerBorderStyle}
       >
         <Arrow
-          direction='up'
+          direction="up"
           onClick={this.onClickUp}
           type={type}
         />
         <input
           type="text"
-          ref={input => {
+          ref={(input) => {
             this.inputs[tabIndex] = input;
           }}
           size={size}
@@ -349,7 +349,7 @@ class DateInputColumn extends Component {
           onFocus={this.handleFocus}
         />
         <Arrow
-          direction='down'
+          direction="down"
           onClick={this.onClickDown}
           type={type}
         />
@@ -372,7 +372,7 @@ DateInputColumn.propTypes = {
   type: PropTypes.string,
   updateDate: PropTypes.func,
   updateTimeUnitInput: PropTypes.func,
-  value: PropTypes.node
+  value: PropTypes.node,
 };
 
 export default DateInputColumn;

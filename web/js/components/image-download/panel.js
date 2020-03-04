@@ -1,14 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import googleTagManager from 'googleTagManager';
 import {
   imageSizeValid,
   getDimensions,
-  getDownloadUrl
+  getDownloadUrl,
 } from '../../modules/image-download/util';
 
 import SelectionList from '../util/selector';
 import ResTable from './grid';
-import PropTypes from 'prop-types';
-import googleTagManager from 'googleTagManager';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -19,7 +19,7 @@ const RESOLUTION_KEY = {
   2: '500m',
   4: '1km',
   20: '5km',
-  40: '10km'
+  40: '10km',
 };
 /*
  * A react component, Builds a rather specific
@@ -38,12 +38,14 @@ export default class ImageResSelection extends React.Component {
       isWorldfile: props.isWorldfile,
       resolution: props.resolution,
       valid: props.valid,
-      debugUrl: ''
+      debugUrl: '',
     };
   }
 
   onDownload(width, height) {
-    const { getLayers, url, lonlats, projection, date } = this.props;
+    const {
+      getLayers, url, lonlats, projection, date,
+    } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
     const time = new Date(date.getTime());
 
@@ -56,7 +58,7 @@ export default class ImageResSelection extends React.Component {
       { width, height },
       time,
       fileType,
-      fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile
+      fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile,
     );
 
     if (url) {
@@ -67,13 +69,13 @@ export default class ImageResSelection extends React.Component {
     googleTagManager.pushEvent({
       event: 'image_download',
       layers: {
-        activeCount: layerList.length
+        activeCount: layerList.length,
       },
       image: {
         resolution: RESOLUTION_KEY[resolution],
         format: fileType,
-        worldfile: isWorldfile
-      }
+        worldfile: isWorldfile,
+      },
     });
     this.setState({ debugUrl: dlURL });
   }
@@ -82,16 +84,16 @@ export default class ImageResSelection extends React.Component {
     const { onPanelChange } = this.props;
     if (type === 'resolution') {
       this.setState({
-        resolution: value
+        resolution: value,
       });
     } else if (type === 'worldfile') {
       value = Boolean(Number(value));
       this.setState({
-        isWorldfile: value
+        isWorldfile: value,
       });
     } else {
       this.setState({
-        fileType: value
+        fileType: value,
       });
     }
     onPanelChange(type, value);
@@ -127,7 +129,7 @@ export default class ImageResSelection extends React.Component {
             <select
               id="wv-image-worldfile"
               value={value}
-              onChange={e => this.handleChange('worldfile', e.target.value)}
+              onChange={(e) => this.handleChange('worldfile', e.target.value)}
             >
               <option value={0}>No</option>
               <option value={1}>Yes</option>
@@ -140,11 +142,13 @@ export default class ImageResSelection extends React.Component {
   }
 
   render() {
-    const { getLayers, projection, lonlats, resolutions, maxImageSize } = this.props;
+    const {
+      getLayers, projection, lonlats, resolutions, maxImageSize,
+    } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
-    const height = dimensions.height;
-    const width = dimensions.width;
+    const { height } = dimensions;
+    const { width } = dimensions;
     const filetypeSelect = this._renderFileTypeSelect();
     const worldfileSelect = this._renderWorldfileSelect();
     const layerList = getLayers();
@@ -192,7 +196,7 @@ ImageResSelection.defaultProps = {
   resolution: '1',
   secondLabel: 'Format',
   width: '0',
-  worldFileOptions: true
+  worldFileOptions: true,
 };
 ImageResSelection.propTypes = {
   crs: PropTypes.string,
@@ -214,5 +218,5 @@ ImageResSelection.propTypes = {
   secondLabel: PropTypes.string,
   url: PropTypes.string,
   valid: PropTypes.bool,
-  worldFileOptions: PropTypes.bool
+  worldFileOptions: PropTypes.bool,
 };

@@ -12,7 +12,7 @@ export function onClickFeedback(wasInitiated) {
     event.preventDefault();
     if (!wasInitiated) {
       feedback.init({
-        showIcon: false
+        showIcon: false,
       });
     }
     feedback.showForm();

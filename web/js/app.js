@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
 // Utils
+import { calculateResponsiveState } from 'redux-responsive';
 import util from './util/util';
 import MapInteractions from './containers/map-interactions';
 // Toolbar
@@ -18,7 +19,6 @@ import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 
 // actions
-import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
 import AnimationWidget from './containers/animation-widget';
@@ -97,7 +97,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents } = this.props;
+    const {
+      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents,
+    } = this.props;
 
     return (
       <div className="wv-content" id="wv-content" data-role="content">
@@ -128,9 +130,9 @@ class App extends React.Component {
   }
 
   onload() {
-    var self = this;
-    var config;
-    var state = self.props.parameters;
+    const self = this;
+    let config;
+    const state = self.props.parameters;
 
     config = self.props.config;
     config.parameters = state;
@@ -143,16 +145,16 @@ class App extends React.Component {
 
       googleTagManager.pushEvent({
         event: 'ipAddress',
-        ipAddress: ipAddress
+        ipAddress,
       });
     };
 
     const main = function() {
-      const models = self.props.models;
+      const { models } = self.props;
 
       // Load any additional scripts as needed
       if (config.scripts) {
-        lodashEach(config.scripts, function(script) {
+        lodashEach(config.scripts, (script) => {
           $.getScript(script);
         });
       }
@@ -164,11 +166,11 @@ class App extends React.Component {
       // Console notifications
       if (Brand.release()) {
         console.info(
-          Brand.NAME +
-          ' - Version ' +
-          Brand.VERSION +
-          ' - ' +
-          Brand.BUILD_TIMESTAMP
+          `${Brand.NAME
+          } - Version ${
+            Brand.VERSION
+          } - ${
+            Brand.BUILD_TIMESTAMP}`,
         );
       } else {
         console.warn('Development version');
@@ -184,7 +186,7 @@ class App extends React.Component {
 }
 function mapStateToProps(state, ownProps) {
   return {
-    state: state,
+    state,
     isAnimationWidgetActive: state.animation.isActive,
     isTourActive: state.tour.active,
     tour: state.tour,
@@ -193,21 +195,21 @@ function mapStateToProps(state, ownProps) {
     models: ownProps.models,
     mapMouseEvents: ownProps.mapMouseEvents,
     locationKey: state.location.key,
-    modalId: state.modal.id
+    modalId: state.modal.id,
   };
 }
-const mapDispatchToProps = dispatch => ({
-  keyPressAction: keyCode => {
+const mapDispatchToProps = (dispatch) => ({
+  keyPressAction: (keyCode) => {
     dispatch(keyPress(keyCode));
   },
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(App);
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
@@ -217,5 +219,5 @@ App.propTypes = {
   mapMouseEvents: PropTypes.object,
   modalId: PropTypes.string,
   parameters: PropTypes.object,
-  state: PropTypes.object
+  state: PropTypes.object,
 };

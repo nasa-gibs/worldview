@@ -1,5 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
+
 const TIME_LIMIT = 10000;
 /**
  * Selectors
@@ -16,7 +17,7 @@ const trackMarker = '.track-marker';
 const layersTab = '#layers-sidebar-tab';
 
 module.exports = {
-  before: function(client) {
+  before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   'Make sure that 4 fire layers are not present in layer list: use mock': function(
@@ -26,7 +27,7 @@ module.exports = {
     client.waitForElementVisible(
       '#sidebar-event-EONET_3931',
       TIME_LIMIT,
-      function() {
+      () => {
         client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night')
           .to.not.be.present;
         client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day')
@@ -46,7 +47,7 @@ module.exports = {
     client.waitForElementPresent(
       '#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night',
       TIME_LIMIT,
-      function() {
+      () => {
         client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day')
           .to.be.present;
         client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.be
@@ -60,7 +61,7 @@ module.exports = {
     client
   ) {
     client.url(client.globals.url + localQuerystrings.mockEvents);
-    client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
+    client.waitForElementVisible(listOfEvents, TIME_LIMIT, () => {
       client.assert.elementCountEquals(eventIcons, 9);
     });
   },
@@ -73,7 +74,7 @@ module.exports = {
   ) {
     const globalSelectors = client.globals.selectors;
     client.click(firstEvent);
-    client.waitForElementVisible(trackMarker, TIME_LIMIT, function() {
+    client.waitForElementVisible(trackMarker, TIME_LIMIT, () => {
       client.assert.elementCountEquals(trackMarker, 5);
       client.click(globalSelectors.dataTab).pause(2000);
       client.expect.element(trackMarker).to.not.be.present;
@@ -85,9 +86,9 @@ module.exports = {
   },
   'Click Events tab and select an Event from the List': function(client) {
     client.url(client.globals.url + localQuerystrings.mockEvents);
-    client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
+    client.waitForElementVisible(listOfEvents, TIME_LIMIT, () => {
       client.click(firstEvent);
-      client.waitForElementVisible(selectedMarker, TIME_LIMIT, function() {
+      client.waitForElementVisible(selectedMarker, TIME_LIMIT, () => {
         client.expect.element(selectedFirstEvent).to.be.visible;
       });
     });
@@ -106,7 +107,7 @@ module.exports = {
     client.waitForElementVisible(
       globalSelectors.notifyMessage,
       TIME_LIMIT,
-      function() {
+      () => {
         client.assert.containsText(
           globalSelectors.notifyMessage,
           'Events may not be visible at all times'
@@ -134,15 +135,15 @@ module.exports = {
   },
   'Check that clicking eternal link opens in new window': function(client) {
     client.click(firstEvent).pause(500);
-    client.windowHandles(function(tabs) {
+    client.windowHandles((tabs) => {
       client.assert.equal(tabs.value.length, 1);
     });
     client.click(firstExternalEventLink).pause(2000);
-    client.windowHandles(function(tabs) {
+    client.windowHandles((tabs) => {
       client.assert.equal(tabs.value.length, 2);
     });
   },
-  after: function(client) {
+  after(client) {
     client.end();
   }
 };

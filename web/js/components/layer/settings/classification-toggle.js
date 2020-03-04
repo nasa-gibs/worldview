@@ -7,17 +7,19 @@ class ClassificationToggle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: props.active
+      active: props.active,
     };
   }
 
   render() {
-    const { legend, toggle, palette, height } = this.props;
-    const tooltips = legend.tooltips;
+    const {
+      legend, toggle, palette, height,
+    } = this.props;
+    const { tooltips } = legend;
     return (
       <div className="layer-classification-toggle settings-component">
         <h2 className="wv-header">Disable/Enable</h2>
-        <Scrollbar style={{ maxHeight: height + 'px' }}>
+        <Scrollbar style={{ maxHeight: `${height}px` }}>
           {legend.colors.map((color, index) => {
             const id = legend.id + index;
             const tooltip = tooltips[index];
@@ -39,7 +41,7 @@ class ClassificationToggle extends React.Component {
   }
 }
 ClassificationToggle.defaultProps = {
-  start: 100
+  start: 100,
 };
 ClassificationToggle.propTypes = {
   active: PropTypes.bool,
@@ -49,7 +51,7 @@ ClassificationToggle.propTypes = {
   palette: PropTypes.object,
   setOpacity: PropTypes.func,
   start: PropTypes.number,
-  toggle: PropTypes.func
+  toggle: PropTypes.func,
 };
 
 export default ClassificationToggle;

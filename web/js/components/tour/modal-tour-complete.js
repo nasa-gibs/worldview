@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {
+  Modal, ModalHeader, ModalBody, ModalFooter,
+} from 'reactstrap';
 
 class ModalComplete extends React.Component {
   render() {
-    const { currentStory, modalComplete, resetTour, endTour } = this.props;
-    const readMoreLinks = currentStory.readMoreLinks;
+    const {
+      currentStory, modalComplete, resetTour, endTour,
+    } = this.props;
+    const { readMoreLinks } = currentStory;
     let list;
     if (
-      readMoreLinks &&
-      (Array.isArray(readMoreLinks) && readMoreLinks.length)
+      readMoreLinks
+      && (Array.isArray(readMoreLinks) && readMoreLinks.length)
     ) {
       list = (
-        <React.Fragment>
+        <>
           <p>Read more about this story at the links below:</p>
           <ul>
             {readMoreLinks.map((linkId, i) => (
@@ -23,7 +27,7 @@ class ModalComplete extends React.Component {
               </li>
             ))}
           </ul>
-        </React.Fragment>
+        </>
       );
     }
     return (
@@ -32,9 +36,9 @@ class ModalComplete extends React.Component {
           isOpen={modalComplete}
           toggle={endTour}
           wrapClassName="tour tour-complete"
-          backdrop={'static'}
+          backdrop="static"
           fade={false}
-          keyboard={true}
+          keyboard
         >
           <ModalHeader toggle={endTour} charCode="">
             Story Complete
@@ -75,7 +79,7 @@ ModalComplete.propTypes = {
   endTour: PropTypes.func.isRequired,
   modalComplete: PropTypes.bool.isRequired,
   resetTour: PropTypes.func.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default ModalComplete;

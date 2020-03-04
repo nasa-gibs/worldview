@@ -1,21 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {
+  Nav, NavItem, NavLink, TabContent, TabPane,
+} from 'reactstrap';
 import Layers from './layers';
 import { getLayers } from '../../modules/layers/selectors';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import util from '../../util/util';
-import { connect } from 'react-redux';
 import AlertUtil from '../../components/util/alert';
 import { CompareAlertModalBody } from '../../components/compare/alert';
 import { openCustomContent } from '../../modules/modal/actions';
-import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 
 const tabHeight = 32;
 class CompareCase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showAlert: props.showAlert
+      showAlert: props.showAlert,
     };
     this.dismissAlert = this.dismissAlert.bind(this);
   }
@@ -36,7 +38,7 @@ class CompareCase extends React.Component {
       layersA,
       layersB,
       openAlertModal,
-      checkerBoardPattern
+      checkerBoardPattern,
     } = this.props;
 
     const outerClass = 'layer-container sidebar-panel';
@@ -45,14 +47,13 @@ class CompareCase extends React.Component {
       <div className={isActive ? '' : 'hidden '}>
         {this.state.showAlert ? (
           <AlertUtil
-            isOpen={true}
+            isOpen
             onClick={openAlertModal}
             onDismiss={this.dismissAlert}
             message="You are now in comparison mode."
           />
-        ) : (
-          ''
-        )}
+        )
+          : ''}
         <div className={outerClass}>
           <div className="ab-tabs-case">
             <Nav tabs>
@@ -60,26 +61,26 @@ class CompareCase extends React.Component {
                 <NavLink
                   className={
                     isCompareA
-                      ? tabClasses + ' first-tab active'
-                      : tabClasses + ' first-tab'
+                      ? `${tabClasses} first-tab active`
+                      : `${tabClasses} first-tab`
                   }
                   onClick={toggleActiveCompareState}
                 >
                   <i className="productsIcon selected icon-layers" />
-                  {' A: ' + dateStringA}
+                  {` A: ${dateStringA}`}
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink
                   className={
                     !isCompareA
-                      ? tabClasses + ' second-tab active'
-                      : tabClasses + ' second-tab'
+                      ? `${tabClasses} second-tab active`
+                      : `${tabClasses} second-tab`
                   }
                   onClick={toggleActiveCompareState}
                 >
                   <i className="productsIcon selected icon-layers" />
-                  {' B: ' + dateStringB}
+                  {` B: ${dateStringB}`}
                 </NavLink>
               </NavItem>
             </Nav>
@@ -109,7 +110,7 @@ class CompareCase extends React.Component {
     );
   }
 }
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
   },
@@ -121,17 +122,18 @@ const mapDispatchToProps = dispatch => ({
         size: 'lg',
         clickableBehindModal: true,
         bodyComponent: CompareAlertModalBody,
-        desktopOnly: true
-      })
+        desktopOnly: true,
+      }),
     );
-  }
+  },
 });
 function mapStateToProps(state, ownProps) {
-  const { layers, compare, date, browser } = state;
-  const showAlert =
-    util.browser.localStorage &&
-    browser.greaterThan.small &&
-    !localStorage.getItem('dismissedCompareAlert');
+  const {
+    layers, compare, date, browser,
+  } = state;
+  const showAlert = util.browser.localStorage
+    && browser.greaterThan.small
+    && !localStorage.getItem('dismissedCompareAlert');
 
   return {
     isCompareA: compare.isCompareA,
@@ -141,7 +143,7 @@ function mapStateToProps(state, ownProps) {
     dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,
     height: ownProps.height,
-    showAlert
+    showAlert,
   };
 }
 CompareCase.propTypes = {
@@ -155,9 +157,9 @@ CompareCase.propTypes = {
   layersB: PropTypes.object,
   openAlertModal: PropTypes.func,
   showAlert: PropTypes.bool,
-  toggleActiveCompareState: PropTypes.func
+  toggleActiveCompareState: PropTypes.func,
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(CompareCase);

@@ -1,6 +1,6 @@
 import googleTagManager from 'googleTagManager';
-import util from '../../util/util';
 import update from 'immutability-helper';
+import util from '../../util/util';
 /**
  * Update Tour state when location-pop action occurs
  *
@@ -13,15 +13,15 @@ export function mapLocationToTourState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   if (parameters.tr) {
     stateFromLocation = update(stateFromLocation, {
-      tour: { active: { $set: true } }
+      tour: { active: { $set: true } },
     });
   } else {
     stateFromLocation = update(stateFromLocation, {
-      tour: { active: { $set: false } }
+      tour: { active: { $set: false } },
     });
   }
   return stateFromLocation;
@@ -37,7 +37,7 @@ export function mapLocationToTourState(
  */
 export function checkTourBuildTimestamp(config) {
   if (!util.browser.localStorage) return false;
-  var hideTour = localStorage.getItem('hideTour');
+  const hideTour = localStorage.getItem('hideTour');
 
   // Don't start tour if coming in via a permalink
   if (window.location.search && !config.parameters.tour) {
@@ -50,22 +50,20 @@ export function checkTourBuildTimestamp(config) {
     // Tour hidden when visiting fresh URL
     googleTagManager.pushEvent({
       event: 'tour_start_hidden',
-      buildDate: buildDate,
-      tourDate: tourDate
+      buildDate,
+      tourDate,
     });
     if (buildDate > tourDate) {
       localStorage.removeItem('hideTour');
       return true;
-    } else {
-      return false;
     }
-  } else if (hideTour) {
     return false;
-  } else {
-    // Tour shown when visiting fresh URL
-    googleTagManager.pushEvent({
-      event: 'tour_start'
-    });
-    return true;
+  } if (hideTour) {
+    return false;
   }
+  // Tour shown when visiting fresh URL
+  googleTagManager.pushEvent({
+    event: 'tour_start',
+  });
+  return true;
 }

@@ -1,17 +1,18 @@
-import util from '../../util/util';
 import { each as lodashEach } from 'lodash';
+import util from '../../util/util';
 import { getTitles } from '../layers/selectors';
+
 const NO_PRODUCT_ID = '__NO_PRODUCT';
 const NO_PRODUCT = {
   name: "Not available for download &nbsp;&nbsp;<span class='link'>(?)</span>",
-  notSelectable: true
+  notSelectable: true,
 };
 
 // For each product displayed in the sidebar, gets the count of
 // granules that have been selected by the user. Returns an object
 // in the form of product_id = count.
 export function getSelectionCounts(layers, selectedGranules) {
-  var counts = {};
+  const counts = {};
   for (const layer of layers) {
     if (layer.product) {
       const products = util.toArray(layer.product);
@@ -26,9 +27,9 @@ export function getSelectionCounts(layers, selectedGranules) {
   return counts;
 }
 export function getDataSelectionSize(selectedGranules) {
-  var totalSize = 0;
-  var sizeValid = true;
-  lodashEach(selectedGranules, function(granule, key) {
+  let totalSize = 0;
+  let sizeValid = true;
+  lodashEach(selectedGranules, (granule, key) => {
     const size = granule.granule_size;
     if (sizeValid && size) {
       totalSize += parseFloat(size);
@@ -56,12 +57,12 @@ export function groupByProducts(config, dataProducts) {
       productIds = [NO_PRODUCT_ID];
     }
     for (const productId of productIds) {
-      var product = config.products[productId] || NO_PRODUCT;
+      const product = config.products[productId] || NO_PRODUCT;
       if (!products[productId]) {
         products[productId] = {
           title: product.name,
           items: [],
-          notSelectable: product.notSelectable
+          notSelectable: product.notSelectable,
         };
       }
       products[productId].items.push({
@@ -69,17 +70,17 @@ export function groupByProducts(config, dataProducts) {
         sublabel: layer.description,
         value: layer.id,
         categories: {
-          All: 1
-        }
+          All: 1,
+        },
       });
     }
   }
 
   // FIXME: This is a hack to force the not availables to the bottom
   // especially for IE9. This whole function needs clean up.
-  var results = {};
-  var none = products.__NO_PRODUCT;
-  lodashEach(products, function(product, key) {
+  const results = {};
+  const none = products.__NO_PRODUCT;
+  lodashEach(products, (product, key) => {
     if (key !== NO_PRODUCT_ID) {
       results[key] = product;
     }
@@ -91,7 +92,7 @@ export function groupByProducts(config, dataProducts) {
 }
 export function doesSelectedExist(products, selectedId) {
   let exists = false;
-  lodashEach(products, function(productItemArray) {
+  lodashEach(products, (productItemArray) => {
     const id = productItemArray[0];
     if (id === selectedId) {
       exists = true;
@@ -102,28 +103,28 @@ export function doesSelectedExist(products, selectedId) {
 }
 export function getDataProductsFromActiveLayers(layers, config, projId) {
   const dataProducts = [];
-  lodashEach(layers, function(layer) {
-    var id = layer.id;
-    var names = getTitles(config, layer.id, projId);
-    var layerName = names.title;
-    var description = names.subtitle;
-    var productName = layer.product;
+  lodashEach(layers, (layer) => {
+    const { id } = layer;
+    const names = getTitles(config, layer.id, projId);
+    const layerName = names.title;
+    const description = names.subtitle;
+    const productName = layer.product;
     dataProducts.push({
-      id: id,
+      id,
       name: layerName,
-      description: description,
-      product: productName
+      description,
+      product: productName,
     });
   });
-  var products = groupByProducts(config, dataProducts);
+  const products = groupByProducts(config, dataProducts);
   return products;
 }
 
 export function findAvailableProduct(layers) {
-  var foundProduct = null;
+  let foundProduct = null;
 
   // Find the top most layer that has a product entry in CMR
-  for (var i = layers.length - 1; i >= 0; i--) {
+  for (let i = layers.length - 1; i >= 0; i--) {
     if (layers[i].product) {
       foundProduct = layers[i].product;
       // If the layer has more than one product, select the first.

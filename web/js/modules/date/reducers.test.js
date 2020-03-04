@@ -1,13 +1,13 @@
 import {
   dateReducer,
-  dateReducerState
+  dateReducerState,
 } from './reducers';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
-  UPDATE_APP_NOW
+  UPDATE_APP_NOW,
 } from './constants';
 
 // test variables
@@ -17,111 +17,111 @@ const selectedZoom = 2;
 describe('dateReducer', () => {
   test('should return the initial state', () => {
     expect(dateReducer(undefined, {})).toEqual(
-      dateReducerState
+      dateReducerState,
     );
   });
   test(
-    CHANGE_TIME_SCALE +
-      'action type and ' + selectedZoom + ' as selectedZoom ' +
-      'should return new state',
+    `${CHANGE_TIME_SCALE
+    }action type and ${selectedZoom} as selectedZoom `
+      + 'should return new state',
     () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_TIME_SCALE,
-          value: selectedZoom
-        })
+          value: selectedZoom,
+        }),
       ).toEqual({
         ...dateReducerState,
-        selectedZoom: selectedZoom
+        selectedZoom,
       });
-    }
+    },
   );
   test(
-    CHANGE_CUSTOM_INTERVAL +
-      'action type and 4 as customInterval and 10 as customDelta ' +
-      'should return new state',
+    `${CHANGE_CUSTOM_INTERVAL
+    }action type and 4 as customInterval and 10 as customDelta `
+      + 'should return new state',
     () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_CUSTOM_INTERVAL,
           value: 4,
-          delta: 10
-        })
+          delta: 10,
+        }),
       ).toEqual({
         ...dateReducerState,
         customInterval: 4,
         customDelta: 10,
-        customSelected: true
+        customSelected: true,
       });
-    }
+    },
   );
   test(
-    CHANGE_INTERVAL +
-      'action type and 1 as delta and 2 as interval ' +
-      'should return new state',
+    `${CHANGE_INTERVAL
+    }action type and 1 as delta and 2 as interval `
+      + 'should return new state',
     () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_INTERVAL,
           value: 2,
           delta: 1,
-          customSelected: false
-        })
+          customSelected: false,
+        }),
       ).toEqual({
         ...dateReducerState,
         interval: 2,
         delta: 1,
-        customSelected: false
+        customSelected: false,
       });
-    }
+    },
   );
   test(
-    SELECT_DATE +
-      'action type and ' + mockDate + ' as value and selected ' +
-      'as activeString should return new state',
+    `${SELECT_DATE
+    }action type and ${mockDate} as value and selected `
+      + 'as activeString should return new state',
     () => {
       expect(
         dateReducer(dateReducerState, {
           type: SELECT_DATE,
           value: mockDate,
-          activeString: 'selected'
-        })
+          activeString: 'selected',
+        }),
       ).toEqual({
         ...dateReducerState,
-        selected: mockDate
+        selected: mockDate,
       });
-    }
+    },
   );
   test(
-    SELECT_DATE +
-      'action type and ' + mockDate + ' as value and selectedB ' +
-      'as activeString should return new state',
+    `${SELECT_DATE
+    }action type and ${mockDate} as value and selectedB `
+      + 'as activeString should return new state',
     () => {
       expect(
         dateReducer(dateReducerState, {
           type: SELECT_DATE,
           value: mockDate,
-          activeString: 'selectedB'
-        })
+          activeString: 'selectedB',
+        }),
       ).toEqual({
         ...dateReducerState,
-        selectedB: mockDate
+        selectedB: mockDate,
       });
-    }
+    },
   );
   test(
-    UPDATE_APP_NOW +
-      'action type and ' + mockDate + ' as value should return new state',
+    `${UPDATE_APP_NOW
+    }action type and ${mockDate} as value should return new state`,
     () => {
       expect(
         dateReducer(dateReducerState, {
           type: UPDATE_APP_NOW,
-          value: mockDate
-        })
+          value: mockDate,
+        }),
       ).toEqual({
         ...dateReducerState,
-        appNow: mockDate
+        appNow: mockDate,
       });
-    }
+    },
   );
 });

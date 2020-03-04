@@ -37,7 +37,8 @@ export class EventsAlertModalBody extends React.Component {
         </ul>
         <p>
           This is currently an experimental feature and we are working closely
-          with the provider of these events, the{' '}
+          with the provider of these events, the
+          {' '}
           <a href="https://eonet.sci.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">
             Earth Observatory Natural Event Tracker
           </a>

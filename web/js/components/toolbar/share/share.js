@@ -9,7 +9,7 @@ class Share extends React.Component {
       fbLink: props.fbLink,
       twLink: props.twLink,
       rdLink: props.rdLink,
-      emailLink: props.emailLink
+      emailLink: props.emailLink,
     };
   }
 
@@ -33,7 +33,7 @@ Share.propTypes = {
   emailLink: PropTypes.string,
   fbLink: PropTypes.string,
   rdLink: PropTypes.string,
-  twLink: PropTypes.string
+  twLink: PropTypes.string,
 };
 
 export default Share;

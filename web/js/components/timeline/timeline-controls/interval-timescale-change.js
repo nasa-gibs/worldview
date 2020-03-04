@@ -14,21 +14,21 @@ class TimeScaleIntervalChange extends PureComponent {
     super(props);
     this.state = {
       toolTipHovered: false,
-      customIntervalText: 'Custom'
+      customIntervalText: 'Custom',
     };
   }
 
   // Interval select tooltip on
   toolTipHoverOn = () => {
     this.setState({
-      toolTipHovered: true
+      toolTipHovered: true,
     });
   }
 
   // Interval select tooltip off
   toolTipHoverOff = () => {
     this.setState({
-      toolTipHovered: false
+      toolTipHovered: false,
     });
   }
 
@@ -36,7 +36,7 @@ class TimeScaleIntervalChange extends PureComponent {
   handleClickInterval = (timescale, openModal = false) => {
     // send props function to change timescale interval throughout app
     this.setState({
-      toolTipHovered: false
+      toolTipHovered: false,
     }, this.props.setTimeScaleIntervalChangeUnit(timescale, openModal));
   }
 
@@ -72,7 +72,7 @@ class TimeScaleIntervalChange extends PureComponent {
   // set custom text for custom interval
   setCustomIntervalText = () => {
     this.setState({
-      customIntervalText: this.props.customDelta + ' ' + this.props.customIntervalZoomLevel
+      customIntervalText: `${this.props.customDelta} ${this.props.customIntervalZoomLevel}`,
     });
   }
 
@@ -86,7 +86,7 @@ class TimeScaleIntervalChange extends PureComponent {
     const {
       customDelta,
       timeScaleChangeUnit,
-      customSelected
+      customSelected,
     } = this.props;
     if (customSelected && customDelta && timeScaleChangeUnit) {
       const didCustomDeltaChange = customDelta !== prevProps.customDelta;
@@ -100,16 +100,17 @@ class TimeScaleIntervalChange extends PureComponent {
   render() {
     const {
       customIntervalText,
-      toolTipHovered
+      toolTipHovered,
     } = this.state;
     const {
       customSelected,
       hasSubdailyLayers,
-      timeScaleChangeUnit
+      timeScaleChangeUnit,
     } = this.props;
     return (
-      <React.Fragment>
-        <div id="timeline-interval-btn-container"
+      <>
+        <div
+          id="timeline-interval-btn-container"
           className="interval-btn-container noselect"
           onMouseEnter={this.toolTipHoverOn}
           onMouseLeave={this.toolTipHoverOff}
@@ -119,11 +120,12 @@ class TimeScaleIntervalChange extends PureComponent {
             id="current-interval"
             className={`interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''}`}
           >
-            {customSelected ? customIntervalText : 1 + ' ' + timeScaleChangeUnit}
+            {customSelected ? customIntervalText : `${1} ${timeScaleChangeUnit}`}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
-          <div className="wv-tooltip"
+          <div
+            className="wv-tooltip"
             style={{ display: toolTipHovered ? 'block' : 'none' }}
           >
             <div id="timeline-interval" className="timeline-interval">
@@ -149,7 +151,7 @@ class TimeScaleIntervalChange extends PureComponent {
                 Day
               </span>
               {hasSubdailyLayers ? (
-                <React.Fragment>
+                <>
                   <span
                     id="interval-hours"
                     className="interval-btn interval-hours"
@@ -164,7 +166,7 @@ class TimeScaleIntervalChange extends PureComponent {
                   >
                     Minute
                   </span>
-                </React.Fragment>
+                </>
               ) : null}
               <span
                 id="interval-custom"
@@ -184,7 +186,7 @@ class TimeScaleIntervalChange extends PureComponent {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -195,7 +197,7 @@ TimeScaleIntervalChange.propTypes = {
   customSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   setTimeScaleIntervalChangeUnit: PropTypes.func,
-  timeScaleChangeUnit: PropTypes.string
+  timeScaleChangeUnit: PropTypes.string,
 };
 
 export default TimeScaleIntervalChange;

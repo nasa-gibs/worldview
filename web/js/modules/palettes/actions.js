@@ -1,3 +1,4 @@
+import { forOwn as lodashForOwn } from 'lodash';
 import { requestAction } from '../core/actions';
 import {
   REQUEST_PALETTE,
@@ -5,15 +6,14 @@ import {
   CLEAR_CUSTOM,
   SET_CUSTOM,
   SET_DISABLED_CLASSIFICATION,
-  LOADED_CUSTOM_PALETTES
+  LOADED_CUSTOM_PALETTES,
 } from './constants';
-import { forOwn as lodashForOwn } from 'lodash';
 import {
   setRange as setRangeSelector,
   setCustomSelector,
   clearCustomSelector,
   refreshDisabledSelector,
-  setDisabledSelector
+  setDisabledSelector,
 } from './selectors';
 
 /**
@@ -23,16 +23,16 @@ import {
  */
 export function requestPalette(id) {
   return (dispatch, getState) => {
-    const config = getState().config;
-    var layer = config.layers[id];
+    const { config } = getState();
+    const layer = config.layers[id];
     const paletteID = layer.palette.id;
-    const location = 'config/palettes/' + paletteID + '.json';
+    const location = `config/palettes/${paletteID}.json`;
     return requestAction(
       dispatch,
       REQUEST_PALETTE,
       location,
       'application/json',
-      paletteID
+      paletteID,
     );
   };
 }
@@ -51,15 +51,15 @@ export function setThresholdRangeAndSquash(layerId, props, index, groupName) {
       props,
       index,
       state.palettes[groupName],
-      state
+      state,
     );
     dispatch({
       type: SET_THRESHOLD_RANGE_AND_SQUASH,
-      groupName: groupName,
+      groupName,
       activeString: groupName,
       layerId,
       palettes: newActivePalettesObj,
-      props
+      props,
     });
   };
 }
@@ -79,15 +79,15 @@ export function setCustomPalette(layerId, paletteId, index, groupName) {
       paletteId,
       index,
       groupName,
-      state
+      state,
     );
     dispatch({
       type: SET_CUSTOM,
-      layerId: layerId,
-      paletteId: paletteId,
-      groupName: groupName,
+      layerId,
+      paletteId,
+      groupName,
       activeString: groupName,
-      palettes: newActivePalettesObj
+      palettes: newActivePalettesObj,
     });
   };
 }
@@ -106,7 +106,7 @@ export function clearCustomPalette(layerId, index, groupName) {
       layerId,
       index,
       palettes[groupName],
-      state
+      state,
     );
 
     dispatch({
@@ -114,7 +114,7 @@ export function clearCustomPalette(layerId, index, groupName) {
       groupName,
       layerId,
       activeString: groupName,
-      palettes: newActivePalettesObj
+      palettes: newActivePalettesObj,
     });
   };
 }
@@ -132,7 +132,7 @@ export function clearCustoms() {
     const groupName = compare.activeString;
     const activePalettes = palettes[groupName];
     const props = { squash: undefined, min: undefined, max: undefined };
-    lodashForOwn(activePalettes, function(value, key) {
+    lodashForOwn(activePalettes, (value, key) => {
       activePalettes[key].maps.forEach((colormap, index) => {
         if (colormap.custom) {
           dispatch(clearCustomPalette(key, index, groupName));
@@ -155,7 +155,7 @@ export function clearCustoms() {
 export function loadedCustomPalettes(customs) {
   return {
     type: LOADED_CUSTOM_PALETTES,
-    custom: customs
+    custom: customs,
   };
 }
 export function setToggledClassification(layerId, classIndex, index, groupName) {
@@ -166,24 +166,24 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
       classIndex,
       index,
       state.palettes[groupName],
-      state
+      state,
     );
     let hasDisabled = false;
-    newActivePalettesObj[layerId].maps.forEach(colorMap => {
+    newActivePalettesObj[layerId].maps.forEach((colorMap) => {
       if (colorMap.disabled && colorMap.disabled.length) {
         hasDisabled = true;
       }
     });
     dispatch({
       type: SET_DISABLED_CLASSIFICATION,
-      groupName: groupName,
+      groupName,
       activeString: groupName,
       layerId,
       palettes: newActivePalettesObj,
-      props: { disabled: hasDisabled }
+      props: { disabled: hasDisabled },
     });
   };
-};
+}
 export function refreshDisabledClassification(layerId, disabledArray, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
@@ -192,28 +192,28 @@ export function refreshDisabledClassification(layerId, disabledArray, index, gro
       disabledArray,
       index,
       state.palettes[groupName],
-      state
+      state,
     );
     let hasDisabled = false;
-    newActivePalettesObj[layerId].maps.forEach(colorMap => {
+    newActivePalettesObj[layerId].maps.forEach((colorMap) => {
       if (colorMap.disabled && colorMap.disabled.length) {
         hasDisabled = true;
       }
     });
     dispatch({
       type: SET_DISABLED_CLASSIFICATION,
-      groupName: groupName,
+      groupName,
       activeString: groupName,
       layerId,
       palettes: newActivePalettesObj,
-      props: { disabled: hasDisabled }
+      props: { disabled: hasDisabled },
     });
   };
-};
+}
 export function refreshPalettes(activePalettes) {
   return (dispatch, getState) => {
     const groupName = getState().compare.activeString;
-    lodashForOwn(activePalettes, function(value, key) {
+    lodashForOwn(activePalettes, (value, key) => {
       activePalettes[key].maps.forEach((colormap, index) => {
         if (colormap.custom) {
           dispatch(setCustomPalette(key, colormap.custom, index, groupName));

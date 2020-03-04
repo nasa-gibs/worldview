@@ -1,7 +1,7 @@
 const { URL } = require('url');
 
 exports.assertion = function(parameter, value) {
-  this.message = 'Testing if URL parameter "' + parameter + '" has value: ' + value;
+  this.message = `Testing if URL parameter "${parameter}" has value: ${value}`;
   this.expected = `${parameter}=${value}`;
   this.pass = function(value) {
     const expected = this.expected.split('=');

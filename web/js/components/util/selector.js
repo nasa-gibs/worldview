@@ -11,7 +11,7 @@ export default class Selector extends React.Component {
     super(props);
     this.props = props;
     this.state = {
-      value: props.value
+      value: props.value,
     };
   }
 
@@ -26,13 +26,11 @@ export default class Selector extends React.Component {
         id={this.props.id}
         onChange={this.handleChange.bind(this)}
       >
-        {this.props.optionArray.values.map((dataEl, i) => {
-          return (
-            <option key={dataEl.value + '-' + i} value={dataEl.value}>
-              {dataEl.text}
-            </option>
-          );
-        })}
+        {this.props.optionArray.values.map((dataEl, i) => (
+          <option key={`${dataEl.value}-${i}`} value={dataEl.value}>
+            {dataEl.text}
+          </option>
+        ))}
       </select>
     );
   }
@@ -43,5 +41,5 @@ Selector.propTypes = {
   onChange: PropTypes.func,
   optionArray: PropTypes.object,
   optionName: PropTypes.string,
-  value: PropTypes.string
+  value: PropTypes.string,
 };

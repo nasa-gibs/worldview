@@ -7,14 +7,14 @@
 import util from './util/util';
 
 export function feedbackUi() {
-  var self = {};
-  var feedbackInit = false;
+  const self = {};
+  let feedbackInit = false;
 
   self.showFeedback = function() {
     if (!util.browser.small && window.feedback) {
       if (!feedbackInit) {
         feedback.init({
-          showIcon: false
+          showIcon: false,
         });
       }
       feedback.showForm();

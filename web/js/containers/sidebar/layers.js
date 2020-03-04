@@ -14,13 +14,13 @@ class Layers extends React.Component {
       layerGroupName,
       height,
       checkerBoardPattern,
-      layerSplit
+      layerSplit,
     } = this.props;
     const outterClass = 'layer-container sidebar-panel';
     return isActive && (
-      <Scrollbars style={{ maxHeight: height + 'px' }}>
+      <Scrollbars style={{ maxHeight: `${height}px` }}>
         <div
-          className={isActive ? outterClass : 'hidden ' + outterClass}
+          className={isActive ? outterClass : `hidden ${outterClass}`}
           style={{ display: isActive ? 'block' : 'none' }}
         >
           <LayerList
@@ -47,7 +47,9 @@ class Layers extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const { layers, proj } = state;
-  const { isActive, layerGroupName, height, checkerBoardPattern } = ownProps;
+  const {
+    isActive, layerGroupName, height, checkerBoardPattern,
+  } = ownProps;
   const componentLayers = layers[layerGroupName];
   const layerObj = getLayers(componentLayers, { proj: proj.id, group: 'all' });
 
@@ -58,13 +60,13 @@ function mapStateToProps(state, ownProps) {
     layerGroupName,
     height,
     isActive,
-    checkerBoardPattern
+    checkerBoardPattern,
   };
 }
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = (dispatch) => ({});
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Layers);
 
 Layers.propTypes = {
@@ -74,5 +76,5 @@ Layers.propTypes = {
   isActive: PropTypes.bool,
   layerGroupName: PropTypes.string,
   layerSplit: PropTypes.number,
-  overlays: PropTypes.array
+  overlays: PropTypes.array,
 };

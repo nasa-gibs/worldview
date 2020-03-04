@@ -1,13 +1,13 @@
 import {
   UPDATE_PRODUCT_PICKER,
   UPDATE_LIST_SCROLL_TOP,
-  RESET_STATE
+  RESET_STATE,
 } from './constants';
 
 const projToListType = {
   arctic: 'measurements',
   antarctic: 'measurements',
-  geographic: 'category'
+  geographic: 'category',
 };
 
 export const productPickerState = {
@@ -21,27 +21,23 @@ export const productPickerState = {
   listScrollTop: 0,
   selectedLayer: undefined,
   selectedMeasurement: undefined,
-  selectedMeasurementSourceIndex: 0
+  selectedMeasurementSourceIndex: 0,
 };
 
 export function getInitialState(config) {
-  return Object.assign({}, productPickerState, {
-    categoryType: Object.keys(config.categories)[1]
-  });
-};
+  return { ...productPickerState, categoryType: Object.keys(config.categories)[1] };
+}
 
 export function productPickerReducer(state = productPickerState, action) {
   switch (action.type) {
     case UPDATE_PRODUCT_PICKER:
-      return Object.assign({}, state, action.value);
+      return { ...state, ...action.value };
     case UPDATE_LIST_SCROLL_TOP:
-      return Object.assign({}, state, {
-        listScrollTop: action.value
-      });
+      return { ...state, listScrollTop: action.value };
     case RESET_STATE:
       var listType = projToListType[action.value];
-      var newState = Object.assign({}, productPickerState, { listType });
-      return Object.assign({}, state, newState);
+      var newState = { ...productPickerState, listType };
+      return { ...state, ...newState };
     default:
       return state;
   }

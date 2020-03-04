@@ -9,7 +9,7 @@ class VectorFilter extends React.Component {
     this.state = {
       start: props.start,
       end: props.end,
-      activeDragger: 'start'
+      activeDragger: 'start',
     };
     this.debounceSetRange = lodashDebounce(props.setFilterRange, 300);
   }
@@ -27,15 +27,15 @@ class VectorFilter extends React.Component {
     if (newStart !== start && newEnd !== end) {
       this.setState({
         start: newStart,
-        end: newEnd
+        end: newEnd,
       });
     } else if (newStart !== start) {
       this.setState({
-        start: newStart
+        start: newStart,
       });
     } else if (newEnd !== end) {
       this.setState({
-        end: newEnd
+        end: newEnd,
       });
     } else {
       return;
@@ -46,7 +46,7 @@ class VectorFilter extends React.Component {
       parseFloat(newStart),
       parseFloat(newEnd),
       index,
-      groupName
+      groupName,
     );
   }
 
@@ -59,7 +59,7 @@ class VectorFilter extends React.Component {
       <div className="layer-threshold-select settings-component">
         <h2 className="wv-header">Filters</h2>
         <div
-          id={'wv-layer-options-threshold' + index}
+          id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
           <RangeInput
@@ -89,7 +89,7 @@ VectorFilter.propTypes = {
   max: PropTypes.number,
   min: PropTypes.number,
   setFilterRange: PropTypes.func,
-  start: PropTypes.number
+  start: PropTypes.number,
 };
 
 export default VectorFilter;

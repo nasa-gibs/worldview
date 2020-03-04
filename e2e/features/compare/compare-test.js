@@ -1,6 +1,7 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
+
 const animationButtonCase = '#timeline-header .animate-button';
 const ImageDownloadButton = '#wv-image-button';
 const eventsTabButton = '#events-sidebar-tab';
@@ -15,7 +16,7 @@ const collapsedToggleButton =
 
 const TIME_LIMIT = 20000;
 module.exports = {
-  before: function(client) {
+  before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   // load A|B and verify that it is active
@@ -94,7 +95,7 @@ module.exports = {
   ) {
     client.url(client.globals.url + localQuerystrings.spyAndBIsActive);
 
-    client.waitForElementVisible(toggleButton, TIME_LIMIT, function() {
+    client.waitForElementVisible(toggleButton, TIME_LIMIT, () => {
       client.expect.element(collapsedToggleButton).to.not.be.visible;
       client.click(toggleButton);
       client.pause(100);
@@ -126,7 +127,7 @@ module.exports = {
     client.waitForElementNotPresent(
       '.timeline-dragger.draggerA',
       TIME_LIMIT,
-      function() {
+      () => {
         client.expect.element('#activeB-Coastlines').to.be.visible;
         client.expect.element(
           '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'
@@ -140,7 +141,7 @@ module.exports = {
       }
     );
   },
-  after: function(client) {
+  after(client) {
     client.end();
   }
 };

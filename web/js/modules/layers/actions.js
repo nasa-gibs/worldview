@@ -3,7 +3,7 @@ import {
   addLayer as addLayerSelector,
   resetLayers as resetLayersSelector,
   getLayers as getLayersSelector,
-  activateLayersForEventCategory as activateLayersForEventCategorySelector
+  activateLayersForEventCategory as activateLayersForEventCategorySelector,
 } from './selectors';
 
 import {
@@ -15,7 +15,7 @@ import {
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
   UPDATE_OPACITY,
-  ADD_LAYERS_FOR_EVENT
+  ADD_LAYERS_FOR_EVENT,
 } from './constants';
 import { selectProduct } from '../data/actions';
 
@@ -24,13 +24,13 @@ export function resetLayers(activeString) {
     const { config } = getState();
     const newLayers = resetLayersSelector(
       config.defaults.startingLayers,
-      config.layers
+      config.layers,
     );
 
     dispatch({
       type: RESET_LAYERS,
       activeString,
-      layers: newLayers
+      layers: newLayers,
     });
   };
 }
@@ -39,13 +39,13 @@ export function activateLayersForEventCategory(activeLayers) {
     const state = getState();
     const newLayers = activateLayersForEventCategorySelector(
       activeLayers,
-      state
+      state,
     );
 
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
       activeString: state.compare.activeString,
-      layers: newLayers
+      layers: newLayers,
     });
   };
 }
@@ -55,11 +55,11 @@ export function addLayer(id, spec) {
     const state = getState();
     const { layers, compare, proj } = state;
 
-    const activeString = compare.activeString;
+    const { activeString } = compare;
     const layerObj = getLayersSelector(
       layers[activeString],
       { group: 'all' },
-      state
+      state,
     );
     const newLayers = addLayerSelector(
       id,
@@ -67,14 +67,14 @@ export function addLayer(id, spec) {
       layers[activeString],
       layers.layerConfig,
       layerObj.overlays.length || 0,
-      proj.id
+      proj.id,
     );
 
     dispatch({
       type: ADD_LAYER,
       id,
       activeString,
-      layers: newLayers
+      layers: newLayers,
     });
   };
 }
@@ -90,21 +90,21 @@ export function refreshGraticule() {
 }
 export function initSecondLayerGroup() {
   return {
-    type: INIT_SECOND_LAYER_GROUP
+    type: INIT_SECOND_LAYER_GROUP,
   };
 }
 export function reorderLayers(layerArray) {
   return {
     type: REORDER_LAYER_GROUP,
-    layers: layerArray
+    layers: layerArray,
   };
 }
 
 export function layerHover(id, isMouseOver) {
   return {
     type: ON_LAYER_HOVER,
-    id: id,
-    active: isMouseOver
+    id,
+    active: isMouseOver,
   };
 }
 export function toggleVisibility(id, visible) {
@@ -112,7 +112,7 @@ export function toggleVisibility(id, visible) {
     const { layers, compare } = getState();
     const activeString = compare.isCompareA ? 'active' : 'activeB';
     const index = lodashFindIndex(layers[activeString], {
-      id: id
+      id,
     });
 
     dispatch({
@@ -120,19 +120,19 @@ export function toggleVisibility(id, visible) {
       id,
       index,
       visible,
-      activeString
+      activeString,
     });
   };
 }
 export function removeLayer(id) {
   return (dispatch, getState) => {
     const { layers, compare, data } = getState();
-    const activeString = compare.activeString;
+    const { activeString } = compare;
     const index = lodashFindIndex(layers[activeString], {
-      id: id
+      id,
     });
     if (index === -1) {
-      return console.warn('Invalid layer ID: ' + id);
+      return console.warn(`Invalid layer ID: ${id}`);
     }
 
     const def = layers[activeString][index];
@@ -144,7 +144,7 @@ export function removeLayer(id) {
       id,
       index,
       activeString,
-      def
+      def,
     });
   };
 }
@@ -153,10 +153,10 @@ export function setOpacity(id, opacity) {
     const { layers, compare } = getState();
     const activeString = compare.isCompareA ? 'active' : 'activeB';
     const index = lodashFindIndex(layers[activeString], {
-      id: id
+      id,
     });
     if (index === -1) {
-      return console.warn('Invalid layer ID: ' + id);
+      return console.warn(`Invalid layer ID: ${id}`);
     }
 
     dispatch({
@@ -164,7 +164,7 @@ export function setOpacity(id, opacity) {
       id,
       index,
       opacity,
-      activeString
+      activeString,
     });
   };
 }
