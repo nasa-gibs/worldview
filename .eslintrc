@@ -16,10 +16,7 @@
     "react",
     "jest"
   ],
-  "extends": [
-    "standard",
-    "plugin:react/recommended"
-  ],
+  "extends": "airbnb",
   "parser": "babel-eslint",
   "settings": {
     "react": {
