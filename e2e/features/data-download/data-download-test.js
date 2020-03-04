@@ -1,4 +1,5 @@
 const reuseables = require('../../reuseables/skip-tour.js');
+
 const layersTab = '#layers-sidebar-tab';
 const dataDownloadTabButton = '#download-sidebar-tab';
 const zoomInButton =
@@ -11,7 +12,7 @@ const upYearInputButton =
   '#date-selector-main > div > div.input-wrapper.input-wrapper-year > div.date-arrows.date-arrow-up';
 
 module.exports = {
-  'Initial State - Data Download tab is available and in default state when clicked': '' + function(
+  'Initial State - Data Download tab is available and in default state when clicked': `${function(
     client
   ) {
     reuseables.loadAndSkipTour(client, client.globals.timeout);
@@ -26,16 +27,16 @@ module.exports = {
       .to.have.text.equal('No Data Selected');
 
     // All 6 default layers in Not Available for Download
-    client.elements('css selector', '.wv-datacategory > li', function(result) {
+    client.elements('css selector', '.wv-datacategory > li', (result) => {
       client.assert.equal(result.value.length, 6);
     });
 
     // No 'Searching for Data' CMR query indicator present
     client.expect.element('#indicator').to.be.present;
     client.useCss().assert.containsText('#indicator span', 'No Data Available');
-  },
+  }}`,
 
-  'No Results - No Data Available indicator displayed when no data': '' + function(
+  'No Results - No Data Available indicator displayed when no data': `${function(
     client
   ) {
     // December 31, 2022 no results
@@ -86,7 +87,7 @@ module.exports = {
       .element('#indicator > span')
       .to.have.text.equal('No Data Available')
       .after(client.globals.timeout);
-  },
+  }}`,
 
   'No data in view - Zoom out or move map indicator displayed when no data in view': function(
     client
@@ -139,7 +140,7 @@ module.exports = {
       .to.have.text.equal('Zoom out or move map')
       .after(client.globals.timeout);
   },
-  'Query Timeout - No results received yet dialog box displayed': '' + function(
+  'Query Timeout - No results received yet dialog box displayed': `${function(
     client
   ) {
     // query timeout
@@ -151,7 +152,7 @@ module.exports = {
     client.waitForElementVisible(
       dataDownloadTabButton,
       client.globals.timeout,
-      function() {
+      () => {
         client.click(dataDownloadTabButton);
         client.expect
           .element('.wv-dialog')
@@ -161,8 +162,8 @@ module.exports = {
           .after(client.globals.timeout);
       }
     );
-  },
-  after: function(client) {
+  }}`,
+  after(client) {
     client.end();
   }
 };

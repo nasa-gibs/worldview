@@ -22,13 +22,13 @@ const pluginSystem = [
     hash: true,
     title: 'Worldview',
     filename: 'web/index.html',
-    inject: false
+    inject: false,
   }),
   new MiniCssExtractPlugin({
-    filename: 'wv.css'
+    filename: 'wv.css',
   }),
   new WriteFilePlugin(),
-  new MomentLocalesPlugin()
+  new MomentLocalesPlugin(),
 ];
 
 /* Conditional Plugin Management */
@@ -36,19 +36,18 @@ const pluginSystem = [
 if (isDevServer) {
   pluginSystem.push(
     new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
   );
 }
 
 // conditionally required and add plugin bundle analzyer
 if (process.env.ANALYZE_MODE === 'true') {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-    .BundleAnalyzerPlugin;
+  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
 if (process.env.DEBUG === 'true') {
   pluginSystem.push(
-    new webpack.DefinePlugin({ DEBUG: JSON.stringify('true') })
+    new webpack.DefinePlugin({ DEBUG: JSON.stringify('true') }),
   );
 }
 
@@ -68,16 +67,16 @@ module.exports = {
     alias: {
       googleTagManager$: path.resolve(
         __dirname,
-        './web/js/components/util/google-tag-manager.js'
-      )
-    }
+        './web/js/components/util/google-tag-manager.js',
+      ),
+    },
   },
   mode: devMode ? 'development' : 'production',
   stats: {
     // reduce output text on build - remove for more verbose
     chunks: false,
     modules: false,
-    children: false
+    children: false,
   },
   entry: entryPoint,
   devtool: devMode ? 'cheap-module-source-map' : 'source-map',
@@ -87,12 +86,12 @@ module.exports = {
     hot: true,
     watchContentBase: true, // watch index.html changes
     port: 3000,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
   },
   output: {
     filename: outputFileName,
     path: path.join(__dirname, '/web/build'),
-    pathinfo: false
+    pathinfo: false,
   },
   optimization: {
     minimizer: [
@@ -105,26 +104,26 @@ module.exports = {
           safari10: true,
           output: {
             comments: false,
-            beautify: false
-          }
+            beautify: false,
+          },
         },
         cache: true,
-        parallel: true
+        parallel: true,
       }),
       new OptimizeCSSAssetsPlugin({
         cssProcessor: cssnano,
         cssProcessorOptions: {
           preset: ['default', {
             discardComments: {
-              removeAll: true
+              removeAll: true,
             },
             map: {
-              inline: false
-            }
-          }]
-        }
-      })
-    ]
+              inline: false,
+            },
+          }],
+        },
+      }),
+    ],
   },
   plugins: pluginSystem,
   module: {
@@ -134,46 +133,46 @@ module.exports = {
         use: {
           loader: devMode ? 'babel-loader?cacheDirectory=true' : 'babel-loader',
           options: {
-            compact: false // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
-          }
+            compact: false, // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
+          },
         },
         exclude: [
           /\.test\.js$/,
           /fixtures\.js$/,
-          /core-js/
-        ]
+          /core-js/,
+        ],
       },
       {
         test: require.resolve('jquery'), // expose globally for jQuery plugins
         use: [
           {
             loader: 'expose-loader',
-            options: 'jQuery'
+            options: 'jQuery',
           },
           {
             loader: 'expose-loader',
-            options: '$'
-          }
-        ]
+            options: '$',
+          },
+        ],
       },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {
-            loader: 'css-hot-loader'
+            loader: 'css-hot-loader',
           },
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: 'postcss-loader', // Run post css actions
@@ -186,20 +185,20 @@ module.exports = {
                     'last 5 versions',
                     'not ie < 11',
                     'not edge < 15',
-                    '> 2%'
-                  ]
+                    '> 2%',
+                  ],
                 }),
-                postcssNesting()
-              ]
-            }
+                postcssNesting(),
+              ],
+            },
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg)$/,
@@ -208,9 +207,9 @@ module.exports = {
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
-            outputPath: 'images/'
-          }
-        }
+            outputPath: 'images/',
+          },
+        },
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -219,9 +218,9 @@ module.exports = {
           loader: 'url-loader?limit=10000&mimetype=application/font-woff',
           options: {
             name: '[name].[ext]',
-            outputPath: 'fonts/'
-          }
-        }
+            outputPath: 'fonts/',
+          },
+        },
       },
       {
         test: /((fontawesome-webfont.svg)|(\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?))/,
@@ -229,9 +228,9 @@ module.exports = {
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
-            outputPath: 'fonts/'
-          }
-        }
+            outputPath: 'fonts/',
+          },
+        },
       },
       {
         test: /\.html$/,
@@ -242,12 +241,12 @@ module.exports = {
               minimize: !devMode,
               removeEmptyAttributes: !devMode,
               sortAttributes: !devMode,
-              sortClassName: !devMode
-            }
-          }
-        ]
-      }
-    ]
+              sortClassName: !devMode,
+            },
+          },
+        ],
+      },
+    ],
   },
-  node: { fs: 'empty' }
+  node: { fs: 'empty' },
 };

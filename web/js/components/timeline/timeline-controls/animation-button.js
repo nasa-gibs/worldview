@@ -10,12 +10,12 @@ class AnimationButton extends PureComponent {
     return (
       <div
         className={
-          this.props.disabled ? 'wv-disabled-button ' + className : className
+          this.props.disabled ? `wv-disabled-button ${className}` : className
         }
         title={this.props.title ? this.props.title : 'Set up animation'}
       >
         <div id="animate-button" onClick={this.props.clickAnimationButton}>
-          <FontAwesomeIcon icon={faVideo} className='wv-animate' size='3x' />
+          <FontAwesomeIcon icon={faVideo} className="wv-animate" size="3x" />
         </div>
       </div>
     );
@@ -25,7 +25,7 @@ class AnimationButton extends PureComponent {
 AnimationButton.propTypes = {
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
-  title: PropTypes.string
+  title: PropTypes.string,
 };
 
 export default AnimationButton;

@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import PaletteLegend from '../../components/sidebar/paletteLegend';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSatellite } from '@fortawesome/free-solid-svg-icons';
+import PaletteLegend from '../../components/sidebar/paletteLegend';
 import {
   getPalette,
-  getPaletteLegends
+  getPaletteLegends,
 } from '../../modules/palettes/selectors';
 import { requestPalette } from '../../modules/palettes/actions';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSatellite } from '@fortawesome/free-solid-svg-icons';
+
 class OrbitTrack extends React.Component {
   getPaletteLegend = () => {
     const {
@@ -22,7 +23,7 @@ class OrbitTrack extends React.Component {
       requestPalette,
       isLoading,
       isMobile,
-      parentLayer
+      parentLayer,
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
       return (
@@ -34,20 +35,20 @@ class OrbitTrack extends React.Component {
           isMobile={isMobile}
         />
       );
-    } else if (!isLoading) {
+    } if (!isLoading) {
       requestPalette(trackLayer.id);
     }
   }
 
   render() {
     const { trackLayer, hasPalette } = this.props;
-    const containerClasses = 'wv-orbit-track ' + (!trackLayer.visible ? 'not-visible' : '');
+    const containerClasses = `wv-orbit-track ${!trackLayer.visible ? 'not-visible' : ''}`;
 
     return (
       <div className={containerClasses}>
         {hasPalette ? this.getPaletteLegend() : ''}
         <FontAwesomeIcon icon={faSatellite} />
-        <span className='wv-orbit-track-label'>
+        <span className="wv-orbit-track-label">
           {getOrbitTrackTitle(trackLayer)}
         </span>
       </div>
@@ -65,13 +66,13 @@ OrbitTrack.propTypes = {
   parentLayer: PropTypes.object,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,
-  trackLayer: PropTypes.object
+  trackLayer: PropTypes.object,
 };
 
 function mapStateToProps(state, ownProps) {
   const {
     trackLayer,
-    layerGroupName
+    layerGroupName,
   } = ownProps;
   const { palettes, config } = state;
   const renderedPalettes = palettes.rendered;
@@ -91,18 +92,16 @@ function mapStateToProps(state, ownProps) {
     layerGroupName,
     isMobile: state.browser.lessThan.medium,
     hasPalette,
-    getPalette: (layerId, index) => {
-      return getPalette(trackLayer.id, index, layerGroupName, state);
-    }
+    getPalette: (layerId, index) => getPalette(trackLayer.id, index, layerGroupName, state),
   };
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   requestPalette: (id) => {
     dispatch(requestPalette(id));
-  }
+  },
 });
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(OrbitTrack);

@@ -5,7 +5,7 @@ import googleTagManager from 'googleTagManager';
 import {
   requestTemplate,
   renderTemplate,
-  openCustomContent
+  openCustomContent,
 } from '../modules/modal/actions';
 import { ABOUT_PAGE_REQUEST } from '../modules/modal/constants';
 import IconList from '../components/util/list';
@@ -16,7 +16,7 @@ import { initFeedback } from '../modules/feedback/actions';
 import { startTour, endTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
-import Notifications from '../containers/notifications';
+import Notifications from './notifications';
 
 class InfoList extends Component {
   getNotificationListItem(obj) {
@@ -32,10 +32,10 @@ class InfoList extends Component {
           : 'faBolt',
       id: 'notifications_info_item',
       badge: number,
-      className: type ? type + '-notification' : '',
+      className: type ? `${type}-notification` : '',
       onClick: () => {
         this.props.notificationClick(object, number);
-      }
+      },
     };
   }
 
@@ -48,14 +48,14 @@ class InfoList extends Component {
       config,
       startTour,
       isTourActive,
-      isMobile
+      isMobile,
     } = this.props;
     const feedbackAction = isMobile
       ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
       : {
         onClick: () => {
           sendFeedback(feedbackIsInitiated);
-        }
+        },
       };
     const arr = [
       {
@@ -63,21 +63,21 @@ class InfoList extends Component {
         iconClass: 'ui-icon',
         iconName: 'faEnvelope',
         id: 'send_feedback_info_item',
-        ...feedbackAction
+        ...feedbackAction,
       },
       {
         text: 'Source Code',
         iconClass: 'ui-icon',
         iconName: 'faCode',
         id: 'source_code_info_item',
-        href: 'https://github.com/nasa-gibs/worldview'
+        href: 'https://github.com/nasa-gibs/worldview',
       },
       {
         text: 'What\'s new',
         iconClass: 'ui-icon',
         iconName: 'faFlag',
         id: 'whats_new_info_item',
-        href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS'
+        href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS',
       },
       {
         text: 'About',
@@ -86,15 +86,15 @@ class InfoList extends Component {
         id: 'about_info_item',
         onClick: () => {
           aboutClick();
-        }
-      }
+        },
+      },
     ];
     if (
-      config.features.tour &&
-      config.stories &&
-      config.storyOrder &&
-      window.innerWidth >= 740 &&
-      window.innerHeight >= 615
+      config.features.tour
+      && config.stories
+      && config.storyOrder
+      && window.innerWidth >= 740
+      && window.innerHeight >= 615
     ) {
       const exploreWorlviewObj = {
         text: 'Explore Worldview',
@@ -104,9 +104,9 @@ class InfoList extends Component {
         onClick: () => {
           startTour(isTourActive);
           googleTagManager.pushEvent({
-            event: 'tour_start_button'
+            event: 'tour_start_button',
           });
-        }
+        },
       };
       arr.splice(1, 0, exploreWorlviewObj);
     }
@@ -132,11 +132,11 @@ function mapStateToProps(state) {
     notifications: state.notifications,
     config: state.config,
     models: state.models,
-    isMobile: state.browser.lessThan.medium
+    isMobile: state.browser.lessThan.medium,
   };
 }
-const mapDispatchToProps = dispatch => ({
-  sendFeedback: isInitiated => {
+const mapDispatchToProps = (dispatch) => ({
+  sendFeedback: (isInitiated) => {
     onClickFeedback(isInitiated);
     if (!isInitiated) {
       dispatch(initFeedback());
@@ -152,11 +152,11 @@ const mapDispatchToProps = dispatch => ({
             dispatch(notificationsSeen());
             addToLocalStorage(obj);
           }
-        }
-      })
+        },
+      }),
     );
   },
-  startTour: isTourActive => {
+  startTour: (isTourActive) => {
     if (isTourActive) {
       dispatch(endTour());
       setTimeout(() => {
@@ -174,17 +174,17 @@ const mapDispatchToProps = dispatch => ({
         requestTemplate(
           ABOUT_PAGE_REQUEST,
           'pages/about.html?v=@BUILD_NONCE@',
-          'text/html'
-        )
+          'text/html',
+        ),
       );
       dispatch(renderTemplate('About', 'modalAboutPage'));
     }
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(InfoList);
 
 InfoList.propTypes = {
@@ -197,5 +197,5 @@ InfoList.propTypes = {
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
   sendFeedback: PropTypes.func,
-  startTour: PropTypes.func
+  startTour: PropTypes.func,
 };

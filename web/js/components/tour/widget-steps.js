@@ -6,11 +6,13 @@ import { faCheckCircle, faArrowCircleLeft, faArrowCircleRight } from '@fortaweso
 
 class Steps extends React.Component {
   render() {
-    const { currentStep, decreaseStep, incrementStep, totalSteps } = this.props;
+    const {
+      currentStep, decreaseStep, incrementStep, totalSteps,
+    } = this.props;
     return (
       <div className="step-container">
         <a
-          className={'step-previous'}
+          className="step-previous"
           aria-label="Previous"
           onClick={decreaseStep}
         >
@@ -18,7 +20,10 @@ class Steps extends React.Component {
         </a>
         <div className="step-counter">
           <p>
-            Step <span className="step-current">{currentStep}</span>/
+            Step
+            {' '}
+            <span className="step-current">{currentStep}</span>
+            /
             <span className="step-total">{totalSteps}</span>
           </p>
         </div>
@@ -29,8 +34,7 @@ class Steps extends React.Component {
         >
           {currentStep === totalSteps
             ? <FontAwesomeIcon icon={faCheckCircle} />
-            : <FontAwesomeIcon icon={faArrowCircleRight} />
-          }
+            : <FontAwesomeIcon icon={faArrowCircleRight} />}
         </a>
       </div>
     );
@@ -41,7 +45,7 @@ Steps.propTypes = {
   currentStep: PropTypes.number.isRequired,
   decreaseStep: PropTypes.func.isRequired,
   incrementStep: PropTypes.func.isRequired,
-  totalSteps: PropTypes.number.isRequired
+  totalSteps: PropTypes.number.isRequired,
 };
 
 export default Steps;

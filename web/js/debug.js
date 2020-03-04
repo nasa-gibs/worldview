@@ -4,26 +4,26 @@ import lodashParseInt from 'lodash/parseInt';
 import util from './util/util';
 
 export var debug = (function() {
-  var parameters = util.fromQueryString(location.search);
-  var self = {};
+  const parameters = util.fromQueryString(location.search);
+  const self = {};
 
-  var init = function() {
+  const init = function() {
     if (parameters.loadDelay) {
-      var delay;
+      let delay;
       try {
         delay = parseInt(parameters.loadDelay);
         self.loadDelay(delay);
       } catch (error) {
-        console.warn('Invalid load delay: ' + delay);
+        console.warn(`Invalid load delay: ${delay}`);
       }
     }
   };
 
-  var delayedCallback = function(jqXHR, wrap, delay) {
+  const delayedCallback = function(jqXHR, wrap, delay) {
     return function(fn) {
       wrap(function() {
-        var args = arguments;
-        setTimeout(function() {
+        const args = arguments;
+        setTimeout(() => {
           if (fn) {
             fn.apply(jqXHR, args);
           }
@@ -34,25 +34,25 @@ export var debug = (function() {
   };
 
   self.loadDelay = function(delay) {
-    var ajax = $.ajax;
+    const { ajax } = $;
     $.ajax = function() {
-      var ajaxArgs = arguments;
+      const ajaxArgs = arguments;
       console.log('delay', delay, ajaxArgs);
-      var jqXHR = ajax.apply($, arguments);
+      const jqXHR = ajax.apply($, arguments);
 
-      var done = jqXHR.done;
+      const { done } = jqXHR;
       jqXHR.done = delayedCallback(jqXHR, done, delay);
-      jqXHR.done(function() {
+      jqXHR.done(() => {
         console.log('done', ajaxArgs);
       });
 
-      var fail = jqXHR.fail;
+      const { fail } = jqXHR;
       jqXHR.fail = delayedCallback(jqXHR, fail, delay);
-      jqXHR.fail(function() {
+      jqXHR.fail(() => {
         console.log('fail', ajaxArgs);
       });
 
-      var always = jqXHR.always;
+      const { always } = jqXHR;
       jqXHR.always = delayedCallback(jqXHR, always, delay);
 
       return jqXHR;
@@ -61,11 +61,11 @@ export var debug = (function() {
 
   init();
   return self;
-})();
+}());
 
 export function debugConfig(config) {
   if (config.parameters.debug === 'tiles') {
-    var tileSize = lodashParseInt(config.parameters.tileSize);
+    const tileSize = lodashParseInt(config.parameters.tileSize);
     if (lodashIsNaN(tileSize)) {
       throw new Error('No tileSize specified');
     }
@@ -79,25 +79,25 @@ export function debugConfig(config) {
       format: 'image/svg',
       type: 'wmts',
       noTransition: 'true',
-      projections: {}
+      projections: {},
     };
-    lodashEach(config.projections, function(proj) {
+    lodashEach(config.projections, (proj) => {
       config.layers.debug_tile.projections[proj.id] = {
         source: 'debug_tile',
-        matrixSet: tileSize
+        matrixSet: tileSize,
       };
     });
     config.sources.debug_tile = {
       url: 'service/debug_tile.cgi',
-      matrixSets: {}
+      matrixSets: {},
     };
     config.sources.debug_tile.matrixSets[tileSize] = {
       id: tileSize,
-      tileSize: [tileSize, tileSize]
+      tileSize: [tileSize, tileSize],
     };
     config.layerOrder.push('debug_tile');
     config.defaults.startingLayers.push({
-      id: 'debug_tile'
+      id: 'debug_tile',
     });
   }
 }

@@ -7,7 +7,7 @@ import {
   ModalFooter,
   InputGroup,
   InputGroupText,
-  Input
+  Input,
 } from 'reactstrap';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
@@ -18,7 +18,7 @@ class ModalStart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: this.props.checked
+      checked: this.props.checked,
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -50,7 +50,7 @@ class ModalStart extends React.Component {
   // Handle the show/hide checkbox state
   handleCheck() {
     this.setState({
-      checked: !this.state.checked
+      checked: !this.state.checked,
     });
     if (!this.state.checked) {
       this.props.hideTour();
@@ -67,7 +67,7 @@ class ModalStart extends React.Component {
         onClosed={this.props.showTourAlert}
         wrapClassName="tour tour-start"
         className={this.props.className}
-        backdrop={true}
+        backdrop
         fade={false}
         keyboard={false}
         innerRef={this.setWrapperRef}
@@ -75,7 +75,7 @@ class ModalStart extends React.Component {
         <ModalHeader toggle={this.props.endTour} charCode="">
           Welcome to Worldview!
         </ModalHeader>
-        <Scrollbars style={{ maxHeight: this.props.height - 200 + 'px' }}>
+        <Scrollbars style={{ maxHeight: `${this.props.height - 200}px` }}>
 
           <ModalBody>
 
@@ -87,7 +87,7 @@ class ModalStart extends React.Component {
             />
 
           </ModalBody>
-        </Scrollbars >
+        </Scrollbars>
         {util.browser.localStorage && (
           <ModalFooter>
             <InputGroup>
@@ -124,7 +124,7 @@ ModalStart.propTypes = {
   storyOrder: PropTypes.array.isRequired,
   toggleModalStart: PropTypes.func.isRequired,
   className: PropTypes.string,
-  height: PropTypes.number
+  height: PropTypes.number,
 };
 
 export default ModalStart;

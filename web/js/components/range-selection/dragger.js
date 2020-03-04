@@ -20,7 +20,7 @@ class TimelineDragger extends PureComponent {
       position: props.position,
       backgroundColor: props.backgroundColor,
       textColor: props.textColor,
-      max: props.max
+      max: props.max,
     };
 
     this.handleDrag = this.handleDrag.bind(this);
@@ -42,13 +42,13 @@ class TimelineDragger extends PureComponent {
 
   getDefaultDragger(visibility) {
     return (
-      <React.Fragment>
+      <>
         <rect
           width={this.props.width}
           height={52}
           style={{
             fill: this.props.color,
-            visibility: visibility
+            visibility,
           }}
         />
         {/*
@@ -58,30 +58,30 @@ class TimelineDragger extends PureComponent {
          */}
         <polygon
           points={
-            '0,0,' +
-            this.props.height / 1.5 +
-            ',0 ' +
-            this.props.height / 3 +
-            ', ' +
-            this.props.height / 1.5
+            `0,0,${
+              this.props.height / 1.5
+            },0 ${
+              this.props.height / 3
+            }, ${
+              this.props.height / 1.5}`
           }
           transform={
-            'translate(' +
-            -this.props.width * 2.45 +
-            ', ' +
-            -this.props.height / 2 +
-            ')'
+            `translate(${
+              -this.props.width * 2.45
+            }, ${
+              -this.props.height / 2
+            })`
           }
           id={this.props.draggerID}
           style={{
             fill: this.state.backgroundColor,
-            visibility: visibility,
+            visibility,
             stroke: '#000',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         />
         {this.getText(-1, -12, visibility)}
-      </React.Fragment>
+      </>
     );
   }
 
@@ -93,23 +93,23 @@ class TimelineDragger extends PureComponent {
    */
   getCustomDragger(visibility) {
     return (
-      <React.Fragment>
+      <>
         <path
           style={{
             fill: this.props.color ? this.props.color : null,
-            visibility: visibility
+            visibility,
           }}
           d={this.props.path}
           transform={
-            'translate(' +
-            -this.props.width / 2 +
-            ', ' +
-            -this.props.height / 4 +
-            ')'
+            `translate(${
+              -this.props.width / 2
+            }, ${
+              -this.props.height / 4
+            })`
           }
         />
         {this.getText(-5, lodashRound(this.props.height / 6, 4))}
-      </React.Fragment>
+      </>
     );
   }
 
@@ -117,7 +117,7 @@ class TimelineDragger extends PureComponent {
    * Return visibility style string
    */
   getVisibility() {
-    var visibility = 'visible';
+    let visibility = 'visible';
     if (this.state.position < 0 || this.state.position > this.state.max) {
       visibility = 'hidden';
     }
@@ -130,7 +130,7 @@ class TimelineDragger extends PureComponent {
    * @param {number} y | y offset
    */
   getText(x, y) {
-    var visibility = this.getVisibility();
+    const visibility = this.getVisibility();
     if (this.props.text) {
       return (
         <text
@@ -140,7 +140,7 @@ class TimelineDragger extends PureComponent {
           textAnchor="middle"
           style={{
             fill: this.state.textColor ? this.state.textColor : null,
-            visibility: visibility || null
+            visibility: visibility || null,
           }}
         >
           {this.props.text}
@@ -162,17 +162,17 @@ class TimelineDragger extends PureComponent {
   handleDrag(e, d) {
     e.stopPropagation();
     e.preventDefault();
-    var deltaX = e.movementX || d.deltaX;
-    var position = this.state.position + deltaX;
+    const deltaX = e.movementX || d.deltaX;
+    const position = this.state.position + deltaX;
     this.props.onDrag(d.deltaX, this.props.id, d.x);
-    this.setState({ position: position });
+    this.setState({ position });
   }
 
   /*
    * @method render
    */
   render() {
-    var visibility = this.getVisibility();
+    const visibility = this.getVisibility();
     return (
       <Draggable
         onDrag={this.handleDrag}
@@ -200,7 +200,7 @@ TimelineDragger.defaultProps = {
   visibility: 'visible',
   visible: true,
   width: 5,
-  yOffset: 23
+  yOffset: 23,
 };
 
 TimelineDragger.propTypes = {
@@ -217,7 +217,7 @@ TimelineDragger.propTypes = {
   text: PropTypes.string,
   textColor: PropTypes.string,
   width: PropTypes.number,
-  yOffset: PropTypes.number
+  yOffset: PropTypes.number,
 };
 
 export default TimelineDragger;

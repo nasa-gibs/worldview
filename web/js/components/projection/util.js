@@ -4,12 +4,12 @@ export function parse(state, errors, config) {
     state.p = state.switch;
     delete state.switch;
   }
-  var projId = state.p;
+  const projId = state.p;
   if (projId) {
     if (!config.projections[projId]) {
       delete state.p;
       errors.push({
-        message: 'Unsupported projection: ' + projId
+        message: `Unsupported projection: ${projId}`,
       });
     }
   }

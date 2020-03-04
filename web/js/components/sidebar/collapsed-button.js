@@ -10,7 +10,7 @@ class CollapsedButton extends React.Component {
       isMobile,
       isCollapsed,
       numberOfLayers,
-      onclick
+      onclick,
     } = this.props;
 
     return (
@@ -28,16 +28,17 @@ class CollapsedButton extends React.Component {
           <FontAwesomeIcon icon={faLayerGroup} />
           {isMobile
             ? (
-              <span className='layer-count mobile'>
+              <span className="layer-count mobile">
                 {numberOfLayers.toString()}
               </span>
             )
             : (
-              <span className='layer-count '>
-                {numberOfLayers.toString()} Layers
+              <span className="layer-count ">
+                {numberOfLayers.toString()}
+                {' '}
+                Layers
               </span>
-            )
-          }
+            )}
         </a>
       </div>
     );
@@ -47,7 +48,7 @@ CollapsedButton.propTypes = {
   isCollapsed: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
-  onclick: PropTypes.func
+  onclick: PropTypes.func,
 };
 
 export default CollapsedButton;

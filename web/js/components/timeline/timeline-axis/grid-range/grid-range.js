@@ -11,17 +11,17 @@ import TileText from './tile-text';
 const tileTextConditionOptions = {
   minute: (itemDateObject) => {
     const timeScaleUnit = itemDateObject.minutes;
-    return timeScaleUnit === 0 ||
-      timeScaleUnit === 15 ||
-      timeScaleUnit === 30 ||
-      timeScaleUnit === 45;
+    return timeScaleUnit === 0
+      || timeScaleUnit === 15
+      || timeScaleUnit === 30
+      || timeScaleUnit === 45;
   },
   hour: (itemDateObject) => {
     const timeScaleUnit = itemDateObject.hours;
-    return timeScaleUnit === 0 ||
-    timeScaleUnit === 6 ||
-    timeScaleUnit === 12 ||
-    timeScaleUnit === 18;
+    return timeScaleUnit === 0
+    || timeScaleUnit === 6
+    || timeScaleUnit === 12
+    || timeScaleUnit === 18;
   },
   day: (itemDateObject) => {
     const timeScaleUnit = itemDateObject.date;
@@ -34,7 +34,7 @@ const tileTextConditionOptions = {
   year: (itemDateObject) => {
     const timeScaleUnit = itemDateObject.years;
     return timeScaleUnit % 10 === 0;
-  }
+  },
 };
 
 class GridRange extends PureComponent {
@@ -44,16 +44,16 @@ class GridRange extends PureComponent {
       transformX,
       timeScale,
       timeRange,
-      showHover
+      showHover,
     } = this.props;
     const tileTextCondition = tileTextConditionOptions[timeScale];
     return (
       <g className="axis-grid-container" transform={`translate(${transformX}, 0)`}>
-        <React.Fragment>
-          {timeRange.map((item, index) => {
-            return (
-              item.withinRange
-                ? <React.Fragment key={index}>
+        <>
+          {timeRange.map((item, index) => (
+            item.withinRange
+              ? (
+                <React.Fragment key={index}>
                   <TileRect
                     item={item}
                     index={index}
@@ -62,18 +62,19 @@ class GridRange extends PureComponent {
                     timeScale={timeScale}
                   />
                   {tileTextCondition(item.dateObject)
-                    ? <TileText
-                      item={item}
-                      index={index}
-                      gridWidth={gridWidth}
-                    />
+                    ? (
+                      <TileText
+                        item={item}
+                        index={index}
+                        gridWidth={gridWidth}
+                      />
+                    )
                     : null }
                 </React.Fragment>
-                : null
-            );
-          }
-          )}
-        </React.Fragment>
+              )
+              : null
+          ))}
+        </>
       </g>
     );
   }
@@ -84,7 +85,7 @@ GridRange.propTypes = {
   showHover: PropTypes.func,
   timeRange: PropTypes.array,
   timeScale: PropTypes.string,
-  transformX: PropTypes.number
+  transformX: PropTypes.number,
 };
 
 export default GridRange;

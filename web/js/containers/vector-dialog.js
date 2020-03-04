@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
+import {
+  ModalBody, ModalHeader, Nav, NavItem, NavLink,
+} from 'reactstrap';
 import Scrollbars from '../components/util/scrollbar';
 import VectorMetaTable from '../components/vector-metadata/table';
 
@@ -18,15 +20,17 @@ class VectorDialog extends React.Component {
   }
 
   render() {
-    const { toggleWithClose, vectorMetaObject, modalHeight, dialogKey } = this.props;
+    const {
+      toggleWithClose, vectorMetaObject, modalHeight, dialogKey,
+    } = this.props;
     const { activeIndex } = this.state;
     const navArray = [];
     const keyArray = [];
     let i = 0;
     for (const [key, value] of Object.entries(vectorMetaObject)) {
       const stringLength = 20;
-      const title = (value[0].title || key);
-      const titleText = title.length > stringLength ? title.substring(0, stringLength) + '...' : title;
+      const title = value[0].title || key;
+      const titleText = title.length > stringLength ? `${title.substring(0, stringLength)}...` : title;
       const index = i;
       keyArray.push(key);
       navArray.push(
@@ -36,26 +40,26 @@ class VectorDialog extends React.Component {
           active={activeIndex === i}
         >
           <NavLink onClick={() => this.updateIndex(index)} title={title}>
-            {titleText + ' [' + (value.length) + ']'}
+            {`${titleText} [${value.length}]`}
           </NavLink>
-        </NavItem>
+        </NavItem>,
       );
       i++;
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
 
     return (
-      <div className='draggable-modal-content' >
+      <div className="draggable-modal-content">
         <ModalHeader toggle={toggleWithClose}>
           <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
             {navArray}
           </Nav>
-        </ ModalHeader>
+        </ModalHeader>
 
         <ModalBody>
-          <Scrollbars style={{ maxHeight: modalHeight - 70 + 'px' }} >
+          <Scrollbars style={{ maxHeight: `${modalHeight - 70}px` }}>
             <VectorMetaTable id={dialogKey} metaArray={activeMetaArray} title={keyArray[activeIndex]} />
-          </ Scrollbars>
+          </Scrollbars>
         </ModalBody>
       </div>
     );
@@ -64,15 +68,15 @@ class VectorDialog extends React.Component {
 
 function mapStateToProps(state) {
   return {};
-};
+}
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(VectorDialog);
 VectorDialog.propTypes = {
   dialogKey: PropTypes.number,
   modalHeight: PropTypes.number,
   toggleWithClose: PropTypes.func,
   vectorMetaArray: PropTypes.array,
-  vectorMetaObject: PropTypes.object
+  vectorMetaObject: PropTypes.object,
 };

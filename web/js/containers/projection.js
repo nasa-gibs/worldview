@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get as lodashGet } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import { changeProjection } from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import { resetProductPickerState } from '../modules/product-picker/actions';
 import IconList from '../components/util/list';
-import { get as lodashGet } from 'lodash';
-import googleTagManager from 'googleTagManager';
 
 const DEFAULT_PROJ_ARRAY = [
   {
@@ -14,33 +14,31 @@ const DEFAULT_PROJ_ARRAY = [
     iconClass: 'ui-icon icon-large',
     iconName: 'faArrowCircleUp',
     id: 'change-arctic-button',
-    key: 'arctic'
+    key: 'arctic',
   },
   {
     text: 'Geographic',
     iconClass: 'ui-icon icon-large',
     iconName: 'faCircle',
     id: 'change-geographic-button',
-    key: 'geographic'
+    key: 'geographic',
   },
   {
     text: 'Antarctic',
     iconClass: 'ui-icon icon-large',
     iconName: 'faArrowCircleDown',
     id: 'change-antarctic-button',
-    key: 'antarctic'
-  }
+    key: 'antarctic',
+  },
 ];
 const getInfoArray = function(projArray) {
-  return projArray.map(el => {
-    return {
-      text: el.name,
-      iconClass: ' ui-icon icon-large',
-      iconName: el.style,
-      id: 'change-' + el.id + '-button',
-      key: el.id
-    };
-  });
+  return projArray.map((el) => ({
+    text: el.name,
+    iconClass: ' ui-icon icon-large',
+    iconName: el.style,
+    id: `change-${el.id}-button`,
+    key: el.id,
+  }));
 };
 class ProjectionList extends Component {
   updateProjection(id) {
@@ -49,7 +47,7 @@ class ProjectionList extends Component {
     onCloseModal();
     googleTagManager.pushEvent({
       event: 'change_projection',
-      projection: id
+      projection: id,
     });
   }
 
@@ -74,7 +72,7 @@ function mapStateToProps(state) {
     models: state.models,
     config: state.config,
     projection: state.proj.id,
-    projectionArray
+    projectionArray,
   };
 }
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -84,12 +82,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   onCloseModal: () => {
     dispatch(onToggle());
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ProjectionList);
 
 ProjectionList.propTypes = {
@@ -98,5 +96,5 @@ ProjectionList.propTypes = {
   onCloseModal: PropTypes.func,
   projection: PropTypes.string,
   projectionArray: PropTypes.array,
-  updateProjection: PropTypes.func
+  updateProjection: PropTypes.func,
 };

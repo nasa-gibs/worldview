@@ -18,8 +18,7 @@ class PlayButton extends React.Component {
       >
         {this.props.playing
           ? <FontAwesomeIcon icon={faPause} className="wv-animation-widget-icon" />
-          : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />
-        }
+          : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />}
       </a>
     );
   }
@@ -28,7 +27,7 @@ class PlayButton extends React.Component {
 PlayButton.propTypes = {
   pause: PropTypes.func,
   play: PropTypes.func,
-  playing: PropTypes.bool
+  playing: PropTypes.bool,
 };
 
 export default PlayButton;

@@ -8,22 +8,22 @@ import {
   values as lodashValues,
   sortBy as lodashSortBy,
   indexOf as lodashIndexOf,
-  findIndex as lodashFindIndex
+  findIndex as lodashFindIndex,
 } from 'lodash';
 import update from 'immutability-helper';
-import util from '../../util/util';
 import { createSelector } from 'reselect';
+import util from '../../util/util';
 
-const getConfig = state => state.config;
-const getProjection = state => state.proj && state.proj.id;
+const getConfig = (state) => state.config;
+const getProjection = (state) => state.proj && state.proj.id;
 
 export const getLayersForProjection = createSelector(
   [getConfig, getProjection],
   (config, projection) => {
     const filteredRows = lodashValues(config.layers)
       // Only use the layers for the active projection
-      .filter(layer => layer.projections[projection])
-      .map(layer => {
+      .filter((layer) => layer.projections[projection])
+      .map((layer) => {
         // If there is metadata for the current projection, use that
         const projectionMeta = layer.projections[projection];
         if (projectionMeta.title) layer.title = projectionMeta.title;
@@ -32,15 +32,13 @@ export const getLayersForProjection = createSelector(
         if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
         return layer;
       });
-    return lodashSortBy(filteredRows, layer => {
-      return lodashIndexOf(config.layerOrder, layer.id);
-    });
-  }
+    return lodashSortBy(filteredRows, (layer) => lodashIndexOf(config.layerOrder, layer.id));
+  },
 );
 
 export function hasMeasurementSource(current, config, projId) {
-  var hasSource;
-  lodashValues(current.sources).forEach(function(source) {
+  let hasSource;
+  lodashValues(current.sources).forEach((source) => {
     if (hasMeasurementSetting(current, source, config, projId)) {
       hasSource = true;
     }
@@ -58,15 +56,15 @@ export function hasMeasurementSource(current, config, projId) {
  *
  */
 export function hasMeasurementSetting(current, source, config, projId) {
-  var hasSetting;
-  lodashValues(source.settings).forEach(function(setting) {
-    var layer = config.layers[setting];
+  let hasSetting;
+  lodashValues(source.settings).forEach((setting) => {
+    const layer = config.layers[setting];
     if (layer) {
-      var proj = layer.projections;
+      const proj = layer.projections;
       if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {
         if (
-          layer.layergroup &&
-          layer.layergroup.indexOf('reference_orbits') !== -1
+          layer.layergroup
+          && layer.layergroup.indexOf('reference_orbits') !== -1
         ) {
           if (current.id === 'orbital-track') {
             hasSetting = true;
@@ -82,7 +80,7 @@ export function hasMeasurementSetting(current, source, config, projId) {
 }
 
 var decodeHtml = function(html) {
-  var txt = document.createElement('textarea');
+  const txt = document.createElement('textarea');
   txt.innerHTML = html;
   return txt.value;
 };
@@ -94,7 +92,7 @@ var decodeHtml = function(html) {
  */
 export function hasSubDaily(layers) {
   if (layers && layers.length) {
-    for (var i = 0; i < layers.length; i++) {
+    for (let i = 0; i < layers.length; i++) {
       if (layers[i].period === 'subdaily') {
         return true;
       }
@@ -106,19 +104,19 @@ export function hasSubDaily(layers) {
 export function addLayer(id, spec, layers, layerConfig, overlayLength, projection) {
   layers = lodashCloneDeep(layers);
   if (projection) {
-    layers = layers.filter(layer => layer.projections[projection]);
+    layers = layers.filter((layer) => layer.projections[projection]);
   }
   if (
     lodashFind(layers, {
-      id: id
+      id,
     })
   ) {
     return layers;
   }
   spec = spec || {};
-  var def = lodashCloneDeep(layerConfig[id]);
+  const def = lodashCloneDeep(layerConfig[id]);
   if (!def) {
-    throw new Error('No such layer: ' + id);
+    throw new Error(`No such layer: ${id}`);
   }
   def.visible = spec.visible || true;
   def.min = spec.min || undefined;
@@ -136,7 +134,7 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength, projectio
   if (def.group === 'overlays') {
     layers.unshift(def);
   } else {
-    const overlaysLength = overlayLength || layers.filter(layer => layer.group === 'overlays').length;
+    const overlaysLength = overlayLength || layers.filter((layer) => layer.group === 'overlays').length;
     layers.splice(overlaysLength, 0, def);
   }
   return layers;
@@ -150,7 +148,7 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength, projectio
 export function resetLayers(startingLayers, layerConfig) {
   let layers = [];
   if (startingLayers) {
-    lodashEach(startingLayers, function(start) {
+    lodashEach(startingLayers, (start) => {
       layers = addLayer(start.id, start, layers, layerConfig);
     });
   }
@@ -165,10 +163,11 @@ export function resetLayers(startingLayers, layerConfig) {
  */
 export function getTitles(config, layerId, projId) {
   try {
-    var title, subtitle, tags;
+    let title; let subtitle; let
+      tags;
     const forProj = lodashGet(
       config,
-      `layers.${layerId}.projections.${projId}`
+      `layers.${layerId}.projections.${projId}`,
     );
     if (forProj) {
       title = forProj.title;
@@ -176,14 +175,14 @@ export function getTitles(config, layerId, projId) {
       tags = forProj.tags;
     }
     // const forLayer = lodashGet(config, `layers.${layerId}`);
-    var forLayer = config.layers[layerId];
-    title = title || forLayer.title || '[' + layerId + ']';
+    const forLayer = config.layers[layerId];
+    title = title || forLayer.title || `[${layerId}]`;
     subtitle = subtitle || forLayer.subtitle || '';
     tags = tags || forLayer.tags || '';
     return {
-      title: title,
-      subtitle: subtitle,
-      tags: tags
+      title,
+      subtitle,
+      tags,
     };
   } catch (err) {
     throw new Error(`error in layer ${layerId}: ${err}`);
@@ -211,32 +210,32 @@ export function getLayers(layers, spec, state) {
     return { baselayers, overlays };
   }
   if (spec.group) {
-    throw new Error('Invalid layer group: ' + spec.group);
+    throw new Error(`Invalid layer group: ${spec.group}`);
   }
   return baselayers.concat(overlays);
 }
 
 function forGroup(group, spec, activeLayers, state) {
   spec = spec || {};
-  var projId = spec.proj || state.proj.id;
-  var results = [];
-  var defs = lodashFilter(activeLayers, {
-    group: group
+  const projId = spec.proj || state.proj.id;
+  let results = [];
+  const defs = lodashFilter(activeLayers, {
+    group,
   });
-  lodashEach(defs, function(def) {
+  lodashEach(defs, (def) => {
     // Skip if this layer isn't available for the selected projection
     if (!def.projections[projId] && projId !== 'all') {
       return;
     }
     if (
-      spec.dynamic &&
-      !['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)
+      spec.dynamic
+      && !['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)
     ) {
       return;
     }
     if (
-      spec.renderable &&
-      !isRenderable(def.id, activeLayers, spec.date, state)
+      spec.renderable
+      && !isRenderable(def.id, activeLayers, spec.date, state)
     ) {
       return;
     }
@@ -271,13 +270,12 @@ export function replaceSubGroup(
   nextLayerId,
   layers,
   subGroup,
-  layerSplit
+  layerSplit,
 ) {
   if (nextLayerId) {
     return moveBefore(layerId, nextLayerId, layers);
-  } else {
-    return pushToBottom(layerId, layers, layerSplit);
   }
+  return pushToBottom(layerId, layers, layerSplit);
 }
 
 /**
@@ -287,30 +285,30 @@ export function replaceSubGroup(
  * @param {*} config
  */
 export function dateRange(spec, activeLayers, config) {
-  var layers = spec.layer
+  const layers = spec.layer
     ? [lodashFind(activeLayers, { id: spec.layer })]
     : activeLayers;
-  var ignoreRange = config.parameters && (config.parameters.debugGIBS || config.parameters.ignoreDateRange);
+  const ignoreRange = config.parameters && (config.parameters.debugGIBS || config.parameters.ignoreDateRange);
   if (ignoreRange) {
     return {
       start: new Date(Date.UTC(1970, 0, 1)),
-      end: util.now()
+      end: util.now(),
     };
   }
-  var min = Number.MAX_VALUE;
-  var max = 0;
-  var range = false;
-  var maxDates = [];
+  let min = Number.MAX_VALUE;
+  let max = 0;
+  let range = false;
+  const maxDates = [];
 
   // Use the minute ceiling of the current time so that we don't run into an issue where
   // seconds value of current appNow time is greater than a layer's available time range
   const minuteCeilingCurrentTime = util.now().setSeconds(59);
 
-  lodashEach(layers, function(def) {
+  lodashEach(layers, (def) => {
     if (def) {
       if (def.startDate) {
         range = true;
-        var start = util.parseDateUTC(def.startDate).getTime();
+        const start = util.parseDateUTC(def.startDate).getTime();
         min = Math.min(min, start);
       }
       // For now, we assume that any layer with an end date is
@@ -321,7 +319,7 @@ export function dateRange(spec, activeLayers, config) {
         maxDates.push(new Date(max));
       } else if (def.inactive && def.endDate) {
         range = true;
-        var end = util.parseDateUTC(def.endDate).getTime();
+        const end = util.parseDateUTC(def.endDate).getTime();
         max = Math.max(max, end);
         maxDates.push(new Date(max));
       } else if (def.endDate) {
@@ -335,9 +333,9 @@ export function dateRange(spec, activeLayers, config) {
       if (def.futureLayer && def.futureTime && !def.endDate) {
         // Calculate endDate + parsed futureTime from layer JSON
         max = new Date();
-        var futureTime = def.futureTime;
-        var dateType = futureTime.slice(-1);
-        var dateInterval = futureTime.slice(0, -1);
+        const { futureTime } = def;
+        const dateType = futureTime.slice(-1);
+        const dateInterval = futureTime.slice(0, -1);
         if (dateType === 'D') {
           max.setDate(max.getDate() + parseInt(dateInterval));
           maxDates.push(new Date(max));
@@ -360,23 +358,23 @@ export function dateRange(spec, activeLayers, config) {
       max = minuteCeilingCurrentTime;
       maxDates.push(max);
     }
-    var maxDate = Math.max.apply(max, maxDates);
+    const maxDate = Math.max.apply(max, maxDates);
     return {
       start: new Date(min),
-      end: new Date(maxDate)
+      end: new Date(maxDate),
     };
   }
 }
 
 export function pushToBottom(id, layers, layerSplit) {
   const decodedId = util.decodeId(id);
-  var oldIndex = lodashFindIndex(layers, {
-    id: decodedId
+  const oldIndex = lodashFindIndex(layers, {
+    id: decodedId,
   });
   if (oldIndex < 0) {
-    throw new Error('Layer is not active: ' + decodedId);
+    throw new Error(`Layer is not active: ${decodedId}`);
   }
-  var def = layers[oldIndex];
+  const def = layers[oldIndex];
   layers.splice(oldIndex, 1);
   if (def.group === 'baselayers') {
     layers.push(def);
@@ -388,18 +386,18 @@ export function pushToBottom(id, layers, layerSplit) {
 
 export function moveBefore(sourceId, targetId, layers) {
   const decodedId = util.decodeId(sourceId);
-  var sourceIndex = lodashFindIndex(layers, {
-    id: decodedId
+  let sourceIndex = lodashFindIndex(layers, {
+    id: decodedId,
   });
   if (sourceIndex < 0) {
-    throw new Error('Layer is not active: ' + decodedId);
+    throw new Error(`Layer is not active: ${decodedId}`);
   }
-  var sourceDef = layers[sourceIndex];
-  var targetIndex = lodashFindIndex(layers, {
-    id: targetId
+  const sourceDef = layers[sourceIndex];
+  const targetIndex = lodashFindIndex(layers, {
+    id: targetId,
   });
   if (targetIndex < 0) {
-    throw new Error('Layer is not active: ' + targetId);
+    throw new Error(`Layer is not active: ${targetId}`);
   }
   layers.splice(targetIndex, 0, sourceDef);
   if (sourceIndex > targetIndex) {
@@ -437,22 +435,22 @@ export function isRenderable(id, activeLayers, date, state) {
         return false;
       }
       if (
-        otherDef.visible &&
-        otherDef.opacity === 1.0 &&
-        available(otherDef.id, date, activeLayers, state.config)
+        otherDef.visible
+        && otherDef.opacity === 1.0
+        && available(otherDef.id, date, activeLayers, state.config)
       ) {
         obscured = true;
         return false;
       }
-    }
+    },
   );
   return !obscured;
 }
 
 export function lastDate(activeLayers, config) {
-  var endDate;
-  var layersDateRange = dateRange({}, activeLayers, config);
-  var today = util.today();
+  let endDate;
+  const layersDateRange = dateRange({}, activeLayers, config);
+  const today = util.today();
   if (layersDateRange && layersDateRange.end > today) {
     endDate = layersDateRange.end;
   } else {
@@ -462,9 +460,9 @@ export function lastDate(activeLayers, config) {
 }
 
 export function lastDateTime(activeLayers, config) {
-  var endDate;
-  var layersDateRange = dateRange({}, activeLayers, config);
-  var now = util.now();
+  let endDate;
+  const layersDateRange = dateRange({}, activeLayers, config);
+  const now = util.now();
   if (layersDateRange && layersDateRange.end > now) {
     endDate = layersDateRange.end;
   } else {
@@ -477,19 +475,19 @@ export function activateLayersForEventCategory(activeLayers, state) {
   const { layers, compare } = state;
   // Turn off all layers in list first
   let newLayers = layers[compare.activeString];
-  lodashEach(newLayers, function(layer, index) {
+  lodashEach(newLayers, (layer, index) => {
     newLayers = update(newLayers, {
-      [index]: { visible: { $set: false } }
+      [index]: { visible: { $set: false } },
     });
   });
   // Turn on or add new layers
-  lodashEach(activeLayers, function(layer) {
-    var id = layer[0];
-    var visible = layer[1];
+  lodashEach(activeLayers, (layer) => {
+    const id = layer[0];
+    const visible = layer[1];
     const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
       newLayers = update(newLayers, {
-        [index]: { visible: { $set: visible } }
+        [index]: { visible: { $set: visible } },
       });
     } else {
       newLayers = addLayer(
@@ -497,7 +495,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
         { visible },
         newLayers,
         layers.layerConfig,
-        getLayers(newLayers, { group: 'all' }, state).overlays.length
+        getLayers(newLayers, { group: 'all' }, state).overlays.length,
       );
     }
   });
@@ -505,11 +503,11 @@ export function activateLayersForEventCategory(activeLayers, state) {
 }
 
 export function getZotsForActiveLayers(config, projection, map, activeLayers) {
-  var zotObj = {};
-  var sources = config.sources;
-  var proj = projection.selected.id;
-  var zoom = map.ui.selected.getView().getZoom();
-  lodashEach(activeLayers, layer => {
+  const zotObj = {};
+  const { sources } = config;
+  const proj = projection.selected.id;
+  const zoom = map.ui.selected.getView().getZoom();
+  lodashEach(activeLayers, (layer) => {
     if (layer.projections[proj]) {
       const overZoomValue = getZoomLevel(layer, zoom, proj, sources);
       if (overZoomValue) {
@@ -523,15 +521,14 @@ export function getZotsForActiveLayers(config, projection, map, activeLayers) {
 function getZoomLevel(layer, zoom, proj, sources) {
   // Account for offset between the map's top zoom level and the
   // lowest-resolution TileMatrix in polar layers
-  var zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
-  var matrixSet = layer.projections[proj].matrixSet;
+  const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
+  const { matrixSet } = layer.projections[proj];
 
   if (matrixSet !== undefined && layer.type !== 'vector') {
-    var source = layer.projections[proj].source;
-    var zoomLimit =
-      sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
+    const { source } = layer.projections[proj];
+    const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
     if (zoom > zoomLimit) {
-      var overZoomValue = Math.round((zoom - zoomLimit) * 100) / 100;
+      const overZoomValue = Math.round((zoom - zoomLimit) * 100) / 100;
       return overZoomValue;
     }
   }

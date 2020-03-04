@@ -5,7 +5,7 @@ import {
   EXPAND_SIDEBAR,
   TOGGLE_MOBILE_COLLAPSE,
   MOBILE_COLLAPSE_SIDEBAR,
-  MOBILE_EXPAND_SIDEBAR
+  MOBILE_EXPAND_SIDEBAR,
 } from './constants';
 
 export function changeTab(str) {
@@ -13,7 +13,7 @@ export function changeTab(str) {
     if (getState().sidebar.activeTab !== str) {
       dispatch({
         type: CHANGE_TAB,
-        activeTab: str
+        activeTab: str,
       });
     }
   };

@@ -1,7 +1,8 @@
 /* eslint no-console: "off" */
-var pkg = require('../package.json');
-var requiredVersion = 'v' + pkg.engines.node;
-var nodeBeingUsed = process.version;
+const pkg = require('../package.json');
+
+const requiredVersion = `v${pkg.engines.node}`;
+const nodeBeingUsed = process.version;
 
 if (requiredVersion !== nodeBeingUsed) {
   console.log('\x1b[31m', '\x1b[1m'); // Added styling to warn

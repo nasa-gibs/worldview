@@ -4,12 +4,14 @@ import { Alert } from 'reactstrap';
 import { Portal } from 'react-portal';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faTimes, faRuler, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faLayerGroup, faTimes, faRuler, faExclamationTriangle,
+} from '@fortawesome/free-solid-svg-icons';
 
 // icons used with alert by passing string as prop iconClassName
 const alertIcons = {
-  faRuler: faRuler,
-  faLayerGroup: faLayerGroup
+  faRuler,
+  faLayerGroup,
 };
 
 /*
@@ -46,7 +48,7 @@ export default class AlertComponent extends React.Component {
       iconClassName,
       isOpen,
       onDismiss,
-      onClick
+      onClick,
     } = this.props;
     const icon = iconClassName
       ? alertIcons[iconClassName] || faExclamationTriangle
@@ -78,7 +80,7 @@ export default class AlertComponent extends React.Component {
 
   render() {
     return this.props.noPortal
-      ? (this.renderAlert())
+      ? this.renderAlert()
       : (
         <Portal node={document && document.getElementById('wv-alert-container')}>
           {this.renderAlert()}
@@ -89,7 +91,7 @@ export default class AlertComponent extends React.Component {
 
 AlertComponent.defaultProps = {
   iconClassName: '',
-  title: ''
+  title: '',
 };
 AlertComponent.propTypes = {
   iconClassName: PropTypes.string,
@@ -100,5 +102,5 @@ AlertComponent.propTypes = {
   onClick: PropTypes.func,
   onDismiss: PropTypes.func,
   timeout: PropTypes.number,
-  title: PropTypes.string
+  title: PropTypes.string,
 };

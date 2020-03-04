@@ -1,19 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { get as lodashGet } from 'lodash';
+import { TabContent, TabPane } from 'reactstrap';
+import googleTagManager from 'googleTagManager';
 import Layers from './layers';
 import Events from './events';
 import Data from './data';
-import { get as lodashGet } from 'lodash';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
-import { TabContent, TabPane } from 'reactstrap';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
-import googleTagManager from 'googleTagManager';
 import {
   getCheckerboard,
-  loadCustom as loadCustomPalette
+  loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
 import { getLayers } from '../../modules/layers/selectors';
@@ -23,25 +23,24 @@ import {
   changeTab,
   toggleSidebarCollapse,
   collapseSidebar,
-  expandSidebar
+  expandSidebar,
 } from '../../modules/sidebar/actions';
 
 const getActiveTabs = function(config) {
-  const features = config.features;
+  const { features } = config;
   return {
     download: features.dataDownload,
     layers: true,
-    events: features.naturalEvents
+    events: features.naturalEvents,
   };
 };
 const resetWorldview = function(e) {
   e.preventDefault();
   if (window.location.search === '') return; // Nothing to reset
-  var msg =
-    'Do you want to reset Worldview to its defaults? You will lose your current state.';
+  const msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
   if (confirm(msg)) {
     googleTagManager.pushEvent({
-      event: 'logo_page_reset'
+      event: 'logo_page_reset',
     });
     document.location.href = '/';
   }
@@ -52,7 +51,7 @@ class Sidebar extends React.Component {
     this.state = { subComponentHeight: 700 };
     this.checkerBoardPattern = getCheckerboard();
     const customPalettePromise = loadCustomPalette(props.config);
-    customPalettePromise.done(customs => {
+    customPalettePromise.done((customs) => {
       props.loadedCustomPalettes(customs);
     });
   }
@@ -61,7 +60,7 @@ class Sidebar extends React.Component {
     this.updateDimensions();
     // prevent browserzooming in safari
     if (util.browser.safari) {
-      const onGestureCallback = e => {
+      const onGestureCallback = (e) => {
         e.preventDefault();
         e.stopPropagation();
       };
@@ -83,10 +82,9 @@ class Sidebar extends React.Component {
       const topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);
       const tabHeight = 32;
       const basePadding = 130;
-      const newHeight =
-        screenHeight -
-        (iconHeight + topOffset + tabHeight + basePadding + footerHeight) -
-        10;
+      const newHeight = screenHeight
+        - (iconHeight + topOffset + tabHeight + basePadding + footerHeight)
+        - 10;
       // Issue #1415: This was checking for subComponentHeight !== newHeight.
       // Sometimes it would get stuck in a loop in which the newHeight
       // would vary by a single pixel on each render. Hack fix is to
@@ -117,14 +115,14 @@ class Sidebar extends React.Component {
       isCollapsed,
       collapseExpandToggle,
       hasLocalStorage,
-      isMobile
+      isMobile,
     } = this.props;
-    var isNowCollapsed = !isCollapsed;
+    const isNowCollapsed = !isCollapsed;
     if (isMobile) {
       return collapseExpandToggle();
     }
     googleTagManager.pushEvent({
-      event: 'sidebar_chevron'
+      event: 'sidebar_chevron',
     });
     if (hasLocalStorage) {
       const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
@@ -143,7 +141,7 @@ class Sidebar extends React.Component {
           checkerBoardPattern={this.checkerBoardPattern}
         />
       );
-    } else if (!isCompareMode) {
+    } if (!isCompareMode) {
       return (
         <Layers
           height={subComponentHeight}
@@ -168,7 +166,7 @@ class Sidebar extends React.Component {
       tabTypes,
       isMobile,
       changeTab,
-      isDataDisabled
+      isDataDisabled,
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
@@ -182,7 +180,7 @@ class Sidebar extends React.Component {
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
             onClick={resetWorldview}
-            ref={iconElement => (this.iconElement = iconElement)}
+            ref={(iconElement) => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}
           />
           <CollapsedButton
@@ -194,13 +192,13 @@ class Sidebar extends React.Component {
           <div
             id="productsHolder"
             className="products-holder-case"
-            ref={el => {
+            ref={(el) => {
               this.sideBarCase = el;
             }}
             style={
               isCollapsed
                 ? { maxHeight: '0' }
-                : { maxHeight: screenHeight + 'px' }
+                : { maxHeight: `${screenHeight}px` }
             }
             onWheel={wheelCallBack}
           >
@@ -221,25 +219,27 @@ class Sidebar extends React.Component {
                   </TabPane>
                   <TabPane tabId="events">
                     {naturalEventsFeatureActive
-                      ? <Events
-                        isActive={activeTab === 'events'}
-                        height={subComponentHeight}
-                      />
-                      : null
-                    }
+                      ? (
+                        <Events
+                          isActive={activeTab === 'events'}
+                          height={subComponentHeight}
+                        />
+                      )
+                      : null}
                   </TabPane>
                   <TabPane tabId="download">
                     {dataDownloadFeatureActive
-                      ? <Data
-                        isActive={activeTab === 'download'}
-                        height={subComponentHeight}
-                        tabTypes={tabTypes}
-                      />
-                      : null
-                    }
+                      ? (
+                        <Data
+                          isActive={activeTab === 'download'}
+                          height={subComponentHeight}
+                          tabTypes={tabTypes}
+                        />
+                      )
+                      : null}
                   </TabPane>
                   <footer
-                    ref={footerElement => (this.footerElement = footerElement)}
+                    ref={(footerElement) => (this.footerElement = footerElement)}
                   >
                     <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
                   </footer>
@@ -262,14 +262,14 @@ function mapStateToProps(state) {
     modal,
     measure,
     animation,
-    events
+    events,
   } = state;
   const { screenHeight } = browser;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
   const tabTypes = getActiveTabs(config);
-  const snapshotModalOpen = (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT');
+  const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const isMobile = browser.lessThan.medium;
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
@@ -277,24 +277,24 @@ function mapStateToProps(state) {
     activeTab,
     isMobile,
     hasLocalStorage: util.browser.localStorage,
-    screenHeight: screenHeight,
+    screenHeight,
     isCompareMode: compare.active,
     activeString,
     numberOfLayers,
     isDataDisabled: events.isAnimatingToEvent,
-    isCollapsed: isMobile ? mobileCollapsed : (isCollapsed || shouldBeCollapsed),
+    isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
     tabTypes,
-    config
+    config,
   };
 }
-const mapDispatchToProps = dispatch => ({
-  changeTab: str => {
+const mapDispatchToProps = (dispatch) => ({
+  changeTab: (str) => {
     dispatch(changeTab(str));
   },
   onTabClick: (str, activeStr) => {
     if (str === activeStr) return;
     googleTagManager.pushEvent({
-      event: str + '_tab'
+      event: `${str}_tab`,
     });
     dispatch(changeTab(str));
   },
@@ -307,19 +307,19 @@ const mapDispatchToProps = dispatch => ({
   expandSidebar: () => {
     dispatch(expandSidebar());
   },
-  loadedCustomPalettes: customs => {
+  loadedCustomPalettes: (customs) => {
     dispatch(loadedCustomPalettes(customs));
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Sidebar);
 
 Sidebar.defaultProps = {
   maxHeight: 700,
-  visibleEvents: {}
+  visibleEvents: {},
 };
 Sidebar.propTypes = {
   activeString: PropTypes.string,
@@ -337,5 +337,5 @@ Sidebar.propTypes = {
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
-  tabTypes: PropTypes.object
+  tabTypes: PropTypes.object,
 };

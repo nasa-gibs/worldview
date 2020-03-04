@@ -8,11 +8,11 @@ const {
 const TIME_LIMIT = 10000;
 
 module.exports = {
-  before: function(client) {
+  before(client) {
     loadAndSkipTour(client, TIME_LIMIT);
   },
 
-  after: function(client) {
+  after(client) {
     client.end();
   },
 

@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 // delay helper to prevent too many requests at once
-const sleeper = (ms) => (x) => new Promise(resolve => setTimeout(() => resolve(x), ms));
+const sleeper = (ms) => (x) => new Promise((resolve) => setTimeout(() => resolve(x), ms));
 
 // helper function to find target key in nested object
 const findProp = async (obj, keys, out) => {

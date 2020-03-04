@@ -2,13 +2,13 @@ const fetch = require('node-fetch');
 // URL status check function makes GET requests to provided list of URLs to get status codes / errors
 
 // Delay helper to prevent too many requests at once
-const sleeper = (ms) => (x) => new Promise(resolve => setTimeout(() => resolve(x), ms));
+const sleeper = (ms) => (x) => new Promise((resolve) => setTimeout(() => resolve(x), ms));
 
 // Checks status code of provided links and return object organized by errors / statuscodes
 const requestCheck = async (urls) => {
   const parsedUrls = {
     ERROR: [],
-    STATUSCODE: {}
+    STATUSCODE: {},
   };
   for (let i = 0; i < urls.length; i++) {
     const linkName = Object.keys(urls[i])[0];

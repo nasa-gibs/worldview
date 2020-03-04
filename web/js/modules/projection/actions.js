@@ -6,12 +6,12 @@ export function changeProjection(id) {
     const proj = config.projections[id];
 
     if (!proj) {
-      throw new Error('Invalid projection: ' + id);
+      throw new Error(`Invalid projection: ${id}`);
     }
     dispatch({
       type: CHANGE_PROJECTION,
-      id: id,
-      selected: proj
+      id,
+      selected: proj,
     });
   };
 }

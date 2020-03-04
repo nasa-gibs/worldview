@@ -13,14 +13,14 @@ class CategoryCell extends React.Component {
       measurementConfig,
       drawMeasurements,
       hasMeasurementSource,
-      categoryType
+      categoryType,
     } = this.props;
     const bgImage = category.image
-      ? 'images/layers/categories/' + category.image
+      ? `images/layers/categories/${category.image}`
       : '';
     const categoryBgImage = bgImage
       ? {
-        backgroundImage: `url(${bgImage})`
+        backgroundImage: `url(${bgImage})`,
       }
       : {};
 
@@ -28,7 +28,7 @@ class CategoryCell extends React.Component {
       <div
         key={category.id}
         className={
-          'layer-category layer-category' + interestCssName(categoryType)
+          `layer-category layer-category${interestCssName(categoryType)}`
         }
         id={category.id}
       >
@@ -45,9 +45,7 @@ class CategoryCell extends React.Component {
             </h3>
             <ul>
               {category.measurements
-                .filter(measurement =>
-                  hasMeasurementSource(measurementConfig[measurement])
-                )
+                .filter((measurement) => hasMeasurementSource(measurementConfig[measurement]))
                 .slice(0, 7)
                 .map((measurement, index) => {
                   const current = measurementConfig[measurement];
@@ -56,17 +54,17 @@ class CategoryCell extends React.Component {
                       'in category',
                       category.title,
                       'unknown measurement',
-                      measurement
+                      measurement,
                     );
                   }
                   if (measurementConfig[measurement] === undefined) {
                     throw new Error(
-                      "Error: Measurement '" +
-                        measurement +
-                        "' stated in category '" +
-                        category.title +
-                        "' does not exist " +
-                        'in measurement list!'
+                      `Error: Measurement '${
+                        measurement
+                      }' stated in category '${
+                        category.title
+                      }' does not exist `
+                        + 'in measurement list!',
                     );
                   }
                   return index === 6 ? (
@@ -86,17 +84,16 @@ class CategoryCell extends React.Component {
                       className="layer-category-item"
                       key={category.id + index}
                       id={
-                        'layer-category-item-' + category.id + '-' + current.id
+                        `layer-category-item-${category.id}-${current.id}`
                       }
                     >
                       <a
                         className="layer-category-name"
-                        onClick={() =>
-                          drawMeasurements(category, current.id, index)
-                        }
+                        onClick={() => drawMeasurements(category, current.id, index)}
                       >
                         {current.title}
-                      </a>{' '}
+                      </a>
+                      {' '}
                     </li>
                   );
                 })}
@@ -110,16 +107,15 @@ class CategoryCell extends React.Component {
 var interestCssName = function(name) {
   if (name === 'hazards and disasters') {
     return 'legacy';
-  } else {
-    return name;
   }
+  return name;
 };
 CategoryCell.propTypes = {
   category: PropTypes.object,
   categoryType: PropTypes.string,
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object
+  measurementConfig: PropTypes.object,
 };
 
 export default CategoryCell;

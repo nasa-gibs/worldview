@@ -7,30 +7,25 @@ export function getEventsWithinExtent(
   selected,
   extent,
   selectedProj,
-  showAll
+  showAll,
 ) {
-  var maxExtent = selectedProj.maxExtent;
-  var visibleListEvents = {};
+  const { maxExtent } = selectedProj;
+  const visibleListEvents = {};
 
-  loadedEvents.forEach(function(naturalEvent) {
-    var isSelectedEvent = selected.id === naturalEvent.id;
-    var date = getDefaultEventDate(naturalEvent);
+  loadedEvents.forEach((naturalEvent) => {
+    const isSelectedEvent = selected.id === naturalEvent.id;
+    let date = getDefaultEventDate(naturalEvent);
     if (selected && selected.date) {
       date = selected.date;
     }
-    var geometry =
-      lodashFind(naturalEvent.geometries, function(geometry) {
-        return geometry.date.split('T')[0] === date;
-      }) || naturalEvent.geometries[0];
+    const geometry = lodashFind(naturalEvent.geometries, (geometry) => geometry.date.split('T')[0] === date) || naturalEvent.geometries[0];
 
-    var coordinates = geometry.coordinates;
+    let { coordinates } = geometry;
 
     if (selectedProj.id !== 'geographic') {
       // check for polygon geometries for targeted projection coordinate transform
       if (geometry.type === 'Polygon') {
-        const coordinatesTransform = coordinates[0].map(coordinate => {
-          return olProj.transform(coordinate, 'EPSG:4326', selectedProj.crs);
-        });
+        const coordinatesTransform = coordinates[0].map((coordinate) => olProj.transform(coordinate, 'EPSG:4326', selectedProj.crs));
         const geomExtent = olExtent.boundingExtent(coordinatesTransform);
         coordinates = olExtent.getCenter(geomExtent);
       } else {
@@ -38,27 +33,24 @@ export function getEventsWithinExtent(
         coordinates = olProj.transform(
           coordinates,
           'EPSG:4326',
-          selectedProj.crs
+          selectedProj.crs,
         );
       }
-    } else {
-      if (geometry.type === 'Polygon') {
-        const geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
-        coordinates = olExtent.getCenter(geomExtent);
-      }
+    } else if (geometry.type === 'Polygon') {
+      const geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
+      coordinates = olExtent.getCenter(geomExtent);
     }
 
     // limit to maxExtent while allowing zoom and filter 'out of extent' events
-    var isVisible =
-      olExtent.containsCoordinate(extent, coordinates) &&
-      olExtent.containsCoordinate(maxExtent, coordinates);
+    const isVisible = olExtent.containsCoordinate(extent, coordinates)
+      && olExtent.containsCoordinate(maxExtent, coordinates);
 
     if (isVisible) {
       visibleListEvents[naturalEvent.id] = true;
     } else if (
       // Keep selected in event list if within proj limits
-      isSelectedEvent &&
-      olExtent.containsCoordinate(maxExtent, coordinates)
+      isSelectedEvent
+      && olExtent.containsCoordinate(maxExtent, coordinates)
     ) {
       visibleListEvents[naturalEvent.id] = true;
     }
@@ -66,10 +58,10 @@ export function getEventsWithinExtent(
   return visibleListEvents;
 }
 export function getDefaultEventDate(event) {
-  var date = new Date(event.geometries[0].date).toISOString().split('T')[0];
+  let date = new Date(event.geometries[0].date).toISOString().split('T')[0];
   if (event.geometries.length < 2) return date;
-  var category = event.categories.title || event.categories[0].title;
-  var today = new Date().toISOString().split('T')[0];
+  const category = event.categories.title || event.categories[0].title;
+  const today = new Date().toISOString().split('T')[0];
   // For storms that happened today, get previous date
   if (date === today && category === 'Severe Storms') {
     date = new Date(event.geometries[1].date).toISOString().split('T')[0];

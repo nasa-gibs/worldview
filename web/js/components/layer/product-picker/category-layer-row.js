@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashValues from 'lodash/values';
 import lodashFind from 'lodash/find';
-import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import {
   TabContent,
   TabPane,
   Nav,
   NavItem,
-  ListGroup
+  ListGroup,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronCircleDown, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
+import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import MeasurementLayerRow from './measurement-layer-row';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronCircleDown, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * A single category result row
@@ -26,7 +26,7 @@ class CategoryLayerRow extends React.Component {
     super(props);
     this.state = {
       isSelected: props.isSelected,
-      projection: props.projection
+      projection: props.projection,
     };
   }
 
@@ -42,23 +42,23 @@ class CategoryLayerRow extends React.Component {
       activeLayers,
       removeLayer,
       addLayer,
-      selectedDate
+      selectedDate,
     } = this.props;
     const { projection } = this.state;
     const OrbitSourceList = [];
     const LayerSouceList = [];
     let orbitTitle = '';
 
-    source.settings.forEach(setting => {
+    source.settings.forEach((setting) => {
       const layer = layerConfig[setting];
       if (
-        layer &&
-        layer.id === setting &&
-        Object.keys(layer.projections).indexOf(projection) > -1
+        layer
+        && layer.id === setting
+        && Object.keys(layer.projections).indexOf(projection) > -1
       ) {
         if (
-          layer.layergroup &&
-          layer.layergroup.indexOf('reference_orbits') !== -1
+          layer.layergroup
+          && layer.layergroup.indexOf('reference_orbits') !== -1
         ) {
           orbitTitle = getOrbitTrackTitle(layer);
           OrbitSourceList.push(
@@ -71,7 +71,7 @@ class CategoryLayerRow extends React.Component {
               removeLayer={removeLayer}
               addLayer={addLayer}
               selectedDate={selectedDate}
-            />
+            />,
           );
         } else {
           LayerSouceList.push(
@@ -84,7 +84,7 @@ class CategoryLayerRow extends React.Component {
               removeLayer={removeLayer}
               addLayer={addLayer}
               selectedDate={selectedDate}
-            />
+            />,
           );
         }
       } else if (layer && layer.title && layer.title.indexOf('Orbital Track') !== -1) {
@@ -92,8 +92,8 @@ class CategoryLayerRow extends React.Component {
         // for truncating the layer names, until the rest of
         // the interface is implemented
         if (layer.title.indexOf('(') !== -1) {
-          var regExp = /\(([^)]+)\)/;
-          var matches = regExp.exec(layer.title);
+          const regExp = /\(([^)]+)\)/;
+          const matches = regExp.exec(layer.title);
           orbitTitle = matches[1];
         }
       }
@@ -104,22 +104,20 @@ class CategoryLayerRow extends React.Component {
           <ListGroup className="source-settings source-sub-group">
             {LayerSouceList}
           </ListGroup>
-        ) : (
-          ''
-        )}
+        )
+          : ''}
         {OrbitSourceList.length > 0 ? (
-          <React.Fragment>
+          <>
             <h3 className="source-orbits-title">Orbital Tracks:</h3>
             <ListGroup
-              id={source.id + '-orbit-tracks'}
+              id={`${source.id}-orbit-tracks`}
               className="source-orbit-tracks source-sub-group"
             >
               {OrbitSourceList}
             </ListGroup>
-          </React.Fragment>
-        ) : (
-          ''
-        )}
+          </>
+        )
+          : ''}
       </div>
     );
   }
@@ -148,7 +146,7 @@ class CategoryLayerRow extends React.Component {
     return (
       <NavItem
         key={source.id + index}
-        id={source.id + '-' + index + '-source-Nav'}
+        id={`${source.id}-${index}-source-Nav`}
         onClick={() => setSourceIndex(index)}
         className={
           index === activeSourceIndex
@@ -169,7 +167,7 @@ class CategoryLayerRow extends React.Component {
       hasMeasurementSetting,
       measurement,
       isMobile,
-      selectedMeasurementSourceIndex
+      selectedMeasurementSourceIndex,
     } = this.props;
     const sources = lodashValues(measurement.sources);
 
@@ -193,20 +191,20 @@ class CategoryLayerRow extends React.Component {
                   ? minValidIndex
                   : selectedMeasurementSourceIndex;
                 return this.renderSourceTabs(source, index, selectedMeasurementSourceIndex);
-              } else {
-                return '';
               }
+              return '';
             })}
         </Nav>
-        <TabContent id={measurement.id + '-' + sources[validActiveIndex].id}>
+        <TabContent id={`${measurement.id}-${sources[validActiveIndex].id}`}>
           <TabPane>
             {this.renderSourceSettings(sources[validActiveIndex])}
-            {isMobile &&
+            {isMobile
+              && (
               <MeasurementMetadataDetail
                 source={sources[validActiveIndex]}
                 isMobile={isMobile}
               />
-            }
+              )}
           </TabPane>
         </TabContent>
       </div>
@@ -219,7 +217,7 @@ class CategoryLayerRow extends React.Component {
       category,
       updateSelectedMeasurement,
       id,
-      isSelected
+      isSelected,
     } = this.props;
     const className = isSelected
       ? 'measurement-row layers-all-layer selected'
@@ -227,19 +225,18 @@ class CategoryLayerRow extends React.Component {
     return (
       <div
         className={className}
-        id={'accordion-' + category.id + '-' + measurement.id}
-        key={category.id + '-' + measurement.id}
+        id={`accordion-${category.id}-${measurement.id}`}
+        key={`${category.id}-${measurement.id}`}
       >
         <div
-          onClick={() => updateSelectedMeasurement(id) }
+          onClick={() => updateSelectedMeasurement(id)}
           className="measurement-row-header"
         >
           <h3>{measurement.title}</h3>
           {measurement.subtitle && <h5>{measurement.subtitle}</h5>}
           {isSelected
             ? <FontAwesomeIcon icon={faChevronCircleDown} className="arrow-icon" />
-            : <FontAwesomeIcon icon={faChevronCircleRight} className="arrow-icon" />
-          }
+            : <FontAwesomeIcon icon={faChevronCircleRight} className="arrow-icon" />}
         </div>
         {isSelected ? this.renderContent() : ''}
       </div>
@@ -264,7 +261,7 @@ CategoryLayerRow.propTypes = {
   selectedMeasurementSourceIndex: PropTypes.number,
   setSourceIndex: PropTypes.func,
   sourceMetadata: PropTypes.object,
-  updateSelectedMeasurement: PropTypes.func
+  updateSelectedMeasurement: PropTypes.func,
 };
 
 export default CategoryLayerRow;

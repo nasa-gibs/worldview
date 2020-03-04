@@ -1,9 +1,10 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
+
 const TIME_LIMIT = 10000;
 module.exports = {
-  before: function(client) {
+  before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   /**
@@ -20,7 +21,7 @@ module.exports = {
     client.waitForElementVisible(
       localSelectors.animationButton,
       TIME_LIMIT,
-      function(el) {
+      (el) => {
         client
           .useCss()
           .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
@@ -43,8 +44,8 @@ module.exports = {
     client.waitForElementVisible(
       '#day-animation-widget-start',
       TIME_LIMIT,
-      function(el) {
-        client.getValue('#day-animation-widget-start', function(result) {
+      (el) => {
+        client.getValue('#day-animation-widget-start', (result) => {
           const startDay = result.value;
           client
             .useCss()
@@ -79,7 +80,7 @@ module.exports = {
     client.waitForElementVisible(
       localSelectors.animationButton,
       TIME_LIMIT,
-      function(el) {
+      (el) => {
         client
           .useCss()
           .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
@@ -91,7 +92,7 @@ module.exports = {
       }
     );
   },
-  after: function(client) {
+  after(client) {
     client.end();
   }
 };

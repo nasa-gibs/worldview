@@ -4,15 +4,15 @@ import fixtures from '../../fixtures';
 const globalState = fixtures.getState();
 const config = {
   products: {
-    product1: true
-  }
+    product1: true,
+  },
 };
 
 let defaultStateFromLocation = {};
 beforeEach(() => {
   defaultStateFromLocation = {
     data: {},
-    layers: { active: [{ product: 'product1' }] }
+    layers: { active: [{ product: 'product1' }] },
   };
 });
 test('parses state, 1.1', () => {
@@ -22,7 +22,7 @@ test('parses state, 1.1', () => {
     parameters,
     defaultStateFromLocation,
     globalState,
-    config
+    config,
   );
   const selected = stateFromLocation.data.selectedProduct;
   expect(selected).toBe('product1');

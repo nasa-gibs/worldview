@@ -12,7 +12,7 @@ class ThresholdSelect extends React.Component {
       start,
       end,
       squashed,
-      activeDragger: 'start'
+      activeDragger: 'start',
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
   }
@@ -22,7 +22,9 @@ class ThresholdSelect extends React.Component {
    * @param {Boolean} boo
    */
   updateSquash(boo) {
-    const { setRange, layerId, index, groupName, palette, legend } = this.props;
+    const {
+      setRange, layerId, index, groupName, palette, legend,
+    } = this.props;
     const { start, end, squashed } = this.state;
     const isSquashed = !squashed;
     const startIndex = legend.refs[start];
@@ -34,7 +36,7 @@ class ThresholdSelect extends React.Component {
       parseFloat(palette.entries.refs.indexOf(endIndex)),
       isSquashed,
       index,
-      groupName
+      groupName,
     );
     this.setState({ squashed: isSquashed });
   }
@@ -44,7 +46,9 @@ class ThresholdSelect extends React.Component {
    * @param {Array} thresholdArray | Array of start/end indexs for colormap
    */
   updateThreshold(thresholdArray) {
-    const { layerId, index, groupName, palette, legend } = this.props;
+    const {
+      layerId, index, groupName, palette, legend,
+    } = this.props;
     const { start, end } = this.state;
     const newStart = Math.ceil(Number(thresholdArray[0]));
     const newEnd = Math.ceil(Number(thresholdArray[1]));
@@ -53,15 +57,15 @@ class ThresholdSelect extends React.Component {
     if (newStart !== start && newEnd !== end) {
       this.setState({
         start: newStart,
-        end: newEnd
+        end: newEnd,
       });
     } else if (newStart !== start) {
       this.setState({
-        start: newStart
+        start: newStart,
       });
     } else if (newEnd !== end) {
       this.setState({
-        end: newEnd
+        end: newEnd,
       });
     } else {
       return;
@@ -74,39 +78,39 @@ class ThresholdSelect extends React.Component {
       parseFloat(palette.entries.refs.indexOf(endRef)),
       this.state.squashed,
       index,
-      groupName
+      groupName,
     );
   }
 
   render() {
     const { start, end, squashed } = this.state;
-    const { index, min, max, legend } = this.props;
+    const {
+      index, min, max, legend,
+    } = this.props;
     const units = legend.units || '';
-    const startLabel =
-      start === 0 && legend.minLabel
-        ? legend.minLabel + ' ' + units
-        : legend.tooltips[start] + ' ' + units;
-    const endLabel =
-      end === legend.tooltips.length - 1 && legend.maxLabel
-        ? legend.maxLabel + ' ' + units
-        : legend.tooltips[end] + ' ' + units;
+    const startLabel = start === 0 && legend.minLabel
+      ? `${legend.minLabel} ${units}`
+      : `${legend.tooltips[start]} ${units}`;
+    const endLabel = end === legend.tooltips.length - 1 && legend.maxLabel
+      ? `${legend.maxLabel} ${units}`
+      : `${legend.tooltips[end]} ${units}`;
 
     return (
       <div className="layer-threshold-select settings-component">
         <h2 className="wv-header">Thresholds</h2>
-        <div id={'wv-palette-squash' + index} className="wv-palette-squash">
+        <div id={`wv-palette-squash${index}`} className="wv-palette-squash">
           <Checkbox
             name="Squash Palette"
             color="gray"
             checked={squashed}
-            label={'Squash Palette'}
+            label="Squash Palette"
             classNames="wv-squash-button-check"
-            id={'wv-squash-button-check' + index}
+            id={`wv-squash-button-check${index}`}
             onCheck={this.updateSquash.bind(this)}
           />
         </div>
         <div
-          id={'wv-layer-options-threshold' + index}
+          id={`wv-layer-options-threshold${index}`}
           className="wv-layer-options-threshold"
         >
           <RangeInput
@@ -139,7 +143,7 @@ ThresholdSelect.propTypes = {
   palette: PropTypes.object,
   setRange: PropTypes.func,
   squashed: PropTypes.bool,
-  start: PropTypes.number
+  start: PropTypes.number,
 };
 
 export default ThresholdSelect;

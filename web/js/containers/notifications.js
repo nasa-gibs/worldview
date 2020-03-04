@@ -32,15 +32,15 @@ function mapStateToProps(state) {
   const { object } = state.notifications;
 
   return {
-    object
+    object,
   };
 }
 
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(Notifications);
 
 Notifications.propTypes = {
-  object: PropTypes.object
+  object: PropTypes.object,
 };

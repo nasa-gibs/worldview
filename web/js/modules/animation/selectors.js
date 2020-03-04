@@ -2,7 +2,7 @@ import { each as lodashEach } from 'lodash';
 import util from '../../util/util';
 import {
   imageUtilGetCoordsFromPixelValues,
-  getDownloadUrl
+  getDownloadUrl,
 } from '../image-download/util';
 import { getLayers, hasSubDaily } from '../layers/selectors';
 import { timeScaleFromNumberKey } from '../date/constants';
@@ -21,13 +21,17 @@ export function getImageArray(
   gifComponentState,
   gifComponentProps,
   dimensions,
-  state
+  state,
 ) {
-  const { animation, proj, map, date, layers, compare } = state;
+  const {
+    animation, proj, map, date, layers, compare,
+  } = state;
   const { startDate, endDate, url } = gifComponentProps;
   const { boundaries, showDates } = gifComponentState;
-  const { customInterval, interval, customDelta, delta, customSelected } = date;
-  const activeString = compare.activeString;
+  const {
+    customInterval, interval, customDelta, delta, customSelected,
+  } = date;
+  const { activeString } = compare;
   const a = [];
   const fromDate = new Date(startDate);
   const toDate = new Date(endDate);
@@ -56,9 +60,9 @@ export function getImageArray(
 
     src = util.format(dlURL, strDate);
     a.push({
-      src: src,
+      src,
       text: showDates ? strDate : '',
-      delay: 1000 / animation.speed
+      delay: 1000 / animation.speed,
     });
     current = util.dateAdd(current, increment, useDelta);
     if (j > 40) {
@@ -79,16 +83,16 @@ export function getImageArray(
  */
 var getProducts = function(layers, date, state) {
   const layersArray = [];
-  var products = getLayers(
+  const products = getLayers(
     layers,
     {
       reverse: true,
       renderable: true,
-      date
+      date,
     },
-    state
+    state,
   );
-  lodashEach(products, function(layer) {
+  lodashEach(products, (layer) => {
     const layerDate = new Date(date);
     if (layer.endDate) {
       if (layerDate > new Date(layer.endDate)) return;

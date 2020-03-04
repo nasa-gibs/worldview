@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SelectionList from '../util/selector';
 import { GifPanelGrid } from './gif-panel-grid';
 import Button from '../util/button';
 import { Checkbox } from '../util/checkbox';
-import PropTypes from 'prop-types';
 import { getDimensions } from '../../modules/image-download/util';
+
 const MAX_GIF_SIZE = 250;
 const MAX_IMAGE_DIMENSION_SIZE = 8200;
 
@@ -26,14 +27,14 @@ export default class GifPanel extends React.Component {
       resolution: props.resolution,
       valid: props.valid,
       showDates: props.showDates,
-      increment: props.increment
+      increment: props.increment,
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(type, value) {
     this.setState({
-      resolution: value
+      resolution: value,
     });
   }
 
@@ -45,14 +46,13 @@ export default class GifPanel extends React.Component {
       endDate,
       onCheck,
       showDates,
-      numberOfFrames
+      numberOfFrames,
     } = this.props;
     const { resolution } = this.state;
     const dimensions = getDimensions(projId, lonlats, resolution);
-    const height = dimensions.height;
-    const width = dimensions.width;
-    const requestSize =
-      ((width * height * 24) / 8388608).toFixed(2) * numberOfFrames;
+    const { height } = dimensions;
+    const { width } = dimensions;
+    const requestSize = ((width * height * 24) / 8388608).toFixed(2) * numberOfFrames;
     const valid = isFileSizeValid(requestSize, height, width);
     return (
       <div className="gif-dialog">
@@ -103,7 +103,7 @@ GifPanel.defaultProps = {
   firstLabel: 'Resolution (per pixel):',
   maxGifSize: 20,
   secondLabel: 'Format',
-  showDates: true
+  showDates: true,
 };
 GifPanel.propTypes = {
   checked: PropTypes.bool,
@@ -127,14 +127,14 @@ GifPanel.propTypes = {
   showDates: PropTypes.bool,
   speed: PropTypes.number,
   startDate: PropTypes.string,
-  valid: PropTypes.bool
+  valid: PropTypes.bool,
 };
 const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
   return (
-    requestSize < MAX_GIF_SIZE &&
-    imgHeight !== 0 &&
-    imgWidth !== 0 &&
-    imgHeight <= MAX_IMAGE_DIMENSION_SIZE &&
-    imgWidth <= MAX_IMAGE_DIMENSION_SIZE
+    requestSize < MAX_GIF_SIZE
+    && imgHeight !== 0
+    && imgWidth !== 0
+    && imgHeight <= MAX_IMAGE_DIMENSION_SIZE
+    && imgWidth <= MAX_IMAGE_DIMENSION_SIZE
   );
 };

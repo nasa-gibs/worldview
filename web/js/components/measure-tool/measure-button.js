@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import googleTagManager from 'googleTagManager';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRuler } from '@fortawesome/free-solid-svg-icons';
 import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
-import googleTagManager from 'googleTagManager';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRuler } from '@fortawesome/free-solid-svg-icons';
 
 const MEASURE_MENU_PROPS = {
   headerText: null,
@@ -17,7 +17,7 @@ const MEASURE_MENU_PROPS = {
   backdrop: false,
   bodyComponent: MeasureMenu,
   touchDevice: false,
-  wrapClassName: 'toolbar_modal_outer'
+  wrapClassName: 'toolbar_modal_outer',
 };
 
 const mobileHelpMsg = 'Tap to add a point. Double-tap to complete.';
@@ -28,7 +28,7 @@ class MeasureButton extends React.Component {
     super(props);
     this.state = {
       showAlert: true,
-      isTouchDevice: false
+      isTouchDevice: false,
     };
     this.onButtonClick = this.onButtonClick.bind(this);
     this.dismissAlert = this.dismissAlert.bind(this);
@@ -43,10 +43,10 @@ class MeasureButton extends React.Component {
     openModal('MEASURE_MENU', MEASURE_MENU_PROPS);
     this.setState({
       isTouchDevice,
-      showAlert: true
+      showAlert: true,
     });
     googleTagManager.pushEvent({
-      event: 'measure_tool_activated'
+      event: 'measure_tool_activated',
     });
   }
 
@@ -60,14 +60,16 @@ class MeasureButton extends React.Component {
 
     return (
       <>
-        {showAlert && <AlertUtil
-          id={'measurement-alert'}
-          isOpen={true}
-          iconClassName='faRuler'
-          title='Measure Tool'
+        {showAlert && (
+        <AlertUtil
+          id="measurement-alert"
+          isOpen
+          iconClassName="faRuler"
+          title="Measure Tool"
           message={message}
           onDismiss={this.dismissAlert}
-        />}
+        />
+        )}
 
         <Button
           id="wv-measure-button"
@@ -76,30 +78,28 @@ class MeasureButton extends React.Component {
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
         >
-          <FontAwesomeIcon icon={faRuler} size='2x' />
+          <FontAwesomeIcon icon={faRuler} size="2x" />
         </Button>
       </>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    isActive: state.measure.isActive
-  };
-};
-const mapDispatchToProps = dispatch => ({
+const mapStateToProps = (state, ownProps) => ({
+  isActive: state.measure.isActive,
+});
+const mapDispatchToProps = (dispatch) => ({
   openModal: (key, customParams) => {
     dispatch(openCustomContent(key, customParams));
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MeasureButton);
 
 MeasureButton.propTypes = {
   isActive: PropTypes.bool,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
 };

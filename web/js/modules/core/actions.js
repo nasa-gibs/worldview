@@ -5,50 +5,49 @@ export function requestAction(
   mimeType,
   id,
   signal,
-  TIMEOUT_AMOUNT
+  TIMEOUT_AMOUNT,
 ) {
   // let didTimeOut = false;
   dispatch(startRequest(actionName, id));
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) =>
     // const timeout = setTimeout(function() {
     //   didTimeOut = true;
     //   dispatch(fetchTimeout(actionName, id));
     // }, TIMEOUT_AMOUNT);
-    return fetch(url, { signal })
-      .then(function(response) {
+    fetch(url, { signal })
+      .then((response) =>
         // clearTimeout(timeout);
         //  if (!didTimeOut) {
-        return mimeType === 'application/json'
+        (mimeType === 'application/json'
           ? response.json()
-          : response.text();
+          : response.text()),
         // }
-      })
-      .then(function(data) {
+      )
+      .then((data) => {
         // if (!didTimeOut) {
         dispatch(fetchSuccess(actionName, data, id));
         resolve(data);
         // }
       })
-      .catch(function(error) {
+      .catch((error) => {
         // if (didTimeOut) return;
         // clearTimeout(timeout);
         dispatch(fetchFailure(actionName, error, id));
         reject(error);
-      });
-  });
+      }));
 }
 export function startRequest(actionName, id) {
   return {
     type: `${actionName}_START`,
-    ...(!!id && { id })
+    ...!!id && { id },
   };
 }
 
 export function fetchSuccess(actionName, response, id) {
   return {
     type: `${actionName}_SUCCESS`,
-    response: response,
-    ...(!!id && { id })
+    response,
+    ...!!id && { id },
   };
 }
 // export function fetchTimeout(actionName, error, id) {
@@ -60,7 +59,7 @@ export function fetchSuccess(actionName, response, id) {
 export function fetchFailure(actionName, error, id) {
   return {
     type: `${actionName}_FAILURE`,
-    error: error,
-    ...(!!id && { id })
+    error,
+    ...!!id && { id },
   };
 }

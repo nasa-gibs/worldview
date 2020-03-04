@@ -1,12 +1,12 @@
-import util from '../util/util';
 import * as olProj from 'ol/proj';
 import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
+import util from '../util/util';
 
 export function mapModel(models, config) {
-  var self = {};
+  const self = {};
 
   self.extent = null;
   self.selectedMap = null;
@@ -18,7 +18,7 @@ export function mapModel(models, config) {
       return;
     }
 
-    Object.values(config.projections).forEach(proj => {
+    Object.values(config.projections).forEach((proj) => {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
       }
@@ -69,10 +69,10 @@ export function mapModel(models, config) {
   self.load = function(state, errors) {
     if (state.v) {
       const projId = state.p ? state.p : 'geographic';
-      var proj = config.projections[projId];
+      const proj = config.projections[projId];
       if (proj) {
-        var extent = state.v;
-        var maxExtent = proj.maxExtent;
+        const extent = state.v;
+        let { maxExtent } = proj;
 
         if (proj.id === 'geographic') {
           proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
@@ -82,12 +82,12 @@ export function mapModel(models, config) {
         } else {
           self.extent = lodashClone(proj.maxExtent);
           errors.push({
-            message: 'Extent outside of range'
+            message: 'Extent outside of range',
           });
         }
       } else {
         errors.push({
-          message: 'Projection does not exist'
+          message: 'Projection does not exist',
         });
       }
     }
@@ -116,9 +116,9 @@ export function mapModel(models, config) {
   self.save = function(state) {
     state.v = lodashClone(self.extent);
     if (
-      self.rotation !== 0.0 &&
-      self.rotation !== 0 &&
-      models.proj.selected.id !== 'geographic'
+      self.rotation !== 0.0
+      && self.rotation !== 0
+      && models.proj.selected.id !== 'geographic'
     ) {
       state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6);
     } // convert from radians to degrees

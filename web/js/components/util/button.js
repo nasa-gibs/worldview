@@ -10,14 +10,14 @@ export default class Button extends React.Component {
     return (
       <button
         onClick={this.props.onClick}
-        onMouseDown={e => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
         style={this.props.style}
         id={this.props.id}
         disabled={!this.props.valid}
         className={
           this.props.valid
-            ? 'wv-button ' + this.props.className
-            : 'wv-disabled wv-button ' + this.props.className
+            ? `wv-button ${this.props.className}`
+            : `wv-disabled wv-button ${this.props.className}`
         }
       >
         <span className="button-text">{this.props.text}</span>
@@ -30,7 +30,7 @@ Button.defaultProps = {
   className: 'gray',
   id: '',
   style: null,
-  valid: true
+  valid: true,
 };
 Button.propTypes = {
   className: PropTypes.string,
@@ -38,5 +38,5 @@ Button.propTypes = {
   onClick: PropTypes.func,
   style: PropTypes.object,
   text: PropTypes.string,
-  valid: PropTypes.bool
+  valid: PropTypes.bool,
 };

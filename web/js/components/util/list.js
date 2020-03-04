@@ -17,7 +17,7 @@ import {
   faRuler,
   faRulerCombined,
   faTrash,
-  faTruck
+  faTruck,
 } from '@fortawesome/free-solid-svg-icons';
 
 // icons used with List by passing string as prop iconClass
@@ -35,7 +35,7 @@ const listIcons = {
   faRuler,
   faRulerCombined,
   faTrash,
-  faTruck
+  faTruck,
 };
 
 /*
@@ -46,16 +46,17 @@ const listIcons = {
  */
 export default class List extends React.Component {
   render() {
-    const { list, listClass, active, disabled, onClick, size } = this.props;
+    const {
+      list, listClass, active, disabled, onClick, size,
+    } = this.props;
     return (
       <ListGroup className={listClass}>
-        {list.map(item => {
-          const iconName = item.iconName;
-          const iconClass = item.iconClass;
+        {list.map((item) => {
+          const { iconName } = item;
+          const { iconClass } = item;
           const isActive = item.key && active ? item.key === active : false;
-          const isDisabled =
-            item.key && disabled ? item.key === disabled : false;
-          const badge = item.badge;
+          const isDisabled = item.key && disabled ? item.key === disabled : false;
+          const { badge } = item;
           const className = item.className ? item.className : '';
           const tagType = item.href ? 'a' : 'button';
           return (
@@ -64,7 +65,7 @@ export default class List extends React.Component {
               tag={tagType}
               active={isActive}
               id={item.id || ''}
-              className={className + ' ' + size + '-item'}
+              className={`${className} ${size}-item`}
               href={item.href ? item.href : undefined}
               target={item.href ? '_blank' : undefined}
               onClick={
@@ -89,7 +90,7 @@ export default class List extends React.Component {
   }
 }
 List.defaultProps = {
-  size: 'medium'
+  size: 'medium',
 };
 List.propTypes = {
   active: PropTypes.string,
@@ -97,5 +98,5 @@ List.propTypes = {
   list: PropTypes.array,
   listClass: PropTypes.string,
   onClick: PropTypes.func,
-  size: PropTypes.string
+  size: PropTypes.string,
 };

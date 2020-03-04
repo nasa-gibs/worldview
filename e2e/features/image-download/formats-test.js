@@ -14,7 +14,7 @@ const startParams = [
 ];
 
 module.exports = {
-  after: function(client) {
+  after(client) {
     client.end();
   },
 

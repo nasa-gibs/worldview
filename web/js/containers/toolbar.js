@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ButtonToolbar, Button } from 'reactstrap';
+import { get as lodashGet, find as lodashFind } from 'lodash';
+import Promise from 'bluebird';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faShareSquare, faGlobeAsia, faCamera, faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { openCustomContent, onToggle } from '../modules/modal/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
@@ -11,23 +17,20 @@ import ErrorBoundary from './error-boundary';
 import { get as lodashGet, find as lodashFind, cloneDeep as lodashCloneDeep } from 'lodash';
 import {
   requestNotifications,
-  setNotifications
+  setNotifications,
 } from '../modules/notifications/actions';
 import {
   STATUS_REQUEST_URL,
-  REQUEST_NOTIFICATIONS
+  REQUEST_NOTIFICATIONS,
 } from '../modules/notifications/constants';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import { Notify } from '../components/image-download/notify';
-import Promise from 'bluebird';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareSquare, faGlobeAsia, faCamera, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 Promise.config({ cancellation: true });
 
@@ -38,7 +41,7 @@ const CUSTOM_MODAL_PROPS = {
     modalClassName: 'toolbar-list-modal toolbar-projection-modal toolbar-modal',
     backdrop: false,
     bodyComponent: Projection,
-    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer'
+    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
   },
   TOOLBAR_SHARE_LINK: {
     headerText: 'Copy Link to Share',
@@ -47,7 +50,7 @@ const CUSTOM_MODAL_PROPS = {
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
     clickableBehindModal: true,
     wrapClassName: 'toolbar_modal_outer',
-    bodyComponent: ShareLinks
+    bodyComponent: ShareLinks,
   },
   TOOLBAR_INFO: {
     headerText: null,
@@ -55,7 +58,7 @@ const CUSTOM_MODAL_PROPS = {
     type: 'toolbar',
     modalClassName: 'toolbar-list-modal toolbar-info-modal toolbar-modal',
     bodyComponent: InfoList,
-    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer'
+    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
   },
   TOOLBAR_SNAPSHOT: {
     headerText: 'Take a Snapshot',
@@ -65,8 +68,8 @@ const CUSTOM_MODAL_PROPS = {
     modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
     bodyComponent: ImageDownload,
     desktopOnly: true,
-    clickableBehindModal: true
-  }
+    clickableBehindModal: true,
+  },
 };
 class toolbarContainer extends Component {
   constructor(props) {
@@ -79,9 +82,8 @@ class toolbarContainer extends Component {
     const { notify } = this.props;
     if (bool) {
       return notify(type, action);
-    } else {
-      return Promise.resolve(type);
     }
+    return Promise.resolve(type);
   }
 
   openImageDownload() {
@@ -94,13 +96,13 @@ class toolbarContainer extends Component {
           isRotated,
           'rotate',
           clearRotate,
-          'Reset rotation'
+          'Reset rotation',
         ).then(() => {
           this.getPromise(
             hasGraticule,
             'graticule',
             clearGraticule,
-            'Remove Graticule?'
+            'Remove Graticule?',
           ).then(() => {
             openModal(
               'TOOLBAR_SNAPSHOT',
@@ -115,7 +117,7 @@ class toolbarContainer extends Component {
             );
           });
         });
-      }
+      },
     );
   }
 
@@ -126,13 +128,11 @@ class toolbarContainer extends Component {
         ? config.features.notification.url
         : STATUS_REQUEST_URL;
       if (config.parameters.mockAlerts) {
-        notificationURL =
-          'mock/notify_' + config.parameters.mockAlerts + '.json';
+        notificationURL = `mock/notify_${config.parameters.mockAlerts}.json`;
       } else if (config.parameters.notificationURL) {
         console.log('mock notificationURL');
-        notificationURL =
-          'https://status.earthdata.nasa.gov/api/v1/notifications?domain=' +
-          config.parameters.notificationURL;
+        notificationURL = `https://status.earthdata.nasa.gov/api/v1/notifications?domain=${
+          config.parameters.notificationURL}`;
       }
       requestNotifications(notificationURL);
     }
@@ -145,44 +145,39 @@ class toolbarContainer extends Component {
       notificationContentNumber,
       config,
       isImageDownloadActive,
-      isCompareActive
+      isCompareActive,
     } = this.props;
     const notificationClass = notificationType
-      ? ' wv-status-' + notificationType
+      ? ` wv-status-${notificationType}`
       : ' wv-status-hide';
     return (
       <ErrorBoundary>
-        <ButtonToolbar id="wv-toolbar" className={'wv-toolbar'}>
+        <ButtonToolbar id="wv-toolbar" className="wv-toolbar">
           <Button
             id="wv-link-button"
             className="wv-toolbar-button"
             title="Share this map"
-            onClick={() =>
-              openModal(
-                'TOOLBAR_SHARE_LINK',
-                CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK
-              )
-            }
+            onClick={() => openModal(
+              'TOOLBAR_SHARE_LINK',
+              CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK,
+            )}
           >
-            <FontAwesomeIcon icon={faShareSquare} size='2x' />
+            <FontAwesomeIcon icon={faShareSquare} size="2x" />
           </Button>
           {config.ui && config.ui.projections ? (
             <Button
               id="wv-proj-button"
               className="wv-toolbar-button"
               title="Switch projection"
-              onClick={() =>
-                openModal(
-                  'TOOLBAR_PROJECTION',
-                  CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION
-                )
-              }
+              onClick={() => openModal(
+                'TOOLBAR_PROJECTION',
+                CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
+              )}
             >
-              <FontAwesomeIcon icon={faGlobeAsia} size='2x' />
+              <FontAwesomeIcon icon={faGlobeAsia} size="2x" />
             </Button>
-          ) : (
-            ''
-          )}
+          )
+            : ''}
           <Button
             id="wv-image-button"
             className={
@@ -200,18 +195,16 @@ class toolbarContainer extends Component {
             }
             onClick={this.openImageDownload}
           >
-            <FontAwesomeIcon icon={faCamera} size='2x' />
+            <FontAwesomeIcon icon={faCamera} size="2x" />
           </Button>
           <Button
             id="wv-info-button"
             title="Information"
-            className={'wv-toolbar-button' + notificationClass}
-            onClick={() =>
-              openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)
-            }
+            className={`wv-toolbar-button${notificationClass}`}
+            onClick={() => openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)}
             data-content={notificationContentNumber}
           >
-            <FontAwesomeIcon icon={faInfoCircle} size='2x' />
+            <FontAwesomeIcon icon={faInfoCircle} size="2x" />
           </Button>
         </ButtonToolbar>
       </ErrorBoundary>
@@ -219,13 +212,15 @@ class toolbarContainer extends Component {
   }
 }
 function mapStateToProps(state) {
-  const { notifications, palettes, compare, map, layers, proj, data } = state;
+  const {
+    notifications, palettes, compare, map, layers, proj, data,
+  } = state;
   const { number, type } = notifications;
-  const activeString = compare.activeString;
+  const { activeString } = compare;
   const activeLayersForProj = getLayers(
     layers[activeString],
     { proj: proj.id },
-    state
+    state,
   );
   const isCompareActive = compare.active;
   const isDataDownloadActive = data.active;
@@ -237,26 +232,26 @@ function mapStateToProps(state) {
     rotation: map.rotation,
     activePalettes,
     isImageDownloadActive: Boolean(
-      lodashGet(state, 'map.ui.selected') &&
-      !isCompareActive &&
-      !isDataDownloadActive
+      lodashGet(state, 'map.ui.selected')
+      && !isCompareActive
+      && !isDataDownloadActive,
     ),
     isCompareActive,
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
-      activePalettes
+      activePalettes,
     ),
 
     isRotated: Boolean(map.rotation !== 0),
     hasGraticule: Boolean(
       lodashGet(
         lodashFind(layers[activeString], { id: 'Graticule' }) || {},
-        'visible'
-      )
-    )
+        'visible',
+      ),
+    ),
   };
 }
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule) => {
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
@@ -271,48 +266,46 @@ const mapDispatchToProps = dispatch => ({
   openModal: (key, customParams, actions) => {
     dispatch(openCustomContent(
       key,
-      customParams
+      customParams,
     ));
   },
-  notify: (type, action, title) => {
-    return new Promise((resolve, reject, cancel) => {
-      const bodyComponentProps = {
-        bodyText: notificationWarnings[type],
-        cancel: () => {
-          dispatch(onToggle());
-        },
-        accept: () => {
-          dispatch(action());
-          resolve();
-        }
-      };
-      dispatch(
-        openCustomContent('image_download_notify_' + type, {
-          headerText: 'Notify',
-          bodyComponent: Notify,
-          size: 'sm',
-          modalClassName: 'notify',
-          bodyComponentProps
-        })
-      );
-    });
-  },
-  requestNotifications: location => {
-    const promise = dispatch(
-      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json')
+  notify: (type, action, title) => new Promise((resolve, reject, cancel) => {
+    const bodyComponentProps = {
+      bodyText: notificationWarnings[type],
+      cancel: () => {
+        dispatch(onToggle());
+      },
+      accept: () => {
+        dispatch(action());
+        resolve();
+      },
+    };
+    dispatch(
+      openCustomContent(`image_download_notify_${type}`, {
+        headerText: 'Notify',
+        bodyComponent: Notify,
+        size: 'sm',
+        modalClassName: 'notify',
+        bodyComponentProps,
+      }),
     );
-    promise.then(data => {
+  }),
+  requestNotifications: (location) => {
+    const promise = dispatch(
+      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json'),
+    );
+    promise.then((data) => {
       const obj = JSON.parse(data);
       if (obj.notifications) {
         dispatch(setNotifications(obj.notifications));
       }
     });
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(toolbarContainer);
 
 toolbarContainer.propTypes = {
@@ -329,5 +322,5 @@ toolbarContainer.propTypes = {
   openModal: PropTypes.func,
   refreshStateAfterImageDownload: PropTypes.func,
   requestNotifications: PropTypes.func,
-  rotation: PropTypes.number
+  rotation: PropTypes.number,
 };

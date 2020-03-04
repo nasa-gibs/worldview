@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import util from '../../util/util';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import util from '../../util/util';
 
 class Event extends React.Component {
   constructor(props) {
@@ -25,11 +25,11 @@ class Event extends React.Component {
           style={!isSelected ? { display: 'none' } : { display: 'block' }}
         >
           {event.geometries.map((geometry, index) => {
-            var date = geometry.date.split('T')[0];
+            const date = geometry.date.split('T')[0];
             return (
-              <li key={event.id + '-' + date} className="dates">
+              <li key={`${event.id}-${date}`} className="dates">
                 <a
-                  onClick={e => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     this.onClick(date);
                   }}
@@ -61,7 +61,7 @@ class Event extends React.Component {
       event,
       deselectEvent,
       isSelected,
-      selectedDate
+      selectedDate,
     } = this.props;
     if (isSelected && (!date || date === selectedDate)) {
       deselectEvent();
@@ -70,8 +70,8 @@ class Event extends React.Component {
       googleTagManager.pushEvent({
         event: 'natural_event_selected',
         natural_events: {
-          category: event.categories[0].title
-        }
+          category: event.categories[0].title,
+        },
       });
     }
   }
@@ -87,9 +87,9 @@ class Event extends React.Component {
       ? event.sources
       : [event.sources];
     if (references.length > 0) {
-      return references.map(reference => {
+      return references.map((reference) => {
         const source = lodashFind(sources, {
-          id: reference.id
+          id: reference.id,
         });
         if (reference.url) {
           return (
@@ -98,18 +98,17 @@ class Event extends React.Component {
               rel="noopener noreferrer"
               className="natural-event-link"
               href={reference.url}
-              key={event.id + '-' + reference.id}
-              onClick={e => {
+              key={`${event.id}-${reference.id}`}
+              onClick={(e) => {
                 e.stopPropagation();
               }}
             >
               <FontAwesomeIcon icon={faExternalLinkAlt} />
-              {' ' + source.title}
+              {` ${source.title}`}
             </a>
           );
-        } else {
-          return source.title + ' ';
         }
+        return `${source.title} `;
       });
     }
   }
@@ -117,14 +116,13 @@ class Event extends React.Component {
   render() {
     const { event, isVisible, isSelected } = this.props;
     const eventDate = util.parseDateUTC(event.geometries[0].date);
-    var dateString =
-      util.giveWeekDay(eventDate) +
-      ', ' +
-      util.giveMonth(eventDate) +
-      ' ' +
-      eventDate.getUTCDate();
+    let dateString = `${util.giveWeekDay(eventDate)
+    }, ${
+      util.giveMonth(eventDate)
+    } ${
+      eventDate.getUTCDate()}`;
     if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
-      dateString += ', ' + eventDate.getUTCFullYear();
+      dateString += `, ${eventDate.getUTCFullYear()}`;
     }
     return (
       <li
@@ -135,20 +133,20 @@ class Event extends React.Component {
               ? 'selectorItem item'
               : 'selectorItem item hidden'
         }
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           this.onClick();
         }}
-        id={'sidebar-event-' + util.encodeId(event.id)}
+        id={`sidebar-event-${util.encodeId(event.id)}`}
       >
         <i
-          className={'event-icon event-icon-' + event.categories[0].slug}
+          className={`event-icon event-icon-${event.categories[0].slug}`}
           title={event.categories[0].title}
         />
         <h4
           className="title"
           dangerouslySetInnerHTML={{
-            __html: event.title + '<br />' + dateString
+            __html: `${event.title}<br />${dateString}`,
           }}
         />
         <p className="subtitle">{this.getReferenceList()}</p>
@@ -165,7 +163,7 @@ Event.propTypes = {
   isVisible: PropTypes.bool,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
-  sources: PropTypes.array
+  sources: PropTypes.array,
 };
 
 export default Event;

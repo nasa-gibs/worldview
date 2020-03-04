@@ -1,17 +1,17 @@
-import util from '../../util/util';
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
+import util from '../../util/util';
 
 export function serializeDate(date) {
   return (
-    date.toISOString().split('T')[0] +
-    '-' +
-    'T' +
-    date
-      .toISOString()
-      .split('T')[1]
-      .slice(0, -5) +
-    'Z'
+    `${date.toISOString().split('T')[0]
+    }-`
+    + `T${
+      date
+        .toISOString()
+        .split('T')[1]
+        .slice(0, -5)
+    }Z`
   );
 }
 
@@ -25,7 +25,7 @@ export function tryCatchDate(str, initialState) {
   try {
     return util.parseDateUTC(str);
   } catch (error) {
-    console.warn('Invalid date: ' + str);
+    console.warn(`Invalid date: ${str}`);
     return initialState;
   }
 }
@@ -39,8 +39,8 @@ export function tryCatchDate(str, initialState) {
  * @return {array}       An array of visible layers within the date.
  */
 export function getLayersActiveAtDate(layers, date) {
-  var arra = [];
-  lodashEach(layers, function(layer) {
+  const arra = [];
+  lodashEach(layers, (layer) => {
     if (layer.visible && layer.startDate && new Date(layer.startDate > date)) {
       arra.push(layer);
     }
@@ -59,7 +59,7 @@ export function mapLocationToDateState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   const appNow = get(state, 'date.appNow');
   // legacy time permalink
@@ -69,8 +69,8 @@ export function mapLocationToDateState(
     if (date && date !== appNow) {
       stateFromLocation = update(stateFromLocation, {
         date: {
-          selected: { $set: date }
-        }
+          selected: { $set: date },
+        },
       });
     }
   }

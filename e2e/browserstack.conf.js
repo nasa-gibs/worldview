@@ -1,5 +1,6 @@
-const environments = require('./environments.js');
 const glob = require('glob');
+const environments = require('./environments.js');
+
 const files = glob.sync('./e2e/features/**/*-test.js');
 const now = new Date();
 const timeStamp = `${now.getMonth() + 1}/${now.getDate()} @ ${now.getHours()}:${now.getMinutes()}`;
@@ -19,8 +20,8 @@ const nightwatchConfig = {
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
     'browserstack.local': true,
     'browserstack.debug': true,
-    'browserstack.localIdentifier': ('wvtester19234' + process.env.BROWSERSTACK_USER).replace(/[^a-zA-Z0-9]/g, ''),
-    build: 'wv-nightwatch-' + timeStamp,
+    'browserstack.localIdentifier': (`wvtester19234${process.env.BROWSERSTACK_USER}`).replace(/[^a-zA-Z0-9]/g, ''),
+    build: `wv-nightwatch-${timeStamp}`,
     applicationCacheEnabled: false,
     webStorageEnabled: false,
     marionette: true,
@@ -66,8 +67,8 @@ const nightwatchConfig = {
   }
 };
 
-environments.forEach(e => {
-  var env = [
+environments.forEach((e) => {
+  const env = [
     e.browser,
     e.browser_version,
     e.os,

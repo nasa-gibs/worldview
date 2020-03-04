@@ -18,7 +18,7 @@ module.exports = {
   'No visible notifications with mockAlert parameter set to no_types': function(
     client
   ) {
-    client.url(client.globals.url + mockParam + 'no_types');
+    client.url(`${client.globals.url + mockParam}no_types`);
     client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
       client.useCss().click(infoButtonIcon);
       client.pause(2000);
@@ -33,9 +33,9 @@ module.exports = {
   'Outage takes precedence when all three notifications are present': function(
     client
   ) {
-    client.url(client.globals.url + mockParam + 'all_types');
+    client.url(`${client.globals.url + mockParam}all_types`);
     client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
-      client.expect.element(infoButton + '.wv-status-outage').to.be.present;
+      client.expect.element(`${infoButton}.wv-status-outage`).to.be.present;
       client.useCss().click(infoButtonIcon);
       client.pause(2000);
       client.useCss().assert.containsText(infoMenu, 'Notifications');
@@ -50,19 +50,19 @@ module.exports = {
       client
         .useCss()
         .assert.containsText(
-          outageContentHightlighted + ' span',
+          `${outageContentHightlighted} span`,
           'Posted 20 May 2018'
         );
       client
         .useCss()
         .assert.containsText(
-          alertContentHightlighted + ' p',
+          `${alertContentHightlighted} p`,
           'learn how to visualize global satellite imagery'
         );
       client
         .useCss()
         .assert.containsText(
-          messageContentHightlighted + ' p',
+          `${messageContentHightlighted} p`,
           'This is a message test'
         );
     });
@@ -75,10 +75,10 @@ module.exports = {
       .click('#notification_list_modal .close')
       .pause(500);
     client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
-      client.expect.element(infoButton + '.wv-status-hide').to.be.present;
+      client.expect.element(`${infoButton}.wv-status-hide`).to.be.present;
     });
   },
-  after: function(client) {
+  after(client) {
     client.end();
   }
 };

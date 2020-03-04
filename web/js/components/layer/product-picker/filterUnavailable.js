@@ -12,14 +12,21 @@ const FilterUnavailable = (props) => {
   const {
     selectedDate,
     filterByAvailable,
-    toggleFilterByAvailable
+    toggleFilterByAvailable,
   } = props;
   const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
-  const tooltipContent =
+  const tooltipContent = (
     <div className="filter-tooltip">
-      When enabled, only show results available on the selected date: <br />
-      <div className="display-date"> {diplayDate} </div>
-    </div>;
+      When enabled, only show results available on the selected date:
+      {' '}
+      <br />
+      <div className="display-date">
+        {' '}
+        {diplayDate}
+        {' '}
+      </div>
+    </div>
+  );
 
   return (
     <Switch
@@ -27,15 +34,15 @@ const FilterUnavailable = (props) => {
       label="Hide unavailable"
       active={filterByAvailable}
       toggle={toggleFilterByAvailable}
-      tooltip={tooltipContent}>
-    </Switch>
+      tooltip={tooltipContent}
+    />
   );
 };
 
 FilterUnavailable.propTypes = {
   filterByAvailable: PropTypes.bool,
   selectedDate: PropTypes.object,
-  toggleFilterByAvailable: PropTypes.func
+  toggleFilterByAvailable: PropTypes.func,
 };
 
 export default FilterUnavailable;

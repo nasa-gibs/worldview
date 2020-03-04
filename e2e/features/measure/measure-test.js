@@ -15,7 +15,7 @@ const {
 } = localSelectors;
 
 module.exports = {
-  before: function(client) {
+  before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   'Clicking the measure button opens the menu': function(client) {
@@ -31,7 +31,8 @@ module.exports = {
     client.useCss().assert.cssProperty(
       sidebarContainer,
       'max-height',
-      '0px');
+      '0px'
+    );
     client.pause(300);
   },
   'Cancelling a measurement causes an alert to disappear and sidebar to expand': function(client) {
@@ -111,7 +112,7 @@ module.exports = {
       });
     }
   },
-  after: function(client) {
+  after(client) {
     client.end();
   }
 };

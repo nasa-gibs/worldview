@@ -7,7 +7,7 @@ class ModeSelection extends React.Component {
     super(props);
     this.state = {
       selected: props.selected,
-      loaded: false
+      loaded: false,
     };
   }
 
@@ -59,7 +59,7 @@ class ModeSelection extends React.Component {
 ModeSelection.propTypes = {
   isActive: PropTypes.bool,
   onclick: PropTypes.func,
-  selected: PropTypes.string
+  selected: PropTypes.string,
 };
 
 export default ModeSelection;

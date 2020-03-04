@@ -16,7 +16,7 @@ const startParams = [
 ];
 
 module.exports = {
-  after: function(client) {
+  after(client) {
     client.end();
   },
 
@@ -106,7 +106,7 @@ module.exports = {
   'Click download': function(c) {
     openImageDownloadPanel(c);
     clickDownload(c);
-    c.getAttribute('#wv-image-download-url', 'url', result => {
+    c.getAttribute('#wv-image-download-url', 'url', (result) => {
       // See if the bounding box here is reasonable. Should be centered
       // on 0,0 and not be wider than 0.1 degrees
       const matcher = /BBOX=([^,]+),([^,]+),([^,]+),([^&]+)/;

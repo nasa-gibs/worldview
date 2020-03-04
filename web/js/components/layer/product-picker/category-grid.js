@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CategoryCell from './category-cell';
 import lodashOrderBy from 'lodash/orderBy';
 import Masonry from 'react-masonry-component';
+import CategoryCell from './category-cell';
 
 /*
  * A scrollable list of layers
@@ -17,25 +17,24 @@ class CategoryGrid extends React.Component {
       drawMeasurements,
       hasMeasurementSource,
       categoryType,
-      width
+      width,
     } = this.props;
     const masonryOptions = {
       transitionDuration: '0.6s',
       columnWidth: width >= 630 ? 310 : width - 26,
-      gutter: 10
+      gutter: 10,
     };
-    categories.map(item => {
-      item.sortOrder =
-        item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
+    categories.map((item) => {
+      item.sortOrder = item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
     });
     const orderedCategories = lodashOrderBy(
       categories,
       ['sortOrder', 'title'],
-      ['asc']
+      ['asc'],
     );
     return (
       <Masonry className="category-masonry-case" options={masonryOptions}>
-        {orderedCategories.map(category => (
+        {orderedCategories.map((category) => (
           <CategoryCell
             key={category.id}
             category={category}
@@ -56,7 +55,7 @@ CategoryGrid.propTypes = {
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
   measurementConfig: PropTypes.object,
-  width: PropTypes.number
+  width: PropTypes.number,
 };
 
 export default CategoryGrid;

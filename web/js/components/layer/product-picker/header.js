@@ -8,13 +8,13 @@ import {
   BreadcrumbItem,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownMenu
+  DropdownMenu,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import LayerFilters from './layer-filters';
 import util from '../../../util/util';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 /*
  * A scrollable list of layers
@@ -25,7 +25,7 @@ class ProductPickerHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: props.inputValue
+      inputValue: props.inputValue,
     };
   }
 
@@ -60,16 +60,16 @@ class ProductPickerHeader extends React.Component {
       width,
       toggleFilterByAvailable,
       filterByAvailable,
-      isMobile
+      isMobile,
     } = this.props;
     const isSearching = listType === 'search';
     const categoryId = category && category.id;
-    const showBackButton = isSearching ||
-      (categoryId !== 'featured-all' &&
-      selectedProjection === 'geographic' &&
-      listType !== 'category');
+    const showBackButton = isSearching
+      || (categoryId !== 'featured-all'
+      && selectedProjection === 'geographic'
+      && listType !== 'category');
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
-    const BreadcrubEl =
+    const BreadcrubEl = (
       <Breadcrumb tag="nav" className="layer-bread-crumb">
         <BreadcrumbItem
           tag="a"
@@ -77,17 +77,19 @@ class ProductPickerHeader extends React.Component {
           href="#"
           onClick={this.revertToInitialScreen.bind(this)}
         >
-        Categories
+          Categories
         </BreadcrumbItem>
         <BreadcrumbItem active tag="span">
           {category && category.title}
         </BreadcrumbItem>
-      </Breadcrumb>;
+      </Breadcrumb>
+    );
 
     return (
       <>
         <InputGroup id="layer-search" className="layer-search">
-          {showBackButton &&
+          {showBackButton
+          && (
           <>
             <Button
               className="back-button"
@@ -98,8 +100,9 @@ class ProductPickerHeader extends React.Component {
             </Button>
             {isBreadCrumb && BreadcrubEl}
           </>
-          }
-          {isSearching && isMobile &&
+          )}
+          {isSearching && isMobile
+            && (
             <UncontrolledDropdown>
               <DropdownToggle className="filter-button" caret>
                 <FontAwesomeIcon icon={faFilter} />
@@ -112,14 +115,14 @@ class ProductPickerHeader extends React.Component {
                 />
               </DropdownMenu>
             </UncontrolledDropdown>
-          }
+            )}
 
           <Input
             onChange={this.handleChange.bind(this)}
             id="layers-search-input"
             value={this.state.inputValue}
             placeholder="Search"
-            innerRef={c => (this._input = c)}
+            innerRef={(c) => (this._input = c)}
             type="search"
             autoFocus={isAutoFocus}
           />
@@ -143,7 +146,7 @@ ProductPickerHeader.propTypes = {
   selectedProjection: PropTypes.string,
   toggleFilterByAvailable: PropTypes.func,
   updateListState: PropTypes.func,
-  width: PropTypes.number
+  width: PropTypes.number,
 };
 
 export default ProductPickerHeader;

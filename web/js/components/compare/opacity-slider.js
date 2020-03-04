@@ -18,7 +18,7 @@ class OpacitySlider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value
+      value: props.value,
     };
     this.debounceOpacityUpdate = lodashDebounce(this.onSlide.bind(this), 100);
   }
@@ -59,11 +59,11 @@ class OpacitySlider extends React.Component {
   }
 }
 OpacitySlider.defaultProps = {
-  value: 50
+  value: 50,
 };
 OpacitySlider.propTypes = {
   onSlide: PropTypes.func,
-  value: PropTypes.number
+  value: PropTypes.number,
 };
 
 export default OpacitySlider;

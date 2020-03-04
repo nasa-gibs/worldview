@@ -1,6 +1,7 @@
 const { assertCategories } = require('../../reuseables/layer-picker.js');
 
 const skipTour = require('../../reuseables/skip-tour.js');
+
 const layersSearchField = 'input#layers-search-input';
 const categoriesNav = '#categories-nav';
 const allCategoryHeader = '#legacy-all .layer-category-name';
@@ -36,7 +37,7 @@ const TIME_LIMIT = 10000;
 module.exports = {
   before: (client) => {
     skipTour.loadAndSkipTour(client, TIME_LIMIT);
-    client.url(client.globals.url + '?t=2013-05-15');
+    client.url(`${client.globals.url}?t=2013-05-15`);
   },
   'Layer picker shows categories when first opened': (client) => {
     client.click(addLayers);
@@ -212,7 +213,7 @@ module.exports = {
     client.click('#accordionTogglerButton');
   },
   'When no results returned due to filters, help text shows and user can click to remove all': (client) => {
-    client.url(client.globals.url + '?t=2020-2-14');
+    client.url(`${client.globals.url}?t=2020-2-14`);
     client.click(addLayers);
     client.waitForElementVisible(layersSearchField, TIME_LIMIT, (e) => {
       client.setValue(layersSearchField, 'grace');

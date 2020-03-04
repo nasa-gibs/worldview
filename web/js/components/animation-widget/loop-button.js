@@ -28,7 +28,7 @@ class LoopButton extends React.Component {
 
 LoopButton.propTypes = {
   looping: PropTypes.bool,
-  onLoop: PropTypes.func
+  onLoop: PropTypes.func,
 };
 
 export default LoopButton;

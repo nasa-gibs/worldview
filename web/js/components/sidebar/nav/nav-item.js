@@ -13,7 +13,7 @@ class CustomNavItem extends React.Component {
       onTabClick,
       id,
       iconClassName,
-      text
+      text,
     } = this.props;
     return (
       <NavItem
@@ -27,10 +27,10 @@ class CustomNavItem extends React.Component {
           disabled={isDisabled}
           title={title}
           className={className}
-          id={this.props.id + '-sidebar-tab'}
+          id={`${this.props.id}-sidebar-tab`}
           onClick={() => onTabClick(id)}
         >
-          <i className={'productsIcon selected ' + iconClassName} />
+          <i className={`productsIcon selected ${iconClassName}`} />
           {text}
         </NavLink>
       </NavItem>
@@ -47,7 +47,7 @@ CustomNavItem.propTypes = {
   onTabClick: PropTypes.func,
   shouldHideInMobile: PropTypes.bool,
   text: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
 };
 
 export default CustomNavItem;
