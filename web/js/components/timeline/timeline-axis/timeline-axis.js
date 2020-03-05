@@ -551,17 +551,15 @@ class TimelineAxis extends Component {
       if (!draggerCheck.withinRange) {
         this.updateScale(selectedDate, timeScale, 0.5);
       }
-    } else {
-      // handle dragger and potential axis updates
-      if (!isDraggerDragging) {
-        // handle A dragger change
-        if (draggerSelected === 'selected' || isCompareModeActive) {
-          this.handleDraggerUpdateCheck(dateA, prevProps.dateA, draggerTimeState, false);
-        }
-        // handle B dragger change
-        if (draggerSelected === 'selectedB' || isCompareModeActive) {
-          this.handleDraggerUpdateCheck(dateB, prevProps.dateB, draggerTimeStateB, true);
-        }
+    // handle dragger and potential axis updates
+    } else if (!isDraggerDragging) {
+      // handle A dragger change
+      if (draggerSelected === 'selected' || isCompareModeActive) {
+        this.handleDraggerUpdateCheck(dateA, prevProps.dateA, draggerTimeState, false);
+      }
+      // handle B dragger change
+      if (draggerSelected === 'selectedB' || isCompareModeActive) {
+        this.handleDraggerUpdateCheck(dateB, prevProps.dateB, draggerTimeStateB, true);
       }
     }
   }
@@ -1009,137 +1007,138 @@ class TimelineAxis extends Component {
         dragSentinelCount: dragSentinelCount + deltaX,
       });
       this.props.updatePositioning(updatePositioningArguments);
-    } else { // handle all timescale other than year and month
-      if (deltaX > 0) { // dragging right - exposing past dates
-        if (dragSentinelCount + deltaX > dragSentinelChangeNumber) {
-          // handle over drag the necessitates multiple axis updates
-          let overDrag = 0;
-          if (dragSentinelCount + deltaX > dragSentinelChangeNumber * 2) {
-            overDrag = Math.abs(dragSentinelCount + deltaX - dragSentinelChangeNumber * 2);
-          }
-          const {
-            currentTimeRange,
-            transformX,
-            draggerVisible,
-            draggerVisibleB,
-            overDragGrids,
-            newDraggerPosition,
-            newDraggerPositionB,
-          } = this.updateTimeRangeFromDrag(
-            position,
-            deltaX,
-            draggerPosition,
-            draggerPositionB,
-            overDrag,
-          );
-
-          const newDragSentinelCount = dragSentinelCount + deltaX - dragSentinelChangeNumber - overDragGrids * gridWidth;
-          const frontDate = currentTimeRange[0].rawDate;
-          const backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
-          const updatePositioningArguments = {
-            hasMoved: true,
-            isTimelineDragging: true,
-            position,
-            transformX,
-            frontDate,
-            backDate,
-            draggerPosition: newDraggerPosition,
-            draggerPositionB: newDraggerPositionB,
-            draggerVisible,
-            draggerVisibleB,
-            animationStartLocation,
-            animationEndLocation,
-          };
-          this.setState({
-            currentTimeRange,
-            dragSentinelCount: newDragSentinelCount,
-          });
-          this.props.updatePositioning(updatePositioningArguments);
-        } else {
-          // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
-          const newDragSentinelCount = dragSentinelCount < 0
-            ? dragSentinelChangeNumber + dragSentinelCount + deltaX
-            : dragSentinelCount + deltaX;
-
-          const updatePositioningArguments = {
-            hasMoved: true,
-            isTimelineDragging: true,
-            position,
-            draggerPosition,
-            draggerPositionB,
-            animationStartLocation,
-            animationEndLocation,
-          };
-          this.setState({
-            dragSentinelCount: newDragSentinelCount,
-          });
-          this.props.updatePositioningOnSimpleDrag(updatePositioningArguments);
+    // handle all timescale other than year and month
+    } else if (deltaX > 0) {
+      // dragging right - exposing past dates
+      if (dragSentinelCount + deltaX > dragSentinelChangeNumber) {
+        // handle over drag the necessitates multiple axis updates
+        let overDrag = 0;
+        if (dragSentinelCount + deltaX > dragSentinelChangeNumber * 2) {
+          overDrag = Math.abs(dragSentinelCount + deltaX - dragSentinelChangeNumber * 2);
         }
-      } else if (deltaX < 0) { // dragging left - exposing future dates
-        if (dragSentinelCount + deltaX < -dragSentinelChangeNumber) {
-          // handle over drag the necessitates multiple axis updates
-          let overDrag = 0;
-          if (dragSentinelCount + deltaX < -dragSentinelChangeNumber * 2) {
-            overDrag = Math.abs(dragSentinelCount + deltaX + dragSentinelChangeNumber * 2);
-          }
-          const {
-            currentTimeRange,
-            transformX,
-            draggerVisible,
-            draggerVisibleB,
-            overDragGrids,
-            newDraggerPosition,
-            newDraggerPositionB,
-          } = this.updateTimeRangeFromDrag(
-            position,
-            deltaX,
-            draggerPosition,
-            draggerPositionB,
-            overDrag,
-          );
+        const {
+          currentTimeRange,
+          transformX,
+          draggerVisible,
+          draggerVisibleB,
+          overDragGrids,
+          newDraggerPosition,
+          newDraggerPositionB,
+        } = this.updateTimeRangeFromDrag(
+          position,
+          deltaX,
+          draggerPosition,
+          draggerPositionB,
+          overDrag,
+        );
 
-          const newDragSentinelCount = dragSentinelCount + deltaX + dragSentinelChangeNumber + overDragGrids * gridWidth;
-          const frontDate = currentTimeRange[0].rawDate;
-          const backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
-          const updatePositioningArguments = {
-            hasMoved: true,
-            isTimelineDragging: true,
-            position,
-            transformX,
-            frontDate,
-            backDate,
-            draggerPosition: newDraggerPosition,
-            draggerPositionB: newDraggerPositionB,
-            draggerVisible,
-            draggerVisibleB,
-            animationStartLocation,
-            animationEndLocation,
-          };
-          this.setState({
-            currentTimeRange,
-            dragSentinelCount: newDragSentinelCount,
-          });
-          this.props.updatePositioning(updatePositioningArguments);
-        } else {
-          // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
-          const newDragSentinelCount = dragSentinelCount > 0
-            ? -dragSentinelChangeNumber + dragSentinelCount + deltaX
-            : dragSentinelCount + deltaX;
+        const newDragSentinelCount = dragSentinelCount + deltaX - dragSentinelChangeNumber - overDragGrids * gridWidth;
+        const frontDate = currentTimeRange[0].rawDate;
+        const backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
+        const updatePositioningArguments = {
+          hasMoved: true,
+          isTimelineDragging: true,
+          position,
+          transformX,
+          frontDate,
+          backDate,
+          draggerPosition: newDraggerPosition,
+          draggerPositionB: newDraggerPositionB,
+          draggerVisible,
+          draggerVisibleB,
+          animationStartLocation,
+          animationEndLocation,
+        };
+        this.setState({
+          currentTimeRange,
+          dragSentinelCount: newDragSentinelCount,
+        });
+        this.props.updatePositioning(updatePositioningArguments);
+      } else {
+        // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
+        const newDragSentinelCount = dragSentinelCount < 0
+          ? dragSentinelChangeNumber + dragSentinelCount + deltaX
+          : dragSentinelCount + deltaX;
 
-          const updatePositioningArguments = {
-            hasMoved: true,
-            isTimelineDragging: true,
-            position,
-            draggerPosition,
-            draggerPositionB,
-            animationStartLocation,
-            animationEndLocation,
-          };
-          this.setState({
-            dragSentinelCount: newDragSentinelCount,
-          });
-          this.props.updatePositioningOnSimpleDrag(updatePositioningArguments);
+        const updatePositioningArguments = {
+          hasMoved: true,
+          isTimelineDragging: true,
+          position,
+          draggerPosition,
+          draggerPositionB,
+          animationStartLocation,
+          animationEndLocation,
+        };
+        this.setState({
+          dragSentinelCount: newDragSentinelCount,
+        });
+        this.props.updatePositioningOnSimpleDrag(updatePositioningArguments);
+      }
+    } else if (deltaX < 0) {
+      // dragging left - exposing future dates
+      if (dragSentinelCount + deltaX < -dragSentinelChangeNumber) {
+        // handle over drag the necessitates multiple axis updates
+        let overDrag = 0;
+        if (dragSentinelCount + deltaX < -dragSentinelChangeNumber * 2) {
+          overDrag = Math.abs(dragSentinelCount + deltaX + dragSentinelChangeNumber * 2);
         }
+        const {
+          currentTimeRange,
+          transformX,
+          draggerVisible,
+          draggerVisibleB,
+          overDragGrids,
+          newDraggerPosition,
+          newDraggerPositionB,
+        } = this.updateTimeRangeFromDrag(
+          position,
+          deltaX,
+          draggerPosition,
+          draggerPositionB,
+          overDrag,
+        );
+
+        const newDragSentinelCount = dragSentinelCount + deltaX + dragSentinelChangeNumber + overDragGrids * gridWidth;
+        const frontDate = currentTimeRange[0].rawDate;
+        const backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
+        const updatePositioningArguments = {
+          hasMoved: true,
+          isTimelineDragging: true,
+          position,
+          transformX,
+          frontDate,
+          backDate,
+          draggerPosition: newDraggerPosition,
+          draggerPositionB: newDraggerPositionB,
+          draggerVisible,
+          draggerVisibleB,
+          animationStartLocation,
+          animationEndLocation,
+        };
+        this.setState({
+          currentTimeRange,
+          dragSentinelCount: newDragSentinelCount,
+        });
+        this.props.updatePositioning(updatePositioningArguments);
+      } else {
+        // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
+        const newDragSentinelCount = dragSentinelCount > 0
+          ? -dragSentinelChangeNumber + dragSentinelCount + deltaX
+          : dragSentinelCount + deltaX;
+
+        const updatePositioningArguments = {
+          hasMoved: true,
+          isTimelineDragging: true,
+          position,
+          draggerPosition,
+          draggerPositionB,
+          animationStartLocation,
+          animationEndLocation,
+        };
+        this.setState({
+          dragSentinelCount: newDragSentinelCount,
+        });
+        this.props.updatePositioningOnSimpleDrag(updatePositioningArguments);
       }
     }
   }

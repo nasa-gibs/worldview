@@ -72,16 +72,12 @@ class DateSelector extends Component {
     } else {
       maxTab = 3;
     }
-    if (index > tab) {
+    if (index > tab && index > maxTab) {
       // past max tab
-      if (index > maxTab) {
-        nextTab = 1;
-      }
-    } else {
+      nextTab = 1;
+    } else if (index < 1) {
       // below min tab
-      if (index < 1) {
-        nextTab = maxTab;
-      }
+      nextTab = maxTab;
     }
     this.setState({
       tab: nextTab,
