@@ -119,22 +119,18 @@ class TimelineDraggerRange extends PureComponent {
       // stop dragger if reached end date
       if (endLocationDate >= timelineEndDate) {
         deltaX = 0;
-      } else {
-        // if end of timeline date is within view - rely on max
-        if (max.end) {
-          // timeline dragger dragged to max future of current viewable timeline
-          if (endLocation >= max.width || endLocation > max.width - deltaX) {
-            deltaX = 0;
-          }
-          // end of timeline date is not within view - rely on dates
-        } else {
-          // use buffer to start slowing down allowed deltaX to prevent overdrag
-          if (needDeltaThrottle) {
-            deltaX = Math.min(deltaX, Math.abs(timeUnitsTillEnd * 2));
-          }
+      // if end of timeline date is within view - rely on max
+      } else if (max.end) {
+        // timeline dragger dragged to max future of current viewable timeline
+        if (endLocation >= max.width || endLocation > max.width - deltaX) {
+          deltaX = 0;
         }
+        // end of timeline date is not within view - rely on dates
+      } else if (needDeltaThrottle) {
+        // use buffer to start slowing down allowed deltaX to prevent overdrag
+        deltaX = Math.min(deltaX, Math.abs(timeUnitsTillEnd * 2));
       }
-      // timeline dragger dragged into the past (to the left)
+    // timeline dragger dragged into the past (to the left)
     } else if (max.start) {
       // timeline dragger dragged to min past of current viewable timeline
       if (startLocation + deltaX - max.startOffset <= 0) {

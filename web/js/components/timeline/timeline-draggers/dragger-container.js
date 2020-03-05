@@ -197,13 +197,11 @@ class DraggerContainer extends PureComponent {
       // turn on compare mode
       if (isCompareModeActive) {
         setDraggerVisibility(true, true);
-      } else {
+      } else if (draggerSelected === 'selected') {
         // turn off compare mode
-        if (draggerSelected === 'selected') {
-          setDraggerVisibility(true, false);
-        } else {
-          setDraggerVisibility(false, true);
-        }
+        setDraggerVisibility(true, false);
+      } else {
+        setDraggerVisibility(false, true);
       }
     }
 
