@@ -106,7 +106,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "expose-loader": "^0.7.5",
     "express": "^4.17.1",
-    "fetch-mock": "^7.7.3",
+    "fetch-mock": "^9.1.0",
     "file-loader": "^5.0.2",
     "geckodriver": "^1.19.1",
     "glob": "^7.1.6",
