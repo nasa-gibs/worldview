@@ -9,6 +9,7 @@ export default class Button extends React.Component {
   render() {
     return (
       <button
+        type="button"
         onClick={this.props.onClick}
         onMouseDown={(e) => e.stopPropagation()}
         style={this.props.style}
