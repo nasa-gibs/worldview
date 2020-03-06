@@ -16,7 +16,7 @@ export default (function(self) {
    * @param {Exception} cause The exception object that caused the error
    */
   self.error = function() {
-    console.error.apply(console, arguments);
+    console.error(...arguments);
 
     self.notify(
       "<div class='error-header'>"

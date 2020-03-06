@@ -35,7 +35,7 @@ export function mapAnimate(config, ui, store) {
           if (complete) resolve();
           if (!complete) reject(new Error('Animation interrupted!'));
         });
-        view.animate.apply(view, args);
+        view.animate(...args);
       }).catch(() => {});
     };
     if (hasEndInView) {
