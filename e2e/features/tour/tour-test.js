@@ -13,7 +13,7 @@ module.exports = {
     client.waitForElementVisible('.tour-start', TIME_LIMIT, () => {
       client.click('.tour-box:first-child');
       client.waitForElementVisible('.tour-in-progress .step-total', 2000, () => {
-        client.getText('.tour-in-progress .step-total', (result) => { totalSteps = parseInt(result.value); })
+        client.getText('.tour-in-progress .step-total', (result) => { totalSteps = parseInt(result.value, 10); })
           .perform(() => {
             for (let i = 0; i < totalSteps; i++) {
               client.pause(500);

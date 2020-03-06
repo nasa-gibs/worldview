@@ -37,15 +37,17 @@ module.exports = {
       }
 
       function extend(destination, source) {
-        for (const property in source) { destination[property] = source[property]; }
+        Object.keys(source).forEach((property) => {
+          destination[property] = source[property];
+        });
         return destination;
       }
 
-      var eventMatchers = {
+      const eventMatchers = {
         HTMLEvents: /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
         MouseEvents: /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/,
       };
-      var defaultOptions = {
+      const defaultOptions = {
         pointerX: 0,
         pointerY: 0,
         button: 0,
