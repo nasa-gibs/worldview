@@ -143,7 +143,7 @@ export default (function() {
     const navigator = self.tests.navigator();
     const version = navigator.userAgent.match(/ Version\/([^ ]+)/);
     if (version) {
-      return parseInt(version[1].split('.')[0]);
+      return parseInt(version[1].split('.')[0], 10);
     }
   };
 
@@ -210,7 +210,7 @@ export default (function() {
     // that this regex is probably wrong.
     var version = navigator.userAgent.match(/MSIE ([\d\.]+)/); //eslint-disable-line
     if (version) {
-      return parseInt(version[1].split('.')[0]);
+      return parseInt(version[1].split('.')[0], 10);
     }
   };
 

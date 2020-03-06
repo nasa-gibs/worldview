@@ -337,13 +337,13 @@ export function dateRange(spec, activeLayers, config) {
         const dateType = futureTime.slice(-1);
         const dateInterval = futureTime.slice(0, -1);
         if (dateType === 'D') {
-          max.setDate(max.getDate() + parseInt(dateInterval));
+          max.setDate(max.getDate() + parseInt(dateInterval, 10));
           maxDates.push(new Date(max));
         } else if (dateType === 'M') {
-          max.setMonth(max.getMonth() + parseInt(dateInterval));
+          max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
           maxDates.push(new Date(max));
         } else if (dateType === 'Y') {
-          max.setYear(max.getYear() + parseInt(dateInterval));
+          max.setYear(max.getYear() + parseInt(dateInterval, 10));
           maxDates.push(new Date(max));
         }
       } else if (def.startDate && !def.endDate) {
