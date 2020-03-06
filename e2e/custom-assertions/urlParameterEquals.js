@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-redeclare
 const { URL } = require('url');
 
 exports.assertion = function(parameter, value) {
