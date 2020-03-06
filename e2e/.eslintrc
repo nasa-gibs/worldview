@@ -10,61 +10,48 @@
       "jsx": false
     }
   },
-  "extends": "standard",
+  "extends": "airbnb",
   "rules": {
-    "semi": [
+    // The following rules are cases where our base rules
+    // differed from AirBnB Style guide. Keeping for now.
+    "import/no-extraneous-dependencies": [
       "error",
-      "always"
-    ],
-    "object-curly-spacing": [
-      "warn",
-      "always"
-    ],
-  },
-  "overrides": [
-    {
-      "files": [
-        "*.js"
-      ],
-      "rules": {
-        "no-octal": "warn",
-        "no-unused-vars": "warn",
-        "no-undef": "warn",
-        "no-useless-escape": "warn",
-        "eqeqeq": "warn",
-        "padded-blocks": "warn",
-        "space-before-blocks": "warn",
-        "spaced-comment": "warn",
-        "no-multiple-empty-lines": "warn",
-        "operator-linebreak": "warn",
-        "comma-dangle": "warn",
-        "no-use-before-define": "warn",
-        "camelcase": "warn",
-        "no-extend-native": "warn",
-        "one-var": "warn",
-        "no-extra-parens": "warn",
-        "space-in-parens": "warn",
-        "space-infix-ops": "warn",
-        "no-multi-spaces": "warn",
-        "comma-spacing": "warn",
-        "yoda": "warn",
-        "no-useless-return": "warn",
-        "keyword-spacing": "warn",
-        "brace-style": "warn",
-        "func-call-spacing": "warn",
-        "no-return-assign": "warn",
-        "no-sequences": "warn",
-        "no-unused-expressions": "off",
-        "no-useless-call": "warn",
-        "no-trailing-spaces": "warn",
-        "standard/computed-property-even-spacing": "warn",
-        "space-before-function-paren": [
-          "error",
-          "never"
-        ],
-        "wrap-iife": "warn",
-        "new-cap": "warn"
+      {
+        "devDependencies": [
+          "*.js",
+          "**/*.js"
+        ]
       }
-    }
-  ]
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "none"
+      }
+    ],
+    "space-before-function-paren": [
+      "error",
+      "never"
+    ],
+    /* BEGIN Airbnb overrides
+      Rules below are overriding the Airbnb style guide rules in order to get existing code
+      to pass without having to fix hundreds of existing errors by hand.
+
+      For rules set to "off": consider setting to "warn" to identify non-compliance in new code
+      For rules set to "warn": consider removing to throw errors on existing and future code
+    */
+    "array-callback-return": "warn",
+    "prefer-destructuring": "warn",
+    "prefer-const": "warn",
+    "no-nested-ternary": "warn",
+    "no-shadow": "warn",
+    "no-use-before-define": "warn",
+    "prefer-rest-params": "warn",
+    "no-plusplus": "warn",
+    "no-param-reassign": "warn",
+    "no-multi-assign": "warn",
+    "no-unused-expressions": "off",
+    "max-len": "off"
+  }
 }

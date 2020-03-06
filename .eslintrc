@@ -24,82 +24,113 @@
     }
   },
   "rules": {
-    "semi": [
+    // The following rules are cases where our base rules
+    // differed from AirBnB Style guide. Keeping for now.
+    "no-unused-vars": [
       "error",
-      "always"
-    ],
-    "space-before-function-paren": "off",
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
-    "quotes": [
-      2,
-      "single",
       {
-        "avoidEscape": true
+        "vars": "all",
+        "args": "none"
+      }
+    ],
+    "camelcase": [
+      "error",
+      {
+        "allow": [
+          "^UNSAFE_"
+        ],
+        "properties": "never"
+      }
+    ],
+    "no-useless-call": "error",
+    "no-extra-parens": "error",
+    "space-before-function-paren": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "tasks/*.js",
+          "tasks/**/*.js",
+          "rpm/*.js",
+          "**/*test.js",
+          "**/*config.js",
+          "**/*conf.js"
+        ]
       }
     ]
   },
   "overrides": [
     {
       "files": [
-        "web/**/*.js",
-        "test/**/*.js"
+        "**/*.js"
       ],
       "rules": {
-        "no-octal": "error",
-        "no-unused-vars": "error",
-        "no-undef": "error",
-        "no-useless-escape": "error",
-        "eqeqeq": "error",
-        "padded-blocks": "error",
-        "space-before-blocks": "error",
-        "spaced-comment": "error",
-        "no-multiple-empty-lines": "error",
-        "operator-linebreak": "error",
-        "comma-dangle": "error",
-        "no-use-before-define": "error",
-        "camelcase": [
-          "error",
-          {
-            "allow": [
-              "^UNSAFE_"
-            ],
-            "properties": "never"
-          }
-        ],
-        "no-extend-native": "error",
-        "one-var": "error",
-        "no-extra-parens": "error",
-        "space-in-parens": "error",
-        "space-infix-ops": "error",
-        "no-multi-spaces": "error",
-        "comma-spacing": "error",
-        "yoda": "error",
-        "no-useless-return": "error",
-        "keyword-spacing": "error",
-        "brace-style": "error",
-        "func-call-spacing": "error",
-        "no-return-assign": "error",
-        "no-sequences": "error",
-        "no-unused-expressions": "error",
-        "no-useless-call": "error",
-        "no-trailing-spaces": "error",
-        "standard/computed-property-even-spacing": "error",
-        "space-before-function-paren": [
-          "error",
-          "never"
-        ],
-        "wrap-iife": "error",
-        "new-cap": "error",
-        "semi": [
-          "error",
-          "always"
-        ],
-        "react/no-danger": "warn",
-        "react/prop-types": "error",
-        "react/no-did-update-set-state": "warn",
+        /* BEGIN Airbnb overrides
+
+          Rules below are overriding the Airbnb style guide rules in order to get existing code
+          to pass without having to fix hundreds of existing errors by hand.
+
+          For rules set to "off": consider setting to "warn" to identify non-compliance in new code
+          For rules set to "warn": consider removing to throw errors on existing and future code
+        */
+
+        // Base rule overrides
+        "default-case": "warn",
+        "array-callback-return": "warn",
+        "no-nested-ternary": "warn",
+        "no-shadow": "warn",
+        "prefer-const": "warn",
+        "prefer-destructuring": "warn",
+
+        "no-unused-expressions": "off",
+        "no-restricted-syntax": "off",
+        "no-useless-concat": "off",
+        "class-methods-use-this": "off",
+        "max-len": "off",
+        "no-restricted-properties": "off",
+        "no-restricted-globals": "off",
+        "no-multi-assign": "off",
+        "consistent-return": "off",
+        "no-underscore-dangle": "off",
+        "vars-on-top": "off",
+        "func-names": "off",
+        "no-param-reassign": "off",
+        "no-use-before-define": "off",
+        "no-plusplus": "off",
+        "prefer-rest-params": "off",
+
+        // Import rules overrides
+        "import/prefer-default-export": "off",
+        "import/no-cycle": "off",
+        "import/no-unresolved": "off",
+
+        // Accesibility rules overrides
+        "jsx-a11y/no-noninteractive-tabindex": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off",
+        "jsx-a11y/anchor-has-content": "off",
+        "jsx-a11y/control-has-associated-label": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/alt-text": "off",
+        "jsx-a11y/mouse-events-have-key-events": "off",
+        "jsx-a11y/tabindex-no-positive": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+
+        // React rules overrides
+        "react/prefer-stateless-function": "off",
+        "react/sort-comp": "off",
+        "react/no-danger": "off",
+        "react/no-unused-state": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/no-access-state-in-setstate": "off",
+        "react/jsx-filename-extension": "off",
+        "react/no-unused-prop-types": "off",
+        "react/forbid-prop-types": "off",
+        "react/require-default-props": "off",
+        "react/destructuring-assignment": "off",
+        "react/jsx-no-bind": "off",
+        "react/no-array-index-key": "off",
         "react/no-render-return-value": "warn",
         "react/sort-prop-types": [
           "warn",
