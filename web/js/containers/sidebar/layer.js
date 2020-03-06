@@ -269,7 +269,6 @@ class Layer extends React.Component {
 
 Layer.defaultProps = {
   palette: {},
-  renderedLegend: false,
 };
 Layer.propTypes = {
   checkerBoardPattern: PropTypes.object,
