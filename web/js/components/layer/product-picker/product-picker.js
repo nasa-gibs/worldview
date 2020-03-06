@@ -31,7 +31,7 @@ import {
   hasMeasurementSource,
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
-import { availableAtDate } from '../../../modules/layers/util.js';
+import { availableAtDate } from '../../../modules/layers/util';
 import LayerMetadataDetail from './layer-metadata-detail';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {

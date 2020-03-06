@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import { dataModel } from './model';
 import { projectionModel } from '../projection/model';
 import { layersModel } from '../layers/model';

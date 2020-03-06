@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap, faMeteor } from '@fortawesome/free-solid-svg-icons';
-import util from '../../../util/util.js';
+import util from '../../../util/util';
 
 class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
