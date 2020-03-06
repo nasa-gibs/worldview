@@ -93,12 +93,12 @@ export const mapLocationToState = (state, location) => {
     );
 
     // one level deep merge of newState with defaultState
-    for (const key in stateFromLocation) {
+    Object.keys(stateFromLocation).forEach((key) => {
       const obj = lodashAssign({}, state[key], stateFromLocation[key]);
       stateFromLocation = update(stateFromLocation, {
         [key]: { $set: obj },
       });
-    }
+    });
     return update(state, { $merge: stateFromLocation });
   }
   const startTour = checkTourBuildTimestamp(state.config);
