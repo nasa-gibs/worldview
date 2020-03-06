@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
@@ -396,7 +397,11 @@ export function setDisabledSelector(
   const legend = getPalette(layerId, index, undefined, state);
   const oldDisabled = legend.disabled || [];
   const indexOf = oldDisabled.indexOf(classIndex);
-  indexOf !== -1 ? oldDisabled.splice(indexOf, 1) : oldDisabled.push(classIndex);
+  if (indexOf !== -1) {
+    oldDisabled.splice(indexOf, 1);
+  } else {
+    oldDisabled.push(classIndex);
+  }
   newPalettes = update(newPalettes, {
     [layerId]: {
       maps: {
