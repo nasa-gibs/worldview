@@ -855,9 +855,9 @@ export function mapui(models, config, store, ui) {
   };
 
   const toggleMeasurementUnits = (units) => {
-    for (const proj in measureTools) {
-      measureTools[proj].changeUnits(units);
-    }
+    Object.keys(measureTools).forEach((projection) => {
+      measureTools[projection].changeUnits(units);
+    });
   };
 
   /*

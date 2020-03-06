@@ -18,7 +18,7 @@ import {
   transformPolygonArc,
   getFormattedLength,
   getFormattedArea,
-} from './util.js';
+} from './util';
 import { toggleMeasureActive } from '../../modules/measure/actions';
 
 export function measure(map, mapUiEvents, store) {
@@ -176,13 +176,13 @@ export function measure(map, mapUiEvents, store) {
    * current settings of unit of measurement
    */
   function recalculateAllMeasurements() {
-    for (const id in allMeasureTooltips) {
+    Object.keys(allMeasureTooltips.forEach((id) => {
       const geomForTooltip = allGeometries[id];
       const tooltipElement = allMeasureTooltips[id].element.children[0];
       tooltipElement.innerHtml = setMeasurementTooltip(geomForTooltip, tooltipElement);
       geomForTooltip.changed();
       allMeasureTooltips[id].setOffset([0, -7]);
-    }
+    }));
   }
 
   /**
@@ -234,9 +234,9 @@ export function measure(map, mapUiEvents, store) {
    * Clear all existing measurements on the associated map
    */
   self.clearMeasurements = () => {
-    for (const id in allMeasureTooltips) {
+    Object.keys(allMeasureTooltips).forEach((id) => {
       map.removeOverlay(allMeasureTooltips[id]);
-    }
+    });
     allMeasureTooltips = {};
     allGeometries = {};
     terminateDraw();
