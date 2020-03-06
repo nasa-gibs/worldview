@@ -16,8 +16,8 @@ const makeLine = (msg) => console.log(`${'-'.repeat(66)}
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // Make get requests with URLs with node-fetch to check status codes and organize by errors and codes
-const organizeURLStatus = async (scrapedUrls) => {
-  const timeEstimate = (scrapedUrls.length * 1000 / 60000).toFixed(0);
+const organizeURLStatus = async(scrapedUrls) => {
+  const timeEstimate = ((scrapedUrls.length * 1000) / 60000).toFixed(0);
   makeLine(`Checking url status codes will take approximately ${timeEstimate} minutes...`);
   // Initiate status code check
   const results = await getUrlStatusCodeCollection(scrapedUrls);
@@ -35,7 +35,7 @@ const organizeURLStatus = async (scrapedUrls) => {
   });
 };
 
-const main = async () => {
+const main = async() => {
   makeLine('Starting by collecting urls to check...');
   // get natural event urls
   const naturalEventsUrls = await getNaturalEventsUrls();

@@ -15,6 +15,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 // environment dev flag
 const devMode = process.env.NODE_ENV !== 'production';
 const isDevServer = process.argv[1].indexOf('webpack-dev-server') !== -1;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const pluginSystem = [
   new CleanWebpackPlugin(),
@@ -42,7 +43,6 @@ if (isDevServer) {
 
 // conditionally required and add plugin bundle analzyer
 if (process.env.ANALYZE_MODE === 'true') {
-  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
 if (process.env.DEBUG === 'true') {
