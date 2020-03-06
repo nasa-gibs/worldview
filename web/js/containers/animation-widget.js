@@ -138,6 +138,8 @@ class AnimationWidget extends React.Component {
     // yet, try to keep it centered
     if (subdailyChange && !userHasMovedWidget) {
       const useWidth = subDailyMode ? subdailyWidgetWidth : widgetWidth;
+
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         widgetPosition: {
           x: (screenWidth / 2) - (useWidth / 2),

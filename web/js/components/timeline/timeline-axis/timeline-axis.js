@@ -510,6 +510,7 @@ class TimelineAxis extends Component {
         leftOffset = 0.8;
       }
       // add updateTimeScale flag to indicate showHover should not fire immediately
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         updatedTimeScale: true,
       });
