@@ -135,6 +135,7 @@ export function polyfill() {
    * Mobile device quirks.  This section is mostly overwriting things that jquery.mobile is adding
    */
   (function() {
+    let mobile = false;
     if (navigator.userAgent.match(/Android/i)
       || navigator.userAgent.match(/webOS/i)
       || navigator.userAgent.match(/iPhone/i)
@@ -143,7 +144,7 @@ export function polyfill() {
       || navigator.userAgent.match(/BlackBerry/i)
       || navigator.userAgent.match(/Windows Phone/i)
     ) {
-      var mobile = true;
+      mobile = true;
     }
 
     if (navigator.userAgent.indexOf('iPhone') !== -1 || navigator.userAgent.indexOf('Android') !== -1) {
