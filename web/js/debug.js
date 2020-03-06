@@ -3,7 +3,7 @@ import lodashIsNaN from 'lodash/isNaN';
 import lodashParseInt from 'lodash/parseInt';
 import util from './util/util';
 
-export var debug = (function() {
+export const debug = (function() {
   const parameters = util.fromQueryString(location.search);
   const self = {};
 
@@ -11,7 +11,7 @@ export var debug = (function() {
     if (parameters.loadDelay) {
       let delay;
       try {
-        delay = parseInt(parameters.loadDelay);
+        delay = parseInt(parameters.loadDelay, 10);
         self.loadDelay(delay);
       } catch (error) {
         console.warn(`Invalid load delay: ${delay}`);

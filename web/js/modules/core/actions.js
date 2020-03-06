@@ -9,32 +9,19 @@ export function requestAction(
 ) {
   // let didTimeOut = false;
   dispatch(startRequest(actionName, id));
-  return new Promise((resolve, reject) =>
-    // const timeout = setTimeout(function() {
-    //   didTimeOut = true;
-    //   dispatch(fetchTimeout(actionName, id));
-    // }, TIMEOUT_AMOUNT);
-    fetch(url, { signal })
-      .then((response) =>
-        // clearTimeout(timeout);
-        //  if (!didTimeOut) {
-        (mimeType === 'application/json'
-          ? response.json()
-          : response.text()),
-        // }
-      )
-      .then((data) => {
-        // if (!didTimeOut) {
-        dispatch(fetchSuccess(actionName, data, id));
-        resolve(data);
-        // }
-      })
-      .catch((error) => {
-        // if (didTimeOut) return;
-        // clearTimeout(timeout);
-        dispatch(fetchFailure(actionName, error, id));
-        reject(error);
-      }));
+  return new Promise((resolve, reject) => fetch(url, { signal })
+    .then((response) => (mimeType === 'application/json'
+      ? response.json()
+      : response.text()
+    ))
+    .then((data) => {
+      dispatch(fetchSuccess(actionName, data, id));
+      resolve(data);
+    })
+    .catch((error) => {
+      dispatch(fetchFailure(actionName, error, id));
+      reject(error);
+    }));
 }
 export function startRequest(actionName, id) {
   return {

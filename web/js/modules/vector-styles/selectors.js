@@ -73,7 +73,9 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
 
 export function setRange(layerId, props, index, palettes, state) {
   // Placeholder filter range function
-  return layerId, props, index, palettes, state;
+  return {
+    layerId, props, index, palettes, state,
+  };
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
