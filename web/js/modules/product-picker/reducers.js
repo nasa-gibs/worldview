@@ -34,10 +34,11 @@ export function productPickerReducer(state = productPickerState, action) {
       return { ...state, ...action.value };
     case UPDATE_LIST_SCROLL_TOP:
       return { ...state, listScrollTop: action.value };
-    case RESET_STATE:
-      var listType = projToListType[action.value];
-      var newState = { ...productPickerState, listType };
+    case RESET_STATE: {
+      const listType = projToListType[action.value];
+      const newState = { ...productPickerState, listType };
       return { ...state, ...newState };
+    }
     default:
       return state;
   }

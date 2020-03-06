@@ -81,7 +81,7 @@ export function getImageArray(
  * @returns {array} array of layer objects
  *
  */
-var getProducts = function(layers, date, state) {
+function getProducts(layers, date, state) {
   const layersArray = [];
   const products = getLayers(
     layers,
@@ -104,4 +104,4 @@ var getProducts = function(layers, date, state) {
     }
   });
   return layersArray;
-};
+}

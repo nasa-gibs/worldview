@@ -74,12 +74,12 @@ export function dataUi(store, ui, config) {
         return query();
     }
   };
-  var changeProjection = function() {
+  const changeProjection = function() {
     updateLayers();
     query();
     self.events.trigger('projectionUpdate');
   };
-  var updateLayers = function() {
+  const updateLayers = function() {
     const state = store.getState();
     const {
       layers, compare, proj, data,
@@ -98,7 +98,7 @@ export function dataUi(store, ui, config) {
       }
     });
   };
-  var query = function() {
+  const query = function() {
     const state = store.getState();
     const dataState = state.data;
     const { compare, layers, proj } = state;
@@ -156,7 +156,7 @@ export function dataUi(store, ui, config) {
     executeQuery(handler);
   };
 
-  var executeQuery = function(handler) {
+  const executeQuery = function(handler) {
     if (!queryExecuting) {
       try {
         queryExecuting = true;
@@ -208,12 +208,12 @@ export function dataUi(store, ui, config) {
       indicators.noneInView = uiIndicator.show('Zoom out or move map');
     }
   };
-  var updateSelection = function() {
+  const updateSelection = function() {
     if (downloadListPanel && downloadListPanel.visible()) {
       downloadListPanel.refresh();
     }
   };
-  var onActivate = self.onActivate = function() {
+  const onActivate = self.onActivate = function() {
     self.active = true;
     self.events.trigger('activate');
     if (!mapController) {
@@ -222,7 +222,7 @@ export function dataUi(store, ui, config) {
     query();
   };
 
-  var onDeactivate = function() {
+  const onDeactivate = function() {
     self.active = false;
     uiIndicator.hide(indicators);
     if (selectionListPanel) {
@@ -234,7 +234,7 @@ export function dataUi(store, ui, config) {
     mapController.dispose();
   };
 
-  var onQuery = function() {
+  const onQuery = function() {
     queryActive = true;
     indicators.query = uiIndicator.searching(indicators);
     if (selectionListPanel) {
@@ -245,7 +245,7 @@ export function dataUi(store, ui, config) {
     }
   };
 
-  var onQueryResults = function(results) {
+  const onQueryResults = function(results) {
     const dataState = store.getState().data;
     if (selectionListPanel) {
       selectionListPanel.hide();
@@ -265,7 +265,7 @@ export function dataUi(store, ui, config) {
     }
   };
 
-  var onQueryError = function(status, error) {
+  const onQueryError = function(status, error) {
     queryActive = false;
     uiIndicator.hide(indicators);
     if (status !== 'abort') {
@@ -276,7 +276,7 @@ export function dataUi(store, ui, config) {
     }
   };
 
-  var onQueryTimeout = function() {
+  const onQueryTimeout = function() {
     queryActive = false;
     uiIndicator.hide(indicators);
     wvui.notify(
@@ -330,7 +330,7 @@ const dataUiBulkDownloadPage = (function() {
       }
     };
     let checkCount = 0;
-    var timer = setInterval(() => {
+    const timer = setInterval(() => {
       checkCount++;
       if (loaded) {
         clearInterval(timer);
@@ -347,7 +347,7 @@ const dataUiBulkDownloadPage = (function() {
     }, 100);
   };
 
-  var fillPage = function(page, selection, type) {
+  const fillPage = function(page, selection, type) {
     const downloadLinks = [];
     const hosts = {};
     const indirectLinks = [];
@@ -420,7 +420,7 @@ const dataUiBulkDownloadPage = (function() {
   return ns;
 }());
 
-var dataUiDownloadListPanel = function(config, store) {
+const dataUiDownloadListPanel = function(config, store) {
   const NOTICE = `<div id='wv-data-selection-notice'>${
     faIconInfoCircleSVGDomEl
   }<p class='text'>`
@@ -499,7 +499,7 @@ var dataUiDownloadListPanel = function(config, store) {
     return false;
   };
 
-  var reformatSelection = function(dataState) {
+  const reformatSelection = function(dataState) {
     const selection = {};
 
     urs = false;
@@ -610,7 +610,7 @@ var dataUiDownloadListPanel = function(config, store) {
     return selection;
   };
 
-  var isBulkDownloadable = function() {
+  const isBulkDownloadable = function() {
     let result = false;
     $.each(selection, (index, product) => {
       if (!product.noBulkDownload) {
@@ -620,7 +620,7 @@ var dataUiDownloadListPanel = function(config, store) {
     return result;
   };
 
-  var reformatLink = function(link) {
+  const reformatLink = function(link) {
     // For title, take it if found, otherwise, use the basename of the URI
     let titleVal = link.title;
     if (!link.title) {
@@ -707,7 +707,7 @@ var dataUiDownloadListPanel = function(config, store) {
     return elements.join('\n');
   };
 
-  var bodyText = function() {
+  const bodyText = function() {
     const dataState = store.getState().data;
 
     if (lodashSize(dataState.selectedGranules) === 0) {
@@ -726,7 +726,7 @@ var dataUiDownloadListPanel = function(config, store) {
     return text;
   };
 
-  var bulkDownloadText = function() {
+  const bulkDownloadText = function() {
     const bulk = "<div class='bulk'>"
       + '<h5>Bulk Download</h5>'
       + "<ul class='BulkDownload'>"
@@ -741,28 +741,28 @@ var dataUiDownloadListPanel = function(config, store) {
     return bulk;
   };
 
-  var showWgetPage = function() {
+  const showWgetPage = function() {
     googleTagManager.pushEvent({
       event: 'data_download_list_wget',
     });
     dataUiBulkDownloadPage.show(selection, 'wget');
   };
 
-  var showCurlPage = function() {
+  const showCurlPage = function() {
     googleTagManager.pushEvent({
       event: 'data_download_list_curl',
     });
     dataUiBulkDownloadPage.show(selection, 'curl');
   };
 
-  var removeGranule = function() {
+  const removeGranule = function() {
     const id = $(this).attr('data-granule');
     const dataState = store.getState().data;
     store.dispatch(toggleGranule(dataState.selectedGranules[id]));
     onHoverOut.apply(this);
   };
 
-  var onHoverOver = function() {
+  const onHoverOver = function() {
     const dataState = store.getState().data;
     self.events.trigger(
       'hoverOver',
@@ -770,7 +770,7 @@ var dataUiDownloadListPanel = function(config, store) {
     );
   };
 
-  var onHoverOut = function() {
+  const onHoverOut = function() {
     const dataState = store.getState().data;
     self.events.trigger(
       'hoverOut',
@@ -781,7 +781,7 @@ var dataUiDownloadListPanel = function(config, store) {
   return self;
 };
 
-var dataUiSelectionListPanel = function(dataUi, results, store) {
+const dataUiSelectionListPanel = function(dataUi, results, store) {
   const self = {};
   const granules = {};
   let $dialog;
@@ -855,18 +855,18 @@ var dataUiSelectionListPanel = function(dataUi, results, store) {
     return text;
   };
 
-  var bodyText = function() {
+  const bodyText = function() {
     const elements = ["<div'>", '<table>', resultsText(), '</table>', '</div>'];
     const text = `${elements.join('\n')}<br/>`;
     return text;
   };
 
-  var toggleSelection = function() {
+  const toggleSelection = function() {
     const granule = granules[$(this).attr('value')];
     store.dispatch(toggleGranule(granule));
   };
 
-  var onGranuleUnselect = function(granule) {
+  const onGranuleUnselect = function(granule) {
     $(`#wv-data-list input[value='${granule.id}']`).removeAttr('checked');
   };
 

@@ -109,7 +109,7 @@ export function dataCmrGeometry(result) {
     return olPolygons[0];
   };
 
-  var initFromPolygons = function(cmrPolygons) {
+  const initFromPolygons = function(cmrPolygons) {
     $.each(cmrPolygons, (index, cmrPolygon) => {
       const rings = [];
       $.each(cmrPolygon, (index, cmrRing) => {
@@ -129,7 +129,7 @@ export function dataCmrGeometry(result) {
     });
   };
 
-  var initFromBoxes = function(cmrBoxes) {
+  const initFromBoxes = function(cmrBoxes) {
     $.each(cmrBoxes, (index, cmrBox) => {
       const ring = [];
       const fields = cmrBox.split(' ');
@@ -200,7 +200,7 @@ export function dataCmrMockClient(suffix, store) {
     return deferred.promise();
   };
 
-  var adjustResults = function(parameters, data) {
+  const adjustResults = function(parameters, data) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const day = state.date[activeDateStr];
     // Mock data was retrieved for Aug 6, 2013

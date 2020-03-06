@@ -79,11 +79,11 @@ export function hasMeasurementSetting(current, source, config, projId) {
   return hasSetting;
 }
 
-var decodeHtml = function(html) {
+function decodeHtml(html) {
   const txt = document.createElement('textarea');
   txt.innerHTML = html;
   return txt.value;
-};
+}
 
 /**
  * See if an array of layers has a subdaily

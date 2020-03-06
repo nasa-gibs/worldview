@@ -160,6 +160,8 @@ export function mapui(models, config, store, ui) {
         return toggleMeasurementUnits(action.value);
       case SELECT_DATE:
         return updateDate();
+      default:
+        break;
     }
   };
 
@@ -215,7 +217,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateProjection = function(start) {
+  function updateProjection(start) {
     const state = store.getState();
     const { proj } = state;
     if (self.selected) {
@@ -269,7 +271,7 @@ export function mapui(models, config, store, ui) {
     }
     updateExtent();
     onResize();
-  };
+  }
   /*
    * When page is resised set for mobile or desktop
    *
@@ -278,7 +280,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var onResize = function() {
+  function onResize() {
     const map = self.selected;
     if (map.small !== util.browser.small) {
       if (util.browser.small) {
@@ -291,7 +293,7 @@ export function mapui(models, config, store, ui) {
         $(`#${map.getTarget()} .select-wrapper`).show();
       }
     }
-  };
+  }
   /*
    * Hide Map
    *
@@ -302,9 +304,9 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var hideMap = function(map) {
+  function hideMap(map) {
     $(`#${map.getTarget()}`).hide();
-  };
+  }
   /*
    * Show Map
    *
@@ -315,9 +317,9 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var showMap = function(map) {
+  function showMap(map) {
     $(`#${map.getTarget()}`).show();
-  };
+  }
   /*
    * Remove Layers from map
    *
@@ -351,7 +353,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var reloadLayers = self.reloadLayers = function(map) {
+  const reloadLayers = self.reloadLayers = function(map) {
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -398,7 +400,7 @@ export function mapui(models, config, store, ui) {
    * Create a Layergroup given the date and layerGroups
    * @param {Array} arr | Array of date/layer group strings
    */
-  var getCompareLayerGroup = function(arr, layersState, projId, state) {
+  function getCompareLayerGroup(arr, layersState, projId, state) {
     return new OlLayerGroup({
       layers: getLayers(
         layersState[arr[0]],
@@ -419,7 +421,7 @@ export function mapui(models, config, store, ui) {
       group: arr[0],
       date: arr[1],
     });
-  };
+  }
   /*
    * Function called when layers need to be updated
    * e.g: can be the result of new data or another display
@@ -429,7 +431,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateLayerVisibilities = function() {
+  function updateLayerVisibilities() {
     const state = store.getState();
     let renderable;
     const layers = self.selected.getLayers();
@@ -484,7 +486,7 @@ export function mapui(models, config, store, ui) {
         updateGraticules(defs, group);
       }
     });
-  };
+  }
   /*
    * Sets new opacity to layer
    *
@@ -497,7 +499,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateOpacity = function(action) {
+  function updateOpacity(action) {
     const state = store.getState();
     const { layers, compare, proj } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
@@ -514,7 +516,7 @@ export function mapui(models, config, store, ui) {
       layer.setOpacity(action.opacity);
       updateLayerVisibilities();
     }
-  };
+  }
   /*
    *Initiates the adding of a layer or Graticule
    *
@@ -526,7 +528,7 @@ export function mapui(models, config, store, ui) {
    * @returns {void}
    */
 
-  var addLayer = function(def, date, activeLayers) {
+  function addLayer(def, date, activeLayers) {
     const state = store.getState();
     const { compare, layers, proj } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
@@ -559,7 +561,7 @@ export function mapui(models, config, store, ui) {
     updateLayerVisibilities();
 
     self.events.trigger('added-layer');
-  };
+  }
   /*
    *Initiates the adding of a layer or Graticule
    *
@@ -570,7 +572,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var removeLayer = function(action) {
+  function removeLayer(action) {
     const state = store.getState();
     const { compare, proj } = state;
     const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
@@ -588,7 +590,7 @@ export function mapui(models, config, store, ui) {
       }
     }
     updateLayerVisibilities();
-  };
+  }
 
   /*
    * Update layers for the correct Date
@@ -599,7 +601,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateDate = self.updateDate = function() {
+  const updateDate = self.updateDate = function() {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;
@@ -678,9 +680,9 @@ export function mapui(models, config, store, ui) {
    *
    * @todo Check if this function can be combined with updateLayerOrder
    */
-  var updateLookup = function(layerId) {
+  function updateLookup(layerId) {
     reloadLayers();
-  };
+  }
 
   /*
    * Get a layer object from id
@@ -693,7 +695,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {object} Layer object
    */
-  var findLayer = function(def, layerGroupStr) {
+  function findLayer(def, layerGroupStr) {
     const layers = self.selected.getLayers().getArray();
     let layer = lodashFind(layers, {
       wv: {
@@ -716,7 +718,7 @@ export function mapui(models, config, store, ui) {
       });
     }
     return layer;
-  };
+  }
 
   /*
    * Return an Index value for a layer in the OPenLayers layer array
@@ -729,7 +731,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {number} Index of layer in OpenLayers layer array
    */
-  var findLayerIndex = function(def, layerGroup) {
+  function findLayerIndex(def, layerGroup) {
     layerGroup = layerGroup || self.selected;
     const layers = layerGroup.getLayers().getArray();
 
@@ -739,7 +741,7 @@ export function mapui(models, config, store, ui) {
       },
     });
     return index;
-  };
+  }
 
   /*
    * Checks a layer's properties to deterimine if
@@ -754,11 +756,11 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {boolean}
    */
-  var isGraticule = function(def, proj) {
+  function isGraticule(def, proj) {
     return (
       def.projections[proj].type === 'graticule' || def.type === 'graticule'
     );
-  };
+  }
 
   /*
    * Adds a graticule to the OpenLayers Map
@@ -771,7 +773,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var addGraticule = function(opacity, groupStr) {
+  function addGraticule(opacity, groupStr) {
     groupStr = groupStr || 'active';
     opacity = opacity || 0.5;
     const graticule = self.selected[`graticule-${groupStr}`];
@@ -791,7 +793,7 @@ export function mapui(models, config, store, ui) {
       strokeStyle,
     });
     self[`graticule-${groupStr}-style`] = strokeStyle;
-  };
+  }
 
   /*
    * Adds a graticule to the OpenLayers Map
@@ -803,14 +805,14 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var removeGraticule = function(groupStr) {
+  function removeGraticule(groupStr) {
     groupStr = groupStr || 'active';
     const graticule = self.selected[`graticule-${groupStr}`];
     if (graticule) {
       graticule.setMap(null);
     }
     self.selected[`graticule-${groupStr}`] = null;
-  };
+  }
 
   const triggerExtent = lodashThrottle(
     () => {
@@ -831,13 +833,13 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateExtent = function() {
+  function updateExtent() {
     const map = self.selected;
     const view = map.getView();
     const extent = view.calculateExtent(map.getSize());
     store.dispatch({ type: 'MAP/UPDATE_MAP_EXTENT', extent });
     triggerExtent();
-  };
+  }
 
   const measureDistance = () => {
     const proj = self.selected.getView().getProjection().getCode();
@@ -872,7 +874,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {object} OpenLayers Map Object
    */
-  var createMap = function(proj, dateSelected) {
+  function createMap(proj, dateSelected) {
     const state = store.getState();
     const { date, compare } = state;
     const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
@@ -1001,7 +1003,7 @@ export function mapui(models, config, store, ui) {
     measureTools[proj.crs] = measure(map, self.events, store);
 
     return map;
-  };
+  }
   /*
    * Creates map zoom buttons
    *
@@ -1016,7 +1018,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var createZoomButtons = function(map, proj) {
+  function createZoomButtons(map, proj) {
     const $map = $(`#${map.getTarget()}`);
 
     const $zoomOut = $('<div></div>')
@@ -1077,11 +1079,12 @@ export function mapui(models, config, store, ui) {
       self.events.trigger('movestart');
     });
     onZoomChange();
-  };
-  var onRotate = function(val) {
+  }
+
+  function onRotate(val) {
     rotation.updateRotation(val);
     updateExtent();
-  };
+  }
   /*
    * Creates map events based on mouse position
    *
@@ -1098,7 +1101,7 @@ export function mapui(models, config, store, ui) {
    *
    * @todo move this component to another Location
    */
-  var createMousePosSel = function(map, proj) {
+  function createMousePosSel(map, proj) {
     let hoverThrottle;
 
     function onMouseMove(e) {
@@ -1146,7 +1149,7 @@ export function mapui(models, config, store, ui) {
         dataRunner.clearAll();
       })
       .mousemove(hoverThrottle = lodashThrottle(onMouseMove, 300));
-  };
+  }
 
   init();
   return self;

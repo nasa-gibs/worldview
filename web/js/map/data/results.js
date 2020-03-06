@@ -187,7 +187,7 @@ export function dataResultsConnectSwaths(projection, delta) {
     });
   };
 
-  var combineSwath = function(swath, delta) {
+  const combineSwath = function(swath, delta) {
     let combined = false;
 
     const maxDistance = projection === CRS_WGS_84 ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
@@ -239,7 +239,7 @@ export function dataResultsConnectSwaths(projection, delta) {
 
   // Connection is allowed as long as there is at least one path between
   // centroids that is less than the max distance
-  var connectionAllowed = function(g1, g2, maxDistance) {
+  const connectionAllowed = function(g1, g2, maxDistance) {
     const polys1 = mapToPolys(g1.geometry[projection]);
     const polys2 = mapToPolys(g2.geometry[projection]);
     let allowed = false;
@@ -256,7 +256,7 @@ export function dataResultsConnectSwaths(projection, delta) {
     return allowed;
   };
 
-  var roundTime = function(timeString) {
+  const roundTime = function(timeString) {
     return dataCmrRoundTime(timeString);
   };
 

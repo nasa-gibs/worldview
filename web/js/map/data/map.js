@@ -195,7 +195,7 @@ export function dataMap(store, maps, dataUi, ui) {
   };
   self.dispose = dispose;
 
-  var updateGranules = function(r) {
+  const updateGranules = function(r) {
     const dataState = store.getState().data;
     results = r;
     granules = r.granules;
@@ -211,7 +211,7 @@ export function dataMap(store, maps, dataUi, ui) {
     });
   };
 
-  var updateButtons = function() {
+  const updateButtons = function() {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
     buttonLayer.getSource().clear();
@@ -232,7 +232,7 @@ export function dataMap(store, maps, dataUi, ui) {
     buttonLayer.getSource().addFeatures(features);
   };
 
-  var updateSwaths = function() {
+  const updateSwaths = function() {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
     swathLayer.getSource().clear();
@@ -268,7 +268,7 @@ export function dataMap(store, maps, dataUi, ui) {
     swathLayer.getSource().addFeatures(features);
   };
 
-  var updateGrid = function() {
+  const updateGrid = function() {
     gridLayer.getSource().clear();
     const { grid } = results.meta;
     if (!grid) {
@@ -284,7 +284,7 @@ export function dataMap(store, maps, dataUi, ui) {
     gridLayer.getSource().addFeatures(features);
   };
 
-  var selectGranule = function(granule) {
+  const selectGranule = function(granule) {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
     if (!granule.feature) {
@@ -297,7 +297,7 @@ export function dataMap(store, maps, dataUi, ui) {
     selectedFeatures[granule.id] = select;
   };
 
-  var unselectGranule = function(granule) {
+  const unselectGranule = function(granule) {
     if (!granule.feature) {
       return;
     }
@@ -309,13 +309,13 @@ export function dataMap(store, maps, dataUi, ui) {
     }
   };
 
-  var updateProjection = function() {
+  const updateProjection = function() {
     dispose();
     map = maps.selected;
     create();
   };
 
-  var clear = function() {
+  const clear = function() {
     if (map) {
       swathLayer.getSource().clear();
       gridLayer.getSource().clear();
@@ -324,7 +324,7 @@ export function dataMap(store, maps, dataUi, ui) {
     }
   };
 
-  var hoverCheck = function(event) {
+  const hoverCheck = function(event) {
     const pixel = map.getEventPixel(event.originalEvent);
     let newFeature = null;
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
@@ -349,7 +349,7 @@ export function dataMap(store, maps, dataUi, ui) {
     hovering = newFeature;
   };
 
-  var clickCheck = function(event) {
+  const clickCheck = function(event) {
     const pixel = map.getEventPixel(event.originalEvent);
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
       if (feature.button) {
@@ -360,7 +360,7 @@ export function dataMap(store, maps, dataUi, ui) {
     });
   };
 
-  var hoverOver = function(feature) {
+  const hoverOver = function(feature) {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
     const { granule } = feature;
@@ -373,11 +373,11 @@ export function dataMap(store, maps, dataUi, ui) {
     hoverLayer.getSource().addFeature(hover);
   };
 
-  var hoverOut = function() {
+  const hoverOut = function() {
     hoverLayer.getSource().clear();
   };
 
-  var getButtonDimensions = function(feature) {
+  const getButtonDimensions = function(feature) {
     const zoom = map.getView().getZoom();
     // Minimum size of the button is 15 pixels
     const base = 12;

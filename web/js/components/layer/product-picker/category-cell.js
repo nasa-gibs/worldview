@@ -104,7 +104,7 @@ class CategoryCell extends React.Component {
     );
   }
 }
-var interestCssName = function(name) {
+const interestCssName = function(name) {
   if (name === 'hazards and disasters') {
     return 'legacy';
   }
