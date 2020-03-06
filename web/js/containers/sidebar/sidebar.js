@@ -180,6 +180,7 @@ class Sidebar extends React.Component {
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
             onClick={resetWorldview}
+            // eslint-disable-next-line no-return-assign
             ref={(iconElement) => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}
           />
@@ -239,6 +240,7 @@ class Sidebar extends React.Component {
                       : null}
                   </TabPane>
                   <footer
+                    // eslint-disable-next-line no-return-assign
                     ref={(footerElement) => (this.footerElement = footerElement)}
                   >
                     <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
