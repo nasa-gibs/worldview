@@ -39,11 +39,10 @@ export function separateByType(array) {
  * @param {object} obj - array
  * @returns {void}
  */
-var orderByDate = function(obj) {
+function orderByDate(obj) {
   obj.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
   return obj;
-};
+}
 /**
  * Checks to see if id or smaller #id is in localstorage
  * @function localStorageValueMatches
@@ -168,7 +167,7 @@ export function getNumberOfTypeNotSeen(type, arra) {
  * @param {object} obj - object from API array
  * @returns {void}
  */
-var objectAlreadySeen = function(obj) {
+function objectAlreadySeen(obj) {
   let fieldExists; let fieldValueMatches; let type; let
     idString;
 
@@ -182,4 +181,4 @@ var objectAlreadySeen = function(obj) {
   }
 
   return fieldValueMatches;
-};
+}

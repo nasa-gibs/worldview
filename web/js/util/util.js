@@ -595,48 +595,55 @@ export default (function(self) {
   self.rollRange = function(date, interval, minDate, maxDate) {
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth();
-    let first; let
-      last;
+    let first;
+    let last;
     switch (interval) {
-      case 'minute':
-        var firstMinute = new Date(Date.UTC(year, month, 1, 0, 0));
-        var lastMinute = new Date(Date.UTC(year, month, self.daysInMonth(date), 23, 59));
+      case 'minute': {
+        const firstMinute = new Date(Date.UTC(year, month, 1, 0, 0));
+        const lastMinute = new Date(Date.UTC(year, month, self.daysInMonth(date), 23, 59));
         first = new Date(Math.max(firstMinute, minDate))
           .getUTCMinutes();
         last = new Date(Math.min(lastMinute, maxDate))
           .getUTCMinutes();
         break;
-      case 'hour':
-        var firstHour = new Date(Date.UTC(year, month, 1, 0));
-        var lastHour = new Date(Date.UTC(year, month, self.daysInMonth(date), 23));
+      }
+      case 'hour': {
+        const firstHour = new Date(Date.UTC(year, month, 1, 0));
+        const lastHour = new Date(Date.UTC(year, month, self.daysInMonth(date), 23));
         first = new Date(Math.max(firstHour, minDate))
           .getUTCHours();
         last = new Date(Math.min(lastHour, maxDate))
           .getUTCHours();
         break;
-      case 'day':
-        var firstDay = new Date(Date.UTC(year, month, 1));
-        var lastDay = new Date(Date.UTC(year, month, self.daysInMonth(date)));
+      }
+      case 'day': {
+        const firstDay = new Date(Date.UTC(year, month, 1));
+        const lastDay = new Date(Date.UTC(year, month, self.daysInMonth(date)));
         first = new Date(Math.max(firstDay, minDate))
           .getUTCDate();
         last = new Date(Math.min(lastDay, maxDate))
           .getUTCDate();
         break;
-      case 'month':
-        var firstMonth = new Date(Date.UTC(year, 0, 1));
-        var lastMonth = new Date(Date.UTC(year, 11, 31));
+      }
+      case 'month': {
+        const firstMonth = new Date(Date.UTC(year, 0, 1));
+        const lastMonth = new Date(Date.UTC(year, 11, 31));
         first = new Date(Math.max(firstMonth, minDate))
           .getUTCMonth();
         last = new Date(Math.min(lastMonth, maxDate))
           .getUTCMonth();
         break;
-      case 'year':
-        var firstYear = self.minDate();
-        var lastYear = self.maxDate();
+      }
+      case 'year': {
+        const firstYear = self.minDate();
+        const lastYear = self.maxDate();
         first = new Date(Math.max(firstYear, minDate))
           .getUTCFullYear();
         last = new Date(Math.min(lastYear, maxDate))
           .getUTCFullYear();
+        break;
+      }
+      default:
         break;
     }
     return {
@@ -882,6 +889,7 @@ export default (function(self) {
     };
   };
   self.errorReport = function(errors) {
+    // eslint-disable-next-line no-unused-vars
     let layersRemoved = 0;
     lodashEach(errors, (error) => {
       const cause = error.cause ? `: ${error.cause}` : '';

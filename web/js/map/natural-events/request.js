@@ -21,7 +21,7 @@ export default function naturalEventsRequest(models, ui, config) {
     self.query();
   };
 
-  var onQueryResults = function() {
+  const onQueryResults = function() {
     if (model.data.sources && model.data.types && model.data.events) {
       self.querySuccessFlag = true;
 

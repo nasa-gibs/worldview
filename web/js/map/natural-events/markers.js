@@ -167,7 +167,7 @@ export default function markers(ui, store) {
     });
   };
 
-  var createPin = function(id, category, isSelected, title) {
+  const createPin = function(id, category, isSelected, title) {
     const overlayEl = document.createElement('div');
     const icon = document.createElement('i');
     overlayEl.className = 'marker';
@@ -183,7 +183,7 @@ export default function markers(ui, store) {
     });
   };
 
-  var createBoundingBox = function(coordinates) {
+  const createBoundingBox = function(coordinates) {
     const lightStroke = new OlStyleStyle({
       stroke: new OlStyleStroke({
         color: [255, 255, 255, 0.6],

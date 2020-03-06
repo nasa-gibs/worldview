@@ -393,7 +393,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     self.events.trigger('list-change', visibleListEvents, showListAllButton);
   };
 
-  var activateLayersForCategory = function(category) {
+  const activateLayersForCategory = function(category) {
     const state = store.getState();
     const { proj } = state;
     category = category || 'Default';
@@ -404,7 +404,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     store.dispatch(activateLayersForEventCategory(activeLayers));
   };
 
-  var zoomToEvent = function(event, date, rotation, isSameEventID) {
+  const zoomToEvent = function(event, date, rotation, isSameEventID) {
     const { proj } = store.getState();
     const category = event.categories[0].title;
     const zoom = isSameEventID

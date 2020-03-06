@@ -16,7 +16,7 @@ LookupImageTile.prototype.load = function() {
     this.state = OlTileState.LOADING;
     this.changed();
     const that = this;
-    var onImageLoad = function() {
+    const onImageLoad = function() {
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;

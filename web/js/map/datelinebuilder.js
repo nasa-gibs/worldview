@@ -89,7 +89,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
     });
     ui.events.on('last-action', subscribeToStore);
   };
-  var isGeoProjection = function() {
+  const isGeoProjection = function() {
     if (proj === 'geographic') {
       return true;
     }
@@ -164,7 +164,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {object} Object with tooltip state
    */
-  var getTextState = function(date, isLeft) {
+  const getTextState = function(date, isLeft) {
     const isCompareActive = models.compare && models.compare.active;
     const state = {
       dateLeft: !isCompareActive
@@ -191,7 +191,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateLineVisibility = function(boo) {
+  const updateLineVisibility = function(boo) {
     const state = {
       active: boo,
     };
@@ -209,7 +209,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var drawDatelines = function(map, date) {
+  const drawDatelines = function(map, date) {
     let height; let leftLineCase; let rightLineCase; let leftTextCase; let
       rightTextCase;
 
@@ -267,7 +267,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var onHover = function(pixels, overlay, lineX, tooltip) {
+  const onHover = function(pixels, overlay, lineX, tooltip) {
     let coords;
     coords = map.getCoordinateFromPixel(pixels);
     overlay.setPosition([lineX, coords[1]]);
@@ -287,7 +287,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var onMouseOut = function(tooltip) {
+  const onMouseOut = function(tooltip) {
     tooltip.setState({
       active: false,
     });
@@ -303,7 +303,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateDate = function(date) {
+  const updateDate = function(date) {
     const leftState = getTextState(date, true);
     const rightState = getTextState(util.dateAdd(date, 'day', -1), false);
     textLeft.setState(leftState);
@@ -320,7 +320,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var position = function(map) {
+  const position = function(map) {
     let extent;
     let top;
     let topY;
@@ -368,7 +368,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var update = function(dimensions) {
+  const update = function(dimensions) {
     const state = {
       height: dimensions[0],
     };
@@ -389,7 +389,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var drawOverlay = function(coordinate, el) {
+  const drawOverlay = function(coordinate, el) {
     const overlay = new OlOverlay({
       element: el,
       stopEvent: false,

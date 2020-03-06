@@ -55,7 +55,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {object} date Date of data to be displayed on the map.
    * @return {array}       An array of visible layers within the date.
    */
-  var getActiveLayersWithData = function(date) {
+  const getActiveLayersWithData = function(date) {
     let layers;
     const arra = [];
     layers = models.layers.get();
@@ -106,7 +106,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {array} extent2 Extent 2.
    * @return {array}         A new extent with intersecting points
    */
-  var getExtent = function(extent1, extent2) {
+  const getExtent = function(extent1, extent2) {
     return olExtent.getIntersection(extent1, extent2);
   };
 
@@ -121,7 +121,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {object} map        _ol_Map_ object
    * @return {object}            Promise.all
    */
-  var promiseLayerGroup = function(layer, viewState, pixelRatio, map) {
+  const promiseLayerGroup = function(layer, viewState, pixelRatio, map) {
     let extent;
     return new Promise((resolve, reject) => {
       let layers; let
@@ -158,7 +158,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
    * @return {object}            promise
    */
-  var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
+  const promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
     let renderer; let tileSource; let currentZ; let i; let tileGrid; let
       projection;
     return new Promise((resolve, reject) => {
@@ -188,7 +188,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
             projection,
           );
           tile.load();
-          var loader = function(e) {
+          const loader = function(e) {
             if (e.type === 'tileloadend') {
               --i;
               if (i === 0) {

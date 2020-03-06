@@ -116,7 +116,7 @@ export class Spy {
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
-var applyReverseLayerListeners = function(layer) {
+const applyReverseLayerListeners = function(layer) {
   layer.on('postcompose', inverseClip);
   bottomLayers.push(layer);
 };
@@ -124,7 +124,7 @@ var applyReverseLayerListeners = function(layer) {
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
  */
-var applyLayerListeners = function(layer) {
+const applyLayerListeners = function(layer) {
   layer.on('precompose', clip);
   layer.on('postcompose', restore);
   topLayers.push(layer);
@@ -133,7 +133,7 @@ var applyLayerListeners = function(layer) {
  * Clip everything but the circle
  * @param {Object} event | Event object
  */
-var inverseClip = function(event) {
+const inverseClip = function(event) {
   const ctx = event.context;
   const { pixelRatio } = event.frameState;
   ctx.save();
@@ -156,7 +156,7 @@ var inverseClip = function(event) {
 /**
  * Clip the circle of a layer so users can see through
  */
-var clip = function(event) {
+const clip = function(event) {
   const ctx = event.context;
   const { pixelRatio } = event.frameState;
   ctx.save();
@@ -175,7 +175,7 @@ var clip = function(event) {
   }
   ctx.clip();
 };
-var restore = function(event) {
+const restore = function(event) {
   const ctx = event.context;
   ctx.restore();
 };
@@ -183,7 +183,7 @@ var restore = function(event) {
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
  */
-var removeListenersFromLayers = function(layers) {
+const removeListenersFromLayers = function(layers) {
   lodashEach(layers, (layer) => {
     layer.un('precompose', clip);
     layer.un('postcompose', restore);
@@ -193,7 +193,7 @@ var removeListenersFromLayers = function(layers) {
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
  */
-var removeInverseListenersFromLayers = function(layers) {
+const removeInverseListenersFromLayers = function(layers) {
   lodashEach(layers, (layer) => {
     layer.un('precompose', inverseClip);
     layer.un('postcompose', restore);
@@ -205,7 +205,7 @@ var removeInverseListenersFromLayers = function(layers) {
  * @param {Object} map | OL Map Object
  * @param {Function} callback | Function that will apply event listeners to layer
  */
-var applyEventsToBaseLayers = function(layer, map, callback) {
+const applyEventsToBaseLayers = function(layer, map, callback) {
   const layers = layer.get('layers');
   if (layers) {
     lodashEach(layers.getArray(), (layer) => {

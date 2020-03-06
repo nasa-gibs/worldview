@@ -82,7 +82,7 @@ export function mapAnimate(config, ui, store) {
    * @param  {object} view     map view
    * @return {integer}          best zoom level for flight animation
    */
-  var getBestZoom = function(distance, start, end, view) {
+  const getBestZoom = function(distance, start, end, view) {
     const idealLength = 1500;
     const lines = [2, 3, 4, 5, 6, 7, 8].map((zoom) => ({
       zoom,

@@ -109,6 +109,7 @@ export function getCustomPalette(paletteId, customsPaletteConfig) {
   }
   return palette;
 }
+
 const useLookup = function(layerId, palettesObj, state) {
   let use = false;
   const active = palettesObj[layerId].maps;
@@ -135,11 +136,13 @@ const useLookup = function(layerId, palettesObj, state) {
   });
   return use;
 };
+
 // Looks up options/colormaps/layer.xml colormap entry
 export function getLookup(layerId, groupstr, state) {
   groupstr = groupstr || state.compare.activeString;
   return state.palettes[groupstr][layerId].lookup;
 }
+
 const updateLookup = function(layerId, palettesObj, state) {
   let newPalettes = palettesObj;
   if (!useLookup(layerId, newPalettes, state)) {
@@ -229,6 +232,7 @@ const updateLookup = function(layerId, palettesObj, state) {
   });
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
+
 const toggleLookup = function(layerId, palettesObj, state) {
   const newPalettes = palettesObj;
   if (!useLookup(layerId, newPalettes, state)) {
@@ -284,6 +288,7 @@ const toggleLookup = function(layerId, palettesObj, state) {
   });
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
+
 export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
   const { values } = getPalette(layerId, index, groupStr, state).entries;
@@ -302,6 +307,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   });
   return result;
 }
+
 export function setCustomSelector(layerId, paletteId, index, groupName, state) {
   const { config, palettes } = state;
   if (!config.layers[layerId]) {
@@ -317,6 +323,7 @@ export function setCustomSelector(layerId, paletteId, index, groupName, state) {
   palette.custom = paletteId;
   return updateLookup(layerId, newPalettes, state);
 }
+
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
@@ -338,10 +345,12 @@ export function getKey(layerId, groupStr, state) {
   }
   return keys.join(',');
 }
+
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   return state.palettes[group][layerId];
 }
+
 export function refreshDisabledSelector(
   layerId,
   disabled,
@@ -363,6 +372,7 @@ export function refreshDisabledSelector(
   });
   return toggleLookup(layerId, newPalettes, state);
 }
+
 export function initDisabledSelector(
   layerId,
   disabledStr,
@@ -386,6 +396,7 @@ export function initDisabledSelector(
   });
   return toggleLookup(layerId, newPalettes, state);
 }
+
 export function setDisabledSelector(
   layerId,
   classIndex,
@@ -415,6 +426,7 @@ export function setDisabledSelector(
   });
   return toggleLookup(layerId, newPalettes, state);
 }
+
 export function setRange(layerId, props, index, palettes, state) {
   let { min } = props;
   let { max } = props;
@@ -450,6 +462,7 @@ export function setRange(layerId, props, index, palettes, state) {
 
   return updateLookup(layerId, newPalettes, state);
 }
+
 export function clearCustomSelector(layerId, index, palettes, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   const active = palettes[layerId];
@@ -466,7 +479,8 @@ export function clearCustomSelector(layerId, index, palettes, state) {
   }); // remove custom key
   return updateLookup(layerId, newPalettes, state);
 }
-var prepare = function(layerId, palettesObj, state) {
+
+function prepare(layerId, palettesObj, state) {
   let newPalettes = lodashCloneDeep(palettesObj);
   if (!newPalettes[layerId]) newPalettes[layerId] = {};
   const active = newPalettes[layerId];
@@ -482,7 +496,8 @@ var prepare = function(layerId, palettesObj, state) {
     }
   });
   return newPalettes;
-};
+}
+
 export function isPaletteAllowed(layerId, config) {
   if (!isSupported()) {
     return false;

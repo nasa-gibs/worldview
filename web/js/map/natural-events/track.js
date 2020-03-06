@@ -172,7 +172,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
     self.trackDetails = newTrackDetails;
   };
 
-  var debounceTrackUpdate = lodashDebounce(() => {
+  const debounceTrackUpdate = lodashDebounce(() => {
     const selectedEvent = ui.naturalEvents.selected;
 
     if (!selectedEvent.id || !selectedEvent.date) {
@@ -295,7 +295,7 @@ const naturalEventsTrackLine = function(coordinateArray) {
  * @param  {Number} Width
  * @return {Object} OpenLayers Style Object
  */
-var getLineStyle = function(color, width) {
+const getLineStyle = function(color, width) {
   return new OlStyleStyle({
     stroke: new OlStyleStroke({
       color,
@@ -314,7 +314,7 @@ var getLineStyle = function(color, width) {
  * @param  {Function} callback date-change callback
  * @return {Object} Object with Track elements and info
  */
-var createTrack = function(proj, eventObj, map, selectedDate, callback) {
+const createTrack = function(proj, eventObj, map, selectedDate, callback) {
   const olTrackLineFeatures = [];
   let pointObject = {};
   const geoJSONPointsBeforeSelected = [];
@@ -406,7 +406,7 @@ var createTrack = function(proj, eventObj, map, selectedDate, callback) {
  * @param  {Array} pointOverlayArray
  * @return {void}
  */
-var removeOldPoints = function(map, pointOverlayArray) {
+const removeOldPoints = function(map, pointOverlayArray) {
   lodashEach(pointOverlayArray, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
       map.removeOverlay(pointOverlay);
@@ -421,7 +421,7 @@ var removeOldPoints = function(map, pointOverlayArray) {
  * @param  {Array} pointOverlayArray
  * @return {void}
  */
-var addPointOverlays = function(map, pointOverlayArray) {
+const addPointOverlays = function(map, pointOverlayArray) {
   lodashEach(pointOverlayArray, (pointOverlay) => {
     addOverlayIfIsVisible(map, pointOverlay);
   });
@@ -432,7 +432,7 @@ var addPointOverlays = function(map, pointOverlayArray) {
  * @param  {String} newDate
  * @return {void}
  */
-var updateSelection = function(newDate) {
+const updateSelection = function(newDate) {
   const oldSelectedPoint = document.getElementsByClassName(
     'track-marker-case-selected',
   )[0];
@@ -496,7 +496,7 @@ const createArrows = function(lineSegmentCoords, map) {
  * @param {Function} callback
  * @return {Object} Object Containing track info and elements
  */
-var addPoints = function(proj, clusters, map, selectedDate, callback) {
+const addPoints = function(proj, clusters, map, selectedDate, callback) {
   const overlays = [];
   const trackArray = [];
   lodashEach(clusters, (clusterPoint, index) => {

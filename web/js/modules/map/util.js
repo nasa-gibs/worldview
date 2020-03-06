@@ -205,9 +205,9 @@ export function calculateExtent(extent, viewportExtent) {
  * @param  {array} extent2 Extent 2.
  * @return {array}         A new extent with intersecting points
  */
-var getExtent = function(extent1, extent2) {
+function getExtent(extent1, extent2) {
   return olExtent.getIntersection(extent1, extent2);
-};
+}
 /**
  * Returns a promise of the layer tilegrid.
  *
@@ -218,9 +218,14 @@ var getExtent = function(extent1, extent2) {
  * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
  * @return {object}            promise
  */
-var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
-  let renderer; let tileSource; let currentZ; let i; let tileGrid; let
-    projection;
+function promiseTileLayer(layer, extent, viewState, pixelRatio) {
+  let renderer;
+  let tileSource;
+  let currentZ;
+  let i;
+  let tileGrid;
+  let projection;
+
   return new Promise((resolve, reject) => {
     if (!extent) {
       resolve('resolve tile layer');
@@ -252,7 +257,7 @@ var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
 
         if (tile.state === 2) resolve();
 
-        var loader = function(e) {
+        const loader = function(e) {
           if (e.type === 'tileloadend') {
             --i;
             if (i === 0) {
@@ -271,4 +276,4 @@ var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
       });
     }
   });
-};
+}
