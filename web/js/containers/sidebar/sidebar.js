@@ -317,10 +317,7 @@ export default connect(
   mapDispatchToProps,
 )(Sidebar);
 
-Sidebar.defaultProps = {
-  maxHeight: 700,
-  visibleEvents: {},
-};
+
 Sidebar.propTypes = {
   activeString: PropTypes.string,
   activeTab: PropTypes.string,

@@ -189,13 +189,10 @@ ImageResSelection.defaultProps = {
   fileType: 'image/jpeg',
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
-  height: '0',
-  imageSize: '0',
   isWorldfile: 'false',
   maxImageSize: '8200px x 8200px',
   resolution: '1',
   secondLabel: 'Format',
-  width: '0',
   worldFileOptions: true,
 };
 ImageResSelection.propTypes = {
