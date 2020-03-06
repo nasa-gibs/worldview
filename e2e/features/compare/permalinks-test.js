@@ -12,7 +12,7 @@ module.exports = {
    * date with given queryString
    */
   'Swipe mode and A|B state A are active and date is correct': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
     client.waitForElementVisible(
@@ -24,11 +24,11 @@ module.exports = {
         client
           .useCss()
           .assert.containsText(localSelectors.aTab, 'A: 2018-08-17');
-      }
+      },
     );
   },
   'Opacity mode and A|B state B are active and date is correct': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.opacityAndBIsActive);
     client.waitForElementVisible('#ab-slider-case', TIME_LIMIT, () => {
@@ -49,15 +49,15 @@ module.exports = {
    * Ensure that A|B state loads with correct layers given permalink
    */
   'A|B loaded with one only layer in A section -- Corrected Reflectance (True Color)': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
     client.waitForElementPresent(localSelectors.aTab, TIME_LIMIT, () => {
       client.expect.element(
-        '.ab-tabs-case .tab-pane.active ul#overlays .item'
+        '.ab-tabs-case .tab-pane.active ul#overlays .item',
       ).to.not.be.present;
       client.expect.element(
-        '#active-MODIS_Terra_CorrectedReflectance_TrueColor'
+        '#active-MODIS_Terra_CorrectedReflectance_TrueColor',
       ).to.be.visible;
     });
   },
@@ -65,24 +65,24 @@ module.exports = {
     client.click(localSelectors.bTab);
     client.waitForElementVisible('#activeB-Coastlines', TIME_LIMIT, () => {
       client.expect.element(
-        '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor.layer-hidden'
+        '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor.layer-hidden'
+        '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-Reference_Labels.layer-hidden'
+        '#activeB-Reference_Labels.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-Reference_Features.layer-hidden'
+        '#activeB-Reference_Features.layer-hidden',
       ).to.be.visible;
       client.expect.element('#activeB-Coastlines.layer-visible').to.be.visible;
       client.expect.element(
-        '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor.layer-visible'
+        '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor.layer-visible',
       ).to.be.visible;
     });
   },
   after(client) {
     client.end();
-  }
+  },
 };

@@ -8,11 +8,9 @@ const TIME_LIMIT = 10000;
 const listOfEvents = '#wv-events ul.map-item-list';
 const eventIcons = '.marker .event-icon';
 const firstEvent = '#wv-events ul.map-item-list .item:first-child h4';
-const selectedFirstEvent =
-  '#wv-events ul.map-item-list .item-selected:first-child h4';
+const selectedFirstEvent = '#wv-events ul.map-item-list .item-selected:first-child h4';
 const selectedMarker = '.marker-selected';
-const firstExternalEventLink =
-  '#wv-events ul.map-item-list .item:first-child .natural-event-link:first-child';
+const firstExternalEventLink = '#wv-events ul.map-item-list .item:first-child .natural-event-link:first-child';
 const trackMarker = '.track-marker';
 const layersTab = '#layers-sidebar-tab';
 
@@ -21,7 +19,7 @@ module.exports = {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   'Make sure that 4 fire layers are not present in layer list: use mock': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.mockEvents);
     client.waitForElementVisible(
@@ -36,7 +34,7 @@ module.exports = {
           .be.present;
         client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to
           .not.be.present;
-      }
+      },
     );
   },
   'Click fire event': function(client) {
@@ -54,11 +52,11 @@ module.exports = {
           .present;
         client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to.be
           .present;
-      }
+      },
     );
   },
   'Use Mock to make sure appropriate number of event markers are appended to map': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.mockEvents);
     client.waitForElementVisible(listOfEvents, TIME_LIMIT, () => {
@@ -70,7 +68,7 @@ module.exports = {
     client.waitForElementVisible(listOfEvents, TIME_LIMIT);
   },
   'Use Mock Ensure number of event track points is correct and event markers and tabs are not visible when layer tab is clicked': function(
-    client
+    client,
   ) {
     const globalSelectors = client.globals.selectors;
     client.click(firstEvent);
@@ -101,7 +99,7 @@ module.exports = {
       .assert.urlParameterEquals('e', true);
   },
   'Verify Events may not be visible at all times is visible ': function(
-    client
+    client,
   ) {
     const globalSelectors = client.globals.selectors;
     client.waitForElementVisible(
@@ -110,9 +108,9 @@ module.exports = {
       () => {
         client.assert.containsText(
           globalSelectors.notifyMessage,
-          'Events may not be visible at all times'
+          'Events may not be visible at all times',
         );
-      }
+      },
     );
   },
   'Clicking event notifcation opens explanation in dialog': function(client) {
@@ -121,7 +119,7 @@ module.exports = {
     client.click(globalSelectors.notifyMessage).pause(2000);
     client.assert.containsText(
       '#event_visibility_info .wv-data-unavailable-header',
-      'Why can’t I see an event?'
+      'Why can’t I see an event?',
     );
     client.click('#event_visibility_info .close').pause(2000);
     client.expect.element('#event_visibility_info').to.not.be.present;
@@ -145,5 +143,5 @@ module.exports = {
   },
   after(client) {
     client.end();
-  }
+  },
 };

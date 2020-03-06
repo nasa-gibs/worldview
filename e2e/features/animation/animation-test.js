@@ -31,7 +31,7 @@ module.exports = {
         client.useCss().assert.elementPresent('#wv-animation-widget .custom-interval-widget');
         client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', '1 DAY');
         client.useCss().assert.containsText('#timeline #current-interval', '1 DAY');
-      }
+      },
     );
   },
   /**
@@ -52,7 +52,7 @@ module.exports = {
             .moveToElement(
               '#wv-timeline-range-selector > g:nth-child(2) > rect',
               1,
-              1
+              1,
             )
             .mouseButtonDown(0)
             .moveToElement('.timeline-dragger', 0, 0)
@@ -63,7 +63,7 @@ module.exports = {
             this.assert.notEqual(startDay, newDay);
           });
         });
-      }
+      },
     );
   },
 
@@ -89,10 +89,10 @@ module.exports = {
         client.pause(1000);
         client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', '1 YEAR');
         client.useCss().assert.containsText('#timeline #current-interval', '1 YEAR');
-      }
+      },
     );
   },
   after(client) {
     client.end();
-  }
+  },
 };

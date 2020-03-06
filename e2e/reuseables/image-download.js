@@ -20,5 +20,5 @@ module.exports = {
     c.waitForElementVisible('.wv-image-button', TIME_LIMIT);
     c.click('.wv-image-button');
     c.pause(550);
-  }
+  },
 };

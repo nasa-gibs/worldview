@@ -2,7 +2,9 @@ module.exports = {
   customMouseEvent(client, selector, offsetX, offsetY, eventType) {
     eventType = eventType || 'dblclick';
     client.execute((obj) => {
-      const { eventType, selector, offsetX, offsetY } = obj;
+      const {
+        eventType, selector, offsetX, offsetY,
+      } = obj;
       const el = document.querySelector(selector || 'body');
       function simulate(element, eventName) {
         const options = extend(defaultOptions, arguments[2] || {});
@@ -41,7 +43,7 @@ module.exports = {
 
       var eventMatchers = {
         HTMLEvents: /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
-        MouseEvents: /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+        MouseEvents: /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/,
       };
       var defaultOptions = {
         pointerX: 0,
@@ -52,10 +54,12 @@ module.exports = {
         shiftKey: false,
         metaKey: false,
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       };
       return simulate(el, eventType, { pointerX: offsetX, pointerY: offsetY });
-    }, [{ eventType, selector, offsetX, offsetY }], (result) => {
+    }, [{
+      eventType, selector, offsetX, offsetY,
+    }], (result) => {
     });
-  }
+  },
 };

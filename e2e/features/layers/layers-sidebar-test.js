@@ -28,5 +28,5 @@ module.exports = {
   // TODO tests for orbit tracks toggle on/off
   after: (client) => {
     client.end();
-  }
+  },
 };

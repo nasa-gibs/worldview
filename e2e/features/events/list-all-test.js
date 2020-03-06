@@ -27,9 +27,9 @@ module.exports = {
             client.click('#events-footer-checkbox').pause(1000);
             client.expect.element('#sidebar-event-EONET_2703').to.not.be.visible;
             client.expect.element('ul#wv-eventscontent > li:nth-child(2)').to.not.be.visible;
-          }
+          },
         );
-      }
+      },
     );
   },
   'Show events that are not in view': function(client) {
@@ -40,5 +40,5 @@ module.exports = {
   },
   after(client) {
     client.end();
-  }
+  },
 };

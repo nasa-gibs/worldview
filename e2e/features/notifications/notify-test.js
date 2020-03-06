@@ -7,16 +7,13 @@ const infoMenu = '#toolbar_info';
 const giftListItem = '#toolbar_info li.gift';
 const boltListItem = '#toolbar_info li.bolt';
 const exclamationListItem = '#notifications_info_item .fa-exclamation-circle';
-const alertContentHightlighted =
-  '#notification_list_modal .alert-notification-item';
-const outageContentHightlighted =
-  '#notification_list_modal .outage-notification-item';
-const messageContentHightlighted =
-  '#notification_list_modal .message-notification-item';
+const alertContentHightlighted = '#notification_list_modal .alert-notification-item';
+const outageContentHightlighted = '#notification_list_modal .outage-notification-item';
+const messageContentHightlighted = '#notification_list_modal .message-notification-item';
 
 module.exports = {
   'No visible notifications with mockAlert parameter set to no_types': function(
-    client
+    client,
   ) {
     client.url(`${client.globals.url + mockParam}no_types`);
     client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
@@ -31,7 +28,7 @@ module.exports = {
     });
   },
   'Outage takes precedence when all three notifications are present': function(
-    client
+    client,
   ) {
     client.url(`${client.globals.url + mockParam}all_types`);
     client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
@@ -43,7 +40,7 @@ module.exports = {
     });
   },
   'alert, outage, and message content is highlighted and found in modal': function(
-    client
+    client,
   ) {
     client.useCss().click(exclamationListItem);
     client.waitForElementVisible(outageContentHightlighted, TIME_LIMIT, () => {
@@ -51,24 +48,24 @@ module.exports = {
         .useCss()
         .assert.containsText(
           `${outageContentHightlighted} span`,
-          'Posted 20 May 2018'
+          'Posted 20 May 2018',
         );
       client
         .useCss()
         .assert.containsText(
           `${alertContentHightlighted} p`,
-          'learn how to visualize global satellite imagery'
+          'learn how to visualize global satellite imagery',
         );
       client
         .useCss()
         .assert.containsText(
           `${messageContentHightlighted} p`,
-          'This is a message test'
+          'This is a message test',
         );
     });
   },
   'Verify that the user is only alerted if he has not already stored all items in localStorage': function(
-    client
+    client,
   ) {
     client
       .useCss()
@@ -80,5 +77,5 @@ module.exports = {
   },
   after(client) {
     client.end();
-  }
+  },
 };

@@ -6,13 +6,10 @@ const animationButtonCase = '#timeline-header .animate-button';
 const ImageDownloadButton = '#wv-image-button';
 const eventsTabButton = '#events-sidebar-tab';
 const dataDownloadTabButton = '#download-sidebar-tab';
-const ModisTruecolorLayerA =
-  '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
-const ModisTruecolorLayerB =
-  '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
+const ModisTruecolorLayerA = '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
+const ModisTruecolorLayerB = '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
 const toggleButton = '.toggleIconHolder .accordionToggler';
-const collapsedToggleButton =
-  '#productsHoldertoggleButtonHolder .accordionToggler';
+const collapsedToggleButton = '#productsHoldertoggleButtonHolder .accordionToggler';
 
 const TIME_LIMIT = 20000;
 module.exports = {
@@ -25,7 +22,7 @@ module.exports = {
     client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
   },
   'Animation, image download, data-download, and events are disabled when in A|B': function(
-    client
+    client,
   ) {
     // Verify Animation widget can't be clicked
 
@@ -38,7 +35,7 @@ module.exports = {
     client.assert.attributeContains(
       animationButtonCase,
       'title',
-      'Animation feature is deactivated when Compare feature is active'
+      'Animation feature is deactivated when Compare feature is active',
     );
     // Verify image download can't be clicked
     client.click(ImageDownloadButton);
@@ -48,7 +45,7 @@ module.exports = {
     client.assert.attributeContains(
       ImageDownloadButton,
       'title',
-      'You must exit comparison mode to use the snapshot feature'
+      'You must exit comparison mode to use the snapshot feature',
     );
     // Verify events can't be clicked
     client
@@ -60,7 +57,7 @@ module.exports = {
     client.assert.attributeContains(
       eventsTabButton,
       'title',
-      'You must exit comparison mode to use the natural events feature'
+      'You must exit comparison mode to use the natural events feature',
     );
     // Verify Data Download can't be clicked
     client
@@ -73,11 +70,11 @@ module.exports = {
     client.assert.attributeContains(
       dataDownloadTabButton,
       'title',
-      'You must exit comparison mode to download data'
+      'You must exit comparison mode to download data',
     );
   },
   'Removing layer removes correct layer from correct layer group': function(
-    client
+    client,
   ) {
     client.expect.element(ModisTruecolorLayerA).to.be.visible;
     client.click('#closeactiveMODIS_Terra_CorrectedReflectance_TrueColor');
@@ -91,7 +88,7 @@ module.exports = {
    * B state can layer list collapse
    */
   'Collapse layer list with B state and test label shows correct number of layers': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.spyAndBIsActive);
 
@@ -112,7 +109,7 @@ module.exports = {
    * that layer-sidebar inherits B state layers
    */
   'If you exit A|B with B selection active, the active state will then be the B state': function(
-    client
+    client,
   ) {
     client.expect.element('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor')
       .to.be.visible;
@@ -130,18 +127,18 @@ module.exports = {
       () => {
         client.expect.element('#activeB-Coastlines').to.be.visible;
         client.expect.element(
-          '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'
+          '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor',
         ).to.be.visible;
         client.expect.element(
-          '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor'
+          '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor',
         ).to.not.be.present;
         client.expect.element(
-          '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor'
+          '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor',
         ).to.not.be.present;
-      }
+      },
     );
   },
   after(client) {
     client.end();
-  }
+  },
 };

@@ -3,11 +3,11 @@ const { bookmark } = require('../../reuseables/bookmark');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload
+  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
-  'imageDownload='
+  'imageDownload=',
 ];
 
 module.exports = {
@@ -42,6 +42,6 @@ module.exports = {
     c.expect.element('#wv-image-download-url').to.have.attribute('url')
       .and.to.contain('TIME=2018-05-15');
     closeImageDownloadPanel(c);
-  }
+  },
 
 };

@@ -6,7 +6,7 @@ module.exports = {
   before(client) {
     normalizeViewport(client, 1000, 850);
     client.url(client.globals.url)
-      .execute(() => !(window.localStorage.getItem('hideTour')));
+      .execute(() => !window.localStorage.getItem('hideTour'));
   },
   'Verify that all tour modals are present when the page is loaded': function(client) {
     let totalSteps;
@@ -28,5 +28,5 @@ module.exports = {
 
   after(client) {
     client.end();
-  }
+  },
 };

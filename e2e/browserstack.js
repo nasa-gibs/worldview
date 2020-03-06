@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 /* eslint no-console: "off", camelcase: "off" */
 
-var Nightwatch = require('nightwatch');
-var browserstack = require('browserstack-local');
-var environments = require('./environments.js');
+const Nightwatch = require('nightwatch');
+const browserstack = require('browserstack-local');
+const environments = require('./environments.js');
 
-var bs_local;
+let bs_local;
 
-var environment_names = environments.map(
+const environment_names = environments.map(
   (e) => [
     e.browser,
     e.browser_version,
     e.os,
-    e.os_version
-  ].join('_').replace(/\./g, '-').replace(/ /g, '_')
+    e.os_version,
+  ].join('_').replace(/\./g, '-').replace(/ /g, '_'),
 );
 
 try {
@@ -24,8 +24,8 @@ try {
   Nightwatch.bs_local = bs_local = new browserstack.Local();
   bs_local.start({
     key: process.env.BROWSERSTACK_ACCESS_KEY,
-    localIdentifier: (`wvtester19234${process.env.BROWSERSTACK_USER}`).replace(/[^a-zA-Z0-9]/g, ''),
-    force: 'true' // if you want to kill existing ports
+    localIdentifier: `wvtester19234${process.env.BROWSERSTACK_USER}`.replace(/[^a-zA-Z0-9]/g, ''),
+    force: 'true', // if you want to kill existing ports
   }, (error) => {
     if (error) throw new Error(error);
     console.log('Connected. Running tests...');
