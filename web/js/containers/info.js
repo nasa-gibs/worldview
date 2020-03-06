@@ -92,7 +92,8 @@ class InfoList extends Component {
       },
       {
         text: 'Distraction Free',
-        iconClass: 'ui-icon far fa-eye fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faEye',
         id: 'distraction_free_info_item',
         onClick: () => {
           toggleDistractionFreeMode();
