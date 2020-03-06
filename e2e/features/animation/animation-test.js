@@ -4,19 +4,21 @@ const localQuerystrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 10000;
 module.exports = {
-  before(client) {
+  beforeEach(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   /**
    * Clicking the animation widget button
    * Opens the widget
    */
-  'Toggling Animation Mode': function(client) {
-    client.expect.element(localSelectors.animationWidget).to.not.be.present;
-    client.useCss().click(localSelectors.animationButton);
-    client.waitForElementVisible(localSelectors.animationWidget, TIME_LIMIT);
+  'Toggling Animation Mode': (client) => {
+    client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT, (el) => {
+      client.expect.element(localSelectors.animationWidget).to.not.be.present;
+      client.useCss().click(localSelectors.animationButton);
+      client.waitForElementVisible(localSelectors.animationWidget, TIME_LIMIT);
+    });
   },
-  'Opening custom interval widget': function(client) {
+  'Opening custom interval widget': (client) => {
     client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
     client.waitForElementVisible(
       localSelectors.animationButton,
@@ -38,7 +40,7 @@ module.exports = {
    * Moving the range selector updates the selected range
    * in the animation widget date selector
    */
-  'Changing date range of animation': function(client) {
+  'Changing date range of animation': (client) => {
     client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
     // Test Permalink opens widget
     client.waitForElementVisible(
@@ -58,9 +60,9 @@ module.exports = {
             .moveToElement('.timeline-dragger', 0, 0)
             .mouseButtonUp(0)
             .pause(2000);
-          client.getValue('#day-animation-widget-start', function(result) {
+          client.getValue('#day-animation-widget-start', (result) => {
             const newDay = result.value;
-            this.assert.notEqual(startDay, newDay);
+            client.assert.notEqual(startDay, newDay);
           });
         });
       },
@@ -70,7 +72,7 @@ module.exports = {
   /**
    * Changing animation time interval
    */
-  'Changing animation time interval': function(client) {
+  'Changing animation time interval': (client) => {
     // Can't use moveToElement twice with same elements
     // because of selenium catching.
     // Loading a different Url fixed the problem

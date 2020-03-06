@@ -176,13 +176,13 @@ export function measure(map, mapUiEvents, store) {
    * current settings of unit of measurement
    */
   function recalculateAllMeasurements() {
-    Object.keys(allMeasureTooltips.forEach((id) => {
+    Object.keys(allMeasureTooltips).forEach((id) => {
       const geomForTooltip = allGeometries[id];
       const tooltipElement = allMeasureTooltips[id].element.children[0];
       tooltipElement.innerHtml = setMeasurementTooltip(geomForTooltip, tooltipElement);
       geomForTooltip.changed();
       allMeasureTooltips[id].setOffset([0, -7]);
-    }));
+    });
   }
 
   /**

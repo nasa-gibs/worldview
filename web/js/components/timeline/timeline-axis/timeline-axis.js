@@ -94,7 +94,8 @@ class TimelineAxis extends Component {
 
     // this is the middle on the axis based on number of tiles determined from width of axis and gridwidth
     // this is used to determine position and also to "reset" position after an axis drag has stopped
-    const midPoint = numberOfVisibleTiles / (2 * gridWidth) - (gridWidth * gridNumber) / 2;
+    // eslint-disable-next-line no-mixed-operators
+    const midPoint = numberOfVisibleTiles / 2 * gridWidth - gridWidth * gridNumber / 2;
 
     // horizontal scroll will disable this, so use frontDate in that case
     let hoverTimeString = hoverTime || this.props.draggerTimeState;

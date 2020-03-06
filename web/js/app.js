@@ -6,6 +6,7 @@ import googleTagManager from 'googleTagManager';
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
 import util from './util/util';
+// eslint-disable-next-line import/no-named-as-default
 import MapInteractions from './containers/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';

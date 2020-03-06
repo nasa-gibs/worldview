@@ -183,6 +183,7 @@ export function datesinDateRanges(def, date) {
         if (dateArray.length > 0) {
           // prevent earlier dates from being added after later dates while building dateArray
           if (day < dateArray[dateArray.length - 1]) {
+            // eslint-disable-next-line no-continue
             continue;
           }
         }
