@@ -382,7 +382,7 @@ export function mapui(models, config, store, ui) {
         },
         state
       );
-      lodashEach(defs, def => {
+      lodashEach(defs, async def => {
         if (isGraticule(def, proj.id)) {
           addGraticule(def.opacity, layerGroupStr);
         } else {
@@ -397,7 +397,9 @@ export function mapui(models, config, store, ui) {
             geometry = state.layers.granuleLayers[layerGroupStr][proj.id][def.id].geometry;
           }
           const granuleLayerParam = { granuleDates, granuleCount, geometry };
-          map.addLayer(createLayer(def, {}, granuleLayerParam));
+          const createdLayer = await createLayer(def, {}, granuleLayerParam);
+          map.addLayer(createdLayer);
+          updateLayerVisibilities();
         }
       });
     } else {
@@ -414,8 +416,8 @@ export function mapui(models, config, store, ui) {
         map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state, granuleOptions));
       });
       compareMapUi.create(map, compareState.mode);
+      updateLayerVisibilities();
     }
-    updateLayerVisibilities();
   };
   /**
    * Create a Layergroup given the date and layerGroups
@@ -435,7 +437,7 @@ export function mapui(models, config, store, ui) {
           }
           return true;
         })
-        .map(def => {
+        .map(async def => {
           const granuleReset = granuleOptions && granuleOptions.reset === def.id;
           const previouslyCachedGranule = state.layers.granuleLayers[arr[0]][projId][def.id];
           let granuleDates;
@@ -447,13 +449,11 @@ export function mapui(models, config, store, ui) {
             geometry = previouslyCachedGranule.geometry;
           }
           const granuleLayerParam = { granuleDates, granuleCount, geometry };
-          console.log(granuleLayerParam)
-
-          //TODO: verify date is valid for granules
-          return createLayer(def, {
+          const createdLayer = await createLayer(def, {
             date: state.date[arr[1]],
             group: arr[0]
           }, granuleLayerParam);
+          return createdLayer;
         }),
       group: arr[0],
       date: arr[1]
@@ -625,7 +625,7 @@ export function mapui(models, config, store, ui) {
    * @returns {void}
    */
 
-  var addLayer = function(def, date, activeLayers) {
+  var addLayer = async function(def, date, activeLayers) {
     const state = store.getState();
     const { compare, layers, proj } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
@@ -640,6 +640,9 @@ export function mapui(models, config, store, ui) {
     var firstLayer = mapLayers[0];
     if (isGraticule(def, proj.id)) {
       addGraticule(def.opacity, activeLayerStr);
+
+      updateLayerVisibilities();
+      self.events.trigger('added-layer');
     } else {
       def.availableDates = datesinDateRanges(def, date, true);
       if (firstLayer && firstLayer.get('group') && firstLayer.get('granule') !== true) {
@@ -649,19 +652,22 @@ export function mapui(models, config, store, ui) {
           firstLayer.get('group') === activeLayerStr
             ? firstLayer
             : mapLayers[1];
-        const newLayer = createLayer(def, {
+        const newLayer = await createLayer(def, {
           date: date,
           group: activeLayerStr
         });
         activelayer.getLayers().insertAt(mapIndex, newLayer);
         compareMapUi.create(self.selected, compare.mode);
+
+        updateLayerVisibilities();
+        self.events.trigger('added-layer');
       } else {
-        self.selected.getLayers().insertAt(mapIndex, createLayer(def));
+        self.selected.getLayers().insertAt(mapIndex, await createLayer(def));
+
+        updateLayerVisibilities();
+        self.events.trigger('added-layer');
       }
     }
-    updateLayerVisibilities();
-
-    self.events.trigger('added-layer');
   };
   /*
    *Initiates the adding of a layer or Graticule
@@ -702,7 +708,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateDate = self.updateDate = function() {
+  var updateDate = self.updateDate = async function() {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;
@@ -726,7 +732,7 @@ export function mapui(models, config, store, ui) {
               : null;
       }
     }
-    lodashEach(activeLayers, function(def) {
+    await lodashEach(activeLayers, async function(def) {
       const layerName = def.layer || def.id;
 
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
@@ -738,7 +744,7 @@ export function mapui(models, config, store, ui) {
           const index = findLayerIndex(def, layerGroup);
           layerGroup.getLayers().setAt(
             index,
-            createLayer(def, {
+            await createLayer(def, {
               group: activeLayerStr,
               date: state.date[activeDate]
             })
@@ -748,7 +754,7 @@ export function mapui(models, config, store, ui) {
       } else {
         // layerGroups = self.selected.getLayers().getArray();
         const index = findLayerIndex(def);
-        self.selected.getLayers().setAt(index, createLayer(def));
+        self.selected.getLayers().setAt(index, await createLayer(def));
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         var vectorStyles = config.vectorStyles;
@@ -765,8 +771,8 @@ export function mapui(models, config, store, ui) {
         }
         setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
       }
+      updateLayerVisibilities();
     });
-    updateLayerVisibilities();
   };
 
   /*

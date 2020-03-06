@@ -189,6 +189,7 @@ class GranuleLayerDateList extends PureComponent {
       const date = entry.time_start.split('.')[0] + 'Z';
       const polygons = entry.polygons[0][0].split(' ');
 
+      // filter night granules
       // TODO: confirm reordering is correct
       const polygonReorder = [];
       for (let i = 0; i < polygons.length; i += 2) {
@@ -230,7 +231,6 @@ class GranuleLayerDateList extends PureComponent {
   }
 
   render() {
-    console.log(this.state, this.props)
     const { items, sorted } = this.state;
     const { def } = this.props;
     const maxNumItemsNoScrollNeeded = 8;
