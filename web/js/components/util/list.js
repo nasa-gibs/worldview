@@ -2,6 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem, Badge } from 'reactstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowCircleDown,
+  faArrowCircleUp,
+  faBolt,
+  faCircle,
+  faCode,
+  faEnvelope,
+  faExclamationCircle,
+  faFile,
+  faFlag,
+  faGift,
+  faRuler,
+  faRulerCombined,
+  faTrash,
+  faTruck
+} from '@fortawesome/free-solid-svg-icons';
+
+// icons used with List by passing string as prop iconClass
+const listIcons = {
+  faArrowCircleDown,
+  faArrowCircleUp,
+  faBolt,
+  faCircle,
+  faCode,
+  faEnvelope,
+  faExclamationCircle,
+  faFile,
+  faFlag,
+  faGift,
+  faRuler,
+  faRulerCombined,
+  faTrash,
+  faTruck
+};
+
 /*
  * A react reuseable list component
  *
@@ -14,6 +50,7 @@ export default class List extends React.Component {
     return (
       <ListGroup className={listClass}>
         {list.map(item => {
+          const iconName = item.iconName;
           const iconClass = item.iconClass;
           const isActive = item.key && active ? item.key === active : false;
           const isDisabled =
@@ -41,7 +78,7 @@ export default class List extends React.Component {
               }
               disabled={isDisabled}
             >
-              {iconClass ? <i className={iconClass} /> : ''}
+              {iconName ? <FontAwesomeIcon icon={listIcons[iconName]} className={iconClass} fixedWidth /> : ''}
               {item.text || ''}
               {badge ? <Badge pill>{item.badge}</Badge> : ''}
             </ListGroupItem>

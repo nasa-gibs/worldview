@@ -9,6 +9,9 @@ import {
 import { toggleCustomModal } from '../../../modules/date/actions';
 import { connect } from 'react-redux';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 /*
  * CustomIntervalSelectorWidget for Custom Interval Selector
  * group. It is a parent component of this group.
@@ -66,7 +69,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>
-        <i className="fa fa-times wv-close" onClick={closeModal}/>
+        <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={closeModal} />
       </div>
     );
   }

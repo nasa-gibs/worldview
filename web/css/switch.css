@@ -12,7 +12,7 @@
 }
 .react-switch-label-case {
   width: 80%;
-  .fa {
+  svg.svg-inline--fa {
     margin-left: 5px;
   }
 }

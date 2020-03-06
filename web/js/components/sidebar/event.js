@@ -4,6 +4,9 @@ import util from '../../util/util';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+
 class Event extends React.Component {
   constructor(props) {
     super(props);
@@ -100,7 +103,7 @@ class Event extends React.Component {
                 e.stopPropagation();
               }}
             >
-              <i className="fa fa-external-link-alt fa-1" />{' '}
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
               {' ' + source.title}
             </a>
           );

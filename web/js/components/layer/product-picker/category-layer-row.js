@@ -13,6 +13,9 @@ import {
 import MeasurementLayerRow from './measurement-layer-row';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronCircleDown, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
+
 /**
  * A single category result row
  * @class CategoryLayerRow
@@ -233,13 +236,10 @@ class CategoryLayerRow extends React.Component {
         >
           <h3>{measurement.title}</h3>
           {measurement.subtitle && <h5>{measurement.subtitle}</h5>}
-          <i
-            className={
-              isSelected
-                ? 'fa fa-chevron-circle-down arrow-icon'
-                : 'fa fa-chevron-circle-right arrow-icon'
-            }
-          />
+          {isSelected
+            ? <FontAwesomeIcon icon={faChevronCircleDown} className="arrow-icon" />
+            : <FontAwesomeIcon icon={faChevronCircleRight} className="arrow-icon" />
+          }
         </div>
         {isSelected ? this.renderContent() : ''}
       </div>

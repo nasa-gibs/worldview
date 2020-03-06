@@ -20,7 +20,6 @@ export default (function(self) {
 
     self.notify(
       "<div class='error-header'>" +
-        "<i class='error-icon fas fa-exclamation-triangle fa-3x'></i>" +
         'An unexpected error has occurred' +
         '</div>' +
         "<div class='error-body'>Please reload the page and try " +
@@ -69,44 +68,6 @@ export default (function(self) {
           callback();
         }
       });
-  };
-
-  self.alert = function(body, title, size, glyph, glyphType, closeFn) {
-    var $message = $('<span/>', { class: 'notify-message' });
-    glyphType = glyphType || 'fa';
-    var $icon = $('<i/>', {
-      class: glyphType + ' fa-' + glyph + ' fa-1x',
-      title: title
-    });
-    var $messageWrapper = $('<div/>')
-      .click(function() {
-        self.notify(body, title, size);
-      })
-      .append($icon)
-      .append($message);
-    var $close = $('<i/>', { class: 'fa fa-times fa-1x' }).click(closeFn);
-    var $alert = $('<div/>')
-      .append($close)
-      .append($messageWrapper)
-      .dialog({
-        autoOpen: false,
-        resizable: false,
-        height: 40,
-        width: 420,
-        draggable: false,
-        show: {
-          effect: 'fade',
-          duration: 400
-        },
-        hide: {
-          effect: 'fade',
-          duration: 200
-        },
-        dialogClass: 'no-titlebar notify-alert',
-        closeText: ''
-      });
-    $message.empty().append(title);
-    return $alert;
   };
 
   var getComponent = function(marker) {

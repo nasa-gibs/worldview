@@ -10,6 +10,8 @@ import {
 import { requestPalette } from '../../modules/palettes/actions';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSatellite } from '@fortawesome/free-solid-svg-icons';
 class OrbitTrack extends React.Component {
   getPaletteLegend = () => {
     const {
@@ -44,7 +46,7 @@ class OrbitTrack extends React.Component {
     return (
       <div className={containerClasses}>
         {hasPalette ? this.getPaletteLegend() : ''}
-        <i className='fa fa-satellite'/>
+        <FontAwesomeIcon icon={faSatellite} />
         <span className='wv-orbit-track-label'>
           {getOrbitTrackTitle(trackLayer)}
         </span>

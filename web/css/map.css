@@ -21,14 +21,15 @@
   pointer-events: none;
 }
 
-.wv-map-zoom.ui-button-click-prevent i {
+.wv-map-zoom.ui-button-click-prevent svg.svg-inline--fa {
   opacity: 0.4;
 }
 
-.wv-map-zoom i {
-  padding: 15px 14px;
+.wv-map-zoom svg.svg-inline--fa {
   display: block;
-  line-height: normal;
+  width: 40px;
+  padding: 14px;
+  height: 45px;
 }
 
 .wv-map-zoom:hover {

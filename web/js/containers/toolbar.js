@@ -26,6 +26,10 @@ import { Notify } from '../components/image-download/notify';
 import Promise from 'bluebird';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareSquare, faGlobeAsia, faCamera, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
 Promise.config({ cancellation: true });
 
 const CUSTOM_MODAL_PROPS = {
@@ -158,7 +162,7 @@ class toolbarContainer extends Component {
                   )
                 }
               >
-                <i className="fas fa-share-square fa-2x" />
+                <FontAwesomeIcon icon={faShareSquare} size='2x' />
               </Button>
               {config.ui && config.ui.projections ? (
                 <Button
@@ -172,7 +176,7 @@ class toolbarContainer extends Component {
                     )
                   }
                 >
-                  <i className="fas fa-globe-asia fa-2x" />{' '}
+                  <FontAwesomeIcon icon={faGlobeAsia} size='2x' />
                 </Button>
               ) : (
                 ''
@@ -194,7 +198,7 @@ class toolbarContainer extends Component {
                 }
                 onClick={this.openImageDownload}
               >
-                <i className="fa fa-camera fa-2x" />{' '}
+                <FontAwesomeIcon icon={faCamera} size='2x' />
               </Button>
             </React.Fragment>
           )}
@@ -207,7 +211,7 @@ class toolbarContainer extends Component {
             }
             data-content={notificationContentNumber}
           >
-            <i className="fa fa-info-circle fa-2x" />{' '}
+            <FontAwesomeIcon icon={faInfoCircle} size='2x' />
           </Button>
         </ButtonToolbar>
       </ErrorBoundary>

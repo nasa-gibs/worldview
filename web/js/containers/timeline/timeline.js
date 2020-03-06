@@ -1014,7 +1014,7 @@ class Timeline extends React.Component {
             <ErrorBoundary>
               {isSmallScreen
               /* Mobile Timeline Size */
-                ? <div id="timeline-header">
+                ? <div id="timeline-header" className="timeline-header-mobile">
                   <div id="date-selector-main">
                     <MobileDatePicker
                       date={selectedDate}
@@ -1045,7 +1045,7 @@ class Timeline extends React.Component {
                 /* Normal Timeline Size */
                 : <section id="timeline" className="timeline-inner clearfix">
                   <div id="timeline-header"
-                    className={hasSubdailyLayers ? 'subdaily' : ''}
+                    className={`timeline-header-desktop ${hasSubdailyLayers ? 'subdaily' : ''}`}
                   >
                     {/* Date Selector, Interval, Arrow Controls */}
                     <div id="date-selector-main">

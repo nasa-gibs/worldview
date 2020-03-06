@@ -1,36 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
+
 class Steps extends React.Component {
   render() {
+    const { currentStep, decreaseStep, incrementStep, totalSteps } = this.props;
     return (
       <div className="step-container">
         <a
           className={'step-previous'}
           aria-label="Previous"
-          onClick={this.props.decreaseStep}
+          onClick={decreaseStep}
         >
-          <i className="fa fa-arrow-circle-left" aria-hidden="true" />
+          <FontAwesomeIcon icon={faArrowCircleLeft} />
         </a>
         <div className="step-counter">
           <p>
-            Step <span className="step-current">{this.props.currentStep}</span>/
-            <span className="step-total">{this.props.totalSteps}</span>
+            Step <span className="step-current">{currentStep}</span>/
+            <span className="step-total">{totalSteps}</span>
           </p>
         </div>
         <a
           className="step-next"
           aria-label="Next"
-          onClick={this.props.incrementStep}
+          onClick={incrementStep}
         >
-          <i
-            className={
-              this.props.currentStep === this.props.totalSteps
-                ? 'fa fa-check-circle'
-                : 'fa fa-arrow-circle-right'
-            }
-            aria-hidden="true"
-          />
+          {currentStep === totalSteps
+            ? <FontAwesomeIcon icon={faCheckCircle} />
+            : <FontAwesomeIcon icon={faArrowCircleRight} />
+          }
         </a>
       </div>
     );

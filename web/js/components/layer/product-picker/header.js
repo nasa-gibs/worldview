@@ -13,6 +13,9 @@ import {
 import LayerFilters from './layer-filters';
 import util from '../../../util/util';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+
 /*
  * A scrollable list of layers
  * @class LayerList
@@ -91,7 +94,7 @@ class ProductPickerHeader extends React.Component {
               color="secondary"
               onClick={this.revertToInitialScreen.bind(this)}
             >
-              <i className="fa fa-arrow-left" />{' '}
+              <FontAwesomeIcon icon={faArrowLeft} />
             </Button>
             {isBreadCrumb && BreadcrubEl}
           </>
@@ -99,7 +102,7 @@ class ProductPickerHeader extends React.Component {
           {isSearching && isMobile &&
             <UncontrolledDropdown>
               <DropdownToggle className="filter-button" caret>
-                <i className="fas fa-filter"></i>
+                <FontAwesomeIcon icon={faFilter} />
               </DropdownToggle>
               <DropdownMenu>
                 <LayerFilters
