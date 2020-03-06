@@ -90,16 +90,16 @@ class ProductPickerHeader extends React.Component {
         <InputGroup id="layer-search" className="layer-search">
           {showBackButton
           && (
-          <>
-            <Button
-              className="back-button"
-              color="secondary"
-              onClick={this.revertToInitialScreen.bind(this)}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </Button>
-            {isBreadCrumb && BreadcrubEl}
-          </>
+            <>
+              <Button
+                className="back-button"
+                color="secondary"
+                onClick={this.revertToInitialScreen.bind(this)}
+              >
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </Button>
+              {isBreadCrumb && BreadcrubEl}
+            </>
           )}
           {isSearching && isMobile
             && (
@@ -122,6 +122,7 @@ class ProductPickerHeader extends React.Component {
             id="layers-search-input"
             value={this.state.inputValue}
             placeholder="Search"
+            // eslint-disable-next-line no-return-assign
             innerRef={(c) => (this._input = c)}
             type="search"
             autoFocus={isAutoFocus}
