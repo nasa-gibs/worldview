@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Dragger from './dragger.js';
-import DraggerRange from './dragger-range.js';
+import Dragger from './dragger';
+import DraggerRange from './dragger-range';
 
 import { timeScaleOptions } from '../../modules/date/constants';
 /*
