@@ -10,6 +10,7 @@ module.exports = {
         const options = extend(defaultOptions, arguments[2] || {});
         let oEvent; let eventType = null;
 
+        // eslint-disable-next-line no-restricted-syntax
         for (const name in eventMatchers) {
           if (eventMatchers[name].test(eventName)) { eventType = name; break; }
         }
@@ -18,7 +19,7 @@ module.exports = {
 
         if (document.createEvent) {
           oEvent = document.createEvent(eventType);
-          if (eventType == 'HTMLEvents') {
+          if (eventType === 'HTMLEvents') {
             oEvent.initEvent(eventName, options.bubbles, options.cancelable);
           } else {
             oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
