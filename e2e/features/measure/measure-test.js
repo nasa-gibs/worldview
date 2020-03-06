@@ -11,7 +11,7 @@ const {
   measureMenu,
   measurementTooltip,
   sidebarContainer,
-  unitOfMeasureToggle
+  unitOfMeasureToggle,
 } = localSelectors;
 
 module.exports = {
@@ -31,7 +31,7 @@ module.exports = {
     client.useCss().assert.cssProperty(
       sidebarContainer,
       'max-height',
-      '0px'
+      '0px',
     );
     client.pause(300);
   },
@@ -114,5 +114,5 @@ module.exports = {
   },
   after(client) {
     client.end();
-  }
+  },
 };

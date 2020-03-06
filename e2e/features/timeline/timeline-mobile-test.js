@@ -177,5 +177,5 @@ module.exports = {
   },
   after: (c) => {
     c.end();
-  }
+  },
 };

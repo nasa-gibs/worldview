@@ -36,17 +36,17 @@ module.exports = {
                 .present;
               client.waitForElementVisible(
                 localSelectors.animationWidget,
-                TIME_LIMIT
+                TIME_LIMIT,
               );
-            }
+            },
           );
-        }
+        },
       );
     }
   },
   'Downloading GIF when polar projection is rotated': function(client) {
     client.url(
-      client.globals.url + localQuerystrings.animationProjectionRotated
+      client.globals.url + localQuerystrings.animationProjectionRotated,
     );
     client.waitForElementVisible(
       localSelectors.animationWidget,
@@ -59,11 +59,11 @@ module.exports = {
           .click(rotationDialogOkButton)
           .pause(1000);
         client.useCss().assert.containsText(articeRotationResetButton, '0');
-      }
+      },
     );
   },
   'GIF selection preview is Accurate and selections that are too high disable GIF download': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
     client.waitForElementVisible(
@@ -79,19 +79,19 @@ module.exports = {
               .useCss()
               .assert.containsText(
                 localSelectors.gifPreviewStartDate,
-                '2018-03-28'
+                '2018-03-28',
               );
             client
               .useCss()
               .assert.containsText(
                 localSelectors.gifPreviewEndDate,
-                '2018-04-04'
+                '2018-04-04',
               );
             client
               .useCss()
               .assert.containsText(
                 localSelectors.gifPreviewFrameRateValue,
-                '3 Frames Per Second'
+                '3 Frames Per Second',
               );
             client.useCss().assert.containsText('.gif-max-size', '8200px');
             client.assert.ok('#wv-checkbox-gif'); // checkbox is checked
@@ -100,17 +100,17 @@ module.exports = {
               .pause(1000);
             client.assert.value(
               localSelectors.gifPreviewEndResolutionSelector,
-              '2'
+              '2',
             );
             client.expect.element(localSelectors.gifDownloadButton).to.not.be
               .enabled;
-          }
+          },
         );
-      }
+      },
     );
   },
   'GIF download is disabled when too many frames would be requested with standard interval': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.animationTooManyFrames);
     client.waitForElementVisible(
@@ -118,11 +118,11 @@ module.exports = {
       TIME_LIMIT,
       () => {
         client.useCss().assert.cssClassPresent('#create-gif-button', 'disabled');
-      }
+      },
     );
   },
   'GIF download is disabled when too many frames would be requested with custom interval': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.animationTooManyFramesCustomInterval);
     client.waitForElementVisible(
@@ -130,10 +130,10 @@ module.exports = {
       TIME_LIMIT,
       () => {
         client.useCss().assert.cssClassPresent('#create-gif-button', 'disabled');
-      }
+      },
     );
   },
   after(client) {
     client.end();
-  }
+  },
 };

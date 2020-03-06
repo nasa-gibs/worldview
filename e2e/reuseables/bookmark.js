@@ -5,5 +5,5 @@ module.exports = {
     const url = `${c.globals.url}?${params.join('&')}`;
     c.url(url);
     c.waitForElementVisible('#wv-logo', TIME_LIMIT);
-  }
+  },
 };

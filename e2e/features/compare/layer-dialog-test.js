@@ -4,19 +4,13 @@ const localQuerystrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 20000;
 const aerosolLayer = '#active-MODIS_Terra_Aerosol';
-const AodOptionsPanelBody =
-  '#layer_options_modal-modis_terra_aerosol .modal-body';
-const AodOptionsPanelHeader =
-  '#layer_options_modal-modis_terra_aerosol .modal-header';
+const AodOptionsPanelBody = '#layer_options_modal-modis_terra_aerosol .modal-body';
+const AodOptionsPanelHeader = '#layer_options_modal-modis_terra_aerosol .modal-header';
 const AodInfoPanel = '.layer_info_modal-modis_terra_aerosol';
-const correctedReflectanceBLayer =
-  '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
-const correctedReflectanceOptionsPanelHeader =
-  '#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header';
-const correctedReflectanceOptionsPanelBody =
-  '#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-body';
-const correctedReflectanceInfoPanel =
-  '#layer_info_modal-modis_terra_correctedreflectance_truecolor';
+const correctedReflectanceBLayer = '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
+const correctedReflectanceOptionsPanelHeader = '#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header';
+const correctedReflectanceOptionsPanelBody = '#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-body';
+const correctedReflectanceInfoPanel = '#layer_info_modal-modis_terra_correctedreflectance_truecolor';
 
 module.exports = {
   before(client) {
@@ -37,13 +31,13 @@ module.exports = {
             .useCss()
             .assert.containsText(
               `${AodOptionsPanelHeader} .modal-title`,
-              'Aerosol Optical Depth'
+              'Aerosol Optical Depth',
             );
           if (client.options.desiredCapabilities.browser !== 'ie') {
             client.expect.element(`${AodOptionsPanelBody} .wv-palette-selector`)
               .to.be.visible;
           }
-        }
+        },
       );
     });
   },
@@ -58,9 +52,9 @@ module.exports = {
           .useCss()
           .assert.containsText(
             AodInfoPanel,
-            'The Aerosol Optical Depth layer is useful for studying aerosol optical depth'
+            'The Aerosol Optical Depth layer is useful for studying aerosol optical depth',
           );
-      }
+      },
     );
   },
   'expect clicking A|B button to close options dialog': function(client) {
@@ -77,7 +71,7 @@ module.exports = {
         .useCss()
         .assert.containsText(
           `${AodOptionsPanelHeader} .modal-title`,
-          'Aerosol Optical Depth'
+          'Aerosol Optical Depth',
         );
       if (client.options.desiredCapabilities.browser !== 'ie') {
         client.expect.element(`${AodOptionsPanelBody} .wv-palette-selector`).to
@@ -96,13 +90,13 @@ module.exports = {
           .useCss()
           .assert.containsText(
             AodInfoPanel,
-            'The Aerosol Optical Depth layer is useful for studying aerosol optical depth'
+            'The Aerosol Optical Depth layer is useful for studying aerosol optical depth',
           );
-      }
+      },
     );
   },
   'expect reactivating A|B to close options dialog and activate B state': function(
-    client
+    client,
   ) {
     client.click(`${AodInfoPanel} .close`).pause(1000);
     client.click(`${aerosolLayer} .wv-layers-options`).pause(1000);
@@ -129,16 +123,16 @@ module.exports = {
               .useCss()
               .assert.containsText(
                 `${correctedReflectanceOptionsPanelHeader} .modal-title`,
-                'Corrected Reflectance (True Color)'
+                'Corrected Reflectance (True Color)',
               );
             if (client.options.desiredCapabilities.browser !== 'ie') {
               client.expect.element(
-                `${correctedReflectanceOptionsPanelBody} .wv-palette-selector`
+                `${correctedReflectanceOptionsPanelBody} .wv-palette-selector`,
               ).to.not.be.present;
             }
-          }
+          },
         );
-      }
+      },
     );
   },
   'Layer info dialog works after clicking into B mode': function(client) {
@@ -154,12 +148,12 @@ module.exports = {
           .useCss()
           .assert.containsText(
             correctedReflectanceInfoPanel,
-            'These images are called true-color or natural color because this combination of wavelengths is similar to what the human eye'
+            'These images are called true-color or natural color because this combination of wavelengths is similar to what the human eye',
           );
-      }
+      },
     );
   },
   after(client) {
     client.end();
-  }
+  },
 };

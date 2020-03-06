@@ -5,7 +5,7 @@ const { normalizeViewport } = require('../../reuseables/normalize-viewport');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload
+  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
@@ -13,7 +13,7 @@ const startParams = [
   'v=-4194304,-4194304,4194304,4194304',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   't=2018-06-01',
-  'imageDownload='
+  'imageDownload=',
 ];
 
 module.exports = {
@@ -92,6 +92,6 @@ module.exports = {
       c.assert.ok(x1 > 0 && x1 < 20000);
       c.assert.ok(y1 > 0 && y1 < 20000);
     });
-  }
+  },
 
 };

@@ -106,7 +106,7 @@ module.exports = {
       client.assert
         .containsText(
           layerResultsCountText,
-          'Showing 4 results(1 hidden by filters)'
+          'Showing 4 results(1 hidden by filters)',
         );
     });
   },
@@ -150,7 +150,7 @@ module.exports = {
     client.clearValue(layersSearchField);
     client.setValue(
       layersSearchField,
-      'MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly'
+      'MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly',
     );
     client.waitForElementVisible(layersSearchRow, TIME_LIMIT, (e) => {
       client.assert.containsText(layersAll, 'Total Aerosol Optical Thickness Scattering 550nm');
@@ -262,5 +262,5 @@ module.exports = {
   },
   after: (client) => {
     client.end();
-  }
+  },
 };

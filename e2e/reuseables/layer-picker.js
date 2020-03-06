@@ -24,5 +24,5 @@ module.exports = {
     client.expect.element('#active-VIIRS_SNPP_CorrectedReflectance_TrueColor').to.be.present;
     client.expect.element('#active-MODIS_Aqua_CorrectedReflectance_TrueColor').to.be.present;
     client.expect.element('#active-MODIS_Terra_CorrectedReflectance_TrueColor').to.be.present;
-  }
+  },
 };

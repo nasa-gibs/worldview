@@ -3,14 +3,14 @@ const { bookmark } = require('../../reuseables/bookmark');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload
+  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   'v=-1,-1,1,1',
   't=2018-06-01',
-  'imageDownload='
+  'imageDownload=',
 ];
 
 module.exports = {
@@ -73,7 +73,7 @@ module.exports = {
     switchProjection(c, 'geographic');
     openImageDownloadPanel(c);
     c.click(
-      '#wv-image-format option[value="application/vnd.google-earth.kmz"]'
+      '#wv-image-format option[value="application/vnd.google-earth.kmz"]',
     );
     closeImageDownloadPanel(c);
     switchProjection(c, 'arctic');
@@ -84,5 +84,5 @@ module.exports = {
       .element('#wv-image-download-url')
       .to.have.attribute('url')
       .contain('FORMAT=image/jpeg');
-  }
+  },
 };

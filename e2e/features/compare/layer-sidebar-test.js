@@ -43,15 +43,15 @@ module.exports = {
         client.click(aodMAIACCheckbox);
         client.waitForElementVisible(
           '#activeB-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
-          client.globals.timeout
+          client.globals.timeout,
         );
         client.expect.element(`#activeB-${aodCombinedValueId}`).to.not.be.present;
         client.expect.element(`#active-${aodCombinedValueId}`).to.not.be.present;
-      }
+      },
     );
   },
   'Verify that AOD combined is visible and AOD index is not present in Layer list A': function(
-    client
+    client,
   ) {
     client.click(selectors.layersModalCloseButton);
     client.pause(100);
@@ -62,10 +62,10 @@ module.exports = {
       () => {
         client.expect.element(`#activeB-${aodCombinedValueId}`).to.not.be.present;
         client.expect.element(`#activeA-${aodMAIACId}`).to.not.be.present;
-      }
+      },
     );
   },
   after(client) {
     client.end();
-  }
+  },
 };

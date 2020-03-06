@@ -118,5 +118,5 @@ module.exports = {
 
   after: (client) => {
     client.end();
-  }
+  },
 };

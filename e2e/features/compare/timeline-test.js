@@ -52,7 +52,7 @@ module.exports = {
       TIME_LIMIT,
       () => {
         client.assert.attributeContains(dateSelectorDayInput, 'value', '16');
-      }
+      },
     );
   },
   'Dragging B dragger updates date in label': function(client) {
@@ -78,14 +78,14 @@ module.exports = {
           .useCss()
           .assert.containsText(
             localSelectors.compareButton,
-            'Start Comparison'
+            'Start Comparison',
           );
         client.expect.element(draggerA).to.not.be.present;
         client.expect.element(draggerB).to.be.visible;
-      }
+      },
     );
   },
   after(client) {
     client.end();
-  }
+  },
 };

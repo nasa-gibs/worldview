@@ -9,5 +9,5 @@ module.exports = {
     c.pause(500);
     c.click(`#change-${proj}-button`);
     c.waitForElementVisible(`#wv-map-${proj}`, TIME_LIMIT);
-  }
+  },
 };

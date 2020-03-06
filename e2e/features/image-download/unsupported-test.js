@@ -56,5 +56,5 @@ module.exports = {
     c.waitForElementPresent('#toolbar_snapshot', TIME_WAIT);
     c.pause(500);
     closeImageDownloadPanel(c);
-  }
+  },
 };
