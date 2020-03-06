@@ -24,6 +24,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
   ui.supportsPassive = false;
   try {
     const opts = Object.defineProperty({}, 'passive', {
+      // eslint-disable-next-line getter-return
       get() {
         ui.supportsPassive = true;
       },
