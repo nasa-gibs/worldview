@@ -8,7 +8,7 @@ import Projection from './projection';
 import InfoList from './info';
 import ShareLinks from './share';
 import ErrorBoundary from './error-boundary';
-import { get as lodashGet, find as lodashFind } from 'lodash';
+import { get as lodashGet, find as lodashFind, cloneDeep as lodashCloneDeep } from 'lodash';
 import {
   requestNotifications,
   setNotifications
@@ -86,6 +86,8 @@ class toolbarContainer extends Component {
 
   openImageDownload() {
     const { openModal, hasCustomPalette, isRotated, hasGraticule, activePalettes, rotation, refreshStateAfterImageDownload } = this.props;
+
+    const paletteStore = lodashCloneDeep(activePalettes);
     this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice').then(
       () => {
         this.getPromise(
@@ -102,7 +104,14 @@ class toolbarContainer extends Component {
           ).then(() => {
             openModal(
               'TOOLBAR_SNAPSHOT',
-              Object.assign({}, CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT, { onClose: () => refreshStateAfterImageDownload(hasCustomPalette ? activePalettes : undefined, rotation, hasGraticule) })
+              Object.assign({}, CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT,
+                {
+                  onClose: () => {
+                    refreshStateAfterImageDownload(
+                      hasCustomPalette ? paletteStore : undefined, rotation, hasGraticule
+                    );
+                  }
+                })
             );
           });
         });
