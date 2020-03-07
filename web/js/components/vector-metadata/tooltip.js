@@ -19,9 +19,9 @@ export default class VectorMetaTooltip extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen,
-    });
+    this.setState((prevState) => ({
+      tooltipOpen: !prevState.tooltipOpen,
+    }));
   }
 
   mouseEnter() {

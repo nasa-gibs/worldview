@@ -64,13 +64,15 @@ class Tour extends React.Component {
 
   toggleModalStart(e) {
     e.preventDefault();
-    const toggleModal = !this.state.modalStart;
-    // if closing modal
-    if (!toggleModal) {
-      this.props.endTour();
-    }
-    this.setState({
-      modalStart: toggleModal,
+    this.setState((prevState) => {
+      const toggleModal = !prevState.modalStart;
+      // if closing modal
+      if (!toggleModal) {
+        this.props.endTour();
+      }
+      return {
+        modalStart: toggleModal,
+      };
     });
   }
 
@@ -149,17 +151,18 @@ class Tour extends React.Component {
 
   toggleModalInProgress(e) {
     e.preventDefault();
-    this.setState({
-      modalInProgress: !this.state.modalInProgress,
-    });
+    this.setState((prevState) => ({
+      modalInProgress: !prevState.modalInProgress,
+    }));
   }
 
   toggleModalComplete(e) {
     e.preventDefault();
-    this.setState({
-      modalComplete: !this.state.modalComplete,
-      currentStep: this.state.totalSteps,
-    });
+    this.setState((prevState) => ({
+      modalComplete: !prevState.modalComplete,
+      currentStep: prevState.totalSteps,
+    }));
+
     // The tour completed modal has been shown (all steps complete)
     googleTagManager.pushEvent({
       event: 'tour_completed',

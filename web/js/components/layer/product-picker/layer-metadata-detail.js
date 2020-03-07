@@ -33,7 +33,7 @@ class LayerMetadataDetail extends React.Component {
    * @return {void}
    */
   toggleDateRanges(e) {
-    this.setState({ isDateRangesExpanded: !this.state.isDateRangesExpanded });
+    this.setState((prevState) => ({ isDateRangesExpanded: !prevState.isDateRangesExpanded }));
   }
 
   getListItems(layer) {
