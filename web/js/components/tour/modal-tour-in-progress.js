@@ -7,6 +7,7 @@ import Steps from './widget-steps';
 
 class ModalInProgress extends React.Component {
   componentDidUpdate() {
+    // eslint-disable-next-line react/no-string-refs
     if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
   }
 
