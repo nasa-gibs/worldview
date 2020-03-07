@@ -125,14 +125,12 @@
         "react/sort-comp": "off",
         "react/no-danger": "off",
         "react/no-unused-state": "warn",
-        // "react/no-access-state-in-setstate": "off",
-        "react/no-unused-prop-types": "off",
+        "react/no-unused-prop-types": "off", //66 errors
         "react/forbid-prop-types": "off",
         "react/require-default-props": "off",
         "react/destructuring-assignment": "off",
         "react/no-array-index-key": "warn",
-        "react/no-render-return-value": "warn",
-        "react/no-string-refs": "warn"
+        "react/no-render-return-value": "warn"
       }
     }
   ]
