@@ -150,7 +150,9 @@ class AnimationWidget extends React.Component {
   }
 
   toggleCollapse() {
-    this.setState({ collapsed: !this.state.collapsed });
+    this.setState((prevState) => ({
+      collapsed: !prevState.collapsed,
+    }));
   }
 
   /**

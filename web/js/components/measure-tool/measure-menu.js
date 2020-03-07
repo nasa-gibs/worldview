@@ -34,7 +34,6 @@ class MeasureMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showAlert: false,
       tooltipOpen: false,
     };
     this.tooltipToggle = this.tooltipToggle.bind(this);
@@ -53,9 +52,9 @@ class MeasureMenu extends Component {
   }
 
   tooltipToggle() {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen,
-    });
+    this.setState((prevState) => ({
+      tooltipOpen: !prevState.tooltipOpen,
+    }));
   }
 
   render() {

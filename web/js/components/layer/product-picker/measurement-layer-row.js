@@ -24,7 +24,9 @@ class MeasurementLayerRow extends React.Component {
   onClick() {
     const { removeLayer, addLayer, layer } = this.props;
     const checked = !this.state.checked;
-    this.setState({ checked });
+    this.setState((prevState) => ({
+      checked: !prevState.checked,
+    }));
     if (!checked) {
       removeLayer(layer.id);
     } else {
@@ -33,9 +35,9 @@ class MeasurementLayerRow extends React.Component {
   }
 
   toggleTooltip() {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen,
-    });
+    this.setState((prevState) => ({
+      tooltipOpen: !prevState.tooltipOpen,
+    }));
   }
 
   render() {
@@ -65,24 +67,24 @@ class MeasurementLayerRow extends React.Component {
         >
           {!layerIsAvailable
             && (
-            <>
-              <FontAwesomeIcon icon={faBan} id="availability-info" />
-              <Tooltip
-                placement="top"
-                isOpen={tooltipOpen}
-                target={itemElementId}
-                toggle={this.toggleTooltip.bind(this)}
-              >
-                This layer has no visible content on the selected date:
-                {' '}
-                <br />
-                <span style={{ fontFamily: 'monospace' }}>
+              <>
+                <FontAwesomeIcon icon={faBan} id="availability-info" />
+                <Tooltip
+                  placement="top"
+                  isOpen={tooltipOpen}
+                  target={itemElementId}
+                  toggle={this.toggleTooltip.bind(this)}
+                >
+                  This layer has no visible content on the selected date:
                   {' '}
-                  {diplayDate}
-                  {' '}
-                </span>
-              </Tooltip>
-            </>
+                  <br />
+                  <span style={{ fontFamily: 'monospace' }}>
+                    {' '}
+                    {diplayDate}
+                    {' '}
+                  </span>
+                </Tooltip>
+              </>
             )}
         </Checkbox>
 

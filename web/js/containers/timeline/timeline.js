@@ -1,3 +1,4 @@
+/* eslint react/no-access-state-in-setstate:warn */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

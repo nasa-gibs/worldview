@@ -31,12 +31,12 @@ export class Checkbox extends React.Component {
   }
 
   handleChange(e) {
-    const { onCheck } = this.props;
-    const boo = !this.state.checked;
-    this.setState({
-      checked: boo,
+    this.setState((prevState) => {
+      const { onCheck } = this.props;
+      const checked = !prevState.checked;
+      if (onCheck) onCheck(checked);
+      return { checked };
     });
-    if (onCheck) onCheck(boo);
   }
 
   render() {
