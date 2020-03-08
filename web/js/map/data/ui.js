@@ -271,7 +271,7 @@ export function dataUi(store, ui, config) {
     if (status !== 'abort') {
       console.error('Unable to search', status, error);
       wvui.notify(
-        'Unable to search at this time.<br/><br/>Please try ' + 'again later.',
+        'Unable to search at this time.<br/><br/>Please try again later.',
       );
     }
   };
@@ -391,7 +391,7 @@ const dataUiBulkDownloadPage = (function() {
     const hostnames = [];
     $.each(hosts, (host) => {
       netrcEntries.push(
-        `machine ${host} login URS_USER ` + 'password URS_PASSWORD',
+        `machine ${host} login URS_USER password URS_PASSWORD`,
       );
       hostnames.push(host);
     });

@@ -513,7 +513,7 @@ export function dataResultsModisGridLabel() {
   self.name = 'MODISGridLabel';
 
   self.process = function(meta, granule) {
-    granule.label = `h${granule.h} - ` + `v${granule.v}`;
+    granule.label = `h${granule.h} - v${granule.v}`;
 
     const timeStart = util.parseTimestampUTC(granule.time_start);
     const date = util.toISOStringDate(timeStart);

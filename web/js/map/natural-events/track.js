@@ -477,7 +477,7 @@ const createArrows = function(lineSegmentCoords, map) {
   overlayEl.style.height = '1px';
   innerEl.style.width = `${lengthOfArrowDiv}px`;
   innerEl.style.height = '16px';
-  innerEl.style.transform = `translate(${-(lengthOfArrowDiv / 2)}px` + ', -8px)';
+  innerEl.style.transform = `translate(${-(lengthOfArrowDiv / 2)}px, -8px)`;
   overlayEl.style.transform = `rotate(${angleDegrees}deg)`;
   return new OlOverlay({
     position: map.getCoordinateFromPixel(pixelMidPoint),
