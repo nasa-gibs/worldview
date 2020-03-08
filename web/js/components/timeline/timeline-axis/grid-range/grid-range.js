@@ -53,6 +53,7 @@ class GridRange extends PureComponent {
           {timeRange.map((item, index) => (
             item.withinRange
               ? (
+                /* eslint react/no-array-index-key: 1 */
                 <React.Fragment key={index}>
                   <TileRect
                     item={item}

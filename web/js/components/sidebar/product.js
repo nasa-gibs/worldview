@@ -67,6 +67,7 @@ class Data extends React.Component {
         <ul className="wv-datacategory" id={`wv-data${id}`}>
           {productObject.items.map((layer, index) => (
             <li
+              /* eslint react/no-array-index-key: 1 */
               key={layer + index}
               id={`${listId}-${id}${util.encodeId(layer.value)}`}
               className="item item-static"

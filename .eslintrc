@@ -127,8 +127,7 @@
         "react/no-unused-prop-types": "warn", // 66 errors
         "react/forbid-prop-types": "off", // 216 errors
         "react/require-default-props": "off", // 965 errors
-        "react/destructuring-assignment": "warn", // 464 errors
-        "react/no-array-index-key": "warn"
+        "react/destructuring-assignment": "warn" // 464 errors
       }
     }
   ]

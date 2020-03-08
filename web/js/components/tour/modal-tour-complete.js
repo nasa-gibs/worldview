@@ -20,6 +20,7 @@ class ModalComplete extends React.Component {
           <p>Read more about this story at the links below:</p>
           <ul>
             {readMoreLinks.map((linkId, i) => (
+              /* eslint react/no-array-index-key: 1 */
               <li key={i} index={i}>
                 <a href={linkId.link} target="_blank" rel="noopener noreferrer">
                   {linkId.title}

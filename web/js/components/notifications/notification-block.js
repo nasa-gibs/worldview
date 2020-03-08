@@ -30,6 +30,7 @@ class NotificationBlock extends React.Component {
             dateObject.getFullYear()}`;
           const activeClass = numberNotSeen > i ? `${type}-notification-item` : '';
           return (
+            /* eslint react/no-array-index-key: 1 */
             <li key={type + i} className={activeClass}>
               <h2>
                 <FontAwesomeIcon icon={listIcons[type]} />
