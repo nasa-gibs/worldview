@@ -1,3 +1,4 @@
+/* eslint-disable react/no-render-return-value */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import OlOverlay from 'ol/Overlay';
@@ -58,6 +59,9 @@ export function mapDateLineBuilder(models, config, store, ui) {
       }
       case CHANGE_PROJECTION:
         proj = action.id;
+        break;
+      default:
+        break;
     }
   };
   self.init = function(Parent, olMap, date) {
