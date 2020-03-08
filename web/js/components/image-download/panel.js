@@ -40,6 +40,8 @@ export default class ImageResSelection extends React.Component {
       valid: props.valid,
       debugUrl: '',
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.onDownload = this.onDownload.bind(this);
   }
 
   onDownload(width, height) {
@@ -108,7 +110,7 @@ export default class ImageResSelection extends React.Component {
             optionName="filetype"
             value={this.state.fileType}
             optionArray={this.props.fileTypes}
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChange}
           />
           {this.props.secondLabel}
         </div>
@@ -165,7 +167,7 @@ export default class ImageResSelection extends React.Component {
             optionArray={resolutions}
             value={resolution}
             optionName="resolution"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChange}
           />
           {this.props.firstLabel}
         </div>
@@ -178,7 +180,7 @@ export default class ImageResSelection extends React.Component {
           maxImageSize={maxImageSize}
           validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
           validLayers={layerList.length > 0}
-          onClick={this.onDownload.bind(this)}
+          onClick={this.onDownload}
         />
       </div>
     );

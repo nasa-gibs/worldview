@@ -12,6 +12,7 @@ class VectorFilter extends React.Component {
       activeDragger: 'start',
     };
     this.debounceSetRange = lodashDebounce(props.setFilterRange, 300);
+    this.updateFilter = this.updateFilter.bind(this);
   }
 
   /**
@@ -66,7 +67,7 @@ class VectorFilter extends React.Component {
             defaultValue={[start, end]}
             min={min}
             max={max}
-            onChange={this.updateFilter.bind(this)}
+            onChange={this.updateFilter}
           />
           <div className="wv-label">
             <span className="wv-label-range-min wv-label-range">

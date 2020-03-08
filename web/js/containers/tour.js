@@ -52,6 +52,9 @@ class Tour extends React.Component {
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
+    this.endTour = this.endTour.bind(this);
+    this.selectTour = this.selectTour.bind(this);
+    this.resetTour = this.resetTour.bind(this);
   }
 
   componentDidMount() {
@@ -330,7 +333,7 @@ class Tour extends React.Component {
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
                 toggleModalComplete={this.toggleModalComplete}
-                selectTour={this.selectTour.bind(this)}
+                selectTour={this.selectTour}
                 showTourAlert={showTourAlert}
                 hideTour={() => {
                   hideTour();
@@ -340,13 +343,13 @@ class Tour extends React.Component {
                   showTour();
                   this.setState({ showDisabledAlert: false });
                 }}
-                endTour={this.endTour.bind(this)}
+                endTour={this.endTour}
               />
             ) : modalInProgress ? (
               <TourInProgress
                 config={config}
                 models={models}
-                endTour={this.endTour.bind(this)}
+                endTour={this.endTour}
                 modalInProgress={modalInProgress}
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
@@ -371,8 +374,8 @@ class Tour extends React.Component {
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
                 toggleModalComplete={this.toggleModalComplete}
-                resetTour={this.resetTour.bind(this)}
-                endTour={this.endTour.bind(this)}
+                resetTour={this.resetTour}
+                endTour={this.endTour}
               />
             )}
           </div>

@@ -115,9 +115,8 @@
         "jsx-a11y/click-events-have-key-events": "off",
 
         // React rules overrides
-        "react/jsx-props-no-spreading": "off",
+        "react/jsx-props-no-spreading": "warn",
         "react/jsx-filename-extension": "off",
-        "react/jsx-no-bind": "off", // 37 warnings
         "react/prefer-stateless-function": "warn", // 20 errors, consider fixing
         "react/sort-comp": "off",
         "react/no-unused-state": "warn", // 38 errors

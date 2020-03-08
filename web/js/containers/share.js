@@ -38,6 +38,8 @@ class ShareLinkContainer extends Component {
       tooltipOpen: false,
       queryString: history.location.search || '',
     };
+    this.onToggleShorten = this.onToggleShorten.bind(this);
+    this.onLinkClick = this.onLinkClick.bind(this);
   }
 
   componentDidMount() {
@@ -199,13 +201,13 @@ class ShareLinkContainer extends Component {
           <Checkbox
             label="Shorten link"
             id="wv-link-shorten"
-            onCheck={this.onToggleShorten.bind(this)}
+            onCheck={this.onToggleShorten}
             checked={isShort}
             disabled={!shortLink.isLoading}
           />
           <br />
         </div>
-        <ShareLinks onClick={this.onLinkClick.bind(this)} />
+        <ShareLinks onClick={this.onLinkClick} />
       </>
     );
   }

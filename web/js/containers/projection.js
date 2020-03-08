@@ -41,6 +41,11 @@ const getInfoArray = function(projArray) {
   }));
 };
 class ProjectionList extends Component {
+  constructor(props) {
+    super(props);
+    this.updateProjection = this.updateProjection.bind(this);
+  }
+
   updateProjection(id) {
     const { updateProjection, config, onCloseModal } = this.props;
     updateProjection(id, config);
@@ -57,7 +62,7 @@ class ProjectionList extends Component {
       <IconList
         list={projectionArray}
         active={projection}
-        onClick={this.updateProjection.bind(this)}
+        onClick={this.updateProjection}
         size="small"
       />
     );
