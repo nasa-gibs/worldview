@@ -82,7 +82,6 @@
         "prefer-const": "warn",
         "prefer-destructuring": "warn",
 
-        "no-restricted-syntax": "off",
         "class-methods-use-this": "off",
         "max-len": "off",
         "no-restricted-properties": "off",

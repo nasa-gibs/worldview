@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 const fetch = require('node-fetch');
 
 // delay helper to prevent too many requests at once

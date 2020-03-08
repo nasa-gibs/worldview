@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { each as lodashEach } from 'lodash';
 import util from '../../util/util';
 import { getTitles } from '../layers/selectors';
