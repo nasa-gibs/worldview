@@ -120,17 +120,15 @@
         // React rules overrides
         "react/jsx-props-no-spreading": "off",
         "react/jsx-filename-extension": "off",
-        "react/jsx-no-bind": "off",
-        "react/prefer-stateless-function": "off",
+        "react/jsx-no-bind": "off", // 37 warnings
+        "react/prefer-stateless-function": "warn", // 20 errors, consider fixing
         "react/sort-comp": "off",
-        "react/no-danger": "off",
-        "react/no-unused-state": "warn",
-        "react/no-unused-prop-types": "off", //66 errors
-        "react/forbid-prop-types": "off",
-        "react/require-default-props": "off",
-        "react/destructuring-assignment": "off",
-        "react/no-array-index-key": "warn",
-        "react/no-render-return-value": "warn"
+        "react/no-unused-state": "warn", // 38 errors
+        "react/no-unused-prop-types": "warn", // 66 errors
+        "react/forbid-prop-types": "off", // 216 errors
+        "react/require-default-props": "off", // 965 errors
+        "react/destructuring-assignment": "warn", // 464 errors
+        "react/no-array-index-key": "warn"
       }
     }
   ]
