@@ -825,6 +825,7 @@ export default (function(self) {
     const g2 = parseInt(hex2.substring(2, 4), 16);
     const b2 = parseInt(hex2.substring(4, 6), 16);
     // calculate differences in 3D Space
+    // eslint-disable-next-line no-restricted-properties
     return Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2));
   };
   self.fetch = function(url, mimeType) {

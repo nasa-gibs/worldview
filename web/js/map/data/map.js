@@ -382,7 +382,7 @@ export function dataMap(store, maps, dataUi, ui) {
     // Minimum size of the button is 15 pixels
     const base = 12;
     // Double the size for each zoom level
-    const add = Math.pow(2, zoom);
+    const add = 2 ** zoom;
     // Apply size adjustment to the button if specified by TagButtonScale
     const buttonScale = feature.granule.buttonScale || 1;
     let size = (base + add) * buttonScale;
