@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -40,6 +41,7 @@ class Tooltip extends React.Component {
           <ul>
             {this.props.dataArray.map((dataEl, i) => (
               <li
+                /* eslint react/no-array-index-key: 1 */
                 key={`tooltip-${dataEl}-${i}`}
                 id={dataEl}
                 onClick={this.onClick.bind(this, dataEl)}

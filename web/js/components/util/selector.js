@@ -27,6 +27,7 @@ export default class Selector extends React.Component {
         onChange={this.handleChange.bind(this)}
       >
         {this.props.optionArray.values.map((dataEl, i) => (
+          /* eslint react/no-array-index-key: 1 */
           <option key={`${dataEl.value}-${i}`} value={dataEl.value}>
             {dataEl.text}
           </option>

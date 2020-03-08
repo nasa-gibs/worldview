@@ -70,6 +70,7 @@ class CategoryCell extends React.Component {
                   return index === 6 ? (
                     <li
                       className="layer-category-item"
+                      /* eslint react/no-array-index-key: 1 */
                       key={category.id + index}
                     >
                       <a

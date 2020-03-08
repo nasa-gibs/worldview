@@ -84,6 +84,7 @@ class VectorStyleSelect extends React.Component {
       }
     }
     return organizedArray.map((obj, i) => (
+      /* eslint react/no-array-index-key: 1 */
       <div key={vectorStyleId + i} className={caseDefaultClassName}>
         <label>
           <span
