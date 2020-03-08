@@ -64,7 +64,7 @@ export default class GifPanel extends React.Component {
               optionArray={this.state.resolutions}
               value={this.state.resolution}
               optionName="resolution"
-              onChange={this.handleChange.bind(this)}
+              onChange={this.handleChange}
             />
           </div>
           <GifPanelGrid

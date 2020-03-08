@@ -55,6 +55,12 @@ class ProductPicker extends React.Component {
       listScrollTop: props.listScrollTop || 0,
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
+    this.revertSearchState = this.revertSearchState.bind(this);
+    this.showMetadataForLayer = this.showMetadataForLayer.bind(this);
+    this.updateSelectedMeasurement = this.updateSelectedMeasurement.bind(this);
+    this.toggleFilterByAvailable = this.toggleFilterByAvailable.bind(this);
+    this.drawMeasurements = this.drawMeasurements.bind(this);
+    this.sort = this.sort.bind(this);
   }
 
   componentDidMount() {
@@ -360,7 +366,7 @@ class ProductPicker extends React.Component {
                   hasMeasurementSource={hasMeasurementSource}
                   measurementConfig={measurementConfig}
                   selectedMeasurement={selectedMeasurement}
-                  updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
+                  updateSelectedMeasurement={this.updateSelectedMeasurement}
                   showMetadataForLayer={(layer) => this.showMetadataForLayer(layer)}
                   setSourceIndex={(index) => this.setSourceIndex(index)}
                   selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
@@ -382,7 +388,7 @@ class ProductPicker extends React.Component {
             {numRowsFilteredOut}
             {' '}
             result(s) are being filtered out.
-            <a className="remove-filters" onClick={this.toggleFilterByAvailable.bind(this)}>
+            <a className="remove-filters" onClick={this.toggleFilterByAvailable}>
               Remove filters?
             </a>
           </p>
@@ -423,7 +429,7 @@ class ProductPicker extends React.Component {
               removeLayer={removeLayer}
               selectedProjection={selectedProjection}
               showPreviewImage={showPreviewImage}
-              showMetadataForLayer={this.showMetadataForLayer.bind(this)}
+              showMetadataForLayer={this.showMetadataForLayer}
             />
           </Scrollbars>
         </div>
@@ -484,10 +490,10 @@ class ProductPicker extends React.Component {
             category={category}
             modalView={modalView}
             width={width}
-            runSearch={this.runSearch.bind(this)}
-            updateListState={this.revertSearchState.bind(this)}
+            runSearch={this.runSearch}
+            updateListState={this.revertSearchState}
             filterByAvailable={filterByAvailable}
-            toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}
+            toggleFilterByAvailable={this.toggleFilterByAvailable}
           >
             {listType === 'search' && !isMobile
               && (
@@ -496,7 +502,7 @@ class ProductPicker extends React.Component {
                   <FilterUnavailable
                     selectedDate={selectedDate}
                     filterByAvailable={filterByAvailable}
-                    toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}
+                    toggleFilterByAvailable={this.toggleFilterByAvailable}
                   />
                 </div>
                 <div className="results-text">
@@ -532,7 +538,7 @@ class ProductPicker extends React.Component {
                         className="layer-category-navigation"
                         active={sortKey === categoryType}
                       >
-                        <NavLink onClick={this.sort.bind(this, sortKey)}>
+                        <NavLink onClick={() => this.sort(sortKey)}>
                           {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
                         </NavLink>
                       </NavItem>
@@ -544,7 +550,7 @@ class ProductPicker extends React.Component {
                         <CategoryGrid
                           categories={lodashValues(categoryConfig[categoryType])}
                           measurementConfig={measurementConfig}
-                          drawMeasurements={this.drawMeasurements.bind(this)}
+                          drawMeasurements={this.drawMeasurements}
                           hasMeasurementSource={hasMeasurementSource}
                           categoryType={categoryType}
                           width={width}

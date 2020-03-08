@@ -27,6 +27,8 @@ class ProductPickerHeader extends React.Component {
     this.state = {
       inputValue: props.inputValue,
     };
+    this.revertToInitialScreen = this.revertToInitialScreen.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -75,7 +77,7 @@ class ProductPickerHeader extends React.Component {
           tag="a"
           title="Back to Layer Categories"
           href="#"
-          onClick={this.revertToInitialScreen.bind(this)}
+          onClick={this.revertToInitialScreen}
         >
           Categories
         </BreadcrumbItem>
@@ -94,7 +96,7 @@ class ProductPickerHeader extends React.Component {
               <Button
                 className="back-button"
                 color="secondary"
-                onClick={this.revertToInitialScreen.bind(this)}
+                onClick={this.revertToInitialScreen}
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
               </Button>
@@ -118,7 +120,7 @@ class ProductPickerHeader extends React.Component {
             )}
 
           <Input
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChange}
             id="layers-search-input"
             value={this.state.inputValue}
             placeholder="Search"

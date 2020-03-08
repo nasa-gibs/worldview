@@ -13,6 +13,7 @@ class LayerMetadataDetail extends React.Component {
     this.state = {
       isDateRangesExpanded: false,
     };
+    this.toggleLayer = this.toggleLayer.bind(this);
   }
 
   toggleLayer() {
@@ -174,7 +175,7 @@ class LayerMetadataDetail extends React.Component {
           </div>
           )}
         <div className="text-center">
-          <Button className={btnClass} onClick={this.toggleLayer.bind(this)}>
+          <Button className={btnClass} onClick={this.toggleLayer}>
             <FontAwesomeIcon icon={btnIconClass} />
             {buttonText}
           </Button>

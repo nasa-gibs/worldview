@@ -54,6 +54,7 @@ class Sidebar extends React.Component {
     customPalettePromise.done((customs) => {
       props.loadedCustomPalettes(customs);
     });
+    this.toggleSidebar = this.toggleSidebar.bind(this);
   }
 
   componentDidMount() {
@@ -187,7 +188,7 @@ class Sidebar extends React.Component {
           <CollapsedButton
             isMobile={isMobile}
             isCollapsed={isCollapsed}
-            onclick={this.toggleSidebar.bind(this)}
+            onclick={this.toggleSidebar}
             numberOfLayers={numberOfLayers}
           />
           <div
@@ -210,7 +211,7 @@ class Sidebar extends React.Component {
                   onTabClick={onTabClick}
                   tabTypes={tabTypes}
                   isMobile={isMobile}
-                  toggleSidebar={this.toggleSidebar.bind(this)}
+                  toggleSidebar={this.toggleSidebar}
                   isCompareMode={isCompareMode}
                   isDataDisabled={isDataDisabled}
                 />

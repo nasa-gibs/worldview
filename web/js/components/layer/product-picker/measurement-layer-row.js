@@ -19,6 +19,8 @@ class MeasurementLayerRow extends React.Component {
       checked: props.checked,
       tooltipOpen: false,
     };
+    this.onClick = this.onClick.bind(this);
+    this.toggleTooltip = this.toggleTooltip.bind(this);
   }
 
   onClick() {
@@ -54,13 +56,13 @@ class MeasurementLayerRow extends React.Component {
     return (
       <ListGroupItem
         key={`${measurementId}-${layer.id}`}
-        onClick={this.onClick.bind(this)}
+        onClick={this.onClick}
         id={itemElementId}
         className={listItemClass}
       >
         <Checkbox
           name={title}
-          onClick={this.onClick.bind(this)}
+          onClick={this.onClick}
           checked={checked}
           label={title}
           classNames="settings-check"
@@ -73,7 +75,7 @@ class MeasurementLayerRow extends React.Component {
                   placement="top"
                   isOpen={tooltipOpen}
                   target={itemElementId}
-                  toggle={this.toggleTooltip.bind(this)}
+                  toggle={this.toggleTooltip}
                 >
                   This layer has no visible content on the selected date:
                   {' '}

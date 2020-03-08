@@ -10,6 +10,11 @@ import {
 import { history } from '../../main';
 
 class GeostationaryModalBody extends React.Component {
+  constructor(props) {
+    super(props);
+    this.tryIt = this.tryIt.bind(this);
+  }
+
   tryIt() {
     const { isMobile, prepareAnimate, closeModal } = this.props;
     prepareAnimate(isMobile);
@@ -66,7 +71,7 @@ class GeostationaryModalBody extends React.Component {
 
         <Button
           className="btn btn-lg"
-          onClick={this.tryIt.bind(this)}
+          onClick={this.tryIt}
         >
           Try it!
         </Button>

@@ -56,6 +56,8 @@ class GIF extends Component {
     };
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
+    this.createGIF = this.createGIF.bind(this);
+    this.toggleShowDates = this.toggleShowDates.bind(this);
   }
 
   componentDidMount() {
@@ -130,8 +132,8 @@ class GIF extends Component {
             lonlats={lonlats}
             startDate={startDate}
             endDate={endDate}
-            onClick={this.createGIF.bind(this)}
-            onCheck={this.toggleShowDates.bind(this)}
+            onClick={this.createGIF}
+            onCheck={this.toggleShowDates}
             numberOfFrames={numberOfFrames}
           />
 

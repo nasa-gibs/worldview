@@ -37,6 +37,8 @@ class MeasureMenu extends Component {
       tooltipOpen: false,
     };
     this.tooltipToggle = this.tooltipToggle.bind(this);
+    this.triggerEvent = this.triggerEvent.bind(this);
+    this.unitToggle = this.unitToggle.bind(this);
   }
 
   triggerEvent(eventName) {
@@ -68,7 +70,7 @@ class MeasureMenu extends Component {
               id="unit-toggle"
               className="custom-control-input"
               type="checkbox"
-              onChange={this.unitToggle.bind(this)}
+              onChange={this.unitToggle}
               defaultChecked={this.props.units === 'mi'}
             />
             <label className="custom-control-label" htmlFor="unit-toggle">
@@ -78,7 +80,7 @@ class MeasureMenu extends Component {
         </Form>
         <IconList
           list={OPTIONS_ARRAY}
-          onClick={this.triggerEvent.bind(this)}
+          onClick={this.triggerEvent}
           size={listSize}
         />
       </>

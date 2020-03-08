@@ -15,6 +15,8 @@ class ThresholdSelect extends React.Component {
       activeDragger: 'start',
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
+    this.updateSquash = this.updateSquash.bind(this);
+    this.updateThreshold = this.updateThreshold.bind(this);
   }
 
   /**
@@ -106,7 +108,7 @@ class ThresholdSelect extends React.Component {
             label="Squash Palette"
             classNames="wv-squash-button-check"
             id={`wv-squash-button-check${index}`}
-            onCheck={this.updateSquash.bind(this)}
+            onCheck={this.updateSquash}
           />
         </div>
         <div
@@ -117,7 +119,7 @@ class ThresholdSelect extends React.Component {
             defaultValue={[start, end]}
             min={min}
             max={max}
-            onChange={this.updateThreshold.bind(this)}
+            onChange={this.updateThreshold}
           />
           <div className="wv-label">
             <span className="wv-label-range-min wv-label-range">
