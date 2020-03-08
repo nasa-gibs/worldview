@@ -418,7 +418,7 @@ export function setDisabledSelector(
       maps: {
         [index]: {
           $merge: {
-            disabled: isNaN(classIndex) ? [] : oldDisabled,
+            disabled: Number.isNaN(classIndex) ? [] : oldDisabled,
           },
         },
       },

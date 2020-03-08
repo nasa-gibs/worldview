@@ -4,7 +4,7 @@ import lodashParseInt from 'lodash/parseInt';
 import util from './util/util';
 
 export const debug = (function() {
-  const parameters = util.fromQueryString(location.search);
+  const parameters = util.fromQueryString(window.location.search);
   const self = {};
 
   const init = function() {

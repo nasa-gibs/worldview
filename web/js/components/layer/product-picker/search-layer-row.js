@@ -16,6 +16,8 @@ class LayerRow extends React.Component {
     this.state = {
       checked: props.isEnabled,
     };
+    this.toggleCheck = this.toggleCheck.bind(this);
+    this.toggleShowMetadata = this.toggleShowMetadata.bind(this);
   }
 
   /**
@@ -111,12 +113,12 @@ class LayerRow extends React.Component {
             type="checkbox"
             id={`${layer.id}-checkbox`}
             title={title}
-            name={name}
+            name={`${layer.id}-checkbox`}
             checked={checked}
-            onChange={this.toggleCheck.bind(this)}
+            onChange={this.toggleCheck}
           />
         </div>
-        <div className="layers-all-header" onClick={this.toggleShowMetadata.bind(this)}>
+        <div className="layers-all-header" onClick={this.toggleShowMetadata}>
           {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
           {subtitle && <h5>{subtitle}</h5>}
           {description && !isMetadataShowing && (

@@ -496,7 +496,7 @@ const createLayerArrayFromState = function(state, config) {
           }
           if (attr.id === 'opacity') {
             opacity = util.clamp(parseFloat(attr.value), 0, 1);
-            if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+            if (Number.isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
           }
           if (attr.id === 'disabled') {
             const values = util.toArray(attr.value.split(';'));

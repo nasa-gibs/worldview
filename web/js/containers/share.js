@@ -19,7 +19,7 @@ import { history } from '../main';
 
 const getShortenRequestString = function(mock, permalink) {
   const mockStr = mock || '';
-  if (/localhost/.test(location)) {
+  if (/localhost/.test(window.location)) {
     return 'mock/short_link.json';
   }
   return (

@@ -84,7 +84,6 @@
 
         "class-methods-use-this": "off",
         "max-len": "off",
-        "no-restricted-globals": "off",
         "no-multi-assign": "off",
         "consistent-return": "off",
         "no-underscore-dangle": "off",

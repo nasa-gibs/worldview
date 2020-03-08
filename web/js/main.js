@@ -45,7 +45,7 @@ const startTime = new Date().getTime();
 //   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ latency: 0 }) ||
 //     defaultCompose
 //   : defaultCompose;
-const parameters = util.fromQueryString(location.search);
+const parameters = util.fromQueryString(window.location.search);
 let { elapsed } = util;
 const errors = [];
 // Document ready function

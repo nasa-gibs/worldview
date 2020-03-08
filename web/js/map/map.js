@@ -64,7 +64,7 @@ export function mapIsExtentValid(extent) {
     extent = extent.toArray();
   }
   lodashEach(extent, (value) => {
-    if (isNaN(value)) {
+    if (Number.isNaN(value)) {
       valid = false;
       return false;
     }

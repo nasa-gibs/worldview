@@ -93,7 +93,7 @@ export function mapModel(models, config) {
     }
     // get rotation if it exists
     if (state.p === 'arctic' || state.p === 'antarctic') {
-      if (!isNaN(state.r)) {
+      if (!Number.isNaN(state.r)) {
         self.rotation = state.r * (Math.PI / 180.0);
       } // convert to radians
     }
