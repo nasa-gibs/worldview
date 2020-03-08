@@ -83,7 +83,6 @@
         "prefer-destructuring": "warn",
 
         "no-restricted-syntax": "off",
-        "no-useless-concat": "off",
         "class-methods-use-this": "off",
         "max-len": "off",
         "no-restricted-properties": "off",
@@ -126,7 +125,7 @@
         "react/no-unused-prop-types": "warn", // 66 errors
         "react/forbid-prop-types": "off", // 216 errors
         "react/require-default-props": "off", // 965 errors
-        "react/destructuring-assignment": "off" // 464 errors
+        "react/destructuring-assignment": "off" // 464 errors (Set to warn)
       }
     }
   ]

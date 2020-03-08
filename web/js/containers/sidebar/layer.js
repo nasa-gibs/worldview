@@ -353,7 +353,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(removeLayer(id));
   },
   onOptionsClick: (layer, title) => {
-    const key = `${'LAYER_OPTIONS_MODAL' + '-'}${layer.id}`;
+    const key = `LAYER_OPTIONS_MODAL-${layer.id}`;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_options',
     });
@@ -374,7 +374,7 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   onInfoClick: (layer, title) => {
-    const key = `${'LAYER_INFO_MODAL' + '-'}${layer.id}`;
+    const key = `LAYER_INFO_MODAL-${layer.id}`;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_info',
     });

@@ -78,7 +78,7 @@ export class MapInteractions extends React.Component {
 
   render() {
     const { isShowingClick, mouseEvents } = this.props;
-    const mapClasses = isShowingClick ? 'wv-map' + ' cursor-pointer' : 'wv-map';
+    const mapClasses = isShowingClick ? 'wv-map cursor-pointer' : 'wv-map';
 
     return (
       <>
