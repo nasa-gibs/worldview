@@ -26,6 +26,7 @@ const organizeURLStatus = async(scrapedUrls) => {
   const now = new Date();
 
   // Check for 'results' directory or make new one
+  // eslint-disable-next-line no-unused-expressions
   fs.existsSync('./tasks/link-check/results') || fs.mkdirSync('./tasks/link-check/results');
 
   const fileName = `./tasks/link-check/results/WV-link-check-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}.json`;
