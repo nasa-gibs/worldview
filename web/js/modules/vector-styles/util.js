@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import {
   assign as lodashAssign,
   find as lodashFind,

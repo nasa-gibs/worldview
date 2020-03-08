@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Coordinates from './coordinates';
