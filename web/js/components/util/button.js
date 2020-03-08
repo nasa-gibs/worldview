@@ -5,26 +5,27 @@ import PropTypes from 'prop-types';
  * @class Button
  * @extends React.Component
  */
-export default class Button extends React.Component {
-  render() {
-    return (
-      <button
-        type="button"
-        onClick={this.props.onClick}
-        onMouseDown={(e) => e.stopPropagation()}
-        style={this.props.style}
-        id={this.props.id}
-        disabled={!this.props.valid}
-        className={
-          this.props.valid
-            ? `wv-button ${this.props.className}`
-            : `wv-disabled wv-button ${this.props.className}`
+export default function Button(props) {
+  const {
+    id, onClick, style, valid, className, text,
+  } = props;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      onMouseDown={(e) => e.stopPropagation()}
+      style={style}
+      id={id}
+      disabled={!valid}
+      className={
+          valid
+            ? `wv-button ${className}`
+            : `wv-disabled wv-button ${className}`
         }
-      >
-        <span className="button-text">{this.props.text}</span>
-      </button>
-    );
-  }
+    >
+      <span className="button-text">{text}</span>
+    </button>
+  );
 }
 
 Button.defaultProps = {

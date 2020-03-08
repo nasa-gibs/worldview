@@ -16,34 +16,32 @@ const listIcons = {
   outage: faExclamationCircle,
 };
 
-class NotificationBlock extends React.Component {
-  render() {
-    const { arr, type, numberNotSeen } = this.props;
-    return (
-      <ul>
-        {arr.map((notification, i) => {
-          const dateObject = new Date(notification.created_at);
-          const date = `${dateObject.getDate()
-          } ${
-            util.giveMonth(dateObject)
-          } ${
-            dateObject.getFullYear()}`;
-          const activeClass = numberNotSeen > i ? `${type}-notification-item` : '';
-          return (
-            /* eslint react/no-array-index-key: 1 */
-            <li key={type + i} className={activeClass}>
-              <h2>
-                <FontAwesomeIcon icon={listIcons[type]} />
-                <span>{`Posted ${date}`}</span>
-              </h2>
-              <p dangerouslySetInnerHTML={{ __html: notification.message }} />
-            </li>
-          );
-        })}
-      </ul>
-    );
-  }
-}
+const NotificationBlock = (props) => {
+  const { arr, type, numberNotSeen } = props;
+  return (
+    <ul>
+      {arr.map((notification, i) => {
+        const dateObject = new Date(notification.created_at);
+        const date = `${dateObject.getDate()
+        } ${
+          util.giveMonth(dateObject)
+        } ${
+          dateObject.getFullYear()}`;
+        const activeClass = numberNotSeen > i ? `${type}-notification-item` : '';
+        return (
+        /* eslint react/no-array-index-key: 1 */
+          <li key={type + i} className={activeClass}>
+            <h2>
+              <FontAwesomeIcon icon={listIcons[type]} />
+              <span>{`Posted ${date}`}</span>
+            </h2>
+            <p dangerouslySetInnerHTML={{ __html: notification.message }} />
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
 
 export default NotificationBlock;
 

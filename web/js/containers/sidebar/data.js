@@ -51,50 +51,48 @@ const CustomBodyModalContent = () => (
   </>
 );
 
-class Data extends React.Component {
-  render() {
-    const {
-      isActive,
-      height,
-      findProductToSelect,
-      counts,
-      selectedProduct,
-      selectProduct,
-      activeLayers,
-      products,
-      showUnavailableReason,
-      tabTypes,
-    } = this.props;
-    if (!tabTypes.download) return null;
-    const dataArray = Object.entries(products);
-    if (dataArray.length > 0 && !selectedProduct && isActive) {
-      findProductToSelect(activeLayers, selectedProduct);
-    } else if (selectedProduct && !doesSelectedExist(dataArray, selectedProduct)) {
-      findProductToSelect(activeLayers, selectedProduct);
-    }
-    return (
-      <Scrollbars style={{ maxHeight: `${height}px` }}>
-        <div id="wv-data">
-          <div className="wv-datalist sidebar-panel content">
-            <div id="wv-datacontent">
-              {dataArray.map((product, i) => (
-                <Products
-                  key={product[0]}
-                  id={product[0]}
-                  productObject={product[1]}
-                  countsObject={counts}
-                  isSelected={selectedProduct === product[0]}
-                  selectProduct={selectProduct}
-                  showUnavailableReason={showUnavailableReason}
-                />
-              ))}
-            </div>
+const Data = (props) => {
+  const {
+    isActive,
+    height,
+    findProductToSelect,
+    counts,
+    selectedProduct,
+    selectProduct,
+    activeLayers,
+    products,
+    showUnavailableReason,
+    tabTypes,
+  } = props;
+  if (!tabTypes.download) return null;
+  const dataArray = Object.entries(products);
+  if (dataArray.length > 0 && !selectedProduct && isActive) {
+    findProductToSelect(activeLayers, selectedProduct);
+  } else if (selectedProduct && !doesSelectedExist(dataArray, selectedProduct)) {
+    findProductToSelect(activeLayers, selectedProduct);
+  }
+  return (
+    <Scrollbars style={{ maxHeight: `${height}px` }}>
+      <div id="wv-data">
+        <div className="wv-datalist sidebar-panel content">
+          <div id="wv-datacontent">
+            {dataArray.map((product, i) => (
+              <Products
+                key={product[0]}
+                id={product[0]}
+                productObject={product[1]}
+                countsObject={counts}
+                isSelected={selectedProduct === product[0]}
+                selectProduct={selectProduct}
+                showUnavailableReason={showUnavailableReason}
+              />
+            ))}
           </div>
         </div>
-      </Scrollbars>
-    );
-  }
-}
+      </div>
+    </Scrollbars>
+  );
+};
 Data.propTypes = {
   activeLayers: PropTypes.array,
   counts: PropTypes.object,
