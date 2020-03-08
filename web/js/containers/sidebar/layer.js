@@ -237,7 +237,7 @@ class Layer extends React.Component {
             <div className="layer-main">
               <div className="layer-info">
                 {this.renderControls()}
-                <h4 title={name.title}>{names.title}</h4>
+                <h4 title={names.title}>{names.title}</h4>
                 <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
                 {hasPalette ? this.getPaletteLegend() : ''}
               </div>

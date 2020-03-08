@@ -11,6 +11,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {object} date Date of data to be displayed on the map.
    * @return {object}      Promise.all
    */
+  /* eslint-disable no-restricted-globals */
   self.promiseDay = function(date) {
     let viewState;
     let frameState;
@@ -92,7 +93,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
       // Current day (within map extent)
       extent = getExtent(extent, viewportExtent);
     }
-    if (!isFinite(extent[0])) {
+    if (!Number.isFinite(extent[0])) {
       return null;
     }
     return extent;

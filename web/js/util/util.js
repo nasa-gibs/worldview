@@ -216,7 +216,7 @@ export default (function(self) {
     }
     const date = new Date(Date.UTC(year, month, day, hour, minute, second,
       millisecond));
-    if (isNaN(date.getTime())) {
+    if (Number.isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
     }
     return date;
@@ -245,7 +245,7 @@ export default (function(self) {
    * @param {Object} d | Date object
    */
   self.isValidDate = function(d) {
-    return d instanceof Date && !isNaN(d);
+    return d instanceof Date && !Number.isNaN(d);
   };
   /**
    * Parses a UTC ISO 8601 date to a non UTC date
@@ -281,7 +281,7 @@ export default (function(self) {
     }
     const date = new Date(year, month, day, hour, minute, second,
       millisecond);
-    if (isNaN(date.getTime())) {
+    if (Number.isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
     }
     return date;

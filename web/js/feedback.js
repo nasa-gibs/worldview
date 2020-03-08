@@ -20,7 +20,7 @@ export function feedbackUi() {
       feedback.showForm();
       feedbackInit = true;
     } else {
-      location.href = 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool';
+      window.location.href = 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool';
     }
   };
   return self;

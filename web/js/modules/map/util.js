@@ -58,7 +58,7 @@ export function getMapParameterSetup(
       initialState: 0,
       options: {
         serializeNeedsGlobalState: true,
-        parse: (state) => (!isNaN(state) ? state * (Math.PI / 180.0) : 0),
+        parse: (state) => (!Number.isNaN(state) ? state * (Math.PI / 180.0) : 0),
         serialize: (currentItemState, currentState) => (currentItemState
             && currentState.proj.selected.id !== 'geographic'
           ? (currentItemState * (180.0 / Math.PI)).toPrecision(6)
@@ -87,7 +87,7 @@ export function mapIsExtentValid(extent) {
     extent = extent.toArray();
   }
   lodashEach(extent, (value) => {
-    if (isNaN(value)) {
+    if (Number.isNaN(value)) {
       valid = false;
       return false;
     }
@@ -191,7 +191,7 @@ export function calculateExtent(extent, viewportExtent) {
     // Current day (within map extent)
     extent = getExtent(extent, viewportExtent);
   }
-  if (!isFinite(extent[0])) {
+  if (!Number.isFinite(extent[0])) {
     return null;
   }
   return extent;

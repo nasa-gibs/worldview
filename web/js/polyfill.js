@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 // ===========================================================================
 // Polyfills and browser quirks - DEPRECATED
 // This file is full of lots of old hacks, that are kept around to avoid
