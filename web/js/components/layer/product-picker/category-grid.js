@@ -9,45 +9,43 @@ import CategoryCell from './category-cell';
  * @class LayerList
  * @extends React.Component
  */
-class CategoryGrid extends React.Component {
-  render() {
-    const {
-      categories,
-      measurementConfig,
-      drawMeasurements,
-      hasMeasurementSource,
-      categoryType,
-      width,
-    } = this.props;
-    const masonryOptions = {
-      transitionDuration: '0.6s',
-      columnWidth: width >= 630 ? 310 : width - 26,
-      gutter: 10,
-    };
-    categories.map((item) => {
-      item.sortOrder = item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
-    });
-    const orderedCategories = lodashOrderBy(
-      categories,
-      ['sortOrder', 'title'],
-      ['asc'],
-    );
-    return (
-      <Masonry className="category-masonry-case" options={masonryOptions}>
-        {orderedCategories.map((category) => (
-          <CategoryCell
-            key={category.id}
-            category={category}
-            categoryType={categoryType}
-            measurementConfig={measurementConfig}
-            drawMeasurements={drawMeasurements}
-            hasMeasurementSource={hasMeasurementSource}
-          />
-        ))}
-      </Masonry>
-    );
-  }
-}
+const CategoryGrid = (props) => {
+  const {
+    categories,
+    measurementConfig,
+    drawMeasurements,
+    hasMeasurementSource,
+    categoryType,
+    width,
+  } = props;
+  const masonryOptions = {
+    transitionDuration: '0.6s',
+    columnWidth: width >= 630 ? 310 : width - 26,
+    gutter: 10,
+  };
+  categories.forEach((item) => {
+    item.sortOrder = item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
+  });
+  const orderedCategories = lodashOrderBy(
+    categories,
+    ['sortOrder', 'title'],
+    ['asc'],
+  );
+  return (
+    <Masonry className="category-masonry-case" options={masonryOptions}>
+      {orderedCategories.map((category) => (
+        <CategoryCell
+          key={category.id}
+          category={category}
+          categoryType={categoryType}
+          measurementConfig={measurementConfig}
+          drawMeasurements={drawMeasurements}
+          hasMeasurementSource={hasMeasurementSource}
+        />
+      ))}
+    </Masonry>
+  );
+};
 
 CategoryGrid.propTypes = {
   categories: PropTypes.array,

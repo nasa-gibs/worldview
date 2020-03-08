@@ -44,31 +44,30 @@ const listIcons = {
  * @class List
  * @extends React.Component
  */
-export default class List extends React.Component {
-  render() {
-    const {
-      list, listClass, active, disabled, onClick, size,
-    } = this.props;
-    return (
-      <ListGroup className={listClass}>
-        {list.map((item) => {
-          const { iconName } = item;
-          const { iconClass } = item;
-          const isActive = item.key && active ? item.key === active : false;
-          const isDisabled = item.key && disabled ? item.key === disabled : false;
-          const { badge } = item;
-          const className = item.className ? item.className : '';
-          const tagType = item.href ? 'a' : 'button';
-          return (
-            <ListGroupItem
-              key={item.key || item.id || ''}
-              tag={tagType}
-              active={isActive}
-              id={item.id || ''}
-              className={`${className} ${size}-item`}
-              href={item.href ? item.href : undefined}
-              target={item.href ? '_blank' : undefined}
-              onClick={
+export default function List(props) {
+  const {
+    list, listClass, active, disabled, onClick, size,
+  } = props;
+  return (
+    <ListGroup className={listClass}>
+      {list.map((item) => {
+        const { iconName } = item;
+        const { iconClass } = item;
+        const isActive = item.key && active ? item.key === active : false;
+        const isDisabled = item.key && disabled ? item.key === disabled : false;
+        const { badge } = item;
+        const className = item.className ? item.className : '';
+        const tagType = item.href ? 'a' : 'button';
+        return (
+          <ListGroupItem
+            key={item.key || item.id || ''}
+            tag={tagType}
+            active={isActive}
+            id={item.id || ''}
+            className={`${className} ${size}-item`}
+            href={item.href ? item.href : undefined}
+            target={item.href ? '_blank' : undefined}
+            onClick={
                 item.onClick
                   ? item.onClick
                   : onClick
@@ -77,17 +76,16 @@ export default class List extends React.Component {
                     }
                     : null
               }
-              disabled={isDisabled}
-            >
-              {iconName ? <FontAwesomeIcon icon={listIcons[iconName]} className={iconClass} fixedWidth /> : ''}
-              {item.text || ''}
-              {badge ? <Badge pill>{item.badge}</Badge> : ''}
-            </ListGroupItem>
-          );
-        })}
-      </ListGroup>
-    );
-  }
+            disabled={isDisabled}
+          >
+            {iconName ? <FontAwesomeIcon icon={listIcons[iconName]} className={iconClass} fixedWidth /> : ''}
+            {item.text || ''}
+            {badge ? <Badge pill>{item.badge}</Badge> : ''}
+          </ListGroupItem>
+        );
+      })}
+    </ListGroup>
+  );
 }
 List.defaultProps = {
   size: 'medium',

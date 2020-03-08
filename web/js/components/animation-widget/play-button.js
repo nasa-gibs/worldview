@@ -8,21 +8,20 @@ import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
  * @class PlayButton
  * @extends React.Component
  */
-class PlayButton extends React.Component {
-  render() {
-    return (
-      <a
-        title={this.props.playing ? 'Pause video' : 'Play video'}
-        className="wv-anim-play-case wv-icon-case"
-        onClick={this.props.playing ? this.props.pause : this.props.play}
-      >
-        {this.props.playing
-          ? <FontAwesomeIcon icon={faPause} className="wv-animation-widget-icon" />
-          : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />}
-      </a>
-    );
-  }
-}
+const PlayButton = (props) => {
+  const { playing, pause, play } = props;
+  return (
+    <a
+      title={playing ? 'Pause video' : 'Play video'}
+      className="wv-anim-play-case wv-icon-case"
+      onClick={playing ? pause : play}
+    >
+      {playing
+        ? <FontAwesomeIcon icon={faPause} className="wv-animation-widget-icon" />
+        : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />}
+    </a>
+  );
+};
 
 PlayButton.propTypes = {
   pause: PropTypes.func,

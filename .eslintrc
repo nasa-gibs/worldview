@@ -117,7 +117,7 @@
         // React rules overrides
         "react/jsx-props-no-spreading": "warn",
         "react/jsx-filename-extension": "off",
-        "react/prefer-stateless-function": "warn", // 20 errors, consider fixing
+        // "react/prefer-stateless-function": "warn", // 20 errors, consider fixing
         "react/sort-comp": "off",
         "react/no-unused-state": "warn", // 38 errors
         "react/no-unused-prop-types": "warn", // 66 errors
