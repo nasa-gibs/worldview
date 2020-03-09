@@ -64,7 +64,8 @@ export function mapIsExtentValid(extent) {
     extent = extent.toArray();
   }
   lodashEach(extent, (value) => {
-    if (Number.isNaN(value)) {
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(value)) {
       valid = false;
       return false;
     }

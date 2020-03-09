@@ -418,7 +418,8 @@ export function setDisabledSelector(
       maps: {
         [index]: {
           $merge: {
-            disabled: Number.isNaN(classIndex) ? [] : oldDisabled,
+            // eslint-disable-next-line no-restricted-globals
+            disabled: isNaN(classIndex) ? [] : oldDisabled,
           },
         },
       },

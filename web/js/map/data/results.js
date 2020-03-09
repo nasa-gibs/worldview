@@ -771,7 +771,8 @@ export function dataResultsTagVersionRegex(spec) {
 
       if (version === null) {
         console.warn('version not assigned', strVersion, granule);
-      } else if (Number.isNaN(version)) {
+      // eslint-disable-next-line no-restricted-globals
+      } else if (isNaN(version)) {
         console.warn('version is not a number', strVersion, granule);
       } else {
         granule.version = version;

@@ -125,7 +125,8 @@ class DateInputColumn extends Component {
       case 'month':
         newDate = this.monthValidation(value);
         // transform month number to string (e.g., 3 -> 'MAR')
-        if (newDate !== null && !Number.isNaN(value)) {
+        // eslint-disable-next-line no-restricted-globals
+        if (newDate !== null && !isNaN(value)) {
           value = util.monthStringArray[value - 1];
         }
         break;
@@ -137,6 +138,8 @@ class DateInputColumn extends Component {
         break;
       case 'minute':
         newDate = this.minuteValidation(value);
+        break;
+      default:
         break;
     }
 
@@ -164,7 +167,7 @@ class DateInputColumn extends Component {
   monthValidation = (input) => {
     const date = new Date(this.props.date);
     let newDate;
-    if (!Number.isNaN(input) && input < 13 && input > 0) {
+    if (!isNaN(input) && input < 13 && input > 0) {
       newDate = new Date(date.setUTCMonth(input - 1));
       if (newDate) {
         return this.validateDate(newDate);
@@ -263,7 +266,8 @@ class DateInputColumn extends Component {
       ? this.props.value
       : inputValue;
 
-    if (type === 'month' && !Number.isNaN(value)) {
+    // eslint-disable-next-line no-restricted-globals
+    if (type === 'month' && !isNaN(value)) {
       value = util.monthStringArray[value - 1];
     } else if (value.length === 1) {
       value = `0${value}`;
