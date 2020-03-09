@@ -82,15 +82,12 @@
         "class-methods-use-this": "warn",
         "no-plusplus": "warn",
         "max-len": "off",
-  
+
         "consistent-return": "off",
         "no-underscore-dangle": "off",
-        "vars-on-top": "off",
         "func-names": "off",
-        "no-param-reassign": "off",
+        "no-param-reassign": "warn",
         "no-use-before-define": "off",
-
-        "prefer-rest-params": "off",
 
         // Import rules overrides
         "import/prefer-default-export": "off",
@@ -110,9 +107,9 @@
         "jsx-a11y/click-events-have-key-events": "off",
 
         // React rules overrides
-        "react/jsx-props-no-spreading": "warn",
-        "react/destructuring-assignment": "off", // 464 errors (Set to WARN)
+        "react/destructuring-assignment": "warn", // 464 errors
         "react/no-unused-state": "warn", // 38 errors
+        "react/jsx-props-no-spreading": "warn",
         "react/jsx-filename-extension": "off",
         "react/sort-comp": "off",
 

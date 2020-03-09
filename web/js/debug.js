@@ -21,8 +21,7 @@ export const debug = (function() {
 
   const delayedCallback = function(jqXHR, wrap, delay) {
     return function(fn) {
-      wrap(function() {
-        const args = arguments;
+      wrap((...args) => {
         setTimeout(() => {
           if (fn) {
             fn.apply(jqXHR, args);
@@ -35,10 +34,9 @@ export const debug = (function() {
 
   self.loadDelay = function(delay) {
     const { ajax } = $;
-    $.ajax = function() {
-      const ajaxArgs = arguments;
+    $.ajax = function(...ajaxArgs) {
       console.log('delay', delay, ajaxArgs);
-      const jqXHR = ajax.apply($, arguments);
+      const jqXHR = ajax.apply($, ajaxArgs);
 
       const { done } = jqXHR;
       jqXHR.done = delayedCallback(jqXHR, done, delay);

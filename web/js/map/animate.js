@@ -28,8 +28,7 @@ export function mapAnimate(config, ui, store) {
     const distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
     let duration = Math.floor(distanceDuration * 20 + 1000); // approx 6 seconds to go 360 degrees
     if (!rotation) rotation = 0;
-    const animationPromise = function() {
-      const args = Array.prototype.slice.call(arguments);
+    const animationPromise = function(...args) {
       return new Promise((resolve, reject) => {
         args.push((complete) => {
           if (complete) resolve();
