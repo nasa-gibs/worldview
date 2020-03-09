@@ -5,8 +5,6 @@ const Nightwatch = require('nightwatch');
 const browserstack = require('browserstack-local');
 const environments = require('./environments.js');
 
-let bs_local;
-
 const environment_names = environments.map(
   (e) => [
     e.browser,
@@ -21,7 +19,8 @@ try {
 
   // Code to start browserstack local before start of test
   console.log('Connecting localhost to Browserstack...');
-  Nightwatch.bs_local = bs_local = new browserstack.Local();
+  const bs_local = new browserstack.Local();
+  Nightwatch.bs_local = bs_local;
   bs_local.start({
     key: process.env.BROWSERSTACK_ACCESS_KEY,
     localIdentifier: `wvtester19234${process.env.BROWSERSTACK_USER}`.replace(/[^a-zA-Z0-9]/g, ''),

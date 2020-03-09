@@ -34,6 +34,8 @@
       "error",
       "never"
     ],
+    // Must be disabled for e2e assertions
+    "no-unused-expressions": "off",
     /* BEGIN Airbnb overrides
       Rules below are overriding the Airbnb style guide rules in order to get existing code
       to pass without having to fix hundreds of existing errors by hand.
@@ -41,17 +43,10 @@
       For rules set to "off": consider setting to "warn" to identify non-compliance in new code
       For rules set to "warn": consider removing to throw errors on existing and future code
     */
-    "array-callback-return": "warn",
-    "prefer-destructuring": "warn",
-    "prefer-const": "warn",
-    "no-nested-ternary": "warn",
-    "no-shadow": "warn",
-    "no-use-before-define": "warn",
-    "prefer-rest-params": "warn",
-    "no-plusplus": "warn",
     "no-param-reassign": "warn",
-    "no-multi-assign": "warn",
-    "no-unused-expressions": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "func-names": "off",
+    "no-shadow": "off",
+    "no-plusplus": "off"
   }
 }
