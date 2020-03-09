@@ -908,9 +908,9 @@ export default (function(self) {
    * @return the function wrapped in a try/catch block.
    */
   self.wrap = function(func) {
-    return function() {
+    return function(...args) {
       try {
-        return func.apply(func, arguments);
+        return func.apply(func, args);
       } catch (error) {
         self.error(error);
       }
@@ -1084,11 +1084,11 @@ export default (function(self) {
   // arguments array contains all args passed. String must be formatted
   // so that first replacement starts with "{1}"
   // usage example: wv.util.format("{1}{2}",'World','view')
-  self.format = function() {
-    let formatted = arguments[0];
-    for (let i = 1; i < arguments.length; i++) {
+  self.format = function(...args) {
+    let [formatted] = args;
+    for (let i = 1; i < args.length; i++) {
       const regexp = new RegExp(`\\{${i}\\}`, 'gi');
-      formatted = formatted.replace(regexp, arguments[i]);
+      formatted = formatted.replace(regexp, args[i]);
     }
     return formatted;
   };

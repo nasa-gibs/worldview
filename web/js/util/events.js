@@ -36,12 +36,13 @@ export function events() {
     allListeners.push(callback);
   };
 
-  self.trigger = function(event) {
+  self.trigger = function(...args) {
+    const [event] = args;
     const listeners = events[event];
     if (!listeners && !allListeners) {
       return;
     }
-    const eventArguments = Array.prototype.slice.call(arguments, 1);
+    const eventArguments = args.slice(1);
     lodashEach(events[event], (listener) => {
       listener.apply(self, eventArguments);
     });
