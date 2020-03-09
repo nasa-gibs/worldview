@@ -177,14 +177,17 @@ class PaletteSelect extends React.Component {
         <h2 className="wv-header">Color Palette</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
           {this.renderDefault()}
-          {paletteOrder.map((id) => {
-            if (lodashIndexOf(recommended, id) < 0) {
-              const item = this.customLegend(id);
-              if (item) {
-                return item;
+          {
+            // eslint-disable-next-line array-callback-return
+            paletteOrder.map((id) => {
+              if (lodashIndexOf(recommended, id) < 0) {
+                const item = this.customLegend(id);
+                if (item) {
+                  return item;
+                }
               }
-            }
-          })}
+            })
+          }
         </Scrollbar>
       </div>
     );

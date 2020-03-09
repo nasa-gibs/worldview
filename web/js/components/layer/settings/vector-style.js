@@ -140,11 +140,12 @@ class VectorStyleSelect extends React.Component {
     const vectorStyle = vectorStyles[vectorStyleId];
     const vectorStyleLayers = vectorStyle.layers;
 
-    const uniqueStyleLayers = vectorStyleLayers.filter(function(a) {
+    const uniqueStyleLayers = vectorStyleLayers.filter((a) => {
       if (!this[a.id]) {
         this[a.id] = true;
         return true;
       }
+      return false;
     }, Object.create(null));
     return (
       <div
@@ -153,12 +154,15 @@ class VectorStyleSelect extends React.Component {
       >
         <h2 className="wv-header">Vector Styles</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
-          {uniqueStyleLayers.map((styleLayerObject) => {
-            if (styleLayerObject && styleLayerObject) {
-              const item = this.customLegend(styleLayerObject);
-              return item;
-            }
-          })}
+          {
+            // eslint-disable-next-line array-callback-return
+            uniqueStyleLayers.map((styleLayerObject) => {
+              if (styleLayerObject && styleLayerObject) {
+                const item = this.customLegend(styleLayerObject);
+                return item;
+              }
+            })
+          }
         </Scrollbar>
       </div>
     );
