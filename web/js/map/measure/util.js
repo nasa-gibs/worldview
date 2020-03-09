@@ -142,5 +142,5 @@ export function getGeographicLibDistance(line) {
  */
 export function roundAndLocale(measurement, factor) {
   factor = factor || 1;
-  return (Math.round(measurement / (factor * 100)) / 100).toLocaleString();
+  return (Math.round((measurement / factor) * 100) / 100).toLocaleString();
 }
