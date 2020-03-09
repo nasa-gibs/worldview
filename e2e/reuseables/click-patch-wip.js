@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 module.exports = {
   customMouseEvent(client, selector, offsetX, offsetY, eventType) {
     eventType = eventType || 'dblclick';
@@ -6,7 +7,9 @@ module.exports = {
         eventType, selector, offsetX, offsetY,
       } = obj;
       const el = document.querySelector(selector || 'body');
+
       function simulate(element, eventName) {
+        // eslint-disable-next-line prefer-rest-params
         const options = extend(defaultOptions, arguments[2] || {});
         let oEvent; let eventType = null;
 
