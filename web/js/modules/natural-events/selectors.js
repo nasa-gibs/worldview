@@ -58,13 +58,13 @@ export function getEventsWithinExtent(
   return visibleListEvents;
 }
 export function getDefaultEventDate(event) {
-  let date = new Date(event.geometries[0].date).toISOString().split('T')[0];
+  let [date] = new Date(event.geometries[0].date).toISOString().split('T');
   if (event.geometries.length < 2) return date;
   const category = event.categories.title || event.categories[0].title;
   const today = new Date().toISOString().split('T')[0];
   // For storms that happened today, get previous date
   if (date === today && category === 'Severe Storms') {
-    date = new Date(event.geometries[1].date).toISOString().split('T')[0];
+    [date] = new Date(event.geometries[1].date).toISOString().split('T');
   }
   return date;
 }

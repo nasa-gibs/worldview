@@ -71,7 +71,7 @@ export function MapRunningData(models, compareUi, store) {
         const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
         color = legend.colors[colorIndex];
       } else if (legend.colors.length === 1) {
-        color = legend.colors[0];
+        [color] = legend.colors;
       }
       activeLayerObj[layerId] = {
         paletteLegends,

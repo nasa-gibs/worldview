@@ -73,6 +73,8 @@ export default function naturalEventsUI(ui, config, store, models) {
         return;
       case CHANGE_PROJECTION:
         return !isLoading ? onProjChange(action.id) : '';
+      default:
+        break;
     }
   };
 
@@ -320,7 +322,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     const today = new Date().toISOString().split('T')[0];
     // For storms that happened today, get previous date
     if (date === today && category === 'Severe Storms') {
-      date = new Date(event.geometries[1].date).toISOString().split('T')[0];
+      [date] = new Date(event.geometries[1].date).toISOString().split('T');
     }
     return date;
   };

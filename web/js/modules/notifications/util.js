@@ -68,13 +68,10 @@ export function localStorageValueMatches(property, value) {
  * @returns {void}
  */
 export function getPriority(sortedNotifications) {
-  let priority; let message; let outage; let
-    alert;
-
-  priority = '';
-  message = sortedNotifications.messages[0];
-  outage = sortedNotifications.outages[0];
-  alert = sortedNotifications.alerts[0];
+  let priority = '';
+  const [message] = sortedNotifications.messages;
+  const [outage] = sortedNotifications.outages;
+  const [alert] = sortedNotifications.alerts;
 
   if (message && !objectAlreadySeen(message)) {
     priority = 'message';
