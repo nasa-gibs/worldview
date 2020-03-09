@@ -167,6 +167,7 @@ class DateInputColumn extends Component {
   monthValidation = (input) => {
     const date = new Date(this.props.date);
     let newDate;
+    // eslint-disable-next-line no-restricted-globals
     if (!isNaN(input) && input < 13 && input > 0) {
       newDate = new Date(date.setUTCMonth(input - 1));
       if (newDate) {
