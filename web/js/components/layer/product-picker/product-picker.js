@@ -55,7 +55,8 @@ class ProductPicker extends React.Component {
       headerElement: undefined,
       listScrollTop: props.listScrollTop || 0,
     };
-    this.runSearch = lodashDebounce(this.runSearch, 300);
+
+    this.runSearch = lodashDebounce(this.runSearch.bind(this), 300);
     this.revertSearchState = this.revertSearchState.bind(this);
     this.showMetadataForLayer = this.showMetadataForLayer.bind(this);
     this.updateSelectedMeasurement = this.updateSelectedMeasurement.bind(this);
