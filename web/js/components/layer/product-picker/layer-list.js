@@ -94,34 +94,37 @@ class LayerList extends React.Component {
     const categoryToUse = category || categoryConfig.All;
     return (
       <div id={`${categoryToUse.id}-list`}>
-        {categoryToUse.measurements.map((measurement, index) => {
-          const current = measurementConfig[measurement];
-          const isSelected = selectedMeasurement === current.id;
-          if (hasMeasurementSource(current)) {
-            return (
-              <CategoryLayerRow
-                key={current.id}
-                id={current.id}
-                index={index}
-                activeLayers={activeLayers}
-                category={categoryToUse}
-                measurement={current}
-                measurementConfig={measurementConfig}
-                layerConfig={layerConfig}
-                hasMeasurementSetting={hasMeasurementSetting}
-                addLayer={addLayer}
-                removeLayer={removeLayer}
-                projection={selectedProjection}
-                isSelected={isSelected}
-                selectedDate={selectedDate}
-                isMobile={isMobile}
-                updateSelectedMeasurement={updateSelectedMeasurement}
-                setSourceIndex={setSourceIndex}
-                selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
-              />
-            );
-          }
-        })}
+        {
+          // eslint-disable-next-line array-callback-return
+          categoryToUse.measurements.map((measurement, index) => {
+            const current = measurementConfig[measurement];
+            const isSelected = selectedMeasurement === current.id;
+            if (hasMeasurementSource(current)) {
+              return (
+                <CategoryLayerRow
+                  key={current.id}
+                  id={current.id}
+                  index={index}
+                  activeLayers={activeLayers}
+                  category={categoryToUse}
+                  measurement={current}
+                  measurementConfig={measurementConfig}
+                  layerConfig={layerConfig}
+                  hasMeasurementSetting={hasMeasurementSetting}
+                  addLayer={addLayer}
+                  removeLayer={removeLayer}
+                  projection={selectedProjection}
+                  isSelected={isSelected}
+                  selectedDate={selectedDate}
+                  isMobile={isMobile}
+                  updateSelectedMeasurement={updateSelectedMeasurement}
+                  setSourceIndex={setSourceIndex}
+                  selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
+                />
+              );
+            }
+          })
+        }
       </div>
     );
   }

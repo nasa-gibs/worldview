@@ -76,7 +76,6 @@
 
         // Base rule overrides
         "default-case": "warn",
-        "array-callback-return": "warn",
         "no-nested-ternary": "warn",
         "no-shadow": "warn",
         "prefer-const": "warn",

@@ -405,6 +405,7 @@ class PaletteLegend extends React.Component {
    */
   renderPaletteLegends() {
     const { paletteLegends } = this.props;
+    // eslint-disable-next-line array-callback-return
     return paletteLegends.map((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
         this[`canvas_${index}`] = React.createRef();
