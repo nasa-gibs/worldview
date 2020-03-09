@@ -216,7 +216,7 @@ export function dataUi(store, ui, config) {
       downloadListPanel.refresh();
     }
   };
-  const onActivate = self.onActivate = function() {
+  const onActivate = function() {
     self.active = true;
     self.events.trigger('activate');
     if (!mapController) {
@@ -224,6 +224,7 @@ export function dataUi(store, ui, config) {
     }
     query();
   };
+  self.onActivate = onActivate;
 
   const onDeactivate = function() {
     self.active = false;

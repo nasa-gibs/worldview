@@ -80,10 +80,9 @@
         "no-shadow": "warn",
         "prefer-const": "warn",
         "class-methods-use-this": "warn",
-        "no-plusplus": "warn", // 50 errors (set to WARN)
-
+        "no-plusplus": "warn",
         "max-len": "off",
-        "no-multi-assign": "off",
+  
         "consistent-return": "off",
         "no-underscore-dangle": "off",
         "vars-on-top": "off",

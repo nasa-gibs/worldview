@@ -75,7 +75,8 @@ export function mapModel(models, config) {
         let { maxExtent } = proj;
 
         if (proj.id === 'geographic') {
-          proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
+          maxExtent = [-250, -90, 250, 90];
+          proj.wrapExtent = maxExtent;
         }
         if (intersects(extent, maxExtent)) {
           self.extent = state.v;

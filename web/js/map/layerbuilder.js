@@ -51,7 +51,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     const layerNext = createLayerFunc(def, options, 1, state);
     const layerPrior = createLayerFunc(def, options, -1, state);
-    layer.wv = layerPrior.wv = layerNext.wv = attributes;
+    layer.wv = attributes;
+    layerPrior.wv = attributes;
+    layerNext.wv = attributes;
     return new OlLayerGroup({
       layers: [layer, layerNext, layerPrior],
     });
