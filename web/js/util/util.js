@@ -216,7 +216,8 @@ export default (function(self) {
     }
     const date = new Date(Date.UTC(year, month, day, hour, minute, second,
       millisecond));
-    if (Number.isNaN(date.getTime())) {
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
     }
     return date;
@@ -245,7 +246,8 @@ export default (function(self) {
    * @param {Object} d | Date object
    */
   self.isValidDate = function(d) {
-    return d instanceof Date && !Number.isNaN(d);
+    // eslint-disable-next-line no-restricted-globals
+    return d instanceof Date && !isNaN(d);
   };
   /**
    * Parses a UTC ISO 8601 date to a non UTC date
@@ -281,7 +283,8 @@ export default (function(self) {
     }
     const date = new Date(year, month, day, hour, minute, second,
       millisecond);
-    if (Number.isNaN(date.getTime())) {
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
     }
     return date;

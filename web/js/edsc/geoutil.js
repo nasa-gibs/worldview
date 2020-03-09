@@ -39,7 +39,7 @@ export default function (L, Coordinate, Arc, config) {
       lat = RAD_TO_DEG * atan2(z, sqrt(x * x + y * y));
       lon = RAD_TO_DEG * atan2(y, x);
       // Guard against the points being the same or antipodal
-      if (Number.isNaN(lat) || Number.isNaN(lon)) {
+      if (isNaN(lat) || isNaN(lon)) {
         return p1;
       }
       while (lon < p1.lng - EPSILON) {
