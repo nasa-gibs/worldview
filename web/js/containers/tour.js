@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
 import update from 'immutability-helper';

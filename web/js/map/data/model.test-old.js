@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 import { dataModel } from './model';
 import { projectionModel } from '../projection/model';

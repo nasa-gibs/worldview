@@ -4,7 +4,7 @@ import {
   LineString as OlLineString,
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
-import { Draw as OlInteractionDraw } from 'ol/interaction/';
+import { Draw as OlInteractionDraw } from 'ol/interaction';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { Vector as OlVectorSource } from 'ol/source';
 import {

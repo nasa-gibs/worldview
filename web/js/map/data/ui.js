@@ -1,6 +1,7 @@
 import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
 import lodashFind from 'lodash/find';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import * as olExtent from 'ol/extent';
 import { dataHandlerGetByName } from './handler';

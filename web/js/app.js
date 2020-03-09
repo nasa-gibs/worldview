@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
+
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
+
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
 import util from './util/util';
