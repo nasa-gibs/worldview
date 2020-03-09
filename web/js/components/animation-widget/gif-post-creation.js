@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { capitalize as lodashCapitalize } from 'lodash';
 import FileSaver from 'file-saver';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import util from '../../util/util';

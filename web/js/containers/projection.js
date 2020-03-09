@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { changeProjection } from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';

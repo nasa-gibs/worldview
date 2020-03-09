@@ -81,8 +81,8 @@
         "no-shadow": "warn",
         "prefer-const": "warn",
         "prefer-destructuring": "warn",
+        "class-methods-use-this": "warn",
 
-        "class-methods-use-this": "off",
         "max-len": "off",
         "no-multi-assign": "off",
         "consistent-return": "off",
@@ -96,8 +96,7 @@
 
         // Import rules overrides
         "import/prefer-default-export": "off",
-        "import/no-cycle": "off",
-        "import/no-unresolved": "off",
+        "import/no-cycle": "warn",
 
         // Accesibility rules overrides
         "jsx-a11y/no-noninteractive-tabindex": "off",

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

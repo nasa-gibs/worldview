@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import lodashOrderBy from 'lodash/orderBy';
 import lodashUniqBy from 'lodash/uniqBy';
-import util from '../util/util';
+import util from '../../util/util';
 
 export default function naturalEventsRequest(models, ui, config) {
   const self = {};
