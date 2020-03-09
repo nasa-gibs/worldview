@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-assign */
 import {
   throttle as lodashThrottle,
   forOwn as lodashForOwn,
@@ -58,16 +59,19 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 
 export function mapui(models, config, store, ui) {
+  let layerBuilder; let
+    createLayer;
   const id = 'wv-map';
   const selector = `#${id}`;
   const animationDuration = 250;
-  const cache = new Cache(400);
+  const self = {};
+  let cache;
   const rotation = new MapRotate(self, models, store);
   const dateline = mapDateLineBuilder(models, config, store, ui);
   const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(config, store);
   const measureTools = {};
-  const dataRunner = new MapRunningData(
+  const dataRunner = self.runningdata = new MapRunningData(
     models,
     compareMapUi,
     store,
@@ -75,34 +79,23 @@ export function mapui(models, config, store, ui) {
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
-  const layerBuilder = mapLayerBuilder(
+  cache = self.cache = new Cache(400);
+  self.mapIsbeingDragged = false;
+  self.mapIsbeingZoomed = false;
+  self.proj = {}; // One map for each projection
+  self.selected = null; // The map for the selected projection
+  self.events = util.events();
+  layerBuilder = self.layerBuilder = mapLayerBuilder(
     models,
     config,
     cache,
     ui,
     store,
   );
-
-  const { createLayer, layerKey } = layerBuilder;
-  const { promiseDay } = precache;
-
-  const self = {
-    cache,
-    createLayer,
-    layerKey,
-    runningdata: dataRunner,
-    layerBuilder,
-    mapIsbeingDragged: false,
-    mapIsbeingZoomed: false,
-    promiseDay,
-    proj: {}, // One map for each projection
-    selected: null, // The map for the selected projection
-    events: util.events(),
-    selectedVectirs: {},
-    reloadLayers,
-    updateDate,
-  };
-
+  self.layerKey = layerBuilder.layerKey;
+  createLayer = self.createLayer = layerBuilder.createLayer;
+  self.promiseDay = precache.promiseDay;
+  self.selectedVectors = {};
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -350,7 +343,6 @@ export function mapui(models, config, store, ui) {
     removeGraticule('activeB');
     cache.clear();
   };
-
   /*
    * get layers from models obj
    * and add each layer to the map
@@ -362,7 +354,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const reloadLayers = function(map) {
+  const reloadLayers = self.reloadLayers = function(map) {
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -610,7 +602,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const updateDate = function() {
+  const updateDate = self.updateDate = function() {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;
