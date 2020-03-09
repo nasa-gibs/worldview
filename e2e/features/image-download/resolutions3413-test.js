@@ -10,7 +10,7 @@ const {
 
 const startParams = [
   'p=arctic',
-  'v=-4194304,-4194304,4194304,4194304',
+  'v=-4194304,-3145728,4194304,3145728',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   't=2018-06-01',
   'imageDownload=',
