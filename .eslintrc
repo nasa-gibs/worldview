@@ -79,8 +79,8 @@
         "no-nested-ternary": "warn",
         "no-shadow": "warn",
         "prefer-const": "warn",
-        "prefer-destructuring": "warn",
         "class-methods-use-this": "warn",
+        "no-plusplus": "warn", // 50 errors (set to WARN)
 
         "max-len": "off",
         "no-multi-assign": "off",
@@ -90,7 +90,7 @@
         "func-names": "off",
         "no-param-reassign": "off",
         "no-use-before-define": "off",
-        "no-plusplus": "off",
+
         "prefer-rest-params": "off",
 
         // Import rules overrides
@@ -112,13 +112,14 @@
 
         // React rules overrides
         "react/jsx-props-no-spreading": "warn",
+        "react/destructuring-assignment": "off", // 464 errors (Set to WARN)
+        "react/no-unused-state": "warn", // 38 errors
         "react/jsx-filename-extension": "off",
         "react/sort-comp": "off",
-        "react/no-unused-state": "warn", // 38 errors
+
         "react/no-unused-prop-types": "warn", // 66 errors
         "react/forbid-prop-types": "off", // 216 errors
-        "react/require-default-props": "off", // 965 errors
-        "react/destructuring-assignment": "off" // 464 errors (Set to warn)
+        "react/require-default-props": "off" // 965 errors
       }
     }
   ]

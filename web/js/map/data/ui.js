@@ -73,6 +73,8 @@ export function dataUi(store, ui, config) {
       case SELECT_DATE:
       case DATA_CONSTANTS.SELECT_PRODUCT:
         return query();
+      default:
+        break;
     }
   };
   const changeProjection = function() {
@@ -536,6 +538,7 @@ const dataUiDownloadListPanel = function(config, store) {
           .split('.')
           .slice(-1);
         if (hrefExt && hrefExt.length > 0) {
+          // eslint-disable-next-line prefer-destructuring
           hrefExt = hrefExt[0];
         }
         if (

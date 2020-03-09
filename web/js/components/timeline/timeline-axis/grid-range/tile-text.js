@@ -13,8 +13,7 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   // TODO: may need to expand for subdaily to differentiate time units
   if (item.timeScale === 'day') {
     const dateSplit = item.date.split(' ');
-    dateText = dateSplit[0];
-    dateTextYear = dateSplit[1];
+    [dateText, dateTextYear] = dateSplit;
   } else {
     dateText = item.date;
   }

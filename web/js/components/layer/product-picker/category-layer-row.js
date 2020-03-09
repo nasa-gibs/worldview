@@ -94,7 +94,8 @@ class CategoryLayerRow extends React.Component {
         if (layer.title.indexOf('(') !== -1) {
           const regExp = /\(([^)]+)\)/;
           const matches = regExp.exec(layer.title);
-          orbitTitle = matches[1];
+          // eslint-disable-next-line prefer-destructuring
+          [, orbitTitle] = matches;
         }
       }
     });

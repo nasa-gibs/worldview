@@ -68,7 +68,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
     let dimensions;
     map = olMap;
     drawDatelines(map, date);
-    self.date = date.toISOString().split('T')[0];
+    [self.date] = date.toISOString().split('T');
     proj = store.getState().proj.id;
 
     Parent.events.on('moveend', () => {
@@ -349,14 +349,14 @@ export function mapDateLineBuilder(models, config, store, ui) {
 
     if (startY > 90) {
       startY = 90;
-      topY = map.getPixelFromCoordinate([extent[2], 90])[1];
+      [, topY] = map.getPixelFromCoordinate([extent[2], 90]);
     } else {
-      topY = map.getPixelFromCoordinate(top)[1];
+      [, topY] = map.getPixelFromCoordinate(top);
     }
     if (extent[1] > -90) {
-      bottomY = map.getPixelFromCoordinate(bottom)[1];
+      [, bottomY] = map.getPixelFromCoordinate(bottom);
     } else {
-      bottomY = map.getPixelFromCoordinate([extent[2], -90])[1];
+      [, bottomY] = map.getPixelFromCoordinate([extent[2], -90]);
     }
     height = Math.round(Math.abs(bottomY - topY));
     return [height, startY];

@@ -130,6 +130,7 @@ export function findAvailableProduct(layers) {
       foundProduct = layers[i].product;
       // If the layer has more than one product, select the first.
       if (Array.isArray(foundProduct)) {
+        // eslint-disable-next-line prefer-destructuring
         foundProduct = foundProduct[0];
       }
     }

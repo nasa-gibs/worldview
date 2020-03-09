@@ -133,7 +133,7 @@ class ProductPicker extends React.Component {
         && !!filteredRows.find((layer) => layer.id === selectedLayer.id);
 
       if (filteredRows.length === 1) {
-        newSelectedLayer = filteredRows[0];
+        [newSelectedLayer] = filteredRows;
       } else if (selectedLayerInResults) {
         newSelectedLayer = selectedLayer;
       }

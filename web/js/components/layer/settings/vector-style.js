@@ -55,6 +55,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | colormap Id
    * @param {String} description | Colormap name
    */
+  // eslint-disable-next-line class-methods-use-this
   renderLegendMultiItem(vectorStyle, vectorStyleId, description) {
     const caseDefaultClassName = 'wv-palette-selector-row ';
     const array = Array.from(vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color'] || vectorStyle.paint['fill-color']);
@@ -71,8 +72,7 @@ class VectorStyleSelect extends React.Component {
           && typeof temp[0][2] === 'string'
           && typeof temp[1] === 'string'
         ) {
-          obj.label = temp[0][2];
-          obj.color = temp[1];
+          [[,, obj.label], obj.color] = temp;
           organizedArray.push(obj);
         } else {
           console.warn('Irregular conditional');

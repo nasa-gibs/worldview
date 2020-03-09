@@ -241,7 +241,7 @@ class LayerSettings extends React.Component {
     } = this.props;
     let customStyle;
     if (layer.custom && layer.custom[0]) {
-      customStyle = layer.custom[0];
+      [customStyle] = layer.custom;
     }
     return (
       <>
