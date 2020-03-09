@@ -152,7 +152,7 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.8.1",
     "write-file-webpack-plugin": "^4.5.1",
-    "yargs": "^14.2.0"
+    "yargs": "^15.3.0"
   },
   "dependencies": {
     "@entryline/gifstream": "^1.2.0",
