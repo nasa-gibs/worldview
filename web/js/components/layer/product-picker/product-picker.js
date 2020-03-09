@@ -324,7 +324,8 @@ class ProductPicker extends React.Component {
       listHeight = selectedLayer ? bodyHeight * 0.4 : bodyHeight;
       listMinHeight = listHeight;
     } else {
-      detailHeight = listHeight = bodyHeight - 80;
+      listHeight = bodyHeight - 80;
+      detailHeight = listHeight;
       listMinHeight = 300;
     }
 
