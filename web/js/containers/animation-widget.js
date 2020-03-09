@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   find as lodashFind,
-  get as lodashGet
+  get as lodashGet,
+  cloneDeep as lodashCloneDeep
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import util from '../util/util';
@@ -208,6 +209,7 @@ class AnimationWidget extends React.Component {
     if (numberOfFrames >= maxFrames) {
       return;
     }
+    const paletteStore = lodashCloneDeep(activePalettes);
 
     this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice').then(
       () => {
@@ -229,7 +231,7 @@ class AnimationWidget extends React.Component {
               event: 'GIF_create_animated_button'
             });
             this.onCloseGif = () => {
-              refreshStateAfterGif(hasCustomPalettes ? activePalettes : undefined, rotation, hasGraticule);
+              refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule);
               toggleGif();
             };
             toggleGif();

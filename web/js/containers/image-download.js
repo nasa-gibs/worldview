@@ -70,7 +70,7 @@ class ImageDownloadContainer extends Component {
       proj,
       map,
       url,
-      onClose,
+      closeModal,
       screenWidth,
       screenHeight,
       date,
@@ -125,7 +125,7 @@ class ImageDownloadContainer extends Component {
           maxHeight={screenHeight}
           maxWidth={screenWidth}
           onChange={this.onBoundaryChange}
-          onClose={onClose}
+          onClose={closeModal}
           bottomLeftStyle={{
             left: x,
             top: y2 + 5,
@@ -217,10 +217,10 @@ ImageDownloadContainer.defualtProps = {
   fileType: 'image/jpeg'
 };
 ImageDownloadContainer.propTypes = {
+  closeModal: PropTypes.func.isRequired,
   fileType: PropTypes.string.isRequired,
   map: PropTypes.object.isRequired,
   onBoundaryChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
   onPanelChange: PropTypes.func.isRequired,
   proj: PropTypes.object.isRequired,
   url: PropTypes.string.isRequired,
