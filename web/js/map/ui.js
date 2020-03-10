@@ -363,7 +363,7 @@ export function mapui(models, config, store, ui) {
      * @param {Boolean} id - layer id
    * @returns {void}
    */
-  var reloadLayers = self.reloadLayers = function(map, granuleOptions) {
+  var reloadLayers = self.reloadLayers = async(map, granuleOptions) => {
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -382,26 +382,43 @@ export function mapui(models, config, store, ui) {
         },
         state
       );
-      lodashEach(defs, async def => {
-        if (isGraticule(def, proj.id)) {
-          addGraticule(def.opacity, layerGroupStr);
-        } else {
-          // update granule date order and reset
-          const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-          let granuleDates;
-          let granuleCount;
-          let geometry;
-          if (state.layers.granuleLayers[layerGroupStr][proj.id][def.id]) {
-            granuleDates = !granuleReset ? state.layers.granuleLayers[layerGroupStr][proj.id][def.id].dates : false;
-            granuleCount = state.layers.granuleLayers[layerGroupStr][proj.id][def.id].count;
-            geometry = state.layers.granuleLayers[layerGroupStr][proj.id][def.id].geometry;
+
+      // get all created layers as promises
+      const createdLayersFromDefs = defs.map((def) => {
+        return new Promise(resolve => {
+          if (isGraticule(def, proj.id)) {
+            addGraticule(def.opacity, layerGroupStr);
+          } else {
+            // update granule date order and reset
+            const granuleReset = granuleOptions && granuleOptions.reset === def.id;
+            const granuleState = state.layers.granuleLayers[layerGroupStr][proj.id][def.id];
+            let granuleDates;
+            let granuleCount;
+            let geometry;
+            if (granuleState) {
+              granuleDates = !granuleReset ? granuleState.dates : false;
+              granuleCount = granuleState.count;
+              geometry = granuleState.geometry;
+            }
+            const granuleLayerParam = {
+              granuleDates,
+              granuleCount,
+              geometry
+            };
+            const createdLayer = createLayer(def, {}, granuleLayerParam);
+            resolve(createdLayer);
           }
-          const granuleLayerParam = { granuleDates, granuleCount, geometry };
-          const createdLayer = await createLayer(def, {}, granuleLayerParam);
-          map.addLayer(createdLayer);
-          updateLayerVisibilities();
-        }
+        });
       });
+
+      // resolve them with Promise.all to preserve layer order delay for CMR granule requests
+      await Promise.all(createdLayersFromDefs)
+        .then(createdLayers => {
+          lodashEach(createdLayers, (createdLayer) => {
+            map.addLayer(createdLayer);
+          });
+        });
+      updateLayerVisibilities();
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
@@ -662,7 +679,8 @@ export function mapui(models, config, store, ui) {
         updateLayerVisibilities();
         self.events.trigger('added-layer');
       } else {
-        self.selected.getLayers().insertAt(mapIndex, await createLayer(def));
+        const newLayer = await createLayer(def);
+        self.selected.getLayers().insertAt(mapIndex, newLayer);
 
         updateLayerVisibilities();
         self.events.trigger('added-layer');
@@ -742,19 +760,21 @@ export function mapui(models, config, store, ui) {
       if (compare && compare.active) {
         if (layerGroup && layerGroup.getLayers().getArray().length) {
           const index = findLayerIndex(def, layerGroup);
+          const updatedLayer = await createLayer(def, {
+            group: activeLayerStr,
+            date: state.date[activeDate]
+          });
           layerGroup.getLayers().setAt(
             index,
-            await createLayer(def, {
-              group: activeLayerStr,
-              date: state.date[activeDate]
-            })
+            updatedLayer
           );
           compareMapUi.update(activeLayerStr);
         }
       } else {
         // layerGroups = self.selected.getLayers().getArray();
         const index = findLayerIndex(def);
-        self.selected.getLayers().setAt(index, await createLayer(def));
+        const updatedLayer = await createLayer(def);
+        self.selected.getLayers().setAt(index, updatedLayer);
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         var vectorStyles = config.vectorStyles;

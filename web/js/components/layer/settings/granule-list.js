@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Button, Spinner } from 'reactstrap';
+import { Button } from 'reactstrap';
 import Scrollbar from '../../util/scrollbar';
 
 const gridConstant = 8;
@@ -40,8 +40,7 @@ class GranuleLayerDateList extends PureComponent {
       hoveredItem: null,
       lastMovedItem: null,
       sorted: true,
-      items: this.props.granuleDates,
-      isLoading: true
+      items: this.props.granuleDates
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
@@ -167,59 +166,10 @@ class GranuleLayerDateList extends PureComponent {
     }
   }
 
-  granuleCmrRequest = async() => {
-    const { updateGranuleCMRGeometry, def, projection } = this.props;
-    const layerId = 'VJ102MOD';
-
-    var ajaxOptions = {
-      url: 'https://cmr.earthdata.nasa.gov/search/',
-      headers: {
-        'Client-Id': 'Worldview'
-      },
-      traditional: true,
-      dataType: 'json',
-      timeout: 45 * 1000
-    };
-
-    const query = 'https://cmr.earthdata.nasa.gov/search/granules.json?shortName=' + layerId + '&temporal=2019-07-21T00%3A36%3A00.000Z%2C2019-07-24T23%3A36%3A00.000Z&pageSize=1000';
-    const response = await fetch(query, ajaxOptions);
-    const data = await response.json();
-    const granuleDateListPolygons = {};
-    data.feed.entry.map(entry => {
-      const date = entry.time_start.split('.')[0] + 'Z';
-      const polygons = entry.polygons[0][0].split(' ');
-
-      // filter night granules
-      // TODO: confirm reordering is correct
-      const polygonReorder = [];
-      for (let i = 0; i < polygons.length; i += 2) {
-        const tuple = [];
-        tuple.unshift(polygons[i]);
-        tuple.unshift(polygons[i + 1]);
-        polygonReorder.push(tuple);
-      }
-
-      granuleDateListPolygons[date] = polygonReorder;
-    });
-
-    updateGranuleCMRGeometry(def.id, projection, granuleDateListPolygons);
-    this.setState({
-      isLoading: false
-    });
-  }
-
   componentDidMount() {
-    const { granuleDates, granuleCMRGeometry } = this.props;
+    const { granuleDates } = this.props;
     this.setItems(granuleDates);
     this.checkGranuleDateSorting(granuleDates);
-    // check for CMR granule polygon geometry if first mount
-    if (!granuleCMRGeometry) {
-      this.granuleCmrRequest();
-    } else {
-      this.setState({
-        isLoading: false
-      });
-    }
   }
 
   componentDidUpdate(prevProps) {
@@ -250,72 +200,67 @@ class GranuleLayerDateList extends PureComponent {
             </Button>
           </span>
         </h2>
-        {this.state.isLoading
-          ? <div style={{ textAlign: 'center' }}>
-            <Spinner color="primary" />
-          </div>
-          : <Scrollbar style={{ maxHeight: '500px' }} needsScrollBar={needsScrollBar} >
-            <DragDropContext onDragEnd={this.onDragEnd}>
-              <Droppable droppableId={droppableId}>
-                {(provided, snapshot) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={getListStyle(needsScrollBar)}
-                  >
-                    {items.map((item, index) => (
-                      <Draggable key={item} draggableId={item} index={index}>
-                        {(provided, snapshot) => (
-                          <div className="granule-date-item"
-                            onMouseEnter={() => this.handleMouseOverItem(item, index)}
-                            onMouseLeave={() => this.handleMouseLeaveItem(item, index)}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(
-                              snapshot.isDragging,
-                              this.state.hoveredItem === item,
-                              this.state.lastMovedItem === item,
-                              provided.draggableProps.style
-                            )}
-                          >
-                            <div>
-                              {item}
-                            </div>
-                            <div>
-                              {index < items.length - 1
-                                ? <button className="granule-date-item-down-button"
-                                  onClick={(e) => this.moveDown(e, index, item)}>
-                                  <i className='fa fa-arrow-circle-down fa-fw'></i>
-                                </button>
-                                : null
-                              }
-                              {index > 0
-                                ? <button className="granule-date-item-up-button"
-                                  onClick={(e) => this.moveUp(e, index, item)}>
-                                  <i className='fa fa-arrow-circle-up fa-fw'></i>
-                                </button>
-                                : null
-                              }
-                              {index > 0
-                                ? <button className="granule-date-item-top-button"
-                                  onClick={(e) => this.moveToTop(e, index, item)}>
-                                    TOP
-                                </button>
-                                : null
-                              }
-                            </div>
+        <Scrollbar style={{ maxHeight: '500px' }} needsScrollBar={needsScrollBar} >
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <Droppable droppableId={droppableId}>
+              {(provided, snapshot) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={getListStyle(needsScrollBar)}
+                >
+                  {items.map((item, index) => (
+                    <Draggable key={item} draggableId={item} index={index}>
+                      {(provided, snapshot) => (
+                        <div className="granule-date-item"
+                          onMouseEnter={() => this.handleMouseOverItem(item, index)}
+                          onMouseLeave={() => this.handleMouseLeaveItem(item, index)}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={getItemStyle(
+                            snapshot.isDragging,
+                            this.state.hoveredItem === item,
+                            this.state.lastMovedItem === item,
+                            provided.draggableProps.style
+                          )}
+                        >
+                          <div>
+                            {item}
                           </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </Scrollbar>
-        }
+                          <div>
+                            {index < items.length - 1
+                              ? <button className="granule-date-item-down-button"
+                                onClick={(e) => this.moveDown(e, index, item)}>
+                                <i className='fa fa-arrow-circle-down fa-fw'></i>
+                              </button>
+                              : null
+                            }
+                            {index > 0
+                              ? <button className="granule-date-item-up-button"
+                                onClick={(e) => this.moveUp(e, index, item)}>
+                                <i className='fa fa-arrow-circle-up fa-fw'></i>
+                              </button>
+                              : null
+                            }
+                            {index > 0
+                              ? <button className="granule-date-item-top-button"
+                                onClick={(e) => this.moveToTop(e, index, item)}>
+                                  TOP
+                              </button>
+                              : null
+                            }
+                          </div>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Scrollbar>
       </div>
     );
   }
@@ -323,13 +268,11 @@ class GranuleLayerDateList extends PureComponent {
 
 GranuleLayerDateList.propTypes = {
   def: PropTypes.object,
-  granuleCMRGeometry: PropTypes.object,
   granuleCount: PropTypes.number,
   granuleDates: PropTypes.array,
   projection: PropTypes.string,
   resetGranuleLayerDates: PropTypes.func,
   toggleHoveredGranule: PropTypes.func,
-  updateGranuleCMRGeometry: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func
 };
 
