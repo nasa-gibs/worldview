@@ -94,7 +94,7 @@ class CategoryLayerRow extends React.Component {
         if (layer.title.indexOf('(') !== -1) {
           const regExp = /\(([^)]+)\)/;
           const matches = regExp.exec(layer.title);
-          // eslint-disable-next-line prefer-destructuring
+
           [, orbitTitle] = matches;
         }
       }
@@ -234,7 +234,7 @@ class CategoryLayerRow extends React.Component {
           className="measurement-row-header"
         >
           <h3>{measurement.title}</h3>
-          {measurement.subtitle && <h5>{measurement.subtitle}</h5>}
+          {measurement.subtitle && !isSelected && <h5>{measurement.subtitle}</h5>}
           {isSelected
             ? <FontAwesomeIcon icon={faChevronCircleDown} className="arrow-icon" />
             : <FontAwesomeIcon icon={faChevronCircleRight} className="arrow-icon" />}
