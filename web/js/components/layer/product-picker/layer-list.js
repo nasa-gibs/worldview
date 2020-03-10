@@ -46,11 +46,14 @@ class LayerList extends React.Component {
     } = this.props;
     const layer = filteredRows.find((l) => l.id === layerId);
 
+    // No result found, clear the metadata detail view by passing null
     if (!layerId) {
       showMetadataForLayer(null);
       return;
     }
-    if (selectedLayer && selectedLayer.id === layerId) {
+
+    // Single result, auto selected, and we have the metadata for it already
+    if (selectedLayer && selectedLayer.id === layerId && layer.metadata) {
       return;
     }
 
@@ -175,11 +178,9 @@ LayerList.defaultProps = {
 };
 LayerList.propTypes = {
   activeLayers: PropTypes.array,
-  activeMeasurementIndex: PropTypes.number,
   addLayer: PropTypes.func,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
-  currentMeasureSource: PropTypes.object,
   filteredRows: PropTypes.array,
   hasMeasurementSetting: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
