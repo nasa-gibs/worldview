@@ -149,7 +149,7 @@
     "url-loader": "^2.1.0",
     "webpack": "^4.39.3",
     "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "^3.3.10",
+    "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.8.1",
     "write-file-webpack-plugin": "^4.5.1",
     "yargs": "^15.3.0"
