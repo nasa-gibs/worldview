@@ -482,6 +482,7 @@
   padding: 5px 8px;
   position: relative;
   cursor: pointer;
+  min-height: 44px;
   & .arrow-icon {
     color: #d54e21;
     width: 30px;
