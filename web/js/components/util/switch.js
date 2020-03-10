@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 
@@ -19,6 +19,10 @@ const Switch = (props) => {
   const [tooltipOpen, toggleTooltip] = useState(false);
   const activeColor = color || '007BFF';
   const style = isActive ? { backgroundColor: `#${activeColor}` } : {};
+
+  useEffect(() => {
+    toggleActive(active);
+  }, [active]);
 
   return (
     <div className="react-switch">
