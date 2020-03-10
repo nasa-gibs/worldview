@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
   find as lodashFind,
   get as lodashGet,
-  cloneDeep as lodashCloneDeep
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
 // eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
