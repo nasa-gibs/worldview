@@ -14,7 +14,6 @@ beforeEach(() => {
   component = renderer.create(
     <OlCoordinates
       mouseEvents={events}
-      distractionFreeMode={false}
     />
   );
   map = {

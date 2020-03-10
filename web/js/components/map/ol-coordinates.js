@@ -25,6 +25,11 @@ export class OlCoordinates extends React.Component {
     this.props.mouseEvents.on('mouseout', this.mouseOut);
   }
 
+  componentWillUnmount() {
+    this.props.mouseEvents.off('mousemove', this.mouseMove);
+    this.props.mouseEvents.off('mouseout', this.mouseOut);
+  }
+
   mouseMove(event, map, crs) {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
@@ -78,14 +83,13 @@ export class OlCoordinates extends React.Component {
   }
 
   render() {
-    const { isDistractionFreeModeActive } = this.props;
     // Don't render until a mouse is being used
     if (!this.state.hasMouse) {
       return null;
     }
 
     return (
-      <div id='ol-coords-case' style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}>
+      <div id='ol-coords-case'>
         <Coordinates
           format={this.state.format}
           latitude={this.state.latitude}
@@ -99,8 +103,5 @@ export class OlCoordinates extends React.Component {
 }
 
 OlCoordinates.propTypes = {
-  mouseEvents: PropTypes.object.isRequired,
-  isDistractionFreeModeActive: PropTypes.bool
+  mouseEvents: PropTypes.object.isRequired
 };
-
-export default OlCoordinates;

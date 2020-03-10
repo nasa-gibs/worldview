@@ -15,6 +15,7 @@ export function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
   return (dispatch, getState) => {
     const { modal, animation, tour, ui } = getState();
     const modalIsOpen = modal.isOpen;
+    const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
     if (animation.isActive && !modalIsOpen) {
       // can get more specific modal.key !== "LAYER_PICKER_COMPONENT"
       dispatch({
@@ -28,11 +29,13 @@ export function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
       });
     }
     if (!ctrlOrCmdKey && shiftKey && keyCode === 68) {
-      const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
       dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
       if (!isDistractionFreeModeActive && modalIsOpen) {
         dispatch({ type: CLOSE_MODAL });
       }
+    }
+    if (isDistractionFreeModeActive && keyCode === 27) {
+      dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
     }
   };
 }

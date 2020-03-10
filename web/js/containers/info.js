@@ -48,84 +48,92 @@ class InfoList extends Component {
       notifications,
       config,
       startTour,
+      isDistractionFreeModeActive,
       isTourActive,
       isMobile,
       toggleDistractionFreeMode
     } = this.props;
-    const feedbackAction = isMobile
-      ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
-      : {
-        onClick: () => {
-          sendFeedback(feedbackIsInitiated);
-        }
-      };
-    const arr = [
-      {
-        text: 'Send feedback',
-        iconClass: 'ui-icon',
-        iconName: 'faEnvelope',
-        id: 'send_feedback_info_item',
-        ...feedbackAction
-      },
-      {
-        text: 'Source Code',
-        iconClass: 'ui-icon',
-        iconName: 'faCode',
-        id: 'source_code_info_item',
-        href: 'https://github.com/nasa-gibs/worldview'
-      },
-      {
-        text: 'What\'s new',
-        iconClass: 'ui-icon',
-        iconName: 'faFlag',
-        id: 'whats_new_info_item',
-        href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS'
-      },
-      {
-        text: 'About',
-        iconClass: 'ui-icon',
-        iconName: 'faFile',
-        id: 'about_info_item',
-        onClick: () => {
-          aboutClick();
-        }
-      },
-      {
-        text: 'Distraction Free',
-        iconClass: 'ui-icon',
-        iconName: 'faEye',
-        id: 'distraction_free_info_item',
-        onClick: () => {
-          toggleDistractionFreeMode();
-        }
+    const distractionFreeObj = {
+      text: isDistractionFreeModeActive ? 'Exit Distraction Free' : 'Distraction Free',
+      iconClass: 'ui-icon',
+      iconName: 'faEye',
+      id: 'distraction_free_info_item',
+      onClick: () => {
+        toggleDistractionFreeMode();
       }
-    ];
-    if (
-      config.features.tour &&
-      config.stories &&
-      config.storyOrder &&
-      window.innerWidth >= 740 &&
-      window.innerHeight >= 615
-    ) {
-      const exploreWorlviewObj = {
-        text: 'Explore Worldview',
-        iconClass: 'ui-icon',
-        iconName: 'faTruck',
-        id: 'start_tour_info_item',
-        onClick: () => {
-          startTour(isTourActive);
-          googleTagManager.pushEvent({
-            event: 'tour_start_button'
-          });
+    };
+    if (!isDistractionFreeModeActive) {
+      const feedbackAction = isMobile
+        ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
+        : {
+          onClick: () => {
+            sendFeedback(feedbackIsInitiated);
+          }
+        };
+      const arr = [
+        {
+          text: 'Send feedback',
+          iconClass: 'ui-icon',
+          iconName: 'faEnvelope',
+          id: 'send_feedback_info_item',
+          ...feedbackAction
+        },
+        {
+          text: 'Source Code',
+          iconClass: 'ui-icon',
+          iconName: 'faCode',
+          id: 'source_code_info_item',
+          href: 'https://github.com/nasa-gibs/worldview'
+        },
+        {
+          text: 'What\'s new',
+          iconClass: 'ui-icon',
+          iconName: 'faFlag',
+          id: 'whats_new_info_item',
+          href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS'
+        },
+        {
+          text: 'About',
+          iconClass: 'ui-icon',
+          iconName: 'faFile',
+          id: 'about_info_item',
+          onClick: () => {
+            aboutClick();
+          }
         }
-      };
-      arr.splice(1, 0, exploreWorlviewObj);
+      ];
+
+      // limit explore and distraction free for larger device displays
+      if (window.innerWidth >= 740 &&
+        window.innerHeight >= 615) {
+        if (
+          config.features.tour &&
+          config.stories &&
+          config.storyOrder) {
+          const exploreWorlviewObj = {
+            text: 'Explore Worldview',
+            iconClass: 'ui-icon',
+            iconName: 'faTruck',
+            id: 'start_tour_info_item',
+            onClick: () => {
+              startTour(isTourActive);
+              googleTagManager.pushEvent({
+                event: 'tour_start_button'
+              });
+            }
+          };
+          arr.splice(1, 0, exploreWorlviewObj);
+        }
+        arr.push(distractionFreeObj);
+      }
+      if (notifications.isActive) {
+        const obj = this.getNotificationListItem();
+        arr.splice(4, 0, obj);
+      }
+      return arr;
+    } else {
+      return [distractionFreeObj];
     }
-    if (notifications.isActive) {
-      const obj = this.getNotificationListItem();
-      arr.splice(4, 0, obj);
-    }
-    return arr;
   }
 
   render() {
@@ -139,6 +147,7 @@ function mapStateToProps(state) {
 
   return {
     feedbackIsInitiated: isInitiated,
+    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
     isTourActive: state.tour.active,
     notifications: state.notifications,
     config: state.config,
@@ -205,6 +214,7 @@ InfoList.propTypes = {
   aboutClick: PropTypes.func,
   config: PropTypes.object,
   feedbackIsInitiated: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   models: PropTypes.object,

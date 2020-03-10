@@ -36,7 +36,6 @@ import { measure } from './measure/ui';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { TOGGLE_DISTRACTION_FREE_MODE } from '../modules/ui/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_UNITS } from '../modules/measure/constants';
 import Cache from 'cachai';
@@ -99,26 +98,6 @@ export function mapui(models, config, store, ui) {
    */
   const subscribeToStore = function(action) {
     switch (action.type) {
-      case TOGGLE_DISTRACTION_FREE_MODE: {
-        var map = self.selected;
-        const isDistractionFreeModeActive = store.getState().ui.isDistractionFreeModeActive;
-        if (isDistractionFreeModeActive) {
-          // hide map scale and zoom buttons
-          map.removeControl(map.wv.scaleImperial);
-          map.removeControl(map.wv.scaleMetric);
-          $('#' + map.getTarget() + ' .select-wrapper').hide();
-          $('.wv-map-zoom-in').hide();
-          $('.wv-map-zoom-out').hide();
-        } else {
-          // show map scale and zoom buttons
-          map.addControl(map.wv.scaleImperial);
-          map.addControl(map.wv.scaleMetric);
-          $('#' + map.getTarget() + ' .select-wrapper').show();
-          $('.wv-map-zoom-in').show();
-          $('.wv-map-zoom-out').show();
-        }
-        return;
-      }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
@@ -298,8 +277,6 @@ export function mapui(models, config, store, ui) {
    * @returns {void}
    */
   var onResize = function() {
-    const state = store.getState();
-    const isDistractionFreeModeActive = state.ui.isDistractionFreeModeActive;
     var map = self.selected;
     if (map.small !== util.browser.small) {
       if (util.browser.small) {
@@ -307,11 +284,9 @@ export function mapui(models, config, store, ui) {
         map.removeControl(map.wv.scaleMetric);
         $('#' + map.getTarget() + ' .select-wrapper').hide();
       } else {
-        if (!isDistractionFreeModeActive) {
-          map.addControl(map.wv.scaleImperial);
-          map.addControl(map.wv.scaleMetric);
-          $('#' + map.getTarget() + ' .select-wrapper').show();
-        }
+        map.addControl(map.wv.scaleImperial);
+        map.addControl(map.wv.scaleMetric);
+        $('#' + map.getTarget() + ' .select-wrapper').show();
       }
     }
   };

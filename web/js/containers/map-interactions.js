@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import OlCoordinates from '../components/map/ol-coordinates';
+import { OlCoordinates } from '../components/map/ol-coordinates';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
@@ -78,15 +78,20 @@ export class MapInteractions extends React.Component {
       isShowingClick,
       mouseEvents
     } = this.props;
-    const mapClasses = isShowingClick ? 'wv-map' + ' cursor-pointer' : 'wv-map';
+    let mapClasses = isShowingClick
+      ? 'wv-map' + ' cursor-pointer'
+      : 'wv-map';
+    mapClasses = isDistractionFreeModeActive
+      ? mapClasses + ' distraction-free-active'
+      : mapClasses;
 
     return (
       <React.Fragment>
         <div id="wv-map" className={mapClasses} />
-        <OlCoordinates
+        {!isDistractionFreeModeActive && <OlCoordinates
           mouseEvents={mouseEvents}
-          isDistractionFreeModeActive={isDistractionFreeModeActive}
         />
+        }
       </React.Fragment>
     );
   }
