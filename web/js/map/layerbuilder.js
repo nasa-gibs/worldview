@@ -313,8 +313,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @returns {object} OpenLayers layer
    */
   self.createLayer = (def, options, granuleLayerParam) => {
-    const isGranule = !!(def.tags && def.tags.contains('granule'));
     const state = store.getState();
+    const proj = state.proj.selected;
 
     let granuleCount;
     let updatedGranules;
@@ -323,13 +323,18 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
     const group = options.group || 'active';
+
+    console.log(state.layers.granuleLayers[group][proj.id][def.id]);
     const isActive = group === 'active';
     const activeKey = isActive ? 'active' : 'activeB';
-    let date = self.closestDate(def, options);
+    const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
+    // let date = self.closestDate(def, options);
+    console.log(closestDate, nextDate, previousDate);
+    let date = closestDate;
     const key = self.layerKey(def, options, state);
-    const proj = state.proj.selected;
 
     let getFilteredDates;
+    const isGranule = !!(def.tags && def.tags.contains('granule'));
     if (isGranule) {
       granuleCount = (granuleLayerParam && granuleLayerParam.granuleCount) || 20;
       if (granuleLayerParam && granuleLayerParam.granuleDates && granuleLayerParam.granuleDates.length) {
@@ -360,9 +365,11 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
 
     const createLayer = (filteredGranules) => {
+      console.log(filteredGranules);
       return new Promise((resolve) => {
         let layer = cache.getItem(key);
         let granuleDayTimes = updatedGranules || [];
+        console.log(layer, granuleDayTimes);
         if (!layer || isGranule) {
           // layer is not in the cache OR is a granule layer
           if (!date) date = options.date || state.date[activeDateStr];
@@ -373,7 +380,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
             date,
             proj: proj.id,
             def,
-            group
+            group,
+            nextDate,
+            previousDate
           };
           def = lodashCloneDeep(def);
           lodashMerge(def, def.projections[proj.id]);
@@ -447,7 +456,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           if (storedLayer && storedLayer.geometry) {
             geometry = geometry || storedLayer.geometry;
           }
-          // console.log(filteredGranules, includedDates, granuleCount, geometry)
+          console.log(filteredGranules, includedDates, granuleCount, geometry);
 
           const granuleGeometry = filteredGranules.reduce((granuleDates, granuleObject) => {
             const granuleDate = granuleObject.date;
@@ -456,7 +465,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
             return granuleDates;
           }, {});
 
-          // console.log(granuleGeometry)
+          console.log(granuleGeometry);
 
           // includedDates - array of date strings
           // geometry - object of date: array of polygon coordinates

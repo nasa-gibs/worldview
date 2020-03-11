@@ -147,6 +147,7 @@ export function getLeadingExtent(loadtime) {
  * @return {object}            Promise.all
  */
 export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
+  console.log(layer);
   var extent;
   return new Promise(function(resolve, reject) {
     var layers, layerPromiseArray;

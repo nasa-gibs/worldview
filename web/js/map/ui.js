@@ -404,21 +404,26 @@ export function mapui(models, config, store, ui) {
             addGraticule(def.opacity, layerGroupStr);
           } else {
             // update granule date order and reset
-            const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-            const granuleState = state.layers.granuleLayers[layerGroupStr][proj.id][def.id];
-            let granuleDates;
-            let granuleCount;
-            let geometry;
-            if (granuleState) {
-              granuleDates = !granuleReset ? granuleState.dates : false;
-              granuleCount = granuleState.count;
-              geometry = granuleState.geometry;
+            const isGranule = !!(def.tags && def.tags.contains('granule'));
+            let granuleLayerParam;
+            if (isGranule) {
+              const granuleReset = granuleOptions && granuleOptions.reset === def.id;
+              const granuleState = state.layers.granuleLayers[layerGroupStr][proj.id][def.id];
+              let granuleDates;
+              let granuleCount;
+              let geometry;
+              if (granuleState) {
+                granuleDates = !granuleReset ? granuleState.dates : false;
+                granuleCount = granuleState.count;
+                geometry = granuleState.geometry;
+              }
+              granuleLayerParam = {
+                granuleDates,
+                granuleCount,
+                geometry
+              };
             }
-            const granuleLayerParam = {
-              granuleDates,
-              granuleCount,
-              geometry
-            };
+
             const createdLayer = createLayer(def, {}, granuleLayerParam);
             resolve(createdLayer);
           }
@@ -444,9 +449,21 @@ export function mapui(models, config, store, ui) {
       ) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
-      lodashEach(stateArray, arr => {
-        map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state, granuleOptions));
+
+      const stateArrayGroups = stateArray.map((arr) => {
+        return new Promise(resolve => {
+          const compareLayerGroup = getCompareLayerGroup(arr, layers, proj.id, state, granuleOptions);
+          resolve(compareLayerGroup);
+        });
       });
+
+      await Promise.all(stateArrayGroups)
+        .then(newGroupedLayers => {
+          lodashEach(newGroupedLayers, (compareLayerGroup) => {
+            map.addLayer(compareLayerGroup);
+          });
+        })
+        .catch(error => console.log(error));
       compareMapUi.create(map, compareState.mode);
       updateLayerVisibilities();
     }
@@ -455,41 +472,60 @@ export function mapui(models, config, store, ui) {
    * Create a Layergroup given the date and layerGroups
    * @param {Array} arr | Array of date/layer group strings
    */
-  var getCompareLayerGroup = function(arr, layersState, projId, state, granuleOptions) {
-    return new OlLayerGroup({
-      layers: getLayers(
-        layersState[arr[0]],
-        { reverse: true },
-        store.getState()
-      )
-        .filter(def => {
-          if (isGraticule(def, projId)) {
-            addGraticule(def.opacity, arr[0]);
-            return false;
+  var getCompareLayerGroup = async function(arr, layersState, projId, state, granuleOptions) {
+    // get grouped layers
+    const newGroupedLayers = getLayers(
+      layersState[arr[0]],
+      { reverse: true },
+      store.getState()
+    )
+      .filter(def => {
+        if (isGraticule(def, projId)) {
+          addGraticule(def.opacity, arr[0]);
+          return false;
+        }
+        return true;
+      })
+      .map(def => {
+        return new Promise(resolve => {
+          const isGranule = !!(def.tags && def.tags.contains('granule'));
+          let granuleLayerParam;
+          if (isGranule) {
+            const granuleReset = granuleOptions && granuleOptions.reset === def.id;
+            const previouslyCachedGranule = state.layers.granuleLayers[arr[0]][projId][def.id];
+            let granuleDates;
+            let granuleCount;
+            let geometry;
+            if (previouslyCachedGranule) {
+              granuleDates = !granuleReset ? previouslyCachedGranule.dates : false;
+              granuleCount = previouslyCachedGranule.count;
+              geometry = previouslyCachedGranule.geometry;
+            }
+            granuleLayerParam = { granuleDates, granuleCount, geometry };
           }
-          return true;
-        })
-        .map(async def => {
-          const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-          const previouslyCachedGranule = state.layers.granuleLayers[arr[0]][projId][def.id];
-          let granuleDates;
-          let granuleCount;
-          let geometry;
-          if (previouslyCachedGranule) {
-            granuleDates = !granuleReset ? previouslyCachedGranule.dates : false;
-            granuleCount = previouslyCachedGranule.count;
-            geometry = previouslyCachedGranule.geometry;
-          }
-          const granuleLayerParam = { granuleDates, granuleCount, geometry };
-          const createdLayer = await createLayer(def, {
+          console.log(def, arr[0], state.date[arr[1]], granuleLayerParam);
+          // TODO: should pass empty param to compare mode ?
+          // TODO: issue with enter/exit and zeroing date solved by requesting each time
+          // TODO: seems now an update problem presents itself if an empty object is sent
+          const createdLayer = createLayer(def, {
             date: state.date[arr[1]],
             group: arr[0]
           }, granuleLayerParam);
-          return createdLayer;
-        }),
-      group: arr[0],
-      date: arr[1]
-    });
+          resolve(createdLayer);
+        });
+      });
+
+    // return new layer group
+    return Promise.all(newGroupedLayers)
+      .then(compareLayerGroup => {
+        console.log(compareLayerGroup);
+        return new OlLayerGroup({
+          layers: compareLayerGroup,
+          group: arr[0],
+          date: arr[1]
+        });
+      })
+      .catch(error => console.log(error));
   };
   /*
    * Function called when layers need to be updated
@@ -794,7 +830,7 @@ export function mapui(models, config, store, ui) {
         const index = findLayerIndex(def);
         const layerValue = self.selected.getLayers().getArray()[index];
         const updatedLayer = await createLayer(def, { previousLayer: layerValue ? layerValue.wv : null });
-        self.selected.getLayers().setAt(index, updatedLayer);
+        await self.selected.getLayers().setAt(index, updatedLayer);
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         var vectorStyles = config.vectorStyles;

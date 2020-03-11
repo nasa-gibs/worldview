@@ -347,7 +347,7 @@ class PlayAnimation extends React.Component {
     const { layers, promiseImageryForTime } = this.props;
     const activeLayers = getLayersActiveAtDate(layers, date);
     const strDate = util.toISOStringSeconds(date);
-
+    console.log(layers, activeLayers);
     if (this.inQueueObject[strDate] || this.preloadObject[strDate]) {
       return;
     }

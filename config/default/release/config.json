@@ -5,6 +5,10 @@
             "to": "gibs-geographic.xml"
         },
         {
+            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
+            "to": "gibs-geographic-nrt.xml"
+        },
+        {
             "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-arctic.xml"
         },
@@ -26,6 +30,13 @@
             "source": "GIBS:geographic",
             "from": "gibs-geographic.xml",
             "to": "gibs-geographic.json",
+            "projection": "geographic",
+            "maxResolution": 0.5625
+        },
+        {
+            "source": "GIBS:geographic:nrt",
+            "from": "gibs-geographic-nrt.xml",
+            "to": "gibs-geographic-nrt.json",
             "projection": "geographic",
             "maxResolution": 0.5625
         },
