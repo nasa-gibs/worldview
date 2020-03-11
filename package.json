@@ -197,7 +197,7 @@
     "reselect": "^4.0.0",
     "simplebar-react": "^2.0.8",
     "supercluster": "7.0.0",
-    "web-streams-polyfill": "^2.0.6",
+    "web-streams-polyfill": "^2.1.0",
     "whatwg-fetch": "^3.0.0"
   },
   "browser": {
