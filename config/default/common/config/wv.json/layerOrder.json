@@ -269,8 +269,6 @@
         "Landsat_WELD_NDVI_Global_Monthly",
         "Landsat_WELD_NDVI_Global_Annual",
 
-        "IMERG_Rain_Rate",
-        "IMERG_Snow_Rate",
         "IMERG_Precipitation_Rate",
 
         "GMI_Brightness_Temp_Asc",
