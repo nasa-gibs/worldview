@@ -34,9 +34,9 @@ const getActiveTabs = function(config) {
     events: features.naturalEvents
   };
 };
-const resetWorldview = function(e) {
+const resetWorldview = function(e, isDistractionFreeModeActive) {
   e.preventDefault();
-  if (window.location.search === '') return; // Nothing to reset
+  if (!isDistractionFreeModeActive && window.location.search === '') return; // Nothing to reset
   var msg =
     'Do you want to reset Worldview to its defaults? You will lose your current state.';
   if (confirm(msg)) {
@@ -183,7 +183,7 @@ class Sidebar extends React.Component {
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
             className={`${isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}`}
-            onClick={resetWorldview}
+            onClick={(e) => resetWorldview(e, isDistractionFreeModeActive)}
             ref={iconElement => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}
           />
