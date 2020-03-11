@@ -56,7 +56,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),IMERG_Rain_Rate(opacity=0.61),Reference_Labels(hidden),Reference_Features,Coastlines&t=2019-03-03-T00%3A00%3A00Z&z=3&v=19.901498172180744,-28.291373467405613,52.755013797180744,-11.117545342405613&ab=on&as=2019-03-03T00%3A00%3A00Z&ae=2019-03-18T00%3A00%3A00Z&av=3&al=false"
+          "stepLink": "v=19.45043134357345,-28.600642717054235,53.20043134357345,-10.864314592054235&t=2019-03-03-T00%3A00%3A00Z&as=2019-03-03-T00%3A00%3A00Z&ae=2019-03-18-T00%3A00%3A00Z&l=IMERG_Precipitation_Rate(opacity=0.61),Reference_Labels(hidden),Reference_Features,Coastlines,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
         },
         {
           "description": "step004.html",
@@ -80,7 +80,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features,IMERG_Rain_Rate,Human_Footprint_1995-2004(palette=red_1),Coastlines&t=2019-03-15-T00%3A00%3A00Z&z=3&t1=2019-03-25-T00%3A00%3A00Z&v=17.53701672934683,-28.108451104124356,50.89085754470216,-10.934622979124361&ab=off&as=2019-03-03T00%3A00%3A00Z&ae=2019-03-18T00%3A00%3A00Z&av=3&al=true"
+          "stepLink": "v=17.293956922042206,-28.358577168362388,51.043956922042206,-10.622249043362388&t=2019-03-15-T00%3A00%3A00Z&l=Reference_Labels,Reference_Features,IMERG_Precipitation_Rate,Human_Footprint_1995-2004(palette=red_1),Coastlines,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
         },
         {
           "description": "step007.html",
@@ -88,7 +88,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),IMERG_Rain_Rate(hidden,opacity=0.53),Reference_Labels,Reference_Features,Coastlines,NDH_Flood_Proportional_Economic_Loss_Risk_Deciles_2000(hidden),NDH_Flood_Mortality_Risks_Distribution_2000,NDH_Flood_Hazard_Frequency_Distribution_1985-2003(hidden)&t=2019-03-15-T00%3A00%3A00Z&z=3&t1=2019-03-25-T00%3A00%3A00Z&v=28.330498384186065,-24.12233697173991,44.757256196686065,-15.535422909239909&ab=off&as=2019-03-03T00%3A00%3A00Z&ae=2019-03-18T00%3A00%3A00Z&av=3&al=false"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),IMERG_Precipitation_Rate(hidden,opacity=0.53),Reference_Labels,Reference_Features,Coastlines,NDH_Flood_Proportional_Economic_Loss_Risk_Deciles_2000(hidden),NDH_Flood_Mortality_Risks_Distribution_2000,NDH_Flood_Hazard_Frequency_Distribution_1985-2003(hidden)&t=2019-03-15-T00%3A00%3A00Z&z=3&t1=2019-03-25-T00%3A00%3A00Z&v=28.330498384186065,-24.12233697173991,44.757256196686065,-15.535422909239909&ab=off&as=2019-03-03T00%3A00%3A00Z&ae=2019-03-18T00%3A00%3A00Z&av=3&al=false"
         },
         {
           "description": "step008.html",
@@ -96,7 +96,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features,Coastlines,IMERG_Rain_Rate(hidden,opacity=0.53),NDH_Cyclone_Proportional_Economic_Loss_Risk_Deciles_2000(hidden),NDH_Cyclone_Mortality_Risks_Distribution_2000(hidden),NDH_Cyclone_Hazard_Frequency_Distribution_1980-2000&t=2019-03-15-T00%3A00%3A00Z&z=3&t1=2019-03-25-T00%3A00%3A00Z&v=28.330498384186065,-24.12233697173991,44.757256196686065,-15.535422909239909&ab=off&as=2019-03-03T00%3A00%3A00Z&ae=2019-03-18T00%3A00%3A00Z&av=3&al=false"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features,Coastlines,IMERG_Precipitation_Rate(hidden,opacity=0.53),NDH_Cyclone_Proportional_Economic_Loss_Risk_Deciles_2000(hidden),NDH_Cyclone_Mortality_Risks_Distribution_2000(hidden),NDH_Cyclone_Hazard_Frequency_Distribution_1980-2000&t=2019-03-15-T00%3A00%3A00Z&z=3&t1=2019-03-25-T00%3A00%3A00Z&v=28.330498384186065,-24.12233697173991,44.757256196686065,-15.535422909239909&ab=off&as=2019-03-03T00%3A00%3A00Z&ae=2019-03-18T00%3A00%3A00Z&av=3&al=false"
         },
         {
           "description": "step009.html",
@@ -104,7 +104,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels,Reference_Features,Coastlines(hidden)&t=2019-04-25-T00%3A00%3A00Z&z=3&v=24.107496643066405,-21.600251770019533,57.734449768066405,-4.285798645019533&ab=off&as=2019-04-17T00%3A00%3A00Z&ae=2019-04-24T00%3A00%3A00Z&av=3&al=false"
+          "stepLink": "v=24.034247767383143,-21.82375314675635,57.78424776738314,-4.087425021756349&t=2019-04-25-T00%3A00%3A00Z&l=IMERG_Precipitation_Rate(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels,Reference_Features,Coastlines(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
         }
       ]
     }

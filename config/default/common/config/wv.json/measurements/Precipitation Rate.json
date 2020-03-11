@@ -11,8 +11,6 @@
                   "description": "multi-mission/imerg/Precipitation",
                   "image": "",
                   "settings": [
-                      "IMERG_Rain_Rate",
-                      "IMERG_Snow_Rate",
                       "IMERG_Precipitation_Rate"
                   ]
               },
