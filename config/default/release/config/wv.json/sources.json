@@ -15,6 +15,9 @@
         "GIBS:geographic": {
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
         },
+        "GIBS:geographic:nrt": {
+            "url": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi"
+        },
         "GIBS:wms": {
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi"
         },

@@ -417,7 +417,8 @@ export function mapui(models, config, store, ui) {
           lodashEach(createdLayers, (createdLayer) => {
             map.addLayer(createdLayer);
           });
-        });
+        })
+        .catch(error => console.log(error));
       updateLayerVisibilities();
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
