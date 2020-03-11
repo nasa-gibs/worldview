@@ -11,8 +11,7 @@ const {
   measureMenu,
   measurementTooltip,
   sidebarContainer,
-  unitOfMeasureToggle,
-  greatCircleToggle
+  unitOfMeasureToggle
 } = localSelectors;
 
 module.exports = {
@@ -23,26 +22,32 @@ module.exports = {
     client.expect.element(measureMenu).to.not.be.present;
     client.useCss().click(measureBtn);
     client.waitForElementVisible(measureMenu, TIME_LIMIT);
+    client.pause(300);
   },
   'Initiating a measurement causes an alert to show and sidebar to collapse': function(client) {
     client.useCss().click(measureDistanceBtn);
-    client.waitForElementVisible('.wv-alert', TIME_LIMIT);
+    client.waitForElementVisible('#measurement-alert', TIME_LIMIT);
     client.useCss().assert.elementPresent(sidebarContainer);
     client.useCss().assert.cssProperty(
       sidebarContainer,
       'max-height',
       '0px');
+    client.pause(300);
   },
   'Cancelling a measurement causes an alert to disappear and sidebar to expand': function(client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // right click doesn't work in firefox
       client.useCss().click(measureBtn);
       client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
+        client.waitForElementVisible(measureDistanceBtn, TIME_LIMIT);
+        client.click(measureDistanceBtn);
         client.pause(300);
-        client.moveToElement('#wv-map-geographic', 300, 110)
-          .mouseButtonDown(2)
-          .mouseButtonUp(2);
+        client.moveToElement('#wv-map-geographic', 400, 110)
+          .mouseButtonClick(0)
+          .moveTo(null, 400, 210)
+          .mouseButtonClick(2)
+          .mouseButtonClick(0);
         client.pause(300);
-        client.expect.element('.wv-alert').to.not.be.present;
+        client.expect.element('#measurement-alert').to.not.be.present;
         client.expect.element(sidebarContainer)
           .to.have.css('max-height').which.does.not.equal('0px');
       });
@@ -53,7 +58,7 @@ module.exports = {
     client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       client.useCss().click(measureDistanceBtn);
       client.pause(300);
-      client.waitForElementVisible('.wv-alert', TIME_LIMIT);
+      client.waitForElementVisible('#measurement-alert', TIME_LIMIT);
       client.moveToElement('#wv-map-geographic', 300, 100)
         .mouseButtonClick(0);
       client.pause(300);
@@ -70,10 +75,13 @@ module.exports = {
       client.useCss().click(measureAreaBtn);
       client.moveTo(null, -250, 10);
       client.mouseButtonClick(0);
+      client.pause(200);
       client.moveTo(null, 0, 100);
       client.mouseButtonClick(0);
+      client.pause(200);
       client.moveTo(null, 100, 0);
       client.mouseButtonClick(0);
+      client.pause(200);
       client.moveTo(null, 0, -100);
       client.mouseButtonClick(0);
       client.mouseButtonClick(0);
@@ -92,21 +100,6 @@ module.exports = {
           const pass = elResult.value.includes('mi');
           client.assert.ok(pass);
         });
-      });
-    }
-  },
-  'Toggling great circle changes the measurement value': async function(client) {
-    if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
-      const measureTooltips = await client.elements('css selector', measurementTooltip);
-      const elPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
-      const initMeasureValues = await Promise.all(elPromises).then(elem => elem.map(el => el.value));
-
-      await client.click(greatCircleToggle);
-      const updatedElPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
-      const updatedValues = await Promise.all(updatedElPromises).then(elem => elem.map(el => el.value));
-      updatedValues.forEach((value, index) => {
-        const prevValue = initMeasureValues[index];
-        client.assert.ok(value !== prevValue);
       });
     }
   },

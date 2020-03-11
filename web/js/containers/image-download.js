@@ -70,7 +70,7 @@ class ImageDownloadContainer extends Component {
       proj,
       map,
       url,
-      onClose,
+      closeModal,
       screenWidth,
       screenHeight,
       date,
@@ -98,6 +98,8 @@ class ImageDownloadContainer extends Component {
         isGeoProjection,
         proj.selected.resolutions
       );
+    const boxTopLongitude = Math.abs(geolonlat1[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat1[0]) : geolonlat1[0];
+    const boxBottomLongitude = Math.abs(geolonlat2[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat2[0]) : geolonlat2[0];
     return (
       <ErrorBoundary>
         <Panel
@@ -123,7 +125,7 @@ class ImageDownloadContainer extends Component {
           maxHeight={screenHeight}
           maxWidth={screenWidth}
           onChange={this.onBoundaryChange}
-          onClose={onClose}
+          onClose={closeModal}
           bottomLeftStyle={{
             left: x,
             top: y2 + 5,
@@ -135,8 +137,8 @@ class ImageDownloadContainer extends Component {
             width: x2 - x
           }}
           coordinates={{
-            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
+            bottomLeft: util.formatCoordinate([boxTopLongitude, geolonlat1[1]]),
+            topRight: util.formatCoordinate([boxBottomLongitude, geolonlat2[1]])
           }}
           showCoordinates={true}
         />
@@ -215,10 +217,10 @@ ImageDownloadContainer.defualtProps = {
   fileType: 'image/jpeg'
 };
 ImageDownloadContainer.propTypes = {
+  closeModal: PropTypes.func.isRequired,
   fileType: PropTypes.string.isRequired,
   map: PropTypes.object.isRequired,
   onBoundaryChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
   onPanelChange: PropTypes.func.isRequired,
   proj: PropTypes.object.isRequired,
   url: PropTypes.string.isRequired,

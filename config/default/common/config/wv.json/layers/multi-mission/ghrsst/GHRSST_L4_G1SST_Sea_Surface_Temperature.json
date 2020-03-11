@@ -10,9 +10,10 @@
               "multi-mission",
               "multi-mission_ghrsst"
             ],
-            "product": 	"GHRSST_L4G1SST_LL",
+            "product": 	"JPL_OUROCEAN-L4UHfnd-GLOB-G1SST",
             "group":    "overlays",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "inactive" : true
         }
     }
 }

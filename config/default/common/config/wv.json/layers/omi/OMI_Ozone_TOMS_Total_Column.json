@@ -10,7 +10,10 @@
               "omi"
             ],
             "product":  "OMTO3e",
-            "tags":     "Total Ozone Mapping Spectrometer"
+            "tags":     "Total Ozone Mapping Spectrometer",
+            "tracks": [
+            "OrbitTracks_Aura_Ascending"
+            ]
 
 
         }

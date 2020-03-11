@@ -14,6 +14,7 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import { lookupFactory } from '../ol/lookupimagetile';
+import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import {
   isActive as isPaletteActive,
   getKey as getPaletteKeys,
@@ -25,9 +26,7 @@ import {
   setStyleFunction
 } from '../modules/vector-styles/selectors';
 import {
-  nearestInterval,
-  datesinDateRanges,
-  prevDateInDateRange
+  nearestInterval
 } from '../modules/layers/util';
 import { ADD_GRANULE_LAYER_DATES } from '../modules/layers/constants';
 
@@ -473,7 +472,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           self.proj = proj.id;
         }
         layer.setOpacity(def.opacity || 1.0);
-        console.log(layer, def.id)
+        console.log(layer, def.id);
         resolve(layer); // TileLayer or LayerGroup
       });
     };
@@ -495,40 +494,54 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  self.closestDate = function(def, options) {
+  self.getRequestDates = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    const dateArray = def.availableDates || [];
-    let date = options.date || new Date(state.date[activeDateStr]);
-    const zoomGreaterThanEqPeriod = (def.period === 'daily' && state.date.selectedZoom >= 3) ||
-                                  (def.period === 'monthly' && state.date.selectedZoom >= 2) ||
-                                  (def.period === 'yearly' && state.date.selectedZoom >= 1);
+    const stateCurrentDate = new Date(state.date[activeDateStr]);
+    const previousLayer = options.previousLayer || {};
+    let date = options.date || stateCurrentDate;
+    let previousDateFromRange;
+    let previousLayerDate = previousLayer.previousDate;
+    let nextLayerDate = previousLayer.nextDate;
+    if (!state.animation.isPlaying) {
+      // need to get previous available date to prevent unecessary requests
+      let dateRange;
+      if (previousLayer.previousDate && previousLayer.nextDate) {
+        const dateTime = date.getTime();
+        const previousDateTime = previousLayer.previousDate.getTime();
+        const nextDateTime = previousLayer.nextDate.getTime();
+        // if current date is outside previous and next dates avaiable, recheck range
+        if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
+          dateRange = datesinDateRanges(def, date);
+          const { next, previous } = prevDateInDateRange(def, date, dateRange);
+          previousDateFromRange = previous;
+          previousLayerDate = previous;
+          nextLayerDate = next;
+        } else {
+          previousDateFromRange = previousLayer.previousDate;
+        }
+      } else {
+        dateRange = datesinDateRanges(def, date);
+        const { next, previous } = prevDateInDateRange(def, date, dateRange);
+        previousDateFromRange = previous;
+        previousLayerDate = previous;
+        nextLayerDate = next;
+      }
+    }
 
     if (def.period === 'subdaily') {
       date = nearestInterval(def, date);
     } else {
-      date = options.date
-        ? util.clearTimeUTC(new Date(date.getTime()))
-        : util.clearTimeUTC(date);
-    }
-
-    if (
-      !options.precache &&
-      state.animation.isPlaying === false &&
-      state.date.selectedZoom !== 0 &&
-      zoomGreaterThanEqPeriod
-    ) {
-      date = prevDateInDateRange(def, date, dateArray);
-      // Is current "rounded" previous date in the array of available dates
-      const dateInArray = dateArray.some((arrDate) => date.getTime() === arrDate.getTime());
-
-      if (date && !dateInArray) {
-        // Then, update layer object with new array of dates
-        def.availableDates = datesinDateRanges(def, date);
-        date = prevDateInDateRange(def, date, def.availableDates);
+      if (previousDateFromRange) {
+        date = util.clearTimeUTC(previousDateFromRange);
+      } else {
+        date = options.date
+          ? util.clearTimeUTC(new Date(date.getTime()))
+          : util.clearTimeUTC(date);
       }
     }
-    return date;
+
+    return { closestDate: date, previousDate: previousLayerDate, nextDate: nextLayerDate };
   };
 
   /**
@@ -553,7 +566,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     // every date.
     if (def.period) {
       date = util.toISOStringSeconds(
-        util.roundTimeOneMinute(self.closestDate(def, options))
+        util.roundTimeOneMinute(self.getRequestDates(def, options).closestDate)
       );
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
@@ -642,15 +655,15 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     let date = options.date || state.date[activeDateStr];
     if (def.period === 'subdaily') {
-      date = self.closestDate(def, options);
+      date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
-    if (day && def.period !== 'subdaily') {
+    if (day && def.wrapadjacentdays && def.period !== 'subdaily') {
       date = util.dateAdd(date, 'day', day);
     }
     const { tileMatrices, resolutions, tileSize } = matrixSet;
     const { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
-    const sizes = tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
     const tileGridOptions = {
       origin,
       extent,
@@ -702,13 +715,14 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const createLayerVector = function(def, options, day, state) {
     const { proj, compare } = state;
-    var date, urlParameters, extent, source, matrixSet, matrixIds, start;
+    var date, urlParameters, gridExtent, source, matrixSet, matrixIds, start, layerExtent;
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeGroupStr = options.group ? options.group : compare.activeString;
 
     source = config.sources[def.source];
-    extent = selectedProj.maxExtent;
+    gridExtent = selectedProj.maxExtent;
+    layerExtent = gridExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
 
     if (!source) {
@@ -729,11 +743,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
     if (day) {
       if (day === 1) {
-        extent = [-250, -90, -180, 90];
-        start = [-540, 90];
+        layerExtent = [-250, -90, -180, 90];
+        start = [-180, 90];
+        gridExtent = [110, -90, 180, 90];
       } else {
-        extent = [180, -90, 250, 90];
-        start = [180, 90];
+        gridExtent = [-180, -90, -110, 90];
+        layerExtent = [180, -90, 250, 90];
+        start = [-180, 90];
       }
     }
 
@@ -741,7 +757,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     var tms = def.matrixSet;
 
     date = options.date || state.date[activeDateStr];
-    if (day) {
+    if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
 
@@ -758,23 +774,26 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       '&Version=1.0.0' +
       '&FORMAT=application%2Fvnd.mapbox-vector-tile' +
       '&TileMatrix={z}&TileCol={x}&TileRow={y}';
-
+    const wrapX = !!(day === 1 || day === -1);
     var sourceOptions = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
+      day: day,
       format: new MVT(),
       matrixSet: tms,
+      wrapX: wrapX,
       tileGrid: new OlTileGridTileGrid({
-        extent: extent,
-        origin: start,
+        extent: gridExtent,
         resolutions: matrixSet.resolutions,
-        tileSize: matrixSet.tileSize
+        tileSize: matrixSet.tileSize,
+        origin: start
       })
     });
 
     var layer = new LayerVectorTile({
-      extent: extent,
-      source: sourceOptions
+      extent: layerExtent,
+      source: sourceOptions,
+      renderMode: wrapX ? 'image' : 'hybrid' // Todo: revert to just 'image' when styles are updated
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
@@ -792,7 +811,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       }
       setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
     }
-
+    layer.wrap = day;
     return layer;
   };
 
@@ -864,7 +883,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     urlParameters = '';
 
     date = options.date || state.date[activeDateStr];
-    if (day) {
+    if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
     urlParameters =

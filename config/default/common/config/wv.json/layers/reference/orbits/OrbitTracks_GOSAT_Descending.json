@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_GOSAT_Descending": {
       "id": "OrbitTracks_GOSAT_Descending",
-      "title": "GOSAT Orbital Track & Overpass Time (Descending/Night)",
+      "title": "GOSAT - Orbit Track & Time",
       "subtitle": "GOSAT / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GOSAT_Descending",
       "group": "overlays",
@@ -35,7 +35,7 @@
         "id": "OrbitTracks_GOSAT_Descending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks night"
     }
   }
 }

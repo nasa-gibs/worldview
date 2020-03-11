@@ -10,7 +10,10 @@
               "omi"
             ],
             "product":  "OMAERUVd",
-            "tags":     "ultra violet"
+            "tags":     "ultra violet",
+            "tracks": [
+            "OrbitTracks_Aura_Ascending"
+            ]
 
         }
     }

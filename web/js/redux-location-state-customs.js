@@ -4,7 +4,6 @@ import {
   createObjectFromConfig,
   isEqual
 } from 'redux-location-state/lib/helpers';
-import isEqualDate from 'date-fns/is_equal';
 import { typeHandles } from 'redux-location-state/lib/typeHandles';
 import { ENCODING_EXCEPTIONS } from './modules/link/constants';
 export const LOCATION_POP_ACTION = 'REDUX-LOCATION-POP-ACTION';
@@ -49,10 +48,14 @@ export function stateToParams(initialState, currentState, location) {
       type
     } = pathConfig[curr];
     let currentItemState = get(currentState, stateKey);
-    let isDefault;
+    let isDefault = false;
     // check if the date is the same as the one in initial value
     if (type === 'date') {
-      isDefault = isEqualDate(initialValue, currentItemState);
+      if (initialValue && currentItemState) {
+        const initialValueMS = initialValue.getTime();
+        const currentItemStateMS = currentItemState.getTime();
+        isDefault = initialValueMS === currentItemStateMS;
+      }
     } else {
       // if an empty object, make currentItemState undefined
       if (

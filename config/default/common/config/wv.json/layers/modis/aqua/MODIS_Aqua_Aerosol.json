@@ -13,7 +13,9 @@
             ],
             "product":  "MYD04_L2",
             "wrapadjacentdays": true,
-
+            "tracks": [
+                "OrbitTracks_Aqua_Ascending"
+             ],
             "palette": {
                 "recommended":  ["orange_1"]
             }

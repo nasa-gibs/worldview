@@ -1,7 +1,8 @@
 import {
   SET_FILTER_RANGE,
   CLEAR_VECTORSTYLE,
-  SET_VECTORSTYLE
+  SET_VECTORSTYLE,
+  SET_SELECTED_VECTORS
 } from './constants';
 import {
   setRange as setRangeSelector,
@@ -34,6 +35,7 @@ export function setFilterRange(layerId, props, index, groupName) {
     });
   };
 }
+
 /**
  * Action to set custom vectorStyle
  *
@@ -45,7 +47,7 @@ export function setFilterRange(layerId, props, index, groupName) {
 export function setStyle(layer, vectorStyleId, groupName) {
   return (dispatch, getState) => {
     const state = getState();
-    const newActiveVectorStylesObj = setStyleFunction(
+    const newActiveVectorStylesObj = setStyleFunction( // should probably place this inside map.ui as it is a rendering
       layer,
       vectorStyleId,
       state.vectorStyles.custom,
@@ -87,5 +89,16 @@ export function clearStyle(layer, vectorStyleId, groupName) {
       activeString: groupName,
       vectorStyles: newActiveVectorStylesObj
     });
+  };
+}
+/**
+ * Action to select Vectors
+ *
+ * @param {Object} payload Keys are layer ids that contain arrays of feature ids
+ */
+export function selectVectorFeatures(payload) {
+  return {
+    type: SET_SELECTED_VECTORS,
+    payload
   };
 }

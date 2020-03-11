@@ -5,7 +5,7 @@
   antarctic. Let’s zoom out using the
   “-” icon. Click the icon 3 times to get
   an idea of where the iceberg is
-  located on our earth. </p>
+  located on our Earth. </p>
 
 <p>Experiment with using both zoom
   buttons to zoom in and out. Note

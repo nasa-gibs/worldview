@@ -9,9 +9,13 @@ import {
 } from './constants';
 
 export function changeTab(str) {
-  return {
-    type: CHANGE_TAB,
-    activeTab: str
+  return (dispatch, getState) => {
+    if (getState().sidebar.activeTab !== str) {
+      dispatch({
+        type: CHANGE_TAB,
+        activeTab: str
+      });
+    }
   };
 }
 export function toggleSidebarCollapse(str) {

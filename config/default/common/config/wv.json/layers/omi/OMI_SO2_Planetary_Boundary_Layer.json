@@ -10,7 +10,10 @@
               "omi"
             ],
             "product":  "OMSO2e",
-            "tags":     "so2 sulphur dioxide"
+            "tags":     "so2 sulphur dioxide",
+            "tracks": [
+            "OrbitTracks_Aura_Ascending"
+            ]
         }
     }
 }

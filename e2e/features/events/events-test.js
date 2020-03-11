@@ -13,6 +13,7 @@ const selectedMarker = '.marker-selected';
 const firstExternalEventLink =
   '#wv-events ul.map-item-list .item:first-child .natural-event-link:first-child';
 const trackMarker = '.track-marker';
+const layersTab = '#layers-sidebar-tab';
 
 module.exports = {
   before: function(client) {
@@ -41,6 +42,7 @@ module.exports = {
     client.click('#sidebar-event-EONET_3931');
   },
   'Check that 4 fire layers are now present': function(client) {
+    client.click(layersTab);
     client.waitForElementPresent(
       '#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night',
       TIME_LIMIT,
@@ -105,8 +107,6 @@ module.exports = {
       globalSelectors.notifyMessage,
       TIME_LIMIT,
       function() {
-        // Close the geostationary alert since it obscures the event alert
-        client.click('#geostationary-alert-close').pause(500);
         client.assert.containsText(
           globalSelectors.notifyMessage,
           'Events may not be visible at all times'

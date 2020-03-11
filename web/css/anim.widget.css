@@ -1,18 +1,29 @@
+.wv-animation-widget-wrapper {
+  position: absolute;
+  bottom: 88px;
+  z-index: 100;
+  &.minimized {
+    bottom: 80px;
+    left: 10px;
+  }
+}
 .wv-animation-widget {
   width: 334px;
-  border-radius: 8px;
-  height: 134px;
+  border-radius: 5px;
+  height: 136px;
   background: #212121;
-  position: absolute;
-  transform: translateX(-50%);
-  -webkit-transform: translate(-50%);
-  bottom: 125px;
-  left: 50%;
   color: #fff;
+  padding: 1px 0;
+  cursor: move;
+  &.minimized {
+    height: 52px;
+    width: 80px;
+    background: rgba(40, 40, 40, 0.85);
+  }
   & .wv-animation-widget-header {
     display: block;
+    margin: 7px 45px 10px 5px;
     text-align: center;
-    margin-bottom: 10px;
     text-transform: capitalize;
     & .interval-btn-container,
     & .interval-btn.interval-btn-active {
@@ -21,7 +32,7 @@
     }
     & .wv-tooltip {
       bottom: 128px;
-      left: 44%;
+      left: 35%;
       position: absolute;
       border-bottom: 8px solid transparent;
       width: 100px;
@@ -54,11 +65,18 @@
   }
   &.subdaily {
     width: 460px;
+    & .wv-animation-widget-header {
+      display: block;
+      text-align: center;
+    }
     & .input-range {
       width: 278px;
     }
     & .custom-interval-widget {
       left: 113px;
+    }
+    & .wv-tooltip {
+      left: 39%;
     }
   }
   & .wv-slider-case {
@@ -81,10 +99,20 @@
     position: relative;
     width: 152px;
   }
-  & i.wv-close {
+  & svg.svg-inline--fa {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    &.wv-close {
+      top: 9px;
+      right: 9px;
+    }
+    &.wv-minimize {
+      top: 9px;
+      right: 29px;
+    }
+    &.wv-expand {
+      right: 8px;
+      bottom: 9px;
+    }
     &:hover {
       color: #999;
       cursor: pointer;
@@ -252,6 +280,10 @@ a .wv-animation-widget-icon {
   font-weight: 400;
 }
 
+#download-gif-button {
+  margin: 10px;
+}
+
 .gif-download-grid .grid-child {
   width: 190px;
   font-size: 12px;
@@ -292,6 +324,10 @@ a .wv-animation-widget-icon {
   font-size: 15px;
 }
 
+.gif-results-dialog {
+  padding-bottom: 7px;
+}
+
 .wv-gif-progress {
   width: 100%;
 }
@@ -299,32 +335,4 @@ a .wv-animation-widget-icon {
 .wv-checkbox-date {
   display: inline;
   position: relative;
-}
-
-.jcrop-tracker .wv-dl-gif-bt-case {
-  width: inherit;
-  position: relative;
-  height: inherit;
-}
-
-.jcrop-tracker .wv-dl-gif-bt-case i {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  color: #d54e21;
-  position: absolute;
-  transition: color 0.5s ease;
-}
-
-.jcrop-tracker .wv-dl-gif-bt-case i:hover {
-  color: #f4f5f5;
-  cursor: pointer;
-}
-
-.jcrop-tracker .wv-dl-gif-bt-case.disabled i,
-.jcrop-tracker .wv-dl-gif-bt-case.disabled i:hover {
-  cursor: default;
-  color: transparent;
-  pointer-events: none;
 }

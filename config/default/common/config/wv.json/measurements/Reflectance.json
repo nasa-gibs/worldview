@@ -8,9 +8,10 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/Reflectance",
+                    "description": "modis/combined/Reflectance",
                     "image": "",
                     "settings": [
+                        "MODIS_Combined_MAIAC_L2G_BidirectionalReflectance_Bands143",
                         "MODIS_Combined_L3_Nadir-BRDF_Daily"
                     ]
                 }

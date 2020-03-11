@@ -5,7 +5,7 @@ import { each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
 // Utils
 import util from './util/util';
-import OlCoordinates from './components/map/ol-coordinates';
+import MapInteractions from './containers/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
@@ -26,20 +26,14 @@ import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 
 // Dependency CSS
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.css';
-import '../../node_modules/icheck/skins/square/grey.css';
-import '../../node_modules/icheck/skins/square/red.css';
-import '../../node_modules/icheck/skins/line/red.css';
-import '../../node_modules/jscrollpane/style/jquery.jscrollpane.css';
-import '../../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css';
-import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.min.css';
+import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css';
 import '../../node_modules/ol/ol.css';
-import '../../node_modules/rc-slider/dist/rc-slider.css';
-import '../../node_modules/simplebar/dist/simplebar.css';
-import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
+import '../../node_modules/rc-slider/dist/rc-slider.min.css';
+import '../../node_modules/simplebar/dist/simplebar.min.css';
 import 'react-image-crop/dist/ReactCrop.css';
+import 'react-resizable/css/styles.css';
 // App CSS
 import '../css/fonts.css';
 import '../css/alert.css';
@@ -52,6 +46,7 @@ import '../css/toolbar.css';
 import '../css/notifications.css';
 import '../css/sidebar-panel.css';
 import '../css/button.css';
+import '../css/modal.css';
 import '../css/checkbox.css';
 import '../css/map.css';
 import '../css/link.css';
@@ -68,16 +63,17 @@ import '../css/dataDownload.css';
 import '../css/sidebar.css';
 import '../css/layers.css';
 import '../css/scrollbar.css';
+import '../css/switch.css';
 import '../css/timeline.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
 import '../css/mobile.css';
-import '../css/modal.css';
 import '../css/measure.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
 import '../css/geostationary-modal.css';
+import '../css/orbitTracks.css';
 import '../pages/css/document.css';
 import { keyPress } from './modules/key-press/actions';
 
@@ -101,10 +97,12 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAnimationWidgetActive, isTourActive, locationKey } = this.props;
+    const { isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents } = this.props;
+
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
+        <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
         </div>
@@ -112,17 +110,16 @@ class App extends React.Component {
         {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
-        <div id="wv-map" className="wv-map" />
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <div id="dlMap" />
         <Timeline key={locationKey || '1'} />
         <div id="wv-animation-widet-case">
-          {isAnimationWidgetActive ? <AnimationWidget /> : null}
+          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
-        <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
-        <Modal />
+
+        <Modal key={modalId} />
         <ErrorBoundary>
           <Debug parameters={this.props.parameters} />
         </ErrorBoundary>
@@ -138,6 +135,18 @@ class App extends React.Component {
     config = self.props.config;
     config.parameters = state;
 
+    // get user IP address for GTM/GA using https://www.ipify.org/ API
+    const getIpAddress = async() => {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const json = await response.json();
+      const ipAddress = json.ip;
+
+      googleTagManager.pushEvent({
+        event: 'ipAddress',
+        ipAddress: ipAddress
+      });
+    };
+
     const main = function() {
       const models = self.props.models;
 
@@ -149,16 +158,17 @@ class App extends React.Component {
       }
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
+        getIpAddress();
       }
 
       // Console notifications
       if (Brand.release()) {
         console.info(
           Brand.NAME +
-            ' - Version ' +
-            Brand.VERSION +
-            ' - ' +
-            Brand.BUILD_TIMESTAMP
+          ' - Version ' +
+          Brand.VERSION +
+          ' - ' +
+          Brand.BUILD_TIMESTAMP
         );
       } else {
         console.warn('Development version');
@@ -182,7 +192,8 @@ function mapStateToProps(state, ownProps) {
     parameters: state.parameters,
     models: ownProps.models,
     mapMouseEvents: ownProps.mapMouseEvents,
-    locationKey: state.location.key
+    locationKey: state.location.key,
+    modalId: state.modal.id
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -204,6 +215,7 @@ App.propTypes = {
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
   mapMouseEvents: PropTypes.object,
+  modalId: PropTypes.string,
   parameters: PropTypes.object,
   state: PropTypes.object
 };

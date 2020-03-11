@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_GOSAT_Ascending": {
       "id": "OrbitTracks_GOSAT_Ascending",
-      "title": "GOSAT Orbital Track & Overpass Time (Ascending/Day)",
+      "title": "GOSAT - Orbit Track & Time",
       "subtitle": "GOSAT / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GOSAT_Ascending",
       "group": "overlays",
@@ -35,7 +35,7 @@
         "id": "OrbitTracks_GOSAT_Ascending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks day"
     }
   }
 }

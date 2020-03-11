@@ -11,7 +11,10 @@
               "modis",
               "modis_terra"
             ],
-            "product":  "MODIS_TERRA_L3_SST_MID-IR_DAILY_9KM_NIGHTTIME_V2014.0"
+            "product":  "MODIS_TERRA_L3_SST_MID-IR_DAILY_9KM_NIGHTTIME_V2014.0",
+            "tracks": [
+            "OrbitTracks_Terra_Ascending"
+             ]
         }
     }
 }

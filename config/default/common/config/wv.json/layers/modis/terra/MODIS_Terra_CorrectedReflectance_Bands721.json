@@ -7,7 +7,10 @@
             "description": "modis/terra/MODIS_Terra_CorrectedReflectance_Bands721",
             "tags":     "cr m11-i2-i1",
             "group":    "baselayers",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "tracks": [
+            "OrbitTracks_Terra_Descending"
+             ]
         }
     }
 }

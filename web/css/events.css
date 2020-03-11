@@ -24,6 +24,7 @@
   font-size: 0.85em;
   color: #ccc;
   padding: 0 3px;
+  margin-left: 40px;
 }
 
 .map-item-list li.item p,
@@ -72,7 +73,7 @@
   font-weight: 700;
 }
 
-.wv-eventslist .map-item-list li.item .fa-external-link {
+.wv-eventslist .map-item-list li.item .fa-external-link-alt {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -313,8 +314,7 @@
   padding: 10px;
 }
 
-.wv-alert,
-.notify-alert {
+.wv-alert {
   position: relative;
   color: #fff;
   background: #282828;
@@ -322,79 +322,10 @@
   border-radius: 0;
 }
 
-.notify-alert .ui-dialog-content div::after {
-  pointer-events: none;
-  transform: translateY(50%);
-  bottom: 50%;
-  height: 10px;
-  content: "Read more \002026 ";
-  float: right;
-  position: absolute;
-  display: block;
-  z-index: 999;
-  right: 45px;
-  font-size: 13px;
-}
-
-.notify-alert .ui-dialog-content div:hover::after {
-  color: #000;
-}
-
-@media screen and (max-device-height: 720px) {
-  .notify-alert {
-    display: none;
-  }
-}
-
 @media only screen and (max-width: 420px) {
-  .wv-alert,
-  .notify-alert {
+  .wv-alert {
     left: 10px !important;
   }
-}
-
-.notify-alert i {
-  font-size: 1.4em;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  line-height: 40px;
-}
-
-.notify-alert .ui-dialog-content div > i {
-  color: #d54e21;
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.notify-alert .ui-dialog-content div {
-  margin-right: 40px;
-}
-
-.notify-alert .ui-dialog-content div:hover {
-  background: #ccc;
-  cursor: pointer;
-}
-
-.notify-alert .ui-dialog-content div:hover span {
-  color: #000;
-}
-
-.notify-alert .ui-dialog-content > i {
-  float: right;
-  padding: 0 10px;
-}
-
-.notify-alert .ui-dialog-content > i:hover {
-  cursor: pointer;
-  background: #ccc;
-  color: #333;
-}
-
-.notify-alert .ui-dialog-content {
-  padding: 0;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  line-height: 40px;
 }
 
 .event-alert-modal-body ul {

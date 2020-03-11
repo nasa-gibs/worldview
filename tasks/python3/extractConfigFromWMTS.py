@@ -17,18 +17,17 @@ help_description = """\
 Extracts configuration information from a WMTS GetCapabilities file.
 """
 
-parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir> <colormaps_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 (options, args) = parser.parse_args()
 
-if len(args) != 4:
+if len(args) != 3:
     parser.error("Invalid number of arguments")
 
 config_file = args[0]
 input_dir = args[1]
 output_dir = args[2]
-colormaps_dir = args[3]
 
 with open(config_file) as fp:
     config = json.load(fp)
@@ -57,7 +56,7 @@ json_options["separators"] = (',', ': ')
 class SkipException(Exception):
     pass
 
-def process_layer(gc_layer, wv_layers, colormaps):
+def process_layer(gc_layer, wv_layers):
     ident = gc_layer["ows:Identifier"]
     if ident in skip:
         print("%s: skipping" % ident)
@@ -141,7 +140,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
                         "id": vectorstyle_id
                     }
 
-def process_entry(entry, colormaps):
+def process_entry(entry):
     layer_count = 0
     warning_count = 0
     error_count = 0
@@ -184,7 +183,7 @@ def process_entry(entry, colormaps):
         ident = gc_layer["ows:Identifier"]
         try:
             layer_count += 1
-            process_layer(gc_layer, wv_layers, colormaps)
+            process_layer(gc_layer, wv_layers)
         except SkipException as se:
             warning_count += 1
             sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, ident))
@@ -197,7 +196,7 @@ def process_entry(entry, colormaps):
             ident = gc_layer["ows:Identifier"]
             try:
                 layer_count += 1
-                process_layer(gc_layer, wv_layers, colormaps)
+                process_layer(gc_layer, wv_layers)
             except SkipException as se:
                 warning_count += 1
                 sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
@@ -250,15 +249,14 @@ def process_entry(entry, colormaps):
 
 
 # Main
-colormaps = {}
 for entry in entries:
-    error_count, warning_count, layer_count = process_entry(entry, colormaps)
+    error_count, warning_count, layer_count = process_entry(entry)
     total_error_count += error_count
     total_warning_count += warning_count
     total_layer_count += layer_count
 
 print("%s: %d error(s), %d warning(s), %d layers" % (prog, total_error_count,
-        total_warning_count, total_layer_count))
+    total_warning_count, total_layer_count))
 
 if total_error_count > 0:
     sys.exit(1)

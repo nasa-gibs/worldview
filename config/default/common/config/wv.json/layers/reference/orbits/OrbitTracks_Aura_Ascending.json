@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_Aura_Ascending": {
       "id": "OrbitTracks_Aura_Ascending",
-      "title": "Aura Orbital Track & Overpass Time (Ascending/Day)",
+      "title": "Aura - Orbit Track & Time",
       "subtitle": "Aura / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Aura_Ascending",
       "group": "overlays",
@@ -36,7 +36,7 @@
         "id": "OrbitTracks_Aura_Ascending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks day"
     }
   }
 }

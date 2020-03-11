@@ -1,6 +1,8 @@
 const environments = require('./environments.js');
 const glob = require('glob');
 const files = glob.sync('./e2e/features/**/*-test.js');
+const now = new Date();
+const timeStamp = `${now.getMonth() + 1}/${now.getDate()} @ ${now.getHours()}:${now.getMinutes()}`;
 
 const nightwatchConfig = {
   output_folder: './e2e/reports',
@@ -18,10 +20,11 @@ const nightwatchConfig = {
     'browserstack.local': true,
     'browserstack.debug': true,
     'browserstack.localIdentifier': ('wvtester19234' + process.env.BROWSERSTACK_USER).replace(/[^a-zA-Z0-9]/g, ''),
-    build: 'nightwatch-browserstack',
+    build: 'wv-nightwatch-' + timeStamp,
     applicationCacheEnabled: false,
     webStorageEnabled: false,
-    marionette: true
+    marionette: true,
+    project: 'Worldview'
   },
   test_settings: {
     default: {},

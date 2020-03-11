@@ -2,10 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 
-const CLASS_MATCHING_OBJ = {
-  alert: 'bolt',
-  message: 'gift',
-  outage: 'exclamation-circle'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faBolt,
+  faExclamationCircle,
+  faGift
+} from '@fortawesome/free-solid-svg-icons';
+
+// icons used with NotificationBlock by passing string as prop type
+const listIcons = {
+  alert: faBolt,
+  message: faGift,
+  outage: faExclamationCircle
 };
 
 class NotificationBlock extends React.Component {
@@ -26,7 +34,7 @@ class NotificationBlock extends React.Component {
           return (
             <li key={type + i} className={activeClass}>
               <h2>
-                <i className={'fa fa-' + CLASS_MATCHING_OBJ[type]} />
+                <FontAwesomeIcon icon={listIcons[type]} />
                 <span>{'Posted ' + date}</span>
               </h2>
               <p dangerouslySetInnerHTML={{ __html: notification.message }} />

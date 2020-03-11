@@ -39,7 +39,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),IMERG_Rain_Rate(opacity=0.42),Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2017-09-20-T00%3A00%3A00Z&z=3&v=-88.41235502068209,7.635276360042516,-47.69132538906318,27.345385841458054"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),IMERG_Precipitation_Rate(opacity=0.42),Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2017-09-20-T00%3A00%3A00Z&z=3&v=-88.41235502068209,7.635276360042516,-47.69132538906318,27.345385841458054"
         },
         {
           "id": "004",

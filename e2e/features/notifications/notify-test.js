@@ -2,7 +2,7 @@ const TIME_LIMIT = 30000;
 const mockParam = '?mockAlerts=';
 // Selectors
 const infoButton = '#wv-info-button';
-const infoButtonIcon = '#wv-info-button i';
+const infoButtonIcon = '#wv-info-button svg.svg-inline--fa';
 const infoMenu = '#toolbar_info';
 const giftListItem = '#toolbar_info li.gift';
 const boltListItem = '#toolbar_info li.bolt';

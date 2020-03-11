@@ -6,12 +6,14 @@
             "subtitle": "Aqua / AMSR-E",
             "description": "amsre/AMSRE_Surface_Rain_Rate_Night",
             "group":    "overlays",
-              "group":    "overlays",
             "product":  "AE_Rain",
             "layergroup": [
               "amsre"
             ],
-            "inactive": true
+            "inactive": true,
+            "tracks": [
+            "OrbitTracks_Aqua_Descending"
+            ]
         }
     }
 }

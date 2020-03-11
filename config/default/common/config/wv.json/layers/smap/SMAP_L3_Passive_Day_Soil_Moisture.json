@@ -10,7 +10,10 @@
               "smap"
             ],
             "product":  "SPL3SMP",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "tracks": [
+            "OrbitTracks_SMAP_Descending"
+             ]
         }
     }
 }

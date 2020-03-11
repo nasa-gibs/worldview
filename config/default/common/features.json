@@ -7,6 +7,7 @@
         "compare": true,
         "tour": true,
         "feedback": true,
+        "previewSnapshots": true,
         "googleTagManager": {
             "id": "GTM-WNP7MLF"
         },
@@ -22,7 +23,6 @@
         }
     },
     "scripts": [
-        "https://earthdata.nasa.gov/lib/ntpagetag.js",
         "https://fbm.earthdata.nasa.gov/for/worldview/feedback.js"
     ]
 }

@@ -18,6 +18,7 @@ const reorder = (list, startIndex, endIndex) => {
   result.splice(endIndex, 0, removed);
   return result;
 };
+
 class LayerList extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +27,7 @@ class LayerList extends React.Component {
       layers: props.layers
     };
     this.promises = {};
+    this.onDragEnd = this.onDragEnd.bind(this);
   }
 
   /**
@@ -56,10 +58,9 @@ class LayerList extends React.Component {
 
   /**
    * Update Layer order after drag
-   * @param {Function} replaceSubGroup | Replace a products subgroup (Baselayer or Overlay) with new order
    * @param {Object} result | Result of layer drag
    */
-  onDragEnd(replaceSubGroup, result) {
+  onDragEnd(result) {
     const {
       layerGroupName,
       groupId,
@@ -68,23 +69,18 @@ class LayerList extends React.Component {
       activeLayers,
       layers
     } = this.props;
-    if (!result.destination) {
-      return;
-    }
-    if (result.source.index === result.destination.index) {
+    const { destination, source, draggableId } = result;
+    if (!destination || source.index === destination.index) {
       return;
     }
     const regex = new RegExp('-' + layerGroupName + '$');
-    const layerId = result.draggableId.replace(regex, '');
-    const newLayerArray = reorder(
-      layers,
-      result.source.index,
-      result.destination.index
-    );
+    const layerId = draggableId.replace(regex, '');
+    const newLayerArray = reorder(layers, source.index, destination.index);
+
     // In the new ordering, find the layer right after the layer that just
     // moved. Leave null if moved to the end of the list.
     let nextLayerId = null;
-    const nextIndex = result.destination.index + 1;
+    const nextIndex = destination.index + 1;
     if (nextIndex < newLayerArray.length) {
       nextLayerId = newLayerArray[nextIndex].id;
     }
@@ -114,40 +110,44 @@ class LayerList extends React.Component {
     return (
       <div className="layer-group-case">
         <h3 className="head">{title}</h3>
-        <DragDropContext onDragEnd={this.onDragEnd.bind(this, replaceSubGroup)}>
+
+        <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable
             droppableId={layerGroupName + '-' + groupId}
-            type="layerSubGroup"
+            type={'layerSubGroup' + groupId}
             direction="vertical"
           >
-            {(provided, snapshot) => {
-              return (
-                <ul id={groupId} className="category" ref={provided.innerRef}>
-                  {layers.map((object, i) => (
-                    <Layer
-                      layer={object}
-                      groupId={groupId}
-                      layerGroupName={layerGroupName}
-                      isInProjection={!!object.projections[projId]}
-                      key={i}
-                      index={i}
-                      layerClasses="item productsitem"
-                      zot={zots[object.id] ? zots[object.id].value : null}
-                      names={getNames(object.id)}
-                      checkerBoardPattern={checkerBoardPattern}
-                      isDisabled={!available(object.id)}
-                      isVisible={object.visible}
-                      runningObject={
-                        runningLayers && runningLayers[object.id]
-                          ? runningLayers[object.id]
-                          : null
-                      }
-                    />
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              );
-            }}
+            {(provided, snapshot) => (
+              <ul
+                id={groupId}
+                className="category"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {layers.map((object, i) => (
+                  <Layer
+                    layer={object}
+                    groupId={groupId}
+                    layerGroupName={layerGroupName}
+                    isInProjection={!!object.projections[projId]}
+                    key={object.id}
+                    index={i}
+                    layerClasses="item productsitem"
+                    zot={zots[object.id] ? zots[object.id].value : null}
+                    names={getNames(object.id)}
+                    checkerBoardPattern={checkerBoardPattern}
+                    isDisabled={!available(object.id)}
+                    isVisible={object.visible}
+                    runningObject={
+                      runningLayers && runningLayers[object.id]
+                        ? runningLayers[object.id]
+                        : null
+                    }
+                  />
+                ))}
+                {provided.placeholder}
+              </ul>
+            )}
           </Droppable>
         </DragDropContext>
       </div>

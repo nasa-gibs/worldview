@@ -1,6 +1,7 @@
 import 'jquery-ui-bundle/jquery-ui';
 import util from '../util/util';
 import { debounce } from 'lodash';
+import { faIconUndoSVGDomEl, faIconRedoSVGDomEl } from './fa-map-icons';
 
 export function MapRotate(ui, models, store) {
   this.evts = util.events();
@@ -41,7 +42,7 @@ export function MapRotate(ui, models, store) {
         'title',
         'You may also rotate by holding Alt and dragging the mouse'
       );
-    var $lefticon = $('<i></i>').addClass('fa fa-undo');
+    var $lefticon = $(faIconUndoSVGDomEl);
 
     var $rotateRightButton = $('<button></button>')
       .addClass('wv-map-rotate-right wv-map-zoom')
@@ -49,12 +50,12 @@ export function MapRotate(ui, models, store) {
         'title',
         'You may also rotate by holding Alt and dragging the mouse'
       );
-    var $righticon = $('<i></i>').addClass('fas fa-redo');
+    var $righticon = $(faIconRedoSVGDomEl);
 
     var $resetButton = $('<button></button>')
       .addClass('wv-map-reset-rotation wv-map-zoom')
       .attr('title', 'Click to reset')
-      .attr('style', 'width: 43px');
+      .attr('style', 'width: 42px');
 
     $rotateLeftButton.append($lefticon);
     $rotateRightButton.append($righticon);
@@ -248,6 +249,12 @@ export function MapRotate(ui, models, store) {
 
     map.getView().animate({
       rotation: map.getView().getRotation() - Math.PI / amount,
+      duration: duration
+    });
+  };
+  this.setRotation = function(val, duration, map) {
+    map.getView().animate({
+      rotation: val,
       duration: duration
     });
   };

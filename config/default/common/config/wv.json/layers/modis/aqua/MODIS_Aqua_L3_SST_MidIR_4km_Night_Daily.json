@@ -11,7 +11,10 @@
               "modis",
               "modis_aqua"
             ],
-            "product":  "MODIS_AQUA_L3_SST_MID-IR_DAILY_4KM_NIGHTTIME_V2014.0"
+            "product":  "MODIS_AQUA_L3_SST_MID-IR_DAILY_4KM_NIGHTTIME_V2014.0",
+            "tracks": [
+            "OrbitTracks_Aqua_Descending"
+             ]
         }
     }
 }

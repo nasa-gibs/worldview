@@ -18,6 +18,7 @@ import { getLayers } from '../../modules/layers/selectors';
 import { getDataProductsFromActiveLayers, doesSelectedExist } from '../../modules/data/selectors';
 import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
+import { faIconInfoCircleSVGDomEl } from '../fa-map-icons';
 
 export function dataUi(store, ui, config) {
   var queryActive = false;
@@ -98,12 +99,15 @@ export function dataUi(store, ui, config) {
     const dataState = state.data;
     const { compare, layers, proj } = state;
     const activeLayers = getLayers(layers[compare.activeString], { proj: proj.id });
-
     if (state.sidebar.activeTab !== 'download') {
       return;
     }
-
-    if (!dataState.selectedProduct || (dataState.selectedProduct && !doesSelectedExist(activeLayers, dataState.selectedProduct))) {
+    const products = getDataProductsFromActiveLayers(
+      activeLayers,
+      config,
+      proj.id
+    );
+    if (!dataState.selectedProduct || (dataState.selectedProduct && !doesSelectedExist(Object.entries(products), dataState.selectedProduct))) {
       self.events.trigger(self.EVENT_QUERY_RESULTS, {
         meta: {},
         granules: []
@@ -273,7 +277,7 @@ export function dataUi(store, ui, config) {
     uiIndicator.hide(indicators);
     wvui.notify(
       'No results received yet. This may be due to a ' +
-        'connectivity issue. Please try again later.'
+      'connectivity issue. Please try again later.'
     );
   };
 
@@ -422,7 +426,7 @@ var dataUiBulkDownloadPage = (function() {
 var dataUiDownloadListPanel = function(config, store) {
   var NOTICE =
     "<div id='wv-data-selection-notice'>" +
-    "<i class='icon fa fa-info-circle fa-3x'></i>" +
+    faIconInfoCircleSVGDomEl +
     "<p class='text'>" +
     'Some items you have selected require a profile with ' +
     'Earthdata Login to download. ' +
@@ -463,14 +467,6 @@ var dataUiDownloadListPanel = function(config, store) {
     $('a.wget').click(showWgetPage);
     $('a.curl').click(showCurlPage);
 
-    $dialog.find('.dd-collapse').accordion({
-      collapsible: true,
-      active: false,
-      icons: {
-        header: 'fas fa-caret-right fa-fw',
-        activeHeader: 'fa fa-caret-down fa-fw'
-      }
-    });
     $dialog.on('dialogclose', function() {
       self.events.trigger('close');
     });
@@ -654,10 +650,10 @@ var dataUiDownloadListPanel = function(config, store) {
     $.each(links, function(index, link) {
       elements.push(
         "<li class='link'><a href='" +
-          link.href +
-          "' target='_blank'>" +
-          link.title +
-          '</a></li>'
+        link.href +
+        "' target='_blank'>" +
+        link.title +
+        '</a></li>'
       );
     });
     elements.push('</ul>');
@@ -670,24 +666,24 @@ var dataUiDownloadListPanel = function(config, store) {
       elements = [
         "<tr data-granule='" + granule.id + "'>",
         "<td><input type='button' class='remove' " +
-          "data-granule='" +
-          granule.id +
-          "' " +
-          "value='X'></input></td>",
+        "data-granule='" +
+        granule.id +
+        "' " +
+        "value='X'></input></td>",
         '<td><nobr><ul><li>' + granule.label + '</li></ul></nobr></td>',
         "<td class='wv-data-granule-link'>" +
-          linksText(granule.links) +
-          '</td>',
+        linksText(granule.links) +
+        '</td>',
         '</tr>'
       ];
     } else {
       elements = [
         "<tr data-granule='" + granule.id + "'>",
         "<td><input type='button' class='remove' " +
-          "data-granule='" +
-          granule.id +
-          "' " +
-          "value='X'></input></td>",
+        "data-granule='" +
+        granule.id +
+        "' " +
+        "value='X'></input></td>",
         "<td colspan='2'>" + linksText(granule.links) + '</td>',
         '</tr>'
       ];
@@ -737,7 +733,7 @@ var dataUiDownloadListPanel = function(config, store) {
 
   var bulkDownloadText = function() {
     var bulk =
-      "<div class='bulk dd-collapse'>" +
+      "<div class='bulk'>" +
       '<h5>Bulk Download</h5>' +
       "<ul class='BulkDownload'>" +
       "<li><a class='link wget'>List of Links</a>: " +
@@ -848,17 +844,17 @@ var dataUiSelectionListPanel = function(dataUi, results, store) {
       var selected = dataState.selectedGranules[granule.id] ? "checked='true'" : '';
       elements.push(
         '<tr>' +
-          '<td>' +
-          "<input type='checkbox' value='" +
-          granule.id +
-          "' " +
-          selected +
-          '>' +
-          '</td>' +
-          "<td class='label'>" +
-          granule.label +
-          '</td>' +
-          '</tr>'
+        '<td>' +
+        "<input type='checkbox' value='" +
+        granule.id +
+        "' " +
+        selected +
+        '>' +
+        '</td>' +
+        "<td class='label'>" +
+        granule.label +
+        '</td>' +
+        '</tr>'
       );
     });
     var text = elements.join('\n');

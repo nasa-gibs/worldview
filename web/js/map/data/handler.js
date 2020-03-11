@@ -1,7 +1,10 @@
 import { dataCmrMockClient, dataCmrClient } from './cmr';
 import { getActiveTime } from '../../modules/date/util';
 import util from '../../util/util';
-import { forOwn as lodashForOwn } from 'lodash';
+import {
+  get as lodashGet,
+  forOwn as lodashForOwn
+} from 'lodash';
 import brand from '../../brand';
 import { CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84 } from '../map';
 import {
@@ -68,14 +71,16 @@ export function dataHandlerBase(config, store) {
   self.cmr = null;
   self.ajax = null;
 
+  const mockCMR = lodashGet(config, 'parameters.mockCMR');
+  const timeoutCMR = lodashGet(config, 'parameters.timeoutCMR');
   var init = function() {
     var ns = self;
     if (!ns.cmr) {
-      if (config.parameters.mockCMR) {
-        ns.cmr = dataCmrMockClient(config.parameters.mockCMR, store);
+      if (mockCMR) {
+        ns.cmr = dataCmrMockClient(mockCMR, store);
       } else {
         ns.cmr = dataCmrClient({
-          timeout: config.parameters.timeoutCMR
+          timeout: timeoutCMR
         });
       }
     }

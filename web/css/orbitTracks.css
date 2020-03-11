@@ -1,0 +1,46 @@
+.layer-tracks {
+  border-top: 1px solid #333;
+}
+
+.wv-orbit-track {
+  padding-top: 4px;
+  background-color: #ccc;
+  & svg.svg-inline--fa {
+    color: #333;
+  }
+
+  &.not-visible {
+    background: rgba(255, 255, 255, 0.2);
+    color: #999;
+    & svg.svg-inline--fa {
+      color: #999;
+    }
+  }
+
+  & .wv-orbit-track-vis-toggle {
+    display: inline-block;
+    background: transparent;
+    border: none;
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  & .wv-palettes-panel {
+    display: inline-block;
+  }
+
+  & .wv-palettes-legend {
+    display: inline-block;
+    & .wv-palettes-class {
+      display: inline-block;
+    }
+  }
+
+  & .wv-orbit-track-label {
+    display: inline-block;
+    text-transform: capitalize;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+}

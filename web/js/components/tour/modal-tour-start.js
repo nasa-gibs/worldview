@@ -123,7 +123,8 @@ ModalStart.propTypes = {
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   toggleModalStart: PropTypes.func.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  height: PropTypes.number
 };
 
 export default ModalStart;

@@ -5,10 +5,13 @@ import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { connect } from 'react-redux';
 import Opacity from './opacity';
 import Palette from './palette';
+import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-list';
 import GranuleCountSlider from './granule-count';
+import ClassificationToggle from './classification-toggle';
+
 import {
   getCheckerboard,
   palettesTranslate
@@ -24,7 +27,8 @@ import {
 import {
   setThresholdRangeAndSquash,
   setCustomPalette,
-  clearCustomPalette
+  clearCustomPalette,
+  setToggledClassification
 } from '../../../modules/palettes/actions';
 import {
   setFilterRange,
@@ -69,7 +73,9 @@ class LayerSettings extends React.Component {
       palettesTranslate,
       groupName,
       setThresholdRange,
-      layer
+      layer,
+      toggleClassification,
+      screenHeight
     } = this.props;
     const { activeIndex } = this.state;
     const navElements = [];
@@ -89,10 +95,16 @@ class LayerSettings extends React.Component {
       );
       const palette = getPalette(layer.id, i);
       const max = legend.colors.length - 1;
-      const start = palette.min || 0;
-      const end = palette.max || max;
+      const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
+      const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
-      if (
+      if (legend.type === 'classification' && legend.colors.length > 1) {
+        paneItemEl = (
+          <TabPane key={legend.id + 'pane'} tabId={i}>
+            <ClassificationToggle height={Math.ceil(screenHeight / 3)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
+          </TabPane>
+        );
+      } else if (
         legend.type !== 'continuous' &&
         legend.type !== 'discrete' &&
         legend.colors.length > 1
@@ -107,6 +119,7 @@ class LayerSettings extends React.Component {
           <TabPane key={legend.id + 'pane'} tabId={i}>
             {legend.type !== 'classification' ? (
               <PaletteThreshold
+                key={layer.id + i + '_threshold'}
                 legend={legend}
                 setRange={setThresholdRange}
                 min={0}
@@ -119,9 +132,9 @@ class LayerSettings extends React.Component {
                 index={i}
                 palette={palette}
               />
-            ) : (
-              ''
-            )}
+            ) : null
+            }
+
             <Palette
               setCustomPalette={setCustomPalette}
               groupName={groupName}
@@ -167,7 +180,9 @@ class LayerSettings extends React.Component {
       setThresholdRange,
       paletteOrder,
       groupName,
-      layer
+      layer,
+      toggleClassification,
+      screenHeight
     } = this.props;
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
@@ -175,18 +190,18 @@ class LayerSettings extends React.Component {
     const palette = getPalette(layer.id, 0);
     const legend = getPaletteLegend(layer.id, 0);
     const max = palette.legend.colors.length - 1;
-    const start = palette.min || 0;
-    const end = palette.max || max;
+    const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
+    const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
-      return '';
+      return (<ClassificationToggle height={Math.ceil(screenHeight / 2)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
     }
-
     return (
       <React.Fragment>
         {legend.type !== 'classification' &&
           <PaletteThreshold
+            key={layer.id + '0_threshold'}
             legend={legend}
             setRange={setThresholdRange}
             min={0}
@@ -269,7 +284,7 @@ class LayerSettings extends React.Component {
           ? this.renderCustomPalettes()
           : '';
     } else {
-      renderCustomizations = this.renderVectorStyles();
+      renderCustomizations = ''; // this.renderVectorStyles(); for future
     }
 
     if (!layer.id) return '';
@@ -301,13 +316,14 @@ class LayerSettings extends React.Component {
             />
           </React.Fragment> : null}
         {renderCustomizations}
+        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
       </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state, ownProps) {
-  const { config, palettes, compare, layers, proj } = state;
+  const { config, palettes, compare, browser, layers, proj } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
   const projection = proj.id;
@@ -330,6 +346,7 @@ function mapStateToProps(state, ownProps) {
     granuleCMRGeometry,
     paletteOrder: config.paletteOrder,
     groupName,
+    screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
     palettesTranslate,
@@ -356,6 +373,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = dispatch => ({
+  toggleClassification: (layerId, classIndex, index, groupName) => {
+    dispatch(
+      setToggledClassification(layerId, classIndex, index, groupName)
+    );
+  },
   setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
       setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
@@ -425,12 +447,14 @@ LayerSettings.propTypes = {
   palettesTranslate: PropTypes.func,
   projection: PropTypes.string,
   resetGranuleLayerDates: PropTypes.func,
+  screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setFilterRange: PropTypes.func,
   setOpacity: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   title: PropTypes.string,
+  toggleClassification: PropTypes.func,
   toggleHoveredGranule: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func,
   vectorStyles: PropTypes.object

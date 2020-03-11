@@ -11,10 +11,12 @@ import {
 } from '../modules/palettes/util';
 import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
+import { onClose as closeModal } from '../modules/modal/actions';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import { layersParse12 } from '../modules/layers/util';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
+
 import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
 import ErrorBoundary from './error-boundary';
 import update from 'immutability-helper';
@@ -108,9 +110,8 @@ class Tour extends React.Component {
 
   fetchMetadata(currentStory, stepIndex) {
     var description = currentStory.steps[stepIndex].description;
-    var { origin, pathname } = window.location;
     var errorMessage = '<p>There was an error loading this description.</p>';
-    var uri = `${origin}${pathname}config/metadata/stories/${
+    var uri = `config/metadata/stories/${
       currentStory.id
       }/${description}`;
     this.setState({
@@ -404,8 +405,8 @@ const mapDispatchToProps = dispatch => ({
         totalSteps: totalSteps
       }
     });
-
     dispatch(stopAnimation());
+    dispatch(closeModal());
     if (
       (parameters.l && hasCustomTypePalette(parameters.l)) ||
       (parameters.l1 && hasCustomTypePalette(parameters.l1))

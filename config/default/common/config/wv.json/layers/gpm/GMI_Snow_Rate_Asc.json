@@ -10,7 +10,10 @@
             "layergroup": [
               "gpm"
             ],
-            "product":  "GPM_2AGPROFGPMGMI"
+            "product":  "GPM_2AGPROFGPMGMI",
+            "tracks": [
+            "OrbitTracks_GPM_Ascending"
+             ]
         }
     }
 }

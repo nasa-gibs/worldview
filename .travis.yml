@@ -1,15 +1,69 @@
+env:
+  global:
+    - MOZ_HEADLESS=1
+cache:
+  directories:
+    - node_modules
+    - .python
+  npm: true
+  pip: true
+
+install: npm ci
+
+script:
+  - npm test
+  - npm run build
+
 matrix:
+  fast_finish: true # don't wait for allowed failures to determine overall build status
+  allow_failures:
+    - os: windows
+    - node_js: lts/*
+    - name: 'Node.js 10.16.3 - Chrome E2E'
+
   include:
+    - os: osx
+      name: 'Node.js 10.16.3 - Chrome E2E'
+      language: node_js
+      node_js: '10.16.3'
+      osx_image: xcode11.2
+      addons:
+        chrome: stable
+      before_install:
+         - "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &"
+      script:
+        - npm run build:ci
+        - npm run start &
+        - npm run e2e:headless:chrome
+
+    - os: osx
+      language: node_js
+      node_js: lts/* # latest LTS Node.js release
+      osx_image: xcode11.2
+
+    - os: osx
+      language: node_js
+      node_js: '8.15.1'
+      osx_image: xcode11.2
+
     - os: linux
+      name: 'Node.js 10.16.3 - Firefox E2E'
       dist: xenial
       language: python
-      node_js: '8.15.1'
+      node_js: '10.16.3'
       python: '3.7'
       sudo: required
+      addons:
+        firefox: latest
       before_install:
         - python --version
         - python3 --version
-        - nvm install 8.15.1
+        - nvm install 10.16.3
+      script:
+        - npm run build:ci
+        - npm run start &
+        - npm run e2e:headless:firefox
+
     - os: linux
       dist: xenial
       language: python
@@ -20,17 +74,23 @@ matrix:
         - python --version
         - python3 --version
         - nvm install lts/*
-    - os: osx
-      language: node_js
+
+    - os: linux
+      dist: xenial
+      language: python
       node_js: '8.15.1'
-    - os: osx
-      language: node_js
-      node_js: lts/* # latest LTS Node.js release
+      python: '3.7'
+      sudo: required
+      before_install:
+        - python --version
+        - python3 --version
+        - nvm install 8.15.1
+
     - os: windows
       language: node_js
-      node_js: '8.15.1'
+      node_js: lts/* # latest LTS Node.js release
       before_install:
-        - choco install python3
+        - choco install python --version 3.7.5
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
         - python --version
         - python -m ensurepip
@@ -42,11 +102,12 @@ matrix:
           - $HOME/venv
           - c:/Python37
           - c:/Python37/Scripts
+
     - os: windows
       language: node_js
-      node_js: lts/* # latest LTS Node.js release
+      node_js: '8.15.1'
       before_install:
-        - choco install python3
+        - choco install python --version 3.7.5
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
         - python --version
         - python -m ensurepip
@@ -58,14 +119,3 @@ matrix:
           - $HOME/venv
           - c:/Python37
           - c:/Python37/Scripts
-
-cache:
-  directories:
-    - node_modules
-    - .python
-  npm: true
-  pip: true
-
-install: npm install
-
-script: npm test

@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_METOP-A_Descending": {
       "id": "OrbitTracks_METOP-A_Descending",
-      "title": "MetOp-A Orbital Track & Overpass Time (Descending/Night)",
+      "title": "MetOp-A - Orbit Track & Time",
       "subtitle": "MetOp-A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_METOP-A_Descending",
       "group": "overlays",
@@ -35,7 +35,7 @@
         "id": "OrbitTracks_METOP-A_Descending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks night"
     }
   }
 }

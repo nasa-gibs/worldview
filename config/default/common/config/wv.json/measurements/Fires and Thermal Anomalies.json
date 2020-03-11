@@ -3,7 +3,7 @@
         "Fires and Thermal Anomalies": {
             "id": "fires-thermal-anomalies",
             "title":    "Fires and Thermal Anomalies",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Suomi NPP/VIIRS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -40,16 +40,29 @@
                         "MODIS_Combined_Thermal_Anomalies_All"
                     ]
                 },
-                "S-NPP/VIIRS": {
+                "Suomi NPP/VIIRS": {
                     "id": "snpp-viirs",
                     "title": "Suomi NPP / VIIRS",
                     "description": "viirs/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
                       	"VIIRS_SNPP_Thermal_Anomalies_375m_Day",
-	                      "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
+	                    "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
                         "OrbitTracks_Suomi_NPP_Ascending",
                         "OrbitTracks_Suomi_NPP_Descending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20 / VIIRS",
+                    "description": "viirs/Fires_ThermalAnomalies",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Thermal_Anomalies_375m_All",  
+                        "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+	                    "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
+                        "OrbitTracks_NOAA-20_Ascending",
+                        "OrbitTracks_NOAA-20_Descending"
                     ]
                 }
             }

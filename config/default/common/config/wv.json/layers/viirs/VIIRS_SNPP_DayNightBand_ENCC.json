@@ -9,7 +9,10 @@
             "layergroup": [
               "viirs"
             ],
-            "group":    "overlays"
+            "group":    "overlays",
+            "tracks": [
+                "OrbitTracks_Suomi_NPP_Descending"
+            ]
         }
     }
 }

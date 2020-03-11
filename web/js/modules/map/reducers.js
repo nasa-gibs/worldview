@@ -6,7 +6,9 @@ import {
   UPDATE_MAP_UI,
   UPDATE_MAP_ROTATION,
   RENDERED,
-  FITTED_TO_LEADING_EXTENT
+  FITTED_TO_LEADING_EXTENT,
+  CHANGE_CURSOR,
+  REFRESH_ROTATE
 } from './constants';
 import update from 'immutability-helper';
 const INITIAL_STATE = {
@@ -15,7 +17,9 @@ const INITIAL_STATE = {
   rotation: 0,
   extent: [],
   rendered: false,
-  leadingExtent: []
+  leadingExtent: [],
+  isClickable: false
+
 };
 
 export default function mapReducer(state = INITIAL_STATE, action) {
@@ -36,6 +40,7 @@ export default function mapReducer(state = INITIAL_STATE, action) {
         rotation: action.rotation
       });
     case UPDATE_MAP_ROTATION:
+    case REFRESH_ROTATE:
       return update(state, { rotation: { $set: action.rotation } });
     case RENDERED:
       return lodashAssign({}, state, {
@@ -44,6 +49,10 @@ export default function mapReducer(state = INITIAL_STATE, action) {
     case FITTED_TO_LEADING_EXTENT:
       return lodashAssign({}, state, {
         leadingExtent: action.extent
+      });
+    case CHANGE_CURSOR:
+      return lodashAssign({}, state, {
+        isClickable: action.bool
       });
     default:
       return state;

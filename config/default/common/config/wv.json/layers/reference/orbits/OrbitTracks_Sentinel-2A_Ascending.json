@@ -2,10 +2,10 @@
   "layers": {
     "OrbitTracks_Sentinel-2A_Ascending": {
       "id": "OrbitTracks_Sentinel-2A_Ascending",
-      "title": "Sentinel-2A Orbital Track & Overpass Time (Ascending/Night)",
+      "title": "Sentinel-2A - Orbit Track & Time",
       "subtitle": "Sentinel-2A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-2A_Ascending",
-      "tags": "tracks",
+      "tags": "tracks night",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",

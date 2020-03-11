@@ -1,12 +1,18 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
+import util from '../../util/util';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfo } from '@fortawesome/free-solid-svg-icons';
 
 export default class VectorMetaTooltip extends React.Component {
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
     this.state = {
       tooltipOpen: false
     };
@@ -18,26 +24,48 @@ export default class VectorMetaTooltip extends React.Component {
     });
   }
 
+  mouseEnter() {
+    this.setState({
+      tooltipOpen: true
+    });
+  }
+
+  mouseLeave() {
+    this.setState({
+      tooltipOpen: false
+    });
+  }
+
   render() {
+    const { id, index, description } = this.props;
+    const elId = util.cleanId(String('tooltip' + id + index));
+
     return (
-      <Fragment key={this.props.index}>
-        <span href="#" id={'tooltip-' + this.props.index}><i className="fa fa-info vector-info-icon"></i></span>
+      <div
+        className='vector-info-tooltip-case'
+        onMouseEnter={this.mouseEnter}
+        onMouseLeave={this.mouseLeave}
+        key={elId}
+      >
+        <div id={elId} className='sub-case'>
+          <FontAwesomeIcon icon={faInfo} className="vector-info-icon cursor-pointer" />
+        </div>
         <Tooltip
-          dangerouslySetInnerHTML={{ __html: this.props.description }}
+          dangerouslySetInnerHTML={{ __html: description }}
           boundariesElement="window"
-          placement="top"
+          placement="right"
           isOpen={this.state.tooltipOpen}
-          target={'tooltip-' + this.props.index}
-          toggle={this.toggle}
+          target={elId}
           fade={false}
         >
         </Tooltip>
-      </Fragment>
+      </div>
     );
   }
 }
 
 VectorMetaTooltip.propTypes = {
+  id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   description: PropTypes.string
 };

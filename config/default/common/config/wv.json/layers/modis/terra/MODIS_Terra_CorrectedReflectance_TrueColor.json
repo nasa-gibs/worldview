@@ -8,11 +8,14 @@
             "tags": "natural color cr",
             "group": "baselayers",
             "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Terra_Descending"
+            ],
             "projections": {
                 "geographic": {
                     "source": "GIBS:geographic"
                 }
-            }
+            }  
         }
     }
 }

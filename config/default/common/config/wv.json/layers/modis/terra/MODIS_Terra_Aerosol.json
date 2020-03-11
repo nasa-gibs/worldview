@@ -13,6 +13,9 @@
             ],
             "product":  "MOD04_L2",
             "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Terra_Descending"
+            ],
             "projections": {
                 "geographic": {
                     "source": "GIBS:geographic"

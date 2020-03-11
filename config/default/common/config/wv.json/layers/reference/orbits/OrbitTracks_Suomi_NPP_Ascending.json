@@ -2,11 +2,11 @@
   "layers": {
     "OrbitTracks_Suomi_NPP_Ascending": {
       "id": "OrbitTracks_Suomi_NPP_Ascending",
-      "title": "Suomi-NPP Orbital Track & Overpass Time (Ascending/Day)",
-      "subtitle": "Suomi-NPP / Space-Track.org",
+      "title": "Suomi NPP - Orbit Track & Time",
+      "subtitle": "Suomi NPP / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Suomi_NPP_Ascending",
       "group": "overlays",
-      "tags": "snpp s-npp tracks",
+      "tags": "snpp s-npp tracks day",
       "format": "image/png",
       "type": "wms",
       "tileSize": [

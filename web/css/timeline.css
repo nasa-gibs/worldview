@@ -161,12 +161,13 @@ button:focus {
   }
   & .button-action-group svg {
     position: absolute;
+  }
+  & #zoom-buttons-group .button-action-group svg {
     top: 50%;
     margin-top: -15px;
     left: 50%;
     margin-left: -12px;
   }
-
   & #left-arrow-group {
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
@@ -192,18 +193,21 @@ button:focus {
     fill: #333;
   }
 
+  & #animate-button {
+    width: 100%;
+    height: 100%;
+  }
+
   & .animate-button {
-    margin-top: 10px;
+    position: absolute;
     height: 40px;
-    width: 40px;
+    width: 50px;
+    top: 11px;
+    right: 24px;
+    padding-left: 3px;
   }
-  & .animate-button .wv-animate {
-    color: #fff;
-    font-size: 2.5em;
-    margin: 5px 0 0 2px;
-  }
-  & .animate-button:hover .wv-animate {
-    color: #1a1a1a;
+  & .animate-button:hover svg.wv-animate path {
+    fill: #1a1a1a;
   }
   & .animate-button.wv-disabled-button {
     cursor: auto;
@@ -226,9 +230,12 @@ button:focus {
   }
 }
 
+.timeline-header-desktop {
+  position: relative;
+}
+
 #zoom-buttons-group {
   position: relative;
-  width: 86px;
 }
 
 .button-action-group {
@@ -345,18 +352,21 @@ button:focus {
   background: rgba(40, 40, 40, 0.85);
   position: absolute;
   top: -54px;
-  left: 0;
+  left: 85px;
   color: #fff;
   border-bottom: thin solid #444;
+  &.subdaily {
+    left: 189px;
+  }
 }
 
-.custom-interval-widget i.wv-close {
+.custom-interval-widget svg.svg-inline--fa {
   position: absolute;
   top: 5px;
   right: 5px;
 }
 
-.custom-interval-widget i.wv-close:hover {
+.custom-interval-widget svg.svg-inline--fa.wv-close:hover {
   color: #999;
   cursor: pointer;
 }
@@ -622,6 +632,10 @@ button:focus {
 }
 
 /* Mobile date picker */
+.timeline-header-mobile {
+  position: static;
+}
+
 .mobile-date-picker-select-btn {
   position: absolute;
   left: 10px;
@@ -629,18 +643,40 @@ button:focus {
   background: rgba(40, 40, 40, 0.85);
   color: #fff;
   border: thin solid #333;
-  font-size: 17px;
-  font-family: 'Open Sans', sans-serif;
-  padding: 3px;
+  font-size: 23px;
+  padding: 14px 8px;
   border-radius: 5px;
-  line-height: 25px;
   white-space: nowrap;
   cursor: pointer;
+  height: 44px;
+  font-family: 'Roboto Mono', monospace;
+}
+.datepicker-modal {
+  & div, li {
+    font-family: 'Roboto Mono', monospace;
+  }
+  & .datepicker-header,
+  .datepicker-navbar-btn {
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .datepicker .datepicker-navbar-btn:hover {
+    background: #ccc;
+    color: #333;
+  }
 }
 
-.datepicker-header,
-.datepicker-navbar-btn {
-  font-weight: 700;
+/* Mobile date change arrows */
+.mobile-date-change-arrows-btn {
+  position: absolute;
+  left: 120px;
+  bottom: 10px;
+  background: rgba(40, 40, 40, 0.85);
+  border: thin solid #333;
+  padding: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 44px;
 }
 
 .datepicker.android-dark .datepicker-header {
@@ -659,8 +695,4 @@ button:focus {
 
 .datepicker.android-dark .datepicker-scroll li.disabled {
   color: rgb(88, 88, 88) !important;
-}
-
-.datepicker-navbar-btn:hover {
-  background: #fff;
 }

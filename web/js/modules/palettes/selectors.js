@@ -129,6 +129,8 @@ var useLookup = function(layerId, palettesObj, state) {
         use = true;
         return false;
       }
+    } else if (palette.legend.colors.length > 1) {
+      use = true;
     }
   });
   return use;
@@ -144,6 +146,7 @@ var updateLookup = function(layerId, palettesObj, state) {
     delete newPalettes[layerId];
     return newPalettes;
   }
+
   var lookup = {};
   var active = newPalettes[layerId].maps;
   lodashEach(active, function(palette, index) {
@@ -172,9 +175,10 @@ var updateLookup = function(layerId, palettesObj, state) {
     var sourceCount = source.length;
     var targetCount = target.length;
     var appliedLegends = [];
+    var disabled = palette.disabled || [];
     lodashEach(source, function(color, index) {
       var targetColor;
-      if (index < min || index > max) {
+      if (index < min || index > max || disabled.includes(index)) {
         targetColor = '00000000';
       } else {
         var sourcePercent, targetIndex;
@@ -225,7 +229,61 @@ var updateLookup = function(layerId, palettesObj, state) {
   });
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
+var toggleLookup = function(layerId, palettesObj, state) {
+  const newPalettes = palettesObj;
+  if (!useLookup(layerId, newPalettes, state)) {
+    delete newPalettes[layerId];
+    return newPalettes;
+  }
+  var lookup = {};
+  var active = newPalettes[layerId].maps;
+  lodashEach(active, function(palette, index) {
+    var entries = palette.entries;
+    const refs = palette.legend.refs;
+    var source = entries.colors;
+    var target = palette.custom
+      ? getCustomPalette(palette.custom, state.palettes.custom).colors
+      : source;
 
+    var sourceCount = source.length;
+    var targetCount = target.length;
+    var appliedLegends = [];
+    var disabled = palette.disabled || [];
+    lodashEach(source, function(color, index) {
+      var targetColor;
+      if (disabled.includes(index)) {
+        targetColor = '00000000';
+      } else {
+        var sourcePercent, targetIndex;
+        sourcePercent = index / sourceCount;
+        targetIndex = Math.floor(sourcePercent * targetCount);
+        targetColor = target[targetIndex];
+      }
+      const colormapRef = entries.refs[index];
+      const refIndex = refs.indexOf(colormapRef);
+
+      if (~refIndex && !appliedLegends.includes(colormapRef)) {
+        appliedLegends.push(colormapRef);
+      }
+      var lookupSource =
+        lodashParseInt(color.substring(0, 2), 16) +
+        ',' +
+        lodashParseInt(color.substring(2, 4), 16) +
+        ',' +
+        lodashParseInt(color.substring(4, 6), 16) +
+        ',' +
+        lodashParseInt(color.substring(6, 8), 16);
+      var lookupTarget = {
+        r: lodashParseInt(targetColor.substring(0, 2), 16),
+        g: lodashParseInt(targetColor.substring(2, 4), 16),
+        b: lodashParseInt(targetColor.substring(4, 6), 16),
+        a: lodashParseInt(targetColor.substring(6, 8), 16)
+      };
+      lookup[lookupSource] = lookupTarget;
+    });
+  });
+  return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
+};
 export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
   var values = getPalette(layerId, index, groupStr, state).entries.values;
@@ -283,6 +341,75 @@ export function getKey(layerId, groupStr, state) {
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   return state.palettes[group][layerId];
+}
+export function refreshDisabledSelector(
+  layerId,
+  disabled,
+  index,
+  palettes,
+  state
+) {
+  let newPalettes = prepare(layerId, palettes, state);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled
+          }
+        }
+      }
+    }
+  });
+  return toggleLookup(layerId, newPalettes, state);
+}
+export function initDisabledSelector(
+  layerId,
+  disabledStr,
+  index,
+  palettes,
+  state
+) {
+  const disabled = disabledStr.split('-');
+  for (var i = 0; i < disabled.length; i++) { disabled[i] = +disabled[i]; }
+  let newPalettes = prepare(layerId, palettes, state);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled
+          }
+        }
+      }
+    }
+  });
+  return toggleLookup(layerId, newPalettes, state);
+}
+export function setDisabledSelector(
+  layerId,
+  classIndex,
+  index,
+  palettes,
+  state
+) {
+  let newPalettes = prepare(layerId, palettes, state);
+  const legend = getPalette(layerId, index, undefined, state);
+  const oldDisabled = legend.disabled || [];
+  const indexOf = oldDisabled.indexOf(classIndex);
+  indexOf !== -1 ? oldDisabled.splice(indexOf, 1) : oldDisabled.push(classIndex);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled: isNaN(classIndex) ? [] : oldDisabled
+          }
+        }
+      }
+    }
+  });
+  return toggleLookup(layerId, newPalettes, state);
 }
 export function setRange(layerId, props, index, palettes, state) {
   let min = props.min;

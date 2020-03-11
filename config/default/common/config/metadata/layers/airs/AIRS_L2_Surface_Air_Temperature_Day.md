@@ -1,5 +1,5 @@
 #### Description
-Temperature of the air in units of kelvin two meters above sea level. Near-surface air temperature is an essential climate variable widely used in studies of meteorology, climate, and environmental health applications.
+Temperature of the air in units of Kelvin (K) two meters above sea level. Near-surface air temperature is an essential climate variable widely used in studies of meteorology, climate, and environmental health applications.
 
 #### Image Resolution
 32 km/pixel (AIRS Level 2 data is nominally 45 km/pixel at the equator and the data has been resampled into a 32 km/pixel visualization.)

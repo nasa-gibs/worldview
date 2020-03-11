@@ -2,7 +2,7 @@
   "layers": {
     "OrbitTracks_GPM_Descending": {
       "id": "OrbitTracks_GPM_Descending",
-      "title": "GPM Orbital Track & Overpass Time (Descending)",
+      "title": "GPM - Orbit Track & Time",
       "subtitle": "GPM / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GPM_Descending",
       "group": "overlays",
@@ -35,7 +35,7 @@
         "id": "OrbitTracks_GPM_Descending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks descending"
     }
   }
 }

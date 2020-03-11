@@ -11,7 +11,7 @@ const upYearInputButton =
   '#date-selector-main > div > div.input-wrapper.input-wrapper-year > div.date-arrows.date-arrow-up';
 
 module.exports = {
-  'Initial State - Data Download tab is available and in default state when clicked': function(
+  'Initial State - Data Download tab is available and in default state when clicked': '' + function(
     client
   ) {
     reuseables.loadAndSkipTour(client, client.globals.timeout);
@@ -34,7 +34,8 @@ module.exports = {
     client.expect.element('#indicator').to.be.present;
     client.useCss().assert.containsText('#indicator span', 'No Data Available');
   },
-  'No Results - No Data Available indicator displayed when no data': function(
+
+  'No Results - No Data Available indicator displayed when no data': '' + function(
     client
   ) {
     // December 31, 2022 no results
@@ -86,6 +87,7 @@ module.exports = {
       .to.have.text.equal('No Data Available')
       .after(client.globals.timeout);
   },
+
   'No data in view - Zoom out or move map indicator displayed when no data in view': function(
     client
   ) {
@@ -105,13 +107,19 @@ module.exports = {
 
     // Zoom out three times for a data point granule selection button to be visible and indicator disappears
     client.click(zoomOutButton);
+    client.pause(750);
     client.click(zoomOutButton);
+    client.pause(750);
     client.click(zoomOutButton);
     client.expect
       .element('#indicator')
       .to.not.be.visible.after(client.globals.timeout);
 
     // Zoom in data point granule selection button is not visible and indicator reappears
+    client.click(zoomInButton);
+    client.pause(750);
+    client.click(zoomInButton);
+    client.pause(750);
     client.click(zoomInButton);
     client.expect
       .element('#indicator')
@@ -131,7 +139,7 @@ module.exports = {
       .to.have.text.equal('Zoom out or move map')
       .after(client.globals.timeout);
   },
-  'Query Timeout - No results received yet dialog box displayed': function(
+  'Query Timeout - No results received yet dialog box displayed': '' + function(
     client
   ) {
     // query timeout

@@ -3,7 +3,7 @@
         "Aerosol Index": {
             "id": "aerosol-index",
             "title":    "Aerosol Index",
-            "subtitle": "Aura/OMI, Suomi-NPP/OMPS",
+            "subtitle": "Aura/OMI, Suomi NPP/OMPS",
             "sources": {
                 "Aura/OMI": {
                     "id": "aura-omi",
@@ -17,7 +17,7 @@
                     ]
                 },
                 "Suomi NPP/OMPS": {
-                    "id": "suominpp-omps",
+                    "id": "suomi-npp-omps",
                     "title": "Suomi NPP/OMPS",
                     "description": "omps/AerosolIndex",
                     "image": "",

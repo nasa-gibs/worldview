@@ -1,0 +1,21 @@
+{
+    "layers": {
+        "MODIS_Terra_L2G_SurfaceReflectance_Bands143_Daily": {
+            "id":       "MODIS_Terra_L2G_SurfaceReflectance_Bands143_Daily",
+            "title":    "Land Surface Reflectance (L2G, Daily, True Color)",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Terra_L2G_SurfaceReflectance_Bands143_Daily",
+            "tags":     "lsr 143 true color",
+            "group":    "baselayers",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "MOD09GA",
+            "wrapadjacentdays": true,
+            "tracks": [
+            "OrbitTracks_Terra_Descending"
+             ]
+            }
+        }
+    }

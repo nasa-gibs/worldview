@@ -19,6 +19,11 @@ import {
   removeLayer,
   layerHover
 } from '../../modules/layers/actions';
+import OrbitTrack from './orbit-track';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faSlidersH, faInfo, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -28,6 +33,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   top: null,
   left: null
 });
+
 class Layer extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +45,9 @@ class Layer extends React.Component {
 
   getPaletteLegend = () => {
     const {
+      compare,
       layer,
+      layerGroupName,
       runningObject,
       paletteLegends,
       checkerBoardPattern,
@@ -49,16 +57,21 @@ class Layer extends React.Component {
       requestPalette,
       isCustomPalette,
       isLoading,
-      isMobile
+      isMobile,
+      zot
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
-      const isRunningData = !!runningObject;
+      const isRunningData = compare.active
+        ? compare.activeString === layerGroupName && !!runningObject
+        : !!runningObject;
       const colorHex = isRunningData ? runningObject.paletteHex : null;
       return (
         <PaletteLegend
           layer={layer}
+          layerGroupName={layerGroupName}
           paletteId={palette.id}
           getPalette={getPalette}
+          width={zot ? 220 : 231}
           paletteLegends={paletteLegends}
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
@@ -73,35 +86,19 @@ class Layer extends React.Component {
   }
 
   getDisabledTitle = (layer) => {
-    var startDate, endDate;
-    if (layer.startDate && layer.endDate) {
-      startDate = util.parseDate(layer.startDate);
-      endDate = util.parseDate(layer.endDate);
-      if (layer.period !== 'subdaily') {
-        startDate =
-          startDate.getDate() +
-          ' ' +
-          util.giveMonth(startDate) +
-          ' ' +
-          startDate.getFullYear();
-        endDate =
-          endDate.getDate() +
-          ' ' +
-          util.giveMonth(endDate) +
-          ' ' +
-          endDate.getFullYear();
-      }
+    let startDate, endDate;
+
+    if (layer.startDate) {
+      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
+    }
+
+    if (layer.endDate) {
+      endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
+    }
+
+    if (startDate && endDate) {
       return 'Data available between ' + startDate + ' - ' + endDate;
-    } else if (layer.startDate) {
-      startDate = util.parseDate(layer.startDate);
-      if (layer.period !== 'subdaily') {
-        startDate =
-          startDate.getDate() +
-          ' ' +
-          util.giveMonth(startDate) +
-          ' ' +
-          startDate.getFullYear();
-      }
+    } else if (startDate) {
       return 'Data available between ' + startDate + ' - Present';
     } else {
       return 'No data on selected date for this layer';
@@ -114,25 +111,90 @@ class Layer extends React.Component {
     e.preventDefault();
   }
 
+  renderControls() {
+    const {
+      layer,
+      layerGroupName,
+      names,
+      isMobile,
+      onRemoveClick,
+      onInfoClick,
+      onOptionsClick
+    } = this.props;
+    const { title } = names;
+    return (
+      <>
+        <a
+          id={'close' + layerGroupName + util.encodeId(layer.id)}
+          title={'Remove Layer'}
+          className="button wv-layers-close"
+          onClick={() => onRemoveClick(layer.id)}
+        >
+          <FontAwesomeIcon icon={faTimes} fixedWidth />
+        </a>
+        <a
+          title={'Layer options for ' + title}
+          className={isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'}
+          onMouseDown={this.stopPropagation}
+          onClick={() => onOptionsClick(layer, title)}
+        >
+          <FontAwesomeIcon icon={faSlidersH} className="wv-layers-options-icon" />
+        </a>
+        <a
+          title={'Layer description for ' + title}
+          className={isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'}
+          onMouseDown={this.stopPropagation}
+          onClick={() => onInfoClick(layer, title)}
+        >
+          <FontAwesomeIcon icon={faInfo} className="wv-layers-info-icon" />
+        </a>
+      </>
+    );
+  };
+
   render() {
     const {
       layerGroupName,
-      onRemoveClick,
       toggleVisibility,
-      onInfoClick,
       hover,
       layer,
       isDisabled,
       isVisible,
       layerClasses,
       names,
-      isMobile,
       index,
-      onOptionsClick,
       hasPalette,
       zot,
-      isInProjection
+      isInProjection,
+      tracksForLayer
     } = this.props;
+
+    const containerClass = isDisabled
+      ? layerClasses + ' disabled layer-hidden'
+      : !isVisible
+        ? layerClasses + ' layer-hidden'
+        : zot
+          ? layerClasses + ' layer-enabled layer-visible zotted'
+          : layerClasses + ' layer-enabled layer-visible';
+    const visibilityToggleClass = isDisabled
+      ? visibilityButtonClasses + ' layer-hidden'
+      : !isVisible
+        ? visibilityButtonClasses + ' layer-hidden'
+        : visibilityButtonClasses + ' layer-enabled layer-visible';
+    const visibilityTitle = !isVisible && !isDisabled
+      ? 'Show Layer'
+      : isDisabled
+        ? this.getDisabledTitle(layer)
+        : 'Hide Layer';
+    const visibilityIconClass = isDisabled
+      ? faBan
+      : !isVisible
+        ? faEyeSlash
+        : faEye;
+
+    const zotTitle = zot
+      ? 'Layer is overzoomed by ' + zot.toString() + 'x its maximum zoom level'
+      : '';
 
     return (
       <Draggable
@@ -143,99 +205,54 @@ class Layer extends React.Component {
         {(provided, snapshot) => {
           return isInProjection ? (
             <li
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
               id={layerGroupName + '-' + util.encodeId(layer.id)}
+              className={containerClass}
               style={getItemStyle(
                 snapshot.isDragging,
                 provided.draggableProps.style
               )}
-              className={
-                isDisabled
-                  ? layerClasses + ' disabled layer-hidden'
-                  : !isVisible
-                    ? layerClasses + ' layer-hidden'
-                    : zot
-                      ? layerClasses + ' layer-enabled layer-visible zotted'
-                      : layerClasses + ' layer-enabled layer-visible'
-              }
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
               onMouseEnter={() => hover(layer.id, true)}
               onMouseLeave={() => hover(layer.id, false)}
             >
               <a
-                className={
-                  isDisabled
-                    ? visibilityButtonClasses + ' layer-hidden'
-                    : !isVisible
-                      ? visibilityButtonClasses + ' layer-hidden'
-                      : visibilityButtonClasses + ' layer-enabled layer-visible'
-                }
+                className={visibilityToggleClass}
                 id={'hide' + util.encodeId(layer.id)}
                 onClick={() => toggleVisibility(layer.id, !isVisible)}
-                title={
-                  !isVisible && !isDisabled
-                    ? 'Show Layer'
-                    : isDisabled
-                      ? this.getDisabledTitle(layer)
-                      : 'Hide Layer'
-                }
+                title={visibilityTitle}
               >
-                <i
-                  className={
-                    isDisabled
-                      ? 'fas fa-ban layer-eye-icon'
-                      : !isVisible
-                        ? 'far fa-eye-slash layer-eye-icon'
-                        : 'far fa-eye layer-eye-icon'
-                  }
-                />
+                <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
               </a>
 
               <div
                 className={'zot'}
-                title={
-                  zot
-                    ? 'Layer is overzoomed by ' +
-                    zot.toString() +
-                    'x its maximum zoom level'
-                    : ''
-                }
+                title={zotTitle}
               >
                 <b>!</b>
               </div>
+
               <div className="layer-main">
-                <a
-                  id={'close' + layerGroupName + util.encodeId(layer.id)}
-                  title={'Remove Layer'}
-                  className="button wv-layers-close"
-                  onClick={() => onRemoveClick(layer.id)}
-                >
-                  <i className="fa fa-times" />
-                </a>
-                <a
-                  title={'Layer options for ' + names.title}
-                  className={
-                    isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'
-                  }
-                  onMouseDown={this.stopPropagation}
-                  onClick={() => onOptionsClick(layer, names.title)}
-                >
-                  <i className="fas fa-sliders-h wv-layers-options-icon" />
-                </a>
-                <a
-                  title={'Layer description for ' + names.title}
-                  className={
-                    isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
-                  }
-                  onMouseDown={this.stopPropagation}
-                  onClick={() => onInfoClick(layer, names.title)}
-                >
-                  <i className="fa fa-info wv-layers-info-icon" />
-                </a>
-                <h4 title={name.title}>{names.title}</h4>
-                <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-                {hasPalette ? this.getPaletteLegend() : ''}
+                <div className="layer-info">
+                  {this.renderControls()}
+                  <h4 title={name.title}>{names.title}</h4>
+                  <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+                  {hasPalette ? this.getPaletteLegend() : ''}
+                </div>
+                {tracksForLayer.length > 0 && (
+                  <div className="layer-tracks">
+                    {tracksForLayer.map(track => {
+                      return (
+                        <OrbitTrack
+                          key={track.id}
+                          trackLayer={track}
+                          parentLayer={layer}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </li>
           ) : (
@@ -258,6 +275,7 @@ Layer.defaultProps = {
 };
 Layer.propTypes = {
   checkerBoardPattern: PropTypes.object,
+  compare: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
   hover: PropTypes.func,
@@ -281,6 +299,7 @@ Layer.propTypes = {
   requestPalette: PropTypes.func,
   runningObject: PropTypes.object,
   toggleVisibility: PropTypes.func,
+  tracksForLayer: PropTypes.array,
   zot: PropTypes.number
 };
 function mapStateToProps(state, ownProps) {
@@ -293,17 +312,21 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
-  const { palettes, config, map } = state;
+  const { palettes, config, map, layers, compare } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
-  const paletteLegends =
-    hasPalette && renderedPalettes[paletteName]
-      ? getPaletteLegends(layer.id, layerGroupName, state)
-      : [];
+  const paletteLegends = hasPalette && renderedPalettes[paletteName]
+    ? getPaletteLegends(layer.id, layerGroupName, state)
+    : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
+  const tracksForLayer = layers[layerGroupName].filter(activeLayer => {
+    return (layer.tracks || []).some(track => activeLayer.id === track);
+  });
 
   return {
+    compare,
+    tracksForLayer,
     layer,
     isDisabled,
     isVisible,
@@ -370,6 +393,7 @@ const mapDispatchToProps = dispatch => ({
         wrapClassName: 'clickable-behind-modal',
         modalClassName: ' layer-info-settings-modal layer-info-modal',
         timeout: 150,
+        size: 'lg',
         bodyComponentProps: {
           layer: layer
         }

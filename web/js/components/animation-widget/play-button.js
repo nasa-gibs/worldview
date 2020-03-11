@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+
 /*
  * @class PlayButton
  * @extends React.Component
@@ -13,13 +16,10 @@ class PlayButton extends React.Component {
         className="wv-anim-play-case wv-icon-case"
         onClick={this.props.playing ? this.props.pause : this.props.play}
       >
-        <i
-          className={
-            this.props.playing
-              ? 'fa fa-pause wv-animation-widget-icon'
-              : 'fa fa-play wv-animation-widget-icon'
-          }
-        />
+        {this.props.playing
+          ? <FontAwesomeIcon icon={faPause} className="wv-animation-widget-icon" />
+          : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />
+        }
       </a>
     );
   }

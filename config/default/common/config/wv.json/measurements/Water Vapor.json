@@ -40,6 +40,15 @@
                         "OrbitTracks_Terra_Ascending",
                         "OrbitTracks_Terra_Descending"
                     ]
+                  },
+                  "Terra and Aqua/MODIS": {
+                      "id": "terra-aqua-modis",
+                      "title": "Terra and Aqua / MODIS",
+                      "description": "modis/combined/WaterVapor",
+                      "image": "",
+                      "settings": [
+                          "MODIS_Combined_MAIAC_L2G_ColumnWaterVapor"
+                      ]
                 },
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",

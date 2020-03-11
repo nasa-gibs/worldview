@@ -8,10 +8,11 @@
             "tags":     "CH4",
             "group":    "overlays",
             "product":  "AIRS2RET",
-            "wrapadjacentdays": true,
-
             "layergroup": [
               "airs"
+            ],
+            "tracks": [
+            "OrbitTracks_Aqua_Descending"
             ]
 
         }

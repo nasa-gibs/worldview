@@ -7,10 +7,14 @@
             "description": "omps/OMPS_Aerosol_Index",
             "tags":     "ai",
             "group":    "overlays",
+            "wrapadjacentdays": true,
             "layergroup": [
               "omps"
             ],
-            "product":  "NMTO3"
+            "product":  "OMPS_NPP_NMMIEAI_L2",
+            "tracks": [
+            "OrbitTracks_Suomi_NPP_Ascending"
+             ]
         }
     }
 }

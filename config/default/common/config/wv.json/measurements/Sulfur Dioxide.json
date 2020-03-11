@@ -37,23 +37,25 @@
                     "description": "omi/SO2",
                     "image": "",
                     "settings": [
+                        "OMI_SO2_Planetary_Boundary_Layer",
                         "OMI_SO2_Lower_Troposphere",
                         "OMI_SO2_Middle_Troposphere",
                         "OMI_SO2_Upper_Troposphere_and_Stratosphere",
-                        "OMI_SO2_Planetary_Boundary_Layer",
                         "OrbitTracks_Aura_Ascending"
                     ]
                 },
                 "Suomi NPP/OMPS": {
-                    "id": "suominpp-omps",
+                    "id": "suomi-npp-omps",
                     "title": "Suomi NPP / OMPS",
                     "description": "omps/SO2",
                     "image": "",
                     "settings": [
+                      "OMPS_SO2_Planetary_Boundary_Layer",
                        "OMPS_SO2_Lower_Troposphere",
                        "OMPS_SO2_Middle_Troposphere",
                        "OMPS_SO2_Upper_Troposphere_and_Stratosphere",
-                       "OMPS_SO2_Planetary_Boundary_Layer"
+                       "OrbitTracks_Suomi_NPP_Ascending"
+
                     ]
                 },
                 "MERRA-2": {

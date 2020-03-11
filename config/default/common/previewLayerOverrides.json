@@ -1,0 +1,72 @@
+{
+  "AMSRU2_Snow_Water_Equivalent_Monthly": "2019-01-01T00:00:00Z",
+
+  "AMSUA_NOAA16_Brightness_Temp_Channel_1": "2008-01-01T00:00:00Z",
+  "AMSUA_NOAA16_Brightness_Temp_Channel_2": "2008-01-01T00:00:00Z",
+  "AMSUA_NOAA16_Brightness_Temp_Channel_3": "2008-01-01T00:00:00Z",
+  "AMSUA_NOAA16_Brightness_Temp_Channel_4": "2008-01-01T00:00:00Z",
+  "AMSUA_NOAA16_Brightness_Temp_Channel_5": "2008-01-01T00:00:00Z",
+  "AMSUA_NOAA16_Brightness_Temp_Channel_6": "2008-01-01T00:00:00Z",
+  "AMSUA_NOAA16_Brightness_Temp_Channel_7": "2008-01-01T00:00:00Z",
+  "AMSUA_NOAA16_Brightness_Temp_Channel_15": "2008-01-01T00:00:00Z",
+
+  "CALIPSO_Wide_Field_Camera_Radiance_v3-02": "2019-10-12T00:00:00Z",
+
+  "GHRSST_L4_G1SST_Sea_Surface_Temperature": "2019-01-01T00:00:00Z",
+
+  "GOES-West_ABI_Air_Mass": "2020-01-02T21:00:00Z",
+  "GOES-West_ABI_Band2_Red_Visible_1km": "2020-01-02T21:00:00Z",
+  "GOES-West_ABI_Band13_Clean_Infrared": "2020-01-02T21:00:00Z",
+
+  "Himawari_AHI_Air_Mass": "2020-01-02T03:00:00Z",
+  "Himawari_AHI_Band3_Red_Visible_1km": "2020-01-02T03:00:00Z",
+  "Himawari_AHI_Band13_Clean_Infrared": "2020-01-02T03:00:00Z",
+
+  "Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual": "1998-12-01T00:00:00Z",
+  "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual": "1998-12-01T00:00:00Z",
+
+  "MEaSUREs_Sea_Ice_Snow_Extent": "2012-12-31T00:00:00Z",
+
+  "MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct": "2019-06-01T00:00:00Z",
+  "MODIS_Aqua_L3_Snow_Extent_8Day": "2019-06-02T00:00:00Z",
+  "MODIS_Terra_L3_Snow_Extent_8Day": "2019-06-02T00:00:00Z",
+
+  "MODIS_Aqua_Thermal_Anomalies_Day": "2019-08-01T00:00:00Z",
+  "MODIS_Aqua_Thermal_Anomalies_Night": "2019-08-01T00:00:00Z",
+  "MODIS_Terra_Thermal_Anomalies_Day": "2019-08-01T00:00:00Z",
+  "MODIS_Terra_Thermal_Anomalies_Night": "2019-08-01T00:00:00Z",
+
+  "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day": "2019-12-19T00:00:00Z",
+
+  "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day": "2019-02-01T00:00:00Z",
+  "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Night": "2019-02-01T00:00:00Z",
+  "MOPITT_CO_Monthly_Total_Column_Day": "2019-02-01T00:00:00Z",
+  "MOPITT_CO_Monthly_Total_Column_Night": "2019-02-01T00:00:00Z",
+
+  "OrbitTracks_Landsat-8_Ascending": "2019-02-14T00:00:00Z",
+  "OrbitTracks_Landsat-8_Descending": "2019-02-14T00:00:00Z",
+
+  "OrbitTracks_SMAP_Ascending": "2019-02-14T00:00:00Z",
+  "OrbitTracks_SMAP_Descending": "2019-02-14T00:00:00Z",
+
+  "SSMI_DMSP_F8_Cloud_Liquid_Water_Over_Oceans_Ascending": "1991-11-03T00:00:00Z",
+  "SSMI_DMSP_F8_Cloud_Liquid_Water_Over_Oceans_Descending": "1991-11-03T00:00:00Z",
+  "SSMI_DMSP_F8_Rain_Rate_Over_Oceans_Ascending": "1991-11-03T00:00:00Z",
+  "SSMI_DMSP_F8_Rain_Rate_Over_Oceans_Descending": "1991-11-03T00:00:00Z",
+  "SSMI_DMSP_F8_Water_Vapor_Over_Oceans_Ascending": "1991-11-03T00:00:00Z",
+  "SSMI_DMSP_F8_Water_Vapor_Over_Oceans_Descending": "1991-11-03T00:00:00Z",
+  "SSMI_DMSP_F8_Wind_Speed_Over_Oceans_Ascending": "1991-11-03T00:00:00Z",
+  "SSMI_DMSP_F8_Wind_Speed_Over_Oceans_Descending": "1991-11-03T00:00:00Z",
+
+  "SSMI_DMSP_F11_Cloud_Liquid_Water_Over_Oceans_Ascending": "2000-04-21T00:00:00Z",
+  "SSMI_DMSP_F11_Cloud_Liquid_Water_Over_Oceans_Descending": "2000-04-21T00:00:00Z",
+  "SSMI_DMSP_F11_Rain_Rate_Over_Oceans_Ascending": "2000-04-21T00:00:00Z",
+  "SSMI_DMSP_F11_Rain_Rate_Over_Oceans_Descending": "2000-04-21T00:00:00Z",
+  "SSMI_DMSP_F11_Water_Vapor_Over_Oceans_Ascending": "2000-04-21T00:00:00Z",
+  "SSMI_DMSP_F11_Water_Vapor_Over_Oceans_Descending": "2000-04-21T00:00:00Z",
+  "SSMI_DMSP_F11_Wind_Speed_Over_Oceans_Ascending": "2000-04-21T00:00:00Z",
+  "SSMI_DMSP_F11_Wind_Speed_Over_Oceans_Descending": "2000-04-21T00:00:00Z",
+  "VIIRS_NOAA20_Thermal_Anomalies_375m_All": "2020-01-29T00:00:00Z",
+  "VIIRS_NOAA20_Thermal_Anomalies_375m_Day": "2020-01-29T00:00:00Z",
+  "VIIRS_NOAA20_Thermal_Anomalies_375m_Night": "2020-01-29T00:00:00Z"
+}

@@ -11,7 +11,9 @@
               "modis_aqua"
             ],
             "product":  "MYD05_L2_NIGHT",
-
+            "tracks": [
+                "OrbitTracks_Aqua_Descending"
+                 ],
             "palette": {
                 "recommended":  ["blue_1"]
             }

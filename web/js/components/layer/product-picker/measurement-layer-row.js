@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListGroupItem } from 'reactstrap';
+import { ListGroupItem, Tooltip } from 'reactstrap';
 import { Checkbox } from '../../util/checkbox';
+import { availableAtDate } from '../../../modules/layers/util';
+import moment from 'moment';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
 /*
  * A scrollable list of layers
  * @class LayerList
@@ -12,29 +16,43 @@ class MeasurementLayerRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: props.checked
+      checked: props.checked,
+      tooltipOpen: false
     };
   }
 
   onClick() {
-    const { removeLayer, addLayer, layerId } = this.props;
+    const { removeLayer, addLayer, layer } = this.props;
     const checked = !this.state.checked;
-    this.setState({ checked: checked });
+    this.setState({ checked });
     if (!checked) {
-      removeLayer(layerId);
+      removeLayer(layer.id);
     } else {
-      addLayer(layerId);
+      addLayer(layer.id);
     }
   }
 
+  toggleTooltip() {
+    this.setState({
+      tooltipOpen: !this.state.tooltipOpen
+    });
+  }
+
   render() {
-    const { layerId, measurementId, title } = this.props;
-    const { checked } = this.state;
+    const { layer, measurementId, title, selectedDate } = this.props;
+    const { checked, tooltipOpen } = this.state;
+    const layerIsAvailable = availableAtDate(layer, selectedDate);
+    const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
+    const listItemClass = !layerIsAvailable ? 'unavailable' : '';
+    // Replace periods in id since period causes issue with tooltip targeting
+    const itemElementId = 'checkbox-case-' + layer.id.split('.').join('-');
+
     return (
       <ListGroupItem
-        key={measurementId + '-' + layerId}
+        key={measurementId + '-' + layer.id}
         onClick={this.onClick.bind(this)}
-        id={'checkbox-case-' + layerId}
+        id={itemElementId}
+        className={listItemClass}
       >
         <Checkbox
           name={title}
@@ -42,7 +60,22 @@ class MeasurementLayerRow extends React.Component {
           checked={checked}
           label={title}
           classNames="settings-check"
-        />
+        >
+          {!layerIsAvailable &&
+            <>
+              <FontAwesomeIcon icon={faBan} id="availability-info" />
+              <Tooltip
+                placement="top"
+                isOpen={tooltipOpen}
+                target={itemElementId}
+                toggle={this.toggleTooltip.bind(this)}>
+                    This layer has no visible content on the selected date: <br/>
+                <span style={{ fontFamily: 'monospace' }}> {diplayDate} </span>
+              </Tooltip>
+            </>
+          }
+        </Checkbox>
+
       </ListGroupItem>
     );
   }
@@ -53,10 +86,11 @@ MeasurementLayerRow.defaultProps = {
 MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
   checked: PropTypes.bool,
-  layerId: PropTypes.string,
+  layer: PropTypes.object,
   measurementId: PropTypes.string,
   onClick: PropTypes.func,
   removeLayer: PropTypes.func,
+  selectedDate: PropTypes.object,
   title: PropTypes.string
 };
 

@@ -20,6 +20,12 @@ test('hasCustomTypePalette func determines if custom palette is in string', () =
   );
   expect(bool).toBeTruthy();
 });
+test('hasCustomTypePalette func determines if custom palette is in string', () => {
+  const bool = hasCustomTypePalette(
+    'some-layer(disabled(;0-2)'
+  );
+  expect(bool).toBeTruthy();
+});
 test('loadPalettes func updates state with correct palette attributes', () => {
   util.browser = jest.fn(() => {
     return {

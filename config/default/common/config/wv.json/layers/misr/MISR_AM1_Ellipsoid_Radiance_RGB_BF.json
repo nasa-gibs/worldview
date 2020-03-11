@@ -10,7 +10,10 @@
             "layergroup": [
               "misr"
             ],
-            "product":  "MI1B2_ELLIPSOID_BF"
+            "product":  "MI1B2_ELLIPSOID_BF",
+            "tracks": [
+            "OrbitTracks_Terra_Descending"
+             ]
         }
     }
 }

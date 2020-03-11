@@ -1,64 +1,97 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import ScrollBar from 'simplebar';
-export default class SimpleBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      needsScrollBar: false
-    };
-  }
+import SimpleBarReact from 'simplebar-react';
+import { debounce } from 'lodash';
 
-  componentDidMount() {
-    const element = this.caseEl;
-    this.scrollBar = new ScrollBar(element);
-    this.content = this.scrollBar.getScrollElement();
-  }
-
-  componentDidUpdate() {
-    this.updateBoolean();
-    // scroll to vertical axis point - note: 0 would be no scroll
-    const verticalTop = Math.floor(this.props.scrollBarVerticalTop);
-    if (verticalTop !== 0) {
-      this.content.scrollTop = verticalTop;
-    }
-  }
+/**
+ * Wrapper component for SimpleBar
+ */
+export default function Scrollbars(props) {
+  const ref = useRef();
+  const [scrollTop, updateScrollTop] = useState(0);
 
   /**
-   * Use offsetHeight to determine if scrollbar should be visible
-   * https://stackoverflow.com/a/42026562/4589331
+   * Add/remove 'scrollbar-visible' class based on content size
    */
-  updateBoolean() {
-    const element = this.content;
-    const hasOverflowingChildren = element.offsetHeight + 1 < element.scrollHeight;
-    if (this.state.needsScrollBar !== hasOverflowingChildren) {
-      this.setState({ needsScrollBar: hasOverflowingChildren });
+  useEffect(() => {
+    if (!ref || !ref.current) {
+      return;
     }
-  }
+    const { contentEl, contentWrapperEl } = ref.current;
+    function toggleVisibleClass() {
+      if (contentEl.offsetHeight > contentWrapperEl.offsetHeight) {
+        contentEl.classList.add('scrollbar-visible');
+      } else {
+        contentEl.classList.remove('scrollbar-visible');
+      }
+    };
+    debounce(() => {
+      toggleVisibleClass();
+      // If scrollbar contents are loaded asynchronously, we need to delay
+      // comparing content/wrapper offsetHeights until the content has loaded.
+      // It would be better to call this after some event or callback rather
+      // than just guessing 800ms is long enough for content to load but this
+      // seems to work pretty well enough for now.
+      setTimeout(toggleVisibleClass, 800);
+    }, 50, { leading: true, trailing: true })();
+  });
 
-  render() {
-    return (
-      <div
-        style={this.props.style}
-        ref={el => {
-          this.caseEl = el;
-        }}
-        className={
-          this.state.needsScrollBar ? 'scrollbar-visible' : 'scrollbar-hidden'
-        }
-      >
-        {this.props.children}
-      </div>
-    );
-  }
+  /**
+   *  Set scroll top when prop changes
+   */
+  useEffect(() => {
+    if (!ref || !ref.current) {
+      return;
+    }
+    function setScrollTop() {
+      const { contentWrapperEl } = ref.current;
+      const { scrollBarVerticalTop } = props;
+      if (contentWrapperEl) {
+        updateScrollTop(scrollBarVerticalTop);
+        contentWrapperEl.scrollTop = scrollBarVerticalTop;
+      }
+    };
+    setTimeout(setScrollTop, 100);
+  }, [props.scrollBarVerticalTop]);
+
+  /**
+   * Handle register/deregister of scroll event listener
+   */
+  useEffect(() => {
+    if (!props.onScroll) return;
+    const { contentWrapperEl } = ref && ref.current;
+    function scrollListener() {
+      // Avoid calling event listener when we are setting scrollTop manually
+      if (contentWrapperEl.scrollTop !== scrollTop) {
+        props.onScroll(contentWrapperEl);
+      }
+    }
+    contentWrapperEl.addEventListener('scroll', scrollListener);
+    return function cleanUp() {
+      contentWrapperEl.removeEventListener('scroll', scrollListener);
+    };
+  });
+
+  return (
+    <SimpleBarReact
+      autoHide={false}
+      style={props.style}
+      className={props.className}
+      ref={ref}
+    >
+      {props.children}
+    </SimpleBarReact>
+  );
 }
 
-SimpleBar.propTypes = {
+Scrollbars.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
+  onScroll: PropTypes.func,
   scrollBarVerticalTop: PropTypes.number,
   style: PropTypes.object
 };
 
-SimpleBar.defaultProps = {
+Scrollbars.defaultProps = {
   scrollBarVerticalTop: 0
 };

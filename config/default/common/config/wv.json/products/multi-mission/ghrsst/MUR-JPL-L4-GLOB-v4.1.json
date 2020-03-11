@@ -1,0 +1,12 @@
+{
+    "products": {
+        "MUR-JPL-L4-GLOB-v4.1": {
+            "name": "GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis (v4.1)",
+            "handler": "List",
+            "query": {
+                "shortName": "MUR-JPL-L4-GLOB-v4.1"
+            },
+            "version": 4.1
+        }
+    }
+}

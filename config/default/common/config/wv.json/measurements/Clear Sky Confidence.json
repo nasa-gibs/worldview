@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Clear Sky Confidence": {
+            "id": "clear-sky-confidence",
+            "title":    "Clear Sky Confidence",
+            "subtitle": "Suomi NPP/VIIRS",
+            "sources": {
+                "": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/ClearSkyConfidence",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Clear_Sky_Confidence_Day",
+                        "VIIRS_SNPP_Clear_Sky_Confidence_Night"
+                    ]
+                }
+            }
+        }
+    }
+}

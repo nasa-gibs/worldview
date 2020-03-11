@@ -66,7 +66,7 @@
   border-bottom: 3px solid #dee2e6;
 }
 
-.nav-item {
+.products-holder-case .nav-item {
   color: #fff;
 }
 .nav-item .active {
@@ -175,14 +175,4 @@ footer .compare-toggle-button {
 #productsHolder footer .action.ui-state-focus {
   background: #d54e21;
   background-image: none;
-}
-
-/* perfect scrollbars */
-#productsHolder .ps__scrollbar-y-rail {
-  background-color: transparent;
-  margin-top: 5px;
-}
-
-#productsHolder .ps__scrollbar-y {
-  background: #ccc;
 }

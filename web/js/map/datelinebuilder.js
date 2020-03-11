@@ -8,6 +8,7 @@ import LineText from '../components/dateline/text';
 import { CHANGE_STATE as COMPARE_CHANGE_STATE } from '../modules/compare/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
 var map,
   overlay1,
@@ -44,6 +45,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
   const subscribeToStore = function(action) {
     switch (action.type) {
       case SELECT_DATE:
+      case LOCATION_POP_ACTION:
       case COMPARE_CHANGE_STATE: {
         const state = store.getState();
         const selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
