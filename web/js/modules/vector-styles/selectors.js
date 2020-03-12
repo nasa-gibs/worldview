@@ -3,12 +3,16 @@ import {
   isUndefined as lodashIsUndefined,
   each as lodashEach,
   find as lodashFind,
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
 
 import update from 'immutability-helper';
 import { containsCoordinate } from 'ol/extent';
 import stylefunction from 'ol-mapbox-style/stylefunction';
-import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
+
+import {
+  getMinValue, getMaxValue, selectedStyleFunction, getDisabledStyle,
+} from './util';
 import {
   getLayers,
 } from '../layers/selectors';
@@ -79,10 +83,11 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
-  const { compare } = state;
+  const { compare, palettes } = state;
+
   let styleFunction;
   const layerId = def.id;
-  const glStyle = vectorStyles[layerId];
+  let glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'map.ui.selected');
   const layerState = state.layers;
   const activeLayerStr = state.compare.activeString;
@@ -94,35 +99,40 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   ).reverse();
   let layerGroups;
   let layerGroup;
-
+  if (def.disabled) {
+    const palette = palettes.active[def.id];
+    glStyle = getDisabledStyle(def, palette, lodashCloneDeep(glStyle));
+  }
   if (olMap) {
     layerGroups = olMap.getLayers().getArray();
     if (compare && compare.active) {
       if (layerGroups.length === 2) {
-        layerGroup = layerGroups[0].get('group') === activeLayerStr
-          ? layerGroups[0]
-          : layerGroups[1].get('group') === activeLayerStr
-            ? layerGroups[1]
-            : null;
+        if (layerGroups[0].get('group') === activeLayerStr) {
+          [layerGroup] = layerGroups;
+        } else if (layerGroups[1].get('group') === activeLayerStr) {
+          [, layerGroup] = layerGroups;
+        } else {
+          layerGroup = null;
+        }
       }
     }
-    lodashEach(activeLayers, (def) => {
-      if (compare && compare.active) {
-        if (layerGroup && layerGroup.getLayers().getArray().length) {
-          lodashEach(layerGroup.getLayers().getArray(), (subLayer) => {
-            if (subLayer.wv && (subLayer.wv.id === layerId)) {
-              layer = subLayer;
-            }
-          });
-        }
-      } else {
-        lodashEach(layerGroups, (subLayer) => {
+    // lodashEach(activeLayers, (def) => {
+    if (compare && compare.active) {
+      if (layerGroup && layerGroup.getLayers().getArray().length) {
+        lodashEach(layerGroup.getLayers().getArray(), (subLayer) => {
           if (subLayer.wv && (subLayer.wv.id === layerId)) {
             layer = subLayer;
           }
         });
       }
-    });
+    } else {
+      lodashEach(layerGroups, (subLayer) => {
+        if (subLayer.wv && (subLayer.wv.id === layerId)) {
+          layer = subLayer;
+        }
+      });
+    }
+    // });
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
   lodashEach(layerArray, (layerInLayerGroup) => {

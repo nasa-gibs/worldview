@@ -4,12 +4,18 @@ import {
   find as lodashFind,
   get as lodashGet,
 } from 'lodash';
-
+import {
+  expression,
+} from '@mapbox/mapbox-gl-style-spec';
 import {
   Stroke, Style, Fill, Circle,
 } from 'ol/style';
+import oneColor from 'onecolor';
 import { setStyleFunction } from './selectors';
 import { isFromActiveCompareRegion } from '../compare/util';
+
+
+const { isExpression } = expression;
 
 export function getVectorStyleAttributeArray(layer) {
   let isCustomActive = false;
@@ -121,6 +127,39 @@ export function selectedStyleFunction(feature, styleArray, size) {
         return style;
     }
   });
+}
+export function getDisabledStyle(def, palette, mapboxStyle) {
+  const disabledColors = [];
+  palette.maps.forEach((map) => {
+    map.disabled.forEach((index) => {
+      const color = map.entries.colors[index];
+      disabledColors.push(`#${color.slice(0, 6)}`);
+    });
+  });
+
+  const { paint } = mapboxStyle.layers[0];
+  Object.entries(paint).forEach(([key, value]) => {
+    if (key.indexOf('color') !== -1) {
+      if (isExpression(value) && Array.isArray(value)) {
+        value.forEach((elInArray, i) => {
+          if (oneColor(elInArray)) {
+            disabledColors.forEach((disabledColor) => {
+              if (disabledColor && oneColor(elInArray).equals(oneColor(disabledColor))) {
+                paint[key][i] = 'rgba(0,0,0,0)';
+              }
+            });
+          }
+        });
+      } else if (typeof value === 'string') {
+        disabledColors.forEach((disabledColor) => {
+          if (disabledColor && oneColor(value).equals(oneColor(disabledColor))) {
+            paint[key] = 'rgba(0,0,0,0)';
+          }
+        });
+      }
+    }
+  });
+  return mapboxStyle;
 }
 export function getConditionalColors(color) {
   const array = Array.from(color);

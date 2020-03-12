@@ -186,6 +186,7 @@ class LayerSettings extends React.Component {
     const max = palette.legend.colors.length - 1;
     const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
     const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
+
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } if (legend.type === 'classification' && legend.colors.length > 1) {
@@ -266,14 +267,10 @@ class LayerSettings extends React.Component {
       layer,
       palettedAllowed,
     } = this.props;
-
-    if (layer.type !== 'vector') {
-      renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
-        ? this.renderCustomPalettes()
-        : '';
-    } else {
-      renderCustomizations = ''; // this.renderVectorStyles(); for future
-    }
+    renderCustomizations =
+        customPalettesIsActive && palettedAllowed && layer.palette
+          ? this.renderCustomPalettes()
+          : '';
 
     if (!layer.id) return '';
     return (

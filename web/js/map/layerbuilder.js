@@ -429,13 +429,15 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         resolutions: matrixSet.resolutions,
         tileSize: matrixSet.tileSize,
         origin: start,
+        minZoom: 1,
       }),
     });
 
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: sourceOptions,
-      renderMode: wrapX ? 'image' : 'hybrid', // Todo: revert to just 'image' when styles are updated
+      updateWhileInteracting: true,
+      renderMode: 'image', // Todo: revert to just 'image' when styles are updated
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
