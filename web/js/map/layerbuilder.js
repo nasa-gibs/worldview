@@ -437,7 +437,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       extent: layerExtent,
       source: sourceOptions,
       updateWhileInteracting: true,
-      renderMode: 'image', // Todo: revert to just 'image' when styles are updated
+      renderMode: 'image',
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
