@@ -20,7 +20,7 @@ class TimeScaleSelect extends PureComponent {
   render() {
     const {
       zoomLevel,
-      hasSubdailyLayers
+      hasSubdailyLayers,
     } = this.props;
     return (
       <form
@@ -36,12 +36,13 @@ class TimeScaleSelect extends PureComponent {
           <option className="custom-interval-timescale-select-option" value="month">month</option>
           <option className="custom-interval-timescale-select-option" value="day">day</option>
           {hasSubdailyLayers
-            ? <React.Fragment>
-              <option className="custom-interval-timescale-select-option" value="hour">hour</option>
-              <option className="custom-interval-timescale-select-option" value="minute">minute</option>
-            </React.Fragment>
-            : null
-          }
+            ? (
+              <>
+                <option className="custom-interval-timescale-select-option" value="hour">hour</option>
+                <option className="custom-interval-timescale-select-option" value="minute">minute</option>
+              </>
+            )
+            : null}
         </select>
       </form>
     );
@@ -51,7 +52,7 @@ class TimeScaleSelect extends PureComponent {
 TimeScaleSelect.propTypes = {
   changeZoomLevel: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
-  zoomLevel: PropTypes.string
+  zoomLevel: PropTypes.string,
 };
 
 export default TimeScaleSelect;

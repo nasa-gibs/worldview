@@ -151,15 +151,6 @@ a:hover {
   font-size: 13px;
 }
 
-.iCheck-checkbox {
-  margin: 0 10px;
-  background-position: -24px 0;
-}
-
-.iCheck-radio {
-  background-position: -144px 0;
-}
-
 label {
   -webkit-user-select: none;
   -moz-user-select: none;

@@ -8,16 +8,14 @@ export const getIsBetween = (date, frontDate, backDate) => {
 
 // return day number of given UTC string date
 export const getDaysInYear = (date) => {
-  var dateObj = new Date(date);
-  var start = new Date(dateObj.getUTCFullYear(), 0, 0);
-  var diff = (dateObj - start) + ((start.getTimezoneOffset()) * 60 * 1000);
+  const dateObj = new Date(date);
+  const start = new Date(dateObj.getUTCFullYear(), 0, 0);
+  const diff = (dateObj - start) + (start.getTimezoneOffset() * 60 * 1000);
   return Math.floor(diff / 86400000);
 };
 
 // return string in ISO format "2018-03-16T06:17:30Z"
-export const getISODateFormatted = (date) => {
-  return new Date(date).toISOString().split('.')[0] + 'Z';
-};
+export const getISODateFormatted = (date) => `${new Date(date).toISOString().split('.')[0]}Z`;
 
 // timeRange extension to pop NUM times
 export const removeBackMultipleInPlace = (timeRange, num) => {

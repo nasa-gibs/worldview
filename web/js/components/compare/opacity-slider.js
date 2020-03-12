@@ -18,9 +18,10 @@ class OpacitySlider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value
+      value: props.value,
     };
-    this.debounceOpacityUpdate = lodashDebounce(this.onSlide.bind(this), 100);
+    this.onSlide = this.onSlide.bind(this);
+    this.debounceOpacityUpdate = lodashDebounce(this.onSlide, 100);
   }
 
   /*
@@ -48,7 +49,7 @@ class OpacitySlider extends React.Component {
             defaultValue={this.state.value}
             tipFormatter={percentFormatter}
             onChange={this.debounceOpacityUpdate}
-            onAfterChange={this.onSlide.bind(this)}
+            onAfterChange={this.onSlide}
           />
         </div>
         <label className="wv-slider-label right">
@@ -59,11 +60,11 @@ class OpacitySlider extends React.Component {
   }
 }
 OpacitySlider.defaultProps = {
-  value: 50
+  value: 50,
 };
 OpacitySlider.propTypes = {
   onSlide: PropTypes.func,
-  value: PropTypes.number
+  value: PropTypes.number,
 };
 
 export default OpacitySlider;

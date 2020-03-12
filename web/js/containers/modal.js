@@ -4,21 +4,21 @@ import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import { toLower as lodashToLower } from 'lodash';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import Draggable from 'react-draggable';
+import { Resizable } from 'react-resizable';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
-import Draggable from 'react-draggable';
-import { Resizable } from 'react-resizable';
-const InteractionWrap = ({ condition, wrapper, children }) => condition ? wrapper(children) : children;
+
+const InteractionWrap = ({ condition, wrapper, children }) => (condition ? wrapper(children) : children);
 const toggleWithClose = (onToggle, onClose, isOpen) => {
   if (onClose && isOpen) {
     return () => {
       onToggle();
       onClose();
     };
-  } else {
-    return onToggle;
   }
+  return onToggle;
 };
 class ModalContainer extends Component {
   constructor(props) {
@@ -29,28 +29,30 @@ class ModalContainer extends Component {
       isDraggable: props.isDraggable,
       offsetLeft: props.customProps.offsetLeft,
       offsetTop: props.customProps.offsetTop,
-      offsetRight: props.customProps.offsetRight
+      offsetRight: props.customProps.offsetRight,
     };
     this.onResize = this.onResize.bind(this);
   }
 
   getStyle() {
-    const { offsetLeft, offsetRight, offsetTop, width, height } = this.state;
+    const {
+      offsetLeft, offsetRight, offsetTop, width, height,
+    } = this.state;
 
     return {
       left: offsetLeft,
       right: offsetRight,
       top: offsetTop,
-      width: width,
-      height: height,
-      maxHeight: height
+      width,
+      height,
+      maxHeight: height,
     };
   }
 
   onResize(e, { size }) {
     e.stopPropagation();
     this.setState({
-      width: size.width, height: size.height
+      width: size.width, height: size.height,
     });
   }
 
@@ -74,11 +76,10 @@ class ModalContainer extends Component {
       isTemplateModal,
       customProps,
       isMobile,
-      screenHeight
+      screenHeight,
     } = this.props;
     // Populate props from custom obj
-    const newProps =
-      isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       onToggle,
       bodyText,
@@ -100,7 +101,7 @@ class ModalContainer extends Component {
       size,
       isDraggable,
       isResizable,
-      dragHandle
+      dragHandle,
     } = newProps;
 
     const style = this.getStyle();
@@ -116,13 +117,17 @@ class ModalContainer extends Component {
       <ErrorBoundary>
         <InteractionWrap
           condition={isDraggable || isResizable}
-          wrapper={children =>
+          wrapper={(children) => (
             <Draggable
               handle={dragHandle}
               disabled={!isDraggable}
             >
-              <Resizable className="resize-box" resizeHandles={['se']}
-                width={this.state.width || newProps.width} height={this.state.height || newProps.height} minConstraints={[250, 250]}
+              <Resizable
+                className="resize-box"
+                resizeHandles={['se']}
+                width={this.state.width || newProps.width}
+                height={this.state.height || newProps.height}
+                minConstraints={[250, 250]}
                 maxConstraints={[495, screenHeight]}
                 handleSize={[8, 8]}
                 onResize={this.onResize}
@@ -131,7 +136,7 @@ class ModalContainer extends Component {
                 {children}
               </Resizable>
             </Draggable>
-          }
+          )}
 
         >
           <Modal
@@ -144,13 +149,20 @@ class ModalContainer extends Component {
             className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
             autoFocus={autoFocus || false}
             style={style}
-            wrapClassName={modalWrapClass + ' ' + lowerCaseId}
+            wrapClassName={`${modalWrapClass} ${lowerCaseId}`}
             modalTransition={{ timeout: isDraggable ? 0 : timeout || 100 }}
             fade={!isDraggable}
           >
             {CompletelyCustomModal
-              ? (<CompletelyCustomModal key={'custom_' + lowerCaseId} modalHeight={this.state.height || newProps.height} modalWidth={this.state.width || newProps.width} {...customProps}
-                toggleWithClose={toggleFunction} />)
+              ? (
+                <CompletelyCustomModal
+                  key={`custom_${lowerCaseId}`}
+                  modalHeight={this.state.height || newProps.height}
+                  modalWidth={this.state.width || newProps.width}
+                  {...customProps}
+                  toggleWithClose={toggleFunction}
+                />
+              )
               : (
                 <DetectOuterClick
                   onClick={toggleFunction}
@@ -165,17 +177,19 @@ class ModalContainer extends Component {
                     {bodyHeader && <h3>{bodyHeader}</h3>}
                     {BodyComponent
                       ? (
-                        <BodyComponent {...bodyComponentProps}
+                        <BodyComponent
+                          {...bodyComponentProps}
                           screenHeight={screenHeight}
-                          closeModal={toggleFunction} />
+                          closeModal={toggleFunction}
+                        />
                       )
                       : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
                   </ModalBody>
                 </DetectOuterClick>
               )}
           </Modal>
-        </InteractionWrap >
-      </ErrorBoundary >
+        </InteractionWrap>
+      </ErrorBoundary>
     );
   }
 }
@@ -188,7 +202,7 @@ function mapStateToProps(state) {
     id,
     isOpen,
     template,
-    customProps
+    customProps,
   } = state.modal;
   let bodyTemplate;
   let isTemplateModal = false;
@@ -199,7 +213,7 @@ function mapStateToProps(state) {
   const isMobile = state.browser.lessThan.medium;
 
   return {
-    isOpen: isOpen,
+    isOpen,
     bodyText,
     headerText,
     isCustom,
@@ -209,21 +223,21 @@ function mapStateToProps(state) {
     screenWidth: isMobile ? undefined : state.browser.screenWidth,
     bodyTemplate,
     isTemplateModal,
-    customProps
+    customProps,
   };
 }
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onToggle: () => {
     dispatch(onToggle());
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ModalContainer);
 ModalContainer.defaultProps = {
-  customProps: {}
+  customProps: {},
 };
 ModalContainer.propTypes = {
   bodyTemplate: PropTypes.object,
@@ -234,5 +248,5 @@ ModalContainer.propTypes = {
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
-  screenHeight: PropTypes.number
+  screenHeight: PropTypes.number,
 };

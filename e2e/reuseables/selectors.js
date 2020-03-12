@@ -45,5 +45,5 @@ module.exports = {
   optionsDialog: '.layer-info-settings-modal',
   addLayers: '#layers-add',
   layersModalCloseButton: '.custom-layer-dialog .modal-header .close',
-  aerosolOpticalDepth: '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth'
+  aerosolOpticalDepth: '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth',
 };

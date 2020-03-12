@@ -1,19 +1,5 @@
-### Rain Rate (Early)
-Temporal coverage: 9 July 2017 - Present
-
-The Snow Rate (Early) layer is from the Integrated Multi-satellitE Retrievals for GPM (Global Precipitation Measurement) (IMERG) unified U.S. algorithm that provides the Day-1 multi-satellite precipitation product for the U.S. GPM team. The input precipitation estimates computed from the various satellite passive microwave sensors in the GPM constellation are intercalibrated to the GPM Combined Instrument product (because it is presumed to be the best snapshot GPM estimate), then "morphed" and combined with microwave precipitation-calibrated geo-IR fields, and adjusted with monthly surface precipitation gauge analysis data (where available) to provide half-hourly and monthly precipitation estimates on a 10-km grid over the domain 60 degrees N-S. Precipitation phase is diagnosed using analyses of surface temperature, humidity, and pressure. The "Early" multi-satellite product is run approximately 4 hours after observation time but is only available as a daily composite in Worldview and the Global Imagery Browse Services (GIBS). The imagery resolution is 2 km, and the temporal resolution is daily.
-
-References: [GPM_3IMERGHHE: GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06](https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGHHE_06/summary)
-
-### Snow Rate (Early)
-Temporal coverage: 9 July 2017 - Present
-
-The Snow Rate (Early) layer is from the Integrated Multi-satellitE Retrievals for GPM (Global Precipitation Measurement) (IMERG) unified U.S. algorithm that provides the Day-1 multi-satellite precipitation product for the U.S. GPM team. The input precipitation estimates computed from the various satellite passive microwave sensors in the GPM constellation are intercalibrated to the GPM Combined Instrument product (because it is presumed to be the best snapshot GPM estimate), then "morphed" and combined with microwave precipitation-calibrated geo-IR fields, and adjusted with monthly surface precipitation gauge analysis data (where available) to provide half-hourly and monthly precipitation estimates on a 10-km grid over the domain 60 degrees N-S. Precipitation phase is diagnosed using analyses of surface temperature, humidity, and pressure. The "Early" multi-satellite product is run approximately 4 hours after observation time but is only available as a daily composite in Worldview and the Global Imagery Browse Services (GIBS). The imagery resolution is 2 km, and the temporal resolution is daily.
-
-References: [GPM_3IMERGHHE: GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06](https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGHHE_06/summary)
-
 ### Precipitation Rate
-Temporal coverage: 1 June 2000 - Present (Imagery between June - October 2019 currently unavailable)
+Temporal coverage: 1 June 2000 - Present
 
 The Precipitation Rate (Final) layer is from the Integrated Multi-satellitE Retrievals for GPM (Global Precipitation Measurement) (IMERG) unified U.S. algorithm that provides the Day-1 multi-satellite precipitation product for the U.S. GPM team. The input precipitation estimates computed from the various satellite passive microwave sensors in the GPM constellation are intercalibrated to the GPM Combined Instrument product (because it is presumed to be the best snapshot GPM estimate), then "morphed" and combined with microwave precipitation-calibrated geo-IR fields, and adjusted with monthly surface precipitation gauge analysis data (where available) to provide half-hourly and monthly precipitation estimates on a 10-km grid over the domain 60 degrees N-S. Precipitation phase is diagnosed using analyses of surface temperature, humidity, and pressure. The "Final" multi-satellite product is derived from the half-hourly GPM_3IMERGHH. The derived result represents the final estimate of the daily accumulated precipitation. It available as a daily composite in Worldview and the Global Imagery Browse Services (GIBS). The imagery resolution is 2 km, and the temporal resolution is daily.
 

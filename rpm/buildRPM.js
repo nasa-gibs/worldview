@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 const shell = require('shelljs');
-const pkg = require('../package.json');
 const moment = require('moment');
+const homedir = require('os').homedir();
+const pkg = require('../package.json');
 
 const buildNumber = moment.utc().format('YYMMDDHHmmss');
-const homedir = require('os').homedir();
 
 console.log('Preparing RPM build');
 shell.rm('-rf', `${homedir}/rpmbuild`);

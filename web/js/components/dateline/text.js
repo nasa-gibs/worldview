@@ -17,21 +17,19 @@ class LineText extends React.Component {
     this.state = {
       active: false,
       dateRight: props.dateRight,
-      dateLeft: props.dateLeft
+      dateLeft: props.dateLeft,
     };
   }
 
   render() {
-    const leftTextWidth =
-      Math.round(
-        util.getTextWidth(this.state.dateLeft, '13px Open Sans') * 100
-      ) / 100 || this.props.textWidth;
-    const rightTextWidth =
-      Math.round(
-        util.getTextWidth(this.state.dateRight, '13px Open Sans') * 100
-      ) / 100 || this.props.textWidth;
+    const leftTextWidth = Math.round(
+      util.getTextWidth(this.state.dateLeft, '13px Open Sans') * 100,
+    ) / 100 || this.props.textWidth;
+    const rightTextWidth = Math.round(
+      util.getTextWidth(this.state.dateRight, '13px Open Sans') * 100,
+    ) / 100 || this.props.textWidth;
     const svgStyle = {
-      transform: 'translateX(' + -(leftTextWidth + 20) + 'px)'
+      transform: `translateX(${-(leftTextWidth + 20)}px)`,
     };
     return (
       <svg className="dateline-text" style={svgStyle}>
@@ -97,7 +95,7 @@ LineText.defaultProps = {
   fill: 'rgba(40,40,40,0.5)',
   textWidth: 80,
   textHeight: 20,
-  recRadius: 3
+  recRadius: 3,
 };
 
 LineText.propTypes = {
@@ -112,7 +110,7 @@ LineText.propTypes = {
   textOpacity: PropTypes.number,
   textWidth: PropTypes.number,
   textY: PropTypes.number,
-  width: PropTypes.string
+  width: PropTypes.string,
 };
 
 export default LineText;

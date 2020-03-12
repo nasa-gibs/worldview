@@ -3,18 +3,18 @@ import { CHANGE_UNITS, TOGGLE_MEASURE_ACTIVE } from './constants';
 
 const defaultState = {
   isActive: false,
-  units: 'km'
+  units: 'km',
 };
 
 export default function measureReducer(state = defaultState, action) {
   switch (action.type) {
     case CHANGE_UNITS:
       return lodashAssign({}, state, {
-        units: action.value
+        units: action.value,
       });
     case TOGGLE_MEASURE_ACTIVE:
       return lodashAssign({}, state, {
-        isActive: action.value
+        isActive: action.value,
       });
     default:
       return state;

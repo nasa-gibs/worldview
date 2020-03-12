@@ -32,26 +32,26 @@ const aodSearchCheckbox = '#MODIS_Aqua_Aerosol-search-row > .wv-checkbox';
 const TIME_LIMIT = 10000;
 
 module.exports = {
-  before: c => {
+  before: (c) => {
     skipTour.loadAndSkipTour(c, TIME_LIMIT);
-    c.url(c.globals.url + '?t=2013-05-15');
+    c.url(`${c.globals.url}?t=2013-05-15`);
     c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
   },
-  'Initial state indicates layer count': c => {
-    c.waitForElementVisible(collapsedLayerButton, TIME_LIMIT, e => {
+  'Initial state indicates layer count': (c) => {
+    c.waitForElementVisible(collapsedLayerButton, TIME_LIMIT, (e) => {
       c.expect.element(layerCount).to.be.present;
       c.assert.containsText(layerCount, '6');
     });
   },
-  'Expand layer list and show default layers': c => {
+  'Expand layer list and show default layers': (c) => {
     c.click(collapsedLayerButton);
     c.waitForElementVisible(layerContainer, TIME_LIMIT, assertDefaultLayers(c));
   },
-  'Open product picker and show categories by defulat': c => {
+  'Open product picker and show categories by defulat': (c) => {
     c.click(addLayers);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
   },
-  'Clicking a measurement': c => {
+  'Clicking a measurement': (c) => {
     c.click(aodMeasurement);
     c.waitForElementVisible(aodMeasurementContents, TIME_LIMIT, (e) => {
       c.expect.element(sourceMetadataCollapsed).to.be.present;
@@ -64,45 +64,45 @@ module.exports = {
       c.expect.elements(sourceTabs).count.to.equal(8);
     });
   },
-  'Expanding measurement details': c => {
+  'Expanding measurement details': (c) => {
     c.click('.ellipsis');
-    c.waitForElementVisible(sourceMetadataExpanded, TIME_LIMIT, e => {
+    c.waitForElementVisible(sourceMetadataExpanded, TIME_LIMIT, (e) => {
       c.assert.containsText(aquaTerraModisHeader, 'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth');
       c.assert.containsText(maiacHeader, 'MAIAC Aerosol Optical Depth');
       c.expect.elements('.source-metadata > p').count.to.equal(7);
       c.expect.element('.ellipsis.up').to.be.present;
     });
   },
-  'Collapsing measurement details': c => {
+  'Collapsing measurement details': (c) => {
     c.click('.ellipsis.up').pause(250);
     c.assert.cssClassPresent('.source-metadata', 'overflow');
   },
-  'Switching source tabs': c => {
+  'Switching source tabs': (c) => {
     c.click(aquaModisTab).pause(250);
     c.expect.element(aodCheckbox).to.be.present;
     c.expect.element('h3#aerosolopticaldepth').to.be.present;
     c.assert.containsText('h3#aerosolopticaldepth', 'Aerosol Optical Depth');
     c.click(aodCheckbox);
   },
-  'Back button returns to categories': c => {
+  'Back button returns to categories': (c) => {
     c.click(layerPickerBackButton);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
   },
-  'Searching for layers': c => {
+  'Searching for layers': (c) => {
     c.setValue(layersSearchField, 'aerosol optical depth');
     c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
       c.expect.elements(layersSearchRow).count.to.equal(16);
       c.assert.attributeEquals('.search-row .checked input', 'id', 'MODIS_Aqua_Aerosol-checkbox');
     });
   },
-  'Viewing details for search results': c => {
+  'Viewing details for search results': (c) => {
     c.click(aodSearchRow);
-    c.waitForElementVisible(layerDetails, TIME_LIMIT, e => {
+    c.waitForElementVisible(layerDetails, TIME_LIMIT, (e) => {
       c.assert.containsText(layerDetailHeader, 'Aerosol Optical Depth');
       c.assert.containsText(addToMapButton, 'Remove Layer');
     });
   },
-  'Add to layer button and checkbox are in sync': c => {
+  'Add to layer button and checkbox are in sync': (c) => {
     // Remove the layer
     c.click(addToMapButton).pause(200);
     c.assert.not.cssClassPresent(aodSearchCheckbox, 'checked');
@@ -112,14 +112,14 @@ module.exports = {
     c.assert.containsText(addToMapButton, 'Remove Layer');
     c.assert.cssClassPresent(aodSearchCheckbox, 'checked');
   },
-  'Clicking the selected row deselects it and hides the details': c => {
+  'Clicking the selected row deselects it and hides the details': (c) => {
     c.click(aodSearchRow).pause(300);
     c.expect.element(layerDetails).to.not.be.present;
     c.assert.not.cssClassPresent(aodSearchRow, 'selected');
     c.click(aodSearchRow).pause(300);
     c.assert.cssClassPresent(aodSearchRow, 'selected');
   },
-  'Unvailable filter removes results and when disabled, they show in the list': c => {
+  'Unvailable filter removes results and when disabled, they show in the list': (c) => {
     c.clearValue(layersSearchField);
     c.setValue(layersSearchField, 'goes').pause(500);
     c.waitForElementVisible('.no-results', TIME_LIMIT, (e) => {
@@ -134,16 +134,16 @@ module.exports = {
       });
     });
   },
-  'Close product picker and confirm added layers show in sidebar': c => {
+  'Close product picker and confirm added layers show in sidebar': (c) => {
     c.click(layersModalCloseButton).pause(200);
     c.expect.element('#active-MODIS_Aqua_Aerosol').to.be.present;
   },
-  'Collapse sidebar and confirm layer count updated': c => {
+  'Collapse sidebar and confirm layer count updated': (c) => {
     c.click('.toggleIconHolder').pause(200);
     c.expect.element(layerCount).to.be.present;
     c.assert.containsText(layerCount, '7');
   },
-  after: c => {
+  after: (c) => {
     c.end();
-  }
+  },
 };

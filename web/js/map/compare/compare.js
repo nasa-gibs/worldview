@@ -3,23 +3,24 @@ import { Opacity } from './opacity';
 import { Spy } from './spy';
 import util from '../../util/util';
 import { setValue } from '../../modules/compare/actions';
+
 const TOUCH_EVENT = {
   type: 'touch',
   start: 'touchstart',
   move: 'touchmove',
-  end: 'touchend'
+  end: 'touchend',
 };
 const MOUSE_EVENT = {
   type: 'default',
   start: 'mousedown',
   move: 'mousemove',
-  end: 'mouseup'
+  end: 'mouseup',
 };
 export function mapCompare(config, store) {
-  var self = {};
-  var comparison = null;
-  var mode = 'swipe';
-  var proj = '';
+  const self = {};
+  let comparison = null;
+  let mode = 'swipe';
+  let proj = '';
   self.events = util.events();
   self.swipe = Swipe;
   self.opacity = Opacity;
@@ -30,12 +31,12 @@ export function mapCompare(config, store) {
     ? TOUCH_EVENT
     : MOUSE_EVENT;
 
-  var init = function() {
+  const init = function() {
     self.events
       .on('movestart', () => {
         self.dragging = true;
       })
-      .on('moveend', value => {
+      .on('moveend', (value) => {
         self.dragging = false;
         store.dispatch(setValue(value));
       });
@@ -63,7 +64,7 @@ export function mapCompare(config, store) {
         state.compare.isCompareA,
         self.events,
         self.EventTypeObject,
-        state.compare.value || null
+        state.compare.value || null,
       ); // e.g. new self.swipe()
     } else {
       mode = compareMode;
@@ -72,7 +73,7 @@ export function mapCompare(config, store) {
         state.compare.isCompareA,
         self.events,
         self.EventTypeObject,
-        state.compare.value || null
+        state.compare.value || null,
       ); // e.g. new self.swipe()
     }
     self.active = true;
@@ -84,9 +85,8 @@ export function mapCompare(config, store) {
   self.getOffset = function() {
     if (mode === 'swipe' && comparison) {
       return comparison.getSwipeOffset();
-    } else {
-      return null;
     }
+    return null;
   };
   /**
    * Destroy instance in full and nullify vars

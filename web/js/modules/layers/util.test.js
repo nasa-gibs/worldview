@@ -1,24 +1,23 @@
+import { assign } from 'lodash';
 import {
   serializeLayers,
   layersParse12,
   removeLayer,
   toggleVisibility,
-  mapLocationToLayerState
+  mapLocationToLayerState,
 } from './util';
 import { initialState } from './reducers';
 import fixtures from '../../fixtures';
-import { assign } from 'lodash';
+
 let defaultStateFromLocation = {
   layers: {
-    active: []
-  }
+    active: [],
+  },
 };
 const globalState = fixtures.getState();
 const config = fixtures.config();
-const PALETTE_LAYER_STRING =
-  'AMSRE_Brightness_Temp_89H_Night(hidden,opacity=0.54,palette=red_2,min=224,225,max=294,295,squash=true),mask';
-const VECTOR_LAYER_STRING =
-  'OrbitTracks_Aqua_Ascending(hidden,opacity=0.46,style=yellow1),mask';
+const PALETTE_LAYER_STRING = 'AMSRE_Brightness_Temp_89H_Night(hidden,opacity=0.54,palette=red_2,min=224,225,max=294,295,squash=true),mask';
+const VECTOR_LAYER_STRING = 'OrbitTracks_Aqua_Ascending(hidden,opacity=0.46,style=yellow1),mask';
 
 test('Layer parser, retrieves correct number of palette layers from permalink string', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
@@ -84,9 +83,9 @@ test('serialize layers and palettes', () => {
     palettes: {
       active: { 'terra-aod': config.palettes.rendered['terra-aod'] },
       rendered: config.palettes.rendered,
-      custom: config.palettes.custom
+      custom: config.palettes.custom,
     },
-    config
+    config,
   };
   const state = assign({}, paletteState, { layers: initialState });
   terraAodLayer.custom = ['red'];
@@ -113,25 +112,25 @@ describe('permalink 1.0', () => {
   beforeEach(() => {
     defaultStateFromLocation = {
       layers: {
-        active: []
-      }
+        active: [],
+      },
     };
   });
   test('supports old style period delimiters', () => {
     const parameters = {
-      products: 'baselayers.terra-cr~overlays.terra-aod.aqua-aod'
+      products: 'baselayers.terra-cr~overlays.terra-aod.aqua-aod',
     };
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
     const activeLayers = stateFromLocation.layers.active;
 
-    expect(activeLayers.find(x => x.id === 'terra-cr')).toBeTruthy();
-    expect(activeLayers.find(x => x.id === 'terra-aod')).toBeTruthy();
-    expect(activeLayers.find(x => x.id === 'aqua-aod')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'terra-aod')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'aqua-aod')).toBeTruthy();
   });
 });
 
@@ -139,101 +138,101 @@ describe('permalink 1.1', () => {
   beforeEach(() => {
     defaultStateFromLocation = {
       layers: {
-        active: []
-      }
+        active: [],
+      },
     };
   });
 
   test('parses only one baselayer', () => {
     const parameters = {
-      products: 'baselayers,terra-cr'
+      products: 'baselayers,terra-cr',
     };
 
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
     expect(stateFromLocation.layers.active[0].id).toBe('terra-cr');
   });
   test('parses only one overlay', () => {
     const parameters = {
-      products: 'overlays,terra-aod'
+      products: 'overlays,terra-aod',
     };
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
 
     expect(stateFromLocation.layers.active[0].id).toBe('terra-aod');
   });
   test('parses multiple layers', () => {
     const parameters = {
-      products: 'baselayers,terra-cr~overlays,terra-aod,aqua-aod'
+      products: 'baselayers,terra-cr~overlays,terra-aod,aqua-aod',
     };
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
     const activeLayers = stateFromLocation.layers.active;
-    expect(activeLayers.find(x => x.id === 'terra-cr')).toBeTruthy();
-    expect(activeLayers.find(x => x.id === 'terra-aod')).toBeTruthy();
-    expect(activeLayers.find(x => x.id === 'aqua-aod')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'terra-aod')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'aqua-aod')).toBeTruthy();
   });
   test('empty layer list', () => {
     const parameters = {
-      products: 'baselayers~overlays'
+      products: 'baselayers~overlays',
     };
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
     const activeLayers = stateFromLocation.layers.active;
     expect(activeLayers).toHaveLength(0);
   });
   test('skips invalid layers and records an error', () => {
     const parameters = {
-      products: 'baselayers,terra-cr~overlays,layerx,aqua-aod'
+      products: 'baselayers,terra-cr~overlays,layerx,aqua-aod',
     };
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
     const activeLayers = stateFromLocation.layers.active;
-    expect(activeLayers.find(x => x.id === 'terra-cr')).toBeTruthy();
-    expect(activeLayers.find(x => x.id === 'aqua-aod')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
+    expect(activeLayers.find((x) => x.id === 'aqua-aod')).toBeTruthy();
   });
   test('no layers if no groups found', () => {
     const parameters = {
-      products: 'layerx,layery'
+      products: 'layerx,layery',
     };
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
     const activeLayers = stateFromLocation.layers.active;
     expect(activeLayers).toHaveLength(0);
   });
   test('hidden layers', () => {
     const parameters = {
-      products: 'baselayers,!terra-cr'
+      products: 'baselayers,!terra-cr',
     };
     const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
-      config
+      config,
     );
     const activeLayers = stateFromLocation.layers.active;
     expect(activeLayers[0].id).toBe('terra-cr');

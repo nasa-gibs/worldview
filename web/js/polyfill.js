@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 // ===========================================================================
 // Polyfills and browser quirks - DEPRECATED
 // This file is full of lots of old hacks, that are kept around to avoid
@@ -17,22 +18,22 @@ export function polyfill() {
     (function() {
       function pad(number) {
         if (number < 10) {
-          return '0' + number;
+          return `0${number}`;
         }
         return number;
       }
 
       Date.prototype.toISOString = function() {
-        return this.getUTCFullYear() +
-          '-' + pad(this.getUTCMonth() + 1) +
-          '-' + pad(this.getUTCDate()) +
-          'T' + pad(this.getUTCHours()) +
-          ':' + pad(this.getUTCMinutes()) +
-          ':' + pad(this.getUTCSeconds()) +
-          '.' + (this.getUTCMilliseconds() / 1000)
+        return `${this.getUTCFullYear()
+        }-${pad(this.getUTCMonth() + 1)
+        }-${pad(this.getUTCDate())
+        }T${pad(this.getUTCHours())
+        }:${pad(this.getUTCMinutes())
+        }:${pad(this.getUTCSeconds())
+        }.${(this.getUTCMilliseconds() / 1000)
           .toFixed(3)
-          .slice(2, 5) +
-          'Z';
+          .slice(2, 5)
+        }Z`;
       };
     }());
   }
@@ -43,23 +44,23 @@ export function polyfill() {
   if (!window.console) {
     (function() {
       window.console = {
-        log: function() {},
-        warn: function() {},
-        info: function() {},
-        error: function() {}
+        log() {},
+        warn() {},
+        info() {},
+        error() {},
       };
-    })();
+    }());
   }
 
   /*
    * Get rid of address bar on iphone/ipod
    */
   (function() {
-    var execute = function() {
+    const execute = function() {
       window.scrollTo(0, 0);
       if (document.body) {
         document.body.style.height = '100%';
-        if (!(/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()))) {
+        if (!/(iphone|ipod)/.test(navigator.userAgent.toLowerCase())) {
           if (document.body.parentNode) {
             document.body.parentNode.style.height = '100%';
           }
@@ -68,14 +69,14 @@ export function polyfill() {
     };
     setTimeout(execute, 700);
     setTimeout(execute, 1500);
-  })();
+  }());
 
   /*
    * Hide the URL bar
    */
   (function() {
     window.scrollTo(0, 0);
-  })();
+  }());
 
   /*
    * String.contains
@@ -88,7 +89,7 @@ export function polyfill() {
         return String.prototype.indexOf.call(this, str,
           startIndex) !== -1;
       };
-    })();
+    }());
   }
 
   /*
@@ -102,12 +103,12 @@ export function polyfill() {
         enumerable: false,
         configurable: false,
         writable: false,
-        value: function(searchString, position) {
+        value(searchString, position) {
           position = position || 0;
           return this.indexOf(searchString, position) === position;
-        }
+        },
       });
-    })();
+    }());
   }
 
   /*
@@ -121,33 +122,34 @@ export function polyfill() {
         enumerable: false,
         configurable: false,
         writable: false,
-        value: function(searchString, position) {
+        value(searchString, position) {
           position = position || this.length;
-          position = position - searchString.length;
-          var lastIndex = this.lastIndexOf(searchString);
+          position -= searchString.length;
+          const lastIndex = this.lastIndexOf(searchString);
           return lastIndex !== -1 && lastIndex === position;
-        }
+        },
       });
-    })();
+    }());
   }
 
   /*
    * Mobile device quirks.  This section is mostly overwriting things that jquery.mobile is adding
    */
   (function() {
-    if (navigator.userAgent.match(/Android/i) ||
-      navigator.userAgent.match(/webOS/i) ||
-      navigator.userAgent.match(/iPhone/i) ||
-      navigator.userAgent.match(/iPad/i) ||
-      navigator.userAgent.match(/iPod/i) ||
-      navigator.userAgent.match(/BlackBerry/i) ||
-      navigator.userAgent.match(/Windows Phone/i)
+    let mobile = false;
+    if (navigator.userAgent.match(/Android/i)
+      || navigator.userAgent.match(/webOS/i)
+      || navigator.userAgent.match(/iPhone/i)
+      || navigator.userAgent.match(/iPad/i)
+      || navigator.userAgent.match(/iPod/i)
+      || navigator.userAgent.match(/BlackBerry/i)
+      || navigator.userAgent.match(/Windows Phone/i)
     ) {
-      var mobile = true;
+      mobile = true;
     }
 
     if (navigator.userAgent.indexOf('iPhone') !== -1 || navigator.userAgent.indexOf('Android') !== -1) {
-      addEventListener('load', function() {
+      addEventListener('load', () => {
         if (mobile) {
           $('.layerPicker a[href=\'#DataDownload\']')
             .hide();
@@ -157,7 +159,7 @@ export function polyfill() {
         $('#app, .ui-mobile, .ui-mobile .ui-page')
           .css('min-height', 0);
       }, false);
-      addEventListener('orientationchange', function() {
+      addEventListener('orientationchange', () => {
         window.scrollTo(0, 1);
         setHeight();
       }, false);
@@ -166,7 +168,7 @@ export function polyfill() {
     // Set the div height
     function setHeight($body) {
       if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 6_\d/i)) {
-        var newHeight = $(window)
+        let newHeight = $(window)
           .height();
         // if mobileSafari 6 add +60px
         newHeight += 60;
@@ -178,5 +180,5 @@ export function polyfill() {
           .css('min-height', 0);
       }
     }
-  })();
+  }());
 }

@@ -12,32 +12,32 @@ import {
   CRS_WGS_84,
   mapIsPolygonValid,
   mapAdjustAntiMeridian,
-  mapToPolys
+  mapToPolys,
 } from '../map';
 
 export function dataResultsAntiMeridianMulti(maxDistance) {
-  var self = {};
+  const self = {};
   self.name = 'AntiMeridianMulti';
 
   self.process = function(meta, granule) {
-    var geom = granule.geometry[CRS_WGS_84];
+    const geom = granule.geometry[CRS_WGS_84];
     // Semi-hack of ensuring geometry isn't a MultiPolygon since
     // isPolygonValid can't handle it; addresses WV-1574
     if (
-      !(geom instanceof OlGeomMultiPolygon) &&
-      !mapIsPolygonValid(geom, maxDistance)
+      !(geom instanceof OlGeomMultiPolygon)
+      && !mapIsPolygonValid(geom, maxDistance)
     ) {
-      var geomEast = mapAdjustAntiMeridian(geom, 1);
-      var geomWest = mapAdjustAntiMeridian(geom, -1);
-      var centroidEast = geomEast.getInteriorPoint();
-      var centroidWest = geomWest.getInteriorPoint();
-      var newGeom = new OlGeomMultiPolygon([
+      const geomEast = mapAdjustAntiMeridian(geom, 1);
+      const geomWest = mapAdjustAntiMeridian(geom, -1);
+      const centroidEast = geomEast.getInteriorPoint();
+      const centroidWest = geomWest.getInteriorPoint();
+      const newGeom = new OlGeomMultiPolygon([
         geomEast.getCoordinates(),
-        geomWest.getCoordinates()
+        geomWest.getCoordinates(),
       ]);
-      var newCentroid = new OlGeomMultiPoint([
+      const newCentroid = new OlGeomMultiPoint([
         centroidEast.getCoordinates(),
-        centroidWest.getCoordinates()
+        centroidWest.getCoordinates(),
       ]);
       granule.geometry[CRS_WGS_84] = newGeom;
       granule.centroid[CRS_WGS_84] = newCentroid;
@@ -49,19 +49,19 @@ export function dataResultsAntiMeridianMulti(maxDistance) {
 }
 
 export function dataResultsChain() {
-  var self = {};
+  const self = {};
 
   self.processes = [];
 
   self.process = function(results) {
-    $.each(results.granules, function(index, granule) {
+    $.each(results.granules, (index, granule) => {
       delete granule.filtered;
       delete granule.filteredBy;
     });
-    $.each(self.processes, function(index, process) {
-      $.each(results.granules, function(index2, granule) {
+    $.each(self.processes, (index, process) => {
+      $.each(results.granules, (index2, granule) => {
         if (!granule.filtered) {
-          var result = process.process(results.meta, granule);
+          const result = process.process(results.meta, granule);
           if (!result) {
             granule.filtered = true;
             granule.filteredBy = process.name;
@@ -73,9 +73,9 @@ export function dataResultsChain() {
       }
     });
 
-    var newGranules = [];
-    var filteredGranules = {};
-    $.each(results.granules, function(index, granule) {
+    const newGranules = [];
+    const filteredGranules = {};
+    $.each(results.granules, (index, granule) => {
       if (!granule.filtered) {
         newGranules.push(granule);
       } else {
@@ -89,7 +89,7 @@ export function dataResultsChain() {
     return {
       meta: results.meta,
       granules: newGranules,
-      filtered: filteredGranules
+      filtered: filteredGranules,
     };
   };
 
@@ -97,7 +97,7 @@ export function dataResultsChain() {
 }
 
 export function dataResultsCollectPreferred(prefer) {
-  var self = {};
+  const self = {};
 
   self.name = 'CollectPreferred';
 
@@ -105,11 +105,10 @@ export function dataResultsCollectPreferred(prefer) {
     if (!meta.preferred) {
       meta.preferred = {};
     }
-    var preferred =
-      (prefer === 'nrt' && granule.nrt) ||
-      (prefer === 'science' && !granule.nrt);
+    const preferred = (prefer === 'nrt' && granule.nrt)
+      || (prefer === 'science' && !granule.nrt);
     if (preferred) {
-      var timeStart = dataCmrRoundTime(granule.time_start);
+      const timeStart = dataCmrRoundTime(granule.time_start);
       meta.preferred[timeStart] = granule;
     }
     return granule;
@@ -119,7 +118,7 @@ export function dataResultsCollectPreferred(prefer) {
 }
 
 export function dataResultsCollectVersions() {
-  var self = {};
+  const self = {};
 
   self.name = 'CollectVersions';
 
@@ -128,8 +127,8 @@ export function dataResultsCollectVersions() {
       meta.versions = {};
     }
     if (granule.version) {
-      var timeStart = dataCmrRoundTime(granule.time_start);
-      var previousVersion = meta.versions[timeStart] || 0;
+      const timeStart = dataCmrRoundTime(granule.time_start);
+      const previousVersion = meta.versions[timeStart] || 0;
       meta.versions[timeStart] = Math.max(previousVersion, granule.version);
     }
     return granule;
@@ -139,26 +138,26 @@ export function dataResultsCollectVersions() {
 }
 
 export function dataResultsConnectSwaths(projection, delta) {
-  var MAX_DISTANCE_GEO = 270;
-  var startTimes = {};
-  var endTimes = {};
+  const MAX_DISTANCE_GEO = 270;
+  const startTimes = {};
+  const endTimes = {};
 
-  var self = {};
+  const self = {};
   self.name = 'ConnectSwaths';
 
   self.process = function(meta, granule) {
     if (!granule.centroid[projection]) {
       return;
     }
-    var timeStart = roundTime(granule.time_start);
-    var timeEnd = roundTime(granule.time_end);
+    const timeStart = roundTime(granule.time_start);
+    const timeEnd = roundTime(granule.time_end);
 
     if (startTimes[timeStart]) {
       console.warn(
         'Discarding duplicate start time',
         timeStart,
         granule,
-        startTimes[timeStart]
+        startTimes[timeStart],
       );
       return;
     }
@@ -167,11 +166,11 @@ export function dataResultsConnectSwaths(projection, delta) {
         'Discarding duplicate end time',
         timeEnd,
         granule,
-        endTimes[timeEnd]
+        endTimes[timeEnd],
       );
       return;
     }
-    var swath = [granule];
+    const swath = [granule];
     startTimes[timeStart] = swath;
     endTimes[timeEnd] = swath;
 
@@ -181,36 +180,35 @@ export function dataResultsConnectSwaths(projection, delta) {
 
   self.after = function(results) {
     results.meta.swaths = [];
-    $.each(startTimes, function(index, swath) {
+    $.each(startTimes, (index, swath) => {
       if (swath.length > 1) {
         results.meta.swaths.push(swath);
       }
     });
   };
 
-  var combineSwath = function(swath, delta) {
-    var combined = false;
+  const combineSwath = function(swath, delta) {
+    let combined = false;
 
-    var maxDistance =
-      projection === CRS_WGS_84 ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
-    var thisTimeStart = roundTime(swath[0].time_start);
-    var thisTimeEnd = roundTime(swath[swath.length - 1].time_end);
+    const maxDistance = projection === CRS_WGS_84 ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
+    const thisTimeStart = roundTime(swath[0].time_start);
+    const thisTimeEnd = roundTime(swath[swath.length - 1].time_end);
 
     // MODIS data is easily combined by matching up the end time of
     // one granule to the start time of another granule because they
     // are the same value. VIIRS start and end times differ by a
     // minute. Use the delta value to adjust as needed.
     delta = delta || 0;
-    var thisTimeStartDate = util.parseTimestampUTC(thisTimeStart);
+    const thisTimeStartDate = util.parseTimestampUTC(thisTimeStart);
     thisTimeStartDate.setUTCSeconds(thisTimeStartDate.getUTCSeconds() + delta);
-    var thisTimeStartDelta = thisTimeStartDate.toISOString(thisTimeStartDate);
-    var otherSwath = endTimes[thisTimeStartDelta];
+    const thisTimeStartDelta = thisTimeStartDate.toISOString(thisTimeStartDate);
+    const otherSwath = endTimes[thisTimeStartDelta];
 
     // Can this swath be added to the end of other swath?
     if (otherSwath) {
-      var otherGranule = otherSwath[otherSwath.length - 1];
-      var otherTimeStart = roundTime(otherSwath[0].time_start);
-      var otherTimeEnd = roundTime(otherSwath[otherSwath.length - 1].time_end);
+      const otherGranule = otherSwath[otherSwath.length - 1];
+      const otherTimeStart = roundTime(otherSwath[0].time_start);
+      const otherTimeEnd = roundTime(otherSwath[otherSwath.length - 1].time_end);
 
       if (connectionAllowed(swath[0], otherGranule, maxDistance)) {
         // Remove entries for this swath
@@ -222,10 +220,10 @@ export function dataResultsConnectSwaths(projection, delta) {
         delete endTimes[otherTimeEnd];
 
         // Combine swaths
-        var newSwath = otherSwath.concat(swath);
+        const newSwath = otherSwath.concat(swath);
 
-        var newTimeStart = roundTime(newSwath[0].time_start);
-        var newTimeEnd = roundTime(newSwath[newSwath.length - 1].time_end);
+        const newTimeStart = roundTime(newSwath[0].time_start);
+        const newTimeEnd = roundTime(newSwath[newSwath.length - 1].time_end);
 
         startTimes[newTimeStart] = newSwath;
         endTimes[newTimeEnd] = newSwath;
@@ -241,14 +239,14 @@ export function dataResultsConnectSwaths(projection, delta) {
 
   // Connection is allowed as long as there is at least one path between
   // centroids that is less than the max distance
-  var connectionAllowed = function(g1, g2, maxDistance) {
-    var polys1 = mapToPolys(g1.geometry[projection]);
-    var polys2 = mapToPolys(g2.geometry[projection]);
-    var allowed = false;
-    $.each(polys1, function(index, poly1) {
-      $.each(polys2, function(index, poly2) {
-        var x1 = poly1.getInteriorPoint().getCoordinates()[0];
-        var x2 = poly2.getInteriorPoint().getCoordinates()[0];
+  const connectionAllowed = function(g1, g2, maxDistance) {
+    const polys1 = mapToPolys(g1.geometry[projection]);
+    const polys2 = mapToPolys(g2.geometry[projection]);
+    let allowed = false;
+    $.each(polys1, (index, poly1) => {
+      $.each(polys2, (index, poly2) => {
+        const x1 = poly1.getInteriorPoint().getCoordinates()[0];
+        const x2 = poly2.getInteriorPoint().getCoordinates()[0];
         if (Math.abs(x2 - x1) < maxDistance) {
           allowed = true;
           return false;
@@ -258,7 +256,7 @@ export function dataResultsConnectSwaths(projection, delta) {
     return allowed;
   };
 
-  var roundTime = function(timeString) {
+  const roundTime = function(timeString) {
     return dataCmrRoundTime(timeString);
   };
 
@@ -266,29 +264,27 @@ export function dataResultsConnectSwaths(projection, delta) {
 }
 
 export function dataResultsDateTimeLabel(time) {
-  var self = {};
+  const self = {};
 
   self.name = 'DateTimeLabel';
 
   self.process = function(meta, granule) {
-    var timeStart = util.parseTimestampUTC(granule.time_start);
+    const timeStart = util.parseTimestampUTC(granule.time_start);
 
     // Some granules may not have an end time
     if (granule.time_end) {
-      var timeEnd = util.parseTimestampUTC(granule.time_end);
-      granule.label =
-        util.toISOStringDate(timeStart) +
-        ': ' +
-        util.toHourMinutes(timeStart) +
-        '-' +
-        util.toHourMinutes(timeEnd) +
-        ' UTC';
+      const timeEnd = util.parseTimestampUTC(granule.time_end);
+      granule.label = `${util.toISOStringDate(timeStart)
+      }: ${
+        util.toHourMinutes(timeStart)
+      }-${
+        util.toHourMinutes(timeEnd)
+      } UTC`;
     } else {
-      granule.label =
-        util.toISOStringDate(timeStart) +
-        ': ' +
-        util.toHourMinutes(timeStart) +
-        ' UTC';
+      granule.label = `${util.toISOStringDate(timeStart)
+      }: ${
+        util.toHourMinutes(timeStart)
+      } UTC`;
     }
 
     return granule;
@@ -299,7 +295,7 @@ export function dataResultsDateTimeLabel(time) {
 
 export function dataResultsDensify() {
   // var MAX_DISTANCE = 5;
-  var self = {};
+  const self = {};
 
   self.name = 'Densify';
 
@@ -356,7 +352,7 @@ export function dataResultsDensify() {
 }
 
 export function dataResultsDividePolygon() {
-  var self = {};
+  const self = {};
 
   self.name = 'DividePolygon';
 
@@ -364,19 +360,19 @@ export function dataResultsDividePolygon() {
     if (granule.geometry['EPSG:4326'].getPolygons) {
       return granule;
     }
-    var ring = granule.geometry['EPSG:4326'].getLinearRing(0);
-    var coords = ring.getCoordinates();
-    var latlons = [];
-    lodashEach(coords, function(coord) {
-      var latlon = new dataHelper.LatLng(coord[1], coord[0]);
+    const ring = granule.geometry['EPSG:4326'].getLinearRing(0);
+    const coords = ring.getCoordinates();
+    const latlons = [];
+    lodashEach(coords, (coord) => {
+      const latlon = new dataHelper.LatLng(coord[1], coord[0]);
       latlons.push(latlon);
     });
-    var result = dataHelper.sphericalPolygon.dividePolygon(latlons);
-    var newPolys = result.interiors;
-    var resultMultiPoly = [];
-    lodashEach(newPolys, function(newPoly) {
-      var resultPoly = [];
-      lodashEach(newPoly, function(newCoord) {
+    const result = dataHelper.sphericalPolygon.dividePolygon(latlons);
+    const newPolys = result.interiors;
+    const resultMultiPoly = [];
+    lodashEach(newPolys, (newPoly) => {
+      const resultPoly = [];
+      lodashEach(newPoly, (newCoord) => {
         resultPoly.push([newCoord.lng, newCoord.lat]);
       });
       resultMultiPoly.push(resultPoly);
@@ -389,16 +385,16 @@ export function dataResultsDividePolygon() {
 }
 
 export function dataResultsExtentFilter(projection, extent) {
-  var self = {};
+  const self = {};
 
   self.name = 'ExtentFilter';
 
   self.process = function(meta, granule) {
-    var geom = granule.geometry[projection];
+    const geom = granule.geometry[projection];
     if (!geom) {
       return granule;
     }
-    var mbr = geom.getExtent();
+    const mbr = geom.getExtent();
     if (olExtent.intersects(extent, mbr)) {
       return granule;
     }
@@ -412,7 +408,7 @@ export function dataResultsExtentFilter(projection, extent) {
 }
 
 export function dataResultsGeometryFromCMR(densify) {
-  var self = {};
+  const self = {};
 
   self.name = 'GeometryFromCMR';
 
@@ -425,9 +421,9 @@ export function dataResultsGeometryFromCMR(densify) {
     }
 
     if (!granule.geometry[CRS_WGS_84]) {
-      var cmrGeom = dataCmrGeometry(granule, densify);
-      var geom = cmrGeom.toOpenLayers();
-      var centroid = geom.getInteriorPoint();
+      const cmrGeom = dataCmrGeometry(granule, densify);
+      const geom = cmrGeom.toOpenLayers();
+      const centroid = geom.getInteriorPoint();
       granule.geometry[CRS_WGS_84] = geom;
       granule.centroid[CRS_WGS_84] = centroid;
     }
@@ -438,9 +434,9 @@ export function dataResultsGeometryFromCMR(densify) {
 }
 
 export function dataResultsGeometryFromMODISGrid(projection) {
-  var parser = new OlFormatGeoJSON();
+  const parser = new OlFormatGeoJSON();
 
-  var self = {};
+  const self = {};
 
   self.name = 'GeoemtryFromMODISGrid';
 
@@ -451,15 +447,15 @@ export function dataResultsGeometryFromMODISGrid(projection) {
     }
 
     if (!granule.geometry[projection]) {
-      var json = meta.grid[granule.hv];
+      const json = meta.grid[granule.hv];
       if (!json) {
         return;
       }
-      var grid = meta.grid[granule.hv];
-      var geom = parser.readGeometry(meta.grid[granule.hv].geometry);
-      var centroid = new OlGeomPoint([
+      const grid = meta.grid[granule.hv];
+      const geom = parser.readGeometry(meta.grid[granule.hv].geometry);
+      const centroid = new OlGeomPoint([
         grid.properties.CENTER_X,
-        grid.properties.CENTER_Y
+        grid.properties.CENTER_Y,
       ]);
 
       granule.geometry[projection] = geom;
@@ -472,7 +468,7 @@ export function dataResultsGeometryFromMODISGrid(projection) {
 }
 
 export function dataResultsOfflineFilter() {
-  var self = {};
+  const self = {};
 
   self.name = 'OfflineFilter';
 
@@ -487,23 +483,23 @@ export function dataResultsOfflineFilter() {
 }
 
 export function dataResultsModisGridIndex() {
-  var self = {};
+  const self = {};
 
   self.name = 'MODISGridIndex';
 
   self.process = function(meta, granule) {
-    var id = granule.producer_granule_id;
-    var matches = id.match(/\.h(\d+)v(\d+)\./);
+    const id = granule.producer_granule_id;
+    const matches = id.match(/\.h(\d+)v(\d+)\./);
     granule.h = parseInt(matches[1], 10);
     granule.v = parseInt(matches[2], 10);
-    granule.hv = 'h' + granule.h + 'v' + granule.v;
+    granule.hv = `h${granule.h}v${granule.v}`;
     return granule;
   };
 
   self.after = function(results) {
     results.meta.grid = {};
-    $.each(results.meta.gridFetched.features, function(index, feature) {
-      var key = 'h' + feature.properties.H + 'v' + feature.properties.V;
+    $.each(results.meta.gridFetched.features, (index, feature) => {
+      const key = `h${feature.properties.H}v${feature.properties.V}`;
       results.meta.grid[key] = feature;
     });
   };
@@ -512,17 +508,17 @@ export function dataResultsModisGridIndex() {
 }
 
 export function dataResultsModisGridLabel() {
-  var self = {};
+  const self = {};
 
   self.name = 'MODISGridLabel';
 
   self.process = function(meta, granule) {
-    granule.label = 'h' + granule.h + ' - ' + 'v' + granule.v;
+    granule.label = `h${granule.h} - v${granule.v}`;
 
-    var timeStart = util.parseTimestampUTC(granule.time_start);
-    var date = util.toISOStringDate(timeStart);
+    const timeStart = util.parseTimestampUTC(granule.time_start);
+    const date = util.toISOStringDate(timeStart);
 
-    granule.downloadLabel = date + ': h' + granule.h + '-' + granule.v;
+    granule.downloadLabel = `${date}: h${granule.h}-${granule.v}`;
 
     return granule;
   };
@@ -531,15 +527,15 @@ export function dataResultsModisGridLabel() {
 }
 
 export function dataResultsOrbitFilter(spec) {
-  var self = {};
+  const self = {};
 
   self.name = 'OrbitFilter';
 
   self.process = function(meta, granule) {
     if (spec) {
-      var regex = new RegExp(spec.regex);
-      var text = granule[spec.field];
-      var result = text.match(regex);
+      const regex = new RegExp(spec.regex);
+      const text = granule[spec.field];
+      const result = text.match(regex);
       if (result && result[1] === spec.match) {
         return granule;
       }
@@ -552,12 +548,12 @@ export function dataResultsOrbitFilter(spec) {
 }
 
 export function dataResultsPreferredFilter(prefer) {
-  var self = {};
+  const self = {};
 
   self.name = 'PreferredFilter';
 
   self.process = function(meta, granule) {
-    var timeStart = dataCmrRoundTime(granule.time_start);
+    const timeStart = dataCmrRoundTime(granule.time_start);
     if (meta.preferred[timeStart]) {
       if (prefer === 'nrt' && !granule.nrt) {
         return;
@@ -573,7 +569,7 @@ export function dataResultsPreferredFilter(prefer) {
 }
 
 export function dataResultsProductLabel(name) {
-  var self = {};
+  const self = {};
 
   self.name = 'ProductLabel';
 
@@ -586,7 +582,7 @@ export function dataResultsProductLabel(name) {
 }
 
 export function dataResultsTagButtonScale(scale) {
-  var self = {};
+  const self = {};
 
   self.name = 'TagButtonScale';
 
@@ -599,7 +595,7 @@ export function dataResultsTagButtonScale(scale) {
 }
 
 export function dataResultsTagList(spec) {
-  var self = {};
+  const self = {};
 
   self.name = 'TagList';
 
@@ -615,7 +611,7 @@ export function dataResultsTagList(spec) {
 }
 
 export function dataResultsTagNRT(spec) {
-  var self = {};
+  const self = {};
 
   self.name = 'TagNRT';
 
@@ -624,14 +620,14 @@ export function dataResultsTagNRT(spec) {
     if (!spec) {
       return granule;
     }
-    var isNRT;
+    let isNRT;
     if (spec.by === 'value') {
       isNRT = granule[spec.field] === spec.value;
     } else if (spec.by === 'regex') {
-      var re = new RegExp(spec.value);
+      const re = new RegExp(spec.value);
       isNRT = re.test(granule[spec.field]);
     } else {
-      throw new Error('Unknown TagNRT method: ' + spec.by);
+      throw new Error(`Unknown TagNRT method: ${spec.by}`);
     }
     if (isNRT) {
       granule.nrt = true;
@@ -644,7 +640,7 @@ export function dataResultsTagNRT(spec) {
 }
 
 export function dataResultsTagProduct(product) {
-  var self = {};
+  const self = {};
 
   self.name = 'TagProduct';
 
@@ -658,7 +654,7 @@ export function dataResultsTagProduct(product) {
 
 // FIXME: Code copy and pasted from TagNRT, maybe consoldate this?
 export function dataResultsTagURS(spec) {
-  var self = {};
+  const self = {};
 
   self.name = 'TagURS';
 
@@ -667,20 +663,20 @@ export function dataResultsTagURS(spec) {
     if (!spec) {
       return granule;
     }
-    var isURS;
+    let isURS;
     if (spec.by === 'constant') {
       isURS = spec.value;
     } else if (spec.by === 'value') {
       isURS = granule[spec.field] === spec.value;
     } else if (spec.by === 'regex') {
-      var re = new RegExp(spec.value);
+      const re = new RegExp(spec.value);
       isURS = re.test(granule[spec.field]);
     } else {
-      throw new Error('Unknown TagURS method: ' + spec.by);
+      throw new Error(`Unknown TagURS method: ${spec.by}`);
     }
     granule.urs = isURS;
     if (isURS) {
-      meta.urs = meta.urs ? (meta.urs += 1) : 1;
+      meta.urs = meta.urs ? meta.urs += 1 : 1;
     }
     return granule;
   };
@@ -689,16 +685,16 @@ export function dataResultsTagURS(spec) {
 }
 
 export function dataResultsTagVersion() {
-  var self = {};
+  const self = {};
 
   self.name = 'TagVersion';
 
   self.process = function(meta, granule) {
-    var match = granule.dataset_id.match('V(\\d{3})(\\d*)');
+    let match = granule.dataset_id.match('V(\\d{3})(\\d*)');
     if (match) {
-      var major = match[1];
-      var minor = match[2] || 0;
-      granule.version = parseFloat(major + '.' + minor);
+      const major = match[1];
+      const minor = match[2] || 0;
+      granule.version = parseFloat(`${major}.${minor}`);
       return granule;
     }
 
@@ -714,28 +710,28 @@ export function dataResultsTagVersion() {
   return self;
 }
 
-var versionRegex = {
+const versionRegex = {
   // Form of MOD04_L2.A2016137.2105.061.2017326151115.hdf
   // Using periods as delimiters, version is the 4th field
-  MODISProducerGranuleID: '[^\\.]+\\.[^\\.]+\\.[^\\.]+\\.([^\\.]+)\\.'
+  MODISProducerGranuleID: '[^\\.]+\\.[^\\.]+\\.[^\\.]+\\.([^\\.]+)\\.',
 };
 
-var versionParsers = {
+const versionParsers = {
   // MODIS uses version numbers like 4, 5, 6 as major versions but
   // 41, 51, 61 for minor versions. This function multiplies values
   // less than 10 for easy comparision (40, 41, 50, 51, 60, 61).
   // Will there ever be a collection 10?
-  MODIS: strVersion => {
-    var version = Number.parseFloat(strVersion);
+  MODIS: (strVersion) => {
+    let version = Number.parseFloat(strVersion);
     if (version < 10) {
       version *= 10;
     }
     return version;
-  }
+  },
 };
 
 export function dataResultsTagVersionRegex(spec) {
-  var self = {};
+  const self = {};
 
   self.name = 'TagVersionRegex';
 
@@ -744,7 +740,7 @@ export function dataResultsTagVersionRegex(spec) {
     if (!spec) {
       return granule;
     }
-    var regex = versionRegex[spec.namedRegex];
+    let regex = versionRegex[spec.namedRegex];
     if (!regex) {
       regex = spec.regex;
     }
@@ -752,18 +748,18 @@ export function dataResultsTagVersionRegex(spec) {
       console.warn('no regex', granule);
       return granule;
     }
-    var value = granule[spec.field];
+    const value = granule[spec.field];
     if (!value) {
       console.warn(`no value for ${spec.field}`, granule);
       return granule;
     }
-    var match = value.match(regex);
+    const match = value.match(regex);
     if (match) {
-      var version = null;
-      var strVersion = match[1];
+      let version = null;
+      const strVersion = match[1];
       // If a parsing function is not named, just convert from float
       if (spec.parseVersion) {
-        var parser = versionParsers[spec.parseVersion];
+        const parser = versionParsers[spec.parseVersion];
         if (!parser) {
           console.warn('no such parser', spec.parseVersion);
           return granule;
@@ -775,7 +771,8 @@ export function dataResultsTagVersionRegex(spec) {
 
       if (version === null) {
         console.warn('version not assigned', strVersion, granule);
-      } else if (Number.isNaN(version)) {
+      // eslint-disable-next-line no-restricted-globals
+      } else if (isNaN(version)) {
         console.warn('version is not a number', strVersion, granule);
       } else {
         granule.version = version;
@@ -788,15 +785,15 @@ export function dataResultsTagVersionRegex(spec) {
 }
 
 export function dataResultsTimeFilter(spec) {
-  var westZone = null;
-  var eastZone = null;
-  var maxDistance = null;
-  var timeOffset;
-  var self = {};
+  let westZone = null;
+  let eastZone = null;
+  let maxDistance = null;
+  let timeOffset;
+  const self = {};
 
   self.name = 'TimeFilter';
 
-  var init = function() {
+  const init = function() {
     const zeroedTime = spec.time.setUTCHours(0);
     westZone = new Date(zeroedTime).setUTCMinutes(spec.westZone);
     eastZone = new Date(zeroedTime).setUTCMinutes(spec.eastZone);
@@ -805,23 +802,23 @@ export function dataResultsTimeFilter(spec) {
   };
 
   self.process = function(meta, granule) {
-    var geom = granule.geometry[CRS_WGS_84];
-    var time = util.parseTimestampUTC(granule.time_start);
+    let geom = granule.geometry[CRS_WGS_84];
+    const time = util.parseTimestampUTC(granule.time_start);
     time.setUTCMinutes(time.getUTCMinutes() + timeOffset);
 
     // Semi-hack of ensuring geometry isn't a MultiPolygon since
     // isPolygonValid can't handle it; addresses WV-1574
     if (
-      !(geom instanceof OlGeomMultiPolygon) &&
-      !mapIsPolygonValid(geom, maxDistance)
+      !(geom instanceof OlGeomMultiPolygon)
+      && !mapIsPolygonValid(geom, maxDistance)
     ) {
-      var adjustSign = time < eastZone ? 1 : -1;
+      const adjustSign = time < eastZone ? 1 : -1;
       geom = mapAdjustAntiMeridian(geom, adjustSign);
       granule.geometry[CRS_WGS_84] = geom;
       granule.centroid[CRS_WGS_84] = geom.getInteriorPoint();
     }
 
-    var x = granule.centroid[CRS_WGS_84].getCoordinates()[0];
+    const x = granule.centroid[CRS_WGS_84].getCoordinates()[0];
     if (time < eastZone && x < 0) {
       return;
     }
@@ -836,47 +833,46 @@ export function dataResultsTimeFilter(spec) {
 }
 
 export function dataResultsTimeLabel(time) {
-  var self = {};
+  const self = {};
 
   self.name = 'TimeLabel';
 
   self.process = function(meta, granule) {
-    var timeStart = util.parseTimestampUTC(granule.time_start);
+    const timeStart = util.parseTimestampUTC(granule.time_start);
 
     // Sometimes an end time is not provided by CMR
-    var timeEnd;
+    let timeEnd;
     if (granule.time_end) {
       timeEnd = util.parseTimestampUTC(granule.time_end);
     }
 
-    var diff = Math.floor(
-      (timeStart.getTime() - time.setUTCHours(0)) / (1000 * 60 * 60 * 24)
+    const diff = Math.floor(
+      (timeStart.getTime() - time.setUTCHours(0)) / (1000 * 60 * 60 * 24),
     );
 
-    var suffix = '';
+    let suffix = '';
     if (diff !== 0) {
       if (diff < 0) {
-        suffix = ' (' + diff + ' day)';
+        suffix = ` (${diff} day)`;
       } else {
-        suffix = ' (+' + diff + ' day)';
+        suffix = ` (+${diff} day)`;
       }
     }
-    var displayStart = util.toHourMinutes(timeStart);
-    var displayEnd = null;
+    const displayStart = util.toHourMinutes(timeStart);
+    let displayEnd = null;
     if (timeEnd) {
       displayEnd = util.toHourMinutes(timeEnd);
     } else {
       displayEnd = '?';
     }
-    granule.label = displayStart + ' - ' + displayEnd + ' UTC' + suffix;
+    granule.label = `${displayStart} - ${displayEnd} UTC${suffix}`;
 
-    granule.downloadLabel =
-      util.toISOStringDate(timeStart) +
-      ': ' +
-      displayStart +
-      '-' +
-      displayEnd +
-      ' UTC';
+    granule.downloadLabel = `${util.toISOStringDate(timeStart)
+    }: ${
+      displayStart
+    }-${
+      displayEnd
+    } UTC`;
 
     return granule;
   };
@@ -885,7 +881,7 @@ export function dataResultsTimeLabel(time) {
 }
 
 export function dataResultsTitleLabel() {
-  var self = {};
+  const self = {};
 
   self.name = 'TitleLabel';
 
@@ -898,7 +894,7 @@ export function dataResultsTitleLabel() {
 }
 
 export function dataResultsTransform(projection) {
-  var self = {};
+  const self = {};
 
   self.name = 'Transform';
 
@@ -906,8 +902,8 @@ export function dataResultsTransform(projection) {
     if (granule.geometry[projection]) {
       return granule;
     }
-    var geom = granule.geometry[CRS_WGS_84];
-    var projGeom = geom.clone().transform(CRS_WGS_84, projection);
+    const geom = granule.geometry[CRS_WGS_84];
+    const projGeom = geom.clone().transform(CRS_WGS_84, projection);
     granule.geometry[projection] = projGeom;
 
     if (projGeom instanceof OlGeomPolygon) {
@@ -924,13 +920,13 @@ export function dataResultsTransform(projection) {
 }
 
 export function dataResultsVersionFilter() {
-  var self = {};
+  const self = {};
 
   self.name = 'VersionFilter';
 
   self.process = function(meta, granule) {
     if (granule.version) {
-      var timeStart = dataCmrRoundTime(granule.time_start);
+      const timeStart = dataCmrRoundTime(granule.time_start);
       if (meta.versions[timeStart]) {
         if (meta.versions[timeStart] !== granule.version) {
           return;
@@ -944,7 +940,7 @@ export function dataResultsVersionFilter() {
 }
 
 export function dataResultsVersionFilterExact(version) {
-  var self = {};
+  const self = {};
 
   self.name = 'versionFilterExact';
 

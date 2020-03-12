@@ -33,9 +33,9 @@ export default class OutsideAlerter extends Component {
    */
   handleClickOutside(event) {
     if (
-      this.wrapperRef &&
-      !this.wrapperRef.contains(event.target) &&
-      !this.props.disabled
+      this.wrapperRef
+      && !this.wrapperRef.contains(event.target)
+      && !this.props.disabled
     ) {
       this.props.onClick();
     }
@@ -46,10 +46,10 @@ export default class OutsideAlerter extends Component {
   }
 }
 OutsideAlerter.defaultProps = {
-  disabled: false
+  disabled: false,
 };
 OutsideAlerter.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };

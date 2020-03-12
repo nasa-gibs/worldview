@@ -6,7 +6,6 @@ const datepickerHeader = '.datepicker .datepicker-header';
 const TIME_LIMIT = 10000;
 const TODAY = moment(new Date()).format('YYYY-MM-DD');
 const YESTERDAY = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
-const TOMORROW = moment(new Date()).add(1, 'days').format('YYYY-MM-DD');
 
 module.exports = {
   before: c => {

@@ -2,11 +2,11 @@ import {
   SET_FILTER_RANGE,
   CLEAR_VECTORSTYLE,
   SET_VECTORSTYLE,
-  SET_SELECTED_VECTORS
+  SET_SELECTED_VECTORS,
 } from './constants';
 import {
   setRange as setRangeSelector,
-  setStyleFunction
+  setStyleFunction,
 } from './selectors';
 
 /**
@@ -23,15 +23,15 @@ export function setFilterRange(layerId, props, index, groupName) {
       props,
       index,
       state.vectorStyles[groupName],
-      state
+      state,
     );
     dispatch({
       type: SET_FILTER_RANGE,
-      groupName: groupName,
+      groupName,
       activeString: groupName,
       layerId,
       vectorStyles: newActiveVectorStylesObj,
-      props
+      props,
     });
   };
 }
@@ -52,15 +52,15 @@ export function setStyle(layer, vectorStyleId, groupName) {
       vectorStyleId,
       state.vectorStyles.custom,
       null,
-      state
+      state,
     );
     dispatch({
       type: SET_VECTORSTYLE,
       layerId: layer.id,
-      vectorStyleId: vectorStyleId,
-      groupName: groupName,
+      vectorStyleId,
+      groupName,
       activeString: groupName,
-      vectorStyles: newActiveVectorStylesObj
+      vectorStyles: newActiveVectorStylesObj,
     });
   };
 }
@@ -79,15 +79,15 @@ export function clearStyle(layer, vectorStyleId, groupName) {
       vectorStyleId,
       state.vectorStyles.custom,
       null,
-      state
+      state,
     );
     dispatch({
       type: CLEAR_VECTORSTYLE,
       layerId: layer.id,
-      vectorStyleId: vectorStyleId,
-      groupName: groupName,
+      vectorStyleId,
+      groupName,
       activeString: groupName,
-      vectorStyles: newActiveVectorStylesObj
+      vectorStyles: newActiveVectorStylesObj,
     });
   };
 }
@@ -99,6 +99,6 @@ export function clearStyle(layer, vectorStyleId, groupName) {
 export function selectVectorFeatures(payload) {
   return {
     type: SET_SELECTED_VECTORS,
-    payload
+    payload,
   };
 }

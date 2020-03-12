@@ -4,11 +4,11 @@ import update from 'immutability-helper';
 export function getProjInitialState(config) {
   const selected = lodashGet(
     config,
-    `projections.${config.defaults.projection}`
+    `projections.${config.defaults.projection}`,
   );
   return {
     id: selected ? selected.id : 'geographic',
-    selected: selected || {}
+    selected: selected || {},
   };
 }
 export function parseProjection(str, config) {
@@ -29,7 +29,7 @@ export function mapLocationToProjState(parameters, stateFromLocation, state) {
     const selected = lodashGet(state, `config.projections.${projId}`);
     if (selected) {
       stateFromLocation = update(stateFromLocation, {
-        proj: { selected: { $set: selected } }
+        proj: { selected: { $set: selected } },
       });
     }
   } else if (parameters.switch) {
@@ -39,13 +39,13 @@ export function mapLocationToProjState(parameters, stateFromLocation, state) {
       const newProjState = { id, selected };
 
       stateFromLocation = update(stateFromLocation, {
-        proj: { $set: newProjState }
+        proj: { $set: newProjState },
       });
     }
   } else {
     const selected = lodashGet(state, 'config.projections.geographic');
     stateFromLocation = update(stateFromLocation, {
-      proj: { selected: { $set: selected } }
+      proj: { selected: { $set: selected } },
     });
   }
   return stateFromLocation;

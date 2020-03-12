@@ -1,6 +1,6 @@
 import {
   MultiLineString as OlGeomMultiLineString,
-  Polygon as OlGeomPolygon
+  Polygon as OlGeomPolygon,
 } from 'ol/geom';
 import geographiclib from 'geographiclib';
 
@@ -32,7 +32,7 @@ export function transformLineStringArc(geom, projection) {
     }
   });
   return new OlGeomMultiLineString([coords]).transform(geographicProj, projection);
-};
+}
 
 /**
  * Transforms a Polygon into one with addiitonal points on each edge to account for
@@ -49,7 +49,7 @@ export function transformPolygonArc(geom, projection) {
       polyCoords[i][1],
       polyCoords[i][0],
       polyCoords[i + 1][1],
-      polyCoords[i + 1][0]
+      polyCoords[i + 1][0],
     );
     const n = Math.ceil(line.s13 / distance);
     for (let j = 0; j <= n; ++j) {
@@ -57,9 +57,9 @@ export function transformPolygonArc(geom, projection) {
       const r = line.Position(s, geographiclib.Geodesic.LONG_UNROLL);
       coords.push([r.lon2, r.lat2]);
     }
-  };
+  }
   return new OlGeomPolygon([coords]).transform(geographicProj, projection);
-};
+}
 
 /**
    *
@@ -80,7 +80,7 @@ export function getFormattedLength(line, projection, unitOfMeasure) {
       ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
       : `${roundAndLocale(imperialLength)} ft`;
   }
-};
+}
 
 /**
    *
@@ -101,7 +101,7 @@ export function getFormattedArea(polygon, projection, unitOfMeasure) {
       ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
       : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
   }
-};
+}
 
 /**
  * Calculate area of a polygon with GeographicLib library
@@ -112,7 +112,7 @@ export function getGeographicLibArea(polygon) {
   const coordinates = polygon.getCoordinates()[0];
   if (coordinates.length < 3) return 0;
   const geoPoly = geod.Polygon(false);
-  coordinates.forEach(coord => {
+  coordinates.forEach((coord) => {
     // flip lat/lon position
     geoPoly.AddPoint(coord[1], coord[0]);
   });
@@ -142,5 +142,5 @@ export function getGeographicLibDistance(line) {
  */
 export function roundAndLocale(measurement, factor) {
   factor = factor || 1;
-  return (Math.round(measurement / factor * 100) / 100).toLocaleString();
-};
+  return (Math.round((measurement / factor) * 100) / 100).toLocaleString();
+}

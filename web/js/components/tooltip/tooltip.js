@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,19 +6,19 @@ class Tooltip extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hovered: false
+      hovered: false,
     };
   }
 
   mouseOver() {
     this.setState({
-      hovered: true
+      hovered: true,
     });
   }
 
   mouseOut() {
     this.setState({
-      hovered: false
+      hovered: false,
     });
   }
 
@@ -38,17 +39,16 @@ class Tooltip extends React.Component {
           style={this.state.hovered ? { visibility: 'visible' } : {}}
         >
           <ul>
-            {this.props.dataArray.map((dataEl, i) => {
-              return (
-                <li
-                  key={'tooltip-' + dataEl + '-' + i}
-                  id={dataEl}
-                  onClick={this.onClick.bind(this, dataEl)}
-                >
-                  {dataEl}
-                </li>
-              );
-            })}
+            {this.props.dataArray.map((dataEl, i) => (
+              <li
+                /* eslint react/no-array-index-key: 1 */
+                key={`tooltip-${dataEl}-${i}`}
+                id={dataEl}
+                onClick={this.onClick.bind(this, dataEl)}
+              >
+                {dataEl}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -59,7 +59,7 @@ class Tooltip extends React.Component {
 Tooltip.propTypes = {
   dataArray: PropTypes.array.isRequired,
   text: PropTypes.string.isRequired,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default Tooltip;

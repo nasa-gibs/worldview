@@ -9,7 +9,7 @@ let isMouseHolding = false;
 // left/right arrow intervals
 const intervals = {
   left: 0,
-  right: 0
+  right: 0,
 };
 class DateChangeArrows extends PureComponent {
   /**
@@ -18,12 +18,12 @@ class DateChangeArrows extends PureComponent {
   */
   leftArrowDown = () => {
     this.props.leftArrowDown();
-    mouseHoldCheckTimer = setTimeout(function() {
+    mouseHoldCheckTimer = setTimeout(() => {
       mouseHoldCheckTimer = null;
       isMouseHolding = true;
       // set interval for holding arrow down
       intervals.left = setInterval(this.props.leftArrowDown, ANIMATION_DELAY);
-    }.bind(this), CLICK_TIMEOUT_DELAY);
+    }, CLICK_TIMEOUT_DELAY);
   }
 
   /**
@@ -32,12 +32,12 @@ class DateChangeArrows extends PureComponent {
   */
   rightArrowDown = () => {
     this.props.rightArrowDown();
-    mouseHoldCheckTimer = setTimeout(function() {
+    mouseHoldCheckTimer = setTimeout(() => {
       mouseHoldCheckTimer = null;
       isMouseHolding = true;
       // set interval for holding arrow down
       intervals.right = setInterval(this.props.rightArrowDown, ANIMATION_DELAY);
-    }.bind(this), CLICK_TIMEOUT_DELAY);
+    }, CLICK_TIMEOUT_DELAY);
   }
 
   /**
@@ -76,7 +76,7 @@ class DateChangeArrows extends PureComponent {
   render() {
     const {
       leftArrowDisabled,
-      rightArrowDisabled
+      rightArrowDisabled,
     } = this.props;
     return (
       <div>
@@ -124,7 +124,7 @@ DateChangeArrows.propTypes = {
   leftArrowUp: PropTypes.func,
   rightArrowDisabled: PropTypes.bool,
   rightArrowDown: PropTypes.func,
-  rightArrowUp: PropTypes.func
+  rightArrowUp: PropTypes.func,
 };
 
 export default DateChangeArrows;

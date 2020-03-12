@@ -42,15 +42,18 @@ class LayerList extends React.Component {
     const {
       filteredRows,
       selectedLayer,
-      showMetadataForLayer
+      showMetadataForLayer,
     } = this.props;
-    const layer = filteredRows.find(l => l.id === layerId);
+    const layer = filteredRows.find((l) => l.id === layerId);
 
+    // No result found, clear the metadata detail view by passing null
     if (!layerId) {
       showMetadataForLayer(null);
       return;
     }
-    if (selectedLayer && selectedLayer.id === layerId) {
+
+    // Single result, auto selected, and we have the metadata for it already
+    if (selectedLayer && selectedLayer.id === layerId && layer.metadata) {
       return;
     }
 
@@ -58,8 +61,8 @@ class LayerList extends React.Component {
       const errorMessage = '<p>There was an error loading layer metadata.</p>';
       const uri = `config/metadata/layers/${layer.description}.html`;
       fetch(uri)
-        .then(res => (res.ok ? res.text() : errorMessage))
-        .then(body => {
+        .then((res) => (res.ok ? res.text() : errorMessage))
+        .then((body) => {
           // Check that we have a metadata html snippet, rather than a fully
           // formed HTML file. Also avoid executing any script or style tags.
           const isMetadataSnippet = !body.match(/<(head|body|html|style|script)[^>]*>/i);
@@ -88,40 +91,43 @@ class LayerList extends React.Component {
       categoryConfig,
       setSourceIndex,
       selectedDate,
-      selectedMeasurementSourceIndex
+      selectedMeasurementSourceIndex,
     } = this.props;
 
     const categoryToUse = category || categoryConfig.All;
     return (
-      <div id={categoryToUse.id + '-list'}>
-        {categoryToUse.measurements.map((measurement, index) => {
-          const current = measurementConfig[measurement];
-          const isSelected = selectedMeasurement === current.id;
-          if (hasMeasurementSource(current)) {
-            return (
-              <CategoryLayerRow
-                key={current.id}
-                id={current.id}
-                index={index}
-                activeLayers={activeLayers}
-                category={categoryToUse}
-                measurement={current}
-                measurementConfig={measurementConfig}
-                layerConfig={layerConfig}
-                hasMeasurementSetting={hasMeasurementSetting}
-                addLayer={addLayer}
-                removeLayer={removeLayer}
-                projection={selectedProjection}
-                isSelected={isSelected}
-                selectedDate={selectedDate}
-                isMobile={isMobile}
-                updateSelectedMeasurement={updateSelectedMeasurement}
-                setSourceIndex={setSourceIndex}
-                selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
-              />
-            );
-          }
-        })}
+      <div id={`${categoryToUse.id}-list`}>
+        {
+          // eslint-disable-next-line array-callback-return
+          categoryToUse.measurements.map((measurement, index) => {
+            const current = measurementConfig[measurement];
+            const isSelected = selectedMeasurement === current.id;
+            if (hasMeasurementSource(current)) {
+              return (
+                <CategoryLayerRow
+                  key={current.id}
+                  id={current.id}
+                  index={index}
+                  activeLayers={activeLayers}
+                  category={categoryToUse}
+                  measurement={current}
+                  measurementConfig={measurementConfig}
+                  layerConfig={layerConfig}
+                  hasMeasurementSetting={hasMeasurementSetting}
+                  addLayer={addLayer}
+                  removeLayer={removeLayer}
+                  projection={selectedProjection}
+                  isSelected={isSelected}
+                  selectedDate={selectedDate}
+                  isMobile={isMobile}
+                  updateSelectedMeasurement={updateSelectedMeasurement}
+                  setSourceIndex={setSourceIndex}
+                  selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
+                />
+              );
+            }
+          })
+        }
       </div>
     );
   }
@@ -132,12 +138,12 @@ class LayerList extends React.Component {
       removeLayer,
       selectedLayer,
       activeLayers,
-      isMobile
+      isMobile,
     } = this.props;
 
     return (
-      filteredRows.map(layer => {
-        const isEnabled = activeLayers.some(l => l.id === layer.id);
+      filteredRows.map((layer) => {
+        const isEnabled = activeLayers.some((l) => l.id === layer.id);
         const isMetadataShowing = selectedLayer && layer.id === selectedLayer.id;
         return (
           <SearchLayerRow
@@ -148,8 +154,8 @@ class LayerList extends React.Component {
             onState={addLayer}
             offState={removeLayer}
             isMobile={isMobile}
-            showLayerMetadata={id => this.showLayerMetadata(id)}
-            toggleDateRangesExpansion={id => this.toggleDateRangesExpansion(id)}
+            showLayerMetadata={(id) => this.showLayerMetadata(id)}
+            toggleDateRangesExpansion={(id) => this.toggleDateRangesExpansion(id)}
           />
         );
       })
@@ -168,15 +174,13 @@ class LayerList extends React.Component {
   }
 }
 LayerList.defaultProps = {
-  listType: 'search'
+  listType: 'search',
 };
 LayerList.propTypes = {
   activeLayers: PropTypes.array,
-  activeMeasurementIndex: PropTypes.number,
   addLayer: PropTypes.func,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
-  currentMeasureSource: PropTypes.object,
   filteredRows: PropTypes.array,
   hasMeasurementSetting: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
@@ -192,7 +196,7 @@ LayerList.propTypes = {
   selectedProjection: PropTypes.string,
   setSourceIndex: PropTypes.func,
   showMetadataForLayer: PropTypes.func,
-  updateSelectedMeasurement: PropTypes.func
+  updateSelectedMeasurement: PropTypes.func,
 };
 
 export default LayerList;

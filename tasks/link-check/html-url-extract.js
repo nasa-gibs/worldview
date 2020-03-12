@@ -6,8 +6,8 @@ const fs = require('fs');
 const walk = (dir) => {
   let results = [];
   const list = fs.readdirSync(dir);
-  list.forEach(function(file) {
-    file = dir + '/' + file;
+  list.forEach((file) => {
+    file = `${dir}/${file}`;
     const stat = fs.statSync(file);
     if (stat && stat.isDirectory()) {
       /* Recurse into a subdirectory */
@@ -34,7 +34,7 @@ const getUrls = (htmlArray) => {
 
     // create url object:
     // { 'AIRS - The AIRS instrument suite physical retrievals': 'http://airs.jpl.nasa.gov/data/physical_retrievals' }
-    $(links).each(function(i, link) {
+    $(links).each((i, link) => {
       const linkRel = $(link).text() || 'EMPTY';
       const linkHref = $(link).attr('href');
 
@@ -50,7 +50,7 @@ const getUrls = (htmlArray) => {
 // get URLS from HTML files
 // scraped URLs are saved in an array of objects with a key value pair of link text and href:
 // 'Wildfire MB-CE042, Manitoba, Canada': 'https://eonet.sci.gsfc.nasa.gov/api/v2.1/events/EONET_3518'
-const initExtractor = async () => {
+const initExtractor = async() => {
   // any html file with a url will be scraped and added
   const htmlFiles = await walk('./build/options');
   const htmlUrls = await getUrls(htmlFiles);
