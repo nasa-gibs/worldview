@@ -267,10 +267,9 @@ class LayerSettings extends React.Component {
       layer,
       palettedAllowed,
     } = this.props;
-    renderCustomizations =
-        customPalettesIsActive && palettedAllowed && layer.palette
-          ? this.renderCustomPalettes()
-          : '';
+    renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
+      ? this.renderCustomPalettes()
+      : '';
 
     if (!layer.id) return '';
     return (

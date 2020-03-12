@@ -926,7 +926,7 @@ export function mapui(models, config, store, ui) {
         maxResolution: proj.resolutions[0],
         enableRotation: true,
         extent: isGeographic ? [-250, -90, 250, 90] : proj.maxExtent,
-        constrainOnlyCenter: true
+        constrainOnlyCenter: true,
       }),
       target: id,
       renderer: ['canvas'],

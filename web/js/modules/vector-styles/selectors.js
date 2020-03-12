@@ -13,9 +13,6 @@ import stylefunction from 'ol-mapbox-style/stylefunction';
 import {
   getMinValue, getMaxValue, selectedStyleFunction, getDisabledStyle,
 } from './util';
-import {
-  getLayers,
-} from '../layers/selectors';
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -89,14 +86,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const layerId = def.id;
   let glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'map.ui.selected');
-  const layerState = state.layers;
-  const activeLayerStr = state.compare.activeString;
+  const activeLayerStr = compare.activeString;
   const { selected } = state.vectorStyles;
-  const activeLayers = getLayers(
-    layerState[activeLayerStr],
-    {},
-    state,
-  ).reverse();
   let layerGroups;
   let layerGroup;
   if (def.disabled) {
@@ -116,7 +107,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         }
       }
     }
-    // lodashEach(activeLayers, (def) => {
     if (compare && compare.active) {
       if (layerGroup && layerGroup.getLayers().getArray().length) {
         lodashEach(layerGroup.getLayers().getArray(), (subLayer) => {
@@ -132,7 +122,6 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         }
       });
     }
-    // });
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
   lodashEach(layerArray, (layerInLayerGroup) => {
