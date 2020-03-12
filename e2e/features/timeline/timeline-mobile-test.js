@@ -1,37 +1,42 @@
 const skipTour = require('../../reuseables/skip-tour.js');
+const moment = require('moment');
 const mobileDatePickerSelectBtn = '#date-selector-main .mobile-date-picker-select-btn';
 const nextDayArrowContainer = '#right-arrow-group';
 const datepickerHeader = '.datepicker .datepicker-header';
 const TIME_LIMIT = 10000;
+const TODAY = moment(new Date()).format('YYYY-MM-DD');
+const YESTERDAY = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+const TOMORROW = moment(new Date()).add(1, 'days').format('YYYY-MM-DD');
 
 module.exports = {
   before: c => {
     skipTour.loadAndSkipTour(c, TIME_LIMIT);
-    c.url(c.globals.url + '?now=2013-03-15T0');
+    c.url(c.globals.url + '?now=' + TODAY);
     c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
   },
   'date.mob.init.2a: Before 3:00 UTC: load yesterdays date': c => {
     c.waitForElementVisible(mobileDatePickerSelectBtn, TIME_LIMIT, e => {
-      c.assert.containsText(mobileDatePickerSelectBtn, '2013-03-14');
+      c.assert.containsText(mobileDatePickerSelectBtn, YESTERDAY);
     });
   },
   'date.mob.init.2b: Before 3:00 UTC: right button is not disabled': c => {
     c.expect.element(nextDayArrowContainer).to.be.present;
     c.expect.element(nextDayArrowContainer + '.button-disabled').to.not.be.present;
     c.click(nextDayArrowContainer);
-    c.waitForElementVisible(nextDayArrowContainer + '.button-disabled', TIME_LIMIT);
+    c.waitForElementVisible(nextDayArrowContainer, TIME_LIMIT);
   },
   'date.mob.init.3a: After 3:00 UTC: load todays date': c => {
-    c.url(c.globals.url + '?now=2013-03-15T4');
+    c.url(c.globals.url + '?now=' + TODAY + 'T4');
     c.waitForElementVisible(mobileDatePickerSelectBtn, TIME_LIMIT, e => {
-      c.assert.containsText(mobileDatePickerSelectBtn, '2013-03-15');
+      c.assert.containsText(mobileDatePickerSelectBtn, TODAY);
     });
   },
   'date.mob.init.3b:After 3:00 UTC: right button is  disabled': c => {
     c.expect.element(nextDayArrowContainer).to.be.present;
+    c.click(nextDayArrowContainer);
     c.expect.element(nextDayArrowContainer + '.button-disabled').to.be.present;
   },
-  'date.mob.range.1: Date label should show 2013-07-20': c => {
+  'date.mob.range.1: Date label should show 2013-03-15': c => {
     c.url(c.globals.url + '?now=2013-03-15T12');
     c.waitForElementVisible(mobileDatePickerSelectBtn, TIME_LIMIT, e => {
       c.assert.containsText(mobileDatePickerSelectBtn, '2013-03-15');

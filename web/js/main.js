@@ -67,10 +67,15 @@ window.onload = () => {
         ? new Date((config.pageLoadTime).setUTCDate(config.pageLoadTime.getUTCDate() - 1))
         : config.pageLoadTime;
 
+      config.todaysDate = new Date().getUTCHours() < 3
+        ? new Date((new Date()).setUTCDate(new Date().getUTCDate() - 1))
+        : new Date();
+
       config.palettes = {
         rendered: {},
         custom: {}
       };
+
       elapsed('Config loaded', config.now, parameters);
       // Determine which layers need to be preloaded
       let layers = [];

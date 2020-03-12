@@ -161,7 +161,6 @@ const getParameters = function(config, parameters) {
           const appNow = get(state, 'date.appNow');
           const appNowString = util.toISOStringSeconds(appNow);
           const initialDateString = util.toISOStringSeconds(initialDate);
-
           return !compareIsActive && !isCompareA
             ? util.toISOStringSeconds(dateB) === appNowString
               ? undefined

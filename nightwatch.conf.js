@@ -1,7 +1,7 @@
 const seleniumServer = require('selenium-server-standalone-jar');
 const chromedriver = require('chromedriver');
 const geckodriver = require('geckodriver');
-const files = './e2e/features';
+const files = './e2e/features/timeline/timeline-mobile-test.js';
 module.exports = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
@@ -34,7 +34,7 @@ module.exports = {
           prefs: { 'profile.managed_default_content_settings.notifications': 1 }
         }
       }
-    },
+    }/*
     chromeHeadless: {
       desiredCapabilities: {
         browserName: 'chrome',
@@ -59,6 +59,6 @@ module.exports = {
           args: ['--headless']
         }
       }
-    }
+    } */
   }
 };
