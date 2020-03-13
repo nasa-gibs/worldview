@@ -25,7 +25,7 @@ class DistractionFreeTimeUI extends PureComponent {
     // display date as '2000-10-28' for default or '2000-10-28 20:28Z' for subdaily
     let displayDate;
     if (hasSubdailyLayers) {
-      displayDate = dateFirstHalfYMD.join(' ') + ' ' + dateSecondHalfHM;
+      displayDate = `${dateFirstHalfYMD.join(' ')} ${dateSecondHalfHM}`;
     } else {
       displayDate = dateFirstHalfYMD.join(' ');
     }
@@ -34,7 +34,7 @@ class DistractionFreeTimeUI extends PureComponent {
       <div
         className="distraction-free-date"
         style={{
-          opacity: isHoverOverDistractionFreeTimeUI ? '0' : '1'
+          opacity: isHoverOverDistractionFreeTimeUI ? '0' : '1',
         }}
         onMouseOver={this.handleMouseOver}
       >
@@ -48,7 +48,7 @@ DistractionFreeTimeUI.propTypes = {
   date: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   hoverOverDistractionFreeTimeUI: PropTypes.func,
-  isHoverOverDistractionFreeTimeUI: PropTypes.bool
+  isHoverOverDistractionFreeTimeUI: PropTypes.bool,
 };
 
 export default DistractionFreeTimeUI;

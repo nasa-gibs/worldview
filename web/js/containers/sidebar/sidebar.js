@@ -39,7 +39,7 @@ const resetWorldview = function(e, isDistractionFreeModeActive) {
   e.preventDefault();
   if (!isDistractionFreeModeActive && window.location.search === '') return; // Nothing to reset
   const msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
-  if (confirm(msg)) {
+  if (window.confirm(msg)) {
     googleTagManager.pushEvent({
       event: 'logo_page_reset',
     });

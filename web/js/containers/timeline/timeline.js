@@ -570,8 +570,9 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   toggleHideTimeline = () => {
+    const { timelineHidden } = this.state;
     this.setState({
-      timelineHidden: !this.state.timelineHidden,
+      timelineHidden: !timelineHidden,
     });
   };
 
@@ -585,9 +586,10 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   updateAnimationDateAndLocation = (startDate, endDate, startLocation, endLocation, isDragging) => {
+    const { animationStartLocation, animationEndLocation } = this.state;
     this.setState({
-      animationStartLocation: startLocation || this.state.animationStartLocation,
-      animationEndLocation: endLocation || this.state.animationEndLocation,
+      animationStartLocation: startLocation || animationStartLocation,
+      animationEndLocation: endLocation || animationEndLocation,
       animationStartLocationDate: startDate,
       animationEndLocationDate: endDate,
       isAnimationDraggerDragging: isDragging,
@@ -671,31 +673,34 @@ class Timeline extends React.Component {
   * @desc update state dragger position and if new date, change store date
   * @param {String} newDate - new dragger date
   * @param {String} draggerSelected
-  * @param {Number} draggerPosition
-  * @param {Boolean} draggerVisible
-  * @param {Boolean} otherDraggerVisible
-  * @param {Boolean} hasMoved
+  * @param {Number} draggerPositionArg
+  * @param {Boolean} draggerVisibleArg
+  * @param {Boolean} otherDraggerVisibleArg
+  * @param {Boolean} hasMovedArg
   * @returns {void}
   */
-  updateDraggerDatePosition = (newDate, draggerSelected, draggerPosition, draggerVisible, otherDraggerVisible, hasMoved) => {
+  updateDraggerDatePosition = (newDate, draggerSelected, draggerPositionArg, draggerVisibleArg, otherDraggerVisibleArg, hasMovedArg) => {
+    const {
+      draggerPosition, draggerPositionB, draggerVisible, draggerVisibleB, draggerTimeState, draggerTimeStateB, hasMoved,
+    } = this.state;
     if (draggerSelected === 'selected') {
       this.setState({
-        draggerPosition: draggerPosition || this.state.draggerPosition,
-        draggerVisible: draggerVisible || this.state.draggerVisible,
-        draggerVisibleB: otherDraggerVisible || this.state.draggerVisibleB,
-        draggerTimeState: newDate || this.state.draggerTimeState,
-        hasMoved: hasMoved || this.state.hasMoved,
+        draggerPosition: draggerPositionArg || draggerPosition,
+        draggerVisible: draggerVisibleArg || draggerVisible,
+        draggerVisibleB: otherDraggerVisibleArg || draggerVisibleB,
+        draggerTimeState: newDate || draggerTimeState,
+        hasMoved: hasMovedArg || hasMoved,
       });
       if (newDate) {
         this.onDateChange(newDate, 'selected');
       }
     } else {
       this.setState({
-        draggerPositionB: draggerPosition || this.state.draggerPositionB,
-        draggerVisible: otherDraggerVisible || this.state.draggerVisible,
-        draggerVisibleB: draggerVisible || this.state.draggerVisibleB,
-        draggerTimeStateB: newDate || this.state.draggerTimeStateB,
-        hasMoved: hasMoved || this.state.hasMoved,
+        draggerPositionB: draggerPositionArg || draggerPositionB,
+        draggerVisible: otherDraggerVisibleArg || draggerVisible,
+        draggerVisibleB: draggerVisibleArg || draggerVisibleB,
+        draggerTimeStateB: newDate || draggerTimeStateB,
+        hasMoved: hasMovedArg || hasMoved,
       });
       if (newDate) {
         this.onDateChange(newDate, 'selectedB');

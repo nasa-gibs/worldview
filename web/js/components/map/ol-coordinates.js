@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
-import Coordinates from './coordinates';
+import { Coordinates } from './coordinates';
 import util from '../../util/util';
 
 export class OlCoordinates extends React.Component {

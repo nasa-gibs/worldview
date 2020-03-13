@@ -1,14 +1,15 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
+
 const TIME_LIMIT = 5000;
 
 module.exports = {
-  before: client => {
+  before: (client) => {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
 
   // verify distraction free mode shortcut hides ui elements
-  'Enabling distraction free mode with shortcut key hides UI elements': client => {
+  'Enabling distraction free mode with shortcut key hides UI elements': (client) => {
     client.pause(300);
     client.sendKeys('body', [client.Keys.SHIFT, 'd', client.Keys.NULL]);
     client.pause(300);
@@ -26,7 +27,7 @@ module.exports = {
   },
 
   // verify turning off distraction free mode shortcut returns hidden ui elements
-  'Disabling distraction free mode with shortcut key returns UI elements': client => {
+  'Disabling distraction free mode with shortcut key returns UI elements': (client) => {
     client.pause(300);
     client.sendKeys('body', [client.Keys.SHIFT, 'd', client.Keys.NULL]);
     client.pause(300);
@@ -43,7 +44,7 @@ module.exports = {
     client.waitForElementPresent('.wv-map-scale-imperial', TIME_LIMIT);
   },
 
-  after: client => {
+  after: (client) => {
     client.end();
-  }
+  },
 };
