@@ -47,6 +47,10 @@
         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
         "VIIRS_SNPP_Clear_Sky_Confidence_Day",
         "VIIRS_SNPP_Clear_Sky_Confidence_Night",
+        "VIIRS_SNPP_Cloud_Optical_Thickness",
+        "VIIRS_SNPP_Cloud_Effective_Radius",
+        "VIIRS_SNPP_Cloud_Top_Height_Day",
+        "VIIRS_SNPP_Cloud_Top_Height_Night",
 
         "GOES-East_ABI_Band2_Red_Visible_1km",
         "GOES-West_ABI_Band2_Red_Visible_1km",

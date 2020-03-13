@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "VIIRS_SNPP_Cloud_Effective_Radius": {
+            "id":       "VIIRS_SNPP_Cloud_Effective_Radius",
+            "title":    "Cloud Effective Radius",
+            "subtitle": "Suomi NPP / VIIRS",
+            "description": "viirs/VIIRS_SNPP_Cloud_Effective_Radius",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "viirs"
+            ],
+            "product":  "CLDPROP_L2_VIIRS_SNPP",
+            "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_Suomi_NPP_Ascending"
+            ]
+        }
+    }
+}
