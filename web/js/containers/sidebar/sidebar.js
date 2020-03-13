@@ -200,11 +200,10 @@ class Sidebar extends React.Component {
             ref={(el) => {
               this.sideBarCase = el;
             }}
-            style={
-              isCollapsed
-                ? { maxHeight: '0' }
-                : { maxHeight: `${screenHeight}px` }
-            }
+            style={{
+              maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
+              display: isDistractionFreeModeActive ? 'none' : 'block',
+            }}
             onWheel={wheelCallBack}
           >
             {!isCollapsed && (
