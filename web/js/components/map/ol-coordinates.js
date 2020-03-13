@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { transform } from 'ol/proj';
 import Coordinates from './coordinates';
 import util from '../../util/util';
-import { transform } from 'ol/proj';
 
 export class OlCoordinates extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export class OlCoordinates extends React.Component {
       latitude: null,
       longitude: null,
       crs: null,
-      format: null
+      format: null,
     };
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
@@ -57,7 +57,7 @@ export class OlCoordinates extends React.Component {
       format: util.getCoordinateFormat(),
       latitude: pcoord[1],
       longitude: pcoord[0],
-      crs
+      crs,
     });
   }
 
@@ -89,7 +89,7 @@ export class OlCoordinates extends React.Component {
     }
 
     return (
-      <div id='ol-coords-case'>
+      <div id="ol-coords-case">
         <Coordinates
           format={this.state.format}
           latitude={this.state.latitude}
@@ -103,5 +103,5 @@ export class OlCoordinates extends React.Component {
 }
 
 OlCoordinates.propTypes = {
-  mouseEvents: PropTypes.object.isRequired
+  mouseEvents: PropTypes.object.isRequired,
 };

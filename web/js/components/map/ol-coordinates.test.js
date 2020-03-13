@@ -18,7 +18,7 @@ beforeEach(() => {
   );
   map = {
     getEventPixel: jest.fn(),
-    getCoordinateFromPixel: () => [0, 0]
+    getCoordinateFromPixel: () => [0, 0],
   };
 });
 

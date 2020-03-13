@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+// eslint-disable-next-line import/no-unresolved
+import googleTagManager from 'googleTagManager';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRuler } from '@fortawesome/free-solid-svg-icons';
 import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
-import googleTagManager from 'googleTagManager';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRuler } from '@fortawesome/free-solid-svg-icons';
 
 const MEASURE_MENU_PROPS = {
   headerText: null,
@@ -17,7 +18,7 @@ const MEASURE_MENU_PROPS = {
   backdrop: false,
   bodyComponent: MeasureMenu,
   touchDevice: false,
-  wrapClassName: 'toolbar_modal_outer'
+  wrapClassName: 'toolbar_modal_outer',
 };
 
 const mobileHelpMsg = 'Tap to add a point. Double-tap to complete.';
@@ -28,7 +29,7 @@ class MeasureButton extends React.Component {
     super(props);
     this.state = {
       showAlert: true,
-      isTouchDevice: false
+      isTouchDevice: false,
     };
     this.onButtonClick = this.onButtonClick.bind(this);
     this.dismissAlert = this.dismissAlert.bind(this);
@@ -43,10 +44,10 @@ class MeasureButton extends React.Component {
     openModal('MEASURE_MENU', MEASURE_MENU_PROPS);
     this.setState({
       isTouchDevice,
-      showAlert: true
+      showAlert: true,
     });
     googleTagManager.pushEvent({
-      event: 'measure_tool_activated'
+      event: 'measure_tool_activated',
     });
   }
 
@@ -56,19 +57,22 @@ class MeasureButton extends React.Component {
 
   render() {
     const { isActive, isDistractionFreeModeActive } = this.props;
-    const showAlert = isActive && this.state.showAlert;
-    const message = this.state.isTouchDevice ? mobileHelpMsg : helpMsg;
+    const { showAlert, isTouchDevice } = this.state;
+    const shouldShowAlert = isActive && showAlert;
+    const message = isTouchDevice ? mobileHelpMsg : helpMsg;
 
     return (
       <>
-        {showAlert && <AlertUtil
-          id={'measurement-alert'}
-          isOpen={true}
-          iconClassName='faRuler'
-          title='Measure Tool'
+        {shouldShowAlert && (
+        <AlertUtil
+          id="measurement-alert"
+          isOpen
+          iconClassName="faRuler"
+          title="Measure Tool"
           message={message}
           onDismiss={this.dismissAlert}
-        />}
+        />
+        )}
 
         <Button
           style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}
@@ -78,32 +82,30 @@ class MeasureButton extends React.Component {
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
         >
-          <FontAwesomeIcon icon={faRuler} size='2x' />
+          <FontAwesomeIcon icon={faRuler} size="2x" />
         </Button>
       </>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    isActive: state.measure.isActive,
-    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive
-  };
-};
-const mapDispatchToProps = dispatch => ({
+const mapStateToProps = (state, ownProps) => ({
+  isActive: state.measure.isActive,
+  isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
+});
+const mapDispatchToProps = (dispatch) => ({
   openModal: (key, customParams) => {
     dispatch(openCustomContent(key, customParams));
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MeasureButton);
 
 MeasureButton.propTypes = {
   isActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
 };

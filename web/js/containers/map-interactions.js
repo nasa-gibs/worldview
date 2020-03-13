@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { groupBy as lodashGroupBy, debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import { OlCoordinates } from '../components/map/ol-coordinates';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures } from '../modules/vector-styles/actions';
-import { groupBy as lodashGroupBy, debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import { changeCursor } from '../modules/map/actions';
 import { isFromActiveCompareRegion } from '../modules/compare/util';
 
@@ -24,7 +24,9 @@ export class MapInteractions extends React.Component {
   }
 
   singleClick(e, map) {
-    const { lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject, measureIsActive, isMobile } = this.props;
+    const {
+      lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject, measureIsActive, isMobile,
+    } = this.props;
     if (measureIsActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
@@ -33,7 +35,7 @@ export class MapInteractions extends React.Component {
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
-    const dialogId = isVectorModalOpen ? modalState.id : 'vector_dialog' + pixels[0] + pixels[1];
+    const dialogId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
 
     if (metaArray.length) {
       openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
@@ -49,7 +51,9 @@ export class MapInteractions extends React.Component {
   mouseMove(event, map, crs) {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
-    const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj } = this.props;
+    const {
+      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj,
+    } = this.props;
     const [lon, lat] = coord;
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
@@ -57,11 +61,11 @@ export class MapInteractions extends React.Component {
     const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
-      map.forEachFeatureAtPixel(pixels, function(feature, layer) {
+      map.forEachFeatureAtPixel(pixels, (feature, layer) => {
         const def = lodashGet(layer, 'wv.def');
         if (!def) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
-        const isRenderedFeature = isWrapped ? (lon > -250 || lon < 250 || lat > -90 || lat < 90) : true;
+        const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
         if (isRenderedFeature && isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
@@ -76,27 +80,28 @@ export class MapInteractions extends React.Component {
     const {
       isDistractionFreeModeActive,
       isShowingClick,
-      mouseEvents
+      mouseEvents,
     } = this.props;
     let mapClasses = isShowingClick
-      ? 'wv-map' + ' cursor-pointer'
+      ? 'wv-map cursor-pointer'
       : 'wv-map';
     mapClasses = isDistractionFreeModeActive
-      ? mapClasses + ' distraction-free-active'
+      ? `${mapClasses} distraction-free-active`
       : mapClasses;
 
     return (
-      <React.Fragment>
+      <>
         <div id="wv-map" className={mapClasses} />
-        {!isDistractionFreeModeActive && <OlCoordinates
+        {!isDistractionFreeModeActive && (
+        <OlCoordinates
           mouseEvents={mouseEvents}
         />
-        }
-      </React.Fragment>
+        )}
+      </>
     );
   }
 }
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   selectVectorFeatures: (features) => {
     setTimeout(() => {
       dispatch(selectVectorFeatures(features));
@@ -133,13 +138,14 @@ const mapDispatchToProps = dispatch => ({
           setTimeout(() => {
             dispatch(selectVectorFeatures({}));
           }, 1);
-        }
-      }
-    ));
-  }
+        },
+      }));
+  },
 });
 function mapStateToProps(state) {
-  const { modal, map, measure, vectorStyles, browser, compare, proj, ui } = state;
+  const {
+    modal, map, measure, vectorStyles, browser, compare, proj, ui,
+  } = state;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
@@ -155,7 +161,7 @@ function mapStateToProps(state) {
     isMobile: browser.lessThan.medium,
     compareState: compare,
     swipeOffset,
-    proj
+    proj,
   };
 }
 MapInteractions.propTypes = {
@@ -173,9 +179,9 @@ MapInteractions.propTypes = {
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
   proj: PropTypes.object,
-  swipeOffset: PropTypes.number
+  swipeOffset: PropTypes.number,
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MapInteractions);

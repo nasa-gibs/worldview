@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
-class CollapsedButton extends React.Component {
+class CollapsedButton extends PureComponent {
   render() {
     const {
       isMobile,
       isDistractionFreeModeActive,
       isCollapsed,
       numberOfLayers,
-      onclick
+      onclick,
     } = this.props;
 
     return (
@@ -29,16 +29,17 @@ class CollapsedButton extends React.Component {
           <FontAwesomeIcon icon={faLayerGroup} />
           {isMobile
             ? (
-              <span className='layer-count mobile'>
+              <span className="layer-count mobile">
                 {numberOfLayers.toString()}
               </span>
             )
             : (
-              <span className='layer-count '>
-                {numberOfLayers.toString()} Layers
+              <span className="layer-count ">
+                {numberOfLayers.toString()}
+                {' '}
+                Layers
               </span>
-            )
-          }
+            )}
         </a>
       </div>
     );
@@ -49,7 +50,7 @@ CollapsedButton.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
-  onclick: PropTypes.func
+  onclick: PropTypes.func,
 };
 
 export default CollapsedButton;

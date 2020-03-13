@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { createResponsiveStateReducer } from 'redux-responsive';
+import { get as lodashGet, assign as lodashAssign } from 'lodash';
 import { modalReducer, modalAboutPage } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
@@ -9,38 +10,37 @@ import {
   requestedEventSources,
   requestedEventCategories,
   eventsReducer,
-  eventRequestResponse
+  eventRequestResponse,
 } from './natural-events/reducers';
 import tourReducer from './tour/reducers';
 import mapReducer from './map/reducers';
 import {
   notificationsRequest,
-  notificationsReducer
+  notificationsReducer,
 } from './notifications/reducers';
 import { getProjInitialState } from './projection/util';
 import { compareReducer } from './compare/reducers';
 import sidebarReducer from './sidebar/reducers';
 import {
   layerReducer,
-  getInitialState as getLayersInitialState
+  getInitialState as getLayersInitialState,
 } from './layers/reducers';
 import {
   dateReducer,
-  getInitialState as getDateInitialState
+  getInitialState as getDateInitialState,
 } from './date/reducers';
 import { animationReducer } from './animation/reducers';
 import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
 import {
   vectorStyleReducer,
-  getInitialVectorStyleState
+  getInitialVectorStyleState,
 } from './vector-styles/reducers';
 import dataDownloadReducer from './data/reducers';
-import { get as lodashGet, assign as lodashAssign } from 'lodash';
 import { imageDownloadReducer } from './image-download/reducers';
 import measureReducer from './measure/reducers';
 import {
   productPickerReducer,
-  getInitialState as getProductPickerInitialState
+  getInitialState as getProductPickerInitialState,
 } from './product-picker/reducers';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
@@ -60,14 +60,14 @@ const responsiveStateReducer = createResponsiveStateReducer(
     small: 740,
     medium: 1000,
     large: 1280,
-    extraLarge: 1400
+    extraLarge: 1400,
   },
   {
     extraFields: () => ({
       screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight
-    })
-  }
+      screenHeight: window.innerHeight,
+    }),
+  },
 );
 /**
  * Get initial module states based on config
@@ -79,7 +79,7 @@ const responsiveStateReducer = createResponsiveStateReducer(
  */
 export function getInitialState(models, config, parameters) {
   const eventsIgnoreArray = {
-    ignore: lodashGet(config, 'naturalEvents.skip') || []
+    ignore: lodashGet(config, 'naturalEvents.skip') || [],
   };
 
   return {
@@ -94,15 +94,14 @@ export function getInitialState(models, config, parameters) {
     requestedEventCategories: eventRequestResponse(eventsIgnoreArray),
     palettes: getInitialPaletteState(config),
     productPicker: getProductPickerInitialState(config),
-    vectorStyles: getInitialVectorStyleState(config)
+    vectorStyles: getInitialVectorStyleState(config),
   };
 }
 const locationReducer = (state = { key: '' }, action) => {
   if (action.type === LOCATION_POP_ACTION) {
     return lodashAssign({}, state, { key: action.payload.key });
-  } else {
-    return state;
   }
+  return state;
 };
 const defaultReducer = (state = {}) => state;
 const reducers = {
@@ -132,11 +131,11 @@ const reducers = {
   modalAboutPage,
   shortLink,
   notificationsRequest,
-  lastAction: lastAction,
+  lastAction,
   location: locationReducer,
   measure: measureReducer,
   ui: uiReducers,
-  productPicker: productPickerReducer
+  productPicker: productPickerReducer,
 };
 const appReducer = combineReducers(reducers);
 /**

@@ -20,12 +20,12 @@ export function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
       // can get more specific modal.key !== "LAYER_PICKER_COMPONENT"
       dispatch({
         type: ANIMATION_KEY_PRESS_ACTION,
-        keyCode
+        keyCode,
       });
     }
     if (tour.active && keyCode === 27) {
       dispatch({
-        type: TOUR_KEY_PRESS_CLOSE
+        type: TOUR_KEY_PRESS_CLOSE,
       });
     }
     if (!ctrlOrCmdKey && shiftKey && keyCode === 68) {
