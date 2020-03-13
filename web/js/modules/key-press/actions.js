@@ -13,9 +13,11 @@ import { CLOSE as CLOSE_MODAL } from '../modal/constants';
  */
 export function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
   return (dispatch, getState) => {
-    const { modal, animation, tour, ui } = getState();
+    const {
+      modal, animation, tour, ui,
+    } = getState();
     const modalIsOpen = modal.isOpen;
-    const isDistractionFreeModeActive = ui.isDistractionFreeModeActive;
+    const { isDistractionFreeModeActive } = ui;
     if (animation.isActive && !modalIsOpen) {
       // can get more specific modal.key !== "LAYER_PICKER_COMPONENT"
       dispatch({
