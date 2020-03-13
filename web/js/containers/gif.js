@@ -2,22 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from 'react-loader';
 import { connect } from 'react-redux';
-import GifPanel from '../components/animation-widget/gif-panel';
 import GifStream from '@entryline/gifstream';
-import util from '../util/util';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
+import {
+  Progress, Modal, ModalBody, ModalHeader,
+} from 'reactstrap';
+import GifPanel from '../components/animation-widget/gif-panel';
+import util from '../util/util';
 
 import Crop from '../components/util/image-crop';
 import {
   resolutionsGeo,
-  resolutionsPolar
+  resolutionsPolar,
 } from '../modules/image-download/constants';
 import {
   imageUtilCalculateResolution,
-  imageUtilGetCoordsFromPixelValues
+  imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
-import { Progress, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { timeScaleFromNumberKey } from '../modules/date/constants';
 import { GifResults } from '../components/animation-widget/gif-post-creation';
 import { getImageArray } from '../modules/animation/selectors';
@@ -29,17 +31,17 @@ const gifStream = new GifStream();
 class GIF extends Component {
   constructor(props) {
     super(props);
-    const screenHeight = props.screenHeight;
-    const screenWidth = props.screenWidth;
+    const { screenHeight } = props;
+    const { screenWidth } = props;
     const boundaries = props.boundaries || {
       x: screenWidth / 2 - 100,
       y: screenHeight / 2 - 100,
       x2: screenWidth / 2 + 100,
-      y2: screenHeight / 2 + 100
+      y2: screenHeight / 2 + 100,
     };
     const {
       offsetLeft,
-      offsetTop
+      offsetTop,
     } = this.getModalOffsets(boundaries);
     this.state = {
       isDownloaded: false,
@@ -50,10 +52,12 @@ class GIF extends Component {
       downloadedObject: {},
       offsetLeft,
       offsetTop,
-      boundaries
+      boundaries,
     };
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
+    this.createGIF = this.createGIF.bind(this);
+    this.toggleShowDates = this.toggleShowDates.bind(this);
   }
 
   componentDidMount() {
@@ -72,7 +76,7 @@ class GIF extends Component {
       left: state.offsetLeft,
       right: state.offsetRight,
       top: state.offsetTop,
-      maxWidth: 342
+      maxWidth: 342,
     };
   }
 
@@ -87,30 +91,32 @@ class GIF extends Component {
       onClose,
       endDate,
       startDate,
-      numberOfFrames
+      numberOfFrames,
     } = this.props;
     const { boundaries, showDates } = this.state;
-    const { x, y, x2, y2 } = boundaries;
+    const {
+      x, y, x2, y2,
+    } = boundaries;
     const isGeoProjection = proj.id === 'geographic';
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
-      map.ui.selected
+      map.ui.selected,
     );
-    const crs = proj.crs;
+    const { crs } = proj;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
     const resolution = imageUtilCalculateResolution(
       Math.round(map.ui.selected.getView().getZoom()),
       isGeoProjection,
-      proj.resolutions
+      proj.resolutions,
     );
     return (
       <Modal
         backdrop={false}
-        isOpen={true}
-        wrapClassName={'clickable-behind-modal toolbar_modal_outer'}
-        className={'gif-modal dynamic-modal'}
+        isOpen
+        wrapClassName="clickable-behind-modal toolbar_modal_outer"
+        className="gif-modal dynamic-modal"
         style={this.getStyle(this.state)}
         toggle={onClose}
       >
@@ -126,8 +132,8 @@ class GIF extends Component {
             lonlats={lonlats}
             startDate={startDate}
             endDate={endDate}
-            onClick={this.createGIF.bind(this)}
-            onCheck={this.toggleShowDates.bind(this)}
+            onClick={this.createGIF}
+            onCheck={this.toggleShowDates}
             numberOfFrames={numberOfFrames}
           />
 
@@ -142,7 +148,7 @@ class GIF extends Component {
             onClose={onClose}
             coordinates={{
               bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-              topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
+              topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
             }}
             showCoordinates={false}
           />
@@ -161,13 +167,13 @@ class GIF extends Component {
     const { boundaries } = this.state;
     const dimensions = {
       w: boundaries.y2 - boundaries.y,
-      h: boundaries.x2 - boundaries.x
+      h: boundaries.x2 - boundaries.x,
     };
-    var stampWidth;
-    var stampProps;
-    var newImage;
-    var breakPointOne = 300;
-    var stampWidthRatio = 4.889;
+    let stampWidth;
+    let stampProps;
+    let newImage;
+    const breakPointOne = 300;
+    const stampWidthRatio = 4.889;
 
     const build = (stamp, dateStamp, stampHeight) => {
       const imageArray = getImageArray(this.state, this.props, { width, height });
@@ -183,7 +189,7 @@ class GIF extends Component {
           waterMarkHeight: stamp.height,
           waterMark: stampHeight > 20 ? stamp : null,
           waterMarkWidth: stamp.width,
-          fontSize: dateStamp.fontSize + 'px',
+          fontSize: `${dateStamp.fontSize}px`,
           textXCoordinate: dateStamp.x,
           textYCoordinate: dateStamp.y, // date location based on Dimensions
           textAlign: dateStamp.align, // If textXCoordinate is null this takes precedence
@@ -197,13 +203,13 @@ class GIF extends Component {
           text: '',
           stroke: {
             color: '#000',
-            pixels: dateStamp.fontSize * 0.05
+            pixels: dateStamp.fontSize * 0.05,
           },
-          pause: 1
+          pause: 1,
         },
-        obj => {
+        (obj) => {
           this.onGifComplete(obj, width, height);
-        }
+        },
       );
     };
     stampProps = getStampProps(
@@ -212,11 +218,11 @@ class GIF extends Component {
       stampWidth,
       dimensions,
       width,
-      height
+      height,
     );
     newImage = svgToPng(
       'brand/images/wv-logo-w-shadow.svg',
-      stampProps.stampHeight
+      stampProps.stampHeight,
     );
 
     build(newImage, stampProps.dateStamp, stampProps.stampHeight);
@@ -229,14 +235,14 @@ class GIF extends Component {
         isDownloadError: true,
         isDownloading: false,
         progress: 0,
-        downloadedObject: {}
+        downloadedObject: {},
       });
     } else if (obj.cancelled) {
       if (this.mounted) {
         this.setState({
           isDownloading: false,
           progress: 0,
-          downloadedObject: {}
+          downloadedObject: {},
         });
       }
     } else {
@@ -248,21 +254,23 @@ class GIF extends Component {
           blob: obj.blob,
           size: lodashRound((obj.blob.size / 1024) * 0.001, 2),
           width,
-          height
-        }
+          height,
+        },
       });
     }
   }
 
   onGifProgress(val) {
     this.setState({
-      progress: val
+      progress: val,
     });
   }
 
   getModalOffsets(boundaries) {
     const { screenWidth, screenHeight } = this.props;
-    const { x, y, x2, y2 } = boundaries;
+    const {
+      x, y, x2, y2,
+    } = boundaries;
     const width = 342;
     const height = 280;
     const padding = 20;
@@ -284,25 +292,27 @@ class GIF extends Component {
     }
     return {
       offsetLeft: left,
-      offsetTop: top
+      offsetTop: top,
     };
   }
 
   onBoundaryChange(cropBounds) {
     const { onBoundaryChange } = this.props;
-    const { x, y, width, height } = cropBounds;
+    const {
+      x, y, width, height,
+    } = cropBounds;
     const newBoundaries = {
       x,
       y,
       x2: x + width,
-      y2: y + height
+      y2: y + height,
     };
     const { offsetLeft, offsetTop } = this.getModalOffsets(newBoundaries);
     onBoundaryChange(newBoundaries);
     this.setState({
       offsetLeft,
       offsetTop,
-      boundaries: newBoundaries
+      boundaries: newBoundaries,
     });
   }
 
@@ -314,28 +324,28 @@ class GIF extends Component {
       startDate,
       screenHeight,
       screenWidth,
-      onClose
+      onClose,
     } = this.props;
     const {
       isDownloaded,
       isDownloading,
       progress,
       downloadedObject,
-      boundaries
+      boundaries,
     } = this.state;
 
     if (isDownloading) {
       const headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
       return (
         <Modal
-          isOpen={true}
+          isOpen
           toggle={onClose}
           size={progress === 0 ? 'sm' : 'md'}
         >
           <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
           <ModalBody>
             <div style={{ minHeight: 50 }}>
-              <Spinner color={'#fff'} loaded={progress > 0}>
+              <Spinner color="#fff" loaded={progress > 0}>
                 <Progress value={progress} />
               </Spinner>
             </div>
@@ -363,17 +373,23 @@ class GIF extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { browser, proj, animation, map, date, config } = state;
-  const { speed, startDate, endDate, boundaries } = animation;
+  const {
+    browser, proj, animation, map, date, config,
+  } = state;
+  const {
+    speed, startDate, endDate, boundaries,
+  } = animation;
   const { screenWidth, screenHeight } = browser;
-  const { customSelected, interval, customInterval, customDelta } = date;
+  const {
+    customSelected, interval, customInterval, customDelta,
+  } = date;
   const increment = customSelected
     ? `${customDelta} ${timeScaleFromNumberKey[customInterval]}`
     : `1 ${timeScaleFromNumberKey[interval]}`;
   let url = 'http://localhost:3002/api/v1/snapshot';
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
-    util.warn('Redirecting GIF download to: ' + url);
+    util.warn(`Redirecting GIF download to: ${url}`);
   }
   return {
     screenWidth,
@@ -393,28 +409,26 @@ function mapStateToProps(state, ownProps) {
       customSelected
         ? timeScaleFromNumberKey[customInterval]
         : timeScaleFromNumberKey[interval],
-      customSelected ? customDelta : 1
+      customSelected ? customDelta : 1,
     ),
-    getImageArray: (gifComponentProps, gifComponentState, dimensions) => {
-      return getImageArray(
-        gifComponentProps,
-        gifComponentState,
-        dimensions,
-        state
-      );
-    },
-    onClose: ownProps.onClose
+    getImageArray: (gifComponentProps, gifComponentState, dimensions) => getImageArray(
+      gifComponentProps,
+      gifComponentState,
+      dimensions,
+      state,
+    ),
+    onClose: ownProps.onClose,
   };
 }
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onBoundaryChange: (bounds) => {
     dispatch(changeCropBounds(bounds));
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(GIF);
 
 GIF.propTypes = {
@@ -431,5 +445,5 @@ GIF.propTypes = {
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   speed: PropTypes.number,
-  startDate: PropTypes.string
+  startDate: PropTypes.string,
 };

@@ -1,4 +1,9 @@
 import {
+  assign as lodashAssign,
+  orderBy as lodashOrderBy,
+  uniqBy as lodashUniqBy,
+} from 'lodash';
+import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
   REQUEST_CATEGORIES,
@@ -7,28 +12,21 @@ import {
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
-  FINISHED_ANIMATING_TO_EVENT
+  FINISHED_ANIMATING_TO_EVENT,
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
-import {
-  assign as lodashAssign,
-  orderBy as lodashOrderBy,
-  uniqBy as lodashUniqBy
-} from 'lodash';
 
 const sortEvents = function(events) {
-  return events.map(function(e) {
+  return events.map((e) => {
     e.geometries = lodashOrderBy(e.geometries, 'date', 'desc');
     // Discard duplicate geometry dates
-    e.geometries = lodashUniqBy(e.geometries, function(g) {
-      return g.date.split('T')[0];
-    });
+    e.geometries = lodashUniqBy(e.geometries, (g) => g.date.split('T')[0]);
     return e;
   });
 };
 const formatResponse = function(item, ignored) {
   if (item.categories) {
-    var category = Array.isArray(item.categories)
+    const category = Array.isArray(item.categories)
       ? item.categories[0]
       : item.categories;
     // Add slug to categories
@@ -37,19 +35,18 @@ const formatResponse = function(item, ignored) {
       .split(' ')
       .join('-');
     return !ignored.includes(category.title);
-  } else {
-    return !ignored.includes(item.title);
   }
+  return !ignored.includes(item.title);
 };
 
 export const eventsReducerState = {
   selected: {
     id: '',
-    date: null
+    date: null,
   },
   active: false,
   showAll: true,
-  isAnimatingToEvent: false
+  isAnimatingToEvent: false,
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -58,40 +55,40 @@ export function eventsReducer(state = eventsReducerState, action) {
       return lodashAssign({}, state, {
         selected: {
           id: action.id,
-          date: action.date
+          date: action.date,
         },
-        isAnimatingToEvent: true
+        isAnimatingToEvent: true,
       });
 
     case DESELECT_EVENT:
       return lodashAssign({}, state, {
         selected: {
           id: '',
-          date: null
-        }
+          date: null,
+        },
       });
     case SHOW_ALL_EVENTS:
       return lodashAssign({}, state, {
-        showAll: true
+        showAll: true,
       });
     case TOGGLE_SHOW_ALL:
       return lodashAssign({}, state, {
-        showAll: !state.showAll
+        showAll: !state.showAll,
       });
     case ONLY_SHOW_VISIBLE:
       return lodashAssign({}, state, {
-        showAll: false
+        showAll: false,
       });
     case CHANGE_SIDEBAR_TAB: {
       const isActive = action.activeTab === 'events';
       if (isActive === state.active) return state;
       return lodashAssign({}, state, {
-        active: isActive
+        active: isActive,
       });
     }
     case FINISHED_ANIMATING_TO_EVENT:
       return lodashAssign({}, state, {
-        isAnimatingToEvent: false
+        isAnimatingToEvent: false,
       });
     default:
       return state;
@@ -102,7 +99,7 @@ export const defaultRequestState = {
   error: null,
   response: null,
   type: null,
-  ignore: []
+  ignore: [],
 };
 export function eventRequestResponse(props = {}) {
   return lodashAssign({}, defaultRequestState, props);
@@ -115,29 +112,26 @@ export function eventsRequestReducer(actionName, state, action) {
     case START:
       return eventRequestResponse({
         isLoading: true,
-        response: null
+        response: null,
       });
     case SUCCESS: {
-      const key =
-        actionName === REQUEST_EVENTS
-          ? 'events'
-          : actionName === REQUEST_CATEGORIES
-            ? 'categories'
-            : 'sources';
-      const filtered = action.response[key].filter(item => {
-        return formatResponse(item, state.ignore);
-      });
+      const key = actionName === REQUEST_EVENTS
+        ? 'events'
+        : actionName === REQUEST_CATEGORIES
+          ? 'categories'
+          : 'sources';
+      const filtered = action.response[key].filter((item) => formatResponse(item, state.ignore));
       return eventRequestResponse({
         response:
           actionName === REQUEST_EVENTS ? sortEvents(filtered) : filtered,
-        isLoading: false
+        isLoading: false,
       });
     }
     case FAILURE:
       return eventRequestResponse({
         response: null,
         error: action.error,
-        isLoading: false
+        isLoading: false,
       });
     default:
       return eventRequestResponse(state);

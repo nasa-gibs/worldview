@@ -15,34 +15,34 @@ import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 
 const zoomLevelReference = {
   Wildfires: 8,
-  Volcanoes: 6
+  Volcanoes: 6,
 };
 
 export default function naturalEventsUI(ui, config, store, models) {
-  var self = {};
-  var map;
-  var view;
-  var isLoading = true;
+  const self = {};
+  let map;
+  let view;
+  let isLoading = true;
   self.eventsData = [];
   self.layers = config.naturalEvents.layers;
   self.events = util.events();
   self.markers = [];
   self.selected = {};
   self.selecting = false;
-  var naturalEventMarkers = markers(ui, store);
-  var naturalEventsTracks = {};
-  var naturalEventsTrack;
+  let naturalEventMarkers = markers(ui, store);
+  const naturalEventsTracks = {};
+  let naturalEventsTrack;
   /**
    * Suscribe to redux store and listen for
    * specific action types
    */
   const subscribeToStore = function(action) {
     const state = store.getState();
-    const events = state.events;
+    const { events } = state;
     const {
       requestedEvents,
       requestedEventSources,
-      requestedEventCategories
+      requestedEventCategories,
     } = state;
     switch (action.type) {
       case CHANGE_SIDEBAR_TAB:
@@ -55,17 +55,16 @@ export default function naturalEventsUI(ui, config, store, models) {
       case EVENT_CONSTANTS.REQUEST_SOURCES_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_CATEGORIES_SUCCESS:
         if (!isLoading) return;
-        isLoading =
-          requestedEvents.isLoading ||
-          requestedEventSources.isLoading ||
-          requestedEventCategories.isLoading;
+        isLoading = requestedEvents.isLoading
+          || requestedEventSources.isLoading
+          || requestedEventCategories.isLoading;
         if (!isLoading) {
           self.eventsData = requestedEvents.response;
         }
         if (!isLoading && state.sidebar.activeTab === 'events') {
           onQueryResults();
 
-          const selected = events.selected;
+          const { selected } = events;
 
           if (selected.id) {
             return self.selectEvent(selected.id, selected.date, null, true);
@@ -74,6 +73,8 @@ export default function naturalEventsUI(ui, config, store, models) {
         return;
       case CHANGE_PROJECTION:
         return !isLoading ? onProjChange(action.id) : '';
+      default:
+        break;
     }
   };
 
@@ -82,34 +83,32 @@ export default function naturalEventsUI(ui, config, store, models) {
    * @param {*} tab
    */
   const onSidebarChange = function(tab) {
-    const proj = store.getState().proj;
+    const { proj } = store.getState();
     if (tab === 'events') {
       // Remove previously stored markers
       naturalEventMarkers.remove(self.markers);
       // Store markers so the can be referenced later
       self.markers = naturalEventMarkers.draw();
 
-      var isZoomed = Math.floor(view.getZoom()) >= 3;
+      const isZoomed = Math.floor(view.getZoom()) >= 3;
       if (isZoomed || proj.selected.id !== 'geographic') {
         self.filterEventList();
       }
       // check if selected event is in changed projection
       if (self.selected.id) {
-        const findSelectedInProjection = lodashFind(self.markers, function(
-          marker
-        ) {
+        const findSelectedInProjection = lodashFind(self.markers, (
+          marker,
+        ) => {
           if (marker.pin) {
             if (marker.pin.id === self.selected.id) {
               // keep event highlighted when available in changed projection
               // highlightEventInList(self.selected.id, self.selected.date);
               return true;
-            } else {
-              return false;
             }
-          } else {
-            // highlightEventInList();
             return false;
           }
+          // highlightEventInList();
+          return false;
         });
         // remove selected event if not in changed projection
         if (!findSelectedInProjection) {
@@ -138,7 +137,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     self.filterEventList();
 
     // handle list filter on map move
-    map.on('moveend', function(e) {
+    map.on('moveend', (e) => {
       self.filterEventList();
     });
 
@@ -150,21 +149,19 @@ export default function naturalEventsUI(ui, config, store, models) {
       self.filterEventList();
       // check if selected event is in changed projection
       if (self.selected.id) {
-        const findSelectedInProjection = lodashFind(self.markers, function(
-          marker
-        ) {
+        const findSelectedInProjection = lodashFind(self.markers, (
+          marker,
+        ) => {
           if (marker.pin) {
             if (marker.pin.id === self.selected.id) {
               // keep event highlighted when available in changed projection
               // highlightEventInList(self.selected.id, self.selected.date);
               return true;
-            } else {
-              return false;
             }
-          } else {
-            // highlightEventInList();
             return false;
           }
+          // highlightEventInList();
+          return false;
         });
         // remove selected event if not in changed projection
         if (!findSelectedInProjection) {
@@ -172,9 +169,9 @@ export default function naturalEventsUI(ui, config, store, models) {
           self.filterEventList();
         }
         if (self.selected.date) {
-          var event = naturalEventsUtilGetEventById(self.eventsData, self.selected.id);
+          const event = naturalEventsUtilGetEventById(self.eventsData, self.selected.id);
           naturalEventsTrack.update(event, self.selected.date, self.selectEvent);
-        };
+        }
       }
     }
   };
@@ -188,13 +185,13 @@ export default function naturalEventsUI(ui, config, store, models) {
       self.markers = naturalEventMarkers.draw();
     }
 
-    var isZoomed = Math.floor(view.getZoom()) >= 3;
+    const isZoomed = Math.floor(view.getZoom()) >= 3;
     if (isZoomed || state.proj.selected.id !== 'geographic') {
       self.filterEventList();
     }
 
-    map.on('moveend', function(e) {
-      var isZoomed = Math.floor(view.getZoom()) >= 3;
+    map.on('moveend', (e) => {
+      const isZoomed = Math.floor(view.getZoom()) >= 3;
       if (isZoomed || state.proj.selected.id !== 'geographic') {
         self.filterEventList();
       }
@@ -206,11 +203,11 @@ export default function naturalEventsUI(ui, config, store, models) {
         self.selected.id,
         self.selected.date || null,
         null,
-        true
+        true,
       );
     }
   };
-  var init = function() {
+  const init = function() {
     map = ui.map.selected;
     lodashForOwn(ui.map.proj, (projMap, key) => {
       naturalEventsTracks[key] = track(ui, store, projMap);
@@ -220,15 +217,15 @@ export default function naturalEventsUI(ui, config, store, models) {
     view = map.getView();
     ui.events.on('last-action', subscribeToStore);
   };
-  var getZoomPromise = function(
+  const getZoomPromise = function(
     event,
     date,
     rotation,
     isIdChange,
-    isInitialLoad
+    isInitialLoad,
   ) {
     return isInitialLoad
-      ? new Promise(function(resolve, reject) {
+      ? new Promise((resolve, reject) => {
         resolve();
       })
       : zoomToEvent(event, date, rotation, isIdChange);
@@ -242,21 +239,21 @@ export default function naturalEventsUI(ui, config, store, models) {
    * @param {*} isInitialLoad
    */
   self.selectEvent = function(id, date, rotation, isInitialLoad) {
-    var isIdChange = !self.selected || self.selected.id !== id;
-    var prevId = self.selected.id ? self.selected.id : false;
-    var prevEvent = prevId && naturalEventsUtilGetEventById(self.eventsData, prevId);
-    var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
-    var event = naturalEventsUtilGetEventById(self.eventsData, id);
-    var category = event && event.categories[0].title;
-    var isSameCategory = category === prevCategory;
+    const isIdChange = !self.selected || self.selected.id !== id;
+    const prevId = self.selected.id ? self.selected.id : false;
+    const prevEvent = prevId && naturalEventsUtilGetEventById(self.eventsData, prevId);
+    const prevCategory = prevEvent ? prevEvent.categories[0].title : false;
+    const event = naturalEventsUtilGetEventById(self.eventsData, id);
+    const category = event && event.categories[0].title;
+    const isSameCategory = category === prevCategory;
     if (!event) {
-      wvui.notify('The event with an id of ' + id + ' is no longer active.');
+      wvui.notify(`The event with an id of ${id} is no longer active.`);
       return;
     }
     date = date || self.getDefaultEventDate(event);
     self.selected = {
       id,
-      date: date
+      date,
     };
 
     const zoomPromise = getZoomPromise(
@@ -264,7 +261,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       date,
       rotation,
       !isIdChange,
-      isInitialLoad
+      isInitialLoad,
     );
     // highlightEventInList(id, date);
     // Remove previously stored markers
@@ -280,14 +277,14 @@ export default function naturalEventsUI(ui, config, store, models) {
        * for today, this may not help.
        */
       if (event.categories[0].title === 'Wildfires' && !isInitialLoad) {
-        var now = new Date();
-        var today = now.toISOString().split('T')[0];
-        var yesterday = new Date(now.setDate(now.getDate() - 1))
+        const now = new Date();
+        const today = now.toISOString().split('T')[0];
+        const yesterday = new Date(now.setDate(now.getDate() - 1))
           .toISOString()
           .split('T')[0];
         if (date !== today || date !== yesterday) {
           store.dispatch(
-            selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1))
+            selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1)),
           );
         }
       } else if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
@@ -319,13 +316,13 @@ export default function naturalEventsUI(ui, config, store, models) {
   };
 
   self.getDefaultEventDate = function(event) {
-    var date = new Date(event.geometries[0].date).toISOString().split('T')[0];
+    let date = new Date(event.geometries[0].date).toISOString().split('T')[0];
     if (event.geometries.length < 2) return date;
-    var category = event.categories.title || event.categories[0].title;
-    var today = new Date().toISOString().split('T')[0];
+    const category = event.categories.title || event.categories[0].title;
+    const today = new Date().toISOString().split('T')[0];
     // For storms that happened today, get previous date
     if (date === today && category === 'Severe Storms') {
-      date = new Date(event.geometries[1].date).toISOString().split('T')[0];
+      [date] = new Date(event.geometries[1].date).toISOString().split('T');
     }
     return date;
   };
@@ -337,34 +334,29 @@ export default function naturalEventsUI(ui, config, store, models) {
    */
   self.filterEventList = function() {
     const state = store.getState();
-    const proj = state.proj;
-    const showAll = state.events.showAll;
+    const { proj } = state;
+    const { showAll } = state.events;
     if (isLoading || !state.sidebar.activeTab === 'events') return;
-    var hiddenEventsCounter = self.markers.length;
-    var extent = view.calculateExtent();
-    var maxExtent = proj.selected.maxExtent;
-    var visibleListEvents = {};
-    var showListAllButton = false;
+    let hiddenEventsCounter = self.markers.length;
+    const extent = view.calculateExtent();
+    const { maxExtent } = proj.selected;
+    const visibleListEvents = {};
+    let showListAllButton = false;
 
-    self.eventsData.forEach(function(naturalEvent) {
-      var isSelectedEvent = self.selected.id === naturalEvent.id;
-      var date = self.getDefaultEventDate(naturalEvent);
+    self.eventsData.forEach((naturalEvent) => {
+      const isSelectedEvent = self.selected.id === naturalEvent.id;
+      let date = self.getDefaultEventDate(naturalEvent);
       if (self.selected && self.selected.date) {
         date = self.selected.date;
       }
-      var geometry =
-        lodashFind(naturalEvent.geometries, function(geometry) {
-          return geometry.date.split('T')[0] === date;
-        }) || naturalEvent.geometries[0];
+      const geometry = lodashFind(naturalEvent.geometries, (geometry) => geometry.date.split('T')[0] === date) || naturalEvent.geometries[0];
 
-      var coordinates = geometry.coordinates;
+      let { coordinates } = geometry;
 
       if (proj.selected.id !== 'geographic') {
         // check for polygon geometries for targeted projection coordinate transform
         if (geometry.type === 'Polygon') {
-          const coordinatesTransform = coordinates[0].map(coordinate => {
-            return olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs);
-          });
+          const coordinatesTransform = coordinates[0].map((coordinate) => olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs));
           const geomExtent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(geomExtent);
         } else {
@@ -372,20 +364,17 @@ export default function naturalEventsUI(ui, config, store, models) {
           coordinates = olProj.transform(
             coordinates,
             'EPSG:4326',
-            proj.selected.crs
+            proj.selected.crs,
           );
         }
-      } else {
-        if (geometry.type === 'Polygon') {
-          const geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
-          coordinates = olExtent.getCenter(geomExtent);
-        }
+      } else if (geometry.type === 'Polygon') {
+        const geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
+        coordinates = olExtent.getCenter(geomExtent);
       }
 
       // limit to maxExtent while allowing zoom and filter 'out of extent' events
-      var isVisible =
-        olExtent.containsCoordinate(extent, coordinates) &&
-        olExtent.containsCoordinate(maxExtent, coordinates);
+      let isVisible = olExtent.containsCoordinate(extent, coordinates)
+        && olExtent.containsCoordinate(maxExtent, coordinates);
       // boolean showAll events limited to maxExtent of current projection
       if (showAll) {
         isVisible = olExtent.containsCoordinate(maxExtent, coordinates);
@@ -406,49 +395,46 @@ export default function naturalEventsUI(ui, config, store, models) {
     self.events.trigger('list-change', visibleListEvents, showListAllButton);
   };
 
-  var activateLayersForCategory = function(category) {
+  const activateLayersForCategory = function(category) {
     const state = store.getState();
     const { proj } = state;
     category = category || 'Default';
     const currentProjection = proj.selected.id;
     // Turn on the relevant layers for the event type based on projection and category
-    var activeLayers = self.layers[currentProjection][category];
+    let activeLayers = self.layers[currentProjection][category];
     if (!activeLayers) activeLayers = self.layers[currentProjection].Default;
     store.dispatch(activateLayersForEventCategory(activeLayers));
   };
 
-  var zoomToEvent = function(event, date, rotation, isSameEventID) {
-    const proj = store.getState().proj;
-    var category = event.categories[0].title;
-    var zoom = isSameEventID
+  const zoomToEvent = function(event, date, rotation, isSameEventID) {
+    const { proj } = store.getState();
+    const category = event.categories[0].title;
+    const zoom = isSameEventID
       ? ui.map.selected.getView().getZoom()
       : zoomLevelReference[category];
-    var geometry = lodashFind(event.geometries, function(geom) {
-      return geom.date.split('T')[0] === date;
-    });
+    const geometry = lodashFind(event.geometries, (geom) => geom.date.split('T')[0] === date);
 
     // check for polygon geometries and/or perform projection coordinate transform
-    var coordinates =
-      geometry.type === 'Polygon'
-        ? olExtent.boundingExtent(
-          olProj.transform(
-            geometry.coordinates[0],
-            'EPSG:4326',
-            proj.selected.crs
-          )
-        )
-        : olProj.transform(
-          geometry.coordinates,
+    let coordinates = geometry.type === 'Polygon'
+      ? olExtent.boundingExtent(
+        olProj.transform(
+          geometry.coordinates[0],
           'EPSG:4326',
-          proj.selected.crs
-        );
+          proj.selected.crs,
+        ),
+      )
+      : olProj.transform(
+        geometry.coordinates,
+        'EPSG:4326',
+        proj.selected.crs,
+      );
 
     // handle extent transform for polar
     if (geometry.type === 'Polygon' && proj.selected.id !== 'geographic') {
       coordinates = olProj.transformExtent(
         coordinates,
         'EPSG:4326',
-        proj.selected.crs
+        proj.selected.crs,
       );
     }
     return ui.map.animate.fly(coordinates, zoom, rotation);

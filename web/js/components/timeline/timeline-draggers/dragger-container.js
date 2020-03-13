@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Dragger from './timeline-dragger';
 
-import moment from 'moment';
 
 import { getISODateFormatted, getIsBetween } from '../date-util';
 import { timeScaleOptions } from '../../../modules/date/constants';
@@ -18,7 +18,7 @@ class DraggerContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      draggerWidth: 49
+      draggerWidth: 49,
     };
   }
 
@@ -54,7 +54,7 @@ class DraggerContainer extends PureComponent {
       draggerPosition,
       draggerPositionB,
       timelineEndDateLimit,
-      updateDraggerDatePosition
+      updateDraggerDatePosition,
     } = this.props;
 
     const isBetween = getIsBetween(inputTime, frontDate, backDate);
@@ -75,7 +75,7 @@ class DraggerContainer extends PureComponent {
     }
 
     const options = timeScaleOptions[timeScale].timeAxis;
-    const gridWidth = options.gridWidth;
+    const { gridWidth } = options;
     const frontDateObj = moment.utc(frontDate);
     const pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
     newDraggerPosition = pixelsToAddToDraggerNew + position - this.state.draggerWidth + transformX + 2;
@@ -108,7 +108,7 @@ class DraggerContainer extends PureComponent {
     }
 
     requestAnimationFrame(() => {
-      var deltaX = d.deltaX;
+      const { deltaX } = d;
       // if no movement, RETURN out of function
       if (deltaX === 0) {
         return false;
@@ -125,12 +125,12 @@ class DraggerContainer extends PureComponent {
         transformX,
         timelineStartDateLimit,
         timelineEndDateLimit,
-        updateDraggerDatePosition
+        updateDraggerDatePosition,
       } = this.props;
 
       // get timescale specific options for scaleMs and gridWidth
       const options = timeScaleOptions[timeScale].timeAxis;
-      const gridWidth = options.gridWidth;
+      const { gridWidth } = options;
 
       let draggerTime;
       let newDraggerPosition;
@@ -152,7 +152,7 @@ class DraggerContainer extends PureComponent {
         // calculate based on frontDate due to varying number of days per month and per year (leapyears)
         const draggerPositionRelativeToFrontDate = this.state.draggerWidth - 2 + newDraggerPosition - position - transformX;
         const gridWidthCoef = draggerPositionRelativeToFrontDate / gridWidth;
-        const draggerDateAdded = moment.utc(frontDate).add((Math.floor(gridWidthCoef)), timeScale);
+        const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
 
         let daysCount;
         if (timeScale === 'year') {
@@ -188,7 +188,7 @@ class DraggerContainer extends PureComponent {
       isDraggerDragging,
       draggerSelected,
       isCompareModeActive,
-      setDraggerVisibility
+      setDraggerVisibility,
     } = this.props;
 
     // handle dragger visibility update on compare mode activate/deactivate
@@ -197,13 +197,11 @@ class DraggerContainer extends PureComponent {
       // turn on compare mode
       if (isCompareModeActive) {
         setDraggerVisibility(true, true);
-      } else {
+      } else if (draggerSelected === 'selected') {
         // turn off compare mode
-        if (draggerSelected === 'selected') {
-          setDraggerVisibility(true, false);
-        } else {
-          setDraggerVisibility(false, true);
-        }
+        setDraggerVisibility(true, false);
+      } else {
+        setDraggerVisibility(false, true);
       }
     }
 
@@ -231,7 +229,7 @@ class DraggerContainer extends PureComponent {
       draggerPosition,
       draggerPositionB,
       draggerVisible,
-      draggerVisibleB
+      draggerVisibleB,
     } = this.props;
 
     const sharedProps = {
@@ -239,46 +237,54 @@ class DraggerContainer extends PureComponent {
       transformX,
       isCompareModeActive,
       handleDragDragger: this.handleDragDragger,
-      selectDragger: this.selectDragger
+      selectDragger: this.selectDragger,
     };
     return (
       draggerSelected === 'selectedB'
-        ? <svg className="dragger-container" width={axisWidth} height={83}>
-          {isCompareModeActive
-            ? <Dragger
+        ? (
+          <svg className="dragger-container" width={axisWidth} height={83}>
+            {isCompareModeActive
+              ? (
+                <Dragger
+                  {...sharedProps}
+                  disabled
+                  draggerName="selected"
+                  draggerPosition={draggerPosition}
+                  draggerVisible={draggerVisible}
+                />
+              )
+              : null}
+            <Dragger
               {...sharedProps}
-              disabled={true}
-              draggerName='selected'
-              draggerPosition={draggerPosition}
-              draggerVisible={draggerVisible}
-            />
-            : null}
-          <Dragger
-            {...sharedProps}
-            disabled={false}
-            draggerName='selectedB'
-            draggerPosition={draggerPositionB}
-            draggerVisible={draggerVisibleB}
-          />
-        </svg>
-        : <svg className="dragger-container" width={axisWidth} height={83}>
-          {isCompareModeActive
-            ? <Dragger
-              {...sharedProps}
-              disabled={true}
-              draggerName='selectedB'
+              disabled={false}
+              draggerName="selectedB"
               draggerPosition={draggerPositionB}
               draggerVisible={draggerVisibleB}
             />
-            : null}
-          <Dragger
-            {...sharedProps}
-            disabled={false}
-            draggerName='selected'
-            draggerPosition={draggerPosition}
-            draggerVisible={draggerVisible}
-          />
-        </svg>
+          </svg>
+        )
+        : (
+          <svg className="dragger-container" width={axisWidth} height={83}>
+            {isCompareModeActive
+              ? (
+                <Dragger
+                  {...sharedProps}
+                  disabled
+                  draggerName="selectedB"
+                  draggerPosition={draggerPositionB}
+                  draggerVisible={draggerVisibleB}
+                />
+              )
+              : null}
+            <Dragger
+              {...sharedProps}
+              disabled={false}
+              draggerName="selected"
+              draggerPosition={draggerPosition}
+              draggerVisible={draggerVisible}
+            />
+          </svg>
+        )
     );
   }
 }
@@ -305,7 +311,7 @@ DraggerContainer.propTypes = {
   timeScale: PropTypes.string,
   toggleShowDraggerTime: PropTypes.func,
   transformX: PropTypes.number,
-  updateDraggerDatePosition: PropTypes.func
+  updateDraggerDatePosition: PropTypes.func,
 };
 
 export default DraggerContainer;

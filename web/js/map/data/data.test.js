@@ -3,10 +3,10 @@ import { dataParser } from './data';
 function testConfig() {
   return {
     products: {
-      product1: {}
-    }
+      product1: {},
+    },
   };
-};
+}
 
 test('parses state, 1.1', () => {
   const state = { dataDownload: 'product1' };

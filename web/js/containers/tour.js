@@ -1,5 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+// eslint-disable-next-line import/no-unresolved
+import googleTagManager from 'googleTagManager';
+import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
+import update from 'immutability-helper';
 import TourStart from '../components/tour/modal-tour-start';
 import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
@@ -7,33 +12,25 @@ import AlertUtil from '../components/util/alert';
 
 import {
   preloadPalettes,
-  hasCustomTypePalette
+  hasCustomTypePalette,
 } from '../modules/palettes/util';
 import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
-import { connect } from 'react-redux';
-import googleTagManager from 'googleTagManager';
 import { layersParse12 } from '../modules/layers/util';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
 
-import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
 import ErrorBoundary from './error-boundary';
-import update from 'immutability-helper';
 import { history } from '../main';
 import util from '../util/util';
 
 class Tour extends React.Component {
   constructor(props) {
     super(props);
-    const storyOrder = props.storyOrder;
-    const stories = props.stories;
-    const currentStoryIndex =
-      lodashFindIndex(storyOrder, id => {
-        return id === props.currentStoryId;
-      }) || null;
-    const currentStory =
-      currentStoryIndex >= 0 ? stories[props.currentStoryId] : {};
+    const { storyOrder } = props;
+    const { stories } = props;
+    const currentStoryIndex = lodashFindIndex(storyOrder, (id) => id === props.currentStoryId) || null;
+    const currentStory = currentStoryIndex >= 0 ? stories[props.currentStoryId] : {};
     const steps = lodashGet(currentStory, 'steps') || [];
     this.state = {
       modalStart: !props.currentStoryId,
@@ -47,8 +44,8 @@ class Tour extends React.Component {
       isLoadingMeta: false,
       currentStory,
       currentStoryId: props.currentStoryId,
-      currentStoryIndex: currentStoryIndex,
-      tourEnded: false
+      currentStoryIndex,
+      tourEnded: false,
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -56,6 +53,9 @@ class Tour extends React.Component {
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
+    this.endTour = this.endTour.bind(this);
+    this.selectTour = this.selectTour.bind(this);
+    this.resetTour = this.resetTour.bind(this);
   }
 
   componentDidMount() {
@@ -68,13 +68,15 @@ class Tour extends React.Component {
 
   toggleModalStart(e) {
     e.preventDefault();
-    const toggleModal = !this.state.modalStart;
-    // if closing modal
-    if (!toggleModal) {
-      this.props.endTour();
-    }
-    this.setState({
-      modalStart: toggleModal
+    this.setState((prevState) => {
+      const toggleModal = !prevState.modalStart;
+      // if closing modal
+      if (!toggleModal) {
+        this.props.endTour();
+      }
+      return {
+        modalStart: toggleModal,
+      };
     });
   }
 
@@ -82,59 +84,57 @@ class Tour extends React.Component {
     if (e) e.preventDefault();
     this.setState({
       currentStep: 1,
-      currentStoryIndex: currentStoryIndex,
+      currentStoryIndex,
       modalStart: false,
       modalInProgress: true,
       metaLoaded: false,
       modalComplete: false,
-      currentStory: currentStory,
-      currentStoryId: currentStoryId,
-      totalSteps: currentStory.steps.length
+      currentStory,
+      currentStoryId,
+      totalSteps: currentStory.steps.length,
     });
     this.props.selectTour(currentStoryId);
     this.fetchMetadata(currentStory, 0);
     const storyStep = currentStory.steps[0];
     const transition = getTransitionAttr(
       storyStep.transition.element,
-      storyStep.transition.action
+      storyStep.transition.action,
     );
     this.props.processStepLink(
       currentStoryId,
       1,
       currentStory.steps.length,
-      storyStep.stepLink + '&tr=' + currentStoryId + transition,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transition}`,
       this.props.config,
-      this.props.renderedPalettes
+      this.props.renderedPalettes,
     );
   }
 
   fetchMetadata(currentStory, stepIndex) {
-    var description = currentStory.steps[stepIndex].description;
-    var errorMessage = '<p>There was an error loading this description.</p>';
-    var uri = `config/metadata/stories/${
+    const { description } = currentStory.steps[stepIndex];
+    const errorMessage = '<p>There was an error loading this description.</p>';
+    const uri = `config/metadata/stories/${
       currentStory.id
-      }/${description}`;
+    }/${description}`;
     this.setState({
       isLoadingMeta: true,
       metaLoaded: false,
-      description: 'Loading story description...'
+      description: 'Loading story description...',
     });
     fetch(uri)
-      .then(res => (res.ok ? res.text() : errorMessage))
-      .then(body => {
+      .then((res) => (res.ok ? res.text() : errorMessage))
+      .then((body) => {
         const isMetadataSnippet = !body.match(
-          /<(head|body|html|style|script)[^>]*>/i
+          /<(head|body|html|style|script)[^>]*>/i,
         );
         const description = isMetadataSnippet ? body : errorMessage;
         this.setState({
-          description: description,
+          description,
           isLoadingMeta: false,
-          metaLoaded: true
+          metaLoaded: true,
         });
       })
-      .catch(error =>
-        this.setState({ description: error, isLoadingMeta: false })
-      );
+      .catch((error) => this.setState({ description: error, isLoadingMeta: false }));
   }
 
   resetTour(e) {
@@ -142,36 +142,37 @@ class Tour extends React.Component {
     // Tour startup modal shown by clicking "More Stories" button at end of story
     this.props.startTour();
     googleTagManager.pushEvent({
-      event: 'tour_more_stories_button'
+      event: 'tour_more_stories_button',
     });
     this.setState({
       modalInProgress: false,
       modalComplete: false,
       metaLoaded: false,
       modalStart: true,
-      currentStep: 0
+      currentStep: 0,
     });
   }
 
   toggleModalInProgress(e) {
     e.preventDefault();
-    this.setState({
-      modalInProgress: !this.state.modalInProgress
-    });
+    this.setState((prevState) => ({
+      modalInProgress: !prevState.modalInProgress,
+    }));
   }
 
   toggleModalComplete(e) {
     e.preventDefault();
-    this.setState({
-      modalComplete: !this.state.modalComplete,
-      currentStep: this.state.totalSteps
-    });
+    this.setState((prevState) => ({
+      modalComplete: !prevState.modalComplete,
+      currentStep: prevState.totalSteps,
+    }));
+
     // The tour completed modal has been shown (all steps complete)
     googleTagManager.pushEvent({
       event: 'tour_completed',
       story: {
-        id: this.state.currentStoryId
-      }
+        id: this.state.currentStoryId,
+      },
     });
   }
 
@@ -180,7 +181,7 @@ class Tour extends React.Component {
       currentStep,
       currentStory,
       totalSteps,
-      currentStoryId
+      currentStoryId,
     } = this.state;
 
     if (currentStep + 1 <= totalSteps) {
@@ -190,18 +191,18 @@ class Tour extends React.Component {
       const storyStep = currentStory.steps[newStep - 1];
       const transition = getTransitionAttr(
         storyStep.transition.element,
-        storyStep.transition.action
+        storyStep.transition.action,
       );
       this.props.processStepLink(
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        currentStory.steps[newStep - 1].stepLink +
-        '&tr=' +
-        currentStoryId +
-        transition,
+        `${currentStory.steps[newStep - 1].stepLink
+        }&tr=${
+          currentStoryId
+        }${transition}`,
         this.props.config,
-        this.props.renderedPalettes
+        this.props.renderedPalettes,
       );
     }
     if (currentStep + 1 === totalSteps + 1) {
@@ -219,24 +220,24 @@ class Tour extends React.Component {
       const storyStep = currentStory.steps[newStep - 1];
       const transition = getTransitionAttr(
         storyStep.transition.element,
-        storyStep.transition.action
+        storyStep.transition.action,
       );
       this.props.processStepLink(
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        currentStory.steps[newStep - 1].stepLink +
-        '&tr=' +
-        currentStoryId +
-        transition,
+        `${currentStory.steps[newStep - 1].stepLink
+        }&tr=${
+          currentStoryId
+        }${transition}`,
         this.props.config,
-        this.props.renderedPalettes
+        this.props.renderedPalettes,
       );
     } else {
       this.setState({
         currentStep: 0,
         modalInProgress: false,
-        modalStart: true
+        modalStart: true,
       });
     }
   }
@@ -253,11 +254,11 @@ class Tour extends React.Component {
   renderSupportAlert() {
     return (
       <AlertUtil
-        isOpen={true}
+        isOpen
         timeout={10000}
         onDismiss={this.props.endTour}
-        iconClassName=' '
-        message='Sorry, this tour is no longer supported.'
+        iconClassName=" "
+        message="Sorry, this tour is no longer supported."
       />
     );
   }
@@ -265,10 +266,10 @@ class Tour extends React.Component {
   renderDisableAlert() {
     return (
       <AlertUtil
-        isOpen={true}
+        isOpen
         timeout={10000}
         onDismiss={this.props.endTour}
-        iconClassName=' '
+        iconClassName=" "
         message="To view these tours again, click the 'Explore Worldview' link in the “i” menu."
       />
     );
@@ -285,7 +286,7 @@ class Tour extends React.Component {
       screenHeight,
       screenWidth,
       isActive,
-      endTour
+      endTour,
     } = this.props;
     const {
       modalInProgress,
@@ -302,7 +303,7 @@ class Tour extends React.Component {
       isLoadingMeta,
       showSupportAlert,
       showDisabledAlert,
-      tourEnded
+      tourEnded,
     } = this.state;
     if (screenWidth < 740 || screenHeight < 450) {
       endTour();
@@ -333,7 +334,7 @@ class Tour extends React.Component {
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
                 toggleModalComplete={this.toggleModalComplete}
-                selectTour={this.selectTour.bind(this)}
+                selectTour={this.selectTour}
                 showTourAlert={showTourAlert}
                 hideTour={() => {
                   hideTour();
@@ -343,13 +344,13 @@ class Tour extends React.Component {
                   showTour();
                   this.setState({ showDisabledAlert: false });
                 }}
-                endTour={this.endTour.bind(this)}
+                endTour={this.endTour}
               />
             ) : modalInProgress ? (
               <TourInProgress
                 config={config}
                 models={models}
-                endTour={this.endTour.bind(this)}
+                endTour={this.endTour}
                 modalInProgress={modalInProgress}
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
@@ -374,24 +375,23 @@ class Tour extends React.Component {
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
                 toggleModalComplete={this.toggleModalComplete}
-                resetTour={this.resetTour.bind(this)}
-                endTour={this.endTour.bind(this)}
+                resetTour={this.resetTour}
+                endTour={this.endTour}
               />
             )}
           </div>
         </ErrorBoundary>
       );
-    } else {
-      return null;
     }
+    return null;
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   processStepLink: (currentStoryId, currentStep, totalSteps, search, config, rendered) => {
     search = search.split('/?').pop();
     const location = update(history.location, {
-      search: { $set: search }
+      search: { $set: search },
     });
     const parameters = util.fromQueryString(search);
     let layers = [];
@@ -402,14 +402,14 @@ const mapDispatchToProps = dispatch => ({
       story: {
         id: currentStoryId,
         selectedStep: currentStep,
-        totalSteps: totalSteps
-      }
+        totalSteps,
+      },
     });
     dispatch(stopAnimation());
     dispatch(closeModal());
     if (
-      (parameters.l && hasCustomTypePalette(parameters.l)) ||
-      (parameters.l1 && hasCustomTypePalette(parameters.l1))
+      (parameters.l && hasCustomTypePalette(parameters.l))
+      || (parameters.l1 && hasCustomTypePalette(parameters.l1))
     ) {
       layers = layersParse12(parameters.l, config);
       if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
@@ -417,10 +417,10 @@ const mapDispatchToProps = dispatch => ({
       }
       layers = uniqBy(layers, 'id');
 
-      preloadPalettes(layers, rendered, true).then(obj => {
+      preloadPalettes(layers, rendered, true).then((obj) => {
         dispatch({
           type: BULK_PALETTE_RENDERING_SUCCESS,
-          rendered: obj.rendered
+          rendered: obj.rendered,
         });
         dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
       });
@@ -434,17 +434,19 @@ const mapDispatchToProps = dispatch => ({
   endTour: () => {
     dispatch(endTour());
   },
-  showTourAlert: message => {
+  showTourAlert: (message) => {
     // dispatch(showAlert(message));
   },
-  selectTour: id => {
+  selectTour: (id) => {
     dispatch(selectStory(id));
   },
-  showTour: showTour,
-  hideTour: hideTour
+  showTour,
+  hideTour,
 });
 function mapStateToProps(state) {
-  const { browser, config, tour, palettes } = state;
+  const {
+    browser, config, tour, palettes,
+  } = state;
   const { screenWidth, screenHeight } = browser;
 
   return {
@@ -459,7 +461,7 @@ function mapStateToProps(state) {
     screenWidth,
     screenHeight,
     showTour,
-    renderedPalettes: palettes.rendered
+    renderedPalettes: palettes.rendered,
   };
 }
 const getTransitionAttr = function(el, action) {
@@ -469,10 +471,10 @@ const getTransitionAttr = function(el, action) {
   return '';
 };
 const hideTour = function(e) {
-  var hideTour = localStorage.getItem('hideTour');
+  const hideTour = localStorage.getItem('hideTour');
   // Checkbox to "hide tour modal until a new story has been added" has been checked
   googleTagManager.pushEvent({
-    event: 'tour_hide_checked'
+    event: 'tour_hide_checked',
   });
 
   if (!util.browser.localStorage) return;
@@ -481,11 +483,11 @@ const hideTour = function(e) {
   localStorage.setItem('hideTour', new Date());
 };
 const showTour = function(e) {
-  var hideTour = localStorage.getItem('hideTour');
+  const hideTour = localStorage.getItem('hideTour');
 
   // Checkbox to "hide tour modal until a new story has been added" has been checked
   googleTagManager.pushEvent({
-    event: 'tour_hide_unchecked'
+    event: 'tour_hide_unchecked',
   });
 
   if (!util.browser.localStorage) return;
@@ -495,7 +497,7 @@ const showTour = function(e) {
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Tour);
 Tour.propTypes = {
   config: PropTypes.object.isRequired,
@@ -515,5 +517,5 @@ Tour.propTypes = {
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   startTour: PropTypes.func,
-  totalSteps: PropTypes.number
+  totalSteps: PropTypes.number,
 };

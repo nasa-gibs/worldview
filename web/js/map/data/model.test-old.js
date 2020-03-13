@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
 import { dataModel } from './model';
 import { projectionModel } from '../projection/model';
 import { layersModel } from '../layers/model';
@@ -6,7 +8,7 @@ import { dateModel } from '../date/model';
 function fixture() {
   const config = {
     products: {
-      product1: {}
+      product1: {},
     },
     layers: {
       layer1: {
@@ -14,10 +16,10 @@ function fixture() {
         product: 'product1',
         group: 'overlays',
         projections: {
-          geographic: {}
-        }
-      }
-    }
+          geographic: {},
+        },
+      },
+    },
   };
 
   const models = {};
@@ -29,7 +31,7 @@ function fixture() {
   models.data = dataModel(models, config);
 
   return models;
-};
+}
 
 test('does not save state when not active', () => {
   const models = fixture();
@@ -53,11 +55,11 @@ test('subscribed for startup event when data download in load state', () => {
   const eventsOn = jest.fn();
   models.wv = {
     events: {
-      on: eventsOn
-    }
+      on: eventsOn,
+    },
   };
   const state = {
-    download: 'product1'
+    download: 'product1',
   };
   const errors = [];
   models.data.load(state, errors);
@@ -70,12 +72,12 @@ test('error product is in state when no active layer is found', () => {
   const eventsOn = jest.fn();
   models.wv = {
     events: {
-      on: eventsOn
-    }
+      on: eventsOn,
+    },
   };
   models.layers.remove('layer1');
   const state = {
-    download: 'product1'
+    download: 'product1',
   };
   const errors = [];
   models.data.load(state, errors);

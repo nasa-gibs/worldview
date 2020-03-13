@@ -1,15 +1,11 @@
 export const REQUEST_NOTIFICATIONS = 'NOTIFICATIONS/REQUEST_APP_NOTIFICATIONS';
-export const REQUEST_NOTIFICATIONS_START =
-  'NOTIFICATIONS/REQUEST_APP_NOTIFICATIONS_START';
-export const REQUEST_NOTIFICATIONS_SUCCESS =
-  'NOTIFICATIONS/REQUEST_APP_NOTIFICATIONS_SUCCESS';
-export const REQUEST_NOTIFICATIONS_FAILURE =
-  'NOTIFICATIONS/REQUEST_APP_NOTIFICATIONS_FAILURE';
+export const REQUEST_NOTIFICATIONS_START = 'NOTIFICATIONS/REQUEST_APP_NOTIFICATIONS_START';
+export const REQUEST_NOTIFICATIONS_SUCCESS = 'NOTIFICATIONS/REQUEST_APP_NOTIFICATIONS_SUCCESS';
+export const REQUEST_NOTIFICATIONS_FAILURE = 'NOTIFICATIONS/REQUEST_APP_NOTIFICATIONS_FAILURE';
 export const SET_NOTIFICATIONS = 'NOTIFICATIONS/SET_NOTIFICATION_RESPONSE';
 export const NOTIFICATIONS_SEEN = 'NOTIFICATIONS/NOTIFICATIONS_HAVE_BEEN_SEEN';
 
-export const STATUS_REQUEST_URL =
-  'https://status.earthdata.nasa.gov/api/v1/notifications?domain=https%3A%2F%2Fworldview.earthdata.nasa.gov';
+export const STATUS_REQUEST_URL = 'https://status.earthdata.nasa.gov/api/v1/notifications?domain=https%3A%2F%2Fworldview.earthdata.nasa.gov';
 export const MOCK_RESPONSE_BODY = [
   {
     id: 537,
@@ -22,12 +18,12 @@ export const MOCK_RESPONSE_BODY = [
     applications: ['Worldview (OPS)'],
     domains: ['https://worldview.earthdata.nasa.gov'],
     dismissible: true,
-    path: ''
-  }
+    path: '',
+  },
 ];
 export const MOCK_RESPONSE = {
   success: true,
-  notifications: MOCK_RESPONSE_BODY
+  notifications: MOCK_RESPONSE_BODY,
 };
 export const MOCK_SORTED_NOTIFICATIONS = {
   messages: [],
@@ -43,8 +39,8 @@ export const MOCK_SORTED_NOTIFICATIONS = {
       applications: ['Worldview (OPS)'],
       domains: ['https://worldview.earthdata.nasa.gov'],
       dismissible: true,
-      path: ''
-    }
+      path: '',
+    },
   ],
-  alerts: []
+  alerts: [],
 };

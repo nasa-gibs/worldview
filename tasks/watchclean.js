@@ -3,7 +3,7 @@
 const shell = require('shelljs');
 
 const dirs = [
-  'web/build'
+  'web/build',
 ];
 
 dirs.forEach((dir) => {

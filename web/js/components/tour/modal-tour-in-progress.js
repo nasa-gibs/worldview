@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {
+  Modal, ModalHeader, ModalBody, ModalFooter,
+} from 'reactstrap';
 import Steps from './widget-steps';
 
 class ModalInProgress extends React.Component {
   componentDidUpdate() {
+    // eslint-disable-next-line react/no-string-refs
     if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
   }
 
   render() {
-    var { description } = this.props;
+    const { description } = this.props;
 
     return (
       <div>
@@ -19,7 +22,7 @@ class ModalInProgress extends React.Component {
           onClosed={this.props.showTourAlert}
           wrapClassName="tour tour-in-progress"
           className={
-            this.props.className + ' ' + this.props.currentStory.type
+            `${this.props.className} ${this.props.currentStory.type}`
           }
           backdrop={false}
           keyboard={false}
@@ -60,7 +63,7 @@ ModalInProgress.propTypes = {
   showTourAlert: PropTypes.func.isRequired,
   totalSteps: PropTypes.number.isRequired,
   className: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
 };
 
 export default ModalInProgress;

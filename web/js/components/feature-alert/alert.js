@@ -9,7 +9,7 @@ class FeaturedAlert extends React.Component {
     super(props);
     const alertHasBeenShown = true;
     this.state = {
-      showAlert: !alertHasBeenShown
+      showAlert: !alertHasBeenShown,
     };
   }
 
@@ -22,12 +22,12 @@ class FeaturedAlert extends React.Component {
 
   render() {
     // const { showAlert } = this.state;
-    return ('');
+    return '';
     // return (
     //   <AlertUtil
     //     id={'geostationary-alert'}
     //     isOpen={showAlert}
-    //     iconClassName='fa fa-layer-group fa-fw'
+    //     iconClassName='faLayerGroup'
     //     onClick={this.props.showModal.bind(this)}
     //     onDismiss={this.dismissAlert.bind(this)}
     //     message="Check out our new geostationary layers!"
@@ -47,17 +47,17 @@ const mapDispatchToProps = (dispatch) => ({
         wrapClassName: '',
         clickableBehindModal: true,
         bodyComponent: undefined,
-        scrollable: true
-      })
+        scrollable: true,
+      }),
     );
-  }
+  },
 });
 
 FeaturedAlert.propTypes = {
-  showModal: PropTypes.func
+  showModal: PropTypes.func,
 };
 
 export default connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(FeaturedAlert);

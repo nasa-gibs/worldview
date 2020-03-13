@@ -11,9 +11,10 @@
   background: #eee;
   color: #282828;
 }
-.list-group-item i {
+.list-group-item svg.svg-inline--fa {
   margin-right: 6px;
   line-height: 1.5;
+  height: 1em;
 }
 button.list-group-item {
   cursor: pointer;

@@ -1,9 +1,10 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
+
 const TIME_LIMIT = 20000;
 module.exports = {
-  before: function(client) {
+  before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   /**
@@ -11,26 +12,26 @@ module.exports = {
    * date with given queryString
    */
   'Swipe mode and A|B state A are active and date is correct': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
     client.waitForElementVisible(
       localSelectors.swipeDragger,
       TIME_LIMIT,
-      function() {
+      () => {
         client.expect.element(localSelectors.swipeButton).to.not.be.enabled;
         client.assert.cssClassPresent(localSelectors.aTab, 'active');
         client
           .useCss()
           .assert.containsText(localSelectors.aTab, 'A: 2018-08-17');
-      }
+      },
     );
   },
   'Opacity mode and A|B state B are active and date is correct': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.opacityAndBIsActive);
-    client.waitForElementVisible('#ab-slider-case', TIME_LIMIT, function() {
+    client.waitForElementVisible('#ab-slider-case', TIME_LIMIT, () => {
       client.expect.element(localSelectors.opacityButton).to.not.be.enabled;
       client.assert.cssClassPresent(localSelectors.bTab, 'active');
       client.useCss().assert.containsText(localSelectors.bTab, 'B: 2018-08-16');
@@ -38,7 +39,7 @@ module.exports = {
   },
   'Spy mode is active in B state': function(client) {
     client.url(client.globals.url + localQuerystrings.spyAndBIsActive);
-    client.waitForElementPresent('.ab-spy-span', TIME_LIMIT, function() {
+    client.waitForElementPresent('.ab-spy-span', TIME_LIMIT, () => {
       client.expect.element(localSelectors.spyButton).to.not.be.enabled;
       client.assert.cssClassPresent(localSelectors.bTab, 'active');
       client.useCss().assert.containsText(localSelectors.bTab, 'B: 2018-08-16');
@@ -48,40 +49,40 @@ module.exports = {
    * Ensure that A|B state loads with correct layers given permalink
    */
   'A|B loaded with one only layer in A section -- Corrected Reflectance (True Color)': function(
-    client
+    client,
   ) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
-    client.waitForElementPresent(localSelectors.aTab, TIME_LIMIT, function() {
+    client.waitForElementPresent(localSelectors.aTab, TIME_LIMIT, () => {
       client.expect.element(
-        '.ab-tabs-case .tab-pane.active ul#overlays .item'
+        '.ab-tabs-case .tab-pane.active ul#overlays .item',
       ).to.not.be.present;
       client.expect.element(
-        '#active-MODIS_Terra_CorrectedReflectance_TrueColor'
+        '#active-MODIS_Terra_CorrectedReflectance_TrueColor',
       ).to.be.visible;
     });
   },
   'Click B tab to ensure that loaded layers are correct': function(client) {
     client.click(localSelectors.bTab);
-    client.waitForElementVisible('#activeB-Coastlines', TIME_LIMIT, function() {
+    client.waitForElementVisible('#activeB-Coastlines', TIME_LIMIT, () => {
       client.expect.element(
-        '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor.layer-hidden'
+        '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor.layer-hidden'
+        '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-Reference_Labels.layer-hidden'
+        '#activeB-Reference_Labels.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-Reference_Features.layer-hidden'
+        '#activeB-Reference_Features.layer-hidden',
       ).to.be.visible;
       client.expect.element('#activeB-Coastlines.layer-visible').to.be.visible;
       client.expect.element(
-        '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor.layer-visible'
+        '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor.layer-visible',
       ).to.be.visible;
     });
   },
-  after: function(client) {
+  after(client) {
     client.end();
-  }
+  },
 };

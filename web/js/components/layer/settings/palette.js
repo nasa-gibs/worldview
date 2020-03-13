@@ -9,7 +9,7 @@ class PaletteSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePalette: props.activePalette
+      activePalette: props.activePalette,
     };
   }
 
@@ -25,16 +25,15 @@ class PaletteSelect extends React.Component {
         legend.colors,
         '__default',
         legend,
-        activePalette === '__default'
-      );
-    } else {
-      return this.renderSelectorItemSingle(
-        legend,
-        '__default',
-        'Default',
-        activePalette === '__default'
+        activePalette === '__default',
       );
     }
+    return this.renderSelectorItemSingle(
+      legend,
+      '__default',
+      'Default',
+      activePalette === '__default',
+    );
   }
 
   /**
@@ -42,7 +41,9 @@ class PaletteSelect extends React.Component {
    * @param {String} id | custom Palette Id
    */
   onChangePalette(id) {
-    const { layer, clearCustomPalette, setCustomPalette, groupName, index } = this.props;
+    const {
+      layer, clearCustomPalette, setCustomPalette, groupName, index,
+    } = this.props;
 
     // Applying customs takes a while and
     // it looks more natural to make this async
@@ -65,24 +66,23 @@ class PaletteSelect extends React.Component {
       getCustomPalette,
       layer,
       index,
-      palettesTranslate
+      palettesTranslate,
     } = this.props;
     const { activePalette } = this.state;
-    var source = getDefaultLegend(layer.id, index);
-    var target = getCustomPalette(id);
-    var targetType =
-      target.colors.length === 1 ? 'classification' : 'continuous';
+    const source = getDefaultLegend(layer.id, index);
+    const target = getCustomPalette(id);
+    const targetType = target.colors.length === 1 ? 'classification' : 'continuous';
 
     if (
-      (source.type === 'continuous' && targetType === 'continuous') ||
-      (source.type === 'discrete' && targetType === 'continuous')
+      (source.type === 'continuous' && targetType === 'continuous')
+      || (source.type === 'discrete' && targetType === 'continuous')
     ) {
-      var translated = palettesTranslate(source.colors, target.colors);
+      const translated = palettesTranslate(source.colors, target.colors);
       return this.renderSelectorItemScale(
         translated,
         id,
         target,
-        activePalette === target.id
+        activePalette === target.id,
       );
     }
     if (source.type === 'classification' && targetType === 'classification') {
@@ -90,7 +90,7 @@ class PaletteSelect extends React.Component {
         target,
         id,
         target.name,
-        activePalette === target.id
+        activePalette === target.id,
       );
     }
   }
@@ -104,8 +104,7 @@ class PaletteSelect extends React.Component {
    */
   renderSelectorItemScale(palette, id, legend, isSelected) {
     const { canvas, checkerBoard } = this.props;
-    const caseDefaultClassName =
-      'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
+    const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
     const ctx = canvas.getContext('2d');
     drawPaletteOnCanvas(
@@ -113,17 +112,17 @@ class PaletteSelect extends React.Component {
       checkerBoard,
       palette,
       canvas.width,
-      canvas.height
+      canvas.height,
     );
     return (
       <div key={id} className={caseDefaultClassName + checkedClassName}>
         <input
-          id={'wv-palette-radio-' + id}
+          id={`wv-palette-radio-${id}`}
           type="radio"
           name="wv-palette-radio"
           onClick={() => this.onChangePalette(id)}
         />
-        <label htmlFor={'wv-palette-radio-' + id}>
+        <label htmlFor={`wv-palette-radio-${id}`}>
           <img src={this.props.canvas.toDataURL('image/png')} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
         </label>
@@ -143,18 +142,17 @@ class PaletteSelect extends React.Component {
     const color = palette.classes
       ? palette.classes.colors[0]
       : palette.colors[0];
-    const caseDefaultClassName =
-      'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
+    const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
     return (
       <div key={id} className={caseDefaultClassName + checkedClassName}>
         <input
-          id={'wv-palette-radio-' + id}
+          id={`wv-palette-radio-${id}`}
           type="radio"
           name="wv-palette-radio"
           onClick={() => this.onChangePalette(id)}
         />
-        <label htmlFor={'wv-palette-radio-' + id}>
+        <label htmlFor={`wv-palette-radio-${id}`}>
           <span
             className="wv-palettes-class"
             style={{ backgroundColor: util.hexToRGB(color) }}
@@ -174,19 +172,22 @@ class PaletteSelect extends React.Component {
     return (
       <div
         className="wv-palette-selector settings-component noselect"
-        id={'wv-palette-selector' + index}
+        id={`wv-palette-selector${index}`}
       >
         <h2 className="wv-header">Color Palette</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
           {this.renderDefault()}
-          {paletteOrder.map(id => {
-            if (lodashIndexOf(recommended, id) < 0) {
-              var item = this.customLegend(id);
-              if (item) {
-                return item;
+          {
+            // eslint-disable-next-line array-callback-return
+            paletteOrder.map((id) => {
+              if (lodashIndexOf(recommended, id) < 0) {
+                const item = this.customLegend(id);
+                if (item) {
+                  return item;
+                }
               }
-            }
-          })}
+            })
+          }
         </Scrollbar>
       </div>
     );
@@ -204,7 +205,7 @@ PaletteSelect.propTypes = {
   layer: PropTypes.object,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
-  setCustomPalette: PropTypes.func
+  setCustomPalette: PropTypes.func,
 };
 
 export default PaletteSelect;

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dragger from './dragger.js';
-import DraggerRange from './dragger-range.js';
-
 import moment from 'moment';
+import Dragger from './dragger';
+import DraggerRange from './dragger-range';
+
 import { timeScaleOptions } from '../../modules/date/constants';
 /*
  * A react component, is a draggable svg
@@ -18,7 +18,7 @@ class TimelineRangeSelector extends React.Component {
     this.state = {
       startLocation: props.startLocation,
       endLocation: props.endLocation,
-      deltaStart: 0
+      deltaStart: 0,
     };
   }
 
@@ -51,9 +51,8 @@ class TimelineRangeSelector extends React.Component {
       if (startX + pinWidth >= endX) {
         if (startX + pinWidth >= max.width) {
           return;
-        } else {
-          endX = startX + pinWidth;
         }
+        endX = startX + pinWidth;
       }
     } else if (id === 'end') {
       startX = startLocation;
@@ -73,7 +72,7 @@ class TimelineRangeSelector extends React.Component {
     }
     this.setState({
       startLocation: startX,
-      endLocation: endX
+      endLocation: endX,
     });
     this.animationDraggerPositionUpdate(startX, endX, true);
   }
@@ -102,14 +101,16 @@ class TimelineRangeSelector extends React.Component {
    * @return {void}
    */
   onRangeDrag = (d, deltaStart) => {
-    const startLocation = this.state.startLocation + d;
-    const endLocation = this.state.endLocation + d;
-    this.setState({
-      startLocation: startLocation,
-      endLocation: endLocation,
-      deltaStart: deltaStart
+    this.setState((prevState) => {
+      const startLocation = prevState.startLocation + d;
+      const endLocation = prevState.endLocation + d;
+      this.animationDraggerPositionUpdate(startLocation, endLocation, true);
+      return {
+        startLocation: prevState.startLocation + d,
+        endLocation: prevState.endLocation + d,
+        deltaStart,
+      };
     });
-    this.animationDraggerPositionUpdate(startLocation, endLocation, true);
   }
 
   // update animation dragger helper function
@@ -118,15 +119,15 @@ class TimelineRangeSelector extends React.Component {
       const {
         timeScale,
         position,
-        transformX
+        transformX,
       } = this.props;
 
       const options = timeScaleOptions[timeScale].timeAxis;
-      const gridWidth = options.gridWidth;
+      const { gridWidth } = options;
 
       const startDraggerPositionRelativeToFrontDate = animDraggerLocation - position - transformX + deltaX;
       const gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
-      const draggerDateAdded = moment.utc(this.props.frontDate).add((Math.floor(gridWidthCoef)), timeScale);
+      const draggerDateAdded = moment.utc(this.props.frontDate).add(Math.floor(gridWidthCoef), timeScale);
       const draggerDateAddedValue = draggerDateAdded.valueOf();
       let daysCount;
       if (timeScale === 'year') {
@@ -139,11 +140,10 @@ class TimelineRangeSelector extends React.Component {
       const newLocationDate = draggerDateAddedValue + remainderMilliseconds;
 
       return new Date(newLocationDate);
-    } else {
-      const draggerTimeStartValue = new Date(animLocationDate).getTime();
-      const newLocationDate = draggerTimeStartValue + (diffFactor * deltaX);
-      return new Date(newLocationDate);
     }
+    const draggerTimeStartValue = new Date(animLocationDate).getTime();
+    const newLocationDate = draggerTimeStartValue + (diffFactor * deltaX);
+    return new Date(newLocationDate);
   }
 
   // handle animation dragger drag change
@@ -153,12 +153,12 @@ class TimelineRangeSelector extends React.Component {
       timelineEndDateLimit,
       startLocationDate,
       endLocationDate,
-      timeScale
+      timeScale,
     } = this.props;
 
     const {
       startLocation,
-      endLocation
+      endLocation,
     } = this.state;
 
     // calculate new start and end positions
@@ -179,7 +179,7 @@ class TimelineRangeSelector extends React.Component {
 
       const sharedAnimLocationUpdateParams = {
         diffZeroValues,
-        diffFactor
+        diffFactor,
       };
 
       if (deltaXStart !== 0) { // update new start date
@@ -187,7 +187,7 @@ class TimelineRangeSelector extends React.Component {
           animationStartLocationDate,
           startLocation,
           deltaXStart,
-          sharedAnimLocationUpdateParams
+          sharedAnimLocationUpdateParams,
         );
       }
       if (deltaXEnd !== 0) { // update new end date
@@ -195,7 +195,7 @@ class TimelineRangeSelector extends React.Component {
           animationEndLocationDate,
           endLocation,
           deltaXEnd,
-          sharedAnimLocationUpdateParams
+          sharedAnimLocationUpdateParams,
         );
       }
     }
@@ -228,7 +228,7 @@ class TimelineRangeSelector extends React.Component {
       animationEndLocationDate,
       draggerStartLocation,
       draggerEndLocation,
-      isDragging
+      isDragging,
     );
   }
 
@@ -239,7 +239,7 @@ class TimelineRangeSelector extends React.Component {
   updateLocation = () => {
     this.setState({
       startLocation: this.props.startLocation,
-      endLocation: this.props.endLocation
+      endLocation: this.props.endLocation,
     });
   }
 
@@ -269,7 +269,7 @@ class TimelineRangeSelector extends React.Component {
       startTriangleColor,
       timelineEndDateLimit,
       timelineStartDateLimit,
-      timeScale
+      timeScale,
     } = this.props;
     return (
       <svg
@@ -307,7 +307,7 @@ class TimelineRangeSelector extends React.Component {
           max={max.width}
           draggerID="range-selector-dragger-1"
           backgroundColor={startTriangleColor}
-          first={true}
+          first
           id="start"
         />
         <Dragger
@@ -335,7 +335,7 @@ TimelineRangeSelector.defaultProps = {
   startColor: '#40a9db',
   startTriangleColor: '#fff',
   endColor: '#295f92',
-  endTriangleColor: '#4b7aab'
+  endTriangleColor: '#4b7aab',
 };
 
 TimelineRangeSelector.propTypes = {
@@ -361,7 +361,7 @@ TimelineRangeSelector.propTypes = {
   timeScale: PropTypes.string,
   transformX: PropTypes.number,
   updateAnimationDateAndLocation: PropTypes.func,
-  width: PropTypes.number
+  width: PropTypes.number,
 };
 
 export default TimelineRangeSelector;

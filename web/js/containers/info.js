@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import {
   requestTemplate,
   renderTemplate,
-  openCustomContent
+  openCustomContent,
 } from '../modules/modal/actions';
 import { ABOUT_PAGE_REQUEST } from '../modules/modal/constants';
 import IconList from '../components/util/list';
@@ -16,27 +17,26 @@ import { initFeedback } from '../modules/feedback/actions';
 import { startTour, endTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
-import Notifications from '../containers/notifications';
+import Notifications from './notifications';
 
 class InfoList extends Component {
   getNotificationListItem(obj) {
     const { number, type, object } = this.props.notifications;
-    const baseIconclass = 'ui-icon fa fa-fw fa-';
 
     return {
       text: 'Notifications',
-      iconClass:
-        type === 'message'
-          ? baseIconclass + 'gift'
-          : type === 'outage'
-            ? baseIconclass + 'exclamation-circle'
-            : baseIconclass + 'bolt',
+      iconClass: 'ui-icon',
+      iconName: type === 'message'
+        ? 'faGift'
+        : type === 'outage'
+          ? 'faExclamationCircle'
+          : 'faBolt',
       id: 'notifications_info_item',
       badge: number,
-      className: type ? type + '-notification' : '',
+      className: type ? `${type}-notification` : '',
       onClick: () => {
         this.props.notificationClick(object, number);
-      }
+      },
     };
   }
 
@@ -49,60 +49,65 @@ class InfoList extends Component {
       config,
       startTour,
       isTourActive,
-      isMobile
+      isMobile,
     } = this.props;
     const feedbackAction = isMobile
       ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
       : {
         onClick: () => {
           sendFeedback(feedbackIsInitiated);
-        }
+        },
       };
     const arr = [
       {
         text: 'Send feedback',
-        iconClass: 'ui-icon fa fa-envelope fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faEnvelope',
         id: 'send_feedback_info_item',
-        ...feedbackAction
+        ...feedbackAction,
       },
       {
         text: 'Source Code',
-        iconClass: 'ui-icon fa fa-code fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faCode',
         id: 'source_code_info_item',
-        href: 'https://github.com/nasa-gibs/worldview'
+        href: 'https://github.com/nasa-gibs/worldview',
       },
       {
         text: 'What\'s new',
-        iconClass: 'ui-icon fa fa-flag fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faFlag',
         id: 'whats_new_info_item',
-        href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS'
+        href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS',
       },
       {
         text: 'About',
-        iconClass: 'ui-icon fa fa-file fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faFile',
         id: 'about_info_item',
         onClick: () => {
           aboutClick();
-        }
-      }
+        },
+      },
     ];
     if (
-      config.features.tour &&
-      config.stories &&
-      config.storyOrder &&
-      window.innerWidth >= 740 &&
-      window.innerHeight >= 615
+      config.features.tour
+      && config.stories
+      && config.storyOrder
+      && window.innerWidth >= 740
+      && window.innerHeight >= 615
     ) {
       const exploreWorlviewObj = {
         text: 'Explore Worldview',
-        iconClass: 'ui-icon fa fa-truck fa-fw',
+        iconClass: 'ui-icon',
+        iconName: 'faTruck',
         id: 'start_tour_info_item',
         onClick: () => {
           startTour(isTourActive);
           googleTagManager.pushEvent({
-            event: 'tour_start_button'
+            event: 'tour_start_button',
           });
-        }
+        },
       };
       arr.splice(1, 0, exploreWorlviewObj);
     }
@@ -128,11 +133,11 @@ function mapStateToProps(state) {
     notifications: state.notifications,
     config: state.config,
     models: state.models,
-    isMobile: state.browser.lessThan.medium
+    isMobile: state.browser.lessThan.medium,
   };
 }
-const mapDispatchToProps = dispatch => ({
-  sendFeedback: isInitiated => {
+const mapDispatchToProps = (dispatch) => ({
+  sendFeedback: (isInitiated) => {
     onClickFeedback(isInitiated);
     if (!isInitiated) {
       dispatch(initFeedback());
@@ -148,11 +153,11 @@ const mapDispatchToProps = dispatch => ({
             dispatch(notificationsSeen());
             addToLocalStorage(obj);
           }
-        }
-      })
+        },
+      }),
     );
   },
-  startTour: isTourActive => {
+  startTour: (isTourActive) => {
     if (isTourActive) {
       dispatch(endTour());
       setTimeout(() => {
@@ -170,17 +175,17 @@ const mapDispatchToProps = dispatch => ({
         requestTemplate(
           ABOUT_PAGE_REQUEST,
           'pages/about.html?v=@BUILD_NONCE@',
-          'text/html'
-        )
+          'text/html',
+        ),
       );
       dispatch(renderTemplate('About', 'modalAboutPage'));
     }
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(InfoList);
 
 InfoList.propTypes = {
@@ -193,5 +198,5 @@ InfoList.propTypes = {
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
   sendFeedback: PropTypes.func,
-  startTour: PropTypes.func
+  startTour: PropTypes.func,
 };

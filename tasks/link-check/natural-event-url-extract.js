@@ -1,10 +1,11 @@
+/* eslint-disable no-restricted-syntax */
 const fetch = require('node-fetch');
 
 // delay helper to prevent too many requests at once
-const sleeper = (ms) => (x) => new Promise(resolve => setTimeout(() => resolve(x), ms));
+const sleeper = (ms) => (x) => new Promise((resolve) => setTimeout(() => resolve(x), ms));
 
 // helper function to find target key in nested object
-const findProp = async (obj, keys, out) => {
+const findProp = async(obj, keys, out) => {
   let i;
   const proto = Object.prototype;
   const ts = proto.toString;
@@ -29,15 +30,16 @@ const findProp = async (obj, keys, out) => {
   return out;
 };
 
-const scrapeLinks = async (htmlLinks) => {
+const scrapeLinks = async(htmlLinks) => {
   // skip exact (rel and href) doubles of links
   const trackDoubles = {};
   const addedUrls = [];
 
   for (let i = 0; i < htmlLinks.length; i++) {
     const htmlLink = htmlLinks[i];
+    // eslint-disable-next-line no-await-in-loop
     await fetch(htmlLink)
-      .then(async (res) => {
+      .then(async(res) => {
         const status = await res.json();
         const urls = await findProp(status, ['url', 'link', 'source']);
         for (let j = 0; j < urls.length; j++) {
@@ -61,7 +63,7 @@ const scrapeLinks = async (htmlLinks) => {
 // get URLs from natural events EONET
 // scraped URLs are saved in an array of objects with a key value pair of link text and href:
 // 'Wildfire MB-CE042, Manitoba, Canada': 'https://eonet.sci.gsfc.nasa.gov/api/v2.1/events/EONET_3518'
-const initExtractor = async () => {
+const initExtractor = async() => {
   // target EONET sources from natural events
   const links = ['https://eonet.sci.gsfc.nasa.gov/api/v2.1/sources',
     'https://eonet.sci.gsfc.nasa.gov/api/v2.1/events',

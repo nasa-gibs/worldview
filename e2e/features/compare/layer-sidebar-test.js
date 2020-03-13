@@ -1,6 +1,7 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const selectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
+
 const aodCombinedValueId = 'MODIS_Combined_Value_Added_AOD';
 const aodMAIACId = 'MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
 const aodCheckBox = '#checkbox-case-MODIS_Combined_Value_Added_AOD .wv-checkbox';
@@ -19,7 +20,7 @@ module.exports = {
         client.click(selectors.aerosolOpticalDepth);
         client.waitForElementVisible(aodCheckBox, client.globals.timeout, () => {
           client.click(aodCheckBox);
-          client.waitForElementVisible('#active-' + aodCombinedValueId, client.globals.timeout);
+          client.waitForElementVisible(`#active-${aodCombinedValueId}`, client.globals.timeout);
           client.click(selectors.layersModalCloseButton);
         });
       });
@@ -28,11 +29,11 @@ module.exports = {
     client.pause(250);
   },
   'Toggle compare mode to Active state B': (client) => {
-    client.click(selectors.bTab + ' .productsIcon');
+    client.click(`${selectors.bTab} .productsIcon`);
     client.waitForElementVisible('#activeB-Coastlines', client.globals.timeout);
   },
   'Verify that AOD layer is not visible': (client) => {
-    client.expect.element('#active-' + aodCombinedValueId).to.not.be.present;
+    client.expect.element(`#active-${aodCombinedValueId}`).to.not.be.present;
   },
   'Add AOD index layer to Active state B and verify it has been added': (client) => {
     client.click(selectors.addLayers);
@@ -42,28 +43,29 @@ module.exports = {
         client.click(aodMAIACCheckbox);
         client.waitForElementVisible(
           '#activeB-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
-          client.globals.timeout
+          client.globals.timeout,
         );
-        client.expect.element('#activeB-' + aodCombinedValueId).to.not.be.present;
-        client.expect.element('#active-' + aodCombinedValueId).to.not.be.present;
-      });
+        client.expect.element(`#activeB-${aodCombinedValueId}`).to.not.be.present;
+        client.expect.element(`#active-${aodCombinedValueId}`).to.not.be.present;
+      },
+    );
   },
   'Verify that AOD combined is visible and AOD index is not present in Layer list A': function(
-    client
+    client,
   ) {
     client.click(selectors.layersModalCloseButton);
     client.pause(100);
     client.click(selectors.aTab);
     client.waitForElementVisible(
-      '#active-' + aodCombinedValueId,
+      `#active-${aodCombinedValueId}`,
       client.globals.timeout,
       () => {
-        client.expect.element('#activeB-' + aodCombinedValueId).to.not.be.present;
-        client.expect.element('#activeA-' + aodMAIACId).to.not.be.present;
-      }
+        client.expect.element(`#activeB-${aodCombinedValueId}`).to.not.be.present;
+        client.expect.element(`#activeA-${aodMAIACId}`).to.not.be.present;
+      },
     );
   },
-  after: function(client) {
+  after(client) {
     client.end();
-  }
+  },
 };
