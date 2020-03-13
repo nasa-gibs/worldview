@@ -1,5 +1,6 @@
 const skipTour = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
+
 const TIME_LIMIT = 10000;
 
 module.exports = {
@@ -27,5 +28,5 @@ module.exports = {
   // TODO tests for orbit tracks toggle on/off
   after: (client) => {
     client.end();
-  }
+  },
 };

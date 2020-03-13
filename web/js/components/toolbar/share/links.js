@@ -18,7 +18,7 @@ class ShareLinks extends React.Component {
           id="fb-share"
           className="icon-link social-icon-container-facebook"
           href="#"
-          onClick={e => this.onClick(e, 'facebook')}
+          onClick={(e) => this.onClick(e, 'facebook')}
           title="Share via Facebook!"
         >
           <FontAwesomeIcon icon={faFacebookF} />
@@ -27,7 +27,7 @@ class ShareLinks extends React.Component {
           id="tw-share"
           className="icon-link social-icon-container-twitter"
           href="#"
-          onClick={e => this.onClick(e, 'twitter')}
+          onClick={(e) => this.onClick(e, 'twitter')}
           title="Share via Twitter!"
         >
           <FontAwesomeIcon icon={faTwitter} />
@@ -36,7 +36,7 @@ class ShareLinks extends React.Component {
           id="rd-share"
           className="icon-link social-icon-container-reddit-alien"
           href="#"
-          onClick={e => this.onClick(e, 'reddit')}
+          onClick={(e) => this.onClick(e, 'reddit')}
           title="Share via Reddit!"
         >
           <FontAwesomeIcon icon={faRedditAlien} />
@@ -45,7 +45,7 @@ class ShareLinks extends React.Component {
           id="email-share"
           className="icon-link social-icon-container-email"
           href="#"
-          onClick={e => this.onClick(e, 'email')}
+          onClick={(e) => this.onClick(e, 'email')}
           title="Share via Email!"
         >
           <FontAwesomeIcon icon={faEnvelope} />
@@ -56,7 +56,7 @@ class ShareLinks extends React.Component {
 }
 
 ShareLinks.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default ShareLinks;

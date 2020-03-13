@@ -4,8 +4,7 @@ import Cropper from 'react-image-crop';
 import { Portal } from 'react-portal';
 
 // https://stackoverflow.com/a/13139830
-const TRANSPARENT_GIF =
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+const TRANSPARENT_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 /*
  * A react reuseable list component
@@ -21,8 +20,8 @@ export default class Crop extends React.Component {
         x: props.x,
         y: props.y,
         width: props.width,
-        height: props.height
-      }
+        height: props.height,
+      },
     };
   }
 
@@ -32,7 +31,7 @@ export default class Crop extends React.Component {
       return '';
     }
     return (
-      <React.Fragment>
+      <>
         <div
           id="wv-image-top"
           className="wv-image-coords wv-image-top noselect"
@@ -47,7 +46,7 @@ export default class Crop extends React.Component {
         >
           {coordinates.bottomLeft}
         </div>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -57,7 +56,7 @@ export default class Crop extends React.Component {
       onChange,
       maxWidth,
       maxHeight,
-      showCoordinates
+      showCoordinates,
     } = this.props;
     const { crop } = this.state;
     return (
@@ -69,18 +68,18 @@ export default class Crop extends React.Component {
           style={{
             background:
               crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',
-            zIndex: 10
+            zIndex: 10,
           }}
           imageStyle={{
             width: maxWidth,
-            height: maxHeight
+            height: maxHeight,
           }}
-          onComplete={crop => {
+          onComplete={(crop) => {
             if (!crop.width || !crop.height) {
               onClose();
             }
           }}
-          onChange={crop => {
+          onChange={(crop) => {
             this.setState({ crop });
             if (crop.width && crop.height) {
               onChange(crop);
@@ -97,7 +96,7 @@ Crop.defaultProps = {
   maxWidth: window.innerHeight,
   width: 30,
   x: 20,
-  y: 10
+  y: 10,
 };
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -111,5 +110,5 @@ Crop.propTypes = {
   topRightStyle: PropTypes.object,
   width: PropTypes.number,
   x: PropTypes.number,
-  y: PropTypes.number
+  y: PropTypes.number,
 };

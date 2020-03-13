@@ -11,7 +11,7 @@ const LayerFilters = (props) => {
   const {
     selectedDate,
     filterByAvailable,
-    toggleFilterByAvailable
+    toggleFilterByAvailable,
   } = props;
 
   return (
@@ -21,8 +21,8 @@ const LayerFilters = (props) => {
         <FilterUnavailable
           selectedDate={selectedDate}
           filterByAvailable={filterByAvailable}
-          toggleFilterByAvailable={toggleFilterByAvailable}>
-        </FilterUnavailable>
+          toggleFilterByAvailable={toggleFilterByAvailable}
+        />
       </div>
     </div>
   );
@@ -32,7 +32,7 @@ LayerFilters.propTypes = {
   filterByAvailable: PropTypes.bool,
   numResults: PropTypes.number,
   selectedDate: PropTypes.object,
-  toggleFilterByAvailable: PropTypes.func
+  toggleFilterByAvailable: PropTypes.func,
 };
 
 export default LayerFilters;

@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ShareLinks from '../components/toolbar/share/links';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
-import { getSharelink, openPromisedSocial } from '../modules/link/util';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Checkbox } from '../components/util/checkbox';
-import { requestShortLink } from '../modules/link/actions';
 import {
   InputGroupAddon,
   Input,
   InputGroup,
   Button,
-  Tooltip
+  Tooltip,
 } from 'reactstrap';
+import ShareLinks from '../components/toolbar/share/links';
+import { getSharelink, openPromisedSocial } from '../modules/link/util';
+import { Checkbox } from '../components/util/checkbox';
+import { requestShortLink } from '../modules/link/actions';
 
 import { history } from '../main';
 
 const getShortenRequestString = function(mock, permalink) {
   const mockStr = mock || '';
-  if (/localhost/.test(location)) {
+  if (/localhost/.test(window.location)) {
     return 'mock/short_link.json';
   }
   return (
-    'service/link/shorten.cgi' +
-    mockStr +
-    '?url=' +
-    encodeURIComponent(permalink)
+    `service/link/shorten.cgi${
+      mockStr
+    }?url=${
+      encodeURIComponent(permalink)}`
   );
 };
 class ShareLinkContainer extends Component {
@@ -36,8 +37,10 @@ class ShareLinkContainer extends Component {
       shortLinkKey: '',
       isShort: false,
       tooltipOpen: false,
-      queryString: history.location.search || ''
+      queryString: history.location.search || '',
     };
+    this.onToggleShorten = this.onToggleShorten.bind(this);
+    this.onLinkClick = this.onLinkClick.bind(this);
   }
 
   componentDidMount() {
@@ -48,7 +51,7 @@ class ShareLinkContainer extends Component {
         this.setState({
           queryString: newString,
           isShort: false,
-          shortLinkKey: ''
+          shortLinkKey: '',
         });
       }
     });
@@ -70,11 +73,11 @@ class ShareLinkContainer extends Component {
     if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink();
       googleTagManager.pushEvent({
-        event: 'social_link_shorten'
+        event: 'social_link_shorten',
       });
       this.setState({
         shortLinkKey: queryString,
-        isShort: !isShort
+        isShort: !isShort,
       });
     } else {
       this.setState({ isShort: !isShort });
@@ -93,7 +96,7 @@ class ShareLinkContainer extends Component {
     const permalink = this.getPermalink();
     googleTagManager.pushEvent({
       event: 'social_share_platform',
-      social_type: type
+      social_type: type,
     });
     // If a short link can be generated, replace the full link.
     if (type === 'twitter' || type === 'email') {
@@ -103,13 +106,13 @@ class ShareLinkContainer extends Component {
         win = window.open('', '_blank');
       }
       promise
-        .then(function(result) {
+        .then((result) => {
           if (result.status_code === 200) {
             const href = getSharelink(type, result.data.url);
             openPromisedSocial(href, win);
           }
         })
-        .catch(function() {
+        .catch(() => {
           const href = getSharelink(type, permalink);
           openPromisedSocial(href, win);
           console.warn('Unable to shorten URL, full link generated.');
@@ -123,7 +126,7 @@ class ShareLinkContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.shortLink.error && prevState.isShort) {
       return { isShort: false, showErrorTooltip: true };
-    } else return null;
+    } return null;
   }
 
   renderToolTips() {
@@ -134,7 +137,7 @@ class ShareLinkContainer extends Component {
       }, 2000);
     }
     return (
-      <React.Fragment>
+      <>
         <Tooltip
           placement="left"
           isOpen={showErrorTooltip}
@@ -149,25 +152,24 @@ class ShareLinkContainer extends Component {
         >
           Copied!
         </Tooltip>
-      </React.Fragment>
+      </>
     );
   }
 
   render() {
     const { shortLink } = this.props;
     const { isShort } = this.state;
-    const value =
-      shortLink.isLoading && isShort
-        ? 'Please wait...'
-        : isShort &&
-          shortLink.response &&
-          shortLink.response.data &&
-          shortLink.response.data.url
-          ? shortLink.response.data.url
-          : this.getPermalink();
+    const value = shortLink.isLoading && isShort
+      ? 'Please wait...'
+      : isShort
+          && shortLink.response
+          && shortLink.response.data
+          && shortLink.response.data.url
+        ? shortLink.response.data.url
+        : this.getPermalink();
 
     return (
-      <React.Fragment>
+      <>
         <div>
           {this.renderToolTips()}
           <InputGroup>
@@ -176,13 +178,13 @@ class ShareLinkContainer extends Component {
               value={value}
               name="permalink_content"
               id="permalink_content"
-              onChange={e => {
+              onChange={(e) => {
                 e.preventDefault();
               }}
             />
 
             <CopyToClipboard
-              options={window.clipboardData ? {} : { format: 'text/plain' } }
+              options={window.clipboardData ? {} : { format: 'text/plain' }}
               text={value}
               onCopy={() => {
                 this.setState({ tooltipOpen: true });
@@ -200,14 +202,14 @@ class ShareLinkContainer extends Component {
           <Checkbox
             label="Shorten link"
             id="wv-link-shorten"
-            onCheck={this.onToggleShorten.bind(this)}
+            onCheck={this.onToggleShorten}
             checked={isShort}
             disabled={!shortLink.isLoading}
           />
           <br />
         </div>
-        <ShareLinks onClick={this.onLinkClick.bind(this)} />
-      </React.Fragment>
+        <ShareLinks onClick={this.onLinkClick} />
+      </>
     );
   }
 }
@@ -220,25 +222,23 @@ function mapStateToProps(state) {
     mock:
       config.parameters && config.parameters.shorten
         ? config.parameters.shorten
-        : ''
+        : '',
   };
 }
-const mapDispatchToProps = dispatch => ({
-  requestShortLink: (location, signal) => {
-    return dispatch(
-      requestShortLink(location, 'application/json', null, signal)
-    );
-  }
+const mapDispatchToProps = (dispatch) => ({
+  requestShortLink: (location, signal) => dispatch(
+    requestShortLink(location, 'application/json', null, signal),
+  ),
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ShareLinkContainer);
 
 ShareLinkContainer.propTypes = {
   mock: PropTypes.string,
   queryString: PropTypes.string,
   requestShortLink: PropTypes.func,
-  shortLink: PropTypes.object
+  shortLink: PropTypes.object,
 };

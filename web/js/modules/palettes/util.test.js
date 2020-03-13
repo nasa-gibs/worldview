@@ -3,39 +3,37 @@ import { layersParse12 } from '../layers/util';
 import {
   hasCustomTypePalette,
   loadPalettes,
-  mapLocationToPaletteState
+  mapLocationToPaletteState,
 } from './util';
 import util from '../../util/util';
 import fixtures from '../../fixtures';
+
 const state = fixtures.getState();
 const config = fixtures.config();
-const LAYER_STRING =
-  'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true),mask';
+const LAYER_STRING = 'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true),mask';
 const layerArrayFromPermalinkString = layersParse12(LAYER_STRING, config);
 const PERMALINK_STATE = { l: LAYER_STRING };
 
 test('hasCustomTypePalette func determines if custom palette is in string', () => {
   const bool = hasCustomTypePalette(
-    'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true)'
+    'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true)',
   );
   expect(bool).toBeTruthy();
 });
 test('hasCustomTypePalette func determines if custom palette is in string', () => {
   const bool = hasCustomTypePalette(
-    'some-layer(disabled(;0-2)'
+    'some-layer(disabled(;0-2)',
   );
   expect(bool).toBeTruthy();
 });
 test('loadPalettes func updates state with correct palette attributes', () => {
-  util.browser = jest.fn(() => {
-    return {
-      webWorkers: true,
-      ie: false,
-      cors: true
-    };
-  })();
+  util.browser = jest.fn(() => ({
+    webWorkers: true,
+    ie: false,
+    cors: true,
+  }))();
   const updatedState = update(state, {
-    layers: { active: { $set: layerArrayFromPermalinkString } }
+    layers: { active: { $set: layerArrayFromPermalinkString } },
   });
 
   const loadedState = loadPalettes(PERMALINK_STATE, updatedState);
@@ -49,17 +47,17 @@ describe('permalink 1.1', () => {
   test('parses palette for valid layer', () => {
     const parameters = {
       l: 'terra-aod',
-      palettes: 'terra-aod,blue-1'
+      palettes: 'terra-aod,blue-1',
     };
     let stateFromLocation = update(state, {
-      layers: { active: { $set: layersParse12(parameters.l, config) } }
+      layers: { active: { $set: layersParse12(parameters.l, config) } },
     });
 
     stateFromLocation = mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     const layer = stateFromLocation.layers.active[0];
     expect(layer.id).toBe('terra-aod');
@@ -69,16 +67,16 @@ describe('permalink 1.1', () => {
   test('parses palette for two valid layers', () => {
     const parameters = {
       l: 'terra-aod,aqua-aod',
-      palettes: 'terra-aod,blue-1~aqua-aod,red-1'
+      palettes: 'terra-aod,blue-1~aqua-aod,red-1',
     };
     let stateFromLocation = update(state, {
-      layers: { active: { $set: layersParse12(parameters.l, config) } }
+      layers: { active: { $set: layersParse12(parameters.l, config) } },
     });
     stateFromLocation = mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
 
     const layer1 = stateFromLocation.layers.active[0];
@@ -91,18 +89,18 @@ describe('permalink 1.1', () => {
   });
 
   test('disregard palettes value if palette assigned to a layer that is not active', () => {
-    var parameters = {
+    const parameters = {
       l: 'terra-aod',
-      palettes: 'aqua-aod,red-1'
+      palettes: 'aqua-aod,red-1',
     };
     let stateFromLocation = update(state, {
-      layers: { active: { $set: layersParse12(parameters.l, config) } }
+      layers: { active: { $set: layersParse12(parameters.l, config) } },
     });
     stateFromLocation = mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     const layer = stateFromLocation.layers.active[0];
 

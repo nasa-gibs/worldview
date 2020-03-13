@@ -1,8 +1,8 @@
+import { Polygon, LineString } from 'ol/geom';
 import {
   getFormattedArea,
-  getFormattedLength
+  getFormattedLength,
 } from './util';
-import { Polygon, LineString } from 'ol/geom';
 import { registerProjections } from '../../fixtures';
 
 beforeEach(registerProjections);
@@ -102,8 +102,8 @@ test('lines which are the same numbers of degrees apart, at different poles, and
 /**
  * Check for equality across ant-meridian to left and right of standard extents (-180, -90, 180, 90)
  */
-test('lines which cross the anti-meridian outside of "normal" extents' +
-     ' are the same length as equal distances within extents', () => {
+test('lines which cross the anti-meridian outside of "normal" extents'
+     + ' are the same length as equal distances within extents', () => {
   const line1 = [[-50, 0], [0, 0]]; // normal
   const line2 = [[-230, 0], [-180, 0]]; // outside left
   const line3 = [[180, 0], [230, 0]]; // outside right

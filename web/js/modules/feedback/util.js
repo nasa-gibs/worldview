@@ -9,10 +9,11 @@ import util from '../../util/util';
 
 export function onClickFeedback(wasInitiated) {
   if (!util.browser.small && window.feedback) {
+    // eslint-disable-next-line no-restricted-globals
     event.preventDefault();
     if (!wasInitiated) {
       feedback.init({
-        showIcon: false
+        showIcon: false,
       });
     }
     feedback.showForm();

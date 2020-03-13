@@ -13,115 +13,116 @@ import {
   changeStartAndEndDate,
   changeFrameRate,
   changeCropBounds,
-  onActivate
+  onActivate,
 } from './actions';
 import fixtures from '../../fixtures';
+
 const middlewares = [thunk];
 const state = fixtures.getState();
 
 describe('Open, play, stop, close and toggle actions', () => {
   test(
-    'onClose action returns ' + constants.EXIT_ANIMATION + ' action type',
+    `onClose action returns ${constants.EXIT_ANIMATION} action type`,
     () => {
       const expectedAction = {
-        type: constants.EXIT_ANIMATION
+        type: constants.EXIT_ANIMATION,
       };
       expect(onClose().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
-    'play action returns ' + constants.PLAY_ANIMATION + ' action type',
+    `play action returns ${constants.PLAY_ANIMATION} action type`,
     () => {
       const expectedAction = {
-        type: constants.PLAY_ANIMATION
+        type: constants.PLAY_ANIMATION,
       };
       expect(play().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
-    'stop action returns ' + constants.STOP_ANIMATION + ' action type',
+    `stop action returns ${constants.STOP_ANIMATION} action type`,
     () => {
       const expectedAction = {
-        type: constants.STOP_ANIMATION
+        type: constants.STOP_ANIMATION,
       };
       expect(stop().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
-    'toggleLooping action returns ' + constants.TOGGLE_LOOPING + ' action type',
+    `toggleLooping action returns ${constants.TOGGLE_LOOPING} action type`,
     () => {
       const expectedAction = {
-        type: constants.TOGGLE_LOOPING
+        type: constants.TOGGLE_LOOPING,
       };
       expect(toggleLooping().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
-    'toggleComponentGifActive action returns ' +
-    constants.TOGGLE_GIF +
-    ' action type',
+    `toggleComponentGifActive action returns ${
+      constants.TOGGLE_GIF
+    } action type`,
     () => {
       const expectedAction = {
-        type: constants.TOGGLE_GIF
+        type: constants.TOGGLE_GIF,
       };
       expect(toggleComponentGifActive().type).toEqual(expectedAction.type);
-    }
+    },
   );
 });
 describe('Animation Datechange actions', () => {
   const now = new Date();
   const then = util.dateAdd(now, 'day', -7);
   test(
-    'changeStartDate action returns ' +
-    constants.UPDATE_START_DATE +
-    ' action type and current date as value',
+    `changeStartDate action returns ${
+      constants.UPDATE_START_DATE
+    } action type and current date as value`,
     () => {
       const expectedAction = {
         type: constants.UPDATE_START_DATE,
-        value: now
+        value: now,
       };
       const response = changeStartDate(now);
       expect(response.type).toEqual(expectedAction.type);
       expect(response.value).toEqual(now);
-    }
+    },
   );
   test(
-    'changeEndDate action returns ' +
-    constants.UPDATE_END_DATE +
-    ' action type and current date as value',
+    `changeEndDate action returns ${
+      constants.UPDATE_END_DATE
+    } action type and current date as value`,
     () => {
       const response = changeEndDate(now);
       expect(response.type).toEqual(constants.UPDATE_END_DATE);
       expect(response.value).toEqual(now);
-    }
+    },
   );
   test(
-    'changeStartAndEndDate action returns ' +
-    constants.UPDATE_START_AND_END_DATE +
-    ' action type and current date as value',
+    `changeStartAndEndDate action returns ${
+      constants.UPDATE_START_AND_END_DATE
+    } action type and current date as value`,
     () => {
       const response = changeStartAndEndDate(then, now);
       expect(response.type).toEqual(constants.UPDATE_START_AND_END_DATE);
       expect(response.startDate).toEqual(then);
       expect(response.endDate).toEqual(now);
-    }
+    },
   );
 });
 
 test(
-  'changeFrameRate action returns ' +
-  constants.UPDATE_FRAME_RATE +
-  ' action type and number value',
+  `changeFrameRate action returns ${
+    constants.UPDATE_FRAME_RATE
+  } action type and number value`,
   () => {
     const response = changeFrameRate(2);
     expect(response.type).toEqual(constants.UPDATE_FRAME_RATE);
     expect(response.value).toEqual(2);
-  }
+  },
 );
 test(
-  'onActivate action returns ' +
-  constants.OPEN_ANIMATION +
-  ' action type and current dateValue',
+  `onActivate action returns ${
+    constants.OPEN_ANIMATION
+  } action type and current dateValue`,
   () => {
     const mockStore = configureMockStore(middlewares);
     const store = mockStore(state);
@@ -131,21 +132,23 @@ test(
     expect(response1.type).toEqual(constants.UPDATE_START_AND_END_DATE);
     expect(response1.endDate).toEqual(state.date.selected);
     expect(response1.startDate).toEqual(
-      util.dateAdd(state.date.selected, 'day', -10)
+      util.dateAdd(state.date.selected, 'day', -10),
     );
     expect(response2.type).toEqual(constants.OPEN_ANIMATION);
-  }
+  },
 );
 
 test(
-  'changeBoundary action returns ' + constants.UPDATE_CROP_BOUNDS + ' action type and current bounds value',
+  `changeBoundary action returns ${constants.UPDATE_CROP_BOUNDS} action type and current bounds value`,
   () => {
     const mockStore = configureMockStore(middlewares);
     const store = mockStore(state);
-    const mockBounds = { x: 1, y: 1, x2: 2, y2: 2 };
+    const mockBounds = {
+      x: 1, y: 1, x2: 2, y2: 2,
+    };
     store.dispatch(changeCropBounds(mockBounds));
     const response = store.getActions()[0];
     expect(response.type).toEqual(constants.UPDATE_CROP_BOUNDS);
     expect(response.value).toEqual(mockBounds);
-  }
+  },
 );

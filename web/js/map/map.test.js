@@ -4,7 +4,7 @@ describe('permalink 1.1', () => {
   test('parses state', () => {
     const errors = [];
     const state = {
-      map: '0,1,2,3'
+      map: '0,1,2,3',
     };
     mapParser(state, errors);
 
@@ -17,7 +17,7 @@ describe('permalink 1.2', () => {
   test('parses state', () => {
     const errors = [];
     const state = {
-      v: '0,1,2,3'
+      v: '0,1,2,3',
     };
     mapParser(state, errors);
 
@@ -28,7 +28,7 @@ describe('permalink 1.2', () => {
   test('error on invalid extent', () => {
     const errors = [];
     const state = {
-      map: '0,1,x,3'
+      map: '0,1,x,3',
     };
     mapParser(state, errors);
 

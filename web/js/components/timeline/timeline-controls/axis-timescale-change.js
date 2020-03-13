@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeControls from './axis-timescale-change-controls';
@@ -14,7 +15,7 @@ class AxisTimeScaleChange extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      toolTipHovered: false
+      toolTipHovered: false,
     };
   }
 
@@ -23,7 +24,7 @@ class AxisTimeScaleChange extends PureComponent {
     if (!this.props.isDraggerDragging) { // in event of dragging off axis, prevent tooltip display
       this.disableMapScales(true);
       this.setState({
-        toolTipHovered: true
+        toolTipHovered: true,
       });
     }
   }
@@ -32,7 +33,7 @@ class AxisTimeScaleChange extends PureComponent {
   toolTipHoverOff = () => {
     this.disableMapScales(false);
     this.setState({
-      toolTipHovered: false
+      toolTipHovered: false,
     });
   }
 
@@ -79,30 +80,32 @@ class AxisTimeScaleChange extends PureComponent {
       timeScale,
       timelineHidden,
       hasSubdailyLayers,
-      changeTimeScale
+      changeTimeScale,
     } = this.props;
     return (
       <div
         className="zoom-level-change"
         style={{
-          display: timelineHidden ? 'none' : 'block'
+          display: timelineHidden ? 'none' : 'block',
         }}
       >
         { timeScale
-          ? <div
-            onMouseEnter={this.toolTipHoverOn}
-            onMouseLeave={this.toolTipHoverOff}>
-            <AxisTimeScaleChangeControls
-              timeScale={timeScale}
-              hasSubdailyLayers={hasSubdailyLayers}
-              toolTipHovered={this.state.toolTipHovered}
-              changeTimeScale={changeTimeScale}
-              incrementTimeScale={this.incrementTimeScale}
-              decrementTimeScale={this.decrementTimeScale}
-            />
-          </div>
-          : null
-        }
+          ? (
+            <div
+              onMouseEnter={this.toolTipHoverOn}
+              onMouseLeave={this.toolTipHoverOff}
+            >
+              <AxisTimeScaleChangeControls
+                timeScale={timeScale}
+                hasSubdailyLayers={hasSubdailyLayers}
+                toolTipHovered={this.state.toolTipHovered}
+                changeTimeScale={changeTimeScale}
+                incrementTimeScale={this.incrementTimeScale}
+                decrementTimeScale={this.decrementTimeScale}
+              />
+            </div>
+          )
+          : null}
       </div>
     );
   }
@@ -113,7 +116,7 @@ AxisTimeScaleChange.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   timelineHidden: PropTypes.bool,
-  timeScale: PropTypes.string
+  timeScale: PropTypes.string,
 };
 
 export default AxisTimeScaleChange;

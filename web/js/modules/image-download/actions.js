@@ -2,13 +2,13 @@ import {
   UPDATE_BOUNDARIES,
   UPDATE_FILE_TYPE,
   UPDATE_RESOLUTION,
-  UPDATE_WORLDFILE
+  UPDATE_WORLDFILE,
 } from './constants';
 
 export function updateBoundaries(obj) {
   return {
     type: UPDATE_BOUNDARIES,
-    boundaries: obj
+    boundaries: obj,
   };
 }
 export function onPanelChange(type, value) {
@@ -20,6 +20,6 @@ export function onPanelChange(type, value) {
   }
   return {
     type: actionType,
-    value: value
+    value,
   };
 }

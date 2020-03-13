@@ -4,7 +4,7 @@ export const defaultRequestState = {
   isLoading: false,
   error: null,
   response: null,
-  type: null
+  type: null,
 };
 export function requestResponse(props = {}) {
   return lodashAssign({}, defaultRequestState, props);
@@ -17,18 +17,18 @@ export function requestReducer(actionName, state, action, callback) {
     case START:
       return requestResponse({
         isLoading: true,
-        response: null
+        response: null,
       });
     case SUCCESS:
       return requestResponse({
         response: action.response,
-        isLoading: false
+        isLoading: false,
       });
     case FAILURE:
       return requestResponse({
         response: null,
         error: action.error,
-        isLoading: false
+        isLoading: false,
       });
     default:
       return requestResponse(state);

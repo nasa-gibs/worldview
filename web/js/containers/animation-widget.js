@@ -2,13 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   find as lodashFind,
-  get as lodashGet
+  get as lodashGet,
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
-import util from '../util/util';
-import ErrorBoundary from './error-boundary';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
+import { Tooltip } from 'reactstrap';
+import Draggable from 'react-draggable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChevronUp, faChevronDown, faTimes, faFileVideo,
+} from '@fortawesome/free-solid-svg-icons';
+import util from '../util/util';
+import ErrorBoundary from './error-boundary';
 import TimeSelector from '../components/date-selector/date-selector';
 import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
@@ -22,21 +30,21 @@ import {
   selectDate,
   selectInterval,
   changeCustomInterval,
-  toggleCustomModal
+  toggleCustomModal,
 } from '../modules/date/actions';
 import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey,
-  customModalType
+  customModalType,
 } from '../modules/date/constants';
 import {
   getQueueLength,
   getMaxQueueLength,
-  snapToIntervalDelta
+  snapToIntervalDelta,
 } from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
-  getLayers
+  getLayers,
 } from '../modules/layers/selectors';
 import {
   play,
@@ -47,7 +55,7 @@ import {
   changeStartDate,
   changeEndDate,
   changeStartAndEndDate,
-  toggleComponentGifActive
+  toggleComponentGifActive,
 } from '../modules/animation/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import { onToggle, openCustomContent } from '../modules/modal/actions';
@@ -55,22 +63,20 @@ import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
-import { Tooltip } from 'reactstrap';
-import Draggable from 'react-draggable';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp, faChevronDown, faTimes, faFileVideo } from '@fortawesome/free-solid-svg-icons';
 
-const RangeHandle = props => {
-  const { value, offset, dragging, ...restProps } = props;
+const RangeHandle = (props) => {
+  const {
+    value, offset, dragging, ...restProps
+  } = props;
 
   const positionStyle = {
     position: 'absolute',
-    left: `${(offset - 5).toFixed(2)}%`
+    left: `${(offset - 5).toFixed(2)}%`,
   };
 
   return (
-    <React.Fragment>
+    <>
       <span className="anim-frame-rate-label" style={positionStyle}>
         {value < 10 ? value.toFixed(1) : value}
       </span>
@@ -80,7 +86,7 @@ const RangeHandle = props => {
         offset={offset}
         {...restProps}
       />
-    </React.Fragment>
+    </>
   );
 };
 
@@ -107,11 +113,11 @@ class AnimationWidget extends React.Component {
       customIntervalModalOpen: false,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
-        y: 0
+        y: 0,
       },
       collapsed: false,
       collapsedWidgetPosition: { x: 0, y: 0 },
-      userHasMovedWidget: false
+      userHasMovedWidget: false,
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
@@ -133,17 +139,21 @@ class AnimationWidget extends React.Component {
     // yet, try to keep it centered
     if (subdailyChange && !userHasMovedWidget) {
       const useWidth = subDailyMode ? subdailyWidgetWidth : widgetWidth;
+
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         widgetPosition: {
           x: (screenWidth / 2) - (useWidth / 2),
-          y: 0
-        }
+          y: 0,
+        },
       });
     }
   }
 
   toggleCollapse() {
-    this.setState({ collapsed: !this.state.collapsed });
+    this.setState((prevState) => ({
+      collapsed: !prevState.collapsed,
+    }));
   }
 
   /**
@@ -157,35 +167,34 @@ class AnimationWidget extends React.Component {
       'wv-animation-widget',
       'wv-animation-widget-header',
       'wv-anim-dates-case',
-      'thru-label'
+      'thru-label',
     ];
     const { classList } = e.target;
-    return draggableTargets.some(tClass => classList.contains(tClass));
+    return draggableTargets.some((tClass) => classList.contains(tClass));
   }
 
   onExpandedDrag(e, position) {
     const { x, y } = position;
     this.setState({
       userHasMovedWidget: true,
-      widgetPosition: { x, y }
+      widgetPosition: { x, y },
     });
-  };
+  }
 
   onCollapsedDrag(e, position) {
     const { x, y } = position;
     this.setState({
       userHasMovedWidget: true,
-      collapsedWidgetPosition: { x, y }
+      collapsedWidgetPosition: { x, y },
     });
-  };
+  }
 
   getPromise(bool, type, action, title) {
     const { notify } = this.props;
     if (bool) {
       return notify(type, action);
-    } else {
-      return Promise.resolve(type);
     }
+    return Promise.resolve(type);
   }
 
   openGif() {
@@ -198,16 +207,17 @@ class AnimationWidget extends React.Component {
       rotation,
       activePalettes,
       numberOfFrames,
-      refreshStateAfterGif
+      refreshStateAfterGif,
     } = this.props;
     const {
       startDate,
-      endDate
+      endDate,
     } = this.zeroDates();
 
     if (numberOfFrames >= maxFrames) {
       return;
     }
+    const paletteStore = lodashCloneDeep(activePalettes);
 
     this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice').then(
       () => {
@@ -215,27 +225,27 @@ class AnimationWidget extends React.Component {
           isRotated,
           'rotate',
           clearRotate,
-          'Reset rotation'
+          'Reset rotation',
         ).then(() => {
           this.getPromise(
             hasGraticule,
             'graticule',
             clearGraticule,
-            'Remove Graticule?'
+            'Remove Graticule?',
           ).then(() => {
             onUpdateStartAndEndDate(startDate, endDate);
           }).then(() => {
             googleTagManager.pushEvent({
-              event: 'GIF_create_animated_button'
+              event: 'GIF_create_animated_button',
             });
             this.onCloseGif = () => {
-              refreshStateAfterGif(hasCustomPalettes ? activePalettes : undefined, rotation, hasGraticule);
+              refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule);
               toggleGif();
             };
             toggleGif();
           });
         });
-      }
+      },
     );
   }
 
@@ -253,7 +263,7 @@ class AnimationWidget extends React.Component {
    * @return {void}
    */
   onLoop() {
-    var loop = true;
+    let loop = true;
     if (this.state.looping) {
       loop = false;
     }
@@ -310,11 +320,11 @@ class AnimationWidget extends React.Component {
   onPushPlay = () => {
     const {
       onUpdateStartAndEndDate,
-      onPushPlay
+      onPushPlay,
     } = this.props;
     const {
       startDate,
-      endDate
+      endDate,
     } = this.zeroDates();
     onUpdateStartAndEndDate(startDate, endDate);
     onPushPlay();
@@ -334,7 +344,7 @@ class AnimationWidget extends React.Component {
     let {
       subDailyMode,
       startDate,
-      endDate
+      endDate,
     } = this.props;
     if (subDailyMode) {
       // for subdaily, zero start and end dates to UTC XX:YY:00:00
@@ -349,7 +359,7 @@ class AnimationWidget extends React.Component {
     }
     return {
       startDate,
-      endDate
+      endDate,
     };
   }
 
@@ -387,8 +397,11 @@ class AnimationWidget extends React.Component {
       <Tooltip
         placement="right"
         isOpen={showTooltip}
-        target="create-gif-button">
-        Too many frames were selected. <br />
+        target="create-gif-button"
+      >
+        Too many frames were selected.
+        {' '}
+        <br />
         Please request less than 40 frames if you would like to generate a GIF.
       </Tooltip>
     );
@@ -398,26 +411,29 @@ class AnimationWidget extends React.Component {
     const {
       isPlaying,
       onPushPause,
-      hasSubdailyLayers
+      hasSubdailyLayers,
     } = this.props;
     return (
       <Draggable
         bounds="body"
         onStart={this.handleDragStart}
         position={this.state.collapsedWidgetPosition}
-        onDrag={this.onCollapsedDrag}>
+        onDrag={this.onCollapsedDrag}
+      >
         <div
-          className={'wv-animation-widget-wrapper minimized' + (hasSubdailyLayers ? ' subdaily' : '')}>
+          className={`wv-animation-widget-wrapper minimized${hasSubdailyLayers ? ' subdaily' : ''}`}
+        >
           <div
             id="wv-animation-widget"
-            className={'wv-animation-widget minimized'}>
+            className="wv-animation-widget minimized"
+          >
             <PlayButton
               playing={isPlaying}
               play={this.onPushPlay}
               pause={onPushPause}
             />
-            <FontAwesomeIcon icon={faChevronUp} className='wv-expand' onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className='wv-close' onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faChevronUp} className="wv-expand" onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={this.props.onClose} />
           </div>
         </div>
       </Draggable>
@@ -441,7 +457,7 @@ class AnimationWidget extends React.Component {
       customInterval,
       numberOfFrames,
       animationCustomModalOpen,
-      hasSubdailyLayers
+      hasSubdailyLayers,
     } = this.props;
     const { speed } = this.state;
     const gifDisabled = numberOfFrames >= maxFrames;
@@ -450,11 +466,12 @@ class AnimationWidget extends React.Component {
         bounds="body"
         position={this.state.widgetPosition}
         onDrag={this.onExpandedDrag}
-        onStart={this.handleDragStart}>
+        onStart={this.handleDragStart}
+      >
         <div className="wv-animation-widget-wrapper">
           <div
             id="wv-animation-widget"
-            className={'wv-animation-widget' + (subDailyMode ? ' subdaily' : '')}
+            className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
           >
             <div className="wv-animation-widget-header">
               {'Animate Map in '}
@@ -484,7 +501,7 @@ class AnimationWidget extends React.Component {
                 max={10}
                 min={0.5}
                 value={this.state.speed}
-                onChange={num => this.setState({ speed: num })}
+                onChange={(num) => this.setState({ speed: num })}
                 handle={RangeHandle}
                 onBeforeChange={() => this.setState({ isSliding: true })}
                 onAfterChange={() => {
@@ -504,7 +521,7 @@ class AnimationWidget extends React.Component {
               onMouseEnter={this.toggleHoverGif}
               onMouseLeave={this.toggleHoverGif}
             >
-              <FontAwesomeIcon icon={faFileVideo} id="wv-animation-widget-file-video-icon" className='wv-animation-widget-icon' />
+              <FontAwesomeIcon icon={faFileVideo} id="wv-animation-widget-file-video-icon" className="wv-animation-widget-icon" />
             </a>
             {this.renderToolTip()}
 
@@ -530,8 +547,8 @@ class AnimationWidget extends React.Component {
                 subDailyMode={subDailyMode}
               />
             </div>
-            <FontAwesomeIcon icon={faChevronDown} className='wv-minimize' onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className='wv-close' onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faChevronDown} className="wv-minimize" onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={this.props.onClose} />
 
             {/* Custom time interval selection */}
             <CustomIntervalSelectorWidget
@@ -563,7 +580,7 @@ class AnimationWidget extends React.Component {
       currentDate,
       isGifActive,
       delta,
-      interval
+      interval,
     } = this.props;
     const { speed, collapsed } = this.state;
     const maxLength = getMaxQueueLength(speed);
@@ -572,7 +589,7 @@ class AnimationWidget extends React.Component {
       endDate,
       speed,
       interval,
-      delta
+      delta,
     );
 
     const snappedCurrentDate = snapToIntervalDelta(
@@ -580,7 +597,7 @@ class AnimationWidget extends React.Component {
       startDate,
       endDate,
       interval,
-      delta
+      delta,
     );
 
     if (!isActive) {
@@ -632,9 +649,11 @@ function mapStateToProps(state) {
     config,
     map,
     proj,
-    browser
+    browser,
   } = state;
-  const { startDate, endDate, speed, loop, isPlaying, isActive, gifActive } = animation;
+  const {
+    startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
+  } = animation;
   let {
     customSelected,
     interval,
@@ -642,7 +661,7 @@ function mapStateToProps(state) {
     customInterval,
     customDelta,
     appNow,
-    animationCustomModalOpen
+    animationCustomModalOpen,
   } = date;
   const activeStr = compare.activeString;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
@@ -650,21 +669,21 @@ function mapStateToProps(state) {
   const activeLayersForProj = getLayers(
     layers[activeStr],
     { proj: proj.id },
-    state
+    state,
   );
   const activePalettes = palettes[activeStr];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
-    activePalettes
+    activePalettes,
   );
   const minDate = new Date(config.startDate);
   const maxDate = appNow;
-  const animationIsActive = isActive &&
-    browser.greaterThan.small &&
-    lodashGet(map, 'ui.selected.frameState_') &&
-    sidebar.activeTab !== 'download' && // No Animation when data download is active
-    !compare.active &&
-    !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'); // No Animation when Image download is open
+  const animationIsActive = isActive
+    && browser.greaterThan.small
+    && lodashGet(map, 'ui.selected.frameState_')
+    && sidebar.activeTab !== 'download' // No Animation when data download is active
+    && !compare.active
+    && !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'); // No Animation when Image download is open
 
   if (!hasSubdailyLayers) {
     interval = interval > 3 ? 3 : interval;
@@ -678,9 +697,9 @@ function mapStateToProps(state) {
     endDate,
     timeScaleFromNumberKey[useInterval],
     customSelected && customDelta ? customDelta : delta,
-    maxFrames
+    maxFrames,
   );
-  const rotation = map.rotation;
+  const { rotation } = map;
   return {
     screenWidth: browser.screenWidth,
     animationCustomModalOpen,
@@ -706,9 +725,7 @@ function mapStateToProps(state) {
     looping: loop,
     hasCustomPalettes,
     map,
-    promiseImageryForTime: (date, layers) => {
-      return promiseImageryForTime(date, layers, state);
-    },
+    promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
     isGifActive: gifActive,
     isCompareActive: compare.active,
     isRotated: Boolean(rotation !== 0),
@@ -716,39 +733,37 @@ function mapStateToProps(state) {
     hasGraticule: Boolean(
       lodashGet(
         lodashFind(layers[activeStr], { id: 'Graticule' }) || {},
-        'visible'
-      )
-    )
+        'visible',
+      ),
+    ),
   };
 }
-const mapDispatchToProps = dispatch => ({
-  selectDate: val => {
+const mapDispatchToProps = (dispatch) => ({
+  selectDate: (val) => {
     dispatch(selectDate(val));
   },
-  notify: (type, action, title) => {
-    return new Promise((resolve, reject, cancel) => {
-      const bodyComponentProps = {
-        bodyText: notificationWarnings[type],
-        cancel: () => {
-          dispatch(onToggle());
-        },
-        accept: () => {
-          dispatch(action());
-          dispatch(onToggle());
-          resolve();
-        }
-      };
-      dispatch(
-        openCustomContent('image_download_notify_' + type, {
-          headerText: 'Notify',
-          bodyComponent: Notify,
-          size: 'sm',
-          modalClassName: 'notify',
-          bodyComponentProps
-        })
-      );
-    });
-  },
+  notify: (type, action, title) => new Promise((resolve, reject, cancel) => {
+    const bodyComponentProps = {
+      bodyText: notificationWarnings[type],
+      cancel: () => {
+        dispatch(onToggle());
+      },
+      accept: () => {
+        dispatch(action());
+        dispatch(onToggle());
+        resolve();
+      },
+    };
+    dispatch(
+      openCustomContent(`image_download_notify_${type}`, {
+        headerText: 'Notify',
+        bodyComponent: Notify,
+        size: 'sm',
+        modalClassName: 'notify',
+        bodyComponentProps,
+      }),
+    );
+  }),
   onClose: () => {
     dispatch(onClose());
   },
@@ -778,7 +793,7 @@ const mapDispatchToProps = dispatch => ({
   toggleCustomModal: (open, toggleBy) => {
     dispatch(toggleCustomModal(open, toggleBy));
   },
-  onSlide: num => {
+  onSlide: (num) => {
     dispatch(changeFrameRate(num));
   },
   onIntervalSelect: (delta, timeScale, customSelected) => {
@@ -795,18 +810,18 @@ const mapDispatchToProps = dispatch => ({
   },
   onUpdateStartAndEndDate: (startDate, endDate) => {
     dispatch(changeStartAndEndDate(startDate, endDate));
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(AnimationWidget);
 
 RangeHandle.propTypes = {
   dragging: PropTypes.object,
   offset: PropTypes.number,
-  value: PropTypes.number
+  value: PropTypes.number,
 };
 AnimationWidget.propTypes = {
   activePalettes: PropTypes.object,
@@ -855,5 +870,5 @@ AnimationWidget.propTypes = {
   subDailyMode: PropTypes.bool,
   toggleCollapse: PropTypes.func,
   toggleCustomModal: PropTypes.func,
-  toggleGif: PropTypes.func
+  toggleGif: PropTypes.func,
 };

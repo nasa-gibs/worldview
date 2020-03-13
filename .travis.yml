@@ -19,6 +19,7 @@ matrix:
   allow_failures:
     - os: windows
     - node_js: lts/*
+    - name: 'Node.js 10.16.3 - Chrome E2E'
 
   include:
     - os: osx

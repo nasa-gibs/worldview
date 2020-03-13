@@ -1,6 +1,7 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
+
 const draggerA = '.timeline-dragger.draggerA ';
 const draggerB = '.timeline-dragger.draggerB ';
 const dateSelectorDayInput = '#date-selector-main .input-wrapper-day input';
@@ -8,7 +9,7 @@ const dateSelectorMonthInput = '#date-selector-main .input-wrapper-month input';
 const TIME_LIMIT = 20000;
 
 module.exports = {
-  before: function(client) {
+  before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   // load A|B and verify that it is active
@@ -31,9 +32,9 @@ module.exports = {
       .moveToElement(draggerB, 100, 30)
       .mouseButtonUp(0)
       .pause(2000);
-    client.getValue(dateSelectorDayInput, function(dayResult) {
+    client.getValue(dateSelectorDayInput, (dayResult) => {
       client.getValue(dateSelectorMonthInput, function(monthResult) {
-        var result = monthResult.value.concat(dayResult.value);
+        const result = monthResult.value.concat(dayResult.value);
         this.assert.notEqual('AUG17', result);
       });
     });
@@ -49,9 +50,9 @@ module.exports = {
     client.waitForElementVisible(
       '#activeB-Reference_Features',
       TIME_LIMIT,
-      function() {
+      () => {
         client.assert.attributeContains(dateSelectorDayInput, 'value', '16');
-      }
+      },
     );
   },
   'Dragging B dragger updates date in label': function(client) {
@@ -72,19 +73,19 @@ module.exports = {
     client.waitForElementNotPresent(
       localSelectors.bTab,
       TIME_LIMIT,
-      function() {
+      () => {
         client
           .useCss()
           .assert.containsText(
             localSelectors.compareButton,
-            'Start Comparison'
+            'Start Comparison',
           );
         client.expect.element(draggerA).to.not.be.present;
         client.expect.element(draggerB).to.be.visible;
-      }
+      },
     );
   },
-  after: function(client) {
+  after(client) {
     client.end();
-  }
+  },
 };

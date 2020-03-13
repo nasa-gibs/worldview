@@ -3,13 +3,13 @@ export function dataParser(state, errors, config) {
     state.download = state.dataDownload;
     delete state.dataDownload;
   }
-  var productId = state.download;
+  const productId = state.download;
   if (productId) {
     if (!config.products[productId]) {
       delete state.download;
       errors.push({
-        message: 'No such product: ' + productId
+        message: `No such product: ${productId}`,
       });
     }
   }
-};
+}

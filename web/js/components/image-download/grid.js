@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../util/button';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import Button from '../util/button';
 
 /*
  * A table that updates with image
@@ -14,7 +14,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
  */
 export default class ResolutionTable extends React.Component {
   renderImageSize() {
-    var size = this.props.fileSize;
+    const size = this.props.fileSize;
     if (!this.props.validSize) {
       return (
         <div
@@ -22,21 +22,25 @@ export default class ResolutionTable extends React.Component {
           className="wv-image-size wv-image-size-invalid grid-child"
         >
           <FontAwesomeIcon icon={faTimes} fixedWidth />
-          <span>{'~' + size + 'MB'}</span>
-        </div>
-      );
-    } else {
-      return (
-        <div id="wv-image-size" className="wv-image-size grid-child">
-          <span>{'~' + size + ' MB'} </span>
+          <span>{`~${size}MB`}</span>
         </div>
       );
     }
+    return (
+      <div id="wv-image-size" className="wv-image-size grid-child">
+        <span>
+          {`~${size} MB`}
+          {' '}
+        </span>
+      </div>
+    );
   }
 
   render() {
     const imageSize = this.renderImageSize();
-    const { width, height, maxImageSize, onClick, validLayers, validSize } = this.props;
+    const {
+      width, height, maxImageSize, onClick, validLayers, validSize,
+    } = this.props;
     return (
       <div className="wv-image-download-grid">
         <div className="grid-child grid-head">
@@ -59,7 +63,7 @@ export default class ResolutionTable extends React.Component {
           className="grid-child wv-image-dimensions"
           id="wv-image-dimensions"
         >
-          <span>{width + ' x ' + height + 'px'}</span>
+          <span>{`${width} x ${height}px`}</span>
         </div>
         <div className="grid-child wv-image-button">
           <Button
@@ -82,5 +86,5 @@ ResolutionTable.propTypes = {
   onClick: PropTypes.func,
   validLayers: PropTypes.bool,
   validSize: PropTypes.bool,
-  width: PropTypes.number
+  width: PropTypes.number,
 };

@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import DeltaInput from './delta-input';
 import TimeScaleSelect from './interval-select';
 import {
   timeScaleFromNumberKey,
-  timeScaleToNumberKey
+  timeScaleToNumberKey,
 } from '../../../modules/date/constants';
 import { toggleCustomModal } from '../../../modules/date/actions';
-import { connect } from 'react-redux';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 /*
  * CustomIntervalSelectorWidget for Custom Interval Selector
@@ -48,12 +48,12 @@ class CustomIntervalSelectorWidget extends PureComponent {
       hasSubdailyLayers,
       customDelta,
       customIntervalZoomLevel,
-      closeModal
+      closeModal,
     } = this.props;
     return customIntervalModalOpen && (
       <div
         onKeyDown={this.handleKeyPress}
-        className={'custom-interval-widget ' + (hasSubdailyLayers ? 'subdaily' : '')}
+        className={`custom-interval-widget ${hasSubdailyLayers ? 'subdaily' : ''}`}
         tabIndex={0}
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
@@ -78,12 +78,12 @@ class CustomIntervalSelectorWidget extends PureComponent {
 const mapDispatchToProps = (dispatch) => ({
   closeModal: () => {
     dispatch(toggleCustomModal(false, undefined));
-  }
+  },
 });
 
 export default connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(CustomIntervalSelectorWidget);
 
 CustomIntervalSelectorWidget.propTypes = {
@@ -93,5 +93,5 @@ CustomIntervalSelectorWidget.propTypes = {
   customIntervalModalOpen: PropTypes.bool,
   customIntervalZoomLevel: PropTypes.number,
   hasSubdailyLayers: PropTypes.bool,
-  toggleCustomIntervalModal: PropTypes.func
+  toggleCustomIntervalModal: PropTypes.func,
 };

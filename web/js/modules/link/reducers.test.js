@@ -9,26 +9,26 @@ describe('shortLink reducer', () => {
   test('Should set isLoading to true on Request Start', () => {
     expect(
       shortLink([], {
-        type: constants.REQUEST_SHORT_LINK_START
-      })
+        type: constants.REQUEST_SHORT_LINK_START,
+      }),
     ).toEqual({
       isLoading: true,
       error: null,
       response: null,
-      type: null
+      type: null,
     });
   });
   test('Should return response upon request success ', () => {
     expect(
       shortLink([], {
         type: constants.REQUEST_SHORT_LINK_SUCCESS,
-        response: constants.MOCK_SHORT_LINK_RESPONSE_BODY
-      })
+        response: constants.MOCK_SHORT_LINK_RESPONSE_BODY,
+      }),
     ).toEqual({
       isLoading: false,
       error: null,
       response: constants.MOCK_SHORT_LINK_RESPONSE_BODY,
-      type: null
+      type: null,
     });
   });
 });
@@ -37,18 +37,18 @@ describe('linkReducer', () => {
     expect(linkReducer(undefined, {})).toEqual(defaultLinkState);
   });
   test(
-    constants.UPDATE_PERMALINK +
-      'action type should return object containing sorted mock object',
+    `${constants.UPDATE_PERMALINK
+    }action type should return object containing sorted mock object`,
     () => {
       const testString = 'thisIsATestString';
       expect(
         linkReducer([], {
           type: constants.UPDATE_PERMALINK,
-          queryString: testString
-        })
+          queryString: testString,
+        }),
       ).toEqual({
-        queryString: testString
+        queryString: testString,
       });
-    }
+    },
   );
 });

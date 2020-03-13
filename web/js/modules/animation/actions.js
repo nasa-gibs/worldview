@@ -9,7 +9,7 @@ import {
   UPDATE_START_DATE,
   UPDATE_END_DATE,
   UPDATE_CROP_BOUNDS,
-  TOGGLE_GIF
+  TOGGLE_GIF,
 } from './constants';
 import util from '../../util/util';
 import { timeScaleFromNumberKey } from '../date/constants';
@@ -17,7 +17,9 @@ import { timeScaleFromNumberKey } from '../date/constants';
 export function onActivate() {
   return (dispatch, getState) => {
     const { compare, date, animation } = getState();
-    const { customSelected, customDelta, delta, customInterval, interval } = date;
+    const {
+      customSelected, customDelta, delta, customInterval, interval,
+    } = date;
     const dateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeDate = date[dateStr];
     if (!animation.startDate || !animation.endDate) {
@@ -26,7 +28,7 @@ export function onActivate() {
         : timeScaleFromNumberKey[interval];
       const deltaChangeAmt = customSelected ? customDelta : delta;
       const tenFrameDelta = 10 * deltaChangeAmt;
-      const tenFramesBefore = util.dateAdd(activeDate, timeScaleChangeUnit, -(tenFrameDelta));
+      const tenFramesBefore = util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
       const tenFramesAfter = util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
       const startDate = animation.startDate
         ? animation.startDate
@@ -45,57 +47,57 @@ export function onActivate() {
 }
 export function onClose() {
   return {
-    type: EXIT_ANIMATION
+    type: EXIT_ANIMATION,
   };
 }
 export function play() {
   return {
-    type: PLAY_ANIMATION
+    type: PLAY_ANIMATION,
   };
 }
 export function stop() {
   return {
-    type: STOP_ANIMATION
+    type: STOP_ANIMATION,
   };
 }
 export function toggleLooping() {
   return {
-    type: TOGGLE_LOOPING
+    type: TOGGLE_LOOPING,
   };
 }
 export function changeFrameRate(num) {
   return {
     type: UPDATE_FRAME_RATE,
-    value: num
+    value: num,
   };
 }
 export function changeStartAndEndDate(startDate, endDate) {
   return {
     type: UPDATE_START_AND_END_DATE,
     startDate,
-    endDate
+    endDate,
   };
 }
 export function changeStartDate(date) {
   return {
     type: UPDATE_START_DATE,
-    value: date
+    value: date,
   };
 }
 export function changeEndDate(date) {
   return {
     type: UPDATE_END_DATE,
-    value: date
+    value: date,
   };
 }
 export function changeCropBounds(bounds) {
   return {
     type: UPDATE_CROP_BOUNDS,
-    value: bounds
+    value: bounds,
   };
 }
 export function toggleComponentGifActive() {
   return {
-    type: TOGGLE_GIF
+    type: TOGGLE_GIF,
   };
 }
