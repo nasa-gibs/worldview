@@ -58,5 +58,10 @@
         "id": "brown",
         "name": "Brown",
         "colors": ["b15928ff"]
+    },
+    "invisible": {
+        "id": "invisible",
+        "name": "Invisible",
+        "colors": ["00000000"]
     }
 }
