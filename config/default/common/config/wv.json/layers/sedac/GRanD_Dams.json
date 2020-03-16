@@ -18,7 +18,6 @@
             "wrapX": true,
             "palette": {
                 "id": "GRanD_Dams",
-                "immutable": true,
                 "styleProperty": "MAIN_USE",
                 "unclassified": "Not Classified"
             }
