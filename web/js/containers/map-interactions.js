@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { groupBy as lodashGroupBy, debounce as lodashDebounce, get as lodashGet } from 'lodash';
-import OlCoordinates from '../components/map/ol-coordinates';
+import { OlCoordinates } from '../components/map/ol-coordinates';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
@@ -77,13 +77,26 @@ export class MapInteractions extends React.Component {
   }
 
   render() {
-    const { isShowingClick, mouseEvents } = this.props;
-    const mapClasses = isShowingClick ? 'wv-map cursor-pointer' : 'wv-map';
+    const {
+      isDistractionFreeModeActive,
+      isShowingClick,
+      mouseEvents,
+    } = this.props;
+    let mapClasses = isShowingClick
+      ? 'wv-map cursor-pointer'
+      : 'wv-map';
+    mapClasses = isDistractionFreeModeActive
+      ? `${mapClasses} distraction-free-active`
+      : mapClasses;
 
     return (
       <>
         <div id="wv-map" className={mapClasses} />
-        <OlCoordinates mouseEvents={mouseEvents} />
+        {!isDistractionFreeModeActive && (
+        <OlCoordinates
+          mouseEvents={mouseEvents}
+        />
+        )}
       </>
     );
   }
@@ -131,7 +144,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj,
+    modal, map, measure, vectorStyles, browser, compare, proj, ui,
   } = state;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
@@ -141,6 +154,7 @@ function mapStateToProps(state) {
   return {
     modalState: modal,
     isShowingClick: map.isClickable,
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     getDialogObject: (pixels, map) => onMapClickGetVectorFeatures(pixels, map, state, swipeOffset),
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
@@ -153,6 +167,7 @@ function mapStateToProps(state) {
 MapInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
+  isDistractionFreeModeActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,

@@ -35,9 +35,9 @@ const getActiveTabs = function(config) {
     events: features.naturalEvents,
   };
 };
-const resetWorldview = function(e) {
+const resetWorldview = function(e, isDistractionFreeModeActive) {
   e.preventDefault();
-  if (window.location.search === '') return; // Nothing to reset
+  if (!isDistractionFreeModeActive && window.location.search === '') return; // Nothing to reset
   const msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
   if (window.confirm(msg)) {
     googleTagManager.pushEvent({
@@ -164,6 +164,7 @@ class Sidebar extends React.Component {
       screenHeight,
       isCollapsed,
       isCompareMode,
+      isDistractionFreeModeActive,
       activeTab,
       tabTypes,
       isMobile,
@@ -191,6 +192,7 @@ class Sidebar extends React.Component {
             isCollapsed={isCollapsed}
             onclick={this.toggleSidebar}
             numberOfLayers={numberOfLayers}
+            isDistractionFreeModeActive={isDistractionFreeModeActive}
           />
           <div
             id="productsHolder"
@@ -198,11 +200,10 @@ class Sidebar extends React.Component {
             ref={(el) => {
               this.sideBarCase = el;
             }}
-            style={
-              isCollapsed
-                ? { maxHeight: '0' }
-                : { maxHeight: `${screenHeight}px` }
-            }
+            style={{
+              maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
+              display: isDistractionFreeModeActive ? 'none' : 'block',
+            }}
             onWheel={wheelCallBack}
           >
             {!isCollapsed && (
@@ -267,8 +268,10 @@ function mapStateToProps(state) {
     measure,
     animation,
     events,
+    ui,
   } = state;
   const { screenHeight } = browser;
+  const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
@@ -289,6 +292,7 @@ function mapStateToProps(state) {
     isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
     tabTypes,
     config,
+    isDistractionFreeModeActive,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -333,6 +337,7 @@ Sidebar.propTypes = {
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
   numberOfLayers: PropTypes.number,
