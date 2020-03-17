@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-restricted-syntax */
 
 const fs = require('fs');
 
@@ -22,29 +23,28 @@ const file = fs.readFileSync(csvFile, 'utf8');
 const lines = file.split('\n');
 const colors = [];
 for (const line of lines) {
-  if (line.trim().length === 0) {
-    continue;
+  if (line.trim().length !== 0) {
+    const [r, g, b] = line.split(',');
+    const color = `${hex(r)}${hex(g)}${hex(b)}ff`;
+    colors.push(color);
   }
-  const [r, g, b] = line.split(',');
-  const color = `${hex(r)}${hex(g)}${hex(b)}ff`;
-  colors.push(color);
 }
 
 const colormap = {
   [id]: {
     id,
-    name: name,
-    colors
-  }
+    name,
+    colors,
+  },
 };
 fs.writeFileSync(jsonFile, JSON.stringify(colormap));
 
 // decimal to hex for bytes, 10 => 0a
 function hex(dec) {
-  dec = Number.parseInt(dec);
+  dec = Number.parseInt(dec, 10);
   let h = dec.toString(16);
   if (h.length === 1) {
-    h = '0' + h;
+    h = `0${h}`;
   }
   return h;
-};
+}

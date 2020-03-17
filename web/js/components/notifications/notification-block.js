@@ -1,47 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faBolt,
+  faExclamationCircle,
+  faGift,
+} from '@fortawesome/free-solid-svg-icons';
 import util from '../../util/util';
 
-const CLASS_MATCHING_OBJ = {
-  alert: 'bolt',
-  message: 'gift',
-  outage: 'exclamation-circle'
+// icons used with NotificationBlock by passing string as prop type
+const listIcons = {
+  alert: faBolt,
+  message: faGift,
+  outage: faExclamationCircle,
 };
 
-class NotificationBlock extends React.Component {
-  render() {
-    const { arr, type, numberNotSeen } = this.props;
-    return (
-      <ul>
-        {arr.map((notification, i) => {
-          const dateObject = new Date(notification.created_at);
-          const date =
-            dateObject.getDate() +
-            ' ' +
-            util.giveMonth(dateObject) +
-            ' ' +
-            dateObject.getFullYear();
-          const activeClass =
-            numberNotSeen > i ? type + '-notification-item' : '';
-          return (
-            <li key={type + i} className={activeClass}>
-              <h2>
-                <i className={'fa fa-' + CLASS_MATCHING_OBJ[type]} />
-                <span>{'Posted ' + date}</span>
-              </h2>
-              <p dangerouslySetInnerHTML={{ __html: notification.message }} />
-            </li>
-          );
-        })}
-      </ul>
-    );
-  }
-}
+const NotificationBlock = (props) => {
+  const { arr, type, numberNotSeen } = props;
+  return (
+    <ul>
+      {arr.map((notification, i) => {
+        const dateObject = new Date(notification.created_at);
+        const date = `${dateObject.getDate()
+        } ${
+          util.giveMonth(dateObject)
+        } ${
+          dateObject.getFullYear()}`;
+        const activeClass = numberNotSeen > i ? `${type}-notification-item` : '';
+        return (
+        /* eslint react/no-array-index-key: 1 */
+          <li key={type + i} className={activeClass}>
+            <h2>
+              <FontAwesomeIcon icon={listIcons[type]} />
+              <span>{`Posted ${date}`}</span>
+            </h2>
+            <p dangerouslySetInnerHTML={{ __html: notification.message }} />
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
 
 export default NotificationBlock;
 
 NotificationBlock.propTypes = {
   arr: PropTypes.array.isRequired,
   numberNotSeen: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };

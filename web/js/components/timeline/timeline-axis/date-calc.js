@@ -48,14 +48,14 @@ export function getTimeRange(startDate, endDate, timeScale, startDateLimit, endD
       dateObject: startDate.toObject(),
       date: date.toUpperCase(),
       dayOfWeek: startDate.day(),
-      rawDate: rawDate,
-      rawNextDate: rawNextDate,
-      timeScale: timeScale,
-      withinRange: withinRange
+      rawDate,
+      rawNextDate,
+      timeScale,
+      withinRange,
     };
     timeRange.push(timeObject);
     startDate = nextDate;
   }
 
   return timeRange;
-};
+}

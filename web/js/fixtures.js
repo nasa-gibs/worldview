@@ -4,7 +4,8 @@ import { initialState as initialLayerState } from './modules/layers/reducers';
 import { initialCompareState } from './modules/compare/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
-var fixtures = {
+
+const fixtures = {
   red: 'ff0000ff',
   light_red: 'fff0f0ff',
   dark_red: '400000ff',
@@ -12,7 +13,7 @@ var fixtures = {
   yellow: 'ffff00ff',
   blue: '0000ffff',
   light_blue: 'f0f0ffff',
-  dark_blue: '000040'
+  dark_blue: '000040',
 };
 fixtures.getState = function() {
   return {
@@ -33,17 +34,17 @@ fixtures.getState = function() {
                 type: 'scale',
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 values: [0, 1, 2],
-                refs: ['0', '1', '2']
+                refs: ['0', '1', '2'],
               },
               legend: {
                 tooltips: ['0', '1', '2'],
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 minLabel: '0',
                 maxLabel: '2',
-                refs: ['0', '1', '2']
-              }
-            }
-          ]
+                refs: ['0', '1', '2'],
+              },
+            },
+          ],
         },
         'aqua-aod': {
           id: 'aqua-aod',
@@ -53,27 +54,27 @@ fixtures.getState = function() {
                 type: 'scale',
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 values: [0, 1, 2],
-                refs: ['0', '1', '2']
+                refs: ['0', '1', '2'],
               },
               legend: {
                 tooltips: ['0', '1', '2'],
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 minLabel: '0',
                 maxLabel: '2',
-                refs: ['0', '1', '2']
-              }
-            }
-          ]
-        }
+                refs: ['0', '1', '2'],
+              },
+            },
+          ],
+        },
       },
       custom: {
         'blue-1': {
-          colors: [fixtures.light_blue, fixtures.blue, fixtures.dark_blue]
+          colors: [fixtures.light_blue, fixtures.blue, fixtures.dark_blue],
         },
         'red-1': {
-          colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
-        }
-      }
+          colors: [fixtures.light_red, fixtures.red, fixtures.dark_red],
+        },
+      },
     },
     vectorStyles: {
       custom: {
@@ -84,15 +85,15 @@ fixtures.getState = function() {
             OrbitTracks_Aqua_Ascending: {
               type: 'vector',
               tiles: [
-                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
-              ]
+                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt',
+              ],
             },
             yellow1: {
               type: 'vector',
               tiles: [
-                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
-              ]
-            }
+                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt',
+              ],
+            },
           },
           layers: [
             {
@@ -103,8 +104,8 @@ fixtures.getState = function() {
               type: 'line',
               paint: {
                 'line-color': 'rgb(21, 192, 230)',
-                'line-width': 2
-              }
+                'line-width': 2,
+              },
             },
             {
               id: 'OrbitTracks_Aqua_Ascending',
@@ -114,8 +115,8 @@ fixtures.getState = function() {
               type: 'circle',
               paint: {
                 'circle-radius': '5',
-                'circle-color': 'rgb(21, 192, 230)'
-              }
+                'circle-color': 'rgb(21, 192, 230)',
+              },
             },
             {
               id: 'OrbitTracks_Aqua_Ascending',
@@ -129,13 +130,13 @@ fixtures.getState = function() {
                 'text-size': 10,
                 'text-transform': 'uppercase',
                 'text-letter-spacing': 0.05,
-                'text-offset': [-2.5, 0]
+                'text-offset': [-2.5, 0],
               },
               paint: {
                 'text-color': '#fff',
                 'text-halo-color': '#999',
-                'text-halo-width': 1
-              }
+                'text-halo-width': 1,
+              },
             },
             {
               id: 'yellow1',
@@ -145,8 +146,8 @@ fixtures.getState = function() {
               type: 'line',
               paint: {
                 'line-color': 'rgb(204, 255, 51)',
-                'line-width': 2
-              }
+                'line-width': 2,
+              },
             },
             {
               id: 'yellow1',
@@ -156,8 +157,8 @@ fixtures.getState = function() {
               type: 'circle',
               paint: {
                 'circle-radius': '5',
-                'circle-color': 'rgb(204, 255, 51)'
-              }
+                'circle-color': 'rgb(204, 255, 51)',
+              },
             },
             {
               id: 'yellow1',
@@ -171,18 +172,18 @@ fixtures.getState = function() {
                 'text-size': 10,
                 'text-transform': 'uppercase',
                 'text-letter-spacing': 0.05,
-                'text-offset': [-2.5, 0]
+                'text-offset': [-2.5, 0],
               },
               paint: {
                 'text-color': '#fff',
                 'text-halo-color': '#999',
-                'text-halo-width': 1
-              }
-            }
-          ]
-        }
-      }
-    }
+                'text-halo-width': 1,
+              },
+            },
+          ],
+        },
+      },
+    },
   };
 };
 
@@ -193,25 +194,25 @@ fixtures.config = function() {
     now: new Date(),
     defaults: {
       projection: 'geographic',
-      startingLayers: [{ id: 'terra-cr' }, { id: 'aqua-cr', hidden: 'true' }]
+      startingLayers: [{ id: 'terra-cr' }, { id: 'aqua-cr', hidden: 'true' }],
     },
     projections: {
       geographic: {
         id: 'geographic',
         epsg: 4326,
         crs: 'EPSG:4326',
-        maxExtent: [-180, -90, 180, 90]
+        maxExtent: [-180, -90, 180, 90],
       },
       arctic: {
         id: 'arctic',
         epsg: 3413,
-        crs: 'EPSG:3413'
+        crs: 'EPSG:3413',
       },
       antarctic: {
         id: 'antarctic',
         epsg: 3031,
-        crs: 'EPSG:3031'
-      }
+        crs: 'EPSG:3031',
+      },
     },
     layers: {
       'terra-cr': {
@@ -222,8 +223,8 @@ fixtures.config = function() {
         projections: {
           geographic: {},
           arctic: {},
-          antarctic: {}
-        }
+          antarctic: {},
+        },
       },
       'aqua-cr': {
         id: 'aqua-cr',
@@ -233,8 +234,8 @@ fixtures.config = function() {
         projections: {
           geographic: {},
           arctic: {},
-          antarctic: {}
-        }
+          antarctic: {},
+        },
       },
       mask: {
         id: 'mask',
@@ -242,8 +243,8 @@ fixtures.config = function() {
         projections: {
           geographic: {},
           arctic: {},
-          antarctic: {}
-        }
+          antarctic: {},
+        },
       },
       AMSRE_Brightness_Temp_89H_Night: {
         id: 'AMSRE_Brightness_Temp_89H_Night',
@@ -256,9 +257,9 @@ fixtures.config = function() {
         projections: {
           geographic: {},
           arctic: {},
-          antarctic: {}
+          antarctic: {},
         },
-        inactive: true
+        inactive: true,
       },
       'terra-aod': {
         id: 'terra-aod',
@@ -266,11 +267,11 @@ fixtures.config = function() {
         period: 'daily',
         startDate: '2000-01-01',
         projections: {
-          geographic: {}
+          geographic: {},
         },
         palette: {
-          id: 'terra-aod'
-        }
+          id: 'terra-aod',
+        },
       },
       'aqua-aod': {
         id: 'aqua-aod',
@@ -278,18 +279,18 @@ fixtures.config = function() {
         period: 'daily',
         startDate: '2002-01-01',
         projections: {
-          geographic: {}
+          geographic: {},
         },
         palette: {
-          id: 'aqua-aod'
-        }
+          id: 'aqua-aod',
+        },
       },
       'combo-aod': {
         id: 'combo-aod',
         group: 'overlays',
         projections: {
-          geographic: {}
-        }
+          geographic: {},
+        },
       },
       OrbitTracks_Aqua_Ascending: {
         id: 'OrbitTracks_Aqua_Ascending',
@@ -302,63 +303,69 @@ fixtures.config = function() {
         layergroup: ['vector'],
         inactive: true,
         vectorStyle: {
-          id: 'OrbitTracks_Aqua_Ascending'
+          id: 'OrbitTracks_Aqua_Ascending',
         },
-        period: 'daily'
-      }
+        period: 'daily',
+      },
     },
     features: {
-      compare: true
+      compare: true,
     },
     palettes: {
       lookups: {
         'terra-aod': {
           'min-1': {
-            '0,255,0,255': { r: 0, g: 0, b: 0, a: 0 },
-            '255,255,0,255': { r: 255, g: 255, b: 0, a: 255 },
-            '255,0,0,255': { r: 255, g: 0, b: 0, a: 255 }
+            '0,255,0,255': {
+              r: 0, g: 0, b: 0, a: 0,
+            },
+            '255,255,0,255': {
+              r: 255, g: 255, b: 0, a: 255,
+            },
+            '255,0,0,255': {
+              r: 255, g: 0, b: 0, a: 255,
+            },
           },
           'red-1': {
             '0,255,0,255': {
               a: 255,
               b: 240,
               g: 240,
-              r: 255
+              r: 255,
             },
             '255,0,0,255': {
               a: 255,
               b: 0,
               g: 0,
-              r: 64
+              r: 64,
             },
             '255,255,0,255': {
               a: 255,
               b: 0,
               g: 0,
-              r: 255
-            }
+              r: 255,
+            },
           },
           'max-1-squashed': {
             '0,255,0,255': {
               a: 255,
               b: 0,
               g: 255,
-              r: 0
+              r: 0,
             },
             '255,0,0,255': {
               a: 0,
               b: 0,
               g: 0,
-              r: 0
+              r: 0,
             },
             '255,255,0,255': {
               a: 255,
               b: 0,
               g: 0,
-              r: 255
-            }
-          }
-        }
+              r: 255,
+            },
+          },
+        },
       },
       rendered: {
         'terra-aod': {
@@ -369,17 +376,17 @@ fixtures.config = function() {
                 type: 'scale',
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 values: [0, 1, 2],
-                refs: ['0', '1', '2']
+                refs: ['0', '1', '2'],
 
               },
               legend: {
                 tooltips: ['0', '1', '2'],
                 minLabel: '0',
                 maxLabel: '2',
-                refs: ['0', '1', '2']
-              }
-            }
-          ]
+                refs: ['0', '1', '2'],
+              },
+            },
+          ],
         },
         'aqua-aod': {
           id: 'aqua-aod',
@@ -389,27 +396,27 @@ fixtures.config = function() {
                 type: 'scale',
                 colors: [fixtures.green, fixtures.yellow, fixtures.red],
                 values: [0, 1, 2],
-                refs: ['0', '1', '2']
+                refs: ['0', '1', '2'],
 
               },
               legend: {
                 tooltips: ['0', '1', '2'],
                 minLabel: '0',
                 maxLabel: '2',
-                refs: ['0', '1', '2']
-              }
-            }
-          ]
-        }
+                refs: ['0', '1', '2'],
+              },
+            },
+          ],
+        },
       },
       custom: {
         'blue-1': {
-          colors: [fixtures.light_blue, fixtures.blue, fixtures.dark_blue]
+          colors: [fixtures.light_blue, fixtures.blue, fixtures.dark_blue],
         },
         'red-1': {
-          colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
-        }
-      }
+          colors: [fixtures.light_red, fixtures.red, fixtures.dark_red],
+        },
+      },
     },
     vectorData: {
       OrbitTracks: {
@@ -422,7 +429,7 @@ fixtures.config = function() {
             Title: 'Direction of travel',
             DataType: 'string',
             ValueList: ['Ascending', 'Descending', 'Transitional'],
-            Identifier: 'direction'
+            Identifier: 'direction',
           },
           {
             Function: 'Describe',
@@ -430,7 +437,7 @@ fixtures.config = function() {
             IsOptional: 'False',
             Title: 'Datetime',
             DataType: 'datetime',
-            Identifier: 'datetime'
+            Identifier: 'datetime',
           },
           {
             Function: 'Describe',
@@ -439,7 +446,7 @@ fixtures.config = function() {
             Title: 'Day/Night Flag',
             DataType: 'string',
             ValueList: ['Day', 'Night', 'Both'],
-            Identifier: 'day_night'
+            Identifier: 'day_night',
           },
           {
             Function: 'Describe',
@@ -447,7 +454,7 @@ fixtures.config = function() {
             IsOptional: 'False',
             Title: 'Identifier',
             DataType: 'int',
-            Identifier: 'id'
+            Identifier: 'id',
           },
           {
             Function: 'Identify',
@@ -455,10 +462,10 @@ fixtures.config = function() {
             IsOptional: 'False',
             Title: 'Label for default display',
             DataType: 'string',
-            Identifier: 'label'
-          }
-        ]
-      }
+            Identifier: 'label',
+          },
+        ],
+      },
     },
     vectorStyles: {
       OrbitTracks_Aura_Ascending: {
@@ -468,15 +475,15 @@ fixtures.config = function() {
           OrbitTracks_Aqua_Ascending: {
             type: 'vector',
             tiles: [
-              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
-            ]
+              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt',
+            ],
           },
           yellow1: {
             type: 'vector',
             tiles: [
-              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
-            ]
-          }
+              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt',
+            ],
+          },
         },
         layers: [
           {
@@ -487,8 +494,8 @@ fixtures.config = function() {
             type: 'line',
             paint: {
               'line-color': 'rgb(21, 192, 230)',
-              'line-width': 2
-            }
+              'line-width': 2,
+            },
           },
           {
             id: 'OrbitTracks_Aqua_Ascending',
@@ -498,8 +505,8 @@ fixtures.config = function() {
             type: 'circle',
             paint: {
               'circle-radius': '5',
-              'circle-color': 'rgb(21, 192, 230)'
-            }
+              'circle-color': 'rgb(21, 192, 230)',
+            },
           },
           {
             id: 'OrbitTracks_Aqua_Ascending',
@@ -513,13 +520,13 @@ fixtures.config = function() {
               'text-size': 10,
               'text-transform': 'uppercase',
               'text-letter-spacing': 0.05,
-              'text-offset': [-2.5, 0]
+              'text-offset': [-2.5, 0],
             },
             paint: {
               'text-color': '#fff',
               'text-halo-color': '#999',
-              'text-halo-width': 1
-            }
+              'text-halo-width': 1,
+            },
           },
           {
             id: 'yellow1',
@@ -529,8 +536,8 @@ fixtures.config = function() {
             type: 'line',
             paint: {
               'line-color': 'rgb(204, 255, 51)',
-              'line-width': 2
-            }
+              'line-width': 2,
+            },
           },
           {
             id: 'yellow1',
@@ -540,8 +547,8 @@ fixtures.config = function() {
             type: 'circle',
             paint: {
               'circle-radius': '5',
-              'circle-color': 'rgb(204, 255, 51)'
-            }
+              'circle-color': 'rgb(204, 255, 51)',
+            },
           },
           {
             id: 'yellow1',
@@ -555,28 +562,28 @@ fixtures.config = function() {
               'text-size': 10,
               'text-transform': 'uppercase',
               'text-letter-spacing': 0.05,
-              'text-offset': [-2.5, 0]
+              'text-offset': [-2.5, 0],
             },
             paint: {
               'text-color': '#fff',
               'text-halo-color': '#999',
-              'text-halo-width': 1
-            }
-          }
-        ]
-      }
-    }
+              'text-halo-width': 1,
+            },
+          },
+        ],
+      },
+    },
   };
 };
 
 export function registerProjections() {
   proj4.defs(
     'EPSG:3413',
-    '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+    '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
   );
   proj4.defs(
     'EPSG:3031',
-    '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+    '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
   );
   register(proj4);
 }

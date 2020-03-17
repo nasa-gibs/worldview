@@ -31,20 +31,18 @@ export function mapParser(state, errors) {
     delete state.map;
   }
   if (state.v) {
-    var extent = lodashMap(state.v.split(','), function(str) {
-      return parseFloat(str);
-    });
-    var valid = mapIsExtentValid(extent);
+    const extent = lodashMap(state.v.split(','), (str) => parseFloat(str));
+    const valid = mapIsExtentValid(extent);
     if (!valid) {
       errors.push({
-        message: 'Invalid extent: ' + state.v
+        message: `Invalid extent: ${state.v}`,
       });
       delete state.v;
     } else {
       state.v = extent;
     }
   }
-};
+}
 
 /**
  * Determines if an exent object contains valid values.
@@ -61,18 +59,19 @@ export function mapIsExtentValid(extent) {
   if (lodashIsUndefined(extent)) {
     return false;
   }
-  var valid = true;
+  let valid = true;
   if (extent.toArray) {
     extent = extent.toArray();
   }
-  lodashEach(extent, function(value) {
+  lodashEach(extent, (value) => {
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(value)) {
       valid = false;
       return false;
     }
   });
   return valid;
-};
+}
 
 /**
  * Sets the opacity of a layer. Since the backbuffer can interfere with
@@ -88,13 +87,13 @@ export function mapIsExtentValid(extent) {
 export function setOpacity(layer, opacity) {
   layer.setOpacity(opacity);
   if (opacity === 1) {
-    var effect = layer.originalTransitionEffect || 'resize';
+    const effect = layer.originalTransitionEffect || 'resize';
     layer.transitionEffect = effect;
   } else {
     layer.originalTransitionEffect = layer.transitionEffect;
     layer.transitionEffect = 'none';
   }
-};
+}
 
 /**
  * Sets the visibility of a layer. If the layer is supposed to be not
@@ -116,13 +115,13 @@ export function setVisibility(layer, visible, opacity) {
   if (layer.isControl) {
     layer.setVisibility(visible);
   } else {
-    var actualOpacity = (visible) ? opacity : 0;
+    const actualOpacity = visible ? opacity : 0;
     layer.div.style.opacity = actualOpacity;
     if (visible && opacity > 0 && !layer.getVisibility()) {
       layer.setVisibility(true);
     }
   }
-};
+}
 
 /**
  * Gets the layer object by the name
@@ -138,12 +137,12 @@ export function setVisibility(layer, visible, opacity) {
  *
  */
 export function getLayerByName(map, name) {
-  var layers = map.getLayers()
+  const layers = map.getLayers()
     .getArray();
   return lodashFind(layers, {
-    wvname: name
+    wvname: name,
   });
-};
+}
 
 /**
  * Checks if a polygon's coordinate length is within a set distance
@@ -161,17 +160,17 @@ export function getLayerByName(map, name) {
  *
  */
 export function mapIsPolygonValid(polygon, maxDistance) {
-  var outerRing = polygon.getLinearRing(0);
-  var points = outerRing.getCoordinates();
-  for (var i = 0; i < points.length - 1; i++) {
-    var p1 = points[i];
-    var p2 = points[i + 1];
+  const outerRing = polygon.getLinearRing(0);
+  const points = outerRing.getCoordinates();
+  for (let i = 0; i < points.length - 1; i++) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
     if (Math.abs(p2[0] - p1[0]) > maxDistance) {
       return false;
     }
   }
   return true;
-};
+}
 
 /**
  * Switches the x coordinate values of Polygon
@@ -194,11 +193,11 @@ export function mapIsPolygonValid(polygon, maxDistance) {
  * @todo relocate this utility function
  */
 export function mapAdjustAntiMeridian(polygon, adjustSign) {
-  var outerRing = polygon.getLinearRing(0);
-  var points = outerRing.getCoordinates()
+  const outerRing = polygon.getLinearRing(0);
+  const points = outerRing.getCoordinates()
     .slice();
 
-  for (var i = 0; i < points.length; i++) {
+  for (let i = 0; i < points.length; i++) {
     if (adjustSign > 0 && points[i][0] < 0) {
       points[i] = [points[i][0] + 360, points[i][1]];
     }
@@ -207,7 +206,7 @@ export function mapAdjustAntiMeridian(polygon, adjustSign) {
     }
   }
   return new OlGeomPolygon([points]);
-};
+}
 
 /**
  * Gets distance between two (x,y) points
@@ -225,9 +224,9 @@ export function mapAdjustAntiMeridian(polygon, adjustSign) {
  *
  */
 export function mapDistance2D(p1, p2) {
-  return Math.sqrt(Math.pow(p1[0] - p2[0], 2) +
-    (Math.pow(p1[1] - p2[1], 2)));
-};
+  // eslint-disable-next-line no-restricted-properties
+  return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
+}
 
 /**
  * Gets distance between two values on the same axis
@@ -246,7 +245,7 @@ export function mapDistance2D(p1, p2) {
  */
 export function mapDistanceX(p1, p2) {
   return Math.abs(p2 - p1);
-};
+}
 
 /**
  * Gets distance between two values on the same axis
@@ -264,14 +263,14 @@ export function mapDistanceX(p1, p2) {
  *
  */
 export function mapInterpolate2D(p1, p2, amount) {
-  var distX = p2[0] - p1[0];
-  var distY = p2[1] - p1[1];
+  const distX = p2[0] - p1[0];
+  const distY = p2[1] - p1[1];
 
-  var interpX = p1[0] + (distX * amount);
-  var interpY = p1[1] + (distY * amount);
+  const interpX = p1[0] + (distX * amount);
+  const interpY = p1[1] + (distY * amount);
 
   return [interpX, interpY];
-};
+}
 
 /**
  * If the geometry has a multipolygon list. This method returns
@@ -292,7 +291,7 @@ export function mapToPolys(geom) {
     return geom.getPolygons();
   }
   return [geom];
-};
+}
 
 /* FIXME OL3
 wv.map.mock = function() {

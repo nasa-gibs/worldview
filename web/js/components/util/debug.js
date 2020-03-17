@@ -15,5 +15,5 @@ export default class Debug extends React.Component {
 }
 
 Debug.propTypes = {
-  parameters: PropTypes.object
+  parameters: PropTypes.object,
 };

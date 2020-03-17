@@ -1,15 +1,16 @@
-import * as CONSTANTS from './constants';
 import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import * as CONSTANTS from './constants';
 import {
   toggleActiveCompareState,
   toggleCompareOnOff,
   setValue,
-  changeMode
+  changeMode,
 } from './actions';
-import thunk from 'redux-thunk';
 import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 import fixtures from '../../fixtures';
 import { INIT_SECOND_DATE } from '../date/constants';
+
 const middlewares = [thunk];
 const state = fixtures.getState();
 
@@ -27,32 +28,32 @@ test('toggleCompareOnOff dispactches two actions', () => {
 });
 
 test(
-  'toggleActiveCompareState returns ' + CONSTANTS.CHANGE_STATE + ' action type',
+  `toggleActiveCompareState returns ${CONSTANTS.CHANGE_STATE} action type`,
   () => {
     const expectedAction = {
-      type: CONSTANTS.CHANGE_STATE
+      type: CONSTANTS.CHANGE_STATE,
     };
     expect(toggleActiveCompareState()).toEqual(expectedAction);
-  }
+  },
 );
 test(
-  'setValue returns ' + CONSTANTS.CHANGE_VALUE + ' action type and value',
+  `setValue returns ${CONSTANTS.CHANGE_VALUE} action type and value`,
   () => {
     const expectedAction = {
       type: CONSTANTS.CHANGE_VALUE,
-      value: 3
+      value: 3,
     };
     expect(setValue(3)).toEqual(expectedAction);
-  }
+  },
 );
 
 test(
-  'changeMode returns ' + CONSTANTS.CHANGE_MODE + ' action type and mode value',
+  `changeMode returns ${CONSTANTS.CHANGE_MODE} action type and mode value`,
   () => {
     const expectedAction = {
       type: CONSTANTS.CHANGE_MODE,
-      mode: 'some-mode'
+      mode: 'some-mode',
     };
     expect(changeMode('some-mode')).toEqual(expectedAction);
-  }
+  },
 );

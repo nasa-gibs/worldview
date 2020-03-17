@@ -7,13 +7,13 @@ import util from '../../util/util';
  * @returns {void}
  */
 export function separateByType(array) {
-  var type;
-  var subObj;
-  var messages = [];
-  var alerts = [];
-  var outages = [];
+  let type;
+  let subObj;
+  const messages = [];
+  const alerts = [];
+  const outages = [];
 
-  for (var i = 0, len = array.length; i < len; i++) {
+  for (let i = 0, len = array.length; i < len; i++) {
     subObj = array[i];
     type = subObj.notification_type;
 
@@ -29,7 +29,7 @@ export function separateByType(array) {
   return {
     messages: orderByDate(messages),
     alerts: orderByDate(alerts),
-    outages: orderByDate(outages)
+    outages: orderByDate(outages),
   };
 }
 /**
@@ -39,13 +39,10 @@ export function separateByType(array) {
  * @param {object} obj - array
  * @returns {void}
  */
-var orderByDate = function(obj) {
-  obj.sort(function(a, b) {
-    return new Date(b.created_at) - new Date(a.created_at);
-  });
-
+function orderByDate(obj) {
+  obj.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   return obj;
-};
+}
 /**
  * Checks to see if id or smaller #id is in localstorage
  * @function localStorageValueMatches
@@ -58,7 +55,7 @@ export function localStorageValueMatches(property, value) {
   if (!util.browser.localStorage) {
     return false;
   }
-  var oldValue = localStorage.getItem(property);
+  const oldValue = localStorage.getItem(property);
   return new Date(value) <= new Date(oldValue);
 }
 
@@ -71,12 +68,10 @@ export function localStorageValueMatches(property, value) {
  * @returns {void}
  */
 export function getPriority(sortedNotifications) {
-  var priority, message, outage, alert;
-
-  priority = '';
-  message = sortedNotifications.messages[0];
-  outage = sortedNotifications.outages[0];
-  alert = sortedNotifications.alerts[0];
+  let priority = '';
+  const [message] = sortedNotifications.messages;
+  const [outage] = sortedNotifications.outages;
+  const [alert] = sortedNotifications.alerts;
 
   if (message && !objectAlreadySeen(message)) {
     priority = 'message';
@@ -99,11 +94,12 @@ export function getPriority(sortedNotifications) {
  * @returns {Number}
  */
 export function getCount(sortedNotifications) {
-  var outageCount, messageCount, alertCount;
+  let outageCount; let messageCount; let
+    alertCount;
 
   messageCount = getNumberOfTypeNotSeen(
     'message',
-    sortedNotifications.messages
+    sortedNotifications.messages,
   ); // Number of messages not yet seen
   alertCount = getNumberOfTypeNotSeen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
   outageCount = getNumberOfTypeNotSeen('outage', sortedNotifications.outages); // Number of outages not yet seen
@@ -140,8 +136,9 @@ export function getNumberOfTypeNotSeen(type, arra) {
   if (!util.browser.localStorage) {
     return arra.length;
   }
-  var storageItem = localStorage.getItem(type);
-  var count, len;
+  const storageItem = localStorage.getItem(type);
+  let count; let
+    len;
 
   len = arra.length;
   count = 0;
@@ -150,7 +147,7 @@ export function getNumberOfTypeNotSeen(type, arra) {
     return len;
   }
 
-  for (var i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     if (new Date(storageItem) < new Date(arra[i].created_at)) {
       count++;
     } else {
@@ -167,8 +164,9 @@ export function getNumberOfTypeNotSeen(type, arra) {
  * @param {object} obj - object from API array
  * @returns {void}
  */
-var objectAlreadySeen = function(obj) {
-  var fieldExists, fieldValueMatches, type, idString;
+function objectAlreadySeen(obj) {
+  let fieldExists; let fieldValueMatches; let type; let
+    idString;
 
   type = obj.notification_type;
   idString = obj.created_at.toString();
@@ -180,4 +178,4 @@ var objectAlreadySeen = function(obj) {
   }
 
   return fieldValueMatches;
-};
+}

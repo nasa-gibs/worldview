@@ -2,17 +2,17 @@ const { loadAndSkipTour } = require('../../reuseables/skip-tour');
 const { switchProjection } = require('../../reuseables/switch-projection');
 const {
   openImageDownloadPanel,
-  closeImageDownloadPanel
+  closeImageDownloadPanel,
 } = require('../../reuseables/image-download');
 
 const TIME_LIMIT = 10000;
 
 module.exports = {
-  before: function(client) {
+  before(client) {
     loadAndSkipTour(client, TIME_LIMIT);
   },
 
-  after: function(client) {
+  after(client) {
     client.end();
   },
 
@@ -26,7 +26,7 @@ module.exports = {
       '500m',
       '1km',
       '5km',
-      '10km'
+      '10km',
     ].join('\n');
     c.expect.element('#wv-image-resolution').text.to.equal(expected);
   },
@@ -59,5 +59,5 @@ module.exports = {
     const expected = ['JPEG', 'PNG', 'GeoTIFF'].join('\n');
     c.expect.element('#wv-image-format').text.to.equal(expected);
     closeImageDownloadPanel(c);
-  }
+  },
 };

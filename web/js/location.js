@@ -1,23 +1,24 @@
 import { assign as lodashAssign, get } from 'lodash';
+import update from 'immutability-helper';
 import { encode } from './modules/link/util';
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
 import { serializeDate, tryCatchDate, mapLocationToDateState } from './modules/date/util';
 import {
   checkTourBuildTimestamp,
-  mapLocationToTourState
+  mapLocationToTourState,
 } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
 import { eventParse, serializeEvent } from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
 import {
   mapLocationToProjState,
-  parseProjection
+  parseProjection,
 } from './modules/projection/util';
 import {
   layersParse12,
   serializeLayers,
-  mapLocationToLayerState
+  mapLocationToLayerState,
 } from './modules/layers/util';
 import { resetLayers, hasSubDaily } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
@@ -25,7 +26,6 @@ import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
 import { mapLocationToSidebarState } from './modules/sidebar/util';
 import util from './util/util';
-import update from 'immutability-helper';
 import { mapLocationToDataState } from './modules/data/util';
 
 /**
@@ -37,83 +37,82 @@ import { mapLocationToDataState } from './modules/data/util';
  * @param {Object} location | Redux-location-state Location object
  */
 export const mapLocationToState = (state, location) => {
-  const config = state.config;
+  const { config } = state;
   if (location.search) {
     const parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
     stateFromLocation = mapLocationToDateState(
       parameters,
       stateFromLocation,
-      state
+      state,
     );
     stateFromLocation = mapLocationToProjState(
       parameters,
       stateFromLocation,
-      state
+      state,
     );
     stateFromLocation = mapLocationToLayerState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToCompareState(
       parameters,
-      stateFromLocation
+      stateFromLocation,
     );
     stateFromLocation = mapLocationToDataState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToAnimationState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToSidebarState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToTourState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
 
     // one level deep merge of newState with defaultState
-    for (var key in stateFromLocation) {
+    Object.keys(stateFromLocation).forEach((key) => {
       const obj = lodashAssign({}, state[key], stateFromLocation[key]);
       stateFromLocation = update(stateFromLocation, {
-        [key]: { $set: obj }
+        [key]: { $set: obj },
       });
-    }
+    });
     return update(state, { $merge: stateFromLocation });
-  } else {
-    const startTour = checkTourBuildTimestamp(state.config);
-    if (
-      startTour &&
-      config.features.tour &&
-      config.stories &&
-      config.storyOrder
-    ) {
-      return update(state, {
-        tour: { active: { $set: true } }
-      });
-    }
-    return state;
   }
+  const startTour = checkTourBuildTimestamp(state.config);
+  if (
+    startTour
+      && config.features.tour
+      && config.stories
+      && config.storyOrder
+  ) {
+    return update(state, {
+      tour: { active: { $set: true } },
+    });
+  }
+  return state;
 };
 
 const getParameters = function(config, parameters) {
@@ -125,10 +124,8 @@ const getParameters = function(config, parameters) {
       stateKey: 'proj.id',
       initialState: 'geographic',
       options: {
-        parse: str => {
-          return parseProjection(str, config);
-        }
-      }
+        parse: (str) => parseProjection(str, config),
+      },
     },
     now: {
       stateKey: 'date.testNow',
@@ -137,15 +134,11 @@ const getParameters = function(config, parameters) {
       options: {
         serializeNeedsGlobalState: false,
         setAsEmptyItem: true,
-        serialize: currentItemState => {
-          return currentItemState
-            ? util.toISOStringSeconds(currentItemState)
-            : undefined;
-        },
-        parse: str => {
-          return tryCatchDate(str, now);
-        }
-      }
+        serialize: (currentItemState) => (currentItemState
+          ? util.toISOStringSeconds(currentItemState)
+          : undefined),
+        parse: (str) => tryCatchDate(str, now),
+      },
     },
     t: {
       stateKey: 'date.selected',
@@ -169,7 +162,7 @@ const getParameters = function(config, parameters) {
                 ? undefined
                 : serializeDate(currentItemState);
         },
-        parse: str => {
+        parse: (str) => {
           let time = tryCatchDate(str, now);
           if (time instanceof Date) {
             const startDate = new Date(config.startDate);
@@ -180,8 +173,8 @@ const getParameters = function(config, parameters) {
             }
           }
           return time;
-        }
-      }
+        },
+      },
     },
     t1: {
       stateKey: 'date.selectedB',
@@ -195,18 +188,16 @@ const getParameters = function(config, parameters) {
           const initialDateString = util.toISOStringSeconds(initialDate);
           const appNowMinusSevenDays = util.dateAdd(initialDateString, 'day', -7);
           const appNowMinusSevenDaysString = util.toISOStringSeconds(
-            appNowMinusSevenDays
+            appNowMinusSevenDays,
           );
           if (!isActive) return undefined;
-          return appNowMinusSevenDaysString ===
-            util.toISOStringSeconds(currentItemState)
+          return appNowMinusSevenDaysString
+            === util.toISOStringSeconds(currentItemState)
             ? undefined
             : serializeDate(currentItemState || appNowMinusSevenDays);
         },
-        parse: str => {
-          return tryCatchDate(str, nowMinusSevenDays);
-        }
-      }
+        parse: (str) => tryCatchDate(str, nowMinusSevenDays),
+      },
     },
     z: {
       stateKey: 'date.selectedZoom',
@@ -225,10 +216,8 @@ const getParameters = function(config, parameters) {
           }
           return zoom === 3 ? undefined : zoom.toString();
         },
-        parse: str => {
-          return str ? Number(str) : 3;
-        }
-      }
+        parse: (str) => (str ? Number(str) : 3),
+      },
     },
     i: {
       stateKey: 'date.interval',
@@ -247,10 +236,8 @@ const getParameters = function(config, parameters) {
           }
           return interval === 3 ? undefined : interval.toString();
         },
-        parse: str => {
-          return str ? Number(str) : 3;
-        }
-      }
+        parse: (str) => (str ? Number(str) : 3),
+      },
     },
     ics: {
       stateKey: 'date.customSelected',
@@ -265,10 +252,8 @@ const getParameters = function(config, parameters) {
           }
           return currentItemState;
         },
-        parse: val => {
-          return val === 'true';
-        }
-      }
+        parse: (val) => val === 'true',
+      },
     },
     ici: {
       stateKey: 'date.customInterval',
@@ -289,10 +274,8 @@ const getParameters = function(config, parameters) {
           }
           return customInterval.toString();
         },
-        parse: val => {
-          return Number(val);
-        }
-      }
+        parse: (val) => Number(val),
+      },
     },
     icd: {
       stateKey: 'date.customDelta',
@@ -304,10 +287,8 @@ const getParameters = function(config, parameters) {
           if (!isCustomSelected) return undefined;
           return currentItemState.toString();
         },
-        parse: val => {
-          return Number(val);
-        }
-      }
+        parse: (val) => Number(val),
+      },
     },
     as: {
       stateKey: 'animation.startDate',
@@ -321,10 +302,8 @@ const getParameters = function(config, parameters) {
             ? serializeDate(currentItemState || nowMinusSevenDays)
             : undefined;
         },
-        parse: str => {
-          return tryCatchDate(str, nowMinusSevenDays);
-        }
-      }
+        parse: (str) => tryCatchDate(str, nowMinusSevenDays),
+      },
     },
     ae: {
       stateKey: 'animation.endDate',
@@ -338,10 +317,8 @@ const getParameters = function(config, parameters) {
             ? serializeDate(currentItemState || now)
             : undefined;
         },
-        parse: str => {
-          return tryCatchDate(str, now);
-        }
-      }
+        parse: (str) => tryCatchDate(str, now),
+      },
     },
     e: {
       stateKey: 'events',
@@ -349,17 +326,15 @@ const getParameters = function(config, parameters) {
       initialState: eventsReducerState,
       options: {
         parse: eventParse,
-        serialize: serializeEvent
-      }
+        serialize: serializeEvent,
+      },
     },
     l: {
       stateKey: 'layers.active',
       initialState: resetLayers(config.defaults.startingLayers, config.layers),
       type: 'array',
       options: {
-        parse: permalink => {
-          return layersParse12(permalink, config);
-        },
+        parse: (permalink) => layersParse12(permalink, config),
         serializeNeedsGlobalState: true,
         serialize: (currentLayers, state) => {
           const compareIsActive = get(state, 'compare.active');
@@ -368,25 +343,23 @@ const getParameters = function(config, parameters) {
           return !isCompareA && !compareIsActive
             ? serializeLayers(activeLayersB, state, 'activeB')
             : serializeLayers(currentLayers, state, 'active');
-        }
-      }
+        },
+      },
     },
     l1: {
       stateKey: 'layers.activeB',
       initialState: [],
       type: 'array',
       options: {
-        parse: permalink => {
-          return layersParse12(permalink, config);
-        },
+        parse: (permalink) => layersParse12(permalink, config),
         serializeNeedsGlobalState: true,
         serialize: (currentLayers, state) => {
           const compareIsActive = get(state, 'compare.active');
           return compareIsActive
             ? serializeLayers(currentLayers, state, 'activeB')
             : undefined;
-        }
-      }
+        },
+      },
     },
     ca: {
       stateKey: 'compare.isCompareA',
@@ -398,21 +371,21 @@ const getParameters = function(config, parameters) {
         serialize: (currentItemState, state) => {
           const compareIsActive = get(state, 'compare.active');
           return compareIsActive ? currentItemState : undefined;
-        }
-      }
+        },
+      },
     },
     cm: {
       stateKey: 'compare.mode',
-      initialState: 'swipe'
+      initialState: 'swipe',
     },
     cv: {
       stateKey: 'compare.value',
       initialState: 50,
-      type: 'number'
+      type: 'number',
     },
     tr: {
       stateKey: 'tour.selected',
-      initialState: ''
+      initialState: '',
     },
     al: {
       stateKey: 'animation.loop',
@@ -423,8 +396,8 @@ const getParameters = function(config, parameters) {
         serialize: (boo, state) => {
           const isAnimActive = get(state, 'animation.isActive');
           return isAnimActive ? boo : undefined;
-        }
-      }
+        },
+      },
     },
     av: {
       stateKey: 'animation.speed',
@@ -435,20 +408,16 @@ const getParameters = function(config, parameters) {
         serialize: (num, state) => {
           const isAnimActive = get(state, 'animation.isActive');
           return isAnimActive ? num : undefined;
-        }
-      }
+        },
+      },
     },
     ab: {
       stateKey: 'animation.isActive',
       initialState: false,
       options: {
-        serialize: boo => {
-          return boo ? 'on' : undefined;
-        },
-        parse: str => {
-          return str === 'on';
-        }
-      }
+        serialize: (boo) => (boo ? 'on' : undefined),
+        parse: (str) => str === 'on',
+      },
     },
     download: {
       stateKey: 'data.selectedProduct',
@@ -457,9 +426,9 @@ const getParameters = function(config, parameters) {
       options: {
         delimiter: ',',
         serializeNeedsGlobalState: true,
-        parse: id => {
+        parse: (id) => {
           if (!config.products[id]) {
-            console.warn('No such product: ' + id);
+            console.warn(`No such product: ${id}`);
             return '';
           }
           return id;
@@ -467,9 +436,9 @@ const getParameters = function(config, parameters) {
         serialize: (currentItemState, state) => {
           if (state.sidebar.activeTab !== 'download') return undefined;
           return encode(currentItemState);
-        }
-      }
-    }
+        },
+      },
+    },
   };
 };
 
@@ -478,24 +447,24 @@ export function getParamObject(
   config,
   models,
   legacyState,
-  errors
+  errors,
 ) {
   const mapParamObject = getMapParameterSetup(
     parameters,
     config,
     models,
     legacyState,
-    errors
+    errors,
   );
   const obj = lodashAssign(
     {},
     mapParamObject,
-    getParameters(config, parameters)
+    getParameters(config, parameters),
   );
   return {
     global: obj,
     RLSCONFIG: {
-      queryParser: (q) => (q.match(/^.*?(?==)|[^=\n\r].*$/gm))
-    }
+      queryParser: (q) => q.match(/^.*?(?==)|[^=\n\r].*$/gm),
+    },
   };
 }

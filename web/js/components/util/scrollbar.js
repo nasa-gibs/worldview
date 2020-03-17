@@ -24,7 +24,7 @@ export default function Scrollbars(props) {
       } else {
         contentEl.classList.remove('scrollbar-visible');
       }
-    };
+    }
     debounce(() => {
       toggleVisibleClass();
       // If scrollbar contents are loaded asynchronously, we need to delay
@@ -50,7 +50,7 @@ export default function Scrollbars(props) {
         updateScrollTop(scrollBarVerticalTop);
         contentWrapperEl.scrollTop = scrollBarVerticalTop;
       }
-    };
+    }
     setTimeout(setScrollTop, 100);
   }, [props.scrollBarVerticalTop]);
 
@@ -89,9 +89,9 @@ Scrollbars.propTypes = {
   className: PropTypes.string,
   onScroll: PropTypes.func,
   scrollBarVerticalTop: PropTypes.number,
-  style: PropTypes.object
+  style: PropTypes.object,
 };
 
 Scrollbars.defaultProps = {
-  scrollBarVerticalTop: 0
+  scrollBarVerticalTop: 0,
 };

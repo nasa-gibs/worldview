@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-restricted-syntax */
 
 const fs = require('fs');
 const glob = require('glob');

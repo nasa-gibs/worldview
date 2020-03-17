@@ -8,10 +8,13 @@ import {
   BreadcrumbItem,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownMenu
+  DropdownMenu,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import LayerFilters from './layer-filters';
 import util from '../../../util/util';
+
 
 /*
  * A scrollable list of layers
@@ -22,8 +25,10 @@ class ProductPickerHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: props.inputValue
+      inputValue: props.inputValue,
     };
+    this.revertToInitialScreen = this.revertToInitialScreen.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -57,49 +62,52 @@ class ProductPickerHeader extends React.Component {
       width,
       toggleFilterByAvailable,
       filterByAvailable,
-      isMobile
+      isMobile,
     } = this.props;
     const isSearching = listType === 'search';
     const categoryId = category && category.id;
-    const showBackButton = isSearching ||
-      (categoryId !== 'featured-all' &&
-      selectedProjection === 'geographic' &&
-      listType !== 'category');
+    const showBackButton = isSearching
+      || (categoryId !== 'featured-all'
+      && selectedProjection === 'geographic'
+      && listType !== 'category');
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
-    const BreadcrubEl =
+    const BreadcrubEl = (
       <Breadcrumb tag="nav" className="layer-bread-crumb">
         <BreadcrumbItem
           tag="a"
           title="Back to Layer Categories"
           href="#"
-          onClick={this.revertToInitialScreen.bind(this)}
+          onClick={this.revertToInitialScreen}
         >
-        Categories
+          Categories
         </BreadcrumbItem>
         <BreadcrumbItem active tag="span">
           {category && category.title}
         </BreadcrumbItem>
-      </Breadcrumb>;
+      </Breadcrumb>
+    );
 
     return (
       <>
         <InputGroup id="layer-search" className="layer-search">
-          {showBackButton &&
-          <>
-            <Button
-              className="back-button"
-              color="secondary"
-              onClick={this.revertToInitialScreen.bind(this)}
-            >
-              <i className="fa fa-arrow-left" />{' '}
-            </Button>
-            {isBreadCrumb && BreadcrubEl}
-          </>
-          }
-          {isSearching && isMobile &&
+          {showBackButton
+          && (
+            <>
+              <Button
+                className="back-button"
+                color="secondary"
+                onClick={this.revertToInitialScreen}
+              >
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </Button>
+              {isBreadCrumb && BreadcrubEl}
+            </>
+          )}
+          {isSearching && isMobile
+            && (
             <UncontrolledDropdown>
               <DropdownToggle className="filter-button" caret>
-                <i className="fas fa-filter"></i>
+                <FontAwesomeIcon icon={faFilter} />
               </DropdownToggle>
               <DropdownMenu>
                 <LayerFilters
@@ -109,14 +117,15 @@ class ProductPickerHeader extends React.Component {
                 />
               </DropdownMenu>
             </UncontrolledDropdown>
-          }
+            )}
 
           <Input
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChange}
             id="layers-search-input"
             value={this.state.inputValue}
             placeholder="Search"
-            innerRef={c => (this._input = c)}
+            // eslint-disable-next-line no-return-assign
+            innerRef={(c) => (this._input = c)}
             type="search"
             autoFocus={isAutoFocus}
           />
@@ -140,7 +149,7 @@ ProductPickerHeader.propTypes = {
   selectedProjection: PropTypes.string,
   toggleFilterByAvailable: PropTypes.func,
   updateListState: PropTypes.func,
-  width: PropTypes.number
+  width: PropTypes.number,
 };
 
 export default ProductPickerHeader;

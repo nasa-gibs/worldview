@@ -142,8 +142,7 @@
                 ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true],
                 ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
                 ["MODIS_Terra_CorrectedReflectance_TrueColor", false],
-                ["IMERG_Rain_Rate", true],
-                ["IMERG_Snow_Rate", false]
+                ["IMERG_Precipitation_Rate", true]
             ],
             "Snow": [
                 ["Reference_Features", true],
@@ -155,7 +154,7 @@
                 ["MODIS_Terra_CorrectedReflectance_Bands367", false],
                 ["MODIS_Aqua_NDSI_Snow_Cover", false],
                 ["MODIS_Terra_NDSI_Snow_Cover", false],
-                ["IMERG_Snow_Rate", false]
+                ["IMERG_Precipitation_Rate", false]
             ],
             "Floods": [
                 ["Reference_Features", true],

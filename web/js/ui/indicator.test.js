@@ -22,7 +22,7 @@ test('delayed indicator shown', (done) => {
   indicator.hide = jest.fn();
   const promise = jQuery.Deferred();
   indicator.delayed(promise, 10);
-  setTimeout(function() {
+  setTimeout(() => {
     promise.resolve();
     expect(indicator._show).toBeCalled();
     expect(indicator.hide).toBeCalled();
@@ -35,7 +35,7 @@ test('delayed indicator not shown', (done) => {
   indicator.hide = jest.fn();
   const promise = jQuery.Deferred();
   indicator.delayed(promise, 1000);
-  setTimeout(function() {
+  setTimeout(() => {
     promise.resolve();
     expect(indicator._show).not.toBeCalled();
     expect(indicator.hide).not.toBeCalled();
@@ -73,7 +73,7 @@ test('hide group', () => {
 
   const indicators = {
     two: null,
-    three: null
+    three: null,
   };
   indicator.show('One');
   indicators.two = indicator.show('Two');

@@ -1,14 +1,15 @@
 import { mapLocationToDateState, tryCatchDate } from './util';
 import fixtures from '../../fixtures';
+
 const state = fixtures.getState();
 
 test('parses date 1.1', () => {
   const d = new Date(Date.UTC(2013, 0, 5));
   const param = {
-    time: '2013-01-05'
+    time: '2013-01-05',
   };
   let stateFromLocation = {
-    date: {}
+    date: {},
   };
 
   stateFromLocation = mapLocationToDateState(param, stateFromLocation, state);
@@ -17,17 +18,17 @@ test('parses date 1.1', () => {
 test('parses valid date: 1.2', () => {
   const d = new Date(Date.UTC(2013, 0, 5));
   const param = {
-    t: '2013-01-05'
+    t: '2013-01-05',
   };
   const date = tryCatchDate(param.t, state.date.appNow);
   expect(date).toEqual(d);
 });
 test('If date is invalid, uses initialDate Time', () => {
   const param = {
-    time: 'X'
+    time: 'X',
   };
   let stateFromLocation = {
-    date: state.date
+    date: state.date,
   };
   stateFromLocation = mapLocationToDateState(param, stateFromLocation, state);
 

@@ -17,7 +17,7 @@ class Line extends React.Component {
     this.state = {
       hovered: false,
       height: props.height,
-      active: true
+      active: true,
     };
   }
 
@@ -28,7 +28,7 @@ class Line extends React.Component {
    */
   mouseOver() {
     this.setState({
-      hovered: true
+      hovered: true,
     });
   }
 
@@ -39,7 +39,7 @@ class Line extends React.Component {
    */
   mouseOut() {
     this.setState({
-      hovered: false
+      hovered: false,
     });
   }
 
@@ -56,7 +56,7 @@ class Line extends React.Component {
       [e.clientX, e.clientY],
       this.props.overlay,
       this.props.lineX,
-      this.props.tooltip
+      this.props.tooltip,
     );
   }
 
@@ -86,8 +86,8 @@ class Line extends React.Component {
           strokeWidth={this.props.strokeWidth}
           stroke={this.props.color}
           opacity={
-            (this.state.hovered && this.state.active) ||
-            (this.state.active && util.browser.mobileAndTabletDevice)
+            (this.state.hovered && this.state.active)
+            || (this.state.active && util.browser.mobileAndTabletDevice)
               ? this.props.opacity
               : '0'
           }
@@ -124,8 +124,8 @@ Line.defaultProps = {
   height: 200,
   svgStyle: {
     margin: '0 40px 0 40px',
-    transform: 'translateX(-43px)'
-  }
+    transform: 'translateX(-43px)',
+  },
 };
 
 Line.propTypes = {
@@ -143,7 +143,7 @@ Line.propTypes = {
   style: PropTypes.object,
   svgStyle: PropTypes.object,
   tooltip: PropTypes.object,
-  width: PropTypes.string
+  width: PropTypes.string,
 };
 
 export default Line;

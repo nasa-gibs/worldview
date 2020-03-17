@@ -51,7 +51,7 @@
     background-image: none;
     border-radius: 5px;
     top: 58px;
-    & .fa {
+    & svg.svg-inline--fa {
       font-size: 33px;
       position: absolute;
       left: 10px;
@@ -140,9 +140,5 @@
 
   #selected-category .ui-tabs-panel li.measurement-settings-item {
     margin-left: 0;
-  }
-
-  .notify-alert {
-    visibility: hidden;
   }
 }

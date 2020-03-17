@@ -1,24 +1,25 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
+import { assign, cloneDeep } from 'lodash';
+import update from 'immutability-helper';
 import {
   requestPalette,
   setThresholdRangeAndSquash,
   setCustomPalette,
-  clearCustomPalette
+  clearCustomPalette,
 } from './actions';
 import { addLayer } from '../layers/selectors';
-import { assign, cloneDeep } from 'lodash';
 import {
   REQUEST_PALETTE_START,
   REQUEST_PALETTE_SUCCESS,
   REQUEST_PALETTE_FAILURE,
   SET_THRESHOLD_RANGE_AND_SQUASH,
   SET_CUSTOM,
-  CLEAR_CUSTOM
+  CLEAR_CUSTOM,
 } from './constants';
 import fixtures from '../../fixtures';
-import update from 'immutability-helper';
+
 const middlewares = [thunk];
 
 const state = fixtures.getState();
@@ -31,39 +32,39 @@ describe('Palette terra-aod fetching with requestPalette action', () => {
     fetchMock.restore();
   });
   const loc = 'config/palettes/terra-aod.json';
-  test('test ' + REQUEST_PALETTE_SUCCESS, () => {
+  test(`test ${REQUEST_PALETTE_SUCCESS}`, () => {
     fetchMock.getOnce(loc, {
       body: JSON.stringify(config.palettes.rendered['terra-aod']),
       headers: {
         'content-type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      }
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
     });
     const expectedActions = [
       { type: REQUEST_PALETTE_START, id: 'terra-aod' },
       {
         type: REQUEST_PALETTE_SUCCESS,
         id: 'terra-aod',
-        response: config.palettes.rendered['terra-aod']
-      }
+        response: config.palettes.rendered['terra-aod'],
+      },
     ];
     const store = mockStore(state);
     return store.dispatch(requestPalette('terra-aod')).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
-  test('Test ' + REQUEST_PALETTE_FAILURE, () => {
+  test(`Test ${REQUEST_PALETTE_FAILURE}`, () => {
     fetchMock.mock(loc, {
-      throws: ERROR_MESSAGE
+      throws: ERROR_MESSAGE,
     });
     const expectedActions = [
       { type: REQUEST_PALETTE_START, id: 'terra-aod' },
       {
         type: REQUEST_PALETTE_FAILURE,
         id: 'terra-aod',
-        error: ERROR_MESSAGE
-      }
+        error: ERROR_MESSAGE,
+      },
     ];
     const store = mockStore(state);
     return store.dispatch(requestPalette('terra-aod')).catch(() => {
@@ -76,12 +77,12 @@ describe('Test lookup actions', () => {
   let layers = addLayer('terra-aod', {}, [], config.layers, 0);
   layers = addLayer('aqua-cr', {}, layers, config.layers, 1);
   const stateWithLayers = update(state, {
-    layers: { active: { $set: layers } }
+    layers: { active: { $set: layers } },
   });
   afterEach(() => {
     fetchMock.restore();
   });
-  test('test ' + setThresholdRangeAndSquash + ' action with min equal to 1', () => {
+  test(`test ${setThresholdRangeAndSquash} action with min equal to 1`, () => {
     const store = mockStore(stateWithLayers);
     store.dispatch(setThresholdRangeAndSquash('terra-aod', { min: 1 }, 0, 'active'));
     const response = store.getActions()[0];
@@ -94,19 +95,19 @@ describe('Test lookup actions', () => {
     expect(response.palettes['terra-aod'].maps[0].legend.colors).toEqual([
       '00000000',
       fixtures.yellow,
-      fixtures.red
+      fixtures.red,
     ]);
     expect(response.palettes['terra-aod'].maps[0].min).toEqual(1);
     expect(response.palettes['terra-aod'].maps[0].max).toEqual(undefined);
     expect(response.palettes['terra-aod'].maps[0].squash).toEqual(undefined);
     expect(response.palettes['terra-aod'].lookup).toEqual(
-      config.palettes.lookups['terra-aod']['min-1']
+      config.palettes.lookups['terra-aod']['min-1'],
     );
   });
-  test('test ' + setThresholdRangeAndSquash + ' action with squash and max', () => {
+  test(`test ${setThresholdRangeAndSquash} action with squash and max`, () => {
     const store = mockStore(stateWithLayers);
     store.dispatch(
-      setThresholdRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active')
+      setThresholdRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active'),
     );
     const response = store.getActions()[0];
 
@@ -118,15 +119,15 @@ describe('Test lookup actions', () => {
     expect(response.palettes['terra-aod'].maps[0].legend.colors).toEqual([
       '00ff00ff',
       'ff0000ff',
-      '00000000'
+      '00000000',
     ]);
     expect(response.palettes['terra-aod'].maps[0].max).toEqual(1);
     expect(response.palettes['terra-aod'].maps[0].squash).toEqual(true);
     expect(response.palettes['terra-aod'].lookup).toEqual(
-      config.palettes.lookups['terra-aod']['max-1-squashed']
+      config.palettes.lookups['terra-aod']['max-1-squashed'],
     );
   });
-  test('test ' + setCustomPalette + ' action with red-1 fixture palette', () => {
+  test(`test ${setCustomPalette} action with red-1 fixture palette`, () => {
     const expectedLegendColors = config.palettes.custom['red-1'].colors;
     const store = mockStore(stateWithLayers);
     store.dispatch(setCustomPalette('terra-aod', 'red-1', 0, 'active'));
@@ -138,40 +139,40 @@ describe('Test lookup actions', () => {
     expect(response.layerId).toEqual('terra-aod');
     expect(response.activeString).toEqual('active');
     expect(response.palettes['terra-aod'].maps[0].legend.colors).toEqual(
-      expectedLegendColors
+      expectedLegendColors,
     );
     expect(response.palettes['terra-aod'].maps[0].custom).toEqual('red-1');
     expect(response.palettes['terra-aod'].lookup).toEqual(
-      config.palettes.lookups['terra-aod']['red-1']
+      config.palettes.lookups['terra-aod']['red-1'],
     );
   });
-  test('test ' + clearCustomPalette + ' action when no threshold applied', () => {
+  test(`test ${clearCustomPalette} action when no threshold applied`, () => {
     let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
     terraAOD = update(terraAOD, {
-      lookup: { $set: config.palettes.lookups['terra-aod']['red-1'] }
+      lookup: { $set: config.palettes.lookups['terra-aod']['red-1'] },
     });
     terraAOD = update(terraAOD, {
       maps: {
         0: {
           custom: {
-            $set: 'red-1'
-          }
-        }
-      }
+            $set: 'red-1',
+          },
+        },
+      },
     });
     terraAOD = update(terraAOD, {
       maps: {
         0: {
           legend: {
-            colors: { $set: config.palettes.custom['red-1'].colors }
-          }
-        }
-      }
+            colors: { $set: config.palettes.custom['red-1'].colors },
+          },
+        },
+      },
     });
     const previousPaletteObject = cloneDeep(terraAOD);
 
     const customPalatteState = update(stateWithLayers, {
-      palettes: { active: { $set: { 'terra-aod': terraAOD } } }
+      palettes: { active: { $set: { 'terra-aod': terraAOD } } },
     });
 
     const store = mockStore(customPalatteState);
@@ -185,48 +186,48 @@ describe('Test lookup actions', () => {
     expect(response.activeString).toEqual('active');
   });
   test(
-    'test ' + clearCustomPalette + ' action with threshold and squash applied',
+    `test ${clearCustomPalette} action with threshold and squash applied`,
     () => {
       let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
       terraAOD = update(terraAOD, {
-        lookup: { $set: config.palettes.lookups['terra-aod']['red-1'] }
+        lookup: { $set: config.palettes.lookups['terra-aod']['red-1'] },
       });
       terraAOD = update(terraAOD, {
         maps: {
           0: {
             custom: {
-              $set: 'red-1'
-            }
-          }
-        }
+              $set: 'red-1',
+            },
+          },
+        },
       });
       terraAOD = update(terraAOD, {
         maps: {
           0: {
             legend: {
-              colors: { $set: config.palettes.custom['red-1'].colors }
-            }
-          }
-        }
+              colors: { $set: config.palettes.custom['red-1'].colors },
+            },
+          },
+        },
       });
       terraAOD = update(terraAOD, {
         maps: {
           0: {
-            max: { $set: 1 }
-          }
-        }
+            max: { $set: 1 },
+          },
+        },
       });
       terraAOD = update(terraAOD, {
         maps: {
           0: {
-            squash: { $set: true }
-          }
-        }
+            squash: { $set: true },
+          },
+        },
       });
       const previousPaletteObject = cloneDeep(terraAOD);
 
       const customPalatteState = update(stateWithLayers, {
-        palettes: { active: { $set: { 'terra-aod': terraAOD } } }
+        palettes: { active: { $set: { 'terra-aod': terraAOD } } },
       });
 
       const store = mockStore(customPalatteState);
@@ -241,13 +242,13 @@ describe('Test lookup actions', () => {
       expect(response.palettes['terra-aod'].maps[0].legend.colors).toEqual([
         '00ff00ff',
         'ff0000ff',
-        '00000000'
+        '00000000',
       ]);
       expect(response.palettes['terra-aod'].maps[0].max).toEqual(1);
       expect(response.palettes['terra-aod'].maps[0].squash).toEqual(true);
       expect(response.palettes['terra-aod'].lookup).toEqual(
-        config.palettes.lookups['terra-aod']['max-1-squashed']
+        config.palettes.lookups['terra-aod']['max-1-squashed'],
       );
-    }
+    },
   );
 });

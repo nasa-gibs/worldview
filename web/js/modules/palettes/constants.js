@@ -9,14 +9,13 @@ export const CLEAR_CUSTOM = 'PALETTES/CLEAR_CUSTOM';
 export const CLEAR_CUSTOMS = 'PALETTES/CLEAR_CUSTOMS';
 export const SET_CUSTOM = 'PALETTES/SET_CUSTOM';
 export const LOADED_CUSTOM_PALETTES = 'PALETTES/LOADED_CUSTOM_PALETTES';
-export const BULK_PALETTE_RENDERING_SUCCESS =
-  'PALETTES/BULK_PALETTE_RENDERING_SUCCESS';
+export const BULK_PALETTE_RENDERING_SUCCESS = 'PALETTES/BULK_PALETTE_RENDERING_SUCCESS';
 
 export const PALETTE_STRINGS_PERMALINK_ARRAY = [
   'palette',
   'squash',
   'min',
   'max',
-  'disabled'
+  'disabled',
 ];
 export const CUSTOM_PALETTE_TYPE_ARRAY = ['custom', 'squash', 'min', 'max', 'disabled'];

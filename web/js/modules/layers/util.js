@@ -8,13 +8,13 @@ import {
   each as lodashEach,
   isNaN as lodashIsNaN,
   startCase as lodashStartCase,
-  isArray
+  isArray,
 } from 'lodash';
 
+import update from 'immutability-helper';
 import { addLayer, resetLayers } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
-import update from 'immutability-helper';
 import util from '../../util/util';
 
 /**
@@ -36,14 +36,14 @@ export function availableAtDate(def, date) {
     return date > new Date(def.startDate);
   }
   return availableDates.length > 0;
-};
+}
 
 export function getOrbitTrackTitle(def) {
   if (def.daynight && def.track) {
-    return lodashStartCase(def.track) + '/' + lodashStartCase(def.daynight);
-  } else if (def.track) {
+    return `${lodashStartCase(def.track)}/${lodashStartCase(def.daynight)}`;
+  } if (def.track) {
     return lodashStartCase(def.track);
-  } else if (def.daynight) {
+  } if (def.daynight) {
     return lodashStartCase(def.daynight);
   }
 }
@@ -65,10 +65,10 @@ export function nearestInterval(def, date) {
     date.getMonth(),
     date.getDate(),
     date.getHours(),
-    newMinutes
+    newMinutes,
   );
   return newDate;
-};
+}
 
 /**
    * Find the closest previous date from an array of dates
@@ -90,9 +90,9 @@ export function prevDateInDateRange(def, date, dateArray) {
   const isMonthPeriod = def.period === 'monthly';
   const isYearPeriod = def.period === 'yearly';
 
-  if (!dateArray ||
-    (isMonthPeriod && isFirstDayOfMonth) ||
-    (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
+  if (!dateArray
+    || (isMonthPeriod && isFirstDayOfMonth)
+    || (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
     return date;
   }
 
@@ -115,7 +115,7 @@ export function prevDateInDateRange(def, date, dateArray) {
   const next = dateArray[closestDateIndex + 1] || null;
   const previous = closestDate ? new Date(closestDate.getTime()) : date;
   return { previous, next };
-};
+}
 
 /**
    * Return an array of dates based on the dateRange the current date falls in.
@@ -183,6 +183,7 @@ export function datesinDateRanges(def, date) {
         if (dateArray.length > 0) {
           // prevent earlier dates from being added after later dates while building dateArray
           if (day < dateArray[dateArray.length - 1]) {
+            // eslint-disable-next-line no-continue
             continue;
           }
         }
@@ -214,25 +215,25 @@ export function datesinDateRanges(def, date) {
             minDate.getUTCDate(),
             minDate.getUTCHours(),
             minDate.getUTCMinutes() + i,
-            0
-          )
+            0,
+          ),
         );
       }
     }
   });
   return dateArray;
-};
+}
 
 export function serializeLayers(currentLayers, state, groupName) {
   const layers = currentLayers;
   const palettes = state.palettes[groupName];
 
   return layers.map((def, i) => {
-    var item = {};
+    let item = {};
 
     if (def.id) {
       item = {
-        id: def.id
+        id: def.id,
       };
     }
     if (!item.attributes) {
@@ -240,13 +241,13 @@ export function serializeLayers(currentLayers, state, groupName) {
     }
     if (!def.visible) {
       item.attributes.push({
-        id: 'hidden'
+        id: 'hidden',
       });
     }
     if (def.opacity < 1) {
       item.attributes.push({
         id: 'opacity',
-        value: def.opacity
+        value: def.opacity,
       });
     }
     if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
@@ -254,7 +255,7 @@ export function serializeLayers(currentLayers, state, groupName) {
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
         palettes,
-        state
+        state,
       );
       item.attributes = paletteAttributeArray.length
         ? item.attributes.concat(paletteAttributeArray)
@@ -273,23 +274,23 @@ export function serializeLayers(currentLayers, state, groupName) {
 }
 
 export function toggleVisibility(id, layers) {
-  var index = lodashFindIndex(layers, {
-    id: id
+  const index = lodashFindIndex(layers, {
+    id,
   });
   if (index === -1) {
-    throw new Error('Invalid layer ID: ' + id);
+    throw new Error(`Invalid layer ID: ${id}`);
   }
-  var visibility = !layers[index].visible;
+  const visibility = !layers[index].visible;
 
   return update(layers, { [index]: { visible: { $set: visibility } } });
 }
 
 export function removeLayer(id, layers) {
-  var index = lodashFindIndex(layers, {
-    id: id
+  const index = lodashFindIndex(layers, {
+    id,
   });
   if (index === -1) {
-    throw new Error('Invalid layer ID: ' + id);
+    throw new Error(`Invalid layer ID: ${id}`);
   }
   return update(layers, { $splice: [[index, 1]] });
 }
@@ -298,11 +299,11 @@ export function removeLayer(id, layers) {
 // [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
 // the array is first sorted, and then checked for any overlap
 export function dateOverlap(period, dateRanges) {
-  var sortedRanges = dateRanges.sort((previous, current) => {
+  const sortedRanges = dateRanges.sort((previous, current) => {
     // get the start date from previous and current
-    var previousTime = util.parseDate(previous.startDate);
+    let previousTime = util.parseDate(previous.startDate);
     previousTime = previousTime.getTime();
-    var currentTime = util.parseDate(current.startDate);
+    let currentTime = util.parseDate(current.startDate);
     currentTime = currentTime.getTime();
 
     // if the previous is earlier than the current
@@ -319,52 +320,52 @@ export function dateOverlap(period, dateRanges) {
     return 1;
   });
 
-  var result = sortedRanges.reduce(
+  const result = sortedRanges.reduce(
     (result, current, idx, arr) => {
       // get the previous range
       if (idx === 0) {
         return result;
       }
-      var previous = arr[idx - 1];
+      const previous = arr[idx - 1];
 
       // check for any overlap
-      var previousEnd = util.parseDate(previous.endDate);
+      let previousEnd = util.parseDate(previous.endDate);
       // Add dateInterval
       if (previous.dateInterval > 1 && period === 'daily') {
         previousEnd = new Date(
           previousEnd.setTime(
-            previousEnd.getTime() +
-            (previous.dateInterval * 86400000 - 86400000)
-          )
+            previousEnd.getTime()
+            + (previous.dateInterval * 86400000 - 86400000),
+          ),
         );
       }
       if (period === 'monthly') {
         previousEnd = new Date(
           previousEnd.setMonth(
-            previousEnd.getMonth() + (previous.dateInterval - 1)
-          )
+            previousEnd.getMonth() + (previous.dateInterval - 1),
+          ),
         );
       } else if (period === 'yearly') {
         previousEnd = new Date(
           previousEnd.setFullYear(
-            previousEnd.getFullYear() + (previous.dateInterval - 1)
-          )
+            previousEnd.getFullYear() + (previous.dateInterval - 1),
+          ),
         );
       }
       previousEnd = previousEnd.getTime();
 
-      var currentStart = util.parseDate(current.startDate);
+      let currentStart = util.parseDate(current.startDate);
       currentStart = currentStart.getTime();
 
-      var overlap = previousEnd >= currentStart;
+      const overlap = previousEnd >= currentStart;
       // store the result
       if (overlap) {
         // yes, there is overlap
         result.overlap = true;
         // store the specific ranges that overlap
         result.ranges.push({
-          previous: previous,
-          current: current
+          previous,
+          current,
         });
       }
 
@@ -372,8 +373,8 @@ export function dateOverlap(period, dateRanges) {
     },
     {
       overlap: false,
-      ranges: []
-    }
+      ranges: [],
+    },
   );
 
   // return the final results
@@ -384,8 +385,8 @@ export function dateOverlap(period, dateRanges) {
 //
 // LODASH Find() essentially does the same thing
 export function exists(layer, activeLayers) {
-  var found = false;
-  lodashEach(activeLayers, function(current) {
+  let found = false;
+  lodashEach(activeLayers, (current) => {
     if (layer === current.id) {
       found = true;
     }
@@ -394,13 +395,13 @@ export function exists(layer, activeLayers) {
 }
 // Permalink versions 1.0 and 1.1
 export function layersParse11(str, config) {
-  var layers = [];
-  var ids = str.split(/[~,.]/);
-  lodashEach(ids, function(id) {
+  const layers = [];
+  const ids = str.split(/[~,.]/);
+  lodashEach(ids, (id) => {
     if (id === 'baselayers' || id === 'overlays') {
       return;
     }
-    var visible = true;
+    let visible = true;
     if (id.startsWith('!')) {
       visible = false;
       id = id.substring(1);
@@ -409,17 +410,17 @@ export function layersParse11(str, config) {
       id = config.redirects.layers[id] || id;
     }
     if (!config.layers[id]) {
-      console.warn('No such layer: ' + id);
+      console.warn(`No such layer: ${id}`);
       return;
     }
-    var lstate = {
-      id: id,
-      attributes: []
+    const lstate = {
+      id,
+      attributes: [],
     };
     if (!visible) {
       lstate.attributes.push({
         id: 'hidden',
-        value: true
+        value: true,
       });
     }
     layers.push(lstate);
@@ -430,39 +431,39 @@ export function layersParse11(str, config) {
 // Permalink version 1.2
 export function layersParse12(stateObj, config) {
   try {
-    var parts;
-    var str = stateObj;
+    let parts;
+    const str = stateObj;
     // Split by layer definitions (commas not in parens)
-    var layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
-    var lstates = [];
-    lodashEach(layerDefs, function(layerDef) {
+    const layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
+    const lstates = [];
+    lodashEach(layerDefs, (layerDef) => {
       // Get the text before any paren or comma
-      var layerId = layerDef.match(/[^(,]+/)[0];
+      let layerId = layerDef.match(/[^(,]+/)[0];
       if (config.redirects && config.redirects.layers) {
         layerId = config.redirects.layers[layerId] || layerId;
       }
-      var lstate = {
+      const lstate = {
         id: layerId,
-        attributes: []
+        attributes: [],
       };
       // Everything inside parens
-      var arrayAttr = layerDef.match(/\(.*\)/);
+      const arrayAttr = layerDef.match(/\(.*\)/);
       if (arrayAttr) {
         // Get single match and remove parens
-        var strAttr = arrayAttr[0].replace(/[()]/g, '');
+        const strAttr = arrayAttr[0].replace(/[()]/g, '');
         // Key value pairs
-        var kvps = strAttr.split(',');
-        lodashEach(kvps, function(kvp) {
+        const kvps = strAttr.split(',');
+        lodashEach(kvps, (kvp) => {
           parts = kvp.split('=');
           if (parts.length === 1) {
             lstate.attributes.push({
               id: parts[0],
-              value: true
+              value: true,
             });
           } else {
             lstate.attributes.push({
               id: parts[0],
-              value: parts[1]
+              value: parts[1],
             });
           }
         });
@@ -471,29 +472,31 @@ export function layersParse12(stateObj, config) {
     });
     return createLayerArrayFromState(lstates, config);
   } catch (e) {
-    console.warn('Error Parsing layers: ' + e);
+    console.warn(`Error Parsing layers: ${e}`);
     console.log('reverting to default layers');
     return resetLayers(config.defaults.startingLayers, config.layers);
   }
 }
 const createLayerArrayFromState = function(state, config) {
   let layerArray = [];
-  lodashEach(state, obj => {
+  lodashEach(state, (obj) => {
     if (!lodashIsUndefined(state)) {
-      lodashEachRight(state, function(layerDef) {
+      lodashEachRight(state, (layerDef) => {
         let hidden = false;
         let opacity = 1.0;
-        let max, min, squash, custom, disabled;
+        let max; let min; let squash; let custom; let
+          disabled;
         if (!config.layers[layerDef.id]) {
-          console.warn('No such layer: ' + layerDef.id);
+          console.warn(`No such layer: ${layerDef.id}`);
           return;
         }
-        lodashEach(layerDef.attributes, function(attr) {
+        lodashEach(layerDef.attributes, (attr) => {
           if (attr.id === 'hidden') {
             hidden = true;
           }
           if (attr.id === 'opacity') {
             opacity = util.clamp(parseFloat(attr.value), 0, 1);
+            // eslint-disable-next-line no-restricted-globals
             if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
           }
           if (attr.id === 'disabled') {
@@ -503,14 +506,14 @@ const createLayerArrayFromState = function(state, config) {
           if (attr.id === 'max' && typeof attr.value === 'string') {
             const maxArray = [];
             const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, function(value, index) {
+            lodashEach(values, (value, index) => {
               if (value === '') {
                 maxArray.push(undefined);
                 return;
               }
               const maxValue = parseFloat(value);
               if (lodashIsNaN(maxValue)) {
-                console.warn('Invalid max value: ' + value);
+                console.warn(`Invalid max value: ${value}`);
               } else {
                 maxArray.push(maxValue);
               }
@@ -520,14 +523,14 @@ const createLayerArrayFromState = function(state, config) {
           if (attr.id === 'min' && typeof attr.value === 'string') {
             const minArray = [];
             const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, function(value, index) {
+            lodashEach(values, (value, index) => {
               if (value === '') {
                 minArray.push(undefined);
                 return;
               }
               const minValue = parseFloat(value);
               if (lodashIsNaN(minValue)) {
-                console.warn('Invalid min value: ' + value);
+                console.warn(`Invalid min value: ${value}`);
               } else {
                 minArray.push(minValue);
               }
@@ -540,7 +543,7 @@ const createLayerArrayFromState = function(state, config) {
             } else if (typeof attr.value === 'string') {
               const squashArray = [];
               const values = util.toArray(attr.value.split(';'));
-              lodashEach(values, function(value) {
+              lodashEach(values, (value) => {
                 squashArray.push(value === 'true');
               });
               squash = squashArray.length ? squashArray : undefined;
@@ -562,14 +565,14 @@ const createLayerArrayFromState = function(state, config) {
             opacity,
             // only include palette attributes if Array.length condition
             // is true: https://stackoverflow.com/a/40560953/4589331
-            ...(isArray(custom) && { custom }),
-            ...(isArray(min) && { min }),
-            ...(isArray(squash) && { squash }),
-            ...(isArray(max) && { max }),
-            ...(isArray(disabled) && { disabled })
+            ...isArray(custom) && { custom },
+            ...isArray(min) && { min },
+            ...isArray(squash) && { squash },
+            ...isArray(max) && { max },
+            ...isArray(disabled) && { disabled },
           },
           layerArray,
-          config.layers
+          config.layers,
         );
       });
     }
@@ -577,23 +580,19 @@ const createLayerArrayFromState = function(state, config) {
   return layerArray;
 };
 export function validate(errors, config) {
-  var error = function(layerId, cause) {
+  const error = function(layerId, cause) {
     errors.push({
-      message: 'Invalid layer: ' + layerId,
-      cause: cause,
-      layerRemoved: true
+      message: `Invalid layer: ${layerId}`,
+      cause,
+      layerRemoved: true,
     });
     delete config.layers[layerId];
-    lodashRemove(config.layerOrder.baselayers, function(e) {
-      return e === layerId;
-    });
-    lodashRemove(config.layerOrder.overlays, function(e) {
-      return e === layerId;
-    });
+    lodashRemove(config.layerOrder.baselayers, (e) => e === layerId);
+    lodashRemove(config.layerOrder.overlays, (e) => e === layerId);
   };
 
-  var layers = lodashCloneDeep(config.layers);
-  lodashEach(layers, function(layer) {
+  const layers = lodashCloneDeep(config.layers);
+  lodashEach(layers, (layer) => {
     if (!layer.group) {
       error(layer.id, 'No group defined');
       return;
@@ -603,8 +602,8 @@ export function validate(errors, config) {
     }
   });
 
-  var orders = lodashCloneDeep(config.layerOrder);
-  lodashEach(orders, function(layerId) {
+  const orders = lodashCloneDeep(config.layerOrder);
+  lodashEach(orders, (layerId) => {
     if (!config.layers[layerId]) {
       error(layerId, 'No configuration');
     }
@@ -614,11 +613,11 @@ export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   if (!parameters.l1 && parameters.ca !== undefined) {
     stateFromLocation = update(stateFromLocation, {
-      layers: { activeB: { $set: stateFromLocation.layers.active } }
+      layers: { activeB: { $set: stateFromLocation.layers.active } },
     });
   }
   // legacy layers permalink
@@ -626,9 +625,9 @@ export function mapLocationToLayerState(
     stateFromLocation = update(stateFromLocation, {
       layers: {
         active: {
-          $set: layersParse11(parameters.products, config)
-        }
-      }
+          $set: layersParse11(parameters.products, config),
+        },
+      },
     });
   }
   return stateFromLocation;
