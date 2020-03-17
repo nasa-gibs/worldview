@@ -35,6 +35,14 @@
   display: none;
 }
 
+.wv-info-button-distraction-free-mode {
+  opacity: 0.5;
+}
+
+.wv-info-button-distraction-free-mode:hover {
+  opacity: 1;
+}
+
 .ui-menu-item {
   position: relative;
 }

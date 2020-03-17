@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
-import Coordinates from './coordinates';
+import { Coordinates } from './coordinates';
 import util from '../../util/util';
 
-class OlCoordinates extends React.Component {
+export class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +23,11 @@ class OlCoordinates extends React.Component {
   registerMouseListeners() {
     this.props.mouseEvents.on('mousemove', this.mouseMove);
     this.props.mouseEvents.on('mouseout', this.mouseOut);
+  }
+
+  componentWillUnmount() {
+    this.props.mouseEvents.off('mousemove', this.mouseMove);
+    this.props.mouseEvents.off('mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {
@@ -100,5 +105,3 @@ class OlCoordinates extends React.Component {
 OlCoordinates.propTypes = {
   mouseEvents: PropTypes.object.isRequired,
 };
-
-export default OlCoordinates;

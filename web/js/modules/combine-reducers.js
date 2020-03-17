@@ -44,6 +44,8 @@ import {
 } from './product-picker/reducers';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
+import uiReducers from './ui/reducers';
+
 function lastAction(state = null, action) {
   return action;
 }
@@ -132,6 +134,7 @@ const reducers = {
   lastAction,
   location: locationReducer,
   measure: measureReducer,
+  ui: uiReducers,
   productPicker: productPickerReducer,
 };
 const appReducer = combineReducers(reducers);

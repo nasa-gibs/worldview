@@ -199,3 +199,10 @@
   background: url('../images/map/latlon.png') no-repeat;
   background-position: -14px;
 }
+
+.distraction-free-active .wv-map-zoom-in,
+.distraction-free-active .wv-map-zoom-out,
+.distraction-free-active .wv-map-scale-imperial,
+.distraction-free-active .wv-map-scale-metric {
+  display: none;
+}
