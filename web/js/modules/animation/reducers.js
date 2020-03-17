@@ -28,7 +28,7 @@ export const defaultState = {
 export function getInitialState(config) {
   return lodashAssign({}, defaultState, {
     startDate: util.dateAdd(config.initialDate, 'day', -7),
-    endDate: config.initialDate
+    endDate: config.initialDate,
   });
 }
 
