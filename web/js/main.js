@@ -63,13 +63,11 @@ window.onload = () => {
         ? util.parseDateUTC(parameters.now) || new Date()
         : new Date();
 
-      config.initialDate = config.pageLoadTime.getUTCHours() < 3
-        ? new Date((config.pageLoadTime).setUTCDate(config.pageLoadTime.getUTCDate() - 1))
-        : config.pageLoadTime;
+      const pageLoadTime = new Date(config.pageLoadTime);
 
-      config.todaysDate = new Date().getUTCHours() < 3
-        ? new Date((new Date()).setUTCDate(new Date().getUTCDate() - 1))
-        : new Date();
+      config.initialDate = config.pageLoadTime.getUTCHours() < 3
+        ? new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 1))
+        : pageLoadTime;
 
       config.palettes = {
         rendered: {},

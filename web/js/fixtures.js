@@ -189,6 +189,7 @@ fixtures.getState = function() {
 fixtures.config = function() {
   return {
     pageLoadTime: new Date(),
+    initialDate: new Date(),
     now: new Date(),
     defaults: {
       projection: 'geographic',

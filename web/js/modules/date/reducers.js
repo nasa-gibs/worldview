@@ -25,8 +25,8 @@ export const dateReducerState = {
 
 export function getInitialState(config) {
   return lodashAssign({}, dateReducerState, {
-    selected: config.pageLoadTime,
-    selectedB: util.dateAdd(config.pageLoadTime, 'day', -7),
+    selected: config.initialDate,
+    selectedB: util.dateAdd(config.initialDate, 'day', -7),
     appNow: config.pageLoadTime
   });
 }

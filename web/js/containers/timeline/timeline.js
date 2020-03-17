@@ -1273,9 +1273,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
     endTime = layersLastDateTime(layers[activeString], config);
   }
-  /** endTime = appNow; This was originally here, wondering why the
-  above logic is there when it gets set here **/
-  endTime = state.config.todaysDate;
+  endTime = appNow;
 
   const dimensionsAndOffsetValues = getOffsetValues(
     screenWidth,

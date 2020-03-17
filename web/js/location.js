@@ -158,11 +158,9 @@ const getParameters = function(config, parameters) {
           const compareIsActive = get(state, 'compare.active');
           const isCompareA = get(state, 'compare.isCompareA');
           const dateB = get(state, 'date.selectedB');
-          const appNow = get(state, 'date.appNow');
-          const appNowString = util.toISOStringSeconds(appNow);
           const initialDateString = util.toISOStringSeconds(initialDate);
           return !compareIsActive && !isCompareA
-            ? util.toISOStringSeconds(dateB) === appNowString
+            ? util.toISOStringSeconds(dateB) === initialDateString
               ? undefined
               : serializeDate(dateB)
             : util.toISOStringSeconds(currentItemState) === initialDateString
@@ -194,8 +192,8 @@ const getParameters = function(config, parameters) {
         setAsEmptyItem: true,
         serialize: (currentItemState, state) => {
           const isActive = get(state, 'compare.active');
-          const appNow = get(state, 'date.appNow');
-          const appNowMinusSevenDays = util.dateAdd(appNow, 'day', -7);
+          const initialDateString = util.toISOStringSeconds(initialDate);
+          const appNowMinusSevenDays = util.dateAdd(initialDateString, 'day', -7);
           const appNowMinusSevenDaysString = util.toISOStringSeconds(
             appNowMinusSevenDays
           );
