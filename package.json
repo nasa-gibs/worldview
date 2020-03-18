@@ -89,7 +89,7 @@
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^80.0.0",
+    "chromedriver": "^80.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^6.0.2",
     "css-hot-loader": "^1.4.1",
@@ -203,6 +203,7 @@
     "simplebar-react": "^2.0.8",
     "supercluster": "7.0.0",
     "web-streams-polyfill": "^2.0.6",
+    "what-input": "^5.2.7",
     "whatwg-fetch": "^3.0.0"
   },
   "browser": {

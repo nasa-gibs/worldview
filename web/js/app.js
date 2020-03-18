@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
+// eslint-disable-next-line no-unused-vars
+import whatInput from 'what-input';
 
 // eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';

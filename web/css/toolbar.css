@@ -6,7 +6,8 @@
   border-radius: 0;
 }
 
-.wv-toolbar-button {
+.wv-toolbar-button,
+[data-whatintent='mouse'] .wv-toolbar-button:focus {
   font-size: 14.3px;
   height: 44px;
   display: inline-block;
@@ -27,6 +28,11 @@
     background-color: rgba(40, 40, 40, 0.85);
     color: #eee;
   }
+}
+
+[data-whatintent='keyboard'] .wv-toolbar-button:focus {
+  background-color: #eee;
+  color: #1a1a1a;
 }
 
 .wv-toolbar .btn.disabled {
