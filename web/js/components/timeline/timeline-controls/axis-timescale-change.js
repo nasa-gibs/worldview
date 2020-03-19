@@ -25,7 +25,7 @@ class AxisTimeScaleChange extends PureComponent {
       isDistractionFreeModeActive,
       isDraggerDragging,
     } = this.props;
-    // in event of dragging off axis, prevent tooltip displayD
+    // in event of dragging off axis, prevent tooltip display
     if (!isDraggerDragging && !isDistractionFreeModeActive) {
       this.disableMapScales(true);
       this.setState({
