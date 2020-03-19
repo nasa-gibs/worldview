@@ -11,7 +11,6 @@ import * as EVENT_CONSTANTS from '../../modules/natural-events/constants';
 import { activateLayersForEventCategory } from '../../modules/layers/actions';
 import { deselectEvent as deselectEventAction, selected as selectedAction } from '../../modules/natural-events/actions';
 import { selectDate } from '../../modules/date/actions';
-import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import { UPDATE_MAP_UI } from '../../modules/map/constants';
 
 const zoomLevelReference = {
