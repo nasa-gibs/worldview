@@ -351,22 +351,23 @@ class PaletteLegend extends React.Component {
           <div className={legendClass} key={`${legend.id}_${legendIndex}`}>
             {legend.colors.map((color, keyIndex) => {
               const isActiveKey = activeKeyObj && activeKeyObj.index === keyIndex;
-              const palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
+              let palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
               const parentLayerId = isSubLayer ? `-${parentLayer.id}` : '';
               const keyId = `${legend.id}-color${parentLayerId}-${layerGroupName}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
-
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
               const tooltipText = singleKey
                 ? layer.track ? trackLabel : legendTooltip
                 : keyLabel;
+              const isInvisible = color === '00000000';
+              palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
               return (
                 <React.Fragment key={keyId}>
                   <span
                     id={keyId}
                     className={inActive ? `${palletteClass} disabled-classification` : palletteClass}
-                    style={{ backgroundColor: util.hexToRGBA(color) }}
+                    style={isInvisible ? null : { backgroundColor: util.hexToRGBA(color) }}
                     onMouseMove={this.onMove.bind(this, color)}
                     onMouseEnter={this.onMouseEnter.bind(this)}
                     onMouseLeave={this.hideValue.bind(this)}
