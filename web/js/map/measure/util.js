@@ -14,6 +14,42 @@ const metersToFeet = (meters) => meters * 3.28084;
 const squareMetersToFeet = (sqMeters) => sqMeters * 10.76391;
 
 /**
+ * Shift x value of every coord except the last,
+ * which is the active drawing point
+ * @param {*} coords
+ * @param {*} shiftValue
+ */
+function shiftXCoords (coords, shiftValue) {
+  const newCoordsArray = [];
+  const len = coords.length;
+  for (let i = 0; i < len - 1; i += 1) {
+    const [x, y] = coords[i];
+    newCoordsArray.push([x + shiftValue, y]);
+  }
+  newCoordsArray.push(coords[len - 1]);
+  return newCoordsArray;
+}
+
+/**
+ * If the last two coordinates in a measurement are more than 180
+ * degrees apart, flip the whole drawing forward or backward 360 degrees
+ * @param {*} geom
+ */
+function checkForXFlip(geom) {
+  const coords = geom.getCoordinates();
+  const [x1] = coords[coords.length - 2];
+  const [x2] = coords[coords.length - 1];
+  if (Math.abs(x1 - x2) > 180) {
+    if (x1 < x2) {
+      geom.setCoordinates(shiftXCoords(coords, 360));
+    } else if (x1 > x2) {
+      geom.setCoordinates(shiftXCoords(coords, -360));
+    }
+  }
+  return geom;
+}
+
+/**
  * Transforms a LineString of two points to a MultiLineString of multiple points
  * applying a great circle arc transformation
  * @param {*} geom - the geometry object to apply great circle arc transformation to
@@ -21,11 +57,11 @@ const squareMetersToFeet = (sqMeters) => sqMeters * 10.76391;
 export function transformLineStringArc(geom, projection) {
   const coords = [];
   const distance = 10000; // meters between segments
-  const transformedGeom = geom.clone().transform(projection, geographicProj);
+  const transformedGeom = checkForXFlip(geom).clone().transform(projection, geographicProj);
   transformedGeom.forEachSegment((segStart, segEnd) => {
     const line = geod.InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
     const n = Math.ceil(line.s13 / distance);
-    for (let i = 0; i <= n; ++i) {
+    for (let i = 0; i <= n; i += 1) {
       const s = Math.min(distance * i, line.s13);
       const r = line.Position(s, geographiclib.Geodesic.LONG_UNROLL);
       coords.push([r.lon2, r.lat2]);
@@ -44,7 +80,7 @@ export function transformPolygonArc(geom, projection) {
   const transformedGeom = geom.clone().transform(projection, geographicProj);
   const distance = 10000; // meters between segments
   const polyCoords = transformedGeom.getCoordinates()[0];
-  for (let i = 0; i < polyCoords.length - 1; i++) {
+  for (let i = 0; i < polyCoords.length - 1; i += 1) {
     const line = geod.InverseLine(
       polyCoords[i][1],
       polyCoords[i][0],
@@ -52,7 +88,7 @@ export function transformPolygonArc(geom, projection) {
       polyCoords[i + 1][0],
     );
     const n = Math.ceil(line.s13 / distance);
-    for (let j = 0; j <= n; ++j) {
+    for (let j = 0; j <= n; j += 1) {
       const s = Math.min(distance * j, line.s13);
       const r = line.Position(s, geographiclib.Geodesic.LONG_UNROLL);
       coords.push([r.lon2, r.lat2]);
@@ -140,7 +176,6 @@ export function getGeographicLibDistance(line) {
  * @param {*} factor
  * @return {String} - The measurement, converted based on factor and locale
  */
-export function roundAndLocale(measurement, factor) {
-  factor = factor || 1;
+export function roundAndLocale(measurement, factor = 1) {
   return (Math.round((measurement / factor) * 100) / 100).toLocaleString();
 }
