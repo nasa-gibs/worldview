@@ -21,7 +21,12 @@ class AxisTimeScaleChange extends PureComponent {
 
   // TimeScale select tooltip on
   toolTipHoverOn = () => {
-    if (!this.props.isDraggerDragging) { // in event of dragging off axis, prevent tooltip display
+    const {
+      isDistractionFreeModeActive,
+      isDraggerDragging,
+    } = this.props;
+    // in event of dragging off axis, prevent tooltip displayD
+    if (!isDraggerDragging && !isDistractionFreeModeActive) {
       this.disableMapScales(true);
       this.setState({
         toolTipHovered: true,
@@ -60,18 +65,27 @@ class AxisTimeScaleChange extends PureComponent {
 
   // ex: month(2) to day(3)
   incrementTimeScale = () => {
-    const timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
-    const maxTimeScaleNumber = this.props.hasSubdailyLayers ? 5 : 3;
+    const {
+      changeTimeScale,
+      hasSubdailyLayers,
+      timeScale,
+    } = this.props;
+    const timeScaleNumber = timeScaleToNumberKey[timeScale];
+    const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
     if (timeScaleNumber < maxTimeScaleNumber) {
-      this.props.changeTimeScale(timeScaleNumber + 1);
+      changeTimeScale(timeScaleNumber + 1);
     }
   }
 
   // ex: day(3) to month(2)
   decrementTimeScale = () => {
-    const timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
+    const {
+      changeTimeScale,
+      timeScale,
+    } = this.props;
+    const timeScaleNumber = timeScaleToNumberKey[timeScale];
     if (timeScaleNumber > 1) {
-      this.props.changeTimeScale(timeScaleNumber - 1);
+      changeTimeScale(timeScaleNumber - 1);
     }
   }
 
@@ -114,6 +128,7 @@ class AxisTimeScaleChange extends PureComponent {
 AxisTimeScaleChange.propTypes = {
   changeTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   timelineHidden: PropTypes.bool,
   timeScale: PropTypes.string,
