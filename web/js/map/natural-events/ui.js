@@ -12,6 +12,7 @@ import { activateLayersForEventCategory } from '../../modules/layers/actions';
 import { deselectEvent as deselectEventAction, selected as selectedAction } from '../../modules/natural-events/actions';
 import { selectDate } from '../../modules/date/actions';
 import { UPDATE_MAP_UI } from '../../modules/map/constants';
+import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -45,6 +46,13 @@ export default function naturalEventsUI(ui, config, store, models) {
       requestedEventCategories,
     } = state;
     switch (action.type) {
+      case LOCATION_POP_ACTION: {
+        const newState = util.fromQueryString(action.payload.search);
+        if ((self.active && !newState.e) || (!self.active && newState.e)) {
+          return onSidebarChange(newState.e);
+        }
+        return;
+      }
       case CHANGE_SIDEBAR_TAB:
         return onSidebarChange(action.activeTab);
       case EVENT_CONSTANTS.SELECT_EVENT:
@@ -88,6 +96,7 @@ export default function naturalEventsUI(ui, config, store, models) {
   const onSidebarChange = function(tab) {
     const { proj } = store.getState();
     if (tab === 'events') {
+      self.active = true;
       // Remove previously stored markers
       naturalEventMarkers.remove(self.markers);
       // Store markers so the can be referenced later
@@ -121,6 +130,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       }
     } else {
       naturalEventMarkers.remove(self.markers);
+      self.active = false;
     }
     naturalEventsTrack.onSidebarChange(tab);
   };
