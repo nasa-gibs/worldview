@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
-                    "title": "Aqua / AIRS",
+                    "title": "Aqua/AIRS",
                     "description": "airs/CarbonMonoxide",
                     "image": "",
                     "settings": [
@@ -23,7 +23,7 @@
                 },
                 "Aura/MLS": {
                     "id": "aura-mls",
-                    "title": "Aura / MLS",
+                    "title": "Aura/MLS",
                     "description": "mls/CO",
                     "image": "",
                     "settings": [
@@ -35,7 +35,7 @@
                 },
                 "Terra/MOPITT": {
                     "id": "terra-mopitt",
-                    "title": "Terra / MOPITT",
+                    "title": "Terra/MOPITT",
                     "description": "mopitt/CarbonMonoxide",
                     "image": "",
                     "settings": [

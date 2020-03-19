@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
-                    "title": "Aqua / MODIS",
+                    "title": "Aqua/MODIS",
                     "description": "modis/CorrectedReflectance",
                     "image": "",
                     "settings": [
@@ -18,7 +18,7 @@
                 },
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/CorrectedReflectance",
                     "image": "",
                     "settings": [
@@ -28,9 +28,9 @@
                         "OrbitTracks_Terra_Descending"
                     ]
                 },
-                "SNPP/VIIRS": {
-                    "id": "snpp-viirs",
-                    "title": "Suomi NPP / VIIRS",
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
                     "description": "viirs/CorrectedReflectance",
                     "image": "",
                     "settings": [
@@ -42,7 +42,7 @@
                 },
                 "Landsat/WELD": {
                     "id": "landsat-weld",
-                    "title": "Landsat / WELD",
+                    "title": "Landsat/WELD",
                     "description": "landsat/Reflectance",
                     "image": "",
                     "settings": [

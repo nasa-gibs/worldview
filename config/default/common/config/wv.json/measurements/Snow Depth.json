@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
-                    "title": "Aqua / AMSR-E",
+                    "title": "Aqua/AMSR-E",
                     "description": "amsre/SnowDepthOverIce",
                     "image": "",
                     "settings": [

@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
-                    "title": "Aqua / AMSR-E",
+                    "title": "Aqua/AMSR-E",
                     "description": "amsre/FreezeThaw",
                     "image": "",
                     "settings": [
@@ -16,7 +16,7 @@
                 },
                 "DMSP/SSMI": {
                     "id": "dmsp-ssmi",
-                    "title": "DMSP / SSMI",
+                    "title": "DMSP/SSMI",
                     "description": "ssmi/FreezeThaw",
                     "image": "",
                     "settings": [
@@ -25,7 +25,7 @@
                 },
                 "SMAP/Radar": {
                     "id": "smap-radar",
-                    "title": "SMAP / Radar",
+                    "title": "SMAP/Radar",
                     "description": "smap/FreezeThaw",
                     "image": "",
                     "settings": [
@@ -34,7 +34,7 @@
                 },
                 "SMAP/Radiometer": {
                     "id": "smap-radiometer",
-                    "title": "SMAP / Radiometer",
+                    "title": "SMAP/Radiometer",
                     "description": "smap/FreezeThaw",
                     "image": "",
                     "settings": [

@@ -7,7 +7,7 @@
             "sources": {
               "GCOM-W1/AMSR2": {
                   "id": "gcom-w1-amsr2",
-                  "title": "GCOM-W1 / AMSR2",
+                  "title": "GCOM-W1/AMSR2",
                   "description": "amsr2/SoilMoisture",
                   "image": "",
                   "settings": [
@@ -23,7 +23,7 @@
               },
                 "SMAP/Radar": {
                     "id": "smap-radar",
-                    "title": "SMAP / Radar",
+                    "title": "SMAP/Radar",
                     "description": "smap/SoilMoisture_L3_Active",
                     "image": "",
                     "settings": [
@@ -32,7 +32,7 @@
                 },
                 "SMAP/Radiometer": {
                     "id": "smap-radiometer",
-                    "title": "SMAP / Radiometer",
+                    "title": "SMAP/Radiometer",
                     "description": "smap/SoilMoisture_L2_L3_Passive",
                     "image": "",
                     "settings": [
@@ -58,7 +58,7 @@
                 },
                 "SMAP/Sentinel-1": {
                     "id": "smap-sentinel1",
-                    "title": "SMAP / Sentinel-1",
+                    "title": "SMAP/Sentinel-1",
                     "description": "smap/SoilMoisture_L2_SMAPandSentinel-1",
                     "image": "",
                     "settings": [
@@ -67,7 +67,7 @@
                 },
                 "SMAP/Radar/Radiometer": {
                     "id": "smap-radar-radiometer",
-                    "title": "SMAP / Radar/Radiometer",
+                    "title": "SMAP/Radar/Radiometer",
                     "description": "smap/SoilMoisture_L3_ActivePassive",
                     "image": "",
                     "settings": [
@@ -76,7 +76,7 @@
                 },
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
-                    "title": "SMAP / Model Value-Added",
+                    "title": "SMAP/Model Value-Added",
                     "description": "smap/SoilMoisture_Value-Added",
                     "image": "",
                     "settings": [
