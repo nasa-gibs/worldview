@@ -23,7 +23,7 @@ test('parses valid date: 1.2', () => {
   const date = tryCatchDate(param.t, state.date.appNow);
   expect(date).toEqual(d);
 });
-test('If date is invalid, uses initialDate Time', () => {
+test('If date is invalid, uses Initial Time', () => {
   const param = {
     time: 'X',
   };
@@ -32,5 +32,5 @@ test('If date is invalid, uses initialDate Time', () => {
   };
   stateFromLocation = mapLocationToDateState(param, stateFromLocation, state);
 
-  expect(stateFromLocation.date.selected).toBe(state.date.initialDate);
+  expect(stateFromLocation.date.selected).toBe(state.date.selected);
 });

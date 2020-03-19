@@ -27,7 +27,7 @@ export function getInitialState(config) {
   return lodashAssign({}, dateReducerState, {
     selected: config.initialDate,
     selectedB: util.dateAdd(config.initialDate, 'day', -7),
-    appNow: config.pageLoadTime
+    appNow: config.pageLoadTime,
   });
 }
 
