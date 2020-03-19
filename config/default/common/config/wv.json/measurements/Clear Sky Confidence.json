@@ -5,7 +5,7 @@
             "title":    "Clear Sky Confidence",
             "subtitle": "Suomi NPP/VIIRS",
             "sources": {
-                "": {
+                "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
                     "description": "viirs/ClearSkyConfidence",

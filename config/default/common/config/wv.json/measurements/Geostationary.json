@@ -27,7 +27,7 @@
                       "GOES-West_ABI_Air_Mass"
                     ]
                   },
-                "Himawari": {
+                "Himawari-8": {
                     "id": "himawari-8",
                     "title": "Himawari-8",
                     "description": "himawari/himawari-8",

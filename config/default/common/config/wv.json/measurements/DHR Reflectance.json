@@ -7,7 +7,7 @@
             "sources": {
                 "Terra/MISR": {
                     "id": "terra-misr",
-                    "title": "Terra / MISR",
+                    "title": "Terra/MISR",
                     "description": "misr/DHRReflectance",
                     "image": "",
                     "settings": [
