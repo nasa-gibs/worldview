@@ -38,6 +38,7 @@ export class OlCoordinates extends React.Component {
       return;
     }
     let pcoord = transform(coord, crs, 'EPSG:4326');
+    // eslint-disable-next-line prefer-const
     let [lon, lat] = pcoord;
     if (Math.abs(lat) > 90) {
       this.clearCoord();

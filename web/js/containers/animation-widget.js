@@ -341,8 +341,8 @@ class AnimationWidget extends React.Component {
     * @param {Object} JS Date - endDate
    */
   zeroDates = () => {
+    const { subDailyMode } = this.props;
     let {
-      subDailyMode,
       startDate,
       endDate,
     } = this.props;
@@ -654,14 +654,16 @@ function mapStateToProps(state) {
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
   } = animation;
-  let {
+  const {
     customSelected,
-    interval,
     delta,
-    customInterval,
     customDelta,
     appNow,
     animationCustomModalOpen,
+  } = date;
+  let {
+    interval,
+    customInterval,
   } = date;
   const activeStr = compare.activeString;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';

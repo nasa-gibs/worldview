@@ -59,8 +59,6 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 
 export function mapui(models, config, store, ui) {
-  let layerBuilder; let
-    createLayer;
   const id = 'wv-map';
   const selector = `#${id}`;
   const animationDuration = 250;
@@ -85,7 +83,7 @@ export function mapui(models, config, store, ui) {
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
   self.events = util.events();
-  layerBuilder = self.layerBuilder = mapLayerBuilder(
+  const layerBuilder = self.layerBuilder = mapLayerBuilder(
     models,
     config,
     cache,
@@ -93,7 +91,7 @@ export function mapui(models, config, store, ui) {
     store,
   );
   self.layerKey = layerBuilder.layerKey;
-  createLayer = self.createLayer = layerBuilder.createLayer;
+  const createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
   self.selectedVectors = {};
   /**
@@ -880,15 +878,8 @@ export function mapui(models, config, store, ui) {
     const { date, compare } = state;
     const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
     dateSelected = dateSelected || date[activeDate];
-    let id;
-    let $map;
-    let scaleMetric;
-    let scaleImperial;
-    let rotateInteraction;
-    let map;
-    let mobileRotation;
-    id = `wv-map-${proj.id}`;
-    $map = $('<div></div>')
+    const id = `wv-map-${proj.id}`;
+    const $map = $('<div></div>')
       .attr('id', id)
       .attr('data-proj', proj.id)
       .addClass('wv-map')
@@ -896,23 +887,22 @@ export function mapui(models, config, store, ui) {
     $(selector).append($map);
 
     // Create two specific controls
-    scaleMetric = new OlControlScaleLine({
+    const scaleMetric = new OlControlScaleLine({
       className: 'wv-map-scale-metric',
       units: 'metric',
     });
-    scaleImperial = new OlControlScaleLine({
+    const scaleImperial = new OlControlScaleLine({
       className: 'wv-map-scale-imperial',
       units: 'imperial',
     });
-
-    rotateInteraction = new OlInteractionDragRotate({
+    const rotateInteraction = new OlInteractionDragRotate({
       condition: altKeyOnly,
       duration: animationDuration,
     });
-    mobileRotation = new OlInteractionPinchRotate({
+    const mobileRotation = new OlInteractionPinchRotate({
       duration: animationDuration,
     });
-    map = new OlMap({
+    const map = new OlMap({
       view: new OlView({
         maxResolution: proj.resolutions[0],
         projection: olProj.get(proj.crs),
@@ -1106,8 +1096,6 @@ export function mapui(models, config, store, ui) {
     let hoverThrottle;
 
     function onMouseMove(e) {
-      let coords;
-      let pixels;
       const state = store.getState();
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
@@ -1122,8 +1110,8 @@ export function mapui(models, config, store, ui) {
       ) {
         return;
       }
-      pixels = map.getEventPixel(e.originalEvent);
-      coords = map.getCoordinateFromPixel(pixels);
+      const pixels = map.getEventPixel(e.originalEvent);
+      const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
       // setting a limit on running-data retrievel

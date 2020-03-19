@@ -170,8 +170,6 @@ class GIF extends Component {
       h: boundaries.x2 - boundaries.x,
     };
     let stampWidth;
-    let stampProps;
-    let newImage;
     const breakPointOne = 300;
     const stampWidthRatio = 4.889;
 
@@ -212,7 +210,7 @@ class GIF extends Component {
         },
       );
     };
-    stampProps = getStampProps(
+    const stampProps = getStampProps(
       stampWidthRatio,
       breakPointOne,
       stampWidth,
@@ -220,7 +218,7 @@ class GIF extends Component {
       width,
       height,
     );
-    newImage = svgToPng(
+    const newImage = svgToPng(
       'brand/images/wv-logo-w-shadow.svg',
       stampProps.stampHeight,
     );

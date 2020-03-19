@@ -57,9 +57,8 @@ export class Opacity {
    * @param {Number} newValue
    */
   oninput(newValue) {
-    let convertedValue;
     value = newValue;
-    convertedValue = value / 100;
+    const convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);
     this.secondLayer.setOpacity(convertedValue);
     this.compareEvents.trigger('moveend', value);

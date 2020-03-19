@@ -342,10 +342,8 @@ export default (function(self) {
    * @return {string} Julian date string in the form of `YYYYDDD`
    */
   self.toJulianDate = function(date) {
-    let jStart; let
-      jDate;
-    jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
-    jDate = `00${1 + Math.ceil((date.getTime() - jStart) / 86400000)}`;
+    const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
+    const jDate = `00${1 + Math.ceil((date.getTime() - jStart) / 86400000)}`;
     return date.getUTCFullYear() + jDate.substr(jDate.length - 3);
   };
 
@@ -507,10 +505,8 @@ export default (function(self) {
   };
 
   self.daysInYear = function(date) {
-    let jStart; let
-      jDate;
-    jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
-    jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
+    const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
+    const jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
     return jDate.substr(jDate.length - 3);
   };
 

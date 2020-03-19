@@ -14,9 +14,7 @@ import {
 } from '../modules/compare/util';
 
 export function MapRunningData(models, compareUi, store) {
-  let self;
-
-  self = this;
+  const self = this;
   let dataObj = {};
   /**
    * Clear running data value

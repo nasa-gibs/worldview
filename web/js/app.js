@@ -138,10 +138,8 @@ class App extends React.Component {
 
   onload() {
     const self = this;
-    let config;
     const state = self.props.parameters;
-
-    config = self.props.config;
+    const { config } = self.props;
     config.parameters = state;
 
     // get user IP address for GTM/GA using https://www.ipify.org/ API

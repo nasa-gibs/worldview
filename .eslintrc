@@ -78,7 +78,7 @@
         "default-case": "warn", // 7 errors
         "no-nested-ternary": "warn", // 58 errors
         "no-shadow": "warn",
-        "prefer-const": "warn", // 100 errors
+        "prefer-const": "error",
         "class-methods-use-this": "warn",
         "no-plusplus": "warn", // 50 errors
         "max-len": "off",

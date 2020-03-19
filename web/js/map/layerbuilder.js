@@ -355,13 +355,16 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const createLayerVector = function(def, options, day, state) {
     const { proj, compare } = state;
-    let date; let urlParameters; let gridExtent; let source; let matrixSet; let matrixIds; let start; let
-      layerExtent;
+    let date;
+    let gridExtent;
+    let matrixIds;
+    let start;
+    let layerExtent;
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeGroupStr = options.group ? options.group : compare.activeString;
 
-    source = config.sources[def.source];
+    const source = config.sources[def.source];
     gridExtent = selectedProj.maxExtent;
     layerExtent = gridExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
@@ -369,7 +372,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
-    matrixSet = source.matrixSets[def.matrixSet];
+    const matrixSet = source.matrixSets[def.matrixSet];
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
@@ -402,7 +405,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       date = util.dateAdd(date, 'day', day);
     }
 
-    urlParameters = `${'?'
+    const urlParameters = `${'?'
       + 'TIME='}${
       util.toISOStringSeconds(util.roundTimeOneMinute(date))
     }&layer=${
@@ -468,16 +471,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const { proj, compare } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const selectedProj = proj.selected;
-    let source;
     let urlParameters;
-    let transparent;
     let date;
     let extent;
     let start;
     let res;
-    let parameters;
 
-    source = config.sources[def.source];
+    const source = config.sources[def.source];
     extent = selectedProj.maxExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
     res = selectedProj.resolutions;
@@ -485,7 +485,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
 
-    transparent = def.format === 'image/png';
+    const transparent = def.format === 'image/png';
     if (selectedProj.id === 'geographic') {
       res = [
         0.28125,
@@ -510,7 +510,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         start = [180, 90];
       }
     }
-    parameters = {
+    const parameters = {
       LAYERS: def.layer || def.id,
       FORMAT: def.format,
       TRANSPARENT: transparent,

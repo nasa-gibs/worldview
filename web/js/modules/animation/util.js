@@ -73,7 +73,6 @@ export function getStampProps(
 }
 
 export function svgToPng(svgURL, stampHeight) {
-  let newImage;
   const canvasEl = document.createElement('canvas');
   const canvgOptions = {
     log: false,
@@ -81,7 +80,7 @@ export function svgToPng(svgURL, stampHeight) {
     scaleHeight: stampHeight,
   };
   canvg(canvasEl, svgURL, canvgOptions);
-  newImage = new Image();
+  const newImage = new Image();
   newImage.src = canvasEl.toDataURL('image/png');
   newImage.width = canvasEl.width;
   newImage.height = canvasEl.height;

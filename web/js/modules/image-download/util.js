@@ -75,7 +75,6 @@ export function imageUtilCalculateResolution(
   resolutions,
 ) {
   let resolution;
-  let resolutionEstimate;
   const nZoomLevels = resolutions.length;
   const currentZoom = zoom < 0 ? 0 : zoom;
   const curResolution = currentZoom >= nZoomLevels
@@ -83,7 +82,7 @@ export function imageUtilCalculateResolution(
     : resolutions[currentZoom];
 
   // Estimate the option value used by "wv-image-resolution"
-  resolutionEstimate = imageUtilEstimateResolution(
+  const resolutionEstimate = imageUtilEstimateResolution(
     curResolution,
     isGeoProjection,
   );

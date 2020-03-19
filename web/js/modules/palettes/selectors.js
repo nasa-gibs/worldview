@@ -258,10 +258,8 @@ const toggleLookup = function(layerId, palettesObj, state) {
       if (disabled.includes(index)) {
         targetColor = '00000000';
       } else {
-        let sourcePercent; let
-          targetIndex;
-        sourcePercent = index / sourceCount;
-        targetIndex = Math.floor(sourcePercent * targetCount);
+        const sourcePercent = index / sourceCount;
+        const targetIndex = Math.floor(sourcePercent * targetCount);
         targetColor = target[targetIndex];
       }
       const colormapRef = entries.refs[index];

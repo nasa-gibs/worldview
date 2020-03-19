@@ -60,10 +60,9 @@ export class Spy {
    * @param {Object} e | mousemove event object
    */
   updateSpy(e) {
-    let offSetXandY;
     mousePosition = e.pixel || this.map.getEventPixel(e);
     radius = DEFAULT_RADIUS;
-    offSetXandY = Math.sqrt((radius * radius) / 2);
+    const offSetXandY = Math.sqrt((radius * radius) / 2);
     label.style.top = `${mousePosition[1] + offSetXandY - 10}px`;
     label.style.left = `${mousePosition[0] + offSetXandY - 5}px`;
     this.map.render();

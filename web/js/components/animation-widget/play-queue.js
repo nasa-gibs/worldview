@@ -227,12 +227,11 @@ class PlayAnimation extends React.Component {
    * @param endDate {object} JS date
    */
   customQueuer(currentDate, startDate, endDate) {
-    let nextDateStr;
     let nextDate = this.nextDate(currentDate);
     if (nextDate > endDate) {
       nextDate = startDate;
     }
-    nextDateStr = util.toISOStringSeconds(nextDate);
+    const nextDateStr = util.toISOStringSeconds(nextDate);
     if (
       !this.preloadObject[nextDateStr]
       && !this.inQueueObject[nextDateStr]

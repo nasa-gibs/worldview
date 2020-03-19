@@ -145,8 +145,7 @@ export function getLeadingExtent(loadtime) {
 export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
   let extent;
   return new Promise((resolve, reject) => {
-    let layers; let
-      layerPromiseArray;
+    let layers;
     // Current layer's 3 layer array (prev, current, next days)
     layers = layer.values_.layers;
     if (layer.values_.layers) {
@@ -156,7 +155,7 @@ export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
     }
     // Calculate the extent of each layer in the layer group
     // and create a promiseTileLayer for prev, current, next day
-    layerPromiseArray = layers.map((layer) => {
+    const layerPromiseArray = layers.map((layer) => {
       extent = calculateExtent(
         layer.getExtent(),
         map.getView().calculateExtent(map.getSize()),
@@ -248,8 +247,7 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
         renderer.zDirection,
       );
       tileGrid.forEachTileCoord(extent, currentZ, (tileCoord) => {
-        let tile;
-        tile = tileSource.getTile(
+        const tile = tileSource.getTile(
           tileCoord[0],
           tileCoord[1],
           tileCoord[2],
