@@ -12,6 +12,7 @@ import { activateLayersForEventCategory } from '../../modules/layers/actions';
 import { deselectEvent as deselectEventAction, selected as selectedAction } from '../../modules/natural-events/actions';
 import { selectDate } from '../../modules/date/actions';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
+import { UPDATE_MAP_UI } from '../../modules/map/constants';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -51,6 +52,11 @@ export default function naturalEventsUI(ui, config, store, models) {
         return self.selectEvent(action.id, action.date);
       case EVENT_CONSTANTS.DESELECT_EVENT:
         return self.deselectEvent();
+      case UPDATE_MAP_UI:
+        if (map.proj !== action.ui.selected.proj) {
+          onProjChange(action.ui.selected.proj);
+        }
+        return;
       case EVENT_CONSTANTS.REQUEST_EVENTS_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_SOURCES_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_CATEGORIES_SUCCESS:
@@ -70,9 +76,7 @@ export default function naturalEventsUI(ui, config, store, models) {
             return self.selectEvent(selected.id, selected.date, null, true);
           }
         }
-        return;
-      case CHANGE_PROJECTION:
-        return !isLoading ? onProjChange(action.id) : '';
+        break;
       default:
         break;
     }

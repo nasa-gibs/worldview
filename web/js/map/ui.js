@@ -953,6 +953,7 @@ export function mapui(models, config, store, ui) {
       scaleMetric,
       scaleImperial,
     };
+    map.proj = proj.id;
     createZoomButtons(map, proj);
     createMousePosSel(map, proj);
 
