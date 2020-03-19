@@ -108,13 +108,13 @@ describe('fromCompactTimestamp', () => {
 
 test('clearTimeUTC', () => {
   const d = new Date(2013, 2, 15, 12, 34, 56, 789);
-  util.clearTimeUTC(d);
-  expect(2013).toBe(d.getUTCFullYear());
-  expect(2).toBe(d.getUTCMonth());
-  expect(15).toBe(d.getUTCDate());
-  expect(0).toBe(d.getUTCHours());
-  expect(0).toBe(d.getUTCMinutes());
-  expect(0).toBe(d.getUTCSeconds());
+  const dCleared = util.clearTimeUTC(d);
+  expect(2013).toBe(dCleared.getUTCFullYear());
+  expect(2).toBe(dCleared.getUTCMonth());
+  expect(15).toBe(dCleared.getUTCDate());
+  expect(0).toBe(dCleared.getUTCHours());
+  expect(0).toBe(dCleared.getUTCMinutes());
+  expect(0).toBe(dCleared.getUTCSeconds());
 });
 
 describe('dateAdd', () => {

@@ -183,7 +183,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     if (def.period === 'subdaily') {
       date = nearestInterval(def, date);
     } else if (previousDateFromRange) {
-      date = previousDateFromRange;
+      date = util.clearTimeUTC(previousDateFromRange);
+    } else {
+      date = util.clearTimeUTC(date);
     }
 
     return { closestDate: date, previousDate: previousLayerDate, nextDate: nextLayerDate };
