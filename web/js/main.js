@@ -59,7 +59,7 @@ window.onload = () => {
 
   loadingIndicator.delayed(promise, 1000);
   promise
-    .done(config => {
+    .done((config) => {
       // Perform check to see if app was in the midst of a tour
       if (parameters.tr) {
         // Gets the extent of the first step of specified tour and overrides current view params
