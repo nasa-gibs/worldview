@@ -1247,6 +1247,7 @@ class Timeline extends React.Component {
                       timeScale={timeScale}
                       changeTimeScale={this.changeTimeScale}
                       isDraggerDragging={isDraggerDragging}
+                      isDistractionFreeModeActive={isDistractionFreeModeActive}
                       hasSubdailyLayers={hasSubdailyLayers}
                       timelineHidden={isTimelineHidden}
                     />
