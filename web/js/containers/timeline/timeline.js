@@ -1551,7 +1551,6 @@ Timeline.propTypes = {
   animationDisabled: PropTypes.bool,
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
-  appNow: PropTypes.object,
   axisWidth: PropTypes.number,
   changeCustomInterval: PropTypes.func,
   changeDate: PropTypes.func,

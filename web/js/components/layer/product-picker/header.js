@@ -143,7 +143,6 @@ ProductPickerHeader.propTypes = {
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   listType: PropTypes.string,
-  modalView: PropTypes.string,
   runSearch: PropTypes.func,
   selectedDate: PropTypes.object,
   selectedProjection: PropTypes.string,

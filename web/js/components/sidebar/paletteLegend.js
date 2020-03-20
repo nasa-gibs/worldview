@@ -438,8 +438,6 @@ class PaletteLegend extends React.Component {
 }
 PaletteLegend.defaultProps = {
   isRunningData: false,
-  isHoveringLegend: false,
-  isRunningDataEnabled: true,
   width: 231,
   height: 12,
 };
@@ -449,12 +447,8 @@ PaletteLegend.propTypes = {
   getPalette: PropTypes.func,
   height: PropTypes.number,
   isCustomPalette: PropTypes.bool,
-  isHoveringCanvas: PropTypes.bool,
-  isHoveringLegend: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
-  isRunningDataEnabled: PropTypes.bool,
-  isSubLayer: PropTypes.bool,
   layer: PropTypes.object,
   layerGroupName: PropTypes.string,
   paletteId: PropTypes.string,

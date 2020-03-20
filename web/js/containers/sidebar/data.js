@@ -96,12 +96,10 @@ const Data = (props) => {
 Data.propTypes = {
   activeLayers: PropTypes.array,
   counts: PropTypes.object,
-  data: PropTypes.object,
   findProductToSelect: PropTypes.func,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   products: PropTypes.object,
-  selected: PropTypes.string,
   selectedProduct: PropTypes.string,
   selectProduct: PropTypes.func,
   showUnavailableReason: PropTypes.func,

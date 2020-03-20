@@ -108,12 +108,9 @@
 
         // React rules overrides
         "react/destructuring-assignment": "warn", // 464 errors
-        "react/no-unused-state": "warn", // 38 errors
         "react/jsx-props-no-spreading": "warn", // 17 errors
         "react/jsx-filename-extension": "off",
         "react/sort-comp": "off",
-
-        "react/no-unused-prop-types": "warn", // 66 errors
         "react/forbid-prop-types": "off", // 216 errors
         "react/require-default-props": "off" // 965 errors
       }

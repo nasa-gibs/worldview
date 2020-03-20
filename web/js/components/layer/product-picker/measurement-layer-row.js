@@ -102,7 +102,6 @@ MeasurementLayerRow.propTypes = {
   checked: PropTypes.bool,
   layer: PropTypes.object,
   measurementId: PropTypes.string,
-  onClick: PropTypes.func,
   removeLayer: PropTypes.func,
   selectedDate: PropTypes.object,
   title: PropTypes.string,

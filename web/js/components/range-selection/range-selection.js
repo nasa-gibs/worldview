@@ -346,8 +346,6 @@ TimelineRangeSelector.propTypes = {
   endTriangleColor: PropTypes.string,
   frontDate: PropTypes.string,
   max: PropTypes.object,
-  onDrag: PropTypes.func,
-  parentOffset: PropTypes.number,
   pinWidth: PropTypes.number,
   position: PropTypes.number,
   rangeColor: PropTypes.string,

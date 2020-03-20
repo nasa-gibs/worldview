@@ -97,33 +97,23 @@ export default class GifPanel extends React.Component {
 
 GifPanel.defaultProps = {
   firstLabel: 'Resolution (per pixel):',
-  maxGifSize: 20,
-  secondLabel: 'Format',
   showDates: true,
 };
 GifPanel.propTypes = {
-  checked: PropTypes.bool,
   endDate: PropTypes.string,
   firstLabel: PropTypes.string,
-  imgHeight: PropTypes.number,
-  imgWidth: PropTypes.number,
   increment: PropTypes.string,
   lonlats: PropTypes.array,
-  maxGifSize: PropTypes.number,
-  maxImageDimensionSize: PropTypes.number,
   numberOfFrames: PropTypes.number,
   onCheck: PropTypes.func,
   onClick: PropTypes.func,
   onDownloadClick: PropTypes.func,
   projId: PropTypes.string,
-  requestSize: PropTypes.string,
   resolution: PropTypes.string,
   resolutions: PropTypes.object,
-  secondLabel: PropTypes.string,
   showDates: PropTypes.bool,
   speed: PropTypes.number,
   startDate: PropTypes.string,
-  valid: PropTypes.bool,
 };
 const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
   return (

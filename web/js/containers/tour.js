@@ -507,8 +507,6 @@ Tour.propTypes = {
   showTourAlert: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
-  currentStep: PropTypes.number,
-  currentStory: PropTypes.object,
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
@@ -517,5 +515,4 @@ Tour.propTypes = {
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   startTour: PropTypes.func,
-  totalSteps: PropTypes.number,
 };

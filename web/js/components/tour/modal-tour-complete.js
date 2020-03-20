@@ -78,7 +78,6 @@ ModalComplete.propTypes = {
   endTour: PropTypes.func.isRequired,
   modalComplete: PropTypes.bool.isRequired,
   resetTour: PropTypes.func.isRequired,
-  className: PropTypes.string,
 };
 
 export default ModalComplete;

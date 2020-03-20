@@ -835,7 +835,6 @@ AnimationWidget.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,
-  isCompareActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
@@ -847,7 +846,6 @@ AnimationWidget.propTypes = {
   notify: PropTypes.func,
   numberOfFrames: PropTypes.number,
   onClose: PropTypes.func,
-  onDateChange: PropTypes.func,
   onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
   onPushPause: PropTypes.func,
@@ -865,7 +863,6 @@ AnimationWidget.propTypes = {
   speed: PropTypes.number,
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
-  toggleCollapse: PropTypes.func,
   toggleCustomModal: PropTypes.func,
   toggleGif: PropTypes.func,
 };

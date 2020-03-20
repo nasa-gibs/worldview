@@ -78,6 +78,5 @@ VectorDialog.propTypes = {
   dialogKey: PropTypes.number,
   modalHeight: PropTypes.number,
   toggleWithClose: PropTypes.func,
-  vectorMetaArray: PropTypes.array,
   vectorMetaObject: PropTypes.object,
 };

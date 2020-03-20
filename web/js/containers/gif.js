@@ -434,7 +434,6 @@ GIF.propTypes = {
   endDate: PropTypes.string,
   getImageArray: PropTypes.func,
   increment: PropTypes.string,
-  isActive: PropTypes.bool,
   map: PropTypes.object,
   numberOfFrames: PropTypes.number,
   onBoundaryChange: PropTypes.func,

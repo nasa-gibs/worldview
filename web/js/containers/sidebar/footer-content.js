@@ -207,7 +207,6 @@ FooterContent.propTypes = {
   compareMode: PropTypes.string,
   counts: PropTypes.object,
   dataSelectionSize: PropTypes.number,
-  events: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   onGetData: PropTypes.func,

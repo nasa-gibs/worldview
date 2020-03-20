@@ -195,7 +195,6 @@ LayerMetadataDetail.propTypes = {
   layer: PropTypes.object,
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,
-  showMetadataForLayer: PropTypes.func,
   showPreviewImage: PropTypes.bool,
 };
 

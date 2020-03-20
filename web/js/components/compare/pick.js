@@ -76,7 +76,6 @@ Pick.propTypes = {
   path: PropTypes.string,
   position: PropTypes.number,
   text: PropTypes.string,
-  visibility: PropTypes.string,
   width: PropTypes.number,
   yOffset: PropTypes.number,
 };

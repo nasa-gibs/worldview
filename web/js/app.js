@@ -224,5 +224,4 @@ App.propTypes = {
   mapMouseEvents: PropTypes.object,
   modalId: PropTypes.string,
   parameters: PropTypes.object,
-  state: PropTypes.object,
 };

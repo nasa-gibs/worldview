@@ -217,7 +217,6 @@ InfoList.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
-  models: PropTypes.object,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
   sendFeedback: PropTypes.func,

@@ -98,7 +98,6 @@ export default connect(
 
 ProjectionList.propTypes = {
   config: PropTypes.object,
-  models: PropTypes.object,
   onCloseModal: PropTypes.func,
   projection: PropTypes.string,
   projectionArray: PropTypes.array,

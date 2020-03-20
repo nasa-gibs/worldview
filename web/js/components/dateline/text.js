@@ -105,7 +105,6 @@ LineText.propTypes = {
   fill: PropTypes.string,
   recRadius: PropTypes.number,
   rectOpacity: PropTypes.number,
-  svgStyle: PropTypes.object,
   textHeight: PropTypes.number,
   textOpacity: PropTypes.number,
   textWidth: PropTypes.number,

@@ -197,15 +197,12 @@ ImageResSelection.defaultProps = {
   worldFileOptions: true,
 };
 ImageResSelection.propTypes = {
-  crs: PropTypes.string,
   date: PropTypes.object,
-  fileSize: PropTypes.string,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
   fileTypes: PropTypes.object,
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
-  hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
@@ -215,6 +212,5 @@ ImageResSelection.propTypes = {
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
   url: PropTypes.string,
-  valid: PropTypes.bool,
   worldFileOptions: PropTypes.bool,
 };

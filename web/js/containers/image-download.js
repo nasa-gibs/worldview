@@ -237,5 +237,4 @@ ImageDownloadContainer.propTypes = {
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  worldfile: PropTypes.bool,
 };

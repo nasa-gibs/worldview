@@ -93,5 +93,4 @@ CustomIntervalSelectorWidget.propTypes = {
   customIntervalModalOpen: PropTypes.bool,
   customIntervalZoomLevel: PropTypes.number,
   hasSubdailyLayers: PropTypes.bool,
-  toggleCustomIntervalModal: PropTypes.func,
 };

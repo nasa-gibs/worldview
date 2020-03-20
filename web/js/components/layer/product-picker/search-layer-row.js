@@ -137,7 +137,6 @@ LayerRow.propTypes = {
   offState: PropTypes.func,
   onState: PropTypes.func,
   showLayerMetadata: PropTypes.func,
-  toggleDateRangesExpansion: PropTypes.func,
 };
 
 export default LayerRow;
