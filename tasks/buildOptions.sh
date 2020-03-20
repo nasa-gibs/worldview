@@ -143,7 +143,7 @@ cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
 "$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
-    "$OPT_DIR/common/previewLayerOverrides.json"
+    "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
 
 # Validate the options build
 "$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
