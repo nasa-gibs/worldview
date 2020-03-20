@@ -25,6 +25,11 @@
   "engines": {
     "node": "8.15.1"
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
+  },
   "scripts": {
     "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
@@ -114,6 +119,7 @@
     "glob": "^7.1.6",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^4.2.3",
     "jest": "^25.1.0",
     "jest-canvas-mock": "^2.2.0",
     "mini-css-extract-plugin": "^0.8.0",
