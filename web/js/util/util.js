@@ -430,17 +430,18 @@ export default (function(self) {
     return str.replace(/\W/g, '_');
   };
   /**
-   * Sets a date to UTC midnight.
+   * Returns a new date from input date set to UTC midnight.
    *
    * @method clearTimeUTC
    * @static
    * @param date {Date} date to set the UTC hours, minutes, and seconds
    * to zero.
-   * @return {Date} the date object
+   * @return {Date} new date object
    */
   self.clearTimeUTC = function(date) {
-    date.setUTCHours(0, 0, 0, 0);
-    return date;
+    const newDate = new Date(date);
+    newDate.setUTCHours(0, 0, 0, 0);
+    return newDate;
   };
 
   self.dateAdd = function(date, interval, amount) {

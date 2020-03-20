@@ -185,9 +185,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     } else if (previousDateFromRange) {
       date = util.clearTimeUTC(previousDateFromRange);
     } else {
-      date = options.date
-        ? util.clearTimeUTC(new Date(date.getTime()))
-        : util.clearTimeUTC(date);
+      date = util.clearTimeUTC(date);
     }
 
     return { closestDate: date, previousDate: previousLayerDate, nextDate: nextLayerDate };
