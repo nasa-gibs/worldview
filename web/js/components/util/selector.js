@@ -7,14 +7,6 @@ import PropTypes from 'prop-types';
  * @extends React.Component
  */
 export default class Selector extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
-    this.state = {
-      value: props.value,
-    };
-  }
-
   handleChange(event) {
     this.props.onChange(this.props.optionName, event.target.value);
   }

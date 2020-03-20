@@ -20,13 +20,9 @@ export default class GifPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgHeight: props.imgHeight,
-      imgWidth: props.imgWidth,
       speed: props.speed,
       resolutions: props.resolutions,
       resolution: props.resolution,
-      valid: props.valid,
-      showDates: props.showDates,
       increment: props.increment,
     };
     this.handleChange = this.handleChange.bind(this);

@@ -17,7 +17,6 @@ class TimelineDraggerRange extends PureComponent {
     this.state = {
       width: 0,
       startLocation: this.props.startLocation,
-      endLocation: this.props.endLocation,
       previousStartLocation: this.props.startLocation,
     };
 
@@ -186,7 +185,6 @@ class TimelineDraggerRange extends PureComponent {
   updateExtent(nextProps) {
     this.setState({
       startLocation: nextProps.startLocation,
-      endLocation: nextProps.endLocation,
     });
   }
 

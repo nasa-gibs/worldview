@@ -53,7 +53,6 @@ class ProductPicker extends React.Component {
     this.state = {
       modalElement: undefined,
       headerElement: undefined,
-      listScrollTop: props.listScrollTop || 0,
     };
 
     this.runSearch = lodashDebounce(this.runSearch.bind(this), 300);

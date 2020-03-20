@@ -35,10 +35,8 @@ export default class ImageResSelection extends React.Component {
 
     this.state = {
       fileType: props.fileType,
-      fileSize: props.fileSize,
       isWorldfile: props.isWorldfile,
       resolution: props.resolution,
-      valid: props.valid,
       debugUrl: '',
     };
     this.handleChange = this.handleChange.bind(this);

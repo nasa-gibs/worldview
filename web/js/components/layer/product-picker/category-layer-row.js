@@ -25,7 +25,6 @@ class CategoryLayerRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSelected: props.isSelected,
       projection: props.projection,
     };
   }

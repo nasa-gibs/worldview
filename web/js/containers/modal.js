@@ -26,7 +26,6 @@ class ModalContainer extends Component {
     this.state = {
       width: props.customProps.width,
       height: props.customProps.height,
-      isDraggable: props.isDraggable,
       offsetLeft: props.customProps.offsetLeft,
       offsetTop: props.customProps.offsetTop,
       offsetRight: props.customProps.offsetRight,

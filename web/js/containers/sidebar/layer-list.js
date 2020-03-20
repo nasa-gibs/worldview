@@ -24,7 +24,6 @@ class LayerList extends React.Component {
     super(props);
     this.state = {
       palettes: {},
-      layers: props.layers,
     };
     this.promises = {};
     this.onDragEnd = this.onDragEnd.bind(this);

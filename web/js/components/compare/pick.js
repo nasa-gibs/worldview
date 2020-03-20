@@ -7,8 +7,6 @@ class Pick extends React.Component {
     super(props);
     this.state = {
       position: props.position,
-      visibility: props.visibility,
-      color: props.color,
       max: props.max,
     };
   }

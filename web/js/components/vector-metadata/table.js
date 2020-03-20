@@ -5,13 +5,6 @@ import VectorMetaTooltip from './tooltip';
 import util from '../../util/util';
 
 export default class VectorMetaTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tooltipOpen: false,
-    };
-  }
-
   shouldComponentUpdate(nextProps) {
     const { id, title } = this.props;
     if (id && title && nextProps.id && nextProps.title && this.props.id === nextProps.id && title === nextProps.title) {

@@ -107,10 +107,7 @@ class AnimationWidget extends React.Component {
     const halfWidgetWidth = (props.subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
     this.state = {
       speed: props.speed,
-      isSliding: false,
-      isGifActive: false,
       hoverGif: false,
-      customIntervalModalOpen: false,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
         y: -10,
@@ -503,10 +500,8 @@ class AnimationWidget extends React.Component {
                 value={this.state.speed}
                 onChange={(num) => this.setState({ speed: num })}
                 handle={RangeHandle}
-                onBeforeChange={() => this.setState({ isSliding: true })}
                 onAfterChange={() => {
                   this.props.onSlide(speed);
-                  this.setState({ isSliding: false });
                 }}
               />
               <span className="wv-slider-label">{sliderLabel}</span>

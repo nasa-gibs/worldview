@@ -12,7 +12,6 @@ class ThresholdSelect extends React.Component {
       start,
       end,
       squashed,
-      activeDragger: 'start',
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
     this.updateSquash = this.updateSquash.bind(this);

@@ -14,8 +14,7 @@ class PaletteLegend extends React.Component {
     this.state = {
       isRunningData: props.isRunningData,
       colorHex: props.colorHex,
-      isHoveringCanvas: props.isHoveringCanvas,
-      width: this.props.width,
+      width: props.width,
 
       scrollContainerEl: null,
     };

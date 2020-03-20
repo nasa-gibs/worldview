@@ -7,7 +7,6 @@ class ModeSelection extends React.Component {
     super(props);
     this.state = {
       selected: props.selected,
-      loaded: false,
     };
   }
 
