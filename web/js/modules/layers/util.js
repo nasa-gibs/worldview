@@ -118,26 +118,59 @@ export function prevDateInDateRange(def, date, dateArray) {
 }
 
 /**
+   * Return revised maxEndDate based on given start/end date limits
+   *
+   * @method getRevisedMaxEndDate
+   * @param  {object} maxEndDate     A date object
+   * @param  {object} startDateLimit A date object (optional) used as start date of timeline range for available data
+   * @param  {object} endDateLimit   A date object (optional) used as end date of timeline range for available data
+   * @param  {object} minDate        A date object
+   * @return {object}                A date object
+   */
+const getRevisedMaxEndDate = (maxEndDate, startDateLimit, endDateLimit, minDate) => {
+  const startDateLimitTime = startDateLimit.getTime();
+  const minDateTime = minDate.getTime();
+  const maxEndDateTime = maxEndDate.getTime();
+  const endDateLimitTime = endDateLimit.getTime();
+  const frontDateWithinRange = startDateLimitTime >= minDateTime && startDateLimitTime <= maxEndDateTime;
+  const backDateWithinRange = endDateLimitTime <= maxEndDateTime && endDateLimitTime >= minDateTime;
+  if (frontDateWithinRange || backDateWithinRange) {
+    return endDateLimit;
+  }
+  return maxEndDate;
+};
+
+/**
    * Return an array of dates based on the dateRange the current date falls in.
    *
    * @method datesinDateRanges
-   * @param  {object} def           A layer object
-   * @param  {object} date          A date object
+   * @param  {object} def            A layer object
+   * @param  {object} date           A date object
+   * @param  {object} startDateLimit A date object (optional) used as start date of timeline range for available data
+   * @param  {object} endDateLimit   A date object (optional) used as end date of timeline range for available data
    * @return {array}                An array of dates with normalized timezones
    */
-export function datesinDateRanges(def, date) {
+export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
+  const inactiveLayer = def.inactive;
+  const rangeLimitsProvided = startDateLimit && endDateLimit;
   const dateArray = [];
   let currentDate = new Date(date.getTime());
-
-  lodashEach(def.dateRanges, (dateRange) => {
-    let { dateInterval } = dateRange;
-    dateInterval = Number(dateInterval);
+  // runningMinDate used for overlapping ranges
+  let runningMinDate;
+  lodashEach(def.dateRanges, (dateRange, index) => {
+    const { period } = def;
+    const dateInterval = Number(dateRange.dateInterval);
     let yearDifference;
     let monthDifference;
     let dayDifference;
     let minuteDifference;
     let minDate = new Date(dateRange.startDate);
-    const maxDate = new Date(dateRange.endDate);
+    let maxDate = new Date(dateRange.endDate);
+
+    // set maxDate to current date if layer coverage is ongoing
+    if (index === def.dateRanges.length - 1 && !inactiveLayer) {
+      maxDate = new Date();
+    }
 
     const maxYear = maxDate.getUTCFullYear();
     const maxMonth = maxDate.getUTCMonth();
@@ -147,79 +180,252 @@ export function datesinDateRanges(def, date) {
     const minDay = minDate.getUTCDate();
 
     let i;
+
+    // handle single date coverage
+    if (dateRange.startDate === dateRange.endDate) {
+      const dateTime = new Date(minDate.getTime());
+      dateArray.push(dateTime);
+      return;
+    }
+
     // Yearly layers
-    if (def.period === 'yearly') {
+    if (period === 'yearly') {
       const maxYearDate = new Date(maxYear + dateInterval, maxMonth, maxDay);
       if (currentDate >= minDate && currentDate <= maxYearDate) {
         yearDifference = util.yearDiff(minDate, maxYearDate);
       }
-      for (i = 0; i <= (yearDifference + 1); i++) {
+      for (i = 0; i <= (yearDifference + 1); i += 1) {
         let year = new Date(minYear + i * dateInterval, minMonth, minDay);
         year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
         dateArray.push(year);
       }
       // Monthly layers
-    } else if (def.period === 'monthly') {
-      const maxMonthDate = new Date(maxYear, maxMonth + dateInterval, maxDay);
-      if (currentDate >= minDate && currentDate <= maxMonthDate) {
-        monthDifference = util.monthDiff(minDate, maxMonthDate);
+    } else if (period === 'monthly') {
+      let maxMonthDate = new Date(maxYear, maxMonth + dateInterval, maxDay);
+      maxMonthDate = new Date(maxMonthDate.getTime() - (maxMonthDate.getTimezoneOffset() * 60000));
+
+      if (runningMinDate && dateArray[dateArray.length - 1] > minDate) {
+        currentDate = minDate;
       }
-      for (i = 0; i <= (monthDifference + 1); i++) {
+
+      // conditional revision of maxEndDate for data availability partial coverage
+      let maxEndDate = maxMonthDate;
+      if (rangeLimitsProvided) {
+        maxEndDate = getRevisedMaxEndDate(new Date(maxEndDate), startDateLimit, endDateLimit, minDate);
+      }
+
+      if (currentDate <= maxMonthDate) {
+        monthDifference = util.monthDiff(minDate, maxMonthDate);
+        // handle non-1 month intervals to prevent over pushing unused dates to dateArray
+        monthDifference = Math.ceil(monthDifference / dateInterval);
+      }
+
+      // get minStartDate for partial range coverage starting date
+      let minStartMonthDate;
+      if (rangeLimitsProvided) {
+        let prevDate = '';
+        for (i = 0; i <= (monthDifference + 1); i += 1) {
+          if (!minStartMonthDate) {
+            let month = new Date(minYear, minMonth + i * dateInterval, minDay);
+            month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
+
+            if (month > startDateLimit || month.getTime() === startDateLimit.getTime()) {
+              minStartMonthDate = prevDate;
+            } else {
+              prevDate = month;
+            }
+          }
+        }
+      }
+
+      for (i = 0; i <= (monthDifference + 1); i += 1) {
         let month = new Date(minYear, minMonth + i * dateInterval, minDay);
         month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
-        dateArray.push(month);
-      }
-      // Daily layers
-    } else if (def.period === 'daily') {
-      const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateInterval);
-      if (currentDate >= minDate && currentDate <= maxDayDate) {
-        dayDifference = util.dayDiff(minDate, maxDayDate);
-        // handle non-1 day intervals to prevent over pushing unused dates to dateArray
-        dayDifference = Math.ceil(dayDifference / dateInterval);
-      }
-      for (i = 0; i <= (dayDifference + 1); i++) {
-        let day = new Date(minYear, minMonth, minDay + i * dateInterval);
-        day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
+        if (month.getTime() >= maxEndDate.getTime()) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
         if (dateArray.length > 0) {
           // prevent earlier dates from being added after later dates while building dateArray
-          if (day < dateArray[dateArray.length - 1]) {
+          if (month < dateArray[dateArray.length - 1]) {
+            let endDateFound = false;
+            for (let j = dateArray.length - 1; j >= 0; j -= 1) {
+              if (!endDateFound) {
+                const dateCheck = dateArray[j];
+                const monthTime = month.getTime();
+                const dateCheckTime = dateCheck.getTime();
+
+                if (monthTime <= dateCheckTime) {
+                  dateArray.pop();
+                } else {
+                  dateArray.push(month);
+                  endDateFound = true;
+                  // eslint-disable-next-line no-continue
+                  continue;
+                }
+              }
+            }
             // eslint-disable-next-line no-continue
             continue;
           }
         }
-        dateArray.push(day);
+
+        if (minStartMonthDate) {
+          const monthTime = month.getTime();
+          const minStartMonthDateTime = minStartMonthDate.getTime();
+          const monthWithinRange = month > minStartMonthDate && month < maxMonthDate;
+          if (monthTime === minStartMonthDateTime || monthWithinRange) {
+            dateArray.push(month);
+          }
+        } else {
+          dateArray.push(month);
+        }
+      }
+      // Daily layers
+    } else if (period === 'daily') {
+      const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateInterval);
+      if (runningMinDate && dateArray[dateArray.length - 1] > minDate) {
+        currentDate = minDate;
+      }
+
+      // conditional revision of maxEndDate for data availability partial coverage
+      let maxEndDate = maxDayDate;
+      if (rangeLimitsProvided) {
+        maxEndDate = getRevisedMaxEndDate(new Date(maxEndDate), startDateLimit, endDateLimit, minDate);
+      }
+
+      if (currentDate >= minDate && currentDate <= maxEndDate) {
+        dayDifference = util.dayDiff(minDate, maxEndDate);
+        // handle non-1 day intervals to prevent over pushing unused dates to dateArray
+        dayDifference = Math.ceil(dayDifference / dateInterval);
+      }
+
+      // get minStartDate for partial range coverage starting date
+      let minStartDayDate;
+      if (rangeLimitsProvided) {
+        let prevDate = '';
+        for (i = 0; i <= (dayDifference + 1); i += 1) {
+          if (!minStartDayDate) {
+            let day = new Date(minYear, minMonth, minDay + i * dateInterval);
+            day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
+
+            if (day > startDateLimit || day.getTime() === startDateLimit.getTime()) {
+              minStartDayDate = prevDate;
+            } else {
+              prevDate = day;
+            }
+          }
+        }
+      }
+
+      for (i = 0; i <= (dayDifference + 1); i += 1) {
+        let day = new Date(minYear, minMonth, minDay + i * dateInterval);
+        day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
+        if (day.getTime() > maxEndDate.getTime()) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        if (dateArray.length > 0) {
+          // prevent earlier dates from being added after later dates while building dateArray
+          if (day < dateArray[dateArray.length - 1]) {
+            let endDateFound = false;
+            for (let j = dateArray.length - 1; j >= 0; j -= 1) {
+              if (!endDateFound) {
+                const dateCheck = dateArray[j];
+                const dayTime = day.getTime();
+                const dateCheckTime = dateCheck.getTime();
+
+                if (dayTime <= dateCheckTime) {
+                  dateArray.pop();
+                } else {
+                  dateArray.push(day);
+                  endDateFound = true;
+                  // eslint-disable-next-line no-continue
+                  continue;
+                }
+              }
+            }
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+        }
+
+        if (minStartDayDate) {
+          const dayTime = day.getTime();
+          const minStartDayDateTime = minStartDayDate.getTime();
+
+          if (dayTime === minStartDayDateTime || (day > minStartDayDate && day < maxDayDate)) {
+            dateArray.push(day);
+          }
+        } else {
+          dateArray.push(day);
+        }
       }
       // Subdaily layers
-    } else if (def.period === 'subdaily') {
+    } else if (period === 'subdaily') {
       const maxHours = maxDate.getUTCHours();
+      const minHours = minDate.getUTCHours();
       const maxMinutes = maxDate.getUTCMinutes();
       const minMinutes = minDate.getUTCMinutes();
+      const minMinuteDate = new Date(minDate);
+      const minMinuteDateTime = minMinuteDate.getTime();
       let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateInterval);
+      const minMinuteDateMinusInterval = new Date(minYear, minMonth, minDay, minHours, minMinutes - dateInterval);
 
-      const currentDateOffset = currentDate.getTimezoneOffset() * 60000;
-      const hourBeforeCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
-      const hourAfterCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));
+      let currentDateOffset;
+      let hourBeforeCurrentDate;
+      let hourAfterCurrentDate;
+      if (rangeLimitsProvided) {
+        currentDateOffset = startDateLimit.getTimezoneOffset() * 60000;
+        hourBeforeCurrentDate = new Date(startDateLimit.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
+        hourAfterCurrentDate = new Date(endDateLimit.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));
 
-      minDate = hourBeforeCurrentDate < minDate ? minDate : hourBeforeCurrentDate;
-      maxMinuteDate = hourAfterCurrentDate > maxMinuteDate ? maxMinuteDate : hourAfterCurrentDate;
+        const minMinuteDateMinusIntervalOffset = new Date(minMinuteDateMinusInterval.getTime() - (minMinuteDateMinusInterval.getTimezoneOffset() * 60000));
+
+        // eslint-disable-next-line no-nested-ternary
+        minDate = hourBeforeCurrentDate < minDate
+          ? hourBeforeCurrentDate
+          : hourBeforeCurrentDate > minMinuteDateMinusIntervalOffset
+            ? hourBeforeCurrentDate
+            : minDate;
+
+        maxMinuteDate = hourAfterCurrentDate > maxMinuteDate ? maxMinuteDate : hourAfterCurrentDate;
+      } else {
+        currentDateOffset = currentDate.getTimezoneOffset() * 60000;
+        hourBeforeCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
+        hourAfterCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));
+        minDate = hourBeforeCurrentDate < minDate
+          ? minDate
+          : hourBeforeCurrentDate;
+        maxMinuteDate = hourAfterCurrentDate > maxMinuteDate
+          ? maxMinuteDate
+          : hourAfterCurrentDate;
+      }
 
       currentDate = new Date(currentDate.getTime() - currentDateOffset);
       if (currentDate >= minDate && currentDate <= maxMinuteDate) {
         minuteDifference = util.minuteDiff(minDate, maxMinuteDate);
       }
       for (i = 0; i <= (minuteDifference + 1); i += dateInterval) {
-        dateArray.push(
-          new Date(
-            minDate.getUTCFullYear(),
-            minDate.getUTCMonth(),
-            minDate.getUTCDate(),
-            minDate.getUTCHours(),
-            minDate.getUTCMinutes() + i,
-            0,
-          ),
+        const time = new Date(
+          minDate.getUTCFullYear(),
+          minDate.getUTCMonth(),
+          minDate.getUTCDate(),
+          minDate.getUTCHours(),
+          minDate.getUTCMinutes() + i,
+          0,
         );
+
+        if (time.getTime() < minMinuteDateTime) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        dateArray.push(time);
       }
     }
+    runningMinDate = minDate;
   });
   return dateArray;
 }
@@ -410,6 +616,7 @@ export function layersParse11(str, config) {
       id = config.redirects.layers[id] || id;
     }
     if (!config.layers[id]) {
+      // eslint-disable-next-line no-console
       console.warn(`No such layer: ${id}`);
       return;
     }
@@ -472,7 +679,9 @@ export function layersParse12(stateObj, config) {
     });
     return createLayerArrayFromState(lstates, config);
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.warn(`Error Parsing layers: ${e}`);
+    // eslint-disable-next-line no-console
     console.log('reverting to default layers');
     return resetLayers(config.defaults.startingLayers, config.layers);
   }
@@ -487,6 +696,7 @@ const createLayerArrayFromState = function(state, config) {
         let max; let min; let squash; let custom; let
           disabled;
         if (!config.layers[layerDef.id]) {
+          // eslint-disable-next-line no-console
           console.warn(`No such layer: ${layerDef.id}`);
           return;
         }
@@ -513,6 +723,7 @@ const createLayerArrayFromState = function(state, config) {
               }
               const maxValue = parseFloat(value);
               if (lodashIsNaN(maxValue)) {
+                // eslint-disable-next-line no-console
                 console.warn(`Invalid max value: ${value}`);
               } else {
                 maxArray.push(maxValue);
@@ -530,6 +741,7 @@ const createLayerArrayFromState = function(state, config) {
               }
               const minValue = parseFloat(value);
               if (lodashIsNaN(minValue)) {
+                // eslint-disable-next-line no-console
                 console.warn(`Invalid min value: ${value}`);
               } else {
                 minArray.push(minValue);
@@ -615,14 +827,15 @@ export function mapLocationToLayerState(
   state,
   config,
 ) {
+  let newStateFromLocation = stateFromLocation;
   if (!parameters.l1 && parameters.ca !== undefined) {
-    stateFromLocation = update(stateFromLocation, {
+    newStateFromLocation = update(stateFromLocation, {
       layers: { activeB: { $set: stateFromLocation.layers.active } },
     });
   }
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
-    stateFromLocation = update(stateFromLocation, {
+    newStateFromLocation = update(stateFromLocation, {
       layers: {
         active: {
           $set: layersParse11(parameters.products, config),
@@ -630,5 +843,5 @@ export function mapLocationToLayerState(
       },
     });
   }
-  return stateFromLocation;
+  return newStateFromLocation;
 }
