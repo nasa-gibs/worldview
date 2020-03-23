@@ -10,6 +10,7 @@ const Switch = (props) => {
   const {
     id,
     color,
+    containerId,
     active,
     toggle,
     label,
@@ -25,7 +26,7 @@ const Switch = (props) => {
   }, [active]);
 
   return (
-    <div className="react-switch">
+    <div id={containerId} className="react-switch">
       <div className="react-switch-case switch-col">
         <input
           className="react-switch-checkbox"
@@ -50,25 +51,29 @@ const Switch = (props) => {
         {label}
         {tooltip
           && (
-          <>
-            <FontAwesomeIcon icon={faInfoCircle} id="availability-filter" />
-            <Tooltip
-              placement="right"
-              isOpen={tooltipOpen}
-              target="availability-filter"
-              toggle={() => { toggleTooltip(!tooltipOpen); }}
-            >
-              {tooltip}
-            </Tooltip>
-          </>
+            <>
+              <FontAwesomeIcon icon={faInfoCircle} id="availability-filter" />
+              <Tooltip
+                placement="right"
+                isOpen={tooltipOpen}
+                target="availability-filter"
+                toggle={() => { toggleTooltip(!tooltipOpen); }}
+              >
+                {tooltip}
+              </Tooltip>
+            </>
           )}
       </div>
     </div>
   );
 };
+Switch.defaultProps = {
+  containerId: '',
+};
 Switch.propTypes = {
   active: PropTypes.bool,
   color: PropTypes.string,
+  containerId: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
   toggle: PropTypes.func,

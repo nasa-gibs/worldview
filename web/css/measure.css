@@ -1,6 +1,6 @@
 .wv-measure-button {
   position: absolute;
-  bottom: 128px;
+  bottom: 148px;
   right: 10px;
   padding: 6px 10px;
 }
@@ -8,7 +8,7 @@
 .modal-dialog.measure-tool-modal {
   position: absolute;
   right: 10px;
-  bottom: 151px;
+  bottom: 171px;
 
   & .modal-body {
     padding: 8px 0 0;

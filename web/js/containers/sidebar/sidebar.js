@@ -182,7 +182,7 @@ class Sidebar extends React.Component {
             href="/"
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
-            onClick={resetWorldview}
+            onClick={(e) => resetWorldview(e, isDistractionFreeModeActive)}
             // eslint-disable-next-line no-return-assign
             ref={(iconElement) => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}
