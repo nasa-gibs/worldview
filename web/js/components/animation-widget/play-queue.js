@@ -120,10 +120,11 @@ class PlayAnimation extends React.Component {
    */
   checkShouldPlay = function(isLoopStart) {
     const { startDate, endDate, hasCustomPalettes } = this.props;
+    const { isPlaying } = this.state;
     const currentDate = util.parseDateUTC(this.currentPlayingDate);
     const lastToQueue = this.getLastBufferDateStr(currentDate, startDate, endDate);
 
-    if (this.state.isPlaying && !isLoopStart) {
+    if (isPlaying && !isLoopStart) {
       return false;
     }
     if (this.preloadObject[lastToQueue]) {
@@ -227,6 +228,7 @@ class PlayAnimation extends React.Component {
    * @param endDate {object} JS date
    */
   customQueuer(currentDate, startDate, endDate) {
+    const { isPlaying } = this.state;
     let nextDate = this.nextDate(currentDate);
     if (nextDate > endDate) {
       nextDate = startDate;
@@ -235,7 +237,7 @@ class PlayAnimation extends React.Component {
     if (
       !this.preloadObject[nextDateStr]
       && !this.inQueueObject[nextDateStr]
-      && !this.state.isPlaying
+      && !isPlaying
     ) {
       this.clearCache();
       this.checkQueue();
@@ -374,7 +376,8 @@ class PlayAnimation extends React.Component {
    */
   play(dateStr) {
     const { togglePlaying } = this.props;
-    if (!this.state.isPlaying) this.setState({ isPlaying: true });
+    const { isPlaying } = this.state;
+    if (!isPlaying) this.setState({ isPlaying: true });
 
     this.animate(dateStr);
     if (document.hidden) {

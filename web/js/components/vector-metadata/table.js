@@ -7,7 +7,7 @@ import util from '../../util/util';
 export default class VectorMetaTable extends React.Component {
   shouldComponentUpdate(nextProps) {
     const { id, title } = this.props;
-    if (id && title && nextProps.id && nextProps.title && this.props.id === nextProps.id && title === nextProps.title) {
+    if (id && title && nextProps.id && nextProps.title && id === nextProps.id && title === nextProps.title) {
       return false;
     }
     return true;

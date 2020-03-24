@@ -71,13 +71,15 @@ class TimeScaleIntervalChange extends PureComponent {
 
   // set custom text for custom interval
   setCustomIntervalText = () => {
+    const { customDelta, customIntervalZoomLevel } = this.props;
     this.setState({
-      customIntervalText: `${this.props.customDelta} ${this.props.customIntervalZoomLevel}`,
+      customIntervalText: `${customDelta} ${customIntervalZoomLevel}`,
     });
   }
 
   componentDidMount() {
-    if (this.props.customDelta !== 1 && this.props.customIntervalZoomLevel) {
+    const { customDelta, customIntervalZoomLevel } = this.props;
+    if (customDelta !== 1 && customIntervalZoomLevel) {
       this.setCustomIntervalText();
     }
   }

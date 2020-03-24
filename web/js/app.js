@@ -91,8 +91,9 @@ class App extends React.Component {
   }
 
   handleKeyPress(event) {
+    const { keyPressAction } = this.props;
     const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
-    this.props.keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey);
+    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey);
   }
 
   componentDidMount() {
@@ -105,7 +106,7 @@ class App extends React.Component {
 
   render() {
     const {
-      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents,
+      parameters, isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents,
     } = this.props;
 
     return (
@@ -130,7 +131,7 @@ class App extends React.Component {
 
         <Modal key={modalId} />
         <ErrorBoundary>
-          <Debug parameters={this.props.parameters} />
+          <Debug parameters={parameters} />
         </ErrorBoundary>
       </div>
     );

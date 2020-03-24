@@ -16,6 +16,7 @@ class VectorDialog extends React.Component {
   }
 
   updateIndex(activeIndex) {
+    // eslint-disable-next-line react/destructuring-assignment
     if (activeIndex === this.state.activeIndex) return;
     this.setState({ activeIndex });
   }

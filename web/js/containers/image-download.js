@@ -32,8 +32,7 @@ const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 class ImageDownloadContainer extends Component {
   constructor(props) {
     super(props);
-    const { screenHeight } = props;
-    const { screenWidth } = props;
+    const { onBoundaryChange, screenHeight, screenWidth } = props;
     this.state = {
       fileType: props.fileType,
       resolution: props.resolution,
@@ -45,10 +44,7 @@ class ImageDownloadContainer extends Component {
         y2: screenHeight / 2 + 100,
       },
     };
-    this.debounceBoundaryUpdate = lodashDebounce(
-      this.props.onBoundaryChange,
-      200,
-    );
+    this.debounceBoundaryUpdate = lodashDebounce(onBoundaryChange, 200);
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
   }
 

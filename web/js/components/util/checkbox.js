@@ -15,7 +15,8 @@ export class Checkbox extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.state.checked !== nextProps.checked) {
+    const { checked } = this.state;
+    if (checked !== nextProps.checked) {
       this.setState({
         checked: nextProps.checked,
       });

@@ -48,10 +48,11 @@ class DateSelector extends Component {
   * @param {Number} previousTab - input
   * @returns {void}
   */
-  setFocusedTab = (tab, previousTab = this.state.previousTab) => {
+  setFocusedTab = (tab, previousTabParam) => {
+    const { previousTab } = this.state;
     this.setState({
       tab,
-      previousTab,
+      previousTab: previousTabParam || previousTab,
     });
   }
 

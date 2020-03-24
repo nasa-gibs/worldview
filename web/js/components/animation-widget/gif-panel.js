@@ -43,8 +43,13 @@ export default class GifPanel extends React.Component {
       onCheck,
       showDates,
       numberOfFrames,
+      firstLabel,
+      onClick,
+      onDownloadClick,
     } = this.props;
-    const { resolution } = this.state;
+    const {
+      resolution, resolutions, speed, increment,
+    } = this.state;
     const dimensions = getDimensions(projId, lonlats, resolution);
     const { height } = dimensions;
     const { width } = dimensions;
@@ -54,11 +59,11 @@ export default class GifPanel extends React.Component {
       <div className="gif-dialog">
         <div className="animation-gif-dialog-wrapper">
           <div className="gif-selector-case">
-            {this.props.firstLabel}
+            {firstLabel}
             <SelectionList
               id="gif-resolution"
-              optionArray={this.state.resolutions}
-              value={this.state.resolution}
+              optionArray={resolutions}
+              value={resolution}
               optionName="resolution"
               onChange={this.handleChange}
             />
@@ -70,14 +75,14 @@ export default class GifPanel extends React.Component {
             maxGifSize={MAX_GIF_SIZE}
             maxImageDimensionSize={MAX_IMAGE_DIMENSION_SIZE}
             valid={valid}
-            onClick={this.props.onDownloadClick}
+            onClick={onDownloadClick}
             startDate={startDate}
             endDate={endDate}
-            speed={this.state.speed}
-            increment={this.state.increment}
+            speed={speed}
+            increment={increment}
           />
           <Button
-            onClick={() => this.props.onClick(width, height)}
+            onClick={() => onClick(width, height)}
             text="Create GIF"
             valid={valid}
           />

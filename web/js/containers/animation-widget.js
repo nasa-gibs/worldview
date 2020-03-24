@@ -260,11 +260,13 @@ class AnimationWidget extends React.Component {
    * @return {void}
    */
   onLoop() {
+    const { looping } = this.state;
+    const { onPushLoop } = this.props;
     let loop = true;
-    if (this.state.looping) {
+    if (looping) {
       loop = false;
     }
-    this.props.onPushLoop(loop);
+    onPushLoop(loop);
   }
 
   onDateChange(date, id) {
@@ -289,7 +291,7 @@ class AnimationWidget extends React.Component {
    */
   onIntervalSelect(timeScale, openModal) {
     let delta;
-    const { customInterval, customDelta } = this.props;
+    const { onIntervalSelect, customInterval, customDelta } = this.props;
     const customSelected = timeScale === 'custom';
 
     if (openModal) {
@@ -304,7 +306,7 @@ class AnimationWidget extends React.Component {
       timeScale = Number(timeScaleToNumberKey[timeScale]);
       delta = 1;
     }
-    this.props.onIntervalSelect(delta, timeScale, customSelected);
+    onIntervalSelect(delta, timeScale, customSelected);
   }
 
   /**
@@ -377,12 +379,13 @@ class AnimationWidget extends React.Component {
   * @returns {void}
   */
   changeCustomInterval = (delta, timeScale) => {
-    this.props.changeCustomInterval(delta, timeScale);
+    const { changeCustomInterval } = this.props;
+    changeCustomInterval(delta, timeScale);
   };
 
   toggleHoverGif() {
-    const hoverState = this.state.hoverGif;
-    this.setState({ hoverGif: !hoverState });
+    const { hoverGif } = this.state;
+    this.setState({ hoverGif: !hoverGif });
   }
 
   renderToolTip() {
@@ -406,15 +409,17 @@ class AnimationWidget extends React.Component {
 
   renderCollapsedWidget() {
     const {
+      onClose,
       isPlaying,
       onPushPause,
       hasSubdailyLayers,
     } = this.props;
+    const { collapsedWidgetPosition } = this.state;
     return (
       <Draggable
         bounds="body"
         onStart={this.handleDragStart}
-        position={this.state.collapsedWidgetPosition}
+        position={collapsedWidgetPosition}
         onDrag={this.onCollapsedDrag}
       >
         <div
@@ -430,7 +435,7 @@ class AnimationWidget extends React.Component {
               pause={onPushPause}
             />
             <FontAwesomeIcon icon={faChevronUp} className="wv-expand" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
           </div>
         </div>
       </Draggable>
@@ -443,6 +448,7 @@ class AnimationWidget extends React.Component {
       isPlaying,
       maxDate,
       minDate,
+      onSlide,
       sliderLabel,
       startDate,
       endDate,
@@ -456,12 +462,12 @@ class AnimationWidget extends React.Component {
       animationCustomModalOpen,
       hasSubdailyLayers,
     } = this.props;
-    const { speed } = this.state;
+    const { speed, widgetPosition } = this.state;
     const gifDisabled = numberOfFrames >= maxFrames;
     return (
       <Draggable
         bounds="body"
-        position={this.state.widgetPosition}
+        position={widgetPosition}
         onDrag={this.onExpandedDrag}
         onStart={this.handleDragStart}
       >
@@ -497,12 +503,10 @@ class AnimationWidget extends React.Component {
                 step={0.5}
                 max={10}
                 min={0.5}
-                value={this.state.speed}
+                value={speed}
                 onChange={(num) => this.setState({ speed: num })}
                 handle={RangeHandle}
-                onAfterChange={() => {
-                  this.props.onSlide(speed);
-                }}
+                onAfterChange={() => { onSlide(speed); }}
               />
               <span className="wv-slider-label">{sliderLabel}</span>
             </div>
@@ -543,7 +547,7 @@ class AnimationWidget extends React.Component {
               />
             </div>
             <FontAwesomeIcon icon={faChevronDown} className="wv-minimize" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
 
             {/* Custom time interval selection */}
             <CustomIntervalSelectorWidget

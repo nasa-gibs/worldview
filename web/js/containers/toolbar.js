@@ -343,5 +343,4 @@ toolbarContainer.propTypes = {
   refreshStateAfterImageDownload: PropTypes.func,
   requestNotifications: PropTypes.func,
   rotation: PropTypes.number,
-  toggleDistractionFreeMode: PropTypes.func,
 };

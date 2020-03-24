@@ -40,12 +40,13 @@ class CompareCase extends React.Component {
       openAlertModal,
       checkerBoardPattern,
     } = this.props;
+    const { showAlert } = this.state;
 
     const outerClass = 'layer-container sidebar-panel';
     const tabClasses = 'ab-tab';
     return (
       <div className={isActive ? '' : 'hidden '}>
-        {this.state.showAlert ? (
+        {showAlert ? (
           <AlertUtil
             isOpen
             onClick={openAlertModal}

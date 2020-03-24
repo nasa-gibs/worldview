@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 class AxisTimeScaleChangeTooltip extends PureComponent {
   // Handle change axis timescale
   changeTimeScale = (timeScale) => {
+    // eslint-disable-next-line react/destructuring-assignment
     this.props.changeTimeScale(timeScale);
   };
 

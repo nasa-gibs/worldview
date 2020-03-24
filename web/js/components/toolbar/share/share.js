@@ -14,14 +14,18 @@ class Share extends React.Component {
   }
 
   render() {
+    const {
+      fbLink, twLink, rdLink, emailLink,
+    } = this.state;
+    const { clickFunction } = this.props;
     return (
       <div>
         <ShareLinks
-          fbLink={this.state.fbLink}
-          twLink={this.state.twLink}
-          rdLink={this.state.rdLink}
-          emailLink={this.state.emailLink}
-          onClick={this.props.clickFunction}
+          fbLink={fbLink}
+          twLink={twLink}
+          rdLink={rdLink}
+          emailLink={emailLink}
+          onClick={clickFunction}
         />
       </div>
     );

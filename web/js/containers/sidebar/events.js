@@ -107,16 +107,20 @@ class Events extends React.Component {
 
     return (
       <>
-        {showAlert && this.state.showAlert ? (
-          <AlertUtil
-            id="event-alert"
-            isOpen
-            onClick={openAlertModal}
-            onDismiss={this.dismissAlert}
-            message="Events may not be visible at all times."
-          />
-        )
-          : ''}
+        {
+          // eslint-disable-next-line react/destructuring-assignment
+          showAlert && this.state.showAlert
+            ? (
+              <AlertUtil
+                id="event-alert"
+                isOpen
+                onClick={openAlertModal}
+                onDismiss={this.dismissAlert}
+                message="Events may not be visible at all times."
+              />
+            )
+            : ''
+        }
         <Scrollbars
           style={{ maxHeight: `${height}px` }}
           scrollBarVerticalTop={scrollBarVerticalTop}

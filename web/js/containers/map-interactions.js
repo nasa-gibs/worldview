@@ -19,8 +19,9 @@ export class MapInteractions extends React.Component {
   }
 
   registerMouseListeners() {
-    this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('singleclick', this.singleClick);
+    const { mouseEvents } = this.props;
+    mouseEvents.on('mousemove', this.mouseMove);
+    mouseEvents.on('singleclick', this.singleClick);
   }
 
   singleClick(e, map) {

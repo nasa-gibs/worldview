@@ -39,6 +39,7 @@ export default class VectorMetaTooltip extends React.Component {
   render() {
     const { id, index, description } = this.props;
     const elId = util.cleanId(String(`tooltip${id}${index}`));
+    const { tooltipOpen } = this.state;
 
     return (
       <div
@@ -54,7 +55,7 @@ export default class VectorMetaTooltip extends React.Component {
           dangerouslySetInnerHTML={{ __html: description }}
           boundariesElement="window"
           placement="right"
-          isOpen={this.state.tooltipOpen}
+          isOpen={tooltipOpen}
           target={elId}
           fade={false}
         />

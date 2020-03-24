@@ -66,16 +66,18 @@ class GIF extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
-    if (this.state.isDownloading) {
+    const { isDownloading } = this.state;
+    if (isDownloading) {
       gifStream.cancel();
     }
   }
 
-  getStyle(state) {
+  getStyle() {
+    const { offsetLeft, offsetRight, offsetTop } = this.state;
     return {
-      left: state.offsetLeft,
-      right: state.offsetRight,
-      top: state.offsetTop,
+      left: offsetLeft,
+      right: offsetRight,
+      top: offsetTop,
       maxWidth: 342,
     };
   }
@@ -117,7 +119,7 @@ class GIF extends Component {
         isOpen
         wrapClassName="clickable-behind-modal toolbar_modal_outer"
         className="gif-modal dynamic-modal"
-        style={this.getStyle(this.state)}
+        style={this.getStyle()}
         toggle={onClose}
       >
         <ModalHeader toggle={onClose}>Create An Animated GIF</ModalHeader>

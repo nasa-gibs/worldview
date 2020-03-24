@@ -15,8 +15,9 @@ class Pick extends React.Component {
    * Return visibility style string
    */
   getVisibility() {
+    const { position, max } = this.state;
     let visibility = 'visible';
-    if (this.state.position < 0 || this.state.position > this.state.max) {
+    if (position < 0 || position > max) {
       visibility = 'hidden';
     }
     return visibility;
@@ -28,7 +29,9 @@ class Pick extends React.Component {
    * @param {number} y | y offset
    */
   getText(x, y, visibility) {
-    if (this.props.text) {
+    const { text } = this.props;
+    const { textColor } = this.state;
+    if (text) {
       return (
         <text
           x={x}
@@ -36,11 +39,11 @@ class Pick extends React.Component {
           alignmentBaseline="middle"
           textAnchor="middle"
           style={{
-            fill: this.state.textColor ? this.state.textColor : null,
+            fill: textColor || null,
             visibility: visibility || null,
           }}
         >
-          {this.props.text}
+          {text}
         </text>
       );
     }
@@ -49,7 +52,7 @@ class Pick extends React.Component {
   render() {
     const visibility = this.getVisibility();
     const {
-      yOffset, path, width, height,
+      yOffset, path, width, height, color,
     } = this.props;
     const { position } = this.state;
     const translate = `translate(${position},${yOffset})`;
@@ -57,7 +60,7 @@ class Pick extends React.Component {
       <g transform={translate}>
         <path
           style={{
-            fill: this.props.color ? this.props.color : null,
+            fill: color || null,
             visibility,
           }}
           d={path}

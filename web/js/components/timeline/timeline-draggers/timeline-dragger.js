@@ -28,7 +28,8 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   selectDragger = (e) => {
-    this.props.selectDragger(this.props.draggerName, e);
+    const { selectDragger, draggerName } = this.props;
+    selectDragger(draggerName, e);
   };
 
   /**
@@ -38,10 +39,11 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   handleDragDragger = (e, d) => {
+    const { handleDragDragger } = this.props;
     this.setState({
       isHoveredDragging: true,
     });
-    this.props.handleDragDragger(e, d);
+    handleDragDragger(e, d);
   };
 
   /**
@@ -49,7 +51,8 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   startShowDraggerTime = () => {
-    this.props.toggleShowDraggerTime(true);
+    const { toggleShowDraggerTime } = this.props;
+    toggleShowDraggerTime(true);
   };
 
   /**
@@ -57,10 +60,11 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   stopShowDraggerTime = () => {
+    const { toggleShowDraggerTime } = this.props;
     this.setState({
       isHoveredDragging: false,
     });
-    this.props.toggleShowDraggerTime(false);
+    toggleShowDraggerTime(false);
   };
 
   /**

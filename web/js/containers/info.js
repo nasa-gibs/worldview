@@ -22,7 +22,8 @@ import Notifications from './notifications';
 
 class InfoList extends Component {
   getNotificationListItem(obj) {
-    const { number, type, object } = this.props.notifications;
+    const { notifications, notificationClick } = this.props;
+    const { number, type, object } = notifications;
 
     return {
       text: 'Notifications',
@@ -36,7 +37,7 @@ class InfoList extends Component {
       badge: number,
       className: type ? `${type}-notification` : '',
       onClick: () => {
-        this.props.notificationClick(object, number);
+        notificationClick(object, number);
       },
     };
   }

@@ -156,7 +156,8 @@ class DateInputColumn extends Component {
   }
 
   yearValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     if (input > 1000 && input < 9999) {
       const newDate = new Date(date.setUTCFullYear(input));
       return this.validateDate(newDate);
@@ -165,7 +166,8 @@ class DateInputColumn extends Component {
   }
 
   monthValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     let newDate;
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(input) && input < 13 && input > 0) {
@@ -195,7 +197,8 @@ class DateInputColumn extends Component {
   }
 
   dayValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     const standardMaxDateForMonth = 31;
 
     if (input > 0 && input <= standardMaxDateForMonth) {
@@ -215,7 +218,8 @@ class DateInputColumn extends Component {
   }
 
   hourValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     if (input >= 0 && input <= 23) {
       const newDate = new Date(date.setUTCHours(input));
       return this.validateDate(newDate);
@@ -224,7 +228,8 @@ class DateInputColumn extends Component {
   }
 
   minuteValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     if (input >= 0 && input <= 59) {
       const newDate = new Date(date.setUTCMinutes(input));
       return this.validateDate(newDate);
@@ -259,23 +264,25 @@ class DateInputColumn extends Component {
   }
 
   blur = (e) => {
-    const { setFocusedTab, tabIndex, type } = this.props;
+    const {
+      setFocusedTab, tabIndex, type, value,
+    } = this.props;
     // check for valid date on blur
     const inputValue = e.target.value;
     const newDate = this.validateBasedOnType(inputValue);
-    let value = newDate === null
-      ? this.props.value
+    let newValue = newDate === null
+      ? value
       : inputValue;
 
     // eslint-disable-next-line no-restricted-globals
-    if (type === 'month' && !isNaN(value)) {
-      value = util.monthStringArray[value - 1];
-    } else if (value.length === 1) {
-      value = `0${value}`;
+    if (type === 'month' && !isNaN(newValue)) {
+      newValue = util.monthStringArray[newValue - 1];
+    } else if (newValue.length === 1) {
+      newValue = `0${newValue}`;
     }
 
     this.setState({
-      value,
+      value: newValue,
       selected: false,
     });
 

@@ -288,6 +288,7 @@ class Timeline extends React.Component {
     draggerVisibleB,
     animationStartLocation,
     animationEndLocation,
+  // eslint-disable-next-line react/destructuring-assignment
   }, hoverTime = this.state.hoverTime) => {
     this.setState({
       hasMoved,
@@ -355,6 +356,7 @@ class Timeline extends React.Component {
     isTimelineDragging,
     position,
     transformX,
+  // eslint-disable-next-line react/destructuring-assignment
   }, hoverTime = this.state.hoverTime) => {
     this.setState({
       hasMoved,
@@ -816,6 +818,7 @@ class Timeline extends React.Component {
       isGifActive,
       hasSubdailyLayers,
     } = this.props;
+    const { frontDate, draggerTimeState, draggerTimeStateB } = this.state;
 
     // handle update animation positioning and local state from play button/gif creation
     const didAnimationTurnOn = !prevProps.isAnimationPlaying && isAnimationPlaying;
@@ -829,7 +832,7 @@ class Timeline extends React.Component {
       if (prevStartLocationDate && prevEndLocationDate) {
         const animStartDateChanged = prevStartLocationDate.getTime() !== animStartLocationDate.getTime();
         const animEndDateChanged = prevEndLocationDate.getTime() !== animEndLocationDate.getTime();
-        const frontDateChanged = prevState.frontDate !== this.state.frontDate;
+        const frontDateChanged = prevState.frontDate !== frontDate;
         if (animStartDateChanged || animEndDateChanged || frontDateChanged) {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
@@ -843,10 +846,10 @@ class Timeline extends React.Component {
       this.changeTimeScale(4);
     }
 
-    if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
+    if (dateA !== prevProps.dateA && dateA !== draggerTimeState) {
       this.updateDraggerTimeState(dateA, false);
     }
-    if (dateB !== prevProps.dateB && dateB !== this.state.draggerTimeStateB) {
+    if (dateB !== prevProps.dateB && dateB !== draggerTimeStateB) {
       this.updateDraggerTimeState(dateB, true);
     }
   }
@@ -954,6 +957,7 @@ class Timeline extends React.Component {
   * @param {String} draggerSelected - default to props draggerSelected
   * @returns {void}
   */
+  // eslint-disable-next-line react/destructuring-assignment
   onDateChange = (date, draggerSelected = this.props.draggerSelected) => {
     const dateObj = new Date(date);
     const dateISOFormatted = getISODateFormatted(date);

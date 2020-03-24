@@ -29,12 +29,13 @@ class DraggerContainer extends PureComponent {
   * @returns {void}
   */
   selectDragger = (draggerName, e) => {
+    const { draggerSelected, onChangeSelectedDragger } = this.props;
     if (e) {
       e.stopPropagation();
       e.preventDefault();
     }
-    if (draggerName !== this.props.draggerSelected) {
-      this.props.onChangeSelectedDragger(draggerName);
+    if (draggerName !== draggerSelected) {
+      onChangeSelectedDragger(draggerName);
     }
   }
 
@@ -56,6 +57,7 @@ class DraggerContainer extends PureComponent {
       timelineEndDateLimit,
       updateDraggerDatePosition,
     } = this.props;
+    const { draggerWidth } = this.state;
 
     const isBetween = getIsBetween(inputTime, frontDate, backDate);
     let draggerVisible = false;
@@ -78,11 +80,11 @@ class DraggerContainer extends PureComponent {
     const { gridWidth } = options;
     const frontDateObj = moment.utc(frontDate);
     const pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
-    newDraggerPosition = pixelsToAddToDraggerNew + position - this.state.draggerWidth + transformX + 2;
+    newDraggerPosition = pixelsToAddToDraggerNew + position - draggerWidth + transformX + 2;
 
     // determine max timelineEndDate position for dragger
     const endDateLimitPositionFromFront = Math.abs(frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth);
-    const endDatePosition = endDateLimitPositionFromFront + position - this.state.draggerWidth + transformX + 2;
+    const endDatePosition = endDateLimitPositionFromFront + position - draggerWidth + transformX + 2;
 
     // checks to prevent positioning outside of valid timeline range
     const isBeforeFrontDate = new Date(inputTime) < new Date(frontDate);
@@ -127,6 +129,7 @@ class DraggerContainer extends PureComponent {
         timelineEndDateLimit,
         updateDraggerDatePosition,
       } = this.props;
+      const { draggerWidth } = this.state;
 
       // get timescale specific options for scaleMs and gridWidth
       const options = timeScaleOptions[timeScale].timeAxis;
@@ -150,7 +153,7 @@ class DraggerContainer extends PureComponent {
       const diffZeroValues = options.scaleMs;
       if (!diffZeroValues) {
         // calculate based on frontDate due to varying number of days per month and per year (leapyears)
-        const draggerPositionRelativeToFrontDate = this.state.draggerWidth - 2 + newDraggerPosition - position - transformX;
+        const draggerPositionRelativeToFrontDate = draggerWidth - 2 + newDraggerPosition - position - transformX;
         const gridWidthCoef = draggerPositionRelativeToFrontDate / gridWidth;
         const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
 

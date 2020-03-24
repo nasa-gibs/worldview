@@ -77,6 +77,7 @@ class ModalContainer extends Component {
       isMobile,
       screenHeight,
     } = this.props;
+    const { width, height } = this.state;
     // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
@@ -124,8 +125,8 @@ class ModalContainer extends Component {
               <Resizable
                 className="resize-box"
                 resizeHandles={['se']}
-                width={this.state.width || newProps.width}
-                height={this.state.height || newProps.height}
+                width={width || newProps.width}
+                height={height || newProps.height}
                 minConstraints={[250, 250]}
                 maxConstraints={[495, screenHeight]}
                 handleSize={[8, 8]}
@@ -156,8 +157,8 @@ class ModalContainer extends Component {
               ? (
                 <CompletelyCustomModal
                   key={`custom_${lowerCaseId}`}
-                  modalHeight={this.state.height || newProps.height}
-                  modalWidth={this.state.width || newProps.width}
+                  modalHeight={height || newProps.height}
+                  modalWidth={width || newProps.width}
                   {...customProps}
                   toggleWithClose={toggleFunction}
                 />

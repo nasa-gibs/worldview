@@ -23,23 +23,26 @@ class Tooltip extends React.Component {
   }
 
   onClick(str) {
-    this.props.onClick(str);
+    const { onClick } = this.props;
+    onClick(str);
   }
 
   render() {
+    const { text, dataArray } = this.props;
+    const { hovered } = this.state;
     return (
       <div
         onMouseEnter={this.mouseOver.bind(this)}
         onMouseLeave={this.mouseOut.bind(this)}
         className="wv-tooltip-case"
       >
-        <span>{this.props.text}</span>
+        <span>{text}</span>
         <div
           className="wv-tooltip"
-          style={this.state.hovered ? { visibility: 'visible' } : {}}
+          style={hovered ? { visibility: 'visible' } : {}}
         >
           <ul>
-            {this.props.dataArray.map((dataEl, i) => (
+            {dataArray.map((dataEl, i) => (
               <li
                 /* eslint react/no-array-index-key: 1 */
                 key={`tooltip-${dataEl}-${i}`}
