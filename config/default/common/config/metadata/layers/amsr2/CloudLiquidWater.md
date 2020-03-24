@@ -1,4 +1,4 @@
-### AMSR2 Columnar Cloud Liquid Water (NRT< Day | Night)
+### AMSR2 Columnar Cloud Liquid Water (NRT, Day | Night)
 Temporal coverage: 7 June 2015 - present
 
 The AMSR2 Columnar Cloud Liquid Water layer indicates the depth of the total liquid water in a cloud within a vertical column of atmosphere over the ocean, measured in millimeters (mm). It does not include solid water such as snow or ice. Cloud water can have a positive and a negative effect on the climate. It can cause a warming greenhouse effect by trapping heat near the Earth’s surface as well as a cooling effect by increasing the Earth’s albedo (reflection of incoming solar energy back into space).
