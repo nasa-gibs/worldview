@@ -23,7 +23,7 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": "8.15.1"
+    "node": ">=10"
   },
   "husky": {
     "hooks": {
@@ -61,7 +61,7 @@
     "linkcheck": "node ./tasks/linkcheck",
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
-    "lint:js": "eslint .",
+    "lint:js": "eslint . --quiet",
     "notes": "node ./tasks/releaseNotes.js",
     "preinstall": "node tasks/checkNodeVersion.js",
     "postinstall": "npm run python",
