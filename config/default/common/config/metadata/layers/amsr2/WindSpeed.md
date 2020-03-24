@@ -1,4 +1,4 @@
-### AMSR2 Wind Speed (Day | Night)
+### AMSR2 Wind Speed (NRT, Day | Night)
 Temporal coverage: 7 June 2015 - present
 
 The AMSR2 Wind Speed layer indicates the speed at which air is moving over the ocean and is measured in meters per second (m/s). Wind is caused by the difference in atmospheric pressure between high and low pressure weather systems. The AMSR2 instrument measures the ocean surface roughness and this is correlated to wind speeds at 10 meters above the water’s surface. The wind speed layer is useful for looking at areas of high wind and how it affects the weather in these regions.

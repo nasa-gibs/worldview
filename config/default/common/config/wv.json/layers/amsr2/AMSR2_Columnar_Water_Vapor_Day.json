@@ -2,7 +2,7 @@
     "layers": {
         "AMSR2_Columnar_Water_Vapor_Day": {
             "id":       "AMSR2_Columnar_Water_Vapor_Day",
-            "title":    "Columnar Water Vapor (Day)",
+            "title":    "Columnar Water Vapor (NRT, Day)",
             "subtitle": "GCOM-W1 / AMSR2",
             "description": "amsr2/AMSR2_Columnar_Water_Vapor_Day",
             "tags":     "amsr-2",

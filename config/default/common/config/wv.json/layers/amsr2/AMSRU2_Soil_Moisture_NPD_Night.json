@@ -5,7 +5,7 @@
             "title":    "Soil Moisture (Normalized Polarization Difference, Night)",
             "subtitle": "GCOM-W1 / AMSR2",
             "description": "amsr2/AMSRU2_Soil_Moisture_NPD_Night",
-            "tags":     "amsr-u2",
+            "tags":     "amsr2 amsr-u2 amsru2",
             "group":    "overlays",
             "layergroup": [
               "amsr2"
