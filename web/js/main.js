@@ -45,7 +45,7 @@ const startTime = new Date().getTime();
 //   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ latency: 0 }) ||
 //     defaultCompose
 //   : defaultCompose;
-const parameters = util.fromQueryString(window.location.search);
+let parameters = util.fromQueryString(window.location.search);
 let { elapsed } = util;
 const errors = [];
 // Document ready function
@@ -63,8 +63,7 @@ window.onload = () => {
       // Perform check to see if app was in the midst of a tour
       if (parameters.tr) {
         // Gets the extent of the first step of specified tour and overrides current view params
-        const tourParams = util.fromQueryString(config.stories[parameters.tr].steps[0].stepLink);
-        parameters.v = tourParams.v;
+        parameters = util.fromQueryString(config.stories[parameters.tr].steps[0].stepLink);
       }
       config.pageLoadTime = parameters.now
         ? util.parseDateUTC(parameters.now) || new Date()
