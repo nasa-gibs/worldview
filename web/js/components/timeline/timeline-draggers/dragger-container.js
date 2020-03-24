@@ -233,6 +233,7 @@ class DraggerContainer extends PureComponent {
     } = this.props;
 
     const sharedProps = {
+      axisWidth,
       toggleShowDraggerTime,
       transformX,
       isCompareModeActive,

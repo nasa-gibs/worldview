@@ -28,7 +28,8 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   selectDragger = (e) => {
-    this.props.selectDragger(this.props.draggerName, e);
+    const { draggerName, selectDragger } = this.props;
+    selectDragger(draggerName, e);
   };
 
   /**
@@ -38,10 +39,28 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   handleDragDragger = (e, d) => {
+    const { axisWidth, draggerPosition, handleDragDragger } = this.props;
+    const { deltaX, x } = d;
+    const draggerAtStart = x <= -15;
+    const draggerAtEnd = x + 36 >= axisWidth;
+
+
     this.setState({
       isHoveredDragging: true,
     });
-    this.props.handleDragDragger(e, d);
+
+    // if dragger is positioned near axis edge from panning axis vs. dragging dragger
+    if (draggerPosition <= -15 || draggerPosition + 49 + 36 >= axisWidth) {
+      handleDragDragger(e, d);
+    }
+    // if at start or end of axis, return false to stop dragger
+    // which will initiate an axis update towards that drag direction
+    if (deltaX < 0 && draggerAtStart) {
+      return false;
+    } if (deltaX > 0 && draggerAtEnd) {
+      return false;
+    }
+    handleDragDragger(e, d);
   };
 
   /**
@@ -49,7 +68,8 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   startShowDraggerTime = () => {
-    this.props.toggleShowDraggerTime(true);
+    const { toggleShowDraggerTime } = this.props;
+    toggleShowDraggerTime(true);
   };
 
   /**
@@ -57,10 +77,11 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   stopShowDraggerTime = () => {
+    const { toggleShowDraggerTime } = this.props;
     this.setState({
       isHoveredDragging: false,
     });
-    this.props.toggleShowDraggerTime(false);
+    toggleShowDraggerTime(false);
   };
 
   /**
@@ -193,6 +214,7 @@ class Dragger extends PureComponent {
 }
 
 Dragger.propTypes = {
+  axisWidth: PropTypes.number,
   disabled: PropTypes.bool,
   draggerName: PropTypes.string,
   draggerPosition: PropTypes.number,
