@@ -11,7 +11,8 @@ class ModeSelection extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(newProp) {
-    if (this.state.selected !== newProp.selected) {
+    const { selected } = this.state;
+    if (selected !== newProp.selected) {
       this.setState({ selected: newProp.selected });
     }
   }

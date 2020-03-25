@@ -309,6 +309,7 @@ class DateSelector extends Component {
     const dateWithinRange = dateTime >= minDateTime && dateTime <= maxDateTime;
 
     // updateDate at this stage can still be invalid with pending timeunit changes
+    // eslint-disable-next-line react/destructuring-assignment
     const updatedDate = date.getTime() !== this.props.date.getTime();
     const newDateWithinRange = dateWithinRange && updatedDate;
     if (validDate && (isRollDate || newDateWithinRange)) {
@@ -342,6 +343,7 @@ class DateSelector extends Component {
   * @param {Boolean} isRollDate
   * @returns {void}
   */
+  // eslint-disable-next-line react/destructuring-assignment
   updateDate = (date = this.props.date, isRollDate = false) => {
     const { id, onDateChange } = this.props;
     const newDate = this.updateDateCheck(date, isRollDate);

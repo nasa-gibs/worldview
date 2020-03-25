@@ -25,11 +25,12 @@ class MeasurementLayerRow extends React.Component {
 
   onClick() {
     const { removeLayer, addLayer, layer } = this.props;
-    const checked = !this.state.checked;
+    const { checked } = this.state;
+    const newChecked = !checked;
     this.setState((prevState) => ({
       checked: !prevState.checked,
     }));
-    if (!checked) {
+    if (!newChecked) {
       removeLayer(layer.id);
     } else {
       addLayer(layer.id);

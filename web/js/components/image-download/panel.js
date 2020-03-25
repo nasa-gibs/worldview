@@ -101,28 +101,32 @@ export default class ImageResSelection extends React.Component {
   }
 
   _renderFileTypeSelect() {
-    if (this.props.fileTypeOptions) {
+    const { fileTypeOptions, fileTypes, secondLabel } = this.props;
+    const { fileType } = this.state;
+    if (fileTypeOptions) {
       return (
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-format"
             optionName="filetype"
-            value={this.state.fileType}
-            optionArray={this.props.fileTypes}
+            value={fileType}
+            optionArray={fileTypes}
             onChange={this.handleChange}
           />
-          {this.props.secondLabel}
+          {secondLabel}
         </div>
       );
     }
   }
 
   _renderWorldfileSelect() {
-    if (this.props.worldFileOptions) {
-      const value = this.state.isWorldfile ? 1 : 0;
+    const { worldFileOptions } = this.props;
+    const { isWorldfile, fileType } = this.state;
+    if (worldFileOptions) {
+      const value = isWorldfile ? 1 : 0;
       return (
         <div className="wv-image-header">
-          {this.state.fileType === 'application/vnd.google-earth.kmz' ? (
+          {fileType === 'application/vnd.google-earth.kmz' ? (
             <select disabled>
               <option value={0}>No</option>
             </select>
@@ -144,7 +148,7 @@ export default class ImageResSelection extends React.Component {
 
   render() {
     const {
-      getLayers, projection, lonlats, resolutions, maxImageSize,
+      getLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
     } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
@@ -168,7 +172,7 @@ export default class ImageResSelection extends React.Component {
             optionName="resolution"
             onChange={this.handleChange}
           />
-          {this.props.firstLabel}
+          {firstLabel}
         </div>
         {filetypeSelect}
         {worldfileSelect}

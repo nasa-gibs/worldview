@@ -87,10 +87,8 @@ class PaletteLegend extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(props) {
-    if (
-      props.colorHex !== this.state.colorHex
-      || props.isRunningData !== this.state.isRunningData
-    ) {
+    const { colorHex, isRunningData } = this.state;
+    if (props.colorHex !== colorHex || props.isRunningData !== isRunningData) {
       this.setState({
         isRunningData: props.isRunningData,
         colorHex: props.colorHex,
@@ -99,8 +97,9 @@ class PaletteLegend extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const { layer, width } = this.props;
     // Only updates when layer options/settings have changed or if ZOT changes the width of the palette
-    if (!lodashIsEqual(this.props.layer, prevProps.layer) || (prevProps.width !== this.props.width)) {
+    if (!lodashIsEqual(layer, prevProps.layer) || (prevProps.width !== width)) {
       this.updateCanvas();
     }
   }
@@ -177,6 +176,7 @@ class PaletteLegend extends React.Component {
         const ctxStr = `canvas_${index}`;
         if (this[ctxStr]) {
           const newWidth = this[ctxStr].current.getBoundingClientRect().width;
+          // eslint-disable-next-line react/destructuring-assignment
           if (newWidth !== this.state.width) {
             // If scrollbar appears canvas width changes.
             // This value is needed for calculating running data offsets
@@ -235,14 +235,18 @@ class PaletteLegend extends React.Component {
     } = this.props;
     const { isRunningData, colorHex, isHoveringLegend } = this.state;
     const palette = getPalette(layer.id, index);
-    let percent; let textWidth; let xOffset; let
-      legendObj;
+    let percent;
+    let textWidth;
+    let xOffset;
+    let legendObj;
     const toolTipLength = legend.tooltips.length;
+    // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
       legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
+        // eslint-disable-next-line react/destructuring-assignment
         xOffset = Math.floor(this.state.width * percent);
       }
     }

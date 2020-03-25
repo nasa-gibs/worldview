@@ -21,13 +21,15 @@ export default class OlCoordinates extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.mouseEvents.off('mousemove', this.mouseMove);
-    this.props.mouseEvents.off('mouseout', this.mouseOut);
+    const { mouseEvents } = this.props;
+    mouseEvents.off('mousemove', this.mouseMove);
+    mouseEvents.off('mouseout', this.mouseOut);
   }
 
   registerMouseListeners() {
-    this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('mouseout', this.mouseOut);
+    const { mouseEvents } = this.props;
+    mouseEvents.on('mousemove', this.mouseMove);
+    mouseEvents.on('mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {
@@ -84,18 +86,21 @@ export default class OlCoordinates extends React.Component {
   }
 
   render() {
+    const {
+      hasMouse, format, latitude, longitude, crs,
+    } = this.state;
     // Don't render until a mouse is being used
-    if (!this.state.hasMouse) {
+    if (!hasMouse) {
       return null;
     }
 
     return (
       <div id="ol-coords-case">
         <Coordinates
-          format={this.state.format}
-          latitude={this.state.latitude}
-          longitude={this.state.longitude}
-          crs={this.state.crs}
+          format={format}
+          latitude={latitude}
+          longitude={longitude}
+          crs={crs}
           onFormatChange={this.changeFormat}
         />
       </div>

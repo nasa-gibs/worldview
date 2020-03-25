@@ -195,6 +195,7 @@ class TimelineData extends Component {
   * @param {Array} layers
   * @returns {Object} startDate, endDate
   */
+  // eslint-disable-next-line react/destructuring-assignment
   addMatchingCoverageToTimeline = (isChecked, layerCollection = this.state.activeLayers) => {
     const { setMatchingTimelineCoverage } = this.props;
     const layers = this.getActiveLayers(layerCollection);

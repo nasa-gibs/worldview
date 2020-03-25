@@ -7,14 +7,13 @@ import { faVideo } from '@fortawesome/free-solid-svg-icons';
 class AnimationButton extends PureComponent {
   render() {
     const className = 'button-action-group animate-button';
+    const { disabled, title, clickAnimationButton } = this.props;
     return (
       <div
-        className={
-          this.props.disabled ? `wv-disabled-button ${className}` : className
-        }
-        title={this.props.title ? this.props.title : 'Set up animation'}
+        className={disabled ? `wv-disabled-button ${className}` : className}
+        title={title || 'Set up animation'}
       >
-        <div id="animate-button" onClick={this.props.clickAnimationButton}>
+        <div id="animate-button" onClick={clickAnimationButton}>
           <FontAwesomeIcon icon={faVideo} className="wv-animate" size="3x" />
         </div>
       </div>

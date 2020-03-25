@@ -1051,7 +1051,10 @@ class TimelineAxis extends Component {
       dragSentinelCount,
     } = this.state;
     const {
+      draggerVisible,
+      draggerVisibleB,
       timeScale,
+      transformX,
       updatePositioning,
       updatePositioningOnSimpleDrag,
     } = this.props;
@@ -1077,13 +1080,13 @@ class TimelineAxis extends Component {
         hasMoved: true,
         isTimelineDragging: true,
         position,
-        transformX: this.props.transformX,
+        transformX,
         frontDate,
         backDate,
         draggerPosition,
         draggerPositionB,
-        draggerVisible: this.props.draggerVisible,
-        draggerVisibleB: this.props.draggerVisibleB,
+        draggerVisible,
+        draggerVisibleB,
         animationStartLocation,
         animationEndLocation,
       };

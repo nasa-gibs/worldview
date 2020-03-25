@@ -50,7 +50,7 @@ class ThresholdSelect extends React.Component {
     const {
       layerId, index, groupName, palette, legend,
     } = this.props;
-    const { start, end } = this.state;
+    const { start, end, squashed } = this.state;
     const newStart = Math.ceil(Number(thresholdArray[0]));
     const newEnd = Math.ceil(Number(thresholdArray[1]));
     const startRef = legend.refs[newStart];
@@ -77,7 +77,7 @@ class ThresholdSelect extends React.Component {
       layerId,
       parseFloat(palette.entries.refs.indexOf(startRef)),
       parseFloat(palette.entries.refs.indexOf(endRef)),
-      this.state.squashed,
+      squashed,
       index,
       groupName,
     );

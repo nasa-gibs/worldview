@@ -135,7 +135,10 @@ class LayerMetadataDetail extends React.Component {
   }
 
   render() {
-    if (!this.props.layer) {
+    const {
+      layer, selectedProjection, isActive, showPreviewImage,
+    } = this.props;
+    if (!layer) {
       return (
         <div className="no-results">
           <FontAwesomeIcon icon={faGlobeAmericas} />
@@ -144,9 +147,6 @@ class LayerMetadataDetail extends React.Component {
         </div>
       );
     }
-    const {
-      layer, selectedProjection, isActive, showPreviewImage,
-    } = this.props;
     const {
       title, subtitle, track, metadata,
     } = layer;

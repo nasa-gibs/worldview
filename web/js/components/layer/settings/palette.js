@@ -123,7 +123,7 @@ class PaletteSelect extends React.Component {
           onClick={() => this.onChangePalette(id)}
         />
         <label htmlFor={`wv-palette-radio-${id}`}>
-          <img src={this.props.canvas.toDataURL('image/png')} />
+          <img src={canvas.toDataURL('image/png')} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
         </label>
       </div>

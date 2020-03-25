@@ -4,7 +4,8 @@ import util from '../../util/util';
 
 class DistractionFreeTimeUI extends PureComponent {
   handleMouseOver = () => {
-    this.props.hoverOverDistractionFreeTimeUI(true);
+    const { hoverOverDistractionFreeTimeUI } = this.props;
+    hoverOverDistractionFreeTimeUI(true);
   }
 
   render() {

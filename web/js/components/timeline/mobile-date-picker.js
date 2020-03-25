@@ -88,13 +88,14 @@ class MobileDatePicker extends Component {
   }
 
   handleSelect = (time) => {
+    const { onDateChange } = this.props;
     this.setState({
       time,
       isOpen: false,
     });
     // convert date back to local time
     const date = this.convertToLocalDateObject(time);
-    this.props.onDateChange(getISODateFormatted(date));
+    onDateChange(getISODateFormatted(date));
   }
 
   // used for init mount
