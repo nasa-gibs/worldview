@@ -1390,8 +1390,6 @@ function mapStateToProps(state) {
     customDelta,
     appNow,
     timelineCustomModalOpen,
-  } = date;
-  let {
     selectedZoom,
     interval,
     customInterval,
@@ -1551,6 +1549,7 @@ export default connect(
 )(Timeline);
 
 Timeline.propTypes = {
+  appNow: PropTypes.object,
   activeLayers: PropTypes.array,
   animationDisabled: PropTypes.bool,
   animEndLocationDate: PropTypes.object,
