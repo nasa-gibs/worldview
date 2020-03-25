@@ -1,3 +1,4 @@
+/* eslint no-nested-ternary: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -36,7 +37,7 @@ class LayerDataItems extends Component {
   * @param {String} background color
   * @returns {DOM Element} header
   */
-  getHeader = (layer, visible, dateRange, layerItemBackground) => {
+  getHeaderDOMEl = (layer, visible, dateRange, layerItemBackground) => {
     const titleColor = visible ? '#000' : '#999';
     const textColor = visible ? '#222' : '#999';
     return (
@@ -77,7 +78,57 @@ class LayerDataItems extends Component {
   }
 
   /**
-  * @desc get line DOM element from full/partial (interval) date range
+  * @desc get formatted display dates for line tooltips and selectors
+  * @param {String} lineType
+  * @param {Object} startDate date
+  * @param {Object} endDate date
+  * @param {String} layerPeriod
+  * @returns {Object}
+  *   @param {String} dateRangeStart
+  *   @param {String} dateRangeEnd
+  *   @param {String} toolTipText
+  */
+  getFormattedDisplayDates = (lineType, startDate, endDate, layerPeriod) => {
+    let dateRangeStart;
+    let dateRangeEnd;
+    let toolTipText;
+
+    // eslint-disable-next-line default-case
+    switch (lineType) {
+      case 'CONTAINER':
+        dateRangeStart = (startDate && startDate.split('T')[0]) || 'start';
+        dateRangeEnd = (endDate && endDate.split('T')[0]) || 'present';
+        toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
+        break;
+      case 'MULTI':
+        dateRangeStart = startDate.toISOString().replace(/[.:]/g, '_');
+        dateRangeEnd = endDate.toISOString().replace(/[.:]/g, '_');
+        toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
+        // handle minutes range display text (ex: '14:50 to 15:00')
+        if (layerPeriod === 'minutes') {
+          // eslint-disable-next-line prefer-destructuring
+          dateRangeStart = startDate.toISOString().split('T')[1];
+          // eslint-disable-next-line prefer-destructuring
+          dateRangeEnd = endDate.toISOString().split('T')[1];
+          toolTipText = `${dateRangeStart.split(':', 2).join(':')} to ${dateRangeEnd.split(':', 2).join(':')}`;
+        }
+        break;
+      case 'SINGLE':
+        dateRangeStart = startDate.replace(/:/g, '_');
+        dateRangeEnd = endDate.replace(/:/g, '_');
+        toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
+        break;
+    }
+
+    return {
+      dateRangeStart,
+      dateRangeEnd,
+      toolTipText,
+    };
+  }
+
+  /**
+  * @desc get line DOM element from full/partial (interval) date range with tooltip
   * @param {String} id
   * @param {Object} options
   * @param {String} dateRangeStart
@@ -88,11 +139,17 @@ class LayerDataItems extends Component {
   * @param {Number/String} index
   * @returns {DOM Element} line
   */
-  createMatchingCoverageLineDOMEl = (id, options, dateRangeStart, dateRangeEnd, color, position, toolTipText, index) => {
+  // createMatchingCoverageLineDOMEl = (id, options, dateRangeStart, dateRangeEnd, color, position, toolTipText, index) => {
+  createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, position, layerPeriod, index) => {
     const { hoverOnToolTip, hoverOffToolTip, hoveredTooltip } = this.props;
-    const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
     const width = Math.max(options.width, 0);
-
+    // get formatted dates based on line type
+    const {
+      dateRangeStart,
+      dateRangeEnd,
+      toolTipText,
+    } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
+    const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
     return (
       <div
         id={`data-coverage-line-${dateRangeStartEnd}`}
@@ -125,9 +182,11 @@ class LayerDataItems extends Component {
   * @param {Object} range date object
   * @param {String} time unit period
   * @param {Number} itemRangeInterval
+  * @param {Object} endDateLimit data object
+  * @param {Object} nextDate range object with date
   * @returns {Object} rangeDateEnd date object
   */
-  getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval) => {
+  getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, endDateLimit, nextDate) => {
     const minYear = rangeDate.getUTCFullYear();
     const minMonth = rangeDate.getUTCMonth();
     const minDay = rangeDate.getUTCDate();
@@ -146,7 +205,20 @@ class LayerDataItems extends Component {
       minMinute + minuteAdd,
     );
 
-    const rangeDateEnd = new Date(rangeDateEndLocal.getTime() - (rangeDateEndLocal.getTimezoneOffset() * 60000));
+    let rangeDateEnd = new Date(rangeDateEndLocal.getTime() - (rangeDateEndLocal.getTimezoneOffset() * 60000));
+    // check if next date cuts off this range
+    // (e.g., 8 day interval with: currentDate = 12-27-1999, and nextDate = 1-1-2000)
+    if (nextDate) {
+      const nextDateObject = new Date(nextDate.date);
+      const rangeDateEndTime = rangeDateEnd.getTime();
+      const nextDateTime = nextDateObject.getTime();
+      if (nextDateTime <= rangeDateEndTime) {
+        rangeDateEnd = nextDateObject;
+      }
+    }
+    if (endDateLimit < rangeDateEnd) {
+      rangeDateEnd = endDateLimit;
+    }
     return rangeDateEnd;
   }
 
@@ -190,19 +262,95 @@ class LayerDataItems extends Component {
     return dateRangeText;
   }
 
+  /**
+  * @desc get endDateLimit based on axis and appNow
+  * @param {Boolean} layer inactive
+  * @param {Boolean} isLastInRange
+  * @returns {Object} endDateLimit date object
+  */
+  getMaxEndDate = (inactive, isLastInRange) => {
+    const {
+      appNow,
+      backDate,
+    } = this.props;
+
+    let endDateLimit = new Date(backDate);
+    const appNowDate = new Date(appNow);
+    // appNow will override max range endDate
+    if (appNowDate < endDateLimit) {
+      endDateLimit = appNowDate;
+    }
+    // if last date of multiple ranges check for endDate over appNow date
+    if (!inactive && isLastInRange) {
+      if (endDateLimit > appNowDate) {
+        endDateLimit = appNowDate;
+      }
+    }
+    return endDateLimit;
+  }
+
+  /**
+  * @desc get array of dates for layer
+  * @param {Object} layer
+  * @param {String} layerPeriod
+  * @param {Object} range
+  * @param {Object} endDateLimit
+  * @param {Boolean} inactive
+  * @param {Boolean} isLastInRange
+  * @returns {Array} dateIntervalStartDates
+  */
+  getDatesInDateRange = (layer, layerPeriod, range, endDateLimit, inactive, isLastInRange) => {
+    const {
+      appNow,
+      frontDate,
+    } = this.props;
+
+    const {
+      dateInterval,
+      startDate,
+      endDate,
+    } = range;
+
+    const rangeInterval = Number(range.dateInterval);
+    const rangeStart = range.startDate;
+    let rangeEnd = range.endDate;
+
+    let startDateLimit = new Date(frontDate);
+    // get leading start date minus rangeInterval and add to end date
+    startDateLimit = moment.utc(startDateLimit).subtract(rangeInterval, layerPeriod);
+    startDateLimit = moment(startDateLimit).toDate();
+    rangeEnd = moment.utc(rangeEnd).add(rangeInterval, layerPeriod);
+    rangeEnd = moment(rangeEnd).toDate();
+
+    // rangeEnd for last time coverage section of active layers can't be greater than appNow
+    const appNowDate = new Date(appNow);
+    if (!inactive && isLastInRange) {
+      rangeEnd = appNowDate;
+    }
+
+    // get dates within given date range
+    let dateIntervalStartDates = [];
+    const startLessThanOrEqualToEndDateLimit = new Date(rangeStart).getTime() <= endDateLimit.getTime();
+    const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd).getTime() >= startDateLimit.getTime();
+    if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
+      const inputStartDate = new Date(startDateLimit);
+      const inputEndDate = new Date(endDateLimit);
+      dateIntervalStartDates = datesinDateRanges(layer, inputStartDate, inputStartDate, inputEndDate);
+    }
+
+    return dateIntervalStartDates;
+  }
+
+
   render() {
     const {
       activeLayers,
-      appNow,
       axisWidth,
-      backDate,
-      frontDate,
       getMatchingCoverageLineDimensions,
       hoveredLayer,
       timeScale,
     } = this.props;
 
-    const baseLineColor = '#00457B';
     return (
       <div className="data-panel-layer-list">
         {activeLayers.map((layer, index) => {
@@ -223,10 +371,8 @@ class LayerDataItems extends Component {
           if (dateRanges && !ignoredLayer[id]) {
             multipleCoverageRanges = dateRanges.length > 1;
           }
-          // eslint-disable-next-line no-nested-ternary
           let layerPeriod = period === 'daily'
             ? 'day'
-            // eslint-disable-next-line no-nested-ternary
             : period === 'monthly'
               ? 'month'
               : period === 'yearly'
@@ -242,24 +388,31 @@ class LayerDataItems extends Component {
           // concat (ex: day to days) for moment manipulation below
           layerPeriod += 's';
 
-          // get line dimensions and handle condtional styling
+          // get line container dimensions
           const containerLineDimensions = getMatchingCoverageLineDimensions(layer);
-          const containerBackgroundColor = visible ? '#ccc' : 'rgb(79, 79, 79)';
+          // condtional styling for line/background colors
+          const containerBackgroundColor = visible
+            ? 'rgb(204, 204, 204)'
+            : 'rgb(79, 79, 79)';
           // lighten data panel layer container on sidebar hover
-          const containerHoveredBackgroundColor = visible ? '#e6e6e6' : 'rgb(101, 101, 101)';
-          const backgroundColor = visible ? baseLineColor : 'rgb(116, 116, 116)';
+          const containerHoveredBackgroundColor = visible
+            ? 'rgb(230, 230, 230)'
+            : 'rgb(101, 101, 101)';
+          const backgroundColor = visible
+            ? 'rgb(0, 69, 123)'
+            : 'rgb(116, 116, 116)';
           const isLayerHoveredInSidebar = id === hoveredLayer;
 
-          // get date range to display
-          const dateRangeStart = (startDate && startDate.split('T')[0]) || 'start';
-          const dateRangeEnd = (endDate && endDate.split('T')[0]) || 'present';
+          // get date range
           const dateRange = this.getFormattedDateRange(layer);
           const dateRangeIntervalZeroIndex = dateRanges
             ? Number(dateRanges[0].dateInterval)
             : 1;
 
           const multipleCoverageRangesDateIntervals = {};
-          const layerItemBackground = isLayerHoveredInSidebar ? containerHoveredBackgroundColor : containerBackgroundColor;
+          const layerItemBackground = isLayerHoveredInSidebar
+            ? containerHoveredBackgroundColor
+            : containerBackgroundColor;
           const key = index;
           return (
             <div
@@ -267,11 +420,11 @@ class LayerDataItems extends Component {
               className={`data-panel-layer-item data-item-${id}`}
               style={{
                 background: layerItemBackground,
-                outline: isLayerHoveredInSidebar ? '1px solid #222' : '',
+                outline: isLayerHoveredInSidebar ? '1px solid rgb(204, 204, 204)' : '',
               }}
             >
-              {/* Layer Header */
-                this.getHeader(layer, visible, dateRange, layerItemBackground)
+              {/* Layer Header DOM El */
+                this.getHeaderDOMEl(layer, visible, dateRange, layerItemBackground)
               }
               <div
                 className={`data-panel-layer-coverage-line-container data-line-${id}`}
@@ -290,40 +443,13 @@ class LayerDataItems extends Component {
                       }}
                     >
                       {dateRanges.map((range, innerIndex) => {
+                        const isLastInRange = innerIndex === dateRanges.length - 1;
                         const rangeInterval = Number(range.dateInterval);
-                        const rangeStart = range.startDate;
-                        let rangeEnd = range.endDate;
                         // multi time unit range - no year time unit
                         if (isLayerGreaterIncrementThanZoom || (rangeInterval !== 1 && timeScale !== 'year')) {
-                          let startDateLimit = new Date(frontDate);
-                          // get leading start date minus rangeInterval and add to end date
-                          startDateLimit = moment.utc(startDateLimit).subtract(rangeInterval, layerPeriod);
-                          startDateLimit = moment(startDateLimit).toDate();
-                          rangeEnd = moment.utc(rangeEnd).add(rangeInterval, layerPeriod);
-                          rangeEnd = moment(rangeEnd).toDate();
-                          // get max end date based on dates visible on axis and appNow date
-                          let endDateLimit = new Date(backDate);
-                          const appNowDate = new Date(appNow);
-                          if (appNowDate < endDateLimit) {
-                            endDateLimit = appNowDate;
-                          }
-                          // if last date of multiple ranges check for endDate over appNow date
-                          if (!inactive && innerIndex === dateRanges.length - 1) {
-                            if (endDateLimit > appNowDate) {
-                              endDateLimit = appNowDate;
-                            }
-                            rangeEnd = appNowDate;
-                          }
-
-                          // get dates within given date range
-                          let dateIntervalStartDates = [];
-                          const startLessThanOrEqualToEndDateLimit = new Date(rangeStart).getTime() <= endDateLimit.getTime();
-                          const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd).getTime() >= startDateLimit.getTime();
-                          if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
-                            const inputStartDate = new Date(startDateLimit);
-                            const inputEndDate = new Date(endDateLimit);
-                            dateIntervalStartDates = datesinDateRanges(layer, inputStartDate, inputStartDate, inputEndDate);
-                          }
+                          const endDateLimit = this.getMaxEndDate(inactive, isLastInRange);
+                          // get dates based on date ranges
+                          const dateIntervalStartDates = this.getDatesInDateRange(layer, layerPeriod, range, endDateLimit, inactive, isLastInRange);
                           // add date intervals to multipleCoverageRangesDateIntervals object to catch repeats
                           dateIntervalStartDates.forEach((dateInt) => {
                             const dateIntFormatted = dateInt.toISOString();
@@ -331,57 +457,35 @@ class LayerDataItems extends Component {
                           });
 
                           // if at the end of dateRanges array, display results from multipleCoverageRangesDateIntervals
-                          if (innerIndex === dateRanges.length - 1) {
+                          if (isLastInRange) {
                             const multiDateToDisplay = Object.values(multipleCoverageRangesDateIntervals);
                             return multiDateToDisplay.map((itemRange, multiIndex) => {
                               const rangeDate = itemRange.date;
                               const itemRangeInterval = itemRange.interval;
-                              let rangeDateEnd = this.getRangeDateEndWithAddedInterval(rangeDate, layerPeriod, itemRangeInterval);
-                              // check if next date cuts off this range
-                              // (e.g., 8 day interval with: currentDate = 12-27-1999, and nextDate = 1-1-2000)
-                              if (multiDateToDisplay[multiIndex + 1]) {
-                                const nextDateObject = multiDateToDisplay[multiIndex + 1];
-                                const rangeDateEndTime = rangeDateEnd.getTime();
-                                const nextDate = nextDateObject.date;
-                                const nextDateTime = nextDate.getTime();
-                                if (nextDateTime <= rangeDateEndTime) {
-                                  rangeDateEnd = nextDate;
-                                }
-                              }
-                              if (endDateLimit < rangeDateEnd) {
-                                rangeDateEnd = endDateLimit;
-                              }
-
+                              const nextDate = multiDateToDisplay[multiIndex + 1];
+                              const rangeDateEnd = this.getRangeDateEndWithAddedInterval(rangeDate, layerPeriod, itemRangeInterval, endDateLimit, nextDate);
                               // get range line dimensions
                               const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, rangeDate, rangeDateEnd);
-
-                              // get formatted dates for tooltip display
-                              const cleanRangeStart = rangeDate.toISOString().replace(/[.:]/g, '_');
-                              const cleanRangeEnd = rangeDateEnd.toISOString().replace(/[.:]/g, '_');
-                              let displayText = `${cleanRangeStart.split('T')[0]} to ${cleanRangeEnd.split('T')[0]}`;
-
-                              // handle minutes range display text (ex: '14:50 to 15:00')
-                              if (layerPeriod === 'minutes') {
-                                const minutesRangeDateStart = rangeDate.toISOString().split('T')[1];
-                                const minutesRangeDateEnd = rangeDateEnd.toISOString().split('T')[1];
-                                displayText = `${minutesRangeDateStart.split(':', 2).join(':')} to ${minutesRangeDateEnd.split(':', 2).join(':')}`;
-                              }
+                              // create DOM line element
                               return multiLineRangeOptions.visible
                                 && this.createMatchingCoverageLineDOMEl(
                                   id,
                                   multiLineRangeOptions,
-                                  cleanRangeStart,
-                                  cleanRangeEnd,
+                                  'MULTI',
+                                  rangeDate,
+                                  rangeDateEnd,
                                   backgroundColor,
                                   'absolute',
-                                  displayText,
-                                  multiIndex,
+                                  layerPeriod,
+                                  `${id}-${multiIndex}`,
                                 );
                             });
                           }
                           return null;
                         }
                         // handle single coverage
+                        const rangeStart = range.startDate;
+                        let rangeEnd = range.endDate;
                         if (range.startDate === range.endDate) {
                           rangeEnd = moment.utc(range.startDate).add(rangeInterval + 1, layerPeriod).format();
                         } else {
@@ -390,20 +494,18 @@ class LayerDataItems extends Component {
 
                         // get range line dimensions
                         const singleLineOptions = getMatchingCoverageLineDimensions(layer, rangeStart, rangeEnd);
-
-                        // get formatted dates for tooltip display
-                        const cleanRangeStart = rangeStart.replace(/:/g, '_');
-                        const cleanRangeEnd = rangeEnd.replace(/:/g, '_');
+                        // create DOM line element
                         return singleLineOptions.visible
                           && this.createMatchingCoverageLineDOMEl(
                             id,
                             singleLineOptions,
-                            cleanRangeStart,
-                            cleanRangeEnd,
+                            'SINGLE',
+                            rangeStart,
+                            rangeEnd,
                             backgroundColor,
                             'absolute',
-                            `${cleanRangeStart.split('T')[0]} to ${cleanRangeEnd.split('T')[0]}`,
-                            index,
+                            layerPeriod,
+                            `${id}-${innerIndex}`,
                           );
                       })}
                     </div>
@@ -413,11 +515,12 @@ class LayerDataItems extends Component {
                   && this.createMatchingCoverageLineDOMEl(
                     id,
                     containerLineDimensions,
-                    dateRangeStart,
-                    dateRangeEnd,
+                    'CONTAINER',
+                    startDate,
+                    endDate,
                     backgroundColor,
                     'relative',
-                    `${dateRangeStart} to ${dateRangeEnd}`,
+                    layerPeriod,
                     `${id}-0`,
                   )}
               </div>

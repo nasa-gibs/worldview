@@ -1,3 +1,4 @@
+/* eslint no-nested-ternary: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
@@ -75,7 +76,6 @@ class TimelineAxis extends Component {
     const options = timeScaleOptions[timeScale].timeAxis;
     const { gridWidth } = options;
     const timelineAxisWidth = axisWidth;
-    // eslint-disable-next-line no-nested-ternary
     const hoverLeftOffset = leftOffsetFixedCoeff
       ? timelineAxisWidth * leftOffsetFixedCoeff
       : leftOffset === 0
@@ -132,7 +132,6 @@ class TimelineAxis extends Component {
     let draggerTime;
     let draggerTimeB;
     if (draggerSelected === 'selected') {
-    // eslint-disable-next-line no-nested-ternary
       draggerTime = hoverChange
         ? draggerTimeState
         : isCompareModeActive
@@ -141,7 +140,6 @@ class TimelineAxis extends Component {
       draggerTimeB = isCompareModeActive ? dateB : draggerTimeStateB;
     } else {
       draggerTime = isCompareModeActive ? dateA : draggerTimeState;
-      // eslint-disable-next-line no-nested-ternary
       draggerTimeB = hoverChange
         ? draggerTimeStateB
         : isCompareModeActive
@@ -678,10 +676,8 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   updateScaleWithOffset = (date, timeScale, draggerCheck) => {
-    // eslint-disable-next-line no-nested-ternary
     const leftOffsetFixedCoeff = draggerCheck.newDraggerDiff > 5
       ? 0.5
-      // eslint-disable-next-line no-nested-ternary
       : draggerCheck.newDateInThePast
         ? !draggerCheck.withinRange
           ? 0.5
@@ -1253,7 +1249,6 @@ class TimelineAxis extends Component {
     const timelineEndDateLimitDateObj = new Date(timelineEndDateLimit);
     const hoverTimeDateObj = new Date(hoverTimeDate);
 
-    // eslint-disable-next-line no-nested-ternary
     hoverTimeDate = hoverTimeDateObj > timelineEndDateLimitDateObj
       ? timelineEndDateLimit
       : hoverTimeDateObj < timelineStartDateLimitDateObj
