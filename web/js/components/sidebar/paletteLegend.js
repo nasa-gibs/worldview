@@ -8,6 +8,65 @@ import { getOrbitTrackTitle } from '../../modules/layers/util';
 import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import util from '../../util/util';
 
+/**
+   * Find wanted legend object from Hex
+   * @param {Object} legend
+   * @param {String} hex
+   * @param {Number} acceptableDifference
+   */
+const getLegendObject = (legend, hex, acceptableDifference) => {
+  const units = legend.units || '';
+  for (let i = 0, len = legend.colors.length; i < len; i++) {
+    if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
+      // If the two colors are close
+      return {
+        label: units ? `${legend.tooltips[i]} ${units}` : legend.tooltips[i],
+        len,
+        index: i,
+      };
+    }
+  }
+  return null;
+};
+
+/**
+   * @param {Number} index | Selected label Index
+   * @param {Number} boxWidth | Width of Each label box
+   * @param {Number} textWidth | Label width
+   * @param {Number} width | Case width
+   */
+// const getClassLabelStyle = (index, boxWidth, textWidth, width, rowEndIndex) => {
+//   const halfTextWidth = textWidth / 2 || 0;
+//   const xOffset = boxWidth * (index - rowEndIndex) + boxWidth / 2 || 0;
+
+//   if (halfTextWidth > xOffset) {
+//     return { textAlign: 'left', visibility: 'visible' };
+//   } if (xOffset + halfTextWidth > width) {
+//     return { textAlign: 'right', visibility: 'visible' };
+//   }
+//   return {
+//     marginLeft: `${xOffset - halfTextWidth}px`,
+//     visibility: 'visible',
+//     textAlign: 'left',
+//   };
+// };
+
+/**
+   * @param {Number} xOffset | X px Location of running-data
+   * @param {Number} textWidth | px width of text calculated with canvas
+   * @param {Number} width | Case width
+   */
+const getRunningLabelStyle = (xOffset, textWidth, width) => {
+  if (!xOffset || !textWidth || !width) return { left: '0' };
+  const halfTextWidth = textWidth / 2 || 0;
+  if (halfTextWidth > xOffset) {
+    return { left: '0' };
+  } if (xOffset + halfTextWidth > width) {
+    return { right: '0' };
+  }
+  return { left: `${Math.floor(xOffset - halfTextWidth)}px` };
+};
+
 class PaletteLegend extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +79,13 @@ class PaletteLegend extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.updateCanvas();
+    this.setState(() => ({
+      scrollContainerEl: document.querySelector('#productsHolder .simplebar-wrapper'),
+    }));
+  }
+
   UNSAFE_componentWillReceiveProps(props) {
     if (
       props.colorHex !== this.state.colorHex
@@ -30,13 +96,6 @@ class PaletteLegend extends React.Component {
         colorHex: props.colorHex,
       });
     }
-  }
-
-  componentDidMount() {
-    this.updateCanvas();
-    this.setState(() => ({
-      scrollContainerEl: document.querySelector('#productsHolder .simplebar-wrapper'),
-    }));
   }
 
   componentDidUpdate(prevProps) {
@@ -91,27 +150,6 @@ class PaletteLegend extends React.Component {
       isRunningData: true,
       isHoveringLegend: true,
     });
-  }
-
-  /**
-   * Find wanted legend object from Hex
-   * @param {Object} legend
-   * @param {String} hex
-   * @param {Number} acceptableDifference
-   */
-  getLegendObject(legend, hex, acceptableDifference) {
-    const units = legend.units || '';
-    for (let i = 0, len = legend.colors.length; i < len; i++) {
-      if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
-        // If the two colors are close
-        return {
-          label: units ? `${legend.tooltips[i]} ${units}` : legend.tooltips[i],
-          len,
-          index: i,
-        };
-      }
-    }
-    return null;
   }
 
   /**
@@ -183,44 +221,6 @@ class PaletteLegend extends React.Component {
         ctx.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
       });
     }
-  }
-
-  /**
-   * @param {Number} index | Selected label Index
-   * @param {Number} boxWidth | Width of Each label box
-   * @param {Number} textWidth | Label width
-   * @param {Number} width | Case width
-   */
-  getClassLabelStyle(index, boxWidth, textWidth, width, rowEndIndex) {
-    const halfTextWidth = textWidth / 2 || 0;
-    const xOffset = boxWidth * (index - rowEndIndex) + boxWidth / 2 || 0;
-
-    if (halfTextWidth > xOffset) {
-      return { textAlign: 'left', visibility: 'visible' };
-    } if (xOffset + halfTextWidth > width) {
-      return { textAlign: 'right', visibility: 'visible' };
-    }
-    return {
-      marginLeft: `${xOffset - halfTextWidth}px`,
-      visibility: 'visible',
-      textAlign: 'left',
-    };
-  }
-
-  /**
-   * @param {Number} xOffset | X px Location of running-data
-   * @param {Number} textWidth | px width of text calculated with canvas
-   * @param {Number} width | Case width
-   */
-  getRunningLabelStyle(xOffset, textWidth, width) {
-    if (!xOffset || !textWidth || !width) return { left: '0' };
-    const halfTextWidth = textWidth / 2 || 0;
-    if (halfTextWidth > xOffset) {
-      return { left: '0' };
-    } if (xOffset + halfTextWidth > width) {
-      return { right: '0' };
-    }
-    return { left: `${Math.floor(xOffset - halfTextWidth)}px` };
   }
 
   /**
@@ -299,7 +299,7 @@ class PaletteLegend extends React.Component {
           className="wv-running-label"
           style={
             isRunningData
-              ? this.getRunningLabelStyle(xOffset, textWidth, this.state.width)
+              ? getRunningLabelStyle(xOffset, textWidth, width)
               : { display: 'none' }
           }
         >
@@ -330,7 +330,7 @@ class PaletteLegend extends React.Component {
     const {
       layer, parentLayer, layerGroupName, getPalette,
     } = this.props;
-    const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
+    const activeKeyObj = isRunningData && colorHex && getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
       : 'wv-palettes-legend wv-palettes-classes';

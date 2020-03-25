@@ -22,6 +22,17 @@ class TimelineRangeSelector extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.updateLocation();
+  }
+
+  componentDidUpdate() {
+    const { startLocation, endLocation } = this.props;
+    if (startLocation !== this.state.startLocation || endLocation !== this.state.endLocation) {
+      this.updateLocation();
+    }
+  }
+
   /*
    * When a child component is dragged,
    * this function is called to determine
@@ -154,6 +165,7 @@ class TimelineRangeSelector extends React.Component {
       startLocationDate,
       endLocationDate,
       timeScale,
+      updateAnimationDateAndLocation,
     } = this.props;
 
     const {
@@ -223,7 +235,7 @@ class TimelineRangeSelector extends React.Component {
       draggerStartLocation = startLocation;
       animationStartLocationDate = endDateLimit;
     }
-    this.props.updateAnimationDateAndLocation(
+    updateAnimationDateAndLocation(
       animationStartLocationDate,
       animationEndLocationDate,
       draggerStartLocation,
@@ -232,22 +244,11 @@ class TimelineRangeSelector extends React.Component {
     );
   }
 
-  componentDidMount() {
-    this.updateLocation();
-  }
-
   updateLocation = () => {
     this.setState({
       startLocation: this.props.startLocation,
       endLocation: this.props.endLocation,
     });
-  }
-
-  componentDidUpdate() {
-    const { startLocation, endLocation } = this.props;
-    if (startLocation !== this.state.startLocation || endLocation !== this.state.endLocation) {
-      this.updateLocation();
-    }
   }
 
   /*

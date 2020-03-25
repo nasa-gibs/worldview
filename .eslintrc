@@ -109,9 +109,55 @@
         // React rules overrides
         "react/jsx-props-no-spreading": "warn", // 17 errors
         "react/jsx-filename-extension": "off",
-        "react/sort-comp": "off",
+
+        // To run react-codemod with AirBnB rules:
+        // npx react-codemod sort-comp worldview --force
+
+        // To run react-codemod with customised rules:
+        // jscodeshift --verbose=2 --parser babel --extensions=js --transform /Users/jtkent/nasa-git/react-codemod/transforms/sort-comp.js ../worldview/web
+        "react/sort-comp": [
+          "error",
+          {
+            "order": [
+              "static-methods",
+              "lifecycle",
+              "everything-else",
+              "render"
+            ],
+            "groups": {
+              "lifecycle": [
+                "displayName",
+                "propTypes",
+                "contextTypes",
+                "childContextTypes",
+                "mixins",
+                "statics",
+                "defaultProps",
+                "constructor",
+                "getDefaultProps",
+                "state",
+                "getInitialState",
+                "getChildContext",
+                "getDerivedStateFromProps",
+                "componentWillMount",
+                "UNSAFE_componentWillMount",
+                "componentDidMount",
+                "componentWillReceiveProps",
+                "UNSAFE_componentWillReceiveProps",
+                "shouldComponentUpdate",
+                "componentWillUpdate",
+                "UNSAFE_componentWillUpdate",
+                "getSnapshotBeforeUpdate",
+                "componentDidUpdate",
+                "componentDidCatch",
+                "componentWillUnmount"
+              ]
+            }
+          }
+        ],
         "react/forbid-prop-types": "off", // 216 errors
-        "react/require-default-props": "off" // 965 errors
+        "react/require-default-props": "off", // 965 errors
+        "react/destructuring-assignment": "warn"
       }
     }
   ]

@@ -30,6 +30,7 @@ const getShortenRequestString = function(mock, permalink) {
       encodeURIComponent(permalink)}`
   );
 };
+
 class ShareLinkContainer extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +42,12 @@ class ShareLinkContainer extends Component {
     };
     this.onToggleShorten = this.onToggleShorten.bind(this);
     this.onLinkClick = this.onLinkClick.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.shortLink.error && prevState.isShort) {
+      return { isShort: false, showErrorTooltip: true };
+    } return null;
   }
 
   componentDidMount() {
@@ -121,12 +128,6 @@ class ShareLinkContainer extends Component {
       const href = getSharelink(type, permalink);
       window.open(href, '_blank');
     }
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.shortLink.error && prevState.isShort) {
-      return { isShort: false, showErrorTooltip: true };
-    } return null;
   }
 
   renderToolTips() {

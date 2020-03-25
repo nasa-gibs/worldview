@@ -90,12 +90,6 @@ class App extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  handleKeyPress(event) {
-    const { keyPressAction } = this.props;
-    const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
-    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey);
-  }
-
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
   }
@@ -104,37 +98,10 @@ class App extends React.Component {
     document.removeEventListener('keydown', this.handleKeyPress);
   }
 
-  render() {
-    const {
-      parameters, isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents,
-    } = this.props;
-
-    return (
-      <div className="wv-content" id="wv-content" data-role="content">
-        <Toolbar />
-        <MapInteractions mouseEvents={mapMouseEvents} />
-        <div id="wv-alert-container" className="wv-alert-container">
-          <FeatureAlert />
-        </div>
-        <Sidebar />
-        {isTourActive ? <Tour /> : null}
-        <div id="layer-modal" className="layer-modal" />
-        <div id="layer-settings-modal" />
-        <div id="eventsHolder" />
-        <div id="imagedownload" />
-        <div id="dlMap" />
-        <Timeline key={locationKey || '1'} />
-        <div id="wv-animation-widet-case">
-          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
-        </div>
-        <MeasureButton />
-
-        <Modal key={modalId} />
-        <ErrorBoundary>
-          <Debug parameters={parameters} />
-        </ErrorBoundary>
-      </div>
-    );
+  handleKeyPress(event) {
+    const { keyPressAction } = this.props;
+    const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
+    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey);
   }
 
   onload() {
@@ -189,7 +156,41 @@ class App extends React.Component {
     };
     util.wrap(main)();
   }
+
+  render() {
+    const {
+      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, parameters,
+    } = this.props;
+
+    return (
+      <div className="wv-content" id="wv-content" data-role="content">
+        <Toolbar />
+        <MapInteractions mouseEvents={mapMouseEvents} />
+        <div id="wv-alert-container" className="wv-alert-container">
+          <FeatureAlert />
+        </div>
+        <Sidebar />
+        {isTourActive ? <Tour /> : null}
+        <div id="layer-modal" className="layer-modal" />
+        <div id="layer-settings-modal" />
+        <div id="eventsHolder" />
+        <div id="imagedownload" />
+        <div id="dlMap" />
+        <Timeline key={locationKey || '1'} />
+        <div id="wv-animation-widet-case">
+          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
+        </div>
+        <MeasureButton />
+
+        <Modal key={modalId} />
+        <ErrorBoundary>
+          <Debug parameters={parameters} />
+        </ErrorBoundary>
+      </div>
+    );
+  }
 }
+
 function mapStateToProps(state, ownProps) {
   return {
     state,

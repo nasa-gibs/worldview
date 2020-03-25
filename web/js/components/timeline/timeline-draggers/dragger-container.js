@@ -22,6 +22,44 @@ class DraggerContainer extends PureComponent {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      draggerTimeState,
+      draggerTimeStateB,
+      isDraggerDragging,
+      draggerSelected,
+      isCompareModeActive,
+      setDraggerVisibility,
+    } = this.props;
+
+    // handle dragger visibility update on compare mode activate/deactivate
+    const hasCompareModeChanged = isCompareModeActive !== prevProps.isCompareModeActive;
+    if (hasCompareModeChanged) {
+      // turn on compare mode
+      if (isCompareModeActive) {
+        setDraggerVisibility(true, true);
+      } else if (draggerSelected === 'selected') {
+        // turn off compare mode
+        setDraggerVisibility(true, false);
+      } else {
+        setDraggerVisibility(false, true);
+      }
+    }
+
+    if (!isDraggerDragging) {
+      // handle A dragger change
+      const propsTimeStateChanged = draggerTimeState !== prevProps.draggerTimeState;
+      if (propsTimeStateChanged && (isCompareModeActive || draggerSelected === 'selected')) {
+        this.setDraggerPosition(draggerTimeState, false);
+      }
+      // handle B dragger change
+      const propsTimeStateBChanged = draggerTimeStateB !== prevProps.draggerTimeStateB;
+      if (propsTimeStateBChanged && (isCompareModeActive || draggerSelected === 'selectedB')) {
+        this.setDraggerPosition(draggerTimeStateB, true);
+      }
+    }
+  }
+
   /**
   * @desc select dragger 'selected' or 'selectedB'
   * @param {String} draggerName
@@ -182,44 +220,6 @@ class DraggerContainer extends PureComponent {
       // update parent dragger positioning
       updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
     });
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      draggerTimeState,
-      draggerTimeStateB,
-      isDraggerDragging,
-      draggerSelected,
-      isCompareModeActive,
-      setDraggerVisibility,
-    } = this.props;
-
-    // handle dragger visibility update on compare mode activate/deactivate
-    const hasCompareModeChanged = isCompareModeActive !== prevProps.isCompareModeActive;
-    if (hasCompareModeChanged) {
-      // turn on compare mode
-      if (isCompareModeActive) {
-        setDraggerVisibility(true, true);
-      } else if (draggerSelected === 'selected') {
-        // turn off compare mode
-        setDraggerVisibility(true, false);
-      } else {
-        setDraggerVisibility(false, true);
-      }
-    }
-
-    if (!isDraggerDragging) {
-      // handle A dragger change
-      const propsTimeStateChanged = draggerTimeState !== prevProps.draggerTimeState;
-      if (propsTimeStateChanged && (isCompareModeActive || draggerSelected === 'selected')) {
-        this.setDraggerPosition(draggerTimeState, false);
-      }
-      // handle B dragger change
-      const propsTimeStateBChanged = draggerTimeStateB !== prevProps.draggerTimeStateB;
-      if (propsTimeStateBChanged && (isCompareModeActive || draggerSelected === 'selectedB')) {
-        this.setDraggerPosition(draggerTimeStateB, true);
-      }
-    }
   }
 
   render() {

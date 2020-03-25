@@ -63,6 +63,18 @@ class MobileDatePicker extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setInitDates();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { date, endDateLimit } = this.props;
+    // update on new endDateLimit or changed date
+    if (prevProps.endDateLimit !== endDateLimit || prevProps.date !== date) {
+      this.setInitDates();
+    }
+  }
+
   handleClickDateButton = () => {
     this.setState({
       isOpen: true,
@@ -110,18 +122,6 @@ class MobileDatePicker extends Component {
   convertToLocalDateObject = (date) => {
     const dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
     return dateLocal;
-  }
-
-  componentDidMount() {
-    this.setInitDates();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { date, endDateLimit } = this.props;
-    // update on new endDateLimit or changed date
-    if (prevProps.endDateLimit !== endDateLimit || prevProps.date !== date) {
-      this.setInitDates();
-    }
   }
 
   render() {

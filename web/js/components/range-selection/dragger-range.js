@@ -9,9 +9,6 @@ import { timeScaleOptions } from '../../modules/date/constants';
  * @class TimelineDraggerRange
  */
 class TimelineDraggerRange extends PureComponent {
-  /*
-   * @constructor
-   */
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +19,21 @@ class TimelineDraggerRange extends PureComponent {
 
     this.handleDrag = this.handleDrag.bind(this);
     this.handleDraggerClick = this.handleDraggerClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.checkWidth();
+  }
+
+  componentDidUpdate(prevProps) {
+    // update state and checkWidth only on startLocation and/or endLocation changes
+    if (
+      prevProps.startLocation !== this.props.startLocation
+      || prevProps.endLocation !== this.props.endLocation
+    ) {
+      this.updateExtent(this.props);
+      this.checkWidth();
+    }
   }
 
   /*
@@ -177,26 +189,11 @@ class TimelineDraggerRange extends PureComponent {
     }
   }
 
-  componentDidMount() {
-    this.checkWidth();
-  }
-
   // update state - used in componentDidUpdate
   updateExtent(nextProps) {
     this.setState({
       startLocation: nextProps.startLocation,
     });
-  }
-
-  componentDidUpdate(prevProps) {
-    // update state and checkWidth only on startLocation and/or endLocation changes
-    if (
-      prevProps.startLocation !== this.props.startLocation
-      || prevProps.endLocation !== this.props.endLocation
-    ) {
-      this.updateExtent(this.props);
-      this.checkWidth();
-    }
   }
 
   /*

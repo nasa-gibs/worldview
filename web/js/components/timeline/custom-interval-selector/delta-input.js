@@ -18,6 +18,10 @@ class DeltaInput extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    this.setValue(this.props.deltaValue);
+  }
+
   onKeyInput = (e) => {
     let { value } = e.target;
     if (value === '' || regex.test(value)) {
@@ -67,10 +71,6 @@ class DeltaInput extends PureComponent {
     this.setState({
       value,
     });
-  }
-
-  componentDidMount() {
-    this.setValue(this.props.deltaValue);
   }
 
   render() {

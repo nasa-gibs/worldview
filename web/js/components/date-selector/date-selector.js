@@ -28,6 +28,73 @@ class DateSelector extends Component {
     };
   }
 
+  shouldComponentUpdate(prevProps, prevState) {
+    const {
+      date,
+      subDailyMode,
+      maxDate,
+      minDate,
+    } = this.props;
+    const {
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      yearValid,
+      monthValid,
+      dayValid,
+      hourValid,
+      minuteValid,
+      tab,
+    } = this.state;
+
+    const updateCheck = year === prevState.year
+      && month === prevState.month
+      && day === prevState.day
+      && hour === prevState.hour
+      && minute === prevState.minute
+      && yearValid === prevState.yearValid
+      && monthValid === prevState.monthValid
+      && dayValid === prevState.dayValid
+      && hourValid === prevState.hourValid
+      && minuteValid === prevState.minuteValid
+      && tab === prevState.tab
+      && date.getTime() === prevProps.date.getTime()
+      && subDailyMode === prevProps.subDailyMode
+      && maxDate.getTime() === prevProps.maxDate.getTime()
+      && minDate.getTime() === prevProps.minDate.getTime();
+    return !updateCheck;
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      date,
+      id,
+      minDate,
+      maxDate,
+    } = this.props;
+    const {
+      year,
+      month,
+      day,
+      hour,
+      minute,
+    } = this.state;
+
+    // parent arrow clicks should override any temporary values within date selector
+    if (prevProps.date.getTime() !== date.getTime()) {
+      this.clearTimeValuesAndValidation();
+    }
+    // handle animation start/end date limit changes and pending invalid -> valid dates
+    const minDateChangeEndUpdate = id === 'end' && prevProps.minDate.getTime() !== minDate.getTime();
+    const maxDateChangeStartUpdate = id === 'start' && prevProps.maxDate.getTime() !== maxDate.getTime();
+    const anyPendingTimeUnits = year || month || day || hour || minute;
+    if ((minDateChangeEndUpdate || maxDateChangeStartUpdate) && anyPendingTimeUnits) {
+      this.updateDate();
+    }
+  }
+
   /**
   * @desc add individual timeunit input
   *
@@ -304,73 +371,6 @@ class DateSelector extends Component {
       hourValid: true,
       minuteValid: true,
     });
-  }
-
-  shouldComponentUpdate(prevProps, prevState) {
-    const {
-      date,
-      subDailyMode,
-      maxDate,
-      minDate,
-    } = this.props;
-    const {
-      year,
-      month,
-      day,
-      hour,
-      minute,
-      yearValid,
-      monthValid,
-      dayValid,
-      hourValid,
-      minuteValid,
-      tab,
-    } = this.state;
-
-    const updateCheck = year === prevState.year
-      && month === prevState.month
-      && day === prevState.day
-      && hour === prevState.hour
-      && minute === prevState.minute
-      && yearValid === prevState.yearValid
-      && monthValid === prevState.monthValid
-      && dayValid === prevState.dayValid
-      && hourValid === prevState.hourValid
-      && minuteValid === prevState.minuteValid
-      && tab === prevState.tab
-      && date.getTime() === prevProps.date.getTime()
-      && subDailyMode === prevProps.subDailyMode
-      && maxDate.getTime() === prevProps.maxDate.getTime()
-      && minDate.getTime() === prevProps.minDate.getTime();
-    return !updateCheck;
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      date,
-      id,
-      minDate,
-      maxDate,
-    } = this.props;
-    const {
-      year,
-      month,
-      day,
-      hour,
-      minute,
-    } = this.state;
-
-    // parent arrow clicks should override any temporary values within date selector
-    if (prevProps.date.getTime() !== date.getTime()) {
-      this.clearTimeValuesAndValidation();
-    }
-    // handle animation start/end date limit changes and pending invalid -> valid dates
-    const minDateChangeEndUpdate = id === 'end' && prevProps.minDate.getTime() !== minDate.getTime();
-    const maxDateChangeStartUpdate = id === 'start' && prevProps.maxDate.getTime() !== maxDate.getTime();
-    const anyPendingTimeUnits = year || month || day || hour || minute;
-    if ((minDateChangeEndUpdate || maxDateChangeStartUpdate) && anyPendingTimeUnits) {
-      this.updateDate();
-    }
   }
 
   render() {

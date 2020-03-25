@@ -20,6 +20,12 @@ class LayerRow extends React.Component {
     this.toggleShowMetadata = this.toggleShowMetadata.bind(this);
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState({
+      checked: nextProps.isEnabled,
+    });
+  }
+
   /**
    * Toggle layer checked state
    * @method toggleCheck
@@ -86,12 +92,6 @@ class LayerRow extends React.Component {
           </h4>
         </>
       );
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({
-      checked: nextProps.isEnabled,
-    });
   }
 
   render() {

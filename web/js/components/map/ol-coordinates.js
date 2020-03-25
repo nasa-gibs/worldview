@@ -20,14 +20,14 @@ export class OlCoordinates extends React.Component {
     this.registerMouseListeners();
   }
 
-  registerMouseListeners() {
-    this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('mouseout', this.mouseOut);
-  }
-
   componentWillUnmount() {
     this.props.mouseEvents.off('mousemove', this.mouseMove);
     this.props.mouseEvents.off('mouseout', this.mouseOut);
+  }
+
+  registerMouseListeners() {
+    this.props.mouseEvents.on('mousemove', this.mouseMove);
+    this.props.mouseEvents.on('mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {

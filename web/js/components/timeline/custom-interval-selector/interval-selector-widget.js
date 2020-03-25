@@ -19,6 +19,13 @@ import { toggleCustomModal } from '../../../modules/date/actions';
  * @class CustomIntervalSelectorWidget
  */
 class CustomIntervalSelectorWidget extends PureComponent {
+  componentDidUpdate(prevProps) {
+    // handle focus widget on opening
+    if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
+      this.customIntervalWidget.focus();
+    }
+  }
+
   changeDelta = (value) => {
     if (value >= 0 && value <= 1000) {
       this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
@@ -32,13 +39,6 @@ class CustomIntervalSelectorWidget extends PureComponent {
   handleKeyPress= (e) => {
     if (e.key === 'Escape') {
       this.props.closeModal();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    // handle focus widget on opening
-    if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
-      this.customIntervalWidget.focus();
     }
   }
 

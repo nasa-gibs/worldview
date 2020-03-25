@@ -147,6 +147,100 @@ class Timeline extends React.Component {
     this.appNowUpdateInterval = 0;
   }
 
+  static getDerivedStateFromProps(props, currentState) {
+    // Update animation Date states when animation is initiated
+    if (!currentState.animationEndLocationDate
+      && !currentState.animationStartLocationDate
+      && props.animStartLocationDate
+      && props.animEndLocationDate) {
+      const { position, transformX } = currentState;
+      const { timeScale } = props;
+      const startDate = props.animStartLocationDate;
+      const endDate = props.animEndLocationDate;
+      const options = timeScaleOptions[timeScale].timeAxis;
+      const { gridWidth } = options;
+
+      const frontDate = moment.utc(currentState.frontDate);
+      const startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
+      const endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
+      return {
+        animationStartLocationDate: props.animStartLocationDate,
+        animationEndLocationDate: props.animEndLocationDate,
+        animationStartLocation: position - startLocation + transformX,
+        animationEndLocation: position - endLocation + transformX,
+      };
+    }
+    return null;
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('keyup', this.handleKeyUp);
+    // prevent default react synthetic event passive event listener
+    // that allows browser resize/zoom on certain wheel events
+    document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
+
+    this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
+    this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 15);
+    this.setInitialState();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevStartLocationDate = prevProps.animStartLocationDate;
+    const prevEndLocationDate = prevProps.animEndLocationDate;
+    const {
+      animStartLocationDate,
+      animEndLocationDate,
+      dateA,
+      dateB,
+      isAnimationPlaying,
+      isAnimationWidgetOpen,
+      isGifActive,
+      hasSubdailyLayers,
+    } = this.props;
+    const { frontDate, draggerTimeState, draggerTimeStateB } = this.state;
+
+    // handle update animation positioning and local state from play button/gif creation
+    const didAnimationTurnOn = !prevProps.isAnimationPlaying && isAnimationPlaying;
+    const didGifTurnOn = !prevProps.isGifActive && isGifActive;
+    if (didAnimationTurnOn || didGifTurnOn) {
+      this.animationDraggerDateUpdateLocal(animStartLocationDate, animEndLocationDate);
+    }
+
+    // handle location update triggered from animation start/end date change from animation widget
+    if (isAnimationWidgetOpen) {
+      if (prevStartLocationDate && prevEndLocationDate) {
+        const animStartDateChanged = prevStartLocationDate.getTime() !== animStartLocationDate.getTime();
+        const animEndDateChanged = prevEndLocationDate.getTime() !== animEndLocationDate.getTime();
+        const frontDateChanged = prevState.frontDate !== frontDate;
+        if (animStartDateChanged || animEndDateChanged || frontDateChanged) {
+          this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
+        }
+      }
+    }
+
+    // if user adds a subdaily layer (and none were active) adjust the time backwards if needed
+    // and change the time scale to hourly
+    if (hasSubdailyLayers && !prevProps.hasSubdailyLayers) {
+      this.moveSelectedDateBackwards();
+      this.changeTimeScale(4);
+    }
+
+    if (dateA !== prevProps.dateA && dateA !== draggerTimeState) {
+      this.updateDraggerTimeState(dateA, false);
+    }
+    if (dateB !== prevProps.dateB && dateB !== draggerTimeStateB) {
+      this.updateDraggerTimeState(dateB, true);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.appNowUpdateInterval) clearInterval(this.appNowUpdateInterval);
+    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('keyup', this.handleKeyUp);
+    document.querySelector('.timeline-container').removeEventListener('wheel', preventDefaultFunc);
+  }
+
   // chain throttled timescale wheel change call after debounce for smoother UX
   throttleChangeTimeScaleWheel = (e) => {
     this.throttleChangeTimeScaleWheelFire(e);
@@ -779,81 +873,6 @@ class Timeline extends React.Component {
     });
   }
 
-  static getDerivedStateFromProps(props, currentState) {
-    // Update animation Date states when animation is initiated
-    if (!currentState.animationEndLocationDate
-      && !currentState.animationStartLocationDate
-      && props.animStartLocationDate
-      && props.animEndLocationDate) {
-      const { position, transformX } = currentState;
-      const { timeScale } = props;
-      const startDate = props.animStartLocationDate;
-      const endDate = props.animEndLocationDate;
-      const options = timeScaleOptions[timeScale].timeAxis;
-      const { gridWidth } = options;
-
-      const frontDate = moment.utc(currentState.frontDate);
-      const startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
-      const endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
-      return {
-        animationStartLocationDate: props.animStartLocationDate,
-        animationEndLocationDate: props.animEndLocationDate,
-        animationStartLocation: position - startLocation + transformX,
-        animationEndLocation: position - endLocation + transformX,
-      };
-    }
-    return null;
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const prevStartLocationDate = prevProps.animStartLocationDate;
-    const prevEndLocationDate = prevProps.animEndLocationDate;
-    const {
-      animStartLocationDate,
-      animEndLocationDate,
-      dateA,
-      dateB,
-      isAnimationPlaying,
-      isAnimationWidgetOpen,
-      isGifActive,
-      hasSubdailyLayers,
-    } = this.props;
-    const { frontDate, draggerTimeState, draggerTimeStateB } = this.state;
-
-    // handle update animation positioning and local state from play button/gif creation
-    const didAnimationTurnOn = !prevProps.isAnimationPlaying && isAnimationPlaying;
-    const didGifTurnOn = !prevProps.isGifActive && isGifActive;
-    if (didAnimationTurnOn || didGifTurnOn) {
-      this.animationDraggerDateUpdateLocal(animStartLocationDate, animEndLocationDate);
-    }
-
-    // handle location update triggered from animation start/end date change from animation widget
-    if (isAnimationWidgetOpen) {
-      if (prevStartLocationDate && prevEndLocationDate) {
-        const animStartDateChanged = prevStartLocationDate.getTime() !== animStartLocationDate.getTime();
-        const animEndDateChanged = prevEndLocationDate.getTime() !== animEndLocationDate.getTime();
-        const frontDateChanged = prevState.frontDate !== frontDate;
-        if (animStartDateChanged || animEndDateChanged || frontDateChanged) {
-          this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
-        }
-      }
-    }
-
-    // if user adds a subdaily layer (and none were active) adjust the time backwards if needed
-    // and change the time scale to hourly
-    if (hasSubdailyLayers && !prevProps.hasSubdailyLayers) {
-      this.moveSelectedDateBackwards();
-      this.changeTimeScale(4);
-    }
-
-    if (dateA !== prevProps.dateA && dateA !== draggerTimeState) {
-      this.updateDraggerTimeState(dateA, false);
-    }
-    if (dateB !== prevProps.dateB && dateB !== draggerTimeStateB) {
-      this.updateDraggerTimeState(dateB, true);
-    }
-  }
-
   /**
    * If a user adds a subdaily layer and the current selected time is too recent
    * it is likely they will see no layer content. Here we are moving the selected time
@@ -917,25 +936,6 @@ class Timeline extends React.Component {
     ensureCanUpdate().then(() => {
       updateAppNow(new Date());
     });
-  }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-    document.addEventListener('keyup', this.handleKeyUp);
-    // prevent default react synthetic event passive event listener
-    // that allows browser resize/zoom on certain wheel events
-    document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
-
-    this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
-    this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 15);
-    this.setInitialState();
-  }
-
-  componentWillUnmount() {
-    if (this.appNowUpdateInterval) clearInterval(this.appNowUpdateInterval);
-    document.removeEventListener('keydown', this.handleKeyDown);
-    document.removeEventListener('keyup', this.handleKeyUp);
-    document.querySelector('.timeline-container').removeEventListener('wheel', preventDefaultFunc);
   }
 
   setInitialState = () => {

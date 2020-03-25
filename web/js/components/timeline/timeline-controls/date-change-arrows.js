@@ -11,7 +11,13 @@ const intervals = {
   left: 0,
   right: 0,
 };
+
 class DateChangeArrows extends PureComponent {
+  componentWillUnmount() {
+    clearInterval(intervals.left);
+    clearInterval(intervals.right);
+  }
+
   /**
   * @desc repeatedly call while mouse down - decrement date
   * @returns {void}
@@ -70,11 +76,6 @@ class DateChangeArrows extends PureComponent {
     }
     clearInterval(intervals.right);
     rightArrowUp();
-  }
-
-  componentWillUnmount() {
-    clearInterval(intervals.left);
-    clearInterval(intervals.right);
   }
 
   render() {

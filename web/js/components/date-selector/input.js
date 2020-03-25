@@ -20,6 +20,11 @@ class DateInputColumn extends Component {
     this.inputs = [];
   }
 
+  componentDidMount() {
+    this.updateValue();
+    this.setTextSize();
+  }
+
   componentDidUpdate(prevProps) {
     const { focused, tabIndex, value } = this.props;
     if (focused) {
@@ -28,11 +33,6 @@ class DateInputColumn extends Component {
     if (value !== prevProps.value) {
       this.updateValue();
     }
-  }
-
-  componentDidMount() {
-    this.updateValue();
-    this.setTextSize();
   }
 
   setTextSize = () => {
