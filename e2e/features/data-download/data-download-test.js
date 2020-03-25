@@ -50,7 +50,7 @@ module.exports = {
 
     // On Valid Data Select, 'No Data Available' indicator disappears and data layer is in sidebar
     // Click from year 2022 down to 2013
-    for (let i = 0; i <= 8; i++) {
+    for (let i = 0; i <= 8; i += 1) {
       client.click(downYearInputButton);
     }
     client.expect
@@ -62,7 +62,7 @@ module.exports = {
 
     // On Valid Data Select, 'No Data Available' indicator appears
     // Click from year 2013 up to 2022
-    for (let i = 0; i <= 8; i++) {
+    for (let i = 0; i <= 8; i += 1) {
       client.click(upYearInputButton);
     }
     client.expect.element('#indicator').to.be.present;

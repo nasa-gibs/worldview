@@ -46,7 +46,7 @@ class VectorDialog extends React.Component {
           </NavLink>
         </NavItem>,
       );
-      i++;
+      i += 1;
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
 

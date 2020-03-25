@@ -382,7 +382,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       if (isVisible || isSelectedEvent) {
         visibleListEvents[naturalEvent.id] = true;
       } else {
-        hiddenEventsCounter++;
+        hiddenEventsCounter += 1;
       }
     });
 

@@ -47,7 +47,7 @@ export default function getImageArray(
     : timeScaleFromNumberKey[interval];
 
   while (current <= toDate) {
-    j++;
+    j += 1;
     if (isSubDaily) {
       strDate = util.toISOStringMinutes(current);
     } else {

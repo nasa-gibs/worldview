@@ -136,7 +136,7 @@ export function getQueueLength(startDate, endDate, speed, interval, delta) {
   let i = 0;
   const maxQueueLength = getMaxQueueLength(speed);
   while (i <= maxQueueLength) {
-    i++;
+    i += 1;
     day = util.dateAdd(day, interval, delta);
     if (day > endDate) {
       return i;

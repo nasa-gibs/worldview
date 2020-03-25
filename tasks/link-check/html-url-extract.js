@@ -28,7 +28,7 @@ const getUrls = (htmlArray) => {
   const trackDoubles = {};
   const scrapedHTML = [];
 
-  for (let i = 0; i < htmlArray.length; i++) {
+  for (let i = 0; i < htmlArray.length; i += 1) {
     const $ = cheerio.load(fs.readFileSync(htmlArray[i]));
     const links = $('a');
 

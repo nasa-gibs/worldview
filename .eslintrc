@@ -78,7 +78,6 @@
         "no-nested-ternary": "warn", // 58 errors
         "no-shadow": "warn",
         "class-methods-use-this": "warn",
-        "no-plusplus": "warn", // 50 errors
         "max-len": "off",
 
         "consistent-return": "off",

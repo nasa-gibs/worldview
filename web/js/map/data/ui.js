@@ -335,7 +335,7 @@ const dataUiBulkDownloadPage = (function() {
     };
     let checkCount = 0;
     const timer = setInterval(() => {
-      checkCount++;
+      checkCount += 1;
       if (loaded) {
         clearInterval(timer);
         return;
@@ -549,7 +549,7 @@ const dataUiDownloadListPanel = function(config, store) {
           if (!product.counts[link.href]) {
             product.counts[link.href] = 1;
           } else {
-            product.counts[link.href]++;
+            product.counts[link.href] += 1;
           }
         }
       });

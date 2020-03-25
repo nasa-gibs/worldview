@@ -15,7 +15,7 @@ module.exports = {
       client.waitForElementVisible('.tour-in-progress .step-total', 2000, () => {
         client.getText('.tour-in-progress .step-total', (result) => { totalSteps = parseInt(result.value, 10); })
           .perform(() => {
-            for (let i = 0; i < totalSteps; i++) {
+            for (let i = 0; i < totalSteps; i += 1) {
               client.pause(500);
               client.click('.step-container .step-next');
             }

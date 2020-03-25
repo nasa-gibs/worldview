@@ -239,7 +239,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
     let disabledObj = lodashAssign({}, { key: 'disabled', array: [] }, DEFAULT_OBJ);
     const attrArray = [];
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i += 1) {
       if (!palettes[layerId].maps[i]) {
         console.warn('NO PALETTE');
       }
@@ -426,7 +426,7 @@ export function loadPalettes(permlinkState, state) {
         }
         if (min.length > 0 || max.length > 0) {
           count = getCount(layerId, state);
-          for (let i = 0; i < count; i++) {
+          for (let i = 0; i < count; i += 1) {
             const vmin = min.length > 0 ? min[i] : undefined;
             const vmax = max.length > 0 ? max[i] : undefined;
             const vsquash = squash.length > 0 ? squash[i] : undefined;
@@ -533,7 +533,7 @@ export function hasCustomPaletteInActiveProjection(
   activeLayers,
   activePalettes,
 ) {
-  for (let i = 0, len = activeLayers.length; i < len; i++) {
+  for (let i = 0, len = activeLayers.length; i < len; i += 1) {
     if (activePalettes[activeLayers[i].id]) {
       return true;
     }

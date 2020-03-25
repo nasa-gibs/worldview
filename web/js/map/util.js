@@ -28,7 +28,7 @@ export function mapUtilZoomAction(map, amount, duration, center) {
 export function getActiveLayerGroup(map, layerGroupString) {
   let group = null;
   const array = map.getLayers().getArray();
-  for (let i = 0, len = array.length; i < len; i++) {
+  for (let i = 0, len = array.length; i < len; i += 1) {
     const layerGroup = array[i];
     if (layerGroup.get('group') === layerGroupString) {
       group = layerGroup;

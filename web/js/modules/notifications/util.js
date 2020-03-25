@@ -13,7 +13,7 @@ export function separateByType(array) {
   const alerts = [];
   const outages = [];
 
-  for (let i = 0, len = array.length; i < len; i++) {
+  for (let i = 0, len = array.length; i < len; i += 1) {
     subObj = array[i];
     type = subObj.notification_type;
 
@@ -141,9 +141,9 @@ export function getNumberOfTypeNotSeen(type, arra) {
     return len;
   }
 
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     if (new Date(storageItem) < new Date(arra[i].created_at)) {
-      count++;
+      count += 1;
     } else {
       return count;
     }

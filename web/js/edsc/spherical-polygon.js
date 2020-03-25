@@ -6,7 +6,7 @@ export default function (L, geoutil, Arc, Coordinate) {
   convertLatLngs = function (latlngs) {
     var j, latlng, len1, original, result;
     result = [];
-    for (j = 0, len1 = latlngs.length; j < len1; j++) {
+    for (j = 0, len1 = latlngs.length; j < len1; j+= 1) {
       original = latlngs[j];
       latlng = L.latLng(original);
       while (latlng.lng > 180) {
@@ -49,7 +49,7 @@ export default function (L, geoutil, Arc, Coordinate) {
     return ((function () {
       var j, len1, results;
       results = [];
-      for (j = 0, len1 = latlngs.length; j < len1; j++) {
+      for (j = 0, len1 = latlngs.length; j < len1; j+= 1) {
         ll = latlngs[j];
         results.push('(' + ll.lat + ', ' + ll.lng + ')');
       }
@@ -65,7 +65,7 @@ export default function (L, geoutil, Arc, Coordinate) {
       var j, len1, ref, results;
       ref = latlngs.concat(latlngs[0]);
       results = [];
-      for (j = 0, len1 = ref.length; j < len1; j++) {
+      for (j = 0, len1 = ref.length; j < len1; j+= 1) {
         ll = ref[j];
         results.push(ll.lng + ',' + ll.lat);
       }
@@ -105,7 +105,7 @@ export default function (L, geoutil, Arc, Coordinate) {
     // Handle a list containing holes
     if (latlngs && L.Util.isArray(latlngs[0]) && typeof latlngs[0][0] !== 'number') {
       ref = latlngs.slice(1);
-      for (j = 0, len1 = ref.length; j < len1; j++) {
+      for (j = 0, len1 = ref.length; j < len1; j+= 1) {
         hole = ref[j];
         hole = convertLatLngs(hole);
         denormalizePath(hole);
@@ -159,7 +159,7 @@ export default function (L, geoutil, Arc, Coordinate) {
       } else if (latlng2.lng === -180 && latlng1.lng > 0) {
         extras = [[latlng2.lat, 180]];
       }
-      for (l = 0, len2 = extras.length; l < len2; l++) {
+      for (l = 0, len2 = extras.length; l < len2; l+= 1) {
         extra = extras[l];
         lat = extra[0], lng = extra[1];
         split.push(L.latLng(lat, lng));
@@ -277,7 +277,7 @@ export default function (L, geoutil, Arc, Coordinate) {
       latlngs = (function () {
         var j, len1, results;
         results = [];
-        for (j = 0, len1 = latlngs.length; j < len1; j++) {
+        for (j = 0, len1 = latlngs.length; j < len1; j+= 1) {
           latlng = latlngs[j];
           results.push(L.latLng(latlng));
         }

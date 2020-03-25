@@ -94,7 +94,7 @@ export function imageUtilCalculateResolution(
   let bestDiff = Infinity;
   let bestIdx = -1;
   let currDiff = 0;
-  for (let i = 0; i < possibleResolutions.length; i++) {
+  for (let i = 0; i < possibleResolutions.length; i += 1) {
     currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
     if (currDiff < bestDiff) {
       resolution = possibleResolutions[i];

@@ -16,7 +16,7 @@ import util from '../../util/util';
    */
 const getLegendObject = (legend, hex, acceptableDifference) => {
   const units = legend.units || '';
-  for (let i = 0, len = legend.colors.length; i < len; i++) {
+  for (let i = 0, len = legend.colors.length; i < len; i += 1) {
     if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
       // If the two colors are close
       return {

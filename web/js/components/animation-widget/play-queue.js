@@ -82,7 +82,7 @@ class PlayAnimation extends React.Component {
       } else {
         day = this.nextDate(day);
       }
-      i++;
+      i += 1;
     }
     return util.toISOStringSeconds(day);
   };
@@ -104,7 +104,7 @@ class PlayAnimation extends React.Component {
       togglePlaying();
       return;
     }
-    for (let i = 0; i < queueLength; i++) {
+    for (let i = 0; i < queueLength; i += 1) {
       this.addDate(day);
       day = this.getNextBufferDate(day, startDate, endDate);
       if (util.toISOStringSeconds(day) === lastToQueue) {
@@ -335,7 +335,7 @@ class PlayAnimation extends React.Component {
       if (day.valueOf() === jsTestDate.valueOf()) {
         return true;
       }
-      i++;
+      i += 1;
     }
     return false;
   }

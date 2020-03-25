@@ -23,7 +23,7 @@ export function getSelectionCounts(layers, selectedGranules) {
     }
   }
   for (const granule of Object.values(selectedGranules)) {
-    counts[granule.product]++;
+    counts[granule.product] += 1;
   }
   return counts;
 }
@@ -125,7 +125,7 @@ export function findAvailableProduct(layers) {
   let foundProduct = null;
 
   // Find the top most layer that has a product entry in CMR
-  for (let i = layers.length - 1; i >= 0; i--) {
+  for (let i = layers.length - 1; i >= 0; i -= 1) {
     if (layers[i].product) {
       foundProduct = layers[i].product;
       // If the layer has more than one product, select the first.

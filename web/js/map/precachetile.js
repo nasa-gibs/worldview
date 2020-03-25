@@ -179,7 +179,7 @@ export default function mapPrecacheTile(models, config, cache, parent) {
           tile.load();
           const loader = function(e) {
             if (e.type === 'tileloadend') {
-              --i;
+              i -= 1;
               if (i === 0) {
                 resolve();
               }
@@ -192,7 +192,7 @@ export default function mapPrecacheTile(models, config, cache, parent) {
           };
           tileSource.on('tileloadend', loader);
           tileSource.on('tileloaderror', loader);
-          ++i;
+          i += 1;
         });
       }
     });

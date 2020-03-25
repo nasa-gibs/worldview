@@ -330,13 +330,13 @@ export function dataResultsDensify() {
       .getCoordinates();
     var points = [];
     var end;
-    for (var i = 0; i < ring.length - 2; i++) {
+    for (var i = 0; i < ring.length - 2; i+= 1) {
       var start = ring[i];
       end = ring[i + 1];
       var distance = mapDistance2D(start, end);
       var numPoints = Math.floor(distance / MAX_DISTANCE);
       points.push(lodashClone(start));
-      for (var j = 1; j < numPoints - 1; j++) {
+      for (var j = 1; j < numPoints - 1; j+= 1) {
         var d = j / numPoints;
         // This is what REVERB does, so we will do the same
         var p = mapInterpolate2D(start, end, d);

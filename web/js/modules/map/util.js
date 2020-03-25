@@ -260,7 +260,7 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
 
         const loader = function(e) {
           if (e.type === 'tileloadend') {
-            --i;
+            i -= 1;
             if (i === 0) {
               resolve();
             }
@@ -273,7 +273,7 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
         };
         tileSource.on('tileloadend', loader);
         tileSource.on('tileloaderror', loader);
-        ++i;
+        i += 1;
       });
     }
   });
