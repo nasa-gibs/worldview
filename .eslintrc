@@ -106,12 +106,6 @@
         // React rules overrides
         "react/jsx-props-no-spreading": "warn", // 17 errors
         "react/jsx-filename-extension": "off",
-
-        // To run react-codemod with AirBnB rules:
-        // npx react-codemod sort-comp worldview --force
-
-        // To run react-codemod with customised rules:
-        // jscodeshift --verbose=2 --parser babel --extensions=js --transform /Users/jtkent/nasa-git/react-codemod/transforms/sort-comp.js ../worldview/web
         "react/sort-comp": [
           "error",
           {
