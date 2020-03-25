@@ -61,8 +61,9 @@ export function getSharelink(type, url) {
       return redditUrlParams(url, shareMessage);
     case 'email':
       return emailUrlParams(shareMessage, emailBody);
+    default:
+      // return undefined
   }
-  return undefined;
 }
 export function openPromisedSocial(url, win) {
   win.location.assign(url);

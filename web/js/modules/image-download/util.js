@@ -112,6 +112,9 @@ export function imageUtilCalculateResolution(
         case 6:
         case 7:
           resolution = possibleResolutions[bestIdx - 1];
+          break;
+        default:
+          break;
       }
     } else {
       switch (currentZoom) {
@@ -120,6 +123,9 @@ export function imageUtilCalculateResolution(
         case 4:
         case 5:
           resolution = possibleResolutions[bestIdx - 1];
+          break;
+        default:
+          break;
       }
     }
   }

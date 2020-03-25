@@ -975,6 +975,8 @@ export function mapui(models, config, store, ui) {
           self.mapIsbeingZoomed = true;
           self.events.trigger('zooming');
           break;
+        default:
+          break;
       }
     });
     map.on('moveend', (e) => {

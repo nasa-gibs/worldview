@@ -113,6 +113,8 @@ export function getMaxQueueLength(speed) {
     case speed > 0 && speed <= 3:
       queueLength = 10;
       break;
+    default:
+      break;
   }
   return queueLength;
 }
