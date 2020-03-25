@@ -13,7 +13,7 @@ import { toggleGranule } from '../../modules/data/actions';
 
 import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map';
 
-export function dataMap(store, maps, dataUi, ui) {
+export default function dataMap(store, maps, dataUi, ui) {
   const self = {};
 
   let map = null;

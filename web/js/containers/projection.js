@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 // eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
-import { changeProjection } from '../modules/projection/actions';
+import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import { resetProductPickerState } from '../modules/product-picker/actions';
 import IconList from '../components/util/list';

@@ -6,7 +6,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
 import { availableAtDate } from '../../../modules/layers/util';
-import { Checkbox } from '../../util/checkbox';
+import Checkbox from '../../util/checkbox';
 /*
  * A scrollable list of layers
  * @class LayerList

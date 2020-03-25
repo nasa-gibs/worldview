@@ -17,7 +17,7 @@ import { timeScaleFromNumberKey } from '../date/constants';
  * @returns {array} array of jpg urls
  *
  */
-export function getImageArray(
+export default function getImageArray(
   gifComponentState,
   gifComponentProps,
   dimensions,

@@ -13,7 +13,7 @@ import {
   debounce as lodashDebounce,
 } from 'lodash';
 
-import { naturalEventsUtilGetEventById } from './util';
+import naturalEventsUtilGetEventById from './util';
 import {
   naturalEventsClusterPointToGeoJSON,
   naturalEventsClusterGetPoints,

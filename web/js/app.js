@@ -81,7 +81,7 @@ import '../css/vectorMeta.css';
 import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../pages/css/document.css';
-import { keyPress } from './modules/key-press/actions';
+import keyPress from './modules/key-press/actions';
 
 class App extends React.Component {
   constructor(props) {

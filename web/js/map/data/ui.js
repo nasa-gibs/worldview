@@ -5,7 +5,7 @@ import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
 import * as olExtent from 'ol/extent';
 import { dataHandlerGetByName } from './handler';
-import { dataMap } from './map';
+import dataMap from './map';
 import uiIndicator from '../../ui/indicator';
 import util from '../../util/util';
 import wvui from '../../ui/ui';
@@ -23,7 +23,7 @@ import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import { faIconInfoCircleSVGDomEl } from '../fa-map-icons';
 
-export function dataUi(store, ui, config) {
+export default function dataUi(store, ui, config) {
   let queryActive = false;
   let mapController = null;
   let selectionListPanel = null;

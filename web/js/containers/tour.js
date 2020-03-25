@@ -21,7 +21,7 @@ import { layersParse12 } from '../modules/layers/util';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
 
 import ErrorBoundary from './error-boundary';
-import { history } from '../main';
+import history from '../main';
 import util from '../util/util';
 
 class Tour extends React.Component {

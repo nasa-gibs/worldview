@@ -7,7 +7,7 @@ import Cache from 'cachai';
 import moment from 'moment';
 import wvui from '../ui/ui';
 import browser from './browser';
-import { events } from './events';
+import events from './events';
 import load from './load';
 
 export default (function(self) {

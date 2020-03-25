@@ -15,7 +15,7 @@ let percentSwipe = null;
 const SWIPE_PADDING = 30;
 let dragging = false;
 
-export class Swipe {
+export default class Swipe {
   constructor(
     olMap,
     isActive,

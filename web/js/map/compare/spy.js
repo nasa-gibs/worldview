@@ -8,7 +8,7 @@ const DEFAULT_RADIUS = 140;
 let radius = DEFAULT_RADIUS;
 let label = null;
 
-export class Spy {
+export default class Spy {
   constructor(olMap, isBInside) {
     this.mapCase = document.getElementById('wv-map');
     this.map = olMap;

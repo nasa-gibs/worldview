@@ -5,7 +5,7 @@ import markers from './markers';
 import track from './track';
 import wvui from '../../ui/ui';
 import util from '../../util/util';
-import { naturalEventsUtilGetEventById } from './util';
+import naturalEventsUtilGetEventById from './util';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import * as EVENT_CONSTANTS from '../../modules/natural-events/constants';
 import { activateLayersForEventCategory } from '../../modules/layers/actions';

@@ -9,7 +9,7 @@ import { getLayers } from '../../modules/layers/selectors';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import util from '../../util/util';
 import AlertUtil from '../../components/util/alert';
-import { CompareAlertModalBody } from '../../components/compare/alert';
+import CompareAlertModalBody from '../../components/compare/alert';
 import { openCustomContent } from '../../modules/modal/actions';
 
 const tabHeight = 32;

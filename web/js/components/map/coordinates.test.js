@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { Coordinates } from './coordinates';
+import Coordinates from './coordinates';
 
 describe('formats', () => {
   const formats = ['latlon-dd', 'latlon-dm', 'latlon-dms'];

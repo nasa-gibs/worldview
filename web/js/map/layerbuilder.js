@@ -12,7 +12,7 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import util from '../util/util';
-import { lookupFactory } from '../ol/lookupimagetile';
+import lookupFactory from '../ol/lookupimagetile';
 import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import {
   isActive as isPaletteActive,
@@ -28,7 +28,7 @@ import {
   nearestInterval,
 } from '../modules/layers/util';
 
-export function mapLayerBuilder(models, config, cache, ui, store) {
+export default function mapLayerBuilder(models, config, cache, ui, store) {
   const self = {};
 
   self.init = function() {

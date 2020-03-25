@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SelectionList from '../util/selector';
-import { GifPanelGrid } from './gif-panel-grid';
+import GifPanelGrid from './gif-panel-grid';
 import Button from '../util/button';
-import { Checkbox } from '../util/checkbox';
+import Checkbox from '../util/checkbox';
 import { getDimensions } from '../../modules/image-download/util';
 
 const MAX_GIF_SIZE = 250;

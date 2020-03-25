@@ -11,7 +11,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
  * @class ResolutionTable
  * @extends React.Component
  */
-export class GifPanelGrid extends React.Component {
+export default class GifPanelGrid extends React.Component {
   renderImageSize() {
     const { valid, maxGifSize, requestSize } = this.props;
     const roundedSize = requestSize.toFixed(2);

@@ -21,8 +21,8 @@ import {
   imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
 import { timeScaleFromNumberKey } from '../modules/date/constants';
-import { GifResults } from '../components/animation-widget/gif-post-creation';
-import { getImageArray } from '../modules/animation/selectors';
+import GifResults from '../components/animation-widget/gif-post-creation';
+import getImageArray from '../modules/animation/selectors';
 import { getStampProps, svgToPng } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 

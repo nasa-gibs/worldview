@@ -8,13 +8,13 @@ import {
   renderTemplate,
   openCustomContent,
 } from '../modules/modal/actions';
-import { toggleDistractionFreeMode } from '../modules/ui/actions';
+import toggleDistractionFreeMode from '../modules/ui/actions';
 import { ABOUT_PAGE_REQUEST } from '../modules/modal/constants';
 import IconList from '../components/util/list';
-import { onClickFeedback } from '../modules/feedback/util';
+import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
-import { initFeedback } from '../modules/feedback/actions';
+import initFeedback from '../modules/feedback/actions';
 import { startTour, endTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';

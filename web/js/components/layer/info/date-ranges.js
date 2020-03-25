@@ -5,7 +5,7 @@ import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
 import { dateOverlap } from '../../../modules/layers/util';
 
-export class DateRanges extends React.Component {
+export default class DateRanges extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

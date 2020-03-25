@@ -88,7 +88,6 @@
         "no-use-before-define": "off",
 
         // Import rules overrides
-        "import/prefer-default-export": "off",
         "import/no-cycle": "warn",
 
         // Accesibility rules overrides

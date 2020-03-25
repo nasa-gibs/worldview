@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
-import { DateRanges } from './date-ranges';
+import DateRanges from './date-ranges';
 import util from '../../../util/util';
 import Scrollbars from '../../util/scrollbar';
 

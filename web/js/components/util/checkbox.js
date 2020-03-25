@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
  * @class Checkbox
  * @extends React.Component
  */
-export class Checkbox extends React.Component {
+export default class Checkbox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

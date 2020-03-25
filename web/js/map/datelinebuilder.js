@@ -22,7 +22,7 @@ let textLeft;
 let textRight;
 let proj;
 
-export function mapDateLineBuilder(models, config, store, ui) {
+export default function mapDateLineBuilder(models, config, store, ui) {
   const self = {};
   // formatted YYYY-MM-DD (e.g., 2019-06-25) for checking daily change for dateline
   self.date = {};

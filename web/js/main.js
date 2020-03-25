@@ -15,7 +15,7 @@ import {
 } from 'redux-location-state';
 import { createBrowserHistory } from 'history';
 import { uniqBy } from 'lodash';
-import { getMiddleware } from './combine-middleware';
+import getMiddleware from './combine-middleware';
 import { mapLocationToState, getParamObject } from './location';
 import { stateToParams } from './redux-location-state-customs';
 import reducers, { getInitialState } from './modules/combine-reducers';
@@ -23,19 +23,19 @@ import App from './app';
 import util from './util/util';
 import loadingIndicator from './ui/indicator';
 import Brand from './brand';
-import { combineModels } from './combine-models';
-import { parse } from './parse';
-import { combineUi } from './combine-ui';
+import combineModels from './combine-models';
+import parse from './parse';
+import combineUi from './combine-ui';
 import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
   validate as layerValidate,
   layersParse12,
 } from './modules/layers/util';
-import { polyfill } from './polyfill';
+import polyfill from './polyfill';
 import { debugConfig } from './debug';
 import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
-export const history = createBrowserHistory();
+const history = createBrowserHistory();
 
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
@@ -158,3 +158,5 @@ const render = (config, parameters, legacyState) => {
   combineUi(models, config, mouseMoveEvents, store); // Legacy UI
   util.errorReport(errors);
 };
+
+export default history;

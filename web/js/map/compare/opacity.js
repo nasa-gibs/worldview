@@ -5,7 +5,7 @@ import OpacitySlider from '../../components/compare/opacity-slider';
 let slider;
 let value = 50;
 
-export class Opacity {
+export default class Opacity {
   constructor(olMap, isAactive, events, eventListenerStringObj, valueOverride) {
     this.map = olMap;
     this.compareEvents = events;

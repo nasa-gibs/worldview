@@ -13,10 +13,9 @@ import {
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import { getSharelink, openPromisedSocial } from '../modules/link/util';
-import { Checkbox } from '../components/util/checkbox';
+import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
-
-import { history } from '../main';
+import history from '../main';
 
 const getShortenRequestString = function(mock, permalink) {
   const mockStr = mock || '';

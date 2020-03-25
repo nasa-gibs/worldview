@@ -14,7 +14,7 @@ import {
   deselectEvent,
 } from '../../modules/natural-events/actions';
 import util from '../../util/util';
-import { EventsAlertModalBody } from '../../components/events/alert-body';
+import EventsAlertModalBody from '../../components/events/alert-body';
 import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';

@@ -27,14 +27,14 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
-import { MapRotate } from './rotation';
-import { mapDateLineBuilder } from './datelinebuilder';
-import { mapLayerBuilder } from './layerbuilder';
-import { MapRunningData } from './runningdata';
-import { mapPrecacheTile } from './precachetile';
+import MapRotate from './rotation';
+import mapDateLineBuilder from './datelinebuilder';
+import mapLayerBuilder from './layerbuilder';
+import MapRunningData from './runningdata';
+import mapPrecacheTile from './precachetile';
 import { mapUtilZoomAction, getActiveLayerGroup } from './util';
-import { mapCompare } from './compare/compare';
-import { measure } from './measure/ui';
+import mapCompare from './compare/compare';
+import measure from './measure/ui';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
@@ -58,7 +58,7 @@ import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 
-export function mapui(models, config, store, ui) {
+export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
   const selector = `#${id}`;
   const animationDuration = 250;

@@ -21,7 +21,7 @@ import {
 } from './util';
 import { toggleMeasureActive } from '../../modules/measure/actions';
 
-export function measure(map, mapUiEvents, store) {
+export default function measure(map, mapUiEvents, store) {
   let draw;
   let sketch;
   let measureTooltipElement;
