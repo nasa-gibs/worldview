@@ -113,7 +113,7 @@ class Timeline extends React.Component {
     } = this.props;
 
     // left/right arrows
-    const throttleSettings = throttleSettings;
+    const throttleSettings = { leading: true, trailing: false };
     this.debounceDateUpdate = lodashDebounce(changeDate, 8);
     this.throttleDecrementDate = lodashThrottle(
       this.handleArrowDateChange.bind(this, -1),
