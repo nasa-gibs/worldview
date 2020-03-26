@@ -76,19 +76,17 @@
 
         // Base rule overrides
         "no-nested-ternary": "warn", // 58 errors
-        "no-shadow": "warn",
+        "no-shadow": "warn", // 136 errors
         "max-len": "off",
         "consistent-return": "off", // 73 erorrs
         "no-underscore-dangle": "off",
         "func-names": "off",
-
         "no-param-reassign": [ // 329 errors
           "warn",
           {
             "props": false
           }
         ],
-        // "no-use-before-define": "off",
         "no-use-before-define": [
           "error",
           {
@@ -158,7 +156,7 @@
           }
         ],
         "react/forbid-prop-types": "off", // 216 errors
-        "react/require-default-props": "off", // 965 errors
+        "react/require-default-props": "off" // 965 errors
       }
     }
   ]
