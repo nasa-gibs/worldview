@@ -159,7 +159,7 @@ class AnimationWidget extends React.Component {
    * @param {*} e
    * @param {*} data
    */
-  handleDragStart(e, data) {
+  handleDragStart = (e, data) => {
     const draggableTargets = [
       'wv-animation-widget',
       'wv-animation-widget-header',
@@ -168,7 +168,7 @@ class AnimationWidget extends React.Component {
     ];
     const { classList } = e.target;
     return draggableTargets.some((tClass) => classList.contains(tClass));
-  }
+  };
 
   onExpandedDrag(e, position) {
     const { x, y } = position;
@@ -636,6 +636,7 @@ class AnimationWidget extends React.Component {
     );
   }
 }
+
 function mapStateToProps(state) {
   const {
     layers,

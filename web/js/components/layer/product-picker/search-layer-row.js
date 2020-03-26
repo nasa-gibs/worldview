@@ -66,30 +66,16 @@ class LayerRow extends React.Component {
    *
    * @param {*} title - the full layer title
    */
-  renderSplitTitle(title) {
+  renderSplitTitle = (title) => {
     const splitIdx = title.indexOf('(');
     const attrs = title.slice(splitIdx);
     const titleName = title.slice(0, splitIdx - 1);
     return splitIdx < 0
-      ? (
-        <h3>
-          {' '}
-          {title}
-          {' '}
-        </h3>
-      )
+      ? (<h3>{title}</h3>)
       : (
         <>
-          <h3>
-            {' '}
-            {titleName}
-            {' '}
-          </h3>
-          <h4>
-            {' '}
-            {attrs}
-            {' '}
-          </h4>
+          <h3>{titleName}</h3>
+          <h4>{attrs}</h4>
         </>
       );
   }

@@ -77,14 +77,26 @@
         // Base rule overrides
         "no-nested-ternary": "warn", // 58 errors
         "no-shadow": "warn",
-        "class-methods-use-this": "warn",
         "max-len": "off",
-
-        "consistent-return": "off",
+        "consistent-return": "off", // 73 erorrs
         "no-underscore-dangle": "off",
         "func-names": "off",
-        "no-param-reassign": "warn", // 329 errors
-        "no-use-before-define": "off",
+
+        "no-param-reassign": [ // 329 errors
+          "warn",
+          {
+            "props": false
+          }
+        ],
+        // "no-use-before-define": "off",
+        "no-use-before-define": [
+          "error",
+          {
+            "functions": false,
+            "classes": true,
+            "variables": false
+          }
+        ],
 
         // Import rules overrides
         "import/no-cycle": "warn",
