@@ -90,7 +90,7 @@
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-react": "^7.7.0",
     "babel-eslint": "^10.0.3",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.1.0",
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
