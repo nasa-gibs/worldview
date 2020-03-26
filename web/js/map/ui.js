@@ -264,10 +264,21 @@ export function mapui(models, config, store, ui) {
         };
       }
       if (extent) {
-        map.getView().fit(extent, {
+        const view = map.getView();
+        const mapRotation = view.getRotation();
+
+        // Fit the layer extent to the given size of the map
+        view.fit(extent, {
           constrainResolution: false,
           callback,
         });
+
+        // Correct the zoom level if map was rotated
+        if (mapRotation) {
+          let zoom = Math.round(view.getZoom());
+          if (zoom >= 0) zoom += 1;
+          view.setZoom(zoom);
+        }
       }
     }
     updateExtent();
