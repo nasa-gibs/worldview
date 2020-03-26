@@ -9,27 +9,6 @@ import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/pal
 import util from '../../util/util';
 
 /**
-   * Find wanted legend object from Hex
-   * @param {Object} legend
-   * @param {String} hex
-   * @param {Number} acceptableDifference
-   */
-const getLegendObject = (legend, hex, acceptableDifference) => {
-  const units = legend.units || '';
-  for (let i = 0, len = legend.colors.length; i < len; i += 1) {
-    if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
-      // If the two colors are close
-      return {
-        label: units ? `${legend.tooltips[i]} ${units}` : legend.tooltips[i],
-        len,
-        index: i,
-      };
-    }
-  }
-  return null;
-};
-
-/**
    * @param {Number} index | Selected label Index
    * @param {Number} boxWidth | Width of Each label box
    * @param {Number} textWidth | Label width
@@ -50,6 +29,27 @@ const getLegendObject = (legend, hex, acceptableDifference) => {
 //     textAlign: 'left',
 //   };
 // };
+
+/**
+   * Find wanted legend object from Hex
+   * @param {Object} legend
+   * @param {String} hex
+   * @param {Number} acceptableDifference
+   */
+const getLegendObject = (legend, hex, acceptableDifference) => {
+  const units = legend.units || '';
+  for (let i = 0, len = legend.colors.length; i < len; i += 1) {
+    if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
+      // If the two colors are close
+      return {
+        label: units ? `${legend.tooltips[i]} ${units}` : legend.tooltips[i],
+        len,
+        index: i,
+      };
+    }
+  }
+  return null;
+};
 
 /**
    * @param {Number} xOffset | X px Location of running-data
@@ -242,7 +242,7 @@ class PaletteLegend extends React.Component {
     const toolTipLength = legend.tooltips.length;
     // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
+      legendObj = getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
