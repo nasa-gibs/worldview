@@ -266,35 +266,15 @@ export function mapui(models, config, store, ui) {
       }
       if (extent) {
         const view = map.getView();
+        const rotation = view.getRotation(); // This should be pulled from the permalink now since we removed rotation from the view object.
 
-        const mapRotation = (Math.abs(view.getRotation()) * (180 / Math.PI)).toFixed(4);
-
-        // This is where the funny business happens
         view.fit(extent, {
           constrainResolution: false,
           callback,
         });
 
-        // view.getZoom() doing this after fit yields a floating zoom level (i.e. -0.2223, 1.8845, etc.)
-
-        // console.log(view.getZoom())
-
-        /**  Originally, I was trying to a find a way to either round up or down the value,
-        or truncate it completely based on the rotation value. When you rotate the map, the zoom level will
-        either go up or down; it will not be a whole number. */
-
-        // let zoom = Math.trunc(view.getZoom());
-        // let zoom = Math.floor(view.getZoom());
-        // let zoom = Math.ceil(view.getZoom());
-
-        if (mapRotation) {
-          const zoom = Math.ceil(view.getZoom());
-          /** Run the app, and rotate the map using the rotational buttons, reload the page, view should be restored.
-           Now rotate the map using the alt + mouse and get a decimal rotation value, (i.e. 137.448), infinte zoom
-           should take place. Not all decimal values will cause it to happen. */
-          // if (mapRotation >= 29 && mapRotation <= 60) zoom += 1;
-          // else if (mapRotation >= 114 && mapRotation < 160) zoom += 1;
-          view.setZoom(zoom);
+        if (rotation) {
+          view.setRotation(rotation);
         }
       }
     }
@@ -945,10 +925,6 @@ export function mapui(models, config, store, ui) {
         maxResolution: proj.resolutions[0],
         projection: olProj.get(proj.crs),
         center: proj.startCenter,
-        rotation:
-          proj.id === 'geographic' || proj.id === 'webmerc'
-            ? 0.0
-            : models.map.rotation,
         zoom: proj.startZoom,
         maxZoom: proj.numZoomLevels,
         enableRotation: true,
