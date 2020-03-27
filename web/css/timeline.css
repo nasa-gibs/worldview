@@ -812,6 +812,7 @@ button:focus {
   color: #fff;
   box-sizing: border-box;
   border: thin solid #333;
+  border-bottom: 0;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
 }
