@@ -305,7 +305,7 @@ class DateSelector extends Component {
     });
   }
 
-  shouldComponentUpdate(prevProps, prevState) {
+  shouldComponentUpdate(nextProps, nextState) {
     const {
       date,
       subDailyMode,
@@ -326,21 +326,21 @@ class DateSelector extends Component {
       tab,
     } = this.state;
 
-    const updateCheck = year === prevState.year
-      && month === prevState.month
-      && day === prevState.day
-      && hour === prevState.hour
-      && minute === prevState.minute
-      && yearValid === prevState.yearValid
-      && monthValid === prevState.monthValid
-      && dayValid === prevState.dayValid
-      && hourValid === prevState.hourValid
-      && minuteValid === prevState.minuteValid
-      && tab === prevState.tab
-      && date.getTime() === prevProps.date.getTime()
-      && subDailyMode === prevProps.subDailyMode
-      && maxDate.getTime() === prevProps.maxDate.getTime()
-      && minDate.getTime() === prevProps.minDate.getTime();
+    const updateCheck = year === nextState.year
+      && month === nextState.month
+      && day === nextState.day
+      && hour === nextState.hour
+      && minute === nextState.minute
+      && yearValid === nextState.yearValid
+      && monthValid === nextState.monthValid
+      && dayValid === nextState.dayValid
+      && hourValid === nextState.hourValid
+      && minuteValid === nextState.minuteValid
+      && tab === nextState.tab
+      && date.getTime() === nextProps.date.getTime()
+      && subDailyMode === nextProps.subDailyMode
+      && maxDate.getTime() === nextProps.maxDate.getTime()
+      && minDate.getTime() === nextProps.minDate.getTime();
     return !updateCheck;
   }
 
