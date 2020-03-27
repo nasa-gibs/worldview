@@ -38,10 +38,12 @@ class AxisHoverLine extends PureComponent {
       ? layer.startDate
       : layer.startDate && layer.visible));
 
+    // min 1 layer for error message display
+    const layerLengthCoef = Math.max(layers.length, 1);
     // handle active layer count dependent tooltip height
     if (isDataCoveragePanelOpen) {
       lineHeight = 111;
-      const addHeight = Math.min(layers.length, 5) * 40;
+      const addHeight = Math.min(layerLengthCoef, 5) * 40;
       lineHeight += addHeight;
       lineHeightInner = lineHeight;
     }
@@ -53,7 +55,7 @@ class AxisHoverLine extends PureComponent {
         : draggerPositionB;
       linePosition = selectedDraggerPosition + 47;
       // lineheight for dragger
-      const minusY1Height = Math.min(layers.length, 5) * 40.5;
+      const minusY1Height = Math.min(layerLengthCoef, 5) * 40.5;
       lineHeightInner = 40.5 + minusY1Height;
     }
 

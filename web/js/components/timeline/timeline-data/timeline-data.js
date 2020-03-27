@@ -54,6 +54,43 @@ class TimelineData extends Component {
     }
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   const {
+  //     activeLayers,
+  //     appNow,
+  //     axisWidth,
+  //     backDate,
+  //     frontDate,
+  //     parentOffset,
+  //     isDataCoveragePanelOpen,
+  //     position,
+  //     timeScale,
+  //     timelineStartDateLimit,
+  //     transformX,
+  //   } = this.props;
+
+  //   const checkForPropsUpdates = nextProps.appNow === appNow
+  //     && nextProps.axisWidth === axisWidth
+  //     && nextProps.backDate === backDate
+  //     && nextProps.frontDate === frontDate
+  //     && nextProps.position === position
+  //     && nextProps.isDataCoveragePanelOpen === isDataCoveragePanelOpen
+  //     && nextProps.parentOffset === parentOffset
+  //     && nextProps.timeScale === timeScale
+  //     && nextProps.timelineStartDateLimit === timelineStartDateLimit
+  //     && nextProps.transformX === transformX
+  //     && lodashIsEqual(nextProps.activeLayers, activeLayers);
+
+
+  //   const { shouldIncludeHiddenLayers } = this.state;
+  //   const checkForStateUpdates = shouldIncludeHiddenLayers === nextState.shouldIncludeHiddenLayers;
+  //   if (checkForPropsUpdates && checkForStateUpdates) {
+  //     return false;
+  //   }
+
+  //   return true;
+  // }
+
   /**
   * @desc set active layers
   * @param {Array} layers
@@ -124,7 +161,8 @@ class TimelineData extends Component {
     let borderRadiusLeft = '0';
     let borderRadiusRight = '0';
 
-    let width = axisWidth * 2;
+    // let width = axisWidth * 2;
+    let width = axisWidth;
     if (visible) {
       if (layerStart <= axisFrontDate) {
         leftOffset = 0;
@@ -209,10 +247,14 @@ class TimelineData extends Component {
   /**
   * @desc get startDate and endDate based on layers currently selected for matching coverage
   * @param {Array} layers
-  * @returns {Object} startDate, endDate
+  * @returns {Object}
+    * @param {String} startDate
+    * @param {String} endDate
   */
   getNewMatchingDatesRange = (layers) => {
-    const { appNow } = this.props;
+    const {
+      appNow,
+    } = this.props;
     let startDate;
     let endDate = new Date(appNow);
     if (layers.length > 0) {
@@ -227,7 +269,7 @@ class TimelineData extends Component {
           startDate = date;
         }
       }
-      // for each end date, find earlier that is still after start date
+      // for each end date, find earliest that is still after start date
       const endDates = layers.reduce((acc, x) => (x.endDate ? acc.concat(x.endDate) : acc), []);
       for (let i = 0; i < endDates.length; i += 1) {
         const date = new Date(endDates[i]);
@@ -267,9 +309,11 @@ class TimelineData extends Component {
       ? layer.startDate
       : layer.startDate && layer.visible));
 
+    const emptyLayers = activeLayers.length === 0;
+
     // handle conditional styling
     const maxHeightScrollBar = '203px';
-    const layerListItemHeigthConstant = layers.length * 41;
+    const layerListItemHeigthConstant = emptyLayers ? 41 : layers.length * 41;
 
     const dataAvailabilityHandleTopOffset = `${Math.max(-54 - layerListItemHeigthConstant, -259)}px`;
 

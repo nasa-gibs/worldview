@@ -167,6 +167,23 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
     let minDate = new Date(dateRange.startDate);
     let maxDate = new Date(dateRange.endDate);
 
+    // explicit min/max ranges provided
+    if (rangeLimitsProvided) {
+      // handle single date coverage
+      if (dateRange.startDate === dateRange.endDate) {
+        const dateTime = new Date(minDate.getTime());
+        dateArray.push(dateTime);
+        return;
+      }
+      const startDateLimitTime = startDateLimit.getTime();
+      const endDateLimitTime = endDateLimit.getTime();
+      const minDateTime = minDate.getTime();
+      const minDateWithinRangeLimits = minDateTime > startDateLimitTime && minDateTime < endDateLimitTime;
+      if (currentDate.getTime() < minDateTime && minDateWithinRangeLimits) {
+        currentDate = minDate;
+      }
+    }
+
     // set maxDate to current date if layer coverage is ongoing
     if (index === def.dateRanges.length - 1 && !inactiveLayer) {
       maxDate = new Date();
@@ -180,13 +197,6 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
     const minDay = minDate.getUTCDate();
 
     let i;
-
-    // handle single date coverage
-    if (dateRange.startDate === dateRange.endDate) {
-      const dateTime = new Date(minDate.getTime());
-      dateArray.push(dateTime);
-      return;
-    }
 
     // Yearly layers
     if (period === 'yearly') {

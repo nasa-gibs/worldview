@@ -810,7 +810,8 @@ button:focus {
   position: relative;
   background-color: #212121;
   color: #fff;
-  border: thin solid #595959;
+  box-sizing: border-box;
+  border: thin solid #333;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
 }
@@ -850,4 +851,14 @@ button:focus {
 .data-panel-coverage-line {
   position: relative;
   height: 12px;
+}
+
+.data-panel-layer-empty {
+  height: 41px;
+  padding: 6px;
+}
+
+.data-item-empty {
+  display: flex;
+  flex-direction: row;
 }

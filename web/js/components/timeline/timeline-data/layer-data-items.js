@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Tooltip } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { datesinDateRanges } from '../../../modules/layers/util';
 import util from '../../../util/util';
-
 import {
   timeScaleToNumberKey,
 } from '../../../modules/date/constants';
@@ -141,8 +142,13 @@ class LayerDataItems extends Component {
   */
   // createMatchingCoverageLineDOMEl = (id, options, dateRangeStart, dateRangeEnd, color, position, toolTipText, index) => {
   createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, position, layerPeriod, index) => {
-    const { hoverOnToolTip, hoverOffToolTip, hoveredTooltip } = this.props;
+    const {
+      axisWidth, hoverOnToolTip, hoverOffToolTip, hoveredTooltip,
+    } = this.props;
     const width = Math.max(options.width, 0);
+    const offset = width > axisWidth
+      ? -options.leftOffset - axisWidth
+      : 0;
     // get formatted dates based on line type
     const {
       dateRangeStart,
@@ -150,6 +156,7 @@ class LayerDataItems extends Component {
       toolTipText,
     } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
     const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
+    const toolTipPlacement = 'auto';
     return (
       <div
         id={`data-coverage-line-${dateRangeStartEnd}`}
@@ -166,7 +173,9 @@ class LayerDataItems extends Component {
         }}
       >
         <Tooltip
-          placement={options.toolTipPlacement}
+          placement={toolTipPlacement}
+          boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
+          offset={offset}
           container={`.data-item-${id}`}
           isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
           target={`data-coverage-line-${dateRangeStartEnd}`}
@@ -305,12 +314,6 @@ class LayerDataItems extends Component {
       frontDate,
     } = this.props;
 
-    const {
-      dateInterval,
-      startDate,
-      endDate,
-    } = range;
-
     const rangeInterval = Number(range.dateInterval);
     const rangeStart = range.startDate;
     let rangeEnd = range.endDate;
@@ -341,18 +344,65 @@ class LayerDataItems extends Component {
     return dateIntervalStartDates;
   }
 
+  /**
+  * @desc get conditional styling for layer container and coverage line
+  * @param {Boolean} visible
+  * @param {String} id
+  * @returns {Object}
+  *   @param {String} lineBackgroundColor
+  *   @param {String} layerItemBackground
+  *   @param {String} layerItemOutline
+  */
+  getLayerItemStyles = (visible, id) => {
+    const { hoveredLayer } = this.props;
+    // condtional styling for line/background colors
+    const containerBackgroundColor = visible
+      ? 'rgb(204, 204, 204)'
+      : 'rgb(79, 79, 79)';
+    // lighten data panel layer container on sidebar hover
+    const containerHoveredBackgroundColor = visible
+      ? 'rgb(230, 230, 230)'
+      : 'rgb(101, 101, 101)';
+    // layer coverage line color
+    const lineBackgroundColor = visible
+      ? 'rgb(0, 69, 123)'
+      : 'rgb(116, 116, 116)';
+    // check if provided id is hovered over for background color and outline
+    const isLayerHoveredInSidebar = id === hoveredLayer;
+    const layerItemBackground = isLayerHoveredInSidebar
+      ? containerHoveredBackgroundColor
+      : containerBackgroundColor;
+    const layerItemOutline = isLayerHoveredInSidebar
+      ? '1px solid rgb(204, 204, 204)'
+      : '';
+
+    return {
+      lineBackgroundColor,
+      layerItemBackground,
+      layerItemOutline,
+    };
+  }
+
 
   render() {
     const {
       activeLayers,
       axisWidth,
       getMatchingCoverageLineDimensions,
-      hoveredLayer,
       timeScale,
     } = this.props;
-
+    const emptyLayers = activeLayers.length === 0;
     return (
       <div className="data-panel-layer-list">
+        {emptyLayers
+          && (
+          <div className="data-panel-layer-empty">
+            <div className="data-item-empty">
+              <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
+              <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
+            </div>
+          </div>
+          )}
         {activeLayers.map((layer, index) => {
           const {
             dateRanges,
@@ -391,17 +441,11 @@ class LayerDataItems extends Component {
           // get line container dimensions
           const containerLineDimensions = getMatchingCoverageLineDimensions(layer);
           // condtional styling for line/background colors
-          const containerBackgroundColor = visible
-            ? 'rgb(204, 204, 204)'
-            : 'rgb(79, 79, 79)';
-          // lighten data panel layer container on sidebar hover
-          const containerHoveredBackgroundColor = visible
-            ? 'rgb(230, 230, 230)'
-            : 'rgb(101, 101, 101)';
-          const backgroundColor = visible
-            ? 'rgb(0, 69, 123)'
-            : 'rgb(116, 116, 116)';
-          const isLayerHoveredInSidebar = id === hoveredLayer;
+          const {
+            lineBackgroundColor,
+            layerItemBackground,
+            layerItemOutline,
+          } = this.getLayerItemStyles(visible, id);
 
           // get date range
           const dateRange = this.getFormattedDateRange(layer);
@@ -410,9 +454,6 @@ class LayerDataItems extends Component {
             : 1;
 
           const multipleCoverageRangesDateIntervals = {};
-          const layerItemBackground = isLayerHoveredInSidebar
-            ? containerHoveredBackgroundColor
-            : containerBackgroundColor;
           const key = index;
           return (
             <div
@@ -420,7 +461,7 @@ class LayerDataItems extends Component {
               className={`data-panel-layer-item data-item-${id}`}
               style={{
                 background: layerItemBackground,
-                outline: isLayerHoveredInSidebar ? '1px solid rgb(204, 204, 204)' : '',
+                outline: layerItemOutline,
               }}
             >
               {/* Layer Header DOM El */
@@ -453,28 +494,34 @@ class LayerDataItems extends Component {
                           // add date intervals to multipleCoverageRangesDateIntervals object to catch repeats
                           dateIntervalStartDates.forEach((dateInt) => {
                             const dateIntFormatted = dateInt.toISOString();
-                            multipleCoverageRangesDateIntervals[dateIntFormatted] = { date: dateInt, interval: rangeInterval };
+                            const dateIntTime = new Date(dateInt).getTime();
+                            const startDateTime = new Date(range.startDate).getTime();
+                            const endDateTime = new Date(range.endDate).getTime();
+                            // allow overwriting of subsequent date ranges
+                            if (dateIntTime >= startDateTime && startDateTime <= endDateTime) {
+                              multipleCoverageRangesDateIntervals[dateIntFormatted] = { date: dateInt, interval: rangeInterval };
+                            }
                           });
-
                           // if at the end of dateRanges array, display results from multipleCoverageRangesDateIntervals
                           if (isLastInRange) {
                             const multiDateToDisplay = Object.values(multipleCoverageRangesDateIntervals);
                             return multiDateToDisplay.map((itemRange, multiIndex) => {
-                              const rangeDate = itemRange.date;
-                              const itemRangeInterval = itemRange.interval;
+                              const { date, interval } = itemRange;
+                              // const rangeDate = itemRange.date;
+                              // const itemRangeInterval = itemRange.interval;
                               const nextDate = multiDateToDisplay[multiIndex + 1];
-                              const rangeDateEnd = this.getRangeDateEndWithAddedInterval(rangeDate, layerPeriod, itemRangeInterval, endDateLimit, nextDate);
+                              const rangeDateEnd = this.getRangeDateEndWithAddedInterval(date, layerPeriod, interval, endDateLimit, nextDate);
                               // get range line dimensions
-                              const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, rangeDate, rangeDateEnd);
+                              const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, date, rangeDateEnd);
                               // create DOM line element
                               return multiLineRangeOptions.visible
                                 && this.createMatchingCoverageLineDOMEl(
                                   id,
                                   multiLineRangeOptions,
                                   'MULTI',
-                                  rangeDate,
+                                  date,
                                   rangeDateEnd,
-                                  backgroundColor,
+                                  lineBackgroundColor,
                                   'absolute',
                                   layerPeriod,
                                   `${id}-${multiIndex}`,
@@ -502,7 +549,7 @@ class LayerDataItems extends Component {
                             'SINGLE',
                             rangeStart,
                             rangeEnd,
-                            backgroundColor,
+                            lineBackgroundColor,
                             'absolute',
                             layerPeriod,
                             `${id}-${innerIndex}`,
@@ -518,7 +565,7 @@ class LayerDataItems extends Component {
                     'CONTAINER',
                     startDate,
                     endDate,
-                    backgroundColor,
+                    lineBackgroundColor,
                     'relative',
                     layerPeriod,
                     `${id}-0`,

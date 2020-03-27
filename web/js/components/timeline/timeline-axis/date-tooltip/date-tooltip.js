@@ -95,7 +95,9 @@ class DateToolTip extends PureComponent {
       const layers = activeLayers.filter((layer) => (shouldIncludeHiddenLayers
         ? layer.startDate
         : layer.startDate && layer.visible));
-      const addHeight = Math.min(layers.length, 5) * 40;
+      // min 1 layer for error message display
+      const layerLengthCoef = Math.max(layers.length, 1);
+      const addHeight = Math.min(layerLengthCoef, 5) * 40;
       toolTipHeightOffset -= addHeight;
       toolTipHeightOffset = Math.max(toolTipHeightOffset, -357);
     }
