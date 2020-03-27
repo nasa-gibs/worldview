@@ -54,43 +54,6 @@ class TimelineData extends Component {
     }
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const {
-  //     activeLayers,
-  //     appNow,
-  //     axisWidth,
-  //     backDate,
-  //     frontDate,
-  //     parentOffset,
-  //     isDataCoveragePanelOpen,
-  //     position,
-  //     timeScale,
-  //     timelineStartDateLimit,
-  //     transformX,
-  //   } = this.props;
-
-  //   const checkForPropsUpdates = nextProps.appNow === appNow
-  //     && nextProps.axisWidth === axisWidth
-  //     && nextProps.backDate === backDate
-  //     && nextProps.frontDate === frontDate
-  //     && nextProps.position === position
-  //     && nextProps.isDataCoveragePanelOpen === isDataCoveragePanelOpen
-  //     && nextProps.parentOffset === parentOffset
-  //     && nextProps.timeScale === timeScale
-  //     && nextProps.timelineStartDateLimit === timelineStartDateLimit
-  //     && nextProps.transformX === transformX
-  //     && lodashIsEqual(nextProps.activeLayers, activeLayers);
-
-
-  //   const { shouldIncludeHiddenLayers } = this.state;
-  //   const checkForStateUpdates = shouldIncludeHiddenLayers === nextState.shouldIncludeHiddenLayers;
-  //   if (checkForPropsUpdates && checkForStateUpdates) {
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
-
   /**
   * @desc set active layers
   * @param {Array} layers
