@@ -102,9 +102,6 @@ class LayerDataItems extends Component {
         toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         break;
       case 'MULTI':
-        dateRangeStart = startDate.toISOString().replace(/[.:]/g, '_');
-        dateRangeEnd = endDate.toISOString().replace(/[.:]/g, '_');
-        toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
         // handle minutes range display text (ex: '14:50 to 15:00')
         if (layerPeriod === 'minutes') {
           // eslint-disable-next-line prefer-destructuring
@@ -112,6 +109,12 @@ class LayerDataItems extends Component {
           // eslint-disable-next-line prefer-destructuring
           dateRangeEnd = endDate.toISOString().split('T')[1];
           toolTipText = `${dateRangeStart.split(':', 2).join(':')} to ${dateRangeEnd.split(':', 2).join(':')}`;
+          dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
+          dateRangeEnd = dateRangeEnd.replace(/[.:]/g, '_');
+        } else {
+          dateRangeStart = startDate.toISOString().replace(/[.:]/g, '_');
+          dateRangeEnd = endDate.toISOString().replace(/[.:]/g, '_');
+          toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
         }
         break;
       case 'SINGLE':
@@ -140,15 +143,11 @@ class LayerDataItems extends Component {
   * @param {Number/String} index
   * @returns {DOM Element} line
   */
-  // createMatchingCoverageLineDOMEl = (id, options, dateRangeStart, dateRangeEnd, color, position, toolTipText, index) => {
   createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, position, layerPeriod, index) => {
     const {
       axisWidth, hoverOnToolTip, hoverOffToolTip, hoveredTooltip,
     } = this.props;
     const width = Math.max(options.width, 0);
-    const offset = width > axisWidth
-      ? -options.leftOffset - axisWidth
-      : 0;
     // get formatted dates based on line type
     const {
       dateRangeStart,
@@ -156,7 +155,9 @@ class LayerDataItems extends Component {
       toolTipText,
     } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
     const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
+    const toolTipOffset = -options.leftOffset - (width < axisWidth ? options.leftOffset : axisWidth / 2);
     const toolTipPlacement = 'auto';
+
     return (
       <div
         id={`data-coverage-line-${dateRangeStartEnd}`}
@@ -174,8 +175,8 @@ class LayerDataItems extends Component {
       >
         <Tooltip
           placement={toolTipPlacement}
-          boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
-          offset={offset}
+          boundariesElement="data-panel-coverage-line"
+          offset={toolTipOffset}
           container={`.data-item-${id}`}
           isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
           target={`data-coverage-line-${dateRangeStartEnd}`}
@@ -196,6 +197,7 @@ class LayerDataItems extends Component {
   * @returns {Object} rangeDateEnd date object
   */
   getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, endDateLimit, nextDate) => {
+    const { appNow } = this.props;
     const minYear = rangeDate.getUTCFullYear();
     const minMonth = rangeDate.getUTCMonth();
     const minDay = rangeDate.getUTCDate();
@@ -225,8 +227,9 @@ class LayerDataItems extends Component {
         rangeDateEnd = nextDateObject;
       }
     }
-    if (endDateLimit < rangeDateEnd) {
-      rangeDateEnd = endDateLimit;
+    // prevent range end exceeding appNow
+    if (appNow < rangeDateEnd) {
+      rangeDateEnd = appNow;
     }
     return rangeDateEnd;
   }
@@ -413,7 +416,7 @@ class LayerDataItems extends Component {
             startDate,
             visible,
           } = layer;
-          if (!dateRanges) {
+          if (!dateRanges && !startDate) {
             return null;
           }
           // check for multiple date ranges
@@ -473,8 +476,8 @@ class LayerDataItems extends Component {
                   maxWidth: `${axisWidth}px`,
                 }}
               >
-                {(isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex))
-                || (isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1)
+                {dateRanges && ((isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex))
+                || (isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1))
                 // multiple coverage ranges
                   ? (
                     <div
@@ -483,7 +486,7 @@ class LayerDataItems extends Component {
                         width: `${containerLineDimensions.width}px`,
                       }}
                     >
-                      {dateRanges.map((range, innerIndex) => {
+                      {dateRanges && dateRanges.map((range, innerIndex) => {
                         const isLastInRange = innerIndex === dateRanges.length - 1;
                         const rangeInterval = Number(range.dateInterval);
                         // multi time unit range - no year time unit

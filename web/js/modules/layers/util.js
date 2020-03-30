@@ -206,6 +206,10 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
       }
       for (i = 0; i <= (yearDifference + 1); i += 1) {
         let year = new Date(minYear + i * dateInterval, minMonth, minDay);
+        if (year.getTime() >= maxYearDate.getTime()) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
         year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
         dateArray.push(year);
       }

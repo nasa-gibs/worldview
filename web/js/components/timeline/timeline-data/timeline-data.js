@@ -124,8 +124,8 @@ class TimelineData extends Component {
     let borderRadiusLeft = '0';
     let borderRadiusRight = '0';
 
-    // let width = axisWidth * 2;
-    let width = axisWidth;
+    let width = axisWidth * 2;
+    // let width = axisWidth;
     if (visible) {
       if (layerStart <= axisFrontDate) {
         leftOffset = 0;
@@ -134,7 +134,7 @@ class TimelineData extends Component {
         const diff = moment.utc(layerStart).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
         leftOffset = gridDiff + postionTransformX;
-        borderRadiusLeft = '3px';
+        borderRadiusLeft = '6px';
       }
 
       if (layerEnd <= axisBackDate) {
@@ -142,7 +142,7 @@ class TimelineData extends Component {
         const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
         width = gridDiff + postionTransformX - leftOffset;
-        borderRadiusRight = '3px';
+        borderRadiusRight = '6px';
       }
     }
 
