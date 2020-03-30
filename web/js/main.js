@@ -34,6 +34,7 @@ import {
 import polyfill from './polyfill';
 import { debugConfig } from './debug';
 import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
+import buildLayerFacetProps from './modules/product-picker/formatConfig';
 
 const history = createBrowserHistory();
 
@@ -117,7 +118,7 @@ window.onload = () => {
 };
 
 const render = (config, legacyState) => {
-  // TODO transform layer properties as necessary on config here
+  buildLayerFacetProps(config);
   config.parameters = parameters;
   debugConfig(config);
 
