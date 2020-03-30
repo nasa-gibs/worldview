@@ -228,8 +228,16 @@ export function mapui(models, config, store, ui) {
     }
     self.selected = self.proj[proj.id];
     const map = self.selected;
+    // const currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? models.map.rotation : 0;
+    // const rotationStart = models.map.rotation;
+
     const currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
-    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: currentRotation });
+    const rotationStart = proj.id !== 'geographic' && proj.id !== 'webmerc' ? models.map.rotation : 0;
+
+    console.log(`cur ${currentRotation}`);
+    console.log(`sta ${rotationStart}`);
+
+    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: start ? rotationStart : currentRotation });
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
@@ -242,11 +250,13 @@ export function mapui(models, config, store, ui) {
     // using the previous value.
     showMap(map);
     map.updateSize();
+    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
+      rotation.setResetButton(currentRotation);
+    }
 
     if (self.selected.previousCenter) {
       self.selected.setCenter(self.selected.previousCenter);
     }
-
     // This is awkward and needs a refactoring
     if (start) {
       const projId = proj.selected.id;
@@ -257,24 +267,30 @@ export function mapui(models, config, store, ui) {
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          console.log('callback return');
           const map = self.selected;
           const view = map.getView();
           const extent = view.calculateExtent(map.getSize());
           store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
         };
       }
+      if (projId !== 'geographic') {
+        callback = () => {
+          const map = self.selected;
+          const view = map.getView();
+          rotation.setResetButton(rotationStart);
+          view.setRotation(rotationStart);
+          const extent = view.calculateExtent(map.getSize());
+          store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
+        };
+      }
       if (extent) {
-        const view = map.getView();
-        const rotation = view.getRotation(); // This should be pulled from the permalink now since we removed rotation from the view object.
-
-        view.fit(extent, {
-          constrainResolution: false,
-          callback,
-        });
-
-        if (rotation) {
-          view.setRotation(rotation);
+        if (rotationStart) {
+          map.getView().fit(extent, {
+            constrainResolution: false,
+            callback,
+          });
+        } else {
+          map.getView().fit(extent);
         }
       }
     }

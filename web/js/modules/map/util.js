@@ -1,5 +1,4 @@
 import * as olExtent from 'ol/extent';
-import * as Polygon from 'ol/geom/Polygon';
 import {
   each as lodashEach,
   isUndefined as lodashIsUndefined,
@@ -44,8 +43,9 @@ export function getMapParameterSetup(
           const rotation = lodashGet(currentState, 'map.rotation');
 
           if (rotation) {
+            console.log('We in here');
             const map = currentState.map.ui.selected;
-            currentItemState = getRotatedExtent(map, rotation);
+            currentItemState = getRotatedExtent(map);
           }
 
           if (!rendered) return undefined;
@@ -139,16 +139,9 @@ export function getLeadingExtent(loadtime) {
   return [minLon, minLat, maxLon, maxLat];
 }
 
-export function getRotatedExtent(map, rotation) {
+export function getRotatedExtent(map) {
   const view = map.getView();
-  const extent = view.calculateExtent(map.getSize());
-  const geom = Polygon.fromExtent(extent);
-  const mapCenter = view.getCenter();
-  const radians = rotation * (Math.PI / 180);
-
-  geom.rotate(radians, mapCenter);
-
-  return geom.getExtent();
+  return olExtent.getForViewAndSize(view.getCenter(), view.getResolution(), 0, map.getSize());
 }
 
 /**
