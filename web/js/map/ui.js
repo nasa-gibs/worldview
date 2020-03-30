@@ -276,19 +276,13 @@ export function mapui(models, config, store, ui) {
           const view = map.getView();
           rotation.setResetButton(rotationStart);
           view.setRotation(rotationStart);
-          const extent = view.calculateExtent(map.getSize());
-          store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
         };
       }
       if (extent) {
-        if (rotationStart) {
-          map.getView().fit(extent, {
-            constrainResolution: false,
-            callback,
-          });
-        } else {
-          map.getView().fit(extent);
-        }
+        map.getView().fit(extent, {
+          constrainResolution: false,
+          callback,
+        });
       }
     }
     updateExtent();
