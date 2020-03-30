@@ -43,7 +43,6 @@ export function getMapParameterSetup(
           const rotation = lodashGet(currentState, 'map.rotation');
 
           if (rotation) {
-            console.log('We in here');
             const map = currentState.map.ui.selected;
             currentItemState = getRotatedExtent(map);
           }
@@ -76,6 +75,12 @@ export function getMapParameterSetup(
     },
   };
 }
+
+export function getRotatedExtent(map) {
+  const view = map.getView();
+  return olExtent.getForViewAndSize(view.getCenter(), view.getResolution(), 0, map.getSize());
+}
+
 /**
  * Determines if an exent object contains valid values.
  *
@@ -137,11 +142,6 @@ export function getLeadingExtent(loadtime) {
   const maxLat = 53.015625;
 
   return [minLon, minLat, maxLon, maxLat];
-}
-
-export function getRotatedExtent(map) {
-  const view = map.getView();
-  return olExtent.getForViewAndSize(view.getCenter(), view.getResolution(), 0, map.getSize());
 }
 
 /**

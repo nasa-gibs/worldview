@@ -228,20 +228,17 @@ export function mapui(models, config, store, ui) {
     }
     self.selected = self.proj[proj.id];
     const map = self.selected;
-    // const currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? models.map.rotation : 0;
-    // const rotationStart = models.map.rotation;
 
-    const currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
-    const rotationStart = proj.id !== 'geographic' && proj.id !== 'webmerc' ? models.map.rotation : 0;
+    const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
 
-    console.log(`cur ${currentRotation}`);
-    console.log(`sta ${rotationStart}`);
+    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
 
     store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: start ? rotationStart : currentRotation });
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
-    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
+    if (isProjectionRotatable) {
       rotation.setResetButton(currentRotation);
     }
 
@@ -250,7 +247,7 @@ export function mapui(models, config, store, ui) {
     // using the previous value.
     showMap(map);
     map.updateSize();
-    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
+    if (isProjectionRotatable) {
       rotation.setResetButton(currentRotation);
     }
 
