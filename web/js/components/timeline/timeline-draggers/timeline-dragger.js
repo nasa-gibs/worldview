@@ -44,13 +44,19 @@ class Dragger extends PureComponent {
     const draggerAtStart = x <= -15;
     const draggerAtEnd = x + 36 >= axisWidth;
 
+    const draggerWidth = 49;
+    const leftAxisEdgeCutoff = -15;
+    const rightAxisEdgeCutoff = draggerWidth + 36;
+
+    const isDraggerLeftOfAxisBuffer = draggerPosition <= leftAxisEdgeCutoff;
+    const isDraggerRightOfAxisBuffer = draggerPosition + rightAxisEdgeCutoff >= axisWidth;
 
     this.setState({
       isHoveredDragging: true,
     });
 
     // if dragger is positioned near axis edge from panning axis vs. dragging dragger
-    if (draggerPosition <= -15 || draggerPosition + 49 + 36 >= axisWidth) {
+    if (isDraggerLeftOfAxisBuffer || isDraggerRightOfAxisBuffer) {
       handleDragDragger(e, d);
     }
     // if at start or end of axis, return false to stop dragger
