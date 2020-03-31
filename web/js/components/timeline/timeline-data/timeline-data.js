@@ -279,7 +279,7 @@ class TimelineData extends Component {
 
     const dataAvailabilityHandleTopOffset = `${Math.max(-54 - layerListItemHeigthConstant, -259)}px`;
 
-    const mainContainerWidth = `${axisWidth + 78}px`;
+    const mainContainerWidth = `${axisWidth + 1}px`;
     const mainContainerHeight = `${Math.min(35 + layerListItemHeigthConstant, 240)}px`;
     const mainContainerLeftOffset = `${parentOffset - 10}px`;
 

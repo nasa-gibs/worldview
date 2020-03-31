@@ -155,9 +155,15 @@ class LayerDataItems extends Component {
       toolTipText,
     } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
     const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
+
+    // handle tooltip positioning
     const toolTipOffset = -options.leftOffset - (width < axisWidth ? options.leftOffset : axisWidth / 2);
     const toolTipPlacement = 'auto';
 
+    // candy stripe alt color
+    const altLineColor = color === 'rgb(0, 69, 123)'
+      ? '#164e7a'
+      : '#797979';
     return (
       <div
         id={`data-coverage-line-${dateRangeStartEnd}`}
@@ -167,10 +173,14 @@ class LayerDataItems extends Component {
         onMouseLeave={() => hoverOffToolTip()}
         style={{
           position,
-          left: options.leftOffset,
+          transform: `translate(${options.leftOffset}px, 0)`,
           width: `${width}px`,
-          backgroundColor: color,
           borderRadius: options.borderRadius,
+          background: `repeating-linear-gradient(45deg,
+            ${color},
+            ${color} 20px,
+            ${altLineColor} 20px,
+            ${altLineColor} 40px)`,
         }}
       >
         <Tooltip
@@ -192,11 +202,10 @@ class LayerDataItems extends Component {
   * @param {Object} range date object
   * @param {String} time unit period
   * @param {Number} itemRangeInterval
-  * @param {Object} endDateLimit data object
   * @param {Object} nextDate range object with date
   * @returns {Object} rangeDateEnd date object
   */
-  getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, endDateLimit, nextDate) => {
+  getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
     const { appNow } = this.props;
     const minYear = rangeDate.getUTCFullYear();
     const minMonth = rangeDate.getUTCMonth();
@@ -513,7 +522,7 @@ class LayerDataItems extends Component {
                               // const rangeDate = itemRange.date;
                               // const itemRangeInterval = itemRange.interval;
                               const nextDate = multiDateToDisplay[multiIndex + 1];
-                              const rangeDateEnd = this.getRangeDateEndWithAddedInterval(date, layerPeriod, interval, endDateLimit, nextDate);
+                              const rangeDateEnd = this.getRangeDateEndWithAddedInterval(date, layerPeriod, interval, nextDate);
                               // get range line dimensions
                               const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, date, rangeDateEnd);
                               // create DOM line element
