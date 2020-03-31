@@ -3,42 +3,27 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   toLower as lodashToLower,
-  values as lodashValues,
   each as lodashEach,
   includes as lodashIncludes,
 } from 'lodash';
 import lodashDebounce from 'lodash/debounce';
-import googleTagManager from 'googleTagManager';
 import {
   ModalBody,
   ModalHeader,
-  Nav,
-  NavItem,
-  NavLink,
 } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMeteor } from '@fortawesome/free-solid-svg-icons';
-import LayerList from './layer-list';
-import CategoryGrid from './category-grid';
 import ProductPickerHeader from './header';
 import FilterUnavailable from './filterUnavailable';
-import Scrollbars from '../../util/scrollbar';
-import { addLayer, removeLayer } from '../../../modules/layers/actions';
 import {
   getLayersForProjection,
   getTitles,
-  hasMeasurementSetting,
-  hasMeasurementSource,
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
 import { availableAtDate } from '../../../modules/layers/util';
-import LayerMetadataDetail from './layer-metadata-detail';
-import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   updateProductPicker,
-  updateListScrollTop,
 } from '../../../modules/product-picker/actions';
-
+import BrowseLayers from './browse-layers';
+import SearchLayers from './search-layers';
 
 /*
  * A scrollable list of layers
@@ -56,11 +41,7 @@ class ProductPicker extends React.Component {
 
     this.runSearch = lodashDebounce(this.runSearch.bind(this), 300);
     this.revertSearchState = this.revertSearchState.bind(this);
-    this.showMetadataForLayer = this.showMetadataForLayer.bind(this);
-    this.updateSelectedMeasurement = this.updateSelectedMeasurement.bind(this);
     this.toggleFilterByAvailable = this.toggleFilterByAvailable.bind(this);
-    this.drawMeasurements = this.drawMeasurements.bind(this);
-    this.sort = this.sort.bind(this);
   }
 
   componentDidMount() {
@@ -104,7 +85,7 @@ class ProductPicker extends React.Component {
       categoryType,
       filterByAvailable,
       selectedLayer,
-      update,
+      updateProductPickerState,
     } = this.props;
     const val = value.toLowerCase();
     let newState;
@@ -147,130 +128,15 @@ class ProductPicker extends React.Component {
         listScrollTop: 0,
       };
     }
-    update(newState);
-  }
-
-  /**
-   * Draw measurement list when category is clicked
-   * @function drawMeasurements
-   * @param {Object} category | category object
-   * @param {String} selectedMeasurement | Measurement ID
-   */
-  drawMeasurements(category, selectedMeasurement) {
-    const { update } = this.props;
-    update({
-      listType: 'measurements',
-      selectedMeasurement,
-      category,
-    });
-    googleTagManager.pushEvent({
-      event: 'layers_category',
-      layers: {
-        category: category.title,
-      },
-    });
-  }
-
-  /**
-   * @function updateSelectedMeasurement
-   * @param {String} id | Measurement ID
-   */
-  updateSelectedMeasurement(id) {
-    const { update, selectedMeasurement } = this.props;
-    if (selectedMeasurement !== id) {
-      update({
-        selectedMeasurement: id,
-        selectedMeasurementSourceIndex: 0,
-      });
-    } else {
-      update({
-        selectedMeasurement: null,
-        selectedMeasurementSourceIndex: 0,
-      });
-    }
-  }
-
-  /**
-   * When in "browse" measurement mode
-   * @param {*} selectedMeasurementSourceIndex -  the index of the source for which to show metadata
-   */
-  setSourceIndex(index) {
-    const { update } = this.props;
-    update({
-      selectedMeasurementSourceIndex: index,
-    });
-  }
-
-  getSelectedMeasurementSource() {
-    const {
-      selectedMeasurement,
-      selectedMeasurementSourceIndex,
-      measurementConfig,
-    } = this.props;
-    const measurements = Object.values(measurementConfig);
-    const currentMeasurement = measurements.find((measure) => measure.id === selectedMeasurement);
-    if (currentMeasurement) {
-      const sources = Object.values(currentMeasurement.sources)
-        .sort((a, b) => a.title.localeCompare(b.title));
-      return sources && sources[selectedMeasurementSourceIndex];
-    }
-  }
-
-  toggleFeatureTab = (partialState) => {
-    const { update } = this.props;
-    const categoryType = 'featured';
-    const { categoryConfig, measurementConfig } = this.props;
-    const category = categoryConfig[categoryType].All;
-    const selectedMeasurement = category.measurements[0];
-    const selectedMeasurementId = measurementConfig[selectedMeasurement].id;
-
-    update({
-      ...partialState,
-      categoryType,
-      category,
-      listType: 'measurements',
-      selectedMeasurement: selectedMeasurementId,
-    });
-  }
-
-  /**
-   * Update category type in which to sort
-   * e.g. Hazards and disasters or science
-   * disciplines
-   * @param {String} key | categoryType identifier
-   */
-  sort(key) {
-    const { update } = this.props;
-    if (key === 'featured') {
-      this.toggleFeatureTab();
-    } else {
-      update({
-        categoryType: key,
-        listType: 'category',
-        selectedMeasurement: null,
-      });
-    }
-
-    googleTagManager.pushEvent({
-      event: 'layers_meta_category',
-      layers: {
-        meta_category: key,
-      },
-    });
-  }
-
-  toggleFilterByAvailable() {
-    const { inputValue, filterByAvailable, update } = this.props;
-    update({ filterByAvailable: !filterByAvailable });
-    this.runSearch(inputValue);
+    updateProductPickerState(newState);
   }
 
   /**
    * When using "back" button or clearing search field, unset selections
    */
   revertSearchState() {
-    const { update } = this.props;
-    update({
+    const { updateProductPickerState } = this.props;
+    updateProductPickerState({
       listType: 'category',
       inputValue: '',
       selectedLayer: null,
@@ -280,193 +146,47 @@ class ProductPicker extends React.Component {
     });
   }
 
-  /**
-   * When in "search" mode
-   * @param {*} selectedLayer - the layer for which to show metadata
-   */
-  showMetadataForLayer(selectedLayer) {
-    const { update } = this.props;
-    update({ selectedLayer });
+  toggleFilterByAvailable() {
+    const { inputValue, filterByAvailable, updateProductPickerState } = this.props;
+    updateProductPickerState({ filterByAvailable: !filterByAvailable });
+    this.runSearch(inputValue);
   }
 
-  renderLayerList() {
-    const { headerElement } = this.state;
+  getComponentHeights = () => {
     const {
       isMobile,
-      categoryConfig,
-      selectedProjection,
-      selectedDate,
-      activeLayers,
-      measurementConfig,
-      hasMeasurementSource,
-      selectedMeasurementSourceIndex,
-      removeLayer,
-      addLayer,
-      hasMeasurementSetting,
       screenHeight,
-      layerConfig,
-      filteredRows,
-      numRowsFilteredOut,
-      listType,
-      categoryType,
-      category,
-      selectedMeasurement,
       selectedLayer,
-      updateScrollPosition,
-      listScrollTop,
+      listType,
+      category,
     } = this.props;
-
-    const isSearching = listType === 'search';
-    const debouncedOnScroll = lodashDebounce((contentWrapperEl) => {
-      updateScrollPosition(contentWrapperEl.scrollTop);
-    }, 500);
+    const { headerElement } = this.state;
+    const tabOffset = listType === 'category' || category === 'featured' ? 38 : 0;
     const detailTopBorderSize = 5;
-    const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight : 0;
-    let listHeight; let listMinHeight; let
-      detailHeight;
+    const headerHeight = headerElement && headerElement.offsetHeight;
+    const bodyHeight = headerElement ? screenHeight - headerHeight - tabOffset : 0;
 
-    if (isMobile) {
-      detailHeight = !selectedLayer ? 0 : (bodyHeight * 0.6) - detailTopBorderSize;
-      listHeight = selectedLayer ? bodyHeight * 0.4 : bodyHeight;
-      listMinHeight = listHeight;
-    } else {
-      listHeight = bodyHeight - 80;
-      detailHeight = listHeight;
-      listMinHeight = 300;
-    }
-
-    const containerClass = isMobile ? 'search-container mobile' : 'search-container';
-    const listContainerClass = isSearching
-      ? isMobile
-        ? 'layer-list-container search mobile'
-        : 'layer-list-container search'
-      : isMobile
-        ? 'layer-list-container browse mobile'
-        : 'layer-list-container browse';
-
-    return filteredRows.length || !isSearching ? (
-      <>
-        <div className={containerClass}>
-          <div className={listContainerClass}>
-            <Scrollbars
-              style={{
-                maxHeight: `${listHeight}px`,
-                minHeight: `${listMinHeight}px`,
-              }}
-              scrollBarVerticalTop={listScrollTop}
-              onScroll={debouncedOnScroll}
-            >
-              <div className="product-outter-list-case">
-                <LayerList
-                  isMobile={isMobile}
-                  addLayer={addLayer}
-                  removeLayer={removeLayer}
-                  activeLayers={activeLayers}
-                  layerConfig={layerConfig}
-                  listType={listType}
-                  category={category}
-                  categoryConfig={categoryConfig[categoryType]}
-                  selectedProjection={selectedProjection}
-                  selectedDate={selectedDate}
-                  selectedLayer={selectedLayer}
-                  filteredRows={filteredRows}
-                  hasMeasurementSetting={hasMeasurementSetting}
-                  hasMeasurementSource={hasMeasurementSource}
-                  measurementConfig={measurementConfig}
-                  selectedMeasurement={selectedMeasurement}
-                  updateSelectedMeasurement={this.updateSelectedMeasurement}
-                  showMetadataForLayer={(layer) => this.showMetadataForLayer(layer)}
-                  setSourceIndex={(index) => this.setSourceIndex(index)}
-                  selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
-                />
-              </div>
-            </Scrollbars>
-          </div>
-          { this.renderDetails(detailHeight) }
-        </div>
-      </>
-    )
-      : (
-        <div className="no-results" style={{ height: `${listMinHeight - 45}px` }}>
-          <FontAwesomeIcon icon={faMeteor} size="5x" />
-          <h3> No layers found! </h3>
-          {numRowsFilteredOut > 0
-          && (
-          <p>
-            {numRowsFilteredOut}
-            {' '}
-            result(s) are being filtered out.
-            <a className="remove-filters" onClick={this.toggleFilterByAvailable}>
-              Remove filters?
-            </a>
-          </p>
-          )}
-        </div>
-      );
-  }
-
-  renderDetails(height) {
-    const {
-      isMobile,
-      activeLayers,
-      addLayer,
-      removeLayer,
-      selectedProjection,
-      category,
-      listType,
-      selectedLayer,
-      showPreviewImage,
-    } = this.props;
-    const isSearching = listType === 'search';
-    const selectedLayerActive = selectedLayer
-      && activeLayers.some((layer) => layer.id === selectedLayer.id);
-    const detailContainerClass = isSearching
-      ? isMobile
-        ? 'layer-detail-container layers-all search mobile'
-        : 'layer-detail-container layers-all search'
-      : 'layer-detail-container layers-all browse';
-
-    if (isSearching) {
-      return isMobile && !selectedLayer ? null : (
-        <div className={detailContainerClass}>
-          <Scrollbars style={{ maxHeight: `${height}px` }}>
-            <LayerMetadataDetail
-              layer={selectedLayer}
-              isActive={selectedLayerActive}
-              addLayer={addLayer}
-              removeLayer={removeLayer}
-              selectedProjection={selectedProjection}
-              showPreviewImage={showPreviewImage}
-              showMetadataForLayer={this.showMetadataForLayer}
-            />
-          </Scrollbars>
-        </div>
-      );
-    }
-    return !isMobile && (
-    <div className={detailContainerClass}>
-      <Scrollbars style={{ maxHeight: `${height}px` }}>
-        <MeasurementMetadataDetail
-          categoryTitle={category && category.title}
-          source={this.getSelectedMeasurementSource()}
-        />
-      </Scrollbars>
-    </div>
-    );
+    return isMobile
+      ? {
+        detailHeight: !selectedLayer ? 0 : (bodyHeight * 0.6) - detailTopBorderSize,
+        listHeight: selectedLayer ? bodyHeight * 0.4 : bodyHeight,
+        listMinHeight: selectedLayer ? bodyHeight * 0.4 : bodyHeight,
+      }
+      : {
+        listHeight: bodyHeight - 80,
+        detailHeight: bodyHeight - 80,
+        listMinHeight: 300,
+      };
   }
 
   render() {
-    const { headerElement } = this.state;
     const {
+      activeLayers,
       selectedProjection,
       modalView,
-      screenHeight,
       width,
       isMobile,
       onToggle,
-      categoryConfig,
-      measurementConfig,
-      hasMeasurementSource,
       selectedDate,
       listType,
       categoryType,
@@ -476,15 +196,7 @@ class ProductPicker extends React.Component {
       filteredRows,
       numRowsFilteredOut,
     } = this.props;
-    const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
-    const showCategoryTabs = (isCategoryDisplay || categoryType === 'featured') && !inputValue;
-    const categoryKeys = [
-      'hazards and disasters',
-      'scientific',
-      'featured',
-    ];
-    const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight - 38 : 0;
-    const listHeight = isMobile ? bodyHeight : bodyHeight - 50;
+    const { listHeight, listMinHeight, detailHeight } = this.getComponentHeights();
 
     return (
       <>
@@ -514,20 +226,12 @@ class ProductPicker extends React.Component {
                   />
                 </div>
                 <div className="results-text">
-                  Showing
-                  {' '}
-                  {filteredRows.length}
-                  {' '}
-                  results
-                  {numRowsFilteredOut > 0
-                    && (
+                  { `Showing ${filteredRows.length} results`}
+                  {numRowsFilteredOut > 0 && (
                     <span>
-                      (
-                      {numRowsFilteredOut}
-                      {' '}
-                      hidden by filters)
+                      {`(${numRowsFilteredOut} hidden by filters)`}
                     </span>
-                    )}
+                  )}
                 </div>
               </div>
               )}
@@ -536,39 +240,25 @@ class ProductPicker extends React.Component {
 
         <ModalBody>
           <div id="layer-modal-content" className="layer-modal-content">
-            {showCategoryTabs
+            {listType !== 'search'
               ? (
-                <>
-                  <Nav id="categories-nav" className="categories-nav">
-                    {categoryKeys.map((sortKey) => (
-                      <NavItem
-                        key={sortKey}
-                        className="layer-category-navigation"
-                        active={sortKey === categoryType}
-                      >
-                        <NavLink onClick={() => this.sort(sortKey)}>
-                          {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
-                        </NavLink>
-                      </NavItem>
-                    ))}
-                  </Nav>
-                  {isCategoryDisplay ? (
-                    <Scrollbars style={{ maxHeight: `${listHeight}px` }}>
-                      <div className="product-outter-list-case">
-                        <CategoryGrid
-                          categories={lodashValues(categoryConfig[categoryType])}
-                          measurementConfig={measurementConfig}
-                          drawMeasurements={this.drawMeasurements}
-                          hasMeasurementSource={hasMeasurementSource}
-                          categoryType={categoryType}
-                          width={width}
-                        />
-                      </div>
-                    </Scrollbars>
-                  ) : this.renderLayerList()}
-                </>
+                <BrowseLayers
+                  listHeight={listHeight}
+                  listMinHeight={listMinHeight}
+                  detailHeight={detailHeight}
+                  activeLayers={activeLayers}
+                  category={category}
+                  categoryType={categoryType}
+                />
               )
-              : this.renderLayerList()}
+              : (
+                <SearchLayers
+                  listHeight={listHeight}
+                  listMinHeight={listMinHeight}
+                  detailHeight={detailHeight}
+                  filteredRows={filteredRows}
+                />
+              )}
           </div>
         </ModalBody>
       </>
@@ -578,60 +268,32 @@ class ProductPicker extends React.Component {
 
 ProductPicker.propTypes = {
   activeLayers: PropTypes.array,
-  addLayer: PropTypes.func,
   allLayers: PropTypes.array,
   category: PropTypes.object,
-  categoryConfig: PropTypes.object,
   categoryType: PropTypes.string,
   filterByAvailable: PropTypes.bool,
   filteredRows: PropTypes.array,
   filterProjections: PropTypes.func,
   filterSearch: PropTypes.func,
-  hasMeasurementSetting: PropTypes.func,
-  hasMeasurementSource: PropTypes.func,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
-  layerConfig: PropTypes.object,
-  listScrollTop: PropTypes.number,
   listType: PropTypes.string,
-  measurementConfig: PropTypes.object,
-  measurements: PropTypes.object,
   modalView: PropTypes.string,
   numRowsFilteredOut: PropTypes.number,
   onToggle: PropTypes.func,
-  removeLayer: PropTypes.func,
   screenHeight: PropTypes.number,
   selectedDate: PropTypes.object,
   selectedLayer: PropTypes.object,
-  selectedMeasurement: PropTypes.string,
-  selectedMeasurementSourceIndex: PropTypes.number,
   selectedProjection: PropTypes.string,
-  showPreviewImage: PropTypes.bool,
-  update: PropTypes.func,
-  updateScrollPosition: PropTypes.func,
+  updateProductPickerState: PropTypes.func,
   width: PropTypes.number,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  addLayer: (id) => {
-    googleTagManager.pushEvent({
-      event: 'layer_added',
-      layers: {
-        id,
-      },
-    });
-    dispatch(addLayer(id));
-  },
-  removeLayer: (id) => {
-    dispatch(removeLayer(id));
-  },
   onToggle: () => {
     dispatch(onToggle());
   },
-  updateScrollPosition: (scrollTop) => {
-    dispatch(updateListScrollTop(scrollTop));
-  },
-  update: (partialState) => {
+  updateProductPickerState: (partialState) => {
     dispatch(updateProductPicker(partialState));
   },
 });
@@ -668,8 +330,6 @@ function mapStateToProps(state, ownProps) {
     showPreviewImage: config.features.previewSnapshots,
     filterProjections: (layer) => !layer.projections[proj.id],
     filterSearch: (layer, val, terms) => filterSearch(layer, val, terms, config, proj.id),
-    hasMeasurementSource: (current) => hasMeasurementSource(current, config, proj.id),
-    hasMeasurementSetting: (current, source) => hasMeasurementSetting(current, source, config, proj.id),
   };
 }
 export default connect(
