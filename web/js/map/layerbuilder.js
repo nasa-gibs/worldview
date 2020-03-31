@@ -45,8 +45,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
+    const { infiniteScroll } = state;
     const layer = createLayerFunc(def, options, null, state);
-    if (!wrapLayer) {
+    if (!wrapLayer || infiniteScroll.active) {
       return layer;
     }
     const layerNext = createLayerFunc(def, options, 1, state);
@@ -98,7 +99,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const key = self.layerKey(def, options, state);
     const proj = state.proj.selected;
     let layer = cache.getItem(key);
-
     if (!layer) {
       // layer is not in the cache
       if (!date) date = options.date || state.date[activeDateStr];
@@ -203,11 +203,11 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.layerKey = function(def, options, state) {
     const { compare } = state;
-    let date;
+    let { date, group } = options;
     const layerId = def.id;
     const projId = state.proj.id;
     let style = '';
-    const activeGroupStr = options.group ? options.group : compare.activeString;
+    const activeGroupStr = group || compare.activeString;
 
     // Don't key by time if this is a static layer--it is valid for
     // every date.
@@ -291,7 +291,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   const createLayerWMTS = function(def, options, day, state) {
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+    const { compare } = state;
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const proj = state.proj.selected;
     const source = config.sources[def.source];
     if (!source) {
@@ -310,7 +311,11 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       date = util.dateAdd(date, 'day', day);
     }
     const { tileMatrices, resolutions, tileSize } = matrixSet;
-    const { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
+    let { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
+    if (options.extent) {
+      extent = options.extent;
+      origin = [extent[0], 90];
+    }
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
     const tileGridOptions = {
       origin,
@@ -340,6 +345,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     return new OlLayerTile({
       preload: Infinity,
       extent,
+      key: options.key,
       source: new OlSourceWMTS(sourceOptions),
     });
   };
@@ -476,7 +482,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     let start;
     let res;
     let parameters;
-
     source = config.sources[def.source];
     extent = selectedProj.maxExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
@@ -548,6 +553,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const layer = new OlLayerTile({
       preload: Infinity,
       extent,
+      key: options.key,
       source: new OlSourceTileWMS(sourceOptions),
     });
     return layer;

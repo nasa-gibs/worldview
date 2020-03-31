@@ -10,7 +10,7 @@ import {
 import Promise from 'bluebird';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faShareSquare, faGlobeAsia, faCamera, faInfoCircle,
+  faShareSquare, faGlobeAsia, faCamera, faInfoCircle, faCogs,
 } from '@fortawesome/free-solid-svg-icons';
 import { openCustomContent, onToggle } from '../modules/modal/actions';
 import { toggleDistractionFreeMode } from '../modules/ui/actions';
@@ -34,6 +34,7 @@ import { notificationWarnings } from '../modules/image-download/constants';
 import { Notify } from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
+import settings from './settings';
 
 
 Promise.config({ cancellation: true });
@@ -63,6 +64,15 @@ const CUSTOM_MODAL_PROPS = {
     modalClassName: 'toolbar-list-modal toolbar-info-modal toolbar-modal',
     bodyComponent: InfoList,
     wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
+  },
+  TOOLBAR_SETTINGS: {
+    headerText: 'Settings',
+    type: 'toolbar',
+    backdrop: false,
+    modalClassName: 'toolbar-settings-modal toolbar-modal toolbar-medium-modal',
+    clickableBehindModal: false,
+    wrapClassName: 'toolbar_modal_outer',
+    bodyComponent: settings,
   },
   TOOLBAR_SNAPSHOT: {
     headerText: 'Take a Snapshot',
@@ -209,8 +219,20 @@ class toolbarContainer extends Component {
               >
                 <FontAwesomeIcon icon={faCamera} size="2x" />
               </Button>
+
             </>
           )}
+          <Button
+            id="wv-settings-button"
+            title="Map Settings"
+            className="wv-toolbar-button"
+            onClick={() => openModal(
+              'TOOLBAR_SETTINGS',
+              CUSTOM_MODAL_PROPS.TOOLBAR_SETTINGS,
+            )}
+          >
+            <FontAwesomeIcon icon={faCogs} size="2x" />
+          </Button>
           <Button
             id="wv-info-button"
             title="Information"

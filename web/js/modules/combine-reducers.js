@@ -45,6 +45,7 @@ import {
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
 import uiReducers from './ui/reducers';
+import { infiniteScrollReducer } from './infinite-wrap/reducers';
 
 function lastAction(state = null, action) {
   return action;
@@ -109,6 +110,7 @@ const reducers = {
   modal: modalReducer,
   date: dateReducer,
   feedback: feedbackReducer,
+  infiniteScroll: infiniteScrollReducer,
   notifications: notificationsReducer,
   config: defaultReducer,
   models: defaultReducer,

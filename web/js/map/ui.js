@@ -37,6 +37,7 @@ import { mapCompare } from './compare/compare';
 import { measure } from './measure/ui';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { TOGGLE as TOGGLE_INFINITE_WRAP } from '../modules/infinite-wrap/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_UNITS } from '../modules/measure/constants';
 import util from '../util/util';
@@ -54,13 +55,13 @@ import {
   CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE,
 } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
-
+import { InfiniteScroll } from './infinite-scroll';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 
 export function mapui(models, config, store, ui) {
-  let layerBuilder; let
-    createLayer;
+  let layerBuilder;
+  let createLayer;
   const id = 'wv-map';
   const selector = `#${id}`;
   const animationDuration = 250;
@@ -85,6 +86,7 @@ export function mapui(models, config, store, ui) {
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
   self.events = util.events();
+  self.infiniteScroll = null;
   layerBuilder = self.layerBuilder = mapLayerBuilder(
     models,
     config,
@@ -134,6 +136,7 @@ export function mapui(models, config, store, ui) {
       case layerConstants.REORDER_LAYER_GROUP:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
+      case TOGGLE_INFINITE_WRAP:
         return reloadLayers();
       case CHANGE_PROJECTION:
         return updateProjection();
@@ -357,22 +360,30 @@ export function mapui(models, config, store, ui) {
   const reloadLayers = self.reloadLayers = function(map) {
     map = map || self.selected;
     const state = store.getState();
-    const { layers, proj } = state;
-    const compareState = state.compare;
+    const {
+      layers, proj, infiniteScroll, date, compare,
+    } = state;
+    const compareState = compare;
     const layerGroupStr = compareState.activeString;
     const activeLayers = layers[layerGroupStr];
-    if (!config.features.compare || !compareState.active) {
+    const activeDateStr = compareState.isCompareA ? 'selected' : 'selectedB';
+    const defs = getLayers(
+      activeLayers,
+      {
+        reverse: true,
+      },
+      state,
+    );
+    if (infiniteScroll.active) {
+      self.infiniteScroll = new InfiniteScroll({
+        date: date[activeDateStr], activeLayers: defs, map, createLayer, cache,
+      });
+    } else if (!config.features.compare || !compareState.active) {
       if (!compareState.active && compareMapUi.active) {
         compareMapUi.destroy();
       }
       clearLayers(map);
-      const defs = getLayers(
-        activeLayers,
-        {
-          reverse: true,
-        },
-        state,
-      );
+
       lodashEach(defs, (def) => {
         if (isGraticule(def, proj.id)) {
           addGraticule(def.opacity, layerGroupStr);
@@ -924,7 +935,7 @@ export function mapui(models, config, store, ui) {
         zoom: proj.startZoom,
         maxZoom: proj.numZoomLevels,
         enableRotation: true,
-        extent: proj.id === 'geographic' ? [-250, -90, 250, 90] : proj.maxExtent,
+        extent: proj.id === 'geographic' ? [-Infinity, -90, Infinity, 90] : proj.maxExtent,
         constrainOnlyCenter: true,
       }),
       target: id,

@@ -93,9 +93,14 @@
   padding: 0;
 }
 
+/* Settings modal */
+.toolbar-settings-modal {
+  right: 70px;
+}
+
 /* Snapshot modal */
 .toolbar-snapshot-modal {
-  right: 70px;
+  right: 75px;
 }
 
 .toolbar-snapshot-modal .modal-body {
@@ -104,7 +109,7 @@
 
 /* Projection modal */
 .toolbar-projection-modal {
-  right: 66px;
+  right: 100px;
 }
 
 .toolbar_projection .modal-backdrop {

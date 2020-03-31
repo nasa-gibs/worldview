@@ -6,9 +6,13 @@ import {
   get as lodashGet,
   isEqual as lodashIsEqual,
 } from 'lodash';
+
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
+
 import Promise from 'bluebird';
 import { encode } from '../link/util';
+import util from '../../util/util';
+
 
 export function getMapParameterSetup(
   parameters,
@@ -279,4 +283,69 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
       });
     }
   });
+}
+export function layerUpdate(longitude, startDate, layerArray) {
+  const numberOfLayersOff = longitude < 0 ? Math.floor(Math.abs(Math.abs(longitude) / 360)) : Math.ceil(Math.abs(Math.abs(longitude) / 360));
+  const amount = longitude < 0 ? -numberOfLayersOff : numberOfLayersOff;
+  const newCenterDate = util.toISOStringDate(util.dateAdd(startDate, 'day', -amount));
+  const x = -360 + (360 * amount);
+  const newCenterOriginX = x + 180;
+  const newCenterExtent = [newCenterOriginX - 180, -90, newCenterOriginX + 180, 90];
+  const newArray = [{ extent: newCenterExtent, date: newCenterDate }];
+  currentCenterX = newCenterOriginX;
+
+  for (let i = 1; i < 4; i++) {
+    const date = util.toISOStringDate(util.dateAdd(newCenterDate, 'day', i));
+    const xOrigin = x - 360 * i;
+    const extentRight = [xOrigin, -90, xOrigin + 360, 90];
+    const dateRight = util.toISOStringDate(util.dateAdd(newCenterDate, 'day', i * -1));
+    const xOriginRight = 360 * i + x;
+    const extent = [xOriginRight, -90, xOriginRight + 360, 90];
+    newArray.push({ extent, date: dateRight });
+    newArray.push({ extent: extentRight, date });
+  }
+  newArray.forEach((newLayerObj) => {
+    const isNotOnMap = !_.find(layerArray, { date: newLayerObj.date });
+    if (isNotOnMap) {
+      const imageryLayer = createLayerWMTS(newLayerObj.date, newLayerObj.extent, imageryLayerId);
+      const nightTimeLayer = createLayerWMTS(newLayerObj.date, newLayerObj.extent, nightLayerId, true);
+      const orbitTrackLayer = createLayerWMS(newLayerObj.date, newLayerObj.extent, orbitTrackLayerId);
+      map.addLayer(imageryLayer);
+      map.addLayer(nightTimeLayer);
+      orbitsArray.push(orbitTrackLayer);
+      nightTimeLayers.push(nightTimeLayer);
+      dayImageryArray.push(imageryLayer);
+    }
+    if (!datelineArray.includes(newLayerObj.date)) {
+      datelineArray.push(newLayerObj.date);
+      const layerExtent = [newLayerObj.extent[0] + 180, newLayerObj.extent[1], newLayerObj.extent[2] + 180, newLayerObj.extent[3]];
+      const leftLineCase = document.createElement('div');
+      const rightLineCase = document.createElement('div');
+      const leftTextCase = document.createElement('div');
+      const rightTextCase = document.createElement('div');
+      const sampleNightLineCase = document.createElement('div');
+      const sampleNightTextCase = document.createElement('div');
+      sampleNightLineCase.className = 'night night-line-overlay';
+      leftLineCase.className = 'left-line-overlay';
+      rightLineCase.className = 'right-line-overlay';
+      leftTextCase.className = 'left-text-overlay';
+      rightTextCase.className = 'right-text-overlay';
+      sampleNightTextCase.className = 'night-text-overlayer';
+      leftTextCase.appendChild(document.createTextNode(newLayerObj.date));
+      rightTextCase.appendChild(document.createTextNode(newLayerObj.date));
+      sampleNightTextCase.appendChild(document.createTextNode('Night Date line'));
+      // map.addOverlay(util.drawOverlay([layerExtent[0], 100], leftLineCase));
+      // map.addOverlay(util.drawOverlay([layerExtent[2], 100], rightLineCase));
+      const leftOverlay = util.drawOverlay([layerExtent[0], 0], leftTextCase);
+      const rightOverlay = util.drawOverlay([layerExtent[2], 0], rightTextCase);
+      // map.addOverlay(leftOverlay);
+      // map.addOverlay(leftOverlay);
+      textArray.push(leftOverlay);
+      textArray.push(rightOverlay);
+
+      // map.addOverlay(util.drawOverlay([layerExtent[2] - 100, 100], sampleNightLineCase));
+      // map.addOverlay(util.drawOverlay([layerExtent[2] - 100, 100], sampleNightTextCase));
+    }
+  });
+  dateLabel.textContent = newCenterDate;
 }
