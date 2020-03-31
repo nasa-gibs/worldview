@@ -175,7 +175,7 @@ class LayerDataItems extends Component {
       >
         <Tooltip
           placement={toolTipPlacement}
-          boundariesElement="data-panel-coverage-line"
+          boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
           offset={toolTipOffset}
           container={`.data-item-${id}`}
           isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}

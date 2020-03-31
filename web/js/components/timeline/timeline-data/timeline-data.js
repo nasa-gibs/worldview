@@ -101,8 +101,8 @@ class TimelineData extends Component {
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
     const axisFrontDate = new Date(frontDate).getTime();
     const axisBackDate = new Date(backDate).getTime();
-    let layerStart; let
-      layerEnd;
+    let layerStart;
+    let layerEnd;
 
     if (rangeStart || layer.startDate) {
       layerStart = new Date(rangeStart || layer.startDate).getTime();
@@ -125,7 +125,6 @@ class TimelineData extends Component {
     let borderRadiusRight = '0';
 
     let width = axisWidth * 2;
-    // let width = axisWidth;
     if (visible) {
       if (layerStart <= axisFrontDate) {
         leftOffset = 0;
