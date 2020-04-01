@@ -4,30 +4,15 @@ import {
   forEach as lodashForEach,
   toLower as lodashToLower,
   includes as lodashIncludes,
-  sortBy as lodashSortBy,
-  indexOf as lodashIndexOf,
 } from 'lodash';
-import { createSelector } from 'reselect';
 import {
   getTitles,
 } from '../layers/selectors';
-import buildLayerFacetProps from './formatConfig';
-import { availableAtDate } from '../layers/util';
 
 const facets = {};
 let initialLayersArray;
 let configRef;
 let projectionRef;
-const initialState = {
-  filters: [
-    // {
-    //   field: "facetPeriod",
-    //   values: ["Multi-Day"],
-    //   type: "any"
-    // }
-  ],
-  resultsPerPage: Infinity,
-};
 
 const hideZeroCountFields = [
   'measurements',
@@ -168,70 +153,35 @@ function filterSearch (layer, val, terms) {
   return filtered;
 }
 
-function getOnSearch(config, projection) {
-  configRef = config;
-  projectionRef = projection;
-  return async (requestState, queryConfig) => {
-    const { filters, searchTerm } = requestState;
-    const results = layersMatchSearchAndFilters(filters, searchTerm);
-    updateAllFacetCounts(filters, searchTerm);
+/**
+ *
+ * @param {Object} requestState
+ *  - https://github.com/elastic/search-ui/blob/master/ADVANCED.md#request-state
+ * @returns {Object} responseState
+ *  -  https://github.com/elastic/search-ui/blob/master/ADVANCED.md#response-state
+ */
+async function onSearch (requestState) {
+  const { filters, searchTerm } = requestState;
+  const results = layersMatchSearchAndFilters(filters, searchTerm);
+  updateAllFacetCounts(filters, searchTerm);
 
-    return {
-      facets: formatFacets(facets),
-      results,
-      totalResults: results.length,
-    };
+  return {
+    facets: formatFacets(facets),
+    results,
+    totalResults: results.length,
   };
 }
 
-function decodeHtml(html) {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value;
-}
+export default function initSearch(layers, config, projection) {
+  configRef = config;
+  projectionRef = projection;
+  initialLayersArray = layers;
 
-const getConfig = (state) => state.config;
-const getProjection = (state) => state.proj && state.proj.id;
-const getFacetLayers = (state) => buildLayerFacetProps(state.config);
-
-const getLayersForProjection = createSelector(
-  [getConfig, getProjection, getFacetLayers],
-  (config, projection, layers) => {
-    const filteredRows = layers
-      // Only use the layers for the active projection
-      .filter((layer) => layer.projections[projection])
-      .map((layer) => {
-        // If there is metadata for the current projection, use that
-        const projectionMeta = layer.projections[projection];
-        if (projectionMeta.title) layer.title = projectionMeta.title;
-        if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
-        // Decode HTML entities in the subtitle
-        if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
-        return layer;
-      });
-    return lodashSortBy(filteredRows, (layer) => lodashIndexOf(config.layerOrder, layer.id));
-  },
-);
-
-// eslint-disable-next-line import/prefer-default-export
-export const getSearchConfig = createSelector(
-  [getLayersForProjection, getConfig, getProjection],
-  (layers, config, projection) => {
-    
-    initialLayersArray = layers;
-    layers.forEach((layer) => {
-      facetFields.forEach((facetField) => {
-        updateFacetCounts(facetField, layer);
-      });
+  layers.forEach((layer) => {
+    facetFields.forEach((facetField) => {
+      updateFacetCounts(facetField, layer);
     });
+  });
 
-    return {
-      // debug: true, // TODO disable for prod
-      alwaysSearchOnInitialLoad: true,
-      trackUrlState: false,
-      initialState,
-      onSearch: getOnSearch(config, projection),
-      searchQuery: {},
-    };
-  },
-);
+  return onSearch;
+}
