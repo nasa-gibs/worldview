@@ -4,6 +4,7 @@ import {
 } from 'lodash';
 import { createSelector } from 'reselect';
 import buildLayerFacetProps from './formatConfig';
+import initSearch from './searchConfig';
 
 const decodeHtml = (html) => {
   const txt = document.createElement('textarea');
@@ -13,12 +14,11 @@ const decodeHtml = (html) => {
 
 const getConfig = (state) => state.config;
 const getProjection = (state) => state.proj && state.proj.id;
-const getFacetLayers = (state) => buildLayerFacetProps(state.config);
 
 const getLayersForProjection = createSelector(
-  [getConfig, getProjection, getFacetLayers],
-  (config, projection, layers) => {
-    const filteredRows = layers
+  [getConfig, getProjection],
+  (config, projection) => {
+    const filteredRows = buildLayerFacetProps(config)
       // Only use the layers for the active projection
       .filter((layer) => layer.projections[projection])
       .map((layer) => {
@@ -27,31 +27,28 @@ const getLayersForProjection = createSelector(
         if (projectionMeta.title) layer.title = projectionMeta.title;
         if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
         // Decode HTML entities in the subtitle
-        if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
+        if (layer.subtitle.includes('&')) {
+          layer.subtitle = decodeHtml(layer.subtitle);
+        }
         return layer;
       });
     return lodashSortBy(filteredRows, (layer) => lodashIndexOf(config.layerOrder, layer.id));
   },
 );
 
+/**
+ * Returns a SearchProvider configuration object.
+ * https://github.com/elastic/search-ui/blob/master/ADVANCED.md#advanced-configuration
+ */
 // eslint-disable-next-line import/prefer-default-export
 export const getSearchConfig = createSelector(
   [getLayersForProjection, getConfig, getProjection],
-  (layers, config, projection) => {
-    initialLayersArray = layers;
-    layers.forEach((layer) => {
-      facetFields.forEach((facetField) => {
-        updateFacetCounts(facetField, layer);
-      });
-    });
-
-    return {
-      // debug: true, // TODO disable for prod
-      alwaysSearchOnInitialLoad: true,
-      trackUrlState: false,
-      initialState,
-      onSearch: getOnSearch(config, projection),
-      searchQuery: {},
-    };
-  },
+  (layers, config, projection) => ({
+    // debug: true,
+    alwaysSearchOnInitialLoad: true,
+    trackUrlState: false,
+    initialState: {},
+    onSearch: initSearch(layers, config, projection),
+    searchQuery: {},
+  }),
 );
