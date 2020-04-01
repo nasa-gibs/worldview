@@ -6,36 +6,10 @@ import {
   cloneDeep as lodashCloneDeep,
   isUndefined as lodashIsUndefined,
   values as lodashValues,
-  sortBy as lodashSortBy,
-  indexOf as lodashIndexOf,
   findIndex as lodashFindIndex,
 } from 'lodash';
 import update from 'immutability-helper';
-import { createSelector } from 'reselect';
 import util from '../../util/util';
-
-const getConfig = (state) => state.config;
-const getProjection = (state) => state.proj && state.proj.id;
-const getFacetLayers = (state) => state.layers.facetArray;
-
-export const getLayersForProjection = createSelector(
-  [getConfig, getProjection, getFacetLayers],
-  (config, projection, layers) => {
-    const filteredRows = layers
-      // Only use the layers for the active projection
-      .filter((layer) => layer.projections[projection])
-      .map((layer) => {
-        // If there is metadata for the current projection, use that
-        const projectionMeta = layer.projections[projection];
-        if (projectionMeta.title) layer.title = projectionMeta.title;
-        if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
-        // Decode HTML entities in the subtitle
-        if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
-        return layer;
-      });
-    return lodashSortBy(filteredRows, (layer) => lodashIndexOf(config.layerOrder, layer.id));
-  },
-);
 
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;
@@ -78,12 +52,6 @@ export function hasMeasurementSetting(current, source, config, projId) {
     }
   });
   return hasSetting;
-}
-
-function decodeHtml(html) {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value;
 }
 
 /**

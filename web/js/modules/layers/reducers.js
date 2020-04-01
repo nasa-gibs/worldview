@@ -27,7 +27,6 @@ import {
   SET_FILTER_RANGE,
 } from '../vector-styles/constants';
 import { resetLayers } from './selectors';
-import buildLayerFacetProps from './formatConfig';
 
 export const initialState = {
   active: [],
@@ -41,7 +40,6 @@ export function getInitialState(config) {
   return lodashAssign({}, initialState, {
     active: resetLayers(config.defaults.startingLayers, config.layers),
     layerConfig: config.layers,
-    facetArray: buildLayerFacetProps(config),
     startingLayers: config.defaults.startingLayers,
   });
 }
