@@ -249,11 +249,11 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
       if (currentDate.getTime() < minDateTime && minDateWithinRangeLimits) {
         currentDate = minDate;
       }
-    }
 
-    // set maxDate to current date if layer coverage is ongoing
-    if (index === def.dateRanges.length - 1 && !inactiveLayer) {
-      maxDate = new Date();
+      // set maxDate to current date if layer coverage is ongoing
+      if (index === def.dateRanges.length - 1 && !inactiveLayer) {
+        maxDate = new Date();
+      }
     }
 
     const maxYear = maxDate.getUTCFullYear();
@@ -309,7 +309,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
         month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
         const monthTime = month.getTime();
         if (monthTime < maxEndDate.getTime()) {
-          if (dateArray.length > 0) {
+          if (rangeLimitsProvided && dateArray.length > 0) {
             dateArray = getDateArrayLastDateInOrder(month, dateArray);
           }
 
@@ -353,7 +353,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
         day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
         const dayTime = day.getTime();
         if (dayTime < maxEndDate.getTime()) {
-          if (dateArray.length > 0) {
+          if (rangeLimitsProvided && dateArray.length > 0) {
             dateArray = getDateArrayLastDateInOrder(day, dateArray);
           }
 

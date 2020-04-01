@@ -41,8 +41,13 @@ class TimelineData extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { activeLayers } = this.props;
+    const { activeLayers, isProductPickerOpen, isDataCoveragePanelOpen } = this.props;
     const { shouldIncludeHiddenLayers } = this.state;
+
+    if (!prevProps.isProductPickerOpen && isProductPickerOpen && isDataCoveragePanelOpen) {
+      this.togglePanelOpenClose();
+      return;
+    }
 
     const toggleHiddenChange = prevState.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
     // need to update layer toggles for show/hide/remove
@@ -285,7 +290,6 @@ class TimelineData extends Component {
 
     const animateBottomClassName = `animate-timeline-data-panel-slide-${isDataCoveragePanelOpen ? 'up' : 'down'}`;
     const panelChevronClassName = `wv-timeline-data-availability-handle-chevron-${isDataCoveragePanelOpen ? 'open' : 'closed'}`;
-
     return (
       <>
         {/* Data Coverage Panel open/close handle */}
@@ -355,8 +359,9 @@ class TimelineData extends Component {
 function mapStateToProps(state) {
   const {
     compare,
-    layers,
     date,
+    layers,
+    modal,
   } = state;
   const {
     appNow,
@@ -364,11 +369,13 @@ function mapStateToProps(state) {
 
   const activeLayers = layers[compare.activeString].filter((activeLayer) => activeLayer.startDate);
   const { hoveredLayer } = layers;
+  const isProductPickerOpen = modal.isOpen && modal.id === 'LAYER_PICKER_COMPONENT';
 
   return {
     activeLayers,
     hoveredLayer,
     appNow,
+    isProductPickerOpen,
   };
 }
 
@@ -383,6 +390,7 @@ TimelineData.propTypes = {
   frontDate: PropTypes.string,
   hoveredLayer: PropTypes.string,
   isDataCoveragePanelOpen: PropTypes.bool,
+  isProductPickerOpen: PropTypes.bool,
   parentOffset: PropTypes.number,
   position: PropTypes.number,
   setMatchingTimelineCoverage: PropTypes.func,
