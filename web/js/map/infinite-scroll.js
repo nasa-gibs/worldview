@@ -19,13 +19,13 @@ export function getActiveDateArray(longitude, centerDate) {
     if (dateRight) dateArray.push({ extent, date: dateRight });
     if (date) dateArray.push({ extent: extentRight, date });
   }
-  return { dateArray, newCenterX };
+  return { dateArray, newCenterX, newCenterDate };
 }
 export class InfiniteScroll {
   constructor(props) {
     this.props = props;
     this.state = {
-      centerDate: props.date,
+      centerDate: props.startDate,
       currentCenterX: 0,
       view: props.map.getView(),
     };
@@ -34,9 +34,9 @@ export class InfiniteScroll {
   }
 
   init() {
-    const { map, cache } = this.props;
-    const { centerDate, currentCenterX } = this.state;
-    const { dateArray } = getActiveDateArray(currentCenterX, centerDate);
+    const { map, cache, startDate } = this.props;
+    const { currentCenterX } = this.state;
+    const { dateArray } = getActiveDateArray(currentCenterX, startDate);
     clearLayers(map);
     cache.clear();
     this.setListeners();
@@ -44,10 +44,15 @@ export class InfiniteScroll {
   }
 
   updateLayers(centerX) {
+    const { startDate, updateDate } = this.props;
     const { centerDate } = this.state;
-    const { dateArray, newCenterX } = getActiveDateArray(centerX, centerDate);
+    const { dateArray, newCenterX, newCenterDate } = getActiveDateArray(centerX, startDate);
     this.state.currentCenterX = newCenterX;
     this.renderLayers(dateArray);
+    if (newCenterDate !== centerDate) {
+      this.state.newCenterDate = newCenterDate;
+      updateDate(new Date(newCenterDate)); // dispatcher
+    }
   }
 
   onViewChange() {

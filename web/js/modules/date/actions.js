@@ -25,7 +25,7 @@ export function initSecondDate() {
     type: INIT_SECOND_DATE,
   };
 }
-export function selectDate(value) {
+export function selectDate(value, isInfiniteScroll) {
   return (dispatch, getState) => {
     const compareState = getState().compare;
     const activeString = compareState.isCompareA ? 'selected' : 'selectedB';
@@ -34,6 +34,7 @@ export function selectDate(value) {
       type: SELECT_DATE,
       activeString,
       value,
+      isInfiniteScroll,
     });
   };
 }

@@ -58,6 +58,7 @@ import { getLeadingExtent } from '../modules/map/util';
 import { InfiniteScroll } from './infinite-scroll';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
+import { selectDate } from '../modules/date/actions';
 
 export function mapui(models, config, store, ui) {
   let layerBuilder;
@@ -103,6 +104,7 @@ export function mapui(models, config, store, ui) {
    * specific action types
    */
   const subscribeToStore = function(action) {
+    const state = store.getState();
     switch (action.type) {
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
@@ -137,6 +139,7 @@ export function mapui(models, config, store, ui) {
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
       case TOGGLE_INFINITE_WRAP:
+        destroyInfiniteScroll();
         return reloadLayers();
       case CHANGE_PROJECTION:
         return updateProjection();
@@ -153,7 +156,6 @@ export function mapui(models, config, store, ui) {
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
         const newSelection = action.payload;
-        const state = store.getState();
         const { compare, layers } = state;
         const activeLayerStr = compare.activeString;
         updateVectorSelection(action.payload, self.selectedVectors, layers[activeLayerStr], type, state);
@@ -163,7 +165,13 @@ export function mapui(models, config, store, ui) {
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
       case SELECT_DATE:
-        return updateDate();
+        if (state.infiniteScroll.active && !action.isInfiniteScroll) {
+          destroyInfiniteScroll();
+          reloadLayers();
+        } else {
+          updateDate();
+        }
+        break;
       default:
         break;
     }
@@ -276,6 +284,12 @@ export function mapui(models, config, store, ui) {
     updateExtent();
     onResize();
   }
+  function destroyInfiniteScroll() {
+    if (self.infiniteScroll) {
+      self.infiniteScroll.destroy();
+      self.infiniteScroll = null;
+    }
+  }
   /*
    * When page is resised set for mobile or desktop
    *
@@ -376,12 +390,13 @@ export function mapui(models, config, store, ui) {
     );
     if (infiniteScroll.active) {
       self.infiniteScroll = new InfiniteScroll({
-        date: date[activeDateStr],
+        startDate: date[activeDateStr],
         activeLayers: defs,
         map,
         createLayer,
         cache,
         getLayerKey: (def, options) => self.layerKey(def, options, state),
+        updateDate: (dateStr) => store.dispatch(selectDate(dateStr, true)),
       });
     } else if (!config.features.compare || !compareState.active) {
       if (!compareState.active && compareMapUi.active) {
