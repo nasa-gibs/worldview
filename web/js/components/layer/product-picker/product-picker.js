@@ -16,13 +16,12 @@ import {
   getLayersForProjection,
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
-import { availableAtDate } from '../../../modules/layers/util';
 import {
   updateProductPicker,
 } from '../../../modules/product-picker/actions';
 import BrowseLayers from './browse-layers';
 import SearchLayers from './search-layers';
-import getSearchConfig from '../../../modules/product-picker/searchConfig';
+import { getSearchConfig } from '../../../modules/product-picker/searchConfig';
 
 
 /*
@@ -37,7 +36,6 @@ class ProductPicker extends React.Component {
     this.state = {
       modalElement: undefined,
       headerElement: undefined,
-      searchConfig: undefined,
     };
 
     this.runSearch = lodashDebounce(this.runSearch.bind(this), 300);
@@ -50,11 +48,10 @@ class ProductPicker extends React.Component {
     const modalElement = document.getElementById('layer_picker_component');
     const headerElement = modalElement.querySelector('.modal-header');
     modalElement.classList.add('category-width');
-    const { allLayers, config, selectedProjection } = this.props;
+
     this.setState({
       modalElement,
       headerElement,
-      searchConfig: getSearchConfig(allLayers, config, selectedProjection),
     });
   }
 
@@ -237,8 +234,8 @@ class ProductPicker extends React.Component {
       listType,
       categoryType,
       category,
+      searchConfig,
     } = this.props;
-    const { searchConfig } = this.state;
     const { listHeight, listMinHeight, detailHeight } = this.getComponentHeights();
 
     return !searchConfig ? null : (
@@ -330,8 +327,8 @@ function mapStateToProps(state, ownProps) {
   const isMobile = browser.lessThan.medium;
   const activeString = compare.isCompareA ? 'active' : 'activeB';
   const width = getModalWidth(screenWidth);
-  const allLayers = getLayersForProjection(state);
   const activeLayers = layers[activeString];
+  const searchConfig = getSearchConfig(state);
 
   return {
     ...productPicker,
@@ -340,9 +337,9 @@ function mapStateToProps(state, ownProps) {
     isMobile,
     screenHeight,
     width,
-    allLayers,
     activeLayers,
     selectedProjection: proj.id,
+    searchConfig,
   };
 }
 export default connect(
