@@ -2,10 +2,18 @@ import {
   get as lodashGet,
   set as lodashSet,
   forEach as lodashForEach,
+  toLower as lodashToLower,
+  includes as lodashIncludes,
 } from 'lodash';
+import {
+  getTitles,
+} from '../layers/selectors';
+import { availableAtDate } from '../layers/util';
 
 const facets = {};
 let initialLayersArray;
+let configRef;
+let projectionRef;
 const initialState = {
   filters: [
     // {
@@ -98,40 +106,81 @@ function updateFacetCounts(facetField, layer) {
   });
 }
 
-function updateAllFacetCounts(currentFilters) {
+function updateAllFacetCounts(currentFilters, searchTerm) {
   resetFacetCounts();
   facetFields.forEach((facetField) => {
     // Start with a filtered result array that has all OTHER facets applied
     const otherFilters = currentFilters.filter((f) => f.field !== facetField);
-    layersMatchFilters(initialLayersArray, otherFilters).forEach((layer) => {
-      updateFacetCounts(facetField, layer);
-    });
+    layersMatchSearchAndFilters(otherFilters, searchTerm)
+      .forEach((layer) => {
+        updateFacetCounts(facetField, layer);
+      });
   });
 }
 
-function layersMatchFilters(layers, filters) {
-  return layers.filter((layer) => filters.every(({ field, values }) => {
+function layerMatchesFilters(layer, filters) {
+  return filters.every(({ field, values }) => {
     let fieldVal = layer[field];
     fieldVal = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
     const noneSelected = values.includes('None');
     const matches = values.some((value) => fieldVal.includes(value));
     return matches || (noneSelected && !fieldVal[0]);
-  }));
+  });
 }
 
-async function onSearch(requestState, queryConfig) {
-  const { filters, searchTerm } = requestState;
-  const results = layersMatchFilters(initialLayersArray, filters);
-  updateAllFacetCounts(filters);
-  return {
-    facets: formatFacets(facets),
-    results,
-    resultSearchTerm: '',
-    totalResults: results.length,
+function layersMatchSearchAndFilters(currentFilters, searchTerm) {
+  const val = searchTerm.toLowerCase();
+  const terms = val.split(/ +/);
+
+  // TODO filtering by date availability e.g.:
+  // const filteredRows = searchResultRows.filter((layer) => !(filterByAvailable && !availableAtDate(layer, selectedDate)));
+  return initialLayersArray.filter((layer) => {
+    const filterMatches = layerMatchesFilters(layer, currentFilters);
+    const searchMatches = val.length === 0 ? true : !filterSearch(layer, val, terms);
+    return filterMatches && searchMatches;
+  });
+}
+
+// Check for search term match
+function filterSearch (layer, val, terms) {
+  if (!val) {
+    return false;
+  }
+
+  let filtered = false;
+  const names = getTitles(configRef, layer.id, projectionRef);
+  const title = lodashToLower(names.title);
+  const subtitle = lodashToLower(names.subtitle);
+  const tags = lodashToLower(names.tags);
+  const layerId = lodashToLower(layer.id);
+
+  lodashForEach(terms, (term) => {
+    filtered = !lodashIncludes(title, term)
+      && !lodashIncludes(subtitle, term)
+      && !lodashIncludes(tags, term)
+      && !lodashIncludes(layerId, term);
+    if (filtered) return false;
+  });
+  return filtered;
+}
+
+function getOnSearch(config, projection) {
+  configRef = config;
+  projectionRef = projection;
+  return async (requestState, queryConfig) => {
+    const { filters, searchTerm } = requestState;
+    const results = layersMatchSearchAndFilters(filters, searchTerm);
+    updateAllFacetCounts(filters, searchTerm);
+
+    return {
+      facets: formatFacets(facets),
+      results,
+      totalResults: results.length,
+    };
   };
 }
 
-export default function getSearchConfig(layers) {
+export default function getSearchConfig(layers, config, projection) {
   initialLayersArray = layers;
   layers.forEach((layer) => {
     facetFields.forEach((facetField) => {
@@ -140,11 +189,11 @@ export default function getSearchConfig(layers) {
   });
 
   return {
-    debug: true, // TODO disable for prod
+    // debug: true, // TODO disable for prod
     alwaysSearchOnInitialLoad: true,
     trackUrlState: false,
     initialState,
-    onSearch,
+    onSearch: getOnSearch(config, projection),
     searchQuery: {},
   };
 }

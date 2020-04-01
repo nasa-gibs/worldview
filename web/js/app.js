@@ -36,6 +36,7 @@ import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css';
 import '../../node_modules/simplebar/dist/simplebar.min.css';
+import '../../node_modules/@elastic/react-search-ui-views/lib/styles/styles.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import 'react-resizable/css/styles.css';
 // App CSS
