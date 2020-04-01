@@ -6,6 +6,7 @@ import lodashDebounce from 'lodash/debounce';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMeteor } from '@fortawesome/free-solid-svg-icons';
+import { Facet } from '@elastic/react-search-ui';
 import LayerList from './layer-list';
 import Scrollbars from '../../util/scrollbar';
 import {
@@ -18,6 +19,9 @@ import {
   updateProductPicker,
   updateListScrollTop,
 } from '../../../modules/product-picker/actions';
+// import {
+//   BooleanFacet, Layout, SingleSelectFacet, SingleLinksFacet,
+// } from '@elastic/react-search-ui-views';
 
 /*
  * A scrollable list of layers
@@ -74,7 +78,7 @@ class SearchLayers extends React.Component {
     );
   }
 
-  render() {
+  renderLayerList() {
     const {
       listHeight,
       listMinHeight,
@@ -84,7 +88,6 @@ class SearchLayers extends React.Component {
       removeLayer,
       addLayer,
       filteredRows,
-      numRowsFilteredOut,
       selectedLayer,
       updateScrollPosition,
       listScrollTop,
@@ -93,55 +96,165 @@ class SearchLayers extends React.Component {
     const debouncedOnScroll = lodashDebounce(({ scrollTop }) => {
       updateScrollPosition(scrollTop);
     }, 500);
-    const containerClass = isMobile ? 'search-container mobile' : 'search-container';
     const listContainerClass = isMobile
       ? 'layer-list-container search mobile'
       : 'layer-list-container search';
-
-    return filteredRows.length
-      ? (
-        <div className={containerClass}>
-          <div className={listContainerClass}>
-            <Scrollbars
-              style={{
-                maxHeight: `${listHeight}px`,
-                minHeight: `${listMinHeight}px`,
-              }}
-              scrollBarVerticalTop={listScrollTop}
-              onScroll={debouncedOnScroll}
-            >
-              <div className="product-outter-list-case">
-                <LayerList
-                  listType="search"
-                  isMobile={isMobile}
-                  addLayer={addLayer}
-                  removeLayer={removeLayer}
-                  activeLayers={activeLayers}
-                  selectedProjection={selectedProjection}
-                  selectedLayer={selectedLayer}
-                  filteredRows={filteredRows}
-                  showMetadataForLayer={(layer) => this.showMetadataForLayer(layer)}
-                />
-              </div>
-            </Scrollbars>
+    return (
+      <div className={listContainerClass}>
+        <Scrollbars
+          style={{
+            maxHeight: `${listHeight}px`,
+            minHeight: `${listMinHeight}px`,
+          }}
+          scrollBarVerticalTop={listScrollTop}
+          onScroll={debouncedOnScroll}
+        >
+          <div className="product-outter-list-case">
+            <LayerList
+              listType="search"
+              isMobile={isMobile}
+              addLayer={addLayer}
+              removeLayer={removeLayer}
+              activeLayers={activeLayers}
+              selectedProjection={selectedProjection}
+              selectedLayer={selectedLayer}
+              filteredRows={filteredRows}
+              showMetadataForLayer={(layer) => this.showMetadataForLayer(layer)}
+            />
           </div>
-          { this.renderDetails() }
-        </div>
-      )
-      : (
-        <div className="no-results" style={{ height: `${listMinHeight - 45}px` }}>
-          <FontAwesomeIcon icon={faMeteor} size="5x" />
-          <h3> No layers found! </h3>
-          {numRowsFilteredOut > 0 && (
-            <p>
-              {`${numRowsFilteredOut} result(s) are being filtered out.`}
-              <a className="remove-filters" onClick={this.toggleFilterByAvailable}>
-                Remove filters?
-              </a>
-            </p>
-          )}
-        </div>
-      );
+        </Scrollbars>
+      </div>
+    );
+  }
+
+  renderFacetList() {
+    const { listHeight, listMinHeight } = this.props;
+    return (
+      <div
+        className="facet-container"
+        style={{ flexGrow: 1, maxWidth: '300px' }}
+      >
+        <Scrollbars
+          style={{
+            maxHeight: `${listHeight}px`,
+            minHeight: `${listMinHeight}px`,
+          }}
+        >
+          <div style={{ padding: '10px 15px 10px 10px' }}>
+            {/* {wasSearched && (
+              <Sorting label={"Sort by"} sortOptions={SORT_OPTIONS} />
+            )} */}
+            <Facet
+              field="categories"
+              label="Category"
+              filterType="any"
+              show={20}
+            />
+            <Facet
+              field="measurements"
+              label="Measurement"
+              filterType="any"
+              isFilterable
+              show={5}
+            />
+            <Facet
+              field="facetPeriod"
+              label="Period"
+              filterType="any"
+              show={10}
+            />
+            <Facet
+              field="active"
+              label="Currently Active?"
+              filterType="any"
+            />
+            <Facet
+              field="track"
+              label="Track Asc/Desc"
+              filterType="any"
+            />
+            <Facet
+              field="daynight"
+              label="Track Day/Night"
+              filterType="any"
+            />
+            <Facet
+              field="projects"
+              label="Project (From CMR)"
+              filterType="any"
+              isFilterable
+            />
+            <Facet
+              field="sources"
+              label="Source (From WV configs)"
+              filterType="any"
+              isFilterable
+            />
+            <Facet
+              field="platforms"
+              label="Platform (From CMR)"
+              filterType="any"
+            />
+            <Facet
+              field="processingLevelId"
+              label="Processing Level"
+              filterType="any"
+              show={3}
+            />
+            <Facet
+              field="collectionDataType"
+              label="Data Type"
+              filterType="any"
+            />
+            <Facet
+              field="dataCenter"
+              label="Data Center"
+              filterType="any"
+              show={3}
+            />
+            <Facet
+              field="group"
+              label="Layer Group"
+              filterType="any"
+            />
+          </div>
+        </Scrollbars>
+      </div>
+    );
+  }
+
+  renderNoResults() {
+    const { listMinHeight, numRowsFilteredOut } = this.props;
+    return (
+      <div className="no-results" style={{ height: `${listMinHeight - 45}px` }}>
+        <FontAwesomeIcon icon={faMeteor} size="5x" />
+        <h3> No layers found! </h3>
+        {numRowsFilteredOut > 0 && (
+          <p>
+            {`${numRowsFilteredOut} result(s) are being filtered out.`}
+            <a className="remove-filters" onClick={this.toggleFilterByAvailable}>
+              Remove filters?
+            </a>
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      isMobile,
+      selectedLayer,
+    } = this.props;
+    const containerClass = isMobile ? 'search-container mobile' : 'search-container';
+
+    return (
+      <div className={containerClass}>
+        {!selectedLayer && this.renderFacetList()}
+        {this.renderLayerList()}
+        { selectedLayer && this.renderDetails() }
+      </div>
+    );
   }
 }
 

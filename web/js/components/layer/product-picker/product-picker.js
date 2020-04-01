@@ -1,21 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  toLower as lodashToLower,
-  each as lodashEach,
-  includes as lodashIncludes,
-} from 'lodash';
 import lodashDebounce from 'lodash/debounce';
 import {
   ModalBody,
   ModalHeader,
 } from 'reactstrap';
+import {
+  SearchProvider,
+  WithSearch,
+} from '@elastic/react-search-ui';
 import ProductPickerHeader from './header';
 import FilterUnavailable from './filterUnavailable';
 import {
   getLayersForProjection,
-  getTitles,
 } from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
 import { availableAtDate } from '../../../modules/layers/util';
@@ -24,6 +22,8 @@ import {
 } from '../../../modules/product-picker/actions';
 import BrowseLayers from './browse-layers';
 import SearchLayers from './search-layers';
+import getSearchConfig from '../../../modules/product-picker/searchConfig';
+
 
 /*
  * A scrollable list of layers
@@ -37,9 +37,11 @@ class ProductPicker extends React.Component {
     this.state = {
       modalElement: undefined,
       headerElement: undefined,
+      searchConfig: undefined,
     };
 
     this.runSearch = lodashDebounce(this.runSearch.bind(this), 300);
+    this.enableSearchMode = this.enableSearchMode.bind(this);
     this.revertSearchState = this.revertSearchState.bind(this);
     this.toggleFilterByAvailable = this.toggleFilterByAvailable.bind(this);
   }
@@ -48,9 +50,11 @@ class ProductPicker extends React.Component {
     const modalElement = document.getElementById('layer_picker_component');
     const headerElement = modalElement.querySelector('.modal-header');
     modalElement.classList.add('category-width');
+    const { allLayers, config, selectedProjection } = this.props;
     this.setState({
       modalElement,
       headerElement,
+      searchConfig: getSearchConfig(allLayers, config, selectedProjection),
     });
   }
 
@@ -76,39 +80,25 @@ class ProductPicker extends React.Component {
    * @function runSearch
    * @param e | onChange event object
    */
-  runSearch(value) {
+  runSearch(searchTerm) {
     const {
-      filterProjections,
-      filterSearch,
-      selectedDate,
-      allLayers,
-      categoryType,
-      filterByAvailable,
       selectedLayer,
       updateProductPickerState,
     } = this.props;
-    const val = value.toLowerCase();
+
     let newState;
     let newSelectedLayer;
 
     // Search cleared
-    if (val.length === 0) {
+    if (searchTerm.length === 0) {
       newState = {
         filteredRows: [],
         listType: 'category',
         inputValue: '',
         selectedLayer: null,
       };
-      if (categoryType === 'featured') {
-        this.toggleFeatureTab(newState);
-        return;
-      }
     // Search with terms
     } else {
-      const terms = val.split(/ +/);
-      const searchResultRows = allLayers.filter((layer) => !(filterProjections(layer) || filterSearch(layer, val, terms)));
-      const filteredRows = searchResultRows.filter((layer) => !(filterByAvailable && !availableAtDate(layer, selectedDate)));
-
       const selectedLayerInResults = selectedLayer
         && !!filteredRows.find((layer) => layer.id === selectedLayer.id);
 
@@ -118,15 +108,15 @@ class ProductPicker extends React.Component {
         newSelectedLayer = selectedLayer;
       }
 
-      newState = {
-        filteredRows,
-        searchResultRows,
-        numRowsFilteredOut: searchResultRows.length - filteredRows.length,
-        listType: 'search',
-        inputValue: value,
-        selectedLayer: newSelectedLayer,
-        listScrollTop: 0,
-      };
+      // newState = {
+      //   filteredRows,
+      //   searchResultRows,
+      //   numRowsFilteredOut: searchResultRows.length - filteredRows.length,
+      //   listType: 'search',
+      //   inputValue: value,
+      //   selectedLayer: newSelectedLayer,
+      //   listScrollTop: 0,
+      // };
     }
     updateProductPickerState(newState);
   }
@@ -179,89 +169,120 @@ class ProductPicker extends React.Component {
       };
   }
 
-  render() {
+  enableSearchMode = () => {
+    const { updateProductPickerState, allLayers } = this.props;
+    updateProductPickerState({
+      listType: 'search',
+      filteredRows: allLayers,
+      selectedLayer: null,
+    });
+  }
+
+  renderHeader(results, searchTerm, setSearchTerm) {
     const {
-      activeLayers,
       selectedProjection,
-      modalView,
       width,
       isMobile,
       onToggle,
       selectedDate,
       listType,
-      categoryType,
       category,
-      inputValue,
       filterByAvailable,
-      filteredRows,
       numRowsFilteredOut,
     } = this.props;
+    return (
+      <ModalHeader toggle={onToggle}>
+        <ProductPickerHeader
+          selectedProjection={selectedProjection}
+          selectedDate={selectedDate}
+          listType={listType}
+          inputValue={searchTerm}
+          isMobile={isMobile}
+          category={category}
+          width={width}
+          setSearchTerm={setSearchTerm}
+          enableSearchMode={this.enableSearchMode}
+          updateListState={this.revertSearchState}
+          filterByAvailable={filterByAvailable}
+          toggleFilterByAvailable={this.toggleFilterByAvailable}
+        >
+          {listType === 'search' && !isMobile
+            && (
+            <div className="header-filter-container">
+              <div className="header-filters">
+                <FilterUnavailable
+                  selectedDate={selectedDate}
+                  filterByAvailable={filterByAvailable}
+                  toggleFilterByAvailable={this.toggleFilterByAvailable}
+                />
+              </div>
+              <div className="results-text">
+                { `Showing ${results.length} results`}
+                {numRowsFilteredOut > 0 && (
+                  <span>
+                    {`(${numRowsFilteredOut} hidden by filters)`}
+                  </span>
+                )}
+              </div>
+            </div>
+            )}
+        </ProductPickerHeader>
+      </ModalHeader>
+    );
+  }
+
+  render() {
+    const {
+      activeLayers,
+      listType,
+      categoryType,
+      category,
+    } = this.props;
+    const { searchConfig } = this.state;
     const { listHeight, listMinHeight, detailHeight } = this.getComponentHeights();
 
-    return (
-      <>
-        <ModalHeader toggle={onToggle}>
-          <ProductPickerHeader
-            selectedProjection={selectedProjection}
-            selectedDate={selectedDate}
-            listType={listType}
-            inputValue={inputValue}
-            isMobile={isMobile}
-            category={category}
-            modalView={modalView}
-            width={width}
-            runSearch={this.runSearch}
-            updateListState={this.revertSearchState}
-            filterByAvailable={filterByAvailable}
-            toggleFilterByAvailable={this.toggleFilterByAvailable}
-          >
-            {listType === 'search' && !isMobile
-              && (
-              <div className="header-filter-container">
-                <div className="header-filters">
-                  <FilterUnavailable
-                    selectedDate={selectedDate}
-                    filterByAvailable={filterByAvailable}
-                    toggleFilterByAvailable={this.toggleFilterByAvailable}
-                  />
-                </div>
-                <div className="results-text">
-                  { `Showing ${filteredRows.length} results`}
-                  {numRowsFilteredOut > 0 && (
-                    <span>
-                      {`(${numRowsFilteredOut} hidden by filters)`}
-                    </span>
-                  )}
-                </div>
-              </div>
-              )}
-          </ProductPickerHeader>
-        </ModalHeader>
+    return !searchConfig ? null : (
+      <SearchProvider config={searchConfig}>
+        <WithSearch
+          mapContextToProps={({
+            wasSearched, setSearchTerm, searchTerm, results,
+          }) => ({
+            wasSearched, setSearchTerm, searchTerm, results,
+          })}
+        >
+          {({
+            wasSearched, setSearchTerm, searchTerm, results,
+          }) => (
+            <>
+              {this.renderHeader(results, searchTerm, setSearchTerm)}
 
-        <ModalBody>
-          <div id="layer-modal-content" className="layer-modal-content">
-            {listType !== 'search'
-              ? (
-                <BrowseLayers
-                  listHeight={listHeight}
-                  listMinHeight={listMinHeight}
-                  detailHeight={detailHeight}
-                  activeLayers={activeLayers}
-                  category={category}
-                  categoryType={categoryType}
-                />
-              )
-              : (
-                <SearchLayers
-                  listHeight={listHeight}
-                  listMinHeight={listMinHeight}
-                  detailHeight={detailHeight}
-                  filteredRows={filteredRows}
-                />
-              )}
-          </div>
-        </ModalBody>
-      </>
+              <ModalBody>
+                <div id="layer-modal-content" className="layer-modal-content">
+                  {listType !== 'search'
+                    ? (
+                      <BrowseLayers
+                        listHeight={listHeight}
+                        listMinHeight={listMinHeight}
+                        detailHeight={detailHeight}
+                        activeLayers={activeLayers}
+                        category={category}
+                        categoryType={categoryType}
+                      />
+                    )
+                    : (
+                      <SearchLayers
+                        listHeight={800}
+                        listMinHeight={listMinHeight}
+                        detailHeight={detailHeight}
+                        filteredRows={results}
+                      />
+                    )}
+                </div>
+              </ModalBody>
+            </>
+          )}
+        </WithSearch>
+      </SearchProvider>
     );
   }
 }
@@ -271,14 +292,11 @@ ProductPicker.propTypes = {
   allLayers: PropTypes.array,
   category: PropTypes.object,
   categoryType: PropTypes.string,
+  config: PropTypes.object,
   filterByAvailable: PropTypes.bool,
-  filteredRows: PropTypes.array,
-  filterProjections: PropTypes.func,
-  filterSearch: PropTypes.func,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   listType: PropTypes.string,
-  modalView: PropTypes.string,
   numRowsFilteredOut: PropTypes.number,
   onToggle: PropTypes.func,
   screenHeight: PropTypes.number,
@@ -317,9 +335,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     ...productPicker,
-    categoryConfig: config.categories,
-    measurementConfig: config.measurements,
-    layerConfig: config.layers,
+    config,
     selectedDate: date.selected,
     isMobile,
     screenHeight,
@@ -327,9 +343,6 @@ function mapStateToProps(state, ownProps) {
     allLayers,
     activeLayers,
     selectedProjection: proj.id,
-    showPreviewImage: config.features.previewSnapshots,
-    filterProjections: (layer) => !layer.projections[proj.id],
-    filterSearch: (layer, val, terms) => filterSearch(layer, val, terms, config, proj.id),
   };
 }
 export default connect(
@@ -350,25 +363,4 @@ const getModalWidth = function(width) {
   const gutterSpace = (sizeMultiplier - 1) * 10;
   const modalPadding = 26;
   return gridItemWidth * sizeMultiplier + gutterSpace + modalPadding;
-};
-
-// Takes the terms and returns true if the layer isnt part of search
-const filterSearch = (layer, val, terms, config, projId) => {
-  if (!val) return false;
-
-  let filtered = false;
-  const names = getTitles(config, layer.id, projId);
-  const title = lodashToLower(names.title);
-  const subtitle = lodashToLower(names.subtitle);
-  const tags = lodashToLower(names.tags);
-  const layerId = lodashToLower(layer.id);
-
-  lodashEach(terms, (term) => {
-    filtered = !lodashIncludes(title, term)
-      && !lodashIncludes(subtitle, term)
-      && !lodashIncludes(tags, term)
-      && !lodashIncludes(layerId, term);
-    if (filtered) return false;
-  });
-  return filtered;
 };
