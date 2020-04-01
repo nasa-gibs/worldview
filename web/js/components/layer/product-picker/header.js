@@ -50,9 +50,28 @@ class ProductPickerHeader extends React.Component {
   }
 
   handleChange(e) {
-    const { runSearch } = this.props;
-    runSearch(e.target.value);
+    const { setSearchTerm } = this.props;
+    setSearchTerm(e.target.value, { shouldClearFilters: false });
     this.setState({ inputValue: e.target.value });
+  }
+
+  renderBreadCrumb() {
+    const { category } = this.props;
+    return (
+      <Breadcrumb tag="nav" className="layer-bread-crumb">
+        <BreadcrumbItem
+          tag="a"
+          title="Back to Layer Categories"
+          href="#"
+          onClick={this.revertToInitialScreen}
+        >
+          Categories
+        </BreadcrumbItem>
+        <BreadcrumbItem active tag="span">
+          {category && category.title}
+        </BreadcrumbItem>
+      </Breadcrumb>
+    );
   }
 
   render() {
@@ -68,6 +87,7 @@ class ProductPickerHeader extends React.Component {
       filterByAvailable,
       isMobile,
       children,
+      enableSearchMode,
     } = this.props;
     const isSearching = listType === 'search';
     const categoryId = category && category.id;
@@ -76,27 +96,11 @@ class ProductPickerHeader extends React.Component {
       && selectedProjection === 'geographic'
       && listType !== 'category');
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
-    const BreadcrubEl = (
-      <Breadcrumb tag="nav" className="layer-bread-crumb">
-        <BreadcrumbItem
-          tag="a"
-          title="Back to Layer Categories"
-          href="#"
-          onClick={this.revertToInitialScreen}
-        >
-          Categories
-        </BreadcrumbItem>
-        <BreadcrumbItem active tag="span">
-          {category && category.title}
-        </BreadcrumbItem>
-      </Breadcrumb>
-    );
 
     return (
       <>
         <InputGroup id="layer-search" className="layer-search">
-          {showBackButton
-          && (
+          {showBackButton && (
             <>
               <Button
                 className="back-button"
@@ -105,24 +109,13 @@ class ProductPickerHeader extends React.Component {
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
               </Button>
-              {isBreadCrumb && BreadcrubEl}
+              {isBreadCrumb && this.renderBreadCrumb()}
             </>
           )}
-          {isSearching && isMobile
-            && (
-            <UncontrolledDropdown>
-              <DropdownToggle className="filter-button" caret>
-                <FontAwesomeIcon icon={faFilter} />
-              </DropdownToggle>
-              <DropdownMenu>
-                <LayerFilters
-                  selectedDate={selectedDate}
-                  filterByAvailable={filterByAvailable}
-                  toggleFilterByAvailable={toggleFilterByAvailable}
-                />
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            )}
+
+          <Button className="filter-button" onClick={enableSearchMode}>
+            <FontAwesomeIcon icon={faFilter} />
+          </Button>
 
           <Input
             onChange={this.handleChange}
@@ -148,7 +141,7 @@ ProductPickerHeader.propTypes = {
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   listType: PropTypes.string,
-  runSearch: PropTypes.func,
+  setSearchTerm: PropTypes.func,
   selectedDate: PropTypes.object,
   selectedProjection: PropTypes.string,
   toggleFilterByAvailable: PropTypes.func,

@@ -16,11 +16,12 @@ import util from '../../util/util';
 
 const getConfig = (state) => state.config;
 const getProjection = (state) => state.proj && state.proj.id;
+const getFacetLayers = (state) => state.layers.facetArray;
 
 export const getLayersForProjection = createSelector(
-  [getConfig, getProjection],
-  (config, projection) => {
-    const filteredRows = lodashValues(config.layers)
+  [getConfig, getProjection, getFacetLayers],
+  (config, projection, layers) => {
+    const filteredRows = layers
       // Only use the layers for the active projection
       .filter((layer) => layer.projections[projection])
       .map((layer) => {
