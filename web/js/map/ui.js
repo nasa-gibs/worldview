@@ -376,7 +376,12 @@ export function mapui(models, config, store, ui) {
     );
     if (infiniteScroll.active) {
       self.infiniteScroll = new InfiniteScroll({
-        date: date[activeDateStr], activeLayers: defs, map, createLayer, cache,
+        date: date[activeDateStr],
+        activeLayers: defs,
+        map,
+        createLayer,
+        cache,
+        getLayerKey: (def, options) => self.layerKey(def, options, state),
       });
     } else if (!config.features.compare || !compareState.active) {
       if (!compareState.active && compareMapUi.active) {
