@@ -12,17 +12,13 @@ import {
 } from '@elastic/react-search-ui';
 import ProductPickerHeader from './header';
 import FilterUnavailable from './filterUnavailable';
-import {
-  getLayersForProjection,
-} from '../../../modules/layers/selectors';
 import { onToggle } from '../../../modules/modal/actions';
 import {
   updateProductPicker,
 } from '../../../modules/product-picker/actions';
 import BrowseLayers from './browse-layers';
 import SearchLayers from './search-layers';
-import { getSearchConfig } from '../../../modules/product-picker/searchConfig';
-
+import { getSearchConfig } from '../../../modules/product-picker/selectors';
 
 /*
  * A scrollable list of layers
@@ -289,7 +285,7 @@ ProductPicker.propTypes = {
   allLayers: PropTypes.array,
   category: PropTypes.object,
   categoryType: PropTypes.string,
-  config: PropTypes.object,
+  searchConfig: PropTypes.object,
   filterByAvailable: PropTypes.bool,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
@@ -332,7 +328,6 @@ function mapStateToProps(state, ownProps) {
 
   return {
     ...productPicker,
-    config,
     selectedDate: date.selected,
     isMobile,
     screenHeight,
