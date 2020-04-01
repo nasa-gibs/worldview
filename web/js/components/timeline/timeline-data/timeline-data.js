@@ -83,7 +83,7 @@ class TimelineData extends Component {
   * @param {Object} layer
   * @param {String} rangeStart
   * @param {String} rangeEnd
-  * @returns {Object} visible, leftOffset, width, borderRadius, toolTipPlacement
+  * @returns {Object} visible, leftOffset, width, borderRadius
   */
   getMatchingCoverageLineDimensions = (layer, rangeStart, rangeEnd) => {
     const {
@@ -146,14 +146,12 @@ class TimelineData extends Component {
     }
 
     const borderRadius = `${borderRadiusLeft} ${borderRadiusRight} ${borderRadiusRight} ${borderRadiusLeft}`;
-    const toolTipPlacement = 'auto';
 
     return {
       visible,
       leftOffset,
       width,
       borderRadius,
-      toolTipPlacement,
     };
   }
 
@@ -259,7 +257,9 @@ class TimelineData extends Component {
       hoveredLayer,
       isDataCoveragePanelOpen,
       parentOffset,
+      position,
       timeScale,
+      transformX,
     } = this.props;
     const {
       activeLayers,
@@ -340,6 +340,8 @@ class TimelineData extends Component {
                 hoverOffToolTip={this.hoverOffToolTip}
                 hoverOnToolTip={this.hoverOnToolTip}
                 timeScale={timeScale}
+                position={position}
+                transformX={transformX}
               />
             </Scrollbars>
           </div>

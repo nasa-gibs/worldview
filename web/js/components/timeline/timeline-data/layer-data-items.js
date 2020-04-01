@@ -27,7 +27,19 @@ class LayerDataItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      initPosition: '',
     };
+  }
+
+  componentDidMount() {
+    this.setPropPosition();
+  }
+
+  setPropPosition = () => {
+    const { position } = this.props;
+    this.setState({
+      initPosition: position,
+    });
   }
 
   /**
@@ -48,7 +60,6 @@ class LayerDataItems extends Component {
             className="data-panel-layer-item-title"
             style={{
               color: titleColor,
-              fontSize: '1em',
             }}
           >
             {layer.title}
@@ -57,7 +68,6 @@ class LayerDataItems extends Component {
               className="data-panel-layer-item-subtitle"
               style={{
                 color: textColor,
-                fontSize: '0.9em',
               }}
             >
               {layer.subtitle}
@@ -68,7 +78,6 @@ class LayerDataItems extends Component {
             style={{
               background: layerItemBackground,
               color: textColor,
-              fontSize: '0.9em',
             }}
           >
             {dateRange}
@@ -138,15 +147,22 @@ class LayerDataItems extends Component {
   * @param {String} dateRangeStart
   * @param {String} dateRangeEnd
   * @param {String} color
-  * @param {String} position
   * @param {String} toolTipText
   * @param {Number/String} index
   * @returns {DOM Element} line
   */
-  createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, position, layerPeriod, index) => {
+  createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
     const {
-      axisWidth, hoverOnToolTip, hoverOffToolTip, hoveredTooltip,
+      axisWidth,
+      hoverOnToolTip,
+      hoverOffToolTip,
+      hoveredTooltip,
+      position,
+      transformX,
     } = this.props;
+    const {
+      initPosition,
+    } = this.state;
     const width = Math.max(options.width, 0);
     // get formatted dates based on line type
     const {
@@ -155,44 +171,64 @@ class LayerDataItems extends Component {
       toolTipText,
     } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
     const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
-
     // handle tooltip positioning
     const toolTipOffset = -options.leftOffset - (width < axisWidth ? options.leftOffset : axisWidth / 2);
     const toolTipPlacement = 'auto';
 
-    // candy stripe alt color
+    // handle line overlay for wide lines
+    const needsLineOverlay = options.leftOffset === 0 && options.width > axisWidth;
+    const overlayWidth = width * 10;
+    const overlayTransform = -overlayWidth / 2 + initPosition + position + transformX;
+
+    // candy stripe color
     const altLineColor = color === 'rgb(0, 69, 123)'
       ? '#164e7a'
       : '#797979';
+    const stripeBackground = `repeating-linear-gradient(45deg,
+      ${color},
+      ${color} 20px,
+      ${altLineColor} 20px,
+      ${altLineColor} 40px)`;
+
     return (
       <div
-        id={`data-coverage-line-${dateRangeStartEnd}`}
-        className="data-panel-coverage-line"
         key={index}
-        onMouseEnter={() => hoverOnToolTip(`${dateRangeStartEnd}`)}
-        onMouseLeave={() => hoverOffToolTip()}
-        style={{
-          position,
-          transform: `translate(${options.leftOffset}px, 0)`,
-          width: `${width}px`,
-          borderRadius: options.borderRadius,
-          background: `repeating-linear-gradient(45deg,
-            ${color},
-            ${color} 20px,
-            ${altLineColor} 20px,
-            ${altLineColor} 40px)`,
-        }}
+        className="data-panel-coverage-line-container"
       >
-        <Tooltip
-          placement={toolTipPlacement}
-          boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
-          offset={toolTipOffset}
-          container={`.data-item-${id}`}
-          isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
-          target={`data-coverage-line-${dateRangeStartEnd}`}
+        { needsLineOverlay
+        && (
+        <div
+          className="data-panel-coverage-line-overlay"
+          style={{
+            width: `${width * 10}px`,
+            transform: `translate(${overlayTransform}px, 0)`,
+            background: stripeBackground,
+          }}
+        />
+        )}
+        <div
+          id={`data-coverage-line-${dateRangeStartEnd}`}
+          className="data-panel-coverage-line"
+          onMouseEnter={() => hoverOnToolTip(`${dateRangeStartEnd}`)}
+          onMouseLeave={() => hoverOffToolTip()}
+          style={{
+            transform: `translate(${options.leftOffset}px, 0)`,
+            width: `${width}px`,
+            borderRadius: options.borderRadius,
+            background: stripeBackground,
+          }}
         >
-          {toolTipText}
-        </Tooltip>
+          <Tooltip
+            placement={toolTipPlacement}
+            boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
+            offset={toolTipOffset}
+            container={`.data-item-${id}`}
+            isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
+            target={`data-coverage-line-${dateRangeStartEnd}`}
+          >
+            {toolTipText}
+          </Tooltip>
+        </div>
       </div>
     );
   }
@@ -466,6 +502,9 @@ class LayerDataItems extends Component {
             : 1;
 
           const multipleCoverageRangesDateIntervals = {};
+          const isValidMultipleRangesLayer = !ignoredLayer[id] && dateRanges;
+          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
+          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1;
           const key = index;
           return (
             <div
@@ -485,8 +524,7 @@ class LayerDataItems extends Component {
                   maxWidth: `${axisWidth}px`,
                 }}
               >
-                {dateRanges && ((isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex))
-                || (isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1))
+                {isValidMultipleRangesLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage)
                 // multiple coverage ranges
                   ? (
                     <div
@@ -519,8 +557,6 @@ class LayerDataItems extends Component {
                             const multiDateToDisplay = Object.values(multipleCoverageRangesDateIntervals);
                             return multiDateToDisplay.map((itemRange, multiIndex) => {
                               const { date, interval } = itemRange;
-                              // const rangeDate = itemRange.date;
-                              // const itemRangeInterval = itemRange.interval;
                               const nextDate = multiDateToDisplay[multiIndex + 1];
                               const rangeDateEnd = this.getRangeDateEndWithAddedInterval(date, layerPeriod, interval, nextDate);
                               // get range line dimensions
@@ -534,7 +570,6 @@ class LayerDataItems extends Component {
                                   date,
                                   rangeDateEnd,
                                   lineBackgroundColor,
-                                  'absolute',
                                   layerPeriod,
                                   `${id}-${multiIndex}`,
                                 );
@@ -562,7 +597,6 @@ class LayerDataItems extends Component {
                             rangeStart,
                             rangeEnd,
                             lineBackgroundColor,
-                            'absolute',
                             layerPeriod,
                             `${id}-${innerIndex}`,
                           );
@@ -578,7 +612,6 @@ class LayerDataItems extends Component {
                     startDate,
                     endDate,
                     lineBackgroundColor,
-                    'relative',
                     layerPeriod,
                     `${id}-0`,
                   )}
@@ -602,7 +635,9 @@ LayerDataItems.propTypes = {
   hoveredTooltip: PropTypes.object,
   hoverOffToolTip: PropTypes.func,
   hoverOnToolTip: PropTypes.func,
+  position: PropTypes.number,
   timeScale: PropTypes.string,
+  transformX: PropTypes.number,
 };
 
 export default LayerDataItems;
