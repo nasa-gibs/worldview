@@ -60,6 +60,12 @@ window.onload = () => {
   loadingIndicator.delayed(promise, 1000);
   promise
     .done((config) => {
+      // Perform check to see if app was in the midst of a tour
+      if (parameters.tr) {
+        // Gets the extent of the first step of specified tour and overrides current view params
+        const tourParams = util.fromQueryString(config.stories[parameters.tr].steps[0].stepLink);
+        parameters.v = tourParams.v;
+      }
       config.pageLoadTime = parameters.now
         ? util.parseDateUTC(parameters.now) || new Date()
         : new Date();
