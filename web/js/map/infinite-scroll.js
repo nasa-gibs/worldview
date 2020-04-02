@@ -30,6 +30,7 @@ export class InfiniteScroll {
       view: props.map.getView(),
     };
     this.onViewChange = this.onViewChange.bind(this);
+    this.onPropertyChange = this.onPropertyChange.bind(this);
     this.init();
   }
 
@@ -63,25 +64,31 @@ export class InfiniteScroll {
     }
   }
 
+  onPropertyChange(e) {
+    if (e.key === 'resolution') {
+      this.onViewChange();
+    }
+  }
+
   setListeners() {
     const { map } = this.props;
     const { view } = this.state;
     map.on('pointerdrag', this.onViewChange);
-    view.on('propertychange', (e) => {
-      if (e.key === 'resolution') {
-        this.onViewChange();
-      }
-    });
+    view.on('propertychange', this.onPropertyChange);
+  }
+
+  unsetListeners() {
+    const { map } = this.props;
+    const { view } = this.state;
+    map.un('pointerdrag', this.onViewChange);
+    view.un('propertychange', this.onPropertyChange);
   }
 
   destroy() {
     const { map } = this.props;
     clearLayers(map);
+    this.unsetListeners();
   }
-
-  shiftLayers() {}
-
-  pushLayers() {}
 
   renderLayers(dateArray) { // Render()
     const {
