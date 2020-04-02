@@ -31,10 +31,10 @@ class LayerDataItems extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setPropPosition();
-  }
-
+  /**
+  * @desc setPropPosition set init position related to timeline axis
+  * @returns {void}
+  */
   setPropPosition = () => {
     const { position } = this.props;
     this.setState({
@@ -176,7 +176,7 @@ class LayerDataItems extends Component {
     const toolTipPlacement = 'auto';
 
     // handle line overlay for wide lines
-    const needsLineOverlay = options.leftOffset === 0 && options.width > axisWidth;
+    const needsLineOverlay = options.leftOffset === 0 && options.width >= axisWidth * 2;
     const overlayWidth = width * 10;
     const overlayTransform = -overlayWidth / 2 + initPosition + position + transformX;
 
@@ -431,6 +431,9 @@ class LayerDataItems extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setPropPosition();
+  }
 
   render() {
     const {
