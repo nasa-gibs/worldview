@@ -11,7 +11,8 @@ import * as EVENT_CONSTANTS from '../../modules/natural-events/constants';
 import { activateLayersForEventCategory } from '../../modules/layers/actions';
 import { deselectEvent as deselectEventAction, selected as selectedAction } from '../../modules/natural-events/actions';
 import { selectDate } from '../../modules/date/actions';
-import { CHANGE_PROJECTION } from '../../modules/projection/constants';
+import { UPDATE_MAP_UI } from '../../modules/map/constants';
+import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -45,12 +46,24 @@ export default function naturalEventsUI(ui, config, store, models) {
       requestedEventCategories,
     } = state;
     switch (action.type) {
+      case LOCATION_POP_ACTION: {
+        const newState = util.fromQueryString(action.payload.search);
+        if ((self.active && !newState.e) || (!self.active && newState.e)) {
+          return onSidebarChange(newState.e);
+        }
+        return;
+      }
       case CHANGE_SIDEBAR_TAB:
         return onSidebarChange(action.activeTab);
       case EVENT_CONSTANTS.SELECT_EVENT:
         return self.selectEvent(action.id, action.date);
       case EVENT_CONSTANTS.DESELECT_EVENT:
         return self.deselectEvent();
+      case UPDATE_MAP_UI:
+        if (map.proj !== action.ui.selected.proj) {
+          onProjChange(action.ui.selected.proj);
+        }
+        return;
       case EVENT_CONSTANTS.REQUEST_EVENTS_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_SOURCES_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_CATEGORIES_SUCCESS:
@@ -70,9 +83,7 @@ export default function naturalEventsUI(ui, config, store, models) {
             return self.selectEvent(selected.id, selected.date, null, true);
           }
         }
-        return;
-      case CHANGE_PROJECTION:
-        return !isLoading ? onProjChange(action.id) : '';
+        break;
       default:
         break;
     }
@@ -85,6 +96,7 @@ export default function naturalEventsUI(ui, config, store, models) {
   const onSidebarChange = function(tab) {
     const { proj } = store.getState();
     if (tab === 'events') {
+      self.active = true;
       // Remove previously stored markers
       naturalEventMarkers.remove(self.markers);
       // Store markers so the can be referenced later
@@ -118,6 +130,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       }
     } else {
       naturalEventMarkers.remove(self.markers);
+      self.active = false;
     }
     naturalEventsTrack.onSidebarChange(tab);
   };
