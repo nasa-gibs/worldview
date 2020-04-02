@@ -788,10 +788,10 @@
   }
   &.browse-search-width {
     width: 95%;
-    max-width: 978px;
+    max-width: 700px;
     & .product-outter-list-case {
       width: 100%;
-      padding: 5px 11px 5px 5px;
+      padding: 5px 11px 5px 2px;
     }
   }
 
@@ -830,6 +830,7 @@
   & .filter-button {
     background-color: #d54e21;
     border-color: #b55a3c;
+    margin-right: 10px;
   }
 }
 
@@ -984,7 +985,7 @@
     border-right: 1px solid #ccc;
   }
   &.search:not(.mobile) {
-    max-width: 400px;
+    max-width: 430px;
   }
   &.mobile {
     background-image: linear-gradient(360deg, #aaa, #ddd 15%);

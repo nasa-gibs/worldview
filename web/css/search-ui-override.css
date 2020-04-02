@@ -1,0 +1,80 @@
+
+.sui-facet + .sui-facet {
+  margin-top: 16px;
+}
+
+.layer-modal-content .facet-container {
+  flex-grow: 1;
+  max-width: 270px;
+
+  & .inner-container {
+    padding: 10px 8px 10px 10px;
+    margin: 3px 10px 2px 2px;
+    background-color: #333;
+
+    /* @media (max-width: 800px) {
+      div.sui-layout-sidebar {
+
+      }
+      button.sui-layout-sidebar-toggle {
+        background-color: #33425f;
+        color: #fff;
+      }
+    } */
+    div.sui-layout-sidebar {
+      width: 30%;
+    }
+
+    div.sui-layout-body, div.sui-layout-header {
+      background: #333;
+    }
+
+    legend.sui-facet__title {
+      font-weight: 600;
+      color: #eee;
+      border-bottom: 1px solid #aaa;
+    }
+
+    div.sui-boolean-facet,
+    a.sui-single-option-facet__link,
+    div.sui-paging-info,
+    div.sui-results-per-page__label {
+      color: #eee;
+    }
+
+    .sui-multi-checkbox-facet label {
+      margin-bottom: 4px;
+      & .sui-multi-checkbox-facet__input-text {
+        color: #eee;
+      }
+    }
+
+    span.sui-facet__count,
+    span.sui-boolean-facet__option-count,
+    span.sui-multi-checkbox-facet__option-count {
+      color: #ccc;
+    }
+
+    button.sui-facet-view-more {
+      color: #a8b6fa;
+    }
+
+    div.sui-layout-body::after {
+      background: #333;
+    }
+
+    li.sui-result {
+      padding: 5px;
+      border: 1px solid #333;
+      background: #ccc;
+    }
+
+    ul.sui-paging .rc-pagination-item-active a {
+      color: #eee;
+    }
+
+    h1, h2, h3, h4, h5 {
+      margin: 8px 12px;
+    }
+  }
+}
