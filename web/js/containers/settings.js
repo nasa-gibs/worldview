@@ -24,6 +24,12 @@ class Settings extends Component {
         active: false,
         toggle: () => {},
       },
+      {
+        label: 'Show Datelines',
+        id: 'show-dateline-settings-item',
+        active: false,
+        toggle: () => {},
+      },
     ];
   }
 
