@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-/*
- * A scrollable list of layers
- * @class LayerList
- * @extends React.Component
- */
 const CategoryCell = (props) => {
   const {
     category,

@@ -1,9 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
+import {
+  addLayer as addLayerAction,
+  removeLayer as removeLayerAction,
+} from '../../../modules/layers/actions';
 
 /**
  * A single layer search result row
@@ -33,9 +37,9 @@ class LayerRow extends React.Component {
    */
   toggleCheck() {
     const { checked } = this.state;
-    const { onState, offState, layer } = this.props;
-    if (checked) offState(layer.id);
-    if (!checked) onState(layer.id);
+    const { addLayer, removeLayer, layer } = this.props;
+    if (checked) removeLayer(layer.id);
+    if (!checked) addLayer(layer.id);
     this.setState({ checked: !checked });
   }
 
@@ -49,10 +53,10 @@ class LayerRow extends React.Component {
     const {
       layer,
       showLayerMetadata,
-      isMetadataShowing,
+      selectedLayer,
       isMobile,
     } = this.props;
-    if (!isMetadataShowing) {
+    if (!(selectedLayer && layer.id === selectedLayer.id)) {
       showLayerMetadata(layer.id);
     } else if (isMobile) {
       // Allow click to deselect on mobile
@@ -82,7 +86,8 @@ class LayerRow extends React.Component {
 
   render() {
     const { checked } = this.state;
-    const { layer, isMetadataShowing } = this.props;
+    const { layer, selectedLayer } = this.props;
+    const isMetadataShowing = selectedLayer && layer.id === selectedLayer.id;
     const {
       title, track, description, subtitle,
     } = layer;
@@ -117,12 +122,31 @@ class LayerRow extends React.Component {
 }
 LayerRow.propTypes = {
   isEnabled: PropTypes.bool,
-  isMetadataShowing: PropTypes.bool,
   isMobile: PropTypes.bool,
   layer: PropTypes.object,
-  offState: PropTypes.func,
-  onState: PropTypes.func,
+  addLayer: PropTypes.func,
+  removeLayer: PropTypes.func,
+  selectedLayer: PropTypes.object,
   showLayerMetadata: PropTypes.func,
 };
 
-export default LayerRow;
+const mapStateToProps = (state, ownProps) => {
+  const { date, productPicker } = state;
+  return {
+    selectedDate: date.selected,
+    selectedLayer: productPicker.selectedLayer,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  addLayer: (id) => {
+    dispatch(addLayerAction(id));
+  },
+  removeLayer: (id) => {
+    dispatch(removeLayerAction(id));
+  },
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LayerRow);

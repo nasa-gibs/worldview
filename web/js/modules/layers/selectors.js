@@ -5,7 +5,6 @@ import {
   find as lodashFind,
   cloneDeep as lodashCloneDeep,
   isUndefined as lodashIsUndefined,
-  values as lodashValues,
   findIndex as lodashFindIndex,
 } from 'lodash';
 import update from 'immutability-helper';
@@ -13,7 +12,7 @@ import util from '../../util/util';
 
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;
-  lodashValues(current.sources).forEach((source) => {
+  Object.values(current.sources).forEach((source) => {
     if (hasMeasurementSetting(current, source, config, projId)) {
       hasSource = true;
     }
@@ -32,7 +31,7 @@ export function hasMeasurementSource(current, config, projId) {
  */
 export function hasMeasurementSetting(current, source, config, projId) {
   let hasSetting;
-  lodashValues(source.settings).forEach((setting) => {
+  Object.values(source.settings).forEach((setting) => {
     const layer = config.layers[setting];
     if (layer) {
       const proj = layer.projections;
