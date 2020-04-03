@@ -12,8 +12,10 @@ const decodeHtml = (html) => {
   return txt.value;
 };
 
-const getConfig = (state) => state.config;
-const getProjection = (state) => state.proj && state.proj.id;
+// State selectors
+const getConfig = ({ config }) => config;
+const getProjection = ({ proj }) => proj && proj.id;
+const getProductPicker = ({ productPicker }) => productPicker;
 
 const getLayersForProjection = createSelector(
   [getConfig, getProjection],
@@ -40,15 +42,18 @@ const getLayersForProjection = createSelector(
  * Returns a SearchProvider configuration object.
  * https://github.com/elastic/search-ui/blob/master/ADVANCED.md#advanced-configuration
  */
-// eslint-disable-next-line import/prefer-default-export
 export const getSearchConfig = createSelector(
   [getLayersForProjection, getConfig, getProjection],
-  (layers, config, projection) => ({
-    // debug: true,
-    alwaysSearchOnInitialLoad: true,
-    trackUrlState: false,
-    initialState: {},
-    onSearch: initSearch(layers, config, projection),
-    searchQuery: {},
-  }),
+  initSearch,
+);
+
+export const getMeasurementSource = createSelector(
+  [getConfig, getProductPicker],
+  (config, { selectedMeasurement, selectedMeasurementSourceIndex }) => {
+    const measurements = Object.values(config.measurements);
+    const currentMeasurement = measurements.find(({ id }) => id === selectedMeasurement);
+    const sources = currentMeasurement && Object.values(currentMeasurement.sources);
+    const sortedSources = sources && sources.sort((a, b) => a.title.localeCompare(b.title));
+    return sortedSources && sortedSources[selectedMeasurementSourceIndex];
+  },
 );

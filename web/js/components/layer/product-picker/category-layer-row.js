@@ -1,6 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import lodashValues from 'lodash/values';
 import lodashFind from 'lodash/find';
 import {
   TabContent,
@@ -14,6 +14,17 @@ import { faChevronCircleDown, faChevronCircleRight } from '@fortawesome/free-sol
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import MeasurementLayerRow from './measurement-layer-row';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
+import {
+  addLayer as addLayerAction,
+  removeLayer as removeLayerAction,
+} from '../../../modules/layers/actions';
+import {
+  selectSource as selectSourceAction,
+  selectMeasurement as selectMeasurementAction,
+} from '../../../modules/product-picker/actions';
+import {
+  hasMeasurementSetting as hasSettingSelector,
+} from '../../../modules/layers/selectors';
 
 
 /**
@@ -39,9 +50,6 @@ class CategoryLayerRow extends React.Component {
       layerConfig,
       measurement,
       activeLayers,
-      removeLayer,
-      addLayer,
-      selectedDate,
     } = this.props;
     const { projection } = this.state;
     const OrbitSourceList = [];
@@ -64,12 +72,9 @@ class CategoryLayerRow extends React.Component {
             <MeasurementLayerRow
               measurementId={measurement.id}
               key={measurement.id + layer.id}
-              checked={!!lodashFind(activeLayers, { id: layer.id })}
               layer={layer}
               title={orbitTitle}
-              removeLayer={removeLayer}
-              addLayer={addLayer}
-              selectedDate={selectedDate}
+              checked={!!lodashFind(activeLayers, { id: layer.id })}
             />,
           );
         } else {
@@ -77,12 +82,9 @@ class CategoryLayerRow extends React.Component {
             <MeasurementLayerRow
               measurementId={measurement.id}
               key={measurement.id + layer.id}
-              checked={!!lodashFind(activeLayers, { id: layer.id })}
               layer={layer}
               title={layer.title}
-              removeLayer={removeLayer}
-              addLayer={addLayer}
-              selectedDate={selectedDate}
+              checked={!!lodashFind(activeLayers, { id: layer.id })}
             />,
           );
         }
@@ -100,23 +102,25 @@ class CategoryLayerRow extends React.Component {
     });
     return (
       <div>
-        {LayerSouceList.length > 0 ? (
-          <ListGroup className="source-settings source-sub-group">
-            {LayerSouceList}
-          </ListGroup>
-        )
-          : ''}
-        {OrbitSourceList.length > 0 ? (
-          <>
-            <h3 className="source-orbits-title">Orbital Tracks:</h3>
-            <ListGroup
-              id={`${source.id}-orbit-tracks`}
-              className="source-orbit-tracks source-sub-group"
-            >
-              {OrbitSourceList}
+        {LayerSouceList.length > 0
+          ? (
+            <ListGroup className="source-settings source-sub-group">
+              {LayerSouceList}
             </ListGroup>
-          </>
-        )
+          )
+          : ''}
+        {OrbitSourceList.length > 0
+          ? (
+            <>
+              <h3 className="source-orbits-title">Orbital Tracks:</h3>
+              <ListGroup
+                id={`${source.id}-orbit-tracks`}
+                className="source-orbit-tracks source-sub-group"
+              >
+                {OrbitSourceList}
+              </ListGroup>
+            </>
+          )
           : ''}
       </div>
     );
@@ -142,12 +146,12 @@ class CategoryLayerRow extends React.Component {
    * @param {Number} activeSourceIndex | Index of active measurement
    */
   renderSourceTabs(source, index, activeSourceIndex) {
-    const { setSourceIndex } = this.props;
+    const { selectSource } = this.props;
     return (
       <NavItem
         key={source.id + index}
         id={`${source.id}-${index}-source-Nav`}
-        onClick={() => setSourceIndex(index)}
+        onClick={() => selectSource(index)}
         className={
           index === activeSourceIndex
             ? 'active source-nav-item'
@@ -169,7 +173,7 @@ class CategoryLayerRow extends React.Component {
       isMobile,
       selectedMeasurementSourceIndex,
     } = this.props;
-    const sources = lodashValues(measurement.sources);
+    const sources = Object.values(measurement.sources);
 
     // set first valid index to handle invalid activeSourceIndex indexes after projection change
     let minValidIndex = -1;
@@ -215,7 +219,7 @@ class CategoryLayerRow extends React.Component {
     const {
       measurement,
       category,
-      updateSelectedMeasurement,
+      selectMeasurement,
       id,
       isSelected,
     } = this.props;
@@ -229,7 +233,7 @@ class CategoryLayerRow extends React.Component {
         key={`${category.id}-${measurement.id}`}
       >
         <div
-          onClick={() => updateSelectedMeasurement(id)}
+          onClick={() => selectMeasurement(id)}
           className="measurement-row-header"
         >
           <h3>{measurement.title}</h3>
@@ -245,7 +249,6 @@ class CategoryLayerRow extends React.Component {
 }
 CategoryLayerRow.propTypes = {
   activeLayers: PropTypes.array,
-  addLayer: PropTypes.func,
   category: PropTypes.object,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
@@ -254,11 +257,54 @@ CategoryLayerRow.propTypes = {
   layerConfig: PropTypes.object,
   measurement: PropTypes.object,
   projection: PropTypes.string,
+  addLayer: PropTypes.func,
   removeLayer: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectSource: PropTypes.func,
+  selectMeasurement: PropTypes.func,
   selectedMeasurementSourceIndex: PropTypes.number,
-  setSourceIndex: PropTypes.func,
-  updateSelectedMeasurement: PropTypes.func,
 };
 
-export default CategoryLayerRow;
+const mapStateToProps = (state, ownProps) => {
+  const {
+    config,
+    browser,
+    proj,
+    layers,
+    compare,
+    productPicker,
+  } = state;
+  const isMobile = browser.lessThan.medium;
+  const activeString = compare.isCompareA ? 'active' : 'activeB';
+  const activeLayers = layers[activeString];
+  const {
+    selectedMeasurementSourceIndex,
+  } = productPicker;
+  return {
+    layerConfig: config.layers,
+    isMobile,
+    activeLayers,
+    projection: proj.id,
+    selectedMeasurementSourceIndex,
+    hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  addLayer: (id) => {
+    dispatch(addLayerAction(id));
+  },
+  removeLayer: (id) => {
+    dispatch(removeLayerAction(id));
+  },
+  selectMeasurement: (id) => {
+    dispatch(selectMeasurementAction(id));
+  },
+  selectSource: (sourceIndex) => {
+    dispatch(selectSourceAction(sourceIndex));
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CategoryLayerRow);

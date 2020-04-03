@@ -1,11 +1,12 @@
 import { findIndex as lodashFindIndex } from 'lodash';
+// eslint-disable-next-line import/no-unresolved
+import googleTagManager from 'googleTagManager';
 import {
   addLayer as addLayerSelector,
   resetLayers as resetLayersSelector,
   getLayers as getLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
 } from './selectors';
-
 import {
   RESET_LAYERS,
   ADD_LAYER,
@@ -51,10 +52,15 @@ export function activateLayersForEventCategory(activeLayers) {
 }
 export function addLayer(id, spec) {
   spec = spec || {};
+  googleTagManager.pushEvent({
+    event: 'layer_added',
+    layers: {
+      id,
+    },
+  });
   return (dispatch, getState) => {
     const state = getState();
     const { layers, compare, proj } = state;
-
     const { activeString } = compare;
     const layerObj = getLayersSelector(
       layers[activeString],

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap, faMeteor } from '@fortawesome/free-solid-svg-icons';
 import util from '../../../util/util';
+import { getMeasurementSource } from '../../../modules/product-picker/selectors';
 
 class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
@@ -85,11 +86,7 @@ class MeasurementMetadataDetail extends React.Component {
       return (
         <div className="no-results">
           <FontAwesomeIcon icon={faMap} />
-          <h3>
-            {' '}
-            {categoryTitle}
-            {' '}
-          </h3>
+          <h3>{categoryTitle}</h3>
           <h5> Select a measurement to view details here!</h5>
         </div>
       );
@@ -125,4 +122,15 @@ MeasurementMetadataDetail.propTypes = {
   source: PropTypes.object,
 };
 
-export default MeasurementMetadataDetail;
+const mapStateToProps = (state) => {
+  const { category } = state.productPicker;
+  return {
+    categoryTitle: category.title,
+    source: getMeasurementSource(state),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  () => ({}),
+)(MeasurementMetadataDetail);

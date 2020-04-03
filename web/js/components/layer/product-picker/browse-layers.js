@@ -1,12 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  values as lodashValues,
-} from 'lodash';
 import lodashDebounce from 'lodash/debounce';
-// eslint-disable-next-line import/no-unresolved
-import googleTagManager from 'googleTagManager';
 import {
   Nav,
   NavItem,
@@ -15,17 +10,10 @@ import {
 import LayerList from './layer-list';
 import CategoryGrid from './category-grid';
 import Scrollbars from '../../util/scrollbar';
-import {
-  addLayer as addLayerAction,
-  removeLayer as removeLayerAction,
-} from '../../../modules/layers/actions';
-import {
-  hasMeasurementSetting as hasSettingSelector,
-  hasMeasurementSource as hasSourceeSelecetor,
-} from '../../../modules/layers/selectors';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
-  updateProductPicker,
+  selectCategory as selectCategoryAction,
+  toggleFeatureTab as toggleFeatureTabAction,
   updateListScrollTop,
 } from '../../../modules/product-picker/actions';
 
@@ -38,8 +26,6 @@ class BrowseLayers extends React.Component {
   constructor(props) {
     super(props);
 
-    this.selectMeasurement = this.selectMeasurement.bind(this);
-    this.showMeasurements = this.showMeasurements.bind(this);
     this.selectCategoryType = this.selectCategoryType.bind(this);
   }
 
@@ -49,136 +35,37 @@ class BrowseLayers extends React.Component {
    * @param {String} key | categoryType identifier
    */
   selectCategoryType(key) {
-    const { updateProductPickerState } = this.props;
+    const { selectCategory, toggleFeatureTab } = this.props;
     if (key === 'featured') {
-      this.toggleFeatureTab();
+      toggleFeatureTab();
     } else {
-      updateProductPickerState({
-        categoryType: key,
-        listType: 'category',
-        selectedMeasurement: null,
-      });
-    }
-
-    googleTagManager.pushEvent({
-      event: 'layers_meta_category',
-      layers: {
-        meta_category: key,
-      },
-    });
-  }
-
-  toggleFeatureTab = (partialState) => {
-    const { updateProductPickerState } = this.props;
-    const categoryType = 'featured';
-    const { categoryConfig, measurementConfig } = this.props;
-    const category = categoryConfig[categoryType].All;
-    const selectedMeasurement = category.measurements[0];
-    const selectedMeasurementId = measurementConfig[selectedMeasurement].id;
-
-    updateProductPickerState({
-      ...partialState,
-      categoryType,
-      category,
-      listType: 'measurements',
-      selectedMeasurement: selectedMeasurementId,
-    });
-  }
-
-  /**
-   * Draw measurement list when category is clicked
-   * @function showMeasurements
-   * @param {Object} category | category object
-   * @param {String} selectedMeasurement | Measurement ID
-   */
-  showMeasurements(category, selectedMeasurement) {
-    const { updateProductPickerState } = this.props;
-    updateProductPickerState({
-      listType: 'measurements',
-      selectedMeasurement,
-      category,
-    });
-    googleTagManager.pushEvent({
-      event: 'layers_category',
-      layers: {
-        category: category.title,
-      },
-    });
-  }
-
-  /**
-   * @function selectMeasurement
-   * @param {String} id | Measurement ID
-   */
-  selectMeasurement(id) {
-    const { updateProductPickerState, productPicker } = this.props;
-    if (productPicker.selectedMeasurement !== id) {
-      updateProductPickerState({
-        selectedMeasurement: id,
-        selectedMeasurementSourceIndex: 0,
-      });
-    } else {
-      updateProductPickerState({
-        selectedMeasurement: null,
-        selectedMeasurementSourceIndex: 0,
-      });
+      selectCategory(key);
     }
   }
 
-  /**
-   * When in "browse" measurement mode
-   * @param {*} selectedMeasurementSourceIndex - the index of the source for which to show metadata
-   */
-  setSourceIndex(selectedMeasurementSourceIndex) {
-    const { updateProductPickerState } = this.props;
-    updateProductPickerState({ selectedMeasurementSourceIndex });
-  }
-
-  getSelectedMeasurementSource() {
-    const { productPicker, measurementConfig } = this.props;
-    const { selectedMeasurement, selectedMeasurementSourceIndex } = productPicker;
-    const measurements = Object.values(measurementConfig);
-    const currentMeasurement = measurements.find(({ id }) => id === selectedMeasurement);
-    if (currentMeasurement) {
-      const sources = Object.values(currentMeasurement.sources)
-        .sort((a, b) => a.title.localeCompare(b.title));
-      return sources && sources[selectedMeasurementSourceIndex];
-    }
-  }
 
   renderLayerList() {
+    const {
+      componentHeights,
+      isMobile,
+      // updateScrollPosition,
+      listScrollTop,
+    } = this.props;
     const {
       listHeight,
       listMinHeight,
       detailHeight,
-      isMobile,
-      categoryConfig,
-      selectedProjection,
-      selectedDate,
-      activeLayers,
-      measurementConfig,
-      addLayer,
-      removeLayer,
-      hasMeasurementSource,
-      hasMeasurementSetting,
-      layerConfig,
-      selectedLayer,
-      updateScrollPosition,
-      productPicker,
-    } = this.props;
-    const {
-      category,
-      categoryType,
-      listScrollTop,
-      selectedMeasurement,
-      selectedMeasurementSourceIndex,
-    } = productPicker;
+    } = componentHeights;
 
     const debouncedOnScroll = lodashDebounce(({ scrollTop }) => {
-      updateScrollPosition(scrollTop);
+      // updateScrollPosition(scrollTop);
     }, 500);
-    const containerClass = isMobile ? 'search-container mobile' : 'search-container';
-    const listContainerClass = isMobile ? 'layer-list-container browse mobile' : 'layer-list-container browse';
+    const containerClass = isMobile
+      ? 'search-container mobile'
+      : 'search-container';
+    const listContainerClass = isMobile
+      ? 'layer-list-container browse mobile'
+      : 'layer-list-container browse';
 
     return (
       <div className={containerClass}>
@@ -195,22 +82,6 @@ class BrowseLayers extends React.Component {
               <LayerList
                 listType="measurements"
                 isMobile={isMobile}
-                addLayer={addLayer}
-                removeLayer={removeLayer}
-                activeLayers={activeLayers}
-                layerConfig={layerConfig}
-                category={category}
-                categoryConfig={categoryConfig[categoryType]}
-                selectedProjection={selectedProjection}
-                selectedDate={selectedDate}
-                selectedLayer={selectedLayer}
-                hasMeasurementSetting={hasMeasurementSetting}
-                hasMeasurementSource={hasMeasurementSource}
-                measurementConfig={measurementConfig}
-                selectedMeasurement={selectedMeasurement}
-                updateSelectedMeasurement={this.selectMeasurement}
-                setSourceIndex={(index) => this.setSourceIndex(index)}
-                selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
               />
             </div>
           </Scrollbars>
@@ -218,10 +89,7 @@ class BrowseLayers extends React.Component {
         { !isMobile && (
           <div className="layer-detail-container layers-all browse">
             <Scrollbars style={{ maxHeight: `${detailHeight}px` }}>
-              <MeasurementMetadataDetail
-                categoryTitle={category && category.title}
-                source={this.getSelectedMeasurementSource()}
-              />
+              <MeasurementMetadataDetail />
             </Scrollbars>
           </div>
         )}
@@ -231,16 +99,14 @@ class BrowseLayers extends React.Component {
 
   render() {
     const {
-      listHeight,
+      componentHeights,
       selectedProjection,
       width,
-      categoryConfig,
-      measurementConfig,
-      hasMeasurementSource,
-      productPicker,
+      categoryType,
+      mode,
     } = this.props;
-    const { categoryType, listType } = productPicker;
-    const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
+    const { listHeight } = componentHeights;
+    const isCategoryDisplay = mode === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
     const categoryKeys = [
       'hazards and disasters',
@@ -268,14 +134,7 @@ class BrowseLayers extends React.Component {
             {isCategoryDisplay ? (
               <Scrollbars style={{ maxHeight: `${listHeight}px` }}>
                 <div className="product-outter-list-case">
-                  <CategoryGrid
-                    categories={lodashValues(categoryConfig[categoryType])}
-                    measurementConfig={measurementConfig}
-                    drawMeasurements={this.showMeasurements}
-                    hasMeasurementSource={hasMeasurementSource}
-                    categoryType={categoryType}
-                    width={width}
-                  />
+                  <CategoryGrid width={width} />
                 </div>
               </Scrollbars>
             ) : this.renderLayerList()}
@@ -287,46 +146,27 @@ class BrowseLayers extends React.Component {
 }
 
 BrowseLayers.propTypes = {
-  activeLayers: PropTypes.array,
-  addLayer: PropTypes.func,
-  categoryConfig: PropTypes.object,
-  hasMeasurementSetting: PropTypes.func,
-  hasMeasurementSource: PropTypes.func,
+  categoryType: PropTypes.string,
+  mode: PropTypes.string,
   isMobile: PropTypes.bool,
-  layerConfig: PropTypes.object,
-  listHeight: PropTypes.number,
-  listMinHeight: PropTypes.number,
-  detailHeight: PropTypes.number,
-  measurementConfig: PropTypes.object,
-  measurements: PropTypes.object,
-  productPicker: PropTypes.object,
-  removeLayer: PropTypes.func,
-  selectedDate: PropTypes.object,
-  selectedLayer: PropTypes.object,
+  componentHeights: PropTypes.object,
+  listScrollTop: PropTypes.number,
+  selectCategory: PropTypes.func,
   selectedProjection: PropTypes.string,
-  updateProductPickerState: PropTypes.func,
-  updateScrollPosition: PropTypes.func,
+  toggleFeatureTab: PropTypes.func,
+  // updateScrollPosition: PropTypes.func,
   width: PropTypes.number,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  addLayer: (id) => {
-    googleTagManager.pushEvent({
-      event: 'layer_added',
-      layers: {
-        id,
-      },
-    });
-    dispatch(addLayerAction(id));
+  selectCategory: (key) => {
+    dispatch(selectCategoryAction(key));
   },
-  removeLayer: (id) => {
-    dispatch(removeLayerAction(id));
+  toggleFeatureTab: () => {
+    dispatch(toggleFeatureTabAction());
   },
   updateScrollPosition: (scrollTop) => {
     dispatch(updateListScrollTop(scrollTop));
-  },
-  updateProductPickerState: (partialState) => {
-    dispatch(updateProductPicker(partialState));
   },
 });
 
@@ -335,30 +175,26 @@ function mapStateToProps(state, ownProps) {
     config,
     browser,
     proj,
-    layers,
-    compare,
-    date,
     productPicker,
   } = state;
-  const { screenHeight } = browser;
   const isMobile = browser.lessThan.medium;
-  const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const activeLayers = layers[activeString];
-
+  const {
+    mode,
+    categoryType,
+    listScrollTop,
+    selectedMeasurement,
+    selectedMeasurementSourceIndex,
+  } = productPicker;
   return {
-    productPicker,
+    mode,
+    categoryType,
     categoryConfig: config.categories,
     measurementConfig: config.measurements,
-    layerConfig: config.layers,
-    selectedDate: date.selected,
+    listScrollTop,
     isMobile,
-    screenHeight,
-    activeLayers,
     selectedProjection: proj.id,
-    showPreviewImage: config.features.previewSnapshots,
-    filterProjections: (layer) => !layer.projections[proj.id],
-    hasMeasurementSource: (current) => hasSourceeSelecetor(current, config, proj.id),
-    hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),
+    selectedMeasurement,
+    selectedMeasurementSourceIndex,
   };
 }
 export default connect(

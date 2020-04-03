@@ -1,8 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withSearch } from '@elastic/react-search-ui';
 import SearchLayerRow from './search-layer-row';
 import CategoryLayerRow from './category-layer-row';
 import 'whatwg-fetch'; // fetch() polyfill for IE
+import {
+  hasMeasurementSource as hasSourceeSelector,
+} from '../../../modules/layers/selectors';
+import {
+  selectLayer as selectLayerAction,
+} from '../../../modules/product-picker/actions';
 
 /*
  * A scrollable list of layers
@@ -40,15 +48,15 @@ class LayerList extends React.Component {
    */
   showLayerMetadata(layerId) {
     const {
-      filteredRows,
+      results,
       selectedLayer,
-      showMetadataForLayer,
+      selectLayer,
     } = this.props;
-    const layer = filteredRows.find((l) => l.id === layerId);
+    const layer = results.find((l) => l.id === layerId);
 
     // No result found, clear the metadata detail view by passing null
     if (!layerId) {
-      showMetadataForLayer(null);
+      selectLayer(null);
       return;
     }
 
@@ -67,31 +75,20 @@ class LayerList extends React.Component {
           // formed HTML file. Also avoid executing any script or style tags.
           const isMetadataSnippet = !body.match(/<(head|body|html|style|script)[^>]*>/i);
           layer.metadata = isMetadataSnippet ? body : errorMessage;
-          showMetadataForLayer(layer);
+          selectLayer(layer);
         });
     } else {
-      showMetadataForLayer(layer);
+      selectLayer(layer);
     }
   }
 
   renderCategoryList() {
     const {
-      isMobile,
       measurementConfig,
-      layerConfig,
-      addLayer,
-      removeLayer,
-      activeLayers,
-      selectedProjection,
       selectedMeasurement,
       hasMeasurementSource,
-      hasMeasurementSetting,
-      updateSelectedMeasurement,
       category,
       categoryConfig,
-      setSourceIndex,
-      selectedDate,
-      selectedMeasurementSourceIndex,
     } = this.props;
 
     const categoryToUse = category || categoryConfig.All;
@@ -108,21 +105,9 @@ class LayerList extends React.Component {
                   key={current.id}
                   id={current.id}
                   index={index}
-                  activeLayers={activeLayers}
                   category={categoryToUse}
                   measurement={current}
-                  measurementConfig={measurementConfig}
-                  layerConfig={layerConfig}
-                  hasMeasurementSetting={hasMeasurementSetting}
-                  addLayer={addLayer}
-                  removeLayer={removeLayer}
-                  projection={selectedProjection}
                   isSelected={isSelected}
-                  selectedDate={selectedDate}
-                  isMobile={isMobile}
-                  updateSelectedMeasurement={updateSelectedMeasurement}
-                  setSourceIndex={setSourceIndex}
-                  selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
                 />
               );
             }
@@ -132,27 +117,21 @@ class LayerList extends React.Component {
     );
   }
 
-  renderSearchList(filteredRows) {
+  renderSearchList() {
     const {
-      addLayer,
-      removeLayer,
-      selectedLayer,
+      results,
       activeLayers,
       isMobile,
     } = this.props;
 
     return (
-      filteredRows.map((layer) => {
+      results.map((layer) => {
         const isEnabled = activeLayers.some((l) => l.id === layer.id);
-        const isMetadataShowing = selectedLayer && layer.id === selectedLayer.id;
         return (
           <SearchLayerRow
             key={layer.id}
             layer={layer}
             isEnabled={isEnabled}
-            isMetadataShowing={isMetadataShowing}
-            onState={addLayer}
-            offState={removeLayer}
             isMobile={isMobile}
             showLayerMetadata={(id) => this.showLayerMetadata(id)}
             toggleDateRangesExpansion={(id) => this.toggleDateRangesExpansion(id)}
@@ -163,11 +142,11 @@ class LayerList extends React.Component {
   }
 
   render() {
-    const { filteredRows, listType } = this.props;
+    const { listType } = this.props;
     return (
       <div className="layer-picker-list-case layers-all">
         {listType === 'search'
-          ? this.renderSearchList(filteredRows)
+          ? this.renderSearchList()
           : this.renderCategoryList()}
       </div>
     );
@@ -178,25 +157,60 @@ LayerList.defaultProps = {
 };
 LayerList.propTypes = {
   activeLayers: PropTypes.array,
-  addLayer: PropTypes.func,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
-  filteredRows: PropTypes.array,
-  hasMeasurementSetting: PropTypes.func,
+  results: PropTypes.array,
   hasMeasurementSource: PropTypes.func,
   isMobile: PropTypes.bool,
-  layerConfig: PropTypes.object,
   listType: PropTypes.string,
   measurementConfig: PropTypes.object,
-  removeLayer: PropTypes.func,
-  selectedDate: PropTypes.object,
   selectedLayer: PropTypes.object,
   selectedMeasurement: PropTypes.string,
-  selectedMeasurementSourceIndex: PropTypes.number,
-  selectedProjection: PropTypes.string,
-  setSourceIndex: PropTypes.func,
-  showMetadataForLayer: PropTypes.func,
-  updateSelectedMeasurement: PropTypes.func,
+  selectLayer: PropTypes.func,
 };
 
-export default LayerList;
+const mapStateToProps = (state, ownProps) => {
+  const {
+    date,
+    productPicker,
+    proj,
+    compare,
+    layers,
+    config,
+  } = state;
+  const {
+    category,
+    categoryType,
+    selectedLayer,
+    selectedMeasurement,
+    selectedMeasurementSourceIndex,
+  } = productPicker;
+  const activeString = compare.isCompareA ? 'active' : 'activeB';
+  const activeLayers = layers[activeString];
+  return {
+    categoryConfig: config.categories[categoryType],
+    measurementConfig: config.measurements,
+    layerConfig: config.layers,
+    activeLayers,
+    category,
+    selectedProjection: proj.id,
+    selectedLayer,
+    selectedMeasurement,
+    selectedMeasurementSourceIndex,
+    selectedDate: date.selected,
+    hasMeasurementSource: (current) => hasSourceeSelector(current, config, proj.id),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  selectLayer: (layer) => {
+    dispatch(selectLayerAction(layer));
+  },
+});
+
+export default withSearch(
+  ({ results }) => ({ results }),
+)(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LayerList));

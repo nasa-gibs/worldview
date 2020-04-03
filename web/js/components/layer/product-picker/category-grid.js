@@ -1,8 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashOrderBy from 'lodash/orderBy';
 import Masonry from 'react-masonry-component';
 import CategoryCell from './category-cell';
+import {
+  showMeasurements as showMeasurementsAction,
+} from '../../../modules/product-picker/actions';
+import {
+  hasMeasurementSource as hasSourceSelector,
+} from '../../../modules/layers/selectors';
 
 /*
  * A scrollable list of layers
@@ -13,7 +20,7 @@ const CategoryGrid = (props) => {
   const {
     categories,
     measurementConfig,
-    drawMeasurements,
+    showMeasurements,
     hasMeasurementSource,
     categoryType,
     width,
@@ -39,21 +46,54 @@ const CategoryGrid = (props) => {
           category={category}
           categoryType={categoryType}
           measurementConfig={measurementConfig}
-          drawMeasurements={drawMeasurements}
+          drawMeasurements={showMeasurements}
           hasMeasurementSource={hasMeasurementSource}
         />
       ))}
     </Masonry>
   );
 };
+const mapDispatchToProps = (dispatch) => ({
+  showMeasurements: (category, selectedMeasurement) => {
+    dispatch(showMeasurementsAction({ category, selectedMeasurement }));
+  },
+});
+
+function mapStateToProps(state, ownProps) {
+  const {
+    proj,
+    config,
+    productPicker,
+  } = state;
+  const {
+    category,
+    categoryType,
+    selectedMeasurement,
+    selectedMeasurementSourceIndex,
+  } = productPicker;
+  const categoryConfig = config.categories;
+
+  return {
+    categories: Object.values(categoryConfig[categoryType]),
+    categoryType,
+    category,
+    measurementConfig: config.measurements,
+    selectedMeasurement,
+    selectedMeasurementSourceIndex,
+    hasMeasurementSource: (current) => hasSourceSelector(current, config, proj.id),
+  };
+}
 
 CategoryGrid.propTypes = {
   categories: PropTypes.array,
   categoryType: PropTypes.string,
-  drawMeasurements: PropTypes.func,
+  showMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
   measurementConfig: PropTypes.object,
   width: PropTypes.number,
 };
 
-export default CategoryGrid;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CategoryGrid);
