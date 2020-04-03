@@ -172,10 +172,16 @@ async function onSearch (requestState) {
   };
 }
 
+/**
+ *
+ * @param {*} layers - layer objects (filtered by projection) with additional facet props
+ * @param {*} config - the entire WV config object
+ * @param {*} projection - current map projection
+ */
 export default function initSearch(layers, config, projection) {
+  initialLayersArray = layers;
   configRef = config;
   projectionRef = projection;
-  initialLayersArray = layers;
 
   layers.forEach((layer) => {
     facetFields.forEach((facetField) => {
@@ -183,5 +189,12 @@ export default function initSearch(layers, config, projection) {
     });
   });
 
-  return onSearch;
+  return {
+    // debug: true,
+    alwaysSearchOnInitialLoad: true,
+    trackUrlState: false,
+    initialState: {},
+    onSearch,
+    searchQuery: {},
+  };
 }

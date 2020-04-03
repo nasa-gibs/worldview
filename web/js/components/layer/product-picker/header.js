@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   InputGroup,
@@ -6,13 +7,15 @@ import {
   Button,
   Breadcrumb,
   BreadcrumbItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import LayerFilters from './layer-filters';
+import { withSearch } from '@elastic/react-search-ui';
+// import LayerFilters from './layer-filters';
+import {
+  toggleCategoryMode as toggleCategoryModeAction,
+  toggleSearchMode as toggleSearchModeAction,
+} from '../../../modules/product-picker/actions';
 import util from '../../../util/util';
 
 
@@ -24,9 +27,6 @@ import util from '../../../util/util';
 class ProductPickerHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      inputValue: props.inputValue,
-    };
     this.revertToInitialScreen = this.revertToInitialScreen.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -43,16 +43,31 @@ class ProductPickerHeader extends React.Component {
    * @method revertToInitialScreen
    */
   revertToInitialScreen(e) {
-    const { updateListState } = this.props;
+    const {
+      clearFilters,
+      setSearchTerm,
+      selectedLayer,
+      toggleCategoryMode,
+      toggleSearchMode,
+    } = this.props;
     e.preventDefault();
-    updateListState();
-    this.setState({ inputValue: '' });
+
+    if (selectedLayer) {
+      toggleSearchMode();
+      return;
+    }
+    toggleCategoryMode();
+    setSearchTerm('');
+    clearFilters();
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     const { setSearchTerm } = this.props;
-    setSearchTerm(e.target.value, { shouldClearFilters: false });
-    this.setState({ inputValue: e.target.value });
+    const { value } = e.target;
+    setSearchTerm(value, {
+      shouldClearFilters: false,
+      debounce: 200,
+    });
   }
 
   renderBreadCrumb() {
@@ -78,23 +93,22 @@ class ProductPickerHeader extends React.Component {
     const isAutoFocus = !util.browser.touchDevice;
     const { inputValue } = this.state;
     const {
+      isMobile,
       selectedProjection,
-      selectedDate,
-      listType,
+      mode,
       category,
       width,
-      toggleFilterByAvailable,
-      filterByAvailable,
-      isMobile,
-      children,
-      enableSearchMode,
+      results,
+      searchTerm,
+      selectedLayer,
+      toggleSearchMode,
     } = this.props;
-    const isSearching = listType === 'search';
+    const isSearching = mode === 'search';
     const categoryId = category && category.id;
     const showBackButton = isSearching
       || (categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
-      && listType !== 'category');
+      && mode !== 'category');
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
 
     return (
@@ -113,14 +127,17 @@ class ProductPickerHeader extends React.Component {
             </>
           )}
 
-          <Button className="filter-button" onClick={enableSearchMode}>
-            <FontAwesomeIcon icon={faFilter} />
-          </Button>
+          {(mode !== 'search' && !selectedLayer)
+            && (
+              <Button className="filter-button" onClick={toggleSearchMode}>
+                <FontAwesomeIcon icon={faFilter} />
+              </Button>
+            )}
 
           <Input
             onChange={this.handleChange}
             id="layers-search-input"
-            value={inputValue}
+            value={searchTerm}
             placeholder="Search"
             // eslint-disable-next-line no-return-assign
             innerRef={(c) => (this._input = c)}
@@ -128,7 +145,25 @@ class ProductPickerHeader extends React.Component {
             autoFocus={isAutoFocus}
           />
         </InputGroup>
-        {children}
+        {(mode === 'search' && !isMobile) && (
+          <div className="header-filter-container">
+            {/* <div className="header-filters">
+                    <FilterUnavailable
+                      selectedDate={selectedDate}
+                      filterByAvailable={filterByAvailable}
+                      toggleFilterByAvailable={this.toggleFilterByAvailable}
+                    />
+                  </div> */}
+            <div className="results-text">
+              { `Showing ${results.length} results`}
+              {/* {numRowsFilteredOut > 0 && (
+                      <span>
+                        {`(${numRowsFilteredOut} hidden by filters)`}
+                      </span>
+                    )} */}
+            </div>
+          </div>
+        )}
       </>
     );
   }
@@ -136,17 +171,63 @@ class ProductPickerHeader extends React.Component {
 
 ProductPickerHeader.propTypes = {
   category: PropTypes.object,
-  children: PropTypes.node,
-  filterByAvailable: PropTypes.bool,
-  inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
-  listType: PropTypes.string,
+  clearFilters: PropTypes.func,
+  mode: PropTypes.string,
+  results: PropTypes.array,
   setSearchTerm: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedLayer: PropTypes.object,
   selectedProjection: PropTypes.string,
-  toggleFilterByAvailable: PropTypes.func,
-  updateListState: PropTypes.func,
+  searchTerm: PropTypes.string,
+  toggleCategoryMode: PropTypes.func,
+  toggleSearchMode: PropTypes.func,
   width: PropTypes.number,
 };
 
-export default ProductPickerHeader;
+const mapDispatchToProps = (dispatch) => ({
+  toggleCategoryMode: () => {
+    dispatch(toggleCategoryModeAction());
+  },
+  toggleSearchMode: () => {
+    dispatch(toggleSearchModeAction());
+  },
+});
+
+const mapStateToProps = (state, ownProps) => {
+  const { productPicker, browser, proj } = state;
+  const {
+    mode,
+    category,
+    selectedDate,
+    selectedLayer,
+    filterByAvailable,
+  } = productPicker;
+  const isMobile = browser.lessThan.medium;
+
+  return {
+    isMobile,
+    mode,
+    category,
+    selectedDate,
+    selectedLayer,
+    selectedProjection: proj.id,
+    filterByAvailable,
+  };
+};
+
+export default withSearch(
+  ({
+    clearFilters,
+    results,
+    searchTerm,
+    setSearchTerm,
+  }) => ({
+    clearFilters,
+    searchTerm,
+    setSearchTerm,
+    results,
+  }),
+)(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProductPickerHeader));
