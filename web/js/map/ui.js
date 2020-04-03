@@ -228,12 +228,17 @@ export function mapui(models, config, store, ui) {
     }
     self.selected = self.proj[proj.id];
     const map = self.selected;
-    const currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
-    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: currentRotation });
+
+    const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
+
+    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
+
+    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: start ? rotationStart : currentRotation });
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
-    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
+    if (isProjectionRotatable) {
       rotation.setResetButton(currentRotation);
     }
 
@@ -242,11 +247,13 @@ export function mapui(models, config, store, ui) {
     // using the previous value.
     showMap(map);
     map.updateSize();
+    if (isProjectionRotatable) {
+      rotation.setResetButton(currentRotation);
+    }
 
     if (self.selected.previousCenter) {
       self.selected.setCenter(self.selected.previousCenter);
     }
-
     // This is awkward and needs a refactoring
     if (start) {
       const projId = proj.selected.id;
@@ -261,6 +268,14 @@ export function mapui(models, config, store, ui) {
           const view = map.getView();
           const extent = view.calculateExtent(map.getSize());
           store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
+        };
+      }
+      if (projId !== 'geographic') {
+        callback = () => {
+          const map = self.selected;
+          const view = map.getView();
+          rotation.setResetButton(rotationStart);
+          view.setRotation(rotationStart);
         };
       }
       if (extent) {
@@ -917,10 +932,6 @@ export function mapui(models, config, store, ui) {
         maxResolution: proj.resolutions[0],
         projection: olProj.get(proj.crs),
         center: proj.startCenter,
-        rotation:
-          proj.id === 'geographic' || proj.id === 'webmerc'
-            ? 0.0
-            : models.map.rotation,
         zoom: proj.startZoom,
         maxZoom: proj.numZoomLevels,
         enableRotation: true,

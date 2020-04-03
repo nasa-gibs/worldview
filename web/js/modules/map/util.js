@@ -40,6 +40,13 @@ export function getMapParameterSetup(
         },
         serialize: (currentItemState, currentState) => {
           const rendered = lodashGet(currentState, 'map.rendered');
+          const rotation = lodashGet(currentState, 'map.rotation');
+
+          if (rotation) {
+            const map = currentState.map.ui.selected;
+            currentItemState = getRotatedExtent(map);
+          }
+
           if (!rendered) return undefined;
           const actualLeadingExtent = lodashGet(
             currentState,
@@ -68,6 +75,12 @@ export function getMapParameterSetup(
     },
   };
 }
+
+export function getRotatedExtent(map) {
+  const view = map.getView();
+  return olExtent.getForViewAndSize(view.getCenter(), view.getResolution(), 0, map.getSize());
+}
+
 /**
  * Determines if an exent object contains valid values.
  *
