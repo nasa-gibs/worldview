@@ -860,13 +860,6 @@ button:focus {
   height: 12px;
 }
 
-.data-panel-coverage-line-overlay {
-  position: absolute;
-  pointer-events: none;
-  height: 12px;
-  z-index: 5;
-}
-
 .data-panel-layer-empty {
   height: 41px;
   padding: 6px;

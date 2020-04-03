@@ -27,19 +27,7 @@ class LayerDataItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      initPosition: '',
     };
-  }
-
-  /**
-  * @desc setPropPosition set init position related to timeline axis
-  * @returns {void}
-  */
-  setPropPosition = () => {
-    const { position } = this.props;
-    this.setState({
-      initPosition: position,
-    });
   }
 
   /**
@@ -160,9 +148,6 @@ class LayerDataItems extends Component {
       position,
       transformX,
     } = this.props;
-    const {
-      initPosition,
-    } = this.state;
     const width = Math.max(options.width, 0);
     // get formatted dates based on line type
     const {
@@ -175,11 +160,6 @@ class LayerDataItems extends Component {
     const toolTipOffset = -options.leftOffset - (width < axisWidth ? options.leftOffset : axisWidth / 2);
     const toolTipPlacement = 'auto';
 
-    // handle line overlay for wide lines
-    const needsLineOverlay = options.leftOffset === 0 && options.width >= axisWidth * 2;
-    const overlayWidth = width * 10;
-    const overlayTransform = -overlayWidth / 2 + initPosition + position + transformX;
-
     // candy stripe color
     const altLineColor = color === 'rgb(0, 69, 123)'
       ? '#164e7a'
@@ -189,23 +169,13 @@ class LayerDataItems extends Component {
       ${color} 20px,
       ${altLineColor} 20px,
       ${altLineColor} 40px)`;
+    const bgPosition = `${options.leftOffset + width + position + transformX}px 0`;
 
     return (
       <div
         key={index}
         className="data-panel-coverage-line-container"
       >
-        { needsLineOverlay
-        && (
-        <div
-          className="data-panel-coverage-line-overlay"
-          style={{
-            width: `${width * 10}px`,
-            transform: `translate(${overlayTransform}px, 0)`,
-            background: stripeBackground,
-          }}
-        />
-        )}
         <div
           id={`data-coverage-line-${dateRangeStartEnd}`}
           className="data-panel-coverage-line"
@@ -216,6 +186,7 @@ class LayerDataItems extends Component {
             width: `${width}px`,
             borderRadius: options.borderRadius,
             background: stripeBackground,
+            backgroundPosition: width < axisWidth ? 0 : bgPosition,
           }}
         >
           <Tooltip
@@ -429,10 +400,6 @@ class LayerDataItems extends Component {
       layerItemBackground,
       layerItemOutline,
     };
-  }
-
-  componentDidMount() {
-    this.setPropPosition();
   }
 
   render() {
