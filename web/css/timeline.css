@@ -829,6 +829,7 @@ button:focus {
 }
 
 .data-panel-layer-item-title {
+  white-space: nowrap;
   font-size: 1em;
 }
 
@@ -841,7 +842,8 @@ button:focus {
 .data-panel-layer-item-date-range {
   position: absolute;
   font-size: 0.9em;
-  right: 15px;
+  right: 0;
+  padding: 4px 10px;
 }
 
 .data-panel-layer-list {
