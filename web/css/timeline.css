@@ -787,22 +787,18 @@ button:focus {
   color: #999;
 }
 
-#wv-toggle-data-matching-main {
+.wv-toggle-data-matching-main {
   align-items: center;
   margin: 0;
   white-space: nowrap;
   flex-grow: 1;
 }
 
-#wv-toggle-data-matching-main .react-switch-case {
+.wv-toggle-data-matching-main .react-switch-case {
   width: 45px;
 }
 
-#wv-toggle-data-matching-main .react-switch-label {
-  border: thin solid rgb(97, 97, 97);
-}
-
-#wv-toggle-data-matching-main > div.react-switch-label-case.switch-col {
+.wv-toggle-data-matching-main > div.react-switch-label-case.switch-col {
   padding-left: 5px;
 }
 

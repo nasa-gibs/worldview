@@ -324,9 +324,10 @@ class TimelineData extends Component {
               <h3 className="timeline-data-panel-header-title">LAYER COVERAGE</h3>
               <Switch
                 active={shouldIncludeHiddenLayers}
+                border
                 color="00457b"
                 id="wv-toggle-data-matching-toggle"
-                containerId="wv-toggle-data-matching-main"
+                containerClassAddition="wv-toggle-data-matching-main"
                 label="Include Hidden Layers"
                 toggle={() => this.addMatchingCoverageToTimeline(!shouldIncludeHiddenLayers)}
               />

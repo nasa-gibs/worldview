@@ -8,9 +8,10 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 // https://upmostly.com/tutorials/build-a-react-switch-toggle-component
 const Switch = (props) => {
   const {
+    border,
     id,
     color,
-    containerId,
+    containerClassAddition,
     active,
     toggle,
     label,
@@ -20,13 +21,14 @@ const Switch = (props) => {
   const [tooltipOpen, toggleTooltip] = useState(false);
   const activeColor = color || '007BFF';
   const style = isActive ? { backgroundColor: `#${activeColor}` } : {};
+  const containerClass = `react-switch ${containerClassAddition || ''} ${border ? 'switch-thin-border' : ''}`;
 
   useEffect(() => {
     toggleActive(active);
   }, [active]);
 
   return (
-    <div id={containerId} className="react-switch">
+    <div className={containerClass}>
       <div className="react-switch-case switch-col">
         <input
           className="react-switch-checkbox"
@@ -68,12 +70,14 @@ const Switch = (props) => {
   );
 };
 Switch.defaultProps = {
-  containerId: '',
+  containerClassAddition: '',
+  border: false,
 };
 Switch.propTypes = {
   active: PropTypes.bool,
+  border: PropTypes.bool,
   color: PropTypes.string,
-  containerId: PropTypes.string,
+  containerClassAddition: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
   toggle: PropTypes.func,
