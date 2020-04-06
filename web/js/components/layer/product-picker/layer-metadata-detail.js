@@ -14,6 +14,7 @@ import {
 import {
   selectLayer as selectLayerAction,
 } from '../../../modules/product-picker/actions';
+import { getActiveLayers } from '../../../modules/layers/selectors';
 
 class LayerMetadataDetail extends React.Component {
   constructor(props) {
@@ -263,15 +264,11 @@ const mapStateToProps = (state, ownProps) => {
   const {
     productPicker,
     proj,
-    compare,
-    layers,
     config,
   } = state;
   const { selectedLayer } = productPicker;
-  const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const activeLayers = layers[activeString];
-  const isActive = selectedLayer
-    && activeLayers.some(({ id }) => id === selectedLayer.id);
+  const activeLayers = getActiveLayers(state);
+  const isActive = !!activeLayers[selectedLayer.id];
   return {
     layer: selectedLayer,
     isActive,

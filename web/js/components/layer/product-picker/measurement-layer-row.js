@@ -11,6 +11,7 @@ import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
 } from '../../../modules/layers/actions';
+import { getActiveLayers } from '../../../modules/layers/selectors';
 
 /*
  * A scrollable list of layers
@@ -21,7 +22,6 @@ class MeasurementLayerRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: props.checked,
       tooltipOpen: false,
     };
     this.onClick = this.onClick.bind(this);
@@ -29,13 +29,10 @@ class MeasurementLayerRow extends React.Component {
   }
 
   onClick() {
-    const { removeLayer, addLayer, layer } = this.props;
-    const { checked } = this.state;
-    const newChecked = !checked;
-    this.setState((prevState) => ({
-      checked: !prevState.checked,
-    }));
-    if (!newChecked) {
+    const {
+      isEnabled, removeLayer, addLayer, layer,
+    } = this.props;
+    if (isEnabled) {
       removeLayer(layer.id);
     } else {
       addLayer(layer.id);
@@ -50,11 +47,11 @@ class MeasurementLayerRow extends React.Component {
 
   render() {
     const {
-      layer, measurementId, title, selectedDate,
+      layer, measurementId, title, selectedDate, isEnabled,
     } = this.props;
-    const { checked, tooltipOpen } = this.state;
+    const { tooltipOpen } = this.state;
     const layerIsAvailable = availableAtDate(layer, selectedDate);
-    const diplayDate = moment.utc(selectedDate).format('YYYY MMM DD');
+    const displayDate = moment.utc(selectedDate).format('YYYY MMM DD');
     const listItemClass = !layerIsAvailable ? 'unavailable' : '';
     // Replace periods in id since period causes issue with tooltip targeting
     const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
@@ -69,7 +66,7 @@ class MeasurementLayerRow extends React.Component {
         <Checkbox
           name={title}
           onClick={this.onClick}
-          checked={checked}
+          checked={isEnabled}
           label={title}
           classNames="settings-check"
         >
@@ -87,9 +84,7 @@ class MeasurementLayerRow extends React.Component {
                   {' '}
                   <br />
                   <span style={{ fontFamily: 'monospace' }}>
-                    {' '}
-                    {diplayDate}
-                    {' '}
+                    {` ${displayDate} `}
                   </span>
                 </Tooltip>
               </>
@@ -100,12 +95,10 @@ class MeasurementLayerRow extends React.Component {
     );
   }
 }
-MeasurementLayerRow.defaultProps = {
-  checked: false,
-};
+
 MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
-  checked: PropTypes.bool,
+  isEnabled: PropTypes.bool,
   layer: PropTypes.object,
   measurementId: PropTypes.string,
   removeLayer: PropTypes.func,
@@ -115,7 +108,9 @@ MeasurementLayerRow.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { date } = state;
+  const activeLayerMap = getActiveLayers(state);
   return {
+    isEnabled: !!activeLayerMap[ownProps.layer.id],
     selectedDate: date.selected,
   };
 };
