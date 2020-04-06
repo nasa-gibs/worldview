@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Checkbox from '../../util/checkbox';
-import { addLayer, removeLayer } from '../../../modules/layers/actions';
+import {
+  addLayer as addLayerAction,
+  removeLayer as removeLayerAction,
+} from '../../../modules/layers/actions';
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
+import { getActiveLayers } from '../../../modules/layers/selectors';
 
 const OrbitTracksToggle = (props) => {
   const {
@@ -18,7 +22,7 @@ const OrbitTracksToggle = (props) => {
       <h2 className="wv-header"> Orbit Tracks </h2>
       { trackLayers.map((layer) => {
         const { id } = layer;
-        const isEnabled = activeLayers.some((l) => l.id === id);
+        const isEnabled = !!activeLayers[id];
         const onCheck = () => (isEnabled ? removeLayer(id) : addLayer(id));
         return (
           <Checkbox
@@ -35,22 +39,20 @@ const OrbitTracksToggle = (props) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { config, compare, layers } = state;
-  const trackLayers = ownProps.layer.tracks.map((trackName) => config.layers[trackName]);
-  const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const activeLayers = layers[activeString];
+  const { config } = state;
+  const { tracks } = ownProps.layer;
   return {
-    trackLayers,
-    activeLayers,
+    trackLayers: tracks.map((trackName) => config.layers[trackName]),
+    activeLayers: getActiveLayers(state),
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   addLayer: (id) => {
-    dispatch(addLayer(id));
+    dispatch(addLayerAction(id));
   },
   removeLayer: (id) => {
-    dispatch(removeLayer(id));
+    dispatch(removeLayerAction(id));
   },
 });
 
@@ -60,7 +62,7 @@ export default connect(
 )(OrbitTracksToggle);
 
 OrbitTracksToggle.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.object,
   addLayer: PropTypes.func,
   removeLayer: PropTypes.func,
   trackLayers: PropTypes.array,
