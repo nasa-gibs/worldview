@@ -9,7 +9,7 @@ button:focus {
 
 .timeline-inner {
   position: absolute;
-  border: 1px solid #333;
+  border: thin solid #333;
   background: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
   display: flex;
@@ -42,7 +42,7 @@ button:focus {
 
   & .input-wrapper {
     background: transparent;
-    border: 1px solid transparent;
+    border: thin solid transparent;
     vertical-align: top;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -255,8 +255,8 @@ button:focus {
 }
 
 #timeline-footer {
-  border-left: 1px solid #666;
-  border-right: 1px solid #666;
+  border-left: thin solid #666;
+  border-right: thin solid #666;
 }
 
 #wv-timeline-range-selector {
@@ -539,19 +539,19 @@ button:focus {
   height: 64px;
   width: 20px;
   cursor: pointer;
-  border-left: 1px solid #1a1a1a;
+  border-left: thin solid #1a1a1a;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
-#timeline-hide:hover {
+#timeline-hide:hover,
+#timeline-data-availability-panel-handle:hover {
   background-color: #fff;
+  border-color: #000;
 }
 
-#timeline-hide:hover .wv-timeline-hide-double-chevron-left,
-#timeline-hide:hover .wv-timeline-hide-double-chevron-right,
-.wv-timeline-hide-double-chevron-left:hover,
-.wv-timeline-hide-double-chevron-right:hover {
+#timeline-hide:hover .wv-timeline-hide,
+#timeline-data-availability-panel-handle:hover .wv-timeline-data-availability-handle-chevron {
   background-position: -206px -63px;
 }
 
@@ -561,31 +561,58 @@ button:focus {
   right: -5px;
   color: #fff;
   cursor: pointer;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
   user-select: none;
   height: 30px;
   width: 30px;
-}
-
-.wv-timeline-hide-double-chevron-left {
   position: absolute;
   background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
   border-radius: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   border-right: 0;
+}
+
+.wv-timeline-hide-double-chevron-left {
   transform: rotate(90deg);
 }
 
 .wv-timeline-hide-double-chevron-right {
+  transform: rotate(270deg);
+}
+
+#timeline-data-availability-panel-handle {
+  position: absolute;
+  height: 19px;
+  width: 57px;
+  top: -20px;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  background-color: rgba(40, 40, 40, 0.65);
+  border: thin solid #fff;
+  border-bottom: none;
+  overflow: hidden;
+}
+
+.wv-timeline-data-availability-handle-chevron {
   position: absolute;
   background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
-  border-radius: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  border-right: 0;
-  transform: rotate(270deg);
+  left: 50%;
+  width: 57px;
+  height: 20px;
+}
+
+.wv-timeline-data-availability-handle-chevron-open {
+  top: 2.5px;
+  margin-left: -43px;
+  transform: rotate(180deg);
+}
+
+.wv-timeline-data-availability-handle-chevron-closed {
+  top: -4px;
+  margin-left: -14px;
 }
 
 .dragger-container {
@@ -707,4 +734,138 @@ button:focus {
 
 .datepicker.android-dark .datepicker-scroll li.disabled {
   color: rgb(88, 88, 88) !important;
+}
+
+.datepicker-navbar-btn:hover {
+  background: #fff;
+}
+
+/* TIMELINE DATA PANEL */
+
+.timeline-data-panel-container {
+  position: absolute;
+  background: rgba(40, 40, 40, 1);
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.animate-timeline-data-panel-slide-up {
+  z-index: 5;
+  bottom: 66px;
+  opacity: 1;
+}
+
+.animate-timeline-data-panel-slide-down {
+  z-index: -5;
+  bottom: -12px;
+  opacity: 0;
+}
+
+.timeline-data-panel i.wv-close:hover {
+  color: #999;
+  cursor: pointer;
+}
+
+.timeline-data-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: thin solid #808080;
+  padding: 5px;
+}
+
+.timeline-data-panel-header-title {
+  width: 150px;
+  padding: 5px;
+}
+
+.label-layer-active {
+  color: #000;
+}
+
+.label-layer-inactive {
+  color: #999;
+}
+
+.wv-toggle-data-matching-main {
+  align-items: center;
+  margin: 0;
+  white-space: nowrap;
+  flex-grow: 1;
+}
+
+.wv-toggle-data-matching-main .react-switch-case {
+  width: 45px;
+}
+
+.wv-toggle-data-matching-main > div.react-switch-label-case.switch-col {
+  padding-left: 5px;
+}
+
+.timeline-data-panel {
+  position: relative;
+  background-color: #212121;
+  color: #fff;
+  box-sizing: border-box;
+  border: thin solid #333;
+  border-bottom: 0;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.data-panel-layer-item {
+  border-bottom: thin solid #3c3c3c;
+  padding-bottom: 5px;
+}
+
+.data-panel-layer-item-header {
+  display: flex;
+  align-items: center;
+  padding: 5px 3px;
+}
+
+.data-panel-layer-item-title {
+  white-space: nowrap;
+  font-size: 1em;
+}
+
+.data-panel-layer-item-subtitle {
+  font-style: italic;
+  font-size: 0.9em;
+  padding-left: 3px;
+}
+
+.data-panel-layer-item-date-range {
+  position: absolute;
+  font-size: 0.9em;
+  right: 0;
+  padding: 4px 10px;
+}
+
+.data-panel-layer-list {
+  overflow: hidden;
+}
+
+.data-panel-layer-coverage-line-container {
+  overflow: hidden;
+  height: 12px;
+}
+
+.data-panel-coverage-line-container {
+  position: absolute;
+}
+
+.data-panel-coverage-line {
+  position: absolute;
+  height: 12px;
+}
+
+.data-panel-layer-empty {
+  height: 41px;
+  padding: 6px;
+}
+
+.data-item-empty {
+  display: flex;
+  flex-direction: row;
 }

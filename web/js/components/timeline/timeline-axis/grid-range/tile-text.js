@@ -10,7 +10,6 @@ import React from 'react';
 const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   let dateText;
   let dateTextYear;
-  // TODO: may need to expand for subdaily to differentiate time units
   if (item.timeScale === 'day') {
     const dateSplit = item.date.split(' ');
     [dateText, dateTextYear] = dateSplit;

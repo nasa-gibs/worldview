@@ -113,7 +113,7 @@ class AnimationWidget extends React.Component {
       customIntervalModalOpen: false,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
-        y: 0,
+        y: -10,
       },
       collapsed: false,
       collapsedWidgetPosition: { x: 0, y: 0 },

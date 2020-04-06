@@ -55,3 +55,9 @@
 .react-switch-label:active .react-switch-button {
   width: 20px;
 }
+
+.switch-thin-border .react-switch-label {
+  border: thin solid rgb(97, 97, 97);
+  height: 17px;
+  width: 32px;
+}

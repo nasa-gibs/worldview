@@ -34,6 +34,7 @@ const getToolTipTime = (time, hasSubdailyLayers) => {
 class DateToolTip extends PureComponent {
   render() {
     const {
+      activeLayers,
       draggerSelected,
       draggerPosition,
       draggerPositionB,
@@ -43,17 +44,21 @@ class DateToolTip extends PureComponent {
       draggerTimeState,
       draggerTimeStateB,
       hoverTime,
+      isDataCoveragePanelOpen,
       showHoverLine,
+      shouldIncludeHiddenLayers,
       axisWidth,
     } = this.props;
     // checks for dragger and hover handled by parent
     const showDraggerToolTip = !!(showDraggerTime && draggerTimeState);
     const showHoverToolTip = !!(showHoverLine && hoverTime);
+    const shouldDisplayDraggerToolTip = showDraggerToolTip || showHoverToolTip;
 
-    let toolTipLeftOffest;
+    let toolTipLeftOffset;
     let toolTipDate;
     let toolTipDayOfYear;
     let toolTipDisplay;
+    let toolTipHeightOffset;
 
     if (showDraggerToolTip) {
       // handle dragger tooltip
@@ -67,31 +72,43 @@ class DateToolTip extends PureComponent {
         draggerTime = draggerTimeStateB;
         position = draggerPositionB;
       }
-      toolTipLeftOffest = position - (hasSubdailyLayers ? 68 : 35);
+      toolTipLeftOffset = position - (hasSubdailyLayers ? 68 : 35);
       toolTipDate = getToolTipTime(draggerTime, hasSubdailyLayers);
       toolTipDayOfYear = getDaysInYear(draggerTime);
-      toolTipDisplay = position > -49 && position < axisWidth - 49 ? 'block' : 'none';
+      toolTipDisplay = position > -49 && position < axisWidth - 49
+        ? 'block'
+        : 'none';
     } else if (showHoverToolTip) {
       // handle hover tooltip
-      toolTipLeftOffest = hasSubdailyLayers ? leftOffset - 117 : leftOffset - 84;
+      toolTipLeftOffset = hasSubdailyLayers
+        ? leftOffset - 117
+        : leftOffset - 84;
       toolTipDate = getToolTipTime(hoverTime, hasSubdailyLayers);
       toolTipDayOfYear = getDaysInYear(hoverTime);
       toolTipDisplay = 'block';
     }
+
+    // handle active layer count dependent tooltip height
+    toolTipHeightOffset = -100;
+    if (isDataCoveragePanelOpen) {
+      toolTipHeightOffset = -136;
+      const layers = activeLayers.filter((layer) => (shouldIncludeHiddenLayers
+        ? layer.startDate
+        : layer.startDate && layer.visible));
+      // min 1 layer for error message display
+      const layerLengthCoef = Math.max(layers.length, 1);
+      const addHeight = Math.min(layerLengthCoef, 5) * 40;
+      toolTipHeightOffset -= addHeight;
+      toolTipHeightOffset = Math.max(toolTipHeightOffset, -357);
+    }
     return (
-      <>
-        { (showDraggerToolTip || showHoverToolTip)
-        && (
+      shouldDisplayDraggerToolTip && (
         <div
           className="date-tooltip"
           style={{
-            transform: `translate(${toolTipLeftOffest}px, -100px)`,
+            transform: `translate(${toolTipLeftOffset}px, ${toolTipHeightOffset}px)`,
             display: toolTipDisplay,
-            width: hasSubdailyLayers
-              ? toolTipDayOfYear >= 100
-                ? '239px'
-                : '232px'
-              : '165px',
+            width: hasSubdailyLayers ? '232px' : '165px',
           }}
         >
           { toolTipDate }
@@ -102,13 +119,13 @@ class DateToolTip extends PureComponent {
             )
           </span>
         </div>
-        )}
-      </>
+      )
     );
   }
 }
 
 DateToolTip.propTypes = {
+  activeLayers: PropTypes.array,
   axisWidth: PropTypes.number,
   draggerPosition: PropTypes.number,
   draggerPositionB: PropTypes.number,
@@ -117,7 +134,9 @@ DateToolTip.propTypes = {
   draggerTimeStateB: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
+  isDataCoveragePanelOpen: PropTypes.bool,
   leftOffset: PropTypes.number,
+  shouldIncludeHiddenLayers: PropTypes.bool,
   showDraggerTime: PropTypes.bool,
   showHoverLine: PropTypes.bool,
 };
