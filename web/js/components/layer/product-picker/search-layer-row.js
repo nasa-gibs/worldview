@@ -8,19 +8,17 @@ import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
 } from '../../../modules/layers/actions';
+import { getActiveLayers } from '../../../modules/layers/selectors';
 
 /**
  * A single layer search result row
  * @class LayerRow
  * @extends React.Component
  */
-class LayerRow extends React.Component {
+class SearchLayerRow extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      checked: props.isEnabled,
-    };
-    this.toggleCheck = this.toggleCheck.bind(this);
+    this.toggleEnabled = this.toggleEnabled.bind(this);
     this.toggleShowMetadata = this.toggleShowMetadata.bind(this);
   }
 
@@ -32,15 +30,15 @@ class LayerRow extends React.Component {
 
   /**
    * Toggle layer checked state
-   * @method toggleCheck
+   * @method toggleEnabled
    * @return {void}
    */
-  toggleCheck() {
-    const { checked } = this.state;
-    const { addLayer, removeLayer, layer } = this.props;
-    if (checked) removeLayer(layer.id);
-    if (!checked) addLayer(layer.id);
-    this.setState({ checked: !checked });
+  toggleEnabled() {
+    const {
+      isEnabled, addLayer, removeLayer, layer,
+    } = this.props;
+    if (isEnabled) removeLayer(layer.id);
+    if (!isEnabled) addLayer(layer.id);
   }
 
   /**
@@ -65,7 +63,7 @@ class LayerRow extends React.Component {
   }
 
   /**
-   * Spit the layer name and details (which are foundi in parentheses)
+   * Split the layer name and details (which are found in parentheses)
    * onto separate lines
    *
    * @param {*} title - the full layer title
@@ -85,8 +83,7 @@ class LayerRow extends React.Component {
   }
 
   render() {
-    const { checked } = this.state;
-    const { layer, selectedLayer } = this.props;
+    const { isEnabled, layer, selectedLayer } = this.props;
     const isMetadataShowing = selectedLayer && layer.id === selectedLayer.id;
     const {
       title, track, description, subtitle,
@@ -95,7 +92,7 @@ class LayerRow extends React.Component {
     const rowClass = isMetadataShowing
       ? 'search-row layers-all-layer selected'
       : 'search-row layers-all-layer';
-    const checkboxClass = checked ? 'wv-checkbox checked' : 'wv-checkbox';
+    const checkboxClass = isEnabled ? 'wv-checkbox checked' : 'wv-checkbox';
 
     return (
       <div id={`${layer.id}-search-row`} className={rowClass}>
@@ -105,8 +102,8 @@ class LayerRow extends React.Component {
             id={`${layer.id}-checkbox`}
             title={title}
             name={`${layer.id}-checkbox`}
-            checked={checked}
-            onChange={this.toggleCheck}
+            checked={isEnabled}
+            onChange={this.toggleEnabled}
           />
         </div>
         <div className="layers-all-header" onClick={this.toggleShowMetadata}>
@@ -120,7 +117,7 @@ class LayerRow extends React.Component {
     );
   }
 }
-LayerRow.propTypes = {
+SearchLayerRow.propTypes = {
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   layer: PropTypes.object,
@@ -132,7 +129,9 @@ LayerRow.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { date, productPicker } = state;
+  const activeLayerMap = getActiveLayers(state);
   return {
+    isEnabled: !!activeLayerMap[ownProps.layer.id],
     selectedDate: date.selected,
     selectedLayer: productPicker.selectedLayer,
   };
@@ -149,4 +148,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LayerRow);
+)(SearchLayerRow);

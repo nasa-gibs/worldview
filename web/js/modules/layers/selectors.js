@@ -7,8 +7,27 @@ import {
   isUndefined as lodashIsUndefined,
   findIndex as lodashFindIndex,
 } from 'lodash';
+import { createSelector } from 'reselect';
 import update from 'immutability-helper';
 import util from '../../util/util';
+
+// State selectors
+const getLayersState = ({ layers }) => layers;
+const getActiveCompareState = ({ compare }) => (compare.isCompareA ? 'active' : 'activeB');
+
+/**
+ * Return a map of active layers where key is layer id
+ */
+export const getActiveLayers = createSelector(
+  [getLayersState, getActiveCompareState],
+  (layers, activeCompare) => {
+    const activeLayerMap = {};
+    layers[activeCompare].forEach((layer) => {
+      activeLayerMap[layer.id] = layer;
+    });
+    return activeLayerMap;
+  },
+);
 
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;

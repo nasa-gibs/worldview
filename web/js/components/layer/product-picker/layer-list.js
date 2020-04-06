@@ -6,7 +6,7 @@ import SearchLayerRow from './search-layer-row';
 import CategoryLayerRow from './category-layer-row';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 import {
-  hasMeasurementSource as hasSourceeSelector,
+  hasMeasurementSource as hasSourceSelector,
 } from '../../../modules/layers/selectors';
 import {
   selectLayer as selectLayerAction,
@@ -120,24 +120,18 @@ class LayerList extends React.Component {
   renderSearchList() {
     const {
       results,
-      activeLayers,
       isMobile,
     } = this.props;
 
     return (
-      results.map((layer) => {
-        const isEnabled = activeLayers.some((l) => l.id === layer.id);
-        return (
-          <SearchLayerRow
-            key={layer.id}
-            layer={layer}
-            isEnabled={isEnabled}
-            isMobile={isMobile}
-            showLayerMetadata={(id) => this.showLayerMetadata(id)}
-            toggleDateRangesExpansion={(id) => this.toggleDateRangesExpansion(id)}
-          />
-        );
-      })
+      results.map((layer) => (
+        <SearchLayerRow
+          key={layer.id}
+          layer={layer}
+          isMobile={isMobile}
+          showLayerMetadata={(id) => this.showLayerMetadata(id)}
+        />
+      ))
     );
   }
 
@@ -156,7 +150,6 @@ LayerList.defaultProps = {
   listType: 'search',
 };
 LayerList.propTypes = {
-  activeLayers: PropTypes.array,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
   results: PropTypes.array,
@@ -174,8 +167,6 @@ const mapStateToProps = (state, ownProps) => {
     date,
     productPicker,
     proj,
-    compare,
-    layers,
     config,
   } = state;
   const {
@@ -185,20 +176,17 @@ const mapStateToProps = (state, ownProps) => {
     selectedMeasurement,
     selectedMeasurementSourceIndex,
   } = productPicker;
-  const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const activeLayers = layers[activeString];
   return {
     categoryConfig: config.categories[categoryType],
     measurementConfig: config.measurements,
     layerConfig: config.layers,
-    activeLayers,
     category,
     selectedProjection: proj.id,
     selectedLayer,
     selectedMeasurement,
     selectedMeasurementSourceIndex,
     selectedDate: date.selected,
-    hasMeasurementSource: (current) => hasSourceeSelector(current, config, proj.id),
+    hasMeasurementSource: (current) => hasSourceSelector(current, config, proj.id),
   };
 };
 

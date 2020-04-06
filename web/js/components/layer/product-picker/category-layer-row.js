@@ -15,10 +15,6 @@ import { getOrbitTrackTitle } from '../../../modules/layers/util';
 import MeasurementLayerRow from './measurement-layer-row';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
-  addLayer as addLayerAction,
-  removeLayer as removeLayerAction,
-} from '../../../modules/layers/actions';
-import {
   selectSource as selectSourceAction,
   selectMeasurement as selectMeasurementAction,
 } from '../../../modules/product-picker/actions';
@@ -49,7 +45,6 @@ class CategoryLayerRow extends React.Component {
     const {
       layerConfig,
       measurement,
-      activeLayers,
     } = this.props;
     const { projection } = this.state;
     const OrbitSourceList = [];
@@ -74,7 +69,6 @@ class CategoryLayerRow extends React.Component {
               key={measurement.id + layer.id}
               layer={layer}
               title={orbitTitle}
-              checked={!!lodashFind(activeLayers, { id: layer.id })}
             />,
           );
         } else {
@@ -84,7 +78,6 @@ class CategoryLayerRow extends React.Component {
               key={measurement.id + layer.id}
               layer={layer}
               title={layer.title}
-              checked={!!lodashFind(activeLayers, { id: layer.id })}
             />,
           );
         }
@@ -124,19 +117,6 @@ class CategoryLayerRow extends React.Component {
           : ''}
       </div>
     );
-  }
-
-  /**
-   * Toggle layer
-   * @param {String} id | Layer ID
-   */
-  onClickLayer(id) {
-    const { removeLayer, addLayer, activeLayers } = this.props;
-    if (lodashFind(activeLayers, { id })) {
-      removeLayer(id);
-    } else {
-      addLayer(id);
-    }
   }
 
   /**
@@ -248,7 +228,6 @@ class CategoryLayerRow extends React.Component {
   }
 }
 CategoryLayerRow.propTypes = {
-  activeLayers: PropTypes.array,
   category: PropTypes.object,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
@@ -257,8 +236,6 @@ CategoryLayerRow.propTypes = {
   layerConfig: PropTypes.object,
   measurement: PropTypes.object,
   projection: PropTypes.string,
-  addLayer: PropTypes.func,
-  removeLayer: PropTypes.func,
   selectSource: PropTypes.func,
   selectMeasurement: PropTypes.func,
   selectedMeasurementSourceIndex: PropTypes.number,
@@ -269,20 +246,15 @@ const mapStateToProps = (state, ownProps) => {
     config,
     browser,
     proj,
-    layers,
-    compare,
     productPicker,
   } = state;
   const isMobile = browser.lessThan.medium;
-  const activeString = compare.isCompareA ? 'active' : 'activeB';
-  const activeLayers = layers[activeString];
   const {
     selectedMeasurementSourceIndex,
   } = productPicker;
   return {
     layerConfig: config.layers,
     isMobile,
-    activeLayers,
     projection: proj.id,
     selectedMeasurementSourceIndex,
     hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),
@@ -290,12 +262,6 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  addLayer: (id) => {
-    dispatch(addLayerAction(id));
-  },
-  removeLayer: (id) => {
-    dispatch(removeLayerAction(id));
-  },
   selectMeasurement: (id) => {
     dispatch(selectMeasurementAction(id));
   },
