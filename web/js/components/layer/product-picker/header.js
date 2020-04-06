@@ -31,13 +31,6 @@ class ProductPickerHeader extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount() {
-    const { isMobile } = this.props;
-    setTimeout(() => {
-      if (this._input && !isMobile) this._input.focus();
-    }, 500);
-  }
-
   /**
    * Go back to original screen
    * @method revertToInitialScreen
@@ -90,8 +83,6 @@ class ProductPickerHeader extends React.Component {
   }
 
   render() {
-    const isAutoFocus = !util.browser.touchDevice;
-    const { inputValue } = this.state;
     const {
       isMobile,
       selectedProjection,
@@ -139,10 +130,8 @@ class ProductPickerHeader extends React.Component {
             id="layers-search-input"
             value={searchTerm}
             placeholder="Search"
-            // eslint-disable-next-line no-return-assign
-            innerRef={(c) => (this._input = c)}
             type="search"
-            autoFocus={isAutoFocus}
+            onFocus={toggleSearchMode}
           />
         </InputGroup>
         {(mode === 'search' && !isMobile) && (
