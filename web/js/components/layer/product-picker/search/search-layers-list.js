@@ -3,21 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
 import SearchLayerRow from './search-layer-row';
-import CategoryLayerRow from './category-layer-row';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 import {
-  hasMeasurementSource as hasSourceSelector,
-} from '../../../modules/layers/selectors';
-import {
   selectLayer as selectLayerAction,
-} from '../../../modules/product-picker/actions';
+} from '../../../../modules/product-picker/actions';
 
 /*
  * A scrollable list of layers
  * @class LayerList
  * @extends React.Component
  */
-class LayerList extends React.Component {
+class SearchLayerList extends React.Component {
   /**
    * Handle selecting/showing metadata when there is only a single search result
    */
@@ -82,111 +78,39 @@ class LayerList extends React.Component {
     }
   }
 
-  renderCategoryList() {
-    const {
-      measurementConfig,
-      selectedMeasurement,
-      hasMeasurementSource,
-      category,
-      categoryConfig,
-    } = this.props;
 
-    const categoryToUse = category || categoryConfig.All;
+  render() {
+    const { results, isMobile } = this.props;
     return (
-      <div id={`${categoryToUse.id}-list`}>
+      <div className="layer-picker-list-case layers-all">
         {
-          // eslint-disable-next-line array-callback-return
-          categoryToUse.measurements.map((measurement, index) => {
-            const current = measurementConfig[measurement];
-            const isSelected = selectedMeasurement === current.id;
-            if (hasMeasurementSource(current)) {
-              return (
-                <CategoryLayerRow
-                  key={current.id}
-                  id={current.id}
-                  index={index}
-                  category={categoryToUse}
-                  measurement={current}
-                  isSelected={isSelected}
-                />
-              );
-            }
-          })
+          results.map((layer) => (
+            <SearchLayerRow
+              key={layer.id}
+              layer={layer}
+              isMobile={isMobile}
+              showLayerMetadata={(id) => this.showLayerMetadata(id)}
+            />
+          ))
+
         }
       </div>
     );
   }
-
-  renderSearchList() {
-    const {
-      results,
-      isMobile,
-    } = this.props;
-
-    return (
-      results.map((layer) => (
-        <SearchLayerRow
-          key={layer.id}
-          layer={layer}
-          isMobile={isMobile}
-          showLayerMetadata={(id) => this.showLayerMetadata(id)}
-        />
-      ))
-    );
-  }
-
-  render() {
-    const { listType } = this.props;
-    return (
-      <div className="layer-picker-list-case layers-all">
-        {listType === 'search'
-          ? this.renderSearchList()
-          : this.renderCategoryList()}
-      </div>
-    );
-  }
 }
-LayerList.defaultProps = {
-  listType: 'search',
-};
-LayerList.propTypes = {
-  category: PropTypes.object,
-  categoryConfig: PropTypes.object,
+
+SearchLayerList.propTypes = {
   results: PropTypes.array,
-  hasMeasurementSource: PropTypes.func,
   isMobile: PropTypes.bool,
-  listType: PropTypes.string,
-  measurementConfig: PropTypes.object,
   selectedLayer: PropTypes.object,
-  selectedMeasurement: PropTypes.string,
   selectLayer: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const {
-    date,
-    productPicker,
-    proj,
-    config,
-  } = state;
-  const {
-    category,
-    categoryType,
-    selectedLayer,
-    selectedMeasurement,
-    selectedMeasurementSourceIndex,
-  } = productPicker;
+  const { productPicker } = state;
+  const { selectedLayer } = productPicker;
   return {
-    categoryConfig: config.categories[categoryType],
-    measurementConfig: config.measurements,
-    layerConfig: config.layers,
-    category,
-    selectedProjection: proj.id,
     selectedLayer,
-    selectedMeasurement,
-    selectedMeasurementSourceIndex,
-    selectedDate: date.selected,
-    hasMeasurementSource: (current) => hasSourceSelector(current, config, proj.id),
   };
 };
 
@@ -201,4 +125,4 @@ export default withSearch(
 )(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LayerList));
+)(SearchLayerList));

@@ -5,13 +5,13 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
-import { availableAtDate } from '../../../modules/layers/util';
-import Checkbox from '../../util/checkbox';
+import { availableAtDate } from '../../../../modules/layers/util';
+import Checkbox from '../../../util/checkbox';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
-} from '../../../modules/layers/actions';
-import { getActiveLayers } from '../../../modules/layers/selectors';
+} from '../../../../modules/layers/actions';
+import { getActiveLayers } from '../../../../modules/layers/selectors';
 
 /*
  * A scrollable list of layers

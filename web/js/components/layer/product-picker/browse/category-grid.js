@@ -6,10 +6,10 @@ import Masonry from 'react-masonry-component';
 import CategoryCell from './category-cell';
 import {
   showMeasurements as showMeasurementsAction,
-} from '../../../modules/product-picker/actions';
+} from '../../../../modules/product-picker/actions';
 import {
   hasMeasurementSource as hasSourceSelector,
-} from '../../../modules/layers/selectors';
+} from '../../../../modules/layers/selectors';
 
 /*
  * A scrollable list of layers

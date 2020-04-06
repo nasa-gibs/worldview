@@ -5,12 +5,12 @@ import lodashDebounce from 'lodash/debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMeteor } from '@fortawesome/free-solid-svg-icons';
 import { Facet } from '@elastic/react-search-ui';
-import LayerList from './layer-list';
-import Scrollbars from '../../util/scrollbar';
+import SearchLayerList from './search-layers-list';
+import Scrollbars from '../../../util/scrollbar';
 import LayerMetadataDetail from './layer-metadata-detail';
 import {
   updateListScrollTop,
-} from '../../../modules/product-picker/actions';
+} from '../../../../modules/product-picker/actions';
 
 // import {
 //   BooleanFacet, Layout, SingleSelectFacet, SingleLinksFacet,
@@ -67,7 +67,7 @@ class SearchLayers extends React.Component {
           onScroll={debouncedOnScroll}
         >
           <div className="product-outter-list-case">
-            <LayerList listType="search" isMobile={isMobile} />
+            <SearchLayerList isMobile={isMobile} />
           </div>
         </Scrollbars>
       </div>
