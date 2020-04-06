@@ -5,16 +5,16 @@ import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
-import util from '../../../util/util';
-import { getOrbitTrackTitle, dateOverlap } from '../../../modules/layers/util';
+import util from '../../../../util/util';
+import { getOrbitTrackTitle, dateOverlap } from '../../../../modules/layers/util';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
-} from '../../../modules/layers/actions';
+} from '../../../../modules/layers/actions';
 import {
   selectLayer as selectLayerAction,
-} from '../../../modules/product-picker/actions';
-import { getActiveLayers } from '../../../modules/layers/selectors';
+} from '../../../../modules/product-picker/actions';
+import { getActiveLayers } from '../../../../modules/layers/selectors';
 
 class LayerMetadataDetail extends React.Component {
   constructor(props) {

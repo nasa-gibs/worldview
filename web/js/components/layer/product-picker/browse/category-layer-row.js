@@ -11,16 +11,16 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
-import { getOrbitTrackTitle } from '../../../modules/layers/util';
+import { getOrbitTrackTitle } from '../../../../modules/layers/util';
 import MeasurementLayerRow from './measurement-layer-row';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   selectSource as selectSourceAction,
   selectMeasurement as selectMeasurementAction,
-} from '../../../modules/product-picker/actions';
+} from '../../../../modules/product-picker/actions';
 import {
   hasMeasurementSetting as hasSettingSelector,
-} from '../../../modules/layers/selectors';
+} from '../../../../modules/layers/selectors';
 
 
 /**

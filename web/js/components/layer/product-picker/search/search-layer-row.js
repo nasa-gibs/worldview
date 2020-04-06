@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { getOrbitTrackTitle } from '../../../modules/layers/util';
+import { getOrbitTrackTitle } from '../../../../modules/layers/util';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
-} from '../../../modules/layers/actions';
-import { getActiveLayers } from '../../../modules/layers/selectors';
+} from '../../../../modules/layers/actions';
+import { getActiveLayers } from '../../../../modules/layers/selectors';
 
 /**
  * A single layer search result row
