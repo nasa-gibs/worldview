@@ -35,10 +35,12 @@ class OpacitySlider extends React.Component {
    * @return {void}
    */
   onSlide(value) {
-    this.props.onSlide(value);
+    const { onSlide } = this.props;
+    onSlide(value);
   }
 
   render() {
+    const { value } = this.state;
     return (
       <div id="ab-slider-case" className="ab-slider-case">
         <label className="wv-slider-label left">
@@ -46,7 +48,7 @@ class OpacitySlider extends React.Component {
         </label>
         <div className="input-range ">
           <SliderWithTooltip
-            defaultValue={this.state.value}
+            defaultValue={value}
             tipFormatter={percentFormatter}
             onChange={this.debounceOpacityUpdate}
             onAfterChange={this.onSlide}

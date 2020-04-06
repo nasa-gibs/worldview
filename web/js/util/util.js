@@ -7,7 +7,7 @@ import Cache from 'cachai';
 import moment from 'moment';
 import wvui from '../ui/ui';
 import browser from './browser';
-import { events } from './events';
+import events from './events';
 import load from './load';
 
 export default (function(self) {
@@ -48,7 +48,7 @@ export default (function(self) {
 
   self.repeat = function(value, length) {
     let result = '';
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < length; i += 1) {
       result += value;
     }
     return result;
@@ -97,7 +97,7 @@ export default (function(self) {
     }
     const parameters = queryString.split('&');
     const result = {};
-    for (let i = 0; i < parameters.length; i++) {
+    for (let i = 0; i < parameters.length; i += 1) {
       const index = parameters[i].indexOf('=');
       const key = parameters[i].substring(0, index);
       const value = parameters[i].substring(index + 1);
@@ -342,10 +342,8 @@ export default (function(self) {
    * @return {string} Julian date string in the form of `YYYYDDD`
    */
   self.toJulianDate = function(date) {
-    let jStart; let
-      jDate;
-    jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
-    jDate = `00${1 + Math.ceil((date.getTime() - jStart) / 86400000)}`;
+    const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
+    const jDate = `00${1 + Math.ceil((date.getTime() - jStart) / 86400000)}`;
     return date.getUTCFullYear() + jDate.substr(jDate.length - 3);
   };
 
@@ -482,7 +480,7 @@ export default (function(self) {
     let i = 1;
     let currentDate = start;
     while (currentDate < end) {
-      i++;
+      i += 1;
       currentDate = self.dateAdd(currentDate, interval, increment);
       // if checking for a max number limit, break out after reaching it
       if (maxToCheck && i >= maxToCheck) {
@@ -507,10 +505,8 @@ export default (function(self) {
   };
 
   self.daysInYear = function(date) {
-    let jStart; let
-      jDate;
-    jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
-    jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
+    const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
+    const jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
     return jDate.substr(jDate.length - 3);
   };
 
@@ -1090,7 +1086,7 @@ export default (function(self) {
   // usage example: wv.util.format("{1}{2}",'World','view')
   self.format = function(...args) {
     let [formatted] = args;
-    for (let i = 1; i < args.length; i++) {
+    for (let i = 1; i < args.length; i += 1) {
       const regexp = new RegExp(`\\{${i}\\}`, 'gi');
       formatted = formatted.replace(regexp, args[i]);
     }
@@ -1121,8 +1117,8 @@ export default (function(self) {
     let month1 = startDate.getMonth();
     let month2 = endDate.getMonth();
     if (month1 === 0) {
-      month1++;
-      month2++;
+      month1 += 1;
+      month2 += 1;
     }
     const numberOfMonths = (year2 - year1) * 12 + (month2 - month1);
     return numberOfMonths;
@@ -1172,7 +1168,7 @@ export default (function(self) {
    * @return {Number}
    */
   self.stringInArray = function(arra, value) {
-    for (let i = 0, len = arra.length; i < len; i++) {
+    for (let i = 0, len = arra.length; i < len; i += 1) {
       if (arra[i] === value) {
         return i;
       }

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SelectionList from '../util/selector';
-import { GifPanelGrid } from './gif-panel-grid';
+import GifPanelGrid from './gif-panel-grid';
 import Button from '../util/button';
-import { Checkbox } from '../util/checkbox';
+import Checkbox from '../util/checkbox';
 import { getDimensions } from '../../modules/image-download/util';
 
 const MAX_GIF_SIZE = 250;
@@ -20,13 +20,9 @@ export default class GifPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgHeight: props.imgHeight,
-      imgWidth: props.imgWidth,
       speed: props.speed,
       resolutions: props.resolutions,
       resolution: props.resolution,
-      valid: props.valid,
-      showDates: props.showDates,
       increment: props.increment,
     };
     this.handleChange = this.handleChange.bind(this);
@@ -47,8 +43,13 @@ export default class GifPanel extends React.Component {
       onCheck,
       showDates,
       numberOfFrames,
+      firstLabel,
+      onClick,
+      onDownloadClick,
     } = this.props;
-    const { resolution } = this.state;
+    const {
+      resolution, resolutions, speed, increment,
+    } = this.state;
     const dimensions = getDimensions(projId, lonlats, resolution);
     const { height } = dimensions;
     const { width } = dimensions;
@@ -58,11 +59,11 @@ export default class GifPanel extends React.Component {
       <div className="gif-dialog">
         <div className="animation-gif-dialog-wrapper">
           <div className="gif-selector-case">
-            {this.props.firstLabel}
+            {firstLabel}
             <SelectionList
               id="gif-resolution"
-              optionArray={this.state.resolutions}
-              value={this.state.resolution}
+              optionArray={resolutions}
+              value={resolution}
               optionName="resolution"
               onChange={this.handleChange}
             />
@@ -74,14 +75,14 @@ export default class GifPanel extends React.Component {
             maxGifSize={MAX_GIF_SIZE}
             maxImageDimensionSize={MAX_IMAGE_DIMENSION_SIZE}
             valid={valid}
-            onClick={this.props.onDownloadClick}
+            onClick={onDownloadClick}
             startDate={startDate}
             endDate={endDate}
-            speed={this.state.speed}
-            increment={this.state.increment}
+            speed={speed}
+            increment={increment}
           />
           <Button
-            onClick={() => this.props.onClick(width, height)}
+            onClick={() => onClick(width, height)}
             text="Create GIF"
             valid={valid}
           />
@@ -101,33 +102,23 @@ export default class GifPanel extends React.Component {
 
 GifPanel.defaultProps = {
   firstLabel: 'Resolution (per pixel):',
-  maxGifSize: 20,
-  secondLabel: 'Format',
   showDates: true,
 };
 GifPanel.propTypes = {
-  checked: PropTypes.bool,
   endDate: PropTypes.string,
   firstLabel: PropTypes.string,
-  imgHeight: PropTypes.number,
-  imgWidth: PropTypes.number,
   increment: PropTypes.string,
   lonlats: PropTypes.array,
-  maxGifSize: PropTypes.number,
-  maxImageDimensionSize: PropTypes.number,
   numberOfFrames: PropTypes.number,
   onCheck: PropTypes.func,
   onClick: PropTypes.func,
   onDownloadClick: PropTypes.func,
   projId: PropTypes.string,
-  requestSize: PropTypes.string,
   resolution: PropTypes.string,
   resolutions: PropTypes.object,
-  secondLabel: PropTypes.string,
   showDates: PropTypes.bool,
   speed: PropTypes.number,
   startDate: PropTypes.string,
-  valid: PropTypes.bool,
 };
 const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
   return (

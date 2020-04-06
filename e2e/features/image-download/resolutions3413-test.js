@@ -66,7 +66,7 @@ module.exports = {
 
   'Last zoom level is 250m': function(c) {
     // mash the zoom button a bunch of times and see if it changes
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i += 1) {
       zoomIn(c, 'arctic');
     }
     openImageDownloadPanel(c);

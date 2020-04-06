@@ -16,7 +16,7 @@ const limitCache = {};
  * @param {endDateLimit} endDateLimit - max date within timeline range
  * @returns {Array} timeRange - consecutive time units based on range
  */
-export function getTimeRange(startDate, endDate, timeScale, startDateLimit, endDateLimit) {
+export default function getTimeRange(startDate, endDate, timeScale, startDateLimit, endDateLimit) {
   const timeRange = [];
   const { format } = timeScaleOptions[timeScale].timeAxis;
 

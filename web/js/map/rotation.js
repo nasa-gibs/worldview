@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 import util from '../util/util';
 import { faIconUndoSVGDomEl, faIconRedoSVGDomEl } from './fa-map-icons';
 
-export function MapRotate(ui, models, store) {
+export default function MapRotate(ui, models, store) {
   this.evts = util.events();
   this.intervalId = null;
   const self = this;
@@ -184,15 +184,12 @@ export function MapRotate(ui, models, store) {
    * @returns {void}
    */
   this.updateRotation = function() {
-    let radians; let currentView; let
-      currentDeg;
-
-    currentView = ui.selected.getView();
-    radians = currentView.getRotation();
+    const currentView = ui.selected.getView();
+    const radians = currentView.getRotation();
     debounceRotationDispatcher(radians);
     self.setResetButton(radians);
 
-    currentDeg = currentView.getRotation() * (180.0 / Math.PI);
+    const currentDeg = currentView.getRotation() * (180.0 / Math.PI);
     this.saveRotation(currentDeg, currentView);
   };
 

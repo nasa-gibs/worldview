@@ -13,10 +13,9 @@ import {
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import { getSharelink, openPromisedSocial } from '../modules/link/util';
-import { Checkbox } from '../components/util/checkbox';
+import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
-
-import { history } from '../main';
+import history from '../main';
 
 const getShortenRequestString = function(mock, permalink) {
   const mockStr = mock || '';
@@ -30,6 +29,7 @@ const getShortenRequestString = function(mock, permalink) {
       encodeURIComponent(permalink)}`
   );
 };
+
 class ShareLinkContainer extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +41,12 @@ class ShareLinkContainer extends Component {
     };
     this.onToggleShorten = this.onToggleShorten.bind(this);
     this.onLinkClick = this.onLinkClick.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.shortLink.error && prevState.isShort) {
+      return { isShort: false, showErrorTooltip: true };
+    } return null;
   }
 
   componentDidMount() {
@@ -121,12 +127,6 @@ class ShareLinkContainer extends Component {
       const href = getSharelink(type, permalink);
       window.open(href, '_blank');
     }
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.shortLink.error && prevState.isShort) {
-      return { isShort: false, showErrorTooltip: true };
-    } return null;
   }
 
   renderToolTips() {
@@ -238,7 +238,6 @@ export default connect(
 
 ShareLinkContainer.propTypes = {
   mock: PropTypes.string,
-  queryString: PropTypes.string,
   requestShortLink: PropTypes.func,
   shortLink: PropTypes.object,
 };

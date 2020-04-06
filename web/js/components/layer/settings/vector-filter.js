@@ -9,7 +9,6 @@ class VectorFilter extends React.Component {
     this.state = {
       start: props.start,
       end: props.end,
-      activeDragger: 'start',
     };
     this.debounceSetRange = lodashDebounce(props.setFilterRange, 300);
     this.updateFilter = this.updateFilter.bind(this);

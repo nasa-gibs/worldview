@@ -7,6 +7,6 @@ import lodashFind from 'lodash/find';
  * @param  {String} id Event Id
  * @return {Object} Eonet Event Object
  */
-export function naturalEventsUtilGetEventById(events, id) {
+export default function naturalEventsUtilGetEventById(events, id) {
   return lodashFind(events, (e) => e.id === id);
 }

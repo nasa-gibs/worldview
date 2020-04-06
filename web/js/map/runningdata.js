@@ -13,10 +13,8 @@ import {
   isFromActiveCompareRegion,
 } from '../modules/compare/util';
 
-export function MapRunningData(models, compareUi, store) {
-  let self;
-
-  self = this;
+export default function MapRunningData(models, compareUi, store) {
+  const self = this;
   let dataObj = {};
   /**
    * Clear running data value

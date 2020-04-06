@@ -13,21 +13,21 @@ class LayerList extends React.Component {
   /**
    * Handle selecting/showing metadata when there is only a single search result
    */
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidMount() {
     const { selectedLayer } = this.props;
-    if (prevProps.selectedLayer !== selectedLayer) {
-      const id = selectedLayer ? selectedLayer.id : null;
-      this.showLayerMetadata(id);
+    if (selectedLayer && selectedLayer.id) {
+      this.showLayerMetadata(selectedLayer.id);
     }
   }
 
   /**
    * Handle selecting/showing metadata when there is only a single search result
    */
-  componentDidMount() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     const { selectedLayer } = this.props;
-    if (selectedLayer && selectedLayer.id) {
-      this.showLayerMetadata(selectedLayer.id);
+    if (prevProps.selectedLayer !== selectedLayer) {
+      const id = selectedLayer ? selectedLayer.id : null;
+      this.showLayerMetadata(id);
     }
   }
 

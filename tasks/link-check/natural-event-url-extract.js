@@ -35,14 +35,14 @@ const scrapeLinks = async(htmlLinks) => {
   const trackDoubles = {};
   const addedUrls = [];
 
-  for (let i = 0; i < htmlLinks.length; i++) {
+  for (let i = 0; i < htmlLinks.length; i += 1) {
     const htmlLink = htmlLinks[i];
     // eslint-disable-next-line no-await-in-loop
     await fetch(htmlLink)
       .then(async(res) => {
         const status = await res.json();
         const urls = await findProp(status, ['url', 'link', 'source']);
-        for (let j = 0; j < urls.length; j++) {
+        for (let j = 0; j < urls.length; j += 1) {
           const url = urls[j];
           const linkRel = Object.keys(url)[0];
           const linkHref = Object.values(url)[0];

@@ -5,7 +5,7 @@ import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
 import { connect } from 'react-redux';
 import Button from '../../components/util/button';
-import { Checkbox } from '../../components/util/checkbox';
+import Checkbox from '../../components/util/checkbox';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import {
@@ -207,7 +207,6 @@ FooterContent.propTypes = {
   compareMode: PropTypes.string,
   counts: PropTypes.object,
   dataSelectionSize: PropTypes.number,
-  events: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   onGetData: PropTypes.func,

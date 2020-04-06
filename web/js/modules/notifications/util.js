@@ -13,7 +13,7 @@ export function separateByType(array) {
   const alerts = [];
   const outages = [];
 
-  for (let i = 0, len = array.length; i < len; i++) {
+  for (let i = 0, len = array.length; i < len; i += 1) {
     subObj = array[i];
     type = subObj.notification_type;
 
@@ -94,15 +94,12 @@ export function getPriority(sortedNotifications) {
  * @returns {Number}
  */
 export function getCount(sortedNotifications) {
-  let outageCount; let messageCount; let
-    alertCount;
-
-  messageCount = getNumberOfTypeNotSeen(
+  const messageCount = getNumberOfTypeNotSeen(
     'message',
     sortedNotifications.messages,
   ); // Number of messages not yet seen
-  alertCount = getNumberOfTypeNotSeen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
-  outageCount = getNumberOfTypeNotSeen('outage', sortedNotifications.outages); // Number of outages not yet seen
+  const alertCount = getNumberOfTypeNotSeen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
+  const outageCount = getNumberOfTypeNotSeen('outage', sortedNotifications.outages); // Number of outages not yet seen
 
   return messageCount + outageCount + alertCount;
 }
@@ -137,19 +134,16 @@ export function getNumberOfTypeNotSeen(type, arra) {
     return arra.length;
   }
   const storageItem = localStorage.getItem(type);
-  let count; let
-    len;
-
-  len = arra.length;
-  count = 0;
+  const len = arra.length;
+  let count = 0;
 
   if (!storageItem) {
     return len;
   }
 
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     if (new Date(storageItem) < new Date(arra[i].created_at)) {
-      count++;
+      count += 1;
     } else {
       return count;
     }
@@ -165,13 +159,10 @@ export function getNumberOfTypeNotSeen(type, arra) {
  * @returns {void}
  */
 function objectAlreadySeen(obj) {
-  let fieldExists; let fieldValueMatches; let type; let
-    idString;
-
-  type = obj.notification_type;
-  idString = obj.created_at.toString();
-  fieldValueMatches = false;
-  fieldExists = util.browser.localStorage && !!localStorage.getItem(type);
+  const type = obj.notification_type;
+  const idString = obj.created_at.toString();
+  let fieldValueMatches = false;
+  const fieldExists = util.browser.localStorage && !!localStorage.getItem(type);
 
   if (fieldExists) {
     fieldValueMatches = localStorageValueMatches(type, idString);

@@ -32,8 +32,9 @@ class ProductPickerHeader extends React.Component {
   }
 
   componentDidMount() {
+    const { isMobile } = this.props;
     setTimeout(() => {
-      if (this._input && !this.props.isMobile) this._input.focus();
+      if (this._input && !isMobile) this._input.focus();
     }, 500);
   }
 
@@ -42,18 +43,21 @@ class ProductPickerHeader extends React.Component {
    * @method revertToInitialScreen
    */
   revertToInitialScreen(e) {
+    const { updateListState } = this.props;
     e.preventDefault();
-    this.props.updateListState();
+    updateListState();
     this.setState({ inputValue: '' });
   }
 
   handleChange(e) {
-    this.props.runSearch(e.target.value);
+    const { runSearch } = this.props;
+    runSearch(e.target.value);
     this.setState({ inputValue: e.target.value });
   }
 
   render() {
     const isAutoFocus = !util.browser.touchDevice;
+    const { inputValue } = this.state;
     const {
       selectedProjection,
       selectedDate,
@@ -63,6 +67,7 @@ class ProductPickerHeader extends React.Component {
       toggleFilterByAvailable,
       filterByAvailable,
       isMobile,
+      children,
     } = this.props;
     const isSearching = listType === 'search';
     const categoryId = category && category.id;
@@ -122,7 +127,7 @@ class ProductPickerHeader extends React.Component {
           <Input
             onChange={this.handleChange}
             id="layers-search-input"
-            value={this.state.inputValue}
+            value={inputValue}
             placeholder="Search"
             // eslint-disable-next-line no-return-assign
             innerRef={(c) => (this._input = c)}
@@ -130,7 +135,7 @@ class ProductPickerHeader extends React.Component {
             autoFocus={isAutoFocus}
           />
         </InputGroup>
-        {this.props.children}
+        {children}
       </>
     );
   }
@@ -143,7 +148,6 @@ ProductPickerHeader.propTypes = {
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   listType: PropTypes.string,
-  modalView: PropTypes.string,
   runSearch: PropTypes.func,
   selectedDate: PropTypes.object,
   selectedProjection: PropTypes.string,

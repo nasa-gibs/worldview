@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Checkbox } from '../../util/checkbox';
+import Checkbox from '../../util/checkbox';
 import { addLayer, removeLayer } from '../../../modules/layers/actions';
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
 

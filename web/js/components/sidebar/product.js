@@ -86,11 +86,8 @@ class Data extends React.Component {
     );
   }
 }
-Data.defaultProps = {
-  count: 0,
-};
+
 Data.propTypes = {
-  count: PropTypes.number,
   countsObject: PropTypes.object,
   id: PropTypes.string,
   isSelected: PropTypes.bool,

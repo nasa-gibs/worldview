@@ -73,7 +73,6 @@ export function getStampProps(
 }
 
 export function svgToPng(svgURL, stampHeight) {
-  let newImage;
   const canvasEl = document.createElement('canvas');
   const canvgOptions = {
     log: false,
@@ -81,7 +80,7 @@ export function svgToPng(svgURL, stampHeight) {
     scaleHeight: stampHeight,
   };
   canvg(canvasEl, svgURL, canvgOptions);
-  newImage = new Image();
+  const newImage = new Image();
   newImage.src = canvasEl.toDataURL('image/png');
   newImage.width = canvasEl.width;
   newImage.height = canvasEl.height;
@@ -114,6 +113,8 @@ export function getMaxQueueLength(speed) {
     case speed > 0 && speed <= 3:
       queueLength = 10;
       break;
+    default:
+      break;
   }
   return queueLength;
 }
@@ -135,7 +136,7 @@ export function getQueueLength(startDate, endDate, speed, interval, delta) {
   let i = 0;
   const maxQueueLength = getMaxQueueLength(speed);
   while (i <= maxQueueLength) {
-    i++;
+    i += 1;
     day = util.dateAdd(day, interval, delta);
     if (day > endDate) {
       return i;

@@ -21,8 +21,8 @@ import {
   imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
 import { timeScaleFromNumberKey } from '../modules/date/constants';
-import { GifResults } from '../components/animation-widget/gif-post-creation';
-import { getImageArray } from '../modules/animation/selectors';
+import GifResults from '../components/animation-widget/gif-post-creation';
+import getImageArray from '../modules/animation/selectors';
 import { getStampProps, svgToPng } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 
@@ -66,16 +66,18 @@ class GIF extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
-    if (this.state.isDownloading) {
+    const { isDownloading } = this.state;
+    if (isDownloading) {
       gifStream.cancel();
     }
   }
 
-  getStyle(state) {
+  getStyle() {
+    const { offsetLeft, offsetRight, offsetTop } = this.state;
     return {
-      left: state.offsetLeft,
-      right: state.offsetRight,
-      top: state.offsetTop,
+      left: offsetLeft,
+      right: offsetRight,
+      top: offsetTop,
       maxWidth: 342,
     };
   }
@@ -117,7 +119,7 @@ class GIF extends Component {
         isOpen
         wrapClassName="clickable-behind-modal toolbar_modal_outer"
         className="gif-modal dynamic-modal"
-        style={this.getStyle(this.state)}
+        style={this.getStyle()}
         toggle={onClose}
       >
         <ModalHeader toggle={onClose}>Create An Animated GIF</ModalHeader>
@@ -170,8 +172,6 @@ class GIF extends Component {
       h: boundaries.x2 - boundaries.x,
     };
     let stampWidth;
-    let stampProps;
-    let newImage;
     const breakPointOne = 300;
     const stampWidthRatio = 4.889;
 
@@ -212,7 +212,7 @@ class GIF extends Component {
         },
       );
     };
-    stampProps = getStampProps(
+    const stampProps = getStampProps(
       stampWidthRatio,
       breakPointOne,
       stampWidth,
@@ -220,7 +220,7 @@ class GIF extends Component {
       width,
       height,
     );
-    newImage = svgToPng(
+    const newImage = svgToPng(
       'brand/images/wv-logo-w-shadow.svg',
       stampProps.stampHeight,
     );
@@ -436,7 +436,6 @@ GIF.propTypes = {
   endDate: PropTypes.string,
   getImageArray: PropTypes.func,
   increment: PropTypes.string,
-  isActive: PropTypes.bool,
   map: PropTypes.object,
   numberOfFrames: PropTypes.number,
   onBoundaryChange: PropTypes.func,

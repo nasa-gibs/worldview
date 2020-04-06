@@ -11,11 +11,13 @@ import Arrow from '../../util/arrow';
  */
 class AxisTimeScaleChangeControls extends PureComponent {
   onClickUp = () => {
-    this.props.decrementTimeScale();
+    const { decrementTimeScale } = this.props;
+    decrementTimeScale();
   }
 
   onClickDown = () => {
-    this.props.incrementTimeScale();
+    const { incrementTimeScale } = this.props;
+    incrementTimeScale();
   }
 
   render() {

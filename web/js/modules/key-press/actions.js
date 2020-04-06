@@ -11,7 +11,7 @@ import { CLOSE as CLOSE_MODAL } from '../modal/constants';
  * @param {Number} keyCode
  * @param {Boolean} is shiftKey down
  */
-export function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
+export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
   return (dispatch, getState) => {
     const {
       modal, animation, tour, ui,

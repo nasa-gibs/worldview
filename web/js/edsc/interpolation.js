@@ -43,7 +43,7 @@ export default function (L, gcInterpolate) {
     points = (function () {
       var i, len, results;
       results = [];
-      for (i = 0, len = latLngs.length; i < len; i++) {
+      for (i = 0, len = latLngs.length; i < len; i+= 1) {
         ll = latLngs[i];
         results.push(proj(ll));
       }
@@ -131,7 +131,7 @@ export default function (L, gcInterpolate) {
         var i, len, ref, results;
         ref = holes != null ? holes : [];
         results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
+        for (i = 0, len = ref.length; i < len; i+= 1) {
           hole = ref[i];
           results.push(projectLatLngPath(hole, proj, fn, tolerance, maxDepth));
         }

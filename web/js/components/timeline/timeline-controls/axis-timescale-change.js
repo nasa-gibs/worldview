@@ -96,6 +96,7 @@ class AxisTimeScaleChange extends PureComponent {
       hasSubdailyLayers,
       changeTimeScale,
     } = this.props;
+    const { toolTipHovered } = this.state;
     return (
       <div
         className="zoom-level-change"
@@ -112,7 +113,7 @@ class AxisTimeScaleChange extends PureComponent {
               <AxisTimeScaleChangeControls
                 timeScale={timeScale}
                 hasSubdailyLayers={hasSubdailyLayers}
-                toolTipHovered={this.state.toolTipHovered}
+                toolTipHovered={toolTipHovered}
                 changeTimeScale={changeTimeScale}
                 incrementTimeScale={this.incrementTimeScale}
                 decrementTimeScale={this.decrementTimeScale}

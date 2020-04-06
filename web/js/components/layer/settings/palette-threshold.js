@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
-import { Checkbox } from '../../util/checkbox';
+import Checkbox from '../../util/checkbox';
 
 class ThresholdSelect extends React.Component {
   constructor(props) {
@@ -12,7 +12,6 @@ class ThresholdSelect extends React.Component {
       start,
       end,
       squashed,
-      activeDragger: 'start',
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
     this.updateSquash = this.updateSquash.bind(this);
@@ -51,7 +50,7 @@ class ThresholdSelect extends React.Component {
     const {
       layerId, index, groupName, palette, legend,
     } = this.props;
-    const { start, end } = this.state;
+    const { start, end, squashed } = this.state;
     const newStart = Math.ceil(Number(thresholdArray[0]));
     const newEnd = Math.ceil(Number(thresholdArray[1]));
     const startRef = legend.refs[newStart];
@@ -78,7 +77,7 @@ class ThresholdSelect extends React.Component {
       layerId,
       parseFloat(palette.entries.refs.indexOf(startRef)),
       parseFloat(palette.entries.refs.indexOf(endRef)),
-      this.state.squashed,
+      squashed,
       index,
       groupName,
     );

@@ -162,7 +162,7 @@ export function getLayerByName(map, name) {
 export function mapIsPolygonValid(polygon, maxDistance) {
   const outerRing = polygon.getLinearRing(0);
   const points = outerRing.getCoordinates();
-  for (let i = 0; i < points.length - 1; i++) {
+  for (let i = 0; i < points.length - 1; i += 1) {
     const p1 = points[i];
     const p2 = points[i + 1];
     if (Math.abs(p2[0] - p1[0]) > maxDistance) {
@@ -197,7 +197,7 @@ export function mapAdjustAntiMeridian(polygon, adjustSign) {
   const points = outerRing.getCoordinates()
     .slice();
 
-  for (let i = 0; i < points.length; i++) {
+  for (let i = 0; i < points.length; i += 1) {
     if (adjustSign > 0 && points[i][0] < 0) {
       points[i] = [points[i][0] + 360, points[i][1]];
     }

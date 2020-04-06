@@ -8,7 +8,7 @@
 
 /* eslint-disable no-extend-native */
 
-export function polyfill() {
+export default function polyfill() {
   /*
    * Date.toISOString
    *

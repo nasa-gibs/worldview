@@ -19,26 +19,32 @@ import { toggleCustomModal } from '../../../modules/date/actions';
  * @class CustomIntervalSelectorWidget
  */
 class CustomIntervalSelectorWidget extends PureComponent {
+  componentDidUpdate(prevProps) {
+    const { customIntervalModalOpen } = this.props;
+    // handle focus widget on opening
+    if (customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
+      this.customIntervalWidget.focus();
+    }
+  }
+
   changeDelta = (value) => {
+    const {
+      changeCustomInterval, customIntervalZoomLevel,
+    } = this.props;
     if (value >= 0 && value <= 1000) {
-      this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
+      changeCustomInterval(value, customIntervalZoomLevel);
     }
   }
 
   changeZoomLevel = (zoomLevel) => {
-    this.props.changeCustomInterval(this.props.customDelta, timeScaleToNumberKey[zoomLevel]);
+    const { changeCustomInterval, customDelta } = this.props;
+    changeCustomInterval(customDelta, timeScaleToNumberKey[zoomLevel]);
   }
 
   handleKeyPress= (e) => {
+    const { closeModal } = this.props;
     if (e.key === 'Escape') {
-      this.props.closeModal();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    // handle focus widget on opening
-    if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
-      this.customIntervalWidget.focus();
+      closeModal();
     }
   }
 
@@ -93,5 +99,4 @@ CustomIntervalSelectorWidget.propTypes = {
   customIntervalModalOpen: PropTypes.bool,
   customIntervalZoomLevel: PropTypes.number,
   hasSubdailyLayers: PropTypes.bool,
-  toggleCustomIntervalModal: PropTypes.func,
 };

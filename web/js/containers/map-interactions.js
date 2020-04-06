@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { groupBy as lodashGroupBy, debounce as lodashDebounce, get as lodashGet } from 'lodash';
-import { OlCoordinates } from '../components/map/ol-coordinates';
+import OlCoordinates from '../components/map/ol-coordinates';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
@@ -19,8 +19,9 @@ export class MapInteractions extends React.Component {
   }
 
   registerMouseListeners() {
-    this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('singleclick', this.singleClick);
+    const { mouseEvents } = this.props;
+    mouseEvents.on('mousemove', this.mouseMove);
+    mouseEvents.on('singleclick', this.singleClick);
   }
 
   singleClick(e, map) {

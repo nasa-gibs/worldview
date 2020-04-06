@@ -17,7 +17,7 @@ import { timeScaleFromNumberKey } from '../date/constants';
  * @returns {array} array of jpg urls
  *
  */
-export function getImageArray(
+export default function getImageArray(
   gifComponentState,
   gifComponentProps,
   dimensions,
@@ -47,7 +47,7 @@ export function getImageArray(
     : timeScaleFromNumberKey[interval];
 
   while (current <= toDate) {
-    j++;
+    j += 1;
     if (isSubDaily) {
       strDate = util.toISOStringMinutes(current);
     } else {

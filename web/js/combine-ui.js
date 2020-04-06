@@ -1,7 +1,7 @@
 import util from './util/util';
-import { mapui } from './map/ui';
-import { mapAnimate } from './map/animate';
-import { dataUi } from './map/data/ui';
+import mapui from './map/ui';
+import mapAnimate from './map/animate';
+import dataUi from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
 
 /**
@@ -10,7 +10,7 @@ import naturalEventsUI from './map/natural-events/ui';
  * @param {Object} config
  * @param {Object} MapMouseEvents | Map events object that is registered here and used in react to render coords
  */
-export function combineUi(models, config, MapMouseEvents, store) {
+export default function combineUi(models, config, MapMouseEvents, store) {
   const ui = {};
   ui.events = util.events();
   const subscribeToStore = function() {
@@ -52,6 +52,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
 
   return ui;
 }
+
 function registerMapMouseHandlers(maps, events) {
   Object.values(maps).forEach((map) => {
     const element = map.getTargetElement();

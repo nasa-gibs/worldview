@@ -8,13 +8,13 @@ import {
   renderTemplate,
   openCustomContent,
 } from '../modules/modal/actions';
-import { toggleDistractionFreeMode } from '../modules/ui/actions';
+import toggleDistractionFreeMode from '../modules/ui/actions';
 import { ABOUT_PAGE_REQUEST } from '../modules/modal/constants';
 import IconList from '../components/util/list';
-import { onClickFeedback } from '../modules/feedback/util';
+import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
-import { initFeedback } from '../modules/feedback/actions';
+import initFeedback from '../modules/feedback/actions';
 import { startTour, endTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
@@ -22,7 +22,8 @@ import Notifications from './notifications';
 
 class InfoList extends Component {
   getNotificationListItem(obj) {
-    const { number, type, object } = this.props.notifications;
+    const { notifications, notificationClick } = this.props;
+    const { number, type, object } = notifications;
 
     return {
       text: 'Notifications',
@@ -36,7 +37,7 @@ class InfoList extends Component {
       badge: number,
       className: type ? `${type}-notification` : '',
       onClick: () => {
-        this.props.notificationClick(object, number);
+        notificationClick(object, number);
       },
     };
   }
@@ -217,7 +218,6 @@ InfoList.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
-  models: PropTypes.object,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
   sendFeedback: PropTypes.func,

@@ -92,7 +92,7 @@ function decodeHtml(html) {
  */
 export function hasSubDaily(layers) {
   if (layers && layers.length) {
-    for (let i = 0; i < layers.length; i++) {
+    for (let i = 0; i < layers.length; i += 1) {
       if (layers[i].period === 'subdaily') {
         return true;
       }
@@ -401,7 +401,7 @@ export function moveBefore(sourceId, targetId, layers) {
   }
   layers.splice(targetIndex, 0, sourceDef);
   if (sourceIndex > targetIndex) {
-    sourceIndex++;
+    sourceIndex += 1;
   }
   layers.splice(sourceIndex, 1);
   return layers;

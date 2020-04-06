@@ -43,6 +43,7 @@ export default class AlertComponent extends React.Component {
 
   renderAlert() {
     const {
+      id,
       title,
       message,
       iconClassName,
@@ -55,7 +56,7 @@ export default class AlertComponent extends React.Component {
       : faExclamationTriangle;
     return (
       <Alert
-        id={this.props.id}
+        id={id}
         className="wv-alert"
         isOpen={isOpen}
       >
@@ -70,7 +71,7 @@ export default class AlertComponent extends React.Component {
           </div>
         </div>
         {onDismiss && (
-          <div id={`${this.props.id}-close`} className="close-alert" onClick={onDismiss}>
+          <div id={`${id}-close`} className="close-alert" onClick={onDismiss}>
             <FontAwesomeIcon icon={faTimes} className="exit" size="1x" />
           </div>
         )}
@@ -79,7 +80,8 @@ export default class AlertComponent extends React.Component {
   }
 
   render() {
-    return this.props.noPortal
+    const { noPortal } = this.props;
+    return noPortal
       ? this.renderAlert()
       : (
         <Portal node={document && document.getElementById('wv-alert-container')}>

@@ -9,7 +9,7 @@ import { getLayers } from '../../modules/layers/selectors';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import util from '../../util/util';
 import AlertUtil from '../../components/util/alert';
-import { CompareAlertModalBody } from '../../components/compare/alert';
+import CompareAlertModalBody from '../../components/compare/alert';
 import { openCustomContent } from '../../modules/modal/actions';
 
 const tabHeight = 32;
@@ -40,12 +40,13 @@ class CompareCase extends React.Component {
       openAlertModal,
       checkerBoardPattern,
     } = this.props;
+    const { showAlert } = this.state;
 
     const outerClass = 'layer-container sidebar-panel';
     const tabClasses = 'ab-tab';
     return (
       <div className={isActive ? '' : 'hidden '}>
-        {this.state.showAlert ? (
+        {showAlert ? (
           <AlertUtil
             isOpen
             onClick={openAlertModal}

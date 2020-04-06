@@ -38,14 +38,6 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 });
 
 class Layer extends React.Component {
-  constructor(props) {
-    super(props);
-    const { index } = props;
-    this.state = {
-      index,
-    };
-  }
-
   getPaletteLegend = () => {
     const {
       compare,

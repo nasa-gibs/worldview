@@ -63,6 +63,18 @@ class MobileDatePicker extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setInitDates();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { date, endDateLimit } = this.props;
+    // update on new endDateLimit or changed date
+    if (prevProps.endDateLimit !== endDateLimit || prevProps.date !== date) {
+      this.setInitDates();
+    }
+  }
+
   handleClickDateButton = () => {
     this.setState({
       isOpen: true,
@@ -76,13 +88,14 @@ class MobileDatePicker extends Component {
   }
 
   handleSelect = (time) => {
+    const { onDateChange } = this.props;
     this.setState({
       time,
       isOpen: false,
     });
     // convert date back to local time
     const date = this.convertToLocalDateObject(time);
-    this.props.onDateChange(getISODateFormatted(date));
+    onDateChange(getISODateFormatted(date));
   }
 
   // used for init mount
@@ -110,18 +123,6 @@ class MobileDatePicker extends Component {
   convertToLocalDateObject = (date) => {
     const dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
     return dateLocal;
-  }
-
-  componentDidMount() {
-    this.setInitDates();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { date, endDateLimit } = this.props;
-    // update on new endDateLimit or changed date
-    if (prevProps.endDateLimit !== endDateLimit || prevProps.date !== date) {
-      this.setInitDates();
-    }
   }
 
   render() {
