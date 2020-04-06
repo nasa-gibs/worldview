@@ -75,7 +75,6 @@ export function imageUtilCalculateResolution(
   resolutions,
 ) {
   let resolution;
-  let resolutionEstimate;
   const nZoomLevels = resolutions.length;
   const currentZoom = zoom < 0 ? 0 : zoom;
   const curResolution = currentZoom >= nZoomLevels
@@ -83,7 +82,7 @@ export function imageUtilCalculateResolution(
     : resolutions[currentZoom];
 
   // Estimate the option value used by "wv-image-resolution"
-  resolutionEstimate = imageUtilEstimateResolution(
+  const resolutionEstimate = imageUtilEstimateResolution(
     curResolution,
     isGeoProjection,
   );
@@ -95,7 +94,7 @@ export function imageUtilCalculateResolution(
   let bestDiff = Infinity;
   let bestIdx = -1;
   let currDiff = 0;
-  for (let i = 0; i < possibleResolutions.length; i++) {
+  for (let i = 0; i < possibleResolutions.length; i += 1) {
     currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
     if (currDiff < bestDiff) {
       resolution = possibleResolutions[i];
@@ -113,6 +112,9 @@ export function imageUtilCalculateResolution(
         case 6:
         case 7:
           resolution = possibleResolutions[bestIdx - 1];
+          break;
+        default:
+          break;
       }
     } else {
       switch (currentZoom) {
@@ -121,6 +123,9 @@ export function imageUtilCalculateResolution(
         case 4:
         case 5:
           resolution = possibleResolutions[bestIdx - 1];
+          break;
+        default:
+          break;
       }
     }
   }

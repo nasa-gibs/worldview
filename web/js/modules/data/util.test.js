@@ -1,4 +1,4 @@
-import { mapLocationToDataState } from './util';
+import mapLocationToDataState from './util';
 import fixtures from '../../fixtures';
 
 const globalState = fixtures.getState();

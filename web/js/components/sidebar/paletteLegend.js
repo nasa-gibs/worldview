@@ -8,29 +8,75 @@ import { getOrbitTrackTitle } from '../../modules/layers/util';
 import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import util from '../../util/util';
 
+/**
+   * @param {Number} index | Selected label Index
+   * @param {Number} boxWidth | Width of Each label box
+   * @param {Number} textWidth | Label width
+   * @param {Number} width | Case width
+   */
+// const getClassLabelStyle = (index, boxWidth, textWidth, width, rowEndIndex) => {
+//   const halfTextWidth = textWidth / 2 || 0;
+//   const xOffset = boxWidth * (index - rowEndIndex) + boxWidth / 2 || 0;
+
+//   if (halfTextWidth > xOffset) {
+//     return { textAlign: 'left', visibility: 'visible' };
+//   } if (xOffset + halfTextWidth > width) {
+//     return { textAlign: 'right', visibility: 'visible' };
+//   }
+//   return {
+//     marginLeft: `${xOffset - halfTextWidth}px`,
+//     visibility: 'visible',
+//     textAlign: 'left',
+//   };
+// };
+
+/**
+   * Find wanted legend object from Hex
+   * @param {Object} legend
+   * @param {String} hex
+   * @param {Number} acceptableDifference
+   */
+const getLegendObject = (legend, hex, acceptableDifference) => {
+  const units = legend.units || '';
+  for (let i = 0, len = legend.colors.length; i < len; i += 1) {
+    if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
+      // If the two colors are close
+      return {
+        label: units ? `${legend.tooltips[i]} ${units}` : legend.tooltips[i],
+        len,
+        index: i,
+      };
+    }
+  }
+  return null;
+};
+
+/**
+   * @param {Number} xOffset | X px Location of running-data
+   * @param {Number} textWidth | px width of text calculated with canvas
+   * @param {Number} width | Case width
+   */
+const getRunningLabelStyle = (xOffset, textWidth, width) => {
+  if (!xOffset || !textWidth || !width) return { left: '0' };
+  const halfTextWidth = textWidth / 2 || 0;
+  if (halfTextWidth > xOffset) {
+    return { left: '0' };
+  } if (xOffset + halfTextWidth > width) {
+    return { right: '0' };
+  }
+  return { left: `${Math.floor(xOffset - halfTextWidth)}px` };
+};
+
 class PaletteLegend extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isRunningData: props.isRunningData,
       colorHex: props.colorHex,
-      isHoveringCanvas: props.isHoveringCanvas,
-      width: this.props.width,
+      width: props.width,
 
       scrollContainerEl: null,
     };
-  }
-
-  UNSAFE_componentWillReceiveProps(props) {
-    if (
-      props.colorHex !== this.state.colorHex
-      || props.isRunningData !== this.state.isRunningData
-    ) {
-      this.setState({
-        isRunningData: props.isRunningData,
-        colorHex: props.colorHex,
-      });
-    }
   }
 
   componentDidMount() {
@@ -40,9 +86,20 @@ class PaletteLegend extends React.Component {
     }));
   }
 
+  UNSAFE_componentWillReceiveProps(props) {
+    const { colorHex, isRunningData } = this.state;
+    if (props.colorHex !== colorHex || props.isRunningData !== isRunningData) {
+      this.setState({
+        isRunningData: props.isRunningData,
+        colorHex: props.colorHex,
+      });
+    }
+  }
+
   componentDidUpdate(prevProps) {
+    const { layer, width } = this.props;
     // Only updates when layer options/settings have changed or if ZOT changes the width of the palette
-    if (!lodashIsEqual(this.props.layer, prevProps.layer) || (prevProps.width !== this.props.width)) {
+    if (!lodashIsEqual(layer, prevProps.layer) || (prevProps.width !== width)) {
       this.updateCanvas();
     }
   }
@@ -95,27 +152,6 @@ class PaletteLegend extends React.Component {
   }
 
   /**
-   * Find wanted legend object from Hex
-   * @param {Object} legend
-   * @param {String} hex
-   * @param {Number} acceptableDifference
-   */
-  getLegendObject(legend, hex, acceptableDifference) {
-    const units = legend.units || '';
-    for (let i = 0, len = legend.colors.length; i < len; i++) {
-      if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
-        // If the two colors are close
-        return {
-          label: units ? `${legend.tooltips[i]} ${units}` : legend.tooltips[i],
-          len,
-          index: i,
-        };
-      }
-    }
-    return null;
-  }
-
-  /**
    * Update state on MouseOut
    */
   hideValue(e) {
@@ -140,6 +176,7 @@ class PaletteLegend extends React.Component {
         const ctxStr = `canvas_${index}`;
         if (this[ctxStr]) {
           const newWidth = this[ctxStr].current.getBoundingClientRect().width;
+          // eslint-disable-next-line react/destructuring-assignment
           if (newWidth !== this.state.width) {
             // If scrollbar appears canvas width changes.
             // This value is needed for calculating running data offsets
@@ -187,44 +224,6 @@ class PaletteLegend extends React.Component {
   }
 
   /**
-   * @param {Number} index | Selected label Index
-   * @param {Number} boxWidth | Width of Each label box
-   * @param {Number} textWidth | Label width
-   * @param {Number} width | Case width
-   */
-  getClassLabelStyle(index, boxWidth, textWidth, width, rowEndIndex) {
-    const halfTextWidth = textWidth / 2 || 0;
-    const xOffset = boxWidth * (index - rowEndIndex) + boxWidth / 2 || 0;
-
-    if (halfTextWidth > xOffset) {
-      return { textAlign: 'left', visibility: 'visible' };
-    } if (xOffset + halfTextWidth > width) {
-      return { textAlign: 'right', visibility: 'visible' };
-    }
-    return {
-      marginLeft: `${xOffset - halfTextWidth}px`,
-      visibility: 'visible',
-      textAlign: 'left',
-    };
-  }
-
-  /**
-   * @param {Number} xOffset | X px Location of running-data
-   * @param {Number} textWidth | px width of text calculated with canvas
-   * @param {Number} width | Case width
-   */
-  getRunningLabelStyle(xOffset, textWidth, width) {
-    if (!xOffset || !textWidth || !width) return { left: '0' };
-    const halfTextWidth = textWidth / 2 || 0;
-    if (halfTextWidth > xOffset) {
-      return { left: '0' };
-    } if (xOffset + halfTextWidth > width) {
-      return { right: '0' };
-    }
-    return { left: `${Math.floor(xOffset - halfTextWidth)}px` };
-  }
-
-  /**
    * Render scale-type paletteLegends
    * @param {Object} legend
    * @param {Number} index
@@ -236,14 +235,18 @@ class PaletteLegend extends React.Component {
     } = this.props;
     const { isRunningData, colorHex, isHoveringLegend } = this.state;
     const palette = getPalette(layer.id, index);
-    let percent; let textWidth; let xOffset; let
-      legendObj;
+    let percent;
+    let textWidth;
+    let xOffset;
+    let legendObj;
     const toolTipLength = legend.tooltips.length;
+    // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
+      legendObj = getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
+        // eslint-disable-next-line react/destructuring-assignment
         xOffset = Math.floor(this.state.width * percent);
       }
     }
@@ -300,7 +303,7 @@ class PaletteLegend extends React.Component {
           className="wv-running-label"
           style={
             isRunningData
-              ? this.getRunningLabelStyle(xOffset, textWidth, this.state.width)
+              ? getRunningLabelStyle(xOffset, textWidth, width)
               : { display: 'none' }
           }
         >
@@ -331,7 +334,7 @@ class PaletteLegend extends React.Component {
     const {
       layer, parentLayer, layerGroupName, getPalette,
     } = this.props;
-    const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
+    const activeKeyObj = isRunningData && colorHex && getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
       : 'wv-palettes-legend wv-palettes-classes';
@@ -439,8 +442,6 @@ class PaletteLegend extends React.Component {
 }
 PaletteLegend.defaultProps = {
   isRunningData: false,
-  isHoveringLegend: false,
-  isRunningDataEnabled: true,
   width: 231,
   height: 12,
 };
@@ -450,12 +451,8 @@ PaletteLegend.propTypes = {
   getPalette: PropTypes.func,
   height: PropTypes.number,
   isCustomPalette: PropTypes.bool,
-  isHoveringCanvas: PropTypes.bool,
-  isHoveringLegend: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
-  isRunningDataEnabled: PropTypes.bool,
-  isSubLayer: PropTypes.bool,
   layer: PropTypes.object,
   layerGroupName: PropTypes.string,
   paletteId: PropTypes.string,

@@ -106,9 +106,11 @@ class Sidebar extends React.Component {
   }
 
   selectEvent(id, date) {
-    this.state.selectEvent(id, date);
-    if (this.props.isMobile) {
-      this.props.collapseSidebar();
+    const { selectEvent } = this.state;
+    const { isMobile, collapseSidebar } = this.props;
+    selectEvent(id, date);
+    if (isMobile) {
+      collapseSidebar();
     }
   }
 
@@ -134,6 +136,7 @@ class Sidebar extends React.Component {
   }
 
   getProductsToRender(activeTab, isCompareMode) {
+    const { activeString } = this.props;
     const { subComponentHeight } = this.state;
     if (isCompareMode) {
       return (
@@ -148,7 +151,7 @@ class Sidebar extends React.Component {
         <Layers
           height={subComponentHeight}
           isActive={activeTab === 'layers'}
-          layerGroupName={this.props.activeString}
+          layerGroupName={activeString}
           checkerBoardPattern={this.checkerBoardPattern}
         />
       );

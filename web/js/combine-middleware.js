@@ -8,7 +8,7 @@ const loggerMiddleware = createLogger({ collapsed: true });
  * @param {Boolean} isDebugMode | Server is in debug mode
  * @param {Object} locationMiddleware | redux-location-state middleware
  */
-export function getMiddleware(isDebugMode, locationMiddleware) {
+export default function getMiddleware(isDebugMode, locationMiddleware) {
   return isDebugMode
     ? compact([thunkMiddleware, locationMiddleware, loggerMiddleware])
     : compact([thunkMiddleware, locationMiddleware]);

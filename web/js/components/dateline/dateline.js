@@ -52,11 +52,14 @@ class Line extends React.Component {
    * return {Void}
    */
   mouseOverHidden(e) {
-    this.props.lineOver(
+    const {
+      lineOver, overlay, lineX, tooltip,
+    } = this.props;
+    lineOver(
       [e.clientX, e.clientY],
-      this.props.overlay,
-      this.props.lineX,
-      this.props.tooltip,
+      overlay,
+      lineX,
+      tooltip,
     );
   }
 
@@ -68,33 +71,46 @@ class Line extends React.Component {
    * return {Void}
    */
   mouseOutHidden() {
-    this.props.lineOut(this.props.tooltip);
+    const { lineOut, tooltip } = this.props;
+    lineOut(tooltip);
   }
 
   render() {
+    const {
+      id,
+      svgStyle,
+      width,
+      style,
+      classes,
+      color,
+      strokeWidth,
+      opacity,
+      dashArray,
+    } = this.props;
+    const { height, active, hovered } = this.state;
     return (
       <svg
         onMouseOver={this.mouseOver.bind(this)}
         onMouseOut={this.mouseOut.bind(this)}
-        style={this.props.svgStyle}
-        width={this.props.width}
-        id={this.props.id}
-        height={this.state.height}
-        className={this.props.classes}
+        style={svgStyle}
+        width={width}
+        id={id}
+        height={height}
+        className={classes}
       >
         <line
-          strokeWidth={this.props.strokeWidth}
-          stroke={this.props.color}
+          strokeWidth={strokeWidth}
+          stroke={color}
           opacity={
-            (this.state.hovered && this.state.active)
-            || (this.state.active && util.browser.mobileAndTabletDevice)
-              ? this.props.opacity
+            (hovered && active)
+            || (active && util.browser.mobileAndTabletDevice)
+              ? opacity
               : '0'
           }
-          x1={this.props.strokeWidth / 2}
-          x2={this.props.strokeWidth / 2}
-          strokeDasharray={this.props.dashArray}
-          y2={this.state.height}
+          x1={strokeWidth / 2}
+          x2={strokeWidth / 2}
+          strokeDasharray={dashArray}
+          y2={height}
           y1="0"
         />
         <line
@@ -102,14 +118,14 @@ class Line extends React.Component {
           onMouseOver={this.mouseOverHidden.bind(this)}
           onMouseMove={this.mouseOverHidden.bind(this)}
           onMouseOut={this.mouseOutHidden.bind(this)}
-          style={this.props.style}
+          style={style}
           opacity="0"
-          x1={this.props.strokeWidth / 2}
-          x2={this.props.strokeWidth / 2}
-          strokeWidth={this.props.strokeWidth}
-          stroke={this.props.color}
+          x1={strokeWidth / 2}
+          x2={strokeWidth / 2}
+          strokeWidth={strokeWidth}
+          stroke={color}
           y1="0"
-          y2={this.state.height}
+          y2={height}
         />
       </svg>
     );

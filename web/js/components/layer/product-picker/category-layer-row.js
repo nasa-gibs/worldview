@@ -25,7 +25,6 @@ class CategoryLayerRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSelected: props.isSelected,
       projection: props.projection,
     };
   }
@@ -248,8 +247,6 @@ CategoryLayerRow.propTypes = {
   activeLayers: PropTypes.array,
   addLayer: PropTypes.func,
   category: PropTypes.object,
-  checked: PropTypes.bool,
-  getSourceMetadata: PropTypes.func,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
   isMobile: PropTypes.bool,
@@ -261,7 +258,6 @@ CategoryLayerRow.propTypes = {
   selectedDate: PropTypes.object,
   selectedMeasurementSourceIndex: PropTypes.number,
   setSourceIndex: PropTypes.func,
-  sourceMetadata: PropTypes.object,
   updateSelectedMeasurement: PropTypes.func,
 };
 

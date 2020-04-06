@@ -37,35 +37,77 @@ class LayerMetadataDetail extends React.Component {
     this.setState((prevState) => ({ isDateRangesExpanded: !prevState.isDateRangesExpanded }));
   }
 
-  getListItems(layer) {
-    return layer.dateRanges
-      .slice(0)
-      .reverse()
-      .map((l) => {
-        let listItemStartDate;
-        let listItemEndDate;
+  getListItems = (layer) => layer.dateRanges
+    .slice(0)
+    .reverse()
+    .map((l) => {
+      let listItemStartDate;
+      let listItemEndDate;
+      if (l.startDate) {
+        listItemStartDate = util.coverageDateFormatter('START-DATE', l.startDate, layer.period);
+      }
+      if (l.endDate) {
+        listItemEndDate = util.coverageDateFormatter('END-DATE', l.endDate, layer.period);
+      }
 
-        if (l.startDate) {
-          listItemStartDate = util.coverageDateFormatter('START-DATE', l.startDate, layer.period);
-        }
+      return (
+        <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>
+          {`${listItemStartDate} - ${listItemEndDate}`}
+        </ListGroupItem>
+      );
+    })
 
-        if (l.endDate) {
-          listItemEndDate = util.coverageDateFormatter('END-DATE', l.endDate, layer.period);
-        }
+  renderSplitTitle = (title) => {
+    const splitIdx = title.indexOf('(');
+    const attrs = title.slice(splitIdx);
+    const titleName = title.slice(0, splitIdx - 1);
+    return splitIdx < 0
+      ? (<h3>{title}</h3>)
+      : (
+        <>
+          <h3>{titleName}</h3>
+          <h4>{attrs}</h4>
+        </>
+      );
+  }
 
-        return (
-          <ListGroupItem key={`${l.startDate} - ${l.endDate}`}>
-            {`${listItemStartDate} - ${listItemEndDate}`}
-          </ListGroupItem>
-        );
-      });
+  /**
+     * Return text with the temporal range based on layer start
+     * and end dates
+     * @param  {object} layer the layer object
+     * @return {string}       Return a string with temporal range information
+     */
+  dateRangeText = (layer) => {
+    let startDate;
+    let startDateId;
+    let endDate;
+    let endDateId;
+
+    if (layer.startDate) {
+      startDateId = `${layer.id}-startDate`;
+      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
+    }
+    if (layer.endDate) {
+      endDateId = `${layer.id}-endDate`;
+      endDate = util.parseDate(layer.endDate);
+      if (endDate <= util.today() && !layer.inactive) {
+        endDate = 'Present';
+      } else {
+        endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
+      }
+    } else {
+      endDate = 'Present';
+    }
+    return `Temporal coverage:
+          <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
+          <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>`;
   }
 
   renderLayerDates() {
     const { layer } = this.props;
     const { isDateRangesExpanded } = this.state;
-    let listItems; let
-      dateRanges;
+    let listItems;
+    let dateRanges;
 
     if (layer.dateRanges && layer.dateRanges.length > 1) {
       dateRanges = dateOverlap(layer.period, layer.dateRanges);
@@ -79,7 +121,7 @@ class LayerMetadataDetail extends React.Component {
         {layer.startDate && (
           <p className="layer-date-range">
             <span
-              dangerouslySetInnerHTML={{ __html: dateRangeText(layer) }}
+              dangerouslySetInnerHTML={{ __html: this.dateRangeText(layer) }}
             />
             {layer.dateRanges
               && layer.dateRanges.length > 1
@@ -106,36 +148,11 @@ class LayerMetadataDetail extends React.Component {
     );
   }
 
-  renderSplitTitle(title) {
-    const splitIdx = title.indexOf('(');
-    const attrs = title.slice(splitIdx);
-    const titleName = title.slice(0, splitIdx - 1);
-    return splitIdx < 0
-      ? (
-        <h3>
-          {' '}
-          {title}
-          {' '}
-        </h3>
-      )
-      : (
-        <>
-          <h3>
-            {' '}
-            {titleName}
-            {' '}
-          </h3>
-          <h4>
-            {' '}
-            {attrs}
-            {' '}
-          </h4>
-        </>
-      );
-  }
-
   render() {
-    if (!this.props.layer) {
+    const {
+      layer, selectedProjection, isActive, showPreviewImage,
+    } = this.props;
+    if (!layer) {
       return (
         <div className="no-results">
           <FontAwesomeIcon icon={faGlobeAmericas} />
@@ -144,9 +161,6 @@ class LayerMetadataDetail extends React.Component {
         </div>
       );
     }
-    const {
-      layer, selectedProjection, isActive, showPreviewImage,
-    } = this.props;
     const {
       title, subtitle, track, metadata,
     } = layer;
@@ -195,47 +209,7 @@ LayerMetadataDetail.propTypes = {
   layer: PropTypes.object,
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,
-  showMetadataForLayer: PropTypes.func,
   showPreviewImage: PropTypes.bool,
 };
 
 export default LayerMetadataDetail;
-
-/**
-   * dateRangeText - Return text with the temporal range based on layer start
-   * and end dates
-   *
-   * @method toggleMetadataButtons
-   * @param  {object} layer the layer object
-   * @return {string}       Return a string with temporal range information
-   */
-const dateRangeText = (layer) => {
-  let startDate; let startDateId; let endDate; let
-    endDateId;
-
-  if (layer.startDate) {
-    startDateId = `${layer.id}-startDate`;
-    startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
-  }
-
-  if (layer.endDate) {
-    endDateId = `${layer.id}-endDate`;
-    endDate = util.parseDate(layer.endDate);
-
-    if (endDate <= util.today() && !layer.inactive) {
-      endDate = 'Present';
-    } else {
-      endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
-    }
-  } else {
-    endDate = 'Present';
-  }
-
-  const dateRange = `
-      Temporal coverage:
-      <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
-      <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>
-    `;
-
-  return dateRange;
-};

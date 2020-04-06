@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import util from '../../util/util';
-import { OlCoordinates } from './ol-coordinates';
+import OlCoordinates from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
 
 let events;

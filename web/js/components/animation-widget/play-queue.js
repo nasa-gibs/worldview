@@ -82,7 +82,7 @@ class PlayAnimation extends React.Component {
       } else {
         day = this.nextDate(day);
       }
-      i++;
+      i += 1;
     }
     return util.toISOStringSeconds(day);
   };
@@ -104,7 +104,7 @@ class PlayAnimation extends React.Component {
       togglePlaying();
       return;
     }
-    for (let i = 0; i < queueLength; i++) {
+    for (let i = 0; i < queueLength; i += 1) {
       this.addDate(day);
       day = this.getNextBufferDate(day, startDate, endDate);
       if (util.toISOStringSeconds(day) === lastToQueue) {
@@ -120,10 +120,11 @@ class PlayAnimation extends React.Component {
    */
   checkShouldPlay = function(isLoopStart) {
     const { startDate, endDate, hasCustomPalettes } = this.props;
+    const { isPlaying } = this.state;
     const currentDate = util.parseDateUTC(this.currentPlayingDate);
     const lastToQueue = this.getLastBufferDateStr(currentDate, startDate, endDate);
 
-    if (this.state.isPlaying && !isLoopStart) {
+    if (isPlaying && !isLoopStart) {
       return false;
     }
     if (this.preloadObject[lastToQueue]) {
@@ -227,16 +228,16 @@ class PlayAnimation extends React.Component {
    * @param endDate {object} JS date
    */
   customQueuer(currentDate, startDate, endDate) {
-    let nextDateStr;
+    const { isPlaying } = this.state;
     let nextDate = this.nextDate(currentDate);
     if (nextDate > endDate) {
       nextDate = startDate;
     }
-    nextDateStr = util.toISOStringSeconds(nextDate);
+    const nextDateStr = util.toISOStringSeconds(nextDate);
     if (
       !this.preloadObject[nextDateStr]
       && !this.inQueueObject[nextDateStr]
-      && !this.state.isPlaying
+      && !isPlaying
     ) {
       this.clearCache();
       this.checkQueue();
@@ -334,7 +335,7 @@ class PlayAnimation extends React.Component {
       if (day.valueOf() === jsTestDate.valueOf()) {
         return true;
       }
-      i++;
+      i += 1;
     }
     return false;
   }
@@ -375,7 +376,8 @@ class PlayAnimation extends React.Component {
    */
   play(dateStr) {
     const { togglePlaying } = this.props;
-    if (!this.state.isPlaying) this.setState({ isPlaying: true });
+    const { isPlaying } = this.state;
+    if (!isPlaying) this.setState({ isPlaying: true });
 
     this.animate(dateStr);
     if (document.hidden) {

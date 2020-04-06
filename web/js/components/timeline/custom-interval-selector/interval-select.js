@@ -9,8 +9,9 @@ import PropTypes from 'prop-types';
  */
 class TimeScaleSelect extends PureComponent {
   handleChangeZoomLevel = (e) => {
+    const { changeZoomLevel } = this.props;
     const zoomLevel = e.target.value;
-    this.props.changeZoomLevel(zoomLevel);
+    changeZoomLevel(zoomLevel);
   }
 
   handleSubmit = (e) => {

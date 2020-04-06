@@ -77,4 +77,5 @@ edsc.geoutil = edscGeoUtil(L, edsc.Coordinate, edsc.Arc, edsc.config);
 edsc.interpolation = edscInterpolation(L, edsc.geoutil.gcInterpolate);
 edsc.L.sphericalPolygon = edscSphericalPolygon(L, edsc.geoutil, edsc.Arc, edsc.Coordinate);
 
+// eslint-disable-next-line import/prefer-default-export
 export { L as dataHelper };

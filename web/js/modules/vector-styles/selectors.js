@@ -203,7 +203,6 @@ export function isActive(layerId, group, state) {
 }
 
 export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
-  let styleFunction;
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');
@@ -214,7 +213,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       }
     });
   }
-  styleFunction = stylefunction(layer, glStyle, vectorStyleId);
+  const styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
     layer.setStyle((feature, resolution) => {

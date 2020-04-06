@@ -13,7 +13,7 @@ import {
   faShareSquare, faGlobeAsia, faCamera, faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { openCustomContent, onToggle } from '../modules/modal/actions';
-import { toggleDistractionFreeMode } from '../modules/ui/actions';
+import toggleDistractionFreeMode from '../modules/ui/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
@@ -31,7 +31,7 @@ import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
-import { Notify } from '../components/image-download/notify';
+import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
 
@@ -343,5 +343,4 @@ toolbarContainer.propTypes = {
   refreshStateAfterImageDownload: PropTypes.func,
   requestNotifications: PropTypes.func,
   rotation: PropTypes.number,
-  toggleDistractionFreeMode: PropTypes.func,
 };

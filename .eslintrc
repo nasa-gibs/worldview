@@ -75,22 +75,28 @@
         */
 
         // Base rule overrides
-        "default-case": "warn",
-        "no-nested-ternary": "warn",
-        "no-shadow": "warn",
-        "prefer-const": "warn",
-        "class-methods-use-this": "warn",
-        "no-plusplus": "warn",
+        "no-nested-ternary": "warn", // 58 errors
+        "no-shadow": "warn", // 136 errors
         "max-len": "off",
-
-        "consistent-return": "off",
+        "consistent-return": "off", // 73 erorrs
         "no-underscore-dangle": "off",
         "func-names": "off",
-        "no-param-reassign": "warn",
-        "no-use-before-define": "off",
+        "no-param-reassign": [ // 329 errors
+          "warn",
+          {
+            "props": false
+          }
+        ],
+        "no-use-before-define": [
+          "error",
+          {
+            "functions": false,
+            "classes": true,
+            "variables": false
+          }
+        ],
 
         // Import rules overrides
-        "import/prefer-default-export": "off",
         "import/no-cycle": "warn",
 
         // Accesibility rules overrides
@@ -107,13 +113,48 @@
         "jsx-a11y/click-events-have-key-events": "off",
 
         // React rules overrides
-        "react/destructuring-assignment": "warn", // 464 errors
-        "react/no-unused-state": "warn", // 38 errors
-        "react/jsx-props-no-spreading": "warn",
+        "react/jsx-props-no-spreading": "warn", // 17 errors
         "react/jsx-filename-extension": "off",
-        "react/sort-comp": "off",
-
-        "react/no-unused-prop-types": "warn", // 66 errors
+        "react/sort-comp": [
+          "error",
+          {
+            "order": [
+              "static-methods",
+              "lifecycle",
+              "everything-else",
+              "render"
+            ],
+            "groups": {
+              "lifecycle": [
+                "displayName",
+                "propTypes",
+                "contextTypes",
+                "childContextTypes",
+                "mixins",
+                "statics",
+                "defaultProps",
+                "constructor",
+                "getDefaultProps",
+                "state",
+                "getInitialState",
+                "getChildContext",
+                "getDerivedStateFromProps",
+                "componentWillMount",
+                "UNSAFE_componentWillMount",
+                "componentDidMount",
+                "componentWillReceiveProps",
+                "UNSAFE_componentWillReceiveProps",
+                "shouldComponentUpdate",
+                "componentWillUpdate",
+                "UNSAFE_componentWillUpdate",
+                "getSnapshotBeforeUpdate",
+                "componentDidUpdate",
+                "componentDidCatch",
+                "componentWillUnmount"
+              ]
+            }
+          }
+        ],
         "react/forbid-prop-types": "off", // 216 errors
         "react/require-default-props": "off" // 965 errors
       }

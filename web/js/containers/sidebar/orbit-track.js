@@ -61,7 +61,6 @@ OrbitTrack.propTypes = {
   hasPalette: PropTypes.bool,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
-  palette: PropTypes.object,
   paletteLegends: PropTypes.array,
   parentLayer: PropTypes.object,
   renderedPalette: PropTypes.object,

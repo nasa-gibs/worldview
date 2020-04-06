@@ -5,7 +5,7 @@ import OpacitySlider from '../../components/compare/opacity-slider';
 let slider;
 let value = 50;
 
-export class Opacity {
+export default class Opacity {
   constructor(olMap, isAactive, events, eventListenerStringObj, valueOverride) {
     this.map = olMap;
     this.compareEvents = events;
@@ -57,9 +57,8 @@ export class Opacity {
    * @param {Number} newValue
    */
   oninput(newValue) {
-    let convertedValue;
     value = newValue;
-    convertedValue = value / 100;
+    const convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);
     this.secondLayer.setOpacity(convertedValue);
     this.compareEvents.trigger('moveend', value);

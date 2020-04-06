@@ -232,9 +232,8 @@ export default (function() {
     }
     try {
       const uid = new Date().toString();
-      let result;
       localStorage.setItem(uid, uid);
-      result = localStorage.getItem(uid) === uid;
+      const result = localStorage.getItem(uid) === uid;
       localStorage.removeItem(uid);
       return result && true;
     } catch (error) {

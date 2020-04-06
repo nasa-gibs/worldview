@@ -59,7 +59,7 @@ export function getRenderedPalette(layerId, index, state) {
 export function getPaletteLegends(layerId, groupName, state) {
   const paletteLegends = [];
   const count = getCount(layerId, state);
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i += 1) {
     paletteLegends.push(getPaletteLegend(layerId, i, groupName, state));
   }
   return paletteLegends;
@@ -258,10 +258,8 @@ const toggleLookup = function(layerId, palettesObj, state) {
       if (disabled.includes(index)) {
         targetColor = '00000000';
       } else {
-        let sourcePercent; let
-          targetIndex;
-        sourcePercent = index / sourceCount;
-        targetIndex = Math.floor(sourcePercent * targetCount);
+        const sourcePercent = index / sourceCount;
+        const targetIndex = Math.floor(sourcePercent * targetCount);
         targetColor = target[targetIndex];
       }
       const colormapRef = entries.refs[index];
@@ -381,7 +379,7 @@ export function initDisabledSelector(
   state,
 ) {
   const disabled = disabledStr.split('-');
-  for (let i = 0; i < disabled.length; i++) { disabled[i] = +disabled[i]; }
+  for (let i = 0; i < disabled.length; i += 1) { disabled[i] = +disabled[i]; }
   let newPalettes = prepare(layerId, palettes, state);
   newPalettes = update(newPalettes, {
     [layerId]: {

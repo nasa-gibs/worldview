@@ -23,8 +23,8 @@ import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/interval-timescale-change';
 import CustomIntervalSelectorWidget from '../components/timeline/custom-interval-selector/interval-selector-widget';
 import PlayQueue from '../components/animation-widget/play-queue';
-import { Notify } from '../components/image-download/notify';
-import { promiseImageryForTime } from '../modules/map/selectors';
+import Notify from '../components/image-download/notify';
+import promiseImageryForTime from '../modules/map/selectors';
 import GifContainer from './gif';
 import {
   selectDate,
@@ -107,10 +107,7 @@ class AnimationWidget extends React.Component {
     const halfWidgetWidth = (props.subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
     this.state = {
       speed: props.speed,
-      isSliding: false,
-      isGifActive: false,
       hoverGif: false,
-      customIntervalModalOpen: false,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
         y: -10,
@@ -162,7 +159,7 @@ class AnimationWidget extends React.Component {
    * @param {*} e
    * @param {*} data
    */
-  handleDragStart(e, data) {
+  handleDragStart = (e, data) => {
     const draggableTargets = [
       'wv-animation-widget',
       'wv-animation-widget-header',
@@ -171,7 +168,7 @@ class AnimationWidget extends React.Component {
     ];
     const { classList } = e.target;
     return draggableTargets.some((tClass) => classList.contains(tClass));
-  }
+  };
 
   onExpandedDrag(e, position) {
     const { x, y } = position;
@@ -263,11 +260,13 @@ class AnimationWidget extends React.Component {
    * @return {void}
    */
   onLoop() {
+    const { looping } = this.state;
+    const { onPushLoop } = this.props;
     let loop = true;
-    if (this.state.looping) {
+    if (looping) {
       loop = false;
     }
-    this.props.onPushLoop(loop);
+    onPushLoop(loop);
   }
 
   onDateChange(date, id) {
@@ -292,7 +291,7 @@ class AnimationWidget extends React.Component {
    */
   onIntervalSelect(timeScale, openModal) {
     let delta;
-    const { customInterval, customDelta } = this.props;
+    const { onIntervalSelect, customInterval, customDelta } = this.props;
     const customSelected = timeScale === 'custom';
 
     if (openModal) {
@@ -307,7 +306,7 @@ class AnimationWidget extends React.Component {
       timeScale = Number(timeScaleToNumberKey[timeScale]);
       delta = 1;
     }
-    this.props.onIntervalSelect(delta, timeScale, customSelected);
+    onIntervalSelect(delta, timeScale, customSelected);
   }
 
   /**
@@ -341,8 +340,8 @@ class AnimationWidget extends React.Component {
     * @param {Object} JS Date - endDate
    */
   zeroDates = () => {
+    const { subDailyMode } = this.props;
     let {
-      subDailyMode,
       startDate,
       endDate,
     } = this.props;
@@ -380,12 +379,13 @@ class AnimationWidget extends React.Component {
   * @returns {void}
   */
   changeCustomInterval = (delta, timeScale) => {
-    this.props.changeCustomInterval(delta, timeScale);
+    const { changeCustomInterval } = this.props;
+    changeCustomInterval(delta, timeScale);
   };
 
   toggleHoverGif() {
-    const hoverState = this.state.hoverGif;
-    this.setState({ hoverGif: !hoverState });
+    const { hoverGif } = this.state;
+    this.setState({ hoverGif: !hoverGif });
   }
 
   renderToolTip() {
@@ -409,15 +409,17 @@ class AnimationWidget extends React.Component {
 
   renderCollapsedWidget() {
     const {
+      onClose,
       isPlaying,
       onPushPause,
       hasSubdailyLayers,
     } = this.props;
+    const { collapsedWidgetPosition } = this.state;
     return (
       <Draggable
         bounds="body"
         onStart={this.handleDragStart}
-        position={this.state.collapsedWidgetPosition}
+        position={collapsedWidgetPosition}
         onDrag={this.onCollapsedDrag}
       >
         <div
@@ -433,7 +435,7 @@ class AnimationWidget extends React.Component {
               pause={onPushPause}
             />
             <FontAwesomeIcon icon={faChevronUp} className="wv-expand" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
           </div>
         </div>
       </Draggable>
@@ -446,6 +448,7 @@ class AnimationWidget extends React.Component {
       isPlaying,
       maxDate,
       minDate,
+      onSlide,
       sliderLabel,
       startDate,
       endDate,
@@ -459,12 +462,12 @@ class AnimationWidget extends React.Component {
       animationCustomModalOpen,
       hasSubdailyLayers,
     } = this.props;
-    const { speed } = this.state;
+    const { speed, widgetPosition } = this.state;
     const gifDisabled = numberOfFrames >= maxFrames;
     return (
       <Draggable
         bounds="body"
-        position={this.state.widgetPosition}
+        position={widgetPosition}
         onDrag={this.onExpandedDrag}
         onStart={this.handleDragStart}
       >
@@ -500,14 +503,10 @@ class AnimationWidget extends React.Component {
                 step={0.5}
                 max={10}
                 min={0.5}
-                value={this.state.speed}
+                value={speed}
                 onChange={(num) => this.setState({ speed: num })}
                 handle={RangeHandle}
-                onBeforeChange={() => this.setState({ isSliding: true })}
-                onAfterChange={() => {
-                  this.props.onSlide(speed);
-                  this.setState({ isSliding: false });
-                }}
+                onAfterChange={() => { onSlide(speed); }}
               />
               <span className="wv-slider-label">{sliderLabel}</span>
             </div>
@@ -548,7 +547,7 @@ class AnimationWidget extends React.Component {
               />
             </div>
             <FontAwesomeIcon icon={faChevronDown} className="wv-minimize" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={this.props.onClose} />
+            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
 
             {/* Custom time interval selection */}
             <CustomIntervalSelectorWidget
@@ -637,6 +636,7 @@ class AnimationWidget extends React.Component {
     );
   }
 }
+
 function mapStateToProps(state) {
   const {
     layers,
@@ -654,14 +654,16 @@ function mapStateToProps(state) {
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
   } = animation;
-  let {
+  const {
     customSelected,
-    interval,
     delta,
-    customInterval,
     customDelta,
     appNow,
     animationCustomModalOpen,
+  } = date;
+  let {
+    interval,
+    customInterval,
   } = date;
   const activeStr = compare.activeString;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
@@ -838,7 +840,6 @@ AnimationWidget.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,
-  isCompareActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
@@ -850,7 +851,6 @@ AnimationWidget.propTypes = {
   notify: PropTypes.func,
   numberOfFrames: PropTypes.number,
   onClose: PropTypes.func,
-  onDateChange: PropTypes.func,
   onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
   onPushPause: PropTypes.func,
@@ -868,7 +868,6 @@ AnimationWidget.propTypes = {
   speed: PropTypes.number,
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
-  toggleCollapse: PropTypes.func,
   toggleCustomModal: PropTypes.func,
   toggleGif: PropTypes.func,
 };

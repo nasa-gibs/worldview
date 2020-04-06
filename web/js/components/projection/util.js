@@ -1,4 +1,4 @@
-export function parse(state, errors, config) {
+export default function parse(state, errors, config) {
   // Permalink version 1.0 - 1.1
   if (state.switch) {
     state.p = state.switch;

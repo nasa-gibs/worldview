@@ -6,7 +6,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
 import { availableAtDate } from '../../../modules/layers/util';
-import { Checkbox } from '../../util/checkbox';
+import Checkbox from '../../util/checkbox';
 /*
  * A scrollable list of layers
  * @class LayerList
@@ -25,11 +25,12 @@ class MeasurementLayerRow extends React.Component {
 
   onClick() {
     const { removeLayer, addLayer, layer } = this.props;
-    const checked = !this.state.checked;
+    const { checked } = this.state;
+    const newChecked = !checked;
     this.setState((prevState) => ({
       checked: !prevState.checked,
     }));
-    if (!checked) {
+    if (!newChecked) {
       removeLayer(layer.id);
     } else {
       addLayer(layer.id);
@@ -102,7 +103,6 @@ MeasurementLayerRow.propTypes = {
   checked: PropTypes.bool,
   layer: PropTypes.object,
   measurementId: PropTypes.string,
-  onClick: PropTypes.func,
   removeLayer: PropTypes.func,
   selectedDate: PropTypes.object,
   title: PropTypes.string,

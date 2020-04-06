@@ -22,7 +22,8 @@ export default class SpinnerModal extends React.Component {
 
   render() {
     const { headerText, onClose, delay } = this.props;
-    if (delay && !this.state.metDelay) return '';
+    const { metDelay } = this.state;
+    if (delay && !metDelay) return '';
     return (
       <Modal isOpen toggle={onClose}>
         <ModalHeader toggle={onClose}>{headerText}</ModalHeader>

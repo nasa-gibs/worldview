@@ -8,7 +8,7 @@ import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import util from '../../util/util';
 import Button from '../util/button';
 
-export class GifResults extends Component {
+export default class GifResults extends Component {
   getStyle(imgElWidth, imgElHeight) {
     const { screenHeight, screenWidth } = this.props;
     const width = imgElWidth + 204;

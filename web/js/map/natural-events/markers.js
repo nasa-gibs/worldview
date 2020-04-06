@@ -113,7 +113,7 @@ export default function markers(ui, store) {
           pinEl.addEventListener(
             type,
             (e) => {
-              moveCount++;
+              moveCount += 1;
               if (moveCount > 2) {
                 willSelect = false;
               }

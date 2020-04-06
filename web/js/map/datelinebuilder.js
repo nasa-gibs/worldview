@@ -22,7 +22,7 @@ let textLeft;
 let textRight;
 let proj;
 
-export function mapDateLineBuilder(models, config, store, ui) {
+export default function mapDateLineBuilder(models, config, store, ui) {
   const self = {};
   // formatted YYYY-MM-DD (e.g., 2019-06-25) for checking daily change for dateline
   self.date = {};
@@ -214,14 +214,11 @@ export function mapDateLineBuilder(models, config, store, ui) {
    * @returns {void}
    */
   const drawDatelines = function(map, date) {
-    let height; let leftLineCase; let rightLineCase; let leftTextCase; let
-      rightTextCase;
-
-    leftLineCase = document.createElement('div');
-    rightLineCase = document.createElement('div');
-    leftTextCase = document.createElement('div');
-    rightTextCase = document.createElement('div');
-    height = 0;
+    const leftLineCase = document.createElement('div');
+    const rightLineCase = document.createElement('div');
+    const leftTextCase = document.createElement('div');
+    const rightTextCase = document.createElement('div');
+    const height = 0;
 
     overlay1 = drawOverlay([-180, 90], leftLineCase);
     overlay2 = drawOverlay([180, 90], rightLineCase);
@@ -272,8 +269,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    * @returns {void}
    */
   const onHover = function(pixels, overlay, lineX, tooltip) {
-    let coords;
-    coords = map.getCoordinateFromPixel(pixels);
+    const coords = map.getCoordinateFromPixel(pixels);
     overlay.setPosition([lineX, coords[1]]);
     tooltip.setState({
       active: true,
@@ -325,24 +321,18 @@ export function mapDateLineBuilder(models, config, store, ui) {
    * @returns {void}
    */
   const position = function(map) {
-    let extent;
-    let top;
     let topY;
     let bottomY;
-    let bottom;
-    let height;
     let startY;
-    let topExtent;
-    let bottomExtent;
 
     if (map.getSize()[0] === 0) {
       return;
     }
-    extent = map.getView().calculateExtent(map.getSize());
-    top = [extent[2] - 1, extent[3] + 5];
-    bottom = [extent[2] - 1, extent[1] - 5];
-    topExtent = map.getPixelFromCoordinate([extent[2] - 1, extent[3] - 1]);
-    bottomExtent = map.getPixelFromCoordinate([extent[0] + 1, extent[1] + 1]);
+    const extent = map.getView().calculateExtent(map.getSize());
+    const top = [extent[2] - 1, extent[3] + 5];
+    const bottom = [extent[2] - 1, extent[1] - 5];
+    const topExtent = map.getPixelFromCoordinate([extent[2] - 1, extent[3] - 1]);
+    const bottomExtent = map.getPixelFromCoordinate([extent[0] + 1, extent[1] + 1]);
     topY = Math.round(topExtent[1] + 5);
     bottomY = Math.round(bottomExtent[1] - 5);
     startY = Math.round(extent[3] + 5);
@@ -358,7 +348,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
     } else {
       [, bottomY] = map.getPixelFromCoordinate([extent[2], -90]);
     }
-    height = Math.round(Math.abs(bottomY - topY));
+    const height = Math.round(Math.abs(bottomY - topY));
     return [height, startY];
   };
 

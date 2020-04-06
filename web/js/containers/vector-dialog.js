@@ -16,6 +16,7 @@ class VectorDialog extends React.Component {
   }
 
   updateIndex(activeIndex) {
+    // eslint-disable-next-line react/destructuring-assignment
     if (activeIndex === this.state.activeIndex) return;
     this.setState({ activeIndex });
   }
@@ -45,7 +46,7 @@ class VectorDialog extends React.Component {
           </NavLink>
         </NavItem>,
       );
-      i++;
+      i += 1;
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
 
@@ -78,6 +79,5 @@ VectorDialog.propTypes = {
   dialogKey: PropTypes.number,
   modalHeight: PropTypes.number,
   toggleWithClose: PropTypes.func,
-  vectorMetaArray: PropTypes.array,
   vectorMetaObject: PropTypes.object,
 };

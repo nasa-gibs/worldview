@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
-import { Coordinates } from './coordinates';
+import Coordinates from './coordinates';
 import util from '../../util/util';
 
-export class OlCoordinates extends React.Component {
+export default class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,14 +20,16 @@ export class OlCoordinates extends React.Component {
     this.registerMouseListeners();
   }
 
-  registerMouseListeners() {
-    this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('mouseout', this.mouseOut);
+  componentWillUnmount() {
+    const { mouseEvents } = this.props;
+    mouseEvents.off('mousemove', this.mouseMove);
+    mouseEvents.off('mouseout', this.mouseOut);
   }
 
-  componentWillUnmount() {
-    this.props.mouseEvents.off('mousemove', this.mouseMove);
-    this.props.mouseEvents.off('mouseout', this.mouseOut);
+  registerMouseListeners() {
+    const { mouseEvents } = this.props;
+    mouseEvents.on('mousemove', this.mouseMove);
+    mouseEvents.on('mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {
@@ -38,6 +40,7 @@ export class OlCoordinates extends React.Component {
       return;
     }
     let pcoord = transform(coord, crs, 'EPSG:4326');
+    // eslint-disable-next-line prefer-const
     let [lon, lat] = pcoord;
     if (Math.abs(lat) > 90) {
       this.clearCoord();
@@ -83,18 +86,21 @@ export class OlCoordinates extends React.Component {
   }
 
   render() {
+    const {
+      hasMouse, format, latitude, longitude, crs,
+    } = this.state;
     // Don't render until a mouse is being used
-    if (!this.state.hasMouse) {
+    if (!hasMouse) {
       return null;
     }
 
     return (
       <div id="ol-coords-case">
         <Coordinates
-          format={this.state.format}
-          latitude={this.state.latitude}
-          longitude={this.state.longitude}
-          crs={this.state.crs}
+          format={format}
+          latitude={latitude}
+          longitude={longitude}
+          crs={crs}
           onFormatChange={this.changeFormat}
         />
       </div>

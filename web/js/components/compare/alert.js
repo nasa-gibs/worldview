@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const CompareAlertModalBody = () => (
+const CompareAlertModalBody = () => (
   <div className="compare-dialog">
     <p>How to get started?</p>
     <ul>
@@ -29,3 +29,5 @@ export const CompareAlertModalBody = () => (
     </ul>
   </div>
 );
+
+export default CompareAlertModalBody;

@@ -10,7 +10,7 @@ const requestCheck = async(urls) => {
     ERROR: [],
     STATUSCODE: {},
   };
-  for (let i = 0; i < urls.length; i++) {
+  for (let i = 0; i < urls.length; i += 1) {
     const linkName = Object.keys(urls[i])[0];
     const url = Object.values(urls[i])[0];
 

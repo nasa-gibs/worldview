@@ -6,7 +6,7 @@
 */
 import util from './util/util';
 
-export function feedbackUi() {
+export default function feedbackUi() {
   const self = {};
   let feedbackInit = false;
 

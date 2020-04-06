@@ -18,6 +18,28 @@ class TimeScaleIntervalChange extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    const { customDelta, customIntervalZoomLevel } = this.props;
+    if (customDelta !== 1 && customIntervalZoomLevel) {
+      this.setCustomIntervalText();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      customDelta,
+      timeScaleChangeUnit,
+      customSelected,
+    } = this.props;
+    if (customSelected && customDelta && timeScaleChangeUnit) {
+      const didCustomDeltaChange = customDelta !== prevProps.customDelta;
+      const didTimeScaleChangeUnitChange = timeScaleChangeUnit !== prevProps.timeScaleChangeUnit;
+      if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
+        this.setCustomIntervalText();
+      }
+    }
+  }
+
   // Interval select tooltip on
   toolTipHoverOn = () => {
     this.setState({
@@ -34,10 +56,11 @@ class TimeScaleIntervalChange extends PureComponent {
 
   // handle click of timescale intervals
   handleClickInterval = (timescale, openModal = false) => {
+    const { setTimeScaleIntervalChangeUnit } = this.props;
     // send props function to change timescale interval throughout app
     this.setState({
       toolTipHovered: false,
-    }, this.props.setTimeScaleIntervalChangeUnit(timescale, openModal));
+    }, setTimeScaleIntervalChangeUnit(timescale, openModal));
   }
 
   // individual linking timescale handlers
@@ -71,30 +94,10 @@ class TimeScaleIntervalChange extends PureComponent {
 
   // set custom text for custom interval
   setCustomIntervalText = () => {
+    const { customDelta, customIntervalZoomLevel } = this.props;
     this.setState({
-      customIntervalText: `${this.props.customDelta} ${this.props.customIntervalZoomLevel}`,
+      customIntervalText: `${customDelta} ${customIntervalZoomLevel}`,
     });
-  }
-
-  componentDidMount() {
-    if (this.props.customDelta !== 1 && this.props.customIntervalZoomLevel) {
-      this.setCustomIntervalText();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      customDelta,
-      timeScaleChangeUnit,
-      customSelected,
-    } = this.props;
-    if (customSelected && customDelta && timeScaleChangeUnit) {
-      const didCustomDeltaChange = customDelta !== prevProps.customDelta;
-      const didTimeScaleChangeUnitChange = timeScaleChangeUnit !== prevProps.timeScaleChangeUnit;
-      if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
-        this.setCustomIntervalText();
-      }
-    }
   }
 
   render() {

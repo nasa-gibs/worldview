@@ -11,18 +11,25 @@ const intervals = {
   left: 0,
   right: 0,
 };
+
 class DateChangeArrows extends PureComponent {
+  componentWillUnmount() {
+    clearInterval(intervals.left);
+    clearInterval(intervals.right);
+  }
+
   /**
   * @desc repeatedly call while mouse down - decrement date
   * @returns {void}
   */
   leftArrowDown = () => {
-    this.props.leftArrowDown();
+    const { leftArrowDown } = this.props;
+    leftArrowDown();
     mouseHoldCheckTimer = setTimeout(() => {
       mouseHoldCheckTimer = null;
       isMouseHolding = true;
       // set interval for holding arrow down
-      intervals.left = setInterval(this.props.leftArrowDown, ANIMATION_DELAY);
+      intervals.left = setInterval(leftArrowDown, ANIMATION_DELAY);
     }, CLICK_TIMEOUT_DELAY);
   }
 
@@ -31,12 +38,13 @@ class DateChangeArrows extends PureComponent {
   * @returns {void}
   */
   rightArrowDown = () => {
-    this.props.rightArrowDown();
+    const { rightArrowDown } = this.props;
+    rightArrowDown();
     mouseHoldCheckTimer = setTimeout(() => {
       mouseHoldCheckTimer = null;
       isMouseHolding = true;
       // set interval for holding arrow down
-      intervals.right = setInterval(this.props.rightArrowDown, ANIMATION_DELAY);
+      intervals.right = setInterval(rightArrowDown, ANIMATION_DELAY);
     }, CLICK_TIMEOUT_DELAY);
   }
 
@@ -45,13 +53,14 @@ class DateChangeArrows extends PureComponent {
   * @returns {void}
   */
   leftArrowUp = () => {
+    const { leftArrowUp } = this.props;
     if (mouseHoldCheckTimer) {
       clearTimeout(mouseHoldCheckTimer);
     } else if (isMouseHolding) {
       isMouseHolding = false;
     }
     clearInterval(intervals.left);
-    this.props.leftArrowUp();
+    leftArrowUp();
   }
 
   /**
@@ -59,18 +68,14 @@ class DateChangeArrows extends PureComponent {
   * @returns {void}
   */
   rightArrowUp = () => {
+    const { rightArrowUp } = this.props;
     if (mouseHoldCheckTimer) {
       clearTimeout(mouseHoldCheckTimer);
     } else if (isMouseHolding) {
       isMouseHolding = false;
     }
     clearInterval(intervals.right);
-    this.props.rightArrowUp();
-  }
-
-  componentWillUnmount() {
-    clearInterval(intervals.left);
-    clearInterval(intervals.right);
+    rightArrowUp();
   }
 
   render() {
