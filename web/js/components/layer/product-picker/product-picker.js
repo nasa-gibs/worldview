@@ -12,12 +12,9 @@ import {
 } from '@elastic/react-search-ui';
 import ProductPickerHeader from './header';
 import FilterUnavailable from './filterUnavailable';
-import { onToggle } from '../../../modules/modal/actions';
-import {
-  updateProductPicker,
-} from '../../../modules/product-picker/actions';
-import BrowseLayers from './browse-layers';
-import SearchLayers from './search-layers';
+import { onToggle as onToggleAction } from '../../../modules/modal/actions';
+import BrowseLayers from './browse/browse-layers';
+import SearchLayers from './search/search-layers';
 import { getSearchConfig } from '../../../modules/product-picker/selectors';
 
 /*
@@ -184,7 +181,7 @@ ProductPicker.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   onToggle: () => {
-    dispatch(onToggle());
+    dispatch(onToggleAction());
   },
 });
 

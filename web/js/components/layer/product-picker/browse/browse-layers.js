@@ -7,15 +7,15 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
-import LayerList from './layer-list';
+import BrowseLayerList from './browse-layers-list';
 import CategoryGrid from './category-grid';
-import Scrollbars from '../../util/scrollbar';
+import Scrollbars from '../../../util/scrollbar';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   selectCategory as selectCategoryAction,
   toggleFeatureTab as toggleFeatureTabAction,
   updateListScrollTop,
-} from '../../../modules/product-picker/actions';
+} from '../../../../modules/product-picker/actions';
 
 /*
  * A scrollable list of layers
@@ -79,10 +79,7 @@ class BrowseLayers extends React.Component {
             onScroll={debouncedOnScroll}
           >
             <div className="product-outter-list-case">
-              <LayerList
-                listType="measurements"
-                isMobile={isMobile}
-              />
+              <BrowseLayerList isMobile={isMobile} />
             </div>
           </Scrollbars>
         </div>

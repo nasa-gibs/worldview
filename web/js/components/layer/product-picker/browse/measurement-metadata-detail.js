@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMap, faMeteor } from '@fortawesome/free-solid-svg-icons';
-import util from '../../../util/util';
-import { getMeasurementSource } from '../../../modules/product-picker/selectors';
+import util from '../../../../util/util';
+import { getMeasurementSource } from '../../../../modules/product-picker/selectors';
 
 class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
