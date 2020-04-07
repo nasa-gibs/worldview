@@ -129,9 +129,7 @@ class LayerMetadataDetail extends React.Component {
       <>
         {layer.startDate && (
           <p className="layer-date-range">
-            <span
-              dangerouslySetInnerHTML={{ __html: this.dateRangeText(layer) }}
-            />
+            <span dangerouslySetInnerHTML={{ __html: this.dateRangeText(layer) }} />
             {layer.dateRanges
               && layer.dateRanges.length > 1
               && dateRanges.overlap === false && (
@@ -219,45 +217,6 @@ LayerMetadataDetail.propTypes = {
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,
   showPreviewImage: PropTypes.bool,
-};
-
-/**
-   * dateRangeText - Return text with the temporal range based on layer start
-   * and end dates
-   *
-   * @method toggleMetadataButtons
-   * @param  {object} layer the layer object
-   * @return {string}       Return a string with temporal range information
-   */
-const dateRangeText = (layer) => {
-  let startDate; let startDateId; let endDate; let
-    endDateId;
-
-  if (layer.startDate) {
-    startDateId = `${layer.id}-startDate`;
-    startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
-  }
-
-  if (layer.endDate) {
-    endDateId = `${layer.id}-endDate`;
-    endDate = util.parseDate(layer.endDate);
-
-    if (endDate <= util.today() && !layer.inactive) {
-      endDate = 'Present';
-    } else {
-      endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
-    }
-  } else {
-    endDate = 'Present';
-  }
-
-  const dateRange = `
-      Temporal coverage:
-      <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
-      <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>
-    `;
-
-  return dateRange;
 };
 
 const mapStateToProps = (state, ownProps) => {

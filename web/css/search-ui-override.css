@@ -3,7 +3,7 @@
   margin-top: 16px;
 }
 
-.layer-modal-content .facet-container {
+.facet-container {
   flex-grow: 1;
   max-width: 270px;
 
@@ -12,15 +12,6 @@
     margin: 3px 10px 2px 2px;
     background-color: #333;
 
-    /* @media (max-width: 800px) {
-      div.sui-layout-sidebar {
-
-      }
-      button.sui-layout-sidebar-toggle {
-        background-color: #33425f;
-        color: #fff;
-      }
-    } */
     div.sui-layout-sidebar {
       width: 30%;
     }
