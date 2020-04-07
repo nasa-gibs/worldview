@@ -2,7 +2,7 @@
     "layers": {
         "AMSR2_Cloud_Liquid_Water_Night": {
             "id":       "AMSR2_Cloud_Liquid_Water_Night",
-            "title":    "Columnar Cloud Liquid Water (NRT, Night)",
+            "title":    "Columnar Cloud Liquid Water (Night)",
             "subtitle": "GCOM-W1 / AMSR2",
             "description": "amsr2/AMSR2_Cloud_Liquid_Water_Night",
             "tags":     "amsr-2",
