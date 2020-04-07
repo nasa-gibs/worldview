@@ -22,12 +22,6 @@ class SearchLayerRow extends React.Component {
     this.toggleShowMetadata = this.toggleShowMetadata.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({
-      checked: nextProps.isEnabled,
-    });
-  }
-
   /**
    * Toggle layer checked state
    * @method toggleEnabled
@@ -128,9 +122,11 @@ SearchLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { date, productPicker } = state;
+  const { browser, date, productPicker } = state;
   const activeLayerMap = getActiveLayers(state);
+  const isMobile = browser.lessThan.medium;
   return {
+    isMobile,
     isEnabled: !!activeLayerMap[ownProps.layer.id],
     selectedDate: date.selected,
     selectedLayer: productPicker.selectedLayer,

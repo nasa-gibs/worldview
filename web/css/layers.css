@@ -232,12 +232,6 @@
   color: #fff;
 }
 
-.layer-picker-list-case .source-metadata h3 {
-  font-size: 14px;
-  line-height: 18px;
-  margin: 0 0 6px;
-}
-
 .layers-all-header > h3,
 .measurement-row-header > h3 {
   color: #ddd;

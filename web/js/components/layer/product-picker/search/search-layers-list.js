@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
+import InfiniteScroll from 'react-infinite-scroller';
+import { debounce as lodashDebounce } from 'lodash';
+import Scrollbars from '../../../util/scrollbar';
 import SearchLayerRow from './search-layer-row';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 import {
@@ -14,6 +17,16 @@ import {
  * @extends React.Component
  */
 class SearchLayerList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibleItems: [],
+      hasMoreItems: true,
+      nextIndex: 0,
+    };
+    this.loadMoreItems = this.loadMoreItems.bind(this);
+  }
+
   /**
    * Handle selecting/showing metadata when there is only a single search result
    */
@@ -28,10 +41,13 @@ class SearchLayerList extends React.Component {
    * Handle selecting/showing metadata when there is only a single search result
    */
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { selectedLayer } = this.props;
+    const { selectedLayer, results } = this.props;
     if (prevProps.selectedLayer !== selectedLayer) {
       const id = selectedLayer ? selectedLayer.id : null;
       this.showLayerMetadata(id);
+    }
+    if (prevProps.results !== results) {
+      this.loadMoreItems(0, prevProps);
     }
   }
 
@@ -78,28 +94,89 @@ class SearchLayerList extends React.Component {
     }
   }
 
+  loadMoreItems(page, prevProps) {
+    const { results } = this.props;
+    const { visibleItems, nextIndex, hasMoreItems } = this.state;
+
+    // If results changed, reset
+    if (prevProps) {
+      this.setState({
+        visibleItems: [],
+        hasMoreItems: true,
+        nextIndex: 0,
+      }, this.loadMoreItems);
+      return;
+    }
+
+    if (hasMoreItems) {
+      const prevIndex = nextIndex;
+      const newNextIndex = prevIndex + 50;
+      const moreItems = results.slice(prevIndex, newNextIndex);
+      const newItems = [...visibleItems, ...moreItems];
+      this.setState({
+        visibleItems: newItems,
+        nextIndex: newNextIndex,
+        hasMoreItems: results.length > newItems.length,
+      });
+    } else {
+      this.setState({
+        hasMoreItems: false,
+      });
+    }
+  }
 
   render() {
-    const { results, isMobile } = this.props;
-    return (
-      <div className="layer-picker-list-case layers-all">
-        {
-          results.map((layer) => (
-            <SearchLayerRow
-              key={layer.id}
-              layer={layer}
-              isMobile={isMobile}
-              showLayerMetadata={(id) => this.showLayerMetadata(id)}
-            />
-          ))
+    const { visibleItems, hasMoreItems } = this.state;
+    const {
+      componentHeights, isMobile,
+    } = this.props;
+    const { listHeight, listMinHeight } = componentHeights;
+    const listContainerClass = isMobile
+      ? 'layer-list-container search mobile'
+      : 'layer-list-container search ';
+    const scrollHeightStyles = {
+      height: `${listHeight}px`,
+      maxHeight: `${listHeight}px`,
+      minHeight: `${listMinHeight}px`,
+    };
+    const scrollParentSelector = '.layer-list-container .simplebar-content-wrapper';
+    const debouncedOnScroll = lodashDebounce(({ scrollTop }) => {
+      // updateScrollPosition(scrollTop);
+    }, 500);
+    this.scrollParent = this.scrollParent || document.querySelector(scrollParentSelector);
 
-        }
+    return (
+      <div className={listContainerClass}>
+        <Scrollbars
+          style={scrollHeightStyles}
+          // scrollBarVerticalTop={listScrollTop}
+          onScroll={debouncedOnScroll}
+        >
+          <div className="product-outter-list-case layers-all">
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={this.loadMoreItems}
+              hasMore={hasMoreItems}
+              useWindow={false}
+              getScrollParent={() => this.scrollParent}
+            >
+              {visibleItems.map((layer) => (
+                <SearchLayerRow
+                  key={layer.id}
+                  layer={layer}
+                  showLayerMetadata={(id) => this.showLayerMetadata(id)}
+                />
+              ))}
+            </InfiniteScroll>
+          </div>
+        </Scrollbars>
       </div>
     );
   }
 }
 
 SearchLayerList.propTypes = {
+  componentHeights: PropTypes.object,
   results: PropTypes.array,
   isMobile: PropTypes.bool,
   selectedLayer: PropTypes.object,
@@ -107,9 +184,10 @@ SearchLayerList.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { productPicker } = state;
+  const { productPicker, browser } = state;
   const { selectedLayer } = productPicker;
   return {
+    isMobile: browser.lessThan.medium,
     selectedLayer,
   };
 };
