@@ -444,6 +444,7 @@ class AnimationWidget extends React.Component {
 
   renderExpandedWidget() {
     const {
+      onClose,
       looping,
       isPlaying,
       maxDate,
