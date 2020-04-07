@@ -42,37 +42,6 @@ class SearchLayers extends React.Component {
     );
   }
 
-  renderLayerList() {
-    const {
-      componentHeights,
-      isMobile,
-      listScrollTop,
-    } = this.props;
-    const { listHeight, listMinHeight } = componentHeights;
-
-    const debouncedOnScroll = lodashDebounce(({ scrollTop }) => {
-      // updateScrollPosition(scrollTop);
-    }, 500);
-    const listContainerClass = isMobile
-      ? 'layer-list-container search mobile'
-      : 'layer-list-container search';
-    return (
-      <div className={listContainerClass}>
-        <Scrollbars
-          style={{
-            maxHeight: `${listHeight}px`,
-            minHeight: `${listMinHeight}px`,
-          }}
-          scrollBarVerticalTop={listScrollTop}
-          onScroll={debouncedOnScroll}
-        >
-          <div className="product-outter-list-case">
-            <SearchLayerList isMobile={isMobile} />
-          </div>
-        </Scrollbars>
-      </div>
-    );
-  }
 
   renderFacetList() {
     const { componentHeights } = this.props;
@@ -164,13 +133,14 @@ class SearchLayers extends React.Component {
     const {
       isMobile,
       selectedLayer,
+      componentHeights,
     } = this.props;
     const containerClass = isMobile ? 'search-container mobile' : 'search-container';
 
     return (
       <div className={containerClass}>
         {!selectedLayer && this.renderFacetList()}
-        {this.renderLayerList()}
+        {<SearchLayerList componentHeights={componentHeights} />}
         { selectedLayer && this.renderDetails() }
       </div>
     );
@@ -179,7 +149,6 @@ class SearchLayers extends React.Component {
 
 SearchLayers.propTypes = {
   isMobile: PropTypes.bool,
-  listScrollTop: PropTypes.number,
   componentHeights: PropTypes.object,
   numRowsFilteredOut: PropTypes.number,
   selectedLayer: PropTypes.object,
@@ -192,23 +161,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state, ownProps) {
-  const {
-    browser,
-    productPicker,
-  } = state;
-  const isMobile = browser.lessThan.medium;
-
-  const {
-    listScrollTop,
-    numRowsFilteredOut,
-    selectedLayer,
-  } = productPicker;
+  const { browser, productPicker } = state;
+  const { numRowsFilteredOut, selectedLayer } = productPicker;
 
   return {
     numRowsFilteredOut,
     selectedLayer,
-    listScrollTop,
-    isMobile,
+    isMobile: browser.lessThan.medium,
   };
 }
 export default connect(

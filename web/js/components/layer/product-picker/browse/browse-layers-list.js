@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
-import InfiniteScroll from 'react-infinite-scroller';
 import CategoryLayerRow from './category-layer-row';
 import {
   hasMeasurementSource as hasSourceSelector,
