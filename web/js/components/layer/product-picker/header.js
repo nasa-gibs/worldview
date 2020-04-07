@@ -16,7 +16,6 @@ import {
   toggleCategoryMode as toggleCategoryModeAction,
   toggleSearchMode as toggleSearchModeAction,
 } from '../../../modules/product-picker/actions';
-import util from '../../../util/util';
 
 
 /*
