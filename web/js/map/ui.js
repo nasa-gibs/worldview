@@ -37,7 +37,7 @@ import { mapCompare } from './compare/compare';
 import { measure } from './measure/ui';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { TOGGLE as TOGGLE_INFINITE_WRAP } from '../modules/infinite-wrap/constants';
+import { TOGGLE_INFINITE_WRAP, TOGGLE_OVERVIEW_MAP } from '../modules/settings/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_UNITS } from '../modules/measure/constants';
 import util from '../util/util';
@@ -59,6 +59,7 @@ import { InfiniteScroll } from './infinite-scroll';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { selectDate } from '../modules/date/actions';
+import { getOverviewControl } from './mapOverview';
 
 export function mapui(models, config, store, ui) {
   let layerBuilder;
@@ -165,13 +166,15 @@ export function mapui(models, config, store, ui) {
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
       case SELECT_DATE:
-        if (state.infiniteScroll.active && !action.isInfiniteScroll) {
+        if (state.settings.isInfinite && !action.isInfiniteScroll) {
           destroyInfiniteScroll();
           reloadLayers();
         } else {
           updateDate();
         }
         break;
+      case TOGGLE_OVERVIEW_MAP:
+        return state.settings.hasOverview ? addMapOverview() : removeMapOverview();
       default:
         break;
     }
@@ -284,6 +287,17 @@ export function mapui(models, config, store, ui) {
     updateExtent();
     onResize();
   }
+  function addMapOverview() {
+    const { proj, date, compare } = store.getState();
+    const layerId = 'BlueMarble_NextGeneration';
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    const activeDate = lodashGet(self, 'infiniteScroll.props.startDate') || date[activeDateStr];
+    self.overviewMapControl = getOverviewControl(config.layers[layerId], activeDate, proj.selected.crs, createLayer);
+    self.selected.addControl(self.overviewMapControl);
+  }
+  function removeMapOverview() {
+    self.selected.removeControl(self.overviewMapControl);
+  }
   function destroyInfiniteScroll() {
     if (self.infiniteScroll) {
       self.infiniteScroll.destroy();
@@ -375,7 +389,7 @@ export function mapui(models, config, store, ui) {
     map = map || self.selected;
     const state = store.getState();
     const {
-      layers, proj, infiniteScroll, date, compare,
+      layers, proj, settings, date, compare,
     } = state;
     const compareState = compare;
     const layerGroupStr = compareState.activeString;
@@ -388,7 +402,7 @@ export function mapui(models, config, store, ui) {
       },
       state,
     );
-    if (infiniteScroll.active) {
+    if (settings.isInfinite) {
       self.infiniteScroll = new InfiniteScroll({
         startDate: date[activeDateStr],
         activeLayers: defs,

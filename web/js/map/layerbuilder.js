@@ -45,9 +45,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
-    const { infiniteScroll } = state;
+    const { settings } = state;
     const layer = createLayerFunc(def, options, null, state);
-    if (!wrapLayer || infiniteScroll.active) {
+    if (!wrapLayer || settings.isInfinite || options.isOverview) {
       return layer;
     }
     const layerNext = createLayerFunc(def, options, 1, state);
@@ -203,10 +203,12 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.layerKey = function(def, options, state) {
     const { compare } = state;
-    let { date, group } = options;
+    const { group, isOverview } = options;
+    let { date } = options;
     const layerId = def.id;
     const projId = state.proj.id;
     let style = '';
+    let isOverviewStr = ';';
     const activeGroupStr = group || compare.activeString;
 
     // Don't key by time if this is a static layer--it is valid for
@@ -222,7 +224,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
       style = getVectorStyleKeys(def.id, undefined, state);
     }
-    return [layerId, projId, date, style, activeGroupStr].join(':');
+    if (isOverview) isOverviewStr = 'overviewLayer';
+    return [layerId, projId, date, style, activeGroupStr, isOverviewStr].join(':');
   };
 
   /**
@@ -317,14 +320,16 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       origin = [extent[0], 90];
     }
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+    const matrixIds = options.matrixIds || def.matrixIds || resolutions.map((set, index) => index);
     const tileGridOptions = {
       origin,
       extent,
-      sizes,
-      resolutions,
-      matrixIds: def.matrixIds || resolutions.map((set, index) => index),
+      resolutions: options.resolutions || resolutions,
+      matrixIds,
       tileSize: tileSize[0],
+      sizes,
     };
+
     const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
     const sourceOptions = {
       url: source.url + urlParameters,
@@ -335,19 +340,24 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       transition: 0,
       matrixSet: matrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
-      wrapX: false,
+      wrapX: !!options.isOverview,
       style: typeof def.style === 'undefined' ? 'default' : def.style,
     };
     if (isPaletteActive(def.id, options.group, state)) {
       const lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
-    return new OlLayerTile({
+    const tileOptions = options.isOverview ? {
+      preload: Infinity,
+      key: options.key,
+      source: new OlSourceWMTS(sourceOptions),
+    } : {
       preload: Infinity,
       extent,
       key: options.key,
       source: new OlSourceWMTS(sourceOptions),
-    });
+    };
+    return new OlLayerTile(tileOptions);
   };
 
   /**
@@ -464,7 +474,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   /**
    * Create a new WMS Layer
    *
-   * @method createLayerWMTS
+   * @method createLayerWMS
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options

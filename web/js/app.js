@@ -41,6 +41,7 @@ import '../../node_modules/simplebar/dist/simplebar.min.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import 'react-resizable/css/styles.css';
 // App CSS
+import '../css/map-overview.css';
 import '../css/fonts.css';
 import '../css/alert.css';
 import '../css/reset.css';

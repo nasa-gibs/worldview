@@ -1,3 +1,10 @@
+import OlStyle from 'ol/style/Style';
+import OlStroke from 'ol/style/Stroke';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import OlFeature from 'ol/Feature';
+import LineString from 'ol/geom/LineString';
+
 const ZOOM_DURATION = 250;
 
 /*
@@ -43,4 +50,26 @@ export function clearLayers(map) {
     map.removeLayer(layer);
   });
   return map;
+}
+function getLineStyle(color, width, lineDash) {
+  return new OlStyle({
+    stroke: new OlStroke({
+      color,
+      width,
+      lineDash: lineDash || undefined,
+    }),
+  });
+}
+export function getLine(coordinateArray, width, color, opacity, lineDash) {
+  return new VectorLayer({
+    source: new VectorSource({
+      features: [new OlFeature({
+        geometry: new LineString(coordinateArray),
+      })],
+    }),
+    zIndex: Infinity,
+    opacity: opacity || 1,
+    wrapX: true,
+    style: [getLineStyle('black', width, lineDash), getLineStyle(color, width / 2, lineDash)],
+  });
 }

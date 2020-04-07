@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { toggle as toggleInfiniteWrap } from '../modules/infinite-wrap/actions';
+import { toggleInfiniteWrap, toggleOverviewMap } from '../modules/settings/actions';
 import Switch from '../components/util/switch';
 
 class Settings extends Component {
@@ -9,6 +9,8 @@ class Settings extends Component {
     const {
       isInfinite,
       toggleInfinite,
+      toggleOverview,
+      hasOverview,
     } = this.props;
 
     return [
@@ -30,6 +32,12 @@ class Settings extends Component {
         active: false,
         toggle: () => {},
       },
+      {
+        label: 'Show Map Overview',
+        id: 'show-mapoverview-settings-item',
+        active: hasOverview,
+        toggle: toggleOverview,
+      },
     ];
   }
 
@@ -42,16 +50,20 @@ class Settings extends Component {
 }
 
 function mapStateToProps(state) {
-  const { infiniteScroll, browser } = state;
-
+  const { settings, browser } = state;
+  const { isInfinite, hasOverview } = settings;
   return {
-    isInfinite: infiniteScroll.active,
+    isInfinite,
     isMobile: browser.lessThan.medium,
+    hasOverview,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
   toggleInfinite: () => {
     dispatch(toggleInfiniteWrap());
+  },
+  toggleOverview: () => {
+    dispatch(toggleOverviewMap());
   },
 });
 
@@ -63,4 +75,6 @@ export default connect(
 Settings.propTypes = {
   isInfinite: PropTypes.bool,
   toggleInfinite: PropTypes.func,
+  toggleOverview: PropTypes.func,
+  isShowOverviewMap: PropTypes.bool,
 };
