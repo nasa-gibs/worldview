@@ -2,7 +2,7 @@
     "layers": {
         "AMSR2_Wind_Speed_Day": {
             "id":       "AMSR2_Wind_Speed_Day",
-            "title":    "Wind Speed (NRT, Day)",
+            "title":    "Wind Speed (Day)",
             "subtitle": "GCOM-W1 / AMSR2",
             "description": "amsr2/AMSR2_Wind_Speed_Day",
             "tags":     "amsr-2",

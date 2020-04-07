@@ -5,7 +5,7 @@
             "title":    "Soil Moisture (Single Channel Algorithm, Day)",
             "subtitle": "GCOM-W1 / AMSR2",
             "description": "amsr2/AMSRU2_Soil_Moisture_SCA_Day",
-            "tags":     "amsr2  amsr-u2 amsru2",
+            "tags":     "amsr-u2",
             "group":    "overlays",
             "layergroup": [
               "amsr2"

@@ -5,7 +5,7 @@
             "title":    "Brightness Temperature for Sea Ice (89H Ghz)",
             "subtitle": "GCOM-W1 / AMSR2",
             "description": "amsr2/AMSRU2_Sea_Ice_Brightness_Temp_89H",
-            "tags":     "amsr2 amsr-u2",
+            "tags":     "amsr-u2",
             "group":    "overlays",
             "layergroup": [
               "amsr2"
