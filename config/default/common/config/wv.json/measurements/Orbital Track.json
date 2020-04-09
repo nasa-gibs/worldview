@@ -3,7 +3,7 @@
         "Orbital Track": {
             "id": "orbital-track",
             "title":    "Orbital Track & Overpass Time",
-            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESAT-2, ISS, Suomi NPP, Landsat 7, Landsat 8, MetOp-A, MetOp-B, MetOp-C, NOAA-20, OCO-2, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-5P, SMAP, Suomi NPP",
+            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESat-2, ISS, Suomi NPP, Landsat 7, Landsat 8, MetOp-A, MetOp-B, MetOp-C, NOAA-20, OCO-2, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-5P, SMAP, Suomi NPP",
             "sources": {
               "Aqua/Space-Track.org": {
                   "id": "space-track-org-aqua",
@@ -115,9 +115,9 @@
                         "OrbitTracks_GPM_Descending"
                     ]
                 },
-                "ICESAT-2/Space-Track.org": {
+                "ICESat-2/Space-Track.org": {
                     "id": "space-track-org-icesat-2",
-                    "title": "ICESAT-2/Space-Track.org",
+                    "title": "ICESat-2/Space-Track.org",
                     "description": "reference/orbits/icesat-2",
                     "image": "",
                     "settings": [
