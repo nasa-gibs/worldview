@@ -125,7 +125,7 @@ MeasurementMetadataDetail.propTypes = {
 const mapStateToProps = (state) => {
   const { category } = state.productPicker;
   return {
-    categoryTitle: category.title,
+    categoryTitle: category && category.title,
     source: getMeasurementSource(state),
   };
 };

@@ -72,10 +72,16 @@ class SearchLayers extends React.Component {
               show={5}
             />
             <Facet
+              field="sources"
+              label="Source"
+              filterType="any"
+              isFilterable
+            />
+            <Facet
               field="facetPeriod"
               label="Period"
               filterType="any"
-              show={10}
+              show={15}
             />
             <Facet
               field="active"
@@ -93,16 +99,10 @@ class SearchLayers extends React.Component {
               filterType="any"
             />
             <Facet
-              field="sources"
-              label="Source"
-              filterType="any"
-              isFilterable
-            />
-            <Facet
               field="processingLevelId"
               label="Processing Level"
               filterType="any"
-              show={3}
+              show={15}
             />
           </div>
         </Scrollbars>
