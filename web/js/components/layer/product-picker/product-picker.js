@@ -1,21 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import lodashDebounce from 'lodash/debounce';
+import {
+  WithSearch,
+  SearchProvider,
+} from '@elastic/react-search-ui';
 import {
   ModalBody,
   ModalHeader,
 } from 'reactstrap';
-import {
-  SearchProvider,
-  // WithSearch,
-} from '@elastic/react-search-ui';
+
 import ProductPickerHeader from './header';
-import FilterUnavailable from './filterUnavailable';
-import { onToggle as onToggleAction } from '../../../modules/modal/actions';
+import {
+  onToggle as onToggleAction,
+} from '../../../modules/modal/actions';
 import BrowseLayers from './browse/browse-layers';
 import SearchLayers from './search/search-layers';
-import { getSearchConfig } from '../../../modules/product-picker/selectors';
+import {
+  initSearchState as initStateAction,
+  saveSearchState as saveSearchStateAction,
+} from '../../../modules/product-picker/actions';
 
 /*
  * A scrollable list of layers
@@ -25,15 +29,14 @@ import { getSearchConfig } from '../../../modules/product-picker/selectors';
 class ProductPicker extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       modalElement: undefined,
     };
-
-    // this.toggleFilterByAvailable = this.toggleFilterByAvailable.bind(this);
   }
 
   componentDidMount() {
+    const { initState } = this.props;
+    initState();
     const modalElement = document.getElementById('layer_picker_component');
     modalElement.classList.add('category-width');
     this.setState({ modalElement });
@@ -138,31 +141,37 @@ class ProductPicker extends React.Component {
 
   render() {
     const {
+      closeModal,
       mode,
       searchConfig,
       width,
-      onToggle,
     } = this.props;
 
     return !searchConfig ? null : (
       <SearchProvider config={searchConfig}>
-        <ModalHeader toggle={onToggle}>
-          <ProductPickerHeader
-            width={width}
-            toggleFilterByAvailable={this.toggleFilterByAvailable}
-          />
-        </ModalHeader>
-        <ModalBody>
-          <div id="layer-modal-content" className="layer-modal-content">
-            {mode !== 'search'
-              ? (
-                <BrowseLayers componentHeights={this.getComponentHeights()} width={width} />
-              )
-              : (
-                <SearchLayers componentHeights={this.getComponentHeights()} width={width} />
-              )}
-          </div>
-        </ModalBody>
+        <WithSearch mapContextToProps={({ filters, searchTerm }) => ({ filters, searchTerm })}>
+          {({ filters, searchTerm }) => (
+            <>
+              <ModalHeader toggle={() => closeModal(filters, searchTerm)}>
+                <ProductPickerHeader
+                  width={width}
+                  toggleFilterByAvailable={this.toggleFilterByAvailable}
+                />
+              </ModalHeader>
+              <ModalBody>
+                <div id="layer-modal-content" className="layer-modal-content">
+                  {mode !== 'search'
+                    ? (
+                      <BrowseLayers componentHeights={this.getComponentHeights()} width={width} />
+                    )
+                    : (
+                      <SearchLayers componentHeights={this.getComponentHeights()} width={width} />
+                    )}
+                </div>
+              </ModalBody>
+            </>
+          )}
+        </WithSearch>
       </SearchProvider>
     );
   }
@@ -170,9 +179,10 @@ class ProductPicker extends React.Component {
 
 ProductPicker.propTypes = {
   category: PropTypes.object,
+  closeModal: PropTypes.func,
+  initState: PropTypes.func,
   isMobile: PropTypes.bool,
   mode: PropTypes.string,
-  onToggle: PropTypes.func,
   screenHeight: PropTypes.number,
   searchConfig: PropTypes.object,
   selectedLayer: PropTypes.object,
@@ -180,12 +190,16 @@ ProductPicker.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onToggle: () => {
+  closeModal: (filters, searchTerm) => {
+    dispatch(saveSearchStateAction(filters, searchTerm));
     dispatch(onToggleAction());
+  },
+  initState: () => {
+    dispatch(initStateAction());
   },
 });
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     browser,
     productPicker,
@@ -193,8 +207,7 @@ const mapStateToProps = (state, ownProps) => {
   const { screenWidth, screenHeight } = browser;
   const isMobile = browser.lessThan.medium;
   const width = getModalWidth(screenWidth);
-  const searchConfig = getSearchConfig(state);
-  const { mode, category } = productPicker;
+  const { mode, category, searchConfig } = productPicker;
 
   return {
     category,
@@ -205,6 +218,7 @@ const mapStateToProps = (state, ownProps) => {
     width,
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

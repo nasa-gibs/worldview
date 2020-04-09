@@ -28,6 +28,7 @@ class ProductPickerHeader extends React.Component {
     super(props);
     this.revertToInitialScreen = this.revertToInitialScreen.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onSearchInputFocus = this.onSearchInputFocus.bind(this);
   }
 
   /**
@@ -81,6 +82,17 @@ class ProductPickerHeader extends React.Component {
     );
   }
 
+  onSearchInputFocus (e) {
+    const { mode, toggleSearchMode } = this.props;
+
+    // TODO also need to actually focus the input so user can start typing here
+    // e.target.focus();
+
+    if (mode !== 'search') {
+      toggleSearchMode();
+    }
+  }
+
   render() {
     const {
       isMobile,
@@ -119,7 +131,10 @@ class ProductPickerHeader extends React.Component {
 
           {(mode !== 'search' && !selectedLayer)
             && (
-              <Button className="filter-button" onClick={toggleSearchMode}>
+              <Button
+                className="filter-button"
+                onClick={toggleSearchMode}
+              >
                 <FontAwesomeIcon icon={faFilter} />
               </Button>
             )}
@@ -130,7 +145,7 @@ class ProductPickerHeader extends React.Component {
             value={searchTerm}
             placeholder="Search"
             type="search"
-            onFocus={toggleSearchMode}
+            onFocus={(e) => this.onSearchInputFocus(e)}
           />
         </InputGroup>
         {(mode === 'search' && !isMobile) && (
