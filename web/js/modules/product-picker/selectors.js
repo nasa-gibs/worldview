@@ -16,6 +16,8 @@ const decodeHtml = (html) => {
 const getConfig = ({ config }) => config;
 const getProjection = ({ proj }) => proj && proj.id;
 const getProductPicker = ({ productPicker }) => productPicker;
+const getFilters = ({ productPicker }) => productPicker.filters;
+const getSearchTerm = ({ productPicker }) => productPicker.searchTerm;
 
 const getLayersForProjection = createSelector(
   [getConfig, getProjection],
@@ -43,7 +45,13 @@ const getLayersForProjection = createSelector(
  * https://github.com/elastic/search-ui/blob/master/ADVANCED.md#advanced-configuration
  */
 export const getSearchConfig = createSelector(
-  [getLayersForProjection, getConfig, getProjection],
+  [
+    getLayersForProjection,
+    getConfig,
+    getProjection,
+    getFilters,
+    getSearchTerm,
+  ],
   initSearch,
 );
 

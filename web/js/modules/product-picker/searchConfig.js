@@ -16,20 +16,19 @@ let projectionRef;
 
 const hideZeroCountFields = [
   'measurements',
+  'sources',
+  'facetPeriod',
+  'processingLevelId',
 ];
 
 // TODO pull from a config?
 const facetFields = [
-  'dataCenter',
   'processingLevelId',
   'facetPeriod',
   'group',
-  'collectionDataType',
-  'projects',
   'sources',
   'categories',
   'measurements',
-  'platforms',
   'active',
   'track',
   'daynight',
@@ -51,7 +50,7 @@ function moveNoneOther(data) {
 }
 
 // Convert facet count obj into the format search-ui expects
-function formatFacets(facetValues, firstFormat) {
+function formatFacets(facetValues) {
   const formattedFacets = {};
   lodashForEach(facetValues, (facetObj, field) => {
     let data = Object.keys(facetObj)
@@ -178,7 +177,7 @@ async function onSearch (requestState) {
  * @param {*} config - the entire WV config object
  * @param {*} projection - current map projection
  */
-export default function initSearch(layers, config, projection) {
+export default function initSearch(layers, config, projection, filters, searchTerm) {
   initialLayersArray = layers;
   configRef = config;
   projectionRef = projection;
@@ -193,7 +192,10 @@ export default function initSearch(layers, config, projection) {
     // debug: true,
     alwaysSearchOnInitialLoad: true,
     trackUrlState: false,
-    initialState: {},
+    initialState: {
+      filters,
+      searchTerm,
+    },
     onSearch,
     searchQuery: {},
   };

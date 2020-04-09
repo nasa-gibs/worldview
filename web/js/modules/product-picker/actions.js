@@ -1,5 +1,7 @@
+import { getSearchConfig } from './selectors';
 import {
-  UPDATE_PRODUCT_PICKER,
+  SAVE_SEARCH_STATE,
+  INIT_SEARCH_STATE,
   SELECT_CATEGORY,
   SELECT_MEASUREMENT,
   SELECT_SOURCE,
@@ -12,10 +14,19 @@ import {
   RESET_STATE,
 } from './constants';
 
-export function updateProductPicker(value) {
+export function initSearchState() {
+  return (dispatch, getState) => {
+    dispatch({
+      type: INIT_SEARCH_STATE,
+      searchConfig: getSearchConfig(getState()),
+    });
+  };
+}
+export function saveSearchState(filters, searchTerm) {
   return {
-    type: UPDATE_PRODUCT_PICKER,
-    value,
+    type: SAVE_SEARCH_STATE,
+    filters,
+    searchTerm,
   };
 }
 export function selectCategory(value) {
@@ -72,9 +83,9 @@ export function updateListScrollTop(value) {
     value,
   };
 }
-export function resetProductPickerState(value) {
+export function resetProductPickerState(projection) {
   return {
     type: RESET_STATE,
-    value,
+    projection,
   };
 }

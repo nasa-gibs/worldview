@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
+
 import {
-  UPDATE_PRODUCT_PICKER,
   SELECT_CATEGORY,
   SELECT_MEASUREMENT,
   SELECT_SOURCE,
@@ -12,42 +12,51 @@ import {
   TOGGLE_CATEGORY_MODE,
   UPDATE_LIST_SCROLL_TOP,
   RESET_STATE,
+  INIT_SEARCH_STATE,
+  SAVE_SEARCH_STATE,
 } from './constants';
-
-const projToListType = {
-  arctic: 'measurements',
-  antarctic: 'measurements',
-  geographic: 'category',
-};
 
 export const productPickerState = {
   mode: 'category',
   category: undefined,
-  results: [],
-  searchResultRows: undefined,
-  numRowsFilteredOut: undefined,
-  inputValue: '',
-  filterByAvailable: true,
-  listScrollTop: 0,
+  categoryType: 'hazards and disasters',
+  filters: [],
+  searchTerm: '',
   selectedLayer: undefined,
   selectedMeasurement: undefined,
   selectedMeasurementSourceIndex: 0,
+  searchConfig: undefined,
+  results: [],
+  // searchResultRows: undefined,
+  // numRowsFilteredOut: undefined,
+  // filterByAvailable: true,
+  // listScrollTop: 0,
 };
 
 export function getInitialState(config) {
-  return {
-    ...productPickerState,
-    categoryType: Object.keys(config.categories)[1],
-  };
+  return productPickerState;
 }
 
 export function productPickerReducer(state = productPickerState, action) {
   switch (action.type) {
-    case UPDATE_PRODUCT_PICKER:
+    case INIT_SEARCH_STATE: {
+      const { searchConfig } = action;
       return {
         ...state,
-        ...action.value,
+        searchConfig,
       };
+    }
+
+    case SAVE_SEARCH_STATE: {
+      const { filters, searchTerm } = action;
+      return {
+        ...state,
+        filters,
+        searchTerm,
+        searchConfig: null,
+      };
+    }
+
     case SELECT_CATEGORY: {
       googleTagManager.pushEvent({
         event: 'layers_meta_category',
@@ -62,6 +71,7 @@ export function productPickerReducer(state = productPickerState, action) {
         selectedMeasurement: null,
       };
     }
+
     case SELECT_MEASUREMENT: {
       return {
         ...state,
@@ -69,16 +79,21 @@ export function productPickerReducer(state = productPickerState, action) {
         selectedMeasurementSourceIndex: 0,
       };
     }
-    case SELECT_SOURCE:
+
+    case SELECT_SOURCE: {
       return {
         ...state,
         selectedMeasurementSourceIndex: action.value,
       };
-    case SELECT_LAYER:
+    }
+
+    case SELECT_LAYER: {
       return {
         ...state,
         selectedLayer: action.value,
       };
+    }
+
     case SHOW_MEASUREMENTS: {
       const { category, selectedMeasurement } = action.value;
       googleTagManager.pushEvent({
@@ -94,12 +109,15 @@ export function productPickerReducer(state = productPickerState, action) {
         selectedMeasurement,
       };
     }
-    case TOGGLE_SEARCH_MODE:
+
+    case TOGGLE_SEARCH_MODE: {
       return {
         ...state,
         mode: 'search',
         selectedLayer: null,
       };
+    }
+
     case TOGGLE_FEATURED_TAB: {
       const { config } = action;
       const category = config.categories.featured.All;
@@ -113,25 +131,38 @@ export function productPickerReducer(state = productPickerState, action) {
         selectedMeasurement: selectedMeasurementId,
       };
     }
-    case TOGGLE_CATEGORY_MODE:
+
+    case TOGGLE_CATEGORY_MODE: {
       return {
-        ...state,
+        ...productPickerState,
         mode: 'category',
-        selectedLayer: null,
-        selectedMeasurement: null,
-        selectedMeasurementSourceIndex: 0,
-        listScrollTop: 0,
       };
-    case UPDATE_LIST_SCROLL_TOP:
+    }
+
+    // TODO this one unused?
+    case UPDATE_LIST_SCROLL_TOP: {
       return {
         ...state,
         listScrollTop: action.value,
       };
+    }
+
     case RESET_STATE: {
-      const listType = projToListType[action.value];
+      // When switching projections: if we were in 'search'
+      // mode stay there.  Otherwise if in a polar projection
+      // show 'measurement' rather than 'category'
+      const projToListMode = {
+        arctic: 'measurements',
+        antarctic: 'measurements',
+        geographic: 'category',
+      };
+      const modeForProj = projToListMode[action.projection];
+      const prevMode = state.mode;
       const newState = {
-        ...productPickerState,
-        listType,
+        ...state,
+        mode: prevMode === 'search' ? prevMode : modeForProj,
+        filters: [],
+        searchTerm: '',
       };
       return { ...state, ...newState };
     }

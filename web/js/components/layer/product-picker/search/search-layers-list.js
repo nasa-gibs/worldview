@@ -127,9 +127,7 @@ class SearchLayerList extends React.Component {
 
   render() {
     const { visibleItems, hasMoreItems } = this.state;
-    const {
-      componentHeights, isMobile,
-    } = this.props;
+    const { componentHeights, isMobile } = this.props;
     const { listHeight, listMinHeight } = componentHeights;
     const listContainerClass = isMobile
       ? 'layer-list-container search mobile'
@@ -139,7 +137,7 @@ class SearchLayerList extends React.Component {
       maxHeight: `${listHeight}px`,
       minHeight: `${listMinHeight}px`,
     };
-    const scrollParentSelector = '.layer-list-container .simplebar-content-wrapper';
+    const scrollParentSelector = '.layer-list-container.search .simplebar-content-wrapper';
     const debouncedOnScroll = lodashDebounce(({ scrollTop }) => {
       // updateScrollPosition(scrollTop);
     }, 500);
@@ -152,14 +150,14 @@ class SearchLayerList extends React.Component {
           // scrollBarVerticalTop={listScrollTop}
           onScroll={debouncedOnScroll}
         >
-          <div className="product-outter-list-case layers-all">
-            <InfiniteScroll
-              pageStart={0}
-              loadMore={this.loadMoreItems}
-              hasMore={hasMoreItems}
-              useWindow={false}
-              getScrollParent={() => this.scrollParent}
-            >
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={this.loadMoreItems}
+            hasMore={hasMoreItems}
+            useWindow={false}
+            getScrollParent={() => this.scrollParent}
+          >
+            <div className="product-outter-list-case layers-all">
               {visibleItems.map((layer) => (
                 <SearchLayerRow
                   key={layer.id}
@@ -167,8 +165,8 @@ class SearchLayerList extends React.Component {
                   showLayerMetadata={(id) => this.showLayerMetadata(id)}
                 />
               ))}
-            </InfiniteScroll>
-          </div>
+            </div>
+          </InfiniteScroll>
         </Scrollbars>
       </div>
     );
