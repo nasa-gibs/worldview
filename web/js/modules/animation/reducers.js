@@ -93,6 +93,13 @@ export function animationReducer(state = defaultState, action) {
           isPlaying: !state.isPlaying,
         });
       }
+      if (action.keyCode === 27) {
+        return lodashAssign({}, state, {
+          isActive: false,
+          gifActive: false,
+          isPlaying: false,
+        });
+      }
       return state;
 
     default:

@@ -16,28 +16,34 @@ export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
     const {
       modal, animation, tour, ui,
     } = getState();
-    const modalIsOpen = modal.isOpen;
+    const {
+      id,
+      isOpen,
+    } = modal;
     const { isDistractionFreeModeActive } = ui;
-    if (animation.isActive && !modalIsOpen) {
-      // can get more specific modal.key !== "LAYER_PICKER_COMPONENT"
-      dispatch({
-        type: ANIMATION_KEY_PRESS_ACTION,
-        keyCode,
-      });
-    }
+    const isProductPickerOpen = isOpen && id === 'LAYER_PICKER_COMPONENT';
     if (tour.active && keyCode === 27) {
       dispatch({
         type: TOUR_KEY_PRESS_CLOSE,
       });
-    }
-    if (!ctrlOrCmdKey && shiftKey && keyCode === 68) {
-      dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
-      if (!isDistractionFreeModeActive && modalIsOpen) {
-        dispatch({ type: CLOSE_MODAL });
+    } else if (!isProductPickerOpen) {
+      if (animation.isActive) {
+        dispatch({
+          type: ANIMATION_KEY_PRESS_ACTION,
+          keyCode,
+        });
+      } else if (!ctrlOrCmdKey && shiftKey && keyCode === 68) {
+        dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
+        if (!isDistractionFreeModeActive && isOpen) {
+          dispatch({ type: CLOSE_MODAL });
+        }
+      } else if (keyCode === 27) {
+        if (isDistractionFreeModeActive) {
+          dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
+        } else {
+          dispatch({ type: CLOSE_MODAL });
+        }
       }
-    }
-    if (isDistractionFreeModeActive && keyCode === 27) {
-      dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
     }
   };
 }
