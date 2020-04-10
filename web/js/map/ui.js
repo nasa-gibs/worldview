@@ -281,6 +281,8 @@ export default function mapui(models, config, store, ui) {
           constrainResolution: false,
           callback,
         });
+      } else if (rotationStart && projId !== 'geographic') {
+        callback();
       }
     }
     updateExtent();
