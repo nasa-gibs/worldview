@@ -227,7 +227,7 @@ const mapStateToProps = (state, ownProps) => {
   } = state;
   const { selectedLayer } = productPicker;
   const activeLayers = getActiveLayers(state);
-  const isActive = !!activeLayers[selectedLayer.id];
+  const isActive = selectedLayer && !!activeLayers[selectedLayer.id];
   return {
     layer: selectedLayer,
     isActive,

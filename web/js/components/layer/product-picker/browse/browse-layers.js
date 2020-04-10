@@ -43,49 +43,21 @@ class BrowseLayers extends React.Component {
     }
   }
 
-
   renderLayerList() {
-    const {
-      componentHeights,
-      isMobile,
-      // updateScrollPosition,
-      listScrollTop,
-    } = this.props;
-    const {
-      listHeight,
-      listMinHeight,
-      detailHeight,
-    } = componentHeights;
-
-    const debouncedOnScroll = lodashDebounce(({ scrollTop }) => {
-      // updateScrollPosition(scrollTop);
-    }, 500);
-    const containerClass = isMobile
-      ? 'search-container mobile'
-      : 'search-container';
-    const listContainerClass = isMobile
-      ? 'layer-list-container browse mobile'
-      : 'layer-list-container browse';
+    const { browser, bodyHeight } = this.props;
 
     return (
-      <div className={containerClass}>
-        <div className={listContainerClass}>
-          <Scrollbars
-            style={{
-              maxHeight: `${listHeight}px`,
-              minHeight: `${listMinHeight}px`,
-            }}
-            scrollBarVerticalTop={listScrollTop}
-            onScroll={debouncedOnScroll}
-          >
+      <div className="search-layers-container" style={{ maxHeight: bodyHeight }}>
+        <div className="layer-list-container browse">
+          <Scrollbars style={{ height: '100%' }}>
             <div className="product-outter-list-case">
-              <BrowseLayerList isMobile={isMobile} />
+              <BrowseLayerList />
             </div>
           </Scrollbars>
         </div>
-        { !isMobile && (
+        { !browser.lessThan.medium && (
           <div className="layer-detail-container layers-all browse">
-            <Scrollbars style={{ maxHeight: `${detailHeight}px` }}>
+            <Scrollbars style={{ height: '100%' }}>
               <MeasurementMetadataDetail />
             </Scrollbars>
           </div>
@@ -96,13 +68,12 @@ class BrowseLayers extends React.Component {
 
   render() {
     const {
-      componentHeights,
+      bodyHeight,
       selectedProjection,
       width,
       categoryType,
       mode,
     } = this.props;
-    const { listHeight } = componentHeights;
     const isCategoryDisplay = mode === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
     const categoryKeys = [
@@ -129,7 +100,7 @@ class BrowseLayers extends React.Component {
               ))}
             </Nav>
             {isCategoryDisplay ? (
-              <Scrollbars style={{ maxHeight: `${listHeight}px` }}>
+              <Scrollbars style={{ maxHeight: bodyHeight }}>
                 <div className="product-outter-list-case">
                   <CategoryGrid width={width} />
                 </div>
@@ -143,15 +114,13 @@ class BrowseLayers extends React.Component {
 }
 
 BrowseLayers.propTypes = {
+  browser: PropTypes.object,
+  bodyHeight: PropTypes.number,
   categoryType: PropTypes.string,
   mode: PropTypes.string,
-  isMobile: PropTypes.bool,
-  componentHeights: PropTypes.object,
-  listScrollTop: PropTypes.number,
   selectCategory: PropTypes.func,
   selectedProjection: PropTypes.string,
   toggleFeatureTab: PropTypes.func,
-  // updateScrollPosition: PropTypes.func,
   width: PropTypes.number,
 };
 
@@ -174,7 +143,6 @@ function mapStateToProps(state, ownProps) {
     proj,
     productPicker,
   } = state;
-  const isMobile = browser.lessThan.medium;
   const {
     mode,
     categoryType,
@@ -182,13 +150,14 @@ function mapStateToProps(state, ownProps) {
     selectedMeasurement,
     selectedMeasurementSourceIndex,
   } = productPicker;
+
   return {
+    browser,
     mode,
     categoryType,
     categoryConfig: config.categories,
     measurementConfig: config.measurements,
     listScrollTop,
-    isMobile,
     selectedProjection: proj.id,
     selectedMeasurement,
     selectedMeasurementSourceIndex,

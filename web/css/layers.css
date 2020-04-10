@@ -159,10 +159,6 @@
   color: #00f;
 }
 
-.layers-all {
-  height: 100%;
-}
-
 .layers-all .layers-all-layer {
   margin-top: 5px;
   padding: 0 0 0.5em 1.2em;
@@ -781,8 +777,8 @@
     }
   }
   &.browse-search-width {
-    width: 95%;
-    max-width: 700px;
+    width: 98%;
+    max-width: 1200px;
     & .product-outter-list-case {
       width: 100%;
       padding: 5px 11px 5px 2px;
@@ -834,29 +830,51 @@
   margin-right: 10px;
 }
 
+/* Need at least 1024px to fit three category boxes inline */
 @media (max-width: 1024px) {
-  .custom-layer-dialog {
-    &.category-width {
-      width: 658px;
-      & .modal-body {
-        padding: 0 0 0 6px;
-      }
+  .custom-layer-dialog.category-width {
+    width: 658px;
+    & .modal-body {
+      padding: 0 0 0 6px;
     }
+  }
+  .custom-layer-dialog {
     &.browse-search-width {
       width: 95%;
-      max-width: 978px;
+      max-width: 800px;
     }
+  }
+  .layer-list-container.search {
+    height: 40%;
+  }
+  .layer-detail-container.search {
+    height: 60%;
+  }
+}
 
-    & .category-masonry-case {
-      max-width: 640px;
+@media (min-width: 1024px) {
+  .search-layers-container {
+    & div.layer-list-detail-container {
+      flex-direction: row;
     }
-    & .categories-nav {
-      max-width: 640px;
+    & div.layer-list-container {
+      max-width: 480px;
     }
   }
 }
 
-@media (max-width: 740px) {
+/* Small Desktop Styles Begin Here */
+@media (max-width: 992px) {
+  /* .custom-layer-dialog {
+    &.browse-search-width {
+      width: 95%;
+      max-width: 800px;
+    }
+  } */
+}
+
+/* Mobile Styles Begin Here */
+@media (max-width: 768px) {
   .modal-content {
     border-radius: 0;
     border: none;
@@ -877,21 +895,17 @@
       max-width: 100%;
       margin: 0;
     }
-
     & .product-outter-list-case {
       width: 100%;
       padding: 0 10px 0 0;
     }
   }
-
   .layer-category {
     width: 100%;
   }
-
   .category-background-cover {
     background-size: cover;
   }
-
   .layer-modal-content .categories-nav .nav-link {
     font-size: 11px;
     padding: 1px 7px;
@@ -908,111 +922,47 @@
   }
 }
 
-.header-filter-container {
-  padding: 8px 0 0;
-  .header-filters {
-    width: 200px;
-    position: absolute;
-  }
-  .results-text {
-    text-align: right;
-    font-size: 13px;
-    font-weight: 500;
-    & span {
-      margin-left: 5px;
-      color: #777;
-    }
-  }
-}
-
-.layer-filters-container {
-
-  & .filter-controls {
-    min-height: 90px;
-    min-width: 230px;
-    background-color: #333;
-    color: #eee;
-    padding: 10px;
-    & h3 {
-      color: #ddd;
-      font-size: 17px;
-      line-height: 100%;
-      font-family: 'Open Sans', sans-serif;
-      font-weight: 300;
-      margin: 0 0 20px;
-    }
-    & .custom-control {
-      display: inline;
-      margin-top: 10px;
-      & .custom-control-label {
-        color: #eee;
-        padding: 2px;
-      }
-    }
-    & svg.svg-inline--fa {
-      color: #eee;
-      padding: 2px;
-      margin-left: 6px;
-    }
-  }
-}
-
-.filter-tooltip {
-  & .display-date {
-    font-size: 14px;
-    font-family: monospace;
-    margin: 5px;
-  }
-}
-
-.search-container {
+.search-layers-container {
   display: flex;
-  &.mobile {
+  & .layer-list-detail-container {
+    flex: 1.5;
+    display: flex;
     flex-direction: column;
+  }
+  & .layer-list-container {
+    flex-grow: 1;
+  }
+  & .layer-detail-container.search {
+    flex-grow: 1;
+  }
+  & .layer-detail-container.browse {
+    flex-basis: 50%;
   }
 }
 
 .layer-list-container {
   padding: 0 2px 0 0;
-  flex-grow: 1;
+  background-image: linear-gradient(360deg, #aaa, #ddd 15%);
   &.browse {
     border-right: 1px solid #ccc;
-  }
-  &.search:not(.mobile) {
-    max-width: 430px;
-  }
-  &.mobile {
-    background-image: linear-gradient(360deg, #aaa, #ddd 15%);
-  }
-}
-.no-results {
-  text-align: center;
-  margin-top: 40px;
-  & svg.svg-inline--fa {
-    color: #777;
-    font-size: 100px;
-  }
-  & h3 {
-    font-weight: 500;
-    font-size: 20px;
-    margin: 40px auto 15px;
-    text-align: center;
-    color: #777;
-  }
-  & h5 {
-    font-size: 16px;
-    margin: 20px auto;
-    text-align: center;
-    font-weight: 300;
-  }
-  a.remove-filters {
-    color: #007bff;
-    margin-left: 5px;
   }
 }
 
 .layer-detail-container {
   padding-right: 2px;
+  &.search {
+    border-top: 5px solid #d54e21;
+    padding-left: 2px;
+    background-image: linear-gradient(#aaa, #ddd 15%);
+  }
+  &.browse {
+    & h2 {
+      color: #eee;
+      font-size: 24px;
+      margin: 10px 0;
+      font-weight: 400;
+    }
+  }
   & .layers-all-layer {
     background: transparent;
     padding: 5px 10px;
@@ -1036,25 +986,6 @@
     }
     &:hover {
       background-color: transparent;
-    }
-  }
-
-  &.search {
-    flex-grow: 1;
-    &.mobile {
-      border-top: 5px solid #d54e21;
-      padding-left: 2px;
-      background: #333;
-      background-image: linear-gradient(#aaa, #ddd 15%);
-    }
-  }
-  &.browse {
-    flex-basis: 50%;
-    & h2 {
-      color: #eee;
-      font-size: 24px;
-      margin: 10px 0;
-      font-weight: 400;
     }
   }
   & .scrollbar-visible .layers-all-layer {
@@ -1109,5 +1040,87 @@
       color: #fff;
       background-color: #d54e21;
     }
+  }
+}
+
+.no-results {
+  text-align: center;
+  margin-top: 40px;
+  & svg.svg-inline--fa {
+    color: #777;
+    font-size: 100px;
+  }
+  & h3 {
+    font-weight: 500;
+    font-size: 20px;
+    margin: 40px auto 15px;
+    text-align: center;
+    color: #777;
+  }
+  & h5 {
+    font-size: 16px;
+    margin: 20px auto;
+    text-align: center;
+    font-weight: 300;
+  }
+  a.remove-filters {
+    color: #007bff;
+    margin-left: 5px;
+  }
+}
+
+.header-filter-container {
+  padding: 8px 0 0;
+  .header-filters {
+    width: 200px;
+    position: absolute;
+  }
+  .results-text {
+    text-align: right;
+    font-size: 13px;
+    font-weight: 500;
+    & span {
+      margin-left: 5px;
+      color: #777;
+    }
+  }
+}
+
+.layer-filters-container {
+  & .filter-controls {
+    min-height: 90px;
+    min-width: 230px;
+    background-color: #333;
+    color: #eee;
+    padding: 10px;
+    & h3 {
+      color: #ddd;
+      font-size: 17px;
+      line-height: 100%;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+      margin: 0 0 20px;
+    }
+    & .custom-control {
+      display: inline;
+      margin-top: 10px;
+      & .custom-control-label {
+        color: #eee;
+        padding: 2px;
+      }
+    }
+    & svg.svg-inline--fa {
+      color: #eee;
+      padding: 2px;
+      margin-left: 6px;
+    }
+  }
+}
+
+.filter-tooltip {
+  & .display-date {
+    font-size: 14px;
+    font-family: monospace;
+    margin: 5px;
   }
 }
