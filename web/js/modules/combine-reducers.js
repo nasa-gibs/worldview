@@ -55,13 +55,7 @@ function lastAction(state = null, action) {
  * no longer necessary
  */
 const responsiveStateReducer = createResponsiveStateReducer(
-  {
-    extraSmall: 500,
-    small: 740,
-    medium: 1000,
-    large: 1280,
-    extraLarge: 1400,
-  },
+  null,
   {
     extraFields: () => ({
       screenWidth: window.innerWidth,

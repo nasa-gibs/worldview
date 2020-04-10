@@ -46,11 +46,10 @@ class SearchLayerRow extends React.Component {
       layer,
       showLayerMetadata,
       selectedLayer,
-      isMobile,
     } = this.props;
     if (!(selectedLayer && layer.id === selectedLayer.id)) {
       showLayerMetadata(layer.id);
-    } else if (isMobile) {
+    } else {
       // Allow click to deselect on mobile
       showLayerMetadata(null);
     }

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
 import InfiniteScroll from 'react-infinite-scroller';
-import { debounce as lodashDebounce } from 'lodash';
-import Scrollbars from '../../../util/scrollbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMeteor } from '@fortawesome/free-solid-svg-icons';
 import SearchLayerRow from './search-layer-row';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 import {
@@ -127,65 +127,59 @@ class SearchLayerList extends React.Component {
 
   render() {
     const { visibleItems, hasMoreItems } = this.state;
-    const { componentHeights, isMobile } = this.props;
-    const { listHeight, listMinHeight } = componentHeights;
-    const listContainerClass = isMobile
-      ? 'layer-list-container search mobile'
-      : 'layer-list-container search ';
-    const scrollHeightStyles = {
-      height: `${listHeight}px`,
-      maxHeight: `${listHeight}px`,
-      minHeight: `${listMinHeight}px`,
-    };
+    const { results } = this.props;
     const scrollParentSelector = '.layer-list-container.search .simplebar-content-wrapper';
-    const debouncedOnScroll = lodashDebounce(({ scrollTop }) => {
-      // updateScrollPosition(scrollTop);
-    }, 500);
     this.scrollParent = this.scrollParent || document.querySelector(scrollParentSelector);
 
-    return (
-      <div className={listContainerClass}>
-        <Scrollbars
-          style={scrollHeightStyles}
-          // scrollBarVerticalTop={listScrollTop}
-          onScroll={debouncedOnScroll}
+    return !results.length
+      ? (
+        <div className="no-results">
+          <FontAwesomeIcon icon={faMeteor} size="5x" />
+          <h3> No layers found! </h3>
+          {/* {numRowsFilteredOut > 0 && (
+            <p>
+              {`${numRowsFilteredOut} result(s) are being filtered out.`}
+              <a
+                className="remove-filters"
+              >
+                Remove filters?
+              </a>
+            </p>
+          )} */}
+        </div>
+      )
+      : (
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadMoreItems}
+          hasMore={hasMoreItems}
+          useWindow={false}
+          getScrollParent={() => this.scrollParent}
         >
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={this.loadMoreItems}
-            hasMore={hasMoreItems}
-            useWindow={false}
-            getScrollParent={() => this.scrollParent}
-          >
-            <div className="product-outter-list-case layers-all">
-              {visibleItems.map((layer) => (
-                <SearchLayerRow
-                  key={layer.id}
-                  layer={layer}
-                  showLayerMetadata={(id) => this.showLayerMetadata(id)}
-                />
-              ))}
-            </div>
-          </InfiniteScroll>
-        </Scrollbars>
-      </div>
-    );
+          <div className="product-outter-list-case layers-all">
+            {visibleItems.map((layer) => (
+              <SearchLayerRow
+                key={layer.id}
+                layer={layer}
+                showLayerMetadata={(id) => this.showLayerMetadata(id)}
+              />
+            ))}
+          </div>
+        </InfiniteScroll>
+      );
   }
 }
 
 SearchLayerList.propTypes = {
-  componentHeights: PropTypes.object,
   results: PropTypes.array,
-  isMobile: PropTypes.bool,
   selectedLayer: PropTypes.object,
   selectLayer: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { productPicker, browser } = state;
+  const { productPicker } = state;
   const { selectedLayer } = productPicker;
   return {
-    isMobile: browser.lessThan.medium,
     selectedLayer,
   };
 };

@@ -134,7 +134,7 @@ export function productPickerReducer(state = productPickerState, action) {
 
     case TOGGLE_CATEGORY_MODE: {
       return {
-        ...productPickerState,
+        ...state,
         mode: 'category',
       };
     }

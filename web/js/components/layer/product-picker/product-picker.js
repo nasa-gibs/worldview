@@ -111,41 +111,30 @@ class ProductPicker extends React.Component {
   // this.runSearch(inputValue);
   // }
 
-  getComponentHeights = () => {
-    const {
-      isMobile,
-      screenHeight,
-      selectedLayer,
-      mode,
-      category,
-    } = this.props;
-    const { modalElement } = this.state;
-    const headerElement = modalElement && modalElement.querySelector('.modal-header');
-    const tabOffset = mode === 'category' || category === 'featured' ? 38 : 0;
-    const detailTopBorderSize = 5;
-    const headerHeight = headerElement && headerElement.offsetHeight;
-    const bodyHeight = headerElement ? screenHeight - headerHeight - tabOffset : 0;
-
-    return isMobile
-      ? {
-        detailHeight: !selectedLayer ? 0 : (bodyHeight * 0.6) - detailTopBorderSize,
-        listHeight: selectedLayer ? bodyHeight * 0.4 : bodyHeight,
-        listMinHeight: selectedLayer ? bodyHeight * 0.4 : bodyHeight,
-      }
-      : {
-        listHeight: bodyHeight - 80,
-        detailHeight: bodyHeight - 80,
-        listMinHeight: 300,
-      };
-  }
-
   render() {
     const {
       closeModal,
       mode,
       searchConfig,
       width,
+      browser,
+      category,
     } = this.props;
+
+    const { screenHeight } = browser;
+    const dialogMargin = 12;
+    const tabOffset = mode === 'category' || category === 'featured' ? 38 : 0;
+    let headerHeight = mode === 'search' ? 70 : 48;
+    let bodyHeight = screenHeight - headerHeight - tabOffset - 100 - dialogMargin;
+    if (browser.lessThan.medium) {
+      headerHeight = 48;
+      bodyHeight = screenHeight - headerHeight - tabOffset;
+    }
+
+    console.log('screenHeight', screenHeight);
+    console.log('headerHeight', headerHeight);
+    console.log('bodyHeight', bodyHeight);
+    console.log('------------', bodyHeight);
 
     return !searchConfig ? null : (
       <SearchProvider config={searchConfig}>
@@ -162,10 +151,10 @@ class ProductPicker extends React.Component {
                 <div id="layer-modal-content" className="layer-modal-content">
                   {mode !== 'search'
                     ? (
-                      <BrowseLayers componentHeights={this.getComponentHeights()} width={width} />
+                      <BrowseLayers bodyHeight={bodyHeight} width={width} />
                     )
                     : (
-                      <SearchLayers componentHeights={this.getComponentHeights()} width={width} />
+                      <SearchLayers bodyHeight={bodyHeight} width={width} />
                     )}
                 </div>
               </ModalBody>
@@ -178,14 +167,13 @@ class ProductPicker extends React.Component {
 }
 
 ProductPicker.propTypes = {
+  browser: PropTypes.object,
   category: PropTypes.object,
   closeModal: PropTypes.func,
   initState: PropTypes.func,
-  isMobile: PropTypes.bool,
   mode: PropTypes.string,
   screenHeight: PropTypes.number,
   searchConfig: PropTypes.object,
-  selectedLayer: PropTypes.object,
   width: PropTypes.number,
 };
 
@@ -204,16 +192,16 @@ const mapStateToProps = (state) => {
     browser,
     productPicker,
   } = state;
-  const { screenWidth, screenHeight } = browser;
-  const isMobile = browser.lessThan.medium;
+  const { screenWidth } = browser;
   const width = getModalWidth(screenWidth);
-  const { mode, category, searchConfig } = productPicker;
+  const {
+    mode, category, searchConfig,
+  } = productPicker;
 
   return {
+    browser,
     category,
     mode,
-    isMobile,
-    screenHeight,
     searchConfig,
     width,
   };
