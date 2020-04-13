@@ -1,13 +1,13 @@
-div.ol-custom-overviewmap,
-div.ol-custom-overviewmap.ol-uncollapsible   {
-    bottom: auto;
-    left: auto;
-    right: 60px;
-    top: 61px;
+.ol-custom-overviewmap,
+.ol-custom-overviewmap.ol-uncollapsible {
+  bottom: auto;
+  left: auto;
+  right: 60px;
+  top: 61px;
 }
 
-.ol-custom-overviewmap:not(.ol-collapsed)  {
-  border: 1px solid black;
+.ol-custom-overviewmap:not(.ol-collapsed) {
+  border: 1px solid #000;
 }
 
 .ol-custom-overviewmap div.ol-overviewmap-map {
@@ -15,11 +15,11 @@ div.ol-custom-overviewmap.ol-uncollapsible   {
   width: 300px;
 }
 
-div.ol-custom-overviewmap div.ol-overviewmap-box {
-  border: 2px solid red;
+.ol-custom-overviewmap .ol-overviewmap-box {
+  border: 2px solid #f00;
 }
 
-div.ol-custom-overviewmap:not(.ol-collapsed) button{
+.ol-custom-overviewmap:not(.ol-collapsed) button {
   bottom: auto;
   left: auto;
   right: 1px;

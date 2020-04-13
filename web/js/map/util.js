@@ -1,9 +1,9 @@
 import OlStyle from 'ol/style/Style';
 import OlStroke from 'ol/style/Stroke';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
+import OlVectorLayer from 'ol/layer/Vector';
+import OlVectorSource from 'ol/source/Vector';
 import OlFeature from 'ol/Feature';
-import LineString from 'ol/geom/LineString';
+import OlLineString from 'ol/geom/LineString';
 
 const ZOOM_DURATION = 250;
 
@@ -57,14 +57,16 @@ function getLineStyle(color, width, lineDash) {
       color,
       width,
       lineDash: lineDash || undefined,
+
     }),
+
   });
 }
 export function getLine(coordinateArray, width, color, opacity, lineDash) {
-  return new VectorLayer({
-    source: new VectorSource({
+  return new OlVectorLayer({
+    source: new OlVectorSource({
       features: [new OlFeature({
-        geometry: new LineString(coordinateArray),
+        geometry: new OlLineString(coordinateArray),
       })],
     }),
     zIndex: Infinity,
