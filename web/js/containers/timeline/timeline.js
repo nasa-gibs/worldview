@@ -1248,6 +1248,23 @@ class Timeline extends React.Component {
                         isDataCoveragePanelOpen={isDataCoveragePanelOpen}
                       />
 
+                      {/* Data Coverage Panel */}
+                      <TimelineData
+                        appNow={appNow}
+                        position={position}
+                        transformX={transformX}
+                        timeScale={timeScale}
+                        frontDate={frontDate}
+                        backDate={backDate}
+                        timelineStartDateLimit={timelineStartDateLimit}
+                        parentOffset={parentOffset}
+                        axisWidth={axisWidth}
+                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
+                        matchingTimelineCoverage={matchingTimelineCoverage}
+                        toggleDataCoveragePanel={this.toggleDataCoveragePanel}
+                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
+                      />
+
                       {isAnimationWidgetReady
                       && (
                       <TimelineRangeSelector
@@ -1314,23 +1331,6 @@ class Timeline extends React.Component {
                         isDataCoveragePanelOpen={isDataCoveragePanelOpen}
                       />
                       )}
-
-                      {/* Data Coverage Panel */}
-                      <TimelineData
-                        appNow={appNow}
-                        position={position}
-                        transformX={transformX}
-                        timeScale={timeScale}
-                        frontDate={frontDate}
-                        backDate={backDate}
-                        timelineStartDateLimit={timelineStartDateLimit}
-                        parentOffset={parentOffset}
-                        axisWidth={axisWidth}
-                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
-                        matchingTimelineCoverage={matchingTimelineCoverage}
-                        toggleDataCoveragePanel={this.toggleDataCoveragePanel}
-                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
-                      />
                     </div>
 
                     {/* Custom Interval Selector Widget */}

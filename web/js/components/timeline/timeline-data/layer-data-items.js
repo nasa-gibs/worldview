@@ -148,7 +148,14 @@ class LayerDataItems extends Component {
       position,
       transformX,
     } = this.props;
-    const width = Math.max(options.width, 0);
+    const {
+      borderRadius,
+      leftOffset,
+      isWidthGreaterThanRendered,
+      width,
+    } = options;
+    const lineWidth = Math.max(width, 0);
+
     // get formatted dates based on line type
     const {
       dateRangeStart,
@@ -156,8 +163,9 @@ class LayerDataItems extends Component {
       toolTipText,
     } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
     const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
+
     // handle tooltip positioning
-    const toolTipOffset = -options.leftOffset - (width < axisWidth ? options.leftOffset : axisWidth / 2);
+    const toolTipOffset = -leftOffset - (lineWidth < axisWidth ? leftOffset : axisWidth / 2);
     const toolTipPlacement = 'auto';
 
     // candy stripe color
@@ -169,7 +177,11 @@ class LayerDataItems extends Component {
       ${color} 20px,
       ${altLineColor} 20px,
       ${altLineColor} 40px)`;
-    const bgPosition = `${options.leftOffset + width + position + transformX}px 0`;
+    const backgroundPositionCalculated = `${leftOffset + lineWidth + position + transformX}px 0`;
+    const backgroundPosition = !isWidthGreaterThanRendered
+      || (leftOffset !== 0 && isWidthGreaterThanRendered)
+      ? 0
+      : backgroundPositionCalculated;
 
     return (
       <div
@@ -182,11 +194,11 @@ class LayerDataItems extends Component {
           onMouseEnter={() => hoverOnToolTip(`${dateRangeStartEnd}`)}
           onMouseLeave={() => hoverOffToolTip()}
           style={{
-            transform: `translate(${options.leftOffset}px, 0)`,
-            width: `${width}px`,
-            borderRadius: options.borderRadius,
+            transform: `translate(${leftOffset}px, 0)`,
+            width: `${lineWidth}px`,
+            borderRadius,
             background: stripeBackground,
-            backgroundPosition: width < axisWidth ? 0 : bgPosition,
+            backgroundPosition,
           }}
         >
           <Tooltip

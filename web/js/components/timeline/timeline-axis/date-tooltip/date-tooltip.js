@@ -101,6 +101,19 @@ class DateToolTip extends PureComponent {
       toolTipHeightOffset -= addHeight;
       toolTipHeightOffset = Math.max(toolTipHeightOffset, -357);
     }
+
+    // eslint-disable-next-line no-nested-ternary
+    const toolTipWidth = hasSubdailyLayers
+      ? toolTipDayOfYear >= 100
+        ? '239px'
+        : '232px'
+      : '165px';
+
+    // add leading zero for single digits
+    toolTipDayOfYear = toolTipDayOfYear < 10
+      ? `0${toolTipDayOfYear}`
+      : toolTipDayOfYear;
+
     return (
       shouldDisplayDraggerToolTip && (
         <div
@@ -108,7 +121,7 @@ class DateToolTip extends PureComponent {
           style={{
             transform: `translate(${toolTipLeftOffset}px, ${toolTipHeightOffset}px)`,
             display: toolTipDisplay,
-            width: hasSubdailyLayers ? '232px' : '165px',
+            width: toolTipWidth,
           }}
         >
           { toolTipDate }

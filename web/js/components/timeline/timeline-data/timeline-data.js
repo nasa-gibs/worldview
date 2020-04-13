@@ -88,7 +88,7 @@ class TimelineData extends Component {
   * @param {Object} layer
   * @param {String} rangeStart
   * @param {String} rangeEnd
-  * @returns {Object} visible, leftOffset, width, borderRadius
+  * @returns {Object} visible, leftOffset, width, borderRadius, isWidthGreaterThanRendered
   */
   getMatchingCoverageLineDimensions = (layer, rangeStart, rangeEnd) => {
     const {
@@ -150,6 +150,7 @@ class TimelineData extends Component {
       }
     }
 
+    const isWidthGreaterThanRendered = layerStart < axisFrontDate || layerEnd > axisBackDate;
     const borderRadius = `${borderRadiusLeft} ${borderRadiusRight} ${borderRadiusRight} ${borderRadiusLeft}`;
 
     return {
@@ -157,6 +158,7 @@ class TimelineData extends Component {
       leftOffset,
       width,
       borderRadius,
+      isWidthGreaterThanRendered,
     };
   }
 

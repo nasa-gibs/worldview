@@ -814,6 +814,7 @@ button:focus {
 }
 
 .data-panel-layer-item {
+  position: relative;
   border-bottom: thin solid #3c3c3c;
   padding-bottom: 5px;
 }
@@ -839,6 +840,7 @@ button:focus {
   position: absolute;
   font-size: 0.9em;
   right: 0;
+  top: 0;
   padding: 4px 10px;
 }
 
