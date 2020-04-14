@@ -166,7 +166,7 @@
     "history": "^4.7.2",
     "icheck": "^1.0.2",
     "immutability-helper": "^3.0.1",
-    "jquery": "^3.0.0",
+    "jquery": "^3.5.0",
     "jquery-ui-bundle": "1.12.1-migrate",
     "jquery-ui-touch-punch": "0.2.3",
     "lodash": "^4.17.15",
