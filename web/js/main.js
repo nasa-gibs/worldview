@@ -14,7 +14,7 @@ import {
   listenForHistoryChange,
 } from 'redux-location-state';
 import { createBrowserHistory } from 'history';
-import { uniqBy } from 'lodash';
+import { uniqBy, get as lodashGet } from 'lodash';
 import getMiddleware from './combine-middleware';
 import { mapLocationToState, getParamObject } from './location';
 import { stateToParams } from './redux-location-state-customs';
@@ -61,10 +61,12 @@ window.onload = () => {
   promise
     .done((config) => {
       // Perform check to see if app was in the midst of a tour
-      if (parameters.tr) {
-        // Gets the extent of the first step of specified tour and overrides current view params
-        parameters = util.fromQueryString(config.stories[parameters.tr].steps[0].stepLink);
+      const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
+      if (hasTour) {
+        // Gets the extent of the first tour step and overrides view params
+        parameters = util.fromQueryString(hasTour.steps[0].stepLink);
       }
+
       config.pageLoadTime = parameters.now
         ? util.parseDateUTC(parameters.now) || new Date()
         : new Date();
