@@ -1124,3 +1124,38 @@
     margin: 5px;
   }
 }
+
+.facet-container .facet-wrapper {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 25px;
+  margin-bottom: 8px;
+
+  &.hidden {
+    display: none;
+  }
+
+  .no-matches {
+    color: #aaa;
+    margin: 6px;
+    text-align: center;
+  }
+
+  & .svg-inline--fa {
+    cursor: pointer;
+    color: #fff;
+  }
+  .facet-collapse-toggle {
+    position: absolute;
+    right: 0;
+    top: -4px;
+    width: 18px;
+    height: 20px;
+  }
+  .facet-tooltip {
+    position: absolute;
+    left: 0;
+    top: 2px;
+  }
+}

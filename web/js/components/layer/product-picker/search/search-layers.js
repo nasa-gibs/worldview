@@ -1,74 +1,42 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withSearch, Facet } from '@elastic/react-search-ui';
-// import { debounce as lodashDebounce } from 'lodash';
+import { withSearch } from '@elastic/react-search-ui';
 import SearchLayerList from './search-layers-list';
+import ProductFacet from './product-facet';
 import Scrollbars from '../../../util/scrollbar';
 import LayerMetadataDetail from './layer-metadata-detail';
 import {
   updateListScrollTop,
 } from '../../../../modules/product-picker/actions';
+import facetConfig from '../../../../modules/product-picker/facetConfig';
 
 function SearchLayers(props) {
   const {
     browser,
     selectedLayer,
     bodyHeight,
+    facets,
   } = props;
 
   function renderFacetList() {
     return (
       <div className="inner-container">
-        {/* {wasSearched && (
+        {
+          /* {wasSearched && (
               <Sorting label={"Sort by"} sortOptions={SORT_OPTIONS} />
-            )} */}
-        <Facet
-          field="categories"
-          label="Category"
-          filterType="any"
-          show={20}
-        />
-        <Facet
-          field="measurements"
-          label="Measurement"
-          filterType="any"
-          isFilterable
-          show={5}
-        />
-        <Facet
-          field="sources"
-          label="Source"
-          filterType="any"
-          isFilterable
-        />
-        <Facet
-          field="facetPeriod"
-          label="Period"
-          filterType="any"
-          show={15}
-        />
-        <Facet
-          field="active"
-          label="Currently Active?"
-          filterType="any"
-        />
-        <Facet
-          field="track"
-          label="Track Asc/Desc"
-          filterType="any"
-        />
-        <Facet
-          field="daynight"
-          label="Track Day/Night"
-          filterType="any"
-        />
-        <Facet
-          field="processingLevelId"
-          label="Processing Level"
-          filterType="any"
-          show={15}
-        />
+            )} */
+        }
+        {facetConfig.map((config) => (
+          <ProductFacet
+            key={config.field}
+            field={config.field}
+            label={config.label}
+            tooltip={config.tooltip}
+            show={config.show}
+            data={facets[config.field][0].data}
+          />
+        ))}
       </div>
     );
   }
@@ -108,6 +76,7 @@ function SearchLayers(props) {
 SearchLayers.propTypes = {
   browser: PropTypes.object,
   bodyHeight: PropTypes.number,
+  facets: PropTypes.object,
   selectedLayer: PropTypes.object,
 };
 
@@ -128,7 +97,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 export default withSearch(
-  ({ results }) => ({ results }),
+  ({ results, facets }) => ({ results, facets }),
 )(connect(
   mapStateToProps,
   mapDispatchToProps,
