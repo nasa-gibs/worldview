@@ -8,31 +8,14 @@ import {
 import {
   getTitles,
 } from '../layers/selectors';
+import facetConfig from './facetConfig';
 
-const facets = {};
 let initialLayersArray;
 let configRef;
 let projectionRef;
-
-const hideZeroCountFields = [
-  'measurements',
-  'sources',
-  'facetPeriod',
-  'processingLevelId',
-];
-
-// TODO pull from a config?
-const facetFields = [
-  'processingLevelId',
-  'facetPeriod',
-  'group',
-  'sources',
-  'categories',
-  'measurements',
-  'active',
-  'track',
-  'daynight',
-];
+const facets = {};
+const facetFields = facetConfig.map(({ field }) => field);
+const hideZeroCountFields = facetConfig.filter((f) => f.hideZeroCount).map(({ field }) => field);
 
 // Move "None" or "Other" entries to the top or bottom respectively
 function moveNoneOther(data) {

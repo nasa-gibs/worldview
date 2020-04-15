@@ -24,6 +24,7 @@
       font-weight: 600;
       color: #eee;
       border-bottom: 1px solid #aaa;
+      padding-left: 18px;
     }
 
     div.sui-boolean-facet,
@@ -48,6 +49,11 @@
 
     button.sui-facet-view-more {
       color: #a8b6fa;
+      &:hover {
+        background-color: #666;
+        outline: 4px solid #666;
+        color: #eff2ff;
+      }
     }
 
     div.sui-layout-body::after {
