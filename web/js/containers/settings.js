@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { toggleInfiniteWrap, toggleOverviewMap } from '../modules/settings/actions';
+import {
+  toggleInfiniteWrap, toggleOverviewMap, toggleDatelines, toggleDayNightMode,
+} from '../modules/settings/actions';
 import Switch from '../components/util/switch';
 
 class Settings extends Component {
@@ -11,6 +13,10 @@ class Settings extends Component {
       toggleInfinite,
       toggleOverview,
       hasOverview,
+      hasVisibleDatelines,
+      toggleLines,
+      toggleDayNight,
+      isNightMode,
     } = this.props;
 
     return [
@@ -23,14 +29,14 @@ class Settings extends Component {
       {
         label: 'Day / Night',
         id: 'day-night-settings-item',
-        active: false,
-        toggle: () => {},
+        active: isNightMode,
+        toggle: toggleDayNight,
       },
       {
         label: 'Show Datelines',
         id: 'show-dateline-settings-item',
-        active: false,
-        toggle: () => {},
+        active: hasVisibleDatelines,
+        toggle: toggleLines,
       },
       {
         label: 'Show Map Overview',
@@ -51,11 +57,16 @@ class Settings extends Component {
 
 function mapStateToProps(state) {
   const { settings, browser } = state;
-  const { isInfinite, hasOverview } = settings;
+  const {
+    isInfinite, hasOverview, hasVisibleDatelines, isNightMode,
+  } = settings;
+
   return {
     isInfinite,
     isMobile: browser.lessThan.medium,
     hasOverview,
+    hasVisibleDatelines,
+    isNightMode,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -64,6 +75,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   toggleOverview: () => {
     dispatch(toggleOverviewMap());
+  },
+  toggleLines: () => {
+    dispatch(toggleDatelines());
+  },
+  toggleDayNight: () => {
+    dispatch(toggleDayNightMode());
   },
 });
 
@@ -77,4 +94,9 @@ Settings.propTypes = {
   toggleInfinite: PropTypes.func,
   toggleOverview: PropTypes.func,
   isShowOverviewMap: PropTypes.bool,
+  hasOverview: PropTypes.bool,
+  hasVisibleDatelines: PropTypes.bool,
+  toggleLines: PropTypes.func,
+  toggleDayNight: PropTypes.func,
+  isNightMode: PropTypes.bool,
 };

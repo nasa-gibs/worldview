@@ -3,14 +3,22 @@ import { clearLayers } from './util';
 import util from '../util/util';
 
 export function getActiveDateArray(longitude, centerDate) {
-  const numberOfLayersOff = longitude < 0 ? Math.floor(Math.abs(Math.abs(longitude) / 360)) : Math.ceil(Math.abs(Math.abs(longitude) / 360));
-  const amount = longitude < 0 ? -numberOfLayersOff : numberOfLayersOff;
-  const newCenterDate = util.toISOStringDate(util.dateAdd(centerDate, 'day', -amount));
+  const isNegative = longitude < 0;
+  const numOfDaysOf = Math.abs(Math.abs(longitude) / 360);
+  // const remainder = Math.abs(longitude % 360);
+  // const nightDateIsOneLeft = isNegative ? remainder > 180 : remainder < 180;
+
+  const numberOfLayersOff = isNegative ? Math.floor(numOfDaysOf) : Math.ceil(numOfDaysOf);
+  const amount = isNegative ? -numberOfLayersOff : numberOfLayersOff;
+  const newDate = util.dateAdd(centerDate, 'day', -amount);
+  const newCenterDate = util.toISOStringDate(newDate);
+  // const newNightCenterDate = nightDateIsOneLeft ? util.toISOStringDate(util.dateAdd(centerDate, 'day', 1)) : newCenterDate;
+  console.log(newCenterDate);
   const x = -360 + (360 * amount);
   const newCenterX = x + 180;
-
   const newCenterExtent = [newCenterX - 180, -90, newCenterX + 180, 90];
   const dateArray = [{ extent: newCenterExtent, date: newCenterDate }];
+
   for (let i = 1; i < 3; i += 1) {
     const date = util.toISOStringDate(util.dateAdd(newCenterDate, 'day', i));
     const xOrigin = x - 360 * i;
@@ -21,7 +29,9 @@ export function getActiveDateArray(longitude, centerDate) {
     if (dateRight) dateArray.push({ extent, date: dateRight });
     if (date) dateArray.push({ extent: extentRight, date });
   }
-  return { dateArray, newCenterX: newCenterX + 180, newCenterDate };
+  return {
+    dateArray, newCenterX: newCenterX + 180, newCenterDate, // newNightCenterDate,
+  };
 }
 export class InfiniteScroll {
   constructor(props) {
@@ -30,6 +40,7 @@ export class InfiniteScroll {
       centerDate: props.startDate,
       currentCenterX: 0,
       view: props.map.getView(),
+      isNightMode: false,
     };
     this.onViewChange = this.onViewChange.bind(this);
     this.onPropertyChange = this.onPropertyChange.bind(this);
@@ -47,16 +58,26 @@ export class InfiniteScroll {
     this.renderLayers(dateArray);
   }
 
+  toggleNightMode(isNightMode) {
+    const { currentCenterX } = this.state;
+    console.log(currentCenterX);
+    this.state.isNightMode = isNightMode;
+    this.state.currentCenterX = isNightMode ? currentCenterX - 180 : currentCenterX + 180;
+  }
+
   getExtentForCurrentDay() {
     return [this.state.currentCenterX - 180, -90, this.state.currentCenterX + 180, 90];
   }
 
   updateLayers(centerX) {
     const { startDate, updateDate } = this.props;
-    const { centerDate } = this.state;
-    const { dateArray, newCenterX, newCenterDate } = getActiveDateArray(centerX, startDate);
-    this.state.currentCenterX = newCenterX;
+    const { centerDate, isNightMode } = this.state;
+    const {
+      dateArray, newCenterX, newCenterDate,
+    } = getActiveDateArray(centerX, startDate);
+    this.state.currentCenterX = isNightMode ? newCenterX - 180 : newCenterX;
     this.renderLayers(dateArray);
+
     if (newCenterDate !== centerDate) {
       this.state.newCenterDate = newCenterDate;
       updateDate(new Date(newCenterDate)); // store.dispatch()
@@ -64,10 +85,13 @@ export class InfiniteScroll {
   }
 
   onViewChange() {
-    const { view, currentCenterX } = this.state;
+    const { view, currentCenterX, isNightMode } = this.state;
     const centerX = view.getCenter()[0];
-    if (Math.abs(centerX - currentCenterX) > 180) {
-      this.updateLayers(centerX);
+
+    const adjustedCenterX = isNightMode ? centerX : centerX - 180;
+    console.log(adjustedCenterX, currentCenterX);
+    if (Math.abs(adjustedCenterX - currentCenterX) > 180) {
+      this.updateLayers(adjustedCenterX);
     }
   }
 

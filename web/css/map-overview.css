@@ -2,7 +2,7 @@
 .ol-custom-overviewmap.ol-uncollapsible {
   bottom: auto;
   left: auto;
-  right: 60px;
+  right: 0;
   top: 61px;
 }
 
@@ -24,4 +24,12 @@
   left: auto;
   right: 1px;
   top: 1px;
+}
+
+/* override zoom styles */
+.map-overview .wv-map-zoom-in {
+  top: 225px;
+}
+.map-overview .wv-map-zoom-out {
+  top: 270px;
 }

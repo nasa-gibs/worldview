@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import OlOverlay from 'ol/Overlay';
-
 import util from '../util/util';
 import DateLine from '../components/dateline/dateline';
 import LineText from '../components/dateline/text';
@@ -10,22 +9,26 @@ import { CHANGE_STATE as COMPARE_CHANGE_STATE } from '../modules/compare/constan
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
-
-let map;
-let overlay1;
-let overlay2;
-let textOverlay1;
-let textOverlay2;
-let lineLeft;
-let lineRight;
-let textLeft;
-let textRight;
-let proj;
+import { TOGGLE_VISIBLE_DATELINES } from '../modules/settings/constants';
 
 export function mapDateLineBuilder(models, config, store, ui) {
   const self = {};
   // formatted YYYY-MM-DD (e.g., 2019-06-25) for checking daily change for dateline
   self.date = {};
+  let map;
+  let overlay1;
+  let overlay2;
+  let textOverlay1;
+  let textOverlay2;
+  let leftLineCase;
+  let rightLineCase;
+  let lineLeft;
+  let lineRight;
+  let textLeft;
+  let textRight;
+  let proj;
+  let x1 = -180;
+  let x2 = 180;
   /*
    * Sets globals and event listeners
    *
@@ -60,6 +63,9 @@ export function mapDateLineBuilder(models, config, store, ui) {
       case CHANGE_PROJECTION:
         proj = action.id;
         break;
+      case TOGGLE_VISIBLE_DATELINES:
+        updateDatelines(store.getState().settings.hasVisibleDatelines);
+        break;
       default:
         break;
     }
@@ -76,7 +82,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
         return;
       }
       updateLineVisibility(true);
-      dimensions = position(map);
+      dimensions = getPosition(map);
       update(dimensions);
     });
     Parent.events.on('drag', () => {
@@ -98,6 +104,10 @@ export function mapDateLineBuilder(models, config, store, ui) {
       return true;
     }
     return false;
+  };
+  const updateDatelines = function(isVisible) {
+    lineLeft.setState({ isVisible });
+    lineRight.setState({ isVisible });
   };
   /*
    * Add Props to React Compents that creates
@@ -137,7 +147,35 @@ export function mapDateLineBuilder(models, config, store, ui) {
     );
     return component;
   };
+  self.animation = function(isNightMode, newExtent) {
+    const view = map.getView();
+    const initialExtent = view.calculateExtent(map.getSize());
 
+    view.animate({ zoom: 1, duration: 2000 },
+      () => {
+        const rightOverlayPositoon = overlay1.getPosition();
+        const deltaCoordX = isNightMode ? 180 : -180;
+        const newCoordX = rightOverlayPositoon[0] + deltaCoordX;
+        const pixelRightOverlay = map.getPixelFromCoordinate(rightOverlayPositoon);
+        const pixelFutureRight = map.getPixelFromCoordinate([newCoordX, rightOverlayPositoon[1]]);
+        const deltaPixelX = pixelRightOverlay[0] - pixelFutureRight[0];
+        rightLineCase.style.transition = '2s ease-in-out';
+        leftLineCase.style.transition = '2s ease-in-out';
+        leftLineCase.style.transform = `translate(${deltaPixelX}px)`;
+        rightLineCase.style.transform = `translate(${deltaPixelX}px)`;
+        setTimeout(() => {
+          rightLineCase.style.transition = 'none';
+          leftLineCase.style.transition = 'none';
+          leftLineCase.style.transform = 'translateX(0)';
+          rightLineCase.style.transform = 'translateX(0)';
+
+          self.updateExtents(newExtent);
+          view.fit(initialExtent, {
+            duration: 2000,
+          });
+        }, 2000);
+      });
+  };
   /*
    * Add Props to React Compents that creates an
    *  SVG text component
@@ -214,11 +252,13 @@ export function mapDateLineBuilder(models, config, store, ui) {
    * @returns {void}
    */
   const drawDatelines = function(map, date) {
-    let height; let leftLineCase; let rightLineCase; let leftTextCase; let
+    let height; let leftTextCase; let
       rightTextCase;
 
     leftLineCase = document.createElement('div');
     rightLineCase = document.createElement('div');
+    leftLineCase.className = 'dateline-case';
+    rightLineCase.className = 'dateline-case';
     leftTextCase = document.createElement('div');
     rightTextCase = document.createElement('div');
     height = 0;
@@ -324,7 +364,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const position = function(map) {
+  const getPosition = function(map) {
     let extent;
     let top;
     let topY;
@@ -334,6 +374,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
     let startY;
     let topExtent;
     let bottomExtent;
+
 
     if (map.getSize()[0] === 0) {
       return;
@@ -378,10 +419,19 @@ export function mapDateLineBuilder(models, config, store, ui) {
     };
     lineRight.setState(state);
     lineLeft.setState(state);
-    overlay1.setPosition([-180, dimensions[1]]);
-    overlay2.setPosition([180, dimensions[1]]);
+    overlay1.setPosition([x1, dimensions[1]]);
+    overlay2.setPosition([x2, dimensions[1]]);
   };
-
+  self.updateExtents = function(newExtent) {
+    const dimensions = getPosition(map);
+    [x1, , x2] = newExtent;
+    overlay1.setPosition([x1, dimensions[1]]);
+    overlay2.setPosition([x2, dimensions[1]]);
+    textOverlay1.setPosition([x1, dimensions[1]]);
+    textOverlay2.setPosition([x2, dimensions[1]]);
+    lineLeft.setState({ lineX: x1 });
+    lineRight.setState({ lineX: x2 });
+  };
   /*
    * Calculates the height and y-position of the line
    *

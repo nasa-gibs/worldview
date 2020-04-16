@@ -106,11 +106,11 @@ class App extends React.Component {
 
   render() {
     const {
-      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents,
+      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, hasOverview,
     } = this.props;
-
+    const parentClass = hasOverview ? 'wv-content map-overview' : 'wv-content';
     return (
-      <div className="wv-content" id="wv-content" data-role="content">
+      <div className={parentClass} id="wv-content" data-role="content">
         <Toolbar />
         <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
@@ -204,6 +204,7 @@ function mapStateToProps(state, ownProps) {
     mapMouseEvents: ownProps.mapMouseEvents,
     locationKey: state.location.key,
     modalId: state.modal.id,
+    hasOverview: state.settings.hasOverview,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -228,4 +229,5 @@ App.propTypes = {
   modalId: PropTypes.string,
   parameters: PropTypes.object,
   state: PropTypes.object,
+  hasOverview: PropTypes.bool,
 };

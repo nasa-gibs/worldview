@@ -18,6 +18,8 @@ class Line extends React.Component {
       hovered: false,
       height: props.height,
       active: true,
+      lineX: props.lineX,
+      isVisible: props.isVisible || false,
     };
   }
 
@@ -55,7 +57,7 @@ class Line extends React.Component {
     this.props.lineOver(
       [e.clientX, e.clientY],
       this.props.overlay,
-      this.props.lineX,
+      this.state.lineX,
       this.props.tooltip,
     );
   }
@@ -72,6 +74,10 @@ class Line extends React.Component {
   }
 
   render() {
+    const { isVisible } = this.state;
+    const opacity = this.state.hovered || util.browser.mobileAndTabletDevice
+      ? this.props.opacity
+      : '0';
     return (
       <svg
         onMouseOver={this.mouseOver.bind(this)}
@@ -85,12 +91,7 @@ class Line extends React.Component {
         <line
           strokeWidth={this.props.strokeWidth}
           stroke={this.props.color}
-          opacity={
-            (this.state.hovered && this.state.active)
-            || (this.state.active && util.browser.mobileAndTabletDevice)
-              ? this.props.opacity
-              : '0'
-          }
+          opacity={isVisible ? 1 : opacity}
           x1={this.props.strokeWidth / 2}
           x2={this.props.strokeWidth / 2}
           strokeDasharray={this.props.dashArray}
@@ -103,12 +104,13 @@ class Line extends React.Component {
           onMouseMove={this.mouseOverHidden.bind(this)}
           onMouseOut={this.mouseOutHidden.bind(this)}
           style={this.props.style}
-          opacity="0"
+          opacity={isVisible ? 1 : 0}
           x1={this.props.strokeWidth / 2}
           x2={this.props.strokeWidth / 2}
           strokeWidth={this.props.strokeWidth}
-          stroke={this.props.color}
-          y1="0"
+          strokeDasharray={this.props.dashArray}
+          stroke="#000"
+          y1="5"
           y2={this.state.height}
         />
       </svg>
@@ -122,6 +124,7 @@ Line.defaultProps = {
   strokeWidth: '6',
   color: 'white',
   height: 200,
+  isVisible: false,
   svgStyle: {
     margin: '0 40px 0 40px',
     transform: 'translateX(-43px)',
@@ -144,6 +147,7 @@ Line.propTypes = {
   svgStyle: PropTypes.object,
   tooltip: PropTypes.object,
   width: PropTypes.string,
+  isVisible: PropTypes.bool,
 };
 
 export default Line;

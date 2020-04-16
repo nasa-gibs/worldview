@@ -37,7 +37,7 @@ import { mapCompare } from './compare/compare';
 import { measure } from './measure/ui';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { TOGGLE_INFINITE_WRAP, TOGGLE_OVERVIEW_MAP } from '../modules/settings/constants';
+import { TOGGLE_INFINITE_WRAP, TOGGLE_OVERVIEW_MAP, TOGGLE_DAY_NIGHT_MODE } from '../modules/settings/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_UNITS } from '../modules/measure/constants';
 import util from '../util/util';
@@ -163,6 +163,8 @@ export function mapui(models, config, store, ui) {
         self.selectedVectors = newSelection;
         return;
       }
+      case TOGGLE_DAY_NIGHT_MODE:
+        return onToggleNightModeAction(state);
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
       case SELECT_DATE:
@@ -209,10 +211,12 @@ export function mapui(models, config, store, ui) {
     const { settings } = state;
     const { isInfinite } = settings;
     const { infiniteScroll, overviewMapControl } = self;
+
     if (overviewMapControl) {
       if (isInfinite && infiniteScroll) {
         const newExtent = infiniteScroll.getExtentForCurrentDay();
         overviewMapControl.updateFeatures(action.value, newExtent);
+        dateline.updateExtents(newExtent);
       } else {
         self.overviewMapControl.updateDate(action.value);
       }
@@ -222,7 +226,24 @@ export function mapui(models, config, store, ui) {
       reloadLayers();
     } else if (!isInfinite) {
       updateDate();
+    } else {
+      const newExtent = infiniteScroll.getExtentForCurrentDay();
+      dateline.updateExtents(newExtent);
     }
+  };
+  const onToggleNightModeAction = function (state) {
+    const { isNightMode } = state.settings;
+
+    if (self.infiniteScroll) {
+      self.infiniteScroll.toggleNightMode(isNightMode);
+      const newExtent = self.infiniteScroll.getExtentForCurrentDay();
+      dateline.animation(isNightMode, newExtent);
+
+    }
+    if (self.overviewMapControl) {
+      self.overviewMapControl.toggleNightMode(isNightMode);
+    }
+
   };
 
   const flyToNewExtent = function(extent, rotation) {
