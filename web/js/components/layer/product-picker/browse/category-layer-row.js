@@ -28,13 +28,6 @@ import {
  * @extends React.Component
  */
 class CategoryLayerRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      projection: props.projection,
-    };
-  }
-
   /**
    * Render orbits and layer selections for
    * selected source
@@ -44,52 +37,39 @@ class CategoryLayerRow extends React.Component {
     const {
       layerConfig,
       measurement,
+      projection,
     } = this.props;
-    const { projection } = this.state;
     const OrbitSourceList = [];
     const LayerSouceList = [];
     let orbitTitle = '';
 
-    source.settings.forEach((setting) => {
-      const layer = layerConfig[setting];
-      if (
-        layer
-        && layer.id === setting
-        && Object.keys(layer.projections).indexOf(projection) > -1
-      ) {
-        if (
-          layer.layergroup
-          && layer.layergroup.indexOf('reference_orbits') !== -1
-        ) {
-          orbitTitle = getOrbitTrackTitle(layer);
-          OrbitSourceList.push(
-            <MeasurementLayerRow
-              measurementId={measurement.id}
-              key={measurement.id + layer.id}
-              layer={layer}
-              title={orbitTitle}
-            />,
-          );
-        } else {
-          LayerSouceList.push(
-            <MeasurementLayerRow
-              measurementId={measurement.id}
-              key={measurement.id + layer.id}
-              layer={layer}
-              title={layer.title}
-            />,
-          );
-        }
-      } else if (layer && layer.title && layer.title.indexOf('Orbital Track') !== -1) {
-        // The following complex if statement is a placeholder
-        // for truncating the layer names, until the rest of
-        // the interface is implemented
-        if (layer.title.indexOf('(') !== -1) {
-          const regExp = /\(([^)]+)\)/;
-          const matches = regExp.exec(layer.title);
+    source.settings.forEach((layerId) => {
+      const layer = layerConfig[layerId];
+      const inProjection = Object.keys(layer.projections).indexOf(projection) > -1;
 
-          [, orbitTitle] = matches;
-        }
+      if (!layer || layer.id !== layerId || !inProjection) {
+        return;
+      }
+
+      if ((layer.layergroup || []).includes('reference_orbits')) {
+        orbitTitle = getOrbitTrackTitle(layer);
+        OrbitSourceList.push(
+          <MeasurementLayerRow
+            measurementId={measurement.id}
+            key={measurement.id + layer.id}
+            layer={layer}
+            title={orbitTitle}
+          />,
+        );
+      } else {
+        LayerSouceList.push(
+          <MeasurementLayerRow
+            measurementId={measurement.id}
+            key={measurement.id + layer.id}
+            layer={layer}
+            title={layer.title}
+          />,
+        );
       }
     });
     return (
@@ -226,6 +206,7 @@ class CategoryLayerRow extends React.Component {
     );
   }
 }
+
 CategoryLayerRow.propTypes = {
   category: PropTypes.object,
   hasMeasurementSetting: PropTypes.func,
