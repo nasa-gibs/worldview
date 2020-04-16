@@ -6,7 +6,7 @@ import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 import util from '../../../../util/util';
-import { getOrbitTrackTitle, dateOverlap } from '../../../../modules/layers/util';
+import { dateOverlap } from '../../../../modules/layers/util';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
@@ -15,6 +15,7 @@ import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
+import RenderSplitLayerTitle from '../renderSplitTitle';
 
 class LayerMetadataDetail extends React.Component {
   constructor(props) {
@@ -168,10 +169,7 @@ class LayerMetadataDetail extends React.Component {
         </div>
       );
     }
-    const {
-      title, subtitle, track, metadata,
-    } = layer;
-    const layerTitle = !track ? title : `${title} (${getOrbitTrackTitle(layer)})`;
+    const { metadata } = layer;
     const previewUrl = `images/layers/previews/${selectedProjection}/${layer.id}.jpg`;
     const buttonText = isActive ? 'Remove Layer' : 'Add Layer';
     const btnClass = isActive ? 'add-to-map-btn text-center is-active' : 'add-to-map-btn text-center';
@@ -179,8 +177,7 @@ class LayerMetadataDetail extends React.Component {
     return (
       <div className="layers-all-layer">
         <div className="layers-all-header">
-          {!track ? this.renderSplitTitle(layerTitle) : <h3>{layerTitle}</h3>}
-          {subtitle && <h5>{subtitle}</h5>}
+          <RenderSplitLayerTitle layer={layer} />
           {/* NOTE - NEED TO ADD faChevronDown TO FONT AWESOME IMPORT ABOVE FROM '@fortawesome/free-solid-svg-icons'
             <Button className="close-details" onClick={() => selectLayer(null)}>
               <FontAwesomeIcon icon={faChevronDown} />
