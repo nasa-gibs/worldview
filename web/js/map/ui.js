@@ -463,21 +463,14 @@ export function mapui(models, config, store, ui) {
    */
   var updateOpacity = function (action) {
     const state = store.getState();
-    const { layers, compare, proj } = state;
+    const { layers, compare } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
     const def = lodashFind(layers[activeStr], {
       id: action.id
     });
-
-    if (isGraticule(def, proj.id)) {
-      const strokeStyle = self['graticule-' + activeStr + '-style'];
-      strokeStyle.setColor('rgba(255, 255, 255,' + action.opacity + ')');
-      self.selected.render();
-    } else {
-      const layer = findLayer(def, activeStr);
-      layer.setOpacity(action.opacity);
-      updateLayerVisibilities();
-    }
+    let layer = findLayer(def, activeStr);
+    layer.setOpacity(Number(action.opacity));
+    updateLayerVisibilities();
   };
   /*
    *Initiates the adding of a layer or Graticule
@@ -700,25 +693,6 @@ export function mapui(models, config, store, ui) {
       }
     });
     return index;
-  };
-
-  /*
-   * Checks a layer's properties to deterimine if
-   * it is a graticule
-   *
-   *
-   * @method isGraticule
-   * @static
-   *
-   * @param def {object} Layer Specs
-   *
-   *
-   * @returns {boolean}
-   */
-  var isGraticule = function (def, proj) {
-    return (
-      def.projections[proj].type === 'graticule' || def.type === 'graticule'
-    );
   };
 
   var triggerExtent = lodashThrottle(
