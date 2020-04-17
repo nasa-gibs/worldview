@@ -1,4 +1,4 @@
-import { each as lodashEach, get as lodashGet } from 'lodash';
+import { each as lodashEach } from 'lodash';
 import { getRenderPixel } from 'ol/render';
 var mousePosition = null;
 var spy = null;
