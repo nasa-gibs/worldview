@@ -1,5 +1,5 @@
-import lodashEach from 'lodash/each';
-
+import { each as lodashEach, get as lodashGet } from 'lodash';
+import { getRenderPixel } from 'ol/render';
 var mousePosition = null;
 var spy = null;
 var topLayers = [];
@@ -117,15 +117,16 @@ export class Spy {
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
-var applyReverseLayerListeners = function (layer) {
+var applyReverseLayerListeners = function(layer) {
   layer.on('postrender', inverseClip);
+  layer.on('postrender', restore);
   bottomLayers.push(layer);
 };
 /**
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
  */
-var applyLayerListeners = function (layer) {
+var applyLayerListeners = function(layer) {
   layer.on('prerender', clip);
   layer.on('postrender', restore);
   topLayers.push(layer);
@@ -134,42 +135,43 @@ var applyLayerListeners = function (layer) {
  * Clip everything but the circle
  * @param {Object} event | Event object
  */
-var inverseClip = function (event) {
+var inverseClip = function(event) {
   var ctx = event.context;
-
+  ctx.save();
+  ctx.beginPath();
   if (mousePosition) {
     // only show a circle around the mouse
-    ctx.beginPath();
-    ctx.globalCompositeOperation = 'destination-out';
-    let x = mousePosition[0];
-    let y = mousePosition[1];
-    ctx.arc(x, y, radius, 0, 2 * Math.PI);
-    ctx.fill();
+    var pixel = getRenderPixel(event, mousePosition);
+    var offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
+    var canvasRadius = Math.sqrt(Math.pow(offset[0] - pixel[0], 2) + Math.pow(offset[1] - pixel[1], 2));
+    ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.lineWidth = 5 * canvasRadius / radius;
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.clip();
+    ctx.clearRect(0, 0, offset, offset);
   }
 };
 /**
  * Clip the circle of a layer so users can see through
  */
-var clip = function (event) {
+var clip = function(event) {
   var ctx = event.context;
   ctx.save();
   ctx.beginPath();
-
   if (mousePosition) {
     // only show a circle around the mouse
-    let x = mousePosition[0];
-    let y = mousePosition[1];
-    let pixelRadius = radius;
-
-    ctx.arc(x, y, pixelRadius, 0, 2 * Math.PI);
-
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+    var pixel = getRenderPixel(event, mousePosition);
+    var offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
+    var canvasRadius = Math.sqrt(Math.pow(offset[0] - pixel[0], 2) + Math.pow(offset[1] - pixel[1], 2));
+    ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
+    ctx.lineWidth = 5 * canvasRadius / radius;
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
     ctx.stroke();
   }
   ctx.clip();
 };
-var restore = function (event) {
+var restore = function(event) {
   var ctx = event.context;
   ctx.restore();
 };
@@ -177,7 +179,7 @@ var restore = function (event) {
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
  */
-var removeListenersFromLayers = function (layers) {
+var removeListenersFromLayers = function(layers) {
   lodashEach(layers, layer => {
     layer.un('prerender', clip);
     layer.un('postrender', restore);
@@ -187,7 +189,7 @@ var removeListenersFromLayers = function (layers) {
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
  */
-var removeInverseListenersFromLayers = function (layers) {
+var removeInverseListenersFromLayers = function(layers) {
   lodashEach(layers, layer => {
     layer.un('prerender', inverseClip);
     layer.un('postrender', restore);
@@ -199,7 +201,7 @@ var removeInverseListenersFromLayers = function (layers) {
  * @param {Object} map | OL Map Object
  * @param {Function} callback | Function that will apply event listeners to layer
  */
-var applyEventsToBaseLayers = function (layer, map, callback) {
+var applyEventsToBaseLayers = function(layer, map, callback) {
   var layers = layer.get('layers');
   if (layers) {
     lodashEach(layers.getArray(), layer => {

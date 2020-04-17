@@ -9,7 +9,7 @@ import {
 } from '../layers/selectors';
 import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import update from 'immutability-helper';
-import stylefunction from 'ol-mapbox-style/stylefunction';
+import stylefunction from 'ol-mapbox-style/dist/stylefunction';
 /**
  * Gets a single colormap (entries / legend combo)
  *
