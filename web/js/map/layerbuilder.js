@@ -212,9 +212,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     // Don't key by time if this is a static layer--it is valid for
     // every date.
     if (def.period) {
-      date = util.toISOStringSeconds(
-        util.roundTimeOneMinute(self.getRequestDates(def, options).closestDate),
-      );
+      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
       style = getPaletteKeys(def.id, undefined, state);
@@ -302,7 +300,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
     let date = options.date || state.date[activeDateStr];
-    if (def.period === 'subdaily') {
+    if (def.period === 'subdaily' && !date) {
       date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
