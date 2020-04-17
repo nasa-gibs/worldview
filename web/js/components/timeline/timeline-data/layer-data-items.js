@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { datesinDateRanges } from '../../../modules/layers/util';
+import { DATAPANELdatesinDateRanges } from '../../../modules/layers/util';
 import util from '../../../util/util';
 import {
   timeScaleToNumberKey,
@@ -369,9 +369,8 @@ class LayerDataItems extends Component {
     if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
       const inputStartDate = new Date(startDateLimit);
       const inputEndDate = new Date(endDateLimit);
-      dateIntervalStartDates = datesinDateRanges(layer, inputStartDate, inputStartDate, inputEndDate);
+      dateIntervalStartDates = DATAPANELdatesinDateRanges(layer, inputStartDate, inputStartDate, inputEndDate);
     }
-
     return dateIntervalStartDates;
   }
 
