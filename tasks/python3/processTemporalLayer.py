@@ -27,6 +27,7 @@ def process_temporal(wv_layer, value):
         start_date = datetime.max
         end_date = datetime.min
         date_range_start, date_range_end, range_interval = [], [], []
+        multiple_date_intervals = "false"
         for range in ranges:
             times = range.split('/')
             if wv_layer["period"] == "daily" \
@@ -64,6 +65,13 @@ def process_temporal(wv_layer, value):
                 wv_layer["endDate"] = end_date.strftime("%Y-%m-%d") + "T" + end_date.strftime("%H:%M:%S") + "Z"
             if date_range_start and date_range_end:
                 wv_layer["dateRanges"] = [{"startDate": s, "endDate": e, "dateInterval": i} for s, e, i in zip(date_range_start, date_range_end, range_interval)]
+            # Set flag if intervals vary within range intervals
+            if range_interval:
+                zero_index_range_interval = range_interval[0]
+                for range_interval_individual in range_interval:
+                    if multiple_date_intervals == "false" and range_interval_individual != zero_index_range_interval:
+                        multiple_date_intervals = "true"
+            wv_layer["multipleDateIntervals"] = multiple_date_intervals
     except ValueError:
         raise
         raise Exception("Invalid time: {0}".format(range))
