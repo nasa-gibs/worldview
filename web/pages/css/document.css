@@ -1,5 +1,6 @@
 .wv-document {
-  background-color: #222;
+  background-color: #282828;
+  padding: 5px;
 }
 
 .wv-document div,
@@ -102,3 +103,17 @@
   font-style: italic;
   text-align: center;
 }
+
+#about_modal .modal-header {
+  color: #fff;
+  background-color: #00457b;
+  border-radius: 0;
+  padding: 8px 12px 7px;
+}
+
+#about_modal .modal-title {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 300;
+}
+

@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import {
-  requestTemplate,
-  renderTemplate,
   openCustomContent,
 } from '../modules/modal/actions';
 import toggleDistractionFreeMode from '../modules/ui/actions';
-import { ABOUT_PAGE_REQUEST } from '../modules/modal/constants';
+import AboutPage from '../components/util/about-page';
 import IconList from '../components/util/list';
 import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
@@ -17,7 +15,6 @@ import { addToLocalStorage } from '../modules/notifications/util';
 import initFeedback from '../modules/feedback/actions';
 import { startTour, endTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
-import util from '../util/util';
 import Notifications from './notifications';
 
 class InfoList extends Component {
@@ -191,18 +188,14 @@ const mapDispatchToProps = (dispatch) => ({
     }
   },
   aboutClick: () => {
-    if (util.browser.small) {
-      window.open('pages/about.html?v=@BUILD_NONCE@', '_blank');
-    } else {
-      dispatch(
-        requestTemplate(
-          ABOUT_PAGE_REQUEST,
-          'pages/about.html?v=@BUILD_NONCE@',
-          'text/html',
-        ),
-      );
-      dispatch(renderTemplate('About', 'modalAboutPage'));
-    }
+    // Create new functionality here that renders the about page
+    // inside a modal window.
+    dispatch(
+      openCustomContent('ABOUT_MODAL', {
+        headerText: 'About',
+        bodyComponent: AboutPage,
+      }),
+    );
   },
 });
 
