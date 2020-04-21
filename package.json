@@ -206,7 +206,7 @@
     "redux-thunk": "^2.3.0",
     "regenerator-runtime": "^0.13.3",
     "reselect": "^4.0.0",
-    "simplebar-react": "^2.0.8",
+    "simplebar-react": "^2.1.0",
     "supercluster": "7.0.0",
     "web-streams-polyfill": "^2.0.6",
     "what-input": "^5.2.7",
