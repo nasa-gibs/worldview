@@ -436,7 +436,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: sourceOptions,
-      renderMode: wrapX ? 'image' : 'hybrid', // Todo: revert to just 'image' when styles are updated
+      renderMode: 'image',
     });
 
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
