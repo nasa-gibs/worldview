@@ -146,7 +146,7 @@
     "showdown": "^1.9.1",
     "stylelint": "^13.2.0",
     "tar": "^6.0.1",
-    "uglify-js": "^3.6.9",
+    "uglify-js": "^3.9.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^2.1.0",
     "webpack": "^4.39.3",
