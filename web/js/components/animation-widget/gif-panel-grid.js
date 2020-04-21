@@ -1,5 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 /*
  * A table that updates with image
  * data
@@ -7,27 +11,32 @@ import PropTypes from 'prop-types';
  * @class ResolutionTable
  * @extends React.Component
  */
-export class GifPanelGrid extends React.Component {
+export default class GifPanelGrid extends React.Component {
   renderImageSize() {
-    const { requestSize } = this.props;
+    const { valid, maxGifSize, requestSize } = this.props;
     const roundedSize = requestSize.toFixed(2);
-    if (!this.props.valid) {
+    if (!valid) {
       return (
         <div id="gif-size" className="gif-size gif-size-invalid grid-child">
-          <i className="fa fa-times fa-fw" />
-          <span>{this.props.maxGifSize + ' MB' + '~' + roundedSize + ' MB'}</span>
-        </div>
-      );
-    } else {
-      return (
-        <div id="gif-size" className="gif-size grid-child">
-          <span>{this.props.maxGifSize + ' MB / ~' + roundedSize + ' MB'} </span>
+          <FontAwesomeIcon icon={faTimes} fixedWidth />
+          <span>{`${maxGifSize} MB ~${roundedSize} MB`}</span>
         </div>
       );
     }
+    return (
+      <div id="gif-size" className="gif-size grid-child">
+        <span>
+          {`${maxGifSize} MB / ~${roundedSize} MB`}
+          {' '}
+        </span>
+      </div>
+    );
   }
 
   render() {
+    const {
+      startDate, endDate, speed, increment, valid, height, width, maxImageDimensionSize,
+    } = this.props;
     const imageSize = this.renderImageSize();
     return (
       <div className="gif-download-grid">
@@ -35,25 +44,28 @@ export class GifPanelGrid extends React.Component {
           <span>Start Date: </span>
         </div>
         <div className="grid-child">
-          <span>{this.props.startDate} </span>
+          <span>
+            {startDate}
+            {' '}
+          </span>
         </div>
         <div className="grid-child label">
           <span>End Date: </span>
         </div>
         <div className="grid-child">
-          <span>{this.props.endDate}</span>
+          <span>{endDate}</span>
         </div>
         <div className="grid-child label">
           <span>Speed: </span>
         </div>
         <div className="grid-child">
-          <span>{this.props.speed + ' Frames Per Second'}</span>
+          <span>{`${speed} Frames Per Second`}</span>
         </div>
         <div className="grid-child label">
           <span>Increment:</span>
         </div>
         <div className="grid-child">
-          <span>{this.props.increment}</span>
+          <span>{increment}</span>
         </div>
         <div className="grid-child label">
           <span>Max / Raw Size:</span>
@@ -64,18 +76,18 @@ export class GifPanelGrid extends React.Component {
         </div>
         <div
           className={
-            this.props.valid
+            valid
               ? 'grid-child gif-max-size'
               : 'grid-child gif-max-size gif-size-invalid'
           }
         >
-          <span>{this.props.maxImageDimensionSize + 'px'}</span>
+          <span>{`${maxImageDimensionSize}px`}</span>
         </div>
         <div className="grid-child label">
           <span>Image Dimensions:</span>
         </div>
         <div className="grid-child" id="wv-image-width">
-          <span>{this.props.width + 'px x ' + this.props.height + 'px'}</span>
+          <span>{`${width}px x ${height}px`}</span>
         </div>
       </div>
     );
@@ -91,5 +103,5 @@ GifPanelGrid.propTypes = {
   speed: PropTypes.number,
   startDate: PropTypes.string,
   valid: PropTypes.bool,
-  width: PropTypes.number
+  width: PropTypes.number,
 };

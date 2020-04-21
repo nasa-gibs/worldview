@@ -4,7 +4,7 @@ const { normalizeViewport } = require('../../reuseables/normalize-viewport');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload
+  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
@@ -12,11 +12,11 @@ const startParams = [
   'v=-180,-90,180,90',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   't=2018-06-01',
-  'imageDownload='
+  'imageDownload=',
 ];
 
 module.exports = {
-  after: function(client) {
+  after(client) {
     client.end();
   },
 
@@ -94,7 +94,7 @@ module.exports = {
 
   'Last zoom level is 30m': function(c) {
     // mash the zoom button a bunch of times and see if it changes
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i += 1) {
       zoomIn(c, 'geographic');
     }
     openImageDownloadPanel(c);
@@ -106,7 +106,7 @@ module.exports = {
   'Click download': function(c) {
     openImageDownloadPanel(c);
     clickDownload(c);
-    c.getAttribute('#wv-image-download-url', 'url', result => {
+    c.getAttribute('#wv-image-download-url', 'url', (result) => {
       // See if the bounding box here is reasonable. Should be centered
       // on 0,0 and not be wider than 0.1 degrees
       const matcher = /BBOX=([^,]+),([^,]+),([^,]+),([^&]+)/;
@@ -120,5 +120,5 @@ module.exports = {
       c.assert.ok(lat1 > 0 && lat1 < 0.1);
       c.assert.ok(lon1 > 0 && lon1 < 0.1);
     });
-  }
+  },
 };

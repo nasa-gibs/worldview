@@ -11,11 +11,13 @@ import Arrow from '../../util/arrow';
  */
 class AxisTimeScaleChangeControls extends PureComponent {
   onClickUp = () => {
-    this.props.decrementTimeScale();
+    const { decrementTimeScale } = this.props;
+    decrementTimeScale();
   }
 
   onClickDown = () => {
-    this.props.incrementTimeScale();
+    const { incrementTimeScale } = this.props;
+    incrementTimeScale();
   }
 
   render() {
@@ -23,7 +25,7 @@ class AxisTimeScaleChangeControls extends PureComponent {
       timeScale,
       toolTipHovered,
       changeTimeScale,
-      hasSubdailyLayers
+      hasSubdailyLayers,
     } = this.props;
     return (
       <div className="zoom-level-change-arrows">
@@ -34,14 +36,14 @@ class AxisTimeScaleChangeControls extends PureComponent {
           hasSubdailyLayers={hasSubdailyLayers}
         />
         <Arrow
-          direction='up'
+          direction="up"
           onClick={this.onClickUp}
-          type='zoom-level-up'
+          type="zoom-level-up"
         />
         <Arrow
-          direction='down'
+          direction="down"
           onClick={this.onClickDown}
-          type='zoom-level-down'
+          type="zoom-level-down"
         />
       </div>
     );
@@ -54,7 +56,7 @@ AxisTimeScaleChangeControls.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   incrementTimeScale: PropTypes.func,
   timeScale: PropTypes.string,
-  toolTipHovered: PropTypes.bool
+  toolTipHovered: PropTypes.bool,
 };
 
 export default AxisTimeScaleChangeControls;

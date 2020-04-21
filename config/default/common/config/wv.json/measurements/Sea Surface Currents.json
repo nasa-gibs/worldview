@@ -15,7 +15,7 @@
                       "OSCAR_Sea_Surface_Currents_Meridional"
                     ]
                 },
-                "tpj": {
+                "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2": {
                     "id": "tpj",
                     "title": "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2",
                     "description": "multi-mission/tpj/SeaSurfaceCurrents",

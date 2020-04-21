@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeControls from './axis-timescale-change-controls';
@@ -14,16 +15,21 @@ class AxisTimeScaleChange extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      toolTipHovered: false
+      toolTipHovered: false,
     };
   }
 
   // TimeScale select tooltip on
   toolTipHoverOn = () => {
-    if (!this.props.isDraggerDragging) { // in event of dragging off axis, prevent tooltip display
+    const {
+      isDistractionFreeModeActive,
+      isDraggerDragging,
+    } = this.props;
+    // in event of dragging off axis, prevent tooltip display
+    if (!isDraggerDragging && !isDistractionFreeModeActive) {
       this.disableMapScales(true);
       this.setState({
-        toolTipHovered: true
+        toolTipHovered: true,
       });
     }
   }
@@ -32,7 +38,7 @@ class AxisTimeScaleChange extends PureComponent {
   toolTipHoverOff = () => {
     this.disableMapScales(false);
     this.setState({
-      toolTipHovered: false
+      toolTipHovered: false,
     });
   }
 
@@ -59,18 +65,27 @@ class AxisTimeScaleChange extends PureComponent {
 
   // ex: month(2) to day(3)
   incrementTimeScale = () => {
-    const timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
-    const maxTimeScaleNumber = this.props.hasSubdailyLayers ? 5 : 3;
+    const {
+      changeTimeScale,
+      hasSubdailyLayers,
+      timeScale,
+    } = this.props;
+    const timeScaleNumber = timeScaleToNumberKey[timeScale];
+    const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
     if (timeScaleNumber < maxTimeScaleNumber) {
-      this.props.changeTimeScale(timeScaleNumber + 1);
+      changeTimeScale(timeScaleNumber + 1);
     }
   }
 
   // ex: day(3) to month(2)
   decrementTimeScale = () => {
-    const timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
+    const {
+      changeTimeScale,
+      timeScale,
+    } = this.props;
+    const timeScaleNumber = timeScaleToNumberKey[timeScale];
     if (timeScaleNumber > 1) {
-      this.props.changeTimeScale(timeScaleNumber - 1);
+      changeTimeScale(timeScaleNumber - 1);
     }
   }
 
@@ -79,30 +94,33 @@ class AxisTimeScaleChange extends PureComponent {
       timeScale,
       timelineHidden,
       hasSubdailyLayers,
-      changeTimeScale
+      changeTimeScale,
     } = this.props;
+    const { toolTipHovered } = this.state;
     return (
       <div
         className="zoom-level-change"
         style={{
-          display: timelineHidden ? 'none' : 'block'
+          display: timelineHidden ? 'none' : 'block',
         }}
       >
         { timeScale
-          ? <div
-            onMouseEnter={this.toolTipHoverOn}
-            onMouseLeave={this.toolTipHoverOff}>
-            <AxisTimeScaleChangeControls
-              timeScale={timeScale}
-              hasSubdailyLayers={hasSubdailyLayers}
-              toolTipHovered={this.state.toolTipHovered}
-              changeTimeScale={changeTimeScale}
-              incrementTimeScale={this.incrementTimeScale}
-              decrementTimeScale={this.decrementTimeScale}
-            />
-          </div>
-          : null
-        }
+          ? (
+            <div
+              onMouseEnter={this.toolTipHoverOn}
+              onMouseLeave={this.toolTipHoverOff}
+            >
+              <AxisTimeScaleChangeControls
+                timeScale={timeScale}
+                hasSubdailyLayers={hasSubdailyLayers}
+                toolTipHovered={toolTipHovered}
+                changeTimeScale={changeTimeScale}
+                incrementTimeScale={this.incrementTimeScale}
+                decrementTimeScale={this.decrementTimeScale}
+              />
+            </div>
+          )
+          : null}
       </div>
     );
   }
@@ -111,9 +129,10 @@ class AxisTimeScaleChange extends PureComponent {
 AxisTimeScaleChange.propTypes = {
   changeTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   timelineHidden: PropTypes.bool,
-  timeScale: PropTypes.string
+  timeScale: PropTypes.string,
 };
 
 export default AxisTimeScaleChange;

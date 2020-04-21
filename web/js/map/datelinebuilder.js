@@ -1,3 +1,4 @@
+/* eslint-disable react/no-render-return-value */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import OlOverlay from 'ol/Overlay';
@@ -10,19 +11,19 @@ import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
-var map,
-  overlay1,
-  overlay2,
-  textOverlay1,
-  textOverlay2,
-  lineLeft,
-  lineRight,
-  textLeft,
-  textRight,
-  proj;
+let map;
+let overlay1;
+let overlay2;
+let textOverlay1;
+let textOverlay2;
+let lineLeft;
+let lineRight;
+let textLeft;
+let textRight;
+let proj;
 
-export function mapDateLineBuilder(models, config, store, ui) {
-  var self = {};
+export default function mapDateLineBuilder(models, config, store, ui) {
+  const self = {};
   // formatted YYYY-MM-DD (e.g., 2019-06-25) for checking daily change for dateline
   self.date = {};
   /*
@@ -58,16 +59,19 @@ export function mapDateLineBuilder(models, config, store, ui) {
       }
       case CHANGE_PROJECTION:
         proj = action.id;
+        break;
+      default:
+        break;
     }
   };
   self.init = function(Parent, olMap, date) {
-    var dimensions;
+    let dimensions;
     map = olMap;
     drawDatelines(map, date);
-    self.date = date.toISOString().split('T')[0];
+    [self.date] = date.toISOString().split('T');
     proj = store.getState().proj.id;
 
-    Parent.events.on('moveend', function() {
+    Parent.events.on('moveend', () => {
       if (!isGeoProjection()) {
         return;
       }
@@ -75,13 +79,13 @@ export function mapDateLineBuilder(models, config, store, ui) {
       dimensions = position(map);
       update(dimensions);
     });
-    Parent.events.on('drag', function() {
+    Parent.events.on('drag', () => {
       if (!isGeoProjection()) {
         return;
       }
       updateLineVisibility(false);
     });
-    Parent.events.on('movestart', function() {
+    Parent.events.on('movestart', () => {
       if (!isGeoProjection()) {
         return;
       }
@@ -89,7 +93,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
     });
     ui.events.on('last-action', subscribeToStore);
   };
-  var isGeoProjection = function() {
+  const isGeoProjection = function() {
     if (proj === 'geographic') {
       return true;
     }
@@ -111,25 +115,25 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {object} React Component
    */
-  var setLineDefaults = function(
+  const setLineDefaults = function(
     ReactComponent,
     height,
     lineX,
     overlay,
     reactCase,
-    tooltip
+    tooltip,
   ) {
-    var props = {
-      height: height,
+    const props = {
+      height,
       lineOver: onHover,
       lineOut: onMouseOut,
-      lineX: lineX,
-      overlay: overlay,
-      tooltip: tooltip
+      lineX,
+      overlay,
+      tooltip,
     };
-    var component = ReactDOM.render(
+    const component = ReactDOM.render(
       React.createElement(ReactComponent, props),
-      reactCase
+      reactCase,
     );
     return component;
   };
@@ -147,11 +151,11 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {object} React Component
    */
-  var setTextDefaults = function(ReactComponent, reactCase, date, isLeft) {
+  const setTextDefaults = function(ReactComponent, reactCase, date, isLeft) {
     const props = getTextState(date, isLeft);
     return ReactDOM.render(
       React.createElement(ReactComponent, props),
-      reactCase
+      reactCase,
     );
   };
 
@@ -164,9 +168,9 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {object} Object with tooltip state
    */
-  var getTextState = function(date, isLeft) {
+  const getTextState = function(date, isLeft) {
     const isCompareActive = models.compare && models.compare.active;
-    var state = {
+    const state = {
       dateLeft: !isCompareActive
         ? util.toISOStringDate(util.dateAdd(date, 'day', 1))
         : isLeft
@@ -176,7 +180,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
         ? util.toISOStringDate(date)
         : isLeft
           ? ''
-          : '- 1 day'
+          : '- 1 day',
     };
     return state;
   };
@@ -191,9 +195,9 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateLineVisibility = function(boo) {
-    var state = {
-      active: boo
+  const updateLineVisibility = function(boo) {
+    const state = {
+      active: boo,
     };
     lineRight.setState(state);
     lineLeft.setState(state);
@@ -209,14 +213,12 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var drawDatelines = function(map, date) {
-    var height, leftLineCase, rightLineCase, leftTextCase, rightTextCase;
-
-    leftLineCase = document.createElement('div');
-    rightLineCase = document.createElement('div');
-    leftTextCase = document.createElement('div');
-    rightTextCase = document.createElement('div');
-    height = 0;
+  const drawDatelines = function(map, date) {
+    const leftLineCase = document.createElement('div');
+    const rightLineCase = document.createElement('div');
+    const leftTextCase = document.createElement('div');
+    const rightTextCase = document.createElement('div');
+    const height = 0;
 
     overlay1 = drawOverlay([-180, 90], leftLineCase);
     overlay2 = drawOverlay([180, 90], rightLineCase);
@@ -233,7 +235,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
       LineText,
       rightTextCase,
       util.dateAdd(date, 'day', -1),
-      false
+      false,
     );
     lineLeft = setLineDefaults(
       DateLine,
@@ -241,7 +243,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
       -180,
       textOverlay1,
       leftLineCase,
-      textLeft
+      textLeft,
     );
     lineRight = setLineDefaults(
       DateLine,
@@ -249,7 +251,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
       180,
       textOverlay2,
       rightLineCase,
-      textRight
+      textRight,
     );
   };
 
@@ -266,12 +268,11 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var onHover = function(pixels, overlay, lineX, tooltip) {
-    var coords;
-    coords = map.getCoordinateFromPixel(pixels);
+  const onHover = function(pixels, overlay, lineX, tooltip) {
+    const coords = map.getCoordinateFromPixel(pixels);
     overlay.setPosition([lineX, coords[1]]);
     tooltip.setState({
-      active: true
+      active: true,
     });
   };
 
@@ -286,9 +287,9 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var onMouseOut = function(tooltip) {
+  const onMouseOut = function(tooltip) {
     tooltip.setState({
-      active: false
+      active: false,
     });
   };
 
@@ -302,7 +303,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateDate = function(date) {
+  const updateDate = function(date) {
     const leftState = getTextState(date, true);
     const rightState = getTextState(util.dateAdd(date, 'day', -1), false);
     textLeft.setState(leftState);
@@ -319,41 +320,35 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var position = function(map) {
-    var extent,
-      top,
-      topY,
-      bottomY,
-      bottom,
-      height,
-      startY,
-      topExtent,
-      bottomExtent;
+  const position = function(map) {
+    let topY;
+    let bottomY;
+    let startY;
 
     if (map.getSize()[0] === 0) {
       return;
     }
-    extent = map.getView().calculateExtent(map.getSize());
-    top = [extent[2] - 1, extent[3] + 5];
-    bottom = [extent[2] - 1, extent[1] - 5];
-    topExtent = map.getPixelFromCoordinate([extent[2] - 1, extent[3] - 1]);
-    bottomExtent = map.getPixelFromCoordinate([extent[0] + 1, extent[1] + 1]);
+    const extent = map.getView().calculateExtent(map.getSize());
+    const top = [extent[2] - 1, extent[3] + 5];
+    const bottom = [extent[2] - 1, extent[1] - 5];
+    const topExtent = map.getPixelFromCoordinate([extent[2] - 1, extent[3] - 1]);
+    const bottomExtent = map.getPixelFromCoordinate([extent[0] + 1, extent[1] + 1]);
     topY = Math.round(topExtent[1] + 5);
     bottomY = Math.round(bottomExtent[1] - 5);
     startY = Math.round(extent[3] + 5);
 
     if (startY > 90) {
       startY = 90;
-      topY = map.getPixelFromCoordinate([extent[2], 90])[1];
+      [, topY] = map.getPixelFromCoordinate([extent[2], 90]);
     } else {
-      topY = map.getPixelFromCoordinate(top)[1];
+      [, topY] = map.getPixelFromCoordinate(top);
     }
     if (extent[1] > -90) {
-      bottomY = map.getPixelFromCoordinate(bottom)[1];
+      [, bottomY] = map.getPixelFromCoordinate(bottom);
     } else {
-      bottomY = map.getPixelFromCoordinate([extent[2], -90])[1];
+      [, bottomY] = map.getPixelFromCoordinate([extent[2], -90]);
     }
-    height = Math.round(Math.abs(bottomY - topY));
+    const height = Math.round(Math.abs(bottomY - topY));
     return [height, startY];
   };
 
@@ -367,9 +362,9 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var update = function(dimensions) {
-    var state = {
-      height: dimensions[0]
+  const update = function(dimensions) {
+    const state = {
+      height: dimensions[0],
     };
     lineRight.setState(state);
     lineLeft.setState(state);
@@ -388,10 +383,10 @@ export function mapDateLineBuilder(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var drawOverlay = function(coordinate, el) {
-    var overlay = new OlOverlay({
+  const drawOverlay = function(coordinate, el) {
+    const overlay = new OlOverlay({
       element: el,
-      stopEvent: false
+      stopEvent: false,
     });
     overlay.setPosition(coordinate);
     return overlay;

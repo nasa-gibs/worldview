@@ -12,7 +12,7 @@
 }
 .react-switch-label-case {
   width: 80%;
-  .fa {
+  svg.svg-inline--fa {
     margin-left: 5px;
   }
 }
@@ -54,4 +54,10 @@
 
 .react-switch-label:active .react-switch-button {
   width: 20px;
+}
+
+.switch-thin-border .react-switch-label {
+  border: thin solid rgb(97, 97, 97);
+  height: 17px;
+  width: 32px;
 }

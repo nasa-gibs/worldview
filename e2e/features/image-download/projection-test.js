@@ -3,17 +3,17 @@ const { bookmark } = require('../../reuseables/bookmark');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload
+  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   't=2018-06-01',
-  'imageDownload='
+  'imageDownload=',
 ];
 
 module.exports = {
-  after: function(client) {
+  after(client) {
     client.end();
   },
 
@@ -42,5 +42,5 @@ module.exports = {
     c.expect.element('#wv-image-download-url').to.have.attribute('url')
       .and.to.contain('CRS=EPSG:3031');
     closeImageDownloadPanel(c);
-  }
+  },
 };

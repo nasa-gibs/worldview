@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
-                    "title": "Aqua / MODIS",
+                    "title": "Aqua/MODIS",
                     "description": "modis/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
@@ -20,7 +20,7 @@
                 },
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
@@ -33,7 +33,7 @@
                 },
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
-                    "title": "Aqua and Terra / MODIS",
+                    "title": "Aqua and Terra/MODIS",
                     "description": "modis/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
@@ -41,8 +41,8 @@
                     ]
                 },
                 "Suomi NPP/VIIRS": {
-                    "id": "snpp-viirs",
-                    "title": "Suomi NPP / VIIRS",
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
                     "description": "viirs/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
@@ -54,7 +54,7 @@
                 },
                 "NOAA-20/VIIRS": {
                     "id": "noaa20-viirs",
-                    "title": "NOAA-20 / VIIRS",
+                    "title": "NOAA-20/VIIRS",
                     "description": "viirs/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [

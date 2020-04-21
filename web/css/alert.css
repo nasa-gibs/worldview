@@ -22,12 +22,12 @@
   background-color: #ddd;
   color: #333;
 }
-.wv-alert i {
+.wv-alert svg.svg-inline--fa {
   color: #d54e21;
   margin-right: 10px;
   font-size: 1.4em;
 }
-.wv-alert i.exit {
+.wv-alert svg.svg-inline--fa.exit {
   color: #fff;
   margin-left: 10px;
   font-size: 1.4em;

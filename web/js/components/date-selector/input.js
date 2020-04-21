@@ -15,9 +15,14 @@ class DateInputColumn extends Component {
     this.state = {
       value: '',
       selected: false,
-      size: null
+      size: null,
     };
     this.inputs = [];
+  }
+
+  componentDidMount() {
+    this.updateValue();
+    this.setTextSize();
   }
 
   componentDidUpdate(prevProps) {
@@ -28,11 +33,6 @@ class DateInputColumn extends Component {
     if (value !== prevProps.value) {
       this.updateValue();
     }
-  }
-
-  componentDidMount() {
-    this.updateValue();
-    this.setTextSize();
   }
 
   setTextSize = () => {
@@ -47,7 +47,7 @@ class DateInputColumn extends Component {
       size = 2;
     }
     this.setState({
-      size: size
+      size,
     });
   }
 
@@ -59,7 +59,7 @@ class DateInputColumn extends Component {
 
   onKeyPress = (e) => {
     // check tab and enter key code
-    const keyCode = e.keyCode;
+    const { keyCode } = e;
     const entered = keyCode === 13 || keyCode === 9;
     if (entered) {
       e.preventDefault();
@@ -69,7 +69,7 @@ class DateInputColumn extends Component {
 
   onKeyUp = (e) => {
     const { type } = this.props;
-    const keyCode = e.keyCode;
+    const { keyCode } = e;
     const entered = keyCode === 13 || keyCode === 9;
     let shiftTab;
 
@@ -125,6 +125,7 @@ class DateInputColumn extends Component {
       case 'month':
         newDate = this.monthValidation(value);
         // transform month number to string (e.g., 3 -> 'MAR')
+        // eslint-disable-next-line no-restricted-globals
         if (newDate !== null && !isNaN(value)) {
           value = util.monthStringArray[value - 1];
         }
@@ -138,11 +139,13 @@ class DateInputColumn extends Component {
       case 'minute':
         newDate = this.minuteValidation(value);
         break;
+      default:
+        break;
     }
 
     // add leading '0' to single string number
     if (newDate !== null && value.length === 1) {
-      value = '0' + value;
+      value = `0${value}`;
     }
 
     // update parent level time unit type value
@@ -153,7 +156,8 @@ class DateInputColumn extends Component {
   }
 
   yearValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     if (input > 1000 && input < 9999) {
       const newDate = new Date(date.setUTCFullYear(input));
       return this.validateDate(newDate);
@@ -162,45 +166,46 @@ class DateInputColumn extends Component {
   }
 
   monthValidation = (input) => {
-    const date = new Date(this.props.date);
-    var newDate;
+    let { date } = this.props;
+    date = new Date(date);
+    let newDate;
+    // eslint-disable-next-line no-restricted-globals
     if (!isNaN(input) && input < 13 && input > 0) {
       newDate = new Date(date.setUTCMonth(input - 1));
       if (newDate) {
         return this.validateDate(newDate);
       }
       return null;
-    } else {
-      const realMonth = util.stringInArray(util.monthStringArray, input);
-      if (realMonth !== false) {
-        const day = date.getUTCDate();
-        const zeroDay = new Date(date.setUTCDate(1));
-
-        const zeroAddMonth = new Date(zeroDay.setUTCMonth(realMonth));
-        const zeroAddedMonthNumber = zeroAddMonth.getUTCMonth();
-
-        const addDay = new Date(zeroAddMonth.setUTCDate(day));
-        const addedDayMonthNumber = addDay.getUTCMonth();
-
-        if (addedDayMonthNumber !== zeroAddedMonthNumber) {
-          return false;
-        }
-        return this.validateDate(addDay);
-      } else {
-        return null;
-      }
     }
+    const realMonth = util.stringInArray(util.monthStringArray, input);
+    if (realMonth !== false) {
+      const day = date.getUTCDate();
+      const zeroDay = new Date(date.setUTCDate(1));
+
+      const zeroAddMonth = new Date(zeroDay.setUTCMonth(realMonth));
+      const zeroAddedMonthNumber = zeroAddMonth.getUTCMonth();
+
+      const addDay = new Date(zeroAddMonth.setUTCDate(day));
+      const addedDayMonthNumber = addDay.getUTCMonth();
+
+      if (addedDayMonthNumber !== zeroAddedMonthNumber) {
+        return false;
+      }
+      return this.validateDate(addDay);
+    }
+    return null;
   }
 
   dayValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     const standardMaxDateForMonth = 31;
 
     if (input > 0 && input <= standardMaxDateForMonth) {
       const actualMaxDateForMonth = new Date(
         date.getYear(),
         date.getMonth() + 1,
-        0
+        0,
       ).getDate();
 
       if (input > actualMaxDateForMonth) {
@@ -213,7 +218,8 @@ class DateInputColumn extends Component {
   }
 
   hourValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     if (input >= 0 && input <= 23) {
       const newDate = new Date(date.setUTCHours(input));
       return this.validateDate(newDate);
@@ -222,7 +228,8 @@ class DateInputColumn extends Component {
   }
 
   minuteValidation = (input) => {
-    const date = new Date(this.props.date);
+    let { date } = this.props;
+    date = new Date(date);
     if (input >= 0 && input <= 59) {
       const newDate = new Date(date.setUTCMinutes(input));
       return this.validateDate(newDate);
@@ -231,13 +238,15 @@ class DateInputColumn extends Component {
   }
 
   rollDate = (amt) => {
-    const { date, minDate, maxDate, type, updateDate } = this.props;
+    const {
+      date, minDate, maxDate, type, updateDate,
+    } = this.props;
     const newDate = util.rollDate(
       date,
       type,
       amt,
       minDate,
-      maxDate
+      maxDate,
     );
     updateDate(newDate, true);
   }
@@ -255,23 +264,26 @@ class DateInputColumn extends Component {
   }
 
   blur = (e) => {
-    const { setFocusedTab, tabIndex, type } = this.props;
+    const {
+      setFocusedTab, tabIndex, type, value,
+    } = this.props;
     // check for valid date on blur
     const inputValue = e.target.value;
     const newDate = this.validateBasedOnType(inputValue);
-    let value = newDate === null
-      ? this.props.value
+    let newValue = newDate === null
+      ? value
       : inputValue;
 
-    if (type === 'month' && !isNaN(value)) {
-      value = util.monthStringArray[value - 1];
-    } else if (value.length === 1) {
-      value = '0' + value;
+    // eslint-disable-next-line no-restricted-globals
+    if (type === 'month' && !isNaN(newValue)) {
+      newValue = util.monthStringArray[newValue - 1];
+    } else if (newValue.length === 1) {
+      newValue = `0${newValue}`;
     }
 
     this.setState({
-      value,
-      selected: false
+      value: newValue,
+      selected: false,
     });
 
     setFocusedTab(null, tabIndex);
@@ -279,7 +291,7 @@ class DateInputColumn extends Component {
 
   onChange = (e) => {
     this.setState({
-      value: e.target.value.toUpperCase()
+      value: e.target.value.toUpperCase(),
     });
   }
 
@@ -307,32 +319,32 @@ class DateInputColumn extends Component {
       inputId,
       isValid,
       tabIndex,
-      type
+      type,
     } = this.props;
     const {
       selected,
       size,
-      value
+      value,
     } = this.state;
 
     // conditional styling
     const containerClassName = `input-wrapper ${selected ? 'selected ' : ''}input-wrapper-${type}`;
     const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
     const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
-    const fontSizeStyle = fontSize ? { fontSize: fontSize + 'px' } : {};
+    const fontSizeStyle = fontSize ? { fontSize: `${fontSize}px` } : {};
     return (
       <div
         className={containerClassName}
         style={containerBorderStyle}
       >
         <Arrow
-          direction='up'
+          direction="up"
           onClick={this.onClickUp}
           type={type}
         />
         <input
           type="text"
-          ref={input => {
+          ref={(input) => {
             this.inputs[tabIndex] = input;
           }}
           size={size}
@@ -349,7 +361,7 @@ class DateInputColumn extends Component {
           onFocus={this.handleFocus}
         />
         <Arrow
-          direction='down'
+          direction="down"
           onClick={this.onClickDown}
           type={type}
         />
@@ -372,7 +384,7 @@ DateInputColumn.propTypes = {
   type: PropTypes.string,
   updateDate: PropTypes.func,
   updateTimeUnitInput: PropTypes.func,
-  value: PropTypes.node
+  value: PropTypes.node,
 };
 
 export default DateInputColumn;

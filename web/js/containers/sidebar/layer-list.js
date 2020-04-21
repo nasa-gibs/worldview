@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Layer from './layer';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { get as lodashGet } from 'lodash';
+import Layer from './layer';
 import {
   replaceSubGroup,
   getZotsForActiveLayers,
   getTitles,
-  available
+  available,
 } from '../../modules/layers/selectors';
 import { reorderLayers } from '../../modules/layers/actions';
-import { get as lodashGet } from 'lodash';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -24,7 +24,6 @@ class LayerList extends React.Component {
     super(props);
     this.state = {
       palettes: {},
-      layers: props.layers
     };
     this.promises = {};
     this.onDragEnd = this.onDragEnd.bind(this);
@@ -39,17 +38,17 @@ class LayerList extends React.Component {
     const { renderedPalettes } = this.props;
     if (renderedPalettes[layer.id]) {
       return renderedPalettes[layer.id];
-    } else if (this.promises[layer.id]) {
+    } if (this.promises[layer.id]) {
       return null;
-    } else if (layer.palette) {
+    } if (layer.palette) {
       this.promises[layer.id] = true;
       const promise = palettePromise(layer.id);
-      promise.then(palette => {
-        var palettes = this.state.palettes;
+      promise.then((palette) => {
+        const { palettes } = this.state;
         delete this.promises[layer.id];
         palettes[layer.id] = palette;
         this.setState({
-          palettes: palettes
+          palettes,
         });
       });
     }
@@ -67,13 +66,13 @@ class LayerList extends React.Component {
       reorderLayers,
       layerSplit,
       activeLayers,
-      layers
+      layers,
     } = this.props;
     const { destination, source, draggableId } = result;
     if (!destination || source.index === destination.index) {
       return;
     }
-    const regex = new RegExp('-' + layerGroupName + '$');
+    const regex = new RegExp(`-${layerGroupName}$`);
     const layerId = draggableId.replace(regex, '');
     const newLayerArray = reorder(layers, source.index, destination.index);
 
@@ -89,7 +88,7 @@ class LayerList extends React.Component {
       nextLayerId,
       activeLayers,
       groupId,
-      layerSplit
+      layerSplit,
     );
     reorderLayers(newLayers);
   }
@@ -105,7 +104,7 @@ class LayerList extends React.Component {
       projId,
       checkerBoardPattern,
       getNames,
-      available
+      available,
     } = this.props;
     return (
       <div className="layer-group-case">
@@ -113,8 +112,8 @@ class LayerList extends React.Component {
 
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable
-            droppableId={layerGroupName + '-' + groupId}
-            type={'layerSubGroup' + groupId}
+            droppableId={`${layerGroupName}-${groupId}`}
+            type={`layerSubGroup${groupId}`}
             direction="vertical"
           >
             {(provided, snapshot) => (
@@ -168,7 +167,7 @@ LayerList.propTypes = {
   reorderLayers: PropTypes.func,
   runningLayers: PropTypes.object,
   title: PropTypes.string,
-  zots: PropTypes.object
+  zots: PropTypes.object,
 };
 function mapStateToProps(state, ownProps) {
   const {
@@ -177,9 +176,11 @@ function mapStateToProps(state, ownProps) {
     title,
     layerGroupName,
     checkerBoardPattern,
-    layerSplit
+    layerSplit,
   } = ownProps;
-  const { proj, compare, config, map } = state;
+  const {
+    proj, compare, config, map,
+  } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
   const activeDateString = compare.isCompareA ? 'selected' : 'selectedB';
@@ -198,21 +199,19 @@ function mapStateToProps(state, ownProps) {
     projId: id,
     checkerBoardPattern,
     layerSplit,
-    getNames: layerId => {
-      return getTitles(state.config, layerId, id);
-    },
-    available: id => {
+    getNames: (layerId) => getTitles(state.config, layerId, id),
+    available: (id) => {
       const date = state.date[activeDateString];
       return available(id, date, layers, state.config, state);
-    }
+    },
   };
 }
-const mapDispatchToProps = dispatch => ({
-  reorderLayers: newLayerArray => {
+const mapDispatchToProps = (dispatch) => ({
+  reorderLayers: (newLayerArray) => {
     dispatch(reorderLayers(newLayerArray));
-  }
+  },
 });
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LayerList);

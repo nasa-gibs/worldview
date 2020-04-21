@@ -16,10 +16,7 @@
     "react",
     "jest"
   ],
-  "extends": [
-    "standard",
-    "plugin:react/recommended"
-  ],
+  "extends": "airbnb",
   "parser": "babel-eslint",
   "settings": {
     "react": {
@@ -27,92 +24,139 @@
     }
   },
   "rules": {
-    "semi": [
+    // The following rules are cases where our base rules
+    // differed from AirBnB Style guide. Keeping for now.
+    "no-unused-vars": [
       "error",
-      "always"
-    ],
-    "space-before-function-paren": "off",
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
-    "quotes": [
-      2,
-      "single",
       {
-        "avoidEscape": true
+        "vars": "all",
+        "args": "none"
+      }
+    ],
+    "camelcase": [
+      "error",
+      {
+        "allow": [
+          "^UNSAFE_"
+        ],
+        "properties": "never"
+      }
+    ],
+    "no-useless-call": "error",
+    "no-extra-parens": "error",
+    "space-before-function-paren": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "tasks/*.js",
+          "tasks/**/*.js",
+          "rpm/*.js",
+          "**/*test.js",
+          "**/*config.js",
+          "**/*conf.js"
+        ]
       }
     ]
   },
   "overrides": [
     {
       "files": [
-        "web/**/*.js",
-        "test/**/*.js"
+        "**/*.js"
       ],
       "rules": {
-        "no-octal": "error",
-        "no-unused-vars": "error",
-        "no-undef": "error",
-        "no-useless-escape": "error",
-        "eqeqeq": "error",
-        "padded-blocks": "error",
-        "space-before-blocks": "error",
-        "spaced-comment": "error",
-        "no-multiple-empty-lines": "error",
-        "operator-linebreak": "error",
-        "comma-dangle": "error",
-        "no-use-before-define": "error",
-        "camelcase": [
-          "error",
-          {
-            "allow": [
-              "^UNSAFE_"
-            ],
-            "properties": "never"
-          }
-        ],
-        "no-extend-native": "error",
-        "one-var": "error",
-        "no-extra-parens": "error",
-        "space-in-parens": "error",
-        "space-infix-ops": "error",
-        "no-multi-spaces": "error",
-        "comma-spacing": "error",
-        "yoda": "error",
-        "no-useless-return": "error",
-        "keyword-spacing": "error",
-        "brace-style": "error",
-        "func-call-spacing": "error",
-        "no-return-assign": "error",
-        "no-sequences": "error",
-        "no-unused-expressions": "error",
-        "no-useless-call": "error",
-        "no-trailing-spaces": "error",
-        "standard/computed-property-even-spacing": "error",
-        "space-before-function-paren": [
-          "error",
-          "never"
-        ],
-        "wrap-iife": "error",
-        "new-cap": "error",
-        "semi": [
-          "error",
-          "always"
-        ],
-        "react/no-danger": "warn",
-        "react/prop-types": "error",
-        "react/no-did-update-set-state": "warn",
-        "react/no-render-return-value": "warn",
-        "react/sort-prop-types": [
+        /* BEGIN Airbnb overrides
+
+          Rules below are overriding the Airbnb style guide rules in order to get code
+          to pass without having to fix hundreds of existing errors by hand.
+
+          For rules set to "off": consider setting to "warn" to identify non-compliance in new code
+          For rules set to "warn": consider removing to throw errors on existing and future code
+        */
+
+        // Base rule overrides
+        "no-nested-ternary": "warn", // 58 errors
+        "no-shadow": "warn", // 136 errors
+        "max-len": "off",
+        "consistent-return": "off", // 73 erorrs
+        "no-underscore-dangle": "off",
+        "func-names": "off",
+        "no-param-reassign": [ // 329 errors
           "warn",
           {
-            "ignoreCase": true,
-            "requiredFirst": true,
-            "sortShapeProp": true
+            "props": false
           }
         ],
-        "react/no-string-refs": "warn"
+        "no-use-before-define": [
+          "error",
+          {
+            "functions": false,
+            "classes": true,
+            "variables": false
+          }
+        ],
+
+        // Import rules overrides
+        "import/no-cycle": "warn",
+
+        // Accesibility rules overrides
+        "jsx-a11y/no-noninteractive-tabindex": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off",
+        "jsx-a11y/anchor-has-content": "off",
+        "jsx-a11y/control-has-associated-label": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/alt-text": "off",
+        "jsx-a11y/mouse-events-have-key-events": "off",
+        "jsx-a11y/tabindex-no-positive": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+
+        // React rules overrides
+        "react/jsx-props-no-spreading": "warn", // 17 errors
+        "react/jsx-filename-extension": "off",
+        "react/sort-comp": [
+          "error",
+          {
+            "order": [
+              "static-methods",
+              "lifecycle",
+              "everything-else",
+              "render"
+            ],
+            "groups": {
+              "lifecycle": [
+                "displayName",
+                "propTypes",
+                "contextTypes",
+                "childContextTypes",
+                "mixins",
+                "statics",
+                "defaultProps",
+                "constructor",
+                "getDefaultProps",
+                "state",
+                "getInitialState",
+                "getChildContext",
+                "getDerivedStateFromProps",
+                "componentWillMount",
+                "UNSAFE_componentWillMount",
+                "componentDidMount",
+                "componentWillReceiveProps",
+                "UNSAFE_componentWillReceiveProps",
+                "shouldComponentUpdate",
+                "componentWillUpdate",
+                "UNSAFE_componentWillUpdate",
+                "getSnapshotBeforeUpdate",
+                "componentDidUpdate",
+                "componentDidCatch",
+                "componentWillUnmount"
+              ]
+            }
+          }
+        ],
+        "react/forbid-prop-types": "off", // 216 errors
+        "react/require-default-props": "off" // 965 errors
       }
     }
   ]

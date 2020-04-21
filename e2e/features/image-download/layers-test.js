@@ -1,17 +1,17 @@
 const { bookmark } = require('../../reuseables/bookmark');
 const {
   openImageDownloadPanel,
-  clickDownload
+  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
   'v=-180,-90,180,90',
   't=2018-06-01',
-  'imageDownload='
+  'imageDownload=',
 ];
 
 module.exports = {
-  after: function(client) {
+  after(client) {
     client.end();
   },
 
@@ -46,6 +46,6 @@ module.exports = {
     c.expect.element('#wv-image-download-url').to.have.attribute('url')
       .and.to.contain('LAYERS=MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor')
       .and.to.contain('OPACITIES=,0.5');
-  }
+  },
 
 };

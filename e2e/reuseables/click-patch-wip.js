@@ -1,14 +1,20 @@
+/* eslint-disable no-use-before-define */
 module.exports = {
-  customMouseEvent: function(client, selector, offsetX, offsetY, eventType) {
+  customMouseEvent(client, selector, offsetX, offsetY, eventType) {
     eventType = eventType || 'dblclick';
-    client.execute(function(obj) {
-      var { eventType, selector, offsetX, offsetY } = obj;
-      var el = document.querySelector(selector || 'body');
-      function simulate(element, eventName) {
-        var options = extend(defaultOptions, arguments[2] || {});
-        var oEvent; var eventType = null;
+    client.execute((obj) => {
+      const {
+        eventType, selector, offsetX, offsetY,
+      } = obj;
+      const el = document.querySelector(selector || 'body');
 
-        for (var name in eventMatchers) {
+      function simulate(element, eventName) {
+        // eslint-disable-next-line prefer-rest-params
+        const options = extend(defaultOptions, arguments[2] || {});
+        let oEvent; let eventType = null;
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const name in eventMatchers) {
           if (eventMatchers[name].test(eventName)) { eventType = name; break; }
         }
 
@@ -16,7 +22,7 @@ module.exports = {
 
         if (document.createEvent) {
           oEvent = document.createEvent(eventType);
-          if (eventType == 'HTMLEvents') {
+          if (eventType === 'HTMLEvents') {
             oEvent.initEvent(eventName, options.bubbles, options.cancelable);
           } else {
             oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
@@ -27,23 +33,25 @@ module.exports = {
         } else {
           options.clientX = options.pointerX;
           options.clientY = options.pointerY;
-          var evt = document.createEventObject();
+          const evt = document.createEventObject();
           oEvent = extend(evt, options);
-          element.fireEvent('on' + eventName, oEvent);
+          element.fireEvent(`on${eventName}`, oEvent);
         }
         return element;
       }
 
       function extend(destination, source) {
-        for (var property in source) { destination[property] = source[property]; }
+        Object.keys(source).forEach((property) => {
+          destination[property] = source[property];
+        });
         return destination;
       }
 
-      var eventMatchers = {
+      const eventMatchers = {
         HTMLEvents: /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
-        MouseEvents: /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+        MouseEvents: /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/,
       };
-      var defaultOptions = {
+      const defaultOptions = {
         pointerX: 0,
         pointerY: 0,
         button: 0,
@@ -52,10 +60,12 @@ module.exports = {
         shiftKey: false,
         metaKey: false,
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       };
       return simulate(el, eventType, { pointerX: offsetX, pointerY: offsetY });
-    }, [{ eventType: eventType, selector: selector, offsetX: offsetX, offsetY: offsetY }], function(result) {
+    }, [{
+      eventType, selector, offsetX, offsetY,
+    }], (result) => {
     });
-  }
+  },
 };

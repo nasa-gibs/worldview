@@ -32,24 +32,26 @@ export default class OutsideAlerter extends Component {
    * Alert if clicked on outside of element
    */
   handleClickOutside(event) {
+    const { onClick, disabled } = this.props;
     if (
-      this.wrapperRef &&
-      !this.wrapperRef.contains(event.target) &&
-      !this.props.disabled
+      this.wrapperRef
+      && !this.wrapperRef.contains(event.target)
+      && !disabled
     ) {
-      this.props.onClick();
+      onClick();
     }
   }
 
   render() {
-    return <div ref={this.setWrapperRef}>{this.props.children}</div>;
+    const { children } = this.props;
+    return <div ref={this.setWrapperRef}>{children}</div>;
   }
 }
 OutsideAlerter.defaultProps = {
-  disabled: false
+  disabled: false,
 };
 OutsideAlerter.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };

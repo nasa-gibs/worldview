@@ -3,7 +3,7 @@
         "Methane": {
             "id": "methane",
             "title":    "Methane",
-            "subtitle": "Aqua / AIRS",
+            "subtitle": "Aqua/AIRS",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",

@@ -1,17 +1,17 @@
+import { assign } from 'lodash';
 import { requestReducer } from '../core/reducers';
 import { getCount, separateByType, getPriority } from './util';
 import {
   REQUEST_NOTIFICATIONS,
   SET_NOTIFICATIONS,
-  NOTIFICATIONS_SEEN
+  NOTIFICATIONS_SEEN,
 } from './constants';
-import { assign } from 'lodash';
 
 export const notificationReducerState = {
   number: null,
   type: '',
   isActive: false,
-  object: {}
+  object: {},
 };
 
 export function notificationsRequest(state = {}, action) {
@@ -27,14 +27,14 @@ export function notificationsReducer(state = notificationReducerState, action) {
           number: getCount(sortedNotificationObject),
           type: getPriority(sortedNotificationObject),
           isActive: true,
-          object: sortedNotificationObject
+          object: sortedNotificationObject,
         });
-      } else return state;
+      } return state;
     case NOTIFICATIONS_SEEN:
       return assign({}, state, {
         number: null,
         type: '',
-        isActive: true
+        isActive: true,
       });
     default:
       return state;

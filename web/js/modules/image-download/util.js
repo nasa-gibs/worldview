@@ -24,7 +24,7 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
   return subDailyDefs.length
     ? nearestInterval(defsSortedByInterval[0], dateTime)
     : new Date(dateTime.setUTCHours(0, 0, 0, 0));
-};
+}
 
 /**
  * Get the snapshots URL to download an image
@@ -53,7 +53,7 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
     `WRAP=${layerWraps.join(',')}`,
     `FORMAT=${imgFormat}`,
     `WIDTH=${width}`,
-    `HEIGHT=${height}`
+    `HEIGHT=${height}`,
   ];
   if (opacities.length > 0) {
     params.push(`OPACITIES=${opacities.join(',')}`);
@@ -61,7 +61,7 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
   if (isWorldfile) {
     params.push('WORLDFILE=true');
   }
-  return url + '?' + params.join('&') + `&ts=${Date.now()}`;
+  return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
 
 /*
@@ -72,31 +72,29 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
 export function imageUtilCalculateResolution(
   zoom,
   isGeoProjection,
-  resolutions
+  resolutions,
 ) {
-  var resolution;
-  var resolutionEstimate;
-  var nZoomLevels = resolutions.length;
-  var currentZoom = zoom < 0 ? 0 : zoom;
-  var curResolution =
-    currentZoom >= nZoomLevels
-      ? resolutions[nZoomLevels - 1]
-      : resolutions[currentZoom];
+  let resolution;
+  const nZoomLevels = resolutions.length;
+  const currentZoom = zoom < 0 ? 0 : zoom;
+  const curResolution = currentZoom >= nZoomLevels
+    ? resolutions[nZoomLevels - 1]
+    : resolutions[currentZoom];
 
   // Estimate the option value used by "wv-image-resolution"
-  resolutionEstimate = imageUtilEstimateResolution(
+  const resolutionEstimate = imageUtilEstimateResolution(
     curResolution,
-    isGeoProjection
+    isGeoProjection,
   );
 
   // Find the closest match of resolution within the available values
-  var possibleResolutions = isGeoProjection
+  const possibleResolutions = isGeoProjection
     ? [0.125, 0.25, 0.5, 1, 2, 4, 20, 40]
     : [1, 2, 4, 20, 40];
-  var bestDiff = Infinity;
-  var bestIdx = -1;
-  var currDiff = 0;
-  for (var i = 0; i < possibleResolutions.length; i++) {
+  let bestDiff = Infinity;
+  let bestIdx = -1;
+  let currDiff = 0;
+  for (let i = 0; i < possibleResolutions.length; i += 1) {
     currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
     if (currDiff < bestDiff) {
       resolution = possibleResolutions[i];
@@ -114,6 +112,9 @@ export function imageUtilCalculateResolution(
         case 6:
         case 7:
           resolution = possibleResolutions[bestIdx - 1];
+          break;
+        default:
+          break;
       }
     } else {
       switch (currentZoom) {
@@ -122,6 +123,9 @@ export function imageUtilCalculateResolution(
         case 4:
         case 5:
           resolution = possibleResolutions[bestIdx - 1];
+          break;
+        default:
+          break;
       }
     }
   }
@@ -140,8 +144,8 @@ export function imageUtilCalculateResolution(
  *
  */
 export function imageUtilGetLayers(products, proj) {
-  var layers = [];
-  lodashEach(products, function(layer) {
+  const layers = [];
+  lodashEach(products, (layer) => {
     if (layer.downloadId) {
       layers.push(layer.downloadId);
     } else if (layer.projections[proj].layer) {
@@ -166,7 +170,7 @@ export function imageUtilGetLayers(products, proj) {
 export function imageUtilGetLayerOpacities(layers) {
   const opacities = [];
   let found = false;
-  layers.forEach(layer => {
+  layers.forEach((layer) => {
     let opacity = '';
     if ('opacity' in layer && layer.opacity !== 1) {
       opacity = layer.opacity;
@@ -183,7 +187,7 @@ export function imageUtilGetLayerOpacities(layers) {
 }
 
 export function imageUtilGetLayerWrap(layers) {
-  return layers.map(layer => {
+  return layers.map((layer) => {
     if (layer.wrapX) {
       return 'x';
     }
@@ -216,7 +220,7 @@ export function imageUtilGetConversionFactor(proj) {
 export function imageUtilGetCoordsFromPixelValues(pixels, map) {
   return [
     map.getCoordinateFromPixel([Math.floor(pixels.x), Math.floor(pixels.y2)]),
-    map.getCoordinateFromPixel([Math.floor(pixels.x2), Math.floor(pixels.y)])
+    map.getCoordinateFromPixel([Math.floor(pixels.x2), Math.floor(pixels.y)]),
   ];
 }
 
@@ -230,12 +234,11 @@ export function bboxWMS13(lonlats, crs) {
   if (crs === 'EPSG:4326') {
     return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
       lonlats[1][0]
-      }`;
-  } else {
-    return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${
-      lonlats[1][1]
-      }`;
+    }`;
   }
+  return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${
+    lonlats[1][1]
+  }`;
 }
 
 export function imageSizeValid(imgHeight, imgWidth, maxSize) {
@@ -250,14 +253,14 @@ export function imageSizeValid(imgHeight, imgWidth, maxSize) {
 export function getDimensions(projection, bounds, resolution) {
   const conversionFactor = imageUtilGetConversionFactor(projection);
   const imgWidth = Math.round(
-    Math.abs(bounds[1][0] - bounds[0][0]) /
-    conversionFactor /
-    Number(resolution)
+    Math.abs(bounds[1][0] - bounds[0][0])
+    / conversionFactor
+    / Number(resolution),
   );
   const imgHeight = Math.round(
-    Math.abs(bounds[1][1] - bounds[0][1]) /
-    conversionFactor /
-    Number(resolution)
+    Math.abs(bounds[1][1] - bounds[0][1])
+    / conversionFactor
+    / Number(resolution),
   );
   return { width: imgWidth, height: imgHeight };
 }

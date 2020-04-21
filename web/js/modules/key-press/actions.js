@@ -1,5 +1,7 @@
 import { KEY_PRESS_ACTION as ANIMATION_KEY_PRESS_ACTION } from '../animation/constants';
 import { TOUR_KEY_PRESS_CLOSE } from '../tour/constants';
+import { TOGGLE_DISTRACTION_FREE_MODE } from '../ui/constants';
+import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
 /**
  * Function to dispatch actions
@@ -7,21 +9,41 @@ import { TOUR_KEY_PRESS_CLOSE } from '../tour/constants';
  * State
  *
  * @param {Number} keyCode
+ * @param {Boolean} is shiftKey down
  */
-export function keyPress(keyCode) {
+export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
   return (dispatch, getState) => {
-    const { modal, animation, tour } = getState();
-    if (animation.isActive && !modal.isOpen) {
-      // can get more specific modal.key !== "LAYER_PICKER_COMPONENT"
-      dispatch({
-        type: ANIMATION_KEY_PRESS_ACTION,
-        keyCode
-      });
-    }
+    const {
+      modal, animation, tour, ui,
+    } = getState();
+    const {
+      id,
+      isOpen,
+    } = modal;
+    const { isDistractionFreeModeActive } = ui;
+    const isProductPickerOpen = isOpen && id === 'LAYER_PICKER_COMPONENT';
     if (tour.active && keyCode === 27) {
       dispatch({
-        type: TOUR_KEY_PRESS_CLOSE
+        type: TOUR_KEY_PRESS_CLOSE,
       });
+    } else if (!isProductPickerOpen) {
+      if (animation.isActive) {
+        dispatch({
+          type: ANIMATION_KEY_PRESS_ACTION,
+          keyCode,
+        });
+      } else if (!ctrlOrCmdKey && shiftKey && keyCode === 68) {
+        dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
+        if (!isDistractionFreeModeActive && isOpen) {
+          dispatch({ type: CLOSE_MODAL });
+        }
+      } else if (keyCode === 27) {
+        if (isDistractionFreeModeActive) {
+          dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
+        } else {
+          dispatch({ type: CLOSE_MODAL });
+        }
+      }
     }
   };
 }

@@ -14,12 +14,17 @@ class DeltaInput extends PureComponent {
     super(props);
     this.state = {
       value: '',
-      valid: true
+      valid: true,
     };
   }
 
+  componentDidMount() {
+    const { deltaValue } = this.props;
+    this.setValue(deltaValue);
+  }
+
   onKeyInput = (e) => {
-    let value = e.target.value;
+    let { value } = e.target;
     if (value === '' || regex.test(value)) {
       value = Number(value);
       if (value < 1000) {
@@ -29,7 +34,7 @@ class DeltaInput extends PureComponent {
   }
 
   handleKeyPress = (e) => {
-    let value = this.state.value;
+    let { value } = this.state;
     if (value === '' || regex.test(value)) {
       value = Number(value);
       if (e.key === 'ArrowUp') {
@@ -51,48 +56,50 @@ class DeltaInput extends PureComponent {
   }
 
   handleBlur = () => {
+    const { changeDelta } = this.props;
     const { value } = this.state;
     if (value >= 1 && value < 1000) {
       this.setState({
-        valid: true
-      }, this.props.changeDelta(value));
+        valid: true,
+      }, changeDelta(value));
     } else {
       this.setState({
-        valid: false
+        valid: false,
       });
     }
   }
 
   setValue = (value) => {
     this.setState({
-      value: value
+      value,
     });
-  }
-
-  componentDidMount() {
-    this.setValue(this.props.deltaValue);
   }
 
   render() {
     const {
       value,
-      valid
+      valid,
     } = this.state;
     return (
-      <input className="custom-interval-delta-input" type="text"
+      <input
+        className="custom-interval-delta-input"
+        type="text"
         style={valid ? {} : { borderColor: '#ff0000' }}
-        min="1" step="1" value={value}
+        min="1"
+        step="1"
+        value={value}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyPress}
-        onChange={this.onKeyInput} />
+        onChange={this.onKeyInput}
+      />
     );
   }
 }
 
 DeltaInput.propTypes = {
   changeDelta: PropTypes.func,
-  deltaValue: PropTypes.number
+  deltaValue: PropTypes.number,
 };
 
 export default DeltaInput;

@@ -6,18 +6,19 @@ import PropTypes from 'prop-types';
  * @class Checkbox
  * @extends React.Component
  */
-export class Checkbox extends React.Component {
+export default class Checkbox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: props.checked
+      checked: props.checked,
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.state.checked !== nextProps.checked) {
+    const { checked } = this.state;
+    if (checked !== nextProps.checked) {
       this.setState({
-        checked: nextProps.checked
+        checked: nextProps.checked,
       });
     }
   }
@@ -31,22 +32,23 @@ export class Checkbox extends React.Component {
   }
 
   handleChange(e) {
-    const { onCheck } = this.props;
-    const boo = !this.state.checked;
-    this.setState({
-      checked: boo
+    this.setState((prevState) => {
+      const { onCheck } = this.props;
+      const checked = !prevState.checked;
+      if (onCheck) onCheck(checked);
+      return { checked };
     });
-    if (onCheck) onCheck(boo);
   }
 
   render() {
     const { checked } = this.state;
-    const { isRound, color, classNames, id, name, title, label, children } = this.props;
+    const {
+      isRound, color, classNames, id, name, title, label, children,
+    } = this.props;
     const roundClassName = isRound ? 'wv-checkbox-round ' : '';
     const defaultClassName = 'wv-checkbox ';
     const checkedClassName = checked ? 'checked ' : '';
-    const caseClassName =
-      defaultClassName + roundClassName + checkedClassName + color;
+    const caseClassName = defaultClassName + roundClassName + checkedClassName + color;
 
     return (
       <div className={caseClassName} onClick={this.onClick.bind(this)}>
@@ -69,7 +71,7 @@ Checkbox.defaultProps = {
   checked: true,
   color: '',
   isRound: false,
-  onCheck: null
+  onCheck: null,
 };
 
 Checkbox.propTypes = {
@@ -83,5 +85,5 @@ Checkbox.propTypes = {
   name: PropTypes.string,
   onCheck: PropTypes.func,
   onClick: PropTypes.func,
-  title: PropTypes.string
+  title: PropTypes.string,
 };

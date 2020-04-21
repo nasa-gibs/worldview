@@ -1,41 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import LayerList from './layer-list';
-import CategoryGrid from './category-grid';
-import ProductPickerHeader from './header';
-import FilterUnavailable from './filterUnavailable';
 import {
   toLower as lodashToLower,
   values as lodashValues,
   each as lodashEach,
-  includes as lodashIncludes
+  includes as lodashIncludes,
 } from 'lodash';
 import lodashDebounce from 'lodash/debounce';
-import Scrollbars from '../../util/scrollbar';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
-import { addLayer, removeLayer } from '../../../modules/layers/actions';
-import {
-  getLayersForProjection,
-  getTitles,
-  hasMeasurementSetting,
-  hasMeasurementSource
-} from '../../../modules/layers/selectors';
-import { onToggle } from '../../../modules/modal/actions';
-import { availableAtDate } from '../../../modules/layers/util.js';
-import LayerMetadataDetail from './layer-metadata-detail';
-import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   ModalBody,
   ModalHeader,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMeteor } from '@fortawesome/free-solid-svg-icons';
+import LayerList from './layer-list';
+import CategoryGrid from './category-grid';
+import ProductPickerHeader from './header';
+import FilterUnavailable from './filterUnavailable';
+import Scrollbars from '../../util/scrollbar';
+import { addLayer, removeLayer } from '../../../modules/layers/actions';
+import {
+  getLayersForProjection,
+  getTitles,
+  hasMeasurementSetting,
+  hasMeasurementSource,
+} from '../../../modules/layers/selectors';
+import { onToggle } from '../../../modules/modal/actions';
+import { availableAtDate } from '../../../modules/layers/util';
+import LayerMetadataDetail from './layer-metadata-detail';
+import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   updateProductPicker,
-  updateListScrollTop
+  updateListScrollTop,
 } from '../../../modules/product-picker/actions';
+
 
 /*
  * A scrollable list of layers
@@ -49,9 +53,15 @@ class ProductPicker extends React.Component {
     this.state = {
       modalElement: undefined,
       headerElement: undefined,
-      listScrollTop: props.listScrollTop || 0
     };
-    this.runSearch = lodashDebounce(this.runSearch, 300);
+
+    this.runSearch = lodashDebounce(this.runSearch.bind(this), 300);
+    this.revertSearchState = this.revertSearchState.bind(this);
+    this.showMetadataForLayer = this.showMetadataForLayer.bind(this);
+    this.updateSelectedMeasurement = this.updateSelectedMeasurement.bind(this);
+    this.toggleFilterByAvailable = this.toggleFilterByAvailable.bind(this);
+    this.drawMeasurements = this.drawMeasurements.bind(this);
+    this.sort = this.sort.bind(this);
   }
 
   componentDidMount() {
@@ -60,7 +70,7 @@ class ProductPicker extends React.Component {
     modalElement.classList.add('category-width');
     this.setState({
       modalElement,
-      headerElement
+      headerElement,
     });
   }
 
@@ -95,7 +105,7 @@ class ProductPicker extends React.Component {
       categoryType,
       filterByAvailable,
       selectedLayer,
-      update
+      update,
     } = this.props;
     const val = value.toLowerCase();
     let newState;
@@ -107,7 +117,7 @@ class ProductPicker extends React.Component {
         filteredRows: [],
         listType: 'category',
         inputValue: '',
-        selectedLayer: null
+        selectedLayer: null,
       };
       if (categoryType === 'featured') {
         this.toggleFeatureTab(newState);
@@ -116,18 +126,14 @@ class ProductPicker extends React.Component {
     // Search with terms
     } else {
       const terms = val.split(/ +/);
-      const searchResultRows = allLayers.filter(layer => {
-        return !(filterProjections(layer) || filterSearch(layer, val, terms));
-      });
-      const filteredRows = searchResultRows.filter(layer => {
-        return !(filterByAvailable && !availableAtDate(layer, selectedDate));
-      });
+      const searchResultRows = allLayers.filter((layer) => !(filterProjections(layer) || filterSearch(layer, val, terms)));
+      const filteredRows = searchResultRows.filter((layer) => !(filterByAvailable && !availableAtDate(layer, selectedDate)));
 
-      const selectedLayerInResults = selectedLayer &&
-        !!filteredRows.find(layer => layer.id === selectedLayer.id);
+      const selectedLayerInResults = selectedLayer
+        && !!filteredRows.find((layer) => layer.id === selectedLayer.id);
 
       if (filteredRows.length === 1) {
-        newSelectedLayer = filteredRows[0];
+        [newSelectedLayer] = filteredRows;
       } else if (selectedLayerInResults) {
         newSelectedLayer = selectedLayer;
       }
@@ -139,7 +145,7 @@ class ProductPicker extends React.Component {
         listType: 'search',
         inputValue: value,
         selectedLayer: newSelectedLayer,
-        listScrollTop: 0
+        listScrollTop: 0,
       };
     }
     update(newState);
@@ -156,13 +162,13 @@ class ProductPicker extends React.Component {
     update({
       listType: 'measurements',
       selectedMeasurement,
-      category
+      category,
     });
     googleTagManager.pushEvent({
       event: 'layers_category',
       layers: {
-        category: category.title
-      }
+        category: category.title,
+      },
     });
   }
 
@@ -171,16 +177,16 @@ class ProductPicker extends React.Component {
    * @param {String} id | Measurement ID
    */
   updateSelectedMeasurement(id) {
-    const { update } = this.props;
-    if (this.props.selectedMeasurement !== id) {
+    const { update, selectedMeasurement } = this.props;
+    if (selectedMeasurement !== id) {
       update({
         selectedMeasurement: id,
-        selectedMeasurementSourceIndex: 0
+        selectedMeasurementSourceIndex: 0,
       });
     } else {
       update({
         selectedMeasurement: null,
-        selectedMeasurementSourceIndex: 0
+        selectedMeasurementSourceIndex: 0,
       });
     }
   }
@@ -192,14 +198,18 @@ class ProductPicker extends React.Component {
   setSourceIndex(index) {
     const { update } = this.props;
     update({
-      selectedMeasurementSourceIndex: index
+      selectedMeasurementSourceIndex: index,
     });
   }
 
   getSelectedMeasurementSource() {
-    const { selectedMeasurement, selectedMeasurementSourceIndex } = this.props;
-    const measurements = Object.values(this.props.measurementConfig);
-    const currentMeasurement = measurements.find(measure => measure.id === selectedMeasurement);
+    const {
+      selectedMeasurement,
+      selectedMeasurementSourceIndex,
+      measurementConfig,
+    } = this.props;
+    const measurements = Object.values(measurementConfig);
+    const currentMeasurement = measurements.find((measure) => measure.id === selectedMeasurement);
     if (currentMeasurement) {
       const sources = Object.values(currentMeasurement.sources)
         .sort((a, b) => a.title.localeCompare(b.title));
@@ -220,7 +230,7 @@ class ProductPicker extends React.Component {
       categoryType,
       category,
       listType: 'measurements',
-      selectedMeasurement: selectedMeasurementId
+      selectedMeasurement: selectedMeasurementId,
     });
   }
 
@@ -231,21 +241,22 @@ class ProductPicker extends React.Component {
    * @param {String} key | categoryType identifier
    */
   sort(key) {
+    const { update } = this.props;
     if (key === 'featured') {
       this.toggleFeatureTab();
     } else {
-      this.props.update({
+      update({
         categoryType: key,
         listType: 'category',
-        selectedMeasurement: null
+        selectedMeasurement: null,
       });
     }
 
     googleTagManager.pushEvent({
       event: 'layers_meta_category',
       layers: {
-        meta_category: key
-      }
+        meta_category: key,
+      },
     });
   }
 
@@ -259,13 +270,14 @@ class ProductPicker extends React.Component {
    * When using "back" button or clearing search field, unset selections
    */
   revertSearchState() {
-    this.props.update({
+    const { update } = this.props;
+    update({
       listType: 'category',
       inputValue: '',
       selectedLayer: null,
       selectedMeasurement: null,
       selectedMeasurementSourceIndex: 0,
-      listScrollTop: 0
+      listScrollTop: 0,
     });
   }
 
@@ -274,7 +286,8 @@ class ProductPicker extends React.Component {
    * @param {*} selectedLayer - the layer for which to show metadata
    */
   showMetadataForLayer(selectedLayer) {
-    this.props.update({ selectedLayer });
+    const { update } = this.props;
+    update({ selectedLayer });
   }
 
   renderLayerList() {
@@ -301,7 +314,7 @@ class ProductPicker extends React.Component {
       selectedMeasurement,
       selectedLayer,
       updateScrollPosition,
-      listScrollTop
+      listScrollTop,
     } = this.props;
 
     const isSearching = listType === 'search';
@@ -310,14 +323,16 @@ class ProductPicker extends React.Component {
     }, 500);
     const detailTopBorderSize = 5;
     const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight : 0;
-    let listHeight, listMinHeight, detailHeight;
+    let listHeight; let listMinHeight; let
+      detailHeight;
 
     if (isMobile) {
       detailHeight = !selectedLayer ? 0 : (bodyHeight * 0.6) - detailTopBorderSize;
       listHeight = selectedLayer ? bodyHeight * 0.4 : bodyHeight;
       listMinHeight = listHeight;
     } else {
-      detailHeight = listHeight = bodyHeight - 80;
+      listHeight = bodyHeight - 80;
+      detailHeight = listHeight;
       listMinHeight = 300;
     }
 
@@ -336,11 +351,12 @@ class ProductPicker extends React.Component {
           <div className={listContainerClass}>
             <Scrollbars
               style={{
-                maxHeight: listHeight + 'px',
-                minHeight: listMinHeight + 'px'
+                maxHeight: `${listHeight}px`,
+                minHeight: `${listMinHeight}px`,
               }}
               scrollBarVerticalTop={listScrollTop}
-              onScroll={debouncedOnScroll}>
+              onScroll={debouncedOnScroll}
+            >
               <div className="product-outter-list-case">
                 <LayerList
                   isMobile={isMobile}
@@ -359,9 +375,9 @@ class ProductPicker extends React.Component {
                   hasMeasurementSource={hasMeasurementSource}
                   measurementConfig={measurementConfig}
                   selectedMeasurement={selectedMeasurement}
-                  updateSelectedMeasurement={this.updateSelectedMeasurement.bind(this)}
-                  showMetadataForLayer={layer => this.showMetadataForLayer(layer)}
-                  setSourceIndex={index => this.setSourceIndex(index)}
+                  updateSelectedMeasurement={this.updateSelectedMeasurement}
+                  showMetadataForLayer={(layer) => this.showMetadataForLayer(layer)}
+                  setSourceIndex={(index) => this.setSourceIndex(index)}
                   selectedMeasurementSourceIndex={selectedMeasurementSourceIndex}
                 />
               </div>
@@ -369,19 +385,23 @@ class ProductPicker extends React.Component {
           </div>
           { this.renderDetails(detailHeight) }
         </div>
-      </>)
+      </>
+    )
       : (
-        <div className="no-results" style={{ height: listMinHeight - 45 + 'px' }}>
-          <i className="fas fa-5x fa-meteor"></i>
+        <div className="no-results" style={{ height: `${listMinHeight - 45}px` }}>
+          <FontAwesomeIcon icon={faMeteor} size="5x" />
           <h3> No layers found! </h3>
-          {numRowsFilteredOut > 0 &&
+          {numRowsFilteredOut > 0
+          && (
           <p>
-            {numRowsFilteredOut} result(s) are being filtered out.
-            <a className="remove-filters" onClick={this.toggleFilterByAvailable.bind(this)}>
+            {numRowsFilteredOut}
+            {' '}
+            result(s) are being filtered out.
+            <a className="remove-filters" onClick={this.toggleFilterByAvailable}>
               Remove filters?
             </a>
           </p>
-          }
+          )}
         </div>
       );
   }
@@ -396,11 +416,11 @@ class ProductPicker extends React.Component {
       category,
       listType,
       selectedLayer,
-      showPreviewImage
+      showPreviewImage,
     } = this.props;
     const isSearching = listType === 'search';
-    const selectedLayerActive = selectedLayer &&
-      activeLayers.some(layer => layer.id === selectedLayer.id);
+    const selectedLayerActive = selectedLayer
+      && activeLayers.some((layer) => layer.id === selectedLayer.id);
     const detailContainerClass = isSearching
       ? isMobile
         ? 'layer-detail-container layers-all search mobile'
@@ -410,7 +430,7 @@ class ProductPicker extends React.Component {
     if (isSearching) {
       return isMobile && !selectedLayer ? null : (
         <div className={detailContainerClass}>
-          <Scrollbars style={{ maxHeight: height + 'px' }}>
+          <Scrollbars style={{ maxHeight: `${height}px` }}>
             <LayerMetadataDetail
               layer={selectedLayer}
               isActive={selectedLayerActive}
@@ -418,23 +438,22 @@ class ProductPicker extends React.Component {
               removeLayer={removeLayer}
               selectedProjection={selectedProjection}
               showPreviewImage={showPreviewImage}
-              showMetadataForLayer={this.showMetadataForLayer.bind(this)}>
-            </LayerMetadataDetail>
-          </Scrollbars>
-        </div>
-      );
-    } else {
-      return !isMobile && (
-        <div className={detailContainerClass}>
-          <Scrollbars style={{ maxHeight: height + 'px' }}>
-            <MeasurementMetadataDetail
-              categoryTitle={category && category.title}
-              source={this.getSelectedMeasurementSource()}>
-            </MeasurementMetadataDetail>
+              showMetadataForLayer={this.showMetadataForLayer}
+            />
           </Scrollbars>
         </div>
       );
     }
+    return !isMobile && (
+    <div className={detailContainerClass}>
+      <Scrollbars style={{ maxHeight: `${height}px` }}>
+        <MeasurementMetadataDetail
+          categoryTitle={category && category.title}
+          source={this.getSelectedMeasurementSource()}
+        />
+      </Scrollbars>
+    </div>
+    );
   }
 
   render() {
@@ -456,14 +475,14 @@ class ProductPicker extends React.Component {
       inputValue,
       filterByAvailable,
       filteredRows,
-      numRowsFilteredOut
+      numRowsFilteredOut,
     } = this.props;
     const isCategoryDisplay = listType === 'category' && selectedProjection === 'geographic';
     const showCategoryTabs = (isCategoryDisplay || categoryType === 'featured') && !inputValue;
     const categoryKeys = [
       'hazards and disasters',
       'scientific',
-      'featured'
+      'featured',
     ];
     const bodyHeight = headerElement ? screenHeight - headerElement.offsetHeight - 38 : 0;
     const listHeight = isMobile ? bodyHeight : bodyHeight - 50;
@@ -480,27 +499,39 @@ class ProductPicker extends React.Component {
             category={category}
             modalView={modalView}
             width={width}
-            runSearch={this.runSearch.bind(this)}
-            updateListState={this.revertSearchState.bind(this)}
+            runSearch={this.runSearch}
+            updateListState={this.revertSearchState}
             filterByAvailable={filterByAvailable}
-            toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}>
-            {listType === 'search' && !isMobile &&
-              <div className='header-filter-container'>
-                <div className='header-filters'>
+            toggleFilterByAvailable={this.toggleFilterByAvailable}
+          >
+            {listType === 'search' && !isMobile
+              && (
+              <div className="header-filter-container">
+                <div className="header-filters">
                   <FilterUnavailable
                     selectedDate={selectedDate}
                     filterByAvailable={filterByAvailable}
-                    toggleFilterByAvailable={this.toggleFilterByAvailable.bind(this)}>
-                  </FilterUnavailable>
+                    toggleFilterByAvailable={this.toggleFilterByAvailable}
+                  />
                 </div>
                 <div className="results-text">
-                  Showing {filteredRows.length} results
-                  {numRowsFilteredOut > 0 &&
-                    <span>({numRowsFilteredOut} hidden by filters)</span>
-                  }
+                  Showing
+                  {' '}
+                  {filteredRows.length}
+                  {' '}
+                  results
+                  {numRowsFilteredOut > 0
+                    && (
+                    <span>
+                      (
+                      {numRowsFilteredOut}
+                      {' '}
+                      hidden by filters)
+                    </span>
+                    )}
                 </div>
               </div>
-            }
+              )}
           </ProductPickerHeader>
         </ModalHeader>
 
@@ -510,25 +541,25 @@ class ProductPicker extends React.Component {
               ? (
                 <>
                   <Nav id="categories-nav" className="categories-nav">
-                    {categoryKeys.map(sortKey => (
+                    {categoryKeys.map((sortKey) => (
                       <NavItem
                         key={sortKey}
                         className="layer-category-navigation"
                         active={sortKey === categoryType}
                       >
-                        <NavLink onClick={this.sort.bind(this, sortKey)}>
+                        <NavLink onClick={() => this.sort(sortKey)}>
                           {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
                         </NavLink>
                       </NavItem>
                     ))}
                   </Nav>
                   {isCategoryDisplay ? (
-                    <Scrollbars style={{ maxHeight: listHeight + 'px' }}>
+                    <Scrollbars style={{ maxHeight: `${listHeight}px` }}>
                       <div className="product-outter-list-case">
                         <CategoryGrid
                           categories={lodashValues(categoryConfig[categoryType])}
                           measurementConfig={measurementConfig}
-                          drawMeasurements={this.drawMeasurements.bind(this)}
+                          drawMeasurements={this.drawMeasurements}
                           hasMeasurementSource={hasMeasurementSource}
                           categoryType={categoryType}
                           width={width}
@@ -538,8 +569,7 @@ class ProductPicker extends React.Component {
                   ) : this.renderLayerList()}
                 </>
               )
-              : this.renderLayerList()
-            }
+              : this.renderLayerList()}
           </div>
         </ModalBody>
       </>
@@ -551,11 +581,9 @@ ProductPicker.propTypes = {
   activeLayers: PropTypes.array,
   addLayer: PropTypes.func,
   allLayers: PropTypes.array,
-  categories: PropTypes.array,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
   categoryType: PropTypes.string,
-  drawMeasurements: PropTypes.func,
   filterByAvailable: PropTypes.bool,
   filteredRows: PropTypes.array,
   filterProjections: PropTypes.func,
@@ -574,30 +602,28 @@ ProductPicker.propTypes = {
   onToggle: PropTypes.func,
   removeLayer: PropTypes.func,
   screenHeight: PropTypes.number,
-  searchResultRows: PropTypes.array,
   selectedDate: PropTypes.object,
   selectedLayer: PropTypes.object,
   selectedMeasurement: PropTypes.string,
-  selectedMeasurementSource: PropTypes.object,
   selectedMeasurementSourceIndex: PropTypes.number,
   selectedProjection: PropTypes.string,
   showPreviewImage: PropTypes.bool,
   update: PropTypes.func,
   updateScrollPosition: PropTypes.func,
-  width: PropTypes.number
+  width: PropTypes.number,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addLayer: id => {
+const mapDispatchToProps = (dispatch) => ({
+  addLayer: (id) => {
     googleTagManager.pushEvent({
       event: 'layer_added',
       layers: {
-        id: id
-      }
+        id,
+      },
     });
     dispatch(addLayer(id));
   },
-  removeLayer: id => {
+  removeLayer: (id) => {
     dispatch(removeLayer(id));
   },
   onToggle: () => {
@@ -608,7 +634,7 @@ const mapDispatchToProps = dispatch => ({
   },
   update: (partialState) => {
     dispatch(updateProductPicker(partialState));
-  }
+  },
 });
 
 function mapStateToProps(state, ownProps) {
@@ -619,7 +645,7 @@ function mapStateToProps(state, ownProps) {
     layers,
     compare,
     date,
-    productPicker
+    productPicker,
   } = state;
   const { screenWidth, screenHeight } = browser;
   const isMobile = browser.lessThan.medium;
@@ -641,28 +667,20 @@ function mapStateToProps(state, ownProps) {
     activeLayers,
     selectedProjection: proj.id,
     showPreviewImage: config.features.previewSnapshots,
-    filterProjections: layer => {
-      return !layer.projections[proj.id];
-    },
-    filterSearch: (layer, val, terms) => {
-      return filterSearch(layer, val, terms, config, proj.id);
-    },
-    hasMeasurementSource: current => {
-      return hasMeasurementSource(current, config, proj.id);
-    },
-    hasMeasurementSetting: (current, source) => {
-      return hasMeasurementSetting(current, source, config, proj.id);
-    }
+    filterProjections: (layer) => !layer.projections[proj.id],
+    filterSearch: (layer, val, terms) => filterSearch(layer, val, terms, config, proj.id),
+    hasMeasurementSource: (current) => hasMeasurementSource(current, config, proj.id),
+    hasMeasurementSetting: (current, source) => hasMeasurementSetting(current, source, config, proj.id),
   };
 }
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ProductPicker);
 
 const getModalWidth = function(width) {
-  var availableWidth = width - width * 0.15;
-  var gridItemWidth = 310;
+  const availableWidth = width - width * 0.15;
+  const gridItemWidth = 310;
   let sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
   if (sizeMultiplier < 1) {
     sizeMultiplier = 1;
@@ -687,11 +705,10 @@ const filterSearch = (layer, val, terms, config, projId) => {
   const layerId = lodashToLower(layer.id);
 
   lodashEach(terms, (term) => {
-    filtered =
-      !lodashIncludes(title, term) &&
-      !lodashIncludes(subtitle, term) &&
-      !lodashIncludes(tags, term) &&
-      !lodashIncludes(layerId, term);
+    filtered = !lodashIncludes(title, term)
+      && !lodashIncludes(subtitle, term)
+      && !lodashIncludes(tags, term)
+      && !lodashIncludes(layerId, term);
     if (filtered) return false;
   });
   return filtered;

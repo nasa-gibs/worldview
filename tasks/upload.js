@@ -6,50 +6,51 @@ const path = require('path');
 const yargs = require('yargs');
 const shell = require('shelljs');
 const NodeSSH = require('node-ssh');
+
 const ssh = new NodeSSH();
 
 function error(msg) {
   const prog = path.basename(__filename);
   console.error(`${prog}: error: ${msg}`);
   process.exit(1);
-};
+}
 
-const argv = yargs
+const { argv } = yargs
   .usage('$0 [options] <name>')
   .option('d', {
     alias: 'dist',
     description: 'do not build, use artifacts found in dist directory',
-    type: 'boolean'
+    type: 'boolean',
   })
   .option('e', {
     alias: 'env',
     description: 'configuration environment if not "release"',
     requiresArg: true,
-    type: 'string'
+    type: 'string',
   })
   .option('h', {
     alias: 'host',
     description: 'upload to this host',
     requiresArg: true,
-    type: 'string'
+    type: 'string',
   })
   .option('k', {
     alias: 'key',
     description: 'path to private ssh key',
     requiresArg: true,
-    type: 'string'
+    type: 'string',
   })
   .option('r', {
     alias: 'root',
     description: 'extract application to this directory',
     requiresArg: true,
-    type: 'string'
+    type: 'string',
   })
   .option('u', {
     alias: 'user',
     description: 'login to remote host using this user name',
     requiresArg: true,
-    type: 'string'
+    type: 'string',
   })
   .epilog(`
 Defaults for "host", "key", "root", and "user" should be placed in a JSON
@@ -58,8 +59,7 @@ file found at "${os.homedir()}/.worldview/upload.config".
 Values on the command line override those found in the configuration file.
 
 If "host" or "root" is not found in the configuration file, it must
-appear on the command line.`)
-  .argv;
+appear on the command line.`);
 
 if (argv.help) {
   yargs.showHelp();
@@ -132,7 +132,7 @@ async function upload() {
   } catch (err) {
     error(err.toString());
   }
-};
+}
 
 if (!argv.dist) {
   const cmd = 'npm run build';

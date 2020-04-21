@@ -8,44 +8,42 @@ import { find as lodashFind, get as lodashGet } from 'lodash';
  * @param {Object} state | initial state before location POP action
  * @param {Object} config
  */
-export function mapLocationToDataState(
+export default function mapLocationToDataState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   const productId = parameters.download || parameters.dataDownload;
   if (productId) {
-    const activeString =
-      lodashGet(stateFromLocation, 'compare.activeString') ||
-      lodashGet(state, 'compare.activeString');
-    const activeLayers =
-      lodashGet(stateFromLocation, `layers.${activeString}`) ||
-      lodashGet(state, `layers.${activeString}`);
+    const activeString = lodashGet(stateFromLocation, 'compare.activeString')
+      || lodashGet(state, 'compare.activeString');
+    const activeLayers = lodashGet(stateFromLocation, `layers.${activeString}`)
+      || lodashGet(state, `layers.${activeString}`);
     if (
-      !config.products[productId] ||
-      !lodashFind(activeLayers, { product: productId })
+      !config.products[productId]
+      || !lodashFind(activeLayers, { product: productId })
     ) {
-      console.warn('No such product: ' + productId);
+      console.warn(`No such product: ${productId}`);
       stateFromLocation = update(stateFromLocation, {
-        data: { selectedProduct: { $set: '' } }
+        data: { selectedProduct: { $set: '' } },
       });
       stateFromLocation = update(stateFromLocation, {
-        data: { active: { $set: false } }
+        data: { active: { $set: false } },
       });
     } else {
       stateFromLocation = update(stateFromLocation, {
-        data: { active: { $set: true } }
+        data: { active: { $set: true } },
       });
       if (parameters.dataDownload && !parameters.download) {
         stateFromLocation = update(stateFromLocation, {
-          data: { selectedProduct: { $set: productId } }
+          data: { selectedProduct: { $set: productId } },
         });
       }
     }
   } else {
     stateFromLocation = update(stateFromLocation, {
-      data: { active: { $set: false } }
+      data: { active: { $set: false } },
     });
   }
   return stateFromLocation;

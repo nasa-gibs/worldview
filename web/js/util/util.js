@@ -1,17 +1,17 @@
 import {
   isObject as lodashIsObject,
   each as lodashEach,
-  isNull as lodashIsNull
+  isNull as lodashIsNull,
 } from 'lodash';
-import wvui from '../ui/ui';
-import browser from './browser';
-import { events } from './events';
-import load from './load';
 import Cache from 'cachai';
 import moment from 'moment';
+import wvui from '../ui/ui';
+import browser from './browser';
+import events from './events';
+import load from './load';
 
 export default (function(self) {
-  var canvas = null;
+  let canvas = null;
 
   // Export other util methods
   self.browser = browser;
@@ -29,7 +29,7 @@ export default (function(self) {
     'SEP',
     'OCT',
     'NOV',
-    'DEC'
+    'DEC',
   ];
 
   // Needed anymore?
@@ -37,27 +37,27 @@ export default (function(self) {
     baselayers: {
       id: 'baselayers',
       camel: 'BaseLayers',
-      description: 'Base Layers'
+      description: 'Base Layers',
     },
     overlays: {
       id: 'overlays',
       camel: 'Overlays',
-      description: 'Overlays'
-    }
+      description: 'Overlays',
+    },
   };
 
   self.repeat = function(value, length) {
-    var result = '';
-    for (var i = 0; i < length; i++) {
+    let result = '';
+    for (let i = 0; i < length; i += 1) {
       result += value;
     }
     return result;
   };
 
   self.pad = function(value, width, padding) {
-    value = '' + value;
+    value = `${value}`;
     if (value.length < width) {
-      var add = width - value.length;
+      const add = width - value.length;
       value = self.repeat(padding, add) + value;
     }
     return value;
@@ -95,19 +95,19 @@ export default (function(self) {
     if (queryString[0] === '?') {
       queryString = queryString.substring(1);
     }
-    var parameters = queryString.split('&');
-    var result = {};
-    for (var i = 0; i < parameters.length; i++) {
-      var index = parameters[i].indexOf('=');
-      var key = parameters[i].substring(0, index);
-      var value = parameters[i].substring(index + 1);
+    const parameters = queryString.split('&');
+    const result = {};
+    for (let i = 0; i < parameters.length; i += 1) {
+      const index = parameters[i].indexOf('=');
+      const key = parameters[i].substring(0, index);
+      const value = parameters[i].substring(index + 1);
       result[key] = decodeURIComponent(value);
     }
     return result;
   };
   self.elapsed = function(message, startTime, parameters) {
     if (parameters && !parameters.elapsed) return;
-    var t = new Date().getTime() - startTime;
+    const t = new Date().getTime() - startTime;
     console.log(t, message);
     return t;
   };
@@ -134,12 +134,12 @@ export default (function(self) {
    */
   self.toQueryString = function(kvps, exceptions) {
     exceptions = exceptions || {};
-    var parts = [];
-    lodashEach(kvps, function(value, key) {
-      var part = key + '=' + encodeURIComponent(value);
-      lodashEach(exceptions, function(exception) {
-        var regexp = new RegExp(exception, 'ig');
-        var decoded = decodeURIComponent(exception);
+    const parts = [];
+    lodashEach(kvps, (value, key) => {
+      let part = `${key}=${encodeURIComponent(value)}`;
+      lodashEach(exceptions, (exception) => {
+        const regexp = new RegExp(exception, 'ig');
+        const decoded = decodeURIComponent(exception);
         part = part.replace(regexp, decoded);
       });
       parts.push(part);
@@ -147,7 +147,7 @@ export default (function(self) {
     if (parts.length === 0) {
       return '';
     }
-    return '?' + parts.join('&');
+    return `?${parts.join('&')}`;
   };
 
   /**
@@ -176,7 +176,7 @@ export default (function(self) {
    * @return {Object} Canvas image data.
    */
   self.getCanvasPixelData = function(canvas, x, y) {
-    var context = canvas.getContext('2d');
+    const context = canvas.getContext('2d');
     return context.getImageData(x, y, 1, 1)
       .data;
   };
@@ -192,32 +192,33 @@ export default (function(self) {
    */
   // NOTE: Older Safari doesn't like Date.parse
   self.parseDateUTC = function(dateAsString) {
-    var dateTimeArr = dateAsString.split(/T/);
+    const dateTimeArr = dateAsString.split(/T/);
 
-    var yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
+    const yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
 
     // Parse elements of date and time
-    var year = yyyymmdd[0];
-    var month = yyyymmdd[1] - 1;
-    var day = yyyymmdd[2];
+    const year = yyyymmdd[0];
+    const month = yyyymmdd[1] - 1;
+    const day = yyyymmdd[2];
 
-    var hour = 0;
-    var minute = 0;
-    var second = 0;
-    var millisecond = 0;
+    let hour = 0;
+    let minute = 0;
+    let second = 0;
+    let millisecond = 0;
 
     // Use default of midnight if time is not specified
     if (dateTimeArr.length > 1) {
-      var hhmmss = dateTimeArr[1].split(/[:.Z]/);
+      const hhmmss = dateTimeArr[1].split(/[:.Z]/);
       hour = hhmmss[0] || 0;
       minute = hhmmss[1] || 0;
       second = hhmmss[2] || 0;
       millisecond = hhmmss[3] || 0;
     }
-    var date = new Date(Date.UTC(year, month, day, hour, minute, second,
+    const date = new Date(Date.UTC(year, month, day, hour, minute, second,
       millisecond));
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(date.getTime())) {
-      throw new Error('Invalid date: ' + dateAsString);
+      throw new Error(`Invalid date: ${dateAsString}`);
     }
     return date;
   };
@@ -226,18 +227,18 @@ export default (function(self) {
       let part = item.id || '';
       const attributes = [];
       if (item.attributes && item.attributes.length > 0) {
-        lodashEach(item.attributes, function(attribute) {
+        lodashEach(item.attributes, (attribute) => {
           if (attribute.value) {
-            attributes.push(attribute.id + '=' + attribute.value);
+            attributes.push(`${attribute.id}=${attribute.value}`);
           } else {
             attributes.push(attribute.id);
           }
         });
-        part += '(' + attributes.join(',') + ')';
+        part += `(${attributes.join(',')})`;
       }
       return part;
     }
-    self.warn('Is not an object: ' + item);
+    self.warn(`Is not an object: ${item}`);
     return '';
   };
   /**
@@ -245,6 +246,7 @@ export default (function(self) {
    * @param {Object} d | Date object
    */
   self.isValidDate = function(d) {
+    // eslint-disable-next-line no-restricted-globals
     return d instanceof Date && !isNaN(d);
   };
   /**
@@ -257,32 +259,33 @@ export default (function(self) {
    * the string is invalid
    */
   self.parseDate = function(dateAsString) {
-    var dateTimeArr = dateAsString.split(/T/);
+    const dateTimeArr = dateAsString.split(/T/);
 
-    var yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
+    const yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
 
     // Parse elements of date and time
-    var year = yyyymmdd[0];
-    var month = yyyymmdd[1] - 1;
-    var day = yyyymmdd[2];
+    const year = yyyymmdd[0];
+    const month = yyyymmdd[1] - 1;
+    const day = yyyymmdd[2];
 
-    var hour = 0;
-    var minute = 0;
-    var second = 0;
-    var millisecond = 0;
+    let hour = 0;
+    let minute = 0;
+    let second = 0;
+    let millisecond = 0;
 
     // Use default of midnight if time is not specified
     if (dateTimeArr.length > 1) {
-      var hhmmss = dateTimeArr[1].split(/[:.Z]/);
+      const hhmmss = dateTimeArr[1].split(/[:.Z]/);
       hour = hhmmss[0] || 0;
       minute = hhmmss[1] || 0;
       second = hhmmss[2] || 0;
       millisecond = hhmmss[3] || 0;
     }
-    var date = new Date(year, month, day, hour, minute, second,
+    const date = new Date(year, month, day, hour, minute, second,
       millisecond);
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(date.getTime())) {
-      throw new Error('Invalid date: ' + dateAsString);
+      throw new Error(`Invalid date: ${dateAsString}`);
     }
     return date;
   };
@@ -293,7 +296,7 @@ export default (function(self) {
 
     switch (period) {
       case 'subdaily':
-        dateString = moment(date).format('DD MMMM YYYY HH:mm') + 'Z';
+        dateString = `${moment(date).format('DD MMMM YYYY HH:mm')}Z`;
         break;
 
       case 'yearly':
@@ -325,9 +328,9 @@ export default (function(self) {
   self.getTextWidth = function(text, font) {
     // re-use canvas object for better performance
     canvas = canvas || document.createElement('canvas');
-    var context = canvas.getContext('2d');
+    const context = canvas.getContext('2d');
     context.font = font;
-    var metrics = context.measureText(text);
+    const metrics = context.measureText(text);
     return metrics.width;
   };
 
@@ -339,10 +342,9 @@ export default (function(self) {
    * @return {string} Julian date string in the form of `YYYYDDD`
    */
   self.toJulianDate = function(date) {
-    var jStart, jDate;
-    jStart = self.parseDateUTC(date.getUTCFullYear() + '-01-01');
-    jDate = '00' + (1 + Math.ceil((date.getTime() - jStart) / 86400000));
-    return date.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+    const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
+    const jDate = `00${1 + Math.ceil((date.getTime() - jStart) / 86400000)}`;
+    return date.getUTCFullYear() + jDate.substr(jDate.length - 3);
   };
 
   /**
@@ -367,7 +369,7 @@ export default (function(self) {
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
   self.toISOStringSeconds = function(date) {
-    return date.toISOString().split('.')[0] + 'Z';
+    return `${date.toISOString().split('.')[0]}Z`;
   };
 
   /**
@@ -380,7 +382,7 @@ export default (function(self) {
    */
   self.toISOStringMinutes = function(date) {
     const parts = date.toISOString().split(':');
-    return parts[0] + ':' + parts[1] + 'Z';
+    return `${parts[0]}:${parts[1]}Z`;
   };
 
   /**
@@ -392,10 +394,10 @@ export default (function(self) {
    * @return {string} ISO string in the form of HH:MM`.
    */
   self.toHourMinutes = function(date) {
-    var time = date.toISOString()
+    const time = date.toISOString()
       .split('T')[1];
-    var parts = time.split('.')[0].split(':');
-    return parts[0] + ':' + parts[1];
+    const parts = time.split('.')[0].split(':');
+    return `${parts[0]}:${parts[1]}`;
   };
 
   /**
@@ -407,7 +409,7 @@ export default (function(self) {
    * @return {number} rounded date
    */
   self.roundTimeOneMinute = function(time) {
-    var timeToReturn = new Date(time);
+    const timeToReturn = new Date(time);
 
     timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
     timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
@@ -426,22 +428,24 @@ export default (function(self) {
     return str.replace(/\W/g, '_');
   };
   /**
-   * Sets a date to UTC midnight.
+   * Returns a new date from input date set to UTC midnight.
    *
    * @method clearTimeUTC
    * @static
    * @param date {Date} date to set the UTC hours, minutes, and seconds
    * to zero.
-   * @return {Date} the date object
+   * @return {Date} new date object
    */
   self.clearTimeUTC = function(date) {
-    date.setUTCHours(0, 0, 0, 0);
-    return date;
+    const newDate = new Date(date);
+    newDate.setUTCHours(0, 0, 0, 0);
+    return newDate;
   };
 
   self.dateAdd = function(date, interval, amount) {
-    var month, maxDay, year;
-    var newDate = new Date(date);
+    let month; let maxDay; let
+      year;
+    const newDate = new Date(date);
     switch (interval) {
       case 'minute':
         newDate.setUTCMinutes(newDate.getUTCMinutes() + amount);
@@ -466,17 +470,17 @@ export default (function(self) {
         newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
         break;
       default:
-        throw new Error('[dateAdd] Invalid interval: ' + interval);
+        throw new Error(`[dateAdd] Invalid interval: ${interval}`);
     }
     return newDate;
   };
 
   self.getNumberOfDays = function(start, end, interval, increment, maxToCheck) {
     increment = increment || 1;
-    var i = 1;
-    var currentDate = start;
+    let i = 1;
+    let currentDate = start;
     while (currentDate < end) {
-      i++;
+      i += 1;
       currentDate = self.dateAdd(currentDate, interval, increment);
       // if checking for a max number limit, break out after reaching it
       if (maxToCheck && i >= maxToCheck) {
@@ -487,8 +491,8 @@ export default (function(self) {
   };
 
   self.daysInMonth = function(d) {
-    var year;
-    var month;
+    let year;
+    let month;
     if (d.getUTCFullYear) {
       year = d.getUTCFullYear();
       month = d.getUTCMonth();
@@ -496,15 +500,14 @@ export default (function(self) {
       year = d.year;
       month = d.month;
     }
-    var lastDay = new Date(Date.UTC(year, month + 1, 0));
+    const lastDay = new Date(Date.UTC(year, month + 1, 0));
     return lastDay.getUTCDate();
   };
 
   self.daysInYear = function(date) {
-    var jStart, jDate;
-    jStart = self.parseDateUTC(date.getUTCFullYear() + '-01-01');
-    jDate = '00' + (Math.ceil((date.getTime() - jStart) / 86400000) + 1);
-    return (jDate).substr((jDate.length) - 3);
+    const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
+    const jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
+    return jDate.substr(jDate.length - 3);
   };
 
   self.objectLength = function(obj) {
@@ -521,14 +524,14 @@ export default (function(self) {
    * @return {String} the full name of the day of the week
    */
   self.giveWeekDay = function(d) {
-    var day = [
+    const day = [
       'Sunday',
       'Monday',
       'Tuesday',
       'Wednesday',
       'Thursday',
       'Friday',
-      'Saturday'
+      'Saturday',
     ];
 
     return day[d.getUTCDay()];
@@ -543,7 +546,7 @@ export default (function(self) {
    * @return {String} the full name of the month
    */
   self.giveMonth = function(d) {
-    var month = [
+    const month = [
       'January',
       'February',
       'March',
@@ -555,7 +558,7 @@ export default (function(self) {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ];
 
     return month[d.getUTCMonth()];
@@ -590,69 +593,77 @@ export default (function(self) {
   };
 
   self.rollRange = function(date, interval, minDate, maxDate) {
-    var year = date.getUTCFullYear();
-    var month = date.getUTCMonth();
-    var first, last;
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth();
+    let first;
+    let last;
     switch (interval) {
-      case 'minute':
-        var firstMinute = new Date(Date.UTC(year, month, 1, 0, 0));
-        var lastMinute = new Date(Date.UTC(year, month, self.daysInMonth(date), 23, 59));
+      case 'minute': {
+        const firstMinute = new Date(Date.UTC(year, month, 1, 0, 0));
+        const lastMinute = new Date(Date.UTC(year, month, self.daysInMonth(date), 23, 59));
         first = new Date(Math.max(firstMinute, minDate))
           .getUTCMinutes();
         last = new Date(Math.min(lastMinute, maxDate))
           .getUTCMinutes();
         break;
-      case 'hour':
-        var firstHour = new Date(Date.UTC(year, month, 1, 0));
-        var lastHour = new Date(Date.UTC(year, month, self.daysInMonth(date), 23));
+      }
+      case 'hour': {
+        const firstHour = new Date(Date.UTC(year, month, 1, 0));
+        const lastHour = new Date(Date.UTC(year, month, self.daysInMonth(date), 23));
         first = new Date(Math.max(firstHour, minDate))
           .getUTCHours();
         last = new Date(Math.min(lastHour, maxDate))
           .getUTCHours();
         break;
-      case 'day':
-        var firstDay = new Date(Date.UTC(year, month, 1));
-        var lastDay = new Date(Date.UTC(year, month, self.daysInMonth(date)));
+      }
+      case 'day': {
+        const firstDay = new Date(Date.UTC(year, month, 1));
+        const lastDay = new Date(Date.UTC(year, month, self.daysInMonth(date)));
         first = new Date(Math.max(firstDay, minDate))
           .getUTCDate();
         last = new Date(Math.min(lastDay, maxDate))
           .getUTCDate();
         break;
-      case 'month':
-        var firstMonth = new Date(Date.UTC(year, 0, 1));
-        var lastMonth = new Date(Date.UTC(year, 11, 31));
+      }
+      case 'month': {
+        const firstMonth = new Date(Date.UTC(year, 0, 1));
+        const lastMonth = new Date(Date.UTC(year, 11, 31));
         first = new Date(Math.max(firstMonth, minDate))
           .getUTCMonth();
         last = new Date(Math.min(lastMonth, maxDate))
           .getUTCMonth();
         break;
-      case 'year':
-        var firstYear = self.minDate();
-        var lastYear = self.maxDate();
+      }
+      case 'year': {
+        const firstYear = self.minDate();
+        const lastYear = self.maxDate();
         first = new Date(Math.max(firstYear, minDate))
           .getUTCFullYear();
         last = new Date(Math.min(lastYear, maxDate))
           .getUTCFullYear();
         break;
+      }
+      default:
+        break;
     }
     return {
-      first: first,
-      last: last
+      first,
+      last,
     };
   };
 
   self.rollDate = function(date, interval, amount, minDate, maxDate) {
     minDate = minDate || self.minDate();
     maxDate = maxDate || self.maxDate();
-    var range = self.rollRange(date, interval, minDate, maxDate);
-    var min = range.first;
-    var max = range.last;
-    var second = date.getUTCSeconds();
-    var minute = date.getUTCMinutes();
-    var hour = date.getUTCHours();
-    var day = date.getUTCDate();
-    var month = date.getUTCMonth();
-    var year = date.getUTCFullYear();
+    const range = self.rollRange(date, interval, minDate, maxDate);
+    const min = range.first;
+    const max = range.last;
+    const second = date.getUTCSeconds();
+    let minute = date.getUTCMinutes();
+    let hour = date.getUTCHours();
+    let day = date.getUTCDate();
+    let month = date.getUTCMonth();
+    let year = date.getUTCFullYear();
     switch (interval) {
       // TODO: change minute and hour hard-coded min & max to be dynamic
       case 'minute':
@@ -671,16 +682,16 @@ export default (function(self) {
         year = self.roll(year + amount, min, max);
         break;
       default:
-        throw new Error('[rollDate] Invalid interval: ' + interval);
+        throw new Error(`[rollDate] Invalid interval: ${interval}`);
     }
-    var daysInMonth = self.daysInMonth({
-      year: year,
-      month: month
+    const daysInMonth = self.daysInMonth({
+      year,
+      month,
     });
     if (day > daysInMonth) {
       day = daysInMonth;
     }
-    var newDate = new Date(Date.UTC(year, month, day, hour, minute, second));
+    let newDate = new Date(Date.UTC(year, month, day, hour, minute, second));
     newDate = new Date(self.clamp(newDate, minDate, maxDate));
     return newDate;
   };
@@ -709,9 +720,9 @@ export default (function(self) {
    * @return {Date} the converted date object.
    */
   self.fromCompactTimestamp = function(str) {
-    var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
+    const v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
     if (lodashIsNull(v)) {
-      throw new Error('Invalid timestamp:' + str);
+      throw new Error(`Invalid timestamp:${str}`);
     }
     return new Date(Date.UTC(
       parseInt(v[1], 10),
@@ -720,7 +731,8 @@ export default (function(self) {
       parseInt(v[4], 10),
       parseInt(v[5], 10),
       parseInt(v[6], 10),
-      parseInt(v[7], 10)));
+      parseInt(v[7], 10),
+    ));
   };
 
   /**
@@ -731,7 +743,7 @@ export default (function(self) {
    * @static
    * @return {Date} The current time or an overriden value.
    */
-  var now = function() {
+  const now = function() {
     return new Date();
   };
 
@@ -779,57 +791,54 @@ export default (function(self) {
    * @static
    * @param {object*} messages Messages to display to the end user.
    */
-  self.warn = (console && console.warn && console.warn.bind)
+  self.warn = console && console.warn && console.warn.bind
     ? console.warn.bind(console) : function() { };
 
   self.hexToRGB = function(str) {
-    return 'rgb(' +
-      parseInt(str.substring(0, 2), 16) + ',' +
-      parseInt(str.substring(2, 4), 16) + ',' +
-      parseInt(str.substring(4, 6), 16) + ')';
+    return `rgb(${
+      parseInt(str.substring(0, 2), 16)},${
+      parseInt(str.substring(2, 4), 16)},${
+      parseInt(str.substring(4, 6), 16)})`;
   };
 
   self.hexToRGBA = function(str) {
-    return 'rgba(' +
-      parseInt(str.substring(0, 2), 16) + ',' +
-      parseInt(str.substring(2, 4), 16) + ',' +
-      parseInt(str.substring(4, 6), 16) + ',' +
-      parseInt(str.substring(6, 8), 16) + ')';
+    return `rgba(${
+      parseInt(str.substring(0, 2), 16)},${
+      parseInt(str.substring(2, 4), 16)},${
+      parseInt(str.substring(4, 6), 16)},${
+      parseInt(str.substring(6, 8), 16)})`;
   };
 
   self.rgbaToHex = function(r, g, b) {
     function hex(c) {
-      var strHex = c.toString(16);
-      return strHex.length === 1 ? '0' + strHex : strHex;
+      const strHex = c.toString(16);
+      return strHex.length === 1 ? `0${strHex}` : strHex;
     }
-    return hex(r) + hex(g) + hex(b) + 'ff';
+    return `${hex(r) + hex(g) + hex(b)}ff`;
   };
 
   self.hexColorDelta = function(hex1, hex2) {
-    var r1 = parseInt(hex1.substring(0, 2), 16);
-    var g1 = parseInt(hex1.substring(2, 4), 16);
-    var b1 = parseInt(hex1.substring(4, 6), 16);
-    var r2 = parseInt(hex2.substring(0, 2), 16);
-    var g2 = parseInt(hex2.substring(2, 4), 16);
-    var b2 = parseInt(hex2.substring(4, 6), 16);
+    const r1 = parseInt(hex1.substring(0, 2), 16);
+    const g1 = parseInt(hex1.substring(2, 4), 16);
+    const b1 = parseInt(hex1.substring(4, 6), 16);
+    const r2 = parseInt(hex2.substring(0, 2), 16);
+    const g2 = parseInt(hex2.substring(2, 4), 16);
+    const b2 = parseInt(hex2.substring(4, 6), 16);
     // calculate differences in 3D Space
-    return Math.sqrt(Math.pow((r1 - r2), 2) + Math.pow((g1 - g2), 2) + Math.pow((b1 - b2), 2));
+    // eslint-disable-next-line no-restricted-properties
+    return Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2));
   };
   self.fetch = function(url, mimeType) {
-    return new Promise((resolve, reject) => {
-      return fetch(url)
-        .then(function(response) {
-          return mimeType === 'application/json'
-            ? response.json()
-            : response.text();
-        })
-        .then(function(data) {
-          resolve(data);
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    return new Promise((resolve, reject) => fetch(url)
+      .then((response) => (mimeType === 'application/json'
+        ? response.json()
+        : response.text()))
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        reject(error);
+      }));
   };
 
   /**
@@ -844,9 +853,9 @@ export default (function(self) {
    */
   self.ajaxCache = function(spec) {
     spec = spec || {};
-    var size = spec.size || null;
-    var options = spec.options || {};
-    var cache = new Cache(size);
+    const size = spec.size || null;
+    const options = spec.options || {};
+    const cache = new Cache(size);
 
     return {
       /**
@@ -860,34 +869,34 @@ export default (function(self) {
        * when the query returns, or resolves immedately if the results
        * are cached.
        */
-      submit: function(parameters) {
-        var key = 'url=' + parameters.url;
+      submit(parameters) {
+        let key = `url=${parameters.url}`;
         if (parameters.data) {
-          key += '&query=' + $.param(parameters.data, true);
+          key += `&query=${$.param(parameters.data, true)}`;
         }
-        var results = cache.getItem(key);
+        const results = cache.getItem(key);
 
         if (results) {
           return $.Deferred()
             .resolve(results)
             .promise();
-        } else {
-          var promise = $.ajax(parameters);
-          promise.done(function(results) {
-            cache.setItem(key, results, options);
-          });
-          return promise;
         }
-      }
+        const promise = $.ajax(parameters);
+        promise.done((results) => {
+          cache.setItem(key, results, options);
+        });
+        return promise;
+      },
     };
   };
   self.errorReport = function(errors) {
-    var layersRemoved = 0;
-    lodashEach(errors, function(error) {
-      var cause = error.cause ? ': ' + error.cause : '';
+    // eslint-disable-next-line no-unused-vars
+    let layersRemoved = 0;
+    lodashEach(errors, (error) => {
+      const cause = error.cause ? `: ${error.cause}` : '';
       self.warn(error.message + cause);
       if (error.layerRemoved) {
-        layersRemoved = layersRemoved + 1;
+        layersRemoved += 1;
       }
     });
   };
@@ -899,9 +908,9 @@ export default (function(self) {
    * @return the function wrapped in a try/catch block.
    */
   self.wrap = function(func) {
-    return function() {
+    return function(...args) {
       try {
-        return func.apply(func, arguments);
+        return func.apply(func, args);
       } catch (error) {
         self.error(error);
       }
@@ -918,9 +927,9 @@ export default (function(self) {
    */
   self.get = function(url) {
     // Return a new promise.
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       // Do the usual XHR stuff
-      var req = new XMLHttpRequest();
+      const req = new XMLHttpRequest();
       req.open('GET', url);
 
       req.onload = function() {
@@ -946,19 +955,19 @@ export default (function(self) {
 
   // FIXME: Should be replaced with $.when
   self.ajaxJoin = function(calls) {
-    var completed = 0;
-    var result = {};
-    var deferred = $.Deferred();
+    let completed = 0;
+    const result = {};
+    const deferred = $.Deferred();
 
-    $.each(calls, function(index, call) {
-      call.promise.done(function(data) {
+    $.each(calls, (index, call) => {
+      call.promise.done((data) => {
         result[call.item] = data;
         completed += 1;
         if (completed === calls.length) {
           deferred.resolve(result);
         }
       })
-        .fail(function(jqXHR, textStatus, errorThrown) {
+        .fail((jqXHR, textStatus, errorThrown) => {
           deferred.reject(jqXHR, textStatus, errorThrown);
         });
     });
@@ -982,9 +991,7 @@ export default (function(self) {
   // became confusing as element attributes would need one escape character
   // but the selector would need two (\. vs \\.)
   self.encodeId = function(str) {
-    return str.replace(/[.:]/g, (match) => {
-      return '__' + match.charCodeAt(0).toString(16).toUpperCase() + '__';
-    });
+    return str.replace(/[.:]/g, (match) => `__${match.charCodeAt(0).toString(16).toUpperCase()}__`);
   };
 
   // Converts an encoded identifier back to its original value.
@@ -999,11 +1006,12 @@ export default (function(self) {
     LEFT: 37,
     RIGHT: 39,
     UP: 38,
-    DOWN: 40
+    DOWN: 40,
   };
 
   function formatDegrees(value, type, withSeconds) {
-    let width, signs;
+    let width; let
+      signs;
     if (type === 'longitude') {
       width = 3;
       signs = 'EW';
@@ -1011,7 +1019,7 @@ export default (function(self) {
       width = 2;
       signs = 'NS';
     }
-    const sign = (value >= 0) ? signs[0] : signs[1];
+    const sign = value >= 0 ? signs[0] : signs[1];
     value = Math.abs(value);
 
     const degrees = Math.floor(value);
@@ -1023,16 +1031,15 @@ export default (function(self) {
       const sdegrees = self.pad(degrees, width, ' ');
       const sminutes = self.pad(minutes, 2, '0');
       const sseconds = self.pad(seconds, 2, '0');
-      return sdegrees + '°' + sminutes + '\'' + sseconds + '"' + sign;
-    } else {
-      const sdegrees = self.pad(degrees, width, ' ');
-      // toFixed rounds and to prevent seeing 60.000, get it out to
-      // four digits and then chop off the last one
-      let sminutes = self.pad(fminutes.toFixed(4), 7, '0');
-      sminutes = sminutes.substring(0, sminutes.length - 1);
-      return sdegrees + '°' + sminutes + '\'' + sign;
+      return `${sdegrees}°${sminutes}'${sseconds}"${sign}`;
     }
-  };
+    const sdegrees = self.pad(degrees, width, ' ');
+    // toFixed rounds and to prevent seeing 60.000, get it out to
+    // four digits and then chop off the last one
+    let sminutes = self.pad(fminutes.toFixed(4), 7, '0');
+    sminutes = sminutes.substring(0, sminutes.length - 1);
+    return `${sdegrees}°${sminutes}'${sign}`;
+  }
 
   self.formatDMS = (value, type) => formatDegrees(value, type, true);
   self.formatDM = (value, type) => formatDegrees(value, type, false);
@@ -1040,7 +1047,7 @@ export default (function(self) {
   self.setCoordinateFormat = function(type) {
     if (!browser.localStorage) return;
     if (type !== 'latlon-dd' && type !== 'latlon-dms' && type !== 'latlon-dm') {
-      throw new Error('Invalid coordinate format: ' + type);
+      throw new Error(`Invalid coordinate format: ${type}`);
     }
     localStorage.setItem('coordinateFormat', type);
   };
@@ -1051,17 +1058,16 @@ export default (function(self) {
   };
 
   self.formatCoordinate = function(coord, format) {
-    var type = format || self.getCoordinateFormat();
+    const type = format || self.getCoordinateFormat();
     if (type === 'latlon-dms') {
-      return self.formatDMS(coord[1], 'latitude') + ', ' +
-        self.formatDMS(coord[0], 'longitude');
-    } else if (type === 'latlon-dm') {
-      return self.formatDM(coord[1], 'latitude') + ', ' +
-        self.formatDM(coord[0], 'longitude');
-    } else {
-      return coord[1].toFixed(4) + '°, ' +
-        coord[0].toFixed(4) + '°';
+      return `${self.formatDMS(coord[1], 'latitude')}, ${
+        self.formatDMS(coord[0], 'longitude')}`;
+    } if (type === 'latlon-dm') {
+      return `${self.formatDM(coord[1], 'latitude')}, ${
+        self.formatDM(coord[0], 'longitude')}`;
     }
+    return `${coord[1].toFixed(4)}°, ${
+      coord[0].toFixed(4)}°`;
   };
   /**
    * map openlayers provided longitude value to be between -180 && 180
@@ -1078,11 +1084,11 @@ export default (function(self) {
   // arguments array contains all args passed. String must be formatted
   // so that first replacement starts with "{1}"
   // usage example: wv.util.format("{1}{2}",'World','view')
-  self.format = function() {
-    var formatted = arguments[0];
-    for (var i = 1; i < arguments.length; i++) {
-      var regexp = new RegExp('\\{' + i + '\\}', 'gi');
-      formatted = formatted.replace(regexp, arguments[i]);
+  self.format = function(...args) {
+    let [formatted] = args;
+    for (let i = 1; i < args.length; i += 1) {
+      const regexp = new RegExp(`\\{${i}\\}`, 'gi');
+      formatted = formatted.replace(regexp, args[i]);
     }
     return formatted;
   };
@@ -1099,38 +1105,38 @@ export default (function(self) {
 
   // Returns the number of months between two dates
   self.yearDiff = function(startDate, endDate) {
-    var year1 = startDate.getFullYear();
-    var year2 = endDate.getFullYear();
+    const year1 = startDate.getFullYear();
+    const year2 = endDate.getFullYear();
     return year2 - year1;
   };
 
   // Returns the number of months between two dates
   self.monthDiff = function(startDate, endDate) {
-    var year1 = startDate.getFullYear();
-    var year2 = endDate.getFullYear();
-    var month1 = startDate.getMonth();
-    var month2 = endDate.getMonth();
+    const year1 = startDate.getFullYear();
+    const year2 = endDate.getFullYear();
+    let month1 = startDate.getMonth();
+    let month2 = endDate.getMonth();
     if (month1 === 0) {
-      month1++;
-      month2++;
+      month1 += 1;
+      month2 += 1;
     }
-    var numberOfMonths = (year2 - year1) * 12 + (month2 - month1);
+    const numberOfMonths = (year2 - year1) * 12 + (month2 - month1);
     return numberOfMonths;
   };
 
   self.dayDiff = function(startDate, endDate) {
-    var date1 = new Date(startDate);
-    var date2 = new Date(endDate);
-    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-    var dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     return dayDiff;
   };
 
   self.minuteDiff = function(startDate, endDate) {
-    var date1 = new Date(startDate);
-    var date2 = new Date(endDate);
-    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-    var minuteDiff = Math.ceil(timeDiff / (60000));
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const minuteDiff = Math.ceil(timeDiff / 60000);
     return minuteDiff;
   };
 
@@ -1145,7 +1151,7 @@ export default (function(self) {
     let minDistance;
     dateArray.forEach((date, index) => {
       const dateValue = date.getTime();
-      var distance = Math.abs(currentDateValue - dateValue);
+      const distance = Math.abs(currentDateValue - dateValue);
       if (closestDateIndex === undefined || distance < minDistance) {
         closestDateIndex = index;
         minDistance = distance;
@@ -1162,7 +1168,7 @@ export default (function(self) {
    * @return {Number}
    */
   self.stringInArray = function(arra, value) {
-    for (var i = 0, len = arra.length; i < len; i++) {
+    for (let i = 0, len = arra.length; i < len; i += 1) {
       if (arra[i] === value) {
         return i;
       }
@@ -1179,8 +1185,8 @@ export default (function(self) {
   self.objectsHaveSameKeys = function(...objects) {
     const allKeys = objects.reduce((keys, object) => keys.concat(Object.keys(object)), []);
     const union = new Set(allKeys);
-    return objects.every(object => union.size === Object.keys(object).length);
+    return objects.every((object) => union.size === Object.keys(object).length);
   };
 
   return self;
-})({});
+}({}));

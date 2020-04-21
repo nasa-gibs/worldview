@@ -71,7 +71,7 @@ if [ -e "$BUILD_DIR/config.json" ] ; then
         "$BUILD_DIR/_wmts"
 fi
 
-# # Run processVectorStyles.py and move vectorstyles where we want them
+# # Run copyVectorStyles.py and move vectorstyles where we want them
 if [ -e "$BUILD_DIR/vectorstyles" ] ; then
     mkdir -p "$BUILD_DIR"/config/vectorstyles
     if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
@@ -82,14 +82,14 @@ if [ -e "$BUILD_DIR/vectorstyles" ] ; then
         "$BUILD_DIR/config/vectorstyles"
 fi
 
-# Run processVectorData.py and move vectordata where we want them
+# Run processVectorStyles.py and move vectordata where we want them
 if [ -e "$BUILD_DIR/vectorstyles" ] ; then
     mkdir -p "$BUILD_DIR"/config/wv.json/vectorstyles
     if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
         cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"
     fi
     "$PYTHON_SCRIPTS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-        "$BUILD_DIR/vectorstyles" \
+        "$BUILD_DIR/config/vectorstyles" \
         "$BUILD_DIR/config/wv.json/vectorstyles"
 fi
 
@@ -143,7 +143,7 @@ cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
 "$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
-    "$OPT_DIR/common/previewLayerOverrides.json"
+    "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
 
 # Validate the options build
 "$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"

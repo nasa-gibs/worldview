@@ -15,20 +15,20 @@ const ZOOM_DURATION = 250;
  * @returns {void}
  */
 export function mapUtilZoomAction(map, amount, duration, center) {
-  var zoomDuration = duration || ZOOM_DURATION;
-  var centerPoint = center || undefined;
-  var view = map.getView();
-  var zoom = view.getZoom();
+  const zoomDuration = duration || ZOOM_DURATION;
+  const centerPoint = center || undefined;
+  const view = map.getView();
+  const zoom = view.getZoom();
   view.animate({
     zoom: zoom + amount,
     duration: zoomDuration,
-    center: centerPoint
+    center: centerPoint,
   });
 }
 export function getActiveLayerGroup(map, layerGroupString) {
-  var group = null;
-  var array = map.getLayers().getArray();
-  for (var i = 0, len = array.length; i < len; i++) {
+  let group = null;
+  const array = map.getLayers().getArray();
+  for (let i = 0, len = array.length; i < len; i += 1) {
     const layerGroup = array[i];
     if (layerGroup.get('group') === layerGroupString) {
       group = layerGroup;

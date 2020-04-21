@@ -1,48 +1,46 @@
+import update from 'immutability-helper';
 import {
   SELECT_PRODUCT,
   DATA_GRANULE_SELECT,
   DATA_QUERY,
-  DATA_GRANULE_UNSELECT
+  DATA_GRANULE_UNSELECT,
 } from './constants';
 import { requestAction } from '../core/actions';
-import update from 'immutability-helper';
 
 export function selectProduct(id) {
   return (dispatch, getState) => {
     if (getState().data.selectedProduct !== id) {
       dispatch({
         type: SELECT_PRODUCT,
-        id: id
+        id,
       });
     }
   };
 }
 export function dataQuery(location) {
-  return (dispatch, getData) => {
-    return requestAction(dispatch, DATA_QUERY, location, 'application/json');
-  };
+  return (dispatch, getData) => requestAction(dispatch, DATA_QUERY, location, 'application/json');
 }
 export function toggleGranule(granule) {
-  const id = granule.id;
+  const { id } = granule;
   return (dispatch, getData) => {
-    let selectedGranules = getData().data.selectedGranules;
+    let { selectedGranules } = getData().data;
     if (selectedGranules[id]) {
       selectedGranules = update(selectedGranules, {
-        $unset: [id]
+        $unset: [id],
       });
       dispatch({
         type: DATA_GRANULE_UNSELECT,
-        selectedGranules: selectedGranules,
-        granule: granule
+        selectedGranules,
+        granule,
       });
     } else {
       selectedGranules = update(selectedGranules, {
-        [id]: { $set: granule }
+        [id]: { $set: granule },
       });
       dispatch({
         type: DATA_GRANULE_SELECT,
-        granule: granule,
-        selectedGranules: selectedGranules
+        granule,
+        selectedGranules,
       });
     }
   };

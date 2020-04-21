@@ -1,14 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-unresolved
+import googleTagManager from 'googleTagManager';
 import {
   imageSizeValid,
   getDimensions,
-  getDownloadUrl
+  getDownloadUrl,
 } from '../../modules/image-download/util';
 
 import SelectionList from '../util/selector';
 import ResTable from './grid';
-import PropTypes from 'prop-types';
-import googleTagManager from 'googleTagManager';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -19,7 +20,7 @@ const RESOLUTION_KEY = {
   2: '500m',
   4: '1km',
   20: '5km',
-  40: '10km'
+  40: '10km',
 };
 /*
  * A react component, Builds a rather specific
@@ -34,16 +35,18 @@ export default class ImageResSelection extends React.Component {
 
     this.state = {
       fileType: props.fileType,
-      fileSize: props.fileSize,
       isWorldfile: props.isWorldfile,
       resolution: props.resolution,
-      valid: props.valid,
-      debugUrl: ''
+      debugUrl: '',
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.onDownload = this.onDownload.bind(this);
   }
 
   onDownload(width, height) {
-    const { getLayers, url, lonlats, projection, date } = this.props;
+    const {
+      getLayers, url, lonlats, projection, date,
+    } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
     const time = new Date(date.getTime());
 
@@ -56,7 +59,7 @@ export default class ImageResSelection extends React.Component {
       { width, height },
       time,
       fileType,
-      fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile
+      fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile,
     );
 
     if (url) {
@@ -67,13 +70,13 @@ export default class ImageResSelection extends React.Component {
     googleTagManager.pushEvent({
       event: 'image_download',
       layers: {
-        activeCount: layerList.length
+        activeCount: layerList.length,
       },
       image: {
         resolution: RESOLUTION_KEY[resolution],
         format: fileType,
-        worldfile: isWorldfile
-      }
+        worldfile: isWorldfile,
+      },
     });
     this.setState({ debugUrl: dlURL });
   }
@@ -82,44 +85,48 @@ export default class ImageResSelection extends React.Component {
     const { onPanelChange } = this.props;
     if (type === 'resolution') {
       this.setState({
-        resolution: value
+        resolution: value,
       });
     } else if (type === 'worldfile') {
       value = Boolean(Number(value));
       this.setState({
-        isWorldfile: value
+        isWorldfile: value,
       });
     } else {
       this.setState({
-        fileType: value
+        fileType: value,
       });
     }
     onPanelChange(type, value);
   }
 
   _renderFileTypeSelect() {
-    if (this.props.fileTypeOptions) {
+    const { fileTypeOptions, fileTypes, secondLabel } = this.props;
+    const { fileType } = this.state;
+    if (fileTypeOptions) {
       return (
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-format"
             optionName="filetype"
-            value={this.state.fileType}
-            optionArray={this.props.fileTypes}
-            onChange={this.handleChange.bind(this)}
+            value={fileType}
+            optionArray={fileTypes}
+            onChange={this.handleChange}
           />
-          {this.props.secondLabel}
+          {secondLabel}
         </div>
       );
     }
   }
 
   _renderWorldfileSelect() {
-    if (this.props.worldFileOptions) {
-      const value = this.state.isWorldfile ? 1 : 0;
+    const { worldFileOptions } = this.props;
+    const { isWorldfile, fileType } = this.state;
+    if (worldFileOptions) {
+      const value = isWorldfile ? 1 : 0;
       return (
         <div className="wv-image-header">
-          {this.state.fileType === 'application/vnd.google-earth.kmz' ? (
+          {fileType === 'application/vnd.google-earth.kmz' ? (
             <select disabled>
               <option value={0}>No</option>
             </select>
@@ -127,7 +134,7 @@ export default class ImageResSelection extends React.Component {
             <select
               id="wv-image-worldfile"
               value={value}
-              onChange={e => this.handleChange('worldfile', e.target.value)}
+              onChange={(e) => this.handleChange('worldfile', e.target.value)}
             >
               <option value={0}>No</option>
               <option value={1}>Yes</option>
@@ -140,11 +147,13 @@ export default class ImageResSelection extends React.Component {
   }
 
   render() {
-    const { getLayers, projection, lonlats, resolutions, maxImageSize } = this.props;
+    const {
+      getLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
+    } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
-    const height = dimensions.height;
-    const width = dimensions.width;
+    const { height } = dimensions;
+    const { width } = dimensions;
     const filetypeSelect = this._renderFileTypeSelect();
     const worldfileSelect = this._renderWorldfileSelect();
     const layerList = getLayers();
@@ -161,9 +170,9 @@ export default class ImageResSelection extends React.Component {
             optionArray={resolutions}
             value={resolution}
             optionName="resolution"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChange}
           />
-          {this.props.firstLabel}
+          {firstLabel}
         </div>
         {filetypeSelect}
         {worldfileSelect}
@@ -174,7 +183,7 @@ export default class ImageResSelection extends React.Component {
           maxImageSize={maxImageSize}
           validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
           validLayers={layerList.length > 0}
-          onClick={this.onDownload.bind(this)}
+          onClick={this.onDownload}
         />
       </div>
     );
@@ -185,25 +194,19 @@ ImageResSelection.defaultProps = {
   fileType: 'image/jpeg',
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
-  height: '0',
-  imageSize: '0',
   isWorldfile: 'false',
   maxImageSize: '8200px x 8200px',
   resolution: '1',
   secondLabel: 'Format',
-  width: '0',
-  worldFileOptions: true
+  worldFileOptions: true,
 };
 ImageResSelection.propTypes = {
-  crs: PropTypes.string,
   date: PropTypes.object,
-  fileSize: PropTypes.string,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
   fileTypes: PropTypes.object,
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
-  hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
@@ -213,6 +216,5 @@ ImageResSelection.propTypes = {
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
   url: PropTypes.string,
-  valid: PropTypes.bool,
-  worldFileOptions: PropTypes.bool
+  worldFileOptions: PropTypes.bool,
 };

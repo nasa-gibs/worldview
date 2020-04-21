@@ -5,7 +5,7 @@ class TourBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      styles: { }
+      styles: { },
     };
 
     this.onMouseOver = this.onMouseOver.bind(this);
@@ -13,45 +13,65 @@ class TourBox extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    if (this.props.backgroundImage) {
+    const { backgroundImage, storyId } = this.props;
+    if (backgroundImage) {
       this.setState({
-        styles: { backgroundImage: `url(config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
+        styles: {
+          backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
+        },
       });
     }
   }
 
   onMouseOver(e) {
+    const { backgroundImageHover, storyId } = this.props;
     e.preventDefault();
-    if (this.props.backgroundImageHover) {
+    if (backgroundImageHover) {
       this.setState({
-        styles: { backgroundImage: `url(config/metadata/stories/${this.props.storyId}/${this.props.backgroundImageHover})` }
+        styles: {
+          backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImageHover})`,
+        },
       });
     }
   }
 
   onMouseOut(e) {
+    const { backgroundImage, storyId } = this.props;
     e.preventDefault();
-    if (this.props.backgroundImage) {
+    if (backgroundImage) {
       this.setState({
-        styles: { backgroundImage: `url(config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
+        styles: {
+          backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
+        },
       });
     }
   }
 
   render() {
+    const {
+      index, story, storyId, storyOrder, className, title, description, selectTour,
+    } = this.props;
+    const { styles } = this.state;
     let floatBox = '';
-    if (this.props.storyOrder.length - (this.props.index + 1) === 0 ||
-      this.props.storyOrder.length - (this.props.index + 2) === 0) {
+    if (storyOrder.length - (index + 1) === 0
+      || storyOrder.length - (index + 2) === 0) {
       floatBox = ' tour-box-float';
     }
     return (
-      <a href="#" style={this.state.styles} onMouseOver={(e) => this.onMouseOver(e)} onMouseOut={(e) => this.onMouseOut(e)} className={this.props.className + floatBox} onClick={(e) => this.props.selectTour(e, this.props.story, this.props.index, this.props.storyId)}>
+      <a
+        href="#"
+        style={styles}
+        onMouseOver={(e) => this.onMouseOver(e)}
+        onMouseOut={(e) => this.onMouseOut(e)}
+        className={className + floatBox}
+        onClick={(e) => selectTour(e, story, index, storyId)}
+      >
         <div className="tour-box-content">
           <div className="tour-box-header">
-            <h3 className="tour-box-title">{this.props.title}</h3>
+            <h3 className="tour-box-title">{title}</h3>
           </div>
           <div className="tour-box-description">
-            <p>{this.props.description}</p>
+            <p>{description}</p>
           </div>
         </div>
       </a>
@@ -69,7 +89,7 @@ TourBox.propTypes = {
   className: PropTypes.string,
   description: PropTypes.string,
   storyOrder: PropTypes.array,
-  title: PropTypes.string
+  title: PropTypes.string,
 };
 
 export default TourBox;

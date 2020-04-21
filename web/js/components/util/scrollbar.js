@@ -9,6 +9,9 @@ import { debounce } from 'lodash';
 export default function Scrollbars(props) {
   const ref = useRef();
   const [scrollTop, updateScrollTop] = useState(0);
+  const {
+    scrollBarVerticalTop, style, className, onScroll, children,
+  } = props;
 
   /**
    * Add/remove 'scrollbar-visible' class based on content size
@@ -24,7 +27,7 @@ export default function Scrollbars(props) {
       } else {
         contentEl.classList.remove('scrollbar-visible');
       }
-    };
+    }
     debounce(() => {
       toggleVisibleClass();
       // If scrollbar contents are loaded asynchronously, we need to delay
@@ -45,25 +48,24 @@ export default function Scrollbars(props) {
     }
     function setScrollTop() {
       const { contentWrapperEl } = ref.current;
-      const { scrollBarVerticalTop } = props;
       if (contentWrapperEl) {
         updateScrollTop(scrollBarVerticalTop);
         contentWrapperEl.scrollTop = scrollBarVerticalTop;
       }
-    };
+    }
     setTimeout(setScrollTop, 100);
-  }, [props.scrollBarVerticalTop]);
+  }, [scrollBarVerticalTop]);
 
   /**
    * Handle register/deregister of scroll event listener
    */
   useEffect(() => {
-    if (!props.onScroll) return;
+    if (!onScroll) return;
     const { contentWrapperEl } = ref && ref.current;
     function scrollListener() {
       // Avoid calling event listener when we are setting scrollTop manually
       if (contentWrapperEl.scrollTop !== scrollTop) {
-        props.onScroll(contentWrapperEl);
+        onScroll(contentWrapperEl);
       }
     }
     contentWrapperEl.addEventListener('scroll', scrollListener);
@@ -75,11 +77,11 @@ export default function Scrollbars(props) {
   return (
     <SimpleBarReact
       autoHide={false}
-      style={props.style}
-      className={props.className}
+      style={style}
+      className={className}
       ref={ref}
     >
-      {props.children}
+      {children}
     </SimpleBarReact>
   );
 }
@@ -89,9 +91,9 @@ Scrollbars.propTypes = {
   className: PropTypes.string,
   onScroll: PropTypes.func,
   scrollBarVerticalTop: PropTypes.number,
-  style: PropTypes.object
+  style: PropTypes.object,
 };
 
 Scrollbars.defaultProps = {
-  scrollBarVerticalTop: 0
+  scrollBarVerticalTop: 0,
 };

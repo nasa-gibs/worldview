@@ -1,8 +1,8 @@
 import { round as lodashRound, get as lodashGet } from 'lodash';
 import canvg from 'canvg-browser';
-import util from '../../util/util';
 import update from 'immutability-helper';
 import moment from 'moment';
+import util from '../../util/util';
 
 /**
  * Snap the value for the date/time to the closest previous playback step so that
@@ -18,10 +18,11 @@ import moment from 'moment';
  */
 export function snapToIntervalDelta(currDate, startDate, endDate, interval, delta) {
   // moment pluralizes: 'days', 'hours', etc
-  const units = interval + 's';
+  const units = `${interval}s`;
   const dateArray = [];
   let tempDate = startDate;
-  let currentDate, prevMoment, nextMoment;
+  let currentDate; let prevMoment; let
+    nextMoment;
 
   while (tempDate <= endDate) {
     prevMoment = moment.utc(tempDate);
@@ -41,50 +42,45 @@ export function getStampProps(
   stampWidth,
   dimensions,
   width,
-  height
+  height,
 ) {
-  var dateStamp = {};
-  var stampHeight;
-  var stampHeightByImageWidth;
+  const dateStamp = {};
+  let stampHeight;
+  let stampHeightByImageWidth;
   // Set Logo-stamp dimensions based upon smallest total image dimension
   if (dimensions.w < breakPoint) {
-    stampHeight =
-      (width * 0.7) / stampWidthRatio < 60
-        ? (width * 0.7) / stampWidthRatio
-        : 60;
-    dateStamp.fontSize =
-      dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
+    stampHeight = (width * 0.7) / stampWidthRatio < 60
+      ? (width * 0.7) / stampWidthRatio
+      : 60;
+    dateStamp.fontSize = dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
     dateStamp.align = 'left';
     dateStamp.x = width * 0.01;
     dateStamp.y = height - (dateStamp.fontSize + height * 0.01) - 4;
   } else {
     stampWidth = width * 0.4;
     stampHeightByImageWidth = stampWidth / stampWidthRatio;
-    stampHeight =
-      stampHeightByImageWidth < 20
-        ? 20
-        : stampHeightByImageWidth > 60
-          ? 60
-          : stampHeightByImageWidth;
-    dateStamp.fontSize =
-      dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
+    stampHeight = stampHeightByImageWidth < 20
+      ? 20
+      : stampHeightByImageWidth > 60
+        ? 60
+        : stampHeightByImageWidth;
+    dateStamp.fontSize = dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
     dateStamp.y = height - (dateStamp.fontSize + height * 0.01) - 4;
     dateStamp.x = width * 0.01;
     dateStamp.align = 'left';
   }
-  return { stampHeight: stampHeight, dateStamp: dateStamp };
+  return { stampHeight, dateStamp };
 }
 
 export function svgToPng(svgURL, stampHeight) {
-  var newImage;
-  var canvasEl = document.createElement('canvas');
-  var canvgOptions = {
+  const canvasEl = document.createElement('canvas');
+  const canvgOptions = {
     log: false,
     ignoreMouse: true,
-    scaleHeight: stampHeight
+    scaleHeight: stampHeight,
   };
   canvg(canvasEl, svgURL, canvgOptions);
-  newImage = new Image();
+  const newImage = new Image();
   newImage.src = canvasEl.toDataURL('image/png');
   newImage.width = canvasEl.width;
   newImage.height = canvasEl.height;
@@ -117,6 +113,8 @@ export function getMaxQueueLength(speed) {
     case speed > 0 && speed <= 3:
       queueLength = 10;
       break;
+    default:
+      break;
   }
   return queueLength;
 }
@@ -134,11 +132,11 @@ export function getMaxQueueLength(speed) {
  *
  */
 export function getQueueLength(startDate, endDate, speed, interval, delta) {
-  var day = startDate;
-  var i = 0;
+  let day = startDate;
+  let i = 0;
   const maxQueueLength = getMaxQueueLength(speed);
   while (i <= maxQueueLength) {
-    i++;
+    i += 1;
     day = util.dateAdd(day, interval, delta);
     if (day > endDate) {
       return i;
@@ -151,26 +149,26 @@ export function mapLocationToAnimationState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');
   const endDate = lodashGet(stateFromLocation, 'animation.endDate');
   if (parameters.playanim && parameters.ab) {
     stateFromLocation = update(stateFromLocation, {
-      animation: { isPlaying: { $set: true } }
+      animation: { isPlaying: { $set: true } },
     });
   } else if (
-    parameters.ab !== 'on' &&
-    (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
+    parameters.ab !== 'on'
+    && (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
   ) {
     // wipe anim start & end dates on tour change
 
     stateFromLocation = update(stateFromLocation, {
-      animation: { endDate: { $set: undefined } }
+      animation: { endDate: { $set: undefined } },
     });
 
     stateFromLocation = update(stateFromLocation, {
-      animation: { startDate: { $set: undefined } }
+      animation: { startDate: { $set: undefined } },
     });
   }
   return stateFromLocation;

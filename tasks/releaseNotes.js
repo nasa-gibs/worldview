@@ -1,5 +1,6 @@
 /* eslint no-template-curly-in-string: "off" */
 const shell = require('shelljs');
+
 const args = process.argv;
 
 // save arguments to object for options check below
@@ -13,7 +14,7 @@ args.forEach((val) => {
   }
 });
 
-const GITHUB_CHANGELOG_GENERATOR_TOKEN = process.env.GITHUB_CHANGELOG_GENERATOR_TOKEN;
+const { GITHUB_CHANGELOG_GENERATOR_TOKEN } = process.env;
 
 if (!GITHUB_CHANGELOG_GENERATOR_TOKEN) {
   console.log('\u{1b}[33mA GitHub token is required to make the required number of requests to the GitHub API for release note generation.\u{1b}[0m');

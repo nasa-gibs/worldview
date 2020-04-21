@@ -34,11 +34,11 @@ RUN cd /usr/src && \
     pip --version
 RUN mkdir -p /usr/local/stow
 RUN cd /usr/local/stow && \
-    curl -O https://nodejs.org/dist/v8.11.2/node-v8.11.2-linux-x64.tar.xz && \
-    tar xf node-v8.11.2-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node/node-v8.11.2-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node-v8.11.2-linux-x64/{LICENSE,*.md} && \
-    stow -S node-v8.11.2-linux-x64
+    curl -O https://nodejs.org/download/release/v10.19.0/node-v10.19.0-linux-x64.tar.xz && \
+    tar xf node-v10.19.0-linux-x64.tar.xz && \
+    rm -f /usr/local/stow/node/node-v10.19.0-linux-x64.tar.xz && \
+    rm -f /usr/local/stow/node-v10.19.0-linux-x64/{LICENSE,*.md} && \
+    stow -S node-v10.19.0-linux-x64
 RUN ln -s /usr/bin/virtualenv-3.7.4 /usr/bin/virtualenv
 
 WORKDIR /build

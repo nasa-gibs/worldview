@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Coordinates from './coordinates';
@@ -10,7 +11,7 @@ describe('formats', () => {
         format={format}
         latitude={0}
         longitude={0}
-        crs='EPSG:4326'
+        crs="EPSG:4326"
         onFormatChange={jest.fn()}
       />);
       expect(component.toJSON()).toMatchSnapshot();
@@ -21,10 +22,10 @@ describe('formats', () => {
 test('change format from latlon-dd to latlon-dm', () => {
   const callback = jest.fn();
   const component = renderer.create(<Coordinates
-    format='latlon-dd'
+    format="latlon-dd"
     latitude={0}
     longitude={0}
-    crs='EPSG:4326'
+    crs="EPSG:4326"
     onFormatChange={callback}
   />);
 

@@ -6,7 +6,7 @@ const startParams = ['v=-180,-90,180,90', 't=2018-06-01', 'imageDownload='];
 const TIME_WAIT = 10000;
 
 module.exports = {
-  after: function(client) {
+  after(client) {
     client.end();
   },
 
@@ -56,5 +56,5 @@ module.exports = {
     c.waitForElementPresent('#toolbar_snapshot', TIME_WAIT);
     c.pause(500);
     closeImageDownloadPanel(c);
-  }
+  },
 };

@@ -1,9 +1,10 @@
 import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import fixtures from '../../fixtures';
 import { addLayer, getLayers } from './selectors';
 import * as LAYER_ACTIONS from './actions';
 import * as LAYER_CONSTANTS from './constants';
-import thunk from 'redux-thunk';
+
 const mockStore = configureMockStore([thunk]);
 const config = fixtures.config();
 function getState(layers) {
@@ -11,11 +12,11 @@ function getState(layers) {
     config,
     proj: { id: 'geographic', selected: config.projections.geographic },
     layers: {
-      active: layers
+      active: layers,
     },
     compare: {
-      activeString: 'active'
-    }
+      activeString: 'active',
+    },
   };
 }
 function addMockLayer(layerId, layerArray) {
@@ -25,7 +26,7 @@ function addMockLayer(layerId, layerArray) {
     layerArray,
     config.layers,
     getLayers(layerArray, { group: 'all' }, getState(layerArray)).overlays
-      .length
+      .length,
   );
 }
 describe('remove Layer action', () => {
@@ -43,7 +44,7 @@ describe('remove Layer action', () => {
       id: 'terra-cr',
       index: 3,
       activeString: 'active',
-      def
+      def,
     };
     expect(actionResponse).toEqual(expectedPayload);
   });

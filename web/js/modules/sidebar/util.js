@@ -9,32 +9,32 @@ import { assign as lodashAssign, get } from 'lodash';
  * @param {Object} state | initial state before location POP action
  * @param {Object} config
  */
-export function mapLocationToSidebarState(
+export default function mapLocationToSidebarState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   if (parameters.e) {
     const sidebarState = lodashAssign({}, state.sidebar, {
-      activeTab: 'events'
+      activeTab: 'events',
     });
     stateFromLocation = update(stateFromLocation, {
-      sidebar: { $set: sidebarState }
+      sidebar: { $set: sidebarState },
     });
   } else if (get(stateFromLocation, 'data.active')) {
     const sidebarState = lodashAssign({}, state.sidebar, {
-      activeTab: 'download'
+      activeTab: 'download',
     });
     stateFromLocation = update(stateFromLocation, {
-      sidebar: { $set: sidebarState }
+      sidebar: { $set: sidebarState },
     });
   } else {
     const sidebarState = lodashAssign({}, state.sidebar, {
-      activeTab: 'layers'
+      activeTab: 'layers',
     });
     stateFromLocation = update(stateFromLocation, {
-      sidebar: { $set: sidebarState }
+      sidebar: { $set: sidebarState },
     });
   }
   return stateFromLocation;

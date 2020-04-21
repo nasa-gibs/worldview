@@ -1,40 +1,44 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { Form } from 'reactstrap';
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits } from '../../modules/measure/actions';
-import { Form } from 'reactstrap';
 
 const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
-    iconClass: 'ui-icon icon-large fa fa-ruler fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faRuler',
     id: 'measure-distance-button',
-    key: 'measure-distance'
+    key: 'measure-distance',
   },
   {
     text: 'Measure area',
-    iconClass: 'ui-icon icon-large fa fa-ruler-combined fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faRulerCombined',
     id: 'measure-area-button',
-    key: 'measure-area'
+    key: 'measure-area',
   },
   {
     text: 'Remove Measurements',
-    iconClass: 'ui-icon icon-large fa fa-trash fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faTrash',
     id: 'clear-measurements-button',
-    key: 'measure-clear'
-  }
+    key: 'measure-clear',
+  },
 ];
 
 class MeasureMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showAlert: false,
-      tooltipOpen: false
+      tooltipOpen: false,
     };
     this.tooltipToggle = this.tooltipToggle.bind(this);
+    this.triggerEvent = this.triggerEvent.bind(this);
+    this.unitToggle = this.unitToggle.bind(this);
   }
 
   triggerEvent(eventName) {
@@ -44,19 +48,20 @@ class MeasureMenu extends Component {
   }
 
   unitToggle(evt) {
+    const { onToggleUnits } = this.props;
     const { checked } = evt.target;
     const units = checked ? 'mi' : 'km';
-    this.props.onToggleUnits(units);
+    onToggleUnits(units);
   }
 
   tooltipToggle() {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen
-    });
+    this.setState((prevState) => ({
+      tooltipOpen: !prevState.tooltipOpen,
+    }));
   }
 
   render() {
-    const { isTouchDevice } = this.props;
+    const { isTouchDevice, units } = this.props;
     const listSize = isTouchDevice ? 'medium' : 'small';
     return (
       <>
@@ -66,16 +71,17 @@ class MeasureMenu extends Component {
               id="unit-toggle"
               className="custom-control-input"
               type="checkbox"
-              onChange={this.unitToggle.bind(this)}
-              defaultChecked={this.props.units === 'mi'}/>
+              onChange={this.unitToggle}
+              defaultChecked={units === 'mi'}
+            />
             <label className="custom-control-label" htmlFor="unit-toggle">
-              {this.props.units}
+              {units}
             </label>
           </div>
         </Form>
         <IconList
           list={OPTIONS_ARRAY}
-          onClick={this.triggerEvent.bind(this)}
+          onClick={this.triggerEvent}
           size={listSize}
         />
       </>
@@ -83,25 +89,23 @@ class MeasureMenu extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    isTouchDevice: state.modal.customProps.touchDevice,
-    map: state.map,
-    units: state.measure.units
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  isTouchDevice: state.modal.customProps.touchDevice,
+  map: state.map,
+  units: state.measure.units,
+});
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onToggleUnits: (units) => {
     dispatch(changeUnits(units));
   },
   onCloseModal: (eventName) => {
     dispatch(onToggle());
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MeasureMenu);
 
 MeasureMenu.propTypes = {
@@ -109,5 +113,5 @@ MeasureMenu.propTypes = {
   map: PropTypes.object,
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,
-  units: PropTypes.string
+  units: PropTypes.string,
 };

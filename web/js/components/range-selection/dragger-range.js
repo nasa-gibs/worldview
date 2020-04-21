@@ -9,20 +9,33 @@ import { timeScaleOptions } from '../../modules/date/constants';
  * @class TimelineDraggerRange
  */
 class TimelineDraggerRange extends PureComponent {
-  /*
-   * @constructor
-   */
   constructor(props) {
     super(props);
+    const { startLocation } = props;
     this.state = {
       width: 0,
-      startLocation: this.props.startLocation,
-      endLocation: this.props.endLocation,
-      previousStartLocation: this.props.startLocation
+      startLocation,
+      previousStartLocation: startLocation,
     };
 
     this.handleDrag = this.handleDrag.bind(this);
     this.handleDraggerClick = this.handleDraggerClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.checkWidth();
+  }
+
+  componentDidUpdate(prevProps) {
+    // update state and checkWidth only on startLocation and/or endLocation changes
+    const { startLocation, endLocation } = this.props;
+    if (
+      prevProps.startLocation !== startLocation
+      || prevProps.endLocation !== endLocation
+    ) {
+      this.updateExtent(this.props);
+      this.checkWidth();
+    }
   }
 
   /*
@@ -33,24 +46,25 @@ class TimelineDraggerRange extends PureComponent {
    * @return {void}
    */
   checkWidth() {
-    var start = this.props.startLocation;
-    var end = this.props.endLocation;
-    var max = this.props.max.width;
-    var width;
+    const { startLocation, endLocation, max } = this.props;
+    let start = startLocation;
+    let end = endLocation;
+    const maxWidth = max.width;
+    let width;
 
     if (start < 0) {
       start = 0;
     }
-    if (end > max) {
-      end = max;
+    if (end > maxWidth) {
+      end = maxWidth;
     }
     width = end - start;
     if (width < 0) {
       width = 0;
     }
     this.setState({
-      width: width,
-      startLocation: start
+      width,
+      startLocation: start,
     });
   }
 
@@ -75,13 +89,14 @@ class TimelineDraggerRange extends PureComponent {
       max,
       startLocation,
       timelineEndDateLimit,
-      timeScale
+      timeScale,
+      onDrag,
     } = this.props;
-    let endLocationDate = this.props.endLocationDate;
+    let { endLocationDate } = this.props;
     let timelineEndDate = new Date(timelineEndDateLimit);
 
     // milliseconds to determine # of time units from end based on timeScale
-    let scaleMs = timeScaleOptions[timeScale].timeAxis.scaleMs;
+    let { scaleMs } = timeScaleOptions[timeScale].timeAxis;
     // threshold for scaleMs to buffer if below
     let bufferCoeff = 20;
 
@@ -111,40 +126,34 @@ class TimelineDraggerRange extends PureComponent {
     const needDeltaThrottle = timeUnitsTillEnd < bufferCoeff;
 
     // format dates to ISO for comparison
-    endLocationDate = endLocationDate.toISOString().split('.')[0] + 'Z';
-    timelineEndDate = timelineEndDate.toISOString().split('.')[0] + 'Z';
+    endLocationDate = `${endLocationDate.toISOString().split('.')[0]}Z`;
+    timelineEndDate = `${timelineEndDate.toISOString().split('.')[0]}Z`;
 
     // timeline dragger dragged into the future (to the right)
     if (deltaX > 0) {
       // stop dragger if reached end date
       if (endLocationDate >= timelineEndDate) {
         deltaX = 0;
-      } else {
-        // if end of timeline date is within view - rely on max
-        if (max.end) {
-          // timeline dragger dragged to max future of current viewable timeline
-          if (endLocation >= max.width || endLocation > max.width - deltaX) {
-            deltaX = 0;
-          }
-          // end of timeline date is not within view - rely on dates
-        } else {
-          // use buffer to start slowing down allowed deltaX to prevent overdrag
-          if (needDeltaThrottle) {
-            deltaX = Math.min(deltaX, Math.abs(timeUnitsTillEnd * 2));
-          }
-        }
-      }
-      // timeline dragger dragged into the past (to the left)
-    } else {
-      if (max.start) {
-        // timeline dragger dragged to min past of current viewable timeline
-        if (startLocation + deltaX - max.startOffset <= 0) {
+      // if end of timeline date is within view - rely on max
+      } else if (max.end) {
+        // timeline dragger dragged to max future of current viewable timeline
+        if (endLocation >= max.width || endLocation > max.width - deltaX) {
           deltaX = 0;
         }
+        // end of timeline date is not within view - rely on dates
+      } else if (needDeltaThrottle) {
+        // use buffer to start slowing down allowed deltaX to prevent overdrag
+        deltaX = Math.min(deltaX, Math.abs(timeUnitsTillEnd * 2));
+      }
+    // timeline dragger dragged into the past (to the left)
+    } else if (max.start) {
+      // timeline dragger dragged to min past of current viewable timeline
+      if (startLocation + deltaX - max.startOffset <= 0) {
+        deltaX = 0;
       }
     }
 
-    this.props.onDrag(deltaX, deltaStart);
+    onDrag(deltaX, deltaStart);
   }
 
   /*
@@ -156,12 +165,12 @@ class TimelineDraggerRange extends PureComponent {
    * @return {number}
    */
   handleStartPositionRestriction() {
+    const { startLocation, deltaStart } = this.props;
     // if startLocation is in the past prior to min past of current viewable timeline
-    if (this.props.startLocation <= 0) {
-      return -this.props.deltaStart;
-    } else {
-      return this.props.startLocation - this.props.deltaStart;
+    if (startLocation <= 0) {
+      return -deltaStart;
     }
+    return startLocation - deltaStart;
   }
 
   /*
@@ -173,63 +182,54 @@ class TimelineDraggerRange extends PureComponent {
    * @return {void}
    */
   handleDraggerClick(e) {
+    const { startLocation, previousStartLocation } = this.state;
     e.preventDefault();
     // compare start locations to check if range has been dragged vs. clicked
     if (
-      this.state.startLocation.toFixed(3) !==
-      this.state.previousStartLocation.toFixed(3)
+      startLocation.toFixed(3)
+      !== previousStartLocation.toFixed(3)
     ) {
-      this.setState({ previousStartLocation: this.state.startLocation });
+      this.setState((prevState) => ({
+        previousStartLocation: prevState.startLocation,
+      }));
     }
-  }
-
-  componentDidMount() {
-    this.checkWidth();
   }
 
   // update state - used in componentDidUpdate
   updateExtent(nextProps) {
     this.setState({
       startLocation: nextProps.startLocation,
-      endLocation: nextProps.endLocation
     });
-  }
-
-  componentDidUpdate(prevProps) {
-    // update state and checkWidth only on startLocation and/or endLocation changes
-    if (
-      prevProps.startLocation !== this.props.startLocation ||
-      prevProps.endLocation !== this.props.endLocation
-    ) {
-      this.updateExtent(this.props);
-      this.checkWidth();
-    }
   }
 
   /*
    * @method render
    */
   render() {
+    const {
+      onStop, height, color, opacity, draggerID,
+    } = this.props;
+    const { width } = this.state;
     return (
       <Draggable
         handle=".dragger-range"
         axis="x"
         position={null}
         defaultPosition={{ x: 0, y: 11 }}
-        onStop={this.props.onStop}
+        onStop={onStop}
         onDrag={this.handleDrag}
       >
         <rect
           x={this.handleStartPositionRestriction()}
-          fill={this.props.color}
-          width={this.state.width}
+          fill={color}
+          width={width}
           style={{
-            fillOpacity: this.props.opacity,
-            cursor: 'pointer'
+            fillOpacity: opacity,
+            cursor: 'pointer',
           }}
-          height={this.props.height}
+          height={height}
           className="dragger-range"
-          id={this.props.draggerID}
+          id={draggerID}
           onClick={this.handleDraggerClick}
         />
       </Draggable>
@@ -244,16 +244,14 @@ TimelineDraggerRange.propTypes = {
   endLocation: PropTypes.number,
   endLocationDate: PropTypes.object,
   height: PropTypes.number,
-  id: PropTypes.string,
   max: PropTypes.object,
   onDrag: PropTypes.func,
   onStop: PropTypes.func,
   opacity: PropTypes.number,
   startLocation: PropTypes.number,
-  startLocationDate: PropTypes.object,
   timelineEndDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
-  width: PropTypes.number
+  width: PropTypes.number,
 };
 
 export default TimelineDraggerRange;

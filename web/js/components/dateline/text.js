@@ -17,72 +17,58 @@ class LineText extends React.Component {
     this.state = {
       active: false,
       dateRight: props.dateRight,
-      dateLeft: props.dateLeft
+      dateLeft: props.dateLeft,
     };
   }
 
   render() {
-    const leftTextWidth =
-      Math.round(
-        util.getTextWidth(this.state.dateLeft, '13px Open Sans') * 100
-      ) / 100 || this.props.textWidth;
-    const rightTextWidth =
-      Math.round(
-        util.getTextWidth(this.state.dateRight, '13px Open Sans') * 100
-      ) / 100 || this.props.textWidth;
+    const { dateLeft, dateRight, active } = this.state;
+    const {
+      textWidth, recRadius, fill, textY, color, width, textOpacity, textHeight, rectOpacity,
+    } = this.props;
+    const leftTextWidth = Math.round(
+      util.getTextWidth(dateLeft, '13px Open Sans') * 100,
+    ) / 100 || textWidth;
+    const rightTextWidth = Math.round(
+      util.getTextWidth(dateRight, '13px Open Sans') * 100,
+    ) / 100 || textWidth;
     const svgStyle = {
-      transform: 'translateX(' + -(leftTextWidth + 20) + 'px)'
+      transform: `translateX(${-(leftTextWidth + 20)}px)`,
     };
     return (
       <svg className="dateline-text" style={svgStyle}>
         <rect
-          fill={this.props.fill}
+          fill={fill}
           width={leftTextWidth + 12}
-          height={this.props.textHeight}
+          height={textHeight}
           x={0}
-          rx={this.props.recRadius}
-          opacity={
-            this.state.active && this.state.dateLeft
-              ? this.props.rectOpacity
-              : '0'
-          }
+          rx={recRadius}
+          opacity={active && dateLeft ? rectOpacity : '0'}
         />
         <text
-          y={this.props.textY}
+          y={textY}
           x={6}
-          fill={this.props.color}
-          width={this.props.width}
-          opacity={
-            this.state.active && this.state.dateLeft
-              ? this.props.textOpacity
-              : '0'
-          }
+          fill={color}
+          width={width}
+          opacity={active && dateLeft ? textOpacity : '0'}
         >
-          {this.state.dateLeft}
+          {dateLeft}
         </text>
         <rect
-          fill={this.props.fill}
+          fill={fill}
           width={rightTextWidth + 12}
-          height={this.props.textHeight}
+          height={textHeight}
           x={leftTextWidth + 40}
-          rx={this.props.recRadius}
-          opacity={
-            this.state.active && this.state.dateRight
-              ? this.props.rectOpacity
-              : '0'
-          }
+          rx={recRadius}
+          opacity={active && dateRight ? rectOpacity : '0'}
         />
         <text
-          y={this.props.textY}
+          y={textY}
           x={leftTextWidth + 46}
-          fill={this.props.color}
-          opacity={
-            this.state.active && this.state.dateRight
-              ? this.props.textOpacity
-              : '0'
-          }
+          fill={color}
+          opacity={active && dateRight ? textOpacity : '0'}
         >
-          {this.state.dateRight}
+          {dateRight}
         </text>
       </svg>
     );
@@ -97,7 +83,7 @@ LineText.defaultProps = {
   fill: 'rgba(40,40,40,0.5)',
   textWidth: 80,
   textHeight: 20,
-  recRadius: 3
+  recRadius: 3,
 };
 
 LineText.propTypes = {
@@ -107,12 +93,11 @@ LineText.propTypes = {
   fill: PropTypes.string,
   recRadius: PropTypes.number,
   rectOpacity: PropTypes.number,
-  svgStyle: PropTypes.object,
   textHeight: PropTypes.number,
   textOpacity: PropTypes.number,
   textWidth: PropTypes.number,
   textY: PropTypes.number,
-  width: PropTypes.string
+  width: PropTypes.string,
 };
 
 export default LineText;

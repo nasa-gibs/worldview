@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const pkg = require('../package.json');
 const moment = require('moment');
 const shell = require('shelljs');
 const tar = require('tar');
+const pkg = require('../package.json');
 
 console.log('Preparing distribution');
 shell.rm('-rf', 'build/worldview');
@@ -12,12 +12,14 @@ shell.mkdir('-p', 'build/worldview');
 shell.cp('-rf', 'web/*', 'build/worldview');
 
 console.log('Branding');
+// eslint-disable-next-line import/no-unresolved
 const brand = require('../build/worldview/brand/brand.json');
+
 const applyTo = [
   'build/worldview/index.html',
   'build/worldview/build/wv.js',
   'build/worldview/build/wv.css.map',
-  'build/worldview/pages/*.html'
+  'build/worldview/pages/*.html',
 ];
 
 // Build date shown in the About box
@@ -45,5 +47,5 @@ shell.mkdir('-p', 'dist');
 tar.c({
   gzip: true,
   portable: true,
-  C: 'build'
+  C: 'build',
 }, ['worldview']).pipe(fs.createWriteStream(dist));

@@ -8,13 +8,13 @@ import {
   each as lodashEach,
   isNaN as lodashIsNaN,
   startCase as lodashStartCase,
-  isArray
+  isArray,
 } from 'lodash';
 
+import update from 'immutability-helper';
 import { addLayer, resetLayers } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
-import update from 'immutability-helper';
 import util from '../../util/util';
 
 /**
@@ -36,14 +36,14 @@ export function availableAtDate(def, date) {
     return date > new Date(def.startDate);
   }
   return availableDates.length > 0;
-};
+}
 
 export function getOrbitTrackTitle(def) {
   if (def.daynight && def.track) {
-    return lodashStartCase(def.track) + '/' + lodashStartCase(def.daynight);
-  } else if (def.track) {
+    return `${lodashStartCase(def.track)}/${lodashStartCase(def.daynight)}`;
+  } if (def.track) {
     return lodashStartCase(def.track);
-  } else if (def.daynight) {
+  } if (def.daynight) {
     return lodashStartCase(def.daynight);
   }
 }
@@ -65,10 +65,10 @@ export function nearestInterval(def, date) {
     date.getMonth(),
     date.getDate(),
     date.getHours(),
-    newMinutes
+    newMinutes,
   );
   return newDate;
-};
+}
 
 /**
    * Find the closest previous date from an array of dates
@@ -90,9 +90,9 @@ export function prevDateInDateRange(def, date, dateArray) {
   const isMonthPeriod = def.period === 'monthly';
   const isYearPeriod = def.period === 'yearly';
 
-  if (!dateArray ||
-    (isMonthPeriod && isFirstDayOfMonth) ||
-    (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
+  if (!dateArray
+    || (isMonthPeriod && isFirstDayOfMonth)
+    || (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
     return date;
   }
 
@@ -115,29 +115,146 @@ export function prevDateInDateRange(def, date, dateArray) {
   const next = dateArray[closestDateIndex + 1] || null;
   const previous = closestDate ? new Date(closestDate.getTime()) : date;
   return { previous, next };
+}
+
+/**
+ * Return revised maxEndDate based on given start/end date limits
+ *
+ * @method getRevisedMaxEndDate
+ * @param  {object} maxEndDate     A date object
+ * @param  {object} startDateLimit A date object (optional) used as start date of timeline range for available data
+ * @param  {object} endDateLimit   A date object (optional) used as end date of timeline range for available data
+ * @param  {object} minDate        A date object
+ * @return {object}                A date object
+ */
+const getRevisedMaxEndDate = (maxEndDate, startDateLimit, endDateLimit, minDate) => {
+  const startDateLimitTime = startDateLimit.getTime();
+  const minDateTime = minDate.getTime();
+  const maxEndDateTime = maxEndDate.getTime();
+  const endDateLimitTime = endDateLimit.getTime();
+  const frontDateWithinRange = startDateLimitTime >= minDateTime && startDateLimitTime <= maxEndDateTime;
+  const backDateWithinRange = endDateLimitTime <= maxEndDateTime && endDateLimitTime >= minDateTime;
+  if (frontDateWithinRange || backDateWithinRange) {
+    return endDateLimit;
+  }
+  return maxEndDate;
+};
+
+/**
+ * Prevent earlier dates from being added after later dates while building dateArray
+ *
+ * @method getDateArrayLastDateInOrder
+ * @param  {Object} timeUnit  A date object
+ * @param  {Array} dateArray  An array of date objects
+ * @return {Array} newDateArray  An array of date objects
+ */
+const getDateArrayLastDateInOrder = (timeUnit, dateArray) => {
+  const newDateArray = [...dateArray];
+  const arrLastIndex = newDateArray.length - 1;
+  if (timeUnit < newDateArray[arrLastIndex]) {
+    let endDateFound = false;
+    for (let j = arrLastIndex; j >= 0; j -= 1) {
+      if (!endDateFound) {
+        const dateCheck = newDateArray[j];
+        const timeUnitTime = timeUnit.getTime();
+        const dateCheckTime = dateCheck.getTime();
+
+        if (timeUnitTime <= dateCheckTime) {
+          newDateArray.pop();
+        } else {
+          newDateArray.push(timeUnit);
+          endDateFound = true;
+        }
+      }
+    }
+  }
+  return newDateArray;
+};
+
+/**
+ * Get min start date for partial date range coverage
+ *
+ * @method getMinStartDate
+ * @param  {Number} timeDiff time difference based on intervals and unit
+ * @param  {String} period
+ * @param  {Number} dateInterval
+ * @param  {Object} startDateLimit A date object
+ * @param  {Number} minYear
+ * @param  {Number} minMonth
+ * @param  {Number} minDay
+ * @return {Object} minStartDate A date object
+ */
+const getMinStartDate = (timeDiff, period, dateInterval, startDateLimit, minYear, minMonth, minDay) => {
+  let minStartDate;
+  let prevDate = '';
+  for (let i = 0; i <= (timeDiff + 1); i += 1) {
+    if (!minStartDate) {
+      let timeUnit;
+      if (period === 'monthly') {
+        timeUnit = new Date(minYear, minMonth + i * dateInterval, minDay);
+      } else if (period === 'daily') {
+        timeUnit = new Date(minYear, minMonth, minDay + i * dateInterval);
+      }
+      timeUnit = new Date(timeUnit.getTime() - (timeUnit.getTimezoneOffset() * 60000));
+
+      if (timeUnit > startDateLimit || timeUnit.getTime() === startDateLimit.getTime()) {
+        minStartDate = prevDate;
+      } else {
+        prevDate = timeUnit;
+      }
+    }
+  }
+  return minStartDate;
 };
 
 /**
    * Return an array of dates based on the dateRange the current date falls in.
    *
    * @method datesinDateRanges
-   * @param  {object} def           A layer object
-   * @param  {object} date          A date object
+   * @param  {object} def            A layer object
+   * @param  {object} date           A date object
+   * @param  {object} startDateLimit A date object (optional) used as start date of timeline range for available data
+   * @param  {object} endDateLimit   A date object (optional) used as end date of timeline range for available data
    * @return {array}                An array of dates with normalized timezones
    */
-export function datesinDateRanges(def, date) {
-  const dateArray = [];
+export function datesinDateRanges(def, date, startDateLimit, endDateLimit) {
+  const inactiveLayer = def.inactive;
+  const rangeLimitsProvided = startDateLimit && endDateLimit;
+  let dateArray = [];
   let currentDate = new Date(date.getTime());
-
-  lodashEach(def.dateRanges, (dateRange) => {
-    let { dateInterval } = dateRange;
-    dateInterval = Number(dateInterval);
+  // runningMinDate used for overlapping ranges
+  let runningMinDate;
+  lodashEach(def.dateRanges, (dateRange, index) => {
+    const { period } = def;
+    const dateInterval = Number(dateRange.dateInterval);
     let yearDifference;
     let monthDifference;
     let dayDifference;
     let minuteDifference;
     let minDate = new Date(dateRange.startDate);
-    const maxDate = new Date(dateRange.endDate);
+    let maxDate = new Date(dateRange.endDate);
+
+    // explicit min/max ranges provided
+    if (rangeLimitsProvided) {
+      // handle single date coverage
+      if (dateRange.startDate === dateRange.endDate) {
+        const dateTime = new Date(minDate.getTime());
+        dateArray.push(dateTime);
+        return;
+      }
+      const startDateLimitTime = startDateLimit.getTime();
+      const endDateLimitTime = endDateLimit.getTime();
+      const minDateTime = minDate.getTime();
+      const minDateWithinRangeLimits = minDateTime > startDateLimitTime && minDateTime < endDateLimitTime;
+      if (currentDate.getTime() < minDateTime && minDateWithinRangeLimits) {
+        currentDate = minDate;
+      }
+
+      // set maxDate to current date if layer coverage is ongoing
+      if (index === def.dateRanges.length - 1 && !inactiveLayer) {
+        maxDate = new Date();
+      }
+    }
 
     const maxYear = maxDate.getUTCFullYear();
     const maxMonth = maxDate.getUTCMonth();
@@ -147,92 +264,185 @@ export function datesinDateRanges(def, date) {
     const minDay = minDate.getUTCDate();
 
     let i;
+
     // Yearly layers
-    if (def.period === 'yearly') {
+    if (period === 'yearly') {
       const maxYearDate = new Date(maxYear + dateInterval, maxMonth, maxDay);
       if (currentDate >= minDate && currentDate <= maxYearDate) {
         yearDifference = util.yearDiff(minDate, maxYearDate);
       }
-      for (i = 0; i <= (yearDifference + 1); i++) {
+      for (i = 0; i <= (yearDifference + 1); i += 1) {
         let year = new Date(minYear + i * dateInterval, minMonth, minDay);
-        year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
-        dateArray.push(year);
+        if (year.getTime() < maxYearDate.getTime()) {
+          year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
+          dateArray.push(year);
+        }
       }
       // Monthly layers
-    } else if (def.period === 'monthly') {
-      const maxMonthDate = new Date(maxYear, maxMonth + dateInterval, maxDay);
-      if (currentDate >= minDate && currentDate <= maxMonthDate) {
-        monthDifference = util.monthDiff(minDate, maxMonthDate);
+    } else if (period === 'monthly') {
+      let maxMonthDate = new Date(maxYear, maxMonth + dateInterval, maxDay);
+      maxMonthDate = new Date(maxMonthDate.getTime() - (maxMonthDate.getTimezoneOffset() * 60000));
+
+      if (runningMinDate && dateArray[dateArray.length - 1] > minDate) {
+        currentDate = minDate;
       }
-      for (i = 0; i <= (monthDifference + 1); i++) {
+
+      // conditional revision of maxEndDate for data availability partial coverage
+      let maxEndDate = maxMonthDate;
+      if (rangeLimitsProvided) {
+        maxEndDate = getRevisedMaxEndDate(new Date(maxEndDate), startDateLimit, endDateLimit, minDate);
+      }
+
+      if (currentDate <= maxMonthDate) {
+        monthDifference = util.monthDiff(minDate, maxMonthDate);
+        // handle non-1 month intervals to prevent over pushing unused dates to dateArray
+        monthDifference = Math.ceil(monthDifference / dateInterval);
+      }
+
+      // get minStartDate for partial range coverage starting date
+      const minStartMonthDate = rangeLimitsProvided
+        && monthDifference
+        && getMinStartDate(monthDifference, period, dateInterval, startDateLimit, minYear, minMonth, minDay);
+
+      for (i = 0; i <= (monthDifference + 1); i += 1) {
         let month = new Date(minYear, minMonth + i * dateInterval, minDay);
         month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
-        dateArray.push(month);
+        const monthTime = month.getTime();
+        if (monthTime < maxEndDate.getTime()) {
+          if (rangeLimitsProvided && dateArray.length > 0) {
+            dateArray = getDateArrayLastDateInOrder(month, dateArray);
+          }
+
+          if (minStartMonthDate) {
+            const minStartMonthDateTime = minStartMonthDate.getTime();
+            const monthWithinRange = month > minStartMonthDate && month < maxMonthDate;
+            if (monthTime === minStartMonthDateTime || monthWithinRange) {
+              dateArray.push(month);
+            }
+          } else {
+            dateArray.push(month);
+          }
+        }
       }
       // Daily layers
-    } else if (def.period === 'daily') {
+    } else if (period === 'daily') {
       const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateInterval);
-      if (currentDate >= minDate && currentDate <= maxDayDate) {
-        dayDifference = util.dayDiff(minDate, maxDayDate);
+      if (runningMinDate && dateArray[dateArray.length - 1] > minDate) {
+        currentDate = minDate;
+      }
+
+      // conditional revision of maxEndDate for data availability partial coverage
+      let maxEndDate = maxDayDate;
+      if (rangeLimitsProvided) {
+        maxEndDate = getRevisedMaxEndDate(new Date(maxEndDate), startDateLimit, endDateLimit, minDate);
+      }
+
+      if (currentDate >= minDate && currentDate <= maxEndDate) {
+        dayDifference = util.dayDiff(minDate, maxEndDate);
         // handle non-1 day intervals to prevent over pushing unused dates to dateArray
         dayDifference = Math.ceil(dayDifference / dateInterval);
       }
-      for (i = 0; i <= (dayDifference + 1); i++) {
+
+      // get minStartDate for partial range coverage starting date
+      const minStartDayDate = rangeLimitsProvided
+        && dayDifference
+        && getMinStartDate(dayDifference, period, dateInterval, startDateLimit, minYear, minMonth, minDay);
+
+      for (i = 0; i <= (dayDifference + 1); i += 1) {
         let day = new Date(minYear, minMonth, minDay + i * dateInterval);
         day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
-        if (dateArray.length > 0) {
-          // prevent earlier dates from being added after later dates while building dateArray
-          if (day < dateArray[dateArray.length - 1]) {
-            continue;
+        const dayTime = day.getTime();
+        if (dayTime < maxEndDate.getTime()) {
+          if (rangeLimitsProvided && dateArray.length > 0) {
+            dateArray = getDateArrayLastDateInOrder(day, dateArray);
+          }
+
+          if (minStartDayDate) {
+            const minStartDayDateTime = minStartDayDate.getTime();
+
+            if (dayTime === minStartDayDateTime || (day > minStartDayDate && day < maxDayDate)) {
+              dateArray.push(day);
+            }
+          } else {
+            dateArray.push(day);
           }
         }
-        dateArray.push(day);
       }
       // Subdaily layers
-    } else if (def.period === 'subdaily') {
+    } else if (period === 'subdaily') {
       const maxHours = maxDate.getUTCHours();
+      const minHours = minDate.getUTCHours();
       const maxMinutes = maxDate.getUTCMinutes();
       const minMinutes = minDate.getUTCMinutes();
+      const minMinuteDate = new Date(minDate);
+      const minMinuteDateTime = minMinuteDate.getTime();
       let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateInterval);
+      const minMinuteDateMinusInterval = new Date(minYear, minMonth, minDay, minHours, minMinutes - dateInterval);
 
-      const currentDateOffset = currentDate.getTimezoneOffset() * 60000;
-      const hourBeforeCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
-      const hourAfterCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));
+      let currentDateOffset;
+      let hourBeforeCurrentDate;
+      let hourAfterCurrentDate;
+      if (rangeLimitsProvided) {
+        currentDateOffset = startDateLimit.getTimezoneOffset() * 60000;
+        hourBeforeCurrentDate = new Date(startDateLimit.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
+        hourAfterCurrentDate = new Date(endDateLimit.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));
 
-      minDate = hourBeforeCurrentDate < minDate ? minDate : hourBeforeCurrentDate;
-      maxMinuteDate = hourAfterCurrentDate > maxMinuteDate ? maxMinuteDate : hourAfterCurrentDate;
+        const minMinuteDateMinusIntervalOffset = new Date(minMinuteDateMinusInterval.getTime() - (minMinuteDateMinusInterval.getTimezoneOffset() * 60000));
+
+        // eslint-disable-next-line no-nested-ternary
+        minDate = hourBeforeCurrentDate < minDate
+          ? hourBeforeCurrentDate
+          : hourBeforeCurrentDate > minMinuteDateMinusIntervalOffset
+            ? hourBeforeCurrentDate
+            : minDate;
+
+        maxMinuteDate = hourAfterCurrentDate > maxMinuteDate ? maxMinuteDate : hourAfterCurrentDate;
+      } else {
+        currentDateOffset = currentDate.getTimezoneOffset() * 60000;
+        hourBeforeCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
+        hourAfterCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));
+        minDate = hourBeforeCurrentDate < minDate
+          ? minDate
+          : hourBeforeCurrentDate;
+        maxMinuteDate = hourAfterCurrentDate > maxMinuteDate
+          ? maxMinuteDate
+          : hourAfterCurrentDate;
+      }
 
       currentDate = new Date(currentDate.getTime() - currentDateOffset);
       if (currentDate >= minDate && currentDate <= maxMinuteDate) {
         minuteDifference = util.minuteDiff(minDate, maxMinuteDate);
       }
       for (i = 0; i <= (minuteDifference + 1); i += dateInterval) {
-        dateArray.push(
-          new Date(
-            minDate.getUTCFullYear(),
-            minDate.getUTCMonth(),
-            minDate.getUTCDate(),
-            minDate.getUTCHours(),
-            minDate.getUTCMinutes() + i,
-            0
-          )
+        const time = new Date(
+          minDate.getUTCFullYear(),
+          minDate.getUTCMonth(),
+          minDate.getUTCDate(),
+          minDate.getUTCHours(),
+          minDate.getUTCMinutes() + i,
+          0,
         );
+
+        if (time.getTime() >= minMinuteDateTime) {
+          dateArray.push(time);
+        }
       }
     }
+    runningMinDate = minDate;
   });
   return dateArray;
-};
+}
 
 export function serializeLayers(currentLayers, state, groupName) {
   const layers = currentLayers;
   const palettes = state.palettes[groupName];
 
   return layers.map((def, i) => {
-    var item = {};
+    let item = {};
 
     if (def.id) {
       item = {
-        id: def.id
+        id: def.id,
       };
     }
     if (!item.attributes) {
@@ -240,13 +450,13 @@ export function serializeLayers(currentLayers, state, groupName) {
     }
     if (!def.visible) {
       item.attributes.push({
-        id: 'hidden'
+        id: 'hidden',
       });
     }
     if (def.opacity < 1) {
       item.attributes.push({
         id: 'opacity',
-        value: def.opacity
+        value: def.opacity,
       });
     }
     if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled)) {
@@ -254,7 +464,7 @@ export function serializeLayers(currentLayers, state, groupName) {
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
         palettes,
-        state
+        state,
       );
       item.attributes = paletteAttributeArray.length
         ? item.attributes.concat(paletteAttributeArray)
@@ -273,23 +483,23 @@ export function serializeLayers(currentLayers, state, groupName) {
 }
 
 export function toggleVisibility(id, layers) {
-  var index = lodashFindIndex(layers, {
-    id: id
+  const index = lodashFindIndex(layers, {
+    id,
   });
   if (index === -1) {
-    throw new Error('Invalid layer ID: ' + id);
+    throw new Error(`Invalid layer ID: ${id}`);
   }
-  var visibility = !layers[index].visible;
+  const visibility = !layers[index].visible;
 
   return update(layers, { [index]: { visible: { $set: visibility } } });
 }
 
 export function removeLayer(id, layers) {
-  var index = lodashFindIndex(layers, {
-    id: id
+  const index = lodashFindIndex(layers, {
+    id,
   });
   if (index === -1) {
-    throw new Error('Invalid layer ID: ' + id);
+    throw new Error(`Invalid layer ID: ${id}`);
   }
   return update(layers, { $splice: [[index, 1]] });
 }
@@ -298,11 +508,11 @@ export function removeLayer(id, layers) {
 // [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
 // the array is first sorted, and then checked for any overlap
 export function dateOverlap(period, dateRanges) {
-  var sortedRanges = dateRanges.sort((previous, current) => {
+  const sortedRanges = dateRanges.sort((previous, current) => {
     // get the start date from previous and current
-    var previousTime = util.parseDate(previous.startDate);
+    let previousTime = util.parseDate(previous.startDate);
     previousTime = previousTime.getTime();
-    var currentTime = util.parseDate(current.startDate);
+    let currentTime = util.parseDate(current.startDate);
     currentTime = currentTime.getTime();
 
     // if the previous is earlier than the current
@@ -319,52 +529,52 @@ export function dateOverlap(period, dateRanges) {
     return 1;
   });
 
-  var result = sortedRanges.reduce(
+  const result = sortedRanges.reduce(
     (result, current, idx, arr) => {
       // get the previous range
       if (idx === 0) {
         return result;
       }
-      var previous = arr[idx - 1];
+      const previous = arr[idx - 1];
 
       // check for any overlap
-      var previousEnd = util.parseDate(previous.endDate);
+      let previousEnd = util.parseDate(previous.endDate);
       // Add dateInterval
       if (previous.dateInterval > 1 && period === 'daily') {
         previousEnd = new Date(
           previousEnd.setTime(
-            previousEnd.getTime() +
-            (previous.dateInterval * 86400000 - 86400000)
-          )
+            previousEnd.getTime()
+            + (previous.dateInterval * 86400000 - 86400000),
+          ),
         );
       }
       if (period === 'monthly') {
         previousEnd = new Date(
           previousEnd.setMonth(
-            previousEnd.getMonth() + (previous.dateInterval - 1)
-          )
+            previousEnd.getMonth() + (previous.dateInterval - 1),
+          ),
         );
       } else if (period === 'yearly') {
         previousEnd = new Date(
           previousEnd.setFullYear(
-            previousEnd.getFullYear() + (previous.dateInterval - 1)
-          )
+            previousEnd.getFullYear() + (previous.dateInterval - 1),
+          ),
         );
       }
       previousEnd = previousEnd.getTime();
 
-      var currentStart = util.parseDate(current.startDate);
+      let currentStart = util.parseDate(current.startDate);
       currentStart = currentStart.getTime();
 
-      var overlap = previousEnd >= currentStart;
+      const overlap = previousEnd >= currentStart;
       // store the result
       if (overlap) {
         // yes, there is overlap
         result.overlap = true;
         // store the specific ranges that overlap
         result.ranges.push({
-          previous: previous,
-          current: current
+          previous,
+          current,
         });
       }
 
@@ -372,8 +582,8 @@ export function dateOverlap(period, dateRanges) {
     },
     {
       overlap: false,
-      ranges: []
-    }
+      ranges: [],
+    },
   );
 
   // return the final results
@@ -384,8 +594,8 @@ export function dateOverlap(period, dateRanges) {
 //
 // LODASH Find() essentially does the same thing
 export function exists(layer, activeLayers) {
-  var found = false;
-  lodashEach(activeLayers, function(current) {
+  let found = false;
+  lodashEach(activeLayers, (current) => {
     if (layer === current.id) {
       found = true;
     }
@@ -394,13 +604,13 @@ export function exists(layer, activeLayers) {
 }
 // Permalink versions 1.0 and 1.1
 export function layersParse11(str, config) {
-  var layers = [];
-  var ids = str.split(/[~,.]/);
-  lodashEach(ids, function(id) {
+  const layers = [];
+  const ids = str.split(/[~,.]/);
+  lodashEach(ids, (id) => {
     if (id === 'baselayers' || id === 'overlays') {
       return;
     }
-    var visible = true;
+    let visible = true;
     if (id.startsWith('!')) {
       visible = false;
       id = id.substring(1);
@@ -409,17 +619,18 @@ export function layersParse11(str, config) {
       id = config.redirects.layers[id] || id;
     }
     if (!config.layers[id]) {
-      console.warn('No such layer: ' + id);
+      // eslint-disable-next-line no-console
+      console.warn(`No such layer: ${id}`);
       return;
     }
-    var lstate = {
-      id: id,
-      attributes: []
+    const lstate = {
+      id,
+      attributes: [],
     };
     if (!visible) {
       lstate.attributes.push({
         id: 'hidden',
-        value: true
+        value: true,
       });
     }
     layers.push(lstate);
@@ -430,39 +641,39 @@ export function layersParse11(str, config) {
 // Permalink version 1.2
 export function layersParse12(stateObj, config) {
   try {
-    var parts;
-    var str = stateObj;
+    let parts;
+    const str = stateObj;
     // Split by layer definitions (commas not in parens)
-    var layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
-    var lstates = [];
-    lodashEach(layerDefs, function(layerDef) {
+    const layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
+    const lstates = [];
+    lodashEach(layerDefs, (layerDef) => {
       // Get the text before any paren or comma
-      var layerId = layerDef.match(/[^(,]+/)[0];
+      let layerId = layerDef.match(/[^(,]+/)[0];
       if (config.redirects && config.redirects.layers) {
         layerId = config.redirects.layers[layerId] || layerId;
       }
-      var lstate = {
+      const lstate = {
         id: layerId,
-        attributes: []
+        attributes: [],
       };
       // Everything inside parens
-      var arrayAttr = layerDef.match(/\(.*\)/);
+      const arrayAttr = layerDef.match(/\(.*\)/);
       if (arrayAttr) {
         // Get single match and remove parens
-        var strAttr = arrayAttr[0].replace(/[()]/g, '');
+        const strAttr = arrayAttr[0].replace(/[()]/g, '');
         // Key value pairs
-        var kvps = strAttr.split(',');
-        lodashEach(kvps, function(kvp) {
+        const kvps = strAttr.split(',');
+        lodashEach(kvps, (kvp) => {
           parts = kvp.split('=');
           if (parts.length === 1) {
             lstate.attributes.push({
               id: parts[0],
-              value: true
+              value: true,
             });
           } else {
             lstate.attributes.push({
               id: parts[0],
-              value: parts[1]
+              value: parts[1],
             });
           }
         });
@@ -471,29 +682,34 @@ export function layersParse12(stateObj, config) {
     });
     return createLayerArrayFromState(lstates, config);
   } catch (e) {
-    console.warn('Error Parsing layers: ' + e);
+    // eslint-disable-next-line no-console
+    console.warn(`Error Parsing layers: ${e}`);
+    // eslint-disable-next-line no-console
     console.log('reverting to default layers');
     return resetLayers(config.defaults.startingLayers, config.layers);
   }
 }
 const createLayerArrayFromState = function(state, config) {
   let layerArray = [];
-  lodashEach(state, obj => {
+  lodashEach(state, (obj) => {
     if (!lodashIsUndefined(state)) {
-      lodashEachRight(state, function(layerDef) {
+      lodashEachRight(state, (layerDef) => {
         let hidden = false;
         let opacity = 1.0;
-        let max, min, squash, custom, disabled;
+        let max; let min; let squash; let custom; let
+          disabled;
         if (!config.layers[layerDef.id]) {
-          console.warn('No such layer: ' + layerDef.id);
+          // eslint-disable-next-line no-console
+          console.warn(`No such layer: ${layerDef.id}`);
           return;
         }
-        lodashEach(layerDef.attributes, function(attr) {
+        lodashEach(layerDef.attributes, (attr) => {
           if (attr.id === 'hidden') {
             hidden = true;
           }
           if (attr.id === 'opacity') {
             opacity = util.clamp(parseFloat(attr.value), 0, 1);
+            // eslint-disable-next-line no-restricted-globals
             if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
           }
           if (attr.id === 'disabled') {
@@ -503,14 +719,15 @@ const createLayerArrayFromState = function(state, config) {
           if (attr.id === 'max' && typeof attr.value === 'string') {
             const maxArray = [];
             const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, function(value, index) {
+            lodashEach(values, (value, index) => {
               if (value === '') {
                 maxArray.push(undefined);
                 return;
               }
               const maxValue = parseFloat(value);
               if (lodashIsNaN(maxValue)) {
-                console.warn('Invalid max value: ' + value);
+                // eslint-disable-next-line no-console
+                console.warn(`Invalid max value: ${value}`);
               } else {
                 maxArray.push(maxValue);
               }
@@ -520,14 +737,15 @@ const createLayerArrayFromState = function(state, config) {
           if (attr.id === 'min' && typeof attr.value === 'string') {
             const minArray = [];
             const values = util.toArray(attr.value.split(';'));
-            lodashEach(values, function(value, index) {
+            lodashEach(values, (value, index) => {
               if (value === '') {
                 minArray.push(undefined);
                 return;
               }
               const minValue = parseFloat(value);
               if (lodashIsNaN(minValue)) {
-                console.warn('Invalid min value: ' + value);
+                // eslint-disable-next-line no-console
+                console.warn(`Invalid min value: ${value}`);
               } else {
                 minArray.push(minValue);
               }
@@ -540,7 +758,7 @@ const createLayerArrayFromState = function(state, config) {
             } else if (typeof attr.value === 'string') {
               const squashArray = [];
               const values = util.toArray(attr.value.split(';'));
-              lodashEach(values, function(value) {
+              lodashEach(values, (value) => {
                 squashArray.push(value === 'true');
               });
               squash = squashArray.length ? squashArray : undefined;
@@ -562,14 +780,14 @@ const createLayerArrayFromState = function(state, config) {
             opacity,
             // only include palette attributes if Array.length condition
             // is true: https://stackoverflow.com/a/40560953/4589331
-            ...(isArray(custom) && { custom }),
-            ...(isArray(min) && { min }),
-            ...(isArray(squash) && { squash }),
-            ...(isArray(max) && { max }),
-            ...(isArray(disabled) && { disabled })
+            ...isArray(custom) && { custom },
+            ...isArray(min) && { min },
+            ...isArray(squash) && { squash },
+            ...isArray(max) && { max },
+            ...isArray(disabled) && { disabled },
           },
           layerArray,
-          config.layers
+          config.layers,
         );
       });
     }
@@ -577,23 +795,19 @@ const createLayerArrayFromState = function(state, config) {
   return layerArray;
 };
 export function validate(errors, config) {
-  var error = function(layerId, cause) {
+  const error = function(layerId, cause) {
     errors.push({
-      message: 'Invalid layer: ' + layerId,
-      cause: cause,
-      layerRemoved: true
+      message: `Invalid layer: ${layerId}`,
+      cause,
+      layerRemoved: true,
     });
     delete config.layers[layerId];
-    lodashRemove(config.layerOrder.baselayers, function(e) {
-      return e === layerId;
-    });
-    lodashRemove(config.layerOrder.overlays, function(e) {
-      return e === layerId;
-    });
+    lodashRemove(config.layerOrder.baselayers, (e) => e === layerId);
+    lodashRemove(config.layerOrder.overlays, (e) => e === layerId);
   };
 
-  var layers = lodashCloneDeep(config.layers);
-  lodashEach(layers, function(layer) {
+  const layers = lodashCloneDeep(config.layers);
+  lodashEach(layers, (layer) => {
     if (!layer.group) {
       error(layer.id, 'No group defined');
       return;
@@ -603,8 +817,8 @@ export function validate(errors, config) {
     }
   });
 
-  var orders = lodashCloneDeep(config.layerOrder);
-  lodashEach(orders, function(layerId) {
+  const orders = lodashCloneDeep(config.layerOrder);
+  lodashEach(orders, (layerId) => {
     if (!config.layers[layerId]) {
       error(layerId, 'No configuration');
     }
@@ -614,22 +828,23 @@ export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
+  let newStateFromLocation = stateFromLocation;
   if (!parameters.l1 && parameters.ca !== undefined) {
-    stateFromLocation = update(stateFromLocation, {
-      layers: { activeB: { $set: stateFromLocation.layers.active } }
+    newStateFromLocation = update(stateFromLocation, {
+      layers: { activeB: { $set: stateFromLocation.layers.active } },
     });
   }
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
-    stateFromLocation = update(stateFromLocation, {
+    newStateFromLocation = update(stateFromLocation, {
       layers: {
         active: {
-          $set: layersParse11(parameters.products, config)
-        }
-      }
+          $set: layersParse11(parameters.products, config),
+        },
+      },
     });
   }
-  return stateFromLocation;
+  return newStateFromLocation;
 }

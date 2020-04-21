@@ -24,7 +24,7 @@ const Arrow = ({ onClick, type, direction }) => {
 Arrow.propTypes = {
   direction: PropTypes.string,
   onClick: PropTypes.func,
-  type: PropTypes.string
+  type: PropTypes.string,
 };
 
 export default Arrow;

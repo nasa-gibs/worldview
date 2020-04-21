@@ -25,7 +25,7 @@
                       },
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
-                    "title": "SMAP / Model Value-Added",
+                    "title": "SMAP/Model Value-Added",
                     "description": "smap/GrossPrimaryProduction",
                     "image": "",
                     "settings": [

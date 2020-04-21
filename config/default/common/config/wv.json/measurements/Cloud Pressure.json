@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
-                    "title": "Aqua / MODIS",
+                    "title": "Aqua/MODIS",
                     "description": "modis/CloudTopPressure",
                     "image": "",
                     "settings": [
@@ -19,7 +19,7 @@
                 },
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/CloudTopPressure",
                     "image": "",
                     "settings": [

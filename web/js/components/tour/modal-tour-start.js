@@ -7,7 +7,7 @@ import {
   ModalFooter,
   InputGroup,
   InputGroupText,
-  Input
+  Input,
 } from 'reactstrap';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
@@ -18,7 +18,7 @@ class ModalStart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: this.props.checked
+      checked: props.checked,
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -42,52 +42,59 @@ class ModalStart extends React.Component {
   // Use custom clickOutside function since we contained the clickable area with
   // CSS to have a cleaner looking scrollbar
   handleClickOutside(e) {
+    const { toggleModalStart } = this.props;
     if (this.wrapperRef && !this.wrapperRef.contains(e.target)) {
-      this.props.toggleModalStart(e);
+      toggleModalStart(e);
     }
   }
 
   // Handle the show/hide checkbox state
   handleCheck() {
-    this.setState({
-      checked: !this.state.checked
-    });
-    if (!this.state.checked) {
-      this.props.hideTour();
+    const { hideTour, showTour } = this.props;
+    const { checked } = this.state;
+    this.setState((prevState) => ({
+      checked: !prevState.checked,
+    }));
+    if (!checked) {
+      hideTour();
     } else {
-      this.props.showTour();
+      showTour();
     }
   }
 
   render() {
+    const {
+      modalStart, endTour, showTourAlert, toggleModalStart, className, height, stories, storyOrder, selectTour,
+    } = this.props;
+    const { checked } = this.state;
     return (
       <Modal
-        isOpen={this.props.modalStart}
-        toggle={this.props.endTour}
-        onClosed={this.props.showTourAlert}
+        isOpen={modalStart}
+        toggle={endTour}
+        onClosed={showTourAlert}
         wrapClassName="tour tour-start"
-        className={this.props.className}
-        backdrop={true}
+        className={className}
+        backdrop
         fade={false}
         keyboard={false}
         innerRef={this.setWrapperRef}
       >
-        <ModalHeader toggle={this.props.endTour} charCode="">
+        <ModalHeader toggle={endTour} charCode="">
           Welcome to Worldview!
         </ModalHeader>
-        <Scrollbars style={{ maxHeight: this.props.height - 200 + 'px' }}>
+        <Scrollbars style={{ maxHeight: `${height - 200}px` }}>
 
           <ModalBody>
 
-            <TourIntro toggleModalStart={this.props.toggleModalStart} />
+            <TourIntro toggleModalStart={toggleModalStart} />
             <TourBoxes
-              stories={this.props.stories}
-              storyOrder={this.props.storyOrder}
-              selectTour={this.props.selectTour}
+              stories={stories}
+              storyOrder={storyOrder}
+              selectTour={selectTour}
             />
 
           </ModalBody>
-        </Scrollbars >
+        </Scrollbars>
         {util.browser.localStorage && (
           <ModalFooter>
             <InputGroup>
@@ -96,7 +103,7 @@ class ModalStart extends React.Component {
                   addon
                   type="checkbox"
                   className="float-right m-0"
-                  defaultChecked={this.state.checked}
+                  defaultChecked={checked}
                   onChange={this.handleCheck}
                   aria-label="Hide this box until a new story has been added."
                 />
@@ -124,7 +131,7 @@ ModalStart.propTypes = {
   storyOrder: PropTypes.array.isRequired,
   toggleModalStart: PropTypes.func.isRequired,
   className: PropTypes.string,
-  height: PropTypes.number
+  height: PropTypes.number,
 };
 
 export default ModalStart;

@@ -3,11 +3,11 @@
         "Earth at Night": {
             "id": "earth-at-night",
             "title":    "Earth at Night",
-            "subtitle": "Suomi NPP / VIIRS",
+            "subtitle": "Suomi NPP/VIIRS",
             "sources": {
                 "Suomi NPP/VIIRS": {
-                    "id": "npp-viirs",
-                    "title": "Suomi NPP / VIIRS",
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
                     "description": "viirs/EarthAtNight",
                     "image": "",
                     "settings": [

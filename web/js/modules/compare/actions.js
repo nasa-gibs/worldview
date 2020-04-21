@@ -4,12 +4,12 @@ import {
   CHANGE_STATE,
   TOGGLE_ON_OFF,
   CHANGE_VALUE,
-  CHANGE_MODE
+  CHANGE_MODE,
 } from './constants';
 
 export function toggleActiveCompareState(str) {
   return {
-    type: CHANGE_STATE
+    type: CHANGE_STATE,
   };
 }
 export function toggleCompareOnOff() {

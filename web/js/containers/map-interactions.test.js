@@ -1,8 +1,8 @@
 import React from 'react';
+import renderer from 'react-test-renderer';
 import util from '../util/util';
 import { MapInteractions } from './map-interactions';
 import { registerProjections } from '../fixtures';
-import renderer from 'react-test-renderer';
 
 let events;
 let component;
@@ -17,7 +17,9 @@ beforeEach(() => {
   changeCursor = jest.fn();
   openVectorDiaglog = jest.fn();
   selectVectorFeatures = jest.fn();
-  getDialogObject = () => { return { metaArray: [0], selected: [1], offsetLeft: 100, offsetTop: 100 }; };
+  getDialogObject = () => ({
+    metaArray: [0], selected: [1], offsetLeft: 100, offsetTop: 100,
+  });
   component = renderer.create(
     <MapInteractions
       mouseEvents={events}
@@ -30,19 +32,20 @@ beforeEach(() => {
       measureIsActive={false}
       onCloseModal={jest.fn()}
       modalState={{ id: [], isOpen: false }}
+      isDistractionFreeModeActive={false}
     />,
     {
       createNodeMock: (element) => {
         if (element.id === 'ol-coords-case') {
           return null;
         }
-      }
-    }
+      },
+    },
   );
   map = {
     getEventPixel: jest.fn(),
     getCoordinateFromPixel: () => [0, 0],
-    hasFeatureAtPixel: () => false
+    hasFeatureAtPixel: () => false,
   };
 });
 

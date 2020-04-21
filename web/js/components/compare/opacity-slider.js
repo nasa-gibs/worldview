@@ -18,9 +18,10 @@ class OpacitySlider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value
+      value: props.value,
     };
-    this.debounceOpacityUpdate = lodashDebounce(this.onSlide.bind(this), 100);
+    this.onSlide = this.onSlide.bind(this);
+    this.debounceOpacityUpdate = lodashDebounce(this.onSlide, 100);
   }
 
   /*
@@ -34,10 +35,12 @@ class OpacitySlider extends React.Component {
    * @return {void}
    */
   onSlide(value) {
-    this.props.onSlide(value);
+    const { onSlide } = this.props;
+    onSlide(value);
   }
 
   render() {
+    const { value } = this.state;
     return (
       <div id="ab-slider-case" className="ab-slider-case">
         <label className="wv-slider-label left">
@@ -45,10 +48,10 @@ class OpacitySlider extends React.Component {
         </label>
         <div className="input-range ">
           <SliderWithTooltip
-            defaultValue={this.state.value}
+            defaultValue={value}
             tipFormatter={percentFormatter}
             onChange={this.debounceOpacityUpdate}
-            onAfterChange={this.onSlide.bind(this)}
+            onAfterChange={this.onSlide}
           />
         </div>
         <label className="wv-slider-label right">
@@ -59,11 +62,11 @@ class OpacitySlider extends React.Component {
   }
 }
 OpacitySlider.defaultProps = {
-  value: 50
+  value: 50,
 };
 OpacitySlider.propTypes = {
   onSlide: PropTypes.func,
-  value: PropTypes.number
+  value: PropTypes.number,
 };
 
 export default OpacitySlider;
