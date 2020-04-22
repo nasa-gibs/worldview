@@ -11,7 +11,7 @@ export default class SpinnerModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      metDelay: false
+      metDelay: false,
     };
     if (props.delay) {
       setTimeout(() => {
@@ -22,13 +22,14 @@ export default class SpinnerModal extends React.Component {
 
   render() {
     const { headerText, onClose, delay } = this.props;
-    if (delay && !this.state.metDelay) return '';
+    const { metDelay } = this.state;
+    if (delay && !metDelay) return '';
     return (
-      <Modal isOpen={true} toggle={onClose}>
+      <Modal isOpen toggle={onClose}>
         <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
         <ModalBody>
           <div style={{ minHeight: 50 }}>
-            <Spinner color={'#fff'} loaded={false}>
+            <Spinner color="#fff" loaded={false}>
               loading
             </Spinner>
           </div>
@@ -39,10 +40,10 @@ export default class SpinnerModal extends React.Component {
 }
 
 SpinnerModal.defaultProps = {
-  headerText: 'Loading'
+  headerText: 'Loading',
 };
 SpinnerModal.propTypes = {
   delay: PropTypes.number,
   headerText: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };

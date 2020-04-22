@@ -1,41 +1,44 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { Form } from 'reactstrap';
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
-import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
-import { Form, FormGroup, Label, Input, Tooltip } from 'reactstrap';
+import { changeUnits } from '../../modules/measure/actions';
 
 const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
-    iconClass: 'ui-icon icon-large fa fa-ruler fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faRuler',
     id: 'measure-distance-button',
-    key: 'measure-distance'
+    key: 'measure-distance',
   },
   {
     text: 'Measure area',
-    iconClass: 'ui-icon icon-large fa fa-ruler-combined fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faRulerCombined',
     id: 'measure-area-button',
-    key: 'measure-area'
+    key: 'measure-area',
   },
   {
     text: 'Remove Measurements',
-    iconClass: 'ui-icon icon-large fa fa-trash fa-fw',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faTrash',
     id: 'clear-measurements-button',
-    key: 'measure-clear'
-  }
+    key: 'measure-clear',
+  },
 ];
 
 class MeasureMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showAlert: false,
       tooltipOpen: false,
-      useGreatCircleMeasurements: props.useGreatCircleMeasurements
     };
     this.tooltipToggle = this.tooltipToggle.bind(this);
+    this.triggerEvent = this.triggerEvent.bind(this);
+    this.unitToggle = this.unitToggle.bind(this);
   }
 
   triggerEvent(eventName) {
@@ -45,63 +48,40 @@ class MeasureMenu extends Component {
   }
 
   unitToggle(evt) {
+    const { onToggleUnits } = this.props;
     const { checked } = evt.target;
     const units = checked ? 'mi' : 'km';
-    this.props.onToggleUnits(units);
-  }
-
-  useGreatCircle(evt) {
-    const { checked } = evt.target;
-    this.props.onToggleUseGreatCircle(checked);
+    onToggleUnits(units);
   }
 
   tooltipToggle() {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen
-    });
+    this.setState((prevState) => ({
+      tooltipOpen: !prevState.tooltipOpen,
+    }));
   }
 
   render() {
-    const { isTouchDevice } = this.props;
+    const { isTouchDevice, units } = this.props;
     const listSize = isTouchDevice ? 'medium' : 'small';
     return (
       <>
         <Form>
-          <FormGroup check>
-            <Label check>
-              <Input
-                id="great-circle-toggle"
-                type="checkbox"
-                onChange={this.useGreatCircle.bind(this)}
-                defaultChecked={this.props.useGreatCircleMeasurements}
-              />
-              {' '} Use Great Circle
-            </Label>
-            <i id="great-circle-info" className="fas fa-info-circle"></i>
-            <Tooltip
-              placement="top"
-              isOpen={this.state.tooltipOpen}
-              target="great-circle-info"
-              toggle={this.tooltipToggle}>
-              If enabled, lines will be drawn as great circle arcs which represent
-              the shortest real world distance between two points.
-            </Tooltip>
-          </FormGroup>
           <div className="measure-unit-toggle custom-control custom-switch">
             <input
               id="unit-toggle"
               className="custom-control-input"
               type="checkbox"
-              onChange={this.unitToggle.bind(this)}
-              defaultChecked={this.props.units === 'mi'}/>
+              onChange={this.unitToggle}
+              defaultChecked={units === 'mi'}
+            />
             <label className="custom-control-label" htmlFor="unit-toggle">
-              {this.props.units}
+              {units}
             </label>
           </div>
         </Form>
         <IconList
           list={OPTIONS_ARRAY}
-          onClick={this.triggerEvent.bind(this)}
+          onClick={this.triggerEvent}
           size={listSize}
         />
       </>
@@ -109,29 +89,23 @@ class MeasureMenu extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    isTouchDevice: state.modal.customProps.touchDevice,
-    map: state.map,
-    units: state.measure.units,
-    useGreatCircleMeasurements: state.measure.useGreatCircleMeasurements
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  isTouchDevice: state.modal.customProps.touchDevice,
+  map: state.map,
+  units: state.measure.units,
+});
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onToggleUnits: (units) => {
     dispatch(changeUnits(units));
   },
-  onToggleUseGreatCircle: (value) => {
-    dispatch(useGreatCircle(value));
-  },
   onCloseModal: (eventName) => {
     dispatch(onToggle());
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MeasureMenu);
 
 MeasureMenu.propTypes = {
@@ -139,7 +113,5 @@ MeasureMenu.propTypes = {
   map: PropTypes.object,
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,
-  onToggleUseGreatCircle: PropTypes.func,
   units: PropTypes.string,
-  useGreatCircleMeasurements: PropTypes.bool
 };

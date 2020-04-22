@@ -5,19 +5,19 @@ const { normalizeViewport } = require('../../reuseables/normalize-viewport');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
-  clickDownload
+  clickDownload,
 } = require('../../reuseables/image-download');
 
 const startParams = [
   'p=arctic',
-  'v=-4194304,-4194304,4194304,4194304',
+  'v=-4194304,-3145728,4194304,3145728',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   't=2018-06-01',
-  'imageDownload='
+  'imageDownload=',
 ];
 
 module.exports = {
-  after: function(client) {
+  after(client) {
     client.end();
   },
 
@@ -66,7 +66,7 @@ module.exports = {
 
   'Last zoom level is 250m': function(c) {
     // mash the zoom button a bunch of times and see if it changes
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i += 1) {
       zoomIn(c, 'arctic');
     }
     openImageDownloadPanel(c);
@@ -92,6 +92,6 @@ module.exports = {
       c.assert.ok(x1 > 0 && x1 < 20000);
       c.assert.ok(y1 > 0 && y1 < 20000);
     });
-  }
+  },
 
 };

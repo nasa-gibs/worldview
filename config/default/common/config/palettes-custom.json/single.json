@@ -58,5 +58,10 @@
         "id": "brown",
         "name": "Brown",
         "colors": ["b15928ff"]
+    },
+    "transparent": {
+        "id": "transparent",
+        "name": "Transparent",
+        "colors": ["00000000"]
     }
 }

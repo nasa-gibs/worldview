@@ -33,6 +33,10 @@
         "MODIS_Terra_L3_Land_Water_Mask",
         "MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual",
 
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+        "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
+
         "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
         "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
         "VIIRS_SNPP_DayNightBand_ENCC",
@@ -43,6 +47,10 @@
         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
         "VIIRS_SNPP_Clear_Sky_Confidence_Day",
         "VIIRS_SNPP_Clear_Sky_Confidence_Night",
+        "VIIRS_SNPP_Cloud_Optical_Thickness",
+        "VIIRS_SNPP_Cloud_Effective_Radius",
+        "VIIRS_SNPP_Cloud_Top_Height_Day",
+        "VIIRS_SNPP_Cloud_Top_Height_Night",
 
         "GOES-East_ABI_Band2_Red_Visible_1km",
         "GOES-West_ABI_Band2_Red_Visible_1km",
@@ -72,7 +80,7 @@
         "MODIS_Aqua_AOD_Deep_Blue_Combined",
         "MODIS_Terra_AOD_Deep_Blue_Land",
         "MODIS_Aqua_AOD_Deep_Blue_Land",
-        "MODIS_Combined_L3_Albedo_Daily",
+        "MODIS_Combined_L3_White_Sky_Albedo_Daily",
         "MODIS_Terra_Brightness_Temp_Band31_Day",
         "MODIS_Terra_Brightness_Temp_Band31_Night",
         "MODIS_Aqua_Brightness_Temp_Band31_Day",
@@ -265,8 +273,6 @@
         "Landsat_WELD_NDVI_Global_Monthly",
         "Landsat_WELD_NDVI_Global_Annual",
 
-        "IMERG_Rain_Rate",
-        "IMERG_Snow_Rate",
         "IMERG_Precipitation_Rate",
 
         "GMI_Brightness_Temp_Asc",
@@ -449,8 +455,6 @@
         "AMSRE_Sea_Ice_Concentration_25km",
         "AMSRE_Snow_Depth_Over_Ice",
 
-        "AIRS_CO_Total_Column_Day",
-        "AIRS_CO_Total_Column_Night",
         "AIRS_Precipitation_Day",
         "AIRS_Precipitation_Night",
         "AIRS_Prata_SO2_Index_Day",
@@ -922,6 +926,8 @@
         "OrbitTracks_CYGNSS_Descending",
         "OrbitTracks_Calipso_Ascending",
         "OrbitTracks_Calipso_Descending",
+        "OrbitTracks_CloudSat_Ascending",
+        "OrbitTracks_CloudSat_Descending",
         "OrbitTracks_GCOM-C_Ascending",
         "OrbitTracks_GCOM-C_Descending",
         "OrbitTracks_GCOM-W1_Ascending",

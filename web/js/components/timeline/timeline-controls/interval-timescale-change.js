@@ -14,30 +14,53 @@ class TimeScaleIntervalChange extends PureComponent {
     super(props);
     this.state = {
       toolTipHovered: false,
-      customIntervalText: 'Custom'
+      customIntervalText: 'Custom',
     };
+  }
+
+  componentDidMount() {
+    const { customDelta, customIntervalZoomLevel } = this.props;
+    if (customDelta !== 1 && customIntervalZoomLevel) {
+      this.setCustomIntervalText();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      customDelta,
+      timeScaleChangeUnit,
+      customSelected,
+    } = this.props;
+    if (customSelected && customDelta && timeScaleChangeUnit) {
+      const didCustomDeltaChange = customDelta !== prevProps.customDelta;
+      const didTimeScaleChangeUnitChange = timeScaleChangeUnit !== prevProps.timeScaleChangeUnit;
+      if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
+        this.setCustomIntervalText();
+      }
+    }
   }
 
   // Interval select tooltip on
   toolTipHoverOn = () => {
     this.setState({
-      toolTipHovered: true
+      toolTipHovered: true,
     });
   }
 
   // Interval select tooltip off
   toolTipHoverOff = () => {
     this.setState({
-      toolTipHovered: false
+      toolTipHovered: false,
     });
   }
 
   // handle click of timescale intervals
   handleClickInterval = (timescale, openModal = false) => {
+    const { setTimeScaleIntervalChangeUnit } = this.props;
     // send props function to change timescale interval throughout app
     this.setState({
-      toolTipHovered: false
-    }, this.props.setTimeScaleIntervalChangeUnit(timescale, openModal));
+      toolTipHovered: false,
+    }, setTimeScaleIntervalChangeUnit(timescale, openModal));
   }
 
   // individual linking timescale handlers
@@ -71,45 +94,26 @@ class TimeScaleIntervalChange extends PureComponent {
 
   // set custom text for custom interval
   setCustomIntervalText = () => {
+    const { customDelta, customIntervalZoomLevel } = this.props;
     this.setState({
-      customIntervalText: this.props.customDelta + ' ' + this.props.customIntervalZoomLevel
+      customIntervalText: `${customDelta} ${customIntervalZoomLevel}`,
     });
-  }
-
-  componentDidMount() {
-    if (this.props.customDelta !== 1 && this.props.customIntervalZoomLevel) {
-      this.setCustomIntervalText();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      customDelta,
-      timeScaleChangeUnit,
-      customSelected
-    } = this.props;
-    if (customSelected && customDelta && timeScaleChangeUnit) {
-      const didCustomDeltaChange = customDelta !== prevProps.customDelta;
-      const didTimeScaleChangeUnitChange = timeScaleChangeUnit !== prevProps.timeScaleChangeUnit;
-      if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
-        this.setCustomIntervalText();
-      }
-    }
   }
 
   render() {
     const {
       customIntervalText,
-      toolTipHovered
+      toolTipHovered,
     } = this.state;
     const {
       customSelected,
       hasSubdailyLayers,
-      timeScaleChangeUnit
+      timeScaleChangeUnit,
     } = this.props;
     return (
-      <React.Fragment>
-        <div id="timeline-interval-btn-container"
+      <>
+        <div
+          id="timeline-interval-btn-container"
           className="interval-btn-container noselect"
           onMouseEnter={this.toolTipHoverOn}
           onMouseLeave={this.toolTipHoverOff}
@@ -119,11 +123,12 @@ class TimeScaleIntervalChange extends PureComponent {
             id="current-interval"
             className={`interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''}`}
           >
-            {customSelected ? customIntervalText : 1 + ' ' + timeScaleChangeUnit}
+            {customSelected ? customIntervalText : `${1} ${timeScaleChangeUnit}`}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
-          <div className="wv-tooltip"
+          <div
+            className="wv-tooltip"
             style={{ display: toolTipHovered ? 'block' : 'none' }}
           >
             <div id="timeline-interval" className="timeline-interval">
@@ -149,7 +154,7 @@ class TimeScaleIntervalChange extends PureComponent {
                 Day
               </span>
               {hasSubdailyLayers ? (
-                <React.Fragment>
+                <>
                   <span
                     id="interval-hours"
                     className="interval-btn interval-hours"
@@ -164,7 +169,7 @@ class TimeScaleIntervalChange extends PureComponent {
                   >
                     Minute
                   </span>
-                </React.Fragment>
+                </>
               ) : null}
               <span
                 id="interval-custom"
@@ -184,7 +189,7 @@ class TimeScaleIntervalChange extends PureComponent {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -195,7 +200,7 @@ TimeScaleIntervalChange.propTypes = {
   customSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   setTimeScaleIntervalChangeUnit: PropTypes.func,
-  timeScaleChangeUnit: PropTypes.string
+  timeScaleChangeUnit: PropTypes.string,
 };
 
 export default TimeScaleIntervalChange;

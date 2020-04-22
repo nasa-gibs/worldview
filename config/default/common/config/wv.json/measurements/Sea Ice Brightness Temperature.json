@@ -23,7 +23,7 @@
                     },
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
-                    "title": "GCOM-W1 / AMSR2",
+                    "title": "GCOM-W1/AMSR2",
                     "description": "amsr2/SeaIceBrightnessTemperature",
                     "image": "",
                     "settings": [

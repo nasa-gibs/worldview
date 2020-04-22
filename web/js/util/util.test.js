@@ -13,7 +13,7 @@ describe('fromQueryString', () => {
     { qs: '', obj: {}, name: 'zero' },
     { qs: '?foo=a&bar=b', obj: { foo: 'a', bar: 'b' }, name: 'two' },
     { qs: 'foo=a&bar=b', obj: { foo: 'a', bar: 'b' }, name: 'no leading ?' },
-    { qs: '?foo=image%2fjpeg', obj: { foo: 'image/jpeg' }, name: 'decodes' }
+    { qs: '?foo=image%2fjpeg', obj: { foo: 'image/jpeg' }, name: 'decodes' },
   ];
 
   tests.forEach((t) => {
@@ -28,7 +28,9 @@ describe('toQueryString', () => {
     { qs: '', obj: {}, name: 'zero' },
     { qs: '?foo=a&bar=b', obj: { foo: 'a', bar: 'b' }, name: 'two' },
     { qs: '?foo=image%2Fjpeg', obj: { foo: 'image/jpeg' }, name: 'encodes' },
-    { qs: '?path=/a/b', obj: { path: '/a/b' }, exceptions: ['%2f'], name: 'exceptions' }
+    {
+      qs: '?path=/a/b', obj: { path: '/a/b' }, exceptions: ['%2f'], name: 'exceptions',
+    },
   ];
 
   tests.forEach((t) => {
@@ -42,18 +44,18 @@ describe('parseDateUTC', () => {
   const tests = [{
     str: '2013-03-15T11:22:33Z',
     date: new Date(Date.UTC(2013, 2, 15, 11, 22, 33)),
-    name: 'timestamp'
+    name: 'timestamp',
   }, {
     str: '2013-03-15T11:22:33Z',
     date: new Date(Date.UTC(2013, 2, 15, 11, 22, 33)),
-    name: 'timestamp without Z'
+    name: 'timestamp without Z',
   }, {
     str: '2013-03-15',
     date: new Date(Date.UTC(2013, 2, 15)),
-    name: 'time'
+    name: 'time',
   }, {
     str: 'x',
-    name: 'invalid'
+    name: 'invalid',
   }];
 
   tests.forEach((t) => {
@@ -105,14 +107,14 @@ describe('fromCompactTimestamp', () => {
 });
 
 test('clearTimeUTC', () => {
-  var d = new Date(2013, 2, 15, 12, 34, 56, 789);
-  util.clearTimeUTC(d);
-  expect(2013).toBe(d.getUTCFullYear());
-  expect(2).toBe(d.getUTCMonth());
-  expect(15).toBe(d.getUTCDate());
-  expect(0).toBe(d.getUTCHours());
-  expect(0).toBe(d.getUTCMinutes());
-  expect(0).toBe(d.getUTCSeconds());
+  const d = new Date(2013, 2, 15, 12, 34, 56, 789);
+  const dCleared = util.clearTimeUTC(d);
+  expect(2013).toBe(dCleared.getUTCFullYear());
+  expect(2).toBe(dCleared.getUTCMonth());
+  expect(15).toBe(dCleared.getUTCDate());
+  expect(0).toBe(dCleared.getUTCHours());
+  expect(0).toBe(dCleared.getUTCMinutes());
+  expect(0).toBe(dCleared.getUTCSeconds());
 });
 
 describe('dateAdd', () => {
@@ -120,7 +122,7 @@ describe('dateAdd', () => {
     { part: 'day', fn: 'getUTCDate', answer: 5 },
     { part: 'month', fn: 'getUTCMonth', answer: 5 },
     { part: 'year', fn: 'getUTCFullYear', answer: 2015 },
-    { part: 'foo' }
+    { part: 'foo' },
   ];
 
   tests.forEach((t) => {
@@ -138,12 +140,12 @@ describe('dateAdd', () => {
 
 describe('daysInMonth', () => {
   test('feb, non-leap', () => {
-    var d = new Date(Date.UTC(2015, 1, 15));
+    const d = new Date(Date.UTC(2015, 1, 15));
     expect(util.daysInMonth(d)).toBe(28);
   });
 
   test('feb, leap', () => {
-    var d = new Date(Date.UTC(2016, 1, 15));
+    const d = new Date(Date.UTC(2016, 1, 15));
     expect(util.daysInMonth(d)).toBe(29);
   });
 });
@@ -153,7 +155,7 @@ describe('daysInYear', () => {
     { date: Date.UTC(2015, 5, 26), doy: '177', name: '2015 jun 26 => 177' },
     { date: Date.UTC(2015, 0, 1), doy: '001', name: 'first of year' },
     { date: Date.UTC(2015, 11, 31), doy: '365', name: 'last day of year' },
-    { date: Date.UTC(2016, 11, 31), doy: '366', name: 'last day of leap year' }
+    { date: Date.UTC(2016, 11, 31), doy: '366', name: 'last day of leap year' },
   ];
   tests.forEach((t) => {
     test(t.name, () => {
@@ -165,9 +167,15 @@ describe('daysInYear', () => {
 
 describe('clamp', () => {
   const tests = [
-    { v: 15, min: 10, max: 20, answer: 15, name: 'middle' },
-    { v: 8, min: 10, max: 20, answer: 10, name: 'min' },
-    { v: 22, min: 10, max: 20, answer: 20, name: 'max' }
+    {
+      v: 15, min: 10, max: 20, answer: 15, name: 'middle',
+    },
+    {
+      v: 8, min: 10, max: 20, answer: 10, name: 'min',
+    },
+    {
+      v: 22, min: 10, max: 20, answer: 20, name: 'max',
+    },
   ];
 
   tests.forEach((t) => {
@@ -179,9 +187,15 @@ describe('clamp', () => {
 
 describe('roll', () => {
   const tests = [
-    { v: 15, min: 10, max: 20, answer: 15, name: 'middle' },
-    { v: 8, min: 10, max: 20, answer: 19, name: 'min' },
-    { v: 22, min: 10, max: 20, answer: 11, name: 'max' }
+    {
+      v: 15, min: 10, max: 20, answer: 15, name: 'middle',
+    },
+    {
+      v: 8, min: 10, max: 20, answer: 19, name: 'min',
+    },
+    {
+      v: 22, min: 10, max: 20, answer: 11, name: 'max',
+    },
   ];
 
   tests.forEach((t) => {
@@ -196,131 +210,131 @@ describe('rollDate', () => {
     name: 'day up',
     d: new Date(Date.UTC(2014, 1, 15)),
     period: { value: 1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 1, 16))
+    answer: new Date(Date.UTC(2014, 1, 16)),
   }, {
     name: 'day up, roll',
     d: new Date(Date.UTC(2014, 1, 28)),
     period: { value: 1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 1, 1))
+    answer: new Date(Date.UTC(2014, 1, 1)),
   }, {
     name: 'day down',
     d: new Date(Date.UTC(2014, 1, 15)),
     period: { value: -1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 1, 14))
+    answer: new Date(Date.UTC(2014, 1, 14)),
   }, {
     name: 'day down, roll',
     d: new Date(Date.UTC(2014, 1, 1)),
     period: { value: -1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 1, 28))
+    answer: new Date(Date.UTC(2014, 1, 28)),
   }, {
     name: 'day up, roll over max',
     maxDate: new Date(Date.UTC(2014, 11, 2)),
     d: new Date(Date.UTC(2014, 11, 2)),
     period: { value: 1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 11, 1))
+    answer: new Date(Date.UTC(2014, 11, 1)),
   }, {
     name: 'day down, roll over max',
     maxDate: new Date(Date.UTC(2014, 11, 2)),
     d: new Date(Date.UTC(2014, 11, 1)),
     period: { value: -1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 11, 2))
+    answer: new Date(Date.UTC(2014, 11, 2)),
   }, {
     name: 'day up, roll over min',
     minDate: new Date(Date.UTC(2014, 11, 2)),
     d: new Date(Date.UTC(2014, 11, 31)),
     period: { value: 1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 11, 2))
+    answer: new Date(Date.UTC(2014, 11, 2)),
   }, {
     name: 'day down, roll over min',
     minDate: new Date(Date.UTC(2014, 11, 2)),
     d: new Date(Date.UTC(2014, 11, 2)),
     period: { value: -1, unit: 'day' },
-    answer: new Date(Date.UTC(2014, 11, 31))
+    answer: new Date(Date.UTC(2014, 11, 31)),
   }, {
     name: 'month up',
     d: new Date(Date.UTC(2014, 5, 15)),
     period: { value: 1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 6, 15))
+    answer: new Date(Date.UTC(2014, 6, 15)),
   }, {
     name: 'month up, roll',
     d: new Date(Date.UTC(2014, 11, 15)),
     period: { value: 1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 0, 15))
+    answer: new Date(Date.UTC(2014, 0, 15)),
   }, {
     name: 'month down',
     d: new Date(Date.UTC(2014, 5, 15)),
     period: { value: -1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 4, 15))
+    answer: new Date(Date.UTC(2014, 4, 15)),
   }, {
     name: 'month down, roll',
     d: new Date(Date.UTC(2014, 0, 15)),
     period: { value: -1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 11, 15))
+    answer: new Date(Date.UTC(2014, 11, 15)),
   }, {
     name: 'month up, roll over max',
     maxDate: new Date(Date.UTC(2014, 10, 2)),
     d: new Date(Date.UTC(2014, 9, 20)),
     period: { value: 1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 10, 2))
+    answer: new Date(Date.UTC(2014, 10, 2)),
   }, {
     name: 'month up, roll past max',
     maxDate: new Date(Date.UTC(2014, 10, 2)),
     d: new Date(Date.UTC(2014, 10, 1)),
     period: { value: 1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 0, 1))
+    answer: new Date(Date.UTC(2014, 0, 1)),
   }, {
     name: 'month down, roll over max',
     maxDate: new Date(Date.UTC(2014, 10, 2)),
     d: new Date(Date.UTC(2014, 0, 20)),
     period: { value: -1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 10, 2))
+    answer: new Date(Date.UTC(2014, 10, 2)),
   }, {
     name: 'month up, truncate day',
     d: new Date(Date.UTC(2014, 0, 31)),
     period: { value: 1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 1, 28))
+    answer: new Date(Date.UTC(2014, 1, 28)),
   }, {
     name: 'month down, roll over min',
     minDate: new Date(Date.UTC(2014, 2, 25)),
     d: new Date(Date.UTC(2014, 3, 1)),
     period: { value: -1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 2, 25))
+    answer: new Date(Date.UTC(2014, 2, 25)),
   }, {
     name: 'month up, roll over min',
     minDate: new Date(Date.UTC(2014, 2, 25)),
     d: new Date(Date.UTC(2014, 11, 1)),
     period: { value: 1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 2, 25))
+    answer: new Date(Date.UTC(2014, 2, 25)),
   }, {
     name: 'month down, roll past min',
     minDate: new Date(Date.UTC(2014, 2, 25)),
     d: new Date(Date.UTC(2014, 2, 27)),
     period: { value: -1, unit: 'month' },
-    answer: new Date(Date.UTC(2014, 11, 27))
+    answer: new Date(Date.UTC(2014, 11, 27)),
   }, {
     name: 'year up',
     d: new Date(Date.UTC(2014, 5, 15)),
     period: { value: 1, unit: 'year' },
-    answer: new Date(Date.UTC(2015, 5, 15))
+    answer: new Date(Date.UTC(2015, 5, 15)),
   }, {
     name: 'year down',
     d: new Date(Date.UTC(2014, 5, 15)),
     period: { value: -1, unit: 'year' },
-    answer: new Date(Date.UTC(2013, 5, 15))
+    answer: new Date(Date.UTC(2013, 5, 15)),
   }, {
     name: 'year up, roll over max',
     minDate: new Date(Date.UTC(2000, 3, 12)),
     maxDate: new Date(Date.UTC(2015, 6, 16)),
     d: new Date(Date.UTC(2015, 0, 1)),
     period: { value: 1, unit: 'year' },
-    answer: new Date(Date.UTC(2000, 3, 12))
+    answer: new Date(Date.UTC(2000, 3, 12)),
   }, {
     name: 'year down, roll over min',
     minDate: new Date(Date.UTC(2000, 3, 12)),
     maxDate: new Date(Date.UTC(2015, 6, 16)),
     d: new Date(Date.UTC(2000, 8, 1)),
     period: { value: -1, unit: 'year' },
-    answer: new Date(Date.UTC(2015, 6, 16))
+    answer: new Date(Date.UTC(2015, 6, 16)),
   }];
 
   tests.forEach((t) => {
@@ -335,19 +349,19 @@ describe('formatDMS', () => {
   const tests = [{
     name: 'zero',
     dd: [0, 0],
-    str: [' 0°00\'00"N', '  0°00\'00"E']
+    str: [' 0°00\'00"N', '  0°00\'00"E'],
   }, {
     name: 'positive',
     dd: [12.582222, 12.582222],
-    str: ['12°34\'55"N', ' 12°34\'55"E']
+    str: ['12°34\'55"N', ' 12°34\'55"E'],
   }, {
     name: 'negative',
     dd: [-12.582222, -12.582222],
-    str: ['12°34\'55"S', ' 12°34\'55"W']
+    str: ['12°34\'55"S', ' 12°34\'55"W'],
   }, {
     name: 'max',
     dd: [89.999997, 179.999997],
-    str: ['89°59\'59"N', '179°59\'59"E']
+    str: ['89°59\'59"N', '179°59\'59"E'],
   }];
 
   tests.forEach((t) => {
@@ -364,19 +378,19 @@ describe('formatDM', () => {
   const tests = [{
     name: 'zero',
     dd: [0, 0],
-    str: [' 0°00.000\'N', '  0°00.000\'E']
+    str: [' 0°00.000\'N', '  0°00.000\'E'],
   }, {
     name: 'positive',
     dd: [12.582222, 12.582222],
-    str: ['12°34.933\'N', ' 12°34.933\'E']
+    str: ['12°34.933\'N', ' 12°34.933\'E'],
   }, {
     name: 'negative',
     dd: [-12.582222, -12.582222],
-    str: ['12°34.933\'S', ' 12°34.933\'W']
+    str: ['12°34.933\'S', ' 12°34.933\'W'],
   }, {
     name: 'max',
     dd: [89.999997, 179.999997],
-    str: ['89°59.999\'N', '179°59.999\'E']
+    str: ['89°59.999\'N', '179°59.999\'E'],
   }];
 
   tests.forEach((t) => {
@@ -389,20 +403,28 @@ describe('formatDM', () => {
   });
 });
 
+test('Convert wrapped longitude to value between -180 & 180', () => {
+  expect(util.normalizeWrappedLongitude(-181)).toBe(179);
+  expect(util.normalizeWrappedLongitude(181)).toBe(-179);
+  expect(util.normalizeWrappedLongitude(-721)).toBe(-1);
+  expect(util.normalizeWrappedLongitude(721)).toBe(1);
+  expect(util.normalizeWrappedLongitude(541)).toBe(-179);
+  expect(util.normalizeWrappedLongitude(-541)).toBe(179);
+});
 describe('encodeId/decodeId', () => {
   const tests = [
     { decoded: '', encoded: '' },
     { decoded: 'foo', encoded: 'foo' },
     { decoded: 'really.', encoded: 'really__2E__' },
     { decoded: 'foo:bar', encoded: 'foo__3A__bar' },
-    { decoded: 'foos.bars:', encoded: 'foos__2E__bars__3A__' }
+    { decoded: 'foos.bars:', encoded: 'foos__2E__bars__3A__' },
   ];
 
   tests.forEach((t) => {
-    test('encode "' + t.decoded + '"', () => {
+    test(`encode "${t.decoded}"`, () => {
       expect(util.encodeId(t.decoded)).toBe(t.encoded);
     });
-    test('decode "' + t.encoded + '"', () => {
+    test(`decode "${t.encoded}"`, () => {
       expect(util.decodeId(t.encoded)).toBe(t.decoded);
     });
   });

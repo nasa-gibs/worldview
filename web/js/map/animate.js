@@ -1,8 +1,9 @@
 import * as olExtent from 'ol/extent';
 import OlGeomLineString from 'ol/geom/LineString';
 import Promise from 'bluebird';
-export function mapAnimate(config, ui, store) {
-  var self = {};
+
+export default function mapAnimate(config, ui, store) {
+  const self = {};
 
   /**
    * Moves the map with a "flying" animation
@@ -13,29 +14,28 @@ export function mapAnimate(config, ui, store) {
    */
   self.fly = function(endPoint, endZoom, rotation) {
     const state = store.getState();
-    var view = ui.map.selected.getView();
-    var polarProjectionCheck = state.proj.selected.id !== 'geographic'; // boolean if current projection is polar
+    const view = ui.map.selected.getView();
+    const polarProjectionCheck = state.proj.selected.id !== 'geographic'; // boolean if current projection is polar
     view.cancelAnimations();
-    var startPoint = view.getCenter();
-    var startZoom = Math.floor(view.getZoom());
+    const startPoint = view.getCenter();
+    const startZoom = Math.floor(view.getZoom());
     endZoom = endZoom || 5;
     if (endPoint.length > 2) endPoint = olExtent.getCenter(endPoint);
-    var extent = view.calculateExtent();
-    var hasEndInView = olExtent.containsCoordinate(extent, endPoint);
-    var line = new OlGeomLineString([startPoint, endPoint]);
-    var distance = line.getLength(); // In map units, which is usually degrees
-    var distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
-    var duration = Math.floor(distanceDuration * 20 + 1000); // approx 6 seconds to go 360 degrees
+    const extent = view.calculateExtent();
+    const hasEndInView = olExtent.containsCoordinate(extent, endPoint);
+    const line = new OlGeomLineString([startPoint, endPoint]);
+    const distance = line.getLength(); // In map units, which is usually degrees
+    const distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
+    let duration = Math.floor(distanceDuration * 20 + 1000); // approx 6 seconds to go 360 degrees
     if (!rotation) rotation = 0;
-    var animationPromise = function() {
-      var args = Array.prototype.slice.call(arguments);
-      return new Promise(function(resolve, reject) {
-        args.push(function(complete) {
+    const animationPromise = function(...args) {
+      return new Promise((resolve, reject) => {
+        args.push((complete) => {
           if (complete) resolve();
           if (!complete) reject(new Error('Animation interrupted!'));
         });
-        view.animate.apply(view, args);
-      }).catch(function() {});
+        view.animate(...args);
+      }).catch(() => {});
     };
     if (hasEndInView) {
       // allow faster fly with nearby events
@@ -44,31 +44,31 @@ export function mapAnimate(config, ui, store) {
       return Promise.all([
         animationPromise({
           center: endPoint,
-          duration: duration,
-          rotation: rotation
+          duration,
+          rotation,
         }),
         animationPromise({
           zoom: endZoom,
-          duration: duration,
-          rotation: rotation
-        })
+          duration,
+          rotation,
+        }),
       ]);
     }
     // Default animation zooms out to arc
     return Promise.all([
       animationPromise({
         center: endPoint,
-        duration: duration,
-        rotation: rotation
+        duration,
+        rotation,
       }),
       animationPromise(
         {
           zoom: getBestZoom(distance, startZoom, endZoom, view),
           duration: duration / 2,
-          rotation: rotation
+          rotation,
         },
-        { zoom: endZoom, duration: duration / 2, rotation: rotation }
-      )
+        { zoom: endZoom, duration: duration / 2, rotation },
+      ),
     ]);
   };
 
@@ -81,19 +81,13 @@ export function mapAnimate(config, ui, store) {
    * @param  {object} view     map view
    * @return {integer}          best zoom level for flight animation
    */
-  var getBestZoom = function(distance, start, end, view) {
-    var idealLength = 1500;
-    var lines = [2, 3, 4, 5, 6, 7, 8].map(function(zoom) {
-      return {
-        zoom: zoom,
-        pixels: distance / view.getResolutionForZoom(zoom)
-      };
-    });
-    var bestFit = lines.sort(function(a, b) {
-      return (
-        Math.abs(idealLength - a.pixels) - Math.abs(idealLength - b.pixels)
-      );
-    })[0];
+  const getBestZoom = function(distance, start, end, view) {
+    const idealLength = 1500;
+    const lines = [2, 3, 4, 5, 6, 7, 8].map((zoom) => ({
+      zoom,
+      pixels: distance / view.getResolutionForZoom(zoom),
+    }));
+    const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels) - Math.abs(idealLength - b.pixels))[0];
     return Math.max(2, Math.min(bestFit.zoom, start - 1, end - 1));
   };
   return self;

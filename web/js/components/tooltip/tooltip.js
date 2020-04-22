@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,50 +6,52 @@ class Tooltip extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hovered: false
+      hovered: false,
     };
   }
 
   mouseOver() {
     this.setState({
-      hovered: true
+      hovered: true,
     });
   }
 
   mouseOut() {
     this.setState({
-      hovered: false
+      hovered: false,
     });
   }
 
   onClick(str) {
-    this.props.onClick(str);
+    const { onClick } = this.props;
+    onClick(str);
   }
 
   render() {
+    const { text, dataArray } = this.props;
+    const { hovered } = this.state;
     return (
       <div
         onMouseEnter={this.mouseOver.bind(this)}
         onMouseLeave={this.mouseOut.bind(this)}
         className="wv-tooltip-case"
       >
-        <span>{this.props.text}</span>
+        <span>{text}</span>
         <div
           className="wv-tooltip"
-          style={this.state.hovered ? { visibility: 'visible' } : {}}
+          style={hovered ? { visibility: 'visible' } : {}}
         >
           <ul>
-            {this.props.dataArray.map((dataEl, i) => {
-              return (
-                <li
-                  key={'tooltip-' + dataEl + '-' + i}
-                  id={dataEl}
-                  onClick={this.onClick.bind(this, dataEl)}
-                >
-                  {dataEl}
-                </li>
-              );
-            })}
+            {dataArray.map((dataEl, i) => (
+              <li
+                /* eslint react/no-array-index-key: 1 */
+                key={`tooltip-${dataEl}-${i}`}
+                id={dataEl}
+                onClick={this.onClick.bind(this, dataEl)}
+              >
+                {dataEl}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -59,7 +62,7 @@ class Tooltip extends React.Component {
 Tooltip.propTypes = {
   dataArray: PropTypes.array.isRequired,
   text: PropTypes.string.isRequired,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default Tooltip;

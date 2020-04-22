@@ -1,5 +1,5 @@
 #### Description
-Air temperature in units of kelvin at the 500 hPa pressure level, approximately 5500 meters (18,000 feet) above sea level. The 500 hPa pressure level is near the divide between upper and lower halves of atmospheric mass and is often referred to as a steering level. Many midlatitude weather systems between this level and the Earth's surface move in roughly the same direction as winds at the 500 hPa level.
+Air temperature in units of Kelvin (K) at the 500 hPa pressure level, approximately 5500 meters (18,000 feet) above sea level. The 500 hPa pressure level is near the divide between upper and lower halves of atmospheric mass and is often referred to as a steering level. Many midlatitude weather systems between this level and the Earth's surface move in roughly the same direction as winds at the 500 hPa level.
 
 #### Image Resolution
 32 km/pixel (AIRS Level 2 data is nominally 45 km/pixel at the equator and the data has been resampled into a 32 km/pixel visualization.)

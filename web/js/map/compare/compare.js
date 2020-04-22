@@ -1,6 +1,6 @@
-import { Swipe } from './swipe';
-import { Opacity } from './opacity';
-import { Spy } from './spy';
+import Swipe from './swipe';
+import Opacity from './opacity';
+import Spy from './spy';
 import util from '../../util/util';
 import { setValue } from '../../modules/compare/actions';
 
@@ -16,7 +16,7 @@ const MOUSE_EVENT = {
   move: 'mousemove',
   end: 'mouseup',
 };
-export function mapCompare(config, store) {
+export default function mapCompare(config, store) {
   const self = {};
   let comparison = null;
   let mode = 'swipe';

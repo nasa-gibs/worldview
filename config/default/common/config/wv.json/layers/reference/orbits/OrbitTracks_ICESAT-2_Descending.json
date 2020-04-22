@@ -2,8 +2,8 @@
   "layers": {
     "OrbitTracks_ICESAT-2_Descending": {
       "id": "OrbitTracks_ICESAT-2_Descending",
-      "title": "ICESAT-2 - Orbit Track & Time",
-      "subtitle": "ICESAT-2 / Space-Track.org",
+      "title": "ICESat-2 - Orbit Track & Time",
+      "subtitle": "ICESat-2 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ICESAT-2_Descending",
       "tags": "tracks",
       "group": "overlays",
@@ -18,7 +18,7 @@
         "reference",
         "reference_orbits"
       ],
-      "daynight": "night",
+      "daynight": "",
       "track": "descending",
       "startDate": "2018-09-15",
       "projections": {

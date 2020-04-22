@@ -1,15 +1,20 @@
+/* eslint-disable no-restricted-syntax */
 import {
   assign as lodashAssign,
   find as lodashFind,
-  get as lodashGet
+  get as lodashGet,
 } from 'lodash';
-import { Stroke, Style, Fill, Circle } from 'ol/style';
+
+import {
+  Stroke, Style, Fill, Circle,
+} from 'ol/style';
 import { setStyleFunction } from './selectors';
 import { isFromActiveCompareRegion } from '../compare/util';
+
 export function getVectorStyleAttributeArray(layer) {
-  var isCustomActive = false;
-  var isMinActive = false;
-  var isMaxActive = false;
+  let isCustomActive = false;
+  let isMinActive = false;
+  let isMaxActive = false;
   if (layer.custom) { isCustomActive = true; }
   if (layer.min) { isMinActive = true; }
   if (layer.max) { isMaxActive = true; }
@@ -18,19 +23,17 @@ export function getVectorStyleAttributeArray(layer) {
   const maxObj = lodashAssign({}, { key: 'max', value: layer.max, isActive: isMaxActive });
   const attrArray = [];
 
-  [styleObj, minObj, maxObj].forEach(obj => {
+  [styleObj, minObj, maxObj].forEach((obj) => {
     if (obj.isActive) {
       attrArray.push({
         id: obj.key === 'custom' ? 'style' : obj.key,
-        value: obj.value
+        value: obj.value,
       });
-    } else {
-      if (obj.isActive) {
-        attrArray.push({
-          id: obj.key === 'custom' ? 'style' : obj.key,
-          value: ''
-        });
-      }
+    } else if (obj.isActive) {
+      attrArray.push({
+        id: obj.key === 'custom' ? 'style' : obj.key,
+        value: '',
+      });
     }
   });
   return attrArray;
@@ -46,24 +49,47 @@ export function getMaxValue(v) {
 export function isConditional(item) {
   return Array.isArray(item) && item[0] === 'case';
 }
-
-export function selectedCircleStyle(style) {
+export function adjustCircleRadius(style) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
-  const radius = styleImage.getRadius() * 2;
+  const radius = styleImage.getRadius() * 0.6;
   return new Style({
     image: new Circle({
-      radius: radius,
-      stroke: new Stroke({
-        color: 'white',
-        width: 2
-      }),
-      fill: new Fill({
-        color: fill.getColor().replace(/[^,]+(?=\))/, '0.5')
-      })
-    })
+      radius,
+      fill,
+    }),
   });
 }
+export function getOrbitPointStyles(feature, styleArray) {
+  return styleArray.map((style) => {
+    const type = feature.getType();
+    switch (type) {
+      case 'Point':
+        return adjustCircleRadius(style);
+      default:
+        return style;
+    }
+  });
+}
+export function selectedCircleStyle(style, size) {
+  size = size || 2;
+  const styleImage = style.getImage();
+  const fill = styleImage.getFill();
+  const radius = styleImage.getRadius() * size;
+  return new Style({
+    image: new Circle({
+      radius,
+      stroke: new Stroke({
+        color: 'white',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: fill.getColor().replace(/[^,]+(?=\))/, '0.5'),
+      }),
+    }),
+  });
+}
+
 export function selectedPolygonStyle(style) {
   const fill = style.getFill();
   const color = fill.getColor().replace(/[^,]+(?=\))/, '0.5');
@@ -73,13 +99,22 @@ export function selectedPolygonStyle(style) {
   fill.setColor(color);
   return style;
 }
-export function selectedStyleFunction(feature, styleArray) {
+export function offsetLineStringStyle(feature, styleArray) {
+  return styleArray.map((style) => {
+    const text = style.getText();
+    if (text) {
+      text.setOffsetX(25);
+    }
+    return style;
+  });
+}
+export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
     const type = feature.getType();
     switch (type) {
       case 'Point':
-        return selectedCircleStyle(style);
+        return selectedCircleStyle(style, size);
       case 'Polygon':
         return selectedPolygonStyle(style);
       default:
@@ -98,9 +133,9 @@ export function getConditionalColors(color) {
   for (let i = 0, j = array.length; i < j; i += chunk) {
     temp = array.slice(i, i + chunk);
     if (temp.length === 2) {
-      if (temp[0].length === 3 &&
-        typeof temp[0][2] === 'string' &&
-        typeof temp[1] === 'string'
+      if (temp[0].length === 3
+        && typeof temp[0][2] === 'string'
+        && typeof temp[1] === 'string'
       ) {
         labels.push(temp[0][2]);
         colors.push(temp[1]);
@@ -131,17 +166,23 @@ export function getPaletteForStyle(layer, layerstyleLayerObject) {
     labels.push(layer.title);
   }
   return [{
-    colors: colors,
+    colors,
     type: 'classification',
     tooltips: labels,
     title: layer.title,
-    id: layer.id + '0_legend'
+    id: `${layer.id}0_legend`,
   }];
+}
+export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
+  if (acceptableExtent) {
+    return lon > acceptableExtent[0] && lon < acceptableExtent[2];
+  }
+  return wrap === -1 ? lon < 250 && lon > 180 : wrap === 1 ? lon > -250 && lon < -180 : false;
 }
 export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const metaArray = [];
   const selected = {};
-  const config = state.config;
+  const { config } = state;
   const { screenWidth, screenHeight, lessThan } = state.browser;
   const isMobile = lessThan.medium;
 
@@ -164,7 +205,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
     offsetTop = y - modalHeight;
   }
 
-  map.forEachFeatureAtPixel(pixels, function(feature, layer) {
+  map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const def = lodashGet(layer, 'wv.def');
     if (!def) return;
     if (!isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
@@ -184,20 +225,22 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
       if (selected[layerId].includes(uniqueIdentifier)) return;
       const obj = {
         legend: properties,
-        features: features,
+        features,
         id: vectorDataId,
         title: def.title || def.id,
-        featureTitle: title
+        featureTitle: title,
 
       };
       metaArray.push(obj);
       selected[layerId].push(uniqueIdentifier);
     }
   });
-  return { selected, metaArray, offsetLeft, offsetTop };
+  return {
+    selected, metaArray, offsetLeft, offsetTop,
+  };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
-  const vectorStyles = state.config.vectorStyles;
+  const { vectorStyles } = state.config;
   for (const [key] of Object.entries(selectionObj)) {
     const def = lodashFind(layers, { id: key });
     if (!def) return;
@@ -212,7 +255,7 @@ export function updateVectorSelection(selectionObj, lastSelection, layers, type,
       def.vectorStyle.id,
       vectorStyles,
       null,
-      state
+      state,
     );
   }
 }

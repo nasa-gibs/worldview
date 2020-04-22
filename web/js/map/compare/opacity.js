@@ -5,7 +5,7 @@ import OpacitySlider from '../../components/compare/opacity-slider';
 let slider;
 let value = 50;
 
-export class Opacity {
+export default class Opacity {
   constructor(olMap, isAactive, events, eventListenerStringObj, valueOverride) {
     this.map = olMap;
     this.compareEvents = events;
@@ -23,8 +23,7 @@ export class Opacity {
    * Refresh secondLayer layer group (after date change for example)
    */
   update() {
-    this.secondLayer = this.map.getLayers().getArray()[1];
-    this.firstLayer = this.map.getLayers().getArray()[0];
+    [this.firstLayer, this.secondLayer] = this.map.getLayers().getArray();
     this.oninput(value);
   }
 
@@ -42,9 +41,7 @@ export class Opacity {
    * @param {Object} secondLayer | Second layer group on Map
    */
   createSlider(layerArray) {
-    this.firstLayer = layerArray[0];
-    this.secondLayer = layerArray[1];
-
+    [this.firstLayer, this.secondLayer] = layerArray;
     this.mapCase = document.getElementById('wv-map');
     const Props = {
       onSlide: this.oninput.bind(this),
@@ -60,9 +57,8 @@ export class Opacity {
    * @param {Number} newValue
    */
   oninput(newValue) {
-    let convertedValue;
     value = newValue;
-    convertedValue = value / 100;
+    const convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);
     this.secondLayer.setOpacity(convertedValue);
     this.compareEvents.trigger('moveend', value);

@@ -8,8 +8,6 @@
             "tags":     "CO",
             "group":    "overlays",
             "product":  "AIRS2RET",
-            "wrapadjacentdays": true,
-
             "layergroup": [
               "airs"
             ],

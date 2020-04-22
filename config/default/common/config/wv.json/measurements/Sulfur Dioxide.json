@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
-                    "title": "Aqua / AIRS",
+                    "title": "Aqua/AIRS",
                     "description": "airs/SO2",
                     "image": "",
                     "settings": [
@@ -21,7 +21,7 @@
                 },
                 "Aura/MLS": {
                     "id": "aura-mls",
-                    "title": "Aura / MLS",
+                    "title": "Aura/MLS",
                     "description": "mls/SO2",
                     "image": "",
                     "settings": [
@@ -33,7 +33,7 @@
                 },
                 "Aura/OMI": {
                     "id": "aura-omi",
-                    "title": "Aura / OMI",
+                    "title": "Aura/OMI",
                     "description": "omi/SO2",
                     "image": "",
                     "settings": [
@@ -45,8 +45,8 @@
                     ]
                 },
                 "Suomi NPP/OMPS": {
-                    "id": "suominpp-omps",
-                    "title": "Suomi NPP / OMPS",
+                    "id": "suomi-npp-omps",
+                    "title": "Suomi NPP/OMPS",
                     "description": "omps/SO2",
                     "image": "",
                     "settings": [

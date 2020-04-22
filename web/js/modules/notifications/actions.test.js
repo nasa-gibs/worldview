@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import * as actions from './actions';
 import * as constants from './constants';
+
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const ERROR_MESSAGE = 'There was an error';
@@ -17,15 +18,15 @@ describe('Notification fetch action', () => {
       headers: {
         'content-type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      }
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
     });
     const expectedActions = [
       { type: constants.REQUEST_NOTIFICATIONS_START },
       {
         type: constants.REQUEST_NOTIFICATIONS_SUCCESS,
-        response: JSON.stringify(constants.MOCK_RESPONSE)
-      }
+        response: JSON.stringify(constants.MOCK_RESPONSE),
+      },
     ];
     const store = mockStore({ notifications: {} });
     return store
@@ -34,17 +35,17 @@ describe('Notification fetch action', () => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   });
-  test('creates ' + constants.REQUEST_NOTIFICATIONS_FAILURE + ' Action', () => {
+  test(`creates ${constants.REQUEST_NOTIFICATIONS_FAILURE} Action`, () => {
     const loc = 'mock/';
     fetchMock.mock(loc, {
-      throws: ERROR_MESSAGE
+      throws: ERROR_MESSAGE,
     });
     const expectedActions = [
       { type: constants.REQUEST_NOTIFICATIONS_START },
       {
         type: constants.REQUEST_NOTIFICATIONS_FAILURE,
-        error: ERROR_MESSAGE
-      }
+        error: ERROR_MESSAGE,
+      },
     ];
     const store = mockStore({ shortLink: {} });
     return store
@@ -56,28 +57,28 @@ describe('Notification fetch action', () => {
 });
 describe('Notification post-request actions', () => {
   test(
-    'setNotication action returns ' +
-      constants.SET_NOTIFICATIONS +
-      ' action type with array',
+    `setNotication action returns ${
+      constants.SET_NOTIFICATIONS
+    } action type with array`,
     () => {
       const expectedAction = {
         type: constants.SET_NOTIFICATIONS,
-        array: ['alerts', 'outages', 'messages']
+        array: ['alerts', 'outages', 'messages'],
       };
       expect(
-        actions.setNotifications(['alerts', 'outages', 'messages'])
+        actions.setNotifications(['alerts', 'outages', 'messages']),
       ).toEqual(expectedAction);
-    }
+    },
   );
   test(
-    'notificationsSeen action returns ' +
-      constants.NOTIFICATIONS_SEEN +
-      ' action type',
+    `notificationsSeen action returns ${
+      constants.NOTIFICATIONS_SEEN
+    } action type`,
     () => {
       const expectedAction = {
-        type: constants.NOTIFICATIONS_SEEN
+        type: constants.NOTIFICATIONS_SEEN,
       };
       expect(actions.notificationsSeen()).toEqual(expectedAction);
-    }
+    },
   );
 });

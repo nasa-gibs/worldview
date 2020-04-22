@@ -3,11 +3,11 @@
         "Nitrous Oxide": {
             "id": "nitrous-oxide",
             "title":    "Nitrous Oxide",
-            "subtitle": "Aura / MLS",
+            "subtitle": "Aura/MLS",
             "sources": {
                 "Aura/MLS": {
                     "id": "aura-mls",
-                    "title": "Aura / MLS",
+                    "title": "Aura/MLS",
                     "description": "mls/N2O",
                     "image": "",
                     "settings": [

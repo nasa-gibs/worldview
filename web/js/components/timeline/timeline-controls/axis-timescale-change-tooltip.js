@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
  */
 class AxisTimeScaleChangeTooltip extends PureComponent {
   // Handle change axis timescale
-  changeTimeScale = timeScale => {
+  changeTimeScale = (timeScale) => {
+    // eslint-disable-next-line react/destructuring-assignment
     this.props.changeTimeScale(timeScale);
   };
 
@@ -37,12 +38,12 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
   render() {
     const { timeScale, toolTipHovered, hasSubdailyLayers } = this.props;
     return (
-      <React.Fragment>
+      <>
         <div id="zoom-btn-container-axis">
           <span
             id="current-zoom"
             className={
-              'zoom-btn zoom-level-display-text zoom-' + timeScale.toLowerCase()
+              `zoom-btn zoom-level-display-text zoom-${timeScale.toLowerCase()}`
             }
           >
             {timeScale}
@@ -56,7 +57,7 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
                 style={{
                   textDecoration: 'underline',
                   paddingBottom: '4px',
-                  color: '#fff'
+                  color: '#fff',
                 }}
               >
                 TIMESCALE
@@ -83,7 +84,7 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
                 DAY
               </span>
               {hasSubdailyLayers ? (
-                <React.Fragment>
+                <>
                   <span
                     id="zoom-hours"
                     className="zoom-btn zoom-hours"
@@ -98,12 +99,12 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
                   >
                     MINUTE
                   </span>
-                </React.Fragment>
+                </>
               ) : null}
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -112,7 +113,7 @@ AxisTimeScaleChangeTooltip.propTypes = {
   changeTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   timeScale: PropTypes.string,
-  toolTipHovered: PropTypes.bool
+  toolTipHovered: PropTypes.bool,
 };
 
 export default AxisTimeScaleChangeTooltip;

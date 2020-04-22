@@ -9,19 +9,23 @@ class Share extends React.Component {
       fbLink: props.fbLink,
       twLink: props.twLink,
       rdLink: props.rdLink,
-      emailLink: props.emailLink
+      emailLink: props.emailLink,
     };
   }
 
   render() {
+    const {
+      fbLink, twLink, rdLink, emailLink,
+    } = this.state;
+    const { clickFunction } = this.props;
     return (
       <div>
         <ShareLinks
-          fbLink={this.state.fbLink}
-          twLink={this.state.twLink}
-          rdLink={this.state.rdLink}
-          emailLink={this.state.emailLink}
-          onClick={this.props.clickFunction}
+          fbLink={fbLink}
+          twLink={twLink}
+          rdLink={rdLink}
+          emailLink={emailLink}
+          onClick={clickFunction}
         />
       </div>
     );
@@ -33,7 +37,7 @@ Share.propTypes = {
   emailLink: PropTypes.string,
   fbLink: PropTypes.string,
   rdLink: PropTypes.string,
-  twLink: PropTypes.string
+  twLink: PropTypes.string,
 };
 
 export default Share;

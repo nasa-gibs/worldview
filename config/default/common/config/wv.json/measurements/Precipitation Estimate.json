@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
-                    "title": "Aqua / AIRS",
+                    "title": "Aqua/AIRS",
                     "description": "airs/PrecipitationEstimate",
                     "image": "",
                     "settings": [

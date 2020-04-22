@@ -9,42 +9,38 @@ import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 
 export default function markers(ui, store) {
-  var self = {};
-  var map = ui.map.selected;
+  const self = {};
+  const map = ui.map.selected;
 
   self.draw = function() {
-    const proj = store.getState().proj;
-    var events = ui.naturalEvents.eventsData;
+    const { proj } = store.getState();
+    const events = ui.naturalEvents.eventsData;
     if (!events || events.length < 1) return null;
-    var markers = events.reduce(function(collection, event) {
-      var marker = {};
-      var selected = ui.naturalEvents.selected;
-      var isSelected = event.id === selected.id;
-      var date = ui.naturalEvents.getDefaultEventDate(event);
+    const markers = events.reduce((collection, event) => {
+      const marker = {};
+      const { selected } = ui.naturalEvents;
+      const isSelected = event.id === selected.id;
+      let date = ui.naturalEvents.getDefaultEventDate(event);
 
       if (isSelected && selected.date) {
         date = selected.date;
       }
 
-      var geometry =
-        lodashFind(event.geometries, function(geom) {
-          return geom.date.split('T')[0] === date;
-        }) || event.geometries[0];
+      const geometry = lodashFind(event.geometries, (geom) => geom.date.split('T')[0] === date) || event.geometries[0];
       if (!geometry) return marker;
 
-      var coordinates = geometry.coordinates;
+      let { coordinates } = geometry;
 
       // polar projections require transform of coordinates to crs
       if (proj.selected.id !== 'geographic') {
         // check for polygon geometries
         if (geometry.type === 'Polygon') {
-          const coordinatesTransform = coordinates[0].map(coordinate => {
-            return olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs);
-          });
+          const coordinatesTransform = coordinates[0].map((coordinate) => olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs));
           const extent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(extent);
           if (isSelected) {
@@ -56,23 +52,21 @@ export default function markers(ui, store) {
           coordinates = olProj.transform(
             coordinates,
             'EPSG:4326',
-            proj.selected.crs
+            proj.selected.crs,
           );
         }
-      } else {
-        if (geometry.type === 'Polygon') {
-          const extent = olExtent.boundingExtent(geometry.coordinates[0]);
-          coordinates = olExtent.getCenter(extent);
-          if (isSelected) {
-            marker.boundingBox = createBoundingBox(geometry.coordinates);
-            map.addLayer(marker.boundingBox);
-          }
+      } else if (geometry.type === 'Polygon') {
+        const extent = olExtent.boundingExtent(geometry.coordinates[0]);
+        coordinates = olExtent.getCenter(extent);
+        if (isSelected) {
+          marker.boundingBox = createBoundingBox(geometry.coordinates);
+          map.addLayer(marker.boundingBox);
         }
       }
 
-      var category = event.categories[0];
+      let category = event.categories[0];
       // Assign a default category if we don't have an icon
-      var icons = [
+      const icons = [
         'Dust and Haze',
         'Icebergs',
         'Manmade',
@@ -82,14 +76,14 @@ export default function markers(ui, store) {
         'Temperature Extremes',
         'Volcanoes',
         'Water Color',
-        'Wildfires'
+        'Wildfires',
       ];
       category = icons.includes(category.title)
         ? category
         : { title: 'Default', slug: 'default' };
 
       // get maxExtent of current projection and check if marker is within range
-      const maxExtent = proj.selected.maxExtent;
+      const { maxExtent } = proj.selected;
       const maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
       // only create marker if within projection extent range
       if (maxExtentCheck) {
@@ -98,51 +92,51 @@ export default function markers(ui, store) {
         map.addOverlay(marker.pin);
 
         // Add event listeners
-        var willSelect = true;
-        var moveCount = 0;
+        let willSelect = true;
+        let moveCount = 0;
         // The pin element used to be on `element_` but now it looks like it
         // moved to `element`. Maybe this was a change to OpenLayers.
-        var pinEl = marker.pin.element_ || marker.pin.element;
+        const pinEl = marker.pin.element_ || marker.pin.element;
 
         // Use passiveSupport detect in ui. passive applied if supported, capture will be false either way.
-        ['pointerdown', 'mousedown', 'touchstart'].forEach(function(type) {
+        ['pointerdown', 'mousedown', 'touchstart'].forEach((type) => {
           pinEl.addEventListener(
             type,
-            function(e) {
+            (e) => {
               willSelect = true;
               moveCount = 0;
             },
-            ui.supportsPassive ? { passive: true } : false
+            ui.supportsPassive ? { passive: true } : false,
           );
         });
-        ['pointermove', 'mousemove'].forEach(function(type) {
+        ['pointermove', 'mousemove'].forEach((type) => {
           pinEl.addEventListener(
             type,
-            function(e) {
-              moveCount++;
+            (e) => {
+              moveCount += 1;
               if (moveCount > 2) {
                 willSelect = false;
               }
             },
-            ui.supportsPassive ? { passive: true } : false
+            ui.supportsPassive ? { passive: true } : false,
           );
         });
-        ['touchend', 'click'].forEach(function(type) {
+        ['touchend', 'click'].forEach((type) => {
           pinEl.addEventListener(
             type,
-            function(e) {
+            (e) => {
               if (willSelect && !isSelected) {
                 e.stopPropagation();
                 store.dispatch(selectEventAction(event.id, date));
                 googleTagManager.pushEvent({
                   event: 'natural_event_selected',
                   natural_events: {
-                    category: category.title
-                  }
+                    category: category.title,
+                  },
                 });
               }
             },
-            ui.supportsPassive ? { passive: true } : false
+            ui.supportsPassive ? { passive: true } : false,
           );
         });
       }
@@ -160,7 +154,7 @@ export default function markers(ui, store) {
   self.remove = function(markers) {
     markers = markers || [];
     if (markers.length < 1) return;
-    markers.forEach(function(marker) {
+    markers.forEach((marker) => {
       if (marker.boundingBox) {
         // added setMap to null for marker to remove - may be scope related issue
         marker.boundingBox.setMap(null);
@@ -174,49 +168,49 @@ export default function markers(ui, store) {
     });
   };
 
-  var createPin = function(id, category, isSelected, title) {
-    var overlayEl = document.createElement('div');
-    var icon = document.createElement('i');
+  const createPin = function(id, category, isSelected, title) {
+    const overlayEl = document.createElement('div');
+    const icon = document.createElement('i');
     overlayEl.className = 'marker';
     if (isSelected) overlayEl.classList.add('marker-selected');
-    icon.className = 'event-icon event-icon-' + category.slug;
+    icon.className = `event-icon event-icon-${category.slug}`;
     icon.title = title || category.title;
     overlayEl.appendChild(icon);
     return new OlOverlay({
       element: overlayEl,
       positioning: 'bottom-center',
       stopEvent: false,
-      id: id
+      id,
     });
   };
 
-  var createBoundingBox = function(coordinates) {
-    var lightStroke = new OlStyleStyle({
+  const createBoundingBox = function(coordinates) {
+    const lightStroke = new OlStyleStyle({
       stroke: new OlStyleStroke({
         color: [255, 255, 255, 0.6],
         width: 2,
         lineDash: [4, 8],
-        lineDashOffset: 6
-      })
+        lineDashOffset: 6,
+      }),
     });
-    var darkStroke = new OlStyleStyle({
+    const darkStroke = new OlStyleStyle({
       stroke: new OlStyleStroke({
         color: [0, 0, 0, 0.6],
         width: 2,
-        lineDash: [4, 8]
-      })
+        lineDash: [4, 8],
+      }),
     });
     return new OlLayerVector({
       source: new OlSourceVector({
         features: [
           new OlFeature({
             geometry: new OlGeomPolygon(coordinates),
-            name: 'NaturalEvent'
-          })
+            name: 'NaturalEvent',
+          }),
         ],
-        wrapX: false
+        wrapX: false,
       }),
-      style: [lightStroke, darkStroke]
+      style: [lightStroke, darkStroke],
     });
   };
 

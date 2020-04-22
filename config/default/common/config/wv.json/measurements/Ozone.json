@@ -29,7 +29,7 @@
                     ]
                 },
                 "Suomi NPP/OMPS": {
-                    "id": "suominpp-omps",
+                    "id": "suomi-npp-omps",
                     "title": "Suomi NPP/OMPS",
                     "description": "omps/Ozone",
                     "image": "",

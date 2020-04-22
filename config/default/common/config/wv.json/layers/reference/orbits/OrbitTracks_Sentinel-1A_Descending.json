@@ -5,7 +5,7 @@
       "title": "Sentinel-1A - Orbit Track & Time",
       "subtitle": "Sentinel-1A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-1A_Descending",
-      "tags": "tracks",
+      "tags": "tracks day",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",

@@ -128,7 +128,7 @@ export default function (L, Coordinate, Arc, config) {
     latlngs = (function () {
       var j, len1, results;
       results = [];
-      for (j = 0, len1 = latlngs.length; j < len1; j++) {
+      for (j = 0, len1 = latlngs.length; j < len1; j+= 1) {
         latlng = latlngs[j];
         results.push(L.latLng(latlng));
       }
@@ -173,7 +173,7 @@ export default function (L, Coordinate, Arc, config) {
       angles = (function () {
         var k, len1, results;
         results = [];
-        for (k = 0, len1 = latlngs.length; k < len1; k++) {
+        for (k = 0, len1 = latlngs.length; k < len1; k+= 1) {
           latlng = latlngs[k];
           results.push(latlng.lng);
         }

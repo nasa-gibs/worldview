@@ -8,25 +8,25 @@ import OlSourceVector from 'ol/source/Vector';
 import OlGeomLineString from 'ol/geom/LineString';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlFeature from 'ol/Feature';
-import { toggleGranule } from '../../modules/data/actions';
 import { find as lodashFind, each as lodashEach } from 'lodash';
+import { toggleGranule } from '../../modules/data/actions';
 
 import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map';
 
-export function dataMap(store, maps, dataUi, ui) {
-  var self = {};
+export default function dataMap(store, maps, dataUi, ui) {
+  const self = {};
 
-  var map = null;
-  var results = [];
-  var granules = [];
-  var hoverLayer = null;
-  var buttonLayer = null;
-  var selectionLayer = null;
-  var gridLayer = null;
-  var swathLayer = null;
-  var hovering = null;
-  var selectedFeatures = null;
-  var init = function() {
+  let map = null;
+  let results = [];
+  let granules = [];
+  let hoverLayer = null;
+  let buttonLayer = null;
+  let selectionLayer = null;
+  let gridLayer = null;
+  let swathLayer = null;
+  let hovering = null;
+  let selectedFeatures = null;
+  const init = function() {
     dataUi.events
       .on('activate', updateProjection)
       .on('query', clear)
@@ -37,10 +37,10 @@ export function dataMap(store, maps, dataUi, ui) {
     updateProjection();
   };
 
-  var buttonStyle = function(feature) {
+  const buttonStyle = function(feature) {
     const dataState = store.getState().data;
-    var dimensions = getButtonDimensions(feature);
-    var image;
+    const dimensions = getButtonDimensions(feature);
+    let image;
     if (lodashFind(dataState.selectedGranules, { id: feature.granule.id })) {
       image = 'images/data.minus-button.png';
     } else {
@@ -51,128 +51,127 @@ export function dataMap(store, maps, dataUi, ui) {
       new OlStyleStyle({
         image: new OlStyleIcon({
           src: image,
-          scale: dimensions.scale
-        })
-      })
+          scale: dimensions.scale,
+        }),
+      }),
     ];
   };
 
-  var hoverStyle = function(feature) {
+  const hoverStyle = function(feature) {
     const dataState = store.getState().data;
-    var dimensions = getButtonDimensions(feature);
-    var offset = -(dimensions.size / 2.0 + 14);
-    var textStyle = new OlStyleText({
+    const dimensions = getButtonDimensions(feature);
+    const offset = -(dimensions.size / 2.0 + 14);
+    const textStyle = new OlStyleText({
       overflow: true,
       font: 'bold 14px ‘Lucida Sans’, Arial, Sans-Serif',
       text: feature.granule.label,
       fill: new OlStyleFill({
-        color: '#ffffff'
+        color: '#ffffff',
       }),
       stroke: new OlStyleStroke({
         color: 'rgba(0, 0, 0, .7)',
-        width: 5
+        width: 5,
       }),
-      offsetY: offset
+      offsetY: offset,
     });
     if (!lodashFind(dataState.selectedGranules, { id: feature.granule.id })) {
       return [
         new OlStyleStyle({
           fill: new OlStyleFill({
-            color: 'rgba(181, 158, 50, 0.25)'
+            color: 'rgba(181, 158, 50, 0.25)',
           }),
           stroke: new OlStyleStroke({
             color: 'rgb(251, 226, 109)',
-            width: 3
+            width: 3,
           }),
-          text: textStyle
-        })
-      ];
-    } else {
-      return [
-        new OlStyleStyle({
-          fill: new OlStyleFill({
-            color: 'rgba(242, 12, 12, 0.25)'
-          }),
-          stroke: new OlStyleStroke({
-            color: 'rgb(255, 6, 0)',
-            width: 3
-          }),
-          text: textStyle
-        })
+          text: textStyle,
+        }),
       ];
     }
+    return [
+      new OlStyleStyle({
+        fill: new OlStyleFill({
+          color: 'rgba(242, 12, 12, 0.25)',
+        }),
+        stroke: new OlStyleStroke({
+          color: 'rgb(255, 6, 0)',
+          width: 3,
+        }),
+        text: textStyle,
+      }),
+    ];
   };
 
-  var createButtonLayer = function() {
+  const createButtonLayer = function() {
     buttonLayer = new OlLayerVector({
       source: new OlSourceVector({
-        wrapX: false
+        wrapX: false,
       }),
-      style: buttonStyle
+      style: buttonStyle,
     });
     map.addLayer(buttonLayer);
   };
 
-  var createHoverLayer = function() {
+  const createHoverLayer = function() {
     hoverLayer = new OlLayerVector({
       source: new OlSourceVector({
-        wrapX: false
+        wrapX: false,
       }),
-      style: hoverStyle
+      style: hoverStyle,
     });
     map.addLayer(hoverLayer);
   };
 
-  var createSelectionLayer = function() {
+  const createSelectionLayer = function() {
     selectionLayer = new OlLayerVector({
       source: new OlSourceVector({
-        wrapX: false
+        wrapX: false,
       }),
       style: new OlStyleStyle({
         fill: new OlStyleFill({
-          color: 'rgba(127, 127, 127, 0.2)'
+          color: 'rgba(127, 127, 127, 0.2)',
         }),
         stroke: new OlStyleStroke({
           color: 'rgb(127, 127, 127)',
-          width: 3
+          width: 3,
         }),
-        opacity: 0.6
-      })
+        opacity: 0.6,
+      }),
     });
     map.addLayer(selectionLayer);
   };
 
-  var createSwathLayer = function() {
+  const createSwathLayer = function() {
     swathLayer = new OlLayerVector({
       source: new OlSourceVector({
-        wrapX: false
+        wrapX: false,
       }),
       style: new OlStyleStyle({
         stroke: new OlStyleStroke({
           color: 'rgba(195, 189, 123, 0.75)',
-          width: 2
-        })
-      })
+          width: 2,
+        }),
+      }),
     });
     map.addLayer(swathLayer);
   };
 
-  var createGridLayer = function() {
+  const createGridLayer = function() {
     gridLayer = new OlLayerVector({
       source: new OlSourceVector({
-        wrapX: false
+        wrapX: false,
       }),
       style: new OlStyleStyle({
         stroke: new OlStyleStroke({
           color: 'rgba(186, 180, 152, 0.6)',
-          width: 1.5
-        })
-      })
+          width: 1.5,
+        }),
+      }),
     });
     map.addLayer(gridLayer);
   };
 
-  var create = function() {
+  const create = function() {
     createGridLayer();
     createSwathLayer();
     createButtonLayer();
@@ -182,7 +181,7 @@ export function dataMap(store, maps, dataUi, ui) {
     $(maps.selected.getViewport()).on('click', clickCheck);
   };
 
-  var dispose = function() {
+  const dispose = function() {
     if (map) {
       map.removeLayer(selectionLayer);
       map.removeLayer(gridLayer);
@@ -196,14 +195,14 @@ export function dataMap(store, maps, dataUi, ui) {
   };
   self.dispose = dispose;
 
-  var updateGranules = function(r) {
+  const updateGranules = function(r) {
     const dataState = store.getState().data;
     results = r;
     granules = r.granules;
     updateButtons();
     updateSwaths();
     updateGrid();
-    lodashEach(dataState.selectedGranules, function(granule) {
+    lodashEach(dataState.selectedGranules, (granule) => {
       if (selectedFeatures[granule.id]) {
         selectionLayer.getSource().removeFeature(selectedFeatures[granule.id]);
         delete selectedFeatures[granule.id];
@@ -212,18 +211,18 @@ export function dataMap(store, maps, dataUi, ui) {
     });
   };
 
-  var updateButtons = function() {
+  const updateButtons = function() {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
     buttonLayer.getSource().clear();
-    var features = [];
-    lodashEach(granules, function(granule) {
+    const features = [];
+    lodashEach(granules, (granule) => {
       if (!granule.centroid || !granule.centroid[projCrs]) {
         return;
       }
-      var centroid = granule.centroid[projCrs];
-      var feature = new OlFeature({
-        geometry: centroid
+      const centroid = granule.centroid[projCrs];
+      const feature = new OlFeature({
+        geometry: centroid,
       });
       feature.button = true;
       feature.granule = granule;
@@ -233,32 +232,32 @@ export function dataMap(store, maps, dataUi, ui) {
     buttonLayer.getSource().addFeatures(features);
   };
 
-  var updateSwaths = function() {
+  const updateSwaths = function() {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
     swathLayer.getSource().clear();
-    var swaths = results.meta.swaths;
+    const { swaths } = results.meta;
     if (!swaths) {
       return;
     }
-    var maxDistance = projCrs === CRS_WGS_84 ? 270 : Number.POSITIVE_INFINITY;
-    var features = [];
-    lodashEach(swaths, function(swath) {
-      var lastGranule = null;
-      lodashEach(swath, function(granule) {
+    const maxDistance = projCrs === CRS_WGS_84 ? 270 : Number.POSITIVE_INFINITY;
+    const features = [];
+    lodashEach(swaths, (swath) => {
+      let lastGranule = null;
+      lodashEach(swath, (granule) => {
         if (!lastGranule) {
           lastGranule = granule;
           return;
         }
-        var polys1 = mapToPolys(lastGranule.geometry[projCrs]);
-        var polys2 = mapToPolys(granule.geometry[projCrs]);
-        lodashEach(polys1, function(poly1) {
-          lodashEach(polys2, function(poly2) {
-            var c1 = poly1.getInteriorPoint().getCoordinates();
-            var c2 = poly2.getInteriorPoint().getCoordinates();
-            var distanceX = mapDistanceX(c1[0], c2[0]);
+        const polys1 = mapToPolys(lastGranule.geometry[projCrs]);
+        const polys2 = mapToPolys(granule.geometry[projCrs]);
+        lodashEach(polys1, (poly1) => {
+          lodashEach(polys2, (poly2) => {
+            const c1 = poly1.getInteriorPoint().getCoordinates();
+            const c2 = poly2.getInteriorPoint().getCoordinates();
+            const distanceX = mapDistanceX(c1[0], c2[0]);
             if (distanceX < maxDistance) {
-              var ls = new OlGeomLineString([c1, c2]);
+              const ls = new OlGeomLineString([c1, c2]);
               features.push(new OlFeature(ls));
             }
           });
@@ -269,36 +268,36 @@ export function dataMap(store, maps, dataUi, ui) {
     swathLayer.getSource().addFeatures(features);
   };
 
-  var updateGrid = function() {
+  const updateGrid = function() {
     gridLayer.getSource().clear();
-    var grid = results.meta.grid;
+    const { grid } = results.meta;
     if (!grid) {
       return;
     }
-    var features = [];
-    var parser = new OlFormatGeoJSON();
-    lodashEach(grid, function(cell) {
-      var geom = parser.readGeometry(cell.geometry);
-      var feature = new OlFeature(geom);
+    const features = [];
+    const parser = new OlFormatGeoJSON();
+    lodashEach(grid, (cell) => {
+      const geom = parser.readGeometry(cell.geometry);
+      const feature = new OlFeature(geom);
       features.push(feature);
     });
     gridLayer.getSource().addFeatures(features);
   };
 
-  var selectGranule = function(granule) {
+  const selectGranule = function(granule) {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
     if (!granule.feature) {
       return;
     }
     granule.feature.changed();
-    var select = new OlFeature(granule.geometry[projCrs]);
+    const select = new OlFeature(granule.geometry[projCrs]);
     select.granule = granule;
     selectionLayer.getSource().addFeature(select);
     selectedFeatures[granule.id] = select;
   };
 
-  var unselectGranule = function(granule) {
+  const unselectGranule = function(granule) {
     if (!granule.feature) {
       return;
     }
@@ -310,13 +309,13 @@ export function dataMap(store, maps, dataUi, ui) {
     }
   };
 
-  var updateProjection = function() {
+  const updateProjection = function() {
     dispose();
     map = maps.selected;
     create();
   };
 
-  var clear = function() {
+  const clear = function() {
     if (map) {
       swathLayer.getSource().clear();
       gridLayer.getSource().clear();
@@ -325,10 +324,10 @@ export function dataMap(store, maps, dataUi, ui) {
     }
   };
 
-  var hoverCheck = function(event) {
-    var pixel = map.getEventPixel(event.originalEvent);
-    var newFeature = null;
-    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+  const hoverCheck = function(event) {
+    const pixel = map.getEventPixel(event.originalEvent);
+    let newFeature = null;
+    map.forEachFeatureAtPixel(pixel, (feature, layer) => {
       if (feature.button) {
         newFeature = feature;
       }
@@ -350,9 +349,9 @@ export function dataMap(store, maps, dataUi, ui) {
     hovering = newFeature;
   };
 
-  var clickCheck = function(event) {
-    var pixel = map.getEventPixel(event.originalEvent);
-    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+  const clickCheck = function(event) {
+    const pixel = map.getEventPixel(event.originalEvent);
+    map.forEachFeatureAtPixel(pixel, (feature, layer) => {
       if (feature.button) {
         store.dispatch(toggleGranule(feature.granule));
         hovering = false;
@@ -361,37 +360,37 @@ export function dataMap(store, maps, dataUi, ui) {
     });
   };
 
-  var hoverOver = function(feature) {
+  const hoverOver = function(feature) {
     const state = store.getState();
     const projCrs = state.proj.selected.crs;
-    var granule = feature.granule;
+    const { granule } = feature;
     if (!granule.geometry) {
       return;
     }
-    var hover = new OlFeature(granule.geometry[projCrs]);
+    const hover = new OlFeature(granule.geometry[projCrs]);
     hover.granule = granule;
     hoverLayer.getSource().clear();
     hoverLayer.getSource().addFeature(hover);
   };
 
-  var hoverOut = function() {
+  const hoverOut = function() {
     hoverLayer.getSource().clear();
   };
 
-  var getButtonDimensions = function(feature) {
-    var zoom = map.getView().getZoom();
+  const getButtonDimensions = function(feature) {
+    const zoom = map.getView().getZoom();
     // Minimum size of the button is 15 pixels
-    var base = 12;
+    const base = 12;
     // Double the size for each zoom level
-    var add = Math.pow(2, zoom);
+    const add = 2 ** zoom;
     // Apply size adjustment to the button if specified by TagButtonScale
-    var buttonScale = feature.granule.buttonScale || 1;
-    var size = (base + add) * buttonScale;
+    const buttonScale = feature.granule.buttonScale || 1;
+    let size = (base + add) * buttonScale;
     // But 44 pixels is the maximum size
     size = Math.min(size, base + 32);
     return {
       scale: size / 48,
-      size: size
+      size,
     };
   };
 

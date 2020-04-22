@@ -36,7 +36,7 @@ This project uses Node and Python. See the [dependencies](#dependencies) section
 ```bash
 git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
-npm install
+npm ci
 ```
 
 View the [Configuration](doc/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
@@ -45,7 +45,7 @@ View the [Configuration](doc/configuration.md) section for information on how to
 
 The following are required to install and run Worldview:
 
-- [Node v8.15.1 or Later](https://nodejs.org/en/download/)
+- [Node v10 or Later](https://nodejs.org/en/download/)
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v3.7.1 or Later](https://www.python.org/)
 
@@ -88,6 +88,8 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 - [Testing](doc/testing.md)
 - [Uploading](doc/upload.md)
 - [Docker](doc/docker.md)
+- [Release Notes](doc/release_notes.md)
+- [Changelog](CHANGELOG.md)
 
 ## Contact
 
@@ -98,7 +100,7 @@ Contact us via GitHub or by sending an email to
 
 We welcome your contributions! Feel free to [open an issue](https://github.com/nasa-gibs/worldview/issues/new) or [submit a PR](https://github.com/nasa-gibs/worldview/compare).
 
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more contribution guidelines.
+Please review [CONTRIBUTING.md](.github/CONTRIBUTING.md) for contribution guidelines before getting started.
 
 Worldview and NASA follow the [Contributor Covenant Code of Conduct](.github/CODE_OF_CONDUCT.md).
 

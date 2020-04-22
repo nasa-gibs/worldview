@@ -3,11 +3,11 @@
         "Clear Sky Confidence": {
             "id": "clear-sky-confidence",
             "title":    "Clear Sky Confidence",
-            "subtitle": "Suomi-NPP/VIIRS",
+            "subtitle": "Suomi NPP/VIIRS",
             "sources": {
-                "": {
+                "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
-                    "title": "Suomi-NPP/VIIRS",
+                    "title": "Suomi NPP/VIIRS",
                     "description": "viirs/ClearSkyConfidence",
                     "image": "",
                     "settings": [

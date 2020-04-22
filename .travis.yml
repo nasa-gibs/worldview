@@ -19,12 +19,14 @@ matrix:
   allow_failures:
     - os: windows
     - node_js: lts/*
+    - name: 'Node.js 10.16.3 - Chrome E2E'
 
   include:
     - os: osx
       name: 'Node.js 10.16.3 - Chrome E2E'
       language: node_js
       node_js: '10.16.3'
+      osx_image: xcode11.2
       addons:
         chrome: stable
       before_install:
@@ -37,10 +39,12 @@ matrix:
     - os: osx
       language: node_js
       node_js: lts/* # latest LTS Node.js release
+      osx_image: xcode11.2
 
     - os: osx
       language: node_js
       node_js: '8.15.1'
+      osx_image: xcode11.2
 
     - os: linux
       name: 'Node.js 10.16.3 - Firefox E2E'

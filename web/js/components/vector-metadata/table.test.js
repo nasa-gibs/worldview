@@ -1,6 +1,6 @@
 import React from 'react';
-import VectorMetaTable from './table';
 import renderer from 'react-test-renderer';
+import VectorMetaTable from './table';
 
 let component;
 beforeEach(() => {
@@ -8,12 +8,12 @@ beforeEach(() => {
     <VectorMetaTable
       metaArray={[{
         features: {
-          GRAND_ID: 4886
+          GRAND_ID: 4886,
         },
         legend: [{ Identifier: 'GRAND_ID' }],
-        featureTitle: 'Choclococha'
+        featureTitle: 'Choclococha',
       }]}
-    />
+    />,
   );
 });
 
@@ -26,19 +26,19 @@ test('If there is a valuemap, use valuemap', () => {
       metaArray={[{
         features: {
           GRAND_ID: 4886,
-          Urborrur: 'U'
+          Urborrur: 'U',
         },
         legend: [
           {
-            Identifier: 'GRAND_ID'
+            Identifier: 'GRAND_ID',
           }, {
             Identifier: 'Urborrur',
-            ValueMap: { U: 'Urban', R: 'Rural' }
-          }
+            ValueMap: { U: 'Urban', R: 'Rural' },
+          },
         ],
-        featureTitle: 'Choclococha'
+        featureTitle: 'Choclococha',
       }]}
-    />
+    />,
   );
   expect(component.toJSON()).toMatchSnapshot();
 });

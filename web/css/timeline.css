@@ -9,7 +9,7 @@ button:focus {
 
 .timeline-inner {
   position: absolute;
-  border: 1px solid #333;
+  border: thin solid #333;
   background: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
   display: flex;
@@ -42,7 +42,7 @@ button:focus {
 
   & .input-wrapper {
     background: transparent;
-    border: 1px solid transparent;
+    border: thin solid transparent;
     vertical-align: top;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -161,12 +161,13 @@ button:focus {
   }
   & .button-action-group svg {
     position: absolute;
+  }
+  & #zoom-buttons-group .button-action-group svg {
     top: 50%;
     margin-top: -15px;
     left: 50%;
     margin-left: -12px;
   }
-
   & #left-arrow-group {
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
@@ -192,18 +193,21 @@ button:focus {
     fill: #333;
   }
 
+  & #animate-button {
+    width: 100%;
+    height: 100%;
+  }
+
   & .animate-button {
-    margin: 10px 0 0 10px;
+    position: absolute;
     height: 40px;
-    width: 40px;
+    width: 50px;
+    top: 11px;
+    right: 24px;
+    padding-left: 3px;
   }
-  & .animate-button .wv-animate {
-    color: #fff;
-    font-size: 2.5em;
-    margin: 5px 0 0 2px;
-  }
-  & .animate-button:hover .wv-animate {
-    color: #1a1a1a;
+  & .animate-button:hover svg.wv-animate path {
+    fill: #1a1a1a;
   }
   & .animate-button.wv-disabled-button {
     cursor: auto;
@@ -226,9 +230,12 @@ button:focus {
   }
 }
 
+.timeline-header-desktop {
+  position: relative;
+}
+
 #zoom-buttons-group {
   position: relative;
-  width: 86px;
 }
 
 .button-action-group {
@@ -248,8 +255,8 @@ button:focus {
 }
 
 #timeline-footer {
-  border-left: 1px solid #666;
-  border-right: 1px solid #666;
+  border-left: thin solid #666;
+  border-right: thin solid #666;
 }
 
 #wv-timeline-range-selector {
@@ -353,13 +360,13 @@ button:focus {
   }
 }
 
-.custom-interval-widget i.wv-close {
+.custom-interval-widget svg.svg-inline--fa {
   position: absolute;
   top: 5px;
   right: 5px;
 }
 
-.custom-interval-widget i.wv-close:hover {
+.custom-interval-widget svg.svg-inline--fa.wv-close:hover {
   color: #999;
   cursor: pointer;
 }
@@ -508,6 +515,18 @@ button:focus {
   padding: 2px 0;
 }
 
+.distraction-free-date {
+  color: #fff;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 24px;
+  font-weight: 400;
+  position: absolute;
+  bottom: 36px;
+  left: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .zoom-btn:hover, .interval-btn:hover {
   background-color: #fff;
   color: #1a1a1a;
@@ -520,19 +539,19 @@ button:focus {
   height: 64px;
   width: 20px;
   cursor: pointer;
-  border-left: 1px solid #1a1a1a;
+  border-left: thin solid #1a1a1a;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
-#timeline-hide:hover {
+#timeline-hide:hover,
+#timeline-data-availability-panel-handle:hover {
   background-color: #fff;
+  border-color: #000;
 }
 
-#timeline-hide:hover .wv-timeline-hide-double-chevron-left,
-#timeline-hide:hover .wv-timeline-hide-double-chevron-right,
-.wv-timeline-hide-double-chevron-left:hover,
-.wv-timeline-hide-double-chevron-right:hover {
+#timeline-hide:hover .wv-timeline-hide,
+#timeline-data-availability-panel-handle:hover .wv-timeline-data-availability-handle-chevron {
   background-position: -206px -63px;
 }
 
@@ -542,31 +561,58 @@ button:focus {
   right: -5px;
   color: #fff;
   cursor: pointer;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
   user-select: none;
   height: 30px;
   width: 30px;
-}
-
-.wv-timeline-hide-double-chevron-left {
   position: absolute;
   background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
   border-radius: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   border-right: 0;
+}
+
+.wv-timeline-hide-double-chevron-left {
   transform: rotate(90deg);
 }
 
 .wv-timeline-hide-double-chevron-right {
+  transform: rotate(270deg);
+}
+
+#timeline-data-availability-panel-handle {
+  position: absolute;
+  height: 19px;
+  width: 57px;
+  top: -20px;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  background-color: rgba(40, 40, 40, 0.65);
+  border: thin solid #fff;
+  border-bottom: none;
+  overflow: hidden;
+}
+
+.wv-timeline-data-availability-handle-chevron {
   position: absolute;
   background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
-  border-radius: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  border-right: 0;
-  transform: rotate(270deg);
+  left: 50%;
+  width: 57px;
+  height: 20px;
+}
+
+.wv-timeline-data-availability-handle-chevron-open {
+  top: 2.5px;
+  margin-left: -43px;
+  transform: rotate(180deg);
+}
+
+.wv-timeline-data-availability-handle-chevron-closed {
+  top: -4px;
+  margin-left: -14px;
 }
 
 .dragger-container {
@@ -625,6 +671,10 @@ button:focus {
 }
 
 /* Mobile date picker */
+.timeline-header-mobile {
+  position: static;
+}
+
 .mobile-date-picker-select-btn {
   position: absolute;
   left: 10px;
@@ -632,18 +682,40 @@ button:focus {
   background: rgba(40, 40, 40, 0.85);
   color: #fff;
   border: thin solid #333;
-  font-size: 17px;
-  font-family: 'Open Sans', sans-serif;
-  padding: 3px;
+  font-size: 23px;
+  padding: 14px 8px;
   border-radius: 5px;
-  line-height: 25px;
   white-space: nowrap;
   cursor: pointer;
+  height: 44px;
+  font-family: 'Roboto Mono', monospace;
+}
+.datepicker-modal {
+  & div, li {
+    font-family: 'Roboto Mono', monospace;
+  }
+  & .datepicker-header,
+  .datepicker-navbar-btn {
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .datepicker .datepicker-navbar-btn:hover {
+    background: #ccc;
+    color: #333;
+  }
 }
 
-.datepicker-header,
-.datepicker-navbar-btn {
-  font-weight: 700;
+/* Mobile date change arrows */
+.mobile-date-change-arrows-btn {
+  position: absolute;
+  left: 120px;
+  bottom: 10px;
+  background: rgba(40, 40, 40, 0.85);
+  border: thin solid #333;
+  padding: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 44px;
 }
 
 .datepicker.android-dark .datepicker-header {
@@ -666,4 +738,136 @@ button:focus {
 
 .datepicker-navbar-btn:hover {
   background: #fff;
+}
+
+/* TIMELINE DATA PANEL */
+
+.timeline-data-panel-container {
+  position: absolute;
+  background: rgba(40, 40, 40, 1);
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.animate-timeline-data-panel-slide-up {
+  z-index: 5;
+  bottom: 66px;
+  opacity: 1;
+}
+
+.animate-timeline-data-panel-slide-down {
+  z-index: -5;
+  bottom: -12px;
+  opacity: 0;
+}
+
+.timeline-data-panel i.wv-close:hover {
+  color: #999;
+  cursor: pointer;
+}
+
+.timeline-data-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: thin solid #808080;
+  padding: 5px;
+}
+
+.timeline-data-panel-header-title {
+  width: 150px;
+  padding: 5px;
+}
+
+.label-layer-active {
+  color: #000;
+}
+
+.label-layer-inactive {
+  color: #999;
+}
+
+.wv-toggle-data-matching-main {
+  align-items: center;
+  margin: 0;
+  white-space: nowrap;
+  flex-grow: 1;
+}
+
+.wv-toggle-data-matching-main .react-switch-case {
+  width: 45px;
+}
+
+.wv-toggle-data-matching-main > div.react-switch-label-case.switch-col {
+  padding-left: 5px;
+}
+
+.timeline-data-panel {
+  position: relative;
+  background-color: #212121;
+  color: #fff;
+  box-sizing: border-box;
+  border: thin solid #333;
+  border-bottom: 0;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.data-panel-layer-item {
+  position: relative;
+  border-bottom: thin solid #3c3c3c;
+  padding-bottom: 5px;
+}
+
+.data-panel-layer-item-header {
+  display: flex;
+  align-items: center;
+  padding: 5px 3px;
+}
+
+.data-panel-layer-item-title {
+  white-space: nowrap;
+  font-size: 1em;
+}
+
+.data-panel-layer-item-subtitle {
+  font-style: italic;
+  font-size: 0.9em;
+  padding-left: 3px;
+}
+
+.data-panel-layer-item-date-range {
+  position: absolute;
+  font-size: 0.9em;
+  right: 0;
+  top: 0;
+  padding: 4px 10px;
+}
+
+.data-panel-layer-list {
+  overflow: hidden;
+}
+
+.data-panel-layer-coverage-line-container {
+  overflow: hidden;
+  height: 12px;
+}
+
+.data-panel-coverage-line-container {
+  position: absolute;
+}
+
+.data-panel-coverage-line {
+  position: absolute;
+  height: 12px;
+}
+
+.data-panel-layer-empty {
+  height: 41px;
+  padding: 6px;
+}
+
+.data-item-empty {
+  display: flex;
+  flex-direction: row;
 }

@@ -10,46 +10,46 @@ const defaultDateConfig = {
   year: {
     format: 'YYYY',
     caption: 'Year',
-    step: 1
+    step: 1,
   },
   month: {
     format: 'MM',
     caption: 'Month',
-    step: 1
+    step: 1,
   },
   date: {
     format: 'DD',
     caption: 'Day',
-    step: 1
-  }
+    step: 1,
+  },
 };
 
 const subDailyDateConfig = {
   year: {
     format: 'YYYY',
     caption: 'Year',
-    step: 1
+    step: 1,
   },
   month: {
     format: 'MM',
     caption: 'Mon',
-    step: 1
+    step: 1,
   },
   date: {
     format: 'DD',
     caption: 'Day',
-    step: 1
+    step: 1,
   },
   hour: {
     format: 'hh',
     caption: 'Hour',
-    step: 1
+    step: 1,
   },
   minute: {
     format: 'mm',
     caption: 'Min',
-    step: 1
-  }
+    step: 1,
+  },
 };
 
 class MobileDatePicker extends Component {
@@ -59,30 +59,43 @@ class MobileDatePicker extends Component {
       time: '',
       minDate: '',
       maxDate: '',
-      isOpen: false
+      isOpen: false,
     };
+  }
+
+  componentDidMount() {
+    this.setInitDates();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { date, endDateLimit } = this.props;
+    // update on new endDateLimit or changed date
+    if (prevProps.endDateLimit !== endDateLimit || prevProps.date !== date) {
+      this.setInitDates();
+    }
   }
 
   handleClickDateButton = () => {
     this.setState({
-      isOpen: true
+      isOpen: true,
     });
   }
 
   handleCancel = () => {
     this.setState({
-      isOpen: false
+      isOpen: false,
     });
   }
 
   handleSelect = (time) => {
+    const { onDateChange } = this.props;
     this.setState({
       time,
-      isOpen: false
+      isOpen: false,
     });
     // convert date back to local time
     const date = this.convertToLocalDateObject(time);
-    this.props.onDateChange(getISODateFormatted(date));
+    onDateChange(getISODateFormatted(date));
   }
 
   // used for init mount
@@ -90,12 +103,12 @@ class MobileDatePicker extends Component {
     const {
       date,
       startDateLimit,
-      endDateLimit
+      endDateLimit,
     } = this.props;
     this.setState({
       time: this.convertToUTCDateObject(date),
       minDate: this.convertToUTCDateObject(startDateLimit),
-      maxDate: this.convertToUTCDateObject(endDateLimit)
+      maxDate: this.convertToUTCDateObject(endDateLimit),
     });
   }
 
@@ -112,45 +125,45 @@ class MobileDatePicker extends Component {
     return dateLocal;
   }
 
-  componentDidMount() {
-    this.setInitDates();
-  }
-
   render() {
     const {
       time,
       minDate,
       maxDate,
-      isOpen
+      isOpen,
     } = this.state;
     const {
       date,
-      hasSubdailyLayers
+      hasSubdailyLayers,
     } = this.props;
     // display date as '2000-10-28' for default or '2000-10-28 20:28Z' for subdaily
-    const displayDate = hasSubdailyLayers ? date.split('T').join(' ').split(':', 2).join(':') + 'Z' : date.split('T')[0];
+    const displayDate = hasSubdailyLayers ? `${date.split('T').join(' ').split(':', 2).join(':')}Z` : date.split('T')[0];
     return (
       time
-        ? <React.Fragment>
-          <div
-            className="mobile-date-picker-select-btn"
-            onClick={this.handleClickDateButton}>
-            {displayDate}
-          </div>
-          <DatePicker
-            dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
-            showCaption={true}
-            theme={'android-dark'}
-            headerFormat={hasSubdailyLayers ? 'YYYY-MM-DD hh:mmZ' : 'YYYY-MM-DD'}
-            confirmText={'OK'}
-            cancelText={'CANCEL'}
-            min={minDate}
-            max={maxDate}
-            value={time}
-            isOpen={isOpen}
-            onSelect={this.handleSelect}
-            onCancel={this.handleCancel} />
-        </React.Fragment>
+        ? (
+          <>
+            <div
+              className="mobile-date-picker-select-btn"
+              onClick={this.handleClickDateButton}
+            >
+              {displayDate}
+            </div>
+            <DatePicker
+              dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
+              showCaption
+              theme="android-dark"
+              headerFormat={hasSubdailyLayers ? 'YYYY-MM-DD hh:mmZ' : 'YYYY-MM-DD'}
+              confirmText="OK"
+              cancelText="CANCEL"
+              min={minDate}
+              max={maxDate}
+              value={time}
+              isOpen={isOpen}
+              onSelect={this.handleSelect}
+              onCancel={this.handleCancel}
+            />
+          </>
+        )
         : null
     );
   }
@@ -161,7 +174,7 @@ MobileDatePicker.propTypes = {
   endDateLimit: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   onDateChange: PropTypes.func,
-  startDateLimit: PropTypes.string
+  startDateLimit: PropTypes.string,
 };
 
 export default MobileDatePicker;

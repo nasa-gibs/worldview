@@ -68,10 +68,10 @@ fi
 # Run extractConfigFromWMTS.py script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
     "$PYTHON_SCRIPTS_DIR/extractConfigFromWMTS.py" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
-        "$BUILD_DIR/_wmts" "$BUILD_DIR/colormaps"
+        "$BUILD_DIR/_wmts"
 fi
 
-# # Run processVectorStyles.py and move vectorstyles where we want them
+# # Run copyVectorStyles.py and move vectorstyles where we want them
 if [ -e "$BUILD_DIR/vectorstyles" ] ; then
     mkdir -p "$BUILD_DIR"/config/vectorstyles
     if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
@@ -82,14 +82,14 @@ if [ -e "$BUILD_DIR/vectorstyles" ] ; then
         "$BUILD_DIR/config/vectorstyles"
 fi
 
-# Run processVectorData.py and move vectordata where we want them
+# Run processVectorStyles.py and move vectordata where we want them
 if [ -e "$BUILD_DIR/vectorstyles" ] ; then
     mkdir -p "$BUILD_DIR"/config/wv.json/vectorstyles
     if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
         cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"
     fi
     "$PYTHON_SCRIPTS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
-        "$BUILD_DIR/vectorstyles" \
+        "$BUILD_DIR/config/vectorstyles" \
         "$BUILD_DIR/config/wv.json/vectorstyles"
 fi
 
@@ -115,6 +115,13 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
             "$BUILD_DIR/config/palettes"
 fi
 
+# Run getCollectionData.py to fetch collection metadata
+# TODO re-enable when ready
+# if [ -e "$OPT_DIR/$OPT_SUBDIR/conceptIds.json" ] ; then
+#     "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$OPT_DIR/$OPT_SUBDIR/conceptIds.json" \
+#         "$BUILD_DIR/config/wv.json/collections.json"
+# fi
+
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
@@ -134,6 +141,9 @@ done
 # Copy brand files from build to dest
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
+
+"$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
+    "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
 
 # Validate the options build
 "$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"

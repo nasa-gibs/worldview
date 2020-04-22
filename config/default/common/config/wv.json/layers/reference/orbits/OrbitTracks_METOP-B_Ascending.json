@@ -35,7 +35,7 @@
         "id": "OrbitTracks_METOP-B_Ascending",
         "immutable": true
       },
-      "tags": "tracks"
+      "tags": "tracks day"
     }
   }
 }

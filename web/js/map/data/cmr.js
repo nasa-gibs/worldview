@@ -1,5 +1,6 @@
-import util from '../../util/util';
 import OlGeomPolygon from 'ol/geom/Polygon';
+import util from '../../util/util';
+
 export const REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
 export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
 export const REL_BROWSE = 'http://esipfed.org/ns/fedsearch/1.1/browse#';
@@ -7,69 +8,67 @@ export const DATA_EXTS = ['hdf', 'he5', 'h5', 'hdf5', 'nc', 'bz2'];
 
 export function dataCmrClient(spec, store) {
   // Abort query after 45 seconds
-  var QUERY_TIMEOUT = spec.timeout || 45 * 1000;
-  var self = {};
-  var ns = self;
+  const QUERY_TIMEOUT = spec.timeout || 45 * 1000;
+  const self = {};
+  const ns = self;
 
-  var ajaxOptions = {
+  const ajaxOptions = {
     url: 'https://cmr.earthdata.nasa.gov/search/',
     headers: {
-      'Client-Id': 'Worldview'
+      'Client-Id': 'Worldview',
     },
     traditional: true,
     dataType: 'json',
-    timeout: QUERY_TIMEOUT
+    timeout: QUERY_TIMEOUT,
   };
 
-  var init = function() {
+  const init = function() {
     ns.ajax = util.ajaxCache(100);
   };
 
   self.submit = function(parameters) {
-    var queryParameters = $.extend(true, {}, ajaxOptions, parameters);
-    var startTimeDelta = parameters.startTimeDelta || 0;
-    var endTimeDelta = parameters.endTimeDelta || 0;
-    var t = parameters.time;
-    var searchType = 'granules.json';
+    const queryParameters = $.extend(true, {}, ajaxOptions, parameters);
+    const startTimeDelta = parameters.startTimeDelta || 0;
+    const endTimeDelta = parameters.endTimeDelta || 0;
+    const t = parameters.time;
+    let searchType = 'granules.json';
     if (parameters.search) {
       searchType = parameters.search;
     }
     queryParameters.url += searchType;
     if (t) {
-      var startTime = new Date(
+      let startTime = new Date(
         Date.UTC(
           t.getUTCFullYear(),
           t.getUTCMonth(),
           t.getUTCDate(),
           0,
           0 + startTimeDelta,
-          0
-        )
+          0,
+        ),
       );
-      var endTime = new Date(
+      let endTime = new Date(
         Date.UTC(
           t.getUTCFullYear(),
           t.getUTCMonth(),
           t.getUTCDate(),
           23,
           59 + endTimeDelta,
-          59
-        )
+          59,
+        ),
       );
       startTime = startTime.toISOString();
       endTime = endTime.toISOString();
-      queryParameters.data.temporal = startTime + ',' + endTime;
+      queryParameters.data.temporal = `${startTime},${endTime}`;
     }
     queryParameters.data.pageSize = '1000';
-    var deferred = $.Deferred();
-    var metrics = 'ev=data-download&' + $.param(queryParameters.data, true);
-    util.metrics(metrics);
+    const deferred = $.Deferred();
     ns.ajax
       .submit(queryParameters)
-      .done(function(data) {
+      .done((data) => {
         deferred.resolve(data.feed.entry);
       })
-      .fail(function(jqXHR, textStatus, errorThrown) {
+      .fail((jqXHR, textStatus, errorThrown) => {
         deferred.reject(jqXHR, textStatus, errorThrown);
       });
     return deferred.promise();
@@ -80,10 +79,10 @@ export function dataCmrClient(spec, store) {
 }
 
 export function dataCmrGeometry(result) {
-  var self = {};
+  const self = {};
   self.polygons = [];
 
-  var init = function() {
+  const init = function() {
     if (result.polygons) {
       initFromPolygons(result.polygons);
     } else if (result.boxes) {
@@ -94,13 +93,13 @@ export function dataCmrGeometry(result) {
   };
 
   self.toOpenLayers = function() {
-    var olPolygons = [];
-    $.each(self.polygons, function(index, polygon) {
-      var olRings = [];
-      $.each(polygon, function(index, ring) {
-        var olPoints = [];
-        $.each(ring, function(index, point) {
-          var p = [point.x, point.y];
+    const olPolygons = [];
+    $.each(self.polygons, (index, polygon) => {
+      const olRings = [];
+      $.each(polygon, (index, ring) => {
+        const olPoints = [];
+        $.each(ring, (index, point) => {
+          const p = [point.x, point.y];
           olPoints.push(p);
         });
         olRings.push(olPoints);
@@ -110,18 +109,18 @@ export function dataCmrGeometry(result) {
     return olPolygons[0];
   };
 
-  var initFromPolygons = function(cmrPolygons) {
-    $.each(cmrPolygons, function(index, cmrPolygon) {
-      var rings = [];
-      $.each(cmrPolygon, function(index, cmrRing) {
-        var ring = [];
-        var parts = cmrRing.split(' ');
-        for (var i = 0; i < parts.length; i += 2) {
-          var y = parseFloat(parts[i]);
-          var x = parseFloat(parts[i + 1]);
+  const initFromPolygons = function(cmrPolygons) {
+    $.each(cmrPolygons, (index, cmrPolygon) => {
+      const rings = [];
+      $.each(cmrPolygon, (index, cmrRing) => {
+        const ring = [];
+        const parts = cmrRing.split(' ');
+        for (let i = 0; i < parts.length; i += 2) {
+          const y = parseFloat(parts[i]);
+          const x = parseFloat(parts[i + 1]);
           ring.push({
-            x: x,
-            y: y
+            x,
+            y,
           });
         }
         rings.push(ring);
@@ -130,33 +129,33 @@ export function dataCmrGeometry(result) {
     });
   };
 
-  var initFromBoxes = function(cmrBoxes) {
-    $.each(cmrBoxes, function(index, cmrBox) {
-      var ring = [];
-      var fields = cmrBox.split(' ');
-      var ymin = parseFloat(fields[0]);
-      var xmin = parseFloat(fields[1]);
-      var ymax = parseFloat(fields[2]);
-      var xmax = parseFloat(fields[3]);
+  const initFromBoxes = function(cmrBoxes) {
+    $.each(cmrBoxes, (index, cmrBox) => {
+      const ring = [];
+      const fields = cmrBox.split(' ');
+      const ymin = parseFloat(fields[0]);
+      const xmin = parseFloat(fields[1]);
+      const ymax = parseFloat(fields[2]);
+      const xmax = parseFloat(fields[3]);
       ring.push({
         x: xmin,
-        y: ymin
+        y: ymin,
       });
       ring.push({
         x: xmax,
-        y: ymin
+        y: ymin,
       });
       ring.push({
         x: xmax,
-        y: ymax
+        y: ymax,
       });
       ring.push({
         x: xmin,
-        y: ymax
+        y: ymax,
       });
       ring.push({
         x: xmin,
-        y: ymin
+        y: ymin,
       });
 
       self.polygons.push([ring]);
@@ -169,30 +168,30 @@ export function dataCmrGeometry(result) {
 
 export function dataCmrMockClient(suffix, store) {
   const state = store.getState();
-  var endpoint;
-  var results;
+  let endpoint;
+  let results;
 
-  var self = {};
+  const self = {};
 
-  var init = function() {
+  const init = function() {
     if (!suffix) {
       throw new Error('No mock CMR suffix specified');
     }
-    endpoint = 'mock/cmr.cgi-' + suffix;
+    endpoint = `mock/cmr.cgi-${suffix}`;
   };
 
   self.submit = function(parameters) {
     console.warn('Mocking CMR query', endpoint);
-    var deferred = $.Deferred();
+    const deferred = $.Deferred();
     if (!results) {
-      $.getJSON(endpoint, function(data) {
+      $.getJSON(endpoint, (data) => {
         try {
           results = adjustResults(parameters, data);
           deferred.resolve(results.feed.entry);
         } catch (error) {
           util.error(error);
         }
-      }).fail(function(jqXHR, textStatus, errorThrown) {
+      }).fail((jqXHR, textStatus, errorThrown) => {
         deferred.reject(jqXHR, textStatus, errorThrown);
       });
     } else {
@@ -201,19 +200,19 @@ export function dataCmrMockClient(suffix, store) {
     return deferred.promise();
   };
 
-  var adjustResults = function(parameters, data) {
+  const adjustResults = function(parameters, data) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    var day = state.date[activeDateStr];
+    const day = state.date[activeDateStr];
     // Mock data was retrieved for Aug 6, 2013
-    var resultsDay = new Date(Date.UTC(2013, 7, 6));
-    var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);
+    const resultsDay = new Date(Date.UTC(2013, 7, 6));
+    const diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);
 
-    $.each(data.feed.entry, function(index, entry) {
-      var timeStart = util.parseTimestampUTC(entry.time_start);
+    $.each(data.feed.entry, (index, entry) => {
+      const timeStart = util.parseTimestampUTC(entry.time_start);
       timeStart.setUTCDate(timeStart.getUTCDate() + diffDays);
       entry.time_start = timeStart.toISOString();
 
-      var timeEnd = util.parseTimestampUTC(entry.time_end);
+      const timeEnd = util.parseTimestampUTC(entry.time_end);
       timeEnd.setUTCDate(timeEnd.getUTCDate() + diffDays);
       entry.time_end = timeEnd.toISOString();
     });
@@ -227,7 +226,7 @@ export function dataCmrMockClient(suffix, store) {
 }
 
 export function dataCmrRoundTime(timeString) {
-  var time = util.parseTimestampUTC(timeString);
+  const time = util.parseTimestampUTC(timeString);
   if (time.getUTCMilliseconds() >= 500) {
     time.setUTCSeconds(time.getUTCSeconds() + 1);
   }

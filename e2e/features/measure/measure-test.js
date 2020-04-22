@@ -12,30 +12,30 @@ const {
   measurementTooltip,
   sidebarContainer,
   unitOfMeasureToggle,
-  greatCircleToggle
 } = localSelectors;
 
 module.exports = {
-  before: function(client) {
+  before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
-  'Clicking the measure button opens the menu': function(client) {
+  'Clicking the measure button opens the menu': (client) => {
     client.expect.element(measureMenu).to.not.be.present;
     client.useCss().click(measureBtn);
     client.waitForElementVisible(measureMenu, TIME_LIMIT);
     client.pause(300);
   },
-  'Initiating a measurement causes an alert to show and sidebar to collapse': function(client) {
+  'Initiating a measurement causes an alert to show and sidebar to collapse': (client) => {
     client.useCss().click(measureDistanceBtn);
     client.waitForElementVisible('#measurement-alert', TIME_LIMIT);
     client.useCss().assert.elementPresent(sidebarContainer);
     client.useCss().assert.cssProperty(
       sidebarContainer,
       'max-height',
-      '0px');
+      '0px',
+    );
     client.pause(300);
   },
-  'Cancelling a measurement causes an alert to disappear and sidebar to expand': function(client) {
+  'Cancelling a measurement causes an alert to disappear and sidebar to expand': (client) => {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // right click doesn't work in firefox
       client.useCss().click(measureBtn);
       client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
@@ -54,7 +54,7 @@ module.exports = {
       });
     }
   },
-  'Creating a distance measurement causes a tooltip to show': function(client) {
+  'Creating a distance measurement causes a tooltip to show': (client) => {
     client.useCss().click(measureBtn);
     client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       client.useCss().click(measureDistanceBtn);
@@ -70,7 +70,7 @@ module.exports = {
       client.waitForElementVisible(measurementTooltip, TIME_LIMIT);
     });
   },
-  'Creating a area measurement causes a tooltip to show': function(client) {
+  'Creating a area measurement causes a tooltip to show': (client) => {
     client.useCss().click(measureBtn);
     client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       client.useCss().click(measureAreaBtn);
@@ -90,7 +90,7 @@ module.exports = {
       client.waitForElementVisible(measurementTooltip, TIME_LIMIT);
     });
   },
-  'Toggling unit of measure updates the measurement value': async function(client) {
+  'Toggling unit of measure updates the measurement value': async(client) => {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
       client.click(measureBtn);
       await client.waitForElementVisible(measureMenu, TIME_LIMIT);
@@ -104,22 +104,7 @@ module.exports = {
       });
     }
   },
-  'Toggling great circle changes the measurement value': async function(client) {
-    if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
-      const measureTooltips = await client.elements('css selector', measurementTooltip);
-      const elPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
-      const initMeasureValues = await Promise.all(elPromises).then(elem => elem.map(el => el.value));
-
-      await client.click(greatCircleToggle);
-      const updatedElPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
-      const updatedValues = await Promise.all(updatedElPromises).then(elem => elem.map(el => el.value));
-      updatedValues.forEach((value, index) => {
-        const prevValue = initMeasureValues[index];
-        client.assert.ok(value !== prevValue);
-      });
-    }
-  },
-  'Clearing a measurements removes all tooltips': function(client) {
+  'Clearing a measurements removes all tooltips': (client) => {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
       client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
         client.useCss().click(clearMeasurementsBtn);
@@ -127,7 +112,7 @@ module.exports = {
       });
     }
   },
-  after: function(client) {
+  after(client) {
     client.end();
-  }
+  },
 };

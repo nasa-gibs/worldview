@@ -136,7 +136,6 @@ ul.BulkDownload li a.link {
   font-size: 15px;
   font-weight: 700;
   margin: 0 0 10px;
-  color: #fffbe7;
 }
 
 #wv-data-bulk-download-links li {
@@ -159,16 +158,12 @@ ul.BulkDownload li a.link {
   padding: 5px;
 }
 
-#wv-data-selection-notice .icon {
-  color: #fffbe7;
-  width: 32px;
-  height: 32px;
+#wv-data-selection-notice svg.svg-inline--fa {
   float: left;
 }
 
 #wv-data-selection-notice .text {
   margin-left: 47px;
-  color: #fffbe7;
 }
 
 #wv-data-list table {

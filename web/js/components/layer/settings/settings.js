@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
-import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import {
+  TabContent, TabPane, Nav, NavItem, NavLink,
+} from 'reactstrap';
 import { connect } from 'react-redux';
 import Opacity from './opacity';
 import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
+
 import {
   getCheckerboard,
-  palettesTranslate
+  palettesTranslate,
 } from '../../../modules/palettes/util';
 import {
   getDefaultLegend,
@@ -18,29 +21,31 @@ import {
   getPaletteLegends,
   getPalette,
   getPaletteLegend,
-  isPaletteAllowed
+  isPaletteAllowed,
 } from '../../../modules/palettes/selectors';
 import {
   setThresholdRangeAndSquash,
   setCustomPalette,
-  clearCustomPalette
+  clearCustomPalette,
+  setToggledClassification,
 } from '../../../modules/palettes/actions';
 import {
   setFilterRange,
   setStyle,
-  clearStyle
+  clearStyle,
 } from '../../../modules/vector-styles/actions';
 
 import {
-  getVectorStyle
+  getVectorStyle,
 } from '../../../modules/vector-styles/selectors';
 import { setOpacity } from '../../../modules/layers/actions';
+import ClassificationToggle from './classification-toggle';
 
 class LayerSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeIndex: 0
+      activeIndex: 0,
     };
     this.canvas = document.createElement('canvas');
     this.canvas.width = 120;
@@ -63,7 +68,9 @@ class LayerSettings extends React.Component {
       palettesTranslate,
       groupName,
       setThresholdRange,
-      layer
+      layer,
+      toggleClassification,
+      screenHeight,
     } = this.props;
     const { activeIndex } = this.state;
     const navElements = [];
@@ -73,8 +80,8 @@ class LayerSettings extends React.Component {
       const dualStr = paletteLegends.length === 2 ? ' dual' : '';
       const navItemEl = (
         <NavItem
-          key={legend.id + 'nav'}
-          className={'settings-customs-title ' + activeClass + dualStr}
+          key={`${legend.id}nav`}
+          className={`settings-customs-title ${activeClass}${dualStr}`}
         >
           <NavLink onClick={() => this.setState({ activeIndex: i })}>
             {legend.title}
@@ -86,22 +93,28 @@ class LayerSettings extends React.Component {
       const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
       const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
       let paneItemEl;
-      if (
-        legend.type !== 'continuous' &&
-        legend.type !== 'discrete' &&
-        legend.colors.length > 1
+      if (legend.type === 'classification' && legend.colors.length > 1) {
+        paneItemEl = (
+          <TabPane key={`${legend.id}pane`} tabId={i}>
+            <ClassificationToggle height={Math.ceil(screenHeight / 3)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
+          </TabPane>
+        );
+      } else if (
+        legend.type !== 'continuous'
+        && legend.type !== 'discrete'
+        && legend.colors.length > 1
       ) {
         paneItemEl = (
-          <TabPane key={legend.id + 'pane'} tabId={i}>
+          <TabPane key={`${legend.id}pane`} tabId={i}>
             No customizations available for this palette.
           </TabPane>
         );
       } else {
         paneItemEl = (
-          <TabPane key={legend.id + 'pane'} tabId={i}>
+          <TabPane key={`${legend.id}pane`} tabId={i}>
             {legend.type !== 'classification' ? (
               <PaletteThreshold
-                key={layer.id + i + '_threshold'}
+                key={`${layer.id + i}_threshold`}
                 legend={legend}
                 setRange={setThresholdRange}
                 min={0}
@@ -114,9 +127,8 @@ class LayerSettings extends React.Component {
                 index={i}
                 palette={palette}
               />
-            ) : (
-              ''
-            )}
+            ) : null}
+
             <Palette
               setCustomPalette={setCustomPalette}
               groupName={groupName}
@@ -139,10 +151,10 @@ class LayerSettings extends React.Component {
       navElements.push(navItemEl);
     });
     return (
-      <React.Fragment>
+      <>
         <Nav tabs>{navElements}</Nav>
         <TabContent activeTab={activeIndex}>{paneElements}</TabContent>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -162,7 +174,9 @@ class LayerSettings extends React.Component {
       setThresholdRange,
       paletteOrder,
       groupName,
-      layer
+      layer,
+      toggleClassification,
+      screenHeight,
     } = this.props;
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
@@ -174,14 +188,15 @@ class LayerSettings extends React.Component {
     const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
-    } else if (legend.type === 'classification' && legend.colors.length > 1) {
-      return '';
+    } if (legend.type === 'classification' && legend.colors.length > 1) {
+      return (<ClassificationToggle height={Math.ceil(screenHeight / 2)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
     }
     return (
-      <React.Fragment>
-        {legend.type !== 'classification' &&
+      <>
+        {legend.type !== 'classification'
+          && (
           <PaletteThreshold
-            key={layer.id + '0_threshold'}
+            key={`${layer.id}0_threshold`}
             legend={legend}
             setRange={setThresholdRange}
             min={0}
@@ -194,7 +209,7 @@ class LayerSettings extends React.Component {
             index={0}
             palette={palette}
           />
-        }
+          )}
         <Palette
           setCustomPalette={setCustomPalette}
           clearCustomPalette={clearCustomPalette}
@@ -209,7 +224,7 @@ class LayerSettings extends React.Component {
           index={0}
           paletteOrder={paletteOrder}
         />
-      </React.Fragment>
+      </>
     );
   }
 
@@ -222,14 +237,14 @@ class LayerSettings extends React.Component {
       clearStyle,
       groupName,
       layer,
-      vectorStyles
+      vectorStyles,
     } = this.props;
-    var customStyle;
+    let customStyle;
     if (layer.custom && layer.custom[0]) {
-      customStyle = layer.custom[0];
+      [customStyle] = layer.custom;
     }
     return (
-      <React.Fragment>
+      <>
         <VectorStyle
           setStyle={setStyle}
           clearStyle={clearStyle}
@@ -239,85 +254,80 @@ class LayerSettings extends React.Component {
           groupName={groupName}
           vectorStyles={vectorStyles}
         />
-      </React.Fragment>
+      </>
     );
   }
 
   render() {
-    var renderCustomizations;
+    let renderCustomizations;
     const {
       setOpacity,
       customPalettesIsActive,
       layer,
-      palettedAllowed
+      palettedAllowed,
     } = this.props;
 
     if (layer.type !== 'vector') {
-      renderCustomizations =
-        customPalettesIsActive && palettedAllowed && layer.palette
-          ? this.renderCustomPalettes()
-          : '';
+      renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
+        ? this.renderCustomPalettes()
+        : '';
     } else {
       renderCustomizations = ''; // this.renderVectorStyles(); for future
     }
 
     if (!layer.id) return '';
     return (
-      <React.Fragment>
+      <>
         <Opacity
           start={Math.ceil(layer.opacity * 100)}
           setOpacity={setOpacity}
           layer={layer}
         />
         {renderCustomizations}
-        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer}/>}
-      </React.Fragment>
+        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
+      </>
     );
   }
 }
 
 function mapStateToProps(state, ownProps) {
-  const { config, palettes, compare } = state;
+  const {
+    config, palettes, compare, browser,
+  } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
 
   return {
     paletteOrder: config.paletteOrder,
     groupName,
+    screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
     palettesTranslate,
-    getDefaultLegend: (layerId, index) => {
-      return getDefaultLegend(layerId, index, state);
-    },
-    getCustomPalette: id => {
-      return getCustomPalette(id, custom);
-    },
-    getPaletteLegend: (layerId, index) => {
-      return getPaletteLegend(layerId, index, groupName, state);
-    },
+    getDefaultLegend: (layerId, index) => getDefaultLegend(layerId, index, state),
+    getCustomPalette: (id) => getCustomPalette(id, custom),
+    getPaletteLegend: (layerId, index) => getPaletteLegend(layerId, index, groupName, state),
 
-    getPaletteLegends: layerId => {
-      return getPaletteLegends(layerId, groupName, state);
-    },
-    getPalette: (layerId, index) => {
-      return getPalette(layerId, index, groupName, state);
-    },
-    getVectorStyle: (layerId, index) => {
-      return getVectorStyle(layerId, index, groupName, state);
-    },
-    vectorStyles: config.vectorStyles
+    getPaletteLegends: (layerId) => getPaletteLegends(layerId, groupName, state),
+    getPalette: (layerId, index) => getPalette(layerId, index, groupName, state),
+    getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
+    vectorStyles: config.vectorStyles,
   };
 }
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
+  toggleClassification: (layerId, classIndex, index, groupName) => {
+    dispatch(
+      setToggledClassification(layerId, classIndex, index, groupName),
+    );
+  },
   setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
-      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
+      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName),
     );
   },
   setFilterRange: (layerId, min, max, index, groupName) => {
     dispatch(
-      setFilterRange(layerId, { min, max }, index, groupName)
+      setFilterRange(layerId, { min, max }, index, groupName),
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
@@ -334,22 +344,19 @@ const mapDispatchToProps = dispatch => ({
   },
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
-  }
+  },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LayerSettings);
 
 LayerSettings.defaultProps = {
-  isOpen: false,
   layer: { id: null, name: null },
   palettedAllowed: false,
-  title: null
 };
 LayerSettings.propTypes = {
-  canvas: PropTypes.object,
   clearCustomPalette: PropTypes.func,
   clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
@@ -358,19 +365,16 @@ LayerSettings.propTypes = {
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
-  getVectorStyle: PropTypes.func,
   groupName: PropTypes.string,
-  index: PropTypes.number,
-  isOpen: PropTypes.bool,
   layer: PropTypes.object,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
+  screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
-  setFilterRange: PropTypes.func,
   setOpacity: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
-  title: PropTypes.string,
-  vectorStyles: PropTypes.object
+  toggleClassification: PropTypes.func,
+  vectorStyles: PropTypes.object,
 };

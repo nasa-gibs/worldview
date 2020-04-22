@@ -2,6 +2,8 @@ import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
 
+import { faIconArrowsAltHSVGDomEl } from '../fa-map-icons';
+
 let swipeOffset = null;
 let line = null;
 let bottomLayers = [];
@@ -13,7 +15,7 @@ let percentSwipe = null;
 const SWIPE_PADDING = 30;
 let dragging = false;
 
-export class Swipe {
+export default class Swipe {
   constructor(
     olMap,
     isActive,
@@ -39,9 +41,7 @@ export class Swipe {
     this.update();
   }
 
-  getSwipeOffset() {
-    return swipeOffset;
-  }
+  getSwipeOffset = () => swipeOffset
 
   /**
    * Recursively apply listeners to layers
@@ -75,7 +75,7 @@ export class Swipe {
    * Clip the top layer at the right xOffset
    * @param {Object} event | OL Precompose event object
    */
-  clip(event) {
+  clip = (event) => {
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const width = ctx.canvas.width * (swipeOffset / viewportWidth);
@@ -90,7 +90,7 @@ export class Swipe {
    * Layer group is transparent
    * @param {Object} event | OL Precompose event object
    */
-  reverseClip(event) {
+  reverseClip = (event) => {
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
@@ -135,11 +135,10 @@ export class Swipe {
  * Add Swiper
  * @param {Object} map | OL map object
  */
-var addLineOverlay = function(map) {
+const addLineOverlay = function(map) {
   const lineCaseEl = document.createElement('div');
   const draggerEl = document.createElement('div');
   const draggerCircleEl = document.createElement('div');
-  const iconEl = document.createElement('i');
   const firstLabel = document.createElement('span');
   const secondLabel = document.createElement('span');
   const windowWidth = util.browser.dimensions[0];
@@ -150,13 +149,12 @@ var addLineOverlay = function(map) {
   firstLabel.appendChild(document.createTextNode('A'));
   secondLabel.appendChild(document.createTextNode('B'));
 
-  iconEl.className = 'fas fa-arrows-alt-h';
   draggerEl.className = 'ab-swipe-dragger';
   lineCaseEl.className = 'ab-swipe-line';
   lineCaseEl.appendChild(firstLabel);
   lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(draggerCircleEl);
-  draggerCircleEl.appendChild(iconEl);
+  draggerCircleEl.insertAdjacentHTML('beforeend', faIconArrowsAltHSVGDomEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe
@@ -198,7 +196,7 @@ var addLineOverlay = function(map) {
   return lineCaseEl;
 };
 
-var dragLine = function(listenerObj, lineCaseEl, map) {
+const dragLine = function(listenerObj, lineCaseEl, map) {
   function move(evt) {
     if (!dragging) {
       dragging = true;
@@ -241,7 +239,7 @@ var dragLine = function(listenerObj, lineCaseEl, map) {
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
  */
-var applyLayerListeners = function(layer) {
+const applyLayerListeners = function(layer) {
   layer.on('prerender', this.clip);
   layer.on('postrender', restore);
   bottomLayers.push(layer);
@@ -251,13 +249,13 @@ var applyLayerListeners = function(layer) {
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
-var applyReverseLayerListeners = function(layer) {
+const applyReverseLayerListeners = function(layer) {
   layer.on('prerender', this.reverseClip);
   layer.on('postrender', restore);
   topLayers.push(layer);
 };
 
-var restore = function(event) {
+const restore = function(event) {
   const ctx = event.context;
   ctx.restore();
 };

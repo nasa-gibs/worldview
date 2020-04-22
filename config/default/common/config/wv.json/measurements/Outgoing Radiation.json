@@ -3,7 +3,7 @@
         "Outgoing Radiation": {
             "id": "outgoing-radiation",
             "title":    "Outgoing Radiation",
-            "subtitle": "Aqua / AIRS",
+            "subtitle": "Aqua/AIRS",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",

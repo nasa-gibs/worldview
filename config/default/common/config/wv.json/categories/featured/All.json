@@ -8,6 +8,7 @@
               "description": "",
               "measurements": [
                 "Geostationary",
+                "Vectors",
                 "Corrected Reflectance",
                 "Fires and Thermal Anomalies",
                 "Precipitation Rate - Featured",
@@ -16,6 +17,7 @@
                 "Land Surface Temperature",
                 "Sea Surface Temperature - Featured",
                 "Orbital Track"
+                
               ]
           }
       }

@@ -7,9 +7,7 @@ class Pick extends React.Component {
     super(props);
     this.state = {
       position: props.position,
-      visibility: props.visibility,
-      color: props.color,
-      max: props.max
+      max: props.max,
     };
   }
 
@@ -17,8 +15,9 @@ class Pick extends React.Component {
    * Return visibility style string
    */
   getVisibility() {
-    var visibility = 'visible';
-    if (this.state.position < 0 || this.state.position > this.state.max) {
+    const { position, max } = this.state;
+    let visibility = 'visible';
+    if (position < 0 || position > max) {
       visibility = 'hidden';
     }
     return visibility;
@@ -30,7 +29,9 @@ class Pick extends React.Component {
    * @param {number} y | y offset
    */
   getText(x, y, visibility) {
-    if (this.props.text) {
+    const { text } = this.props;
+    const { textColor } = this.state;
+    if (text) {
       return (
         <text
           x={x}
@@ -38,30 +39,32 @@ class Pick extends React.Component {
           alignmentBaseline="middle"
           textAnchor="middle"
           style={{
-            fill: this.state.textColor ? this.state.textColor : null,
-            visibility: visibility || null
+            fill: textColor || null,
+            visibility: visibility || null,
           }}
         >
-          {this.props.text}
+          {text}
         </text>
       );
     }
   }
 
   render() {
-    var visibility = this.getVisibility();
-    const { yOffset, path, width, height } = this.props;
+    const visibility = this.getVisibility();
+    const {
+      yOffset, path, width, height, color,
+    } = this.props;
     const { position } = this.state;
-    var translate = 'translate(' + position + ',' + yOffset + ')';
+    const translate = `translate(${position},${yOffset})`;
     return (
       <g transform={translate}>
         <path
           style={{
-            fill: this.props.color ? this.props.color : null,
-            visibility: visibility
+            fill: color || null,
+            visibility,
           }}
           d={path}
-          transform={'translate(' + -width / 2 + ', ' + -height / 4 + ')'}
+          transform={`translate(${-width / 2}, ${-height / 4})`}
         />
         {this.getText(-5, lodashRound(height / 6, 4), visibility)}
       </g>
@@ -76,9 +79,8 @@ Pick.propTypes = {
   path: PropTypes.string,
   position: PropTypes.number,
   text: PropTypes.string,
-  visibility: PropTypes.string,
   width: PropTypes.number,
-  yOffset: PropTypes.number
+  yOffset: PropTypes.number,
 };
 
 export default Pick;

@@ -18,7 +18,8 @@
             "palette": {
                 "id": "GRanD_Reservoirs",
                 "immutable": true
-            }
+            },
+            "wrapX": true
         }
     }
 }

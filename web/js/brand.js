@@ -4,7 +4,7 @@ import lodashIndexOf from 'lodash/indexOf';
  * @static
  */
 export default (function() {
-  var self = {};
+  const self = {};
 
   /**
    * Official name of this application.
@@ -59,9 +59,9 @@ export default (function() {
   };
 
   self.url = function(base) {
-    var joiner = (lodashIndexOf(base, '?') < 0) ? '?' : '&';
-    return base + joiner + 'v=' + self.BUILD_NONCE;
+    const joiner = lodashIndexOf(base, '?') < 0 ? '?' : '&';
+    return `${base + joiner}v=${self.BUILD_NONCE}`;
   };
 
   return self;
-})();
+}());

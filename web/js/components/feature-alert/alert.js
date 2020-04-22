@@ -1,67 +1,59 @@
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { openCustomContent } from '../../modules/modal/actions';
-import GeostationaryModalBody from './geostationary-modal';
-import AlertUtil from '../util/alert';
 import util from '../../util/util';
 
 class FeaturedAlert extends React.Component {
   constructor(props) {
     super(props);
-    let alertHasBeenShown;
-    if (util.browser.localStorage) {
-      alertHasBeenShown = localStorage.getItem('featured-alert:geostationary');
-    }
+    const alertHasBeenShown = true;
     this.state = {
-      showAlert: !alertHasBeenShown
+      showAlert: !alertHasBeenShown,
     };
   }
 
   dismissAlert() {
     if (util.browser.localStorage) {
-      localStorage.setItem('featured-alert:geostationary', true);
+      localStorage.setItem('<alert-name>', true);
     }
     this.setState({ showAlert: false });
   }
 
   render() {
-    const { showAlert } = this.state;
-    return (
-      <AlertUtil
-        id={'geostationary-alert'}
-        isOpen={showAlert}
-        iconClassName='fa fa-layer-group fa-fw'
-        onClick={this.props.showModal.bind(this)}
-        onDismiss={this.dismissAlert.bind(this)}
-        message="Check out our new geostationary layers!"
-        noPortal={true}
-      />
-    );
+    // const { showAlert } = this.state;
+    return '';
+    // return (
+    //   <AlertUtil
+    //     id={'geostationary-alert'}
+    //     isOpen={showAlert}
+    //     iconClassName='faLayerGroup'
+    //     onClick={this.props.showModal.bind(this)}
+    //     onDismiss={this.dismissAlert.bind(this)}
+    //     message="Check out our new geostationary layers!"
+    //     noPortal={true}
+    //   />
+    // );
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   showModal: () => {
     dispatch(
-      openCustomContent('geostationary_info', {
-        headerText: 'New: Geostationary Layers',
+      openCustomContent('', {
+        headerText: '',
         backdrop: false,
         size: 'lg',
         wrapClassName: '',
         clickableBehindModal: true,
-        bodyComponent: GeostationaryModalBody,
-        scrollable: true
-      })
+        bodyComponent: undefined,
+        scrollable: true,
+      }),
     );
-  }
+  },
 });
-
-FeaturedAlert.propTypes = {
-  showModal: PropTypes.func
-};
 
 export default connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(FeaturedAlert);

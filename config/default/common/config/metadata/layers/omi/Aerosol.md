@@ -1,5 +1,5 @@
 ### Aerosol Optical Depth
-Aerosols absorb and scatter incoming sunlight, which reduces visibility and increases the optical depth. Aerosols have an effect on human health, weather and the climate. Sources of aerosols include pollution from factories, smoke from fires, dust from dust storms, sea salts, and volcanic ash and smog. Aerosols compromise human health when inhaled by people with asthma or other respiratory illnesses. Aerosols also have an affect on the weather and climate by cooling or warming the earth, helping or preventing clouds from forming.
+Aerosols absorb and scatter incoming sunlight, which reduces visibility and increases the optical depth. Aerosols have an effect on human health, weather and the climate. Sources of aerosols include pollution from factories, smoke from fires, dust from dust storms, sea salts, and volcanic ash and smog. Aerosols compromise human health when inhaled by people with asthma or other respiratory illnesses. Aerosols also have an affect on the weather and climate by cooling or warming the Earth, helping or preventing clouds from forming.
 
 ### Aerosol Optical Depth (Extinction, Near-UV, 388.0 nm)
 Temporal Coverage: 1 October 2004 - Present

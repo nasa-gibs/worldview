@@ -4,4 +4,4 @@ The Moderate Resolution Imaging Spectroradiometer (MODIS) is a 36-band visible t
 
 Seasonal snow cover is an important part of Earth’s climate system. It helps regulate the Earth’s surface temperature and is crucial for predicting snow and flooding.
 
-References: [doi: 10.5067/MODIS/MOD10A2.006](https://doi.org/10.5067/MODIS/MOD10A2.00)
+References: [doi: 10.5067/MODIS/MOD10A2.006](https://doi.org/10.5067/MODIS/MOD10A2.006)

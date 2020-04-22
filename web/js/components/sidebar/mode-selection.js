@@ -7,12 +7,12 @@ class ModeSelection extends React.Component {
     super(props);
     this.state = {
       selected: props.selected,
-      loaded: false
     };
   }
 
   UNSAFE_componentWillReceiveProps(newProp) {
-    if (this.state.selected !== newProp.selected) {
+    const { selected } = this.state;
+    if (selected !== newProp.selected) {
       this.setState({ selected: newProp.selected });
     }
   }
@@ -59,7 +59,7 @@ class ModeSelection extends React.Component {
 ModeSelection.propTypes = {
   isActive: PropTypes.bool,
   onclick: PropTypes.func,
-  selected: PropTypes.string
+  selected: PropTypes.string,
 };
 
 export default ModeSelection;

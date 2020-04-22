@@ -2,7 +2,7 @@
     "layers": {
         "Landsat_WELD_CorrectedReflectance_Bands743_Global_Annual": {
             "id":       "Landsat_WELD_CorrectedReflectance_Bands743_Global_Annual",
-            "title":    "Surface Reflectance (Bands 7-4-3, Global, Annual)",
+            "title":    "Surface Reflectance (Bands 7-4-3, Global, Annual, V3.1)",
             "subtitle": "Landsat / WELD",
             "description": "landsat/Landsat_WELD_CorrectedReflectance_Bands743_Global_Annual",
             "tags":     "corrected burn scar bands 7-2-1",

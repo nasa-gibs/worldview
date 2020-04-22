@@ -2,13 +2,13 @@ import { START, UPDATE_SELECTED, END_TOUR } from './constants';
 
 export function startTour() {
   return {
-    type: START
+    type: START,
   };
 }
 export function selectStory(id) {
   return {
     type: UPDATE_SELECTED,
-    id
+    id,
   };
 }
 export function endTour() {

@@ -1,12 +1,13 @@
+/* eslint-disable no-bitwise */
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
   each as lodashEach,
   parseInt as lodashParseInt,
-  cloneDeep as lodashCloneDeep
+  cloneDeep as lodashCloneDeep,
 } from 'lodash';
-import { getMinValue, getMaxValue, isSupported } from './util';
 import update from 'immutability-helper';
+import { getMinValue, getMaxValue, isSupported } from './util';
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -24,11 +25,11 @@ export function getPalette(layerId, index, groupStr, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   const renderedPalette = lodashGet(
     state,
-    `palettes.rendered['${layerId}'].maps[${index}]`
+    `palettes.rendered['${layerId}'].maps[${index}]`,
   );
   const customPalette = lodashGet(
     state,
-    `palettes['${groupStr}']['${layerId}'].maps[${index}]`
+    `palettes['${groupStr}']['${layerId}'].maps[${index}]`,
   );
 
   if (customPalette) {
@@ -42,10 +43,10 @@ export function getPalette(layerId, index, groupStr, state) {
 
 export function getRenderedPalette(layerId, index, state) {
   const { config, palettes } = state;
-  var name = lodashGet(config, `layers['${layerId}'].palette.id`);
-  var palette = palettes.rendered[name];
+  const name = lodashGet(config, `layers['${layerId}'].palette.id`);
+  let palette = palettes.rendered[name];
   if (!palette) {
-    throw new Error(name + ' Is not a rendered palette');
+    throw new Error(`${name} Is not a rendered palette`);
   }
   if (!lodashIsUndefined(index)) {
     if (palette.maps) {
@@ -56,9 +57,9 @@ export function getRenderedPalette(layerId, index, state) {
 }
 
 export function getPaletteLegends(layerId, groupName, state) {
-  var paletteLegends = [];
-  var count = getCount(layerId, state);
-  for (var i = 0; i < count; i++) {
+  const paletteLegends = [];
+  const count = getCount(layerId, state);
+  for (let i = 0; i < count; i += 1) {
     paletteLegends.push(getPaletteLegend(layerId, i, groupName, state));
   }
   return paletteLegends;
@@ -75,16 +76,15 @@ export function getPaletteLegends(layerId, groupName, state) {
  * @return {object} object of the legend
  */
 export function getPaletteLegend(layerId, index, groupStr, state) {
-  var value = getPalette(layerId, index, groupStr, state);
+  const value = getPalette(layerId, index, groupStr, state);
   return value.legend || value.entries;
 }
 export function getCount(layerId, state) {
   const renderedPalette = getRenderedPalette(layerId, undefined, state);
   if (renderedPalette && renderedPalette.maps) {
     return renderedPalette.maps.length;
-  } else {
-    return 0;
   }
+  return 0;
 }
 /**
  * Gets the legend of a colormap
@@ -98,26 +98,27 @@ export function getCount(layerId, state) {
  * @return {object} object of the legend
  */
 export function getDefaultLegend(layerId, index, state) {
-  var palette = getRenderedPalette(layerId, index, state);
+  const palette = getRenderedPalette(layerId, index, state);
   return palette.legend || palette.entries || {};
 }
 
 export function getCustomPalette(paletteId, customsPaletteConfig) {
-  var palette = customsPaletteConfig[paletteId];
+  const palette = customsPaletteConfig[paletteId];
   if (!palette) {
-    throw new Error('Invalid palette: ' + paletteId);
+    throw new Error(`Invalid palette: ${paletteId}`);
   }
   return palette;
 }
-var useLookup = function(layerId, palettesObj, state) {
-  var use = false;
-  var active = palettesObj[layerId].maps;
-  lodashEach(active, function(palette, index) {
+
+const useLookup = function(layerId, palettesObj, state) {
+  let use = false;
+  const active = palettesObj[layerId].maps;
+  lodashEach(active, (palette, index) => {
     if (palette.custom) {
       use = true;
       return false;
     }
-    var rendered = getRenderedPalette(layerId, index, state);
+    const rendered = getRenderedPalette(layerId, index, state);
     if (palette.type !== 'classification') {
       if (palette.min <= 0) {
         delete palette.min;
@@ -129,55 +130,62 @@ var useLookup = function(layerId, palettesObj, state) {
         use = true;
         return false;
       }
+    } else if (palette.legend.colors.length > 1) {
+      use = true;
     }
   });
   return use;
 };
+
 // Looks up options/colormaps/layer.xml colormap entry
 export function getLookup(layerId, groupstr, state) {
   groupstr = groupstr || state.compare.activeString;
   return state.palettes[groupstr][layerId].lookup;
 }
-var updateLookup = function(layerId, palettesObj, state) {
+
+const updateLookup = function(layerId, palettesObj, state) {
   let newPalettes = palettesObj;
   if (!useLookup(layerId, newPalettes, state)) {
     delete newPalettes[layerId];
     return newPalettes;
   }
-  var lookup = {};
-  var active = newPalettes[layerId].maps;
-  lodashEach(active, function(palette, index) {
-    var oldLegend = palette.legend;
-    var entries = palette.entries;
-    const refs = oldLegend.refs;
-    var legend = {
+
+  const lookup = {};
+  const active = newPalettes[layerId].maps;
+  lodashEach(active, (palette, index) => {
+    const oldLegend = palette.legend;
+    const { entries } = palette;
+    const { refs } = oldLegend;
+    const legend = {
       colors: oldLegend.colors,
       minLabel: oldLegend.minLabel,
       maxLabel: oldLegend.maxLabel,
       tooltips: oldLegend.tooltips,
       ticks: oldLegend.ticks,
       units: oldLegend.units,
-      refs: refs,
+      refs,
       type: entries.type,
       title: entries.title,
-      id: oldLegend.id
+      id: oldLegend.id,
     };
-    var source = entries.colors;
-    var target = palette.custom
+    const source = entries.colors;
+    const target = palette.custom
       ? getCustomPalette(palette.custom, state.palettes.custom).colors
       : source;
 
-    var min = palette.min || 0;
-    var max = palette.max || source.length;
-    var sourceCount = source.length;
-    var targetCount = target.length;
-    var appliedLegends = [];
-    lodashEach(source, function(color, index) {
-      var targetColor;
-      if (index < min || index > max) {
+    const min = palette.min || 0;
+    const max = palette.max || source.length;
+    const sourceCount = source.length;
+    const targetCount = target.length;
+    const appliedLegends = [];
+    const disabled = palette.disabled || [];
+    lodashEach(source, (color, index) => {
+      let targetColor;
+      if (index < min || index > max || disabled.includes(index)) {
         targetColor = '00000000';
       } else {
-        var sourcePercent, targetIndex;
+        let sourcePercent; let
+          targetIndex;
         if (palette.squash) {
           sourcePercent = (index - min) / (max - min);
           if (index === max) {
@@ -200,27 +208,80 @@ var updateLookup = function(layerId, palettesObj, state) {
         appliedLegends.push(colormapRef);
         legend.colors[refIndex] = targetColor;
       }
-      var lookupSource =
-        lodashParseInt(color.substring(0, 2), 16) +
-        ',' +
-        lodashParseInt(color.substring(2, 4), 16) +
-        ',' +
-        lodashParseInt(color.substring(4, 6), 16) +
-        ',' +
-        lodashParseInt(color.substring(6, 8), 16);
-      var lookupTarget = {
+      const lookupSource = `${lodashParseInt(color.substring(0, 2), 16)
+      },${
+        lodashParseInt(color.substring(2, 4), 16)
+      },${
+        lodashParseInt(color.substring(4, 6), 16)
+      },${
+        lodashParseInt(color.substring(6, 8), 16)}`;
+      const lookupTarget = {
         r: lodashParseInt(targetColor.substring(0, 2), 16),
         g: lodashParseInt(targetColor.substring(2, 4), 16),
         b: lodashParseInt(targetColor.substring(4, 6), 16),
-        a: lodashParseInt(targetColor.substring(6, 8), 16)
+        a: lodashParseInt(targetColor.substring(6, 8), 16),
       };
       lookup[lookupSource] = lookupTarget;
     });
 
     newPalettes = update(newPalettes, {
       [layerId]: {
-        maps: { [index]: { legend: { $set: legend } } }
+        maps: { [index]: { legend: { $set: legend } } },
+      },
+    });
+  });
+  return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
+};
+
+const toggleLookup = function(layerId, palettesObj, state) {
+  const newPalettes = palettesObj;
+  if (!useLookup(layerId, newPalettes, state)) {
+    delete newPalettes[layerId];
+    return newPalettes;
+  }
+  const lookup = {};
+  const active = newPalettes[layerId].maps;
+  lodashEach(active, (palette, index) => {
+    const { entries } = palette;
+    const { refs } = palette.legend;
+    const source = entries.colors;
+    const target = palette.custom
+      ? getCustomPalette(palette.custom, state.palettes.custom).colors
+      : source;
+
+    const sourceCount = source.length;
+    const targetCount = target.length;
+    const appliedLegends = [];
+    const disabled = palette.disabled || [];
+    lodashEach(source, (color, index) => {
+      let targetColor;
+      if (disabled.includes(index)) {
+        targetColor = '00000000';
+      } else {
+        const sourcePercent = index / sourceCount;
+        const targetIndex = Math.floor(sourcePercent * targetCount);
+        targetColor = target[targetIndex];
       }
+      const colormapRef = entries.refs[index];
+      const refIndex = refs.indexOf(colormapRef);
+
+      if (~refIndex && !appliedLegends.includes(colormapRef)) {
+        appliedLegends.push(colormapRef);
+      }
+      const lookupSource = `${lodashParseInt(color.substring(0, 2), 16)
+      },${
+        lodashParseInt(color.substring(2, 4), 16)
+      },${
+        lodashParseInt(color.substring(4, 6), 16)
+      },${
+        lodashParseInt(color.substring(6, 8), 16)}`;
+      const lookupTarget = {
+        r: lodashParseInt(targetColor.substring(0, 2), 16),
+        g: lodashParseInt(targetColor.substring(2, 4), 16),
+        b: lodashParseInt(targetColor.substring(4, 6), 16),
+        a: lodashParseInt(targetColor.substring(6, 8), 16),
+      };
+      lookup[lookupSource] = lookupTarget;
     });
   });
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
@@ -228,11 +289,11 @@ var updateLookup = function(layerId, palettesObj, state) {
 
 export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
-  var values = getPalette(layerId, index, groupStr, state).entries.values;
-  var result;
-  lodashEach(values, function(check, index) {
-    var min = getMinValue(check);
-    var max = getMaxValue(check);
+  const { values } = getPalette(layerId, index, groupStr, state).entries;
+  let result;
+  lodashEach(values, (check, index) => {
+    const min = getMinValue(check);
+    const max = getMaxValue(check);
     if (type === 'min' && value === min) {
       result = index;
       return false;
@@ -244,50 +305,131 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   });
   return result;
 }
+
 export function setCustomSelector(layerId, paletteId, index, groupName, state) {
   const { config, palettes } = state;
   if (!config.layers[layerId]) {
-    throw new Error('Invalid layer: ' + layerId);
+    throw new Error(`Invalid layer: ${layerId}`);
   }
   const newPalettes = prepare(layerId, palettes[groupName], state);
   index = lodashIsUndefined(index) ? 0 : index;
-  var active = newPalettes[layerId];
-  var palette = active.maps[index];
+  const active = newPalettes[layerId];
+  const palette = active.maps[index];
   if (palette.custom === paletteId && palette.lookup) {
     return newPalettes;
   }
   palette.custom = paletteId;
   return updateLookup(layerId, newPalettes, state);
 }
+
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
     return '';
   }
-  var def = getPalette(layerId, undefined, groupStr, state);
-  var keys = [];
+  const def = getPalette(layerId, undefined, groupStr, state);
+  const keys = [];
   if (def.custom) {
-    keys.push('palette=' + def.custom);
+    keys.push(`palette=${def.custom}`);
   }
   if (def.min) {
-    keys.push('min=' + def.min);
+    keys.push(`min=${def.min}`);
   }
   if (def.max) {
-    keys.push('max=' + def.max);
+    keys.push(`max=${def.max}`);
   }
   if (def.squash) {
     keys.push('squash');
   }
   return keys.join(',');
 }
+
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   return state.palettes[group][layerId];
 }
+
+export function refreshDisabledSelector(
+  layerId,
+  disabled,
+  index,
+  palettes,
+  state,
+) {
+  let newPalettes = prepare(layerId, palettes, state);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled,
+          },
+        },
+      },
+    },
+  });
+  return toggleLookup(layerId, newPalettes, state);
+}
+
+export function initDisabledSelector(
+  layerId,
+  disabledStr,
+  index,
+  palettes,
+  state,
+) {
+  const disabled = disabledStr.split('-');
+  for (let i = 0; i < disabled.length; i += 1) { disabled[i] = +disabled[i]; }
+  let newPalettes = prepare(layerId, palettes, state);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            disabled,
+          },
+        },
+      },
+    },
+  });
+  return toggleLookup(layerId, newPalettes, state);
+}
+
+export function setDisabledSelector(
+  layerId,
+  classIndex,
+  index,
+  palettes,
+  state,
+) {
+  let newPalettes = prepare(layerId, palettes, state);
+  const legend = getPalette(layerId, index, undefined, state);
+  const oldDisabled = legend.disabled || [];
+  const indexOf = oldDisabled.indexOf(classIndex);
+  if (indexOf !== -1) {
+    oldDisabled.splice(indexOf, 1);
+  } else {
+    oldDisabled.push(classIndex);
+  }
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            // eslint-disable-next-line no-restricted-globals
+            disabled: isNaN(classIndex) ? [] : oldDisabled,
+          },
+        },
+      },
+    },
+  });
+  return toggleLookup(layerId, newPalettes, state);
+}
+
 export function setRange(layerId, props, index, palettes, state) {
-  let min = props.min;
-  let max = props.max;
-  const squash = props.squash;
+  let { min } = props;
+  let { max } = props;
+  const { squash } = props;
   let newPalettes = prepare(layerId, palettes, state);
   index = lodashIsUndefined(index) ? 0 : index;
   if (min === 0) {
@@ -295,9 +437,9 @@ export function setRange(layerId, props, index, palettes, state) {
   }
   const legend = getPalette(layerId, index, undefined, state);
   if (
-    legend.entries &&
-    legend.entries.values &&
-    max === legend.entries.values.length - 1
+    legend.entries
+    && legend.entries.values
+    && max === legend.entries.values.length - 1
   ) {
     max = undefined;
   }
@@ -310,53 +452,56 @@ export function setRange(layerId, props, index, palettes, state) {
           $merge: {
             max,
             min,
-            squash
-          }
-        }
-      }
-    }
+            squash,
+          },
+        },
+      },
+    },
   });
 
   return updateLookup(layerId, newPalettes, state);
 }
+
 export function clearCustomSelector(layerId, index, palettes, state) {
   index = lodashIsUndefined(index) ? 0 : index;
-  var active = palettes[layerId];
+  const active = palettes[layerId];
   if (!active) {
     return palettes;
   }
-  var palette = active.maps[index];
+  const palette = active.maps[index];
   if (!palette.custom) {
     return palettes;
   }
   delete palette.custom;
   const newPalettes = update(palettes, {
-    [layerId]: { maps: { [index]: { $set: palette } } }
+    [layerId]: { maps: { [index]: { $set: palette } } },
   }); // remove custom key
   return updateLookup(layerId, newPalettes, state);
 }
-var prepare = function(layerId, palettesObj, state) {
-  var newPalettes = lodashCloneDeep(palettesObj);
+
+function prepare(layerId, palettesObj, state) {
+  let newPalettes = lodashCloneDeep(palettesObj);
   if (!newPalettes[layerId]) newPalettes[layerId] = {};
-  var active = newPalettes[layerId];
+  const active = newPalettes[layerId];
   active.maps = active.maps || [];
-  lodashEach(getRenderedPalette(layerId, undefined, state).maps, function(
+  lodashEach(getRenderedPalette(layerId, undefined, state).maps, (
     palette,
-    index
-  ) {
+    index,
+  ) => {
     if (!active.maps[index]) {
       newPalettes = update(newPalettes, {
-        [layerId]: { maps: { [index]: { $set: palette } } }
+        [layerId]: { maps: { [index]: { $set: palette } } },
       });
     }
   });
   return newPalettes;
-};
+}
+
 export function isPaletteAllowed(layerId, config) {
   if (!isSupported()) {
     return false;
   }
-  const palette = config.layers[layerId].palette;
+  const { palette } = config.layers[layerId];
   if (!palette || palette.immutable) {
     return false;
   }

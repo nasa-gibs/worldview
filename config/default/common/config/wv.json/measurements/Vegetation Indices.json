@@ -7,7 +7,7 @@
             "sources": {
                   "Aqua/MODIS": {
                       "id": "aqua-modis",
-                      "title": "Aqua / MODIS",
+                      "title": "Aqua/MODIS",
                       "description": "modis/VegetationIndices",
                       "image": "",
                       "settings": [
@@ -19,7 +19,7 @@
                   },
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/VegetationIndices",
                     "image": "",
                     "settings": [
@@ -43,7 +43,7 @@
                   },
                   "Terra/MISR": {
                       "id": "terra-misr",
-                      "title": "Terra / MISR",
+                      "title": "Terra/MISR",
                       "description": "misr/NDVI",
                       "image": "",
                       "settings": [

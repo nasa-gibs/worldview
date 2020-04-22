@@ -6,30 +6,31 @@ import {
   size as lodashSize,
   findIndex as lodashFindIndex,
   split as lodashSplit,
-  isArray
+  isArray,
 } from 'lodash';
+import Promise from 'bluebird';
 import { PALETTE_STRINGS_PERMALINK_ARRAY } from './constants';
 import {
   setCustomSelector,
   getCount,
   setRange as setRangeSelector,
-  findIndex as findPaletteExtremeIndex
+  findIndex as findPaletteExtremeIndex,
+  initDisabledSelector,
 } from './selectors';
 import util from '../../util/util';
-import Promise from 'bluebird';
 
 /**
  * Create checkerboard canvas pattern object
  * to use on background of legend colorbars
  */
 export function getCheckerboard() {
-  var size = 2;
-  var canvas = document.createElement('canvas');
+  const size = 2;
+  const canvas = document.createElement('canvas');
 
   canvas.width = size * 2;
   canvas.height = size * 2;
 
-  var g = canvas.getContext('2d');
+  const g = canvas.getContext('2d');
 
   // g.fillStyle = "rgb(102, 102, 102)";
   g.fillStyle = 'rgb(200, 200, 200)';
@@ -45,10 +46,10 @@ export function getCheckerboard() {
 }
 
 export function palettesTranslate(source, target) {
-  var translation = [];
-  lodashEach(source, function(color, index) {
-    var sourcePercent = index / source.length;
-    var targetIndex = Math.floor(sourcePercent * target.length);
+  const translation = [];
+  lodashEach(source, (color, index) => {
+    const sourcePercent = index / source.length;
+    const targetIndex = Math.floor(sourcePercent * target.length);
     translation.push(target[targetIndex]);
   });
   return translation;
@@ -64,15 +65,15 @@ export function drawPaletteOnCanvas(
   checkerBoardPattern,
   colors,
   width,
-  height
+  height,
 ) {
   ctx.fillStyle = checkerBoardPattern;
   ctx.fillRect(0, 0, width, height);
 
   if (colors) {
-    var bins = colors.length;
-    var binWidth = width / bins;
-    var drawWidth = Math.ceil(binWidth);
+    const bins = colors.length;
+    const binWidth = width / bins;
+    const drawWidth = Math.ceil(binWidth);
     colors.forEach((color, i) => {
       ctx.fillStyle = util.hexToRGBA(color);
       ctx.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
@@ -89,7 +90,7 @@ export function drawSidebarPaletteOnCanvas(
   ctx,
   checkerBoardPattern,
   colors,
-  width
+  width,
 ) {
   const barHeight = 12;
   const colorbarStartY = barHeight - 5;
@@ -97,33 +98,33 @@ export function drawSidebarPaletteOnCanvas(
   ctx.fillRect(1, colorbarStartY, width - 1, barHeight);
 
   if (colors) {
-    var bins = colors.length;
-    var binWidth = (width - 2) / bins;
-    var drawWidth = Math.ceil(binWidth);
-    var thickness = 0.5;
+    const bins = colors.length;
+    const binWidth = (width - 2) / bins;
+    const drawWidth = Math.ceil(binWidth);
+    const thickness = 0.5;
     ctx.strokeStyle = '#000';
 
     colors.forEach((color, i) => {
       ctx.fillStyle = util.hexToRGBA(color);
       ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, barHeight);
     });
-    ctx.rect(2 - (thickness), (colorbarStartY) - (thickness), width - 3 + (thickness * 2), (barHeight) + (thickness * 2));
+    ctx.rect(2 - thickness, colorbarStartY - thickness, width - 3 + (thickness * 2), barHeight + (thickness * 2));
     ctx.stroke();
   }
 }
 export function drawTicksOnCanvas(ctx, legend, width) {
   const canvasHeight = 24;
-  const ticks = legend.ticks;
-  const colors = legend.colors;
+  const { ticks } = legend;
+  const { colors } = legend;
   const bins = colors.length;
   const binWidth = width / bins;
   const drawWidth = Math.ceil(binWidth);
   const halfWidth = drawWidth / 2;
   if (ticks && ticks.length > 0 && bins > 100) {
     ctx.beginPath();
-    ticks.forEach(tick => {
+    ticks.forEach((tick) => {
       const start = binWidth * tick;
-      const midpoint = Math.floor((start + halfWidth)) + 0.5; // https://stackoverflow.com/a/8696641/4589331
+      const midpoint = Math.floor(start + halfWidth) + 0.5; // https://stackoverflow.com/a/8696641/4589331
       ctx.strokeStyle = '#000';
       ctx.lineWidth = 0.8;
       ctx.moveTo(midpoint, canvasHeight - 4);
@@ -134,40 +135,39 @@ export function drawTicksOnCanvas(ctx, legend, width) {
   }
 }
 export function lookup(sourcePalette, targetPalette) {
-  var lookup = {};
-  lodashEach(sourcePalette.colors, function(sourceColor, index) {
-    var source =
-      parseInt(sourceColor.substring(0, 2), 16) +
-      ',' +
-      parseInt(sourceColor.substring(2, 4), 16) +
-      ',' +
-      parseInt(sourceColor.substring(4, 6), 16) +
-      ',' +
-      '255';
-    var targetColor = targetPalette.colors[index];
-    var target = {
+  const lookup = {};
+  lodashEach(sourcePalette.colors, (sourceColor, index) => {
+    const source = `${parseInt(sourceColor.substring(0, 2), 16)
+    },${
+      parseInt(sourceColor.substring(2, 4), 16)
+    },${
+      parseInt(sourceColor.substring(4, 6), 16)
+    },`
+      + '255';
+    const targetColor = targetPalette.colors[index];
+    const target = {
       r: parseInt(targetColor.substring(0, 2), 16),
       g: parseInt(targetColor.substring(2, 4), 16),
       b: parseInt(targetColor.substring(4, 6), 16),
-      a: 255
+      a: 255,
     };
     lookup[source] = target;
   });
   return lookup;
 }
 export function loadRenderedPalette(config, layerId) {
-  var layer = config.layers[layerId];
+  const layer = config.layers[layerId];
   return util.load.config(
     config.palettes.rendered,
     layer.palette.id,
-    'config/palettes/' + layer.palette.id + '.json'
+    `config/palettes/${layer.palette.id}.json`,
   );
 }
 export function loadCustom(config) {
   return util.load.config(
     config.palettes,
     'custom',
-    'config/palettes-custom.json'
+    'config/palettes-custom.json',
   );
 }
 export function getMinValue(v) {
@@ -190,34 +190,34 @@ export function parseLegacyPalettes(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
-  var parts = parameters.palettes.split('~');
-  parts.forEach(part => {
-    var items = part.split(',');
-    var layerId = items[0];
-    var paletteId = items[1];
-    var index = lodashFindIndex(stateFromLocation.layers.active, {
-      id: layerId
+  const parts = parameters.palettes.split('~');
+  parts.forEach((part) => {
+    const items = part.split(',');
+    const layerId = items[0];
+    const paletteId = items[1];
+    const index = lodashFindIndex(stateFromLocation.layers.active, {
+      id: layerId,
     });
     if (
-      index >= 0 &&
-      lodashGet(stateFromLocation, `layers.active.${index}`) &&
-      !lodashGet(stateFromLocation, `layers.active.${index}.custom`)
+      index >= 0
+      && lodashGet(stateFromLocation, `layers.active.${index}`)
+      && !lodashGet(stateFromLocation, `layers.active.${index}.custom`)
     ) {
       stateFromLocation = update(stateFromLocation, {
         layers: {
           active: {
-            [index]: { custom: { $set: paletteId } }
-          }
-        }
+            [index]: { custom: { $set: paletteId } },
+          },
+        },
       });
     }
   });
   return stateFromLocation;
 }
 export function isSupported() {
-  var browser = util.browser;
+  const { browser } = util;
   return !(browser.ie || !browser.webWorkers || !browser.cors);
 }
 /**
@@ -237,65 +237,76 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     let minObj = lodashAssign({}, { key: 'min', array: [] }, DEFAULT_OBJ);
     let maxObj = lodashAssign({}, { key: 'max', array: [] }, DEFAULT_OBJ);
     let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
+    let disabledObj = lodashAssign({}, { key: 'disabled', array: [] }, DEFAULT_OBJ);
     const attrArray = [];
-    for (var i = 0; i < count; i++) {
+    for (let i = 0; i < count; i += 1) {
       if (!palettes[layerId].maps[i]) {
         console.warn('NO PALETTE');
       }
+
       const paletteDef = palettes[layerId].maps[i];
-      const entryLength =
-        lodashSize(lodashGet(paletteDef, 'entries.values')) ||
-        lodashSize(lodashGet(paletteDef, 'entries.colors'));
+
+      const entryLength = lodashSize(lodashGet(paletteDef, 'entries.values'))
+        || lodashSize(lodashGet(paletteDef, 'entries.colors'));
       const maxValue = paletteDef.max
         ? lodashSplit(paletteDef.entries.values[paletteDef.max || entryLength], ',', 1)
         : undefined;
       const minValue = paletteDef.min
         ? lodashSplit(paletteDef.entries.values[paletteDef.min || 0], ',', 1)
         : undefined;
+      const disabledValue = paletteDef.disabled && paletteDef.disabled.length
+        ? paletteDef.disabled.join('-')
+        : undefined;
+
       palObj = createPaletteAttributeObject(
         paletteDef,
         paletteDef.custom,
         palObj,
-        count
+        count,
       );
       maxObj = createPaletteAttributeObject(
         paletteDef,
         maxValue,
         maxObj,
-        count
+        count,
       );
       minObj = createPaletteAttributeObject(
         paletteDef,
         minValue,
         minObj,
-        count
+        count,
       );
 
       squashObj = createPaletteAttributeObject(
         paletteDef,
         true,
         squashObj,
-        count
+        count,
+      );
+      disabledObj = createPaletteAttributeObject(
+        paletteDef,
+        disabledValue,
+        disabledObj,
+        count,
       );
     }
 
-    [palObj, minObj, maxObj, squashObj].forEach(obj => {
+    [palObj, minObj, maxObj, squashObj, disabledObj].forEach((obj) => {
       if (obj.isActive) {
         attrArray.push({
           id: obj.key === 'custom' ? 'palette' : obj.key,
-          value: obj.value
+          value: obj.value,
         });
       }
     });
-
     return attrArray;
   } catch (e) {
-    console.warn('Error parsing palette: ' + e);
+    console.warn(`Error parsing palette: ${e}`);
     return [];
   }
 }
 const createPaletteAttributeObject = function(def, value, attrObj, count) {
-  const key = attrObj.key;
+  const { key } = attrObj;
   const attrArray = attrObj.array;
   let hasAtLeastOnePair = attrObj.isActive;
   value = isArray(value) ? value.join(',') : value;
@@ -308,7 +319,7 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
   return lodashAssign({}, attrObj, {
     array: attrArray,
     isActive: hasAtLeastOnePair,
-    value: attrArray.join(';')
+    value: attrArray.join(';'),
   });
 };
 
@@ -320,44 +331,44 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
  * @param {Object} state
  */
 export function loadPalettes(permlinkState, state) {
-  var stateArray = [{ stateStr: 'l', groupStr: 'active' }];
+  let stateArray = [{ stateStr: 'l', groupStr: 'active' }];
   if (!isSupported()) {
     return state;
   }
   if (permlinkState.l1) {
     stateArray = [
       { stateStr: 'l', groupStr: 'active' },
-      { stateStr: 'l1', groupStr: 'activeB' }
+      { stateStr: 'l1', groupStr: 'activeB' },
     ];
   }
-  lodashEach(stateArray, stateObj => {
-    lodashEach(state.layers[stateObj.groupStr], function(layerDef) {
+  lodashEach(stateArray, (stateObj) => {
+    lodashEach(state.layers[stateObj.groupStr], (layerDef) => {
       if (layerDef.palette) {
-        var layerId = layerDef.id;
-        var min = [];
-        var max = [];
-        var squash = [];
-        var count = 0;
+        const layerId = layerDef.id;
+        const min = [];
+        const max = [];
+        let squash = [];
+        let count = 0;
         if (layerDef.custom) {
-          lodashEach(layerDef.custom, function(value, index) {
+          lodashEach(layerDef.custom, (value, index) => {
             try {
               const newPalettes = setCustomSelector(
                 layerId,
                 value,
                 index,
                 stateObj.groupStr,
-                state
+                state,
               );
               state = update(state, {
-                palettes: { [stateObj.groupStr]: { $set: newPalettes } }
+                palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
             } catch (error) {
-              console.warn(' Invalid palette: ' + value);
+              console.warn(` Invalid palette: ${value}`);
             }
           });
         }
         if (layerDef.min) {
-          lodashEach(layerDef.min, function(value, index) {
+          lodashEach(layerDef.min, (value, index) => {
             try {
               min.push(
                 findPaletteExtremeIndex(
@@ -366,16 +377,16 @@ export function loadPalettes(permlinkState, state) {
                   value,
                   index,
                   stateObj.groupStr,
-                  state
-                )
+                  state,
+                ),
               );
             } catch (error) {
-              console.warn('Unable to set min: ' + value);
+              console.warn(`Unable to set min: ${value}`);
             }
           });
         }
         if (layerDef.max) {
-          lodashEach(layerDef.max, function(value, index) {
+          lodashEach(layerDef.max, (value, index) => {
             try {
               max.push(
                 findPaletteExtremeIndex(
@@ -384,34 +395,51 @@ export function loadPalettes(permlinkState, state) {
                   value,
                   index,
                   stateObj.groupStr,
-                  state
-                )
+                  state,
+                ),
               );
             } catch (error) {
-              console.warn('Unable to set max index: ' + value);
+              console.warn(`Unable to set max index: ${value}`);
             }
           });
         }
         if (layerDef.squash) {
           squash = layerDef.squash;
         }
-
+        if (layerDef.disabled) {
+          lodashEach(layerDef.disabled, (value, index) => {
+            try {
+              const newPalettes = initDisabledSelector(
+                layerId,
+                value,
+                index,
+                state.palettes[stateObj.groupStr],
+                state,
+              );
+              state = update(state, {
+                palettes: { [stateObj.groupStr]: { $set: newPalettes } },
+              });
+            } catch (error) {
+              console.warn(` Invalid palette: ${value}`);
+            }
+          });
+        }
         if (min.length > 0 || max.length > 0) {
           count = getCount(layerId, state);
-          for (var i = 0; i < count; i++) {
-            var vmin = min.length > 0 ? min[i] : undefined;
-            var vmax = max.length > 0 ? max[i] : undefined;
-            var vsquash = squash.length > 0 ? squash[i] : undefined;
+          for (let i = 0; i < count; i += 1) {
+            const vmin = min.length > 0 ? min[i] : undefined;
+            const vmax = max.length > 0 ? max[i] : undefined;
+            const vsquash = squash.length > 0 ? squash[i] : undefined;
             const props = { min: vmin, max: vmax, squash: vsquash };
             const newPalettes = setRangeSelector(
               layerId,
               props,
               i,
               state.palettes[stateObj.groupStr],
-              state
+              state,
             );
             state = update(state, {
-              palettes: { [stateObj.groupStr]: { $set: newPalettes } }
+              palettes: { [stateObj.groupStr]: { $set: newPalettes } },
             });
           }
         }
@@ -424,15 +452,15 @@ export function mapLocationToPaletteState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   if (parameters.l1 || parameters.l) {
     stateFromLocation = loadPalettes(
       parameters,
       lodashAssign({}, stateFromLocation, {
         palettes: state.palettes,
-        config
-      })
+        config,
+      }),
     );
   }
   // legacy palettes permalink
@@ -441,7 +469,7 @@ export function mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
   }
   return stateFromLocation;
@@ -461,30 +489,30 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
   let custom = {};
   const loading = {};
   if (layersArray) {
-    layersArray.forEach(obj => {
+    layersArray.forEach((obj) => {
       if (
-        obj &&
-        obj.palette &&
-        !renderedPalettes[obj.palette.id] &&
-        !loading[obj.palette.id]
+        obj
+        && obj.palette
+        && !renderedPalettes[obj.palette.id]
+        && !loading[obj.palette.id]
       ) {
         const paletteId = obj.palette.id;
-        const location = 'config/palettes/' + paletteId + '.json';
+        const location = `config/palettes/${paletteId}.json`;
         const promise = util.fetch(location, 'application/json');
         loading[paletteId] = true;
         requestArray.push(promise);
-        promise.then(data => {
+        promise.then((data) => {
           rendered[paletteId] = data;
         });
       }
       if (obj.custom && !customLoaded && !preloadedCustom) {
         const customPromise = util.fetch(
           'config/palettes-custom.json',
-          'application/json'
+          'application/json',
         );
         preloadedCustom = true;
         requestArray.push(customPromise);
-        customPromise.then(data => {
+        customPromise.then((data) => {
           custom = data;
         });
       }
@@ -494,19 +522,18 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
         .then(() => {
           resolve({ custom, rendered });
         })
-        .catch(error => {
+        .catch((error) => {
           reject(error);
         });
     });
-  } else {
-    return Promise.resolve({ custom, rendered });
   }
+  return Promise.resolve({ custom, rendered });
 }
 export function hasCustomPaletteInActiveProjection(
   activeLayers,
-  activePalettes
+  activePalettes,
 ) {
-  for (let i = 0, len = activeLayers.length; i < len; i++) {
+  for (let i = 0, len = activeLayers.length; i < len; i += 1) {
     if (activePalettes[activeLayers[i].id]) {
       return true;
     }
@@ -515,7 +542,7 @@ export function hasCustomPaletteInActiveProjection(
 }
 export function hasCustomTypePalette(str) {
   let bool = false;
-  PALETTE_STRINGS_PERMALINK_ARRAY.forEach(element => {
+  PALETTE_STRINGS_PERMALINK_ARRAY.forEach((element) => {
     if (str.includes(element)) bool = true;
   });
   return bool;

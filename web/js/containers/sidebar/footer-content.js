@@ -1,20 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../components/util/button';
-import { Checkbox } from '../../components/util/checkbox';
-import ModeSelection from '../../components/sidebar/mode-selection';
+// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
-import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import { connect } from 'react-redux';
+import Button from '../../components/util/button';
+import Checkbox from '../../components/util/checkbox';
+import ModeSelection from '../../components/sidebar/mode-selection';
+import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import {
   getSelectionCounts,
-  getDataSelectionSize
+  getDataSelectionSize,
 } from '../../modules/data/selectors';
 import ProductPicker from '../../components/layer/product-picker/product-picker';
 import { openCustomContent } from '../../modules/modal/actions';
 import { toggleListAll } from '../../modules/natural-events/actions';
 import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
+import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
 class FooterContent extends React.Component {
   constructor(props) {
@@ -25,16 +27,16 @@ class FooterContent extends React.Component {
   toggleListAll() {
     const {
       toggleListAll,
-      showAll
+      showAll,
     } = this.props;
     toggleListAll();
     if (showAll) {
       googleTagManager.pushEvent({
-        event: 'natural_events_current_view_only'
+        event: 'natural_events_current_view_only',
       });
     } else {
       googleTagManager.pushEvent({
-        event: 'natural_events_show_all'
+        event: 'natural_events_show_all',
       });
     }
   }
@@ -52,14 +54,14 @@ class FooterContent extends React.Component {
       counts,
       dataSelectionSize,
       compareFeature,
-      showAll
+      showAll,
     } = this.props;
     if (isCompareActive && isMobile) {
       toggleCompare();
     }
     if (activeTab === 'layers') {
       return (
-        <React.Fragment>
+        <>
           <ModeSelection
             isActive={isCompareActive}
             selected={compareMode}
@@ -70,20 +72,20 @@ class FooterContent extends React.Component {
               text="+ Add Layers"
               id="layers-add"
               className="layers-add red"
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
                 addLayers();
                 googleTagManager.pushEvent({
-                  event: 'add_layers'
+                  event: 'add_layers',
                 });
               }}
             />
             <Button
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
                 toggleCompare();
                 googleTagManager.pushEvent({
-                  event: 'comparison_mode'
+                  event: 'comparison_mode',
                 });
               }}
               className="compare-toggle-button"
@@ -92,9 +94,9 @@ class FooterContent extends React.Component {
               text={!isCompareActive ? 'Start Comparison' : 'Exit Comparison'}
             />
           </div>
-        </React.Fragment>
+        </>
       );
-    } else if (activeTab === 'events') {
+    } if (activeTab === 'events') {
       return (
         <div className="events-footer-case">
           <Checkbox
@@ -107,48 +109,46 @@ class FooterContent extends React.Component {
           />
         </div>
       );
-    } else {
-      var countArray = Object.values(counts);
-      var noDataSelected =
-        countArray.length === 0
-          ? true
-          : countArray.reduce((a, b) => a + b, 0) === 0;
-      return (
-        <div className="data-download-footer-case">
-          <Button
-            onClick={e => {
-              e.stopPropagation();
-              onGetData();
-              googleTagManager.pushEvent({
-                event: 'data_download_button'
-              });
-            }}
-            className={
+    }
+    const countArray = Object.values(counts);
+    const noDataSelected = countArray.length === 0
+      ? true
+      : countArray.reduce((a, b) => a + b, 0) === 0;
+    return (
+      <div className="data-download-footer-case">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            onGetData();
+            googleTagManager.pushEvent({
+              event: 'data_download_button',
+            });
+          }}
+          className={
               noDataSelected
                 ? 'wv-data-download-button black no-pointer-events'
                 : 'wv-data-download-button red'
             }
-            id="compare-toggle-button"
-            text={
+          id="compare-toggle-button"
+          text={
               dataSelectionSize
-                ? 'Download Data (' +
-                  Math.round(dataSelectionSize * 100) / 100 +
-                  ' MB)'
+                ? `Download Data (${
+                  Math.round(dataSelectionSize * 100) / 100
+                } MB)`
                 : noDataSelected
                   ? 'No Data Selected'
                   : 'Download Selected Data'
             }
-          />
-        </div>
-      );
-    }
+        />
+      </div>
+    );
   }
 }
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   toggleCompare: () => {
     dispatch(toggleCompareOnOff());
   },
-  changeCompareMode: str => {
+  changeCompareMode: (str) => {
     dispatch(changeMode(str));
   },
   onGetData: () => {
@@ -158,24 +158,27 @@ const mapDispatchToProps = dispatch => ({
     dispatch(toggleListAll());
   },
   addLayers: () => {
+    dispatch(stopAnimationAction());
     dispatch(
       openCustomContent('LAYER_PICKER_COMPONENT', {
         headerText: null,
         modalClassName: 'custom-layer-dialog light',
         backdrop: true,
         CompletelyCustomModal: ProductPicker,
-        wrapClassName: ''
-      })
+        wrapClassName: '',
+      }),
     );
-  }
+  },
 });
 function mapStateToProps(state, ownProps) {
   const { activeTab } = ownProps;
-  const { requestedEvents, config, layers, data, compare, browser } = state;
+  const {
+    requestedEvents, config, layers, data, compare, browser,
+  } = state;
   const { showAll } = state.events;
   const { selectedGranules } = data;
   const events = lodashGet(requestedEvents, 'response');
-  const activeString = compare.activeString;
+  const { activeString } = compare;
   const activeLayers = layers[activeString];
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const dataSelectionSize = getDataSelectionSize(selectedGranules);
@@ -190,12 +193,12 @@ function mapStateToProps(state, ownProps) {
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
     compareMode: compare.mode,
-    toggleListAll
+    toggleListAll,
   };
 }
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(FooterContent);
 
 FooterContent.propTypes = {
@@ -206,11 +209,10 @@ FooterContent.propTypes = {
   compareMode: PropTypes.string,
   counts: PropTypes.object,
   dataSelectionSize: PropTypes.number,
-  events: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   onGetData: PropTypes.func,
   showAll: PropTypes.bool,
   toggleCompare: PropTypes.func,
-  toggleListAll: PropTypes.func
+  toggleListAll: PropTypes.func,
 };

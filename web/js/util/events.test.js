@@ -1,4 +1,4 @@
-import { events } from './events';
+import events from './events';
 
 test('triggers an event', () => {
   const e = events();
