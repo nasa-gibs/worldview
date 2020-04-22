@@ -146,6 +146,6 @@ cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
 # Fetch preview imagese from WV Snapshots for any layers which they are missing
 "$PYTHON_SCRIPTS_DIR/fetchPreviewSnapshots.py"  "$DEST_DIR/config/wv.json" \
-    "$OPT_DIR/common/previewLayerOverrides.json"
+    "$OPT_DIR/common/previewLayerOverrides.json" "$BUILD_DIR/features.json"
 
 exit 0
