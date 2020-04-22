@@ -420,7 +420,6 @@ class TimelineAxis extends Component {
     draggerPosition = draggerPosition - pixelsToAdd + position - draggerWidth + boundsDiff;
     draggerPositionB = draggerPositionB - pixelsToAdd + position - draggerWidth + boundsDiff;
     const updatePositioningArguments = {
-      hasMoved: false,
       isTimelineDragging: false,
       position,
       transformX,
@@ -1014,12 +1013,11 @@ class TimelineAxis extends Component {
   */
   handleStartDrag = () => {
     const {
-      hasMoved,
       isTimelineDragging,
       updateTimelineMoveAndDrag,
     } = this.props;
     if (!isTimelineDragging) {
-      updateTimelineMoveAndDrag(hasMoved, true);
+      updateTimelineMoveAndDrag(true);
     }
   }
 
@@ -1067,7 +1065,6 @@ class TimelineAxis extends Component {
       const frontDate = currentTimeRange[0].rawDate;
       const backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
       const updatePositioningArguments = {
-        hasMoved: true,
         isTimelineDragging: true,
         position,
         transformX,
@@ -1113,7 +1110,6 @@ class TimelineAxis extends Component {
         const frontDate = newCurrentTimeRange[0].rawDate;
         const backDate = newCurrentTimeRange[newCurrentTimeRange.length - 1].rawDate;
         const updatePositioningArguments = {
-          hasMoved: true,
           isTimelineDragging: true,
           position,
           transformX,
@@ -1138,7 +1134,6 @@ class TimelineAxis extends Component {
           : dragSentinelCount + deltaX;
 
         const updatePositioningArguments = {
-          hasMoved: true,
           isTimelineDragging: true,
           position,
           draggerPosition,
@@ -1180,7 +1175,6 @@ class TimelineAxis extends Component {
         const frontDate = newCurrentTimeRange[0].rawDate;
         const backDate = newCurrentTimeRange[newCurrentTimeRange.length - 1].rawDate;
         const updatePositioningArguments = {
-          hasMoved: true,
           isTimelineDragging: true,
           position,
           transformX,
@@ -1205,7 +1199,6 @@ class TimelineAxis extends Component {
           : dragSentinelCount + deltaX;
 
         const updatePositioningArguments = {
-          hasMoved: true,
           isTimelineDragging: true,
           position,
           draggerPosition,
@@ -1264,7 +1257,6 @@ class TimelineAxis extends Component {
     rightBound += midPoint - d.x;
 
     const updatePositioningArguments = {
-      hasMoved,
       isTimelineDragging: false,
       position: midPoint,
       transformX: newTransformX,
@@ -1513,7 +1505,6 @@ TimelineAxis.propTypes = {
   draggerVisible: PropTypes.bool,
   draggerVisibleB: PropTypes.bool,
   frontDate: PropTypes.string,
-  hasMoved: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
   isAnimationDraggerDragging: PropTypes.bool,
