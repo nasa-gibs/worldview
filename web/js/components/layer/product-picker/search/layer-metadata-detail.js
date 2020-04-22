@@ -65,21 +65,7 @@ class LayerMetadataDetail extends React.Component {
           {`${listItemStartDate} - ${listItemEndDate}`}
         </ListGroupItem>
       );
-    })
-
-  renderSplitTitle = (title) => {
-    const splitIdx = title.indexOf('(');
-    const attrs = title.slice(splitIdx);
-    const titleName = title.slice(0, splitIdx - 1);
-    return splitIdx < 0
-      ? (<h3>{title}</h3>)
-      : (
-        <>
-          <h3>{titleName}</h3>
-          <h4>{attrs}</h4>
-        </>
-      );
-  }
+    });
 
   /**
      * Return text with the temporal range based on layer start
@@ -229,7 +215,6 @@ const mapStateToProps = (state, ownProps) => {
     layer: selectedLayer,
     isActive,
     selectedProjection: proj.id,
-    selectedLayer,
     showPreviewImage: config.features.previewSnapshots,
   };
 };
