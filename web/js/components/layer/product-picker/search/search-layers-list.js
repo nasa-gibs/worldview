@@ -30,18 +30,14 @@ class SearchLayerList extends React.Component {
   /**
    * Handle selecting/showing metadata when there is only a single search result
    */
-  componentDidMount() {
-    const { selectedLayer } = this.props;
-    if (selectedLayer && selectedLayer.id) {
-      this.showLayerMetadata(selectedLayer.id);
-    }
-  }
-
-  /**
-   * Handle selecting/showing metadata when there is only a single search result
-   */
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { selectedLayer, results } = this.props;
+    const { selectLayer, selectedLayer, results } = this.props;
+    const selectedLayerInResults = selectedLayer && results.length
+      && results.find((l) => l.id === selectedLayer.id);
+
+    if (!selectedLayerInResults) {
+      selectLayer(null);
+    }
     if (prevProps.selectedLayer !== selectedLayer) {
       const id = selectedLayer ? selectedLayer.id : null;
       this.showLayerMetadata(id);
@@ -72,7 +68,7 @@ class SearchLayerList extends React.Component {
       return;
     }
 
-    // Single result, auto selected, and we have the metadata for it already
+    // Single result and we have the metadata for it already
     if (selectedLayer && selectedLayer.id === layerId && layer.metadata) {
       return;
     }

@@ -26,7 +26,6 @@ export const productPickerState = {
   selectedMeasurement: undefined,
   selectedMeasurementSourceIndex: 0,
   searchConfig: undefined,
-  results: [],
   // searchResultRows: undefined,
   // numRowsFilteredOut: undefined,
   // filterByAvailable: true,
