@@ -181,7 +181,7 @@
     "moment-locales-webpack-plugin": "^1.1.2",
     "ol": "5.3.3",
     "ol-mapbox-style": "4.3.1",
-    "proj4": "2.5.0",
+    "proj4": "2.6.1",
     "promise-queue": "2.2.5",
     "prop-types": "^15.7.2",
     "rc-slider": "9.2.2",
