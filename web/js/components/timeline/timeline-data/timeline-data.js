@@ -41,7 +41,12 @@ class TimelineData extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { activeLayers, isProductPickerOpen, isDataCoveragePanelOpen } = this.props;
+    const {
+      activeLayers,
+      isProductPickerOpen,
+      isDataCoveragePanelOpen,
+      projection,
+    } = this.props;
     const { shouldIncludeHiddenLayers } = this.state;
 
     if (!prevProps.isProductPickerOpen && isProductPickerOpen && isDataCoveragePanelOpen) {
@@ -49,9 +54,10 @@ class TimelineData extends Component {
       return;
     }
 
+    const projectionChange = prevProps.projection !== projection;
     const toggleHiddenChange = prevState.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
     // need to update layer toggles for show/hide/remove
-    if (!lodashIsEqual(prevProps.activeLayers, activeLayers) || toggleHiddenChange) {
+    if (projectionChange || !lodashIsEqual(prevProps.activeLayers, activeLayers) || toggleHiddenChange) {
       // update coverage including layer added/removed and option changes (active/inactive)
       const layers = this.getActiveLayers(activeLayers);
       this.setActiveLayers(layers);
@@ -366,20 +372,26 @@ function mapStateToProps(state) {
     date,
     layers,
     modal,
+    proj,
   } = state;
   const {
     appNow,
   } = date;
 
-  const activeLayers = layers[compare.activeString].filter((activeLayer) => activeLayer.startDate);
+  // handle active layer filtering
+  const activeLayers = layers[compare.activeString];
+  const projection = proj.id;
+  const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
+
   const { hoveredLayer } = layers;
   const isProductPickerOpen = modal.isOpen && modal.id === 'LAYER_PICKER_COMPONENT';
 
   return {
-    activeLayers,
+    activeLayers: activeLayersFiltered,
     hoveredLayer,
     appNow,
     isProductPickerOpen,
+    projection,
   };
 }
 
@@ -397,6 +409,7 @@ TimelineData.propTypes = {
   isProductPickerOpen: PropTypes.bool,
   parentOffset: PropTypes.number,
   position: PropTypes.number,
+  projection: PropTypes.string,
   setMatchingTimelineCoverage: PropTypes.func,
   timelineStartDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
