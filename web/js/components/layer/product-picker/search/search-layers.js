@@ -19,40 +19,42 @@ function SearchLayers(props) {
     facets,
   } = props;
 
-  function renderFacetList() {
-    return (
-      <div className="inner-container">
-        {
-          /* {wasSearched && (
-              <Sorting label={"Sort by"} sortOptions={SORT_OPTIONS} />
-            )} */
-        }
-        {facetConfig.map((config) => (
-          <ProductFacet
-            key={config.field}
-            field={config.field}
-            label={config.label}
-            tooltip={config.tooltip}
-            show={config.show}
-            data={facets[config.field][0].data}
-          />
-        ))}
-      </div>
-    );
-  }
+  const listDetailContainerClass = selectedLayer
+    ? 'layer-list-detail-container show-details'
+    : 'layer-list-detail-container';
 
   return (
     <div className="search-layers-container" style={{ maxHeight: bodyHeight }}>
 
-      { !browser.lessThan.medium && (
+      { /*! browser.lessThan.medium */ true && (
         <div className="facet-container">
           <Scrollbars style={{ height: '100%' }}>
-            { renderFacetList() }
+            <div className="inner-container">
+              {
+                  /* {wasSearched && (
+                      <Sorting label={"Sort by"} sortOptions={SORT_OPTIONS} />
+                    )} */
+                }
+              {facetConfig.map((config) => {
+                const facet = facets[config.field];
+                const data = (facet && facet.length && facet[0].data) || [];
+                return (
+                  <ProductFacet
+                    key={config.field}
+                    field={config.field}
+                    label={config.label}
+                    tooltip={config.tooltip}
+                    show={config.show}
+                    data={data}
+                  />
+                );
+              })}
+            </div>
           </Scrollbars>
         </div>
       ) }
 
-      <div className="layer-list-detail-container">
+      <div className={listDetailContainerClass}>
 
         <div className="layer-list-container search">
           <Scrollbars style={{ height: '100%' }}>
@@ -60,7 +62,7 @@ function SearchLayers(props) {
           </Scrollbars>
         </div>
 
-        { !selectedLayer && browser.lessThan.medium ? null : (
+        { !selectedLayer ? null : (
           <div className="layer-detail-container layers-all search">
             <Scrollbars style={{ height: '100%' }}>
               <LayerMetadataDetail />
@@ -97,7 +99,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 export default withSearch(
-  ({ results, facets }) => ({ results, facets }),
+  ({ facets }) => ({ facets }),
 )(connect(
   mapStateToProps,
   mapDispatchToProps,
