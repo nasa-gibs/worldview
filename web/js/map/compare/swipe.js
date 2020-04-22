@@ -2,16 +2,16 @@ import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
 
-var swipeOffset = null;
-var line = null;
-var bottomLayers = [];
-var topLayers = [];
-var events;
-var mapCase;
-var listenerObj;
-var percentSwipe = null;
+let swipeOffset = null;
+let line = null;
+let bottomLayers = [];
+let topLayers = [];
+let events;
+let mapCase;
+let listenerObj;
+let percentSwipe = null;
 const SWIPE_PADDING = 30;
-var dragging = false;
+let dragging = false;
 
 export class Swipe {
   constructor(
@@ -19,7 +19,7 @@ export class Swipe {
     isActive,
     compareEvents,
     eventListenerStringObj,
-    valueOverride
+    valueOverride,
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;
@@ -49,9 +49,9 @@ export class Swipe {
    * @param {Function} callback | Function that will apply event listeners to layer
    */
   applyEventsToBaseLayers(layer, callback) {
-    var layers = layer.get('layers');
+    const layers = layer.get('layers');
     if (layers) {
-      lodashEach(layers.getArray(), layer => {
+      lodashEach(layers.getArray(), (layer) => {
         this.applyEventsToBaseLayers(layer, callback);
       });
     } else {
@@ -60,7 +60,7 @@ export class Swipe {
   }
 
   update(isCompareA, groupName) {
-    var mapLayers = this.map.getLayers().getArray();
+    const mapLayers = this.map.getLayers().getArray();
     if (!groupName) {
       this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
       this.applyEventsToBaseLayers(mapLayers[0], applyReverseLayerListeners);
@@ -76,9 +76,9 @@ export class Swipe {
    * @param {Object} event | OL Precompose event object
    */
   clip(event) {
-    var ctx = event.context;
-    var viewportWidth = event.frameState.size[0];
-    var width = ctx.canvas.width * (swipeOffset / viewportWidth);
+    const ctx = event.context;
+    const viewportWidth = event.frameState.size[0];
+    const width = ctx.canvas.width * (swipeOffset / viewportWidth);
     ctx.save();
     ctx.beginPath();
     ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
@@ -91,9 +91,9 @@ export class Swipe {
    * @param {Object} event | OL Precompose event object
    */
   reverseClip(event) {
-    var ctx = event.context;
-    var viewportWidth = event.frameState.size[0];
-    var width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
+    const ctx = event.context;
+    const viewportWidth = event.frameState.size[0];
+    const width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
     ctx.save();
     ctx.beginPath();
     ctx.rect(0, 0, ctx.canvas.width - width, ctx.canvas.height);
@@ -113,7 +113,7 @@ export class Swipe {
    * @param {Array} layers | Layer group
    */
   removeListenersFromBottomLayers(layers) {
-    lodashEach(layers, layer => {
+    lodashEach(layers, (layer) => {
       layer.un('precompose', this.reverseClip);
       layer.un('postcompose', restore);
     });
@@ -124,7 +124,7 @@ export class Swipe {
    * @param {Array} layers | Layer group
    */
   removeListenersFromLayers(layers) {
-    lodashEach(layers, layer => {
+    lodashEach(layers, (layer) => {
       layer.un('precompose', this.clip);
       layer.un('postcompose', restore);
     });
@@ -136,13 +136,13 @@ export class Swipe {
  * @param {Object} map | OL map object
  */
 var addLineOverlay = function(map) {
-  var lineCaseEl = document.createElement('div');
-  var draggerEl = document.createElement('div');
-  var draggerCircleEl = document.createElement('div');
-  var iconEl = document.createElement('i');
-  var firstLabel = document.createElement('span');
-  var secondLabel = document.createElement('span');
-  var windowWidth = util.browser.dimensions[0];
+  const lineCaseEl = document.createElement('div');
+  const draggerEl = document.createElement('div');
+  const draggerCircleEl = document.createElement('div');
+  const iconEl = document.createElement('i');
+  const firstLabel = document.createElement('span');
+  const secondLabel = document.createElement('span');
+  const windowWidth = util.browser.dimensions[0];
   mapCase = map.getTargetElement();
   draggerCircleEl.className = 'swipe-dragger-circle';
   firstLabel.className = 'ab-swipe-span left-label';
@@ -162,36 +162,36 @@ var addLineOverlay = function(map) {
   swipeOffset = percentSwipe
     ? windowWidth * percentSwipe
     : swipeOffset || windowWidth / 2;
-  lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
+  lineCaseEl.style.transform = `translateX( ${swipeOffset}px)`;
 
   // Add event listeners to Elements
-  [lineCaseEl, draggerEl].forEach(el => {
+  [lineCaseEl, draggerEl].forEach((el) => {
     el.addEventListener(
       'mousedown',
-      function onTouchEnd() {
+      () => {
         listenerObj = {
           type: 'default',
           start: 'mousedown',
           move: 'mousemove',
-          end: 'mouseup'
+          end: 'mouseup',
         };
         dragLine(listenerObj, lineCaseEl, map);
       },
-      true
+      true,
     );
 
     el.addEventListener(
       'touchstart',
-      function onTouchStart() {
+      () => {
         listenerObj = {
           type: 'touch',
           start: 'touchstart',
           move: 'touchmove',
-          end: 'touchend'
+          end: 'touchend',
         };
         dragLine(listenerObj, lineCaseEl, map);
       },
-      true
+      true,
     );
   });
 
@@ -204,7 +204,7 @@ var dragLine = function(listenerObj, lineCaseEl, map) {
       dragging = true;
       events.trigger('movestart');
     }
-    var windowWidth = util.browser.dimensions[0];
+    const windowWidth = util.browser.dimensions[0];
     if (listenerObj.type === 'default') evt.preventDefault();
     evt.stopPropagation();
 
@@ -214,14 +214,13 @@ var dragLine = function(listenerObj, lineCaseEl, map) {
       swipeOffset = evt.clientX;
     }
     // Prevent swiper from being swiped off screen
-    swipeOffset =
-      swipeOffset > windowWidth - SWIPE_PADDING
-        ? windowWidth - SWIPE_PADDING
-        : swipeOffset < SWIPE_PADDING
-          ? SWIPE_PADDING
-          : swipeOffset;
+    swipeOffset = swipeOffset > windowWidth - SWIPE_PADDING
+      ? windowWidth - SWIPE_PADDING
+      : swipeOffset < SWIPE_PADDING
+        ? SWIPE_PADDING
+        : swipeOffset;
     percentSwipe = swipeOffset / windowWidth;
-    lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
+    lineCaseEl.style.transform = `translateX( ${swipeOffset}px)`;
 
     map.render();
   }
@@ -229,7 +228,7 @@ var dragLine = function(listenerObj, lineCaseEl, map) {
     dragging = false;
     events.trigger(
       'moveend',
-      lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0)
+      lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0),
     );
 
     window.removeEventListener(listenerObj.move, move);
@@ -259,6 +258,6 @@ var applyReverseLayerListeners = function(layer) {
 };
 
 var restore = function(event) {
-  var ctx = event.context;
+  const ctx = event.context;
   ctx.restore();
 };

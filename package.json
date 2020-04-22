@@ -161,6 +161,8 @@
     "cachai": "^1.0.2",
     "canvg-browser": "^1.0.0",
     "date-fns": "^1.29.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
     "file-saver": "^2.0.2",
     "history": "^4.7.2",
     "icheck": "^1.0.2",

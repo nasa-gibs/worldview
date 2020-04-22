@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import OpacitySlider from '../../components/compare/opacity-slider';
 
-var slider;
-var value = 50;
+let slider;
+let value = 50;
 
 export class Opacity {
   constructor(olMap, isAactive, events, eventListenerStringObj, valueOverride) {
@@ -48,7 +48,7 @@ export class Opacity {
     this.mapCase = document.getElementById('wv-map');
     const Props = {
       onSlide: this.oninput.bind(this),
-      value: value
+      value,
     };
     this.mapCase.appendChild(this.sliderCase);
     ReactDOM.render(React.createElement(OpacitySlider, Props), this.sliderCase);
@@ -60,7 +60,7 @@ export class Opacity {
    * @param {Number} newValue
    */
   oninput(newValue) {
-    var convertedValue;
+    let convertedValue;
     value = newValue;
     convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);

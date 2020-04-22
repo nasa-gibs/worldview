@@ -1,12 +1,13 @@
 import { each as lodashEach } from 'lodash';
 import { getRenderPixel } from 'ol/render';
-var mousePosition = null;
-var spy = null;
-var topLayers = [];
-var bottomLayers = [];
+
+let mousePosition = null;
+let spy = null;
+const topLayers = [];
+const bottomLayers = [];
 const DEFAULT_RADIUS = 140;
-var radius = DEFAULT_RADIUS;
-var label = null;
+let radius = DEFAULT_RADIUS;
+let label = null;
 
 export class Spy {
   constructor(olMap, isBInside) {
@@ -34,12 +35,12 @@ export class Spy {
       this.destroy();
       this.create(isBInside);
     } else {
-      var mapLayers = this.map.getLayers().getArray();
+      const mapLayers = this.map.getLayers().getArray();
       console.log(mapLayers);
       applyEventsToBaseLayers(
         mapLayers[0],
         this.map,
-        applyReverseLayerListeners
+        applyReverseLayerListeners,
       );
       applyEventsToBaseLayers(mapLayers[1], this.map, applyLayerListeners);
     }
@@ -61,12 +62,12 @@ export class Spy {
    * @param {Object} e | mousemove event object
    */
   updateSpy(e) {
-    var offSetXandY;
+    let offSetXandY;
     mousePosition = e.pixel || this.map.getEventPixel(e);
     radius = DEFAULT_RADIUS;
     offSetXandY = Math.sqrt((radius * radius) / 2);
-    label.style.top = mousePosition[1] + offSetXandY - 10 + 'px';
-    label.style.left = mousePosition[0] + offSetXandY - 5 + 'px';
+    label.style.top = `${mousePosition[1] + offSetXandY - 10}px`;
+    label.style.left = `${mousePosition[0] + offSetXandY - 5}px`;
     this.map.render();
   }
 
@@ -97,7 +98,7 @@ export class Spy {
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
   addSpy(map, isBInside) {
-    var insideText = !isBInside ? 'A' : 'B';
+    const insideText = !isBInside ? 'A' : 'B';
     label = document.createElement('span');
     label.className = 'ab-spy-span inside-label';
     label.style.display = 'none';
@@ -136,14 +137,14 @@ var applyLayerListeners = function(layer) {
  * @param {Object} event | Event object
  */
 var inverseClip = function(event) {
-  var ctx = event.context;
+  const ctx = event.context;
   ctx.save();
   ctx.beginPath();
   if (mousePosition) {
     // only show a circle around the mouse
-    var pixel = getRenderPixel(event, mousePosition);
-    var offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
-    var canvasRadius = Math.sqrt(Math.pow(offset[0] - pixel[0], 2) + Math.pow(offset[1] - pixel[1], 2));
+    const pixel = getRenderPixel(event, mousePosition);
+    const offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
+    const canvasRadius = Math.sqrt(Math.pow(offset[0] - pixel[0], 2) + Math.pow(offset[1] - pixel[1], 2));
     ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
     ctx.closePath();
     ctx.lineWidth = 5 * canvasRadius / radius;
@@ -156,14 +157,14 @@ var inverseClip = function(event) {
  * Clip the circle of a layer so users can see through
  */
 var clip = function(event) {
-  var ctx = event.context;
+  const ctx = event.context;
   ctx.save();
   ctx.beginPath();
   if (mousePosition) {
     // only show a circle around the mouse
-    var pixel = getRenderPixel(event, mousePosition);
-    var offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
-    var canvasRadius = Math.sqrt(Math.pow(offset[0] - pixel[0], 2) + Math.pow(offset[1] - pixel[1], 2));
+    const pixel = getRenderPixel(event, mousePosition);
+    const offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
+    const canvasRadius = Math.sqrt(Math.pow(offset[0] - pixel[0], 2) + Math.pow(offset[1] - pixel[1], 2));
     ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
     ctx.lineWidth = 5 * canvasRadius / radius;
     ctx.strokeStyle = 'rgba(0,0,0,0.5)';
@@ -172,7 +173,7 @@ var clip = function(event) {
   ctx.clip();
 };
 var restore = function(event) {
-  var ctx = event.context;
+  const ctx = event.context;
   ctx.restore();
 };
 /**
@@ -180,7 +181,7 @@ var restore = function(event) {
  * @param {Array} layers | Layer group
  */
 var removeListenersFromLayers = function(layers) {
-  lodashEach(layers, layer => {
+  lodashEach(layers, (layer) => {
     layer.un('prerender', clip);
     layer.un('postrender', restore);
   });
@@ -190,7 +191,7 @@ var removeListenersFromLayers = function(layers) {
  * @param {Array} layers | Layer group
  */
 var removeInverseListenersFromLayers = function(layers) {
-  lodashEach(layers, layer => {
+  lodashEach(layers, (layer) => {
     layer.un('prerender', inverseClip);
     layer.un('postrender', restore);
   });
@@ -202,9 +203,9 @@ var removeInverseListenersFromLayers = function(layers) {
  * @param {Function} callback | Function that will apply event listeners to layer
  */
 var applyEventsToBaseLayers = function(layer, map, callback) {
-  var layers = layer.get('layers');
+  const layers = layer.get('layers');
   if (layers) {
-    lodashEach(layers.getArray(), layer => {
+    lodashEach(layers.getArray(), (layer) => {
       applyEventsToBaseLayers(layer, map, callback);
     });
   } else {
