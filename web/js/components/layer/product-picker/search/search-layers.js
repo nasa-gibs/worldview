@@ -26,15 +26,10 @@ function SearchLayers(props) {
   return (
     <div className="search-layers-container" style={{ maxHeight: bodyHeight }}>
 
-      { /*! browser.lessThan.medium */ true && (
+      {browser.greaterThan.small && (
         <div className="facet-container">
           <Scrollbars style={{ height: '100%' }}>
             <div className="inner-container">
-              {
-                  /* {wasSearched && (
-                      <Sorting label={"Sort by"} sortOptions={SORT_OPTIONS} />
-                    )} */
-                }
               {facetConfig.map((config) => {
                 const facet = facets[config.field];
                 const data = (facet && facet.length && facet[0].data) || [];
@@ -52,7 +47,7 @@ function SearchLayers(props) {
             </div>
           </Scrollbars>
         </div>
-      ) }
+      )}
 
       <div className={listDetailContainerClass}>
 
@@ -62,7 +57,7 @@ function SearchLayers(props) {
           </Scrollbars>
         </div>
 
-        { !selectedLayer ? null : (
+        { !selectedLayer && browser.lessThan.large ? null : (
           <div className="layer-detail-container layers-all search">
             <Scrollbars style={{ height: '100%' }}>
               <LayerMetadataDetail />
