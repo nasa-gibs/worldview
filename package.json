@@ -152,7 +152,7 @@
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.7.0",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.8.1",
+    "webpack-dev-server": "^3.10.3",
     "write-file-webpack-plugin": "^4.5.1",
     "yargs": "^15.3.0"
   },
