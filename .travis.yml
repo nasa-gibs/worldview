@@ -43,7 +43,7 @@ matrix:
 
     - os: osx
       language: node_js
-      node_js: '8.15.1'
+      node_js: '10.19.0'
       osx_image: xcode11.2
 
     - os: linux
@@ -78,13 +78,13 @@ matrix:
     - os: linux
       dist: xenial
       language: python
-      node_js: '8.15.1'
+      node_js: '10.19.0'
       python: '3.7'
       sudo: required
       before_install:
         - python --version
         - python3 --version
-        - nvm install 8.15.1
+        - nvm install 10.19.0
 
     - os: windows
       language: node_js
@@ -105,7 +105,7 @@ matrix:
 
     - os: windows
       language: node_js
-      node_js: '8.15.1'
+      node_js: '10.19.0'
       before_install:
         - choco install python --version 3.7.5
         - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
