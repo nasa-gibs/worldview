@@ -22,8 +22,8 @@
 
 .wv-document h1 {
   font-size: 20px;
-  margin: 0.67em 0;
   font-weight: 600;
+  line-height: 1em;
 }
 
 .wv-document h2 {
@@ -104,6 +104,8 @@
   text-align: center;
 }
 
+/* Override default modal CSS */
+
 #about_modal .modal-header {
   color: #fff;
   background-color: #00457b;
@@ -116,4 +118,22 @@
   line-height: 28px;
   font-weight: 300;
 }
+
+#about_modal.modal-dialog .close {
+  opacity: 1;
+}
+
+#about_modal.modal-dialog .close span {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  position: relative;
+  height: 26px;
+  width: 26px;
+  background: url(../../images/wv-icons.png) -26px 0;
+  background-repeat: no-repeat;
+}
+
+
 
