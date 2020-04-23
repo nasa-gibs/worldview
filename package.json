@@ -199,7 +199,7 @@
     "react-resizable": "^1.9.0",
     "react-visibility-sensor": "^5.1.1",
     "reactstrap": "^8.0.1",
-    "redux": "^4.0.4",
+    "redux": "^4.0.5",
     "redux-location-state": "^2.6.0",
     "redux-logger": "^3.0.6",
     "redux-responsive": "^4.3.8",
