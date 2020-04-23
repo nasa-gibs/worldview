@@ -27,8 +27,35 @@ class LayerDataItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      hoveredTooltip: {},
     };
+
+    // cache for queried date arrays
+    this.layerDateArrayCache = {};
   }
+
+
+  /**
+  * @desc handle hovering on line and adding active tooltip
+  * @param {String} input
+  * @returns {void}
+  */
+ hoverOnToolTip = (input) => {
+   this.setState({
+     hoveredTooltip: { [input]: true },
+   });
+ }
+
+/**
+* @desc handle hovering off line and removing active tooltip
+* @returns {void}
+*/
+hoverOffToolTip = () => {
+  this.setState({
+    hoveredTooltip: {},
+  });
+}
+
 
   /**
   * @desc get layer header with title, subtitle, and full date range
@@ -129,6 +156,19 @@ class LayerDataItems extends Component {
   }
 
   /**
+  * @desc get formatted time period name
+  * @param {String} period
+  * @returns {String} formatted period
+  */
+  getFormattedTimePeriod = (period) => (period === 'daily'
+    ? 'day'
+    : period === 'monthly'
+      ? 'month'
+      : period === 'yearly'
+        ? 'year'
+        : 'minute')
+
+  /**
   * @desc get line DOM element from full/partial (interval) date range with tooltip
   * @param {String} id
   * @param {Object} options
@@ -142,12 +182,10 @@ class LayerDataItems extends Component {
   createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
     const {
       axisWidth,
-      hoverOnToolTip,
-      hoverOffToolTip,
-      hoveredTooltip,
       position,
       transformX,
     } = this.props;
+    const { hoveredTooltip } = this.state;
     const {
       borderRadius,
       leftOffset,
@@ -191,8 +229,8 @@ class LayerDataItems extends Component {
         <div
           id={`data-coverage-line-${dateRangeStartEnd}`}
           className="data-panel-coverage-line"
-          onMouseEnter={() => hoverOnToolTip(`${dateRangeStartEnd}`)}
-          onMouseLeave={() => hoverOffToolTip()}
+          onMouseEnter={() => this.hoverOnToolTip(`${dateRangeStartEnd}`)}
+          onMouseLeave={() => this.hoverOffToolTip()}
           style={{
             transform: `translate(${leftOffset}px, 0)`,
             width: `${lineWidth}px`,
@@ -331,30 +369,32 @@ class LayerDataItems extends Component {
 
   /**
   * @desc get array of dates for layer
-  * @param {Object} layer
-  * @param {String} layerPeriod
+  * @param {Object} def - layer
   * @param {Object} range
   * @param {Object} endDateLimit
-  * @param {Boolean} inactive
   * @param {Boolean} isLastInRange
   * @returns {Array} dateIntervalStartDates
   */
-  getDatesInDateRange = (layer, layerPeriod, range, endDateLimit, inactive, isLastInRange) => {
+  getDatesInDateRange = (def, range, endDateLimit, isLastInRange) => {
     const {
       appNow,
+      backDate,
       frontDate,
     } = this.props;
 
-    const rangeInterval = Number(range.dateInterval);
-    const rangeStart = range.startDate;
-    let rangeEnd = range.endDate;
+    const { period, id, inactive } = def;
+    const { dateInterval, startDate, endDate } = range;
+
+    const layerPeriod = this.getFormattedTimePeriod(period);
+    const rangeInterval = Number(dateInterval);
+    let rangeEnd;
 
     let startDateLimit = new Date(frontDate);
     // get leading start date minus rangeInterval and add to end date
     startDateLimit = moment.utc(startDateLimit).subtract(rangeInterval, layerPeriod);
     startDateLimit = moment(startDateLimit).toDate();
-    rangeEnd = moment.utc(rangeEnd).add(rangeInterval, layerPeriod);
-    rangeEnd = moment(rangeEnd).toDate();
+    rangeEnd = moment.utc(endDate).add(rangeInterval, layerPeriod);
+    rangeEnd = moment(endDate).toDate();
 
     // rangeEnd for last time coverage section of active layers can't be greater than appNow
     const appNowDate = new Date(appNow);
@@ -364,12 +404,21 @@ class LayerDataItems extends Component {
 
     // get dates within given date range
     let dateIntervalStartDates = [];
-    const startLessThanOrEqualToEndDateLimit = new Date(rangeStart).getTime() <= endDateLimit.getTime();
+    const startLessThanOrEqualToEndDateLimit = new Date(startDate).getTime() <= endDateLimit.getTime();
     const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd).getTime() >= startDateLimit.getTime();
     if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
-      const inputStartDate = new Date(startDateLimit);
-      const inputEndDate = new Date(endDateLimit);
-      dateIntervalStartDates = datesinDateRangesDataPanel(layer, inputStartDate, inputStartDate, inputEndDate);
+      // check layer date array cache and use caches date array if available, if not add date array
+      if (!this.layerDateArrayCache[id]) {
+        this.layerDateArrayCache[id] = {};
+      }
+
+      const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
+      if (this.layerDateArrayCache[id][layerIdDates] === undefined) {
+        dateIntervalStartDates = datesinDateRangesDataPanel(def, startDateLimit, endDateLimit, appNow);
+        this.layerDateArrayCache[id][layerIdDates] = dateIntervalStartDates;
+      } else {
+        dateIntervalStartDates = this.layerDateArrayCache[id][layerIdDates];
+      }
     }
     return dateIntervalStartDates;
   }
@@ -450,13 +499,7 @@ class LayerDataItems extends Component {
           if (dateRanges && !ignoredLayer[id]) {
             multipleCoverageRanges = dateRanges.length > 1;
           }
-          let layerPeriod = period === 'daily'
-            ? 'day'
-            : period === 'monthly'
-              ? 'month'
-              : period === 'yearly'
-                ? 'year'
-                : 'minute';
+          let layerPeriod = this.getFormattedTimePeriod(period);
 
           // get layer scale number to determine relation to current axis zoom level
           const timeScaleNumber = timeScaleToNumberKey[timeScale];
@@ -521,7 +564,7 @@ class LayerDataItems extends Component {
                         if (isLayerGreaterIncrementThanZoom || (rangeInterval !== 1 && timeScale !== 'year')) {
                           const endDateLimit = this.getMaxEndDate(inactive, isLastInRange);
                           // get dates based on date ranges
-                          const dateIntervalStartDates = this.getDatesInDateRange(layer, layerPeriod, range, endDateLimit, inactive, isLastInRange);
+                          const dateIntervalStartDates = this.getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
                           // add date intervals to multipleCoverageRangesDateIntervals object to catch repeats
                           dateIntervalStartDates.forEach((dateInt) => {
                             const dateIntFormatted = dateInt.toISOString();
@@ -613,9 +656,6 @@ LayerDataItems.propTypes = {
   frontDate: PropTypes.string,
   getMatchingCoverageLineDimensions: PropTypes.func,
   hoveredLayer: PropTypes.string,
-  hoveredTooltip: PropTypes.object,
-  hoverOffToolTip: PropTypes.func,
-  hoverOnToolTip: PropTypes.func,
   position: PropTypes.number,
   timeScale: PropTypes.string,
   transformX: PropTypes.number,

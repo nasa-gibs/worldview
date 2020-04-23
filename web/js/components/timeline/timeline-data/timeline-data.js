@@ -24,7 +24,6 @@ class TimelineData extends Component {
     this.state = {
       activeLayers: [],
       shouldIncludeHiddenLayers: false,
-      hoveredTooltip: {},
     };
   }
 
@@ -38,6 +37,24 @@ class TimelineData extends Component {
     document.querySelector('.timeline-data-panel-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
     // init populate of activeLayers
     this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, layers);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      timeScale,
+      frontDate,
+      backDate,
+    } = this.props;
+
+    // prevent repeated rendering on timescale change updates
+    if (nextProps.timeScale !== timeScale) {
+      const isFrontDateSame = nextProps.frontDate === frontDate;
+      const isBackDateSame = nextProps.backDate === backDate;
+      if (isFrontDateSame && isBackDateSame) {
+        return false;
+      }
+    }
+    return true;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -169,27 +186,6 @@ class TimelineData extends Component {
   }
 
   /**
-  * @desc handle hovering on line and adding active tooltip
-  * @param {String} input
-  * @returns {void}
-  */
-  hoverOnToolTip = (input) => {
-    this.setState({
-      hoveredTooltip: { [input]: true },
-    });
-  }
-
-  /**
-  * @desc handle hovering off line and removing active tooltip
-  * @returns {void}
-  */
-  hoverOffToolTip = () => {
-    this.setState({
-      hoveredTooltip: {},
-    });
-  }
-
-  /**
   * @desc handle open/close modal from clicking handle
   * @returns {void}
   */
@@ -277,7 +273,7 @@ class TimelineData extends Component {
     } = this.props;
     const {
       activeLayers,
-      hoveredTooltip,
+      // hoveredTooltip,
       shouldIncludeHiddenLayers,
     } = this.state;
     // filter current active layers
@@ -350,9 +346,6 @@ class TimelineData extends Component {
                 frontDate={frontDate}
                 getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
                 hoveredLayer={hoveredLayer}
-                hoveredTooltip={hoveredTooltip}
-                hoverOffToolTip={this.hoverOffToolTip}
-                hoverOnToolTip={this.hoverOnToolTip}
                 timeScale={timeScale}
                 position={position}
                 transformX={transformX}
