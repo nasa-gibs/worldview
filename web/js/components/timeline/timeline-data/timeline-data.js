@@ -273,7 +273,6 @@ class TimelineData extends Component {
     } = this.props;
     const {
       activeLayers,
-      // hoveredTooltip,
       shouldIncludeHiddenLayers,
     } = this.state;
     // filter current active layers
