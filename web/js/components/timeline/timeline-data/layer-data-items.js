@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { datesinDateRangesDataPanel } from '../../../modules/layers/util';
+import { datesinDateRanges } from '../../../modules/layers/util';
 import util from '../../../util/util';
 import {
   timeScaleToNumberKey,
@@ -282,7 +282,7 @@ hoverOffToolTip = () => {
       minMinute + minuteAdd,
     );
 
-    let rangeDateEnd = new Date(rangeDateEndLocal.getTime() - (rangeDateEndLocal.getTimezoneOffset() * 60000));
+    let rangeDateEnd = util.getTimezoneOffsetDate(rangeDateEndLocal);
     // check if next date cuts off this range
     // (e.g., 8 day interval with: currentDate = 12-27-1999, and nextDate = 1-1-2000)
     if (nextDate) {
@@ -414,7 +414,7 @@ hoverOffToolTip = () => {
 
       const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
       if (this.layerDateArrayCache[id][layerIdDates] === undefined) {
-        dateIntervalStartDates = datesinDateRangesDataPanel(def, startDateLimit, endDateLimit, appNow);
+        dateIntervalStartDates = datesinDateRanges(def, startDateLimit, startDateLimit, endDateLimit, appNow);
         this.layerDateArrayCache[id][layerIdDates] = dateIntervalStartDates;
       } else {
         dateIntervalStartDates = this.layerDateArrayCache[id][layerIdDates];

@@ -94,8 +94,7 @@ export function nearestInterval(def, date) {
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
   const currentDateValue = date.getTime();
-  const currentDate = new Date(currentDateValue);
-  const currentDateOffsetCheck = new Date(currentDateValue + (currentDate.getTimezoneOffset() * 60000));
+  const currentDateOffsetCheck = util.getTimezoneOffsetDate(date);
 
   const isFirstDayOfMonth = currentDateOffsetCheck.getDate() === 1;
   const isFirstDayOfYear = currentDateOffsetCheck.getMonth() === 0;
@@ -189,14 +188,14 @@ const getDateArrayLastDateInOrder = (timeUnit, dateArray) => {
  * @method getMinStartDate
  * @param  {Number} timeDiff time difference based on intervals and unit
  * @param  {String} period
- * @param  {Number} dateInterval
+ * @param  {Number} interval
  * @param  {Object} startDateLimit A date object
  * @param  {Number} minYear
  * @param  {Number} minMonth
  * @param  {Number} minDay
  * @return {Object} minStartDate A date object
  */
-const getMinStartDate = (timeDiff, period, dateInterval, startDateLimit, minYear, minMonth, minDay) => {
+const getMinStartDate = (timeDiff, period, interval, startDateLimit, minYear, minMonth, minDay) => {
   const startDateLimitTime = startDateLimit.getTime();
   let minStartDate;
   let prevDate = '';
@@ -204,11 +203,11 @@ const getMinStartDate = (timeDiff, period, dateInterval, startDateLimit, minYear
     if (!minStartDate) {
       let timeUnit;
       if (period === 'monthly') {
-        timeUnit = new Date(minYear, minMonth + i * dateInterval, minDay);
+        timeUnit = new Date(minYear, minMonth + i * interval, minDay);
       } else if (period === 'daily') {
-        timeUnit = new Date(minYear, minMonth, minDay + i * dateInterval);
+        timeUnit = new Date(minYear, minMonth, minDay + i * interval);
       }
-      timeUnit = new Date(timeUnit.getTime() - (timeUnit.getTimezoneOffset() * 60000));
+      timeUnit = util.getTimezoneOffsetDate(timeUnit);
       const timeUnitTime = timeUnit.getTime();
 
       if (timeUnitTime >= startDateLimitTime) {
@@ -241,9 +240,11 @@ const getLimitedDateRange = (def, currentDate) => {
   const breakMinDateTime = rangeStartDate.getTime();
 
   // build test max date to determine if date is within max date range
-  const breakMaxYear = rangeEndDate.getUTCFullYear();
-  const breakMaxMonth = rangeEndDate.getUTCMonth();
-  const breakMaxDay = rangeEndDate.getUTCDate();
+  const {
+    breakMaxYear,
+    breakMaxMonth,
+    breakMaxDay,
+  } = util.getUTCNumbers(rangeEndDate, 'breakMax');
   let breakMaxDate;
   if (period === 'yearly') {
     breakMaxDate = new Date(breakMaxYear + 1, breakMaxMonth, breakMaxDay);
@@ -260,11 +261,15 @@ const getLimitedDateRange = (def, currentDate) => {
   const limitedDateRange = [];
   if (currentDateTime >= breakMinDateTime && currentDateTime <= breakMaxDateTime) {
     // get date building components
-    const minCurrentYear = currentDate.getUTCFullYear();
-    const minCurrentMonth = currentDate.getUTCMonth();
-    const minCurrentDay = currentDate.getUTCDate();
-    const minStartMonth = rangeStartDate.getUTCMonth();
-    const minStartDay = rangeStartDate.getUTCDate();
+    const {
+      minCurrentYear,
+      minCurrentMonth,
+      minCurrentDay,
+    } = util.getUTCNumbers(currentDate, 'minCurrent');
+    const {
+      minStartMonth,
+      minStartDay,
+    } = util.getUTCNumbers(rangeStartDate, 'minStart');
 
     // period specific date addition/subtraction building
     let dayBeforeCurrent;
@@ -289,36 +294,42 @@ const getLimitedDateRange = (def, currentDate) => {
     // handle previous date
     const dayBeforeCurrentTime = dayBeforeCurrent.getTime();
     if (dayBeforeCurrentTime >= breakMinDateTime) {
-      const dayBeforeDate = new Date(dayBeforeCurrent.getTime() - (dayBeforeCurrent.getTimezoneOffset() * 60000));
+      const dayBeforeDate = util.getTimezoneOffsetDate(dayBeforeCurrent);
       limitedDateRange.push(dayBeforeDate);
     }
 
     // handle current date
-    const currentDateDate = new Date(currentDateZeroed.getTime() - (currentDateZeroed.getTimezoneOffset() * 60000));
+    const currentDateDate = util.getTimezoneOffsetDate(currentDateZeroed);
     limitedDateRange.push(currentDateDate);
 
     // handle next date
     const dayAfterCurrentTime = dayAfterCurrent.getTime();
     if (dayAfterCurrentTime <= breakMaxDateTime) {
-      const dayAfterDate = new Date(dayAfterCurrent.getTime() - (dayAfterCurrent.getTimezoneOffset() * 60000));
+      const dayAfterDate = util.getTimezoneOffsetDate(dayAfterCurrent);
       limitedDateRange.push(dayAfterDate);
     }
   }
   return limitedDateRange;
 };
 
-
-const getYearDatesInDateRange = (currentDateTime, minDate, maxDate, dateIntervalNum, dateArray) => {
+/**
+   * Return an array of dates from a yearly period layer based on the dateRange the current date falls in.
+   *
+   * @method getYearDateRange
+   * @param  {Number} currentDateTime  Current date milliseconds
+   * @param  {Object} minDate          A date object used as min date
+   * @param  {Object} maxDate          A date object used as max date
+   * @param  {Number} interval         Temporal interval
+   * @param  {Array} dateArray         An array of dates
+   * @return {Array}                   An array of dates with normalized timezones
+   */
+const getYearDateRange = (currentDateTime, minDate, maxDate, interval, dateArray) => {
   const newDateArray = [...dateArray];
-  const maxYear = maxDate.getUTCFullYear();
-  const maxMonth = maxDate.getUTCMonth();
-  const maxDay = maxDate.getUTCDate();
-  const minYear = minDate.getUTCFullYear();
-  const minMonth = minDate.getUTCMonth();
-  const minDay = minDate.getUTCDate();
+  const { maxYear, maxMonth, maxDay } = util.getUTCNumbers(maxDate, 'max');
+  const { minYear, minMonth, minDay } = util.getUTCNumbers(minDate, 'min');
 
   const minDateTime = minDate.getTime();
-  const maxYearDate = new Date(maxYear + dateIntervalNum, maxMonth, maxDay);
+  const maxYearDate = new Date(maxYear + interval, maxMonth, maxDay);
   const maxYearDateTime = maxYearDate.getTime();
 
   let yearDifference;
@@ -327,56 +338,39 @@ const getYearDatesInDateRange = (currentDateTime, minDate, maxDate, dateInterval
   }
 
   for (let i = 0; i <= (yearDifference + 1); i += 1) {
-    let year = new Date(minYear + i * dateIntervalNum, minMonth, minDay);
+    let year = new Date(minYear + i * interval, minMonth, minDay);
     if (year.getTime() < maxYearDateTime) {
-      year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
+      year = util.getTimezoneOffsetDate(year);
       newDateArray.push(year);
     }
   }
   return newDateArray;
 };
 
-// const getYearDatesInDateRange = (currentDateTime, minDate, maxDate, dateIntervalNum, dateArray) => {
-//   const newDateArray = [...dateArray];
-//   const maxYear = maxDate.getUTCFullYear();
-//   const maxMonth = maxDate.getUTCMonth();
-//   const maxDay = maxDate.getUTCDate();
-//   const minYear = minDate.getUTCFullYear();
-//   const minMonth = minDate.getUTCMonth();
-//   const minDay = minDate.getUTCDate();
-
-//   const minDateTime = minDate.getTime();
-//   const maxYearDate = new Date(maxYear + dateIntervalNum, maxMonth, maxDay);
-//   const maxYearDateTime = maxYearDate.getTime();
-
-//   let yearDifference;
-//   if (currentDateTime >= minDateTime && currentDateTime <= maxYearDateTime) {
-//     yearDifference = util.yearDiff(minDate, maxYearDate);
-//   }
-
-//   for (let i = 0; i <= (yearDifference + 1); i += 1) {
-//     let year = new Date(minYear + i * dateIntervalNum, minMonth, minDay);
-//     if (year.getTime() < maxYearDateTime) {
-//       year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
-//       newDateArray.push(year);
-//     }
-//   }
-//   return newDateArray;
-// };
-
-const getMonthDatesInDateRange = (isDataPanel, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray) => {
+/**
+   * Return an array of dates from a monthly period layer based on the dateRange the current date falls in.
+   *
+   * @method getMonthDateRange
+   * @param  {Boolean} isDataPanel     Is data panel query
+   * @param  {Number} currentDateTime  Current date milliseconds
+   * @param  {Object} startDateLimit   A date object used as start date of timeline range for available data
+   * @param  {Object} endDateLimit     A date object used as end date of timeline range for available data
+   * @param  {Object} minDate          A date object used as min date
+   * @param  {Object} maxDate          A date object used as max date
+   * @param  {Number} interval         Temporal interval
+   * @param  {Array} dateArray         An array of dates
+   * @return {Array}                   An array of dates with normalized timezones
+   */
+const getMonthDateRange = (isDataPanel, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, interval, dateArray) => {
   let newDateArray = [...dateArray];
-  const maxYear = maxDate.getUTCFullYear();
-  const maxMonth = maxDate.getUTCMonth();
-  const maxDay = maxDate.getUTCDate();
-  const minYear = minDate.getUTCFullYear();
-  const minMonth = minDate.getUTCMonth();
-  const minDay = minDate.getUTCDate();
+  const { maxYear, maxMonth, maxDay } = util.getUTCNumbers(maxDate, 'max');
+  const { minYear, minMonth, minDay } = util.getUTCNumbers(minDate, 'min');
 
   // conditional revision of maxEndDate for data availability partial coverage
   const minDateTime = minDate.getTime();
-  let maxMonthDate = new Date(maxYear, maxMonth + dateIntervalNum, maxDay);
-  maxMonthDate = new Date(maxMonthDate.getTime() - (maxMonthDate.getTimezoneOffset() * 60000));
+  let maxMonthDate = new Date(maxYear, maxMonth + interval, maxDay);
+  maxMonthDate = util.getTimezoneOffsetDate(maxMonthDate);
+
   let maxEndDate;
   let maxEndDateTime;
   if (isDataPanel) {
@@ -390,19 +384,19 @@ const getMonthDatesInDateRange = (isDataPanel, currentDateTime, startDateLimit, 
   if (currentDateTime >= minDateTime && currentDateTime <= maxEndDateTime) {
     monthDifference = util.monthDiff(minDate, maxMonthDate);
     // handle non-1 month intervals to prevent over pushing unused dates to dateArray
-    monthDifference = Math.ceil(monthDifference / dateIntervalNum);
+    monthDifference = Math.ceil(monthDifference / interval);
   }
 
   let minStartMonthDate;
   if (isDataPanel) {
     // get minStartDate for partial range coverage starting date
     minStartMonthDate = monthDifference
-      && getMinStartDate(monthDifference, 'monthly', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
+      && getMinStartDate(monthDifference, 'monthly', interval, startDateLimit, minYear, minMonth, minDay);
   }
 
   for (let i = 0; i <= (monthDifference + 1); i += 1) {
-    let month = new Date(minYear, minMonth + i * dateIntervalNum, minDay);
-    month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
+    let month = new Date(minYear, minMonth + i * interval, minDay);
+    month = util.getTimezoneOffsetDate(month);
     const monthTime = month.getTime();
     if (monthTime < maxEndDateTime) {
       if (isDataPanel) {
@@ -426,68 +420,28 @@ const getMonthDatesInDateRange = (isDataPanel, currentDateTime, startDateLimit, 
   return newDateArray;
 };
 
-// const getMonthDatesInDateRange = (currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray, period) => {
-//   let newDateArray = [...dateArray];
-//   const maxYear = maxDate.getUTCFullYear();
-//   const maxMonth = maxDate.getUTCMonth();
-//   const maxDay = maxDate.getUTCDate();
-//   const minYear = minDate.getUTCFullYear();
-//   const minMonth = minDate.getUTCMonth();
-//   const minDay = minDate.getUTCDate();
-
-//   // conditional revision of maxEndDate for data availability partial coverage
-//   let maxMonthDate = new Date(maxYear, maxMonth + dateIntervalNum, maxDay);
-//   maxMonthDate = new Date(maxMonthDate.getTime() - (maxMonthDate.getTimezoneOffset() * 60000));
-//   const minDateTime = minDate.getTime();
-//   const maxEndDate = getRevisedMaxEndDate(minDate, maxMonthDate, startDateLimit, endDateLimit);
-//   const maxEndDateTime = maxEndDate.getTime();
-
-//   let monthDifference;
-//   if (currentDateTime >= minDateTime && currentDateTime <= maxMonthDate) {
-//     monthDifference = util.monthDiff(minDate, maxMonthDate);
-//     // handle non-1 month intervals to prevent over pushing unused dates to dateArray
-//     monthDifference = Math.ceil(monthDifference / dateIntervalNum);
-//   }
-
-//   // get minStartDate for partial range coverage starting date
-//   const minStartMonthDate = monthDifference
-//     && getMinStartDate(monthDifference, period, dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
-
-//   for (let i = 0; i <= (monthDifference + 1); i += 1) {
-//     let month = new Date(minYear, minMonth + i * dateIntervalNum, minDay);
-//     month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
-//     const monthTime = month.getTime();
-//     if (monthTime < maxEndDateTime) {
-//       if (newDateArray.length > 0) {
-//         newDateArray = getDateArrayLastDateInOrder(month, newDateArray);
-//       }
-
-//       if (minStartMonthDate) {
-//         const minStartMonthDateTime = minStartMonthDate.getTime();
-//         const monthWithinRange = month > minStartMonthDate && month < maxMonthDate;
-//         if (monthTime === minStartMonthDateTime || monthWithinRange) {
-//           newDateArray.push(month);
-//         }
-//       } else {
-//         newDateArray.push(month);
-//       }
-//     }
-//   }
-//   return newDateArray;
-// };
-
-const getDayDatesinDateRange = (isDataPanel, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray) => {
+/**
+   * Return an array of dates from a daily period layer based on the dateRange the current date falls in.
+   *
+   * @method getDayDateRange
+   * @param  {Boolean} isDataPanel     Is data panel query
+   * @param  {Number} currentDateTime  Current date milliseconds
+   * @param  {Object} startDateLimit   A date object used as start date of timeline range for available data
+   * @param  {Object} endDateLimit     A date object used as end date of timeline range for available data
+   * @param  {Object} minDate          A date object used as min date
+   * @param  {Object} maxDate          A date object used as max date
+   * @param  {Number} interval         Temporal interval
+   * @param  {Array} dateArray         An array of dates
+   * @return {Array}                   An array of dates with normalized timezones
+   */
+const getDayDateRange = (isDataPanel, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, interval, dateArray) => {
   let newDateArray = [...dateArray];
-  const maxYear = maxDate.getUTCFullYear();
-  const maxMonth = maxDate.getUTCMonth();
-  const maxDay = maxDate.getUTCDate();
-  const minYear = minDate.getUTCFullYear();
-  const minMonth = minDate.getUTCMonth();
-  const minDay = minDate.getUTCDate();
+  const { maxYear, maxMonth, maxDay } = util.getUTCNumbers(maxDate, 'max');
+  const { minYear, minMonth, minDay } = util.getUTCNumbers(minDate, 'min');
 
   // conditional revision of maxEndDate for data availability partial coverage
   const minDateTime = minDate.getTime();
-  const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateIntervalNum);
+  const maxDayDate = new Date(maxYear, maxMonth, maxDay + interval);
   let maxEndDateTime;
   let maxEndDate;
   if (isDataPanel) {
@@ -502,19 +456,19 @@ const getDayDatesinDateRange = (isDataPanel, currentDateTime, startDateLimit, en
   if (currentDateTime >= minDateTime && currentDateTime <= maxEndDateTime) {
     dayDifference = util.dayDiff(minDate, maxEndDate);
     // handle non-1 day intervals to prevent over pushing unused dates to dateArray
-    dayDifference = Math.ceil(dayDifference / dateIntervalNum);
+    dayDifference = Math.ceil(dayDifference / interval);
   }
 
   let minStartDayDate;
   if (isDataPanel) {
     // get minStartDate for partial range coverage starting date
     minStartDayDate = dayDifference
-    && getMinStartDate(dayDifference, 'daily', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
+    && getMinStartDate(dayDifference, 'daily', interval, startDateLimit, minYear, minMonth, minDay);
   }
 
   for (let i = 0; i <= (dayDifference + 1); i += 1) {
-    let day = new Date(minYear, minMonth, minDay + i * dateIntervalNum);
-    day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
+    let day = new Date(minYear, minMonth, minDay + i * interval);
+    day = util.getTimezoneOffsetDate(day);
     const dayTime = day.getTime();
     if (dayTime < maxEndDateTime) {
       if (isDataPanel) {
@@ -538,93 +492,56 @@ const getDayDatesinDateRange = (isDataPanel, currentDateTime, startDateLimit, en
   return newDateArray;
 };
 
-// const getDayDatesinDateRange = (isDataPanel, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray, period) => {
-//   let newDateArray = [...dateArray];
-//   const maxYear = maxDate.getUTCFullYear();
-//   const maxMonth = maxDate.getUTCMonth();
-//   const maxDay = maxDate.getUTCDate();
-//   const minYear = minDate.getUTCFullYear();
-//   const minMonth = minDate.getUTCMonth();
-//   const minDay = minDate.getUTCDate();
-
-//   // conditional revision of maxEndDate for data availability partial coverage
-//   const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateIntervalNum);
-//   const minDateTime = minDate.getTime();
-//   const maxEndDate = getRevisedMaxEndDate(minDate, maxDayDate, startDateLimit, endDateLimit);
-//   const maxEndDateTime = maxEndDate.getTime();
-
-//   let dayDifference;
-//   if (currentDateTime >= minDateTime && currentDateTime <= maxEndDateTime) {
-//     dayDifference = util.dayDiff(minDate, maxEndDate);
-//     // handle non-1 day intervals to prevent over pushing unused dates to dateArray
-//     dayDifference = Math.ceil(dayDifference / dateIntervalNum);
-//   }
-
-//   let minStartDayDate;
-//   if (isDataPanel) {
-//     // get minStartDate for partial range coverage starting date
-//     minStartDayDate = dayDifference
-//     && getMinStartDate(dayDifference, period, dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
-//   }
-
-//   for (let i = 0; i <= (dayDifference + 1); i += 1) {
-//     let day = new Date(minYear, minMonth, minDay + i * dateIntervalNum);
-//     day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
-//     const dayTime = day.getTime();
-//     if (dayTime < maxEndDateTime) {
-//       if (isDataPanel) {
-//         if (newDateArray.length > 0) {
-//           newDateArray = getDateArrayLastDateInOrder(day, newDateArray);
-//         }
-//         if (minStartDayDate) {
-//           const minStartDayDateTime = minStartDayDate.getTime();
-//           const dayWithinRange = day > minStartDayDate && day < maxDayDate;
-//           if (dayTime === minStartDayDateTime || dayWithinRange) {
-//             newDateArray.push(day);
-//           }
-//         } else {
-//           newDateArray.push(day);
-//         }
-//       } else {
-//         newDateArray.push(day);
-//       }
-//     }
-//   }
-//   return newDateArray;
-// };
-
-const getSubdailyDatesinDateRange = (isDataPanel, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray) => {
+/**
+   * Return an array of dates from a subdaily period layer based on the dateRange the current date falls in.
+   *
+   * @method getSubdailyDateRange
+   * @param  {Boolean} isDataPanel     Is data panel query
+   * @param  {Number} currentDateTime  Current date milliseconds
+   * @param  {Object} startDateLimit   A date object used as start date of timeline range for available data
+   * @param  {Object} endDateLimit     A date object used as end date of timeline range for available data
+   * @param  {Object} minDate          A date object used as min date
+   * @param  {Object} maxDate          A date object used as max date
+   * @param  {Number} interval         Temporal interval
+   * @param  {Array} dateArray         An array of dates
+   * @return {Array}                   An array of dates with normalized timezones
+   */
+const getSubdailyDateRange = (isDataPanel, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, interval, dateArray) => {
   const newDateArray = [...dateArray];
-  const maxYear = maxDate.getUTCFullYear();
-  const maxMonth = maxDate.getUTCMonth();
-  const maxDay = maxDate.getUTCDate();
-  const minYear = minDate.getUTCFullYear();
-  const minMonth = minDate.getUTCMonth();
-  const minDay = minDate.getUTCDate();
-  const maxHours = maxDate.getUTCHours();
-  const maxMinutes = maxDate.getUTCMinutes();
-  const minHours = minDate.getUTCHours();
-  const minMinutes = minDate.getUTCMinutes();
+  const {
+    maxYear,
+    maxMonth,
+    maxDay,
+    maxHour,
+    maxMinute,
+  } = util.getUTCNumbers(maxDate, 'max');
+  const {
+    minYear,
+    minMonth,
+    minDay,
+    minHour,
+    minMinute,
+  } = util.getUTCNumbers(minDate, 'min');
 
-  let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateIntervalNum);
+  let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHour, maxMinute + interval);
   let minMinuteDateMinusInterval;
   let minMinuteDateMinusIntervalOffset;
   let hourBeforeStartDateLimit;
   let hourAfterEndDateLimit;
   if (isDataPanel) {
-    minMinuteDateMinusInterval = new Date(minYear, minMonth, minDay, minHours, minMinutes - dateIntervalNum);
-    minMinuteDateMinusIntervalOffset = new Date(minMinuteDateMinusInterval.getTime() - (minMinuteDateMinusInterval.getTimezoneOffset() * 60000));
+    minMinuteDateMinusInterval = new Date(minYear, minMonth, minDay, minHour, minMinute - interval);
+    minMinuteDateMinusIntervalOffset = util.getTimezoneOffsetDate(minMinuteDateMinusInterval);
 
     const startDateLimitOffset = startDateLimit.getTimezoneOffset() * 60000;
     const endDateLimitOffset = endDateLimit.getTimezoneOffset() * 60000;
-    const startDateLimitSetMinutes = new Date(startDateLimit).setMinutes(minMinutes);
-    const endDateLimitSetMinutes = new Date(endDateLimit).setMinutes(minMinutes);
+    const startDateLimitSetMinutes = new Date(startDateLimit).setMinutes(minMinute);
+    const endDateLimitSetMinutes = new Date(endDateLimit).setMinutes(minMinute);
 
     hourBeforeStartDateLimit = new Date(startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000));
     hourAfterEndDateLimit = new Date(endDateLimitSetMinutes - endDateLimitOffset + (60 * 60000));
   } else {
     // limit date range request to +/- one hour from current date
-    const currentSetMinutes = new Date(currentDateTime).setMinutes(minMinutes);
+    const currentSetMinutes = new Date(currentDateTime).setMinutes(minMinute);
     hourBeforeStartDateLimit = new Date(currentSetMinutes - (60 * 60000));
     hourAfterEndDateLimit = new Date(currentSetMinutes + (60 * 60000));
   }
@@ -649,7 +566,7 @@ const getSubdailyDatesinDateRange = (isDataPanel, currentDateTime, startDateLimi
   const maxMinuteDateTime = maxMinuteDate.getTime();
   let currentDateTimeCheck;
   if (isDataPanel) {
-    const minCurrentDate = new Date(currentDateTime - new Date(currentDateTime).getTimezoneOffset() * 60000);
+    const minCurrentDate = util.getTimezoneOffsetDate(new Date(currentDateTime));
     const minCurrentDateTime = minCurrentDate.getTime();
     currentDateTimeCheck = minCurrentDateTime;
   } else {
@@ -661,7 +578,7 @@ const getSubdailyDatesinDateRange = (isDataPanel, currentDateTime, startDateLimi
     minuteDifference = util.minuteDiff(minMinuteDate, maxMinuteDate);
   }
 
-  for (let i = 0; i <= (minuteDifference + 1); i += dateIntervalNum) {
+  for (let i = 0; i <= (minuteDifference + 1); i += interval) {
     let subdailyTime = new Date(
       minMinuteDate.getUTCFullYear(),
       minMinuteDate.getUTCMonth(),
@@ -671,7 +588,7 @@ const getSubdailyDatesinDateRange = (isDataPanel, currentDateTime, startDateLimi
       0,
     );
     if (!isDataPanel) {
-      subdailyTime = new Date(subdailyTime.getTime() - (subdailyTime.getTimezoneOffset() * 60000));
+      subdailyTime = util.getTimezoneOffsetDate(subdailyTime);
     }
     if (subdailyTime.getTime() >= minMinuteDateTime) {
       newDateArray.push(subdailyTime);
@@ -685,25 +602,40 @@ const getSubdailyDatesinDateRange = (isDataPanel, currentDateTime, startDateLimi
    *
    * @method datesinDateRangesDataPanel
    * @param  {Object} def            A layer object
+   * @param  {Object} date           A date object for currently selected date
    * @param  {Object} startDateLimit A date object used as start date of timeline range for available data
    * @param  {Object} endDateLimit   A date object used as end date of timeline range for available data
    * @param  {Object} appNow         A date object of appNow (current date or set explicitly)
    * @return {Array}                An array of dates with normalized timezones
    */
-export function datesinDateRangesDataPanel(def, startDateLimit, endDateLimit, appNow) {
+export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
   const {
     dateRanges,
     period,
     inactive,
   } = def;
+  const rangeLimitsProvided = startDateLimit && endDateLimit;
   let dateArray = [];
-  let currentDate = new Date(startDateLimit);
+  let currentDate = new Date(date);
 
-  const inputStartDate = new Date(startDateLimit);
-  const inputEndDate = new Date(endDateLimit);
-  const inputStartDateTime = inputStartDate.getTime();
-  const inputEndDateTime = inputEndDate.getTime();
+  let inputStartDate;
+  let inputEndDate;
+  let inputStartDateTime;
+  let inputEndDateTime;
+  let singleDateRangeAndInterval;
+  if (rangeLimitsProvided) {
+    inputStartDate = new Date(startDateLimit);
+    inputEndDate = new Date(endDateLimit);
+    inputStartDateTime = inputStartDate.getTime();
+    inputEndDateTime = inputEndDate.getTime();
+  } else {
+    singleDateRangeAndInterval = dateRanges
+    && dateRanges.length === 1
+    && dateRanges[0].dateInterval === '1';
+  }
 
+  // at end of range, used to add "next" date
+  let hitMaxLimitOfRange = false;
   // runningMinDate used for overlapping ranges
   let runningMinDate;
   lodashEach(dateRanges, (dateRange, index) => {
@@ -714,101 +646,38 @@ export function datesinDateRangesDataPanel(def, startDateLimit, endDateLimit, ap
     } = dateRange;
     const dateIntervalNum = Number(dateInterval);
     let currentDateTime = currentDate.getTime();
+    const lastDateInDateArray = dateArray[dateArray.length - 1];
     const minDate = new Date(startDate);
     let maxDate = new Date(endDate);
-
-    // handle single date coverage
-    if (startDate === endDate) {
-      dateArray.push(minDate);
-      return;
-    }
-
-    // revise currentDate to minDate to reduce earlier minDate than needed
-    const minDateTime = minDate.getTime();
-    const minDateWithinRangeLimits = minDateTime > inputStartDateTime && minDateTime < inputEndDateTime;
-    const runningMinDateAndLastDateEarlier = runningMinDate && dateArray[dateArray.length - 1] > minDate;
-    if (currentDateTime < minDateTime && (minDateWithinRangeLimits || runningMinDateAndLastDateEarlier)) {
-      currentDate = minDate;
-      currentDateTime = currentDate.getTime();
-    }
-    // set maxDate to current date if layer coverage is ongoing
-    if (index === dateRanges.length - 1 && !inactive) {
-      maxDate = new Date(appNow);
-    }
-
-    // Yearly layers
-    if (period === 'yearly') {
-      const yearArray = getYearDatesInDateRange(currentDateTime, minDate, maxDate, dateIntervalNum, dateArray);
-      dateArray = [...yearArray];
-      // Monthly layers
-    } else if (period === 'monthly') {
-      const monthArray = getMonthDatesInDateRange(true, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
-      dateArray = [...monthArray];
-      // Daily layers
-    } else if (period === 'daily') {
-      const dayArray = getDayDatesinDateRange(true, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
-      dateArray = [...dayArray];
-      // Subdaily layers
-    } else if (period === 'subdaily') {
-      const subdailyArray = getSubdailyDatesinDateRange(true, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
-      dateArray = [...subdailyArray];
-    }
-    runningMinDate = minDate;
-  });
-  return dateArray;
-}
-
-/**
-   * Return an array of dates based on the dateRange the current date falls in.
-   *
-   * @method datesinDateRanges
-   * @param  {Object} def            A layer object
-   * @param  {Object} date           A date object
-   * @return {Array}                An array of dates with normalized timezones
-   */
-export function datesinDateRanges(def, date) {
-  const { dateRanges, period } = def;
-  let dateArray = [];
-  const currentDate = new Date(date);
-  const currentDateTime = currentDate.getTime();
-  const singleDateRangeAndInterval = dateRanges
-    && dateRanges.length === 1
-    && dateRanges[0].dateInterval === '1';
-  let hitMaxLimitOfRange = false;
-
-  lodashEach(dateRanges, (dateRange) => {
-    const { startDate, endDate, dateInterval } = dateRange;
-    const dateIntervalNum = Number(dateInterval);
-    // let yearDifference;
-    // let monthDifference;
-    // let dayDifference;
-    // let minuteDifference;
-    const minDate = new Date(startDate);
-    const maxDate = new Date(endDate);
 
     const minDateTime = minDate.getTime();
     const maxDateTime = maxDate.getTime();
 
-    // break out if currentDate is not within range by skipping current date range
-    if (currentDateTime < minDateTime || currentDateTime > maxDateTime) {
-      // handle adding next date (if available/not at end of range) as final date
-      if (!hitMaxLimitOfRange && currentDateTime < minDateTime) {
-        const lastDateInDateArray = dateArray[dateArray.length - 1];
-        if (lastDateInDateArray) {
-          // reorder last dates from overlapping end/start dateRanges
-          if (lastDateInDateArray > minDate) {
-            dateArray.pop();
-            dateArray.push(minDate);
-            dateArray.push(lastDateInDateArray);
+    const currentDateLessThanMinDate = currentDateTime < minDateTime;
+    const currentDateGreaterThanMaxDate = currentDateTime > maxDateTime;
+
+    // LAYER DATE RANGE SPECIFIC
+    if (!rangeLimitsProvided) {
+      // break out if currentDate is not within range by skipping current date range
+      if (currentDateLessThanMinDate || currentDateGreaterThanMaxDate) {
+        // handle adding next date (if available/not at end of range) as final date
+        if (!hitMaxLimitOfRange && currentDateLessThanMinDate) {
+          if (lastDateInDateArray) {
+            // reorder last dates from overlapping end/start dateRanges
+            if (lastDateInDateArray > minDate) {
+              dateArray.pop();
+              dateArray.push(minDate);
+              dateArray.push(lastDateInDateArray);
+            } else {
+              dateArray.push(minDate);
+            }
           } else {
             dateArray.push(minDate);
           }
-        } else {
-          dateArray.push(minDate);
+          hitMaxLimitOfRange = true;
         }
-        hitMaxLimitOfRange = true;
+        return;
       }
-      return;
     }
 
     // handle single date coverage by adding date to date array
@@ -817,138 +686,46 @@ export function datesinDateRanges(def, date) {
       return;
     }
 
-    const maxYear = maxDate.getUTCFullYear();
-    const maxMonth = maxDate.getUTCMonth();
-    const maxDay = maxDate.getUTCDate();
-    const minYear = minDate.getUTCFullYear();
-    const minMonth = minDate.getUTCMonth();
-    const minDay = minDate.getUTCDate();
+    // DATA PANEL SPECIFIC
+    if (rangeLimitsProvided) {
+      // revise currentDate to minDate to reduce earlier minDate than needed
+      const minDateWithinRangeLimits = minDateTime > inputStartDateTime && minDateTime < inputEndDateTime;
+      const runningMinDateAndLastDateEarlier = runningMinDate && lastDateInDateArray > minDate;
+      if (currentDateLessThanMinDate && (minDateWithinRangeLimits || runningMinDateAndLastDateEarlier)) {
+        currentDate = minDate;
+        currentDateTime = currentDate.getTime();
+      }
+      // set maxDate to current date if layer coverage is ongoing
+      if (index === dateRanges.length - 1 && !inactive) {
+        maxDate = new Date(appNow);
+      }
+    }
 
-    let i;
+    // single date range and interval allows only returning prev, current, and next dates
+    // (if available) instead of full range traversal
+    if (singleDateRangeAndInterval) {
+      const limitedDateRange = getLimitedDateRange(def, currentDate);
+      return limitedDateRange;
+    }
 
     // Yearly layers
     if (period === 'yearly') {
-      // single date range and interval allows only returning prev, current, and next dates
-      // (if available) instead of full range traversal
-      if (singleDateRangeAndInterval) {
-        const limitedDateRange = getLimitedDateRange(def, currentDate);
-        return limitedDateRange;
-      }
-
-      const yearArray = getYearDatesInDateRange(currentDateTime, minDate, maxDate, dateIntervalNum, dateArray);
+      const yearArray = getYearDateRange(currentDateTime, minDate, maxDate, dateIntervalNum, dateArray);
       dateArray = [...yearArray];
-
-      // const maxYearDate = new Date(maxYear + dateIntervalNum, maxMonth, maxDay);
-      // const maxYearDateTime = maxYearDate.getTime();
-      // if (currentDateTime >= minDateTime && currentDateTime <= maxYearDate) {
-      //   yearDifference = util.yearDiff(minDate, maxYearDate);
-      // }
-      // for (i = 0; i <= (yearDifference + 1); i += 1) {
-      //   let year = new Date(minYear + i * dateIntervalNum, minMonth, minDay);
-      //   if (year.getTime() < maxYearDateTime) {
-      //     year = new Date(year.getTime() - (year.getTimezoneOffset() * 60000));
-      //     dateArray.push(year);
-      //   }
-      // }
       // Monthly layers
     } else if (period === 'monthly') {
-      // single date range and interval allows only returning prev, current, and next dates
-      // (if available) instead of full range traversal
-      if (singleDateRangeAndInterval) {
-        const limitedDateRange = getLimitedDateRange(def, currentDate);
-        return limitedDateRange;
-      }
-
-      // let maxMonthDate = new Date(maxYear, maxMonth + dateIntervalNum, maxDay);
-      // maxMonthDate = new Date(maxMonthDate.getTime() - (maxMonthDate.getTimezoneOffset() * 60000));
-      // const maxMonthDateTime = maxMonthDate.getTime();
-      // if (currentDateTime >= minDateTime && currentDateTime <= maxMonthDate) {
-      //   monthDifference = util.monthDiff(minDate, maxMonthDate);
-      //   // handle non-1 month intervals to prevent over pushing unused dates to dateArray
-      //   monthDifference = Math.ceil(monthDifference / dateIntervalNum);
-      // }
-
-      // for (i = 0; i <= (monthDifference + 1); i += 1) {
-      //   let month = new Date(minYear, minMonth + i * dateIntervalNum, minDay);
-      //   month = new Date(month.getTime() - (month.getTimezoneOffset() * 60000));
-      //   const monthTime = month.getTime();
-      //   if (monthTime < maxMonthDateTime) {
-      //     dateArray.push(month);
-      //   }
-      // }
-
-      const monthArray = getMonthDatesInDateRange(false, currentDateTime, null, null, minDate, maxDate, dateIntervalNum, dateArray);
+      const monthArray = getMonthDateRange(rangeLimitsProvided, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
       dateArray = [...monthArray];
       // Daily layers
     } else if (period === 'daily') {
-      // single date range and interval allows only returning prev, current, and next dates
-      // (if available) instead of full range traversal
-      if (singleDateRangeAndInterval) {
-        const limitedDateRange = getLimitedDateRange(def, currentDate);
-        return limitedDateRange;
-      }
-
-      const dayArray = getDayDatesinDateRange(false, currentDateTime, null, null, minDate, maxDate, dateIntervalNum, dateArray);
+      const dayArray = getDayDateRange(rangeLimitsProvided, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
       dateArray = [...dayArray];
-      // const maxDayDate = new Date(maxYear, maxMonth, maxDay + dateIntervalNum); // same
-      // const maxDayDateTime = maxDayDate.getTime();
-      // if (currentDateTime >= minDateTime && currentDateTime <= maxDayDate) {
-      //   dayDifference = util.dayDiff(minDate, maxDayDate);
-      //   // handle non-1 day intervals to prevent over pushing unused dates to dateArray
-      //   dayDifference = Math.ceil(dayDifference / dateIntervalNum);
-      // }
-
-      // for (i = 0; i <= (dayDifference + 1); i += 1) {
-      //   let day = new Date(minYear, minMonth, minDay + i * dateIntervalNum);
-      //   day = new Date(day.getTime() - (day.getTimezoneOffset() * 60000));
-      //   const dayTime = day.getTime();
-      //   if (dayTime < maxDayDateTime) {
-      //     dateArray.push(day);
-      //   }
-      // }
       // Subdaily layers
     } else if (period === 'subdaily') {
-      const subdailyArray = getSubdailyDatesinDateRange(false, currentDateTime, null, null, minDate, maxDate, dateIntervalNum, dateArray);
+      const subdailyArray = getSubdailyDateRange(rangeLimitsProvided, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
       dateArray = [...subdailyArray];
-
-      // const maxHours = maxDate.getUTCHours();
-      // const maxMinutes = maxDate.getUTCMinutes();
-      // const minMinutes = minDate.getUTCMinutes();
-      // let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateIntervalNum);
-
-      // // limit date range request to +/- one hour from current date
-      // const currentSetMinutes = new Date(currentDate).setMinutes(minMinutes);
-      // const hourBeforeCurrentDate = new Date(currentSetMinutes - (60 * 60000));
-      // const hourAfterCurrentDate = new Date(currentSetMinutes + (60 * 60000));
-
-      // const minMinuteDate = hourBeforeCurrentDate < minDate
-      //   ? minDate
-      //   : hourBeforeCurrentDate;
-      // maxMinuteDate = hourAfterCurrentDate > maxMinuteDate
-      //   ? maxMinuteDate
-      //   : hourAfterCurrentDate;
-
-      // const minMinuteDateTime = minMinuteDate.getTime();
-      // const maxMinuteDateTime = maxMinuteDate.getTime();
-      // if (currentDateTime >= minMinuteDateTime && currentDateTime <= maxMinuteDateTime) {
-      //   minuteDifference = util.minuteDiff(minMinuteDate, maxMinuteDate);
-      // }
-
-      // for (i = 0; i <= (minuteDifference + 1); i += dateIntervalNum) {
-      //   let subdailyTime = new Date(
-      //     minMinuteDate.getUTCFullYear(),
-      //     minMinuteDate.getUTCMonth(),
-      //     minMinuteDate.getUTCDate(),
-      //     minMinuteDate.getUTCHours(),
-      //     minMinuteDate.getUTCMinutes() + i,
-      //     0,
-      //   );
-      //   subdailyTime = new Date(subdailyTime.getTime() - (subdailyTime.getTimezoneOffset() * 60000));
-      //   if (subdailyTime.getTime() >= minMinuteDateTime) {
-      //     dateArray.push(subdailyTime);
-      //   }
-      // }
     }
+    runningMinDate = minDate;
   });
   return dateArray;
 }
