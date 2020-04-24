@@ -132,16 +132,6 @@ class SearchLayerList extends React.Component {
         <div className="no-results">
           <FontAwesomeIcon icon={faMeteor} size="5x" />
           <h3> No layers found! </h3>
-          {/* {numRowsFilteredOut > 0 && (
-            <p>
-              {`${numRowsFilteredOut} result(s) are being filtered out.`}
-              <a
-                className="remove-filters"
-              >
-                Remove filters?
-              </a>
-            </p>
-          )} */}
         </div>
       )
       : (

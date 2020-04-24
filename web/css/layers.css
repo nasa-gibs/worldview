@@ -830,6 +830,16 @@
   margin-right: 10px;
 }
 
+.facet-container {
+  flex: 1;
+  max-width: 270px;
+  & .inner-container {
+    padding: 10px 8px 10px 10px;
+    margin: 3px 10px 2px 2px;
+    background-color: #333;
+  }
+}
+
 @media (min-width: 1024px) {
   .search-layers-container {
     & div.layer-list-detail-container {
@@ -859,18 +869,19 @@
     background-image: linear-gradient(360deg, #aaa, #ddd 15%);
   }
   .layer-list-container.search {
-    height: 40%;
+    height: 35%;
   }
   .layer-detail-container.search {
-    height: 60%;
-    border-top: 5px solid #d54e21;
-    padding-left: 2px;
+    height: 65%;
+    border-top: 2px solid #d54e21;
+    padding: 4px 0 0 2px;
     background-image: linear-gradient(#aaa, #ddd 15%);
   }
 }
 
 /* Small Desktop Styles Begin Here */
 @media (max-width: 992px) {
+
   /* .custom-layer-dialog {
     &.browse-search-width {
       width: 95%;
@@ -925,6 +936,25 @@
       height: 30px;
       width: 30px;
     }
+  }
+  .facet-container {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    & .apply-facets {
+      height: 50px;
+      background: #d54f21;
+      font-size: 16px;
+      border: 1px solid #aa3c16;
+      margin: 4px auto;
+      width: 165px;
+    }
+  }
+  .layer-detail-container.search {
+    height: 65%;
+    border-top: 5px solid #d54e21;
+    padding-left: 2px;
+    background-image: linear-gradient(#aaa, #ddd 15%);
   }
 }
 
@@ -1162,5 +1192,20 @@
     position: absolute;
     left: 0;
     top: 2px;
+  }
+}
+
+@media (max-width: 768px) {
+  .facet-container .facet-wrapper {
+    margin-bottom: 12px;
+    & .facet-tooltip {
+      top: 1px;
+      height: 20px;
+      width: 16px;
+    }
+    & .facet-collapse-toggle {
+      height: 28px;
+      width: 24px;
+    }
   }
 }
