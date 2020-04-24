@@ -264,11 +264,13 @@ hoverOffToolTip = () => {
   */
   getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
     const { appNow } = this.props;
-    const minYear = rangeDate.getUTCFullYear();
-    const minMonth = rangeDate.getUTCMonth();
-    const minDay = rangeDate.getUTCDate();
-    const minHour = rangeDate.getUTCHours();
-    const minMinute = rangeDate.getUTCMinutes();
+    const {
+      minYear,
+      minMonth,
+      minDay,
+      minHour,
+      minMinute,
+    } = util.getUTCNumbers(rangeDate, 'min');
     const yearAdd = layerPeriod === 'years' ? itemRangeInterval : 0;
     const monthAdd = layerPeriod === 'months' ? itemRangeInterval : 0;
     const dayAdd = layerPeriod === 'days' ? itemRangeInterval : 0;
