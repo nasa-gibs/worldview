@@ -1377,6 +1377,7 @@ function mapStateToProps(state) {
     browser,
     date,
     animation,
+    proj,
     sidebar,
     modal,
     tour,
@@ -1401,8 +1402,12 @@ function mapStateToProps(state) {
   const isSmallScreen = lessThan.medium;
   const isScreenWidthLessThan350 = screenWidth < 350;
   const isScreenWidthLessThan450 = screenWidth < 450;
-  let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
-  const activeLayers = layers[compare.activeString].filter((activeLayer) => activeLayer.startDate);
+
+  // handle active layer filtering and check for subdaily
+  const activeLayers = layers[compare.activeString];
+  const projection = proj.id;
+  const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
+  let hasSubdailyLayers = hasSubDaily(activeLayers);
 
   let updatedInterval = interval;
   let updatedCustomInterval = customInterval;
@@ -1425,7 +1430,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers = hasSubDaily(layers.active) || hasSubDaily(layers.activeB);
     endTime = getEndTime(layers, config);
   } else {
-    hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+    hasSubdailyLayers = hasSubDaily(activeLayers);
     endTime = layersLastDateTime(layers[activeString], config);
   }
   endTime = appNow;
@@ -1456,7 +1461,7 @@ function mapStateToProps(state) {
   );
   return {
     appNow,
-    activeLayers,
+    activeLayers: activeLayersFiltered,
     isTourActive: tour.active,
     isSmallScreen,
     isScreenWidthLessThan350,
