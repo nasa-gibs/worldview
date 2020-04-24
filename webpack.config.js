@@ -182,9 +182,11 @@ module.exports = {
               plugins: () => [
                 postcssPresetEnv({
                   browserslist: [
-                    'last 5 versions',
+                    'last 4 versions',
                     'not ie < 11',
-                    'not edge < 15',
+                    'not edge < 17',
+                    'not IE_Mob 11',
+                    'not dead',
                     '> 2%',
                   ],
                 }),
