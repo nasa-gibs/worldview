@@ -7,7 +7,7 @@ import {
   openCustomContent,
 } from '../modules/modal/actions';
 import toggleDistractionFreeMode from '../modules/ui/actions';
-import AboutPage from '../components/util/about-page';
+import AboutPage from '../components/about/about-page';
 import IconList from '../components/util/list';
 import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';

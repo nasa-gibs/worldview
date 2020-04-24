@@ -1,11 +1,11 @@
 import React from 'react';
-import Scrollbar from './scrollbar';
+import Scrollbar from '../util/scrollbar';
 
 export default function AboutPage() {
   return (
 
     <Scrollbar style={{ height: 'calc(100vh - 200px)' }}>
-      <div id="page" className="wv-document">
+      <div id="page" className="wv-document about-page">
         <div className="right">
           <div className="caption">
             Version @BUILD_VERSION@
