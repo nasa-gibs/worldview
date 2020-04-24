@@ -184,7 +184,7 @@
     "proj4": "2.6.1",
     "promise-queue": "2.2.5",
     "prop-types": "^15.7.2",
-    "rc-slider": "9.2.2",
+    "rc-slider": "9.2.4",
     "react": "16.11.x",
     "react-beautiful-dnd": "^13.0.0",
     "react-copy-to-clipboard": "^5.0.2",
