@@ -172,7 +172,7 @@
     "file-saver": "^2.0.2",
     "geographiclib": "^1.50.0",
     "history": "^4.7.2",
-    "immutability-helper": "^3.0.1",
+    "immutability-helper": "^3.0.2",
     "jquery": "^3.5.0",
     "jquery-ui-bundle": "1.12.1-migrate",
     "jquery-ui-touch-punch": "0.2.3",
