@@ -1008,6 +1008,34 @@ export default (function(self) {
     return value;
   };
 
+  /**
+   * Returns offset date object
+   *
+   * @method getTimezoneOffsetDate
+   * @param  {Object} date        A date object
+   * @return {Object} offsetDate  An offset date object
+   */
+  self.getTimezoneOffsetDate = (date) => {
+    const offsetDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+    return offsetDate;
+  };
+
+  /**
+   * Returns absolute UTC date timeunit numbers object
+   *
+   * @method getUTCNumbers
+   * @param  {Object} date    A date object
+   * @param  {String} prefix  Prefix min/max for timeunits in object
+   * @return {Object}         An object of UTC date timeunit numbers
+   */
+  self.getUTCNumbers = (date, prefix) => ({
+    [`${prefix}Year`]: date.getUTCFullYear(),
+    [`${prefix}Month`]: date.getUTCMonth(),
+    [`${prefix}Day`]: date.getUTCDate(),
+    [`${prefix}Hour`]: date.getUTCHours(),
+    [`${prefix}Minute`]: date.getUTCMinutes(),
+  });
+
   // Returns the number of months between two dates
   self.yearDiff = function(startDate, endDate) {
     const year1 = startDate.getFullYear();
