@@ -1,4 +1,9 @@
 const facetConfig = [
+  // {
+  //   field: 'available',
+  //   label: 'Available',
+  //   tooltip: 'Layer has available imagery at currently selected date/time',
+  // },
   {
     field: 'categories',
     label: 'Category',
@@ -25,11 +30,6 @@ const facetConfig = [
     hideZeroCount: true,
   },
   {
-    field: 'active',
-    label: 'Currently Active?',
-    tooltip: 'Is this layer derived from a currently ongoing mission?',
-  },
-  {
     field: 'track',
     label: 'Track Asc/Desc',
     tooltip: 'Whether the satellite orbit track passes over on the ascending or descending node',
@@ -42,7 +42,7 @@ const facetConfig = [
   {
     field: 'processingLevelId',
     label: 'Processing Level',
-    tooltip: 'Level of data processing.  <a href="https://earthdata.nasa.gov/collaborate/open-data-services-and-software/data-information-policy/data-levels" target="_blank"> Read more. </a> ',
+    tooltip: 'Level of data processing. For more information see: https://earthdata.nasa.gov/collaborate/open-data-services-and-software/data-information-policy/data-levels',
     show: 15,
     hideZeroCount: true,
   },

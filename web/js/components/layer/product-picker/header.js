@@ -11,20 +11,15 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { withSearch } from '@elastic/react-search-ui';
-// import LayerFilters from './layer-filters';
 import {
   selectLayer as selectLayerAction,
   toggleCategoryMode as toggleCategoryModeAction,
   toggleSearchMode as toggleSearchModeAction,
+  toggleMobileFacets as toggleMobileFacetsAction,
 } from '../../../modules/product-picker/actions';
-import FilterUnavailable from './filterUnavailable';
+import { getLayersForProjection } from '../../../modules/product-picker/selectors';
 
 
-/*
- * A scrollable list of layers
- * @class LayerList
- * @extends React.Component
- */
 class ProductPickerHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -97,16 +92,19 @@ class ProductPickerHeader extends React.Component {
 
   render() {
     const {
-      isMobile,
-      selectedProjection,
-      mode,
-      filters,
       category,
-      width,
+      filters,
+      isMobile,
+      layerCount,
+      mode,
+      showMobileFacets,
+      toggleMobileFacets,
       results,
       searchTerm,
       selectedLayer,
+      selectedProjection,
       toggleSearchMode,
+      width,
     } = this.props;
     const isSearching = mode === 'search';
     const categoryId = category && category.id;
@@ -116,6 +114,11 @@ class ProductPickerHeader extends React.Component {
       && mode !== 'category');
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
     const showReset = !!(filters.length || searchTerm.length);
+
+    const showFilterBtnMobile = mode === 'search' ? !showMobileFacets : !selectedLayer;
+    const showFilterBnDesktop = mode !== 'search' && !selectedLayer;
+    const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
+    const filterBtnFn = mode !== 'search' ? toggleSearchMode : toggleMobileFacets;
 
     return (
       <>
@@ -133,16 +136,6 @@ class ProductPickerHeader extends React.Component {
             </>
           )}
 
-          {(mode !== 'search' && !selectedLayer)
-            && (
-              <Button
-                className="filter-button"
-                onClick={toggleSearchMode}
-              >
-                <FontAwesomeIcon icon={faFilter} />
-              </Button>
-            )}
-
           {showReset && (
             <Button
               className="clear-filters"
@@ -151,6 +144,16 @@ class ProductPickerHeader extends React.Component {
               Reset
             </Button>
           )}
+
+          {showFilterBn && (
+            <Button
+              className="filter-button"
+              onClick={filterBtnFn}
+            >
+              <FontAwesomeIcon icon={faFilter} />
+            </Button>
+          )}
+
 
           <Input
             onChange={this.handleChange}
@@ -161,22 +164,13 @@ class ProductPickerHeader extends React.Component {
             onFocus={(e) => this.onSearchInputFocus(e)}
           />
         </InputGroup>
-        {(mode === 'search' && !isMobile) && (
+
+        {mode === 'search' && (
           <div className="header-filter-container">
-            <div className="header-filters">
-              <FilterUnavailable
-                // selectedDate={selectedDate}
-                filterByAvailable
-                toggleFilterByAvailable={this.toggleFilterByAvailable}
-              />
-            </div>
             <div className="results-text">
-              { `Showing ${results.length} results`}
-              {/* {numRowsFilteredOut > 0 && (
-                  <span>
-                    {`(${numRowsFilteredOut} hidden by filters)`}
-                  </span>
-                )} */}
+              {results.length === layerCount
+                ? `Showing ${results.length} layers`
+                : `Showing ${results.length} out of ${layerCount}`}
             </div>
           </div>
         )}
@@ -190,12 +184,15 @@ ProductPickerHeader.propTypes = {
   clearFilters: PropTypes.func,
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
+  layerCount: PropTypes.number,
   mode: PropTypes.string,
   results: PropTypes.array,
   setSearchTerm: PropTypes.func,
   selectedLayer: PropTypes.object,
   selectedProjection: PropTypes.string,
   searchTerm: PropTypes.string,
+  showMobileFacets: PropTypes.bool,
+  toggleMobileFacets: PropTypes.func,
   toggleCategoryMode: PropTypes.func,
   toggleSearchMode: PropTypes.func,
   unselectLayer: PropTypes.func,
@@ -212,6 +209,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleSearchMode: () => {
     dispatch(toggleSearchModeAction());
   },
+  toggleMobileFacets: () => {
+    dispatch(toggleMobileFacetsAction());
+  },
 });
 
 const mapStateToProps = (state, ownProps) => {
@@ -219,20 +219,22 @@ const mapStateToProps = (state, ownProps) => {
   const {
     mode,
     category,
+    showMobileFacets,
     selectedDate,
     selectedLayer,
-    filterByAvailable,
   } = productPicker;
   const isMobile = browser.lessThan.medium;
+  const layers = getLayersForProjection(state);
 
   return {
-    isMobile,
-    mode,
+    layerCount: layers.length,
     category,
+    isMobile,
+    showMobileFacets,
+    mode,
     selectedDate,
     selectedLayer,
     selectedProjection: proj.id,
-    filterByAvailable,
   };
 };
 

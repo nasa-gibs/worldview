@@ -10,6 +10,7 @@ import {
   TOGGLE_FEATURED_TAB,
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
+  TOGGLE_MOBILE_FACETS,
   UPDATE_LIST_SCROLL_TOP,
   RESET_STATE,
 } from './constants';
@@ -75,6 +76,11 @@ export function toggleSearchMode() {
 export function toggleCategoryMode() {
   return {
     type: TOGGLE_CATEGORY_MODE,
+  };
+}
+export function toggleMobileFacets() {
+  return {
+    type: TOGGLE_MOBILE_FACETS,
   };
 }
 export function updateListScrollTop(value) {

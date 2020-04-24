@@ -19,7 +19,7 @@ const getProductPicker = ({ productPicker }) => productPicker;
 const getFilters = ({ productPicker }) => productPicker.filters;
 const getSearchTerm = ({ productPicker }) => productPicker.searchTerm;
 
-const getLayersForProjection = createSelector(
+export const getLayersForProjection = createSelector(
   [getConfig, getProjection],
   (config, projection) => {
     const filteredRows = buildLayerFacetProps(config)

@@ -10,6 +10,7 @@ import {
   TOGGLE_FEATURED_TAB,
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
+  TOGGLE_MOBILE_FACETS,
   UPDATE_LIST_SCROLL_TOP,
   RESET_STATE,
   INIT_SEARCH_STATE,
@@ -21,14 +22,12 @@ export const productPickerState = {
   category: undefined,
   categoryType: 'hazards and disasters',
   filters: [],
+  showMobileFacets: true,
   searchTerm: '',
   selectedLayer: undefined,
   selectedMeasurement: undefined,
   selectedMeasurementSourceIndex: 0,
   searchConfig: undefined,
-  // searchResultRows: undefined,
-  // numRowsFilteredOut: undefined,
-  // filterByAvailable: true,
   // listScrollTop: 0,
 };
 
@@ -114,6 +113,7 @@ export function productPickerReducer(state = productPickerState, action) {
         ...state,
         mode: 'search',
         selectedLayer: null,
+        showMobileFacets: true,
       };
     }
 
@@ -135,6 +135,14 @@ export function productPickerReducer(state = productPickerState, action) {
       return {
         ...state,
         mode: 'category',
+        selectedLayer: null,
+      };
+    }
+
+    case TOGGLE_MOBILE_FACETS: {
+      return {
+        ...state,
+        showMobileFacets: !state.showMobileFacets,
       };
     }
 
@@ -162,6 +170,7 @@ export function productPickerReducer(state = productPickerState, action) {
         mode: prevMode === 'search' ? prevMode : modeForProj,
         filters: [],
         searchTerm: '',
+        selectedLayer: null,
       };
       return { ...state, ...newState };
     }
