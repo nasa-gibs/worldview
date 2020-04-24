@@ -74,10 +74,10 @@ class ProductPicker extends React.Component {
     const { screenHeight } = browser;
     const dialogMargin = 12;
     const tabOffset = mode === 'category' || category === 'featured' ? 38 : 0;
-    let headerHeight = mode === 'search' ? 70 : 48;
+    const headerHeight = mode === 'search' ? 70 : 48;
     let bodyHeight = screenHeight - headerHeight - tabOffset - 100 - dialogMargin;
+
     if (browser.lessThan.medium) {
-      headerHeight = 48;
       bodyHeight = screenHeight - headerHeight - tabOffset;
     }
 

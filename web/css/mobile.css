@@ -115,6 +115,8 @@
     width: 100%;
     position: relative;
     left: 0;
+    height: 50px;
+    font-size: 16px;
   }
 
   #selected-category .ui-tabs-panel {
