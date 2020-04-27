@@ -155,13 +155,13 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     let previousLayerDate = previousLayer.previousDate;
     let nextLayerDate = previousLayer.nextDate;
     if (!state.animation.isPlaying) {
-      // need to get previous available date to prevent unecessary requests
+      // need to get previous available date to prevent unnecessary requests
       let dateRange;
       if (previousLayer.previousDate && previousLayer.nextDate) {
         const dateTime = date.getTime();
         const previousDateTime = previousLayer.previousDate.getTime();
         const nextDateTime = previousLayer.nextDate.getTime();
-        // if current date is outside previous and next dates avaiable, recheck range
+        // if current date is outside previous and next dates available, recheck range
         if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
           dateRange = datesinDateRanges(def, date);
           const { next, previous } = prevDateInDateRange(def, date, dateRange);
@@ -254,7 +254,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const resolutionLen = matrixSet.resolutions.length;
     const setlimitsLen = matrixSetLimits && matrixSetLimits.length;
 
-    // If number of set limits doens't match sets, we are assuming this product
+    // If number of set limits doesn't match sets, we are assuming this product
     // crosses the antimeridian and don't have a reliable way to calculate a single
     // extent based on multiple set limits.
     if (!matrixSetLimits || setlimitsLen !== resolutionLen || day) {

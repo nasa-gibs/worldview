@@ -386,7 +386,7 @@ class LayerDataItems extends Component {
   */
   getLayerItemStyles = (visible, id) => {
     const { hoveredLayer } = this.props;
-    // condtional styling for line/background colors
+    // conditional styling for line/background colors
     const containerBackgroundColor = visible
       ? 'rgb(204, 204, 204)'
       : 'rgb(79, 79, 79)';
@@ -470,7 +470,7 @@ class LayerDataItems extends Component {
 
           // get line container dimensions
           const containerLineDimensions = getMatchingCoverageLineDimensions(layer);
-          // condtional styling for line/background colors
+          // conditional styling for line/background colors
           const {
             lineBackgroundColor,
             layerItemBackground,

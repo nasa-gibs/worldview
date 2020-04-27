@@ -413,7 +413,7 @@ class TimelineAxis extends Component {
       boundsDiff += leftBoundDiff;
     }
 
-    // update transform and dragger positioning based on calulated offsets
+    // update transform and dragger positioning based on calculated offsets
     const transformX = boundsDiff - pixelsToAdd - 2;
     const animationStartLocation = animationStartDraggerLocation + position + transformX;
     const animationEndLocation = animationEndDraggerLocation + position + transformX;

@@ -222,7 +222,7 @@ export default function measure(map, mapUiEvents, store) {
   };
 
   /**
-   * Convert unit of measurement on all existing measurments and those created after
+   * Convert unit of measurement on all existing measurements and those created after
    * @param {String} unit - Unit of measurement: 'km' or 'mi'
    */
   self.changeUnits = (unit) => {
