@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
 
     <Scrollbar style={{ height: 'calc(100vh - 200px)' }}>
-      <div id="page" className="wv-document about-page">
+      <div id="page" className="wv-document">
         <div className="right">
           <div className="caption">
             Version @BUILD_VERSION@
@@ -34,7 +34,7 @@ export default function AboutPage() {
         </p>
 
         <div className="right">
-          <a href="https://earthdata.nasa.gov/gibs" className="gibs-logo" target="_blank" rel="noopener noreferrer" />
+          <a href="https://earthdata.nasa.gov/gibs" className="gibs-logo" target="_blank" rel="noopener noreferrer"><img src="../../../pages/images/gibs.png" /></a>
           <div className="caption gibs-caption">Powered by GIBS</div>
         </div>
 
