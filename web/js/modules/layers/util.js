@@ -198,7 +198,7 @@ const getDateArrayLastDateInOrder = (timeUnit, dateArray) => {
 const getMinStartDate = (timeDiff, period, interval, startDateLimit, minYear, minMonth, minDay) => {
   const startDateLimitTime = startDateLimit.getTime();
   let minStartDate;
-  let prevDate = '';
+  let prevDate;
   for (let i = 0; i <= (timeDiff + 1); i += 1) {
     if (!minStartDate) {
       let timeUnit;
@@ -675,19 +675,26 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
             dateArray.push(minDate);
           }
           hitMaxLimitOfRange = true;
+          return;
         }
+      }
+      // handle single date coverage by adding date to date array
+      if (startDate === endDate) {
+        dateArray.push(minDate);
         return;
       }
     }
 
-    // handle single date coverage by adding date to date array
-    if (startDate === endDate) {
-      dateArray.push(minDate);
-      return;
-    }
-
     // DATA PANEL SPECIFIC
     if (rangeLimitsProvided) {
+      // handle single date coverage by adding date to date array
+      if (startDate === endDate) {
+        if (minDateTime >= inputStartDateTime && maxDate <= inputEndDateTime) {
+          dateArray.push(minDate);
+        }
+        return;
+      }
+
       // revise currentDate to minDate to reduce earlier minDate than needed
       const minDateWithinRangeLimits = minDateTime > inputStartDateTime && minDateTime < inputEndDateTime;
       const runningMinDateAndLastDateEarlier = runningMinDate && lastDateInDateArray > minDate;
