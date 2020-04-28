@@ -47,8 +47,10 @@ function SearchLayers(props) {
                     key={config.field}
                     field={config.field}
                     label={config.label}
+                    filterType={config.filterType}
                     tooltip={config.tooltip}
                     show={config.show}
+                    view={config.view}
                     data={data}
                   />
                 );
