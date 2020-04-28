@@ -16,9 +16,11 @@ function ProductFacet(props) {
   const {
     field,
     label,
+    filterType,
     show,
     tooltip,
     data,
+    view,
   } = props;
 
   const renderHeaderIcons = () => (
@@ -63,8 +65,9 @@ function ProductFacet(props) {
           <Facet
             field={field}
             label={label}
-            filterType="any"
+            filterType={filterType}
             show={show}
+            view={view}
           />
         )}
       </div>
@@ -74,9 +77,11 @@ function ProductFacet(props) {
 ProductFacet.propTypes = {
   field: PropTypes.string,
   label: PropTypes.string,
+  filterType: PropTypes.string,
   show: PropTypes.number,
   tooltip: PropTypes.string,
   data: PropTypes.array,
+  view: PropTypes.func,
 };
 
 

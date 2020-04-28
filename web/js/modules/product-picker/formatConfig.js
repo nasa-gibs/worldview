@@ -2,6 +2,7 @@ import {
   forEach as lodashForEach,
   map as lodashMap,
 } from 'lodash';
+import { availableAtDate } from '../layers/util';
 
 const periodIntervalMap = {
   daily: 'Day',
@@ -9,7 +10,7 @@ const periodIntervalMap = {
   yearly: 'Year',
 };
 
-// TODO WARNING: capitalizing certain props could break other parts of WV
+// WARNING: capitalizing certain props could break other parts of WV
 // that read these props, need to watch for that when integrating this code
 function capitalizeFirstLetter(string) {
   return !string ? '' : string.charAt(0).toUpperCase() + string.slice(1);
@@ -92,10 +93,6 @@ function getLayerPeriodFacetProps(layer) {
   }
 }
 
-function getActiveInactiveFacetProps(layer) {
-  layer.active = layer.inactive ? 'No' : 'Yes';
-}
-
 function getOrbitTrackRelatedFacetProps(layer, allLayers) {
   if (layer.id.includes('OrbitTracks')) {
     layer.track = capitalizeFirstLetter(layer.track);
@@ -108,12 +105,6 @@ function getOrbitTrackRelatedFacetProps(layer, allLayers) {
   });
 }
 
-function capitalizeCMRProps (layer) {
-  const { projects, platforms } = layer;
-  layer.projects = (projects || []).map((proj) => proj.toUpperCase());
-  layer.platforms = (platforms || []).map((plat) => plat.toUpperCase());
-}
-
 function formatFacetProps({ layers, measurements, categories }) {
   getMeasurementSourceFacetProps(layers, measurements);
   getCategoryFacetProps(layers, measurements, categories);
@@ -124,23 +115,17 @@ function formatFacetProps({ layers, measurements, categories }) {
  * Map collection data to layer data from wv.json
  * @param {*} config
  */
-export default function buildLayerFacetProps(config) {
+export default function buildLayerFacetProps(config, selectedDate) {
   const { collections } = config;
   const layers = formatFacetProps(config);
 
   return lodashMap(layers, (layer) => {
-    // WARNING beware clashing keys
-    const { id, title, conceptId } = layer;
-    const layerWithCollectionData = {
-      ...layer,
-      ...collections[conceptId],
-      id,
-      title,
-    };
-    getLayerPeriodFacetProps(layerWithCollectionData);
-    getActiveInactiveFacetProps(layerWithCollectionData);
-    getOrbitTrackRelatedFacetProps(layerWithCollectionData, layers);
-    capitalizeCMRProps(layerWithCollectionData);
-    return layerWithCollectionData;
+    const { conceptId } = layer;
+    const { processingLevelId } = collections[conceptId];
+    layer.processingLevelId = processingLevelId;
+    layer.availableAtDate = availableAtDate(layer, selectedDate).toString();
+    getLayerPeriodFacetProps(layer);
+    getOrbitTrackRelatedFacetProps(layer, layers);
+    return layer;
   });
 }

@@ -4,7 +4,6 @@ import {
 } from 'lodash';
 import { createSelector } from 'reselect';
 import buildLayerFacetProps from './formatConfig';
-import initSearch from './searchConfig';
 
 const decodeHtml = (html) => {
   const txt = document.createElement('textarea');
@@ -16,13 +15,12 @@ const decodeHtml = (html) => {
 const getConfig = ({ config }) => config;
 const getProjection = ({ proj }) => proj && proj.id;
 const getProductPicker = ({ productPicker }) => productPicker;
-const getFilters = ({ productPicker }) => productPicker.filters;
-const getSearchTerm = ({ productPicker }) => productPicker.searchTerm;
+const getSelectedDate = ({ date }) => date && date.selected;
 
 export const getLayersForProjection = createSelector(
-  [getConfig, getProjection],
-  (config, projection) => {
-    const filteredRows = buildLayerFacetProps(config)
+  [getConfig, getProjection, getSelectedDate],
+  (config, projection, selectedDate) => {
+    const filteredRows = buildLayerFacetProps(config, selectedDate)
       // Only use the layers for the active projection
       .filter((layer) => layer.projections[projection])
       .map((layer) => {
@@ -38,21 +36,6 @@ export const getLayersForProjection = createSelector(
       });
     return lodashSortBy(filteredRows, (layer) => lodashIndexOf(config.layerOrder, layer.id));
   },
-);
-
-/**
- * Returns a SearchProvider configuration object.
- * https://github.com/elastic/search-ui/blob/master/ADVANCED.md#advanced-configuration
- */
-export const getSearchConfig = createSelector(
-  [
-    getLayersForProjection,
-    getConfig,
-    getProjection,
-    getFilters,
-    getSearchTerm,
-  ],
-  initSearch,
 );
 
 export const getMeasurementSource = createSelector(

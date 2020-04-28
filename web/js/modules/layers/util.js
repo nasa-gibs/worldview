@@ -25,31 +25,47 @@ import util from '../../util/util';
   * @returns {Boolean} - True if layer is available at date, otherwise false
   */
 export function availableAtDate(def, date) {
+  const { dateRanges, inactive } = def;
+  const startDate = def.startDate && new Date(def.startDate);
+  const endDate = def.endDate && new Date(def.endDate);
+
   // Some vector layers
-  if (!def.startDate && !def.dateRanges) {
+  if (!startDate && !dateRanges) {
     return true;
   }
   // set inactive in config
-  if (def.endDate && def.inactive) {
-    return date < new Date(def.endDate) && date > new Date(def.startDate);
+  if (endDate && inactive) {
+    return date < endDate && date > startDate;
   }
   // no endDate may indicate ongoing
-  if (def.startDate && !def.endDate) {
-    if (!def.dateRanges) {
-      return date > new Date(def.startDate);
+  if (startDate && !endDate) {
+    if (!dateRanges) {
+      return date > startDate;
     }
     // if only one date range, substitute def.endDate with def.dateRanges[0].endDate
-    if (def.dateRanges.length === 1) {
-      const rangeEndDate = def.dateRanges[0].endDate;
-      return date > new Date(def.startDate) && rangeEndDate && date < new Date(rangeEndDate);
+    if (dateRanges.length === 1) {
+      const rangeEndDate = dateRanges[0].endDate;
+      return date > startDate && rangeEndDate && date < new Date(rangeEndDate);
     }
   }
   // need to traverse available layer date range
   const availableDates = datesinDateRanges(def, date);
-  if (!availableDates.length && !def.endDate && !def.inactive) {
-    return date > new Date(def.startDate);
+  if (!availableDates.length && !endDate && !inactive) {
+    return date > startDate;
   }
-  return availableDates.length > 0;
+
+  // if (endDate && inactive) {
+  //   return date < endDate && date > startDate;
+  // }
+  // // no endDate may indicate ongoing
+  // if (startDate && !endDate) {
+  //   if (!dateRanges) {
+  //     return date > startDate;
+  //   }
+  //   const endRange = dateRanges.length - 1;
+  //   const rangeEndDate = new Date(dateRanges[endRange].endDate);
+  //   return date > startDate && rangeEndDate && date < rangeEndDate;
+  // }
 }
 
 export function getOrbitTrackTitle(def) {
