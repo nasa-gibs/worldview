@@ -1,3 +1,4 @@
+
 import {
   get as lodashGet,
   set as lodashSet,
@@ -5,14 +6,14 @@ import {
   toLower as lodashToLower,
   includes as lodashIncludes,
 } from 'lodash';
-import {
-  getTitles,
-} from '../layers/selectors';
+import { getTitles } from '../layers/selectors';
+import { getLayersForProjection } from './selectors';
 import facetConfig from './facetConfig';
 
 let initialLayersArray;
 let configRef;
 let projectionRef;
+
 const facets = {};
 const facetFields = facetConfig.map(({ field }) => field);
 const hideZeroCountFields = facetConfig.filter((f) => f.hideZeroCount).map(({ field }) => field);
@@ -69,7 +70,12 @@ function resetFacetCounts() {
 }
 
 function updateFacetCounts(facetField, layer) {
-  let fieldVal = layer[facetField] || 'None';
+  let fieldVal = layer[facetField];
+  // For a 'None' option remove this return and assign
+  // fieldVal to 'None' when undefined
+  if (!fieldVal) {
+    return;
+  }
   fieldVal = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
   fieldVal.forEach((value) => {
     const currentVal = lodashGet(facets, `['${facetField}']['${value}']`) || 0;
@@ -82,7 +88,7 @@ function updateAllFacetCounts(currentFilters, searchTerm) {
   facetFields.forEach((facetField) => {
     // Start with a filtered result array that has all OTHER facets applied
     const otherFilters = currentFilters.filter((f) => f.field !== facetField);
-    layersMatchSearchAndFilters(otherFilters, searchTerm)
+    layersMatchCriteria(otherFilters, searchTerm)
       .forEach((layer) => {
         updateFacetCounts(facetField, layer);
       });
@@ -99,12 +105,10 @@ function layerMatchesFilters(layer, filters) {
   });
 }
 
-function layersMatchSearchAndFilters(currentFilters, searchTerm) {
+function layersMatchCriteria(currentFilters, searchTerm) {
   const val = searchTerm.toLowerCase();
   const terms = val.split(/ +/);
 
-  // TODO filtering by date availability e.g.:
-  // const filteredRows = searchResultRows.filter((layer) => !(filterByAvailable && !availableAtDate(layer, selectedDate)));
   return initialLayersArray.filter((layer) => {
     const filterMatches = layerMatchesFilters(layer, currentFilters);
     const searchMatches = val.length === 0 ? true : !filterSearch(layer, val, terms);
@@ -142,9 +146,8 @@ function filterSearch (layer, val, terms) {
  * @returns {Object} responseState
  *  -  https://github.com/elastic/search-ui/blob/master/ADVANCED.md#response-state
  */
-async function onSearch (requestState) {
-  const { filters, searchTerm } = requestState;
-  const results = layersMatchSearchAndFilters(filters, searchTerm);
+async function onSearch ({ filters, searchTerm }) {
+  const results = layersMatchCriteria(filters, searchTerm);
   updateAllFacetCounts(filters, searchTerm);
 
   return {
@@ -155,17 +158,20 @@ async function onSearch (requestState) {
 }
 
 /**
+ * @param {*} state - current redux state
  *
- * @param {*} layers - layer objects (filtered by projection) with additional facet props
- * @param {*} config - the entire WV config object
- * @param {*} projection - current map projection
+ * @returns a SearchProvider configuration object.
+ * https://github.com/elastic/search-ui/blob/master/ADVANCED.md#advanced-configuration
  */
-export default function initSearch(layers, config, projection, filters, searchTerm) {
-  initialLayersArray = layers;
-  configRef = config;
-  projectionRef = projection;
+export default function initSearch(state) {
+  const { productPicker, config, proj } = state;
+  const { filters, searchTerm } = productPicker;
 
-  layers.forEach((layer) => {
+  initialLayersArray = getLayersForProjection(state);
+  configRef = config;
+  projectionRef = proj && proj.id;
+
+  initialLayersArray.forEach((layer) => {
     facetFields.forEach((facetField) => {
       updateFacetCounts(facetField, layer);
     });

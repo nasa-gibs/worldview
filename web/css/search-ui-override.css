@@ -21,6 +21,7 @@
   }
 
   div.sui-boolean-facet,
+  span.sui-boolean-facet__input-text,
   a.sui-single-option-facet__link,
   div.sui-paging-info,
   div.sui-results-per-page__label {
@@ -51,12 +52,6 @@
 
   div.sui-layout-body::after {
     background: #333;
-  }
-
-  li.sui-result {
-    padding: 5px;
-    border: 1px solid #333;
-    background: #ccc;
   }
 
   ul.sui-paging .rc-pagination-item-active a {

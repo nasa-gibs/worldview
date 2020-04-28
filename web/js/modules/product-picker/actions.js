@@ -1,4 +1,4 @@
-import { getSearchConfig } from './selectors';
+import initSearch from './searchConfig';
 import {
   SAVE_SEARCH_STATE,
   INIT_SEARCH_STATE,
@@ -19,7 +19,7 @@ export function initSearchState() {
   return (dispatch, getState) => {
     dispatch({
       type: INIT_SEARCH_STATE,
-      searchConfig: getSearchConfig(getState()),
+      searchConfig: initSearch(getState()),
     });
   };
 }
