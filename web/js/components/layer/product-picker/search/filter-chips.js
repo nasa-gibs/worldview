@@ -7,23 +7,32 @@ export default function FilterChips(props) {
   const {
     filters,
     removeFilter,
+    facetConfig,
   } = props;
+
+  const filterValues = filters.flatMap(({ field, values }) => {
+    const config = facetConfig.find((conf) => conf.field === field);
+    return values.map((value) => ({
+      field,
+      value: config.useLabelForValue ? config.label : value,
+    }));
+  });
 
   return !filters.length ? null : (
     <div className="bag-o-chips">
-      {filters.flatMap(({ field, values }) => values.map((filterVal) => (
+      {filterValues.map(({ field, value }) => (
         <div
-          key={field + filterVal}
+          key={field + value}
           className="filter-chip"
-          onClick={() => removeFilter(field, filterVal)}
+          onClick={() => removeFilter(field, value)}
         >
-          {filterVal}
+          {value}
           <FontAwesomeIcon
             icon={faTimes}
             fixedWidth
           />
         </div>
-      )))}
+      ))}
     </div>
   );
 }
@@ -31,4 +40,5 @@ export default function FilterChips(props) {
 FilterChips.propTypes = {
   filters: PropTypes.array,
   removeFilter: PropTypes.func,
+  facetConfig: PropTypes.array,
 };

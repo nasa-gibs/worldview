@@ -27,7 +27,11 @@ function Facets(props) {
   return !showFacets ? null : (
     <div className="facet-container">
 
-      <FilterChips filters={filters} removeFilter={removeFilter} />
+      <FilterChips
+        filters={filters}
+        removeFilter={removeFilter}
+        facetConfig={facetConfig}
+      />
 
       <div className="inner-container" style={{ height: facetHeight, overflowY: 'auto' }}>
         {facetConfig.map((config) => {
@@ -49,12 +53,12 @@ function Facets(props) {
       </div>
 
       {isMobile && showMobileFacets && (
-      <Button
-        className="apply-facets"
-        onClick={toggleMobileFacets}
-      >
-        Apply
-      </Button>
+        <Button
+          className="apply-facets"
+          onClick={toggleMobileFacets}
+        >
+          Apply
+        </Button>
       )}
     </div>
   );

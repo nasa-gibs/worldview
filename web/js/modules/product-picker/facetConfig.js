@@ -2,13 +2,14 @@ import {
   BooleanFacet,
 } from '@elastic/react-search-ui-views';
 
-const facetConfig = [
+export default [
   {
     field: 'availableAtDate',
     label: 'Available',
     filterType: 'any',
     tooltip: 'Layer has available imagery at currently selected date/time',
     view: BooleanFacet,
+    useLabelForValue: true,
   },
   {
     field: 'categories',
@@ -60,5 +61,3 @@ const facetConfig = [
     hideZeroCount: true,
   },
 ];
-
-export default facetConfig;
