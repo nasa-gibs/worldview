@@ -190,6 +190,25 @@ li.item ul.palette li {
   overflow: hidden;
 }
 
+.layer-info-modal .layer-metadata {
+  padding-right: 10px;
+}
+
+.layer-description .layer-metadata h3,
+.layer-description .layer-metadata h4 {
+  margin-bottom: 5px;
+}
+
+.layer-description .layer-metadata h1,
+.layer-description .layer-metadata h2,
+.layer-description .layer-metadata h3,
+.layer-description .layer-metadata h4,
+.layer-description .layer-metadata h5,
+.layer-description .layer-metadata h6 {
+  color: #ddd;
+  font-weight: 700;
+}
+
 img.sidebar-panel-item-img {
   display: block;
 }
