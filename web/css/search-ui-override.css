@@ -22,16 +22,25 @@
 
   div.sui-boolean-facet,
   span.sui-boolean-facet__input-text,
-  a.sui-single-option-facet__link,
-  div.sui-paging-info,
-  div.sui-results-per-page__label {
+  a.sui-single-option-facet__link {
     color: #eee;
+    font-size: 14px;
+  }
+
+  .sui-boolean-facet__option-label {
+    font-size: 14px;
+    .sui-boolean-facet__input-text {
+      font-size: 14px;
+    }
   }
 
   .sui-multi-checkbox-facet label {
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    height: 20px;
+    font-size: 14px;
     & .sui-multi-checkbox-facet__input-text {
       color: #eee;
+      font-size: 14px;
     }
   }
 
@@ -41,11 +50,17 @@
     color: #ccc;
   }
 
+  div.sui-multi-checkbox-facet {
+    margin: 8px 0 4px;
+  }
+
   button.sui-facet-view-more {
+    padding: 4px 8px;
     color: #a8b6fa;
-    &:hover {
+    &:hover, &:focus {
       background-color: #666;
-      border: 4px solid #666;
+      border: none;
+      outline: none;
       color: #eff2ff;
     }
   }
@@ -68,9 +83,6 @@
     & legend.sui-facet__title {
       font-size: 18px;
       padding: 0 0 2px 28px;
-    }
-    & .sui-boolean-facet {
-
     }
     & .sui-boolean-facet__option-label {
       height: 32px;
