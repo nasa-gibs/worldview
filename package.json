@@ -82,7 +82,9 @@
     "updateconfig": "run-s getcapabilities build:config",
     "watch": "node ./tasks/watchclean.js && cross-env NODE_ENV=development webpack-dev-server",
     "watch:debug": "node ./tasks/watchclean.js && cross-env DEBUG=true NODE_ENV=development webpack-dev-server",
-    "upload": "node tasks/upload.js"
+    "upload": "node tasks/upload.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
@@ -210,7 +212,8 @@
     "supercluster": "7.0.0",
     "web-streams-polyfill": "^2.0.6",
     "what-input": "^5.2.7",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "snyk": "^1.316.1"
   },
   "browser": {
     "jquery": "./node_modules/jquery/dist/jquery.js"
@@ -240,5 +243,6 @@
   },
   "prettier": {
     "singleQuote": true
-  }
+  },
+  "snyk": true
 }
