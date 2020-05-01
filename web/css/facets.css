@@ -86,13 +86,16 @@
         top: 5px;
       }
     }
-    & .bag-o-chips,
     & .inner-container {
+      margin-right: 2px;
+      padding: 10px 22px 10px 14px;
+    }
+    & .bag-o-chips {
       margin-right: 2px;
     }
   }
   .apply-facets {
-    height: 50px;
+    min-height: 50px;
     background: #d54f21;
     font-size: 16px;
     border: 1px solid #aa3c16;

@@ -8,7 +8,6 @@ import {
 } from 'reactstrap';
 import BrowseLayerList from './browse-layers-list';
 import CategoryGrid from './category-grid';
-import Scrollbars from '../../../util/scrollbar';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   selectCategory as selectCategoryAction,
@@ -43,22 +42,17 @@ class BrowseLayers extends React.Component {
   }
 
   renderLayerList() {
-    const { browser, bodyHeight } = this.props;
-
+    const { browser } = this.props;
     return (
-      <div className="search-layers-container" style={{ maxHeight: bodyHeight }}>
+      <div className="search-layers-container">
         <div className="layer-list-container browse">
-          <Scrollbars style={{ height: '100%' }}>
-            <div className="product-outter-list-case">
-              <BrowseLayerList />
-            </div>
-          </Scrollbars>
+          <div className="product-outter-list-case">
+            <BrowseLayerList />
+          </div>
         </div>
         { !browser.lessThan.medium && (
           <div className="layer-detail-container layers-all browse">
-            <Scrollbars style={{ height: '100%' }}>
-              <MeasurementMetadataDetail />
-            </Scrollbars>
+            <MeasurementMetadataDetail />
           </div>
         )}
       </div>
@@ -67,7 +61,6 @@ class BrowseLayers extends React.Component {
 
   render() {
     const {
-      bodyHeight,
       selectedProjection,
       width,
       categoryType,
@@ -99,11 +92,9 @@ class BrowseLayers extends React.Component {
               ))}
             </Nav>
             {isCategoryDisplay ? (
-              <Scrollbars style={{ maxHeight: bodyHeight }}>
-                <div className="product-outter-list-case">
-                  <CategoryGrid width={width} />
-                </div>
-              </Scrollbars>
+              <div className="product-outter-list-case">
+                <CategoryGrid width={width} />
+              </div>
             ) : this.renderLayerList()}
           </>
         )
@@ -114,7 +105,6 @@ class BrowseLayers extends React.Component {
 
 BrowseLayers.propTypes = {
   browser: PropTypes.object,
-  bodyHeight: PropTypes.number,
   categoryType: PropTypes.string,
   mode: PropTypes.string,
   selectCategory: PropTypes.func,

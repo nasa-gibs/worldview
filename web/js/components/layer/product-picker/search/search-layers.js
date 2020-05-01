@@ -4,19 +4,16 @@ import PropTypes from 'prop-types';
 import { withSearch } from '@elastic/react-search-ui';
 import SearchLayerList from './search-layers-list';
 import Facets from './facets';
-import Scrollbars from '../../../util/scrollbar';
 import LayerMetadataDetail from './layer-metadata-detail';
-import {
-  updateListScrollTop,
-  toggleMobileFacets as toggleMobileFacetsAction,
-} from '../../../../modules/product-picker/actions';
+// import {
+//   updateListScrollTop,
+// } from '../../../../modules/product-picker/actions';
 
 function SearchLayers(props) {
   const {
     isMobile,
     browser,
     selectedLayer,
-    bodyHeight,
     showMobileFacets,
   } = props;
 
@@ -28,51 +25,35 @@ function SearchLayers(props) {
   const showListAndDetails = isMobile ? !showFacets : true;
 
   return (
-    <div className="search-layers-container" style={{ height: bodyHeight }}>
-
+    <div className="search-layers-container">
       <Facets />
-
       {showListAndDetails && (
         <div className={listDetailContainerClass}>
-
           <div className="layer-list-container search">
-            <Scrollbars style={{ height: '100%' }}>
-              <SearchLayerList />
-            </Scrollbars>
+            <SearchLayerList />
           </div>
-
           { !selectedLayer && browser.lessThan.large ? null : (
             <div className="layer-detail-container layers-all search">
-              <Scrollbars style={{ height: '100%' }}>
-                <LayerMetadataDetail />
-              </Scrollbars>
+              <LayerMetadataDetail />
             </div>
           )}
-
         </div>
       )}
-
     </div>
   );
 }
 
 SearchLayers.propTypes = {
   browser: PropTypes.object,
-  bodyHeight: PropTypes.number,
-  facets: PropTypes.object,
   isMobile: PropTypes.bool,
   selectedLayer: PropTypes.object,
   showMobileFacets: PropTypes.bool,
-  toggleMobileFacets: PropTypes.func,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  updateScrollPosition: (scrollTop) => {
-    dispatch(updateListScrollTop(scrollTop));
-  },
-  toggleMobileFacets: () => {
-    dispatch(toggleMobileFacetsAction());
-  },
+  // updateScrollPosition: (scrollTop) => {
+  //   dispatch(updateListScrollTop(scrollTop));
+  // },
 });
 
 function mapStateToProps(state, ownProps) {
