@@ -1,17 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import { withSearch } from '@elastic/react-search-ui';
 import SearchLayerList from './search-layers-list';
-import ProductFacet from './product-facet';
+import Facets from './facets';
 import Scrollbars from '../../../util/scrollbar';
 import LayerMetadataDetail from './layer-metadata-detail';
 import {
   updateListScrollTop,
   toggleMobileFacets as toggleMobileFacetsAction,
 } from '../../../../modules/product-picker/actions';
-import facetConfig from '../../../../modules/product-picker/facetConfig';
 
 function SearchLayers(props) {
   const {
@@ -19,9 +17,7 @@ function SearchLayers(props) {
     browser,
     selectedLayer,
     bodyHeight,
-    facets,
     showMobileFacets,
-    toggleMobileFacets,
   } = props;
 
   const listDetailContainerClass = selectedLayer
@@ -30,45 +26,11 @@ function SearchLayers(props) {
 
   const showFacets = browser.greaterThan.small || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
-  const facetHeight = isMobile ? 'calc(100vh - 125px)' : '100%';
 
   return (
     <div className="search-layers-container" style={{ height: bodyHeight }}>
 
-      {showFacets && (
-        <div className="facet-container">
-          <Scrollbars style={{ height: facetHeight }}>
-            <div className="inner-container">
-              {facetConfig.map((config) => {
-                const facet = facets[config.field];
-                const data = (facet && facet.length && facet[0].data) || [];
-                return (
-                  <ProductFacet
-                    key={config.field}
-                    field={config.field}
-                    label={config.label}
-                    filterType={config.filterType}
-                    tooltip={config.tooltip}
-                    show={config.show}
-                    view={config.view}
-                    data={data}
-                  />
-                );
-              })}
-            </div>
-          </Scrollbars>
-
-          {isMobile && showMobileFacets && (
-            <Button
-              className="apply-facets"
-              onClick={toggleMobileFacets}
-            >
-              Apply
-            </Button>
-          )}
-        </div>
-      )}
-
+      <Facets />
 
       {showListAndDetails && (
         <div className={listDetailContainerClass}>

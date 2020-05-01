@@ -121,8 +121,10 @@ export default function buildLayerFacetProps(config, selectedDate) {
 
   return lodashMap(layers, (layer) => {
     const { conceptId } = layer;
-    const { processingLevelId } = collections[conceptId];
-    layer.processingLevelId = processingLevelId;
+    const collectionData = (conceptId && collections[conceptId]) || {};
+    if (collectionData.processingLevelId) {
+      layer.processingLevelId = collectionData.processingLevelId;
+    }
     layer.availableAtDate = availableAtDate(layer, selectedDate).toString();
     getLayerPeriodFacetProps(layer);
     getOrbitTrackRelatedFacetProps(layer, layers);
