@@ -80,6 +80,7 @@ import '../css/list.css';
 import '../css/vectorMeta.css';
 import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
+import '../css/facets.css';
 import '../pages/css/document.css';
 import keyPress from './modules/key-press/actions';
 

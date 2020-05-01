@@ -830,16 +830,6 @@
   margin-right: 10px;
 }
 
-.facet-container {
-  flex: 1;
-  max-width: 270px;
-  & .inner-container {
-    padding: 10px 8px 10px 10px;
-    margin: 3px 10px 2px 2px;
-    background-color: #333;
-  }
-}
-
 @media (min-width: 1024px) {
   .search-layers-container {
     & div.layer-list-detail-container {
@@ -935,19 +925,6 @@
       line-height: 25px;
       height: 30px;
       width: 30px;
-    }
-  }
-  .facet-container {
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    & .apply-facets {
-      height: 50px;
-      background: #d54f21;
-      font-size: 16px;
-      border: 1px solid #aa3c16;
-      margin: 4px auto;
-      width: 165px;
     }
   }
   .layer-detail-container.search {
@@ -1160,52 +1137,3 @@
   margin-right: 10px;
 }
 
-.facet-container .facet-wrapper {
-  display: block;
-  position: relative;
-  width: 100%;
-  min-height: 25px;
-  margin-bottom: 8px;
-
-  &.hidden {
-    display: none;
-  }
-
-  .no-matches {
-    color: #aaa;
-    margin: 6px;
-    text-align: center;
-  }
-
-  & .svg-inline--fa {
-    cursor: pointer;
-    color: #fff;
-  }
-  .facet-collapse-toggle {
-    position: absolute;
-    right: 0;
-    top: -4px;
-    width: 18px;
-    height: 20px;
-  }
-  .facet-tooltip {
-    position: absolute;
-    left: 0;
-    top: 2px;
-  }
-}
-
-@media (max-width: 768px) {
-  .facet-container .facet-wrapper {
-    margin-bottom: 12px;
-    & .facet-tooltip {
-      top: 1px;
-      height: 20px;
-      width: 16px;
-    }
-    & .facet-collapse-toggle {
-      height: 28px;
-      width: 24px;
-    }
-  }
-}
