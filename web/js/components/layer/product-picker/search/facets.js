@@ -22,7 +22,6 @@ function Facets(props) {
   } = props;
 
   const showFacets = browser.greaterThan.small || showMobileFacets;
-  const facetHeight = isMobile ? 'calc(100vh - 125px)' : '100%';
 
   return !showFacets ? null : (
     <div className="facet-container">
@@ -33,7 +32,7 @@ function Facets(props) {
         facetConfig={facetConfig}
       />
 
-      <div className="inner-container" style={{ height: facetHeight, overflowY: 'auto' }}>
+      <div className="inner-container">
         {facetConfig.map((config) => {
           const facet = facets[config.field];
           const data = (facet && facet.length && facet[0].data) || [];

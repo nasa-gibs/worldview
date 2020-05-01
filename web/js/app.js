@@ -67,8 +67,8 @@ import '../css/indicator.css';
 import '../css/events.css';
 import '../css/dataDownload.css';
 import '../css/sidebar.css';
-import '../css/layers.css';
 import '../css/layer-categories.css';
+import '../css/layers.css';
 import '../css/scrollbar.css';
 import '../css/switch.css';
 import '../css/timeline.css';
@@ -90,14 +90,24 @@ class App extends React.Component {
     super(props);
     this.onload();
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.setVhCSSProperty = this.setVhCSSProperty.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
+    // We listen to the resize event
+    window.addEventListener('resize', this.setVhCSSProperty);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  setVhCSSProperty = () => {
+    // We execute the same script as before
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
   handleKeyPress(event) {
@@ -156,6 +166,7 @@ class App extends React.Component {
       });
       self.props.screenResize(window);
       models.wv.events.trigger('startup');
+      self.setVhCSSProperty();
     };
     util.wrap(main)();
   }
