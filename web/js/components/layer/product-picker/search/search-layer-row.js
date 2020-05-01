@@ -47,6 +47,14 @@ class SearchLayerRow extends React.Component {
       showLayerMetadata,
       selectedLayer,
     } = this.props;
+
+    console.log({
+      id: layer.id,
+      startDate: layer.startDate,
+      endDate: layer.endDate,
+      dateRanges: layer.dateRanges,
+    });
+
     if (!(selectedLayer && layer.id === selectedLayer.id)) {
       showLayerMetadata(layer.id);
     } else {

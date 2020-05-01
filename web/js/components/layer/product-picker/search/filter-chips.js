@@ -9,8 +9,6 @@ export default function FilterChips(props) {
     removeFilter,
   } = props;
 
-  console.log(filters);
-
   return !filters.length ? null : (
     <div className="bag-o-chips">
       {filters.flatMap(({ field, values }) => values.map((filterVal) => (
