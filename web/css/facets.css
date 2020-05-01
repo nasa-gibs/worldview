@@ -32,10 +32,9 @@
     }
   }
   & .inner-container {
-    padding: 10px 12px 10px 10px;
+    padding: 10px;
     margin: 0 4px 2px 2px;
     background-color: #333;
-    height: 100%;
     overflow-y: auto;
   }
   & .facet-wrapper {
