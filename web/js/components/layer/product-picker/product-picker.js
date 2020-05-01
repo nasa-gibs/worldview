@@ -67,19 +67,7 @@ class ProductPicker extends React.Component {
       closeModal,
       mode,
       width,
-      browser,
-      category,
     } = this.props;
-
-    const { screenHeight } = browser;
-    const dialogMargin = 12;
-    const tabOffset = mode === 'category' || category === 'featured' ? 38 : 0;
-    const headerHeight = mode === 'search' ? 70 : 48;
-    let bodyHeight = screenHeight - headerHeight - tabOffset - 100 - dialogMargin;
-
-    if (browser.lessThan.medium) {
-      bodyHeight = screenHeight - headerHeight - tabOffset;
-    }
 
     return (
       <>
@@ -92,8 +80,8 @@ class ProductPicker extends React.Component {
         <ModalBody>
           <div id="layer-modal-content" className="layer-modal-content">
             {mode !== 'search'
-              ? (<BrowseLayers bodyHeight={bodyHeight} width={width} />)
-              : (<SearchLayers bodyHeight={bodyHeight} width={width} />)}
+              ? (<BrowseLayers width={width} />)
+              : (<SearchLayers />)}
           </div>
         </ModalBody>
       </>
@@ -102,13 +90,10 @@ class ProductPicker extends React.Component {
 }
 
 ProductPicker.propTypes = {
-  browser: PropTypes.object,
-  category: PropTypes.object,
   closeModal: PropTypes.func,
   filters: PropTypes.array,
   mode: PropTypes.string,
   saveSearchState: PropTypes.func,
-  screenHeight: PropTypes.number,
   searchTerm: PropTypes.string,
   width: PropTypes.number,
 };
