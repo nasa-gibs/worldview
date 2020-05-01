@@ -93,6 +93,18 @@
     & .bag-o-chips {
       margin-right: 2px;
     }
+    & .facet-wrapper {
+      margin-bottom: 12px;
+      & .facet-tooltip {
+        top: 4px;
+        height: 20px;
+        width: 18px;
+      }
+      & .facet-collapse-toggle {
+        height: 34px;
+        width: 28px;
+      }
+    }
   }
   .apply-facets {
     min-height: 50px;
@@ -101,17 +113,5 @@
     border: 1px solid #aa3c16;
     margin: 4px auto;
     width: 165px;
-  }
-  .facet-wrapper {
-    margin-bottom: 12px;
-  }
-  .facet-tooltip {
-    top: 1px;
-    height: 20px;
-    width: 16px;
-  }
-  .facet-collapse-toggle {
-    height: 28px;
-    width: 24px;
   }
 }
