@@ -9,3 +9,22 @@
   border-radius: 0;
   opacity: 0.8;
 }
+
+html {
+  --scrollbarBG: #ccc;
+  --thumbBG: #aaa;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+* {
+  scrollbar-width: 10px;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 0;
+}
