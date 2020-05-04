@@ -22,26 +22,6 @@ module.exports = {
     client.expect.element('#about_info_item').to.be.present;
   },
 
-  // verify mobile about menu item opens separate tab or window
-  'Mobile about menu item opens separate tab or window': (client) => {
-    client.pause(1000);
-    client.waitForElementVisible(localSelectors.uiInfoButton, TIME_LIMIT);
-    client.click(localSelectors.uiInfoButton);
-    client.waitForElementVisible('#toolbar_info', TIME_LIMIT);
-
-    client.windowHandles((tabs) => {
-      client.assert.equal(tabs.value.length, 1);
-    });
-
-    client.waitForElementVisible('#about_info_item', TIME_LIMIT);
-    client.click('#about_info_item');
-    client.pause(1000);
-
-    client.windowHandles((tabs) => {
-      client.assert.equal(tabs.value.length, 2);
-    });
-  },
-
   // verify mobile source code menu item opens separate tab or window
   'Mobile source code menu item opens separate tab or window': (client) => {
     client.pause(1000);
