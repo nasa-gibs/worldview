@@ -11,6 +11,8 @@ import {
   isArray,
 } from 'lodash';
 
+// eslint-disable-next-line import/no-unresolved
+import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import { addLayer, resetLayers } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
@@ -627,6 +629,12 @@ export function layersParse11(str, config) {
       id,
       attributes: [],
     };
+    googleTagManager.pushEvent({
+      event: 'layer_included_in_url',
+      layers: {
+        id,
+      },
+    });
     if (!visible) {
       lstate.attributes.push({
         id: 'hidden',
@@ -656,6 +664,12 @@ export function layersParse12(stateObj, config) {
         id: layerId,
         attributes: [],
       };
+      googleTagManager.pushEvent({
+        event: 'layer_included_in_url',
+        layers: {
+          id: layerId,
+        },
+      });
       // Everything inside parens
       const arrayAttr = layerDef.match(/\(.*\)/);
       if (arrayAttr) {

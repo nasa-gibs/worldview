@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
+import googleTagManager from 'googleTagManager';
+
 import { TOGGLE_DISTRACTION_FREE_MODE } from './constants';
 import { CLOSE as CLOSE_MODAL } from '../modal/constants';
 
@@ -6,6 +9,11 @@ export default function toggleDistractionFreeMode() {
     const { modal, ui } = getState();
     const { isDistractionFreeModeActive } = ui;
     const modalIsOpen = modal.isOpen;
+    if (!isDistractionFreeModeActive) {
+      googleTagManager.pushEvent({
+        event: 'init_distraction_free_mode',
+      });
+    }
     dispatch({
       type: TOGGLE_DISTRACTION_FREE_MODE,
       isDistractionFreeModeActive: !isDistractionFreeModeActive,
