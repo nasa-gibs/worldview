@@ -9,9 +9,11 @@ export default function toggleDistractionFreeMode() {
     const { modal, ui } = getState();
     const { isDistractionFreeModeActive } = ui;
     const modalIsOpen = modal.isOpen;
-    googleTagManager.pushEvent({
-      event: 'init_distraction_free_mode',
-    });
+    if (!isDistractionFreeModeActive) {
+      googleTagManager.pushEvent({
+        event: 'init_distraction_free_mode',
+      });
+    }
     dispatch({
       type: TOGGLE_DISTRACTION_FREE_MODE,
       isDistractionFreeModeActive: !isDistractionFreeModeActive,
