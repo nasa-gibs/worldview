@@ -12,7 +12,6 @@ import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   selectCategory as selectCategoryAction,
   toggleFeatureTab as toggleFeatureTabAction,
-  updateListScrollTop,
 } from '../../../../modules/product-picker/actions';
 
 /*
@@ -44,7 +43,7 @@ class BrowseLayers extends React.Component {
   renderLayerList() {
     const { browser } = this.props;
     return (
-      <div className="search-layers-container">
+      <div className="search-layers-container browse">
         <div className="layer-list-container browse">
           <div className="product-outter-list-case">
             <BrowseLayerList />
@@ -119,9 +118,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   toggleFeatureTab: () => {
     dispatch(toggleFeatureTabAction());
-  },
-  updateScrollPosition: (scrollTop) => {
-    dispatch(updateListScrollTop(scrollTop));
   },
 });
 

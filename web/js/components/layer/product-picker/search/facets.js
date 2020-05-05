@@ -80,10 +80,11 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state, ownProps) {
-  const { browser, productPicker } = state;
+  const { browser, productPicker, date } = state;
   const { showMobileFacets } = productPicker;
 
   return {
+    selectedDate: date.selected,
     isMobile: browser.lessThan.medium,
     showMobileFacets,
     browser,

@@ -28,6 +28,21 @@ import {
  * @extends React.Component
  */
 class CategoryLayerRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+  }
+
+  componentDidMount() {
+    const { selectedMeasurement, measurement } = this.props;
+    const { ref } = this;
+    if (selectedMeasurement === measurement.id) {
+      setTimeout(() => {
+        ref.current.scrollIntoView(true);
+      }, 250);
+    }
+  }
+
   /**
    * Render orbits and layer selections for
    * selected source
@@ -187,6 +202,7 @@ class CategoryLayerRow extends React.Component {
       : 'measurement-row layers-all-layer';
     return (
       <div
+        ref={this.ref}
         className={className}
         id={`accordion-${category.id}-${measurement.id}`}
         key={`${category.id}-${measurement.id}`}
@@ -218,6 +234,7 @@ CategoryLayerRow.propTypes = {
   projection: PropTypes.string,
   selectSource: PropTypes.func,
   selectMeasurement: PropTypes.func,
+  selectedMeasurement: PropTypes.string,
   selectedMeasurementSourceIndex: PropTypes.number,
 };
 
@@ -230,12 +247,14 @@ const mapStateToProps = (state, ownProps) => {
   } = state;
   const isMobile = browser.lessThan.medium;
   const {
+    selectedMeasurement,
     selectedMeasurementSourceIndex,
   } = productPicker;
   return {
     layerConfig: config.layers,
     isMobile,
     projection: proj.id,
+    selectedMeasurement,
     selectedMeasurementSourceIndex,
     hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),
   };
