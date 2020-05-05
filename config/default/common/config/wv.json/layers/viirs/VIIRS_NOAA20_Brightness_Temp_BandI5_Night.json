@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "VIIRS_NOAA20_Brightness_Temp_BandI5_Night": {
+            "id":       "VIIRS_NOAA20_Brightness_Temp_BandI5_Night",
+            "title":    "Brightness Temperature (Band I5, Night)",
+            "subtitle": "NOAA-20 / VIIRS",
+            "description": "viirs/VIIRS_NOAA20_Brightness_Temp_BandI5_Night",
+            "tags":     "jpss1",
+            "group":    "overlays",
+            "layergroup": [
+              "viirs"
+            ],
+            "product":  "",
+            "tracks": [
+                "OrbitTracks_NOAA-20_Descending"
+             ]
+        }
+    }
+}
