@@ -14,12 +14,16 @@ html {
   --scrollbarBG: #ccc;
   --thumbBG: #aaa;
 }
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+
+/* Chrome/Safari/Edge(?) */
 *::-webkit-scrollbar {
   width: 10px;
-}
-* {
-  scrollbar-width: 10px;
-  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
 *::-webkit-scrollbar-track {
   background: transparent;

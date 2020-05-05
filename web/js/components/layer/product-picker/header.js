@@ -47,12 +47,21 @@ class ProductPickerHeader extends React.Component {
   }
 
   handleChange = (e) => {
-    const { setSearchTerm } = this.props;
+    const {
+      setSearchTerm,
+      showMobileFacets,
+      toggleMobileFacets,
+    } = this.props;
     const { value } = e.target;
     setSearchTerm(value, {
       shouldClearFilters: false,
       debounce: 200,
     });
+
+    // Entering search terms on mobile should hide facets
+    if (showMobileFacets) {
+      toggleMobileFacets();
+    }
   }
 
   renderBreadCrumb() {

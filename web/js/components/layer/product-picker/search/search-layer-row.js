@@ -20,6 +20,14 @@ class SearchLayerRow extends React.Component {
     super(props);
     this.toggleEnabled = this.toggleEnabled.bind(this);
     this.toggleShowMetadata = this.toggleShowMetadata.bind(this);
+    this.ref = React.createRef();
+  }
+
+  componentDidMount() {
+    const { layer, selectedLayer } = this.props;
+    if (selectedLayer && selectedLayer.id === layer.id) {
+      this.ref.current.scrollIntoView(true);
+    }
   }
 
   /**
@@ -46,16 +54,15 @@ class SearchLayerRow extends React.Component {
       layer,
       showLayerMetadata,
       selectedLayer,
+      scrollIntoView,
     } = this.props;
 
-    console.log({
-      id: layer.id,
-      startDate: layer.startDate,
-      endDate: layer.endDate,
-      dateRanges: layer.dateRanges,
-    });
-
     if (!(selectedLayer && layer.id === selectedLayer.id)) {
+      if (!selectedLayer && scrollIntoView) {
+        // Make sure item doesn't get obscurd by the detail view
+        // only at small and x-small views
+        this.ref.current.scrollIntoView(true);
+      }
       showLayerMetadata(layer.id);
     } else {
       // Allow click to deselect on mobile
@@ -73,7 +80,7 @@ class SearchLayerRow extends React.Component {
     const checkboxClass = isEnabled ? 'wv-checkbox checked' : 'wv-checkbox';
 
     return (
-      <div id={`${id}-search-row`} className={rowClass}>
+      <div id={`${id}-search-row`} className={rowClass} ref={this.ref}>
         <div className={checkboxClass}>
           <input
             type="checkbox"
@@ -98,14 +105,16 @@ SearchLayerRow.propTypes = {
   layer: PropTypes.object,
   addLayer: PropTypes.func,
   removeLayer: PropTypes.func,
+  scrollIntoView: PropTypes.bool,
   selectedLayer: PropTypes.object,
   showLayerMetadata: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { date, productPicker } = state;
+  const { date, productPicker, browser } = state;
   const activeLayerMap = getActiveLayers(state);
   return {
+    scrollIntoView: browser.screenWidth < 1024,
     isEnabled: !!activeLayerMap[ownProps.layer.id],
     selectedDate: date.selected,
     selectedLayer: productPicker.selectedLayer,

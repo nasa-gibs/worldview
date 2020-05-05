@@ -26,12 +26,14 @@ function ProductFacet(props) {
   const renderHeaderIcons = () => (
     <>
       <Tooltip
+        className="facet-tooltip-content"
         isOpen={tooltipVisible}
         target={`${field}-tooltip-target`}
         placement="right"
         toggle={() => toggleTooltip(!tooltipVisible)}
+        delay={{ show: 0, hide: 1000 }}
       >
-        {tooltip}
+        <div dangerouslySetInnerHTML={{ __html: tooltip }} />
       </Tooltip>
       <FontAwesomeIcon
         id={`${field}-tooltip-target`}
