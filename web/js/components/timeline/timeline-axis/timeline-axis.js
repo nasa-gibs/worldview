@@ -1033,16 +1033,12 @@ class TimelineAxis extends Component {
       e.preventDefault();
     }
     const {
-      currentTimeRange,
       gridWidth,
       dragSentinelChangeNumber,
       dragSentinelCount,
     } = this.state;
     const {
-      draggerVisible,
-      draggerVisibleB,
       timeScale,
-      transformX,
       updatePositioning,
       updatePositioningOnSimpleDrag,
     } = this.props;
@@ -1062,25 +1058,16 @@ class TimelineAxis extends Component {
     animationEndLocation += deltaX;
     // update not necessary for year or month since all units are displayed
     if (timeScale === 'year' || timeScale === 'month') {
-      const frontDate = currentTimeRange[0].rawDate;
-      const backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
-      const updatePositioningArguments = {
+      const updateSimplePositioningArguments = {
         isTimelineDragging: true,
         position,
-        transformX,
-        frontDate,
-        backDate,
         draggerPosition,
         draggerPositionB,
-        draggerVisible,
-        draggerVisibleB,
         animationStartLocation,
         animationEndLocation,
       };
-      this.setState({
-        dragSentinelCount: dragSentinelCount + deltaX,
-      });
-      updatePositioning(updatePositioningArguments);
+
+      updatePositioningOnSimpleDrag(updateSimplePositioningArguments);
       // handle all timescale other than year and month to add new groups of tile item dates
     } else if (deltaX > 0) {
       // dragging right - exposing past dates
@@ -1376,28 +1363,31 @@ class TimelineAxis extends Component {
   * @param {Number} transformX
   * @returns {Object} DOM SVG object
   */
-  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => (
-    <g
-      className="axis-data-coverage-line"
-      transform={`translate(${-transformX}, 0)`}
-    >
-      <rect
-        style={{
-          left: lineCoverageOptions.leftOffset,
-          visibility: lineCoverageOptions.visible ? 'visible' : 'hidden',
-          margin: '0 0 6px 0',
-        }}
-        rx={0}
-        ry={0}
-        width={lineCoverageOptions.width}
-        height={10}
-        transform={`translate(${transformX + lineCoverageOptions.leftOffset}, 0)`}
-        fill="rgba(0, 119, 212, 0.5)"
-        stroke="rgba(0, 69, 123, 0.8)"
-        strokeWidth={3}
-      />
-    </g>
-  )
+  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => {
+    const { leftOffset, visible, width } = lineCoverageOptions;
+    return (
+      <g
+        className="axis-data-coverage-line"
+        transform={`translate(${-transformX}, 0)`}
+      >
+        <rect
+          style={{
+            left: leftOffset,
+            visibility: visible ? 'visible' : 'hidden',
+            margin: '0 0 6px 0',
+          }}
+          rx={0}
+          ry={0}
+          width={width}
+          height={10}
+          transform={`translate(${transformX + leftOffset}, 0)`}
+          fill="rgba(0, 119, 212, 0.5)"
+          stroke="rgba(0, 69, 123, 0.8)"
+          strokeWidth={3}
+        />
+      </g>
+    );
+  };
 
   render() {
     const {
@@ -1444,16 +1434,15 @@ class TimelineAxis extends Component {
                 width={axisWidth}
                 height={64}
                 viewBox={`0 0 ${axisWidth} 64`}
-                preserveAspectRatio="xMinYMin slice"
               >
                 <defs>
                   {/* clip axis grid text */}
                   <clipPath id="textDisplay">
-                    <rect width="200" height="64" />
+                    <rect width="64" height="44" />
                   </clipPath>
                   {/* clip axis grid overflow */}
                   <clipPath id="timelineBoundary">
-                    <rect width={axisWidth} height={64} />
+                    <rect x={-position} y="0" width={axisWidth} height={64} />
                   </clipPath>
                 </defs>
                 {shouldDisplayMatchingCoverageLine
@@ -1469,7 +1458,7 @@ class TimelineAxis extends Component {
                     left: leftBound, top: 0, bottom: 0, right: rightBound,
                   }}
                 >
-                  <g>
+                  <g clipPath="url(#timelineBoundary)">
                     <GridRange
                       showHover={showHover}
                       timeScale={timeScale}
