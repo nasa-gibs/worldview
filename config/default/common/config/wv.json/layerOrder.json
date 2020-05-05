@@ -1,8 +1,11 @@
 {
-    "layerOrder": [
+    "layerOrder": [ 
         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
         "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
         "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+        "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
+        "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1",
         "MODIS_Terra_CorrectedReflectance_TrueColor",
         "MODIS_Aqua_CorrectedReflectance_TrueColor",
         "MODIS_Terra_SurfaceReflectance_Bands143",
@@ -43,6 +46,8 @@
         "VIIRS_Night_Lights",
         "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
         "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+        "VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
+        "VIIRS_NOAA20_Brightness_Temp_BandI5_Night",
         "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
         "VIIRS_SNPP_Clear_Sky_Confidence_Day",
