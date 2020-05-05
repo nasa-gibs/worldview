@@ -5,12 +5,10 @@ import { withSearch } from '@elastic/react-search-ui';
 import SearchLayerList from './search-layers-list';
 import Facets from './facets';
 import LayerMetadataDetail from './layer-metadata-detail';
-// import {
-//   updateListScrollTop,
-// } from '../../../../modules/product-picker/actions';
 
 function SearchLayers(props) {
   const {
+    smallView,
     isMobile,
     browser,
     selectedLayer,
@@ -32,7 +30,7 @@ function SearchLayers(props) {
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>
-          { !selectedLayer && browser.lessThan.large ? null : (
+          { !selectedLayer && smallView ? null : (
             <div className="layer-detail-container layers-all search">
               <LayerMetadataDetail />
             </div>
@@ -47,20 +45,16 @@ SearchLayers.propTypes = {
   browser: PropTypes.object,
   isMobile: PropTypes.bool,
   selectedLayer: PropTypes.object,
+  smallView: PropTypes.bool,
   showMobileFacets: PropTypes.bool,
 };
-
-const mapDispatchToProps = (dispatch) => ({
-  // updateScrollPosition: (scrollTop) => {
-  //   dispatch(updateListScrollTop(scrollTop));
-  // },
-});
 
 function mapStateToProps(state, ownProps) {
   const { browser, productPicker } = state;
   const { selectedLayer, showMobileFacets } = productPicker;
 
   return {
+    smallView: browser.screenWidth < 1024,
     isMobile: browser.lessThan.medium,
     showMobileFacets,
     selectedLayer,
@@ -71,5 +65,5 @@ export default withSearch(
   ({ facets }) => ({ facets }),
 )(connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null,
 )(SearchLayers));

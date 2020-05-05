@@ -11,7 +11,6 @@ import {
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
-  UPDATE_LIST_SCROLL_TOP,
   RESET_STATE,
   INIT_SEARCH_STATE,
   SAVE_SEARCH_STATE,
@@ -28,7 +27,6 @@ export const productPickerState = {
   selectedMeasurement: undefined,
   selectedMeasurementSourceIndex: 0,
   searchConfig: undefined,
-  // listScrollTop: 0,
 };
 
 export function getInitialState(config) {
@@ -143,14 +141,6 @@ export function productPickerReducer(state = productPickerState, action) {
       return {
         ...state,
         showMobileFacets: !state.showMobileFacets,
-      };
-    }
-
-    // TODO this one unused?
-    case UPDATE_LIST_SCROLL_TOP: {
-      return {
-        ...state,
-        listScrollTop: action.value,
       };
     }
 
