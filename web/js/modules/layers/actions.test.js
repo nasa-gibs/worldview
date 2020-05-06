@@ -49,7 +49,7 @@ describe('remove Layer action', () => {
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('Do nothing on removing a non-existant layer', () => {
+  test('Do nothing on removing a non-existent layer', () => {
     let layers = addLayer('terra-cr', {}, [], config.layers, 0);
     layers = addMockLayer('terra-aod', layers);
     layers = addMockLayer('aqua-aod', layers);

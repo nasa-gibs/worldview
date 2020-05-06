@@ -184,11 +184,11 @@ export function mapIsPolygonValid(polygon, maxDistance) {
  * @method adjustAntiMeridian
  * @static
  *
- * @param polygon {object} GeoJSON poylgon geomtry Object
+ * @param polygon {object} GeoJSON poylgon geometry Object
  *
  * @param adjustSign {number} a value of 1 or -1
  *
- * @return {obj} Adjusted GeoJSON poylgon geomtry Object
+ * @return {obj} Adjusted GeoJSON poylgon geometry Object
  *
  * @todo relocate this utility function
  */
@@ -279,7 +279,7 @@ export function mapInterpolate2D(p1, p2, amount) {
  * @method toPolys
  * @static
  *
- * @param geom {object} GeoJSON geomtry Object
+ * @param geom {object} GeoJSON geometry Object
  *
  * @return {object} GeoJSON multipolygon list object
  *

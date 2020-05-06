@@ -78,7 +78,7 @@
         "no-nested-ternary": "warn", // 58 errors
         "no-shadow": "warn", // 136 errors
         "max-len": "off",
-        "consistent-return": "off", // 73 erorrs
+        "consistent-return": "off", // 73 errors
         "no-underscore-dangle": "off",
         "func-names": "off",
         "no-param-reassign": [ // 329 errors

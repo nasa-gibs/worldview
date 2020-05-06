@@ -105,7 +105,7 @@ module.exports = {
       },
     );
   },
-  'Clicking event notifcation opens explanation in dialog': (client) => {
+  'Clicking event notification opens explanation in dialog': (client) => {
     const globalSelectors = client.globals.selectors;
 
     client.click(globalSelectors.notifyMessage).pause(2000);

@@ -361,7 +361,7 @@ export default (function(self) {
   };
 
   /**
-   * Converts a time into an ISO string without miliseconds.
+   * Converts a time into an ISO string without milliseconds.
    *
    * @method toISOStringSeconds
    * @static
@@ -741,7 +741,7 @@ export default (function(self) {
    *
    * @method now
    * @static
-   * @return {Date} The current time or an overriden value.
+   * @return {Date} The current time or an overridden value.
    */
   const now = function() {
     return new Date();
@@ -760,7 +760,7 @@ export default (function(self) {
    * @method today
    * @static
    * @return {Date} The current time with the UTC hours, minutes, and seconds
-   * fields set to zero or an overriden value.
+   * fields set to zero or an overridden value.
    */
   self.today = function() {
     return self.now();
@@ -866,7 +866,7 @@ export default (function(self) {
        * @param {Object} parameters Parameters to pass to the jQuery.ajax
        * call.
        * @return {jQuery.Deferred} a deferred object that will resolve
-       * when the query returns, or resolves immedately if the results
+       * when the query returns, or resolves immediately if the results
        * are cached.
        */
       submit(parameters) {
@@ -1179,7 +1179,7 @@ export default (function(self) {
   /**
    * Check if objects have the same keys
    *
-   * @param  {array} comment seperated list of objects
+   * @param  {array} comment separated list of objects
    * @return {bool}
    */
   self.objectsHaveSameKeys = function(...objects) {
