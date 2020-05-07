@@ -1,8 +1,7 @@
 /* Categories view */
 .categories-nav {
-  margin: 0 auto;
-  max-width: 960px;
-  padding-top: 5px;
+  margin: 0;
+  padding: 5px 5px 0 12px;
   & .nav-item {
     height: 31px;
     line-height: 35px;
