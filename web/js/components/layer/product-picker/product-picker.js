@@ -89,6 +89,7 @@ class ProductPicker extends React.Component {
 }
 
 ProductPicker.propTypes = {
+  categoryType: PropTypes.string,
   closeModal: PropTypes.func,
   filters: PropTypes.array,
   mode: PropTypes.string,

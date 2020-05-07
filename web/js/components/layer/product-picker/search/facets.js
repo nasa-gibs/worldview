@@ -17,11 +17,12 @@ function Facets(props) {
     facets,
     filters,
     removeFilter,
+    results,
     showMobileFacets,
     toggleMobileFacets,
   } = props;
 
-  const showFacets = browser.greaterThan.small || showMobileFacets;
+  const showFacets = (browser.greaterThan.small && results.length) || showMobileFacets;
 
   return !showFacets ? null : (
     <div className="facet-container">
@@ -69,6 +70,7 @@ Facets.propTypes = {
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
   removeFilter: PropTypes.func,
+  results: PropTypes.array,
   showMobileFacets: PropTypes.bool,
   toggleMobileFacets: PropTypes.func,
 };
@@ -92,9 +94,9 @@ function mapStateToProps(state, ownProps) {
 }
 export default withSearch(
   ({
-    facets, filters, removeFilter,
+    facets, filters, removeFilter, results,
   }) => ({
-    facets, filters, removeFilter,
+    facets, filters, removeFilter, results,
   }),
 )(connect(
   mapStateToProps,

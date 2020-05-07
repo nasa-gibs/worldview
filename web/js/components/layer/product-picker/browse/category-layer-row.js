@@ -226,6 +226,7 @@ class CategoryLayerRow extends React.Component {
 
 CategoryLayerRow.propTypes = {
   category: PropTypes.object,
+  categoryType: PropTypes.string,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
   isMobile: PropTypes.bool,
