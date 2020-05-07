@@ -1,6 +1,8 @@
-import {
-  BooleanFacet,
-} from '@elastic/react-search-ui-views';
+import BooleanFacet from '../../components/layer/product-picker/search/boolean-facet';
+
+// import {
+//   BooleanFacet,
+// } from '@elastic/react-search-ui-views';
 
 export default [
   {
@@ -59,7 +61,7 @@ export default [
     field: 'processingLevelId',
     label: 'Processing Level',
     filterType: 'any',
-    tooltip: 'Level of data processing. For more information see: <a href="https://go.nasa.gov/3dq5oXx">https://go.nasa.gov/3dq5oXx</a>',
+    tooltip: 'Level of data processing. For more information see: <a href="https://go.nasa.gov/3dq5oXx" target="_blank"> https://go.nasa.gov/3dq5oXx </a>',
     show: 15,
     hideZeroCount: true,
   },
