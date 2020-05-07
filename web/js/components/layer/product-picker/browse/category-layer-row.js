@@ -34,12 +34,13 @@ class CategoryLayerRow extends React.Component {
   }
 
   componentDidMount() {
-    const { selectedMeasurement, measurement } = this.props;
-    const { ref } = this;
-    if (selectedMeasurement === measurement.id) {
-      setTimeout(() => {
-        ref.current.scrollIntoView(true);
-      }, 250);
+    const {
+      measurement,
+      selectedMeasurement,
+      categoryType,
+    } = this.props;
+    if (selectedMeasurement === measurement.id && categoryType !== 'featured') {
+      this.ref.current.scrollIntoView(true);
     }
   }
 
@@ -249,8 +250,10 @@ const mapStateToProps = (state, ownProps) => {
   const {
     selectedMeasurement,
     selectedMeasurementSourceIndex,
+    categoryType,
   } = productPicker;
   return {
+    categoryType,
     layerConfig: config.layers,
     isMobile,
     projection: proj.id,
