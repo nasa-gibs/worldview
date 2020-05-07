@@ -48,14 +48,17 @@ function ProductFacet(props) {
     </>
   );
 
-  return collapsed || !data.length
+  const noBooleanResults = filterType === 'boolean' && data.length === 1 && data.find(({ value }) => value === 'false');
+  const noResults = !data.length || noBooleanResults;
+
+  return collapsed || noResults
     ? (
       <div className="facet-wrapper">
         {renderHeaderIcons()}
         <fieldset className="sui-facet">
           <legend className="sui-facet__title">{label}</legend>
         </fieldset>
-        {!data.length && (
+        {noResults && (
           <div className="no-matches">No matches.</div>
         )}
       </div>

@@ -8,10 +8,11 @@ export default [
   {
     field: 'availableAtDate',
     label: 'Available',
-    filterType: 'any',
+    filterType: 'boolean',
     tooltip: 'Layer has available imagery at currently selected date/time',
     view: BooleanFacet,
     useLabelForValue: true,
+    hideZeroCount: true,
   },
   {
     field: 'categories',
