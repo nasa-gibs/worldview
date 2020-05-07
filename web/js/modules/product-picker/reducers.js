@@ -112,6 +112,8 @@ export function productPickerReducer(state = productPickerState, action) {
         mode: 'search',
         selectedLayer: null,
         showMobileFacets: true,
+        category: null,
+        categoryType: 'hazards and disasters',
       };
     }
 
