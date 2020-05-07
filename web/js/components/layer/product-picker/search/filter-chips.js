@@ -14,19 +14,22 @@ export default function FilterChips(props) {
     const config = facetConfig.find((conf) => conf.field === field);
     return values.map((value) => ({
       field,
-      value: config.useLabelForValue ? config.label : value,
+      displayValue: config.useLabelForValue ? config.label : value,
+      value,
     }));
   });
 
   return !filters.length ? null : (
     <div className="bag-o-chips">
-      {filterValues.map(({ field, value }) => (
+      {filterValues.map(({
+        field, displayValue, value,
+      }) => (
         <div
           key={field + value}
           className="filter-chip"
           onClick={() => removeFilter(field, value)}
         >
-          {value}
+          {displayValue}
           <FontAwesomeIcon
             icon={faTimes}
             fixedWidth

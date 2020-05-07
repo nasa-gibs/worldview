@@ -158,6 +158,7 @@ class ProductPickerHeader extends React.Component {
             <Button
               className="filter-button"
               onClick={filterBtnFn}
+              title="Filter layer results"
             >
               <FontAwesomeIcon icon={faFilter} />
             </Button>
