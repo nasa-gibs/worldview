@@ -124,7 +124,9 @@ class Dragger extends PureComponent {
       isHoveredDragging,
     } = this.state;
     // handle isHovered that may include a mouse up event while not hovered over dragger
-    const isHovered = !isHoveredDrag && !isHoveredDragging ? false : isHoveredDrag || isHoveredDragging;
+    const isHovered = !isHoveredDrag && !isHoveredDragging
+      ? false
+      : isHoveredDrag || isHoveredDragging;
     // handle fill for hover vs non-hover and slightly different A/B draggers
     const draggerFill = disabled
       ? isHovered
@@ -135,6 +137,16 @@ class Dragger extends PureComponent {
           ? '#a3a3a3'
           : '#8e8e8e'
         : '#ccc';
+
+    const draggerStroke = isHovered
+      ? '#ccc'
+      : '#333';
+    const draggerRectFill = isHovered
+      ? '#ccc'
+      : '#515151';
+    const draggerLetter = draggerName === 'selected'
+      ? 'A'
+      : 'B';
     return (
       draggerVisible
         ? (
@@ -142,7 +154,7 @@ class Dragger extends PureComponent {
             axis="x"
             onMouseDown={this.selectDragger}
             onDrag={this.handleDragDragger}
-            position={{ x: draggerPosition + 25, y: 19 }}
+            position={{ x: draggerPosition + 25, y: 0 }}
             onStart={this.startShowDraggerTime}
             onStop={this.stopShowDraggerTime}
             disabled={disabled}
@@ -152,14 +164,15 @@ class Dragger extends PureComponent {
                 cursor: 'pointer',
                 display: draggerVisible ? 'block' : 'none',
               }}
-              className={`timeline-dragger dragger${draggerName === 'selected' ? 'A' : 'B'}`}
+              className={`timeline-dragger dragger${draggerLetter}`}
               transform={`translate(${transformX}, 0)`}
               onMouseEnter={this.handleHoverMouseEnter}
               onMouseLeave={this.handleHoverMouseLeave}
+              clipPath={`url(#selectedDraggerClip${draggerLetter})`}
             >
               <path
                 fill={draggerFill}
-                stroke={isHovered ? '#ccc' : '#333'}
+                stroke={draggerStroke}
                 strokeWidth="1px"
                 d="M5.706 47.781
               C2.77 47.781.39 45.402.39 42.467
@@ -168,6 +181,7 @@ class Dragger extends PureComponent {
               v16.592
               c0 2.935-2.38 5.314-5.316 5.314
               h-34.932z"
+                shapeRendering="optimizeSpeed"
               />
               {isCompareModeActive
                 ? (
@@ -180,14 +194,14 @@ class Dragger extends PureComponent {
                     transform="translate(4, 30)"
                     textRendering="optimizeLegibility"
                   >
-                    {draggerName === 'selected' ? 'A' : 'B'}
+                    {draggerLetter}
                   </text>
                 )
                 : (
                   <>
                     <rect
                       pointerEvents="none"
-                      fill={isHovered ? '#ccc' : '#515151'}
+                      fill={draggerRectFill}
                       width="3"
                       height="20"
                       x="15"
@@ -195,7 +209,7 @@ class Dragger extends PureComponent {
                     />
                     <rect
                       pointerEvents="none"
-                      fill={isHovered ? '#ccc' : '#515151'}
+                      fill={draggerRectFill}
                       width="3"
                       height="20"
                       x="21"
@@ -203,7 +217,7 @@ class Dragger extends PureComponent {
                     />
                     <rect
                       pointerEvents="none"
-                      fill={isHovered ? '#ccc' : '#515151'}
+                      fill={draggerRectFill}
                       width="3"
                       height="20"
                       x="27"

@@ -148,11 +148,13 @@ class TimelineData extends Component {
       visible = false;
     }
 
+    console.log(visible, layer, rangeStart, rangeEnd);
+
     let leftOffset = 0;
     let borderRadiusLeft = '0';
     let borderRadiusRight = '0';
 
-    let width = axisWidth * 2;
+    let width = axisWidth * 5;
     if (visible) {
       if (layerStart <= axisFrontDate) {
         leftOffset = 0;
@@ -336,7 +338,8 @@ class TimelineData extends Component {
                 toggle={() => this.addMatchingCoverageToTimeline(!shouldIncludeHiddenLayers)}
               />
             </header>
-            <Scrollbars style={{ maxHeight: maxHeightScrollBar }}>
+            {/* <Scrollbars style={{ maxHeight: maxHeightScrollBar }}> */}
+            <div style={{ maxHeight: maxHeightScrollBar, overflowY: 'scroll' }}>
               <LayerDataItems
                 activeLayers={activeLayers}
                 appNow={appNow}
@@ -349,7 +352,8 @@ class TimelineData extends Component {
                 position={position}
                 transformX={transformX}
               />
-            </Scrollbars>
+            </div>
+            {/* </Scrollbars> */}
           </div>
           )}
         </div>

@@ -1057,9 +1057,8 @@ class TimelineAxis extends Component {
     animationStartLocation += deltaX;
     animationEndLocation += deltaX;
     // update not necessary for year or month since all units are displayed
-    if (timeScale === 'year' || timeScale === 'month') {
+    if (timeScale === 'month' || timeScale === 'year') {
       const updateSimplePositioningArguments = {
-        isTimelineDragging: true,
         position,
         draggerPosition,
         draggerPositionB,
@@ -1121,7 +1120,6 @@ class TimelineAxis extends Component {
           : dragSentinelCount + deltaX;
 
         const updatePositioningArguments = {
-          isTimelineDragging: true,
           position,
           draggerPosition,
           draggerPositionB,
@@ -1186,7 +1184,6 @@ class TimelineAxis extends Component {
           : dragSentinelCount + deltaX;
 
         const updatePositioningArguments = {
-          isTimelineDragging: true,
           position,
           draggerPosition,
           draggerPositionB,
@@ -1369,6 +1366,7 @@ class TimelineAxis extends Component {
       <g
         className="axis-data-coverage-line"
         transform={`translate(${-transformX}, 0)`}
+        clipPath="url(#matchingCoverage)"
       >
         <rect
           style={{
@@ -1439,6 +1437,10 @@ class TimelineAxis extends Component {
                   {/* clip axis grid text */}
                   <clipPath id="textDisplay">
                     <rect width="64" height="44" />
+                  </clipPath>
+                  {/* clip matching coverage data line */}
+                  <clipPath id="matchingCoverage">
+                    <rect x={transformX} y="0" width={axisWidth} height={64} />
                   </clipPath>
                   {/* clip axis grid overflow */}
                   <clipPath id="timelineBoundary">

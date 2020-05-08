@@ -10,6 +10,7 @@ import util from '../../../util/util';
 import {
   timeScaleToNumberKey,
 } from '../../../modules/date/constants';
+import DataItemContainer from './data-item-container';
 
 // ignore multiple date ranges due to WV config not building to
 // handle varying periods in same layer (example: M and D)
@@ -102,58 +103,6 @@ hoverOffToolTip = () => {
     );
   }
 
-  /**
-  * @desc get formatted display dates for line tooltips and selectors
-  * @param {String} lineType
-  * @param {Object} startDate date
-  * @param {Object} endDate date
-  * @param {String} layerPeriod
-  * @returns {Object}
-  *   @param {String} dateRangeStart
-  *   @param {String} dateRangeEnd
-  *   @param {String} toolTipText
-  */
-  getFormattedDisplayDates = (lineType, startDate, endDate, layerPeriod) => {
-    let dateRangeStart;
-    let dateRangeEnd;
-    let toolTipText;
-
-    // eslint-disable-next-line default-case
-    switch (lineType) {
-      case 'CONTAINER':
-        dateRangeStart = (startDate && startDate.split('T')[0]) || 'start';
-        dateRangeEnd = (endDate && endDate.split('T')[0]) || 'present';
-        toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
-        break;
-      case 'MULTI':
-        // handle minutes range display text (ex: '14:50 to 15:00')
-        if (layerPeriod === 'minutes') {
-          // eslint-disable-next-line prefer-destructuring
-          dateRangeStart = startDate.toISOString().split('T')[1];
-          // eslint-disable-next-line prefer-destructuring
-          dateRangeEnd = endDate.toISOString().split('T')[1];
-          toolTipText = `${dateRangeStart.split(':', 2).join(':')} to ${dateRangeEnd.split(':', 2).join(':')}`;
-          dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
-          dateRangeEnd = dateRangeEnd.replace(/[.:]/g, '_');
-        } else {
-          dateRangeStart = startDate.toISOString().replace(/[.:]/g, '_');
-          dateRangeEnd = endDate.toISOString().replace(/[.:]/g, '_');
-          toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
-        }
-        break;
-      case 'SINGLE':
-        dateRangeStart = startDate.replace(/:/g, '_');
-        dateRangeEnd = endDate.replace(/:/g, '_');
-        toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
-        break;
-    }
-
-    return {
-      dateRangeStart,
-      dateRangeEnd,
-      toolTipText,
-    };
-  }
 
   /**
   * @desc get formatted time period name
@@ -179,80 +128,83 @@ hoverOffToolTip = () => {
   * @param {Number/String} index
   * @returns {DOM Element} line
   */
-  createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
-    const {
-      axisWidth,
-      position,
-      transformX,
-    } = this.props;
-    const { hoveredTooltip } = this.state;
-    const {
-      borderRadius,
-      leftOffset,
-      isWidthGreaterThanRendered,
-      width,
-    } = options;
-    const lineWidth = Math.max(width, 0);
+  // TODO: switch to individual data item components with state based location that is updated vs
+  // TODO: everything being re-rendered - use SVGs (add clipPaths)
+  // TODO: may need PARENT CONTAINER -> DATA ITEM CONTAINER (with header/date range text) -> DATA LINE
+  // createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
+  //   const {
+  //     axisWidth,
+  //     position,
+  //     transformX,
+  //   } = this.props;
+  //   const { hoveredTooltip } = this.state;
+  //   const {
+  //     borderRadius,
+  //     leftOffset,
+  //     isWidthGreaterThanRendered,
+  //     width,
+  //   } = options;
+  //   const lineWidth = Math.max(width, 0);
 
-    // get formatted dates based on line type
-    const {
-      dateRangeStart,
-      dateRangeEnd,
-      toolTipText,
-    } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
-    const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
+  //   // get formatted dates based on line type
+  //   const {
+  //     dateRangeStart,
+  //     dateRangeEnd,
+  //     toolTipText,
+  //   } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
+  //   const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
 
-    // handle tooltip positioning
-    const toolTipOffset = -leftOffset - (lineWidth < axisWidth ? leftOffset : axisWidth / 2);
-    const toolTipPlacement = 'auto';
+  //   // handle tooltip positioning
+  //   const toolTipOffset = -leftOffset - (lineWidth < axisWidth ? leftOffset : axisWidth / 2);
+  //   const toolTipPlacement = 'auto';
 
-    // candy stripe color
-    const altLineColor = color === 'rgb(0, 69, 123)'
-      ? '#164e7a'
-      : '#797979';
-    const stripeBackground = `repeating-linear-gradient(45deg,
-      ${color},
-      ${color} 20px,
-      ${altLineColor} 20px,
-      ${altLineColor} 40px)`;
-    const backgroundPositionCalculated = `${leftOffset + lineWidth + position + transformX}px 0`;
-    const backgroundPosition = !isWidthGreaterThanRendered
-      || (leftOffset !== 0 && isWidthGreaterThanRendered)
-      ? 0
-      : backgroundPositionCalculated;
+  //   // candy stripe color
+  //   const altLineColor = color === 'rgb(0, 69, 123)'
+  //     ? '#164e7a'
+  //     : '#797979';
+  //   const stripeBackground = `repeating-linear-gradient(45deg,
+  //     ${color},
+  //     ${color} 20px,
+  //     ${altLineColor} 20px,
+  //     ${altLineColor} 40px)`;
+  //   const backgroundPositionCalculated = `${leftOffset + lineWidth + position + transformX}px 0`;
+  //   const backgroundPosition = !isWidthGreaterThanRendered
+  //     || (leftOffset !== 0 && isWidthGreaterThanRendered)
+  //     ? 0
+  //     : backgroundPositionCalculated;
 
-    return (
-      <div
-        key={index}
-        className="data-panel-coverage-line-container"
-      >
-        <div
-          id={`data-coverage-line-${dateRangeStartEnd}`}
-          className="data-panel-coverage-line"
-          onMouseEnter={() => this.hoverOnToolTip(`${dateRangeStartEnd}`)}
-          onMouseLeave={() => this.hoverOffToolTip()}
-          style={{
-            transform: `translate(${leftOffset}px, 0)`,
-            width: `${lineWidth}px`,
-            borderRadius,
-            background: stripeBackground,
-            backgroundPosition,
-          }}
-        >
-          <Tooltip
-            placement={toolTipPlacement}
-            boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
-            offset={toolTipOffset}
-            container={`.data-item-${id}`}
-            isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
-            target={`data-coverage-line-${dateRangeStartEnd}`}
-          >
-            {toolTipText}
-          </Tooltip>
-        </div>
-      </div>
-    );
-  }
+  //   return (
+  //     <div
+  //       key={index}
+  //       className="data-panel-coverage-line-container"
+  //     >
+  //       <div
+  //         id={`data-coverage-line-${dateRangeStartEnd}`}
+  //         className="data-panel-coverage-line"
+  //         onMouseEnter={() => this.hoverOnToolTip(`${dateRangeStartEnd}`)}
+  //         onMouseLeave={() => this.hoverOffToolTip()}
+  //         style={{
+  //           transform: `translate(${leftOffset}px, 0)`,
+  //           width: `${lineWidth}px`,
+  //           borderRadius,
+  //           background: stripeBackground,
+  //           backgroundPosition,
+  //         }}
+  //       >
+  //         <Tooltip
+  //           placement={toolTipPlacement}
+  //           boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
+  //           offset={toolTipOffset}
+  //           container={`.data-item-${id}`}
+  //           isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
+  //           target={`data-coverage-line-${dateRangeStartEnd}`}
+  //         >
+  //           {toolTipText}
+  //         </Tooltip>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   /**
   * @desc get range date end with added interval based on period
@@ -470,6 +422,8 @@ hoverOffToolTip = () => {
       axisWidth,
       getMatchingCoverageLineDimensions,
       timeScale,
+      position,
+      transformX,
     } = this.props;
     const emptyLayers = activeLayers.length === 0;
     return (
@@ -512,11 +466,9 @@ hoverOffToolTip = () => {
           // concat (ex: day to days) for moment manipulation below
           layerPeriod += 's';
 
-          // get line container dimensions
-          const containerLineDimensions = getMatchingCoverageLineDimensions(layer);
           // condtional styling for line/background colors
           const {
-            lineBackgroundColor,
+            // lineBackgroundColor,
             layerItemBackground,
             layerItemOutline,
           } = this.getLayerItemStyles(visible, id);
@@ -527,11 +479,11 @@ hoverOffToolTip = () => {
             ? Number(dateRanges[0].dateInterval)
             : 1;
 
-          const multipleCoverageRangesDateIntervals = {};
-          const isValidMultipleRangesLayer = !ignoredLayer[id] && dateRanges;
-          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
-          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1;
+          const isValidMultipleRangesLayer = !!(!ignoredLayer[id] && dateRanges);
+          const isLayerGreaterZoomWithMultipleCoverage = !!(isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex));
+          const isLayerEqualZoomWithMultipleCoverage = !!(isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1);
           const key = index;
+
           return (
             <div
               key={key}
@@ -550,97 +502,31 @@ hoverOffToolTip = () => {
                   maxWidth: `${axisWidth}px`,
                 }}
               >
-                {isValidMultipleRangesLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage)
-                // multiple coverage ranges
-                  ? (
-                    <div
-                      className="data-panel-coverage-line"
-                      style={{
-                        width: `${containerLineDimensions.width}px`,
-                      }}
-                    >
-                      {dateRanges && dateRanges.map((range, innerIndex) => {
-                        const isLastInRange = innerIndex === dateRanges.length - 1;
-                        const rangeInterval = Number(range.dateInterval);
-                        // multi time unit range - no year time unit
-                        if (isLayerGreaterIncrementThanZoom || (rangeInterval !== 1 && timeScale !== 'year')) {
-                          const endDateLimit = this.getMaxEndDate(inactive, isLastInRange);
-                          // get dates based on date ranges
-                          const dateIntervalStartDates = this.getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
-                          // add date intervals to multipleCoverageRangesDateIntervals object to catch repeats
-                          dateIntervalStartDates.forEach((dateInt) => {
-                            const dateIntFormatted = dateInt.toISOString();
-                            const dateIntTime = new Date(dateInt).getTime();
-                            const startDateTime = new Date(range.startDate).getTime();
-                            const endDateTime = new Date(range.endDate).getTime();
-                            // allow overwriting of subsequent date ranges
-                            if (dateIntTime >= startDateTime && startDateTime <= endDateTime) {
-                              multipleCoverageRangesDateIntervals[dateIntFormatted] = { date: dateInt, interval: rangeInterval };
-                            }
-                          });
-                          // if at the end of dateRanges array, display results from multipleCoverageRangesDateIntervals
-                          if (isLastInRange) {
-                            const multiDateToDisplay = Object.values(multipleCoverageRangesDateIntervals);
-                            return multiDateToDisplay.map((itemRange, multiIndex) => {
-                              const { date, interval } = itemRange;
-                              const nextDate = multiDateToDisplay[multiIndex + 1];
-                              const rangeDateEnd = this.getRangeDateEndWithAddedInterval(date, layerPeriod, interval, nextDate);
-                              // get range line dimensions
-                              const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, date, rangeDateEnd);
-                              // create DOM line element
-                              return multiLineRangeOptions.visible
-                                && this.createMatchingCoverageLineDOMEl(
-                                  id,
-                                  multiLineRangeOptions,
-                                  'MULTI',
-                                  date,
-                                  rangeDateEnd,
-                                  lineBackgroundColor,
-                                  layerPeriod,
-                                  `${id}-${multiIndex}`,
-                                );
-                            });
-                          }
-                          return null;
-                        }
-                        // handle single coverage
-                        const rangeStart = range.startDate;
-                        let rangeEnd = range.endDate;
-                        if (range.startDate === range.endDate) {
-                          rangeEnd = moment.utc(range.startDate).add(rangeInterval + 1, layerPeriod).format();
-                        } else {
-                          rangeEnd = moment.utc(rangeEnd).endOf(layerPeriod).format();
-                        }
-
-                        // get range line dimensions
-                        const singleLineOptions = getMatchingCoverageLineDimensions(layer, rangeStart, rangeEnd);
-                        // create DOM line element
-                        return singleLineOptions.visible
-                          && this.createMatchingCoverageLineDOMEl(
-                            id,
-                            singleLineOptions,
-                            'SINGLE',
-                            rangeStart,
-                            rangeEnd,
-                            lineBackgroundColor,
-                            layerPeriod,
-                            `${id}-${innerIndex}`,
-                          );
-                      })}
-                    </div>
-                  )
-                  // single start -> end date range coverage
-                  : containerLineDimensions.visible
-                  && this.createMatchingCoverageLineDOMEl(
-                    id,
-                    containerLineDimensions,
-                    'CONTAINER',
-                    startDate,
-                    endDate,
-                    lineBackgroundColor,
-                    layerPeriod,
-                    `${id}-0`,
-                  )}
+                <DataItemContainer
+                  frontDate={this.props.frontDate}
+                  backDate={this.props.backDate}
+                  getLayerItemStyles={this.getLayerItemStyles}
+                  getHeaderDOMEl={this.getHeaderDOMEl}
+                  getMaxEndDate={this.getMaxEndDate}
+                  getDatesInDateRange={this.getDatesInDateRange}
+                  axisWidth={axisWidth}
+                  position={position}
+                  transformX={transformX}
+                  dateRange={dateRange}
+                  layer={layer}
+                  hoverOnToolTip={this.hoverOnToolTip}
+                  hoverOffToolTip={this.hoverOffToolTip}
+                  hoveredTooltip={this.state.hoveredTooltip}
+                  layerPeriod={layerPeriod}
+                  getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
+                  getRangeDateEndWithAddedInterval={this.getRangeDateEndWithAddedInterval}
+                  timeScale={timeScale}
+                  hoveredLayer={this.props.hoveredLayer}
+                  isValidMultipleRangesLayer={isValidMultipleRangesLayer}
+                  isLayerGreaterZoomWithMultipleCoverage={isLayerGreaterZoomWithMultipleCoverage}
+                  isLayerEqualZoomWithMultipleCoverage={isLayerEqualZoomWithMultipleCoverage}
+                  isLayerGreaterIncrementThanZoom={isLayerGreaterIncrementThanZoom}
+                />
               </div>
             </div>
           );

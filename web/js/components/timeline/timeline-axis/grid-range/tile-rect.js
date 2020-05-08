@@ -96,7 +96,7 @@ class TileRect extends PureComponent {
             width={gridWidth}
             height={65}
             x={indexGridWithCoeff}
-            fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'}
+            fill="transparent"
           />
           <line
             className="axis-grid-line"
@@ -113,7 +113,7 @@ class TileRect extends PureComponent {
             stroke="#555"
             strokeWidth={1}
             x1={indexGridWithCoeff + 1}
-            x2={gridWidth}
+            x2={indexGridWithCoeff + 1 + gridWidth}
             y1="46"
             y2="46"
           />

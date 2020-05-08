@@ -401,7 +401,6 @@ class Timeline extends React.Component {
   /**
   * @desc handles dynamic positioning update based on simple drag
   * @param {Object} args
-    * @param {Boolean} isTimelineDragging
     * @param {Number} position
     * @param {Number} draggerPosition
     * @param {Number} draggerPositionB
@@ -410,7 +409,6 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   updatePositioningOnSimpleDrag = ({
-    isTimelineDragging,
     position,
     draggerPosition,
     draggerPositionB,
@@ -418,7 +416,7 @@ class Timeline extends React.Component {
     animationEndLocation,
   }) => {
     this.setState({
-      isTimelineDragging,
+      isTimelineDragging: true,
       showHoverLine: false,
       position,
       draggerPosition,
