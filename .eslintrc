@@ -21,6 +21,10 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "node": {}, // Needed for node core modules (https://github.com/benmosher/eslint-plugin-import/issues/1396)
+      "webpack": {}
     }
   },
   "rules": {

@@ -9,7 +9,6 @@ import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 

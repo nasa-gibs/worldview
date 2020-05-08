@@ -11,7 +11,6 @@ import {
   isArray,
 } from 'lodash';
 
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import { addLayer, resetLayers } from './selectors';
