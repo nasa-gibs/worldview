@@ -8,7 +8,6 @@ import {
   includes as lodashIncludes,
 } from 'lodash';
 import lodashDebounce from 'lodash/debounce';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import {
   ModalBody,

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 
 import { TOGGLE_DISTRACTION_FREE_MODE } from './constants';

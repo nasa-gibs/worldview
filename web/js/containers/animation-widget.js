@@ -5,7 +5,6 @@ import {
   get as lodashGet,
   cloneDeep as lodashCloneDeep,
 } from 'lodash';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
