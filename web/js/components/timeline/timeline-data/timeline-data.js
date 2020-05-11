@@ -111,7 +111,7 @@ class TimelineData extends Component {
   * @param {Object} layer
   * @param {String} rangeStart
   * @param {String} rangeEnd
-  * @returns {Object} visible, leftOffset, width, borderRadius, isWidthGreaterThanRendered
+  * @returns {Object} visible, leftOffset, width, isWidthGreaterThanRendered
   */
   getMatchingCoverageLineDimensions = (layer, rangeStart, rangeEnd) => {
     const {
@@ -148,42 +148,36 @@ class TimelineData extends Component {
       visible = false;
     }
 
-    console.log(visible, layer, rangeStart, rangeEnd);
-
     let leftOffset = 0;
-    let borderRadiusLeft = '0';
-    let borderRadiusRight = '0';
+    const isWidthGreaterThanRendered = layerStart < axisFrontDate || layerEnd > axisBackDate;
+    const layerStartBeforeAxisFront = layerStart <= axisFrontDate;
+    const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
 
     let width = axisWidth * 5;
     if (visible) {
-      if (layerStart <= axisFrontDate) {
+      if (layerStartBeforeAxisFront) {
         leftOffset = 0;
       } else {
         // positive diff means layerStart more recent than axisFrontDate
         const diff = moment.utc(layerStart).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
         leftOffset = gridDiff + postionTransformX;
-        borderRadiusLeft = '6px';
       }
-
-      if (layerEnd <= axisBackDate) {
+      if (layerEndBeforeAxisBack) {
         // positive diff means layerEnd earlier than back date
         const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
         width = gridDiff + postionTransformX - leftOffset;
-        borderRadiusRight = '6px';
       }
     }
-
-    const isWidthGreaterThanRendered = layerStart < axisFrontDate || layerEnd > axisBackDate;
-    const borderRadius = `${borderRadiusLeft} ${borderRadiusRight} ${borderRadiusRight} ${borderRadiusLeft}`;
 
     return {
       visible,
       leftOffset,
       width,
-      borderRadius,
       isWidthGreaterThanRendered,
+      layerStartBeforeAxisFront,
+      layerEndBeforeAxisBack,
     };
   }
 

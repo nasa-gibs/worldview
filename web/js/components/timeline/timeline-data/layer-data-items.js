@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { datesinDateRanges } from '../../../modules/layers/util';
@@ -23,7 +22,6 @@ const ignoredLayer = {
  *
  * @class LayerDataItems
  */
-
 class LayerDataItems extends Component {
   constructor(props) {
     super(props);
@@ -35,28 +33,26 @@ class LayerDataItems extends Component {
     this.layerDateArrayCache = {};
   }
 
-
   /**
   * @desc handle hovering on line and adding active tooltip
   * @param {String} input
   * @returns {void}
   */
- hoverOnToolTip = (input) => {
-   this.setState({
-     hoveredTooltip: { [input]: true },
-   });
- }
+  hoverOnToolTip = (input) => {
+    this.setState({
+      hoveredTooltip: { [input]: true },
+    });
+  }
 
-/**
-* @desc handle hovering off line and removing active tooltip
-* @returns {void}
-*/
-hoverOffToolTip = () => {
-  this.setState({
-    hoveredTooltip: {},
-  });
-}
-
+  /**
+  * @desc handle hovering off line and removing active tooltip
+  * @returns {void}
+  */
+  hoverOffToolTip = () => {
+    this.setState({
+      hoveredTooltip: {},
+    });
+  }
 
   /**
   * @desc get layer header with title, subtitle, and full date range
@@ -69,6 +65,7 @@ hoverOffToolTip = () => {
   getHeaderDOMEl = (layer, visible, dateRange, layerItemBackground) => {
     const titleColor = visible ? '#000' : '#999';
     const textColor = visible ? '#222' : '#999';
+    const { subtitle, title } = layer;
     return (
       <>
         <div className="data-panel-layer-item-header">
@@ -78,7 +75,7 @@ hoverOffToolTip = () => {
               color: titleColor,
             }}
           >
-            {layer.title}
+            {title}
             {' '}
             <span
               className="data-panel-layer-item-subtitle"
@@ -86,7 +83,7 @@ hoverOffToolTip = () => {
                 color: textColor,
               }}
             >
-              {layer.subtitle}
+              {subtitle}
             </span>
           </div>
           <div
@@ -103,7 +100,6 @@ hoverOffToolTip = () => {
     );
   }
 
-
   /**
   * @desc get formatted time period name
   * @param {String} period
@@ -116,95 +112,6 @@ hoverOffToolTip = () => {
       : period === 'yearly'
         ? 'year'
         : 'minute')
-
-  /**
-  * @desc get line DOM element from full/partial (interval) date range with tooltip
-  * @param {String} id
-  * @param {Object} options
-  * @param {String} dateRangeStart
-  * @param {String} dateRangeEnd
-  * @param {String} color
-  * @param {String} toolTipText
-  * @param {Number/String} index
-  * @returns {DOM Element} line
-  */
-  // TODO: switch to individual data item components with state based location that is updated vs
-  // TODO: everything being re-rendered - use SVGs (add clipPaths)
-  // TODO: may need PARENT CONTAINER -> DATA ITEM CONTAINER (with header/date range text) -> DATA LINE
-  // createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
-  //   const {
-  //     axisWidth,
-  //     position,
-  //     transformX,
-  //   } = this.props;
-  //   const { hoveredTooltip } = this.state;
-  //   const {
-  //     borderRadius,
-  //     leftOffset,
-  //     isWidthGreaterThanRendered,
-  //     width,
-  //   } = options;
-  //   const lineWidth = Math.max(width, 0);
-
-  //   // get formatted dates based on line type
-  //   const {
-  //     dateRangeStart,
-  //     dateRangeEnd,
-  //     toolTipText,
-  //   } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
-  //   const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
-
-  //   // handle tooltip positioning
-  //   const toolTipOffset = -leftOffset - (lineWidth < axisWidth ? leftOffset : axisWidth / 2);
-  //   const toolTipPlacement = 'auto';
-
-  //   // candy stripe color
-  //   const altLineColor = color === 'rgb(0, 69, 123)'
-  //     ? '#164e7a'
-  //     : '#797979';
-  //   const stripeBackground = `repeating-linear-gradient(45deg,
-  //     ${color},
-  //     ${color} 20px,
-  //     ${altLineColor} 20px,
-  //     ${altLineColor} 40px)`;
-  //   const backgroundPositionCalculated = `${leftOffset + lineWidth + position + transformX}px 0`;
-  //   const backgroundPosition = !isWidthGreaterThanRendered
-  //     || (leftOffset !== 0 && isWidthGreaterThanRendered)
-  //     ? 0
-  //     : backgroundPositionCalculated;
-
-  //   return (
-  //     <div
-  //       key={index}
-  //       className="data-panel-coverage-line-container"
-  //     >
-  //       <div
-  //         id={`data-coverage-line-${dateRangeStartEnd}`}
-  //         className="data-panel-coverage-line"
-  //         onMouseEnter={() => this.hoverOnToolTip(`${dateRangeStartEnd}`)}
-  //         onMouseLeave={() => this.hoverOffToolTip()}
-  //         style={{
-  //           transform: `translate(${leftOffset}px, 0)`,
-  //           width: `${lineWidth}px`,
-  //           borderRadius,
-  //           background: stripeBackground,
-  //           backgroundPosition,
-  //         }}
-  //       >
-  //         <Tooltip
-  //           placement={toolTipPlacement}
-  //           boundariesElement={`data-coverage-line-${dateRangeStartEnd}`}
-  //           offset={toolTipOffset}
-  //           container={`.data-item-${id}`}
-  //           isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
-  //           target={`data-coverage-line-${dateRangeStartEnd}`}
-  //         >
-  //           {toolTipText}
-  //         </Tooltip>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   /**
   * @desc get range date end with added interval based on period
@@ -416,6 +323,19 @@ hoverOffToolTip = () => {
     };
   }
 
+  /**
+  * @desc get empty layers message DOM element
+  * @returns {DOM Element} div contained message
+  */
+  createEmptyLayersDOMEl = () => (
+    <div className="data-panel-layer-empty">
+      <div className="data-item-empty">
+        <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
+        <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
+      </div>
+    </div>
+  )
+
   render() {
     const {
       activeLayers,
@@ -428,21 +348,15 @@ hoverOffToolTip = () => {
     const emptyLayers = activeLayers.length === 0;
     return (
       <div className="data-panel-layer-list">
-        {emptyLayers
-          && (
-          <div className="data-panel-layer-empty">
-            <div className="data-item-empty">
-              <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
-              <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
-            </div>
-          </div>
-          )}
-        {activeLayers.map((layer, index) => {
+        {/* Empty layer data message */
+          emptyLayers && this.createEmptyLayersDOMEl()
+        }
+
+        {/* Build individual layer data components */
+        activeLayers.map((layer, index) => {
           const {
             dateRanges,
-            endDate,
             id,
-            inactive,
             period,
             startDate,
             visible,
@@ -468,7 +382,6 @@ hoverOffToolTip = () => {
 
           // condtional styling for line/background colors
           const {
-            // lineBackgroundColor,
             layerItemBackground,
             layerItemOutline,
           } = this.getLayerItemStyles(visible, id);
@@ -481,7 +394,8 @@ hoverOffToolTip = () => {
 
           const isValidMultipleRangesLayer = !!(!ignoredLayer[id] && dateRanges);
           const isLayerGreaterZoomWithMultipleCoverage = !!(isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex));
-          const isLayerEqualZoomWithMultipleCoverage = !!(isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1);
+          // const isLayerEqualZoomWithMultipleCoverage = !!(isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1);
+          const isLayerEqualZoomWithMultipleCoverage = !!(isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1);
           const key = index;
 
           return (
@@ -530,7 +444,8 @@ hoverOffToolTip = () => {
               </div>
             </div>
           );
-        })}
+        })
+        }
       </div>
     );
   }

@@ -87,8 +87,10 @@ class DataLine extends Component {
       leftOffset,
       isWidthGreaterThanRendered,
       width,
+      layerStartBeforeAxisFront,
+      layerEndBeforeAxisBack,
     } = options;
-    const lineWidth = Math.max(width, 0);
+    let lineWidth = Math.max(width, 0);
 
     // get formatted dates based on line type
     const {
@@ -104,15 +106,22 @@ class DataLine extends Component {
       : 'url(#pattern2)';
 
     // allow moving striped background for large width lines
-    const rectTransform = leftOffset === 0 && isWidthGreaterThanRendered
+    let rectTransform = leftOffset === 0 && isWidthGreaterThanRendered && !layerEndBeforeAxisBack
       ? position + transformX
       : leftOffset;
 
     // determine line radius for line start/end vs. partial large width lines
-    const lineRadius = !isWidthGreaterThanRendered
+    let lineRadius = !isWidthGreaterThanRendered
       || (leftOffset !== 0 && isWidthGreaterThanRendered)
       ? '6'
       : '0';
+
+    // handle "false transform" line edge to simulate line movement for striped background
+    if (leftOffset === 0 && isWidthGreaterThanRendered && layerEndBeforeAxisBack) {
+      lineWidth -= position + transformX;
+      rectTransform += position + transformX;
+      lineRadius = '6';
+    }
 
     return (
       <g

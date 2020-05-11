@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-
 import DataLine from './data-line';
 
 /*
@@ -126,8 +124,6 @@ class DataItemContainer extends Component {
     // condtional styling for line/background colors
     const {
       lineBackgroundColor,
-      // layerItemBackground,
-      // layerItemOutline,
     } = getLayerItemStyles(visible, id);
 
     // get line container dimensions
@@ -137,13 +133,13 @@ class DataItemContainer extends Component {
         <div
           className="data-panel-coverage-line"
           style={{
-            // width: `${isValidMultipleRangesLayer ? containerLineDimensions.width : axisWidth}px`,
             width: `${axisWidth}px`,
           }}
         >
           <svg
             className="data-panel-coverage-line-svg"
             width={axisWidth}
+            viewBox={`0 0 ${axisWidth} 64`}
           >
             <defs>
               <clipPath id="dataLineBoundary">
@@ -157,7 +153,7 @@ class DataItemContainer extends Component {
                 patternTransform="rotate(135 50 50)"
               >
                 <rect fill="rgb(0, 69, 123)" width="30" height="12" />
-                <line stroke="#164e7a" strokeWidth="30" y2="12" />
+                <line stroke="#164e7a" strokeWidth="30" y1="12" />
               </pattern>
               <pattern
                 id="pattern2"
@@ -167,7 +163,7 @@ class DataItemContainer extends Component {
                 patternTransform="rotate(135 50 50)"
               >
                 <rect fill="rgb(116, 116, 116)" width="30" height="12" />
-                <line stroke="#797979" strokeWidth="30" y2="12" />
+                <line stroke="#797979" strokeWidth="30" y1="12" />
               </pattern>
             </defs>
             {isValidMultipleRangesLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage)
