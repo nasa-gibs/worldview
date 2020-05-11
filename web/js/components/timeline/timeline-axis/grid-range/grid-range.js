@@ -50,7 +50,7 @@ class GridRange extends PureComponent {
     return (
       <g
         className="axis-grid-container"
-        transform={`translate(${transformX}, 0)`}
+        transform={`translate(${transformX})`}
       >
         <>
           {timeRange.map((item, index) => (

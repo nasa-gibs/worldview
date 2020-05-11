@@ -31,11 +31,13 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   }
   return (
     <>
-      <g transform={`translate(${indexGridWithCoeff + xOffsetAdded}, 20)`}>
+      <g
+        transform={`translate(${indexGridWithCoeff + xOffsetAdded})`}
+      >
         <text
           className={`axis-grid-text axis-grid-text-${item.timeScale}`}
           x="0"
-          y="42"
+          y="62"
           fill="white"
           clipPath="url(#textDisplay)"
         >
@@ -45,10 +47,9 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
           ? (
             <text
               className="axis-grid-text axis-grid-text-year"
-              x="0"
-              y="42"
+              x="40"
+              y="62"
               fill="#cccccc"
-              transform="translate(40, 0)"
               clipPath="url(#textDisplay)"
             >
               {dateTextYear}

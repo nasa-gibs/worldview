@@ -162,10 +162,9 @@ class Dragger extends PureComponent {
             <g
               style={{
                 cursor: 'pointer',
-                display: draggerVisible ? 'block' : 'none',
               }}
               className={`timeline-dragger dragger${draggerLetter}`}
-              transform={`translate(${transformX}, 0)`}
+              transform={`translate(${transformX})`}
               onMouseEnter={this.handleHoverMouseEnter}
               onMouseLeave={this.handleHoverMouseLeave}
               clipPath={`url(#selectedDraggerClip${draggerLetter})`}
@@ -181,17 +180,15 @@ class Dragger extends PureComponent {
               v16.592
               c0 2.935-2.38 5.314-5.316 5.314
               h-34.932z"
-                shapeRendering="optimizeSpeed"
               />
               {isCompareModeActive
                 ? (
                   <text
                     fontSize="26px"
                     fontWeight="400"
-                    x="11"
-                    y="8"
+                    x="14"
+                    y="37"
                     fill={disabled ? '#ccc' : '#000'}
-                    transform="translate(4, 30)"
                     textRendering="optimizeLegibility"
                   >
                     {draggerLetter}

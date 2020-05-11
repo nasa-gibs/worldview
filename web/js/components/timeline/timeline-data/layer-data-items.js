@@ -25,33 +25,9 @@ const ignoredLayer = {
 class LayerDataItems extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hoveredTooltip: {},
-    };
 
     // cache for queried date arrays
     this.layerDateArrayCache = {};
-  }
-
-  /**
-  * @desc handle hovering on line and adding active tooltip
-  * @param {String} input
-  * @returns {void}
-  */
-  hoverOnToolTip = (input) => {
-    this.setState({
-      hoveredTooltip: { [input]: true },
-    });
-  }
-
-  /**
-  * @desc handle hovering off line and removing active tooltip
-  * @returns {void}
-  */
-  hoverOffToolTip = () => {
-    this.setState({
-      hoveredTooltip: {},
-    });
   }
 
   /**
@@ -168,9 +144,10 @@ class LayerDataItems extends Component {
   */
   getFormattedDateRange = (layer) => {
     // get start date -or- 'start'
+    const { endDate, startDate } = layer;
     let dateRangeStart;
-    if (layer.startDate) {
-      const yearMonthDaySplit = layer.startDate.split('T')[0].split('-');
+    if (startDate) {
+      const yearMonthDaySplit = startDate.split('T')[0].split('-');
       const year = yearMonthDaySplit[0];
       const month = yearMonthDaySplit[1];
       const day = yearMonthDaySplit[2];
@@ -184,8 +161,8 @@ class LayerDataItems extends Component {
 
     // get end date -or- 'present'
     let dateRangeEnd;
-    if (layer.endDate) {
-      const yearMonthDaySplit = layer.endDate.split('T')[0].split('-');
+    if (endDate) {
+      const yearMonthDaySplit = endDate.split('T')[0].split('-');
       const year = yearMonthDaySplit[0];
       const month = yearMonthDaySplit[1];
       const day = yearMonthDaySplit[2];
@@ -340,11 +317,15 @@ class LayerDataItems extends Component {
     const {
       activeLayers,
       axisWidth,
+      backDate,
+      frontDate,
       getMatchingCoverageLineDimensions,
+      hoveredLayer,
       timeScale,
       position,
       transformX,
     } = this.props;
+    // const { hoveredTooltip } = this.state;
     const emptyLayers = activeLayers.length === 0;
     return (
       <div className="data-panel-layer-list">
@@ -417,29 +398,26 @@ class LayerDataItems extends Component {
                 }}
               >
                 <DataItemContainer
-                  frontDate={this.props.frontDate}
-                  backDate={this.props.backDate}
+                  frontDate={frontDate}
+                  backDate={backDate}
                   getLayerItemStyles={this.getLayerItemStyles}
-                  getHeaderDOMEl={this.getHeaderDOMEl}
+                  // getHeaderDOMEl={this.getHeaderDOMEl}
                   getMaxEndDate={this.getMaxEndDate}
                   getDatesInDateRange={this.getDatesInDateRange}
                   axisWidth={axisWidth}
                   position={position}
                   transformX={transformX}
-                  dateRange={dateRange}
+                  // dateRange={dateRange}
                   layer={layer}
-                  hoverOnToolTip={this.hoverOnToolTip}
-                  hoverOffToolTip={this.hoverOffToolTip}
-                  hoveredTooltip={this.state.hoveredTooltip}
                   layerPeriod={layerPeriod}
                   getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
                   getRangeDateEndWithAddedInterval={this.getRangeDateEndWithAddedInterval}
-                  timeScale={timeScale}
-                  hoveredLayer={this.props.hoveredLayer}
+                  // timeScale={timeScale}
+                  // hoveredLayer={hoveredLayer}
                   isValidMultipleRangesLayer={isValidMultipleRangesLayer}
                   isLayerGreaterZoomWithMultipleCoverage={isLayerGreaterZoomWithMultipleCoverage}
                   isLayerEqualZoomWithMultipleCoverage={isLayerEqualZoomWithMultipleCoverage}
-                  isLayerGreaterIncrementThanZoom={isLayerGreaterIncrementThanZoom}
+                  // isLayerGreaterIncrementThanZoom={isLayerGreaterIncrementThanZoom}
                 />
               </div>
             </div>

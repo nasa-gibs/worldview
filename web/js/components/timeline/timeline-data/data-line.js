@@ -12,7 +12,19 @@ class DataLine extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isTooltipHovered: false,
     };
+  }
+
+  /**
+  * @desc handle hovering on line and adding/removing tooltip
+  * @param {Boolean} isHovered
+  * @returns {void}
+  */
+  toggleHoverToolTip = (isHovered) => {
+    this.setState({
+      isTooltipHovered: isHovered,
+    });
   }
 
   /**
@@ -34,8 +46,8 @@ class DataLine extends Component {
     // eslint-disable-next-line default-case
     switch (lineType) {
       case 'CONTAINER':
-        dateRangeStart = (startDate && startDate.toISOString().split('T')[0]) || 'start';
-        dateRangeEnd = (endDate && endDate.toISOString().split('T')[0]) || 'present';
+        dateRangeStart = (startDate && new Date(startDate).toISOString().split('T')[0]) || 'start';
+        dateRangeEnd = (endDate && new Date(endDate).toISOString().split('T')[0]) || 'present';
         toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         break;
       case 'MULTI':
@@ -79,10 +91,9 @@ class DataLine extends Component {
     const {
       position,
       transformX,
-      hoverOnToolTip,
-      hoverOffToolTip,
-      hoveredTooltip,
+      axisWidth,
     } = this.props;
+    const { isTooltipHovered } = this.state;
     const {
       leftOffset,
       isWidthGreaterThanRendered,
@@ -123,6 +134,11 @@ class DataLine extends Component {
       lineRadius = '6';
     }
 
+    console.log(leftOffset, lineWidth);
+    // handle tooltip offset to keep visible
+    const toolTipOffset = isWidthGreaterThanRendered
+      ? -(axisWidth * 5) / 2 + axisWidth
+      : -rectTransform - axisWidth;
     return (
       <g
         key={index}
@@ -131,18 +147,20 @@ class DataLine extends Component {
         <rect
           id={`data-coverage-line-${dateRangeStartEnd}`}
           className="data-panel-coverage-line"
-          onMouseEnter={() => hoverOnToolTip(`${dateRangeStartEnd}`)}
-          onMouseLeave={() => hoverOffToolTip()}
+          onMouseEnter={() => this.toggleHoverToolTip(true)}
+          onMouseLeave={() => this.toggleHoverToolTip(false)}
           width={`${lineWidth}px`}
           fill={patternType}
           rx={lineRadius}
           style={{
-            transform: `translate(${rectTransform}px, 0)`,
+            transform: `translate(${rectTransform}px)`,
           }}
         >
           <Tooltip
-            isOpen={hoveredTooltip[`${dateRangeStartEnd}`]}
+            isOpen={isTooltipHovered}
             target={`data-coverage-line-${dateRangeStartEnd}`}
+            offset={toolTipOffset}
+            flip={false}
           >
             {toolTipText}
           </Tooltip>
@@ -180,9 +198,6 @@ class DataLine extends Component {
 }
 
 DataLine.propTypes = {
-  hoverOnToolTip: PropTypes.func,
-  hoverOffToolTip: PropTypes.func,
-  hoveredTooltip: PropTypes.object,
   axisWidth: PropTypes.number,
   position: PropTypes.number,
   transformX: PropTypes.number,
@@ -190,7 +205,7 @@ DataLine.propTypes = {
   options: PropTypes.object,
   lineType: PropTypes.string,
   startDate: PropTypes.object,
-  endDate: PropTypes.object,
+  endDate: PropTypes.string,
   color: PropTypes.string,
   layerPeriod: PropTypes.string,
   index: PropTypes.string,

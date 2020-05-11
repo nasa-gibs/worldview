@@ -1329,9 +1329,12 @@ class TimelineAxis extends Component {
     }
 
     let leftOffset = 0;
+    const layerStartBeforeAxisFront = layerStart <= axisFrontDate;
+    const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
+    // oversized width allows axis drag buffer
     let width = axisWidth * 2;
     if (visible) {
-      if (layerStart <= axisFrontDate) {
+      if (layerStartBeforeAxisFront) {
         leftOffset = 0;
       } else {
         // positive diff means layerStart more recent than axisFrontDate
@@ -1340,13 +1343,14 @@ class TimelineAxis extends Component {
         leftOffset = gridDiff + postionTransformX;
       }
 
-      if (layerEnd <= axisBackDate) {
+      if (layerEndBeforeAxisBack) {
         // positive diff means layerEnd earlier than back date
         const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
         width = Math.max(gridDiff + postionTransformX - leftOffset, 0);
       }
     }
+
     return {
       visible,
       leftOffset,
@@ -1365,7 +1369,7 @@ class TimelineAxis extends Component {
     return (
       <g
         className="axis-data-coverage-line"
-        transform={`translate(${-transformX}, 0)`}
+        transform={`translate(${-transformX})`}
         clipPath="url(#matchingCoverage)"
       >
         <rect
@@ -1378,7 +1382,7 @@ class TimelineAxis extends Component {
           ry={0}
           width={width}
           height={10}
-          transform={`translate(${transformX + leftOffset}, 0)`}
+          transform={`translate(${transformX + leftOffset})`}
           fill="rgba(0, 119, 212, 0.5)"
           stroke="rgba(0, 69, 123, 0.8)"
           strokeWidth={3}
@@ -1436,7 +1440,7 @@ class TimelineAxis extends Component {
                 <defs>
                   {/* clip axis grid text */}
                   <clipPath id="textDisplay">
-                    <rect width="64" height="44" />
+                    <rect width="84" height="64" />
                   </clipPath>
                   {/* clip matching coverage data line */}
                   <clipPath id="matchingCoverage">

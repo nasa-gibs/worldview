@@ -22,24 +22,14 @@ class DataItemContainer extends Component {
     // handle date range query/array building
     const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
     this.updateDateRangeState(dateRangesToDisplay);
-
-    // create data line
-
-    // TODO: which state to store position related state for data line? pure component data line preferred
-  }
-
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { layer } = this.props;
+    const { layer, frontDate, backDate } = this.props;
     const { dateRanges } = layer;
 
-    const frontDateChanged = prevProps.frontDate !== this.props.frontDate;
-    const backDateChanged = prevProps.backDate !== this.props.backDate;
-    // console.log(frontDateChanged, backDateChanged);
+    const frontDateChanged = prevProps.frontDate !== frontDate;
+    const backDateChanged = prevProps.backDate !== backDate;
 
     if (frontDateChanged || backDateChanged) {
       const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
@@ -57,21 +47,23 @@ class DataItemContainer extends Component {
     const { inactive } = layer;
 
     const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
+      const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
-      const rangeInterval = Number(range.dateInterval);
+      const rangeInterval = Number(dateInterval);
       // multi time unit range - no year time unit
       const endDateLimit = getMaxEndDate(inactive, isLastInRange);
       // get dates based on date ranges
       const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
+
+      const startDateTime = new Date(startDate).getTime();
+      const endDateTime = new Date(endDate).getTime();
       // add date intervals to mutliCoverageDates object to catch repeats
-      dateIntervalStartDates.forEach((dateInt) => {
-        const dateIntFormatted = dateInt.toISOString();
-        const dateIntTime = new Date(dateInt).getTime();
-        const startDateTime = new Date(range.startDate).getTime();
-        const endDateTime = new Date(range.endDate).getTime();
+      dateIntervalStartDates.forEach((dateIntStartDate) => {
+        const dateIntTime = new Date(dateIntStartDate).getTime();
         // allow overwriting of subsequent date ranges
         if (dateIntTime >= startDateTime && startDateTime <= endDateTime) {
-          mutliCoverageDates[dateIntFormatted] = { date: dateInt, interval: rangeInterval };
+          const dateIntFormatted = dateIntStartDate.toISOString();
+          mutliCoverageDates[dateIntFormatted] = { date: dateIntStartDate, interval: rangeInterval };
         }
       });
 
@@ -95,20 +87,16 @@ class DataItemContainer extends Component {
   render() {
     const {
       axisWidth,
-      position,
-      transformX,
-      dateRange,
-      layer,
-      layerPeriod,
+      getLayerItemStyles,
       getMatchingCoverageLineDimensions,
       getRangeDateEndWithAddedInterval,
-      createMatchingCoverageLineDOMEl,
-      timeScale,
-      hoveredLayer,
-      getLayerItemStyles,
-      isValidMultipleRangesLayer,
-      isLayerGreaterZoomWithMultipleCoverage,
       isLayerEqualZoomWithMultipleCoverage,
+      isLayerGreaterZoomWithMultipleCoverage,
+      isValidMultipleRangesLayer,
+      layer,
+      layerPeriod,
+      position,
+      transformX,
     } = this.props;
     const {
       dataDateRanges,
@@ -137,7 +125,7 @@ class DataItemContainer extends Component {
           }}
         >
           <svg
-            className="data-panel-coverage-line-svg"
+            className={`data-panel-coverage-line-svg data-panel-coverage-line-svg-${id}`}
             width={axisWidth}
             viewBox={`0 0 ${axisWidth} 64`}
           >
@@ -179,9 +167,6 @@ class DataItemContainer extends Component {
                   && (
                     <React.Fragment key={key}>
                       <DataLine
-                        hoverOnToolTip={this.props.hoverOnToolTip}
-                        hoverOffToolTip={this.props.hoverOffToolTip}
-                        hoveredTooltip={this.props.hoveredTooltip}
                         axisWidth={axisWidth}
                         position={position}
                         transformX={transformX}
@@ -199,9 +184,6 @@ class DataItemContainer extends Component {
               })
               : containerLineDimensions.visible && (
                 <DataLine
-                  hoverOnToolTip={this.props.hoverOnToolTip}
-                  hoverOffToolTip={this.props.hoverOffToolTip}
-                  hoveredTooltip={this.props.hoveredTooltip}
                   axisWidth={axisWidth}
                   position={position}
                   transformX={transformX}
@@ -224,23 +206,20 @@ class DataItemContainer extends Component {
 
 DataItemContainer.propTypes = {
   axisWidth: PropTypes.number,
-  position: PropTypes.number,
-  transformX: PropTypes.number,
-  dateRange: PropTypes.string,
-  frontDate: PropTypes.string,
   backDate: PropTypes.string,
+  frontDate: PropTypes.string,
+  getDatesInDateRange: PropTypes.func,
+  getLayerItemStyles: PropTypes.func,
+  getMatchingCoverageLineDimensions: PropTypes.func,
+  getMaxEndDate: PropTypes.func,
+  getRangeDateEndWithAddedInterval: PropTypes.func,
+  isLayerEqualZoomWithMultipleCoverage: PropTypes.bool,
+  isLayerGreaterZoomWithMultipleCoverage: PropTypes.bool,
+  isValidMultipleRangesLayer: PropTypes.bool,
   layer: PropTypes.object,
   layerPeriod: PropTypes.string,
-  getMatchingCoverageLineDimensions: PropTypes.func,
-  getRangeDateEndWithAddedInterval: PropTypes.func,
-  createMatchingCoverageLineDOMEl: PropTypes.func,
-  timeScale: PropTypes.string,
-  hoveredLayer: PropTypes.string,
-  isValidMultipleRangesLayer: PropTypes.bool,
-  isLayerGreaterZoomWithMultipleCoverage: PropTypes.bool,
-  isLayerEqualZoomWithMultipleCoverage: PropTypes.bool,
-  getMaxEndDate: PropTypes.func,
-  getDatesInDateRange: PropTypes.func,
+  position: PropTypes.number,
+  transformX: PropTypes.number,
 };
 
 export default DataItemContainer;

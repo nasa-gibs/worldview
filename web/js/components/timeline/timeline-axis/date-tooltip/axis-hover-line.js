@@ -75,7 +75,7 @@ class AxisHoverLine extends PureComponent {
             x2="0"
             y1="0"
             y2={lineHeightInner}
-            transform={`translate(${linePosition + 1}, 0)`}
+            transform={`translate(${linePosition + 1})`}
           />
         </svg>
       )

@@ -152,7 +152,7 @@ class TimelineData extends Component {
     const isWidthGreaterThanRendered = layerStart < axisFrontDate || layerEnd > axisBackDate;
     const layerStartBeforeAxisFront = layerStart <= axisFrontDate;
     const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
-
+    // oversized width allows axis drag buffer
     let width = axisWidth * 5;
     if (visible) {
       if (layerStartBeforeAxisFront) {
@@ -278,9 +278,11 @@ class TimelineData extends Component {
 
     const emptyLayers = activeLayers.length === 0;
 
-    // handle conditional styling
+    // handle conditional container styling
     const maxHeightScrollBar = '203px';
-    const layerListItemHeigthConstant = emptyLayers ? 41 : layers.length * 41;
+    const layerListItemHeigthConstant = emptyLayers
+      ? 41
+      : layers.length * 41;
 
     const dataAvailabilityHandleTopOffset = `${Math.max(-54 - layerListItemHeigthConstant, -259)}px`;
 
@@ -332,8 +334,7 @@ class TimelineData extends Component {
                 toggle={() => this.addMatchingCoverageToTimeline(!shouldIncludeHiddenLayers)}
               />
             </header>
-            {/* <Scrollbars style={{ maxHeight: maxHeightScrollBar }}> */}
-            <div style={{ maxHeight: maxHeightScrollBar, overflowY: 'scroll' }}>
+            <Scrollbars style={{ maxHeight: maxHeightScrollBar }}>
               <LayerDataItems
                 activeLayers={activeLayers}
                 appNow={appNow}
@@ -346,8 +347,7 @@ class TimelineData extends Component {
                 position={position}
                 transformX={transformX}
               />
-            </div>
-            {/* </Scrollbars> */}
+            </Scrollbars>
           </div>
           )}
         </div>
