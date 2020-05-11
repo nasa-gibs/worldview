@@ -45,25 +45,10 @@ export default [
     hideZeroCount: true,
   },
   {
-    field: 'track',
-    label: 'Track Asc/Desc',
-    filterType: 'any',
-    tooltip: 'Whether the satellite orbit track passes over on the ascending or descending node',
-    hideZeroCount: true,
-  },
-  {
     field: 'daynight',
     label: 'Track Day/Night',
     filterType: 'any',
     tooltip: 'Whether the satellite orbit track passes over during the daytime or nighttime',
-    hideZeroCount: true,
-  },
-  {
-    field: 'processingLevelId',
-    label: 'Processing Level',
-    filterType: 'any',
-    tooltip: 'Level of data processing. For more information see: <a href="https://go.nasa.gov/3dq5oXx" target="_blank"> https://go.nasa.gov/3dq5oXx </a>',
-    show: 15,
     hideZeroCount: true,
   },
 ];
