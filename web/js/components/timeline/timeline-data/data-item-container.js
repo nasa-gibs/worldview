@@ -17,23 +17,35 @@ class DataItemContainer extends Component {
   }
 
   componentDidMount() {
-    const { layer } = this.props;
+    const {
+      layer,
+      needDateRangeBuilt,
+    } = this.props;
     const { dateRanges } = layer;
     // handle date range query/array building
-    const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
-    this.updateDateRangeState(dateRangesToDisplay);
+    if (needDateRangeBuilt) {
+      const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
+      this.updateDateRangeState(dateRangesToDisplay);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { layer, frontDate, backDate } = this.props;
+    const {
+      layer,
+      frontDate,
+      backDate,
+      needDateRangeBuilt,
+    } = this.props;
     const { dateRanges } = layer;
 
     const frontDateChanged = prevProps.frontDate !== frontDate;
     const backDateChanged = prevProps.backDate !== backDate;
 
     if (frontDateChanged || backDateChanged) {
-      const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
-      this.updateDateRangeState(dateRangesToDisplay);
+      if (needDateRangeBuilt) {
+        const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
+        this.updateDateRangeState(dateRangesToDisplay);
+      }
     }
   }
 
@@ -54,7 +66,6 @@ class DataItemContainer extends Component {
       const endDateLimit = getMaxEndDate(inactive, isLastInRange);
       // get dates based on date ranges
       const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
-
       const startDateTime = new Date(startDate).getTime();
       const endDateTime = new Date(endDate).getTime();
       // add date intervals to mutliCoverageDates object to catch repeats
@@ -63,10 +74,9 @@ class DataItemContainer extends Component {
         // allow overwriting of subsequent date ranges
         if (dateIntTime >= startDateTime && startDateTime <= endDateTime) {
           const dateIntFormatted = dateIntStartDate.toISOString();
-          mutliCoverageDates[dateIntFormatted] = { date: dateIntStartDate, interval: rangeInterval };
+          mutliCoverageDates[dateIntFormatted] = { date: dateIntFormatted, interval: rangeInterval };
         }
       });
-
       return mutliCoverageDates;
     }, {});
 
@@ -90,13 +100,11 @@ class DataItemContainer extends Component {
       getLayerItemStyles,
       getMatchingCoverageLineDimensions,
       getRangeDateEndWithAddedInterval,
-      isLayerEqualZoomWithMultipleCoverage,
-      isLayerGreaterZoomWithMultipleCoverage,
-      isValidMultipleRangesLayer,
       layer,
       layerPeriod,
       position,
       transformX,
+      needDateRangeBuilt,
     } = this.props;
     const {
       dataDateRanges,
@@ -154,13 +162,14 @@ class DataItemContainer extends Component {
                 <line stroke="#797979" strokeWidth="30" y1="12" />
               </pattern>
             </defs>
-            {isValidMultipleRangesLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage)
+            {needDateRangeBuilt
               ? dataDateRanges.map((itemRange, multiIndex, array) => {
                 const { date, interval } = itemRange;
+                const dateObj = new Date(date);
                 const nextDate = array[multiIndex + 1];
-                const rangeDateEnd = getRangeDateEndWithAddedInterval(date, layerPeriod, interval, nextDate);
+                const rangeDateEnd = getRangeDateEndWithAddedInterval(dateObj, layerPeriod, interval, nextDate);
                 // get range line dimensions
-                const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, date, rangeDateEnd);
+                const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, dateObj, rangeDateEnd);
                 // create DOM line element
                 const key = `${id}-${multiIndex}`;
                 return multiLineRangeOptions.visible
@@ -190,7 +199,7 @@ class DataItemContainer extends Component {
                   id={id}
                   options={containerLineDimensions}
                   lineType="CONTAINER"
-                  startDate={new Date(startDate)}
+                  startDate={startDate}
                   endDate={endDate}
                   color={lineBackgroundColor}
                   layerPeriod={layerPeriod}
@@ -213,9 +222,7 @@ DataItemContainer.propTypes = {
   getMatchingCoverageLineDimensions: PropTypes.func,
   getMaxEndDate: PropTypes.func,
   getRangeDateEndWithAddedInterval: PropTypes.func,
-  isLayerEqualZoomWithMultipleCoverage: PropTypes.bool,
-  isLayerGreaterZoomWithMultipleCoverage: PropTypes.bool,
-  isValidMultipleRangesLayer: PropTypes.bool,
+  needDateRangeBuilt: PropTypes.bool,
   layer: PropTypes.object,
   layerPeriod: PropTypes.string,
   position: PropTypes.number,

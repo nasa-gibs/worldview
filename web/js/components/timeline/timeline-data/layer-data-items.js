@@ -95,7 +95,7 @@ class LayerDataItems extends Component {
   * @param {String} time unit period
   * @param {Number} itemRangeInterval
   * @param {Object} nextDate range object with date
-  * @returns {Object} rangeDateEnd date object
+  * @returns {String} rangeDateEnd date ISO string
   */
   getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
     const { appNow } = this.props;
@@ -134,7 +134,7 @@ class LayerDataItems extends Component {
     if (appNow < rangeDateEnd) {
       rangeDateEnd = appNow;
     }
-    return rangeDateEnd;
+    return new Date(rangeDateEnd).toISOString();
   }
 
   /**
@@ -227,7 +227,13 @@ class LayerDataItems extends Component {
     const rangeInterval = Number(dateInterval);
     let rangeEnd;
 
-    let startDateLimit = new Date(frontDate);
+    const startDateObj = new Date(startDate);
+    const frontDateObj = new Date(frontDate);
+    // limit start date based on layer range instead of axis front date
+    let startDateLimit = startDateObj > frontDateObj
+      ? startDateObj
+      : frontDateObj;
+
     // get leading start date minus rangeInterval and add to end date
     startDateLimit = moment.utc(startDateLimit).subtract(rangeInterval, layerPeriod);
     startDateLimit = moment(startDateLimit).toDate();
@@ -242,7 +248,7 @@ class LayerDataItems extends Component {
 
     // get dates within given date range
     let dateIntervalStartDates = [];
-    const startLessThanOrEqualToEndDateLimit = new Date(startDate).getTime() <= endDateLimit.getTime();
+    const startLessThanOrEqualToEndDateLimit = startDateObj.getTime() <= endDateLimit.getTime();
     const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd).getTime() >= startDateLimit.getTime();
     if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
       // check layer date array cache and use caches date array if available, if not add date array
@@ -320,12 +326,10 @@ class LayerDataItems extends Component {
       backDate,
       frontDate,
       getMatchingCoverageLineDimensions,
-      hoveredLayer,
       timeScale,
       position,
       transformX,
     } = this.props;
-    // const { hoveredTooltip } = this.state;
     const emptyLayers = activeLayers.length === 0;
     return (
       <div className="data-panel-layer-list">
@@ -347,7 +351,8 @@ class LayerDataItems extends Component {
           }
           // check for multiple date ranges
           let multipleCoverageRanges = false;
-          if (dateRanges && !ignoredLayer[id]) {
+          const isValidLayer = !ignoredLayer[id] && dateRanges;
+          if (isValidLayer) {
             multipleCoverageRanges = dateRanges.length > 1;
           }
           let layerPeriod = this.getFormattedTimePeriod(period);
@@ -373,10 +378,11 @@ class LayerDataItems extends Component {
             ? Number(dateRanges[0].dateInterval)
             : 1;
 
-          const isValidMultipleRangesLayer = !!(!ignoredLayer[id] && dateRanges);
-          const isLayerGreaterZoomWithMultipleCoverage = !!(isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex));
-          // const isLayerEqualZoomWithMultipleCoverage = !!(isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex && dateRangeIntervalZeroIndex !== 1);
-          const isLayerEqualZoomWithMultipleCoverage = !!(isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1);
+          // conditional check to determine how data line will be built in child component
+          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
+          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1;
+          // determine date range building vs using startDate to endDate single coverage
+          const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage));
           const key = index;
 
           return (
@@ -401,23 +407,16 @@ class LayerDataItems extends Component {
                   frontDate={frontDate}
                   backDate={backDate}
                   getLayerItemStyles={this.getLayerItemStyles}
-                  // getHeaderDOMEl={this.getHeaderDOMEl}
                   getMaxEndDate={this.getMaxEndDate}
                   getDatesInDateRange={this.getDatesInDateRange}
                   axisWidth={axisWidth}
                   position={position}
                   transformX={transformX}
-                  // dateRange={dateRange}
                   layer={layer}
                   layerPeriod={layerPeriod}
                   getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
                   getRangeDateEndWithAddedInterval={this.getRangeDateEndWithAddedInterval}
-                  // timeScale={timeScale}
-                  // hoveredLayer={hoveredLayer}
-                  isValidMultipleRangesLayer={isValidMultipleRangesLayer}
-                  isLayerGreaterZoomWithMultipleCoverage={isLayerGreaterZoomWithMultipleCoverage}
-                  isLayerEqualZoomWithMultipleCoverage={isLayerEqualZoomWithMultipleCoverage}
-                  // isLayerGreaterIncrementThanZoom={isLayerGreaterIncrementThanZoom}
+                  needDateRangeBuilt={needDateRangeBuilt}
                 />
               </div>
             </div>

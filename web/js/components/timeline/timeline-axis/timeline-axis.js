@@ -1329,8 +1329,9 @@ class TimelineAxis extends Component {
     }
 
     let leftOffset = 0;
-    const layerStartBeforeAxisFront = layerStart <= axisFrontDate;
+    const layerStartBeforeAxisFront = layerStart < axisFrontDate;
     const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
+
     // oversized width allows axis drag buffer
     let width = axisWidth * 2;
     if (visible) {

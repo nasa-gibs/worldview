@@ -30,8 +30,8 @@ class DataLine extends Component {
   /**
   * @desc get formatted display dates for line tooltips and selectors
   * @param {String} lineType
-  * @param {Object} startDate date
-  * @param {Object} endDate date
+  * @param {String} startDate date ISO string
+  * @param {String} endDate date ISO string
   * @param {String} layerPeriod
   * @returns {Object}
   *   @param {String} dateRangeStart
@@ -46,23 +46,23 @@ class DataLine extends Component {
     // eslint-disable-next-line default-case
     switch (lineType) {
       case 'CONTAINER':
-        dateRangeStart = (startDate && new Date(startDate).toISOString().split('T')[0]) || 'start';
-        dateRangeEnd = (endDate && new Date(endDate).toISOString().split('T')[0]) || 'present';
+        dateRangeStart = (startDate && startDate.split('T')[0]) || 'start';
+        dateRangeEnd = (endDate && endDate.split('T')[0]) || 'present';
         toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         break;
       case 'MULTI':
         // handle minutes range display text (ex: '14:50 to 15:00')
         if (layerPeriod === 'minutes') {
           // eslint-disable-next-line prefer-destructuring
-          dateRangeStart = startDate.toISOString().split('T')[1];
+          dateRangeStart = startDate.split('T')[1];
           // eslint-disable-next-line prefer-destructuring
-          dateRangeEnd = endDate.toISOString().split('T')[1];
+          dateRangeEnd = endDate.split('T')[1];
           toolTipText = `${dateRangeStart.split(':', 2).join(':')} to ${dateRangeEnd.split(':', 2).join(':')}`;
           dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
           dateRangeEnd = dateRangeEnd.replace(/[.:]/g, '_');
         } else {
-          dateRangeStart = startDate.toISOString().replace(/[.:]/g, '_');
-          dateRangeEnd = endDate.toISOString().replace(/[.:]/g, '_');
+          dateRangeStart = startDate.replace(/[.:]/g, '_');
+          dateRangeEnd = endDate.replace(/[.:]/g, '_');
           toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
         }
         break;
@@ -128,13 +128,14 @@ class DataLine extends Component {
       : '0';
 
     // handle "false transform" line edge to simulate line movement for striped background
-    if (leftOffset === 0 && isWidthGreaterThanRendered && layerEndBeforeAxisBack) {
+    if (leftOffset === 0
+      && ((isWidthGreaterThanRendered && layerEndBeforeAxisBack)
+      || (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
       lineWidth -= position + transformX;
       rectTransform += position + transformX;
       lineRadius = '6';
     }
 
-    console.log(leftOffset, lineWidth);
     // handle tooltip offset to keep visible
     const toolTipOffset = isWidthGreaterThanRendered
       ? -(axisWidth * 5) / 2 + axisWidth
@@ -160,7 +161,6 @@ class DataLine extends Component {
             isOpen={isTooltipHovered}
             target={`data-coverage-line-${dateRangeStartEnd}`}
             offset={toolTipOffset}
-            flip={false}
           >
             {toolTipText}
           </Tooltip>
@@ -204,7 +204,7 @@ DataLine.propTypes = {
   id: PropTypes.string,
   options: PropTypes.object,
   lineType: PropTypes.string,
-  startDate: PropTypes.object,
+  startDate: PropTypes.string,
   endDate: PropTypes.string,
   color: PropTypes.string,
   layerPeriod: PropTypes.string,
