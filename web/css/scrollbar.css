@@ -18,12 +18,12 @@ html {
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+  scrollbar-color: #aaa transparent;
 }
 
 /* Chrome/Safari/Edge(?) */
 *::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 *::-webkit-scrollbar-track {
   background: transparent;
