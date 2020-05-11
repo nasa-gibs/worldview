@@ -1,4 +1,4 @@
-**12 March 2020 Notice**: We have identified a potential irregularity in the AMSR-U2 Snow Water Equivalent data set. The irregularity is manifest in what appears to be an artificial Snow Water Equivalent (SWE) boundary extending across North America. The SWE boundary is more uniform than one would expect for northern hemisphere snow cover and caution is recommended when using this data set at this time. We are actively investigating the issue.
+**6 May 2020 Notice**: The data provider has identified a potential irregularity in the Snow Water Equivalent (SWE) Monthly data set that results in what appears to be an artificial, uniform boundary in SWE values extending across North America. The Principal Investigators are actively examining the data to determine the source of the artificial boundary. Where SWE data values exist, there is confidence that the SWE values are valid. However, users should be cautious when using the data where no data values exist in the northern hemisphere until further notice.
 
 ---
 
