@@ -133,13 +133,13 @@ class DataItemContainer extends Component {
           }}
         >
           <svg
-            className={`data-panel-coverage-line-svg data-panel-coverage-line-svg-${id}`}
+            className="data-panel-coverage-line-svg"
             width={axisWidth}
             viewBox={`0 0 ${axisWidth} 64`}
           >
             <defs>
               <clipPath id="dataLineBoundary">
-                <rect x={0} y="0" width={axisWidth} height={12} />
+                <rect x="0" y="0" width={axisWidth} height={12} />
               </clipPath>
               <pattern
                 id="pattern"

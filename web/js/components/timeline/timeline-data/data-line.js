@@ -1,32 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'reactstrap';
 
 /*
  * Data Line for DOM Element layer data coverage.
  *
- * @class DataLine
+ * @class DataLine PureComponent
  */
 
-class DataLine extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isTooltipHovered: false,
-    };
-  }
-
-  /**
-  * @desc handle hovering on line and adding/removing tooltip
-  * @param {Boolean} isHovered
-  * @returns {void}
-  */
-  toggleHoverToolTip = (isHovered) => {
-    this.setState({
-      isTooltipHovered: isHovered,
-    });
-  }
-
+class DataLine extends PureComponent {
   /**
   * @desc get formatted display dates for line tooltips and selectors
   * @param {String} lineType
@@ -91,9 +72,7 @@ class DataLine extends Component {
     const {
       position,
       transformX,
-      axisWidth,
     } = this.props;
-    const { isTooltipHovered } = this.state;
     const {
       leftOffset,
       isWidthGreaterThanRendered,
@@ -102,6 +81,7 @@ class DataLine extends Component {
       layerEndBeforeAxisBack,
     } = options;
     let lineWidth = Math.max(width, 0);
+    const positionTransformCombined = position + transformX;
 
     // get formatted dates based on line type
     const {
@@ -118,7 +98,7 @@ class DataLine extends Component {
 
     // allow moving striped background for large width lines
     let rectTransform = leftOffset === 0 && isWidthGreaterThanRendered && !layerEndBeforeAxisBack
-      ? position + transformX
+      ? positionTransformCombined
       : leftOffset;
 
     // determine line radius for line start/end vs. partial large width lines
@@ -131,15 +111,11 @@ class DataLine extends Component {
     if (leftOffset === 0
       && ((isWidthGreaterThanRendered && layerEndBeforeAxisBack)
       || (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
-      lineWidth -= position + transformX;
-      rectTransform += position + transformX;
+      lineWidth -= positionTransformCombined;
+      rectTransform += positionTransformCombined;
       lineRadius = '6';
     }
 
-    // handle tooltip offset to keep visible
-    const toolTipOffset = isWidthGreaterThanRendered
-      ? -(axisWidth * 5) / 2 + axisWidth
-      : -rectTransform - axisWidth;
     return (
       <g
         key={index}
@@ -148,8 +124,6 @@ class DataLine extends Component {
         <rect
           id={`data-coverage-line-${dateRangeStartEnd}`}
           className="data-panel-coverage-line"
-          onMouseEnter={() => this.toggleHoverToolTip(true)}
-          onMouseLeave={() => this.toggleHoverToolTip(false)}
           width={`${lineWidth}px`}
           fill={patternType}
           rx={lineRadius}
@@ -157,13 +131,7 @@ class DataLine extends Component {
             transform: `translate(${rectTransform}px)`,
           }}
         >
-          <Tooltip
-            isOpen={isTooltipHovered}
-            target={`data-coverage-line-${dateRangeStartEnd}`}
-            offset={toolTipOffset}
-          >
-            {toolTipText}
-          </Tooltip>
+          <title>{toolTipText}</title>
         </rect>
       </g>
     );
@@ -198,7 +166,6 @@ class DataLine extends Component {
 }
 
 DataLine.propTypes = {
-  axisWidth: PropTypes.number,
   position: PropTypes.number,
   transformX: PropTypes.number,
   id: PropTypes.string,
