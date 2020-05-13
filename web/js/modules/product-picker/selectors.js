@@ -20,7 +20,7 @@ const getSelectedDate = ({ date }) => date && date.selected;
 export const getLayersForProjection = createSelector(
   [getConfig, getProjection, getSelectedDate],
   (config, projection, selectedDate) => {
-    const filteredRows = buildLayerFacetProps(config, selectedDate)
+    const layersWithFacetProps = buildLayerFacetProps(config, selectedDate)
       // Only use the layers for the active projection
       .filter((layer) => layer.projections[projection])
       .map((layer) => {
@@ -34,7 +34,7 @@ export const getLayersForProjection = createSelector(
         }
         return layer;
       });
-    return lodashSortBy(filteredRows, (layer) => lodashIndexOf(config.layerOrder, layer.id));
+    return lodashSortBy(layersWithFacetProps, (layer) => lodashIndexOf(config.layerOrder, layer.id));
   },
 );
 
