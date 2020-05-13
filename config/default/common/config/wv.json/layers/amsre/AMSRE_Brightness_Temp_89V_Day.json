@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "AMSRE_Brightness_Temp_89V_Day": {
-            "id":       "AMSRE_Brightness_Temp_89V_Day",
-            "title":    "Brightness Temperature (89V GHz B Scan, Day)",
-            "subtitle": "Aqua / AMSR-E",
-            "description": "amsre/AMSRE_Brightness_Temp_89V_Day",
-            "group":    "overlays",
-            "product":  "AE_L2A_DAY",
-            "layergroup": [
-              "amsre"
-            ],
-            "inactive": true,
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-            ]
-        }
+  "layers": {
+    "AMSRE_Brightness_Temp_89V_Day": {
+      "id": "AMSRE_Brightness_Temp_89V_Day",
+      "title": "Brightness Temperature (89V GHz B Scan, Day)",
+      "subtitle": "Aqua / AMSR-E",
+      "description": "amsre/AMSRE_Brightness_Temp_89V_Day",
+      "group": "overlays",
+      "product": "AE_L2A_DAY",
+      "layergroup": [
+        "amsre"
+      ],
+      "inactive": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

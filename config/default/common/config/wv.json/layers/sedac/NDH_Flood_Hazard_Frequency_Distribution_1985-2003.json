@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "NDH_Flood_Hazard_Frequency_Distribution_1985-2003": {
-            "id":       "NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
-            "title":    "Flood Hazard: Frequency and Distribution",
-            "subtitle": "Flood Hazard Frequency and Distribution, v1 (1985-2003)",
-            "description": "sedac/NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_CHRR_NDH_FLOOD_HFD",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "NDH_Flood_Hazard_Frequency_Distribution_1985-2003": {
+      "id": "NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
+      "title": "Flood Hazard: Frequency and Distribution",
+      "subtitle": "Flood Hazard Frequency and Distribution, v1 (1985-2003)",
+      "description": "sedac/NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_CHRR_NDH_FLOOD_HFD",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

@@ -1,19 +1,19 @@
 {
-    "layers": {
-        "LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology": {
-            "id":       "LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology",
-            "title":    "Lightning Flash Rate (Combined)",
-            "subtitle": "TRMM / LIS, OrbView-1 / OTD",
-            "description": "multi-mission/trmm_orbview/LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "multi-mission",
-              "multi-mission_trmmorbview"
-            ],
-            "product":  "lohrfc",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology": {
+      "id": "LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology",
+      "title": "Lightning Flash Rate (Combined)",
+      "subtitle": "TRMM / LIS, OrbView-1 / OTD",
+      "description": "multi-mission/trmm_orbview/LIS_High_Resolution_Full_Climatology_Combined_Flash_Rate_Climatology",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "multi-mission",
+        "multi-mission_trmmorbview"
+      ],
+      "product": "lohrfc",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

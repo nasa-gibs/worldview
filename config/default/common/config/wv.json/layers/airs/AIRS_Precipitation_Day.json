@@ -1,23 +1,28 @@
 {
-    "layers": {
-        "AIRS_Precipitation_Day": {
-            "id":       "AIRS_Precipitation_Day",
-            "title":    "Precipitation Estimate (Day)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_Precipitation_Day",
-            "tags":     "rain snow",
-            "group":    "overlays",
-            "product":  "AIRX2SUP_DAY",
-
-            "layergroup": [
-              "airs"
-            ],
-            "palette": {
-                "recommended": ["blue_1", "blue_3"]
-            },
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-            ]
-        }
+  "layers": {
+    "AIRS_Precipitation_Day": {
+      "id": "AIRS_Precipitation_Day",
+      "title": "Precipitation Estimate (Day)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_Precipitation_Day",
+      "tags": "rain snow",
+      "group": "overlays",
+      "product": "AIRX2SUP_DAY",
+      "layergroup": [
+        "airs"
+      ],
+      "palette": {
+        "recommended": [
+          "blue_1",
+          "blue_3"
+        ]
+      },
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

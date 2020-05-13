@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly": {
-            "id":       "MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly",
-            "title":    "Sea Surface Temperature (L3, Night, Monthly, Mid Infrared, 4 km)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly",
-            "group":    "overlays",
-            "tags": "ssc podaac PO.DAAC",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MODIS_TERRA_L3_SST_MID-IR_MONTHLY_4KM_NIGHTTIME_V2014.0",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly": {
+      "id": "MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly",
+      "title": "Sea Surface Temperature (L3, Night, Monthly, Mid Infrared, 4 km)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly",
+      "group": "overlays",
+      "tags": "ssc podaac PO.DAAC",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MODIS_TERRA_L3_SST_MID-IR_MONTHLY_4KM_NIGHTTIME_V2014.0",
+      "wrapadjacentdays": true
     }
+  }
 }

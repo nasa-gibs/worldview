@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "AMSRU2_Soil_Moisture_NPD_Day": {
-            "id":       "AMSRU2_Soil_Moisture_NPD_Day",
-            "title":    "Soil Moisture (Normalized Polarization Difference, Day)",
-            "subtitle": "GCOM-W1 / AMSR2",
-            "description": "amsr2/AMSRU2_Soil_Moisture_NPD_Day",
-            "tags":     "amsr-u2",
-            "group":    "overlays",
-            "layergroup": [
-              "amsr2"
-            ],
-            "product":  "AU_Land",
-            "tracks": [
-            "OrbitTracks_GCOM-W1_Ascending"
-             ]
-        }
+  "layers": {
+    "AMSRU2_Soil_Moisture_NPD_Day": {
+      "id": "AMSRU2_Soil_Moisture_NPD_Day",
+      "title": "Soil Moisture (Normalized Polarization Difference, Day)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSRU2_Soil_Moisture_NPD_Day",
+      "tags": "amsr-u2",
+      "group": "overlays",
+      "layergroup": [
+        "amsr2"
+      ],
+      "product": "AU_Land",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

@@ -1,21 +1,24 @@
 {
-    "layers": {
-        "MODIS_Terra_AOD_Deep_Blue_Land": {
-            "id":       "MODIS_Terra_AOD_Deep_Blue_Land",
-            "title":    "Deep Blue Aerosol Optical Depth (Land)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_AOD_Deep_Blue_Land",
-            "tags":     "aod",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD04_L2",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Terra_Descending"
-             ]
-            }
-        }
+  "layers": {
+    "MODIS_Terra_AOD_Deep_Blue_Land": {
+      "id": "MODIS_Terra_AOD_Deep_Blue_Land",
+      "title": "Deep Blue Aerosol Optical Depth (Land)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_AOD_Deep_Blue_Land",
+      "tags": "aod",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD04_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
+}

@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "MLS_HNO3_46hPa_Night": {
-            "id":       "MLS_HNO3_46hPa_Night",
-            "title":    "Nitric Acid (46 hPa, Night)",
-            "subtitle": "Aura / MLS",
-            "description": "mls/MLS_HNO3_46hPa_Night",
-            "tags":     "hno3",
-            "group":    "overlays",
-            "layergroup": [
-              "mls"
-            ],
-            "product":  "ML2HNO3",
-            "tracks": [
-            "OrbitTracks_Aura_Descending"
-             ]
-        }
+  "layers": {
+    "MLS_HNO3_46hPa_Night": {
+      "id": "MLS_HNO3_46hPa_Night",
+      "title": "Nitric Acid (46 hPa, Night)",
+      "subtitle": "Aura / MLS",
+      "description": "mls/MLS_HNO3_46hPa_Night",
+      "tags": "hno3",
+      "group": "overlays",
+      "layergroup": [
+        "mls"
+      ],
+      "product": "ML2HNO3",
+      "tracks": [
+        "OrbitTracks_Aura_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

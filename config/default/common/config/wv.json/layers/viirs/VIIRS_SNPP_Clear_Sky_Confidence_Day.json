@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "VIIRS_SNPP_Clear_Sky_Confidence_Day": {
-            "id":       "VIIRS_SNPP_Clear_Sky_Confidence_Day",
-            "title":    "Clear Sky Confidence (Day)",
-            "subtitle": "Suomi NPP / VIIRS",
-            "description": "viirs/VIIRS_SNPP_Clear_Sky_Confidence_Day",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "viirs"
-            ],
-            "product":  "CLDMSK_L2_VIIRS_SNPP_NRT",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Suomi_NPP_Ascending"
-            ]
-        }
+  "layers": {
+    "VIIRS_SNPP_Clear_Sky_Confidence_Day": {
+      "id": "VIIRS_SNPP_Clear_Sky_Confidence_Day",
+      "title": "Clear Sky Confidence (Day)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_Clear_Sky_Confidence_Day",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "viirs"
+      ],
+      "product": "CLDMSK_L2_VIIRS_SNPP_NRT",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

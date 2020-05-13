@@ -9,12 +9,17 @@
       "group": "overlays",
       "format": "image/png",
       "period": "daily",
-      "tileSize": [512, 512],
+      "tileSize": [
+        512,
+        512
+      ],
       "type": "wms",
-      "layergroup": ["modis", "modis_terra"],
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
       "transition": "true",
       "startDate": "2012-05-08",
-
       "projections": {
         "arctic": {
           "source": "GIBS:wms:arctic"
@@ -23,7 +28,6 @@
           "source": "GIBS:wms"
         }
       },
-
       "palette": {
         "id": "MODIS_Combined_Thermal_Anomalies_All",
         "immutable": "true"

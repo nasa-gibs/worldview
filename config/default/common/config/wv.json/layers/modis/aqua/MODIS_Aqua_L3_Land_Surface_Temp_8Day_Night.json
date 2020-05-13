@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night": {
-            "id":       "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night",
-            "title":    "Land Surface Temperature (L3, 8-Day, Night)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night",
-            "tags":     "lst",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD11A2",
-            "wrapadjacentdays": true
-            }
-        }
+  "layers": {
+    "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night": {
+      "id": "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night",
+      "title": "Land Surface Temperature (L3, 8-Day, Night)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_Land_Surface_Temp_8Day_Night",
+      "tags": "lst",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD11A2",
+      "wrapadjacentdays": true
     }
+  }
+}

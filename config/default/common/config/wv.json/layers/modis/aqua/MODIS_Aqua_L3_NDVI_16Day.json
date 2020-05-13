@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "MODIS_Aqua_L3_NDVI_16Day": {
-            "id":       "MODIS_Aqua_L3_NDVI_16Day",
-            "title":    "Vegetation Index (L3, 16-Day)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_NDVI_16Day",
-            "tags":     "ndvi normalized difference vegetation index",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD13Q1",
-            "wrapadjacentdays": true
-            }
-        }
+  "layers": {
+    "MODIS_Aqua_L3_NDVI_16Day": {
+      "id": "MODIS_Aqua_L3_NDVI_16Day",
+      "title": "Vegetation Index (L3, 16-Day)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_NDVI_16Day",
+      "tags": "ndvi normalized difference vegetation index",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD13Q1",
+      "wrapadjacentdays": true
     }
+  }
+}

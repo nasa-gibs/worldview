@@ -1,24 +1,29 @@
 {
-    "layers": {
-        "MODIS_Aqua_Aerosol": {
-            "id":       "MODIS_Aqua_Aerosol",
-            "title":    "Aerosol Optical Depth",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Aerosol",
-            "tags":     "aod",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD04_L2",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Aqua_Ascending"
-             ],
-            "palette": {
-                "recommended":  ["orange_1"]
-            }
-        }
+  "layers": {
+    "MODIS_Aqua_Aerosol": {
+      "id": "MODIS_Aqua_Aerosol",
+      "title": "Aerosol Optical Depth",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Aerosol",
+      "tags": "aod",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD04_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "palette": {
+        "recommended": [
+          "orange_1"
+        ]
+      },
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

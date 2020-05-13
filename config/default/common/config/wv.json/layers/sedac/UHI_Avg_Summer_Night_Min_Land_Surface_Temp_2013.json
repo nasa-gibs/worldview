@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "UHI_Avg_Summer_Night_Min_Land_Surface_Temp_2013": {
-            "id":       "UHI_Avg_Summer_Night_Min_Land_Surface_Temp_2013",
-            "title":    "Average Summer Nighttime Minimum Land Surface Temperature",
-            "subtitle": "Global Urban Heat Island (UHI), v1 (2013)",
-            "description": "sedac/UHI_Avg_Summer_Night_Min_Land_Surface_Temp_2013",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_SEDAC_SDEI_UHI2013",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "UHI_Avg_Summer_Night_Min_Land_Surface_Temp_2013": {
+      "id": "UHI_Avg_Summer_Night_Min_Land_Surface_Temp_2013",
+      "title": "Average Summer Nighttime Minimum Land Surface Temperature",
+      "subtitle": "Global Urban Heat Island (UHI), v1 (2013)",
+      "description": "sedac/UHI_Avg_Summer_Night_Min_Land_Surface_Temp_2013",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_SEDAC_SDEI_UHI2013",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

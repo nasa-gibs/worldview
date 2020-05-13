@@ -1,17 +1,17 @@
 {
-    "layers": {
-        "SSMI_DMSP_F14_Wind_Speed_Over_Oceans_Ascending": {
-            "id":       "SSMI_DMSP_F14_Wind_Speed_Over_Oceans_Ascending",
-            "title":    "Surface Wind Speed Over Oceans (Ascending, Local PM)",
-            "subtitle": "DMSP-F14 / SSMI",
-            "description": "ssmi/SSMI_DMSP_F14_Wind_Speed_Over_Oceans_Ascending",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "ssmi"
-            ],
-            "product":  "rssmif14d",
-            "inactive": true
-        }
+  "layers": {
+    "SSMI_DMSP_F14_Wind_Speed_Over_Oceans_Ascending": {
+      "id": "SSMI_DMSP_F14_Wind_Speed_Over_Oceans_Ascending",
+      "title": "Surface Wind Speed Over Oceans (Ascending, Local PM)",
+      "subtitle": "DMSP-F14 / SSMI",
+      "description": "ssmi/SSMI_DMSP_F14_Wind_Speed_Over_Oceans_Ascending",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "ssmi"
+      ],
+      "product": "rssmif14d",
+      "inactive": true
     }
+  }
 }

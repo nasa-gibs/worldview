@@ -1,20 +1,20 @@
 {
-    "layers": {
-        "GOES-East_ABI_Band13_Clean_Infrared": {
-            "id":       "GOES-East_ABI_Band13_Clean_Infrared",
-            "title":    "Clean Infrared (10.3 µm, Band 13, 10 minute)",
-            "subtitle": "GOES-East/ABI",
-            "description": "goes/GOES-East_ABI_Band13_Clean_Infrared",
-            "group":    "overlays",
-            "tags":     "geostationary geo",
-            "layergroup": [
-              "goes"
-            ],
-            "product":  "",
-            "palette": {
-                "immutable": true
-            },
-            "wrapX": true
-        }
+  "layers": {
+    "GOES-East_ABI_Band13_Clean_Infrared": {
+      "id": "GOES-East_ABI_Band13_Clean_Infrared",
+      "title": "Clean Infrared (10.3 µm, Band 13, 10 minute)",
+      "subtitle": "GOES-East/ABI",
+      "description": "goes/GOES-East_ABI_Band13_Clean_Infrared",
+      "group": "overlays",
+      "tags": "geostationary geo",
+      "layergroup": [
+        "goes"
+      ],
+      "product": "",
+      "palette": {
+        "immutable": true
+      },
+      "wrapX": true
     }
+  }
 }

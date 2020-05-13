@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "MODIS_Aqua_L3_SST_MidIR_9km_Night_Monthly": {
-            "id":       "MODIS_Aqua_L3_SST_MidIR_9km_Night_Monthly",
-            "title":    "Sea Surface Temperature (L3, Night, Monthly, Mid Infrared, 9 km)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_SST_MidIR_9km_Night_Monthly",
-            "group":    "overlays",
-            "tags": "ssc podaac PO.DAAC",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MODIS_AQUA_L3_SST_MID-IR_MONTHLY_9KM_NIGHTTIME_V2014.0",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Aqua_L3_SST_MidIR_9km_Night_Monthly": {
+      "id": "MODIS_Aqua_L3_SST_MidIR_9km_Night_Monthly",
+      "title": "Sea Surface Temperature (L3, Night, Monthly, Mid Infrared, 9 km)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_SST_MidIR_9km_Night_Monthly",
+      "group": "overlays",
+      "tags": "ssc podaac PO.DAAC",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MODIS_AQUA_L3_SST_MID-IR_MONTHLY_9KM_NIGHTTIME_V2014.0",
+      "wrapadjacentdays": true
     }
+  }
 }

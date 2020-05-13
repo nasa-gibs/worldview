@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Terra_Cloud_Optical_Thickness_PCL_1621": {
-            "id":       "MODIS_Terra_Cloud_Optical_Thickness_PCL_1621",
-            "title":    "Cloud Optical Thickness (1.6 microns, PCL, 1621 Algorithm)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_Cloud_Optical_Thickness_PCL_1621",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD06_L2",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Terra_Descending"
-             ]
-            }
-        }
+  "layers": {
+    "MODIS_Terra_Cloud_Optical_Thickness_PCL_1621": {
+      "id": "MODIS_Terra_Cloud_Optical_Thickness_PCL_1621",
+      "title": "Cloud Optical Thickness (1.6 microns, PCL, 1621 Algorithm)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Cloud_Optical_Thickness_PCL_1621",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD06_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
+}

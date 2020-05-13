@@ -1,22 +1,23 @@
 {
-    "layers": {
-        "MODIS_Combined_Value_Added_AOD": {
-            "id":       "MODIS_Combined_Value_Added_AOD",
-            "title":    "MODIS Combined Value-Added Aerosol Optical Depth",
-            "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/combined/MODIS_Combined_Value_Added_AOD",
-            "tags":     "aod",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_combined"
-            ],
-            "product":  "MCDAODHD",
-            "wrapadjacentdays": true,
-
-            "palette": {
-                "recommended":  ["orange_1"]
-            }
-        }
+  "layers": {
+    "MODIS_Combined_Value_Added_AOD": {
+      "id": "MODIS_Combined_Value_Added_AOD",
+      "title": "MODIS Combined Value-Added Aerosol Optical Depth",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_Value_Added_AOD",
+      "tags": "aod",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_combined"
+      ],
+      "product": "MCDAODHD",
+      "wrapadjacentdays": true,
+      "palette": {
+        "recommended": [
+          "orange_1"
+        ]
+      }
     }
+  }
 }

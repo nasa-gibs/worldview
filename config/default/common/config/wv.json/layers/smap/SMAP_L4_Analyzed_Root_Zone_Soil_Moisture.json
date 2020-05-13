@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture": {
-            "id":       "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
-            "title":    "Root Zone Soil Moisture 9 km (L4, 12z Instantaneous)",
-            "subtitle": "SMAP / Model Value-Added",
-            "description": "smap/SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL4SMAU",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture": {
+      "id": "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
+      "title": "Root Zone Soil Moisture 9 km (L4, 12z Instantaneous)",
+      "subtitle": "SMAP / Model Value-Added",
+      "description": "smap/SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL4SMAU",
+      "wrapadjacentdays": true
     }
+  }
 }

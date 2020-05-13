@@ -1,36 +1,39 @@
 {
-    "layers": {
-        "Graticule": {
-            "id":       "Graticule",
-            "tags":     "lat lon lat-lon",
-            "title":    "Latitude-Longitude Lines",
-            "description": "reference/Graticule",
-            "group":    "overlays",
-            "format":   "image/png",
-            "tileSize": [ 512, 512 ],
-            "noTransition":     "true",
-            "type":     "variable",
-            "layergroup": [
-              "reference"
-            ],
-            "projections": {
-                "arctic": {
-                    "subtitle":     "Polarview / Graticule",
-                    "type":         "wmts",
-                    "source":       "GIBS:arctic",
-                    "matrixSet":    "250m"
-                },
-                "antarctic": {
-                    "subtitle":     "Polarview / Graticule",
-                    "type":         "wmts",
-                    "source":       "GIBS:antarctic",
-                    "matrixSet":    "250m"
-                },
-                "geographic": {
-                    "subtitle":     "OpenLayers / Graticule Control",
-                    "type":         "graticule"
-                }
-            }
+  "layers": {
+    "Graticule": {
+      "id": "Graticule",
+      "tags": "lat lon lat-lon",
+      "title": "Latitude-Longitude Lines",
+      "description": "reference/Graticule",
+      "group": "overlays",
+      "format": "image/png",
+      "tileSize": [
+        512,
+        512
+      ],
+      "noTransition": "true",
+      "type": "variable",
+      "layergroup": [
+        "reference"
+      ],
+      "projections": {
+        "arctic": {
+          "subtitle": "Polarview / Graticule",
+          "type": "wmts",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        },
+        "antarctic": {
+          "subtitle": "Polarview / Graticule",
+          "type": "wmts",
+          "source": "GIBS:antarctic",
+          "matrixSet": "250m"
+        },
+        "geographic": {
+          "subtitle": "OpenLayers / Graticule Control",
+          "type": "graticule"
         }
+      }
     }
+  }
 }

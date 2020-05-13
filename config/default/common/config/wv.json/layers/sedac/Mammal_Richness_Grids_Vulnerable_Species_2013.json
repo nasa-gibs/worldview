@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "Mammal_Richness_Grids_Vulnerable_Species_2013": {
-            "id":       "Mammal_Richness_Grids_Vulnerable_Species_2013",
-            "title":    "Mammal Richness - Vulnerable",
-            "subtitle": "Species: Global Mammal Richness Grids, 2015 Release (2013)",
-            "description": "sedac/Mammal_Richness_Grids_Vulnerable_Species_2013",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_SEDAC_SPECIES_MAM_RICH15",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "Mammal_Richness_Grids_Vulnerable_Species_2013": {
+      "id": "Mammal_Richness_Grids_Vulnerable_Species_2013",
+      "title": "Mammal Richness - Vulnerable",
+      "subtitle": "Species: Global Mammal Richness Grids, 2015 Release (2013)",
+      "description": "sedac/Mammal_Richness_Grids_Vulnerable_Species_2013",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_SEDAC_SPECIES_MAM_RICH15",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

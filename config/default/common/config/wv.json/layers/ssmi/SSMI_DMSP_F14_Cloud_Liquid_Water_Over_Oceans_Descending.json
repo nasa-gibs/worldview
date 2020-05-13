@@ -1,17 +1,17 @@
 {
-    "layers": {
-        "SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Descending": {
-            "id":       "SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Descending",
-            "title":    "Cloud Liquid Water Over Oceans (Descending, Local AM)",
-            "subtitle": "DMSP-F14 / SSMI",
-            "description": "ssmi/SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Descending",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "ssmi"
-            ],
-            "product":  "rssmif14d",
-            "inactive": true
-        }
+  "layers": {
+    "SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Descending": {
+      "id": "SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Descending",
+      "title": "Cloud Liquid Water Over Oceans (Descending, Local AM)",
+      "subtitle": "DMSP-F14 / SSMI",
+      "description": "ssmi/SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Descending",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "ssmi"
+      ],
+      "product": "rssmif14d",
+      "inactive": true
     }
+  }
 }

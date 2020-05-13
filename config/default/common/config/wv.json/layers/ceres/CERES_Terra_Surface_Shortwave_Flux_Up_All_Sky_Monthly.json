@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "CERES_Terra_Surface_Shortwave_Flux_Up_All_Sky_Monthly": {
-            "id":       "CERES_Terra_Surface_Shortwave_Flux_Up_All_Sky_Monthly",
-            "title":    "Untuned Shortwave Surface Flux (Monthly, Up, All-Sky)",
-            "subtitle": "Terra / CERES",
-            "description": "ceres/CERES_Terra_Surface_Shortwave_Flux_Up_All_Sky_Monthly",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CER_SYN1deg-Month_Terra-MODIS",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_Terra_Surface_Shortwave_Flux_Up_All_Sky_Monthly": {
+      "id": "CERES_Terra_Surface_Shortwave_Flux_Up_All_Sky_Monthly",
+      "title": "Untuned Shortwave Surface Flux (Monthly, Up, All-Sky)",
+      "subtitle": "Terra / CERES",
+      "description": "ceres/CERES_Terra_Surface_Shortwave_Flux_Up_All_Sky_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CER_SYN1deg-Month_Terra-MODIS",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

@@ -1,17 +1,17 @@
 {
-    "layers": {
-        "SMAP_L3_Active_Passive_Soil_Moisture": {
-            "id":       "SMAP_L3_Active_Passive_Soil_Moisture",
-            "title":    "Soil Moisture 9 km (L3, Active/Passive)",
-            "subtitle": "SMAP / Radar + Radiometer",
-            "description": "smap/SMAP_L3_Active_Passive_Soil_Moisture",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL3SMAP",
-            "wrapadjacentdays": true,
-            "inactive": true
-        }
+  "layers": {
+    "SMAP_L3_Active_Passive_Soil_Moisture": {
+      "id": "SMAP_L3_Active_Passive_Soil_Moisture",
+      "title": "Soil Moisture 9 km (L3, Active/Passive)",
+      "subtitle": "SMAP / Radar + Radiometer",
+      "description": "smap/SMAP_L3_Active_Passive_Soil_Moisture",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL3SMAP",
+      "wrapadjacentdays": true,
+      "inactive": true
     }
+  }
 }
