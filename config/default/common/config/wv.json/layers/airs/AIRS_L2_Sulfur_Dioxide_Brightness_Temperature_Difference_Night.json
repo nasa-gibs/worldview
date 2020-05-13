@@ -1,21 +1,22 @@
 {
-    "layers": {
-        "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night": {
-            "id":       "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night",
-            "title":    "Sulfur Dioxide Brightness Temperature Difference (L2, Night)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night",
-            "tags":     "SO2 Bt sulphur dioxide",
-            "group":    "overlays",
-            "product":  "AIRS2SUP",
-
-             "layergroup": [
-              "airs"
-            ],
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-            ]
-
-         }
+  "layers": {
+    "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night": {
+      "id": "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night",
+      "title": "Sulfur Dioxide Brightness Temperature Difference (L2, Night)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night",
+      "tags": "SO2 Bt sulphur dioxide",
+      "group": "overlays",
+      "product": "AIRS2SUP",
+      "layergroup": [
+        "airs"
+      ],
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

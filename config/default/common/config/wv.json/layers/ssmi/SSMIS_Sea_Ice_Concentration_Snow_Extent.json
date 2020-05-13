@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SSMIS_Sea_Ice_Concentration_Snow_Extent": {
-            "id":       "SSMIS_Sea_Ice_Concentration_Snow_Extent",
-            "title":    "Sea Ice Concentration and Snow Extent",
-            "subtitle": "DMSP 5D-3 F17 / SSMIS",
-            "description": "ssmi/SSMIS_Sea_Ice_Concentration_Snow_Extent",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "ssmi"
-            ],
-            "product":  "NISE"
-        }
+  "layers": {
+    "SSMIS_Sea_Ice_Concentration_Snow_Extent": {
+      "id": "SSMIS_Sea_Ice_Concentration_Snow_Extent",
+      "title": "Sea Ice Concentration and Snow Extent",
+      "subtitle": "DMSP 5D-3 F17 / SSMIS",
+      "description": "ssmi/SSMIS_Sea_Ice_Concentration_Snow_Extent",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "ssmi"
+      ],
+      "product": "NISE"
     }
+  }
 }

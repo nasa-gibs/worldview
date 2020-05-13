@@ -1,19 +1,19 @@
 {
-    "layers": {
-        "CCMP_REMSS_Meridional_Wind_Speed_Monthly": {
-            "id":       "CCMP_REMSS_Meridional_Wind_Speed_Monthly",
-            "title":    "Wind Speed (Meridional, Monthly)",
-            "subtitle": "CCMP",
-            "description": "CCMP_REMSS_Meridional_Wind_Speed_Monthly",
-            "tags":     "podaac PO.DAAC",
-            "layergroup": [
-              "multi-mission",
-              "multi-mission_merged"
-            ],
-            "product": 	"CCMP_MEASURES_ATLAS_L4_OW_L3_5A_MONTHLY_WIND_VECTORS_FLK",
-            "group":    "overlays",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CCMP_REMSS_Meridional_Wind_Speed_Monthly": {
+      "id": "CCMP_REMSS_Meridional_Wind_Speed_Monthly",
+      "title": "Wind Speed (Meridional, Monthly)",
+      "subtitle": "CCMP",
+      "description": "CCMP_REMSS_Meridional_Wind_Speed_Monthly",
+      "tags": "podaac PO.DAAC",
+      "layergroup": [
+        "multi-mission",
+        "multi-mission_merged"
+      ],
+      "product": "CCMP_MEASURES_ATLAS_L4_OW_L3_5A_MONTHLY_WIND_VECTORS_FLK",
+      "group": "overlays",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

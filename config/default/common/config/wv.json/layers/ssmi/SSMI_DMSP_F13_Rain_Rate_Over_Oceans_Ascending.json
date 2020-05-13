@@ -1,17 +1,17 @@
 {
-    "layers": {
-        "SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending": {
-            "id":       "SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending",
-            "title":    "Rain Rate Over Oceans (Ascending, Local PM)",
-            "subtitle": "DMSP-F13 / SSMI",
-            "description": "ssmi/SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending",
-            "tags":     "precipitation",
-            "group":    "overlays",
-            "layergroup": [
-              "ssmi"
-            ],
-            "product":  "rssmif13d",
-            "inactive": true
-        }
+  "layers": {
+    "SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending": {
+      "id": "SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending",
+      "title": "Rain Rate Over Oceans (Ascending, Local PM)",
+      "subtitle": "DMSP-F13 / SSMI",
+      "description": "ssmi/SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending",
+      "tags": "precipitation",
+      "group": "overlays",
+      "layergroup": [
+        "ssmi"
+      ],
+      "product": "rssmif13d",
+      "inactive": true
     }
+  }
 }

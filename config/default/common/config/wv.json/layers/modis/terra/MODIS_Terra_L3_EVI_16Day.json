@@ -1,17 +1,17 @@
 {
-    "layers": {
-        "MODIS_Terra_L3_EVI_16Day": {
-            "id":       "MODIS_Terra_L3_EVI_16Day",
-            "title":    "Enhanced Vegetation Index (L3, 16-Day)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_L3_EVI_16Day",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD13Q1",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Terra_L3_EVI_16Day": {
+      "id": "MODIS_Terra_L3_EVI_16Day",
+      "title": "Enhanced Vegetation Index (L3, 16-Day)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_EVI_16Day",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD13Q1",
+      "wrapadjacentdays": true
     }
+  }
 }

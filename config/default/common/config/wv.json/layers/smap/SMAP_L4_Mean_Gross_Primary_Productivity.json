@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L4_Mean_Gross_Primary_Productivity": {
-            "id":       "SMAP_L4_Mean_Gross_Primary_Productivity",
-            "title":    "Gross Primary Production (L4, 9 km Grid Cell Mean)",
-            "subtitle": "SMAP / Model Value-Added",
-            "description": "smap/SMAP_L4_Mean_Gross_Primary_Productivity",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL4CMDL",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L4_Mean_Gross_Primary_Productivity": {
+      "id": "SMAP_L4_Mean_Gross_Primary_Productivity",
+      "title": "Gross Primary Production (L4, 9 km Grid Cell Mean)",
+      "subtitle": "SMAP / Model Value-Added",
+      "description": "smap/SMAP_L4_Mean_Gross_Primary_Productivity",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL4CMDL",
+      "wrapadjacentdays": true
     }
+  }
 }

@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "ASTER_GDEM_Color_Index": {
-            "id":       "ASTER_GDEM_Color_Index",
-            "title":    "Global Digital Elevation Map (Color Index)",
-            "subtitle": "Terra / ASTER",
-            "description": "aster/ASTER_GDEM_Color_Index",
-            "tags":     "gdem",
-            "group":    "overlays",
-            "type":     "wmts",
-            "layergroup": [
-              "aster"
-            ],
-            "product":  "ASTGTM",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "ASTER_GDEM_Color_Index": {
+      "id": "ASTER_GDEM_Color_Index",
+      "title": "Global Digital Elevation Map (Color Index)",
+      "subtitle": "Terra / ASTER",
+      "description": "aster/ASTER_GDEM_Color_Index",
+      "tags": "gdem",
+      "group": "overlays",
+      "type": "wmts",
+      "layergroup": [
+        "aster"
+      ],
+      "product": "ASTGTM",
+      "wrapadjacentdays": true
     }
+  }
 }

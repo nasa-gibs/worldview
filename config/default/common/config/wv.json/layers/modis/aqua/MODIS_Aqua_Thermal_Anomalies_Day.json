@@ -9,32 +9,36 @@
       "group": "overlays",
       "format": "image/png",
       "period": "daily",
-      "layergroup": ["modis", "modis_aqua"],
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
       "product": "MYD14",
-
-      "tileSize": [512, 512],
+      "tileSize": [
+        512,
+        512
+      ],
       "type": "wms",
-
       "transition": "true",
       "startDate": "2012-05-08",
-
       "projections": {
         "arctic": {
           "source": "GIBS:wms:arctic"
         },
-
         "geographic": {
           "source": "GIBS:wms"
         }
       },
-
       "palette": {
         "id": "MODIS_Aqua_Thermal_Anomalies_All",
         "immutable": "true"
       },
       "tracks": [
-      "OrbitTracks_Aqua_Ascending"
-       ]
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

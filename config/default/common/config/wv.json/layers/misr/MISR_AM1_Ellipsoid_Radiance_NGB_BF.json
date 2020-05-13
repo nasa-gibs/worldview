@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "MISR_AM1_Ellipsoid_Radiance_NGB_BF": {
-            "id":       "MISR_AM1_Ellipsoid_Radiance_NGB_BF",
-            "title":    "Color Radiance (Bf, NGB)",
-            "subtitle": "Terra / MISR",
-            "description": "misr/MISR_AM1_Ellipsoid_Radiance_NGB_BF",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "misr"
-            ],
-            "product":  "MI1B2_ELLIPSOID_BF",
-            "tracks": [
-            "OrbitTracks_Terra_Descending"
-             ]
-        }
+  "layers": {
+    "MISR_AM1_Ellipsoid_Radiance_NGB_BF": {
+      "id": "MISR_AM1_Ellipsoid_Radiance_NGB_BF",
+      "title": "Color Radiance (Bf, NGB)",
+      "subtitle": "Terra / MISR",
+      "description": "misr/MISR_AM1_Ellipsoid_Radiance_NGB_BF",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "misr"
+      ],
+      "product": "MI1B2_ELLIPSOID_BF",
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

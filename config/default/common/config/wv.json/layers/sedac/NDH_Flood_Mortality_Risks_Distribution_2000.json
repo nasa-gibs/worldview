@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "NDH_Flood_Mortality_Risks_Distribution_2000": {
-            "id":       "NDH_Flood_Mortality_Risks_Distribution_2000",
-            "title":    "Flood Hazard: Mortality Risk",
-            "subtitle": "Global Flood Mortality Risks and Distribution, v1 (2000)",
-            "description": "sedac/NDH_Flood_Mortality_Risks_Distribution_2000",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_CHRR_NDH_FLOOD_MRD",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "NDH_Flood_Mortality_Risks_Distribution_2000": {
+      "id": "NDH_Flood_Mortality_Risks_Distribution_2000",
+      "title": "Flood Hazard: Mortality Risk",
+      "subtitle": "Global Flood Mortality Risks and Distribution, v1 (2000)",
+      "description": "sedac/NDH_Flood_Mortality_Risks_Distribution_2000",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_CHRR_NDH_FLOOD_MRD",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

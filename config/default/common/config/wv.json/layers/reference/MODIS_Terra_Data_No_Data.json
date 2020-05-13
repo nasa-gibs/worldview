@@ -1,15 +1,15 @@
 {
-    "layers": {
-        "MODIS_Terra_Data_No_Data": {
-            "id":       "MODIS_Terra_Data_No_Data",
-            "title":    "Areas of No Data (mask)",
-            "subtitle": "Terra / MODIS",
-            "description": "reference/MODIS_Terra_Data_No_Data",
-            "group":    "overlays",
-            "layergroup": [
-              "reference"
-            ],
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Terra_Data_No_Data": {
+      "id": "MODIS_Terra_Data_No_Data",
+      "title": "Areas of No Data (mask)",
+      "subtitle": "Terra / MODIS",
+      "description": "reference/MODIS_Terra_Data_No_Data",
+      "group": "overlays",
+      "layergroup": [
+        "reference"
+      ],
+      "wrapadjacentdays": true
     }
+  }
 }

@@ -1,28 +1,33 @@
 {
-    "layers": {
-        "MODIS_Terra_Cloud_Top_Pressure_Day": {
-            "id":       "MODIS_Terra_Cloud_Top_Pressure_Day",
-            "title":    "Cloud Top Pressure (Day)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_Cloud_Top_Pressure_Day",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD06_L2_DAY",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Terra_Descending"
-            ],
-            "projections": {
-                "geographic": {
-                    "source": "GIBS:geographic"
-                }
-            },
-            "palette": {
-                "recommended":  ["blue_4"]
-            }
+  "layers": {
+    "MODIS_Terra_Cloud_Top_Pressure_Day": {
+      "id": "MODIS_Terra_Cloud_Top_Pressure_Day",
+      "title": "Cloud Top Pressure (Day)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Cloud_Top_Pressure_Day",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD06_L2_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
         }
+      },
+      "palette": {
+        "recommended": [
+          "blue_4"
+        ]
+      },
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

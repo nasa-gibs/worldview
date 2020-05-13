@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Aqua_CorrectedReflectance_Bands721": {
-            "id":       "MODIS_Aqua_CorrectedReflectance_Bands721",
-            "title":    "Corrected Reflectance (Bands 7-2-1)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_CorrectedReflectance_Bands721",
-            "tags":     "cr m11-i2-i1",
-            "group":    "baselayers",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-             ]
-        }
+  "layers": {
+    "MODIS_Aqua_CorrectedReflectance_Bands721": {
+      "id": "MODIS_Aqua_CorrectedReflectance_Bands721",
+      "title": "Corrected Reflectance (Bands 7-2-1)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_CorrectedReflectance_Bands721",
+      "tags": "cr m11-i2-i1",
+      "group": "baselayers",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

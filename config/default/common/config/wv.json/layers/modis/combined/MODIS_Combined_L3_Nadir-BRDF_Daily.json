@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "MODIS_Combined_L3_Nadir-BRDF_Daily": {
-            "id":       "MODIS_Combined_L3_Nadir-BRDF_Daily",
-            "title":    "Reflectance (L3, Nadir BRDF-Adjusted, Daily)",
-            "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/combined/MODIS_Combined_L3_Nadir-BRDF_Daily",
-            "tags":     "",
-            "group":    "baselayers",
-            "layergroup": [
-              "modis",
-              "modis_combined"
-            ],
-            "product":  "MCD43A4",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Combined_L3_Nadir-BRDF_Daily": {
+      "id": "MODIS_Combined_L3_Nadir-BRDF_Daily",
+      "title": "Reflectance (L3, Nadir BRDF-Adjusted, Daily)",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_L3_Nadir-BRDF_Daily",
+      "tags": "",
+      "group": "baselayers",
+      "layergroup": [
+        "modis",
+        "modis_combined"
+      ],
+      "product": "MCD43A4",
+      "wrapadjacentdays": true
     }
+  }
 }

@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L3_Active_Sigma0_HH": {
-            "id":       "SMAP_L3_Active_Sigma0_HH",
-            "title":    "Sigma0 3 km (L3, Active, HH Polarization)",
-            "subtitle": "SMAP / Radar",
-            "description": "smap/SMAP_L3_Active_Sigma0_HH",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L3_Active_Sigma0_HH": {
+      "id": "SMAP_L3_Active_Sigma0_HH",
+      "title": "Sigma0 3 km (L3, Active, HH Polarization)",
+      "subtitle": "SMAP / Radar",
+      "description": "smap/SMAP_L3_Active_Sigma0_HH",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

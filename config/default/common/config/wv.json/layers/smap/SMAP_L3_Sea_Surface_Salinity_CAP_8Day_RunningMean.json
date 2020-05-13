@@ -5,7 +5,7 @@
       "title": "Sea Surface Salinity (L3, CAP, 8-Day Running Mean)",
       "subtitle": "SMAP",
       "description": "smap/SMAP_L3_Sea_Surface_Salinity_CAP_8Day_RunningMean",
-      "tags":     "sss podaac PO.DAAC",
+      "tags": "sss podaac PO.DAAC",
       "group": "overlays",
       "layergroup": [
         "smap"

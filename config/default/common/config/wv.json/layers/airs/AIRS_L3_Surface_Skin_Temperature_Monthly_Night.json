@@ -1,18 +1,16 @@
 {
-    "layers": {
-        "AIRS_L3_Surface_Skin_Temperature_Monthly_Night": {
-            "id":       "AIRS_L3_Surface_Skin_Temperature_Monthly_Night",
-            "title":    "Surface Skin Temperature (L3, Night, Monthly)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_L3_Surface_Skin_Temperature_Monthly_Night",
-            "tags":     "",
-            "group":    "overlays",
-            "product":  "AIRS3STM",
-
-            "layergroup": [
-              "airs"
-            ]
-
-        }
+  "layers": {
+    "AIRS_L3_Surface_Skin_Temperature_Monthly_Night": {
+      "id": "AIRS_L3_Surface_Skin_Temperature_Monthly_Night",
+      "title": "Surface Skin Temperature (L3, Night, Monthly)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L3_Surface_Skin_Temperature_Monthly_Night",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS3STM",
+      "layergroup": [
+        "airs"
+      ]
     }
+  }
 }

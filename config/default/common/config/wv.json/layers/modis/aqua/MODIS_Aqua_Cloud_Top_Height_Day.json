@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Aqua_Cloud_Top_Height_Day": {
-            "id":       "MODIS_Aqua_Cloud_Top_Height_Day",
-            "title":    "Cloud Top Height (Day)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Cloud_Top_Height_Day",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD06_L2_DAY",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-             ]
-        }
+  "layers": {
+    "MODIS_Aqua_Cloud_Top_Height_Day": {
+      "id": "MODIS_Aqua_Cloud_Top_Height_Day",
+      "title": "Cloud Top Height (Day)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Cloud_Top_Height_Day",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD06_L2_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

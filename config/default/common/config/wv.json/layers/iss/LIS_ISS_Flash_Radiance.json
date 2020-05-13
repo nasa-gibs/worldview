@@ -1,21 +1,21 @@
 {
-    "layers": {
-        "LIS_ISS_Flash_Radiance": {
-            "id":       "LIS_ISS_Flash_Radiance",
-            "title":    "ISS LIS Flash Radiance (Level 2, NRT)",
-            "subtitle": "ISS / LIS",
-            "description": "iss/LIS_ISS_Flash_Radiance",
-            "tags":     "lightning international space station iss",
-            "group":    "overlays",
-            "layergroup": [
-              "iss"
-            ],
-            "product":  "isslis_p0_nrt",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_ISS_Ascending",
-            "OrbitTracks_ISS_Descending"
-             ]
-        }
+  "layers": {
+    "LIS_ISS_Flash_Radiance": {
+      "id": "LIS_ISS_Flash_Radiance",
+      "title": "ISS LIS Flash Radiance (Level 2, NRT)",
+      "subtitle": "ISS / LIS",
+      "description": "iss/LIS_ISS_Flash_Radiance",
+      "tags": "lightning international space station iss",
+      "group": "overlays",
+      "layergroup": [
+        "iss"
+      ],
+      "product": "isslis_p0_nrt",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_ISS_Ascending",
+        "OrbitTracks_ISS_Descending"
+      ]
     }
+  }
 }

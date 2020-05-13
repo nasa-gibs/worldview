@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "AMSR2_Surface_Precipitation_Rate_Day": {
-            "id":       "AMSR2_Surface_Precipitation_Rate_Day",
-            "title":    "Surface Precipitation Rate (Day)",
-            "subtitle": "GCOM-W1 / AMSR2",
-            "description": "amsr2/AMSR2_Surface_Precipitation_Rate_Day",
-            "tags":     "amsr-2 rain",
-            "group":    "overlays",
-            "layergroup": [
-              "amsr2"
-            ],
-            "product":  "A2_RainOcn_NRT",
-            "tracks": [
-            "OrbitTracks_GCOM-W1_Ascending"
-             ]
-        }
+  "layers": {
+    "AMSR2_Surface_Precipitation_Rate_Day": {
+      "id": "AMSR2_Surface_Precipitation_Rate_Day",
+      "title": "Surface Precipitation Rate (Day)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSR2_Surface_Precipitation_Rate_Day",
+      "tags": "amsr-2 rain",
+      "group": "overlays",
+      "layergroup": [
+        "amsr2"
+      ],
+      "product": "A2_RainOcn_NRT",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

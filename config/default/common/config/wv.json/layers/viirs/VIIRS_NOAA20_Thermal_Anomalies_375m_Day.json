@@ -6,19 +6,21 @@
       "subtitle": "NOAA-20/ VIIRS",
       "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
       "tags": "hotspot noaa20 jpss1 jpss",
-      "layergroup": ["viirs"],
+      "layergroup": [
+        "viirs"
+      ],
       "product": [],
       "group": "overlays",
       "format": "image/png",
       "period": "daily",
       "wrapadjacentdays": true,
-
-      "tileSize": [512, 512],
+      "tileSize": [
+        512,
+        512
+      ],
       "type": "wms",
-
       "transition": "true",
       "startDate": "2020-01-29",
-
       "projections": {
         "arctic": {
           "source": "GIBS:wms:arctic"
@@ -27,13 +29,15 @@
           "source": "GIBS:wms"
         }
       },
-
       "palette": {
         "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
         "immutable": "true"
       },
       "tracks": [
-          "OrbitTracks_NOAA-20_Ascending"
+        "OrbitTracks_NOAA-20_Ascending"
+      ],
+      "daynight": [
+        "day"
       ]
     }
   }

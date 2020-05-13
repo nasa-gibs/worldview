@@ -1,18 +1,21 @@
 {
-    "layers": {
-        "SMAP_L3_Passive_Night_Freeze_Thaw": {
-            "id":       "SMAP_L3_Passive_Night_Freeze_Thaw",
-            "title":    "Freeze/Thaw 36 km (L3, Passive, Night)",
-            "subtitle": "SMAP / Radiometer",
-            "description": "smap/SMAP_L3_Passive_Night_Freeze_Thaw",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL3FTP",
-            "tracks": [
-            "OrbitTracks_SMAP_Ascending"
-             ]
-        }
+  "layers": {
+    "SMAP_L3_Passive_Night_Freeze_Thaw": {
+      "id": "SMAP_L3_Passive_Night_Freeze_Thaw",
+      "title": "Freeze/Thaw 36 km (L3, Passive, Night)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L3_Passive_Night_Freeze_Thaw",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL3FTP",
+      "tracks": [
+        "OrbitTracks_SMAP_Ascending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

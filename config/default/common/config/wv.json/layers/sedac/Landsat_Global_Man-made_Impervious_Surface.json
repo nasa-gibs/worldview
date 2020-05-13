@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "Landsat_Global_Man-made_Impervious_Surface": {
-            "id":       "Landsat_Global_Man-made_Impervious_Surface",
-            "title":    "Impervious Surface Percentage",
-            "subtitle": "Global Man-made Impervious Surface (GMIS) Dataset From Landsat, v1 (2010)",
-            "description": "sedac/Landsat_Global_Man-made_Impervious_Surface",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_SEDAC_ULANDSAT_GMIS_V1",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "Landsat_Global_Man-made_Impervious_Surface": {
+      "id": "Landsat_Global_Man-made_Impervious_Surface",
+      "title": "Impervious Surface Percentage",
+      "subtitle": "Global Man-made Impervious Surface (GMIS) Dataset From Landsat, v1 (2010)",
+      "description": "sedac/Landsat_Global_Man-made_Impervious_Surface",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_SEDAC_ULANDSAT_GMIS_V1",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

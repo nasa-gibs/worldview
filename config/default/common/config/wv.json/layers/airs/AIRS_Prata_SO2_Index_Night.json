@@ -1,23 +1,28 @@
 {
-    "layers": {
-        "AIRS_Prata_SO2_Index_Night": {
-            "id":       "AIRS_Prata_SO2_Index_Night",
-            "title":    "Sulfur Dioxide (Night, Prata Algorithm)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_Prata_SO2_Index_Night",
-            "tags":     "so2 sulphur",
-            "group":    "overlays",
-            "product":  "AIRIBRAD_NIGHT",
-
-            "layergroup": [
-              "airs"
-            ],
-            "palette": {
-                "recommended": ["orange_1", "red_1"]
-            },
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-            ]
-        }
+  "layers": {
+    "AIRS_Prata_SO2_Index_Night": {
+      "id": "AIRS_Prata_SO2_Index_Night",
+      "title": "Sulfur Dioxide (Night, Prata Algorithm)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_Prata_SO2_Index_Night",
+      "tags": "so2 sulphur",
+      "group": "overlays",
+      "product": "AIRIBRAD_NIGHT",
+      "layergroup": [
+        "airs"
+      ],
+      "palette": {
+        "recommended": [
+          "orange_1",
+          "red_1"
+        ]
+      },
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

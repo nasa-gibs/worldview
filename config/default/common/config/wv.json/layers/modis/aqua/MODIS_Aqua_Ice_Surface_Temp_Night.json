@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "MODIS_Aqua_Ice_Surface_Temp_Night": {
-            "id":       "MODIS_Aqua_Ice_Surface_Temp_Night",
-            "title":    "Ice Surface Temperature (Night)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Ice_Surface_Temp_Night",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD29",
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-             ]
-        }
+  "layers": {
+    "MODIS_Aqua_Ice_Surface_Temp_Night": {
+      "id": "MODIS_Aqua_Ice_Surface_Temp_Night",
+      "title": "Ice Surface Temperature (Night)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Ice_Surface_Temp_Night",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD29",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

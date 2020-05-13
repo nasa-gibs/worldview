@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "AMSRU2_Snow_Water_Equivalent_5Day": {
-            "id":       "AMSRU2_Snow_Water_Equivalent_5Day",
-            "title":    "Snow Water Equivalent (25 km, 5-Day)",
-            "subtitle": "GCOM-W1 / AMSR2",
-            "description": "amsr2/AMSRU2_Snow_Water_Equivalent_5Day",
-            "tags":     "amsr-u2 amsru2 swe",
-            "group":    "overlays",
-            "layergroup": [
-              "amsru2"
-            ],
-            "product": "AU_5DSno"
-        }
+  "layers": {
+    "AMSRU2_Snow_Water_Equivalent_5Day": {
+      "id": "AMSRU2_Snow_Water_Equivalent_5Day",
+      "title": "Snow Water Equivalent (25 km, 5-Day)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSRU2_Snow_Water_Equivalent_5Day",
+      "tags": "amsr-u2 amsru2 swe",
+      "group": "overlays",
+      "layergroup": [
+        "amsru2"
+      ],
+      "product": "AU_5DSno"
     }
+  }
 }

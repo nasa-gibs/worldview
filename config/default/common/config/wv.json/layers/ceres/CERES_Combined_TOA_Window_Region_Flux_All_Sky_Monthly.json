@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "CERES_Combined_TOA_Window_Region_Flux_All_Sky_Monthly": {
-            "id":       "CERES_Combined_TOA_Window_Region_Flux_All_Sky_Monthly",
-            "title":    "TOA Window-Region Flux (Monthly, All-Sky)",
-            "subtitle": "Terra and Aqua/CERES",
-            "description": "ceres/CERES_Combined_TOA_Window_Region_Flux_All_Sky_Monthly",
-            "tags":     "top of atmosphere, cloud radiative effect",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CER_SYN1deg-Month_Terra-Aqua-MODIS",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_Combined_TOA_Window_Region_Flux_All_Sky_Monthly": {
+      "id": "CERES_Combined_TOA_Window_Region_Flux_All_Sky_Monthly",
+      "title": "TOA Window-Region Flux (Monthly, All-Sky)",
+      "subtitle": "Terra and Aqua/CERES",
+      "description": "ceres/CERES_Combined_TOA_Window_Region_Flux_All_Sky_Monthly",
+      "tags": "top of atmosphere, cloud radiative effect",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CER_SYN1deg-Month_Terra-Aqua-MODIS",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

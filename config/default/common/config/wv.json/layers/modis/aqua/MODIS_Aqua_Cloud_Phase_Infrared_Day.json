@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Aqua_Cloud_Phase_Infrared_Day": {
-            "id":       "MODIS_Aqua_Cloud_Phase_Infrared_Day",
-            "title":    "Cloud Phase Infrared (Day)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Cloud_Phase_Infrared_Day",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD06_L2_DAY",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-             ]
-        }
+  "layers": {
+    "MODIS_Aqua_Cloud_Phase_Infrared_Day": {
+      "id": "MODIS_Aqua_Cloud_Phase_Infrared_Day",
+      "title": "Cloud Phase Infrared (Day)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Cloud_Phase_Infrared_Day",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD06_L2_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
- }
+  }
+}
