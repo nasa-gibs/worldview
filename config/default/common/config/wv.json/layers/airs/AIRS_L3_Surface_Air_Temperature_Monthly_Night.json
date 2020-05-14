@@ -10,6 +10,9 @@
       "product": "AIRS3STM",
       "layergroup": [
         "airs"
+      ],
+      "daynight": [
+        "night"
       ]
     }
   }

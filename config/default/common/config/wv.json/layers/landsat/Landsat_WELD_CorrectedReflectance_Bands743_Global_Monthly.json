@@ -11,7 +11,10 @@
         "landsat"
       ],
       "product": "",
-      "inactive": true
+      "inactive": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

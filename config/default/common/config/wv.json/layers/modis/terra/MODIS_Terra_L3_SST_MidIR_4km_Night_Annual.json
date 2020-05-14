@@ -12,7 +12,10 @@
         "modis_terra"
       ],
       "product": "MODIS_TERRA_L3_SST_MID-IR_ANNUAL_4KM_NIGHTTIME_V2014.0",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "night"
+      ]
     }
   }
 }
