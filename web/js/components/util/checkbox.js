@@ -62,7 +62,9 @@ export default class Checkbox extends React.Component {
           onChange={this.handleChange.bind(this)}
         />
         {children}
-        <label htmlFor={id}>{label}</label>
+        <label htmlFor={id}>
+          <span>{label}</span>
+        </label>
       </div>
     );
   }
