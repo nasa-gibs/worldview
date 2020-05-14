@@ -13,9 +13,6 @@
       "product": "MOP03JM",
       "wrapadjacentdays": true,
       "inactive": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
       "daynight": [
         "day"
       ]

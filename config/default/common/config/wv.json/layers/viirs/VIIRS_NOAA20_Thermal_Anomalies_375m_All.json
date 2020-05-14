@@ -30,7 +30,11 @@
       },
       "palette": {
         "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
-        "immutable": "true"
+        "immutable": "true",
+        "daynight": [
+          "day",
+          "night"
+        ]
       }
     }
   }

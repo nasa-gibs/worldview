@@ -11,7 +11,10 @@
         "modis_terra"
       ],
       "product": "MOD10CM",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

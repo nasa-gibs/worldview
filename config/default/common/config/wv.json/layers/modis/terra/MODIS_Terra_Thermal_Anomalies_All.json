@@ -31,7 +31,11 @@
       },
       "palette": {
         "id": "MODIS_Terra_Thermal_Anomalies_All",
-        "immutable": "true"
+        "immutable": "true",
+        "daynight": [
+          "day",
+          "night"
+        ]
       }
     }
   }

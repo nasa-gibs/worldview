@@ -13,7 +13,10 @@
       ],
       "product": "MCD12Q1",
       "wrapadjacentdays": true,
-      "inactive": true
+      "inactive": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

@@ -11,7 +11,11 @@
         "goes"
       ],
       "product": "",
-      "wrapX": true
+      "wrapX": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
   }
 }

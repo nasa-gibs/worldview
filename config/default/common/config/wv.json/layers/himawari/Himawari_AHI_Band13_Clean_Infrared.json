@@ -14,7 +14,11 @@
       "palette": {
         "immutable": true
       },
-      "wrapX": true
+      "wrapX": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
   }
 }

@@ -12,7 +12,10 @@
         "modis_terra"
       ],
       "product": "MOD15A2H",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }
