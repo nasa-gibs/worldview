@@ -58,18 +58,17 @@ window.onload = () => {
   elapsed('loading config', startTime, parameters);
   const promise = $.getJSON(configURI);
   loadingIndicator.delayed(promise, 1000);
-  promise
-    .done((config) => {
-      // Perform check to see if app was in the midst of a tour
-      const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
-      if (hasTour) {
-        // Gets the extent of the first tour step and overrides view params
-        parameters = util.fromQueryString(hasTour.steps[0].stepLink);
-      }
+  promise.done((config) => {
+    // Perform check to see if app was in the midst of a tour
+    const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
+    if (hasTour) {
+      // Gets the extent of the first tour step and overrides view params
+      parameters = util.fromQueryString(hasTour.steps[0].stepLink);
+    }
 
-      config.pageLoadTime = parameters.now
-        ? util.parseDateUTC(parameters.now) || new Date()
-        : new Date();
+    config.pageLoadTime = parameters.now
+      ? util.parseDateUTC(parameters.now) || new Date()
+      : new Date();
 
     const pageLoadTime = new Date(config.pageLoadTime);
 
