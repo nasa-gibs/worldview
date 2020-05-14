@@ -31,7 +31,11 @@
       },
       "palette": {
         "id": "MODIS_Aqua_Thermal_Anomalies_All",
-        "immutable": "true"
+        "immutable": "true",
+        "daynight": [
+          "day",
+          "night"
+        ]
       }
     }
   }

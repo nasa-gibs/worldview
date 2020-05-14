@@ -11,7 +11,10 @@
       ],
       "group": "baselayers",
       "inactive": true,
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "night"
+      ]
     }
   }
 }

@@ -11,7 +11,10 @@
         "misr"
       ],
       "product": "MIL3MRD",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

@@ -9,7 +9,13 @@
       "layergroup": [
         "reference"
       ],
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

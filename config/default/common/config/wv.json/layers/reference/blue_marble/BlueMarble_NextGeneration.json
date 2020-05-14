@@ -11,7 +11,10 @@
         "reference",
         "reference_bluemarble"
       ],
-      "wrapX": true
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

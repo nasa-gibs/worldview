@@ -16,6 +16,9 @@
       "palette": {
         "recommended": [
           "orange_1"
+        ],
+        "daynight": [
+          "day"
         ]
       }
     }

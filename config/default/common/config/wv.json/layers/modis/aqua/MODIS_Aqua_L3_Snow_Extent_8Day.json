@@ -12,7 +12,11 @@
         "modis_aqua"
       ],
       "product": "MYD10A2",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
   }
 }
