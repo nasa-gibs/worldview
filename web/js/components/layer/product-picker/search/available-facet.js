@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import SelectedDate from '../../../selected-date';
 
-
-function BooleanFacet({
+function AvailableFacet({
   className,
   label,
   options,
@@ -23,7 +23,10 @@ function BooleanFacet({
 
   return (
     <fieldset className="sui-facet">
-      <legend className="sui-facet__title">{label}</legend>
+      <legend className="sui-facet__title">
+        Visible on &nbsp;
+        <SelectedDate />
+      </legend>
       <div className="sui-boolean-facet">
         <div className="sui-boolean-facet__option-input-wrapper">
           <label className="sui-boolean-facet__option-label">
@@ -46,13 +49,13 @@ function BooleanFacet({
   );
 }
 
-BooleanFacet.propTypes = {
+AvailableFacet.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired,
   options: PropTypes.array,
-  values: PropTypes.array,
   onChange: PropTypes.func.isRequired,
+  values: PropTypes.array,
 };
 
-export default BooleanFacet;
+export default AvailableFacet;

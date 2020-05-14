@@ -1,16 +1,12 @@
-import BooleanFacet from '../../components/layer/product-picker/search/boolean-facet';
-
-// import {
-//   BooleanFacet,
-// } from '@elastic/react-search-ui-views';
+import AvailableFacet from '../../components/layer/product-picker/search/available-facet';
 
 export default [
   {
     field: 'availableAtDate',
-    label: 'Available',
-    filterType: 'boolean',
+    label: 'Visible',
+    filterType: 'any',
     tooltip: 'Layer has available imagery at currently selected date/time',
-    view: BooleanFacet,
+    view: AvailableFacet,
     useLabelForValue: true,
     hideZeroCount: true,
   },
@@ -46,9 +42,9 @@ export default [
   },
   {
     field: 'daynight',
-    label: 'Track Day/Night',
+    label: 'Day/Night',
     filterType: 'any',
-    tooltip: 'Whether the satellite orbit track passes over during the daytime or nighttime',
+    tooltip: 'Whether the layer represents daytime or nighttime imagery or data',
     hideZeroCount: true,
   },
 ];
