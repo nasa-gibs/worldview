@@ -12,7 +12,10 @@
         "modis_combined"
       ],
       "product": "MCD43A4",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

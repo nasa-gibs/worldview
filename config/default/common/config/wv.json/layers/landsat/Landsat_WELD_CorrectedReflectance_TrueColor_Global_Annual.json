@@ -12,7 +12,10 @@
       ],
       "product": "",
       "inactive": true,
-      "wrapX": true
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }
