@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem, Tooltip } from 'reactstrap';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +11,7 @@ import {
   removeLayer as removeLayerAction,
 } from '../../../../modules/layers/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
+import SelectedDate from '../../../selected-date';
 
 /*
  * A scrollable list of layers
@@ -51,7 +51,6 @@ class MeasurementLayerRow extends React.Component {
     } = this.props;
     const { tooltipOpen } = this.state;
     const layerIsAvailable = availableAtDate(layer, selectedDate);
-    const displayDate = moment.utc(selectedDate).format('YYYY MMM DD');
     const listItemClass = !layerIsAvailable ? 'unavailable' : '';
     // Replace periods in id since period causes issue with tooltip targeting
     const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
@@ -84,7 +83,7 @@ class MeasurementLayerRow extends React.Component {
                   {' '}
                   <br />
                   <span style={{ fontFamily: 'monospace' }}>
-                    {` ${displayDate} `}
+                    <SelectedDate />
                   </span>
                 </Tooltip>
               </>
