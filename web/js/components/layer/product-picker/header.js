@@ -230,7 +230,6 @@ const mapStateToProps = (state, ownProps) => {
     mode,
     category,
     showMobileFacets,
-    selectedDate,
     selectedLayer,
   } = productPicker;
   const isMobile = browser.lessThan.medium;
@@ -242,7 +241,6 @@ const mapStateToProps = (state, ownProps) => {
     isMobile,
     showMobileFacets,
     mode,
-    selectedDate,
     selectedLayer,
     selectedProjection: proj.id,
   };
