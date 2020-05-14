@@ -1,5 +1,4 @@
 import { findIndex as lodashFindIndex } from 'lodash';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import {
   addLayer as addLayerSelector,

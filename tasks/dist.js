@@ -12,7 +12,6 @@ shell.mkdir('-p', 'build/worldview');
 shell.cp('-rf', 'web/*', 'build/worldview');
 
 console.log('Branding');
-// eslint-disable-next-line import/no-unresolved
 const brand = require('../build/worldview/brand/brand.json');
 
 const applyTo = [
