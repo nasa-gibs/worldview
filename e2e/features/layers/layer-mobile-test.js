@@ -40,7 +40,7 @@ module.exports = {
   'Initial state indicates layer count': (c) => {
     c.waitForElementVisible(collapsedLayerButton, TIME_LIMIT, (e) => {
       c.expect.element(layerCount).to.be.present;
-      c.assert.containsText(layerCount, '6');
+      c.assert.containsText(layerCount, '7');
     });
   },
   'Expand layer list and show default layers': (c) => {
@@ -141,7 +141,7 @@ module.exports = {
   'Collapse sidebar and confirm layer count updated': (c) => {
     c.click('.toggleIconHolder').pause(200);
     c.expect.element(layerCount).to.be.present;
-    c.assert.containsText(layerCount, '7');
+    c.assert.containsText(layerCount, '8');
   },
   after: (c) => {
     c.end();
