@@ -1,7 +1,7 @@
 /***************** simple-scrollbar customizations ***********************/
 .simplebar-scrollbar {
   right: 0;
-  width: 9px;
+  width: 12px;
 }
 
 .simplebar-track .simplebar-scrollbar::before {

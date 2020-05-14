@@ -173,7 +173,7 @@
   overflow: hidden;
 }
 
-.measurement-row .source-sub-group .list-group-item {
+.source-sub-group .list-group-item {
   background: transparent;
   border-color: transparent;
   padding: 6px 5px 6px 10px;
@@ -186,21 +186,29 @@
   & .wv-checkbox {
     color: #fff;
     font: 400 13px/13px 'Open Sans', sans-serif;
-    display: inline;
+    font-weight: 400;
+    display: flex;
 
-    & label {
-      display: inline;
+    label {
       color: #333;
       padding-left: 5px;
       font-size: 12px;
       pointer-events: none;
+      height: 26px;
+      line-height: 24px;
+    }
+    label span {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 14px;
     }
   }
   &.unavailable {
     & svg.svg-inline--fa {
-      display: inline;
       color: #999;
       margin: 0 0 0 2px;
+      height: 25px;
+      width: 16px;
     }
     & .wv-checkbox label {
       color: #999;

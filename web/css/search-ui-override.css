@@ -20,20 +20,26 @@
     padding-left: 18px;
   }
 
-  .sui-multi-checkbox-facet label {
-    margin-bottom: 2px;
-    height: 20px;
+  /* .sui-boolean-facet__option-input-wrapper, */
+  .sui-multi-checkbox-facet__option-input-wrapper {
+    display: inline-flex;
+    width: 88%;
   }
 
-  .sui-multi-checkbox-facet label,
+  .sui-multi-checkbox-facet label {
+    height: 24px;
+  }
+
   .sui-multi-checkbox-facet label .sui-multi-checkbox-facet__input-text,
-  div.sui-boolean-facet,
   span.sui-boolean-facet__input-text,
-  a.sui-single-option-facet__link,
-  .sui-boolean-facet__option-label,
   .sui-boolean-facet__option-label .sui-boolean-facet__input-text {
     color: #eee;
     font-size: 14px;
+    width: 90%;
+    height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   span.sui-facet__count,
@@ -41,6 +47,7 @@
   span.sui-multi-checkbox-facet__option-count {
     font-size: 14px;
     color: #ccc;
+    margin-left: 12px;
   }
 
   div.sui-multi-checkbox-facet {
@@ -77,35 +84,38 @@
       font-size: 18px;
       padding: 0 0 2px 28px;
     }
-    & .sui-boolean-facet__option-label {
-      height: 32px;
-      margin-bottom: 2px;
-    }
-    & .sui-multi-checkbox-facet {
-      margin-bottom: 5px 0 8px 0;
-      & label {
-        height: 32px;
-        margin-bottom: 2px;
-      }
+
+    label.sui-boolean-facet__option-label,
+    label.sui-multi-checkbox-facet__option-label {
+      height: 38px;
     }
 
-    & .sui-multi-checkbox-facet label,
-    & .sui-multi-checkbox-facet label .sui-multi-checkbox-facet__input-text,
     & .sui-multi-checkbox-facet__option-input-wrapper,
-    & .sui-boolean-facet__option-input-wrapper,
-    & .sui-boolean-facet__option-label,
+    & .sui-boolean-facet__option-input-wrapper {
+      height: 24px;
+      padding: 0;
+    }
+
+    input[type="checkbox"] {
+      vertical-align: middle;
+      height: 20px;
+      width: 22px;
+    }
+
+    & .sui-multi-checkbox-facet label .sui-multi-checkbox-facet__input-text,
     & .sui-boolean-facet__option-label .sui-boolean-facet__input-text {
-      font-size: 18px;
-      position: relative;
-      top: 2px;
+      font-size: 20px;
+      padding: 3px 0;
+      vertical-align: middle;
     }
 
     span.sui-facet__count,
     span.sui-boolean-facet__option-count,
     span.sui-multi-checkbox-facet__option-count {
-      font-size: 16px;
+      font-size: 20px;
       color: #ccc;
     }
+
     button.sui-facet-view-more {
       font-size: 18px;
       margin: 0 auto 10px;
