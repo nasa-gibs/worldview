@@ -106,17 +106,17 @@ module.exports = {
       client.assert
         .containsText(
           layerResultsCountText,
-          'Showing 4 results(1 hidden by filters)',
+          'Showing 4 results(2 hidden by filters)',
         );
     });
   },
   'Disabling unavailable filter updates list': (client) => {
     client.click(unavailableFilterToggle);
     client.pause(200);
-    client.expect.elements(layersSearchRow).count.to.equal(5);
+    client.expect.elements(layersSearchRow).count.to.equal(6);
     client
       .assert
-      .containsText(layerResultsCountText, 'Showing 5 results');
+      .containsText(layerResultsCountText, 'Showing 6 results');
     client.moveToElement(unavailableFilterTooltipIcon, 2, 2, (e) => {
       client.waitForElementVisible('.tooltip', TIME_LIMIT, (e) => {
         client.expect.element('.tooltip').to.be.present;
@@ -136,10 +136,10 @@ module.exports = {
       // Now reopen modal and confirm state is just as we left it
       client.click(addLayers);
       client.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
-        client.expect.elements(layersSearchRow).count.to.equal(5);
+        client.expect.elements(layersSearchRow).count.to.equal(6);
         client
           .assert
-          .containsText(layerResultsCountText, 'Showing 5 results');
+          .containsText(layerResultsCountText, 'Showing 6 results');
         client.expect.element(layerDetails).to.be.present;
         client.assert.containsText(layerDetailHeader, 'Corrected Reflectance');
         client.expect.element(layerDetailsDateRange).to.be.present;
@@ -209,7 +209,7 @@ module.exports = {
   },
   'Collapsed sidebar shows updated layer count': (client) => {
     client.click('.toggleIconHolder');
-    client.assert.containsText('.layer-count', '8 Layers');
+    client.assert.containsText('.layer-count', '9 Layers');
     client.click('#accordionTogglerButton');
   },
   'When no results returned due to filters, help text shows and user can click to remove all': (client) => {

@@ -28,9 +28,9 @@ module.exports = {
           .to.not.be.present;
         client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day')
           .to.not.be.present;
-        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.not
+        client.expect.element('#active-VIIRS_NOAA20_Thermal_Anomalies_375m_Day').to.not
           .be.present;
-        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to
+        client.expect.element('#active-VIIRS_NOAA20_Thermal_Anomalies_375m_Night').to
           .not.be.present;
       },
     );
@@ -46,9 +46,9 @@ module.exports = {
       () => {
         client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day')
           .to.be.present;
-        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.be
+        client.expect.element('#active-VIIRS_NOAA20_Thermal_Anomalies_375m_Day').to.be
           .present;
-        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to.be
+        client.expect.element('#active-VIIRS_NOAA20_Thermal_Anomalies_375m_Night').to.be
           .present;
       },
     );
