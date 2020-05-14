@@ -102,8 +102,7 @@ class DataItemContainer extends Component {
       getRangeDateEndWithAddedInterval,
       layer,
       layerPeriod,
-      position,
-      transformX,
+      positionTransformX,
       needDateRangeBuilt,
     } = this.props;
     const {
@@ -134,34 +133,8 @@ class DataItemContainer extends Component {
         >
           <svg
             className="data-panel-coverage-line-svg"
-            width={axisWidth}
-            viewBox={`0 0 ${axisWidth} 64`}
+            width={`${axisWidth}px`}
           >
-            <defs>
-              <clipPath id="dataLineBoundary">
-                <rect x="0" y="0" width={axisWidth} height={12} />
-              </clipPath>
-              <pattern
-                id="pattern"
-                width="30"
-                height="12"
-                patternUnits="userSpaceOnUse"
-                patternTransform="rotate(135 50 50)"
-              >
-                <rect fill="rgb(0, 69, 123)" width="30" height="12" />
-                <line stroke="#164e7a" strokeWidth="30" y1="12" />
-              </pattern>
-              <pattern
-                id="pattern2"
-                width="30"
-                height="12"
-                patternUnits="userSpaceOnUse"
-                patternTransform="rotate(135 50 50)"
-              >
-                <rect fill="rgb(116, 116, 116)" width="30" height="12" />
-                <line stroke="#797979" strokeWidth="30" y1="12" />
-              </pattern>
-            </defs>
             {needDateRangeBuilt
               ? dataDateRanges.map((itemRange, multiIndex, array) => {
                 const { date, interval } = itemRange;
@@ -177,8 +150,7 @@ class DataItemContainer extends Component {
                     <React.Fragment key={key}>
                       <DataLine
                         axisWidth={axisWidth}
-                        position={position}
-                        transformX={transformX}
+                        positionTransformX={positionTransformX}
                         id={id}
                         options={multiLineRangeOptions}
                         lineType="MULTI"
@@ -194,11 +166,10 @@ class DataItemContainer extends Component {
               : containerLineDimensions.visible && (
                 <DataLine
                   axisWidth={axisWidth}
-                  position={position}
-                  transformX={transformX}
+                  positionTransformX={positionTransformX}
                   id={id}
                   options={containerLineDimensions}
-                  lineType="CONTAINER"
+                  lineType="SINGLE"
                   startDate={startDate}
                   endDate={endDate}
                   color={lineBackgroundColor}
@@ -225,8 +196,7 @@ DataItemContainer.propTypes = {
   needDateRangeBuilt: PropTypes.bool,
   layer: PropTypes.object,
   layerPeriod: PropTypes.string,
-  position: PropTypes.number,
-  transformX: PropTypes.number,
+  positionTransformX: PropTypes.number,
 };
 
 export default DataItemContainer;

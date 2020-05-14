@@ -327,8 +327,7 @@ class LayerDataItems extends Component {
       frontDate,
       getMatchingCoverageLineDimensions,
       timeScale,
-      position,
-      transformX,
+      positionTransformX,
     } = this.props;
     const emptyLayers = activeLayers.length === 0;
     return (
@@ -410,8 +409,7 @@ class LayerDataItems extends Component {
                   getMaxEndDate={this.getMaxEndDate}
                   getDatesInDateRange={this.getDatesInDateRange}
                   axisWidth={axisWidth}
-                  position={position}
-                  transformX={transformX}
+                  positionTransformX={positionTransformX}
                   layer={layer}
                   layerPeriod={layerPeriod}
                   getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
@@ -436,9 +434,8 @@ LayerDataItems.propTypes = {
   frontDate: PropTypes.string,
   getMatchingCoverageLineDimensions: PropTypes.func,
   hoveredLayer: PropTypes.string,
-  position: PropTypes.number,
+  positionTransformX: PropTypes.number,
   timeScale: PropTypes.string,
-  transformX: PropTypes.number,
 };
 
 export default LayerDataItems;

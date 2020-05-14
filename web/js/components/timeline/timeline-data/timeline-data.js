@@ -119,13 +119,11 @@ class TimelineData extends Component {
       axisWidth,
       backDate,
       frontDate,
-      position,
+      positionTransformX,
       timeScale,
       timelineStartDateLimit,
-      transformX,
     } = this.props;
 
-    const postionTransformX = position + transformX;
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
     const axisFrontDate = new Date(frontDate).getTime();
     const axisBackDate = new Date(backDate).getTime();
@@ -161,13 +159,13 @@ class TimelineData extends Component {
         // positive diff means layerStart more recent than axisFrontDate
         const diff = moment.utc(layerStart).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
-        leftOffset = gridDiff + postionTransformX;
+        leftOffset = gridDiff + positionTransformX;
       }
       if (layerEndBeforeAxisBack) {
         // positive diff means layerEnd earlier than back date
         const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
-        width = gridDiff + postionTransformX - leftOffset;
+        width = gridDiff + positionTransformX - leftOffset;
       }
     }
 
@@ -263,9 +261,8 @@ class TimelineData extends Component {
       hoveredLayer,
       isDataCoveragePanelOpen,
       parentOffset,
-      position,
+      positionTransformX,
       timeScale,
-      transformX,
     } = this.props;
     const {
       activeLayers,
@@ -344,8 +341,7 @@ class TimelineData extends Component {
                 getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
                 hoveredLayer={hoveredLayer}
                 timeScale={timeScale}
-                position={position}
-                transformX={transformX}
+                positionTransformX={positionTransformX}
               />
             </Scrollbars>
           </div>
@@ -398,13 +394,12 @@ TimelineData.propTypes = {
   isDataCoveragePanelOpen: PropTypes.bool,
   isProductPickerOpen: PropTypes.bool,
   parentOffset: PropTypes.number,
-  position: PropTypes.number,
+  positionTransformX: PropTypes.number,
   projection: PropTypes.string,
   setMatchingTimelineCoverage: PropTypes.func,
   timelineStartDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
   toggleDataCoveragePanel: PropTypes.func,
-  transformX: PropTypes.number,
 };
 
 export default connect(

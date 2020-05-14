@@ -26,7 +26,7 @@ class DataLine extends PureComponent {
 
     // eslint-disable-next-line default-case
     switch (lineType) {
-      case 'CONTAINER':
+      case 'SINGLE':
         dateRangeStart = (startDate && startDate.split('T')[0]) || 'start';
         dateRangeEnd = (endDate && endDate.split('T')[0]) || 'present';
         toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
@@ -70,8 +70,7 @@ class DataLine extends PureComponent {
   */
   createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
     const {
-      position,
-      transformX,
+      positionTransformX,
     } = this.props;
     const {
       leftOffset,
@@ -81,7 +80,6 @@ class DataLine extends PureComponent {
       layerEndBeforeAxisBack,
     } = options;
     let lineWidth = Math.max(width, 0);
-    const positionTransformCombined = position + transformX;
 
     // get formatted dates based on line type
     const {
@@ -93,12 +91,12 @@ class DataLine extends PureComponent {
 
     // candy stripe color
     const patternType = color === 'rgb(0, 69, 123)'
-      ? 'url(#pattern)'
-      : 'url(#pattern2)';
+      ? 'url(#data-line-pattern)'
+      : 'url(#data-line-pattern-hidden)';
 
     // allow moving striped background for large width lines
     let rectTransform = leftOffset === 0 && isWidthGreaterThanRendered && !layerEndBeforeAxisBack
-      ? positionTransformCombined
+      ? positionTransformX
       : leftOffset;
 
     // determine line radius for line start/end vs. partial large width lines
@@ -111,8 +109,8 @@ class DataLine extends PureComponent {
     if (leftOffset === 0
       && ((isWidthGreaterThanRendered && layerEndBeforeAxisBack)
       || (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
-      lineWidth -= positionTransformCombined;
-      rectTransform += positionTransformCombined;
+      lineWidth -= positionTransformX;
+      rectTransform += positionTransformX;
       lineRadius = '6';
     }
 
@@ -125,11 +123,12 @@ class DataLine extends PureComponent {
           id={`data-coverage-line-${dateRangeStartEnd}`}
           className="data-panel-coverage-line"
           width={`${lineWidth}px`}
+          height="12px"
+          x="0"
+          y="0"
           fill={patternType}
           rx={lineRadius}
-          style={{
-            transform: `translate(${rectTransform}px)`,
-          }}
+          transform={`translate(${rectTransform})`}
         >
           <title>{toolTipText}</title>
         </rect>
@@ -166,8 +165,7 @@ class DataLine extends PureComponent {
 }
 
 DataLine.propTypes = {
-  position: PropTypes.number,
-  transformX: PropTypes.number,
+  positionTransformX: PropTypes.number,
   id: PropTypes.string,
   options: PropTypes.object,
   lineType: PropTypes.string,

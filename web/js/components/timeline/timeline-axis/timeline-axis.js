@@ -1415,12 +1415,13 @@ class TimelineAxis extends Component {
       lineCoverageOptions = this.getMatchingCoverageLineDimensions();
     }
     const shouldDisplayMatchingCoverageLine = matchingTimelineCoverage && lineCoverageOptions;
+    const axisWidthStr = `${axisWidth}px`;
 
     return (
       <>
         <div
           className="timeline-axis-container"
-          style={{ width: `${axisWidth}px` }}
+          style={{ width: axisWidthStr }}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.setLineTime}
           onWheel={this.handleWheelType}
@@ -1434,23 +1435,52 @@ class TimelineAxis extends Component {
               <svg
                 className="timeline-axis-svg"
                 id="timeline-footer-svg"
-                width={axisWidth}
-                height={64}
+                width={axisWidthStr}
+                height="64px"
                 viewBox={`0 0 ${axisWidth} 64`}
+                preserveAspectRatio="xMinYMin slice"
               >
                 <defs>
                   {/* clip axis grid text */}
                   <clipPath id="textDisplay">
-                    <rect width="84" height="64" />
+                    <rect width="84px" height="64px" />
                   </clipPath>
                   {/* clip matching coverage data line */}
                   <clipPath id="matchingCoverage">
-                    <rect x={transformX} y="0" width={axisWidth} height={64} />
+                    <rect x={transformX} y="0" width={axisWidthStr} height="64px" />
                   </clipPath>
                   {/* clip axis grid overflow */}
                   <clipPath id="timelineBoundary">
-                    <rect x={-position} y="0" width={axisWidth} height={64} />
+                    <rect x={-position} y="0" width={axisWidthStr} height="64px" />
                   </clipPath>
+                  {/* data line boundary and background patterns  */}
+                  <clipPath id="dataLineBoundary">
+                    <rect x="0" y="0" width={axisWidthStr} height="12" />
+                  </clipPath>
+                  <pattern
+                    id="data-line-pattern"
+                    x="0"
+                    y="0"
+                    width="30px"
+                    height="12px"
+                    patternUnits="userSpaceOnUse"
+                    patternTransform="rotate(45)"
+                  >
+                    <rect fill="rgb(0, 69, 123)" width="30px" height="12px" x="0" y="0" />
+                    <line stroke="#164e7a" strokeWidth="30px" y1="12" />
+                  </pattern>
+                  <pattern
+                    id="data-line-pattern-hidden"
+                    x="0"
+                    y="0"
+                    width="30px"
+                    height="12px"
+                    patternUnits="userSpaceOnUse"
+                    patternTransform="rotate(45)"
+                  >
+                    <rect fill="rgb(116, 116, 116)" width="30px" height="12px" x="0" y="0" />
+                    <line stroke="#797979" strokeWidth="30px" y1="12" />
+                  </pattern>
                 </defs>
                 {shouldDisplayMatchingCoverageLine
                   && this.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }
