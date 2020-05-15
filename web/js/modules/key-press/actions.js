@@ -10,8 +10,10 @@ import { CLOSE as CLOSE_MODAL } from '../modal/constants';
  *
  * @param {Number} keyCode
  * @param {Boolean} is shiftKey down
+ * @param {Boolean} is ctrlOrCmdKey down
+ * @param {Boolean} is key pressed within an INPUT element
  */
-export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
+export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput) {
   return (dispatch, getState) => {
     const {
       modal, animation, tour, ui,
@@ -32,13 +34,13 @@ export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey) {
           type: ANIMATION_KEY_PRESS_ACTION,
           keyCode,
         });
-      } else if (!ctrlOrCmdKey && shiftKey && keyCode === 68) {
+      } else if (!isInput && !ctrlOrCmdKey && shiftKey && keyCode === 68) {
         dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
         if (!isDistractionFreeModeActive && isOpen) {
           dispatch({ type: CLOSE_MODAL });
         }
       } else if (keyCode === 27) {
-        if (isDistractionFreeModeActive) {
+        if (!isInput && isDistractionFreeModeActive) {
           dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
         } else {
           dispatch({ type: CLOSE_MODAL });

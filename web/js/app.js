@@ -99,7 +99,8 @@ class App extends React.Component {
   handleKeyPress(event) {
     const { keyPressAction } = this.props;
     const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
-    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey);
+    const isInput = event.srcElement.nodeName === 'INPUT';
+    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey, isInput);
   }
 
   onload() {
@@ -204,8 +205,8 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = (dispatch) => ({
-  keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey) => {
-    dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey));
+  keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey, isInput) => {
+    dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput));
   },
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
