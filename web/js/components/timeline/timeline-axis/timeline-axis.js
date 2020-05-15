@@ -1463,6 +1463,34 @@ class TimelineAxis extends Component {
                   <clipPath id="timelineBoundary">
                     <rect width={axisWidth} height={64} />
                   </clipPath>
+                  {/* data line boundary and background patterns  */}
+                  <clipPath id="dataLineBoundary">
+                    <rect x="0" y="0" width={`${axisWidth}px`} height="12" />
+                  </clipPath>
+                  <pattern
+                    id="data-line-pattern"
+                    x="0"
+                    y="0"
+                    width="30px"
+                    height="12px"
+                    patternUnits="userSpaceOnUse"
+                    patternTransform="rotate(45)"
+                  >
+                    <rect fill="rgb(0, 69, 123)" width="30px" height="12px" x="0" y="0" />
+                    <line stroke="#164e7a" strokeWidth="30px" y1="12" />
+                  </pattern>
+                  <pattern
+                    id="data-line-pattern-hidden"
+                    x="0"
+                    y="0"
+                    width="30px"
+                    height="12px"
+                    patternUnits="userSpaceOnUse"
+                    patternTransform="rotate(45)"
+                  >
+                    <rect fill="rgb(116, 116, 116)" width="30px" height="12px" x="0" y="0" />
+                    <line stroke="#797979" strokeWidth="30px" y1="12" />
+                  </pattern>
                 </defs>
                 {shouldDisplayMatchingCoverageLine
                   && this.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }

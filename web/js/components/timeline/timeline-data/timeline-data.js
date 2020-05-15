@@ -10,7 +10,7 @@ import {
 } from '../../../modules/date/constants';
 import Scrollbars from '../../util/scrollbar';
 import Switch from '../../util/switch';
-import LayerDataItems from './layer-data-items';
+import DataItemList from './data-item-list';
 
 /*
  * Timeline Data Panel for layer coverage.
@@ -24,7 +24,6 @@ class TimelineData extends Component {
     this.state = {
       activeLayers: [],
       shouldIncludeHiddenLayers: false,
-      hoveredTooltip: {},
     };
   }
 
@@ -38,6 +37,24 @@ class TimelineData extends Component {
     document.querySelector('.timeline-data-panel-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
     // init populate of activeLayers
     this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, layers);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      timeScale,
+      frontDate,
+      backDate,
+    } = this.props;
+
+    // prevent repeated rendering on timescale change updates
+    if (nextProps.timeScale !== timeScale) {
+      const isFrontDateSame = nextProps.frontDate === frontDate;
+      const isBackDateSame = nextProps.backDate === backDate;
+      if (isFrontDateSame && isBackDateSame) {
+        return false;
+      }
+    }
+    return true;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -94,7 +111,7 @@ class TimelineData extends Component {
   * @param {Object} layer
   * @param {String} rangeStart
   * @param {String} rangeEnd
-  * @returns {Object} visible, leftOffset, width, borderRadius, isWidthGreaterThanRendered
+  * @returns {Object} visible, leftOffset, width, isWidthGreaterThanRendered
   */
   getMatchingCoverageLineDimensions = (layer, rangeStart, rangeEnd) => {
     const {
@@ -102,13 +119,11 @@ class TimelineData extends Component {
       axisWidth,
       backDate,
       frontDate,
-      position,
+      positionTransformX,
       timeScale,
       timelineStartDateLimit,
-      transformX,
     } = this.props;
 
-    const postionTransformX = position + transformX;
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
     const axisFrontDate = new Date(frontDate).getTime();
     const axisBackDate = new Date(backDate).getTime();
@@ -132,61 +147,36 @@ class TimelineData extends Component {
     }
 
     let leftOffset = 0;
-    let borderRadiusLeft = '0';
-    let borderRadiusRight = '0';
-
-    let width = axisWidth * 2;
+    const isWidthGreaterThanRendered = layerStart < axisFrontDate || layerEnd > axisBackDate;
+    const layerStartBeforeAxisFront = layerStart <= axisFrontDate;
+    const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
+    // oversized width allows axis drag buffer
+    let width = axisWidth * 5;
     if (visible) {
-      if (layerStart <= axisFrontDate) {
+      if (layerStartBeforeAxisFront) {
         leftOffset = 0;
       } else {
         // positive diff means layerStart more recent than axisFrontDate
         const diff = moment.utc(layerStart).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
-        leftOffset = gridDiff + postionTransformX;
-        borderRadiusLeft = '6px';
+        leftOffset = gridDiff + positionTransformX;
       }
-
-      if (layerEnd <= axisBackDate) {
+      if (layerEndBeforeAxisBack) {
         // positive diff means layerEnd earlier than back date
         const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
-        width = gridDiff + postionTransformX - leftOffset;
-        borderRadiusRight = '6px';
+        width = gridDiff + positionTransformX - leftOffset;
       }
     }
-
-    const isWidthGreaterThanRendered = layerStart < axisFrontDate || layerEnd > axisBackDate;
-    const borderRadius = `${borderRadiusLeft} ${borderRadiusRight} ${borderRadiusRight} ${borderRadiusLeft}`;
 
     return {
       visible,
       leftOffset,
       width,
-      borderRadius,
       isWidthGreaterThanRendered,
+      layerStartBeforeAxisFront,
+      layerEndBeforeAxisBack,
     };
-  }
-
-  /**
-  * @desc handle hovering on line and adding active tooltip
-  * @param {String} input
-  * @returns {void}
-  */
-  hoverOnToolTip = (input) => {
-    this.setState({
-      hoveredTooltip: { [input]: true },
-    });
-  }
-
-  /**
-  * @desc handle hovering off line and removing active tooltip
-  * @returns {void}
-  */
-  hoverOffToolTip = () => {
-    this.setState({
-      hoveredTooltip: {},
-    });
   }
 
   /**
@@ -271,13 +261,11 @@ class TimelineData extends Component {
       hoveredLayer,
       isDataCoveragePanelOpen,
       parentOffset,
-      position,
+      positionTransformX,
       timeScale,
-      transformX,
     } = this.props;
     const {
       activeLayers,
-      hoveredTooltip,
       shouldIncludeHiddenLayers,
     } = this.state;
     // filter current active layers
@@ -287,9 +275,11 @@ class TimelineData extends Component {
 
     const emptyLayers = activeLayers.length === 0;
 
-    // handle conditional styling
+    // handle conditional container styling
     const maxHeightScrollBar = '203px';
-    const layerListItemHeigthConstant = emptyLayers ? 41 : layers.length * 41;
+    const layerListItemHeigthConstant = emptyLayers
+      ? 41
+      : layers.length * 41;
 
     const dataAvailabilityHandleTopOffset = `${Math.max(-54 - layerListItemHeigthConstant, -259)}px`;
 
@@ -342,7 +332,7 @@ class TimelineData extends Component {
               />
             </header>
             <Scrollbars style={{ maxHeight: maxHeightScrollBar }}>
-              <LayerDataItems
+              <DataItemList
                 activeLayers={activeLayers}
                 appNow={appNow}
                 axisWidth={axisWidth}
@@ -350,12 +340,8 @@ class TimelineData extends Component {
                 frontDate={frontDate}
                 getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
                 hoveredLayer={hoveredLayer}
-                hoveredTooltip={hoveredTooltip}
-                hoverOffToolTip={this.hoverOffToolTip}
-                hoverOnToolTip={this.hoverOnToolTip}
                 timeScale={timeScale}
-                position={position}
-                transformX={transformX}
+                positionTransformX={positionTransformX}
               />
             </Scrollbars>
           </div>
@@ -408,13 +394,12 @@ TimelineData.propTypes = {
   isDataCoveragePanelOpen: PropTypes.bool,
   isProductPickerOpen: PropTypes.bool,
   parentOffset: PropTypes.number,
-  position: PropTypes.number,
+  positionTransformX: PropTypes.number,
   projection: PropTypes.string,
   setMatchingTimelineCoverage: PropTypes.func,
   timelineStartDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
   toggleDataCoveragePanel: PropTypes.func,
-  transformX: PropTypes.number,
 };
 
 export default connect(

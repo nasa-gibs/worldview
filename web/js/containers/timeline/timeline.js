@@ -1255,8 +1255,7 @@ class Timeline extends React.Component {
                       {/* Data Coverage Panel */}
                       <TimelineData
                         appNow={appNow}
-                        position={position}
-                        transformX={transformX}
+                        positionTransformX={position + transformX}
                         timeScale={timeScale}
                         frontDate={frontDate}
                         backDate={backDate}
