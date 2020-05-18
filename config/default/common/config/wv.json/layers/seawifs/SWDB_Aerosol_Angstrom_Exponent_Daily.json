@@ -12,7 +12,10 @@
       ],
       "product": "SWDB_L305",
       "inactive": true,
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

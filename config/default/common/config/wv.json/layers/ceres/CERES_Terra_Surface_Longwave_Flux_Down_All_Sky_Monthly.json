@@ -12,7 +12,7 @@
       ],
       "product": "CER_SYN1deg-Month_Terra-MODIS",
       "inactive": true,
-      "wrapadjacentdays": true
+      "wrapadjacentdays": trueCER_SYN1deg-Month_Terra-MODIS
     }
   }
 }

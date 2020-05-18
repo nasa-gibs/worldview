@@ -11,7 +11,10 @@
         "oco2"
       ],
       "product": "OCO2_L2_Lite_SIF",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

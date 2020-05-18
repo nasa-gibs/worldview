@@ -12,7 +12,11 @@
       ],
       "product": "CER_SYN1deg-Month_Terra-Aqua-MODIS",
       "inactive": true,
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
   }
 }

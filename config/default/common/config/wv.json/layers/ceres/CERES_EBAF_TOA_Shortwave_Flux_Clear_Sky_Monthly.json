@@ -12,7 +12,11 @@
       ],
       "product": "CERES_EBAF-TOA",
       "inactive": true,
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
   }
 }
