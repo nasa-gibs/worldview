@@ -9,9 +9,13 @@
       "layergroup": [
         "daymet"
       ],
-      "product": "1328",
+      "product": "Daymet_V3_CFMosaics_1328",
       "inactive": true,
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
   }
 }

@@ -1,10 +1,10 @@
 {
     "products": {
-        "1328": {
+        "Daymet_V3_CFMosaics_1328": {
             "name": "Daymet: Daily Surface Weather Data on a 1-km Grid for North America, Version 3",
             "handler": "CollectionList",
             "query": {
-                "shortName": "doi:10.3334/ORNLDAAC/1328"
+                "shortName": "Daymet_V3_CFMosaics_1328"
             }
         }
     }

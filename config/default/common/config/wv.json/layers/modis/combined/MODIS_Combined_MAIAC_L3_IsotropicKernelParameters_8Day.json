@@ -11,7 +11,10 @@
         "modis",
         "modis_combined"
       ],
-      "product": ""
+      "product": "",
+      "daynight": [
+        "day"
+      ]
     }
   }
 }

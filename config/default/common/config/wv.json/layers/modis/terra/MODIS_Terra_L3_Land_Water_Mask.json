@@ -12,7 +12,10 @@
       ],
       "product": "MOD44W",
       "inactive": true,
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
   }
 }
