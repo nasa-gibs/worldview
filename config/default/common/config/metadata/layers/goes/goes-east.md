@@ -1,3 +1,6 @@
+
+Note: These layers are generally available for the most recent 30 days, though certain historical ranges are also preserved.
+
 ### Red Visible (0.64 µm, Band 2, 10 minute)
 Temporal coverage: Most recent month
 
@@ -8,7 +11,7 @@ The Geostationary Operational Environmental Satellites (GOES)-East satellite (cu
 References: [GOES-R: ABI Band 2 (0.64 um) Quick Guide](https://www.star.nesdis.noaa.gov/GOES/documents/ABIQuickGuide_Band02.pdf)
 
 ### Clean Infrared (10.3 µm, Band 13, 10 minute)
-Temporal coverage: Most recent 14 days
+Temporal coverage: Most recent month
 
 The Clean Infrared (10.3 um, Band 13) layer from the GOES-East Advanced Baseline Imager (ABI) is useful for detecting clouds all times of day and night and is quite useful in retrievals of cloud top height. It is used to identify and classify cloud and other atmospheric features, estimate cloud-top brightness temperature and cloud particle size, convective severe weather signatures, and hurricane intensity. This infrared window is not strongly affected by atmospheric water vapor.
 
@@ -17,7 +20,7 @@ The Geostationary Operational Environmental Satellites (GOES)-East satellite (cu
 References: [GOES-R: ABI Band 13 (10.3 um) Quick Guide](https://www.star.nesdis.noaa.gov/GOES/documents/ABIQuickGuide_Band13.pdf)
 
 ### Air Mass (10 minute)
-Temporal coverage: Most recent 14 days
+Temporal coverage: Most recent month
 
 The Air Mass layer from the GOES-East Advanced Baseline Imager (ABI) is used primarily for distinguishing between polar and tropical air masses, especially along frontal boundaries and identify high, mid, and low-level clouds. It can also be used to infer cyclogenesis by identifying warm, dry, ozone-rich descending stratospheric air associated with jet streams and potential vorticity (PV) anomalies. The RGB image is comprised of Bands 6.2-7.3, 9.6-10.4 and 6.2.
 
