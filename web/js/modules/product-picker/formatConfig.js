@@ -93,18 +93,6 @@ function getLayerPeriodFacetProps(layer) {
   }
 }
 
-function getOrbitTrackRelatedFacetProps(layer, allLayers) {
-  if (layer.id.includes('OrbitTracks')) {
-    layer.track = capitalizeFirstLetter(layer.track);
-    layer.daynight = capitalizeFirstLetter(layer.daynight);
-  }
-  (layer.tracks || []).forEach((orbitTrackId) => {
-    const { track, daynight } = allLayers[orbitTrackId] || {};
-    setLayerProp(layer, 'track', capitalizeFirstLetter(track));
-    setLayerProp(layer, 'daynight', capitalizeFirstLetter(daynight));
-  });
-}
-
 function formatFacetProps({ layers, measurements, categories }) {
   getMeasurementSourceFacetProps(layers, measurements);
   getCategoryFacetProps(layers, measurements, categories);
@@ -112,22 +100,18 @@ function formatFacetProps({ layers, measurements, categories }) {
 }
 
 /**
- * Map collection data to layer data from wv.json
+ * Derive and format facet props from config
  * @param {*} config
  */
 export default function buildLayerFacetProps(config, selectedDate) {
-  const { collections } = config;
   const layers = formatFacetProps(config);
 
   return lodashMap(layers, (layer) => {
-    const { conceptId } = layer;
-    const collectionData = (conceptId && collections[conceptId]) || {};
-    if (collectionData.processingLevelId) {
-      layer.processingLevelId = collectionData.processingLevelId;
-    }
     layer.availableAtDate = availableAtDate(layer, selectedDate).toString();
     getLayerPeriodFacetProps(layer);
-    getOrbitTrackRelatedFacetProps(layer, layers);
+    if (layer.daynight && layer.daynight.length) {
+      layer.daynight = layer.daynight.map(capitalizeFirstLetter);
+    }
     return layer;
   });
 }

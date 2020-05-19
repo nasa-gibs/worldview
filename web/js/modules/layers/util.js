@@ -69,12 +69,14 @@ export function availableAtDate(def, date) {
 }
 
 export function getOrbitTrackTitle(def) {
-  if (def.daynight && def.track) {
-    return `${lodashStartCase(def.track)}/${lodashStartCase(def.daynight)}`;
-  } if (def.track) {
-    return lodashStartCase(def.track);
-  } if (def.daynight) {
-    return lodashStartCase(def.daynight);
+  const { track } = def;
+  const daynightValue = lodashGet(def, 'daynight[0]');
+  if (track && daynightValue) {
+    return `${lodashStartCase(track)}/${lodashStartCase(daynightValue)}`;
+  } if (track) {
+    return lodashStartCase(track);
+  } if (daynightValue) {
+    return lodashStartCase(daynightValue);
   }
 }
 
