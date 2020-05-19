@@ -18,7 +18,7 @@
         "reference",
         "reference_orbits"
       ],
-      "daynight": "day",
+      "daynight": [ "day" ],
       "track": "ascending",
       "startDate": "2012-05-17",
       "projections": {
