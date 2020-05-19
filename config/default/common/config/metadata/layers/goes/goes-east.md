@@ -1,5 +1,4 @@
-
-Note: These layers are generally available for the most recent 30 days, though certain historical ranges are also preserved.
+Note: This layer is generally available for the **most recent 30 days**, though certain historical ranges are also preserved.
 
 ### Red Visible (0.64 µm, Band 2, 10 minute)
 Temporal coverage: Most recent month
