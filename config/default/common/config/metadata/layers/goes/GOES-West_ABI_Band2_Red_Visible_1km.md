@@ -1,4 +1,4 @@
-Note: This layer is generally available for the most recent 30 days, though certain historical ranges are also preserved.
+Note: This layer is generally available for the **most recent 30 days**, though certain historical ranges are also preserved.
 
 The Red Visible (0.64 um, Band 2) layer from the GOES-West Advanced Baseline Imager (ABI) is used primarily to monitor the evolution of clouds throughout the daylight hours. It is also useful for identifying small-scale features such as river fog/clear air boundaries, or overshooting tops of cumulus clouds. It can also be used to identify daytime snow and ice cover, diagnose low-level cloud-drift winds, assist with detections of volcanic ash and analysis of hurricanes and winter storms.  
 

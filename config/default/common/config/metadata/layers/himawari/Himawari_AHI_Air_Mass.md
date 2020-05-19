@@ -1,4 +1,4 @@
-Note: This layer is generally available for the most recent 30 days, though certain historical ranges are also preserved.
+Note: This layer is generally available for the **most recent 30 days**, though certain historical ranges are also preserved.
 
 The Air Mass layer from the Himawari-8 Advanced Himawari Imager (AHI) is used primarily for distinguishing between polar and tropical air masses, especially along frontal boundaries and identify high, mid, and low-level clouds. It can also be used to infer cyclogenesis by identifying warm, dry, ozone-rich descending stratospheric air associated with jet streams and potential vorticity (PV) anomalies. The RGB image is comprised of Bands 6.2-7.3, 9.6-10.4 and 6.2.
 
