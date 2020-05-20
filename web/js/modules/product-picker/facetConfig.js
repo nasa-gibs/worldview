@@ -1,9 +1,19 @@
+import React from 'react';
 import AvailableFacet from '../../components/layer/product-picker/search/available-facet';
+import SelectedDate from '../../components/selected-date';
+
+const AvailableLabel = (
+  <>
+    Visible on &nbsp;
+    <SelectedDate />
+  </>
+);
 
 export default [
   {
     field: 'availableAtDate',
-    label: 'Visible',
+    label: AvailableLabel,
+    booleanOptionLabel: 'Visible',
     filterType: 'any',
     tooltip: 'Layer has available imagery at currently selected date/time',
     view: AvailableFacet,

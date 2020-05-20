@@ -13,16 +13,21 @@ function ProductFacet(props) {
   const [tooltipVisible, toggleTooltip] = useState(false);
 
   const {
-    field,
-    label,
-    filterType,
-    show,
-    tooltip,
+    config,
     data,
-    view,
     collapsed,
     toggleCollapse,
   } = props;
+
+  const {
+    field,
+    booleanOptionLabel,
+    label,
+    filterType,
+    tooltip,
+    show,
+    view,
+  } = config;
 
   const renderHeaderIcons = () => (
     <>
@@ -72,7 +77,7 @@ function ProductFacet(props) {
         {!collapsed && (
           <Facet
             field={field}
-            label={label}
+            label={booleanOptionLabel || label}
             filterType={filterType}
             show={show}
             view={view}
@@ -83,15 +88,10 @@ function ProductFacet(props) {
 }
 
 ProductFacet.propTypes = {
+  config: PropTypes.object,
   collapsed: PropTypes.bool,
   data: PropTypes.array,
-  field: PropTypes.string,
-  filterType: PropTypes.string,
-  label: PropTypes.string,
-  show: PropTypes.number,
-  tooltip: PropTypes.string,
   toggleCollapse: PropTypes.func,
-  view: PropTypes.func,
 };
 
 
