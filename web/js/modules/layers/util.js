@@ -42,30 +42,19 @@ export function availableAtDate(def, date) {
     if (!dateRanges) {
       return date > startDate;
     }
-    // if only one date range, substitute def.endDate with def.dateRanges[0].endDate
-    if (dateRanges.length === 1) {
-      const rangeEndDate = dateRanges[0].endDate;
-      return date > startDate && rangeEndDate && date < new Date(rangeEndDate);
+
+    const endRange = dateRanges.length - 1;
+    const rangeEndDate = new Date(dateRanges[endRange].endDate);
+    if (inactive) {
+      // We may need to look at individual date ranges for more accuracy
+      return date > startDate && rangeEndDate && date < rangeEndDate;
     }
-  }
-  // need to traverse available layer date range
-  const availableDates = datesinDateRanges(def, date);
-  if (!availableDates.length && !endDate && !inactive) {
+
+    // TODO do we need to see if current date falls within a start/end
+    // date of any date range before resorting to simply checking if it falls
+    // after the start date for an active layer?
     return date > startDate;
   }
-
-  // if (endDate && inactive) {
-  //   return date < endDate && date > startDate;
-  // }
-  // // no endDate may indicate ongoing
-  // if (startDate && !endDate) {
-  //   if (!dateRanges) {
-  //     return date > startDate;
-  //   }
-  //   const endRange = dateRanges.length - 1;
-  //   const rangeEndDate = new Date(dateRanges[endRange].endDate);
-  //   return date > startDate && rangeEndDate && date < rangeEndDate;
-  // }
 }
 
 export function getOrbitTrackTitle(def) {
