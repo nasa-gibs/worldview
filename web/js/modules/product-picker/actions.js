@@ -2,6 +2,7 @@ import initSearch from './searchConfig';
 import {
   SAVE_SEARCH_STATE,
   INIT_SEARCH_STATE,
+  COLLAPSE_FACET,
   SELECT_CATEGORY,
   SELECT_MEASUREMENT,
   SELECT_SOURCE,
@@ -27,6 +28,12 @@ export function saveSearchState(filters, searchTerm) {
     type: SAVE_SEARCH_STATE,
     filters,
     searchTerm,
+  };
+}
+export function collapseFacet(field) {
+  return {
+    type: COLLAPSE_FACET,
+    field,
   };
 }
 export function selectCategory(value) {
