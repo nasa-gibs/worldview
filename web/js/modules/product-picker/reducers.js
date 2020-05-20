@@ -1,6 +1,9 @@
 import googleTagManager from 'googleTagManager';
 
 import {
+  SAVE_SEARCH_STATE,
+  INIT_SEARCH_STATE,
+  COLLAPSE_FACET,
   SELECT_CATEGORY,
   SELECT_MEASUREMENT,
   SELECT_SOURCE,
@@ -11,8 +14,6 @@ import {
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
   RESET_STATE,
-  INIT_SEARCH_STATE,
-  SAVE_SEARCH_STATE,
 } from './constants';
 
 export const productPickerState = {
@@ -26,6 +27,7 @@ export const productPickerState = {
   selectedMeasurement: undefined,
   selectedMeasurementSourceIndex: 0,
   searchConfig: undefined,
+  collapsedFacets: {},
 };
 
 export function getInitialState(config) {
@@ -49,6 +51,18 @@ export function productPickerReducer(state = productPickerState, action) {
         filters,
         searchTerm,
         searchConfig: null,
+      };
+    }
+
+    case COLLAPSE_FACET: {
+      const { field } = action;
+      const { collapsedFacets } = state;
+      return {
+        ...state,
+        collapsedFacets: {
+          ...state.collapsedFacets,
+          [field]: !collapsedFacets[field],
+        },
       };
     }
 

@@ -7,6 +7,7 @@ import FilterChips from './filter-chips';
 import ProductFacet from './product-facet';
 import {
   toggleMobileFacets as toggleMobileFacetsAction,
+  collapseFacet as collapseFacetAction,
 } from '../../../../modules/product-picker/actions';
 import facetConfig from '../../../../modules/product-picker/facetConfig';
 
@@ -20,6 +21,8 @@ function Facets(props) {
     results,
     showMobileFacets,
     toggleMobileFacets,
+    collapsedFacets,
+    toggleCollapseFacet,
   } = props;
 
   const showFacets = (browser.greaterThan.small && results.length) || showMobileFacets;
@@ -37,6 +40,7 @@ function Facets(props) {
         {facetConfig.map((config) => {
           const facet = facets[config.field];
           const data = (facet && facet.length && facet[0].data) || [];
+
           return (
             <ProductFacet
               key={config.field}
@@ -47,6 +51,8 @@ function Facets(props) {
               show={config.show}
               view={config.view}
               data={data}
+              collapsed={collapsedFacets[config.field]}
+              toggleCollapse={toggleCollapseFacet}
             />
           );
         })}
@@ -66,12 +72,14 @@ function Facets(props) {
 
 Facets.propTypes = {
   browser: PropTypes.object,
+  collapsedFacets: PropTypes.object,
   facets: PropTypes.object,
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
   removeFilter: PropTypes.func,
   results: PropTypes.array,
   showMobileFacets: PropTypes.bool,
+  toggleCollapseFacet: PropTypes.func,
   toggleMobileFacets: PropTypes.func,
 };
 
@@ -79,13 +87,17 @@ const mapDispatchToProps = (dispatch) => ({
   toggleMobileFacets: () => {
     dispatch(toggleMobileFacetsAction());
   },
+  toggleCollapseFacet: (field) => {
+    dispatch(collapseFacetAction(field));
+  },
 });
 
 function mapStateToProps(state, ownProps) {
   const { browser, productPicker, date } = state;
-  const { showMobileFacets } = productPicker;
+  const { showMobileFacets, collapsedFacets } = productPicker;
 
   return {
+    collapsedFacets,
     selectedDate: date.selected,
     isMobile: browser.lessThan.medium,
     showMobileFacets,
