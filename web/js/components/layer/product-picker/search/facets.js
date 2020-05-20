@@ -44,12 +44,7 @@ function Facets(props) {
           return (
             <ProductFacet
               key={config.field}
-              field={config.field}
-              label={config.label}
-              filterType={config.filterType}
-              tooltip={config.tooltip}
-              show={config.show}
-              view={config.view}
+              config={config}
               data={data}
               collapsed={collapsedFacets[config.field]}
               toggleCollapse={toggleCollapseFacet}
