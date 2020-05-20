@@ -116,10 +116,11 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
 fi
 
 # Run getCollectionData.py to fetch collection metadata
-if [ -e "$BUILD_DIR/config/wv.json/conceptIds.json" ] ; then
-    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/conceptIds.json" \
-        "$BUILD_DIR/config/wv.json/collections.json"
-fi
+# Disabled for now
+# if [ -e "$BUILD_DIR/config/wv.json/conceptIds.json" ] ; then
+#     "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/conceptIds.json" \
+#         "$BUILD_DIR/config/wv.json/collections.json"
+# fi
 
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
