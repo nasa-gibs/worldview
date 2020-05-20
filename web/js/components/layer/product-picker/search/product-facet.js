@@ -10,7 +10,6 @@ import {
 import { Tooltip } from 'reactstrap';
 
 function ProductFacet(props) {
-  const [collapsed, toggleCollapse] = useState(false);
   const [tooltipVisible, toggleTooltip] = useState(false);
 
   const {
@@ -21,6 +20,8 @@ function ProductFacet(props) {
     tooltip,
     data,
     view,
+    collapsed,
+    toggleCollapse,
   } = props;
 
   const renderHeaderIcons = () => (
@@ -43,12 +44,14 @@ function ProductFacet(props) {
       <FontAwesomeIcon
         className={`facet-collapse-toggle ${!data.length && 'hidden'}`}
         icon={!collapsed ? faCaretDown : faCaretRight}
-        onClick={() => toggleCollapse(!collapsed)}
+        onClick={() => toggleCollapse(field)}
       />
     </>
   );
 
-  const noBooleanResults = filterType === 'boolean' && data.length === 1 && data.find(({ value }) => value === 'false');
+  const noBooleanResults = field === 'availableAtDate'
+     && data.length === 1
+     && data.find(({ value }) => value === 'false');
   const noResults = !data.length || noBooleanResults;
 
   return collapsed || noResults
@@ -58,7 +61,7 @@ function ProductFacet(props) {
         <fieldset className="sui-facet">
           <legend className="sui-facet__title">{label}</legend>
         </fieldset>
-        {noResults && (
+        {noResults && !collapsed && (
           <div className="no-matches">No matches.</div>
         )}
       </div>
@@ -80,12 +83,14 @@ function ProductFacet(props) {
 }
 
 ProductFacet.propTypes = {
+  collapsed: PropTypes.bool,
+  data: PropTypes.array,
   field: PropTypes.string,
-  label: PropTypes.string,
   filterType: PropTypes.string,
+  label: PropTypes.string,
   show: PropTypes.number,
   tooltip: PropTypes.string,
-  data: PropTypes.array,
+  toggleCollapse: PropTypes.func,
   view: PropTypes.func,
 };
 
