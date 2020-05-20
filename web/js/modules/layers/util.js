@@ -1225,3 +1225,27 @@ export function mapLocationToLayerState(
   }
   return newStateFromLocation;
 }
+/**
+ * Determine if active layers have a vector layer
+ * @param {Object} layersState
+ * @param {Object} compareState
+ *
+ * @return {Boolean}
+ */
+export const hasVectorLayers = (layersState, compareState) => {
+  const { activeString } = compareState;
+  const { active, activeB } = layersState;
+  const layersArray = compareState.active ? active.concat(activeB) : layersState[activeString];
+  const len = layersArray.length;
+  // Used for loop
+  // so break could be used
+  let hasVectorTypeLayer = false;
+  for (let i = 0; i < len; i += 1) {
+    const def = layersArray[i];
+    if (def.type === 'vector' && def.visible) {
+      hasVectorTypeLayer = true;
+      break;
+    }
+  }
+  return hasVectorTypeLayer;
+};

@@ -1,3 +1,5 @@
+import util from '../util/util';
+
 const ZOOM_DURATION = 250;
 
 /*
@@ -36,4 +38,38 @@ export function getActiveLayerGroup(map, layerGroupString) {
     }
   }
   return group;
+}
+/**
+ * Create x/y/z vectortile requester url
+ * @param {Date} date
+ * @param {string} layerName
+ * @param {String} tileMatrixSet
+ *
+ * @return {String} URL
+ */
+export function createVectorUrl(date, layerName, tileMatrixSet) {
+  return `${'?'
+  + 'TIME='}${
+    util.toISOStringSeconds(util.roundTimeOneMinute(date))
+  }&layer=${
+    layerName
+  }&tilematrixset=${
+    tileMatrixSet
+  }&Service=WMTS`
+  + '&Request=GetTile'
+  + '&Version=1.0.0'
+  + '&FORMAT=application%2Fvnd.mapbox-vector-tile'
+  + '&TileMatrix={z}&TileCol={x}&TileRow={y}';
+}
+/**
+ *
+ * @param {Object} def
+ * @param {String} projId
+ */
+export function mergeBreakpointLayerAttributes(def, projId) {
+  const { breakPointLayer } = def;
+  if (breakPointLayer) {
+    const updatedBreakPointLayer = { ...breakPointLayer, ...breakPointLayer.projections[projId] };
+    return { ...def, breakPointLayer: updatedBreakPointLayer };
+  } return def;
 }
