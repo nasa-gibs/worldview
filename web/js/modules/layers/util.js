@@ -729,8 +729,6 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
               dateArray.pop();
               dateArray.push(minDate);
               dateArray.push(lastDateInDateArray);
-            } else {
-              dateArray.push(minDate);
             }
           } else {
             dateArray.push(minDate);
@@ -738,11 +736,6 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
           hitMaxLimitOfRange = true;
           return;
         }
-      }
-      // handle single date coverage by adding date to date array
-      if (startDate === endDate) {
-        dateArray.push(minDate);
-        return;
       }
     }
 
