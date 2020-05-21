@@ -276,6 +276,14 @@ li.item.productsitem.inmotion,
 .productsitem svg.svg-inline--fa {
   color: #333;
 }
+.productsitem .layer-main .layer-pointer-icon {
+  position: absolute;
+  right: 4px;
+  bottom: 14px;
+}
+.productsitem  .layer-pointer-icon svg.svg-inline--fa {
+  color: #22a;
+}
 .layer-hidden svg.svg-inline--fa {
   color: #c5c5c8;
 }

@@ -6,7 +6,7 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTimes, faSlidersH, faInfo, faBan,
+  faTimes, faSlidersH, faInfo, faBan, faHandPointUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
@@ -25,6 +25,7 @@ import {
   layerHover,
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
+import { isVectorLayerClickable } from '../../modules/layers/util';
 
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
@@ -161,6 +162,7 @@ class Layer extends React.Component {
       zot,
       isInProjection,
       tracksForLayer,
+      hasClickableFeature,
     } = this.props;
 
     const containerClass = isDisabled
@@ -233,6 +235,12 @@ class Layer extends React.Component {
                 <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
                 {hasPalette ? this.getPaletteLegend() : ''}
               </div>
+              {hasClickableFeature ? (
+                <div className="layer-pointer-icon">
+                  {' '}
+                  <FontAwesomeIcon title="You can click the features of this layer" icon={faHandPointUp} fixedWidth />
+                </div>
+              ) : null}
               {tracksForLayer.length > 0 && (
               <div className="layer-tracks">
                 {tracksForLayer.map((track) => (
@@ -288,6 +296,7 @@ Layer.propTypes = {
   requestPalette: PropTypes.func,
   runningObject: PropTypes.object,
   toggleVisibility: PropTypes.func,
+  hasClickableFeature: PropTypes.bool,
   tracksForLayer: PropTypes.array,
   zot: PropTypes.number,
 };
@@ -312,7 +321,8 @@ function mapStateToProps(state, ownProps) {
     : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
   const tracksForLayer = layers[layerGroupName].filter((activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track));
-
+  const selectedMap = lodashGet(map, 'ui.selected');
+  console.log(isVectorLayerClickable(layer, selectedMap));
   return {
     compare,
     tracksForLayer,
@@ -327,6 +337,7 @@ function mapStateToProps(state, ownProps) {
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     layerGroupName,
+    hasClickableFeature: isVectorLayerClickable(layer, selectedMap),
     isMobile: state.browser.lessThan.medium,
     hasPalette,
     getPalette: (layerId, index) => getPalette(layer.id, index, layerGroupName, state),

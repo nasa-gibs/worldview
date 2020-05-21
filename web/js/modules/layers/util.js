@@ -1249,3 +1249,20 @@ export const hasVectorLayers = (layersState, compareState) => {
   }
   return hasVectorTypeLayer;
 };
+
+/**
+ * Determine if active layers have a vector layer
+ * @param {Object} layersState
+ * @param {Object} compareState
+ *
+ * @return {Boolean}
+ */
+export const isVectorLayerClickable = (layer, map) => {
+  if (!map || layer.type !== 'vector') return false;
+  const res = map.getView().getResolution();
+  const { breakPointLayer } = layer;
+  if (breakPointLayer) {
+    return res <= breakPointLayer.resolutionBreakPoint;
+  }
+  return true;
+};
