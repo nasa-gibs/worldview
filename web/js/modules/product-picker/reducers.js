@@ -127,6 +127,7 @@ export function productPickerReducer(state = productPickerState, action) {
         showMobileFacets: true,
         category: null,
         categoryType: 'hazards and disasters',
+        selectedMeasurementSourceIndex: 0,
       };
     }
 
@@ -176,6 +177,9 @@ export function productPickerReducer(state = productPickerState, action) {
         filters: [],
         searchTerm: '',
         selectedLayer: null,
+        category: null,
+        selectedMeasurement: null,
+        selectedMeasurementSourceIndex: 0,
       };
       return { ...state, ...newState };
     }
