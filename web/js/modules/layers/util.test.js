@@ -1,5 +1,6 @@
 import { assign } from 'lodash';
 import {
+  datesinDateRanges,
   serializeLayers,
   layersParse12,
   removeLayer,
@@ -237,5 +238,69 @@ describe('permalink 1.1', () => {
     const activeLayers = stateFromLocation.layers.active;
     expect(activeLayers[0].id).toBe('terra-cr');
     expect(activeLayers[0].visible).toBeFalsy();
+  });
+  test('test limited date range returned for layer with single date range and interval', () => {
+    const parameters = {
+      products: 'terra-cr',
+    };
+
+    const stateFromLocation = mapLocationToLayerState(
+      parameters,
+      defaultStateFromLocation,
+      globalState,
+      config,
+    );
+    const activeLayers = stateFromLocation.layers.active;
+    const dates = datesinDateRanges(activeLayers[0], new Date('2020-01-01'));
+    expect(dates.length).toBe(3);
+  });
+  test('test only next date returned (out of range past)', () => {
+    const parameters = {
+      products: 'terra-cr',
+    };
+
+    const stateFromLocation = mapLocationToLayerState(
+      parameters,
+      defaultStateFromLocation,
+      globalState,
+      config,
+    );
+    const activeLayers = stateFromLocation.layers.active;
+    const dates = datesinDateRanges(activeLayers[0], new Date('1990-01-01'));
+    expect(dates.length).toBe(1);
+  });
+  test('test no dates returned (out of range future)', () => {
+    const parameters = {
+      products: 'terra-cr',
+    };
+
+    const stateFromLocation = mapLocationToLayerState(
+      parameters,
+      defaultStateFromLocation,
+      globalState,
+      config,
+    );
+    const activeLayers = stateFromLocation.layers.active;
+    const dates = datesinDateRanges(activeLayers[0], new Date('2030-01-01'));
+    expect(dates.length).toBe(0);
+  });
+  test('test date range returned from given start/end date range for data panel', () => {
+    const parameters = {
+      products: 'terra-cr',
+    };
+
+    const stateFromLocation = mapLocationToLayerState(
+      parameters,
+      defaultStateFromLocation,
+      globalState,
+      config,
+    );
+    const activeLayers = stateFromLocation.layers.active;
+    const dates = datesinDateRanges(activeLayers[0], new Date('2018-01-01'), new Date('2017-12-01'), new Date('2018-02-01'), new Date('2020-01-01'));
+    const isFirstDateEqual = dates[0].toISOString() === '2017-12-01T00:00:00.000Z';
+    const isLastDateEqual = dates[dates.length - 1].toISOString() === '2018-01-31T00:00:00.000Z';
+    expect(dates.length).toBe(62);
+    expect(isFirstDateEqual).toBeTruthy();
+    expect(isLastDateEqual).toBeTruthy();
   });
 });

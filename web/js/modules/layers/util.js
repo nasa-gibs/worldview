@@ -211,7 +211,7 @@ const getMinStartDate = (timeDiff, period, interval, startDateLimit, minYear, mi
       timeUnit = util.getTimezoneOffsetDate(timeUnit);
       const timeUnitTime = timeUnit.getTime();
 
-      if (timeUnitTime >= startDateLimitTime) {
+      if (timeUnitTime > startDateLimitTime) {
         minStartDate = prevDate;
       } else {
         prevDate = timeUnit;
