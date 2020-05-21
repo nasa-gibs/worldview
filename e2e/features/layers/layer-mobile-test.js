@@ -1,6 +1,9 @@
 const skipTour = require('../../reuseables/skip-tour.js');
 const { assertCategories, assertDefaultLayers } = require('../../reuseables/layer-picker.js');
 
+const filterButton = '.btn.filter-button';
+const resetButton = '.btn.clear-filters';
+const applyButton = '.btn.apply-facets';
 const layersSearchField = 'input#layers-search-input';
 const categoriesNav = '#categories-nav';
 const layerSearchList = '.layer-list-container.search';
@@ -16,7 +19,6 @@ const aodMeasurementContents = '#accordion-legacy-all-aerosol-optical-depth';
 const aodCheckboxMODIS = '#checkbox-case-MODIS_Combined_Value_Added_AOD';
 const aodCheckboxMAIAC = '#checkbox-case-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
 const aodCheckbox = '#checkbox-case-MODIS_Aqua_Aerosol';
-const unavailableFilterToggle = '[for=unavailable-toggle]';
 const collapsedLayerButton = '#accordionTogglerButton';
 const layerCount = '.layer-count.mobile';
 const layerContainer = '.layer-container.sidebar-panel';
@@ -28,6 +30,10 @@ const aquaModisTab = '#aqua-modis-1-source-Nav';
 const sourceTabs = '.source-nav-item';
 const aodSearchRow = '#MODIS_Aqua_Aerosol-search-row';
 const aodSearchCheckbox = '#MODIS_Aqua_Aerosol-search-row > .wv-checkbox';
+const availableFacetLabel = '#availableAtDate-facet .sui-boolean-facet__option-input-wrapper';
+const categoryOceansFacetLabel = '#categories-facet [for="example_facet_CategoryOceans"]';
+const categoryFacetCollapseToggle = '#categories-facet .facet-collapse-toggle';
+const sourcesDMSPFacetLabel = '#sources-facet [for="example_facet_SourceDMSP-F16/SSMIS"';
 
 const TIME_LIMIT = 10000;
 
@@ -88,10 +94,26 @@ module.exports = {
     c.click(layerPickerBackButton);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
   },
+  'Search button changes to facet selection': (c) => {
+    c.click(filterButton);
+    c.waitForElementVisible('.facet-container', TIME_LIMIT, (e) => {
+      c.click(availableFacetLabel);
+      c.click(categoryOceansFacetLabel);
+      c.click(categoryFacetCollapseToggle);
+      // TODO verify "+ More button reveals additional choices"
+      // TODO verify collapsing sections works
+      c.click(sourcesDMSPFacetLabel);
+      c.click(applyButton);
+      c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
+        c.expect.elements(layersSearchRow).count.to.equal(8);
+      });
+      c.click(resetButton);
+    });
+  },
   'Searching for layers': (c) => {
     c.setValue(layersSearchField, 'aerosol optical depth');
     c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
-      c.expect.elements(layersSearchRow).count.to.equal(16);
+      c.expect.elements(layersSearchRow).count.to.equal(17);
       c.assert.attributeEquals('.search-row .checked input', 'id', 'MODIS_Aqua_Aerosol-checkbox');
     });
   },
@@ -118,21 +140,6 @@ module.exports = {
     c.assert.not.cssClassPresent(aodSearchRow, 'selected');
     c.click(aodSearchRow).pause(300);
     c.assert.cssClassPresent(aodSearchRow, 'selected');
-  },
-  'Unvailable filter removes results and when disabled, they show in the list': (c) => {
-    c.clearValue(layersSearchField);
-    c.setValue(layersSearchField, 'goes').pause(500);
-    c.waitForElementVisible('.no-results', TIME_LIMIT, (e) => {
-      c.assert.containsText('.no-results', 'No layers found!');
-      c.click('.filter-button');
-      c.waitForElementVisible('.filter-controls', TIME_LIMIT, (e) => {
-        c.click(unavailableFilterToggle);
-        c.waitForElementVisible(layersSearchRow, TIME_LIMIT, (e) => {
-          c.click('.filter-button');
-          c.expect.elements(layersSearchRow).count.to.equal(6);
-        });
-      });
-    });
   },
   'Close product picker and confirm added layers show in sidebar': (c) => {
     c.click(layersModalCloseButton).pause(200);
