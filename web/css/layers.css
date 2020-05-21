@@ -542,9 +542,6 @@
       max-width: 800px;
     }
   }
-  .layer-list-container {
-    /* background-image: linear-gradient(360deg, #aaa, #eee 15%); */
-  }
   .layer-detail-container.search {
     flex: 2;
     height: 65%;
