@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import OlCoordinates from '../components/map/ol-coordinates';
+import * as olExtent from 'ol/extent';
+import * as olProj from 'ol/proj';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
@@ -9,7 +11,9 @@ import { selectVectorFeatures } from '../modules/vector-styles/actions';
 import { groupBy as lodashGroupBy, debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import { changeCursor } from '../modules/map/actions';
 import { isFromActiveCompareRegion } from '../modules/compare/util';
-
+import {
+  toggleHoveredGranule
+} from '../modules/layers/actions';
 export class MapInteractions extends React.Component {
   constructor(props) {
     super(props);
@@ -47,8 +51,47 @@ export class MapInteractions extends React.Component {
   }
 
   mouseMove(event, map, crs) {
+    // const {granuleCMRGeometry, granuleLayerId, toggleHoveredGranule } = this.props;
     const pixels = map.getEventPixel(event);
-    const coord = map.getCoordinateFromPixel(pixels);
+    let coord = map.getCoordinateFromPixel(pixels);
+
+    // transform from meter x,y to coordinates
+    if (crs !== 'EPSG:4326') {
+      coord = olProj.transform([coord[0], coord[1]], crs, 'EPSG:4326');
+    }
+
+    if (this.props.granuleCMRGeometry) {
+      let toggledGranuleFootprint;
+      var gcmr = Object.keys(this.props.granuleCMRGeometry).map(key => {
+        return { [key]: this.props.granuleCMRGeometry[key] };
+      });
+
+      const cmrObj = {};
+      for (let i = 0; i < gcmr.length; i++) {
+        const granObj = gcmr[i];
+        const date = Object.keys(granObj)[0];
+        const geom = Object.values(granObj)[0];
+
+        cmrObj[date] = geom;
+
+        const bl = olExtent.getBottomLeft(geom);
+        const tr = olExtent.getTopRight(geom);
+
+        // const geomExtent = ['-139.191498', '-55.285027', '-94.494011', '-55.285027',];
+        const geomExtent = [bl[0][0], bl[0][1], tr[0][0], tr[0][1]];
+        const coordWithinExtent = olExtent.containsCoordinate(geomExtent, [coord[0], coord[1]]);
+
+        if (coordWithinExtent) {
+          toggledGranuleFootprint = true;
+          this.props.toggleHoveredGranule(this.props.granuleLayerId, this.props.proj.id, date);
+        }
+      }
+
+      if (this.props.hoveredGranule && !toggledGranuleFootprint) {
+        this.props.toggleHoveredGranule(this.props.granuleLayerId, this.props.proj.id, null);
+      }
+    }
+
     const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj } = this.props;
     const [lon, lat] = coord;
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
@@ -124,15 +167,36 @@ const mapDispatchToProps = dispatch => ({
         }
       }
     ));
+  },
+  toggleHoveredGranule: (id, projection, granuleDate) => {
+    dispatch(toggleHoveredGranule(id, projection, granuleDate));
   }
 });
 function mapStateToProps(state) {
-  const { modal, map, measure, vectorStyles, browser, compare, proj } = state;
+  const { layers, modal, map, measure, vectorStyles, browser, compare, proj } = state;
+  const groupName = compare.activeString;
+  const projection = proj.id;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
+  let granuleCMRGeometry;
+  let granuleLayerId;
+  const hoveredGranule = layers.hoveredGranule;
+
+  // TODO: CURRENTLY RELYING ON PROVIDED LAYER ID, NEED TO SET UP GLOBAL LAYER STATE WITH CURRENT "FAMILY" OF SATELLITE/PRODUCT
+  const isGranuleIdOptions = {
+    VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT: true,
+    'VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT': true,
+    'VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT': true
+  };
+  const isActiveGranuleVisible = layers.active.filter((layer) => layer.visible && isGranuleIdOptions[layer.id]);
+  if (isActiveGranuleVisible.length && layers.granuleLayers[groupName][projection] && layers.granuleLayers[groupName][projection].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT) {
+    granuleCMRGeometry = layers.granuleLayers[groupName][projection].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT.geometry;
+    granuleLayerId = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT';
+  }
+
   return {
     modalState: modal,
     isShowingClick: map.isClickable,
@@ -140,6 +204,9 @@ function mapStateToProps(state) {
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
     isMobile: browser.lessThan.medium,
+    granuleCMRGeometry,
+    granuleLayerId,
+    hoveredGranule,
     compareState: compare,
     swipeOffset,
     proj
@@ -156,10 +223,14 @@ MapInteractions.propTypes = {
   openVectorDiaglog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
   compareState: PropTypes.object,
+  granuleCMRGeometry: PropTypes.object,
+  granuleLayerId: PropTypes.string,
+  hoveredGranule: PropTypes.object,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
   proj: PropTypes.object,
-  swipeOffset: PropTypes.number
+  swipeOffset: PropTypes.number,
+  toggleHoveredGranule: PropTypes.func
 };
 export default connect(
   mapStateToProps,

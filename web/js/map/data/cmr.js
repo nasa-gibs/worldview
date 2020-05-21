@@ -105,11 +105,13 @@ export function dataCmrGeometry(result) {
       });
       olPolygons.push(new OlGeomPolygon(olRings));
     });
+    console.log(olPolygons);
     return olPolygons[0];
   };
 
   var initFromPolygons = function(cmrPolygons) {
     $.each(cmrPolygons, function(index, cmrPolygon) {
+      console.log(cmrPolygons);
       var rings = [];
       $.each(cmrPolygon, function(index, cmrRing) {
         var ring = [];
@@ -124,6 +126,7 @@ export function dataCmrGeometry(result) {
         }
         rings.push(ring);
       });
+      console.log(rings);
       self.polygons.push(rings);
     });
   };

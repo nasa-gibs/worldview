@@ -42,14 +42,14 @@ export const initialState = {
   hoveredGranule: null,
   granuleLayers: {
     active: {
-      arctic: [],
-      geographic: [],
-      antarctic: []
+      arctic: {},
+      geographic: {},
+      antarctic: {}
     },
     activeB: {
-      arctic: [],
-      geographic: [],
-      antarctic: []
+      arctic: {},
+      geographic: {},
+      antarctic: {}
     }
   }
 };
@@ -177,7 +177,11 @@ export function layerReducer(state = initialState, action) {
         granuleLayers: {
           [action.activeKey]: {
             [action.proj]: {
-              [action.id]: { $set: { dates: action.dates, count: action.count, geometry: action.geometry } }
+              $merge: {
+                [action.id]: {
+                  dates: action.dates, count: action.count, geometry: action.geometry
+                }
+              }
             }
           }
         }
@@ -187,7 +191,11 @@ export function layerReducer(state = initialState, action) {
         granuleLayers: {
           [action.activeKey]: {
             [action.proj]: {
-              [action.id]: { $merge: { dates: action.dates, count: action.count } }
+              $merge: {
+                [action.id]: {
+                  dates: action.dates, count: action.count
+                }
+              }
             }
           }
         }
@@ -197,7 +205,11 @@ export function layerReducer(state = initialState, action) {
         granuleLayers: {
           [action.activeKey]: {
             [action.proj]: {
-              [action.id]: { $merge: { geometry: action.geometry } }
+              $merge: {
+                [action.id]: {
+                  geometry: action.geometry
+                }
+              }
             }
           }
         }

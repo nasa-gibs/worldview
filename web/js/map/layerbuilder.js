@@ -116,10 +116,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const getDayNightFilteredDates = (def, selectedDate, dateInterval, granuleCount, filterTarget) => {
     const layerId = 'VJ102MOD';
-    // TODO: add product layer ID to config
-    // const layerId = def.product;
-    // console.log(def)
-
     var ajaxOptions = {
       url: 'https://cmr.earthdata.nasa.gov/search/',
       headers: {
@@ -137,15 +133,14 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const granuleDateList = [];
     // https://cmr.earthdata.nasa.gov/search/granules.json?shortName=VJ102MOD&temporal=2019-07-21T00:36:00.000Z,2019-07-24T23:36:00.000Z&pageSize=1000
     const query = 'https://cmr.earthdata.nasa.gov/search/granules.json?shortName=' + layerId + '&temporal=' + startQueryDate + ',' + endQueryDate + '&pageSize=1000';
+
     return fetch(query, ajaxOptions)
       .then(response => response.json())
       .then(data => {
-        // console.log(data);
         data.feed.entry.map(entry => {
           const date = entry.time_start.split('.')[0] + 'Z';
           const polygons = entry.polygons[0][0].split(' ');
           // const matchesFilterFlag = entry.day_night_flag === filterTarget;
-
           // TODO: most recent CMR update has NIGHT granules that were previously DAY ?!?
           // if (!matchesFilterFlag) {
           // TODO: polygons for extent filtering
@@ -159,6 +154,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
           //   const coordinates = olProj.transform(tuple, 'EPSG:4326', 'EPSG:3031');
           //   polygons.push(coordinates);
+
           const polygonReorder = [];
           for (let i = 0; i < polygons.length; i += 2) {
             const tuple = [];
@@ -166,9 +162,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
             tuple.unshift(polygons[i + 1]);
             polygonReorder.push(tuple);
           }
-          // }
-
-          // console.log(polygonReorder)
 
           granuleDateList.push({
             date,
@@ -176,7 +169,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           });
           // }
         });
-        return granuleDateList.slice(-granuleCount);
+        const slicedGranuleDateList = granuleDateList.slice(-granuleCount);
+        return slicedGranuleDateList;
       })
       .catch(error => console.log(error));
   };
@@ -194,7 +188,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @returns {array} collection of OpenLayers TileLayers
    */
   const createGranuleDayLayers = (granuleDayTimes, def, proj, state, attributes) => {
-    // console.log(granuleDayTimes)
     const granuleLayers = granuleDayTimes.map(granuleDateISO => {
       const group = attributes.group || state.compare.activeDateStr;
       const granuleISOKey = `${def.id}:${proj.id}:${granuleDateISO.date}::${group}`;
@@ -316,27 +309,23 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const state = store.getState();
     const proj = state.proj.selected;
 
-    let granuleCount;
+    const granuleCount = 1;
     let updatedGranules;
 
     let geometry = granuleLayerParam && granuleLayerParam.geometry;
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
     const group = options.group || 'active';
-
-    console.log(state.layers.granuleLayers[group][proj.id][def.id]);
     const isActive = group === 'active';
     const activeKey = isActive ? 'active' : 'activeB';
     const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
-    // let date = self.closestDate(def, options);
-    console.log(closestDate, nextDate, previousDate);
     let date = closestDate;
     const key = self.layerKey(def, options, state);
 
     let getFilteredDates;
     const isGranule = !!(def.tags && def.tags.contains('granule'));
     if (isGranule) {
-      granuleCount = (granuleLayerParam && granuleLayerParam.granuleCount) || 20;
+      // granuleCount = (granuleLayerParam && granuleLayerParam.granuleCount) || 20;
       if (granuleLayerParam && granuleLayerParam.granuleDates && granuleLayerParam.granuleDates.length) {
         if (granuleLayerParam.granuleDates.length !== granuleLayerParam.granuleCount) {
           updatedGranules = false;
@@ -349,7 +338,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
       if (!updatedGranules) {
         if (state.layers.granuleLayers[activeKey][proj.id][def.id]) {
-          granuleCount = state.layers.granuleLayers[activeKey][proj.id][def.id].count;
+          // granuleCount = state.layers.granuleLayers[activeKey][proj.id][def.id].count;
         }
       }
 
@@ -365,11 +354,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
 
     const createLayer = (filteredGranules) => {
-      console.log(filteredGranules);
       return new Promise((resolve) => {
         let layer = cache.getItem(key);
         let granuleDayTimes = updatedGranules || [];
-        console.log(layer, granuleDayTimes);
         if (!layer || isGranule) {
           // layer is not in the cache OR is a granule layer
           if (!date) date = options.date || state.date[activeDateStr];
@@ -456,7 +443,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           if (storedLayer && storedLayer.geometry) {
             geometry = geometry || storedLayer.geometry;
           }
-          console.log(filteredGranules, includedDates, granuleCount, geometry);
 
           const granuleGeometry = filteredGranules.reduce((granuleDates, granuleObject) => {
             const granuleDate = granuleObject.date;
@@ -464,8 +450,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
             granuleDates[granuleDate] = granulePolygon;
             return granuleDates;
           }, {});
-
-          console.log(granuleGeometry);
 
           // includedDates - array of date strings
           // geometry - object of date: array of polygon coordinates
@@ -481,7 +465,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           self.proj = proj.id;
         }
         layer.setOpacity(def.opacity || 1.0);
-        console.log(layer, def.id);
         resolve(layer); // TileLayer or LayerGroup
       });
     };
@@ -540,14 +523,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
     if (def.period === 'subdaily') {
       date = nearestInterval(def, date);
-    } else {
-      if (previousDateFromRange) {
-        date = util.clearTimeUTC(previousDateFromRange);
-      } else {
-        date = options.date
-          ? util.clearTimeUTC(new Date(date.getTime()))
-          : util.clearTimeUTC(date);
-      }
+    } else if (previousDateFromRange) {
+      date = previousDateFromRange;
     }
 
     return { closestDate: date, previousDate: previousLayerDate, nextDate: nextLayerDate };

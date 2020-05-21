@@ -5,7 +5,6 @@ import { promiseLayerGroup } from './util';
  * @return {object}      Promise.all
  */
 export function promiseImageryForTime(date, layers, state) {
-  console.log(date, layers);
   const map = state.map;
   const cache = map.ui.cache;
   const mapUi = map.ui;
@@ -24,7 +23,6 @@ export function promiseImageryForTime(date, layers, state) {
     }).then(layer => {
       return promiseLayerGroup(layer, viewState, pixelRatio, selectedMap, def);
     });
-    // return promiseLayerGroup(layer, viewState, pixelRatio, selectedMap, def);
   });
   return new Promise(resolve => {
     Promise.all(promiseArray).then(() => resolve(date));

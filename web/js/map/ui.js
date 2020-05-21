@@ -117,12 +117,14 @@ export function mapui(models, config, store, ui) {
       case layerConstants.TOGGLE_HOVERED_GRANULE: {
         const state = store.getState();
         let geometry;
+        let date;
         const hoverGranule = action.hoveredGranule;
         if (hoverGranule) {
           const { activeString, projection, id, granuleDate } = hoverGranule;
           geometry = state.layers.granuleLayers[activeString][projection][id].geometry[granuleDate];
+          date = granuleDate;
         }
-        return granuleFootprintDraw(geometry);
+        return granuleFootprintDraw(geometry, date);
       }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
@@ -503,7 +505,6 @@ export function mapui(models, config, store, ui) {
             }
             granuleLayerParam = { granuleDates, granuleCount, geometry };
           }
-          console.log(def, arr[0], state.date[arr[1]], granuleLayerParam);
           // TODO: should pass empty param to compare mode ?
           // TODO: issue with enter/exit and zeroing date solved by requesting each time
           // TODO: seems now an update problem presents itself if an empty object is sent
@@ -890,7 +891,7 @@ export function mapui(models, config, store, ui) {
   };
 
   /*
-   * Return an Index value for a layer in the OPenLayers layer array
+   * Return an Index value for a layer in the OpenLayers layer arraygranuleLayers
    *
    * @method findLayerIndex
    * @static
@@ -912,7 +913,7 @@ export function mapui(models, config, store, ui) {
         if (!isTile) {
           const layerGroup = layers[layerIndex];
           const layerGroupCollection = layerGroup.getLayers().getArray();
-          if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
+          if (layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
             return layerIndex;
           }
         }
@@ -1046,9 +1047,9 @@ export function mapui(models, config, store, ui) {
     }
   };
 
-  const granuleFootprintDraw = (granuleGeometry) => {
+  const granuleFootprintDraw = (granuleGeometry, date) => {
     const proj = self.selected.getView().getProjection().getCode();
-    granuleFootprints[proj].drawFootprint(granuleGeometry, proj);
+    granuleFootprints[proj].drawFootprint(granuleGeometry, date, proj);
   };
 
   /*
