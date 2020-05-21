@@ -61,7 +61,7 @@ function ProductFacet(props) {
 
   return collapsed || noResults
     ? (
-      <div className="facet-wrapper">
+      <div id={`${field}-facet`} className="facet-wrapper">
         {renderHeaderIcons()}
         <fieldset className="sui-facet">
           <legend className="sui-facet__title">{label}</legend>
@@ -72,7 +72,7 @@ function ProductFacet(props) {
       </div>
     )
     : (
-      <div className="facet-wrapper">
+      <div id={`${field}-facet`} className="facet-wrapper">
         {renderHeaderIcons()}
         {!collapsed && (
           <Facet
