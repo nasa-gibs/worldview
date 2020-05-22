@@ -6,7 +6,7 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTimes, faSlidersH, faInfo, faBan, faHandPointUp,
+  faTimes, faSlidersH, faInfo, faBan, faMousePointer,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
@@ -238,7 +238,11 @@ class Layer extends React.Component {
               {hasClickableFeature ? (
                 <div className="layer-pointer-icon">
                   {' '}
-                  <FontAwesomeIcon title="You can click the features of this layer" icon={faHandPointUp} fixedWidth />
+                  <FontAwesomeIcon
+                    title="You can click the features of this layer to see metadata associated with the feature"
+                    icon={faMousePointer}
+                    fixedWidth
+                  />
                 </div>
               ) : null}
               {tracksForLayer.length > 0 && (
@@ -322,7 +326,9 @@ function mapStateToProps(state, ownProps) {
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
   const tracksForLayer = layers[layerGroupName].filter((activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track));
   const selectedMap = lodashGet(map, 'ui.selected');
-  console.log(isVectorLayerClickable(layer, selectedMap));
+  const isVector = layer.type === 'vector';
+  const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
+
   return {
     compare,
     tracksForLayer,
@@ -337,10 +343,10 @@ function mapStateToProps(state, ownProps) {
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     layerGroupName,
-    hasClickableFeature: isVectorLayerClickable(layer, selectedMap),
+    hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes),
     isMobile: state.browser.lessThan.medium,
     hasPalette,
-    getPalette: (layerId, index) => getPalette(layer.id, index, layerGroupName, state),
+    getPalette: (layerId, i) => getPalette(layer.id, i, layerGroupName, state),
     runningObject: map.runningDataObj[layer.id],
   };
 }

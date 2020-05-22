@@ -6,9 +6,11 @@ import OlCoordinates from '../components/map/ol-coordinates';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../modules/modal/actions';
-import { selectVectorFeatures } from '../modules/vector-styles/actions';
-import { changeCursor } from '../modules/map/actions';
+import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../modules/vector-styles/actions';
+import { changeCursor as changeCursorActionCreator } from '../modules/map/actions';
 import { isFromActiveCompareRegion } from '../modules/compare/util';
+import { hasNonClickableVectorLayer } from '../modules/layers/util';
+import util from '../util/util';
 
 export class MapInteractions extends React.Component {
   constructor(props) {
@@ -26,8 +28,10 @@ export class MapInteractions extends React.Component {
 
   singleClick(e, map) {
     const {
-      lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, modalState, getDialogObject, measureIsActive, isMobile,
+      lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, refeshAlerts,
+      modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
     } = this.props;
+
     if (measureIsActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
@@ -40,6 +44,14 @@ export class MapInteractions extends React.Component {
 
     if (metaArray.length) {
       openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
+    } else {
+      const mapRes = map.getView().getResolution();
+      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes);
+
+      if (hasNonClickableVectorLayerType && util.browser.localStorage) {
+        localStorage.removeItem('dismissedVectorAlert');
+        refeshAlerts();
+      }
     }
     if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       selectVectorFeatures(selected);
@@ -105,11 +117,11 @@ export class MapInteractions extends React.Component {
 const mapDispatchToProps = (dispatch) => ({
   selectVectorFeatures: (features) => {
     setTimeout(() => {
-      dispatch(selectVectorFeatures(features));
+      dispatch(selectVectorFeaturesActionCreator(features));
     }, 1);
   },
   changeCursor: (bool) => {
-    dispatch(changeCursor(bool));
+    dispatch(changeCursorActionCreator(bool));
   },
   onCloseModal: () => {
     dispatch(onClose());
@@ -137,7 +149,7 @@ const mapDispatchToProps = (dispatch) => ({
         timeout: 0,
         onClose: () => {
           setTimeout(() => {
-            dispatch(selectVectorFeatures({}));
+            dispatch(selectVectorFeaturesActionCreator({}));
           }, 1);
         },
       }));
@@ -145,7 +157,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj, ui,
+    modal, map, measure, vectorStyles, browser, compare, proj, ui, layers,
   } = state;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
@@ -156,13 +168,14 @@ function mapStateToProps(state) {
     modalState: modal,
     isShowingClick: map.isClickable,
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
-    getDialogObject: (pixels, map) => onMapClickGetVectorFeatures(pixels, map, state, swipeOffset),
+    getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
     isMobile: browser.lessThan.medium,
     compareState: compare,
     swipeOffset,
     proj,
+    activeLayers: layers[compare.activeString],
   };
 }
 MapInteractions.propTypes = {
@@ -181,6 +194,9 @@ MapInteractions.propTypes = {
   lastSelected: PropTypes.object,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
+  refeshAlerts: PropTypes.func.isRequired,
+  activeLayers: PropTypes.array,
+
 };
 export default connect(
   mapStateToProps,

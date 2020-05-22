@@ -1232,16 +1232,13 @@ export function mapLocationToLayerState(
  *
  * @return {Boolean}
  */
-export const hasVectorLayers = (layersState, compareState) => {
-  const { activeString } = compareState;
-  const { active, activeB } = layersState;
-  const layersArray = compareState.active ? active.concat(activeB) : layersState[activeString];
-  const len = layersArray.length;
+export const hasVectorLayers = (activeLayers) => {
+  const len = activeLayers.length;
   // Used for loop
   // so break could be used
   let hasVectorTypeLayer = false;
   for (let i = 0; i < len; i += 1) {
-    const def = layersArray[i];
+    const def = activeLayers[i];
     if (def.type === 'vector' && def.visible) {
       hasVectorTypeLayer = true;
       break;
@@ -1257,12 +1254,32 @@ export const hasVectorLayers = (layersState, compareState) => {
  *
  * @return {Boolean}
  */
-export const isVectorLayerClickable = (layer, map) => {
-  if (!map || layer.type !== 'vector') return false;
-  const res = map.getView().getResolution();
+export const isVectorLayerClickable = (layer, mapRes) => {
+  if (!mapRes) return false;
   const { breakPointLayer } = layer;
   if (breakPointLayer) {
-    return res <= breakPointLayer.resolutionBreakPoint;
+    return mapRes <= breakPointLayer.resolutionBreakPoint;
   }
   return true;
+};
+
+/**
+ * Determine if active layers have a vector layer
+ * @param {Object} layersState
+ * @param {Object} compareState
+ *
+ * @return {Boolean}
+ */
+export const hasNonClickableVectorLayer = (activeLayers, mapRes) => {
+  if (!mapRes) return false;
+  let isNonClickableVectorLayer = false;
+  const len = activeLayers.length;
+  for (let i = 0; i < len; i += 1) {
+    const def = activeLayers[i];
+    if (def.type === 'vector' && def.visible) {
+      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes);
+      break;
+    }
+  }
+  return isNonClickableVectorLayer;
 };

@@ -45,14 +45,15 @@ const MODAL_PROPERTIES = {
     },
   },
 };
+const HAS_LOCAL_STORAGE = util.browser.localStorage;
 class Alerts extends React.Component {
   constructor(props) {
     super(props);
-    const hasLocalStorage = util.browser.localStorage;
+
     this.state = {
-      hasDismissedEvents: hasLocalStorage && !!localStorage.getItem('dismissedEventVisibilityAlert'),
-      hasDismissedVectors: hasLocalStorage && !!localStorage.getItem('dismissedVectorAlert'),
-      hasDismissedCompare: hasLocalStorage && !!localStorage.getItem('dismissedCompareAlert'),
+      hasDismissedEvents: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedEventVisibilityAlert'),
+      hasDismissedVectors: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedVectorAlert'),
+      hasDismissedCompare: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedCompareAlert'),
     };
   }
 
@@ -65,7 +66,7 @@ class Alerts extends React.Component {
    */
   dismissAlert(storageKey, stateKey) {
     localStorage.setItem(storageKey, true);
-    this.setState({ [stateKey]: false });
+    this.setState({ [stateKey]: true });
   }
 
   render() {
@@ -74,7 +75,7 @@ class Alerts extends React.Component {
     } = this.props;
     const { hasDismissedEvents, hasDismissedVectors, hasDismissedCompare } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
-    if (isSmall) return null;
+    if (isSmall || !HAS_LOCAL_STORAGE) return null;
     return (
       <>
         {!hasDismissedEvents && isEventsActive ? (
@@ -118,11 +119,13 @@ const mapStateToProps = (state) => {
   const {
     browser, events, sidebar, compare, layers,
   } = state;
+  const { activeString } = compare;
+
   return {
     isSmall: browser.lessThan.small,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
     isCompareActive: compare.active,
-    isVectorLayerPresent: hasVectorLayers(layers, compare),
+    isVectorLayerPresent: hasVectorLayers(layers[activeString]),
   };
 };
 export default connect(
