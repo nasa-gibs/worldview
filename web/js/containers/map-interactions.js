@@ -9,15 +9,45 @@ import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../modules/map/actions';
 import { isFromActiveCompareRegion } from '../modules/compare/util';
-import { hasNonClickableVectorLayer } from '../modules/layers/util';
+import { hasNonClickableVectorLayer, hasVectorLayers } from '../modules/layers/util';
 import util from '../util/util';
+import VectorAlertModalBody from '../components/layer/vector/alert';
+import AlertUtil from '../components/util/alert';
 
+
+const VECTOR_MODAL_PROPS = {
+  id: 'vector_layer_info',
+  props: {
+    headerText: 'Vector features may not be clickable at all times.',
+    backdrop: false,
+    size: 'lg',
+    clickableBehindModal: true,
+    bodyComponent: VectorAlertModalBody,
+    desktopOnly: true,
+  },
+};
 export class MapInteractions extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isVectorAlertActive: false,
+    };
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
+    this.toggleVectorAlert = this.toggleVectorAlert.bind(this);
     this.registerMouseListeners();
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      !props.isVectorLayerPresent
+      && state.isVectorAlertActive
+    ) {
+      return {
+        isVectorAlertActive: false,
+      };
+    }
+    return null;
   }
 
   registerMouseListeners() {
@@ -26,9 +56,14 @@ export class MapInteractions extends React.Component {
     mouseEvents.on('singleclick', this.singleClick);
   }
 
+  toggleVectorAlert() {
+    const { isVectorAlertActive } = this.state;
+    this.setState({ isVectorAlertActive: !isVectorAlertActive });
+  }
+
   singleClick(e, map) {
     const {
-      lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures, refeshAlerts,
+      lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
     } = this.props;
 
@@ -49,8 +84,7 @@ export class MapInteractions extends React.Component {
       const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes);
 
       if (hasNonClickableVectorLayerType && util.browser.localStorage) {
-        localStorage.removeItem('dismissedVectorAlert');
-        refeshAlerts();
+        this.toggleVectorAlert();
       }
     }
     if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
@@ -94,7 +128,9 @@ export class MapInteractions extends React.Component {
       isDistractionFreeModeActive,
       isShowingClick,
       mouseEvents,
+      openCustomAlertModal,
     } = this.props;
+    const { isVectorAlertActive } = this.state;
     let mapClasses = isShowingClick
       ? 'wv-map cursor-pointer'
       : 'wv-map';
@@ -106,9 +142,20 @@ export class MapInteractions extends React.Component {
       <>
         <div id="wv-map" className={mapClasses} />
         {!isDistractionFreeModeActive && (
-        <OlCoordinates
-          mouseEvents={mouseEvents}
-        />
+          <>
+            <OlCoordinates
+              mouseEvents={mouseEvents}
+            />
+            {isVectorAlertActive && (
+              <AlertUtil
+                isOpen
+                onClick={() => openCustomAlertModal(VECTOR_MODAL_PROPS)}
+                onDismiss={this.toggleVectorAlert}
+                message="Vector features may not be clickable at all times."
+              />
+            )}
+          </>
+
         )}
       </>
     );
@@ -122,6 +169,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   changeCursor: (bool) => {
     dispatch(changeCursorActionCreator(bool));
+  },
+  openCustomAlertModal: ({ id, props }) => {
+    dispatch(openCustomContent(id, props));
   },
   onCloseModal: () => {
     dispatch(onClose());
@@ -160,10 +210,12 @@ function mapStateToProps(state) {
     modal, map, measure, vectorStyles, browser, compare, proj, ui, layers,
   } = state;
   let swipeOffset;
+  const activeLayers = layers[compare.activeString];
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
+
   return {
     modalState: modal,
     isShowingClick: map.isClickable,
@@ -175,7 +227,8 @@ function mapStateToProps(state) {
     compareState: compare,
     swipeOffset,
     proj,
-    activeLayers: layers[compare.activeString],
+    activeLayers,
+    isVectorLayerPresent: hasVectorLayers(activeLayers),
   };
 }
 MapInteractions.propTypes = {
@@ -194,9 +247,9 @@ MapInteractions.propTypes = {
   lastSelected: PropTypes.object,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
-  refeshAlerts: PropTypes.func.isRequired,
   activeLayers: PropTypes.array,
-
+  openCustomAlertModal: PropTypes.func,
+  isVectorLayerPresent: PropTypes.bool,
 };
 export default connect(
   mapStateToProps,

@@ -5,10 +5,8 @@ import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import EventsAlertModalBody from '../components/events/alert-body';
 import CompareAlertModalBody from '../components/compare/alert';
-import VectorAlertModalBody from '../components/layer/vector/alert';
 import { openCustomContent } from '../modules/modal/actions';
 import util from '../util/util';
-import { hasVectorLayers } from '../modules/layers/util';
 
 const MODAL_PROPERTIES = {
   eventModalProps: {
@@ -33,26 +31,15 @@ const MODAL_PROPERTIES = {
       desktopOnly: true,
     },
   },
-  vectorModalProps: {
-    id: 'vector_layer_info',
-    props: {
-      headerText: 'Vector features may not be clickable at all times.',
-      backdrop: false,
-      size: 'lg',
-      clickableBehindModal: true,
-      bodyComponent: VectorAlertModalBody,
-      desktopOnly: true,
-    },
-  },
 };
 const HAS_LOCAL_STORAGE = util.browser.localStorage;
-class Alerts extends React.Component {
+
+class DismissableAlerts extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       hasDismissedEvents: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedEventVisibilityAlert'),
-      hasDismissedVectors: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedVectorAlert'),
       hasDismissedCompare: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedCompareAlert'),
     };
   }
@@ -71,10 +58,10 @@ class Alerts extends React.Component {
 
   render() {
     const {
-      isEventsActive, isCompareActive, isVectorLayerPresent, openAlertModal, isSmall,
+      isEventsActive, isCompareActive, openAlertModal, isSmall,
     } = this.props;
-    const { hasDismissedEvents, hasDismissedVectors, hasDismissedCompare } = this.state;
-    const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
+    const { hasDismissedEvents, hasDismissedCompare } = this.state;
+    const { eventModalProps, compareModalProps } = MODAL_PROPERTIES;
     if (isSmall || !HAS_LOCAL_STORAGE) return null;
     return (
       <>
@@ -97,15 +84,6 @@ class Alerts extends React.Component {
             message="You are now in comparison mode."
           />
         ) : null}
-        {!hasDismissedVectors && isVectorLayerPresent ? (
-          <AlertUtil
-            isOpen
-            noPortal
-            onClick={() => openAlertModal(vectorModalProps)}
-            onDismiss={() => this.dismissAlert('dismissedVectorAlert', 'hasDismissedVectors')}
-            message="Vector features may not be clickable at all times."
-          />
-        ) : null}
       </>
     );
   }
@@ -117,26 +95,23 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => {
   const {
-    browser, events, sidebar, compare, layers,
+    browser, events, sidebar, compare,
   } = state;
-  const { activeString } = compare;
 
   return {
     isSmall: browser.lessThan.small,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
     isCompareActive: compare.active,
-    isVectorLayerPresent: hasVectorLayers(layers[activeString]),
   };
 };
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Alerts);
+)(DismissableAlerts);
 
-Alerts.propTypes = {
+DismissableAlerts.propTypes = {
   isEventsActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
-  isVectorLayerPresent: PropTypes.bool,
   openAlertModal: PropTypes.func,
   isSmall: PropTypes.bool,
 };
