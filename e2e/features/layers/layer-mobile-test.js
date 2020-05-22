@@ -94,18 +94,19 @@ module.exports = {
     c.click(layerPickerBackButton);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
   },
-  'Search button changes to facet selection': (c) => {
+  'Clicking search button changes view to facet selection': (c) => {
     c.click(filterButton);
     c.waitForElementVisible('.facet-container', TIME_LIMIT, (e) => {
-      c.click(availableFacetLabel);
-      c.click(categoryOceansFacetLabel);
-      c.click(categoryFacetCollapseToggle);
       // TODO verify "+ More button reveals additional choices"
-      // TODO verify collapsing sections works
-      c.click(sourcesDMSPFacetLabel);
+      // TODO verify collapsing/expanding sections works
+      c.click(availableFacetLabel);
+      c.click('#categories-facet [for="example_facet_CategoryAtmosphere"]');
+      c.click(categoryFacetCollapseToggle);
+      c.click('#measurements-facet [for="example_facet_MeasurementsTemperature"]');
+      c.click('#sources-facet [for="example_facet_SourceMERRA-2"]');
       c.click(applyButton);
       c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
-        c.expect.elements(layersSearchRow).count.to.equal(8);
+        c.expect.elements(layersSearchRow).count.to.equal(4);
       });
       c.click(resetButton);
     });
