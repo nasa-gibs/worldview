@@ -284,6 +284,10 @@ li.item.productsitem.inmotion,
 .productsitem  .layer-pointer-icon svg.svg-inline--fa {
   color: #22a;
 }
+.productsitem  .layer-pointer-icon:hover svg.svg-inline--fa {
+  transform: scale(1.2);
+  cursor: pointer;
+}
 .layer-hidden svg.svg-inline--fa {
   color: #c5c5c8;
 }
