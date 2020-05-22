@@ -31,9 +31,13 @@ const sourceTabs = '.source-nav-item';
 const aodSearchRow = '#MODIS_Aqua_Aerosol-search-row';
 const aodSearchCheckbox = '#MODIS_Aqua_Aerosol-search-row > .wv-checkbox';
 const availableFacetLabel = '#availableAtDate-facet .sui-boolean-facet__option-input-wrapper';
-const categoryOceansFacetLabel = '#categories-facet [for="example_facet_CategoryOceans"]';
+const categoryAtmosphereLabel = '#categories-facet [for="example_facet_CategoryAtmosphere"]';
 const categoryFacetCollapseToggle = '#categories-facet .facet-collapse-toggle';
-const sourcesDMSPFacetLabel = '#sources-facet [for="example_facet_SourceDMSP-F16/SSMIS"';
+const categoryFacetChoicesContainer = '#categories-facet .sui-multi-checkbox-facet';
+const measurementTemperatureLabel = '#measurements-facet [for="example_facet_MeasurementsTemperature"]';
+const measurementFacetChoices = '#measurements-facet .sui-multi-checkbox-facet > label';
+const measurementMoreButton = '#measurements-facet .sui-facet-view-more';
+const sourcesMERRALabel = '#sources-facet [for="example_facet_SourceMERRA-2"]';
 
 const TIME_LIMIT = 10000;
 
@@ -94,16 +98,23 @@ module.exports = {
     c.click(layerPickerBackButton);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
   },
-  'Clicking search button changes view to facet selection': (c) => {
+  'Swtich to facet view and confirm applying facets limits results': (c) => {
     c.click(filterButton);
     c.waitForElementVisible('.facet-container', TIME_LIMIT, (e) => {
-      // TODO verify "+ More button reveals additional choices"
-      // TODO verify collapsing/expanding sections works
       c.click(availableFacetLabel);
-      c.click('#categories-facet [for="example_facet_CategoryAtmosphere"]');
+      c.click(categoryAtmosphereLabel);
+
+      // Collapse a set and confirm it hides
       c.click(categoryFacetCollapseToggle);
-      c.click('#measurements-facet [for="example_facet_MeasurementsTemperature"]');
-      c.click('#sources-facet [for="example_facet_SourceMERRA-2"]');
+      c.expect.element(categoryFacetChoicesContainer).to.not.be.present;
+
+      // + More button adds 10 choices
+      c.expect.elements(measurementFacetChoices).count.to.equal(5);
+      c.click(measurementMoreButton);
+      c.expect.elements(measurementFacetChoices).count.to.equal(15);
+
+      c.click(measurementTemperatureLabel);
+      c.click(sourcesMERRALabel);
       c.click(applyButton);
       c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
         c.expect.elements(layersSearchRow).count.to.equal(4);
