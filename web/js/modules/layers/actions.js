@@ -147,9 +147,6 @@ export function removeLayer(id) {
     if (def.product && def.product === data.selectedProduct) {
       dispatch(selectProduct('')); // Clear selected Data product
     }
-    if (alerts.isVectorAlertActive) {
-      // dispatch({ type: DISABLE_VECTOR_ALERT });
-    }
     dispatch({
       type: REMOVE_LAYER,
       id,

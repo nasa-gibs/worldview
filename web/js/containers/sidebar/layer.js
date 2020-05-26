@@ -15,7 +15,7 @@ import {
   getPalette,
   getPaletteLegends,
 } from '../../modules/palettes/selectors';
-import { toggleCustomContent } from '../../modules/modal/actions';
+import { toggleCustomContent, openCustomContent } from '../../modules/modal/actions';
 import LayerInfo from '../../components/layer/info/info';
 import LayerSettings from '../../components/layer/settings/settings';
 import { requestPalette } from '../../modules/palettes/actions';
@@ -26,7 +26,9 @@ import {
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
 import { isVectorLayerClickable } from '../../modules/layers/util';
+import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 
+const { vectorModalProps } = MODAL_PROPERTIES;
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -147,6 +149,28 @@ class Layer extends React.Component {
     );
   }
 
+  renderVectorIcon() {
+    const {
+      isVectorLayer, hasClickableFeature, openVectorAlertModal, runningObject,
+    } = this.props;
+    const clasNames = hasClickableFeature
+      ? 'layer-pointer-icon'
+      : 'layer-pointer-icon disabled';
+    const title = hasClickableFeature
+      ? 'You can click the features of this layer to see metadata associated with the feature.'
+      : 'Zoom in further to click features.';
+    return isVectorLayer ? (
+      <div className={runningObject ? `${clasNames} running` : clasNames} onClick={openVectorAlertModal}>
+        {' '}
+        <FontAwesomeIcon
+          title={title}
+          icon={faMousePointer}
+          fixedWidth
+        />
+      </div>
+    ) : null;
+  }
+
   render() {
     const {
       layerGroupName,
@@ -162,7 +186,6 @@ class Layer extends React.Component {
       zot,
       isInProjection,
       tracksForLayer,
-      hasClickableFeature,
     } = this.props;
 
     const containerClass = isDisabled
@@ -235,16 +258,7 @@ class Layer extends React.Component {
                 <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
                 {hasPalette ? this.getPaletteLegend() : ''}
               </div>
-              {hasClickableFeature ? (
-                <div className="layer-pointer-icon">
-                  {' '}
-                  <FontAwesomeIcon
-                    title="You can click the features of this layer to see metadata associated with the feature"
-                    icon={faMousePointer}
-                    fixedWidth
-                  />
-                </div>
-              ) : null}
+              {this.renderVectorIcon()}
               {tracksForLayer.length > 0 && (
               <div className="layer-tracks">
                 {tracksForLayer.map((track) => (
@@ -274,36 +288,7 @@ class Layer extends React.Component {
 Layer.defaultProps = {
   palette: {},
 };
-Layer.propTypes = {
-  checkerBoardPattern: PropTypes.object,
-  compare: PropTypes.object,
-  getPalette: PropTypes.func,
-  hasPalette: PropTypes.bool,
-  hover: PropTypes.func,
-  index: PropTypes.number,
-  isCustomPalette: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-  isInProjection: PropTypes.bool,
-  isLoading: PropTypes.bool,
-  isMobile: PropTypes.bool,
-  isVisible: PropTypes.bool,
-  layer: PropTypes.object,
-  layerClasses: PropTypes.string,
-  layerGroupName: PropTypes.string,
-  names: PropTypes.object,
-  onInfoClick: PropTypes.func,
-  onOptionsClick: PropTypes.func,
-  onRemoveClick: PropTypes.func,
-  palette: PropTypes.object,
-  paletteLegends: PropTypes.array,
-  renderedPalette: PropTypes.object,
-  requestPalette: PropTypes.func,
-  runningObject: PropTypes.object,
-  toggleVisibility: PropTypes.func,
-  hasClickableFeature: PropTypes.bool,
-  tracksForLayer: PropTypes.array,
-  zot: PropTypes.number,
-};
+
 function mapStateToProps(state, ownProps) {
   const {
     layer,
@@ -343,6 +328,7 @@ function mapStateToProps(state, ownProps) {
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     layerGroupName,
+    isVectorLayer: isVector,
     hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes),
     isMobile: state.browser.lessThan.medium,
     hasPalette,
@@ -357,6 +343,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   toggleVisibility: (id, isVisible) => {
     dispatch(toggleVisibility(id, isVisible));
+  },
+  openVectorAlertModal: () => {
+    const { id, props } = vectorModalProps;
+    dispatch(openCustomContent(id, props));
   },
   onRemoveClick: (id) => {
     dispatch(removeLayer(id));
@@ -412,3 +402,35 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Layer);
+Layer.propTypes = {
+  checkerBoardPattern: PropTypes.object,
+  compare: PropTypes.object,
+  getPalette: PropTypes.func,
+  hasPalette: PropTypes.bool,
+  hover: PropTypes.func,
+  index: PropTypes.number,
+  isCustomPalette: PropTypes.bool,
+  isDisabled: PropTypes.bool,
+  isInProjection: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  layer: PropTypes.object,
+  layerClasses: PropTypes.string,
+  layerGroupName: PropTypes.string,
+  names: PropTypes.object,
+  onInfoClick: PropTypes.func,
+  onOptionsClick: PropTypes.func,
+  onRemoveClick: PropTypes.func,
+  palette: PropTypes.object,
+  paletteLegends: PropTypes.array,
+  renderedPalette: PropTypes.object,
+  requestPalette: PropTypes.func,
+  runningObject: PropTypes.object,
+  toggleVisibility: PropTypes.func,
+  hasClickableFeature: PropTypes.bool,
+  tracksForLayer: PropTypes.array,
+  openVectorAlertModal: PropTypes.func,
+  zot: PropTypes.number,
+  isVectorLayer: PropTypes.bool,
+};

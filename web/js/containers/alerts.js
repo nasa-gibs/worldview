@@ -3,49 +3,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
-import EventsAlertModalBody from '../components/events/alert-body';
-import CompareAlertModalBody from '../components/compare/alert';
-import VectorAlertModalBody from '../components/layer/vector/alert';
 import { openCustomContent } from '../modules/modal/actions';
 import util from '../util/util';
 import { hasVectorLayers } from '../modules/layers/util';
-import { DISABLE_VECTOR_ALERT } from '../modules/alerts/constants';
+import { DISABLE_VECTOR_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
 
-const MODAL_PROPERTIES = {
-  eventModalProps: {
-    id: 'event_visibility_info',
-    props: {
-      headerText: 'Events may not be visible at all times.',
-      backdrop: false,
-      size: 'lg',
-      clickableBehindModal: true,
-      bodyComponent: EventsAlertModalBody,
-      desktopOnly: true,
-    },
-  },
-  compareModalProps: {
-    id: 'compare_mode_info',
-    props: {
-      headerText: 'You are now in comparison mode',
-      backdrop: false,
-      size: 'lg',
-      clickableBehindModal: true,
-      bodyComponent: CompareAlertModalBody,
-      desktopOnly: true,
-    },
-  },
-  vectorModalProps: {
-    id: 'vector_layer_info',
-    props: {
-      headerText: 'Vector features may not be clickable at all times.',
-      backdrop: false,
-      size: 'lg',
-      clickableBehindModal: true,
-      bodyComponent: VectorAlertModalBody,
-      desktopOnly: true,
-    },
-  },
-};
+
 const HAS_LOCAL_STORAGE = util.browser.localStorage;
 class DismissableAlerts extends React.Component {
   constructor(props) {

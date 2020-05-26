@@ -4,6 +4,7 @@ import { initialState as initialLayerState } from './modules/layers/reducers';
 import { initialCompareState } from './modules/compare/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
+import { defaultAlertState } from './modules/alerts/reducer';
 
 const fixtures = {
   red: 'ff0000ff',
@@ -20,6 +21,7 @@ fixtures.getState = function() {
     compare: initialCompareState,
     config: fixtures.config(),
     layers: initialLayerState,
+    alerts: defaultAlertState,
     date: getInitialDateState(fixtures.config()),
     animation: initialAnimationState,
     palettes: {
