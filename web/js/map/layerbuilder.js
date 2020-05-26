@@ -346,23 +346,13 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
   };
 
   /**
-   * Create a new Vector Layer
-   *
-   * @method createLayerVector
-   * @static
-   * @param {object} def - Layer Specs
-   * @param {object} options - Layer options
-   * @returns {object} OpenLayers Vector layer
-   */
-/**
-   * Create a new Vector Layer
-   *
-   * @method createLayerVector
-   * @static
-   * @param {object} def - Layer Specs
-   * @param {object} options - Layer options
-   * @returns {object} OpenLayers Vector layer
-   */
+    *
+    * @param {object} def - Layer Specs
+    * @param {object} options - Layer options
+    * @param {number} day
+    * @param {object} state
+    * @param {object} attributes
+    */
   const createLayerVector = function(def, options, day, state, attributes) {
     const { proj, compare } = state;
     let date;
@@ -447,11 +437,13 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
-    const newDef = { ...def, ...breakPointLayerDef };
     if (breakPointLayerDef) {
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
-        layers: [layer, createLayerWMS(newDef, options, day, state)],
+        layers: [layer, wmsLayer],
       });
+      wmsLayer.wv = attributes;
       return layerGroup;
     }
     return layer;
