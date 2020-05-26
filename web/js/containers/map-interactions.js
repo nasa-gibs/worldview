@@ -9,45 +9,16 @@ import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../modules/map/actions';
 import { isFromActiveCompareRegion } from '../modules/compare/util';
-import { hasNonClickableVectorLayer, hasVectorLayers } from '../modules/layers/util';
-import util from '../util/util';
-import VectorAlertModalBody from '../components/layer/vector/alert';
-import AlertUtil from '../components/util/alert';
+import { hasNonClickableVectorLayer } from '../modules/layers/util';
+import { ACTIVATE_VECTOR_ALERT } from '../modules/alerts/constants';
 
 
-const VECTOR_MODAL_PROPS = {
-  id: 'vector_layer_info',
-  props: {
-    headerText: 'Vector features may not be clickable at all times.',
-    backdrop: false,
-    size: 'lg',
-    clickableBehindModal: true,
-    bodyComponent: VectorAlertModalBody,
-    desktopOnly: true,
-  },
-};
 export class MapInteractions extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isVectorAlertActive: false,
-    };
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
-    this.toggleVectorAlert = this.toggleVectorAlert.bind(this);
     this.registerMouseListeners();
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (
-      !props.isVectorLayerPresent
-      && state.isVectorAlertActive
-    ) {
-      return {
-        isVectorAlertActive: false,
-      };
-    }
-    return null;
   }
 
   registerMouseListeners() {
@@ -56,15 +27,12 @@ export class MapInteractions extends React.Component {
     mouseEvents.on('singleclick', this.singleClick);
   }
 
-  toggleVectorAlert() {
-    const { isVectorAlertActive } = this.state;
-    this.setState({ isVectorAlertActive: !isVectorAlertActive });
-  }
 
   singleClick(e, map) {
     const {
       lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
+      activateVectorAlert,
     } = this.props;
 
     if (measureIsActive) return;
@@ -83,8 +51,8 @@ export class MapInteractions extends React.Component {
       const mapRes = map.getView().getResolution();
       const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes);
 
-      if (hasNonClickableVectorLayerType && util.browser.localStorage) {
-        this.toggleVectorAlert();
+      if (hasNonClickableVectorLayerType) {
+        activateVectorAlert();
       }
     }
     if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
@@ -128,9 +96,7 @@ export class MapInteractions extends React.Component {
       isDistractionFreeModeActive,
       isShowingClick,
       mouseEvents,
-      openCustomAlertModal,
     } = this.props;
-    const { isVectorAlertActive } = this.state;
     let mapClasses = isShowingClick
       ? 'wv-map cursor-pointer'
       : 'wv-map';
@@ -146,14 +112,6 @@ export class MapInteractions extends React.Component {
             <OlCoordinates
               mouseEvents={mouseEvents}
             />
-            {isVectorAlertActive && (
-              <AlertUtil
-                isOpen
-                onClick={() => openCustomAlertModal(VECTOR_MODAL_PROPS)}
-                onDismiss={this.toggleVectorAlert}
-                message="Vector features may not be clickable at all times."
-              />
-            )}
           </>
 
         )}
@@ -176,6 +134,7 @@ const mapDispatchToProps = (dispatch) => ({
   onCloseModal: () => {
     dispatch(onClose());
   },
+  activateVectorAlert: () => dispatch({ type: ACTIVATE_VECTOR_ALERT }),
   openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
     const dialogKey = new Date().getUTCMilliseconds();
     dispatch(openCustomContent(dialogId,
@@ -228,7 +187,6 @@ function mapStateToProps(state) {
     swipeOffset,
     proj,
     activeLayers,
-    isVectorLayerPresent: hasVectorLayers(activeLayers),
   };
 }
 MapInteractions.propTypes = {
@@ -248,8 +206,7 @@ MapInteractions.propTypes = {
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
   activeLayers: PropTypes.array,
-  openCustomAlertModal: PropTypes.func,
-  isVectorLayerPresent: PropTypes.bool,
+  activateVectorAlert: PropTypes.func,
 };
 export default connect(
   mapStateToProps,

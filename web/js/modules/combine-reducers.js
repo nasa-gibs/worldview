@@ -45,6 +45,7 @@ import {
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
 import uiReducers from './ui/reducers';
+import { alertReducer } from './alerts/reducer';
 
 function lastAction(state = null, action) {
   return action;
@@ -99,6 +100,7 @@ const locationReducer = (state = { key: '' }, action) => {
 };
 const defaultReducer = (state = {}) => state;
 const reducers = {
+  alerts: alertReducer,
   proj: projectionReducer,
   modal: modalReducer,
   date: dateReducer,
