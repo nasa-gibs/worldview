@@ -290,7 +290,6 @@ li.item.productsitem.inmotion,
 .productsitem  .layer-pointer-icon:hover svg.svg-inline--fa {
   cursor: pointer;
 }
-.productsitem  .layer-pointer-icon.running svg.svg-inline--fa,
 .productsitem  .layer-pointer-icon:hover svg.svg-inline--fa {
   transform: scale(1.2);
 }
