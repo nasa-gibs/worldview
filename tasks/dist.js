@@ -11,6 +11,12 @@ shell.rm('-rf', 'build/worldview');
 shell.mkdir('-p', 'build/worldview');
 shell.cp('-rf', 'web/*', 'build/worldview');
 
+// Remove preview images, if that feature is disabled, for smaller dist file size
+const { features } = JSON.parse(fs.readFileSync('config/default/common/features.json'));
+if (!features.previewSnapshots) {
+  shell.rm('-rf', 'build/worldview/images/layers/previews');
+}
+
 console.log('Branding');
 // eslint-disable-next-line import/no-unresolved
 const brand = require('../build/worldview/brand/brand.json');
