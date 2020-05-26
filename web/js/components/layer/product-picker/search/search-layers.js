@@ -13,6 +13,7 @@ function SearchLayers(props) {
     browser,
     selectedLayer,
     showMobileFacets,
+    results,
   } = props;
 
   const listDetailContainerClass = selectedLayer
@@ -30,7 +31,7 @@ function SearchLayers(props) {
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>
-          { !selectedLayer && smallView ? null : (
+          { !selectedLayer && smallView ? null : !!results.length && (
             <div className="layer-detail-container layers-all search">
               <LayerMetadataDetail />
             </div>
@@ -44,6 +45,7 @@ function SearchLayers(props) {
 SearchLayers.propTypes = {
   browser: PropTypes.object,
   isMobile: PropTypes.bool,
+  results: PropTypes.array,
   selectedLayer: PropTypes.object,
   smallView: PropTypes.bool,
   showMobileFacets: PropTypes.bool,
@@ -62,7 +64,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 export default withSearch(
-  ({ facets }) => ({ facets }),
+  ({ facets, results }) => ({ facets, results }),
 )(connect(
   mapStateToProps,
   null,

@@ -514,9 +514,6 @@
     & div.layer-list-detail-container {
       flex-direction: row;
     }
-    & div.layer-list-container {
-      max-width: 600px;
-    }
   }
   .layer-detail-container {
     &.browse .layers-all-layer {
