@@ -1258,7 +1258,7 @@ export const isVectorLayerClickable = (layer, mapRes) => {
   if (!mapRes) return false;
   const { breakPointLayer } = layer;
   if (breakPointLayer) {
-    return mapRes <= breakPointLayer.resolutionBreakPoint;
+    return mapRes < breakPointLayer.resolutionBreakPoint;
   }
   return true;
 };
