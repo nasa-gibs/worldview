@@ -1,1 +1,1 @@
-References: [doi: 10.5067/MODIS/MCD19A1N.NRT.006](http://doi.org/10.5067/MODIS/MCD19A1N.NRT.006)
+References: [doi: 10.5067/MODIS/MCD19A1N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A1N.NRT.006)

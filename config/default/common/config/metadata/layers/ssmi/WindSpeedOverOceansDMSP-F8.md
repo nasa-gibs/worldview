@@ -7,6 +7,6 @@ The F08 spacecraft is flown by the DMSP on two operational polar orbiting platfo
 
 References:
 [RSS SSM/I Ocean Product Grids 3-Day Average from DMSP F8 NetCDF](https://doi.org/10.5067/MEASURES/DMSP-F8/SSMI/DATA302);
-[Wentz. F., A Well Calibrated Ocean Algorithm for SSM/I, Remote Sensing Systems](http://images.remss.com/papers/ssmi.pdf);
-[Wentz, F., SSM/I Version-7 Calibration Report, Remote Sensing Systems, 2013](http://images.remss.com/papers/tech_reports/2012_Wentz_011012_Version-7_SSMI_Calibration.pdf);
+[Wentz. F., A Well Calibrated Ocean Algorithm for SSM/I, Remote Sensing Systems](https://images.remss.com/papers/ssmi.pdf);
+[Wentz, F., SSM/I Version-7 Calibration Report, Remote Sensing Systems, 2013](https://images.remss.com/papers/tech_reports/2012_Wentz_011012_Version-7_SSMI_Calibration.pdf);
 [SSM/I and SSMIS Data in NetCDF User's Guide, Global Hydrology Research Center, The University of Alabama in Huntsville, 2012.](https://ghrc.nsstc.nasa.gov/pub/doc/ssmi_netcdf/SSMI_Data_in_NetCDF.docx)

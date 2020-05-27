@@ -3,5 +3,5 @@ The AMSR-U2 Soil Moisture Single Channel Algorithm (Day) layer indicates the amo
 The Advanced Microwave Scanning Radiometer 2 (AMSR2) instrument provides global passive microwave measurements. It is a remote sensing instrument that measures weak microwave emissions from the surface and the atmosphere of the Earth. AMSR2 also provides microwave emission and scattering intensity measurements.
 
 References:
-[NSIDC: AMSR-E/AMSR2 Unified L2B Half-Orbit 25 km EASE-Grid Surface Soil Moisture, Version 1](http://nsidc.org/data/au_land);
-[AMSR2 Global Soil Moisture Retrievals using the Normalized Polarization Difference (NPD) algorithm and Single Channel Algorithm (SCA) Algorithm Theoretical Basis Document](http://nsidc.org/sites/nsidc.org/files/technical-references/AMSR2_ATBD.DOCX)
+[NSIDC: AMSR-E/AMSR2 Unified L2B Half-Orbit 25 km EASE-Grid Surface Soil Moisture, Version 1](https://nsidc.org/data/au_land);
+[AMSR2 Global Soil Moisture Retrievals using the Normalized Polarization Difference (NPD) algorithm and Single Channel Algorithm (SCA) Algorithm Theoretical Basis Document](https://nsidc.org/sites/nsidc.org/files/technical-references/AMSR2_ATBD.DOCX)

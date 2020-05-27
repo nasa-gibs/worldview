@@ -5,4 +5,4 @@ The MODIS Chlorophyll *a* layer provides the near-surface concentration of chlor
 
 The MODIS Chlorophyll *a* product is available from both the Terra and Aqua satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [Earthdata Search: MODISA_L2_OC](https://search.earthdata.nasa.gov/search?q=MODISA_L2_OC); [OceanColor Web - Level 1&2 Browsers](https://oceancolor.gsfc.nasa.gov/cgi/browse.pl?sen=am); [OceanColor Web - Chlorophyll a](https://oceancolor.gsfc.nasa.gov/atbd/chlor_a/); [NASA Earth Observations - Chlorophyll Concentration](http://neo.sci.gsfc.nasa.gov/view.php?datasetId=MY1DMM_CHLORA)
+References: [Earthdata Search: MODISA_L2_OC](https://search.earthdata.nasa.gov/search?q=MODISA_L2_OC); [OceanColor Web - Level 1&2 Browsers](https://oceancolor.gsfc.nasa.gov/cgi/browse.pl?sen=am); [OceanColor Web - Chlorophyll a](https://oceancolor.gsfc.nasa.gov/atbd/chlor_a/); [NASA Earth Observations - Chlorophyll Concentration](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MY1DMM_CHLORA)

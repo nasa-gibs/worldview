@@ -1,12 +1,12 @@
 ### Coastlines/Borders/Roads
 The Coastlines/Borders/Roads layer is a vector layer displaying global coastlines, country borders, first order administrative boundaries and major roads.
 
-Coastlines/Borders/Roads information are gleaned from [OpenStreetMap](https://www.openstreetmap.org/copyright) and [Natural Earth](http://www.naturalearthdata.com/).
+Coastlines/Borders/Roads information are gleaned from [OpenStreetMap](https://www.openstreetmap.org/copyright) and [Natural Earth](https://www.naturalearthdata.com/).
 
 ### Place Labels
 The Place Labels layer is a vector layer displaying labels for countries, major cities, major water bodies and major national parks/protected areas.
 
-Place Labels information are gleaned from [OpenStreetMap](https://www.openstreetmap.org/copyright) and [Natural Earth](http://www.naturalearthdata.com/).
+Place Labels information are gleaned from [OpenStreetMap](https://www.openstreetmap.org/copyright) and [Natural Earth](https://www.naturalearthdata.com/).
 
 ### Coastlines
 The Coastlines layer is a vector layer displaying global coastlines.
