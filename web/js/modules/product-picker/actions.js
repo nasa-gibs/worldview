@@ -1,4 +1,4 @@
-import initSearch from './searchConfig';
+import initSearch from './search-config';
 import {
   SAVE_SEARCH_STATE,
   INIT_SEARCH_STATE,

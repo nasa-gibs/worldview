@@ -3,7 +3,7 @@ import {
   indexOf as lodashIndexOf,
 } from 'lodash';
 import { createSelector } from 'reselect';
-import buildLayerFacetProps from './formatConfig';
+import buildLayerFacetProps from './format-config';
 
 const decodeHtml = (html) => {
   const txt = document.createElement('textarea');

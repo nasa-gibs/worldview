@@ -9,7 +9,7 @@ import {
   toggleMobileFacets as toggleMobileFacetsAction,
   collapseFacet as collapseFacetAction,
 } from '../../../../modules/product-picker/actions';
-import facetConfig from '../../../../modules/product-picker/facetConfig';
+import facetConfig from '../../../../modules/product-picker/facet-config';
 
 function Facets(props) {
   const {

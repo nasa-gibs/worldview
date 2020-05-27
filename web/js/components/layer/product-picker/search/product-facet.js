@@ -37,7 +37,7 @@ function ProductFacet(props) {
         target={`${field}-tooltip-target`}
         placement="right"
         toggle={() => toggleTooltip(!tooltipVisible)}
-        delay={{ show: 0, hide: 1000 }}
+        delay={{ show: 0, hide: 300 }}
       >
         <div dangerouslySetInnerHTML={{ __html: tooltip }} />
       </Tooltip>

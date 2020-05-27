@@ -8,7 +8,7 @@ import {
 } from 'lodash';
 import { getTitles } from '../layers/selectors';
 import { getLayersForProjection } from './selectors';
-import facetConfig from './facetConfig';
+import facetConfig from './facet-config';
 
 let initialLayersArray;
 let configRef;
