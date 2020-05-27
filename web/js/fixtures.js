@@ -218,8 +218,15 @@ fixtures.config = function() {
       'terra-cr': {
         id: 'terra-cr',
         group: 'baselayers',
+        dateRanges: [
+          {
+            dateInterval: '1',
+            endDate: '2020-05-20T00:00:00Z',
+            startDate: '2000-02-24T00:00:00Z',
+          },
+        ],
         period: 'daily',
-        startDate: '2000-01-01',
+        startDate: '2000-02-24T00:00:00Z',
         projections: {
           geographic: {},
           arctic: {},

@@ -69,11 +69,6 @@ describe('parseDateUTC', () => {
   });
 });
 
-test('toJulianDate', () => {
-  const d = new Date(Date.UTC(2013, 0, 15));
-  expect(util.toJulianDate(d)).toBe('2013015');
-});
-
 test('toISOStringDate', () => {
   const d = new Date(Date.UTC(2013, 0, 15));
   expect(util.toISOStringDate(d)).toBe('2013-01-15');
@@ -87,23 +82,6 @@ test('toISOStringSeconds', () => {
 test('toHourMinutes', () => {
   const d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
   expect(util.toHourMinutes(d)).toBe('11:22');
-});
-
-test('toCompactTimestamp', () => {
-  const d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
-  expect(util.toCompactTimestamp(d)).toBe('20130115112233444');
-});
-
-describe('fromCompactTimestamp', () => {
-  test('parses timestamp', () => {
-    const answer = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
-    const result = util.fromCompactTimestamp('20130115112233444');
-    expect(answer.getTime()).toEqual(result.getTime());
-  });
-
-  test('invalid', () => {
-    expect(() => util.fromCompactTimestamp('x0130115112233444')).toThrow();
-  });
 });
 
 test('clearTimeUTC', () => {

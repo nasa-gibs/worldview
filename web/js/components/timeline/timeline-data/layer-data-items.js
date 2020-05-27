@@ -369,7 +369,7 @@ class LayerDataItems extends Component {
     if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
       const inputStartDate = new Date(startDateLimit);
       const inputEndDate = new Date(endDateLimit);
-      dateIntervalStartDates = datesinDateRanges(layer, inputStartDate, inputStartDate, inputEndDate);
+      dateIntervalStartDates = datesinDateRanges(layer, inputStartDate, inputStartDate, inputEndDate, appNow);
     }
 
     return dateIntervalStartDates;
