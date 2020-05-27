@@ -10,4 +10,4 @@ The Group for High Resolution Sea Surface Temperature (GHRSST) layers are the â€
 
 The imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [PO.DAAC - GHRSST Level 4 G1SST Global Foundation Sea Surface Temperature Analysis](https://podaac.jpl.nasa.gov/dataset/JPL_OUROCEAN-L4UHfnd-GLOB-G1SST); [PO.DAAC - GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1)
+References: [PO.DAAC - GHRSST Level 4 G1SST Global Foundation Sea Surface Temperature Analysis](https://podaac.jpl.nasa.gov/dataset/JPL_OUROCEAN-L4UHfnd-GLOB-G1SST)
