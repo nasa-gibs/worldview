@@ -1,4 +1,7 @@
 import googleTagManager from 'googleTagManager';
+import {
+  get as lodashGet,
+} from 'lodash';
 
 import {
   SAVE_SEARCH_STATE,
@@ -133,9 +136,9 @@ export function productPickerReducer(state = productPickerState, action) {
 
     case TOGGLE_FEATURED_TAB: {
       const { config } = action;
-      const category = config.categories.featured.All;
-      const selectedMeasurement = category.measurements[0];
-      const selectedMeasurementId = config.measurements[selectedMeasurement].id;
+      const category = lodashGet(config, 'categories.featured.All');
+      const selectedMeasurement = lodashGet(category, 'measurements[0]');
+      const selectedMeasurementId = lodashGet(config, `measurements[${selectedMeasurement}].id`);
       return {
         ...state,
         categoryType: 'featured',
