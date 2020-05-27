@@ -8,4 +8,4 @@ Reference: [LP DAAC - MCD43A4 Version 6](https://doi.org/10.5067/MODIS/MCD43A4.0
 ### MAIAC Reflectance (BRDF-Adjusted)
 Temporal coverage: 28 September 2019 - Present
 
-References: [doi: 10.5067/MODIS/MCD19A1N.NRT.006](http://doi.org/10.5067/MODIS/MCD19A1N.NRT.006)
+References: [doi: 10.5067/MODIS/MCD19A1N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A1N.NRT.006)

@@ -5,4 +5,4 @@ The MODIS Cloud Top Pressure layer indicates the pressure at the top of the clou
 
 The MODIS Cloud Top Pressure layer is a science parameter of the MODIS Cloud product and is available from both the Terra (MOD06) and Aqua (MYD06) satellites. The sensor resolution is 5 km, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [NASA Earth Observatory - Aerosol-Cloud Interactions](http://earthobservatory.nasa.gov/IOTD/view.php?id=5724)
+References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [NASA Earth Observatory - Aerosol-Cloud Interactions](https://earthobservatory.nasa.gov/IOTD/view.php?id=5724)

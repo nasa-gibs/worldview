@@ -4,4 +4,4 @@ The freeze/thaw layer is useful for assessing the impact of freeze/thaw variatio
 
 The MEaSUREs record of daily landscape freeze/thaw status is produced in a global equal area projection gridded to a 25 km spatial resolution; temporal resolution is daily, as derived from morning (AM) and afternoon (PM) sensor brightness temperature retrievals.
 
-References: [NSIDC - MEaSUREs Global Record of Daily Landscape Freeze/Thaw Status, Version 3](http://nsidc.org/data/nsidc-0477/); [Freeze/Thaw Earth System Data Record](http://freezethaw.ntsg.umt.edu/)
+References: [NSIDC - MEaSUREs Global Record of Daily Landscape Freeze/Thaw Status, Version 3](https://nsidc.org/data/nsidc-0477/); [Freeze/Thaw Earth System Data Record](https://freezethaw.ntsg.umt.edu/)

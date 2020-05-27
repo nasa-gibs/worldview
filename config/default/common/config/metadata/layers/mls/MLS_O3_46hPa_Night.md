@@ -6,4 +6,4 @@ Ozone is a critical player in all three of the primary objectives of MLS: to tra
 
 The MLS Ozone (O3) Mixing Ratio 46hPa layer is derived from the MLS Ozone product (ML2O3_NRT) available from the Microwave Limb Sounder (MLS) instrument on the Aura satellite. The sensor resolution is 5 km, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [GES DISC - ML2O3_NRT: MLS/Aura Near-Real-Time L2 Ozone (O3) Mixing Ratio V004](https://disc.gsfc.nasa.gov/datasets/ML2O3_NRT_004/summary); [MLS - O3 Product](http://mls.jpl.nasa.gov/products/o3_product.php)
+References: [GES DISC - ML2O3_NRT: MLS/Aura Near-Real-Time L2 Ozone (O3) Mixing Ratio V004](https://disc.gsfc.nasa.gov/datasets/ML2O3_NRT_004/summary); [MLS - O3 Product](https://mls.jpl.nasa.gov/products/o3_product.php)

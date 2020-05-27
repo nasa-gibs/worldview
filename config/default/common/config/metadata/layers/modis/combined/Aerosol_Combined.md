@@ -12,4 +12,4 @@ References: [NASA Earthdata - NRT Value-Added MODIS AOD Product](https://earthda
 ### MAIAC Aerosol Optical Depth
 Temporal coverage: 28 September 2019 - present
 
-References: [doi: 10.5067/MODIS/MCD19A2N.NRT.006](http://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)
+References: [doi: 10.5067/MODIS/MCD19A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)

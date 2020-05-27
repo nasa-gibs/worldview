@@ -5,4 +5,4 @@ The Sea Ice Concentration and Snow Extent layer (also known as the Near-real-tim
 
 The sensor/algorithm resolution is 25 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [Near-Real-Time SSM/I-SSMIS EASE-Grid Daily Global Ice Concentration and Snow Extent](http://nsidc.org/data/nise)
+References: [Near-Real-Time SSM/I-SSMIS EASE-Grid Daily Global Ice Concentration and Snow Extent](https://nsidc.org/data/nise)
