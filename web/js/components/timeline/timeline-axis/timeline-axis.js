@@ -420,7 +420,6 @@ class TimelineAxis extends Component {
     draggerPosition = draggerPosition - pixelsToAdd + position - draggerWidth + boundsDiff;
     draggerPositionB = draggerPositionB - pixelsToAdd + position - draggerWidth + boundsDiff;
     const updatePositioningArguments = {
-      hasMoved: false,
       isTimelineDragging: false,
       position,
       transformX,
@@ -1014,12 +1013,11 @@ class TimelineAxis extends Component {
   */
   handleStartDrag = () => {
     const {
-      hasMoved,
       isTimelineDragging,
       updateTimelineMoveAndDrag,
     } = this.props;
     if (!isTimelineDragging) {
-      updateTimelineMoveAndDrag(hasMoved, true);
+      updateTimelineMoveAndDrag(true);
     }
   }
 
@@ -1035,16 +1033,12 @@ class TimelineAxis extends Component {
       e.preventDefault();
     }
     const {
-      currentTimeRange,
       gridWidth,
       dragSentinelChangeNumber,
       dragSentinelCount,
     } = this.state;
     const {
-      draggerVisible,
-      draggerVisibleB,
       timeScale,
-      transformX,
       updatePositioning,
       updatePositioningOnSimpleDrag,
     } = this.props;
@@ -1063,27 +1057,16 @@ class TimelineAxis extends Component {
     animationStartLocation += deltaX;
     animationEndLocation += deltaX;
     // update not necessary for year or month since all units are displayed
-    if (timeScale === 'year' || timeScale === 'month') {
-      const frontDate = currentTimeRange[0].rawDate;
-      const backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
-      const updatePositioningArguments = {
-        hasMoved: true,
-        isTimelineDragging: true,
+    if (timeScale === 'month' || timeScale === 'year') {
+      const updateSimplePositioningArguments = {
         position,
-        transformX,
-        frontDate,
-        backDate,
         draggerPosition,
         draggerPositionB,
-        draggerVisible,
-        draggerVisibleB,
         animationStartLocation,
         animationEndLocation,
       };
-      this.setState({
-        dragSentinelCount: dragSentinelCount + deltaX,
-      });
-      updatePositioning(updatePositioningArguments);
+
+      updatePositioningOnSimpleDrag(updateSimplePositioningArguments);
       // handle all timescale other than year and month to add new groups of tile item dates
     } else if (deltaX > 0) {
       // dragging right - exposing past dates
@@ -1113,7 +1096,6 @@ class TimelineAxis extends Component {
         const frontDate = newCurrentTimeRange[0].rawDate;
         const backDate = newCurrentTimeRange[newCurrentTimeRange.length - 1].rawDate;
         const updatePositioningArguments = {
-          hasMoved: true,
           isTimelineDragging: true,
           position,
           transformX,
@@ -1138,8 +1120,6 @@ class TimelineAxis extends Component {
           : dragSentinelCount + deltaX;
 
         const updatePositioningArguments = {
-          hasMoved: true,
-          isTimelineDragging: true,
           position,
           draggerPosition,
           draggerPositionB,
@@ -1180,7 +1160,6 @@ class TimelineAxis extends Component {
         const frontDate = newCurrentTimeRange[0].rawDate;
         const backDate = newCurrentTimeRange[newCurrentTimeRange.length - 1].rawDate;
         const updatePositioningArguments = {
-          hasMoved: true,
           isTimelineDragging: true,
           position,
           transformX,
@@ -1205,8 +1184,6 @@ class TimelineAxis extends Component {
           : dragSentinelCount + deltaX;
 
         const updatePositioningArguments = {
-          hasMoved: true,
-          isTimelineDragging: true,
           position,
           draggerPosition,
           draggerPositionB,
@@ -1264,7 +1241,6 @@ class TimelineAxis extends Component {
     rightBound += midPoint - d.x;
 
     const updatePositioningArguments = {
-      hasMoved,
       isTimelineDragging: false,
       position: midPoint,
       transformX: newTransformX,
@@ -1353,9 +1329,13 @@ class TimelineAxis extends Component {
     }
 
     let leftOffset = 0;
+    const layerStartBeforeAxisFront = layerStart < axisFrontDate;
+    const layerEndBeforeAxisBack = layerEnd <= axisBackDate;
+
+    // oversized width allows axis drag buffer
     let width = axisWidth * 2;
     if (visible) {
-      if (layerStart <= axisFrontDate) {
+      if (layerStartBeforeAxisFront) {
         leftOffset = 0;
       } else {
         // positive diff means layerStart more recent than axisFrontDate
@@ -1364,13 +1344,14 @@ class TimelineAxis extends Component {
         leftOffset = gridDiff + postionTransformX;
       }
 
-      if (layerEnd <= axisBackDate) {
+      if (layerEndBeforeAxisBack) {
         // positive diff means layerEnd earlier than back date
         const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
         width = Math.max(gridDiff + postionTransformX - leftOffset, 0);
       }
     }
+
     return {
       visible,
       leftOffset,
@@ -1384,28 +1365,32 @@ class TimelineAxis extends Component {
   * @param {Number} transformX
   * @returns {Object} DOM SVG object
   */
-  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => (
-    <g
-      className="axis-data-coverage-line"
-      transform={`translate(${-transformX}, 0)`}
-    >
-      <rect
-        style={{
-          left: lineCoverageOptions.leftOffset,
-          visibility: lineCoverageOptions.visible ? 'visible' : 'hidden',
-          margin: '0 0 6px 0',
-        }}
-        rx={0}
-        ry={0}
-        width={lineCoverageOptions.width}
-        height={10}
-        transform={`translate(${transformX + lineCoverageOptions.leftOffset}, 0)`}
-        fill="rgba(0, 119, 212, 0.5)"
-        stroke="rgba(0, 69, 123, 0.8)"
-        strokeWidth={3}
-      />
-    </g>
-  )
+  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => {
+    const { leftOffset, visible, width } = lineCoverageOptions;
+    return (
+      <g
+        className="axis-data-coverage-line"
+        transform={`translate(${-transformX})`}
+        clipPath="url(#matchingCoverage)"
+      >
+        <rect
+          style={{
+            left: leftOffset,
+            visibility: visible ? 'visible' : 'hidden',
+            margin: '0 0 6px 0',
+          }}
+          rx={0}
+          ry={0}
+          width={width}
+          height={10}
+          transform={`translate(${transformX + leftOffset})`}
+          fill="rgba(0, 119, 212, 0.5)"
+          stroke="rgba(0, 69, 123, 0.8)"
+          strokeWidth={3}
+        />
+      </g>
+    );
+  };
 
   render() {
     const {
@@ -1430,12 +1415,13 @@ class TimelineAxis extends Component {
       lineCoverageOptions = this.getMatchingCoverageLineDimensions();
     }
     const shouldDisplayMatchingCoverageLine = matchingTimelineCoverage && lineCoverageOptions;
+    const axisWidthStr = `${axisWidth}px`;
 
     return (
       <>
         <div
           className="timeline-axis-container"
-          style={{ width: `${axisWidth}px` }}
+          style={{ width: axisWidthStr }}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.setLineTime}
           onWheel={this.handleWheelType}
@@ -1449,19 +1435,23 @@ class TimelineAxis extends Component {
               <svg
                 className="timeline-axis-svg"
                 id="timeline-footer-svg"
-                width={axisWidth}
-                height={64}
+                width={axisWidthStr}
+                height="64px"
                 viewBox={`0 0 ${axisWidth} 64`}
                 preserveAspectRatio="xMinYMin slice"
               >
                 <defs>
                   {/* clip axis grid text */}
                   <clipPath id="textDisplay">
-                    <rect width="200" height="64" />
+                    <rect width="84px" height="64px" />
+                  </clipPath>
+                  {/* clip matching coverage data line */}
+                  <clipPath id="matchingCoverage">
+                    <rect x={transformX} y="0" width={axisWidthStr} height="64px" />
                   </clipPath>
                   {/* clip axis grid overflow */}
                   <clipPath id="timelineBoundary">
-                    <rect width={axisWidth} height={64} />
+                    <rect x={-position} y="0" width={axisWidthStr} height="64px" />
                   </clipPath>
                   {/* data line boundary and background patterns  */}
                   <clipPath id="dataLineBoundary">
@@ -1505,7 +1495,7 @@ class TimelineAxis extends Component {
                     left: leftBound, top: 0, bottom: 0, right: rightBound,
                   }}
                 >
-                  <g>
+                  <g clipPath="url(#timelineBoundary)">
                     <GridRange
                       showHover={showHover}
                       timeScale={timeScale}
@@ -1541,7 +1531,6 @@ TimelineAxis.propTypes = {
   draggerVisible: PropTypes.bool,
   draggerVisibleB: PropTypes.bool,
   frontDate: PropTypes.string,
-  hasMoved: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
   isAnimationDraggerDragging: PropTypes.bool,
