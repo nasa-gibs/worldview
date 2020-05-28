@@ -1,35 +1,27 @@
 {
   "layers": {
     "GRUMP_Settlements": {
-      "id": "GRUMP_Settlements",
       "title": "Settlements",
       "subtitle": "Global Rural-Urban Mapping Project (GRUMP), v1",
       "description": "sedac/GRUMP_Settlements",
+      "type": "vector",
+      "tags": "vector vectors",
       "group": "overlays",
-      "format": "image/png",
-      "tileSize": [
-        512,
-        512
-      ],
-      "type": "wms",
-      "styles": "grump-v1-settlement-points:scale-dependent",
+      "downloadId": "GRUMP_Settlements",
       "layergroup": [
-        "sedac"
+        "vector"
       ],
       "product": "CIESIN_SEDAC_GRUMPv1_STLMNT01",
-      "projections": {
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
+      "uniqueIdenitifier": "Latlongid",
+      "inactive": true,
       "palette": {
         "id": "GRUMP_Settlements",
         "immutable": true
       },
-      "wrapX": true
+      "wrapX": true,
+      "vectorStyle": {
+        "id": "GRUMP_Settlements"
+      }
     }
   }
 }
