@@ -1226,9 +1226,10 @@ export function mapLocationToLayerState(
   return newStateFromLocation;
 }
 /**
- * Determine if active layers have a vector layer
+ * Determine if active layers have a visible
+ * vector layer
+ *
  * @param {Array} activeLayers
- * @param {Object} compareState
  *
  * @return {Boolean}
  */
@@ -1248,9 +1249,11 @@ export const hasVectorLayers = (activeLayers) => {
 };
 
 /**
- * Determine if active layers have a vector layer
+ * Determine if active layers have a vector layer that is
+ * clickable at this zoom
+ *
  * @param {Object} layersState
- * @param {Object} compareState
+ * @param {Number} mapRes
  *
  * @return {Boolean}
  */
@@ -1265,8 +1268,10 @@ export const isVectorLayerClickable = (layer, mapRes) => {
 
 /**
  * Determine if active layers have a vector layer
+ * That is currently not clickable
+ *
  * @param {Object} layersState
- * @param {Object} compareState
+ * @param {Number} mapRes
  *
  * @return {Boolean}
  */
