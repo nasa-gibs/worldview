@@ -66,7 +66,7 @@ class DismissableAlerts extends React.Component {
             noPortal
             onClick={() => openAlertModal(vectorModalProps)}
             onDismiss={dismissVectorAlert}
-            message="Vector features may not be clickable at every zoom level."
+            message="Vector features may not be clickable at all zoom levels."
           />
         ) : null}
       </>
