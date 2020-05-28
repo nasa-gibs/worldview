@@ -17,7 +17,7 @@ const VectorAlertModalBody = () => (
     </Row>
     <Row className="p-2">
       <h2>
-        Why can&nbsp;t I click on a feature in a vector layer?
+        Why can’t I click on a feature in a vector layer?
       </h2>
     </Row>
     <Row className="p-3">
@@ -33,7 +33,7 @@ const VectorAlertModalBody = () => (
     <Row className="p-3">
       <Col>
         <p>
-          If you see the blue pointer icon next to the layer in the sidebar Layer List, you should be able to click on that layer&nbsp;s features in order to access attribute information associated with that vector feature. If you see the blue pointer with a red X over it, you are zoomed out too far and the layer is being rendered as a raster, zoom in to be able to examine the attribute information of the vector layer.
+          If you see the blue pointer icon next to the layer in the sidebar Layer List, you should be able to click on that layer’s features in order to access attribute information associated with that vector feature. If you see the blue pointer with a red X over it, you are zoomed out too far and the layer is being rendered as a raster, zoom in to be able to examine the attribute information of the vector layer.
         </p>
       </Col>
       <Col>
