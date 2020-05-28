@@ -90,11 +90,7 @@ import '../pages/css/document.css';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      alertKey: `alerts-${new Date().getTime()}`,
-    };
     this.onload();
-    this.refeshAlerts = this.refeshAlerts.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.setVhCSSProperty = this.setVhCSSProperty.bind(this);
   }
@@ -177,22 +173,17 @@ class App extends React.Component {
     util.wrap(main)();
   }
 
-  refeshAlerts() {
-    this.setState({ alertKey: `alerts-${new Date().getTime()}` });
-  }
-
   render() {
     const {
       isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, parameters,
     } = this.props;
-    const { alertKey } = this.state;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
-        <MapInteractions refeshAlerts={this.refeshAlerts} mouseEvents={mapMouseEvents} />
+        <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
-          <Alerts key={alertKey} />
+          <Alerts />
         </div>
         <Sidebar />
         {isTourActive ? <Tour /> : null}
