@@ -276,36 +276,38 @@ li.item.productsitem.inmotion,
 .productsitem svg.svg-inline--fa {
   color: #333;
 }
+.productsitem .hdanchor:hover .layer-eye-icon {
+  color: #000;
+}
+
+/* **********************************
+ * Vector layer pointer icon ********
+ ************************************/
 .productsitem .layer-main .layer-pointer-icon {
   position: absolute;
   right: 4px;
   bottom: 14px;
 }
-.productsitem  .layer-pointer-icon svg.svg-inline--fa {
+.productsitem .layer-pointer-icon svg.svg-inline--fa {
   color: #22a;
 }
-.productsitem  .layer-pointer-icon.disabled svg.svg-inline--fa {
-  color: #333333;
+.productsitem .layer-pointer-icon.disabled svg.svg-inline--fa {
+  color: #333;
 }
-.productsitem  .layer-pointer-icon:hover svg.svg-inline--fa {
-  cursor: pointer;
-}
-.productsitem  .layer-pointer-icon:hover svg.svg-inline--fa {
+.productsitem .layer-pointer-icon:hover svg.svg-inline--fa {
   transform: scale(1.2);
+  cursor: pointer;
 }
 .layer-hidden svg.svg-inline--fa {
   color: #c5c5c8;
 }
-.productsitem .hdanchor:hover .layer-eye-icon {
-  color: #000;
-}
 .layer-hidden .layer-pointer-icon {
   opacity: 0.6;
 }
-.layer-pointer-icon.disabled:before, .layer-pointer-icon.disabled:after {
+.layer-pointer-icon.disabled::before, .layer-pointer-icon.disabled::after {
   position: absolute;
   content: '';
-  background: red;
+  background: #f00;
   display: block;
   width: 1px;
   height: 19px;
@@ -317,15 +319,20 @@ li.item.productsitem.inmotion,
   cursor: pointer;
 }
 
-.layer-pointer-icon.disabled:before {
+.layer-pointer-icon.disabled::before {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 
-.layer-pointer-icon.disabled:after {
+.layer-pointer-icon.disabled::after {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+/************************************
+ * End -- vector layer pointer icon *
+ ************************************/
+
 .productsitem a.wv-layers-info,
 .productsitem a.wv-layers-options {
   position: relative;
