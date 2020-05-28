@@ -299,7 +299,9 @@ li.item.productsitem.inmotion,
 .productsitem .hdanchor:hover .layer-eye-icon {
   color: #000;
 }
-
+.layer-hidden .layer-pointer-icon {
+  opacity: 0.6;
+}
 .layer-pointer-icon.disabled:before, .layer-pointer-icon.disabled:after {
   position: absolute;
   content: '';
