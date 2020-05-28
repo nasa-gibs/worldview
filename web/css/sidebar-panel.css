@@ -279,6 +279,9 @@ li.item.productsitem.inmotion,
 .productsitem .hdanchor:hover .layer-eye-icon {
   color: #000;
 }
+.layer-hidden svg.svg-inline--fa {
+  color: #c5c5c8;
+}
 
 /* **********************************
  * Vector layer pointer icon ********
@@ -298,9 +301,7 @@ li.item.productsitem.inmotion,
   transform: scale(1.2);
   cursor: pointer;
 }
-.layer-hidden svg.svg-inline--fa {
-  color: #c5c5c8;
-}
+
 .layer-hidden .layer-pointer-icon {
   opacity: 0.6;
 }
