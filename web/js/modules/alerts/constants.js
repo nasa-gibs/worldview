@@ -1,6 +1,6 @@
 import EventsAlertModalBody from '../../components/events/alert-body';
 import CompareAlertModalBody from '../../components/compare/alert';
-import VectorAlertModalBody from '../../components/layer/vector/alert';
+import VectorAlertModalBody from '../../components/feature-alert/vector-alert-modal';
 
 export const TOGGLE_VECTOR_ALERT = 'ALERTS/TOGGLE_VECTOR_ALERT';
 export const DISABLE_VECTOR_ALERT = 'ALERTS/DISABLE_VECTOR_ALERT';
@@ -32,7 +32,7 @@ export const MODAL_PROPERTIES = {
   vectorModalProps: {
     id: 'vector_layer_info',
     props: {
-      headerText: 'Vector features may not be clickable at all times.',
+      headerText: 'Vector features may not be clickable at all zoom levels.',
       backdrop: false,
       size: 'lg',
       clickableBehindModal: true,
