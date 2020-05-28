@@ -133,7 +133,7 @@ export function toggleVisibility(id, visible) {
 export function removeLayer(id) {
   return (dispatch, getState) => {
     const {
-      layers, compare, data, alerts,
+      layers, compare, data,
     } = getState();
     const { activeString } = compare;
     const index = lodashFindIndex(layers[activeString], {
