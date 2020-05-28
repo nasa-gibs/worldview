@@ -6,7 +6,7 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTimes, faSlidersH, faInfo, faBan, faMousePointer,
+  faTimes, faSlidersH, faInfo, faBan, faHandPointer,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
@@ -160,11 +160,10 @@ class Layer extends React.Component {
       ? 'You can click the features of this layer to see metadata associated with the feature.'
       : 'Zoom in further to click features.';
     return isVectorLayer ? (
-      <div className={runningObject ? `${clasNames} running` : clasNames} onClick={openVectorAlertModal}>
+      <div title={title} className={runningObject ? `${clasNames} running` : clasNames} onClick={openVectorAlertModal}>
         {' '}
         <FontAwesomeIcon
-          title={title}
-          icon={faMousePointer}
+          icon={faHandPointer}
           fixedWidth
         />
       </div>
