@@ -4,6 +4,9 @@
   background: #282828;
   color: #eee;
 }
+.modal-dialog p {
+  line-height: 16px;
+}
 .modal-dialog .close,
 .modal-body pre {
   color: #eee;
