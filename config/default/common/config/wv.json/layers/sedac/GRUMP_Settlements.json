@@ -21,6 +21,18 @@
       "wrapX": true,
       "vectorStyle": {
         "id": "GRUMP_Settlements"
+      },
+      "breakPointLayer": {
+        "id": "GRUMP_Settlements",
+        "type": "wms",
+        "format":   "image/png",
+        "resolutionBreakPoint": 0.03515625,
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms"
+          }
+        }
       }
     }
   }
