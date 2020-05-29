@@ -53,14 +53,14 @@ export function createVectorUrl(date, layerName, tileMatrixSet) {
     `TIME=${time}`,
     `layer=${layerName}`,
     `tilematrixset=${tileMatrixSet}`,
-    `Service=WMTS`,
-    `Request=GetTile`,
-    `Version=1.0.0`,
-    `FORMAT=application%2Fvnd.mapbox-vector-tile`,
-    `TileMatrix={z}`,
-    `TileCol={x}`,
-    `TileRow={y}`,
-  ]
+    'Service=WMTS',
+    'Request=GetTile',
+    'Version=1.0.0',
+    'FORMAT=application%2Fvnd.mapbox-vector-tile',
+    'TileMatrix={z}',
+    'TileCol={x}',
+    'TileRow={y}',
+  ];
   return `?${params.join('&')}`;
 }
 /**
