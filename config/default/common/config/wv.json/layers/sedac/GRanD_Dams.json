@@ -21,6 +21,18 @@
         "immutable": true,
         "styleProperty": "MAIN_USE",
         "unclassified": "Not Classified"
+      },
+      "breakPointLayer": {
+        "id": "GRanD_Dams",
+        "type": "wms",
+        "format":   "image/png",
+        "resolutionBreakPoint": 0.03515625,
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms"
+          }
+        }
       }
     }
   }

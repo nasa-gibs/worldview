@@ -6,6 +6,9 @@ import {
   removeLayer,
   toggleVisibility,
   mapLocationToLayerState,
+  isVectorLayerClickable,
+  hasNonClickableVectorLayer,
+  hasVectorLayers,
 } from './util';
 import { initialState } from './reducers';
 import fixtures from '../../fixtures';
@@ -302,5 +305,50 @@ describe('permalink 1.1', () => {
     expect(dates.length).toBe(62);
     expect(isFirstDateEqual).toBeTruthy();
     expect(isLastDateEqual).toBeTruthy();
+  });
+});
+describe('Vector layers', () => {
+  const breakPointLayer = {
+    resolutionBreakPoint: 0.2,
+  };
+  const layers = [
+    {
+      type: 'vector',
+      visible: true,
+      breakPointLayer,
+    },
+  ];
+  test('isVectorLayerClickable func', () => {
+    const false1 = isVectorLayerClickable({
+      type: 'vector',
+    }, null);
+    const false2 = isVectorLayerClickable({
+      type: 'vector',
+      breakPointLayer,
+    }, 0.3);
+    const true1 = isVectorLayerClickable({
+      type: 'vector',
+      breakPointLayer,
+    }, 0.1);
+
+    expect(false1).toBe(false);
+    expect(false2).toBe(false);
+    expect(true1).toBe(true);
+  });
+  test('hasNonClickableVectorLayer func', () => {
+    const false1 = hasNonClickableVectorLayer(layers, 0.1);
+    const true1 = hasNonClickableVectorLayer(layers, 0.3);
+
+    expect(false1).toBe(false);
+    expect(true1).toBe(true);
+  });
+  test('  hasVectorLayers func', () => {
+    const false1 = hasVectorLayers([{ type: 'wms', visible: true }], 0.1);
+    const false2 = hasVectorLayers([{ type: 'vector', visible: false }], 0.1);
+    const true1 = hasVectorLayers(layers);
+
+    expect(false1).toBe(false);
+    expect(false2).toBe(false);
+    expect(true1).toBe(true);
   });
 });
