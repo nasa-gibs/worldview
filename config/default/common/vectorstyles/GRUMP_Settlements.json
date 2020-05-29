@@ -5,14 +5,15 @@
     "GRUMP_Settlements": {
       "type": "vector",
       "tiles": [
-        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/std/GRUMP_Settlements/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/std/GRUMP_Settlements_v1.01_STD/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     }
   },
   "layers": [{
-    "id": "GRUMP_Settlements",
+
+    "id": "GRUMP_Settlements_v1.01_STD",
     "source": "GRUMP_Settlements",
-    "source-layer": "GRUMP_Settlements",
+    "source-layer": "GRUMP_Settlements_v1.01_STD",
     "source-description": "Default",
     "type": "circle",
     "paint": {
