@@ -48,18 +48,20 @@ export function getActiveLayerGroup(map, layerGroupString) {
  * @return {String} URL
  */
 export function createVectorUrl(date, layerName, tileMatrixSet) {
-  return `${'?'
-  + 'TIME='}${
-    util.toISOStringSeconds(util.roundTimeOneMinute(date))
-  }&layer=${
-    layerName
-  }&tilematrixset=${
-    tileMatrixSet
-  }&Service=WMTS`
-  + '&Request=GetTile'
-  + '&Version=1.0.0'
-  + '&FORMAT=application%2Fvnd.mapbox-vector-tile'
-  + '&TileMatrix={z}&TileCol={x}&TileRow={y}';
+  const time = util.toISOStringSeconds(util.roundTimeOneMinute(date));
+  const params = [
+    `TIME=${time}`,
+    `layer=${layerName}`,
+    `tilematrixset=${tileMatrixSet}`,
+    `Service=WMTS`,
+    `Request=GetTile`,
+    `Version=1.0.0`,
+    `FORMAT=application%2Fvnd.mapbox-vector-tile`,
+    `TileMatrix={z}`,
+    `TileCol={x}`,
+    `TileRow={y}`,
+  ]
+  return `?${params.join('&')}`;
 }
 /**
  *
