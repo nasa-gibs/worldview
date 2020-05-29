@@ -4,6 +4,12 @@
   background: #282828;
   color: #eee;
 }
+.modal-dialog h1 {
+  font-size: 22px;
+}
+.modal-dialog h2 {
+  font-size: 17px;
+}
 .modal-dialog p {
   line-height: 16px;
 }
