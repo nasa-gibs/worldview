@@ -5,10 +5,11 @@
       "subtitle": "Global Rural-Urban Mapping Project (GRUMP), v1",
       "description": "sedac/GRUMP_Settlements",
       "type": "vector",
-      "tags": "vector vectors",
+      "tags": "vectors",
       "group": "overlays",
       "downloadId": "GRUMP_Settlements",
       "layergroup": [
+        "sedac",
         "vector"
       ],
       "product": "CIESIN_SEDAC_GRUMPv1_STLMNT01",

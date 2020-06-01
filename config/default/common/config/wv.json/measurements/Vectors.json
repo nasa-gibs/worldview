@@ -13,7 +13,8 @@
                     "settings": [
                         "GRanD_Dams",
                         "GRanD_Reservoirs",
-                        "Nuclear_Power_Plant_Locations"
+                        "Nuclear_Power_Plant_Locations",
+                        "GRUMP_Settlements"
                     ]
                 }
             }
