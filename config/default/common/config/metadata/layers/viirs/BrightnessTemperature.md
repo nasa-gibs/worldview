@@ -1,5 +1,5 @@
 ### Brightness Temperature (Band I5, Day | Night)
-Temporal coverage: 17 September 2017 - present
+Temporal coverage: 17 September 2017 - present (Suomi NPP); 25 April 2020 (NOAA-20)
 
 The VIIRS Brightness Temperature, Band I5, Day | Night layer is the brightness temperature, measured in Kelvin (K), calculated from the top-of-the-atmosphere radiances. It does not provide an accurate temperature of either clouds nor the land surface, but it does show relative temperature differences which can be used to distinguish features both in clouds and over clear land. It can be used to distinguish land, sea ice, and open water over the polar regions during winter (in cloudless areas).
 
