@@ -29,6 +29,13 @@ class ProductPickerHeader extends React.Component {
     this.resetSearch = this.resetSearch.bind(this);
   }
 
+  componentDidMount() {
+    const { isMobile } = this.props;
+    setTimeout(() => {
+      if (this._input && !isMobile) this._input.focus();
+    }, 500);
+  }
+
   /**
    * Go back to original screen
    * @method revertToInitialScreen
@@ -53,6 +60,8 @@ class ProductPickerHeader extends React.Component {
       toggleMobileFacets,
     } = this.props;
     const { value } = e.target;
+
+    this.onSearchInputFocus();
     setSearchTerm(value, {
       shouldClearFilters: false,
       debounce: 200,
@@ -123,7 +132,6 @@ class ProductPickerHeader extends React.Component {
       && mode !== 'category');
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
     const showReset = !!(filters.length || searchTerm.length);
-
     const showFilterBtnMobile = mode === 'search' ? !showMobileFacets : !selectedLayer;
     const showFilterBnDesktop = mode !== 'search' && !selectedLayer;
     const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
@@ -167,11 +175,13 @@ class ProductPickerHeader extends React.Component {
 
           <Input
             onChange={this.handleChange}
+            onClick={this.onSearchInputFocus}
             id="layers-search-input"
             value={searchTerm}
             placeholder="Search"
             type="search"
-            onFocus={(e) => this.onSearchInputFocus(e)}
+            // eslint-disable-next-line no-return-assign
+            innerRef={(c) => (this._input = c)}
           />
         </InputGroup>
 
