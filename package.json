@@ -81,7 +81,8 @@
     "test:unit:tz:coverage": "TZ=Australia/Sydney npx jest --coverage",
     "updateconfig": "run-s getcapabilities build:config",
     "watch": "node ./tasks/watchclean.js && cross-env NODE_ENV=development webpack-dev-server",
-    "watch:debug": "node ./tasks/watchclean.js && cross-env DEBUG=true NODE_ENV=development webpack-dev-server",
+    "watch:debug:logger": "node ./tasks/watchclean.js && cross-env DEBUG=logger NODE_ENV=development webpack-dev-server",
+    "watch:debug:devtools": "node ./tasks/watchclean.js && cross-env DEBUG=devtools NODE_ENV=development webpack-dev-server",
     "upload": "node tasks/upload.js"
   },
   "devDependencies": {
