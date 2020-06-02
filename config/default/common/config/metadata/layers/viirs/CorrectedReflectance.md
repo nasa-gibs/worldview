@@ -1,5 +1,5 @@
 ### VIIRS Corrected Reflectance (True Color)
-Temporal coverage: 24 November 2015 - present
+Temporal coverage: 24 November 2015 - present (Suomi NPP); 25 April 2020 - present (NOAA-20)
 
 True Color: Red = Band I1, Green = Band M4, Blue = Band M3
 
@@ -10,7 +10,7 @@ The Visible Infrared Imaging Radiometer Suite (VIIRS) Corrected Reflectance imag
 The imagery can be visualized in Worldview and the Global Imagery Browse Services (GIBS). The sensor resolution is 750 m and 375 m (M Bands are 750 m, I Bands are 375 m), imagery resolution is 250 m, and the temporal resolution is daily.
 
 ### VIIRS Corrected Reflectance (Bands M3-I3-M11)
-Temporal coverage: 24 November 2015 - present
+Temporal coverage: 24 November 2015 - present (Suomi NPP); 25 April 2020 - present (NOAA-20)
 
 False Color: Red = M3, Green = I3, Blue = M11
 
@@ -28,7 +28,7 @@ Vegetation will appear green in this band combination, as vegetation is absorben
 Liquid water on the ground will appear very dark since it absorbs in the red and the SWIR, but small liquid water drops in clouds scatter light equally in both the visible and the SWIR, and will therefore appear white. Sediments in water appear dark red.
 
 ### VIIRS Corrected Reflectance (Bands M11-I2-I1)
-Temporal coverage: 24 November 2015 - present
+Temporal coverage: 24 November 2015 - present (Suomi NPP); 25 April 2020 - present (NOAA-20)
 
 False Color: Red = M11, Green = I2, Blue = I1
 
