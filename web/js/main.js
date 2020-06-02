@@ -41,19 +41,19 @@ import { debugConfig } from './debug';
 import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
 const history = createBrowserHistory();
-
-const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
-const compose = !isDebugMode ? defaultCompose : composeWithDevTools({
-  stateSanitizer: (state) => {
-    const sanitizedState = {
-      ...state,
-    };
-    delete sanitizedState.map;
-    return sanitizedState;
-  },
-});
+const compose = DEBUG === false || DEBUG === 'logger'
+  ? defaultCompose
+  : DEBUG === 'devtools' && composeWithDevTools({
+    stateSanitizer: (state) => {
+      const sanitizedState = {
+        ...state,
+      };
+      delete sanitizedState.map;
+      return sanitizedState;
+    },
+  });
 let parameters = util.fromQueryString(window.location.search);
 let { elapsed } = util;
 const errors = [];
@@ -150,7 +150,7 @@ const render = (config, legacyState) => {
     reducers,
     stateToParams,
   );
-  const middleware = getMiddleware(isDebugMode, locationMiddleware);
+  const middleware = getMiddleware(DEBUG === 'logger', locationMiddleware);
   const store = createStore(
     reducersWithLocation,
     getInitialState(models, config, parameters),

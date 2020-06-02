@@ -45,9 +45,13 @@ if (isDevServer) {
 if (process.env.ANALYZE_MODE === 'true') {
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
-if (process.env.DEBUG === 'true') {
+if (process.env.DEBUG !== undefined) {
   pluginSystem.push(
-    new webpack.DefinePlugin({ DEBUG: JSON.stringify('true') }),
+    new webpack.DefinePlugin({ DEBUG: JSON.stringify(process.env.DEBUG) }),
+  );
+} else {
+  pluginSystem.push(
+    new webpack.DefinePlugin({ DEBUG: false }),
   );
 }
 
