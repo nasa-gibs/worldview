@@ -3,9 +3,9 @@
         "projection": "geographic",
         "startingLayers": [
             { "id": "MODIS_Terra_CorrectedReflectance_TrueColor" },
-            { "id": "VIIRS_NOAA20_CorrectedReflectance_TrueColor", "hidden": "true" },
             { "id": "MODIS_Aqua_CorrectedReflectance_TrueColor", "hidden": "true" },
             { "id": "VIIRS_SNPP_CorrectedReflectance_TrueColor", "hidden": "true" },
+            { "id": "VIIRS_NOAA20_CorrectedReflectance_TrueColor", "hidden": "true" },
             { "id": "Coastlines" },
             { "id": "Reference_Features", "hidden": "true" },
             { "id": "Reference_Labels", "hidden": "true" }
