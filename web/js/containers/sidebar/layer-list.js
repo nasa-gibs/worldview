@@ -8,7 +8,7 @@ import {
   replaceSubGroup,
   getZotsForActiveLayers,
   getTitles,
-  available,
+  available as availableSelector,
 } from '../../modules/layers/selectors';
 import { reorderLayers } from '../../modules/layers/actions';
 
@@ -135,6 +135,7 @@ class LayerList extends React.Component {
                     zot={zots[object.id] ? zots[object.id].value : null}
                     names={getNames(object.id)}
                     checkerBoardPattern={checkerBoardPattern}
+                    // TODO probably shouldn't call this function on every render?
                     isDisabled={!available(object.id)}
                     isVisible={object.visible}
                     runningObject={
@@ -179,7 +180,7 @@ function mapStateToProps(state, ownProps) {
     layerSplit,
   } = ownProps;
   const {
-    proj, compare, config, map,
+    proj, compare, config, map, date,
   } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
@@ -199,10 +200,10 @@ function mapStateToProps(state, ownProps) {
     projId: id,
     checkerBoardPattern,
     layerSplit,
-    getNames: (layerId) => getTitles(state.config, layerId, id),
-    available: (id) => {
-      const date = state.date[activeDateString];
-      return available(id, date, layers, state.config, state);
+    getNames: (layerId) => getTitles(config, layerId, id),
+    available: (layerId) => {
+      const currentDate = date[activeDateString];
+      return availableSelector(layerId, currentDate, layers, config);
     },
   };
 }
