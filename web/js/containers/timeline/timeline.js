@@ -35,7 +35,6 @@ import {
 } from '../../components/timeline/date-util';
 import {
   hasSubDaily,
-  lastDate as layersLastDateTime,
 } from '../../modules/layers/selectors';
 import {
   selectDate,
@@ -1379,7 +1378,7 @@ function mapStateToProps(state) {
     customInterval,
   } = date;
   const { screenWidth, lessThan } = browser;
-  const { isCompareA, activeString } = compare;
+  const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
   const isSmallScreen = lessThan.medium;
@@ -1390,7 +1389,9 @@ function mapStateToProps(state) {
   const activeLayers = layers[compare.activeString];
   const projection = proj.id;
   const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
-  let hasSubdailyLayers = hasSubDaily(activeLayers);
+  const hasSubdailyLayers = isCompareModeActive
+    ? hasSubDaily(layers.active) || hasSubDaily(layers.activeB)
+    : hasSubDaily(activeLayers);
 
   let updatedInterval = interval;
   let updatedCustomInterval = customInterval;
@@ -1408,21 +1409,11 @@ function mapStateToProps(state) {
     }
   }
 
-  let endTime;
-  if (isCompareModeActive) {
-    hasSubdailyLayers = hasSubDaily(layers.active) || hasSubDaily(layers.activeB);
-    endTime = getEndTime(layers, config);
-  } else {
-    hasSubdailyLayers = hasSubDaily(activeLayers);
-    endTime = layersLastDateTime(layers[activeString], config);
-  }
-  endTime = appNow;
-
   const dimensionsAndOffsetValues = getOffsetValues(
     screenWidth,
     hasSubdailyLayers,
   );
-  const timelineEndDateLimit = getISODateFormatted(endTime);
+  const timelineEndDateLimit = getISODateFormatted(appNow);
 
   const selectedDate = isCompareA ? selected : selectedB;
   const deltaChangeAmt = customSelected ? customDelta : delta;
@@ -1592,11 +1583,6 @@ const getOffsetValues = (innerWidth, hasSubDaily) => {
   return { width, parentOffset };
 };
 
-const getEndTime = (layers, config) => {
-  const endDateA = layersLastDateTime(layers.active, config);
-  const endDateB = layersLastDateTime(layers.activeB, config);
-  return endDateA > endDateB ? endDateA : endDateB;
-};
 /**
  * @param  {Number} delta Date and direction to change
  * @param  {Number} increment Zoom level of change
