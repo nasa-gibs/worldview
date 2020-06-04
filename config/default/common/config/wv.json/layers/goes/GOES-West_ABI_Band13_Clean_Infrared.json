@@ -18,7 +18,8 @@
       "daynight": [
         "day",
         "night"
-      ]
+      ],
+      "availableWindow": 30
     }
   }
 }

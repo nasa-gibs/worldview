@@ -14,7 +14,8 @@
       "wrapX": true,
       "daynight": [
         "day"
-      ]
+      ],
+      "availableWindow": 30
     }
   }
 }
