@@ -6,6 +6,7 @@ import {
   cloneDeep as lodashCloneDeep,
   isUndefined as lodashIsUndefined,
   findIndex as lodashFindIndex,
+  memoize as lodashMemoize,
 } from 'lodash';
 import { createSelector } from 'reselect';
 import update from 'immutability-helper';
@@ -14,6 +15,9 @@ import util from '../../util/util';
 // State selectors
 const getLayersState = ({ layers }) => layers;
 const getActiveCompareState = ({ compare }) => (compare.isCompareA ? 'active' : 'activeB');
+const getCurrentDate = ({ date, compare }) => date[compare.isCompareA ? 'selected' : 'selectedB'];
+const getCurrentActiveLayers = ({ compare, layers }) => (compare.isCompareA ? layers.active : layers.activeB);
+const getConfigParameters = ({ config }) => config && config.parameters;
 
 /**
  * Return a map of active layers where key is layer id
@@ -334,6 +338,98 @@ export function available(id, date, layers, config) {
   }
   return true;
 }
+
+/**
+ * Determine if a given layer is available
+ * @param {*} id - the layer id
+ */
+export const memoizedAvailable = createSelector(
+  [getCurrentDate, getCurrentActiveLayers, getConfigParameters],
+  (currentDate, activeLayers, parameters) => lodashMemoize((id) => {
+    let dateRange;
+    const { debugGIBS, ignoreDateRange } = parameters;
+    if (debugGIBS || ignoreDateRange) {
+      dateRange = {
+        start: new Date(Date.UTC(1970, 0, 1)),
+        end: util.now(),
+      };
+    }
+    let min = Number.MAX_VALUE;
+    let max = 0;
+    let hasRange = false;
+    const maxDates = [];
+    // Use the minute ceiling of the current time so that we don't run into an issue where
+    // seconds value of current appNow time is greater than a layer's available time range
+    const minuteCeilingCurrentTime = util.now().setSeconds(59);
+    const def = lodashFind(activeLayers, { id });
+
+    if (!def) {
+      return;
+    }
+    if (def.startDate) {
+      hasRange = true;
+      const start = util.parseDateUTC(def.startDate).getTime();
+      min = Math.min(min, start);
+    }
+    // For now, we assume that any layer with an end date is
+    // an ongoing product unless it is marked as inactive.
+    if (def.futureLayer && def.endDate) {
+      hasRange = true;
+      max = util.parseDateUTC(def.endDate).getTime();
+      maxDates.push(new Date(max));
+    } else if (def.inactive && def.endDate) {
+      hasRange = true;
+      const end = util.parseDateUTC(def.endDate).getTime();
+      max = Math.max(max, end);
+      maxDates.push(new Date(max));
+    } else if (def.endDate) {
+      hasRange = true;
+      max = minuteCeilingCurrentTime;
+      maxDates.push(new Date(max));
+    }
+    // If there is a start date but no end date, this is a
+    // product that is currently being created each day, set
+    // the max day to today.
+    if (def.futureLayer && def.futureTime && !def.endDate) {
+      // Calculate endDate + parsed futureTime from layer JSON
+      max = new Date();
+      const { futureTime } = def;
+      const dateType = futureTime.slice(-1);
+      const dateInterval = futureTime.slice(0, -1);
+
+      if (dateType === 'D') {
+        max.setDate(max.getDate() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      } else if (dateType === 'M') {
+        max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      } else if (dateType === 'Y') {
+        max.setYear(max.getYear() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      }
+    } else if (def.startDate && !def.endDate) {
+      max = minuteCeilingCurrentTime;
+      maxDates.push(new Date(max));
+    }
+
+    if (hasRange) {
+      if (max === 0) {
+        max = minuteCeilingCurrentTime;
+        maxDates.push(max);
+      }
+      const maxDate = Math.max.apply(max, maxDates);
+      dateRange = {
+        start: new Date(min),
+        end: new Date(maxDate),
+      };
+    }
+
+    if (hasRange && (currentDate < dateRange.start || currentDate > dateRange.end)) {
+      return false;
+    }
+    return true;
+  }),
+);
 
 /**
  * Determine if a layer should be rendered if it would be visible

@@ -8,7 +8,7 @@ import {
   replaceSubGroup,
   getZotsForActiveLayers,
   getTitles,
-  available as availableSelector,
+  memoizeAvailable as availableSelector,
 } from '../../modules/layers/selectors';
 import { reorderLayers } from '../../modules/layers/actions';
 
@@ -135,7 +135,6 @@ class LayerList extends React.Component {
                     zot={zots[object.id] ? zots[object.id].value : null}
                     names={getNames(object.id)}
                     checkerBoardPattern={checkerBoardPattern}
-                    // TODO probably shouldn't call this function on every render?
                     isDisabled={!available(object.id)}
                     isVisible={object.visible}
                     runningObject={
@@ -170,6 +169,7 @@ LayerList.propTypes = {
   title: PropTypes.string,
   zots: PropTypes.object,
 };
+
 function mapStateToProps(state, ownProps) {
   const {
     layers,
@@ -180,11 +180,10 @@ function mapStateToProps(state, ownProps) {
     layerSplit,
   } = ownProps;
   const {
-    proj, compare, config, map, date,
+    proj, config, map,
   } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
-  const activeDateString = compare.isCompareA ? 'selected' : 'selectedB';
   const activeLayers = state.layers[layerGroupName];
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(config, proj, map, activeLayers)
@@ -201,12 +200,10 @@ function mapStateToProps(state, ownProps) {
     checkerBoardPattern,
     layerSplit,
     getNames: (layerId) => getTitles(config, layerId, id),
-    available: (layerId) => {
-      const currentDate = date[activeDateString];
-      return availableSelector(layerId, currentDate, layers, config);
-    },
+    available: (layerId) => availableSelector(state)(layerId),
   };
 }
+
 const mapDispatchToProps = (dispatch) => ({
   reorderLayers: (newLayerArray) => {
     dispatch(reorderLayers(newLayerArray));
