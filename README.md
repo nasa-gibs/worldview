@@ -4,7 +4,7 @@
 
 [![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
-Interactive interface for browsing full-resolution, global satellite imagery
+Interactive interface for browsing full-resolution, global satellite imagery.
 
 ## Background
 
