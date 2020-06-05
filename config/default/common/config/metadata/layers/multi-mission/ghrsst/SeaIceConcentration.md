@@ -17,6 +17,7 @@ References: doi:[10.5067/GHM25-4FJ42](https://doi.org/10.5067/GHM25-4FJ42)
 
 ### GHRSST Sea Ice Concentration (L4, GAMSSA GDS2)
 Temporal coverage: 23 July 2008 - present
+
 The Sea Ice Concentration (GAMSSA GDS2) layer is a Group for High Resolution Sea Surface Temperature (GHRSST) Level 4 sea surface temperature analysis, produced daily on an operational basis at the Australian Bureau of Meteorology (BoM) using optimal interpolation (OI) on a global 0.25 degree grid. This Global Australian Multi-Sensor SST Analysis (GAMSSA) v1.0 system blends satellite SST observations from passive infrared and passive microwave radiometers with in situ data from ships, drifting buoys and moorings from the Global Telecommunications System (GTS). SST observations that have experienced recent surface wind speeds less than 6 m/s during the day or less than 2 m/s during night are rejected from the analysis.  The processing results in daily foundation SST estimates that are largely free of nocturnal cooling and diurnal warming effects.  Sea ice concentrations are supplied by the NOAA/NCEP 12.7 km sea ice analysis.  In the absence of observations, the analysis relaxes to the Reynolds and Smith (1994) Monthly 1 degree SST climatology for 1961 - 1990.
 
 References: doi:[10.5067/GHGAM-4FA1A](https://doi.org/10.5067/GHGAM-4FA1A)
