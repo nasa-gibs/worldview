@@ -3,7 +3,7 @@
         "Sea Ice": {
             "id": "sea-ice",
             "title":    "Sea Ice",
-            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, GCOM-W1/AMSR2, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
+            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -47,6 +47,17 @@
                         "AMSRU2_Sea_Ice_Concentration_25km",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
+                    ]
+                },
+                "Multi-mission/GHRSST": {
+                    "id": "multi-mission-ghrsst",
+                    "title": "Multi-mission/GHRSST",
+                    "description": "multi-mission/ghrsst/SeaIceConcentration",
+                    "image": "",
+                    "settings": [
+                        "GHRSST_L4_MUR_Sea_Ice_Concentration",
+                        "GHRSST_L4_MUR25_Sea_Ice_Concentration",
+                        "GHRSST_L4_GMSSA_GDS2_Sea_Ice_Concentration"
                     ]
                 },
                 "SSMI": {
