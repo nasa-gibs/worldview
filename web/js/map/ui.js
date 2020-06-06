@@ -100,6 +100,7 @@ export function mapui(models, config, store, ui) {
    */
   const subscribeToStore = function(action) {
     switch (action.type) {
+      // # CHANGE IN SETTINGS ORDER
       case layerConstants.UPDATE_GRANULE_LAYER_DATES: {
         const granuleOptions = {
           id: action.id,
@@ -107,6 +108,7 @@ export function mapui(models, config, store, ui) {
         };
         return reloadLayers(self.selected, granuleOptions);
       }
+      // # RESET IN SETTINGS
       case layerConstants.RESET_GRANULE_LAYER_DATES: {
         const granuleOptions = {
           id: action.id,
@@ -114,14 +116,15 @@ export function mapui(models, config, store, ui) {
         };
         return reloadLayers(self.selected, granuleOptions);
       }
+      // # HOVER IN SETTINGS OR VIA MAP (REMOVE SETTINGS VERSION?)
       case layerConstants.TOGGLE_HOVERED_GRANULE: {
         const state = store.getState();
         let geometry;
         let date;
         const hoverGranule = action.hoveredGranule;
         if (hoverGranule) {
-          const { activeString, projection, id, granuleDate } = hoverGranule;
-          geometry = state.layers.granuleLayers[activeString][projection][id].geometry[granuleDate];
+          const { activeString, id, granuleDate } = hoverGranule;
+          geometry = state.layers.granuleLayers[activeString][id].geometry[granuleDate];
           date = granuleDate;
         }
         return granuleFootprintDraw(geometry, date);
@@ -410,7 +413,7 @@ export function mapui(models, config, store, ui) {
             let granuleLayerParam;
             if (isGranule) {
               const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-              const granuleState = state.layers.granuleLayers[layerGroupStr][proj.id][def.id];
+              const granuleState = state.layers.granuleLayers[layerGroupStr][def.id];
               let granuleDates;
               let granuleCount;
               let geometry;
@@ -425,7 +428,6 @@ export function mapui(models, config, store, ui) {
                 geometry
               };
             }
-
             const createdLayer = createLayer(def, {}, granuleLayerParam);
             resolve(createdLayer);
           }
@@ -494,7 +496,7 @@ export function mapui(models, config, store, ui) {
           let granuleLayerParam;
           if (isGranule) {
             const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-            const previouslyCachedGranule = state.layers.granuleLayers[arr[0]][projId][def.id];
+            const previouslyCachedGranule = state.layers.granuleLayers[arr[0]][def.id];
             let granuleDates;
             let granuleCount;
             let geometry;
@@ -519,7 +521,6 @@ export function mapui(models, config, store, ui) {
     // return new layer group
     return Promise.all(newGroupedLayers)
       .then(compareLayerGroup => {
-        console.log(compareLayerGroup);
         return new OlLayerGroup({
           layers: compareLayerGroup,
           group: arr[0],
@@ -650,7 +651,8 @@ export function mapui(models, config, store, ui) {
         var layersCollection = self.selected.getLayers().getArray();
         for (const layerIndex in layersCollection) {
           const isTile = layersCollection[layerIndex].type === 'TILE';
-          if (!isTile) {
+          const isVector = layersCollection[layerIndex].type === 'VECTOR';
+          if (!isTile && !isVector) {
             const layerGroup = layersCollection[layerIndex];
             const layerGroupCollection = layerGroup.getLayers().getArray();
             if (compare && compare.active) {

@@ -152,7 +152,7 @@ export function removeLayer(id) {
     });
   };
 }
-export function updateGranuleCMRGeometry(id, projection, geometry) {
+export function updateGranuleCMRGeometry(id, geometry) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeString = compare.activeString;
@@ -160,46 +160,44 @@ export function updateGranuleCMRGeometry(id, projection, geometry) {
       type: UPDATE_GRANULE_CMR_GEOMETRY,
       id,
       activeKey: activeString,
-      proj: projection,
       geometry
     });
   };
 }
-export function updateGranuleLayerDates(dates, id, projection, count) {
+export function updateGranuleLayerDates(dates, id, count) {
   return (dispatch, getState) => {
-    const { compare } = getState();
+    const { compare, layers } = getState();
     const activeString = compare.activeString;
+    const geometry = layers.granuleLayers[activeString][id].geometry;
     dispatch({
       type: UPDATE_GRANULE_LAYER_DATES,
       id,
       activeKey: activeString,
       dates,
-      proj: projection,
-      count
+      count,
+      geometry
     });
   };
 }
-export function resetGranuleLayerDates(id, projection) {
+export function resetGranuleLayerDates(id) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeString = compare.activeString;
     dispatch({
       type: RESET_GRANULE_LAYER_DATES,
       id,
-      activeKey: activeString,
-      proj: projection
+      activeKey: activeString
     });
   };
 }
-export function toggleHoveredGranule(id, projection, granuleDate) {
+export function toggleHoveredGranule(id, granuleDate) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeString = compare.activeString;
-    const hoveredGranule = granuleDate ? { granuleDate, activeString, projection, id } : null;
+    const hoveredGranule = granuleDate ? { granuleDate, activeString, id } : null;
     dispatch({
       type: TOGGLE_HOVERED_GRANULE,
       hoveredGranule,
-      projection,
       id,
       activeString
     });

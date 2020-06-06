@@ -50,21 +50,19 @@ export function granuleFootprint(map, mapUiEvents, store) {
    * @static
    *
    * @param {array} granuleGeometry - array of granule points
+   *  example: [
+   *    ['73.512657', '67.650986'],
+   *    ['-113.950806', '84.85434'],
+   *    ['-35.026161', '68.983681'],
+   *    ['27.586159', '59.548096'],
+   *    ['73.512657', '67.650986']
+   *  ]
    * @param {string} date - granule date
    * @param {string} projCodeCRS - string of projection CRS code
    *
    * @returns {void}
    */
   self.drawFootprint = (granuleGeometry, date, projCodeCRS) => {
-    // console.log(granuleGeometry, date, projCodeCRS);
-    // granuleGeometry = [
-    //   ['73.512657', '67.650986'],
-    //   ['-113.950806', '84.85434'],
-    //   ['-35.026161', '68.983681'],
-    //   ['27.586159', '59.548096'],
-    //   ['73.512657', '67.650986']
-    // ];
-
     if (self.currentGranule[date]) {
       return;
     }
@@ -96,12 +94,14 @@ export function granuleFootprint(map, mapUiEvents, store) {
       }
     }
 
-    var feature = new OlFeature({
-      geometry: new OlGeomPolygon([points])
+    // create polygon footprint
+    const polygonFootprint = new OlGeomPolygon([points]);
+    var featureFootprint = new OlFeature({
+      geometry: polygonFootprint
     });
 
     // add the feature vector to the layer vector
-    vectorSource.addFeature(feature);
+    vectorSource.addFeature(featureFootprint);
     // add text to vector layer and set current vector layer
     const newVectorLayer = self.getVectorLayer(date);
     self.vectorLayer = newVectorLayer;

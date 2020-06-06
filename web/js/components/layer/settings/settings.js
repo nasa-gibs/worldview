@@ -270,7 +270,6 @@ class LayerSettings extends React.Component {
       customPalettesIsActive,
       layer,
       palettedAllowed,
-      projection,
       granuleLayerCount,
       granuleLayerDates,
       resetGranuleLayerDates,
@@ -299,7 +298,6 @@ class LayerSettings extends React.Component {
           ? <React.Fragment>
             <GranuleCountSlider
               start={granuleLayerCount}
-              projection={projection}
               granuleDates={granuleLayerDates}
               granuleCount={granuleLayerCount}
               updateGranuleLayerDates={updateGranuleLayerDates}
@@ -307,7 +305,6 @@ class LayerSettings extends React.Component {
             />
             <GranuleLayerDateList
               def={layer}
-              projection={projection}
               granuleDates={granuleLayerDates}
               granuleCount={granuleLayerCount}
               updateGranuleLayerDates={updateGranuleLayerDates}
@@ -326,9 +323,8 @@ function mapStateToProps(state, ownProps) {
   const { config, palettes, compare, browser, layers, proj } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
-  const projection = proj.id;
 
-  const granuleState = layers.granuleLayers[groupName][projection][ownProps.layer.id];
+  const granuleState = layers.granuleLayers[groupName][ownProps.layer.id];
   let granuleLayerDates;
   let granuleLayerCount;
   let granuleCMRGeometry;
@@ -340,7 +336,6 @@ function mapStateToProps(state, ownProps) {
 
   return {
     map: state.map.ui,
-    projection,
     granuleLayerDates,
     granuleLayerCount: granuleLayerCount || 20,
     granuleCMRGeometry,
@@ -359,7 +354,6 @@ function mapStateToProps(state, ownProps) {
     getPaletteLegend: (layerId, index) => {
       return getPaletteLegend(layerId, index, groupName, state);
     },
-
     getPaletteLegends: layerId => {
       return getPaletteLegends(layerId, groupName, state);
     },
@@ -403,14 +397,14 @@ const mapDispatchToProps = dispatch => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
-  updateGranuleLayerDates: (dates, id, projection, count) => {
-    dispatch(updateGranuleLayerDates(dates, id, projection, count));
+  updateGranuleLayerDates: (dates, id, count) => {
+    dispatch(updateGranuleLayerDates(dates, id, count));
   },
-  resetGranuleLayerDates: (id, projection) => {
-    dispatch(resetGranuleLayerDates(id, projection));
+  resetGranuleLayerDates: (id) => {
+    dispatch(resetGranuleLayerDates(id));
   },
-  toggleHoveredGranule: (id, projection, granuleDate) => {
-    dispatch(toggleHoveredGranule(id, projection, granuleDate));
+  toggleHoveredGranule: (id, granuleDate) => {
+    dispatch(toggleHoveredGranule(id, granuleDate));
   }
 });
 
@@ -445,7 +439,6 @@ LayerSettings.propTypes = {
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
-  projection: PropTypes.string,
   resetGranuleLayerDates: PropTypes.func,
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,

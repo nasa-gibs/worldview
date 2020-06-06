@@ -4,6 +4,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Button } from 'reactstrap';
 import Scrollbar from '../../util/scrollbar';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
+
 const gridConstant = 8;
 
 const reorder = (list, startIndex, endIndex) => {
@@ -47,7 +50,7 @@ class GranuleLayerDateList extends PureComponent {
 
   // handle update on complete granule item drag
   onDragEnd = (result) => {
-    const { updateGranuleLayerDates, granuleCount, def, projection } = this.props;
+    const { updateGranuleLayerDates, granuleCount, def } = this.props;
     // dropped granule outside the list
     if (!result.destination) {
       return;
@@ -56,7 +59,7 @@ class GranuleLayerDateList extends PureComponent {
       result.source.index,
       result.destination.index
     );
-    updateGranuleLayerDates(reorderedItems, def.id, projection, granuleCount);
+    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: result.draggableId // granule date
     });
@@ -65,12 +68,12 @@ class GranuleLayerDateList extends PureComponent {
   // move granule item to top of list
   moveToTop = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, granuleCount, def, projection } = this.props;
+    const { updateGranuleLayerDates, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       0
     );
-    updateGranuleLayerDates(reorderedItems, def.id, projection, granuleCount);
+    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: granuleDate
     });
@@ -79,12 +82,12 @@ class GranuleLayerDateList extends PureComponent {
   // move granule item to top of list
   moveUp = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, granuleCount, def, projection } = this.props;
+    const { updateGranuleLayerDates, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       sourceIndex - 1
     );
-    updateGranuleLayerDates(reorderedItems, def.id, projection, granuleCount);
+    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: granuleDate
     });
@@ -93,12 +96,12 @@ class GranuleLayerDateList extends PureComponent {
   // move granule item to top of list
   moveDown = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    const { updateGranuleLayerDates, granuleCount, def, projection } = this.props;
+    const { updateGranuleLayerDates, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
       sourceIndex + 1
     );
-    updateGranuleLayerDates(reorderedItems, def.id, projection, granuleCount);
+    updateGranuleLayerDates(reorderedItems, def.id, granuleCount);
     this.setState({
       lastMovedItem: granuleDate
     });
@@ -118,8 +121,8 @@ class GranuleLayerDateList extends PureComponent {
   // reset granule order
   onClickReset = (e) => {
     e.preventDefault();
-    const { resetGranuleLayerDates, def, projection } = this.props;
-    resetGranuleLayerDates(def.id, projection);
+    const { resetGranuleLayerDates, def } = this.props;
+    resetGranuleLayerDates(def.id);
     this.setState({
       isLastMovedItem: null
     });
@@ -134,8 +137,8 @@ class GranuleLayerDateList extends PureComponent {
 
   // handle mouse over item
   handleMouseOverItem = (granuleDate, index) => {
-    const { def, projection, toggleHoveredGranule } = this.props;
-    toggleHoveredGranule(def.id, projection, granuleDate);
+    const { def, toggleHoveredGranule } = this.props;
+    toggleHoveredGranule(def.id, granuleDate);
     this.setState({
       hoveredItem: granuleDate
     });
@@ -143,8 +146,8 @@ class GranuleLayerDateList extends PureComponent {
 
   // handle mouse leave item
   handleMouseLeaveItem = (granuleDate, index) => {
-    const { def, projection, toggleHoveredGranule } = this.props;
-    toggleHoveredGranule(def.id, projection, null);
+    const { def, toggleHoveredGranule } = this.props;
+    toggleHoveredGranule(def.id, null);
     this.setState({
       hoveredItem: null
     });
@@ -232,14 +235,14 @@ class GranuleLayerDateList extends PureComponent {
                             {index < items.length - 1
                               ? <button className="granule-date-item-down-button"
                                 onClick={(e) => this.moveDown(e, index, item)}>
-                                <i className='fa fa-arrow-circle-down fa-fw'></i>
+                                <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth />
                               </button>
                               : null
                             }
                             {index > 0
                               ? <button className="granule-date-item-up-button"
                                 onClick={(e) => this.moveUp(e, index, item)}>
-                                <i className='fa fa-arrow-circle-up fa-fw'></i>
+                                <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth />
                               </button>
                               : null
                             }
@@ -270,7 +273,6 @@ GranuleLayerDateList.propTypes = {
   def: PropTypes.object,
   granuleCount: PropTypes.number,
   granuleDates: PropTypes.array,
-  projection: PropTypes.string,
   resetGranuleLayerDates: PropTypes.func,
   toggleHoveredGranule: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func

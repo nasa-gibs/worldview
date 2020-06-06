@@ -41,16 +41,8 @@ export const initialState = {
   startingLayers: [],
   hoveredGranule: null,
   granuleLayers: {
-    active: {
-      arctic: {},
-      geographic: {},
-      antarctic: {}
-    },
-    activeB: {
-      arctic: {},
-      geographic: {},
-      antarctic: {}
-    }
+    active: {},
+    activeB: {}
   }
 };
 export function getInitialState(config) {
@@ -176,11 +168,9 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         granuleLayers: {
           [action.activeKey]: {
-            [action.proj]: {
-              $merge: {
-                [action.id]: {
-                  dates: action.dates, count: action.count, geometry: action.geometry
-                }
+            $merge: {
+              [action.id]: {
+                dates: action.dates, count: action.count, geometry: action.geometry
               }
             }
           }
@@ -190,11 +180,9 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         granuleLayers: {
           [action.activeKey]: {
-            [action.proj]: {
-              $merge: {
-                [action.id]: {
-                  dates: action.dates, count: action.count
-                }
+            $merge: {
+              [action.id]: {
+                dates: action.dates, count: action.count, geometry: action.geometry
               }
             }
           }
@@ -204,11 +192,9 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         granuleLayers: {
           [action.activeKey]: {
-            [action.proj]: {
-              $merge: {
-                [action.id]: {
-                  geometry: action.geometry
-                }
+            $merge: {
+              [action.id]: {
+                geometry: action.geometry
               }
             }
           }

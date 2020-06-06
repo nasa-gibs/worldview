@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import OlCoordinates from '../components/map/ol-coordinates';
-import * as olExtent from 'ol/extent';
+import {
+  Polygon as OlGeomPolygon
+} from 'ol/geom';
 import * as olProj from 'ol/proj';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
@@ -51,48 +53,50 @@ export class MapInteractions extends React.Component {
   }
 
   mouseMove(event, map, crs) {
-    // const {granuleCMRGeometry, granuleLayerId, toggleHoveredGranule } = this.props;
+    const { granuleCMRGeometry, granuleLayerId, hoveredGranule, toggleHoveredGranule, proj } = this.props;
     const pixels = map.getEventPixel(event);
-    let coord = map.getCoordinateFromPixel(pixels);
+    const coord = map.getCoordinateFromPixel(pixels);
 
-    // transform from meter x,y to coordinates
-    if (crs !== 'EPSG:4326') {
-      coord = olProj.transform([coord[0], coord[1]], crs, 'EPSG:4326');
-    }
-
-    if (this.props.granuleCMRGeometry) {
+    if (granuleCMRGeometry) {
       let toggledGranuleFootprint;
-      var gcmr = Object.keys(this.props.granuleCMRGeometry).map(key => {
-        return { [key]: this.props.granuleCMRGeometry[key] };
+      var gcmr = Object.keys(granuleCMRGeometry).map(key => {
+        return { [key]: granuleCMRGeometry[key] };
       });
 
-      const cmrObj = {};
       for (let i = 0; i < gcmr.length; i++) {
         const granObj = gcmr[i];
         const date = Object.keys(granObj)[0];
         const geom = Object.values(granObj)[0];
 
-        cmrObj[date] = geom;
+        // string coord to num and transform is polar projections
+        const geomVertices = geom.map(xy => {
+          const coordNums = [parseFloat(xy[0]), parseFloat(xy[1])];
+          // transform for non geographic projections
+          if (crs !== 'EPSG:4326') {
+            return olProj.transform(coordNums, 'EPSG:4326', crs);
+          }
+          return coordNums;
+        });
 
-        const bl = olExtent.getBottomLeft(geom);
-        const tr = olExtent.getTopRight(geom);
+        // update geom polygon for precise coordinate intersect inclusion check
+        const polygon = new OlGeomPolygon([geomVertices]);
+        const areCoordsWithinPolygon = polygon.intersectsCoordinate([coord[0], coord[1]]);
 
-        // const geomExtent = ['-139.191498', '-55.285027', '-94.494011', '-55.285027',];
-        const geomExtent = [bl[0][0], bl[0][1], tr[0][0], tr[0][1]];
-        const coordWithinExtent = olExtent.containsCoordinate(geomExtent, [coord[0], coord[1]]);
-
-        if (coordWithinExtent) {
+        // if coordinates within granule footprint, toggle to show with map/ui
+        if (areCoordsWithinPolygon) {
+          //! MULTIPLE POLYGONS CONTAIN COORDS, BUT ONLY MOST RECENT DATE IS DISPLAYED
+          //! SHOULD THIS BEHAVIOR BE BLOCKED/DEBOUNCED?
           toggledGranuleFootprint = true;
-          this.props.toggleHoveredGranule(this.props.granuleLayerId, this.props.proj.id, date);
+          toggleHoveredGranule(granuleLayerId, date);
         }
       }
 
-      if (this.props.hoveredGranule && !toggledGranuleFootprint) {
-        this.props.toggleHoveredGranule(this.props.granuleLayerId, this.props.proj.id, null);
+      if (hoveredGranule && !toggledGranuleFootprint) {
+        toggleHoveredGranule(granuleLayerId, null);
       }
     }
 
-    const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj } = this.props;
+    const { isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset } = this.props;
     const [lon, lat] = coord;
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
@@ -168,14 +172,13 @@ const mapDispatchToProps = dispatch => ({
       }
     ));
   },
-  toggleHoveredGranule: (id, projection, granuleDate) => {
-    dispatch(toggleHoveredGranule(id, projection, granuleDate));
+  toggleHoveredGranule: (id, granuleDate) => {
+    dispatch(toggleHoveredGranule(id, granuleDate));
   }
 });
 function mapStateToProps(state) {
   const { layers, modal, map, measure, vectorStyles, browser, compare, proj } = state;
   const groupName = compare.activeString;
-  const projection = proj.id;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
@@ -192,8 +195,8 @@ function mapStateToProps(state) {
     'VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT': true
   };
   const isActiveGranuleVisible = layers.active.filter((layer) => layer.visible && isGranuleIdOptions[layer.id]);
-  if (isActiveGranuleVisible.length && layers.granuleLayers[groupName][projection] && layers.granuleLayers[groupName][projection].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT) {
-    granuleCMRGeometry = layers.granuleLayers[groupName][projection].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT.geometry;
+  if (isActiveGranuleVisible.length && layers.granuleLayers[groupName] && layers.granuleLayers[groupName].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT) {
+    granuleCMRGeometry = layers.granuleLayers[groupName].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT.geometry;
     granuleLayerId = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT';
   }
 
