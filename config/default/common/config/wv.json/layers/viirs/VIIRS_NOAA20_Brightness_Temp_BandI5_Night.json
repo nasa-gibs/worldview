@@ -13,6 +13,9 @@
             "product":  "",
             "tracks": [
                 "OrbitTracks_NOAA-20_Descending"
+             ],
+             "daynight": [
+               "night"
              ]
         }
     }
