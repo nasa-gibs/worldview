@@ -5,7 +5,7 @@
       "title": "Photosynthetically Available Radiation (L2)",
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_L2_Photosynthetically_Available_Radiation",
-      "tags": "aod",
+      "tags": "par",
       "group": "overlays",
       "layergroup": [
         "modis",
@@ -16,11 +16,6 @@
       "tracks": [
         "OrbitTracks_Terra_Descending"
       ],
-      "projections": {
-        "geographic": {
-          "source": "GIBS:geographic"
-        }
-      },
       "daynight": [
         "day"
       ]

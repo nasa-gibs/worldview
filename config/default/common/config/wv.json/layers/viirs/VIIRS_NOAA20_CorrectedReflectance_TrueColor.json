@@ -14,11 +14,9 @@
             "tracks": [
                 "OrbitTracks_NOAA-20_Ascending"
             ],
-            "projections": {
-                "geographic": {
-                    "source": "GIBS:geographic"
-                }
-            }
+            "daynight": [
+              "day"
+            ]
         }
     }
 }

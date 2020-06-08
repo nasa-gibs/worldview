@@ -13,6 +13,9 @@
             "wrapadjacentdays": true,
             "tracks": [
                 "OrbitTracks_NOAA-20_Ascending"
+            ],
+            "daynight": [
+              "day"
             ]
          }
     }
