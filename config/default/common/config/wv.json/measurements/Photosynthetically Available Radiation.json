@@ -1,39 +1,37 @@
 {
     "measurements": {
-        "Chlorophyll A": {
-            "id": "chlorophyll-a",
-            "title":    "Chlorophyll a",
+        "Photosynthetically Available Radiation": {
+            "id": "photosynthetically-available-radiation",
+            "title":    "Photosynthetically Available Radiation",
             "subtitle": "Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/Chlorophyll_a",
+                    "description": "modis/PhotosyntheticallyAvailableRadiation",
                     "image": "",
                     "settings": [
-                        "MODIS_Terra_L2_Chlorophyll_A",
-                        "MODIS_Terra_Chlorophyll_A",
+                        "MODIS_Terra_L2_Photosynthetically_Available_Radiation",
                         "OrbitTracks_Terra_Descending"
                     ]
                 },
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/Chlorophyll_a",
+                    "description": "modis/PhotosyntheticallyAvailableRadiation",
                     "image": "",
                     "settings": [
-                        "MODIS_Aqua_L2_Chlorophyll_A",
-                        "MODIS_Aqua_Chlorophyll_A",
+                        "MODIS_Aqua_L2_Photosynthetically_Available_Radiation",
                         "OrbitTracks_Aqua_Ascending"
                     ]
                 },
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/Chlorophyll_a",
+                    "description": "viirs/PhotosyntheticallyAvailableRadiation",
                     "image": "",
                     "settings": [
-                        "VIIRS_SNPP_L2_Chlorophyll_A",
+                        "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
                         "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 }
