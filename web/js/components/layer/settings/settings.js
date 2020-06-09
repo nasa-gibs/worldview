@@ -339,7 +339,6 @@ function mapStateToProps(state, ownProps) {
     granuleCMRGeometry = granuleState.geometry;
   }
 
-
   return {
     paletteOrder: config.paletteOrder,
     granuleLayerDates,

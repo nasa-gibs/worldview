@@ -123,8 +123,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       self.granuleCMRData[id] = {};
     }
 
-    lodashEach(Object.keys(data.feed.entry.map), (entry) => {
-    // data.feed.entry.map((entry) => {
+    lodashEach(Object.values(data.feed.entry), (entry) => {
       const date = `${entry.time_start.split('.')[0]}Z`;
       const polygons = entry.polygons[0][0].split(' ');
       const dayNight = entry.day_night_flag;
@@ -384,15 +383,12 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
   self.createLayer = (def, options, granuleLayerParam) => {
     const state = store.getState();
     const proj = state.proj.selected;
-
     const dayNightFilter = 'DAY'; // 'DAY' 'NIGHT' 'BOTH'
 
     let granuleCount;
     let updatedGranules;
 
     let geometry = granuleLayerParam && granuleLayerParam.geometry;
-
-
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
     const group = options.group || 'active';
@@ -404,7 +400,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       options.date = date;
     }
     const key = self.layerKey(def, options, state);
-
     let getFilteredDates;
     const isGranule = !!(def.tags && def.tags.contains('granule'));
     if (isGranule) {
@@ -529,7 +524,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
 
         const includedDates = [];
         const layerGroupEntries = [];
-        lodashEach(Object.keys(sortedDateCollection), (granuleDate) => {
+        lodashEach(Object.values(sortedDateCollection), (granuleDate) => {
           // check for layer in granuleCache
           const layerCacheKey = self.granuleLayers[def.id][activeKey].dates[granuleDate];
           const layerCache = cache.getItem(layerCacheKey);
@@ -541,18 +536,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
           }
           includedDates.unshift(granuleDate);
         });
-        // for (const granuleDate of sortedDateCollection) {
-        //   // check for layer in granuleCache
-        //   const layerCacheKey = self.granuleLayers[def.id][activeKey].dates[granuleDate];
-        //   const layerCache = cache.getItem(layerCacheKey);
-        //   if (layerCache) {
-        //     layerGroupEntries.push(layerCache);
-        //   } else {
-        //     console.log(granuleDate, 'NOT IN LAYER CACHE');
-        //     layerGroupEntries.push(layer);
-        //   }
-        //   includedDates.unshift(granuleDate);
-        // }
 
         // create new layergroup with granules
         layer = new OlLayerGroup({

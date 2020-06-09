@@ -552,6 +552,8 @@ const getSubdailyDateRange = ({
     minMinute,
   } = util.getUTCNumbers(minDate, 'min');
 
+  // console.log(startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
+
   let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHour, maxMinute + dateIntervalNum);
   let minMinuteDateMinusInterval;
   let minMinuteDateMinusIntervalOffset;
@@ -606,6 +608,8 @@ const getSubdailyDateRange = ({
   if (currentDateTimeCheck >= minMinuteDateTime && currentDateTimeCheck <= maxMinuteDateTime) {
     minuteDifference = util.minuteDiff(minMinuteDate, maxMinuteDate);
   }
+
+  // console.log(minMinuteDate, maxMinuteDate);
 
   for (let i = 0; i <= (minuteDifference + 1); i += dateIntervalNum) {
     let subdailyTime = new Date(

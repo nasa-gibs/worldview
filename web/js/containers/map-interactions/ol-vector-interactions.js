@@ -43,12 +43,6 @@ export class VectorInteractions extends React.Component {
       granuleCMRGeometry, granuleLayerId, hoveredGranule, toggleHoveredGranule,
     } = this.props;
 
-
-    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
-      return;
-    }
-
     if (granuleCMRGeometry) {
       let toggledGranuleFootprint;
       const gcmr = Object.keys(granuleCMRGeometry).map((key) => ({ [key]: granuleCMRGeometry[key] }));
@@ -86,6 +80,10 @@ export class VectorInteractions extends React.Component {
       }
     }
 
+    const [lon, lat] = coord;
+    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
+      return;
+    }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
