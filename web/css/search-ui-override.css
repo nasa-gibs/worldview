@@ -23,7 +23,14 @@
   /* .sui-boolean-facet__option-input-wrapper, */
   .sui-multi-checkbox-facet__option-input-wrapper {
     display: inline-flex;
-    width: 88%;
+    max-width: 92%;
+  }
+
+  /* Target FireFox only */
+  @-moz-document url-prefix("") {
+    .sui-multi-checkbox-facet__checkbox {
+      margin-top: -4px;
+    }
   }
 
   .sui-multi-checkbox-facet label {
@@ -35,8 +42,7 @@
   .sui-boolean-facet__option-label .sui-boolean-facet__input-text {
     color: #eee;
     font-size: 14px;
-    width: 90%;
-    height: 20px;
+    height: 16px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
