@@ -11,15 +11,15 @@ export default function promiseImageryForTime(date, layers, state) {
   const selectedMap = map.ui.selected;
   const { pixelRatio, viewState } = selectedMap.frameState_; // OL object describing the current map frame
 
-  const promiseArray = layers.map((def) => {
+  const promiseArray = layers.map((def) => new Promise((resolve) => {
     const key = mapUi.layerKey(def, { date }, state);
     let layer = cache.getItem(key);
 
     if (!layer) {
       layer = mapUi.createLayer(def, { date, precache: true });
     }
-    return promiseLayerGroup(layer, viewState, pixelRatio, selectedMap, def);
-  });
+    resolve(layer);
+  }).then((layer) => promiseLayerGroup(layer, viewState, pixelRatio, selectedMap, def)));
   return new Promise((resolve) => {
     Promise.all(promiseArray).then(() => resolve(date));
   });

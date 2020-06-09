@@ -1,0 +1,20 @@
+{
+  "layers": {
+      "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT": {
+          "id":       "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
+          "title":    "Corrected Reflectance (True Color, Granules, v1, Near Real-Time, VIIRS, NOAA-20)",
+          "subtitle":    "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
+          "description": "granule/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
+          "tags":     "granule subdaily",
+          "group":    "overlays",
+          "layergroup": [
+            "granule"
+          ],
+          "inactive": true,
+          "period": "subdaily",
+          "tracks": [
+            "OrbitTracks_NOAA-20_Ascending"
+          ]
+      }
+  }
+}

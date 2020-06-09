@@ -10,6 +10,8 @@ import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
+import GranuleLayerDateList from './granule-list';
+import GranuleCountSlider from './granule-count';
 
 import {
   getCheckerboard,
@@ -38,7 +40,12 @@ import {
 import {
   getVectorStyle,
 } from '../../../modules/vector-styles/selectors';
-import { setOpacity } from '../../../modules/layers/actions';
+import {
+  updateGranuleLayerDates,
+  resetGranuleLayerDates,
+  toggleHoveredGranule,
+  setOpacity,
+} from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
 
 class LayerSettings extends React.Component {
@@ -265,6 +272,11 @@ class LayerSettings extends React.Component {
       customPalettesIsActive,
       layer,
       palettedAllowed,
+      granuleLayerCount,
+      granuleLayerDates,
+      resetGranuleLayerDates,
+      toggleHoveredGranule,
+      updateGranuleLayerDates,
     } = this.props;
 
     if (layer.type !== 'vector') {
@@ -283,6 +295,26 @@ class LayerSettings extends React.Component {
           setOpacity={setOpacity}
           layer={layer}
         />
+        {granuleLayerDates
+          ? (
+            <>
+              <GranuleCountSlider
+                start={granuleLayerCount}
+                granuleDates={granuleLayerDates}
+                granuleCount={granuleLayerCount}
+                updateGranuleLayerDates={updateGranuleLayerDates}
+                layer={layer}
+              />
+              <GranuleLayerDateList
+                def={layer}
+                granuleDates={granuleLayerDates}
+                granuleCount={granuleLayerCount}
+                updateGranuleLayerDates={updateGranuleLayerDates}
+                resetGranuleLayerDates={resetGranuleLayerDates}
+                toggleHoveredGranule={toggleHoveredGranule}
+              />
+            </>
+          ) : null}
         {renderCustomizations}
         {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
       </>
@@ -292,13 +324,27 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, browser,
+    config, palettes, compare, browser, layers,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
 
+  const granuleState = layers.granuleLayers[groupName][ownProps.layer.id];
+  let granuleLayerDates;
+  let granuleLayerCount;
+  let granuleCMRGeometry;
+  if (granuleState) {
+    granuleLayerDates = granuleState.dates;
+    granuleLayerCount = granuleState.count;
+    granuleCMRGeometry = granuleState.geometry;
+  }
+
+
   return {
     paletteOrder: config.paletteOrder,
+    granuleLayerDates,
+    granuleLayerCount: granuleLayerCount || 20,
+    granuleCMRGeometry,
     groupName,
     screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
@@ -345,6 +391,15 @@ const mapDispatchToProps = (dispatch) => ({
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
   },
+  updateGranuleLayerDates: (dates, id, count) => {
+    dispatch(updateGranuleLayerDates(dates, id, count));
+  },
+  resetGranuleLayerDates: (id) => {
+    dispatch(resetGranuleLayerDates(id));
+  },
+  toggleHoveredGranule: (id, granuleDate) => {
+    dispatch(toggleHoveredGranule(id, granuleDate));
+  },
 });
 
 export default connect(
@@ -365,16 +420,21 @@ LayerSettings.propTypes = {
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
+  granuleLayerCount: PropTypes.number,
+  granuleLayerDates: PropTypes.array,
   groupName: PropTypes.string,
   layer: PropTypes.object,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
+  resetGranuleLayerDates: PropTypes.func,
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
+  toggleHoveredGranule: PropTypes.func,
+  updateGranuleLayerDates: PropTypes.func,
   vectorStyles: PropTypes.object,
 };

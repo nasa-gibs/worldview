@@ -14,6 +14,10 @@ import {
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
+  ADD_GRANULE_LAYER_DATES,
+  UPDATE_GRANULE_LAYER_DATES,
+  UPDATE_GRANULE_CMR_GEOMETRY,
+  TOGGLE_HOVERED_GRANULE,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -35,6 +39,11 @@ export const initialState = {
   layerConfig: {},
   facetArray: [],
   startingLayers: [],
+  hoveredGranule: null,
+  granuleLayers: {
+    active: {},
+    activeB: {},
+  },
 };
 export function getInitialState(config) {
   return lodashAssign({}, initialState, {
@@ -152,6 +161,46 @@ export function layerReducer(state = initialState, action) {
         },
       });
     }
+    case ADD_GRANULE_LAYER_DATES:
+      return update(state, {
+        granuleLayers: {
+          [action.activeKey]: {
+            $merge: {
+              [action.id]: {
+                dates: action.dates, count: action.count, geometry: action.geometry,
+              },
+            },
+          },
+        },
+      });
+    case UPDATE_GRANULE_LAYER_DATES:
+      return update(state, {
+        granuleLayers: {
+          [action.activeKey]: {
+            $merge: {
+              [action.id]: {
+                dates: action.dates, count: action.count, geometry: action.geometry,
+              },
+            },
+          },
+        },
+      });
+    case UPDATE_GRANULE_CMR_GEOMETRY:
+      return update(state, {
+        granuleLayers: {
+          [action.activeKey]: {
+            $merge: {
+              [action.id]: {
+                geometry: action.geometry,
+              },
+            },
+          },
+        },
+      });
+    case TOGGLE_HOVERED_GRANULE:
+      return lodashAssign({}, state, {
+        hoveredGranule: action.hoveredGranule,
+      });
     case UPDATE_OPACITY:
       return update(state, {
         [layerGroupStr]: {

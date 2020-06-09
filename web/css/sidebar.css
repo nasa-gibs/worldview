@@ -316,7 +316,8 @@ footer .compare-toggle-button {
   position: relative;
 }
 
-.layer-settings-modal .wv-label-opacity {
+.layer-settings-modal .wv-label-opacity,
+.layer-settings-modal .wv-label-granule-count {
   text-align: right;
 }
 
@@ -351,7 +352,8 @@ footer .compare-toggle-button {
   margin-bottom: 8px;
 }
 
-.layer-opacity-select .wv-header {
+.layer-opacity-select .wv-header,
+.layer-granule-count-select .wv-header {
   margin-top: 0;
 }
 

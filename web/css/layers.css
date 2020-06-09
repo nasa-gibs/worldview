@@ -536,6 +536,25 @@
   }
 }
 
+.granule-date-item {
+  flex-wrap: wrap;
+}
+
+.granule-date-item-up-button,
+.granule-date-item-down-button,
+.granule-date-item-top-button {
+  padding: 3px;
+  background: #555;
+  color: #eee;
+}
+
+.granule-date-item-up-button:hover,
+.granule-date-item-down-button:hover,
+.granule-date-item-top-button:hover {
+  background: #eee;
+  color: #555;
+}
+
 @media (min-width: 1024px) {
   .search-layers-container {
     & div.layer-list-detail-container {
