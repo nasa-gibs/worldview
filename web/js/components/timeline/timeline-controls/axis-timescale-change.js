@@ -44,8 +44,8 @@ class AxisTimeScaleChange extends PureComponent {
 
   // Toggle visibility of map scales
   disableMapScales = (disable) => {
-    const imperialMapScale = document.querySelectorAll('.wv-map-scale-imperial');
-    const metricMapScale = document.querySelectorAll('.wv-map-scale-metric');
+    const imperialMapScale = document.getElementsByClassName('wv-map-scale-imperial');
+    const metricMapScale = document.getElementsByClassName('wv-map-scale-metric');
     if (disable) {
       for (const el of imperialMapScale) {
         el.style.display = 'none';
