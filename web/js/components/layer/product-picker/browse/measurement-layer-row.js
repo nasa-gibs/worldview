@@ -4,13 +4,12 @@ import { ListGroupItem, Tooltip } from 'reactstrap';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
-import { availableAtDate } from '../../../../modules/layers/util';
+import { available, getActiveLayers } from '../../../../modules/layers/selectors';
 import Checkbox from '../../../util/checkbox';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
 } from '../../../../modules/layers/actions';
-import { getActiveLayers } from '../../../../modules/layers/selectors';
 import SelectedDate from '../../../selected-date';
 
 /*
@@ -50,7 +49,7 @@ class MeasurementLayerRow extends React.Component {
       layer, measurementId, title, selectedDate, isEnabled,
     } = this.props;
     const { tooltipOpen } = this.state;
-    const layerIsAvailable = availableAtDate(layer, selectedDate);
+    const layerIsAvailable = available(layer.id, selectedDate, [layer]);
     const listItemClass = !layerIsAvailable ? 'unavailable' : '';
     // Replace periods in id since period causes issue with tooltip targeting
     const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
