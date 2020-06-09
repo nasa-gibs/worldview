@@ -138,7 +138,7 @@ class GranuleLayerDateList extends PureComponent {
     const { resetGranuleLayerDates, def } = this.props;
     resetGranuleLayerDates(def.id);
     this.setState({
-      isLastMovedItem: null,
+      lastMovedItem: null,
     });
   }
 
@@ -169,22 +169,28 @@ class GranuleLayerDateList extends PureComponent {
 
   // determine if grnaule dates are in order - used for RESET button toggle
   checkGranuleDateSorting = (granuleDates) => {
-    let sorted = true;
-    for (let i = 0; i < granuleDates.length - 1; i++) {
+    const { sorted } = this.state;
+    let isSorted = true;
+    for (let i = 0; i < granuleDates.length - 1; i += 1) {
       if (granuleDates[i] < granuleDates[i + 1]) {
-        sorted = false;
+        isSorted = false;
         break;
       }
     }
-    if (this.state.sorted !== sorted) {
+    if (sorted !== isSorted) {
       this.setState({
-        sorted,
+        sorted: isSorted,
       });
     }
   }
 
   render() {
-    const { items, sorted } = this.state;
+    const {
+      items,
+      sorted,
+      hoveredItem,
+      lastMovedItem,
+    } = this.state;
     const { def } = this.props;
     const maxNumItemsNoScrollNeeded = 8;
     const granuleDateLength = items.length;
@@ -227,8 +233,8 @@ class GranuleLayerDateList extends PureComponent {
                           {...provided.dragHandleProps}
                           style={getItemStyle(
                             snapshot.isDragging,
-                            this.state.hoveredItem === item,
-                            this.state.lastMovedItem === item,
+                            hoveredItem === item,
+                            lastMovedItem === item,
                             provided.draggableProps.style,
                           )}
                         >
