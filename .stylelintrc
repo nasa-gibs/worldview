@@ -42,7 +42,7 @@
     "selector-max-id": 2,
     "selector-max-universal": 1,
     "selector-no-vendor-prefix": true,
-    "at-rule-whitelist": ["media", "charset", "font-face", "import"],
+    "at-rule-whitelist": ["media", "charset", "font-face", "import", "document"],
     "at-rule-no-vendor-prefix": true,
     "color-hex-case": "lower",
     "color-hex-length": "short",
