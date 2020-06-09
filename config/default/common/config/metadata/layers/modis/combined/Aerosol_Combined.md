@@ -1,5 +1,5 @@
 ### MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth
-Temporal Coverage: 31 January 2013 - present
+Temporal Coverage: 19 April 2017 - present
 
 The MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth layer is a value-added layer based on MODIS Level 2 aerosol products. The layer can give a quick, synoptic view of the level of aerosol in the atmosphere.. MODIS Aerosol Optical Depth (or Aerosol Optical Thickness) layer indicates the level at which particles in the air (aerosols) prevent light from traveling through the atmosphere. Aerosols absorb and scatter incoming sunlight, which reduces visibility and increases the optical depth. An optical depth of less than 0.1 indicates a clear sky with maximum visibility, and a value of 1 indicates the presence of aerosols so dense that people would have difficulty seeing the Sun. Aerosols have an effect on human health, weather and the climate. Sources of aerosols include pollution from factories, smoke from fires, dust from dust storms, sea salts, and volcanic ash and smog. Aerosols compromise human health when inhaled by people with asthma or other respiratory illnesses. Aerosols also have an affect on the weather and climate by cooling or warming the Earth, helping or preventing clouds from forming.
 
