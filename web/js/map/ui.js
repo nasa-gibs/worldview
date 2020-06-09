@@ -893,8 +893,9 @@ export default function mapui(models, config, store, ui) {
     if (isGranule) {
       lodashEach(Object.keys(layers), (layerIndex) => {
         const isTile = layers[layerIndex].type === 'TILE';
+        const isVector = layers[layerIndex].type === 'VECTOR';
         // if not TILE type, it is a granule LayerGroup
-        if (!isTile) {
+        if (!isTile && !isVector) {
           const layerGroupGranule = layers[layerIndex];
           const layerGroupCollection = layerGroupGranule.getLayers().getArray();
           if (!index && layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
