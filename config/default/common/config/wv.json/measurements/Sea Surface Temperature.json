@@ -3,11 +3,11 @@
         "Sea Surface Temperature": {
             "id": "sea-surface-temperature",
             "title":    "Sea Surface Temperature",
-            "subtitle": "GHRSST, Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
+            "subtitle": "Multi-mission/GHRSST, Terra/MODIS, Aqua/MODIS, Suomi NPP/VIIRS",
             "sources": {
-                "GHRSST": {
-                    "id": "ghrsst",
-                    "title": "GHRSST",
+                "Multi-mission/GHRSST": {
+                    "id": "multi-mission-ghrsst",
+                    "title": "Multi-mission/GHRSST",
                     "description": "multi-mission/SeaSurfaceTemperature",
                     "image": "",
                     "settings": [
