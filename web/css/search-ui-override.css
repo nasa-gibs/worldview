@@ -24,6 +24,7 @@
   .sui-multi-checkbox-facet__option-input-wrapper {
     display: inline-flex;
     max-width: 92%;
+    padding-top: 2px;
   }
 
   /* Target FireFox only */
@@ -56,7 +57,8 @@
     margin-left: 12px;
   }
 
-  div.sui-multi-checkbox-facet {
+  div.sui-multi-checkbox-facet,
+  div.sui-boolean-facet {
     margin: 8px 0 4px;
   }
 
@@ -86,6 +88,11 @@
 
 @media (max-width: 768px) {
   .facet-container .inner-container {
+    div.no-matches {
+      font-size: 20px;
+      margin: 12px 0 16px;
+    }
+
     & legend.sui-facet__title {
       font-size: 18px;
       padding: 0 0 2px 28px;
@@ -99,7 +106,7 @@
     & .sui-multi-checkbox-facet__option-input-wrapper,
     & .sui-boolean-facet__option-input-wrapper {
       height: 24px;
-      padding: 0;
+      padding-top: 3px;
     }
 
     input[type="checkbox"] {
@@ -111,8 +118,17 @@
     & .sui-multi-checkbox-facet label .sui-multi-checkbox-facet__input-text,
     & .sui-boolean-facet__option-label .sui-boolean-facet__input-text {
       font-size: 20px;
-      padding: 3px 0;
+      padding: 4px 0;
+      height: 24px;
       vertical-align: middle;
+    }
+
+    /* Target FireFox only */
+    @-moz-document url-prefix("") {
+      & .sui-multi-checkbox-facet label .sui-multi-checkbox-facet__input-text,
+      & .sui-boolean-facet__option-label .sui-boolean-facet__input-text {
+        padding: 0;
+      }
     }
 
     span.sui-facet__count,
