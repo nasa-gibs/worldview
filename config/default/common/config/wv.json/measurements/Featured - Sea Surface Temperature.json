@@ -3,11 +3,11 @@
     "Sea Surface Temperature - Featured": {
       "id": "featured-sea-surface-temperature",
       "title": "Sea Surface Temperature",
-      "subtitle": "GHRSST, Terra/MODIS, Aqua/MODIS",
+      "subtitle": "Multi-mission/GHRSST, Terra/MODIS, Aqua/MODIS",
       "sources": {
-        "GHRSST": {
-          "id": "ghrsst",
-          "title": "GHRSST",
+        "Multi-mission/GHRSST": {
+          "id": "multi-mision-ghrsst",
+          "title": "Multi-mission/GHRSST",
           "description": "multi-mission/SeaSurfaceTemperature",
           "image": "",
           "settings": [
