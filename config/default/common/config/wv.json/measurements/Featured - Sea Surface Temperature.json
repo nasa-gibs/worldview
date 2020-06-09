@@ -3,12 +3,12 @@
     "Sea Surface Temperature - Featured": {
       "id": "featured-sea-surface-temperature",
       "title": "Sea Surface Temperature",
-      "subtitle": "GHRSST",
+      "subtitle": "Multi-mission/GHRSST",
       "sources": {
-        "GHRSST": {
-          "id": "ghrsst",
-          "title": "GHRSST",
-          "description": "multi-mission/SeaSurfaceTemperature",
+        "Multi-mission/GHRSST": {
+          "id": "multi-mission-ghrsst",
+          "title": "Multi-mission/GHRSST",
+          "description": "multi-mission/ghrsst/SeaSurfaceTemperature",
           "image": "",
           "settings": [
             "GHRSST_L4_MUR_Sea_Surface_Temperature",
