@@ -8,7 +8,7 @@ import {
   replaceSubGroup,
   getZotsForActiveLayers,
   getTitles,
-  memoizeAvailable as availableSelector,
+  memoizedAvailable as availableSelector,
 } from '../../modules/layers/selectors';
 import { reorderLayers } from '../../modules/layers/actions';
 
