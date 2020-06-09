@@ -331,7 +331,7 @@ function dateRange(id, layers, parameters = {}) {
  * @param {*} layers
  * @param {*} config
  */
-function available(id, date, layers, parameters) {
+export function available(id, date, layers, parameters) {
   const range = dateRange(id, layers, parameters);
   if (range && (date < range.start || date > range.end)) {
     return false;
