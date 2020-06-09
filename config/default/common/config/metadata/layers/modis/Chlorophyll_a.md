@@ -1,3 +1,6 @@
+### Chlorophyll A (L2)
+Temporal coverage: 1 April - 3 April 2020; 6 June 2020 - present
+
 ### MODIS (Terra/Aqua) Chlorophyll *a*
 Temporal Coverage: 2 July 2013 - present
 
