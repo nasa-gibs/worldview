@@ -20,6 +20,7 @@ import {
 } from 'redux-location-state';
 import { createBrowserHistory } from 'history';
 import { uniqBy, get as lodashGet } from 'lodash';
+import moment from 'moment';
 import getMiddleware from './combine-middleware';
 import { mapLocationToState, getParamObject } from './location';
 import { stateToParams } from './redux-location-state-customs';
@@ -57,6 +58,75 @@ const compose = DEBUG === false || DEBUG === 'logger'
 let parameters = util.fromQueryString(window.location.search);
 let { elapsed } = util;
 const errors = [];
+
+/**
+ * For layers that have an 'availableWindow' property defined, adjust the
+ * start date backwards from now by that many days
+ * @param {*} config
+ */
+function adjustStartDates({ layers }) {
+  return Object.values(layers).forEach((layer) => {
+    if (layer.availableWindow) {
+      const adjustedStartDate = moment.utc().subtract(30, 'days').startOf('day');
+      layer.startDate = adjustedStartDate.toISOString();
+    }
+  });
+}
+
+/**
+ *
+ * @param {*} config
+ * @param {*} legacyState
+ */
+function render (config, legacyState) {
+  config.parameters = parameters;
+  debugConfig(config);
+
+  // Get legacy models
+  const models = combineModels(config, legacyState);
+
+  // Get Permalink parse/serializers
+  const paramSetup = getParamObject(
+    parameters,
+    config,
+    models,
+    legacyState,
+    errors,
+  );
+
+  const {
+    locationMiddleware,
+    reducersWithLocation,
+  } = createReduxLocationActions(
+    paramSetup,
+    mapLocationToState,
+    history,
+    reducers,
+    stateToParams,
+  );
+  const middleware = getMiddleware(DEBUG === 'logger', locationMiddleware);
+  const store = createStore(
+    reducersWithLocation,
+    getInitialState(models, config, parameters),
+    compose(
+      applyMiddleware(...middleware),
+      responsiveStoreEnhancer,
+    ),
+  );
+  listenForHistoryChange(store, history);
+  elapsed('Render', startTime, parameters);
+
+  const mouseMoveEvents = util.events();
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <App models={models} mapMouseEvents={mouseMoveEvents} />
+    </Provider>,
+    document.getElementById('app'),
+  );
+  combineUi(models, config, mouseMoveEvents, store); // Legacy UI
+  util.errorReport(errors);
+}
 
 // Document ready function
 window.onload = () => {
@@ -114,6 +184,7 @@ window.onload = () => {
     }
     const legacyState = parse(parameters, config, errors);
     layerValidate(errors, config);
+    adjustStartDates(config);
     preloadPalettes(layers, {}, false).then((obj) => {
       config.palettes = {
         custom: obj.custom,
@@ -122,57 +193,6 @@ window.onload = () => {
       render(config, parameters, legacyState);
     });
   }).fail(util.error);
-};
-
-const render = (config, legacyState) => {
-  config.parameters = parameters;
-  debugConfig(config);
-
-  // Get legacy models
-  const models = combineModels(config, legacyState);
-
-  // Get Permalink parse/serializers
-  const paramSetup = getParamObject(
-    parameters,
-    config,
-    models,
-    legacyState,
-    errors,
-  );
-
-  const {
-    locationMiddleware,
-    reducersWithLocation,
-  } = createReduxLocationActions(
-    paramSetup,
-    mapLocationToState,
-    history,
-    reducers,
-    stateToParams,
-  );
-  const middleware = getMiddleware(DEBUG === 'logger', locationMiddleware);
-  const store = createStore(
-    reducersWithLocation,
-    getInitialState(models, config, parameters),
-    compose(
-      applyMiddleware(...middleware),
-      responsiveStoreEnhancer,
-    ),
-  );
-  listenForHistoryChange(store, history);
-  elapsed('Render', startTime, parameters);
-
-  const mouseMoveEvents = util.events();
-
-  ReactDOM.render(
-    <Provider store={store}>
-      <App models={models} mapMouseEvents={mouseMoveEvents} />
-    </Provider>,
-    document.getElementById('app'),
-  );
-
-  combineUi(models, config, mouseMoveEvents, store); // Legacy UI
-  util.errorReport(errors);
 };
 
 export default history;
