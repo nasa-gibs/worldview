@@ -161,7 +161,6 @@ export function getTitles(config, layerId, projId) {
       subtitle = forProj.subtitle;
       tags = forProj.tags;
     }
-    // const forLayer = lodashGet(config, `layers.${layerId}`);
     const forLayer = config.layers[layerId];
     title = title || forLayer.title || `[${layerId}]`;
     subtitle = subtitle || forLayer.subtitle || '';
@@ -239,12 +238,13 @@ function forGroup(group, spec = {}, activeLayers, state) {
  * @param {*} activeLayers
  * @param {*} config
  */
-function dateRange(id, layers, parameters = {}) {
+export function dateRange({ layer }, activeLayers, parameters = {}) {
+  const now = util.now();
   const { debugGIBS, ignoreDateRange } = parameters;
   if (debugGIBS || ignoreDateRange) {
     return {
       start: new Date(Date.UTC(1970, 0, 1)),
-      end: util.now(),
+      end: now,
     };
   }
 
@@ -255,57 +255,62 @@ function dateRange(id, layers, parameters = {}) {
   // Use the minute ceiling of the current time so that we don't run into an issue where
   // seconds value of current appNow time is greater than a layer's available time range
   const minuteCeilingCurrentTime = util.now().setSeconds(59);
-  const def = lodashFind(layers, { id });
-  if (!def) {
-    return;
-  }
-  if (def.startDate) {
-    range = true;
-    const start = util.parseDateUTC(def.startDate).getTime();
-    min = Math.min(min, start);
-  }
+  const layers = layer
+    ? [lodashFind(activeLayers, { id: layer })]
+    : activeLayers;
 
-  // For now, we assume that any layer with an end date is
-  // an ongoing product unless it is marked as inactive.
-  if (def.futureLayer && def.endDate) {
-    range = true;
-    max = util.parseDateUTC(def.endDate).getTime();
-    maxDates.push(new Date(max));
-  } else if (def.inactive && def.endDate) {
-    range = true;
-    const end = util.parseDateUTC(def.endDate).getTime();
-    max = Math.max(max, end);
-    maxDates.push(new Date(max));
-  } else if (def.endDate) {
-    range = true;
-    max = minuteCeilingCurrentTime;
-    maxDates.push(new Date(max));
-  }
+  layers.forEach((def) => {
+    if (!def) {
+      return;
+    }
+    if (def.startDate) {
+      range = true;
+      const start = util.parseDateUTC(def.startDate).getTime();
+      min = Math.min(min, start);
+    }
 
-  // If there is a start date but no end date, this is a
-  // product that is currently being created each day, set
-  // the max day to today.
-  if (def.futureLayer && def.futureTime && !def.endDate) {
-    // Calculate endDate + parsed futureTime from layer JSON
-    max = new Date();
-    const { futureTime } = def;
-    const dateType = futureTime.slice(-1);
-    const dateInterval = futureTime.slice(0, -1);
-
-    if (dateType === 'D') {
-      max.setDate(max.getDate() + parseInt(dateInterval, 10));
+    // For now, we assume that any layer with an end date is
+    // an ongoing product unless it is marked as inactive.
+    if (def.futureLayer && def.endDate) {
+      range = true;
+      max = util.parseDateUTC(def.endDate).getTime();
       maxDates.push(new Date(max));
-    } else if (dateType === 'M') {
-      max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
+    } else if (def.inactive && def.endDate) {
+      range = true;
+      const end = util.parseDateUTC(def.endDate).getTime();
+      max = Math.max(max, end);
       maxDates.push(new Date(max));
-    } else if (dateType === 'Y') {
-      max.setYear(max.getYear() + parseInt(dateInterval, 10));
+    } else if (def.endDate) {
+      range = true;
+      max = minuteCeilingCurrentTime;
       maxDates.push(new Date(max));
     }
-  } else if (def.startDate && !def.endDate) {
-    max = minuteCeilingCurrentTime;
-    maxDates.push(new Date(max));
-  }
+
+    // If there is a start date but no end date, this is a
+    // product that is currently being created each day, set
+    // the max day to today.
+    if (def.futureLayer && def.futureTime && !def.endDate) {
+      // Calculate endDate + parsed futureTime from layer JSON
+      max = new Date();
+      const { futureTime } = def;
+      const dateType = futureTime.slice(-1);
+      const dateInterval = futureTime.slice(0, -1);
+
+      if (dateType === 'D') {
+        max.setDate(max.getDate() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      } else if (dateType === 'M') {
+        max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      } else if (dateType === 'Y') {
+        max.setYear(max.getYear() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      }
+    } else if (def.startDate && !def.endDate) {
+      max = minuteCeilingCurrentTime;
+      maxDates.push(new Date(max));
+    }
+  });
 
   if (range) {
     if (max === 0) {
@@ -313,13 +318,9 @@ function dateRange(id, layers, parameters = {}) {
       maxDates.push(max);
     }
     const maxDate = Math.max.apply(max, maxDates);
-    const endDate = new Date(maxDate);
-    const startDate = def.availableWindow
-      ? new Date(new Date().setDate(new Date().getDate() - def.availableWindow))
-      : new Date(min);
     return {
-      start: startDate,
-      end: endDate,
+      start: new Date(min),
+      end: new Date(maxDate),
     };
   }
 }
@@ -332,7 +333,7 @@ function dateRange(id, layers, parameters = {}) {
  * @param {*} config
  */
 export function available(id, date, layers, parameters) {
-  const range = dateRange(id, layers, parameters);
+  const range = dateRange({ layer: id }, layers, parameters);
   if (range && (date < range.start || date > range.end)) {
     return false;
   }
