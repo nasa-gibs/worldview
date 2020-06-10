@@ -20,8 +20,12 @@ const addToMapButton = '.layer-detail-container .add-to-map-btn';
 const layersModalCloseButton = '.custom-layer-dialog .modal-header .close';
 const aodMeasurement = '#layer-category-item-atmosphere-aerosol-optical-depth';
 const aodMeasurementContents = '#accordion-atmosphere-aerosol-optical-depth .measure-row-contents';
+const aodTabContentAquaMODIS = '#aerosol-optical-depth-aqua-modis';
 const aodCheckboxMODIS = '#checkbox-case-MODIS_Combined_Value_Added_AOD';
 const aodCheckboxMAIAC = '#checkbox-case-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
+const aodCheckboxAquaMODIS = '#checkbox-case-MODIS_Aqua_Aerosol';
+const aquaTerraMODISTab = '#aqua-terra-modis-0-source-Nav';
+const aquaModisTab = '#aqua-modis-1-source-Nav';
 const correctedReflectanceCheckboxContainer = '#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor';
 const correctedReflectanceChecked = '#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor .wv-checkbox.checked';
 const weldReflectanceCheckboxContainer = '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly';
@@ -194,25 +198,45 @@ module.exports = {
         // Checkboxes for two layers are visible
         c.expect.element(aodCheckboxMODIS).to.be.present;
         c.expect.element(aodCheckboxMAIAC).to.be.present;
+        // Indicate that MODIS Combined layer has no available coverage
         c
           .assert
-          .not
-          .cssClassPresent(aodCheckboxMODIS, 'unavailable');
+          .cssClassPresent(aodCheckboxMODIS, 'unavailable list-group-item');
         // Indicate that MAIAC layer has no available coverage
         c
           .assert
-          .cssClassPresent(aodCheckboxMAIAC, 'unavailable');
+          .cssClassPresent(aodCheckboxMAIAC, 'unavailable list-group-item');
       });
     });
   },
+  'Available grid source layer measuremet does not have unavaiable coverage class': (c) => {
+    // swith to Aqua/MODIS measurement nav item
+    c.click(aquaModisTab);
+    c.waitForElementVisible(aodTabContentAquaMODIS, TIME_LIMIT, (e) => {
+      c
+        .assert
+        .containsText(layerDetailHeader, 'Aqua/MODIS');
+      // Checkboxes for layer is visible
+      c.expect.element(aodCheckboxAquaMODIS).to.be.present;
+      // Avaialable layer does not have unavailable class
+      c
+        .assert
+        .not
+        .cssClassPresent(aodCheckboxAquaMODIS, 'unavailable');
+      // switch back to previous 'Aqua and Terra/MODIS' measurement nav item
+      c.click(aquaTerraMODISTab);
+    });
+  },
   'Selecting layers from product picker adds them to the sidebar/map': (c) => {
-    c.click(aodCheckboxMODIS);
-    c.click(aodCheckboxMAIAC);
-    // Reset to category mode view for future test
-    c.click(layerPickerBackButton);
-    c.click(layersModalCloseButton);
-    c.expect.element(aodSidebarLayer).to.be.present;
-    c.expect.element(aodMAIACSidebarLayer).to.be.present;
+    c.waitForElementVisible(aodCheckboxMODIS, TIME_LIMIT, (e) => {
+      c.click(aodCheckboxMODIS);
+      c.click(aodCheckboxMAIAC);
+      // Reset to category mode view for future test
+      c.click(layerPickerBackButton);
+      c.click(layersModalCloseButton);
+      c.expect.element(aodSidebarLayer).to.be.present;
+      c.expect.element(aodMAIACSidebarLayer).to.be.present;
+    });
   },
   'Collapsed sidebar shows updated layer count': (c) => {
     c.click('.toggleIconHolder');
