@@ -114,6 +114,7 @@ The `config/wv.json/layerOrder.json` file must be updated to include the new lay
 - **description**: Point to a markdown file within the metadata folder to provide a layer description.
 - **wrapX**: Wrap the layer across the anti-meridian.
 - **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
+- **availableWindow**:  Number of days, counting backwards from app load time, that a layer has avilable coverage.  Setting this will cause a layer's `startDate` property to be dynamically set at app load time.  Primarily for our geostationary layers which only have historical coverage going back ~30 days.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
 
