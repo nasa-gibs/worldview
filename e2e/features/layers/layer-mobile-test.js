@@ -19,6 +19,7 @@ const aodMeasurementContents = '#accordion-legacy-all-aerosol-optical-depth';
 const aodCheckboxMODIS = '#checkbox-case-MODIS_Combined_Value_Added_AOD';
 const aodCheckboxMAIAC = '#checkbox-case-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
 const aodCheckbox = '#checkbox-case-MODIS_Aqua_Aerosol';
+const aodTabContentAquaMODIS = '#aerosol-optical-depth-aqua-modis';
 const collapsedLayerButton = '#accordionTogglerButton';
 const layerCount = '.layer-count.mobile';
 const layerContainer = '.layer-container.sidebar-panel';
@@ -26,6 +27,7 @@ const sourceMetadataCollapsed = '.source-metadata.overflow';
 const sourceMetadataExpanded = '.source-metadata';
 const aquaTerraModisHeader = '#modisterraandaquacombinedvalueaddedaerosolopticaldepth';
 const maiacHeader = '#maiacaerosolopticaldepth';
+const aquaTerraMODISTab = '#aqua-terra-modis-0-source-Nav';
 const aquaModisTab = '#aqua-modis-1-source-Nav';
 const sourceTabs = '.source-nav-item';
 const aodSearchRow = '#MODIS_Aqua_Aerosol-search-row';
@@ -68,10 +70,22 @@ module.exports = {
       // Checkboxes for two layers are visible
       c.expect.element(aodCheckboxMODIS).to.be.present;
       c.expect.element(aodCheckboxMAIAC).to.be.present;
-      c.assert.not.cssClassPresent(aodCheckboxMODIS, 'unavailable');
+      // Indicate that MODIS Combined layer has no available coverage
+      c.assert.cssClassPresent(aodCheckboxMODIS, 'unavailable');
       // Indicate that MAIAC layer has no available coverage
       c.assert.cssClassPresent(aodCheckboxMAIAC, 'unavailable');
       c.expect.elements(sourceTabs).count.to.equal(8);
+    });
+  },
+  'Available grid source layer measuremet does not have unavaiable coverage class': (c) => {
+    // swith to Aqua/MODIS measurement nav item
+    c.click(aquaModisTab);
+    c.waitForElementVisible(aodTabContentAquaMODIS, TIME_LIMIT, (e) => {
+      c.expect.element(aodCheckbox).to.be.present;
+      // Avaialable layer does not have unavailable class
+      c.assert.not.cssClassPresent(aodCheckbox, 'unavailable');
+      // switch back to previous 'Aqua and Terra/MODIS' measurement nav item
+      c.click(aquaTerraMODISTab);
     });
   },
   'Expanding measurement details': (c) => {
