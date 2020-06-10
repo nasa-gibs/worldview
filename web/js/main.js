@@ -61,16 +61,28 @@ const errors = [];
 
 /**
  * For layers that have an 'availableWindow' property defined, adjust the
- * start date backwards from now by that many days
- * @param {*} config
+ * start date backwards from now by that many days.
+ *
+ * Applies to layer.startDate and layer.dateRanges[0].startDate
+ * @param {*} layers
  */
-function adjustStartDates({ layers }) {
-  return Object.values(layers).forEach((layer) => {
-    if (layer.availableWindow) {
-      const adjustedStartDate = moment.utc().subtract(30, 'days').startOf('day');
-      layer.startDate = adjustedStartDate.toISOString();
+function adjustStartDates(layers) {
+  const adjustDate = (days) => moment.utc()
+    .subtract(days, 'days')
+    .startOf('day')
+    .format('YYYY-MM-DD');
+
+  const applyDateAdjustment = (layer) => {
+    const { availableWindow, dateRanges } = layer;
+    if (!availableWindow) return;
+    layer.startDate = adjustDate(availableWindow);
+    if (dateRanges.length) {
+      const [firstDateRange] = dateRanges;
+      firstDateRange.startDate = adjustDate(availableWindow);
     }
-  });
+  };
+
+  return Object.values(layers).forEach(applyDateAdjustment);
 }
 
 /**
@@ -184,7 +196,7 @@ window.onload = () => {
     }
     const legacyState = parse(parameters, config, errors);
     layerValidate(errors, config);
-    adjustStartDates(config);
+    adjustStartDates(config.layers);
     preloadPalettes(layers, {}, false).then((obj) => {
       config.palettes = {
         custom: obj.custom,
