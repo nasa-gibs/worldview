@@ -54,10 +54,7 @@ function ProductFacet(props) {
     </>
   );
 
-  const noBooleanResults = field === 'availableAtDate'
-     && data.length === 1
-     && data.find(({ value }) => value === 'false');
-  const noResults = !data.length || noBooleanResults;
+  const noResults = !data.length;
 
   return collapsed || noResults
     ? (

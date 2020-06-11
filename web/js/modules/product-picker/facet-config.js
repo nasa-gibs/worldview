@@ -1,23 +1,20 @@
-import React from 'react';
-import AvailableFacet from '../../components/layer/product-picker/search/available-facet';
-import SelectedDate from '../../components/selected-date';
 
-const AvailableLabel = (
-  <>
-    Visible on &nbsp;
-    <SelectedDate />
-  </>
-);
+/**
+ * @field - Property name to build this facet on
+ * @label - Label text to show for this facet in the UI
+ * @useLabelForValue - For boolean facets, use the @label instead of 'true' or 'false'
+ * @filterType -
+ * @tooltip - Tooltip text for thie facet
+ * @view - A custom view renderer to use instead of the default
+ * @hideZeroCount - Whether or not to hide filter results that zero matches
+ */
 
 export default [
   {
-    field: 'availableAtDate',
-    label: AvailableLabel,
-    booleanOptionLabel: 'Visible',
+    field: 'coverage',
+    label: 'Coverage',
     filterType: 'any',
-    tooltip: 'Layer has available imagery at currently selected date/time',
-    view: AvailableFacet,
-    useLabelForValue: true,
+    tooltip: 'Filter by coverage at the current selected date, or always available',
     hideZeroCount: true,
   },
   {

@@ -2,7 +2,8 @@ import {
   forEach as lodashForEach,
   map as lodashMap,
 } from 'lodash';
-import { availableAtDate } from '../layers/util';
+import moment from 'moment';
+import { available } from '../layers/selectors';
 
 const periodIntervalMap = {
   daily: 'Day',
@@ -27,7 +28,7 @@ function setLayerProp (layer, prop, value) {
   }
 }
 
-function getMeasurementSourceFacetProps (layers, measurements) {
+function setMeasurementSourceFacetProps (layers, measurements) {
   lodashForEach(measurements, (measureObj, measureKey) => {
     lodashForEach(measureObj.sources, ({ settings }, sourceKey) => {
       settings.forEach((id) => {
@@ -38,7 +39,7 @@ function getMeasurementSourceFacetProps (layers, measurements) {
   });
 }
 
-function getCategoryFacetProps (layers, measurements, categories) {
+function setCategoryFacetProps (layers, measurements, categories) {
   lodashForEach(categories, (categoryObj, categoryKey) => {
     if (categoryKey === 'featured') {
       return;
@@ -59,7 +60,13 @@ function getCategoryFacetProps (layers, measurements, categories) {
   });
 }
 
-function getLayerPeriodFacetProps(layer) {
+function formatFacetProps({ layers, measurements, categories }) {
+  setMeasurementSourceFacetProps(layers, measurements);
+  setCategoryFacetProps(layers, measurements, categories);
+  return layers;
+}
+
+function setLayerPeriodFacetProps(layer) {
   const { period, dateRanges } = layer;
   if (!dateRanges) {
     layer.facetPeriod = capitalizeFirstLetter(period);
@@ -93,10 +100,16 @@ function getLayerPeriodFacetProps(layer) {
   }
 }
 
-function formatFacetProps({ layers, measurements, categories }) {
-  getMeasurementSourceFacetProps(layers, measurements);
-  getCategoryFacetProps(layers, measurements, categories);
-  return layers;
+function setCoverageFacetProp(layer, selectedDate) {
+  const {
+    id, startDate, endDate, dateRanges,
+  } = layer;
+  delete layer.coverage;
+  if (!startDate && !endDate && !dateRanges) {
+    layer.coverage = ['Always Available'];
+  } else if (available(id, selectedDate, [layer], {})) {
+    layer.coverage = [`Available ${moment.utc(selectedDate).format('YYYY MMM DD')}`];
+  }
 }
 
 /**
@@ -107,8 +120,8 @@ export default function buildLayerFacetProps(config, selectedDate) {
   const layers = formatFacetProps(config);
 
   return lodashMap(layers, (layer) => {
-    layer.availableAtDate = availableAtDate(layer, selectedDate).toString();
-    getLayerPeriodFacetProps(layer);
+    setCoverageFacetProp(layer, selectedDate);
+    setLayerPeriodFacetProps(layer);
     if (layer.daynight && layer.daynight.length) {
       layer.daynight = layer.daynight.map(capitalizeFirstLetter);
     }

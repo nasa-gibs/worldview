@@ -18,21 +18,6 @@ const facets = {};
 const facetFields = facetConfig.map(({ field }) => field);
 const hideZeroCountFields = facetConfig.filter((f) => f.hideZeroCount).map(({ field }) => field);
 
-// Move "None" or "Other" entries to the top or bottom respectively
-function moveNoneOther(data) {
-  const noneIndex = data.findIndex((item) => item.value === 'None');
-  if (noneIndex >= 0) {
-    const [noneEntry] = data.splice(noneIndex, 1);
-    data.splice(0, 0, noneEntry);
-  }
-  const otherIndex = data.findIndex((item) => item.value === 'Other');
-  if (otherIndex >= 0) {
-    const [otherEntry] = data.splice(otherIndex, 1);
-    data.splice(data.length, 0, otherEntry);
-  }
-  return data;
-}
-
 // Convert facet count obj into the format search-ui expects
 function formatFacets(facetValues) {
   const formattedFacets = {};
@@ -43,8 +28,6 @@ function formatFacets(facetValues) {
         value: key,
       }))
       .sort((a, b) => a.value.localeCompare(b.value));
-
-    data = moveNoneOther(data);
 
     if (hideZeroCountFields.includes(field)) {
       data = data
