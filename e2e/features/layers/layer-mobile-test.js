@@ -32,7 +32,7 @@ const aquaModisTab = '#aqua-modis-1-source-Nav';
 const sourceTabs = '.source-nav-item';
 const aodSearchRow = '#MODIS_Aqua_Aerosol-search-row';
 const aodSearchCheckbox = '#MODIS_Aqua_Aerosol-search-row > .wv-checkbox';
-const availableFacetLabel = '#availableAtDate-facet .sui-boolean-facet__option-input-wrapper';
+const availableFacetLabel = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type';
 const categoryAtmosphereLabel = '#categories-facet [for="example_facet_CategoryAtmosphere"]';
 const categoryFacetCollapseToggle = '#categories-facet .facet-collapse-toggle';
 const categoryFacetChoicesContainer = '#categories-facet .sui-multi-checkbox-facet';
