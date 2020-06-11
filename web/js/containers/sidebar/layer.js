@@ -151,7 +151,7 @@ class Layer extends React.Component {
 
   renderVectorIcon() {
     const {
-      isVectorLayer, hasClickableFeature, openVectorAlertModal, runningObject,
+      hasClickableFeature, openVectorAlertModal, runningObject,
     } = this.props;
     const clasNames = hasClickableFeature
       ? 'layer-pointer-icon'
@@ -159,7 +159,7 @@ class Layer extends React.Component {
     const title = hasClickableFeature
       ? 'You can click the features of this layer to see metadata associated with the feature.'
       : 'Zoom in further to click features.';
-    return isVectorLayer ? (
+    return (
       <div title={title} className={runningObject ? `${clasNames} running` : clasNames} onClick={openVectorAlertModal}>
         {' '}
         <FontAwesomeIcon
@@ -167,7 +167,7 @@ class Layer extends React.Component {
           fixedWidth
         />
       </div>
-    ) : null;
+    );
   }
 
   render() {
@@ -185,6 +185,7 @@ class Layer extends React.Component {
       zot,
       isInProjection,
       tracksForLayer,
+      isVectorLayer,
     } = this.props;
 
     const containerClass = isDisabled
@@ -257,7 +258,7 @@ class Layer extends React.Component {
                 <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
                 {hasPalette ? this.getPaletteLegend() : ''}
               </div>
-              {this.renderVectorIcon()}
+              {isVectorLayer && isVisible ? this.renderVectorIcon() : null}
               {tracksForLayer.length > 0 && (
               <div className="layer-tracks">
                 {tracksForLayer.map((track) => (
