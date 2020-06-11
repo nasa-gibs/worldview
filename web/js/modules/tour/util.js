@@ -1,6 +1,6 @@
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
-import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
 /**
  * Update Tour state when location-pop action occurs
  *
@@ -36,8 +36,8 @@ export function mapLocationToTourState(
  * @returns {Boolean}
  */
 export function checkTourBuildTimestamp(config) {
-  if (!util.browser.localStorage) return false;
-  const hideTour = localStorage.getItem('hideTour');
+  if (!safeLocalStorage.enabled) return false;
+  const hideTour = safeLocalStorage.getItem('hideTour');
 
   // Don't start tour if coming in via a permalink
   if (window.location.search && !config.parameters.tour) {
@@ -54,7 +54,7 @@ export function checkTourBuildTimestamp(config) {
       tourDate,
     });
     if (buildDate > tourDate) {
-      localStorage.removeItem('hideTour');
+      safeLocalStorage.removeItem('hideTour');
       return true;
     }
     return false;

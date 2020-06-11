@@ -4,19 +4,18 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
-import util from '../util/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { DISABLE_VECTOR_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
+import safeLocalStorage from '../util/local-storage';
 
-
-const HAS_LOCAL_STORAGE = util.browser.localStorage;
+const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
 class DismissableAlerts extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      hasDismissedEvents: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedEventVisibilityAlert'),
-      hasDismissedCompare: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedCompareAlert'),
+      hasDismissedEvents: !!safeLocalStorage.getItem('dismissedEventVisibilityAlert'),
+      hasDismissedCompare: !!safeLocalStorage.getItem('dismissedCompareAlert'),
     };
   }
 
@@ -28,7 +27,7 @@ class DismissableAlerts extends React.Component {
    * @param {String} stateKey
    */
   dismissAlert(storageKey, stateKey) {
-    localStorage.setItem(storageKey, true);
+    safeLocalStorage.setItem(storageKey, true);
     this.setState({ [stateKey]: true });
   }
 

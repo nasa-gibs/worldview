@@ -1,4 +1,5 @@
 import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
 /**
  * Categorizes the returned array
  * @function separateByType
@@ -51,12 +52,9 @@ function orderByDate(obj) {
  * @param {string} value - id of notification
  * @returns {Boolean}
  */
-export function localStorageValueMatches(property, value) {
-  if (!util.browser.localStorage) {
-    return false;
-  }
-  const oldValue = localStorage.getItem(property);
-  return new Date(value) <= new Date(oldValue);
+function localStorageValueMatches(property, value) {
+  const oldValue = safeLocalStorage.getItem(property);
+  return oldValue && new Date(value) <= new Date(oldValue);
 }
 
 /**
@@ -103,22 +101,19 @@ export function getCount(sortedNotifications) {
 
   return messageCount + outageCount + alertCount;
 }
-export function addToLocalStorage(obj) {
-  if (!util.browser.localStorage) {
-    return;
-  }
-  const message = obj.messages[0];
-  const outage = obj.outages[0];
-  const alert = obj.alerts[0];
+export function addToLocalStorage({ messages, outages, alerts }) {
+  const [message] = messages;
+  const [outage] = outages;
+  const [alert] = alerts;
 
   if (outage) {
-    localStorage.setItem('outage', outage.created_at);
+    safeLocalStorage.setItem('outage', outage.created_at);
   }
   if (alert) {
-    localStorage.setItem('alert', alert.created_at);
+    safeLocalStorage.setItem('alert', alert.created_at);
   }
   if (message) {
-    localStorage.setItem('message', message.created_at);
+    safeLocalStorage.setItem('message', message.created_at);
   }
 }
 /**
@@ -130,10 +125,7 @@ export function addToLocalStorage(obj) {
  * @returns {Number} count - number of unseen messages in LocalStorage
  */
 export function getNumberOfTypeNotSeen(type, arra) {
-  if (!util.browser.localStorage) {
-    return arra.length;
-  }
-  const storageItem = localStorage.getItem(type);
+  const storageItem = safeLocalStorage.getItem(type);
   const len = arra.length;
   let count = 0;
 
@@ -162,7 +154,7 @@ function objectAlreadySeen(obj) {
   const type = obj.notification_type;
   const idString = obj.created_at.toString();
   let fieldValueMatches = false;
-  const fieldExists = util.browser.localStorage && !!localStorage.getItem(type);
+  const fieldExists = !!safeLocalStorage.getItem(type);
 
   if (fieldExists) {
     fieldValueMatches = localStorageValueMatches(type, idString);

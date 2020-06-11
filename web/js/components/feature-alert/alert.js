@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { openCustomContent } from '../../modules/modal/actions';
-import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
 
 class FeaturedAlert extends React.Component {
   constructor(props) {
@@ -14,9 +14,7 @@ class FeaturedAlert extends React.Component {
   }
 
   dismissAlert() {
-    if (util.browser.localStorage) {
-      localStorage.setItem('<alert-name>', true);
-    }
+    safeLocalStorage.setItem('<alert-name>', true);
     this.setState({ showAlert: false });
   }
 

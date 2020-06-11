@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
-import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
 import Scrollbars from '../util/scrollbar';
 
 class ModalStart extends React.Component {
@@ -95,7 +95,7 @@ class ModalStart extends React.Component {
 
           </ModalBody>
         </Scrollbars>
-        {util.browser.localStorage && (
+        {safeLocalStorage.enabled && (
           <ModalFooter>
             <InputGroup>
               <InputGroupText className="w-100">
