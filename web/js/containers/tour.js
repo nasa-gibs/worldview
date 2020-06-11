@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -8,6 +9,7 @@ import TourStart from '../components/tour/modal-tour-start';
 import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
 import AlertUtil from '../components/util/alert';
+import safeLocalStorage from '../util/local-storage';
 
 import {
   preloadPalettes,
@@ -17,7 +19,11 @@ import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
 import { layersParse12 } from '../modules/layers/util';
-import { endTour, selectStory, startTour } from '../modules/tour/actions';
+import {
+  endTour as endTourAction,
+  selectStory as selectStoryAction,
+  startTour as startTourAction,
+} from '../modules/tour/actions';
 
 import ErrorBoundary from './error-boundary';
 import history from '../main';
@@ -130,9 +136,9 @@ class Tour extends React.Component {
         const isMetadataSnippet = !body.match(
           /<(head|body|html|style|script)[^>]*>/i,
         );
-        const description = isMetadataSnippet ? body : errorMessage;
+        const desc = isMetadataSnippet ? body : errorMessage;
         this.setState({
-          description,
+          description: desc,
           isLoadingMeta: false,
           metaLoaded: true,
         });
@@ -334,6 +340,7 @@ class Tour extends React.Component {
       if (!modalStart && !modalInProgress && !modalComplete) {
         this.setState({ modalStart: true });
       }
+      const checked = !!safeLocalStorage.getItem('hideTour');
       return (
         <ErrorBoundary>
           <div>
@@ -343,11 +350,7 @@ class Tour extends React.Component {
                 storyOrder={storyOrder}
                 modalStart={modalStart}
                 height={screenHeight}
-                checked={
-                  util.browser.localStorage
-                    ? !!localStorage.getItem('hideTour')
-                    : false
-                }
+                checked={checked}
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
                 toggleModalComplete={this.toggleModalComplete}
@@ -446,19 +449,17 @@ const mapDispatchToProps = (dispatch) => ({
     }
   },
   startTour: () => {
-    dispatch(startTour());
+    dispatch(startTourAction());
   },
   endTour: () => {
-    dispatch(endTour());
+    dispatch(endTourAction());
   },
   showTourAlert: (message) => {
     // dispatch(showAlert(message));
   },
   selectTour: (id) => {
-    dispatch(selectStory(id));
+    dispatch(selectStoryAction(id));
   },
-  showTour,
-  hideTour,
 });
 function mapStateToProps(state) {
   const {
@@ -481,37 +482,34 @@ function mapStateToProps(state) {
     renderedPalettes: palettes.rendered,
   };
 }
+
 const getTransitionAttr = function(el, action) {
   if (el === 'animation' && action === 'play') {
     return '&playanim=true';
   }
   return '';
 };
+
 const hideTour = function(e) {
-  const hideTour = localStorage.getItem('hideTour');
+  const shouldHideTour = safeLocalStorage.getItem('hideTour');
   // Checkbox to "hide tour modal until a new story has been added" has been checked
   googleTagManager.pushEvent({
     event: 'tour_hide_checked',
   });
-
-  if (!util.browser.localStorage) return;
-  if (hideTour) return;
-
-  localStorage.setItem('hideTour', new Date());
+  if (shouldHideTour) return;
+  safeLocalStorage.setItem('hideTour', new Date());
 };
-const showTour = function(e) {
-  const hideTour = localStorage.getItem('hideTour');
 
+const showTour = function(e) {
+  const shouldHideTour = safeLocalStorage.getItem('hideTour');
   // Checkbox to "hide tour modal until a new story has been added" has been checked
   googleTagManager.pushEvent({
     event: 'tour_hide_unchecked',
   });
-
-  if (!util.browser.localStorage) return;
-  if (!hideTour) return;
-
-  localStorage.removeItem('hideTour');
+  if (!shouldHideTour) return;
+  safeLocalStorage.removeItem('hideTour');
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

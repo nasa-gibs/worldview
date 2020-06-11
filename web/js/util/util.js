@@ -8,6 +8,7 @@ import wvui from '../ui/ui';
 import browser from './browser';
 import events from './events';
 import load from './load';
+import safeLocalStorage from './local-storage';
 
 export default (function(self) {
   let canvas = null;
@@ -950,16 +951,14 @@ export default (function(self) {
   self.formatDM = (value, type) => formatDegrees(value, type, false);
 
   self.setCoordinateFormat = function(type) {
-    if (!browser.localStorage) return;
     if (type !== 'latlon-dd' && type !== 'latlon-dms' && type !== 'latlon-dm') {
       throw new Error(`Invalid coordinate format: ${type}`);
     }
-    localStorage.setItem('coordinateFormat', type);
+    safeLocalStorage.setItem('coordinateFormat', type);
   };
 
   self.getCoordinateFormat = function() {
-    if (!browser.localStorage) return 'latlon-dd';
-    return localStorage.getItem('coordinateFormat') || 'latlon-dd';
+    return safeLocalStorage.getItem('coordinateFormat') || 'latlon-dd';
   };
 
   self.formatCoordinate = function(coord, format) {

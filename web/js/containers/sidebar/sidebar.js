@@ -20,11 +20,12 @@ import { getLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
-  changeTab,
-  toggleSidebarCollapse,
-  collapseSidebar,
-  expandSidebar,
+  changeTab as changeTabAction,
+  toggleSidebarCollapse as toggleSidebarCollapseAction,
+  collapseSidebar as collapseSidebarAction,
+  expandSidebar as expandSidebarAction,
 } from '../../modules/sidebar/actions';
+import safeLocalStorage from '../../util/local-storage';
 
 const getActiveTabs = function(config) {
   const { features } = config;
@@ -38,6 +39,7 @@ const resetWorldview = function(e, isDistractionFreeModeActive) {
   e.preventDefault();
   if (!isDistractionFreeModeActive && window.location.search === '') return; // Nothing to reset
   const msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
+  // eslint-disable-next-line no-alert
   if (window.confirm(msg)) {
     googleTagManager.pushEvent({
       event: 'logo_page_reset',
@@ -117,7 +119,6 @@ class Sidebar extends React.Component {
     const {
       isCollapsed,
       collapseExpandToggle,
-      hasLocalStorage,
       isMobile,
     } = this.props;
     const isNowCollapsed = !isCollapsed;
@@ -127,10 +128,8 @@ class Sidebar extends React.Component {
     googleTagManager.pushEvent({
       event: 'sidebar_chevron',
     });
-    if (hasLocalStorage) {
-      const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
-      localStorage.setItem('sidebarState', storageValue);
-    }
+    const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
+    safeLocalStorage.setItem('sidebarState', storageValue);
     collapseExpandToggle();
   }
 
@@ -285,7 +284,6 @@ function mapStateToProps(state) {
   return {
     activeTab,
     isMobile,
-    hasLocalStorage: util.browser.localStorage,
     screenHeight,
     isCompareMode: compare.active,
     activeString,
@@ -299,23 +297,23 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch) => ({
   changeTab: (str) => {
-    dispatch(changeTab(str));
+    dispatch(changeTabAction(str));
   },
   onTabClick: (str, activeStr) => {
     if (str === activeStr) return;
     googleTagManager.pushEvent({
       event: `${str}_tab`,
     });
-    dispatch(changeTab(str));
+    dispatch(changeTabAction(str));
   },
   collapseExpandToggle: () => {
-    dispatch(toggleSidebarCollapse());
+    dispatch(toggleSidebarCollapseAction());
   },
   collapseSidebar: () => {
-    dispatch(collapseSidebar());
+    dispatch(collapseSidebarAction());
   },
   expandSidebar: () => {
-    dispatch(expandSidebar());
+    dispatch(expandSidebarAction());
   },
   loadedCustomPalettes: (customs) => {
     dispatch(loadedCustomPalettes(customs));
@@ -335,7 +333,6 @@ Sidebar.propTypes = {
   collapseExpandToggle: PropTypes.func,
   collapseSidebar: PropTypes.func,
   config: PropTypes.object,
-  hasLocalStorage: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,

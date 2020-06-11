@@ -54,10 +54,9 @@ export function addLayer(id, spec) {
   spec = spec || {};
   googleTagManager.pushEvent({
     event: 'layer_added',
-    layers: {
-      id,
-    },
+    layers: { id },
   });
+  
   return (dispatch, getState) => {
     const state = getState();
     const { layers, compare, proj } = state;
