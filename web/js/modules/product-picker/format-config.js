@@ -18,6 +18,7 @@ function capitalizeFirstLetter(string) {
 }
 
 function setLayerProp (layer, prop, value) {
+  if (!layer) return;
   if (prop === 'measurements' && (value && value.includes('Featured'))) {
     return;
   }
