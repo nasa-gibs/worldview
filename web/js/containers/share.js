@@ -162,9 +162,8 @@ class ShareLinkContainer extends Component {
       ? 'Please wait...'
       : isShort
           && shortLink.response
-          && shortLink.response.data
-          && shortLink.response.data.url
-        ? shortLink.response.data.url
+          && shortLink.response.link
+        ? shortLink.response.link
         : this.getPermalink();
 
     return (
