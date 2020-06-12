@@ -123,7 +123,7 @@ export default function buildLayerFacetProps(config, selectedDate) {
   return lodashMap(layers, (layer) => {
     setCoverageFacetProp(layer, selectedDate);
     setLayerPeriodFacetProps(layer);
-    if (layer.daynight && layer.daynight.length && layer.daynight.map) {
+    if (layer.daynight && layer.daynight.length) {
       if (typeof layer.daynight === 'string') {
         layer.daynight = [layer.daynight];
       }
