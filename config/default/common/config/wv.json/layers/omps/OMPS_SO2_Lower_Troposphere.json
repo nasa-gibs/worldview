@@ -7,6 +7,7 @@
       "description": "omps/OMPS_SO2_Lower_Troposphere",
       "tags": "SO2, sulphur",
       "group": "overlays",
+      "wrapadjacentdays": true,
       "layergroup": [
         "omps"
       ],
