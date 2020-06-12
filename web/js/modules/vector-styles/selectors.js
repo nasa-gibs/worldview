@@ -82,7 +82,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const { compare } = state;
   let styleFunction;
   const layerId = def.id;
-  const glStyle = vectorStyles[layerId];
+  const glStyle = vectorStyles[vectorStyleId || layerId];
   const olMap = lodashGet(state, 'map.ui.selected');
   const layerState = state.layers;
   const activeLayerStr = state.compare.activeString;
@@ -131,7 +131,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     const extentStartX = layerInLayerGroup.getExtent()[0];
     const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
 
-    styleFunction = stylefunction(layerInLayerGroup, glStyle, vectorStyleId);
+    styleFunction = stylefunction(layerInLayerGroup, glStyle, layerId);
     // Filter Orbit Tracks
     if (glStyle.name === 'Orbit Tracks'
       && (selected[layerId] && selected[layerId].length)) {
