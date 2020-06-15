@@ -10,7 +10,8 @@ import {
 } from './constants';
 import safeLocalStorage from '../../util/local-storage';
 
-const wasCallapseRequested = safeLocalStorage.getItem('sidebarState') === 'collapsed';
+const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
+const wasCallapseRequested = safeLocalStorage.getItem(SIDEBAR_COLLAPSED) === 'collapsed';
 export const sidebarState = {
   isCollapsed: wasCallapseRequested || false,
   wasCallapseRequested,

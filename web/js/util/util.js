@@ -10,6 +10,8 @@ import events from './events';
 import load from './load';
 import safeLocalStorage from './local-storage';
 
+const { COORDINATE_FORMAT } = safeLocalStorage.keys;
+
 export default (function(self) {
   let canvas = null;
 
@@ -954,11 +956,11 @@ export default (function(self) {
     if (type !== 'latlon-dd' && type !== 'latlon-dms' && type !== 'latlon-dm') {
       throw new Error(`Invalid coordinate format: ${type}`);
     }
-    safeLocalStorage.setItem('coordinateFormat', type);
+    safeLocalStorage.setItem(COORDINATE_FORMAT, type);
   };
 
   self.getCoordinateFormat = function() {
-    return safeLocalStorage.getItem('coordinateFormat') || 'latlon-dd';
+    return safeLocalStorage.getItem(COORDINATE_FORMAT) || 'latlon-dd';
   };
 
   self.formatCoordinate = function(coord, format) {

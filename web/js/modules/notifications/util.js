@@ -1,5 +1,11 @@
-import util from '../../util/util';
 import safeLocalStorage from '../../util/local-storage';
+
+const {
+  NOTIFICATION_OUTAGE,
+  NOTIFICATION_ALERT,
+  NOTIFICATION_MSG,
+} = safeLocalStorage.keys;
+
 /**
  * Categorizes the returned array
  * @function separateByType
@@ -18,9 +24,9 @@ export function separateByType(array) {
     subObj = array[i];
     type = subObj.notification_type;
 
-    if (type === 'message') {
+    if (type === NOTIFICATION_MSG) {
       messages.push(subObj);
-    } else if (type === 'alert') {
+    } else if (type === NOTIFICATION_ALERT) {
       alerts.push(subObj);
     } else {
       outages.push(subObj);
@@ -72,15 +78,15 @@ export function getPriority(sortedNotifications) {
   const [alert] = sortedNotifications.alerts;
 
   if (message && !objectAlreadySeen(message)) {
-    priority = 'message';
+    priority = NOTIFICATION_MSG;
   }
 
   if (alert && !objectAlreadySeen(alert)) {
-    priority = 'alert';
+    priority = NOTIFICATION_ALERT;
   }
 
   if (outage && !objectAlreadySeen(outage)) {
-    priority = 'outage';
+    priority = NOTIFICATION_OUTAGE;
   }
 
   return priority;
@@ -91,14 +97,10 @@ export function getPriority(sortedNotifications) {
  * @private
  * @returns {Number}
  */
-export function getCount(sortedNotifications) {
-  const messageCount = getNumberOfTypeNotSeen(
-    'message',
-    sortedNotifications.messages,
-  ); // Number of messages not yet seen
-  const alertCount = getNumberOfTypeNotSeen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
-  const outageCount = getNumberOfTypeNotSeen('outage', sortedNotifications.outages); // Number of outages not yet seen
-
+export function getCount({ messages, outages, alerts }) {
+  const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
+  const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
+  const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
   return messageCount + outageCount + alertCount;
 }
 export function addToLocalStorage({ messages, outages, alerts }) {
@@ -107,13 +109,13 @@ export function addToLocalStorage({ messages, outages, alerts }) {
   const [alert] = alerts;
 
   if (outage) {
-    safeLocalStorage.setItem('outage', outage.created_at);
+    safeLocalStorage.setItem(NOTIFICATION_OUTAGE, outage.created_at);
   }
   if (alert) {
-    safeLocalStorage.setItem('alert', alert.created_at);
+    safeLocalStorage.setItem(NOTIFICATION_ALERT, alert.created_at);
   }
   if (message) {
-    safeLocalStorage.setItem('message', message.created_at);
+    safeLocalStorage.setItem(NOTIFICATION_MSG, message.created_at);
   }
 }
 /**

@@ -14,8 +14,19 @@ const enabled = (function() {
   }
 }());
 
-const safeLocalStorage = {
+export default {
   enabled,
+  keys: {
+    RECENT_LAYERS: 'recentlyAddedLayers',
+    DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
+    DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
+    HIDE_TOUR: 'hideTour',
+    SIDEBAR_COLLAPSED: 'sidebarState',
+    COORDINATE_FORMAT: 'coordinateFormat',
+    NOTIFICATION_OUTAGE: 'outage',
+    NOTIFICATION_ALERT: 'alert',
+    NOTIFICATION_MSG: 'message',
+  },
   getItem(key) {
     if (enabled) {
       return localStorage.getItem(key);
