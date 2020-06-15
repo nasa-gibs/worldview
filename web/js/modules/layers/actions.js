@@ -7,6 +7,7 @@ import {
   getLayers as getLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
 } from './selectors';
+import updateRecentLayers from './util';
 import {
   RESET_LAYERS,
   ADD_LAYER,
@@ -56,7 +57,7 @@ export function addLayer(id, spec) {
     event: 'layer_added',
     layers: { id },
   });
-
+  updateRecentLayers(id);
   return (dispatch, getState) => {
     const state = getState();
     const { layers, compare, proj } = state;
