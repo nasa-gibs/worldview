@@ -17,6 +17,7 @@ import { addLayer, resetLayers } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
 
 export function getOrbitTrackTitle(def) {
   const { track } = def;
@@ -1248,4 +1249,17 @@ export const hasNonClickableVectorLayer = (activeLayers, mapRes) => {
     }
   }
   return isNonClickableVectorLayer;
+};
+
+// safeLocalStorage.removeItem(lsKey);
+export const updateRecentLayers = (id) => {
+  const { recentLayersKey: key } = safeLocalStorage.keys;
+  const recentLayersJson = safeLocalStorage.getItem(key);
+  let recentLayers = JSON.parse(recentLayersJson) || [];
+  if (recentLayers.length >= 10) {
+    recentLayers = recentLayers.slice(1, 10);
+  }
+  recentLayers.push(id);
+  console.table(recentLayers);
+  safeLocalStorage.setItem(key, JSON.stringify(recentLayers));
 };
