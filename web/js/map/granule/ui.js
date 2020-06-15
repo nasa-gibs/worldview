@@ -24,12 +24,9 @@ export default function granuleFootprint(map, mapUiEvents, store) {
     source: vectorSource,
     style: [
       new OlStyle({
-        fill: new OlStyleFill({
-          color: 'rgba(0, 123, 255, 0.25)',
-        }),
         stroke: new OlStyleStroke({
-          color: 'rgb(0, 123, 255)',
-          width: 3,
+          color: 'rgb(0, 123, 255, 0.65)',
+          width: 5,
         }),
         text: new OlText({
           textAlign: 'center',
