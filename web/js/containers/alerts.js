@@ -9,13 +9,14 @@ import { DISABLE_VECTOR_ALERT, MODAL_PROPERTIES } from '../modules/alerts/consta
 import safeLocalStorage from '../util/local-storage';
 
 const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
+const { DISMISSED_COMPARE_ALERT, DISMISSED_EVENT_VIS_ALERT } = safeLocalStorage.keys;
 class DismissableAlerts extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      hasDismissedEvents: !!safeLocalStorage.getItem('dismissedEventVisibilityAlert'),
-      hasDismissedCompare: !!safeLocalStorage.getItem('dismissedCompareAlert'),
+      hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
+      hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
     };
   }
 
@@ -46,7 +47,7 @@ class DismissableAlerts extends React.Component {
             isOpen
             noPortal
             onClick={() => openAlertModal(eventModalProps)}
-            onDismiss={() => this.dismissAlert('dismissedEventVisibilityAlert', 'hasDismissedEvents')}
+            onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
             message="Events may not be visible at all times."
           />
         ) : null}
@@ -55,7 +56,7 @@ class DismissableAlerts extends React.Component {
             isOpen
             noPortal
             onClick={() => openAlertModal(compareModalProps)}
-            onDismiss={() => this.dismissAlert('dismissedCompareAlert', 'hasDismissedCompare')}
+            onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
             message="You are now in comparison mode."
           />
         ) : null}

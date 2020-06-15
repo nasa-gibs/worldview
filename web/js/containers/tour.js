@@ -29,6 +29,8 @@ import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
 
+const { HIDE_TOUR } = safeLocalStorage.keys;
+
 class Tour extends React.Component {
   constructor(props) {
     super(props);
@@ -340,7 +342,7 @@ class Tour extends React.Component {
       if (!modalStart && !modalInProgress && !modalComplete) {
         this.setState({ modalStart: true });
       }
-      const checked = !!safeLocalStorage.getItem('hideTour');
+      const checked = !!safeLocalStorage.getItem(HIDE_TOUR);
       return (
         <ErrorBoundary>
           <div>
@@ -491,23 +493,23 @@ const getTransitionAttr = function(el, action) {
 };
 
 const hideTour = function(e) {
-  const shouldHideTour = safeLocalStorage.getItem('hideTour');
+  const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
   // Checkbox to "hide tour modal until a new story has been added" has been checked
   googleTagManager.pushEvent({
     event: 'tour_hide_checked',
   });
   if (shouldHideTour) return;
-  safeLocalStorage.setItem('hideTour', new Date());
+  safeLocalStorage.setItem(HIDE_TOUR, new Date());
 };
 
 const showTour = function(e) {
-  const shouldHideTour = safeLocalStorage.getItem('hideTour');
+  const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
   // Checkbox to "hide tour modal until a new story has been added" has been checked
   googleTagManager.pushEvent({
     event: 'tour_hide_unchecked',
   });
   if (!shouldHideTour) return;
-  safeLocalStorage.removeItem('hideTour');
+  safeLocalStorage.removeItem(HIDE_TOUR);
 };
 
 export default connect(

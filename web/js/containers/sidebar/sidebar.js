@@ -27,6 +27,8 @@ import {
 } from '../../modules/sidebar/actions';
 import safeLocalStorage from '../../util/local-storage';
 
+const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
+
 const getActiveTabs = function(config) {
   const { features } = config;
   return {
@@ -35,6 +37,7 @@ const getActiveTabs = function(config) {
     events: features.naturalEvents,
   };
 };
+
 const resetWorldview = function(e, isDistractionFreeModeActive) {
   e.preventDefault();
   if (!isDistractionFreeModeActive && window.location.search === '') return; // Nothing to reset
@@ -47,6 +50,7 @@ const resetWorldview = function(e, isDistractionFreeModeActive) {
     document.location.href = '/';
   }
 };
+
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
@@ -129,7 +133,7 @@ class Sidebar extends React.Component {
       event: 'sidebar_chevron',
     });
     const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
-    safeLocalStorage.setItem('sidebarState', storageValue);
+    safeLocalStorage.setItem(SIDEBAR_COLLAPSED, storageValue);
     collapseExpandToggle();
   }
 
