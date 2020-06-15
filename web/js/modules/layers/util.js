@@ -1253,7 +1253,7 @@ export const hasNonClickableVectorLayer = (activeLayers, mapRes) => {
 
 // safeLocalStorage.removeItem(lsKey);
 export const updateRecentLayers = (id) => {
-  const { recentLayersKey: key } = safeLocalStorage.keys;
+  const { recentLayers: key } = safeLocalStorage.keys;
   const recentLayersJson = safeLocalStorage.getItem(key);
   let recentLayers = JSON.parse(recentLayersJson) || [];
   if (recentLayers.length >= 10) {
