@@ -126,13 +126,15 @@ class LayerMetadataDetail extends React.Component {
                 className="layer-date-ranges-button"
                 onClick={(e) => this.toggleDateRanges(e)}
               >
-                {' '}
-                <sup>*View Dates</sup>
+                <sup>
+                  {isDateRangesExpanded ? ' *Hide ' : ' *Show '}
+                  Dates
+                </sup>
               </a>
             )}
           </p>
         )}
-        {isDateRangesExpanded && (
+        {isDateRangesExpanded && listItems && (
           <div className="layer-date-wrap">
             <p>Date Ranges:</p>
             <ListGroup className="layer-date-ranges">{listItems}</ListGroup>
