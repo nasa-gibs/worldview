@@ -55,10 +55,10 @@
             "maxResolution": 0.5625
         },
         {
-            "source": "GIBS:antarctic",
-            "from": "gibs-antarctic.xml",
-            "to": "gibs-antarctic.json",
-            "projection": "antarctic",
+            "source": "GIBS:arctic:nrt",
+            "from": "gibs-arctic-nrt.xml",
+            "to": "gibs-arctic-nrt.json",
+            "projection": "arctic",
             "maxResolution": 8192.0
         },
         {
