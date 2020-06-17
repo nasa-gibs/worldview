@@ -1,5 +1,5 @@
 {
-    "layerOrder": [ 
+    "layerOrder": [
         "VIIRS_SNPP_CorrectedReflectance_TrueColor",
         "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
         "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
@@ -58,7 +58,7 @@
         "VIIRS_SNPP_Cloud_Top_Height_Night",
         "VIIRS_SNPP_L2_Chlorophyll_A",
         "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
-        
+
         "GOES-East_ABI_Band2_Red_Visible_1km",
         "GOES-West_ABI_Band2_Red_Visible_1km",
         "Himawari_AHI_Band3_Red_Visible_1km",
@@ -317,6 +317,17 @@
         "AMSR2_Surface_Rain_Rate_Night",
         "AMSR2_Wind_Speed_Day",
         "AMSR2_Wind_Speed_Night",
+
+        "AMSRU2_Cloud_Liquid_Water_Day",
+        "AMSRU2_Cloud_Liquid_Water_Night",
+        "AMSRU2_Columnar_Water_Vapor_Day",
+        "AMSRU2_Columnar_Water_Vapor_Night",
+        "AMSRU2_Surface_Precipitation_Day",
+        "AMSRU2_Surface_Precipitation_Night",
+        "AMSRU2_Total_Precipitable_Water_Day",
+        "AMSRU2_Total_Precipitable_Water_Night",
+        "AMSRU2_Wind_Speed_Day",
+        "AMSRU2_Wind_Speed_Night",
 
         "AMSRU2_Snow_Water_Equivalent_Daily",
         "AMSRU2_Snow_Water_Equivalent_5Day",

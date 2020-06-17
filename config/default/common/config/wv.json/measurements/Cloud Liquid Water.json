@@ -11,6 +11,8 @@
                     "description": "amsr2/CloudLiquidWater",
                     "image": "",
                     "settings": [
+                        "AMSRU2_Cloud_Liquid_Water_Day",
+                        "AMSRU2_Cloud_Liquid_Water_Night",
                         "AMSR2_Cloud_Liquid_Water_Day",
                         "AMSR2_Cloud_Liquid_Water_Night",
                         "OrbitTracks_GCOM-W1_Ascending",

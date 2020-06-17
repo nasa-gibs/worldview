@@ -1,0 +1,22 @@
+{
+  "layers": {
+    "AMSRU2_Cloud_Liquid_Water_Day": {
+      "id": "AMSRU2_Cloud_Liquid_Water_Day",
+      "title": "Columnar Cloud Liquid Water (Day)",
+      "subtitle": "GCOM-W1 / AMSRU2",
+      "description": "amsr2/AMSRU2_Cloud_Liquid_Water_Day",
+      "tags": "amsru2",
+      "group": "overlays",
+      "layergroup": [
+        "amsr2"
+      ],
+      "product": "AU_Ocean_NRT_R01",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

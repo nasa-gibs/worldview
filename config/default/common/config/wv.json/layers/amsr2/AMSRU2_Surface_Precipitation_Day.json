@@ -1,0 +1,22 @@
+{
+  "layers": {
+    "AMSRU2_Surface_Precipitation_Day": {
+      "id": "AMSRU2_Surface_Precipitation_Day",
+      "title": "Surface Precipitation (Day)",
+      "subtitle": "GCOM-W1 / AMSRU2",
+      "description": "amsr2/AMSRU2_Surface_Precipitation_Day",
+      "tags": "amsru2 rain",
+      "group": "overlays",
+      "layergroup": [
+        "amsr2"
+      ],
+      "product": "AU_Rain_NRT_R01",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}
