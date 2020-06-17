@@ -20,6 +20,7 @@ module.exports = {
       'webdriver.gecko.profile': 'nightwatch',
     },
   },
+  test_workers: true, // Run test suites in parallel
   test_settings: {
     default: {
       launch_url: 'http://localhost',
