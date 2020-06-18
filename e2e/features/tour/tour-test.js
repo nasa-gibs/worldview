@@ -5,21 +5,25 @@ const TIME_LIMIT = 10000;
 module.exports = {
   before(client) {
     normalizeViewport(client, 1000, 850);
-    client.url(client.globals.url)
-      .execute(() => !window.localStorage.getItem('hideTour'));
+    client.url(client.globals.url);
   },
   'Verify that all tour modals are present when the page is loaded': function(client) {
     let totalSteps;
     client.waitForElementVisible('.tour-start', TIME_LIMIT, () => {
       client.click('.tour-box:first-child');
       client.waitForElementVisible('.tour-in-progress .step-total', 2000, () => {
-        client.getText('.tour-in-progress .step-total', (result) => { totalSteps = parseInt(result.value, 10); })
+        client
+          .getText(
+            '.tour-in-progress .step-total',
+            (result) => { totalSteps = parseInt(result.value, 10); },
+          )
           .perform(() => {
             for (let i = 0; i < totalSteps; i += 1) {
               client.pause(500);
               client.click('.step-container .step-next');
             }
-          }).waitForElementVisible('.tour-complete button.close', 2000, () => {
+          })
+          .waitForElementVisible('.tour-complete button.close', 2000, () => {
             client.click('.tour-complete button.close');
           });
       });
