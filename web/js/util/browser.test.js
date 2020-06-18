@@ -65,15 +65,6 @@ test('non-working cors on Safari <= 6', () => {
   expect(browser.tests.cors()).toBe(false);
 });
 
-test('local storage', () => {
-  expect(browser.tests.localStorage()).toBeTruthy();
-});
-
-test('no local storage', () => {
-  browser.tests.window = () => undefined;
-  expect(browser.tests.localStorage()).toBeFalsy();
-});
-
 describe('device sizes', () => {
   const tests = [
     {

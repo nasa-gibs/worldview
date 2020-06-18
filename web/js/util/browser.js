@@ -56,21 +56,10 @@ export default (function() {
    * @type Boolean
    */
   self.webWorkers = true;
-
-  /**
-   * True if local storage is available in the browser. This will return
-   * false if local storage is supported, but cannot be used because
-   * it is running in private mode.
-   *
-   * @attribute localStorage
-   * @type Boolean
-   */
-  self.localStorage = false;
   self.history = true;
   self.touchDevice = false;
   self.mobileDevice = false;
   self.mobileAndTabletDevice = false;
-
   self.mobileWidth = 740;
   self.constrainedHeight = 320;
 
