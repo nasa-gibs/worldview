@@ -56,7 +56,7 @@ export function addLayer(id, spec) {
     event: 'layer_added',
     layers: { id },
   });
-  
+
   return (dispatch, getState) => {
     const state = getState();
     const { layers, compare, proj } = state;

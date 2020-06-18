@@ -17,7 +17,6 @@ const enabled = (function() {
 export default {
   enabled,
   keys: {
-    RECENT_LAYERS: 'recentlyAddedLayers',
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
     HIDE_TOUR: 'hideTour',
@@ -43,5 +42,3 @@ export default {
     }
   },
 };
-
-export default safeLocalStorage;
