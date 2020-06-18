@@ -47,6 +47,7 @@
     "max-len": "off",
     "func-names": "off",
     "no-shadow": "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "prefer-arrow-callback": "off"
   }
 }

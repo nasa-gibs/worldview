@@ -46,6 +46,16 @@ module.exports = {
         },
       },
     },
+    chromeLocalStorageDisabled: {
+      desiredCapabilities: {
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          w3c: false,
+          prefs: { 'profile.managed_default_content_settings.notifications': 1 },
+          args: ['headless', 'no-sandbox', 'disable-gpu', 'disable-local-storage'],
+        },
+      },
+    },
     firefox: {
       desiredCapabilities: {
         browserName: 'firefox',
@@ -58,6 +68,18 @@ module.exports = {
         javascriptEnabled: true,
         'moz:firefoxOptions': {
           args: ['--headless'],
+        },
+      },
+    },
+    firefoxLocalStorageDisabled: {
+      desiredCapabilities: {
+        browserName: 'firefox',
+        javascriptEnabled: true,
+        'moz:firefoxOptions': {
+          args: ['--headless'],
+          prefs: {
+            'dom.storage.enabled': false,
+          },
         },
       },
     },
