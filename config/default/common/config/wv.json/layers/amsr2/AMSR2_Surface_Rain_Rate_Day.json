@@ -2,10 +2,11 @@
   "layers": {
     "AMSR2_Surface_Rain_Rate_Day": {
       "id": "AMSR2_Surface_Rain_Rate_Day",
-      "title": "Surface Rain Rate (Day)",
+      "title": "Surface Rain Rate (Day, Historical)",
       "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSR2_Surface_Rain_Rate_Day",
       "tags": "amsr-2 precipitation",
+      "inactive": true,
       "group": "overlays",
       "layergroup": [
         "amsr2"
