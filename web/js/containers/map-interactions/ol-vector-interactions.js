@@ -24,6 +24,7 @@ export class VectorInteractions extends React.Component {
   constructor(props) {
     super(props);
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
+    this.mouseOut = lodashDebounce(this.mouseOut.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
     this.registerMouseListeners();
   }
@@ -31,7 +32,17 @@ export class VectorInteractions extends React.Component {
   registerMouseListeners() {
     const { mouseEvents } = this.props;
     mouseEvents.on('mousemove', this.mouseMove);
+    mouseEvents.on('mouseout', this.mouseOut);
     mouseEvents.on('singleclick', this.singleClick);
+  }
+
+  mouseOut() {
+    const {
+      granuleLayerId, hoveredGranule, toggleHoveredGranule,
+    } = this.props;
+    if (hoveredGranule) {
+      toggleHoveredGranule(granuleLayerId, null);
+    }
   }
 
   mouseMove(event, map, crs) {
@@ -39,14 +50,25 @@ export class VectorInteractions extends React.Component {
     const coord = map.getCoordinateFromPixel(pixels);
 
     const {
-      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj,
-      granuleCMRGeometry, granuleLayerId, hoveredGranule, toggleHoveredGranule,
+      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj, active, activeString,
+      granuleCMRGeometry, granuleLayerId, hoveredGranule, toggleHoveredGranule, maxExtent,
     } = this.props;
 
     if (granuleCMRGeometry) {
       let toggledGranuleFootprint;
       const gcmr = Object.keys(granuleCMRGeometry).map((key) => ({ [key]: granuleCMRGeometry[key] }));
 
+      if (active) {
+        const isOnActiveCompareSide = isFromActiveCompareRegion(map, pixels, { group: activeString }, compareState, swipeOffset);
+        if (!isOnActiveCompareSide) {
+          if (hoveredGranule && !toggledGranuleFootprint) {
+            toggleHoveredGranule(granuleLayerId, null);
+          }
+          return;
+        }
+      }
+
+      const polygon = new OlGeomPolygon([]);
       for (let i = 0; i < gcmr.length; i += 1) {
         const granObj = gcmr[i];
         const date = Object.keys(granObj)[0];
@@ -63,11 +85,13 @@ export class VectorInteractions extends React.Component {
         });
 
         // update geom polygon for precise coordinate intersect inclusion check
-        const polygon = new OlGeomPolygon([geomVertices]);
+        polygon.setCoordinates([geomVertices]);
         const areCoordsWithinPolygon = polygon.intersectsCoordinate([coord[0], coord[1]]);
+        // check is polygon footprint is within max extent, will allow partial corners within max extent
+        const isPolygonWithinExtent = polygon.intersectsExtent(maxExtent);
 
         // if coordinates within granule footprint, toggle to show with map/ui
-        if (areCoordsWithinPolygon) {
+        if (areCoordsWithinPolygon && isPolygonWithinExtent) {
           //! MULTIPLE POLYGONS CONTAIN COORDS, BUT ONLY MOST RECENT DATE IS DISPLAYED
           //! SHOULD THIS BEHAVIOR BE BLOCKED/DEBOUNCED?
           toggledGranuleFootprint = true;
@@ -106,7 +130,7 @@ export class VectorInteractions extends React.Component {
     const {
       lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
-      activateVectorAlert, proj,
+      activateVectorAlert,
     } = this.props;
 
     if (measureIsActive) return;
@@ -123,7 +147,7 @@ export class VectorInteractions extends React.Component {
       openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
     } else {
       const mapRes = map.getView().getResolution();
-      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
+      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes);
 
       if (hasNonClickableVectorLayerType) {
         activateVectorAlert();
@@ -144,19 +168,34 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj, ui, layers,
+    browser,
+    compare,
+    config,
+    layers,
+    map,
+    measure,
+    modal,
+    proj,
+    ui,
+    vectorStyles,
   } = state;
+  const {
+    active,
+    activeString,
+    mode,
+    value,
+  } = compare;
+  const activeLayers = layers[activeString];
   let swipeOffset;
-  const groupName = compare.activeString;
-  const activeLayers = layers[groupName];
-  if (compare.active && compare.mode === 'swipe') {
-    const percentOffset = state.compare.value || 50;
+  if (active && mode === 'swipe') {
+    const percentOffset = value || 50;
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
 
   let granuleCMRGeometry;
   let granuleLayerId;
   const { hoveredGranule } = layers;
+  const { maxExtent } = config.projections[proj.id];
 
   // TODO: CURRENTLY RELYING ON PROVIDED LAYER ID, NEED TO SET UP GLOBAL LAYER STATE WITH CURRENT "FAMILY" OF SATELLITE/PRODUCT
 
@@ -171,8 +210,9 @@ function mapStateToProps(state) {
     'VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT': true,
   };
   const isActiveGranuleVisible = layers.active.filter((layer) => layer.visible && isGranuleIdOptions[layer.id]);
-  if (isActiveGranuleVisible.length && layers.granuleLayers[groupName] && layers.granuleLayers[groupName].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT) {
-    granuleCMRGeometry = layers.granuleLayers[groupName].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT.geometry;
+  // console.log(layers, isActiveGranuleVisible);
+  if (isActiveGranuleVisible.length && layers.granuleLayers[activeString] && layers.granuleLayers[activeString].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT) {
+    granuleCMRGeometry = layers.granuleLayers[activeString].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT.geometry;
     granuleLayerId = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT';
   }
 
@@ -190,6 +230,9 @@ function mapStateToProps(state) {
     compareState: compare,
     swipeOffset,
     proj,
+    maxExtent,
+    active,
+    activeString,
     activeLayers,
   };
 } const mapDispatchToProps = (dispatch) => ({
@@ -256,6 +299,7 @@ VectorInteractions.propTypes = {
   hoveredGranule: PropTypes.object,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
+  maxExtent: PropTypes.array,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
   activeLayers: PropTypes.array,
