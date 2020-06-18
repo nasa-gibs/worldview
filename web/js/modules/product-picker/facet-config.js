@@ -14,7 +14,7 @@ export default [
     field: 'coverage',
     label: 'Coverage',
     filterType: 'any',
-    tooltip: 'Filter by coverage at the current selected date, or always available',
+    tooltip: 'Filter by coverage on the current selected date, or always available',
     hideZeroCount: true,
   },
   {
