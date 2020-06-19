@@ -3,6 +3,7 @@ import {
   assign as lodashAssign,
   find as lodashFind,
   get as lodashGet,
+  includes as lodashIncludes,
 } from 'lodash';
 
 import {
@@ -71,12 +72,11 @@ export function getOrbitPointStyles(feature, styleArray) {
     }
   });
 }
-export function selectedCircleStyle(style, size) {
-  size = size || 2;
+export function selectedCircleStyle(style, size = 2) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
   const radius = styleImage.getRadius() * size;
-  return new Style({
+  return fill ? new Style({
     image: new Circle({
       radius,
       stroke: new Stroke({
@@ -87,7 +87,7 @@ export function selectedCircleStyle(style, size) {
         color: fill.getColor().replace(/[^,]+(?=\))/, '0.5'),
       }),
     }),
-  });
+  }) : style;
 }
 
 export function selectedPolygonStyle(style) {
@@ -179,21 +179,23 @@ export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
   }
   return wrap === -1 ? lon < 250 && lon > 180 : wrap === 1 ? lon > -250 && lon < -180 : false;
 }
-export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
-  const metaArray = [];
-  const selected = {};
-  const { config } = state;
-  const { screenWidth, screenHeight, lessThan } = state.browser;
-  const isMobile = lessThan.medium;
-
-  const x = pixels[0];
-  const y = pixels[1];
+/**
+ * Use modal/screen dimensions and click pixel location
+ * to return X & Y offsets for modal
+ *
+ * @param {Object} dimensionProps
+ *
+ * @returns {Object}
+ */
+function getModalOffset(dimensionProps) {
+  const {
+    x, y, screenHeight, screenWidth, isMobile,
+  } = dimensionProps;
   const isOnLeft = screenWidth - x >= screenWidth / 2;
   const modalWidth = isMobile ? 250 : 445;
   const modalHeight = 300;
   let offsetLeft = isOnLeft ? x + 20 : x - modalWidth - 20;
   let offsetTop = y - (modalHeight / 2);
-
   if (offsetLeft < 0) {
     offsetLeft = 20;
   } else if (offsetLeft + modalWidth > screenWidth) {
@@ -204,11 +206,27 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   } else if (offsetTop + modalHeight > screenHeight) {
     offsetTop = y - modalHeight;
   }
-
+  return { offsetLeft, offsetTop };
+}
+/**
+ * Get Organized data for each feature at pixel
+ * @param {Object} mapProps
+ * @param Object*} config
+ * @param {Object} compareState
+ */
+function getModalContentsAtPixel(mapProps, config, compareState) {
+  const metaArray = [];
+  const selected = {};
+  const { pixels, map, swipeOffset } = mapProps;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const def = lodashGet(layer, 'wv.def');
-    if (!def) return;
-    if (!isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
+    const type = feature.getType();
+    if (
+      !def
+      || lodashIncludes(def.clickDisabledFeatures, type)
+      || !isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
+      return;
+    }
     if (def.vectorData && def.vectorData.id && def.title) {
       const layerId = def.id;
       if (!selected[layerId]) selected[layerId] = [];
@@ -235,8 +253,36 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
+  return { selected, metaArray };
+}
+/**
+ * Get organized vector modal contents for clicked
+ * map location
+ *
+ * @param {Array} pixels
+ * @param {Object} map
+ * @param {Object} state
+ * @param {Number} swipeOffset
+ *
+ * @returns {Object}
+ */
+export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
+  const { config, compare } = state;
+  const { screenWidth, screenHeight, lessThan } = state.browser;
+  const isMobile = lessThan.medium;
+  const x = pixels[0];
+  const y = pixels[1];
+  const modalOffsetProps = {
+    x, y, isMobile, screenHeight, screenWidth,
+  };
+  const mapProps = { pixels, map, swipeOffset };
+  const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
+  const { selected, metaArray } = getModalContentsAtPixel(mapProps, config, compare);
   return {
-    selected, metaArray, offsetLeft, offsetTop,
+    selected, // Object containing unique identifiers of selected features
+    metaArray, // Organized metadata for modal
+    offsetLeft, // Modal default offsetLeft
+    offsetTop, // Modal default offsetTop
   };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
