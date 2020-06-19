@@ -1,3 +1,4 @@
+/* eslint-disable no-storage/no-browser-storage */
 /* eslint-disable no-console */
 const enabled = (function() {
   try {
