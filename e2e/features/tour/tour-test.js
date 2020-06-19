@@ -1,36 +1,56 @@
 const { normalizeViewport } = require('../../reuseables/normalize-viewport.js');
+const { localStorageEnabled } = require('../../reuseables/local-storage-check.js');
 
 const TIME_LIMIT = 10000;
+const runTour = function(c) {
+  let totalSteps;
+  c.waitForElementVisible('.tour-start', TIME_LIMIT, () => {
+    c.click('.tour-box:first-child');
+    c.waitForElementVisible('.tour-in-progress .step-total', 2000, () => {
+      c
+        .getText('.tour-in-progress .step-total', (result) => {
+          totalSteps = parseInt(result.value, 10);
+        })
+        .perform(() => {
+          for (let i = 0; i < totalSteps; i += 1) {
+            c.pause(500);
+            c.click('.step-container .step-next');
+          }
+        })
+        .waitForElementVisible('.tour-complete button.close', 2000, () => {
+          c.click('.tour-complete button.close');
+        });
+    });
+  });
+};
 
 module.exports = {
-  before(client) {
-    normalizeViewport(client, 1000, 850);
-    client.url(client.globals.url);
+  '@tags': ['localStorageDisabled'],
+  before(c) {
+    normalizeViewport(c, 1000, 850);
+    c.url(c.globals.url);
   },
-  'Verify that all tour modals are present when the page is loaded': function(client) {
-    let totalSteps;
-    client.waitForElementVisible('.tour-start', TIME_LIMIT, () => {
-      client.click('.tour-box:first-child');
-      client.waitForElementVisible('.tour-in-progress .step-total', 2000, () => {
-        client
-          .getText(
-            '.tour-in-progress .step-total',
-            (result) => { totalSteps = parseInt(result.value, 10); },
-          )
-          .perform(() => {
-            for (let i = 0; i < totalSteps; i += 1) {
-              client.pause(500);
-              client.click('.step-container .step-next');
-            }
-          })
-          .waitForElementVisible('.tour-complete button.close', 2000, () => {
-            client.click('.tour-complete button.close');
+  'Verify that all tour modals are present when the page is loaded': function(c) {
+    c.execute(
+      localStorageEnabled,
+      [],
+      function({ value }) {
+        if (!value) {
+          c.waitForElementVisible('#wv-info-button', 1000, () => {
+            c.click('#wv-info-button');
+            c.waitForElementVisible('#start_tour_info_item', 1000, () => {
+              c.click('#start_tour_info_item');
+              runTour(c);
+            });
           });
-      });
-    });
+        } else {
+          runTour(c);
+        }
+      },
+    );
   },
 
-  after(client) {
-    client.end();
+  after(c) {
+    c.end();
   },
 };
