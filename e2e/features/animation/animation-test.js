@@ -4,6 +4,7 @@ const localQuerystrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 10000;
 module.exports = {
+  '@tags': ['localStorageDisabled'],
   beforeEach(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
