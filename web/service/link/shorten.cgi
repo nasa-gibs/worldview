@@ -6,11 +6,11 @@ from optparse import OptionParser
 import os
 import shutil
 import sys
-from urllib2 import Request, urlopen, HTTPError, quote
+from urllib2 import Request, urlopen, HTTPError, unquote
 
-endpoint = "http://api.bit.ly/v3/shorten"
-login = ""
+endpoint = "https://api-ssl.bit.ly/v4/shorten"
 key = ""
+group = ""
 
 class RequestError(Exception):
   """
@@ -98,17 +98,15 @@ def process_request(options):
     if required_field not in fields:
       raise RequestError("Missing parameter: %s" % required_field)
 
-
-  url = "".join([endpoint,
-    "?login=" + login,
-    "&apiKey=" + key,
-    "&format=json",
-    "&longUrl=" + quote(fields["url"].value)])
-
-  if options.url:
-    print url
-
-  request = Request(url=url)
+  headers = {
+    "Authorization": "Bearer " + key,
+    "Content-Type": "application/json",
+  }
+  data = {
+    "group_guid": group,
+    "long_url": unquote(fields["url"].value),
+  }
+  request = Request(url=endpoint, headers=headers, data=json.dumps(data))
 
   fp = None
   try:
@@ -141,29 +139,34 @@ def parse_options():
   if options.all:
     options.error = True
 
+  # Enable this to see error output
+  options.error = True
+
   return options
 
 if __name__ == '__main__':
   """
   Entry point
   """
+
   options = parse_options()
   try:
     key_path = os.path.join("..", "..", "..", "bitly.json")
     with open(key_path) as fp:
         config = json.load(fp)
-    login = config["login"]
     key = config["key"]
+    group = config["group"]
     process_request(options)
-  except IOError:
-    options.error = True
-    service_unavailable(options, "No API key")
-  except RequestError as re:
-    bad_request(options, re)
   except HTTPError as he:
     if options.error:
       raise
     service_unavailable(options, he)
+  except IOError as e:
+    sys.stderr.write("error: %s" % str(e))
+    options.error = True
+    service_unavailable(options, "No API key")
+  except RequestError as re:
+    bad_request(options, re)
   except Exception as e:
     if options.error:
       raise

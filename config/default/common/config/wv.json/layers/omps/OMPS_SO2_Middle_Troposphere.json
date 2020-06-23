@@ -1,19 +1,23 @@
 {
-    "layers": {
-        "OMPS_SO2_Middle_Troposphere": {
-            "id":       "OMPS_SO2_Middle_Troposphere",
-            "title":    "Sulfur Dioxide (Middle Troposphere)",
-            "subtitle": "Suomi NPP / OMPS",
-            "description": "omps/OMPS_SO2_Middle_Troposphere",
-            "tags":     "SO2, sulphur",
-            "group":    "overlays",
-            "layergroup": [
-              "omps"
-            ],
-            "product":  "NMSO2-PCA-L2",
-            "tracks": [
-            "OrbitTracks_Suomi_NPP_Ascending"
-            ]
-        }
+  "layers": {
+    "OMPS_SO2_Middle_Troposphere": {
+      "id": "OMPS_SO2_Middle_Troposphere",
+      "title": "Sulfur Dioxide (Middle Troposphere)",
+      "subtitle": "Suomi NPP / OMPS",
+      "description": "omps/OMPS_SO2_Middle_Troposphere",
+      "tags": "SO2, sulphur",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": [
+        "omps"
+      ],
+      "product": "NMSO2-PCA-L2",
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

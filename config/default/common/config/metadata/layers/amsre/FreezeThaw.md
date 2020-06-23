@@ -9,4 +9,4 @@ The Advanced Microwave Scanning Radiometer – Earth Observing System (AMSR-E) i
 
 The MEaSUREs global record of daily landscape freeze/thaw status is available for the AMSR-E instrument. The sensor and imagery resolution is 25 km; temporal resolution was daily, as derived from morning (AM) and afternoon (PM) sensor brightness temperature retrievals.
 
-References: [NSIDC - MEaSUREs Global Record of Daily Landscape Freeze/Thaw Status, Version 3](http://nsidc.org/data/nsidc-0477/); [Freeze/Thaw Earth System Data Record](http://freezethaw.ntsg.umt.edu/)
+References: [NSIDC - MEaSUREs Global Record of Daily Landscape Freeze/Thaw Status, Version 3](https://nsidc.org/data/nsidc-0477/); [Freeze/Thaw Earth System Data Record](https://freezethaw.ntsg.umt.edu/)

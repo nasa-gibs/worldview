@@ -61,9 +61,9 @@ describe('layer Reducer tests', () => {
       type: CONSTANTS.REMOVE_LAYER,
       activeString: 'active',
       index: 1,
+      layers: initalState.active,
     });
-    expect(response.active.length).toEqual(1);
-    expect(response.active[0].id).toEqual('aqua-cr');
+    expect(response.active).toEqual(initalState.active);
   });
   test('INIT_SECOND_LAYER_GROUP copies current layer state', () => {
     const response = layerReducer(initalState, {

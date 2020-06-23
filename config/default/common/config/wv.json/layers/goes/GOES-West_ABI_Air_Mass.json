@@ -1,17 +1,21 @@
 {
-    "layers": {
-        "GOES-West_ABI_Air_Mass": {
-            "id":       "GOES-West_ABI_Air_Mass",
-            "title":    "Air Mass (10 minute)",
-            "subtitle": "GOES-West/ABI",
-            "description": "goes/GOES-West_ABI_Air_Mass",
-            "group":    "overlays",
-            "tags":     "geostationary geo",
-            "layergroup": [
-              "goes"
-            ],
-            "product":  "",
-            "wrapX": true
-        }
+  "layers": {
+    "GOES-West_ABI_Air_Mass": {
+      "id": "GOES-West_ABI_Air_Mass",
+      "title": "Air Mass (10 minute)",
+      "subtitle": "GOES-West/ABI",
+      "description": "goes/GOES-West_ABI_Air_Mass",
+      "group": "overlays",
+      "tags": "geostationary geo",
+      "layergroup": [
+        "goes"
+      ],
+      "product": "",
+      "wrapX": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
+  }
 }

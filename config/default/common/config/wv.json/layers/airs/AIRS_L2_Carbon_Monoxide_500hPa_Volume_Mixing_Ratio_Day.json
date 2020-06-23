@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day": {
-            "id":       "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
-            "title":    "Carbon Monoxide (L2, 500 hPa, Day)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
-            "tags":     "CO",
-            "group":    "overlays",
-            "product":  "AIRS2RET",
-            "layergroup": [
-              "airs"
-            ],
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-            ]
-        }
+  "layers": {
+    "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day": {
+      "id": "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
+      "title": "Carbon Monoxide (L2, 500 hPa, Day)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
+      "tags": "CO",
+      "group": "overlays",
+      "product": "AIRS2RET",
+      "layergroup": [
+        "airs"
+      ],
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

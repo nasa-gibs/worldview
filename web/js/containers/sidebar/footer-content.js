@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
 import { connect } from 'react-redux';
@@ -12,7 +11,7 @@ import {
   getSelectionCounts,
   getDataSelectionSize,
 } from '../../modules/data/selectors';
-import ProductPicker from '../../components/layer/product-picker/product-picker';
+import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { toggleListAll } from '../../modules/natural-events/actions';
 import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
@@ -164,7 +163,7 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: null,
         modalClassName: 'custom-layer-dialog light',
         backdrop: true,
-        CompletelyCustomModal: ProductPicker,
+        CompletelyCustomModal: SearchUiProvider,
         wrapClassName: '',
       }),
     );

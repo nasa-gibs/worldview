@@ -6,5 +6,5 @@ References: [GHRC: RSS Monthly 1-Deg Merged Wind Climatology NetCDF V7R01](https
 [RSS: Merged Wind Speed 1-deg Monthly Climate Product](http://www.remss.com/measurements/wind/wspd-1-deg-product);
 [RSS: AMSR2/AMSRE](http://www.remss.com/missions/amsr);
 [RSS: SSMI/SSMIS](http://www.remss.com/missions/ssmi/);
-[GCOM-W1: AMSR2](http://suzaku.eorc.jaxa.jp/GCOM_W/w_amsr2/whats_amsr2.html);
+[GCOM-W1: AMSR2](https://suzaku.eorc.jaxa.jp/GCOM_W/w_amsr2/whats_amsr2.html);
 [WindSat Quick Guide by NASA / SPoRT](https://weather.msfc.nasa.gov/sport/survey/windSat/WindSat_Reference_Guide.pdf)

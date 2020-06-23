@@ -1,21 +1,24 @@
 {
-    "layers": {
-        "MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day": {
-            "id":       "MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day",
-            "title":    "Land Surface Temperature (L3, Monthly, Day)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day",
-            "tags":     "lst",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD11C3",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Terra_Descending"
-             ]
-        }
+  "layers": {
+    "MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day": {
+      "id": "MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day",
+      "title": "Land Surface Temperature (L3, Monthly, Day)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day",
+      "tags": "lst",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD11C3",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

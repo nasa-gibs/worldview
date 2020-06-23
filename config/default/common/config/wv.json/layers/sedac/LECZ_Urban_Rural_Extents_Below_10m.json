@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "LECZ_Urban_Rural_Extents_Below_10m": {
-            "id":       "LECZ_Urban_Rural_Extents_Below_10m",
-            "title":    "Urban-Rural Extents Below 10m Elevation",
-            "subtitle": "Urban-Rural Population and Land Area Estimates, v2 (1990, 2000, 2010, 2100)",
-            "description": "sedac/LECZ_Urban_Rural_Extents_Below_10m",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_SEDAC_LECZ_URPLAEv2",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "LECZ_Urban_Rural_Extents_Below_10m": {
+      "id": "LECZ_Urban_Rural_Extents_Below_10m",
+      "title": "Urban-Rural Extents Below 10m Elevation",
+      "subtitle": "Urban-Rural Population and Land Area Estimates, v2 (1990, 2000, 2010, 2100)",
+      "description": "sedac/LECZ_Urban_Rural_Extents_Below_10m",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_SEDAC_LECZ_URPLAEv2",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

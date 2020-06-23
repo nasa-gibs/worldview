@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 import Event from '../../components/sidebar/event';
 import Scrollbars from '../../components/util/scrollbar';
-import AlertUtil from '../../components/util/alert';
-import { openCustomContent } from '../../modules/modal/actions';
 import {
   requestEvents,
   requestCategories,
@@ -13,8 +11,6 @@ import {
   selectEvent,
   deselectEvent,
 } from '../../modules/natural-events/actions';
-import util from '../../util/util';
-import EventsAlertModalBody from '../../components/events/alert-body';
 import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
@@ -23,10 +19,6 @@ class Events extends React.Component {
   constructor(props) {
     super(props);
     this.initRequests();
-    this.state = {
-      showAlert: util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert'),
-    };
-    this.dismissAlert = this.dismissAlert.bind(this);
   }
 
   initRequests() {
@@ -65,11 +57,6 @@ class Events extends React.Component {
     requestSources(sourceRequestURL);
   }
 
-  dismissAlert() {
-    localStorage.setItem('dismissedEventVisibilityAlert', true);
-    this.setState({ showAlert: false });
-  }
-
   render() {
     const {
       events,
@@ -83,7 +70,6 @@ class Events extends React.Component {
       deselectEvent,
       hasRequestError,
       isMobile,
-      openAlertModal,
       showAlert,
       selectedDate,
     } = this.props;
@@ -107,20 +93,6 @@ class Events extends React.Component {
 
     return (
       <>
-        {
-          // eslint-disable-next-line react/destructuring-assignment
-          showAlert && this.state.showAlert
-            ? (
-              <AlertUtil
-                id="event-alert"
-                isOpen
-                onClick={openAlertModal}
-                onDismiss={this.dismissAlert}
-                message="Events may not be visible at all times."
-              />
-            )
-            : ''
-        }
         <Scrollbars
           style={{ maxHeight: `${height}px` }}
           scrollBarVerticalTop={scrollBarVerticalTop}
@@ -177,18 +149,6 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(selectDate(new Date(dateStr)));
     }
   },
-  openAlertModal: () => {
-    dispatch(
-      openCustomContent('event_visibility_info', {
-        headerText: 'Events may not be visible at all times.',
-        backdrop: false,
-        size: 'lg',
-        clickableBehindModal: true,
-        bodyComponent: EventsAlertModalBody,
-        desktopOnly: true,
-      }),
-    );
-  },
   deselectEvent: (id, date) => {
     dispatch(deselectEvent());
   },
@@ -210,7 +170,6 @@ function mapStateToProps(state) {
     config,
     proj,
     browser,
-    sidebar,
     date,
     compare,
   } = state;
@@ -246,13 +205,6 @@ function mapStateToProps(state) {
     );
   }
 
-  const showAlert = Boolean(
-    util.browser.localStorage
-      && selected.id
-      && sidebar.activeTab === 'events'
-      && browser.greaterThan.small
-      && !localStorage.getItem('dismissedEventVisibilityAlert'),
-  );
   return {
     events,
     showAll,
@@ -265,7 +217,6 @@ function mapStateToProps(state) {
     apiURL,
     config,
     isMobile: browser.lessThan.medium,
-    showAlert,
     selectedDate: date[activeDatestr].toISOString().split('T')[0],
   };
 }
@@ -283,7 +234,6 @@ Events.propTypes = {
   height: PropTypes.number,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
-  openAlertModal: PropTypes.func,
   requestCategories: PropTypes.func,
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,

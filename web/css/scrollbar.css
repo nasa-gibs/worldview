@@ -1,11 +1,34 @@
 /***************** simple-scrollbar customizations ***********************/
 .simplebar-scrollbar {
   right: 0;
-  width: 9px;
+  width: 12px;
 }
 
 .simplebar-track .simplebar-scrollbar::before {
   background-color: #999;
   border-radius: 0;
   opacity: 0.8;
+}
+
+html {
+  --scrollbarBG: #ccc;
+  --thumbBG: #aaa;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #aaa transparent;
+}
+
+/* Chrome/Safari/Edge(?) */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 0;
 }

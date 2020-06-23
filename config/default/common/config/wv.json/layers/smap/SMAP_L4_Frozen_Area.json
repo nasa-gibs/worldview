@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L4_Frozen_Area": {
-            "id":       "SMAP_L4_Frozen_Area",
-            "title":    "Percent Frozen Area (L4, 9 km Grid Cell Coverage)",
-            "subtitle": "SMAP / Model Value-Added",
-            "description": "smap/SMAP_L4_Frozen_Area",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL4CMDL",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L4_Frozen_Area": {
+      "id": "SMAP_L4_Frozen_Area",
+      "title": "Percent Frozen Area (L4, 9 km Grid Cell Coverage)",
+      "subtitle": "SMAP / Model Value-Added",
+      "description": "smap/SMAP_L4_Frozen_Area",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL4CMDL",
+      "wrapadjacentdays": true
     }
+  }
 }

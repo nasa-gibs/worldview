@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "Estimated_Net_Migration_1990-2000": {
-            "id":       "Estimated_Net_Migration_1990-2000",
-            "title":    "Estimated Net Migration by Decade: 1990-2000",
-            "subtitle": "Global Estimated Net Migration Grids By Decade, v1 (1970-2000)",
-            "description": "sedac/Estimated_Net_Migration_1990-2000",
-            "tags":     "human sedac population",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_SEDAC_PD_NETMIG_1970_2000",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "Estimated_Net_Migration_1990-2000": {
+      "id": "Estimated_Net_Migration_1990-2000",
+      "title": "Estimated Net Migration by Decade: 1990-2000",
+      "subtitle": "Global Estimated Net Migration Grids By Decade, v1 (1970-2000)",
+      "description": "sedac/Estimated_Net_Migration_1990-2000",
+      "tags": "human sedac population",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_SEDAC_PD_NETMIG_1970_2000",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

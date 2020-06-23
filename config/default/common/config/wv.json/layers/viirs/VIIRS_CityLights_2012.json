@@ -1,17 +1,20 @@
 {
-    "layers": {
-        "VIIRS_CityLights_2012": {
-            "id":       "VIIRS_CityLights_2012",
-            "title":    "Earth at Night 2012",
-            "subtitle": "Suomi NPP / VIIRS via NASA Earth Observatory",
-            "description": "viirs/VIIRS_CityLights_2012",
-            "tags":     "night lights city lights urban snpp s-npp",
-            "layergroup": [
-              "viirs"
-            ],
-            "group":    "baselayers",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "VIIRS_CityLights_2012": {
+      "id": "VIIRS_CityLights_2012",
+      "title": "Earth at Night 2012",
+      "subtitle": "Suomi NPP / VIIRS via NASA Earth Observatory",
+      "description": "viirs/VIIRS_CityLights_2012",
+      "tags": "night lights city lights urban snpp s-npp",
+      "layergroup": [
+        "viirs"
+      ],
+      "group": "baselayers",
+      "inactive": true,
+      "wrapadjacentdays": true,
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

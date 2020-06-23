@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "Aquarius_Wind_Speed_L3_7Day_Snapshot": {
-            "id":       "Aquarius_Wind_Speed_L3_7Day_Snapshot",
-            "title":    "Wind Speed (L3, 7-Day Snapshot)",
-            "subtitle": "SAC-D / Aquarius",
-            "description": "aquarius/Aquarius_Wind_Speed_L3_7Day_Snapshot",
-            "tags":     "podaac PO.DAAC",
-            "group":    "overlays",
-            "layergroup": [
-              "aquarius"
-            ],
-            "product":  "AQUARIUS_L3_WIND_SPEED_SMI_7DAY_V4",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "Aquarius_Wind_Speed_L3_7Day_Snapshot": {
+      "id": "Aquarius_Wind_Speed_L3_7Day_Snapshot",
+      "title": "Wind Speed (L3, 7-Day Snapshot)",
+      "subtitle": "SAC-D / Aquarius",
+      "description": "aquarius/Aquarius_Wind_Speed_L3_7Day_Snapshot",
+      "tags": "podaac PO.DAAC",
+      "group": "overlays",
+      "layergroup": [
+        "aquarius"
+      ],
+      "product": "AQUARIUS_L3_WIND_SPEED_SMI_7DAY_V4",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

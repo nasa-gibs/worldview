@@ -1,20 +1,22 @@
 {
-    "layers": {
-        "OMI_Absorbing_Aerosol_Optical_Thickness_MW_388": {
-            "id":       "OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
-            "title":    "Aerosol Optical Depth (Absorbing, Multi-Wavelength, 388.0 nm)",
-            "subtitle": "Aura / OMI",
-            "description": "omi/OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
-            "group":    "overlays",
-            "layergroup": [
-              "omi"
-            ],
-            "product":  "OMAEROe",
-            "tags":     "aod",
-            "tracks": [
-            "OrbitTracks_Aura_Ascending"
-            ]
-
-        }
+  "layers": {
+    "OMI_Absorbing_Aerosol_Optical_Thickness_MW_388": {
+      "id": "OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
+      "title": "Aerosol Optical Depth (Absorbing, Multi-Wavelength, 388.0 nm)",
+      "subtitle": "Aura / OMI",
+      "description": "omi/OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
+      "group": "overlays",
+      "layergroup": [
+        "omi"
+      ],
+      "product": "OMAEROe",
+      "tags": "aod",
+      "tracks": [
+        "OrbitTracks_Aura_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

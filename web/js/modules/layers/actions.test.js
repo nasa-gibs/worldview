@@ -39,17 +39,22 @@ describe('remove Layer action', () => {
     const store = mockStore(getState(layers));
     store.dispatch(LAYER_ACTIONS.removeLayer('terra-cr'));
     const actionResponse = store.getActions()[0];
+    let responseLayers = addLayer('aqua-cr', {}, [], config.layers, 0);
+    responseLayers = addMockLayer('terra-aod', responseLayers);
+    responseLayers = addMockLayer('aqua-aod', responseLayers);
+
     const expectedPayload = {
       type: LAYER_CONSTANTS.REMOVE_LAYER,
       id: 'terra-cr',
       index: 3,
       activeString: 'active',
       def,
+      layers: responseLayers,
     };
     expect(actionResponse).toEqual(expectedPayload);
   });
 
-  test('Do nothing on removing a non-existant layer', () => {
+  test('Do nothing on removing a non-existent layer', () => {
     let layers = addLayer('terra-cr', {}, [], config.layers, 0);
     layers = addMockLayer('terra-aod', layers);
     layers = addMockLayer('aqua-aod', layers);

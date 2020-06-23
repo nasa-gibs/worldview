@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L4_Snow_Mass": {
-            "id":       "SMAP_L4_Snow_Mass",
-            "title":    "Snow Mass 9 km (L4, 12z-3z Average)",
-            "subtitle": "SMAP / Model Value-Added",
-            "description": "smap/SMAP_L4_Snow_Mass",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL4SMGP",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L4_Snow_Mass": {
+      "id": "SMAP_L4_Snow_Mass",
+      "title": "Snow Mass 9 km (L4, 12z-3z Average)",
+      "subtitle": "SMAP / Model Value-Added",
+      "description": "smap/SMAP_L4_Snow_Mass",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL4SMGP",
+      "wrapadjacentdays": true
     }
+  }
 }

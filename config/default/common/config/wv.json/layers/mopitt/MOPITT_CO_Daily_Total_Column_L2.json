@@ -1,20 +1,24 @@
 {
-    "layers": {
-        "MOPITT_CO_Daily_Total_Column_L2": {
-            "id":       "MOPITT_CO_Daily_Total_Column_L2",
-            "title":    "Carbon Monoxide (L2, Daily, Day/Night, Total Column)",
-            "subtitle": "Terra / MOPITT",
-            "description": "mopitt/MOPITT_CO_Daily_Total_Column_L2",
-            "tags":     "co",
-            "group":    "overlays",
-            "layergroup": [
-		          "mopitt"
-            ],
-            "product":  "MOP02R_NRT",
-            "tracks": [
-                "OrbitTracks_Terra_Ascending",
-                "OrbitTracks_Terra_Descending"
-            ]
-        }
+  "layers": {
+    "MOPITT_CO_Daily_Total_Column_L2": {
+      "id": "MOPITT_CO_Daily_Total_Column_L2",
+      "title": "Carbon Monoxide (L2, Daily, Day/Night, Total Column)",
+      "subtitle": "Terra / MOPITT",
+      "description": "mopitt/MOPITT_CO_Daily_Total_Column_L2",
+      "tags": "co",
+      "group": "overlays",
+      "layergroup": [
+        "mopitt"
+      ],
+      "product": "MOP02R_NRT",
+      "tracks": [
+        "OrbitTracks_Terra_Ascending",
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "night",
+        "day"
+      ]
     }
+  }
 }

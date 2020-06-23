@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 
 import {
@@ -97,7 +96,6 @@ class Timeline extends React.Component {
       isTimelineDragging: false,
       initialLoadComplete: false,
       timelineHidden: false,
-      hasMoved: false,
       rangeSelectorMax: {
         end: false, start: false, startOffset: -50, width: 50000,
       },
@@ -354,7 +352,6 @@ class Timeline extends React.Component {
   /**
   * @desc handles dynamic position changes from axis that affect dragger and range select
   * @param {Object} args
-    * @param {Boolean} hasMoved
     * @param {Boolean} isTimelineDragging
     * @param {Number} position
     * @param {Number} transformX
@@ -370,7 +367,6 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   updatePositioning = ({
-    hasMoved,
     isTimelineDragging,
     position,
     transformX,
@@ -385,7 +381,6 @@ class Timeline extends React.Component {
   // eslint-disable-next-line react/destructuring-assignment
   }, hoverTime = this.state.hoverTime) => {
     this.setState({
-      hasMoved,
       isTimelineDragging,
       showHoverLine: false,
       position,
@@ -405,8 +400,6 @@ class Timeline extends React.Component {
   /**
   * @desc handles dynamic positioning update based on simple drag
   * @param {Object} args
-    * @param {Boolean} hasMoved
-    * @param {Boolean} isTimelineDragging
     * @param {Number} position
     * @param {Number} draggerPosition
     * @param {Number} draggerPositionB
@@ -415,8 +408,6 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   updatePositioningOnSimpleDrag = ({
-    hasMoved,
-    isTimelineDragging,
     position,
     draggerPosition,
     draggerPositionB,
@@ -424,8 +415,7 @@ class Timeline extends React.Component {
     animationEndLocation,
   }) => {
     this.setState({
-      hasMoved,
-      isTimelineDragging,
+      isTimelineDragging: true,
       showHoverLine: false,
       position,
       draggerPosition,
@@ -438,7 +428,6 @@ class Timeline extends React.Component {
   /**
   * @desc handles dynamic positioning update based on axis drag stop event
   * @param {Object} args
-    * @param {Boolean} hasMoved
     * @param {Boolean} isTimelineDragging
     * @param {Number} position
     * @param {Number} transformX
@@ -446,14 +435,12 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   updatePositioningOnAxisStopDrag = ({
-    hasMoved,
     isTimelineDragging,
     position,
     transformX,
   // eslint-disable-next-line react/destructuring-assignment
   }, hoverTime = this.state.hoverTime) => {
     this.setState({
-      hasMoved,
       isTimelineDragging,
       showHoverLine: false,
       position,
@@ -464,13 +451,11 @@ class Timeline extends React.Component {
 
   /**
   * @desc update is timeline moved (drag timeline vs. click) and if timeline is dragging
-  * @param {Boolean} hasMoved
   * @param {Boolean} isTimelineDragging
   * @returns {void}
   */
-  updateTimelineMoveAndDrag = (hasMoved, isTimelineDragging) => {
+  updateTimelineMoveAndDrag = (isTimelineDragging) => {
     this.setState({
-      hasMoved,
       isTimelineDragging,
     });
   }
@@ -799,10 +784,9 @@ class Timeline extends React.Component {
   * @param {Number} draggerPositionArg
   * @param {Boolean} draggerVisibleArg
   * @param {Boolean} otherDraggerVisibleArg
-  * @param {Boolean} hasMovedArg
   * @returns {void}
   */
-  updateDraggerDatePosition = (newDate, draggerSelected, draggerPositionArg, draggerVisibleArg, otherDraggerVisibleArg, hasMovedArg) => {
+  updateDraggerDatePosition = (newDate, draggerSelected, draggerPositionArg, draggerVisibleArg, otherDraggerVisibleArg) => {
     const {
       draggerPosition,
       draggerPositionB,
@@ -810,7 +794,6 @@ class Timeline extends React.Component {
       draggerVisibleB,
       draggerTimeState,
       draggerTimeStateB,
-      hasMoved,
     } = this.state;
     if (draggerSelected === 'selected') {
       this.setState({
@@ -818,7 +801,6 @@ class Timeline extends React.Component {
         draggerVisible: draggerVisibleArg || draggerVisible,
         draggerVisibleB: otherDraggerVisibleArg || draggerVisibleB,
         draggerTimeState: newDate || draggerTimeState,
-        hasMoved: hasMovedArg || hasMoved,
       });
       if (newDate) {
         this.onDateChange(newDate, 'selected');
@@ -829,7 +811,6 @@ class Timeline extends React.Component {
         draggerVisible: otherDraggerVisibleArg || draggerVisible,
         draggerVisibleB: draggerVisibleArg || draggerVisibleB,
         draggerTimeStateB: newDate || draggerTimeStateB,
-        hasMoved: hasMovedArg || hasMoved,
       });
       if (newDate) {
         this.onDateChange(newDate, 'selectedB');
@@ -868,6 +849,11 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   toggleDataCoveragePanel = (isOpen) => {
+    if (!isOpen) {
+      googleTagManager.pushEvent({
+        event: 'open_data_coverage_panel',
+      });
+    }
     this.setState({
       isDataCoveragePanelOpen: isOpen,
     });
@@ -1043,7 +1029,6 @@ class Timeline extends React.Component {
       showHoverLine,
       showDraggerTime,
       hoverLinePosition,
-      hasMoved,
       shouldIncludeHiddenLayers,
     } = this.state;
     const selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
@@ -1229,7 +1214,6 @@ class Timeline extends React.Component {
                         isAnimationDraggerDragging={isAnimationDraggerDragging}
                         isDraggerDragging={isDraggerDragging}
                         isTimelineDragging={isTimelineDragging}
-                        hasMoved={hasMoved}
                         matchingTimelineCoverage={matchingTimelineCoverage}
                       />
 
@@ -1251,8 +1235,7 @@ class Timeline extends React.Component {
                       {/* Data Coverage Panel */}
                       <TimelineData
                         appNow={appNow}
-                        position={position}
-                        transformX={transformX}
+                        positionTransformX={position + transformX}
                         timeScale={timeScale}
                         frontDate={frontDate}
                         backDate={backDate}
@@ -1377,6 +1360,7 @@ function mapStateToProps(state) {
     browser,
     date,
     animation,
+    proj,
     sidebar,
     modal,
     tour,
@@ -1401,8 +1385,12 @@ function mapStateToProps(state) {
   const isSmallScreen = lessThan.medium;
   const isScreenWidthLessThan350 = screenWidth < 350;
   const isScreenWidthLessThan450 = screenWidth < 450;
-  let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
-  const activeLayers = layers[compare.activeString].filter((activeLayer) => activeLayer.startDate);
+
+  // handle active layer filtering and check for subdaily
+  const activeLayers = layers[compare.activeString];
+  const projection = proj.id;
+  const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
+  let hasSubdailyLayers = hasSubDaily(activeLayers);
 
   let updatedInterval = interval;
   let updatedCustomInterval = customInterval;
@@ -1425,7 +1413,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers = hasSubDaily(layers.active) || hasSubDaily(layers.activeB);
     endTime = getEndTime(layers, config);
   } else {
-    hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+    hasSubdailyLayers = hasSubDaily(activeLayers);
     endTime = layersLastDateTime(layers[activeString], config);
   }
   endTime = appNow;
@@ -1456,7 +1444,7 @@ function mapStateToProps(state) {
   );
   return {
     appNow,
-    activeLayers,
+    activeLayers: activeLayersFiltered,
     isTourActive: tour.active,
     isSmallScreen,
     isScreenWidthLessThan350,

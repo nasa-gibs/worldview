@@ -5,4 +5,4 @@ The MODIS Cloud Top Temperature layer indicates the atmospheric temperature at t
 
 The MODIS Cloud Top Temperature layer is a science parameter of the MODIS Cloud product and is available from both the Terra (MOD06) and Aqua (MYD06) satellites. The sensor resolution is 5 km, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [Introduction to MODIS Cloud Products](http://views.cira.colostate.edu/data/Documents/Terra_MODIS_Level3/MOD08_D3.005/Intro_to_Modis_Cloud_Products.pdf); [Climate Data Guide - Cloud Observations from MODIS](https://climatedataguide.ucar.edu/climate-data/cloud-observations-modis)
+References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [Introduction to MODIS Cloud Products](https://views.cira.colostate.edu/data/Documents/Terra_MODIS_Level3/MOD08_D3.005/Intro_to_Modis_Cloud_Products.pdf); [Climate Data Guide - Cloud Observations from MODIS](https://climatedataguide.ucar.edu/climate-data/cloud-observations-modis)

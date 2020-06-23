@@ -7,4 +7,4 @@ Carbon Monoxide (CO) is a poisonous, odorless and colorless gas. CO is produced 
 
 The MLS Carbon Monoxide (CO) Mixing Ratio 215hPa layer is derived from the MLS Carbon Monoxide product (ML2CO_NRT) available from the Microwave Limb Sounder (MLS) instrument on the Aura satellite. The sensor resolution is 5 km, imagery resolution is 2 km, temporal resolution is twice daily (day and night).
 
-References: [GES DISC - ML2CO_NRT: MLS/Aura Near-Real-Time L2 Carbon Monoxide (CO) Mixing Ratio V004](https://disc.gsfc.nasa.gov/datasets/ML2CO_NRT_V004/summary); [MLS - Carbon Monoxide](http://mls.jpl.nasa.gov/products/co_product.php)
+References: [GES DISC - ML2CO_NRT: MLS/Aura Near-Real-Time L2 Carbon Monoxide (CO) Mixing Ratio V004](https://disc.gsfc.nasa.gov/datasets/ML2CO_NRT_V004/summary); [MLS - Carbon Monoxide](https://mls.jpl.nasa.gov/products/co_product.php)

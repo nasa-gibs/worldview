@@ -135,13 +135,16 @@ async function upload() {
 }
 
 if (!argv.dist) {
-  const cmd = 'npm run build';
   const options = {};
   if (argv.env) {
-    options.env = { ...process.env, CONFIG_ENV: argv.env };
+    options.env = {
+      ...process.env,
+      CONFIG_ENV: argv.env,
+    };
   }
-  shell.exec(cmd, options);
-  shell.exec('node ./tasks/dist.js');
+
+  shell.exec('npm run build', options);
+  shell.exec('node ./tasks/dist.js', options);
 }
 
 upload();

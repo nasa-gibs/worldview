@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "AMSRU2_Snow_Water_Equivalent_Daily": {
-            "id":       "AMSRU2_Snow_Water_Equivalent_Daily",
-            "title":    "Snow Water Equivalent (25 km, Daily)",
-            "subtitle": "GCOM-W1 / AMSR2",
-            "description": "amsr2/AMSRU2_Snow_Water_Equivalent_Daily",
-            "tags":     "amsr-u2 amsru2 swe",
-            "group":    "overlays",
-            "layergroup": [
-              "amsru2"
-            ],
-            "product": "AU_DySno"
-        }
+  "layers": {
+    "AMSRU2_Snow_Water_Equivalent_Daily": {
+      "id": "AMSRU2_Snow_Water_Equivalent_Daily",
+      "title": "Snow Water Equivalent (25 km, Daily)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSRU2_Snow_Water_Equivalent_Daily",
+      "tags": "amsr-u2 amsru2 swe",
+      "group": "overlays",
+      "layergroup": [
+        "amsru2"
+      ],
+      "product": "AU_DySno"
     }
+  }
 }

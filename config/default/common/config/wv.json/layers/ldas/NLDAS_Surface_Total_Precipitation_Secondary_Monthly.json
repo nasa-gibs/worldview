@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "NLDAS_Surface_Total_Precipitation_Secondary_Monthly": {
-            "id":       "NLDAS_Surface_Total_Precipitation_Secondary_Monthly",
-            "title":    "Precipitation Total (Monthly, Surface, Secondary Forcing Data)",
-            "subtitle": "NLDAS",
-            "description": "ldas/NLDAS_Surface_Total_Precipitation_Secondary_Monthly",
-            "tags":     "north american land data assimilation system rain",
-            "group":    "overlays",
-            "layergroup": [
-              "ldas"
-            ],
-            "product":  "NLDAS_FORB0125_M"
-        }
+  "layers": {
+    "NLDAS_Surface_Total_Precipitation_Secondary_Monthly": {
+      "id": "NLDAS_Surface_Total_Precipitation_Secondary_Monthly",
+      "title": "Precipitation Total (Monthly, Surface, Secondary Forcing Data)",
+      "subtitle": "NLDAS",
+      "description": "ldas/NLDAS_Surface_Total_Precipitation_Secondary_Monthly",
+      "tags": "north american land data assimilation system rain",
+      "group": "overlays",
+      "layergroup": [
+        "ldas"
+      ],
+      "product": "NLDAS_FORB0125_M"
     }
+  }
 }

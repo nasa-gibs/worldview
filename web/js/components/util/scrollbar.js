@@ -10,7 +10,11 @@ export default function Scrollbars(props) {
   const ref = useRef();
   const [scrollTop, updateScrollTop] = useState(0);
   const {
-    scrollBarVerticalTop, style, className, onScroll, children,
+    style,
+    className,
+    onScroll,
+    children,
+    scrollBarVerticalTop,
   } = props;
 
   /**

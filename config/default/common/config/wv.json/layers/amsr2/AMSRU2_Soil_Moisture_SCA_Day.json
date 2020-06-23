@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "AMSRU2_Soil_Moisture_SCA_Day": {
-            "id":       "AMSRU2_Soil_Moisture_SCA_Day",
-            "title":    "Soil Moisture (Single Channel Algorithm, Day)",
-            "subtitle": "GCOM-W1 / AMSR2",
-            "description": "amsr2/AMSRU2_Soil_Moisture_SCA_Day",
-            "tags":     "amsr-u2",
-            "group":    "overlays",
-            "layergroup": [
-              "amsr2"
-            ],
-            "product":  "AU_Land",
-            "tracks": [
-            "OrbitTracks_GCOM-W1_Ascending"
-             ]
-        }
+  "layers": {
+    "AMSRU2_Soil_Moisture_SCA_Day": {
+      "id": "AMSRU2_Soil_Moisture_SCA_Day",
+      "title": "Soil Moisture (Single Channel Algorithm, Day)",
+      "subtitle": "GCOM-W1 / AMSR2",
+      "description": "amsr2/AMSRU2_Soil_Moisture_SCA_Day",
+      "tags": "amsr-u2",
+      "group": "overlays",
+      "layergroup": [
+        "amsr2"
+      ],
+      "product": "AU_Land",
+      "tracks": [
+        "OrbitTracks_GCOM-W1_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

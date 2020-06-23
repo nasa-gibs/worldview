@@ -1,17 +1,20 @@
 {
-    "layers": {
-        "OCO-2_Water_Vapor_Total_Column_Average": {
-            "id":       "OCO-2_Water_Vapor_Total_Column_Average",
-            "title":    "Water Vapor (Total Column Average)",
-            "subtitle": "OCO-2",
-            "description": "oco2/OCO-2_Water_Vapor_Total_Column_Average",
-            "tags":     "oco2",
-            "group":    "overlays",
-            "layergroup": [
-              "oco2"
-            ],
-            "product":  "OCO2_L2_Lite_FP",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "OCO-2_Water_Vapor_Total_Column_Average": {
+      "id": "OCO-2_Water_Vapor_Total_Column_Average",
+      "title": "Water Vapor (Total Column Average)",
+      "subtitle": "OCO-2",
+      "description": "oco2/OCO-2_Water_Vapor_Total_Column_Average",
+      "tags": "oco2",
+      "group": "overlays",
+      "layergroup": [
+        "oco2"
+      ],
+      "product": "OCO2_L2_Lite_FP",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

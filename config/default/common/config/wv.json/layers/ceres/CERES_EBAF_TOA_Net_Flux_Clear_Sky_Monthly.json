@@ -1,18 +1,22 @@
 {
-    "layers": {
-        "CERES_EBAF_TOA_Net_Flux_Clear_Sky_Monthly": {
-            "id":       "CERES_EBAF_TOA_Net_Flux_Clear_Sky_Monthly",
-            "title":    "TOA Net Flux (Monthly, Energy Balanced and Filled, Clear-Sky)",
-            "subtitle": "Terra / CERES",
-            "description": "ceres/CERES_EBAF_TOA_Net_Flux_Clear_Sky_Monthly",
-            "tags":     "top of atmosphere, energy balanced and filled",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CERES_EBAF-TOA",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_EBAF_TOA_Net_Flux_Clear_Sky_Monthly": {
+      "id": "CERES_EBAF_TOA_Net_Flux_Clear_Sky_Monthly",
+      "title": "TOA Net Flux (Monthly, Energy Balanced and Filled, Clear-Sky)",
+      "subtitle": "Terra / CERES",
+      "description": "ceres/CERES_EBAF_TOA_Net_Flux_Clear_Sky_Monthly",
+      "tags": "top of atmosphere, energy balanced and filled",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CERES_EBAF-TOA",
+      "inactive": true,
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
+  }
 }

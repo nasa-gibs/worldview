@@ -1,22 +1,28 @@
 {
-    "layers": {
-        "OMI_SO2_Middle_Troposphere": {
-            "id":       "OMI_SO2_Middle_Troposphere",
-            "title":    "Sulfur Dioxide (Middle Troposphere)",
-            "subtitle": "Aura / OMI",
-            "description": "omi/OMI_SO2_Middle_Troposphere",
-            "group":    "overlays",
-            "layergroup": [
-              "omi"
-            ],
-            "product":  "OMSO2",
-            "tags":     "so2 sulphur dioxide",
-            "tracks": [
-                "OrbitTracks_Aura_Ascending"
-            ],
-            "palette": {
-                "recommended":  ["orange_1", "red_1"]
-            }
-        }
+  "layers": {
+    "OMI_SO2_Middle_Troposphere": {
+      "id": "OMI_SO2_Middle_Troposphere",
+      "title": "Sulfur Dioxide (Middle Troposphere)",
+      "subtitle": "Aura / OMI",
+      "description": "omi/OMI_SO2_Middle_Troposphere",
+      "group": "overlays",
+      "layergroup": [
+        "omi"
+      ],
+      "product": "OMSO2",
+      "tags": "so2 sulphur dioxide",
+      "tracks": [
+        "OrbitTracks_Aura_Ascending"
+      ],
+      "palette": {
+        "recommended": [
+          "orange_1",
+          "red_1"
+        ]
+      },
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

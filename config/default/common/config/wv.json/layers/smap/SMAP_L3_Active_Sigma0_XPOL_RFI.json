@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L3_Active_Sigma0_XPOL_RFI": {
-            "id":       "SMAP_L3_Active_Sigma0_XPOL_RFI",
-            "title":    "Sigma0 3 km RFI (L3, Active, XPOL Polarization)",
-            "subtitle": "SMAP / Radar",
-            "description": "smap/SMAP_L3_Active_Sigma0_XPOL_RFI",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L3_Active_Sigma0_XPOL_RFI": {
+      "id": "SMAP_L3_Active_Sigma0_XPOL_RFI",
+      "title": "Sigma0 3 km RFI (L3, Active, XPOL Polarization)",
+      "subtitle": "SMAP / Radar",
+      "description": "smap/SMAP_L3_Active_Sigma0_XPOL_RFI",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

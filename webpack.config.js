@@ -45,9 +45,13 @@ if (isDevServer) {
 if (process.env.ANALYZE_MODE === 'true') {
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
-if (process.env.DEBUG === 'true') {
+if (process.env.DEBUG !== undefined) {
   pluginSystem.push(
-    new webpack.DefinePlugin({ DEBUG: JSON.stringify('true') }),
+    new webpack.DefinePlugin({ DEBUG: JSON.stringify(process.env.DEBUG) }),
+  );
+} else {
+  pluginSystem.push(
+    new webpack.DefinePlugin({ DEBUG: false }),
   );
 }
 
@@ -182,9 +186,11 @@ module.exports = {
               plugins: () => [
                 postcssPresetEnv({
                   browserslist: [
-                    'last 5 versions',
+                    'last 4 versions',
                     'not ie < 11',
-                    'not edge < 15',
+                    'not edge < 17',
+                    'not IE_Mob 11',
+                    'not dead',
                     '> 2%',
                   ],
                 }),

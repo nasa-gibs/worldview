@@ -48,7 +48,10 @@ class GridRange extends PureComponent {
     } = this.props;
     const tileTextCondition = tileTextConditionOptions[timeScale];
     return (
-      <g className="axis-grid-container" transform={`translate(${transformX}, 0)`}>
+      <g
+        className="axis-grid-container"
+        transform={`translate(${transformX})`}
+      >
         <>
           {timeRange.map((item, index) => (
             item.withinRange

@@ -5,7 +5,8 @@
             "handler": "List",
             "query": {
                 "shortName": "AVHRR_OI-NCEI-L4-GLOB-v2.0"
-            }
+            },
+            "version": 2.0
         }
     }
 }

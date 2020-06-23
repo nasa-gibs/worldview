@@ -1,17 +1,20 @@
 {
-    "layers": {
-        "GOES-East_ABI_Band2_Red_Visible_1km": {
-            "id":       "GOES-East_ABI_Band2_Red_Visible_1km",
-            "title":    "Red Visible (0.64 µm, Band 2, 10 minute)",
-            "subtitle": "GOES-East/ABI",
-            "description": "goes/GOES-East_ABI_Band2_Red_Visible_1km",
-            "group":    "overlays",
-            "tags":     "geostationary geo",
-            "layergroup": [
-              "goes"
-            ],
-            "product":  "",
-            "wrapX": true
-        }
+  "layers": {
+    "GOES-East_ABI_Band2_Red_Visible_1km": {
+      "id": "GOES-East_ABI_Band2_Red_Visible_1km",
+      "title": "Red Visible (0.64 µm, Band 2, 10 minute)",
+      "subtitle": "GOES-East/ABI",
+      "description": "goes/GOES-East_ABI_Band2_Red_Visible_1km",
+      "group": "overlays",
+      "tags": "geostationary geo",
+      "layergroup": [
+        "goes"
+      ],
+      "product": "",
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

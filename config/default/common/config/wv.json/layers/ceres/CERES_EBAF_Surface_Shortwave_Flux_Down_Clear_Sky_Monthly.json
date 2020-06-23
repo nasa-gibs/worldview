@@ -1,18 +1,22 @@
 {
-    "layers": {
-        "CERES_EBAF_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly": {
-            "id":       "CERES_EBAF_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
-            "title":    "Surface Shortwave Flux (Monthly, Energy Balanced and Filled, Down, Clear-Sky)",
-            "subtitle": "Terra / CERES",
-            "description": "ceres/CERES_EBAF_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
-            "tags":     "energy balanced and filled",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CERES_EBAF-Surface",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_EBAF_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly": {
+      "id": "CERES_EBAF_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
+      "title": "Surface Shortwave Flux (Monthly, Energy Balanced and Filled, Down, Clear-Sky)",
+      "subtitle": "Terra / CERES",
+      "description": "ceres/CERES_EBAF_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
+      "tags": "energy balanced and filled",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CERES_EBAF-Surface",
+      "inactive": true,
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
+  }
 }

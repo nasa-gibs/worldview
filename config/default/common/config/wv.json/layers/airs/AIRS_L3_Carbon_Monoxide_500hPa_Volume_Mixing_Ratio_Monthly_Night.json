@@ -1,18 +1,19 @@
 {
-    "layers": {
-        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night": {
-            "id":       "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night",
-            "title":    "Carbon Monoxide (L3, 500 hPa, Night, Monthly)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night",
-            "tags":     "",
-            "group":    "overlays",
-            "product":  "AIRS3STM",
-
-            "layergroup": [
-              "airs"
-            ]
-
-        }
+  "layers": {
+    "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night": {
+      "id": "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night",
+      "title": "Carbon Monoxide (L3, 500 hPa, Night, Monthly)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS3STM",
+      "layergroup": [
+        "airs"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

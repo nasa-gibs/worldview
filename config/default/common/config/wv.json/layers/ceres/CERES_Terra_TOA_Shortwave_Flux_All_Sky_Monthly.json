@@ -1,18 +1,22 @@
 {
-    "layers": {
-        "CERES_Terra_TOA_Shortwave_Flux_All_Sky_Monthly": {
-            "id":       "CERES_Terra_TOA_Shortwave_Flux_All_Sky_Monthly",
-            "title":    "TOA Shortwave Flux (Monthly, All-Sky)",
-            "subtitle": "Terra / CERES",
-            "description": "ceres/CERES_Terra_TOA_Shortwave_Flux_All_Sky_Monthly",
-            "tags":     "top of atmosphere",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CER_SYN1deg-Month_Terra-MODIS",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_Terra_TOA_Shortwave_Flux_All_Sky_Monthly": {
+      "id": "CERES_Terra_TOA_Shortwave_Flux_All_Sky_Monthly",
+      "title": "TOA Shortwave Flux (Monthly, All-Sky)",
+      "subtitle": "Terra / CERES",
+      "description": "ceres/CERES_Terra_TOA_Shortwave_Flux_All_Sky_Monthly",
+      "tags": "top of atmosphere",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CER_SYN1deg-Month_Terra-MODIS",
+      "inactive": true,
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
+  }
 }

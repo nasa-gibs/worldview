@@ -1,22 +1,27 @@
 {
-    "layers": {
-        "MODIS_Aqua_Water_Vapor_5km_Night": {
-            "id":       "MODIS_Aqua_Water_Vapor_5km_Night",
-            "title":    "Water Vapor (Night)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Water_Vapor_5km_Night",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD05_L2_NIGHT",
-            "tracks": [
-                "OrbitTracks_Aqua_Descending"
-                 ],
-            "palette": {
-                "recommended":  ["blue_1"]
-            }
-        }
+  "layers": {
+    "MODIS_Aqua_Water_Vapor_5km_Night": {
+      "id": "MODIS_Aqua_Water_Vapor_5km_Night",
+      "title": "Water Vapor (Night)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Water_Vapor_5km_Night",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD05_L2_NIGHT",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "palette": {
+        "recommended": [
+          "blue_1"
+        ]
+      },
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

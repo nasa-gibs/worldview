@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import util from '../../util/util';

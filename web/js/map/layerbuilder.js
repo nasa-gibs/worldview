@@ -11,8 +11,10 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
+import lodashGet from 'lodash/get';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
+import { createVectorUrl, mergeBreakpointLayerAttributes } from './util';
 import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import {
   isActive as isPaletteActive,
@@ -22,7 +24,7 @@ import {
 import {
   isActive as isVectorStyleActive,
   getKey as getVectorStyleKeys,
-  setStyleFunction,
+  applyStyle,
 } from '../modules/vector-styles/selectors';
 import {
   nearestInterval,
@@ -45,12 +47,12 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
-    const layer = createLayerFunc(def, options, null, state);
+    const layer = createLayerFunc(def, options, null, state, attributes);
     if (!wrapLayer) {
       return layer;
     }
-    const layerNext = createLayerFunc(def, options, 1, state);
-    const layerPrior = createLayerFunc(def, options, -1, state);
+    const layerNext = createLayerFunc(def, options, 1, state, attributes);
+    const layerPrior = createLayerFunc(def, options, -1, state, attributes);
     layer.wv = attributes;
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
@@ -115,6 +117,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
+      if (def.breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
 
       const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
       switch (def.type) {
@@ -155,13 +158,13 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     let previousLayerDate = previousLayer.previousDate;
     let nextLayerDate = previousLayer.nextDate;
     if (!state.animation.isPlaying) {
-      // need to get previous available date to prevent unecessary requests
+      // need to get previous available date to prevent unnecessary requests
       let dateRange;
       if (previousLayer.previousDate && previousLayer.nextDate) {
         const dateTime = date.getTime();
         const previousDateTime = previousLayer.previousDate.getTime();
         const nextDateTime = previousLayer.nextDate.getTime();
-        // if current date is outside previous and next dates avaiable, recheck range
+        // if current date is outside previous and next dates available, recheck range
         if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
           dateRange = datesinDateRanges(def, date);
           const { next, previous } = prevDateInDateRange(def, date, dateRange);
@@ -212,9 +215,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     // Don't key by time if this is a static layer--it is valid for
     // every date.
     if (def.period) {
-      date = util.toISOStringSeconds(
-        util.roundTimeOneMinute(self.getRequestDates(def, options).closestDate),
-      );
+      date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
       style = getPaletteKeys(def.id, undefined, state);
@@ -254,7 +255,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const resolutionLen = matrixSet.resolutions.length;
     const setlimitsLen = matrixSetLimits && matrixSetLimits.length;
 
-    // If number of set limits doens't match sets, we are assuming this product
+    // If number of set limits doesn't match sets, we are assuming this product
     // crosses the antimeridian and don't have a reliable way to calculate a single
     // extent based on multiple set limits.
     if (!matrixSetLimits || setlimitsLen !== resolutionLen || day) {
@@ -302,7 +303,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
     let date = options.date || state.date[activeDateStr];
-    if (def.period === 'subdaily') {
+    if (def.period === 'subdaily' && !date) {
       date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
@@ -345,15 +346,14 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
   };
 
   /**
-   * Create a new Vector Layer
-   *
-   * @method createLayerVector
-   * @static
-   * @param {object} def - Layer Specs
-   * @param {object} options - Layer options
-   * @returns {object} OpenLayers Vector layer
-   */
-  const createLayerVector = function(def, options, day, state) {
+    *
+    * @param {object} def - Layer Specs
+    * @param {object} options - Layer options
+    * @param {number} day
+    * @param {object} state
+    * @param {object} attributes
+    */
+  const createLayerVector = function(def, options, day, state, attributes) {
     const { proj, compare } = state;
     let date;
     let gridExtent;
@@ -362,8 +362,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     let layerExtent;
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-    const activeGroupStr = options.group ? options.group : compare.activeString;
-
     const source = config.sources[def.source];
     gridExtent = selectedProj.maxExtent;
     layerExtent = gridExtent;
@@ -373,6 +371,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
     const matrixSet = source.matrixSets[def.matrixSet];
+
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
@@ -398,63 +397,55 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     }
 
     const layerName = def.layer || def.id;
-    const tms = def.matrixSet;
-
+    const tileMatrixSet = def.matrixSet;
     date = options.date || state.date[activeDateStr];
-    if (day && def.wrapadjacentdays) {
-      date = util.dateAdd(date, 'day', day);
-    }
 
-    const urlParameters = `${'?'
-      + 'TIME='}${
-      util.toISOStringSeconds(util.roundTimeOneMinute(date))
-    }&layer=${
-      layerName
-    }&tilematrixset=${
-      tms
-    }&Service=WMTS`
-      + '&Request=GetTile'
-      + '&Version=1.0.0'
-      + '&FORMAT=application%2Fvnd.mapbox-vector-tile'
-      + '&TileMatrix={z}&TileCol={x}&TileRow={y}';
+    if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
+    const urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
     const wrapX = !!(day === 1 || day === -1);
+    const breakPointLayerDef = def.breakPointLayer;
+    const breakPointResolution = lodashGet(def, 'breakPointLayer.resolutionBreakPoint');
+    const breakPointType = lodashGet(def, 'breakPointLayer.breakPointType');
+    const isMaxBreakPoint = breakPointType === 'max';
+    const isMinBreakPoint = breakPointType === 'min';
+
     const sourceOptions = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
       day,
       format: new MVT(),
-      matrixSet: tms,
+      matrixSet: tileMatrixSet,
       wrapX,
       tileGrid: new OlTileGridTileGrid({
         extent: gridExtent,
         resolutions: matrixSet.resolutions,
         tileSize: matrixSet.tileSize,
         origin: start,
+        sizes: matrixSet.tileMatrices,
+
       }),
     });
-
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: sourceOptions,
       renderMode: 'image',
+      preload: 10,
+      ...isMaxBreakPoint && { maxResolution: breakPointResolution },
+      ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
-
-    if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-      const { vectorStyles } = config;
-      let vectorStyleId;
-
-      vectorStyleId = def.vectorStyle.id;
-      if (state.layers[activeGroupStr]) {
-        const layers = state.layers[activeGroupStr];
-        layers.forEach((layer) => {
-          if (layer.id === layerName && layer.custom) {
-            vectorStyleId = layer.custom;
-          }
-        });
-      }
-      setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
-    }
+    applyStyle(def, layer, state, options);
     layer.wrap = day;
+    layer.wv = attributes;
+    layer.isVector = true;
+    if (breakPointLayerDef) {
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      const layerGroup = new OlLayerGroup({
+        layers: [layer, wmsLayer],
+      });
+      wmsLayer.wv = attributes;
+      return layerGroup;
+    }
     return layer;
   };
 
@@ -548,6 +539,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const layer = new OlLayerTile({
       preload: Infinity,
       extent,
+      ...!!def.resolutionBreakPoint && { minResolution: def.resolutionBreakPoint },
       source: new OlSourceTileWMS(sourceOptions),
     });
     return layer;

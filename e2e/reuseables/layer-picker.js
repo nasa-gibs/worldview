@@ -17,12 +17,13 @@ module.exports = {
     client.expect.element('#legacy-other').to.be.present;
   },
   assertDefaultLayers: (client) => () => {
-    client.expect.elements(layerItem).count.to.equal(6);
+    client.expect.elements(layerItem).count.to.equal(7);
     client.expect.element('#active-Reference_Labels').to.be.present;
     client.expect.element('#active-Reference_Features').to.be.present;
     client.expect.element('#active-Coastlines').to.be.present;
     client.expect.element('#active-VIIRS_SNPP_CorrectedReflectance_TrueColor').to.be.present;
     client.expect.element('#active-MODIS_Aqua_CorrectedReflectance_TrueColor').to.be.present;
     client.expect.element('#active-MODIS_Terra_CorrectedReflectance_TrueColor').to.be.present;
+    client.expect.element('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor').to.be.present;
   },
 };

@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "CYGNSS_L3_Wind_Speed_Daily": {
-            "id":       "CYGNSS_L3_Wind_Speed_Daily",
-            "title":    "Wind Speed (Daily)",
-            "subtitle": "CYGNSS / DDMI",
-            "description": "cygnss/CYGNSS_L3_Wind_Speed_Daily",
-            "group":    "overlays",
-            "tags": "podaac PO.DAAC",
-            "layergroup": [
-              "cygnss"
-            ],
-            "product":  "CYGNSS_L3_V2.1"
-        }
+  "layers": {
+    "CYGNSS_L3_Wind_Speed_Daily": {
+      "id": "CYGNSS_L3_Wind_Speed_Daily",
+      "title": "Wind Speed (Daily)",
+      "subtitle": "CYGNSS / DDMI",
+      "description": "cygnss/CYGNSS_L3_Wind_Speed_Daily",
+      "group": "overlays",
+      "tags": "podaac PO.DAAC",
+      "layergroup": [
+        "cygnss"
+      ],
+      "product": "CYGNSS_L3_V2.1"
     }
+  }
 }

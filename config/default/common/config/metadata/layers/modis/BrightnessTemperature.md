@@ -5,4 +5,4 @@ The MODIS Brightness Temperature, Band 31 layer is the brightness temperature, m
 
 The MODIS Brightness Temperature layer is calculated from MODIS Calibrated Radiances and is available from both the Terra (MOD02) and Aqua (MYD02) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [MODIS - MODIS Calibrated Radiances](http://modis.gsfc.nasa.gov/data/dataprod/mod02.php)
+References: [MODIS - MODIS Calibrated Radiances](https://modis.gsfc.nasa.gov/data/dataprod/mod02.php)

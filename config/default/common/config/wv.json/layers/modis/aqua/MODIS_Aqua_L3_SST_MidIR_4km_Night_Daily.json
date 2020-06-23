@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily": {
-            "id":       "MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily",
-            "title":    "Sea Surface Temperature (L3, Night, Daily, Mid Infrared, 4 km)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily",
-            "group":    "overlays",
-            "tags": "ssc podaac PO.DAAC",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MODIS_AQUA_L3_SST_MID-IR_DAILY_4KM_NIGHTTIME_V2014.0",
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-             ]
-        }
+  "layers": {
+    "MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily": {
+      "id": "MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily",
+      "title": "Sea Surface Temperature (L3, Night, Daily, Mid Infrared, 4 km)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily",
+      "group": "overlays",
+      "tags": "ssc podaac PO.DAAC",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MODIS_AQUA_L3_SST_MID-IR_DAILY_4KM_NIGHTTIME_V2014.0",
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

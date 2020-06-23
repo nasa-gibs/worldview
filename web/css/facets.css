@@ -1,0 +1,122 @@
+.facet-container {
+  flex: 1;
+  max-width: 270px;
+  display: flex;
+  flex-direction: column;
+  & .bag-o-chips {
+    background: #333;
+    margin: 2px 0 1px 2px;
+    padding: 3px;
+  }
+  & .filter-chip {
+    padding: 3px 20px 3px 5px;
+    margin: 4px;
+    background: #ccc;
+    color: #333;
+    border-radius: 20px;
+    position: relative;
+    display: inline-block;
+    font-weight: 500;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+      color: #111;
+      & .svg-inline--fa {
+        color: #222;
+      }
+    }
+    & .svg-inline--fa {
+      position: absolute;
+      right: 2px;
+      color: #666;
+    }
+  }
+  & .inner-container {
+    padding: 10px;
+    margin: 0 0 2px 2px;
+    background-color: #333;
+    overflow-y: auto;
+  }
+  & .facet-wrapper {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: 25px;
+    margin-bottom: 8px;
+
+    &.hidden {
+      display: none;
+    }
+    .no-matches {
+      color: #aaa;
+      margin: 6px;
+      text-align: center;
+    }
+
+    & .svg-inline--fa {
+      cursor: pointer;
+      color: #fff;
+    }
+    .facet-collapse-toggle {
+      position: absolute;
+      right: 0;
+      top: -4px;
+      width: 18px;
+      height: 20px;
+    }
+    .facet-tooltip {
+      position: absolute;
+      left: 0;
+      top: 2px;
+    }
+  }
+}
+.facet-tooltip-content .tooltip-inner {
+  padding: 4px 6px;
+  & > div {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .facet-container {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    & .filter-chip {
+      font-size: 16px;
+      padding: 6px 24px 6px 8px;
+      & .svg-inline--fa {
+        right: 3px;
+        top: 5px;
+      }
+    }
+    & .inner-container {
+      margin-right: 2px;
+      padding: 10px 14px;
+    }
+    & .bag-o-chips {
+      margin-right: 2px;
+    }
+    & .facet-wrapper {
+      margin-bottom: 16px;
+      & .facet-tooltip {
+        top: 4px;
+        height: 20px;
+        width: 18px;
+      }
+      & .facet-collapse-toggle {
+        height: 34px;
+        width: 28px;
+      }
+    }
+  }
+  .apply-facets {
+    min-height: 50px;
+    background: #d54f21;
+    font-size: 16px;
+    border: 1px solid #aa3c16;
+    margin: 4px auto;
+    width: 165px;
+  }
+}

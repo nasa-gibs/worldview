@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Aqua_Sea_Ice": {
-            "id":       "MODIS_Aqua_Sea_Ice",
-            "title":    "Sea Ice",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Sea_Ice",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD29",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-             ]
-        }
+  "layers": {
+    "MODIS_Aqua_Sea_Ice": {
+      "id": "MODIS_Aqua_Sea_Ice",
+      "title": "Sea Ice",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Sea_Ice",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD29",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

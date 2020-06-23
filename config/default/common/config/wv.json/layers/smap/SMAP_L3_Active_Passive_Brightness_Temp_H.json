@@ -1,17 +1,17 @@
 {
-    "layers": {
-        "SMAP_L3_Active_Passive_Brightness_Temp_H": {
-            "id":       "SMAP_L3_Active_Passive_Brightness_Temp_H",
-            "title":    "Disaggregated Brightness Temperature 9 km (L3, Active/Passive, H Polarization)",
-            "subtitle": "SMAP / Radar + Radiometer",
-            "description": "smap/SMAP_L3_Active_Passive_Brightness_Temp_H",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL3SMAP",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L3_Active_Passive_Brightness_Temp_H": {
+      "id": "SMAP_L3_Active_Passive_Brightness_Temp_H",
+      "title": "Disaggregated Brightness Temperature 9 km (L3, Active/Passive, H Polarization)",
+      "subtitle": "SMAP / Radar + Radiometer",
+      "description": "smap/SMAP_L3_Active_Passive_Brightness_Temp_H",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL3SMAP",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

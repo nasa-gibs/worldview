@@ -36,6 +36,9 @@
   "MODIS_Terra_Thermal_Anomalies_Day": "2019-08-01T00:00:00Z",
   "MODIS_Terra_Thermal_Anomalies_Night": "2019-08-01T00:00:00Z",
 
+  "MODIS_Terra_L2_Photosynthetically_Available_Radiation": "2020-06-06T00:00:00Z",
+  "MODIS_Terra_L2_Chlorophyll_A": "2020-06-06T00:00:00Z",
+
   "MODIS_Combined_MAIAC_L3_IsotropicKernelParameters_8Day": "2019-12-19T00:00:00Z",
 
   "MOPITT_CO_Monthly_Surface_Mixing_Ratio_Day": "2019-02-01T00:00:00Z",
@@ -69,4 +72,6 @@
   "VIIRS_NOAA20_Thermal_Anomalies_375m_All": "2020-01-29T00:00:00Z",
   "VIIRS_NOAA20_Thermal_Anomalies_375m_Day": "2020-01-29T00:00:00Z",
   "VIIRS_NOAA20_Thermal_Anomalies_375m_Night": "2020-01-29T00:00:00Z"
+
+
 }

@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "OMI_UV_Aerosol_Index": {
-            "id":       "OMI_UV_Aerosol_Index",
-            "title":    "UV Aerosol Index",
-            "subtitle": "Aura / OMI",
-            "description": "omi/OMI_UV_Aerosol_Index",
-            "group":    "overlays",
-            "layergroup": [
-              "omi"
-            ],
-            "product":  "OMUVBd",
-            "tags":     "ai",
-            "tracks": [
-            "OrbitTracks_Aura_Ascending"
-            ]
-        }
+  "layers": {
+    "OMI_UV_Aerosol_Index": {
+      "id": "OMI_UV_Aerosol_Index",
+      "title": "UV Aerosol Index",
+      "subtitle": "Aura / OMI",
+      "description": "omi/OMI_UV_Aerosol_Index",
+      "group": "overlays",
+      "layergroup": [
+        "omi"
+      ],
+      "product": "OMUVBd",
+      "tags": "ai",
+      "tracks": [
+        "OrbitTracks_Aura_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

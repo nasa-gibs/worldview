@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11": {
-            "id":       "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
-            "title":    "Corrected Reflectance (Bands M3-I3-M11)",
-            "subtitle": "Suomi NPP / VIIRS",
-            "description": "viirs/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
-            "tags":     "false color s-npp snpp 3-6-7",
-            "layergroup": [
-              "viirs"
-            ],
-            "group":    "baselayers",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Suomi_NPP_Ascending"
-            ]
-         }
+  "layers": {
+    "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11": {
+      "id": "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
+      "title": "Corrected Reflectance (Bands M3-I3-M11)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
+      "tags": "false color s-npp snpp 3-6-7",
+      "layergroup": [
+        "viirs"
+      ],
+      "group": "baselayers",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

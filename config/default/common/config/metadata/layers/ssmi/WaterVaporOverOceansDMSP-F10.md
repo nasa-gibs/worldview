@@ -9,4 +9,4 @@ References:
 [RSS SSM/I Ocean Product Grids Daily from DMSP F10 NetCDF](https://doi.org/10.5067/MEASURES/DMSP-F10/SSMI/DATA301);
 [SSM/I and SSMIS Data in NetCDF User's Guide, Global Hydrology Research Center, The University of Alabama in Huntsville, 2012.](https://ghrc.nsstc.nasa.gov/pub/doc/ssmi_netcdf/SSMI_Data_in_NetCDF.docx);
 [WMO Observing System Capability Analysis and Review Tool (OSCAR) - Satellite: DMSP-F10](https://www.wmo-sat.info/oscar/satellites/view/57);
-[Wentz, F., SSM/I Version-7 Calibration Report, Remote Sensing Systems, 2013.](http://images.remss.com/papers/tech_reports/2012_Wentz_011012_Version-7_SSMI_Calibration.pdf)
+[Wentz, F., SSM/I Version-7 Calibration Report, Remote Sensing Systems, 2013.](https://images.remss.com/papers/tech_reports/2012_Wentz_011012_Version-7_SSMI_Calibration.pdf)

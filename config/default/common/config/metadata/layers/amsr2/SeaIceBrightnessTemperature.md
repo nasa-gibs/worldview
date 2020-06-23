@@ -9,4 +9,4 @@ This product uses the JAXA AMSR2 Level-1R input TBs which are calibrated (unifie
 
 The imagery resolution is 2 km and sensor resolution is 6.25 km. The temporal resolution is daily.
 
-References: [AMSR-E/AMSR2 Unified L3 Daily 6.25 km Polar Gridded 89 GHz Brightness Temperatures, Version 1](http://nsidc.org/data/AU_SI6)
+References: [AMSR-E/AMSR2 Unified L3 Daily 6.25 km Polar Gridded 89 GHz Brightness Temperatures, Version 1](https://nsidc.org/data/AU_SI6)

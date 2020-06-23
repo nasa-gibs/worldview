@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "MODIS_Aqua_L2_Chlorophyll_A": {
+      "id": "MODIS_Aqua_L2_Chlorophyll_A",
+      "title": "Chlorophyll A (L2)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L2_Chlorophyll_A",
+      "tags": "ocean color",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

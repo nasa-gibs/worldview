@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "VIIRS_SNPP_Cloud_Optical_Thickness": {
-            "id":       "VIIRS_SNPP_Cloud_Optical_Thickness",
-            "title":    "Cloud Optical Thickness",
-            "subtitle": "Suomi NPP / VIIRS",
-            "description": "viirs/VIIRS_SNPP_Cloud_Optical_Thickness",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "viirs"
-            ],
-            "product":  "CLDPROP_L2_VIIRS_SNPP",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Suomi_NPP_Ascending"
-            ]
-        }
+  "layers": {
+    "VIIRS_SNPP_Cloud_Optical_Thickness": {
+      "id": "VIIRS_SNPP_Cloud_Optical_Thickness",
+      "title": "Cloud Optical Thickness",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_Cloud_Optical_Thickness",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "viirs"
+      ],
+      "product": "CLDPROP_L2_VIIRS_SNPP",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

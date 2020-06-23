@@ -1,18 +1,21 @@
 {
-    "layers": {
-        "MODIS_Combined_L3_White_Sky_Albedo_Daily": {
-            "id":       "MODIS_Combined_L3_White_Sky_Albedo_Daily",
-            "title":    "White Sky Albedo (L3, Daily)",
-            "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/combined/MODIS_Combined_L3_White_Sky_Albedo_Daily",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_combined"
-            ],
-            "product":  "MCD43A3",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Combined_L3_White_Sky_Albedo_Daily": {
+      "id": "MODIS_Combined_L3_White_Sky_Albedo_Daily",
+      "title": "White Sky Albedo (L3, Daily)",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_L3_White_Sky_Albedo_Daily",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_combined"
+      ],
+      "product": "MCD43A3",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

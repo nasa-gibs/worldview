@@ -1,15 +1,15 @@
 {
-    "layers": {
-        "SMAP_L1_Passive_Brightness_Temp_Aft_H": {
-            "id":       "SMAP_L1_Passive_Brightness_Temp_Aft_H",
-            "title":    "Uncorrected Brightness Temperature 36 km (L1, Passive, Aft, H Polarization)",
-            "subtitle": "SMAP / Radiometer",
-            "description": "smap/SMAP_L1_Passive_Brightness_Temp_Aft_H",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL1CTB"
-        }
+  "layers": {
+    "SMAP_L1_Passive_Brightness_Temp_Aft_H": {
+      "id": "SMAP_L1_Passive_Brightness_Temp_Aft_H",
+      "title": "Uncorrected Brightness Temperature 36 km (L1, Passive, Aft, H Polarization)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L1_Passive_Brightness_Temp_Aft_H",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL1CTB"
     }
+  }
 }

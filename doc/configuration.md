@@ -392,9 +392,9 @@ The minimum set of required properties are as follows:
 
 To display story steps in the in-progress modal, a **steps** object should exist with the following properties:
 - **description**: points to a metadata markdown file located in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`
-- **stepLink**: The URL parameters of a linked Worldview instance seperated by an `&` symbol (i.e. `p=geographic&t1=2018-12-30`)
+- **stepLink**: The URL parameters of a linked Worldview instance separated by an `&` symbol (i.e. `p=geographic&t1=2018-12-30`)
 Optional **steps** parameter:
-- **transition**: Advanced Configuration. An object containing an **element** and a custom **action**. These transistions occur between changing steps; these require custom code to target the element and an action to action upon that element.
+- **transition**: Advanced Configuration. An object containing an **element** and a custom **action**. These transitions occur between changing steps; these require custom code to target the element and an action to action upon that element.
 i.e. the following code will play the animation if the animation widget is present.
 
 ```json
