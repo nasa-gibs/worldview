@@ -73,8 +73,8 @@ class TileRect extends PureComponent {
   * @returns {void}
   */
   showHover = (e) => {
-    const { item, index } = this.props;
-    this.props.showHover(e, item.rawDate, item.rawNextDate, index);
+    const { item, index, showHover } = this.props;
+    showHover(e, item.rawDate, item.rawNextDate, index);
   }
 
   render() {

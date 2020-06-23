@@ -9,20 +9,33 @@ import { timeScaleOptions } from '../../modules/date/constants';
  * @class TimelineDraggerRange
  */
 class TimelineDraggerRange extends PureComponent {
-  /*
-   * @constructor
-   */
   constructor(props) {
     super(props);
+    const { startLocation } = props;
     this.state = {
       width: 0,
-      startLocation: this.props.startLocation,
-      endLocation: this.props.endLocation,
-      previousStartLocation: this.props.startLocation,
+      startLocation,
+      previousStartLocation: startLocation,
     };
 
     this.handleDrag = this.handleDrag.bind(this);
     this.handleDraggerClick = this.handleDraggerClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.checkWidth();
+  }
+
+  componentDidUpdate(prevProps) {
+    // update state and checkWidth only on startLocation and/or endLocation changes
+    const { startLocation, endLocation } = this.props;
+    if (
+      prevProps.startLocation !== startLocation
+      || prevProps.endLocation !== endLocation
+    ) {
+      this.updateExtent(this.props);
+      this.checkWidth();
+    }
   }
 
   /*
@@ -33,16 +46,17 @@ class TimelineDraggerRange extends PureComponent {
    * @return {void}
    */
   checkWidth() {
-    let start = this.props.startLocation;
-    let end = this.props.endLocation;
-    const max = this.props.max.width;
+    const { startLocation, endLocation, max } = this.props;
+    let start = startLocation;
+    let end = endLocation;
+    const maxWidth = max.width;
     let width;
 
     if (start < 0) {
       start = 0;
     }
-    if (end > max) {
-      end = max;
+    if (end > maxWidth) {
+      end = maxWidth;
     }
     width = end - start;
     if (width < 0) {
@@ -76,6 +90,7 @@ class TimelineDraggerRange extends PureComponent {
       startLocation,
       timelineEndDateLimit,
       timeScale,
+      onDrag,
     } = this.props;
     let { endLocationDate } = this.props;
     let timelineEndDate = new Date(timelineEndDateLimit);
@@ -138,7 +153,7 @@ class TimelineDraggerRange extends PureComponent {
       }
     }
 
-    this.props.onDrag(deltaX, deltaStart);
+    onDrag(deltaX, deltaStart);
   }
 
   /*
@@ -150,11 +165,12 @@ class TimelineDraggerRange extends PureComponent {
    * @return {number}
    */
   handleStartPositionRestriction() {
+    const { startLocation, deltaStart } = this.props;
     // if startLocation is in the past prior to min past of current viewable timeline
-    if (this.props.startLocation <= 0) {
-      return -this.props.deltaStart;
+    if (startLocation <= 0) {
+      return -deltaStart;
     }
-    return this.props.startLocation - this.props.deltaStart;
+    return startLocation - deltaStart;
   }
 
   /*
@@ -166,11 +182,12 @@ class TimelineDraggerRange extends PureComponent {
    * @return {void}
    */
   handleDraggerClick(e) {
+    const { startLocation, previousStartLocation } = this.state;
     e.preventDefault();
     // compare start locations to check if range has been dragged vs. clicked
     if (
-      this.state.startLocation.toFixed(3)
-      !== this.state.previousStartLocation.toFixed(3)
+      startLocation.toFixed(3)
+      !== previousStartLocation.toFixed(3)
     ) {
       this.setState((prevState) => ({
         previousStartLocation: prevState.startLocation,
@@ -178,53 +195,41 @@ class TimelineDraggerRange extends PureComponent {
     }
   }
 
-  componentDidMount() {
-    this.checkWidth();
-  }
-
   // update state - used in componentDidUpdate
   updateExtent(nextProps) {
     this.setState({
       startLocation: nextProps.startLocation,
-      endLocation: nextProps.endLocation,
     });
-  }
-
-  componentDidUpdate(prevProps) {
-    // update state and checkWidth only on startLocation and/or endLocation changes
-    if (
-      prevProps.startLocation !== this.props.startLocation
-      || prevProps.endLocation !== this.props.endLocation
-    ) {
-      this.updateExtent(this.props);
-      this.checkWidth();
-    }
   }
 
   /*
    * @method render
    */
   render() {
+    const {
+      onStop, height, color, opacity, draggerID,
+    } = this.props;
+    const { width } = this.state;
     return (
       <Draggable
         handle=".dragger-range"
         axis="x"
         position={null}
         defaultPosition={{ x: 0, y: 11 }}
-        onStop={this.props.onStop}
+        onStop={onStop}
         onDrag={this.handleDrag}
       >
         <rect
           x={this.handleStartPositionRestriction()}
-          fill={this.props.color}
-          width={this.state.width}
+          fill={color}
+          width={width}
           style={{
-            fillOpacity: this.props.opacity,
+            fillOpacity: opacity,
             cursor: 'pointer',
           }}
-          height={this.props.height}
+          height={height}
           className="dragger-range"
-          id={this.props.draggerID}
+          id={draggerID}
           onClick={this.handleDraggerClick}
         />
       </Draggable>
@@ -239,13 +244,11 @@ TimelineDraggerRange.propTypes = {
   endLocation: PropTypes.number,
   endLocationDate: PropTypes.object,
   height: PropTypes.number,
-  id: PropTypes.string,
   max: PropTypes.object,
   onDrag: PropTypes.func,
   onStop: PropTypes.func,
   opacity: PropTypes.number,
   startLocation: PropTypes.number,
-  startLocationDate: PropTypes.object,
   timelineEndDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
   width: PropTypes.number,

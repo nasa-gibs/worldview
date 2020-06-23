@@ -7,7 +7,7 @@
             "sources": {
                 "Terra/MISR": {
                     "id": "terra-misr",
-                    "title": "Terra / MISR",
+                    "title": "Terra/MISR",
                     "description": "misr/Radiance",
                     "image": "",
                     "settings": [
@@ -35,7 +35,7 @@
                 },
                     "CALISPO/WFC": {
                         "id": "calipso-wfc",
-                        "title": "CALIPSO / WFC",
+                        "title": "CALIPSO/WFC",
                         "description": "calipso/Radiance",
                         "image": "",
                         "settings": [

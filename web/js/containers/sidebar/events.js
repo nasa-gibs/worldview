@@ -14,7 +14,7 @@ import {
   deselectEvent,
 } from '../../modules/natural-events/actions';
 import util from '../../util/util';
-import { EventsAlertModalBody } from '../../components/events/alert-body';
+import EventsAlertModalBody from '../../components/events/alert-body';
 import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
@@ -107,16 +107,20 @@ class Events extends React.Component {
 
     return (
       <>
-        {showAlert && this.state.showAlert ? (
-          <AlertUtil
-            id="event-alert"
-            isOpen
-            onClick={openAlertModal}
-            onDismiss={this.dismissAlert}
-            message="Events may not be visible at all times."
-          />
-        )
-          : ''}
+        {
+          // eslint-disable-next-line react/destructuring-assignment
+          showAlert && this.state.showAlert
+            ? (
+              <AlertUtil
+                id="event-alert"
+                isOpen
+                onClick={openAlertModal}
+                onDismiss={this.dismissAlert}
+                message="Events may not be visible at all times."
+              />
+            )
+            : ''
+        }
         <Scrollbars
           style={{ maxHeight: `${height}px` }}
           scrollBarVerticalTop={scrollBarVerticalTop}
@@ -281,14 +285,12 @@ Events.propTypes = {
   isMobile: PropTypes.bool,
   openAlertModal: PropTypes.func,
   requestCategories: PropTypes.func,
-  requestedEvents: PropTypes.object,
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
-  showAll: PropTypes.bool,
   sources: PropTypes.array,
   visibleEvents: PropTypes.object,
   visibleWithinMapExtent: PropTypes.object,

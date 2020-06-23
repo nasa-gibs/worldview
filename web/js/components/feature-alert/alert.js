@@ -1,6 +1,6 @@
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { openCustomContent } from '../../modules/modal/actions';
 import util from '../../util/util';
 
@@ -52,10 +52,6 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
 });
-
-FeaturedAlert.propTypes = {
-  showModal: PropTypes.func,
-};
 
 export default connect(
   null,

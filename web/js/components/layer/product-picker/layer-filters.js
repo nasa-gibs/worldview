@@ -30,7 +30,6 @@ const LayerFilters = (props) => {
 
 LayerFilters.propTypes = {
   filterByAvailable: PropTypes.bool,
-  numResults: PropTypes.number,
   selectedDate: PropTypes.object,
   toggleFilterByAvailable: PropTypes.func,
 };

@@ -19,14 +19,14 @@ export const getISODateFormatted = (date) => `${new Date(date).toISOString().spl
 
 // timeRange extension to pop NUM times
 export const removeBackMultipleInPlace = (timeRange, num) => {
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < num; i += 1) {
     timeRange.pop();
   }
 };
 
 // timeRange extension to shift NUM times
 export const removeFrontMultipleInPlace = (timeRange, num) => {
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < num; i += 1) {
     timeRange.shift();
   }
 };

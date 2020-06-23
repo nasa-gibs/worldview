@@ -4,7 +4,7 @@ import { transform } from 'ol/proj';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 
-class OlCoordinates extends React.Component {
+export default class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,9 +20,16 @@ class OlCoordinates extends React.Component {
     this.registerMouseListeners();
   }
 
+  componentWillUnmount() {
+    const { mouseEvents } = this.props;
+    mouseEvents.off('mousemove', this.mouseMove);
+    mouseEvents.off('mouseout', this.mouseOut);
+  }
+
   registerMouseListeners() {
-    this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('mouseout', this.mouseOut);
+    const { mouseEvents } = this.props;
+    mouseEvents.on('mousemove', this.mouseMove);
+    mouseEvents.on('mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {
@@ -33,6 +40,7 @@ class OlCoordinates extends React.Component {
       return;
     }
     let pcoord = transform(coord, crs, 'EPSG:4326');
+    // eslint-disable-next-line prefer-const
     let [lon, lat] = pcoord;
     if (Math.abs(lat) > 90) {
       this.clearCoord();
@@ -78,18 +86,21 @@ class OlCoordinates extends React.Component {
   }
 
   render() {
+    const {
+      hasMouse, format, latitude, longitude, crs,
+    } = this.state;
     // Don't render until a mouse is being used
-    if (!this.state.hasMouse) {
+    if (!hasMouse) {
       return null;
     }
 
     return (
       <div id="ol-coords-case">
         <Coordinates
-          format={this.state.format}
-          latitude={this.state.latitude}
-          longitude={this.state.longitude}
-          crs={this.state.crs}
+          format={format}
+          latitude={latitude}
+          longitude={longitude}
+          crs={crs}
           onFormatChange={this.changeFormat}
         />
       </div>
@@ -100,5 +111,3 @@ class OlCoordinates extends React.Component {
 OlCoordinates.propTypes = {
   mouseEvents: PropTypes.object.isRequired,
 };
-
-export default OlCoordinates;

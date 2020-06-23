@@ -2,7 +2,7 @@ import lodashEach from 'lodash/each';
 import * as olExtent from 'ol/extent';
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 
-export function mapPrecacheTile(models, config, cache, parent) {
+export default function mapPrecacheTile(models, config, cache, parent) {
   /**
    * Loads the layers that are needed for any one date.
    * Checks the cache to see if a layer has already been added to cache.
@@ -13,23 +13,14 @@ export function mapPrecacheTile(models, config, cache, parent) {
    */
   /* eslint-disable no-restricted-globals */
   self.promiseDay = function(date) {
-    let viewState;
-    let frameState;
-    let pixelRatio;
-    let layers;
-    let map;
-    let promiseArray;
-
-    layers = getActiveLayersWithData(date);
-    map = parent.selected;
-    frameState = parent.selected.frameState_; // OL object describing the current map frame
-    pixelRatio = frameState.pixelRatio;
-    viewState = frameState.viewState;
-    promiseArray = layers.map((def) => {
-      let key;
+    const layers = getActiveLayersWithData(date);
+    const map = parent.selected;
+    const frameState = parent.selected.frameState_; // OL object describing the current map frame
+    const { pixelRatio } = frameState;
+    const { viewState } = frameState;
+    const promiseArray = layers.map((def) => {
       let layer;
-
-      key = parent.layerKey(def, {
+      const key = parent.layerKey(def, {
         date,
       });
       layer = cache.getItem(key);
@@ -57,9 +48,8 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @return {array}       An array of visible layers within the date.
    */
   const getActiveLayersWithData = function(date) {
-    let layers;
     const arra = [];
-    layers = models.layers.get();
+    const layers = models.layers.get();
     lodashEach(layers, (layer) => {
       if (layer.visible && new Date(layer.startDate > date)) {
         arra.push(layer);
@@ -125,8 +115,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
   const promiseLayerGroup = function(layer, viewState, pixelRatio, map) {
     let extent;
     return new Promise((resolve, reject) => {
-      let layers; let
-        layerPromiseArray;
+      let layers;
       // Current layer's 3 layer array (prev, current, next days)
       layers = layer.values_.layers;
       if (layer.values_.layers) {
@@ -136,7 +125,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
       }
       // Calculate the extent of each layer in the layer group
       // and create a promiseTileLayer for prev, current, next day
-      layerPromiseArray = layers.map((layer) => {
+      const layerPromiseArray = layers.map((layer) => {
         extent = calculateExtent(
           layer.getExtent(),
           map.getView().calculateExtent(map.getSize()),
@@ -180,8 +169,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
           renderer.zDirection,
         );
         tileGrid.forEachTileCoord(extent, currentZ, (tileCoord) => {
-          let tile;
-          tile = tileSource.getTile(
+          const tile = tileSource.getTile(
             tileCoord[0],
             tileCoord[1],
             tileCoord[2],
@@ -191,7 +179,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
           tile.load();
           const loader = function(e) {
             if (e.type === 'tileloadend') {
-              --i;
+              i -= 1;
               if (i === 0) {
                 resolve();
               }
@@ -204,7 +192,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
           };
           tileSource.on('tileloadend', loader);
           tileSource.on('tileloaderror', loader);
-          ++i;
+          i += 1;
         });
       }
     });

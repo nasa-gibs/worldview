@@ -18,6 +18,11 @@ class DeltaInput extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    const { deltaValue } = this.props;
+    this.setValue(deltaValue);
+  }
+
   onKeyInput = (e) => {
     let { value } = e.target;
     if (value === '' || regex.test(value)) {
@@ -51,11 +56,12 @@ class DeltaInput extends PureComponent {
   }
 
   handleBlur = () => {
+    const { changeDelta } = this.props;
     const { value } = this.state;
     if (value >= 1 && value < 1000) {
       this.setState({
         valid: true,
-      }, this.props.changeDelta(value));
+      }, changeDelta(value));
     } else {
       this.setState({
         valid: false,
@@ -67,10 +73,6 @@ class DeltaInput extends PureComponent {
     this.setState({
       value,
     });
-  }
-
-  componentDidMount() {
-    this.setValue(this.props.deltaValue);
   }
 
   render() {

@@ -12,23 +12,34 @@ class ModalInProgress extends React.Component {
   }
 
   render() {
-    const { description } = this.props;
+    const {
+      className,
+      currentStory,
+      description,
+      modalInProgress,
+      endTour,
+      showTourAlert,
+      currentStep,
+      totalSteps,
+      decreaseStep,
+      incrementStep,
+    } = this.props;
 
     return (
       <div>
         <Modal
-          isOpen={this.props.modalInProgress}
-          toggle={this.props.endTour}
-          onClosed={this.props.showTourAlert}
+          isOpen={modalInProgress}
+          toggle={endTour}
+          onClosed={showTourAlert}
           wrapClassName="tour tour-in-progress"
           className={
-            `${this.props.className} ${this.props.currentStory.type}`
+            `${className} ${currentStory.type}`
           }
           backdrop={false}
           keyboard={false}
         >
-          <ModalHeader toggle={this.props.endTour} charCode="">
-            {this.props.currentStory.title}
+          <ModalHeader toggle={endTour} charCode="">
+            {currentStory.title}
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>
           <ModalBody>
@@ -41,10 +52,10 @@ class ModalInProgress extends React.Component {
           </ModalBody>
           <ModalFooter>
             <Steps
-              currentStep={this.props.currentStep}
-              totalSteps={this.props.totalSteps}
-              decreaseStep={this.props.decreaseStep}
-              incrementStep={this.props.incrementStep}
+              currentStep={currentStep}
+              totalSteps={totalSteps}
+              decreaseStep={decreaseStep}
+              incrementStep={incrementStep}
             />
           </ModalFooter>
         </Modal>

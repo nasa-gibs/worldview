@@ -27,8 +27,8 @@ export const defaultState = {
 };
 export function getInitialState(config) {
   return lodashAssign({}, defaultState, {
-    startDate: util.dateAdd(config.pageLoadTime, 'day', -7),
-    endDate: config.pageLoadTime,
+    startDate: util.dateAdd(config.initialDate, 'day', -7),
+    endDate: config.initialDate,
   });
 }
 
@@ -91,6 +91,13 @@ export function animationReducer(state = defaultState, action) {
       if (action.keyCode === 32 && state.isActive) {
         return lodashAssign({}, state, {
           isPlaying: !state.isPlaying,
+        });
+      }
+      if (action.keyCode === 27) {
+        return lodashAssign({}, state, {
+          isActive: false,
+          gifActive: false,
+          isPlaying: false,
         });
       }
       return state;

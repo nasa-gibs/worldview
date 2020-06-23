@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
-                    "title": "Aqua / AIRS",
+                    "title": "Aqua/AIRS",
                     "description": "airs/Temperature",
                     "image": "",
                     "settings": [
@@ -35,7 +35,7 @@
                 },
                 "Aura/MLS": {
                     "id": "aura-mls",
-                    "title": "Aura / MLS",
+                    "title": "Aura/MLS",
                     "description": "mls/Temperature",
                     "image": "",
                     "settings": [

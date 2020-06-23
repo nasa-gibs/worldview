@@ -217,7 +217,7 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
       const data = config.vectorData[vectorDataId];
       const properties = data.mvt_properties;
       const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
-      const titleObj = lodashFind(properties, { IsLabel: 'True' });
+      const titleObj = lodashFind(properties, 'IsLabel');
       const titleKey = titleObj.Identifier;
 
       const uniqueIdentifier = features[uniqueIdentifierKey];

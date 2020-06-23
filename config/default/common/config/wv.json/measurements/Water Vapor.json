@@ -7,7 +7,7 @@
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
-                    "title": "Aqua / MODIS",
+                    "title": "Aqua/MODIS",
                     "description": "modis/WaterVapor",
                     "image": "",
                     "settings": [
@@ -19,7 +19,7 @@
                 },
                 "Aura/MLS": {
                     "id": "aura-mls",
-                    "title": "Aura / MLS",
+                    "title": "Aura/MLS",
                     "description": "mls/WaterVapor",
                     "image": "",
                     "settings": [
@@ -31,7 +31,7 @@
                 },
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/WaterVapor",
                     "image": "",
                     "settings": [
@@ -41,9 +41,9 @@
                         "OrbitTracks_Terra_Descending"
                     ]
                   },
-                  "Terra and Aqua/MODIS": {
-                      "id": "terra-aqua-modis",
-                      "title": "Terra and Aqua / MODIS",
+                  "Aqua and Terra/MODIS": {
+                      "id": "aqua-terra-modis",
+                      "title": "Aqua and Terra/MODIS",
                       "description": "modis/combined/WaterVapor",
                       "image": "",
                       "settings": [
@@ -52,7 +52,7 @@
                 },
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
-                    "title": "GCOM-W1 / AMSR2",
+                    "title": "GCOM-W1/AMSR2",
                     "description": "amsr2/WaterVapor",
                     "image": "",
                     "settings": [

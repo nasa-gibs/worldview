@@ -27,18 +27,21 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
+    const { errorAlert } = this.props;
     this.setState({ error: true });
     // Display fallback UI
-    this.props.errorAlert();
+    errorAlert();
     // log the error
     console.warn(error, info);
   }
 
   render() {
-    if (this.state.error) {
+    const { error } = this.state;
+    const { children } = this.props;
+    if (error) {
       return '';
     }
-    return this.props.children;
+    return children;
   }
 }
 const mapDispatchToProps = (dispatch) => ({

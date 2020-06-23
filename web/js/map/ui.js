@@ -27,14 +27,14 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
-import { MapRotate } from './rotation';
-import { mapDateLineBuilder } from './datelinebuilder';
-import { mapLayerBuilder } from './layerbuilder';
-import { MapRunningData } from './runningdata';
-import { mapPrecacheTile } from './precachetile';
+import MapRotate from './rotation';
+import mapDateLineBuilder from './datelinebuilder';
+import mapLayerBuilder from './layerbuilder';
+import MapRunningData from './runningdata';
+import mapPrecacheTile from './precachetile';
 import { mapUtilZoomAction, getActiveLayerGroup } from './util';
-import { mapCompare } from './compare/compare';
-import { measure } from './measure/ui';
+import mapCompare from './compare/compare';
+import measure from './measure/ui';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
@@ -58,9 +58,7 @@ import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 
-export function mapui(models, config, store, ui) {
-  let layerBuilder; let
-    createLayer;
+export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
   const selector = `#${id}`;
   const animationDuration = 250;
@@ -85,7 +83,7 @@ export function mapui(models, config, store, ui) {
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
   self.events = util.events();
-  layerBuilder = self.layerBuilder = mapLayerBuilder(
+  const layerBuilder = self.layerBuilder = mapLayerBuilder(
     models,
     config,
     cache,
@@ -93,7 +91,7 @@ export function mapui(models, config, store, ui) {
     store,
   );
   self.layerKey = layerBuilder.layerKey;
-  createLayer = self.createLayer = layerBuilder.createLayer;
+  const createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
   self.selectedVectors = {};
   /**
@@ -228,12 +226,17 @@ export function mapui(models, config, store, ui) {
     }
     self.selected = self.proj[proj.id];
     const map = self.selected;
-    const currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
-    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: currentRotation });
+
+    const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
+
+    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
+
+    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: start ? rotationStart : currentRotation });
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
-    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
+    if (isProjectionRotatable) {
       rotation.setResetButton(currentRotation);
     }
 
@@ -242,11 +245,13 @@ export function mapui(models, config, store, ui) {
     // using the previous value.
     showMap(map);
     map.updateSize();
+    if (isProjectionRotatable) {
+      rotation.setResetButton(currentRotation);
+    }
 
     if (self.selected.previousCenter) {
       self.selected.setCenter(self.selected.previousCenter);
     }
-
     // This is awkward and needs a refactoring
     if (start) {
       const projId = proj.selected.id;
@@ -263,11 +268,21 @@ export function mapui(models, config, store, ui) {
           store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
         };
       }
+      if (projId !== 'geographic') {
+        callback = () => {
+          const map = self.selected;
+          const view = map.getView();
+          rotation.setResetButton(rotationStart);
+          view.setRotation(rotationStart);
+        };
+      }
       if (extent) {
         map.getView().fit(extent, {
           constrainResolution: false,
           callback,
         });
+      } else if (rotationStart && projId !== 'geographic') {
+        callback();
       }
     }
     updateExtent();
@@ -880,15 +895,8 @@ export function mapui(models, config, store, ui) {
     const { date, compare } = state;
     const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
     dateSelected = dateSelected || date[activeDate];
-    let id;
-    let $map;
-    let scaleMetric;
-    let scaleImperial;
-    let rotateInteraction;
-    let map;
-    let mobileRotation;
-    id = `wv-map-${proj.id}`;
-    $map = $('<div></div>')
+    const id = `wv-map-${proj.id}`;
+    const $map = $('<div></div>')
       .attr('id', id)
       .attr('data-proj', proj.id)
       .addClass('wv-map')
@@ -896,31 +904,26 @@ export function mapui(models, config, store, ui) {
     $(selector).append($map);
 
     // Create two specific controls
-    scaleMetric = new OlControlScaleLine({
+    const scaleMetric = new OlControlScaleLine({
       className: 'wv-map-scale-metric',
       units: 'metric',
     });
-    scaleImperial = new OlControlScaleLine({
+    const scaleImperial = new OlControlScaleLine({
       className: 'wv-map-scale-imperial',
       units: 'imperial',
     });
-
-    rotateInteraction = new OlInteractionDragRotate({
+    const rotateInteraction = new OlInteractionDragRotate({
       condition: altKeyOnly,
       duration: animationDuration,
     });
-    mobileRotation = new OlInteractionPinchRotate({
+    const mobileRotation = new OlInteractionPinchRotate({
       duration: animationDuration,
     });
-    map = new OlMap({
+    const map = new OlMap({
       view: new OlView({
         maxResolution: proj.resolutions[0],
         projection: olProj.get(proj.crs),
         center: proj.startCenter,
-        rotation:
-          proj.id === 'geographic' || proj.id === 'webmerc'
-            ? 0.0
-            : models.map.rotation,
         zoom: proj.startZoom,
         maxZoom: proj.numZoomLevels,
         enableRotation: true,
@@ -953,6 +956,7 @@ export function mapui(models, config, store, ui) {
       scaleMetric,
       scaleImperial,
     };
+    map.proj = proj.id;
     createZoomButtons(map, proj);
     createMousePosSel(map, proj);
 
@@ -984,6 +988,8 @@ export function mapui(models, config, store, ui) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
           self.events.trigger('zooming');
+          break;
+        default:
           break;
       }
     });
@@ -1106,8 +1112,6 @@ export function mapui(models, config, store, ui) {
     let hoverThrottle;
 
     function onMouseMove(e) {
-      let coords;
-      let pixels;
       const state = store.getState();
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
@@ -1122,8 +1126,8 @@ export function mapui(models, config, store, ui) {
       ) {
         return;
       }
-      pixels = map.getEventPixel(e.originalEvent);
-      coords = map.getCoordinateFromPixel(pixels);
+      const pixels = map.getEventPixel(e.originalEvent);
+      const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
       // setting a limit on running-data retrievel

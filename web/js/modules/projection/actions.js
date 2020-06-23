@@ -1,6 +1,6 @@
 import { CHANGE_PROJECTION } from './constants';
 
-export function changeProjection(id) {
+export default function changeProjection(id) {
   return (dispatch, getState) => {
     const { config } = getState();
     const proj = config.projections[id];

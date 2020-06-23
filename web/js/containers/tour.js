@@ -21,7 +21,7 @@ import { layersParse12 } from '../modules/layers/util';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
 
 import ErrorBoundary from './error-boundary';
-import { history } from '../main';
+import history from '../main';
 import util from '../util/util';
 
 class Tour extends React.Component {
@@ -68,11 +68,12 @@ class Tour extends React.Component {
 
   toggleModalStart(e) {
     e.preventDefault();
+    const { endTour } = this.props;
     this.setState((prevState) => {
       const toggleModal = !prevState.modalStart;
       // if closing modal
       if (!toggleModal) {
-        this.props.endTour();
+        endTour();
       }
       return {
         modalStart: toggleModal,
@@ -81,6 +82,9 @@ class Tour extends React.Component {
   }
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
+    const {
+      config, renderedPalettes, selectTour, processStepLink,
+    } = this.props;
     if (e) e.preventDefault();
     this.setState({
       currentStep: 1,
@@ -93,20 +97,20 @@ class Tour extends React.Component {
       currentStoryId,
       totalSteps: currentStory.steps.length,
     });
-    this.props.selectTour(currentStoryId);
+    selectTour(currentStoryId);
     this.fetchMetadata(currentStory, 0);
     const storyStep = currentStory.steps[0];
     const transition = getTransitionAttr(
       storyStep.transition.element,
       storyStep.transition.action,
     );
-    this.props.processStepLink(
+    processStepLink(
       currentStoryId,
       1,
       currentStory.steps.length,
       `${storyStep.stepLink}&tr=${currentStoryId}${transition}`,
-      this.props.config,
-      this.props.renderedPalettes,
+      config,
+      renderedPalettes,
     );
   }
 
@@ -138,9 +142,10 @@ class Tour extends React.Component {
   }
 
   resetTour(e) {
+    const { startTour } = this.props;
     if (e) e.preventDefault();
     // Tour startup modal shown by clicking "More Stories" button at end of story
-    this.props.startTour();
+    startTour();
     googleTagManager.pushEvent({
       event: 'tour_more_stories_button',
     });
@@ -161,6 +166,7 @@ class Tour extends React.Component {
   }
 
   toggleModalComplete(e) {
+    const { currentStoryId } = this.state;
     e.preventDefault();
     this.setState((prevState) => ({
       modalComplete: !prevState.modalComplete,
@@ -171,7 +177,7 @@ class Tour extends React.Component {
     googleTagManager.pushEvent({
       event: 'tour_completed',
       story: {
-        id: this.state.currentStoryId,
+        id: currentStoryId,
       },
     });
   }
@@ -183,6 +189,9 @@ class Tour extends React.Component {
       totalSteps,
       currentStoryId,
     } = this.state;
+    const {
+      config, renderedPalettes, processStepLink,
+    } = this.props;
 
     if (currentStep + 1 <= totalSteps) {
       const newStep = currentStep + 1;
@@ -193,7 +202,7 @@ class Tour extends React.Component {
         storyStep.transition.element,
         storyStep.transition.action,
       );
-      this.props.processStepLink(
+      processStepLink(
         currentStoryId,
         newStep,
         currentStory.steps.length,
@@ -201,8 +210,8 @@ class Tour extends React.Component {
         }&tr=${
           currentStoryId
         }${transition}`,
-        this.props.config,
-        this.props.renderedPalettes,
+        config,
+        renderedPalettes,
       );
     }
     if (currentStep + 1 === totalSteps + 1) {
@@ -212,7 +221,12 @@ class Tour extends React.Component {
   }
 
   decreaseStep(e) {
-    const { currentStep, currentStory, currentStoryId } = this.state;
+    const {
+      config, renderedPalettes, processStepLink,
+    } = this.props;
+    const {
+      currentStep, currentStory, currentStoryId,
+    } = this.state;
     if (currentStep - 1 >= 1) {
       const newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
@@ -222,7 +236,7 @@ class Tour extends React.Component {
         storyStep.transition.element,
         storyStep.transition.action,
       );
-      this.props.processStepLink(
+      processStepLink(
         currentStoryId,
         newStep,
         currentStory.steps.length,
@@ -230,8 +244,8 @@ class Tour extends React.Component {
         }&tr=${
           currentStoryId
         }${transition}`,
-        this.props.config,
-        this.props.renderedPalettes,
+        config,
+        renderedPalettes,
       );
     } else {
       this.setState({
@@ -244,19 +258,22 @@ class Tour extends React.Component {
 
   endTour(e) {
     e.preventDefault();
-    if (!this.state.showDisabledAlert) {
-      this.props.endTour();
+    const { showDisabledAlert } = this.state;
+    const { endTour } = this.props;
+    if (!showDisabledAlert) {
+      endTour();
     } else {
       this.setState({ tourEnded: true });
     }
   }
 
   renderSupportAlert() {
+    const { endTour } = this.props;
     return (
       <AlertUtil
         isOpen
         timeout={10000}
-        onDismiss={this.props.endTour}
+        onDismiss={endTour}
         iconClassName=" "
         message="Sorry, this tour is no longer supported."
       />
@@ -264,11 +281,12 @@ class Tour extends React.Component {
   }
 
   renderDisableAlert() {
+    const { endTour } = this.props;
     return (
       <AlertUtil
         isOpen
         timeout={10000}
-        onDismiss={this.props.endTour}
+        onDismiss={endTour}
         iconClassName=" "
         message="To view these tours again, click the 'Explore Worldview' link in the “i” menu."
       />
@@ -507,8 +525,6 @@ Tour.propTypes = {
   showTourAlert: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
-  currentStep: PropTypes.number,
-  currentStory: PropTypes.object,
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
@@ -517,5 +533,4 @@ Tour.propTypes = {
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   startTour: PropTypes.func,
-  totalSteps: PropTypes.number,
 };

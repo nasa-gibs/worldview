@@ -14,6 +14,7 @@ parser = OptionParser(usage="Usage: %s <wv.json> <overrides_file>" % prog)
 (options, args) = parser.parse_args()
 wv_json_file = args[0]
 overrides_file = args[1]
+features_file = args[2]
 
 override_dates_dict = {}
 bad_snapshots = []
@@ -187,6 +188,11 @@ def get_snapshots(layer):
 
 
 if __name__ == "__main__":
+  # Check to see if this feature is enabled in features.json before continuing
+  with open(features_file, 'rt') as features_json:
+    features_dict = json.load(features_json)
+    if features_dict['features']['previewSnapshots'] is False:
+      sys.exit();
 
   # Allow manual configuration of layer ID to specific date to generate desired preview
   with open(overrides_file, 'rt') as overrides_json:
@@ -212,15 +218,15 @@ if __name__ == "__main__":
     except Exception as e:
       print("%s:" % (e))
 
-if len(bad_snapshots) > 0:
-  print("\n%s: WARNING: %s snapshots returned no content.  See below for details: " % (prog, len(bad_snapshots)))
-  for bad_layer in bad_snapshots:
-    print("\n\t Layer: %s" % bad_layer['id'])
-    print("\t URL: %s" % (bad_layer['url']))
+  if len(bad_snapshots) > 0:
+    print("\n%s: WARNING: %s snapshots returned no content.  See below for details: " % (prog, len(bad_snapshots)))
+    for bad_layer in bad_snapshots:
+      print("\n\t Layer: %s" % bad_layer['id'])
+      print("\t URL: %s" % (bad_layer['url']))
 
-if total_success_count > 0:
-  print('\n%s: Successfully retrieved %s snapshots!' % (prog, total_success_count))
-if total_failure_count > 0:
-  print('\n%s: WARNING: Failed to retrieve %s snapshots!' % (prog, total_failure_count))
-if total_failure_count is 0 and total_success_count is 0:
-  print('\n%s: No snapshots were retrieved.  All layers found in wv.json have existing preview images!' % (prog))
+  if total_success_count > 0:
+    print('\n%s: Successfully retrieved %s snapshots!' % (prog, total_success_count))
+  if total_failure_count > 0:
+    print('\n%s: WARNING: Failed to retrieve %s snapshots!' % (prog, total_failure_count))
+  if total_failure_count is 0 and total_success_count is 0:
+    print('\n%s: No snapshots were retrieved.  All layers found in wv.json have existing preview images!' % (prog))

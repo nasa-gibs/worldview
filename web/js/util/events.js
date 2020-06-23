@@ -1,7 +1,7 @@
 import lodashEach from 'lodash/each';
 import lodashPull from 'lodash/pull';
 
-export function events() {
+export default function events() {
   const self = {};
 
   // Object of event types. Each event type is an array of listeners.

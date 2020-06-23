@@ -15,7 +15,7 @@ let percentSwipe = null;
 const SWIPE_PADDING = 30;
 let dragging = false;
 
-export class Swipe {
+export default class Swipe {
   constructor(
     olMap,
     isActive,
@@ -41,9 +41,7 @@ export class Swipe {
     this.update();
   }
 
-  getSwipeOffset() {
-    return swipeOffset;
-  }
+  getSwipeOffset = () => swipeOffset
 
   /**
    * Recursively apply listeners to layers
@@ -77,7 +75,7 @@ export class Swipe {
    * Clip the top layer at the right xOffset
    * @param {Object} event | OL Precompose event object
    */
-  clip(event) {
+  clip = (event) => {
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const width = ctx.canvas.width * (swipeOffset / viewportWidth);
@@ -92,7 +90,7 @@ export class Swipe {
    * Layer group is transparent
    * @param {Object} event | OL Precompose event object
    */
-  reverseClip(event) {
+  reverseClip = (event) => {
     const ctx = event.context;
     const viewportWidth = event.frameState.size[0];
     const width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);

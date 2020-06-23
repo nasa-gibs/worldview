@@ -40,6 +40,13 @@ export function getMapParameterSetup(
         },
         serialize: (currentItemState, currentState) => {
           const rendered = lodashGet(currentState, 'map.rendered');
+          const rotation = lodashGet(currentState, 'map.rotation');
+
+          if (rotation) {
+            const map = currentState.map.ui.selected;
+            currentItemState = getRotatedExtent(map);
+          }
+
           if (!rendered) return undefined;
           const actualLeadingExtent = lodashGet(
             currentState,
@@ -68,6 +75,12 @@ export function getMapParameterSetup(
     },
   };
 }
+
+export function getRotatedExtent(map) {
+  const view = map.getView();
+  return olExtent.getForViewAndSize(view.getCenter(), view.getResolution(), 0, map.getSize());
+}
+
 /**
  * Determines if an exent object contains valid values.
  *
@@ -145,8 +158,7 @@ export function getLeadingExtent(loadtime) {
 export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
   let extent;
   return new Promise((resolve, reject) => {
-    let layers; let
-      layerPromiseArray;
+    let layers;
     // Current layer's 3 layer array (prev, current, next days)
     layers = layer.values_.layers;
     if (layer.values_.layers) {
@@ -156,7 +168,7 @@ export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
     }
     // Calculate the extent of each layer in the layer group
     // and create a promiseTileLayer for prev, current, next day
-    layerPromiseArray = layers.map((layer) => {
+    const layerPromiseArray = layers.map((layer) => {
       extent = calculateExtent(
         layer.getExtent(),
         map.getView().calculateExtent(map.getSize()),
@@ -248,8 +260,7 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
         renderer.zDirection,
       );
       tileGrid.forEachTileCoord(extent, currentZ, (tileCoord) => {
-        let tile;
-        tile = tileSource.getTile(
+        const tile = tileSource.getTile(
           tileCoord[0],
           tileCoord[1],
           tileCoord[2],
@@ -262,7 +273,7 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
 
         const loader = function(e) {
           if (e.type === 'tileloadend') {
-            --i;
+            i -= 1;
             if (i === 0) {
               resolve();
             }
@@ -275,7 +286,7 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
         };
         tileSource.on('tileloadend', loader);
         tileSource.on('tileloaderror', loader);
-        ++i;
+        i += 1;
       });
     }
   });

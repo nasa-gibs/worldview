@@ -7,8 +7,9 @@ import { faFacebookF, faTwitter, faRedditAlien } from '@fortawesome/free-brands-
 
 class ShareLinks extends React.Component {
   onClick(event, type) {
+    const { onClick } = this.props;
     event.preventDefault();
-    this.props.onClick(type);
+    onClick(type);
   }
 
   render() {

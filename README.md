@@ -4,7 +4,7 @@
 
 [![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
-Interactive interface for browsing full-resolution, global satellite imagery
+Interactive interface for browsing full-resolution, global satellite imagery.
 
 ## Background
 
@@ -36,7 +36,7 @@ This project uses Node and Python. See the [dependencies](#dependencies) section
 ```bash
 git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
-npm install
+npm ci
 ```
 
 View the [Configuration](doc/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
@@ -45,7 +45,7 @@ View the [Configuration](doc/configuration.md) section for information on how to
 
 The following are required to install and run Worldview:
 
-- [Node v8.15.1 or Later](https://nodejs.org/en/download/)
+- [Node v10 or Later](https://nodejs.org/en/download/)
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v3.7.1 or Later](https://www.python.org/)
 

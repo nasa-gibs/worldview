@@ -1,49 +1,53 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
-const CollapsedButton = (props) => {
-  const {
-    isMobile,
-    isCollapsed,
-    numberOfLayers,
-    onclick,
-  } = props;
+class CollapsedButton extends PureComponent {
+  render() {
+    const {
+      isMobile,
+      isDistractionFreeModeActive,
+      isCollapsed,
+      numberOfLayers,
+      onclick,
+    } = this.props;
 
-  return (
-    <div
-      id="productsHoldertoggleButtonHolder"
-      className="toggleButtonHolder"
-      style={!isCollapsed ? { display: 'none' } : {}}
-    >
-      <a
-        id="accordionTogglerButton"
-        className="accordionToggler dateHolder staticLayers"
-        title="Show Layer Selector"
-        onClick={onclick}
+    return (
+      <div
+        id="productsHoldertoggleButtonHolder"
+        className="toggleButtonHolder"
+        style={!isCollapsed || isDistractionFreeModeActive ? { display: 'none' } : {}}
       >
-        <FontAwesomeIcon icon={faLayerGroup} />
-        {isMobile
-          ? (
-            <span className="layer-count mobile">
-              {numberOfLayers.toString()}
-            </span>
-          )
-          : (
-            <span className="layer-count ">
-              {numberOfLayers.toString()}
-              {' '}
-              Layers
-            </span>
-          )}
-      </a>
-    </div>
-  );
-};
+        <a
+          id="accordionTogglerButton"
+          className="accordionToggler dateHolder staticLayers"
+          title="Show Layer Selector"
+          onClick={onclick}
+        >
+          <FontAwesomeIcon icon={faLayerGroup} />
+          {isMobile
+            ? (
+              <span className="layer-count mobile">
+                {numberOfLayers.toString()}
+              </span>
+            )
+            : (
+              <span className="layer-count ">
+                {numberOfLayers.toString()}
+                {' '}
+                Layers
+              </span>
+            )}
+        </a>
+      </div>
+    );
+  }
+}
 CollapsedButton.propTypes = {
   isCollapsed: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onclick: PropTypes.func,

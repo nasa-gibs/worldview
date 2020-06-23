@@ -123,7 +123,7 @@ class PaletteSelect extends React.Component {
           onClick={() => this.onChangePalette(id)}
         />
         <label htmlFor={`wv-palette-radio-${id}`}>
-          <img src={this.props.canvas.toDataURL('image/png')} />
+          <img src={canvas.toDataURL('image/png')} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
         </label>
       </div>
@@ -144,6 +144,8 @@ class PaletteSelect extends React.Component {
       : palette.colors[0];
     const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
+    const isInvisible = color === '00000000';
+
     return (
       <div key={id} className={caseDefaultClassName + checkedClassName}>
         <input
@@ -154,8 +156,8 @@ class PaletteSelect extends React.Component {
         />
         <label htmlFor={`wv-palette-radio-${id}`}>
           <span
-            className="wv-palettes-class"
-            style={{ backgroundColor: util.hexToRGB(color) }}
+            className={isInvisible ? 'checkerbox-bg wv-palettes-class' : 'wv-palettes-class'}
+            style={isInvisible ? null : { backgroundColor: util.hexToRGBA(color) }}
           >
             &nbsp;
           </span>
@@ -168,7 +170,6 @@ class PaletteSelect extends React.Component {
   render() {
     const { index, layer, paletteOrder } = this.props;
     const recommended = layer.palette.recommended || [];
-
     return (
       <div
         className="wv-palette-selector settings-component noselect"

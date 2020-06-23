@@ -35,9 +35,9 @@ const getActiveTabs = function(config) {
     events: features.naturalEvents,
   };
 };
-const resetWorldview = function(e) {
+const resetWorldview = function(e, isDistractionFreeModeActive) {
   e.preventDefault();
-  if (window.location.search === '') return; // Nothing to reset
+  if (!isDistractionFreeModeActive && window.location.search === '') return; // Nothing to reset
   const msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
   if (window.confirm(msg)) {
     googleTagManager.pushEvent({
@@ -106,9 +106,11 @@ class Sidebar extends React.Component {
   }
 
   selectEvent(id, date) {
-    this.state.selectEvent(id, date);
-    if (this.props.isMobile) {
-      this.props.collapseSidebar();
+    const { selectEvent } = this.state;
+    const { isMobile, collapseSidebar } = this.props;
+    selectEvent(id, date);
+    if (isMobile) {
+      collapseSidebar();
     }
   }
 
@@ -134,6 +136,7 @@ class Sidebar extends React.Component {
   }
 
   getProductsToRender(activeTab, isCompareMode) {
+    const { activeString } = this.props;
     const { subComponentHeight } = this.state;
     if (isCompareMode) {
       return (
@@ -148,7 +151,7 @@ class Sidebar extends React.Component {
         <Layers
           height={subComponentHeight}
           isActive={activeTab === 'layers'}
-          layerGroupName={this.props.activeString}
+          layerGroupName={activeString}
           checkerBoardPattern={this.checkerBoardPattern}
         />
       );
@@ -164,6 +167,7 @@ class Sidebar extends React.Component {
       screenHeight,
       isCollapsed,
       isCompareMode,
+      isDistractionFreeModeActive,
       activeTab,
       tabTypes,
       isMobile,
@@ -181,7 +185,7 @@ class Sidebar extends React.Component {
             href="/"
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
-            onClick={resetWorldview}
+            onClick={(e) => resetWorldview(e, isDistractionFreeModeActive)}
             // eslint-disable-next-line no-return-assign
             ref={(iconElement) => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}
@@ -191,6 +195,7 @@ class Sidebar extends React.Component {
             isCollapsed={isCollapsed}
             onclick={this.toggleSidebar}
             numberOfLayers={numberOfLayers}
+            isDistractionFreeModeActive={isDistractionFreeModeActive}
           />
           <div
             id="productsHolder"
@@ -198,11 +203,10 @@ class Sidebar extends React.Component {
             ref={(el) => {
               this.sideBarCase = el;
             }}
-            style={
-              isCollapsed
-                ? { maxHeight: '0' }
-                : { maxHeight: `${screenHeight}px` }
-            }
+            style={{
+              maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
+              display: isDistractionFreeModeActive ? 'none' : 'block',
+            }}
             onWheel={wheelCallBack}
           >
             {!isCollapsed && (
@@ -267,8 +271,10 @@ function mapStateToProps(state) {
     measure,
     animation,
     events,
+    ui,
   } = state;
   const { screenHeight } = browser;
+  const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
@@ -289,6 +295,7 @@ function mapStateToProps(state) {
     isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
     tabTypes,
     config,
+    isDistractionFreeModeActive,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -333,6 +340,7 @@ Sidebar.propTypes = {
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
   numberOfLayers: PropTypes.number,

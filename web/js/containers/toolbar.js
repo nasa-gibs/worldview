@@ -13,6 +13,7 @@ import {
   faShareSquare, faGlobeAsia, faCamera, faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { openCustomContent, onToggle } from '../modules/modal/actions';
+import toggleDistractionFreeMode from '../modules/ui/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
@@ -30,7 +31,7 @@ import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
-import { Notify } from '../components/image-download/notify';
+import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
 
@@ -149,6 +150,7 @@ class toolbarContainer extends Component {
       notificationType,
       notificationContentNumber,
       config,
+      isDistractionFreeModeActive,
       isImageDownloadActive,
       isCompareActive,
     } = this.props;
@@ -157,55 +159,62 @@ class toolbarContainer extends Component {
       : ' wv-status-hide';
     return (
       <ErrorBoundary>
-        <ButtonToolbar id="wv-toolbar" className="wv-toolbar">
-          <Button
-            id="wv-link-button"
-            className="wv-toolbar-button"
-            title="Share this map"
-            onClick={() => openModal(
-              'TOOLBAR_SHARE_LINK',
-              CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK,
-            )}
-          >
-            <FontAwesomeIcon icon={faShareSquare} size="2x" />
-          </Button>
-          {config.ui && config.ui.projections ? (
-            <Button
-              id="wv-proj-button"
-              className="wv-toolbar-button"
-              title="Switch projection"
-              onClick={() => openModal(
-                'TOOLBAR_PROJECTION',
-                CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
-              )}
-            >
-              <FontAwesomeIcon icon={faGlobeAsia} size="2x" />
-            </Button>
-          )
-            : ''}
-          <Button
-            id="wv-image-button"
-            className={
-              isImageDownloadActive
-                ? 'wv-toolbar-button'
-                : 'wv-toolbar-button disabled'
-            }
-            disabled={!isImageDownloadActive}
-            title={
-              isCompareActive
-                ? 'You must exit comparison mode to use the snapshot feature'
-                : !isImageDownloadActive
-                  ? 'You must exit data download mode to use the snapshot feature'
-                  : 'Take a snapshot'
-            }
-            onClick={this.openImageDownload}
-          >
-            <FontAwesomeIcon icon={faCamera} size="2x" />
-          </Button>
+        <ButtonToolbar
+          id="wv-toolbar"
+          className="wv-toolbar"
+        >
+          { !isDistractionFreeModeActive && (
+            <>
+              <Button
+                id="wv-link-button"
+                className="wv-toolbar-button"
+                title="Share this map"
+                onClick={() => openModal(
+                  'TOOLBAR_SHARE_LINK',
+                  CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK,
+                )}
+              >
+                <FontAwesomeIcon icon={faShareSquare} size="2x" />
+              </Button>
+              {config.ui && config.ui.projections ? (
+                <Button
+                  id="wv-proj-button"
+                  className="wv-toolbar-button"
+                  title="Switch projection"
+                  onClick={() => openModal(
+                    'TOOLBAR_PROJECTION',
+                    CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
+                  )}
+                >
+                  <FontAwesomeIcon icon={faGlobeAsia} size="2x" />
+                </Button>
+              )
+                : ''}
+              <Button
+                id="wv-image-button"
+                className={
+                  isImageDownloadActive
+                    ? 'wv-toolbar-button'
+                    : 'wv-toolbar-button disabled'
+                }
+                disabled={!isImageDownloadActive}
+                title={
+                  isCompareActive
+                    ? 'You must exit comparison mode to use the snapshot feature'
+                    : !isImageDownloadActive
+                      ? 'You must exit data download mode to use the snapshot feature'
+                      : 'Take a snapshot'
+                }
+                onClick={this.openImageDownload}
+              >
+                <FontAwesomeIcon icon={faCamera} size="2x" />
+              </Button>
+            </>
+          )}
           <Button
             id="wv-info-button"
             title="Information"
-            className={`wv-toolbar-button${notificationClass}`}
+            className={`wv-toolbar-button${notificationClass} ${isDistractionFreeModeActive ? 'wv-info-button-distraction-free-mode' : ''}`}
             onClick={() => openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)}
             data-content={notificationContentNumber}
           >
@@ -218,8 +227,9 @@ class toolbarContainer extends Component {
 }
 function mapStateToProps(state) {
   const {
-    notifications, palettes, compare, map, layers, proj, data,
+    notifications, palettes, compare, map, layers, proj, data, ui,
   } = state;
+  const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
   const { activeString } = compare;
   const activeLayersForProj = getLayers(
@@ -254,9 +264,13 @@ function mapStateToProps(state) {
         'visible',
       ),
     ),
+    isDistractionFreeModeActive,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
+  toggleDistractionFreeMode: () => {
+    dispatch(toggleDistractionFreeMode());
+  },
   refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule) => {
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
@@ -319,6 +333,7 @@ toolbarContainer.propTypes = {
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
   isRotated: PropTypes.bool,
   notificationContentNumber: PropTypes.number,

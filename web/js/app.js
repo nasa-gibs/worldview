@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
+// eslint-disable-next-line no-unused-vars
+import whatInput from 'what-input';
 
 // eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
@@ -79,17 +81,13 @@ import '../css/vectorMeta.css';
 import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../pages/css/document.css';
-import { keyPress } from './modules/key-press/actions';
+import keyPress from './modules/key-press/actions';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.onload();
     this.handleKeyPress = this.handleKeyPress.bind(this);
-  }
-
-  handleKeyPress(event) {
-    this.props.keyPressAction(event.keyCode);
   }
 
   componentDidMount() {
@@ -100,45 +98,16 @@ class App extends React.Component {
     document.removeEventListener('keydown', this.handleKeyPress);
   }
 
-  render() {
-    const {
-      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents,
-    } = this.props;
-
-    return (
-      <div className="wv-content" id="wv-content" data-role="content">
-        <Toolbar />
-        <MapInteractions mouseEvents={mapMouseEvents} />
-        <div id="wv-alert-container" className="wv-alert-container">
-          <FeatureAlert />
-        </div>
-        <Sidebar />
-        {isTourActive ? <Tour /> : null}
-        <div id="layer-modal" className="layer-modal" />
-        <div id="layer-settings-modal" />
-        <div id="eventsHolder" />
-        <div id="imagedownload" />
-        <div id="dlMap" />
-        <Timeline key={locationKey || '1'} />
-        <div id="wv-animation-widet-case">
-          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
-        </div>
-        <MeasureButton />
-
-        <Modal key={modalId} />
-        <ErrorBoundary>
-          <Debug parameters={this.props.parameters} />
-        </ErrorBoundary>
-      </div>
-    );
+  handleKeyPress(event) {
+    const { keyPressAction } = this.props;
+    const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
+    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey);
   }
 
   onload() {
     const self = this;
-    let config;
     const state = self.props.parameters;
-
-    config = self.props.config;
+    const { config } = self.props;
     config.parameters = state;
 
     // get user IP address for GTM/GA using https://www.ipify.org/ API
@@ -187,7 +156,41 @@ class App extends React.Component {
     };
     util.wrap(main)();
   }
+
+  render() {
+    const {
+      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, parameters,
+    } = this.props;
+
+    return (
+      <div className="wv-content" id="wv-content" data-role="content">
+        <Toolbar />
+        <MapInteractions mouseEvents={mapMouseEvents} />
+        <div id="wv-alert-container" className="wv-alert-container">
+          <FeatureAlert />
+        </div>
+        <Sidebar />
+        {isTourActive ? <Tour /> : null}
+        <div id="layer-modal" className="layer-modal" />
+        <div id="layer-settings-modal" />
+        <div id="eventsHolder" />
+        <div id="imagedownload" />
+        <div id="dlMap" />
+        <Timeline key={locationKey || '1'} />
+        <div id="wv-animation-widet-case">
+          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
+        </div>
+        <MeasureButton />
+
+        <Modal key={modalId} />
+        <ErrorBoundary>
+          <Debug parameters={parameters} />
+        </ErrorBoundary>
+      </div>
+    );
+  }
 }
+
 function mapStateToProps(state, ownProps) {
   return {
     state,
@@ -203,8 +206,8 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = (dispatch) => ({
-  keyPressAction: (keyCode) => {
-    dispatch(keyPress(keyCode));
+  keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey) => {
+    dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey));
   },
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
@@ -223,5 +226,4 @@ App.propTypes = {
   mapMouseEvents: PropTypes.object,
   modalId: PropTypes.string,
   parameters: PropTypes.object,
-  state: PropTypes.object,
 };

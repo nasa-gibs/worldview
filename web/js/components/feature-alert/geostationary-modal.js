@@ -7,7 +7,7 @@ import {
   Row,
   Col,
 } from 'reactstrap';
-import { history } from '../../main';
+import history from '../../main';
 
 class GeostationaryModalBody extends React.Component {
   constructor(props) {

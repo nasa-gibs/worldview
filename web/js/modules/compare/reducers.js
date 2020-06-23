@@ -38,6 +38,8 @@ export function compareReducer(state = initialCompareState, action) {
       return lodashAssign({}, state, {
         value: action.value,
       });
+    default:
+      break;
   }
   return state;
 }

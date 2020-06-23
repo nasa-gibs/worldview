@@ -21,7 +21,7 @@ import {
 } from './util';
 import { toggleMeasureActive } from '../../modules/measure/actions';
 
-export function measure(map, mapUiEvents, store) {
+export default function measure(map, mapUiEvents, store) {
   let draw;
   let sketch;
   let measureTooltipElement;
@@ -117,8 +117,8 @@ export function measure(map, mapUiEvents, store) {
     let tooltipCoord;
     mapUiEvents.trigger('disable-click-zoom');
     sketch = evt.feature;
-    drawChangeListener = sketch.getGeometry().on('change', (evt) => {
-      const geom = evt.target;
+    drawChangeListener = sketch.getGeometry().on('change', (e) => {
+      const geom = e.target;
       if (geom instanceof OlGeomPolygon) {
         tooltipCoord = geom.getInteriorPoint().getCoordinates();
       } else if (geom instanceof OlLineString) {

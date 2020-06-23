@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "VIIRS_SNPP_Cloud_Top_Height_Night": {
+            "id":       "VIIRS_SNPP_Cloud_Top_Height_Night",
+            "title":    "Cloud Top Height (Night)",
+            "subtitle": "Suomi NPP / VIIRS",
+            "description": "viirs/VIIRS_SNPP_Cloud_Top_Height_Night",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "viirs"
+            ],
+            "product":  "CLDPROP_L2_VIIRS_SNPP",
+            "tracks": [
+                "OrbitTracks_Suomi_NPP_Descending"
+            ]
+        }
+    }
+}

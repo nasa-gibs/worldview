@@ -12,6 +12,7 @@ class OpacitySelect extends React.Component {
 
   render() {
     const { layer, setOpacity, start } = this.props;
+    const { value } = this.state;
     return (
       <div className="layer-opacity-select settings-component">
         <h2 className="wv-header">Opacity</h2>
@@ -23,7 +24,7 @@ class OpacitySelect extends React.Component {
           }}
         />
         <div className="wv-label wv-label-opacity">
-          {`${this.state.value}%`}
+          {`${value}%`}
         </div>
       </div>
     );

@@ -353,13 +353,10 @@ export default connect(
 )(LayerSettings);
 
 LayerSettings.defaultProps = {
-  isOpen: false,
   layer: { id: null, name: null },
   palettedAllowed: false,
-  title: null,
 };
 LayerSettings.propTypes = {
-  canvas: PropTypes.object,
   clearCustomPalette: PropTypes.func,
   clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
@@ -368,21 +365,16 @@ LayerSettings.propTypes = {
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
-  getVectorStyle: PropTypes.func,
   groupName: PropTypes.string,
-  index: PropTypes.number,
-  isOpen: PropTypes.bool,
   layer: PropTypes.object,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
-  setFilterRange: PropTypes.func,
   setOpacity: PropTypes.func,
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
-  title: PropTypes.string,
   toggleClassification: PropTypes.func,
   vectorStyles: PropTypes.object,
 };

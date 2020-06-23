@@ -9,29 +9,32 @@ const formatOrder = {
   'latlon-dms': 'latlon-dd',
 };
 
-class Coordinates extends React.Component {
+export default class Coordinates extends React.Component {
   constructor(props) {
     super(props);
     this.changeFormat = this.changeFormat.bind(this);
   }
 
   changeFormat() {
-    const thisFormat = this.props.format;
-    const nextFormat = formatOrder[thisFormat];
-    this.props.onFormatChange(nextFormat);
+    const { format, onFormatChange } = this.props;
+    const nextFormat = formatOrder[format];
+    onFormatChange(nextFormat);
   }
 
   render() {
-    if (this.props.latitude === null) {
+    const {
+      latitude, longitude, format, crs,
+    } = this.props;
+    if (latitude === null) {
       return null;
     }
-    if (this.props.longitude === null) {
+    if (longitude === null) {
       return null;
     }
 
     const coords = util.formatCoordinate(
-      [this.props.longitude, this.props.latitude],
-      this.props.format,
+      [longitude, latitude],
+      format,
     );
 
     return (
@@ -42,7 +45,7 @@ class Coordinates extends React.Component {
         <span className="map-coord">
           {coords}
           {' '}
-          {this.props.crs}
+          {crs}
         </span>
         <div className="coord-btn">
           <i className="coord-switch" />
@@ -59,5 +62,3 @@ Coordinates.propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
 };
-
-export default Coordinates;

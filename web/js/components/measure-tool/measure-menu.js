@@ -48,9 +48,10 @@ class MeasureMenu extends Component {
   }
 
   unitToggle(evt) {
+    const { onToggleUnits } = this.props;
     const { checked } = evt.target;
     const units = checked ? 'mi' : 'km';
-    this.props.onToggleUnits(units);
+    onToggleUnits(units);
   }
 
   tooltipToggle() {
@@ -60,7 +61,7 @@ class MeasureMenu extends Component {
   }
 
   render() {
-    const { isTouchDevice } = this.props;
+    const { isTouchDevice, units } = this.props;
     const listSize = isTouchDevice ? 'medium' : 'small';
     return (
       <>
@@ -71,10 +72,10 @@ class MeasureMenu extends Component {
               className="custom-control-input"
               type="checkbox"
               onChange={this.unitToggle}
-              defaultChecked={this.props.units === 'mi'}
+              defaultChecked={units === 'mi'}
             />
             <label className="custom-control-label" htmlFor="unit-toggle">
-              {this.props.units}
+              {units}
             </label>
           </div>
         </Form>

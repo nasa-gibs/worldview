@@ -5,7 +5,7 @@ import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
 import { connect } from 'react-redux';
 import Button from '../../components/util/button';
-import { Checkbox } from '../../components/util/checkbox';
+import Checkbox from '../../components/util/checkbox';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import {
@@ -16,6 +16,7 @@ import ProductPicker from '../../components/layer/product-picker/product-picker'
 import { openCustomContent } from '../../modules/modal/actions';
 import { toggleListAll } from '../../modules/natural-events/actions';
 import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
+import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
 class FooterContent extends React.Component {
   constructor(props) {
@@ -157,6 +158,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleListAll());
   },
   addLayers: () => {
+    dispatch(stopAnimationAction());
     dispatch(
       openCustomContent('LAYER_PICKER_COMPONENT', {
         headerText: null,
@@ -207,7 +209,6 @@ FooterContent.propTypes = {
   compareMode: PropTypes.string,
   counts: PropTypes.object,
   dataSelectionSize: PropTypes.number,
-  events: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   onGetData: PropTypes.func,

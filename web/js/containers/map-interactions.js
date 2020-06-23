@@ -19,8 +19,9 @@ export class MapInteractions extends React.Component {
   }
 
   registerMouseListeners() {
-    this.props.mouseEvents.on('mousemove', this.mouseMove);
-    this.props.mouseEvents.on('singleclick', this.singleClick);
+    const { mouseEvents } = this.props;
+    mouseEvents.on('mousemove', this.mouseMove);
+    mouseEvents.on('singleclick', this.singleClick);
   }
 
   singleClick(e, map) {
@@ -77,13 +78,26 @@ export class MapInteractions extends React.Component {
   }
 
   render() {
-    const { isShowingClick, mouseEvents } = this.props;
-    const mapClasses = isShowingClick ? 'wv-map cursor-pointer' : 'wv-map';
+    const {
+      isDistractionFreeModeActive,
+      isShowingClick,
+      mouseEvents,
+    } = this.props;
+    let mapClasses = isShowingClick
+      ? 'wv-map cursor-pointer'
+      : 'wv-map';
+    mapClasses = isDistractionFreeModeActive
+      ? `${mapClasses} distraction-free-active`
+      : mapClasses;
 
     return (
       <>
         <div id="wv-map" className={mapClasses} />
-        <OlCoordinates mouseEvents={mouseEvents} />
+        {!isDistractionFreeModeActive && (
+        <OlCoordinates
+          mouseEvents={mouseEvents}
+        />
+        )}
       </>
     );
   }
@@ -131,7 +145,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj,
+    modal, map, measure, vectorStyles, browser, compare, proj, ui,
   } = state;
   let swipeOffset;
   if (compare.active && compare.mode === 'swipe') {
@@ -141,6 +155,7 @@ function mapStateToProps(state) {
   return {
     modalState: modal,
     isShowingClick: map.isClickable,
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     getDialogObject: (pixels, map) => onMapClickGetVectorFeatures(pixels, map, state, swipeOffset),
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
@@ -153,6 +168,7 @@ function mapStateToProps(state) {
 MapInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
+  isDistractionFreeModeActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,

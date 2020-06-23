@@ -14,8 +14,8 @@ import {
   listenForHistoryChange,
 } from 'redux-location-state';
 import { createBrowserHistory } from 'history';
-import { uniqBy } from 'lodash';
-import { getMiddleware } from './combine-middleware';
+import { uniqBy, get as lodashGet } from 'lodash';
+import getMiddleware from './combine-middleware';
 import { mapLocationToState, getParamObject } from './location';
 import { stateToParams } from './redux-location-state-customs';
 import reducers, { getInitialState } from './modules/combine-reducers';
@@ -23,19 +23,19 @@ import App from './app';
 import util from './util/util';
 import loadingIndicator from './ui/indicator';
 import Brand from './brand';
-import { combineModels } from './combine-models';
-import { parse } from './parse';
-import { combineUi } from './combine-ui';
+import combineModels from './combine-models';
+import parse from './parse';
+import combineUi from './combine-ui';
 import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
   validate as layerValidate,
   layersParse12,
 } from './modules/layers/util';
-import { polyfill } from './polyfill';
+import polyfill from './polyfill';
 import { debugConfig } from './debug';
 import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
-export const history = createBrowserHistory();
+const history = createBrowserHistory();
 
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
@@ -45,7 +45,7 @@ const startTime = new Date().getTime();
 //   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ latency: 0 }) ||
 //     defaultCompose
 //   : defaultCompose;
-const parameters = util.fromQueryString(window.location.search);
+let parameters = util.fromQueryString(window.location.search);
 let { elapsed } = util;
 const errors = [];
 // Document ready function
@@ -60,13 +60,28 @@ window.onload = () => {
   loadingIndicator.delayed(promise, 1000);
   promise
     .done((config) => {
+      // Perform check to see if app was in the midst of a tour
+      const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
+      if (hasTour) {
+        // Gets the extent of the first tour step and overrides view params
+        parameters = util.fromQueryString(hasTour.steps[0].stepLink);
+      }
+
       config.pageLoadTime = parameters.now
         ? util.parseDateUTC(parameters.now) || new Date()
         : new Date();
+
+      const pageLoadTime = new Date(config.pageLoadTime);
+
+      config.initialDate = config.pageLoadTime.getUTCHours() < 3
+        ? new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 1))
+        : pageLoadTime;
+
       config.palettes = {
         rendered: {},
         custom: {},
       };
+
       elapsed('Config loaded', config.now, parameters);
       // Determine which layers need to be preloaded
       let layers = [];
@@ -150,3 +165,5 @@ const render = (config, parameters, legacyState) => {
   combineUi(models, config, mouseMoveEvents, store); // Legacy UI
   util.errorReport(errors);
 };
+
+export default history;

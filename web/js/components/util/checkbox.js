@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
  * @class Checkbox
  * @extends React.Component
  */
-export class Checkbox extends React.Component {
+export default class Checkbox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,7 +15,8 @@ export class Checkbox extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.state.checked !== nextProps.checked) {
+    const { checked } = this.state;
+    if (checked !== nextProps.checked) {
       this.setState({
         checked: nextProps.checked,
       });

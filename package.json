@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "3.5.1",
+  "version": "3.6.2",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -23,7 +23,12 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": "8.15.1"
+    "node": ">=10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
   },
   "scripts": {
     "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
@@ -56,7 +61,7 @@
     "linkcheck": "node ./tasks/linkcheck",
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
-    "lint:js": "eslint .",
+    "lint:js": "eslint . --quiet",
     "notes": "node ./tasks/releaseNotes.js",
     "preinstall": "node tasks/checkNodeVersion.js",
     "postinstall": "npm run python",
@@ -89,7 +94,7 @@
     "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.4.4",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^80.0.0",
+    "chromedriver": "^80.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^6.0.2",
     "css-hot-loader": "^1.4.1",
@@ -114,6 +119,7 @@
     "glob": "^7.1.6",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^4.2.3",
     "jest": "^25.1.0",
     "jest-canvas-mock": "^2.2.0",
     "mini-css-extract-plugin": "^0.8.0",
@@ -167,7 +173,7 @@
     "geographiclib": "^1.50.0",
     "history": "^4.7.2",
     "immutability-helper": "^3.0.1",
-    "jquery": "^3.0.0",
+    "jquery": "^3.5.0",
     "jquery-ui-bundle": "1.12.1-migrate",
     "jquery-ui-touch-punch": "0.2.3",
     "lodash": "^4.17.15",
@@ -203,6 +209,7 @@
     "simplebar-react": "^2.0.8",
     "supercluster": "7.0.0",
     "web-streams-polyfill": "^2.0.6",
+    "what-input": "^5.2.7",
     "whatwg-fetch": "^3.0.0"
   },
   "browser": {

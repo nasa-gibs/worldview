@@ -13,7 +13,7 @@ import {
   debounce as lodashDebounce,
 } from 'lodash';
 
-import { naturalEventsUtilGetEventById } from './util';
+import naturalEventsUtilGetEventById from './util';
 import {
   naturalEventsClusterPointToGeoJSON,
   naturalEventsClusterGetPoints,
@@ -319,9 +319,6 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
   let pointObject = {};
   const geoJSONPointsBeforeSelected = [];
   const geoJSONPointsAfterSelected = [];
-  let clustersBeforeSelected;
-  let clustersAfterSelected;
-
   let selectedPoint;
   let clusters;
   let afterSelected = false;
@@ -370,13 +367,13 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
     secondClusterObj.options.setGeo();
   }
 
-  clustersBeforeSelected = naturalEventsClusterGetPoints(
+  const clustersBeforeSelected = naturalEventsClusterGetPoints(
     firstClusterObj,
     geoJSONPointsBeforeSelected,
     zoom,
     extent,
   );
-  clustersAfterSelected = naturalEventsClusterGetPoints(
+  const clustersAfterSelected = naturalEventsClusterGetPoints(
     secondClusterObj,
     geoJSONPointsAfterSelected,
     zoom,

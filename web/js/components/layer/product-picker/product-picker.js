@@ -53,7 +53,6 @@ class ProductPicker extends React.Component {
     this.state = {
       modalElement: undefined,
       headerElement: undefined,
-      listScrollTop: props.listScrollTop || 0,
     };
 
     this.runSearch = lodashDebounce(this.runSearch.bind(this), 300);
@@ -178,8 +177,8 @@ class ProductPicker extends React.Component {
    * @param {String} id | Measurement ID
    */
   updateSelectedMeasurement(id) {
-    const { update } = this.props;
-    if (this.props.selectedMeasurement !== id) {
+    const { update, selectedMeasurement } = this.props;
+    if (selectedMeasurement !== id) {
       update({
         selectedMeasurement: id,
         selectedMeasurementSourceIndex: 0,
@@ -204,8 +203,12 @@ class ProductPicker extends React.Component {
   }
 
   getSelectedMeasurementSource() {
-    const { selectedMeasurement, selectedMeasurementSourceIndex } = this.props;
-    const measurements = Object.values(this.props.measurementConfig);
+    const {
+      selectedMeasurement,
+      selectedMeasurementSourceIndex,
+      measurementConfig,
+    } = this.props;
+    const measurements = Object.values(measurementConfig);
     const currentMeasurement = measurements.find((measure) => measure.id === selectedMeasurement);
     if (currentMeasurement) {
       const sources = Object.values(currentMeasurement.sources)
@@ -238,10 +241,11 @@ class ProductPicker extends React.Component {
    * @param {String} key | categoryType identifier
    */
   sort(key) {
+    const { update } = this.props;
     if (key === 'featured') {
       this.toggleFeatureTab();
     } else {
-      this.props.update({
+      update({
         categoryType: key,
         listType: 'category',
         selectedMeasurement: null,
@@ -266,7 +270,8 @@ class ProductPicker extends React.Component {
    * When using "back" button or clearing search field, unset selections
    */
   revertSearchState() {
-    this.props.update({
+    const { update } = this.props;
+    update({
       listType: 'category',
       inputValue: '',
       selectedLayer: null,
@@ -281,7 +286,8 @@ class ProductPicker extends React.Component {
    * @param {*} selectedLayer - the layer for which to show metadata
    */
   showMetadataForLayer(selectedLayer) {
-    this.props.update({ selectedLayer });
+    const { update } = this.props;
+    update({ selectedLayer });
   }
 
   renderLayerList() {
@@ -575,11 +581,9 @@ ProductPicker.propTypes = {
   activeLayers: PropTypes.array,
   addLayer: PropTypes.func,
   allLayers: PropTypes.array,
-  categories: PropTypes.array,
   category: PropTypes.object,
   categoryConfig: PropTypes.object,
   categoryType: PropTypes.string,
-  drawMeasurements: PropTypes.func,
   filterByAvailable: PropTypes.bool,
   filteredRows: PropTypes.array,
   filterProjections: PropTypes.func,
@@ -598,11 +602,9 @@ ProductPicker.propTypes = {
   onToggle: PropTypes.func,
   removeLayer: PropTypes.func,
   screenHeight: PropTypes.number,
-  searchResultRows: PropTypes.array,
   selectedDate: PropTypes.object,
   selectedLayer: PropTypes.object,
   selectedMeasurement: PropTypes.string,
-  selectedMeasurementSource: PropTypes.object,
   selectedMeasurementSourceIndex: PropTypes.number,
   selectedProjection: PropTypes.string,
   showPreviewImage: PropTypes.bool,

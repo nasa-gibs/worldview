@@ -14,22 +14,22 @@ import Button from '../util/button';
  */
 export default class ResolutionTable extends React.Component {
   renderImageSize() {
-    const size = this.props.fileSize;
-    if (!this.props.validSize) {
+    const { fileSize, validSize } = this.props;
+    if (!validSize) {
       return (
         <div
           id="wv-image-size"
           className="wv-image-size wv-image-size-invalid grid-child"
         >
           <FontAwesomeIcon icon={faTimes} fixedWidth />
-          <span>{`~${size}MB`}</span>
+          <span>{`~${fileSize}MB`}</span>
         </div>
       );
     }
     return (
       <div id="wv-image-size" className="wv-image-size grid-child">
         <span>
-          {`~${size} MB`}
+          {`~${fileSize} MB`}
           {' '}
         </span>
       </div>

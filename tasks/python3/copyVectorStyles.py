@@ -43,12 +43,17 @@ def copy_file(file):
 # Main
 file_count = 0
 error_count = 0
+file_list = []
 
 for root, dirs, files in os.walk(vectorstyles_input_dir):
     for file in files:
         try:
-            file_count += 1
-            copy_file(file)
+            if file in file_list:
+                print(f'{file} is present in the vectorStyle List')
+            else:
+                file_count += 1
+                copy_file(file)
+                file_list.append(file)
         except Exception as e:
             sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, file, str(e)))
             error_count += 1

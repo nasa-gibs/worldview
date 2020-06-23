@@ -1,0 +1,54 @@
+{
+  "version": 8,
+  "name": "SEDAC",
+  "sources": {
+    "GRanD_Dams": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/std/GRanD_Dams_v1.01_STD/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "GRanD_Dams_v1.01_STD",
+      "source": "GRanD_Dams",
+      "source-layer": "GRanD_Dams_v1.01_STD",
+      "source-description": "Default",
+      "type": "circle",
+      "paint": {
+        "circle-radius":[
+          "step",
+          [
+            "zoom"
+          ],
+          1,
+          17,
+          2,
+          19,
+          3,
+          22,
+          7
+        ],
+        "circle-color": ["match",
+          ["get", "MAIN_USE"],
+          "Fisheries",
+          "rgb(152, 230, 0)",
+          "Flood control",
+          "rgb(168, 0, 0)",
+          "Hydroelectricity",
+          "rgb(230, 230, 0)",
+          "Navigation",
+          "rgb(230, 152, 0)",
+          "Other",
+          "rgb(255, 190, 232)",
+          "Recreation",
+          "rgb(132, 0, 168)",
+          "Water supply",
+          "rgb(38, 115, 0)",
+          "rgb(255, 255, 255)"
+        ]
+      }
+    }
+  ]
+}
