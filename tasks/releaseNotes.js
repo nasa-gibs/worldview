@@ -31,7 +31,7 @@ if (!GITHUB_CHANGELOG_GENERATOR_TOKEN) {
   // add --release-branch BRANCH ARGUMENT. default branch is master
   const branchOption = argStore.branch ? ` --release-branch ${argStore.branch}` : '';
 
-  const cmd = `${cmdPrefix} -u nasa-gibs -p worldview --no-author --bugs-label '## Technical Updates / Bugs:' \
+  const cmd = `${cmdPrefix} -u nasa-gibs -p worldview --no-author --no-issues --bugs-label '## Technical Updates / Bugs:' \
 --enhancement-label '## Implemented enhancements:' --issues-label '## Closed issues:' --pr-label '## Merged pull requests:' \
 --security-label '## External Dependency Updates:' --security-labels 'external dependency' --removed-label \
 '## Story Changes:' --removed-labels 'story,Story' --deprecated-label '## Layer Changes:' --deprecated-labels \
