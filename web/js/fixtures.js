@@ -4,6 +4,7 @@ import { initialState as initialLayerState } from './modules/layers/reducers';
 import { initialCompareState } from './modules/compare/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
+import { defaultAlertState } from './modules/alerts/reducer';
 
 const fixtures = {
   red: 'ff0000ff',
@@ -20,6 +21,7 @@ fixtures.getState = function() {
     compare: initialCompareState,
     config: fixtures.config(),
     layers: initialLayerState,
+    alerts: defaultAlertState,
     date: getInitialDateState(fixtures.config()),
     animation: initialAnimationState,
     palettes: {
@@ -218,8 +220,15 @@ fixtures.config = function() {
       'terra-cr': {
         id: 'terra-cr',
         group: 'baselayers',
+        dateRanges: [
+          {
+            dateInterval: '1',
+            endDate: '2020-05-20T00:00:00Z',
+            startDate: '2000-02-24T00:00:00Z',
+          },
+        ],
         period: 'daily',
-        startDate: '2000-01-01',
+        startDate: '2000-02-24T00:00:00Z',
         projections: {
           geographic: {},
           arctic: {},

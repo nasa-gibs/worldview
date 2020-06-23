@@ -54,11 +54,11 @@ const Switch = (props) => {
         {tooltip
           && (
             <>
-              <FontAwesomeIcon icon={faInfoCircle} id="availability-filter" />
+              <FontAwesomeIcon icon={faInfoCircle} id="switch-tooltip" />
               <Tooltip
                 placement="right"
                 isOpen={tooltipOpen}
-                target="availability-filter"
+                target="switch-tooltip"
                 toggle={() => { toggleTooltip(!tooltipOpen); }}
               >
                 {tooltip}

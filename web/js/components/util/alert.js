@@ -21,7 +21,7 @@ const alertIcons = {
  * @class AlertComponent
  * @extends React.Component
  */
-export default class AlertComponent extends React.Component {
+export default class AlertUtil extends React.Component {
   constructor(props) {
     super(props);
     if (props.timeout && props.onDismiss) {
@@ -51,6 +51,7 @@ export default class AlertComponent extends React.Component {
       onDismiss,
       onClick,
     } = this.props;
+
     const icon = iconClassName
       ? alertIcons[iconClassName] || faExclamationTriangle
       : faExclamationTriangle;
@@ -91,11 +92,11 @@ export default class AlertComponent extends React.Component {
   }
 }
 
-AlertComponent.defaultProps = {
+AlertUtil.defaultProps = {
   iconClassName: '',
   title: '',
 };
-AlertComponent.propTypes = {
+AlertUtil.propTypes = {
   iconClassName: PropTypes.string,
   id: PropTypes.string,
   isOpen: PropTypes.bool,

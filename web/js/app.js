@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
-
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 
 // Utils
@@ -19,10 +17,11 @@ import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
 
-// Other
+// Other/MISC
 import Brand from './brand';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
+import Alerts from './containers/alerts';
 
 // actions
 import Tour from './containers/tour';
@@ -30,6 +29,7 @@ import Timeline from './containers/timeline/timeline';
 import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
+import keyPress from './modules/key-press/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -46,6 +46,7 @@ import '../css/alert.css';
 import '../css/reset.css';
 import '../css/compare.css';
 import '../css/jquery-ui-override.css';
+import '../css/search-ui-override.css';
 import '../css/rc-slider-overrides.css';
 import '../css/util.css';
 import '../css/toolbar.css';
@@ -67,6 +68,7 @@ import '../css/indicator.css';
 import '../css/events.css';
 import '../css/dataDownload.css';
 import '../css/sidebar.css';
+import '../css/layer-categories.css';
 import '../css/layers.css';
 import '../css/scrollbar.css';
 import '../css/switch.css';
@@ -80,28 +82,41 @@ import '../css/list.css';
 import '../css/vectorMeta.css';
 import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
+import '../css/facets.css';
 import '../pages/css/document.css';
-import keyPress from './modules/key-press/actions';
+
+require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.onload();
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.setVhCSSProperty = this.setVhCSSProperty.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
+    // We listen to the resize event
+    window.addEventListener('resize', this.setVhCSSProperty);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
   }
 
+  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  setVhCSSProperty = () => {
+    // We execute the same script as before
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
   handleKeyPress(event) {
     const { keyPressAction } = this.props;
     const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
-    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey);
+    const isInput = event.srcElement.nodeName === 'INPUT';
+    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey, isInput);
   }
 
   onload() {
@@ -153,6 +168,7 @@ class App extends React.Component {
       });
       self.props.screenResize(window);
       models.wv.events.trigger('startup');
+      self.setVhCSSProperty();
     };
     util.wrap(main)();
   }
@@ -161,13 +177,13 @@ class App extends React.Component {
     const {
       isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, parameters,
     } = this.props;
-
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
         <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
+          <Alerts />
         </div>
         <Sidebar />
         {isTourActive ? <Tour /> : null}
@@ -181,7 +197,6 @@ class App extends React.Component {
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
-
         <Modal key={modalId} />
         <ErrorBoundary>
           <Debug parameters={parameters} />
@@ -206,8 +221,8 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = (dispatch) => ({
-  keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey) => {
-    dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey));
+  keyPressAction: (keyCode, shiftKey, ctrlOrCmdKey, isInput) => {
+    dispatch(keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput));
   },
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));

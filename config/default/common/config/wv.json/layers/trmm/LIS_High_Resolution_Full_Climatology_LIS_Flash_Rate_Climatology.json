@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology": {
-            "id":       "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",
-            "title":    "Lightning Flash Rate",
-            "subtitle": "TRMM / LIS",
-            "description": "trmm/LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "trmm"
-            ],
-            "product":  "lohrfc",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology": {
+      "id": "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",
+      "title": "Lightning Flash Rate",
+      "subtitle": "TRMM / LIS",
+      "description": "trmm/LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "trmm"
+      ],
+      "product": "lohrfc",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

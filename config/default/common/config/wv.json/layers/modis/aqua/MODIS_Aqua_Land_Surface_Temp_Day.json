@@ -1,24 +1,30 @@
 {
-    "layers": {
-        "MODIS_Aqua_Land_Surface_Temp_Day": {
-            "id":       "MODIS_Aqua_Land_Surface_Temp_Day",
-            "title":    "Land Surface Temperature (Day)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Land_Surface_Temp_Day",
-            "tags":     "lst",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD11_L2_DAY",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Aqua_Ascending"
-                 ],
-            "palette": {
-                "recommended": ["rainbow_1", "purple_2"]
-            }
-        }
+  "layers": {
+    "MODIS_Aqua_Land_Surface_Temp_Day": {
+      "id": "MODIS_Aqua_Land_Surface_Temp_Day",
+      "title": "Land Surface Temperature (Day)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Land_Surface_Temp_Day",
+      "tags": "lst",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD11_L2_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "palette": {
+        "recommended": [
+          "rainbow_1",
+          "purple_2"
+        ]
+      },
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

@@ -1,21 +1,22 @@
 {
-    "layers": {
-        "AIRS_L2_Temperature_700hPa_Day": {
-            "id":       "AIRS_L2_Temperature_700hPa_Day",
-            "title":    "Temperature (L2, 700 hPa, Day)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_L2_Temperature_700hPa_Day",
-            "tags":     "",
-            "group":    "overlays",
-            "product":  "AIRS2RET",
-
-             "layergroup": [
-              "airs"
-            ],
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-            ]
-
-         }
+  "layers": {
+    "AIRS_L2_Temperature_700hPa_Day": {
+      "id": "AIRS_L2_Temperature_700hPa_Day",
+      "title": "Temperature (L2, 700 hPa, Day)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_Temperature_700hPa_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS2RET",
+      "layergroup": [
+        "airs"
+      ],
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

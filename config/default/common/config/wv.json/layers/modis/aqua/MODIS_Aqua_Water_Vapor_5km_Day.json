@@ -1,24 +1,28 @@
 {
-    "layers": {
-        "MODIS_Aqua_Water_Vapor_5km_Day": {
-            "id":       "MODIS_Aqua_Water_Vapor_5km_Day",
-            "title":    "Water Vapor (Day)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Water_Vapor_5km_Day",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD05_L2_DAY",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Aqua_Ascending"
-             ],
-
-            "palette": {
-                "recommended":  ["blue_1"]
-            }
-        }
+  "layers": {
+    "MODIS_Aqua_Water_Vapor_5km_Day": {
+      "id": "MODIS_Aqua_Water_Vapor_5km_Day",
+      "title": "Water Vapor (Day)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Water_Vapor_5km_Day",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD05_L2_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "palette": {
+        "recommended": [
+          "blue_1"
+        ]
+      },
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

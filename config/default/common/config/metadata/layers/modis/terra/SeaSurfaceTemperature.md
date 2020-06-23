@@ -1,3 +1,9 @@
+### Sea Surface Temperature (Day, L2) 
+Temporal coverage: 1 April - 3 April 2020; 6 June 2020 - present
+
+### Sea Surface Temperature (Night, L2)
+Temporal coverage: 1 April - 3 April 2020; 6 June 2020 - present
+
 ### Sea Surface Temperature (L3, Night, Daily | 8-Day | Monthly | Annual, Mid-IR, 4km)
 Temporal coverage: 26 February 2000 - present
 

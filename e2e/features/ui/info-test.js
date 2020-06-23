@@ -29,11 +29,12 @@ module.exports = {
     client.click('#about_info_item');
     client.pause(500);
 
-    client.expect.element('.modalaboutpage').to.be.present;
+    client.expect.element('.about-page').to.be.present;
     client.expect.element('a[href="mailto:ryan.a.boller@nasa.gov"]').to.be.visible;
   },
 
   after: (client) => {
     client.end();
   },
+
 };

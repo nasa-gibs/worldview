@@ -1,20 +1,22 @@
 {
-    "layers": {
-        "OMI_Nitrogen_Dioxide_Tropo_Column": {
-            "id":       "OMI_Nitrogen_Dioxide_Tropo_Column",
-            "title":    "Nitrogen Dioxide (Tropospheric Column)",
-            "subtitle": "Aura / OMI",
-            "description": "omi/OMI_Nitrogen_Dioxide_Tropo_Column",
-            "group":    "overlays",
-            "layergroup": [
-              "omi"
-            ],
-            "product":  "OMNO2d",
-            "tags":     "no2",
-            "tracks": [
-            "OrbitTracks_Aura_Ascending"
-            ]
-
-        }
+  "layers": {
+    "OMI_Nitrogen_Dioxide_Tropo_Column": {
+      "id": "OMI_Nitrogen_Dioxide_Tropo_Column",
+      "title": "Nitrogen Dioxide (Tropospheric Column)",
+      "subtitle": "Aura / OMI",
+      "description": "omi/OMI_Nitrogen_Dioxide_Tropo_Column",
+      "group": "overlays",
+      "layergroup": [
+        "omi"
+      ],
+      "product": "OMNO2d",
+      "tags": "no2",
+      "tracks": [
+        "OrbitTracks_Aura_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

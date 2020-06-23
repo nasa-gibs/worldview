@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Terra_L3_SST_MidIR_9km_Night_Daily": {
-            "id":       "MODIS_Terra_L3_SST_MidIR_9km_Night_Daily",
-            "title":    "Sea Surface Temperature (L3, Night, Daily, Mid Infrared, 9 km)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_L3_SST_MidIR_9km_Night_Daily",
-            "group":    "overlays",
-            "tags": "ssc podaac PO.DAAC",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MODIS_TERRA_L3_SST_MID-IR_DAILY_9KM_NIGHTTIME_V2014.0",
-            "tracks": [
-            "OrbitTracks_Terra_Ascending"
-             ]
-        }
+  "layers": {
+    "MODIS_Terra_L3_SST_MidIR_9km_Night_Daily": {
+      "id": "MODIS_Terra_L3_SST_MidIR_9km_Night_Daily",
+      "title": "Sea Surface Temperature (L3, Night, Daily, Mid Infrared, 9 km)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_SST_MidIR_9km_Night_Daily",
+      "group": "overlays",
+      "tags": "ssc podaac PO.DAAC",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MODIS_TERRA_L3_SST_MID-IR_DAILY_9KM_NIGHTTIME_V2014.0",
+      "tracks": [
+        "OrbitTracks_Terra_Ascending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

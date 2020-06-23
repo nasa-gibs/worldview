@@ -1,21 +1,24 @@
 {
-    "layers": {
-        "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_Night": {
-            "id":       "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_Night",
-            "title":    "Land Surface Temperature (L3, Monthly, Night)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_Land_Surface_Temp_Monthly_Night",
-            "tags":     "lst",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD11C3",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-             ]
-        }
+  "layers": {
+    "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_Night": {
+      "id": "MODIS_Aqua_L3_Land_Surface_Temp_Monthly_Night",
+      "title": "Land Surface Temperature (L3, Monthly, Night)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_Land_Surface_Temp_Monthly_Night",
+      "tags": "lst",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD11C3",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

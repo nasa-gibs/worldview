@@ -126,6 +126,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
   lodashEach(layerArray, (layerInLayerGroup) => {
+    layerInLayerGroup = layerInLayerGroup.getLayers ? lodashFind(layerInLayerGroup.getLayers().getArray(), 'isVector') : layerInLayerGroup;
     // Apply mapbox-gl styles
     const extentStartX = layerInLayerGroup.getExtent()[0];
     const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
@@ -150,7 +151,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         }
         return styleFunction(feature, resolution);
       });
-    } else if ((glStyle.name === 'SEDAC')
+    } else if ((glStyle.name !== 'Orbit Tracks')
       && (selected[layerId] && selected[layerId].length)) {
       const selectedFeatures = selected[layerId];
 
@@ -229,3 +230,32 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
   }
   return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } });
 }
+
+/** Apply style to new layer
+ *
+ * @param {Object} def
+ * @param {Object} olVectorLayer
+ * @param {Object} state
+ * @param {Object} options
+ *
+ * @return {undefined}
+ */
+export const applyStyle = (def, olVectorLayer, state, options) => {
+  const { config, layers, compare } = state;
+  const activeGroupStr = options.group ? options.group : compare.activeString;
+  const activeLayers = layers[activeGroupStr];
+  const layerName = def.layer || def.id;
+  if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+    const { vectorStyles } = config;
+    let vectorStyleId;
+    vectorStyleId = def.vectorStyle.id;
+    if (activeLayers) {
+      activeLayers.forEach((layer) => {
+        if (layer.id === layerName && layer.custom) {
+          vectorStyleId = layer.custom;
+        }
+      });
+    }
+    setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, state);
+  }
+};

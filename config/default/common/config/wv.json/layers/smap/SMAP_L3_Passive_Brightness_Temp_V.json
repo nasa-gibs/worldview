@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L3_Passive_Brightness_Temp_V": {
-            "id":       "SMAP_L3_Passive_Brightness_Temp_V",
-            "title":    "Corrected Brightness Temperature (L3, Passive, V Polarization)",
-            "subtitle": "SMAP / Radiometer",
-            "description": "smap/SMAP_L3_Passive_Brightness_Temp_V",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL3SMP",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "SMAP_L3_Passive_Brightness_Temp_V": {
+      "id": "SMAP_L3_Passive_Brightness_Temp_V",
+      "title": "Corrected Brightness Temperature (L3, Passive, V Polarization)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L3_Passive_Brightness_Temp_V",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL3SMP",
+      "wrapadjacentdays": true
     }
+  }
 }

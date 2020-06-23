@@ -1,17 +1,19 @@
 {
-    "layers": {
-        "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day": {
-            "id":       "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
-            "title":    "Outgoing Longwave Radiation (L3, Day, Monthly)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
-            "tags":     "",
-            "group":    "overlays",
-            "product":  "AIRS3STM",
-
-            "layergroup": [
-              "airs"
-            ]
-        }
+  "layers": {
+    "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day": {
+      "id": "AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
+      "title": "Outgoing Longwave Radiation (L3, Day, Monthly)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L3_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS3STM",
+      "layergroup": [
+        "airs"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

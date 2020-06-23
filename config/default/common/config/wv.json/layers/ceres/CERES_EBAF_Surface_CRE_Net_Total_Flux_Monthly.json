@@ -1,18 +1,22 @@
 {
-    "layers": {
-        "CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly": {
-            "id":       "CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly",
-            "title":    "Surface CRE Net Total Flux (Monthly, Energy Balanced and Filled)",
-            "subtitle": "Terra / CERES",
-            "description": "ceres/CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly",
-            "tags":     "cloud radiative effect, energy balanced and filled",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CERES_EBAF-Surface",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly": {
+      "id": "CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly",
+      "title": "Surface CRE Net Total Flux (Monthly, Energy Balanced and Filled)",
+      "subtitle": "Terra / CERES",
+      "description": "ceres/CERES_EBAF_Surface_CRE_Net_Total_Flux_Monthly",
+      "tags": "cloud radiative effect, energy balanced and filled",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CERES_EBAF-Surface",
+      "inactive": true,
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
+  }
 }

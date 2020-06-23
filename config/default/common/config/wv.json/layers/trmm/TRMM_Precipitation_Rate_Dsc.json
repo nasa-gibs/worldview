@@ -1,17 +1,17 @@
 {
-    "layers": {
-        "TRMM_Precipitation_Rate_Dsc": {
-            "id":       "TRMM_Precipitation_Rate_Dsc",
-            "title":    "Precipitation Rate (Descending)",
-            "subtitle": "TRMM",
-            "description": "trmm/TRMM_Precipitation_Rate_Dsc",
-            "tags":     "rain",
-            "group":    "overlays",
-            "layergroup": [
-              "trmm"
-            ],
-            "product":  "GPM_2AGPROFTRMMTMI_CLIM",
-            "inactive": true
-        }
+  "layers": {
+    "TRMM_Precipitation_Rate_Dsc": {
+      "id": "TRMM_Precipitation_Rate_Dsc",
+      "title": "Precipitation Rate (Descending)",
+      "subtitle": "TRMM",
+      "description": "trmm/TRMM_Precipitation_Rate_Dsc",
+      "tags": "rain",
+      "group": "overlays",
+      "layergroup": [
+        "trmm"
+      ],
+      "product": "GPM_2AGPROFTRMMTMI_CLIM",
+      "inactive": true
     }
+  }
 }

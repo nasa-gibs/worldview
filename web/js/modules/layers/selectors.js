@@ -5,40 +5,33 @@ import {
   find as lodashFind,
   cloneDeep as lodashCloneDeep,
   isUndefined as lodashIsUndefined,
-  values as lodashValues,
-  sortBy as lodashSortBy,
-  indexOf as lodashIndexOf,
   findIndex as lodashFindIndex,
 } from 'lodash';
-import update from 'immutability-helper';
 import { createSelector } from 'reselect';
+import update from 'immutability-helper';
 import util from '../../util/util';
 
-const getConfig = (state) => state.config;
-const getProjection = (state) => state.proj && state.proj.id;
+// State selectors
+const getLayersState = ({ layers }) => layers;
+const getActiveCompareState = ({ compare }) => (compare.isCompareA ? 'active' : 'activeB');
 
-export const getLayersForProjection = createSelector(
-  [getConfig, getProjection],
-  (config, projection) => {
-    const filteredRows = lodashValues(config.layers)
-      // Only use the layers for the active projection
-      .filter((layer) => layer.projections[projection])
-      .map((layer) => {
-        // If there is metadata for the current projection, use that
-        const projectionMeta = layer.projections[projection];
-        if (projectionMeta.title) layer.title = projectionMeta.title;
-        if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
-        // Decode HTML entities in the subtitle
-        if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
-        return layer;
-      });
-    return lodashSortBy(filteredRows, (layer) => lodashIndexOf(config.layerOrder, layer.id));
+/**
+ * Return a map of active layers where key is layer id
+ */
+export const getActiveLayers = createSelector(
+  [getLayersState, getActiveCompareState],
+  (layers, activeCompare) => {
+    const activeLayerMap = {};
+    layers[activeCompare].forEach((layer) => {
+      activeLayerMap[layer.id] = layer;
+    });
+    return activeLayerMap;
   },
 );
 
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;
-  lodashValues(current.sources).forEach((source) => {
+  Object.values(current.sources).forEach((source) => {
     if (hasMeasurementSetting(current, source, config, projId)) {
       hasSource = true;
     }
@@ -57,7 +50,7 @@ export function hasMeasurementSource(current, config, projId) {
  */
 export function hasMeasurementSetting(current, source, config, projId) {
   let hasSetting;
-  lodashValues(source.settings).forEach((setting) => {
+  Object.values(source.settings).forEach((setting) => {
     const layer = config.layers[setting];
     if (layer) {
       const proj = layer.projections;
@@ -77,12 +70,6 @@ export function hasMeasurementSetting(current, source, config, projId) {
     }
   });
   return hasSetting;
-}
-
-function decodeHtml(html) {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value;
 }
 
 /**

@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA": {
-            "id":       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA",
-            "title":    "Uncorrected Brightness Temperature 9 km QA (L1, Passive, Fore, H Polarization)",
-            "subtitle": "SMAP / Radiometer",
-            "description": "smap/SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA",
-            "tags":     "enhanced",
-            "group":    "overlays",
-            "layergroup": [
-              "smap"
-            ],
-            "product":  "SPL1CTB_E"
-        }
+  "layers": {
+    "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA": {
+      "id": "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA",
+      "title": "Uncorrected Brightness Temperature 9 km QA (L1, Passive, Fore, H Polarization)",
+      "subtitle": "SMAP / Radiometer",
+      "description": "smap/SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA",
+      "tags": "enhanced",
+      "group": "overlays",
+      "layergroup": [
+        "smap"
+      ],
+      "product": "SPL1CTB_E"
     }
+  }
 }

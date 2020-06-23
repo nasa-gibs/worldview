@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "GLDAS_Near_Surface_Air_Temperature_Monthly": {
-            "id":       "GLDAS_Near_Surface_Air_Temperature_Monthly",
-            "title":    "Air Temperature (Monthly, Near Surface, Noah LSM)",
-            "subtitle": "GLDAS",
-            "description": "ldas/GLDAS_Near_Surface_Air_Temperature_Monthly",
-            "tags":     "global land data assimilation system, land surface model",
-            "group":    "overlays",
-            "layergroup": [
-              "ldas"
-            ],
-            "product":  "GLDAS_NOAH10_M.2.0",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "GLDAS_Near_Surface_Air_Temperature_Monthly": {
+      "id": "GLDAS_Near_Surface_Air_Temperature_Monthly",
+      "title": "Air Temperature (Monthly, Near Surface, Noah LSM)",
+      "subtitle": "GLDAS",
+      "description": "ldas/GLDAS_Near_Surface_Air_Temperature_Monthly",
+      "tags": "global land data assimilation system, land surface model",
+      "group": "overlays",
+      "layergroup": [
+        "ldas"
+      ],
+      "product": "GLDAS_NOAH10_M.2.0",
+      "inactive": true,
+      "wrapadjacentdays": true
     }
+  }
 }

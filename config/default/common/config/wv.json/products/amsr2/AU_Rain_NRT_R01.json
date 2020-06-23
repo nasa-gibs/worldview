@@ -1,0 +1,12 @@
+{
+    "products": {
+        "AU_Rain_NRT_R01": {
+            "name": "NRT AMSR2 Unified Global Swath Surface Precipitation GSFC Profiling Algorithm V1",
+            "handler": "List",
+            "query": {
+                "shortName": "AU_Rain_NRT_R01"
+            },
+            "version": 1
+        }
+    }
+}

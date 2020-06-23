@@ -1,16 +1,16 @@
 {
-    "layers": {
-        "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly": {
-            "id":       "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly",
-            "title":    "Air Temperature (Monthly, Near Surface, Primary Forcing Data)",
-            "subtitle": "NLDAS",
-            "description": "ldas/NLDAS_Near_Surface_Air_Temperature_Primary_Monthly",
-            "tags":     "north american land data assimilation system",
-            "group":    "overlays",
-            "layergroup": [
-              "ldas"
-            ],
-            "product":  "NLDAS_FORA0125_M"
-        }
+  "layers": {
+    "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly": {
+      "id": "NLDAS_Near_Surface_Air_Temperature_Primary_Monthly",
+      "title": "Air Temperature (Monthly, Near Surface, Primary Forcing Data)",
+      "subtitle": "NLDAS",
+      "description": "ldas/NLDAS_Near_Surface_Air_Temperature_Primary_Monthly",
+      "tags": "north american land data assimilation system",
+      "group": "overlays",
+      "layergroup": [
+        "ldas"
+      ],
+      "product": "NLDAS_FORA0125_M"
     }
+  }
 }

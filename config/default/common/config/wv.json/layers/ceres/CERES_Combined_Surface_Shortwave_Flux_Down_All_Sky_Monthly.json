@@ -1,18 +1,22 @@
 {
-    "layers": {
-        "CERES_Combined_Surface_Shortwave_Flux_Down_All_Sky_Monthly": {
-            "id":       "CERES_Combined_Surface_Shortwave_Flux_Down_All_Sky_Monthly",
-            "title":    "Untuned Shortwave Surface Flux (Monthly, Down, All-Sky)",
-            "subtitle": "Terra and Aqua/ CERES",
-            "description": "ceres/CERES_Combined_Surface_Shortwave_Flux_Down_All_Sky_Monthly",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CER_SYN1deg-Month_Terra-Aqua-MODIS",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_Combined_Surface_Shortwave_Flux_Down_All_Sky_Monthly": {
+      "id": "CERES_Combined_Surface_Shortwave_Flux_Down_All_Sky_Monthly",
+      "title": "Untuned Shortwave Surface Flux (Monthly, Down, All-Sky)",
+      "subtitle": "Terra and Aqua/ CERES",
+      "description": "ceres/CERES_Combined_Surface_Shortwave_Flux_Down_All_Sky_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CER_SYN1deg-Month_Terra-Aqua-MODIS",
+      "inactive": true,
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
+  }
 }

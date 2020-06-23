@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "MODIS_Aqua_Cloud_Effective_Radius_1621": {
-            "id":       "MODIS_Aqua_Cloud_Effective_Radius_1621",
-            "title":    "Cloud Effective Radius (2.1 micron, 1621 Algorithm)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Cloud_Effective_Radius_1621",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MYD06_L2",
-            "wrapadjacentdays": true,
-            "tracks": [
-            "OrbitTracks_Aqua_Ascending"
-             ]
-        }
-     }
- }
+  "layers": {
+    "MODIS_Aqua_Cloud_Effective_Radius_1621": {
+      "id": "MODIS_Aqua_Cloud_Effective_Radius_1621",
+      "title": "Cloud Effective Radius (2.1 micron, 1621 Algorithm)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_Cloud_Effective_Radius_1621",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MYD06_L2",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

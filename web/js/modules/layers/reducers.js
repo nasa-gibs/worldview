@@ -31,9 +31,9 @@ import { resetLayers } from './selectors';
 export const initialState = {
   active: [],
   activeB: [],
-  layersConfig: {},
   hoveredLayer: '',
   layerConfig: {},
+  facetArray: [],
   startingLayers: [],
 };
 export function getInitialState(config) {
@@ -51,6 +51,7 @@ export function layerReducer(state = initialState, action) {
     case ADD_LAYER:
     case REORDER_LAYER_GROUP:
     case ADD_LAYERS_FOR_EVENT:
+    case REMOVE_LAYER:
       return lodashAssign({}, state, {
         [layerGroupStr]: action.layers,
       });
@@ -151,10 +152,6 @@ export function layerReducer(state = initialState, action) {
         },
       });
     }
-    case REMOVE_LAYER:
-      return update(state, {
-        [layerGroupStr]: { $splice: [[action.index, 1]] },
-      });
     case UPDATE_OPACITY:
       return update(state, {
         [layerGroupStr]: {

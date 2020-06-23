@@ -1,19 +1,22 @@
 {
-    "layers": {
-        "OMPS_Ozone_Total_Column": {
-            "id":       "OMPS_Ozone_Total_Column",
-            "title":    "Ozone",
-            "subtitle": "Suomi NPP / OMPS",
-            "description": "omps/OMPS_Ozone_Total_Column",
-            "tags":     "O3",
-            "group":    "overlays",
-            "layergroup": [
-              "omps"
-            ],
-            "product":  "NMTO3",
-            "tracks": [
-            "OrbitTracks_Suomi_NPP_Ascending"
-             ]
-        }
+  "layers": {
+    "OMPS_Ozone_Total_Column": {
+      "id": "OMPS_Ozone_Total_Column",
+      "title": "Ozone",
+      "subtitle": "Suomi NPP / OMPS",
+      "description": "omps/OMPS_Ozone_Total_Column",
+      "tags": "O3",
+      "group": "overlays",
+      "layergroup": [
+        "omps"
+      ],
+      "product": "NMTO3",
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

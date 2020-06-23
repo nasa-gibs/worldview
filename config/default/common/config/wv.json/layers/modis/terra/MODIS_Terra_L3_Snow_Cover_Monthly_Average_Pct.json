@@ -1,17 +1,20 @@
 {
-    "layers": {
-        "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct": {
-            "id":       "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
-            "title":    "Days with Snow Cover (L3, Monthly, Average Percent)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD10CM",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct": {
+      "id": "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
+      "title": "Days with Snow Cover (L3, Monthly, Average Percent)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD10CM",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

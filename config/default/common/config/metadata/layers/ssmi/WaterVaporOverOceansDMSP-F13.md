@@ -9,4 +9,4 @@ References:
 [RSS SSM/I Ocean Product Grids Daily from DMSP F13 NetCDF](https://doi.org/10.5067/MEASURES/DMSP-F13/SSMI/DATA301);
 [WMO Observing System Capability Analysis and Review Tool (OSCAR) - Satellite: DMSP-F13](https://www.wmo-sat.info/oscar/satellites/view/60);
 [SSM/I and SSMIS Data in NetCDF User's Guide, Global Hydrology Research Center, The University of Alabama in Huntsville, 2012.](https://ghrc.nsstc.nasa.gov/pub/doc/ssmi_netcdf/SSMI_Data_in_NetCDF.docx);
-[Wentz. F., A Well Calibrated Ocean Algorithm for SSM/I, Remote Sensing Systems.](http://images.remss.com/papers/ssmi.pdf)
+[Wentz. F., A Well Calibrated Ocean Algorithm for SSM/I, Remote Sensing Systems.](https://images.remss.com/papers/ssmi.pdf)

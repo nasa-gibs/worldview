@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "MODIS_Aqua_L2_Photosynthetically_Available_Radiation": {
+      "id": "MODIS_Aqua_L2_Photosynthetically_Available_Radiation",
+      "title": "Photosynthetically Available Radiation (L2)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L2_Photosynthetically_Available_Radiation",
+      "tags": "par",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

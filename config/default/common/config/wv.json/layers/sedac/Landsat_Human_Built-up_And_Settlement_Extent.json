@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "Landsat_Human_Built-up_And_Settlement_Extent": {
-            "id":       "Landsat_Human_Built-up_And_Settlement_Extent",
-            "title":    "Human Built-up And Settlement Extent",
-            "subtitle": "Global Human Built-up And Settlement Extent (HBASE) Dataset From Landsat, v1 (2010)",
-            "description": "sedac/Landsat_Human_Built-up_And_Settlement_Extent",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_SEDAC_ULANDSAT_HBASE_V1",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "Landsat_Human_Built-up_And_Settlement_Extent": {
+      "id": "Landsat_Human_Built-up_And_Settlement_Extent",
+      "title": "Human Built-up And Settlement Extent",
+      "subtitle": "Global Human Built-up And Settlement Extent (HBASE) Dataset From Landsat, v1 (2010)",
+      "description": "sedac/Landsat_Human_Built-up_And_Settlement_Extent",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_SEDAC_ULANDSAT_HBASE_V1",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

@@ -1,11 +1,12 @@
 import { findIndex as lodashFindIndex } from 'lodash';
+import googleTagManager from 'googleTagManager';
+import update from 'immutability-helper';
 import {
   addLayer as addLayerSelector,
   resetLayers as resetLayersSelector,
   getLayers as getLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
 } from './selectors';
-
 import {
   RESET_LAYERS,
   ADD_LAYER,
@@ -51,10 +52,15 @@ export function activateLayersForEventCategory(activeLayers) {
 }
 export function addLayer(id, spec) {
   spec = spec || {};
+  googleTagManager.pushEvent({
+    event: 'layer_added',
+    layers: {
+      id,
+    },
+  });
   return (dispatch, getState) => {
     const state = getState();
     const { layers, compare, proj } = state;
-
     const { activeString } = compare;
     const layerObj = getLayersSelector(
       layers[activeString],
@@ -126,7 +132,9 @@ export function toggleVisibility(id, visible) {
 }
 export function removeLayer(id) {
   return (dispatch, getState) => {
-    const { layers, compare, data } = getState();
+    const {
+      layers, compare, data,
+    } = getState();
     const { activeString } = compare;
     const index = lodashFindIndex(layers[activeString], {
       id,
@@ -145,6 +153,7 @@ export function removeLayer(id) {
       index,
       activeString,
       def,
+      layers: update(layers[activeString], { $splice: [[index, 1]] }),
     });
   };
 }

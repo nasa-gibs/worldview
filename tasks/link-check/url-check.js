@@ -15,7 +15,7 @@ const requestCheck = async(urls) => {
     const url = Object.values(urls[i])[0];
 
     // Skip for mailto email links
-    if (url[0] !== 'h') {
+    if (url[0] === 'h') {
       // eslint-disable-next-line no-await-in-loop
       await fetch(url, { timeout: 10000 })
         .then(async(res) => {

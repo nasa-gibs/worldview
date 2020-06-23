@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "Human_Footprint_1995-2004": {
-            "id":       "Human_Footprint_1995-2004",
-            "title":    "Human Footprint",
-            "subtitle": "Global Human Footprint (Geographic), v2 (1995-2004)",
-            "description": "sedac/Human_Footprint_1995-2004",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_SEDAC_LWP2_HF_GEOG",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "Human_Footprint_1995-2004": {
+      "id": "Human_Footprint_1995-2004",
+      "title": "Human Footprint",
+      "subtitle": "Global Human Footprint (Geographic), v2 (1995-2004)",
+      "description": "sedac/Human_Footprint_1995-2004",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_SEDAC_LWP2_HF_GEOG",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

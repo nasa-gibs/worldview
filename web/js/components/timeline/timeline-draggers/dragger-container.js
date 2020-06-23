@@ -235,6 +235,10 @@ class DraggerContainer extends PureComponent {
       draggerVisibleB,
     } = this.props;
 
+    const {
+      draggerWidth,
+    } = this.state;
+
     const sharedProps = {
       axisWidth,
       toggleShowDraggerTime,
@@ -243,10 +247,23 @@ class DraggerContainer extends PureComponent {
       handleDragDragger: this.handleDragDragger,
       selectDragger: this.selectDragger,
     };
+
+    const selectedDraggerClipAClipWidth = Math.max(draggerWidth, draggerWidth + draggerPosition);
+    const selectedDraggerClipBClipWidth = Math.max(draggerWidth, draggerWidth + draggerPositionB);
     return (
       draggerSelected === 'selectedB'
         ? (
-          <svg className="dragger-container" width={axisWidth} height={83}>
+          <svg className="dragger-container" width={axisWidth} height={65}>
+            <defs>
+              {/* clip dragger */}
+              <clipPath id="selectedDraggerClipA">
+                <rect width={selectedDraggerClipAClipWidth} height="65" />
+              </clipPath>
+              {/* clip dragger */}
+              <clipPath id="selectedDraggerClipB">
+                <rect width={selectedDraggerClipBClipWidth} height="65" />
+              </clipPath>
+            </defs>
             {isCompareModeActive
               ? (
                 <Dragger
@@ -268,7 +285,17 @@ class DraggerContainer extends PureComponent {
           </svg>
         )
         : (
-          <svg className="dragger-container" width={axisWidth} height={83}>
+          <svg className="dragger-container" width={axisWidth} height={65}>
+            <defs>
+              {/* clip dragger */}
+              <clipPath id="selectedDraggerClipA">
+                <rect width={selectedDraggerClipAClipWidth} height="65" />
+              </clipPath>
+              {/* clip dragger */}
+              <clipPath id="selectedDraggerClipB">
+                <rect width={selectedDraggerClipBClipWidth} height="65" />
+              </clipPath>
+            </defs>
             {isCompareModeActive
               ? (
                 <Dragger

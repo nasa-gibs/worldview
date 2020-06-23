@@ -3,10 +3,10 @@
            xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
   <ColorMap title="Settlements">
     <Entries>
-      <ColorMapEntry rgb="103,236,0" transparent="false" ref="1" />
+      <ColorMapEntry rgb="0, 123, 255" transparent="false" ref="1" />
     </Entries>
     <Legend type="classification">
-      <LegendEntry rgb="103,236,0" id="1" tooltip="Settlement" showLabel="true" />
+      <LegendEntry rgb="0, 123, 255" id="1" tooltip="Settlement" showLabel="true" />
     </Legend>
   </ColorMap>
 </ColorMaps>

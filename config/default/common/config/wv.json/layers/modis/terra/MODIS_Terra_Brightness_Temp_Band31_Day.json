@@ -1,25 +1,28 @@
 {
-    "layers": {
-        "MODIS_Terra_Brightness_Temp_Band31_Day": {
-            "id":       "MODIS_Terra_Brightness_Temp_Band31_Day",
-            "title":    "Brightness Temperature (Band 31-Day)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_Brightness_Temp_Band31_Day",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD021KM_DAY",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Terra_Descending"
-            ],
-            "projections": {
-                "geographic": {
-                    "source": "GIBS:geographic"
-                }
-            }
+  "layers": {
+    "MODIS_Terra_Brightness_Temp_Band31_Day": {
+      "id": "MODIS_Terra_Brightness_Temp_Band31_Day",
+      "title": "Brightness Temperature (Band 31-Day)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Brightness_Temp_Band31_Day",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD021KM_DAY",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
         }
+      },
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

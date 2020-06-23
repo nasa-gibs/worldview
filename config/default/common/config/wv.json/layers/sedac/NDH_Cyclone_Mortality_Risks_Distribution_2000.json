@@ -1,18 +1,18 @@
 {
-    "layers": {
-        "NDH_Cyclone_Mortality_Risks_Distribution_2000": {
-            "id":       "NDH_Cyclone_Mortality_Risks_Distribution_2000",
-            "title":    "Cyclone Hazard: Mortality Risk",
-            "subtitle": "Global Cyclone Mortality Risks and Distribution, v1 (2000)",
-            "description": "sedac/NDH_Cyclone_Mortality_Risks_Distribution_2000",
-            "tags":     "human sedac",
-            "group":    "overlays",
-            "layergroup": [
-              "sedac"
-            ],
-            "product":  "CIESIN_CHRR_NDH_CYCLONE_MRD",
-            "inactive": true,
-            "wrapX": true
-        }
+  "layers": {
+    "NDH_Cyclone_Mortality_Risks_Distribution_2000": {
+      "id": "NDH_Cyclone_Mortality_Risks_Distribution_2000",
+      "title": "Cyclone Hazard: Mortality Risk",
+      "subtitle": "Global Cyclone Mortality Risks and Distribution, v1 (2000)",
+      "description": "sedac/NDH_Cyclone_Mortality_Risks_Distribution_2000",
+      "tags": "human sedac",
+      "group": "overlays",
+      "layergroup": [
+        "sedac"
+      ],
+      "product": "CIESIN_CHRR_NDH_CYCLONE_MRD",
+      "inactive": true,
+      "wrapX": true
     }
+  }
 }

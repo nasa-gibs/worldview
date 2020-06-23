@@ -107,7 +107,7 @@ export default function mapDateLineBuilder(models, config, store, ui) {
    * @private
    *
    * @param {object} Factory - React component Factory
-   * @param {number} height - Lenght of line
+   * @param {number} height - Length of line
    * @param {number} lineX - x coord value
    * @param {object} overlay - OL overlay
    * @param {object} reactCase - Dom El in which to render component

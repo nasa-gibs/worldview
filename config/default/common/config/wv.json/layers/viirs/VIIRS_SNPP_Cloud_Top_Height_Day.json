@@ -1,20 +1,23 @@
 {
-    "layers": {
-        "VIIRS_SNPP_Cloud_Top_Height_Day": {
-            "id":       "VIIRS_SNPP_Cloud_Top_Height_Day",
-            "title":    "Cloud Top Height (Day)",
-            "subtitle": "Suomi NPP / VIIRS",
-            "description": "viirs/VIIRS_SNPP_Cloud_Top_Height_Day",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "viirs"
-            ],
-            "product":  "CLDPROP_L2_VIIRS_SNPP",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Suomi_NPP_Ascending"
-            ]
-        }
+  "layers": {
+    "VIIRS_SNPP_Cloud_Top_Height_Day": {
+      "id": "VIIRS_SNPP_Cloud_Top_Height_Day",
+      "title": "Cloud Top Height (Day)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_Cloud_Top_Height_Day",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "viirs"
+      ],
+      "product": "CLDPROP_L2_VIIRS_SNPP",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

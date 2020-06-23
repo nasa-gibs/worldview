@@ -6,18 +6,23 @@
       "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Thermal_Anomalies_375m_Night",
       "tags": "hotspot s-npp snpp",
-      "layergroup": ["viirs"],
-      "product": ["VNP14IMG_NRT_NIGHT", "VNP14IMGTDL_NRT"],
+      "layergroup": [
+        "viirs"
+      ],
+      "product": [
+        "VNP14IMG_NRT_NIGHT",
+        "VNP14IMGTDL_NRT"
+      ],
       "group": "overlays",
       "format": "image/png",
       "period": "daily",
-
-      "tileSize": [512, 512],
+      "tileSize": [
+        512,
+        512
+      ],
       "type": "wms",
-
       "transition": "true",
       "startDate": "2015-11-25",
-
       "projections": {
         "arctic": {
           "source": "GIBS:wms:arctic"
@@ -26,13 +31,15 @@
           "source": "GIBS:wms"
         }
       },
-
       "palette": {
         "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
         "immutable": "true"
       },
       "tracks": [
-          "OrbitTracks_Suomi_NPP_Descending"
+        "OrbitTracks_Suomi_NPP_Descending"
+      ],
+      "daynight": [
+        "night"
       ]
     }
   }

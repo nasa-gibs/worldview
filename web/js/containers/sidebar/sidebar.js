@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get as lodashGet } from 'lodash';
 import { TabContent, TabPane } from 'reactstrap';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import Layers from './layers';
 import Events from './events';

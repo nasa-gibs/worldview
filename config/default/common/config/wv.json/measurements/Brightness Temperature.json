@@ -3,7 +3,7 @@
         "Brightness Temperature": {
             "id": "brightness-temperature",
             "title":    "Brightness Temperature",
-            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, AMSU-A/NOAA-15, AMSU-A/NOAA-16, AMSU-A/NOAA-17",
+            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI,  NOAA-20/VIIRS, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, AMSU-A/NOAA-15, AMSU-A/NOAA-16, AMSU-A/NOAA-17",
             "sources": {
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsre",
@@ -67,6 +67,18 @@
                         "GMI_Brightness_Temp_Dsc",
                         "OrbitTracks_GPM_Ascending",
                         "OrbitTracks_GPM_Descending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
+                        "VIIRS_NOAA20_Brightness_Temp_BandI5_Night",
+                        "OrbitTracks_NOAA-20_Ascending",
+                        "OrbitTracks_NOAA-20_Descending"
                     ]
                 },
                 "TRMM": {

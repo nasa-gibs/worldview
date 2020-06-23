@@ -1,14 +1,17 @@
 {
-    "layers": {
-        "MODIS_Terra_Chlorophyll_A": {
-            "id":       "MODIS_Terra_Chlorophyll_A",
-            "title":    "Chlorophyll a",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_Chlorophyll_A",
-            "group":    "overlays",
-            "tracks": [
-                "OrbitTracks_Terra_Descending"
-            ]
-        }
+  "layers": {
+    "MODIS_Terra_Chlorophyll_A": {
+      "id": "MODIS_Terra_Chlorophyll_A",
+      "title": "Chlorophyll a",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_Chlorophyll_A",
+      "group": "overlays",
+      "tracks": [
+        "OrbitTracks_Terra_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

@@ -1,18 +1,21 @@
 {
-    "layers": {
-        "MODIS_Aqua_L3_SST_Thermal_4km_Night_8Day": {
-            "id":       "MODIS_Aqua_L3_SST_Thermal_4km_Night_8Day",
-            "title":    "Sea Surface Temperature (L3, Night, 8 Day, Thermal, 4 km)",
-            "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_SST_Thermal_4km_Night_8Day",
-            "group":    "overlays",
-            "tags": "ssc podaac PO.DAAC",
-            "layergroup": [
-              "modis",
-              "modis_aqua"
-            ],
-            "product":  "MODIS_AQUA_L3_SST_THERMAL_8DAY_4KM_NIGHTTIME_V2014.0",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Aqua_L3_SST_Thermal_4km_Night_8Day": {
+      "id": "MODIS_Aqua_L3_SST_Thermal_4km_Night_8Day",
+      "title": "Sea Surface Temperature (L3, Night, 8 Day, Thermal, 4 km)",
+      "subtitle": "Aqua / MODIS",
+      "description": "modis/aqua/MODIS_Aqua_L3_SST_Thermal_4km_Night_8Day",
+      "group": "overlays",
+      "tags": "ssc podaac PO.DAAC",
+      "layergroup": [
+        "modis",
+        "modis_aqua"
+      ],
+      "product": "MODIS_AQUA_L3_SST_THERMAL_8DAY_4KM_NIGHTTIME_V2014.0",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }

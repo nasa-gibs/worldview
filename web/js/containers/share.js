@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// eslint-disable-next-line import/no-unresolved
 import googleTagManager from 'googleTagManager';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
@@ -163,9 +162,8 @@ class ShareLinkContainer extends Component {
       ? 'Please wait...'
       : isShort
           && shortLink.response
-          && shortLink.response.data
-          && shortLink.response.data.url
-        ? shortLink.response.data.url
+          && shortLink.response.link
+        ? shortLink.response.link
         : this.getPermalink();
 
     return (

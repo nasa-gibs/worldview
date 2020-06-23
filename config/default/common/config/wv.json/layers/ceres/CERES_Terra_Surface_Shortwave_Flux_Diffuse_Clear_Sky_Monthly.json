@@ -1,18 +1,22 @@
 {
-    "layers": {
-        "CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly": {
-            "id":       "CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
-            "title":    "Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)",
-            "subtitle": "Terra / CERES",
-            "description": "ceres/CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
-            "tags":     "",
-            "group":    "overlays",
-            "layergroup": [
-              "ceres"
-            ],
-            "product":  "CER_SYN1deg-Month_Terra-MODIS",
-            "inactive": true,
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly": {
+      "id": "CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
+      "title": "Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)",
+      "subtitle": "Terra / CERES",
+      "description": "ceres/CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "ceres"
+      ],
+      "product": "CER_SYN1deg-Month_Terra-MODIS",
+      "inactive": true,
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
+  }
 }

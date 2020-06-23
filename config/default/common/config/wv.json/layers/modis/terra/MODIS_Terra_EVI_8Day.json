@@ -1,17 +1,20 @@
 {
-    "layers": {
-        "MODIS_Terra_EVI_8Day": {
-            "id":       "MODIS_Terra_EVI_8Day",
-            "title":    "Enhanced Vegetation Index (EVI) (rolling 8-day)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_EVI_8Day",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD13Q4N",
-            "wrapadjacentdays": true
-        }
+  "layers": {
+    "MODIS_Terra_EVI_8Day": {
+      "id": "MODIS_Terra_EVI_8Day",
+      "title": "Enhanced Vegetation Index (EVI) (rolling 8-day)",
+      "subtitle": "Terra / MODIS",
+      "description": "modis/terra/MODIS_Terra_EVI_8Day",
+      "group": "overlays",
+      "layergroup": [
+        "modis",
+        "modis_terra"
+      ],
+      "product": "MOD13Q4N",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

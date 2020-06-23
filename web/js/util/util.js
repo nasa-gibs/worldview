@@ -1,7 +1,6 @@
 import {
   isObject as lodashIsObject,
   each as lodashEach,
-  isNull as lodashIsNull,
 } from 'lodash';
 import Cache from 'cachai';
 import moment from 'moment';
@@ -31,20 +30,6 @@ export default (function(self) {
     'NOV',
     'DEC',
   ];
-
-  // Needed anymore?
-  self.LAYER_GROUPS = {
-    baselayers: {
-      id: 'baselayers',
-      camel: 'BaseLayers',
-      description: 'Base Layers',
-    },
-    overlays: {
-      id: 'overlays',
-      camel: 'Overlays',
-      description: 'Overlays',
-    },
-  };
 
   self.repeat = function(value, length) {
     let result = '';
@@ -166,22 +151,6 @@ export default (function(self) {
   };
 
   /**
-   * Gets a pixel RGBA value from Canvas
-   *
-   * @method getCanvasPixelData
-   * @static
-   * @param canvas {Object} DOM canvas Element
-   * @param x {Number} X value on canvas
-   * @return y {Number} Y value on canvas
-   * @return {Object} Canvas image data.
-   */
-  self.getCanvasPixelData = function(canvas, x, y) {
-    const context = canvas.getContext('2d');
-    return context.getImageData(x, y, 1, 1)
-      .data;
-  };
-
-  /**
    * Parses a UTC ISO 8601 date.
    *
    * @method parseDateUTC
@@ -240,14 +209,6 @@ export default (function(self) {
     }
     self.warn(`Is not an object: ${item}`);
     return '';
-  };
-  /**
-   * Test if is valid Date
-   * @param {Object} d | Date object
-   */
-  self.isValidDate = function(d) {
-    // eslint-disable-next-line no-restricted-globals
-    return d instanceof Date && !isNaN(d);
   };
   /**
    * Parses a UTC ISO 8601 date to a non UTC date
@@ -335,19 +296,6 @@ export default (function(self) {
   };
 
   /**
-   * Julian date, padded with two zeros
-   * (to ensure the julian date is always in DDD format).
-   *
-   * @param  {Date} date {Date} the date to convert
-   * @return {string} Julian date string in the form of `YYYYDDD`
-   */
-  self.toJulianDate = function(date) {
-    const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
-    const jDate = `00${1 + Math.ceil((date.getTime() - jStart) / 86400000)}`;
-    return date.getUTCFullYear() + jDate.substr(jDate.length - 3);
-  };
-
-  /**
    * Converts a date into an ISO string with only the date portion.
    *
    * @method toISOStringDate
@@ -361,7 +309,7 @@ export default (function(self) {
   };
 
   /**
-   * Converts a time into an ISO string without miliseconds.
+   * Converts a time into an ISO string without milliseconds.
    *
    * @method toISOStringSeconds
    * @static
@@ -697,61 +645,18 @@ export default (function(self) {
   };
 
   /**
-   * Converts a date into a compact string representation.
-   *
-   * @method toCompactTimestamp
-   * @static
-   * @param date {Date} the date to convert
-   * @return {String} string representation in the form of
-   * ``YYYYMMDDHHMMSSsss``
-   */
-  self.toCompactTimestamp = function(date) {
-    return date.toISOString()
-      .replace(/[-:TZ.]/g, '');
-  };
-
-  /**
-   * Converts a compact timestamp into a date.
-   *
-   * @method fromCompactTimestamp
-   * @static
-   * @param str {String} the string to convert in the form of
-   * ``YYYYMMDDHHMMSSsss``.
-   * @return {Date} the converted date object.
-   */
-  self.fromCompactTimestamp = function(str) {
-    const v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
-    if (lodashIsNull(v)) {
-      throw new Error(`Invalid timestamp:${str}`);
-    }
-    return new Date(Date.UTC(
-      parseInt(v[1], 10),
-      parseInt(v[2] - 1, 10),
-      parseInt(v[3], 10),
-      parseInt(v[4], 10),
-      parseInt(v[5], 10),
-      parseInt(v[6], 10),
-      parseInt(v[7], 10),
-    ));
-  };
-
-  /**
    * Gets the current time. Use this instead of the Date methods to allow
    * debugging alternate "now" times.
    *
    * @method now
    * @static
-   * @return {Date} The current time or an overriden value.
+   * @return {Date} The current time or an overridden value.
    */
   const now = function() {
     return new Date();
   };
 
   self.now = now;
-
-  self.resetNow = function() {
-    self.now = now;
-  };
 
   /**
    * Gets the current day. Use this instead of the Date methods to allow
@@ -760,7 +665,7 @@ export default (function(self) {
    * @method today
    * @static
    * @return {Date} The current time with the UTC hours, minutes, and seconds
-   * fields set to zero or an overriden value.
+   * fields set to zero or an overridden value.
    */
   self.today = function() {
     return self.now();
@@ -866,7 +771,7 @@ export default (function(self) {
        * @param {Object} parameters Parameters to pass to the jQuery.ajax
        * call.
        * @return {jQuery.Deferred} a deferred object that will resolve
-       * when the query returns, or resolves immedately if the results
+       * when the query returns, or resolves immediately if the results
        * are cached.
        */
       submit(parameters) {
@@ -1103,6 +1008,34 @@ export default (function(self) {
     return value;
   };
 
+  /**
+   * Returns offset date object
+   *
+   * @method getTimezoneOffsetDate
+   * @param  {Object} date        A date object
+   * @return {Object} offsetDate  An offset date object
+   */
+  self.getTimezoneOffsetDate = (date) => {
+    const offsetDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+    return offsetDate;
+  };
+
+  /**
+   * Returns absolute UTC date timeunit numbers object
+   *
+   * @method getUTCNumbers
+   * @param  {Object} date    A date object
+   * @param  {String} prefix  Prefix min/max for timeunits in object
+   * @return {Object}         An object of UTC date timeunit numbers
+   */
+  self.getUTCNumbers = (date, prefix) => ({
+    [`${prefix}Year`]: date.getUTCFullYear(),
+    [`${prefix}Month`]: date.getUTCMonth(),
+    [`${prefix}Day`]: date.getUTCDate(),
+    [`${prefix}Hour`]: date.getUTCHours(),
+    [`${prefix}Minute`]: date.getUTCMinutes(),
+  });
+
   // Returns the number of months between two dates
   self.yearDiff = function(startDate, endDate) {
     const year1 = startDate.getFullYear();
@@ -1125,17 +1058,13 @@ export default (function(self) {
   };
 
   self.dayDiff = function(startDate, endDate) {
-    const date1 = new Date(startDate);
-    const date2 = new Date(endDate);
-    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     return dayDiff;
   };
 
   self.minuteDiff = function(startDate, endDate) {
-    const date1 = new Date(startDate);
-    const date2 = new Date(endDate);
-    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
     const minuteDiff = Math.ceil(timeDiff / 60000);
     return minuteDiff;
   };
@@ -1174,18 +1103,6 @@ export default (function(self) {
       }
     }
     return false;
-  };
-
-  /**
-   * Check if objects have the same keys
-   *
-   * @param  {array} comment seperated list of objects
-   * @return {bool}
-   */
-  self.objectsHaveSameKeys = function(...objects) {
-    const allKeys = objects.reduce((keys, object) => keys.concat(Object.keys(object)), []);
-    const union = new Set(allKeys);
-    return objects.every((object) => union.size === Object.keys(object).length);
   };
 
   return self;

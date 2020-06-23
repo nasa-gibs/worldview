@@ -1,0 +1,22 @@
+{
+    "layers": {
+        "VIIRS_NOAA20_CorrectedReflectance_TrueColor": {
+            "id":       "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+            "title":    "Corrected Reflectance (True Color)",
+            "subtitle": "NOAA-20 / VIIRS",
+            "description": "viirs/VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+            "tags":     "natural color cr jpss1",
+            "layergroup": [
+              "viirs"
+            ],
+            "group":    "baselayers",
+            "wrapadjacentdays": true,
+            "tracks": [
+                "OrbitTracks_NOAA-20_Ascending"
+            ],
+            "daynight": [
+              "day"
+            ]
+        }
+    }
+}

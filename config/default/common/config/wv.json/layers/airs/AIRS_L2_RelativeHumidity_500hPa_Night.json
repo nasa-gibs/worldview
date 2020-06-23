@@ -1,21 +1,22 @@
 {
-    "layers": {
-        "AIRS_L2_RelativeHumidity_500hPa_Night": {
-            "id":       "AIRS_L2_RelativeHumidity_500hPa_Night",
-            "title":    "Relative Humidity (L2, 500 hPa, Night)",
-            "subtitle": "Aqua / AIRS",
-            "description": "airs/AIRS_L2_RelativeHumidity_500hPa_Night",
-            "tags":     "",
-            "group":    "overlays",
-            "product":  "AIRS2RET",
-
-             "layergroup": [
-              "airs"
-            ],
-            "tracks": [
-            "OrbitTracks_Aqua_Descending"
-            ]
-
-         }
+  "layers": {
+    "AIRS_L2_RelativeHumidity_500hPa_Night": {
+      "id": "AIRS_L2_RelativeHumidity_500hPa_Night",
+      "title": "Relative Humidity (L2, 500 hPa, Night)",
+      "subtitle": "Aqua / AIRS",
+      "description": "airs/AIRS_L2_RelativeHumidity_500hPa_Night",
+      "tags": "",
+      "group": "overlays",
+      "product": "AIRS2RET",
+      "layergroup": [
+        "airs"
+      ],
+      "tracks": [
+        "OrbitTracks_Aqua_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
     }
+  }
 }
