@@ -8,10 +8,11 @@ import {
   Input,
   InputGroup,
   Button,
-  Tooltip,
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
-import { getSharelink, openPromisedSocial } from '../modules/link/util';
+import ShareToolTips from '../components/toolbar/share/tooltips';
+import { encode, getSharelink, openPromisedSocial } from '../modules/link/util';
+import { serializeDate } from '../modules/date/util';
 import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
@@ -35,7 +36,8 @@ class ShareLinkContainer extends Component {
     this.state = {
       shortLinkKey: '',
       isShort: false,
-      tooltipOpen: false,
+      tooltipToggleTime: 0,
+      showErrorTooltip: false,
       queryString: history.location.search || '',
     };
     this.onToggleShorten = this.onToggleShorten.bind(this);
@@ -91,10 +93,30 @@ class ShareLinkContainer extends Component {
 
   getPermalink() {
     const { queryString } = this.state;
+    const { selectedDate } = this.props;
     const url = window.location.href;
-    let prefix = url.split('?')[0];
-    prefix = prefix !== null && prefix !== undefined ? prefix : url;
-    return !queryString ? prefix : prefix + queryString;
+    const prefix = url.split('?')[0];
+
+    // if no time query string parameter, add to permalink
+    const isTimeInQueryString = queryString.includes('t=');
+    let timeParam = '';
+    if (!isTimeInQueryString) {
+      const serialized = serializeDate(selectedDate);
+      const encoded = encode(serialized);
+      timeParam = `t=${encoded}`;
+    }
+
+    // add to permalink based on existing querystring
+    let permalink = prefix;
+    if (!queryString) {
+      permalink += `?${timeParam}`;
+    } else if (!isTimeInQueryString) {
+      permalink += `${queryString}&${timeParam}`;
+    } else {
+      permalink = url;
+    }
+
+    return permalink;
   }
 
   onLinkClick(type) {
@@ -128,36 +150,9 @@ class ShareLinkContainer extends Component {
     }
   }
 
-  renderToolTips() {
-    const { showErrorTooltip, tooltipOpen } = this.state;
-    if (showErrorTooltip) {
-      setTimeout(() => {
-        this.setState({ showErrorTooltip: false });
-      }, 2000);
-    }
-    return (
-      <>
-        <Tooltip
-          placement="left"
-          isOpen={showErrorTooltip}
-          target="permalink_content"
-        >
-          Link cannot be shortened at this time.
-        </Tooltip>
-        <Tooltip
-          placement="right"
-          isOpen={tooltipOpen}
-          target="copy-to-clipboard-button"
-        >
-          Copied!
-        </Tooltip>
-      </>
-    );
-  }
-
   render() {
     const { shortLink } = this.props;
-    const { isShort } = this.state;
+    const { isShort, showErrorTooltip, tooltipToggleTime } = this.state;
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
       : isShort
@@ -169,7 +164,10 @@ class ShareLinkContainer extends Component {
     return (
       <>
         <div>
-          {this.renderToolTips()}
+          <ShareToolTips
+            tooltipToggleTime={tooltipToggleTime}
+            showErrorTooltip={showErrorTooltip}
+          />
           <InputGroup>
             <Input
               type="text"
@@ -185,10 +183,9 @@ class ShareLinkContainer extends Component {
               options={window.clipboardData ? {} : { format: 'text/plain' }}
               text={value}
               onCopy={() => {
-                this.setState({ tooltipOpen: true });
-                setTimeout(() => {
-                  this.setState({ tooltipOpen: false });
-                }, 2000);
+                this.setState({
+                  tooltipToggleTime: Date.now(),
+                });
               }}
             >
               <InputGroupAddon addonType="append">
@@ -213,10 +210,18 @@ class ShareLinkContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { config } = state;
+  const { compare, config, date } = state;
+  const { active, isCompareA } = compare;
+  const { selected, selectedB } = date;
+
+  // selectedDate for shared permalink
+  const selectedDate = !active && !isCompareA
+    ? selectedB
+    : selected;
 
   return {
     shortLink: state.shortLink,
+    selectedDate,
     mock:
       config.parameters && config.parameters.shorten
         ? config.parameters.shorten
@@ -237,5 +242,6 @@ export default connect(
 ShareLinkContainer.propTypes = {
   mock: PropTypes.string,
   requestShortLink: PropTypes.func,
+  selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
 };
