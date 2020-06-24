@@ -18,6 +18,7 @@ function capitalizeFirstLetter(string) {
 }
 
 function setLayerProp (layer, prop, value) {
+  if (!layer) return;
   if (prop === 'measurements' && (value && value.includes('Featured'))) {
     return;
   }
@@ -123,6 +124,9 @@ export default function buildLayerFacetProps(config, selectedDate) {
     setCoverageFacetProp(layer, selectedDate);
     setLayerPeriodFacetProps(layer);
     if (layer.daynight && layer.daynight.length) {
+      if (typeof layer.daynight === 'string') {
+        layer.daynight = [layer.daynight];
+      }
       layer.daynight = layer.daynight.map(capitalizeFirstLetter);
     }
     return layer;
