@@ -29,7 +29,7 @@ export const getLayersForProjection = createSelector(
         if (projectionMeta.title) layer.title = projectionMeta.title;
         if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
         // Decode HTML entities in the subtitle
-        if (layer.subtitle.includes('&')) {
+        if (layer.subtitle && layer.subtitle.includes('&')) {
           layer.subtitle = decodeHtml(layer.subtitle);
         }
         return layer;
