@@ -12,7 +12,9 @@ import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
   selectCategory as selectCategoryAction,
   toggleFeatureTab as toggleFeatureTabAction,
+  toggleRecentLayersTab as toggleRecentLayersTabAction,
 } from '../../../../modules/product-picker/actions';
+import RecentLayersList from './recent-layers';
 
 /*
  * A scrollable list of layers
@@ -32,9 +34,15 @@ class BrowseLayers extends React.Component {
    * @param {String} key | categoryType identifier
    */
   selectCategoryType(key) {
-    const { selectCategory, toggleFeatureTab } = this.props;
+    const {
+      selectCategory,
+      toggleFeatureTab,
+      toggleRecentLayersTab,
+    } = this.props;
     if (key === 'featured') {
       toggleFeatureTab();
+    } else if (key === 'recent') {
+      toggleRecentLayersTab();
     } else {
       selectCategory(key);
     }
@@ -64,13 +72,19 @@ class BrowseLayers extends React.Component {
       width,
       categoryType,
       mode,
+      layerConfig,
     } = this.props;
-    const isCategoryDisplay = mode === 'category' && selectedProjection === 'geographic';
-    const showCategoryTabs = isCategoryDisplay || categoryType === 'featured';
+    const isCategoryDisplay = mode === 'category'
+      && selectedProjection === 'geographic'
+      && categoryType !== 'recent';
+    const showCategoryTabs = isCategoryDisplay
+    || categoryType === 'featured'
+    || categoryType === 'recent';
     const categoryKeys = [
       'hazards and disasters',
       'scientific',
       'featured',
+      'recent',
     ];
 
     return (
@@ -90,11 +104,19 @@ class BrowseLayers extends React.Component {
                 </NavItem>
               ))}
             </Nav>
-            {isCategoryDisplay ? (
+
+
+            {// eslint-disable-next-line no-nested-ternary
+            isCategoryDisplay ? (
               <div className="product-outter-list-case">
                 <CategoryGrid width={width} />
               </div>
-            ) : this.renderLayerList()}
+            ) : categoryType === 'recent'
+              ? (
+                <RecentLayersList proj={selectedProjection} layerConfig={layerConfig} />
+              )
+              : this.renderLayerList()
+            }
           </>
         )
         : this.renderLayerList()
@@ -105,10 +127,12 @@ class BrowseLayers extends React.Component {
 BrowseLayers.propTypes = {
   browser: PropTypes.object,
   categoryType: PropTypes.string,
+  layerConfig: PropTypes.object,
   mode: PropTypes.string,
   selectCategory: PropTypes.func,
   selectedProjection: PropTypes.string,
   toggleFeatureTab: PropTypes.func,
+  toggleRecentLayersTab: PropTypes.func,
   width: PropTypes.number,
 };
 
@@ -119,6 +143,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleFeatureTab: () => {
     dispatch(toggleFeatureTabAction());
   },
+  toggleRecentLayersTab: () => {
+    dispatch(toggleRecentLayersTabAction());
+  },
 });
 
 function mapStateToProps(state, ownProps) {
@@ -127,6 +154,7 @@ function mapStateToProps(state, ownProps) {
     browser,
     proj,
     productPicker,
+    layers,
   } = state;
   const {
     mode,
@@ -142,6 +170,7 @@ function mapStateToProps(state, ownProps) {
     categoryType,
     categoryConfig: config.categories,
     measurementConfig: config.measurements,
+    layerConfig: layers.layerConfig,
     listScrollTop,
     selectedProjection: proj.id,
     selectedMeasurement,

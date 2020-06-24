@@ -13,6 +13,7 @@ import {
   SELECT_LAYER,
   SHOW_MEASUREMENTS,
   TOGGLE_FEATURED_TAB,
+  TOGGLE_RECENT_LAYERS,
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
@@ -145,6 +146,13 @@ export function productPickerReducer(state = productPickerState, action) {
         category,
         mode: 'measurements',
         selectedMeasurement: selectedMeasurementId,
+      };
+    }
+
+    case TOGGLE_RECENT_LAYERS: {
+      return {
+        ...state,
+        categoryType: 'recent',
       };
     }
 

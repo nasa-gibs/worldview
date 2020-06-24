@@ -9,6 +9,7 @@ import {
   SELECT_LAYER,
   SHOW_MEASUREMENTS,
   TOGGLE_FEATURED_TAB,
+  TOGGLE_RECENT_LAYERS,
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
@@ -72,6 +73,11 @@ export function toggleFeatureTab() {
       type: TOGGLE_FEATURED_TAB,
       config: getState().config,
     });
+  };
+}
+export function toggleRecentLayersTab() {
+  return {
+    type: TOGGLE_RECENT_LAYERS,
   };
 }
 export function toggleSearchMode() {

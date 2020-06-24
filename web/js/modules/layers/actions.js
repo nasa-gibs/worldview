@@ -7,7 +7,6 @@ import {
   getLayers as getLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
 } from './selectors';
-import updateRecentLayers from './util';
 import {
   RESET_LAYERS,
   ADD_LAYER,
@@ -20,6 +19,7 @@ import {
   ADD_LAYERS_FOR_EVENT,
 } from './constants';
 import { selectProduct } from '../data/actions';
+import { updateRecentLayers } from './util';
 
 export function resetLayers(activeString) {
   return (dispatch, getState) => {
@@ -36,6 +36,7 @@ export function resetLayers(activeString) {
     });
   };
 }
+
 export function activateLayersForEventCategory(activeLayers) {
   return (dispatch, getState) => {
     const state = getState();
@@ -51,18 +52,18 @@ export function activateLayersForEventCategory(activeLayers) {
     });
   };
 }
-export function addLayer(id, spec) {
-  spec = spec || {};
+
+export function addLayer(id, spec = {}) {
   googleTagManager.pushEvent({
     event: 'layer_added',
     layers: { id },
   });
-  updateRecentLayers(id);
   return (dispatch, getState) => {
     const state = getState();
     const { layers, compare, proj } = state;
     const { activeString } = compare;
-    const layerObj = getLayersSelector(
+    const layerObj = layers.layerConfig[id];
+    const activeLayers = getLayersSelector(
       layers[activeString],
       { group: 'all' },
       state,
@@ -72,10 +73,10 @@ export function addLayer(id, spec) {
       spec,
       layers[activeString],
       layers.layerConfig,
-      layerObj.overlays.length || 0,
+      activeLayers.overlays.length || 0,
       proj.id,
     );
-
+    updateRecentLayers(layerObj);
     dispatch({
       type: ADD_LAYER,
       id,
@@ -84,21 +85,25 @@ export function addLayer(id, spec) {
     });
   };
 }
+
 export function clearGraticule() {
   return (dispatch) => {
     dispatch(toggleVisibility('Graticule', false));
   };
 }
+
 export function refreshGraticule() {
   return (dispatch) => {
     dispatch(toggleVisibility('Graticule', true));
   };
 }
+
 export function initSecondLayerGroup() {
   return {
     type: INIT_SECOND_LAYER_GROUP,
   };
 }
+
 export function reorderLayers(layerArray) {
   return {
     type: REORDER_LAYER_GROUP,
@@ -113,6 +118,7 @@ export function layerHover(id, isMouseOver) {
     active: isMouseOver,
   };
 }
+
 export function toggleVisibility(id, visible) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();
@@ -130,6 +136,7 @@ export function toggleVisibility(id, visible) {
     });
   };
 }
+
 export function removeLayer(id) {
   return (dispatch, getState) => {
     const {
@@ -157,6 +164,7 @@ export function removeLayer(id) {
     });
   };
 }
+
 export function setOpacity(id, opacity) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();

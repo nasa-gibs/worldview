@@ -18,7 +18,7 @@ const enabled = (function() {
 export default {
   enabled,
   keys: {
-    RECENT_LAYERS: 'recentlyAddedLayers',
+    RECENT_LAYERS: 'recentLayers',
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
     HIDE_TOUR: 'hideTour',
@@ -29,9 +29,7 @@ export default {
     NOTIFICATION_MSG: 'message',
   },
   getItem(key) {
-    if (enabled) {
-      return localStorage.getItem(key);
-    }
+    return enabled && localStorage.getItem(key);
   },
   setItem(key, value) {
     if (enabled) {
