@@ -43,7 +43,7 @@ import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
 const history = createBrowserHistory();
 const configURI = Brand.url('config/wv.json');
-const startTime = new Date().getTime();
+const startTime = Date.now();
 const compose = DEBUG === false || DEBUG === 'logger'
   ? defaultCompose
   : DEBUG === 'devtools' && composeWithDevTools({

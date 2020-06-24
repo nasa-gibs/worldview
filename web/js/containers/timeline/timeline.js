@@ -866,7 +866,7 @@ class Timeline extends React.Component {
   moveSelectedDateBackwards() {
     const { selectedDate } = this.props;
     const fortyMinutes = 40 * 60000;
-    const now = new Date().getTime();
+    const now = Date.now();
     const isRecent = Math.abs(now - selectedDate.getTime()) < fortyMinutes;
     if (isRecent) {
       this.onDateChange(now - fortyMinutes);

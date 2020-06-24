@@ -95,7 +95,7 @@ export default (function(self) {
   };
   self.elapsed = function(message, startTime, parameters) {
     if (parameters && !parameters.elapsed) return;
-    const t = new Date().getTime() - startTime;
+    const t = Date.now() - startTime;
     console.log(t, message);
     return t;
   };

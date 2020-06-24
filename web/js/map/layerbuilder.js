@@ -68,7 +68,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
   const getCacheOptions = (period, date, state) => {
     const tenMin = 10 * 60000;
     const thirtyMin = 30 * 60000;
-    const now = new Date().getTime();
+    const now = Date.now();
     const recentTime = Math.abs(now - date.getTime()) < thirtyMin;
     if (period !== 'subdaily' || !recentTime) {
       return {};
