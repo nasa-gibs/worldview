@@ -56,4 +56,9 @@ module.exports = {
 
   // ui
   uiInfoButton: '#wv-info-button',
+
+  // social
+  socialToolbar: '#toolbar_share_link',
+  socialCopyLinkButton: '#wv-link-button',
+  socialLinkInput: '#permalink_content',
 };
