@@ -20,10 +20,8 @@ class ShareToolTips extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const { tooltipToggleTime, tooltipErrorTime } = this.props;
-    const prevTooltipToggleTime = prevProps.tooltipToggleTime;
-    const prevTooltipErrorTime = prevProps.tooltipErrorTime;
-    const toolTipChange = tooltipToggleTime !== prevTooltipToggleTime;
-    const tooltipErrorChange = tooltipErrorTime !== prevTooltipErrorTime;
+    const toolTipChange = tooltipToggleTime !== prevProps.tooltipToggleTime;
+    const tooltipErrorChange = tooltipErrorTime !== prevProps.tooltipErrorTime;
     if (toolTipChange || tooltipErrorChange) {
       this.updateToolTipState(toolTipChange, tooltipErrorChange);
     }
