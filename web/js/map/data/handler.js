@@ -3,7 +3,7 @@ import {
   forOwn as lodashForOwn,
 } from 'lodash';
 import { dataCmrMockClient, dataCmrClient } from './cmr';
-import { getActiveTime } from '../../modules/date/util';
+import getSelectedDate from '../../modules/date/selectors';
 import util from '../../util/util';
 import brand from '../../brand';
 import { CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84 } from '../map';
@@ -152,7 +152,7 @@ export function dataHandlerModisSwathMultiDay(config, store, spec) {
 
   self._submit = function(queryData) {
     const queryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       startTimeDelta,
       endTimeDelta,
       data: queryData,
@@ -185,12 +185,12 @@ export function dataHandlerModisSwathMultiDay(config, store, spec) {
       dataResultsTransform(crs),
       dataResultsExtentFilter(crs, self.extents[crs]),
       dataResultsTimeFilter({
-        time: getActiveTime(state),
+        time: getSelectedDate(state),
         eastZone: spec.eastZone,
         westZone: spec.westZone,
         maxDistance: spec.maxDistance,
       }),
-      dataResultsTimeLabel(getActiveTime(state)),
+      dataResultsTimeLabel(getSelectedDate(state)),
       dataResultsConnectSwaths(crs),
     ];
     return chain.process(results);
@@ -286,7 +286,7 @@ export function dataHandlerCollectionMix(config, store, spec) {
     const state = store.getState();
     const dataState = state.data;
     const nrtQueryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       startTimeDelta: nrtHandler.startTimeDelta,
       endTimeDelta: nrtHandler.endTimeDelta,
       data: config.products[dataState.selectedProduct].query.nrt,
@@ -295,7 +295,7 @@ export function dataHandlerCollectionMix(config, store, spec) {
     const nrt = self.cmr.submit(nrtQueryOptions);
 
     const scienceQueryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: config.products[dataState.selectedProduct].query.science,
       search: 'collections.json',
     };
@@ -341,7 +341,7 @@ export function dataHandlerList(config, store, spec) {
     const queryOptions = {
       startTimeDelta: 1,
       endTimeDelta: -1,
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: queryData,
     };
 
@@ -368,7 +368,7 @@ export function dataHandlerList(config, store, spec) {
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
-      dataResultsDateTimeLabel(getActiveTime(state)),
+      dataResultsDateTimeLabel(getSelectedDate(state)),
     ];
     return chain.process(results);
   };
@@ -384,7 +384,7 @@ export function dataHandlerDailyGranuleList(config, store, spec) {
     const queryOptions = {
       startTimeDelta: 180,
       endTimeDelta: -180,
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: queryData,
     };
 
@@ -402,7 +402,7 @@ export function dataHandlerDailyAMSRE(config, store, spec) {
     const queryOptions = {
       startTimeDelta: 180,
       endTimeDelta: -180,
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: queryData,
     };
 
@@ -425,7 +425,7 @@ export function dataHandlerDailyAMSRE(config, store, spec) {
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsVersionFilterExact(productConfig.version),
-      dataResultsDateTimeLabel(getActiveTime(state)),
+      dataResultsDateTimeLabel(getSelectedDate(state)),
     ];
     return chain.process(results);
   };
@@ -445,7 +445,7 @@ export function dataHandlerModisGrid(config, store, spec) {
     const queryOptions = {
       startTimeDelta: 1,
       endTimeDelta: -1,
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: config.products[dataState.selectedProduct].query,
     };
 
@@ -523,7 +523,7 @@ export function dataHandlerModisMix(config, store, spec) {
     const crs = projCrs.replace(/:/, '_');
 
     const nrtQueryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       startTimeDelta: nrtHandler.startTimeDelta,
       endTimeDelta: nrtHandler.endTimeDelta,
       data: config.products[dataState.selectedProduct].query.nrt,
@@ -531,7 +531,7 @@ export function dataHandlerModisMix(config, store, spec) {
     const nrt = self.cmr.submit(nrtQueryOptions);
 
     const scienceQueryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: config.products[dataState.selectedProduct].query.science,
     };
     const science = self.cmr.submit(scienceQueryOptions);
@@ -592,7 +592,7 @@ export function dataHandlerModisSwath(config, store, spec) {
 
   self._submit = function(queryData) {
     const queryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: queryData,
     };
 
@@ -623,7 +623,7 @@ export function dataHandlerModisSwath(config, store, spec) {
       dataResultsDensify(),
       dataResultsTransform(projCrs),
       dataResultsExtentFilter(projCrs, self.extents[projCrs]),
-      dataResultsTimeLabel(getActiveTime(state)),
+      dataResultsTimeLabel(getSelectedDate(state)),
       dataResultsConnectSwaths(projCrs),
     ];
     return chain.process(results);
@@ -645,7 +645,7 @@ export function dataHandlerHalfOrbit(config, store, spec) {
 
   self._submit = function(queryData) {
     const queryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: queryData,
     };
 
@@ -676,7 +676,7 @@ export function dataHandlerHalfOrbit(config, store, spec) {
       dataResultsDividePolygon(),
       dataResultsDensify(),
       dataResultsTransform(projCrs),
-      dataResultsTimeLabel(getActiveTime(state)),
+      dataResultsTimeLabel(getSelectedDate(state)),
     ];
     return chain.process(results);
   };
@@ -706,7 +706,7 @@ export function dataHandlerVIIRSSwathDay(config, store) {
 
   self._submit = function(queryData) {
     const queryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       startTimeDelta: spec.startTimeDelta,
       endTimeDelta: spec.endTimeDelta,
       data: queryData,
@@ -731,12 +731,12 @@ export function dataHandlerVIIRSSwathDay(config, store) {
       dataResultsTransform(projCrs),
       dataResultsExtentFilter(projCrs, self.extents[projCrs]),
       dataResultsTimeFilter({
-        time: getActiveTime(state),
+        time: getSelectedDate(state),
         eastZone: spec.eastZone,
         westZone: spec.westZone,
         maxDistance: spec.maxDistance,
       }),
-      dataResultsTimeLabel(getActiveTime(state)),
+      dataResultsTimeLabel(getSelectedDate(state)),
       // End of one granule is 60 seconds behind the start of the next granule.
       // Use delta of -60.
       dataResultsConnectSwaths(projCrs, -60),
@@ -769,7 +769,7 @@ export function dataHandlerVIIRSSwathNight(config, store) {
 
   self._submit = function(queryData) {
     const queryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       startTimeDelta: spec.startTimeDelta,
       endTimeDelta: spec.endTimeDelta,
       data: queryData,
@@ -795,12 +795,12 @@ export function dataHandlerVIIRSSwathNight(config, store) {
       dataResultsTransform(projCrs),
       dataResultsExtentFilter(projCrs, self.extents[projCrs]),
       dataResultsTimeFilter({
-        time: getActiveTime(state),
+        time: getSelectedDate(state),
         eastZone: spec.eastZone,
         westZone: spec.westZone,
         maxDistance: spec.maxDistance,
       }),
-      dataResultsTimeLabel(getActiveTime(state)),
+      dataResultsTimeLabel(getSelectedDate(state)),
       // End of one granule is 60 seconds behind the start of the next granule.
       // Use delta of -60.
       dataResultsConnectSwaths(projCrs, -60),
@@ -819,7 +819,7 @@ export function dataHandlerWeldGranuleFootprints(config, store, spec) {
 
   self._submit = function(queryData) {
     const queryOptions = {
-      time: getActiveTime(state),
+      time: getSelectedDate(state),
       data: queryData,
     };
 
