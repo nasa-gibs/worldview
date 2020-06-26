@@ -35,7 +35,7 @@ class SearchLayerList extends React.Component {
     const selectedLayerInResults = selectedLayer && results.length
       && results.find((l) => l.id === selectedLayer.id);
 
-    if (!selectedLayerInResults) {
+    if (!selectedLayerInResults && selectedLayer) {
       selectLayer(null);
     }
     if (prevProps.selectedLayer !== selectedLayer) {
