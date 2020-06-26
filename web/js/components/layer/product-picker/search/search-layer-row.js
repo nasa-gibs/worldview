@@ -9,6 +9,7 @@ import {
 } from '../../../../modules/layers/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
+import getSelectedDate from '../../../../modules/date/selectors';
 
 /**
  * A single layer search result row
@@ -111,12 +112,12 @@ SearchLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { date, productPicker, browser } = state;
+  const { productPicker, browser } = state;
   const activeLayerMap = getActiveLayers(state);
   return {
     scrollIntoView: browser.screenWidth < 1024,
     isEnabled: !!activeLayerMap[ownProps.layer.id],
-    selectedDate: date.selected,
+    selectedDate: getSelectedDate(state),
     selectedLayer: productPicker.selectedLayer,
   };
 };

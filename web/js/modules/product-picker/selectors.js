@@ -4,6 +4,7 @@ import {
 } from 'lodash';
 import { createSelector } from 'reselect';
 import buildLayerFacetProps from './format-config';
+import getSelectedDate from '../date/selectors';
 
 const decodeHtml = (html) => {
   const txt = document.createElement('textarea');
@@ -15,7 +16,6 @@ const decodeHtml = (html) => {
 const getConfig = ({ config }) => config;
 const getProjection = ({ proj }) => proj && proj.id;
 const getProductPicker = ({ productPicker }) => productPicker;
-const getSelectedDate = ({ date }) => date && date.selected;
 
 export const getLayersForProjection = createSelector(
   [getConfig, getProjection, getSelectedDate],

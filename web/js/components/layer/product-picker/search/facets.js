@@ -10,6 +10,7 @@ import {
   collapseFacet as collapseFacetAction,
 } from '../../../../modules/product-picker/actions';
 import facetConfig from '../../../../modules/product-picker/facet-config';
+import getSelectedDate from '../../../../modules/date/selectors';
 
 function Facets(props) {
   const {
@@ -88,12 +89,12 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state, ownProps) {
-  const { browser, productPicker, date } = state;
+  const { browser, productPicker } = state;
   const { showMobileFacets, collapsedFacets } = productPicker;
 
   return {
     collapsedFacets,
-    selectedDate: date.selected,
+    selectedDate: getSelectedDate(state),
     isMobile: browser.lessThan.medium,
     showMobileFacets,
     browser,
