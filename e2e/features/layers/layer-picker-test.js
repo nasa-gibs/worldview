@@ -1,4 +1,5 @@
 const { assertCategories } = require('../../reuseables/layer-picker.js');
+const localSelectors = require('../../reuseables/selectors.js');
 
 const skipTour = require('../../reuseables/skip-tour.js');
 
@@ -30,8 +31,10 @@ const correctedReflectanceCheckboxContainer = '#checkbox-case-MODIS_Aqua_Correct
 const correctedReflectanceChecked = '#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor .wv-checkbox.checked';
 const weldReflectanceCheckboxContainer = '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly';
 const weldUnavailableTooltipIcon = '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly #availability-info';
-const unavailableFilterToggle = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type';
-const unavailableFilterTooltipIcon = '#coverage-facet svg.facet-tooltip';
+const availableFilterCheckbox = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type';
+const availableFilterCheckboxInput = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type input';
+const availableFilterTextEl = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type > span';
+const coverageTooltipIcon = '#coverage-facet svg.facet-tooltip';
 const scienceDisciplinesTab = '#categories-nav .nav-item:nth-child(2)';
 const aodSidebarLayer = '#active-MODIS_Combined_Value_Added_AOD';
 const aodMAIACSidebarLayer = '#active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
@@ -103,10 +106,10 @@ module.exports = {
       c.assert.containsText('.no-results', 'No layers found!');
     });
   },
-  '"Visible" filter removes items not available from list, adds a chip': (c) => {
+  '"Available 2013 May 15" filter removes items not available from list, adds a chip': (c) => {
     c.clearValue(layersSearchField);
     c.setValue(layersSearchField, '(True');
-    c.moveToElement(unavailableFilterTooltipIcon, 2, 2, (e) => {
+    c.moveToElement(coverageTooltipIcon, 2, 2, (e) => {
       c.waitForElementVisible('.tooltip', TIME_LIMIT, (e) => {
         c.expect.element('.tooltip').to.be.present;
         // Move cursor off tooltip so it fades
@@ -115,21 +118,13 @@ module.exports = {
       });
     });
 
-    c.click(unavailableFilterToggle);
+    c.click(availableFilterCheckbox);
     c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
       c.expect.elements(layersSearchRow).count.to.equal(4);
       c.assert.containsText(layerResultsCountText, 'Showing 4 out of');
       c.expect.element('.bag-o-chips').to.be.present;
       c.expect.elements('.filter-chip').count.to.equal(1);
     });
-  },
-  'Disabling unavailable filter updates list': (c) => {
-    c.click(unavailableFilterToggle);
-    c.pause(200);
-    c.expect.elements(layersSearchRow).count.to.equal(6);
-    c
-      .assert
-      .containsText(layerResultsCountText, 'Showing 6 out of');
   },
   'Closing and reopening layer picker restores state.': (c) => {
     // First, select a row and confirm details are showing
@@ -144,15 +139,40 @@ module.exports = {
       // Now reopen modal and confirm state is just as we left it
       c.click(addLayers);
       c.waitForElementVisible(layerSearchList, TIME_LIMIT, (e) => {
-        c.expect.elements(layersSearchRow).count.to.equal(6);
+        c.expect.elements(layersSearchRow).count.to.equal(4);
         c
           .assert
-          .containsText(layerResultsCountText, 'Showing 6 out of');
+          .containsText(layerResultsCountText, 'Showing 4 out of');
         c.expect.element(layerDetails).to.be.present;
         c.assert.containsText(layerDetailHeader, 'Corrected Reflectance');
         c.expect.element(layerDetailsDateRange).to.be.present;
+        c.expect.element('.bag-o-chips').to.be.present;
+        c.expect.elements('.filter-chip').count.to.equal(1);
       });
     });
+  },
+  'Changing app date is reflected in coverage facets': (c) => {
+    // Close the modal
+    c.click(layersModalCloseButton);
+
+    // Change the date 2012-4-14
+    c.click(localSelectors.yearDown);
+    c.click(localSelectors.monthDown);
+    c.click(localSelectors.dayDown);
+
+    c.click(addLayers);
+    // Confirm available facet still enabled but date changed
+    c.assert.containsText(availableFilterTextEl, 'Available 2012 Apr 14');
+    c.expect.element(availableFilterCheckboxInput).to.be.selected;
+  },
+  'Disabling coverage filter updates list': (c) => {
+    c.click(availableFilterCheckbox);
+    c.pause(200);
+    c.expect.element(availableFilterCheckboxInput).to.not.be.selected;
+    c.expect.elements(layersSearchRow).count.to.equal(6);
+    c
+      .assert
+      .containsText(layerResultsCountText, 'Showing 6 out of');
   },
   'Finding layer by ID with search': (c) => {
     c.clearValue(layersSearchField);
