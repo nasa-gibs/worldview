@@ -11,6 +11,7 @@ import {
   removeLayer as removeLayerAction,
 } from '../../../../modules/layers/actions';
 import SelectedDate from '../../../selected-date';
+import getSelectedDate from '../../../../modules/date/selectors';
 
 /*
  * A scrollable list of layers
@@ -105,11 +106,10 @@ MeasurementLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { date } = state;
   const activeLayerMap = getActiveLayers(state);
   return {
     isEnabled: !!activeLayerMap[ownProps.layer.id],
-    selectedDate: date.selected,
+    selectedDate: getSelectedDate(state),
   };
 };
 

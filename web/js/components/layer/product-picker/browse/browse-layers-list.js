@@ -6,6 +6,7 @@ import CategoryLayerRow from './category-layer-row';
 import {
   hasMeasurementSource as hasSourceSelector,
 } from '../../../../modules/layers/selectors';
+import getSelectedDate from '../../../../modules/date/selectors';
 
 function BrowseLayerList (props) {
   const {
@@ -53,7 +54,6 @@ BrowseLayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    date,
     productPicker,
     proj,
     config,
@@ -72,7 +72,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedProjection: proj.id,
     selectedMeasurement,
     selectedMeasurementSourceIndex,
-    selectedDate: date.selected,
+    selectedDate: getSelectedDate(state),
     hasMeasurementSource: (current) => hasSourceSelector(current, config, proj.id),
   };
 };

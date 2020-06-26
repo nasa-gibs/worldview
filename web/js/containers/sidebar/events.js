@@ -14,6 +14,7 @@ import {
 import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
+import getSelectedDate from '../../modules/date/selectors';
 
 class Events extends React.Component {
   constructor(props) {
@@ -170,11 +171,8 @@ function mapStateToProps(state) {
     config,
     proj,
     browser,
-    date,
-    compare,
   } = state;
   const { selected, showAll } = state.events;
-  const activeDatestr = compare.isCompareA ? 'selected' : 'selectedB';
   const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoading = requestedEvents.isLoading
     || requestedEventSources.isLoading
@@ -217,7 +215,7 @@ function mapStateToProps(state) {
     apiURL,
     config,
     isMobile: browser.lessThan.medium,
-    selectedDate: date[activeDatestr].toISOString().split('T')[0],
+    selectedDate: getSelectedDate(state).toISOString().split('T')[0],
   };
 }
 export default connect(
