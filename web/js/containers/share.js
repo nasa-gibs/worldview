@@ -17,7 +17,7 @@ import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
 
-const getShortenRequestString = function(mock, permalink) {
+const getShortenRequestString = (mock, permalink) => {
   const mockStr = mock || '';
   if (/localhost/.test(window.location)) {
     return 'mock/short_link.json';
@@ -37,17 +37,22 @@ class ShareLinkContainer extends Component {
       shortLinkKey: '',
       isShort: false,
       tooltipToggleTime: 0,
-      showErrorTooltip: false,
+      tooltipErrorTime: 0,
       queryString: history.location.search || '',
     };
-    this.onToggleShorten = this.onToggleShorten.bind(this);
-    this.onLinkClick = this.onLinkClick.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.shortLink.error && prevState.isShort) {
-      return { isShort: false, showErrorTooltip: true };
-    } return null;
+    const { shortLink } = nextProps;
+    const errorNoResponse = shortLink.response === null;
+    const errorExplicit = shortLink.error;
+    if ((errorNoResponse || errorExplicit) && prevState.isShort) {
+      return {
+        isShort: false,
+        tooltipErrorTime: Date.now(),
+      };
+    }
+    return null;
   }
 
   componentDidMount() {
@@ -68,14 +73,14 @@ class ShareLinkContainer extends Component {
     if (this.unlisten) this.unlisten();
   }
 
-  getShortLink() {
+  getShortLink = () => {
     const { requestShortLink, mock } = this.props;
     const link = this.getPermalink();
     const location = getShortenRequestString(mock, link);
     return requestShortLink(location);
   }
 
-  onToggleShorten() {
+  onToggleShorten = () => {
     const { shortLinkKey, isShort, queryString } = this.state;
     if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink();
@@ -87,11 +92,20 @@ class ShareLinkContainer extends Component {
         isShort: !isShort,
       });
     } else {
-      this.setState({ isShort: !isShort });
+      this.setState({
+        isShort: !isShort,
+      });
     }
   }
 
-  getPermalink() {
+  // set copy tooltip time
+  onCopyToClipboard = () => {
+    this.setState({
+      tooltipToggleTime: Date.now(),
+    });
+  }
+
+  getPermalink = () => {
     const { queryString } = this.state;
     const { selectedDate } = this.props;
     const url = window.location.href;
@@ -119,7 +133,7 @@ class ShareLinkContainer extends Component {
     return permalink;
   }
 
-  onLinkClick(type) {
+  onLinkClick = (type) => {
     const permalink = this.getPermalink();
     googleTagManager.pushEvent({
       event: 'social_share_platform',
@@ -152,7 +166,11 @@ class ShareLinkContainer extends Component {
 
   render() {
     const { shortLink } = this.props;
-    const { isShort, showErrorTooltip, tooltipToggleTime } = this.state;
+    const {
+      isShort,
+      tooltipErrorTime,
+      tooltipToggleTime,
+    } = this.state;
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
       : isShort
@@ -165,8 +183,8 @@ class ShareLinkContainer extends Component {
       <>
         <div>
           <ShareToolTips
+            tooltipErrorTime={tooltipErrorTime}
             tooltipToggleTime={tooltipToggleTime}
-            showErrorTooltip={showErrorTooltip}
           />
           <InputGroup>
             <Input
@@ -178,15 +196,10 @@ class ShareLinkContainer extends Component {
                 e.preventDefault();
               }}
             />
-
             <CopyToClipboard
               options={window.clipboardData ? {} : { format: 'text/plain' }}
               text={value}
-              onCopy={() => {
-                this.setState({
-                  tooltipToggleTime: Date.now(),
-                });
-              }}
+              onCopy={this.onCopyToClipboard}
             >
               <InputGroupAddon addonType="append">
                 <Button id="copy-to-clipboard-button">COPY</Button>

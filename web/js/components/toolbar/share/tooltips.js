@@ -14,58 +14,46 @@ class ShareToolTips extends PureComponent {
     super(props);
     this.state = {
       showErrorTooltip: false,
-      tooltipOpen: false,
-      tooltipToggleTime: 0,
+      showCopiedToolTip: false,
     };
   }
 
-  componentDidMount() {
-    const { showErrorTooltip } = this.props;
-    if (showErrorTooltip) {
-      this.setState({
-        showErrorTooltip,
-      });
-    }
-  }
-
   componentDidUpdate(prevProps) {
-    const { showErrorTooltip, tooltipToggleTime } = this.props;
-    const tooltipToggleTimeChange = tooltipToggleTime !== this.state.tooltipToggleTime;
-    const showErrorTooltipChange = showErrorTooltip && !prevProps.showErrorTooltip;
-    if (tooltipToggleTimeChange || showErrorTooltipChange) {
-      this.updateToolTipState();
+    const { tooltipToggleTime, tooltipErrorTime } = this.props;
+    const prevTooltipToggleTime = prevProps.tooltipToggleTime;
+    const prevTooltipErrorTime = prevProps.tooltipErrorTime;
+    const toolTipChange = tooltipToggleTime !== prevTooltipToggleTime;
+    const tooltipErrorChange = tooltipErrorTime !== prevTooltipErrorTime;
+    if (toolTipChange || tooltipErrorChange) {
+      this.updateToolTipState(toolTipChange, tooltipErrorChange);
     }
   }
 
   componentWillUnmount() {
     // clear pending timeouts
-    clearTimeout(this.toolTipOpenTimeout);
+    clearTimeout(this.showCopiedToolTipTimeout);
     clearTimeout(this.showErrorTimeout);
   }
 
-  updateToolTipState = () => {
-    const { showErrorTooltip, tooltipToggleTime } = this.props;
-    // eslint-disable-next-line react/no-access-state-in-setstate
-    const toolTipChange = tooltipToggleTime !== this.state.tooltipToggleTime;
+  updateToolTipState = (toolTipChange, tooltipErrorChange) => {
     this.setState({
-      showErrorTooltip,
-      tooltipToggleTime,
-      tooltipOpen: toolTipChange,
+      showErrorTooltip: tooltipErrorChange,
+      showCopiedToolTip: toolTipChange,
     });
   }
 
   render() {
-    const { showErrorTooltip, tooltipOpen } = this.state;
+    const { showErrorTooltip, showCopiedToolTip } = this.state;
     if (showErrorTooltip) {
       clearTimeout(this.showErrorTimeout);
       this.showErrorTimeout = setTimeout(() => {
         this.setState({ showErrorTooltip: false });
       }, 2000);
     }
-    if (tooltipOpen) {
-      clearTimeout(this.toolTipOpenTimeout);
-      this.toolTipOpenTimeout = setTimeout(() => {
-        this.setState({ tooltipOpen: false });
+    if (showCopiedToolTip) {
+      clearTimeout(this.showCopiedToolTipTimeout);
+      this.showCopiedToolTipTimeout = setTimeout(() => {
+        this.setState({ showCopiedToolTip: false });
       }, 2000);
     }
     return (
@@ -79,7 +67,7 @@ class ShareToolTips extends PureComponent {
         </Tooltip>
         <Tooltip
           placement="right"
-          isOpen={tooltipOpen}
+          isOpen={showCopiedToolTip}
           target="copy-to-clipboard-button"
         >
           Copied!
@@ -90,7 +78,7 @@ class ShareToolTips extends PureComponent {
 }
 
 ShareToolTips.propTypes = {
-  showErrorTooltip: PropTypes.bool,
+  tooltipErrorTime: PropTypes.number,
   tooltipToggleTime: PropTypes.number,
 };
 
