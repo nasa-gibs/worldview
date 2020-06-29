@@ -17,7 +17,7 @@ import { addLayer, resetLayers } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
-import safeLocalStorage from '../../util/local-storage';
+
 
 export function getOrbitTrackTitle(def) {
   const { track } = def;
@@ -1250,45 +1250,3 @@ export const hasNonClickableVectorLayer = (activeLayers, mapRes) => {
   }
   return isNonClickableVectorLayer;
 };
-
-export function updateRecentLayers({ id: layerId, projections }) {
-  const MAX_RECENT_LAYERS = 10;
-  const { RECENT_LAYERS } = safeLocalStorage.keys;
-  const defaultObj = {
-    geographic: [],
-    arctic: [],
-    antarctic: [],
-  };
-  const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
-  const recentLayers = JSON.parse(recentLayersJson) || defaultObj;
-
-  Object.keys(projections).forEach((proj) => {
-    const layers = recentLayers[proj];
-    const existingEntry = layers.find(({ id }) => id === layerId);
-
-    if (existingEntry) {
-      existingEntry.count += 1;
-      existingEntry.dateAdded = new Date().valueOf();
-    } else {
-      if (layers.length === MAX_RECENT_LAYERS) {
-        // - Determine lowest count
-        // - Collect all layers that match lowest count
-        // - Remove oldest layer from that group
-        const [lowestCountLayer] = layers.sort((a, b) => a.count - b.count);
-        const filteredByCount = layers.filter(
-          ({ count }) => count === lowestCountLayer.count,
-        );
-        const [oldestLowest] = filteredByCount.sort(
-          (a, b) => a.dateAdded.valueOf() - b.dateAdded.valueOf(),
-        );
-        recentLayers[proj] = layers.filter(({ id }) => id !== oldestLowest.id);
-      }
-      recentLayers[proj].push({
-        id: layerId,
-        count: 1,
-        dateAdded: new Date().valueOf(),
-      });
-    }
-  });
-  safeLocalStorage.setItem(RECENT_LAYERS, JSON.stringify(recentLayers));
-}

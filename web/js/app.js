@@ -83,6 +83,7 @@ import '../css/vectorMeta.css';
 import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../css/facets.css';
+import '../css/recent-layers.css';
 import '../pages/css/document.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');

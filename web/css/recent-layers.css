@@ -1,0 +1,29 @@
+.recent-layers-header {
+  height: 40px;
+  position: relative;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 0 10px;
+
+  h2 {
+    display: inline;
+    line-height: 38px;
+    font-size: 20px;
+  }
+  .svg-inline--fa {
+    height: 20px;
+    color: #555;
+  }
+  button {
+    top: 7px;
+    right: 5px;
+    position: absolute;
+    padding: 4px 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .recent-layers-header {
+    width: 50%;
+  }
+}

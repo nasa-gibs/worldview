@@ -82,6 +82,7 @@ export function productPickerReducer(state = productPickerState, action) {
         mode: 'category',
         categoryType: action.value,
         selectedMeasurement: null,
+        selectedLayer: null,
       };
     }
 
@@ -146,6 +147,7 @@ export function productPickerReducer(state = productPickerState, action) {
         category,
         mode: 'measurements',
         selectedMeasurement: selectedMeasurementId,
+        selectedLayer: null,
       };
     }
 

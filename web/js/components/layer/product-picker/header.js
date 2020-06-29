@@ -111,6 +111,7 @@ class ProductPickerHeader extends React.Component {
   render() {
     const {
       category,
+      categoryType,
       filters,
       isMobile,
       layerCount,
@@ -130,10 +131,13 @@ class ProductPickerHeader extends React.Component {
       || (categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
       && mode !== 'category');
+    const recentLayersMode = categoryType === 'recent';
     const isBreadCrumb = showBackButton && !isSearching && width > 650;
     const showReset = !!(filters.length || searchTerm.length);
-    const showFilterBtnMobile = mode === 'search' ? !showMobileFacets : !selectedLayer;
-    const showFilterBnDesktop = mode !== 'search' && !selectedLayer;
+    const showFilterBtnMobile = recentLayersMode
+      || (mode === 'search' ? !showMobileFacets : !selectedLayer);
+    const showFilterBnDesktop = recentLayersMode
+      || (mode !== 'search' && !selectedLayer);
     const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
     const filterBtnFn = mode !== 'search' ? toggleSearchMode : toggleMobileFacets;
 
@@ -201,6 +205,7 @@ class ProductPickerHeader extends React.Component {
 
 ProductPickerHeader.propTypes = {
   category: PropTypes.object,
+  categoryType: PropTypes.string,
   clearFilters: PropTypes.func,
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
@@ -239,6 +244,7 @@ const mapStateToProps = (state, ownProps) => {
   const {
     mode,
     category,
+    categoryType,
     showMobileFacets,
     selectedLayer,
   } = productPicker;
@@ -248,6 +254,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     layerCount: layers.length,
     category,
+    categoryType,
     isMobile,
     showMobileFacets,
     mode,

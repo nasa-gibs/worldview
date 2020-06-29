@@ -10,6 +10,7 @@ import 'whatwg-fetch'; // fetch() polyfill for IE
 import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
+import RecentLayersInfo from '../browse/recent-layers-info';
 
 /*
  * A scrollable list of layers
@@ -121,6 +122,18 @@ class SearchLayerList extends React.Component {
     }
   }
 
+  renderNoResults () {
+    const { categoryType } = this.props;
+    return categoryType === 'recent'
+      ? (<RecentLayersInfo />)
+      : (
+        <div className="no-results">
+          <FontAwesomeIcon icon={faMeteor} size="5x" />
+          <h3> No layers found! </h3>
+        </div>
+      );
+  }
+
   render() {
     const { visibleItems, hasMoreItems } = this.state;
     const { results } = this.props;
@@ -128,12 +141,7 @@ class SearchLayerList extends React.Component {
     this.scrollParent = this.scrollParent || document.querySelector(scrollParentSelector);
 
     return !results.length
-      ? (
-        <div className="no-results">
-          <FontAwesomeIcon icon={faMeteor} size="5x" />
-          <h3> No layers found! </h3>
-        </div>
-      )
+      ? this.renderNoResults()
       : (
         <InfiniteScroll
           pageStart={0}
@@ -157,6 +165,7 @@ class SearchLayerList extends React.Component {
 }
 
 SearchLayerList.propTypes = {
+  categoryType: PropTypes.string,
   results: PropTypes.array,
   selectedLayer: PropTypes.object,
   selectLayer: PropTypes.func,
@@ -164,8 +173,9 @@ SearchLayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { productPicker } = state;
-  const { selectedLayer } = productPicker;
+  const { selectedLayer, categoryType } = productPicker;
   return {
+    categoryType,
     selectedLayer,
   };
 };
