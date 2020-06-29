@@ -265,6 +265,40 @@ class LayerSettings extends React.Component {
     );
   }
 
+  /**
+   * Render Granule count slider and granule date list settings (if granule layer)
+   */
+  renderGranuleSettings = (layer) => {
+    const {
+      granuleOptions,
+      screenHeight,
+      resetGranuleLayerDates,
+      toggleHoveredGranule,
+      updateGranuleLayerDates,
+    } = this.props;
+    const { count, dates } = granuleOptions;
+    return dates
+      ? (
+        <>
+          <GranuleCountSlider
+            count={count}
+            granuleDates={dates}
+            updateGranuleLayerDates={updateGranuleLayerDates}
+            def={layer}
+          />
+          <GranuleLayerDateList
+            def={layer}
+            screenHeight={screenHeight}
+            granuleDates={dates}
+            granuleCount={count}
+            updateGranuleLayerDates={updateGranuleLayerDates}
+            resetGranuleLayerDates={resetGranuleLayerDates}
+            toggleHoveredGranule={toggleHoveredGranule}
+          />
+        </>
+      ) : null;
+  }
+
   render() {
     let renderCustomizations;
     const {
@@ -272,11 +306,6 @@ class LayerSettings extends React.Component {
       customPalettesIsActive,
       layer,
       palettedAllowed,
-      granuleLayerCount,
-      granuleLayerDates,
-      resetGranuleLayerDates,
-      toggleHoveredGranule,
-      updateGranuleLayerDates,
     } = this.props;
 
     if (layer.type !== 'vector') {
@@ -295,26 +324,7 @@ class LayerSettings extends React.Component {
           setOpacity={setOpacity}
           layer={layer}
         />
-        {granuleLayerDates
-          ? (
-            <>
-              <GranuleCountSlider
-                start={granuleLayerCount}
-                granuleDates={granuleLayerDates}
-                granuleCount={granuleLayerCount}
-                updateGranuleLayerDates={updateGranuleLayerDates}
-                layer={layer}
-              />
-              <GranuleLayerDateList
-                def={layer}
-                granuleDates={granuleLayerDates}
-                granuleCount={granuleLayerCount}
-                updateGranuleLayerDates={updateGranuleLayerDates}
-                resetGranuleLayerDates={resetGranuleLayerDates}
-                toggleHoveredGranule={toggleHoveredGranule}
-              />
-            </>
-          ) : null}
+        {this.renderGranuleSettings(layer)}
         {renderCustomizations}
         {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
       </>
@@ -330,20 +340,16 @@ function mapStateToProps(state, ownProps) {
   const groupName = compare.activeString;
 
   const granuleState = layers.granuleLayers[groupName][ownProps.layer.id];
-  let granuleLayerDates;
-  let granuleLayerCount;
-  let granuleCMRGeometry;
+  const granuleOptions = {};
   if (granuleState) {
-    granuleLayerDates = granuleState.dates;
-    granuleLayerCount = granuleState.count;
-    granuleCMRGeometry = granuleState.geometry;
+    const { dates, count } = granuleState;
+    granuleOptions.dates = dates;
+    granuleOptions.count = count || 20;
   }
 
   return {
     paletteOrder: config.paletteOrder,
-    granuleLayerDates,
-    granuleLayerCount: granuleLayerCount || 20,
-    granuleCMRGeometry,
+    granuleOptions,
     groupName,
     screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
@@ -352,7 +358,6 @@ function mapStateToProps(state, ownProps) {
     getDefaultLegend: (layerId, index) => getDefaultLegend(layerId, index, state),
     getCustomPalette: (id) => getCustomPalette(id, custom),
     getPaletteLegend: (layerId, index) => getPaletteLegend(layerId, index, groupName, state),
-
     getPaletteLegends: (layerId) => getPaletteLegends(layerId, groupName, state),
     getPalette: (layerId, index) => getPalette(layerId, index, groupName, state),
     getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
@@ -419,8 +424,7 @@ LayerSettings.propTypes = {
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
-  granuleLayerCount: PropTypes.number,
-  granuleLayerDates: PropTypes.array,
+  granuleOptions: PropTypes.object,
   groupName: PropTypes.string,
   layer: PropTypes.object,
   palettedAllowed: PropTypes.bool,

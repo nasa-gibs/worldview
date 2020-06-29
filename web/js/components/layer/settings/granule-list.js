@@ -191,13 +191,13 @@ class GranuleLayerDateList extends PureComponent {
       hoveredItem,
       lastMovedItem,
     } = this.state;
-    const { def } = this.props;
+    const { def, screenHeight } = this.props;
     const maxNumItemsNoScrollNeeded = 8;
     const granuleDateLength = items.length;
     const needsScrollBar = granuleDateLength > maxNumItemsNoScrollNeeded;
     const droppableId = `droppable-granule-date-list-${def.id}`;
     return (
-      <div className="layer-granule-date-draggable-list">
+      <div className="layer-granule-date-draggable-list" style={{ paddingLeft: '4px', marginBottom: '14px' }}>
         <h2 className="wv-header">
           Granule Layer Date Order
           <span style={{ float: 'right' }}>
@@ -212,80 +212,91 @@ class GranuleLayerDateList extends PureComponent {
             </Button>
           </span>
         </h2>
-        <Scrollbar style={{ maxHeight: '500px' }} needsScrollBar={needsScrollBar}>
-          <DragDropContext onDragEnd={this.onDragEnd}>
-            <Droppable droppableId={droppableId}>
-              {(provided, snapshot) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={getListStyle(needsScrollBar)}
-                >
-                  {items.map((item, index) => (
-                    <Draggable key={item} draggableId={item} index={index}>
-                      {(provided, snapshot) => (
-                        <div
-                          className="granule-date-item"
-                          onMouseEnter={() => this.handleMouseOverItem(item, index)}
-                          onMouseLeave={() => this.handleMouseLeaveItem(item, index)}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={getItemStyle(
-                            snapshot.isDragging,
-                            hoveredItem === item,
-                            lastMovedItem === item,
-                            provided.draggableProps.style,
+        {items.length > 0
+          ? (
+            <Scrollbar style={{ maxHeight: `${screenHeight - 60 - 60 - 100 - 100 - 40 - 60 - 70}px` }} needsScrollBar={needsScrollBar}>
+              <DragDropContext onDragEnd={this.onDragEnd}>
+                <Droppable droppableId={droppableId}>
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={getListStyle(needsScrollBar)}
+                    >
+                      {items.map((item, index) => (
+                        <Draggable key={item} draggableId={item} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              className="granule-date-item"
+                              onMouseEnter={() => this.handleMouseOverItem(item, index)}
+                              onMouseLeave={() => this.handleMouseLeaveItem(item, index)}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getItemStyle(
+                                snapshot.isDragging,
+                                hoveredItem === item,
+                                lastMovedItem === item,
+                                provided.draggableProps.style,
+                              )}
+                            >
+                              <div>
+                                {item}
+                              </div>
+                              <div>
+                                {index < items.length - 1
+                                  ? (
+                                    <button
+                                      type="button"
+                                      className="granule-date-item-down-button"
+                                      onClick={(e) => this.moveDown(e, index, item)}
+                                    >
+                                      <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth />
+                                    </button>
+                                  )
+                                  : null}
+                                {index > 0
+                                  ? (
+                                    <button
+                                      type="button"
+                                      className="granule-date-item-up-button"
+                                      onClick={(e) => this.moveUp(e, index, item)}
+                                    >
+                                      <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth />
+                                    </button>
+                                  )
+                                  : null}
+                                {index > 0
+                                  ? (
+                                    <button
+                                      type="button"
+                                      className="granule-date-item-top-button"
+                                      onClick={(e) => this.moveToTop(e, index, item)}
+                                    >
+                                      TOP
+                                    </button>
+                                  )
+                                  : null}
+                              </div>
+                            </div>
                           )}
-                        >
-                          <div>
-                            {item}
-                          </div>
-                          <div>
-                            {index < items.length - 1
-                              ? (
-                                <button
-                                  type="button"
-                                  className="granule-date-item-down-button"
-                                  onClick={(e) => this.moveDown(e, index, item)}
-                                >
-                                  <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth />
-                                </button>
-                              )
-                              : null}
-                            {index > 0
-                              ? (
-                                <button
-                                  type="button"
-                                  className="granule-date-item-up-button"
-                                  onClick={(e) => this.moveUp(e, index, item)}
-                                >
-                                  <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth />
-                                </button>
-                              )
-                              : null}
-                            {index > 0
-                              ? (
-                                <button
-                                  type="button"
-                                  className="granule-date-item-top-button"
-                                  onClick={(e) => this.moveToTop(e, index, item)}
-                                >
-                                  TOP
-                                </button>
-                              )
-                              : null}
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </Scrollbar>
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </Scrollbar>
+          )
+          : (
+            <>
+              <div style={{ marginBottom: '14px', color: '#a0a0a0' }}>
+                <p>No granules available.</p>
+                <br />
+              </div>
+            </>
+          )}
       </div>
     );
   }
@@ -296,6 +307,7 @@ GranuleLayerDateList.propTypes = {
   granuleCount: PropTypes.number,
   granuleDates: PropTypes.array,
   resetGranuleLayerDates: PropTypes.func,
+  screenHeight: PropTypes.number,
   toggleHoveredGranule: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func,
 };
