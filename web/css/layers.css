@@ -448,7 +448,8 @@
 
 .no-results {
   text-align: center;
-  margin-top: 40px;
+  max-width: 440px;
+  margin: 40px auto;
   & svg.svg-inline--fa {
     color: #777;
     font-size: 100px;
@@ -551,6 +552,9 @@
 @media (min-width: 768px) {
   .category-width .search-layers-container {
     height: calc(var(--vh, 1vh) * 100 - 172px);
+  }
+  .browse-search-width .search-layers-container.recent-layers {
+    height: calc(var(--vh, 1vh) * 100 - 235px);
   }
 }
 

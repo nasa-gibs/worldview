@@ -19,7 +19,7 @@ import {
   ADD_LAYERS_FOR_EVENT,
 } from './constants';
 import { selectProduct } from '../data/actions';
-import { updateRecentLayers } from './util';
+import { updateRecentLayers } from '../product-picker/util';
 
 export function resetLayers(activeString) {
   return (dispatch, getState) => {
