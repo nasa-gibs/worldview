@@ -21,11 +21,10 @@ import {
   selectCategory as selectCategoryAction,
   toggleFeatureTab as toggleFeatureTabAction,
   toggleRecentLayersTab as toggleRecentLayersTabAction,
+  clearRecentLayers as clearRecentLayersAction,
 } from '../../../../modules/product-picker/actions';
 import {
   recentLayerInfo,
-  getRecentLayers,
-  clearRecentLayers,
 } from '../../../../modules/product-picker/util';
 import RecentLayersList from './recent-layers';
 
@@ -40,19 +39,18 @@ function BrowseLayers (props) {
   const {
     browser,
     categoryType,
-    layerConfig,
     mode,
     selectedProjection,
     width,
+    recentLayers,
     selectCategory,
     toggleFeatureTab,
     toggleRecentLayersTab,
+    clearRecentLayers,
   } = props;
 
-  const recentLayers = getRecentLayers(layerConfig, selectedProjection);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [tooltipVisible, toggleTooltip] = useState(false);
-  // const [results, setResults] = useState(initialResults);
 
   /**
    * Update category type in which to show
@@ -71,7 +69,7 @@ function BrowseLayers (props) {
 
   const renderContent = () => (categoryType === 'recent'
     ? (
-      <RecentLayersList recentLayers={recentLayers} />
+      <RecentLayersList />
     )
     : (
       <div className="search-layers-container browse">
@@ -141,10 +139,7 @@ function BrowseLayers (props) {
         />
         <Button
           size="sm"
-          onClick={() => {
-            clearRecentLayers();
-            // selectCategory(CATEGORY_KEYS[0]);
-          }}
+          onClick={clearRecentLayers}
         >
           Clear List
         </Button>
@@ -210,8 +205,9 @@ function BrowseLayers (props) {
 BrowseLayers.propTypes = {
   browser: PropTypes.object,
   categoryType: PropTypes.string,
-  layerConfig: PropTypes.object,
+  clearRecentLayers: PropTypes.func,
   mode: PropTypes.string,
+  recentLayers: PropTypes.array,
   selectCategory: PropTypes.func,
   selectedProjection: PropTypes.string,
   toggleFeatureTab: PropTypes.func,
@@ -229,6 +225,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleRecentLayersTab: () => {
     dispatch(toggleRecentLayersTabAction());
   },
+  clearRecentLayers: () => {
+    dispatch(clearRecentLayersAction());
+  },
 });
 
 function mapStateToProps(state, ownProps) {
@@ -245,6 +244,7 @@ function mapStateToProps(state, ownProps) {
     listScrollTop,
     selectedMeasurement,
     selectedMeasurementSourceIndex,
+    recentLayers,
   } = productPicker;
 
   return {
@@ -255,6 +255,7 @@ function mapStateToProps(state, ownProps) {
     measurementConfig: config.measurements,
     layerConfig: layers.layerConfig,
     listScrollTop,
+    recentLayers,
     selectedProjection: proj.id,
     selectedMeasurement,
     selectedMeasurementSourceIndex,

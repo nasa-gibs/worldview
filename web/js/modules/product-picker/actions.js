@@ -1,5 +1,10 @@
 import initSearch from './search-config';
 import {
+  getRecentLayers,
+  clearRecentLayers as clearRecentFromLocalStorage,
+} from './util';
+
+import {
   SAVE_SEARCH_STATE,
   INIT_SEARCH_STATE,
   COLLAPSE_FACET,
@@ -13,6 +18,7 @@ import {
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
+  CLEAR_RECENT_LAYERS,
   RESET_STATE,
 } from './constants';
 
@@ -76,8 +82,14 @@ export function toggleFeatureTab() {
   };
 }
 export function toggleRecentLayersTab() {
-  return {
-    type: TOGGLE_RECENT_LAYERS,
+  return (dispatch, getState) => {
+    const { layers, proj } = getState();
+    const { layerConfig } = layers;
+
+    dispatch({
+      type: TOGGLE_RECENT_LAYERS,
+      recentLayers: getRecentLayers(layerConfig, proj.id),
+    });
   };
 }
 export function toggleSearchMode() {
@@ -93,6 +105,12 @@ export function toggleCategoryMode() {
 export function toggleMobileFacets() {
   return {
     type: TOGGLE_MOBILE_FACETS,
+  };
+}
+export function clearRecentLayers() {
+  clearRecentFromLocalStorage();
+  return {
+    type: CLEAR_RECENT_LAYERS,
   };
 }
 export function resetProductPickerState(projection) {

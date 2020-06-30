@@ -8,30 +8,26 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import SearchLayerList from '../search/search-layers-list';
 import LayerMetadataDetail from '../search/layer-metadata-detail';
 import {
-  clearRecentLayers,
   recentLayerInfo,
 } from '../../../../modules/product-picker/util';
+import {
+  clearRecentLayers as clearRecentLayersAction,
+} from '../../../../modules/product-picker/actions';
 
 function RecentLayersList(props) {
   const {
+    clearRecentLayers,
     selectedLayer,
     smallView,
     isMobile,
     recentLayers,
   } = props;
 
-  const [results, setResults] = useState(recentLayers);
   const [tooltipVisible, toggleTooltip] = useState(false);
 
-  function clearList() {
-    clearRecentLayers();
-    setResults([]);
-  }
-
-  // console.table(recentLayers[proj].sort(sortFn));
   return (
     <>
-      {!isMobile && !!results.length && (
+      {!isMobile && !!recentLayers.length && (
       <div className="recent-layers-header">
         <h2> Recently Used Layers </h2>
         <Tooltip
@@ -49,7 +45,7 @@ function RecentLayersList(props) {
           size="lg"
           icon={faInfoCircle}
         />
-        <Button size="sm" onClick={clearList}>
+        <Button size="sm" onClick={clearRecentLayers}>
           Clear List
         </Button>
       </div>
@@ -57,9 +53,9 @@ function RecentLayersList(props) {
       <div className="search-layers-container recent-layers">
         <div className="layer-list-detail-container">
           <div className="layer-list-container search">
-            <SearchLayerList results={results} />
+            <SearchLayerList results={recentLayers} />
           </div>
-          { !selectedLayer && smallView ? null : !!results.length && (
+          { !selectedLayer && smallView ? null : !!recentLayers.length && (
           <div className="layer-detail-container layers-all search">
             <LayerMetadataDetail />
           </div>
@@ -71,23 +67,38 @@ function RecentLayersList(props) {
 }
 
 RecentLayersList.propTypes = {
+  clearRecentLayers: PropTypes.func,
   isMobile: PropTypes.bool,
   selectedLayer: PropTypes.object,
   smallView: PropTypes.bool,
   recentLayers: PropTypes.array,
 };
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   const { browser, productPicker } = state;
-  const { selectedLayer, showMobileFacets } = productPicker;
+  const {
+    selectedLayer,
+    showMobileFacets,
+    recentLayers,
+  } = productPicker;
 
   return {
+    browser,
     smallView: browser.screenWidth < 1024,
     isMobile: browser.lessThan.medium,
     showMobileFacets,
     selectedLayer,
-    browser,
+    recentLayers,
   };
-}
+};
 
-export default connect(mapStateToProps, null)(RecentLayersList);
+const mapDispatchToProps = (dispatch) => ({
+  clearRecentLayers: () => {
+    dispatch(clearRecentLayersAction());
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RecentLayersList);
