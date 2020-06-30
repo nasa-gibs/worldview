@@ -1,7 +1,5 @@
 import googleTagManager from 'googleTagManager';
-import {
-  get as lodashGet,
-} from 'lodash';
+import { get as lodashGet } from 'lodash';
 
 import {
   SAVE_SEARCH_STATE,
@@ -17,6 +15,7 @@ import {
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
+  CLEAR_RECENT_LAYERS,
   RESET_STATE,
 } from './constants';
 
@@ -32,6 +31,7 @@ export const productPickerState = {
   selectedMeasurementSourceIndex: 0,
   searchConfig: undefined,
   collapsedFacets: {},
+  recentLayers: [],
 };
 
 export function getInitialState(config) {
@@ -152,9 +152,11 @@ export function productPickerReducer(state = productPickerState, action) {
     }
 
     case TOGGLE_RECENT_LAYERS: {
+      const { recentLayers } = action;
       return {
         ...state,
         categoryType: 'recent',
+        recentLayers,
       };
     }
 
@@ -170,6 +172,13 @@ export function productPickerReducer(state = productPickerState, action) {
       return {
         ...state,
         showMobileFacets: !state.showMobileFacets,
+      };
+    }
+
+    case CLEAR_RECENT_LAYERS: {
+      return {
+        ...state,
+        recentLayers: [],
       };
     }
 
