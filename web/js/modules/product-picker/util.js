@@ -3,8 +3,16 @@ import safeLocalStorage from '../../util/local-storage';
 const { RECENT_LAYERS } = safeLocalStorage.keys;
 const MAX_RECENT_LAYERS = 20;
 
-export function getRecentLayers() {
-  return JSON.parse(safeLocalStorage.getItem(RECENT_LAYERS));
+export function getRecentLayers(layerConfig, proj) {
+  const byUse = (a, b) => {
+    if (a.count > b.count) return -1;
+    if (a.count < b.count) return 1;
+    if (a.dateAdded > b.dateAdded) return 1;
+    if (a.dateAdded < b.dateAdded) return -1;
+  };
+  const toLayerObj = ({ id }) => layerConfig[id];
+  const layers = JSON.parse(safeLocalStorage.getItem(RECENT_LAYERS));
+  return layers ? layers[proj].sort(byUse).map(toLayerObj) : [];
 }
 
 export function clearRecentLayers() {

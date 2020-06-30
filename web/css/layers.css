@@ -596,6 +596,9 @@
       padding: 0 4px;
     }
   }
+  .search-layers-container.recent-layers {
+    height: calc(var(--vh, 1vh) * 100 - 90px);
+  }
   .category-masonry-case .layer-category {
     width: 100%;
   }

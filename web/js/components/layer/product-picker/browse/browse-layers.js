@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
+  Button,
   Nav,
   NavItem,
   NavLink,
+  DropdownMenu,
+  Dropdown,
+  DropdownItem,
+  DropdownToggle,
+  Tooltip,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 import BrowseLayerList from './browse-layers-list';
 import CategoryGrid from './category-grid';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
@@ -14,31 +22,44 @@ import {
   toggleFeatureTab as toggleFeatureTabAction,
   toggleRecentLayersTab as toggleRecentLayersTabAction,
 } from '../../../../modules/product-picker/actions';
+import {
+  recentLayerInfo,
+  getRecentLayers,
+  clearRecentLayers,
+} from '../../../../modules/product-picker/util';
 import RecentLayersList from './recent-layers';
 
-/*
- * A scrollable list of layers
- * @class LayerList
- * @extends React.Component
- */
-class BrowseLayers extends React.Component {
-  constructor(props) {
-    super(props);
+const CATEGORY_KEYS = [
+  'hazards and disasters',
+  'scientific',
+  'featured',
+  'recent',
+];
 
-    this.selectCategoryType = this.selectCategoryType.bind(this);
-  }
+function BrowseLayers (props) {
+  const {
+    browser,
+    categoryType,
+    layerConfig,
+    mode,
+    selectedProjection,
+    width,
+    selectCategory,
+    toggleFeatureTab,
+    toggleRecentLayersTab,
+  } = props;
+
+  const recentLayers = getRecentLayers(layerConfig, selectedProjection);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [tooltipVisible, toggleTooltip] = useState(false);
+  // const [results, setResults] = useState(initialResults);
 
   /**
    * Update category type in which to show
    * e.g. Hazards and disasters or science disciplines
    * @param {String} key | categoryType identifier
    */
-  selectCategoryType(key) {
-    const {
-      selectCategory,
-      toggleFeatureTab,
-      toggleRecentLayersTab,
-    } = this.props;
+  const selectCategoryType = (key) => {
     if (key === 'featured') {
       toggleFeatureTab();
     } else if (key === 'recent') {
@@ -46,11 +67,13 @@ class BrowseLayers extends React.Component {
     } else {
       selectCategory(key);
     }
-  }
+  };
 
-  renderLayerList() {
-    const { browser } = this.props;
-    return (
+  const renderContent = () => (categoryType === 'recent'
+    ? (
+      <RecentLayersList recentLayers={recentLayers} />
+    )
+    : (
       <div className="search-layers-container browse">
         <div className="layer-list-container browse">
           <div className="product-outter-list-case">
@@ -63,65 +86,125 @@ class BrowseLayers extends React.Component {
           </div>
         )}
       </div>
-    );
-  }
+    ));
 
-  render() {
-    const {
-      selectedProjection,
-      width,
-      categoryType,
-      mode,
-      layerConfig,
-    } = this.props;
-    const isCategoryDisplay = mode === 'category'
-      && selectedProjection === 'geographic'
-      && categoryType !== 'recent';
-    const showCategoryTabs = isCategoryDisplay
-    || categoryType === 'featured'
-    || categoryType === 'recent';
-    const categoryKeys = [
-      'hazards and disasters',
-      'scientific',
-      'featured',
-      'recent',
-    ];
+  const renderDesktopTabs = () => {
+    const tabClass = (sortKey) => (sortKey === 'recent'
+      ? 'recent-tab layer-category-navigation'
+      : 'layer-category-navigation');
+
+    const recentTab = (sortKey) => (
+      <NavLink onClick={() => selectCategoryType(sortKey)}>
+        <FontAwesomeIcon icon={faClock} />
+        Recent
+      </NavLink>
+    );
+
+    const tab = (sortKey) => (
+      <NavLink onClick={() => selectCategoryType(sortKey)}>
+        {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
+      </NavLink>
+    );
 
     return (
-      showCategoryTabs
-        ? (
-          <>
-            <Nav id="categories-nav" className="categories-nav">
-              {categoryKeys.map((sortKey) => (
-                <NavItem
-                  key={sortKey}
-                  className="layer-category-navigation"
-                  active={sortKey === categoryType}
-                >
-                  <NavLink onClick={() => this.selectCategoryType(sortKey)}>
-                    {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
-                  </NavLink>
-                </NavItem>
-              ))}
-            </Nav>
-
-
-            {// eslint-disable-next-line no-nested-ternary
-            isCategoryDisplay ? (
-              <div className="product-outter-list-case">
-                <CategoryGrid width={width} />
-              </div>
-            ) : categoryType === 'recent'
-              ? (
-                <RecentLayersList proj={selectedProjection} layerConfig={layerConfig} />
-              )
-              : this.renderLayerList()
-            }
-          </>
-        )
-        : this.renderLayerList()
+      <Nav id="categories-nav" className="categories-nav">
+        {CATEGORY_KEYS.map((sortKey) => (
+          <NavItem
+            key={sortKey}
+            className={tabClass(sortKey)}
+            active={sortKey === categoryType}
+          >
+            {sortKey === 'recent' ? recentTab(sortKey) : tab(sortKey)}
+          </NavItem>
+        ))}
+      </Nav>
     );
-  }
+  };
+
+  const recentLayersHeader = () => (recentLayers.length && categoryType === 'recent'
+    ? (
+      <div className="recent-layers-mobile-header">
+        <Tooltip
+          className="facet-tooltip-content"
+          isOpen={tooltipVisible}
+          target="recent-tooltip-target"
+          placement="bottom"
+          toggle={() => toggleTooltip(!tooltipVisible)}
+          delay={{ show: 0, hide: 300 }}
+        >
+          <p>{recentLayerInfo}</p>
+        </Tooltip>
+        <FontAwesomeIcon
+          id="recent-tooltip-target"
+          className="recent-tooltip-icon"
+          icon={faQuestionCircle}
+        />
+        <Button
+          size="sm"
+          onClick={() => {
+            clearRecentLayers();
+            // selectCategory(CATEGORY_KEYS[0]);
+          }}
+        >
+          Clear List
+        </Button>
+      </div>
+    )
+    : null);
+
+  const renderMobileDropdown = () => (
+    <div className="categories-dropwdown-header">
+      <Dropdown
+        isOpen={dropdownOpen}
+        toggle={() => setDropdownOpen((prevState) => !prevState)}
+        className="categories-dropdown"
+      >
+        <DropdownToggle caret>
+          {categoryType === 'recent' && (<FontAwesomeIcon icon={faClock} />)}
+          {categoryType}
+        </DropdownToggle>
+        <DropdownMenu className="categories-dropdown-menu">
+          {CATEGORY_KEYS.map((sortKey) => (
+            <DropdownItem
+              key={sortKey}
+              className="categories-dropdown-item"
+              onClick={() => selectCategoryType(sortKey)}
+            >
+              {sortKey}
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+      {recentLayersHeader()}
+    </div>
+  );
+
+  const isCategoryDisplay = mode === 'category'
+      && selectedProjection === 'geographic'
+      && categoryType !== 'recent';
+  const showCategoryTabs = isCategoryDisplay
+      || categoryType === 'featured'
+      || categoryType === 'recent';
+
+  return (
+    showCategoryTabs
+      ? (
+        <>
+          {
+            browser.lessThan.medium ? renderMobileDropdown() : renderDesktopTabs()
+          }
+          {
+            isCategoryDisplay
+              ? (
+                <div className="product-outter-list-case">
+                  <CategoryGrid width={width} />
+                </div>
+              ) : renderContent()
+            }
+        </>
+      )
+      : renderContent()
+  );
 }
 
 BrowseLayers.propTypes = {
