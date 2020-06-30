@@ -8,33 +8,19 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import SearchLayerList from '../search/search-layers-list';
 import LayerMetadataDetail from '../search/layer-metadata-detail';
 import {
-  getRecentLayers,
   clearRecentLayers,
   recentLayerInfo,
 } from '../../../../modules/product-picker/util';
 
 function RecentLayersList(props) {
   const {
-    proj,
-    layerConfig,
     selectedLayer,
     smallView,
     isMobile,
+    recentLayers,
   } = props;
 
-  const byUse = (a, b) => {
-    if (a.count > b.count) return -1;
-    if (a.count < b.count) return 1;
-    if (a.dateAdded > b.dateAdded) return 1;
-    if (a.dateAdded < b.dateAdded) return -1;
-  };
-  const toLayerObj = ({ id }) => layerConfig[id];
-  const recentLayers = getRecentLayers();
-  const initialResults = recentLayers
-    ? recentLayers[proj].sort(byUse).map(toLayerObj)
-    : [];
-
-  const [results, setResults] = useState(initialResults);
+  const [results, setResults] = useState(recentLayers);
   const [tooltipVisible, toggleTooltip] = useState(false);
 
   function clearList() {
@@ -64,7 +50,7 @@ function RecentLayersList(props) {
           icon={faInfoCircle}
         />
         <Button size="sm" onClick={clearList}>
-          Clear Recent
+          Clear List
         </Button>
       </div>
       )}
@@ -85,11 +71,10 @@ function RecentLayersList(props) {
 }
 
 RecentLayersList.propTypes = {
-  proj: PropTypes.string,
   isMobile: PropTypes.bool,
-  layerConfig: PropTypes.object,
   selectedLayer: PropTypes.object,
   smallView: PropTypes.bool,
+  recentLayers: PropTypes.array,
 };
 
 function mapStateToProps(state, ownProps) {

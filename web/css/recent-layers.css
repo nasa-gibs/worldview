@@ -1,3 +1,20 @@
+li.recent-tab.nav-item {
+  margin-left: 10px;
+  background: transparent;
+  a.nav-link {
+    background: #d54e21;
+    color: #fff;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top: 1px solid #9b2704;
+    border-right: 1px solid #9b2704;
+    border-left: 1px solid #9b2704;
+  }
+  .svg-inline--fa {
+    margin-right: 4px;
+  }
+}
+
 .recent-layers-header {
   height: 40px;
   position: relative;

@@ -1,4 +1,47 @@
 /* Categories view */
+.recent-layers-mobile-header {
+  .recent-tooltip-icon {
+    position: absolute;
+    left: 18px;
+    top: 9px;
+    font-size: 24px;
+    color: #666;
+  }
+  button {
+    top: 8px;
+    right: 10px;
+    position: absolute;
+    padding: 4px 8px;
+  }
+}
+
+.categories-dropdown,
+.categories-dropdown.show {
+  text-align: center;
+  button.dropdown-toggle.btn-secondary {
+    text-transform: capitalize;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #666;
+    .svg-inline--fa {
+      margin-right: 4px;
+    }
+    &:focus, &:active {
+      border: none;
+      background: transparent;
+      background-color: transparent;
+      box-shadow: none;
+      color: #666;
+    }
+  }
+  .categories-dropdown-item {
+    text-transform: capitalize;
+    font-size: 18px;
+    padding: 15px 25px;
+  }
+}
+
 .categories-nav {
   margin: 0;
   padding: 5px 5px 0 12px;
