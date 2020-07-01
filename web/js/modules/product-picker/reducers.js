@@ -16,6 +16,7 @@ import {
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
   CLEAR_RECENT_LAYERS,
+  CLEAR_SINGLE_RECENT_LAYER,
   RESET_STATE,
 } from './constants';
 
@@ -179,6 +180,14 @@ export function productPickerReducer(state = productPickerState, action) {
       return {
         ...state,
         recentLayers: [],
+      };
+    }
+
+    case CLEAR_SINGLE_RECENT_LAYER: {
+      const { recentLayers } = action;
+      return {
+        ...state,
+        recentLayers,
       };
     }
 

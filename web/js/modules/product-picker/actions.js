@@ -2,6 +2,7 @@ import initSearch from './search-config';
 import {
   getRecentLayers,
   clearRecentLayers as clearRecentFromLocalStorage,
+  clearSingleRecentLayer as clearSingleRecentLayerFromLocalStorage,
 } from './util';
 
 import {
@@ -19,6 +20,7 @@ import {
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
   CLEAR_RECENT_LAYERS,
+  CLEAR_SINGLE_RECENT_LAYER,
   RESET_STATE,
 } from './constants';
 
@@ -111,6 +113,18 @@ export function clearRecentLayers() {
   clearRecentFromLocalStorage();
   return {
     type: CLEAR_RECENT_LAYERS,
+  };
+}
+export function clearSingleRecentLayer(layer) {
+  clearSingleRecentLayerFromLocalStorage(layer);
+  return (dispatch, getState) => {
+    const { layers, proj } = getState();
+    const { layerConfig } = layers;
+
+    dispatch({
+      type: CLEAR_SINGLE_RECENT_LAYER,
+      recentLayers: getRecentLayers(layerConfig, proj.id),
+    });
   };
 }
 export function resetProductPickerState(projection) {

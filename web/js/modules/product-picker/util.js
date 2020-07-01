@@ -2,6 +2,11 @@ import safeLocalStorage from '../../util/local-storage';
 
 const { RECENT_LAYERS } = safeLocalStorage.keys;
 const MAX_RECENT_LAYERS = 20;
+const DEFAULT_OBJ = {
+  geographic: [],
+  arctic: [],
+  antarctic: [],
+};
 
 export function getRecentLayers(layerConfig, proj) {
   const byUse = (a, b) => {
@@ -23,14 +28,23 @@ export function clearRecentLayers() {
  *
  * @param {*} layer - the layer being added to the map
  */
-export function updateRecentLayers({ id: layerId, projections }) {
-  const defaultObj = {
-    geographic: [],
-    arctic: [],
-    antarctic: [],
-  };
+export function clearSingleRecentLayer({ id: layerId, projections }) {
   const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
-  const recentLayers = JSON.parse(recentLayersJson) || defaultObj;
+  const recentLayers = JSON.parse(recentLayersJson) || DEFAULT_OBJ;
+  Object.keys(projections).forEach((proj) => {
+    const layers = recentLayers[proj];
+    recentLayers[proj] = layers.filter(({ id }) => id !== layerId);
+  });
+  safeLocalStorage.setItem(RECENT_LAYERS, JSON.stringify(recentLayers));
+}
+
+/**
+ *
+ * @param {*} layer - the layer being added to the map
+ */
+export function updateRecentLayers({ id: layerId, projections }) {
+  const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
+  const recentLayers = JSON.parse(recentLayersJson) || DEFAULT_OBJ;
 
   Object.keys(projections).forEach((proj) => {
     const layers = recentLayers[proj];

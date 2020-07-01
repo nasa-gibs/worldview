@@ -3,16 +3,21 @@
   .recent-tooltip-icon {
     position: absolute;
     left: 18px;
-    top: 9px;
+    top: 12px;
     font-size: 24px;
     color: #666;
   }
   button {
-    top: 8px;
+    top: 10px;
     right: 10px;
     position: absolute;
     padding: 4px 8px;
   }
+}
+
+.categories-dropdown-header {
+  height: 45px;
+  margin-top: 2px;
 }
 
 .categories-dropdown,
@@ -22,7 +27,7 @@
     text-transform: capitalize;
     background: transparent;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     color: #666;
     .svg-inline--fa {
       margin-right: 4px;
@@ -39,7 +44,13 @@
     text-transform: capitalize;
     font-size: 18px;
     padding: 15px 25px;
+    color: #333;
   }
+}
+
+.categories-dropdown-menu {
+  background: #eee;
+  color: #333;
 }
 
 .categories-nav {
