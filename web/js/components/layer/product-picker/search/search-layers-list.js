@@ -5,10 +5,12 @@ import { withSearch } from '@elastic/react-search-ui';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMeteor } from '@fortawesome/free-solid-svg-icons';
+import SwipeToDelete from 'react-swipe-to-delete-component';
 import SearchLayerRow from './search-layer-row';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 import {
   selectLayer as selectLayerAction,
+  clearSingleRecentLayer as clearSingleRecentLayerAction,
 } from '../../../../modules/product-picker/actions';
 import RecentLayersInfo from '../browse/recent-layers-info';
 
@@ -123,8 +125,8 @@ class SearchLayerList extends React.Component {
   }
 
   renderNoResults () {
-    const { categoryType } = this.props;
-    return categoryType === 'recent'
+    const { recentLayerMode } = this.props;
+    return recentLayerMode
       ? (<RecentLayersInfo />)
       : (
         <div className="no-results">
@@ -136,7 +138,9 @@ class SearchLayerList extends React.Component {
 
   render() {
     const { visibleItems, hasMoreItems } = this.state;
-    const { results } = this.props;
+    const {
+      results, isMobile, clearSingleRecentLayer, recentLayerMode,
+    } = this.props;
     const scrollParentSelector = '.layer-list-container.search .simplebar-content-wrapper';
     this.scrollParent = this.scrollParent || document.querySelector(scrollParentSelector);
 
@@ -151,13 +155,27 @@ class SearchLayerList extends React.Component {
           getScrollParent={() => this.scrollParent}
         >
           <div className="product-outter-list-case layers-all">
-            {visibleItems.map((layer) => (
-              <SearchLayerRow
-                key={layer.id}
-                layer={layer}
-                showLayerMetadata={(id) => this.showLayerMetadata(id)}
-              />
-            ))}
+            {visibleItems.map((layer) => (isMobile && recentLayerMode
+              ? (
+                <SwipeToDelete
+                  key={layer.id}
+                  item={layer}
+                  deleteSwipe={0.33}
+                  onDelete={() => clearSingleRecentLayer(layer)}
+                >
+                  <SearchLayerRow
+                    layer={layer}
+                    showLayerMetadata={(id) => this.showLayerMetadata(id)}
+                  />
+                </SwipeToDelete>
+              )
+              : (
+                <SearchLayerRow
+                  key={layer.id}
+                  layer={layer}
+                  showLayerMetadata={(id) => this.showLayerMetadata(id)}
+                />
+              )))}
           </div>
         </InfiniteScroll>
       );
@@ -165,17 +183,20 @@ class SearchLayerList extends React.Component {
 }
 
 SearchLayerList.propTypes = {
-  categoryType: PropTypes.string,
+  clearSingleRecentLayer: PropTypes.func,
+  isMobile: PropTypes.bool,
   results: PropTypes.array,
+  recentLayerMode: PropTypes.bool,
   selectedLayer: PropTypes.object,
   selectLayer: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { productPicker } = state;
+  const { productPicker, browser } = state;
   const { selectedLayer, categoryType } = productPicker;
   return {
-    categoryType,
+    isMobile: browser.lessThan.medium,
+    recentLayerMode: categoryType === 'recent',
     selectedLayer,
   };
 };
@@ -183,6 +204,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => ({
   selectLayer: (layer) => {
     dispatch(selectLayerAction(layer));
+  },
+  clearSingleRecentLayer: (layer) => {
+    dispatch(clearSingleRecentLayerAction(layer));
   },
 });
 

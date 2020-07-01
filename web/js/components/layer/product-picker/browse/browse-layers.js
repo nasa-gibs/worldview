@@ -131,6 +131,8 @@ function BrowseLayers (props) {
           delay={{ show: 0, hide: 300 }}
         >
           <p>{recentLayerInfo}</p>
+          <p>&nbsp;</p>
+          <p>Swipe to remove layers from the list.</p>
         </Tooltip>
         <FontAwesomeIcon
           id="recent-tooltip-target"
@@ -140,6 +142,7 @@ function BrowseLayers (props) {
         <Button
           size="sm"
           onClick={clearRecentLayers}
+          title="Remove all layers from the recent list"
         >
           Clear List
         </Button>
@@ -148,7 +151,7 @@ function BrowseLayers (props) {
     : null);
 
   const renderMobileDropdown = () => (
-    <div className="categories-dropwdown-header">
+    <div className="categories-dropdown-header">
       <Dropdown
         isOpen={dropdownOpen}
         toggle={() => setDropdownOpen((prevState) => !prevState)}

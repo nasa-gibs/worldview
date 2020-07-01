@@ -39,6 +39,16 @@ li.recent-tab.nav-item {
   }
 }
 
+.recent-layers-mobile-header {
+  border-bottom: 1px solid #ddd;
+}
+
+button.recent-layer-delete {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+}
+
 @media (min-width: 1024px) {
   .recent-layers-header {
     width: 50%;
