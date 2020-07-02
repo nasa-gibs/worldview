@@ -1,0 +1,45 @@
+{
+  "layers": {
+    "VIIRS_SNPP_Thermal_Anomalies_375m_All": {
+      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_All",
+      "title": "Fires and Thermal Anomalies (Day and Night, 375m)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_Thermal_Anomalies_375m_All",
+      "tags": "hotspot s-npp snpp",
+      "layergroup": [
+        "viirs"
+      ],
+      "product": [
+        "VNP14IMG_NRT_DAY",
+        "VNP14IMG_NRT_NIGHT",
+        "VNP14IMGTDL_NRT"
+      ],
+      "group": "overlays",
+      "format": "image/png",
+      "period": "daily",
+      "tileSize": [
+        512,
+        512
+      ],
+      "type": "wms",
+      "transition": "true",
+      "startDate": "2015-11-25",
+      "projections": {
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+      "palette": {
+        "id": "VIIRS_SNPP_Thermal_Anomalies_375m_All",
+        "immutable": "true"
+      },
+      "daynight": [
+        "day",
+        "night"
+      ]
+    }
+  }
+}

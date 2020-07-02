@@ -46,7 +46,8 @@
                     "description": "viirs/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
-                      	"VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+                        "VIIRS_SNPP_Thermal_Anomalies_375m_All",
+                        "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
 	                    "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
                         "OrbitTracks_Suomi_NPP_Ascending",
                         "OrbitTracks_Suomi_NPP_Descending"
@@ -58,7 +59,7 @@
                     "description": "viirs/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
-                        "VIIRS_NOAA20_Thermal_Anomalies_375m_All",  
+                        "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
 	                    "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
                         "OrbitTracks_NOAA-20_Ascending",
