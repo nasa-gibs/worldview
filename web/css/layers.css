@@ -499,6 +499,11 @@
     }
   }
   & .layer-search {
+    .faded {
+      background-color: #fefefe;
+      color: #999;
+      cursor: pointer;
+    }
     & .filter-button {
       background-color: #d54e21;
       border-color: #b55a3c;

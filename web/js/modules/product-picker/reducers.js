@@ -55,7 +55,6 @@ export function productPickerReducer(state = productPickerState, action) {
         ...state,
         filters,
         searchTerm,
-        searchConfig: null,
       };
     }
 
