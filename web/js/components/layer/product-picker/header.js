@@ -16,6 +16,7 @@ import {
   toggleCategoryMode as toggleCategoryModeAction,
   toggleSearchMode as toggleSearchModeAction,
   toggleMobileFacets as toggleMobileFacetsAction,
+  saveSearchState as saveSearchStateAction,
 } from '../../../modules/product-picker/actions';
 import { getLayersForProjection } from '../../../modules/product-picker/selectors';
 
@@ -42,15 +43,14 @@ class ProductPickerHeader extends React.Component {
    */
   revertToInitialScreen(e) {
     const {
-      clearFilters,
-      setSearchTerm,
+      filters,
+      searchTerm,
+      saveSearchState,
       toggleCategoryMode,
     } = this.props;
     e.preventDefault();
-
+    saveSearchState(filters, searchTerm);
     toggleCategoryMode();
-    setSearchTerm('');
-    clearFilters();
   }
 
   handleChange = (e) => {
@@ -125,21 +125,22 @@ class ProductPickerHeader extends React.Component {
       toggleSearchMode,
       width,
     } = this.props;
-    const isSearching = mode === 'search';
+    const searchMode = mode === 'search';
     const categoryId = category && category.id;
-    const showBackButton = isSearching
+    const showBackButton = searchMode
       || (categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
       && mode !== 'category');
     const recentLayersMode = categoryType === 'recent';
-    const isBreadCrumb = showBackButton && !isSearching && width > 650;
-    const showReset = !!(filters.length || searchTerm.length);
+    const isBreadCrumb = showBackButton && !searchMode && width > 650;
+    const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
     const showFilterBtnMobile = recentLayersMode
-      || (mode === 'search' ? !showMobileFacets : !selectedLayer);
+      || (searchMode ? !showMobileFacets : !selectedLayer);
     const showFilterBnDesktop = recentLayersMode
-      || (mode !== 'search' && !selectedLayer);
+      || (!searchMode && !selectedLayer);
     const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
-    const filterBtnFn = mode !== 'search' ? toggleSearchMode : toggleMobileFacets;
+    const filterBtnFn = !searchMode ? toggleSearchMode : toggleMobileFacets;
+    const inputClass = !searchMode && searchTerm ? 'faded' : '';
 
     return (
       <>
@@ -176,8 +177,8 @@ class ProductPickerHeader extends React.Component {
             </Button>
           )}
 
-
           <Input
+            className={inputClass}
             onChange={this.handleChange}
             onClick={this.onSearchInputFocus}
             id="layers-search-input"
@@ -206,12 +207,12 @@ class ProductPickerHeader extends React.Component {
 ProductPickerHeader.propTypes = {
   category: PropTypes.object,
   categoryType: PropTypes.string,
-  clearFilters: PropTypes.func,
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
   layerCount: PropTypes.number,
   mode: PropTypes.string,
   results: PropTypes.array,
+  saveSearchState: PropTypes.func,
   setSearchTerm: PropTypes.func,
   selectedLayer: PropTypes.object,
   selectedProjection: PropTypes.string,
@@ -227,6 +228,9 @@ ProductPickerHeader.propTypes = {
 const mapDispatchToProps = (dispatch) => ({
   unselectLayer: () => {
     dispatch(selectLayerAction(null));
+  },
+  saveSearchState: (filters, searchTerm) => {
+    dispatch(saveSearchStateAction(filters, searchTerm));
   },
   toggleCategoryMode: () => {
     dispatch(toggleCategoryModeAction());
@@ -266,13 +270,11 @@ const mapStateToProps = (state, ownProps) => {
 export default withSearch(
   ({
     filters,
-    clearFilters,
     results,
     searchTerm,
     setSearchTerm,
   }) => ({
     filters,
-    clearFilters,
     searchTerm,
     setSearchTerm,
     results,
