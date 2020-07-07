@@ -4,7 +4,10 @@ import { initialCompareState } from './reducers';
 export function mapLocationToCompareState(parameters, stateFromLocation) {
   if (parameters.ca !== undefined) {
     stateFromLocation = update(stateFromLocation, {
-      compare: { active: { $set: true } },
+      compare: {
+        active: { $set: true },
+        bStatesInitiated: { $set: true },
+      },
     });
     if (parameters.ca === 'false') {
       stateFromLocation = update(stateFromLocation, {
