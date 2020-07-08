@@ -564,8 +564,8 @@
 }
 
 @media (min-width: 768px) {
-  .category-width .search-layers-container {
-    height: calc(var(--vh, 1vh) * 100 - 172px);
+  .search-layers-container {
+    height: calc(var(--vh, 1vh) * 100 - 195px);
   }
   .browse-search-width .search-layers-container.recent-layers {
     height: calc(var(--vh, 1vh) * 100 - 235px);

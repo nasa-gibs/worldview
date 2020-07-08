@@ -18,7 +18,8 @@ import BrowseLayerList from './browse-layers-list';
 import CategoryGrid from './category-grid';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
 import {
-  selectCategory as selectCategoryAction,
+  selectCategoryType as selectCategoryAction,
+  toggleMeasurementsTab as toggleMeasurementsTabAction,
   toggleFeatureTab as toggleFeatureTabAction,
   toggleRecentLayersTab as toggleRecentLayersTabAction,
   clearRecentLayers as clearRecentLayersAction,
@@ -28,10 +29,17 @@ import {
 } from '../../../../modules/product-picker/util';
 import RecentLayersList from './recent-layers';
 
-const CATEGORY_KEYS = [
+const CATEGORIES = [
   'hazards and disasters',
   'scientific',
   'featured',
+];
+const GEOGRAPHIC_TAB_KEYS = [
+  ...CATEGORIES,
+  'recent',
+];
+const POLAR_TAB_KEYS = [
+  'measurements',
   'recent',
 ];
 
@@ -40,10 +48,11 @@ function BrowseLayers (props) {
     browser,
     categoryType,
     mode,
-    selectedProjection,
     width,
     recentLayers,
-    selectCategory,
+    selectCategoryType,
+    selectedProjection,
+    toggleMeasurementsTab,
     toggleFeatureTab,
     toggleRecentLayersTab,
     clearRecentLayers,
@@ -51,62 +60,69 @@ function BrowseLayers (props) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [tooltipVisible, toggleTooltip] = useState(false);
+  const categoryKeys = selectedProjection === 'geographic'
+    ? GEOGRAPHIC_TAB_KEYS
+    : POLAR_TAB_KEYS;
+
+  const isCategoryDisplay = mode === 'category'
+    && selectedProjection === 'geographic'
+    && categoryType !== 'recent';
 
   /**
    * Update category type in which to show
    * e.g. Hazards and disasters or science disciplines
    * @param {String} key | categoryType identifier
    */
-  const selectCategoryType = (key) => {
+  const selectTab = (key) => {
     if (key === 'featured') {
       toggleFeatureTab();
     } else if (key === 'recent') {
       toggleRecentLayersTab();
-    } else {
-      selectCategory(key);
+    } else if (key === 'measurements') {
+      toggleMeasurementsTab();
+    } else if (CATEGORIES.includes(key)) {
+      selectCategoryType(key);
     }
   };
 
-  const renderContent = () => (categoryType === 'recent'
-    ? (
-      <RecentLayersList />
-    )
-    : (
-      <div className="search-layers-container browse">
-        <div className="layer-list-container browse">
-          <div className="product-outter-list-case">
-            <BrowseLayerList />
+  function renderContent () {
+    return categoryType === 'recent'
+      ? (<RecentLayersList />)
+      : (
+        <div className="search-layers-container browse">
+          <div className="layer-list-container browse">
+            <div className="product-outter-list-case">
+              <BrowseLayerList />
+            </div>
           </div>
-        </div>
-        { !browser.lessThan.medium && (
+          { !browser.lessThan.medium && (
           <div className="layer-detail-container layers-all browse">
             <MeasurementMetadataDetail />
           </div>
-        )}
-      </div>
-    ));
+          )}
+        </div>
+      );
+  }
 
-  const renderDesktopTabs = () => {
+  function renderDesktopTabs () {
     const tabClass = (sortKey) => (sortKey === 'recent'
       ? 'recent-tab layer-category-navigation'
       : 'layer-category-navigation');
-
     const recentTab = (sortKey) => (
-      <NavLink onClick={() => selectCategoryType(sortKey)}>
+      <NavLink onClick={() => selectTab(sortKey)}>
         <FontAwesomeIcon icon={faClock} />
         Recent
       </NavLink>
     );
-
     const tab = (sortKey) => (
-      <NavLink onClick={() => selectCategoryType(sortKey)}>
+      <NavLink onClick={() => selectTab(sortKey)}>
         {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
       </NavLink>
     );
 
     return (
       <Nav id="categories-nav" className="categories-nav">
-        {CATEGORY_KEYS.map((sortKey) => (
+        {categoryKeys.map((sortKey) => (
           <NavItem
             key={sortKey}
             className={tabClass(sortKey)}
@@ -117,91 +133,82 @@ function BrowseLayers (props) {
         ))}
       </Nav>
     );
-  };
+  }
 
-  const recentLayersHeader = () => (recentLayers.length && categoryType === 'recent'
-    ? (
-      <div className="recent-layers-mobile-header">
-        <Tooltip
-          className="facet-tooltip-content"
-          isOpen={tooltipVisible}
-          target="recent-tooltip-target"
-          placement="bottom"
-          toggle={() => toggleTooltip(!tooltipVisible)}
-          delay={{ show: 0, hide: 300 }}
+  function recentLayersHeader() {
+    return !(recentLayers.length && categoryType === 'recent')
+      ? null
+      : (
+        <div className="recent-layers-mobile-header">
+          <Tooltip
+            className="facet-tooltip-content"
+            isOpen={tooltipVisible}
+            target="recent-tooltip-target"
+            placement="bottom"
+            toggle={() => toggleTooltip(!tooltipVisible)}
+            delay={{ show: 0, hide: 300 }}
+          >
+            <p>{recentLayerInfo}</p>
+            <p>&nbsp;</p>
+            <p>Swipe to remove layers from the list.</p>
+          </Tooltip>
+          <FontAwesomeIcon
+            id="recent-tooltip-target"
+            className="recent-tooltip-icon"
+            icon={faQuestionCircle}
+          />
+          <Button
+            size="sm"
+            onClick={clearRecentLayers}
+            title="Remove all layers from the recent list"
+          >
+            Clear List
+          </Button>
+        </div>
+      );
+  }
+
+  function renderMobileDropdown() {
+    return (
+      <div className="categories-dropdown-header">
+        <Dropdown
+          isOpen={dropdownOpen}
+          toggle={() => setDropdownOpen((prevState) => !prevState)}
+          className="categories-dropdown"
         >
-          <p>{recentLayerInfo}</p>
-          <p>&nbsp;</p>
-          <p>Swipe to remove layers from the list.</p>
-        </Tooltip>
-        <FontAwesomeIcon
-          id="recent-tooltip-target"
-          className="recent-tooltip-icon"
-          icon={faQuestionCircle}
-        />
-        <Button
-          size="sm"
-          onClick={clearRecentLayers}
-          title="Remove all layers from the recent list"
-        >
-          Clear List
-        </Button>
+          <DropdownToggle caret>
+            {categoryType === 'recent' && (<FontAwesomeIcon icon={faClock} />)}
+            {categoryType}
+          </DropdownToggle>
+          <DropdownMenu className="categories-dropdown-menu">
+            {categoryKeys.map((sortKey) => (
+              <DropdownItem
+                key={sortKey}
+                className="categories-dropdown-item"
+                onClick={() => selectTab(sortKey)}
+              >
+                {sortKey}
+              </DropdownItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
+        {recentLayersHeader()}
       </div>
-    )
-    : null);
-
-  const renderMobileDropdown = () => (
-    <div className="categories-dropdown-header">
-      <Dropdown
-        isOpen={dropdownOpen}
-        toggle={() => setDropdownOpen((prevState) => !prevState)}
-        className="categories-dropdown"
-      >
-        <DropdownToggle caret>
-          {categoryType === 'recent' && (<FontAwesomeIcon icon={faClock} />)}
-          {categoryType}
-        </DropdownToggle>
-        <DropdownMenu className="categories-dropdown-menu">
-          {CATEGORY_KEYS.map((sortKey) => (
-            <DropdownItem
-              key={sortKey}
-              className="categories-dropdown-item"
-              onClick={() => selectCategoryType(sortKey)}
-            >
-              {sortKey}
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-      {recentLayersHeader()}
-    </div>
-  );
-
-  const isCategoryDisplay = mode === 'category'
-      && selectedProjection === 'geographic'
-      && categoryType !== 'recent';
-  const showCategoryTabs = isCategoryDisplay
-      || categoryType === 'featured'
-      || categoryType === 'recent';
+    );
+  }
 
   return (
-    showCategoryTabs
-      ? (
-        <>
-          {
-            browser.lessThan.medium ? renderMobileDropdown() : renderDesktopTabs()
-          }
-          {
-            isCategoryDisplay
-              ? (
-                <div className="product-outter-list-case">
-                  <CategoryGrid width={width} />
-                </div>
-              ) : renderContent()
-            }
-        </>
-      )
-      : renderContent()
+    <>
+      { browser.lessThan.medium ? renderMobileDropdown() : renderDesktopTabs() }
+      {
+        isCategoryDisplay
+          ? (
+            <div className="product-outter-list-case">
+              <CategoryGrid width={width} />
+            </div>
+          ) : renderContent()
+        }
+    </>
   );
 }
 
@@ -211,16 +218,20 @@ BrowseLayers.propTypes = {
   clearRecentLayers: PropTypes.func,
   mode: PropTypes.string,
   recentLayers: PropTypes.array,
-  selectCategory: PropTypes.func,
+  selectCategoryType: PropTypes.func,
   selectedProjection: PropTypes.string,
+  toggleMeasurementsTab: PropTypes.func,
   toggleFeatureTab: PropTypes.func,
   toggleRecentLayersTab: PropTypes.func,
   width: PropTypes.number,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  selectCategory: (key) => {
+  selectCategoryType: (key) => {
     dispatch(selectCategoryAction(key));
+  },
+  toggleMeasurementsTab: () => {
+    dispatch(toggleMeasurementsTabAction());
   },
   toggleFeatureTab: () => {
     dispatch(toggleFeatureTabAction());
@@ -249,12 +260,10 @@ function mapStateToProps(state, ownProps) {
     selectedMeasurementSourceIndex,
     recentLayers,
   } = productPicker;
-
   return {
     browser,
     mode,
     categoryType,
-    categoryConfig: config.categories,
     measurementConfig: config.measurements,
     layerConfig: layers.layerConfig,
     listScrollTop,

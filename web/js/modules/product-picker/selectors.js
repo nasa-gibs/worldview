@@ -16,6 +16,7 @@ const decodeHtml = (html) => {
 const getConfig = ({ config }) => config;
 const getProjection = ({ proj }) => proj && proj.id;
 const getProductPicker = ({ productPicker }) => productPicker;
+const getCategoryType = ({ productPicker }) => productPicker.categoryType;
 
 export const getLayersForProjection = createSelector(
   [getConfig, getProjection, getSelectedDate],
@@ -47,4 +48,11 @@ export const getMeasurementSource = createSelector(
     const sortedSources = sources && sources.sort((a, b) => a.title.localeCompare(b.title));
     return sortedSources && sortedSources[selectedMeasurementSourceIndex];
   },
+);
+
+export const getCategoryConfig = createSelector(
+  [getConfig, getCategoryType],
+  ({ categories }, categoryType) => (categoryType === 'measurements'
+    ? categories['hazards and disasters']
+    : categories[categoryType]),
 );
