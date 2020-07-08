@@ -7,6 +7,7 @@ import CategoryCell from './category-cell';
 import {
   showMeasurements as showMeasurementsAction,
 } from '../../../../modules/product-picker/actions';
+import { getCategoryConfig } from '../../../../modules/product-picker/selectors';
 import {
   hasMeasurementSource as hasSourceSelector,
 } from '../../../../modules/layers/selectors';
@@ -71,10 +72,10 @@ function mapStateToProps(state, ownProps) {
     selectedMeasurement,
     selectedMeasurementSourceIndex,
   } = productPicker;
-  const categoryConfig = config.categories;
+  const categoryConfig = getCategoryConfig(state);
 
   return {
-    categories: Object.values(categoryConfig[categoryType]),
+    categories: Object.values(categoryConfig),
     categoryType,
     category,
     measurementConfig: config.measurements,

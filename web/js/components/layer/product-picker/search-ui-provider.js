@@ -5,7 +5,7 @@ import {
   SearchProvider,
 } from '@elastic/react-search-ui';
 import {
-  initSearchState as initStateAction,
+  initState as initStateAction,
 } from '../../../modules/product-picker/actions';
 import ProductPicker from './product-picker';
 
