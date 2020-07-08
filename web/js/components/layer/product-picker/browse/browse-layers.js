@@ -158,6 +158,7 @@ function BrowseLayers (props) {
             icon={faQuestionCircle}
           />
           <Button
+            id="clear-recent-layers"
             size="sm"
             onClick={clearRecentLayers}
             title="Remove all layers from the recent list"

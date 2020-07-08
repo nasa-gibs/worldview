@@ -45,7 +45,7 @@ function RecentLayersList(props) {
           size="lg"
           icon={faQuestionCircle}
         />
-        <Button size="sm" onClick={clearRecentLayers}>
+        <Button id="clear-recent-layers" size="sm" onClick={clearRecentLayers}>
           Clear List
         </Button>
       </div>
