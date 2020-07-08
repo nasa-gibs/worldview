@@ -1,9 +1,8 @@
 const { assertCategories } = require('../../reuseables/layer-picker.js');
 const skipTour = require('../../reuseables/skip-tour.js');
-
 const {
   addLayers,
-  categoriesNav,
+  collapsedLayerButton,
   layersSearchField,
   layerSearchList,
   layerPickerBackButton,
@@ -15,10 +14,12 @@ module.exports = {
   before: (c) => {
     skipTour.loadAndSkipTour(c, TIME_LIMIT);
     c.url(`${c.globals.url}?t=2020-07-04`);
+    c.resizeWindow(375, 667); // iPhone 6/7/8 dimensions
   },
   'Layer picker shows categories when first opened': (c) => {
+    c.click(collapsedLayerButton);
     c.click(addLayers);
-    c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
+    c.waitForElementVisible('.categories-dropdown-header', TIME_LIMIT, assertCategories(c));
   },
   'Select several layers': (c) => {
     c.setValue(layersSearchField, 'aod');
@@ -30,21 +31,16 @@ module.exports = {
     });
   },
   'Recent tab shows layers that were selected': (c) => {
-    c.click('.recent-tab');
-    c.waitForElementVisible('.recent-layers', TIME_LIMIT, (e) => {
+    c.click('.categories-dropdown-header .dropdown-toggle');
+    c.waitForElementVisible('.categories-dropdown-item:nth-of-type(4)', TIME_LIMIT, (e) => {
+      c.click('.categories-dropdown-item:nth-of-type(4)');
       c.expect.element('#MODIS_Aqua_Aerosol-search-row').to.be.present;
       c.expect.element('#MODIS_Combined_Value_Added_AOD-search-row').to.be.present;
       c.expect.element('#OMI_Aerosol_Optical_Depth-search-row').to.be.present;
     });
   },
   'Removing individual layers updates the list': (c) => {
-    c.moveToElement('#MODIS_Aqua_Aerosol-search-row', 15, 15);
-    c.waitForElementVisible('.recent-layer-delete', TIME_LIMIT, (e) => {
-      c.click('.recent-layer-delete');
-      c.expect.element('#MODIS_Aqua_Aerosol-search-row').to.not.be.present;
-      c.expect.element('#MODIS_Combined_Value_Added_AOD-search-row').to.be.present;
-      c.expect.element('#OMI_Aerosol_Optical_Depth-search-row').to.be.present;
-    });
+    // Swipe to delete?!
   },
   'Clear list button empties the entire list': (c) => {
     c.click('#clear-recent-layers');
