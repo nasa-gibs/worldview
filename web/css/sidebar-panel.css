@@ -283,9 +283,9 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-/* **********************************
- * Vector layer pointer icon ********
- ************************************/
+/* ***********************************
+ * Vector/granule layer pointer icon *
+ *************************************/
 .productsitem .layer-main .layer-pointer-icon {
   position: absolute;
   right: 4px;

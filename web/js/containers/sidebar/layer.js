@@ -178,14 +178,9 @@ class Layer extends React.Component {
       changeGranuleSatelliteInstrumentGroup,
       runningObject,
       layer,
-      isGranule,
       granuleSatelliteInstrumentGroup,
       layerSatelliteInstrumentGroup,
     } = this.props;
-
-    if (!isGranule) {
-      return null;
-    }
 
     const isGranuleSatelliteActive = granuleSatelliteInstrumentGroup[activeString] === layerSatelliteInstrumentGroup;
     const clasNames = isGranuleSatelliteActive
@@ -217,6 +212,7 @@ class Layer extends React.Component {
       hover,
       layer,
       isDisabled,
+      isGranule,
       isVisible,
       layerClasses,
       names,
@@ -299,7 +295,7 @@ class Layer extends React.Component {
                 {hasPalette ? this.getPaletteLegend() : ''}
               </div>
               {isVectorLayer && isVisible ? this.renderVectorIcon() : null}
-              {this.renderGranuleHoverIcon()}
+              {isGranule && isVisible ? this.renderGranuleHoverIcon() : null}
               {tracksForLayer.length > 0 && (
               <div className="layer-tracks">
                 {tracksForLayer.map((track) => (
@@ -456,15 +452,19 @@ export default connect(
   mapDispatchToProps,
 )(Layer);
 Layer.propTypes = {
+  activeString: PropTypes.string,
   changeGranuleSatelliteInstrumentGroup: PropTypes.func,
   checkerBoardPattern: PropTypes.object,
   compare: PropTypes.object,
   getPalette: PropTypes.func,
+  granuleSatelliteInstrumentGroup: PropTypes.object,
+  layerSatelliteInstrumentGroup: PropTypes.string,
   hasPalette: PropTypes.bool,
   hover: PropTypes.func,
   index: PropTypes.number,
   isCustomPalette: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  isGranule: PropTypes.bool,
   isInProjection: PropTypes.bool,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
