@@ -1,45 +1,47 @@
 const skipTour = require('../../reuseables/skip-tour.js');
 const { assertCategories, assertDefaultLayers } = require('../../reuseables/layer-picker.js');
 
-const filterButton = '.btn.filter-button';
-const resetButton = '.btn.clear-filters';
-const applyButton = '.btn.apply-facets';
-const layersSearchField = 'input#layers-search-input';
-const categoriesNav = '#categories-nav';
-const layerSearchList = '.layer-list-container.search';
-const layersSearchRow = '.search-row.layers-all-layer';
-const layerPickerBackButton = '#layer-search .back-button';
-const layerDetails = '.layer-detail-container';
-const layerDetailHeader = '.layer-detail-container .layers-all-header';
-const addLayers = '#layers-add';
-const addToMapButton = '.layer-detail-container .add-to-map-btn';
-const layersModalCloseButton = '.custom-layer-dialog .modal-header .close';
-const aodMeasurement = '#layer-category-item-legacy-all-aerosol-optical-depth';
-const aodMeasurementContents = '#accordion-legacy-all-aerosol-optical-depth';
-const aodCheckboxMODIS = '#checkbox-case-MODIS_Combined_Value_Added_AOD';
-const aodCheckboxMAIAC = '#checkbox-case-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
-const aodCheckbox = '#checkbox-case-MODIS_Aqua_Aerosol';
-const aodTabContentAquaMODIS = '#aerosol-optical-depth-aqua-modis';
-const collapsedLayerButton = '#accordionTogglerButton';
-const layerCount = '.layer-count.mobile';
-const layerContainer = '.layer-container.sidebar-panel';
-const sourceMetadataCollapsed = '.source-metadata.overflow';
-const sourceMetadataExpanded = '.source-metadata';
-const aquaTerraModisHeader = '#modisterraandaquacombinedvalueaddedaerosolopticaldepth';
-const maiacHeader = '#maiacaerosolopticaldepth';
-const aquaTerraMODISTab = '#aqua-terra-modis-0-source-Nav';
-const aquaModisTab = '#aqua-modis-1-source-Nav';
-const sourceTabs = '.source-nav-item';
-const aodSearchRow = '#MODIS_Aqua_Aerosol-search-row';
-const aodSearchCheckbox = '#MODIS_Aqua_Aerosol-search-row > .wv-checkbox';
-const availableFacetLabel = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type';
-const categoryAtmosphereLabel = '#categories-facet [for="example_facet_CategoryAtmosphere"]';
-const categoryFacetCollapseToggle = '#categories-facet .facet-collapse-toggle';
-const categoryFacetChoicesContainer = '#categories-facet .sui-multi-checkbox-facet';
-const measurementTemperatureLabel = '#measurements-facet [for="example_facet_MeasurementsTemperature"]';
-const measurementFacetChoices = '#measurements-facet .sui-multi-checkbox-facet > label';
-const measurementMoreButton = '#measurements-facet .sui-facet-view-more';
-const sourcesMERRALabel = '#sources-facet [for="example_facet_SourceMERRA-2"]';
+const {
+  availableFacetLabel,
+  categoryAtmosphereLabel,
+  categoriesNav,
+  collapsedLayerButton,
+  layerCount,
+  layerContainer,
+  layersSearchField,
+  layerSearchList,
+  layersSearchRow,
+  layerPickerBackButton,
+  layerDetails,
+  layerDetailHeader,
+  addLayers,
+  addToMapButton,
+  layersModalCloseButton,
+  aodCheckbox,
+  aodSearchRow,
+  aodSearchCheckbox,
+  aodAllMeasurement,
+  aodAllMeasurementContents,
+  aodTabContentAquaMODIS,
+  aodCheckboxMODIS,
+  aodCheckboxMAIAC,
+  aquaTerraMODISTab,
+  aquaTerraModisHeader,
+  aquaModisTab,
+  maiacHeader,
+  filterButton,
+  sourceTabs,
+  sourceMetadataCollapsed,
+  sourceMetadataExpanded,
+  categoryFacetCollapseToggle,
+  categoryFacetChoicesContainer,
+  measurementFacetChoices,
+  measurementMoreButton,
+  measurementTemperatureLabel,
+  sourcesMERRALabel,
+  applyButton,
+  resetButton,
+} = require('../../reuseables/selectors.js');
 
 const TIME_LIMIT = 10000;
 
@@ -59,13 +61,13 @@ module.exports = {
     c.click(collapsedLayerButton);
     c.waitForElementVisible(layerContainer, TIME_LIMIT, assertDefaultLayers(c));
   },
-  'Open product picker and show categories by defulat': (c) => {
+  'Open product picker and show categories by default': (c) => {
     c.click(addLayers);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
   },
   'Clicking a measurement': (c) => {
-    c.click(aodMeasurement);
-    c.waitForElementVisible(aodMeasurementContents, TIME_LIMIT, (e) => {
+    c.click(aodAllMeasurement);
+    c.waitForElementVisible(aodAllMeasurementContents, TIME_LIMIT, (e) => {
       c.expect.element(sourceMetadataCollapsed).to.be.present;
       // Checkboxes for two layers are visible
       c.expect.element(aodCheckboxMODIS).to.be.present;

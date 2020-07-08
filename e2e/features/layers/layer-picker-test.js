@@ -1,44 +1,47 @@
 const { assertCategories } = require('../../reuseables/layer-picker.js');
-const localSelectors = require('../../reuseables/selectors.js');
-
 const skipTour = require('../../reuseables/skip-tour.js');
+const {
+  layersSearchField,
+  categoriesNav,
+  allCategoryHeader,
+  layersAll,
+  layerBrowseList,
+  layerBrowseDetail,
+  layerSearchList,
+  layersSearchRow,
+  layerPickerBackButton,
+  layerDetails,
+  layerDetailsDateRange,
+  layerDetailHeader,
+  layerResultsCountText,
+  addLayers,
+  addToMapButton,
+  layersModalCloseButton,
+  aodMeasurement,
+  aodMeasurementContents,
+  aodTabContentAquaMODIS,
+  aodCheckboxMODIS,
+  aodCheckboxMAIAC,
+  aodCheckboxAquaMODIS,
+  aquaTerraMODISTab,
+  aquaModisTab,
+  correctedReflectanceCheckboxContainer,
+  correctedReflectanceChecked,
+  weldReflectanceCheckboxContainer,
+  weldUnavailableTooltipIcon,
+  availableFilterCheckbox,
+  availableFilterCheckboxInput,
+  availableFilterTextEl,
+  coverageTooltipIcon,
+  scienceDisciplinesTab,
+  aodSidebarLayer,
+  aodMAIACSidebarLayer,
+  projectionButton,
+  yearDown,
+  monthDown,
+  dayDown,
+} = require('../../reuseables/selectors.js');
 
-const layersSearchField = 'input#layers-search-input';
-const categoriesNav = '#categories-nav';
-const allCategoryHeader = '#legacy-all .layer-category-name';
-const layersAll = '.layers-all-layer';
-const layerBrowseList = '.layer-list-container.browse';
-const layerBrowseDetail = '.layer-detail-container.browse';
-const layerSearchList = '.layer-list-container.search';
-const layersSearchRow = '.search-row.layers-all-layer';
-const layerPickerBackButton = '#layer-search .back-button';
-const layerDetails = '.layer-detail-container';
-const layerDetailsDateRange = '.source-metadata .layer-date-range';
-const layerDetailHeader = '.layer-detail-container .layers-all-header';
-const layerResultsCountText = '.header-filter-container .results-text';
-const addLayers = '#layers-add';
-const addToMapButton = '.layer-detail-container .add-to-map-btn';
-const layersModalCloseButton = '.custom-layer-dialog .modal-header .close';
-const aodMeasurement = '#layer-category-item-atmosphere-aerosol-optical-depth';
-const aodMeasurementContents = '#accordion-atmosphere-aerosol-optical-depth .measure-row-contents';
-const aodTabContentAquaMODIS = '#aerosol-optical-depth-aqua-modis';
-const aodCheckboxMODIS = '#checkbox-case-MODIS_Combined_Value_Added_AOD';
-const aodCheckboxMAIAC = '#checkbox-case-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
-const aodCheckboxAquaMODIS = '#checkbox-case-MODIS_Aqua_Aerosol';
-const aquaTerraMODISTab = '#aqua-terra-modis-0-source-Nav';
-const aquaModisTab = '#aqua-modis-1-source-Nav';
-const correctedReflectanceCheckboxContainer = '#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor';
-const correctedReflectanceChecked = '#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor .wv-checkbox.checked';
-const weldReflectanceCheckboxContainer = '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly';
-const weldUnavailableTooltipIcon = '#checkbox-case-Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly #availability-info';
-const availableFilterCheckbox = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type';
-const availableFilterCheckboxInput = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type input';
-const availableFilterTextEl = '#coverage-facet .sui-multi-checkbox-facet__option-input-wrapper:first-of-type > span';
-const coverageTooltipIcon = '#coverage-facet svg.facet-tooltip';
-const scienceDisciplinesTab = '#categories-nav .nav-item:nth-child(2)';
-const aodSidebarLayer = '#active-MODIS_Combined_Value_Added_AOD';
-const aodMAIACSidebarLayer = '#active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
-const projectionButton = '#wv-proj-button';
 const TIME_LIMIT = 10000;
 
 module.exports = {
@@ -156,9 +159,9 @@ module.exports = {
     c.click(layersModalCloseButton);
 
     // Change the date 2012-4-14
-    c.click(localSelectors.yearDown);
-    c.click(localSelectors.monthDown);
-    c.click(localSelectors.dayDown);
+    c.click(yearDown);
+    c.click(monthDown);
+    c.click(dayDown);
 
     c.click(addLayers);
     // Confirm available facet still enabled but date changed
