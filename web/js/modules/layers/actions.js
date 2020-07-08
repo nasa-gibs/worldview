@@ -21,6 +21,7 @@ import {
   RESET_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_CMR_GEOMETRY,
   TOGGLE_HOVERED_GRANULE,
+  CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
 } from './constants';
 import { selectProduct } from '../data/actions';
 import { updateRecentLayers } from '../product-picker/util';
@@ -171,6 +172,26 @@ export function removeLayer(id) {
     });
   };
 }
+export function setOpacity(id, opacity) {
+  return (dispatch, getState) => {
+    const { layers, compare } = getState();
+    const activeString = compare.isCompareA ? 'active' : 'activeB';
+    const index = lodashFindIndex(layers[activeString], {
+      id,
+    });
+    if (index === -1) {
+      return console.warn(`Invalid layer ID: ${id}`);
+    }
+
+    dispatch({
+      type: UPDATE_OPACITY,
+      id,
+      index,
+      opacity: Number(opacity),
+      activeString,
+    });
+  };
+}
 export function updateGranuleCMRGeometry(id, geometry) {
   return (dispatch, getState) => {
     const { compare } = getState();
@@ -209,36 +230,36 @@ export function resetGranuleLayerDates(id) {
     });
   };
 }
-export function toggleHoveredGranule(id, granuleDate) {
+export function toggleHoveredGranule(satelliteInstrumentGroup, granuleDate) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const { activeString } = compare;
-    const hoveredGranule = granuleDate ? { granuleDate, activeString, id } : null;
+    const hoveredGranule = granuleDate
+      ? {
+        granuleDate,
+        activeString,
+        hoveredSatelliteInstrumentGroup: satelliteInstrumentGroup,
+      }
+      : null;
     dispatch({
       type: TOGGLE_HOVERED_GRANULE,
       hoveredGranule,
-      id,
-      activeString,
     });
   };
 }
-export function setOpacity(id, opacity) {
+export function changeGranuleSatelliteInstrumentGroup(id, newSatelliteInstrumentGroup) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();
-    const activeString = compare.isCompareA ? 'active' : 'activeB';
-    const index = lodashFindIndex(layers[activeString], {
-      id,
-    });
-    if (index === -1) {
-      return console.warn(`Invalid layer ID: ${id}`);
+    const { activeString } = compare;
+    const { granuleLayers, satelliteInstrumentGroup } = layers;
+    const granuleGeometry = granuleLayers[activeString][id].geometry;
+    if (satelliteInstrumentGroup !== newSatelliteInstrumentGroup) {
+      dispatch({
+        type: CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
+        satelliteInstrumentGroup: newSatelliteInstrumentGroup,
+        geometry: granuleGeometry,
+        activeKey: activeString,
+      });
     }
-
-    dispatch({
-      type: UPDATE_OPACITY,
-      id,
-      index,
-      opacity: Number(opacity),
-      activeString,
-    });
   };
 }

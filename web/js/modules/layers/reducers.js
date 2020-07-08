@@ -18,6 +18,7 @@ import {
   UPDATE_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_CMR_GEOMETRY,
   TOGGLE_HOVERED_GRANULE,
+  CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -40,6 +41,11 @@ export const initialState = {
   facetArray: [],
   startingLayers: [],
   hoveredGranule: null,
+  granuleSatelliteInstrumentGroup: {
+    active: '',
+    activeB: '',
+  },
+  granuleGeometry: {},
   granuleLayers: {
     active: {},
     activeB: {},
@@ -76,6 +82,12 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         [layerGroupStr]: {
           [action.index]: { visible: { $set: action.visible } },
+        },
+      });
+    case UPDATE_OPACITY:
+      return update(state, {
+        [layerGroupStr]: {
+          [action.index]: { opacity: { $set: action.opacity } },
         },
       });
     case SET_THRESHOLD_RANGE_AND_SQUASH:
@@ -167,9 +179,21 @@ export function layerReducer(state = initialState, action) {
           [action.activeKey]: {
             $merge: {
               [action.id]: {
-                dates: action.dates, count: action.count, geometry: action.geometry,
+                dates: action.dates,
+                count: action.count,
+                geometry: action.geometry,
               },
             },
+          },
+        },
+        granuleSatelliteInstrumentGroup: {
+          [action.activeKey]: {
+            $set: action.satelliteInstrumentGroup,
+          },
+        },
+        granuleGeometry: {
+          [action.activeKey]: {
+            $set: action.geometry,
           },
         },
       });
@@ -184,6 +208,11 @@ export function layerReducer(state = initialState, action) {
             },
           },
         },
+        granuleGeometry: {
+          [action.activeKey]: {
+            $set: action.geometry,
+          },
+        },
       });
     case UPDATE_GRANULE_CMR_GEOMETRY:
       return update(state, {
@@ -196,15 +225,27 @@ export function layerReducer(state = initialState, action) {
             },
           },
         },
+        granuleGeometry: {
+          [action.activeKey]: {
+            $set: action.geometry,
+          },
+        },
       });
     case TOGGLE_HOVERED_GRANULE:
       return lodashAssign({}, state, {
         hoveredGranule: action.hoveredGranule,
       });
-    case UPDATE_OPACITY:
+    case CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP:
       return update(state, {
-        [layerGroupStr]: {
-          [action.index]: { opacity: { $set: action.opacity } },
+        granuleSatelliteInstrumentGroup: {
+          [action.activeKey]: {
+            $set: action.satelliteInstrumentGroup,
+          },
+        },
+        granuleGeometry: {
+          [action.activeKey]: {
+            $set: action.geometry,
+          },
         },
       });
     default:

@@ -276,7 +276,7 @@ class LayerSettings extends React.Component {
       toggleHoveredGranule,
       updateGranuleLayerDates,
     } = this.props;
-    const { count, dates } = granuleOptions;
+    const { count, dates, satelliteInstrumentGroup } = granuleOptions;
     return dates
       ? (
         <>
@@ -293,6 +293,7 @@ class LayerSettings extends React.Component {
             granuleCount={count}
             updateGranuleLayerDates={updateGranuleLayerDates}
             resetGranuleLayerDates={resetGranuleLayerDates}
+            satelliteInstrumentGroup={satelliteInstrumentGroup}
             toggleHoveredGranule={toggleHoveredGranule}
           />
         </>
@@ -339,12 +340,14 @@ function mapStateToProps(state, ownProps) {
   const { custom } = palettes;
   const groupName = compare.activeString;
 
-  const granuleState = layers.granuleLayers[groupName][ownProps.layer.id];
+  const { granuleLayers, granuleSatelliteInstrumentGroup } = layers;
+  const granuleState = granuleLayers[groupName][ownProps.layer.id];
   const granuleOptions = {};
   if (granuleState) {
     const { dates, count } = granuleState;
     granuleOptions.dates = dates;
     granuleOptions.count = count || 20;
+    granuleOptions.satelliteInstrumentGroup = granuleSatelliteInstrumentGroup[groupName];
   }
 
   return {
@@ -401,8 +404,8 @@ const mapDispatchToProps = (dispatch) => ({
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDates(id));
   },
-  toggleHoveredGranule: (id, granuleDate) => {
-    dispatch(toggleHoveredGranule(id, granuleDate));
+  toggleHoveredGranule: (satelliteInstrument, granuleDate) => {
+    dispatch(toggleHoveredGranule(satelliteInstrument, granuleDate));
   },
 });
 

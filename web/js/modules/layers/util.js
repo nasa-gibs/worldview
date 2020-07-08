@@ -11,6 +11,7 @@ import {
   isArray,
 } from 'lodash';
 import moment from 'moment';
+import * as OlExtent from 'ol/extent';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import { addLayer, resetLayers } from './selectors';
@@ -552,8 +553,6 @@ const getSubdailyDateRange = ({
     minMinute,
   } = util.getUTCNumbers(minDate, 'min');
 
-  // console.log(startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray);
-
   let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHour, maxMinute + dateIntervalNum);
   let minMinuteDateMinusInterval;
   let minMinuteDateMinusIntervalOffset;
@@ -609,8 +608,6 @@ const getSubdailyDateRange = ({
     minuteDifference = util.minuteDiff(minMinuteDate, maxMinuteDate);
   }
 
-  // console.log(minMinuteDate, maxMinuteDate);
-
   for (let i = 0; i <= (minuteDifference + 1); i += dateIntervalNum) {
     let subdailyTime = new Date(
       minMinuteDate.getUTCFullYear(),
@@ -623,7 +620,10 @@ const getSubdailyDateRange = ({
     if (!rangeLimitsProvided) {
       subdailyTime = util.getTimezoneOffsetDate(subdailyTime);
     }
-    if (subdailyTime.getTime() >= minMinuteDateTime) {
+    const lessThanLastDateInCollection = newDateArray.length > 0
+      ? subdailyTime.getTime() > newDateArray[newDateArray.length - 1].getTime()
+      : true;
+    if (subdailyTime.getTime() >= minMinuteDateTime && lessThanLastDateInCollection) {
       newDateArray.push(subdailyTime);
     }
   }
@@ -1292,3 +1292,26 @@ export function adjustStartDates(layers) {
 
   return Object.values(layers).forEach(applyDateAdjustment);
 }
+
+/**
+ * Check if coordinates and polygon extent are within and not exceeding max extent
+ *
+ * @param {Object} polygon
+ * @param {Array} coords
+ * @param {Array} maxExtent
+ *
+ * @return {Boolean}
+ */
+export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) => {
+  // check if cursor coordinates within granule footprint
+  const areCoordsWithinPolygon = polygon.intersectsCoordinate(coords);
+  // check is polygon footprint is within max extent, will allow partial corners within max extent
+  const doesPolygonIntersectMaxExtent = polygon.intersectsExtent(maxExtent);
+  // check if polygon is larger than maxExtent - helpful to catch most large polar granules
+  const polygonExtent = polygon.getExtent();
+  const isPolygonLargerThanMaxExtent = OlExtent.containsExtent(polygonExtent, maxExtent);
+
+  return areCoordsWithinPolygon
+    && doesPolygonIntersectMaxExtent
+    && !isPolygonLargerThanMaxExtent;
+};

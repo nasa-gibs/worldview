@@ -157,7 +157,7 @@ for layer_id in list(wv["layers"].keys()):
         start_date = min(start_date, d)
 
 if start_date != datetime.max:
-    wv["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z";
+    wv["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z"
 
 for layer_id in wv["layerOrder"]:
     if layer_id not in wv["layers"]:

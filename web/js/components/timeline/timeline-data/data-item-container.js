@@ -25,6 +25,7 @@ class DataItemContainer extends Component {
     // handle date range query/array building
     if (needDateRangeBuilt) {
       const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
+      console.log(dateRangesToDisplay);
       this.updateDateRangeState(dateRangesToDisplay);
     }
   }
@@ -44,6 +45,7 @@ class DataItemContainer extends Component {
     if (frontDateChanged || backDateChanged) {
       if (needDateRangeBuilt) {
         const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
+        console.log(dateRangesToDisplay);
         this.updateDateRangeState(dateRangesToDisplay);
       }
     }
@@ -58,6 +60,7 @@ class DataItemContainer extends Component {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
     const { inactive } = layer;
 
+    const isGranule = !!(layer.tags && layer.tags.contains('granule'));
     const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
@@ -68,11 +71,13 @@ class DataItemContainer extends Component {
       const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
       const startDateTime = new Date(startDate).getTime();
       const endDateTime = new Date(endDate).getTime();
+
+      console.log(endDateLimit, endDate);
       // add date intervals to mutliCoverageDates object to catch repeats
       dateIntervalStartDates.forEach((dateIntStartDate) => {
         const dateIntTime = new Date(dateIntStartDate).getTime();
         // allow overwriting of subsequent date ranges
-        if (dateIntTime >= startDateTime && startDateTime <= endDateTime) {
+        if ((dateIntTime >= startDateTime || isGranule) && startDateTime <= endDateTime) {
           const dateIntFormatted = dateIntStartDate.toISOString();
           mutliCoverageDates[dateIntFormatted] = { date: dateIntFormatted, interval: rangeInterval };
         }

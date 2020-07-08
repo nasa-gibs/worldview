@@ -11,7 +11,10 @@ import PropTypes from 'prop-types';
 import { Polygon as OlGeomPolygon } from 'ol/geom';
 import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
-import { hasNonClickableVectorLayer } from '../../modules/layers/util';
+import {
+  hasNonClickableVectorLayer,
+  areCoordinatesAndPolygonExtentValid,
+} from '../../modules/layers/util';
 import vectorDialog from '../vector-dialog';
 import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
@@ -36,12 +39,94 @@ export class VectorInteractions extends React.Component {
     mouseEvents.on('singleclick', this.singleClick);
   }
 
+  /**
+  * Handle mouse over granule geometry and trigger action to show granule date footprint
+  *
+  * @param {Object} granuleCMRGeometry
+  * @param {Object} map
+  * @param {String} crs
+  * @param {Array} pixels
+  * @param {Array} coord
+  *
+  * @return {Boolean}
+  */
+  handleGranuleHover = (granuleCMRGeometry, map, crs, pixels, coord) => {
+    const {
+      active,
+      activeString,
+      compareState,
+      granuleSatelliteInstrument,
+      hoveredGranule,
+      maxExtent,
+      swipeOffset,
+      toggleHoveredGranule,
+    } = this.props;
+
+    let toggledGranuleFootprint;
+    // reverse granule geometry so most recent granules are on top
+    const gcmr = Object.keys(granuleCMRGeometry).reverse().map((key) => ({ [key]: granuleCMRGeometry[key] }));
+    // only allow hover footprints on selected side of A/B comparison
+    if (active) {
+      const isOnActiveCompareSide = isFromActiveCompareRegion(map, pixels, { group: activeString }, compareState, swipeOffset);
+      if (!isOnActiveCompareSide) {
+        if (hoveredGranule) {
+          toggleHoveredGranule(granuleSatelliteInstrument, null);
+        }
+        return false;
+      }
+    }
+
+    const polygon = new OlGeomPolygon([]);
+    for (let i = 0; i < gcmr.length; i += 1) {
+      const granObj = gcmr[i];
+      const date = Object.keys(granObj)[0];
+      const geom = Object.values(granObj)[0];
+
+      // string coord to num and transform is polar projections
+      const geomVertices = geom.map((xy) => {
+        const coordNums = [parseFloat(xy[0]), parseFloat(xy[1])];
+        // transform for non geographic projections
+        if (crs !== 'EPSG:4326') {
+          return transform(coordNums, 'EPSG:4326', crs);
+        }
+        return coordNums;
+      });
+
+      // update geom polygon for precise coordinate intersect inclusion check
+      polygon.setCoordinates([geomVertices]);
+      // check if coordinates and polygon extent are within and not exceeding max extent
+      const isValidPolygon = areCoordinatesAndPolygonExtentValid(polygon, [coord[0], coord[1]], maxExtent);
+      if (isValidPolygon) {
+        toggledGranuleFootprint = true;
+        // prevent multiple calls if same hovered granule
+        if (hoveredGranule) {
+          const { granuleDate, hoveredSatelliteInstrumentGroup } = hoveredGranule;
+          // if (granuleDate) {
+          const granuleAlreadyHovered = granuleSatelliteInstrument === hoveredSatelliteInstrumentGroup
+              && granuleDate === date
+              && activeString === hoveredGranule.activeString;
+          if (granuleAlreadyHovered) {
+            return true;
+          }
+          // }
+        }
+        // toggle to show with map/ui
+        toggleHoveredGranule(granuleSatelliteInstrument, date);
+      }
+    }
+
+    if (hoveredGranule && !toggledGranuleFootprint) {
+      toggleHoveredGranule(granuleSatelliteInstrument, null);
+    }
+    return true;
+  }
+
   mouseOut() {
     const {
-      granuleLayerId, hoveredGranule, toggleHoveredGranule,
+      granuleSatelliteInstrument, hoveredGranule, toggleHoveredGranule,
     } = this.props;
     if (hoveredGranule) {
-      toggleHoveredGranule(granuleLayerId, null);
+      toggleHoveredGranule(granuleSatelliteInstrument, null);
     }
   }
 
@@ -50,57 +135,20 @@ export class VectorInteractions extends React.Component {
     const coord = map.getCoordinateFromPixel(pixels);
 
     const {
-      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj, active, activeString,
-      granuleCMRGeometry, granuleLayerId, hoveredGranule, toggleHoveredGranule, maxExtent,
+      changeCursor,
+      compareState,
+      granuleCMRGeometry,
+      isShowingClick,
+      measureIsActive,
+      proj,
+      swipeOffset,
     } = this.props;
 
+    // handle granule footprint hover, will break out with false return if on wrong compare A/B side
     if (granuleCMRGeometry) {
-      let toggledGranuleFootprint;
-      const gcmr = Object.keys(granuleCMRGeometry).map((key) => ({ [key]: granuleCMRGeometry[key] }));
-
-      if (active) {
-        const isOnActiveCompareSide = isFromActiveCompareRegion(map, pixels, { group: activeString }, compareState, swipeOffset);
-        if (!isOnActiveCompareSide) {
-          if (hoveredGranule && !toggledGranuleFootprint) {
-            toggleHoveredGranule(granuleLayerId, null);
-          }
-          return;
-        }
-      }
-
-      const polygon = new OlGeomPolygon([]);
-      for (let i = 0; i < gcmr.length; i += 1) {
-        const granObj = gcmr[i];
-        const date = Object.keys(granObj)[0];
-        const geom = Object.values(granObj)[0];
-
-        // string coord to num and transform is polar projections
-        const geomVertices = geom.map((xy) => {
-          const coordNums = [parseFloat(xy[0]), parseFloat(xy[1])];
-          // transform for non geographic projections
-          if (crs !== 'EPSG:4326') {
-            return transform(coordNums, 'EPSG:4326', crs);
-          }
-          return coordNums;
-        });
-
-        // update geom polygon for precise coordinate intersect inclusion check
-        polygon.setCoordinates([geomVertices]);
-        const areCoordsWithinPolygon = polygon.intersectsCoordinate([coord[0], coord[1]]);
-        // check is polygon footprint is within max extent, will allow partial corners within max extent
-        const isPolygonWithinExtent = polygon.intersectsExtent(maxExtent);
-
-        // if coordinates within granule footprint, toggle to show with map/ui
-        if (areCoordsWithinPolygon && isPolygonWithinExtent) {
-          //! MULTIPLE POLYGONS CONTAIN COORDS, BUT ONLY MOST RECENT DATE IS DISPLAYED
-          //! SHOULD THIS BEHAVIOR BE BLOCKED/DEBOUNCED?
-          toggledGranuleFootprint = true;
-          toggleHoveredGranule(granuleLayerId, date);
-        }
-      }
-
-      if (hoveredGranule && !toggledGranuleFootprint) {
-        toggleHoveredGranule(granuleLayerId, null);
+      const isValidGranule = this.handleGranuleHover(granuleCMRGeometry, map, crs, pixels, coord);
+      if (!isValidGranule) {
+        return;
       }
     }
 
@@ -193,27 +241,18 @@ function mapStateToProps(state) {
   }
 
   let granuleCMRGeometry;
-  let granuleLayerId;
-  const { hoveredGranule } = layers;
+  let granuleSatelliteInstrument;
+  const {
+    hoveredGranule,
+    granuleLayers,
+    granuleGeometry,
+    granuleSatelliteInstrumentGroup,
+  } = layers;
   const { maxExtent } = config.projections[proj.id];
-
-  // TODO: CURRENTLY RELYING ON PROVIDED LAYER ID, NEED TO SET UP GLOBAL LAYER STATE WITH CURRENT "FAMILY" OF SATELLITE/PRODUCT
-
-  // determine how the granules can be grouped - is any granule that starts with 'VIIRS_NOAA20_CorrectedReflectance_' in the layer ID enough?
-  // when granule is added, that CMR data is added to family object instead of individual layer object
-  // when ALL are removed, that family object is destroyed
-  // cannot have more than one family object at a time
-
-  const isGranuleIdOptions = {
-    VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT: true,
-    'VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT': true,
-    'VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT': true,
-  };
-  const isActiveGranuleVisible = layers.active.filter((layer) => layer.visible && isGranuleIdOptions[layer.id]);
-  // console.log(layers, isActiveGranuleVisible);
-  if (isActiveGranuleVisible.length && layers.granuleLayers[activeString] && layers.granuleLayers[activeString].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT) {
-    granuleCMRGeometry = layers.granuleLayers[activeString].VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT.geometry;
-    granuleLayerId = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT';
+  const isActiveGranuleVisible = layers.active.filter((layer) => layer.visible && layer.isGranule);
+  if (isActiveGranuleVisible.length && granuleLayers[activeString]) {
+    granuleSatelliteInstrument = granuleSatelliteInstrumentGroup[activeString];
+    granuleCMRGeometry = granuleGeometry[activeString];
   }
 
   return {
@@ -225,7 +264,7 @@ function mapStateToProps(state) {
     measureIsActive: measure.isActive,
     isMobile: browser.lessThan.medium,
     granuleCMRGeometry,
-    granuleLayerId,
+    granuleSatelliteInstrument,
     hoveredGranule,
     compareState: compare,
     swipeOffset,
@@ -293,9 +332,11 @@ VectorInteractions.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   openVectorDiaglog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
+  active: PropTypes.bool,
+  activeString: PropTypes.string,
   compareState: PropTypes.object,
   granuleCMRGeometry: PropTypes.object,
-  granuleLayerId: PropTypes.string,
+  granuleSatelliteInstrument: PropTypes.string,
   hoveredGranule: PropTypes.object,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,

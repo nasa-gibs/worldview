@@ -65,7 +65,7 @@ export default function mapui(models, config, store, ui) {
   const rotation = new MapRotate(self, models, store);
   const dateline = mapDateLineBuilder(models, config, store, ui);
   const precache = mapPrecacheTile(models, config, cache, self);
-  const compareMapUi = mapCompare(config, store);
+  const compareMapUi = self.compareMapUi = mapCompare(config, store);
   const granuleFootprints = {};
   const dataRunner = self.runningdata = new MapRunningData(
     models,
@@ -98,7 +98,6 @@ export default function mapui(models, config, store, ui) {
    */
   const subscribeToStore = function(action) {
     switch (action.type) {
-      // # CHANGE IN SETTINGS ORDER
       case layerConstants.UPDATE_GRANULE_LAYER_DATES: {
         const granuleOptions = {
           id: action.id,
@@ -106,7 +105,6 @@ export default function mapui(models, config, store, ui) {
         };
         return reloadLayers(self.selected, granuleOptions);
       }
-      // # RESET IN SETTINGS
       case layerConstants.RESET_GRANULE_LAYER_DATES: {
         const granuleOptions = {
           id: action.id,
@@ -114,15 +112,14 @@ export default function mapui(models, config, store, ui) {
         };
         return reloadLayers(self.selected, granuleOptions);
       }
-      // # HOVER IN SETTINGS OR VIA MAP (REMOVE SETTINGS VERSION?)
       case layerConstants.TOGGLE_HOVERED_GRANULE: {
         const state = store.getState();
         let geometry;
         let date;
         const hoverGranule = action.hoveredGranule;
         if (hoverGranule) {
-          const { activeString, id, granuleDate } = hoverGranule;
-          geometry = state.layers.granuleLayers[activeString][id].geometry[granuleDate];
+          const { activeString, granuleDate } = hoverGranule;
+          geometry = state.layers.granuleGeometry[activeString][granuleDate];
           date = granuleDate;
         }
         return granuleFootprintDraw(geometry, date);
@@ -510,9 +507,7 @@ export default function mapui(models, config, store, ui) {
           }
           granuleLayerParam = { granuleDates, granuleCount, geometry };
         }
-        // TODO: should pass empty param to compare mode ?
-        // TODO: issue with enter/exit and zeroing date solved by requesting each time
-        // TODO: seems now an update problem presents itself if an empty object is sent
+
         const createdLayer = createLayer(def, {
           date: state.date[arr[1]],
           group: arr[0],
@@ -1189,7 +1184,7 @@ export default function mapui(models, config, store, ui) {
     function onMouseMove(e) {
       const state = store.getState();
       if (self.mapIsbeingZoomed) return;
-      if (compareMapUi && compareMapUi.dragging) return;
+      if (self.compareMapUi && self.compareMapUi.dragging) return;
       // if mobile return
       if (util.browser.small) return;
       // if measure is active return

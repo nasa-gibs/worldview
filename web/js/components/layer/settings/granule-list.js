@@ -150,18 +150,18 @@ class GranuleLayerDateList extends PureComponent {
   }
 
   // handle mouse over item
-  handleMouseOverItem = (granuleDate, index) => {
-    const { def, toggleHoveredGranule } = this.props;
-    toggleHoveredGranule(def.id, granuleDate);
+  handleMouseOverItem = (granuleDate) => {
+    const { satelliteInstrumentGroup, toggleHoveredGranule } = this.props;
+    toggleHoveredGranule(satelliteInstrumentGroup, granuleDate);
     this.setState({
       hoveredItem: granuleDate,
     });
   }
 
   // handle mouse leave item
-  handleMouseLeaveItem = (granuleDate, index) => {
-    const { def, toggleHoveredGranule } = this.props;
-    toggleHoveredGranule(def.id, null);
+  handleMouseLeaveItem = () => {
+    const { satelliteInstrumentGroup, toggleHoveredGranule } = this.props;
+    toggleHoveredGranule(satelliteInstrumentGroup, null);
     this.setState({
       hoveredItem: null,
     });
@@ -195,6 +195,7 @@ class GranuleLayerDateList extends PureComponent {
     const maxNumItemsNoScrollNeeded = 8;
     const granuleDateLength = items.length;
     const needsScrollBar = granuleDateLength > maxNumItemsNoScrollNeeded;
+    const scrollBarMaxHeight = `${screenHeight - 490}px`;
     const droppableId = `droppable-granule-date-list-${def.id}`;
     return (
       <div className="layer-granule-date-draggable-list" style={{ paddingLeft: '4px', marginBottom: '14px' }}>
@@ -214,7 +215,7 @@ class GranuleLayerDateList extends PureComponent {
         </h2>
         {items.length > 0
           ? (
-            <Scrollbar style={{ maxHeight: `${screenHeight - 60 - 60 - 100 - 100 - 40 - 60 - 70}px` }} needsScrollBar={needsScrollBar}>
+            <Scrollbar style={{ maxHeight: scrollBarMaxHeight }} needsScrollBar={needsScrollBar}>
               <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId={droppableId}>
                   {(provided, snapshot) => (
@@ -228,8 +229,8 @@ class GranuleLayerDateList extends PureComponent {
                           {(provided, snapshot) => (
                             <div
                               className="granule-date-item"
-                              onMouseEnter={() => this.handleMouseOverItem(item, index)}
-                              onMouseLeave={() => this.handleMouseLeaveItem(item, index)}
+                              onMouseEnter={() => this.handleMouseOverItem(item)}
+                              onMouseLeave={() => this.handleMouseLeaveItem()}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
@@ -307,6 +308,7 @@ GranuleLayerDateList.propTypes = {
   granuleCount: PropTypes.number,
   granuleDates: PropTypes.array,
   resetGranuleLayerDates: PropTypes.func,
+  satelliteInstrumentGroup: PropTypes.string,
   screenHeight: PropTypes.number,
   toggleHoveredGranule: PropTypes.func,
   updateGranuleLayerDates: PropTypes.func,

@@ -7,7 +7,7 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTimes, faSlidersH, faInfo, faBan, faHandPointer,
+  faTimes, faSlidersH, faInfo, faBan, faHandPointer, faShoePrints,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
@@ -24,6 +24,7 @@ import {
   toggleVisibility,
   removeLayer,
   layerHover,
+  changeGranuleSatelliteInstrumentGroup,
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
 import { isVectorLayerClickable } from '../../modules/layers/util';
@@ -171,6 +172,44 @@ class Layer extends React.Component {
     );
   }
 
+  renderGranuleHoverIcon() {
+    const {
+      activeString,
+      changeGranuleSatelliteInstrumentGroup,
+      runningObject,
+      layer,
+      isGranule,
+      granuleSatelliteInstrumentGroup,
+      layerSatelliteInstrumentGroup,
+    } = this.props;
+
+    if (!isGranule) {
+      return null;
+    }
+
+    const isGranuleSatelliteActive = granuleSatelliteInstrumentGroup[activeString] === layerSatelliteInstrumentGroup;
+    const clasNames = isGranuleSatelliteActive
+      ? 'layer-pointer-icon'
+      : 'layer-pointer-icon disabled';
+    const title = isGranuleSatelliteActive
+      ? 'Granule hover footprints are active for this satellite instrument.'
+      : 'The hover capability for this granule satellite instrument is not active. Click to make active.';
+
+    return (
+      <div
+        title={title}
+        className={runningObject ? `${clasNames} running` : clasNames}
+        onClick={() => changeGranuleSatelliteInstrumentGroup(layer.id, layerSatelliteInstrumentGroup)}
+      >
+        {' '}
+        <FontAwesomeIcon
+          icon={faShoePrints}
+          fixedWidth
+        />
+      </div>
+    );
+  }
+
   render() {
     const {
       layerGroupName,
@@ -260,6 +299,7 @@ class Layer extends React.Component {
                 {hasPalette ? this.getPaletteLegend() : ''}
               </div>
               {isVectorLayer && isVisible ? this.renderVectorIcon() : null}
+              {this.renderGranuleHoverIcon()}
               {tracksForLayer.length > 0 && (
               <div className="layer-tracks">
                 {tracksForLayer.map((track) => (
@@ -315,12 +355,21 @@ function mapStateToProps(state, ownProps) {
   const isVector = layer.type === 'vector';
   const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
 
+  // granule icon
+  const { isGranule } = layer;
+  const { activeString } = compare;
+  const layerSatelliteInstrumentGroup = `${layer.satellite}_${layer.instrument}`;
+  const { granuleSatelliteInstrumentGroup } = layers;
   return {
+    activeString,
     compare,
     tracksForLayer,
     layer,
     isDisabled,
     isVisible,
+    isGranule,
+    layerSatelliteInstrumentGroup,
+    granuleSatelliteInstrumentGroup,
     layerClasses,
     paletteLegends,
     names,
@@ -398,12 +447,16 @@ const mapDispatchToProps = (dispatch) => ({
   requestPalette: (id) => {
     dispatch(requestPalette(id));
   },
+  changeGranuleSatelliteInstrumentGroup: (id, satelliteInstrumentGroup) => {
+    dispatch(changeGranuleSatelliteInstrumentGroup(id, satelliteInstrumentGroup));
+  },
 });
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Layer);
 Layer.propTypes = {
+  changeGranuleSatelliteInstrumentGroup: PropTypes.func,
   checkerBoardPattern: PropTypes.object,
   compare: PropTypes.object,
   getPalette: PropTypes.func,
