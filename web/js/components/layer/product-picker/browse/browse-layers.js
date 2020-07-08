@@ -28,6 +28,7 @@ import {
   recentLayerInfo,
 } from '../../../../modules/product-picker/util';
 import RecentLayersList from './recent-layers';
+import safeLocalStorage from '../../../../util/local-storage';
 
 const CATEGORIES = [
   'hazards and disasters',
@@ -36,12 +37,14 @@ const CATEGORIES = [
 ];
 const GEOGRAPHIC_TAB_KEYS = [
   ...CATEGORIES,
-  'recent',
 ];
 const POLAR_TAB_KEYS = [
   'measurements',
-  'recent',
 ];
+if (safeLocalStorage.enabled) {
+  GEOGRAPHIC_TAB_KEYS.push('recent');
+  POLAR_TAB_KEYS.push('recent');
+}
 
 function BrowseLayers (props) {
   const {
