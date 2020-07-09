@@ -44,19 +44,21 @@ export function productPickerReducer(state = productPickerState, action) {
   switch (action.type) {
     case INIT_STATE: {
       const { searchConfig, projection } = action;
+      const { mode } = state;
       return {
         ...state,
         searchConfig,
-        mode: projection === 'geographic' ? 'category' : 'measurements',
+        mode: mode || (projection === 'geographic' ? 'category' : 'measurements'),
       };
     }
 
     case SAVE_SEARCH_STATE: {
-      const { filters, searchTerm } = action;
+      const { filters, searchTerm, searchConfig } = action;
       return {
         ...state,
         filters,
         searchTerm,
+        searchConfig,
       };
     }
 

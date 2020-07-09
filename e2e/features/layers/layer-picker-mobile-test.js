@@ -4,7 +4,6 @@ const { assertCategories, assertDefaultLayers } = require('../../reuseables/laye
 const {
   availableFacetLabel,
   categoryAtmosphereLabel,
-  categoriesNav,
   collapsedLayerButton,
   layerCount,
   layerContainer,
@@ -63,7 +62,7 @@ module.exports = {
   },
   'Open product picker and show categories by default': (c) => {
     c.click(addLayers);
-    c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
+    c.waitForElementVisible('.categories-dropdown-header', TIME_LIMIT, assertCategories(c));
   },
   'Clicking a measurement': (c) => {
     c.click(aodAllMeasurement);
@@ -112,7 +111,7 @@ module.exports = {
   },
   'Back button returns to categories': (c) => {
     c.click(layerPickerBackButton);
-    c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
+    c.waitForElementVisible('.categories-dropdown-header', TIME_LIMIT, assertCategories(c));
   },
   'Swtich to facet view and confirm applying facets limits results': (c) => {
     c.click(filterButton);
