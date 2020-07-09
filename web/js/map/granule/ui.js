@@ -12,7 +12,7 @@ import {
   Text as OlText,
 } from 'ol/style';
 
-export default function granuleFootprint(map, mapUiEvents, store) {
+export default function granuleFootprint(map) {
   const self = {};
   self.currentGranule = {};
   self.vectorLayer = {};
@@ -22,6 +22,7 @@ export default function granuleFootprint(map, mapUiEvents, store) {
     useSpatialIndex: false, // TODO: perf improve per docs?
   });
   self.getVectorLayer = (text) => new OlVectorLayer({
+    className: 'granule-map-footprint',
     source: vectorSource,
     style: [
       new OlStyle({

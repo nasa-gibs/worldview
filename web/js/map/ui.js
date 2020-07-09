@@ -1068,7 +1068,7 @@ export default function mapui(models, config, store, ui) {
       if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
-    granuleFootprints[proj.crs] = granuleFootprint(map, self.events, store);
+    granuleFootprints[proj.crs] = granuleFootprint(map);
     return map;
   }
   /*
