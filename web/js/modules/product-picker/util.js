@@ -1,3 +1,4 @@
+import { cloneDeep as lodashCloneDeep } from 'lodash';
 import safeLocalStorage from '../../util/local-storage';
 
 const { RECENT_LAYERS } = safeLocalStorage.keys;
@@ -30,7 +31,7 @@ export function clearRecentLayers() {
  */
 export function clearSingleRecentLayer({ id: layerId, projections }) {
   const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
-  const recentLayers = JSON.parse(recentLayersJson) || DEFAULT_OBJ;
+  const recentLayers = JSON.parse(recentLayersJson) || lodashCloneDeep(DEFAULT_OBJ);
   Object.keys(projections).forEach((proj) => {
     const layers = recentLayers[proj];
     recentLayers[proj] = layers.filter(({ id }) => id !== layerId);
@@ -44,7 +45,7 @@ export function clearSingleRecentLayer({ id: layerId, projections }) {
  */
 export function updateRecentLayers({ id: layerId, projections }) {
   const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
-  const recentLayers = JSON.parse(recentLayersJson) || DEFAULT_OBJ;
+  const recentLayers = JSON.parse(recentLayersJson) || lodashCloneDeep(DEFAULT_OBJ);
 
   Object.keys(projections).forEach((proj) => {
     const layers = recentLayers[proj];
