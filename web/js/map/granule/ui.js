@@ -19,7 +19,7 @@ export default function granuleFootprint(map) {
 
   const vectorSource = new OlVectorSource({
     wrapX: false,
-    useSpatialIndex: false, // TODO: perf improve per docs?
+    useSpatialIndex: false,
   });
   self.getVectorLayer = (text) => new OlVectorLayer({
     className: 'granule-map-footprint',
