@@ -188,17 +188,17 @@ module.exports = {
       c.assert.containsText(layersAll, 'MERRA-2');
     });
   },
-  'Back button returns to main selection and clears search input': (c) => {
+  'Back button returns to main selection but retains search input': (c) => {
     c.waitForElementVisible(layerPickerBackButton, TIME_LIMIT, (e) => {
       c.click(layerPickerBackButton);
       c.getValue(layersSearchField, (result) => {
-        c.assert.equal(result.value, '');
+        c.assert.equal(result.value, 'MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly');
+        c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
       });
     });
   },
   'Switching to "Science Disciplines" tab updates category/measurement choices': (c) => {
     c.click(scienceDisciplinesTab);
-    c.pause(200);
     c.expect.element('#scientific-all').to.be.present;
     c.expect.element('#atmosphere').to.be.present;
     c.expect.element('#biosphere').to.be.present;

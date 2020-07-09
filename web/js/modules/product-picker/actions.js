@@ -37,11 +37,12 @@ export function initState() {
   };
 }
 
-export function saveSearchState(filters, searchTerm) {
+export function saveSearchState(filters, searchTerm, searchConfig) {
   return {
     type: SAVE_SEARCH_STATE,
     filters,
     searchTerm,
+    searchConfig,
   };
 }
 

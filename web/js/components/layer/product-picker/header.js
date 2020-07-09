@@ -45,11 +45,12 @@ class ProductPickerHeader extends React.Component {
     const {
       filters,
       searchTerm,
+      searchConfig,
       saveSearchState,
       toggleCategoryMode,
     } = this.props;
     e.preventDefault();
-    saveSearchState(filters, searchTerm);
+    saveSearchState(filters, searchTerm, searchConfig);
     toggleCategoryMode();
   }
 
@@ -213,6 +214,7 @@ ProductPickerHeader.propTypes = {
   mode: PropTypes.string,
   results: PropTypes.array,
   saveSearchState: PropTypes.func,
+  searchConfig: PropTypes.object,
   setSearchTerm: PropTypes.func,
   selectedLayer: PropTypes.object,
   selectedProjection: PropTypes.string,
@@ -229,8 +231,8 @@ const mapDispatchToProps = (dispatch) => ({
   unselectLayer: () => {
     dispatch(selectLayerAction(null));
   },
-  saveSearchState: (filters, searchTerm) => {
-    dispatch(saveSearchStateAction(filters, searchTerm));
+  saveSearchState: (filters, searchTerm, searchConfig) => {
+    dispatch(saveSearchStateAction(filters, searchTerm, searchConfig));
   },
   toggleCategoryMode: () => {
     dispatch(toggleCategoryModeAction());
@@ -251,6 +253,7 @@ const mapStateToProps = (state, ownProps) => {
     categoryType,
     showMobileFacets,
     selectedLayer,
+    searchConfig,
   } = productPicker;
   const isMobile = browser.lessThan.medium;
   const layers = getLayersForProjection(state);
@@ -262,6 +265,7 @@ const mapStateToProps = (state, ownProps) => {
     isMobile,
     showMobileFacets,
     mode,
+    searchConfig,
     selectedLayer,
     selectedProjection: proj.id,
   };
