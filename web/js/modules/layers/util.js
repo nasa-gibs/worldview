@@ -1315,3 +1315,20 @@ export const areCoordinatesAndPolygonExtentValid = (polygon, coords, maxExtent) 
     && doesPolygonIntersectMaxExtent
     && !isPolygonLargerThanMaxExtent;
 };
+
+/**
+ * For subdaily layers, if the layer date is within 30 minutes of current
+ * time, set expiration to ten minutes from now
+ */
+export const getCacheOptions = (period, date, state) => {
+  const tenMin = 10 * 60000;
+  const thirtyMin = 30 * 60000;
+  const now = new Date().getTime();
+  const recentTime = Math.abs(now - date.getTime()) < thirtyMin;
+  if (period !== 'subdaily' || !recentTime) {
+    return {};
+  }
+  return {
+    expirationAbsolute: new Date(now + tenMin),
+  };
+};
