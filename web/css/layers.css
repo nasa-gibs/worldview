@@ -51,13 +51,22 @@
   }
   &:hover:not(.selected) {
     transition: all 100ms linear;
-    background-color: #3f3f3f;
+    background-color: #5a5a5a;
   }
   &.search-row:hover:not(.selected) {
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
     left: -1px;
-    & .layers-all-header h3 {
+    & .layers-all-header > h3 {
       color: #fff;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+    }
+    & .layers-all-header > h4 {
+      color: #eee;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+    }
+    & .layers-all-header > h5 {
+      color: #bbb;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
     }
   }
 }
@@ -189,7 +198,12 @@
   .layers-all-header {
     padding: 0 0 0 40px;
   }
-  & .wv-checkbox {
+  &:hover {
+    .wv-checkbox::before {
+      border-color: #f3460a;
+    }
+  }
+  .wv-checkbox {
     cursor: pointer;
     float: left;
     position: absolute;
@@ -200,7 +214,7 @@
       top: 0;
     }
   }
-  & .wv-checkbox:hover:not(.checked)::before {
+  .wv-checkbox:hover:not(.checked)::before {
     background-color: rgba(0, 0, 0, 0.25);
   }
 }
