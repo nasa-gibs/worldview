@@ -13,6 +13,7 @@ import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
 import { encode, getSharelink, openPromisedSocial } from '../modules/link/util';
 import { serializeDate } from '../modules/date/util';
+import getSelectedDate from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
@@ -223,18 +224,11 @@ class ShareLinkContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { compare, config, date } = state;
-  const { active, isCompareA } = compare;
-  const { selected, selectedB } = date;
-
-  // selectedDate for shared permalink
-  const selectedDate = !active && !isCompareA
-    ? selectedB
-    : selected;
+  const { config } = state;
 
   return {
     shortLink: state.shortLink,
-    selectedDate,
+    selectedDate: getSelectedDate(state),
     mock:
       config.parameters && config.parameters.shorten
         ? config.parameters.shorten
