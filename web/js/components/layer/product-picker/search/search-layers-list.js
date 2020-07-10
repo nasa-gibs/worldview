@@ -26,29 +26,45 @@ class SearchLayerList extends React.Component {
       visibleItems: [],
       hasMoreItems: true,
       nextIndex: 0,
+      firstLoadAutoSelect: false,
     };
     this.loadMoreItems = this.loadMoreItems.bind(this);
+  }
+
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.selectedLayer) {
+      return { firstLoadAutoSelect: true };
+    }
+    return null;
   }
 
   /**
    * Handle selecting/showing metadata when there is only a single search result
    */
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { selectLayer, selectedLayer, results } = this.props;
-    const selectedLayerInResults = selectedLayer && results.length
-      && results.find((l) => l.id === selectedLayer.id);
+    const { selectedLayer, results } = this.props;
+    const { firstLoadAutoSelect } = this.state;
+    const selectedLayerInResults = selectedLayer
+      && (results || []).find((l) => l.id === selectedLayer.id);
 
+    // Clear metadata when item no longer in list of results
     if (!selectedLayerInResults && selectedLayer) {
-      selectLayer(null);
+      this.showLayerMetadata(null);
     }
-    if (prevProps.selectedLayer !== selectedLayer) {
-      const id = selectedLayer ? selectedLayer.id : null;
-      this.showLayerMetadata(id);
+    // Select first item in list on initial load
+    if (!selectedLayer && results && results.length && !firstLoadAutoSelect) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ firstLoadAutoSelect: true }, () => {
+        const { id } = results[0];
+        this.showLayerMetadata(id);
+      });
     }
     if (prevProps.results !== results) {
       this.loadMoreItems(0, prevProps);
     }
   }
+
 
   /**
    * Loads metadata for layer (if not previously loaded) and
