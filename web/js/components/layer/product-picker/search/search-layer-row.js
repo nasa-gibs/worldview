@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'reactstrap';
 import {
   addLayer as addLayerAction,
@@ -92,7 +92,7 @@ class SearchLayerRow extends React.Component {
       isEnabled, layer, selectedLayer, categoryType, clearSingleRecentLayer,
     } = this.props;
     const { showDeleteIcon } = this.state;
-    const { id, description } = layer;
+    const { id } = layer;
     const isMetadataShowing = selectedLayer && id === selectedLayer.id;
     const rowClass = isMetadataShowing
       ? 'search-row layers-all-layer selected'
