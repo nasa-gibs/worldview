@@ -16,7 +16,7 @@ module.exports = {
   'Clicking the social link button opens the social share dialog': (client) => {
     client.waitForElementVisible(socialCopyLinkButton, TIME_LIMIT);
     client.click(socialCopyLinkButton);
-    client.pause(1000);
+    client.waitForElementVisible(socialToolbar, TIME_LIMIT);
     client.expect.element(socialToolbar).to.be.present;
   },
   'Share link clipboard with existing time query string param in the page url will have the same serialized time': (client) => {
