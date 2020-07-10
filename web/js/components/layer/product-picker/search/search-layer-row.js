@@ -119,20 +119,16 @@ class SearchLayerRow extends React.Component {
         </div>
         <div className="layers-all-header" onClick={this.toggleShowMetadata}>
           <RenderSplitLayerTitle layer={layer} />
-          {recentLayerMode && showDeleteIcon
-            ? (
-              <Button
-                className="recent-layer-delete"
-                color="danger"
-                title="Remove from recent layers list."
-                onClick={(e) => clearSingleRecentLayer(e, layer)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            )
-            : description && !isMetadataShowing && (
-              <FontAwesomeIcon className="info-circle" icon={faInfoCircle} />
-            )}
+          {recentLayerMode && showDeleteIcon && (
+            <Button
+              className="recent-layer-delete"
+              color="danger"
+              title="Remove from recent layers list."
+              onClick={(e) => clearSingleRecentLayer(e, layer)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+          )}
         </div>
       </div>
     );
