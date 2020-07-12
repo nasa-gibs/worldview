@@ -1,0 +1,3 @@
+This false color image (Bands 7-2-1) shows thick fog in the valleys northeast of Vancouver. The fog is a light white color in the center of the image, whilst the snow covered mountains are in blue/cyan and the vegetated areas are in green. Fog is essentially a cloud lying on the ground. It forms when the air reaches its dew point where an air mass cools to a temperature that allows the water vapor to condense into water droplets. The image is from the Moderate Resolution Imaging Spectroradiometer (MODIS) instrument on board the Terra satellite on 21 February 2010.
+
+Read more at NASA Earth Observatory: [Valley Fog in British Columbia](https://earthobservatory.nasa.gov/images/42783/valley-fog-in-british-columbia)

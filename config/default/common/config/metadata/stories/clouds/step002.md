@@ -1,0 +1,1 @@
+Here is a true color image of Hurricane Dorian on 1 September 2019. Images of hurricanes taken from space are most likely to be one of the more typical images you will have seen. The swirling clouds show the rotation of the storm and the eye is also visible in this image.

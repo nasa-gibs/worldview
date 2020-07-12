@@ -1,0 +1,3 @@
+These wispy clouds in western Australia are transverse cirrus bands (TCBs) they are often a precursor to intense weather and are on the edge of a storm or a front. A strong cold front was moving inland from the Indian Ocean and the system eventually brought high winds and heavy rains.
+
+Read more at NASA Earth Observatory: [Wispy Clouds Before the Storm](https://earthobservatory.nasa.gov/images/145189/wispy-clouds-before-the-storm)
