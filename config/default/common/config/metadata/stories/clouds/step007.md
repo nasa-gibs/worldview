@@ -1,0 +1,3 @@
+Popcorn clouds, or low altitude cumulus clouds, appear in this image of the Congo Basin in Central Africa. The clouds appear over the rainforest but avoid the Congo River and its tributaries. The river can be up to 5 km/3 miles in width which can deter clouds from forming. Since the river waters and the air above the waters are cooler than the surrounding tropical forests, there is less moisture rising into the air and clouds are not formed.
+
+Read more at NASA Earth Observatory: [Cloudy Congo Basin](https://earthobservatory.nasa.gov/images/144608/cloudy-congo-river-basin)

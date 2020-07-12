@@ -1,0 +1,3 @@
+This image shows marine stratocumulus clouds hugging the coastline of the Pacific Northwest. Coastal upwelling causes cold water to rise from deep in the ocean to replace the surface water. The cold water cools the air above it and as the moist marine air cools, low clouds form when the water vapor condenses into water droplets. The warm, dry air over the land prevents cloud formation there and as the marine clouds move onshore, they often evaporate due to this warm, dry air.
+
+Read more at NASA Earth Observatory: [Marine Stratocumulus Clouds in the Pacific Northwest](https://earthobservatory.nasa.gov/images/7007/marine-stratocumulus-clouds-in-the-pacific-northwest)
