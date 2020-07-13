@@ -1,3 +1,3 @@
-The von K&agrave;rm&agrave;n vortices are also visible at night! This image shows the spiraling cloud patterns occurring off the coast of Morocco where the winds are slowed by the Canary Islands. When the continue to travel downwind from the islands they create vortex streets.
+The von K&agrave;rm&agrave;n vortices are also visible at night! This image shows the spiraling cloud patterns occurring off the coast of Morocco where the winds are slowed by the Canary Islands. When the vortices continue to travel downwind from the islands they create vortex streets.
 
 Read more at NASA Earth Observatory: [Nighttime Swirls](https://earthobservatory.nasa.gov/images/145471/nighttime-swirls)
