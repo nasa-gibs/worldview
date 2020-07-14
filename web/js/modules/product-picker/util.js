@@ -44,6 +44,9 @@ export function clearSingleRecentLayer({ id: layerId, projections }) {
  * @param {*} layer - the layer being added to the map
  */
 export function updateRecentLayers({ id: layerId, projections }) {
+  if (!safeLocalStorage.enabled) {
+    return;
+  }
   const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
   const recentLayers = JSON.parse(recentLayersJson) || lodashCloneDeep(DEFAULT_OBJ);
 
