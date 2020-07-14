@@ -1,5 +1,8 @@
 #wv-sidebar {
   position: absolute;
+  * {
+    user-select: none;
+  }
 }
 #productsHolder {
   position: absolute;
