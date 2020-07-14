@@ -33,7 +33,7 @@ export default function granuleFootprint(map) {
         text: new OlText({
           textAlign: 'center',
           text,
-          font: '16px sans-serif',
+          font: '18px sans-serif',
           fill: new OlStyleFill({ color: 'white' }),
           stroke: new OlStyleStroke({ color: 'black', width: 1 }),
           overflow: true,
@@ -71,7 +71,6 @@ export default function granuleFootprint(map) {
       map.removeLayer(self.vectorLayer);
       vectorSource.clear();
     }
-
     if (!granuleGeometry || !date) {
       self.currentGranule = {};
       map.removeLayer(self.vectorLayer);
@@ -79,11 +78,9 @@ export default function granuleFootprint(map) {
       return;
     }
     self.currentGranule[date] = true;
-    const flattened = (arr) => [].concat(...arr);
 
-    const res = flattened(granuleGeometry);
+    const res = [].concat(...granuleGeometry);
     const points = [];
-
     // iterate the new array and push a coordinate pair into a new array
     for (let i = 0; i < res[0].length; i += 2) {
       const coord1 = parseFloat(res[i]);
