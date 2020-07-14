@@ -15,8 +15,8 @@ import {
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
   ADD_GRANULE_LAYER_DATES,
+  UPDATE_GRANULE_LAYER_OPTIONS,
   UPDATE_GRANULE_LAYER_DATES,
-  UPDATE_GRANULE_CMR_GEOMETRY,
   TOGGLE_HOVERED_GRANULE,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
 } from './constants';
@@ -197,29 +197,28 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
+    case UPDATE_GRANULE_LAYER_OPTIONS:
+      return update(state, {
+        granuleLayers: {
+          [action.activeKey]: {
+            $merge: {
+              [action.id]: {
+                dates: action.dates,
+                count: action.count,
+                geometry: action.geometry,
+              },
+            },
+          },
+        },
+      });
     case UPDATE_GRANULE_LAYER_DATES:
       return update(state, {
         granuleLayers: {
           [action.activeKey]: {
             $merge: {
               [action.id]: {
-                dates: action.dates, count: action.count, geometry: action.geometry,
-              },
-            },
-          },
-        },
-        granuleGeometry: {
-          [action.activeKey]: {
-            $set: action.geometry,
-          },
-        },
-      });
-    case UPDATE_GRANULE_CMR_GEOMETRY:
-      return update(state, {
-        granuleLayers: {
-          [action.activeKey]: {
-            $merge: {
-              [action.id]: {
+                dates: action.dates,
+                count: action.count,
                 geometry: action.geometry,
               },
             },
@@ -227,7 +226,7 @@ export function layerReducer(state = initialState, action) {
         },
         granuleGeometry: {
           [action.activeKey]: {
-            $set: action.geometry,
+            $set: action.granuleGeometry,
           },
         },
       });

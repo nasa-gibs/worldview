@@ -74,25 +74,23 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    *
    * @method createLayer
    * @static
-   * @param {object} granuleAttributes
-   * @param {object} key
-   * @param {object} options
-   * @param {object} activeDateStr
-   * @param {object} def
    * @param {object} state
-   * @param {object} group
+   * @param {object} def
+   * @param {object} key
+   * @param {object} activeDateStr
+   * @param {object} options
    * @param {object} dateOptions
+   * @param {object} granuleAttributes
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
   const createLayer = (
-    granuleAttributes,
-    key,
-    options,
-    activeDateStr,
-    def,
     state,
-    group,
+    def,
+    key,
+    activeDateStr,
+    options,
     dateOptions,
+    granuleAttributes,
   ) => new Promise((resolve) => {
     const proj = state.proj.selected;
     const {
@@ -121,6 +119,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
         date = options.date || state.date[activeDateStr];
       }
       const cacheOptions = getCacheOptions(period, date, state);
+      const { group } = options;
       const attributes = {
         id,
         key,
@@ -255,9 +254,11 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    *    * @param {number} granuleCount - number of granules in layer group
    * @returns {object} OpenLayers layer
    */
-  self.createLayer = (def, options, granuleOptions) => {
+  self.createLayer = (def, options = {}, granuleOptions) => {
     const state = store.getState();
     const { proj, compare } = state;
+
+    // determine selected A/B
     const activeDateStr = compare.isCompareA
       ? 'selected'
       : 'selectedB';
@@ -265,11 +266,13 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     if (options.group) {
       group = options.group;
     } else {
-      options = {};
       group = activeDateStr === 'selectedB'
         ? 'activeB'
         : 'active';
+      options.group = group;
     }
+
+    // get dates
     const {
       closestDate,
       nextDate,
@@ -284,8 +287,12 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       nextDate,
       previousDate,
     };
+
+    // layer cache key
     const key = self.layerKey(def, options, state);
     const { isGranule } = def;
+    // promise based CMR request process chain for granules
+
     const createLayerPromise = isGranule
       ? createGranuleLayerProcess(
         granuleOptions,
@@ -295,19 +302,18 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
         date,
         proj.selected,
       )
-      // resolve non granule layers
+      // instantly resolve non granule layers
       : new Promise((resolve) => { resolve({}); });
 
     return createLayerPromise
       .then((granuleAttributes) => createLayer(
-        granuleAttributes,
-        key,
-        options,
-        activeDateStr,
-        def,
         state,
-        group,
+        def,
+        key,
+        activeDateStr,
+        options,
         dateOptions,
+        granuleAttributes,
       ))
       .then((layer) => layer)
       .catch((error) => {

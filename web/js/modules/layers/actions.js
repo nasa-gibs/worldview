@@ -17,9 +17,8 @@ import {
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
-  UPDATE_GRANULE_LAYER_DATES,
-  RESET_GRANULE_LAYER_DATES,
-  UPDATE_GRANULE_CMR_GEOMETRY,
+  UPDATE_GRANULE_LAYER_OPTIONS,
+  RESET_GRANULE_LAYER_OPTIONS,
   TOGGLE_HOVERED_GRANULE,
   CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
 } from './constants';
@@ -192,30 +191,30 @@ export function setOpacity(id, opacity) {
     });
   };
 }
-export function updateGranuleCMRGeometry(id, geometry) {
-  return (dispatch, getState) => {
-    const { compare } = getState();
-    const { activeString } = compare;
-    dispatch({
-      type: UPDATE_GRANULE_CMR_GEOMETRY,
-      id,
-      activeKey: activeString,
-      geometry,
-    });
-  };
-}
 export function updateGranuleLayerDates(dates, id, count) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
     const { activeString } = compare;
     const { geometry } = layers.granuleLayers[activeString][id];
+
+    const layerDef = layers.layerConfig[id];
+    const satelliteInstrumentGroup = `${layerDef.satellite}_${layerDef.instrument}`;
+    const activeSatelliteInstrumentGroup = layers.granuleSatelliteInstrumentGroup[activeString];
+    const activeGeometry = layers.granuleGeometry[activeString];
+
+    // determine if active satellite instrument, then update global geometry,
+    // else use current global geometry
+    const newGranuleGeometry = activeSatelliteInstrumentGroup === satelliteInstrumentGroup
+      ? geometry
+      : activeGeometry;
     dispatch({
-      type: UPDATE_GRANULE_LAYER_DATES,
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
       id,
       activeKey: activeString,
       dates,
       count,
       geometry,
+      granuleGeometry: newGranuleGeometry,
     });
   };
 }
@@ -224,7 +223,7 @@ export function resetGranuleLayerDates(id) {
     const { compare } = getState();
     const { activeString } = compare;
     dispatch({
-      type: RESET_GRANULE_LAYER_DATES,
+      type: RESET_GRANULE_LAYER_OPTIONS,
       id,
       activeKey: activeString,
     });
