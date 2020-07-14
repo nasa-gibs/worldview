@@ -28,7 +28,7 @@
     padding: 0;
   }
   &.search-row {
-    border-left: 6px solid transparent;
+    border: 1px solid transparent;
   }
   &.search-row.selected {
     left: 0;
@@ -293,9 +293,6 @@
   &.category-width {
     width: 978px;
     max-width: 95%;
-    & .layer-modal-content {
-      height: calc(var(--vh, 1vh) * 100 - 135px);
-    }
     & .modal-body {
       padding: 0 0 0 10px;
       overflow-y: auto;
@@ -308,7 +305,6 @@
     width: 98%;
     max-width: 1200px;
     & .layer-modal-content {
-      height: calc(var(--vh, 1vh) * 100 - 155px);
       display: flex;
       flex-direction: column;
     }
@@ -578,7 +574,16 @@
 }
 
 @media (min-width: 768px) {
-  .search-layers-container {
+  .category-width .layer-modal-content {
+    height: calc(var(--vh, 1vh) * 100 - 135px);
+  }
+  .browse-search-width .layer-modal-content {
+    height: calc(var(--vh, 1vh) * 100 - 155px);
+  }
+  .browse-search-width .search-layers-container {
+    height: calc(var(--vh, 1vh) * 100 - 157px);
+  }
+  .browse-search-width .search-layers-container.browse {
     height: calc(var(--vh, 1vh) * 100 - 195px);
   }
   .browse-search-width .search-layers-container.recent-layers {
@@ -588,6 +593,21 @@
 
 /* Mobile Styles Begin Here */
 @media (max-width: 768px) {
+  .category-width .layer-modal-content {
+    padding: 0;
+    height: calc(var(--vh, 1vh) * 100 - 40px);
+  }
+  .browse-search-width .layer-modal-content {
+    padding: 0;
+    height: calc(var(--vh, 1vh) * 100 - 70px);
+  }
+  .browse-search-width .search-layers-container.browse {
+    height: calc(var(--vh, 1vh) * 100 - 93px);
+  }
+  .browse-search-width .search-layers-container.recent-layers {
+    height: calc(var(--vh, 1vh) * 100 - 95px);
+  }
+
   .modal-content {
     border-radius: 0;
     border: none;
@@ -610,10 +630,6 @@
       max-width: 100%;
       margin: 0;
     }
-    &.browse-search-width .layer-modal-content {
-      padding: 0;
-      height: calc(var(--vh, 1vh) * 100 - 70px);
-    }
     &.browse-search-width .product-outter-list-case {
       width: 100%;
     }
@@ -627,9 +643,6 @@
       border-right: none;
       padding: 0;
     }
-  }
-  .search-layers-container.recent-layers {
-    height: calc(var(--vh, 1vh) * 100 - 95px);
   }
   .category-masonry-case .layer-category {
     width: 100%;
