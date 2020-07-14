@@ -1,0 +1,54 @@
+h1 {
+    margin-top: 10px;
+    margin-left: 5px;
+    color: gray;
+}
+
+#modal-container {
+    font-size: 14pt !important;
+}
+
+#modal-heading {
+    text-align: right;
+    font-size: 14pt;
+    color: #e94d19;
+    margin-bottom: 15px;
+}
+
+#about-heading {
+    font-size: 9pt;
+    color: #e94d19;
+    margin: 15px 0;
+
+}
+
+#download-btn {
+    display: block;
+    margin: 15px auto;
+}
+
+#layer-info {
+    text-align: center;
+    background: #535353;
+    color: white;
+    width: 100%;
+    padding: 20px;
+    margin: 25px 0;
+}
+
+#layer-info h1 {
+    font-size: 10pt;
+    color: #AAA;
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+
+#button-group {
+    text-align: center;
+}
+
+#cancel-btn, #continue-btn {
+    width: 200px;
+    margin: 5px;
+}
+

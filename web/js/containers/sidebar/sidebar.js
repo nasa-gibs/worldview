@@ -6,7 +6,7 @@ import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import Layers from './layers';
 import Events from './events';
-import Data from './data';
+import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
@@ -240,9 +240,8 @@ class Sidebar extends React.Component {
                   <TabPane tabId="download">
                     {dataDownloadFeatureActive
                       ? (
-                        <Data
+                        <SmartHandoff
                           isActive={activeTab === 'download'}
-                          height={subComponentHeight}
                           tabTypes={tabTypes}
                         />
                       )

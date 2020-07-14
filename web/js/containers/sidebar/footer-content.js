@@ -46,12 +46,9 @@ class FooterContent extends React.Component {
       compareMode,
       isMobile,
       activeTab,
-      onGetData,
       changeCompareMode,
       addLayers,
       toggleCompare,
-      counts,
-      dataSelectionSize,
       compareFeature,
       showAll,
     } = this.props;
@@ -112,37 +109,8 @@ class FooterContent extends React.Component {
         </div>
       );
     }
-    const countArray = Object.values(counts);
-    const noDataSelected = countArray.length === 0
-      ? true
-      : countArray.reduce((a, b) => a + b, 0) === 0;
     return (
-      <div className="data-download-footer-case">
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onGetData();
-            googleTagManager.pushEvent({
-              event: 'data_download_button',
-            });
-          }}
-          className={
-              noDataSelected
-                ? 'wv-data-download-button black no-pointer-events'
-                : 'wv-data-download-button red'
-            }
-          id="compare-toggle-button"
-          text={
-              dataSelectionSize
-                ? `Download Data (${
-                  Math.round(dataSelectionSize * 100) / 100
-                } MB)`
-                : noDataSelected
-                  ? 'No Data Selected'
-                  : 'Download Selected Data'
-            }
-        />
-      </div>
+      <div className="data-download-footer-case" />
     );
   }
 }
@@ -207,11 +175,8 @@ FooterContent.propTypes = {
   changeCompareMode: PropTypes.func,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
-  counts: PropTypes.object,
-  dataSelectionSize: PropTypes.number,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  onGetData: PropTypes.func,
   showAll: PropTypes.bool,
   toggleCompare: PropTypes.func,
   toggleListAll: PropTypes.func,
