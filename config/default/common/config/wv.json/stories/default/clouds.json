@@ -43,7 +43,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-110.98856126183364,2.9588938560442912,-45.87918626183364,33.89639385604429&t=2017-09-08-T00%3A00%3A00Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(opacity=0.50),VIIRS_SNPP_DayNightBand_ENCC,VIIRS_Black_Marble,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+          "stepLink": "v=-123.89976679435544,-8.064288576181596,-23.634141794355443,45.795086423818404&t=2017-09-08-T00%3A00%3A00Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(opacity=0.5),VIIRS_SNPP_DayNightBand_ENCC,VIIRS_Black_Marble,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
         },
         {
           "id": "004",
