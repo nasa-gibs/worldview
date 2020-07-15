@@ -82,7 +82,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const { compare, proj } = state;
   let styleFunction;
   const layerId = def.id;
-  const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, `vectorStyle.id`) || layerId;
+  const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const glStyle = vectorStyles[styleId];
   const olMap = lodashGet(state, 'map.ui.selected');
   const layerState = state.layers;
