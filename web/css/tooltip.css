@@ -4,6 +4,10 @@
   z-index: 1050;
 }
 
+.tooltip-icon {
+  cursor: help;
+}
+
 .wv-tooltip-case {
   display: inline-block;
   position: relative;

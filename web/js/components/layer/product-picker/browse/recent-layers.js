@@ -42,6 +42,7 @@ function RecentLayersList(props) {
         </Tooltip>
         <FontAwesomeIcon
           id="recent-layer-tooltip-target"
+          className="tooltip-icon"
           size="lg"
           icon={faQuestionCircle}
         />
