@@ -806,9 +806,32 @@ export default function mapui(models, config, store, ui) {
           compareMapUi.update(activeLayerStr);
         }
       } else {
+        const { isGranule } = def;
+        let granuleLayerParam;
+        if (isGranule) {
+          const granuleReset = null;
+          const granuleState = state.layers.granuleLayers[activeLayerStr][def.id];
+          let granuleDates;
+          let granuleCount;
+          let geometry;
+          if (granuleState) {
+            granuleDates = false;
+            granuleCount = granuleState.count;
+            geometry = granuleState.geometry;
+          }
+          granuleLayerParam = {
+            granuleDates,
+            granuleCount,
+            geometry,
+          };
+        }
+
         const index = findLayerIndex(def);
         const layerValue = self.selected.getLayers().getArray()[index];
-        const updatedLayer = await createLayer(def, { previousLayer: layerValue ? layerValue.wv : null });
+        const layerOptions = !isGranule
+          ? { previousLayer: layerValue ? layerValue.wv : null }
+          : {};
+        const updatedLayer = await createLayer(def, layerOptions, granuleLayerParam);
         await self.selected.getLayers().setAt(index, updatedLayer);
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
@@ -893,8 +916,13 @@ export default function mapui(models, config, store, ui) {
         if (!isTile && !isVector) {
           const layerGroupGranule = layers[layerIndex];
           const layerGroupCollection = layerGroupGranule.getLayers().getArray();
-          if (!index && layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
-            index = layerIndex;
+          // if (!index && layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
+          if (index === undefined) {
+            const previousGranuleTiles = layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id;
+            const previousNoCoverage = !layerGroupCollection.length && def.id === layerGroupGranule.values_.layerId.split('-')[0];
+            if (previousGranuleTiles || previousNoCoverage) {
+              index = layerIndex;
+            }
           }
         }
       });
