@@ -48,7 +48,7 @@ export class VectorInteractions extends React.Component {
   * @param {Array} pixels
   * @param {Array} coord
   *
-  * @return {Boolean}
+  * @return {Boolean} to indicate if valid for parent mouseMove function
   */
   handleGranuleHover = (granuleCMRGeometry, map, crs, pixels, coord) => {
     const {
@@ -101,14 +101,12 @@ export class VectorInteractions extends React.Component {
         // prevent multiple calls if same hovered granule
         if (hoveredGranule) {
           const { granuleDate, hoveredSatelliteInstrumentGroup } = hoveredGranule;
-          // if (granuleDate) {
           const granuleAlreadyHovered = granuleSatelliteInstrument === hoveredSatelliteInstrumentGroup
               && granuleDate === date
               && activeString === hoveredGranule.activeString;
           if (granuleAlreadyHovered) {
             return true;
           }
-          // }
         }
         // toggle to show with map/ui
         toggleHoveredGranule(granuleSatelliteInstrument, date);
@@ -131,18 +129,24 @@ export class VectorInteractions extends React.Component {
   }
 
   mouseMove(event, map, crs) {
-    const pixels = map.getEventPixel(event);
-    const coord = map.getCoordinateFromPixel(pixels);
-
     const {
       changeCursor,
       compareState,
       granuleCMRGeometry,
+      isMobile,
       isShowingClick,
       measureIsActive,
       proj,
       swipeOffset,
     } = this.props;
+
+    // prevent mobile/smaller devices from mouse events
+    if (isMobile) {
+      return;
+    }
+
+    const pixels = map.getEventPixel(event);
+    const coord = map.getCoordinateFromPixel(pixels);
 
     // handle granule footprint hover, will break out with false return if on wrong compare A/B side
     if (granuleCMRGeometry) {
