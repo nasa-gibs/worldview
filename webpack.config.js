@@ -38,6 +38,7 @@ if (isDevServer) {
   pluginSystem.push(
     new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
     new webpack.NamedModulesPlugin(),
+    // new ReactRefreshWebpackPlugin(),
   );
 }
 
@@ -91,6 +92,7 @@ module.exports = {
     watchContentBase: true, // watch index.html changes
     port: 3000,
     host: '0.0.0.0',
+    liveReload: false,
   },
   output: {
     filename: outputFileName,
