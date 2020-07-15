@@ -177,7 +177,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
         cache.setItem(key, layer, cacheOptions);
         layer.setVisible(false);
       } else {
-        layer = self.granuleBuilder.getGranuleLayer(def, state, attributes, granuleAttributes);
+        layer = self.granuleBuilder.getGranuleLayer(def, attributes, granuleAttributes);
       }
     }
     layer.setOpacity(opacity || 1.0);

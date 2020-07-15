@@ -216,14 +216,16 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         .then((response) => response.json())
         .then((data) => {
         // handle valid, empty response due to CMR issues
-          if (data.feed.entry.length === 0) {
-            store.dispatch({
-              type: OPEN_BASIC,
-              headerText: `${def.title} is unavailable at this time.`,
-              bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
-            });
-            return [];
-          }
+          // TODO: prevent request if before start coverage date
+          // TODO: allow for after due to GIBS GC deploy delays?
+          // if (data.feed.entry.length === 0) {
+          //   store.dispatch({
+          //     type: OPEN_BASIC,
+          //     headerText: `${def.title} is unavailable at this time.`,
+          //     bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
+          //   });
+          //   return [];
+          // }
           addGranuleCMRDateData(data, layerId, projection);
           return processGranuleDateObjects(layerId, selectedDate, startQueryDate);
         })
@@ -380,7 +382,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
  * @param {object} attributes - Layer projection
  * @returns {Void}
  */
-  self.getGranuleLayer = (def, blah, attributes, granuleAttributes) => {
+  self.getGranuleLayer = (def, attributes, granuleAttributes) => {
     const {
       endDate, id, instrument, satellite, startDate,
     } = def;
