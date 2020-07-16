@@ -3,11 +3,9 @@
       "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT": {
           "id":       "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT",
           "title":    "Corrected Reflectance (M11-I2-I1, Granules, v1, Near Real-Time, VIIRS, NOAA-20)",
-          "subtitle":    "NOAA-20 / VIIRS",
-          "satellite": "NOAA-20",
-          "instrument": "VIIRSTEST",
+          "subtitle":    "NOAA-20 / VIIRSTEST",
           "description": "granule/VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT",
-          "tags":     "granule subdaily",
+          "tags":     "subdaily",
           "group":    "overlays",
           "layergroup": [
             "granule"
