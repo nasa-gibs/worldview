@@ -819,6 +819,14 @@ export function serializeLayers(currentLayers, state, groupName) {
       item.attributes = vectorStyleAttributeArray.length
         ? item.attributes.concat(vectorStyleAttributeArray)
         : item.attributes;
+    } else if (def.isGranule) {
+      const granuleLayer = state.layers.granuleLayers[groupName][def.id];
+      if (granuleLayer) {
+        const { count } = granuleLayer;
+        item.attributes = count !== 20
+          ? item.attributes.concat({ id: 'count', value: count })
+          : item.attributes;
+      }
     }
 
     return util.appendAttributesForURL(item);
@@ -1038,8 +1046,12 @@ const createLayerArrayFromState = function(state, config) {
       lodashEachRight(state, (layerDef) => {
         let hidden = false;
         let opacity = 1.0;
-        let max; let min; let squash; let custom; let
-          disabled;
+        let max;
+        let min;
+        let squash;
+        let custom;
+        let disabled;
+        let count;
         if (!config.layers[layerDef.id]) {
           // eslint-disable-next-line no-console
           console.warn(`No such layer: ${layerDef.id}`);
@@ -1114,12 +1126,17 @@ const createLayerArrayFromState = function(state, config) {
             const values = util.toArray(attr.value.split(';'));
             custom = values;
           }
+          // granule specific count (defaults to 20 if no param)
+          if (attr.id === 'count') {
+            count = Number(attr.value);
+          }
         });
         layerArray = addLayer(
           layerDef.id,
           {
             hidden,
             opacity,
+            count,
             // only include palette attributes if Array.length condition
             // is true: https://stackoverflow.com/a/40560953/4589331
             ...isArray(custom) && { custom },
