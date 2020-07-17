@@ -7,7 +7,7 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTimes, faSlidersH, faInfo, faBan, faHandPointer, faShoePrints,
+  faTimes, faSlidersH, faInfo, faBan, faHandPointer,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
@@ -26,6 +26,7 @@ import {
   layerHover,
   changeGranuleSatelliteInstrumentGroup,
 } from '../../modules/layers/actions';
+import Switch from '../../components/util/switch';
 import OrbitTrack from './orbit-track';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
@@ -176,30 +177,25 @@ class Layer extends React.Component {
     const {
       activeString,
       changeGranuleSatelliteInstrumentGroup,
-      runningObject,
       layer,
       granuleSatelliteInstrumentGroup,
       layerSatelliteInstrumentGroup,
     } = this.props;
 
     const isGranuleSatelliteActive = granuleSatelliteInstrumentGroup[activeString] === layerSatelliteInstrumentGroup;
-    const clasNames = isGranuleSatelliteActive
-      ? 'layer-pointer-icon'
-      : 'layer-pointer-icon disabled';
     const title = isGranuleSatelliteActive
       ? 'Granule hover footprints are active for this satellite instrument.'
       : 'The hover capability for this granule satellite instrument is not active. Click to make active.';
-
     return (
       <div
         title={title}
-        className={runningObject ? `${clasNames} running` : clasNames}
-        onClick={() => changeGranuleSatelliteInstrumentGroup(layer.id, layerSatelliteInstrumentGroup)}
+        className="layer-granule-footprint-toggle"
       >
-        {' '}
-        <FontAwesomeIcon
-          icon={faShoePrints}
-          fixedWidth
+        <Switch
+          containerClass="layer-granule-footprint-toggle-container"
+          id={`${layer.id}-${activeString}-tooltip`}
+          active={isGranuleSatelliteActive}
+          toggle={() => changeGranuleSatelliteInstrumentGroup(layer.id, isGranuleSatelliteActive ? '' : layerSatelliteInstrumentGroup)}
         />
       </div>
     );
@@ -354,7 +350,7 @@ function mapStateToProps(state, ownProps) {
   // granule icon
   const { isGranule } = layer;
   const { activeString } = compare;
-  const layerSatelliteInstrumentGroup = `${layer.satellite}_${layer.instrument}`;
+  const layerSatelliteInstrumentGroup = `${layer.subtitle}`;
   const { granuleSatelliteInstrumentGroup } = layers;
   return {
     activeString,
