@@ -7,6 +7,7 @@ import {
   get as lodashGet,
   includes as lodashIncludes,
 } from 'lodash';
+import { transform } from 'ol/proj';
 import OlCoordinates from '../components/map/ol-coordinates';
 import vectorDialog from './vector-dialog';
 import { onMapClickGetVectorFeatures } from '../modules/vector-styles/util';
@@ -37,7 +38,7 @@ export class MapInteractions extends React.Component {
     const {
       lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
-      activateVectorAlert,
+      activateVectorAlert, proj,
     } = this.props;
 
     if (measureIsActive) return;
@@ -54,7 +55,7 @@ export class MapInteractions extends React.Component {
       openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
     } else {
       const mapRes = map.getView().getResolution();
-      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes);
+      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
 
       if (hasNonClickableVectorLayerType) {
         activateVectorAlert();
@@ -71,10 +72,11 @@ export class MapInteractions extends React.Component {
   mouseMove(event, map, crs) {
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
+
     const {
       isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj,
     } = this.props;
-    const [lon, lat] = coord;
+    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
     }
