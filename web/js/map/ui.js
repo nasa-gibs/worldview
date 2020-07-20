@@ -385,6 +385,40 @@ export default function mapui(models, config, store, ui) {
     });
     cache.clear();
   };
+
+  /*
+   * get granule options for layerBuilding
+   *
+   * @method getGranuleOptions
+   * @static
+   *
+   * @param {object} state
+   * @param {Object} def
+   * @param {String} layerGroupStr
+   * @param {Object} options
+   * @returns {Object}
+   */
+  const getGranuleOptions = (state, def, layerGroupStr, options) => {
+    const { layers } = state;
+    const { count, id } = def;
+    const reset = options && options.reset === id;
+    const granuleState = layers.granuleLayers[layerGroupStr][id];
+    let granuleDates;
+    let granuleCount;
+    let geometry;
+    if (granuleState) {
+      granuleDates = !reset ? granuleState.dates : false;
+      granuleCount = granuleState.count;
+      geometry = granuleState.geometry;
+    }
+    return {
+      granuleDates,
+      granuleCount: granuleCount || count,
+      geometry,
+    };
+  };
+
+
   /*
    * get layers from models obj
    * and add each layer to the map
@@ -419,26 +453,9 @@ export default function mapui(models, config, store, ui) {
       );
       // get all created layers as promises
       const createdLayersFromDefs = defs.map((def) => new Promise((resolve) => {
+        const { isGranule, opacity } = def;
         // update granule date order and reset
-        const isGranule = !!(def.tags && def.tags.contains('granule'));
-        let granuleLayerParam;
-        if (isGranule) {
-          const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-          const granuleState = state.layers.granuleLayers[layerGroupStr][def.id];
-          let granuleDates;
-          let granuleCount;
-          let geometry;
-          if (granuleState) {
-            granuleDates = !granuleReset ? granuleState.dates : false;
-            granuleCount = granuleState.count;
-            geometry = granuleState.geometry;
-          }
-          granuleLayerParam = {
-            granuleDates,
-            granuleCount,
-            geometry,
-          };
-        }
+        const granuleLayerParam = isGranule && getGranuleOptions(state, def, layerGroupStr, granuleOptions);
         const createdLayer = createLayer(def, {}, granuleLayerParam);
         resolve(createdLayer);
       }));
@@ -485,32 +502,20 @@ export default function mapui(models, config, store, ui) {
    */
   async function getCompareLayerGroup(arr, layersState, projId, state, granuleOptions) {
     // get grouped layers
+    const [layerGroupStr, activeDateStr] = arr;
     const newGroupedLayers = getLayers(
-      layersState[arr[0]],
+      layersState[layerGroupStr],
       { reverse: true },
       store.getState(),
     )
       .filter(() => true)
       .map((def) => new Promise((resolve) => {
         const { isGranule } = def;
-        let granuleLayerParam;
-        if (isGranule) {
-          const granuleReset = granuleOptions && granuleOptions.reset === def.id;
-          const previouslyCachedGranule = state.layers.granuleLayers[arr[0]][def.id];
-          let granuleDates;
-          let granuleCount;
-          let geometry;
-          if (previouslyCachedGranule) {
-            granuleDates = !granuleReset ? previouslyCachedGranule.dates : false;
-            granuleCount = previouslyCachedGranule.count;
-            geometry = previouslyCachedGranule.geometry;
-          }
-          granuleLayerParam = { granuleDates, granuleCount, geometry };
-        }
+        const granuleLayerParam = isGranule && getGranuleOptions(state, def, layerGroupStr, granuleOptions);
 
         const createdLayer = createLayer(def, {
-          date: state.date[arr[1]],
-          group: arr[0],
+          date: state.date[activeDateStr],
+          group: layerGroupStr,
         }, granuleLayerParam);
         resolve(createdLayer);
       }));
@@ -519,8 +524,8 @@ export default function mapui(models, config, store, ui) {
     return Promise.all(newGroupedLayers)
       .then((compareLayerGroup) => new OlLayerGroup({
         layers: compareLayerGroup,
-        group: arr[0],
-        date: arr[1],
+        group: layerGroupStr,
+        date: activeDateStr,
       }))
       .catch((error) => console.log(error));
   }
@@ -544,7 +549,7 @@ export default function mapui(models, config, store, ui) {
       const group = layer.get('group');
       const granule = layer.get('granule');
       // Not in A|B
-      if (layer.wv) {
+      if (layer.wv && !granule) {
         renderable = isRenderableLayer(
           layer.wv.id,
           layersState[activeGroupStr],
@@ -708,6 +713,7 @@ export default function mapui(models, config, store, ui) {
       const activelayer = firstLayer.get('group') === activeLayerStr
         ? firstLayer
         : mapLayers[1];
+      console.log(def.id);
       const newLayer = await createLayer(def, {
         date,
         group: activeLayerStr,
@@ -718,6 +724,8 @@ export default function mapui(models, config, store, ui) {
       self.events.trigger('added-layer');
     } else {
       const newLayer = await createLayer(def);
+      console.log(def.id);
+      console.log(mapIndex);
       self.selected.getLayers().insertAt(mapIndex, newLayer);
 
       updateLayerVisibilities();
@@ -762,12 +770,12 @@ export default function mapui(models, config, store, ui) {
    */
   const updateDate = self.updateDate = async function() {
     const state = store.getState();
-    const { compare } = state;
-    const layerState = state.layers;
+    const { compare, date, layers } = state;
     const activeLayerStr = compare.activeString;
     const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
+    const activeLayersCollection = layers[activeLayerStr];
     const activeLayers = getLayers(
-      layerState[activeLayerStr],
+      activeLayersCollection,
       {},
       state,
     ).reverse();
@@ -784,9 +792,12 @@ export default function mapui(models, config, store, ui) {
       }
     }
     await lodashEach(activeLayers, async (def) => {
-      const layerName = def.layer || def.id;
+      const {
+        id, layer, period, vectorStyle,
+      } = def;
+      const layerName = layer || id;
 
-      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
+      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(period)) {
         return;
       }
 
@@ -796,7 +807,7 @@ export default function mapui(models, config, store, ui) {
           const layerValue = self.selected.getLayers().getArray()[index];
           const updatedLayer = await createLayer(def, {
             group: activeLayerStr,
-            date: state.date[activeDate],
+            date: date[activeDate],
             previousLayer: layerValue ? layerValue.wv : null,
           });
           layerGroup.getLayers().setAt(
@@ -809,41 +820,31 @@ export default function mapui(models, config, store, ui) {
         const { isGranule } = def;
         let granuleLayerParam;
         if (isGranule) {
-          const granuleReset = null;
-          const granuleState = state.layers.granuleLayers[activeLayerStr][def.id];
-          let granuleDates;
-          let granuleCount;
-          let geometry;
-          if (granuleState) {
-            granuleDates = false;
-            granuleCount = granuleState.count;
-            geometry = granuleState.geometry;
-          }
+          const granuleState = layers.granuleLayers[activeLayerStr][id];
           granuleLayerParam = {
-            granuleDates,
-            granuleCount,
-            geometry,
+            granuleCount: granuleState ? granuleState.count : 20,
           };
         }
-
-        const index = findLayerIndex(def);
-        const layerValue = self.selected.getLayers().getArray()[index];
-        const layerOptions = !isGranule
-          ? { previousLayer: layerValue ? layerValue.wv : null }
-          : {};
-        const updatedLayer = await createLayer(def, layerOptions, granuleLayerParam);
-        await self.selected.getLayers().setAt(index, updatedLayer);
+        const index = findLayerIndex(def, self.selected);
+        if (index) {
+          const layerValue = self.selected.getLayers().getArray()[index];
+          const layerOptions = !isGranule
+            ? { previousLayer: layerValue ? layerValue.wv : null }
+            : {};
+          const updatedLayer = await createLayer(def, layerOptions, granuleLayerParam);
+          await self.selected.getLayers().setAt(index, updatedLayer);
+        }
       }
-      if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+      if (config.vectorStyles && vectorStyle && vectorStyle.id) {
         const { vectorStyles } = config;
         let vectorStyleId;
 
-        vectorStyleId = def.vectorStyle.id;
-        if (state.layers[activeLayerStr]) {
-          const layers = state.layers[activeLayerStr];
-          layers.forEach((layer) => {
-            if (layer.id === layerName && layer.custom) {
-              vectorStyleId = layer.custom;
+        vectorStyleId = vectorStyle.id;
+        if (activeLayersCollection) {
+          activeLayersCollection.forEach((activeLayer) => {
+            const { id, custom } = activeLayer;
+            if (id === layerName && activeLayer.custom) {
+              vectorStyleId = custom;
             }
           });
         }
@@ -916,13 +917,10 @@ export default function mapui(models, config, store, ui) {
         if (!isTile && !isVector) {
           const layerGroupGranule = layers[layerIndex];
           const layerGroupCollection = layerGroupGranule.getLayers().getArray();
-          // if (!index && layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
-          if (index === undefined) {
-            const previousGranuleTiles = layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id;
-            const previousNoCoverage = !layerGroupCollection.length && def.id === layerGroupGranule.values_.layerId.split('-')[0];
-            if (previousGranuleTiles || previousNoCoverage) {
-              index = layerIndex;
-            }
+          const previousGranuleTiles = layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id;
+          const previousNoCoverage = !layerGroupCollection.length && def.id === layerGroupGranule.values_.layerId.split('-')[0];
+          if (previousGranuleTiles || previousNoCoverage) {
+            index = Number(layerIndex);
           }
         }
       });
