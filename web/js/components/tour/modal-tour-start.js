@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputGroupText,
   Input,
+  Label,
 } from 'reactstrap';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
@@ -79,7 +80,7 @@ class ModalStart extends React.Component {
         keyboard={false}
         innerRef={this.setWrapperRef}
       >
-        <ModalHeader toggle={endTour} charCode="">
+        <ModalHeader toggle={endTour}>
           Welcome to Worldview!
         </ModalHeader>
         <Scrollbars style={{ maxHeight: `${height - 200}px` }}>
@@ -101,15 +102,16 @@ class ModalStart extends React.Component {
               <InputGroupText className="w-100">
                 <Input
                   addon
+                  id="hide-until-new-checkbox"
                   type="checkbox"
                   className="float-right m-0"
                   defaultChecked={checked}
                   onChange={this.handleCheck}
-                  aria-label="Hide this box until a new story has been added."
+                  aria-label="Hide this dialog until a new story has been added."
                 />
-                <span className="ml-2">
+                <Label for="hide-until-new-checkbox" className="ml-2">
                   Do not show until a new story has been added.
-                </span>
+                </Label>
               </InputGroupText>
             </InputGroup>
           </ModalFooter>

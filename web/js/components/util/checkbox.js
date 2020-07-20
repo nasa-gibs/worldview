@@ -12,6 +12,8 @@ export default class Checkbox extends React.Component {
     this.state = {
       checked: props.checked,
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -23,7 +25,7 @@ export default class Checkbox extends React.Component {
     }
   }
 
-  onClick(e) {
+  handleClick(e) {
     const { onClick } = this.props;
     if (onClick) {
       e.stopPropagation();
@@ -51,7 +53,10 @@ export default class Checkbox extends React.Component {
     const caseClassName = defaultClassName + roundClassName + checkedClassName + color;
 
     return (
-      <div className={caseClassName} onClick={this.onClick.bind(this)}>
+      <div
+        className={caseClassName}
+        onClick={this.handleClick}
+      >
         <input
           type="checkbox"
           id={id}
@@ -59,7 +64,7 @@ export default class Checkbox extends React.Component {
           name={name}
           checked={checked}
           className={classNames}
-          onChange={this.handleChange.bind(this)}
+          onChange={this.handleChange}
         />
         {children}
         <label htmlFor={id}>
@@ -81,7 +86,7 @@ Checkbox.propTypes = {
   children: PropTypes.node,
   classNames: PropTypes.string,
   color: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   isRound: PropTypes.bool,
   label: PropTypes.string,
   name: PropTypes.string,

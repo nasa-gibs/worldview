@@ -13,6 +13,9 @@
   width: 24px;
   left: 0;
 }
+.wv-checkbox label {
+  cursor: pointer;
+}
 .wv-checkbox::before {
   content: '\00a0';
   display: inline-block;
