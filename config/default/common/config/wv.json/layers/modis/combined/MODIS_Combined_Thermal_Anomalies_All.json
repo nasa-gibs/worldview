@@ -5,37 +5,45 @@
       "title": "Fires and Thermal Anomalies (Day and Night)",
       "subtitle": "Terra and Aqua / MODIS",
       "description": "modis/combined/MODIS_Combined_Thermal_Anomalies_All",
-      "tags": "hotspot",
+      "tags": "hotspot vectors",
       "group": "overlays",
-      "format": "image/png",
       "period": "daily",
-      "tileSize": [
-        512,
-        512
-      ],
-      "type": "wms",
+      "type": "vector",
+      "vectorStyle": {
+        "id": "FIRMS_MODIS_Thermal_Anomalies",
+        "arctic": {
+          "id": "FIRMS_MODIS_Thermal_Anomalies_polar"
+        }
+      },
+      "palette": {
+        "id": "MODIS_All_Thermal_Anomalies",
+        "immutable": true
+      },
       "layergroup": [
         "modis",
         "modis_terra"
       ],
-      "transition": "true",
+      "transition": true,
       "startDate": "2012-05-08",
-      "projections": {
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
+      "breakPointLayer": {
+        "id": "MODIS_Combined_Thermal_Anomalies_All",
+        "type": "wms",
+        "format": "image/png",
+        "resolutionBreakPoint": 0.03515625,
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms"
+          },
+          "arctic": {
+            "source": "GIBS:wms:arctic"
+          }
         }
       },
-      "palette": {
-        "id": "MODIS_Combined_Thermal_Anomalies_All",
-        "immutable": "true",
-        "daynight": [
-          "day",
-          "night"
-        ]
-      }
+      "daynight": [
+        "day",
+        "night"
+      ]
     }
   }
 }
