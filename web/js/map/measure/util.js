@@ -35,11 +35,11 @@ function shiftXCoords (coords, shiftValue) {
  * degrees apart, flip the whole drawing forward or backward 360 degrees
  * @param {*} geom
  */
-function checkForXFlip(geom) {
+function checkForXFlip(geom, projection) {
   const coords = geom.getCoordinates();
   const [x1] = coords[coords.length - 2];
   const [x2] = coords[coords.length - 1];
-  if (Math.abs(x1 - x2) > 180) {
+  if (Math.abs(x1 - x2) > 180 && projection === geographicProj) {
     if (x1 < x2) {
       geom.setCoordinates(shiftXCoords(coords, 360));
     } else if (x1 > x2) {
@@ -57,7 +57,7 @@ function checkForXFlip(geom) {
 export function transformLineStringArc(geom, projection) {
   const coords = [];
   const distance = 10000; // meters between segments
-  const transformedGeom = checkForXFlip(geom).clone().transform(projection, geographicProj);
+  const transformedGeom = checkForXFlip(geom, projection).clone().transform(projection, geographicProj);
   transformedGeom.forEachSegment((segStart, segEnd) => {
     const line = geod.InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
     const n = Math.ceil(line.s13 / distance);
