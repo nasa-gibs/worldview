@@ -177,5 +177,7 @@ export function getGeographicLibDistance(line) {
  * @return {String} - The measurement, converted based on factor and locale
  */
 export function roundAndLocale(measurement, factor = 1) {
-  return (Math.round((measurement / factor) * 100) / 100).toLocaleString();
+  const baseNumber = Math.round((measurement / factor) * 100) / 100;
+  const number = baseNumber >= 10 ? Number(baseNumber.toFixed(0)) : baseNumber;
+  return number.toLocaleString();
 }
