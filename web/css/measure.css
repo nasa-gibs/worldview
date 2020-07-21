@@ -12,6 +12,7 @@
 
   & .modal-body {
     padding: 8px 0 0;
+    border-radius: 6px;
     & div {
       padding: 0 5px 10px 10px;
       & .form-check-label {

@@ -47,25 +47,29 @@
 .toolbar-modal {
   position: absolute;
   top: 48px;
+  border-radius: 6px;
+}
+.toolbar-modal.modal-dialog {
+  padding: 1px;
+  background: #333;
+  border-color: #444;
+  .modal-body {
+    border-radius: 6px;
+  }
 }
 
 .toolbar-list-modal a:hover {
   text-decoration: none;
 }
-
-.toolbar-list-modal,
-.toolbar-list-modal .modal-content {
-  width: 150px;
+.toolbar-list-modal.modal-dialog {
+  width: 160px;
 }
 
-.toolbar-medium-modal,
-.toolbar-medium-modal .modal-content {
+.toolbar-medium-modal {
   width: 230px;
-}
-
-.toolbar-medium-modal .modal-header {
-  border-bottom: none;
-  padding: 5px 8px 0;
+  &.modal-dialog .modal-header {
+    padding: 5px 10px 5px 6px;
+  }
 }
 
 .toolbar_modal_outer .modal.fade .modal-dialog {
@@ -82,10 +86,6 @@
 /* Info modal */
 .toolbar-info-modal {
   right: 10px;
-}
-
-.toolbar_info .modal-content {
-  width: 157px;
 }
 
 /* List modal */
@@ -118,8 +118,6 @@
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .toolbar-share-modal,
@@ -133,7 +131,7 @@
   }
 
   .toolbar-info-modal {
-    right: 16px;
+    right: 10px;
   }
 
   .toolbar-projection-modal {
@@ -146,15 +144,14 @@
     padding: 0;
   }
 
-  .toolbar-share-modal,
-  .toolbar-share-modal .modal-content {
+  .toolbar-share-modal.modal-dialog {
     width: 300px;
   }
 }
 
 @media (min-width: 740px) {
   .toolbar-projection-modal {
-    right: 45px;
+    right: 37px;
   }
 
   .toolbar-share-modal {
