@@ -19,7 +19,6 @@ export default class GifResults extends Component {
       maxWidth: screenWidth,
       maxHeight: screenHeight,
       top: top > 0 ? top : 0,
-      height,
       width: width < screenWidth ? width : screenWidth,
     };
   }
