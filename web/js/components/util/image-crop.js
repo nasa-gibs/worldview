@@ -57,6 +57,7 @@ export default class Crop extends React.Component {
       maxWidth,
       maxHeight,
       showCoordinates,
+      keepSelection,
     } = this.props;
     const { crop } = this.state;
     return (
@@ -74,6 +75,7 @@ export default class Crop extends React.Component {
             width: maxWidth,
             height: maxHeight,
           }}
+          keepSelection={keepSelection}
           onComplete={(crop) => {
             if (!crop.width || !crop.height) {
               onClose();
@@ -94,6 +96,7 @@ Crop.defaultProps = {
   height: 10,
   maxHeight: window.innerWidth,
   maxWidth: window.innerHeight,
+  keepSelection: false,
   width: 30,
   x: 20,
   y: 10,
@@ -106,6 +109,7 @@ Crop.propTypes = {
   height: PropTypes.number,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
+  keepSelection: PropTypes.bool,
   showCoordinates: PropTypes.bool,
   topRightStyle: PropTypes.object,
   width: PropTypes.number,

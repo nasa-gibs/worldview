@@ -8,10 +8,7 @@ import Button from '../../components/util/button';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
 import { getLayers } from '../../modules/layers/selectors';
-import {
-  getSelectionCounts,
-  getDataProductsFromActiveLayers,
-} from '../../modules/data/selectors';
+import { getDataProductsFromActiveLayers } from '../../modules/data/selectors';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { openCustomContent } from '../../modules/modal/actions';
 import { changeCropBounds } from '../../modules/animation/actions';
@@ -31,13 +28,6 @@ class SmartHandoff extends Component {
     super(props);
 
     const {
-      isLayerSelected,
-      products,
-      counts,
-      selectedProduct,
-      selectProduct,
-      showWarningModal,
-      tabTypes,
       screenWidth,
       screenHeight,
       onBoundaryChange,
@@ -56,6 +46,10 @@ class SmartHandoff extends Component {
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
   }
 
+  /**
+   * Fires when the image cropper is moved around on the map; updates the SW and NE lat/lon coordinates.
+   * @param {*} boundaries - the focal point to which layer data should be contained within
+   */
   onBoundaryChange(boundaries) {
     const {
       x, y, width, height,
@@ -72,13 +66,12 @@ class SmartHandoff extends Component {
   }
 
   /**
-   *
+   * Default render which displays the data-download panel
    */
   render() {
     const {
       isLayerSelected,
       products,
-      counts,
       map,
       screenWidth,
       screenHeight,
@@ -86,32 +79,34 @@ class SmartHandoff extends Component {
       selectedProduct,
       selectProduct,
       showWarningModal,
-      tabTypes,
+      isActive,
     } = this.props;
 
+    /** Determine if data-download 'smart-handoff' tab is activated by user */
+    if (!isActive) return null;
+
+    /** Bounardies referencing the coordinates displayed around image crop */
     const { boundaries } = this.state;
     const {
       x, y, x2, y2,
     } = boundaries;
 
-    // There has to be a better way to prevent the below from happening during page load
-    if (!map.ui.selected) return null;
+    /** Keeps image crop to always be displayed on the map */
+    const keepSelection = true;
 
+    /** Retrieve the lat/lon coordinates based on the defining boundary and map projection */
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
       map.ui.selected,
     );
-    console.log(boundaries);
-    console.log(map.ui.selected);
     const { crs } = proj;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
-
     const boxTopLongitude = Math.abs(geolonlat1[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat1[0]) : geolonlat1[0];
     const boxBottomLongitude = Math.abs(geolonlat2[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat2[0]) : geolonlat2[0];
 
-    if (!tabTypes.download) return null;
-    const dataArray = Object.entries(products);
+    /** Contains available imagery data that can be downloaded in Earthdata Search */
+    const dataArray = Object.entries(products); // TO-DO: Display the correct products based on availablility
 
     return (
       <div>
@@ -137,7 +132,7 @@ class SmartHandoff extends Component {
 
         { /** Download button that transfers user to NASA's Earthdata Search */ }
         <Button
-          onClick={() => showWarningModal()}
+          onClick={() => showWarningModal(this.state)}
           id="download-btn"
           text="Download"
           className="red"
@@ -146,6 +141,7 @@ class SmartHandoff extends Component {
 
         { /** Image crop overlay used to determine user's area of interest */ }
         <Crop
+          className="download-extent"
           x={x}
           y={y}
           width={x2 - x}
@@ -153,7 +149,7 @@ class SmartHandoff extends Component {
           maxHeight={screenHeight}
           maxWidth={screenWidth}
           onChange={this.onBoundaryChange}
-          onClose={closeModal}
+          keepSelection={keepSelection}
           bottomLeftStyle={{
             left: x,
             top: y2 + 5,
@@ -179,7 +175,7 @@ class SmartHandoff extends Component {
  * Handles the closeout of the custom modal window as defined below.
  */
 const closeModal = () => {
-  alert('close');
+
 };
 
 /**
@@ -194,7 +190,7 @@ const SmartHandoffModal = () => (
       </div>
 
       <div id="modal-message">
-        You are about to be transferred to NASA's Earthdata Search tool. This tool is used to download
+        You are about to be transferred to the NASA Earthdata Search tool. This tool is used to download
         data granules using the currently selected layer, area of interest, and date.
       </div>
 
@@ -206,7 +202,7 @@ const SmartHandoffModal = () => (
 
       <p>
         Earthdata Search provides the only means for data discovery, filtering, visualization, and
-        access across all of NASA's Earth science data holdings. Excepteur sint occaecat cupidatat non proident,
+        access across all of NASA Earth science data holdings. Excepteur sint occaecat cupidatat non proident,
         sunt in culpa qui officia deserunt mollit anim id est laborum.
       </p>
 
@@ -233,7 +229,7 @@ const SmartHandoffModal = () => (
         />
 
         <Button
-          onClick={() => openEarthDataSearch()}
+          onClick={() => openEarthDataSearch()} // Need to pass reference of current state of boundaries
           id="continue-btn"
           text="Continue"
           className="red"
@@ -250,7 +246,10 @@ const SmartHandoffModal = () => (
  * data prdocuts and granule files based on the currently selected product within Worldview.
  */
 const openEarthDataSearch = () => {
-  window.open('https://search.earthdata.nasa.gov/search', '_blank');
+  // TO-DO: Need to capture boundaries, layer data, etc; whatever essentials for Earthdata Search
+  // const { boundaries } = this.state;
+
+  // window.open('https://search.earthdata.nasa.gov/search', '_blank');
 };
 
 /**
@@ -258,12 +257,11 @@ const openEarthDataSearch = () => {
  */
 SmartHandoff.propTypes = {
   isLayerSelected: PropTypes.bool,
+  isActive: PropTypes.bool,
   products: PropTypes.object,
   selectedProduct: PropTypes.string,
   selectProduct: PropTypes.func,
-  counts: PropTypes.object,
   showWarningModal: PropTypes.func,
-  tabTypes: PropTypes.object,
   map: PropTypes.object.isRequired,
   onBoundaryChange: PropTypes.func,
   boundaries: PropTypes.object,
@@ -285,10 +283,9 @@ const mapStateToProps = (state, ownProps) => {
     browser, layers, map, proj, data, config, compare, sidebar, boundaries,
   } = state;
   const { screenWidth, screenHeight } = browser;
-  const { selectedProduct, selectedGranules } = data;
+  const { selectedProduct } = data;
   const { activeString } = compare;
   const activeLayers = getLayers(layers[activeString], { proj: proj.id });
-  const counts = getSelectionCounts(activeLayers, selectedGranules);
   const products = getDataProductsFromActiveLayers(
     activeLayers,
     config,
@@ -300,7 +297,6 @@ const mapStateToProps = (state, ownProps) => {
     boundaries,
     proj: proj.selected,
     map,
-    counts,
     selectedProduct,
     products,
     tabTypes,
@@ -318,7 +314,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       openCustomContent('warning_now_leaving_worldview', {
         headerText: 'Leaving Worldview',
-        bodyComponent: SmartHandoffModal,
+        bodyComponent: SmartHandoffModal(),
         size: 'lg',
       }),
     );

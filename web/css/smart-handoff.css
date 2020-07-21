@@ -52,3 +52,10 @@ h1 {
     margin: 5px;
 }
 
+
+/** Override CSS rules for crop component **/
+.ReactCrop {
+    cursor: pointer !important;
+    z-index: 0 !important;
+}
+
