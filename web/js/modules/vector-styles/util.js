@@ -244,7 +244,7 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       const obj = {
         legend: properties,
         features,
-        id: vectorDataId,
+        id: layerId + vectorDataId,
         title: def.title || def.id,
         featureTitle: title,
 
