@@ -17,6 +17,7 @@
 .wv-button span {
   padding: 6px 13px 7px;
   display: block;
+  font-size: 13px;
 }
 .wv-button.red {
   background: #d54e21;
