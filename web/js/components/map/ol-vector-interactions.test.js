@@ -1,8 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import util from '../util/util';
-import { MapInteractions } from './map-interactions';
-import { registerProjections } from '../fixtures';
+import util from '../../util/util';
+import VectorInteractions from './ol-vector-interactions';
+import { registerProjections } from '../../fixtures';
 
 let events;
 let component;
@@ -21,7 +21,7 @@ beforeEach(() => {
     metaArray: [0], selected: [1], offsetLeft: 100, offsetTop: 100,
   });
   component = renderer.create(
-    <MapInteractions
+    <VectorInteractions
       mouseEvents={events}
       isShowingClick={false}
       changeCursor={changeCursor}
@@ -34,13 +34,6 @@ beforeEach(() => {
       modalState={{ id: [], isOpen: false }}
       isDistractionFreeModeActive={false}
     />,
-    {
-      createNodeMock: (element) => {
-        if (element.id === 'ol-coords-case') {
-          return null;
-        }
-      },
-    },
   );
   map = {
     getEventPixel: jest.fn(),

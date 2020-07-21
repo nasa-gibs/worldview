@@ -11,7 +11,7 @@ import { openCustomContent, onClose } from '../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../modules/map/actions';
 import { ACTIVATE_VECTOR_ALERT } from '../modules/alerts/constants';
-import OlVectorInteractions from '../components/map/ol-vectors';
+import OlVectorInteractions from '../components/map/ol-vector-interactions';
 
 class MapInteractions extends React.PureComponent {
   render() {
