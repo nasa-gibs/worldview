@@ -220,10 +220,12 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
   const { pixels, map, swipeOffset } = mapProps;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const def = lodashGet(layer, 'wv.def');
+    if (!def) {
+      return;
+    }
+
     const type = feature.getType();
-    if (
-      !def
-      || lodashIncludes(def.clickDisabledFeatures, type)
+    if (lodashIncludes(def.clickDisabledFeatures, type)
       || !isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
       return;
     }
