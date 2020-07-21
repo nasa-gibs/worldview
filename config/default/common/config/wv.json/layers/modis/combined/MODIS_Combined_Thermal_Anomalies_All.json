@@ -29,14 +29,15 @@
         "id": "MODIS_Combined_Thermal_Anomalies_All",
         "type": "wms",
         "format": "image/png",
-        "resolutionBreakPoint": 0.03515625,
         "breakPointType": "max",
         "projections": {
           "geographic": {
+            "resolutionBreakPoint": 0.03515625,
             "source": "GIBS:wms"
           },
           "arctic": {
-            "source": "GIBS:wms:arctic"
+            "source": "GIBS:wms:arctic",
+            "resolutionBreakPoint": 2048
           }
         }
       },

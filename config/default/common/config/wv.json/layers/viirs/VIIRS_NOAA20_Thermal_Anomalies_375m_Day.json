@@ -1,30 +1,47 @@
 {
   "layers": {
       "VIIRS_NOAA20_Thermal_Anomalies_375m_Day": {
-          "id":       "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
-          "title":    "Fires and Thermal Anomalies (Day)",
-          "subtitle": "NOAA-20 / VIIRS",
-          "tags":     "vectors",
+          "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+          "title": "Fires and Thermal Anomalies (Day, 375m)",
+          "subtitle": "NOAA-20/ VIIRS",
+          "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
+          "tags": "hotspot noaa20 jpss1 jpss vectors",
           "group":    "overlays",
           "type":     "vector",
           "vectorStyle": {
-              "id": "FIRMS_VIIRS_Thermal_Anomalies"
+              "id": "FIRMS_VIIRS_Thermal_Anomalies",
+              "arctic": {
+                "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
+              }
           },
           "wrapX": false,
-          "wrapadjacentdays": false,
+          "period": "daily",
+          "wrapadjacentdays": true,
           "palette": {
               "id": "VIIRS_All_Thermal_Anomalies",
               "immutable": true
           },
+          "transition": "true",
+          "startDate": "2020-01-29",
+          "tracks": [
+            "OrbitTracks_NOAA-20_Ascending"
+          ],
+          "daynight": [
+            "day"
+          ],
           "breakPointLayer": {
             "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
             "type": "wms",
             "format":   "image/png",
-            "resolutionBreakPoint": 0.03515625,
             "breakPointType": "max",
             "projections": {
               "geographic": {
+                "resolutionBreakPoint": 0.03515625,
                 "source": "GIBS:wms"
+              },
+              "arctic": {
+                "source": "GIBS:wms:arctic",
+                "resolutionBreakPoint": 2048
               }
             }
           }

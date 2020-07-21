@@ -34,14 +34,15 @@
             "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
             "type": "wms",
             "format":   "image/png",
-            "resolutionBreakPoint": 0.03515625,
             "breakPointType": "max",
             "projections": {
-              "arctic": {
-                "source": "GIBS:wms:arctic"
-              },
               "geographic": {
+                "resolutionBreakPoint": 0.03515625,
                 "source": "GIBS:wms"
+              },
+              "arctic": {
+                "source": "GIBS:wms:arctic",
+                "resolutionBreakPoint": 2048
               }
             }
           }

@@ -38,13 +38,14 @@
         "id": "MODIS_Aqua_Thermal_Anomalies_Day",
         "type": "wms",
         "format":   "image/png",
-        "resolutionBreakPoint": 0.03515625,
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "source": "GIBS:wms"
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.03515625
           },
           "arctic": {
+            "resolutionBreakPoint": 2048,
             "source": "GIBS:wms:arctic"
           }
         }
