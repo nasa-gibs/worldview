@@ -11,6 +11,16 @@ import {
   getCacheOptions,
 } from '../../modules/layers/util';
 
+const CMR_AJAX_OPTIONS = {
+  url: 'https://cmr.earthdata.nasa.gov/search/',
+  headers: {
+    'Client-Id': 'Worldview',
+  },
+  traditional: true,
+  dataType: 'json',
+  timeout: 45 * 1000,
+};
+
 /**
  * Helper to reduce granules object to array of date strings
  *
@@ -148,6 +158,45 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
+ * Get CMR query dates for building query string and child processes
+ *
+ * @method getCMRQueryDates
+ * @static
+ * @param {object} selectedDate - date object
+ * @returns {object}
+    * @param {object} startQueryDate - date object
+    * @param {object} endQueryDate - date object
+  */
+  const getCMRQueryDates = (selectedDate) => {
+    // check if selectedDate is before or after 12 to determine date request range
+    const date = new Date(selectedDate);
+    const isDateAfterNoon = date.getUTCHours() > 12;
+
+    const zeroedDate = util.clearTimeUTC(date);
+
+    const dayBeforeDate = util.dateAdd(zeroedDate, 'day', -1);
+    const dayAfterDate = util.dateAdd(zeroedDate, 'day', 1);
+    const twoDayAfterDate = util.dateAdd(zeroedDate, 'day', 2);
+
+    const startQueryDate = isDateAfterNoon
+      ? zeroedDate
+      : dayBeforeDate;
+    let endQueryDate = isDateAfterNoon
+      ? twoDayAfterDate
+      : dayAfterDate;
+
+    // set current date if on leading edge of time coverage
+    endQueryDate = endQueryDate > new Date()
+      ? new Date()
+      : endQueryDate;
+
+    return {
+      startQueryDate,
+      endQueryDate,
+    };
+  };
+
+  /**
    * Query CMR to get dates filtered by day_night_flag
    *
    * @method getQueriedGranuleDates
@@ -159,73 +208,40 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       * @param {array} polygon - CMR granule polygon geometry
    */
   self.getQueriedGranuleDates = (def, selectedDate, activeKey, projection) => {
-  // TODO: USE GRANULE LAYER ID
+    const {
+      endDate, startDate, id, title, visible,
+    } = def;
+    // TODO: USE GRANULE LAYER ID
     const layerId = 'VJ102MOD';
-    const ajaxOptions = {
-      url: 'https://cmr.earthdata.nasa.gov/search/',
-      headers: {
-        'Client-Id': 'Worldview',
-      },
-      traditional: true,
-      dataType: 'json',
-      timeout: 45 * 1000,
-    };
-
-    // note:
-    // https://cmr.earthdata.nasa.gov/search/granules.json?shortName=VJ102MOD&temporal=2019-09-24T00:00:00.000Z,2019-09-25T00:00:00.000Z&pageSize=1000
-    // 2019-09-24T00:00:00.000Z  to   2019-09-25T00:00:00.000Z
-    // first date returned -  time_start: "2019-09-23T23:54:00.000Z",    time_end: "2019-09-24T00:00:00.000Z",
-    // last date returned  -  time_start: "2019-09-25T00:00:00.000Z",    time_end: "2019-09-25T00:06:00.000Z",
-    // seems to rely on START date relies on matching time_end   and   END date relies on matching time_start?
-    // curious
-
-    // check if selectedDate is before or after 12 to determine date request range
-    const selectedDateTemp = new Date(selectedDate);
-    const isSelectedDateAfterNoon = selectedDateTemp.getUTCHours() > 12;
-
-    const zeroedSelectedDate = util.clearTimeUTC(selectedDateTemp);
-
-    const dayBeforeSelectedDate = util.dateAdd(zeroedSelectedDate, 'day', -1);
-    const dayAfterSelectedDate = util.dateAdd(zeroedSelectedDate, 'day', 1);
-    const twoDayAfterSelectedDate = util.dateAdd(zeroedSelectedDate, 'day', 2);
-
-    const startQueryDate = isSelectedDateAfterNoon
-      ? zeroedSelectedDate
-      : dayBeforeSelectedDate;
-    let endQueryDate = isSelectedDateAfterNoon
-      ? twoDayAfterSelectedDate
-      : dayAfterSelectedDate;
-
-    // set current date if on leading edge of time coverage
-    endQueryDate = endQueryDate > new Date()
-      ? new Date()
-      : endQueryDate;
 
     const queryPrefix = 'https://cmr.earthdata.nasa.gov/search/granules.json?shortName=';
+    const { startQueryDate, endQueryDate } = getCMRQueryDates(selectedDate);
     const queryDateRange = `${startQueryDate.toISOString()},${endQueryDate.toISOString()}`;
     const query = `${queryPrefix + layerId}&temporal=${queryDateRange}&pageSize=1000`;
 
     // if layer id and query date range not previously requested, then fetch, process, and add to CMR query object
-    const hasLayerIdBeenQueried = self.CMRDateRanges[activeKey][def.id];
-    if (!hasLayerIdBeenQueried || (hasLayerIdBeenQueried && !hasLayerIdBeenQueried[queryDateRange])) {
-      if (!hasLayerIdBeenQueried) {
-        self.CMRDateRanges[activeKey][def.id] = {};
+    const CMRDateStoreForLayer = self.CMRDateRanges[activeKey][id];
+    if (!CMRDateStoreForLayer || !CMRDateStoreForLayer[queryDateRange]) {
+      if (!CMRDateStoreForLayer) {
+        self.CMRDateRanges[activeKey][id] = {};
       }
-      self.CMRDateRanges[activeKey][def.id][queryDateRange] = true;
-      return fetch(query, ajaxOptions)
+      self.CMRDateRanges[activeKey][id][queryDateRange] = true;
+      return fetch(query, CMR_AJAX_OPTIONS)
         .then((response) => response.json())
         .then((data) => {
         // handle valid, empty response due to CMR issues
-          // TODO: prevent request if before start coverage date
-          // TODO: allow for after due to GIBS GC deploy delays?
-          // if (data.feed.entry.length === 0) {
-          //   store.dispatch({
-          //     type: OPEN_BASIC,
-          //     headerText: `${def.title} is unavailable at this time.`,
-          //     bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
-          //   });
-          //   return [];
-          // }
+          if (data.feed.entry.length === 0) {
+            const selectedDateWithinRange = isWithinDateRange(selectedDate, startDate, endDate);
+            // only show modal error if layer not set to hidden and outside of selected date range
+            if (visible && selectedDateWithinRange) {
+              store.dispatch({
+                type: OPEN_BASIC,
+                headerText: `${title} is unavailable at this time.`,
+                bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
+              });
+            }
+            return [];
+          }
           addGranuleCMRDateData(data, layerId, projection);
           return processGranuleDateObjects(layerId, selectedDate, startQueryDate);
         })
@@ -238,6 +254,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
+   *
  * Query CMR to get dates filtered by day_night_flag
  *
  * @method processGranuleDateObjects
@@ -288,14 +305,13 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @static
    * @param {array} granueDates - array of dates (already sorted)
    * @param {object} def - Layer specs
-   * @param {object} proj - Layer projection
    * @param {object} state - App state
    * @param {object} attributes - Layer specs
    * @returns {array} collection of OpenLayers TileLayers
    */
-  const createGranuleDatesLayer = (granuleDates, def, proj, state, attributes) => {
+  const createGranuleDatesLayer = (granuleDates, def, state, attributes) => {
     const { period, id } = def;
-    const { group } = attributes;
+    const { group, proj } = attributes;
     const granuleLayers = granuleDates.map((granuleDate) => {
       const { date, polygons } = granuleDate;
       const granuleISOKey = `${id}:${proj.id}:${date}::${group}`;
@@ -361,14 +377,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         },
       };
     } else {
-      // add sorted dates to granule layer store
-      let dateArray = [...self.granuleLayers[id][group].sortedDates];
-      dateArray = [...new Set(dateArray)];
+      // add unique set of sorted dates to granule layer store
+      const dateArray = [...new Set(self.granuleLayers[id][group].sortedDates)];
       lodashEach(granuleDates, (date) => {
         dateArray.splice(getIndexForSortedInsert(dateArray, date), 0, date);
       });
-      // ! IS THERE ARE REASONABLE LIMIT ON SORTEDDATES? THEORETICALLY CAN GET TOO LARGE AND SLOW DOWN
-      self.granuleLayers[id][group].sortedDates = [...new Set(dateArray)];
+      self.granuleLayers[id][group].sortedDates = dateArray;
     }
   };
 
@@ -384,9 +398,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
  */
   self.getGranuleLayer = (def, attributes, granuleAttributes) => {
     const {
-      endDate, id, instrument, satellite, startDate,
+      endDate, id, subtitle, startDate,
     } = def;
     const state = store.getState();
+    const { layers } = state;
     const { proj, group } = attributes;
     const {
       granuleCount,
@@ -397,15 +412,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       processGranuleLayer(def, filteredGranules, attributes);
     }
 
-    let layer = createGranuleDatesLayer(filteredGranules, def, proj, state, attributes);
+    let layer = createGranuleDatesLayer(filteredGranules, def, state, attributes);
     // use updated layers or get array of granule dates from filteredGranules
-    const filteredGranulesCollection = updatedGranules || getGranuleDateArrayFromObject(filteredGranules);
-    const mostRecentGranuleDate = filteredGranulesCollection[filteredGranulesCollection.length - 1];
+    const filteredGranuleCollection = updatedGranules || getGranuleDateArrayFromObject(filteredGranules);
+    const mostRecentGranuleDate = filteredGranuleCollection[filteredGranuleCollection.length - 1];
     const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate).getTime() > new Date(endDate).getTime();
 
     const includedDates = [];
     const layerGroupEntries = [];
-    lodashEach(filteredGranulesCollection, (date) => {
+    lodashEach(filteredGranuleCollection, (date) => {
     // check for layer in granuleCache
       const layerCacheKey = self.granuleLayers[id][group].dates[date];
       const layerCache = cache.getItem(layerCacheKey);
@@ -421,8 +436,9 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     layer = new OlLayerGroup({
       layers: layerGroupEntries,
     });
-    layer.set('granule', true);
+    layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
+    // layer.wv = Object.assign(attributes, granuleAttributes);
 
     // create geometry object with date:polygons key/value pair filtering out granules outside date range
     const granuleGeometry = filteredGranules.reduce((dates, granuleObject) => {
@@ -434,40 +450,45 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     }, {});
 
     const returnedDates = isMostRecentDateOutOfRange ? [] : includedDates;
-    const satelliteInstrumentGroup = `${satellite}_${instrument}`;
-    const isLayerBeingUpdated = !!state.layers.granuleLayers[group][def.id];
-    // add vs update - conditional store type OR condtional params
+    const satelliteInstrumentGroup = `${subtitle}`;
+    const isLayerBeingUpdated = !!layers.granuleLayers[group][id];
+
+    // shared granule store object values
+    const granuleStoreObject = {
+      id,
+      dates: returnedDates,
+      activeKey: group,
+      count: granuleCount,
+      geometry: granuleGeometry,
+    };
+    // add vs update - conditional granule store type OR condtional params
     if (isLayerBeingUpdated) {
-      const activeSatelliteInstrumentGroup = state.layers.granuleSatelliteInstrumentGroup[group];
-      const activeGeometry = state.layers.granuleGeometry[group];
+      const activeSatelliteInstrumentGroup = layers.granuleSatelliteInstrumentGroup[group];
+      const activeGeometry = layers.granuleGeometry[group];
 
       const newGranuleGeometry = activeSatelliteInstrumentGroup === satelliteInstrumentGroup
         ? granuleGeometry
         : activeGeometry;
 
       // granule layer updated
-      store.dispatch({
-        type: UPDATE_GRANULE_LAYER_DATES,
-        id,
-        activeKey: group,
-        dates: returnedDates,
-        count: granuleCount,
-        geometry: granuleGeometry,
-        granuleGeometry: newGranuleGeometry,
-      });
+      store.dispatch(Object.assign(
+        granuleStoreObject,
+        {
+          type: UPDATE_GRANULE_LAYER_DATES,
+          granuleGeometry: newGranuleGeometry,
+        },
+      ));
     } else {
       // granule layer added/initialized
       // Note: a newly added granule layer will default to be the selected granule
       // satellite instrument group with geometry updated
-      store.dispatch({
-        type: ADD_GRANULE_LAYER_DATES,
-        satelliteInstrumentGroup,
-        dates: returnedDates,
-        id,
-        activeKey: group,
-        count: granuleCount,
-        geometry: granuleGeometry,
-      });
+      store.dispatch(Object.assign(
+        granuleStoreObject,
+        {
+          type: ADD_GRANULE_LAYER_DATES,
+          satelliteInstrumentGroup,
+        },
+      ));
     }
     self.proj = proj.id;
     return layer;

@@ -38,7 +38,7 @@ import {
   nearestInterval,
 } from '../modules/layers/util';
 
-export default function mapLayerBuilder(models, config, cache, ui, store) {
+export default function mapLayerBuilder(config, cache, store) {
   const self = {};
 
   self.init = function() {

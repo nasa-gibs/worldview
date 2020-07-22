@@ -82,10 +82,8 @@ export default function mapui(models, config, store, ui) {
   self.selected = null; // The map for the selected projection
   self.events = util.events();
   const layerBuilder = self.layerBuilder = mapLayerBuilder(
-    models,
     config,
     cache,
-    ui,
     store,
   );
   self.layerKey = layerBuilder.layerKey;
@@ -547,7 +545,7 @@ export default function mapui(models, config, store, ui) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     layers.forEach((layer) => {
       const group = layer.get('group');
-      const granule = layer.get('granule');
+      const granule = layer.get('granuleGroup');
       // Not in A|B
       if (layer.wv && !granule) {
         renderable = isRenderableLayer(
@@ -560,22 +558,19 @@ export default function mapui(models, config, store, ui) {
         // If in A|B layer-group will have a 'group' string
       } else if (group || granule) {
         lodashEach(layer.getLayers().getArray(), (subLayer) => {
-          const subLayerGranule = subLayer.get('granule');
-          if (subLayerGranule) {
+          const granuleGroup = subLayer.get('granuleGroup');
+          if (granuleGroup) {
             // TileLayers within granule LayerGroup
-            lodashEach(subLayer.getLayers().getArray(), (granuleSubLayer) => {
-              if (granuleSubLayer.wv) {
-                const granuleSubLayerGroup = granuleSubLayer.wv.group;
+            lodashEach(subLayer.getLayers().getArray(), (granuleTileLayer) => {
+              if (granuleTileLayer.wv) {
+                const granuleTileLayerGroup = granuleTileLayer.wv.group;
                 renderable = isRenderableLayer(
-                  granuleSubLayer.wv.id,
-                  // TODO : SPY MODE BROKEN - swipe and opactiy and hide/show work
-                  // layersState[activeGroupStr],
-                  // layersState[group],
-                  layersState[granuleSubLayerGroup],
-                  state.date[granuleSubLayer.get('date')],
+                  granuleTileLayer.wv.id,
+                  layersState[granuleTileLayerGroup],
+                  state.date[granuleTileLayer.get('date')],
                   state,
                 );
-                granuleSubLayer.setVisible(renderable);
+                granuleTileLayer.setVisible(renderable);
               }
             });
             subLayer.setVisible(true);
@@ -585,8 +580,6 @@ export default function mapui(models, config, store, ui) {
             const subGroup = subLayer.wv.group;
             renderable = isRenderableLayer(
               subLayer.wv.id,
-              // TODO: group undefined in non-compare mode
-              // layersState[group],
               layersState[subGroup],
               state.date[subLayer.get('date')],
               state,
@@ -599,6 +592,54 @@ export default function mapui(models, config, store, ui) {
       }
     });
   }
+
+  /*
+   * Sets new opacity to granule layers
+   *
+   * @method updateGranuleLayerOpacity
+   * @static
+   *
+   * @param {object} def
+   * @param {sring} activeStr
+   * @param {number} opacity
+   * @param {object} compare
+   *
+   * @returns {void}
+   */
+  const updateGranuleLayerOpacity = (def, activeStr, opacity, compare) => {
+    const { id } = def;
+    const layers = self.selected.getLayers().getArray();
+    lodashEach(Object.keys(layers), (index) => {
+      const layerType = layers[index].type;
+      const isValidGranuleGroupType = layerType !== 'TILE' && layerType !== 'VECTOR';
+      if (isValidGranuleGroupType) {
+        const layer = layers[index];
+        const layerGroup = layer.getLayers().getArray();
+        const firstGroupTileLayer = layerGroup[0];
+        if (compare && compare.active) {
+          lodashEach(Object.keys(layerGroup), (groupIndex) => {
+            const islayerGroupTile = layerGroup[groupIndex].type === 'TILE';
+            if (!islayerGroupTile && !layerGroup[groupIndex].wv) {
+              const compareLayerGroup = layerGroup[groupIndex];
+              const tileLayer = compareLayerGroup.getLayers().getArray();
+              // inner granule group tile layer
+              const firstTileLayer = tileLayer[0];
+              if (firstTileLayer.wv && id === firstTileLayer.wv.id) {
+                if (firstTileLayer.wv.group === activeStr) {
+                  compareLayerGroup.setOpacity(opacity);
+                }
+              }
+            }
+          });
+        } else if (firstGroupTileLayer.wv && id === firstGroupTileLayer.wv.id) {
+          if (firstGroupTileLayer.wv.group === activeStr) {
+            layer.setOpacity(opacity);
+          }
+        }
+      }
+    });
+  };
+
   /*
    * Sets new opacity to layer
    *
@@ -612,73 +653,48 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function updateOpacity(action) {
+    const { id, opacity } = action;
     const state = store.getState();
     const { layers, compare } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
     const def = lodashFind(layers[activeStr], {
-      id: action.id,
+      id,
     });
-    const isGranule = !!(def.tags && def.tags.contains('granule'));
-    if (isGranule) {
-      const layersCollection = self.selected.getLayers().getArray();
-      lodashEach(Object.keys(layersCollection), (layerIndex) => {
-        const isTile = layersCollection[layerIndex].type === 'TILE';
-        const isVector = layersCollection[layerIndex].type === 'VECTOR';
-        if (!isTile && !isVector) {
-          const layerGroup = layersCollection[layerIndex];
-          const layerGroupCollection = layerGroup.getLayers().getArray();
-          if (compare && compare.active) {
-            lodashEach(Object.keys(layerGroupCollection), (layerGroupIndex) => {
-              const islayerGroupTile = layerGroupCollection[layerGroupIndex].type === 'TILE';
-              if (!islayerGroupTile && !layerGroupCollection[layerGroupIndex].wv) {
-                const layerGroupColl = layerGroupCollection[layerGroupIndex];
-                const tileLayer = layerGroupColl.getLayers().getArray();
-                // inner tile layer
-                if (tileLayer[0].wv && def.id === tileLayer[0].wv.id) {
-                  if (tileLayer[0].wv.group === activeStr) {
-                    layerGroupColl.setOpacity(action.opacity);
-                  }
-                }
-              }
-            });
-          } else if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
-            if (layerGroupCollection[0].wv.group === activeStr) {
-              layerGroup.setOpacity(action.opacity);
-            }
-          }
-        }
-      });
 
-      // for (const layerIndex in layersCollection) {
+    const { isGranule } = def;
+    if (isGranule) {
+      updateGranuleLayerOpacity(def, activeStr, opacity, compare);
+      // const layersCollection = self.selected.getLayers().getArray();
+      // lodashEach(Object.keys(layersCollection), (layerIndex) => {
       //   const isTile = layersCollection[layerIndex].type === 'TILE';
       //   const isVector = layersCollection[layerIndex].type === 'VECTOR';
       //   if (!isTile && !isVector) {
       //     const layerGroup = layersCollection[layerIndex];
       //     const layerGroupCollection = layerGroup.getLayers().getArray();
       //     if (compare && compare.active) {
-      //       for (const layerIndex in layerGroupCollection) {
-      //         const isTile = layerGroupCollection[layerIndex].type === 'TILE';
-      //         if (!isTile && !layerGroupCollection[layerIndex].wv) {
-      //           const layerGroup = layerGroupCollection[layerIndex];
-      //           const tileLayer = layerGroup.getLayers().getArray();
+      //       lodashEach(Object.keys(layerGroupCollection), (layerGroupIndex) => {
+      //         const islayerGroupTile = layerGroupCollection[layerGroupIndex].type === 'TILE';
+      //         if (!islayerGroupTile && !layerGroupCollection[layerGroupIndex].wv) {
+      //           const innerLayerGroupCollection = layerGroupCollection[layerGroupIndex];
+      //           const tileLayer = innerLayerGroupCollection.getLayers().getArray();
       //           // inner tile layer
       //           if (tileLayer[0].wv && def.id === tileLayer[0].wv.id) {
       //             if (tileLayer[0].wv.group === activeStr) {
-      //               layerGroup.setOpacity(action.opacity);
+      //               innerLayerGroupCollection.setOpacity(opacity);
       //             }
       //           }
       //         }
-      //       }
+      //       });
       //     } else if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
       //       if (layerGroupCollection[0].wv.group === activeStr) {
-      //         layerGroup.setOpacity(action.opacity);
+      //         layerGroup.setOpacity(opacity);
       //       }
       //     }
       //   }
-      // }
+      // });
     } else {
       const layer = findLayer(def, activeStr);
-      layer.setOpacity(action.opacity);
+      layer.setOpacity(opacity);
     }
     updateLayerVisibilities();
   }
@@ -713,7 +729,6 @@ export default function mapui(models, config, store, ui) {
       const activelayer = firstLayer.get('group') === activeLayerStr
         ? firstLayer
         : mapLayers[1];
-      console.log(def.id);
       const newLayer = await createLayer(def, {
         date,
         group: activeLayerStr,
@@ -724,8 +739,6 @@ export default function mapui(models, config, store, ui) {
       self.events.trigger('added-layer');
     } else {
       const newLayer = await createLayer(def);
-      console.log(def.id);
-      console.log(mapIndex);
       self.selected.getLayers().insertAt(mapIndex, newLayer);
 
       updateLayerVisibilities();
@@ -826,7 +839,7 @@ export default function mapui(models, config, store, ui) {
           };
         }
         const index = findLayerIndex(def, self.selected);
-        if (index) {
+        if (index !== undefined) {
           const layerValue = self.selected.getLayers().getArray()[index];
           const layerOptions = !isGranule
             ? { previousLayer: layerValue ? layerValue.wv : null }
@@ -873,7 +886,7 @@ export default function mapui(models, config, store, ui) {
       },
     });
 
-    if (!layer && layers.length && (layers[0].get('group') || layers[0].get('granule'))) {
+    if (!layer && layers.length && (layers[0].get('group') || layers[0].get('granuleGroup'))) {
       let olGroupLayer;
       const layerKey = `${def.id}-${layerGroupStr}`;
       lodashEach(layers, (layerGroup) => {
@@ -908,7 +921,7 @@ export default function mapui(models, config, store, ui) {
     const layers = layerGroupToCheck.getLayers().getArray();
     let index;
 
-    const { isGranule } = def;
+    const { id, isGranule } = def;
     if (isGranule) {
       lodashEach(Object.keys(layers), (layerIndex) => {
         const isTile = layers[layerIndex].type === 'TILE';
@@ -917,8 +930,8 @@ export default function mapui(models, config, store, ui) {
         if (!isTile && !isVector) {
           const layerGroupGranule = layers[layerIndex];
           const layerGroupCollection = layerGroupGranule.getLayers().getArray();
-          const previousGranuleTiles = layerGroupCollection.length && layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id;
-          const previousNoCoverage = !layerGroupCollection.length && def.id === layerGroupGranule.values_.layerId.split('-')[0];
+          const previousGranuleTiles = layerGroupCollection.length && layerGroupCollection[0].wv && id === layerGroupCollection[0].wv.id;
+          const previousNoCoverage = !layerGroupCollection.length && id === layerGroupGranule.values_.layerId.split('-')[0];
           if (previousGranuleTiles || previousNoCoverage) {
             index = Number(layerIndex);
           }
@@ -927,7 +940,7 @@ export default function mapui(models, config, store, ui) {
     } else {
       index = lodashFindIndex(layers, {
         wv: {
-          id: def.id,
+          id,
         },
       });
     }
