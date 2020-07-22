@@ -241,11 +241,13 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = titleKey ? features[titleKey] : 'Unknown title';
       if (selected[layerId].includes(uniqueIdentifier)) return;
+
       const obj = {
         legend: properties,
         features,
         id: layerId,
         title: def.title || layerId,
+        subTitle: def.subtitle,
         featureTitle: title,
 
       };
