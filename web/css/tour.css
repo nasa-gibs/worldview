@@ -13,8 +13,11 @@
 .tour-complete .modal-dialog .modal-header .close {
   font-size: 30px;
   padding: 12px 14px;
-  color: #fff;
+  color: #ddd;
   text-shadow: 1px 1px 0 #333;
+  &:hover {
+    color: #fff;
+  }
 }
 .about-page .modal-header,
 .tour-complete .modal-header,
