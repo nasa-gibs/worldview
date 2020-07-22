@@ -54,15 +54,16 @@ class MeasurementLayerRow extends React.Component {
     const listItemClass = !layerIsAvailable ? 'unavailable' : '';
     // Replace periods in id since period causes issue with tooltip targeting
     const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
+    const checkboxId = `${layer.id.split('.').join('-')}-checkbox`;
 
     return (
       <ListGroupItem
         key={`${measurementId}-${layer.id}`}
-        onClick={this.onClick}
         id={itemElementId}
         className={listItemClass}
       >
         <Checkbox
+          id={checkboxId}
           name={title}
           onClick={this.onClick}
           checked={isEnabled}
