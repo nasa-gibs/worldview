@@ -39,7 +39,7 @@ The MODIS Deep Blue Aerosol Aerosol Ångström Exponent (Land) layer is availabl
 ### MODIS (Aqua/Terra) Dark Target Aerosol Ångström Exponent (Ocean)
 Temporal Coverage: 24 February 2000 - present (Terra); 3 July 2002 - present (Aqua)
 
-The MODIS Deep Blue Aerosol Ångström Exponent layer can be used to provide additional information on the aerosol particle size over ocean. This layer is created from the Dark Target (DT) algorithm that retrieves over ocean (dark in visible and longer wavelengths). The Ångström exponent provides additional information on the particle size (larger the exponent, the smaller the particle size). Values < 1 suggest optical dominance of coarse particles (e.g. dust) and values > 1 suggest optical dominance of fine particles (e.g. smoke).
+The MODIS Dark Target Aerosol Ångström Exponent layer can be used to provide additional information on the aerosol particle size over ocean. This layer is created from the Dark Target (DT) algorithm that retrieves over ocean (dark in visible and longer wavelengths). The Ångström exponent provides additional information on the particle size (larger the exponent, the smaller the particle size). Values < 1 suggest optical dominance of coarse particles (e.g. dust) and values > 1 suggest optical dominance of fine particles (e.g. smoke).
 
 The MODIS Dark Target Aerosol Aerosol Ångström Exponent (Ocean) layer is available from both the Terra (`MOD04_L2`) and Aqua (`MYD04_L2`) satellites for daytime overpasses. The sensor/algorithm resolution is 10 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
 
