@@ -7,9 +7,8 @@ import {
   ModalFooter,
   InputGroup,
   InputGroupText,
-  Input,
-  Label,
 } from 'reactstrap';
+import Checkbox from '../util/checkbox';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
 import safeLocalStorage from '../../util/local-storage';
@@ -83,35 +82,32 @@ class ModalStart extends React.Component {
         <ModalHeader toggle={endTour}>
           Welcome to Worldview!
         </ModalHeader>
+
         <Scrollbars style={{ maxHeight: `${height - 200}px` }}>
-
           <ModalBody>
-
             <TourIntro toggleModalStart={toggleModalStart} />
             <TourBoxes
               stories={stories}
               storyOrder={storyOrder}
               selectTour={selectTour}
             />
-
           </ModalBody>
         </Scrollbars>
+
         {safeLocalStorage.enabled && (
           <ModalFooter>
             <InputGroup>
               <InputGroupText className="w-100">
-                <Input
-                  addon
+                <Checkbox
                   id="hide-until-new-checkbox"
-                  type="checkbox"
-                  className="float-right m-0"
-                  defaultChecked={checked}
-                  onChange={this.handleCheck}
+                  name="hide-until-new"
+                  onCheck={this.handleCheck}
+                  color="gray"
+                  classNames="float-right m-0"
                   aria-label="Hide this dialog until a new story has been added."
+                  checked={checked}
+                  label="Do not show until a new story has been added."
                 />
-                <Label for="hide-until-new-checkbox" className="ml-2">
-                  Do not show until a new story has been added.
-                </Label>
               </InputGroupText>
             </InputGroup>
           </ModalFooter>

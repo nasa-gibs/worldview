@@ -68,6 +68,10 @@
   .modal-footer {
     background: #eee;
     padding: 0 4px 4px;
+    .wv-checkbox span {
+      font-size: 14px;
+      margin-left: 5px;
+    }
   }
 
   .tour-box {
