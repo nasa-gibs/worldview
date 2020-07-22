@@ -24,11 +24,12 @@
       font-size: 26px;
       font-weight: 400;
       padding: 10px 12px;
-      color: #eee;
-      text-shadow: 1px 1px 0 #666;
+      color: #cacaca;
+      text-shadow: 1px 1px 1px #000;
       &:hover {
         color: #fff;
         opacity: 1;
+        text-shadow: 0 0 3px #000;
       }
     }
   }
