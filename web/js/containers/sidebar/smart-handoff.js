@@ -61,6 +61,7 @@ class SmartHandoff extends Component {
       y2: y + height,
     };
 
+
     this.setState({ boundaries: newBoundaries });
     this.debounceBoundaryUpdate(newBoundaries);
   }
@@ -78,7 +79,6 @@ class SmartHandoff extends Component {
       proj,
       selectedProduct,
       selectProduct,
-      showWarningModal,
       isActive,
     } = this.props;
 
@@ -102,8 +102,12 @@ class SmartHandoff extends Component {
     const { crs } = proj;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
-    const boxTopLongitude = Math.abs(geolonlat1[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat1[0]) : geolonlat1[0];
-    const boxBottomLongitude = Math.abs(geolonlat2[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat2[0]) : geolonlat2[0];
+
+    const extentCoordinates = {
+      swCoords: `${geolonlat1[0]},${geolonlat1[1]}`,
+      neCoords: `${geolonlat2[0]},${geolonlat2[1]}`,
+    };
+
 
     /** Contains available imagery data that can be downloaded in Earthdata Search */
     const dataArray = Object.entries(products); // TO-DO: Display the correct products based on availablility
@@ -121,7 +125,6 @@ class SmartHandoff extends Component {
                   key={product[0]}
                   id={product[0]}
                   productObject={product[1]}
-                  countsObject={counts}
                   isSelected={selectedProduct === product[0]}
                   selectProduct={selectProduct}
                 />
@@ -132,7 +135,7 @@ class SmartHandoff extends Component {
 
         { /** Download button that transfers user to NASA's Earthdata Search */ }
         <Button
-          onClick={() => showWarningModal(this.state)}
+          onClick={() => openEarthDataSearch(extentCoordinates)}
           id="download-btn"
           text="Download"
           className="red"
@@ -161,8 +164,8 @@ class SmartHandoff extends Component {
             width: x2 - x,
           }}
           coordinates={{
-            bottomLeft: util.formatCoordinate([boxTopLongitude, geolonlat1[1]]),
-            topRight: util.formatCoordinate([boxBottomLongitude, geolonlat2[1]]),
+            bottomLeft: extentCoordinates.bottomLeftCoordinates,
+            topRight: extentCoordinates.topRightCoordinates,
           }}
           showCoordinates
         />
@@ -245,11 +248,16 @@ const SmartHandoffModal = () => (
  * Handles the processing of various parameters that Earthdata Search needs to find specific
  * data prdocuts and granule files based on the currently selected product within Worldview.
  */
-const openEarthDataSearch = () => {
+const openEarthDataSearch = (coords) => {
+  // coords.topRightCoordinates;
+  // coords.bottomLeftCoordinates;
   // TO-DO: Need to capture boundaries, layer data, etc; whatever essentials for Earthdata Search
   // const { boundaries } = this.state;
 
-  // window.open('https://search.earthdata.nasa.gov/search', '_blank');
+  window.open(`https://search.earthdata.nasa.gov/search?sb=${
+    coords.swCoords},${coords.neCoords}&m=-30.59375!-210.9375!0!1!0!0,2`, '_blank');
+
+  // https://search.earthdata.nasa.gov/search?sb=-16.45313%2C0.28125%2C4.5%2C20.95313&m=0.0703125!0!2!1!0!0%2C2
 };
 
 /**
@@ -261,7 +269,6 @@ SmartHandoff.propTypes = {
   products: PropTypes.object,
   selectedProduct: PropTypes.string,
   selectProduct: PropTypes.func,
-  showWarningModal: PropTypes.func,
   map: PropTypes.object.isRequired,
   onBoundaryChange: PropTypes.func,
   boundaries: PropTypes.object,
