@@ -293,7 +293,7 @@ class GranuleLayerDateList extends PureComponent {
           : (
             <>
               <div style={{ marginBottom: '14px', color: '#a0a0a0' }}>
-                <p>No granules available.</p>
+                <p className="granule-date-item-no-granules-available">No granules available.</p>
                 <br />
               </div>
             </>
