@@ -198,7 +198,7 @@ export function updateGranuleLayerDates(dates, id, count) {
     const { geometry } = layers.granuleLayers[activeString][id];
 
     const layerDef = layers.layerConfig[id];
-    const satelliteInstrumentGroup = `${layerDef.satellite}_${layerDef.instrument}`;
+    const satelliteInstrumentGroup = `${layerDef.subtitle}`;
     const activeSatelliteInstrumentGroup = layers.granuleSatelliteInstrumentGroup[activeString];
     const activeGeometry = layers.granuleGeometry[activeString];
 
@@ -246,19 +246,18 @@ export function toggleHoveredGranule(satelliteInstrumentGroup, granuleDate) {
     });
   };
 }
-export function changeGranuleSatelliteInstrumentGroup(id, newSatelliteInstrumentGroup) {
+export function changeGranuleSatelliteInstrumentGroup(id, satelliteInstrumentGroup) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();
     const { activeString } = compare;
-    const { granuleLayers, satelliteInstrumentGroup } = layers;
+    const { granuleLayers } = layers;
     const granuleGeometry = granuleLayers[activeString][id].geometry;
-    if (satelliteInstrumentGroup !== newSatelliteInstrumentGroup) {
-      dispatch({
-        type: CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
-        satelliteInstrumentGroup: newSatelliteInstrumentGroup,
-        geometry: granuleGeometry,
-        activeKey: activeString,
-      });
-    }
+
+    dispatch({
+      type: CHANGE_GRANULE_SATELLITE_INSTRUMENT_GROUP,
+      satelliteInstrumentGroup,
+      geometry: granuleGeometry,
+      activeKey: activeString,
+    });
   };
 }
