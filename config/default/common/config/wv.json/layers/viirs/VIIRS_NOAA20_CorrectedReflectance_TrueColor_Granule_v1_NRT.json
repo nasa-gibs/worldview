@@ -4,11 +4,11 @@
           "id":       "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
           "title":    "Corrected Reflectance (True Color, Granules, v1, Near Real-Time, VIIRS, NOAA-20)",
           "subtitle":    "NOAA-20 / VIIRS",
-          "description": "granule/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
+          "description": "viirs/VIIRS_NOAA20_CorrectedReflectance_TrueColor",
           "tags":     "subdaily",
           "group":    "overlays",
           "layergroup": [
-            "granule"
+            "viirs"
           ],
           "inactive": true,
           "isGranule": true,
