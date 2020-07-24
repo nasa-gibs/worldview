@@ -204,6 +204,7 @@ class GranuleLayerDateList extends PureComponent {
           <span style={{ float: 'right' }}>
             <Button
               onClick={(e) => this.onClickReset(e)}
+              className="granule-list-reset-button"
               block={false}
               style={{ lineHeight: '6px' }}
               disabled={sorted}
