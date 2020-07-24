@@ -80,7 +80,7 @@ if (devMode) {
   // Don't transpile any dependencies in /node_modules except those found
   // in transpileDependencies array
   babelLoaderExcludes.push(
-    new RegExp(`node_modules/(?!(${transpileDependencies.join('|')})/).*`),
+    new RegExp(`node_modules(?!(/|\\\\)(${transpileDependencies.join('|')})).*`),
   );
 }
 
