@@ -92,7 +92,7 @@ class MeasureMenu extends Component {
 const mapStateToProps = (state, ownProps) => ({
   isTouchDevice: state.modal.customProps.touchDevice,
   map: state.map,
-  units: state.measure.units,
+  units: state.measure.unitOfMeasure,
 });
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onToggleUnits: (units) => {
