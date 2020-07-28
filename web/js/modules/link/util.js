@@ -62,7 +62,7 @@ export function getSharelink(type, url) {
     case 'email':
       return emailUrlParams(shareMessage, emailBody);
     default:
-      // return undefined
+      return undefined;
   }
 }
 export function openPromisedSocial(url, win) {

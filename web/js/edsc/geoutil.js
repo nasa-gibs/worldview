@@ -24,11 +24,11 @@ export default function (L, Coordinate, Arc, config) {
       lat2 = p2.lat * DEG_TO_RAD;
       lon2 = p2.lng * DEG_TO_RAD;
 
-      // http://williams.best.vwh.net/avform.htm#Dist
+      // https://williams.best.vwh.net/avform.htm#Dist
       d = 2 * asin(sqrt(pow(sin((lat1 - lat2) / 2), 2) + cos(lat1) * cos(lat2) * pow(sin((lon1 - lon2) / 2), 2)));
 
       /**
-       * http://williams.best.vwh.net/avform.htm#Intermediate
+       * https://williams.best.vwh.net/avform.htm#Intermediate
        * This is a special case where f = 1/2 and therefore A = B, allowing us
        * to simplify a few expressions
        */
@@ -55,7 +55,7 @@ export default function (L, Coordinate, Arc, config) {
   // Determines the initial course direction from latlng1 setting off toward latlng2
   _course = function (latlng1, latlng2) {
     var PI, atan2, c1, c2, cos, denom, lat1, lat2, lng1, lng2, numer, result, sin;
-    // http://williams.best.vwh.net/avform.htm#Crs
+    // https://williams.best.vwh.net/avform.htm#Crs
     sin = Math.sin, cos = Math.cos, atan2 = Math.atan2, PI = Math.PI;
     c1 = Coordinate.fromLatLng(latlng1);
     c2 = Coordinate.fromLatLng(latlng1);
@@ -79,7 +79,7 @@ export default function (L, Coordinate, Arc, config) {
   };
 
   // Determines the difference between the given angles in the interval (-180, 180)
-  // See: http://www.element84.com/determining-if-a-spherical-polygon-contains-a-pole.html
+  // See: https://www.element84.com/determining-if-a-spherical-polygon-contains-a-pole.html
   _angleDelta = function (a1, a2) {
     var left_turn_amount;
     if (a2 < a1) {
@@ -134,7 +134,7 @@ export default function (L, Coordinate, Arc, config) {
       }
       return results;
     })();
-    // http://www.element84.com/determining-if-a-spherical-polygon-contains-a-pole.html
+    // https://www.element84.com/determining-if-a-spherical-polygon-contains-a-pole.html
     delta = 0;
     len = latlngs.length;
     for (i = j = 0, ref = len; ref >= 0 ? j < ref : j > ref; i = ref >= 0 ? ++j : --j) {
@@ -208,9 +208,9 @@ export default function (L, Coordinate, Arc, config) {
      * more calculations.
      * If polygons still cause problems, interpolate more :)
      * Example of a problematic polygon before interpolation:
-     * http://edsc.dev/search/datasets?polygon=-38.53125%2C37.125%2C-60.75%2C56.109375%2C1.6875%2C0.28125%2C-38.53125%2C37.125&m=15.5390625!10.8984375!2!1!0!
+     * https://edsc.dev/search/datasets?polygon=-38.53125%2C37.125%2C-60.75%2C56.109375%2C1.6875%2C0.28125%2C-38.53125%2C37.125&m=15.5390625!10.8984375!2!1!0!
      * Example of a problematic polygon after interpolation:
-     * http://edsc.dev/search/datasets?polygon=-38.53125%2C37.125%2C-60.75%2C56.109375%2C-11.390625%2C-4.5%2C-38.53125%2C37.125&m=15.5390625!10.8984375!2!1!0!
+     * https://edsc.dev/search/datasets?polygon=-38.53125%2C37.125%2C-60.75%2C56.109375%2C-11.390625%2C-4.5%2C-38.53125%2C37.125&m=15.5390625!10.8984375!2!1!0!
      */
     latlngs = [];
     len = origLatlngs.length;
@@ -222,7 +222,7 @@ export default function (L, Coordinate, Arc, config) {
         latlngs.push(gcInterpolate(latlngA, latlngB));
       }
     }
-    // http://trs-new.jpl.nasa.gov/dspace/bitstream/2014/40409/3/JPL%20Pub%2007-3%20%20w%20Errata.pdf
+    // https://trs-new.jpl.nasa.gov/dspace/bitstream/2014/40409/3/JPL%20Pub%2007-3%20%20w%20Errata.pdf
     // Page 7
     PI = Math.PI;
     crossesMeridian = false;

@@ -654,7 +654,6 @@
     display: block;
   }
 
-  /* .tour-start */
   .tour-start .modal-dialog {
     max-width: 624px;
   }
@@ -668,7 +667,6 @@
     margin: 4px 4px 0 0;
   }
 
-  /* .tour-complete */
   .tour-complete .modal-dialog {
     max-width: 572px;
   }

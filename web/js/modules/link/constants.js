@@ -8,7 +8,7 @@ export const REQUEST_SHORT_LINK = 'REQUEST_BITLY_SHORTENED_LINK';
 
 export const MOCK_SHORT_LINK_RESPONSE_BODY = {
   data: {
-    url: 'http://go.nasa.gov/1iKIZ4j',
+    url: 'https://go.nasa.gov/1iKIZ4j',
   },
   status_code: 200,
   status_txt: 'OK',

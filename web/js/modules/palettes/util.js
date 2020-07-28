@@ -32,12 +32,10 @@ export function getCheckerboard() {
 
   const g = canvas.getContext('2d');
 
-  // g.fillStyle = "rgb(102, 102, 102)";
   g.fillStyle = 'rgb(200, 200, 200)';
   g.fillRect(0, 0, size, size);
   g.fillRect(size, size, size, size);
 
-  // g.fillStyle = "rgb(153, 153, 153)";
   g.fillStyle = 'rgb(240, 240, 240)';
   g.fillRect(0, size, size, size);
   g.fillRect(size, 0, size, size);
