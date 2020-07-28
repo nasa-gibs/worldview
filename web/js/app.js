@@ -191,7 +191,6 @@ class App extends React.Component {
         <div id="layer-settings-modal" />
         <div id="eventsHolder" />
         <div id="imagedownload" />
-        <div id="dlMap" />
         <Timeline key={locationKey || '1'} />
         <div id="wv-animation-widet-case">
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
