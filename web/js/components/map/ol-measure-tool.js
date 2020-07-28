@@ -34,6 +34,11 @@ const allMeasurements = {
   'EPSG:4326': {},
   'EPSG:3031': {},
 };
+const vectorLayers = {
+  'EPSG:3413': null,
+  'EPSG:4326': null,
+  'EPSG:3031': null,
+};
 const source = new OlVectorSource({ wrapX: false });
 
 /**
@@ -44,7 +49,7 @@ function OlMeasureTool (props) {
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
-  let vector;
+
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive,
   } = props;
@@ -201,12 +206,12 @@ function OlMeasureTool (props) {
       style: drawStyles,
     });
     olMap.addInteraction(draw);
-    if (!vector) {
-      vector = new OlVectorLayer({
+    if (!vectorLayers[crs]) {
+      vectorLayers[crs] = new OlVectorLayer({
         source,
         style: vectorStyles,
+        map: olMap,
       });
-      vector.setMap(olMap);
     }
     toggleMeasureActive(true);
 
@@ -260,10 +265,9 @@ function OlMeasureTool (props) {
     allMeasurements[crs] = {};
     terminateDraw();
     olMap.removeOverlay(tooltipOverlay);
-    if (vector) {
-      vector.getSource().clear();
-      vector.setMap(null);
-      vector = null;
+    if (vectorLayers[crs]) {
+      vectorLayers[crs].setMap(null);
+      vectorLayers[crs] = null;
     }
   }
 
