@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import OlCoordinates from '../../components/map/ol-coordinates';
 import OlVectorInteractions from './ol-vector-interactions';
+import OlMeasureTool from '../../components/map/ol-measure-tool';
 
 class MapInteractions extends React.PureComponent {
   render() {
@@ -32,6 +33,7 @@ class MapInteractions extends React.PureComponent {
         <OlVectorInteractions
           mouseEvents={mouseEvents}
         />
+        <OlMeasureTool />
       </>
     );
   }

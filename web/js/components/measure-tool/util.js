@@ -6,12 +6,6 @@ import geographiclib from 'geographiclib';
 
 const geod = geographiclib.Geodesic.WGS84;
 const geographicProj = 'EPSG:4326';
-const metersPerKilometer = 1000;
-const ftPerMile = 5280;
-const sqFtPerSqMile = 27878400;
-const sqMeterPerKilometer = 1000000;
-const metersToFeet = (meters) => meters * 3.28084;
-const squareMetersToFeet = (sqMeters) => sqMeters * 10.76391;
 
 /**
  * Shift x value of every coord except the last,
@@ -98,48 +92,6 @@ export function transformPolygonArc(geom, projection) {
 }
 
 /**
-   *
-   * @param {*} line
-   * @return {String} - The formatted distance measurement
-   */
-export function getFormattedLength(line, projection, unitOfMeasure) {
-  const transformedLine = line.clone().transform(projection, geographicProj);
-  const metricLength = getGeographicLibDistance(transformedLine);
-  if (unitOfMeasure === 'km') {
-    return metricLength > 100
-      ? `${roundAndLocale(metricLength, metersPerKilometer)} km`
-      : `${roundAndLocale(metricLength)} m`;
-  }
-  if (unitOfMeasure === 'mi') {
-    const imperialLength = metersToFeet(metricLength);
-    return imperialLength > (ftPerMile / 4)
-      ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
-      : `${roundAndLocale(imperialLength)} ft`;
-  }
-}
-
-/**
-   *
-   * @param {*} polygon
-   * @return {String} - The formatted area measurement
-   */
-export function getFormattedArea(polygon, projection, unitOfMeasure) {
-  const transformedPoly = polygon.clone().transform(projection, geographicProj);
-  const metricArea = getGeographicLibArea(transformedPoly);
-  if (unitOfMeasure === 'km') {
-    return metricArea > 10000
-      ? `${roundAndLocale(metricArea, sqMeterPerKilometer)} km<sup>2</sup>`
-      : `${roundAndLocale(metricArea)} m<sup>2</sup>`;
-  }
-  if (unitOfMeasure === 'mi') {
-    const imperialArea = squareMetersToFeet(metricArea);
-    return imperialArea > (sqFtPerSqMile / 8)
-      ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
-      : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
-  }
-}
-
-/**
  * Calculate area of a polygon with GeographicLib library
  * @param {*} polygon
  * @returns {Number} - area in square meters
@@ -168,16 +120,4 @@ export function getGeographicLibDistance(line) {
     totalDistance += r.s12;
   });
   return totalDistance;
-}
-
-/**
- * Convert and format raw measurements to two decimal points
- * @param {*} measurement
- * @param {*} factor
- * @return {String} - The measurement, converted based on factor and locale
- */
-export function roundAndLocale(measurement, factor = 1) {
-  const baseNumber = Math.round((measurement / factor) * 100) / 100;
-  const number = baseNumber >= 10 ? Number(baseNumber.toFixed(0)) : baseNumber;
-  return number.toLocaleString();
 }

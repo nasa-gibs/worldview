@@ -59,38 +59,50 @@
 
 .tooltip-measure {
   position: relative;
+  font-weight: 500;
+  font-size: 16px;
+  font-family: 'Roboto Mono', monospace;
   background: #000;
   border-radius: 4px;
   color: #fff;
-  padding: 6px 10px;
+  padding: 5px 8px;
   white-space: nowrap;
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.5);
-}
-.tooltip-active {
-  font-weight: 500;
-  font-size: 16px;
-  font-family: 'Roboto Mono', monospace;
-}
-.tooltip-static {
-  font-weight: 500;
-  font-size: 16px;
-  font-family: 'Roboto Mono', monospace;
-  color: #fff;
-  text-shadow: 1px 1px 1px #000;
-  background-color: #000;
-}
-.tooltip-active::before,
-.tooltip-static::before {
-  border-top: 6px solid rgba(0, 0, 0, 1);
-  border-right: 6px solid transparent;
-  border-left: 6px solid transparent;
-  content: "";
-  position: absolute;
-  bottom: -6px;
-  margin-left: -7px;
-  left: 50%;
-}
-.tooltip-static::before {
-  border-top-color: #000;
+  &.tooltip-active {
+    opacity: 0.85;
+    color: #ddd;
+    background-color: #333;
+  }
+  &.tooltip-static {
+    color: #fff;
+    background-color: #000;
+  }
+  &.tooltip-active::before,
+  &.tooltip-static::before {
+    border-top: 6px solid rgba(0, 0, 0, 1);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    margin-left: -7px;
+    left: 50%;
+  }
+  &.tooltip-static::before {
+    border-top-color: #000;
+  }
+  .remove-measurement {
+    margin-left: 8px;
+    border-left: 1px solid #777;
+    padding-left: 6px;
+  }
+  .svg-inline--fa {
+    width: 12px;
+    color: #ccc;
+    &:hover {
+      cursor: pointer;
+      color: #fff;
+    }
+  }
 }
