@@ -33,7 +33,9 @@ module.exports = {
   measureAreaBtn: '#measure-area-button',
   clearMeasurementsBtn: '#clear-measurements-button',
   unitOfMeasureToggle: '.measure-unit-toggle .custom-control-label',
-  measurementTooltip: '.tooltip-measure.tooltip-static',
+  measurementTooltip: '.tooltip-measure',
+  geoMeasurementTooltip: '#wv-map-geographic .tooltip-measure',
+  arcticMeasurementTooltip: '#wv-map-arctic .tooltip-measure',
 
   // timeline
   dragger: '.timeline-dragger',
@@ -89,7 +91,6 @@ module.exports = {
   scienceDisciplinesTab: '#categories-nav .nav-item:nth-child(2)',
   aodSidebarLayer: '#active-MODIS_Combined_Value_Added_AOD',
   aodMAIACSidebarLayer: '#active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
-  projectionButton: '#wv-proj-button',
   filterButton: '.btn.filter-button',
   resetButton: '.btn.clear-filters',
   applyButton: '.btn.apply-facets',
