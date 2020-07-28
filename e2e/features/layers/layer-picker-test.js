@@ -1,4 +1,5 @@
 const { assertCategories } = require('../../reuseables/layer-picker.js');
+const { switchProjection } = require('../../reuseables/switch-projection');
 const skipTour = require('../../reuseables/skip-tour.js');
 const {
   layersSearchField,
@@ -36,7 +37,6 @@ const {
   scienceDisciplinesTab,
   aodSidebarLayer,
   aodMAIACSidebarLayer,
-  projectionButton,
   yearDown,
   monthDown,
   dayDown,
@@ -267,16 +267,12 @@ module.exports = {
     c.click('#accordionTogglerButton');
   },
   'When switching arctic projection, go straight to measurements browse list if previously in category mode': (c) => {
-    const arcticbutton = '#change-arctic-button';
-
     // Switch projection and confirm measurement view
-    c.click(projectionButton);
-    c.waitForElementVisible(arcticbutton, TIME_LIMIT, (e) => {
-      c.click(arcticbutton).pause(200);
-      c.click(addLayers).waitForElementVisible(layerBrowseList, TIME_LIMIT, (e) => {
-        c.expect.element(layerBrowseDetail).to.be.present;
-        c.assert.containsText('.no-results', 'Select a measurement to view details here!');
-      });
+    switchProjection(c, 'arctic');
+    c.pause(100);
+    c.click(addLayers).waitForElementVisible(layerBrowseList, TIME_LIMIT, (e) => {
+      c.expect.element(layerBrowseDetail).to.be.present;
+      c.assert.containsText('.no-results', 'Select a measurement to view details here!');
     });
   },
   'Searching in arctic projection': (c) => {
@@ -292,13 +288,9 @@ module.exports = {
     });
   },
   'Switching back to geographic projetion, categories appear': (c) => {
-    const geographicButton = '#change-geographic-button';
-    c.click(projectionButton);
-    c.waitForElementVisible(geographicButton, TIME_LIMIT, (e) => {
-      c.click(geographicButton).pause(200);
-      c.click(addLayers);
-      c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
-    });
+    switchProjection(c, 'geographic');
+    c.click(addLayers);
+    c.waitForElementVisible(categoriesNav, TIME_LIMIT, assertCategories(c));
   },
   after: (c) => {
     c.end();
