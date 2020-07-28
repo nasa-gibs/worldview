@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce } from 'lodash';
-import Products from '../../components/sidebar/product';
+import SmartHandoffModal from './smart-handoff-modal';
+// import Products from '../../components/sidebar/product';
 import Button from '../../components/util/button';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
@@ -61,7 +62,6 @@ class SmartHandoff extends Component {
       y2: y + height,
     };
 
-
     this.setState({ boundaries: newBoundaries });
     this.debounceBoundaryUpdate(newBoundaries);
   }
@@ -72,14 +72,15 @@ class SmartHandoff extends Component {
   render() {
     const {
       isLayerSelected,
-      products,
+      // products,
       map,
       screenWidth,
       screenHeight,
       proj,
-      selectedProduct,
-      selectProduct,
+      // selectedProduct,
+      // selectProduct,
       isActive,
+      showWarningModal,
     } = this.props;
 
     /** Determine if data-download 'smart-handoff' tab is activated by user */
@@ -103,14 +104,16 @@ class SmartHandoff extends Component {
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
-    const extentCoordinates = {
-      swCoords: `${geolonlat1[0]},${geolonlat1[1]}`,
-      neCoords: `${geolonlat2[0]},${geolonlat2[1]}`,
+    const extentCoords = {
+      southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
+      northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
     };
+
+    const showModal = true;
 
 
     /** Contains available imagery data that can be downloaded in Earthdata Search */
-    const dataArray = Object.entries(products); // TO-DO: Display the correct products based on availablility
+    // const dataArray = Object.entries(products); // TO-DO: Display the correct products based on availablility
 
     return (
       <div>
@@ -120,6 +123,7 @@ class SmartHandoff extends Component {
         <div id="wv-data">
           <div className="wv-datalist sidebar-panel content">
             <div id="wv-datacontent">
+              { /**
               {dataArray.map((product, i) => (
                 <Products
                   key={product[0]}
@@ -129,13 +133,17 @@ class SmartHandoff extends Component {
                   selectProduct={selectProduct}
                 />
               ))}
+              */}
             </div>
           </div>
         </div>
 
         { /** Download button that transfers user to NASA's Earthdata Search */ }
         <Button
-          onClick={() => openEarthDataSearch(extentCoordinates)}
+          onClick={() => {
+            if (showModal) showWarningModal(extentCoords);
+            else openEarthDataSearch(extentCoords)();
+          }}
           id="download-btn"
           text="Download"
           className="red"
@@ -164,8 +172,8 @@ class SmartHandoff extends Component {
             width: x2 - x,
           }}
           coordinates={{
-            bottomLeft: extentCoordinates.bottomLeftCoordinates,
-            topRight: extentCoordinates.topRightCoordinates,
+            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
+            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
           }}
           showCoordinates
         />
@@ -174,90 +182,10 @@ class SmartHandoff extends Component {
   }
 }
 
-/**
- * Handles the closeout of the custom modal window as defined below.
- */
-const closeModal = () => {
-
-};
-
-/**
- * A custom modal window that instructs the user they are being directed to NASA's Earthdata Search web tool.
- */
-const SmartHandoffModal = () => (
-  <>
-    <div id="modal-container">
-
-      <div id="modal-heading">
-        search.earthdata.nasa.gov
-      </div>
-
-      <div id="modal-message">
-        You are about to be transferred to the NASA Earthdata Search tool. This tool is used to download
-        data granules using the currently selected layer, area of interest, and date.
-      </div>
-
-      <hr />
-
-      <div id="toggle-more-info">Show more</div>
-
-      <h1 id="about-heading">About Earthdata Search</h1>
-
-      <p>
-        Earthdata Search provides the only means for data discovery, filtering, visualization, and
-        access across all of NASA Earth science data holdings. Excepteur sint occaecat cupidatat non proident,
-        sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-
-      <p>
-        The current selected layer and the designated viewport region within Worldview will be transferred to
-        Earthdata Search. At vero eostui noir benet accusamus et iusto odio dignissimos ducimus qui blanditiis
-        praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati
-        cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum
-        et dolorum fuga
-      </p>
-
-      <div id="layer-info">
-        <h1> Selected layer to download: </h1>
-        <p id="layer-name"> INSERT LAYER NAME </p>
-        <p id="layer-mata-data"> INSERT LAYER META DATA </p>
-      </div>
-
-
-      <div id="button-group">
-        <Button
-          onClick={() => closeModal()}
-          id="cancel-btn"
-          text="Cancel"
-        />
-
-        <Button
-          onClick={() => openEarthDataSearch()} // Need to pass reference of current state of boundaries
-          id="continue-btn"
-          text="Continue"
-          className="red"
-        />
-      </div>
-
-    </div>
-
-  </>
-);
-
-/**
- * Handles the processing of various parameters that Earthdata Search needs to find specific
- * data prdocuts and granule files based on the currently selected product within Worldview.
- */
-const openEarthDataSearch = (coords) => {
-  // coords.topRightCoordinates;
-  // coords.bottomLeftCoordinates;
+const openEarthDataSearch = (extentCoords) => () => {
   // TO-DO: Need to capture boundaries, layer data, etc; whatever essentials for Earthdata Search
-  // const { boundaries } = this.state;
-
   window.open(`https://search.earthdata.nasa.gov/search?sb=${
-    coords.swCoords},${coords.neCoords}&m=-30.59375!-210.9375!0!1!0!0,2`, '_blank');
-
-  // https://search.earthdata.nasa.gov/search?sb=-16.45313%2C0.28125%2C4.5%2C20.95313&m=0.0703125!0!2!1!0!0%2C2
+    extentCoords.southWest},${extentCoords.northEast}&m=-30.59375!-210.9375!0!1!0!0,2`, '_blank');
 };
 
 /**
@@ -266,15 +194,16 @@ const openEarthDataSearch = (coords) => {
 SmartHandoff.propTypes = {
   isLayerSelected: PropTypes.bool,
   isActive: PropTypes.bool,
-  products: PropTypes.object,
-  selectedProduct: PropTypes.string,
-  selectProduct: PropTypes.func,
+  // products: PropTypes.object,
+  // selectedProduct: PropTypes.string,
+  // selectProduct: PropTypes.func,
   map: PropTypes.object.isRequired,
   onBoundaryChange: PropTypes.func,
   boundaries: PropTypes.object,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
+  showWarningModal: PropTypes.func,
 };
 
 /**
@@ -317,11 +246,15 @@ const mapStateToProps = (state, ownProps) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: () => {
+  showWarningModal: (extentCoords) => {
     dispatch(
-      openCustomContent('warning_now_leaving_worldview', {
+      openCustomContent('transferring-to-earthdata-search', {
         headerText: 'Leaving Worldview',
-        bodyComponent: SmartHandoffModal(),
+        bodyComponent: SmartHandoffModal,
+        bodyComponentProps: {
+          extentCoords,
+          goToEarthDataSearch: openEarthDataSearch(extentCoords),
+        },
         size: 'lg',
       }),
     );

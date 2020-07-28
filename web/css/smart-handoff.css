@@ -1,11 +1,19 @@
+
+/** Overrides default modal-content CSS */
+#transferring-to-earthdata-search .modal-content {
+    background: #191a1b !important;
+    border: 1px solid #444 !important;
+}
+
+/** Overrides default modal-content CSS */
+#transferring-to-earthdata-search .modal-header {
+    border-bottom: 1px solid #444 !important;
+}
+
 h1 {
     margin-top: 10px;
     margin-left: 5px;
     color: gray;
-}
-
-#modal-container {
-    font-size: 14pt !important;
 }
 
 #modal-heading {
