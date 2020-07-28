@@ -1,13 +1,11 @@
 import { Polygon, LineString } from 'ol/geom';
 import {
-  getFormattedArea,
-  getFormattedLength,
+  getGeographicLibArea,
+  getGeographicLibDistance,
 } from './util';
 import { registerProjections } from '../../fixtures';
 
 beforeEach(registerProjections);
-const miles = 'mi';
-const kilos = 'km';
 
 /**
  * Should be able to handle area calculation made crossing the anti-meridian in polar projection
@@ -21,13 +19,10 @@ test('two different triangles of the same size return the same measurement', () 
   const tri1poly = new Polygon([tri1]);
   const tri2poly = new Polygon([tri2]);
 
-  const tri1AreaKm = getFormattedArea(tri1poly, 'EPSG:4326', kilos);
-  const tri2AreaKm = getFormattedArea(tri2poly, 'EPSG:4326', kilos);
-  const tri1AreaMiles = getFormattedArea(tri1poly, 'EPSG:4326', miles);
-  const tri2AreaMiles = getFormattedArea(tri2poly, 'EPSG:4326', miles);
+  const tri1Area = getGeographicLibArea(tri1poly).toFixed(0);
+  const tri2Area = getGeographicLibArea(tri2poly).toFixed(0);
 
-  expect(tri1AreaKm).toBe(tri2AreaKm);
-  expect(tri1AreaMiles).toBe(tri2AreaMiles);
+  expect(tri1Area).toBe(tri2Area);
 });
 
 /**
@@ -45,9 +40,9 @@ test('area measurement that includes coordinates outisde of "normal" extents ret
   const geoTriPoly = new Polygon([geoTri1]);
   const shiftedTriPoly = new Polygon([shiftedTri1]);
 
-  const normalTriArea = getFormattedArea(normalTriPoly, 'EPSG:4326', kilos);
-  const geoTriArea = getFormattedArea(geoTriPoly, 'EPSG:4326', kilos);
-  const shiftedTriArea = getFormattedArea(shiftedTriPoly, 'EPSG:4326', kilos);
+  const normalTriArea = getGeographicLibArea(normalTriPoly).toFixed(0);
+  const geoTriArea = getGeographicLibArea(geoTriPoly).toFixed(0);
+  const shiftedTriArea = getGeographicLibArea(shiftedTriPoly).toFixed(0);
   expect(normalTriArea).toBe(geoTriArea);
   expect(normalTriArea).toBe(shiftedTriArea);
 });
@@ -59,13 +54,13 @@ test('two different lines, one which crosses the antimeridian, are the same leng
   const lineString1 = new LineString(line1);
   const lineString2 = new LineString(line2);
 
-  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
-  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
+  const lineString1Distance = getGeographicLibDistance(lineString1);
+  const lineString2Distance = getGeographicLibDistance(lineString2);
 
-  const lineString1Miles = getFormattedLength(lineString1, 'EPSG:4326', miles);
-  const lineString2Miles = getFormattedLength(lineString2, 'EPSG:4326', miles);
+  const lineString1Miles = getGeographicLibDistance(lineString1);
+  const lineString2Miles = getGeographicLibDistance(lineString2);
 
-  expect(lineString1Km).toBe(lineString2Km);
+  expect(lineString1Distance).toBe(lineString2Distance);
   expect(lineString1Miles).toBe(lineString2Miles);
 });
 
@@ -80,23 +75,14 @@ test('lines which are the same numbers of degrees apart, at different poles, and
   const lineString3 = new LineString(line3);
   const lineString4 = new LineString(line4);
 
-  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
-  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
-  const lineString3Km = getFormattedLength(lineString3, 'EPSG:4326', kilos);
-  const lineString4Km = getFormattedLength(lineString4, 'EPSG:4326', kilos);
+  const lineString1Distance = getGeographicLibDistance(lineString1);
+  const lineString2Distance = getGeographicLibDistance(lineString2);
+  const lineString3Distance = getGeographicLibDistance(lineString3);
+  const lineString4Distance = getGeographicLibDistance(lineString4);
 
-  const lineString1Miles = getFormattedLength(lineString1, 'EPSG:4326', miles);
-  const lineString2Miles = getFormattedLength(lineString2, 'EPSG:4326', miles);
-  const lineString3Miles = getFormattedLength(lineString3, 'EPSG:4326', miles);
-  const lineString4Miles = getFormattedLength(lineString4, 'EPSG:4326', miles);
-
-  expect(lineString1Km).toBe(lineString2Km);
-  expect(lineString1Km).toBe(lineString3Km);
-  expect(lineString1Km).toBe(lineString4Km);
-
-  expect(lineString1Miles).toBe(lineString2Miles);
-  expect(lineString1Miles).toBe(lineString3Miles);
-  expect(lineString1Miles).toBe(lineString4Miles);
+  expect(lineString1Distance).toBe(lineString2Distance);
+  expect(lineString1Distance).toBe(lineString3Distance);
+  expect(lineString1Distance).toBe(lineString4Distance);
 });
 
 /**
@@ -112,12 +98,12 @@ test('lines which cross the anti-meridian outside of "normal" extents'
   const lineString2 = new LineString(line2);
   const lineString3 = new LineString(line3);
 
-  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
-  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
-  const lineString3Km = getFormattedLength(lineString3, 'EPSG:4326', kilos);
+  const lineString1Distance = getGeographicLibDistance(lineString1);
+  const lineString2Distance = getGeographicLibDistance(lineString2);
+  const lineString3Distance = getGeographicLibDistance(lineString3);
 
-  expect(lineString1Km).toBe(lineString2Km);
-  expect(lineString1Km).toBe(lineString3Km);
+  expect(lineString1Distance).toBe(lineString2Distance);
+  expect(lineString1Distance).toBe(lineString3Distance);
 });
 
 test('always use the shortest distance between two points if within normal extents', () => {
@@ -127,8 +113,8 @@ test('always use the shortest distance between two points if within normal exten
   const lineString1 = new LineString(line1);
   const lineString2 = new LineString(line2);
 
-  const lineString1Km = getFormattedLength(lineString1, 'EPSG:4326', kilos);
-  const lineString2Km = getFormattedLength(lineString2, 'EPSG:4326', kilos);
+  const lineString1Distance = getGeographicLibDistance(lineString1);
+  const lineString2Distance = getGeographicLibDistance(lineString2);
 
-  expect(lineString1Km).toBe(lineString2Km);
+  expect(lineString1Distance).toBe(lineString2Distance);
 });
