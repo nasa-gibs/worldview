@@ -1,5 +1,6 @@
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { unByKey as OlObservableUnByKey } from 'ol/Observable';
@@ -19,54 +20,31 @@ import {
 } from 'ol/style';
 import {
   toggleMeasureActive as toggleMeasureActiveAction,
-  addMeasurement as addMeasurementAction,
-  removeMeasurement as removeMeasurementAction,
-  removeAllMeasurements as removeAllMeasurementsAction,
 } from '../../modules/measure/actions';
 import {
   transformLineStringArc,
   transformPolygonArc,
-  getFormattedLength,
-  getFormattedArea,
-} from '../../map/measure/util';
-
-
-// TODO may need to keep instaces per projection for these
-const allTooltipOverlays = {
-  'EPSG:3413': {},
-  'EPSG:4326': {},
-  'EPSG:3031': {},
-};
-const allGeometries = {
-  'EPSG:3413': {},
-  'EPSG:4326': {},
-  'EPSG:3031': {},
-};
-const allSources = {
-  'EPSG:3413': new OlVectorSource({ wrapX: false }),
-  'EPSG:4326': new OlVectorSource({ wrapX: false }),
-  'EPSG:3031': new OlVectorSource({ wrapX: false }),
-};
+} from '../measure-tool/util';
+import MeasureTooltip from '../measure-tool/measure-tooltip';
 
 let tooltipElement;
 let tooltipOverlay;
-
+const allMeasurements = {
+  'EPSG:3413': {},
+  'EPSG:4326': {},
+  'EPSG:3031': {},
+};
+const source = new OlVectorSource({ wrapX: false });
 
 /**
  * A component to add measurement functionality to the OL map
  */
 function OlMeasureTool (props) {
   let draw;
-  let sketch;
-
   let drawChangeListener;
   let rightClickListener;
   let twoFingerTouchListener;
   let vector;
-
-
-  console.log(allTooltipOverlays);
-
   const {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive,
   } = props;
@@ -155,8 +133,25 @@ function OlMeasureTool (props) {
     }),
   ];
 
-  const terminateDraw = () => {
-    sketch = null;
+  const renderTooltip = (feature, overlay) => {
+    const removeFeature = () => {
+      source.removeFeature(feature);
+      olMap.removeOverlay(overlay);
+      delete allMeasurements[crs][feature.ol_uid];
+    };
+
+    ReactDOM.render((
+      <MeasureTooltip
+        active={!!tooltipElement}
+        geometry={feature.getGeometry()}
+        crs={crs}
+        unitOfMeasure={unitOfMeasure}
+        onRemove={removeFeature}
+      />
+    ), overlay.getElement());
+  };
+
+  const terminateDraw = (geom) => {
     tooltipElement = null;
     toggleMeasureActive(false);
     olMap.removeInteraction(draw);
@@ -166,48 +161,29 @@ function OlMeasureTool (props) {
     map.ui.events.trigger('enable-click-zoom');
   };
 
-  /**
-   * Set the innerHTML of the given tooltip element to the formatted length/area
-   * measruement of the given geometry
-   * @param {*} geometry
-   * @param {*} element
-   */
-  const setMeasurementTooltip = (geometry, element, proj) => {
-    let measurement;
-    if (geometry instanceof OlGeomPolygon) {
-      measurement = getFormattedArea(geometry, proj, unitOfMeasure);
-    }
-    if (geometry instanceof OlLineString) {
-      measurement = getFormattedLength(geometry, proj, unitOfMeasure);
-    }
-    element.innerHTML = measurement;
-  };
-
-  const drawStartCallback = (evt) => {
+  const drawStartCallback = ({ feature }) => {
     let tooltipCoord;
     map.ui.events.trigger('disable-click-zoom');
-    sketch = evt.feature;
-    drawChangeListener = sketch.getGeometry().on('change', (e) => {
+    drawChangeListener = feature.getGeometry().on('change', (e) => {
       const geom = e.target;
       if (geom instanceof OlGeomPolygon) {
         tooltipCoord = geom.getInteriorPoint().getCoordinates();
       } else if (geom instanceof OlLineString) {
         tooltipCoord = geom.getLastCoordinate();
       }
-      setMeasurementTooltip(geom, tooltipElement, crs);
+      renderTooltip(feature, tooltipOverlay);
       tooltipOverlay.setPosition(tooltipCoord);
     });
   };
 
-  const drawEndCallback = (evt) => {
-    const featureGeom = evt.feature.getGeometry();
-    tooltipElement.className = 'tooltip-measure tooltip-static';
-    // TODO maybe here is where we insert the "close" element and functionality
+  const drawEndCallback = ({ feature }) => {
     tooltipOverlay.setOffset([0, -7]);
-
-    allGeometries[crs][featureGeom.ol_uid] = featureGeom;
-    allTooltipOverlays[crs][featureGeom.ol_uid] = tooltipOverlay;
+    allMeasurements[crs][feature.ol_uid] = {
+      feature,
+      overlay: tooltipOverlay,
+    };
     terminateDraw();
+    renderTooltip(feature, tooltipOverlay);
   };
 
   /**
@@ -216,8 +192,6 @@ function OlMeasureTool (props) {
    */
   function initMeasurement (measureType) {
     const type = measureType === 'area' ? 'Polygon' : 'LineString';
-    const source = allSources[crs];
-
     if (draw) {
       olMap.removeInteraction(draw);
     }
@@ -227,7 +201,6 @@ function OlMeasureTool (props) {
       style: drawStyles,
     });
     olMap.addInteraction(draw);
-
     if (!vector) {
       vector = new OlVectorLayer({
         source,
@@ -235,35 +208,24 @@ function OlMeasureTool (props) {
       });
       vector.setMap(olMap);
     }
-
     toggleMeasureActive(true);
 
     tooltipElement = document.createElement('div');
-    tooltipElement.className = 'tooltip-measure tooltip-active';
     tooltipOverlay = new Overlay({
       element: tooltipElement,
       offset: [0, -15],
       positioning: 'bottom-center',
+      stopEvent: false,
     });
     olMap.addOverlay(tooltipOverlay);
 
     draw.on('drawstart', drawStartCallback);
     draw.on('drawend', drawEndCallback);
-
     rightClickListener = olMap.on('contextmenu', (evt) => {
       evt.preventDefault();
       terminateDraw();
       olMap.removeOverlay(tooltipOverlay);
     });
-
-    // TODO get this working
-    // twoFingerTouchListener = olMap.on('touchstart', (evt) => {
-    //   if (evt.touches > 1) {
-    //     evt.preventDefault();
-    //     terminateDraw();
-    //     olMap.removeOverlay(tooltipOverlay);
-    //   }
-    // });
   }
   const initDistanceMeasurement = () => initMeasurement('distance');
   const initAreaMeasurement = () => initMeasurement('area');
@@ -273,14 +235,14 @@ function OlMeasureTool (props) {
    * current settings of unit of measurement
    */
   function recalculateAllMeasurements() {
-    Object.keys(allTooltipOverlays).forEach((proj) => {
-      Object.keys(allTooltipOverlays[proj]).forEach((id) => {
-        const geomForTooltip = allGeometries[proj][id];
-        const overlayElement = allTooltipOverlays[proj][id].element.children[0];
-        overlayElement.innerHtml = setMeasurementTooltip(geomForTooltip, overlayElement, proj);
-        geomForTooltip.changed();
-        allTooltipOverlays[proj][id].setOffset([0, -7]);
-      });
+    Object.values(allMeasurements).forEach((measurementsForProj) => {
+      Object.values(measurementsForProj).forEach(
+        ({ feature, overlay }) => {
+          renderTooltip(feature, overlay);
+          feature.getGeometry().changed();
+          overlay.setOffset([0, -7]);
+        },
+      );
     });
   }
 
@@ -288,18 +250,15 @@ function OlMeasureTool (props) {
    * Clear all existing measurements on the current map projection
    */
   function clearMeasurements () {
-    Object.values(allTooltipOverlays[crs]).forEach((overlay) => {
-      olMap.removeOverlay(overlay);
-    });
-    allSources[crs].getFeatures().forEach((feature) => {
-      allSources[crs].removeFeature(feature);
-    });
+    Object.values(allMeasurements[crs]).forEach(
+      ({ feature, overlay }) => {
+        olMap.removeOverlay(overlay);
+        source.removeFeature(feature);
+      },
+    );
 
-    allTooltipOverlays[crs] = {};
-    allGeometries[crs] = {};
-    allSources[crs] = new OlVectorSource({ wrapX: false });
+    allMeasurements[crs] = {};
     terminateDraw();
-
     olMap.removeOverlay(tooltipOverlay);
     if (vector) {
       vector.getSource().clear();
@@ -323,33 +282,22 @@ const mapDispatchToProps = (dispatch) => ({
   toggleMeasureActive: (isActive) => {
     dispatch(toggleMeasureActiveAction(isActive));
   },
-  addMeasurement: (value) => {
-    dispatch(addMeasurementAction(value));
-  },
-  removeMeasurement: (value) => {
-    dispatch(removeMeasurementAction(value));
-  },
-  removeAllMeasurement: () => {
-    dispatch(removeAllMeasurementsAction());
-  },
 });
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   const {
     map,
     proj,
     measure,
   } = state;
-
   const { unitOfMeasure } = measure;
-
   return {
     map,
     olMap: map.ui.selected,
     crs: proj.selected.crs,
     unitOfMeasure,
   };
-}
+};
 
 export default connect(
   mapStateToProps,
