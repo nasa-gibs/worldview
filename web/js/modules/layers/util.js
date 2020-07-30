@@ -10,14 +10,13 @@ import {
   startCase as lodashStartCase,
   isArray,
 } from 'lodash';
-
+import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import { addLayer, resetLayers } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
-
 
 export function getOrbitTrackTitle(def) {
   const { track } = def;
@@ -1251,3 +1250,41 @@ export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId) => {
   }
   return isNonClickableVectorLayer;
 };
+
+/**
+ * For geostationary layers that have 'availability' properties defined
+ * adjust the start date and date ranges as necessary
+ *
+ * Applies to layer.startDate and layer.dateRanges[0].startDate
+ * @param {*} layers
+ */
+export function adjustStartDates(layers) {
+  const adjustDate = (days) => moment.utc()
+    .subtract(days, 'days')
+    .startOf('day')
+    .format('YYYY-MM-DD');
+
+  const applyDateAdjustment = (layer) => {
+    const { availability, dateRanges } = layer;
+    if (!availability) {
+      return;
+    }
+    const { rollingWindow, historicalRanges } = availability;
+
+    if (dateRanges.length) {
+      const [firstDateRange] = dateRanges;
+      firstDateRange.startDate = adjustDate(rollingWindow);
+    }
+
+    if (historicalRanges && historicalRanges.length) {
+      layer.startDate = historicalRanges[0].startDate;
+      historicalRanges.reverse().forEach((range) => {
+        layer.dateRanges.unshift(range);
+      });
+    } else {
+      layer.startDate = adjustDate(rollingWindow);
+    }
+  };
+
+  return Object.values(layers).forEach(applyDateAdjustment);
+}

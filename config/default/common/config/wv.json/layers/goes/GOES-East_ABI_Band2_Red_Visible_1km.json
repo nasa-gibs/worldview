@@ -15,7 +15,16 @@
       "daynight": [
         "day"
       ],
-      "availableWindow": 30
+      "availability": {
+        "rollingWindow": 30,
+        "historicalRanges": [
+          {
+            "startDate": "2019-09-01T10:00:00Z",
+            "endDate": "2019-09-05T18:00:00Z",
+            "dateInterval": "10"
+          }
+        ]
+      }
     }
   }
 }
