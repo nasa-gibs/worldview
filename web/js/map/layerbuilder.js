@@ -371,7 +371,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
     const matrixSet = source.matrixSets[def.matrixSet];
-
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
@@ -404,7 +403,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
     const wrapX = !!(day === 1 || day === -1);
     const breakPointLayerDef = def.breakPointLayer;
-    const breakPointResolution = lodashGet(def, 'breakPointLayer.resolutionBreakPoint');
+    const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const breakPointType = lodashGet(def, 'breakPointLayer.breakPointType');
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
@@ -433,6 +432,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
+
     applyStyle(def, layer, state, options);
     layer.wrap = day;
     layer.wv = attributes;
@@ -536,10 +536,11 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       const lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
+    const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const layer = new OlLayerTile({
       preload: Infinity,
       extent,
-      ...!!def.resolutionBreakPoint && { minResolution: def.resolutionBreakPoint },
+      ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: new OlSourceTileWMS(sourceOptions),
     });
     return layer;

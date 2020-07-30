@@ -1219,11 +1219,12 @@ export const hasVectorLayers = (activeLayers) => {
  *
  * @return {Boolean}
  */
-export const isVectorLayerClickable = (layer, mapRes) => {
+export const isVectorLayerClickable = (layer, mapRes, projId) => {
   if (!mapRes) return false;
-  const { breakPointLayer } = layer;
-  if (breakPointLayer) {
-    return mapRes < breakPointLayer.resolutionBreakPoint;
+  const resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
+
+  if (resolutionBreakPoint) {
+    return mapRes < resolutionBreakPoint;
   }
   return true;
 };
@@ -1237,14 +1238,14 @@ export const isVectorLayerClickable = (layer, mapRes) => {
  *
  * @return {Boolean}
  */
-export const hasNonClickableVectorLayer = (activeLayers, mapRes) => {
+export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId) => {
   if (!mapRes) return false;
   let isNonClickableVectorLayer = false;
   const len = activeLayers.length;
   for (let i = 0; i < len; i += 1) {
     const def = activeLayers[i];
     if (def.type === 'vector' && def.visible) {
-      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes);
+      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes, projId);
       if (isNonClickableVectorLayer) break;
     }
   }

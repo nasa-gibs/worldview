@@ -1,14 +1,13 @@
 {
   "layers": {
-    "MODIS_Combined_Thermal_Anomalies_All": {
-      "id": "MODIS_Combined_Thermal_Anomalies_All",
-      "title": "Fires and Thermal Anomalies (Day and Night)",
-      "subtitle": "Terra and Aqua / MODIS",
-      "description": "modis/combined/MODIS_Combined_Thermal_Anomalies_All",
+    "MODIS_Combined_Thermal_Anomalies_Night": {
+      "id": "MODIS_Combined_Thermal_Anomalies_Night",
+      "title": "Fires and Thermal Anomalies (Night)",
+      "subtitle": "Combined / MODIS",
       "tags": "hotspot vectors",
       "group": "overlays",
-      "period": "daily",
       "type": "vector",
+      "period": "daily",
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {
@@ -23,10 +22,11 @@
         "modis",
         "modis_terra"
       ],
-      "transition": true,
-      "startDate": "2012-05-08",
+      "daynight": [
+        "night"
+      ],
       "breakPointLayer": {
-        "id": "MODIS_Combined_Thermal_Anomalies_All",
+        "id": "MODIS_Combined_Thermal_Anomalies_Night",
         "type": "wms",
         "format": "image/png",
         "breakPointType": "max",
@@ -40,11 +40,7 @@
             "resolutionBreakPoint": 2048
           }
         }
-      },
-      "daynight": [
-        "day",
-        "night"
-      ]
+      }
     }
   }
 }

@@ -1,44 +1,55 @@
 {
   "layers": {
     "MODIS_Aqua_Thermal_Anomalies_Night": {
-      "id": "MODIS_Aqua_Thermal_Anomalies_Night",
-      "title": "Fires and Thermal Anomalies (Night)",
-      "subtitle": "Aqua / MODIS",
+      "id":       "MODIS_Aqua_Thermal_Anomalies_Night",
+      "title":    "Fires and Thermal Anomalies (Night)",
+      "subtitle": "Terra / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Thermal_Anomalies_All",
-      "tags": "hotspot",
-      "group": "overlays",
-      "format": "image/png",
+      "tags":     "hotspot vectors",
+      "group":    "overlays",
+      "type":     "vector",
       "period": "daily",
       "layergroup": [
         "modis",
         "modis_aqua"
       ],
       "product": "MYD14",
-      "tileSize": [
-        512,
-        512
-      ],
-      "type": "wms",
-      "transition": "true",
-      "startDate": "2012-05-08",
-      "projections": {
+      "vectorStyle": {
+        "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
+          "id": "FIRMS_MODIS_Thermal_Anomalies_polar"
         }
       },
+      "wrapX": false,
+      "wrapadjacentdays": false,
       "palette": {
-        "id": "MODIS_Aqua_Thermal_Anomalies_All",
-        "immutable": "true"
+          "id": "MODIS_All_Thermal_Anomalies",
+          "immutable": true
       },
+      "transition": true,
+      "startDate": "2012-05-08",
       "tracks": [
         "OrbitTracks_Aqua_Descending"
       ],
       "daynight": [
         "night"
-      ]
+      ],
+      "breakPointLayer": {
+        "id": "MODIS_Aqua_Thermal_Anomalies_Night",
+        "type": "wms",
+        "format":   "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.03515625
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
     }
   }
 }
