@@ -158,7 +158,7 @@ module.exports = {
           options: {
             compact: false, // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
             cacheDirectory: devMode,
-            plugins: [devMode && require.resolve('react-refresh/babel')].filter(Boolean),
+            plugins: [isDevServer && require.resolve('react-refresh/babel')].filter(Boolean),
           },
         },
         exclude: babelLoaderExcludes,
