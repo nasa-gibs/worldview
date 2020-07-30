@@ -39,8 +39,10 @@ class MapInteractions extends React.PureComponent {
   }
 }
 function mapStateToProps(state) {
+  const { map, ui } = state;
   return {
-    isShowingClick: state.map.isClickable,
+    isShowingClick: map.isClickable,
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
   };
 }
 MapInteractions.propTypes = {
