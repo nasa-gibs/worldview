@@ -20,7 +20,6 @@ import {
 } from 'redux-location-state';
 import { createBrowserHistory } from 'history';
 import { uniqBy, get as lodashGet } from 'lodash';
-import moment from 'moment';
 import getMiddleware from './combine-middleware';
 import { mapLocationToState, getParamObject } from './location';
 import { stateToParams } from './redux-location-state-customs';
@@ -36,6 +35,7 @@ import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
   validate as layerValidate,
   layersParse12,
+  adjustStartDates,
 } from './modules/layers/util';
 import polyfill from './polyfill';
 import { debugConfig } from './debug';
@@ -58,32 +58,6 @@ const compose = DEBUG === false || DEBUG === 'logger'
 let parameters = util.fromQueryString(window.location.search);
 let { elapsed } = util;
 const errors = [];
-
-/**
- * For layers that have an 'availableWindow' property defined, adjust the
- * start date backwards from now by that many days.
- *
- * Applies to layer.startDate and layer.dateRanges[0].startDate
- * @param {*} layers
- */
-function adjustStartDates(layers) {
-  const adjustDate = (days) => moment.utc()
-    .subtract(days, 'days')
-    .startOf('day')
-    .format('YYYY-MM-DD');
-
-  const applyDateAdjustment = (layer) => {
-    const { availableWindow, dateRanges } = layer;
-    if (!availableWindow) return;
-    layer.startDate = adjustDate(availableWindow);
-    if (dateRanges.length) {
-      const [firstDateRange] = dateRanges;
-      firstDateRange.startDate = adjustDate(availableWindow);
-    }
-  };
-
-  return Object.values(layers).forEach(applyDateAdjustment);
-}
 
 /**
  *

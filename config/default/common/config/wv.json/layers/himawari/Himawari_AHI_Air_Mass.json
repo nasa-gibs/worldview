@@ -16,7 +16,16 @@
         "day",
         "night"
       ],
-      "availableWindow": 30
+      "availability": {
+        "rollingWindow": 30,
+        "historicalRanges": [
+          {
+            "startDate": "2020-01-03",
+            "endDate": "2020-01-04",
+            "dateInterval": "10"
+          }
+        ]
+      }
     }
   }
 }

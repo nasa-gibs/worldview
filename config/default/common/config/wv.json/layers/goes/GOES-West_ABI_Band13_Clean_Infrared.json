@@ -19,7 +19,9 @@
         "day",
         "night"
       ],
-      "availableWindow": 30
+      "availability": {
+        "rollingWindow": 30
+      }
     }
   }
 }
