@@ -4,6 +4,7 @@
       "id": "MODIS_Combined_Thermal_Anomalies_Night",
       "title": "Fires and Thermal Anomalies (Night)",
       "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/combined/MODIS_Combined_Thermal_Anomalies_All",
       "tags": "hotspot vectors",
       "group": "overlays",
       "type": "vector",
