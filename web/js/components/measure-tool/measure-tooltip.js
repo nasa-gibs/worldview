@@ -41,9 +41,15 @@ export default function MeasureTooltip(props) {
    * @return {String} - The measurement, converted based on factor and locale
    */
   const roundAndLocale = (measurement, factor = 1) => {
-    const baseNumber = Math.round((measurement / factor) * 100) / 100;
-    const number = baseNumber >= 10 ? Number(baseNumber.toFixed(0)) : baseNumber;
-    return number.toLocaleString();
+    const number = Math.round((measurement / factor) * 100) / 100;
+    const format = (num, decimal) => Number(num.toFixed(decimal)).toLocaleString();
+    if (number < 10) {
+      return format(number, 2);
+    }
+    if (number >= 10 && number < 100) {
+      return format(number, 1);
+    }
+    return format(number, 0);
   };
 
   /**
