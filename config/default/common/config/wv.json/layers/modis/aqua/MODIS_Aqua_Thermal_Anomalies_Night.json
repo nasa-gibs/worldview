@@ -3,7 +3,7 @@
     "MODIS_Aqua_Thermal_Anomalies_Night": {
       "id":       "MODIS_Aqua_Thermal_Anomalies_Night",
       "title":    "Fires and Thermal Anomalies (Night)",
-      "subtitle": "Terra / MODIS",
+      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Thermal_Anomalies_All",
       "tags":     "hotspot vectors",
       "group":    "overlays",
