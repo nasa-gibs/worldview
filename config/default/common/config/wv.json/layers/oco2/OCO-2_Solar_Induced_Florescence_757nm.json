@@ -12,6 +12,9 @@
       ],
       "product": "OCO2_L2_Lite_SIF",
       "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_OCO-2_Ascending"
+      ],
       "daynight": [
         "day"
       ]
