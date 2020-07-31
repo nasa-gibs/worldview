@@ -2,8 +2,8 @@
   "layers": {
     "MODIS_Aqua_Thermal_Anomalies_All": {
       "id": "MODIS_Aqua_Thermal_Anomalies_All",
-      "title": "Fires and Thermal Anomalies (All)",
-      "subtitle": "Terra / MODIS",
+      "title": "Fires and Thermal Anomalies (Day and Night)",
+      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Thermal_Anomalies_All",
       "tags": "vectors hotspot",
       "group": "overlays",

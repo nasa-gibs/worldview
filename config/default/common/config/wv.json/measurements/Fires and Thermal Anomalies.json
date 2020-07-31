@@ -37,7 +37,9 @@
                     "description": "modis/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
-                        "MODIS_Combined_Thermal_Anomalies_All"
+                        "MODIS_Combined_Thermal_Anomalies_All",
+                        "MODIS_Combined_Thermal_Anomalies_Day",
+                        "MODIS_Combined_Thermal_Anomalies_Night"
                     ]
                 },
                 "Suomi NPP/VIIRS": {

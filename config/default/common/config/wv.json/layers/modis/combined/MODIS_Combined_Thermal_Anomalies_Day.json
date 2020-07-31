@@ -3,7 +3,7 @@
     "MODIS_Combined_Thermal_Anomalies_Day": {
       "id": "MODIS_Combined_Thermal_Anomalies_Day",
       "title": "Fires and Thermal Anomalies (Day)",
-      "subtitle": "Combined / MODIS",
+      "subtitle": "Terra and Aqua / MODIS",
       "tags": "hotspot vectors",
       "group": "overlays",
       "type": "vector",
