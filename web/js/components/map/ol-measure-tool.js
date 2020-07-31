@@ -39,7 +39,11 @@ const vectorLayers = {
   'EPSG:4326': null,
   'EPSG:3031': null,
 };
-const source = new OlVectorSource({ wrapX: false });
+const sources = {
+  'EPSG:3413': new OlVectorSource({ wrapX: false }),
+  'EPSG:4326': new OlVectorSource({ wrapX: false }),
+  'EPSG:3031': new OlVectorSource({ wrapX: false }),
+};
 
 /**
  * A component to add measurement functionality to the OL map
@@ -140,7 +144,7 @@ function OlMeasureTool (props) {
 
   const renderTooltip = (feature, overlay) => {
     const removeFeature = () => {
-      source.removeFeature(feature);
+      sources[crs].removeFeature(feature);
       olMap.removeOverlay(overlay);
       delete allMeasurements[crs][feature.ol_uid];
     };
@@ -197,6 +201,7 @@ function OlMeasureTool (props) {
    */
   function initMeasurement (measureType) {
     const type = measureType === 'area' ? 'Polygon' : 'LineString';
+    const source = sources[crs];
     if (draw) {
       olMap.removeInteraction(draw);
     }
@@ -258,7 +263,7 @@ function OlMeasureTool (props) {
     Object.values(allMeasurements[crs]).forEach(
       ({ feature, overlay }) => {
         olMap.removeOverlay(overlay);
-        source.removeFeature(feature);
+        sources[crs].removeFeature(feature);
       },
     );
 
