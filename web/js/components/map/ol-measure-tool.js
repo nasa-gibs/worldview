@@ -71,7 +71,7 @@ function OlMeasureTool (props) {
         map.ui.events.off('measure-clear', clearMeasurements);
       }
     };
-  }, [map]);
+  }, [map, unitOfMeasure]);
 
   useEffect(recalculateAllMeasurements, [unitOfMeasure]);
 
