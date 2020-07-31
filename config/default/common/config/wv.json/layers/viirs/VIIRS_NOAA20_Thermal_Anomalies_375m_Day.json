@@ -5,7 +5,7 @@
           "title": "Fires and Thermal Anomalies (Day, 375m)",
           "subtitle": "NOAA-20 / VIIRS",
           "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
-          "tags": "hotspot noaa20 jpss1 jpss vectors",
+          "tags": "hotspots noaa20 jpss1 jpss vectors",
           "group":    "overlays",
           "type":     "vector",
           "vectorStyle": {

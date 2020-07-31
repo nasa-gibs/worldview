@@ -5,7 +5,7 @@
       "title": "Fires and Thermal Anomalies (Day)",
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Thermal_Anomalies_All",
-      "tags": "hotspot vectors",
+      "tags": "hotspots vectors",
       "group": "overlays",
       "period": "daily",
       "layergroup": [

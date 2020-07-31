@@ -5,7 +5,7 @@
       "title": "Fires and Thermal Anomalies (Day and Night)",
       "subtitle": "Terra and Aqua / MODIS",
       "description": "modis/combined/MODIS_Combined_Thermal_Anomalies_All",
-      "tags": "hotspot vectors",
+      "tags": "hotspots vectors",
       "group": "overlays",
       "period": "daily",
       "type": "vector",
