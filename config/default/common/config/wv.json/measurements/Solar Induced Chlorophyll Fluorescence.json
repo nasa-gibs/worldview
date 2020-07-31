@@ -3,7 +3,7 @@
         "Solar Induced Chlorophyll Fluorescence": {
             "id": "solar-induced-chlorophyll-fluorescence",
             "title":    "Solar Induced Chlorophyll Fluorescence",
-            "subtitle": "OCO-2",
+            "subtitle": "OCO-2, OCO-3",
             "sources": {
                 "OCO-2": {
                     "id": "oco-2",
@@ -16,7 +16,18 @@
                         "OCO-2_Solar_Induced_Florescence_Blended",
                         "OrbitTracks_OCO-2_Ascending"
                     ]
-                }
+                },
+                "OCO-3": {
+                    "id": "oco-3",
+                    "title": "OCO-3",
+                     "description": "oco3/SolarInducedFluorescence",
+                    "image": "",
+                    "settings": [
+                         "OCO-3_Solar_Induced_Florescence_771nm",
+                         "OCO-3_Solar_Induced_Florescence_757nm",
+                        "OCO-3_Solar_Induced_Florescence_Blended"
+                    ]
+                 }
             }
         }
     }

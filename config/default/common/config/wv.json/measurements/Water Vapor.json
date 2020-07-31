@@ -3,7 +3,7 @@
         "Water Vapor": {
             "id": "water-vapor",
             "title":    "Water Vapor",
-            "subtitle": "Aqua/MODIS, Aura/MLS, Terra/MODIS, GCOM-W1/AMSR2, OCO-2, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
+            "subtitle": "Aqua/MODIS, Aura/MLS, Terra/MODIS, GCOM-W1/AMSR2, OCO-2, OCO-3, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -72,6 +72,15 @@
                     "settings": [
                         "OCO-2_Water_Vapor_Total_Column_Average",
                         "OrbitTracks_OCO-2_Ascending"
+                    ]
+                },
+                "OCO-3": {
+                    "id": "oco-3",
+                    "title": "OCO-3",
+                    "description": "oco3/WaterVapor",
+                    "image": "",
+                    "settings": [
+                        "OCO-3_Water_Vapor_Total_Column_Average"
                     ]
                 },
                     "DMSP-F08/SSMI": {
