@@ -213,7 +213,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     let hitQueryStartDate = false;
     let hitSelectedDate = false;
     return granuleDateKeys.reduce((granuleDateObjects, item) => {
-      if (item === queryStart) {
+      if (!hitQueryStartDate && (item === queryStart || new Date(item) > startQueryDate)) {
         hitQueryStartDate = true;
       }
       if (hitQueryStartDate && !hitSelectedDate) {
@@ -376,6 +376,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
     // layer.wv = Object.assign(attributes, granuleAttributes);
+    // console.log(layer.wv);
 
     // create geometry object with date:polygons key/value pair filtering out granules outside date range
     const granuleGeometry = filteredGranules.reduce((dates, granuleObject) => {

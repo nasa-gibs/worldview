@@ -22,7 +22,7 @@ import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import { createVectorUrl, mergeBreakpointLayerAttributes } from './util';
 import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
-import granuleLayerBuilder from './granule/granuleLayerBuilder';
+import granuleLayerBuilder from './granule/granule-layer-builder';
 import {
   isActive as isPaletteActive,
   getKey as getPaletteKeys,

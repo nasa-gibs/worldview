@@ -664,34 +664,6 @@ export default function mapui(models, config, store, ui) {
     const { isGranule } = def;
     if (isGranule) {
       updateGranuleLayerOpacity(def, activeStr, opacity, compare);
-      // const layersCollection = self.selected.getLayers().getArray();
-      // lodashEach(Object.keys(layersCollection), (layerIndex) => {
-      //   const isTile = layersCollection[layerIndex].type === 'TILE';
-      //   const isVector = layersCollection[layerIndex].type === 'VECTOR';
-      //   if (!isTile && !isVector) {
-      //     const layerGroup = layersCollection[layerIndex];
-      //     const layerGroupCollection = layerGroup.getLayers().getArray();
-      //     if (compare && compare.active) {
-      //       lodashEach(Object.keys(layerGroupCollection), (layerGroupIndex) => {
-      //         const islayerGroupTile = layerGroupCollection[layerGroupIndex].type === 'TILE';
-      //         if (!islayerGroupTile && !layerGroupCollection[layerGroupIndex].wv) {
-      //           const innerLayerGroupCollection = layerGroupCollection[layerGroupIndex];
-      //           const tileLayer = innerLayerGroupCollection.getLayers().getArray();
-      //           // inner tile layer
-      //           if (tileLayer[0].wv && def.id === tileLayer[0].wv.id) {
-      //             if (tileLayer[0].wv.group === activeStr) {
-      //               innerLayerGroupCollection.setOpacity(opacity);
-      //             }
-      //           }
-      //         }
-      //       });
-      //     } else if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
-      //       if (layerGroupCollection[0].wv.group === activeStr) {
-      //         layerGroup.setOpacity(opacity);
-      //       }
-      //     }
-      //   }
-      // });
     } else {
       const layer = findLayer(def, activeStr);
       layer.setOpacity(opacity);
