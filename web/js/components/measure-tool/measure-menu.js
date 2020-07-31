@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { Form } from 'reactstrap';
+
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits } from '../../modules/measure/actions';
@@ -20,6 +21,20 @@ const OPTIONS_ARRAY = [
     iconName: 'faRulerCombined',
     id: 'measure-area-button',
     key: 'measure-area',
+  },
+  {
+    text: 'Download as Shapefiles',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faDownload',
+    id: 'download-shapefiles-button',
+    key: 'measure-download-shapefile',
+  },
+  {
+    text: 'Download as GeoJSON',
+    iconClass: 'ui-icon icon-large',
+    iconName: 'faDownload',
+    id: 'download-geojson-button',
+    key: 'measure-download-geojson',
   },
   {
     text: 'Remove Measurements',

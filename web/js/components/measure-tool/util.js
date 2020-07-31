@@ -3,6 +3,8 @@ import {
   Polygon as OlGeomPolygon,
 } from 'ol/geom';
 import geographiclib from 'geographiclib';
+import shpWrite from 'shp-write';
+import FileSaver from 'file-saver';
 
 const geod = geographiclib.Geodesic.WGS84;
 const geographicProj = 'EPSG:4326';
@@ -120,4 +122,49 @@ export function getGeographicLibDistance(line) {
     totalDistance += r.s12;
   });
   return totalDistance;
+}
+
+function getFeatureJSON(measurements) {
+  return {
+    type: 'FeatureCollection',
+    features: Object.values(measurements).map(({ feature, overlay }) => {
+      const geometry = feature.getGeometry();
+      const type = geometry.getType();
+      const [coordinates] = type === 'Polygon'
+        ? geometry.getCoordinates()
+        : [geometry.getCoordinates()];
+      return {
+        type: 'Feature',
+        geometry: {
+          type,
+          coordinates,
+        },
+        properties: {
+          name: overlay.element.innerText,
+        },
+      };
+    }),
+  };
+}
+
+export function downloadShapefiles(measurements) {
+  // (optional) set names for feature types and zipped folder
+  const options = {
+    folder: 'worldviewMeasurements',
+    types: {
+      polygon: 'areaMeasurements',
+      line: 'distanceMeasurements',
+    },
+  };
+  shpWrite.download(getFeatureJSON(measurements), options);
+}
+
+export function downloadGeoJSON(measurements) {
+  const name = 'worldviewMeasurements.json';
+  const data = JSON.stringify(getFeatureJSON(measurements), undefined, 2);
+  const blob = new Blob([data], {
+    type: 'application/json',
+    name,
+  });
+  FileSaver.saveAs(blob, name);
 }
