@@ -258,66 +258,71 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
   const layers = layer
     ? [lodashFind(activeLayers, { id: layer })]
     : activeLayers;
+  const setMax = (newMax) => {
+    max = newMax;
+    maxDates.push(new Date(max));
+  };
 
   layers.forEach((def) => {
     if (!def) {
       return;
     }
-    if (def.startDate) {
+    const {
+      startDate, endDate, futureLayer, futureTime, inactive,
+    } = def;
+    const start = startDate && util.parseDateUTC(startDate).getTime();
+    const end = endDate && util.parseDateUTC(endDate).getTime();
+
+    if (startDate) {
       range = true;
-      const start = util.parseDateUTC(def.startDate).getTime();
       min = Math.min(min, start);
     }
 
     // For now, we assume that any layer with an end date is
     // an ongoing product unless it is marked as inactive.
-    if (def.futureLayer && def.endDate) {
+    if (futureLayer && endDate) {
       range = true;
-      max = util.parseDateUTC(def.endDate).getTime();
-      maxDates.push(new Date(max));
-    } else if (def.inactive && def.endDate) {
+      setMax(end);
+
+    // Historcal products
+    } else if (inactive && endDate) {
       range = true;
-      const end = util.parseDateUTC(def.endDate).getTime();
-      max = Math.max(max, end);
-      maxDates.push(new Date(max));
-    } else if (def.endDate) {
+      setMax(Math.max(max, end));
+
+    // Ongoing
+    } else if (endDate) {
       range = true;
-      max = minuteCeilingCurrentTime;
-      maxDates.push(new Date(max));
+      setMax(minuteCeilingCurrentTime);
     }
+
+    if (futureLayer && futureTime && !endDate) {
+      max = new Date();
+      const dateType = futureTime.slice(-1);
+      const dateInterval = parseInt(futureTime.slice(0, -1), 10);
+      if (dateType === 'D') {
+        setMax(max.setDate(max.getDate(), dateInterval));
+      } else if (dateType === 'M') {
+        setMax(max.setMonth(max.getMonth(), dateInterval));
+      } else if (dateType === 'Y') {
+        setMax(max.setYear(max.getYear(), dateInterval));
+      }
 
     // If there is a start date but no end date, this is a
     // product that is currently being created each day, set
     // the max day to today.
-    if (def.futureLayer && def.futureTime && !def.endDate) {
-      // Calculate endDate + parsed futureTime from layer JSON
-      max = new Date();
-      const { futureTime } = def;
-      const dateType = futureTime.slice(-1);
-      const dateInterval = futureTime.slice(0, -1);
-
-      if (dateType === 'D') {
-        max.setDate(max.getDate() + parseInt(dateInterval, 10));
-        maxDates.push(new Date(max));
-      } else if (dateType === 'M') {
-        max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
-        maxDates.push(new Date(max));
-      } else if (dateType === 'Y') {
-        max.setYear(max.getYear() + parseInt(dateInterval, 10));
-        maxDates.push(new Date(max));
-      }
-    } else if (def.startDate && !def.endDate) {
-      max = minuteCeilingCurrentTime;
-      maxDates.push(new Date(max));
+    } else if (startDate && !endDate) {
+      // Setting max date to now ignores possible discrete available
+      // date ranges between def.startDate and now.
+      setMax(minuteCeilingCurrentTime);
     }
   });
 
   if (range) {
+    // TODO what case is this handling?
     if (max === 0) {
-      max = minuteCeilingCurrentTime;
-      maxDates.push(max);
+      setMax(minuteCeilingCurrentTime);
     }
-    const maxDate = Math.max.apply(max, maxDates);
+    const maxDate = Math.max(max, ...maxDates);
     return {
       start: new Date(min),
       end: new Date(maxDate),
