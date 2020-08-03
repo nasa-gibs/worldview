@@ -1,0 +1,1 @@
+References: [OCO3_L2_Lite_SIF: OCO-3 Level 2 bias-corrected solar-induced fluorescence and other select fields from the IMAP-DOAS algorithm aggregated as daily files, Retrospective processing VEarlyR](https://disc.gsfc.nasa.gov/datasets/OCO3_L2_Lite_SIF_EarlyR/summary?keywords=OCO3_L2_Lite_SIF_EarlyR)
