@@ -4,7 +4,7 @@
       "id": "OrbitTracks_OCO-2_Ascending",
       "title": "OCO-2 - Orbit Track & Time",
       "subtitle": "OCO-2 / Space-Track.org",
-      "description": "",
+      "description": "reference/orbits/OrbitTracks_OCO_2_Ascending",
       "group": "overlays",
       "format": "image/png",
       "type": "wms",
@@ -36,7 +36,7 @@
         "id": "OrbitTracks_OCO-2_Ascending",
         "immutable": true
       },
-      "tags": "tracks day"
+      "tags": "tracks day oco2"
     }
   }
 }
