@@ -1,7 +1,7 @@
 Note: The Fire and Thermal Anomalies layers are now vectors! Zoom in and click on a point to examine the attributes. Attribute information include Latitude, Longitude, Brightness Temperature (Channel I-4, Brightness Temperature (Channel I-5), Fire Radiative Power, Detection Confidence, Day/Night Flag, Along-Scan Pixel Size, Along-track Pixel Size, Acquisition Date, Acquisition Time, Satellite, Collection and Source, and Unique Identifier.
 
 ### VIIRS (Suomi NPP and NOAA-20) Fires and Thermal Anomalies (Day | Night, 375m)
-Temporal coverage: 24 November 2015 - present (Suomi-NPP); 19 January 2020 - present (NOAA-20)
+Temporal coverage: 20 January 2012 - present (Suomi NPP); 1 January 2020 - present (NOAA-20)
 
 The VIIRS (Visible Infrared Imaging Radiometer Suite) Fire layer shows active fire detections and thermal anomalies, such as volcanoes, and gas flares. Fires can be set naturally, such as by lightning, or by humans, whether intentionally or accidentally. Fire is often thought of as a menace and detriment to life, but in some ecosystems it is necessary to maintain the equilibrium, for example, some plants only release seeds under high temperatures that can only be achieved by fire, fires can also clear undergrowth and brush to help restore forests to good health, humans use fire in slash and burn agriculture, to clear away last year’s crop stubble and provide nutrients for the soil and to clear areas for pasture. The fire layer is useful for studying the spatial and temporal distribution of fire, to locate persistent hot spots such as volcanoes and gas flares, to locate the source of air pollution from smoke that may have adverse human health impacts.
 

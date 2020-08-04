@@ -20,7 +20,6 @@
         "immutable": true
       },
       "transition": "true",
-      "startDate": "2020-01-29",
       "breakPointLayer": {
         "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Night",
         "type": "wms",

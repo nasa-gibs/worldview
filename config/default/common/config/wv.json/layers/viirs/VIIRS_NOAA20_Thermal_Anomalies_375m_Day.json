@@ -22,7 +22,6 @@
               "immutable": true
           },
           "transition": "true",
-          "startDate": "2020-01-29",
           "tracks": [
             "OrbitTracks_NOAA-20_Ascending"
           ],

@@ -15,7 +15,6 @@
         }
       },
       "transition": "true",
-      "startDate": "2012-05-08",
       "period": "daily",
       "layergroup": [
         "modis",
