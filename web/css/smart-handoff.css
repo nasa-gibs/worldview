@@ -19,7 +19,33 @@
     display: block;
     margin: 15px auto;
 }
+#smart-handoff-layer-list {
+    margin-top: 15px;
+    display: block;
+    color: white;
+}
+#smart-handoff-layer-list .layer-item {
+    padding: 10px 20px;
+}
 
+#smart-handoff-layer-list .layer-item label {
+    display: block;
+    margin-top: -20px;
+    margin-left: 20px;
+}
+
+#smart-handoff-layer-list .layer-item span {
+    color: gray;
+    margin-left: 20px;
+    font-size: 9pt;
+}
+
+#smart-handoff-layer-list .layer-item hr {
+    border-top: 1px solid #555;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+}
 
 /** Overrides react image crop component  **/
 .ReactCrop {

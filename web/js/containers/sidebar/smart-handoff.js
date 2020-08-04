@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce } from 'lodash';
 import SmartHandoffModal from './smart-handoff-modal';
-// import Products from '../../components/sidebar/product';
 import Button from '../../components/util/button';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
 import { getLayers } from '../../modules/layers/selectors';
-import { getDataProductsFromActiveLayers } from '../../modules/data/selectors';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { openCustomContent } from '../../modules/modal/actions';
 import { changeCropBounds } from '../../modules/animation/actions';
@@ -31,6 +29,7 @@ class SmartHandoff extends Component {
     const {
       screenWidth,
       screenHeight,
+      selectedDate,
       onBoundaryChange,
     } = props;
 
@@ -41,6 +40,8 @@ class SmartHandoff extends Component {
         x2: screenWidth / 2 + 100,
         y2: screenHeight / 2 + 100,
       },
+      selectedDate,
+      selectedLayer: null,
     };
 
     this.debounceBoundaryUpdate = lodashDebounce(onBoundaryChange, 200);
@@ -66,6 +67,10 @@ class SmartHandoff extends Component {
     this.debounceBoundaryUpdate(newBoundaries);
   }
 
+  onLayerSelected(layer) {
+    this.setState({ selectedLayer: layer });
+  }
+
   /**
    * Default render which displays the data-download panel
    */
@@ -76,9 +81,7 @@ class SmartHandoff extends Component {
       screenWidth,
       screenHeight,
       proj,
-      products,
-      // selectedProduct,
-      // selectProduct,
+      activeLayers,
       isActive,
       showWarningModal,
     } = this.props;
@@ -87,7 +90,7 @@ class SmartHandoff extends Component {
     if (!isActive) return null;
 
     /** Bounardies referencing the coordinates displayed around image crop */
-    const { boundaries } = this.state;
+    const { boundaries, selectedDate, selectedLayer } = this.state;
     const {
       x, y, x2, y2,
     } = boundaries;
@@ -111,61 +114,39 @@ class SmartHandoff extends Component {
 
     const showModal = true;
 
-
-    /** Contains available imagery data that can be downloaded in Earthdata Search */
-    // const dataArray = Object.entries(products); // TO-DO: Display the correct products based on availablility
-    const dataArray = Object.entries(products);
-    // if (dataArray.length > 0 && !selectedProduct && isActive) {
-    // findProductToSelect(activeLayers, selectedProduct);
-    // } else if (selectedProduct && !doesSelectedExist(dataArray, selectedProduct)) {
-    // findProductToSelect(activeLayers, selectedProduct);
-    // }
-
     return (
-      <div id="smart-handoff-panel">
+      <div id="smart-handoff-side-panel">
         <h1>Select a layer to download:</h1>
 
-        { /** Listing of layers that are available to download via Earthdata Search */ }
-        <div id="smart-handoff-product-list">
-          {dataArray.map((product, i) => {
-            if (!product[1].notSelectable) {
+        {/** Listing of layers that are available to download via Earthdata Search */}
+        <div id="smart-handoff-layer-list">
+          {activeLayers.map((layer, i) => {
+            if (layer.conceptId) {
               return (
-                <ul key={product[0]}>
-                  <li>
-                    Label:
-                    {' '}
-                    {product[1].items[0].label}
-                  </li>
-                  <li>
-                    Sub Label:
-                    {' '}
-                    {product[1].items[0].sublabel}
-                  </li>
-                  <li>
-                    Value:
-                    {' '}
-                    {product[1].items[0].value}
-                  </li>
-                  <li>
-                    Title:
-                    {' '}
-                    {product[1].title}
-                  </li>
-                  <li>{product[0]}</li>
-                </ul>
+                <div key={layer.conceptId} className="layer-item">
+                  <input
+                    id={layer.id}
+                    type="radio"
+                    value={layer.conceptId}
+                    name="smart-handoff-layer-radio"
+                    onClick={() => this.onLayerSelected(layer)}
+                  />
+                  <label htmlFor={layer.id}>{layer.title}</label>
+                  <span>{layer.subtitle}</span>
+                  <hr />
+
+                </div>
               );
             }
-            return (
-              <div>Nothing to see here...</div>
-            );
+            return null;
           })}
         </div>
 
         { /** Download button that transfers user to NASA's Earthdata Search */ }
         <Button
           onClick={() => {
-            if (showModal) showWarningModal(extentCoords);
-            else openEarthDataSearch(extentCoords)();
+            if (showModal) showWarningModal(selectedDate, selectedLayer, extentCoords);
+            else openEarthDataSearch(selectedDate, selectedLayer, extentCoords)();
           }}
           id="download-btn"
           text="Download"
@@ -205,12 +186,13 @@ class SmartHandoff extends Component {
   }
 }
 
-const openEarthDataSearch = (extentCoords) => () => {
-  // TO-DO: Need to capture boundaries, layer data, etc; whatever essentials for Earthdata Search
-  window.open(`https://search.earthdata.nasa.gov/search?sb=${
-    extentCoords.southWest},${extentCoords.northEast}&m=-30.59375!-210.9375!0!1!0!0,2`, '_blank');
-
-  /*
+const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () => {
+  const { conceptId } = selectedLayer;
+  const { southWest, northEast } = extentCoords;
+  const date = selectedDate.toISOString();
+  const earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&pg[0][qt]=${date}&pg[0][dnf]=DAY&sb=${southWest},${northEast}&m=-30.59375!-210.9375!0!1!0!0,2`;
+  window.open(earthDataSearchURL, '_blank');
+  /* Example URL string
     https://search.earthdata.nasa.gov/search/granules?
       p=C1000001167-NSIDC_ECS
       &pg[0][qt]=2017-11-15T00%3A00%3A00.000Z%2C2017-11-15T23%3A59%3A59.999Z
@@ -228,15 +210,14 @@ const openEarthDataSearch = (extentCoords) => () => {
 SmartHandoff.propTypes = {
   isLayerSelected: PropTypes.bool,
   isActive: PropTypes.bool,
-  products: PropTypes.object,
-  selectedProduct: PropTypes.string,
-  selectProduct: PropTypes.func,
+  activeLayers: PropTypes.array,
   map: PropTypes.object.isRequired,
   onBoundaryChange: PropTypes.func,
   boundaries: PropTypes.object,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
+  selectedDate: PropTypes.instanceOf(Date),
   showWarningModal: PropTypes.func,
 };
 
@@ -250,28 +231,21 @@ SmartHandoff.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { tabTypes } = ownProps;
   const {
-    browser, layers, map, proj, data, config, compare, sidebar, boundaries,
+    browser, layers, map, proj, date, compare, sidebar, boundaries,
   } = state;
   const { screenWidth, screenHeight } = browser;
-  const { selectedProduct } = data;
   const { activeString } = compare;
   const activeLayers = getLayers(layers[activeString], { proj: proj.id });
-  const products = getDataProductsFromActiveLayers(
-    activeLayers,
-    config,
-    proj.id,
-  );
   return {
+    activeLayers,
+    boundaries,
+    isActive: sidebar.activeTab === 'download',
+    map,
+    proj: proj.selected,
     screenWidth,
     screenHeight,
-    boundaries,
-    proj: proj.selected,
-    map,
-    selectedProduct,
-    products,
+    selectedDate: date.selected,
     tabTypes,
-    activeLayers,
-    isActive: sidebar.activeTab === 'download',
   };
 };
 
@@ -280,14 +254,14 @@ const mapStateToProps = (state, ownProps) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: (extentCoords) => {
+  showWarningModal: (selectedDate, selectedLayer, extentCoords) => {
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
         headerText: 'Leaving Worldview',
         bodyComponent: SmartHandoffModal,
         bodyComponentProps: {
           extentCoords,
-          goToEarthDataSearch: openEarthDataSearch(extentCoords),
+          goToEarthDataSearch: openEarthDataSearch(selectedDate, selectedLayer, extentCoords),
         },
         size: 'lg',
       }),
