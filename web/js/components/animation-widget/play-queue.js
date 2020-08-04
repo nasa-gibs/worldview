@@ -69,13 +69,13 @@ class PlayAnimation extends React.Component {
    * @returns {string} Date string
    */
   getLastBufferDateStr = function(currentDate, startDate, endDate) {
-    const { queueLength, loop } = this.props;
+    const { queueLength, isLoopActive } = this.props;
     let day = currentDate;
     let i = 1;
 
     while (i < queueLength) {
       if (this.nextDate(day) > endDate) {
-        if (!loop) {
+        if (!isLoopActive) {
           return util.toISOStringSeconds(day);
         }
         day = startDate;
@@ -144,8 +144,8 @@ class PlayAnimation extends React.Component {
    * Check if we should loop
    */
   checkShouldLoop() {
-    const { loop, startDate, togglePlaying } = this.props;
-    if (loop) {
+    const { isLoopActive, startDate, togglePlaying } = this.props;
+    if (isLoopActive) {
       this.shiftCache();
       this.currentPlayingDate = util.toISOStringSeconds(startDate);
       setTimeout(() => {
@@ -318,14 +318,14 @@ class PlayAnimation extends React.Component {
    */
   isInToPlayGroup(testDate) {
     const {
-      startDate, endDate, loop, queueLength,
+      startDate, endDate, isLoopActive, queueLength,
     } = this.props;
     let i = 0;
     let day = util.parseDateUTC(this.currentPlayingDate);
     const jsTestDate = util.parseDateUTC(testDate);
     while (i < queueLength) {
       if (this.nextDate(day) > endDate) {
-        if (!loop) {
+        if (!isLoopActive) {
           return false;
         }
         day = startDate;
@@ -358,9 +358,9 @@ class PlayAnimation extends React.Component {
     this.addToInQueue(date);
     this.queue
       .add(() => promiseImageryForTime(date, activeLayers))
-      .then((date) => {
+      .then((addedDate) => {
         if (this.mounted) {
-          this.preloadObject[strDate] = date;
+          this.preloadObject[strDate] = addedDate;
           delete this.inQueueObject[strDate];
           this.shiftCache();
           this.checkQueue();
@@ -400,9 +400,8 @@ class PlayAnimation extends React.Component {
       selectDate, endDate, speed, isPlaying,
     } = this.props;
     let currentDateStr = index;
-    let nextDateStr; let
-      nextDateParsed;
-
+    let nextDateStr;
+    let nextDateParsed;
     const player = () => {
       if (!this.mounted) {
         return clearInterval(this.interval);
@@ -488,7 +487,7 @@ PlayAnimation.propTypes = {
   delta: PropTypes.number,
   hasCustomPalettes: PropTypes.bool,
   interval: PropTypes.string,
-  loop: PropTypes.bool,
+  isLoopActive: PropTypes.bool,
   maxQueueLength: PropTypes.number,
   onClose: PropTypes.func,
 };

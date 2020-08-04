@@ -608,7 +608,7 @@ class AnimationWidget extends React.Component {
       <ErrorBoundary>
         {isPlaying && (
           <PlayQueue
-            loop={looping}
+            isLoopActive={looping}
             isPlaying={isPlaying}
             canPreloadAll={queueLength <= maxLength}
             currentDate={snappedCurrentDate}
