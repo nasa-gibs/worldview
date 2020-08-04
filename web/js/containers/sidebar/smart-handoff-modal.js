@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '../../components/util/button';
@@ -10,41 +10,50 @@ import Button from '../../components/util/button';
  * layer data and granule files that are available for download.
  */
 function SmartHandoffModal({ extentCoords, goToEarthDataSearch }) {
+  // Hides Earthdata Search information by default
+  const [showMoreInfo, toggleInfo] = useState(false);
+
   return (
 
     <div>
 
-      <div id="modal-heading">
+      <div id="smart-handoff-heading">
         <img src="../../../images/earth-data-search-logo.jpg" />
-        search.earthdata.nasa.gov
+        <h1>search.earthdata.nasa.gov</h1>
       </div>
 
-      <div id="modal-message">
+      <div id="smart-handoff-message">
         You are about to be transferred to the NASA Earthdata Search tool. This tool is used to download
-        data granules using the currently selected layer, area of interest, and date.
+        data granules using the selected layer, area of interest, and current date.
       </div>
 
-      <hr />
+      { showMoreInfo
+      && (
+      <div id="smart-handoff-about">
+        <h1 id="about-heading">About Earthdata Search</h1>
+        <div id="about-section">
+          <p>
+            Earthdata Search provides the only means for data discovery, filtering, visualization, and
+            access across all of NASA Earth science data holdings. The current selected layer and the designated
+            viewport region within Worldview will be transferred to Earthdata Search.
+          </p>
+          <p>
+            More information to be documented later... Earthdata Search provides the only means for data discovery, filtering, visualization, and
+            access across all of NASA Earth science data holdings. The current selected layer and the designated
+            viewport region within Worldview will be transferred to Earthdata Search.
+          </p>
+          <p>
+            More information to be documented later... Earthdata Search provides the only means for data discovery, filtering, visualization, and
+            access across all of NASA Earth science data holdings. The current selected layer and the designated
+            viewport region within Worldview will be transferred to Earthdata Search.
+          </p>
+        </div>
+      </div>
+      )}
 
-      <span>{extentCoords.southWest}</span>
-
-      <div id="toggle-more-info">Show more</div>
-
-      <h1 id="about-heading">About Earthdata Search</h1>
-
-      <p>
-        Earthdata Search provides the only means for data discovery, filtering, visualization, and
-        access across all of NASA Earth science data holdings. Excepteur sint occaecat cupidatat non proident,
-        sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-
-      <p>
-        The current selected layer and the designated viewport region within Worldview will be transferred to
-        Earthdata Search. At vero eostui noir benet accusamus et iusto odio dignissimos ducimus qui blanditiis
-        praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati
-        cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum
-        et dolorum fuga
-      </p>
+      <div id="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
+        {showMoreInfo ? 'Hide Info' : 'Show More Info'}
+      </div>
 
       <div id="layer-info">
         <h1> Selected layer to download: </h1>
@@ -72,7 +81,6 @@ function SmartHandoffModal({ extentCoords, goToEarthDataSearch }) {
 
   );
 }
-
 
 /**
  * Handle type-checking of defined properties

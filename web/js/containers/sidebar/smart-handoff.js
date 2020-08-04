@@ -72,11 +72,11 @@ class SmartHandoff extends Component {
   render() {
     const {
       isLayerSelected,
-      // products,
       map,
       screenWidth,
       screenHeight,
       proj,
+      products,
       // selectedProduct,
       // selectProduct,
       isActive,
@@ -114,28 +114,51 @@ class SmartHandoff extends Component {
 
     /** Contains available imagery data that can be downloaded in Earthdata Search */
     // const dataArray = Object.entries(products); // TO-DO: Display the correct products based on availablility
+    const dataArray = Object.entries(products);
+    // if (dataArray.length > 0 && !selectedProduct && isActive) {
+    // findProductToSelect(activeLayers, selectedProduct);
+    // } else if (selectedProduct && !doesSelectedExist(dataArray, selectedProduct)) {
+    // findProductToSelect(activeLayers, selectedProduct);
+    // }
 
     return (
-      <div>
+      <div id="smart-handoff-panel">
         <h1>Select a layer to download:</h1>
 
         { /** Listing of layers that are available to download via Earthdata Search */ }
-        <div id="wv-data">
-          <div className="wv-datalist sidebar-panel content">
-            <div id="wv-datacontent">
-              { /**
-              {dataArray.map((product, i) => (
-                <Products
-                  key={product[0]}
-                  id={product[0]}
-                  productObject={product[1]}
-                  isSelected={selectedProduct === product[0]}
-                  selectProduct={selectProduct}
-                />
-              ))}
-              */}
-            </div>
-          </div>
+        <div id="smart-handoff-product-list">
+          {dataArray.map((product, i) => {
+            if (!product[1].notSelectable) {
+              return (
+                <ul key={product[0]}>
+                  <li>
+                    Label:
+                    {' '}
+                    {product[1].items[0].label}
+                  </li>
+                  <li>
+                    Sub Label:
+                    {' '}
+                    {product[1].items[0].sublabel}
+                  </li>
+                  <li>
+                    Value:
+                    {' '}
+                    {product[1].items[0].value}
+                  </li>
+                  <li>
+                    Title:
+                    {' '}
+                    {product[1].title}
+                  </li>
+                  <li>{product[0]}</li>
+                </ul>
+              );
+            }
+            return (
+              <div>Nothing to see here...</div>
+            );
+          })}
         </div>
 
         { /** Download button that transfers user to NASA's Earthdata Search */ }
@@ -186,6 +209,17 @@ const openEarthDataSearch = (extentCoords) => () => {
   // TO-DO: Need to capture boundaries, layer data, etc; whatever essentials for Earthdata Search
   window.open(`https://search.earthdata.nasa.gov/search?sb=${
     extentCoords.southWest},${extentCoords.northEast}&m=-30.59375!-210.9375!0!1!0!0,2`, '_blank');
+
+  /*
+    https://search.earthdata.nasa.gov/search/granules?
+      p=C1000001167-NSIDC_ECS
+      &pg[0][qt]=2017-11-15T00%3A00%3A00.000Z%2C2017-11-15T23%3A59%3A59.999Z
+      &pg[0][dnf]=DAY
+      &sb=-156.69223022460938%2C54.284636794532624%2C-133.9395446777344%2C70.07726383377425
+      &m=59.6953125!-179.015625!3!1!0!0%2C2
+      &ff=Customizable
+      &tl=1571168792!4!!
+  */
 };
 
 /**
@@ -194,9 +228,9 @@ const openEarthDataSearch = (extentCoords) => () => {
 SmartHandoff.propTypes = {
   isLayerSelected: PropTypes.bool,
   isActive: PropTypes.bool,
-  // products: PropTypes.object,
-  // selectedProduct: PropTypes.string,
-  // selectProduct: PropTypes.func,
+  products: PropTypes.object,
+  selectedProduct: PropTypes.string,
+  selectProduct: PropTypes.func,
   map: PropTypes.object.isRequired,
   onBoundaryChange: PropTypes.func,
   boundaries: PropTypes.object,

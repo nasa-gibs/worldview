@@ -1,40 +1,62 @@
 
-/** Overrides default modal-content CSS */
-#transferring-to-earthdata-search .modal-content {
-    background: #191a1b !important;
-    border: 1px solid #444 !important;
-}
-
-/** Overrides default modal-content CSS */
-#transferring-to-earthdata-search .modal-header {
-    border-bottom: 1px solid #444 !important;
-}
-
-h1 {
+/** Smart handoff side panel **/
+#smart-handoff-side-panel h1 {
     margin-top: 10px;
     margin-left: 5px;
     color: gray;
 }
-
-#modal-heading {
-    text-align: right;
-    font-size: 14pt;
-    color: #e94d19;
-    margin-bottom: 15px;
+#smart-handoff-product-list {
+    color: white;
 }
-
-#about-heading {
-    font-size: 9pt;
-    color: #e94d19;
-    margin: 15px 0;
-
+#button-group {
+    text-align: center;
 }
-
+#cancel-btn, #continue-btn {
+    width: 200px;
+    margin: 5px;
+}
 #download-btn {
     display: block;
     margin: 15px auto;
 }
 
+
+/** Overrides react image crop component  **/
+.ReactCrop {
+    cursor: pointer !important;
+    z-index: 0 !important;
+}
+
+/** Smart handoff modal */
+#smart-handoff-heading {
+    margin-bottom: 15px;
+}
+#smart-handoff-heading h1 {
+    float: right;
+    font-size: 14pt;
+    line-height: 32px;
+    color: #e94d19;
+}
+#smart-handoff-message {
+    line-height: 1.25em;
+    text-align: left;
+    font-size: 12pt;
+    color: #DDD;
+}
+#about-section {
+    overflow-y: scroll;
+    height: 175px;
+}
+#about-section p {
+    color: #BBB;
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+#about-heading {
+    font-size: 9pt;
+    color: #e94d19;
+    margin: 25px 0 10px 0;
+}
 #layer-info {
     text-align: center;
     background: #535353;
@@ -43,27 +65,33 @@ h1 {
     padding: 20px;
     margin: 25px 0;
 }
-
 #layer-info h1 {
     font-size: 10pt;
     color: #AAA;
     margin: 0;
     margin-bottom: 0.5em;
 }
-
-#button-group {
+#toggle-more-info {
+    margin-top: 25px;
+    color: #777;
+    font-size: 12pt;
     text-align: center;
+    text-decoration: underline;
+}
+#toggle-more-info:hover {
+    color: #e94d19;
+    cursor: pointer;
+    text-decoration: none;
 }
 
-#cancel-btn, #continue-btn {
-    width: 200px;
-    margin: 5px;
+/** Overrides the modal component styles */
+#transferring-to-earthdata-search .modal-content {
+    background: #191a1b !important;
+    border: 1px solid #444 !important;
+}
+#transferring-to-earthdata-search .modal-header {
+    border-bottom: 1px solid #444 !important;
 }
 
 
-/** Override CSS rules for crop component **/
-.ReactCrop {
-    cursor: pointer !important;
-    z-index: 0 !important;
-}
 
