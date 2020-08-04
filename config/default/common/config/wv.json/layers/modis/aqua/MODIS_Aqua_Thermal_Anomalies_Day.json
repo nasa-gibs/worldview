@@ -21,13 +21,12 @@
           }
       },
       "wrapX": false,
-      "wrapadjacentdays": false,
+      "wrapadjacentdays": true,
       "palette": {
           "id": "MODIS_All_Thermal_Anomalies",
           "immutable": true
       },
       "transition": "true",
-      "startDate": "2012-05-08",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],

@@ -24,7 +24,6 @@
       },
       "wrapadjacentdays": true,
       "transition": true,
-      "startDate": "2015-11-25",
       "palette": {
         "id": "VIIRS_All_Thermal_Anomalies",
         "immutable": true

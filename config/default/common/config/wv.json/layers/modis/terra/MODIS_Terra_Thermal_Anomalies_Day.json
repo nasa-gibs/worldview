@@ -15,7 +15,7 @@
       "product": "MOD14",
       "type": "vector",
       "transition": "true",
-      "startDate": "2012-05-08",
+      "wrapadjacentdays": true,
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {

@@ -26,7 +26,6 @@
       },
       "product": "MOD14",
       "transition": true,
-      "startDate": "2012-05-08",
       "breakPointLayer": {
         "id": "MODIS_Terra_Thermal_Anomalies_Night",
         "type": "wms",

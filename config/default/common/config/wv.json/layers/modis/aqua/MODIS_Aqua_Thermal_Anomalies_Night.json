@@ -27,7 +27,6 @@
           "immutable": true
       },
       "transition": true,
-      "startDate": "2012-05-08",
       "tracks": [
         "OrbitTracks_Aqua_Descending"
       ],

@@ -24,7 +24,6 @@
         "modis_terra"
       ],
       "transition": true,
-      "startDate": "2012-05-08",
       "breakPointLayer": {
         "id": "MODIS_Combined_Thermal_Anomalies_All",
         "type": "wms",

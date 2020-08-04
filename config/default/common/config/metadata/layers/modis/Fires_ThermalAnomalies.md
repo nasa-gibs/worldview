@@ -1,7 +1,7 @@
 Note: The Fire and Thermal Anomalies layers are now vectors! Zoom in and click on a point to examine the attributes. Attribute information include Latitude, Longitude, Brightness Temperature (Channel 21/22), Brightness Temperature (Channel 31), Fire Radiative Power, Detection Confidence, Day/Night Flag, Along-Scan Pixel Size, Along-track Pixel Size, Acquisition Date, Acquisition Time, Satellite, Collection and Source, and Unique Identifier.
 
 ### MODIS (Terra/Aqua, Terra & Aqua) Fire and Thermal Anomalies
-Temporal Coverage: 8 May 2012 - present
+Temporal Coverage: 1 November 2000 - present (Terra); 4 July 2002 - present (Aqua); 4 July 2002 - present (Terra & Aqua)
 
 The MODIS Fire and Thermal Anomalies layer shows active fire detections and thermal anomalies, such as volcanoes, and gas flares. Fires can be set naturally, such as by lightning, or by humans, whether intentionally or accidentally. Fire is often thought of as a menace and detriment to life, but in some ecosystems it is necessary to maintain the equilibrium, for example, some plants only release seeds under high temperatures that can only be achieved by fire, fires can also clear undergrowth and brush to help restore forests to good health, humans use fire in slash and burn agriculture, to clear away last year’s crop stubble and provide nutrients for the soil and to clear areas for pasture. The fire layer is useful for studying the spatial and temporal distribution of fire, to locate persistent hot spots such as volcanoes and gas flares, to locate the source of air pollution from smoke that may have adverse human health impacts.
 
