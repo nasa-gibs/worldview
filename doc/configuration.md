@@ -490,3 +490,61 @@ First, stories must be added to `config/default/common/config/wv.json/stories` a
 - Add story step descriptions/metadata & overview background images
   - Create .md file in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`. The *story_id* folder identifier should be labeled the same as the folder identifier in `config/default/common/config/wv.json/stories/`_`[story_id]`_`/`. Each step defined in the metadata folder will need to correspond to the `description` parameter within that file.
 - Rebuild the configuration with `npm run build:config` for use by the application.
+
+### Creating Granule Layer
+Granule layers will require specific configuration options within the `config/wv.json/layers` respective satellite instrument folder.
+
+### Granule Layer Example
+```json
+{
+  "layers": {
+    "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT": {
+      "id": "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT",
+      "title": "Corrected Reflectance (M3-I3-M11, Granules, v1, Near Real-Time, VIIRS, NOAA-20)",
+      "subtitle": "NOAA-20 / VIIRS",
+      "description": "viirs/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
+      "tags": "subdaily",
+      "group": "overlays",
+      "layergroup": [
+        "viirs"
+      ],
+      "inactive": true,
+      "isGranule": true,
+      "period": "subdaily",
+      "tracks": [
+        "OrbitTracks_NOAA-20_Ascending"
+      ]
+    }
+  }
+}
+```
+
+Note:
+```json
+  "isGranule": true,
+  "period": "subdaily",
+  "subtitle": "NOAA-20 / VIIRS", (used to match satellite/instrument)
+```
+
+### Granule Layer CMR Requirements
+
+Granule layers rely on Common Metadata Repository (CMR) metadata to 1) filter day/night collections, 2) determine range based on filters, and 3) collect time/polygon data for selected granules.
+
+The following parameters need to be present in the CMR for the granule layer:
+```json
+feed.entry [
+  {
+    time_start: "2020-08-06T00:48:00.000Z",
+    polygons: [
+      [
+      "-68.998596 172.739944 -59.319592 -123.048164 -42.500546 -144.210709 -48.444565 176.622818 -68.998596 172.739944"
+      ]
+    ],
+    day_night_flag: "DAY",
+    ...(other CMR required parameters)*
+  }
+]
+
+* This is where additional parsing can be done (e.g., determine satellite number);
+  however, will need coordination/client side granule processing changes.
+```
