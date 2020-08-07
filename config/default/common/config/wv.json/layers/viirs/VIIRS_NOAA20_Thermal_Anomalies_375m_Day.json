@@ -16,7 +16,7 @@
           },
           "wrapX": false,
           "period": "daily",
-          "wrapadjacentdays": true,
+          "wrapadjacentdays": false,
           "palette": {
               "id": "VIIRS_All_Thermal_Anomalies",
               "immutable": true
