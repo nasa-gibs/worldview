@@ -114,8 +114,8 @@ export default class Swipe {
    */
   removeListenersFromBottomLayers(layers) {
     lodashEach(layers, (layer) => {
-      layer.un('precompose', this.reverseClip);
-      layer.un('postcompose', restore);
+      layer.un('prerender', this.reverseClip);
+      layer.un('postrender', restore);
     });
   }
 
@@ -125,8 +125,8 @@ export default class Swipe {
    */
   removeListenersFromLayers(layers) {
     lodashEach(layers, (layer) => {
-      layer.un('precompose', this.clip);
-      layer.un('postcompose', restore);
+      layer.un('prerender', this.clip);
+      layer.un('postrender', restore);
     });
   }
 }

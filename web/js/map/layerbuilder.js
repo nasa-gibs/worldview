@@ -5,6 +5,8 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
+import OlStroke from 'ol/style/Stroke';
+import OlGraticule from 'ol/layer/Graticule';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -129,6 +131,17 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
           break;
         case 'wms':
           layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        case 'graticule':
+          layer = new OlGraticule({
+            // the style to use for the lines, optional.
+            strokeStyle: new OlStroke({
+              color: 'rgb(255, 255, 255)',
+              width: 2,
+              lineDash: [0.5, 4],
+            }),
+            showLabels: true,
+          });
           break;
         default:
           throw new Error(`Unknown layer type: ${def.type}`);
@@ -415,24 +428,24 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       format: new MVT(),
       matrixSet: tileMatrixSet,
       wrapX,
+      projection: proj.selected.crs,
       tileGrid: new OlTileGridTileGrid({
         extent: gridExtent,
         resolutions: matrixSet.resolutions,
         tileSize: matrixSet.tileSize,
         origin: start,
         sizes: matrixSet.tileMatrices,
-
       }),
     });
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: sourceOptions,
       renderMode: 'image',
+      vector: true,
       preload: 10,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
-
     applyStyle(def, layer, state, options);
     layer.wrap = day;
     layer.wv = attributes;
@@ -543,6 +556,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: new OlSourceTileWMS(sourceOptions),
     });
+    layer.isWMS = true;
     return layer;
   };
 
