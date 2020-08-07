@@ -21,7 +21,7 @@
           }
       },
       "wrapX": false,
-      "wrapadjacentdays": true,
+      "wrapadjacentdays": false,
       "palette": {
           "id": "MODIS_All_Thermal_Anomalies",
           "immutable": true
