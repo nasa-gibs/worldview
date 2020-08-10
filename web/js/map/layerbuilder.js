@@ -185,64 +185,6 @@ export default function mapLayerBuilder(config, cache, store) {
   });
 
   /**
-   * Granule layer request process
-   *
-   * @method createGranuleLayerProcess
-   * @static
-   * @param {object} granuleOptions
-   * @param {object} state
-   * @param {object} def
-   * @param {object} activeKey
-   * @param {object} date
-   * @returns {object} granuleAttributes
-   */
-  const createGranuleLayerProcess = (
-    granuleOptions,
-    state,
-    def,
-    activeKey,
-    date,
-  ) => {
-    const proj = state.proj.selected;
-    let updatedGranules = false;
-    let granuleCount = 20;
-    if (granuleOptions) {
-      granuleCount = granuleOptions.granuleCount || 20;
-      if (granuleOptions.granuleDates && granuleOptions.granuleDates.length) {
-        if (granuleOptions.granuleDates.length !== granuleOptions.granuleCount) {
-          updatedGranules = false;
-        } else {
-          updatedGranules = granuleOptions.granuleDates.reverse();
-        }
-      }
-    }
-
-    if (!updatedGranules) {
-      const granuleState = state.layers.granuleLayers[activeKey][def.id];
-      if (granuleState) {
-        granuleCount = granuleState.count;
-      }
-    }
-
-    // get granule dates waiting for CMR query and filtering (if necessary)
-    return new Promise((resolve) => {
-      resolve(self.granuleBuilder.getQueriedGranuleDates(def, date, activeKey, proj.id));
-    }).then((availableGranuleDates) => {
-      const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
-      const filteredGranuleDates = self.granuleBuilder.filterGranuleDates(
-        availableGranuleDates,
-        dayNightFilter,
-        granuleCount,
-      );
-      return filteredGranuleDates;
-    }).then((filteredGranuleDates) => ({
-      filteredGranules: filteredGranuleDates,
-      granuleCount,
-      updatedGranules,
-    }));
-  };
-
-  /**
    * Create a new OpenLayers Layer
    *
    * @method createLayer
@@ -294,7 +236,7 @@ export default function mapLayerBuilder(config, cache, store) {
     // promise based CMR request process chain for granules
 
     const createLayerPromise = isGranule
-      ? createGranuleLayerProcess(
+      ? self.granuleBuilder.createGranuleLayerProcess(
         granuleOptions,
         state,
         def,

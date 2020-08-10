@@ -47,16 +47,16 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
- * Add granule cmr data to granule cmr object with date as key
- *
- * @method addGranuleCMRDateData
- * @static
- * @param {data} CMR data
- * @param {id} layerId
- * @returns {Void}
- */
+   * Add granule cmr data to granule cmr object with date as key
+   *
+   * @method addGranuleCMRDateData
+   * @static
+   * @param {data} CMR data
+   * @param {id} layerId
+   * @returns {Void}
+  */
   const addGranuleCMRDateData = (data, id, projection) => {
-  // init id object if first time loading cmr data
+    // init id object if first time loading cmr data
     if (!self.CMRDataStore[id]) {
       self.CMRDataStore[id] = {};
     }
@@ -119,14 +119,13 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     });
   };
 
-
   /**
- * Display error dialog in the event of no CMR data returned during valid date range
- *
- * @method dispathCMRErrorDialog
- * @static
- * @param {string} title
- * @returns {void}
+   * Display error dialog in the event of no CMR data returned during valid date range
+   *
+   * @method dispathCMRErrorDialog
+   * @static
+   * @param {string} title
+   * @returns {void}
   */
   const dispathCMRErrorDialog = (title) => {
     store.dispatch({
@@ -146,7 +145,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @returns {array} collection of granule objects with filtered granuleDates to select from
       * @param {string} granuleDate - UTC date string
       * @param {array} polygon - CMR granule polygon geometry
-   */
+  */
   self.getQueriedGranuleDates = (def, selectedDate, activeKey, projection) => {
     const {
       endDate, startDate, id, title, visible,
@@ -191,15 +190,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
- *
- * Process CMR granule data into granule date objects
- *
- * @method processGranuleDateObjects
- * @static
- * @param {String} layerId
- * @param {Object} selectedDate
- * @param {Object} startQueryDate
- * @returns {Array} reducedGranuleDates
+   *
+   * Process CMR granule data into granule date objects
+   *
+   * @method processGranuleDateObjects
+   * @static
+   * @param {String} layerId
+   * @param {Object} selectedDate
+   * @param {Object} startQueryDate
+   * @returns {Array} reducedGranuleDates
   */
   const processGranuleDateObjects = (layerId, selectedDate, startQueryDate) => {
     const selected = `${new Date(selectedDate).toISOString().split('.')[0]}Z`;
@@ -245,13 +244,13 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} state - App state
    * @param {object} attributes - Layer specs
    * @returns {array} collection of OpenLayers TileLayers
-   */
+  */
   const createGranuleDatesLayer = (granuleDates, def, state, attributes) => {
     const { period, id } = def;
     const { group, proj } = attributes;
     const granuleLayers = granuleDates.map((granuleDate) => {
       const { date, polygons } = granuleDate;
-      const granuleISOKey = `${id}:${proj.id}:${date}::${group}`;
+      const granuleISOKey = `${id}:${proj}:${date}::${group}`;
 
       // return cached layer if available
       const layerCache = cache.getItem(granuleISOKey);
@@ -282,15 +281,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
- * Process granule layer to determine if init creation/proj change or adding to exisiting collection
- *
- * @method processGranuleLayer
- * @static
- * @param {object} def - Layer specs
- * @param {array} granulesObject - objects with granule date string and polygons
- * @param {object} attributes - Layer projection
- * @returns {Void}
- */
+   * Process granule layer to determine if init creation/proj change or adding to exisiting collection
+   *
+   * @method processGranuleLayer
+   * @static
+   * @param {object} def - Layer specs
+   * @param {array} granulesObject - objects with granule date string and polygons
+   * @param {object} attributes - Layer projection
+   * @returns {Void}
+  */
   const processGranuleLayer = (def, granulesObject, attributes) => {
     const { proj, group } = attributes;
     const { id } = def;
@@ -299,7 +298,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const granuleDates = getDateArrayFromObject(granulesObject);
 
     // init group/projection specific granule day storage
-    if (self.granuleLayers[id] === undefined || proj.id !== self.proj) {
+    if (self.granuleLayers[id] === undefined || proj !== self.proj) {
       const activeGranuleDates = isActive ? granuleDates : [];
       const activeBGranuleDates = !isActive ? granuleDates : [];
 
@@ -324,15 +323,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
- *
- *
- * @method getGranuleLayer
- * @static
- * @param {object} def - Layer specs
- * @param {array} granuleDates - objects with granule date string and polygons
- * @param {object} attributes - Layer projection
- * @returns {Void}
- */
+   *
+   *
+   * @method getGranuleLayer
+   * @static
+   * @param {object} def - Layer specs
+   * @param {array} granuleDates - objects with granule date string and polygons
+   * @param {object} attributes - Layer projection
+   * @returns {Void}
+  */
   self.getGranuleLayer = (def, attributes, granuleAttributes) => {
     const {
       endDate, id, subtitle, startDate,
@@ -428,20 +427,78 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         },
       ));
     }
-    self.proj = proj.id;
+    self.proj = proj;
     return layer;
   };
 
   /**
- * Filter date objects by day_night_flag
- *
- * @method filterGranuleDates
- * @static
- * @param {Array} granuleDates
- * @param {string} filterTarget - day_night_flag to filter out
- * @param {number} granuleCount - number of granules to add to collection
- * @returns {array} collection of granule objects with filtered granuleDates
- */
+   * Granule layer request process
+   *
+   * @method createGranuleLayerProcess
+   * @static
+   * @param {object} granuleOptions
+   * @param {object} state
+   * @param {object} def
+   * @param {object} activeKey
+   * @param {object} date
+   * @returns {object} granuleAttributes
+   */
+  self.createGranuleLayerProcess = (
+    granuleOptions,
+    state,
+    def,
+    activeKey,
+    date,
+  ) => {
+    const proj = state.proj.selected;
+    let updatedGranules = false;
+    let granuleCount = 20;
+    if (granuleOptions) {
+      granuleCount = granuleOptions.granuleCount || 20;
+      if (granuleOptions.granuleDates && granuleOptions.granuleDates.length) {
+        if (granuleOptions.granuleDates.length !== granuleOptions.granuleCount) {
+          updatedGranules = false;
+        } else {
+          updatedGranules = granuleOptions.granuleDates.reverse();
+        }
+      }
+    }
+
+    if (!updatedGranules) {
+      const granuleState = state.layers.granuleLayers[activeKey][def.id];
+      if (granuleState) {
+        granuleCount = granuleState.count;
+      }
+    }
+
+    // get granule dates waiting for CMR query and filtering (if necessary)
+    return new Promise((resolve) => {
+      resolve(self.getQueriedGranuleDates(def, date, activeKey, proj.id));
+    }).then((availableGranuleDates) => {
+      const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
+      const filteredGranuleDates = self.filterGranuleDates(
+        availableGranuleDates,
+        dayNightFilter,
+        granuleCount,
+      );
+      return filteredGranuleDates;
+    }).then((filteredGranuleDates) => ({
+      filteredGranules: filteredGranuleDates,
+      granuleCount,
+      updatedGranules,
+    }));
+  };
+
+  /**
+   * Filter date objects by day_night_flag
+   *
+   * @method filterGranuleDates
+   * @static
+   * @param {Array} granuleDates
+   * @param {string} filterTarget - day_night_flag to filter out
+   * @param {number} granuleCount - number of granules to add to collection
+   * @returns {array} collection of granule objects with filtered granuleDates
+  */
   self.filterGranuleDates = (granuleDates, filterTarget, granuleCount) => {
     // granuleDates is full array of granule date objects
     const dates = [];
