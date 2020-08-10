@@ -156,7 +156,7 @@ export class VectorInteractions extends React.Component {
       }
     }
 
-    const [lon, lat] = coord;
+    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
     }
@@ -182,7 +182,7 @@ export class VectorInteractions extends React.Component {
     const {
       lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
-      activateVectorAlert,
+      activateVectorAlert, proj,
     } = this.props;
 
     if (measureIsActive) return;
@@ -199,7 +199,7 @@ export class VectorInteractions extends React.Component {
       openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
     } else {
       const mapRes = map.getView().getResolution();
-      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes);
+      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
 
       if (hasNonClickableVectorLayerType) {
         activateVectorAlert();
