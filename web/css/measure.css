@@ -26,6 +26,11 @@
       }
     }
   }
+  .measure-download {
+    border-top: 1px solid #666;
+    margin-top: 4px;
+    padding-top: 8px;
+  }
 }
 
 @media (max-width: 740px) {
@@ -39,7 +44,7 @@
 }
 
 .measure-unit-toggle {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid #666;
   padding: 6px 5px 6px 27px;
   & .custom-control-input:checked ~ .custom-control-label::before {
     border-color: #fff;

@@ -124,47 +124,40 @@ export function getGeographicLibDistance(line) {
   return totalDistance;
 }
 
-function getFeatureJSON(measurements) {
+// TODO - area measurments as geoJSON don't work
+function getFeatureJSON(measurements, bbox) {
   return {
     type: 'FeatureCollection',
     features: Object.values(measurements).map(({ feature, overlay }) => {
-      const geometry = feature.getGeometry();
-      const type = geometry.getType();
-      const [coordinates] = type === 'Polygon'
-        ? geometry.getCoordinates()
-        : [geometry.getCoordinates()];
+      const type = feature.getGeometry().getType();
+      const coordinates = feature.getGeometry().getCoordinates();
       return {
         type: 'Feature',
-        geometry: {
-          type,
-          coordinates,
-        },
+        geometry: { type, coordinates },
         properties: {
-          name: overlay.element.innerText,
+          size: overlay.element.innerText,
         },
       };
     }),
   };
 }
 
-export function downloadShapefiles(measurements) {
-  // (optional) set names for feature types and zipped folder
+export function downloadShapefiles(measurements, bbox) {
+  // Set names for feature types and zipped folder
   const options = {
     folder: 'worldviewMeasurements',
     types: {
       polygon: 'areaMeasurements',
-      line: 'distanceMeasurements',
+      polyline: 'distanceMeasurements',
     },
   };
-  shpWrite.download(getFeatureJSON(measurements), options);
+  shpWrite.download(getFeatureJSON(measurements, bbox), options);
 }
 
-export function downloadGeoJSON(measurements) {
-  const name = 'worldviewMeasurements.json';
-  const data = JSON.stringify(getFeatureJSON(measurements), undefined, 2);
-  const blob = new Blob([data], {
-    type: 'application/json',
-    name,
-  });
-  FileSaver.saveAs(blob, name);
+export function downloadGeoJSON(measurements, bbox) {
+  const data = JSON.stringify(getFeatureJSON(measurements, bbox), undefined, 2);
+  const fileName = 'worldviewMeasurements.json';
+  const fileType = 'application/geo+json';
+  const blob = new Blob([data], { fileType, fileName });
+  FileSaver.saveAs(blob, fileName);
 }

@@ -55,36 +55,34 @@ export default function List(props) {
   return (
     <ListGroup className={listClass}>
       {list.map((item) => {
-        const { iconName } = item;
-        const { iconClass } = item;
-        const isActive = item.key && active ? item.key === active : false;
-        const isDisabled = item.key && disabled ? item.key === disabled : false;
-        const { badge } = item;
-        const className = item.className ? item.className : '';
-        const tagType = item.href ? 'a' : 'button';
-        return (
+        const {
+          id, iconName, iconClass, className, hidden, key, href, badge, text,
+        } = item;
+        const isActive = key && active ? key === active : false;
+        const isDisabled = key && disabled ? key === disabled : false;
+        const itemClass = className || '';
+        const tagType = href ? 'a' : 'button';
+        const propsOnClick = onClick
+          ? () => onClick(key || id)
+          : null;
+        const onClickFn = item.onClick ? item.onClick : propsOnClick;
+
+
+        return !hidden && (
           <ListGroupItem
-            key={item.key || item.id || ''}
+            key={key || id || ''}
             tag={tagType}
             active={isActive}
-            id={item.id || ''}
-            className={`${className} ${size}-item`}
-            href={item.href ? item.href : undefined}
-            target={item.href ? '_blank' : undefined}
-            onClick={
-                item.onClick
-                  ? item.onClick
-                  : onClick
-                    ? () => {
-                      onClick(item.key || item.id);
-                    }
-                    : null
-              }
+            id={id || ''}
+            className={`${itemClass} ${size}-item`}
+            href={href || undefined}
+            target={href ? '_blank' : undefined}
+            onClick={onClickFn}
             disabled={isDisabled}
           >
             {iconName ? <FontAwesomeIcon icon={listIcons[iconName]} className={iconClass} fixedWidth /> : ''}
-            {item.text || ''}
-            {badge ? <Badge pill>{item.badge}</Badge> : ''}
+            {text || ''}
+            {badge ? <Badge pill>{badge}</Badge> : ''}
           </ListGroupItem>
         );
       })}

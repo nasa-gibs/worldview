@@ -7,6 +7,21 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits } from '../../modules/measure/actions';
 
+const DOWNLOAD_GEOJSON = {
+  text: 'Download as GeoJSON',
+  iconClass: 'ui-icon icon-large',
+  iconName: 'faDownload',
+  id: 'download-geojson-button',
+  key: 'measure-download-geojson',
+  className: 'measure-download',
+};
+const DOWNLOAD_SHAPEFILE = {
+  text: 'Download as Shapefiles',
+  iconClass: 'ui-icon icon-large',
+  iconName: 'faDownload',
+  id: 'download-shapefiles-button',
+  key: 'measure-download-shapefile',
+};
 const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
@@ -23,26 +38,14 @@ const OPTIONS_ARRAY = [
     key: 'measure-area',
   },
   {
-    text: 'Download as Shapefiles',
-    iconClass: 'ui-icon icon-large',
-    iconName: 'faDownload',
-    id: 'download-shapefiles-button',
-    key: 'measure-download-shapefile',
-  },
-  {
-    text: 'Download as GeoJSON',
-    iconClass: 'ui-icon icon-large',
-    iconName: 'faDownload',
-    id: 'download-geojson-button',
-    key: 'measure-download-geojson',
-  },
-  {
     text: 'Remove Measurements',
     iconClass: 'ui-icon icon-large',
     iconName: 'faTrash',
     id: 'clear-measurements-button',
     key: 'measure-clear',
   },
+  DOWNLOAD_GEOJSON,
+  DOWNLOAD_SHAPEFILE,
 ];
 
 class MeasureMenu extends Component {
@@ -76,8 +79,12 @@ class MeasureMenu extends Component {
   }
 
   render() {
-    const { isTouchDevice, units } = this.props;
+    const {
+      isTouchDevice, unitOfMeasure, measurementsInProj, isMobile,
+    } = this.props;
     const listSize = isTouchDevice ? 'medium' : 'small';
+    DOWNLOAD_SHAPEFILE.hidden = !measurementsInProj || isMobile;
+    DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
     return (
       <>
         <Form>
@@ -87,10 +94,10 @@ class MeasureMenu extends Component {
               className="custom-control-input"
               type="checkbox"
               onChange={this.unitToggle}
-              defaultChecked={units === 'mi'}
+              defaultChecked={unitOfMeasure === 'mi'}
             />
             <label className="custom-control-label" htmlFor="unit-toggle">
-              {units}
+              {unitOfMeasure}
             </label>
           </div>
         </Form>
@@ -104,14 +111,24 @@ class MeasureMenu extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  isTouchDevice: state.modal.customProps.touchDevice,
-  map: state.map,
-  units: state.measure.unitOfMeasure,
-});
+const mapStateToProps = (state, ownProps) => {
+  const {
+    modal, map, measure, proj, browser,
+  } = state;
+  const { unitOfMeasure, allMeasurements } = measure;
+  const { crs } = proj.selected;
+  const measurementsInProj = !!Object.keys(allMeasurements[crs]).length;
+  return {
+    isMobile: browser.lessThan.medium,
+    isTouchDevice: modal.customProps.touchDevice,
+    map,
+    unitOfMeasure,
+    measurementsInProj,
+  };
+};
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onToggleUnits: (units) => {
-    dispatch(changeUnits(units));
+  onToggleUnits: (unitOfMeasure) => {
+    dispatch(changeUnits(unitOfMeasure));
   },
   onCloseModal: (eventName) => {
     dispatch(onToggle());
@@ -124,9 +141,11 @@ export default connect(
 )(MeasureMenu);
 
 MeasureMenu.propTypes = {
+  isMobile: PropTypes.bool,
   isTouchDevice: PropTypes.bool,
   map: PropTypes.object,
+  measurementsInProj: PropTypes.bool,
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,
-  units: PropTypes.string,
+  unitOfMeasure: PropTypes.string,
 };
