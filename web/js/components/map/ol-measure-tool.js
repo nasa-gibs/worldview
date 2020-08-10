@@ -20,6 +20,7 @@ import {
 } from 'ol/style';
 import {
   toggleMeasureActive as toggleMeasureActiveAction,
+  updateMeasurements as updateMeasurementsAction,
 } from '../../modules/measure/actions';
 import {
   transformLineStringArc,
@@ -57,11 +58,11 @@ function OlMeasureTool (props) {
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, unitOfMeasure, toggleMeasureActive,
+    map, olMap, crs, bbox, unitOfMeasure, toggleMeasureActive, updateMeasurements,
   } = props;
 
-  const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs]);
-  const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs]);
+  const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], bbox);
+  const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], bbox);
 
   useEffect(() => {
     if (map && map.rendered) {
@@ -155,6 +156,7 @@ function OlMeasureTool (props) {
       sources[crs].removeFeature(feature);
       olMap.removeOverlay(overlay);
       delete allMeasurements[crs][feature.ol_uid];
+      updateMeasurements(allMeasurements);
     };
 
     ReactDOM.render((
@@ -199,6 +201,7 @@ function OlMeasureTool (props) {
       feature,
       overlay: tooltipOverlay,
     };
+    updateMeasurements(allMeasurements);
     terminateDraw();
     renderTooltip(feature, tooltipOverlay);
   };
@@ -276,6 +279,7 @@ function OlMeasureTool (props) {
     );
 
     allMeasurements[crs] = {};
+    updateMeasurements(allMeasurements);
     terminateDraw();
     olMap.removeOverlay(tooltipOverlay);
     if (vectorLayers[crs]) {
@@ -299,6 +303,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleMeasureActive: (isActive) => {
     dispatch(toggleMeasureActiveAction(isActive));
   },
+  updateMeasurements: (measurements) => {
+    dispatch(updateMeasurementsAction(measurements));
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -308,10 +315,12 @@ const mapStateToProps = (state) => {
     measure,
   } = state;
   const { unitOfMeasure } = measure;
+  const { crs, maxExtent } = proj.selected;
   return {
     map,
     olMap: map.ui.selected,
-    crs: proj.selected.crs,
+    crs,
+    bbox: maxExtent,
     unitOfMeasure,
   };
 };
