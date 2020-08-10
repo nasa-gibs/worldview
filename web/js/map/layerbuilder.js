@@ -6,6 +6,8 @@ import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import OlStroke from 'ol/style/Stroke';
+import OlText from 'ol/style/Text';
+import OlFill from 'ol/style/Fill';
 import OlGraticule from 'ol/layer/Graticule';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
@@ -134,12 +136,25 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
           break;
         case 'graticule':
           layer = new OlGraticule({
+            lonLabelStyle: new OlText({
+              font: '12px Calibri,sans-serif',
+              textBaseline: 'top',
+              fill: new OlFill({
+                color: 'rgba(0,0,0,1)',
+              }),
+              stroke: new OlStroke({
+                color: 'rgba(255,255,255,1)',
+                width: 3,
+              }),
+            }),
             // the style to use for the lines, optional.
             strokeStyle: new OlStroke({
               color: 'rgb(255, 255, 255)',
               width: 2,
               lineDash: [0.5, 4],
             }),
+            extent: proj.maxExtent,
+            lonLabelPosition: 1,
             showLabels: true,
           });
           break;
