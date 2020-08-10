@@ -124,8 +124,7 @@ export function getGeographicLibDistance(line) {
   return totalDistance;
 }
 
-// TODO - area measurments as geoJSON don't work
-function getFeatureJSON(measurements, bbox) {
+function getFeatureJSON(measurements) {
   return {
     type: 'FeatureCollection',
     features: Object.values(measurements).map(({ feature, overlay }) => {
@@ -142,7 +141,7 @@ function getFeatureJSON(measurements, bbox) {
   };
 }
 
-export function downloadShapefiles(measurements, bbox) {
+export function downloadShapefiles(measurements) {
   // Set names for feature types and zipped folder
   const options = {
     folder: 'worldviewMeasurements',
@@ -151,11 +150,11 @@ export function downloadShapefiles(measurements, bbox) {
       polyline: 'distanceMeasurements',
     },
   };
-  shpWrite.download(getFeatureJSON(measurements, bbox), options);
+  shpWrite.download(getFeatureJSON(measurements), options);
 }
 
-export function downloadGeoJSON(measurements, bbox) {
-  const data = JSON.stringify(getFeatureJSON(measurements, bbox), undefined, 2);
+export function downloadGeoJSON(measurements) {
+  const data = JSON.stringify(getFeatureJSON(measurements), undefined, 2);
   const fileName = 'worldviewMeasurements.json';
   const fileType = 'application/geo+json';
   const blob = new Blob([data], { fileType, fileName });

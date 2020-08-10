@@ -58,11 +58,11 @@ function OlMeasureTool (props) {
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, bbox, unitOfMeasure, toggleMeasureActive, updateMeasurements,
+    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements,
   } = props;
 
-  const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], bbox);
-  const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], bbox);
+  const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs]);
+  const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs]);
 
   useEffect(() => {
     if (map && map.rendered) {
@@ -315,12 +315,11 @@ const mapStateToProps = (state) => {
     measure,
   } = state;
   const { unitOfMeasure } = measure;
-  const { crs, maxExtent } = proj.selected;
+  const { crs } = proj.selected;
   return {
     map,
     olMap: map.ui.selected,
     crs,
-    bbox: maxExtent,
     unitOfMeasure,
   };
 };
