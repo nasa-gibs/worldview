@@ -15,6 +15,8 @@ const {
   arcticMeasurementTooltip,
   sidebarContainer,
   unitOfMeasureToggle,
+  downloadGeojsonBtn,
+  downloadShapefileBtn,
 } = localSelectors;
 
 function createDistanceMeasurement(c, [startX, startY], [endX, endY]) {
@@ -104,12 +106,24 @@ module.exports = {
       c.expect.elements(geoMeasurementTooltip).count.to.equal(3);
     });
   },
+  'Download as GeoJSON and Shapefile options available in menu': (c) => {
+    c.click(measureBtn);
+    c.waitForElementVisible(downloadGeojsonBtn);
+    c.waitForElementVisible(downloadShapefileBtn);
+    c.click('.modal');
+  },
   'Switching to arctic projection, no measurements show': (c) => {
     if (c.options.desiredCapabilities.browserName === 'firefox') {
       return;
     }
     switchProjection(c, 'arctic');
     c.expect.elements(arcticMeasurementTooltip).count.to.equal(0);
+  },
+  'Download as GeoJSON and Shapefile options NOT available in menu': (c) => {
+    c.click(measureBtn);
+    c.expect.element(downloadGeojsonBtn).to.not.be.present;
+    c.expect.element(downloadShapefileBtn).to.not.be.present;
+    c.click('.modal');
   },
   'Creating measurements in arctic projection causes tooltips to show': (c) => {
     if (c.options.desiredCapabilities.browserName === 'firefox') {
