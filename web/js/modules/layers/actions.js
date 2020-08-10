@@ -180,7 +180,7 @@ export function setOpacity(id, opacity) {
       type: UPDATE_OPACITY,
       id,
       index,
-      opacity,
+      opacity: Number(opacity),
       activeString,
     });
   };
