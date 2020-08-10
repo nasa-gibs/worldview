@@ -36,6 +36,8 @@ module.exports = {
   measurementTooltip: '.tooltip-measure',
   geoMeasurementTooltip: '#wv-map-geographic .tooltip-measure',
   arcticMeasurementTooltip: '#wv-map-arctic .tooltip-measure',
+  downloadGeojsonBtn: '#download-geojson-button',
+  downloadShapefileBtn: '#download-shapefiles-button',
 
   // timeline
   dragger: '.timeline-dragger',
