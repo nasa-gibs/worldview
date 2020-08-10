@@ -240,8 +240,8 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
  * @param {Object} layer | Ol Layer object
  */
 const applyLayerListeners = function(layer) {
-  layer.on('precompose', this.clip);
-  layer.on('postcompose', restore);
+  layer.on('prerender', this.clip);
+  layer.on('postrender', restore);
   bottomLayers.push(layer);
 };
 /**
@@ -250,8 +250,8 @@ const applyLayerListeners = function(layer) {
  * @param {Object} layer | Ol Layer object
  */
 const applyReverseLayerListeners = function(layer) {
-  layer.on('precompose', this.reverseClip);
-  layer.on('postcompose', restore);
+  layer.on('prerender', this.reverseClip);
+  layer.on('postrender', restore);
   topLayers.push(layer);
 };
 
