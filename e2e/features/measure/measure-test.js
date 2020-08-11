@@ -107,6 +107,9 @@ module.exports = {
     });
   },
   'Download as GeoJSON and Shapefile options available in menu': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return;
+    }
     c.click(measureBtn);
     c.waitForElementVisible(downloadGeojsonBtn);
     c.waitForElementVisible(downloadShapefileBtn);
@@ -120,6 +123,9 @@ module.exports = {
     c.expect.elements(arcticMeasurementTooltip).count.to.equal(0);
   },
   'Download as GeoJSON and Shapefile options NOT available in menu': (c) => {
+    if (c.options.desiredCapabilities.browserName === 'firefox') {
+      return;
+    }
     c.click(measureBtn);
     c.expect.element(downloadGeojsonBtn).to.not.be.present;
     c.expect.element(downloadShapefileBtn).to.not.be.present;
