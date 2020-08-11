@@ -5,6 +5,10 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
+import OlStroke from 'ol/style/Stroke';
+import OlText from 'ol/style/Text';
+import OlFill from 'ol/style/Fill';
+import OlGraticule from 'ol/layer/Graticule';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -129,6 +133,30 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
           break;
         case 'wms':
           layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        case 'graticule':
+          layer = new OlGraticule({
+            lonLabelStyle: new OlText({
+              font: '12px Calibri,sans-serif',
+              textBaseline: 'top',
+              fill: new OlFill({
+                color: 'rgba(0,0,0,1)',
+              }),
+              stroke: new OlStroke({
+                color: 'rgba(255,255,255,1)',
+                width: 3,
+              }),
+            }),
+            // the style to use for the lines, optional.
+            strokeStyle: new OlStroke({
+              color: 'rgb(255, 255, 255)',
+              width: 2,
+              lineDash: [0.5, 4],
+            }),
+            extent: proj.maxExtent,
+            lonLabelPosition: 1,
+            showLabels: true,
+          });
           break;
         default:
           throw new Error(`Unknown layer type: ${def.type}`);
@@ -415,24 +443,24 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       format: new MVT(),
       matrixSet: tileMatrixSet,
       wrapX,
+      projection: proj.selected.crs,
       tileGrid: new OlTileGridTileGrid({
         extent: gridExtent,
         resolutions: matrixSet.resolutions,
         tileSize: matrixSet.tileSize,
         origin: start,
         sizes: matrixSet.tileMatrices,
-
       }),
     });
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: sourceOptions,
       renderMode: 'image',
+      vector: true,
       preload: 10,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
     });
-
     applyStyle(def, layer, state, options);
     layer.wrap = day;
     layer.wv = attributes;
@@ -543,6 +571,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: new OlSourceTileWMS(sourceOptions),
     });
+    layer.isWMS = true;
     return layer;
   };
 

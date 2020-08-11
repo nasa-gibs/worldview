@@ -7,7 +7,7 @@ import {
 
 import update from 'immutability-helper';
 import { containsCoordinate } from 'ol/extent';
-import stylefunction from 'ol-mapbox-style/stylefunction';
+import stylefunction from 'ol-mapbox-style/dist/stylefunction';
 import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import {
   getLayers,
@@ -127,7 +127,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
   lodashEach(layerArray, (layerInLayerGroup) => {
-    if (layerInLayerGroup.type === 'TILE') return; // WMS breakpoint tile
+    if (layerInLayerGroup.isWMS) return; // WMS breakpoint tile
     layerInLayerGroup = layerInLayerGroup.getLayers ? lodashFind(layerInLayerGroup.getLayers().getArray(), 'isVector') : layerInLayerGroup;
     // Apply mapbox-gl styles
     const extentStartX = layerInLayerGroup.getExtent()[0];

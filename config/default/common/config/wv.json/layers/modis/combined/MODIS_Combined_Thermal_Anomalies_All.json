@@ -31,7 +31,7 @@
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "resolutionBreakPoint": 0.03515625,
+            "resolutionBreakPoint":  0.017578125,
             "source": "GIBS:wms"
           },
           "arctic": {
