@@ -9,7 +9,6 @@
       "group": "overlays",
       "type": "vector",
       "period": "daily",
-      "wrapadjacentdays": false,
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {

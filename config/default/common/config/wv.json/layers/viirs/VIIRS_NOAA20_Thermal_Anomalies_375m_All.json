@@ -18,8 +18,6 @@
                 "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
               }
           },
-          "wrapX": false,
-          "wrapadjacentdays": false,
           "transition": "true",
           "palette": {
               "id": "VIIRS_All_Thermal_Anomalies",
