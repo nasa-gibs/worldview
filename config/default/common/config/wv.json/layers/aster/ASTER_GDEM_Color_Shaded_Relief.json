@@ -7,7 +7,6 @@
       "description": "aster/ASTER_GDEM_Color_Shaded_Relief",
       "tags": "gdem",
       "group": "baselayers",
-      "type": "wmts",
       "layergroup": "Global Digital Elevation Map",
       "product": "ASTGTM",
       "wrapX": true

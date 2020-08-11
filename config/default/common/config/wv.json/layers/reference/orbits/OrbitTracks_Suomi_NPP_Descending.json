@@ -9,10 +9,6 @@
       "tags": "snpp s-npp tracks night",
       "format": "image/png",
       "type": "wms",
-      "tileSize": [
-        512,
-        512
-      ],
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [

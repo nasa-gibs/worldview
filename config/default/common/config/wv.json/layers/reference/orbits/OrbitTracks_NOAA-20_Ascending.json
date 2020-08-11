@@ -9,10 +9,6 @@
       "group": "overlays",
       "format": "image/png",
       "type": "wms",
-      "tileSize": [
-        512,
-        512
-      ],
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",

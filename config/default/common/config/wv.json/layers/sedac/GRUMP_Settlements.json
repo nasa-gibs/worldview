@@ -8,10 +8,8 @@
       "type": "vector",
       "tags": "vectors",
       "group": "overlays",
-      "downloadId": "GRUMP_Settlements",
       "layergroup": "Settlements",
       "product": "CIESIN_SEDAC_GRUMPv1_STLMNT01",
-      "uniqueIdenitifier": "Latlongid",
       "inactive": true,
       "palette": {
         "id": "GRUMP_Settlements",
