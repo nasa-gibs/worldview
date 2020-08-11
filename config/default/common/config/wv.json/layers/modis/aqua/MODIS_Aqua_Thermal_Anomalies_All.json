@@ -20,9 +20,7 @@
         "modis",
         "modis_aqua"
       ],
-      "wrapX": false,
       "product": "MYD14",
-      "wrapadjacentdays": false,
       "palette": {
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true

@@ -20,8 +20,6 @@
           "id": "FIRMS_MODIS_Thermal_Anomalies_polar"
         }
       },
-      "wrapX": false,
-      "wrapadjacentdays": false,
       "palette": {
           "id": "MODIS_All_Thermal_Anomalies",
           "immutable": true
