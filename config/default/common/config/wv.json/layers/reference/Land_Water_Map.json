@@ -8,10 +8,6 @@
       "group": "baselayers",
       "format": "image/png",
       "type": "wmts",
-      "tileSize": [
-        512,
-        512
-      ],
       "layergroup": "Reference",
       "projections": {
         "antarctic": {

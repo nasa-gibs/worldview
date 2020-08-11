@@ -7,10 +7,6 @@
       "description": "reference/Graticule",
       "group": "overlays",
       "format": "image/png",
-      "tileSize": [
-        512,
-        512
-      ],
       "noTransition": "true",
       "type": "variable",
       "layergroup": "Latitude-Longitude Lines",
