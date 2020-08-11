@@ -67,7 +67,6 @@ The following properties are required if this information is not available via t
 
 * **type**: Tile service type, either `wmts`, `wms`, or `vector`.
 * **format**: Image format type, either `image/png` or `image/jpeg`.
-* **tileSize**: For WMS layers only, an array of pixel dimensions used to tile the requests. For example, `[512, 512]`
 * **period**: Use `subdaily`, `daily`, `monthly`, or `yearly` for layers that have new content and no startDate defined in GetCapabilities. Changing the period will affect how often the layer is requested in the timeline. Omit this parameter to always have the layer shown on the timeline.
 * **startDate**: The first day that data is available, represented in YYYY-MM-DD or YYYY-MM-DDThh:mm:ssZ format.
 * **endDate**: The last day that data is available, represented in YYYY-MM-DD or YYYY-MM-DDThh:mm:ssZ format.
@@ -102,7 +101,7 @@ Example:
 * **transition**: For WMS layers only, if set to `true`, the map will display lower-resolution tiles while loading.
 * **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. Can also be a list of identifiers to map the layer to multiple CMR products. See the [Data Download documentation](../data_download.md) for more information.
 * **style**: For WMTS layers only, this sets the WMTS `style` parameter accordingly; defaults to `default` if not set.
-* **matrixIds**: For WMTS layers only, this is an array of labels used for the `TileMatrix` parameter at each zoom level; defaults to `[0, 1, 2, ...]` if not set.
+* **tileSize**: For WMS layers only, an array of pixel dimensions used to tile the requests. For example, `[512, 512]`
 * **daynight**: Classify a layer as day or night. This information will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 * **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 * **description**: Point to a markdown file within the metadata folder to provide a layer description.

@@ -6,11 +6,6 @@
       "description": "reference/Coastlines",
       "group": "overlays",
       "format": "image/png",
-      "type": "wmts",
-      "tileSize": [
-        512,
-        512
-      ],
       "noTransition": "true",
       "layergroup": "Reference",
       "projections": {
