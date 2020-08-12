@@ -52,7 +52,7 @@ function checkForXFlip(geom, projection) {
  */
 export function transformLineStringArc(geom, projection) {
   const coords = [];
-  const distance = 10000; // meters between segments
+  const distance = 50000; // meters between segments
   const transformedGeom = checkForXFlip(geom, projection).clone().transform(projection, geographicProj);
   transformedGeom.forEachSegment((segStart, segEnd) => {
     const line = geod.InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
@@ -74,7 +74,7 @@ export function transformLineStringArc(geom, projection) {
 export function transformPolygonArc(geom, projection) {
   const coords = [];
   const transformedGeom = geom.clone().transform(projection, geographicProj);
-  const distance = 10000; // meters between segments
+  const distance = 50000; // meters between segments
   const polyCoords = transformedGeom.getCoordinates()[0];
   for (let i = 0; i < polyCoords.length - 1; i += 1) {
     const line = geod.InverseLine(
@@ -124,16 +124,23 @@ export function getGeographicLibDistance(line) {
   return totalDistance;
 }
 
-function getFeatureJSON(measurements) {
+function getFeatureJSON(measurements, crs) {
   return {
     type: 'FeatureCollection',
-    features: Object.values(measurements).map(({ feature, overlay }) => {
+    features: Object.values(measurements).map(({ feature, overlay }, index) => {
       const type = feature.getGeometry().getType();
-      const coordinates = feature.getGeometry().getCoordinates();
+      const transformFn = type === 'Polygon'
+        ? transformPolygonArc
+        : transformLineStringArc;
+      const transformedGeom = transformFn(feature.getGeometry(), crs);
+      const coordinates = type === 'Polygon'
+        ? transformedGeom.getCoordinates()
+        : transformedGeom.getCoordinates()[0];
       return {
         type: 'Feature',
         geometry: { type, coordinates },
         properties: {
+          id: `${index}`,
           size: overlay.element.innerText,
         },
       };
@@ -141,7 +148,7 @@ function getFeatureJSON(measurements) {
   };
 }
 
-export function downloadShapefiles(measurements) {
+export function downloadShapefiles(measurements, crs) {
   // Set names for feature types and zipped folder
   const options = {
     folder: 'worldviewMeasurements',
@@ -150,11 +157,12 @@ export function downloadShapefiles(measurements) {
       polyline: 'distanceMeasurements',
     },
   };
-  shpWrite.download(getFeatureJSON(measurements), options);
+  const json = getFeatureJSON(measurements, crs);
+  shpWrite.download(json, options);
 }
 
-export function downloadGeoJSON(measurements) {
-  const data = JSON.stringify(getFeatureJSON(measurements), undefined, 2);
+export function downloadGeoJSON(measurements, crs) {
+  const data = JSON.stringify(getFeatureJSON(measurements, crs), undefined, 2);
   const fileName = 'worldviewMeasurements.json';
   const fileType = 'application/geo+json';
   const blob = new Blob([data], { fileType, fileName });
