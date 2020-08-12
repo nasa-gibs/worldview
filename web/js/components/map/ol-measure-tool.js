@@ -61,8 +61,8 @@ function OlMeasureTool (props) {
     map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements,
   } = props;
 
-  const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs]);
-  const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs]);
+  const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], crs);
+  const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
 
   useEffect(() => {
     if (map && map.rendered) {
