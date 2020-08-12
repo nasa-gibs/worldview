@@ -137,6 +137,9 @@ class PlayAnimation extends React.Component {
     ) {
       return this.play(this.currentPlayingDate);
     }
+    if (isLoopStart && currentDate.getTime() === startDate.getTime()) {
+      return this.play(this.currentPlayingDate);
+    }
     this.shiftCache();
   };
 
@@ -296,6 +299,7 @@ class PlayAnimation extends React.Component {
    * @param endDate {object} JS date
    */
   addItemToQueue(currentDate, startDate, endDate) {
+    const { speed } = this.props;
     const nextDate = this.getNextBufferDate(currentDate, startDate, endDate);
     const nextDateStr = util.toISOStringSeconds(nextDate);
 
@@ -305,8 +309,10 @@ class PlayAnimation extends React.Component {
       && nextDate <= endDate
       && nextDate >= startDate
     ) {
-      this.addDate(nextDate);
-      this.checkQueue();
+      setTimeout(() => {
+        this.addDate(nextDate);
+        this.checkQueue();
+      }, Math.floor(1000 / speed));
     }
   }
 
