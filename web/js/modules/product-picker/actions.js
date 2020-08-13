@@ -140,10 +140,12 @@ export function clearRecentLayers() {
 }
 
 export function clearSingleRecentLayer(layer) {
-  clearSingleRecentLayerFromLocalStorage(layer);
   return (dispatch, getState) => {
-    const { layers, proj } = getState();
+    const { layers, proj, config } = getState();
     const { layerConfig } = layers;
+    const projections = Object.keys(config.projections);
+
+    clearSingleRecentLayerFromLocalStorage(layer, projections);
 
     dispatch({
       type: CLEAR_SINGLE_RECENT_LAYER,
