@@ -32,21 +32,10 @@ import MeasureTooltip from '../measure-tool/measure-tooltip';
 
 let tooltipElement;
 let tooltipOverlay;
-const allMeasurements = {
-  'EPSG:3413': {},
-  'EPSG:4326': {},
-  'EPSG:3031': {},
-};
-const vectorLayers = {
-  'EPSG:3413': null,
-  'EPSG:4326': null,
-  'EPSG:3031': null,
-};
-const sources = {
-  'EPSG:3413': new OlVectorSource({ wrapX: false }),
-  'EPSG:4326': new OlVectorSource({ wrapX: false }),
-  'EPSG:3031': new OlVectorSource({ wrapX: false }),
-};
+let init = false;
+const allMeasurements = {};
+const vectorLayers = {};
+const sources = {};
 
 /**
  * A component to add measurement functionality to the OL map
@@ -58,13 +47,24 @@ function OlMeasureTool (props) {
   let twoFingerTouchListener;
 
   const {
-    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements,
+    map, olMap, crs, unitOfMeasure, toggleMeasureActive, updateMeasurements, projections,
   } = props;
 
-  const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], crs);
-  const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
+  useEffect(() => {
+    if (!init) {
+      projections.forEach((key) => {
+        allMeasurements[key] = {};
+        vectorLayers[key] = null;
+        sources[key] = new OlVectorSource({ wrapX: false });
+      });
+      init = true;
+    }
+  }, [projections]);
 
   useEffect(() => {
+    const dlShapeFiles = () => downloadShapefiles(allMeasurements[crs], crs);
+    const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
+
     if (map && map.rendered) {
       map.ui.events.on('measure-distance', initDistanceMeasurement);
       map.ui.events.on('measure-area', initAreaMeasurement);
@@ -313,14 +313,17 @@ const mapStateToProps = (state) => {
     map,
     proj,
     measure,
+    config,
   } = state;
   const { unitOfMeasure } = measure;
   const { crs } = proj.selected;
+  const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
   return {
     map,
     olMap: map.ui.selected,
     crs,
     unitOfMeasure,
+    projections,
   };
 };
 
