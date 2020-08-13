@@ -136,12 +136,17 @@ function getFeatureJSON(measurements, crs) {
       const coordinates = type === 'Polygon'
         ? transformedGeom.getCoordinates()
         : transformedGeom.getCoordinates()[0];
+
+      const [size, units] = overlay.element.innerText.split(' ');
+      const parsedSize = parseFloat(size.replace(/,/g, ''));
+
       return {
         type: 'Feature',
         geometry: { type, coordinates },
         properties: {
           id: `${index}`,
-          size: overlay.element.innerText,
+          size: parsedSize,
+          units,
         },
       };
     }),
