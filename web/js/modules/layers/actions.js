@@ -60,7 +60,9 @@ export function addLayer(id, spec = {}) {
   });
   return (dispatch, getState) => {
     const state = getState();
-    const { layers, compare, proj } = state;
+    const {
+      layers, compare, proj, config,
+    } = state;
     const { activeString } = compare;
     const layerObj = layers.layerConfig[id];
     const activeLayers = getLayersSelector(
@@ -76,7 +78,8 @@ export function addLayer(id, spec = {}) {
       activeLayers.overlays.length || 0,
       proj.id,
     );
-    updateRecentLayers(layerObj);
+    const projections = Object.keys(config.projections);
+    updateRecentLayers(layerObj, projections);
     dispatch({
       type: ADD_LAYER,
       id,
