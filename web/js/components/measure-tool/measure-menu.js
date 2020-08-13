@@ -45,7 +45,7 @@ const OPTIONS_ARRAY = [
     key: 'measure-clear',
   },
   DOWNLOAD_GEOJSON,
-  DOWNLOAD_SHAPEFILE,
+  // DOWNLOAD_SHAPEFILE,
 ];
 
 class MeasureMenu extends Component {
