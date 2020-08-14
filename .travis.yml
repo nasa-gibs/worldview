@@ -34,6 +34,7 @@ matrix:
       script:
         - npm run build:ci
         - npm run start &
+        - npm run e2e:headless:chrome:localStorageDisabled
         - npm run e2e:headless:chrome
 
     - os: osx
@@ -62,6 +63,7 @@ matrix:
       script:
         - npm run build:ci
         - npm run start &
+        - npm run e2e:headless:firefox:localStorageDisabled
         - npm run e2e:headless:firefox
 
     - os: linux

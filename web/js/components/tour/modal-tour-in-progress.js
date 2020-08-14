@@ -38,7 +38,7 @@ class ModalInProgress extends React.Component {
           backdrop={false}
           keyboard={false}
         >
-          <ModalHeader toggle={endTour} charCode="">
+          <ModalHeader toggle={endTour}>
             {currentStory.title}
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>

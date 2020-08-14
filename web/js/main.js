@@ -35,6 +35,7 @@ import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
   validate as layerValidate,
   layersParse12,
+  adjustStartDates,
 } from './modules/layers/util';
 import polyfill from './polyfill';
 import { debugConfig } from './debug';
@@ -42,7 +43,7 @@ import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
 const history = createBrowserHistory();
 const configURI = Brand.url('config/wv.json');
-const startTime = new Date().getTime();
+const startTime = Date.now();
 const compose = DEBUG === false || DEBUG === 'logger'
   ? defaultCompose
   : DEBUG === 'devtools' && composeWithDevTools({
@@ -57,6 +58,61 @@ const compose = DEBUG === false || DEBUG === 'logger'
 let parameters = util.fromQueryString(window.location.search);
 let { elapsed } = util;
 const errors = [];
+
+/**
+ *
+ * @param {*} config
+ * @param {*} legacyState
+ */
+function render (config, legacyState) {
+  config.parameters = parameters;
+  debugConfig(config);
+
+  // Get legacy models
+  const models = combineModels(config, legacyState);
+
+  // Get Permalink parse/serializers
+  const paramSetup = getParamObject(
+    parameters,
+    config,
+    models,
+    legacyState,
+    errors,
+  );
+
+  const {
+    locationMiddleware,
+    reducersWithLocation,
+  } = createReduxLocationActions(
+    paramSetup,
+    mapLocationToState,
+    history,
+    reducers,
+    stateToParams,
+  );
+  const middleware = getMiddleware(DEBUG === 'logger', locationMiddleware);
+  const store = createStore(
+    reducersWithLocation,
+    getInitialState(models, config, parameters),
+    compose(
+      applyMiddleware(...middleware),
+      responsiveStoreEnhancer,
+    ),
+  );
+  listenForHistoryChange(store, history);
+  elapsed('Render', startTime, parameters);
+
+  const mouseMoveEvents = util.events();
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <App models={models} mapMouseEvents={mouseMoveEvents} />
+    </Provider>,
+    document.getElementById('app'),
+  );
+  combineUi(models, config, mouseMoveEvents, store); // Legacy UI
+  util.errorReport(errors);
+}
 
 // Document ready function
 window.onload = () => {
@@ -114,6 +170,7 @@ window.onload = () => {
     }
     const legacyState = parse(parameters, config, errors);
     layerValidate(errors, config);
+    adjustStartDates(config.layers);
     preloadPalettes(layers, {}, false).then((obj) => {
       config.palettes = {
         custom: obj.custom,
@@ -122,57 +179,6 @@ window.onload = () => {
       render(config, parameters, legacyState);
     });
   }).fail(util.error);
-};
-
-const render = (config, legacyState) => {
-  config.parameters = parameters;
-  debugConfig(config);
-
-  // Get legacy models
-  const models = combineModels(config, legacyState);
-
-  // Get Permalink parse/serializers
-  const paramSetup = getParamObject(
-    parameters,
-    config,
-    models,
-    legacyState,
-    errors,
-  );
-
-  const {
-    locationMiddleware,
-    reducersWithLocation,
-  } = createReduxLocationActions(
-    paramSetup,
-    mapLocationToState,
-    history,
-    reducers,
-    stateToParams,
-  );
-  const middleware = getMiddleware(DEBUG === 'logger', locationMiddleware);
-  const store = createStore(
-    reducersWithLocation,
-    getInitialState(models, config, parameters),
-    compose(
-      applyMiddleware(...middleware),
-      responsiveStoreEnhancer,
-    ),
-  );
-  listenForHistoryChange(store, history);
-  elapsed('Render', startTime, parameters);
-
-  const mouseMoveEvents = util.events();
-
-  ReactDOM.render(
-    <Provider store={store}>
-      <App models={models} mapMouseEvents={mouseMoveEvents} />
-    </Provider>,
-    document.getElementById('app'),
-  );
-
-  combineUi(models, config, mouseMoveEvents, store); // Legacy UI
-  util.errorReport(errors);
 };
 
 export default history;

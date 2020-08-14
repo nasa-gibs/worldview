@@ -1,5 +1,8 @@
 #wv-sidebar {
   position: absolute;
+  * {
+    user-select: none;
+  }
 }
 #productsHolder {
   position: absolute;
@@ -227,18 +230,22 @@ footer .compare-toggle-button {
   color: #22a;
 }
 
-.layer-settings-modal .modal-title {
-  font-size: 15px;
-}
-
-.layer-settings-modal,
-.layer-settings-modal .close {
-  color: #fff;
-}
-
-.layer-settings-modal .modal-content {
+.modal-dialog.layer-settings-modal {
   background: #282828;
   width: 300px;
+  color: #eee;
+}
+
+.layer-info-settings-modal .modal-header .close,
+.layer-settings-modal .modal-header .close {
+  font-size: 22px;
+  padding: 12px 14px;
+}
+
+.layer-info-settings-modal .modal-title,
+.layer-settings-modal .modal-title {
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .layer-settings-modal .nav-item {

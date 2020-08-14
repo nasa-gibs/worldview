@@ -38,8 +38,8 @@ class ProductPicker extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { mode } = this.props;
-    if (prevProps.mode !== mode) {
+    const { mode, categoryType } = this.props;
+    if (prevProps.mode !== mode || prevProps.categoryType !== categoryType) {
       this.setModalClass();
     }
   }
@@ -52,10 +52,15 @@ class ProductPicker extends React.Component {
   setModalClass() {
     const { modalElement } = this.state;
     const { mode, categoryType } = this.props;
-    if (mode === 'category' || categoryType === 'featured') {
+    if (mode === 'category' && categoryType !== 'recent') {
       modalElement.classList.remove('browse-search-width');
       modalElement.classList.add('category-width');
-    } else if (mode === 'search' || mode === 'measurements') {
+    } else if (
+      mode === 'search'
+        || mode === 'measurements'
+        || categoryType === 'recent'
+        || categoryType === 'featured'
+    ) {
       modalElement.classList.remove('category-width');
       modalElement.classList.add('browse-search-width');
     }

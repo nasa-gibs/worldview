@@ -4,19 +4,19 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
-import util from '../util/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { DISABLE_VECTOR_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
+import safeLocalStorage from '../util/local-storage';
 
-
-const HAS_LOCAL_STORAGE = util.browser.localStorage;
+const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
+const { DISMISSED_COMPARE_ALERT, DISMISSED_EVENT_VIS_ALERT } = safeLocalStorage.keys;
 class DismissableAlerts extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      hasDismissedEvents: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedEventVisibilityAlert'),
-      hasDismissedCompare: HAS_LOCAL_STORAGE && !!localStorage.getItem('dismissedCompareAlert'),
+      hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
+      hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
     };
   }
 
@@ -28,7 +28,7 @@ class DismissableAlerts extends React.Component {
    * @param {String} stateKey
    */
   dismissAlert(storageKey, stateKey) {
-    localStorage.setItem(storageKey, true);
+    safeLocalStorage.setItem(storageKey, true);
     this.setState({ [stateKey]: true });
   }
 
@@ -47,7 +47,7 @@ class DismissableAlerts extends React.Component {
             isOpen
             noPortal
             onClick={() => openAlertModal(eventModalProps)}
-            onDismiss={() => this.dismissAlert('dismissedEventVisibilityAlert', 'hasDismissedEvents')}
+            onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
             message="Events may not be visible at all times."
           />
         ) : null}
@@ -56,7 +56,7 @@ class DismissableAlerts extends React.Component {
             isOpen
             noPortal
             onClick={() => openAlertModal(compareModalProps)}
-            onDismiss={() => this.dismissAlert('dismissedCompareAlert', 'hasDismissedCompare')}
+            onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
             message="You are now in comparison mode."
           />
         ) : null}

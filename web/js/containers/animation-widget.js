@@ -574,7 +574,6 @@ class AnimationWidget extends React.Component {
       layers,
       hasCustomPalettes,
       promiseImageryForTime,
-      map,
       selectDate,
       currentDate,
       isGifActive,
@@ -609,14 +608,13 @@ class AnimationWidget extends React.Component {
       <ErrorBoundary>
         {isPlaying && (
           <PlayQueue
-            loop={looping}
+            isLoopActive={looping}
             isPlaying={isPlaying}
             canPreloadAll={queueLength <= maxLength}
             currentDate={snappedCurrentDate}
             startDate={startDate}
             endDate={endDate}
             hasCustomPalettes={hasCustomPalettes}
-            map={map}
             maxQueueLength={maxLength}
             queueLength={queueLength}
             layers={layers}
@@ -845,7 +843,6 @@ AnimationWidget.propTypes = {
   isRotated: PropTypes.bool,
   layers: PropTypes.array,
   looping: PropTypes.bool,
-  map: PropTypes.object,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   notify: PropTypes.func,

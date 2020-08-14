@@ -6,6 +6,8 @@ import CategoryLayerRow from './category-layer-row';
 import {
   hasMeasurementSource as hasSourceSelector,
 } from '../../../../modules/layers/selectors';
+import getSelectedDate from '../../../../modules/date/selectors';
+import { getCategoryConfig } from '../../../../modules/product-picker/selectors';
 
 function BrowseLayerList (props) {
   const {
@@ -13,15 +15,13 @@ function BrowseLayerList (props) {
     selectedMeasurement,
     hasMeasurementSource,
     category,
-    categoryConfig,
   } = props;
-  const categoryToUse = category || categoryConfig.All;
   return (
     <div className="layer-picker-list-case layers-all">
-      <div id={`${categoryToUse.id}-list`}>
+      <div id={`${category.id}-list`}>
         {
           // eslint-disable-next-line array-callback-return
-          categoryToUse.measurements.map((measurement, index) => {
+          category.measurements.map((measurement, index) => {
             const current = measurementConfig[measurement];
             const isSelected = selectedMeasurement === current.id;
             if (hasMeasurementSource(current)) {
@@ -30,7 +30,7 @@ function BrowseLayerList (props) {
                   key={current.id}
                   id={current.id}
                   index={index}
-                  category={categoryToUse}
+                  category={category}
                   measurement={current}
                   isSelected={isSelected}
                 />
@@ -45,7 +45,6 @@ function BrowseLayerList (props) {
 
 BrowseLayerList.propTypes = {
   category: PropTypes.object,
-  categoryConfig: PropTypes.object,
   hasMeasurementSource: PropTypes.func,
   measurementConfig: PropTypes.object,
   selectedMeasurement: PropTypes.string,
@@ -53,26 +52,25 @@ BrowseLayerList.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    date,
     productPicker,
     proj,
     config,
   } = state;
   const {
     category,
-    categoryType,
     selectedMeasurement,
     selectedMeasurementSourceIndex,
   } = productPicker;
+  const categoryConfig = getCategoryConfig(state);
+
   return {
-    categoryConfig: config.categories[categoryType],
     measurementConfig: config.measurements,
     layerConfig: config.layers,
-    category,
+    category: category || categoryConfig.All,
     selectedProjection: proj.id,
     selectedMeasurement,
     selectedMeasurementSourceIndex,
-    selectedDate: date.selected,
+    selectedDate: getSelectedDate(state),
     hasMeasurementSource: (current) => hasSourceSelector(current, config, proj.id),
   };
 };

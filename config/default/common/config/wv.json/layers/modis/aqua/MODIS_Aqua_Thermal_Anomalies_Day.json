@@ -5,40 +5,48 @@
       "title": "Fires and Thermal Anomalies (Day)",
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Thermal_Anomalies_All",
-      "tags": "hotspot",
-      "group": "overlays",
-      "format": "image/png",
+      "tags":     "hotspots vectors",
+      "group":    "overlays",
+      "type":     "vector",
       "period": "daily",
       "layergroup": [
         "modis",
         "modis_aqua"
       ],
       "product": "MYD14",
-      "tileSize": [
-        512,
-        512
-      ],
-      "type": "wms",
-      "transition": "true",
-      "startDate": "2012-05-08",
-      "projections": {
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
+      "vectorStyle": {
+          "id": "FIRMS_MODIS_Thermal_Anomalies",
+          "arctic": {
+            "id": "FIRMS_MODIS_Thermal_Anomalies_polar"
+          }
       },
       "palette": {
-        "id": "MODIS_Aqua_Thermal_Anomalies_All",
-        "immutable": "true"
+          "id": "MODIS_All_Thermal_Anomalies",
+          "immutable": true
       },
+      "transition": "true",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],
       "daynight": [
         "day"
-      ]
+      ],
+      "breakPointLayer": {
+        "id": "MODIS_Aqua_Thermal_Anomalies_Day",
+        "type": "wms",
+        "format":   "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint":  0.017578125
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
     }
   }
 }

@@ -5,32 +5,24 @@
       "title": "Fires and Thermal Anomalies (Day)",
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Thermal_Anomalies_All",
-      "tags": "hotspot",
+      "tags": "hotspots vectors",
       "group": "overlays",
-      "format": "image/png",
       "period": "daily",
       "layergroup": [
         "modis",
         "modis_terra"
       ],
       "product": "MOD14",
-      "tileSize": [
-        512,
-        512
-      ],
-      "type": "wms",
+      "type": "vector",
       "transition": "true",
-      "startDate": "2012-05-08",
-      "projections": {
+      "vectorStyle": {
+        "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
+          "id": "FIRMS_MODIS_Thermal_Anomalies_polar"
         }
       },
       "palette": {
-        "id": "MODIS_Terra_Thermal_Anomalies_All",
+        "id": "MODIS_All_Thermal_Anomalies",
         "immutable": "true"
       },
       "tracks": [
@@ -38,7 +30,23 @@
       ],
       "daynight": [
         "day"
-      ]
+      ],
+      "breakPointLayer": {
+        "id": "MODIS_Terra_Thermal_Anomalies_Day",
+        "type": "wms",
+        "format":   "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "resolutionBreakPoint":  0.017578125,
+            "source": "GIBS:wms"
+          },
+          "arctic": {
+            "source": "GIBS:wms:arctic",
+            "resolutionBreakPoint": 2048
+          }
+        }
+      }
     }
   }
 }

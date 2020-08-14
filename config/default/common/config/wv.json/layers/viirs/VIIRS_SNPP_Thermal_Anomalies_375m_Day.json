@@ -5,7 +5,8 @@
       "title": "Fires and Thermal Anomalies (Day, 375m)",
       "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Thermal_Anomalies_375m_Day",
-      "tags": "hotspot s-npp snpp",
+      "tags": "hotspots s-npp snpp vectors",
+      "group": "overlays",
       "layergroup": [
         "viirs"
       ],
@@ -13,35 +14,35 @@
         "VNP14IMG_NRT_DAY",
         "VNP14IMGTDL_NRT"
       ],
-      "group": "overlays",
-      "format": "image/png",
       "period": "daily",
-      "wrapadjacentdays": true,
-      "tileSize": [
-        512,
-        512
-      ],
-      "type": "wms",
-      "transition": "true",
-      "startDate": "2015-11-25",
-      "projections": {
+      "type": "vector",
+      "vectorStyle": {
+        "id": "FIRMS_VIIRS_Thermal_Anomalies",
         "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
+          "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
         }
       },
+      "transition": true,
       "palette": {
-        "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
-        "immutable": "true"
+        "id": "VIIRS_All_Thermal_Anomalies",
+        "immutable": true
       },
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "breakPointLayer": {
+        "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "resolutionBreakPoint":  0.017578125,
+            "source": "GIBS:wms"
+          },
+          "arctic": {
+            "source": "GIBS:wms:arctic",
+            "resolutionBreakPoint": 2048
+          }
+        }
+      }
     }
   }
 }

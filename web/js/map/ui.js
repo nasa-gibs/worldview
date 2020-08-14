@@ -12,8 +12,6 @@ import {
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlKinetic from 'ol/Kinetic';
-import OlGraticule from 'ol/Graticule';
-import OlStyleStroke from 'ol/style/Stroke';
 import OlControlScaleLine from 'ol/control/ScaleLine';
 import { altKeyOnly } from 'ol/events/condition';
 import OlInteractionPinchRotate from 'ol/interaction/PinchRotate';
@@ -34,11 +32,9 @@ import MapRunningData from './runningdata';
 import mapPrecacheTile from './precachetile';
 import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import mapCompare from './compare/compare';
-import measure from './measure/ui';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
-import { CHANGE_UNITS } from '../modules/measure/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -68,7 +64,6 @@ export default function mapui(models, config, store, ui) {
   const dateline = mapDateLineBuilder(models, config, store, ui);
   const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(config, store);
-  const measureTools = {};
   const dataRunner = self.runningdata = new MapRunningData(
     models,
     compareMapUi,
@@ -155,8 +150,6 @@ export default function mapui(models, config, store, ui) {
         self.selectedVectors = newSelection;
         return;
       }
-      case CHANGE_UNITS:
-        return toggleMeasurementUnits(action.value);
       case SELECT_DATE:
         return updateDate();
       default:
@@ -180,9 +173,6 @@ export default function mapui(models, config, store, ui) {
       self.proj[proj.id] = map;
     });
     self.events.on('update-layers', reloadLayers);
-    self.events.on('measure-clear', clearMeasurements);
-    self.events.on('measure-distance', measureDistance);
-    self.events.on('measure-area', measureArea);
     self.events.on('disable-click-zoom', () => {
       doubleClickZoom.setActive(false);
     });
@@ -354,8 +344,6 @@ export default function mapui(models, config, store, ui) {
     lodashEach(activeLayers, (mapLayer) => {
       map.removeLayer(mapLayer);
     });
-    removeGraticule('active');
-    removeGraticule('activeB');
     cache.clear();
   };
   /*
@@ -389,11 +377,7 @@ export default function mapui(models, config, store, ui) {
         state,
       );
       lodashEach(defs, (def) => {
-        if (isGraticule(def, proj.id)) {
-          addGraticule(def.opacity, layerGroupStr);
-        } else {
-          map.addLayer(createLayer(def));
-        }
+        map.addLayer(createLayer(def));
       });
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
@@ -423,13 +407,7 @@ export default function mapui(models, config, store, ui) {
         { reverse: true },
         store.getState(),
       )
-        .filter((def) => {
-          if (isGraticule(def, projId)) {
-            addGraticule(def.opacity, arr[0]);
-            return false;
-          }
-          return true;
-        })
+        .filter(() => true)
         .map((def) => createLayer(def, {
           date: state.date[arr[1]],
           group: arr[0],
@@ -454,23 +432,6 @@ export default function mapui(models, config, store, ui) {
     const layersState = state.layers;
     const activeGroupStr = state.compare.activeString;
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    const updateGraticules = function(defs, groupName) {
-      lodashEach(defs, (def) => {
-        if (isGraticule(def, state.proj.id)) {
-          renderable = isRenderableLayer(
-            def.id,
-            layersState[activeGroupStr],
-            state.date[activeDateStr],
-            state,
-          );
-          if (renderable) {
-            addGraticule(def.opacity, groupName);
-          } else {
-            removeGraticule(groupName);
-          }
-        }
-      });
-    };
     layers.forEach((layer) => {
       const group = layer.get('group');
       // Not in A|B
@@ -482,8 +443,6 @@ export default function mapui(models, config, store, ui) {
           state,
         );
         layer.setVisible(renderable);
-        const defs = getLayers(layersState[activeGroupStr], {}, state);
-        updateGraticules(defs);
         // If in A|B layer-group will have a 'group' string
       } else if (group) {
         lodashEach(layer.getLayers().getArray(), (subLayer) => {
@@ -498,8 +457,6 @@ export default function mapui(models, config, store, ui) {
           }
         });
         layer.setVisible(true);
-        const defs = getLayers(layersState[group], {}, state);
-        updateGraticules(defs, group);
       }
     });
   }
@@ -517,21 +474,15 @@ export default function mapui(models, config, store, ui) {
    */
   function updateOpacity(action) {
     const state = store.getState();
-    const { layers, compare, proj } = state;
+    const { layers, compare } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
     const def = lodashFind(layers[activeStr], {
       id: action.id,
     });
+    const layer = findLayer(def, activeStr);
 
-    if (isGraticule(def, proj.id)) {
-      const strokeStyle = self[`graticule-${activeStr}-style`];
-      strokeStyle.setColor(`rgba(255, 255, 255,${action.opacity})`);
-      self.selected.render();
-    } else {
-      const layer = findLayer(def, activeStr);
-      layer.setOpacity(action.opacity);
-      updateLayerVisibilities();
-    }
+    layer.setOpacity(action.opacity);
+    updateLayerVisibilities();
   }
   /*
    *Initiates the adding of a layer or Graticule
@@ -546,7 +497,7 @@ export default function mapui(models, config, store, ui) {
 
   function addLayer(def, date, activeLayers) {
     const state = store.getState();
-    const { compare, layers, proj } = state;
+    const { compare, layers } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
     date = date || state.date[activeDateStr];
@@ -557,9 +508,7 @@ export default function mapui(models, config, store, ui) {
     });
     const mapLayers = self.selected.getLayers().getArray();
     const firstLayer = mapLayers[0];
-    if (isGraticule(def, proj.id)) {
-      addGraticule(def.opacity, activeLayerStr);
-    } else if (firstLayer && firstLayer.get('group')) {
+    if (firstLayer && firstLayer.get('group')) {
       // Find which map layer-group is the active LayerGroup
       // and add layer to layerGroup in correct location
       const activelayer = firstLayer.get('group') === activeLayerStr
@@ -590,21 +539,18 @@ export default function mapui(models, config, store, ui) {
    */
   function removeLayer(action) {
     const state = store.getState();
-    const { compare, proj } = state;
+    const { compare } = state;
     const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
     const { def } = action;
 
-    if (isGraticule(def, proj.id)) {
-      removeGraticule(activeLayerStr);
+    const layer = findLayer(def, activeLayerStr);
+    if (compare && compare.active) {
+      const layerGroup = getActiveLayerGroup(self.selected, activeLayerStr);
+      if (layerGroup) layerGroup.getLayers().remove(layer);
     } else {
-      const layer = findLayer(def, activeLayerStr);
-      if (compare && compare.active) {
-        const layerGroup = getActiveLayerGroup(self.selected, activeLayerStr);
-        if (layerGroup) layerGroup.getLayers().remove(layer);
-      } else {
-        self.selected.removeLayer(layer);
-      }
+      self.selected.removeLayer(layer);
     }
+
     updateLayerVisibilities();
   }
 
@@ -759,77 +705,6 @@ export default function mapui(models, config, store, ui) {
     return index;
   }
 
-  /*
-   * Checks a layer's properties to deterimine if
-   * it is a graticule
-   *
-   *
-   * @method isGraticule
-   * @static
-   *
-   * @param def {object} Layer Specs
-   *
-   *
-   * @returns {boolean}
-   */
-  function isGraticule(def, proj) {
-    return (
-      def.projections[proj].type === 'graticule' || def.type === 'graticule'
-    );
-  }
-
-  /*
-   * Adds a graticule to the OpenLayers Map
-   * if a graticule does not already exist
-   *
-   *
-   * @method addGraticule
-   * @static
-   *
-   *
-   * @returns {void}
-   */
-  function addGraticule(opacity, groupStr) {
-    groupStr = groupStr || 'active';
-    opacity = opacity || 0.5;
-    const graticule = self.selected[`graticule-${groupStr}`];
-    if (graticule) {
-      return;
-    }
-    const strokeStyle = new OlStyleStroke({
-      color: `rgba(255, 255, 255,${opacity})`,
-      width: 2,
-      lineDash: [0.5, 4],
-      opacity,
-    });
-
-    self.selected[`graticule-${groupStr}`] = new OlGraticule({
-      map: self.selected,
-      group: groupStr,
-      strokeStyle,
-    });
-    self[`graticule-${groupStr}-style`] = strokeStyle;
-  }
-
-  /*
-   * Adds a graticule to the OpenLayers Map
-   * if a graticule does not already exist
-   *
-   *
-   * @method removeGraticule
-   * @static
-   *
-   * @returns {void}
-   */
-  function removeGraticule(groupStr) {
-    groupStr = groupStr || 'active';
-    const graticule = self.selected[`graticule-${groupStr}`];
-    if (graticule) {
-      graticule.setMap(null);
-    }
-    self.selected[`graticule-${groupStr}`] = null;
-  }
-
   const triggerExtent = lodashThrottle(
     () => {
       self.events.trigger('extent');
@@ -856,27 +731,6 @@ export default function mapui(models, config, store, ui) {
     store.dispatch({ type: 'MAP/UPDATE_MAP_EXTENT', extent });
     triggerExtent();
   }
-
-  const measureDistance = () => {
-    const proj = self.selected.getView().getProjection().getCode();
-    measureTools[proj].initMeasurement('distance');
-  };
-
-  const measureArea = () => {
-    const proj = self.selected.getView().getProjection().getCode();
-    measureTools[proj].initMeasurement('area');
-  };
-
-  const clearMeasurements = () => {
-    const proj = self.selected.getView().getProjection().getCode();
-    measureTools[proj].clearMeasurements();
-  };
-
-  const toggleMeasurementUnits = (units) => {
-    Object.keys(measureTools).forEach((projection) => {
-      measureTools[projection].changeUnits(units);
-    });
-  };
 
   /*
    * Updates the extents of OpenLayers map
@@ -1007,7 +861,6 @@ export default function mapui(models, config, store, ui) {
       if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
-    measureTools[proj.crs] = measure(map, self.events, store);
 
     return map;
   }

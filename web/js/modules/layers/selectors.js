@@ -6,6 +6,7 @@ import {
   cloneDeep as lodashCloneDeep,
   isUndefined as lodashIsUndefined,
   findIndex as lodashFindIndex,
+  memoize as lodashMemoize,
 } from 'lodash';
 import { createSelector } from 'reselect';
 import update from 'immutability-helper';
@@ -14,6 +15,9 @@ import util from '../../util/util';
 // State selectors
 const getLayersState = ({ layers }) => layers;
 const getActiveCompareState = ({ compare }) => (compare.isCompareA ? 'active' : 'activeB');
+const getCurrentDate = ({ date, compare }) => date[compare.isCompareA ? 'selected' : 'selectedB'];
+const getCurrentActiveLayers = ({ compare, layers }) => (compare.isCompareA ? layers.active : layers.activeB);
+const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 
 /**
  * Return a map of active layers where key is layer id
@@ -88,19 +92,14 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec, layers, layerConfig, overlayLength, projection) {
-  layers = lodashCloneDeep(layers);
+export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection) {
+  let layers = lodashCloneDeep(layersParam);
   if (projection) {
     layers = layers.filter((layer) => layer.projections[projection]);
   }
-  if (
-    lodashFind(layers, {
-      id,
-    })
-  ) {
+  if (lodashFind(layers, { id })) {
     return layers;
   }
-  spec = spec || {};
   const def = lodashCloneDeep(layerConfig[id]);
   if (!def) {
     throw new Error(`No such layer: ${id}`);
@@ -150,8 +149,9 @@ export function resetLayers(startingLayers, layerConfig) {
  */
 export function getTitles(config, layerId, projId) {
   try {
-    let title; let subtitle; let
-      tags;
+    let title;
+    let subtitle;
+    let tags;
     const forProj = lodashGet(
       config,
       `layers.${layerId}.projections.${projId}`,
@@ -161,7 +161,6 @@ export function getTitles(config, layerId, projId) {
       subtitle = forProj.subtitle;
       tags = forProj.tags;
     }
-    // const forLayer = lodashGet(config, `layers.${layerId}`);
     const forLayer = config.layers[layerId];
     title = title || forLayer.title || `[${layerId}]`;
     subtitle = subtitle || forLayer.subtitle || '';
@@ -182,8 +181,7 @@ export function getTitles(config, layerId, projId) {
  * @param {*} spec
  * @param {*} state
  */
-export function getLayers(layers, spec, state) {
-  spec = spec || {};
+export function getLayers(layers, spec = {}, state) {
   const baselayers = forGroup('baselayers', spec, layers, state);
   const overlays = forGroup('overlays', spec, layers, state);
 
@@ -202,13 +200,10 @@ export function getLayers(layers, spec, state) {
   return baselayers.concat(overlays);
 }
 
-function forGroup(group, spec, activeLayers, state) {
-  spec = spec || {};
+function forGroup(group, spec = {}, activeLayers, state) {
   const projId = spec.proj || state.proj.id;
   let results = [];
-  const defs = lodashFilter(activeLayers, {
-    group,
-  });
+  const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
     // Skip if this layer isn't available for the selected projection
     if (!def.projections[projId] && projId !== 'all') {
@@ -238,105 +233,82 @@ function forGroup(group, spec, activeLayers, state) {
 }
 
 /**
- * Determine if a given layer is available
- * @param {*} id
- * @param {*} date
- * @param {*} layers
- * @param {*} config
- */
-export function available(id, date, layers, config) {
-  const range = dateRange({ layer: id }, layers, config);
-  if (range && (date < range.start || date > range.end)) {
-    return false;
-  }
-  return true;
-}
-
-export function replaceSubGroup(
-  layerId,
-  nextLayerId,
-  layers,
-  subGroup,
-  layerSplit,
-) {
-  if (nextLayerId) {
-    return moveBefore(layerId, nextLayerId, layers);
-  }
-  return pushToBottom(layerId, layers, layerSplit);
-}
-
-/**
  * Determine date range for layers
  * @param {*} spec
  * @param {*} activeLayers
  * @param {*} config
  */
-export function dateRange(spec, activeLayers, config) {
-  const layers = spec.layer
-    ? [lodashFind(activeLayers, { id: spec.layer })]
-    : activeLayers;
-  const ignoreRange = config.parameters && (config.parameters.debugGIBS || config.parameters.ignoreDateRange);
-  if (ignoreRange) {
+export function dateRange({ layer }, activeLayers, parameters = {}) {
+  const now = util.now();
+  const { debugGIBS, ignoreDateRange } = parameters;
+  if (debugGIBS || ignoreDateRange) {
     return {
       start: new Date(Date.UTC(1970, 0, 1)),
-      end: util.now(),
+      end: now,
     };
   }
+
   let min = Number.MAX_VALUE;
   let max = 0;
   let range = false;
   const maxDates = [];
-
   // Use the minute ceiling of the current time so that we don't run into an issue where
   // seconds value of current appNow time is greater than a layer's available time range
   const minuteCeilingCurrentTime = util.now().setSeconds(59);
+  const layers = layer
+    ? [lodashFind(activeLayers, { id: layer })]
+    : activeLayers;
 
-  lodashEach(layers, (def) => {
-    if (def) {
-      if (def.startDate) {
-        range = true;
-        const start = util.parseDateUTC(def.startDate).getTime();
-        min = Math.min(min, start);
+  layers.forEach((def) => {
+    if (!def) {
+      return;
+    }
+    if (def.startDate) {
+      range = true;
+      const start = util.parseDateUTC(def.startDate).getTime();
+      min = Math.min(min, start);
+    }
+
+    // For now, we assume that any layer with an end date is
+    // an ongoing product unless it is marked as inactive.
+    if (def.futureLayer && def.endDate) {
+      range = true;
+      max = util.parseDateUTC(def.endDate).getTime();
+      maxDates.push(new Date(max));
+    } else if (def.inactive && def.endDate) {
+      range = true;
+      const end = util.parseDateUTC(def.endDate).getTime();
+      max = Math.max(max, end);
+      maxDates.push(new Date(max));
+    } else if (def.endDate) {
+      range = true;
+      max = minuteCeilingCurrentTime;
+      maxDates.push(new Date(max));
+    }
+
+    // If there is a start date but no end date, this is a
+    // product that is currently being created each day, set
+    // the max day to today.
+    if (def.futureLayer && def.futureTime && !def.endDate) {
+      // Calculate endDate + parsed futureTime from layer JSON
+      max = new Date();
+      const { futureTime } = def;
+      const dateType = futureTime.slice(-1);
+      const dateInterval = futureTime.slice(0, -1);
+
+      if (dateType === 'D') {
+        max.setDate(max.getDate() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      } else if (dateType === 'M') {
+        max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
+      } else if (dateType === 'Y') {
+        max.setYear(max.getYear() + parseInt(dateInterval, 10));
+        maxDates.push(new Date(max));
       }
-      // For now, we assume that any layer with an end date is
-      // an ongoing product unless it is marked as inactive.
-      if (def.futureLayer && def.endDate) {
-        range = true;
-        max = util.parseDateUTC(def.endDate).getTime();
-        maxDates.push(new Date(max));
-      } else if (def.inactive && def.endDate) {
-        range = true;
-        const end = util.parseDateUTC(def.endDate).getTime();
-        max = Math.max(max, end);
-        maxDates.push(new Date(max));
-      } else if (def.endDate) {
-        range = true;
-        max = minuteCeilingCurrentTime;
-        maxDates.push(new Date(max));
-      }
-      // If there is a start date but no end date, this is a
-      // product that is currently being created each day, set
-      // the max day to today.
-      if (def.futureLayer && def.futureTime && !def.endDate) {
-        // Calculate endDate + parsed futureTime from layer JSON
-        max = new Date();
-        const { futureTime } = def;
-        const dateType = futureTime.slice(-1);
-        const dateInterval = futureTime.slice(0, -1);
-        if (dateType === 'D') {
-          max.setDate(max.getDate() + parseInt(dateInterval, 10));
-          maxDates.push(new Date(max));
-        } else if (dateType === 'M') {
-          max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
-          maxDates.push(new Date(max));
-        } else if (dateType === 'Y') {
-          max.setYear(max.getYear() + parseInt(dateInterval, 10));
-          maxDates.push(new Date(max));
-        }
-      } else if (def.startDate && !def.endDate) {
-        max = minuteCeilingCurrentTime;
-        maxDates.push(new Date(max));
-      }
+    } else if (def.startDate && !def.endDate) {
+      max = minuteCeilingCurrentTime;
+      maxDates.push(new Date(max));
     }
   });
 
@@ -351,6 +323,102 @@ export function dateRange(spec, activeLayers, config) {
       end: new Date(maxDate),
     };
   }
+}
+
+/**
+ * Determine if a given layer is available
+ * @param {*} id
+ * @param {*} date
+ * @param {*} layers
+ * @param {*} config
+ */
+export function available(id, date, layers, parameters) {
+  const range = dateRange({ layer: id }, layers, parameters);
+  if (range && (date < range.start || date > range.end)) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Determine if a given layer is available
+ * @param {*} id - the layer id
+ */
+export const memoizedAvailable = createSelector(
+  [getCurrentDate, getCurrentActiveLayers, getConfigParameters],
+  (currentDate, activeLayers, parameters) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
+);
+
+/**
+ * Determine if a layer should be rendered if it would be visible
+ *
+ * @param {*} id
+ * @param {*} activeLayers
+ * @param {*} date
+ * @param {*} state
+ */
+export function isRenderable(id, activeLayers, date, state) {
+  const { parameters } = state.config || {};
+  const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+  date = date || state.date[activeDateStr];
+  const def = lodashFind(activeLayers, { id });
+  const notAvailable = !available(id, date, activeLayers, parameters);
+
+  if (!def || notAvailable || !def.visible || def.opacity === 0) {
+    return false;
+  }
+  if (def.group === 'overlays') {
+    return true;
+  }
+  let obscured = false;
+  lodashEach(
+    getLayers(activeLayers, { group: 'baselayers' }, state),
+    (otherDef) => {
+      if (otherDef.id === def.id) {
+        return false;
+      }
+      if (
+        otherDef.visible
+        && otherDef.opacity === 1.0
+        && available(otherDef.id, date, activeLayers, parameters)
+      ) {
+        obscured = true;
+        return false;
+      }
+    },
+  );
+  return !obscured;
+}
+
+export function activateLayersForEventCategory(activeLayers, state) {
+  const { layers, compare } = state;
+  // Turn off all layers in list first
+  let newLayers = layers[compare.activeString];
+  lodashEach(newLayers, (layer, index) => {
+    newLayers = update(newLayers, {
+      [index]: { visible: { $set: false } },
+    });
+  });
+  // Turn on or add new layers
+  lodashEach(activeLayers, (layer) => {
+    const id = layer[0];
+    const visible = layer[1];
+    const index = lodashFindIndex(newLayers, { id });
+    if (index >= 0) {
+      newLayers = update(newLayers, {
+        [index]: { visible: { $set: visible } },
+      });
+    } else {
+      newLayers = addLayer(
+        id,
+        { visible },
+        newLayers,
+        layers.layerConfig,
+        getLayers(newLayers, { group: 'all' }, state).overlays.length,
+      );
+    }
+  });
+  return newLayers;
 }
 
 export function pushToBottom(id, layers, layerSplit) {
@@ -394,99 +462,17 @@ export function moveBefore(sourceId, targetId, layers) {
   return layers;
 }
 
-/**
- * Determine if a layer should be rendered if it would be visible
- *
- * @param {*} id
- * @param {*} activeLayers
- * @param {*} date
- * @param {*} state
- */
-export function isRenderable(id, activeLayers, date, state) {
-  const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-  date = date || state.date[activeDateStr];
-  const def = lodashFind(activeLayers, { id });
-  const notAvailable = !available(id, date, activeLayers, state.config);
-
-  if (!def || notAvailable || !def.visible || def.opacity === 0) {
-    return false;
+export function replaceSubGroup(
+  layerId,
+  nextLayerId,
+  layers,
+  subGroup,
+  layerSplit,
+) {
+  if (nextLayerId) {
+    return moveBefore(layerId, nextLayerId, layers);
   }
-  if (def.group === 'overlays') {
-    return true;
-  }
-  let obscured = false;
-  lodashEach(
-    getLayers(activeLayers, { group: 'baselayers' }, state),
-    (otherDef) => {
-      if (otherDef.id === def.id) {
-        return false;
-      }
-      if (
-        otherDef.visible
-        && otherDef.opacity === 1.0
-        && available(otherDef.id, date, activeLayers, state.config)
-      ) {
-        obscured = true;
-        return false;
-      }
-    },
-  );
-  return !obscured;
-}
-
-export function lastDate(activeLayers, config) {
-  let endDate;
-  const layersDateRange = dateRange({}, activeLayers, config);
-  const today = util.today();
-  if (layersDateRange && layersDateRange.end > today) {
-    endDate = layersDateRange.end;
-  } else {
-    endDate = today;
-  }
-  return endDate;
-}
-
-export function lastDateTime(activeLayers, config) {
-  let endDate;
-  const layersDateRange = dateRange({}, activeLayers, config);
-  const now = util.now();
-  if (layersDateRange && layersDateRange.end > now) {
-    endDate = layersDateRange.end;
-  } else {
-    endDate = now;
-  }
-  return endDate;
-}
-
-export function activateLayersForEventCategory(activeLayers, state) {
-  const { layers, compare } = state;
-  // Turn off all layers in list first
-  let newLayers = layers[compare.activeString];
-  lodashEach(newLayers, (layer, index) => {
-    newLayers = update(newLayers, {
-      [index]: { visible: { $set: false } },
-    });
-  });
-  // Turn on or add new layers
-  lodashEach(activeLayers, (layer) => {
-    const id = layer[0];
-    const visible = layer[1];
-    const index = lodashFindIndex(newLayers, { id });
-    if (index >= 0) {
-      newLayers = update(newLayers, {
-        [index]: { visible: { $set: visible } },
-      });
-    } else {
-      newLayers = addLayer(
-        id,
-        { visible },
-        newLayers,
-        layers.layerConfig,
-        getLayers(newLayers, { group: 'all' }, state).overlays.length,
-      );
-    }
-  });
-  return newLayers;
+  return pushToBottom(layerId, layers, layerSplit);
 }
 
 export function getZotsForActiveLayers(config, projection, map, activeLayers) {

@@ -56,21 +56,10 @@ export default (function() {
    * @type Boolean
    */
   self.webWorkers = true;
-
-  /**
-   * True if local storage is available in the browser. This will return
-   * false if local storage is supported, but cannot be used because
-   * it is running in private mode.
-   *
-   * @attribute localStorage
-   * @type Boolean
-   */
-  self.localStorage = false;
   self.history = true;
   self.touchDevice = false;
   self.mobileDevice = false;
   self.mobileAndTabletDevice = false;
-
   self.mobileWidth = 740;
   self.constrainedHeight = 320;
 
@@ -91,7 +80,6 @@ export default (function() {
 
     self.cors = tests.cors();
     self.webWorkers = tests.webWorkers();
-    self.localStorage = tests.localStorage();
     self.small = tests.small();
     self.dimensions = self.tests.getWindowDimensions();
     self.history = tests.history();
@@ -224,21 +212,6 @@ export default (function() {
   // TODO: Probably can be removecd
   self.tests.webWorkers = function() {
     return self.tests.window('Worker');
-  };
-
-  self.tests.localStorage = function() {
-    if (!self.tests.window('localStorage')) {
-      return false;
-    }
-    try {
-      const uid = new Date().toString();
-      localStorage.setItem(uid, uid);
-      const result = localStorage.getItem(uid) === uid;
-      localStorage.removeItem(uid);
-      return result && true;
-    } catch (error) {
-      return false;
-    }
   };
 
   self.tests.small = function() {

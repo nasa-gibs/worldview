@@ -69,13 +69,13 @@ class PlayAnimation extends React.Component {
    * @returns {string} Date string
    */
   getLastBufferDateStr = function(currentDate, startDate, endDate) {
-    const { queueLength, loop } = this.props;
+    const { queueLength, isLoopActive } = this.props;
     let day = currentDate;
     let i = 1;
 
     while (i < queueLength) {
       if (this.nextDate(day) > endDate) {
-        if (!loop) {
+        if (!isLoopActive) {
           return util.toISOStringSeconds(day);
         }
         day = startDate;
@@ -137,6 +137,9 @@ class PlayAnimation extends React.Component {
     ) {
       return this.play(this.currentPlayingDate);
     }
+    if (isLoopStart && currentDate.getTime() === startDate.getTime()) {
+      return this.play(this.currentPlayingDate);
+    }
     this.shiftCache();
   };
 
@@ -144,8 +147,8 @@ class PlayAnimation extends React.Component {
    * Check if we should loop
    */
   checkShouldLoop() {
-    const { loop, startDate, togglePlaying } = this.props;
-    if (loop) {
+    const { isLoopActive, startDate, togglePlaying } = this.props;
+    if (isLoopActive) {
       this.shiftCache();
       this.currentPlayingDate = util.toISOStringSeconds(startDate);
       setTimeout(() => {
@@ -296,6 +299,7 @@ class PlayAnimation extends React.Component {
    * @param endDate {object} JS date
    */
   addItemToQueue(currentDate, startDate, endDate) {
+    const { speed } = this.props;
     const nextDate = this.getNextBufferDate(currentDate, startDate, endDate);
     const nextDateStr = util.toISOStringSeconds(nextDate);
 
@@ -305,8 +309,10 @@ class PlayAnimation extends React.Component {
       && nextDate <= endDate
       && nextDate >= startDate
     ) {
-      this.addDate(nextDate);
-      this.checkQueue();
+      setTimeout(() => {
+        this.addDate(nextDate);
+        this.checkQueue();
+      }, Math.floor(1000 / speed));
     }
   }
 
@@ -318,14 +324,14 @@ class PlayAnimation extends React.Component {
    */
   isInToPlayGroup(testDate) {
     const {
-      startDate, endDate, loop, queueLength,
+      startDate, endDate, isLoopActive, queueLength,
     } = this.props;
     let i = 0;
     let day = util.parseDateUTC(this.currentPlayingDate);
     const jsTestDate = util.parseDateUTC(testDate);
     while (i < queueLength) {
       if (this.nextDate(day) > endDate) {
-        if (!loop) {
+        if (!isLoopActive) {
           return false;
         }
         day = startDate;
@@ -358,9 +364,9 @@ class PlayAnimation extends React.Component {
     this.addToInQueue(date);
     this.queue
       .add(() => promiseImageryForTime(date, activeLayers))
-      .then((date) => {
+      .then((addedDate) => {
         if (this.mounted) {
-          this.preloadObject[strDate] = date;
+          this.preloadObject[strDate] = addedDate;
           delete this.inQueueObject[strDate];
           this.shiftCache();
           this.checkQueue();
@@ -400,9 +406,8 @@ class PlayAnimation extends React.Component {
       selectDate, endDate, speed, isPlaying,
     } = this.props;
     let currentDateStr = index;
-    let nextDateStr; let
-      nextDateParsed;
-
+    let nextDateStr;
+    let nextDateParsed;
     const player = () => {
       if (!this.mounted) {
         return clearInterval(this.interval);
@@ -488,7 +493,7 @@ PlayAnimation.propTypes = {
   delta: PropTypes.number,
   hasCustomPalettes: PropTypes.bool,
   interval: PropTypes.string,
-  loop: PropTypes.bool,
+  isLoopActive: PropTypes.bool,
   maxQueueLength: PropTypes.number,
   onClose: PropTypes.func,
 };

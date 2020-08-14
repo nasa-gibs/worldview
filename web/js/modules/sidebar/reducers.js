@@ -8,11 +8,10 @@ import {
   MOBILE_COLLAPSE_SIDEBAR,
   MOBILE_EXPAND_SIDEBAR,
 } from './constants';
-import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
 
-const wasCallapseRequested = util.browser.localStorage
-  ? localStorage.getItem('sidebarState') === 'collapsed'
-  : false;
+const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
+const wasCallapseRequested = safeLocalStorage.getItem(SIDEBAR_COLLAPSED) === 'collapsed';
 export const sidebarState = {
   isCollapsed: wasCallapseRequested || false,
   wasCallapseRequested,

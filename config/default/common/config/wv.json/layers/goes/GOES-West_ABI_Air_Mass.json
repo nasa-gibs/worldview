@@ -15,7 +15,10 @@
       "daynight": [
         "day",
         "night"
-      ]
+      ],
+      "availability": {
+        "rollingWindow": 30
+      }
     }
   }
 }

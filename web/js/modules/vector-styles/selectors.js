@@ -7,7 +7,7 @@ import {
 
 import update from 'immutability-helper';
 import { containsCoordinate } from 'ol/extent';
-import stylefunction from 'ol-mapbox-style/stylefunction';
+import stylefunction from 'ol-mapbox-style/dist/stylefunction';
 import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import {
   getLayers,
@@ -79,10 +79,11 @@ export function setRange(layerId, props, index, palettes, state) {
 }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
-  const { compare } = state;
+  const { compare, proj } = state;
   let styleFunction;
   const layerId = def.id;
-  const glStyle = vectorStyles[layerId];
+  const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
+  const glStyle = vectorStyles[styleId];
   const olMap = lodashGet(state, 'map.ui.selected');
   const layerState = state.layers;
   const activeLayerStr = state.compare.activeString;
@@ -126,12 +127,13 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
   lodashEach(layerArray, (layerInLayerGroup) => {
+    if (layerInLayerGroup.isWMS) return; // WMS breakpoint tile
     layerInLayerGroup = layerInLayerGroup.getLayers ? lodashFind(layerInLayerGroup.getLayers().getArray(), 'isVector') : layerInLayerGroup;
     // Apply mapbox-gl styles
     const extentStartX = layerInLayerGroup.getExtent()[0];
     const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
 
-    styleFunction = stylefunction(layerInLayerGroup, glStyle, vectorStyleId);
+    styleFunction = stylefunction(layerInLayerGroup, glStyle, layerId);
     // Filter Orbit Tracks
     if (glStyle.name === 'Orbit Tracks'
       && (selected[layerId] && selected[layerId].length)) {

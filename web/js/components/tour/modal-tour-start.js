@@ -7,11 +7,11 @@ import {
   ModalFooter,
   InputGroup,
   InputGroupText,
-  Input,
 } from 'reactstrap';
+import Checkbox from '../util/checkbox';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
-import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
 import Scrollbars from '../util/scrollbar';
 
 class ModalStart extends React.Component {
@@ -79,37 +79,35 @@ class ModalStart extends React.Component {
         keyboard={false}
         innerRef={this.setWrapperRef}
       >
-        <ModalHeader toggle={endTour} charCode="">
+        <ModalHeader toggle={endTour}>
           Welcome to Worldview!
         </ModalHeader>
+
         <Scrollbars style={{ maxHeight: `${height - 200}px` }}>
-
           <ModalBody>
-
             <TourIntro toggleModalStart={toggleModalStart} />
             <TourBoxes
               stories={stories}
               storyOrder={storyOrder}
               selectTour={selectTour}
             />
-
           </ModalBody>
         </Scrollbars>
-        {util.browser.localStorage && (
+
+        {safeLocalStorage.enabled && (
           <ModalFooter>
             <InputGroup>
               <InputGroupText className="w-100">
-                <Input
-                  addon
-                  type="checkbox"
-                  className="float-right m-0"
-                  defaultChecked={checked}
-                  onChange={this.handleCheck}
-                  aria-label="Hide this box until a new story has been added."
+                <Checkbox
+                  id="hide-until-new-checkbox"
+                  name="hide-until-new"
+                  onCheck={this.handleCheck}
+                  color="gray"
+                  classNames="float-right m-0"
+                  aria-label="Hide this dialog until a new story has been added."
+                  checked={checked}
+                  label="Do not show until a new story has been added."
                 />
-                <span className="ml-2">
-                  Do not show until a new story has been added.
-                </span>
               </InputGroupText>
             </InputGroup>
           </ModalFooter>

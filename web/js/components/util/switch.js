@@ -27,6 +27,12 @@ const Switch = (props) => {
     toggleActive(active);
   }, [active]);
 
+  function toggleSwitch () {
+    // wait for css animation to complete before firing action
+    setTimeout(toggle, 200);
+    toggleActive(!isActive);
+  }
+
   return (
     <div className={containerClass}>
       <div className="react-switch-case switch-col">
@@ -35,11 +41,7 @@ const Switch = (props) => {
           id={id}
           type="checkbox"
           checked={isActive}
-          onChange={() => {
-            // wait for css animation to complete before firing action
-            setTimeout(toggle, 200);
-            toggleActive(!isActive);
-          }}
+          onChange={toggleSwitch}
         />
         <label
           className="react-switch-label"
@@ -50,7 +52,12 @@ const Switch = (props) => {
         </label>
       </div>
       <div className="react-switch-label-case switch-col">
-        {label}
+        <span
+          className="switch-label-text"
+          onClick={toggleSwitch}
+        >
+          {label}
+        </span>
         {tooltip
           && (
             <>
@@ -78,7 +85,7 @@ Switch.propTypes = {
   border: PropTypes.bool,
   color: PropTypes.string,
   containerClassAddition: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   label: PropTypes.string,
   toggle: PropTypes.func,
   tooltip: PropTypes.object,

@@ -114,8 +114,8 @@ export default class Swipe {
    */
   removeListenersFromBottomLayers(layers) {
     lodashEach(layers, (layer) => {
-      layer.un('precompose', this.reverseClip);
-      layer.un('postcompose', restore);
+      layer.un('prerender', this.reverseClip);
+      layer.un('postrender', restore);
     });
   }
 
@@ -125,8 +125,8 @@ export default class Swipe {
    */
   removeListenersFromLayers(layers) {
     lodashEach(layers, (layer) => {
-      layer.un('precompose', this.clip);
-      layer.un('postcompose', restore);
+      layer.un('prerender', this.clip);
+      layer.un('postrender', restore);
     });
   }
 }
@@ -240,8 +240,8 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
  * @param {Object} layer | Ol Layer object
  */
 const applyLayerListeners = function(layer) {
-  layer.on('precompose', this.clip);
-  layer.on('postcompose', restore);
+  layer.on('prerender', this.clip);
+  layer.on('postrender', restore);
   bottomLayers.push(layer);
 };
 /**
@@ -250,8 +250,8 @@ const applyLayerListeners = function(layer) {
  * @param {Object} layer | Ol Layer object
  */
 const applyReverseLayerListeners = function(layer) {
-  layer.on('precompose', this.reverseClip);
-  layer.on('postcompose', restore);
+  layer.on('prerender', this.reverseClip);
+  layer.on('postrender', restore);
   topLayers.push(layer);
 };
 

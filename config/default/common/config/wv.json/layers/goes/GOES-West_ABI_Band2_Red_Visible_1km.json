@@ -14,7 +14,10 @@
       "wrapX": true,
       "daynight": [
         "day"
-      ]
+      ],
+      "availability": {
+        "rollingWindow": 30
+      }
     }
   }
 }

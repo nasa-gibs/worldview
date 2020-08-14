@@ -6,9 +6,11 @@ import {
   toLower as lodashToLower,
   includes as lodashIncludes,
 } from 'lodash';
+import moment from 'moment';
 import { getTitles } from '../layers/selectors';
 import { getLayersForProjection } from './selectors';
 import facetConfig from './facet-config';
+import getSelectedDate from '../date/selectors';
 
 let initialLayersArray;
 let configRef;
@@ -123,6 +125,26 @@ function filterSearch (layer, val, terms) {
 }
 
 /**
+ * If the selected date has changed, we need to update the coverage filter that is date
+ * specific to reflect the new date.
+ *
+ * @param {*} filters
+ * @param {*} selectedDate
+ */
+function updateCoverageFilter (filters, selectedDate) {
+  if (!filters || !filters.length) return;
+  const formattedDate = moment.utc(selectedDate).format('YYYY MMM DD');
+  const oldValueMatch = (value) => !value.contains(formattedDate) && !value.contains('Always');
+
+  filters.forEach((f) => {
+    if (f.field !== 'coverage') return;
+    f.values = f.values.map(
+      (value) => (oldValueMatch(value) ? `Available ${formattedDate}` : value),
+    );
+  });
+}
+
+/**
  *
  * @param {Object} requestState
  *  - https://github.com/elastic/search-ui/blob/master/ADVANCED.md#request-state
@@ -149,7 +171,9 @@ async function onSearch ({ filters, searchTerm }) {
 export default function initSearch(state) {
   const { productPicker, config, proj } = state;
   const { filters, searchTerm } = productPicker;
+  const selectedDate = getSelectedDate(state);
 
+  updateCoverageFilter(filters, selectedDate);
   initialLayersArray = getLayersForProjection(state);
   configRef = config;
   projectionRef = proj && proj.id;

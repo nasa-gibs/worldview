@@ -40,7 +40,7 @@ module.exports = {
   // verify default left arrow enabled since loaded on current day
   'Left timeline arrow will not be disabled by default': (client) => {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
-    client.assert.cssClassNotPresent('#left-arrow-group', 'button-disabled');
+    client.assert.not.cssClassPresent('#left-arrow-group', 'button-disabled');
   },
 
   // verify default right arrow disabled since loaded on current day
@@ -52,7 +52,7 @@ module.exports = {
   // verify valid right arrow enabled since NOT loaded on current day
   'Right timeline arrow will not be disabled': (client) => {
     client.url(client.globals.url + localQuerystrings.knownDate);
-    client.assert.cssClassNotPresent('#right-arrow-group', 'button-disabled');
+    client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
   },
 
   // verify date selector is populated with date YYYY-MON-DD
@@ -92,26 +92,22 @@ module.exports = {
     client.setValue(dateSelectorMonthInput, ['MAR', client.Keys.ENTER]);
     client.setValue(dateSelectorDayInput, [31, client.Keys.ENTER]);
     client.setValue(dateSelectorYearInput, [2019, client.Keys.ENTER]);
-    client.assert.cssClassNotPresent(dateSelectorDayInput, 'invalid-input');
-    client.assert.cssClassNotPresent(dateSelectorMonthInput, 'invalid-input');
-    client.assert.cssClassNotPresent(dateSelectorYearInput, 'invalid-input');
+    client.assert.not.cssClassPresent(dateSelectorDayInput, 'invalid-input');
+    client.assert.not.cssClassPresent(dateSelectorMonthInput, 'invalid-input');
+    client.assert.not.cssClassPresent(dateSelectorYearInput, 'invalid-input');
   },
 
   // date selector up arrow rolls over from Feb 28 to 1 (non leap year) and the inverse
   'Date selector up arrow rolls over from Feb 28 to 1 (non leap year) and the inverse': (client) => {
     client.url(`${client.globals.url}?t=2013-02-28`);
     client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
-    client
-      .click('div.input-wrapper.input-wrapper-day > div.date-arrows.date-arrow-up')
-      .pause(500);
+    client.click(localSelectors.dayUp).pause(500);
 
     client.assert.attributeContains(dateSelectorDayInput, 'value', '01');
     client.assert.attributeContains(dateSelectorMonthInput, 'value', 'FEB');
     client.assert.attributeContains(dateSelectorYearInput, 'value', '2013');
 
-    client
-      .click('div.input-wrapper.input-wrapper-day > div.date-arrows.date-arrow-down')
-      .pause(500);
+    client.click(localSelectors.dayDown).pause(500);
 
     client.assert.attributeContains(dateSelectorDayInput, 'value', '28');
     client.assert.attributeContains(dateSelectorMonthInput, 'value', 'FEB');
