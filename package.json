@@ -179,6 +179,7 @@
     "canvg-browser": "^1.0.0",
     "compression": "^1.7.4",
     "core-js": "^3.6.4",
+    "elm-pep": "^1.0.6",
     "file-saver": "^2.0.2",
     "geographiclib": "^1.50.0",
     "history": "^4.7.2",
