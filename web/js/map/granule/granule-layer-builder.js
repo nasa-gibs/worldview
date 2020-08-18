@@ -16,6 +16,7 @@ import {
   getDateArrayFromObject,
   getCMRQueryDates,
   getIndexForSortedInsert,
+  getCMRQueryDateUpdateOptions,
   isWithinDateRange,
 } from './util';
 
@@ -28,6 +29,7 @@ const CMR_AJAX_OPTIONS = {
   dataType: 'json',
   timeout: 45 * 1000,
 };
+const CMR_QUERY_PREFIX = `${CMR_AJAX_OPTIONS.url}granules.json?shortName=`;
 
 export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const self = {};
@@ -70,10 +72,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       // build the array of arrays polygon
       let polygonReorder = [];
       for (let i = 0; i < polygons.length; i += 2) {
-        const tuple = [];
-        tuple.unshift(polygons[i]);
-        tuple.unshift(polygons[i + 1]);
-        polygonReorder.push(tuple);
+        const coordPair = [];
+        coordPair.unshift(polygons[i]);
+        coordPair.unshift(polygons[i + 1]);
+        polygonReorder.push(coordPair);
       }
 
       // add coordinates that exceeed max distance to table for revision
@@ -142,51 +144,74 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @static
    * @param {object} def - Layer specs
    * @param {object} selectedDate - current selected date (Note: may not return this date, but this date will be the max returned)
+   * @param {string} activeKey
+   * @param {string} projection
    * @returns {array} collection of granule objects with filtered granuleDates to select from
       * @param {string} granuleDate - UTC date string
       * @param {array} polygon - CMR granule polygon geometry
   */
-  self.getQueriedGranuleDates = (def, selectedDate, activeKey, projection) => {
+  self.getQueriedGranuleDates = (def, date, activeKey, projection) => {
     const {
       endDate, startDate, id, title, visible,
     } = def;
     // TODO: USE GRANULE LAYER ID
     const layerId = 'VJ102MOD';
 
-    const queryPrefix = 'https://cmr.earthdata.nasa.gov/search/granules.json?shortName=';
-    const { startQueryDate, endQueryDate } = getCMRQueryDates(selectedDate);
+    const { startQueryDate, endQueryDate } = getCMRQueryDates(date);
     const queryDateRange = `${startQueryDate.toISOString()},${endQueryDate.toISOString()}`;
-    const query = `${queryPrefix + layerId}&temporal=${queryDateRange}&pageSize=1000`;
+    const query = `${CMR_QUERY_PREFIX + layerId}&temporal=${queryDateRange}&pageSize=2000`;
 
-    // if layer id and query date range not previously requested, then fetch, process, and add to CMR query object
+    // update range/extend range checks and new dates (if applicable)
     const CMRDateStoreForLayer = self.CMRDateRanges[activeKey][id];
-    if (!CMRDateStoreForLayer || !CMRDateStoreForLayer[queryDateRange]) {
+    const {
+      canExtendRange,
+      needRangeUpdate,
+      rangeStart,
+      rangeEnd,
+    } = getCMRQueryDateUpdateOptions(
+      CMRDateStoreForLayer,
+      date,
+      startQueryDate,
+      endQueryDate,
+    );
+
+    // make cmr request with -6 days back through +1 day forward
+    // if layer id and query date range not previously requested, then fetch, process, and add to CMR query object
+    if (!CMRDateStoreForLayer || (CMRDateStoreForLayer && needRangeUpdate)) {
+      // update local CMR date object for layer
+      let startDateRange = startQueryDate;
+      let endDateRange = endQueryDate;
       if (!CMRDateStoreForLayer) {
         self.CMRDateRanges[activeKey][id] = {};
+      } else if (canExtendRange) {
+        startDateRange = rangeStart;
+        endDateRange = rangeEnd;
       }
-      self.CMRDateRanges[activeKey][id][queryDateRange] = true;
+      self.CMRDateRanges[activeKey][id].startDate = new Date(startDateRange);
+      self.CMRDateRanges[activeKey][id].endDate = new Date(endDateRange);
+
       return fetch(query, CMR_AJAX_OPTIONS)
         .then((response) => response.json())
         .then((data) => {
         // handle valid, empty response due to CMR issues
           if (data.feed.entry.length === 0) {
-            const selectedDateWithinRange = isWithinDateRange(selectedDate, startDate, endDate);
+            const dateWithinRange = isWithinDateRange(date, startDate, endDate);
             // only show modal error if layer not set to hidden and outside of selected date range
-            if (visible && selectedDateWithinRange) {
+            if (visible && dateWithinRange) {
               // throttled to 30 seconds
               self.throttleDispathCMRErrorDialog(title);
             }
             return [];
           }
           addGranuleCMRDateData(data, layerId, projection);
-          return processGranuleDateObjects(layerId, selectedDate, startQueryDate);
+          return processGranuleDateObjects(layerId, date, startQueryDate);
         })
         .catch((error) => {
           throw error;
         });
     }
     // user previously queried CMR granule dates
-    return processGranuleDateObjects(layerId, selectedDate, startQueryDate);
+    return processGranuleDateObjects(layerId, date, startQueryDate);
   };
 
   /**
@@ -196,12 +221,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @method processGranuleDateObjects
    * @static
    * @param {String} layerId
-   * @param {Object} selectedDate
+   * @param {Object} date
    * @param {Object} startQueryDate
    * @returns {Array} reducedGranuleDates
   */
-  const processGranuleDateObjects = (layerId, selectedDate, startQueryDate) => {
-    const selected = `${new Date(selectedDate).toISOString().split('.')[0]}Z`;
+  const processGranuleDateObjects = (layerId, date, startQueryDate) => {
+    const selected = `${new Date(date).toISOString().split('.')[0]}Z`;
     const queryStart = `${new Date(startQueryDate).toISOString().split('.')[0]}Z`;
 
     const granuleDates = self.CMRDataStore[layerId];
