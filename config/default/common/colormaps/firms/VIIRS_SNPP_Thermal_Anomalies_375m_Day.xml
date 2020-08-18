@@ -3,10 +3,10 @@
            xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.2.xsd">
   <ColorMap title="Fires Day">
     <Entries>
-      <ColorMapEntry rgb="255,0,0" sourceValue="200" transparent="false" ref="1" />
+      <ColorMapEntry rgb="240,40,40" sourceValue="200" transparent="false" ref="1" />
     </Entries>
     <Legend type="classification">
-      <LegendEntry rgb="255,0,0" id="1" tooltip="Fire" label="Fire" showLabel="true" />
+      <LegendEntry rgb="240,40,40" id="1" tooltip="Fire" label="Fire" showLabel="true" />
     </Legend>
   </ColorMap>
 </ColorMaps>
