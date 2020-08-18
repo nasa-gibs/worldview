@@ -43,7 +43,22 @@
   border-bottom-right-radius: 5px;
 }
 #wv-logo {
+  background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center rgba(40, 40, 40, 0.85);
+  display: block;
+  width: 286px;
+  height: 55px;
+  padding: 5px 0;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: 1px solid #333;
   border-bottom: 1px solid transparent;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  z-index: 1;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .wv-logo-distraction-free-mode {
   border-radius: 5px;

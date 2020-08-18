@@ -1,9 +1,9 @@
 import OlGeomPolygon from 'ol/geom/Polygon';
 import util from '../../util/util';
 
-export const REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
-export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
-export const REL_BROWSE = 'http://esipfed.org/ns/fedsearch/1.1/browse#';
+export const REL_DATA = 'https://esipfed.org/ns/fedsearch/1.1/data#';
+export const REL_METADATA = 'https://esipfed.org/ns/fedsearch/1.1/metadata#';
+export const REL_BROWSE = 'https://esipfed.org/ns/fedsearch/1.1/browse#';
 export const DATA_EXTS = ['hdf', 'he5', 'h5', 'hdf5', 'nc', 'bz2'];
 
 export function dataCmrClient(spec, store) {

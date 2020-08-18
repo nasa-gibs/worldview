@@ -58,7 +58,7 @@ export default function (L, geoutil, Arc, Coordinate) {
   };
 
   // Prints a string of latLng objects to a format useful in Jason's visualization
-  // tools: http://testbed.echo.nasa.gov/spatial-viz/interactive_spherical_polygon_coverage
+  // tools: https://testbed.echo.nasa.gov/spatial-viz/interactive_spherical_polygon_coverage
   ll2j = function (latlngs) {
     var ll;
     return ((function () {

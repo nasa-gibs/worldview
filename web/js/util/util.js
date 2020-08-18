@@ -287,7 +287,7 @@ export default (function(self) {
    * @param {String} text The text to be rendered.
    * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
    *
-   * @see http://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
+   * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
    */
   self.getTextWidth = function(text, font) {
     // re-use canvas object for better performance
@@ -827,7 +827,7 @@ export default (function(self) {
 
   /**
    * Http request using promises
-   * http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest
+   * https://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest
    *
    * @method get
    * @param {url} func the function to wrap
