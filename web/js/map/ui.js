@@ -443,6 +443,7 @@ export default function mapui(models, config, store, ui) {
     if (!config.features.compare || !compareState.active) {
       if (!compareState.active && compareMapUi.active) {
         compareMapUi.destroy();
+        clearLayers(map);
       }
       const defs = getLayers(
         activeLayers,
