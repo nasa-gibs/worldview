@@ -1,0 +1,29 @@
+{
+  "id": "MODIS_Terra_L3_SST_Thermal_4km_Day_Daily",
+  "title": "Sea Surface Temperature (L3, Day, Daily, Thermal, 4 km)",
+  "subtitle": "Terra / MODIS",
+  "period": "daily",
+  "wrap": "adjacentDays",
+  "daynight": [ "day" ],
+  "orbitTracks": [ "OrbitTracks_Terra_Descending" ],
+  "orbitDirection": [ "descending" ],
+  "conceptId": "C1293493714-PODAAC",
+  "categories": [
+    "Oceans",
+    "Severe Storms",
+    "Shipping",
+    "Cryosphere",
+    "Other"
+  ],
+  "measurements": [ "Sea Surface Temperature" ],
+  "layergroup": [
+    "modis",
+    "modis_terra"
+  ],
+  "resolutionAtNadir": "250m",
+  "continuous": false,
+  "ongoing": true,
+  "retentionPeriod": 7,
+  "latency": 1,
+  "updateFrequency": 3
+}
