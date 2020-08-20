@@ -21,12 +21,38 @@ export function mapUtilZoomAction(map, amount, duration, center) {
   const centerPoint = center || undefined;
   const view = map.getView();
   const zoom = view.getZoom();
+  const minZoom = view.getMinZoom();
+  const maxZoom = view.getMaxZoom();
+
+  let newZoom = zoom + amount;
+  const newZoomBelowMin = newZoom < minZoom;
+  const newZoomExceedsMax = newZoom > maxZoom;
+
+  // if newZoom is animating, it may not be an integer
+  // and will require revising to within min/max zoom constraints
+  if (zoom < maxZoom && newZoomExceedsMax) {
+    newZoom = maxZoom;
+  } else if (zoom > minZoom && newZoomBelowMin) {
+    newZoom = minZoom;
+  } else if (newZoomExceedsMax || newZoomBelowMin) {
+    return;
+  }
+
+  const isAnimating = view.getAnimating();
   view.animate({
-    zoom: zoom + amount,
-    duration: zoomDuration,
+    zoom: newZoom,
+    duration: isAnimating ? 0 : zoomDuration,
     center: centerPoint,
   });
 }
+
+/**
+ * getActiveLayerGroup
+ * @param {Object} map
+ * @param {string} layerGroupString
+ *
+ * @return {Object} group
+ */
 export function getActiveLayerGroup(map, layerGroupString) {
   let group = null;
   const array = map.getLayers().getArray();
@@ -39,6 +65,7 @@ export function getActiveLayerGroup(map, layerGroupString) {
   }
   return group;
 }
+
 /**
  * Create x/y/z vectortile requester url
  * @param {Date} date
@@ -63,6 +90,7 @@ export function createVectorUrl(date, layerName, tileMatrixSet) {
   ];
   return `?${params.join('&')}`;
 }
+
 /**
  *
  * @param {Object} def
