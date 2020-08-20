@@ -99,6 +99,22 @@ module.exports = {
     client.assert.containsText(granuleLayerSettingsGranuleDateListKnownSecond, '2019-09-23T17:18:00Z');
   },
 
+  'slow CMR query request - retrieving granule metadata dialog box displayed': (client) => {
+    // query timeout
+    const queryString = `${granuleLayerQueryString}&timeoutCMR=10000`;
+    client.url(client.globals.url + queryString);
+
+    // Click Data Download tab and show 'No results received yet' dialog box
+    client.waitForElementVisible('#indicator', TIME_LIMIT, () => {
+      client.expect
+        .element('#indicator > span')
+        .to.have.text.equal(
+          'Retrieving Granule Metadata.',
+        )
+        .after(TIME_LIMIT);
+    });
+  },
+
   after: (client) => {
     client.end();
   },

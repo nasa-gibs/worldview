@@ -4,6 +4,7 @@ import {
   throttle as lodashThrottle,
   each as lodashEach,
 } from 'lodash';
+import loadingIndicator from '../../ui/indicator';
 import {
   ADD_GRANULE_LAYER_DATES,
   UPDATE_GRANULE_LAYER_DATES,
@@ -27,7 +28,7 @@ const CMR_AJAX_OPTIONS = {
   },
   traditional: true,
   dataType: 'json',
-  timeout: 45 * 1000,
+  timeout: 30 * 1000,
 };
 const CMR_QUERY_PREFIX = `${CMR_AJAX_OPTIONS.url}granules.json?shortName=`;
 
@@ -43,9 +44,51 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     self.CMRDataStore = {};
     self.throttleDispathCMRErrorDialog = lodashThrottle(
       dispathCMRErrorDialog.bind(this),
-      30000,
+      CMR_AJAX_OPTIONS.timeout,
       { leading: true, trailing: false },
     );
+    self.indicatorId = 0;
+  };
+
+  /**
+   * Display error dialog in the event of no CMR data returned during valid date range
+   *
+   * @method dispathCMRErrorDialog
+   * @static
+   * @param {string} title
+   * @returns {void}
+  */
+  const dispathCMRErrorDialog = (title) => {
+    store.dispatch({
+      type: OPEN_BASIC,
+      headerText: `${title} is unavailable at this time.`,
+      bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
+    });
+  };
+
+  /**
+   * Initialize timeout countdown (2 seconds) and then show ui indicator for CMR request
+   *
+   * @method initCMRRequestIndicator
+   * @static
+   * @returns {void}
+  */
+  const initCMRRequestIndicator = () => {
+    self.indicatorId = setTimeout(() => {
+      loadingIndicator.show('Retrieving Granule Metadata.', 'images/activity.gif');
+    }, 2000);
+  };
+
+  /**
+   * Clear timeout for CMR request indicator and hide ui indicator
+   *
+   * @method dispathCMRErrorDialog
+   * @static
+   * @returns {void}
+  */
+  const destroyCMRRequestIndicator = () => {
+    clearTimeout(self.indicatorId);
+    loadingIndicator.hide();
   };
 
   /**
@@ -122,22 +165,6 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   };
 
   /**
-   * Display error dialog in the event of no CMR data returned during valid date range
-   *
-   * @method dispathCMRErrorDialog
-   * @static
-   * @param {string} title
-   * @returns {void}
-  */
-  const dispathCMRErrorDialog = (title) => {
-    store.dispatch({
-      type: OPEN_BASIC,
-      headerText: `${title} is unavailable at this time.`,
-      bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
-    });
-  };
-
-  /**
    * Query CMR to get dates filtered by day_night_flag
    *
    * @method getQueriedGranuleDates
@@ -146,11 +173,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} selectedDate - current selected date (Note: may not return this date, but this date will be the max returned)
    * @param {string} activeKey
    * @param {string} projection
+   * @param {number} testTimeoutCMR - used for testing cmr request indicator (time in ms)
    * @returns {array} collection of granule objects with filtered granuleDates to select from
       * @param {string} granuleDate - UTC date string
       * @param {array} polygon - CMR granule polygon geometry
   */
-  self.getQueriedGranuleDates = (def, date, activeKey, projection) => {
+  self.getQueriedGranuleDates = (def, date, activeKey, projection, testTimeoutCMR) => {
     const {
       endDate, startDate, id, title, visible,
     } = def;
@@ -190,15 +218,20 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       self.CMRDateRanges[activeKey][id].startDate = new Date(startDateRange);
       self.CMRDateRanges[activeKey][id].endDate = new Date(endDateRange);
 
+      // show indicator message and spinner after two seconds
+      initCMRRequestIndicator();
       return fetch(query, CMR_AJAX_OPTIONS)
         .then((response) => response.json())
+        .then((response) => new Promise((resolve) => setTimeout(() => resolve(response), testTimeoutCMR || 0)))
         .then((data) => {
-        // handle valid, empty response due to CMR issues
+          // destroy spinner
+          destroyCMRRequestIndicator();
+          // handle valid, empty response due to CMR issues
           if (data.feed.entry.length === 0) {
             const dateWithinRange = isWithinDateRange(date, startDate, endDate);
             // only show modal error if layer not set to hidden and outside of selected date range
             if (visible && dateWithinRange) {
-              // throttled to 30 seconds
+              // throttled to 30 seconds (based on CMR_AJAX_OPTIONS.timeout)
               self.throttleDispathCMRErrorDialog(title);
             }
             return [];
@@ -207,6 +240,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
           return processGranuleDateObjects(layerId, date, startQueryDate);
         })
         .catch((error) => {
+          // destroy spinner
+          destroyCMRRequestIndicator();
           throw error;
         });
     }
@@ -475,7 +510,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     activeKey,
     date,
   ) => {
-    const proj = state.proj.selected;
+    const {
+      config: { parameters: { timeoutCMR: testTimeoutCMR } },
+      proj: { selected: { id: projection } },
+    } = state;
     let updatedGranules = false;
     let granuleCount = 20;
     if (granuleOptions) {
@@ -498,7 +536,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     return new Promise((resolve) => {
-      resolve(self.getQueriedGranuleDates(def, date, activeKey, proj.id));
+      resolve(self.getQueriedGranuleDates(def, date, activeKey, projection, testTimeoutCMR));
     }).then((availableGranuleDates) => {
       const dayNightFilter = 'DAY'; // 'DAY', 'NIGHT', 'BOTH'
       const filteredGranuleDates = self.filterGranuleDates(

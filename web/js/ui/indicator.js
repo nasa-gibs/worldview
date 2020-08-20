@@ -39,14 +39,19 @@ export default (function() {
   };
 
   self.hide = function(hides) {
-    if (lodashIsString(hides)) {
-      hides = [hides];
-    }
-    lodashEach(hides, (id) => {
-      lodashRemove(self.active, {
-        id,
+    if (!hides) {
+      self.active = [];
+      self._hide();
+    } else {
+      if (lodashIsString(hides)) {
+        hides = [hides];
+      }
+      lodashEach(hides, (id) => {
+        lodashRemove(self.active, {
+          id,
+        });
       });
-    });
+    }
     if (lodashIsEmpty(self.active)) {
       self._hide();
     } else {
