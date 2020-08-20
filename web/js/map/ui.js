@@ -798,6 +798,7 @@ export default function mapui(models, config, store, ui) {
         }),
         new OlInteractionMouseWheelZoom({
           duration: animationDuration,
+          constrainResolution: true,
         }),
         new OlInteractionDragZoom({
           duration: animationDuration,
@@ -910,6 +911,20 @@ export default function mapui(models, config, store, ui) {
     $zoomIn.mousemove((e) => e.stopPropagation());
 
     /*
+     * Debounce for below onZoomChange function
+     *
+     * @funct debouncedZoomChange
+     * @static
+     *
+     * @returns {void}
+     *
+     */
+    const debouncedZoomChange = () => {
+      onZoomChange();
+      self.events.trigger('movestart');
+    };
+
+    /*
      * Sets zoom buttons as active or inactive based
      * on the zoom level
      *
@@ -933,11 +948,7 @@ export default function mapui(models, config, store, ui) {
         $zoomOut.button('enable');
       }
     };
-
-    map.getView().on('change:resolution', () => {
-      onZoomChange();
-      self.events.trigger('movestart');
-    });
+    map.getView().on('change:resolution', lodashDebounce(debouncedZoomChange, 30));
     onZoomChange();
   }
 
