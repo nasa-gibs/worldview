@@ -18,13 +18,13 @@ class Event extends React.Component {
    */
   getDateLists() {
     const { event, isSelected, selectedDate } = this.props;
-    if (event.geometries.length > 1) {
+    if (event.geometry.length > 1) {
       return (
         <ul
           className="dates"
           style={!isSelected ? { display: 'none' } : { display: 'block' }}
         >
-          {event.geometries.map((geometry, index) => {
+          {event.geometry.map((geometry, index) => {
             const date = geometry.date.split('T')[0];
             return (
               <li key={`${event.id}-${date}`} className="dates">
@@ -115,7 +115,7 @@ class Event extends React.Component {
 
   render() {
     const { event, isVisible, isSelected } = this.props;
-    const eventDate = util.parseDateUTC(event.geometries[0].date);
+    const eventDate = util.parseDateUTC(event.geometry[0].date);
     let dateString = `${util.giveWeekDay(eventDate)
     }, ${
       util.giveMonth(eventDate)

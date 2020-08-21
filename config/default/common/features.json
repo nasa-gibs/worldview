@@ -19,7 +19,7 @@
             "url": "https://wvs.earthdata.nasa.gov/api/v1/snapshot"
         },
         "naturalEvents": {
-            "host": "https://eonet.sci.gsfc.nasa.gov/api/v2.1"
+            "host": "https://eonet.sci.gsfc.nasa.gov/api/v3"
         }
     },
     "scripts": [

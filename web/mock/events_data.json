@@ -22,7 +22,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-05-18T00:00:00Z",
 					"type": "Point", "coordinates": [ -120.37116, 36.12089 ]
@@ -52,7 +52,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-05-13T00:00:00Z",
 					"type": "Point", "coordinates": [ -70.6640625, -33.45894275368763 ]
@@ -82,7 +82,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-04-23T00:00:00Z",
 					"type": "Point", "coordinates": [ 148.42, -5.525 ]
@@ -112,7 +112,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2012-08-08T00:00:00Z",
 					"type": "Point", "coordinates": [ -107.0791, -74.6012 ]
@@ -254,7 +254,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2012-08-08T00:00:00Z",
 					"type": "Point", "coordinates": [ -107.0791, -74.6012 ]
@@ -400,7 +400,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2012-10-04T00:00:00Z",
 					"type": "Point", "coordinates": [ -41.3934, -75.8634 ]

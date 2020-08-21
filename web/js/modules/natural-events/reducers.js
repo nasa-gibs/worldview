@@ -18,9 +18,9 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 
 const sortEvents = function(events) {
   return events.map((e) => {
-    e.geometries = lodashOrderBy(e.geometries, 'date', 'desc');
+    e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
     // Discard duplicate geometry dates
-    e.geometries = lodashUniqBy(e.geometries, (g) => g.date.split('T')[0]);
+    e.geometry = lodashUniqBy(e.geometry, (g) => g.date.split('T')[0]);
     return e;
   });
 };
