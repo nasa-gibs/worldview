@@ -22,7 +22,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-05-27T18:00:00Z",
 					"type": "Point", "coordinates": [ 88.70, 14.00 ]
@@ -92,7 +92,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-05-27T18:00:00Z",
 					"type": "Point", "coordinates": [ 88.70, 14.00 ]
@@ -149,7 +149,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-05-27T18:00:00Z",
 					"type": "Point", "coordinates": [178.50, 14.00 ]
@@ -185,7 +185,7 @@
           "url": "http://inciweb.nwcg.gov/incident/6182/"
         }
       ],
-      "geometries": [
+      "geometry": [
         {
           "date": "2015-08-30T15:00:00Z",
           "type": "Point",
@@ -211,7 +211,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-05-13T00:00:00Z",
 					"type": "Point", "coordinates": [ -70.6640625, -33.45894275368763 ]
@@ -241,7 +241,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2017-04-23T00:00:00Z",
 					"type": "Point", "coordinates": [ 148.42, -5.525 ]
@@ -271,7 +271,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2012-08-08T00:00:00Z",
 					"type": "Point", "coordinates": [ -107.0791, -74.6012 ]
@@ -413,7 +413,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2012-08-08T00:00:00Z",
 					"type": "Point", "coordinates": [ -107.0791, -74.6012 ]
@@ -559,7 +559,7 @@
 				}
 
 			],
-			"geometries": [
+			"geometry": [
 				{
 					"date": "2012-10-04T00:00:00Z",
 					"type": "Point", "coordinates": [ -41.3934, -75.8634 ]

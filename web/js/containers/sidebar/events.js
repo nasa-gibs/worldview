@@ -11,7 +11,7 @@ import {
   selectEvent,
   deselectEvent,
 } from '../../modules/natural-events/actions';
-import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
+import { getEventsWithinExtent } from '../../map/natural-events/util';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
 import getSelectedDate from '../../modules/date/selectors';

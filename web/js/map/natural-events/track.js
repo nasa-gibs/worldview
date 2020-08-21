@@ -13,7 +13,7 @@ import {
   debounce as lodashDebounce,
 } from 'lodash';
 
-import naturalEventsUtilGetEventById from './util';
+import { naturalEventsUtilGetEventById } from './util';
 import {
   naturalEventsClusterPointToGeoJSON,
   naturalEventsClusterGetPoints,
@@ -80,6 +80,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
       debounceTrackUpdate();
     } else if (self.trackDetails.id) self.update(null);
   };
+
   /**
    * Remove track
    *
@@ -107,7 +108,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
     const { proj } = store.getState();
     let newTrackDetails;
     const { trackDetails } = self;
-    if (!event || event.geometries.length < 2) {
+    if (!event || event.geometry.length < 2) {
       // If track exists remove it.
       // Else return empty Object
       newTrackDetails = trackDetails.id
@@ -190,6 +191,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
   init();
   return self;
 }
+
 /**
  * Determine if track point is across the date line from the
  * selected point
@@ -200,6 +202,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
 const crossesDateLine = function(activeCoord, nextCoord) {
   return Math.abs(activeCoord[0] - nextCoord[0]) > 180;
 };
+
 /**
  * Convert coordinates to be over date line
  * in geographic projections
@@ -214,6 +217,7 @@ const getOverDateLineCoordinates = function(coordinates) {
     ? [Math.abs(180 + 180 - Math.abs(long)), lat]
     : [-Math.abs(180 + 180 - Math.abs(long)), lat];
 };
+
 /**
  * Create vector layer
  *
@@ -233,6 +237,7 @@ const naturalEventsTrackLayer = function(proj, featuresArray) {
     style: [getLineStyle('black', 2), getLineStyle('white', 1)],
   });
 };
+
 /**
  * Create event point
  *
@@ -327,8 +332,8 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
     ? [-250, -90, 250, 90]
     : [-180, -90, 180, 90];
 
-  const selectedCoords = lodashFind(eventObj.geometries, (geometry) => geometry.date.split('T')[0] === selectedDate).coordinates;
-  lodashEach(eventObj.geometries, (geometry, index) => {
+  const selectedCoords = lodashFind(eventObj.geometry, (geometry) => geometry.date.split('T')[0] === selectedDate).coordinates;
+  lodashEach(eventObj.geometry, (geometry, index) => {
     let { coordinates } = geometry;
     const date = geometry.date.split('T')[0];
     const isSelected = selectedDate === date;

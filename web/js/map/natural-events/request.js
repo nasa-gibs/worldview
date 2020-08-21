@@ -45,16 +45,16 @@ export default function naturalEventsRequest(models, ui, config) {
 
       // Sort event geometries by descending date
       model.data.events = model.data.events.map((e) => {
-        e.geometries = lodashOrderBy(e.geometries, 'date', 'desc');
+        e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
         // Discard duplicate geometry dates
-        e.geometries = lodashUniqBy(e.geometries, (g) => g.date.split('T')[0]);
+        e.geometry = lodashUniqBy(e.geometry, (g) => g.date.split('T')[0]);
         return e;
       });
 
       // Sort events by descending date
       model.data.events = lodashOrderBy(
         model.data.events,
-        (e) => e.geometries[0].date,
+        (e) => e.geometry[0].date,
         'desc',
       );
       ui.sidebar.renderEvents();
