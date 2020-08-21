@@ -128,21 +128,30 @@ function getFeatureJSON(measurements, crs) {
   return {
     type: 'FeatureCollection',
     features: Object.values(measurements).map(({ feature, overlay }, index) => {
-      const type = feature.getGeometry().getType();
-      const transformFn = type === 'Polygon'
+      const geom = feature.getGeometry();
+      const isPolygon = geom.getType() === 'Polygon';
+      const transformFn = isPolygon
         ? transformPolygonArc
         : transformLineStringArc;
-      const transformedGeom = transformFn(feature.getGeometry(), crs);
-      const coordinates = type === 'Polygon'
+      const transformedGeom = transformFn(geom, crs);
+      const coordinates = isPolygon
         ? transformedGeom.getCoordinates()
         : transformedGeom.getCoordinates()[0];
+
+      if (isPolygon) {
+        debugger;
+        coordinates[0].push(coordinates[0][0]);
+      }
 
       const [size, units] = overlay.element.innerText.split(' ');
       const parsedSize = parseFloat(size.replace(/,/g, ''));
 
       return {
         type: 'Feature',
-        geometry: { type, coordinates },
+        geometry: {
+          type: geom.getType(),
+          coordinates,
+        },
         properties: {
           id: `${index}`,
           size: parsedSize,
