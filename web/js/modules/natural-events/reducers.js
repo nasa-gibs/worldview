@@ -94,6 +94,7 @@ export function eventsReducer(state = eventsReducerState, action) {
       return state;
   }
 }
+
 export const defaultRequestState = {
   isLoading: false,
   error: null,
@@ -101,13 +102,16 @@ export const defaultRequestState = {
   type: null,
   ignore: [],
 };
+
 export function eventRequestResponse(props = {}) {
   return lodashAssign({}, defaultRequestState, props);
 }
+
 export function eventsRequestReducer(actionName, state, action) {
   const START = `${actionName}_START`;
   const SUCCESS = `${actionName}_SUCCESS`;
   const FAILURE = `${actionName}_FAILURE`;
+
   switch (action.type) {
     case START:
       return eventRequestResponse({
@@ -122,8 +126,9 @@ export function eventsRequestReducer(actionName, state, action) {
           : 'sources';
       const filtered = action.response[key].filter((item) => formatResponse(item, state.ignore));
       return eventRequestResponse({
-        response:
-          actionName === REQUEST_EVENTS ? sortEvents(filtered) : filtered,
+        response: actionName === REQUEST_EVENTS
+          ? sortEvents(filtered)
+          : filtered,
         isLoading: false,
       });
     }
@@ -137,6 +142,7 @@ export function eventsRequestReducer(actionName, state, action) {
       return eventRequestResponse(state);
   }
 }
+
 export function requestedEvents(state = {}, action) {
   return eventsRequestReducer(REQUEST_EVENTS, state, action);
 }
