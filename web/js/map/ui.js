@@ -45,7 +45,7 @@ import {
   getLayers,
   isRenderable as isRenderableLayer,
 } from '../modules/layers/selectors';
-
+import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
   CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE,
 } from '../modules/map/constants';
@@ -53,6 +53,7 @@ import { getLeadingExtent } from '../modules/map/util';
 
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
+import { hasVectorLayers } from '../modules/layers/util';
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -150,13 +151,23 @@ export default function mapui(models, config, store, ui) {
         self.selectedVectors = newSelection;
         return;
       }
+      case STOP_ANIMATION:
+      case EXIT_ANIMATION:
+        return onStopAnimation();
       case SELECT_DATE:
         return updateDate();
       default:
         break;
     }
   };
-
+  const onStopAnimation = function() {
+    const { compare, layers } = store.getState();
+    const activeLayerStr = compare.activeString;
+    const hasActiveVectors = hasVectorLayers(layers[activeLayerStr]);
+    if (hasActiveVectors) {
+      reloadLayers();
+    }
+  };
   /*
    * Sets up map listeners
    *

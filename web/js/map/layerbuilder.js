@@ -382,7 +382,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     * @param {object} attributes
     */
   const createLayerVector = function(def, options, day, state, attributes) {
-    const { proj, compare } = state;
+    const { proj, compare, animation } = state;
     let date;
     let gridExtent;
     let matrixIds;
@@ -391,6 +391,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const source = config.sources[def.source];
+    const animationIsPlaying = animation.isPlaying;
     gridExtent = selectedProj.maxExtent;
     layerExtent = gridExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
@@ -465,7 +466,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
-    if (breakPointLayerDef) {
+    if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
@@ -473,7 +474,14 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       });
       wmsLayer.wv = attributes;
       return layerGroup;
+    } if (breakPointResolution && animationIsPlaying) {
+      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      wmsLayer.wv = attributes;
+      return wmsLayer;
     }
+
     return layer;
   };
 
