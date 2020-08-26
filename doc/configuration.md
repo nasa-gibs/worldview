@@ -24,10 +24,13 @@ and update layer configurations; then use `npm run build:config` to rebuild the
 configuration for use by the application. Run these commands separately
 as needed or use `npm run updateconfig` as a shortcut to run both.
 
+For the purposes of this documentation, all `config` paths with exclude the parent default directory
+`config/default/common/` and use that directory as the base. Therefore, `config/default/common/config/palettes-custom.json` will be written as `config/palettes-custom.json`.
+
 ### Subdirectories
 
-If you have a custom configuration in a subdirectory of `options/` other than
-`options/release/`, pass in the name of the subdirectory to use with
+If you have a custom configuration in a subdirectory of `config/` other than
+`config/release/`, pass in the name of the subdirectory to use with
 `CONFIG_ENV=subdirectory_name npm run build:config`. To build an incomplete configuration,
 prefix the command like this: `IGNORE_ERRORS=true npm run build:config`.
 
@@ -397,8 +400,9 @@ The minimum set of required properties are as follows:
 - **title**: Title of the story displayed to the end user. This is displayed in the story overview modal and the story in-progress modal.
 
 To display story steps in the in-progress modal, a **steps** object should exist with the following properties:
-- **description**: points to a metadata markdown file located in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`
+- **description**: points to a metadata markdown file located in `config/metadata/stories/`_`[story_id]`_`/`
 - **stepLink**: The URL parameters of a linked Worldview instance separated by an `&` symbol (i.e. `p=geographic&t1=2018-12-30`)
+
 Optional **steps** parameter:
 - **transition**: Advanced Configuration. An object containing an **element** and a custom **action**. These transitions occur between changing steps; these require custom code to target the element and an action to action upon that element.
 i.e. the following code will play the animation if the animation widget is present.
@@ -476,12 +480,12 @@ To display read more links on the end of story modal, a *readMoreLinks* object s
 
 New stories can be added to the Worldview tour modals via the following instructions.
 
-First, stories must be added to `config/wv.json/stories` and `config/wv.json/storyOrder.json`. Then, step descriptions and the overview background image(s) can be added in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`.
+First, stories must be added to `config/wv.json/stories` and `config/wv.json/storyOrder.json`. Then, step descriptions and the overview background image(s) can be added in `config/metadata/stories/`_`[story_id]`_`/`.
 
 - Add New Tour Storie(s)
   - Follow [New Tour Stories](configuration.md#new-tour-stories) above to create JSON file in `config/wv.json/stories`.
 - Add to Story Order
   - Add to `config/wv.json/storyOrder.json`.
 - Add story step descriptions/metadata & overview background images
-  - Create .md file in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`. The *story_id* folder identifier should be labeled the same as the folder identifier in `config/wv.json/stories/`_`[story_id]`_`/`. Each step defined in the metadata folder will need to correspond to the `description` parameter within that file.
+  - Create .md file in `config/metadata/stories/`_`[story_id]`_`/`. The *story_id* folder identifier should be labeled the same as the folder identifier in `config/wv.json/stories/`_`[story_id]`_`/`. Each step defined in the metadata folder will need to correspond to the `description` parameter within that file.
 - Rebuild the configuration with `npm run build:config` for use by the application.
