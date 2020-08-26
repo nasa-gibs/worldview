@@ -118,7 +118,7 @@
                 "ICESat-2/Space-Track.org": {
                     "id": "space-track-org-icesat-2",
                     "title": "ICESat-2/Space-Track.org",
-                    "description": "reference/orbits/icesat-2",
+                    "description": "reference/orbits/ICESAT-2",
                     "image": "",
                     "settings": [
                         "OrbitTracks_ICESAT-2_Ascending",
@@ -158,7 +158,7 @@
                 "MetOp-A/Space-Track.org": {
                     "id": "space-track-org-metop-a",
                     "title": "MetOp-A/Space-Track.org",
-                    "description": "reference/orbits/metop-a",
+                    "description": "reference/orbits/METOP-A",
                     "image": "",
                     "settings": [
                         "OrbitTracks_METOP-A_Ascending",
@@ -168,7 +168,7 @@
                 "MetOp-B/Space-Track.org": {
                     "id": "space-track-org-metop-b",
                     "title": "MetOp-B/Space-Track.org",
-                    "description": "reference/orbits/metop-b",
+                    "description": "reference/orbits/METOP-B",
                     "image": "",
                     "settings": [
                         "OrbitTracks_METOP-B_Ascending",
@@ -178,7 +178,7 @@
                 "MetOp-C/Space-Track.org": {
                     "id": "space-track-org-metop-c",
                     "title": "MetOp-C/Space-Track.org",
-                    "description": "reference/orbits/metop-c",
+                    "description": "reference/orbits/METOP-C",
                     "image": "",
                     "settings": [
                         "OrbitTracks_METOP-C_Ascending",
@@ -198,7 +198,7 @@
                 "OCO-2/Space-Track.org": {
                     "id": "space-track-org-oco-2",
                     "title": "OCO-2/Space-Track.org",
-                    "description": "reference/orbits/oco-2",
+                    "description": "reference/orbits/OCO-2",
                     "image": "",
                     "settings": [
                         "OrbitTracks_OCO-2_Ascending",

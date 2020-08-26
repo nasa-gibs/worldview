@@ -60,7 +60,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Fires_Terra,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-07-27-T00%3A00%3A00Z&z=3&v=-129.84610045719097,51.58366744062985,-121.40860045719097,55.70573775312985&ab=on&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=2&al=false"
+          "stepLink": "v=-154.18494413132447,39.84559065933589,-94.68221966406098,66.80776268356468&t=2018-07-27-T00%3A00%3A00Z&as=2018-07-27-T00%3A00%3A00Z&ae=2018-08-27-T00%3A00%3A00Z&l=MODIS_Terra_Thermal_Anomalies_All,Reference_Labels,Reference_Features,Coastlines(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&av=2&ab=on"
         },
         {
           "id": "005",
