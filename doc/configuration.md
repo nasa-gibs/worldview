@@ -406,10 +406,14 @@ i.e. the following code will play the animation if the animation widget is prese
 
 ```json
 {
+  "id": "004",
+  "description": "step004.html",
   "transition": {
     "element": "animation",
     "action": "play"
-  }
+  },
+  "stepLink": "v=-139.69542125350569,34.20775389990919,-107.14073375350569,49.67650389990919&t=2019-05-11-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(opacity=0.19),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+}
 ```
 
 ### Story Order
