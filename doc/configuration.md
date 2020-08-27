@@ -414,7 +414,7 @@ i.e. the following code will play the animation if the animation widget is prese
 
 ### Story Order
 
-The `config/default/common/config/wv.json/storyOrder.json` file must be updated to include the new story identifier. This file determines the order that stories are displayed in the overview modal. The overview modal is limited to the first **9** stories identified in this file.
+The `config/default/common/config/wv.json/storyOrder.json` file must be updated to include the new story identifier. This file determines the order that stories are displayed in the overview modal.
 
 ### Optional properties:
 
