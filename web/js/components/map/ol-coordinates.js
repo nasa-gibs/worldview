@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  throttle as lodashThrottle,
+} from 'lodash';
 import { transform } from 'ol/proj';
 import Coordinates from './coordinates';
 import util from '../../util/util';
@@ -14,8 +17,8 @@ export default class OlCoordinates extends React.Component {
       crs: null,
       format: null,
     };
-    this.mouseMove = this.mouseMove.bind(this);
-    this.mouseOut = this.mouseOut.bind(this);
+    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 8);
+    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 8);
     this.changeFormat = this.changeFormat.bind(this);
     this.registerMouseListeners();
   }
