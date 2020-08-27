@@ -26,14 +26,14 @@ as needed or use `npm run updateconfig` as a shortcut to run both.
 
 ### Subdirectories
 
-If you have a custom configuration in a subdirectory of `options/` other than
-`options/release/`, pass in the name of the subdirectory to use with
+If you have a custom configuration in a subdirectory of `config/` other than
+`config/release/`, pass in the name of the subdirectory to use with
 `CONFIG_ENV=subdirectory_name npm run build:config`. To build an incomplete configuration,
 prefix the command like this: `IGNORE_ERRORS=true npm run build:config`.
 
 ## New Layers
 
-Create a new JSON document in `config/wv.json/layers` named `X.json` where `X`
+Create a new JSON document in `config/default/common/config/wv.json/layers` named `X.json` where `X`
 is the layer identifier used in the WMTS or WMS API call. This file can be
 placed in any subdirectory as needed for organizational purposes.
 
@@ -77,7 +77,7 @@ The following properties are required if this information is not available via t
 - **futureLayer**: Use `true` if the layer has an end date after the current date.
 - **futureTime**: Use `[number][type="D,M,Y"]` (i.e. "3D")  with the `futurelayer` parameter to denote a layer that has a dynamic, future end date. The `[number]` parameter represents the dateInterval, `[type]` can be equal to `"D"`, `"M"`, or `"Y"` to represent day, month or year interval.
 
-A *projections* object must exist which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in `config/wv.json/projections`). Example:
+A *projections* object must exist which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in `config/default/common/config/wv.json/projections`). Example:
 
 ```json
 "projections": {
@@ -94,12 +94,12 @@ A *projections* object must exist which contains an object for each projection s
 
 The projection parameters are as follows:
 
-- **source**: Identifier that indicates which endpoint contains this layer (see `config/wv.json/sources.json`)
+- **source**: Identifier that indicates which endpoint contains this layer (see `config/default/common/config/wv.json/sources.json`)
 - **matrixSet**: For WMTS layers only, the name of the matrix set as defined in the endpoint's GetCapabilities document.
 
 ### Layer Order
 
-The `config/wv.json/layerOrder.json` file must be updated to include the new layer identifier. This file determines the order that layers are displayed in the add layers tab.
+The `config/default/common/config/wv.json/layerOrder.json` file must be updated to include the new layer identifier. This file determines the order that layers are displayed in the add layers tab.
 
 ### Optional Properties
 
@@ -124,7 +124,7 @@ The `config/wv.json/layerOrder.json` file must be updated to include the new lay
 To display a color palette legend, a `palette` object should exist with the following properties:
 
 - **id**: Identifier of the palette. This should match the name of the colormap file without the extension.
-- **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see `config/palettes-custom.json`). Example, *["orange_1", "red_1"]*
+- **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see `config/default/common/config/palettes-custom.json`). Example, *["orange_1", "red_1"]*
 - **immutable**(optional): When this flag is set to true, the options to adjust thresholds and colormaps are removed.
 
 ### Full Example
@@ -263,28 +263,28 @@ Vector layers created from the Global Imagery Browse Services (GIBS) will have a
 
 New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview using the following instructions.
 
-First, layers must be added to `config/wv.json/layers` and `config/wv.json/layerOrder.json`. Then they must be added to the `config/wv.json/measurements` and `config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
+First, layers must be added to `config/default/common/config/wv.json/layers` and `config/default/common/config/wv.json/layerOrder.json`. Then they must be added to the `config/default/common/config/wv.json/measurements` and `config/default/common/config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/default/common/config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
 
 - Fetch GIBS GetCapabilities with `npm run getcapabilities`. This gets the latest layer information and colormaps from GIBS.
 - Add new layer(s)
-  - Follow [New Layers](configuration.md#new-layers) above to create JSON file in `config/wv.json/layers`.
+  - Follow [New Layers](configuration.md#new-layers) above to create JSON file in `config/default/common/config/wv.json/layers`.
 - Add to Measurements
-  - Add to relevant measurement or create a new JSON file in `config/wv.json/measurements`.
+  - Add to relevant measurement or create a new JSON file in `config/default/common/config/wv.json/measurements`.
 - Add to Categories
-  - Add to relevant category (legacy (a.k.a. hazards and disasters) and scientific) or create a new JSON file in the relevant category in `config/wv.json/categories`.
+  - Add to relevant category (legacy (a.k.a. hazards and disasters) and scientific) or create a new JSON file in the relevant category in `config/default/common/config/wv.json/categories`.
 - Add to Layer Order
-  - Add to `config/wv.json/layerOrder.json`.
+  - Add to `config/default/common/config/wv.json/layerOrder.json`.
 - Add layer to Image Download
   - *Worldview Snapshots Team adds layers to Image Download*
 - Add Layer descriptions/metadata, if it exists
-  - Create .md file in `config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
+  - Create .md file in `config/default/common/config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
 - Add Data Download for product, if it exists
-  - Refer to [Data Download](data_download.md) and create JSON file in `config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
+  - Refer to [Data Download](data_download.md) and create JSON file in `config/default/common/config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
 - Rebuild the configuration with `npm run build:config` for use by the application.
 
 ## New Map Sources
 
-Modify the JSON document, `config/wv.json/sources.json`. There is a *sources*
+Modify the JSON document, `config/default/common/config/wv.json/sources.json`. There is a *sources*
 object that contains an object for each map source keyed by the source identifier.
 For layers that can be configured via a GIBS WMTS GetCapabilities document or
 for WMS layers, the only property required is:
@@ -327,7 +327,7 @@ keyed by the matrix set identifier.
 ### GetCapabilities
 
 To automatically fetch configuration information from the GetCapabilities
-document, modify the `config.json` file and add an object to the
+document, modify the `config/default/release/config.json` file and add an object to the
 `wv-options-fetch` object with the following properties:
 
 - **from**: The URL to fetch the GetCapabilities document
@@ -338,7 +338,7 @@ Now add an object to the `wv-options-wmts` object with the following properties:
 - **source**: The identifier of the source that corresponds to this endpoint.
 - **from**: The name of the temporary file used int he `wv-options-fetch` object.
 - **to**: The name of the temporary output JSON file.
-- **projection**: The identifier of the projection used in this endpoint (see `config/wv.json/projections`)
+- **projection**: The identifier of the projection used in this endpoint (see `config/default/common/config/wv.json/projections`)
 - **maxResolution**: The resolution of first tile matrix entry.
 
 ### config.json Example
@@ -365,7 +365,7 @@ Now add an object to the `wv-options-wmts` object with the following properties:
 
 ## New Tour Stories
 
-Create a new JSON document in `config/wv.json/stories` named `X.json` where `X`
+Create a new JSON document in `config/default/common/config/wv.json/stories` named `X.json` where `X`
 is the story identifier. This file can be placed in any subdirectory as needed for organizational purposes.
 
 Here's an example of a minimum configuration for the Hurricane Florence story:
@@ -399,21 +399,26 @@ The minimum set of required properties are as follows:
 To display story steps in the in-progress modal, a **steps** object should exist with the following properties:
 - **description**: points to a metadata markdown file located in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`
 - **stepLink**: The URL parameters of a linked Worldview instance separated by an `&` symbol (i.e. `p=geographic&t1=2018-12-30`)
+
 Optional **steps** parameter:
 - **transition**: Advanced Configuration. An object containing an **element** and a custom **action**. These transitions occur between changing steps; these require custom code to target the element and an action to action upon that element.
 i.e. the following code will play the animation if the animation widget is present.
 
 ```json
 {
+  "id": "004",
+  "description": "step004.html",
   "transition": {
     "element": "animation",
     "action": "play"
-  }
+  },
+  "stepLink": "v=-139.69542125350569,34.20775389990919,-107.14073375350569,49.67650389990919&t=2019-05-11-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(opacity=0.19),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+}
 ```
 
 ### Story Order
 
-The `config/wv.json/storyOrder.json` file must be updated to include the new story identifier. This file determines the order that stories are displayed in the overview modal. The overview modal is limited to the first **9** stories identified in this file.
+The `config/default/common/config/wv.json/storyOrder.json` file must be updated to include the new story identifier. This file determines the order that stories are displayed in the overview modal.
 
 ### Optional properties:
 
@@ -476,12 +481,12 @@ To display read more links on the end of story modal, a *readMoreLinks* object s
 
 New stories can be added to the Worldview tour modals via the following instructions.
 
-First, stories must be added to `config/wv.json/stories` and `config/wv.json/storyOrder.json`. Then, step descriptions and the overview background image(s) can be added in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`.
+First, stories must be added to `config/default/common/config/wv.json/stories` and `config/default/common/config/wv.json/storyOrder.json`. Then, step descriptions and the overview background image(s) can be added in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`.
 
 - Add New Tour Storie(s)
-  - Follow [New Tour Stories](configuration.md#new-tour-stories) above to create JSON file in `config/wv.json/stories`.
+  - Follow [New Tour Stories](configuration.md#new-tour-stories) above to create JSON file in `config/default/common/config/wv.json/stories`.
 - Add to Story Order
-  - Add to `config/wv.json/storyOrder.json`.
+  - Add to `config/default/common/config/wv.json/storyOrder.json`.
 - Add story step descriptions/metadata & overview background images
-  - Create .md file in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`. The *story_id* folder identifier should be labeled the same as the folder identifier in `config/wv.json/stories/`_`[story_id]`_`/`. Each step defined in the metadata folder will need to correspond to the `description` parameter within that file.
+  - Create .md file in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`. The *story_id* folder identifier should be labeled the same as the folder identifier in `config/default/common/config/wv.json/stories/`_`[story_id]`_`/`. Each step defined in the metadata folder will need to correspond to the `description` parameter within that file.
 - Rebuild the configuration with `npm run build:config` for use by the application.
