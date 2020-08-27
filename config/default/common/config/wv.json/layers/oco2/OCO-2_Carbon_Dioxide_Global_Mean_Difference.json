@@ -5,7 +5,7 @@
       "title": "Carbon Dioxide (Difference from Global Mean)",
       "subtitle": "OCO-2",
       "description": "oco2/OCO-2_Carbon_Dioxide_Global_Mean_Difference",
-      "tags": "oco2",
+      "tags": "oco2 co2",
       "group": "overlays",
       "layergroup": [
         "oco2"
