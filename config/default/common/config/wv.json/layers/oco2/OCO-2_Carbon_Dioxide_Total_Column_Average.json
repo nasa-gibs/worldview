@@ -5,7 +5,7 @@
       "title": "Carbon Dioxide (Total Column Average)",
       "subtitle": "OCO-2",
       "description": "oco2/OCO-2_Carbon_Dioxide_Total_Column_Average",
-      "tags": "oco2",
+      "tags": "oco2 co2",
       "group": "overlays",
       "layergroup": [
         "oco2"
