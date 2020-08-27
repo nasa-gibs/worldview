@@ -247,47 +247,42 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
     }
     projection = viewState.projection;
     i = 0;
-    if (layer.type === 'VECTOR_TILE') {
-      // No need to look up tiles, vectors can resolve ASAP
-      resolve();
-    } else {
-      renderer = new OlRendererCanvasTileLayer(layer);
-      tileSource = layer.getSource();
-      // tileSource.expireCache(projection);
-      tileGrid = tileSource.getTileGridForProjection(projection);
-      currentZ = tileGrid.getZForResolution(
-        viewState.resolution,
-        renderer.zDirection,
+    renderer = new OlRendererCanvasTileLayer(layer);
+    tileSource = layer.getSource();
+    // tileSource.expireCache(projection);
+    tileGrid = tileSource.getTileGridForProjection(projection);
+    currentZ = tileGrid.getZForResolution(
+      viewState.resolution,
+      renderer.zDirection,
+    );
+    tileGrid.forEachTileCoord(extent, currentZ, (tileCoord) => {
+      const tile = tileSource.getTile(
+        tileCoord[0],
+        tileCoord[1],
+        tileCoord[2],
+        pixelRatio,
+        projection,
       );
-      tileGrid.forEachTileCoord(extent, currentZ, (tileCoord) => {
-        const tile = tileSource.getTile(
-          tileCoord[0],
-          tileCoord[1],
-          tileCoord[2],
-          pixelRatio,
-          projection,
-        );
-        tile.load();
+      tile.load();
 
-        if (tile.state === 2) resolve();
+      if (tile.state === 2) resolve();
 
-        const loader = function(e) {
-          if (e.type === 'tileloadend') {
-            i -= 1;
-            if (i === 0) {
-              resolve();
-            }
-          } else {
-            console.error(`No response for tile request ${layer.wv.key}`);
-            resolve(); // some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
+      const loader = function(e) {
+        if (e.type === 'tileloadend') {
+          i -= 1;
+          if (i === 0) {
+            resolve();
           }
-          this.un('tileloadend', loader); // remove event listeners from memory
-          this.un('tileloaderror', loader);
-        };
-        tileSource.on('tileloadend', loader);
-        tileSource.on('tileloaderror', loader);
-        i += 1;
-      });
-    }
+        } else {
+          console.error(`No response for tile request ${layer.wv.key}`);
+          resolve(); // some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
+        }
+        this.un('tileloadend', loader); // remove event listeners from memory
+        this.un('tileloaderror', loader);
+      };
+      tileSource.on('tileloadend', loader);
+      tileSource.on('tileloaderror', loader);
+      i += 1;
+    });
   });
 }
