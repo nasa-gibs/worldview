@@ -34,7 +34,6 @@ function setMeasurementSourceFacetProps (layers, measurements) {
     lodashForEach(measureObj.sources, ({ settings = [] }, sourceKey) => {
       settings.forEach((id) => {
         setLayerProp(layers[id], 'measurements', measureKey);
-        setLayerProp(layers[id], 'sources', sourceKey);
       });
     });
   });
@@ -123,6 +122,7 @@ export default function buildLayerFacetProps(config, selectedDate) {
   return lodashMap(layers, (layer) => {
     setCoverageFacetProp(layer, selectedDate);
     setLayerPeriodFacetProps(layer);
+    setLayerProp(layer, 'sources', layer.subtitle);
     if (layer.daynight && layer.daynight.length) {
       if (typeof layer.daynight === 'string') {
         layer.daynight = [layer.daynight];
