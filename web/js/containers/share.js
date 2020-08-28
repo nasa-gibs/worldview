@@ -144,15 +144,17 @@ class ShareLinkContainer extends Component {
     });
 
     // If a short link can be generated, replace the full link.
-    if (type === 'twitter' || type === 'email') {
-      this.getShortLink()
-        .then(({ data }) => {
-          shareLink = getSharelink(type, data.url);
-        })
-        .catch(() => {
-          console.warn('Unable to shorten URL, full link generated.');
-        })
-        .finally(() => window.open(shareLink, '_blank'));
+    if (type === 'twitter') {
+      const newTab = window.open('', '_blank');
+      this.getShortLink().then(({ data }) => {
+        shareLink = getSharelink(type, data.url);
+        newTab.location = shareLink;
+      });
+    } else if (type === 'email') {
+      this.getShortLink().then(({ data }) => {
+        shareLink = getSharelink(type, data.url);
+        window.location = shareLink;
+      });
     } else {
       window.open(shareLink, '_blank');
     }
