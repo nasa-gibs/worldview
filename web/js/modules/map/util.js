@@ -249,7 +249,6 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
     i = 0;
     renderer = new OlRendererCanvasTileLayer(layer);
     tileSource = layer.getSource();
-    // tileSource.expireCache(projection);
     tileGrid = tileSource.getTileGridForProjection(projection);
     currentZ = tileGrid.getZForResolution(
       viewState.resolution,
