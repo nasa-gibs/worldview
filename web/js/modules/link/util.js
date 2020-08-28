@@ -47,6 +47,7 @@ export function emailUrlParams(subject, body) {
       encodeURIComponent(body)}`
   );
 }
+
 export function getSharelink(type, url) {
   const shareMessage = 'Check out what I found in NASA Worldview!';
   const twMessage = 'Check out what I found in #NASAWorldview -';
@@ -65,9 +66,7 @@ export function getSharelink(type, url) {
       return undefined;
   }
 }
-export function openPromisedSocial(url, win) {
-  win.location.assign(url);
-}
+
 export function encode(value) {
   let encoded = encodeURIComponent(value);
   lodashEach(ENCODING_EXCEPTIONS, (exception) => {
