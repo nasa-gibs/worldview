@@ -80,6 +80,7 @@ class MeasureButton extends React.Component {
           title="Measure distances &amp; areas"
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
+          disabled={isActive}
         >
           <FontAwesomeIcon icon={faRuler} size="2x" />
         </Button>
