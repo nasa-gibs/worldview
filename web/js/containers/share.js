@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
-import { encode, getSharelink, openPromisedSocial } from '../modules/link/util';
+import { encode, getSharelink } from '../modules/link/util';
 import { serializeDate } from '../modules/date/util';
 import getSelectedDate from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
@@ -136,32 +136,25 @@ class ShareLinkContainer extends Component {
 
   onLinkClick = (type) => {
     const permalink = this.getPermalink();
+    let shareLink = getSharelink(type, permalink);
+
     googleTagManager.pushEvent({
       event: 'social_share_platform',
       social_type: type,
     });
+
     // If a short link can be generated, replace the full link.
     if (type === 'twitter' || type === 'email') {
-      const promise = this.getShortLink();
-      let win = window;
-      if (type === 'twitter') {
-        win = window.open('', '_blank');
-      }
-      promise
-        .then((result) => {
-          if (result.status_code === 200) {
-            const href = getSharelink(type, result.data.url);
-            openPromisedSocial(href, win);
-          }
+      this.getShortLink()
+        .then(({ data }) => {
+          shareLink = getSharelink(type, data.url);
         })
         .catch(() => {
-          const href = getSharelink(type, permalink);
-          openPromisedSocial(href, win);
           console.warn('Unable to shorten URL, full link generated.');
-        });
+        })
+        .finally(() => window.open(shareLink, '_blank'));
     } else {
-      const href = getSharelink(type, permalink);
-      window.open(href, '_blank');
+      window.open(shareLink, '_blank');
     }
   }
 
