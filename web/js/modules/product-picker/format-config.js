@@ -22,10 +22,10 @@ function setLayerProp (layer, prop, value) {
   if (!layer || featuredMeasurement) {
     return;
   }
-  if (layer[prop] && !layer[prop].includes(value)) {
-    layer[prop].push(value);
-  } else if (value) {
+  if (!layer[prop]) {
     layer[prop] = [value];
+  } else if (!layer[prop].includes(value)) {
+    layer[prop].push(value);
   }
 }
 
