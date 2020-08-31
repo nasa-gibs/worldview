@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import Button from '../../components/util/button';
 
 /**
@@ -9,9 +10,14 @@ import Button from '../../components/util/button';
  * to NASA's Earthdata Search web tool that will proceed in fetching corresponding
  * layer data and granule files that are available for download.
  */
-function SmartHandoffModal({ extentCoords, goToEarthDataSearch }) {
+function SmartHandoffModal({
+  selectedDate, selectedLayer, extentCoords, goToEarthDataSearch,
+}) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
+
+  const { title, subtitle } = selectedLayer;
+  const date = moment.utc(selectedDate).format('YYYY MMM DD');
 
   return (
 
@@ -30,39 +36,53 @@ function SmartHandoffModal({ extentCoords, goToEarthDataSearch }) {
       { showMoreInfo
       && (
       <div id="smart-handoff-about">
-        <h1 id="about-heading">About Earthdata Search</h1>
+        <hr />
+        <h1 className="about-heading">About Earthdata Search</h1>
         <div id="about-section">
           <p>
             Earthdata Search provides the only means for data discovery, filtering, visualization, and
             access across all of NASA Earth science data holdings. The current selected layer and the designated
-            viewport region within Worldview will be transferred to Earthdata Search.
+            viewport region in Worldview will be used to derive data granules within Earthdata Search.
           </p>
-          <p>
-            More information to be documented later... Earthdata Search provides the only means for data discovery, filtering, visualization, and
-            access across all of NASA Earth science data holdings. The current selected layer and the designated
-            viewport region within Worldview will be transferred to Earthdata Search.
+
+          <img id="earth-data-gif" src="../../../images/earth-data-search-preview.gif" />
+          <p id="earth-data-caption">
+            Granules that are available to download will be listed in the white pull out menu. Each granule listed can be
+            downloaded individually or the entire set contained within the bounding box can be downloaded as a zip file.
           </p>
+
           <p>
-            More information to be documented later... Earthdata Search provides the only means for data discovery, filtering, visualization, and
-            access across all of NASA Earth science data holdings. The current selected layer and the designated
-            viewport region within Worldview will be transferred to Earthdata Search.
+            To leverage the use of Earthdata Search, users must register at
+            {' '}
+            <a href="https://urs.earthdata.nasa.gov/home" target="_blank" rel="noopener noreferrer">urs.earthdata.nasa.gov</a>
+            . The registration is provided free of charge. The user needs to set up a user ID, password, and provide
+            additional information, such as, user name, affiliation, country and a valid e-mail address, in order to complete
+            the registration process.
+          </p>
+
+          <h1 className="about-heading">Why must I register?</h1>
+          <p>
+            As noted on the Earthdata homepage, the Earthdata Login provides a single mechanism for user registration and profile
+            management for all EOSDIS system components (DAACs, Tools, Services). Your Earthdata login also helps the EOSDIS program
+            better understand the usage of EOSDIS services to improve user experience through customization of tools and improvement
+            of services. EOSDIS data are openly available to all and free of charge except where governed by international agreements.
           </p>
         </div>
       </div>
       )}
 
       <div id="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
-        {showMoreInfo ? 'Hide Info' : 'Show More Info'}
+        <h2><span>{showMoreInfo ? 'Hide Info' : 'Show More Info'}</span></h2>
       </div>
 
       <div id="layer-info">
         <h1> Selected layer to download: </h1>
-        <p id="layer-name"> INSERT LAYER NAME </p>
-        <p id="layer-mata-data"> INSERT LAYER META DATA </p>
+        <p id="layer-name">{`${title}`}</p>
+        <p id="layer-mata-data">{`${subtitle} (${date})`}</p>
       </div>
 
 
-      <div id="button-group">
+      <div className="button-group">
         <Button
           onClick={() => console.log('closing')}
           id="cancel-btn"
@@ -77,6 +97,11 @@ function SmartHandoffModal({ extentCoords, goToEarthDataSearch }) {
         />
       </div>
 
+      <div className="button-group">
+        <input name="show-earthdata-modal" type="checkbox" />
+        <label htmlFor="show-earthdata-modal">Do not show this message again.</label>
+      </div>
+
     </div>
 
   );
@@ -88,6 +113,8 @@ function SmartHandoffModal({ extentCoords, goToEarthDataSearch }) {
 SmartHandoffModal.propTypes = {
   extentCoords: PropTypes.object,
   goToEarthDataSearch: PropTypes.func,
+  selectedDate: PropTypes.instanceOf(Date),
+  selectedLayer: PropTypes.object,
 };
 
 /**

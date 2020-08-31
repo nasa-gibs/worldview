@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce } from 'lodash';
+import moment from 'moment';
 import SmartHandoffModal from './smart-handoff-modal';
 import Button from '../../components/util/button';
 import Crop from '../../components/util/image-crop';
@@ -11,6 +12,8 @@ import { getLayers } from '../../modules/layers/selectors';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { openCustomContent } from '../../modules/modal/actions';
 import { changeCropBounds } from '../../modules/animation/actions';
+import getSelectedDate from '../../modules/date/selectors';
+
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -29,7 +32,6 @@ class SmartHandoff extends Component {
     const {
       screenWidth,
       screenHeight,
-      selectedDate,
       onBoundaryChange,
     } = props;
 
@@ -40,7 +42,6 @@ class SmartHandoff extends Component {
         x2: screenWidth / 2 + 100,
         y2: screenHeight / 2 + 100,
       },
-      selectedDate,
       selectedLayer: null,
     };
 
@@ -84,13 +85,14 @@ class SmartHandoff extends Component {
       activeLayers,
       isActive,
       showWarningModal,
+      selectedDate,
     } = this.props;
 
     /** Determine if data-download 'smart-handoff' tab is activated by user */
     if (!isActive) return null;
 
     /** Bounardies referencing the coordinates displayed around image crop */
-    const { boundaries, selectedDate, selectedLayer } = this.state;
+    const { boundaries, selectedLayer } = this.state;
     const {
       x, y, x2, y2,
     } = boundaries;
@@ -189,8 +191,14 @@ class SmartHandoff extends Component {
 const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () => {
   const { conceptId } = selectedLayer;
   const { southWest, northEast } = extentCoords;
-  const date = selectedDate.toISOString();
-  const earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&pg[0][qt]=${date}&pg[0][dnf]=DAY&sb=${southWest},${northEast}&m=-30.59375!-210.9375!0!1!0!0,2`;
+
+  const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
+  const endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
+
+  const dateRange = `${startDate},${endDate}`;
+
+  const earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&pg[0][qt]=${dateRange}&pg[0][dnf]=DAY&sb=${southWest},${northEast}&m=-30.59375!-210.9375!0!1!0!0,2`;
+
   window.open(earthDataSearchURL, '_blank');
   /* Example URL string
     https://search.earthdata.nasa.gov/search/granules?
@@ -202,6 +210,14 @@ const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () =>
       &ff=Customizable
       &tl=1571168792!4!!
   */
+
+  // API Call to CMR
+
+  // Standard vs NRT
+
+  // Check DNF for ESD - dont put in query 
+
+
 };
 
 /**
@@ -231,7 +247,7 @@ SmartHandoff.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { tabTypes } = ownProps;
   const {
-    browser, layers, map, proj, date, compare, sidebar, boundaries,
+    browser, layers, map, proj, compare, sidebar, boundaries,
   } = state;
   const { screenWidth, screenHeight } = browser;
   const { activeString } = compare;
@@ -244,7 +260,7 @@ const mapStateToProps = (state, ownProps) => {
     proj: proj.selected,
     screenWidth,
     screenHeight,
-    selectedDate: date.selected,
+    selectedDate: getSelectedDate(state),
     tabTypes,
   };
 };
@@ -260,6 +276,8 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: 'Leaving Worldview',
         bodyComponent: SmartHandoffModal,
         bodyComponentProps: {
+          selectedDate,
+          selectedLayer,
           extentCoords,
           goToEarthDataSearch: openEarthDataSearch(selectedDate, selectedLayer, extentCoords),
         },

@@ -8,8 +8,15 @@
 #smart-handoff-product-list {
     color: white;
 }
-#button-group {
+.button-group {
     text-align: center;
+}
+.button-group input[type="checkbox"] {
+    margin: 10px;
+}
+.button-group label {
+    vertical-align: top;
+    margin-top: 10px;
 }
 #cancel-btn, #continue-btn {
     width: 200px;
@@ -69,19 +76,37 @@
     font-size: 12pt;
     color: #DDD;
 }
+#smart-handoff-about hr {
+    border-bottom: 1px solid #333;
+   margin-top: 15px;
+   margin-bottom: -10px;
+}
 #about-section {
     overflow-y: scroll;
-    height: 175px;
+    height: 400px;
 }
 #about-section p {
     color: #BBB;
     margin-bottom: 10px;
     margin-right: 5px;
 }
-#about-heading {
-    font-size: 9pt;
+.about-heading {
+    font-size: 9pt !important;
     color: #e94d19;
     margin: 25px 0 10px 0;
+}
+#earth-data-gif {
+    padding-top: 10px;
+    display: block;
+    margin: 0 auto;
+    width: 92%;
+}
+#earth-data-caption {
+    font-style: italic;
+    margin: 20px;
+    padding-bottom: 25px;
+    width: 94%;
+    text-align: center;
 }
 #layer-info {
     text-align: center;
@@ -99,19 +124,30 @@
 }
 #toggle-more-info {
     margin-top: 25px;
-    color: #777;
+    color: #7bf;
     font-size: 12pt;
     text-align: center;
-    text-decoration: underline;
 }
 #toggle-more-info:hover {
-    color: #e94d19;
+    color: #9df;
     cursor: pointer;
-    text-decoration: none;
+    text-decoration: underline;
+}
+#toggle-more-info h2 {
+    width: 100%;
+   text-align: center;
+   border-bottom: 1px solid #333;
+   line-height: 0.1em;
+   margin: 10px 0 20px;
+}
+
+#toggle-more-info h2 span {
+    background:#191a1b;
+    padding:0 15px;
 }
 
 /** Overrides the modal component styles */
-#transferring-to-earthdata-search .modal-content {
+#transferring-to-earthdata-search.modal-dialog .modal-body {
     background: #191a1b !important;
     border: 1px solid #444 !important;
 }
