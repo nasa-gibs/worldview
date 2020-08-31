@@ -20,7 +20,7 @@ import history from '../main';
 
 const getShortenRequestString = (mock, permalink) => {
   const mockStr = mock || '';
-  if (/localhost/.test(window.location)) {
+  if (/localhost/.test(window.location.href)) {
     return 'mock/short_link.json';
   }
   return (
@@ -146,13 +146,15 @@ class ShareLinkContainer extends Component {
     // If a short link can be generated, replace the full link.
     if (type === 'twitter') {
       const newTab = window.open('', '_blank');
-      this.getShortLink().then(({ data }) => {
-        shareLink = getSharelink(type, data.url);
+      this.getShortLink().then(({ link }) => {
+        shareLink = getSharelink(type, link);
+      }).finally(() => {
         newTab.location = shareLink;
       });
     } else if (type === 'email') {
-      this.getShortLink().then(({ data }) => {
-        shareLink = getSharelink(type, data.url);
+      this.getShortLink().then(({ link }) => {
+        shareLink = getSharelink(type, link);
+      }).finally(() => {
         window.location = shareLink;
       });
     } else {
