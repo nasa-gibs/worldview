@@ -1,7 +1,13 @@
 {
-  "data": {
-    "url": "http://go.nasa.gov/1iKIZ4j"
-  },
-  "status_code": 200,
-  "status_txt": "OK"
+  "created_at": "2020-08-31T17:21:41+0000",
+  "id": "go.nasa.gov/3lzPmPt",
+  "link": "https://go.nasa.gov/3lzPmPt",
+  "custom_bitlinks": [],
+  "long_url": "https://worldview.uat.earthdata.nasa.gov/?l=Reference_Labels(hidden),Reference_Features(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor&t=2020-08-31-T17:05:22Z",
+  "archived": false,
+  "tags": [],
+  "deeplinks": [],
+  "references": {
+    "group": "https://api-ssl.bitly.com/v4/groups/BdcvjW6GKf1"
+  }
 }
