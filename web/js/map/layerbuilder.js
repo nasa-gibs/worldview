@@ -71,7 +71,7 @@ export default function mapLayerBuilder(config, cache, store) {
   /**
    * Create Openlayers TileLayer or LayerGroup
    *
-   * @method createLayer
+   * @method createLayerWrapper
    * @static
    * @param {object} state
    * @param {object} def
@@ -82,7 +82,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} granuleAttributes
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
-  const createLayer = (
+  const createLayerWrapper = (
     state,
     def,
     key,
@@ -176,12 +176,29 @@ export default function mapLayerBuilder(config, cache, store) {
         cache.setItem(key, layer, cacheOptions);
         layer.setVisible(false);
       } else {
-        layer = self.granuleBuilder.getGranuleLayer(def, attributes, granuleAttributes);
+        resolve(getGranuleLayer(def, attributes, granuleAttributes, opacity).then((granuleLayer) => granuleLayer));
       }
     }
     layer.setOpacity(opacity || 1.0);
     resolve(layer); // TileLayer or LayerGroup
   });
+
+  /**
+   * Get granule layer invocation
+   *
+   * @method getGranuleLayer
+   * @static
+   * @param {object} def - Layer Specs
+   * @param {object} attributes - Layer options
+   * @param {object} granuleAttributes - granule options
+   * @param {number} opacity
+   * @returns {object} OpenLayers layer
+   */
+  const getGranuleLayer = async function (def, attributes, granuleAttributes, opacity) {
+    const granuleLayer = await self.granuleBuilder.getGranuleLayer(def, attributes, granuleAttributes);
+    granuleLayer.setOpacity(opacity || 1.0);
+    return granuleLayer;
+  };
 
   /**
    * Create a new OpenLayers Layer
@@ -247,7 +264,7 @@ export default function mapLayerBuilder(config, cache, store) {
       : new Promise((resolve) => { resolve({}); });
 
     return createLayerPromise
-      .then((granuleAttributes) => createLayer(
+      .then((granuleAttributes) => createLayerWrapper(
         state,
         def,
         key,

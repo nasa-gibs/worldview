@@ -61,6 +61,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const dispathCMRErrorDialog = (title) => {
     store.dispatch({
       type: OPEN_BASIC,
+      key: '__BASIC_MODAL__CMR_REQUEST_ERROR',
       headerText: `${title} is unavailable at this time.`,
       bodyText: 'The Common Metadata Repository(CMR) service that provides metadata for this granule layer is currently unavailable. Please try again later.',
     });
@@ -75,6 +76,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   */
   const initCMRRequestIndicator = () => {
     self.indicatorId = setTimeout(() => {
+      clearTimeout(self.indicatorId);
       loadingIndicator.show('Retrieving Granule Metadata.', 'images/activity.gif');
     }, 2000);
   };
@@ -88,7 +90,9 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   */
   const destroyCMRRequestIndicator = () => {
     clearTimeout(self.indicatorId);
-    loadingIndicator.hide();
+    setTimeout(() => {
+      loadingIndicator.hide();
+    }, 2000);
   };
 
   /**
@@ -246,7 +250,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
         });
     }
     // user previously queried CMR granule dates
-    return processGranuleDateObjects(layerId, date, startQueryDate);
+    return new Promise((resolve) => { resolve(processGranuleDateObjects(layerId, date, startQueryDate)); });
   };
 
   /**
@@ -335,9 +339,9 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       });
       return layerPromise;
     });
-    return new Promise((resolve) => Promise.all(granuleLayers).then((results) => {
-      resolve(results);
-    }));
+    return new Promise((resolve) => {
+      Promise.all(granuleLayers).then((layers) => resolve(layers));
+    });
   };
 
   /**
@@ -434,8 +438,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     });
     layer.set('granuleGroup', true);
     layer.set('layerId', `${id}-${group}`);
-    // layer.wv = Object.assign(attributes, granuleAttributes);
-    // console.log(layer.wv);
+    layer.wv = Object.assign(attributes, granuleAttributes);
 
     // create geometry object with date:polygons key/value pair filtering out granules outside date range
     const granuleGeometry = filteredGranules.reduce((dates, granuleObject) => {

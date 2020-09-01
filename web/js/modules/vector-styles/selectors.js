@@ -125,9 +125,9 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
-  const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
+  const layerArray = layer && layer.getLayers ? layer.getLayers().getArray() : [layer];
   lodashEach(layerArray, (layerInLayerGroup) => {
-    if (layerInLayerGroup.isWMS) return; // WMS breakpoint tile
+    if (!layerInLayerGroup || layerInLayerGroup.isWMS) return; // WMS breakpoint tile
     layerInLayerGroup = layerInLayerGroup.getLayers ? lodashFind(layerInLayerGroup.getLayers().getArray(), 'isVector') : layerInLayerGroup;
     // Apply mapbox-gl styles
     const extentStartX = layerInLayerGroup.getExtent()[0];

@@ -90,9 +90,10 @@ export default function mapui(models, config, store, ui) {
     store,
   );
   self.layerKey = layerBuilder.layerKey;
-  const createLayer = self.createLayer = layerBuilder.createLayer;
+  self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
   self.selectedVectors = {};
+  self.processingPromise = null;
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -127,6 +128,12 @@ export default function mapui(models, config, store, ui) {
       }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
+        if (def.isGranule) {
+          self.processingPromise = new Promise((resolve) => {
+            resolve(addLayer(def));
+          });
+          return self.processingPromise;
+        }
         return addLayer(def);
       }
       case CLEAR_ROTATE:
@@ -184,6 +191,14 @@ export default function mapui(models, config, store, ui) {
       case EXIT_ANIMATION:
         return onStopAnimation();
       case SELECT_DATE:
+        if (self.processingPromise) {
+          return new Promise((resolve) => {
+            resolve(self.processingPromise);
+          }).then(() => {
+            self.processingPromise = null;
+            return updateDate();
+          });
+        }
         return updateDate();
       default:
         break;
@@ -419,6 +434,15 @@ export default function mapui(models, config, store, ui) {
     };
   };
 
+  /*
+   * Event reload layers invocation
+   *
+   * @method eventReloadLayers
+   * @static
+   *
+   * @returns {void}
+   */
+  self.eventReloadLayers = () => self.reloadLayers();
 
   /*
    * get layers from models obj
@@ -436,7 +460,7 @@ export default function mapui(models, config, store, ui) {
   const reloadLayers = self.reloadLayers = async(map, granuleOptions) => {
     map = map || self.selected;
     const state = store.getState();
-    const { layers, proj } = state;
+    const { layers } = state;
     const compareState = state.compare;
     const layerGroupStr = compareState.activeString;
     const activeLayers = layers[layerGroupStr];
@@ -452,22 +476,24 @@ export default function mapui(models, config, store, ui) {
         },
         state,
       );
+
       // get all created layers as promises
       const createdLayersFromDefs = defs.map((def) => new Promise((resolve) => {
-        const { isGranule, opacity } = def;
+        const { isGranule } = def;
         // update granule date order and reset
         const granuleLayerParam = isGranule && getGranuleOptions(state, def, layerGroupStr, granuleOptions);
-        const createdLayer = createLayer(def, {}, granuleLayerParam);
+        const createdLayer = self.createLayer(def, {}, granuleLayerParam);
         resolve(createdLayer);
       }));
 
-      // resolve them with Promise.all to preserve layer order delay for CMR granule requests
+      // resolve them with Promise.all to preserve layer order for CMR granule requests
       await Promise.all(createdLayersFromDefs)
         .then((createdLayers) => {
           clearLayers(map);
           lodashEach(createdLayers, (createdLayer) => {
             map.addLayer(createdLayer);
           });
+          // updateLayerVisibilities();
         })
         .catch((error) => {
           throw error;
@@ -484,7 +510,7 @@ export default function mapui(models, config, store, ui) {
       }
 
       const stateArrayGroups = stateArray.map((arr) => new Promise((resolve) => {
-        const compareLayerGroup = getCompareLayerGroup(arr, layers, proj.id, state, granuleOptions);
+        const compareLayerGroup = getCompareLayerGroup(arr, layers, state, granuleOptions);
         resolve(compareLayerGroup);
       }));
 
@@ -494,6 +520,8 @@ export default function mapui(models, config, store, ui) {
           lodashEach(newGroupedLayers, (compareLayerGroup) => {
             map.addLayer(compareLayerGroup);
           });
+          // compareMapUi.create(map, compareState.mode);
+          // updateLayerVisibilities();
         })
         .catch((error) => {
           throw error;
@@ -502,11 +530,12 @@ export default function mapui(models, config, store, ui) {
       updateLayerVisibilities();
     }
   };
+
   /**
    * Create a Layergroup given the date and layerGroups
    * @param {Array} arr | Array of date/layer group strings
    */
-  async function getCompareLayerGroup(arr, layersState, projId, state, granuleOptions) {
+  async function getCompareLayerGroup(arr, layersState, state, granuleOptions) {
     // get grouped layers
     const [layerGroupStr, activeDateStr] = arr;
     const newGroupedLayers = getLayers(
@@ -519,7 +548,7 @@ export default function mapui(models, config, store, ui) {
         const { isGranule } = def;
         const granuleLayerParam = isGranule && getGranuleOptions(state, def, layerGroupStr, granuleOptions);
 
-        const createdLayer = createLayer(def, {
+        const createdLayer = self.createLayer(def, {
           date: state.date[activeDateStr],
           group: layerGroupStr,
         }, granuleLayerParam);
@@ -537,6 +566,7 @@ export default function mapui(models, config, store, ui) {
         throw error;
       });
   }
+
   /*
    * Function called when layers need to be updated
    * e.g: can be the result of new data or another display
@@ -569,24 +599,23 @@ export default function mapui(models, config, store, ui) {
       } else if (group || granule) {
         lodashEach(layer.getLayers().getArray(), (subLayer) => {
           const granuleGroup = subLayer.get('granuleGroup');
+          // console.log(granuleGroup);
           if (granuleGroup) {
             // TileLayers within granule LayerGroup
             lodashEach(subLayer.getLayers().getArray(), (granuleTileLayer) => {
-              if (granuleTileLayer.wv) {
-                const granuleTileLayerGroup = granuleTileLayer.wv.group;
-                renderable = isRenderableLayer(
-                  granuleTileLayer.wv.id,
-                  layersState[granuleTileLayerGroup],
-                  state.date[granuleTileLayer.get('date')],
-                  state,
-                );
-                granuleTileLayer.setVisible(renderable);
-              }
+              const granuleTileLayerGroup = granuleTileLayer.wv.group;
+              renderable = isRenderableLayer(
+                granuleTileLayer.wv.id,
+                layersState[granuleTileLayerGroup],
+                state.date[granuleTileLayer.get('date')],
+                state,
+              );
+              granuleTileLayer.setVisible(renderable);
             });
             subLayer.setVisible(true);
-          }
-
-          if (subLayer.wv) {
+          } else {
+            // console.log(subLayer.wv);
+            // if (subLayer.wv) {
             const subGroup = subLayer.wv.group;
             renderable = isRenderableLayer(
               subLayer.wv.id,
@@ -595,6 +624,7 @@ export default function mapui(models, config, store, ui) {
               state,
             );
             subLayer.setVisible(renderable);
+            // }
           }
         });
 
@@ -620,29 +650,26 @@ export default function mapui(models, config, store, ui) {
     const { id } = def;
     const layers = self.selected.getLayers().getArray();
     lodashEach(Object.keys(layers), (index) => {
-      const layerType = layers[index].type;
-      const isValidGranuleGroupType = layerType !== 'TILE' && layerType !== 'VECTOR';
-      if (isValidGranuleGroupType) {
-        const layer = layers[index];
-        const layerGroup = layer.getLayers().getArray();
-        const firstGroupTileLayer = layerGroup[0];
+      const layer = layers[index];
+      if (layer.className_ === 'ol-layer') {
         if (compare && compare.active) {
+          const layerGroup = layer.getLayers().getArray();
           lodashEach(Object.keys(layerGroup), (groupIndex) => {
-            const islayerGroupTile = layerGroup[groupIndex].type === 'TILE';
-            if (!islayerGroupTile && !layerGroup[groupIndex].wv) {
-              const compareLayerGroup = layerGroup[groupIndex];
+            const compareLayerGroup = layerGroup[groupIndex];
+            if (compareLayerGroup.wv.id === id) {
               const tileLayer = compareLayerGroup.getLayers().getArray();
-              // inner granule group tile layer
+
+              // inner first granule group tile layer
               const firstTileLayer = tileLayer[0];
-              if (firstTileLayer.wv && id === firstTileLayer.wv.id) {
+              if (firstTileLayer.wv.id === id) {
                 if (firstTileLayer.wv.group === activeStr) {
                   compareLayerGroup.setOpacity(opacity);
                 }
               }
             }
           });
-        } else if (firstGroupTileLayer.wv && id === firstGroupTileLayer.wv.id) {
-          if (firstGroupTileLayer.wv.group === activeStr) {
+        } else if (layer.wv.id === id) {
+          if (layer.wv.group === activeStr) {
             layer.setOpacity(opacity);
           }
         }
@@ -680,8 +707,26 @@ export default function mapui(models, config, store, ui) {
     }
     updateLayerVisibilities();
   }
+
   /*
-   *Initiates the adding of a layer or Graticule
+   * Wrapper for createLayer building needing resolution
+   *
+   * @method createLayerWrapper
+   * @static
+   *
+   * @param {object} def - layer Specs
+   * @param {object} options - date/active options
+   *
+   * @returns {object} createdLayer
+   */
+  const createLayerWrapper = async (def, options = {}) => {
+    const createdLayer = await self.createLayer(def, options)
+      .then((layer) => layer);
+    return createdLayer;
+  };
+
+  /*
+   * Initiates the adding of a layer or Graticule
    *
    * @method addLayer
    * @static
@@ -711,19 +756,29 @@ export default function mapui(models, config, store, ui) {
       const activelayer = firstLayer.get('group') === activeLayerStr
         ? firstLayer
         : mapLayers[1];
-      const newLayer = await createLayer(def, {
+
+      const options = {
         date,
         group: activeLayerStr,
-      });
-      await activelayer.getLayers().insertAt(mapIndex, newLayer);
-      compareMapUi.create(self.selected, compare.mode);
-      updateLayerVisibilities();
-    } else {
-      const newLayer = await createLayer(def);
-      await self.selected.getLayers().insertAt(mapIndex, newLayer);
-      updateLayerVisibilities();
+      };
+
+      await createLayerWrapper(def, options)
+        .then((newLayer) => {
+          activelayer.getLayers().insertAt(mapIndex, newLayer);
+          updateLayerVisibilities();
+        }).catch((err) => {
+          throw err;
+        });
     }
+    await createLayerWrapper(def)
+      .then((newLayer) => {
+        self.selected.getLayers().insertAt(mapIndex, newLayer);
+        updateLayerVisibilities();
+      }).catch((err) => {
+        throw err;
+      });
   };
+
   /*
    *Initiates the adding of a layer or Graticule
    *
@@ -747,9 +802,18 @@ export default function mapui(models, config, store, ui) {
     } else {
       self.selected.removeLayer(layer);
     }
-
     updateLayerVisibilities();
   }
+
+  /*
+   * Event update date invocation
+   *
+   * @method eventUpdateDate
+   * @static
+   *
+   * @returns {void}
+   */
+  self.eventUpdateDate = () => updateDate();
 
   /*
    * Update layers for the correct Date
@@ -760,13 +824,13 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const updateDate = self.updateDate = async function() {
+  const updateDate = self.updateDate = async () => {
     const state = store.getState();
     const { compare, date, layers } = state;
     const activeLayerStr = compare.activeString;
     const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
     const activeLayersCollection = layers[activeLayerStr];
-    const activeLayers = await getLayers(
+    const activeLayers = getLayers(
       activeLayersCollection,
       {},
       state,
@@ -796,7 +860,7 @@ export default function mapui(models, config, store, ui) {
         if (layerGroup && layerGroup.getLayers().getArray().length) {
           const index = findLayerIndex(def, layerGroup);
           const layerValue = self.selected.getLayers().getArray()[index];
-          const updatedLayer = await createLayer(def, {
+          const updatedLayer = await self.createLayer(def, {
             group: activeLayerStr,
             date: date[activeDate],
             previousLayer: layerValue ? layerValue.wv : null,
@@ -816,13 +880,13 @@ export default function mapui(models, config, store, ui) {
           };
         }
         const index = findLayerIndex(def, self.selected);
-        if (index !== undefined) {
+        if (index !== undefined && index !== -1) {
           const layerValue = self.selected.getLayers().getArray()[index];
           const layerOptions = !isGranule
             ? { previousLayer: layerValue ? layerValue.wv : null }
             : {};
-          const updatedLayer = await createLayer(def, layerOptions, granuleLayerParam);
-          await self.selected.getLayers().setAt(index, updatedLayer);
+          const updatedLayer = await self.createLayer(def, layerOptions, granuleLayerParam);
+          self.selected.getLayers().setAt(index, updatedLayer);
         }
       }
       if (config.vectorStyles && vectorStyle && vectorStyle.id) {
@@ -896,34 +960,22 @@ export default function mapui(models, config, store, ui) {
   function findLayerIndex(def, layerGroup) {
     const layerGroupToCheck = layerGroup || self.selected;
     const layers = layerGroupToCheck.getLayers().getArray();
-    let index;
-
-    const { id, isGranule } = def;
-    if (isGranule) {
-      lodashEach(Object.keys(layers), (layerIndex) => {
-        const isTile = layers[layerIndex].type === 'TILE';
-        const isVector = layers[layerIndex].type === 'VECTOR';
-        // if not TILE type, it is a granule LayerGroup
-        if (!isTile && !isVector) {
-          const layerGroupGranule = layers[layerIndex];
-          const layerGroupCollection = layerGroupGranule.getLayers().getArray();
-          const previousGranuleTiles = layerGroupCollection.length && layerGroupCollection[0].wv && id === layerGroupCollection[0].wv.id;
-          const previousNoCoverage = !layerGroupCollection.length && id === layerGroupGranule.values_.layerId.split('-')[0];
-          if (previousGranuleTiles || previousNoCoverage) {
-            index = Number(layerIndex);
-          }
-        }
-      });
-    } else {
-      index = lodashFindIndex(layers, {
-        wv: {
-          id,
-        },
-      });
-    }
-    return index;
+    const { id } = def;
+    return lodashFindIndex(layers, {
+      wv: {
+        id,
+      },
+    });
   }
 
+  /*
+   * Throttled triggger extent handler
+   *
+   * @method triggerExtent
+   * @static
+   *
+   * @returns {void}
+   */
   const triggerExtent = lodashThrottle(
     () => {
       self.events.trigger('extent');
@@ -936,7 +988,6 @@ export default function mapui(models, config, store, ui) {
 
   /*
    * Updates the extents of OpenLayers map
-   *
    *
    * @method updateExtent
    * @static
@@ -951,19 +1002,27 @@ export default function mapui(models, config, store, ui) {
     triggerExtent();
   }
 
+  /*
+   * Add granule footprint to map
+   *
+   * @method granuleFootprintDraw
+   * @static
+   *
+   * @returns {void}
+   */
   const granuleFootprintDraw = (granuleGeometry, date) => {
     const proj = self.selected.getView().getProjection().getCode();
     granuleFootprints[proj].drawFootprint(granuleGeometry, date, proj);
   };
+
   /*
-   * Updates the extents of OpenLayers map
+   * Create map object
    *
-   *
-   * @method updateExtent
+   * @method createMap
    * @static
    *
    * @param {object} proj - Projection properties
-   *
+   * @param {object} dateSelected
    *
    * @returns {object} OpenLayers Map Object
    */
@@ -1087,17 +1146,15 @@ export default function mapui(models, config, store, ui) {
     granuleFootprints[proj.crs] = granuleFootprint(map);
     return map;
   }
+
   /*
    * Creates map zoom buttons
-   *
    *
    * @method createZoomButtons
    * @static
    *
    * @param {object} map - OpenLayers Map Object
-   *
    * @param {object} proj - Projection properties
-   *
    *
    * @returns {void}
    */
@@ -1154,7 +1211,6 @@ export default function mapui(models, config, store, ui) {
      * @static
      *
      * @returns {void}
-     *
      */
     const onZoomChange = function() {
       const { numZoomLevels } = proj;
@@ -1178,22 +1234,19 @@ export default function mapui(models, config, store, ui) {
     rotation.updateRotation(val);
     updateExtent();
   }
+
   /*
-   * Creates map events based on mouse position
-   *
-   *
-   * @method createMousePosSel
-   * @static
-   *
-   * @param {object} map - OpenLayers Map Object
-   *
-   * @param {object} proj - Projection properties
-   *
-   *
-   * @returns {void}
-   *
-   * @todo move this component to another Location
-   */
+  * Creates map events based on mouse position
+  *
+  * @method createMousePosSel
+  * @static
+  *
+  * @param {object} map - OpenLayers Map Object
+  * @param {object} proj - Projection properties
+  *
+  * @returns {void}
+  * @todo move this component to another Location
+  */
   function createMousePosSel(map, proj) {
     let hoverThrottle;
 

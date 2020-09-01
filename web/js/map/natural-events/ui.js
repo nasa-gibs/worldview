@@ -307,9 +307,9 @@ export default function naturalEventsUI(ui, config, store, models) {
       }
       // hack to update layers
       if (isIdChange) {
-        ui.map.reloadLayers();
+        ui.map.eventReloadLayers();
       } else {
-        ui.map.updateDate();
+        ui.map.eventUpdateDate();
       }
       naturalEventsTrack.update(event, date, self.selectEvent);
       store.dispatch(selectedAction());
