@@ -1,16 +1,16 @@
 {
   "layers": {
-    "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate": {
-      "id": "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
-      "title": "Deep Blue Aerosol Optical Thickness (Land and Ocean)",
+    "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean": {
+      "id": "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
+      "title": "Dark Target Aerosol Angstrom Exponent (Ocean)",
       "subtitle": "Suomi NPP / VIIRS",
-      "description": "viirs/VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
+      "description": "viirs/VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
       "tags": "",
       "group": "overlays",
       "layergroup": [
         "viirs"
       ],
-      "product": "AERDB_L2_VIIRS_SNPP",
+      "product": "AERDT_L2_VIIRS_SNPP",
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_Suomi_NPP_Ascending"
