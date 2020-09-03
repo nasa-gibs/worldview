@@ -493,7 +493,6 @@ export default function mapui(models, config, store, ui) {
           lodashEach(createdLayers, (createdLayer) => {
             map.addLayer(createdLayer);
           });
-          // updateLayerVisibilities();
         })
         .catch((error) => {
           throw error;
@@ -520,8 +519,6 @@ export default function mapui(models, config, store, ui) {
           lodashEach(newGroupedLayers, (compareLayerGroup) => {
             map.addLayer(compareLayerGroup);
           });
-          // compareMapUi.create(map, compareState.mode);
-          // updateLayerVisibilities();
         })
         .catch((error) => {
           throw error;
@@ -1086,6 +1083,7 @@ export default function mapui(models, config, store, ui) {
         }),
       ],
       loadTilesWhileAnimating: true,
+      loadTilesWhileInteracting: true,
     });
     map.wv = {
       small: false,

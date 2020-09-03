@@ -10,6 +10,8 @@ import OlStroke from 'ol/style/Stroke';
 import OlText from 'ol/style/Text';
 import OlFill from 'ol/style/Fill';
 import OlGraticule from 'ol/layer/Graticule';
+import * as olProj from 'ol/proj';
+import { Polygon as OlGeomPolygon } from 'ol/geom';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -435,58 +437,84 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
+   * @param {number/null} day
+   * @param {object} state
+   * @param {object} attributes - contain layer options (granule polygons array)
    * @returns {object} OpenLayers WMTS layer
    */
-  const createLayerWMTS = function(def, options, day, state) {
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    const proj = state.proj.selected;
-    const source = config.sources[def.source];
-    if (!source) {
-      throw new Error(`${def.id}: Invalid source: ${def.source}`);
+  const createLayerWMTS = function(def, options, day, state, attributes) {
+    const { compare, date, proj } = state;
+    const {
+      id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays,
+    } = def;
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    const configSource = config.sources[source];
+    if (!configSource) {
+      throw new Error(`${id}: Invalid source: ${source}`);
     }
-    const matrixSet = source.matrixSets[def.matrixSet];
-    if (!matrixSet) {
-      throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
+    const configMatrixSet = configSource.matrixSets[matrixSet];
+    if (!configMatrixSet) {
+      throw new Error(`${id}: Undefined matrix set: ${matrixSet}`);
     }
-    let date = options.date || state.date[activeDateStr];
-    if (def.period === 'subdaily' && !date) {
-      date = self.getRequestDates(def, options).closestDate;
-      date = new Date(date.getTime());
+    let layerDate = options.date || date[activeDateStr];
+    if (period === 'subdaily' && !layerDate) {
+      layerDate = self.getRequestDates(def, options).closestDate;
+      layerDate = new Date(layerDate.getTime());
     }
-    if (day && def.wrapadjacentdays && def.period !== 'subdaily') {
-      date = util.dateAdd(date, 'day', day);
+    if (day && wrapadjacentdays && period !== 'subdaily') {
+      layerDate = util.dateAdd(layerDate, 'day', day);
     }
-    const { tileMatrices, resolutions, tileSize } = matrixSet;
-    const { origin, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
+    const { tileMatrices, resolutions, tileSize } = configMatrixSet;
+    const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, -matrixHeight]);
+
+    // Conditionally set extent for granule tile here with polygon array
+    let tileLayerExtent = extent;
+    if (attributes.polygons) {
+      const res = [].concat(...attributes.polygons);
+      const points = [];
+      // iterate the new array and push a coordinate pair into a new array
+      for (let i = 0; i < res[0].length; i += 2) {
+        const coord1 = parseFloat(res[i]);
+        const coord2 = parseFloat(res[i + 1]);
+        if (coord1 && coord2) {
+          points.push(olProj.transform([coord1, coord2], 'EPSG:4326', proj.selected.crs));
+        }
+      }
+      const polygonFootprint = new OlGeomPolygon([points]);
+      const polygonExtent = polygonFootprint.getExtent();
+      tileLayerExtent = Number.isFinite(polygonExtent[0]) ? polygonExtent : extent;
+    }
+
     const tileGridOptions = {
       origin,
       extent,
       sizes,
       resolutions,
-      matrixIds: def.matrixIds || resolutions.map((set, index) => index),
+      matrixIds: matrixIds || resolutions.map((set, index) => index),
       tileSize: tileSize[0],
     };
-    const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date))}`;
+
+    const urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(layerDate))}`;
     const sourceOptions = {
-      url: source.url + urlParameters,
-      layer: def.layer || def.id,
+      url: configSource.url + urlParameters,
+      layer: layer || id,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
-      format: def.format,
+      format,
       transition: 0,
-      matrixSet: matrixSet.id,
+      matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
       wrapX: false,
-      style: typeof def.style === 'undefined' ? 'default' : def.style,
+      style: typeof style === 'undefined' ? 'default' : style,
     };
-    if (isPaletteActive(def.id, options.group, state)) {
-      const lookup = getPaletteLookup(def.id, options.group, state);
+    if (isPaletteActive(id, options.group, state)) {
+      const lookup = getPaletteLookup(id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     return new OlLayerTile({
       preload: Infinity,
-      extent,
+      extent: tileLayerExtent,
       source: new OlSourceWMTS(sourceOptions),
     });
   };

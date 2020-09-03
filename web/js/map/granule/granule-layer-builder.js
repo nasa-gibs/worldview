@@ -326,7 +326,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       const granuleISODate = new Date(date);
       const dateOption = { date: granuleISODate, polygons };
       const layerPromise = new Promise((resolve) => {
-        const createdLayer = createLayerWMTS(def, dateOption, null, state);
+        const createdLayer = createLayerWMTS(def, dateOption, null, state, { polygons });
         // update attributes
         attributes.key = granuleISOKey;
         attributes.date = granuleISODate;
