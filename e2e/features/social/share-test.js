@@ -35,8 +35,10 @@ module.exports = {
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth() + 1;
     const day = date.getUTCDate();
+    const monthText = month < 10 ? `0${month}` : month;
+    const dayText = day < 10 ? `0${day}` : day;
     client.assert.not.urlContains('t=');
-    client.assert.attributeContains(socialLinkInput, 'value', `t=${year}-${month < 10 ? `0${month}` : month}-${day}`);
+    client.assert.attributeContains(socialLinkInput, 'value', `t=${year}-${monthText}-${dayText}`);
   },
   after(client) {
     client.end();
