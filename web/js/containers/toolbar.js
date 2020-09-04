@@ -129,16 +129,21 @@ class toolbarContainer extends Component {
 
   requestNotifications() {
     const { config, requestNotifications } = this.props;
-    if (config.features.notification) {
-      let notificationURL = config.features.notification.url
-        ? config.features.notification.url
+    const { parameters, features } = config;
+    const { notification } = features;
+    const domain = window.location.origin;
+
+    if (notification) {
+      let notificationURL = notification.url && !domain.includes('localhost')
+        // Use the deployed domain (SIT, UAT, PROD) when possible
+        ? `${notification.url}?domain=${domain}`
+        // Use the PROD domain when running locally
         : STATUS_REQUEST_URL;
-      if (config.parameters.mockAlerts) {
-        notificationURL = `mock/notify_${config.parameters.mockAlerts}.json`;
-      } else if (config.parameters.notificationURL) {
-        console.log('mock notificationURL');
-        notificationURL = `https://status.earthdata.nasa.gov/api/v1/notifications?domain=${
-          config.parameters.notificationURL}`;
+
+      if (parameters.mockAlerts) {
+        notificationURL = `mock/notify_${parameters.mockAlerts}.json`;
+      } else if (parameters.notificationURL) {
+        notificationURL = `${notification.url}?domain=${parameters.notificationURL}`;
       }
       requestNotifications(notificationURL);
     }

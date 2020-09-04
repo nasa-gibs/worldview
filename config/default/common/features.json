@@ -12,7 +12,7 @@
             "id": "GTM-WNP7MLF"
         },
         "notification": {
-            "url": "https://status.earthdata.nasa.gov/api/v1/notifications?domain=https%3A%2F%2Fworldview.earthdata.nasa.gov",
+            "url": "https://status.earthdata.nasa.gov/api/v1/notifications",
             "releases": "https://github.com/nasa-gibs/worldview/releases"
         },
         "imageDownload": {
