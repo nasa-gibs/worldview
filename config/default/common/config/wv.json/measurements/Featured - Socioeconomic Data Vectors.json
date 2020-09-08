@@ -1,9 +1,9 @@
 {
     "measurements": {
-        "Vectors": {
-            "id": "vectors",
-            "title": "Vectors",
-            "subtitle": "SEDAC, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS",
+        "Socioeconomic Data Vectors - Featured": {
+            "id": "featured-socioeconomic-data-vectors",
+            "title": "Socioeconomic Data (Vectors)",
+            "subtitle": "SEDAC",
             "sources": {
                 "SEDAC": {
                     "id": "sedac",

@@ -2,7 +2,7 @@
     "measurements": {
         "Fires and Thermal Anomalies": {
             "id": "fires-thermal-anomalies",
-            "title":    "Fires and Thermal Anomalies",
+            "title":    "Fires and Thermal Anomalies (Vectors)",
             "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS",
             "sources": {
                 "Aqua/MODIS": {
