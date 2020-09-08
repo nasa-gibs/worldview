@@ -8,7 +8,7 @@
               "description": "",
               "measurements": [
                 "Geostationary",
-                "Vectors",
+                "Socioeconomic Data Vectors - Featured",
                 "Corrected Reflectance",
                 "Fires and Thermal Anomalies",
                 "Precipitation Rate - Featured",
@@ -17,7 +17,6 @@
                 "Land Surface Temperature",
                 "Sea Surface Temperature - Featured",
                 "Orbital Track"
-                
               ]
           }
       }
