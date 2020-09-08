@@ -128,7 +128,7 @@ function modifyProps (layerObj) {
   }
 
   if (conceptIdsMap[id]) {
-    modifiedObj.conceptId = [conceptIdsMap[id].conceptId];
+    modifiedObj.conceptIds = conceptIdsMap[id].conceptId;
   }
   if (tracks) {
     modifiedObj.orbitTracks = [];
