@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install python dependencies
 PYTHON_VERSION="$(python -V 2>&1)"
-if [ $1 = "linux" ]; then
+if [[ $1 = "linux" ]]; then
   PYPATH=.python/bin:${PATH}
 else
   PYPATH=.python/Scripts:${PATH}
