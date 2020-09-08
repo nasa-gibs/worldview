@@ -1,6 +1,7 @@
 {
   "layers": {
     "GRUMP_Settlements": {
+      "id": "GRUMP_Settlements",
       "title": "Settlements",
       "subtitle": "Global Rural-Urban Mapping Project (GRUMP), v1",
       "description": "sedac/GRUMP_Settlements",
