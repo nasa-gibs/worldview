@@ -531,16 +531,16 @@ Note:
 Granule layers rely on Common Metadata Repository (CMR) metadata to 1) filter day/night collections, 2) determine range based on filters, and 3) collect time/polygon data for selected granules.
 
 The following parameters need to be present in the CMR for the granule layer:
-```json
-feed.entry [
+```js
+"feed.entry" [
   {
-    time_start: "2020-08-06T00:48:00.000Z",
-    polygons: [
+    "time_start": "2020-08-06T00:48:00.000Z",
+    "polygons": [
       [
       "-68.998596 172.739944 -59.319592 -123.048164 -42.500546 -144.210709 -48.444565 176.622818 -68.998596 172.739944"
       ]
     ],
-    day_night_flag: "DAY",
+    "day_night_flag": "DAY",
     ...(other CMR required parameters)*
   }
 ]
