@@ -1,8 +1,8 @@
 {
 	"layerOrder": [
-        "VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
-        "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT",
-        "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT",
+		"VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule_v1_NRT",
+		"VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule_v1_NRT",
+		"VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT",
 		"VIIRS_SNPP_CorrectedReflectance_TrueColor",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
 		"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",

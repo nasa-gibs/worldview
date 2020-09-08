@@ -278,7 +278,7 @@ export default function mapui(models, config, store, ui) {
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
 
     store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: start ? rotationStart : currentRotation });
-    reloadLayers();
+    reloadLayers(self.selected, {}, start);
 
     // Update the rotation buttons if polar projection to display correct value
     if (isProjectionRotatable) {
@@ -455,9 +455,10 @@ export default function mapui(models, config, store, ui) {
    * @param {Object} granuleOptions (optional: only used for granule layers)
     * @param {Boolean} granuleDates - array of granule dates
     * @param {Boolean} id - layer id
+   * @param {boolean} start - indicate init load
    * @returns {void}
    */
-  const reloadLayers = self.reloadLayers = async(map, granuleOptions) => {
+  const reloadLayers = self.reloadLayers = async(map, granuleOptions, start) => {
     map = map || self.selected;
     const state = store.getState();
     const { layers } = state;
@@ -489,7 +490,9 @@ export default function mapui(models, config, store, ui) {
       // resolve them with Promise.all to preserve layer order for CMR granule requests
       await Promise.all(createdLayersFromDefs)
         .then((createdLayers) => {
-          clearLayers(map);
+          if (!start) {
+            clearLayers(map);
+          }
           lodashEach(createdLayers, (createdLayer) => {
             map.addLayer(createdLayer);
           });
