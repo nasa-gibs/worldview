@@ -134,14 +134,15 @@ export class VectorInteractions extends React.Component {
       compareState,
       granuleCMRGeometry,
       isMobile,
+      isPlaying,
       isShowingClick,
       measureIsActive,
       proj,
       swipeOffset,
     } = this.props;
 
-    // prevent mobile/smaller devices from mouse events
-    if (isMobile) {
+    // prevent mobile/smaller devices and animations from mouse events
+    if (isMobile || isPlaying) {
       return;
     }
 
@@ -220,6 +221,7 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
+    animation,
     browser,
     compare,
     config,
@@ -237,6 +239,7 @@ function mapStateToProps(state) {
     mode,
     value,
   } = compare;
+  const { isPlaying } = animation;
   const activeLayers = layers[activeString];
   let swipeOffset;
   if (active && mode === 'swipe') {
@@ -266,6 +269,7 @@ function mapStateToProps(state) {
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
+    isPlaying,
     isMobile: browser.lessThan.medium,
     granuleCMRGeometry,
     granuleSatelliteInstrument,
@@ -343,6 +347,7 @@ VectorInteractions.propTypes = {
   granuleSatelliteInstrument: PropTypes.string,
   hoveredGranule: PropTypes.object,
   isMobile: PropTypes.bool,
+  isPlaying: PropTypes.bool,
   lastSelected: PropTypes.object,
   maxExtent: PropTypes.array,
   proj: PropTypes.object,
