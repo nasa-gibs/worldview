@@ -23,6 +23,9 @@
         }
       },
       "transition": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
       "palette": {
         "id": "VIIRS_All_Thermal_Anomalies",
         "immutable": true
