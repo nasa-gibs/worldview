@@ -289,7 +289,7 @@ li.item.productsitem.inmotion,
 .productsitem .layer-main .layer-pointer-icon {
   position: absolute;
   right: 4px;
-  bottom: 14px;
+  top: 38px;
 }
 .productsitem .layer-pointer-icon svg.svg-inline--fa {
   color: #22a;
