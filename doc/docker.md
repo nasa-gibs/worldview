@@ -9,4 +9,4 @@ The following scripts are available for working with Docker images and container
 - `npm run docker:restart` - Restart the Docker container
 - `npm run docker:ci` -   Build WV and run the end-to-end tests using Firefox in a headless environment
 - `npm run docker:shell` - Run an interactive shell inside the container.
-
+- `npm run docker:shellwin` - Run an interactive shell inside the container (Windows using `winpty`).

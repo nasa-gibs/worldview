@@ -248,7 +248,7 @@ export default function AboutPage() {
             {' '}
             and
             {' '}
-            <a href="http://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>
+            <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>
             . This data is available under the
             {' '}
             <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">

@@ -350,9 +350,12 @@ export default function dataMap(store, maps, dataUi, ui) {
   };
 
   const clickCheck = function(event) {
+    const clickedFeatures = {};
     const pixel = map.getEventPixel(event.originalEvent);
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
-      if (feature.button) {
+      const id = feature.ol_uid;
+      if (feature.button && !clickedFeatures[id]) {
+        clickedFeatures[id] = true;
         store.dispatch(toggleGranule(feature.granule));
         hovering = false;
         hoverCheck(event);

@@ -1,21 +1,23 @@
 import googleTagManager from 'googleTagManager';
-import {
-  get as lodashGet,
-} from 'lodash';
+import { get as lodashGet } from 'lodash';
 
 import {
   SAVE_SEARCH_STATE,
-  INIT_SEARCH_STATE,
+  INIT_STATE,
   COLLAPSE_FACET,
-  SELECT_CATEGORY,
+  SELECT_CATEGORY_TYPE,
   SELECT_MEASUREMENT,
   SELECT_SOURCE,
   SELECT_LAYER,
   SHOW_MEASUREMENTS,
   TOGGLE_FEATURED_TAB,
+  TOGGLE_MEASUREMENTS_TAB,
+  TOGGLE_RECENT_LAYERS_TAB,
   TOGGLE_SEARCH_MODE,
   TOGGLE_CATEGORY_MODE,
   TOGGLE_MOBILE_FACETS,
+  CLEAR_RECENT_LAYERS,
+  CLEAR_SINGLE_RECENT_LAYER,
   RESET_STATE,
 } from './constants';
 
@@ -31,6 +33,7 @@ export const productPickerState = {
   selectedMeasurementSourceIndex: 0,
   searchConfig: undefined,
   collapsedFacets: {},
+  recentLayers: [],
 };
 
 export function getInitialState(config) {
@@ -39,21 +42,23 @@ export function getInitialState(config) {
 
 export function productPickerReducer(state = productPickerState, action) {
   switch (action.type) {
-    case INIT_SEARCH_STATE: {
-      const { searchConfig } = action;
+    case INIT_STATE: {
+      const { searchConfig, projection } = action;
+      const { mode } = state;
       return {
         ...state,
         searchConfig,
+        mode: mode || (projection === 'geographic' ? 'category' : 'measurements'),
       };
     }
 
     case SAVE_SEARCH_STATE: {
-      const { filters, searchTerm } = action;
+      const { filters, searchTerm, searchConfig } = action;
       return {
         ...state,
         filters,
         searchTerm,
-        searchConfig: null,
+        searchConfig,
       };
     }
 
@@ -69,7 +74,7 @@ export function productPickerReducer(state = productPickerState, action) {
       };
     }
 
-    case SELECT_CATEGORY: {
+    case SELECT_CATEGORY_TYPE: {
       googleTagManager.pushEvent({
         event: 'layers_meta_category',
         layers: {
@@ -80,7 +85,10 @@ export function productPickerReducer(state = productPickerState, action) {
         ...state,
         mode: 'category',
         categoryType: action.value,
+        category: null,
+        selectedLayer: null,
         selectedMeasurement: null,
+        selectedMeasurementSourceIndex: 0,
       };
     }
 
@@ -111,7 +119,7 @@ export function productPickerReducer(state = productPickerState, action) {
       googleTagManager.pushEvent({
         event: 'layers_category',
         layers: {
-          category: category.title,
+          category: category && category.title,
         },
       });
       return {
@@ -144,7 +152,29 @@ export function productPickerReducer(state = productPickerState, action) {
         categoryType: 'featured',
         category,
         mode: 'measurements',
+        selectedLayer: null,
         selectedMeasurement: selectedMeasurementId,
+        selectedMeasurementSourceIndex: 0,
+      };
+    }
+
+    case TOGGLE_MEASUREMENTS_TAB: {
+      return {
+        ...state,
+        mode: 'measurements',
+        categoryType: 'measurements',
+      };
+    }
+
+    case TOGGLE_RECENT_LAYERS_TAB: {
+      const { recentLayers } = action;
+      return {
+        ...state,
+        category: null,
+        categoryType: 'recent',
+        recentLayers,
+        selectedMeasurement: null,
+        selectedMeasurementSourceIndex: 0,
       };
     }
 
@@ -153,6 +183,8 @@ export function productPickerReducer(state = productPickerState, action) {
         ...state,
         mode: 'category',
         selectedLayer: null,
+        selectedMeasurement: null,
+        selectedMeasurementSourceIndex: 0,
       };
     }
 
@@ -160,6 +192,21 @@ export function productPickerReducer(state = productPickerState, action) {
       return {
         ...state,
         showMobileFacets: !state.showMobileFacets,
+      };
+    }
+
+    case CLEAR_RECENT_LAYERS: {
+      return {
+        ...state,
+        recentLayers: [],
+      };
+    }
+
+    case CLEAR_SINGLE_RECENT_LAYER: {
+      const { recentLayers } = action;
+      return {
+        ...state,
+        recentLayers,
       };
     }
 
@@ -181,10 +228,14 @@ export function productPickerReducer(state = productPickerState, action) {
         searchTerm: '',
         selectedLayer: null,
         category: null,
+        categoryType: action.projection === 'geographic' ? 'hazards and disasters' : 'measurements',
         selectedMeasurement: null,
         selectedMeasurementSourceIndex: 0,
       };
-      return { ...state, ...newState };
+      return {
+        ...state,
+        ...newState,
+      };
     }
     default:
       return state;

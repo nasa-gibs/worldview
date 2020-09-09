@@ -10,6 +10,7 @@ import { CHANGE_STATE as COMPARE_CHANGE_STATE } from '../modules/compare/constan
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
+import getSelectedDate from '../modules/date/selectors';
 
 let map;
 let overlay1;
@@ -49,8 +50,7 @@ export default function mapDateLineBuilder(models, config, store, ui) {
       case LOCATION_POP_ACTION:
       case COMPARE_CHANGE_STATE: {
         const state = store.getState();
-        const selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-        const date = state.date[selectedDateStr];
+        const date = getSelectedDate(state);
         const isNewDay = compareDateStrings(date);
         if (isNewDay) {
           return updateDate(date);

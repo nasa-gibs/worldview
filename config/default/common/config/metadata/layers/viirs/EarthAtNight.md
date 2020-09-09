@@ -8,6 +8,10 @@ References: [NASA Earth Observatory: Night Light Maps Open Up New Applications](
 ### VIIRS Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast)
 Temporal coverage: 3 December 2016 - present
 
+**29 June 2020 Notice**: High latitude artifacts have been identified and fixed for 26 June 2020 onward. It is expected that the imagery will be reprocessed back to the beginning of the mission. [Read more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/NPP_QA/displayCase.cgi?esdt=NPP_VDNE&caseNum=PM_NPP_VDNE_20178&caseLocation=cases_data&action=small).
+
+---
+
 The VIIRS Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast) layer shows the Earth’s surface and atmosphere using a sensor designed to capture low-light emission sources, under varying illumination conditions. It is displayed as a grey-scale image. Sources of illumination include both natural and anthropogenic sources of light emissions. Lunar reflection can be used to highlight the location and features of clouds and other terrestrial features such as sea ice and snow cover when there is partial to full moon conditions. When there is no moonlight, natural and anthropogenic night time light emissions are highlighted such as city lights, lightning, auroras, fires, gas flares, and fishing fleets. This layer is useful for showing patterns of human activity and energy behaviors such as cities and highways, the holiday periods, the tracking of shipping and fishing fleets at night and, the burning of waste natural gas (gas flares) from on and off shore oil/gas production sites.
 
 The VIIRS Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast) layer is available from the Visible Infrared Imaging Radiometer Suite (VIIRS) on the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite. The sensor resolution is 750 m at nadir, imagery resolution is 500 m, and the temporal resolution is daily.

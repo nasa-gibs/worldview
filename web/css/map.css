@@ -201,7 +201,7 @@
 }
 
 .distraction-free-active .wv-map-zoom,
-.distraction-free-active .ol-overlaycontainer,
-.distraction-free-active .ol-overlaycontainer-stopevent {
+.distraction-free-active .wv-map-scale-imperial,
+.distraction-free-active .wv-map-scale-metric {
   display: none;
 }

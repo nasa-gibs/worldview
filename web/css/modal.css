@@ -1,28 +1,67 @@
 /* universal/default modal styles */
+.modal-dialog {
+  border: 1px solid #555;
+  border-radius: 6px;
+  box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.75);
+  h1 {
+    font-size: 22px;
+  }
+  h2 {
+    font-size: 17px;
+  }
+  p {
+    line-height: 16px;
+  }
+
+  .modal-header {
+    padding: 8px 10px;
+    border-bottom: 1px solid #666;
+    background-color: #333;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    .close {
+      opacity: 1;
+      font-size: 26px;
+      font-weight: 400;
+      padding: 10px 12px;
+      color: #cacaca;
+      text-shadow: 1px 1px 1px #000;
+      &:hover {
+        color: #fff;
+        opacity: 1;
+        text-shadow: 0 0 3px #000;
+      }
+    }
+  }
+  .modal-body {
+    background-color: #222;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+}
+
+.modal-content {
+  border: none;
+  border-radius: 6px;
+}
+.modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  padding: 4px;
+}
 .modal-dialog .default-modal,
 .modal-dialog .modal-content {
   background: #282828;
   color: #eee;
 }
-.modal-dialog h1 {
-  font-size: 22px;
-}
-.modal-dialog h2 {
-  font-size: 17px;
-}
-.modal-dialog p {
-  line-height: 16px;
-}
-.modal-dialog .close,
 .modal-body pre {
   color: #eee;
 }
 .clickable-behind-modal .modal {
   position: inherit;
 }
-.modal-dialog .modal-header .close:hover {
-  color: #fff;
-}
+
 .draggable-modal .modal {
   position: fixed;
 }
@@ -59,12 +98,14 @@
 }
 .modal-dialog.light .modal-header {
   color: #343a40;
+  background: #ddd;
 }
 .modal-dialog.light .modal-header .close {
-  color: #000;
-}
-.modal-dialog.light .modal-header .close:hover {
-  color: #000;
+  color: #777;
+  text-shadow: 1px 1px #eee;
+  &:hover {
+    color: #333;
+  }
 }
 .modal-dialog.light .modal-body {
   background: #eee;

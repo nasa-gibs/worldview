@@ -10,52 +10,13 @@ import {
   startCase as lodashStartCase,
   isArray,
 } from 'lodash';
-
+import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import { addLayer, resetLayers } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
-
-/**
-  *
-  * @param {*} def - layer definition
-  * @param {*} date - current selected app date
-  * @returns {Boolean} - True if layer is available at date, otherwise false
-  */
-export function availableAtDate(def, date) {
-  const { dateRanges, inactive } = def;
-  const startDate = def.startDate && new Date(def.startDate);
-  const endDate = def.endDate && new Date(def.endDate);
-
-  // Some vector layers
-  if (!startDate && !dateRanges) {
-    return true;
-  }
-  // set inactive in config
-  if (endDate && inactive) {
-    return date < endDate && date > startDate;
-  }
-  // no endDate may indicate ongoing
-  if (startDate && !endDate) {
-    if (!dateRanges) {
-      return date > startDate;
-    }
-
-    const endRange = dateRanges.length - 1;
-    const rangeEndDate = new Date(dateRanges[endRange].endDate);
-    if (inactive) {
-      // We may need to look at individual date ranges for more accuracy
-      return date > startDate && rangeEndDate && date < rangeEndDate;
-    }
-
-    // TODO do we need to see if current date falls within a start/end
-    // date of any date range before resorting to simply checking if it falls
-    // after the start date for an active layer?
-    return date > startDate;
-  }
-}
 
 export function getOrbitTrackTitle(def) {
   const { track } = def;
@@ -1257,11 +1218,12 @@ export const hasVectorLayers = (activeLayers) => {
  *
  * @return {Boolean}
  */
-export const isVectorLayerClickable = (layer, mapRes) => {
+export const isVectorLayerClickable = (layer, mapRes, projId) => {
   if (!mapRes) return false;
-  const { breakPointLayer } = layer;
-  if (breakPointLayer) {
-    return mapRes < breakPointLayer.resolutionBreakPoint;
+  const resolutionBreakPoint = lodashGet(layer, `breakPointLayer.projections.${projId}.resolutionBreakPoint`);
+
+  if (resolutionBreakPoint) {
+    return mapRes < resolutionBreakPoint;
   }
   return true;
 };
@@ -1275,16 +1237,54 @@ export const isVectorLayerClickable = (layer, mapRes) => {
  *
  * @return {Boolean}
  */
-export const hasNonClickableVectorLayer = (activeLayers, mapRes) => {
+export const hasNonClickableVectorLayer = (activeLayers, mapRes, projId) => {
   if (!mapRes) return false;
   let isNonClickableVectorLayer = false;
   const len = activeLayers.length;
   for (let i = 0; i < len; i += 1) {
     const def = activeLayers[i];
     if (def.type === 'vector' && def.visible) {
-      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes);
+      isNonClickableVectorLayer = !isVectorLayerClickable(def, mapRes, projId);
       if (isNonClickableVectorLayer) break;
     }
   }
   return isNonClickableVectorLayer;
 };
+
+/**
+ * For geostationary layers that have 'availability' properties defined
+ * adjust the start date and date ranges as necessary
+ *
+ * Applies to layer.startDate and layer.dateRanges[0].startDate
+ * @param {*} layers
+ */
+export function adjustStartDates(layers) {
+  const adjustDate = (days) => moment.utc()
+    .subtract(days, 'days')
+    .startOf('day')
+    .format('YYYY-MM-DD');
+
+  const applyDateAdjustment = (layer) => {
+    const { availability, dateRanges } = layer;
+    if (!availability) {
+      return;
+    }
+    const { rollingWindow, historicalRanges } = availability;
+
+    if (dateRanges.length) {
+      const [firstDateRange] = dateRanges;
+      firstDateRange.startDate = adjustDate(rollingWindow);
+    }
+
+    if (historicalRanges && historicalRanges.length) {
+      layer.startDate = historicalRanges[0].startDate;
+      historicalRanges.reverse().forEach((range) => {
+        layer.dateRanges.unshift(range);
+      });
+    } else {
+      layer.startDate = adjustDate(rollingWindow);
+    }
+  };
+
+  return Object.values(layers).forEach(applyDateAdjustment);
+}

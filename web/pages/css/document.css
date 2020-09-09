@@ -99,32 +99,8 @@
 
 /* Override default modal CSS */
 
-.about-page .modal-header {
-  color: #fff;
-  background-color: #00457b;
-  border-radius: 0;
-  padding: 8px 12px 7px;
-}
-
-.about-page .modal-title {
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 300;
-}
-
-.about-page .modal-dialog .close {
-  opacity: 1;
-}
-.about-page .modal-dialog .close span {
-  text-indent: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  display: block;
-  position: relative;
-  height: 26px;
-  width: 26px;
-  background: url(../../images/wv-icons.png) -26px 0;
-  background-repeat: no-repeat;
+.about-page .modal-dialog {
+  border: none;
 }
 
 .about-page .modal-body {
@@ -134,6 +110,3 @@
 .about-page .wv-document {
   padding: 10px 15px 0 10px;
 }
-
-
-

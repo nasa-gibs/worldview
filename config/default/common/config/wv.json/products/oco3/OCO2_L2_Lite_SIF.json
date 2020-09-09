@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OCO3_L2_Lite_SIF": {
+            "name": "OCO-3 Level 2 bias-corrected solar-induced fluorescence and other select fields from the IMAP-DOAS algorithm aggregated as daily files, Retrospective processing VEarlyR (OCO3_L2_Lite_SIF) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "OCO3_L2_Lite_SIF"
+            }
+        }
+    }
+}

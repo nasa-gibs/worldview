@@ -1,0 +1,23 @@
+{
+  "layers": {
+    "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean": {
+      "id": "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
+      "title": "Dark Target Aerosol Optical Thickness (Land and Ocean)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "viirs"
+      ],
+      "product": "AERDT_L2_VIIRS_SNPP",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

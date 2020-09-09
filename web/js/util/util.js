@@ -8,6 +8,9 @@ import wvui from '../ui/ui';
 import browser from './browser';
 import events from './events';
 import load from './load';
+import safeLocalStorage from './local-storage';
+
+const { COORDINATE_FORMAT } = safeLocalStorage.keys;
 
 export default (function(self) {
   let canvas = null;
@@ -92,7 +95,7 @@ export default (function(self) {
   };
   self.elapsed = function(message, startTime, parameters) {
     if (parameters && !parameters.elapsed) return;
-    const t = new Date().getTime() - startTime;
+    const t = Date.now() - startTime;
     console.log(t, message);
     return t;
   };
@@ -284,7 +287,7 @@ export default (function(self) {
    * @param {String} text The text to be rendered.
    * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
    *
-   * @see http://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
+   * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
    */
   self.getTextWidth = function(text, font) {
     // re-use canvas object for better performance
@@ -824,7 +827,7 @@ export default (function(self) {
 
   /**
    * Http request using promises
-   * http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest
+   * https://www.html5rocks.com/en/tutorials/es6/promises/#toc-promisifying-xmlhttprequest
    *
    * @method get
    * @param {url} func the function to wrap
@@ -950,16 +953,14 @@ export default (function(self) {
   self.formatDM = (value, type) => formatDegrees(value, type, false);
 
   self.setCoordinateFormat = function(type) {
-    if (!browser.localStorage) return;
     if (type !== 'latlon-dd' && type !== 'latlon-dms' && type !== 'latlon-dm') {
       throw new Error(`Invalid coordinate format: ${type}`);
     }
-    localStorage.setItem('coordinateFormat', type);
+    safeLocalStorage.setItem(COORDINATE_FORMAT, type);
   };
 
   self.getCoordinateFormat = function() {
-    if (!browser.localStorage) return 'latlon-dd';
-    return localStorage.getItem('coordinateFormat') || 'latlon-dd';
+    return safeLocalStorage.getItem(COORDINATE_FORMAT) || 'latlon-dd';
   };
 
   self.formatCoordinate = function(coord, format) {

@@ -16,10 +16,6 @@ function SearchLayers(props) {
     results,
   } = props;
 
-  const listDetailContainerClass = selectedLayer
-    ? 'layer-list-detail-container show-details'
-    : 'layer-list-detail-container';
-
   const showFacets = browser.greaterThan.small || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
 
@@ -27,7 +23,7 @@ function SearchLayers(props) {
     <div className="search-layers-container">
       <Facets />
       {showListAndDetails && (
-        <div className={listDetailContainerClass}>
+        <div className="layer-list-detail-container">
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>

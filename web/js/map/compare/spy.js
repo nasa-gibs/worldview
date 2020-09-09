@@ -1,4 +1,5 @@
-import lodashEach from 'lodash/each';
+import { each as lodashEach } from 'lodash';
+import { getRenderPixel } from 'ol/render';
 
 let mousePosition = null;
 let spy = null;
@@ -116,7 +117,8 @@ export default class Spy {
  * @param {Object} layer | Ol Layer object
  */
 const applyReverseLayerListeners = function(layer) {
-  layer.on('postcompose', inverseClip);
+  layer.on('postrender', inverseClip);
+  layer.on('postrender', restore);
   bottomLayers.push(layer);
 };
 /**
@@ -124,8 +126,8 @@ const applyReverseLayerListeners = function(layer) {
  * @param {Object} layer | Ol Layer object
  */
 const applyLayerListeners = function(layer) {
-  layer.on('precompose', clip);
-  layer.on('postcompose', restore);
+  layer.on('prerender', clip);
+  layer.on('postrender', restore);
   topLayers.push(layer);
 };
 /**
@@ -134,22 +136,19 @@ const applyLayerListeners = function(layer) {
  */
 const inverseClip = function(event) {
   const ctx = event.context;
-  const { pixelRatio } = event.frameState;
   ctx.save();
   ctx.beginPath();
   if (mousePosition) {
     // only show a circle around the mouse
-    const x = mousePosition[0];
-    const y = mousePosition[1];
-    ctx.arc(
-      x * pixelRatio,
-      y * pixelRatio,
-      radius * pixelRatio,
-      0,
-      2 * Math.PI,
-    );
-    ctx.rect(ctx.canvas.width, ctx.canvas.height, -ctx.canvas.width, 0);
-    ctx.fill();
+    const pixel = getRenderPixel(event, mousePosition);
+    const offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
+    const canvasRadius = Math.sqrt(((offset[0] - pixel[0]) ** 2) + ((offset[1] - pixel[1]) ** 2));
+    ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.lineWidth = (5 * canvasRadius) / radius;
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.clip();
+    ctx.clearRect(0, 0, offset, offset);
   }
 };
 /**
@@ -157,19 +156,16 @@ const inverseClip = function(event) {
  */
 const clip = function(event) {
   const ctx = event.context;
-  const { pixelRatio } = event.frameState;
   ctx.save();
   ctx.beginPath();
   if (mousePosition) {
     // only show a circle around the mouse
-    const x = mousePosition[0];
-    const y = mousePosition[1];
-    const pixelRadius = radius * pixelRatio;
-
-    ctx.arc(x * pixelRatio, y * pixelRatio, pixelRadius, 0, 2 * Math.PI);
-
-    ctx.lineWidth = 4 * pixelRatio;
-    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+    const pixel = getRenderPixel(event, mousePosition);
+    const offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
+    const canvasRadius = Math.sqrt(((offset[0] - pixel[0]) ** 2) + ((offset[1] - pixel[1]) ** 2));
+    ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
+    ctx.lineWidth = (5 * canvasRadius) / radius;
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
     ctx.stroke();
   }
   ctx.clip();
@@ -184,8 +180,8 @@ const restore = function(event) {
  */
 const removeListenersFromLayers = function(layers) {
   lodashEach(layers, (layer) => {
-    layer.un('precompose', clip);
-    layer.un('postcompose', restore);
+    layer.un('prerender', clip);
+    layer.un('postrender', restore);
   });
 };
 /**
@@ -194,8 +190,8 @@ const removeListenersFromLayers = function(layers) {
  */
 const removeInverseListenersFromLayers = function(layers) {
   lodashEach(layers, (layer) => {
-    layer.un('precompose', inverseClip);
-    layer.un('postcompose', restore);
+    layer.un('prerender', inverseClip);
+    layer.un('postrender', restore);
   });
 };
 /**

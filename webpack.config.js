@@ -6,7 +6,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const postcssNesting = require('postcss-nesting');
-
 // production optimizations
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
@@ -16,6 +15,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const devMode = process.env.NODE_ENV !== 'production';
 const isDevServer = process.argv[1].indexOf('webpack-dev-server') !== -1;
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const pluginSystem = [
   new CleanWebpackPlugin(),
@@ -38,6 +38,7 @@ if (isDevServer) {
   pluginSystem.push(
     new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
     new webpack.NamedModulesPlugin(),
+    new ReactRefreshWebpackPlugin(),
   );
 }
 
@@ -66,6 +67,23 @@ if (process.env.TESTING_MODE === 'true') {
 }
 */
 
+const babelLoaderExcludes = [
+  /\.test\.js$/,
+  /fixtures\.js$/,
+  /core-js/,
+];
+// Inlucde any modules that need to be transpiled by babel-loader
+const transpileDependencies = [
+  'react-visibility-sensor',
+];
+if (devMode) {
+  // Don't transpile any dependencies in /node_modules except those found
+  // in transpileDependencies array
+  babelLoaderExcludes.push(
+    new RegExp(`node_modules(?!(/|\\\\)(${transpileDependencies.join('|')})).*`),
+  );
+}
+
 module.exports = {
   resolve: {
     alias: {
@@ -91,6 +109,7 @@ module.exports = {
     watchContentBase: true, // watch index.html changes
     port: 3000,
     host: '0.0.0.0',
+    liveReload: false,
   },
   output: {
     filename: outputFileName,
@@ -135,16 +154,14 @@ module.exports = {
       {
         test: /\.js$/,
         use: {
-          loader: devMode ? 'babel-loader?cacheDirectory=true' : 'babel-loader',
+          loader: 'babel-loader',
           options: {
             compact: false, // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
+            cacheDirectory: devMode,
+            plugins: [isDevServer && require.resolve('react-refresh/babel')].filter(Boolean),
           },
         },
-        exclude: [
-          /\.test\.js$/,
-          /fixtures\.js$/,
-          /core-js/,
-        ],
+        exclude: babelLoaderExcludes,
       },
       {
         test: require.resolve('jquery'), // expose globally for jQuery plugins

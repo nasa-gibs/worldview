@@ -2,7 +2,6 @@ import { assign as lodashAssign, get } from 'lodash';
 import update from 'immutability-helper';
 import { encode } from './modules/link/util';
 // legacy crutches
-// import { getLayersParameterSetup } from './modules/layers/util';
 import { serializeDate, tryCatchDate, mapLocationToDateState } from './modules/date/util';
 import {
   checkTourBuildTimestamp,

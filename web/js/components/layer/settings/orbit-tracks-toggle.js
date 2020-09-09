@@ -26,6 +26,7 @@ const OrbitTracksToggle = (props) => {
         const onCheck = () => (isEnabled ? removeLayer(id) : addLayer(id));
         return (
           <Checkbox
+            id={id}
             key={id}
             title="Enable/disable orbit tracks for this layer"
             checked={isEnabled}

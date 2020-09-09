@@ -168,7 +168,7 @@ def get_snapshots(layer):
 
     try:
       image_req = requests.get(snapshots_url, params=params)
-      if image_req.status_code is 200:
+      if image_req.status_code == 200:
         status_text = 'SUCCESS'
         total_success_count += 1
         with open(dest_file_name, 'xb') as image_file:
@@ -228,5 +228,5 @@ if __name__ == "__main__":
     print('\n%s: Successfully retrieved %s snapshots!' % (prog, total_success_count))
   if total_failure_count > 0:
     print('\n%s: WARNING: Failed to retrieve %s snapshots!' % (prog, total_failure_count))
-  if total_failure_count is 0 and total_success_count is 0:
+  if total_failure_count == 0 and total_success_count == 0:
     print('\n%s: No snapshots were retrieved.  All layers found in wv.json have existing preview images!' % (prog))

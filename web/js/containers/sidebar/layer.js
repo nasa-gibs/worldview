@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
@@ -300,7 +301,7 @@ function mapStateToProps(state, ownProps) {
     layerGroupName,
   } = ownProps;
   const {
-    palettes, config, map, layers, compare,
+    palettes, config, map, layers, compare, proj,
   } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
@@ -329,7 +330,7 @@ function mapStateToProps(state, ownProps) {
     renderedPalette: renderedPalettes[paletteName],
     layerGroupName,
     isVectorLayer: isVector,
-    hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes),
+    hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id),
     isMobile: state.browser.lessThan.medium,
     hasPalette,
     getPalette: (layerId, i) => getPalette(layer.id, i, layerGroupName, state),

@@ -16,6 +16,7 @@ import {
   toggleCategoryMode as toggleCategoryModeAction,
   toggleSearchMode as toggleSearchModeAction,
   toggleMobileFacets as toggleMobileFacetsAction,
+  saveSearchState as saveSearchStateAction,
 } from '../../../modules/product-picker/actions';
 import { getLayersForProjection } from '../../../modules/product-picker/selectors';
 
@@ -42,15 +43,15 @@ class ProductPickerHeader extends React.Component {
    */
   revertToInitialScreen(e) {
     const {
-      clearFilters,
-      setSearchTerm,
+      filters,
+      searchTerm,
+      searchConfig,
+      saveSearchState,
       toggleCategoryMode,
     } = this.props;
     e.preventDefault();
-
+    saveSearchState(filters, searchTerm, searchConfig);
     toggleCategoryMode();
-    setSearchTerm('');
-    clearFilters();
   }
 
   handleChange = (e) => {
@@ -111,6 +112,7 @@ class ProductPickerHeader extends React.Component {
   render() {
     const {
       category,
+      categoryType,
       filters,
       isMobile,
       layerCount,
@@ -124,18 +126,22 @@ class ProductPickerHeader extends React.Component {
       toggleSearchMode,
       width,
     } = this.props;
-    const isSearching = mode === 'search';
+    const searchMode = mode === 'search';
     const categoryId = category && category.id;
-    const showBackButton = isSearching
+    const showBackButton = searchMode
       || (categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
       && mode !== 'category');
-    const isBreadCrumb = showBackButton && !isSearching && width > 650;
-    const showReset = !!(filters.length || searchTerm.length);
-    const showFilterBtnMobile = mode === 'search' ? !showMobileFacets : !selectedLayer;
-    const showFilterBnDesktop = mode !== 'search' && !selectedLayer;
+    const recentLayersMode = categoryType === 'recent';
+    const isBreadCrumb = showBackButton && !searchMode && width > 650;
+    const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
+    const showFilterBtnMobile = recentLayersMode
+      || (searchMode ? !showMobileFacets : !selectedLayer);
+    const showFilterBnDesktop = recentLayersMode
+      || (!searchMode && !selectedLayer);
     const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
-    const filterBtnFn = mode !== 'search' ? toggleSearchMode : toggleMobileFacets;
+    const filterBtnFn = !searchMode ? toggleSearchMode : toggleMobileFacets;
+    const inputClass = !searchMode && searchTerm ? 'faded' : '';
 
     return (
       <>
@@ -172,8 +178,8 @@ class ProductPickerHeader extends React.Component {
             </Button>
           )}
 
-
           <Input
+            className={inputClass}
             onChange={this.handleChange}
             onClick={this.onSearchInputFocus}
             id="layers-search-input"
@@ -201,12 +207,14 @@ class ProductPickerHeader extends React.Component {
 
 ProductPickerHeader.propTypes = {
   category: PropTypes.object,
-  clearFilters: PropTypes.func,
+  categoryType: PropTypes.string,
   filters: PropTypes.array,
   isMobile: PropTypes.bool,
   layerCount: PropTypes.number,
   mode: PropTypes.string,
   results: PropTypes.array,
+  saveSearchState: PropTypes.func,
+  searchConfig: PropTypes.object,
   setSearchTerm: PropTypes.func,
   selectedLayer: PropTypes.object,
   selectedProjection: PropTypes.string,
@@ -222,6 +230,9 @@ ProductPickerHeader.propTypes = {
 const mapDispatchToProps = (dispatch) => ({
   unselectLayer: () => {
     dispatch(selectLayerAction(null));
+  },
+  saveSearchState: (filters, searchTerm, searchConfig) => {
+    dispatch(saveSearchStateAction(filters, searchTerm, searchConfig));
   },
   toggleCategoryMode: () => {
     dispatch(toggleCategoryModeAction());
@@ -239,8 +250,10 @@ const mapStateToProps = (state, ownProps) => {
   const {
     mode,
     category,
+    categoryType,
     showMobileFacets,
     selectedLayer,
+    searchConfig,
   } = productPicker;
   const isMobile = browser.lessThan.medium;
   const layers = getLayersForProjection(state);
@@ -248,9 +261,11 @@ const mapStateToProps = (state, ownProps) => {
   return {
     layerCount: layers.length,
     category,
+    categoryType,
     isMobile,
     showMobileFacets,
     mode,
+    searchConfig,
     selectedLayer,
     selectedProjection: proj.id,
   };
@@ -259,13 +274,11 @@ const mapStateToProps = (state, ownProps) => {
 export default withSearch(
   ({
     filters,
-    clearFilters,
     results,
     searchTerm,
     setSearchTerm,
   }) => ({
     filters,
-    clearFilters,
     searchTerm,
     setSearchTerm,
     results,

@@ -2,7 +2,7 @@
   "layers": {
     "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate": {
       "id": "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
-      "title": "Deep Blue Aerosol Optical Thickness",
+      "title": "Deep Blue Aerosol Optical Thickness (Land and Ocean)",
       "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
       "tags": "",
@@ -10,7 +10,7 @@
       "layergroup": [
         "viirs"
       ],
-      "product": "AERDB_L2_VIIRS_SNPP_NRT",
+      "product": "AERDB_L2_VIIRS_SNPP",
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_Suomi_NPP_Ascending"

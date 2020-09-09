@@ -23,7 +23,7 @@ export const defaultState = {
   gifActive: false,
   startDate: undefined,
   endDate: undefined,
-  boundares: undefined,
+  boundaries: undefined,
 };
 export function getInitialState(config) {
   return lodashAssign({}, defaultState, {

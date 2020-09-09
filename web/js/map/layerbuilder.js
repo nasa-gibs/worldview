@@ -5,6 +5,10 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
+import OlStroke from 'ol/style/Stroke';
+import OlText from 'ol/style/Text';
+import OlFill from 'ol/style/Fill';
+import OlGraticule from 'ol/layer/Graticule';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -68,7 +72,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
   const getCacheOptions = (period, date, state) => {
     const tenMin = 10 * 60000;
     const thirtyMin = 30 * 60000;
-    const now = new Date().getTime();
+    const now = Date.now();
     const recentTime = Math.abs(now - date.getTime()) < thirtyMin;
     if (period !== 'subdaily' || !recentTime) {
       return {};
@@ -129,6 +133,30 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
           break;
         case 'wms':
           layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        case 'graticule':
+          layer = new OlGraticule({
+            lonLabelStyle: new OlText({
+              font: '12px Calibri,sans-serif',
+              textBaseline: 'top',
+              fill: new OlFill({
+                color: 'rgba(0,0,0,1)',
+              }),
+              stroke: new OlStroke({
+                color: 'rgba(255,255,255,1)',
+                width: 3,
+              }),
+            }),
+            // the style to use for the lines, optional.
+            strokeStyle: new OlStroke({
+              color: 'rgb(255, 255, 255)',
+              width: 2,
+              lineDash: [0.5, 4],
+            }),
+            extent: proj.maxExtent,
+            lonLabelPosition: 1,
+            showLabels: true,
+          });
           break;
         default:
           throw new Error(`Unknown layer type: ${def.type}`);
@@ -354,7 +382,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     * @param {object} attributes
     */
   const createLayerVector = function(def, options, day, state, attributes) {
-    const { proj, compare } = state;
+    const { proj, compare, animation } = state;
     let date;
     let gridExtent;
     let matrixIds;
@@ -363,6 +391,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const source = config.sources[def.source];
+    const animationIsPlaying = animation.isPlaying;
     gridExtent = selectedProj.maxExtent;
     layerExtent = gridExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
@@ -371,7 +400,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
     const matrixSet = source.matrixSets[def.matrixSet];
-
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
@@ -404,7 +432,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
     const wrapX = !!(day === 1 || day === -1);
     const breakPointLayerDef = def.breakPointLayer;
-    const breakPointResolution = lodashGet(def, 'breakPointLayer.resolutionBreakPoint');
+    const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const breakPointType = lodashGet(def, 'breakPointLayer.breakPointType');
     const isMaxBreakPoint = breakPointType === 'max';
     const isMinBreakPoint = breakPointType === 'min';
@@ -416,19 +444,20 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       format: new MVT(),
       matrixSet: tileMatrixSet,
       wrapX,
+      projection: proj.selected.crs,
       tileGrid: new OlTileGridTileGrid({
         extent: gridExtent,
         resolutions: matrixSet.resolutions,
         tileSize: matrixSet.tileSize,
         origin: start,
         sizes: matrixSet.tileMatrices,
-
       }),
     });
     const layer = new LayerVectorTile({
       extent: layerExtent,
       source: sourceOptions,
       renderMode: 'image',
+      vector: true,
       preload: 10,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
       ...isMinBreakPoint && { minResolution: breakPointResolution },
@@ -437,7 +466,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
-    if (breakPointLayerDef) {
+    if (breakPointLayerDef && !animationIsPlaying) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
@@ -445,7 +474,14 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       });
       wmsLayer.wv = attributes;
       return layerGroup;
+    } if (breakPointResolution && animationIsPlaying) {
+      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
+      const newDef = { ...def, ...breakPointLayerDef };
+      const wmsLayer = createLayerWMS(newDef, options, day, state);
+      wmsLayer.wv = attributes;
+      return wmsLayer;
     }
+
     return layer;
   };
 
@@ -536,12 +572,14 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       const lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
+    const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const layer = new OlLayerTile({
       preload: Infinity,
       extent,
-      ...!!def.resolutionBreakPoint && { minResolution: def.resolutionBreakPoint },
+      ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: new OlSourceTileWMS(sourceOptions),
     });
+    layer.isWMS = true;
     return layer;
   };
 

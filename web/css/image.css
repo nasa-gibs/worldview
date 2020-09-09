@@ -1,3 +1,20 @@
+#imagedownload {
+  z-index: 1005;
+  width: 180px;
+  min-height: 100px;
+  position: absolute;
+  display: none;
+  background: rgba(38, 43, 49, 0.45);
+  text-shadow: none;
+  color: #fff;
+  float: left;
+  font-size: 11px;
+  text-align: left;
+  top: 44px;
+  padding: 5px;
+  border-radius: 0 0 5px 5px;
+}
+
 .wv-image {
   color: #fff;
 }
@@ -56,7 +73,6 @@
 }
 
 .wv-image-download-grid button span {
-  padding: 0.2em 1em;
   font-weight: 700;
   font-size: 12px;
 }

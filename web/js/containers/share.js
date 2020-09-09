@@ -8,17 +8,19 @@ import {
   Input,
   InputGroup,
   Button,
-  Tooltip,
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
-import { getSharelink, openPromisedSocial } from '../modules/link/util';
+import ShareToolTips from '../components/toolbar/share/tooltips';
+import { encode, getSharelink } from '../modules/link/util';
+import { serializeDate } from '../modules/date/util';
+import getSelectedDate from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
 
-const getShortenRequestString = function(mock, permalink) {
+const getShortenRequestString = (mock, permalink) => {
   const mockStr = mock || '';
-  if (/localhost/.test(window.location)) {
+  if (/localhost/.test(window.location.href)) {
     return 'mock/short_link.json';
   }
   return (
@@ -35,17 +37,23 @@ class ShareLinkContainer extends Component {
     this.state = {
       shortLinkKey: '',
       isShort: false,
-      tooltipOpen: false,
+      tooltipToggleTime: 0,
+      tooltipErrorTime: 0,
       queryString: history.location.search || '',
     };
-    this.onToggleShorten = this.onToggleShorten.bind(this);
-    this.onLinkClick = this.onLinkClick.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.shortLink.error && prevState.isShort) {
-      return { isShort: false, showErrorTooltip: true };
-    } return null;
+    const { shortLink } = nextProps;
+    const errorNoResponse = shortLink.response === null;
+    const errorExplicit = shortLink.error;
+    if ((errorNoResponse || errorExplicit) && prevState.isShort) {
+      return {
+        isShort: false,
+        tooltipErrorTime: Date.now(),
+      };
+    }
+    return null;
   }
 
   componentDidMount() {
@@ -66,14 +74,14 @@ class ShareLinkContainer extends Component {
     if (this.unlisten) this.unlisten();
   }
 
-  getShortLink() {
+  getShortLink = () => {
     const { requestShortLink, mock } = this.props;
     const link = this.getPermalink();
     const location = getShortenRequestString(mock, link);
     return requestShortLink(location);
   }
 
-  onToggleShorten() {
+  onToggleShorten = () => {
     const { shortLinkKey, isShort, queryString } = this.state;
     if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink();
@@ -85,79 +93,82 @@ class ShareLinkContainer extends Component {
         isShort: !isShort,
       });
     } else {
-      this.setState({ isShort: !isShort });
+      this.setState({
+        isShort: !isShort,
+      });
     }
   }
 
-  getPermalink() {
-    const { queryString } = this.state;
-    const url = window.location.href;
-    let prefix = url.split('?')[0];
-    prefix = prefix !== null && prefix !== undefined ? prefix : url;
-    return !queryString ? prefix : prefix + queryString;
+  // set copy tooltip time
+  onCopyToClipboard = () => {
+    this.setState({
+      tooltipToggleTime: Date.now(),
+    });
   }
 
-  onLinkClick(type) {
+  getPermalink = () => {
+    const { queryString } = this.state;
+    const { selectedDate } = this.props;
+    const url = window.location.href;
+    const prefix = url.split('?')[0];
+
+    // if no time query string parameter, add to permalink
+    const isTimeInQueryString = queryString.includes('t=');
+    let timeParam = '';
+    if (!isTimeInQueryString) {
+      const serialized = serializeDate(selectedDate);
+      const encoded = encode(serialized);
+      timeParam = `t=${encoded}`;
+    }
+
+    // add to permalink based on existing querystring
+    let permalink = prefix;
+    if (!queryString) {
+      permalink += `?${timeParam}`;
+    } else if (!isTimeInQueryString) {
+      permalink += `${queryString}&${timeParam}`;
+    } else {
+      permalink = url;
+    }
+
+    return permalink;
+  }
+
+  onLinkClick = (type) => {
     const permalink = this.getPermalink();
+    let shareLink = getSharelink(type, permalink);
+
     googleTagManager.pushEvent({
       event: 'social_share_platform',
       social_type: type,
     });
-    // If a short link can be generated, replace the full link.
-    if (type === 'twitter' || type === 'email') {
-      const promise = this.getShortLink();
-      let win = window;
-      if (type === 'twitter') {
-        win = window.open('', '_blank');
-      }
-      promise
-        .then((result) => {
-          if (result.status_code === 200) {
-            const href = getSharelink(type, result.data.url);
-            openPromisedSocial(href, win);
-          }
-        })
-        .catch(() => {
-          const href = getSharelink(type, permalink);
-          openPromisedSocial(href, win);
-          console.warn('Unable to shorten URL, full link generated.');
-        });
-    } else {
-      const href = getSharelink(type, permalink);
-      window.open(href, '_blank');
-    }
-  }
 
-  renderToolTips() {
-    const { showErrorTooltip, tooltipOpen } = this.state;
-    if (showErrorTooltip) {
-      setTimeout(() => {
-        this.setState({ showErrorTooltip: false });
-      }, 2000);
+    // If a short link can be generated, replace the full link.
+    if (type === 'twitter') {
+      const newTab = window.open('', '_blank');
+      this.getShortLink().then(({ link }) => {
+        shareLink = getSharelink(type, link);
+      }).finally(() => {
+        newTab.location = shareLink;
+      });
+    } else if (type === 'email') {
+      this.getShortLink().then(({ link }) => {
+        shareLink = getSharelink(type, link);
+      }).finally(() => {
+        window.location = shareLink;
+      });
+    } else {
+      window.open(shareLink, '_blank');
     }
-    return (
-      <>
-        <Tooltip
-          placement="left"
-          isOpen={showErrorTooltip}
-          target="permalink_content"
-        >
-          Link cannot be shortened at this time.
-        </Tooltip>
-        <Tooltip
-          placement="right"
-          isOpen={tooltipOpen}
-          target="copy-to-clipboard-button"
-        >
-          Copied!
-        </Tooltip>
-      </>
-    );
   }
 
   render() {
     const { shortLink } = this.props;
-    const { isShort } = this.state;
+    const {
+      isShort,
+      tooltipErrorTime,
+      tooltipToggleTime,
+    } = this.state;
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
       : isShort
@@ -169,7 +180,10 @@ class ShareLinkContainer extends Component {
     return (
       <>
         <div>
-          {this.renderToolTips()}
+          <ShareToolTips
+            tooltipErrorTime={tooltipErrorTime}
+            tooltipToggleTime={tooltipToggleTime}
+          />
           <InputGroup>
             <Input
               type="text"
@@ -180,16 +194,10 @@ class ShareLinkContainer extends Component {
                 e.preventDefault();
               }}
             />
-
             <CopyToClipboard
               options={window.clipboardData ? {} : { format: 'text/plain' }}
               text={value}
-              onCopy={() => {
-                this.setState({ tooltipOpen: true });
-                setTimeout(() => {
-                  this.setState({ tooltipOpen: false });
-                }, 2000);
-              }}
+              onCopy={this.onCopyToClipboard}
             >
               <InputGroupAddon addonType="append">
                 <Button id="copy-to-clipboard-button">COPY</Button>
@@ -217,6 +225,7 @@ function mapStateToProps(state) {
 
   return {
     shortLink: state.shortLink,
+    selectedDate: getSelectedDate(state),
     mock:
       config.parameters && config.parameters.shorten
         ? config.parameters.shorten
@@ -237,5 +246,6 @@ export default connect(
 ShareLinkContainer.propTypes = {
   mock: PropTypes.string,
   requestShortLink: PropTypes.func,
+  selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
 };

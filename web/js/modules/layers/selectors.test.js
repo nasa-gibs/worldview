@@ -66,52 +66,6 @@ test('resets to default layers', () => {
   const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'terra-aod']);
 });
-test('no date range for static products', () => {
-  const layers = addLayer('mask', {}, [], config.layers, 0);
-  expect(dateRange({}, layers, config)).toBeFalsy();
-});
-
-test('date range for ongoing layers', () => {
-  let layers = addLayer('terra-cr', {}, [], config.layers);
-  layers = addLayer('aqua-cr', {}, layers, config.layers);
-  layers = addLayer('terra-aod', {}, layers, config.layers);
-  layers = addLayer('aqua-aod', {}, layers, config.layers);
-  const range = dateRange({}, layers, config);
-
-  expect(range.start).toEqual(new Date(Date.UTC(2000, 0, 1)));
-  expect(range.start).toEqual(new Date(Date.UTC(2000, 0, 1)));
-});
-
-test('date range for ended layers', () => {
-  const layersConfig = {};
-  layersConfig.end1 = {
-    id: 'end1',
-    group: 'overlays',
-    projections: {
-      geographic: {},
-    },
-    startDate: '1990-01-01',
-    endDate: '2005-01-01',
-    inactive: true,
-  };
-  layersConfig.end2 = {
-    id: 'end1',
-    group: 'overlays',
-    projections: {
-      geographic: {},
-    },
-    startDate: '1992-01-01',
-    endDate: '2007-01-01',
-    inactive: true,
-  };
-  const adjustedConfig = update(config, { layers: { $set: layersConfig } });
-  let layers = addLayer('end1', {}, [], layersConfig);
-  layers = addLayer('end2', {}, layers, layersConfig);
-  const range = dateRange({}, layers, adjustedConfig);
-
-  expect(range.start).toEqual(new Date(Date.UTC(1990, 0, 1)));
-  expect(range.end).toEqual(new Date(Date.UTC(2007, 0, 1)));
-});
 
 test('gets layers in reverse', () => {
   let layers = addLayer('terra-cr', {}, [], config.layers);
@@ -281,7 +235,6 @@ test('move overlay before', () => {
 });
 
 // Date Ranges
-
 function getDateRangesTestState(state) {
   const today = new Date(Date.UTC(2010, 0, 1));
   util.now = () => today;
@@ -320,7 +273,9 @@ function getDateRangesTestState(state) {
       },
     },
   };
-  state = update(state, { date: { selected: { $set: today } } });
+  state = update(state, {
+    date: { selected: { $set: today } },
+  });
   state = update(state, {
     config: { defaults: { projection: { $set: 'geographic' } } },
   });
@@ -330,9 +285,50 @@ function getDateRangesTestState(state) {
   state = update(state, {
     config: { layers: { $set: layers } },
   });
-
   return state;
 }
+
+test('date range for ongoing layers', () => {
+  let layers = addLayer('terra-cr', {}, [], config.layers);
+  layers = addLayer('aqua-cr', {}, layers, config.layers);
+  layers = addLayer('terra-aod', {}, layers, config.layers);
+  layers = addLayer('aqua-aod', {}, layers, config.layers);
+  const range = dateRange({}, layers, config);
+
+  expect(range.start).toEqual(new Date(Date.UTC(2000, 0, 1)));
+  expect(range.start).toEqual(new Date(Date.UTC(2000, 0, 1)));
+});
+
+test('date range for ended layers', () => {
+  const layersConfig = {};
+  layersConfig.end1 = {
+    id: 'end1',
+    group: 'overlays',
+    projections: {
+      geographic: {},
+    },
+    startDate: '1990-01-01',
+    endDate: '2005-01-01',
+    inactive: true,
+  };
+  layersConfig.end2 = {
+    id: 'end1',
+    group: 'overlays',
+    projections: {
+      geographic: {},
+    },
+    startDate: '1992-01-01',
+    endDate: '2007-01-01',
+    inactive: true,
+  };
+  const adjustedConfig = update(config, { layers: { $set: layersConfig } });
+  let layers = addLayer('end1', {}, [], layersConfig);
+  layers = addLayer('end2', {}, layers, layersConfig);
+  const range = dateRange({}, layers, adjustedConfig);
+
+  expect(range.start).toEqual(new Date(Date.UTC(1990, 0, 1)));
+  expect(range.end).toEqual(new Date(Date.UTC(2007, 0, 1)));
+});
 
 test('date range with one layer', () => {
   let state = getState([]);

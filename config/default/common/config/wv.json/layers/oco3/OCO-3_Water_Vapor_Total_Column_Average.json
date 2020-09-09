@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "OCO-3_Water_Vapor_Total_Column_Average": {
+      "id": "OCO-3_Water_Vapor_Total_Column_Average",
+      "title": "Water Vapor (Total Column Average)",
+      "subtitle": "OCO-3",
+      "description": "oco3/OCO-3_Water_Vapor_Total_Column_Average",
+      "tags": "oco3",
+      "group": "overlays",
+      "layergroup": [
+        "oco3"
+      ],
+      "product": "OCO3_L2_Lite_FP",
+      "wrapadjacentdays": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

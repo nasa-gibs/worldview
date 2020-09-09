@@ -57,14 +57,6 @@
   display: inline-block;
 }
 
-/* .button-action-group,
-.date-arrows {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-} */
-
 .button-action-group {
   height: 40px;
   width: 40px;

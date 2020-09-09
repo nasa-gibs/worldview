@@ -14,7 +14,8 @@
   },
   "plugins": [
     "react",
-    "jest"
+    "jest",
+    "no-storage"
   ],
   "extends": "airbnb",
   "parser": "babel-eslint",
@@ -61,7 +62,8 @@
           "**/*conf.js"
         ]
       }
-    ]
+    ],
+    "no-storage/no-browser-storage": "error"
   },
   "overrides": [
     {

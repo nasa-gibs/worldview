@@ -8,7 +8,7 @@ import {
   replaceSubGroup,
   getZotsForActiveLayers,
   getTitles,
-  available,
+  memoizedAvailable as availableSelector,
 } from '../../modules/layers/selectors';
 import { reorderLayers } from '../../modules/layers/actions';
 
@@ -169,6 +169,7 @@ LayerList.propTypes = {
   title: PropTypes.string,
   zots: PropTypes.object,
 };
+
 function mapStateToProps(state, ownProps) {
   const {
     layers,
@@ -179,11 +180,10 @@ function mapStateToProps(state, ownProps) {
     layerSplit,
   } = ownProps;
   const {
-    proj, compare, config, map,
+    proj, config, map,
   } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
-  const activeDateString = compare.isCompareA ? 'selected' : 'selectedB';
   const activeLayers = state.layers[layerGroupName];
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(config, proj, map, activeLayers)
@@ -199,13 +199,11 @@ function mapStateToProps(state, ownProps) {
     projId: id,
     checkerBoardPattern,
     layerSplit,
-    getNames: (layerId) => getTitles(state.config, layerId, id),
-    available: (id) => {
-      const date = state.date[activeDateString];
-      return available(id, date, layers, state.config, state);
-    },
+    getNames: (layerId) => getTitles(config, layerId, id),
+    available: (layerId) => availableSelector(state)(layerId),
   };
 }
+
 const mapDispatchToProps = (dispatch) => ({
   reorderLayers: (newLayerArray) => {
     dispatch(reorderLayers(newLayerArray));

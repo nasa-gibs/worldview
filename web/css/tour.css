@@ -1,38 +1,3 @@
-/* Breakpoint: Extra Small (< 576px) */
-.tour .close {
-  position: absolute;
-  top: auto;
-  right: 6px;
-  height: 26px;
-  width: 26px;
-  padding: 0;
-  margin: 0;
-  opacity: 1;
-}
-
-.tour .close span {
-  display: block;
-  position: relative;
-  height: 26px;
-  width: 26px;
-  margin: 0;
-  background: url('../images/wv-icons.png') -26px 0;
-  background-repeat: no-repeat;
-}
-
-.tour-in-progress .close {
-  top: 8px;
-  height: 13px;
-  width: 13px;
-}
-
-.tour-in-progress .close span {
-  height: 13px;
-  width: 13px;
-  background: url('../images/wv-icons.png') -13px 0;
-  background-size: 39px 26px;
-}
-
 .tour a {
   color: #00457b;
   font-weight: 400;
@@ -43,645 +8,570 @@
   text-decoration: none;
 }
 
-/* .tour-start */
-.tour-start .modal {
-  overflow-y: auto;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.tour-start .modal-dialog {
-  overflow-y: initial;
-  border: 1px solid #333;
-}
-
-.tour-start .modal.fade .modal-dialog {
-  transform: translate(0, 0);
-  -webkit-transform: translate(0, 0);
-}
-
-.tour-start .modal-dialog .modal-content {
-  background-color: #eee;
-  border: 0;
-  border-radius: 0;
-}
-
-.tour-in-progress .modal-content {
-  height: 350px;
-}
-
-.tour-start .scrollbar-visible .modal-body {
-  padding-right: 10px;
-}
-.tour-start .modal-header {
-  color: #fff;
-  background-color: #00457b;
-  border-radius: 0;
-  padding: 8px 12px 7px;
-}
-
-.tour-start .modal-title {
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 300;
-}
-
-.tour-start .modal-title .close {
-  color: #fff;
-}
-
-.tour-start .modal-body {
-  padding: 4px;
-}
-
-.tour-start .tour-intro {
-  background-color: #fff;
-  border: 1px solid #333;
-  padding: 15px;
-}
-
-.tour-start .modal-body .tour-intro p {
-  font-size: 16px;
-  line-height: 24px;
-  color: #000;
-}
-
-.tour-start .tour-intro a {
-  color: #00457b;
-  font-weight: 600;
-}
-
-.tour-start .tour-intro a:hover {
-  color: #2276ac;
-  text-decoration: none;
-}
-
-.tour-start .tour-box-row {
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.tour-start .tour-box {
-  position: relative;
-  background: url('../images/tour/tour-box-background.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 200px;
-  width: 100%;
-  margin: 4px auto 0;
-  text-decoration: none;
-  border: 1px solid #333;
-}
-
-.tour-start .tour-box-content {
-  height: 198px;
-  display: flex;
-  flex-flow: column-reverse nowrap;
-  justify-content: flex-start;
-  overflow: hidden;
-}
-
-.tour-start .tour-box .tour-box-header {
-  width: 100%;
-  color: #fff;
-  background-color: #00457b;
-  text-align: center;
-  padding: 4px;
-  order: 0;
-}
-
-.tour-start .tour-box.feature .tour-box-header {
-  background-color: #d54e21;
-}
-
-.tour-start .tour-box.wildfire .tour-box-header {
-  background-color: #8d3b36;
-}
-
-.tour-start .tour-box.volcano .tour-box-header {
-  background-color: #a5734b;
-}
-
-.tour-start .tour-box.snow .tour-box-header {
-  background-color: #5a7784;
-}
-
-.tour-start .tour-box.sea-and-lake-ice .tour-box-header {
-  background-color: #328697;
-}
-
-.tour-start .tour-box.iceberg .tour-box-header {
-  background-color: #3889ad;
-}
-
-.tour-start .tour-box.water-color .tour-box-header {
-  background-color: #457d73;
-}
-
-.tour-start .tour-box.dust-and-haze .tour-box-header {
-  background-color: #a09758;
-}
-
-.tour-start .tour-box.severe-storm .tour-box-header {
-  background-color: #465a64;
-}
-
-.tour-start .tour-box.man-made .tour-box-header {
-  background-color: #3e3e3e;
-}
-
-.tour-start .tour-box.critical .tour-box-header {
-  background-color: #585858;
-}
-
-.tour-start .tour-box-title {
-  line-height: 16px;
-}
-
-.tour-start .tour-box-description {
-  display: none;
-}
-
-.tour-start .tour-box:hover .tour-box-description {
-  display: block;
-  cursor: pointer;
-  color: #fff;
-  background-color: rgba(20, 20, 20, 0.75);
-  padding: 4px;
-  order: 1;
-}
-
-.tour-start .modal-footer {
-  padding: 0 4px 4px;
-}
-
-/* .tour-in-progress */
-.tour-in-progress .modal {
-  left: auto;
-  right: 0;
-  top: auto;
-  width: 248px;
-  bottom: 333px;
-  height: 200px;
-  overflow: visible;
-}
-
-.tour-in-progress .modal-dialog {
-  position: absolute;
-  width: 248px;
-  right: 0;
-  top: 0;
-  padding: 0;
-  margin: 0;
-}
-
-.tour-in-progress .modal.fade .modal-dialog {
-  transform: translate(100%, 0);
-  -webkit-transform: translate(100%, 0);
-  transition: transform 0.5s ease-out;
-}
-
-.tour-in-progress .modal.show .modal-dialog {
-  transform: translate(0, 0);
-  -webkit-transform: translate(0, 0);
-}
-
-.tour-in-progress .modal-dialog .modal-content {
-  min-width: 248px;
-  max-height: 357px;
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 8px 0 0 8px;
-  border: none;
-}
-
-.tour-in-progress .modal-header {
-  display: block;
-  position: relative;
-  color: #fff;
-  border-radius: 8px 0 0;
-  background-color: rgb(0, 69, 123);
-  padding: 8px 20px 8px 16px;
-  border-bottom: 2px solid #fff;
-}
-
-.tour-in-progress .feature .modal-header {
-  background-color: rgb(213, 78, 33);
-}
-
-.tour-in-progress .wildfire .modal-header {
-  background-color: rgb(141, 59, 54);
-}
-
-.tour-in-progress .volcano .modal-header {
-  background-color: rgb(165, 115, 75);
-}
-
-.tour-in-progress .snow .modal-header {
-  background-color: rgb(90, 119, 132);
-}
-
-.tour-in-progress .sea-and-lake-ice .modal-header {
-  background-color: rgb(50, 134, 151);
-}
-
-.tour-in-progress .iceberg .modal-header {
-  background-color: rgb(56, 137, 173);
-}
-
-.tour-in-progress .water-color .modal-header {
-  background-color: rgb(69, 125, 115);
-}
-
-.tour-in-progress .dust-and-haze .modal-header {
-  background-color: rgb(160, 151, 88);
-}
-
-.tour-in-progress .severe-storm .modal-header {
-  background-color: rgb(70, 90, 100);
-}
-
-.tour-in-progress .man-made .modal-header {
-  background-color: rgb(62, 62, 62);
-}
-
-.tour-in-progress .critical .modal-header {
-  background-color: rgb(88, 88, 88);
-}
-
-.tour-in-progress .modal-title {
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 300;
-  padding-left: 28px;
-}
-
-.tour-in-progress .modal-icon {
-  position: absolute;
-  top: -9px;
-  left: -20px;
-  height: 60px;
-  width: 60px;
-  z-index: 3;
-  background-color: #fff;
-  border-radius: 50%;
-  background-image: url('../images/natural-events/icon-default.svg');
-  background-size: 64px 64px;
-  background-position: -2px -2px;
-}
-
-.tour-in-progress .feature .modal-icon {
-  background-color: #d54e21;
-  background-size: 68px 68px;
-  background-position: 0;
-  background-image: none;
-  font-size: 32px;
-  padding-top: 14px;
-  padding-left: 8px;
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  display: inline-block;
-  font-style: normal;
-  -webkit-font-feature-settings: normal;
-  font-feature-settings: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  line-height: 1;
-}
-
-.tour-in-progress .feature .modal-icon::before {
-  content: '\F1D8';
-}
-
-.tour-in-progress .wildfire .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-wildfires.svg');
-}
-
-.tour-in-progress .volcano .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-volcanoes.svg');
-}
-
-.tour-in-progress .snow .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-snow.svg');
-}
-
-.tour-in-progress .sea-and-lake-ice .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-sea-and-lake-ice.svg');
-}
-
-.tour-in-progress .iceberg .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-icebergs.svg');
-}
-
-.tour-in-progress .water-color .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-water-color.svg');
-}
-
-.tour-in-progress .dust-and-haze .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-dust-and-haze.svg');
-}
-
-.tour-in-progress .severe-storm .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-severe-storms.svg');
-}
-
-.tour-in-progress .man-made .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-manmade.svg');
-}
-
-.tour-in-progress .critical .modal-icon {
-  background-color: transparent;
-  background-size: 68px 68px;
-  background-position: -4px -4px;
-  background-image: url('../images/natural-events/icon-critical.svg');
-}
-
-.tour-in-progress .modal-body {
-  color: #fff;
-  padding: 0;
-  overflow-y: auto;
-  border-bottom: 2px solid #fff;
-  -ms-flex: 1 1 25px;
-}
-
-.tour-in-progress .modal-body p {
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-
-.tour-in-progress .modal-body > div {
-  padding: 12px 8px 6px 12px;
-}
-
-.tour-in-progress .modal-body a {
-  text-decoration: underline;
-}
-
-.tour-in-progress .default .modal-body a,
-.tour-in-progress .wildfire .modal-body a {
-  color: #7bf;
-  font-weight: 400;
-}
-.tour-in-progress .default .modal-body a:hover,
-.tour-in-progress .wildfire .modal-body a:hover {
-  color: #9df;
-}
-
-.tour-in-progress .modal-body ul {
-  padding-left: 16px;
-  line-height: 16px;
-}
-
-.tour-in-progress .modal-body li {
-  margin-bottom: 4px;
-  line-height: 16px;
-}
-
-.tour-in-progress .modal-body strong {
-  font-weight: 600;
-}
-
-.tour-in-progress .modal-footer {
-  border-radius: 0 0 0 8px;
-  padding: 0;
-  min-height: 52px;
-  justify-content: center;
-}
-
-.tour-in-progress .modal-body,
-.tour-in-progress .modal-footer {
-  background-color: rgba(0, 69, 123, 0.8);
-}
-
-.tour-in-progress .feature .modal-body,
-.tour-in-progress .feature .modal-footer {
-  background-color: rgba(213, 78, 33, 0.8);
-}
-
-.tour-in-progress .wildfire .modal-body,
-.tour-in-progress .wildfire .modal-footer {
-  background-color: rgba(141, 59, 54, 0.8);
-}
-
-.tour-in-progress .volcano .modal-body,
-.tour-in-progress .volcano .modal-footer {
-  background-color: rgba(165, 115, 75, 0.8);
-}
-
-.tour-in-progress .snow .modal-body,
-.tour-in-progress .snow .modal-footer {
-  background-color: rgba(90, 119, 132, 0.8);
-}
-
-.tour-in-progress .sea-and-lake-ice .modal-body,
-.tour-in-progress .sea-and-lake-ice .modal-footer {
-  background-color: rgba(50, 134, 151, 0.8);
-}
-
-.tour-in-progress .iceberg .modal-body,
-.tour-in-progress .iceberg .modal-footer {
-  background-color: rgba(56, 137, 173, 0.8);
-}
-
-.tour-in-progress .water-color .modal-body,
-.tour-in-progress .water-color .modal-footer {
-  background-color: rgba(69, 125, 115, 0.8);
-}
-
-.tour-in-progress .dust-and-haze .modal-body,
-.tour-in-progress .dust-and-haze .modal-footer {
-  background-color: rgba(160, 151, 88, 0.8);
-}
-
-.tour-in-progress .severe-storm .modal-body,
-.tour-in-progress .severe-storm .modal-footer {
-  background-color: rgba(70, 90, 100, 0.8);
-}
-
-.tour-in-progress .man-made .modal-body,
-.tour-in-progress .man-made .modal-footer {
-  background-color: rgba(62, 62, 62, 0.8);
-}
-
-.tour-in-progress .critical .modal-body,
-.tour-in-progress .critical .modal-footer {
-  background-color: rgba(88, 88, 88, 0.8);
-}
-
-.tour-in-progress .step-container {
-  display: flex;
-  height: 40px;
-  width: 220px;
-  flex-flow: row wrap;
-  justify-content: space-between;
-}
-
-.tour-in-progress .step-previous {
-  color: #fff;
-  font-size: 40px;
-  height: 40px;
-  width: 40px;
-  margin: auto;
-}
-
-.tour-in-progress .step-counter {
-  color: #fff;
-  width: 132px;
-  margin: 6px auto;
-  text-align: center;
-}
-
-.tour-in-progress .step-counter p {
-  font-size: 22px;
-  line-height: 24px;
-  font-weight: 300;
-}
-
-.tour-in-progress .step-next {
-  color: #fff;
-  font-size: 40px;
-  height: 40px;
-  width: 40px;
-  margin: auto;
-}
-
-/* (Worst Bootstrap specificty ever) */
-.tour-in-progress .step-previous:not([href]):not([tabindex]):hover,
-.tour-in-progress .step-previous:not([tabindex]):hover,
-.tour-in-progress .step-previous:hover,
-.tour-in-progress .step-next:not([href]):not([tabindex]):hover,
-.tour-in-progress .step-next:not([tabindex]):hover,
-.tour-in-progress .step-next:hover {
-  color: #fff;
-  opacity: 0.75;
-}
-
-.tour-in-progress .step-previous.disabled:not([href]):not([tabindex]):hover,
-.tour-in-progress .step-previous.disabled:not([href]):not([tabindex]):focus,
-.tour-in-progress .step-previous.disabled:not([tabindex]):hover,
-.tour-in-progress .step-previous.disabled:not([tabindex]):focus,
-.tour-in-progress .step-previous.disabled:hover,
-.tour-in-progress .step-previous.disabled:focus,
-.tour-in-progress .step-previous.disabled,
-.tour-in-progress .step-next.disabled:not([href]):not([tabindex]):hover,
-.tour-in-progress .step-next.disabled:not([href]):not([tabindex]):focus,
-.tour-in-progress .step-next.disabled:not([tabindex]):hover,
-.tour-in-progress .step-next.disabled:not([tabindex]):focus,
-.tour-in-progress .step-next.disabled:hover,
-.tour-in-progress .step-next.disabled:focus,
-.tour-in-progress .step-next.disabled {
-  cursor: default;
+.about-page .modal-dialog .modal-header .close,
+.tour-start .modal-dialog .modal-header .close,
+.tour-complete .modal-dialog .modal-header .close {
+  font-size: 30px;
+  padding: 12px 14px;
   color: #ddd;
-  opacity: 0.5;
+  text-shadow: 1px 1px 0 #333;
+  &:hover {
+    color: #fff;
+  }
 }
-
-/* .tour-complete */
-.tour-complete .modal-dialog {
-  border: 1px solid #333;
-}
-
-.tour-complete .modal.fade .modal-dialog {
-  transform: translate(0, 0);
-  -webkit-transform: translate(0, 0);
-}
-
-.tour-complete .modal-dialog .modal-content {
-  background-color: #fff;
-  border: 0;
-  border-radius: 0;
-}
-
-.tour-complete .modal-header {
+.about-page .modal-header,
+.tour-complete .modal-header,
+.tour-start .modal-header {
   position: relative;
-  padding: 7px 12px 8px;
-  border-radius: 0;
   background-color: rgb(0, 69, 123);
+  padding: 6px 8px;
 }
-
-.tour-complete .feature .modal-header {
-  background-color: rgb(213, 78, 33);
-}
-
-.tour-complete .wildfire .modal-header {
-  background-color: rgb(141, 59, 54);
-}
-
-.tour-complete .volcano .modal-header {
-  background-color: rgb(165, 115, 75);
-}
-
-.tour-complete .snow .modal-header {
-  background-color: rgb(90, 119, 132);
-}
-
-.tour-complete .sea-and-lake-ice .modal-header {
-  background-color: rgb(50, 134, 151);
-}
-
-.tour-complete .iceberg .modal-header {
-  background-color: rgb(56, 137, 173);
-}
-
-.tour-complete .water-color .modal-header {
-  background-color: rgb(69, 125, 115);
-}
-
-.tour-complete .dust-and-haze .modal-header {
-  background-color: rgb(160, 151, 88);
-}
-
-.tour-complete .severe-storm .modal-header {
-  background-color: rgb(70, 90, 100);
-}
-
-.tour-complete .man-made .modal-header {
-  background-color: rgb(62, 62, 62);
-}
-
-.tour-complete .critical .modal-header {
-  background-color: rgb(88, 88, 88);
-}
-
+.about-page .modal-title,
+.tour-start .modal-title,
 .tour-complete .modal-title {
   color: #fff;
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 24px;
+  line-height: 22px;
   font-weight: 300;
 }
+.about-page .modal-body,
+.tour-complete .modal-body,
+.tour-start .modal-body {
+  border-radius: 0;
+}
 
-.tour-complete .modal-body {
-  padding: 15px 15px 0;
+/* TOUR START */
+.tour-start {
+  .modal {
+    overflow-y: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .modal-dialog {
+    overflow-y: initial;
+    border: 1px solid #333;
+  }
+  .modal.fade .modal-dialog {
+    transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+  }
+  .modal-dialog .modal-content {
+    border: 0;
+  }
+  .modal-body {
+    padding: 4px;
+    background-color: #eee;
+  }
+  .scrollbar-visible .modal-body {
+    padding-right: 10px;
+  }
+  .modal-footer {
+    background: #eee;
+    padding: 0 4px 4px;
+    .wv-checkbox span {
+      font-size: 14px;
+      margin-left: 5px;
+    }
+  }
+
+  .tour-box {
+    position: relative;
+    background: url('../images/tour/tour-box-background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 200px;
+    width: 100%;
+    margin: 4px auto 0;
+    text-decoration: none;
+    border: 1px solid #333;
+    .tour-box-header {
+      width: 100%;
+      color: #fff;
+      background-color: #00457b;
+      text-align: center;
+      padding: 4px;
+      order: 0;
+    }
+    .tour-box-title {
+      line-height: 16px;
+    }
+
+    &.feature .tour-box-header {
+      background-color: #d54e21;
+    }
+    &.wildfire .tour-box-header {
+      background-color: #8d3b36;
+    }
+    &.volcano .tour-box-header {
+      background-color: #a5734b;
+    }
+    &.snow .tour-box-header {
+      background-color: #5a7784;
+    }
+    &.sea-and-lake-ice .tour-box-header {
+      background-color: #328697;
+    }
+    &.iceberg .tour-box-header {
+      background-color: #3889ad;
+    }
+    &.water-color .tour-box-header {
+      background-color: #457d73;
+    }
+    &.dust-and-haze .tour-box-header {
+      background-color: #a09758;
+    }
+    &.severe-storm .tour-box-header {
+      background-color: #465a64;
+    }
+    &.man-made .tour-box-header {
+      background-color: #3e3e3e;
+    }
+    &.critical .tour-box-header {
+      background-color: #585858;
+    }
+    .tour-box-content {
+      height: 198px;
+      display: flex;
+      flex-flow: column-reverse nowrap;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    .tour-box-description {
+      display: none;
+    }
+    &:hover .tour-box-description {
+      display: block;
+      cursor: pointer;
+      color: #fff;
+      background-color: rgba(20, 20, 20, 0.75);
+      padding: 4px;
+      order: 1;
+    }
+  }
+  .tour-intro {
+    background-color: #fff;
+    border: 1px solid #333;
+    padding: 15px;
+  }
+
+  .modal-body .tour-intro p {
+    font-size: 16px;
+    line-height: 24px;
+    color: #000;
+  }
+
+  .tour-intro a {
+    color: #00457b;
+    font-weight: 600;
+  }
+
+  .tour-intro a:hover {
+    color: #2276ac;
+    text-decoration: none;
+  }
+
+  .tour-box-row {
+    display: flex;
+    flex-flow: row wrap;
+  }
+}
+
+/* TOUR IN PROGRESS */
+.tour-in-progress {
+  .modal {
+    left: auto;
+    right: 0;
+    top: auto;
+    width: 248px;
+    bottom: 343px;
+    height: 200px;
+    overflow: visible;
+  }
+  .modal-dialog {
+    position: absolute;
+    width: 248px;
+    right: 0;
+    top: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+  }
+  .modal-content {
+    height: 350px;
+  }
+  .modal-dialog .modal-content {
+    min-width: 248px;
+    max-height: 357px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 8px 0 0 8px;
+    border: none;
+  }
+  .modal.fade .modal-dialog {
+    transform: translate(100%, 0);
+    -webkit-transform: translate(100%, 0);
+    transition: transform 0.5s ease-out;
+  }
+  .modal.show .modal-dialog {
+    transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+  }
+  .modal-header {
+    display: block;
+    position: relative;
+    color: #fff;
+    border-radius: 8px 0 0;
+    background-color: rgb(0, 69, 123);
+    padding: 8px 20px 8px 16px;
+    border-bottom: 2px solid #fff;
+    .close {
+      position: absolute;
+      padding: 0;
+      margin: 0;
+      top: 11px;
+      right: 9px;
+      font-size: 24px;
+    }
+  }
+  .modal-body {
+    color: #fff;
+    padding: 0;
+    overflow-y: auto;
+    border-bottom: 2px solid #fff;
+    -ms-flex: 1 1 25px;
+    p {
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    > div {
+      padding: 12px 8px 6px 12px;
+    }
+    a {
+      text-decoration: underline;
+    }
+    ul {
+      padding-left: 16px;
+      line-height: 16px;
+    }
+    li {
+      margin-bottom: 4px;
+      line-height: 16px;
+    }
+    strong {
+      font-weight: 600;
+    }
+  }
+  .modal-footer {
+    border-radius: 0 0 0 8px;
+    padding: 0;
+    min-height: 52px;
+    justify-content: center;
+  }
+
+  .feature .modal-header {
+    background-color: rgb(213, 78, 33);
+  }
+  .wildfire .modal-header {
+    background-color: rgb(141, 59, 54);
+  }
+  .volcano .modal-header {
+    background-color: rgb(165, 115, 75);
+  }
+  .snow .modal-header {
+    background-color: rgb(90, 119, 132);
+  }
+  .sea-and-lake-ice .modal-header {
+    background-color: rgb(50, 134, 151);
+  }
+  .iceberg .modal-header {
+    background-color: rgb(56, 137, 173);
+  }
+  .water-color .modal-header {
+    background-color: rgb(69, 125, 115);
+  }
+  .dust-and-haze .modal-header {
+    background-color: rgb(160, 151, 88);
+  }
+  .severe-storm .modal-header {
+    background-color: rgb(70, 90, 100);
+  }
+  .man-made .modal-header {
+    background-color: rgb(62, 62, 62);
+  }
+  .critical .modal-header {
+    background-color: rgb(88, 88, 88);
+  }
+
+  .modal-title {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 300;
+    padding-left: 28px;
+  }
+
+  .modal-icon {
+    position: absolute;
+    top: -9px;
+    left: -20px;
+    height: 60px;
+    width: 60px;
+    z-index: 3;
+    background-color: #fff;
+    border-radius: 50%;
+    background-image: url('../images/natural-events/icon-default.svg');
+    background-size: 64px 64px;
+    background-position: -2px -2px;
+  }
+
+  .feature .modal-icon {
+    background-color: #d54e21;
+    background-size: 68px 68px;
+    background-position: 0;
+    background-image: none;
+    font-size: 32px;
+    padding-top: 14px;
+    padding-left: 8px;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    -webkit-font-feature-settings: normal;
+    font-feature-settings: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+  }
+
+  .feature .modal-icon::before {
+    content: '\F1D8';
+  }
+  .wildfire .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-wildfires.svg');
+  }
+  .volcano .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-volcanoes.svg');
+  }
+  .snow .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-snow.svg');
+  }
+  .sea-and-lake-ice .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-sea-and-lake-ice.svg');
+  }
+  .iceberg .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-icebergs.svg');
+  }
+  .water-color .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-water-color.svg');
+  }
+  .dust-and-haze .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-dust-and-haze.svg');
+  }
+  .severe-storm .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-severe-storms.svg');
+  }
+  .man-made .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-manmade.svg');
+  }
+  .critical .modal-icon {
+    background-color: transparent;
+    background-size: 68px 68px;
+    background-position: -4px -4px;
+    background-image: url('../images/natural-events/icon-critical.svg');
+  }
+  .modal-body, .modal-footer {
+    background-color: rgba(0, 69, 123, 0.8);
+  }
+  .feature .modal-body, .feature .modal-footer {
+    background-color: rgba(213, 78, 33, 0.8);
+  }
+  .wildfire .modal-body, .wildfire .modal-footer {
+    background-color: rgba(141, 59, 54, 0.8);
+  }
+  .volcano .modal-body, .volcano .modal-footer {
+    background-color: rgba(165, 115, 75, 0.8);
+  }
+  .snow .modal-body, .snow .modal-footer {
+    background-color: rgba(90, 119, 132, 0.8);
+  }
+  .sea-and-lake-ice .modal-body, .sea-and-lake-ice .modal-footer {
+    background-color: rgba(50, 134, 151, 0.8);
+  }
+  .iceberg .modal-body, .iceberg .modal-footer {
+    background-color: rgba(56, 137, 173, 0.8);
+  }
+  .water-color .modal-body, .water-color .modal-footer {
+    background-color: rgba(69, 125, 115, 0.8);
+  }
+  .dust-and-haze .modal-body, .dust-and-haze .modal-footer {
+    background-color: rgba(160, 151, 88, 0.8);
+  }
+  .severe-storm .modal-body, .severe-storm .modal-footer {
+    background-color: rgba(70, 90, 100, 0.8);
+  }
+  .man-made .modal-body, .man-made .modal-footer {
+    background-color: rgba(62, 62, 62, 0.8);
+  }
+  .critical .modal-body, .critical .modal-footer {
+    background-color: rgba(88, 88, 88, 0.8);
+  }
+  .default .modal-body a,
+  .wildfire .modal-body a {
+    color: #7bf;
+    font-weight: 400;
+  }
+  .default .modal-body a:hover,
+  .wildfire .modal-body a:hover {
+    color: #9df;
+  }
+  .step-container {
+    display: flex;
+    height: 40px;
+    width: 220px;
+    flex-flow: row wrap;
+    justify-content: space-between;
+  }
+  .step-previous {
+    color: #fff;
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+    margin: auto;
+  }
+  .step-counter {
+    color: #fff;
+    width: 132px;
+    margin: 6px auto;
+    text-align: center;
+    p {
+      font-size: 22px;
+      line-height: 24px;
+      font-weight: 300;
+    }
+  }
+  .step-next {
+    color: #fff;
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+    margin: auto;
+  }
+
+  .step-previous:not([href]):not([tabindex]):hover,
+  .step-previous:not([tabindex]):hover,
+  .step-previous:hover,
+  .step-next:not([href]):not([tabindex]):hover,
+  .step-next:not([tabindex]):hover,
+  .step-next:hover {
+    color: #fff;
+    opacity: 0.75;
+  }
+
+  .step-previous.disabled:not([href]):not([tabindex]):hover,
+  .step-previous.disabled:not([href]):not([tabindex]):focus,
+  .step-previous.disabled:not([tabindex]):hover,
+  .step-previous.disabled:not([tabindex]):focus,
+  .step-previous.disabled:hover,
+  .step-previous.disabled:focus,
+  .step-previous.disabled,
+  .step-next.disabled:not([href]):not([tabindex]):hover,
+  .step-next.disabled:not([href]):not([tabindex]):focus,
+  .step-next.disabled:not([tabindex]):hover,
+  .step-next.disabled:not([tabindex]):focus,
+  .step-next.disabled:hover,
+  .step-next.disabled:focus,
+  .step-next.disabled {
+    cursor: default;
+    color: #ddd;
+    opacity: 0.5;
+  }
+}
+
+/* TOUR-COMPLETE */
+.tour-complete {
+  .modal-dialog {
+    border: 1px solid #333;
+  }
+  .modal.fade .modal-dialog {
+    transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+  }
+  .modal-dialog .modal-content {
+    border: 0;
+  }
+  .modal-body {
+    padding: 15px 15px 0;
+    background-color: #eee;
+  }
+  .modal-footer {
+    background-color: #eee;
+    display: block;
+    border-top: none;
+    padding: 8px 15px 15px;
+  }
+  .feature .modal-header {
+    background-color: rgb(213, 78, 33);
+  }
+  .wildfire .modal-header {
+    background-color: rgb(141, 59, 54);
+  }
+  .volcano .modal-header {
+    background-color: rgb(165, 115, 75);
+  }
+  .snow .modal-header {
+    background-color: rgb(90, 119, 132);
+  }
+  .sea-and-lake-ice .modal-header {
+    background-color: rgb(50, 134, 151);
+  }
+  .iceberg .modal-header {
+    background-color: rgb(56, 137, 173);
+  }
+  .water-color .modal-header {
+    background-color: rgb(69, 125, 115);
+  }
+  .dust-and-haze .modal-header {
+    background-color: rgb(160, 151, 88);
+  }
+  .severe-storm .modal-header {
+    background-color: rgb(70, 90, 100);
+  }
+  .man-made .modal-header {
+    background-color: rgb(62, 62, 62);
+  }
+  .critical .modal-header {
+    background-color: rgb(88, 88, 88);
+  }
 }
 
 .tour-complete .modal-body p {
@@ -704,12 +594,6 @@
   font-size: 16px;
   line-height: 20px;
   margin-bottom: 4px;
-}
-
-.tour-complete .modal-footer {
-  display: block;
-  border-top: none;
-  padding: 8px 15px 15px;
 }
 
 .tour-complete .modal-footer .btn {
@@ -770,7 +654,6 @@
     display: block;
   }
 
-  /* .tour-start */
   .tour-start .modal-dialog {
     max-width: 624px;
   }
@@ -784,7 +667,6 @@
     margin: 4px 4px 0 0;
   }
 
-  /* .tour-complete */
   .tour-complete .modal-dialog {
     max-width: 572px;
   }

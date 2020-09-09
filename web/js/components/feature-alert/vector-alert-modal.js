@@ -8,7 +8,7 @@ const VectorAlertModalBody = () => (
       <Col>
 
         <h2>
-          What are vector layers and how do they differ from raster(image) layers?
+          What are vector layers and how do they differ from raster (image) layers?
         </h2>
       </Col>
     </Row>

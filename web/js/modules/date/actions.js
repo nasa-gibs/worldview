@@ -27,13 +27,19 @@ export function initSecondDate() {
 }
 export function selectDate(value) {
   return (dispatch, getState) => {
-    const compareState = getState().compare;
-    const activeString = compareState.isCompareA ? 'selected' : 'selectedB';
+    const state = getState();
+    const { compare, date } = state;
+    const activeString = compare.isCompareA ? 'selected' : 'selectedB';
+    const { appNow } = date;
+
+    const selectedDate = value > appNow
+      ? appNow
+      : value;
 
     dispatch({
       type: SELECT_DATE,
       activeString,
-      value,
+      value: selectedDate,
     });
   };
 }

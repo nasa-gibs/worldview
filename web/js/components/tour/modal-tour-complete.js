@@ -40,7 +40,7 @@ const ModalComplete = (props) => {
         fade={false}
         keyboard
       >
-        <ModalHeader toggle={endTour} charCode="">
+        <ModalHeader toggle={endTour}>
           Story Complete
         </ModalHeader>
         <ModalBody>

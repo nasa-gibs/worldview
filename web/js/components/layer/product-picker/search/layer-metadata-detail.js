@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMinus,
+  faPlus,
+  faGlobeAmericas,
+} from '@fortawesome/free-solid-svg-icons';
 import util from '../../../../util/util';
 import { dateOverlap } from '../../../../modules/layers/util';
 import {
@@ -16,6 +20,7 @@ import {
 } from '../../../../modules/product-picker/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
+import RecentLayersInfo from '../browse/recent-layers-info';
 
 class LayerMetadataDetail extends React.Component {
   constructor(props) {
@@ -144,18 +149,25 @@ class LayerMetadataDetail extends React.Component {
     );
   }
 
-  render() {
-    const {
-      layer, selectedProjection, isActive, showPreviewImage,
-    } = this.props;
-    if (!layer) {
-      return (
+  renderNoSelection() {
+    const { categoryType } = this.props;
+    return categoryType === 'recent'
+      ? (<RecentLayersInfo />)
+      : (
         <div className="no-results">
           <FontAwesomeIcon icon={faGlobeAmericas} />
           <h3> No layer selected. </h3>
           <h5> Select a layer to view details here!</h5>
         </div>
       );
+  }
+
+  render() {
+    const {
+      layer, selectedProjection, isActive, showPreviewImage,
+    } = this.props;
+    if (!layer) {
+      return this.renderNoSelection();
     }
     const { metadata } = layer;
     const previewUrl = `images/layers/previews/${selectedProjection}/${layer.id}.jpg`;
@@ -197,6 +209,7 @@ class LayerMetadataDetail extends React.Component {
 
 LayerMetadataDetail.propTypes = {
   addLayer: PropTypes.func,
+  categoryType: PropTypes.string,
   isActive: PropTypes.bool,
   layer: PropTypes.object,
   removeLayer: PropTypes.func,
@@ -210,12 +223,13 @@ const mapStateToProps = (state, ownProps) => {
     proj,
     config,
   } = state;
-  const { selectedLayer } = productPicker;
+  const { selectedLayer, categoryType } = productPicker;
   const activeLayers = getActiveLayers(state);
   const isActive = selectedLayer && !!activeLayers[selectedLayer.id];
   return {
     layer: selectedLayer,
     isActive,
+    categoryType,
     selectedProjection: proj.id,
     showPreviewImage: config.features.previewSnapshots,
   };

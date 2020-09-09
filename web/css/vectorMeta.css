@@ -2,6 +2,8 @@
   width: 445px;
   height: 300px;
   position: absolute;
+  border: none;
+  box-shadow: none;
 }
 .vector-modal .close {
   opacity: 1;
@@ -9,6 +11,7 @@
 
 .vector-modal .modal-title {
   font-weight: 800;
+  padding: 0;
 }
 
 .vector-modal .modal-body {
@@ -32,6 +35,7 @@
 .vector-modal .modal-header {
   padding-bottom: 0;
   cursor: move;
+  border-bottom: 1px solid #bbb;
 }
 .vector-modal .nav-item.active {
   background: #f8f9fa;

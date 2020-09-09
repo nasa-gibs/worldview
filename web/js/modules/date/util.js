@@ -15,12 +15,6 @@ export function serializeDate(date) {
   );
 }
 
-export function getActiveTime(state) {
-  const { compare, date } = state;
-  const activeStr = compare.isCompareA ? 'selected' : 'selectedB';
-  return date[activeStr];
-}
-
 export function tryCatchDate(str, initialState) {
   try {
     return util.parseDateUTC(str);

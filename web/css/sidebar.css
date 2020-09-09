@@ -1,5 +1,8 @@
 #wv-sidebar {
   position: absolute;
+  * {
+    user-select: none;
+  }
 }
 #productsHolder {
   position: absolute;
@@ -40,7 +43,22 @@
   border-bottom-right-radius: 5px;
 }
 #wv-logo {
+  background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center rgba(40, 40, 40, 0.85);
+  display: block;
+  width: 286px;
+  height: 55px;
+  padding: 5px 0;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: 1px solid #333;
   border-bottom: 1px solid transparent;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  z-index: 1;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .wv-logo-distraction-free-mode {
   border-radius: 5px;
@@ -227,18 +245,22 @@ footer .compare-toggle-button {
   color: #22a;
 }
 
-.layer-settings-modal .modal-title {
-  font-size: 15px;
-}
-
-.layer-settings-modal,
-.layer-settings-modal .close {
-  color: #fff;
-}
-
-.layer-settings-modal .modal-content {
+.modal-dialog.layer-settings-modal {
   background: #282828;
   width: 300px;
+  color: #eee;
+}
+
+.layer-info-settings-modal .modal-header .close,
+.layer-settings-modal .modal-header .close {
+  font-size: 22px;
+  padding: 12px 14px;
+}
+
+.layer-info-settings-modal .modal-title,
+.layer-settings-modal .modal-title {
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .layer-settings-modal .nav-item {

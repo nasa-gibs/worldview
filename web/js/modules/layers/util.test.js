@@ -309,7 +309,14 @@ describe('permalink 1.1', () => {
 });
 describe('Vector layers', () => {
   const breakPointLayer = {
-    resolutionBreakPoint: 0.2,
+    projections: {
+      geographic: {
+        resolutionBreakPoint: 0.2,
+      },
+      arctic: {
+        resolutionBreakPoint: 0.3,
+      },
+    },
   };
   const layers = [
     {
@@ -321,23 +328,37 @@ describe('Vector layers', () => {
   test('isVectorLayerClickable func', () => {
     const false1 = isVectorLayerClickable({
       type: 'vector',
-    }, null);
+    }, null, 'geographic');
     const false2 = isVectorLayerClickable({
       type: 'vector',
       breakPointLayer,
-    }, 0.3);
+    }, 0.3, 'geographic');
     const true1 = isVectorLayerClickable({
       type: 'vector',
       breakPointLayer,
-    }, 0.1);
-
+    }, 0.1, 'geographic');
+    const falseArctic = isVectorLayerClickable({
+      type: 'vector',
+      breakPointLayer,
+    }, 0.4, 'arctic');
+    const falseWhenEvenZoomArctic = isVectorLayerClickable({
+      type: 'vector',
+      breakPointLayer,
+    }, 0.3, 'arctic');
+    const trueArctic = isVectorLayerClickable({
+      type: 'vector',
+      breakPointLayer,
+    }, 0.2, 'arctic');
     expect(false1).toBe(false);
     expect(false2).toBe(false);
+    expect(falseArctic).toBe(false);
+    expect(falseWhenEvenZoomArctic).toBe(false);
+    expect(trueArctic).toBe(true);
     expect(true1).toBe(true);
   });
   test('hasNonClickableVectorLayer func', () => {
-    const false1 = hasNonClickableVectorLayer(layers, 0.1);
-    const true1 = hasNonClickableVectorLayer(layers, 0.3);
+    const false1 = hasNonClickableVectorLayer(layers, 0.1, 'geographic');
+    const true1 = hasNonClickableVectorLayer(layers, 0.3, 'geographic');
 
     expect(false1).toBe(false);
     expect(true1).toBe(true);

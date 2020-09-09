@@ -1,4 +1,11 @@
-import util from '../../util/util';
+import safeLocalStorage from '../../util/local-storage';
+
+const {
+  NOTIFICATION_OUTAGE,
+  NOTIFICATION_ALERT,
+  NOTIFICATION_MSG,
+} = safeLocalStorage.keys;
+
 /**
  * Categorizes the returned array
  * @function separateByType
@@ -17,9 +24,9 @@ export function separateByType(array) {
     subObj = array[i];
     type = subObj.notification_type;
 
-    if (type === 'message') {
+    if (type === NOTIFICATION_MSG) {
       messages.push(subObj);
-    } else if (type === 'alert') {
+    } else if (type === NOTIFICATION_ALERT) {
       alerts.push(subObj);
     } else {
       outages.push(subObj);
@@ -51,12 +58,9 @@ function orderByDate(obj) {
  * @param {string} value - id of notification
  * @returns {Boolean}
  */
-export function localStorageValueMatches(property, value) {
-  if (!util.browser.localStorage) {
-    return false;
-  }
-  const oldValue = localStorage.getItem(property);
-  return new Date(value) <= new Date(oldValue);
+function localStorageValueMatches(property, value) {
+  const oldValue = safeLocalStorage.getItem(property);
+  return oldValue && new Date(value) <= new Date(oldValue);
 }
 
 /**
@@ -74,15 +78,15 @@ export function getPriority(sortedNotifications) {
   const [alert] = sortedNotifications.alerts;
 
   if (message && !objectAlreadySeen(message)) {
-    priority = 'message';
+    priority = NOTIFICATION_MSG;
   }
 
   if (alert && !objectAlreadySeen(alert)) {
-    priority = 'alert';
+    priority = NOTIFICATION_ALERT;
   }
 
   if (outage && !objectAlreadySeen(outage)) {
-    priority = 'outage';
+    priority = NOTIFICATION_OUTAGE;
   }
 
   return priority;
@@ -93,32 +97,25 @@ export function getPriority(sortedNotifications) {
  * @private
  * @returns {Number}
  */
-export function getCount(sortedNotifications) {
-  const messageCount = getNumberOfTypeNotSeen(
-    'message',
-    sortedNotifications.messages,
-  ); // Number of messages not yet seen
-  const alertCount = getNumberOfTypeNotSeen('alert', sortedNotifications.alerts); // Number of alerts not yet seen
-  const outageCount = getNumberOfTypeNotSeen('outage', sortedNotifications.outages); // Number of outages not yet seen
-
+export function getCount({ messages, outages, alerts }) {
+  const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
+  const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
+  const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
   return messageCount + outageCount + alertCount;
 }
-export function addToLocalStorage(obj) {
-  if (!util.browser.localStorage) {
-    return;
-  }
-  const message = obj.messages[0];
-  const outage = obj.outages[0];
-  const alert = obj.alerts[0];
+export function addToLocalStorage({ messages, outages, alerts }) {
+  const [message] = messages;
+  const [outage] = outages;
+  const [alert] = alerts;
 
   if (outage) {
-    localStorage.setItem('outage', outage.created_at);
+    safeLocalStorage.setItem(NOTIFICATION_OUTAGE, outage.created_at);
   }
   if (alert) {
-    localStorage.setItem('alert', alert.created_at);
+    safeLocalStorage.setItem(NOTIFICATION_ALERT, alert.created_at);
   }
   if (message) {
-    localStorage.setItem('message', message.created_at);
+    safeLocalStorage.setItem(NOTIFICATION_MSG, message.created_at);
   }
 }
 /**
@@ -130,10 +127,7 @@ export function addToLocalStorage(obj) {
  * @returns {Number} count - number of unseen messages in LocalStorage
  */
 export function getNumberOfTypeNotSeen(type, arra) {
-  if (!util.browser.localStorage) {
-    return arra.length;
-  }
-  const storageItem = localStorage.getItem(type);
+  const storageItem = safeLocalStorage.getItem(type);
   const len = arra.length;
   let count = 0;
 
@@ -162,7 +156,7 @@ function objectAlreadySeen(obj) {
   const type = obj.notification_type;
   const idString = obj.created_at.toString();
   let fieldValueMatches = false;
-  const fieldExists = util.browser.localStorage && !!localStorage.getItem(type);
+  const fieldExists = !!safeLocalStorage.getItem(type);
 
   if (fieldExists) {
     fieldValueMatches = localStorageValueMatches(type, idString);

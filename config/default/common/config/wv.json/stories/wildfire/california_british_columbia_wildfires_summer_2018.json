@@ -42,7 +42,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Fires_Terra,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-08-17-T00%3A00%3A00Z&z=3&v=-150.90029967594097,27.400561971879853,-83.40029967594097,60.37712447187985"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_Day,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-08-17-T00%3A00%3A00Z&z=3&v=-150.90029967594097,27.400561971879853,-83.40029967594097,60.37712447187985"
         },
         {
           "id": "003",
@@ -51,7 +51,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Fires_Terra,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-08-17-T00%3A00%3A00Z&z=3&v=-129.84610045719097,51.58366744062985,-121.40860045719097,55.70573775312985"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_Day,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-08-17-T00%3A00%3A00Z&z=3&v=-129.84610045719097,51.58366744062985,-121.40860045719097,55.70573775312985"
         },
         {
           "id": "004",
@@ -60,7 +60,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Fires_Terra,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-07-27-T00%3A00%3A00Z&z=3&v=-129.84610045719097,51.58366744062985,-121.40860045719097,55.70573775312985&ab=on&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=2&al=false"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_Day,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-07-27-T00%3A00%3A00Z&z=3&v=-129.84610045719097,51.58366744062985,-121.40860045719097,55.70573775312985&ab=on&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=2&al=false"
         },
         {
           "id": "005",
@@ -69,7 +69,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_All,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-07-27-T00%3A00%3A00Z&z=3&v=-157.33696018718106,23.555087183379865,-81.13063689670071,59.91185391987986&ab=off&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=6&al=true"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_Day,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-07-27-T00%3A00%3A00Z&z=3&v=-157.33696018718106,23.555087183379865,-81.13063689670071,59.91185391987986&ab=off&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=6&al=true"
         },
         {
           "id": "006",
@@ -78,7 +78,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_All,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-07-27-T00%3A00%3A00Z&z=3&v=-130.61579390360356,35.97557629062987,-113.33549914377824,44.21971691562987&ab=off&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=6&al=true"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_Day,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-07-27-T00%3A00%3A00Z&z=3&v=-130.61579390360356,35.97557629062987,-113.33549914377824,44.21971691562987&ab=off&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=6&al=true"
         },
         {
           "id": "007",
@@ -87,7 +87,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Fires_Terra,Reference_Labels,Reference_Features,Coastlines(hidden),&t=2018-08-27-T00%3A00%3A00Z&z=2&v=-130.4131465236909,35.97557629062987,-113.53814652369091,44.21971691562987&ab=on&as=2018-06-27T00%3A00%3A00Z&ae=2018-10-27T00%3A00%3A00Z&av=1.5&al=true&i=2"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Thermal_Anomalies_Day,Reference_Labels,Reference_Features,Coastlines(hidden),&t=2018-08-27-T00%3A00%3A00Z&z=2&v=-130.4131465236909,35.97557629062987,-113.53814652369091,44.21971691562987&ab=on&as=2018-06-27T00%3A00%3A00Z&ae=2018-10-27T00%3A00%3A00Z&av=1.5&al=true&i=2"
         },
         {
           "id": "008",
@@ -96,7 +96,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),OMPS_Aerosol_Index(min=1.85,1.875,squash),VIIRS_SNPP_Thermal_Anomalies_375m_Day,MODIS_Terra_Thermal_Anomalies_All(hidden),Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-08-24-T00%3A00%3A00Z&z=3&v=-203.60701647757287,-5.748943958565242,4.001611019448021,93.29767207647183&ab=off&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=6&al=true"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),OMPS_Aerosol_Index(min=1.85,1.875,squash),VIIRS_SNPP_Thermal_Anomalies_375m_Day,MODIS_Terra_Thermal_Anomalies_Day(hidden),Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-08-24-T00%3A00%3A00Z&z=3&v=-203.60701647757287,-5.748943958565242,4.001611019448021,93.29767207647183&ab=off&as=2018-07-27T00%3A00%3A00Z&ae=2018-08-27T00%3A00%3A00Z&av=6&al=true"
         }
       ]
     }

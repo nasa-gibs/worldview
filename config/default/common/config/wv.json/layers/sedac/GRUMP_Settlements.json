@@ -1,6 +1,7 @@
 {
   "layers": {
     "GRUMP_Settlements": {
+      "id": "GRUMP_Settlements",
       "title": "Settlements",
       "subtitle": "Global Rural-Urban Mapping Project (GRUMP), v1",
       "description": "sedac/GRUMP_Settlements",
@@ -27,11 +28,11 @@
         "id": "GRUMP_Settlements",
         "type": "wms",
         "format":   "image/png",
-        "resolutionBreakPoint": 0.03515625,
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "source": "GIBS:wms"
+            "source": "GIBS:wms",
+            "resolutionBreakPoint":  0.017578125
           }
         }
       }

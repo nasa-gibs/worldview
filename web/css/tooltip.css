@@ -1,7 +1,10 @@
-
 /* Bootstrap override */
 .tooltip {
   z-index: 1050;
+}
+
+.tooltip-icon {
+  cursor: help;
 }
 
 .wv-tooltip-case {

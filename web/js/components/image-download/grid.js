@@ -67,7 +67,6 @@ export default class ResolutionTable extends React.Component {
         </div>
         <div className="grid-child wv-image-button">
           <Button
-            className="black"
             text="Download"
             onClick={() => {
               onClick(width, height);

@@ -4,6 +4,7 @@ import {
 } from 'lodash';
 import { createSelector } from 'reselect';
 import buildLayerFacetProps from './format-config';
+import getSelectedDate from '../date/selectors';
 
 const decodeHtml = (html) => {
   const txt = document.createElement('textarea');
@@ -15,7 +16,7 @@ const decodeHtml = (html) => {
 const getConfig = ({ config }) => config;
 const getProjection = ({ proj }) => proj && proj.id;
 const getProductPicker = ({ productPicker }) => productPicker;
-const getSelectedDate = ({ date }) => date && date.selected;
+const getCategoryType = ({ productPicker }) => productPicker.categoryType;
 
 export const getLayersForProjection = createSelector(
   [getConfig, getProjection, getSelectedDate],
@@ -29,7 +30,7 @@ export const getLayersForProjection = createSelector(
         if (projectionMeta.title) layer.title = projectionMeta.title;
         if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
         // Decode HTML entities in the subtitle
-        if (layer.subtitle.includes('&')) {
+        if (layer.subtitle && layer.subtitle.includes('&')) {
           layer.subtitle = decodeHtml(layer.subtitle);
         }
         return layer;
@@ -47,4 +48,11 @@ export const getMeasurementSource = createSelector(
     const sortedSources = sources && sources.sort((a, b) => a.title.localeCompare(b.title));
     return sortedSources && sortedSources[selectedMeasurementSourceIndex];
   },
+);
+
+export const getCategoryConfig = createSelector(
+  [getConfig, getCategoryType],
+  ({ categories }, categoryType) => (categoryType === 'measurements'
+    ? categories['hazards and disasters']
+    : categories[categoryType]),
 );

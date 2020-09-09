@@ -18,22 +18,22 @@ function capitalizeFirstLetter(string) {
 }
 
 function setLayerProp (layer, prop, value) {
-  if (prop === 'measurements' && (value && value.includes('Featured'))) {
+  const featuredMeasurement = prop === 'measurements' && (value && value.includes('Featured'));
+  if (!layer || featuredMeasurement) {
     return;
   }
-  if (layer[prop] && !layer[prop].includes(value)) {
-    layer[prop].push(value);
-  } else if (value) {
+  if (!layer[prop]) {
     layer[prop] = [value];
+  } else if (!layer[prop].includes(value)) {
+    layer[prop].push(value);
   }
 }
 
 function setMeasurementSourceFacetProps (layers, measurements) {
   lodashForEach(measurements, (measureObj, measureKey) => {
-    lodashForEach(measureObj.sources, ({ settings }, sourceKey) => {
+    lodashForEach(measureObj.sources, ({ settings = [] }, sourceKey) => {
       settings.forEach((id) => {
         setLayerProp(layers[id], 'measurements', measureKey);
-        setLayerProp(layers[id], 'sources', sourceKey);
       });
     });
   });
@@ -48,9 +48,9 @@ function setCategoryFacetProps (layers, measurements, categories) {
       if (subCategoryKey === 'All') {
         return;
       }
-      subCategoryObj.measurements.forEach((measureKey) => {
+      (subCategoryObj.measurements || []).forEach((measureKey) => {
         const { sources } = measurements[measureKey];
-        lodashForEach(sources, ({ settings }) => {
+        lodashForEach(sources, ({ settings = [] }) => {
           settings.forEach((id) => {
             setLayerProp(layers[id], 'categories', subCategoryKey);
           });
@@ -122,7 +122,11 @@ export default function buildLayerFacetProps(config, selectedDate) {
   return lodashMap(layers, (layer) => {
     setCoverageFacetProp(layer, selectedDate);
     setLayerPeriodFacetProps(layer);
+    setLayerProp(layer, 'sources', layer.subtitle);
     if (layer.daynight && layer.daynight.length) {
+      if (typeof layer.daynight === 'string') {
+        layer.daynight = [layer.daynight];
+      }
       layer.daynight = layer.daynight.map(capitalizeFirstLetter);
     }
     return layer;
