@@ -566,6 +566,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       tileGrid: new OlTileGridTileGrid({
         origin: start,
         resolutions: res,
+        tileSize: def.tileSize || [512, 512],
       }),
     };
     if (isPaletteActive(def.id, options.group, state)) {
