@@ -13,30 +13,34 @@ const {
  * @param {object} obj - array from API
  * @returns {void}
  */
-export function separateByType(array) {
-  let type;
-  let subObj;
+export function separateByType(notifications) {
   const messages = [];
   const alerts = [];
   const outages = [];
+  const layerNotices = [];
 
-  for (let i = 0, len = array.length; i < len; i += 1) {
-    subObj = array[i];
-    type = subObj.notification_type;
+  notifications.forEach((notification) => {
+    const { notification_type: type, path } = notification;
+
+    if (path.contains('layer-notice')) {
+      layerNotices.push(notification);
+      return;
+    }
 
     if (type === NOTIFICATION_MSG) {
-      messages.push(subObj);
+      messages.push(notification);
     } else if (type === NOTIFICATION_ALERT) {
-      alerts.push(subObj);
-    } else {
-      outages.push(subObj);
+      alerts.push(notification);
+    } else if (type === NOTIFICATION_OUTAGE) {
+      outages.push(notification);
     }
-  }
+  });
 
   return {
     messages: orderByDate(messages),
     alerts: orderByDate(alerts),
     outages: orderByDate(outages),
+    layerNotices: orderByDate(layerNotices),
   };
 }
 /**
