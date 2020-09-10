@@ -24,7 +24,6 @@ import {
   setNotifications,
 } from '../modules/notifications/actions';
 import {
-  STATUS_REQUEST_URL,
   REQUEST_NOTIFICATIONS,
 } from '../modules/notifications/constants';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
@@ -138,7 +137,7 @@ class toolbarContainer extends Component {
         // Use the deployed domain (SIT, UAT, PROD) when possible
         ? `${notification.url}?domain=${domain}`
         // Use the PROD domain when running locally
-        : STATUS_REQUEST_URL;
+        : `${notification.url}?domain=https%3A%2F%2Fworldview.uat.earthdata.nasa.gov`;
 
       if (parameters.mockAlerts) {
         notificationURL = `mock/notify_${parameters.mockAlerts}.json`;
