@@ -114,11 +114,12 @@ function modifyProps (layerObj) {
   if (!wvJsonLayerObj) {
     console.log('Layer not found in wv.json, run build script!', title);
   }
+  const staticLayer = !wvJsonLayerObj.startDate && !wvJsonLayerObj.endDate && !wvJsonLayerObj.dateRanges;
 
   const modifiedObj = {
     title,
     subtitle,
-    ongoing: !inactive,
+    ongoing: staticLayer ? false : !inactive,
     measurement: measurementsMap[id],
     retentionPeriod: -1,
   };
