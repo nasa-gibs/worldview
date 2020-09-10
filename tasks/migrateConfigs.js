@@ -114,7 +114,12 @@ function modifyProps (layerObj) {
   if (!wvJsonLayerObj) {
     console.log('Layer not found in wv.json, run build script!', title);
   }
-  const staticLayer = !wvJsonLayerObj.startDate && !wvJsonLayerObj.endDate && !wvJsonLayerObj.dateRanges;
+
+  const {
+    startDate, endDate, dateRanges, period,
+  } = wvJsonLayerObj;
+
+  const staticLayer = !startDate && !endDate && !dateRanges;
 
   const modifiedObj = {
     title,
@@ -131,7 +136,7 @@ function modifyProps (layerObj) {
   if (conceptIdsMap[id]) {
     modifiedObj.conceptIds = conceptIdsMap[id].conceptId;
   }
-  if (tracks) {
+  if (tracks && period !== 'monthly') {
     modifiedObj.orbitTracks = [];
     modifiedObj.orbitDirection = [];
     tracks.forEach((track) => {
@@ -143,7 +148,7 @@ function modifyProps (layerObj) {
       }
     });
   }
-  if (wvJsonLayerObj && wvJsonLayerObj.period) {
+  if (period) {
     // WARNING:  Not totally accurate, will need to identify N-Day layers.
     // modifiedObj.period = wvJsonLayerObj.period;
     setPeriodProps(wvJsonLayerObj, modifiedObj);
