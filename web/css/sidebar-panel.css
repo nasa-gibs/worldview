@@ -388,25 +388,27 @@ li.item.productsitem.inmotion,
   background: #dacf00;
   cursor: default;
   display: none;
-}
-
-.productsitem div.zot:hover {
-  background: #fff200;
-}
-
-.productsitem div.zot b {
-  text-align: center;
-  height: 20px;
-  line-height: 20px;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  margin-top: -10px;
+  &:hover {
+    background: #fff200;
+  }
+  b {
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin-top: -10px;
+  }
 }
 
 .productsitem.zotted div.zot {
   display: block;
+}
+
+.zot-tooltip div {
+  margin: 6px 0;
 }
 
 .productsitem a.button.wv-layers-close {

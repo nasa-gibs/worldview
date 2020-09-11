@@ -6,22 +6,30 @@ import { getNumberOfTypeNotSeen } from '../modules/notifications/util';
 
 const Notifications = (props) => {
   const { object } = props;
+  const {
+    messages, outages, alerts, layerNotices,
+  } = object;
   return (
     <div className="wv-notify-modal">
       <NotificationBlock
-        arr={object.outages}
+        arr={outages}
         type="outage"
-        numberNotSeen={getNumberOfTypeNotSeen('outage', object.outages)}
+        numberNotSeen={getNumberOfTypeNotSeen('outage', outages)}
       />
       <NotificationBlock
-        arr={object.alerts}
+        arr={alerts}
         type="alert"
-        numberNotSeen={getNumberOfTypeNotSeen('alert', object.alerts)}
+        numberNotSeen={getNumberOfTypeNotSeen('alert', alerts)}
       />
       <NotificationBlock
-        arr={object.messages}
+        arr={messages}
         type="message"
-        numberNotSeen={getNumberOfTypeNotSeen('message', object.messages)}
+        numberNotSeen={getNumberOfTypeNotSeen('message', messages)}
+      />
+      <NotificationBlock
+        arr={layerNotices}
+        type="message"
+        numberNotSeen={getNumberOfTypeNotSeen('layerNotices', layerNotices)}
       />
     </div>
   );

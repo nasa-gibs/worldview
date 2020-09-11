@@ -132,7 +132,7 @@ class LayerList extends React.Component {
                     key={object.id}
                     index={i}
                     layerClasses="item productsitem"
-                    zot={zots[object.id] ? zots[object.id].value : null}
+                    zot={zots[object.id]}
                     names={getNames(object.id)}
                     checkerBoardPattern={checkerBoardPattern}
                     isDisabled={!available(object.id)}
@@ -186,7 +186,7 @@ function mapStateToProps(state, ownProps) {
   const { id } = proj;
   const activeLayers = state.layers[layerGroupName];
   const zots = lodashGet(map, 'ui.selected')
-    ? getZotsForActiveLayers(config, proj, map, activeLayers)
+    ? getZotsForActiveLayers(state)
     : {};
   return {
     zots,
