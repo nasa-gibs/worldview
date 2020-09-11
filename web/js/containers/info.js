@@ -1,29 +1,45 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import {
   openCustomContent,
 } from '../modules/modal/actions';
-import toggleDistractionFreeMode from '../modules/ui/actions';
+import toggleDistractionFreeModeAction from '../modules/ui/actions';
 import AboutPage from '../components/about/about-page';
 import IconList from '../components/util/list';
 import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
 import initFeedback from '../modules/feedback/actions';
-import { startTour, endTour } from '../modules/tour/actions';
+import {
+  startTour as startTourAction,
+  endTour as endTourAction,
+} from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import Notifications from './notifications';
 
-class InfoList extends Component {
-  getNotificationListItem(obj) {
-    const { notifications, notificationClick } = this.props;
-    const { number, type, object } = notifications;
+function InfoList (props) {
+  const {
+    sendFeedback,
+    feedbackIsInitiated,
+    aboutClick,
+    config,
+    startTour,
+    isDistractionFreeModeActive,
+    isTourActive,
+    isMobile,
+    toggleDistractionFreeMode,
+    notifications,
+    notificationClick,
+  } = props;
 
+  function getNotificationListItem(obj) {
+    const { number, type, object } = notifications;
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
+      // eslint-disable-next-line no-nested-ternary
       iconName: type === 'message'
         ? 'faGift'
         : type === 'outage'
@@ -38,19 +54,7 @@ class InfoList extends Component {
     };
   }
 
-  getListArray() {
-    const {
-      sendFeedback,
-      feedbackIsInitiated,
-      aboutClick,
-      notifications,
-      config,
-      startTour,
-      isDistractionFreeModeActive,
-      isTourActive,
-      isMobile,
-      toggleDistractionFreeMode,
-    } = this.props;
+  function getListArray() {
     const distractionFreeObj = {
       text: isDistractionFreeModeActive ? 'Exit Distraction Free' : 'Distraction Free',
       iconClass: 'ui-icon',
@@ -125,36 +129,35 @@ class InfoList extends Component {
         arr.push(distractionFreeObj);
       }
       if (notifications.isActive) {
-        const obj = this.getNotificationListItem();
-        arr.splice(4, 0, obj);
+        arr.splice(4, 0, getNotificationListItem());
       }
       return arr;
     }
     return [distractionFreeObj];
   }
 
-  render() {
-    const infoArray = this.getListArray();
-    return <IconList list={infoArray} size="small" />;
-  }
+
+  return (<IconList list={getListArray()} size="small" />);
 }
 
 function mapStateToProps(state) {
-  const { isInitiated } = state.feedback;
+  const {
+    ui, feedback, tour, notifications, config, models, browser,
+  } = state;
 
   return {
-    feedbackIsInitiated: isInitiated,
-    isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
-    isTourActive: state.tour.active,
-    notifications: state.notifications,
-    config: state.config,
-    models: state.models,
-    isMobile: state.browser.lessThan.medium,
+    feedbackIsInitiated: feedback.isInitiated,
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    isTourActive: tour.active,
+    notifications,
+    config,
+    models,
+    isMobile: browser.lessThan.medium,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
   toggleDistractionFreeMode: () => {
-    dispatch(toggleDistractionFreeMode());
+    dispatch(toggleDistractionFreeModeAction());
   },
   sendFeedback: (isInitiated) => {
     onClickFeedback(isInitiated);
@@ -178,12 +181,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   startTour: (isTourActive) => {
     if (isTourActive) {
-      dispatch(endTour());
+      dispatch(endTourAction());
       setTimeout(() => {
-        dispatch(startTour());
+        dispatch(startTourAction());
       }, 100);
     } else {
-      dispatch(startTour());
+      dispatch(startTourAction());
     }
   },
   aboutClick: () => {

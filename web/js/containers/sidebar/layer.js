@@ -26,6 +26,7 @@ import {
   layerHover,
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
+import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 
@@ -212,10 +213,6 @@ class Layer extends React.Component {
         ? faEyeSlash
         : faEye;
 
-    const zotTitle = zot
-      ? `Layer is overzoomed by ${zot.toString()}x its maximum zoom level`
-      : '';
-
     return (
       <Draggable
         draggableId={`${util.encodeId(layer.id)}-${layerGroupName}`}
@@ -245,12 +242,7 @@ class Layer extends React.Component {
               <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
             </a>
 
-            <div
-              className="zot"
-              title={zotTitle}
-            >
-              <b>!</b>
-            </div>
+            <Zot zot={zot} layer={layer.id} />
 
             <div className="layer-main">
               <div className="layer-info">

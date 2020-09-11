@@ -11,6 +11,7 @@ import {
 import { createSelector } from 'reselect';
 import update from 'immutability-helper';
 import util from '../../util/util';
+import { getLayerNoticesForLayer } from '../notifications/util';
 
 // State selectors
 const getLayersState = ({ layers }) => layers;
@@ -475,16 +476,23 @@ export function replaceSubGroup(
   return pushToBottom(layerId, layers, layerSplit);
 }
 
-export function getZotsForActiveLayers(config, projection, map, activeLayers) {
+export function getZotsForActiveLayers(state) {
+  const {
+    config, proj, map, notifications,
+  } = state;
   const zotObj = {};
   const { sources } = config;
-  const proj = projection.selected.id;
+  const projection = proj.selected.id;
   const zoom = map.ui.selected.getView().getZoom();
-  lodashEach(activeLayers, (layer) => {
-    if (layer.projections[proj]) {
-      const overZoomValue = getZoomLevel(layer, zoom, proj, sources);
-      if (overZoomValue) {
-        zotObj[layer.id] = { value: overZoomValue };
+  lodashEach(getActiveLayers(state), (layer) => {
+    if (layer.projections[projection]) {
+      const overZoomValue = getZoomLevel(layer, zoom, projection, sources);
+      const layerNotices = getLayerNoticesForLayer(layer.id, notifications);
+      if (overZoomValue || layerNotices.length) {
+        zotObj[layer.id] = {
+          overZoomValue,
+          layerNotices,
+        };
       }
     }
   });
