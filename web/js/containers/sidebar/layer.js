@@ -424,6 +424,6 @@ Layer.propTypes = {
   hasClickableFeature: PropTypes.bool,
   tracksForLayer: PropTypes.array,
   openVectorAlertModal: PropTypes.func,
-  zot: PropTypes.number,
+  zot: PropTypes.object,
   isVectorLayer: PropTypes.bool,
 };
