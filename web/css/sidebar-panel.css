@@ -407,7 +407,7 @@ li.item.productsitem.inmotion,
   display: block;
 }
 
-.zot-tooltip div {
+.zot-tooltip .tooltip-inner div {
   margin: 6px 0;
 }
 

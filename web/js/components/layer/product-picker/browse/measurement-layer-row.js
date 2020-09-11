@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem, Tooltip } from 'reactstrap';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { available, getActiveLayers } from '../../../../modules/layers/selectors';
 import Checkbox from '../../../util/checkbox';
 import {
@@ -12,26 +12,25 @@ import {
 } from '../../../../modules/layers/actions';
 import SelectedDate from '../../../selected-date';
 import getSelectedDate from '../../../../modules/date/selectors';
+import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 
 /*
  * A scrollable list of layers
  * @class LayerList
  * @extends React.Component
  */
-class MeasurementLayerRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tooltipOpen: false,
-    };
-    this.onClick = this.onClick.bind(this);
-    this.toggleTooltip = this.toggleTooltip.bind(this);
-  }
+export function MeasurementLayerRow (props) {
+  const {
+    isEnabled, removeLayer, addLayer, layer, measurementId, title, selectedDate, layerNotices,
+  } = props;
+  const [tooltipVisible, toggleTooltip] = useState(false);
+  const layerIsAvailable = available(layer.id, selectedDate, [layer]);
+  const listItemClass = !layerIsAvailable || layerNotices ? 'unavailable' : '';
+  // Replace periods in id since period causes issue with tooltip targeting
+  const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
+  const checkboxId = `${layer.id.split('.').join('-')}-checkbox`;
 
-  onClick() {
-    const {
-      isEnabled, removeLayer, addLayer, layer,
-    } = this.props;
+  function onClick() {
     if (isEnabled) {
       removeLayer(layer.id);
     } else {
@@ -39,67 +38,54 @@ class MeasurementLayerRow extends React.Component {
     }
   }
 
-  toggleTooltip() {
-    this.setState((prevState) => ({
-      tooltipOpen: !prevState.tooltipOpen,
-    }));
-  }
-
-  render() {
-    const {
-      layer, measurementId, title, selectedDate, isEnabled,
-    } = this.props;
-    const { tooltipOpen } = this.state;
-    const layerIsAvailable = available(layer.id, selectedDate, [layer]);
-    const listItemClass = !layerIsAvailable ? 'unavailable' : '';
-    // Replace periods in id since period causes issue with tooltip targeting
-    const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
-    const checkboxId = `${layer.id.split('.').join('-')}-checkbox`;
-
-    return (
-      <ListGroupItem
-        key={`${measurementId}-${layer.id}`}
-        id={itemElementId}
-        className={listItemClass}
+  return (
+    <ListGroupItem
+      key={`${measurementId}-${layer.id}`}
+      id={itemElementId}
+      className={listItemClass}
+    >
+      <Checkbox
+        id={checkboxId}
+        name={title}
+        onClick={onClick}
+        checked={isEnabled}
+        label={title}
+        classNames="settings-check"
       >
-        <Checkbox
-          id={checkboxId}
-          name={title}
-          onClick={this.onClick}
-          checked={isEnabled}
-          label={title}
-          classNames="settings-check"
-        >
-          {!layerIsAvailable
-            && (
-              <>
-                <FontAwesomeIcon icon={faBan} id="availability-info" />
-                <Tooltip
-                  placement="top"
-                  isOpen={tooltipOpen}
-                  target={itemElementId}
-                  toggle={this.toggleTooltip}
-                >
-                  This layer has no visible content on the selected date:
-                  {' '}
-                  <br />
-                  <span style={{ fontFamily: 'monospace' }}>
-                    <SelectedDate />
-                  </span>
-                </Tooltip>
-              </>
+        {!layerIsAvailable && (<FontAwesomeIcon icon={faBan} id="availability-info" />)}
+        {layerNotices && (<FontAwesomeIcon icon={faExclamationTriangle} id="notice-info" />)}
+        {(layerNotices || !layerIsAvailable) && (
+          <Tooltip
+            className="zot-tooltip"
+            placement="top"
+            isOpen={tooltipVisible}
+            target={itemElementId}
+            toggle={() => toggleTooltip(!tooltipVisible)}
+          >
+            {!layerIsAvailable && (
+              <div>
+                This layer has no visible content on the selected date:
+                <br />
+                <span style={{ fontFamily: 'monospace' }}>
+                  <SelectedDate />
+                </span>
+              </div>
             )}
-        </Checkbox>
-
-      </ListGroupItem>
-    );
-  }
+            {layerNotices
+              ? (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)
+              : ''}
+          </Tooltip>
+        )}
+      </Checkbox>
+    </ListGroupItem>
+  );
 }
 
 MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
   isEnabled: PropTypes.bool,
   layer: PropTypes.object,
+  layerNotices: PropTypes.string,
   measurementId: PropTypes.string,
   removeLayer: PropTypes.func,
   selectedDate: PropTypes.object,
@@ -107,10 +93,13 @@ MeasurementLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const { notifications } = state;
   const activeLayerMap = getActiveLayers(state);
+  const { id } = ownProps.layer;
   return {
-    isEnabled: !!activeLayerMap[ownProps.layer.id],
+    isEnabled: !!activeLayerMap[id],
     selectedDate: getSelectedDate(state),
+    layerNotices: getLayerNoticesForLayer(id, notifications),
   };
 };
 

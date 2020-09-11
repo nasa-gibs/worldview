@@ -92,7 +92,7 @@ class CategoryLayerRow extends React.Component {
       <div>
         {LayerSouceList.length > 0
           ? (
-            <ListGroup className="source-settings source-sub-group">
+            <ListGroup className="source-sub-group">
               {LayerSouceList}
             </ListGroup>
           )
