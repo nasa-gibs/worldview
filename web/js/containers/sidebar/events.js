@@ -17,6 +17,7 @@ import { getEventsWithinExtent } from '../../map/natural-events/util';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
 import getSelectedDate from '../../modules/date/selectors';
+import { getEventCategories } from '../../modules/natural-events/selectors';
 
 function Events(props) {
   const {
@@ -191,7 +192,6 @@ const mapStateToProps = (state) => {
   const {
     requestedEvents,
     requestedEventSources,
-    requestedEventCategories,
     config,
     proj,
     browser,
@@ -199,22 +199,12 @@ const mapStateToProps = (state) => {
   const { selected, showAll } = state.events;
   const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoading = requestedEvents.isLoading
-    || requestedEventSources.isLoading
-    || requestedEventCategories.isLoading;
+    || requestedEventSources.isLoading;
   const hasRequestError = requestedEvents.error
-    || requestedEventSources.error
-    || requestedEventCategories.error;
+    || requestedEventSources.error;
   let visibleEvents = {};
   const events = lodashGet(requestedEvents, 'response');
   const sources = lodashGet(requestedEventSources, 'response');
-  const eventCategories = (events || []).reduce((categories, event) => {
-    const categoryTitle = lodashGet(event, 'categories[0].title');
-    if (categories.indexOf(categoryTitle) === -1) {
-      categories.push(categoryTitle);
-    }
-    return categories;
-  }, []);
-
   const mapExtent = lodashGet(state, 'map.extent');
   let visibleWithinMapExtent = {};
 
@@ -238,7 +228,7 @@ const mapStateToProps = (state) => {
 
   return {
     events,
-    eventCategories,
+    eventCategories: getEventCategories(state),
     sources,
     showAll,
     isLoading,

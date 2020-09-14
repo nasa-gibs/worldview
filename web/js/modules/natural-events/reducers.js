@@ -24,6 +24,7 @@ const sortEvents = function(events) {
     return e;
   });
 };
+
 const formatResponse = function(item, ignored) {
   if (item.categories) {
     const category = Array.isArray(item.categories)
@@ -59,7 +60,6 @@ export function eventsReducer(state = eventsReducerState, action) {
         },
         isAnimatingToEvent: true,
       });
-
     case DESELECT_EVENT:
       return lodashAssign({}, state, {
         selected: {
@@ -119,6 +119,7 @@ export function eventsRequestReducer(actionName, state, action) {
         response: null,
       });
     case SUCCESS: {
+      // eslint-disable-next-line no-nested-ternary
       const key = actionName === REQUEST_EVENTS
         ? 'events'
         : actionName === REQUEST_CATEGORIES
