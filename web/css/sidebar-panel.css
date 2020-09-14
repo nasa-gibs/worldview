@@ -496,3 +496,41 @@ li.item.productsitem.inmotion,
 .productsitem.disabled.layer-hidden a.hdanchor:hover svg.svg-inline--fa {
   color: #c5c5c8;
 }
+
+@media (max-width: 739px) {
+  .sidebar-panel li.item {
+    h4 {
+      font-size: 16px;
+      padding: 6px 4px 4px;
+    }
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .productsitem {
+    .layer-main {
+      margin-left: 45px;
+    }
+    div.zot {
+      margin-left: 45px;
+      width: 32px;
+      b {
+        font-size: 22px;
+      }
+    }
+    &.zotted .layer-main {
+      margin-left: 78px;
+    }
+    .layer-info {
+      min-height: 44px;
+    }
+    .layer-eye-icon {
+      top: 18px;
+      font-size: 26px;
+    }
+    a.hdanchor.hideReg {
+      width: 44px;
+    }
+  }
+}

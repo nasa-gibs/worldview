@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'reactstrap';
+import { UncontrolledTooltip } from 'reactstrap';
 
 export default function Zot (props) {
-  const { zot, layer } = props;
-  const [tooltipVisible, toggleTooltip] = useState(false);
+  const { zot, layer, isMobile } = props;
   let className = 'zot';
   let tooltipString = '';
+  const delay = isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 300 };
+
   if (zot && zot.overZoomValue) {
     tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level <br/>`;
   }
@@ -20,22 +21,22 @@ export default function Zot (props) {
       id={`${layer}-zot`}
       className={className}
     >
-      <Tooltip
+      <UncontrolledTooltip
         className="zot-tooltip"
-        isOpen={tooltipVisible}
         target={`${layer}-zot`}
         placement="right"
-        toggle={() => toggleTooltip(!tooltipVisible)}
-        delay={{ show: 0, hide: 300 }}
+        trigger="hover"
+        delay={delay}
       >
         <div dangerouslySetInnerHTML={{ __html: tooltipString }} />
-      </Tooltip>
+      </UncontrolledTooltip>
       <b>!</b>
     </div>
   );
 }
 
 Zot.propTypes = {
+  isMobile: PropTypes.bool,
   layer: PropTypes.string,
   zot: PropTypes.object,
 };

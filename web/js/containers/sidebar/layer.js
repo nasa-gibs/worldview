@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -175,6 +176,7 @@ class Layer extends React.Component {
   render() {
     const {
       layerGroupName,
+      isMobile,
       toggleVisibility,
       hover,
       layer,
@@ -242,7 +244,7 @@ class Layer extends React.Component {
               <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
             </a>
 
-            <Zot zot={zot} layer={layer.id} />
+            <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
             <div className="layer-main">
               <div className="layer-info">
