@@ -4,19 +4,14 @@ import {
   SET_NOTIFICATIONS,
   NOTIFICATIONS_SEEN,
 } from './constants';
-import { getActiveLayers } from '../layers/selectors';
 
 export function requestNotifications(location, type) {
   return (dispatch) => requestAction(dispatch, REQUEST_NOTIFICATIONS, location);
 }
 export function setNotifications(array) {
-  return (dispatch, getState) => {
-    const activeLayers = getActiveLayers(getState());
-    dispatch({
-      type: SET_NOTIFICATIONS,
-      array,
-      activeLayers,
-    });
+  return {
+    type: SET_NOTIFICATIONS,
+    array,
   };
 }
 export function notificationsSeen() {

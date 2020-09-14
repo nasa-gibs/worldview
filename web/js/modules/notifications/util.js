@@ -30,7 +30,7 @@ export function separateByType(notifications) {
   notifications.forEach((notification) => {
     const { notification_type: type, path } = notification;
 
-    if (path.contains(LAYER_NOTICE)) {
+    if (path.includes(LAYER_NOTICE)) {
       layerNotices.push(notification);
       return;
     }
@@ -88,26 +88,15 @@ export function getPriority(sortedNotifications) {
  * @private
  * @returns {Number}
  */
-export function getCount(notifications, activeLayers) {
+export function getCount(notifications) {
   const {
-    messages, outages, alerts, layerNotices,
+    messages, outages, alerts,
   } = notifications;
-  const activeLayerIds = Object.keys(activeLayers);
   const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
   const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
   const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
 
-
-  // If any of the layers marked in layerNotices array are currently active,
-  // include in the count.
-  let layerNoticeCount = 0;
-  layerNotices.forEach((notice) => {
-    if (activeLayerIds.some((id) => notice.layers.includes(id))) {
-      layerNoticeCount += 1;
-    }
-  });
-
-  return messageCount + outageCount + alertCount + layerNoticeCount;
+  return messageCount + outageCount + alertCount;
 }
 
 export function addToLocalStorage({ messages, outages, alerts }) {
