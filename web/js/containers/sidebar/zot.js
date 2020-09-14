@@ -5,19 +5,20 @@ import { Tooltip } from 'reactstrap';
 export default function Zot (props) {
   const { zot, layer } = props;
   const [tooltipVisible, toggleTooltip] = useState(false);
-
-  let zotString = '';
+  let className = 'zot';
+  let tooltipString = '';
   if (zot && zot.overZoomValue) {
-    zotString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level <br/>`;
+    tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level <br/>`;
   }
   if (zot && zot.layerNotices) {
-    zotString += zot.layerNotices;
+    tooltipString += zot.layerNotices;
+    className = 'zot layer-notice';
   }
 
   return (
     <div
       id={`${layer}-zot`}
-      className="zot"
+      className={className}
     >
       <Tooltip
         className="zot-tooltip"
@@ -27,7 +28,7 @@ export default function Zot (props) {
         toggle={() => toggleTooltip(!tooltipVisible)}
         delay={{ show: 0, hide: 300 }}
       >
-        <div dangerouslySetInnerHTML={{ __html: zotString }} />
+        <div dangerouslySetInnerHTML={{ __html: tooltipString }} />
       </Tooltip>
       <b>!</b>
     </div>
