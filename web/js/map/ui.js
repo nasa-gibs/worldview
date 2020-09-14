@@ -809,7 +809,6 @@ export default function mapui(models, config, store, ui) {
         }),
         new OlInteractionMouseWheelZoom({
           duration: animationDuration,
-          constrainResolution: true,
         }),
         new OlInteractionDragZoom({
           duration: animationDuration,
