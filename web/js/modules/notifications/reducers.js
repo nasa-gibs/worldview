@@ -29,7 +29,7 @@ export function notificationsReducer(state = notificationReducerState, action) {
 
         return {
           ...state,
-          number: getCount(notificationsByType, action.activeLayers),
+          number: getCount(notificationsByType),
           type: getPriority(notificationsByType),
           isActive: true,
           object: notificationsByType,

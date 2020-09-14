@@ -19,7 +19,7 @@ import { getLayerNoticesForLayer } from '../../../../modules/notifications/util'
  * @class LayerList
  * @extends React.Component
  */
-export function MeasurementLayerRow (props) {
+function MeasurementLayerRow (props) {
   const {
     isEnabled, removeLayer, addLayer, layer, measurementId, title, selectedDate, layerNotices,
   } = props;
