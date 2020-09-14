@@ -388,6 +388,12 @@ li.item.productsitem.inmotion,
   background: #dacf00;
   cursor: default;
   display: none;
+  &.layer-notice {
+    background-color: #f90;
+    &:hover {
+      background: #ff6900;
+    }
+  }
   &:hover {
     background: #fff200;
   }

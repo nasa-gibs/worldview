@@ -131,12 +131,14 @@ class toolbarContainer extends Component {
     const { parameters, features } = config;
     const { notification } = features;
     const domain = window.location.origin;
+    const testDomains = ['localhost', 'worldview.sit', 'worldview.uat', 'uat.gibs'];
+    const isTestInstance = testDomains.some((href) => domain.includes(href));
 
     if (notification) {
-      let notificationURL = notification.url && !domain.includes('localhost')
-        // Use the deployed domain (SIT, UAT, PROD) when possible
+      let notificationURL = !isTestInstance
+        // Use the configured domain in production
         ? `${notification.url}?domain=${domain}`
-        // Use the PROD domain when running locally
+        // Use the UAT domain for test instances
         : `${notification.url}?domain=https%3A%2F%2Fworldview.uat.earthdata.nasa.gov`;
 
       if (parameters.mockAlerts) {
