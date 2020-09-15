@@ -9,7 +9,8 @@
       "layergroup": [
         "reference"
       ],
-      "wrapadjacentdays": true,"tracks": [
+      "wrapadjacentdays": true,
+      "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],
       "daynight": [
