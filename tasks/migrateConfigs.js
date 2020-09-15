@@ -10,6 +10,7 @@ const DEST_DIR = `${GIT_HOME}/layers-config/layer-metadata/v1.0/`;
 const CONCEPT_ID_PATH = './config/default/common/config/wv.json/conceptIds.json';
 const WV_JSON_PATH = './build/options/config/wv.json';
 
+let noWrapCount = 0;
 let conceptIdsMap = {};
 let wvJson = {};
 const measurementsMap = {};
@@ -116,10 +117,15 @@ function modifyProps (layerObj) {
   }
 
   const {
-    startDate, endDate, dateRanges, period,
+    startDate, endDate, dateRanges, period, wrapX, wrapadjacentdays,
   } = wvJsonLayerObj;
-
   const staticLayer = !startDate && !endDate && !dateRanges;
+
+  if (!wrapX && !wrapadjacentdays && !staticLayer) {
+    // console.log(id);
+    noWrapCount += 1;
+  }
+
 
   const modifiedObj = {
     title,
@@ -181,7 +187,6 @@ function migrate(filePath) {
   }
 
   const newObj = modifyProps(layerPropsObj);
-
   fs.writeFile(`${DEST_DIR}${fileName}`, JSON.stringify(newObj, null, 2), errCallback);
 }
 
@@ -192,4 +197,5 @@ dir.files(SOURCE_DIR, (err, files) => {
   wvJson = JSON.parse(fs.readFileSync(WV_JSON_PATH, 'utf-8'));
   generateMeasurements(wvJson.layers, wvJson.measurements);
   files.forEach(migrate);
+  // console.log(noWrapCount);
 });
