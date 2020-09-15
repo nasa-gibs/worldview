@@ -3,7 +3,7 @@
         "Brightness Temperature": {
             "id": "brightness-temperature",
             "title":    "Brightness Temperature",
-            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI,  NOAA-20/VIIRS, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, AMSU-A/NOAA-15, AMSU-A/NOAA-16, AMSU-A/NOAA-17",
+            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI,  NOAA-20/VIIRS, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, NOAA-15/AMSU-A, NOAA-16/AMSU-A, NOAA-17/AMSU-A",
             "sources": {
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsre",
@@ -151,9 +151,9 @@
                         "OrbitTracks_Suomi_NPP_Descending"
                     ]
                 },
-                "AMSU-A/NOAA-15": {
-                    "id": "amsua-noaa15",
-                    "title": "AMSU-A/NOAA-15",
+                "NOAA-15/AMSU-A": {
+                    "id": "noaa15-amsua",
+                    "title": "NOAA-15/AMSU-A",
                     "description": "amsua/BrightnessTemperature",
                     "image": "",
                     "settings": [
@@ -174,9 +174,9 @@
                       "AMSUA_NOAA15_Brightness_Temp_Channel_15"
                     ]
                 },
-                "AMSU-A/NOAA-16": {
-                    "id": "amsua-noaa16",
-                    "title": "AMSU-A/NOAA-16",
+                "NOAA-16/AMSU-A": {
+                    "id": "noaa16-amsua",
+                    "title": "NOAA-16/AMSU-A",
                     "description": "amsua/BrightnessTemperature",
                     "image": "",
                     "settings": [
@@ -197,9 +197,9 @@
                       "AMSUA_NOAA16_Brightness_Temp_Channel_15"
                     ]
                 },
-                "AMSU-A/NOAA-17": {
-                    "id": "amsua-noaa17",
-                    "title": "AMSU-A/NOAA-17",
+                "NOAA-17/AMSU-A": {
+                    "id": "noaa17-amsua",
+                    "title": "NOAA-17/AMSU-A",
                     "description": "amsua/BrightnessTemperature",
                     "image": "",
                     "settings": [

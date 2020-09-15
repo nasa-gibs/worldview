@@ -3,7 +3,7 @@
     "AMSUA_NOAA16_Brightness_Temp_Channel_5": {
       "id": "AMSUA_NOAA16_Brightness_Temp_Channel_5",
       "title": "Brightness Temperature (Channel 05)",
-      "subtitle": "AMSU-A / NOAA-16",
+      "subtitle": "NOAA-16 / AMSU-A",
       "description": "amsua/AMSUA_NOAA16_Brightness_Temp_Channel_5",
       "group": "overlays",
       "layergroup": [
