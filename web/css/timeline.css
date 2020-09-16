@@ -716,6 +716,12 @@ button:focus {
   border-radius: 5px;
   cursor: pointer;
   height: 44px;
+
+  & .button-action-group {
+    height: 37px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
 }
 
 .datepicker.android-dark .datepicker-header {
