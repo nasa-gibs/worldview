@@ -203,10 +203,10 @@
     width: 24px;
     height: 18px;
     position: absolute;
-    bottom: 6px;
+    right: 6px;
   }
   .layers-all-header {
-    padding: 0 0 0 40px;
+    padding: 0 35px 0 40px;
   }
   &:hover {
     .wv-checkbox::before {

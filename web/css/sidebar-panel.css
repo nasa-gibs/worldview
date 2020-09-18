@@ -424,8 +424,11 @@ li.item.productsitem.inmotion,
   display: block;
 }
 
-.zot-tooltip .tooltip-inner div {
-  margin: 6px 0;
+.zot-tooltip .tooltip-inner {
+  max-width: 300px;
+  div {
+    margin: 6px 0;
+  }
 }
 
 .productsitem a.button.wv-layers-close {

@@ -6,7 +6,7 @@ export default function Zot (props) {
   const { zot, layer, isMobile } = props;
   let className = 'zot';
   let tooltipString = '';
-  const delay = isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 300 };
+  const delay = isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 500 };
   if (zot) {
     const { overZoomValue, layerNotices } = zot;
     if (overZoomValue) {
@@ -32,6 +32,7 @@ export default function Zot (props) {
         target={`${layer}-zot`}
         placement="right"
         trigger="hover"
+        autohide={isMobile}
         delay={delay}
       >
         <div dangerouslySetInnerHTML={{ __html: tooltipString }} />
