@@ -67,7 +67,6 @@ module.exports = {
   },
 
   // Layer notice tests
-  // TODO confirm that notices in UAT don't affect this test (e.g. that mock notifications override them)
   'Verify that zots show for the layers that have notices': function(c) {
     c.waitForElementVisible(infoButtonIcon, TIME_LIMIT);
     c.expect.element(aquaZot).to.be.present;

@@ -76,9 +76,6 @@ export function getPriority(sortedNotifications) {
   if (outage && !objectAlreadySeen(outage)) {
     priority = NOTIFICATION_OUTAGE;
   }
-
-  // TODO need to determine how and when layer notices affect priority
-
   return priority;
 }
 
