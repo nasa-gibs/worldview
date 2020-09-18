@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button } from 'reactstrap';
+import { faTrash, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
@@ -14,6 +14,7 @@ import {
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import getSelectedDate from '../../../../modules/date/selectors';
+import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 
 /**
  * A single layer search result row
@@ -89,7 +90,12 @@ class SearchLayerRow extends React.Component {
 
   render() {
     const {
-      isEnabled, layer, selectedLayer, categoryType, clearSingleRecentLayer,
+      isEnabled,
+      layer,
+      selectedLayer,
+      categoryType,
+      clearSingleRecentLayer,
+      layerNotices,
     } = this.props;
     const { showDeleteIcon } = this.state;
     const { id } = layer;
@@ -108,6 +114,22 @@ class SearchLayerRow extends React.Component {
         onMouseEnter={() => this.toggleDeleteIcon(true)}
         onMouseLeave={() => this.toggleDeleteIcon(false)}
       >
+        {layerNotices && (
+          <>
+            <FontAwesomeIcon
+              id={`${id}-notice-info`}
+              className="layer-notice-icon"
+              icon={faExclamationTriangle}
+            />
+            <UncontrolledTooltip
+              className="zot-tooltip"
+              placement="top"
+              target={`${id}-notice-info`}
+            >
+              <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
+            </UncontrolledTooltip>
+          </>
+        )}
         <div className={checkboxClass}>
           <input
             type="checkbox"
@@ -141,6 +163,7 @@ SearchLayerRow.propTypes = {
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   layer: PropTypes.object,
+  layerNotices: PropTypes.array,
   removeLayer: PropTypes.func,
   scrollIntoView: PropTypes.bool,
   selectedLayer: PropTypes.object,
@@ -148,13 +171,14 @@ SearchLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { productPicker, browser } = state;
+  const { productPicker, browser, notifications } = state;
   const activeLayerMap = getActiveLayers(state);
   const { categoryType, selectedLayer } = productPicker;
   return {
     scrollIntoView: browser.screenWidth < 1024,
     isEnabled: !!activeLayerMap[ownProps.layer.id],
     isMobile: browser.lessThan.medium,
+    layerNotices: getLayerNoticesForLayer(ownProps.layer.id, notifications),
     selectedDate: getSelectedDate(state),
     selectedLayer,
     categoryType,

@@ -38,6 +38,9 @@
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
+    & .layer-notice-icon {
+      color: #666;
+    }
     & .layers-all-header > h3 {
       transition: all 200ms ease;
       color: #000;
@@ -195,6 +198,13 @@
 
 .layers-all-layer.search-row {
   padding: 8px 5px;
+  .layer-notice-icon {
+    color: #eee;
+    width: 24px;
+    height: 18px;
+    position: absolute;
+    bottom: 6px;
+  }
   .layers-all-header {
     padding: 0 0 0 40px;
   }
