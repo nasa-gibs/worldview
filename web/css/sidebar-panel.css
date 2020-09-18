@@ -385,17 +385,28 @@ li.item.productsitem.inmotion,
   top: 0;
   bottom: 0;
   width: 10px;
-  background: #dacf00;
+
   cursor: default;
   display: none;
+  &.overzoom {
+    background: #dacf00;
+    &:hover {
+      background: #fff200;
+    }
+  }
   &.layer-notice {
-    background-color: #f90;
+    background-color: #f60;
     &:hover {
       background: #ff6900;
     }
   }
-  &:hover {
-    background: #fff200;
+  &.overzoom.layer-notice {
+    background: #f60;
+    background: linear-gradient(280deg, rgba(255, 102, 0, 0.9) 40%, rgba(255, 252, 3, 0.9) 60%);
+    &:hover {
+      background: #e50;
+      background: linear-gradient(280deg, rgba(255, 102, 0, 1) 40%, rgba(255, 252, 3, 1) 60%);
+    }
   }
   b {
     text-align: center;
