@@ -7,13 +7,19 @@ export default function Zot (props) {
   let className = 'zot';
   let tooltipString = '';
   const delay = isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 300 };
-
-  if (zot && zot.overZoomValue) {
-    tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level <br/>`;
-  }
-  if (zot && zot.layerNotices) {
-    tooltipString += zot.layerNotices;
-    className = 'zot layer-notice';
+  if (zot) {
+    const { overZoomValue, layerNotices } = zot;
+    if (overZoomValue) {
+      className = 'zot overzoom';
+      tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level <br/>`;
+    }
+    if (layerNotices) {
+      tooltipString += zot.layerNotices;
+      className = 'zot layer-notice';
+    }
+    if (overZoomValue && layerNotices) {
+      className = 'zot overzoom layer-notice';
+    }
   }
 
   return (
