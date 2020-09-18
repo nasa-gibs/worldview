@@ -91,7 +91,7 @@ module.exports = {
 
     c.click('#terra-modis-4-source-Nav');
     c.waitForElementVisible('#checkbox-case-MODIS_Terra_CorrectedReflectance_TrueColor', TIME_LIMIT);
-    c.moveToElement('#checkbox-case-MODIS_Terra_CorrectedReflectance_TrueColor', 2, 2);
+    c.moveToElement('#checkbox-case-MODIS_Terra_CorrectedReflectance_TrueColor', 5, 5);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
     c.assert.containsText(`${tooltipSelector} div`, aquaTerraNotice);
   },
