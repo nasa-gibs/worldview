@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { ListGroupItem, Tooltip } from 'reactstrap';
+import { ListGroupItem, UncontrolledTooltip } from 'reactstrap';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -21,9 +21,16 @@ import { getLayerNoticesForLayer } from '../../../../modules/notifications/util'
  */
 function MeasurementLayerRow (props) {
   const {
-    isEnabled, removeLayer, addLayer, layer, measurementId, title, selectedDate, layerNotices,
+    isEnabled,
+    isMobile,
+    removeLayer,
+    addLayer,
+    layer,
+    measurementId,
+    title,
+    selectedDate,
+    layerNotices,
   } = props;
-  const [tooltipVisible, toggleTooltip] = useState(false);
   const layerIsAvailable = available(layer.id, selectedDate, [layer]);
   const listItemClass = !layerIsAvailable || layerNotices ? 'unavailable' : '';
   // Replace periods in id since period causes issue with tooltip targeting
@@ -55,12 +62,13 @@ function MeasurementLayerRow (props) {
         {!layerIsAvailable && (<FontAwesomeIcon icon={faBan} id="availability-info" />)}
         {layerNotices && (<FontAwesomeIcon icon={faExclamationTriangle} id="notice-info" />)}
         {(layerNotices || !layerIsAvailable) && (
-          <Tooltip
+          <UncontrolledTooltip
+            target={itemElementId}
             className="zot-tooltip"
             placement="top"
-            isOpen={tooltipVisible}
-            target={itemElementId}
-            toggle={() => toggleTooltip(!tooltipVisible)}
+            trigger="hover"
+            autohide={isMobile}
+            delay={isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 300 }}
           >
             {!layerIsAvailable && (
               <div>
@@ -74,7 +82,7 @@ function MeasurementLayerRow (props) {
             {layerNotices
               ? (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)
               : ''}
-          </Tooltip>
+          </UncontrolledTooltip>
         )}
       </Checkbox>
     </ListGroupItem>
@@ -84,6 +92,7 @@ function MeasurementLayerRow (props) {
 MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
   isEnabled: PropTypes.bool,
+  isMobile: PropTypes.bool,
   layer: PropTypes.object,
   layerNotices: PropTypes.string,
   measurementId: PropTypes.string,
@@ -93,11 +102,12 @@ MeasurementLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { notifications } = state;
+  const { notifications, browser } = state;
   const activeLayerMap = getActiveLayers(state);
   const { id } = ownProps.layer;
   return {
     isEnabled: !!activeLayerMap[id],
+    isMobile: browser.lessThan.medium,
     selectedDate: getSelectedDate(state),
     layerNotices: getLayerNoticesForLayer(id, notifications),
   };

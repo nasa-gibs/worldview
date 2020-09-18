@@ -91,6 +91,7 @@ class SearchLayerRow extends React.Component {
   render() {
     const {
       isEnabled,
+      isMobile,
       layer,
       selectedLayer,
       categoryType,
@@ -125,6 +126,9 @@ class SearchLayerRow extends React.Component {
               className="zot-tooltip"
               placement="top"
               target={`${id}-notice-info`}
+              trigger="hover"
+              autohide={isMobile}
+              delay={isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 300 }}
             >
               <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
             </UncontrolledTooltip>
@@ -163,7 +167,7 @@ SearchLayerRow.propTypes = {
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   layer: PropTypes.object,
-  layerNotices: PropTypes.array,
+  layerNotices: PropTypes.string,
   removeLayer: PropTypes.func,
   scrollIntoView: PropTypes.bool,
   selectedLayer: PropTypes.object,
