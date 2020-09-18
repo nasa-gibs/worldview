@@ -12,7 +12,7 @@ Fixes # .
 
 ## How To Test
 
-[Provide whatever information a reviewer might need to know in order to verify that the changes made in this PR are working as expected. If there are special build steps that need to be taken in order to get these changes ot run (building while on a separate branch, running `npm ci`, etc) include them here.]
+[Provide whatever information a reviewer might need to know in order to verify that the changes made in this PR are working as expected. If there are special build steps that need to be taken in order to get these changes to run (building while on a separate branch, running `npm ci`, etc) include them here.]
 
 - For bugfixes: What steps need to be taken in the UI to verify the bug is fixed?
 - For enhancements and features: What is the expected functionality being added/modified? How can a reviewer verify this?
