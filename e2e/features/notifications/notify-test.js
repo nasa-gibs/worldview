@@ -1,7 +1,7 @@
 const TIME_LIMIT = 30000;
 const mockParam = '?mockAlerts=';
 const layerNoticesTestParams = '?l=Coastlines,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor';
-const { addLayers, categoriesNav } = require('../../reuseables/selectors.js');
+const { addLayers, layersSearchField, categoriesNav } = require('../../reuseables/selectors.js');
 
 // Selectors
 const infoButton = '#wv-info-button';
@@ -80,7 +80,7 @@ module.exports = {
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
     c.assert.containsText(`${tooltipSelector} div`, aquaTerraNotice);
   },
-  'Verify that warning shows in the product picker next to the layers which have notices': function(c) {
+  'Verify that warning shows in the product picker category/measurement rows': function(c) {
     c.click(addLayers);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT);
     c.click('#layer-category-item-air-quality-corrected-reflectance');
@@ -94,6 +94,15 @@ module.exports = {
     c.moveToElement('#checkbox-case-MODIS_Terra_CorrectedReflectance_TrueColor', 5, 5);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
     c.assert.containsText(`${tooltipSelector} div`, aquaTerraNotice);
+  },
+  'Verify that warning shows in the product picker search results rows': function(c) {
+    c.setValue(layersSearchField, 'MODIS_Aqua_CorrectedReflectance_TrueColor');
+    c.waitForElementVisible('#MODIS_Aqua_CorrectedReflectance_TrueColor-search-row', TIME_LIMIT);
+    c.expect.element('#MODIS_Aqua_CorrectedReflectance_TrueColor-notice-info').present;
+    c.moveToElement('#MODIS_Aqua_CorrectedReflectance_TrueColor-notice-info', 5, 5);
+    c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
+    c.assert.containsText(`${tooltipSelector} div:first-of-type`, aquaNotice);
+    c.assert.containsText(`${tooltipSelector} div:last-of-type`, aquaTerraNotice);
   },
   after(c) {
     c.end();
