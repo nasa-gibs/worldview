@@ -106,6 +106,9 @@ class SearchLayerRow extends React.Component {
       : 'search-row layers-all-layer';
     const checkboxClass = isEnabled ? 'wv-checkbox checked' : 'wv-checkbox';
     const recentLayerMode = categoryType === 'recent';
+    const headerClassName = layerNotices
+      ? 'layers-all-header notice'
+      : 'layers-all-header';
 
     return (
       <div
@@ -115,8 +118,17 @@ class SearchLayerRow extends React.Component {
         onMouseEnter={() => this.toggleDeleteIcon(true)}
         onMouseLeave={() => this.toggleDeleteIcon(false)}
       >
+        <div className={checkboxClass}>
+          <input
+            type="checkbox"
+            id={`${id}-checkbox`}
+            name={`${id}-checkbox`}
+            checked={isEnabled}
+            onChange={this.toggleEnabled}
+          />
+        </div>
         {layerNotices && (
-          <>
+          <div className="layer-notice-wrapper">
             <FontAwesomeIcon
               id={`${id}-notice-info`}
               className="layer-notice-icon"
@@ -132,18 +144,9 @@ class SearchLayerRow extends React.Component {
             >
               <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
             </UncontrolledTooltip>
-          </>
+          </div>
         )}
-        <div className={checkboxClass}>
-          <input
-            type="checkbox"
-            id={`${id}-checkbox`}
-            name={`${id}-checkbox`}
-            checked={isEnabled}
-            onChange={this.toggleEnabled}
-          />
-        </div>
-        <div className="layers-all-header" onClick={this.toggleShowMetadata}>
+        <div className={headerClassName} onClick={this.toggleShowMetadata}>
           <RenderSplitLayerTitle layer={layer} />
           {recentLayerMode && showDeleteIcon && (
             <Button

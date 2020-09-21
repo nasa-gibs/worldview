@@ -198,15 +198,20 @@
 
 .layers-all-layer.search-row {
   padding: 8px 5px;
+
   .layer-notice-icon {
     color: #eee;
+    height: 24px;
     width: 24px;
-    height: 18px;
+    display: inline;
     position: absolute;
-    right: 6px;
+    left: 40px;
   }
   .layers-all-header {
-    padding: 0 35px 0 40px;
+    padding: 0 0 0 40px;
+    &.notice {
+      padding: 0 0 0 70px;
+    }
   }
   &:hover {
     .wv-checkbox::before {
