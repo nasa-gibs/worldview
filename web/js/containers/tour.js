@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
 import update from 'immutability-helper';
-import Joyride from 'react-joyride';
 
+import JoyrideWrapper from '../components/tour/joyride-wrapper';
 import TourStart from '../components/tour/modal-tour-start';
 import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
@@ -382,6 +382,7 @@ class Tour extends React.Component {
 
   render() {
     const {
+      map,
       stories,
       screenHeight,
       screenWidth,
@@ -412,34 +413,14 @@ class Tour extends React.Component {
     if (!modalStart && !modalInProgress && !modalComplete) {
       this.setState({ modalStart: true });
     }
-
-
-    const joyride = (currentStep && currentStory.steps[currentStep - 1].joyride) || {};
-    const {
-      continuous, spotlightClicks, steps, disableOverlayClose,
-    } = joyride;
-    const styleOptions = {
-      arrowColor: '#ccc',
-      backgroundColor: '#ccc',
-      beaconSize: 44,
-      overlayColor: 'rgba(0, 0, 0, 0.5)',
-      primaryColor: '#d54e21',
-      spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
-      textColor: '#333',
-      width: undefined,
-      zIndex: 1050,
-    };
-
     return (
       <ErrorBoundary>
         <div>
-          {joyride && (
-            <Joyride
-              steps={steps}
-              continuous={continuous}
-              spotlightClicks={spotlightClicks}
-              disableOverlayClose={disableOverlayClose || false}
-              styles={{ options: styleOptions }}
+          {currentStory && currentStory.steps && (
+            <JoyrideWrapper
+              currentTourStep={currentStep}
+              tourSteps={currentStory.steps}
+              map={map.ui.selected}
             />
           )}
           {modalStart
@@ -509,15 +490,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    browser, config, tour, palettes,
+    browser, config, tour, palettes, models, compare, map,
   } = state;
   const { screenWidth, screenHeight } = browser;
 
   return {
     config,
     isActive: tour.active,
-    models: state.models,
-    compareState: state.compare,
+    map,
+    models,
+    compareState: compare,
     stories: config.stories,
     storyOrder: config.storyOrder,
     currentStoryId: tour.selected,
@@ -565,6 +547,7 @@ export default connect(
 Tour.propTypes = {
   config: PropTypes.object.isRequired,
   hideTour: PropTypes.func.isRequired,
+  map: PropTypes.object,
   selectTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
   showTourAlert: PropTypes.func.isRequired,
