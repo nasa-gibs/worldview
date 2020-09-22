@@ -182,7 +182,7 @@
     "elm-pep": "^1.0.6",
     "file-saver": "^2.0.2",
     "geographiclib": "^1.50.0",
-    "history": "^5.0.0",
+    "history": "^4.7.2",
     "immutability-helper": "^3.0.1",
     "jquery": "^3.5.0",
     "jquery-ui-bundle": "1.12.1-migrate",
