@@ -17,12 +17,18 @@ import {
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 
 const sortEvents = function(events) {
-  return events.map((e) => {
-    e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
-    // Discard duplicate geometry dates
-    e.geometry = lodashUniqBy(e.geometry, (g) => g.date.split('T')[0]);
-    return e;
-  });
+  return events
+    .map((e) => {
+      e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
+      // Discard duplicate geometry dates
+      e.geometry = lodashUniqBy(e.geometry, (g) => g.date.split('T')[0]);
+      return e;
+    })
+    .sort((eventA, eventB) => {
+      const dateA = new Date(eventA.geometry[0].date).valueOf();
+      const dateB = new Date(eventB.geometry[0].date).valueOf();
+      return dateB - dateA;
+    });
 };
 
 const formatResponse = function(item, ignored) {
