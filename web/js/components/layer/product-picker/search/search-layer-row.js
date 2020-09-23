@@ -140,7 +140,7 @@ class SearchLayerRow extends React.Component {
               target={`${id}-notice-info`}
               trigger="hover"
               autohide={isMobile}
-              delay={isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 300 }}
+              delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
             >
               <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
             </UncontrolledTooltip>

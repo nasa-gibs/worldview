@@ -6,12 +6,12 @@ export default function Zot (props) {
   const { zot, layer, isMobile } = props;
   let className = 'zot';
   let tooltipString = '';
-  const delay = isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 500 };
+  const delay = isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 500 };
   if (zot) {
     const { overZoomValue, layerNotices } = zot;
     if (overZoomValue) {
       className = 'zot overzoom';
-      tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level <br/>`;
+      tooltipString += `Layer is overzoomed by ${zot.overZoomValue.toString()}x its maximum zoom level. <br/>`;
     }
     if (layerNotices) {
       tooltipString += zot.layerNotices;
@@ -29,6 +29,7 @@ export default function Zot (props) {
     >
       <UncontrolledTooltip
         className="zot-tooltip"
+        boundariesElement="window"
         target={`${layer}-zot`}
         placement="right"
         trigger="hover"
