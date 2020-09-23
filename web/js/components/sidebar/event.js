@@ -32,11 +32,7 @@ function Event (props) {
 
   useEffect(() => {
     if (isSelected) {
-      ref.current.scrollIntoView({
-        block: 'start',
-        inline: 'nearest',
-        behavior: 'smooth',
-      });
+      ref.current.scrollIntoView();
     }
   }, [isSelected]);
 
