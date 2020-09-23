@@ -31,8 +31,8 @@ function MeasurementLayerRow (props) {
     selectedDate,
     layerNotices,
   } = props;
-  const layerIsAvailable = available(layer.id, selectedDate, [layer]);
-  const listItemClass = !layerIsAvailable || layerNotices ? 'unavailable' : '';
+  const layerIsUnavailable = !available(layer.id, selectedDate, [layer]);
+  const listItemClass = layerIsUnavailable || layerNotices ? 'unavailable' : '';
   // Replace periods in id since period causes issue with tooltip targeting
   const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
   const checkboxId = `${layer.id.split('.').join('-')}-checkbox`;
@@ -59,18 +59,19 @@ function MeasurementLayerRow (props) {
         label={title}
         classNames="settings-check"
       >
-        {!layerIsAvailable && (<FontAwesomeIcon icon={faBan} id="availability-info" />)}
+        {layerIsUnavailable && (<FontAwesomeIcon icon={faBan} id="availability-info" />)}
         {layerNotices && (<FontAwesomeIcon icon={faExclamationTriangle} id="notice-info" />)}
-        {(layerNotices || !layerIsAvailable) && (
+        {(layerNotices || layerIsUnavailable) && (
           <UncontrolledTooltip
             target={itemElementId}
+            boundariesElement="window"
             className="zot-tooltip"
-            placement="top"
+            placement="right"
             trigger="hover"
             autohide={isMobile}
-            delay={isMobile ? { show: 300, hide: 300 } : { show: 0, hide: 300 }}
+            delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
           >
-            {!layerIsAvailable && (
+            {layerIsUnavailable && (
               <div>
                 This layer has no visible content on the selected date:
                 <br />
@@ -79,9 +80,7 @@ function MeasurementLayerRow (props) {
                 </span>
               </div>
             )}
-            {layerNotices
-              ? (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)
-              : ''}
+            {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
           </UncontrolledTooltip>
         )}
       </Checkbox>
