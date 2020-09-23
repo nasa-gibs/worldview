@@ -425,9 +425,10 @@ li.item.productsitem.inmotion,
 }
 
 .zot-tooltip .tooltip-inner {
-  max-width: 300px;
+  max-width: 280px;
   div {
-    margin: 6px 0;
+    margin: 8px 0;
+    line-height: 16px;
   }
 }
 
