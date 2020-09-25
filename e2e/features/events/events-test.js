@@ -20,7 +20,6 @@ module.exports = {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
   },
   'Make sure that 4 fire layers are not present in layer list: use mock': (c) => {
-    console.log(c.globals.url + localQuerystrings.mockEvents);
     c.url(c.globals.url + localQuerystrings.mockEvents);
     c.waitForElementVisible(
       '#sidebar-event-EONET_3931',
