@@ -21,16 +21,11 @@ import {
   RESET_STATE,
 } from './constants';
 
-const CATEGORY_NAMES_ORDER = [
-  'hazards and disasters',
-  'science disciplines',
-  'featured',
-];
+let CATEGORY_GROUP_ORDER = [];
 
 export const productPickerState = {
   mode: 'category',
   category: undefined,
-  categoryTabNames: undefined,
   categoryType: undefined,
   filters: [],
   showMobileFacets: true,
@@ -44,17 +39,19 @@ export const productPickerState = {
 };
 
 
-export function getInitialState({ categories }) {
-  Object.keys(categories).forEach((name) => {
-    if (!CATEGORY_NAMES_ORDER.includes(name)) {
-      CATEGORY_NAMES_ORDER.push(name);
-    }
-  });
+export function getInitialState({ categories, categoryGroupOrder }) {
+  if (Object.keys(categories).length !== categoryGroupOrder.length) {
+    throw new Error(
+      'Number of category groups did not match defined category group order. '
+      + '\nCheck categoryGroupOrder.json',
+    );
+  }
+
+  CATEGORY_GROUP_ORDER = categoryGroupOrder;
 
   return {
     ...productPickerState,
-    categoryType: CATEGORY_NAMES_ORDER[0],
-    categoryTabNames: CATEGORY_NAMES_ORDER,
+    categoryType: CATEGORY_GROUP_ORDER[0],
   };
 }
 
@@ -155,7 +152,7 @@ export function productPickerReducer(state = productPickerState, action) {
         selectedLayer: null,
         showMobileFacets: true,
         category: null,
-        categoryType: CATEGORY_NAMES_ORDER[0],
+        categoryType: CATEGORY_GROUP_ORDER[0],
         selectedMeasurementSourceIndex: 0,
       };
     }
@@ -246,7 +243,7 @@ export function productPickerReducer(state = productPickerState, action) {
         searchTerm: '',
         selectedLayer: null,
         category: null,
-        categoryType: action.projection === 'geographic' ? CATEGORY_NAMES_ORDER[0] : 'measurements',
+        categoryType: action.projection === 'geographic' ? CATEGORY_GROUP_ORDER[0] : 'measurements',
         selectedMeasurement: null,
         selectedMeasurementSourceIndex: 0,
       };
