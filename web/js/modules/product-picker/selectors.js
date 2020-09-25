@@ -52,7 +52,10 @@ export const getMeasurementSource = createSelector(
 
 export const getCategoryConfig = createSelector(
   [getConfig, getCategoryType],
-  ({ categories }, categoryType) => (categoryType === 'measurements'
-    ? categories['hazards and disasters']
-    : categories[categoryType]),
+  ({ categories }, categoryType, categoryNames) => {
+    const CATEGORY_NAMES = Object.keys(categories);
+    return categoryType === 'measurements'
+      ? categories[CATEGORY_NAMES[0]]
+      : categories[categoryType];
+  },
 );

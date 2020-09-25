@@ -21,10 +21,17 @@ import {
   RESET_STATE,
 } from './constants';
 
+const CATEGORY_NAMES_ORDER = [
+  'hazards and disasters',
+  'science disciplines',
+  'featured',
+];
+
 export const productPickerState = {
   mode: 'category',
   category: undefined,
-  categoryType: 'hazards and disasters',
+  categoryTabNames: undefined,
+  categoryType: undefined,
   filters: [],
   showMobileFacets: true,
   searchTerm: '',
@@ -36,8 +43,19 @@ export const productPickerState = {
   recentLayers: [],
 };
 
-export function getInitialState(config) {
-  return productPickerState;
+
+export function getInitialState({ categories }) {
+  Object.keys(categories).forEach((name) => {
+    if (!CATEGORY_NAMES_ORDER.includes(name)) {
+      CATEGORY_NAMES_ORDER.push(name);
+    }
+  });
+
+  return {
+    ...productPickerState,
+    categoryType: CATEGORY_NAMES_ORDER[0],
+    categoryTabNames: CATEGORY_NAMES_ORDER,
+  };
 }
 
 export function productPickerReducer(state = productPickerState, action) {
@@ -137,7 +155,7 @@ export function productPickerReducer(state = productPickerState, action) {
         selectedLayer: null,
         showMobileFacets: true,
         category: null,
-        categoryType: 'hazards and disasters',
+        categoryType: CATEGORY_NAMES_ORDER[0],
         selectedMeasurementSourceIndex: 0,
       };
     }
@@ -228,7 +246,7 @@ export function productPickerReducer(state = productPickerState, action) {
         searchTerm: '',
         selectedLayer: null,
         category: null,
-        categoryType: action.projection === 'geographic' ? 'hazards and disasters' : 'measurements',
+        categoryType: action.projection === 'geographic' ? CATEGORY_NAMES_ORDER[0] : 'measurements',
         selectedMeasurement: null,
         selectedMeasurementSourceIndex: 0,
       };
