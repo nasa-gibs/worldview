@@ -255,7 +255,6 @@ function mapStateToProps(state, ownProps) {
   } = state;
   const {
     mode,
-    categoryTabNames,
     categoryType,
     listScrollTop,
     selectedMeasurement,
@@ -266,7 +265,7 @@ function mapStateToProps(state, ownProps) {
     browser,
     mode,
     categoryType,
-    categoryTabNames,
+    categoryTabNames: config.categoryGroupOrder,
     measurementConfig: config.measurements,
     layerConfig: layers.layerConfig,
     listScrollTop,
