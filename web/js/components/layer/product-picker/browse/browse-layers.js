@@ -30,25 +30,10 @@ import {
 import RecentLayersList from './recent-layers';
 import safeLocalStorage from '../../../../util/local-storage';
 
-const CATEGORIES = [
-  'hazards and disasters',
-  'scientific',
-  'featured',
-];
-const GEOGRAPHIC_TAB_KEYS = [
-  ...CATEGORIES,
-];
-const POLAR_TAB_KEYS = [
-  'measurements',
-];
-if (safeLocalStorage.enabled) {
-  GEOGRAPHIC_TAB_KEYS.push('recent');
-  POLAR_TAB_KEYS.push('recent');
-}
-
 function BrowseLayers (props) {
   const {
     browser,
+    categoryTabNames,
     categoryType,
     mode,
     width,
@@ -60,6 +45,17 @@ function BrowseLayers (props) {
     toggleRecentLayersTab,
     clearRecentLayers,
   } = props;
+
+  const GEOGRAPHIC_TAB_KEYS = [
+    ...categoryTabNames,
+  ];
+  const POLAR_TAB_KEYS = [
+    'measurements',
+  ];
+  if (safeLocalStorage.enabled) {
+    GEOGRAPHIC_TAB_KEYS.push('recent');
+    POLAR_TAB_KEYS.push('recent');
+  }
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [tooltipVisible, toggleTooltip] = useState(false);
@@ -83,7 +79,7 @@ function BrowseLayers (props) {
       toggleRecentLayersTab();
     } else if (key === 'measurements') {
       toggleMeasurementsTab();
-    } else if (CATEGORIES.includes(key)) {
+    } else if (categoryTabNames.includes(key)) {
       selectCategoryType(key);
     }
   };
@@ -119,7 +115,7 @@ function BrowseLayers (props) {
     );
     const tab = (sortKey) => (
       <NavLink onClick={() => selectTab(sortKey)}>
-        {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
+        {sortKey}
       </NavLink>
     );
 
@@ -218,6 +214,7 @@ function BrowseLayers (props) {
 
 BrowseLayers.propTypes = {
   browser: PropTypes.object,
+  categoryTabNames: PropTypes.array,
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
   mode: PropTypes.string,
@@ -258,6 +255,7 @@ function mapStateToProps(state, ownProps) {
   } = state;
   const {
     mode,
+    categoryTabNames,
     categoryType,
     listScrollTop,
     selectedMeasurement,
@@ -268,6 +266,7 @@ function mapStateToProps(state, ownProps) {
     browser,
     mode,
     categoryType,
+    categoryTabNames,
     measurementConfig: config.measurements,
     layerConfig: layers.layerConfig,
     listScrollTop,
