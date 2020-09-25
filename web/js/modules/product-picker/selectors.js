@@ -52,10 +52,10 @@ export const getMeasurementSource = createSelector(
 
 export const getCategoryConfig = createSelector(
   [getConfig, getCategoryType],
-  ({ categories }, categoryType, categoryNames) => {
-    const CATEGORY_NAMES = Object.keys(categories);
+  ({ categories, categoryGroupOrder }, categoryType) => {
+    const [firstTab] = categoryGroupOrder;
     return categoryType === 'measurements'
-      ? categories[CATEGORY_NAMES[0]]
+      ? categories[firstTab]
       : categories[categoryType];
   },
 );
