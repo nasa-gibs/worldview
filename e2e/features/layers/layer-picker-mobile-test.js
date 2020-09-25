@@ -66,7 +66,7 @@ module.exports = {
   },
   'Clicking a measurement': (c) => {
     c.click(aodAllMeasurement);
-    c.waitForElementVisible(aodAllMeasurementContents, 5000000000, (e) => {
+    c.waitForElementVisible(aodAllMeasurementContents, TIME_LIMIT, (e) => {
       c.expect.element(sourceMetadataCollapsed).to.be.present;
       // Checkboxes for two layers are visible
       c.expect.element(aodCheckboxMODIS).to.be.present;
