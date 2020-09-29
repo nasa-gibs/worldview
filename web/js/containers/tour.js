@@ -421,6 +421,7 @@ class Tour extends React.Component {
               currentTourStep={currentStep}
               tourSteps={currentStory.steps}
               map={map.ui.selected}
+              tourComplete={!modalInProgress}
             />
           )}
           {modalStart
