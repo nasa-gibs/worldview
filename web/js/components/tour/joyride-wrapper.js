@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-// import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Joyride from 'react-joyride';
+import Joyride, { ACTIONS, EVENTS, STATUS } from 'react-joyride';
 
 const placeholderElements = [];
 
@@ -28,7 +27,8 @@ function JoyrideWrapper ({
     zIndex: 1050,
   };
 
-  // const [joyrideState, setJoyrideState] = useState({});
+  const [stepIndex, setStepIndex] = useState();
+  const [run, setRun] = useState(false);
 
   useEffect(
     () => {
@@ -68,14 +68,41 @@ function JoyrideWrapper ({
     }
   });
 
-  return (
+  useEffect(() => {
+    setRun(false);
+    setStepIndex(undefined);
+    setTimeout(() => {
+      if (steps && steps.length) {
+        setStepIndex(0);
+        setRun(true);
+      }
+    });
+  }, [currentTourStep]);
+
+  function joyrideStateCallback(data) {
+    const {
+      action, index, type, status,
+    } = data;
+
+    if ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)) {
+      setStepIndex(index + (action === ACTIONS.PREV ? -1 : 1));
+    }
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+      setStepIndex(0);
+      setRun(false);
+    }
+  }
+
+  return !run ? null : (
     <Joyride
+      run={run}
       steps={steps || []}
+      stepIndex={stepIndex}
       continuous={continuous}
       spotlightClicks={spotlightClicks}
       disableOverlayClose={disableOverlayClose}
       styles={{ options: styleOptions }}
-      // callback={setJoyrideState}
+      callback={joyrideStateCallback}
       disableScrolling
       debug
     />
