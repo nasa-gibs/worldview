@@ -9,6 +9,17 @@ function getDefaultObj (projections) {
   return DEFAULT_OBJ;
 }
 
+function getLayersCheckProjections (allProjections) {
+  const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
+  const recentLayers = JSON.parse(recentLayersJson) || getDefaultObj(allProjections);
+  if (Object.keys(recentLayers).length !== allProjections.length) {
+    allProjections.forEach((proj) => {
+      recentLayers[proj] = recentLayers[proj] || [];
+    });
+  }
+  return recentLayers;
+}
+
 export function getRecentLayers(layerConfig, proj) {
   const byUse = (a, b) => {
     if (a.count > b.count) return -1;
@@ -20,7 +31,7 @@ export function getRecentLayers(layerConfig, proj) {
   const toLayerObj = ({ id }) => layerConfig[id];
   const filterUnknownLayers = (layerDef) => layerDef !== undefined;
   const layers = JSON.parse(safeLocalStorage.getItem(RECENT_LAYERS));
-  return layers ? layers[proj].sort(byUse).map(toLayerObj).filter(filterUnknownLayers) : [];
+  return layers && layers[proj] ? layers[proj].sort(byUse).map(toLayerObj).filter(filterUnknownLayers) : [];
 }
 
 export function clearRecentLayers() {
@@ -36,8 +47,7 @@ export function clearSingleRecentLayer(layer, allProjections) {
     id: layerId,
     projections: layerProjections,
   } = layer;
-  const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
-  const recentLayers = JSON.parse(recentLayersJson) || getDefaultObj(allProjections);
+  const recentLayers = getLayersCheckProjections(allProjections);
   Object.keys(layerProjections).forEach((proj) => {
     const layers = recentLayers[proj];
     recentLayers[proj] = layers.filter(({ id }) => id !== layerId);
@@ -57,9 +67,7 @@ export function updateRecentLayers(layer, allProjections) {
     id: layerId,
     projections: layerProjections,
   } = layer;
-  const recentLayersJson = safeLocalStorage.getItem(RECENT_LAYERS);
-  const recentLayers = JSON.parse(recentLayersJson) || getDefaultObj(allProjections);
-
+  const recentLayers = getLayersCheckProjections(allProjections);
   Object.keys(layerProjections).forEach((proj) => {
     const layers = recentLayers[proj];
     const existingEntry = layers.find(({ id }) => id === layerId);
