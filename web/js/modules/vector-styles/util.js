@@ -217,8 +217,73 @@ function getModalOffset(dimensionProps) {
 function getModalContentsAtPixel(mapProps, config, compareState) {
   const metaArray = [];
   const selected = {};
+  let isCoordinatesMarker = false;
   const { pixels, map, swipeOffset } = mapProps;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+    const featureId = feature.getId();
+    if (featureId === 'coordinates-map-maker') {
+      const featureProperties = feature.getProperties();
+      selected.COORDS = ['COORDS TEST1'];
+
+      const { latitude, longitude, reverseGeocodeResults } = featureProperties;
+      const { address, error } = reverseGeocodeResults;
+
+      let title;
+      if (error) {
+        title = `${latitude}, ${longitude}`;
+      } else if (address) {
+        const { Match_addr } = address;
+        title = Match_addr;
+      }
+
+      const obj = {
+        legend: [
+          // {
+          //   DataType: 'string',
+          //   Description: 'Name of Nuclear Plant',
+          //   Function: 'Identify',
+          //   Identifier: 'Plant',
+          //   IsLabel: true,
+          //   IsOptional: false,
+          //   Title: 'Plant Site Name',
+          // },
+          {
+            DataType: 'float',
+            Description: 'Latitude in Decimal Degrees',
+            Function: 'Describe',
+            Identifier: 'Latitude',
+            IsLabel: false,
+            IsOptional: false,
+            Title: 'Latitude',
+            Units: '°',
+          },
+          {
+            DataType: 'float',
+            Description: 'Longitude in Decimal Degrees',
+            Function: 'Describe',
+            Identifier: 'Longitude',
+            IsLabel: false,
+            IsOptional: false,
+            Title: 'Longitude',
+            Units: '°',
+          },
+        ],
+        features: {
+          // Plant: 'TEST FEATURES Plant',
+          Latitude: latitude,
+          Longitude: longitude,
+        },
+        id: 'TEST coords id',
+        title,
+        subTitle: 'TEST SUBTITLE',
+        featureTitle: title,
+
+      };
+      metaArray.push(obj);
+      isCoordinatesMarker = true;
+      return { selected, metaArray, isCoordinatesMarker };
+    }
+
     const def = lodashGet(layer, 'wv.def');
     if (!def) {
       return;
@@ -257,7 +322,8 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
-  return { selected, metaArray };
+  console.log(selected, metaArray);
+  return { selected, metaArray, isCoordinatesMarker };
 }
 /**
  * Get organized vector modal contents for clicked
@@ -281,12 +347,13 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   };
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
-  const { selected, metaArray } = getModalContentsAtPixel(mapProps, config, compare);
+  const { selected, metaArray, isCoordinatesMarker } = getModalContentsAtPixel(mapProps, config, compare);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
+    isCoordinatesMarker,
   };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {

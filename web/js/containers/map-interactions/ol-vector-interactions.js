@@ -12,6 +12,7 @@ import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
 import { hasNonClickableVectorLayer } from '../../modules/layers/util';
 import vectorDialog from '../vector-dialog';
+import coordinatesDialog from '../coordinates-dialog';
 import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
@@ -65,34 +66,40 @@ export class VectorInteractions extends React.Component {
     const {
       lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
-      activateVectorAlert, proj,
+      activateVectorAlert, proj, openCoordinatesDialog,
     } = this.props;
 
     if (measureIsActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
     const clickObj = getDialogObject(pixels, map);
+    console.log(clickObj);
     const metaArray = clickObj.metaArray || [];
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
+    const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
     const dialogId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
 
-    if (metaArray.length) {
-      openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
+    if (isCoordinatesMarker) {
+      openCoordinatesDialog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
     } else {
-      const mapRes = map.getView().getResolution();
-      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
+      if (metaArray.length) {
+        openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
+      } else {
+        const mapRes = map.getView().getResolution();
+        const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
 
-      if (hasNonClickableVectorLayerType) {
-        activateVectorAlert();
+        if (hasNonClickableVectorLayerType) {
+          activateVectorAlert();
+        }
       }
-    }
-    if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
-      selectVectorFeatures(selected);
-    } else if (isVectorModalOpen && !Object.entries(selected).length) {
-      onCloseModal();
-      selectVectorFeatures({});
+      if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
+        selectVectorFeatures(selected);
+      } else if (isVectorModalOpen && !Object.entries(selected).length) {
+        onCloseModal();
+        selectVectorFeatures({});
+      }
     }
   }
 
@@ -187,6 +194,35 @@ function mapStateToProps(state) {
         },
       }));
   },
+  openCoordinatesDialog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
+    const dialogKey = Date.now();
+    dispatch(openCustomContent(dialogId,
+      {
+        backdrop: false,
+        clickableBehindModal: true,
+        desktopOnly: true,
+        isDraggable: true,
+        wrapClassName: 'vector-modal-wrap',
+        modalClassName: 'vector-modal light',
+        CompletelyCustomModal: coordinatesDialog,
+        isResizable: false,
+        dragHandle: '.modal-header',
+        dialogKey,
+        key: dialogKey,
+        vectorMetaObject: lodashGroupBy(metaArray, 'id'),
+        width: isMobile ? 250 : 445,
+        height: 300,
+        offsetLeft,
+        offsetTop,
+        timeout: 0,
+        isOpen: true,
+        onClose: () => {
+          setTimeout(() => {
+            dispatch(selectVectorFeaturesActionCreator({}));
+          }, 1);
+        },
+      }));
+  },
 });
 VectorInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
@@ -202,6 +238,7 @@ VectorInteractions.propTypes = {
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
   proj: PropTypes.object,
+  openCoordinatesDialog: PropTypes.func,
   swipeOffset: PropTypes.number,
   activeLayers: PropTypes.array,
   activateVectorAlert: PropTypes.func,

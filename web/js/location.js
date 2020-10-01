@@ -25,6 +25,8 @@ import { resetLayers, hasSubDaily } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
+import mapLocationToGeosearchState from './modules/geosearch/util';
+import { areCoordinatesWithinExtent } from './modules/geosearch/selectors';
 import mapLocationToSidebarState from './modules/sidebar/util';
 import util from './util/util';
 import mapLocationToDataState from './modules/data/util';
@@ -57,6 +59,11 @@ export const mapLocationToState = (state, location) => {
       stateFromLocation,
       state,
       config,
+    );
+    stateFromLocation = mapLocationToGeosearchState(
+      parameters,
+      stateFromLocation,
+      state,
     );
     stateFromLocation = mapLocationToCompareState(
       parameters,
@@ -426,6 +433,25 @@ const getParameters = function(config, parameters) {
         serialize: (currentItemState, state) => {
           if (state.sidebar.activeTab !== 'download') return undefined;
           return encode(currentItemState);
+        },
+      },
+    },
+    marker: {
+      stateKey: 'geosearch.coordinates',
+      initialState: [],
+      type: 'string',
+      options: {
+        serializeNeedsGlobalState: true,
+        parse: (coordinates) => coordinates,
+        serialize: (coordinates, state) => {
+          const { map } = state;
+          if (map.ui.selected) {
+            const { coordinatesWithinExtent } = areCoordinatesWithinExtent(map, config, coordinates);
+            if (!coordinatesWithinExtent) {
+              return;
+            }
+          }
+          return coordinates;
         },
       },
     },
