@@ -8,6 +8,7 @@
         "tour": true,
         "feedback": true,
         "previewSnapshots": true,
+        "geocodeSearch": true,
         "googleTagManager": {
             "id": "GTM-WNP7MLF"
         },

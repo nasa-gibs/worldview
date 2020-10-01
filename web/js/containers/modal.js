@@ -122,19 +122,23 @@ class ModalContainer extends Component {
               handle={dragHandle}
               disabled={!isDraggable}
             >
-              <Resizable
-                className="resize-box"
-                resizeHandles={['se']}
-                width={width || newProps.width}
-                height={height || newProps.height}
-                minConstraints={[250, 250]}
-                maxConstraints={[495, screenHeight]}
-                handleSize={[8, 8]}
-                onResize={this.onResize}
-                draggableOpts={{ disabled: !isResizable }}
-              >
-                {children}
-              </Resizable>
+              {isResizable
+                ? (
+                  <Resizable
+                    className="resize-box"
+                    resizeHandles={['se']}
+                    width={width || newProps.width}
+                    height={height || newProps.height}
+                    minConstraints={[250, 250]}
+                    maxConstraints={[495, screenHeight]}
+                    handleSize={[8, 8]}
+                    onResize={this.onResize}
+                    draggableOpts={{ disabled: !isResizable }}
+                  >
+                    {children}
+                  </Resizable>
+                )
+                : children}
             </Draggable>
           )}
 

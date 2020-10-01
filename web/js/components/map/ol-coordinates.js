@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import Coordinates from './coordinates';
 import util from '../../util/util';
+import { reverseGeocode } from '../../modules/geosearch/selectors';
 
 export default class OlCoordinates extends React.Component {
   constructor(props) {
@@ -16,20 +17,34 @@ export default class OlCoordinates extends React.Component {
     };
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
+    this.mouseClick = this.mouseClick.bind(this);
     this.changeFormat = this.changeFormat.bind(this);
     this.registerMouseListeners();
   }
 
   componentWillUnmount() {
     const { mouseEvents } = this.props;
+    mouseEvents.on('click', this.mouseClick);
     mouseEvents.off('mousemove', this.mouseMove);
     mouseEvents.off('mouseout', this.mouseOut);
   }
 
   registerMouseListeners() {
     const { mouseEvents } = this.props;
+    mouseEvents.on('click', this.mouseClick);
     mouseEvents.on('mousemove', this.mouseMove);
     mouseEvents.on('mouseout', this.mouseOut);
+  }
+
+  mouseClick() {
+    const { selectCoordinatesToFly, isCoordinateSearchActive } = this.props;
+    const { latitude, longitude } = this.state;
+
+    if (isCoordinateSearchActive) {
+      reverseGeocode([longitude, latitude]).then((results) => {
+        selectCoordinatesToFly([longitude, latitude], results);
+      });
+    }
   }
 
   mouseMove(event, map, crs) {
@@ -110,4 +125,6 @@ export default class OlCoordinates extends React.Component {
 
 OlCoordinates.propTypes = {
   mouseEvents: PropTypes.object.isRequired,
+  isCoordinateSearchActive: PropTypes.bool,
+  selectCoordinatesToFly: PropTypes.func,
 };

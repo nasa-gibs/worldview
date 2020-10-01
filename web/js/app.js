@@ -16,6 +16,8 @@ import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
+// GeoSearch
+import Geosearch from './components/geosearch/geosearch';
 
 // Other/MISC
 import Brand from './brand';
@@ -85,6 +87,7 @@ import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
+import '../css/geosearch.css';
 import '../pages/css/document.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
@@ -177,7 +180,12 @@ class App extends React.Component {
 
   render() {
     const {
-      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, parameters,
+      isAnimationWidgetActive,
+      isTourActive,
+      locationKey,
+      mapMouseEvents,
+      modalId,
+      parameters,
     } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
@@ -197,6 +205,7 @@ class App extends React.Component {
         <div id="wv-animation-widet-case">
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
+        <Geosearch />
         <MeasureButton />
         <Modal key={modalId} />
         <ErrorBoundary>
@@ -235,6 +244,7 @@ export default connect(
   mapDispatchToProps,
 )(App);
 App.propTypes = {
+  // config: PropTypes.object,
   isAnimationWidgetActive: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,

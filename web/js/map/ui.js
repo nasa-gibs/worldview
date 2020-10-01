@@ -34,6 +34,7 @@ import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { UPDATE_ACTIVE_MARKER } from '../modules/geosearch/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
@@ -54,6 +55,7 @@ import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
+import { addCoordinatesMarker, reverseGeocode } from '../modules/geosearch/selectors';
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -196,6 +198,19 @@ export default function mapui(models, config, store, ui) {
     updateProjection(true);
   };
 
+  // add map coordinate marker
+  const addMapMarker = () => {
+    const state = store.getState();
+    const { geosearch } = state;
+    const { activeMarker, coordinates } = geosearch;
+    if (coordinates && coordinates.length > 0) {
+      reverseGeocode(coordinates).then((results) => {
+        const marker = addCoordinatesMarker(activeMarker, config, { ui: self }, coordinates, results);
+        store.dispatch({ type: UPDATE_ACTIVE_MARKER, value: marker });
+      });
+    }
+  };
+
   const flyToNewExtent = function(extent, rotation) {
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
@@ -288,6 +303,7 @@ export default function mapui(models, config, store, ui) {
     }
     updateExtent();
     onResize();
+    addMapMarker();
   }
   /*
    * When page is resised set for mobile or desktop
