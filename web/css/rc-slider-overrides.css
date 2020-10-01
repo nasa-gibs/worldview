@@ -15,3 +15,6 @@
 .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
   box-shadow: none;
 }
+.rc-slider-tooltip-inner {
+  min-width: 40px;
+}
