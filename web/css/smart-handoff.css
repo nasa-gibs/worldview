@@ -3,20 +3,13 @@
 #smart-handoff-side-panel h1 {
     margin-top: 10px;
     margin-left: 5px;
-    color: gray;
+    color: #AAA;
 }
 #smart-handoff-product-list {
     color: white;
 }
 .button-group {
     text-align: center;
-}
-.button-group input[type="checkbox"] {
-    margin: 10px;
-}
-.button-group label {
-    vertical-align: top;
-    margin-top: 10px;
 }
 #cancel-btn, #continue-btn {
     width: 200px;
@@ -38,25 +31,50 @@
 #smart-handoff-layer-list .layer-item label {
     display: block;
     margin-top: -20px;
-    margin-left: 20px;
+    margin-left: 25px;
 }
 
 #smart-handoff-layer-list .layer-item span {
     color: gray;
-    margin-left: 20px;
-    font-size: 9pt;
+    display: block;
+    margin-left: 25px;
+    margin-top: 5px;
+    font-size: 8pt;
 }
 
-#smart-handoff-layer-list .layer-item hr {
-    border-top: 1px solid #555;
+#smart-handoff-side-panel h1 {
+    margin-left: 0;
+    text-align: center;
+}
+
+#smart-handoff-side-panel hr {
+    border-top: 1px solid #444;
     margin: 0;
     padding: 0;
-    margin-top: 10px;
+    margin-top: 15px;
+}
+
+#smart-handoff-hidden-layer-list {
+    margin: 10px 0px 0px 15px;
+    color: #888;
+}
+
+#smart-handoff-hidden-layer-list h1 {
+    margin-left: 0;
+    text-align: left;
+}
+
+.hidden-layer {
+    margin: 15px 0;
+}
+
+.hidden-layer:last-child {
+    margin-bottom: 0px;
 }
 
 /** Overrides react image crop component  **/
 .ReactCrop {
-    cursor: pointer !important;
+    cursor: default !important;
     z-index: 0 !important;
 }
 
@@ -115,6 +133,7 @@
     width: 100%;
     padding: 20px;
     margin: 25px 0;
+    border-radius: 10px;
 }
 #layer-info h1 {
     font-size: 10pt;
@@ -140,12 +159,26 @@
    line-height: 0.1em;
    margin: 10px 0 20px;
 }
-
 #toggle-more-info h2 span {
     background:#191a1b;
     padding:0 15px;
 }
-
+.checkbox-footer {
+    margin-top: 15px;
+    border-top: 1px solid #333;
+    text-align: center;
+}
+.checkbox-footer label{
+    vertical-align: top;
+    padding: 2px;
+    margin-top: 20px;
+}
+#hide-earthdata-modal-checkbox {
+    margin: 20px 5px 5px 0px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
 /** Overrides the modal component styles */
 #transferring-to-earthdata-search.modal-dialog .modal-body {
     background: #191a1b !important;

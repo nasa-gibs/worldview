@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import {
+  InputGroup, InputGroupText,
+} from 'reactstrap';
 import Button from '../../components/util/button';
+import Checkbox from '../../components/util/checkbox';
+import safeLocalStorage from '../../util/local-storage';
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -97,14 +102,18 @@ function SmartHandoffModal({
         />
       </div>
 
-      <div className="button-group">
-        <input name="show-earthdata-modal" type="checkbox" />
+      <div className="checkbox-footer">
+        <input name="show-earthdata-modal" id="hide-earthdata-modal-checkbox" type="checkbox" />
         <label htmlFor="show-earthdata-modal">Do not show this message again.</label>
       </div>
 
     </div>
 
   );
+}
+
+function hideEarthdataModal() {
+  console.log('ticked');
 }
 
 /**

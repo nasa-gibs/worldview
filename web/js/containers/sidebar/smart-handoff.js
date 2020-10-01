@@ -43,6 +43,8 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       selectedLayer: null,
+      availableGranules: null,
+      currentExtent: null,
     };
 
     this.debounceBoundaryUpdate = lodashDebounce(onBoundaryChange, 200);
@@ -68,8 +70,33 @@ class SmartHandoff extends Component {
     this.debounceBoundaryUpdate(newBoundaries);
   }
 
-  onLayerSelected(layer) {
-    this.setState({ selectedLayer: layer });
+  onLayerChange(layer, currentExtent) {
+    this.setState({ selectedLayer: layer }, () => this.updateGranuleCount(currentExtent));
+  }
+
+  async updateGranuleCount(currentExtent) {
+    const { selectedDate } = this.props;
+    const { selectedLayer } = this.state;
+    const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
+    const endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
+    const dateRange = `${startDate},${endDate}`;
+
+    const url = 'https://cmr.earthdata.nasa.gov/search/granules.json?'
+                + `temporal=${dateRange}&`
+                + `collection_concept_id=${selectedLayer.conceptId}&`
+                + `day_night_flag=${selectedLayer.daynight}&`
+                + `bounding_box=${currentExtent.southWest},${currentExtent.northEast}&`
+                + 'include_facets=v2&'
+                + 'page_size=0';
+
+    const granuleCount = await fetch(url, { timeout: 10000 })
+      .then(async(response) => {
+        const result = await response.json();
+        return result.feed.facets.children[0].children[0].children[0].count;
+      })
+      .catch((error) => 'NONE');
+
+    this.setState({ availableGranules: granuleCount });
   }
 
   /**
@@ -77,7 +104,6 @@ class SmartHandoff extends Component {
    */
   render() {
     const {
-      isLayerSelected,
       map,
       screenWidth,
       screenHeight,
@@ -88,19 +114,19 @@ class SmartHandoff extends Component {
       selectedDate,
     } = this.props;
 
-    /** Determine if data-download 'smart-handoff' tab is activated by user */
+    let { selectedLayer } = this.state;
+    const { availableGranules } = this.state;
+
+    // Determine if data-download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
-    /** Bounardies referencing the coordinates displayed around image crop */
-    const { boundaries, selectedLayer } = this.state;
+    // Bounardies referencing the coordinates displayed around image crop
+    const { boundaries } = this.state;
     const {
       x, y, x2, y2,
     } = boundaries;
 
-    /** Keeps image crop to always be displayed on the map */
-    const keepSelection = true;
-
-    /** Retrieve the lat/lon coordinates based on the defining boundary and map projection */
+    // Retrieve the lat/lon coordinates based on the defining boundary and map projection
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
       map.ui.selected,
@@ -109,33 +135,50 @@ class SmartHandoff extends Component {
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
-    const extentCoords = {
+    const currentExtent = {
       southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
       northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
     };
 
-    const showModal = true;
+
+    if (selectedLayer && currentExtent) {
+      // lodashDebounce(() => this.onUpdateExtent(currentExtent), 300);
+    }
+
+    // Default modal state
+    const showModal = false;
+
+    // Determine if existing selected layer is active still and visibility toggle is 'ON'
+    const isLayerStillActive = activeLayers.find((layer) => selectedLayer === layer && layer.visible);
+
+    // Determine if any hidden layers are available for download; if so, displays hidden layers */
+    const areHiddenLayersAvailable = activeLayers.filter((layer) => layer.conceptId !== undefined && !layer.visible).length;
+
+    if (!isLayerStillActive) {
+      selectedLayer = null;
+    }
+
 
     return (
       <div id="smart-handoff-side-panel">
-        <h1>Select a layer to download:</h1>
 
         {/** Listing of layers that are available to download via Earthdata Search */}
+        <h1>Select an available layer to download:</h1>
         <div id="smart-handoff-layer-list">
           {activeLayers.map((layer, i) => {
-            if (layer.conceptId) {
+            if (layer.conceptId && layer.visible) {
               return (
-                <div key={layer.conceptId} className="layer-item">
+                <div className="layer-item">
                   <input
                     id={layer.id}
                     type="radio"
                     value={layer.conceptId}
+                    checked={selectedLayer && selectedLayer.id === layer.id}
                     name="smart-handoff-layer-radio"
-                    onClick={() => this.onLayerSelected(layer)}
+                    onClick={() => this.onLayerChange(layer, currentExtent)}
                   />
                   <label htmlFor={layer.id}>{layer.title}</label>
                   <span>{layer.subtitle}</span>
-                  <hr />
 
                 </div>
               );
@@ -144,17 +187,52 @@ class SmartHandoff extends Component {
           })}
         </div>
 
+
         { /** Download button that transfers user to NASA's Earthdata Search */ }
         <Button
           onClick={() => {
-            if (showModal) showWarningModal(selectedDate, selectedLayer, extentCoords);
-            else openEarthDataSearch(selectedDate, selectedLayer, extentCoords)();
+            if (showModal) showWarningModal(selectedDate, selectedLayer, currentExtent);
+            else openEarthDataSearch(selectedDate, selectedLayer, currentExtent)();
           }}
           id="download-btn"
           text="Download"
           className="red"
-          disabled={isLayerSelected}
+          valid={selectedLayer}
         />
+
+        { availableGranules !== null && (
+        <div>
+          <h1>
+            {' '}
+            Total Available Granules:
+            {' '}
+            {availableGranules}
+            {' '}
+          </h1>
+        </div>
+        )}
+
+        {/** Listing of layers that are excluded from downloading */}
+        { areHiddenLayersAvailable > 0 && (
+          <div>
+            <hr />
+            <div id="smart-handoff-hidden-layer-list">
+              <h1>Hidden layers:</h1>
+              {activeLayers.map((layer, i) => {
+                if (layer.conceptId && !layer.visible) {
+                  return (
+                    <div className="hidden-layer">
+                      <p>{layer.title}</p>
+                      <p>{layer.subtitle}</p>
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </div>
+        )}
+
 
         { /** Image crop overlay used to determine user's area of interest */ }
         <Crop
@@ -166,7 +244,7 @@ class SmartHandoff extends Component {
           maxHeight={screenHeight}
           maxWidth={screenWidth}
           onChange={this.onBoundaryChange}
-          keepSelection={keepSelection}
+          keepSelection
           bottomLeftStyle={{
             left: x,
             top: y2 + 5,
@@ -189,7 +267,7 @@ class SmartHandoff extends Component {
 }
 
 const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () => {
-  const { conceptId } = selectedLayer;
+  const { conceptId, daynight } = selectedLayer;
   const { southWest, northEast } = extentCoords;
 
   const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
@@ -197,7 +275,11 @@ const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () =>
 
   const dateRange = `${startDate},${endDate}`;
 
-  const earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&pg[0][qt]=${dateRange}&pg[0][dnf]=DAY&sb=${southWest},${northEast}&m=-30.59375!-210.9375!0!1!0!0,2`;
+  let earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&[qt]=${dateRange}&sb=${southWest},${northEast}&m=0.0!-180.0!0!1!0!0,2`;
+
+  if (daynight) {
+    earthDataSearchURL += `&pg[0][dnf]=${daynight}`;
+  }
 
   window.open(earthDataSearchURL, '_blank');
   /* Example URL string
@@ -214,17 +296,12 @@ const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () =>
   // API Call to CMR
 
   // Standard vs NRT
-
-  // Check DNF for ESD - dont put in query 
-
-
 };
 
 /**
  * Handle type-checking of defined properties
  */
 SmartHandoff.propTypes = {
-  isLayerSelected: PropTypes.bool,
   isActive: PropTypes.bool,
   activeLayers: PropTypes.array,
   map: PropTypes.object.isRequired,
