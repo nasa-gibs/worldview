@@ -414,6 +414,7 @@ class Tour extends React.Component {
     if (!modalStart && !modalInProgress && !modalComplete) {
       this.setState({ modalStart: true });
     }
+    const { extent } = map;
     return (
       <ErrorBoundary>
         <div>
@@ -422,7 +423,10 @@ class Tour extends React.Component {
               currentTourStep={currentStep}
               tourSteps={currentStory.steps}
               map={map.ui.selected}
+              mapExtent={extent}
               tourComplete={!modalInProgress}
+              screenHeight={screenHeight}
+              screenWidth={screenWidth}
             />
           )}
           {modalStart

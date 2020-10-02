@@ -5,7 +5,7 @@ import Joyride from 'react-joyride';
 const placeholderElements = [];
 
 export default function JoyrideWrapper ({
-  tourSteps, currentTourStep, map, tourComplete,
+  tourSteps, currentTourStep, map, tourComplete, screenHeight, screenWidth, mapExtent,
 }) {
   const currentStepObj = tourSteps[currentTourStep - 1];
   const {
@@ -27,36 +27,52 @@ export default function JoyrideWrapper ({
     zIndex: 1050,
   };
 
+  function setPlaceholderLocation (element, targetCoordinates) {
+    if (!map) return;
+    const { topLeft, bottomRight } = targetCoordinates;
+    let [x1, y1] = map.getPixelFromCoordinate(topLeft) || [0, 0];
+    let [x2, y2] = map.getPixelFromCoordinate(bottomRight) || [0, 0];
+    x1 = x1.toFixed(0);
+    y1 = y1.toFixed(0);
+    x2 = x2.toFixed(0);
+    y2 = y2.toFixed(0);
+    element.style.top = `${y1}px`;
+    element.style.left = `${x1}px`;
+    element.style.height = `${y2 - y1}px`;
+    element.style.width = `${x2 - x1}px`;
+  }
+
   // Add placeholder DOM elements based on map coordinates so Joyride can place
   // a beacon on them
-  useEffect(() => {
+  function addPlaceholderElements() {
     (steps || []).forEach((step) => {
       const { target, targetCoordinates } = step || {};
       const existingEl = document.querySelector(target);
-
       if (map && target && targetCoordinates && !existingEl) {
         const placeholderEl = document.createElement('span');
-        const { topLeft, bottomRight } = targetCoordinates;
-        let [x1, y1] = map.getPixelFromCoordinate(topLeft) || [0, 0];
-        let [x2, y2] = map.getPixelFromCoordinate(bottomRight) || [0, 0];
-        x1 = x1.toFixed(0);
-        y1 = y1.toFixed(0);
-        x2 = x2.toFixed(0);
-        y2 = y2.toFixed(0);
         placeholderEl.id = target.substr(1, target.length);
         placeholderEl.style.position = 'absolute';
-        placeholderEl.style.top = `${y1}px`;
-        placeholderEl.style.left = `${x1}px`;
-        placeholderEl.style.height = `${y2 - y1}px`;
-        placeholderEl.style.width = `${x2 - x1}px`;
         placeholderEl.style.zIndex = '0';
         placeholderEl.style.pointerEvents = 'none';
+        setPlaceholderLocation(placeholderEl, targetCoordinates);
         document.querySelector('body').appendChild(placeholderEl);
         placeholderElements.push(placeholderEl);
       }
     });
-  }, [currentTourStep]);
+  }
 
+  function updateTargetsOnResize() {
+    (steps || []).forEach((step) => {
+      const { target, targetCoordinates } = step || {};
+      const placeholderEl = document.querySelector(target);
+      if (targetCoordinates) {
+        setPlaceholderLocation(placeholderEl, targetCoordinates);
+      }
+    });
+  }
+
+  useEffect(addPlaceholderElements, [currentTourStep]);
+  useEffect(updateTargetsOnResize, [screenHeight, screenWidth, mapExtent]);
   // When tour is complete, remove all placeholder elements
   useEffect(() => {
     if (tourComplete) {
@@ -66,7 +82,7 @@ export default function JoyrideWrapper ({
 
   return (
     <Joyride
-      key={currentTourStep}
+      key={currentTourStep + mapExtent}
       steps={steps || []}
       continuous={continuous}
       spotlightClicks={spotlightClicks}
@@ -81,6 +97,9 @@ export default function JoyrideWrapper ({
 JoyrideWrapper.propTypes = {
   currentTourStep: PropTypes.number,
   map: PropTypes.object,
+  mapExtent: PropTypes.array,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
   tourComplete: PropTypes.bool,
   tourSteps: PropTypes.array,
 };
