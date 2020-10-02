@@ -86,13 +86,18 @@ const createPin = function(coordinates, transformedCoordinates = false, reverseG
     rainfall: 500,
   });
 
+  // TODO: test pin colors
+  // o, o2, o3, b, map-pin (default)
+  const src = localStorage.mapPin || 'map-pin';
+
+
   const iconStyle = new Style({
     image: new Icon({
       anchorOrigin: 'bottom-left',
       anchorXUnits: 'fraction',
       anchorYUnits: 'pixels',
       scale: 0.5,
-      src: 'images/map-pin.png',
+      src: `images/${src}.png`,
     }),
   });
 
@@ -120,9 +125,10 @@ const GEOCODE_OPTIONS = {
 
 export async function suggest(val) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
+  const encodedValue = encodeURIComponent(val);
 
   try {
-    const response = await fetch(`${urlBase}suggest?text=${val}&f=json`, requestOptions);
+    const response = await fetch(`${urlBase}suggest?text=${encodedValue}&f=json`, requestOptions);
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {
@@ -134,7 +140,7 @@ export async function processMagicKey(magicKey) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
 
   try {
-    const response = await fetch(`${urlBase}findAddressCandidates?f=json&magicKey=${magicKey}=`, requestOptions);
+    const response = await fetch(`${urlBase}findAddressCandidates?f=json&outFields=*&magicKey=${magicKey}=`, requestOptions);
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {
@@ -144,10 +150,9 @@ export async function processMagicKey(magicKey) {
 
 export async function reverseGeocode(coordinates) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
-  console.log(`${urlBase}reverseGeocode?location=${coordinates}&f=json`);
+
   try {
     const response = await fetch(`${urlBase}reverseGeocode?location=${coordinates}&f=json`, requestOptions);
-
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {

@@ -16,7 +16,7 @@ import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
-// GeoSearch
+// Geosearch
 import Geosearch from './components/geosearch/geosearch';
 
 // Other/MISC
@@ -181,6 +181,7 @@ class App extends React.Component {
   render() {
     const {
       isAnimationWidgetActive,
+      isMobile,
       isTourActive,
       locationKey,
       mapMouseEvents,
@@ -189,6 +190,7 @@ class App extends React.Component {
     } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
+        {!isMobile && <Geosearch />}
         <Toolbar />
         <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
@@ -205,7 +207,6 @@ class App extends React.Component {
         <div id="wv-animation-widet-case">
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
-        <Geosearch />
         <MeasureButton />
         <Modal key={modalId} />
         <ErrorBoundary>
@@ -220,6 +221,7 @@ function mapStateToProps(state, ownProps) {
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
+    isMobile: state.browser.lessThan.medium,
     isTourActive: state.tour.active,
     tour: state.tour,
     config: state.config,
@@ -246,6 +248,7 @@ export default connect(
 App.propTypes = {
   // config: PropTypes.object,
   isAnimationWidgetActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,

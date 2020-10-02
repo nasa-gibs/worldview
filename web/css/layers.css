@@ -590,7 +590,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .category-width .layer-modal-content {
     height: calc(var(--vh, 1vh) * 100 - 135px);
   }

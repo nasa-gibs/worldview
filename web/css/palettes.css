@@ -174,7 +174,7 @@
   max-width: 231px;
   margin-left: 0;
 }
-@media (max-width: 740px) {
+@media (max-width: 768px) {
   .wv-palettes-colorbar {
     width: 100%;
     max-width: 100%;
