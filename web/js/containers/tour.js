@@ -40,6 +40,7 @@ class Tour extends React.Component {
     const currentStoryIndex = lodashFindIndex(storyOrder, (id) => id === currentStoryId) || null;
     const currentStory = currentStoryIndex >= 0 ? stories[currentStoryId] : {};
     const steps = lodashGet(currentStory, 'steps') || [];
+
     this.state = {
       modalStart: !currentStoryId,
       showSupportAlert: currentStoryId && currentStoryIndex === -1,
@@ -489,6 +490,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(selectStoryAction(id));
   },
 });
+
 function mapStateToProps(state) {
   const {
     browser, config, tour, palettes, models, compare, map,

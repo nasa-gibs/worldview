@@ -1,0 +1,117 @@
+{
+  "stories": {
+    "hurricane_dorian_september_joyride": {
+      "id": "hurricane_dorian_september_joyride",
+      "isMock": true,
+      "type": "severe-storm",
+      "title": "Hurricane Dorian JOYRIDE TEST",
+      "description": "Explore Hurricane Dorian with imagery from Geostationary satellites like GOES-East!",
+      "backgroundImage": "dorian_background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "View the Earth Every 10 Minutes with Geostationary Imagery! (GIBS Blog)",
+          "link": "https://wiki.earthdata.nasa.gov/display/GIBS/2019/10/21/View+the+Earth+Every+10+Minutes+with+Geostationary+Imagery"
+        },
+        {
+          "title": "Now Available in NASA Worldview: Earth Every 10 Minutes (Earthdata)",
+          "link": "https://earthdata.nasa.gov/learn/articles/geostationary-in-worldview"
+        }
+      ],
+      "steps": [
+        {
+          "description": "step001.html",
+          "stepLink": "v=-93.6687580338324,18.074163862096903,-60.463679908832404,34.0526794870969&t=2019-09-01-T17%3A00%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "description": "step002.html",
+          "joyride": {
+            "continuous": true,
+            "spotlightClicks": true,
+            "steps": [
+              {
+                "target": "#hideGOES-East_ABI_Band2_Red_Visible_1km",
+                "content": "Turn on and off the Red Visible layer to see the VIIRS Corrected Reflectance image underneath. Note the slight apparent shift in the clouds, which may be due to difference in the satellite angle between the polar orbiting and geostationary satellite.",
+                "placementBeacon": "right"
+              },
+              {
+                "target": ".wv-date-selector-widget",
+                "content": "Note the change in the timeline after we added the geostationary layer! In addition to the date, you can now see the time in Hours and Minutes Z (Zulu Time which is equivalent to UTC - Coordinated Universal Time).",
+                "placementBeacon": "top"
+              },
+              {
+                "target": "#zoom-buttons-group",
+                "content": "To the right of the \"Z\" are the < > increment arrows. Click on \"10 minute\" and see the available options - Year, Month, Day, Hour, Minute and Custom. Click on \"Custom\" and in the Custom Interval Selector the increment has been set to \"10\" and \"Minute\".",
+                "placementBeacon": "top"
+              },
+              {
+                "target": "#current-zoom",
+                "content": "The timescale can also be changed here to HOURS or MINUTES",
+                "placementBeacon": "top"
+              }
+            ]
+          },
+          "stepLink": "v=-90.14178198018385,21.134320929529547,-70.29988831612135,30.682378812342048&t=2019-09-01-T18%3A30%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band2_Red_Visible_1km,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "description": "step003.html",
+          "transition": {
+            "element": "animation",
+            "action": "play"
+          },
+          "stepLink": "v=-93.6687580338324,17.641714595069764,-60.463679908832404,34.48512875412404&t=2019-09-01-T11%3A00%3A00Z&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T11%3A00%3A00Z&ae=2019-09-01-T17%3A00%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared(hidden),GOES-East_ABI_Band2_Red_Visible_1km,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=9&ab=on"
+        },
+        {
+          "description": "step004.html",
+          "stepLink": "v=-93.6687580338324,18.074163862096903,-60.463679908832404,34.0526794870969&t=2019-09-01-T17%3A00%3A00Z&z=5&ics=true&ici=5&icd=10&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible_1km,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)",
+          "joyride": {
+            "continuous": true,
+            "spotlightClicks": true,
+            "steps": [
+              {
+                "target": "#dorian-box-1",
+                "targetCoordinates": {
+                  "topLeft": [-79, 29.5],
+                  "bottomRight": [-72, 23]
+                },
+                "content": "Hover over the different colors in the image on the map...",
+                "placementBeacon": "top"
+              },
+              {
+                "target": "#GOES-East_ABI_Band13_Clean_Infrared-Clean_Longwave_Infrared_Window_Band_0_legend0colorbar",
+                "content": "...to see the corresponding temperature value here.",
+                "placementBeacon": "top"
+              },
+              {
+                "target": "#dorian-box-2",
+                "targetCoordinates": {
+                  "topLeft": [-89, 15.5],
+                  "bottomRight": [-71, 14]
+                },
+                "content": "The waters of the carribean...",
+                "placementBeacon": "top"
+              }
+            ]
+          }
+        },
+        {
+          "description": "step005.html",
+          "stepLink": "v=-95.39338920697065,17.70570720628043,-62.18831108197065,35.22206449510876&t=2019-09-01-T17%3A00%3A00Z&z=4&ics=true&ici=5&icd=10&as=2019-09-01-T17%3A00%3A00Z&ae=2019-09-01-T23%3A20%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible_1km(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden,opacity=0.96),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&av=9&ab=on",
+          "joyride": {
+            "steps": [
+              {
+                "target": ".wv-anim-play-case",
+                "content": "Click the \"Play\" button to view an animation of the hurricane on 1 September in 10 minute increments.",
+                "placementBeacon": "top"
+              }
+            ]
+          }
+        },
+        {
+          "description": "step006.html",
+          "stepLink": "v=-113.9154405233163,7.210364622413046,-47.50528427331633,40.897192940521585&t=2019-09-01-T17%3A00%3A00Z&ics=true&ici=4&icd=24&as=2019-09-01-T17%3A00%3A00Z&ae=2019-09-05-T17%3A00%3A00Z&l=Reference_Labels,Reference_Features,Coastlines,GOES-East_ABI_Band13_Clean_Infrared,GOES-East_ABI_Band2_Red_Visible_1km(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&al=true&ab=on"
+        }
+      ]
+    }
+  }
+}
