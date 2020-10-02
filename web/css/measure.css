@@ -2,7 +2,8 @@
   position: absolute;
   bottom: 148px;
   right: 10px;
-  padding: 6px 10px;
+  padding: 2.5px 5.5px;
+  margin-left: 0;
 }
 
 .modal-dialog.measure-tool-modal {

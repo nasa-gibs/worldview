@@ -30,6 +30,8 @@ import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
+// GeoSearch
+import Geosearch from '../components/geosearch/geosearch';
 
 
 Promise.config({ cancellation: true });
@@ -259,6 +261,7 @@ class toolbarContainer extends Component {
           className="wv-toolbar"
         >
           {this.renderShareButton()}
+          <Geosearch />
           {this.renderProjectionButton()}
           {this.renderSnapshotsButton()}
           {this.renderInfoButton()}

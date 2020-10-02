@@ -15,6 +15,7 @@
   z-index: 10000;
   background: none rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
+  margin-right: 0;
 }
 
 .wv-map-zoom.ui-button-click-prevent {
@@ -27,9 +28,9 @@
 
 .wv-map-zoom svg.svg-inline--fa {
   display: block;
-  width: 40px;
-  padding: 14px;
-  height: 45px;
+  width: 36px;
+  padding: 12px;
+  height: 37px;
 }
 
 .wv-map-zoom:hover {
@@ -45,7 +46,7 @@
 }
 
 .wv-map-zoom-out {
-  top: 195px;
+  top: 189px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -101,24 +102,24 @@
 .wv-map-scale-metric {
   position: absolute;
   z-index: 10;
-  right: 75px;
+  right: 58px;
   color: #fff;
   background-color: rgba(40, 40, 40, 0.85);
   text-shadow: -1px -1px 0 #000,
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000;
-  padding: 3px;
+  padding: 2px;
   border-left: 2px solid #fff;
-  border-right: 2px solid #fff;
+  /* border-right: 2px solid #fff; */
 }
 .wv-map-scale-imperial {
-  bottom: 150px;
+  bottom: 148px;
   border-top: 2px solid #fff;
 }
 
 .wv-map-scale-metric {
-  bottom: 169px;
+  bottom: 165px;
   border-bottom: 2px solid #fff;
 }
 

@@ -98,7 +98,7 @@ class SearchBox extends Component {
   render() {
     const { searchResults } = this.state;
     const { coordinates, inputValue } = this.props;
-    const wrapperStyleWidth = `${coordinates.length > 0 ? '250px' : '283px'}`;
+    const wrapperStyleWidth = `${coordinates.length > 0 ? '260px' : '291px'}`;
 
     return (
       <div className="geosearch-input-container">

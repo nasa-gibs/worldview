@@ -49,12 +49,12 @@ class Geosearch extends React.Component {
     return (
       <Button
         id="wv-geosearch-button"
-        className="geosearch-component-minimized-button"
+        className="wv-toolbar-button"
         title="Search by place name or reverse search using coordinates"
         onTouchEnd={toggleShowGeosearch}
         onMouseDown={toggleShowGeosearch}
-        disabled={isExpanded}
-        color="none"
+        // disabled={isExpanded}
+        // color="none"
       >
         <FontAwesomeIcon icon={faSearchLocation} size="1x" />
       </Button>

@@ -47,8 +47,14 @@ class SearchComponent extends Component {
 
     return (
       <div className={containerClass}>
-        <div>
-          <InputGroup>
+        <div style={{
+          background: 'rgba(40, 40, 40, 0.85)',
+          borderRadius: '5px',
+        }}
+        >
+          <InputGroup
+            className="geosearch-search-input-group"
+          >
             <InputGroupAddon addonType="prepend">
               <Button
                 className="geosearch-search-minimize-button"
@@ -69,7 +75,7 @@ class SearchComponent extends Component {
               <Button
                 style={{
                   color: `${textEntered ? '#0070c8' : ''}`,
-                  left: `${hasCoordinates ? '244px' : '279px'}`,
+                  left: `${hasCoordinates ? '256px' : '287px'}`,
                 }}
                 disabled={!textEntered}
                 className="geosearch-search-submit-button"

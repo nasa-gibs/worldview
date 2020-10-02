@@ -8,13 +8,15 @@
 
 .wv-toolbar-button,
 [data-whatintent='mouse'] .wv-toolbar-button:focus {
-  font-size: 14.3px;
-  height: 44px;
+  font-size: 20px;
+  /* height: 44px; */
+  height: 38px;
   display: inline-block;
-  margin: 0 0 0 4px;
+  margin: 0 0 0 5px;
   background: rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
-  padding: 5.72px 14.3px;
+  /* padding: 5.72px 14.3px; */
+  padding: 2.5px 8px;
   border-radius: 5px;
   &:focus {
     box-shadow: none;
@@ -33,6 +35,10 @@
 [data-whatintent='keyboard'] .wv-toolbar-button:focus {
   background-color: #eee;
   color: #1a1a1a;
+}
+
+.wv-toolbar-button svg[data-icon="share-square"] {
+  width: 1em;
 }
 
 .wv-toolbar .btn.disabled {

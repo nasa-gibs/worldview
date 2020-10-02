@@ -86,13 +86,18 @@ const createPin = function(coordinates, transformedCoordinates = false, reverseG
     rainfall: 500,
   });
 
+  // TODO: test pin colors
+  // o, o2, o3, b, map-pin (default)
+  const src = localStorage.mapPin || 'map-pin';
+
+
   const iconStyle = new Style({
     image: new Icon({
       anchorOrigin: 'bottom-left',
       anchorXUnits: 'fraction',
       anchorYUnits: 'pixels',
       scale: 0.5,
-      src: 'images/map-pin.png',
+      src: `images/${src}.png`,
     }),
   });
 
