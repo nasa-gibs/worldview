@@ -128,8 +128,10 @@ window.onload = () => {
     // Perform check to see if app was in the midst of a tour
     const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
     if (hasTour) {
+      const isMockTour = parameters.mockTour;
       // Gets the extent of the first tour step and overrides view params
       parameters = util.fromQueryString(hasTour.steps[0].stepLink);
+      parameters.mockTour = isMockTour;
     }
 
     config.pageLoadTime = parameters.now
@@ -172,6 +174,17 @@ window.onload = () => {
     const legacyState = parse(parameters, config, errors);
     layerValidate(errors, config);
     adjustStartDates(config.layers);
+
+    // Remove any mock stories
+    if (!parameters.mockTour) {
+      Object.keys(config.stories).forEach((storyId) => {
+        if (config.stories[storyId].isMock) {
+          delete config.stories[storyId];
+          config.storyOrder = config.storyOrder.filter((id) => id !== storyId);
+        }
+      });
+    }
+
     preloadPalettes(layers, {}, false).then((obj) => {
       config.palettes = {
         custom: obj.custom,
