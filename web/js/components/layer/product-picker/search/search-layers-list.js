@@ -101,7 +101,7 @@ class SearchLayerList extends React.Component {
           // Check that we have a metadata html snippet, rather than a fully
           // formed HTML file. Also avoid executing any script or style tags.
           const isMetadataSnippet = !body.match(/<(head|body|html|style|script)[^>]*>/i);
-          layer.metadata = isMetadataSnippet ? body : errorMessage;
+          layer.metadata = isMetadataSnippet || !body.length ? body : errorMessage;
           selectLayer(layer);
         });
     } else {
@@ -140,7 +140,7 @@ class SearchLayerList extends React.Component {
     }
   }
 
-  renderNoResults () {
+  renderNoResults() {
     const { recentLayerMode } = this.props;
     return recentLayerMode
       ? (<RecentLayersInfo />)
