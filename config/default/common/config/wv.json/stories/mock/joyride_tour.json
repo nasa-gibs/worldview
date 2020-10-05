@@ -8,16 +8,6 @@
       "description": "Explore Hurricane Dorian with imagery from Geostationary satellites like GOES-East!",
       "backgroundImage": "dorian_background.png",
       "backgroundImageHover": "",
-      "readMoreLinks": [
-        {
-          "title": "View the Earth Every 10 Minutes with Geostationary Imagery! (GIBS Blog)",
-          "link": "https://wiki.earthdata.nasa.gov/display/GIBS/2019/10/21/View+the+Earth+Every+10+Minutes+with+Geostationary+Imagery"
-        },
-        {
-          "title": "Now Available in NASA Worldview: Earth Every 10 Minutes (Earthdata)",
-          "link": "https://earthdata.nasa.gov/learn/articles/geostationary-in-worldview"
-        }
-      ],
       "steps": [
         {
           "description": "step001.html",
@@ -31,22 +21,22 @@
             "steps": [
               {
                 "target": "#hideGOES-East_ABI_Band2_Red_Visible_1km",
-                "content": "Turn on and off the Red Visible layer to see the VIIRS Corrected Reflectance image underneath. Note the slight apparent shift in the clouds, which may be due to difference in the satellite angle between the polar orbiting and geostationary satellite.",
+                "content": "THIS IS STEP 1",
                 "placementBeacon": "right"
               },
               {
                 "target": ".wv-date-selector-widget",
-                "content": "Note the change in the timeline after we added the geostationary layer! In addition to the date, you can now see the time in Hours and Minutes Z (Zulu Time which is equivalent to UTC - Coordinated Universal Time).",
+                "content": "THIS IS STEP 2",
                 "placementBeacon": "top"
               },
               {
                 "target": "#zoom-buttons-group",
-                "content": "To the right of the \"Z\" are the < > increment arrows. Click on \"10 minute\" and see the available options - Year, Month, Day, Hour, Minute and Custom. Click on \"Custom\" and in the Custom Interval Selector the increment has been set to \"10\" and \"Minute\".",
+                "content": "THIS IS STEP 3",
                 "placementBeacon": "top"
               },
               {
                 "target": "#current-zoom",
-                "content": "The timescale can also be changed here to HOURS or MINUTES",
+                "content": "THIS IS STEP 4",
                 "placementBeacon": "top"
               }
             ]

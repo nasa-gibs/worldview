@@ -89,7 +89,6 @@ export default function JoyrideWrapper ({
       disableOverlayClose={disableOverlayClose}
       styles={{ options: styleOptions }}
       disableScrolling
-      debug
     />
   );
 }
