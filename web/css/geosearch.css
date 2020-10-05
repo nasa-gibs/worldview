@@ -1,6 +1,6 @@
 .geosearch-results-menu {
   position: absolute;
-  width: 250px;
+  width: 260px;
 }
 
 .geosearch-item:hover {
@@ -47,26 +47,35 @@
 .geosearch-search-submit-container {
   height: 38px;
   position: absolute;
+  top: 0;
+  right: 62px;
 }
 
 .geosearch-search-submit-container .input-group-append .btn {
-  background: #fff;
+  /* background: #fff; */
   border-top: 1px solid #ced4da;
   border-bottom: 1px solid #ced4da;
   margin-right: 2px;
 }
 
 .geosearch-search-submit-container .btn {
-  background: #fff;
+  /* background: #fff; */
+  background: none;
   border: none;
   color: #808080;
+}
+
+.geosearch-coordinate-button-group {
+  margin-left: 0.25px;
 }
 
 .geosearch-coordinate-button-group .btn {
   border: none;
   background: #00457b;
 }
-.geosearch-coordinate-button-group .btn:hover {
+
+.geosearch-coordinate-button-group .btn:hover,
+.geosearch-coordinate-button-group .btn:focus, {
   background-color: #eee;
   color: #00457b;
 }
@@ -99,6 +108,8 @@
   &:focus {
     box-shadow: none;
     -webkit-box-shadow: none;
+    background-color: #eee;
+    color: #1a1a1a;
   }
   &:hover {
     background-color: #eee;
@@ -116,11 +127,22 @@
   border-bottom-right-radius: 5px;
 }
 
+.geosearch-coordinate-button-group .btn:focus {
+  box-shadow: none;
+}
+
 .geosearch-coordinate-group-container.grouped.input-group-append > div > button.geosearch-coordinate-button-addpoint.btn.btn-secondary {
-  border-right: 1px solid #fff;
+  /* border-right: 1px solid #fff; */
   margin-right: 1px;
 }
 
 .geosearch-coordinate-group-container .btn {
   width: 31px;
+}
+
+.dark-input, .dark-input:focus {
+  background: none;
+  background-color: none;
+  color: #fff;
+  box-shadow: none;
 }
