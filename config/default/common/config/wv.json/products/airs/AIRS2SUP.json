@@ -1,7 +1,7 @@
 {
     "products": {
         "AIRS2SUP": {
-            "name": "AIRS/Aqua L2 Support Retrieval (AIRS-only) V006 (AIRS2SUP)",
+            "name": "AIRS/Aqua L2 Support Retrieval (AIRS-only) V7.0 (AIRS2SUP)",
             "handler": "MODISSwath",
             "query": {
                 "shortName": ["AIRS2SUP", "AIRS2SUP_NRT"]

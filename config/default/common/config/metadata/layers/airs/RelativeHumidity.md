@@ -8,19 +8,19 @@ Relative humidity of the air in units of percent at the 500 hPa pressure level, 
 Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
 
 #### Data Product
-Image initially produced with NRT data. Science quality image replaces NRT when available.  
-Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)  
-Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)  
-Field name: `RelHum`; pressure level at element 7  
+Image initially produced with NRT data. Science quality image replaces NRT when available.<br>
+Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)<br>
+Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)<br>
+Field name: `RelHum`; pressure level at element 7<br>
 Resolution: 45 km/pixel at nadir
 
 #### Coverage
-Spatial Coverage: Global  
-Overpasses: Twice daily (day and night)  
+Spatial Coverage: Global<br>
+Overpasses: Twice daily (day and night)<br>
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References
-Data Product: [AIRS2RET_V006](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_V006/summary)
+Data Product: [AIRS2RET](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_7.0/summary)
 
 ### Relative Humidity (L2, 700 hPa, Day | Night)
 Temporal coverage: 30 August 2002 - Present
@@ -32,15 +32,15 @@ Relative humidity of the air in units of percent at the 700 hPa pressure level, 
 Nominal equatorial image resolution 31.25 km/pixel
 
 #### Data Product
-Image initially produced with NRT data. Science quality image replaces NRT when available.  
-Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)  
-Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)  
-Field name: `RelHum`; pressure level at element 5  
+Image initially produced with NRT data. Science quality image replaces NRT when available.
+Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)
+Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)
+Field name: `RelHum`; pressure level at element 5
 Resolution: 45 km/pixel at nadir
 
 #### Coverage
-Spatial Coverage: Global  
-Overpasses: Twice daily (day and night)  
+Spatial Coverage: Global
+Overpasses: Twice daily (day and night)
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References
@@ -56,15 +56,15 @@ Relative humidity in units of per cent at the 850 hPa pressure, approximately 15
 Nominal equatorial image resolution 31.25 km/pixel
 
 #### Data Product
-Image initially produced with NRT data. Science quality image replaces NRT when available.  
-Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)  
-Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)  
-Field name: `RelHum`; pressure level at element 4  
+Image initially produced with NRT data. Science quality image replaces NRT when available.
+Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)
+Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)
+Field name: `RelHum`; pressure level at element 4
 Resolution: 45 km/pixel at nadir
 
 #### Coverage
-Spatial Coverage: Global  
-Overpasses: Twice daily (day and night)  
+Spatial Coverage: Global
+Overpasses: Twice daily (day and night)
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References
@@ -80,14 +80,14 @@ Relative humidity of air in units of percent, located two meters (6.5 feet) abov
 Nominal equatorial image resolution 31.25 km/pixel
 
 #### Data Product
-Image initially produced with NRT data. Science quality image replaces NRT when available.  
-Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)  
-Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)  
-Field name: `RelHumSurf`  
+Image initially produced with NRT data. Science quality image replaces NRT when available.
+Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)
+Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)
+Field name: `RelHumSurf`
 Resolution: 45 km/pixel at nadir
 
-Spatial Coverage: Global  
-Overpasses: Twice daily (day and night)  
+Spatial Coverage: Global
+Overpasses: Twice daily (day and night)
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References

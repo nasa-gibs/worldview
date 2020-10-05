@@ -1,7 +1,7 @@
 {
     "products": {
         "AIRS2RET": {
-            "name": "AIRS/Aqua L2 Standard Physical Retrieval (AIRS-only) V006 (AIRS2RET)",
+            "name": "AIRS/Aqua L2 Standard Physical Retrieval (AIRS-only) V7.0 (AIRS2RET)",
             "handler": "MODISSwath",
             "query": {
                 "shortName": ["AIRS2RET", "AIRS2RET_NRT"]
