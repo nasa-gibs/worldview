@@ -4,7 +4,7 @@
             "name": "AMSR-E/AMSR2 Unified L3 Daily 6.25 km Polar Gridded 89 GHz Brightness Temperatures",
             "handler": "List",
             "query": {
-                "shortName": ["AU_SI6"]
+                "shortName": ["AU_SI6", "AU_SI6_NRT_R04"]
             }
         }
     }
