@@ -4,7 +4,7 @@
             "name": "AMSR-E/AMSR2 Unified L3 Daily 25 km Brightness Temperatures & Sea Ice Concentration Polar Grids V001",
             "handler": "List",
             "query": {
-                "shortName": ["AU_SI25"]
+                "shortName": ["AU_SI25", "AU_SI25_NRT_R04"]
             }
         }
     }
