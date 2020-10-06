@@ -24,18 +24,14 @@ class Geosearch extends React.Component {
     const {
       coordinates,
       clearCoordinates,
-      isDistractionFreeModeActive,
-      isExpanded,
       selectCoordinatesToFly,
-      shouldBeCollapsed,
       toggleShowGeosearch,
       toggleReverseGeocodeActive,
     } = this.props;
-    const shouldHide = shouldBeCollapsed || isDistractionFreeModeActive || !isExpanded;
+
     return (
       <GeosearchModal
         coordinates={coordinates}
-        shouldHide={shouldHide}
         clearCoordinates={clearCoordinates}
         selectCoordinatesToFly={selectCoordinatesToFly}
         toggleShowGeosearch={toggleShowGeosearch}
@@ -45,18 +41,20 @@ class Geosearch extends React.Component {
   }
 
   renderSearchButton = () => {
-    const { isExpanded, toggleShowGeosearch } = this.props;
+    const { isMobile, toggleShowGeosearch } = this.props;
+    const faSize = isMobile ? '2x' : '1x';
+
     return (
       <Button
+        type="button"
         id="wv-geosearch-button"
         className="wv-toolbar-button"
         title="Search by place name or reverse search using coordinates"
-        onTouchEnd={toggleShowGeosearch}
-        onMouseDown={toggleShowGeosearch}
-        // disabled={isExpanded}
-        // color="none"
+        // onTouchEnd={toggleShowGeosearch}
+        // onMouseDown={toggleShowGeosearch}
+        onClick={toggleShowGeosearch}
       >
-        <FontAwesomeIcon icon={faSearchLocation} size="1x" />
+        <FontAwesomeIcon icon={faSearchLocation} size={faSize} />
       </Button>
     );
   }
@@ -65,19 +63,19 @@ class Geosearch extends React.Component {
     const {
       isExpanded,
       isFeatureEnabled,
+      shouldBeCollapsed,
+      isDistractionFreeModeActive,
     } = this.props;
     if (!isFeatureEnabled) {
       return null;
     }
 
-    const containerClass = `geosearch-component-button-container ${isExpanded ? 'expanded' : ''}`;
+    const shouldShowComponent = isExpanded && !shouldBeCollapsed && !isDistractionFreeModeActive;
     return (
       <>
-        <div className={containerClass}>
-          {isExpanded
-            ? this.renderSearchComponent()
-            : this.renderSearchButton()}
-        </div>
+        {shouldShowComponent
+          ? this.renderSearchComponent()
+          : this.renderSearchButton()}
       </>
     );
   }
@@ -85,6 +83,7 @@ class Geosearch extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
+    browser,
     config,
     modal,
     measure,
@@ -95,6 +94,7 @@ const mapStateToProps = (state) => {
   const { features: { geocodeSearch: search } } = config;
   const { coordinates, isExpanded } = geosearch;
   const { isDistractionFreeModeActive } = ui;
+  const isMobile = browser.lessThan.medium;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
@@ -102,6 +102,7 @@ const mapStateToProps = (state) => {
   return {
     coordinates,
     isExpanded,
+    isMobile,
     shouldBeCollapsed,
     isFeatureEnabled: search,
     isDistractionFreeModeActive,
@@ -128,6 +129,7 @@ Geosearch.propTypes = {
   coordinates: PropTypes.array,
   isExpanded: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   selectCoordinatesToFly: PropTypes.func,
   shouldBeCollapsed: PropTypes.bool,
   toggleReverseGeocodeActive: PropTypes.func,

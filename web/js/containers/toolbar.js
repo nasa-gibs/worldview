@@ -273,7 +273,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    notifications, palettes, compare, map, layers, proj, data, ui, browser,
+    browser, notifications, palettes, compare, map, layers, proj, data, ui,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -283,6 +283,7 @@ const mapStateToProps = (state) => {
     { proj: proj.id },
     state,
   );
+  const isMobile = browser.lessThan.medium;
   const isCompareActive = compare.active;
   const isDataDownloadActive = data.active;
   const activePalettes = palettes[activeString];
@@ -298,7 +299,7 @@ const mapStateToProps = (state) => {
       && !isDataDownloadActive,
     ),
     isCompareActive,
-    isMobile: browser.lessThan.medium,
+    isMobile,
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
       activePalettes,
