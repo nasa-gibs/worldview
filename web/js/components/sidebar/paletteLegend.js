@@ -275,7 +275,6 @@ class PaletteLegend extends React.Component {
             id={`${layer.id}-${legend.id}${index}colorbar`}
             width={width}
             height={24}
-            style={{ width }}
             ref={this[`canvas_${index}`]}
             onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
             onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
