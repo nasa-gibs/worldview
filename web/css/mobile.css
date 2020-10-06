@@ -90,6 +90,13 @@
     display: none;
   }
 
+  .wv-toolbar-button {
+    font-size: 14.3px;
+    height: 44px;
+    margin: 0 0 0 4px;
+    padding: 5.72px 9.1px;
+  }
+
   div.olControlScaleLineCustom {
     bottom: 10px;
   }
