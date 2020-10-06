@@ -2,7 +2,7 @@
   "layers": {
     "MODIS_Terra_L2_Chlorophyll_A": {
       "id": "MODIS_Terra_L2_Chlorophyll_A",
-      "title": "Chlorophyll A (L2)",
+      "title": "Chlorophyll a (L2)",
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_L2_Chlorophyll_A",
       "tags": "ocean color",
