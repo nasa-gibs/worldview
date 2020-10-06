@@ -3,32 +3,108 @@ import React, { Component } from 'react';
 import {
   ButtonGroup, Button, InputGroup, InputGroupAddon,
 } from 'reactstrap';
+import { get as lodashGet } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSearchLocation,
   faMapMarkerAlt,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchBox from './geosearch-input';
+
+import isValidCoordinates from './util';
+import { reverseGeocode, suggest, processMagicKey } from '../../modules/geosearch/selectors';
 
 class SearchComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       inputValue: '',
+      searchResults: [],
+      coordinatesPending: [],
     };
+    this.requestTimer = null;
   }
 
-  updateValue = (inputValue) => {
-    this.setState({
-      inputValue,
+  // update input value
+  updateValue = (inputValue) => this.setState({ inputValue });
+
+  // update list of suggested search results
+  updateSearchResults = (searchResults) => this.setState({ searchResults });
+
+  // update array of pending coordinates
+  updatePendingCoordinates = (coordinatesPending) => this.setState({ coordinatesPending });
+
+  // handle submitting search after inputing coordinates
+  onCoordinateInputSelect = () => {
+    const { selectCoordinatesToFly } = this.props;
+    const { coordinatesPending } = this.state;
+
+    const [longitude, latitude] = coordinatesPending;
+    reverseGeocode([longitude, latitude]).then((results) => {
+      selectCoordinatesToFly([longitude, latitude], results);
+    });
+    this.updatePendingCoordinates([]);
+  }
+
+  // handle selecting menu item in search results
+  onSelect=(value, item) => {
+    const { selectCoordinatesToFly } = this.props;
+
+    this.updateSearchResults([item]);
+    this.updateValue(value);
+    const {
+      magicKey,
+      // text,
+    } = item;
+
+    processMagicKey(magicKey).then((result) => {
+      if (lodashGet(result, 'candidates[0]')) {
+        const firstCandidate = result.candidates[0];
+        const { location } = firstCandidate;
+
+        const { x, y } = location;
+        const parsedX = parseFloat(x.toPrecision(7));
+        const parsedY = parseFloat(y.toPrecision(7));
+        selectCoordinatesToFly([parsedX, parsedY]);
+      }
     });
   }
 
-  selectCoordinatesFromMap = (e) => {
-    const { toggleReverseGeocodeActive } = this.props;
+  // handle input value change including text/coordinates typing, pasting, cutting
+  onChange=(e, value) => {
     e.preventDefault();
+    this.updateValue(value);
+
+    // check for coordinate value
+    const coordinatesInputValue = isValidCoordinates(value);
+    if (coordinatesInputValue) {
+      clearTimeout(this.requestTimer);
+      const { latitude, longitude } = coordinatesInputValue;
+      this.setState({
+        searchResults: [],
+        coordinatesPending: [longitude, latitude],
+      });
+    } else {
+      clearTimeout(this.requestTimer);
+      if (!value) {
+        this.updateSearchResults([]);
+      } else {
+        // provide suggestions to populate search result menu item(s)
+        this.requestTimer = suggest(value).then((items) => {
+          if (lodashGet(items, 'suggestions')) {
+            const { suggestions } = items;
+            this.updateSearchResults(suggestions);
+          }
+        });
+      }
+    }
+  }
+
+  selectCoordinatesFromMap = (e) => {
+    e.preventDefault();
+    const { toggleReverseGeocodeActive } = this.props;
     toggleReverseGeocodeActive(true);
+    this.updateValue('');
   }
 
   selectCoordinatesToFly = (coordinates) => {
@@ -38,63 +114,53 @@ class SearchComponent extends Component {
 
   render() {
     const {
-      coordinates, clearCoordinates, shouldHide, toggleShowGeosearch,
+      coordinates,
+      clearCoordinates,
+      toggleShowGeosearch,
     } = this.props;
-    const { inputValue } = this.state;
+    const {
+      coordinatesPending,
+      inputValue,
+      searchResults,
+    } = this.state;
     const hasCoordinates = coordinates.length > 0;
-    const textEntered = inputValue;
-    const containerClass = `geosearch-component-expanded-search ${!shouldHide ? 'expanded' : ''}`;
 
+    const coordinateButtonGroupContainerClassName = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
     return (
-      <div className={containerClass}>
-        <div style={{
-          background: 'rgba(40, 40, 40, 0.85)',
-          borderRadius: '5px',
-        }}
-        >
-          <InputGroup
-            className="geosearch-search-input-group"
+      <div className="geosearch-component">
+        <InputGroup className="geosearch-search-input-group">
+          <InputGroupAddon addonType="prepend">
+            <Button
+              className="geosearch-search-minimize-button"
+              title="Minimize search box"
+              onClick={toggleShowGeosearch}
+            >
+              <FontAwesomeIcon icon={faChevronRight} size="1x" />
+            </Button>
+          </InputGroupAddon>
+          <SearchBox
+            coordinates={coordinates}
+            coordinatesPending={coordinatesPending}
+            inputValue={inputValue}
+            onChange={this.onChange}
+            onCoordinateInputSelect={this.onCoordinateInputSelect}
+            onSelect={this.onSelect}
+            searchResults={searchResults}
+          />
+          <InputGroupAddon
+            addonType="append"
+            className={coordinateButtonGroupContainerClassName}
           >
-            <InputGroupAddon addonType="prepend">
+            <ButtonGroup className="geosearch-coordinate-button-group">
               <Button
-                className="geosearch-search-minimize-button"
-                title="Minimize search box"
-                onClick={toggleShowGeosearch}
+                onTouchEnd={this.selectCoordinatesFromMap}
+                onMouseDown={this.selectCoordinatesFromMap}
+                className="geosearch-coordinate-button-addpoint"
+                title="Add coordinates marker onto map"
               >
-                <FontAwesomeIcon icon={faChevronRight} size="1x" />
+                <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
               </Button>
-            </InputGroupAddon>
-            <SearchBox
-              coordinates={coordinates}
-              selectCoordinatesToFly={this.selectCoordinatesToFly}
-              isCoordinateSearchActive={false}
-              updateValue={this.updateValue}
-              inputValue={inputValue}
-            />
-            <InputGroupAddon className={`geosearch-search-submit-container ${hasCoordinates ? 'grouped' : ''}`} addonType="append">
-              <Button
-                style={{
-                  color: `${textEntered ? '#0070c8' : ''}`,
-                  left: `${hasCoordinates ? '256px' : '287px'}`,
-                }}
-                disabled={!textEntered}
-                className="geosearch-search-submit-button"
-                title="Search by place name or reverse search using coordinates"
-              >
-                <FontAwesomeIcon icon={faSearchLocation} size="1x" />
-              </Button>
-            </InputGroupAddon>
-            <InputGroupAddon addonType="append" className={`geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`}>
-              <ButtonGroup className="geosearch-coordinate-button-group">
-                <Button
-                  onTouchEnd={this.selectCoordinatesFromMap}
-                  onMouseDown={this.selectCoordinatesFromMap}
-                  className="geosearch-coordinate-button-addpoint"
-                  title="Add coordinates marker onto map"
-                >
-                  <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
-                </Button>
-                {hasCoordinates
+              {hasCoordinates
                   && (
                     <Button
                       onTouchEnd={clearCoordinates}
@@ -105,21 +171,19 @@ class SearchComponent extends Component {
                       <p>X</p>
                     </Button>
                   )}
-              </ButtonGroup>
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
+            </ButtonGroup>
+          </InputGroupAddon>
+        </InputGroup>
       </div>
     );
   }
 }
 
 SearchComponent.propTypes = {
+  clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
   selectCoordinatesToFly: PropTypes.func,
   toggleReverseGeocodeActive: PropTypes.func,
-  clearCoordinates: PropTypes.func,
-  shouldHide: PropTypes.bool,
   toggleShowGeosearch: PropTypes.func,
 };
 

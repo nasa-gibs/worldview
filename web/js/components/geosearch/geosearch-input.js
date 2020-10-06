@@ -1,136 +1,161 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
-import isValidCoordinates from './util';
-import { reverseGeocode, suggest, processMagicKey } from '../../modules/geosearch/selectors';
-
+import {
+  Button, InputGroupAddon,
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSearchLocation,
+} from '@fortawesome/free-solid-svg-icons';
 
 class SearchBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [],
     };
-    this.requestTimer = null;
+    this.highlightedItem = null;
   }
 
   componentDidMount() {
-    this.input.focus();
+    // timeout necessary to trigger input focus
+    setTimeout(() => {
+      this.geosearchInput.focus();
+    }, 1);
   }
 
-  updateSearchResults = (searchResults) => this.setState({ searchResults });
-
-  // handle selecting menu item in search results
-  onSelect=(value, item) => {
-    const { selectCoordinatesToFly, updateValue } = this.props;
-    // set the menu to only the selected item
-
-    this.updateSearchResults([item]);
-    updateValue(value);
-    const {
-      magicKey,
-      // text,
-    } = item;
-
-    processMagicKey(magicKey).then((result) => {
-      const firstCandidate = result.candidates[0];
-      const { location } = firstCandidate;
-      // TODO TEST NO FIRST CANDIDATE
-      const { x, y } = location;
-      const parsedX = parseFloat(x.toPrecision(7));
-      const parsedY = parseFloat(y.toPrecision(7));
-      selectCoordinatesToFly([parsedX, parsedY]);
-    });
+  // handle submit button click - required to select coordinates since no suggestions menu
+  handleSubmitClick = (e) => {
+    e.preventDefault();
+    const { onSelect, coordinatesPending, onCoordinateInputSelect } = this.props;
+    if (coordinatesPending.length > 0) {
+      onCoordinateInputSelect();
+    } else if (this.highlightedItem) {
+      onSelect(this.highlightedItem.text, this.highlightedItem);
+    }
   }
 
-  // handle input value change including text/coordinates typing, pasting, cutting
-  onChange=(e, value) => {
-    // e.preventDefault();
-    const { selectCoordinatesToFly, updateValue } = this.props;
+  // handle key press to use ENTER key to select
+  handleKeyPress = (e) => {
+    const { coordinatesPending, onCoordinateInputSelect } = this.props;
+    // check tab and enter key code
+    const { charCode } = e;
+    const entered = charCode === 13;
+    if (entered) {
+      e.preventDefault();
+      e.stopPropagation();
 
-    updateValue(value);
-    // check for coordinate value
-    const coordinatesInputValue = isValidCoordinates(value);
-    if (coordinatesInputValue) {
-      clearTimeout(this.requestTimer);
-      this.updateSearchResults([]);
-
-      const { latitude, longitude } = coordinatesInputValue;
-      // TODO: require click/enter to search coordinates
-      reverseGeocode([longitude, latitude]).then((results) => {
-        selectCoordinatesToFly([longitude, latitude], results);
-      });
-    } else {
-      clearTimeout(this.requestTimer);
-      if (!value) {
-        this.updateSearchResults([]);
-      } else {
-        // provide suggestions to populate search result menu item(s)
-        this.requestTimer = suggest(value).then((items) => {
-          const { suggestions } = items;
-          this.updateSearchResults(suggestions);
-        });
+      if (coordinatesPending.length > 0) {
+        onCoordinateInputSelect();
       }
     }
   }
 
-  // search result menu item container
+  // render search result menu item container
   renderMenu= (children) => (
     <div className="geosearch-results-menu">
       {children}
     </div>
   )
 
-  // individual menu items with conditional styling
-  renderItem=(item, isHighlighted) => (
-    <div
-      className="geosearch-item"
-      style={{
-        background: isHighlighted ? '#0070c8' : '#fff',
-        color: isHighlighted ? '#fff' : '#000',
-      }}
-      key={item.text}
-    >
-      {item.text}
-    </div>
-  )
-
-  render() {
-    const { searchResults } = this.state;
-    const { coordinates, inputValue } = this.props;
-    const wrapperStyleWidth = `${coordinates.length > 0 ? '260px' : '291px'}`;
+  // render individual menu items with conditional styling
+  renderItem=(item, isHighlighted) => {
+    if (isHighlighted) {
+      this.highlightedItem = item;
+    }
 
     return (
-      <div className="geosearch-input-container">
+      <div
+        className="geosearch-item highlighted-render-item"
+        style={{
+          background: isHighlighted ? '#0070c8' : '#fff',
+          color: isHighlighted ? '#fff' : '#000',
+        }}
+        key={item.text}
+      >
+        {item.text}
+      </div>
+    );
+  }
+
+  // render submit button
+  renderSubmitButton = () => {
+    const {
+      coordinates, inputValue,
+    } = this.props;
+    const hasCoordinates = coordinates.length > 0;
+
+    return (
+      <InputGroupAddon
+        className="geosearch-submit-input-group-addon"
+        addonType="append"
+        style={{
+          right: `${hasCoordinates ? '62px' : '32px'}`,
+        }}
+      >
+        <Button
+          style={{
+            color: `${inputValue ? '#0070c8' : ''}`,
+            boxShadow: 'none',
+          }}
+          disabled={!inputValue}
+          onClick={this.handleSubmitClick}
+          className="geosearch-search-submit-button"
+          title="Search by place name or reverse search using coordinates"
+        >
+          <FontAwesomeIcon icon={faSearchLocation} size="1x" />
+        </Button>
+      </InputGroupAddon>
+    );
+  }
+
+  render() {
+    const {
+      coordinates, inputValue, onChange, onSelect, searchResults,
+    } = this.props;
+    const hasCoordinates = coordinates.length > 0;
+    const wrapperStyleWidth = `${hasCoordinates ? '260px' : '291px'}`;
+
+    return (
+      <div
+        className="geosearch-input-container"
+        onKeyPress={this.handleKeyPress}
+      >
         <Autocomplete
           // eslint-disable-next-line no-return-assign
-          ref={(el) => this.input = el}
+          ref={(el) => this.geosearchInput = el}
           inputProps={{
-            className: 'form-control geosearch-autocomplete',
+            className: 'form-control geosearch-autocomplete dark-input',
             id: 'geosearch-autocomplete',
             placeholder: 'Search for places and coordinates',
           }}
           wrapperStyle={{
             width: wrapperStyleWidth,
+            paddingRight: '28px',
           }}
           value={inputValue}
           items={searchResults}
           getItemValue={(item) => item.text}
-          onSelect={this.onSelect}
-          onChange={this.onChange}
+          onSelect={onSelect}
+          onChange={onChange}
+          onMenuVisibilityChange={this.resetHighlightedItem}
           renderMenu={this.renderMenu}
           renderItem={this.renderItem}
         />
+        {this.renderSubmitButton()}
       </div>
     );
   }
 }
 
 SearchBox.propTypes = {
-  selectCoordinatesToFly: PropTypes.func,
   coordinates: PropTypes.array,
+  coordinatesPending: PropTypes.array,
+  onCoordinateInputSelect: PropTypes.func,
+  searchResults: PropTypes.array,
   inputValue: PropTypes.string,
-  updateValue: PropTypes.func,
+  onSelect: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default SearchBox;

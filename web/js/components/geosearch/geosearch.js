@@ -22,20 +22,20 @@ class Geosearch extends React.Component {
 
   renderSearchComponent = () => {
     const {
-      coordinates,
       clearCoordinates,
+      coordinates,
       selectCoordinatesToFly,
-      toggleShowGeosearch,
       toggleReverseGeocodeActive,
+      toggleShowGeosearch,
     } = this.props;
 
     return (
       <GeosearchModal
-        coordinates={coordinates}
         clearCoordinates={clearCoordinates}
+        coordinates={coordinates}
         selectCoordinatesToFly={selectCoordinatesToFly}
-        toggleShowGeosearch={toggleShowGeosearch}
         toggleReverseGeocodeActive={toggleReverseGeocodeActive}
+        toggleShowGeosearch={toggleShowGeosearch}
       />
     );
   }

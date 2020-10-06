@@ -42,6 +42,8 @@
   right: 172px;
   width: 350px;
   margin-right: 1px;
+  background: rgba(40, 40, 40, 0.85);
+  border-radius: 5px;
 }
 
 /* Geosearch Component Coordinate Buttons */
