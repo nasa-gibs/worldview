@@ -109,8 +109,8 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = (dispatch) => ({
-  selectCoordinatesToFly: (coordinates) => {
-    dispatch(selectCoordinatesToFly(coordinates));
+  selectCoordinatesToFly: (coordinates, addressAttributes) => {
+    dispatch(selectCoordinatesToFly(coordinates, addressAttributes));
   },
   toggleShowGeosearch: () => {
     dispatch(toggleShowGeosearch());

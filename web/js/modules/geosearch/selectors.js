@@ -140,7 +140,7 @@ export async function processMagicKey(magicKey) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
 
   try {
-    const response = await fetch(`${urlBase}findAddressCandidates?f=json&magicKey=${magicKey}=`, requestOptions);
+    const response = await fetch(`${urlBase}findAddressCandidates?f=json&outFields=*&magicKey=${magicKey}=`, requestOptions);
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {

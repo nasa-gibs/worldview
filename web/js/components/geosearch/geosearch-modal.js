@@ -60,12 +60,13 @@ class SearchComponent extends Component {
     processMagicKey(magicKey).then((result) => {
       if (lodashGet(result, 'candidates[0]')) {
         const firstCandidate = result.candidates[0];
-        const { location } = firstCandidate;
+        const { location, attributes } = firstCandidate;
+        const addressAttributes = { address: attributes };
 
         const { x, y } = location;
-        const parsedX = parseFloat(x.toPrecision(7));
-        const parsedY = parseFloat(y.toPrecision(7));
-        selectCoordinatesToFly([parsedX, parsedY]);
+        const parsedX = parseFloat(x.toPrecision(9));
+        const parsedY = parseFloat(y.toPrecision(9));
+        selectCoordinatesToFly([parsedX, parsedY], addressAttributes);
       }
     });
   }
@@ -107,9 +108,10 @@ class SearchComponent extends Component {
     this.updateValue('');
   }
 
-  selectCoordinatesToFly = (coordinates) => {
+  // coordinates in array, addressAttributes with address key: object value
+  selectCoordinatesToFly = (coordinates, addressAttributes) => {
     const { selectCoordinatesToFly } = this.props;
-    selectCoordinatesToFly(coordinates);
+    selectCoordinatesToFly(coordinates, addressAttributes);
   }
 
   render() {
