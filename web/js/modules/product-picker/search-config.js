@@ -134,7 +134,7 @@ function filterSearch (layer, val, terms) {
 function updateCoverageFilter (filters, selectedDate) {
   if (!filters || !filters.length) return;
   const formattedDate = moment.utc(selectedDate).format('YYYY MMM DD');
-  const oldValueMatch = (value) => !value.contains(formattedDate) && !value.contains('Always');
+  const oldValueMatch = (value) => !value.includes(formattedDate) && !value.includes('Always');
 
   filters.forEach((f) => {
     if (f.field !== 'coverage') return;
