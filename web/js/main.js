@@ -38,7 +38,6 @@ import {
   layersParse12,
   adjustStartDates,
 } from './modules/layers/util';
-import polyfill from './polyfill';
 import { debugConfig } from './debug';
 import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
@@ -120,7 +119,6 @@ window.onload = () => {
   if (!parameters.elapsed) {
     elapsed = function() {};
   }
-  polyfill();
   elapsed('loading config', startTime, parameters);
   const promise = $.getJSON(configURI);
   loadingIndicator.delayed(promise, 1000);
