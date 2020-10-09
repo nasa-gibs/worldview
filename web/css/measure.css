@@ -34,7 +34,7 @@
   }
 }
 
-@media (max-width: 740px) {
+@media (max-width: 768px) {
   .wv-measure-button {
     bottom: 10px;
   }

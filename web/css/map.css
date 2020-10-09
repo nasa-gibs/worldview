@@ -26,7 +26,9 @@
   opacity: 0.4;
 }
 
-.wv-map-zoom svg.svg-inline--fa {
+.wv-map-zoom svg.svg-inline--fa,
+.wv-map-rotate-left svg.svg-inline--fa,
+.wv-map-rotate-right svg.svg-inline--fa {
   display: block;
   width: 36px;
   padding: 12px;
@@ -52,9 +54,10 @@
 }
 
 .wv-map-reset-rotation {
-  top: 296px;
+  top: 290px;
   border: 1px solid #333;
   height: 54px;
+  width: 38px;
 }
 
 .wv-map-rotate-left {
@@ -64,7 +67,7 @@
 }
 
 .wv-map-rotate-right {
-  top: 350px;
+  top: 344px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }

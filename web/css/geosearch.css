@@ -1,4 +1,8 @@
 /* Autocomplete Input */
+.geosearch-search-input-group {
+  flex-wrap: nowrap;
+}
+
 .geosearch-autocomplete {
   height: 38px;
   padding: 0 5px;
@@ -11,7 +15,7 @@
 
 .geosearch-results-menu {
   position: absolute;
-  width: 260px;
+  width: 85%;
 }
 
 .geosearch-item {
@@ -29,7 +33,6 @@
   top: 0;
   right: 62px;
   & .btn {
-    /* background: #fff; */
     background: none;
     border: none;
     color: #999;
@@ -39,11 +42,13 @@
 /* Geosearch Component */
 .geosearch-component {
   position: absolute;
-  right: 172px;
+  right: 181px;
+  top: 10px;
   width: 350px;
   margin-right: 1px;
   background: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
+  z-index: 100;
 }
 
 /* Geosearch Component Coordinate Buttons */
@@ -52,7 +57,7 @@
 }
 
 .geosearch-coordinate-button-group {
-  margin-left: 0.25px;
+  margin-left: 0.5px;
   & .btn {
     width: 31px;
     border: none;
@@ -72,10 +77,11 @@
   border-bottom-right-radius: 5px;
 }
 
-.geosearch-coordinate-button-remove p {
-  border: none;
-  font-weight: 700;
-  font-size: 1.3em;
+.geosearch-coordinate-button-remove svg.svg-inline--fa.fa-slash {
+  position: absolute;
+  top: 10px;
+  left: 6px;
+  font-size: 1.25em;
 }
 
 /* Geosearch Component Minimize Button */
@@ -83,6 +89,7 @@
   background: rgba(40, 40, 40, 0.15);
   margin-right: 2px;
   border: none;
+  overflow: hidden;
   &:focus {
     box-shadow: none;
     -webkit-box-shadow: none;
@@ -99,6 +106,20 @@
   }
 }
 
+.geosearch-search-minimize-button-chevron {
+  position: absolute;
+  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 57px;
+  left: -18px;
+  height: 30px;
+  transform: rotate(90deg);
+  &:hover {
+    background-position: -206px -63px;
+  }
+}
+
 /* Additional Styling */
 .dark-input,
 .dark-input:focus {
@@ -106,4 +127,29 @@
   background-color: none;
   color: #fff;
   box-shadow: none;
+}
+
+/* Mobile Styling */
+@media only screen and (max-width: 768px) {
+  .geosearch-component {
+    position: static;
+    width: 100%;
+  }
+  .geosearch-input-container {
+    width: 100%;
+  }
+  .geosearch-autocomplete {
+    font-size: 16px;
+    &::placeholder {
+      font-size: 14px;
+    }
+  }
+  .geosearch-results-menu {
+    width: 100%;
+  }
+  .geosearch-item {
+    padding: 8px 0 8px 7px;
+    line-height: 16px;
+    font-size: 16px;
+  }
 }

@@ -515,7 +515,7 @@ li.item.productsitem.inmotion,
   color: #c5c5c8;
 }
 
-@media (max-width: 739px) {
+@media (max-width: 768px) {
   .sidebar-panel li.item {
     h4 {
       font-size: 16px;

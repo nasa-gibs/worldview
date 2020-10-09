@@ -8,13 +8,9 @@
 
 .wv-toolbar-button,
 [data-whatintent='mouse'] .wv-toolbar-button:focus {
-  font-size: 20px;
-  height: 38px;
   display: inline-block;
-  margin: 0 0 0 5px;
   background: rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
-  padding: 2.5px 8px;
   border-radius: 5px;
   &:focus {
     box-shadow: none;
@@ -130,9 +126,27 @@
   width: 100%;
 }
 
+/* Geosearch Mobile Modal */
+.toolbar-geosearch-modal {
+  top: 100px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.toolbar-geosearch-modal,
+.toolbar-geosearch-modal .modal-content {
+  width: 100%;
+}
+
 @media (min-width: 576px) {
   .toolbar-modal {
     top: 33px;
+  }
+
+  .toolbar-geosearch-modal {
+    top: 84px;
   }
 
   .toolbar-info-modal {
@@ -154,7 +168,15 @@
   }
 }
 
-@media (min-width: 740px) {
+@media (min-width: 769px) {
+  .wv-toolbar-button,
+  [data-whatintent='mouse'] .wv-toolbar-button:focus {
+    font-size: 20px;
+    height: 38px;
+    margin: 0 0 0 5px;
+    padding: 2.5px 8px;
+  }
+
   .toolbar-projection-modal {
     right: 37px;
   }

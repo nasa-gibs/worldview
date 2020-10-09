@@ -60,7 +60,7 @@ export default (function() {
   self.touchDevice = false;
   self.mobileDevice = false;
   self.mobileAndTabletDevice = false;
-  self.mobileWidth = 740;
+  self.mobileWidth = 768;
   self.constrainedHeight = 320;
 
   const init = function() {
