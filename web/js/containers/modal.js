@@ -98,6 +98,7 @@ class ModalContainer extends Component {
       bodyComponentProps,
       timeout,
       desktopOnly,
+      mobileOnly,
       size,
       isDraggable,
       isResizable,
@@ -110,7 +111,10 @@ class ModalContainer extends Component {
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-    if (isMobile && isOpen && desktopOnly) {
+    const shouldToggleMobile = isMobile && desktopOnly;
+    const shouldToggleDesktop = !isMobile && mobileOnly;
+    const toggleConditon = isOpen && (shouldToggleMobile || shouldToggleDesktop);
+    if (toggleConditon) {
       toggleFunction();
     }
     return (

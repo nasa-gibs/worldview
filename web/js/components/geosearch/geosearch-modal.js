@@ -7,9 +7,10 @@ import { get as lodashGet } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMapMarkerAlt,
-  faChevronRight,
+  faSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchBox from './geosearch-input';
+import Alert from '../util/alert';
 
 import isValidCoordinates from './util';
 import { reverseGeocode, suggest, processMagicKey } from '../../modules/geosearch/selectors';
@@ -19,10 +20,26 @@ class SearchComponent extends Component {
     super(props);
     this.state = {
       inputValue: '',
+      isTouchDevice: false,
       searchResults: [],
+      selectingCoordinatesOnMap: false,
       coordinatesPending: [],
+      showAlert: false,
     };
     this.requestTimer = null;
+  }
+
+  componentDidUpdate(prevProps) {
+    const { coordinates } = this.props;
+    const { selectingCoordinatesOnMap, showAlert } = this.state;
+
+    if (showAlert && coordinates.length > 0) {
+      const [prevLong, prevLat] = prevProps.coordinates;
+      const [long, lat] = coordinates;
+      if (prevLong !== long || prevLat !== lat) {
+        this.dismissAlert();
+      }
+    }
   }
 
   // update input value
@@ -33,6 +50,9 @@ class SearchComponent extends Component {
 
   // update array of pending coordinates
   updatePendingCoordinates = (coordinatesPending) => this.setState({ coordinatesPending });
+
+  // dismiss message instruction alert
+  dismissAlert = () => this.setState({ showAlert: false });
 
   // handle submitting search after inputing coordinates
   onCoordinateInputSelect = () => {
@@ -101,11 +121,18 @@ class SearchComponent extends Component {
     }
   }
 
+  // initiate instruction alert and activate store level toggleReverseGeocodeActive
   selectCoordinatesFromMap = (e) => {
     e.preventDefault();
+    const isTouchDevice = e.type === 'touchend';
     const { toggleReverseGeocodeActive } = this.props;
     toggleReverseGeocodeActive(true);
-    this.updateValue('');
+    this.setState({
+      selectingCoordinatesOnMap: true,
+      isTouchDevice,
+      showAlert: true,
+      inputValue: '',
+    });
   }
 
   // coordinates in array, addressAttributes with address key: object value
@@ -118,51 +145,80 @@ class SearchComponent extends Component {
     const {
       coordinates,
       clearCoordinates,
+      geosearchMobileModalOpen,
+      isExpanded,
+      isMobile,
       toggleShowGeosearch,
     } = this.props;
     const {
       coordinatesPending,
       inputValue,
+      isTouchDevice,
       searchResults,
+      showAlert,
     } = this.state;
     const hasCoordinates = coordinates.length > 0;
 
+    const alertMessage = `${isTouchDevice ? 'Tap' : 'Click'} on map to add a reverse geocode marker.`;
     const coordinateButtonGroupContainerClassName = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
     return (
-      <div className="geosearch-component">
-        <InputGroup className="geosearch-search-input-group">
+      <>
+        {showAlert && (
+        <Alert
+          id="geosearch-select-coordinates-alert"
+          isOpen
+          iconClassName="faMapMarkerAlt"
+          title="Geosearch Select Coordinates"
+          timeout={6000}
+          message={alertMessage}
+          onDismiss={this.dismissAlert}
+        />
+        )}
+
+        <div className="geosearch-component">
+          <InputGroup className="geosearch-search-input-group">
+            {!isMobile
+          && (
           <InputGroupAddon addonType="prepend">
             <Button
               className="geosearch-search-minimize-button"
               title="Minimize search box"
               onClick={toggleShowGeosearch}
             >
-              <FontAwesomeIcon icon={faChevronRight} size="1x" />
+              <div className="geosearch-search-minimize-button-chevron" />
             </Button>
           </InputGroupAddon>
-          <SearchBox
-            coordinates={coordinates}
-            coordinatesPending={coordinatesPending}
-            inputValue={inputValue}
-            onChange={this.onChange}
-            onCoordinateInputSelect={this.onCoordinateInputSelect}
-            onSelect={this.onSelect}
-            searchResults={searchResults}
-          />
-          <InputGroupAddon
-            addonType="append"
-            className={coordinateButtonGroupContainerClassName}
-          >
-            <ButtonGroup className="geosearch-coordinate-button-group">
-              <Button
-                onTouchEnd={this.selectCoordinatesFromMap}
-                onMouseDown={this.selectCoordinatesFromMap}
-                className="geosearch-coordinate-button-addpoint"
-                title="Add coordinates marker onto map"
+          )}
+            <SearchBox
+              coordinates={coordinates}
+              coordinatesPending={coordinatesPending}
+              inputValue={inputValue}
+              onChange={this.onChange}
+              onCoordinateInputSelect={this.onCoordinateInputSelect}
+              onSelect={this.onSelect}
+              searchResults={searchResults}
+              geosearchMobileModalOpen={geosearchMobileModalOpen}
+              isExpanded={isExpanded}
+              isMobile={isMobile}
+            />
+            <InputGroupAddon
+              addonType="append"
+              className={coordinateButtonGroupContainerClassName}
+            >
+              <ButtonGroup
+                className="geosearch-coordinate-button-group"
+
               >
-                <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
-              </Button>
-              {hasCoordinates
+                <Button
+                  onTouchEnd={this.selectCoordinatesFromMap}
+                  onMouseDown={this.selectCoordinatesFromMap}
+                  className="geosearch-coordinate-button-addpoint"
+                  title="Add coordinates marker onto map"
+                  style={{ marginRight: hasCoordinates && isMobile ? '6px' : '0' }}
+                >
+                  <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
+                </Button>
+                {hasCoordinates
                   && (
                     <Button
                       onTouchEnd={clearCoordinates}
@@ -170,13 +226,15 @@ class SearchComponent extends Component {
                       className="geosearch-coordinate-button-remove"
                       title="Clear coordinates marker from map"
                     >
-                      <p>X</p>
+                      <FontAwesomeIcon icon={faSlash} />
+                      <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
                     </Button>
                   )}
-            </ButtonGroup>
-          </InputGroupAddon>
-        </InputGroup>
-      </div>
+              </ButtonGroup>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </>
     );
   }
 }
@@ -184,6 +242,9 @@ class SearchComponent extends Component {
 SearchComponent.propTypes = {
   clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
+  geosearchMobileModalOpen: PropTypes.bool,
+  isExpanded: PropTypes.bool,
+  isMobile: PropTypes.bool,
   selectCoordinatesToFly: PropTypes.func,
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowGeosearch: PropTypes.func,

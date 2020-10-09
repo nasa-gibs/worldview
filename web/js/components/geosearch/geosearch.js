@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
 // import googleTagManager from 'googleTagManager';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 import GeosearchModal from './geosearch-modal';
 import {
   clearCoordinates,
@@ -20,10 +17,19 @@ class Geosearch extends React.Component {
     };
   }
 
-  renderSearchComponent = () => {
+  componentDidUpdate(prevProps) {
+    const { isExpanded, isMobile, toggleShowGeosearch } = this.props;
+    if (isExpanded && prevProps.isMobile !== isMobile) {
+      toggleShowGeosearch();
+    }
+  }
+
+  renderSearchComponent = (isMobile) => {
     const {
       clearCoordinates,
       coordinates,
+      geosearchMobileModalOpen,
+      isExpanded,
       selectCoordinatesToFly,
       toggleReverseGeocodeActive,
       toggleShowGeosearch,
@@ -31,6 +37,9 @@ class Geosearch extends React.Component {
 
     return (
       <GeosearchModal
+        geosearchMobileModalOpen={geosearchMobileModalOpen}
+        isExpanded={isExpanded}
+        isMobile={isMobile}
         clearCoordinates={clearCoordinates}
         coordinates={coordinates}
         selectCoordinatesToFly={selectCoordinatesToFly}
@@ -40,31 +49,13 @@ class Geosearch extends React.Component {
     );
   }
 
-  renderSearchButton = () => {
-    const { isMobile, toggleShowGeosearch } = this.props;
-    const faSize = isMobile ? '2x' : '1x';
-
-    return (
-      <Button
-        type="button"
-        id="wv-geosearch-button"
-        className="wv-toolbar-button"
-        title="Search by place name or reverse search using coordinates"
-        // onTouchEnd={toggleShowGeosearch}
-        // onMouseDown={toggleShowGeosearch}
-        onClick={toggleShowGeosearch}
-      >
-        <FontAwesomeIcon icon={faSearchLocation} size={faSize} />
-      </Button>
-    );
-  }
-
   render() {
     const {
+      isDistractionFreeModeActive,
       isExpanded,
       isFeatureEnabled,
+      isMobile,
       shouldBeCollapsed,
-      isDistractionFreeModeActive,
     } = this.props;
     if (!isFeatureEnabled) {
       return null;
@@ -73,9 +64,9 @@ class Geosearch extends React.Component {
     const shouldShowComponent = isExpanded && !shouldBeCollapsed && !isDistractionFreeModeActive;
     return (
       <>
-        {shouldShowComponent
-          ? this.renderSearchComponent()
-          : this.renderSearchButton()}
+        {isMobile
+          ? this.renderSearchComponent(true)
+          : shouldShowComponent && this.renderSearchComponent()}
       </>
     );
   }
@@ -91,20 +82,22 @@ const mapStateToProps = (state) => {
     geosearch,
     ui,
   } = state;
-  const { features: { geocodeSearch: search } } = config;
+  const { features: { geocodeSearch: isFeatureEnabled } } = config;
   const { coordinates, isExpanded } = geosearch;
   const { isDistractionFreeModeActive } = ui;
   const isMobile = browser.lessThan.medium;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
+  const geosearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_GEOSEARCH_MOBILE';
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
 
   return {
     coordinates,
     isExpanded,
+    geosearchMobileModalOpen,
     isMobile,
     shouldBeCollapsed,
-    isFeatureEnabled: search,
+    isFeatureEnabled,
     isDistractionFreeModeActive,
   };
 };
@@ -124,9 +117,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 Geosearch.propTypes = {
-  isFeatureEnabled: PropTypes.bool.isRequired,
+  isFeatureEnabled: PropTypes.bool,
   clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
+  geosearchMobileModalOpen: PropTypes.bool,
   isExpanded: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,

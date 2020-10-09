@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
-import {
-  Button, InputGroupAddon,
-} from 'reactstrap';
+import { Button, InputGroupAddon } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearchLocation,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 
 class SearchBox extends Component {
   constructor(props) {
@@ -18,10 +14,13 @@ class SearchBox extends Component {
   }
 
   componentDidMount() {
+    const { geosearchMobileModalOpen, isExpanded } = this.props;
     // timeout necessary to trigger input focus
-    setTimeout(() => {
-      this.geosearchInput.focus();
-    }, 1);
+    if (isExpanded || geosearchMobileModalOpen) {
+      setTimeout(() => {
+        this.geosearchInput.focus();
+      }, 1);
+    }
   }
 
   // handle submit button click - required to select coordinates since no suggestions menu
@@ -63,7 +62,6 @@ class SearchBox extends Component {
     if (isHighlighted) {
       this.highlightedItem = item;
     }
-
     return (
       <div
         className="geosearch-item highlighted-render-item"
@@ -81,16 +79,19 @@ class SearchBox extends Component {
   // render submit button
   renderSubmitButton = () => {
     const {
-      coordinates, inputValue,
+      coordinates, inputValue, isMobile,
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
+    const buttonContainerRight = hasCoordinates
+      ? isMobile ? '67px' : '62px'
+      : '31px';
 
     return (
       <InputGroupAddon
         className="geosearch-submit-input-group-addon"
         addonType="append"
         style={{
-          right: `${hasCoordinates ? '62px' : '32px'}`,
+          right: buttonContainerRight,
         }}
       >
         <Button
@@ -111,11 +112,14 @@ class SearchBox extends Component {
 
   render() {
     const {
-      coordinates, inputValue, onChange, onSelect, searchResults,
+      coordinates, inputValue, isMobile, onChange, onSelect, searchResults,
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
-    const wrapperStyleWidth = `${hasCoordinates ? '260px' : '291px'}`;
-
+    const wrapperStyleWidth = hasCoordinates ? '268px' : '299px';
+    const wrapperStyle = {
+      width: isMobile ? '90%' : wrapperStyleWidth,
+      paddingRight: isMobile ? '0' : '26px',
+    };
     return (
       <div
         className="geosearch-input-container"
@@ -127,12 +131,9 @@ class SearchBox extends Component {
           inputProps={{
             className: 'form-control geosearch-autocomplete dark-input',
             id: 'geosearch-autocomplete',
-            placeholder: 'Search for places and coordinates',
+            placeholder: 'Search for places or enter coordinates',
           }}
-          wrapperStyle={{
-            width: wrapperStyleWidth,
-            paddingRight: '28px',
-          }}
+          wrapperStyle={wrapperStyle}
           value={inputValue}
           items={searchResults}
           getItemValue={(item) => item.text}
@@ -153,7 +154,10 @@ SearchBox.propTypes = {
   coordinatesPending: PropTypes.array,
   onCoordinateInputSelect: PropTypes.func,
   searchResults: PropTypes.array,
+  geosearchMobileModalOpen: PropTypes.bool,
   inputValue: PropTypes.string,
+  isExpanded: PropTypes.bool,
+  isMobile: PropTypes.bool,
   onSelect: PropTypes.func,
   onChange: PropTypes.func,
 };
