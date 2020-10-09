@@ -87,6 +87,7 @@
 /* Geosearch Component Minimize Button */
 .geosearch-search-minimize-button {
   background: rgba(40, 40, 40, 0.15);
+  width: 21px;
   margin-right: 2px;
   border: none;
   overflow: hidden;
@@ -108,15 +109,16 @@
 
 .geosearch-search-minimize-button-chevron {
   position: absolute;
-  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
+  background: url('../images/icon-sprite.svg') -201px -5px no-repeat;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  width: 57px;
-  left: -18px;
-  height: 30px;
+  width: 42px;
+  top: 9px;
+  left: -9px;
+  height: 24px;
   transform: rotate(90deg);
   &:hover {
-    background-position: -206px -63px;
+    background-position: -201px -65px;
   }
 }
 

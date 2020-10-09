@@ -22,7 +22,6 @@ class SearchComponent extends Component {
       inputValue: '',
       isTouchDevice: false,
       searchResults: [],
-      selectingCoordinatesOnMap: false,
       coordinatesPending: [],
       showAlert: false,
     };
@@ -31,7 +30,7 @@ class SearchComponent extends Component {
 
   componentDidUpdate(prevProps) {
     const { coordinates } = this.props;
-    const { selectingCoordinatesOnMap, showAlert } = this.state;
+    const { showAlert } = this.state;
 
     if (showAlert && coordinates.length > 0) {
       const [prevLong, prevLat] = prevProps.coordinates;
@@ -56,19 +55,19 @@ class SearchComponent extends Component {
 
   // handle submitting search after inputing coordinates
   onCoordinateInputSelect = () => {
-    const { selectCoordinatesToFly } = this.props;
+    const { handleSelectCordinatesToFly } = this.props;
     const { coordinatesPending } = this.state;
 
     const [longitude, latitude] = coordinatesPending;
     reverseGeocode([longitude, latitude]).then((results) => {
-      selectCoordinatesToFly([longitude, latitude], results);
+      handleSelectCordinatesToFly([longitude, latitude], results);
     });
     this.updatePendingCoordinates([]);
   }
 
   // handle selecting menu item in search results
   onSelect=(value, item) => {
-    const { selectCoordinatesToFly } = this.props;
+    const { handleSelectCordinatesToFly } = this.props;
 
     this.updateSearchResults([item]);
     this.updateValue(value);
@@ -86,7 +85,7 @@ class SearchComponent extends Component {
         const { x, y } = location;
         const parsedX = parseFloat(x.toPrecision(9));
         const parsedY = parseFloat(y.toPrecision(9));
-        selectCoordinatesToFly([parsedX, parsedY], addressAttributes);
+        handleSelectCordinatesToFly([parsedX, parsedY], addressAttributes);
       }
     });
   }
@@ -121,30 +120,30 @@ class SearchComponent extends Component {
     }
   }
 
-  // initiate instruction alert and activate store level toggleReverseGeocodeActive
+  // initiate instruction alert and activate store level handleReverseGeocodeActive
   selectCoordinatesFromMap = (e) => {
     e.preventDefault();
     const isTouchDevice = e.type === 'touchend';
-    const { toggleReverseGeocodeActive } = this.props;
-    toggleReverseGeocodeActive(true);
+    const { handleReverseGeocodeActive } = this.props;
+    handleReverseGeocodeActive(true);
     this.setState({
-      selectingCoordinatesOnMap: true,
       isTouchDevice,
       showAlert: true,
       inputValue: '',
     });
   }
 
-  // coordinates in array, addressAttributes with address key: object value
-  selectCoordinatesToFly = (coordinates, addressAttributes) => {
-    const { selectCoordinatesToFly } = this.props;
-    selectCoordinatesToFly(coordinates, addressAttributes);
+  // clear selected marker/coordinates from map
+  clearCoordinatesMarker = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { handleClearCoordinatesClick } = this.props;
+    handleClearCoordinatesClick();
   }
 
   render() {
     const {
       coordinates,
-      clearCoordinates,
       geosearchMobileModalOpen,
       isExpanded,
       isMobile,
@@ -207,7 +206,6 @@ class SearchComponent extends Component {
             >
               <ButtonGroup
                 className="geosearch-coordinate-button-group"
-
               >
                 <Button
                   onTouchEnd={this.selectCoordinatesFromMap}
@@ -221,8 +219,8 @@ class SearchComponent extends Component {
                 {hasCoordinates
                   && (
                     <Button
-                      onTouchEnd={clearCoordinates}
-                      onMouseDown={clearCoordinates}
+                      onTouchEnd={this.clearCoordinatesMarker}
+                      onMouseDown={this.clearCoordinatesMarker}
                       className="geosearch-coordinate-button-remove"
                       title="Clear coordinates marker from map"
                     >
@@ -240,13 +238,13 @@ class SearchComponent extends Component {
 }
 
 SearchComponent.propTypes = {
-  clearCoordinates: PropTypes.func,
+  handleClearCoordinatesClick: PropTypes.func,
   coordinates: PropTypes.array,
   geosearchMobileModalOpen: PropTypes.bool,
   isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
-  selectCoordinatesToFly: PropTypes.func,
-  toggleReverseGeocodeActive: PropTypes.func,
+  handleSelectCordinatesToFly: PropTypes.func,
+  handleReverseGeocodeActive: PropTypes.func,
   toggleShowGeosearch: PropTypes.func,
 };
 

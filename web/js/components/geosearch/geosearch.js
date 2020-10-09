@@ -9,6 +9,9 @@ import {
   toggleShowGeosearch,
   toggleReverseGeocodeActive,
 } from '../../modules/geosearch/actions';
+import {
+  onToggle,
+} from '../../modules/modal/actions';
 
 class Geosearch extends React.Component {
   constructor(props) {
@@ -24,26 +27,47 @@ class Geosearch extends React.Component {
     }
   }
 
+  handleClearCoordinatesClick = () => {
+    const { clearCoordinates, coordinatesDialogOpen, onToggle } = this.props;
+    if (coordinatesDialogOpen) {
+      onToggle();
+    }
+    clearCoordinates();
+  }
+
+  handleSelectCordinatesToFly = (coordinates, addressAttributes) => {
+    const { selectCoordinatesToFly, coordinatesDialogOpen, onToggle } = this.props;
+    if (coordinatesDialogOpen) {
+      onToggle();
+    }
+    selectCoordinatesToFly(coordinates, addressAttributes);
+  }
+
+  handleReverseGeocodeActive = (isActive) => {
+    const { toggleReverseGeocodeActive, coordinatesDialogOpen, onToggle } = this.props;
+    if (coordinatesDialogOpen) {
+      onToggle();
+    }
+    toggleReverseGeocodeActive(isActive);
+  }
+
   renderSearchComponent = (isMobile) => {
     const {
-      clearCoordinates,
       coordinates,
       geosearchMobileModalOpen,
       isExpanded,
-      selectCoordinatesToFly,
-      toggleReverseGeocodeActive,
       toggleShowGeosearch,
     } = this.props;
 
     return (
       <GeosearchModal
+        coordinates={coordinates}
         geosearchMobileModalOpen={geosearchMobileModalOpen}
         isExpanded={isExpanded}
         isMobile={isMobile}
-        clearCoordinates={clearCoordinates}
-        coordinates={coordinates}
-        selectCoordinatesToFly={selectCoordinatesToFly}
-        toggleReverseGeocodeActive={toggleReverseGeocodeActive}
+        handleClearCoordinatesClick={this.handleClearCoordinatesClick}
+        handleSelectCordinatesToFly={this.handleSelectCordinatesToFly}
+        handleReverseGeocodeActive={this.handleReverseGeocodeActive}
         toggleShowGeosearch={toggleShowGeosearch}
       />
     );
@@ -88,12 +112,14 @@ const mapStateToProps = (state) => {
   const isMobile = browser.lessThan.medium;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const geosearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_GEOSEARCH_MOBILE';
+  const coordinatesDialogOpen = modal.isOpen && modal.id.includes('COORDINATES_VECTOR_DIALOG');
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
 
   return {
     coordinates,
     isExpanded,
+    coordinatesDialogOpen,
     geosearchMobileModalOpen,
     isMobile,
     shouldBeCollapsed,
@@ -114,16 +140,21 @@ const mapDispatchToProps = (dispatch) => ({
   toggleReverseGeocodeActive: (isActive) => {
     dispatch(toggleReverseGeocodeActive(isActive));
   },
+  onToggle: () => {
+    dispatch(onToggle());
+  },
 });
 
 Geosearch.propTypes = {
   isFeatureEnabled: PropTypes.bool,
   clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
+  coordinatesDialogOpen: PropTypes.bool,
   geosearchMobileModalOpen: PropTypes.bool,
   isExpanded: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  onToggle: PropTypes.func,
   selectCoordinatesToFly: PropTypes.func,
   shouldBeCollapsed: PropTypes.bool,
   toggleReverseGeocodeActive: PropTypes.func,

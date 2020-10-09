@@ -6,10 +6,12 @@ import {
   TOGGLE_SHOW_GEOSEARCH,
   UPDATE_ACTIVE_MARKER,
 } from './constants';
+import { getLocalStorageCollapseState } from './util';
 
+const localStorageCollapseState = getLocalStorageCollapseState();
 const geosearchState = {
   isCoordinateSearchActive: false,
-  isExpanded: true,
+  isExpanded: !localStorageCollapseState,
   coordinates: [],
   activeMarker: null,
 };

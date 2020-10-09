@@ -11,12 +11,17 @@ import {
   removeCoordinatesMarker,
 } from './selectors';
 import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
+import { setLocalStorageCollapseState } from './util';
 
 export function toggleShowGeosearch() {
   return (dispatch, getState) => {
     const state = getState();
     const { geosearch } = state;
     const { isExpanded } = geosearch;
+
+    // handle localStorage user browser preference of expanded/collapsed
+    const storageValue = isExpanded ? 'collapsed' : 'expanded';
+    setLocalStorageCollapseState(storageValue);
 
     dispatch({
       type: TOGGLE_SHOW_GEOSEARCH,
