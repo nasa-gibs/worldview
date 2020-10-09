@@ -24,7 +24,11 @@ class MapInteractions extends React.PureComponent {
 
     return (
       <>
-        <div id="wv-map" className={mapClasses} />
+        <div
+          id="wv-map"
+          className={mapClasses}
+          style={{ cursor: isCoordinateSearchActive ? 'crosshair' : 'default' }}
+        />
         {!isDistractionFreeModeActive && (
           <>
             <OlCoordinates
