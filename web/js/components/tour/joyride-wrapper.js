@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Joyride from 'react-joyride';
 
@@ -26,6 +26,14 @@ export default function JoyrideWrapper ({
     width: undefined,
     zIndex: 1050,
   };
+
+  const [elementPositionKey, setElementPositionKey] = useState(getKeyFromProps());
+
+  function getKeyFromProps() {
+    let key = currentTourStep + screenHeight + screenWidth;
+    mapExtent.forEach((coord) => { key += Math.abs(coord.toFixed(0)); });
+    return key;
+  }
 
   function setPlaceholderLocation (element, targetCoordinates) {
     if (!map) return;
@@ -69,10 +77,12 @@ export default function JoyrideWrapper ({
         setPlaceholderLocation(placeholderEl, targetCoordinates);
       }
     });
+    setElementPositionKey(getKeyFromProps());
   }
 
   useEffect(addPlaceholderElements, [currentTourStep]);
   useEffect(updateTargetsOnResize, [screenHeight, screenWidth, mapExtent]);
+
   // When tour is complete, remove all placeholder elements
   useEffect(() => {
     if (tourComplete) {
@@ -80,9 +90,11 @@ export default function JoyrideWrapper ({
     }
   });
 
+  console.log(getKeyFromProps());
+
   return (
     <Joyride
-      key={currentTourStep + mapExtent}
+      key={elementPositionKey}
       steps={steps || []}
       continuous={continuous}
       spotlightClicks={spotlightClicks}
