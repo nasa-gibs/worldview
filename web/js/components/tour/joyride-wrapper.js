@@ -7,16 +7,20 @@ let key = 0;
 let joyrideProps;
 
 export default function JoyrideWrapper ({
-  tourSteps, currentTourStep, map, tourComplete,
+  tourSteps, currentTourStep, map, proj, tourComplete,
 }) {
+  if (!map) return null;
   const currentStepObj = tourSteps[currentTourStep - 1];
+  const { stepLink } = currentStepObj;
+  const projParam = stepLink.split('&').filter((param) => param.includes('p='));
+  const stepProj = projParam.length ? projParam[0].substr(2) : 'geographic';
+  const projMatches = stepProj === proj;
   const {
     continuous,
     disableOverlayClose,
     spotlightClicks,
     steps,
   } = (currentStepObj || {}).joyride || {};
-
   const styleOptions = {
     arrowColor: '#ccc',
     backgroundColor: '#ccc',
@@ -31,13 +35,17 @@ export default function JoyrideWrapper ({
 
   const [elementPositionKey, setElementPositionKey] = useState(key);
 
+  const incrementKey = () => {
+    key += 1;
+    setElementPositionKey(key);
+  };
+
   /**
    * Set a placeholder DOM element's position based on map coords
    * @param {*} element
    * @param {*} targetCoordinates
    */
   function setPlaceholderLocation (element, targetCoordinates) {
-    if (!map) return;
     const { topLeft, bottomRight } = targetCoordinates;
     let [x1, y1] = map.getPixelFromCoordinate(topLeft) || [0, 0];
     let [x2, y2] = map.getPixelFromCoordinate(bottomRight) || [0, 0];
@@ -94,8 +102,7 @@ export default function JoyrideWrapper ({
     // Force a re-render so that Joyride updates the beacon location,
     // otherwise it doesn't know the DOM element position was updated
     if (needsUpdate) {
-      // eslint-disable-next-line no-plusplus
-      setElementPositionKey(key++);
+      incrementKey();
     }
   }
 
@@ -103,13 +110,14 @@ export default function JoyrideWrapper ({
   useEffect(() => {
     addPlaceholderElements();
     map.getView().changed();
-    // eslint-disable-next-line no-plusplus
-    setElementPositionKey(key++);
+    incrementKey();
   }, [currentTourStep]);
+
+  // Force re-render on projection change to reset Joyride
+  useEffect(incrementKey, [proj]);
 
   // Register/de-register evnt listeners for map changes
   useEffect(() => {
-    if (!map) return;
     map.getView().on('change', updateTargetsOnResize);
     return () => map.getView().un('change', updateTargetsOnResize);
   });
@@ -121,7 +129,7 @@ export default function JoyrideWrapper ({
     }
   });
 
-  return (
+  return !projMatches ? null : (
     <Joyride
       key={elementPositionKey}
       steps={steps || []}
@@ -138,6 +146,7 @@ export default function JoyrideWrapper ({
 JoyrideWrapper.propTypes = {
   currentTourStep: PropTypes.number,
   map: PropTypes.object,
+  proj: PropTypes.string,
   tourComplete: PropTypes.bool,
   tourSteps: PropTypes.array,
 };
