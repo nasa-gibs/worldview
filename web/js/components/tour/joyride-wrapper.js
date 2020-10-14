@@ -31,6 +31,11 @@ export default function JoyrideWrapper ({
 
   const [elementPositionKey, setElementPositionKey] = useState(key);
 
+  /**
+   * Set a placeholder DOM element's position based on map coords
+   * @param {*} element
+   * @param {*} targetCoordinates
+   */
   function setPlaceholderLocation (element, targetCoordinates) {
     if (!map) return;
     const { topLeft, bottomRight } = targetCoordinates;
@@ -46,8 +51,10 @@ export default function JoyrideWrapper ({
     element.style.width = `${x2 - x1}px`;
   }
 
-  // Add placeholder DOM elements based on map coordinates so Joyride can place
-  // a beacon on them
+  /**
+   * Add placeholder DOM elements based on map coordinates so
+   * Joyride can place a beacon on them
+   */
   function addPlaceholderElements() {
     (steps || []).forEach((step) => {
       const { target, targetCoordinates } = step || {};
@@ -65,6 +72,11 @@ export default function JoyrideWrapper ({
     });
   }
 
+  /**
+   * When the map is moved, zoomed, or the browser is resized,
+   * any placeholder DOM elements being used as Joyride targets
+   * need to have their positiions updated.
+   */
   function updateTargetsOnResize() {
     const { status, action } = joyrideProps || {};
     if (status === STATUS.FINISHED || action === ACTIONS.RESET) {
@@ -79,18 +91,23 @@ export default function JoyrideWrapper ({
         setPlaceholderLocation(placeholderEl, targetCoordinates);
       }
     });
+    // Force a re-render so that Joyride updates the beacon location,
+    // otherwise it doesn't know the DOM element position was updated
     if (needsUpdate) {
       // eslint-disable-next-line no-plusplus
       setElementPositionKey(key++);
     }
   }
 
+  // Handle effects related to changing the tour step
   useEffect(() => {
     addPlaceholderElements();
     map.getView().changed();
     // eslint-disable-next-line no-plusplus
     setElementPositionKey(key++);
   }, [currentTourStep]);
+
+  // Register/de-register evnt listeners for map changes
   useEffect(() => {
     if (!map) return;
     map.getView().on('change', updateTargetsOnResize);
