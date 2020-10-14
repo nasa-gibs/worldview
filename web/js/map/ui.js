@@ -872,6 +872,9 @@ export default function mapui(models, config, store, ui) {
       if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
+    window.addEventListener('resize', () => {
+      map.getView().changed();
+    });
 
     return map;
   }
