@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Joyride from 'react-joyride';
+import Joyride, { STATUS, ACTIONS } from 'react-joyride';
 
 const placeholderElements = [];
 let key = 0;
+let joyrideProps;
 
 export default function JoyrideWrapper ({
   tourSteps, currentTourStep, map, tourComplete,
@@ -57,7 +58,6 @@ export default function JoyrideWrapper ({
         placeholderEl.style.position = 'absolute';
         placeholderEl.style.zIndex = '0';
         placeholderEl.style.pointerEvents = 'none';
-        placeholderEl.style.background = '#f00';
         setPlaceholderLocation(placeholderEl, targetCoordinates);
         document.querySelector('body').appendChild(placeholderEl);
         placeholderElements.push(placeholderEl);
@@ -66,6 +66,10 @@ export default function JoyrideWrapper ({
   }
 
   function updateTargetsOnResize() {
+    const { status, action } = joyrideProps || {};
+    if (status === STATUS.FINISHED || action === ACTIONS.RESET) {
+      return;
+    }
     let needsUpdate = false;
     (steps || []).forEach((step) => {
       const { target, targetCoordinates } = step || {};
@@ -81,13 +85,16 @@ export default function JoyrideWrapper ({
     }
   }
 
-  useEffect(addPlaceholderElements, [currentTourStep]);
+  useEffect(() => {
+    addPlaceholderElements();
+    map.getView().changed();
+    // eslint-disable-next-line no-plusplus
+    setElementPositionKey(key++);
+  }, [currentTourStep]);
   useEffect(() => {
     if (!map) return;
     map.getView().on('change', updateTargetsOnResize);
-    return () => {
-      map.getView().un('change', updateTargetsOnResize);
-    };
+    return () => map.getView().un('change', updateTargetsOnResize);
   });
 
   // When tour is complete, remove all placeholder elements
@@ -102,6 +109,7 @@ export default function JoyrideWrapper ({
       key={elementPositionKey}
       steps={steps || []}
       continuous={continuous}
+      callback={(props) => { joyrideProps = props; }}
       spotlightClicks={spotlightClicks}
       disableOverlayClose={disableOverlayClose}
       styles={{ options: styleOptions }}
