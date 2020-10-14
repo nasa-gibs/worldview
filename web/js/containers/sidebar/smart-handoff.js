@@ -6,12 +6,12 @@ import { debounce as lodashDebounce } from 'lodash';
 import moment from 'moment';
 import SmartHandoffModal from './smart-handoff-modal';
 import Button from '../../components/util/button';
+import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
 import { getLayers } from '../../modules/layers/selectors';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
-import { openCustomContent } from '../../modules/modal/actions';
-import { changeCropBounds } from '../../modules/animation/actions';
+import { onClose, openCustomContent } from '../../modules/modal/actions';
 import getSelectedDate from '../../modules/date/selectors';
 
 
@@ -32,7 +32,6 @@ class SmartHandoff extends Component {
     const {
       screenWidth,
       screenHeight,
-      onBoundaryChange,
     } = props;
 
     this.state = {
@@ -42,13 +41,25 @@ class SmartHandoff extends Component {
         x2: screenWidth / 2 + 100,
         y2: screenHeight / 2 + 100,
       },
-      selectedLayer: null,
-      availableGranules: null,
-      currentExtent: null,
+      selectedLayer: {},
+      showBoundingBox: false,
+      selectedGranules: 0,
+      totalGranules: 0,
+      currentExtent: {},
+      coordinates: {},
     };
 
-    this.debounceBoundaryUpdate = lodashDebounce(onBoundaryChange, 200);
+
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
+    this.updateExtent = this.updateExtent.bind(this);
+    this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 500);
+  }
+
+  updateExtent() {
+    const { currentExtent, selectedLayer } = this.state;
+    if (selectedLayer && currentExtent) {
+      this.updateGranuleCount(currentExtent);
+    }
   }
 
   /**
@@ -56,6 +67,8 @@ class SmartHandoff extends Component {
    * @param {*} boundaries - the focal point to which layer data should be contained within
    */
   onBoundaryChange(boundaries) {
+    const { proj, map } = this.props;
+    const { selectedLayer } = this.state;
     const {
       x, y, width, height,
     } = boundaries;
@@ -66,8 +79,34 @@ class SmartHandoff extends Component {
       y2: y + height,
     };
 
-    this.setState({ boundaries: newBoundaries });
-    this.debounceBoundaryUpdate(newBoundaries);
+    const lonlats = imageUtilGetCoordsFromPixelValues(
+      newBoundaries,
+      map.ui.selected,
+    );
+    const { crs } = proj;
+    // Retrieve the lat/lon coordinates based on the defining boundary and map projection
+    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+
+    const currentExtent = {
+      southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
+      northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
+    };
+
+    const coordinates = {
+      bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
+      topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
+    };
+
+    this.setState({
+      boundaries: newBoundaries,
+      coordinates,
+      currentExtent,
+    }, () => {
+      if (selectedLayer && currentExtent) {
+        this.debouncedUpdateExtent();
+      }
+    });
   }
 
   onLayerChange(layer, currentExtent) {
@@ -76,27 +115,41 @@ class SmartHandoff extends Component {
 
   async updateGranuleCount(currentExtent) {
     const { selectedDate } = this.props;
-    const { selectedLayer } = this.state;
+    const { selectedLayer, showBoundingBox } = this.state;
     const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
     const endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
 
-    const url = 'https://cmr.earthdata.nasa.gov/search/granules.json?'
+    let totalGranules = 0;
+    let selectedGranules = 0;
+
+    const urlTotalGranules = 'https://cmr.earthdata.nasa.gov/search/granules.json?'
                 + `temporal=${dateRange}&`
                 + `collection_concept_id=${selectedLayer.conceptId}&`
                 + `day_night_flag=${selectedLayer.daynight}&`
-                + `bounding_box=${currentExtent.southWest},${currentExtent.northEast}&`
                 + 'include_facets=v2&'
                 + 'page_size=0';
 
-    const granuleCount = await fetch(url, { timeout: 10000 })
+    let urlSelectedGranules = urlTotalGranules;
+
+    totalGranules = await fetch(urlTotalGranules, { timeout: 5000 })
       .then(async(response) => {
         const result = await response.json();
         return result.feed.facets.children[0].children[0].children[0].count;
       })
-      .catch((error) => 'NONE');
+      .catch((error) => 0);
 
-    this.setState({ availableGranules: granuleCount });
+    if (showBoundingBox) {
+      urlSelectedGranules += `&bounding_box=${currentExtent.southWest},${currentExtent.northEast}`;
+      selectedGranules = await fetch(urlSelectedGranules, { timeout: 5000 })
+        .then(async(response) => {
+          const result = await response.json();
+          return result.feed.facets.children[0].children[0].children[0].count;
+        })
+        .catch((error) => 0);
+    }
+
+    this.setState({ selectedGranules, totalGranules });
   }
 
   /**
@@ -104,18 +157,18 @@ class SmartHandoff extends Component {
    */
   render() {
     const {
-      map,
       screenWidth,
       screenHeight,
-      proj,
       activeLayers,
       isActive,
       showWarningModal,
       selectedDate,
     } = this.props;
 
-    let { selectedLayer } = this.state;
-    const { availableGranules } = this.state;
+    const { selectedLayer } = this.state;
+    const {
+      selectedGranules, totalGranules, coordinates, currentExtent, showBoundingBox,
+    } = this.state;
 
     // Determine if data-download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
@@ -126,24 +179,6 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-    // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-    const lonlats = imageUtilGetCoordsFromPixelValues(
-      boundaries,
-      map.ui.selected,
-    );
-    const { crs } = proj;
-    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
-
-    const currentExtent = {
-      southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
-      northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
-    };
-
-
-    if (selectedLayer && currentExtent) {
-      // lodashDebounce(() => this.onUpdateExtent(currentExtent), 300);
-    }
 
     // Default modal state
     const showModal = false;
@@ -155,31 +190,36 @@ class SmartHandoff extends Component {
     const areHiddenLayersAvailable = activeLayers.filter((layer) => layer.conceptId !== undefined && !layer.visible).length;
 
     if (!isLayerStillActive) {
-      selectedLayer = null;
+      // Need to handle cases here when a layer has been toggled to 'hidden'.
     }
-
 
     return (
       <div id="smart-handoff-side-panel">
 
         {/** Listing of layers that are available to download via Earthdata Search */}
         <h1>Select an available layer to download:</h1>
+
+        <div id="esd-notification">
+          Downloading layer granules and map imagery will be performed using NASA's Earthdata Search application.
+        </div>
+
+        <hr />
+
         <div id="smart-handoff-layer-list">
           {activeLayers.map((layer, i) => {
             if (layer.conceptId && layer.visible) {
               return (
-                <div className="layer-item">
+                <div className="layer-item" key={layer.conceptId}>
                   <input
                     id={layer.id}
                     type="radio"
                     value={layer.conceptId}
-                    checked={selectedLayer && selectedLayer.id === layer.id}
                     name="smart-handoff-layer-radio"
-                    onClick={() => this.onLayerChange(layer, currentExtent)}
+                    checked={selectedLayer && selectedLayer.id === layer.id}
+                    onChange={() => this.onLayerChange(layer, currentExtent)}
                   />
                   <label htmlFor={layer.id}>{layer.title}</label>
                   <span>{layer.subtitle}</span>
-
                 </div>
               );
             }
@@ -187,6 +227,45 @@ class SmartHandoff extends Component {
           })}
         </div>
 
+        <hr />
+
+        <div id="crop-toggle">
+          <Checkbox
+            id="chk-crop-toggle"
+            label="Bounding Box"
+            text="Toggle boundary selection."
+            checked={showBoundingBox}
+            onCheck={() => {
+              this.setState({ showBoundingBox: !showBoundingBox }, () => {
+                if (selectedLayer) this.updateGranuleCount(currentExtent);
+              });
+            }}
+          />
+        </div>
+
+        <hr />
+
+        { showBoundingBox && (
+        <div id="granule-count">
+          <h1>
+            {' '}
+            Granules available:
+            {' '}
+            <span>{`${selectedGranules} of ${totalGranules}`}</span>
+          </h1>
+        </div>
+        )}
+
+        { !showBoundingBox && (
+        <div id="granule-count">
+          <h1>
+            {' '}
+            Granules available:
+            {' '}
+            <span>{totalGranules}</span>
+          </h1>
+        </div>
+        )}
 
         { /** Download button that transfers user to NASA's Earthdata Search */ }
         <Button
@@ -195,22 +274,10 @@ class SmartHandoff extends Component {
             else openEarthDataSearch(selectedDate, selectedLayer, currentExtent)();
           }}
           id="download-btn"
-          text="Download"
+          text="GO TO EARTHDATA SEARCH"
           className="red"
-          valid={selectedLayer}
+          valid={selectedLayer && (totalGranules !== 0)}
         />
-
-        { availableGranules !== null && (
-        <div>
-          <h1>
-            {' '}
-            Total Available Granules:
-            {' '}
-            {availableGranules}
-            {' '}
-          </h1>
-        </div>
-        )}
 
         {/** Listing of layers that are excluded from downloading */}
         { areHiddenLayersAvailable > 0 && (
@@ -235,6 +302,7 @@ class SmartHandoff extends Component {
 
 
         { /** Image crop overlay used to determine user's area of interest */ }
+        { showBoundingBox && (
         <Crop
           className="download-extent"
           x={x}
@@ -244,6 +312,7 @@ class SmartHandoff extends Component {
           maxHeight={screenHeight}
           maxWidth={screenWidth}
           onChange={this.onBoundaryChange}
+          onClose={onClose}
           keepSelection
           bottomLeftStyle={{
             left: x,
@@ -255,12 +324,10 @@ class SmartHandoff extends Component {
             top: y - 20,
             width: x2 - x,
           }}
-          coordinates={{
-            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
-          }}
+          coordinates={coordinates}
           showCoordinates
         />
+        )}
       </div>
     );
   }
@@ -282,20 +349,6 @@ const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () =>
   }
 
   window.open(earthDataSearchURL, '_blank');
-  /* Example URL string
-    https://search.earthdata.nasa.gov/search/granules?
-      p=C1000001167-NSIDC_ECS
-      &pg[0][qt]=2017-11-15T00%3A00%3A00.000Z%2C2017-11-15T23%3A59%3A59.999Z
-      &pg[0][dnf]=DAY
-      &sb=-156.69223022460938%2C54.284636794532624%2C-133.9395446777344%2C70.07726383377425
-      &m=59.6953125!-179.015625!3!1!0!0%2C2
-      &ff=Customizable
-      &tl=1571168792!4!!
-  */
-
-  // API Call to CMR
-
-  // Standard vs NRT
 };
 
 /**
@@ -305,7 +358,6 @@ SmartHandoff.propTypes = {
   isActive: PropTypes.bool,
   activeLayers: PropTypes.array,
   map: PropTypes.object.isRequired,
-  onBoundaryChange: PropTypes.func,
   boundaries: PropTypes.object,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
@@ -361,9 +413,6 @@ const mapDispatchToProps = (dispatch) => ({
         size: 'lg',
       }),
     );
-  },
-  onBoundaryChange: (bounds) => {
-    dispatch(changeCropBounds(bounds));
   },
 });
 

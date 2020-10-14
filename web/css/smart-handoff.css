@@ -3,7 +3,7 @@
 #smart-handoff-side-panel h1 {
     margin-top: 10px;
     margin-left: 5px;
-    color: #AAA;
+    color: #BBB;
 }
 #smart-handoff-product-list {
     color: white;
@@ -17,7 +17,15 @@
 }
 #download-btn {
     display: block;
-    margin: 15px auto;
+    margin: 15px auto 30px auto;
+}
+#esd-notification {
+    display: block;
+    margin: 10px 31px;
+    text-align: justify;
+    font-size: 7pt;
+    font-style: italic;
+    color: #7bf;
 }
 #smart-handoff-layer-list {
     margin-top: 15px;
@@ -25,7 +33,7 @@
     color: white;
 }
 #smart-handoff-layer-list .layer-item {
-    padding: 10px 20px;
+    padding: 15px 20px;
 }
 
 #smart-handoff-layer-list .layer-item label {
@@ -48,20 +56,39 @@
 }
 
 #smart-handoff-side-panel hr {
-    border-top: 1px solid #444;
+    border-top: 1px solid rgba(150,150,150,0.25);
     margin: 0;
     padding: 0;
     margin-top: 15px;
 }
 
 #smart-handoff-hidden-layer-list {
-    margin: 10px 0px 0px 15px;
-    color: #888;
+    margin: 15px 0px 0px 15px;
+    color: #777;
 }
 
 #smart-handoff-hidden-layer-list h1 {
     margin-left: 0;
     text-align: left;
+}
+
+#crop-toggle {
+    text-align: center;
+    margin-top: 15px;
+}
+
+label[for=chk-crop-toggle] {
+    color: white;
+}
+
+#granule-count {
+    margin: 25px auto;
+    margin-bottom: 0;
+}
+#granule-count span {
+    color: white;
+    font-size: 9pt;
+    font-weight: bold;
 }
 
 .hidden-layer {
