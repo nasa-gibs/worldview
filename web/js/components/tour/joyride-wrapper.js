@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import Joyride from 'react-joyride';
 
 const placeholderElements = [];
+let key = 0;
 
 export default function JoyrideWrapper ({
-  tourSteps, currentTourStep, map, tourComplete, screenHeight, screenWidth, mapExtent,
+  tourSteps, currentTourStep, map, tourComplete,
 }) {
   const currentStepObj = tourSteps[currentTourStep - 1];
   const {
@@ -27,13 +28,7 @@ export default function JoyrideWrapper ({
     zIndex: 1050,
   };
 
-  const [elementPositionKey, setElementPositionKey] = useState(getKeyFromProps());
-
-  function getKeyFromProps() {
-    let key = currentTourStep + screenHeight + screenWidth;
-    mapExtent.forEach((coord) => { key += Math.abs(coord.toFixed(0)); });
-    return key;
-  }
+  const [elementPositionKey, setElementPositionKey] = useState(key);
 
   function setPlaceholderLocation (element, targetCoordinates) {
     if (!map) return;
@@ -62,6 +57,7 @@ export default function JoyrideWrapper ({
         placeholderEl.style.position = 'absolute';
         placeholderEl.style.zIndex = '0';
         placeholderEl.style.pointerEvents = 'none';
+        placeholderEl.style.background = '#f00';
         setPlaceholderLocation(placeholderEl, targetCoordinates);
         document.querySelector('body').appendChild(placeholderEl);
         placeholderElements.push(placeholderEl);
@@ -70,18 +66,29 @@ export default function JoyrideWrapper ({
   }
 
   function updateTargetsOnResize() {
+    let needsUpdate = false;
     (steps || []).forEach((step) => {
       const { target, targetCoordinates } = step || {};
       const placeholderEl = document.querySelector(target);
       if (targetCoordinates) {
+        needsUpdate = true;
         setPlaceholderLocation(placeholderEl, targetCoordinates);
       }
     });
-    setElementPositionKey(getKeyFromProps());
+    if (needsUpdate) {
+      // eslint-disable-next-line no-plusplus
+      setElementPositionKey(key++);
+    }
   }
 
   useEffect(addPlaceholderElements, [currentTourStep]);
-  useEffect(updateTargetsOnResize, [screenHeight, screenWidth, mapExtent]);
+  useEffect(() => {
+    if (!map) return;
+    map.getView().on('change', updateTargetsOnResize);
+    return () => {
+      map.getView().un('change', updateTargetsOnResize);
+    };
+  });
 
   // When tour is complete, remove all placeholder elements
   useEffect(() => {
@@ -89,8 +96,6 @@ export default function JoyrideWrapper ({
       placeholderElements.forEach((element) => element.remove());
     }
   });
-
-  console.log(getKeyFromProps());
 
   return (
     <Joyride
@@ -108,9 +113,6 @@ export default function JoyrideWrapper ({
 JoyrideWrapper.propTypes = {
   currentTourStep: PropTypes.number,
   map: PropTypes.object,
-  mapExtent: PropTypes.array,
-  screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number,
   tourComplete: PropTypes.bool,
   tourSteps: PropTypes.array,
 };
