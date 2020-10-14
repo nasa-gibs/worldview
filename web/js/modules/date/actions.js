@@ -7,6 +7,7 @@ import {
   TOGGLE_CUSTOM_MODAL,
   INIT_SECOND_DATE,
 } from './constants';
+import { getMaxActiveLayersDate } from './util';
 
 export function changeTimeScale(num) {
   return {
@@ -28,12 +29,13 @@ export function initSecondDate() {
 export function selectDate(value) {
   return (dispatch, getState) => {
     const state = getState();
-    const { compare, date } = state;
+    const {
+      compare,
+    } = state;
     const activeString = compare.isCompareA ? 'selected' : 'selectedB';
-    const { appNow } = date;
-
-    const selectedDate = value > appNow
-      ? appNow
+    const maxDate = getMaxActiveLayersDate(state);
+    const selectedDate = value > maxDate
+      ? maxDate
       : value;
 
     dispatch({

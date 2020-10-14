@@ -234,6 +234,29 @@ function forGroup(group, spec = {}, activeLayers, state) {
 }
 
 /**
+ * Build end date for future layer
+ *
+ * @method getFutureLayerEndDate
+ * @param  {Object} layer
+ * @returns {Object} date object
+ */
+export function getFutureLayerEndDate(layer) {
+  const { futureTime } = layer;
+  const max = new Date();
+  const dateType = futureTime.slice(-1);
+  const dateInterval = futureTime.slice(0, -1);
+
+  if (dateType === 'D') {
+    max.setDate(max.getDate() + parseInt(dateInterval, 10));
+  } else if (dateType === 'M') {
+    max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
+  } else if (dateType === 'Y') {
+    max.setYear(max.getYear() + parseInt(dateInterval, 10));
+  }
+  return max;
+}
+
+/**
  * Determine date range for layers
  * @param {*} spec
  * @param {*} activeLayers
@@ -292,21 +315,8 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
     // the max day to today.
     if (def.futureLayer && def.futureTime && !def.endDate) {
       // Calculate endDate + parsed futureTime from layer JSON
-      max = new Date();
-      const { futureTime } = def;
-      const dateType = futureTime.slice(-1);
-      const dateInterval = futureTime.slice(0, -1);
-
-      if (dateType === 'D') {
-        max.setDate(max.getDate() + parseInt(dateInterval, 10));
-        maxDates.push(new Date(max));
-      } else if (dateType === 'M') {
-        max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
-        maxDates.push(new Date(max));
-      } else if (dateType === 'Y') {
-        max.setYear(max.getYear() + parseInt(dateInterval, 10));
-        maxDates.push(new Date(max));
-      }
+      max = getFutureLayerEndDate(def);
+      maxDates.push(new Date(max));
     } else if (def.startDate && !def.endDate) {
       max = minuteCeilingCurrentTime;
       maxDates.push(new Date(max));
