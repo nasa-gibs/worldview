@@ -1705,12 +1705,11 @@ const getTimelineEndDateLimit = (state) => {
 
   let timelineEndDateLimit;
   if (layerDateRange && layerDateRange.end > appNow) {
-    let layerDateRangeEndZeroMin = new Date(layerDateRange.end).setUTCMinutes(0, 0, 0);
-    const appNowZeroMin = new Date(appNow).setUTCMinutes(0, 0, 0);
-    if (layerDateRangeEndZeroMin > appNowZeroMin) {
-      // if layerDateRange.end is after the set zeored hour time, then update
-      layerDateRangeEndZeroMin = new Date(layerDateRangeEndZeroMin).setUTCHours(0);
-      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndZeroMin);
+    const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
+    const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);
+    if (layerDateRangeEndRoundedQuarterHour.getTime() > appNowRoundedQuarterHour.getTime()) {
+      // if layerDateRange.end is after the set rounded quarter hour time, then update
+      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndRoundedQuarterHour);
     }
   } else {
     timelineEndDateLimit = getISODateFormatted(appNow);
