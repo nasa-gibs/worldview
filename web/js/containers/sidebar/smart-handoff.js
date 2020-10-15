@@ -43,6 +43,7 @@ class SmartHandoff extends Component {
       },
       selectedLayer: {},
       showBoundingBox: false,
+      isSearchingForGranules: false,
       selectedGranules: 0,
       totalGranules: 0,
       currentExtent: {},
@@ -52,7 +53,15 @@ class SmartHandoff extends Component {
 
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.updateExtent = this.updateExtent.bind(this);
-    this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 500);
+    this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 250);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedDate } = this.props;
+    const { currentExtent } = this.state;
+
+    const didDateChange = selectedDate !== prevProps.selectedDate;
+    if (didDateChange) this.updateGranuleCount(currentExtent);
   }
 
   updateExtent() {
@@ -116,6 +125,9 @@ class SmartHandoff extends Component {
   async updateGranuleCount(currentExtent) {
     const { selectedDate } = this.props;
     const { selectedLayer, showBoundingBox } = this.state;
+
+    this.setState({ isSearchingForGranules: true });
+
     const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
     const endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
@@ -150,6 +162,7 @@ class SmartHandoff extends Component {
     }
 
     this.setState({ selectedGranules, totalGranules });
+    this.setState({ isSearchingForGranules: false });
   }
 
   /**
@@ -165,7 +178,7 @@ class SmartHandoff extends Component {
       selectedDate,
     } = this.props;
 
-    const { selectedLayer } = this.state;
+    const { selectedLayer, isSearchingForGranules } = this.state;
     const {
       selectedGranules, totalGranules, coordinates, currentExtent, showBoundingBox,
     } = this.state;
@@ -206,10 +219,10 @@ class SmartHandoff extends Component {
         <hr />
 
         <div id="smart-handoff-layer-list">
-          {activeLayers.map((layer, i) => {
+          {activeLayers.map((layer, index) => {
             if (layer.conceptId && layer.visible) {
               return (
-                <div className="layer-item" key={layer.conceptId}>
+                <div className="layer-item">
                   <input
                     id={layer.id}
                     type="radio"
@@ -232,7 +245,7 @@ class SmartHandoff extends Component {
         <div id="crop-toggle">
           <Checkbox
             id="chk-crop-toggle"
-            label="Bounding Box"
+            label="Toggle Bounding Box"
             text="Toggle boundary selection."
             checked={showBoundingBox}
             onCheck={() => {
@@ -245,33 +258,21 @@ class SmartHandoff extends Component {
 
         <hr />
 
-        { showBoundingBox && (
         <div id="granule-count">
           <h1>
-            {' '}
             Granules available:
             {' '}
-            <span>{`${selectedGranules} of ${totalGranules}`}</span>
+            { showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
+            { !showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{totalGranules}</span>)}
+            { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
           </h1>
         </div>
-        )}
-
-        { !showBoundingBox && (
-        <div id="granule-count">
-          <h1>
-            {' '}
-            Granules available:
-            {' '}
-            <span>{totalGranules}</span>
-          </h1>
-        </div>
-        )}
 
         { /** Download button that transfers user to NASA's Earthdata Search */ }
         <Button
           onClick={() => {
-            if (showModal) showWarningModal(selectedDate, selectedLayer, currentExtent);
-            else openEarthDataSearch(selectedDate, selectedLayer, currentExtent)();
+            if (showModal) showWarningModal(selectedDate, selectedLayer, currentExtent, showBoundingBox);
+            else openEarthDataSearch(selectedDate, selectedLayer, currentExtent, showBoundingBox)();
           }}
           id="download-btn"
           text="GO TO EARTHDATA SEARCH"
@@ -333,7 +334,7 @@ class SmartHandoff extends Component {
   }
 }
 
-const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () => {
+const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords, showBoundingBox) => () => {
   const { conceptId, daynight } = selectedLayer;
   const { southWest, northEast } = extentCoords;
 
@@ -342,11 +343,10 @@ const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords) => () =>
 
   const dateRange = `${startDate},${endDate}`;
 
-  let earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&[qt]=${dateRange}&sb=${southWest},${northEast}&m=0.0!-180.0!0!1!0!0,2`;
+  let earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&[qt]=${dateRange}&m=0.0!-180.0!0!1!0!0,2`;
 
-  if (daynight) {
-    earthDataSearchURL += `&pg[0][dnf]=${daynight}`;
-  }
+  if (daynight) earthDataSearchURL += `&pg[0][dnf]=${daynight}`;
+  if (showBoundingBox) earthDataSearchURL += `&sb=${southWest},${northEast}`;
 
   window.open(earthDataSearchURL, '_blank');
 };
@@ -399,7 +399,7 @@ const mapStateToProps = (state, ownProps) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: (selectedDate, selectedLayer, extentCoords) => {
+  showWarningModal: (selectedDate, selectedLayer, extentCoords, showBoundingBox) => {
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
         headerText: 'Leaving Worldview',
@@ -408,7 +408,8 @@ const mapDispatchToProps = (dispatch) => ({
           selectedDate,
           selectedLayer,
           extentCoords,
-          goToEarthDataSearch: openEarthDataSearch(selectedDate, selectedLayer, extentCoords),
+          showBoundingBox,
+          goToEarthDataSearch: openEarthDataSearch(selectedDate, selectedLayer, extentCoords, showBoundingBox),
         },
         size: 'lg',
       }),

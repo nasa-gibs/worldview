@@ -5,6 +5,7 @@ button:focus {
 
 #timeline {
   left: 0;
+  z-index: 1;
 }
 
 .timeline-inner {
