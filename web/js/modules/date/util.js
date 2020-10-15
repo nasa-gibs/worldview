@@ -98,14 +98,17 @@ export function getMaxActiveLayersDate(state) {
  *
  * @method getLayersActiveAtDate
  * @param  {Array} layers
+ * @param  {Object} appNow date object
  * @returns {Array} Array of max layer end dates
  */
-export function getMaxLayerEndDates(layers) {
+export function getMaxLayerEndDates(layers, appNow) {
   return layers.reduce((layerEndDates, layer) => {
     const futureLayer = layer.futureLayer && layer.futureTime;
     let layerEndDate = layer.endDate;
     if (futureLayer) {
       layerEndDate = getFutureLayerEndDate(layer);
+    } else {
+      layerEndDate = new Date(appNow);
     }
     return layerEndDate ? layerEndDates.concat(layerEndDate) : layerEndDates;
   }, []);

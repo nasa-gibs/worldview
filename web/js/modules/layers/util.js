@@ -13,7 +13,7 @@ import {
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
-import { addLayer, resetLayers } from './selectors';
+import { addLayer, resetLayers, getFutureLayerEndDate } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
@@ -640,10 +640,13 @@ const getSubdailyDateRange = ({
 export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
   const {
     dateRanges,
+    futureLayer,
+    futureTime,
     period,
     inactive,
   } = def;
   const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
+  const isFutureLayer = futureLayer && futureTime;
   let dateArray = [];
   let currentDate = new Date(date);
 
@@ -726,7 +729,12 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
       }
       // set maxDate to current date if layer coverage is ongoing
       if (index === dateRanges.length - 1 && !inactive) {
-        maxDate = new Date(appNow);
+        if (isFutureLayer) {
+          const futureDate = getFutureLayerEndDate(def);
+          maxDate = futureDate;
+        } else {
+          maxDate = new Date(appNow);
+        }
       }
     }
 

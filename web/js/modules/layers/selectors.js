@@ -253,7 +253,7 @@ export function getFutureLayerEndDate(layer) {
   } else if (dateType === 'Y') {
     max.setYear(max.getYear() + parseInt(dateInterval, 10));
   }
-  return max;
+  return util.roundTimeQuarterHour(max);
 }
 
 /**
