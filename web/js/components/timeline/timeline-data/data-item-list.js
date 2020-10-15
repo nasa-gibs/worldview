@@ -5,6 +5,10 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { datesinDateRanges } from '../../../modules/layers/util';
+import { getISODateFormatted } from '../date-util';
+import {
+  getFutureLayerEndDate,
+} from '../../../modules/layers/selectors';
 import util from '../../../util/util';
 import {
   timeScaleToNumberKey,
@@ -91,14 +95,17 @@ class DataItemList extends Component {
 
   /**
   * @desc get range date end with added interval based on period
+  * @param {Object} layer def object
   * @param {Object} range date object
   * @param {String} time unit period
   * @param {Number} itemRangeInterval
   * @param {Object} nextDate range object with date
   * @returns {String} rangeDateEnd date ISO string
   */
-  getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
+  getRangeDateEndWithAddedInterval = (layer, rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
     const { appNow } = this.props;
+    const { futureLayer, futureTime } = layer;
+    const isFutureLayer = futureLayer && futureTime;
     const {
       minYear,
       minMonth,
@@ -132,7 +139,14 @@ class DataItemList extends Component {
     }
     // prevent range end exceeding appNow
     if (appNow < rangeDateEnd) {
-      rangeDateEnd = appNow;
+      if (isFutureLayer) {
+        const futureDate = getFutureLayerEndDate(layer);
+        rangeDateEnd = futureDate && futureDate > rangeDateEnd
+          ? rangeDateEnd
+          : futureDate;
+      } else {
+        rangeDateEnd = appNow;
+      }
     }
     return new Date(rangeDateEnd).toISOString();
   }
@@ -144,7 +158,9 @@ class DataItemList extends Component {
   */
   getFormattedDateRange = (layer) => {
     // get start date -or- 'start'
-    const { endDate, startDate } = layer;
+    const {
+      endDate, startDate, futureLayer, futureTime,
+    } = layer;
     let dateRangeStart;
     if (startDate) {
       const yearMonthDaySplit = startDate.split('T')[0].split('-');
@@ -159,10 +175,17 @@ class DataItemList extends Component {
       dateRangeStart = 'Start';
     }
 
+    let layerEndDate = endDate;
+    if (futureLayer && futureTime) {
+      const futureDate = getFutureLayerEndDate(layer);
+      layerEndDate = futureDate || endDate;
+      layerEndDate = getISODateFormatted(layerEndDate);
+    }
+
     // get end date -or- 'present'
     let dateRangeEnd;
-    if (endDate) {
-      const yearMonthDaySplit = endDate.split('T')[0].split('-');
+    if (layerEndDate) {
+      const yearMonthDaySplit = layerEndDate.split('T')[0].split('-');
       const year = yearMonthDaySplit[0];
       const month = yearMonthDaySplit[1];
       const day = yearMonthDaySplit[2];
@@ -180,25 +203,37 @@ class DataItemList extends Component {
 
   /**
   * @desc get endDateLimit based on axis and appNow
-  * @param {Boolean} layer inactive
+  * @param {Object} layer def object
   * @param {Boolean} isLastInRange
   * @returns {Object} endDateLimit date object
   */
-  getMaxEndDate = (inactive, isLastInRange) => {
+  getMaxEndDate = (layer, isLastInRange) => {
     const {
       appNow,
       backDate,
     } = this.props;
+    const { futureLayer, futureTime, inactive } = layer;
+    const isFutureLayer = futureLayer && futureTime;
+
+    let layerEndDate;
+    if (futureLayer && futureTime) {
+      const futureDate = getFutureLayerEndDate(layer);
+      layerEndDate = futureDate;
+    }
 
     let endDateLimit = new Date(backDate);
     const appNowDate = new Date(appNow);
     // appNow will override max range endDate
-    if (appNowDate < endDateLimit) {
+    if (appNowDate < endDateLimit && !isFutureLayer) {
       endDateLimit = appNowDate;
     }
     // if last date of multiple ranges check for endDate over appNow date
     if (!inactive && isLastInRange) {
-      if (endDateLimit > appNowDate) {
+      if (isFutureLayer && layerEndDate) {
+        if (endDateLimit > layerEndDate) {
+          endDateLimit = layerEndDate;
+        }
+      } else if (endDateLimit > appNowDate) {
         endDateLimit = appNowDate;
       }
     }
@@ -219,8 +254,10 @@ class DataItemList extends Component {
       backDate,
       frontDate,
     } = this.props;
-
-    const { period, id, inactive } = def;
+    const {
+      futureLayer, futureTime, period, id, inactive,
+    } = def;
+    const isFutureLayer = futureLayer && futureTime;
     const { dateInterval, startDate, endDate } = range;
 
     const layerPeriod = this.getFormattedTimePeriod(period);
@@ -243,7 +280,12 @@ class DataItemList extends Component {
     // rangeEnd for last time coverage section of active layers can't be greater than appNow
     const appNowDate = new Date(appNow);
     if (!inactive && isLastInRange) {
-      rangeEnd = appNowDate;
+      if (isFutureLayer) {
+        const futureDate = getFutureLayerEndDate(def);
+        rangeEnd = futureDate;
+      } else {
+        rangeEnd = appNowDate;
+      }
     }
 
     // get dates within given date range

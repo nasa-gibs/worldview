@@ -8,6 +8,13 @@ import {
 import {
   timeScaleOptions,
 } from '../../../modules/date/constants';
+import {
+  filterProjLayersWithStartDate,
+  getMaxLayerEndDates,
+} from '../../../modules/date/util';
+import {
+  getFutureLayerEndDate,
+} from '../../../modules/layers/selectors';
 import Scrollbars from '../../util/scrollbar';
 import Switch from '../../util/switch';
 import DataItemList from './data-item-list';
@@ -137,6 +144,8 @@ class TimelineData extends Component {
     }
     if (rangeEnd || layer.inactive === true) {
       layerEnd = new Date(rangeEnd || layer.endDate).getTime();
+    } else if (layer.futureLayer && layer.futureTime && !layer.endDate) {
+      layerEnd = getFutureLayerEndDate(layer);
     } else {
       layerEnd = new Date(appNow).getTime();
     }
@@ -234,7 +243,7 @@ class TimelineData extends Component {
         }
       }
       // for each end date, find earliest that is still after start date
-      const endDates = layers.reduce((acc, x) => (x.endDate ? acc.concat(x.endDate) : acc), []);
+      const endDates = getMaxLayerEndDates(layers, appNow);
       for (let i = 0; i < endDates.length; i += 1) {
         const date = new Date(endDates[i]);
         if (i === 0) {
@@ -367,7 +376,7 @@ function mapStateToProps(state) {
   // handle active layer filtering
   const activeLayers = layers[compare.activeString];
   const projection = proj.id;
-  const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
+  const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
 
   const { hoveredLayer } = layers;
   const isProductPickerOpen = modal.isOpen && modal.id === 'LAYER_PICKER_COMPONENT';

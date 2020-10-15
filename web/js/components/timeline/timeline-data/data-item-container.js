@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DataLine from './data-line';
+import { getFutureLayerEndDate } from '../../../modules/layers/selectors';
+import { getISODateFormatted } from '../date-util';
 
 /*
  * Data Item Container for individual layer data coverage.
@@ -56,18 +58,29 @@ class DataItemContainer extends Component {
   */
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
-    const { inactive } = layer;
-
+    const { futureLayer, futureTime } = layer;
+    // dateRanges[0].endDate = '2020-10-18T21:07:00.00Z';
     const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
       // multi time unit range - no year time unit
-      const endDateLimit = getMaxEndDate(inactive, isLastInRange);
+      const endDateLimit = getMaxEndDate(layer, isLastInRange);
       // get dates based on date ranges
-      const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
       const startDateTime = new Date(startDate).getTime();
-      const endDateTime = new Date(endDate).getTime();
+
+      let layerEndDate;
+      if (futureLayer && futureTime) {
+        layerEndDate = getFutureLayerEndDate(layer);
+      } else {
+        layerEndDate = new Date(endDate);
+      }
+
+      // TODO: determine condtional logic on using layerEndDate
+      console.log(layerEndDate.toISOString(), endDateLimit.toISOString());
+      const endDateTime = new Date(layerEndDate).getTime();
+      const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
+
       // add date intervals to mutliCoverageDates object to catch repeats
       dateIntervalStartDates.forEach((dateIntStartDate) => {
         const dateIntTime = new Date(dateIntStartDate).getTime();
@@ -109,13 +122,22 @@ class DataItemContainer extends Component {
       dataDateRanges,
     } = this.state;
 
+    // layer options
     const {
-      endDate,
+      futureLayer,
       id,
       startDate,
       visible,
     } = layer;
+    let {
+      endDate,
+    } = layer;
 
+    if (futureLayer) {
+      const futureDate = getFutureLayerEndDate(layer);
+      endDate = futureDate || endDate;
+      endDate = getISODateFormatted(futureDate);
+    }
     // condtional styling for line/background colors
     const {
       lineBackgroundColor,
@@ -140,7 +162,7 @@ class DataItemContainer extends Component {
                 const { date, interval } = itemRange;
                 const dateObj = new Date(date);
                 const nextDate = array[multiIndex + 1];
-                const rangeDateEnd = getRangeDateEndWithAddedInterval(dateObj, layerPeriod, interval, nextDate);
+                const rangeDateEnd = getRangeDateEndWithAddedInterval(layer, dateObj, layerPeriod, interval, nextDate);
                 // get range line dimensions
                 const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, dateObj, rangeDateEnd);
                 // create DOM line element
