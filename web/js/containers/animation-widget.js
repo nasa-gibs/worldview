@@ -44,6 +44,7 @@ import {
 import {
   hasSubDaily as hasSubDailySelector,
   getLayers,
+  dateRange as getDateRange,
 } from '../modules/layers/selectors';
 import {
   play,
@@ -671,13 +672,20 @@ function mapStateToProps(state) {
     { proj: proj.id },
     state,
   );
+  const layerDateRange = getDateRange({}, activeLayersForProj);
   const activePalettes = palettes[activeStr];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
     activePalettes,
   );
   const minDate = new Date(config.startDate);
-  const maxDate = appNow;
+  let maxDate;
+  if (layerDateRange && layerDateRange.end > appNow) {
+    maxDate = layerDateRange.end;
+  } else {
+    maxDate = appNow;
+  }
+
   const animationIsActive = isActive
     && browser.greaterThan.small
     && lodashGet(map, 'ui.selected.frameState_')

@@ -29,6 +29,7 @@ import {
 import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
+import { getFutureLayerEndDate } from '../../modules/layers/selectors';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -86,21 +87,34 @@ class Layer extends React.Component {
   }
 
   getDisabledTitle = (layer) => {
-    let startDate; let
-      endDate;
+    const {
+      endDate,
+      futureLayer,
+      futureTime,
+      period,
+      startDate,
+    } = layer;
 
-    if (layer.startDate) {
-      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
+    // start date
+    let layerStartDate;
+    if (startDate) {
+      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
     }
 
-    if (layer.endDate) {
-      endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
+    // end date (including future date building)
+    let layerEndDate = endDate;
+    if (futureLayer && futureTime) {
+      const futureDate = getFutureLayerEndDate(layer);
+      layerEndDate = futureDate ? futureDate.toISOString() : endDate;
+    }
+    if (layerEndDate) {
+      layerEndDate = util.coverageDateFormatter('END-DATE', layerEndDate, period);
     }
 
-    if (startDate && endDate) {
-      return `Data available between ${startDate} - ${endDate}`;
-    } if (startDate) {
-      return `Data available between ${startDate} - Present`;
+    if (layerStartDate && layerEndDate) {
+      return `Data available between ${layerStartDate} - ${layerEndDate}`;
+    } if (layerStartDate) {
+      return `Data available between ${layerStartDate} - Present`;
     }
     return 'No data on selected date for this layer';
   }

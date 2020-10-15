@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
+import { getFutureLayerEndDate } from '../../../modules/layers/selectors';
 import DateRanges from './date-ranges';
 import util from '../../../util/util';
 import Scrollbars from '../../util/scrollbar';
@@ -41,26 +42,40 @@ class LayerInfo extends React.Component {
   render() {
     const { layer, screenHeight } = this.props;
     const { metaData } = this.state;
-    const layerId = layer.id;
-    const hasLayerDateRange = layer.dateRanges && layer.dateRanges.length > 1;
-    const dateRanges = hasLayerDateRange
-      ? dateOverlap(layer.period, layer.dateRanges)
+    const {
+      dateRanges,
+      endDate,
+      futureLayer,
+      futureTime,
+      id,
+      period,
+      startDate,
+    } = layer;
+    const hasLayerDateRange = dateRanges && dateRanges.length > 1
+      ? dateOverlap(period, dateRanges)
       : [];
+
+    const layerStartDate = startDate;
+    let layerEndDate = endDate;
+    if (futureLayer && futureTime) {
+      const futureDate = getFutureLayerEndDate(layer);
+      layerEndDate = futureDate ? futureDate.toISOString() : endDate;
+    }
     return (
       <div id="layer-description" className="layer-description">
-        {layer.startDate || layer.endDate ? (
+        {layerStartDate || layerEndDate ? (
           <div id="layer-date-range" className="layer-date-range">
-            <span id={`${layerId}-startDate`} className="layer-date-start">
-              {layer.startDate
+            <span id={`${id}-startDate`} className="layer-date-start">
+              {layerStartDate
                 ? `Temporal coverage: ${
-                  configureTemporalDate('START-DATE', layer.startDate, layer.period)}`
+                  configureTemporalDate('START-DATE', layerStartDate, period)}`
                 : ''}
             </span>
-            <span id={`${layerId}-endDate`} className="layer-date-end">
-              {layer.startDate && layer.endDate
+            <span id={`${id}-endDate`} className="layer-date-end">
+              {layerStartDate && layerEndDate
                 ? ` - ${
-                  configureTemporalDate('END-DATE', layer.endDate, layer.period)}`
-                : layer.startDate
+                  configureTemporalDate('END-DATE', layerEndDate, period)}`
+                : layerStartDate
                   ? ' - Present'
                   : ''}
             </span>
