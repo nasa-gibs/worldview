@@ -44,9 +44,14 @@ module.exports = {
   },
 
   // verify default right arrow disabled since loaded on current day
-  'Right timeline arrow will be disabled by default': (client) => {
+  'Right timeline arrow will be disabled by default - unless past 00:00 UTC but before 04:00': (client) => {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
-    client.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
+    // accomodate for config.initialDate past 00:00 UTC but before 04:00
+    if (new Date().getUTCHours() < 3) {
+      client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+    } else {
+      client.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
+    }
   },
 
   // verify valid right arrow enabled since NOT loaded on current day
