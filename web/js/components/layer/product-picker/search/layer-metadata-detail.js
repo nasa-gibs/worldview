@@ -18,7 +18,7 @@ import {
 import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers, getFutureLayerEndDate } from '../../../../modules/layers/selectors';
+import { getActiveLayers, getFutureLayerEndDate, isFutureLayer } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import RecentLayersInfo from '../browse/recent-layers-info';
 
@@ -80,8 +80,6 @@ class LayerMetadataDetail extends React.Component {
      */
   dateRangeText = (layer) => {
     const {
-      futureLayer,
-      futureTime,
       id,
       inactive,
       period,
@@ -91,7 +89,7 @@ class LayerMetadataDetail extends React.Component {
     let layerStartDate = startDate;
     let layerEndDate = layer.endDate;
     // handle future layer dates
-    if (futureLayer && futureTime) {
+    if (isFutureLayer(layer)) {
       const futureDate = getFutureLayerEndDate(layer);
       layerEndDate = futureDate ? futureDate.toISOString() : layer.endDate;
     }

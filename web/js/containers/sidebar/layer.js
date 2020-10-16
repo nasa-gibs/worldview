@@ -103,7 +103,8 @@ class Layer extends React.Component {
 
     // end date (including future date building)
     let layerEndDate = endDate;
-    if (futureLayer && futureTime) {
+    const isFutureLayer = futureLayer && futureTime;
+    if (isFutureLayer) {
       const futureDate = getFutureLayerEndDate(layer);
       layerEndDate = futureDate ? futureDate.toISOString() : endDate;
     }

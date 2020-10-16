@@ -44,6 +44,8 @@ export function hasMeasurementSource(current, config, projId) {
   return hasSource;
 }
 
+export const isFutureLayer = ({ futureLayer, futureTime }) => futureLayer && futureTime;
+
 /**
  * var hasMeasurementSetting - Checks the (current) measurement's source
  *  for a setting and returns true if present.
