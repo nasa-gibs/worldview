@@ -59,7 +59,6 @@ class DataItemContainer extends Component {
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
     const { futureLayer, futureTime } = layer;
-    // dateRanges[0].endDate = '2020-10-18T21:07:00.00Z';
     const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
