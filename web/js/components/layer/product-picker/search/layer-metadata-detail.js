@@ -18,7 +18,7 @@ import {
 import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers } from '../../../../modules/layers/selectors';
+import { getActiveLayers, getFutureLayerEndDate } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import RecentLayersInfo from '../browse/recent-layers-info';
 
@@ -79,28 +79,43 @@ class LayerMetadataDetail extends React.Component {
      * @return {string}       Return a string with temporal range information
      */
   dateRangeText = (layer) => {
-    let startDate;
+    const {
+      futureLayer,
+      futureTime,
+      id,
+      inactive,
+      period,
+      startDate,
+    } = layer;
+
+    let layerStartDate = startDate;
+    let layerEndDate = layer.endDate;
+    // handle future layer dates
+    if (futureLayer && futureTime) {
+      const futureDate = getFutureLayerEndDate(layer);
+      layerEndDate = futureDate ? futureDate.toISOString() : layer.endDate;
+    }
+
     let startDateId;
     let endDate;
     let endDateId;
-
-    if (layer.startDate) {
-      startDateId = `${layer.id}-startDate`;
-      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
+    if (startDate) {
+      startDateId = `${id}-startDate`;
+      layerStartDate = util.coverageDateFormatter('START-DATE', layerStartDate, period);
     }
-    if (layer.endDate) {
-      endDateId = `${layer.id}-endDate`;
-      endDate = util.parseDate(layer.endDate);
-      if (endDate <= util.today() && !layer.inactive) {
+    if (layerEndDate) {
+      endDateId = `${id}-endDate`;
+      endDate = util.parseDate(layerEndDate);
+      if (endDate <= util.today() && !inactive) {
         endDate = 'Present';
       } else {
-        endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
+        endDate = util.coverageDateFormatter('END-DATE', layerEndDate, period);
       }
     } else {
       endDate = 'Present';
     }
     return `Temporal coverage:
-          <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
+          <span class="layer-date-start" id='${startDateId}'> ${layerStartDate} </span> -
           <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>`;
   }
 
