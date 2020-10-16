@@ -64,11 +64,12 @@ class DataItemContainer extends Component {
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
-      // multi time unit range - no year time unit
+      // get max end date based on axis, appNow, and futureLayers (if applicable)
       const endDateLimit = getMaxEndDate(layer, isLastInRange);
       // get dates based on date ranges
       const startDateTime = new Date(startDate).getTime();
 
+      // max end date based on layer
       let layerEndDate;
       if (futureLayer && futureTime) {
         layerEndDate = getFutureLayerEndDate(layer);
@@ -76,8 +77,6 @@ class DataItemContainer extends Component {
         layerEndDate = new Date(endDate);
       }
 
-      // TODO: determine condtional logic on using layerEndDate
-      console.log(layerEndDate.toISOString(), endDateLimit.toISOString());
       const endDateTime = new Date(layerEndDate).getTime();
       const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
 
@@ -180,7 +179,7 @@ class DataItemContainer extends Component {
                         endDate={rangeDateEnd}
                         color={lineBackgroundColor}
                         layerPeriod={layerPeriod}
-                        index={`${id}-${multiIndex}`}
+                        index={key}
                       />
                     </React.Fragment>
                   );
