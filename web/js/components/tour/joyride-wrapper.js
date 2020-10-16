@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Joyride, { STATUS, ACTIONS } from 'react-joyride';
+import Joyride, { STATUS, ACTIONS, EVENTS } from 'react-joyride';
 
 const placeholderElements = [];
 let key = 0;
 let joyrideProps;
 
+/**
+ *
+ * @param {*} props
+ */
 export default function JoyrideWrapper ({
   tourSteps, currentTourStep, map, proj, tourComplete,
 }) {
@@ -34,6 +38,8 @@ export default function JoyrideWrapper ({
   };
 
   const [elementPositionKey, setElementPositionKey] = useState(key);
+  const [stepIndex, setStepIndex] = useState();
+  const [run, setRun] = useState(false);
 
   const incrementKey = () => {
     key += 1;
@@ -87,23 +93,59 @@ export default function JoyrideWrapper ({
    */
   function updateTargetsOnResize() {
     const { status, action } = joyrideProps || {};
-    if (status === STATUS.FINISHED || action === ACTIONS.RESET) {
+    if (
+      status === STATUS.FINISHED
+      || action === ACTIONS.RESET
+      || !(steps && steps.length)
+    ) {
       return;
     }
-    let needsUpdate = false;
     (steps || []).forEach((step) => {
       const { target, targetCoordinates } = step || {};
-      const placeholderEl = document.querySelector(target);
-      if (targetCoordinates) {
-        needsUpdate = true;
+      if (target && targetCoordinates) {
+        const placeholderEl = document.querySelector(target);
         setPlaceholderLocation(placeholderEl, targetCoordinates);
       }
     });
     // Force a re-render so that Joyride updates the beacon location,
     // otherwise it doesn't know the DOM element position was updated
-    if (needsUpdate) {
-      incrementKey();
+    incrementKey();
+  }
+
+  function joyrideStateCallback(data) {
+    joyrideProps = data;
+    const {
+      action, index, type, status,
+    } = data;
+
+    if ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)) {
+      const newIndex = index + (action === ACTIONS.PREV ? -1 : 1);
+      setStepIndex(newIndex);
+      if (newIndex >= 0 && newIndex < steps.length && steps[newIndex].targetCoordinates) {
+        updateTargetsOnResize();
+      }
     }
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+      setStepIndex(0);
+      setRun(false);
+    }
+  }
+
+
+  /**
+   * Forcing a re-render on a target resize (by calling incrementKey())
+   * was causing the beacon to be skipped due to this line in the
+   * Joyride Step component: https://github.com/gilbarbara/react-joyride/blob/2a40561e698f71b3a5c10e018eb7b95f5a797555/src/components/Step.js#L109
+   *
+   * If any tour step has a Joyride step beyond the first which inicludes
+   * targetCoordinates, it cannot be run as continuous.
+   */
+  function checkContinuous () {
+    let isContinuous = continuous;
+    (steps || []).forEach((step, index) => {
+      if (index > 0 && step.targetCoordinates) isContinuous = false;
+    });
+    return isContinuous;
   }
 
   // Handle effects related to changing the tour step
@@ -111,6 +153,14 @@ export default function JoyrideWrapper ({
     addPlaceholderElements();
     map.getView().changed();
     incrementKey();
+    setRun(false);
+    setStepIndex(undefined);
+    setTimeout(() => {
+      if (steps && steps.length) {
+        setStepIndex(0);
+        setRun(true);
+      }
+    });
   }, [currentTourStep]);
 
   // Force re-render on projection change to reset Joyride
@@ -131,14 +181,17 @@ export default function JoyrideWrapper ({
 
   return !projMatches ? null : (
     <Joyride
+      run={run}
+      stepIndex={stepIndex}
       key={elementPositionKey}
       steps={steps || []}
-      continuous={continuous}
-      callback={(props) => { joyrideProps = props; }}
+      continuous={checkContinuous()}
+      callback={joyrideStateCallback}
       spotlightClicks={spotlightClicks}
       disableOverlayClose={disableOverlayClose}
       styles={{ options: styleOptions }}
       disableScrolling
+      disableScrollParentFix
     />
   );
 }
