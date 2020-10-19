@@ -123,12 +123,27 @@ const GEOCODE_OPTIONS = {
   },
 };
 
+// https://developers.arcgis.com/rest/geocode/api-reference/geocoding-category-filtering.htm
+// necessary to filter to remove fast food type suggestions, but still include relavant Places of Interest
+const GEOCODE_SUGGEST_CATEGORIES = [
+  'Address',
+  'Populated Place',
+  'Education,Land Features',
+  'Water Features',
+  'Museum',
+  'Tourist Attraction',
+  'Scientific Research',
+  'Government Office',
+  'Business Facility',
+];
+
 export async function suggest(val) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
   const encodedValue = encodeURIComponent(val);
+  const encodedCategories = encodeURIComponent(GEOCODE_SUGGEST_CATEGORIES.join(','));
 
   try {
-    const response = await fetch(`${urlBase}suggest?text=${encodedValue}&f=json`, requestOptions);
+    const response = await fetch(`${urlBase}suggest?text=${encodedValue}&f=json&category=${encodedCategories}`, requestOptions);
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {

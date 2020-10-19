@@ -22,7 +22,6 @@ class SearchComponent extends Component {
       inputValue: '',
       isTouchDevice: false,
       searchResults: [],
-      selectingCoordinatesOnMap: false,
       coordinatesPending: [],
       showAlert: false,
     };
@@ -31,7 +30,7 @@ class SearchComponent extends Component {
 
   componentDidUpdate(prevProps) {
     const { coordinates } = this.props;
-    const { selectingCoordinatesOnMap, showAlert } = this.state;
+    const { showAlert } = this.state;
 
     if (showAlert && coordinates.length > 0) {
       const [prevLong, prevLat] = prevProps.coordinates;
@@ -128,7 +127,6 @@ class SearchComponent extends Component {
     const { toggleReverseGeocodeActive } = this.props;
     toggleReverseGeocodeActive(true);
     this.setState({
-      selectingCoordinatesOnMap: true,
       isTouchDevice,
       showAlert: true,
       inputValue: '',
@@ -141,10 +139,17 @@ class SearchComponent extends Component {
     selectCoordinatesToFly(coordinates, addressAttributes);
   }
 
+  // clear selected marker/coordinates from map
+  clearCoordinatesMarker = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { clearCoordinates } = this.props;
+    clearCoordinates();
+  }
+
   render() {
     const {
       coordinates,
-      clearCoordinates,
       geosearchMobileModalOpen,
       isExpanded,
       isMobile,
@@ -207,7 +212,6 @@ class SearchComponent extends Component {
             >
               <ButtonGroup
                 className="geosearch-coordinate-button-group"
-
               >
                 <Button
                   onTouchEnd={this.selectCoordinatesFromMap}
@@ -221,8 +225,8 @@ class SearchComponent extends Component {
                 {hasCoordinates
                   && (
                     <Button
-                      onTouchEnd={clearCoordinates}
-                      onMouseDown={clearCoordinates}
+                      onTouchEnd={this.clearCoordinatesMarker}
+                      onMouseDown={this.clearCoordinatesMarker}
                       className="geosearch-coordinate-button-remove"
                       title="Clear coordinates marker from map"
                     >
