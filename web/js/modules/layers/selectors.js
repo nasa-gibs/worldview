@@ -44,8 +44,6 @@ export function hasMeasurementSource(current, config, projId) {
   return hasSource;
 }
 
-export const isFutureLayer = ({ futureLayer, futureTime }) => futureLayer && futureTime;
-
 /**
  * var hasMeasurementSetting - Checks the (current) measurement's source
  *  for a setting and returns true if present.
@@ -234,6 +232,15 @@ function forGroup(group, spec = {}, activeLayers, state) {
   }
   return results;
 }
+
+/**
+ * Check if future layer options are in layer
+ *
+ * @method isFutureLayer
+ * @param  {Object} layer
+ * @returns {Boolean}
+ */
+export const isFutureLayer = ({ futureLayer, futureTime }) => futureLayer && futureTime;
 
 /**
  * Build end date for future layer
