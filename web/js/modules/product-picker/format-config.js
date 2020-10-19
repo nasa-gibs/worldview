@@ -6,12 +6,6 @@ import moment from 'moment';
 import { available } from '../layers/selectors';
 import util from '../../util/util';
 
-const periodIntervalMap = {
-  daily: 'Day',
-  monthly: 'Month',
-  yearly: 'Year',
-};
-
 // WARNING: capitalizing certain props could break other parts of WV
 // that read these props, need to watch for that when integrating this code
 function capitalizeFirstLetter(string) {
@@ -68,40 +62,6 @@ function formatFacetProps({ layers, measurements, categories }) {
   return layers;
 }
 
-function setLayerPeriodFacetProps(layer) {
-  const { period, dateRanges } = layer;
-  if (!dateRanges) {
-    layer.facetPeriod = capitalizeFirstLetter(period);
-    return;
-  }
-  const dateIntervals = (dateRanges || []).map(({ dateInterval }) => dateInterval);
-  const firstInterval = Number.parseInt(dateIntervals[0], 10);
-  const consistentIntervals = dateIntervals.every((interval) => {
-    const parsedInterval = Number.parseInt(interval, 10);
-    return parsedInterval === firstInterval;
-  });
-
-  layer.facetPeriod = capitalizeFirstLetter(period);
-
-  if (period === 'subdaily' || firstInterval === 1) {
-    return;
-  }
-
-  if (consistentIntervals && firstInterval <= 16) {
-    layer.facetPeriod = `${firstInterval}-${periodIntervalMap[period]}`;
-  } else if (layer.id.includes('7Day')) {
-    layer.facetPeriod = '7-Day';
-  } else if (layer.id.includes('5Day')) {
-    layer.facetPeriod = '5-Day';
-  } else if (layer.id.includes('Monthly')) {
-    layer.facetPeriod = 'Monthly';
-  } else if (layer.id.includes('Weekly')) {
-    layer.facetPeriod = '7-Day';
-  } else {
-    layer.facetPeriod = `Multi-${periodIntervalMap[period]}`;
-  }
-}
-
 function setCoverageFacetProp(layer, selectedDate) {
   const {
     id, startDate, endDate, dateRanges,
@@ -123,7 +83,6 @@ export default function buildLayerFacetProps(config, selectedDate) {
 
   return lodashMap(layers, (layer) => {
     setCoverageFacetProp(layer, selectedDate);
-    setLayerPeriodFacetProps(layer);
     setLayerProp(layer, 'sources', layer.subtitle);
     if (layer.daynight && layer.daynight.length) {
       if (typeof layer.daynight === 'string') {

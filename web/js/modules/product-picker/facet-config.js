@@ -41,7 +41,7 @@ export default [
     hideZeroCount: true,
   },
   {
-    field: 'facetPeriod',
+    field: 'layerPeriod',
     label: 'Period',
     filterType: 'any',
     tooltip: 'Temporal Resolution',
