@@ -122,6 +122,10 @@ fi
 #         "$BUILD_DIR/config/wv.json/collections.json"
 # fi
 
+# Run getVisMetadata.py to fetch visualization (layer) metadata
+"$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/config/wv.json/layerOrder.json" \
+    "$BUILD_DIR/config/wv.json/visMetadata.json"
+
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
@@ -136,8 +140,10 @@ for config in $configs; do
     esac
 done
 
+# Run mergeConfigWithWMTS.py to merge layer metadata from WMTS GC with worldview layer configs into wv.json
 "$PYTHON_SCRIPTS_DIR/mergeConfigWithWMTS.py" "$BUILD_DIR/_wmts" \
     "$DEST_DIR/config/wv.json"
+
 # Copy brand files from build to dest
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
