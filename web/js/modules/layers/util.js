@@ -1295,3 +1295,33 @@ export function adjustStartDates(layers) {
 
   return Object.values(layers).forEach(applyDateAdjustment);
 }
+
+/**
+ * Build end date for future layer
+ *
+ * @method mockFutureTimeLayerOptions
+ * @param  {Array} layers array
+ * @param  {String} mockFutureLayerParameters 'targetLayerId, mockFutureTime'
+ * @returns {Array} array of layers
+ */
+export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
+  const urlParameters = mockFutureLayerParameters.split(',');
+  const [targetLayerId, mockFutureTime] = urlParameters;
+
+  if (!targetLayerId || !mockFutureTime) {
+    return;
+  }
+
+  const addFutureTimeOptions = (layer) => {
+    const { futureLayer, futureTime, id } = layer;
+    if (id === targetLayerId) {
+      // prevent overwriting of existing futureLayer options
+      if (futureLayer && futureTime) {
+        return;
+      }
+      layer.futureLayer = true;
+      layer.futureTime = mockFutureTime;
+    }
+  };
+  return Object.values(layers).forEach(addFutureTimeOptions);
+}
