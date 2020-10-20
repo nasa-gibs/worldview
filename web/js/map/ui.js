@@ -77,6 +77,7 @@ export default function mapui(models, config, store, ui) {
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
+  self.zoomButtonListeners = []; // Track debounced zoom button listeners
   self.selected = null; // The map for the selected projection
   self.events = util.events();
   const layerBuilder = self.layerBuilder = mapLayerBuilder(
@@ -219,7 +220,9 @@ export default function mapui(models, config, store, ui) {
    */
   function updateProjection(start) {
     const state = store.getState();
-    const { proj } = state;
+    const { browser, proj } = state;
+    const isMobile = browser.lessThan.medium;
+    const hasZoomButtons = mapHasZoomButtons(proj.id);
     if (self.selected) {
       // Keep track of center point on projection switch
       self.selected.previousCenter = self.selected.center;
@@ -239,6 +242,11 @@ export default function mapui(models, config, store, ui) {
     // Update the rotation buttons if polar projection to display correct value
     if (isProjectionRotatable) {
       rotation.setResetButton(currentRotation);
+    }
+
+    // if no map zoom buttons, add them
+    if (!isMobile && !hasZoomButtons) {
+      createZoomButtons(map, proj.selected);
     }
 
     // If the browser was resized, the inactive map was not notified of
@@ -298,17 +306,27 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function onResize() {
+    const state = store.getState();
+    const { browser, proj } = state;
+    const isMobile = browser.lessThan.medium;
     const map = self.selected;
-    if (map.small !== util.browser.small) {
-      if (util.browser.small) {
-        map.removeControl(map.wv.scaleImperial);
-        map.removeControl(map.wv.scaleMetric);
-        $(`#${map.getTarget()} .select-wrapper`).hide();
-      } else {
-        map.addControl(map.wv.scaleImperial);
-        map.addControl(map.wv.scaleMetric);
-        $(`#${map.getTarget()} .select-wrapper`).show();
+    const hasZoomButtons = mapHasZoomButtons(proj.id);
+
+    if (isMobile) {
+      if (hasZoomButtons) {
+        removeZoomButtons(map, proj.selected);
       }
+      map.removeControl(map.wv.scaleImperial);
+      map.removeControl(map.wv.scaleMetric);
+      $(`#${map.getTarget()} .select-wrapper`).hide();
+    } else {
+      // if no map zoom buttons, add them
+      if (!hasZoomButtons) {
+        createZoomButtons(map, proj.selected);
+      }
+      map.addControl(map.wv.scaleImperial);
+      map.addControl(map.wv.scaleMetric);
+      $(`#${map.getTarget()} .select-wrapper`).show();
     }
   }
   /*
@@ -757,7 +775,8 @@ export default function mapui(models, config, store, ui) {
    */
   function createMap(proj, dateSelected) {
     const state = store.getState();
-    const { date, compare } = state;
+    const { date, compare, browser } = state;
+    const isMobile = browser.lessThan.medium;
     const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
     dateSelected = dateSelected || date[activeDate];
     const id = `wv-map-${proj.id}`;
@@ -817,12 +836,13 @@ export default function mapui(models, config, store, ui) {
       loadTilesWhileAnimating: true,
     });
     map.wv = {
-      small: false,
       scaleMetric,
       scaleImperial,
     };
     map.proj = proj.id;
-    createZoomButtons(map, proj);
+    if (!isMobile) {
+      createZoomButtons(map, proj);
+    }
     createMousePosSel(map, proj);
 
     // This component is inside the map viewport container. Allowing
@@ -894,7 +914,11 @@ export default function mapui(models, config, store, ui) {
 
     const $zoomOut = $('<div></div>')
       .addClass('wv-map-zoom-out')
-      .addClass('wv-map-zoom');
+      .addClass('wv-map-zoom')
+      .attr(
+        'title',
+        'Zoom out map view',
+      );
     const $outIcon = $(faIconMinusSVGDomEl);
     $zoomOut.append($outIcon);
     $map.append($zoomOut);
@@ -908,7 +932,11 @@ export default function mapui(models, config, store, ui) {
 
     const $zoomIn = $('<div></div>')
       .addClass('wv-map-zoom-in')
-      .addClass('wv-map-zoom');
+      .addClass('wv-map-zoom')
+      .attr(
+        'title',
+        'Zoom in map view',
+      );
     const $inIcon = $(faIconPlusSVGDomEl);
     $zoomIn.append($inIcon);
     $map.append($zoomIn);
@@ -958,10 +986,44 @@ export default function mapui(models, config, store, ui) {
         $zoomOut.button('enable');
       }
     };
-    map.getView().on('change:resolution', lodashDebounce(debouncedZoomChange, 30));
+    const eventListenerKey = map.getView().on('change:resolution', lodashDebounce(debouncedZoomChange, 30));
+    self.zoomButtonListeners.push(eventListenerKey);
     onZoomChange();
   }
-
+  /*
+   * @method mapHasZoomButtons
+   * @static
+   *
+   * @returns {void}
+   */
+  function mapHasZoomButtons(proj) {
+    const zoomInButton = document.querySelector(`#wv-map-${proj} .wv-map-zoom-in`);
+    const zoomOutButton = document.querySelector(`#wv-map-${proj} .wv-map-zoom-out`);
+    return zoomInButton && zoomOutButton;
+  }
+  /*
+   * @method removeZoomButtons
+   * @static
+   *
+   * @returns {void}
+   */
+  function removeZoomButtons() {
+    const zoomInButtons = document.querySelectorAll('.wv-map-zoom-in');
+    const zoomOutButtons = document.querySelectorAll('.wv-map-zoom-out');
+    // remove all map projection zoom in/out buttons
+    zoomInButtons.forEach((btn) => btn.parentNode.removeChild(btn));
+    zoomOutButtons.forEach((btn) => btn.parentNode.removeChild(btn));
+    // remove all 'change:resolution' listeners for zoom in/out buttons
+    self.zoomButtonListeners.forEach((t) => t.target.un(t.type, t.listener));
+  }
+  /*
+   * @method onRotate
+   * @static
+   *
+   * @param {Object} val "change:rotation" Object
+   *
+   * @returns {void}
+   */
   function onRotate(val) {
     rotation.updateRotation(val);
     updateExtent();
@@ -987,10 +1049,12 @@ export default function mapui(models, config, store, ui) {
 
     function onMouseMove(e) {
       const state = store.getState();
+      const { browser } = state;
+      const isMobile = browser.lessThan.medium;
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
       // if mobile return
-      if (util.browser.small) return;
+      if (isMobile) return;
       // if measure is active return
       if (state.measure.isActive) return;
       // if over coords return
@@ -1005,7 +1069,7 @@ export default function mapui(models, config, store, ui) {
       if (!coords) return;
 
       // setting a limit on running-data retrievel
-      if (self.mapIsbeingDragged || util.browser.small) {
+      if (self.mapIsbeingDragged) {
         return;
       }
       // Don't add data runners if we're on the events or data tabs, or if map is animating
