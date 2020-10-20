@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_METOP-A_Descending": {
       "id": "OrbitTracks_METOP-A_Descending",
-      "title": "MetOp-A - Orbit Track & Time",
-      "subtitle": "MetOp-A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_METOP-A_Descending",
       "group": "overlays",
       "format": "image/png",

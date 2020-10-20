@@ -1,9 +1,6 @@
 {
   "layers": {
     "GMI_Snow_Rate_Dsc": {
-      "id": "GMI_Snow_Rate_Dsc",
-      "title": "Snow Rate (Descending)",
-      "subtitle": "GPM / GMI",
       "description": "gpm/GMI_Snow_Rate_Dsc",
       "tags": "precipitation",
       "group": "overlays",

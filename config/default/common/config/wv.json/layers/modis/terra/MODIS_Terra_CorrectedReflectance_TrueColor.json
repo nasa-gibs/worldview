@@ -1,16 +1,10 @@
 {
   "layers": {
     "MODIS_Terra_CorrectedReflectance_TrueColor": {
-      "id": "MODIS_Terra_CorrectedReflectance_TrueColor",
-      "title": "Corrected Reflectance (True Color)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_CorrectedReflectance_TrueColor",
       "tags": "natural color cr",
       "group": "baselayers",
       "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
       "projections": {
         "geographic": {
           "source": "GIBS:geographic"

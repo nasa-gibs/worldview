@@ -1,9 +1,6 @@
 {
   "layers": {
     "SMAP_L4_Mean_Net_Ecosystem_Exchange": {
-      "id": "SMAP_L4_Mean_Net_Ecosystem_Exchange",
-      "title": "Net Ecosystem CO2 Exchange (L4, 9 km Grid Cell Mean)",
-      "subtitle": "SMAP / Model Value-Added",
       "description": "smap/SMAP_L4_Mean_Net_Ecosystem_Exchange",
       "group": "overlays",
       "layergroup": "Net Ecosystem CO2 Exchange",

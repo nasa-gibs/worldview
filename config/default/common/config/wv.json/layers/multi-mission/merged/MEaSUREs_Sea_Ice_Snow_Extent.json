@@ -1,9 +1,6 @@
 {
   "layers": {
     "MEaSUREs_Sea_Ice_Snow_Extent": {
-      "id": "MEaSUREs_Sea_Ice_Snow_Extent",
-      "title": "Sea Ice and Snow Extent",
-      "subtitle": " DMSP 5D-2 F13/SSMI, DMSP 5D-3 F17/SSMIS, Terra/MODIS",
       "description": "multi-mission/merged/MEaSUREs_Sea_Ice_Snow_Extent",
       "tags": "",
       "layergroup": "Sea Ice",

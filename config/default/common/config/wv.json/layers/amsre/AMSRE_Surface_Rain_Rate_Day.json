@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSRE_Surface_Rain_Rate_Day": {
-      "id": "AMSRE_Surface_Rain_Rate_Day",
-      "title": "Surface Rain Rate (Day)",
-      "subtitle": "Aqua / AMSR-E",
       "description": "amsre/AMSRE_Surface_Rain_Rate_Day",
       "group": "overlays",
       "tags": "rain",

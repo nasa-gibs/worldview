@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSUA_NOAA17_Brightness_Temp_Channel_6": {
-      "id": "AMSUA_NOAA17_Brightness_Temp_Channel_6",
-      "title": "Brightness Temperature (Channel 06)",
-      "subtitle": "NOAA-17 / AMSU-A",
       "description": "amsua/AMSUA_NOAA17_Brightness_Temp_Channel_6",
       "group": "overlays",
       "layergroup": "Brightness Temperature",

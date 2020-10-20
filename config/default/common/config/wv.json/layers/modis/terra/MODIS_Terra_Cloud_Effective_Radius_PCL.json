@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Terra_Cloud_Effective_Radius_PCL": {
-      "id": "MODIS_Terra_Cloud_Effective_Radius_PCL",
-      "title": "Cloud Effective Radius (PCL)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Effective_Radius_PCL",
       "group": "overlays",
       "layergroup": "Cloud Effective Radius",
       "product": "MOD06_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

@@ -1,19 +1,13 @@
 {
   "layers": {
     "SWDB_Aerosol_Angstrom_Exponent_Daily": {
-      "id": "SWDB_Aerosol_Angstrom_Exponent_Daily",
-      "title": "Aerosol Angstrom Exponent (Daily)",
-      "subtitle": "SeaWiFS Deep Blue",
       "description": "seawifs/SWDB_Aerosol_Angstrom_Exponent_Daily",
       "tags": "swdb",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "SWDB_L305",
       "inactive": true,
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

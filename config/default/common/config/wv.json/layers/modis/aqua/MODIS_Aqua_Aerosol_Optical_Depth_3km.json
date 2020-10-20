@@ -1,21 +1,12 @@
 {
   "layers": {
     "MODIS_Aqua_Aerosol_Optical_Depth_3km": {
-      "id": "MODIS_Aqua_Aerosol_Optical_Depth_3km",
-      "title": "Aerosol Optical Depth 3km (3km, Land and Ocean)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Aerosol_Optical_Depth_3km",
       "tags": "aod",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "MYD04_3K",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

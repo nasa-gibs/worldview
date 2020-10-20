@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Aqua_Cloud_Effective_Radius_37_PCL": {
-      "id": "MODIS_Aqua_Cloud_Effective_Radius_37_PCL",
-      "title": "Cloud Effective Radius (3.7 micron PCL)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Effective_Radius_37_PCL",
       "group": "overlays",
       "layergroup": "Cloud Effective Radius",
       "product": "MYD06_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

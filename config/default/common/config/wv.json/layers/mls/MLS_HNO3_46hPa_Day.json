@@ -1,9 +1,6 @@
 {
   "layers": {
     "MLS_HNO3_46hPa_Day": {
-      "id": "MLS_HNO3_46hPa_Day",
-      "title": "Nitric Acid (46 hPa, Day)",
-      "subtitle": "Aura / MLS",
       "description": "mls/MLS_HNO3_46hPa_Day",
       "tags": "hno3",
       "group": "overlays",

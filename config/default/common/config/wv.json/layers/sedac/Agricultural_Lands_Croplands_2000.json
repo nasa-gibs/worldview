@@ -1,9 +1,6 @@
 {
   "layers": {
     "Agricultural_Lands_Croplands_2000": {
-      "id": "Agricultural_Lands_Croplands_2000",
-      "title": "Croplands",
-      "subtitle": "Global Agricultural Lands, v1 (2000)",
       "description": "sedac/Agricultural_Lands_Croplands_2000",
       "tags": "human sedac",
       "group": "overlays",

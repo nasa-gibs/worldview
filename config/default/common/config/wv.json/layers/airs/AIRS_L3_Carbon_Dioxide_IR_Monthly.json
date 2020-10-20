@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L3_Carbon_Dioxide_IR_Monthly": {
-      "id": "AIRS_L3_Carbon_Dioxide_IR_Monthly",
-      "title": "Carbon Dioxide (L3, Free Troposphere, Monthly)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L3_Carbon_Dioxide_IR_Monthly",
       "tags": "",
       "group": "overlays",

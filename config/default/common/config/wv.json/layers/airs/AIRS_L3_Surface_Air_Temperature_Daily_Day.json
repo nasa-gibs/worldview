@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L3_Surface_Air_Temperature_Daily_Day": {
-      "id": "AIRS_L3_Surface_Air_Temperature_Daily_Day",
-      "title": "Surface Air Temperature (L3, Day, Daily)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L3_Surface_Air_Temperature_Daily_Day",
       "tags": "",
       "group": "overlays",

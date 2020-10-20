@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_GOSAT-2_Ascending": {
       "id": "OrbitTracks_GOSAT-2_Ascending",
-      "title": "GOSAT-2 - Orbit Track & Time",
-      "subtitle": "GOSAT-2 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GOSAT-2_Ascending",
       "group": "overlays",
       "format": "image/png",

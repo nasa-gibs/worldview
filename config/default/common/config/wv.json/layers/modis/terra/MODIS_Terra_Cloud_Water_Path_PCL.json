@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Terra_Cloud_Water_Path_PCL": {
-      "id": "MODIS_Terra_Cloud_Water_Path_PCL",
-      "title": "Cloud Water Path (PCL)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Water_Path_PCL",
       "group": "overlays",
       "layergroup": "Cloud Water Path",
       "product": "MOD06_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

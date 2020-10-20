@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Terra_Cloud_Top_Height_Day": {
-      "id": "MODIS_Terra_Cloud_Top_Height_Day",
-      "title": "Cloud Top Height (Day)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Top_Height_Day",
       "group": "overlays",
       "layergroup": "Cloud Top Height",
       "product": "MOD06_L2_DAY",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

@@ -1,9 +1,6 @@
 {
   "layers": {
     "ASTER_GDEM_Color_Index": {
-      "id": "ASTER_GDEM_Color_Index",
-      "title": "Global Digital Elevation Map (Color Index)",
-      "subtitle": "Terra / ASTER",
       "description": "aster/ASTER_GDEM_Color_Index",
       "tags": "gdem",
       "group": "overlays",

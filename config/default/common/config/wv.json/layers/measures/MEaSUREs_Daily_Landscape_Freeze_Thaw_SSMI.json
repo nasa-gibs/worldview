@@ -1,9 +1,6 @@
 {
   "layers": {
     "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI": {
-      "id": "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI",
-      "title": "Freeze/Thaw (Daily Landscape)",
-      "subtitle": "DMSP / SSMI",
       "description": "ssmi/MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI",
       "group": "overlays",
       "layergroup": "Freeze/Thaw",

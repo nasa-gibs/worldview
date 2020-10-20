@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_Aura_Descending": {
       "id": "OrbitTracks_Aura_Descending",
-      "title": "Aura - Orbit Track & Time",
-      "subtitle": "Aura / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Aura_Descending",
       "group": "overlays",
       "format": "image/png",

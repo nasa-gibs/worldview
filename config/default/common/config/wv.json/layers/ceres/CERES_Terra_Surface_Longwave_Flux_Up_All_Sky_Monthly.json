@@ -1,20 +1,13 @@
 {
   "layers": {
     "CERES_Terra_Surface_Longwave_Flux_Up_All_Sky_Monthly": {
-      "id": "CERES_Terra_Surface_Longwave_Flux_Up_All_Sky_Monthly",
-      "title": "Untuned Longwave Surface Flux (Monthly, Up, All-Sky)",
-      "subtitle": "Terra / CERES",
       "description": "ceres/CERES_Terra_Surface_Longwave_Flux_Up_All_Sky_Monthly",
       "tags": "",
       "group": "overlays",
       "layergroup": "Surface Flux",
       "product": "CER_SYN1deg-Month_Terra-MODIS",
       "inactive": true,
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

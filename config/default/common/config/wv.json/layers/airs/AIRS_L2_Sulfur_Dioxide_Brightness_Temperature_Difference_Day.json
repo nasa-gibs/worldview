@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Day": {
-      "id": "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Day",
-      "title": "Sulfur Dioxide Brightness Temperature Difference (L2, Day)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Day",
       "tags": "SO2 Bt sulphur dioxide",
       "group": "overlays",

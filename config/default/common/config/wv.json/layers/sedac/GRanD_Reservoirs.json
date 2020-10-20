@@ -1,9 +1,6 @@
 {
   "layers": {
     "GRanD_Reservoirs": {
-      "id": "GRanD_Reservoirs",
-      "title": "Reservoirs",
-      "subtitle": "Global Reservoir and Dam Database (GRanD), v1.01",
       "description": "sedac/GRanD_Reservoirs",
       "group": "overlays",
       "type": "vector",

@@ -1,20 +1,11 @@
 {
   "layers": {
     "OMI_SO2_Planetary_Boundary_Layer": {
-      "id": "OMI_SO2_Planetary_Boundary_Layer",
-      "title": "Sulfur Dioxide (Planetary Boundary Layer)",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_SO2_Planetary_Boundary_Layer",
       "group": "overlays",
       "layergroup": "Sulfur Dioxide",
       "product": "OMSO2e",
-      "tags": "so2 sulphur dioxide",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "tags": "so2 sulphur dioxide"
     }
   }
 }

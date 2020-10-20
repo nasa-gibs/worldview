@@ -1,9 +1,6 @@
 {
   "layers": {
     "MISR_AM1_Ellipsoid_Radiance_RGB_DF": {
-      "id": "MISR_AM1_Ellipsoid_Radiance_RGB_DF",
-      "title": "Color Radiance (Df, RGB)",
-      "subtitle": "Terra / MISR",
       "description": "misr/MISR_AM1_Ellipsoid_Radiance_RGB_DF",
       "tags": "",
       "group": "overlays",

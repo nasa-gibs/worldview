@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSRU2_Total_Precipitable_Water_Day": {
-      "id": "AMSRU2_Total_Precipitable_Water_Day",
-      "title": "Total Precipitable Water (Day, Near Real-Time)",
-      "subtitle": "GCOM-W1 / AMSRU2",
       "description": "amsr2/AMSRU2_Total_Precipitable_Water_Day",
       "tags": "amsru2",
       "group": "overlays",

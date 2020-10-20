@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L2_Surface_Relative_Humidity_Day": {
-      "id": "AIRS_L2_Surface_Relative_Humidity_Day",
-      "title": "Surface Relative Humidity (L2, Day)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L2_Surface_Relative_Humidity_Day",
       "tags": "",
       "group": "overlays",

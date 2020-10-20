@@ -1,9 +1,6 @@
 {
   "layers": {
     "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Mascon_CRI": {
-      "id": "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Mascon_CRI",
-      "title": "Liquid Water Equivalent Thickness (Mascon, CRI)",
-      "subtitle": "GRACE Tellus",
       "description": "grace/GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Mascon_CRI",
       "tags": "lwet podaac PO.DAAC",
       "group": "overlays",

@@ -1,9 +1,6 @@
 {
   "layers": {
     "Aquarius_Sea_Surface_Salinity_L3_7Day_RunningMean": {
-      "id": "Aquarius_Sea_Surface_Salinity_L3_7Day_RunningMean",
-      "title": "Sea Surface Salinity (L3, 7-Day Running Mean)",
-      "subtitle": "SAC-D / Aquarius",
       "description": "aquarius/Aquarius_Sea_Surface_Salinity_L3_7Day_RunningMean",
       "tags": "sss podaac PO.DAAC",
       "group": "overlays",

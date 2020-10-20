@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_GCOM-C_Ascending": {
       "id": "OrbitTracks_GCOM-C_Ascending",
-      "title": "GCOM-C - Orbit Track & Time",
-      "subtitle": "GCOM-C / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GCOM-C_Ascending",
       "group": "overlays",
       "format": "image/png",

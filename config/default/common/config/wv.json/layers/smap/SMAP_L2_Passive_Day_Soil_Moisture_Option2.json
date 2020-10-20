@@ -1,9 +1,6 @@
 {
   "layers": {
     "SMAP_L2_Passive_Day_Soil_Moisture_Option2": {
-      "id": "SMAP_L2_Passive_Day_Soil_Moisture_Option2",
-      "title": "Soil Moisture 36 km (L2, Passive, Day, Single Channel Algorithm, V-pol)",
-      "subtitle": "SMAP / Radiometer",
       "description": "smap/SMAP_L2_Passive_Day_Soil_Moisture_Option2",
       "group": "overlays",
       "layergroup": "Soil Moisture",

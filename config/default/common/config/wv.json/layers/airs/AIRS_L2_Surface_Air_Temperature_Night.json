@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L2_Surface_Air_Temperature_Night": {
-      "id": "AIRS_L2_Surface_Air_Temperature_Night",
-      "title": "Surface Air Temperature (L2, Night)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L2_Surface_Air_Temperature_Night",
       "tags": "",
       "group": "overlays",

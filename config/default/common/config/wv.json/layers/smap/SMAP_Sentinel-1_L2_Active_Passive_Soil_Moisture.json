@@ -1,9 +1,6 @@
 {
   "layers": {
     "SMAP_Sentinel-1_L2_Active_Passive_Soil_Moisture": {
-      "id": "SMAP_Sentinel-1_L2_Active_Passive_Soil_Moisture",
-      "title": "Soil Moisture (L2, Active-Passive, Radiometer and Radar)",
-      "subtitle": "SMAP / Sentinel-1",
       "description": "smap/SMAP_Sentinel-1_L2_Active_Passive_Soil_Moisture",
       "group": "overlays",
       "layergroup": "Soil Moisture",

@@ -1,9 +1,6 @@
 {
   "layers": {
     "SMAP_L1_Passive_Brightness_Temp_Fore_H_QA": {
-      "id": "SMAP_L1_Passive_Brightness_Temp_Fore_H_QA",
-      "title": "Uncorrected Brightness Temperature 36 km QA (L1, Passive, Fore, H Polarization)",
-      "subtitle": "SMAP / Radiometer",
       "description": "smap/SMAP_L1_Passive_Brightness_Temp_Fore_H_QA",
       "group": "overlays",
       "layergroup": "Brightness Temperature",

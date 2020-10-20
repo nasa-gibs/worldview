@@ -1,9 +1,6 @@
 {
   "layers": {
     "VIIRS_SNPP_Thermal_Anomalies_375m_All": {
-      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_All",
-      "title": "Fires and Thermal Anomalies (Day and Night, 375m)",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Thermal_Anomalies_375m_All",
       "tags": "hotspots s-npp snpp vectors",
       "layergroup": "Fires and Thermal Anomalies",
@@ -26,10 +23,6 @@
         "id": "VIIRS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "daynight": [
-        "day",
-        "night"
-      ],
       "breakPointLayer": {
         "id": "VIIRS_SNPP_Thermal_Anomalies_375m_All",
         "type": "wms",

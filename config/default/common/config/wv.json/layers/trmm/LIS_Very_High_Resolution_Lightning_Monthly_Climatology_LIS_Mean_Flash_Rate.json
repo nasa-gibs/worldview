@@ -1,9 +1,6 @@
 {
   "layers": {
     "LIS_Very_High_Resolution_Lightning_Monthly_Climatology_LIS_Mean_Flash_Rate": {
-      "id": "LIS_Very_High_Resolution_Lightning_Monthly_Climatology_LIS_Mean_Flash_Rate",
-      "title": "Monthly Mean Lightning Flash Rate",
-      "subtitle": "TRMM / LIS",
       "description": "trmm/LIS_Very_High_Resolution_Lightning_Monthly_Climatology_LIS_Mean_Flash_Rate",
       "tags": "",
       "group": "overlays",

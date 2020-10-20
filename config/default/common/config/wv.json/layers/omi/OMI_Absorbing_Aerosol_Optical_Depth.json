@@ -1,25 +1,16 @@
 {
   "layers": {
     "OMI_Absorbing_Aerosol_Optical_Depth": {
-      "id": "OMI_Absorbing_Aerosol_Optical_Depth",
-      "title": "Aerosol Optical Depth (Absorbing, Near-UV, 388.0 nm)",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_Absorbing_Aerosol_Optical_Depth",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "OMAERUVd",
       "tags": "aod",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ],
       "palette": {
         "recommended": [
           "orange_1"
         ]
-      },
-      "daynight": [
-        "day"
-      ]
+      }
     }
   }
 }

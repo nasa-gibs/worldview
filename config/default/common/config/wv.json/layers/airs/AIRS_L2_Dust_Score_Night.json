@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L2_Dust_Score_Night": {
-      "id": "AIRS_L2_Dust_Score_Night",
-      "title": "Dust Score (L2, Night)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L2_Dust_Score_Night",
       "tags": "",
       "group": "overlays",

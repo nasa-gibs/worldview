@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L2_Temperature_850hPa_Day": {
-      "id": "AIRS_L2_Temperature_850hPa_Day",
-      "title": "Temperature (L2, 850 hPa, Day)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L2_Temperature_850hPa_Day",
       "tags": "",
       "group": "overlays",

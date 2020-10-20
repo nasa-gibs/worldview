@@ -1,9 +1,6 @@
 {
   "layers": {
     "VIIRS_NOAA20_Thermal_Anomalies_375m_Day": {
-      "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
-      "title": "Fires and Thermal Anomalies (Day, 375m)",
-      "subtitle": "NOAA-20 / VIIRS",
       "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
       "tags": "hotspots noaa20 jpss1 jpss vectors",
       "group": "overlays",
@@ -20,12 +17,6 @@
         "immutable": true
       },
       "transition": "true",
-      "tracks": [
-        "OrbitTracks_NOAA-20_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ],
       "breakPointLayer": {
         "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
         "type": "wms",

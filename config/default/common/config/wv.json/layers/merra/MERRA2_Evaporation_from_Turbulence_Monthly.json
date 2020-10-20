@@ -1,9 +1,6 @@
 {
   "layers": {
     "MERRA2_Evaporation_from_Turbulence_Monthly": {
-      "id": "MERRA2_Evaporation_from_Turbulence_Monthly",
-      "title": "Evaporation from Turbulence (Monthly)",
-      "subtitle": "MERRA-2",
       "description": "merra/MERRA2_Evaporation_from_Turbulence_Monthly",
       "tags": "",
       "group": "overlays",

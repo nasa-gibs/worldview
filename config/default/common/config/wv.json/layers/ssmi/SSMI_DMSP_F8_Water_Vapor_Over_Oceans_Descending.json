@@ -1,9 +1,6 @@
 {
   "layers": {
     "SSMI_DMSP_F8_Water_Vapor_Over_Oceans_Descending": {
-      "id": "SSMI_DMSP_F8_Water_Vapor_Over_Oceans_Descending",
-      "title": "Water Vapor Over Oceans (Descending, Local PM)",
-      "subtitle": "DMSP-F8 / SSMI",
       "description": "ssmi/SSMI_DMSP_F8_Water_Vapor_Over_Oceans_Descending",
       "tags": "",
       "group": "overlays",

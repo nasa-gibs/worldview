@@ -1,9 +1,6 @@
 {
   "layers": {
     "MODIS_Aqua_Cloud_Phase_Infrared_Night": {
-      "id": "MODIS_Aqua_Cloud_Phase_Infrared_Night",
-      "title": "Cloud Phase Infrared (Night)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Phase_Infrared_Night",
       "group": "overlays",
       "layergroup": "Cloud Phase",

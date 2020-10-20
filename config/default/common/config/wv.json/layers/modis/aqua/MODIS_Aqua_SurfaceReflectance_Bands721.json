@@ -1,21 +1,12 @@
 {
   "layers": {
     "MODIS_Aqua_SurfaceReflectance_Bands721": {
-      "id": "MODIS_Aqua_SurfaceReflectance_Bands721",
-      "title": "Land Surface Reflectance (Bands 7-2-1)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_SurfaceReflectance_Bands721",
       "tags": "lsr m11-i2-i1 721 false color",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
       "product": "MYD09GA",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

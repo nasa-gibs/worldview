@@ -1,13 +1,9 @@
 {
   "layers": {
     "MODIS_Terra_Thermal_Anomalies_Night": {
-      "id": "MODIS_Terra_Thermal_Anomalies_Night",
-      "title": "Fires and Thermal Anomalies (Night)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Thermal_Anomalies_All",
       "tags": "hotspots vectors",
       "group": "overlays",
-      "format": "image/png",
       "period": "daily",
       "layergroup": "Fires and Thermal Anomalies",
       "type": "vector",
@@ -38,13 +34,7 @@
             "resolutionBreakPoint": 2048
           }
         }
-      },
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      }
     }
   }
 }

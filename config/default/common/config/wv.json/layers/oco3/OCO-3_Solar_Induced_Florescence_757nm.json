@@ -1,18 +1,12 @@
 {
   "layers": {
     "OCO-3_Solar_Induced_Florescence_757nm": {
-      "id": "OCO-3_Solar_Induced_Florescence_757nm",
-      "title": "Solar-induced Chlorophyll Fluorescence (757nm)",
-      "subtitle": "OCO-3",
       "description": "oco3/OCO-3_Solar_Induced_Florescence_757nm",
       "tags": "oco3",
       "group": "overlays",
       "layergroup": "Solar Induced Chlorophyll Fluorescence",
       "product": "OCO3_L2_Lite_SIF",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

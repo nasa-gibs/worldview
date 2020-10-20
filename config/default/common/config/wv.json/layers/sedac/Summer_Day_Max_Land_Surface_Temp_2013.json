@@ -1,19 +1,13 @@
 {
   "layers": {
     "Summer_Day_Max_Land_Surface_Temp_2013": {
-      "id": "Summer_Day_Max_Land_Surface_Temp_2013",
-      "title": "Summer Daytime Maximum Land Surface Temperature",
-      "subtitle": "Global Summer Land Surface Temperature (LST) Grids, v1 (2013)",
       "description": "sedac/Summer_Day_Max_Land_Surface_Temp_2013",
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
       "product": "CIESIN_SEDAC_SDEI_LST2013",
       "inactive": true,
-      "wrapX": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapX": true
     }
   }
 }

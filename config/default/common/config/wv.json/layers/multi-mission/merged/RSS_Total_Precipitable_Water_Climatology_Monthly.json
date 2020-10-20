@@ -1,9 +1,6 @@
 {
   "layers": {
     "RSS_Total_Precipitable_Water_Climatology_Monthly": {
-      "id": "RSS_Total_Precipitable_Water_Climatology_Monthly",
-      "title": "Precipitable Water over Ice-Free Oceans (Monthly, Average)",
-      "subtitle": "Aqua/AMSR-E, GCOM-W1/AMSR2, DMSP-F16/SSMI, DMSP-F17/SSMI",
       "description": "multi-mission/merged/RSS_Total_Precipitable_Water_Climatology_Monthly",
       "tags": "",
       "layergroup": "Precipitation Rate",

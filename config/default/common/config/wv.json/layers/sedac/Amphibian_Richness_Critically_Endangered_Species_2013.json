@@ -1,9 +1,6 @@
 {
   "layers": {
     "Amphibian_Richness_Critically_Endangered_Species_2013": {
-      "id": "Amphibian_Richness_Critically_Endangered_Species_2013",
-      "title": "Amphibian Richness - Critically Endangered",
-      "subtitle": "Species: Global Amphibian Richness Grids, 2015 Release (2013)",
       "description": "sedac/Amphibian_Richness_Critically_Endangered_Species_2013",
       "tags": "human sedac",
       "group": "overlays",

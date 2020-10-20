@@ -1,9 +1,6 @@
 {
   "layers": {
     "Mangrove_Forest_Distribution_2000": {
-      "id": "Mangrove_Forest_Distribution_2000",
-      "title": "Mangrove Forest Distribution",
-      "subtitle": "Global Mangrove Forest Distribution, v1 (2000)",
       "description": "sedac/Mangrove_Forest_Distribution_2000",
       "tags": "human sedac",
       "group": "overlays",

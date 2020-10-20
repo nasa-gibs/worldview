@@ -1,9 +1,6 @@
 {
   "layers": {
     "MODIS_Terra_Cloud_Phase_Infrared_Night": {
-      "id": "MODIS_Terra_Cloud_Phase_Infrared_Night",
-      "title": "Cloud Phase Infrared (Night)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Phase_Infrared_Night",
       "group": "overlays",
       "layergroup": "Cloud Phase",

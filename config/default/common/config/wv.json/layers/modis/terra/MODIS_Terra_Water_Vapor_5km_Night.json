@@ -1,24 +1,15 @@
 {
   "layers": {
     "MODIS_Terra_Water_Vapor_5km_Night": {
-      "id": "MODIS_Terra_Water_Vapor_5km_Night",
-      "title": "Water Vapor (Night)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Water_Vapor_5km_Night",
       "group": "overlays",
       "layergroup": "Water Vapor",
       "product": "MOD05_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
       "palette": {
         "recommended": [
           "blue_1"
         ]
-      },
-      "daynight": [
-        "night"
-      ]
+      }
     }
   }
 }

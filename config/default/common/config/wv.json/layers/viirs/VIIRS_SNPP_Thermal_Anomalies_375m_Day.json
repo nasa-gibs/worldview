@@ -1,9 +1,6 @@
 {
   "layers": {
     "VIIRS_SNPP_Thermal_Anomalies_375m_Day": {
-      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
-      "title": "Fires and Thermal Anomalies (Day, 375m)",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_Thermal_Anomalies_375m_Day",
       "tags": "hotspots s-npp snpp vectors",
       "group": "overlays",
@@ -21,9 +18,6 @@
         }
       },
       "transition": true,
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ],
       "palette": {
         "id": "VIIRS_All_Thermal_Anomalies",
         "immutable": true

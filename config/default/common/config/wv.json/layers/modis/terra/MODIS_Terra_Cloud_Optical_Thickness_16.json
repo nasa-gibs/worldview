@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Terra_Cloud_Optical_Thickness_16": {
-      "id": "MODIS_Terra_Cloud_Optical_Thickness_16",
-      "title": "Cloud Optical Thickness (1.6 microns)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Optical_Thickness_16",
       "group": "overlays",
       "layergroup": "Cloud Optical Thickness",
       "product": "MOD06_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

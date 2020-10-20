@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_Sentinel-2A_Descending": {
       "id": "OrbitTracks_Sentinel-2A_Descending",
-      "title": "Sentinel-2A - Orbit Track & Time",
-      "subtitle": "Sentinel-2A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-2A_Descending",
       "tags": "tracks day",
       "group": "overlays",

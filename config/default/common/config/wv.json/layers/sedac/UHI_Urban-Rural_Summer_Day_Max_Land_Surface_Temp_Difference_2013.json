@@ -1,19 +1,13 @@
 {
   "layers": {
     "UHI_Urban-Rural_Summer_Day_Max_Land_Surface_Temp_Difference_2013": {
-      "id": "UHI_Urban-Rural_Summer_Day_Max_Land_Surface_Temp_Difference_2013",
-      "title": "Summer Daytime Urban-Rural Land Surface Temperature Difference",
-      "subtitle": "Global Urban Heat Island (UHI), v1 (2013)",
       "description": "sedac/UHI_Urban-Rural_Summer_Day_Max_Land_Surface_Temp_Difference_2013",
       "tags": "human sedac",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
       "product": "CIESIN_SEDAC_SDEI_UHI2013",
       "inactive": true,
-      "wrapX": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapX": true
     }
   }
 }

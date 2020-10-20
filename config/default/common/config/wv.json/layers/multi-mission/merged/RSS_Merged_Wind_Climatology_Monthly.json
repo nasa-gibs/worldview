@@ -1,9 +1,6 @@
 {
   "layers": {
     "RSS_Merged_Wind_Climatology_Monthly": {
-      "id": "RSS_Merged_Wind_Climatology_Monthly",
-      "title": "Wind Speed over Ice-Free Oceans (Monthly, Average)",
-      "subtitle": "Aqua/AMSR-E, GCOM-W1/AMSR2, DMSP-F16/SSMI, DMSP-F17/SSMI",
       "description": "multi-mission/merged/RSS_Merged_Wind_Climatology_Monthly",
       "tags": "",
       "layergroup": "Wind Speed",

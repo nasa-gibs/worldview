@@ -1,20 +1,11 @@
 {
   "layers": {
     "OMI_Ozone_TOMS_Total_Column": {
-      "id": "OMI_Ozone_TOMS_Total_Column",
-      "title": "Ozone (TOMS-Like)",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_Ozone_TOMS_Total_Column",
       "group": "overlays",
       "layergroup": "Ozone",
       "product": "OMTO3e",
-      "tags": "Total Ozone Mapping Spectrometer",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "tags": "Total Ozone Mapping Spectrometer"
     }
   }
 }

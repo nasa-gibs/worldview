@@ -1,9 +1,6 @@
 {
   "layers": {
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V": {
-      "id": "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V",
-      "title": "Uncorrected Brightness Temperature 9 km (L1, Passive, Fore, V Polarization)",
-      "subtitle": "SMAP / Radiometer",
       "description": "smap/SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V",
       "tags": "enhanced",
       "group": "overlays",

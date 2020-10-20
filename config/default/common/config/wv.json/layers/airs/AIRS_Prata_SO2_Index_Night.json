@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_Prata_SO2_Index_Night": {
-      "id": "AIRS_Prata_SO2_Index_Night",
-      "title": "Sulfur Dioxide (Night, Prata Algorithm)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_Prata_SO2_Index_Night",
       "tags": "so2 sulphur",
       "group": "overlays",
@@ -14,13 +11,7 @@
           "orange_1",
           "red_1"
         ]
-      },
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      }
     }
   }
 }

@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_METOP-C_Descending": {
       "id": "OrbitTracks_METOP-C_Descending",
-      "title": "MetOp-C - Orbit Track & Time",
-      "subtitle": "MetOp-C / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_METOP-C_Descending",
       "group": "overlays",
       "format": "image/png",

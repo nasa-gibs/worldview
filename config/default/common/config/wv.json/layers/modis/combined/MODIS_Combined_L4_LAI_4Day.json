@@ -1,18 +1,12 @@
 {
   "layers": {
     "MODIS_Combined_L4_LAI_4Day": {
-      "id": "MODIS_Combined_L4_LAI_4Day",
-      "title": "Leaf Area Index (L4, 4-Day)",
-      "subtitle": "Terra and Aqua / MODIS",
       "description": "modis/combined/MODIS_Combined_L4_LAI_4Day",
       "tags": "",
       "group": "overlays",
       "layergroup": "Leaf Area Index",
       "product": "MCD15A3H",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

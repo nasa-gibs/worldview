@@ -1,21 +1,12 @@
 {
   "layers": {
     "MODIS_Terra_L3_Ice_Surface_Temp_Daily_Night": {
-      "id": "MODIS_Terra_L3_Ice_Surface_Temp_Daily_Night",
-      "title": "Ice Surface Temperature (L3, Daily, Night)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_L3_Ice_Surface_Temp_Daily_Night",
       "tags": "ist",
       "group": "overlays",
       "layergroup": "Ice Surface Temperature",
       "product": "MOD29P1N",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

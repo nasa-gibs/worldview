@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_NOAA-20_Descending": {
       "id": "OrbitTracks_NOAA-20_Descending",
-      "title": "NOAA-20 - Orbit Track & Time",
-      "subtitle": "NOAA-20 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_NOAA-20_Descending",
       "tags": "JPSS-1 tracks night",
       "group": "overlays",

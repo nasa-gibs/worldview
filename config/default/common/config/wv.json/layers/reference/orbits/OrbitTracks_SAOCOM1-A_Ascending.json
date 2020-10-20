@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_SAOCOM1-A_Ascending": {
       "id": "OrbitTracks_SAOCOM1-A_Ascending",
-      "title": "SAOCOM-1A - Orbit Track & Time",
-      "subtitle": "SAOCOM-1A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_SAOCOM1-A_Ascending",
       "group": "overlays",
       "format": "image/png",

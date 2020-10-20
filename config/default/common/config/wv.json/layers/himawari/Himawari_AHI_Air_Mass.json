@@ -1,19 +1,12 @@
 {
   "layers": {
     "Himawari_AHI_Air_Mass": {
-      "id": "Himawari_AHI_Air_Mass",
-      "title": "Air Mass (10 minute)",
-      "subtitle": "Himawari-8/AHI",
       "description": "himawari/Himawari_AHI_Air_Mass",
       "group": "overlays",
       "tags": "geostationary geo",
       "layergroup": "Geostationary",
       "product": "",
       "wrapX": true,
-      "daynight": [
-        "day",
-        "night"
-      ],
       "availability": {
         "rollingWindow": 30,
         "historicalRanges": [

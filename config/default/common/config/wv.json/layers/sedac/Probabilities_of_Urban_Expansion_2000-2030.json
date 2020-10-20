@@ -1,9 +1,6 @@
 {
   "layers": {
     "Probabilities_of_Urban_Expansion_2000-2030": {
-      "id": "Probabilities_of_Urban_Expansion_2000-2030",
-      "title": "Probabilities of Urban Expansion to 2030",
-      "subtitle": "Global Grid of Probabilities of Urban Expansion to 2030, v1 (2000-2030)",
       "description": "sedac/Probabilities_of_Urban_Expansion_2000-2030",
       "tags": "human sedac",
       "group": "overlays",

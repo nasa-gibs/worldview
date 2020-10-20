@@ -1,9 +1,6 @@
 {
   "layers": {
     "NLDAS_Underground_Soil_Moisture_Noah_Monthly": {
-      "id": "NLDAS_Underground_Soil_Moisture_Noah_Monthly",
-      "title": "Soil Moisture (Monthly, 0 - 100 cm, Noah LSM)",
-      "subtitle": "NLDAS",
       "description": "ldas/NLDAS_Underground_Soil_Moisture_Noah_Monthly",
       "tags": "north american land data assimilation system",
       "group": "overlays",

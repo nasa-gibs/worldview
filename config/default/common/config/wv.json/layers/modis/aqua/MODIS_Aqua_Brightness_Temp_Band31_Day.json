@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Aqua_Brightness_Temp_Band31_Day": {
-      "id": "MODIS_Aqua_Brightness_Temp_Band31_Day",
-      "title": "Brightness Temperature (Band 31-Day)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Brightness_Temp_Band31_Day",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
       "product": "MYD021KM_DAY",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

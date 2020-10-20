@@ -1,9 +1,6 @@
 {
   "layers": {
     "MODIS_Aqua_L3_SST_MidIR_9km_Night_Daily": {
-      "id": "MODIS_Aqua_L3_SST_MidIR_9km_Night_Daily",
-      "title": "Sea Surface Temperature (L3, Night, Daily, Mid Infrared, 9 km)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_L3_SST_MidIR_9km_Night_Daily",
       "group": "overlays",
       "tags": "ssc podaac PO.DAAC",

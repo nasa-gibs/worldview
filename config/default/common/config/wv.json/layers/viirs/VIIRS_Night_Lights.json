@@ -1,18 +1,12 @@
 {
   "layers": {
     "VIIRS_Night_Lights": {
-      "id": "VIIRS_Night_Lights",
-      "title": "Black Marble - Nighttime Lights only (Annual, 2012 & 2016)",
-      "subtitle": "Suomi NPP / VIIRS via NASA Earth Observatory",
       "description": "viirs/VIIRS_Night_Lights",
       "tags": "night s-npp snpp night lights city urban nighttime",
       "layergroup": "Earth at Night",
       "group": "overlays",
       "inactive": true,
-      "wrapX": true,
-      "daynight": [
-        "night"
-      ]
+      "wrapX": true
     }
   }
 }

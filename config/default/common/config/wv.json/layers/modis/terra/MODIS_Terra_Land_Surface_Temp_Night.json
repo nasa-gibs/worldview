@@ -1,26 +1,17 @@
 {
   "layers": {
     "MODIS_Terra_Land_Surface_Temp_Night": {
-      "id": "MODIS_Terra_Land_Surface_Temp_Night",
-      "title": "Land Surface Temperature (Night)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Night",
       "tags": "lst",
       "group": "overlays",
       "layergroup": "Land Surface Temperature",
       "product": "MOD11_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
       "palette": {
         "recommended": [
           "rainbow_1",
           "purple_2"
         ]
-      },
-      "daynight": [
-        "night"
-      ]
+      }
     }
   }
 }

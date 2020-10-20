@@ -1,9 +1,6 @@
 {
   "layers": {
     "Aquarius_Sea_Surface_Salinity_L3_7Day_Snapshot": {
-      "id": "Aquarius_Sea_Surface_Salinity_L3_7Day_Snapshot",
-      "title": "Sea Surface Salinity (L3, 7-Day Snapshot)",
-      "subtitle": "SAC-D / Aquarius",
       "description": "aquarius/Aquarius_Sea_Surface_Salinity_L3_7Day_Snapshot",
       "tags": "sss podaac PO.DAAC",
       "group": "overlays",

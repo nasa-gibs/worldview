@@ -1,9 +1,6 @@
 {
   "layers": {
     "CYGNSS_L3_Wind_Speed_Daily": {
-      "id": "CYGNSS_L3_Wind_Speed_Daily",
-      "title": "Wind Speed (Daily)",
-      "subtitle": "CYGNSS / DDMI",
       "description": "cygnss/CYGNSS_L3_Wind_Speed_Daily",
       "group": "overlays",
       "tags": "podaac PO.DAAC",

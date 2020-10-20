@@ -1,9 +1,6 @@
 {
   "layers": {
     "Human_Footprint_1995-2004": {
-      "id": "Human_Footprint_1995-2004",
-      "title": "Human Footprint",
-      "subtitle": "Global Human Footprint (Geographic), v2 (1995-2004)",
       "description": "sedac/Human_Footprint_1995-2004",
       "tags": "human sedac",
       "group": "overlays",

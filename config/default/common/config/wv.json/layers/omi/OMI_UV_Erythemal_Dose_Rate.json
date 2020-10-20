@@ -1,20 +1,11 @@
 {
   "layers": {
     "OMI_UV_Erythemal_Dose_Rate": {
-      "id": "OMI_UV_Erythemal_Dose_Rate",
-      "title": "UV Erythemal Dose Rate (Local Noon)",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_UV_Erythemal_Dose_Rate",
       "group": "overlays",
       "layergroup": "Radiation",
       "product": "OMUVBd",
-      "tags": "ultra violet",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "tags": "ultra violet"
     }
   }
 }

@@ -1,18 +1,12 @@
 {
   "layers": {
     "Landsat_WELD_NDVI_Global_Monthly": {
-      "id": "Landsat_WELD_NDVI_Global_Monthly",
-      "title": "Surface Normalized Difference Vegetation Index (NDVI) (NBAR, Global, Monthly, V3.1)",
-      "subtitle": "Landsat / WELD",
       "description": "landsat/Landsat_WELD_NDVI_Global_Monthly",
       "tags": "Nadir BRDF Adjusted Reflectance, Bi-directional Reflectance Distribution Function",
       "group": "baselayers",
       "layergroup": "Vegetation Indices",
       "product": "",
-      "inactive": true,
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }

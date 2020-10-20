@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Aqua_Cloud_Optical_Thickness_PCL_1621": {
-      "id": "MODIS_Aqua_Cloud_Optical_Thickness_PCL_1621",
-      "title": "Cloud Optical Thickness (1.6 microns, PCL, 1621 Algorithm)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Optical_Thickness_PCL_1621",
       "group": "overlays",
       "layergroup": "Cloud Optical Thickness",
       "product": "MYD06_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

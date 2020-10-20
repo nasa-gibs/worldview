@@ -1,9 +1,6 @@
 {
   "layers": {
     "GMI_Brightness_Temp_Asc": {
-      "id": "GMI_Brightness_Temp_Asc",
-      "title": "Brightness Temperature (Ascending)",
-      "subtitle": "GPM / GMI",
       "description": "gpm/GMI_Brightness_Temp_Asc",
       "group": "overlays",
       "layergroup": "Brightness Temperature",

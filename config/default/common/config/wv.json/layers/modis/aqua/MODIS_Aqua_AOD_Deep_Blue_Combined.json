@@ -1,21 +1,12 @@
 {
   "layers": {
     "MODIS_Aqua_AOD_Deep_Blue_Combined": {
-      "id": "MODIS_Aqua_AOD_Deep_Blue_Combined",
-      "title": "Merged DT/DB Aerosol Optical Depth (Land and Ocean)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_AOD_Deep_Blue_Combined",
       "tags": "aod",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "MYD04_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

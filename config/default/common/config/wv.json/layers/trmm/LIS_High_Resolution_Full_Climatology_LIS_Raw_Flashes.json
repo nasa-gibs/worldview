@@ -1,9 +1,6 @@
 {
   "layers": {
     "LIS_High_Resolution_Full_Climatology_LIS_Raw_Flashes": {
-      "id": "LIS_High_Resolution_Full_Climatology_LIS_Raw_Flashes",
-      "title": "Lightning Flashes (Raw)",
-      "subtitle": "TRMM / LIS",
       "description": "trmm/LIS_High_Resolution_Full_Climatology_LIS_Raw_Flashes",
       "tags": "",
       "group": "overlays",

@@ -1,9 +1,6 @@
 {
   "layers": {
     "CCMP_REMSS_Zonal_Wind_Speed_Monthly": {
-      "id": "CCMP_REMSS_Zonal_Wind_Speed_Monthly",
-      "title": "Wind Speed (Zonal, Monthly)",
-      "subtitle": "CCMP",
       "description": "CCMP_REMSS_Zonal_Wind_Speed_Monthly",
       "tags": "podaac PO.DAAC",
       "layergroup": "Wind Speed",

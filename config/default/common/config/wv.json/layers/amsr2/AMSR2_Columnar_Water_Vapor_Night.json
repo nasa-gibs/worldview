@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSR2_Columnar_Water_Vapor_Night": {
-      "id": "AMSR2_Columnar_Water_Vapor_Night",
-      "title": "Columnar Water Vapor (Night, Historical)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSR2_Columnar_Water_Vapor_Night",
       "tags": "amsr-2",
       "inactive": true,

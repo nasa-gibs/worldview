@@ -1,18 +1,12 @@
 {
   "layers": {
     "MODIS_Terra_L4_FPAR_8Day": {
-      "id": "MODIS_Terra_L4_FPAR_8Day",
-      "title": "Fraction of Photosynthetically Active Radiation (L4, 8-Day)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_L4_FPAR_8Day",
       "tags": "fpar",
       "group": "overlays",
       "layergroup": "FPAR",
       "product": "MOD15A2H",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

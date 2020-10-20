@@ -1,9 +1,6 @@
 {
   "layers": {
     "TRMM_Precipitation_Rate_Dsc": {
-      "id": "TRMM_Precipitation_Rate_Dsc",
-      "title": "Precipitation Rate (Descending)",
-      "subtitle": "TRMM",
       "description": "trmm/TRMM_Precipitation_Rate_Dsc",
       "tags": "rain",
       "group": "overlays",

@@ -1,20 +1,11 @@
 {
   "layers": {
     "OMI_Ozone_DOAS_Total_Column": {
-      "id": "OMI_Ozone_DOAS_Total_Column",
-      "title": "Ozone (DOAS)",
-      "subtitle": "Aura / OMI",
       "description": "omi/OMI_Ozone_DOAS_Total_Column",
       "group": "overlays",
       "layergroup": "Ozone",
       "product": "OMDOAO3e",
-      "tags": "Differential Absorption Spectroscopy",
-      "tracks": [
-        "OrbitTracks_Aura_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "tags": "Differential Absorption Spectroscopy"
     }
   }
 }

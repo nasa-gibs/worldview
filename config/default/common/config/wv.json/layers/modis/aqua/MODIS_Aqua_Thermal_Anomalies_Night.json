@@ -22,12 +22,6 @@
         "immutable": true
       },
       "transition": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
-      ],
       "breakPointLayer": {
         "id": "MODIS_Aqua_Thermal_Anomalies_Night",
         "type": "wms",

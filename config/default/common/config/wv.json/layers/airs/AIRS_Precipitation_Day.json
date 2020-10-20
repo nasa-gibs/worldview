@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_Precipitation_Day": {
-      "id": "AIRS_Precipitation_Day",
-      "title": "Precipitation Estimate (Day)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_Precipitation_Day",
       "tags": "rain snow",
       "group": "overlays",
@@ -14,13 +11,7 @@
           "blue_1",
           "blue_3"
         ]
-      },
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      }
     }
   }
 }

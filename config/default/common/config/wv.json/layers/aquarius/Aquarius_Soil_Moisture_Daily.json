@@ -1,9 +1,6 @@
 {
   "layers": {
     "Aquarius_Soil_Moisture_Daily": {
-      "id": "Aquarius_Soil_Moisture_Daily",
-      "title": "Soil Moisture (Daily, Radiometer)",
-      "subtitle": "SAC-D / Aquarius",
       "description": "aquarius/Aquarius_Soil_Moisture_Daily",
       "tags": "",
       "group": "overlays",

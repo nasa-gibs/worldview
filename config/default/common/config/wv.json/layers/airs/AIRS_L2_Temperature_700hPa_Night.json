@@ -1,9 +1,6 @@
 {
   "layers": {
     "AIRS_L2_Temperature_700hPa_Night": {
-      "id": "AIRS_L2_Temperature_700hPa_Night",
-      "title": "Temperature (L2, 700 hPa, Night)",
-      "subtitle": "Aqua / AIRS",
       "description": "airs/AIRS_L2_Temperature_700hPa_Night",
       "tags": "",
       "group": "overlays",

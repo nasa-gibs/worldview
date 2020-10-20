@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSRU2_Cloud_Liquid_Water_Night": {
-      "id": "AMSRU2_Cloud_Liquid_Water_Night",
-      "title": "Columnar Cloud Liquid Water (Night, Near Real-Time)",
-      "subtitle": "GCOM-W1 / AMSRU2",
       "description": "amsr2/AMSRU2_Cloud_Liquid_Water_Night",
       "tags": "amsru2",
       "group": "overlays",

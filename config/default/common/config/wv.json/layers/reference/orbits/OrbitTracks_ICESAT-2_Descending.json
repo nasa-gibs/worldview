@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_ICESAT-2_Descending": {
       "id": "OrbitTracks_ICESAT-2_Descending",
-      "title": "ICESat-2 - Orbit Track & Time",
-      "subtitle": "ICESat-2 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ICESAT-2_Descending",
       "tags": "tracks",
       "group": "overlays",

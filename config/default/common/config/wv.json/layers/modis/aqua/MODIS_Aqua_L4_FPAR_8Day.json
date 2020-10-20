@@ -1,18 +1,12 @@
 {
   "layers": {
     "MODIS_Aqua_L4_FPAR_8Day": {
-      "id": "MODIS_Aqua_L4_FPAR_8Day",
-      "title": "Fraction of Photosynthetically Active Radiation (L4, 8-Day)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_L4_FPAR_8Day",
       "tags": "fpar",
       "group": "overlays",
       "layergroup": "FPAR",
       "product": "MYD15A2H",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

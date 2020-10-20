@@ -1,9 +1,6 @@
 {
   "layers": {
     "Particulate_Matter_Below_2.5micrometers_2001-2010": {
-      "id": "Particulate_Matter_Below_2.5micrometers_2001-2010",
-      "title": "Particulate Matter < 2.5µm, 2001-2010",
-      "subtitle": "SDEI: Global Annual PM 2.5 Grids from MODIS, MISR and SeaWiFS Aerosol Optical Depth (AOD), v1 (1998-2012)",
       "description": "sedac/Particulate_Matter_Below_25micrometers_2001-2010",
       "tags": "human sedac pm2.5",
       "group": "overlays",

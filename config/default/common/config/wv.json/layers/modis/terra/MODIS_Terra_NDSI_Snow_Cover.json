@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Terra_NDSI_Snow_Cover": {
-      "id": "MODIS_Terra_NDSI_Snow_Cover",
-      "title": "Snow Cover (Normalized Difference Snow Index)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_NDSI_Snow_Cover",
       "group": "overlays",
       "layergroup": "Snow Cover",
       "product": "MOD10_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

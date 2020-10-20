@@ -1,9 +1,6 @@
 {
   "layers": {
     "OMPS_SO2_Lower_Troposphere": {
-      "id": "OMPS_SO2_Lower_Troposphere",
-      "title": "Sulfur Dioxide (Lower Troposphere)",
-      "subtitle": "Suomi NPP / OMPS",
       "description": "omps/OMPS_SO2_Lower_Troposphere",
       "tags": "SO2, sulphur",
       "group": "overlays",

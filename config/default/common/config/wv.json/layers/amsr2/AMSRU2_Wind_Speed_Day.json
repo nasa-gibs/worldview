@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSRU2_Wind_Speed_Day": {
-      "id": "AMSRU2_Wind_Speed_Day",
-      "title": "Wind Speed (Day, Near Real-Time)",
-      "subtitle": "GCOM-W1 / AMSRU2",
       "description": "amsr2/AMSRU2_Wind_Speed_Day",
       "tags": "amsru2",
       "group": "overlays",

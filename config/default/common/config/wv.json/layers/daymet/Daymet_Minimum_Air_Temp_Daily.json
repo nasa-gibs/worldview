@@ -1,19 +1,12 @@
 {
   "layers": {
     "Daymet_Minimum_Air_Temp_Daily": {
-      "id": "Daymet_Minimum_Air_Temp_Daily",
-      "title": "Minimum Air Temperature (Daily)",
-      "subtitle": "Daymet",
       "description": "daymet/Daymet_Minimum_Air_Temp_Daily",
       "group": "overlays",
       "layergroup": "Temperature",
       "product": "Daymet_V3_CFMosaics_1328",
       "inactive": true,
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

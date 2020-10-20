@@ -1,9 +1,6 @@
 {
   "layers": {
     "MERRA2_Snowfall_Monthly": {
-      "id": "MERRA2_Snowfall_Monthly",
-      "title": "Snowfall (Monthly)",
-      "subtitle": "MERRA-2",
       "description": "merra/MERRA2_Snowfall_Monthly",
       "tags": "",
       "group": "overlays",

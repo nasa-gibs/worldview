@@ -1,20 +1,13 @@
 {
   "layers": {
     "CERES_EBAF_TOA_CRE_Shortwave_Flux_Monthly": {
-      "id": "CERES_EBAF_TOA_CRE_Shortwave_Flux_Monthly",
-      "title": "TOA CRE Shortwave Flux (Monthly, Energy Balanced and Filled)",
-      "subtitle": "Terra / CERES",
       "description": "ceres/CERES_EBAF_TOA_CRE_Shortwave_Flux_Monthly",
       "tags": "top of atmosphere, cloud radiative effect, energy balanced and filled",
       "group": "overlays",
       "layergroup": "TOA Flux",
       "product": "CERES_EBAF-TOA",
       "inactive": true,
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day",
-        "night"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

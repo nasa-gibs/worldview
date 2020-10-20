@@ -1,9 +1,6 @@
 {
   "layers": {
     "MOPITT_CO_Daily_Surface_Mixing_Ratio_Night": {
-      "id": "MOPITT_CO_Daily_Surface_Mixing_Ratio_Night",
-      "title": "Carbon Monoxide (L3, Daily, Night, Surface Mixing Ratio)",
-      "subtitle": "Terra / MOPITT",
       "description": "mopitt/MOPITT_CO_Daily_Surface_Mixing_Ratio_Night",
       "tags": "co",
       "group": "overlays",

@@ -1,9 +1,6 @@
 {
   "layers": {
     "Estimated_Net_Migration_1980-1990": {
-      "id": "Estimated_Net_Migration_1980-1990",
-      "title": "Estimated Net Migration by Decade: 1980-1990",
-      "subtitle": "Global Estimated Net Migration Grids By Decade, v1 (1970-2000)",
       "description": "sedac/Estimated_Net_Migration_1980-1990",
       "tags": "human sedac population",
       "group": "overlays",

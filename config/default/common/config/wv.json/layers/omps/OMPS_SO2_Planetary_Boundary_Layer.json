@@ -1,9 +1,6 @@
 {
   "layers": {
     "OMPS_SO2_Planetary_Boundary_Layer": {
-      "id": "OMPS_SO2_Planetary_Boundary_Layer",
-      "title": "Sulfur Dioxide (Planetary Boundary Layer)",
-      "subtitle": "Suomi NPP / OMPS",
       "description": "omps/OMPS_SO2_Planetary_Boundary_Layer",
       "tags": "SO2, sulphur",
       "group": "overlays",

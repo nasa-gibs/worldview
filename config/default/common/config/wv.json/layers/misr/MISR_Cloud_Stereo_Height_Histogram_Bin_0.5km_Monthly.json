@@ -1,9 +1,6 @@
 {
   "layers": {
     "MISR_Cloud_Stereo_Height_Histogram_Bin_0.5km_Monthly": {
-      "id": "MISR_Cloud_Stereo_Height_Histogram_Bin_0.5km_Monthly",
-      "title": "Cloud Stereo Height (No Wind Correction, < 0.5 km, Monthly)",
-      "subtitle": "Terra / MISR",
       "description": "misr/MISR_Cloud_Stereo_Height_Histogram_Bin_0_5km_Monthly",
       "tags": "",
       "group": "overlays",

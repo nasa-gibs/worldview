@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSR2_Cloud_Liquid_Water_Day": {
-      "id": "AMSR2_Cloud_Liquid_Water_Day",
-      "title": "Columnar Cloud Liquid Water (Day, Historical)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSR2_Cloud_Liquid_Water_Day",
       "tags": "amsr-2",
       "inactive": true,

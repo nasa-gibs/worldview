@@ -1,26 +1,17 @@
 {
   "layers": {
     "MODIS_Terra_Aerosol_Optical_Depth_3km": {
-      "id": "MODIS_Terra_Aerosol_Optical_Depth_3km",
-      "title": "Aerosol Optical Depth 3km (3km, Land and Ocean)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Aerosol_Optical_Depth_3km",
       "tags": "aod",
       "group": "overlays",
       "layergroup": "Aerosol Optical Depth",
       "product": "MOD04_3K",
       "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
       "projections": {
         "geographic": {
           "source": "GIBS:geographic"
         }
-      },
-      "daynight": [
-        "day"
-      ]
+      }
     }
   }
 }

@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Terra_Cloud_Fraction_Day": {
-      "id": "MODIS_Terra_Cloud_Fraction_Day",
-      "title": "Cloud Fraction (Day)",
-      "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Fraction_Day",
       "group": "overlays",
       "layergroup": "Cloud Fraction",
       "product": "MOD06_L2_DAY",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

@@ -2,7 +2,6 @@
   "layers": {
     "Land_Mask": {
       "id": "Land_Mask",
-      "title": "Land Mask",
       "description": "reference/Land_Mask",
       "tags": "borders mask",
       "group": "overlays",

@@ -1,9 +1,6 @@
 {
   "layers": {
     "SMAP_L3_Active_Sigma0_XPOL": {
-      "id": "SMAP_L3_Active_Sigma0_XPOL",
-      "title": "Sigma0 3 km (L3, Active, XPOL Polarization)",
-      "subtitle": "SMAP / Radar",
       "description": "smap/SMAP_L3_Active_Sigma0_XPOL",
       "group": "overlays",
       "layergroup": "Sigma0",

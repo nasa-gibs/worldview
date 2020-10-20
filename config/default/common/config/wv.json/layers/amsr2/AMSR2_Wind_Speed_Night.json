@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSR2_Wind_Speed_Night": {
-      "id": "AMSR2_Wind_Speed_Night",
-      "title": "Wind Speed (Night, Historical)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSR2_Wind_Speed_Night",
       "tags": "amsr-2",
       "inactive": true,

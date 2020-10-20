@@ -1,9 +1,6 @@
 {
   "layers": {
     "Last_of_the_Wild_1995-2004": {
-      "id": "Last_of_the_Wild_1995-2004",
-      "title": "Last of the Wild",
-      "subtitle": "Global Human Footprint (Geographic), v2 (1995-2004)",
       "description": "sedac/Last_of_the_Wild_1995-2004",
       "tags": "human sedac wild",
       "group": "overlays",

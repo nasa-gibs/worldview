@@ -1,9 +1,6 @@
 {
   "layers": {
     "Ground_Level_Nitrogen_Dioxide_3_Year_Running_Mean_2010-2012": {
-      "id": "Ground_Level_Nitrogen_Dioxide_3_Year_Running_Mean_2010-2012",
-      "title": "Ground-Level NO2, 2010-2012",
-      "subtitle": "Global 3-Year Running Mean Ground-Level NO2 Grids from GOME, SCIAMACHY and GOME-2, v1 (1996-2012)",
       "description": "sedac/Ground_Level_Nitrogen_Dioxide_3_Year_Running_Mean_2010-2012",
       "tags": "human sedac NO2",
       "group": "overlays",

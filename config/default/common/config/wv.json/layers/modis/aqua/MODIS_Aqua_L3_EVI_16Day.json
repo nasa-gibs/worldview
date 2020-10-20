@@ -1,18 +1,12 @@
 {
   "layers": {
     "MODIS_Aqua_L3_EVI_16Day": {
-      "id": "MODIS_Aqua_L3_EVI_16Day",
-      "title": "Enhanced Vegetation Index (L3, 16-Day)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_L3_EVI_16Day",
       "tags": "",
       "group": "overlays",
       "layergroup": "Vegetation Indices",
       "product": "MYD13Q1",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

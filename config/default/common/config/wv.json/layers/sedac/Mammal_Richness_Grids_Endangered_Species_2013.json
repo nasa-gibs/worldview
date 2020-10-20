@@ -1,9 +1,6 @@
 {
   "layers": {
     "Mammal_Richness_Grids_Endangered_Species_2013": {
-      "id": "Mammal_Richness_Grids_Endangered_Species_2013",
-      "title": "Mammal Richness - Endangered",
-      "subtitle": "Species: Global Mammal Richness Grids, 2015 Release (2013)",
       "description": "sedac/Mammal_Richness_Grids_Endangered_Species_2013",
       "tags": "human sedac",
       "group": "overlays",

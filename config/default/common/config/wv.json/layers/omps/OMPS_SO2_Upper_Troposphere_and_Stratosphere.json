@@ -1,9 +1,6 @@
 {
   "layers": {
     "OMPS_SO2_Upper_Troposphere_and_Stratosphere": {
-      "id": "OMPS_SO2_Upper_Troposphere_and_Stratosphere",
-      "title": "Sulfur Dioxide (Upper Troposphere and Stratosphere)",
-      "subtitle": "Suomi NPP / OMPS",
       "description": "omps/OMPS_SO2_Upper_Troposphere_and_Stratosphere",
       "tags": "SO2, sulphur",
       "group": "overlays",

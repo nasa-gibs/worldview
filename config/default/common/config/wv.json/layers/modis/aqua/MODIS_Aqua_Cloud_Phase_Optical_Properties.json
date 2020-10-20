@@ -1,20 +1,11 @@
 {
   "layers": {
     "MODIS_Aqua_Cloud_Phase_Optical_Properties": {
-      "id": "MODIS_Aqua_Cloud_Phase_Optical_Properties",
-      "title": "Cloud Phase Optical Properties",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Phase_Optical_Properties",
       "group": "overlays",
       "layergroup": "Cloud Phase",
       "product": "MYD06_L2",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

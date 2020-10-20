@@ -1,9 +1,6 @@
 {
   "layers": {
     "GMI_Rain_Rate_Asc": {
-      "id": "GMI_Rain_Rate_Asc",
-      "title": "Rain Rate (Ascending)",
-      "subtitle": "GPM / GMI",
       "description": "gpm/GMI_Rain_Rate_Asc",
       "tags": "precipitation",
       "group": "overlays",

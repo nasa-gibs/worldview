@@ -1,9 +1,6 @@
 {
   "layers": {
     "MLS_O3_46hPa_Day": {
-      "id": "MLS_O3_46hPa_Day",
-      "title": "Ozone (46 hPa, Day)",
-      "subtitle": "Aura / MLS",
       "description": "mls/MLS_O3_46hPa_Day",
       "tags": "o3",
       "group": "overlays",

@@ -1,18 +1,12 @@
 {
   "layers": {
     "MODIS_Combined_L4_FPAR_4Day": {
-      "id": "MODIS_Combined_L4_FPAR_4Day",
-      "title": "Fraction of Photosynthetically Active Radiation (L4, 4-Day)",
-      "subtitle": "Terra and Aqua / MODIS",
       "description": "modis/combined/MODIS_Combined_L4_FPAR_4Day",
       "tags": "fpar",
       "group": "overlays",
       "layergroup": "FPAR",
       "product": "MCD15A3H",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

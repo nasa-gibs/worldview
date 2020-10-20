@@ -1,9 +1,6 @@
 {
   "layers": {
     "MERRA2_Evaporation_Land_Monthly": {
-      "id": "MERRA2_Evaporation_Land_Monthly",
-      "title": "Evaporation over Land (Monthly)",
-      "subtitle": "MERRA-2",
       "description": "merra/MERRA2_Evaporation_Land_Monthly",
       "tags": "",
       "group": "overlays",

@@ -1,9 +1,6 @@
 {
   "layers": {
     "Aquarius_Wind_Speed_L3_Daily": {
-      "id": "Aquarius_Wind_Speed_L3_Daily",
-      "title": "Wind Speed (L3, Daily)",
-      "subtitle": "SAC-D / Aquarius",
       "description": "aquarius/Aquarius_Wind_Speed_L3_Daily",
       "tags": "podaac PO.DAAC",
       "group": "overlays",

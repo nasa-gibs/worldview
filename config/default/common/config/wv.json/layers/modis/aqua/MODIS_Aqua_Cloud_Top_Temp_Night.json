@@ -1,25 +1,16 @@
 {
   "layers": {
     "MODIS_Aqua_Cloud_Top_Temp_Night": {
-      "id": "MODIS_Aqua_Cloud_Top_Temp_Night",
-      "title": "Cloud Top Temperature (Night)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Top_Temp_Night",
       "group": "overlays",
       "layergroup": "Cloud Top Temperature",
       "product": "MYD06_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ],
       "palette": {
         "recommended": [
           "purple_2",
           "rainbow_1"
         ]
-      },
-      "daynight": [
-        "night"
-      ]
+      }
     }
   }
 }

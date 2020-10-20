@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_Calipso_Ascending": {
       "id": "OrbitTracks_Calipso_Ascending",
-      "title": "CALIPSO - Orbit Track & Time",
-      "subtitle": "CALIPSO / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Calipso_Ascending",
       "group": "overlays",
       "format": "image/png",

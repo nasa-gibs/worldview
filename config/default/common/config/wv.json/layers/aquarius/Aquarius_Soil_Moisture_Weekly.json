@@ -1,9 +1,6 @@
 {
   "layers": {
     "Aquarius_Soil_Moisture_Weekly": {
-      "id": "Aquarius_Soil_Moisture_Weekly",
-      "title": "Soil Moisture (Weekly, Radiometer)",
-      "subtitle": "SAC-D / Aquarius",
       "description": "aquarius/Aquarius_Soil_Moisture_Weekly",
       "tags": "",
       "group": "overlays",

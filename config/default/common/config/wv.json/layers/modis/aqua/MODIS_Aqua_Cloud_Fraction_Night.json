@@ -1,9 +1,6 @@
 {
   "layers": {
     "MODIS_Aqua_Cloud_Fraction_Night": {
-      "id": "MODIS_Aqua_Cloud_Fraction_Night",
-      "title": "Cloud Fraction (Night)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Fraction_Night",
       "group": "overlays",
       "layergroup": "Cloud Fraction",

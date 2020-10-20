@@ -1,9 +1,6 @@
 {
   "layers": {
     "OTD_High_Resolution_Full_Climatology_OTD_Raw_Flashes": {
-      "id": "OTD_High_Resolution_Full_Climatology_OTD_Raw_Flashes",
-      "title": "Lightning Flashes (Raw)",
-      "subtitle": "OrbView-1 / OTD",
       "description": "orbview/OTD_High_Resolution_Full_Climatology_OTD_Raw_Flashes",
       "tags": "",
       "group": "overlays",

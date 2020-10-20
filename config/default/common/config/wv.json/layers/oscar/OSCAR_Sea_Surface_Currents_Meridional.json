@@ -1,9 +1,6 @@
 {
   "layers": {
     "OSCAR_Sea_Surface_Currents_Meridional": {
-      "id": "OSCAR_Sea_Surface_Currents_Meridional",
-      "title": "Sea Surface Currents (Meridional)",
-      "subtitle": "OSCAR",
       "description": "oscar/OSCAR_Sea_Surface_Currents_Meridional",
       "tags": "podaac PO.DAAC",
       "group": "overlays",

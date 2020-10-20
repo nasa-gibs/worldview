@@ -1,9 +1,6 @@
 {
   "layers": {
     "MODIS_Aqua_Thermal_Anomalies_All": {
-      "id": "MODIS_Aqua_Thermal_Anomalies_All",
-      "title": "Fires and Thermal Anomalies (Day and Night)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Thermal_Anomalies_All",
       "tags": "vectors hotspots",
       "group": "overlays",
@@ -22,10 +19,6 @@
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "daynight": [
-        "day",
-        "night"
-      ],
       "breakPointLayer": {
         "id": "MODIS_Aqua_Thermal_Anomalies_All",
         "type": "wms",

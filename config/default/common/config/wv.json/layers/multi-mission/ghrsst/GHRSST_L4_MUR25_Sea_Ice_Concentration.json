@@ -1,9 +1,6 @@
 {
   "layers": {
     "GHRSST_L4_MUR25_Sea_Ice_Concentration": {
-      "id": "GHRSST_L4_MUR25_Sea_Ice_Concentration",
-      "title": "Sea Ice Concentration (L4, MUR25)",
-      "subtitle": "Multi-mission / GHRSST",
       "description": "multi-mission/ghrsst/GHRSST_L4_MUR25_Sea_Ice_Concentration",
       "tags": "ghrsst podaac PO.DAAC",
       "group": "overlays",

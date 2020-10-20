@@ -2,8 +2,6 @@
   "layers": {
     "OrbitTracks_Landsat-7_Ascending": {
       "id": "OrbitTracks_Landsat-7_Ascending",
-      "title": "Landsat 7 - Orbit Track & Time",
-      "subtitle": "Landsat 7 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Landsat-7_Ascending",
       "group": "overlays",
       "format": "image/png",

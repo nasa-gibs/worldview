@@ -1,18 +1,12 @@
 {
   "layers": {
     "MODIS_Aqua_L3_SST_Thermal_4km_Night_Annual": {
-      "id": "MODIS_Aqua_L3_SST_Thermal_4km_Night_Annual",
-      "title": "Sea Surface Temperature (L3, Night, Annual, Thermal, 4 km)",
-      "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_L3_SST_Thermal_4km_Night_Annual",
       "group": "overlays",
       "tags": "ssc podaac PO.DAAC",
       "layergroup": "Sea Surface Temperature",
       "product": "MODIS_AQUA_L3_SST_THERMAL_ANNUAL_4KM_NIGHTTIME_V2014.0",
-      "wrapadjacentdays": true,
-      "daynight": [
-        "night"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

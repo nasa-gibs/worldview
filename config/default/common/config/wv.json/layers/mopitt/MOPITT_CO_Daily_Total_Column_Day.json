@@ -1,9 +1,6 @@
 {
   "layers": {
     "MOPITT_CO_Daily_Total_Column_Day": {
-      "id": "MOPITT_CO_Daily_Total_Column_Day",
-      "title": "Carbon Monoxide (L3, Daily, Day, Total Column)",
-      "subtitle": "Terra / MOPITT",
       "description": "mopitt/MOPITT_CO_Daily_Total_Column_Day",
       "tags": "co",
       "group": "overlays",
