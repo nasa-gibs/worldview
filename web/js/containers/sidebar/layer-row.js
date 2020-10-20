@@ -335,7 +335,7 @@ const mapStateToProps = (state, ownProps) => {
   const isVector = layer.type === 'vector';
   const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
   const tracksForLayer = getActiveLayers(state).filter(
-    (activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track),
+    (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track),
   );
 
   return {

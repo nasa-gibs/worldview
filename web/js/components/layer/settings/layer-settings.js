@@ -297,7 +297,7 @@ class LayerSettings extends React.Component {
           layer={layer}
         />
         {renderCustomizations}
-        {layer.tracks && layer.tracks.length && <OrbitTracks layer={layer} />}
+        {layer.orbitTracks && layer.orbitTracks.length && <OrbitTracks layer={layer} />}
       </>
     );
   }

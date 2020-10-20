@@ -41,9 +41,9 @@ const OrbitTracksToggle = (props) => {
 
 const mapStateToProps = (state, ownProps) => {
   const { config } = state;
-  const { tracks } = ownProps.layer;
+  const { orbitTracks } = ownProps.layer;
   return {
-    trackLayers: tracks.map((trackName) => config.layers[trackName]),
+    trackLayers: orbitTracks.map((trackName) => config.layers[trackName]),
     activeLayers: getActiveLayersMap(state),
   };
 };
