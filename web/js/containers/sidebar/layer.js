@@ -89,7 +89,6 @@ class Layer extends React.Component {
   getDisabledTitle = (layer) => {
     const {
       endDate,
-      futureLayer,
       futureTime,
       period,
       startDate,
@@ -103,8 +102,7 @@ class Layer extends React.Component {
 
     // end date (including future date building)
     let layerEndDate = endDate;
-    const isFutureLayer = futureLayer && futureTime;
-    if (isFutureLayer) {
+    if (futureTime) {
       const futureDate = getFutureLayerEndDate(layer);
       layerEndDate = futureDate ? futureDate.toISOString() : endDate;
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DataLine from './data-line';
-import { getFutureLayerEndDate, isFutureLayer } from '../../../modules/layers/selectors';
+import { getFutureLayerEndDate } from '../../../modules/layers/selectors';
 import { getISODateFormatted } from '../date-util';
 
 /*
@@ -59,6 +59,7 @@ class DataItemContainer extends Component {
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
     const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
+      const { futureTime } = layer;
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
@@ -69,7 +70,7 @@ class DataItemContainer extends Component {
 
       // max end date based on layer
       let layerEndDate;
-      if (isFutureLayer(layer)) {
+      if (futureTime) {
         layerEndDate = getFutureLayerEndDate(layer);
       } else {
         layerEndDate = new Date(endDate);
@@ -121,7 +122,7 @@ class DataItemContainer extends Component {
 
     // layer options
     const {
-      futureLayer,
+      futureTime,
       id,
       startDate,
       visible,
@@ -130,7 +131,7 @@ class DataItemContainer extends Component {
       endDate,
     } = layer;
 
-    if (futureLayer) {
+    if (futureTime) {
       const futureDate = getFutureLayerEndDate(layer);
       endDate = futureDate || endDate;
       endDate = getISODateFormatted(futureDate);

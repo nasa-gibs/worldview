@@ -1403,9 +1403,9 @@ function mapStateToProps(state) {
   if (isCompareModeActive) {
     const compareALayersFiltered = filterProjLayersWithStartDate(layers.active, proj.id);
     const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB, proj.id);
-    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureLayer);
+    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime);
   } else {
-    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureLayer);
+    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime);
   }
 
   let timelineEndDateLimit;

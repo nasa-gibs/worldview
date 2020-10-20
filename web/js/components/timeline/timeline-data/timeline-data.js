@@ -144,7 +144,7 @@ class TimelineData extends Component {
     }
     if (rangeEnd || layer.inactive === true) {
       layerEnd = new Date(rangeEnd || layer.endDate).getTime();
-    } else if (layer.futureLayer && layer.futureTime && !layer.endDate) {
+    } else if (layer.futureTime && !layer.endDate) {
       layerEnd = getFutureLayerEndDate(layer);
     } else {
       layerEnd = new Date(appNow).getTime();

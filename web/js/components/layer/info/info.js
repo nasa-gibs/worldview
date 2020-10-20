@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
-import { getFutureLayerEndDate, isFutureLayer } from '../../../modules/layers/selectors';
+import { getFutureLayerEndDate } from '../../../modules/layers/selectors';
 import DateRanges from './date-ranges';
 import util from '../../../util/util';
 import Scrollbars from '../../util/scrollbar';
@@ -45,6 +45,7 @@ class LayerInfo extends React.Component {
     const {
       dateRanges,
       endDate,
+      futureTime,
       id,
       period,
       startDate,
@@ -55,7 +56,7 @@ class LayerInfo extends React.Component {
 
     const layerStartDate = startDate;
     let layerEndDate = endDate;
-    if (isFutureLayer(layer)) {
+    if (futureTime) {
       const futureDate = getFutureLayerEndDate(layer);
       layerEndDate = futureDate ? futureDate.toISOString() : endDate;
     }

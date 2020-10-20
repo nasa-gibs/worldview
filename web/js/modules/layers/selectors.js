@@ -234,15 +234,6 @@ function forGroup(group, spec = {}, activeLayers, state) {
 }
 
 /**
- * Check if future layer options are in layer
- *
- * @method isFutureLayer
- * @param  {Object} layer
- * @returns {Boolean}
- */
-export const isFutureLayer = ({ futureLayer, futureTime }) => futureLayer && futureTime;
-
-/**
  * Build end date for future layer
  *
  * @method getFutureLayerEndDate
@@ -304,7 +295,7 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
 
     // For now, we assume that any layer with an end date is
     // an ongoing product unless it is marked as inactive.
-    if (def.futureLayer && def.endDate) {
+    if (def.futureTime && def.endDate) {
       range = true;
       max = util.parseDateUTC(def.endDate).getTime();
       maxDates.push(new Date(max));
@@ -322,7 +313,7 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
     // If there is a start date but no end date, this is a
     // product that is currently being created each day, set
     // the max day to today.
-    if (def.futureLayer && def.futureTime && !def.endDate) {
+    if (def.futureTime && !def.endDate) {
       // Calculate endDate + parsed futureTime from layer JSON
       max = getFutureLayerEndDate(def);
       maxDates.push(new Date(max));
