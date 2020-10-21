@@ -975,6 +975,7 @@ class Timeline extends React.Component {
       activeLayers,
       dateA,
       dateB,
+      hasFutureLayers,
       hasSubdailyLayers,
       draggerSelected,
       leftArrowDisabled,
@@ -1212,7 +1213,7 @@ class Timeline extends React.Component {
                         showHoverOn={this.showHoverOn}
                         showHoverOff={this.showHoverOff}
                         showHover={this.showHover}
-                        hasFutureLayers={this.props.hasFutureLayers}
+                        hasFutureLayers={hasFutureLayers}
                         hasSubdailyLayers={hasSubdailyLayers}
                         isCompareModeActive={isCompareModeActive}
                         isAnimationPlaying={isAnimationPlaying}
@@ -1568,6 +1569,7 @@ Timeline.propTypes = {
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
   draggerSelected: PropTypes.string,
+  hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hideTimeline: PropTypes.bool,
   isAnimationPlaying: PropTypes.bool,

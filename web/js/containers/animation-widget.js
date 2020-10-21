@@ -842,6 +842,7 @@ RangeHandle.propTypes = {
   value: PropTypes.number,
 };
 AnimationWidget.propTypes = {
+  appNow: PropTypes.object,
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   changeCustomInterval: PropTypes.func,
@@ -852,6 +853,7 @@ AnimationWidget.propTypes = {
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasCustomPalettes: PropTypes.bool,
+  hasFutureLayers: PropTypes.bool,
   hasGraticule: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
