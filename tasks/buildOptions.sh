@@ -61,6 +61,9 @@ mkdir -p "$BUILD_DIR/colormaps"
 mkdir -p "$BUILD_DIR/vectorstyles"
 mkdir -p "$BUILD_DIR/vectordata"
 
+"$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
+    "$BASE/schemas/layer-config.json"
+
 if [ -e "$BUILD_DIR/features.json" ] ; then
     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
 fi

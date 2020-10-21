@@ -14,7 +14,7 @@
           "id": "FIRMS_MODIS_Thermal_Anomalies_polar"
         }
       },
-      "transition": "true",
+      "transition": true,
       "period": "daily",
       "layergroup": "Fires and Thermal Anomalies",
       "product": "MYD14",

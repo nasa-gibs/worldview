@@ -21,13 +21,13 @@
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
       },
-      "transition": "true",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],
       "daynight": [
         "day"
       ],
+      "transition": true,
       "breakPointLayer": {
         "id": "MODIS_Aqua_Thermal_Anomalies_Day",
         "type": "wms",
