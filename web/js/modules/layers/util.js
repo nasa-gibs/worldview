@@ -1315,13 +1315,11 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
 
   const addFutureTimeOptions = (layer) => {
     const { futureTime, id } = layer;
-    if (id === targetLayerId) {
-      // prevent overwriting of existing futureTime options
-      if (futureTime) {
-        return;
-      }
-      layer.futureTime = mockFutureTime;
+    if (id !== targetLayerId || futureTime) {
+      return;
     }
+    layer.futureTime = mockFutureTime;
   };
+
   return Object.values(layers).forEach(addFutureTimeOptions);
 }
