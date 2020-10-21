@@ -119,6 +119,17 @@ module.exports = {
     client.assert.attributeContains(dateSelectorYearInput, 'value', '2013');
   },
 
+  // verify right timeline arrow is not disabled for future date
+  'Added future layer and right timeline arrow is not disabled': (client) => {
+    client.url(`${client.globals.url}?mockFutureLayer=VIIRS_SNPP_CorrectedReflectance_TrueColor,3D`);
+    client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
+    client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+    client.click('#right-arrow-group');
+    client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+    client.click('#right-arrow-group');
+    client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+  },
+
   after: (client) => {
     client.end();
   },
