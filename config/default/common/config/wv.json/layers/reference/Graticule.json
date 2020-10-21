@@ -5,7 +5,7 @@
       "description": "reference/Graticule",
       "group": "overlays",
       "format": "image/png",
-      "noTransition": "true",
+      "noTransition": true,
       "type": "variable",
       "layergroup": "Latitude-Longitude Lines",
       "projections": {
@@ -23,7 +23,8 @@
         },
         "geographic": {
           "subtitle": "OpenLayers / Graticule Control",
-          "type": "graticule"
+          "type": "graticule",
+          "source": ""
         }
       }
     }
