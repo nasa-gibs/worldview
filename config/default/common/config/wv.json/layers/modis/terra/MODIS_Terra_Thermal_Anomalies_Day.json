@@ -11,7 +11,7 @@
       "layergroup": "Fires and Thermal Anomalies",
       "product": "MOD14",
       "type": "vector",
-      "transition": "true",
+      "transition": true,
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
         "arctic": {
@@ -20,7 +20,7 @@
       },
       "palette": {
         "id": "MODIS_All_Thermal_Anomalies",
-        "immutable": "true"
+        "immutable": true
       },
       "tracks": [
         "OrbitTracks_Terra_Descending"

@@ -6,20 +6,23 @@
       "description": "reference/Coastlines",
       "group": "overlays",
       "format": "image/png",
-      "noTransition": "true",
       "layergroup": "Reference",
+      "noTransition": true,
       "projections": {
         "antarctic": {
           "subtitle": "SCAR Antarctic Digital Database / Coastlines",
-          "tags": "borders reference"
+          "tags": "borders reference",
+          "source": "GIBS:antarctic"
         },
         "geographic": {
           "subtitle": "&copy; OpenStreetMap contributors",
-          "tags": "borders reference osm"
+          "tags": "borders reference osm",
+          "source": "GIBS:geographic"
         },
         "arctic": {
           "subtitle": "&copy; OpenStreetMap contributors",
-          "tags": "borders reference osm"
+          "tags": "borders reference osm",
+          "source": "GIBS:arctic"
         }
       },
       "wrapX": true

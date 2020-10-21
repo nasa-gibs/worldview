@@ -7,8 +7,8 @@
       "description": "reference/Reference_Labels",
       "tags": "osm reference, country, countries, state, province, cities, city",
       "group": "overlays",
-      "noTransition": "true",
       "layergroup": "Reference",
+      "noTransition": true,
       "wrapX": true
     }
   }

@@ -16,7 +16,7 @@
           "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
         }
       },
-      "transition": "true",
+      "transition": true,
       "palette": {
         "id": "VIIRS_All_Thermal_Anomalies",
         "immutable": true

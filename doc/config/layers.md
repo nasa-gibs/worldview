@@ -100,7 +100,6 @@ Example:
 * **noTransition**: For WMTS layers only, if set to `true`, the map will not display lower-resolution tiles while loading.
 * **transition**: For WMS layers only, if set to `true`, the map will display lower-resolution tiles while loading.
 * **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. Can also be a list of identifiers to map the layer to multiple CMR products. See the [Data Download documentation](../data_download.md) for more information.
-* **style**: For WMTS layers only, this sets the WMTS `style` parameter accordingly; defaults to `default` if not set.
 * **tileSize**: For WMS layers only, an array of pixel dimensions used to tile the requests. For example, `[512, 512]`
 * **daynight**: Classify a layer as day or night. This information will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 * **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
