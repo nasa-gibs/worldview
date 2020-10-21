@@ -4,7 +4,6 @@ import util from '../../util/util';
 import { layersParse12 } from '../layers/util';
 import {
   dateRange as getDateRange,
-  getFutureLayerEndDate,
 } from '../layers/selectors';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
@@ -50,7 +49,6 @@ export function parsePermalinkDate(defaultStr, str, layerParameters, config) {
     } else if (time > defaultStr) {
       // get permalink layers
       const layersParsed = layersParse12(layerParameters, config);
-      // check for futureLayers layer option
       const layersDateRange = getDateRange({}, layersParsed);
       // determine max date "defaultStr" or use permalink layer futureTime
       if (layersDateRange && layersDateRange.end) {
@@ -103,13 +101,9 @@ export function getMaxActiveLayersDate(state) {
  */
 export function getMaxLayerEndDates(layers, appNow) {
   return layers.reduce((layerEndDates, layer) => {
-    let layerEndDate = layer.endDate;
-    if (layer.futureTime) {
-      layerEndDate = getFutureLayerEndDate(layer);
-    } else {
-      layerEndDate = new Date(appNow);
-    }
-    return layerEndDate ? layerEndDates.concat(layerEndDate) : layerEndDates;
+    const { endDate, futureTime } = layer;
+    const layerEndDate = futureTime ? new Date(endDate) : new Date(appNow);
+    return layerEndDates.concat(layerEndDate);
   }, []);
 }
 

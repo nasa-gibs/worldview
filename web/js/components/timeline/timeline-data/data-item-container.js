@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DataLine from './data-line';
-import { getFutureLayerEndDate } from '../../../modules/layers/selectors';
-import { getISODateFormatted } from '../date-util';
 
 /*
  * Data Item Container for individual layer data coverage.
@@ -59,24 +57,14 @@ class DataItemContainer extends Component {
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
     const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
-      const { futureTime } = layer;
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
-      // get max end date based on axis, appNow, and futureLayers (if applicable)
+      // get max end date based on axis, appNow, and futureTime (if applicable)
       const endDateLimit = getMaxEndDate(layer, isLastInRange);
       // get dates based on date ranges
       const startDateTime = new Date(startDate).getTime();
-
-      // max end date based on layer
-      let layerEndDate;
-      if (futureTime) {
-        layerEndDate = getFutureLayerEndDate(layer);
-      } else {
-        layerEndDate = new Date(endDate);
-      }
-
-      const endDateTime = new Date(layerEndDate).getTime();
+      const endDateTime = new Date(endDate).getTime();
       const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
 
       // add date intervals to mutliCoverageDates object to catch repeats
@@ -122,20 +110,12 @@ class DataItemContainer extends Component {
 
     // layer options
     const {
-      futureTime,
+      endDate,
       id,
       startDate,
       visible,
     } = layer;
-    let {
-      endDate,
-    } = layer;
 
-    if (futureTime) {
-      const futureDate = getFutureLayerEndDate(layer);
-      endDate = futureDate || endDate;
-      endDate = getISODateFormatted(futureDate);
-    }
     // condtional styling for line/background colors
     const {
       lineBackgroundColor,

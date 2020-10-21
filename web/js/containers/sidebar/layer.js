@@ -29,7 +29,6 @@ import {
 import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
-import { getFutureLayerEndDate } from '../../modules/layers/selectors';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -89,7 +88,6 @@ class Layer extends React.Component {
   getDisabledTitle = (layer) => {
     const {
       endDate,
-      futureTime,
       period,
       startDate,
     } = layer;
@@ -99,15 +97,10 @@ class Layer extends React.Component {
     if (startDate) {
       layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
     }
-
-    // end date (including future date building)
-    let layerEndDate = endDate;
-    if (futureTime) {
-      const futureDate = getFutureLayerEndDate(layer);
-      layerEndDate = futureDate ? futureDate.toISOString() : endDate;
-    }
+    // end date
+    let layerEndDate;
     if (layerEndDate) {
-      layerEndDate = util.coverageDateFormatter('END-DATE', layerEndDate, period);
+      layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
     }
 
     if (layerStartDate && layerEndDate) {

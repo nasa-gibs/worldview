@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
-import { getFutureLayerEndDate } from '../../../modules/layers/selectors';
 import DateRanges from './date-ranges';
 import util from '../../../util/util';
 import Scrollbars from '../../util/scrollbar';
@@ -45,7 +44,6 @@ class LayerInfo extends React.Component {
     const {
       dateRanges,
       endDate,
-      futureTime,
       id,
       period,
       startDate,
@@ -54,27 +52,21 @@ class LayerInfo extends React.Component {
       ? dateOverlap(period, dateRanges)
       : [];
 
-    const layerStartDate = startDate;
-    let layerEndDate = endDate;
-    if (futureTime) {
-      const futureDate = getFutureLayerEndDate(layer);
-      layerEndDate = futureDate ? futureDate.toISOString() : endDate;
-    }
     return (
       <div id="layer-description" className="layer-description">
-        {layerStartDate || layerEndDate ? (
+        {startDate || endDate ? (
           <div id="layer-date-range" className="layer-date-range">
             <span id={`${id}-startDate`} className="layer-date-start">
-              {layerStartDate
+              {startDate
                 ? `Temporal coverage: ${
-                  configureTemporalDate('START-DATE', layerStartDate, period)}`
+                  configureTemporalDate('START-DATE', startDate, period)}`
                 : ''}
             </span>
             <span id={`${id}-endDate`} className="layer-date-end">
-              {layerStartDate && layerEndDate
+              {startDate && endDate
                 ? ` - ${
-                  configureTemporalDate('END-DATE', layerEndDate, period)}`
-                : layerStartDate
+                  configureTemporalDate('END-DATE', endDate, period)}`
+                : startDate
                   ? ' - Present'
                   : ''}
             </span>

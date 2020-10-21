@@ -1203,6 +1203,7 @@ class Timeline extends React.Component {
                         animStartLocationDate={animStartLocationDate}
                         animEndLocationDate={animEndLocationDate}
                         debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
+                        onDateChange={this.onDateChange}
                         updatePositioning={this.updatePositioning}
                         updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
                         updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
@@ -1211,6 +1212,7 @@ class Timeline extends React.Component {
                         showHoverOn={this.showHoverOn}
                         showHoverOff={this.showHoverOff}
                         showHover={this.showHover}
+                        hasFutureLayers={this.props.hasFutureLayers}
                         hasSubdailyLayers={hasSubdailyLayers}
                         isCompareModeActive={isCompareModeActive}
                         isAnimationPlaying={isAnimationPlaying}
@@ -1403,13 +1405,13 @@ function mapStateToProps(state) {
   if (isCompareModeActive) {
     const compareALayersFiltered = filterProjLayersWithStartDate(layers.active, proj.id);
     const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB, proj.id);
-    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime);
+    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
   } else {
-    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime);
+    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime).length > 0;
   }
 
   let timelineEndDateLimit;
-  if (hasFutureLayers.length > 0) {
+  if (hasFutureLayers) {
     timelineEndDateLimit = getTimelineEndDateLimit(state);
   } else {
     timelineEndDateLimit = getISODateFormatted(appNow);
@@ -1464,6 +1466,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     customSelected,
     isCompareModeActive,
+    hasFutureLayers,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
     timelineStartDateLimit: config.startDate, // same as startDate

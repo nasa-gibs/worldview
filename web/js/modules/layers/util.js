@@ -730,8 +730,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
       // set maxDate to current date if layer coverage is ongoing
       if (index === dateRanges.length - 1 && !inactive) {
         if (futureTime) {
-          const futureDate = getFutureLayerEndDate(def);
-          maxDate = futureDate;
+          maxDate = new Date(endDate);
         } else {
           maxDate = new Date(appNow);
         }
@@ -1298,6 +1297,33 @@ export function adjustStartDates(layers) {
 }
 
 /**
+ * Change end dates for future layers to add 'futureTime' (ex: '3D')
+ * Adjust def.endDate and, if applicable, the last endDate in dateRange object
+ *
+ * @method adjustEndDates
+ * @param  {Array} layers array
+ * @returns {Array} array of layers
+ */
+export function adjustEndDates(layers) {
+  const applyDateAdjustment = (layer) => {
+    const { futureTime, dateRanges } = layer;
+    if (!futureTime) {
+      return;
+    }
+
+    const futureEndDate = getFutureLayerEndDate(layer);
+    layer.endDate = util.toISOStringSeconds(futureEndDate);
+
+    if (dateRanges.length) {
+      const lastDateRange = dateRanges[dateRanges.length - 1];
+      lastDateRange.endDate = util.toISOStringSeconds(futureEndDate);
+    }
+  };
+
+  return Object.values(layers).forEach(applyDateAdjustment);
+}
+
+/**
  * Build end date for future layer
  *
  * @method mockFutureTimeLayerOptions
@@ -1319,6 +1345,8 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
       return;
     }
     layer.futureTime = mockFutureTime;
+    const futureEndDate = getFutureLayerEndDate(layer);
+    layer.endDate = util.toISOStringSeconds(futureEndDate);
   };
 
   return Object.values(layers).forEach(addFutureTimeOptions);

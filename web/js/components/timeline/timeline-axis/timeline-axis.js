@@ -69,6 +69,7 @@ class TimelineAxis extends Component {
       draggerSelected,
       timeScale,
       isCompareModeActive,
+      hasFutureLayers,
       hasSubdailyLayers,
       matchingTimelineCoverage,
       timelineEndDateLimit,
@@ -87,6 +88,7 @@ class TimelineAxis extends Component {
       && nextProps.draggerSelected === draggerSelected
       && nextProps.timeScale === timeScale
       && nextProps.isCompareModeActive === isCompareModeActive
+      && nextProps.hasFutureLayers === hasFutureLayers
       && nextProps.hasSubdailyLayers === hasSubdailyLayers
       && nextProps.timelineEndDateLimit === timelineEndDateLimit
       && nextProps.transformX === transformX
@@ -130,6 +132,8 @@ class TimelineAxis extends Component {
       isDraggerDragging,
       timeScale,
       axisWidth,
+      hasFutureLayers,
+      onDateChange,
       isAnimationPlaying,
       isCompareModeActive,
       isTimelineDragging,
@@ -163,8 +167,17 @@ class TimelineAxis extends Component {
     }
 
     // update scale if end time limit has changed (e.g. time has elapsed since the app was started)
-    if (timelineEndDateLimit !== prevProps.timelineEndDateLimit && !isAnimationPlaying && !isDraggerDragging && !isTimelineDragging) {
-      this.updateScale(draggerDate, timeScale, 0.5);
+    const hasFutureLayersUpdated = prevProps.hasFutureLayers !== hasFutureLayers;
+    const isTimelineInteracting = !isDraggerDragging && !isTimelineDragging;
+    const didtTimelineEndDateLimitUpdate = timelineEndDateLimit !== prevProps.timelineEndDateLimit;
+    if (didtTimelineEndDateLimitUpdate && (!isAnimationPlaying || hasFutureLayersUpdated) && isTimelineInteracting) {
+      const updatedDraggerDate = hasFutureLayersUpdated
+        ? new Date(draggerDate) > new Date(timelineEndDateLimit)
+          ? timelineEndDateLimit
+          : draggerDate
+        : draggerDate;
+      onDateChange(new Date(updatedDraggerDate));
+      this.updateScale(updatedDraggerDate, timeScale, 0.5);
     }
 
     // handle switching A/B dragger axis focus if switched from A/B sidebar tabs
@@ -1531,6 +1544,7 @@ TimelineAxis.propTypes = {
   draggerVisible: PropTypes.bool,
   draggerVisibleB: PropTypes.bool,
   frontDate: PropTypes.string,
+  hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
   isAnimationDraggerDragging: PropTypes.bool,
@@ -1541,6 +1555,7 @@ TimelineAxis.propTypes = {
   isTourActive: PropTypes.bool,
   leftOffset: PropTypes.number,
   matchingTimelineCoverage: PropTypes.object,
+  onDateChange: PropTypes.func,
   parentOffset: PropTypes.number,
   position: PropTypes.number,
   showHover: PropTypes.func,

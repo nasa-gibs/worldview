@@ -18,7 +18,7 @@ import {
 import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers, getFutureLayerEndDate } from '../../../../modules/layers/selectors';
+import { getActiveLayers } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import RecentLayersInfo from '../browse/recent-layers-info';
 
@@ -80,42 +80,35 @@ class LayerMetadataDetail extends React.Component {
      */
   dateRangeText = (layer) => {
     const {
-      futureTime,
+      endDate,
       id,
       inactive,
       period,
       startDate,
     } = layer;
-
-    let layerStartDate = startDate;
-    let layerEndDate = layer.endDate;
-    // handle future layer dates
-    if (futureTime) {
-      const futureDate = getFutureLayerEndDate(layer);
-      layerEndDate = futureDate ? futureDate.toISOString() : layer.endDate;
-    }
-
+    let layerStartDate;
     let startDateId;
-    let endDate;
+    let layerEndDate;
     let endDateId;
+
     if (startDate) {
       startDateId = `${id}-startDate`;
-      layerStartDate = util.coverageDateFormatter('START-DATE', layerStartDate, period);
+      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
     }
-    if (layerEndDate) {
+    if (endDate) {
       endDateId = `${id}-endDate`;
-      endDate = util.parseDate(layerEndDate);
-      if (endDate <= util.today() && !inactive) {
-        endDate = 'Present';
+      layerEndDate = util.parseDate(endDate);
+      if (layerEndDate <= util.today() && !inactive) {
+        layerEndDate = 'Present';
       } else {
-        endDate = util.coverageDateFormatter('END-DATE', layerEndDate, period);
+        layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
       }
     } else {
-      endDate = 'Present';
+      layerEndDate = 'Present';
     }
     return `Temporal coverage:
           <span class="layer-date-start" id='${startDateId}'> ${layerStartDate} </span> -
-          <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>`;
+          <span class="layer-end-date" id='${endDateId}'> ${layerEndDate} </span>`;
   }
 
   renderLayerDates() {

@@ -5,10 +5,6 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { datesinDateRanges } from '../../../modules/layers/util';
-import { getISODateFormatted } from '../date-util';
-import {
-  getFutureLayerEndDate,
-} from '../../../modules/layers/selectors';
 import util from '../../../util/util';
 import {
   timeScaleToNumberKey,
@@ -104,7 +100,7 @@ class DataItemList extends Component {
   */
   getRangeDateEndWithAddedInterval = (layer, rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
     const { appNow } = this.props;
-    const { futureTime } = layer;
+    const { endDate, futureTime } = layer;
     const {
       minYear,
       minMonth,
@@ -139,10 +135,9 @@ class DataItemList extends Component {
     // prevent range end exceeding appNow
     if (appNow < rangeDateEnd) {
       if (futureTime) {
-        const futureDate = getFutureLayerEndDate(layer);
-        rangeDateEnd = futureDate && futureDate > rangeDateEnd
+        rangeDateEnd = new Date(endDate) > rangeDateEnd
           ? rangeDateEnd
-          : futureDate;
+          : new Date(endDate);
       } else {
         rangeDateEnd = appNow;
       }
@@ -158,7 +153,7 @@ class DataItemList extends Component {
   getFormattedDateRange = (layer) => {
     // get start date -or- 'start'
     const {
-      endDate, futureTime, startDate,
+      endDate, startDate,
     } = layer;
     let dateRangeStart;
     if (startDate) {
@@ -174,17 +169,10 @@ class DataItemList extends Component {
       dateRangeStart = 'Start';
     }
 
-    let layerEndDate = endDate;
-    if (futureTime) {
-      const futureDate = getFutureLayerEndDate(layer);
-      layerEndDate = futureDate || endDate;
-      layerEndDate = getISODateFormatted(layerEndDate);
-    }
-
     // get end date -or- 'present'
     let dateRangeEnd;
-    if (layerEndDate) {
-      const yearMonthDaySplit = layerEndDate.split('T')[0].split('-');
+    if (endDate) {
+      const yearMonthDaySplit = endDate.split('T')[0].split('-');
       const year = yearMonthDaySplit[0];
       const month = yearMonthDaySplit[1];
       const day = yearMonthDaySplit[2];
@@ -211,23 +199,18 @@ class DataItemList extends Component {
       appNow,
       backDate,
     } = this.props;
-    const { futureTime, inactive } = layer;
-
-    let layerEndDate;
-    if (futureTime) {
-      const futureDate = getFutureLayerEndDate(layer);
-      layerEndDate = futureDate;
-    }
+    const { endDate, futureTime, inactive } = layer;
 
     let endDateLimit = new Date(backDate);
+    const layerEndDate = new Date(endDate);
     const appNowDate = new Date(appNow);
     // appNow will override max range endDate
-    if (appNowDate < endDateLimit && !futureTime) {
+    if (endDateLimit > appNowDate && !futureTime) {
       endDateLimit = appNowDate;
     }
     // if last date of multiple ranges check for endDate over appNow date
     if (!inactive && isLastInRange) {
-      if (futureTime && layerEndDate) {
+      if (futureTime && endDate) {
         if (endDateLimit > layerEndDate) {
           endDateLimit = layerEndDate;
         }
@@ -235,6 +218,7 @@ class DataItemList extends Component {
         endDateLimit = appNowDate;
       }
     }
+
     return endDateLimit;
   }
 
@@ -278,8 +262,7 @@ class DataItemList extends Component {
     const appNowDate = new Date(appNow);
     if (!inactive && isLastInRange) {
       if (futureTime) {
-        const futureDate = getFutureLayerEndDate(def);
-        rangeEnd = futureDate;
+        rangeEnd = new Date(endDate);
       } else {
         rangeEnd = appNowDate;
       }

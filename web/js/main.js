@@ -36,6 +36,7 @@ import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
   validate as layerValidate,
   layersParse12,
+  adjustEndDates,
   adjustStartDates,
   mockFutureTimeLayerOptions,
 } from './modules/layers/util';
@@ -173,6 +174,7 @@ window.onload = () => {
     const legacyState = parse(parameters, config, errors);
     layerValidate(errors, config);
     adjustStartDates(config.layers);
+    adjustEndDates(config.layers);
     // Remove any mock stories
     if (!parameters.mockTour) {
       Object.keys(config.stories).forEach((storyId) => {
@@ -182,7 +184,6 @@ window.onload = () => {
         }
       });
     }
-
     if (parameters.mockFutureLayer) {
       mockFutureTimeLayerOptions(config.layers, parameters.mockFutureLayer);
     }
