@@ -1,6 +1,6 @@
 const TIME_LIMIT = 30000;
 const mockParam = '?mockAlerts=';
-const layerNoticesTestParams = '?l=Coastlines,MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor';
+const layerNoticesTestParams = '?l=Coastlines,MODIS_Aqua_CorrectedReflectance_TrueColor,Particulate_Matter_Below_2.5micrometers_2001-2010';
 const { addLayers, layersSearchField, categoriesNav } = require('../../reuseables/selectors.js');
 
 // Selectors
@@ -14,10 +14,10 @@ const alertContentHightlighted = '#notification_list_modal .alert-notification-i
 const outageContentHightlighted = '#notification_list_modal .outage-notification-item';
 const messageContentHightlighted = '#notification_list_modal .message-notification-item';
 const aquaNotice = 'The Aqua / MODIS Corrected Reflectance (True Color) layer is currently unavailable.';
-const aquaTerraNotice = 'Several Aqua and Terra MODIS layers are experiencing delays in processing.';
+const multiNotice = 'Several layers are experiencing delays in processing.';
 const tooltipSelector = '.tooltip-inner div';
 const aquaZot = '#MODIS_Aqua_CorrectedReflectance_TrueColor-zot';
-const terraZot = '#MODIS_Terra_CorrectedReflectance_TrueColor-zot';
+const particulateZot = '#Particulate_Matter_Below_2__2E__5micrometers_2001-2010-zot';
 
 module.exports = {
   'No visible notifications with mockAlert parameter set to no_types': function(c) {
@@ -73,12 +73,12 @@ module.exports = {
     c.moveToElement(aquaZot, 2, 2);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
     c.assert.containsText(`${tooltipSelector} div:first-of-type`, aquaNotice);
-    c.assert.containsText(`${tooltipSelector} div:last-of-type`, aquaTerraNotice);
+    c.assert.containsText(`${tooltipSelector} div:last-of-type`, multiNotice);
 
-    c.expect.element(terraZot).to.be.present;
-    c.moveToElement(terraZot, 2, 2);
+    c.expect.element(particulateZot).to.be.present;
+    c.moveToElement(particulateZot, 2, 2);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
-    c.assert.containsText(`${tooltipSelector} div`, aquaTerraNotice);
+    c.assert.containsText(`${tooltipSelector} div`, multiNotice);
   },
   'Verify that warning shows in the product picker category/measurement rows': function(c) {
     c.click(addLayers);
@@ -87,13 +87,7 @@ module.exports = {
     c.moveToElement('#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor', 2, 2);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
     c.assert.containsText(`${tooltipSelector} div:first-of-type`, aquaNotice);
-    c.assert.containsText(`${tooltipSelector} div:last-of-type`, aquaTerraNotice);
-
-    c.click('#terra-modis-4-source-Nav');
-    c.waitForElementVisible('#checkbox-case-MODIS_Terra_CorrectedReflectance_TrueColor', TIME_LIMIT);
-    c.moveToElement('#checkbox-case-MODIS_Terra_CorrectedReflectance_TrueColor', 5, 5);
-    c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
-    c.assert.containsText(`${tooltipSelector} div`, aquaTerraNotice);
+    c.assert.containsText(`${tooltipSelector} div:last-of-type`, multiNotice);
   },
   'Verify that warning shows in the product picker search results rows': function(c) {
     if (c.options.desiredCapabilities.browserName === 'firefox') {
@@ -106,7 +100,7 @@ module.exports = {
     c.moveToElement('#MODIS_Aqua_CorrectedReflectance_TrueColor-notice-info', 12, 12);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
     c.assert.containsText(`${tooltipSelector} div:first-of-type`, aquaNotice);
-    c.assert.containsText(`${tooltipSelector} div:last-of-type`, aquaTerraNotice);
+    c.assert.containsText(`${tooltipSelector} div:last-of-type`, multiNotice);
   },
   after(c) {
     c.end();
