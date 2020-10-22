@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
+import util from '../../util/util';
 
 export default function Zot (props) {
   const { zot, layer, isMobile } = props;
@@ -24,13 +25,13 @@ export default function Zot (props) {
 
   return (
     <div
-      id={`${layer}-zot`}
+      id={`${util.encodeId(layer)}-zot`}
       className={className}
     >
       <UncontrolledTooltip
         className="zot-tooltip"
         boundariesElement="window"
-        target={`${layer}-zot`}
+        target={`${util.encodeId(layer)}-zot`}
         placement="right"
         trigger="hover"
         autohide={isMobile}
