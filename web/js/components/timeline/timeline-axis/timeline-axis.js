@@ -168,9 +168,9 @@ class TimelineAxis extends Component {
 
     // update scale if end time limit has changed (e.g. time has elapsed since the app was started)
     const hasFutureLayersUpdated = prevProps.hasFutureLayers !== hasFutureLayers;
-    const isTimelineInteracting = !isDraggerDragging && !isTimelineDragging;
+    const isTimelineInteracting = isDraggerDragging || isTimelineDragging;
     const didtTimelineEndDateLimitUpdate = timelineEndDateLimit !== prevProps.timelineEndDateLimit;
-    if (didtTimelineEndDateLimitUpdate && (!isAnimationPlaying || hasFutureLayersUpdated) && isTimelineInteracting) {
+    if (didtTimelineEndDateLimitUpdate && (!isAnimationPlaying || hasFutureLayersUpdated) && !isTimelineInteracting) {
       const updatedDraggerDate = hasFutureLayersUpdated
         ? new Date(draggerDate) > new Date(timelineEndDateLimit)
           ? timelineEndDateLimit
