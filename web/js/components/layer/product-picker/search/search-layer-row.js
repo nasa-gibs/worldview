@@ -15,6 +15,7 @@ import { getActiveLayers } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import getSelectedDate from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
+import util from '../../../../util/util';
 
 /**
  * A single layer search result row
@@ -100,6 +101,7 @@ class SearchLayerRow extends React.Component {
     } = this.props;
     const { showDeleteIcon } = this.state;
     const { id } = layer;
+    const encodedId = util.encodeId(id);
     const isMetadataShowing = selectedLayer && id === selectedLayer.id;
     const rowClass = isMetadataShowing
       ? 'search-row layers-all-layer selected'
@@ -112,7 +114,7 @@ class SearchLayerRow extends React.Component {
 
     return (
       <div
-        id={`${id}-search-row`}
+        id={`${encodedId}-search-row`}
         className={rowClass}
         ref={this.ref}
         onMouseEnter={() => this.toggleDeleteIcon(true)}
@@ -121,8 +123,8 @@ class SearchLayerRow extends React.Component {
         <div className={checkboxClass}>
           <input
             type="checkbox"
-            id={`${id}-checkbox`}
-            name={`${id}-checkbox`}
+            id={`${encodedId}-checkbox`}
+            name={`${encodedId}-checkbox`}
             checked={isEnabled}
             onChange={this.toggleEnabled}
           />
@@ -130,14 +132,14 @@ class SearchLayerRow extends React.Component {
         {layerNotices && (
           <div className="layer-notice-wrapper">
             <FontAwesomeIcon
-              id={`${id}-notice-info`}
+              id={`${encodedId}-notice-info`}
               className="layer-notice-icon"
               icon={faExclamationTriangle}
             />
             <UncontrolledTooltip
               className="zot-tooltip"
               placement="top"
-              target={`${id}-notice-info`}
+              target={`${encodedId}-notice-info`}
               trigger="hover"
               autohide={isMobile}
               delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
