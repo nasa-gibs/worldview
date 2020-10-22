@@ -387,7 +387,7 @@ class DataItemList extends Component {
           return (
             <div
               key={key}
-              className={`data-panel-layer-item data-item-${id}`}
+              className="data-panel-layer-item"
               style={{
                 background: layerItemBackground,
                 outline: layerItemOutline,
@@ -397,7 +397,7 @@ class DataItemList extends Component {
                 this.getHeaderDOMEl(layer, visible, dateRange, layerItemBackground)
               }
               <div
-                className={`data-panel-layer-coverage-line-container data-line-${id}`}
+                className="data-panel-layer-coverage-line-container"
                 style={{
                   maxWidth: `${axisWidth}px`,
                 }}
