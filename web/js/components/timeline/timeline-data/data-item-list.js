@@ -404,7 +404,8 @@ class DataItemList extends Component {
           const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1;
           // determine date range building vs using startDate to endDate single coverage
           const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage));
-          const key = `data-item-${id}-${index}`;
+          const encodedId = util.encodeId(id);
+          const key = `data-item-${encodedId}-${index}`;
 
           return (
             <div
