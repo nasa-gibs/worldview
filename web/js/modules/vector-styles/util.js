@@ -5,7 +5,6 @@ import {
   get as lodashGet,
   includes as lodashIncludes,
 } from 'lodash';
-
 import {
   Stroke, Style, Fill, Circle,
 } from 'ol/style';
@@ -222,66 +221,8 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-maker') {
-      const featureProperties = feature.getProperties();
-      selected.COORDS = ['COORDS TEST1'];
-
-      const { latitude, longitude, reverseGeocodeResults } = featureProperties;
-      const { address, error } = reverseGeocodeResults;
-
-      let title;
-      if (error) {
-        title = `${latitude}, ${longitude}`;
-      } else if (address) {
-        const { Match_addr } = address;
-        title = Match_addr;
-      }
-
-      const obj = {
-        legend: [
-          // {
-          //   DataType: 'string',
-          //   Description: 'Name of Nuclear Plant',
-          //   Function: 'Identify',
-          //   Identifier: 'Plant',
-          //   IsLabel: true,
-          //   IsOptional: false,
-          //   Title: 'Plant Site Name',
-          // },
-          {
-            DataType: 'float',
-            Description: 'Latitude in Decimal Degrees',
-            Function: 'Describe',
-            Identifier: 'Latitude',
-            IsLabel: false,
-            IsOptional: false,
-            Title: 'Latitude',
-            Units: '°',
-          },
-          {
-            DataType: 'float',
-            Description: 'Longitude in Decimal Degrees',
-            Function: 'Describe',
-            Identifier: 'Longitude',
-            IsLabel: false,
-            IsOptional: false,
-            Title: 'Longitude',
-            Units: '°',
-          },
-        ],
-        features: {
-          // Plant: 'TEST FEATURES Plant',
-          Latitude: latitude,
-          Longitude: longitude,
-        },
-        id: 'TEST coords id',
-        title,
-        subTitle: 'TEST SUBTITLE',
-        featureTitle: title,
-
-      };
-      metaArray.push(obj);
       isCoordinatesMarker = true;
-      return { selected, metaArray, isCoordinatesMarker };
+      return;
     }
 
     const def = lodashGet(layer, 'wv.def');
@@ -291,7 +232,7 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
 
     const type = feature.getType();
     if (lodashIncludes(def.clickDisabledFeatures, type)
-      || !isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
+      || !isFromActiveCompareRegion(pixels, layer.wv, compareState, swipeOffset)) {
       return;
     }
     if (def.vectorData && def.vectorData.id && def.title) {
@@ -322,7 +263,6 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
-  console.log(selected, metaArray);
   return { selected, metaArray, isCoordinatesMarker };
 }
 /**

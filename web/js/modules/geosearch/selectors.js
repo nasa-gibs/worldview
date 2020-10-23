@@ -1,8 +1,11 @@
 import OlPoint from 'ol/geom/Point';
-import { Icon, Style } from 'ol/style';
 import OlFeature from 'ol/Feature';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
+import {
+  Style as OlStyle,
+  Icon as OlIcon,
+} from 'ol/style';
 import * as olProj from 'ol/proj';
 import { containsXY } from 'ol/extent';
 
@@ -16,7 +19,7 @@ export function animateCoordinates(map, coordinates, zoom) {
   ui.animate.fly(targetCoordinates, zoom);
 }
 
-function polarCoordinatesTransform(coordinates, proj) {
+export function polarCoordinatesTransform(coordinates, proj) {
   const projObj = {
     arctic: 'EPSG:3413',
     antarctic: 'EPSG:3031',
@@ -53,67 +56,70 @@ export function addCoordinatesMarker(activeMarker, config, map, coordinates, rev
     return false;
   }
 
-  const marker = createPin(coordinates, transformedCoordinates, reverseGeocodeResults, 'testerMarker', true);
+  const marker = createPin(coordinates, transformedCoordinates, reverseGeocodeResults);
   selected.addLayer(marker);
   selected.renderSync();
   return marker;
 }
 
 export function removeCoordinatesMarker(activeMarker, map) {
-  const { selected } = map.ui;
+  const { selected, proj } = map.ui;
+  // remove marker
   if (activeMarker) {
     activeMarker.setMap(null);
     selected.removeLayer(activeMarker);
   }
+  // remove tooltip
+  const removeOverlayFromAllProjections = () => {
+    const mapProjections = Object.keys(proj);
+    mapProjections.forEach((mapProjection) => {
+      const mapOverlays = proj[mapProjection].getOverlays().getArray();
+      const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
+        const { id } = overlay;
+        return id && id.contains('coordinates-map-maker');
+      });
+      if (coordinatesTooltipOverlay.length > 0) {
+        proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
+      }
+    });
+  };
+  removeOverlayFromAllProjections();
 }
 
-const createPin = function(coordinates, transformedCoordinates = false, reverseGeocodeResults = {}, id, isSelected, category = { slug: 'test', title: 'cat' }, title) {
-  const overlayEl = document.createElement('div');
-  const icon = document.createElement('i');
-  overlayEl.className = 'marker';
-  if (isSelected) overlayEl.classList.add('marker-selected');
-  icon.className = `event-icon event-icon-${category.slug}`;
-  icon.title = title || category.title;
-  overlayEl.appendChild(icon);
-
+const createPin = function(coordinates, transformedCoordinates = false, reverseGeocodeResults = {}) {
   const [longitude, latitude] = coordinates;
   const iconFeature = new OlFeature({
     geometry: new OlPoint(transformedCoordinates || coordinates),
     reverseGeocodeResults,
     latitude,
     longitude,
-    population: 4000,
-    rainfall: 500,
   });
 
-  // TODO: test pin colors
-  // o, o2, o3, b, map-pin (default)
-  const src = localStorage.mapPin || 'map-pin';
-
-
-  const iconStyle = new Style({
-    image: new Icon({
+  const iconStyle = new OlStyle({
+    image: new OlIcon({
       anchorOrigin: 'bottom-left',
       anchorXUnits: 'fraction',
       anchorYUnits: 'pixels',
       scale: 0.5,
-      src: `images/${src}.png`,
+      src: 'images/map-pin.png',
     }),
   });
 
   iconFeature.setStyle(iconStyle);
   iconFeature.setId('coordinates-map-maker');
+
   const vectorSource = new OlSourceVector({
     wrapX: false,
     features: [iconFeature],
   });
-
   const vectorLayer = new OlLayerVector({
     source: vectorSource,
   });
 
   return vectorLayer;
 };
+
+// ArcGIS World Geocoding Service API Requests and Options
 
 const GEOCODE_OPTIONS = {
   urlBase: 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/',
