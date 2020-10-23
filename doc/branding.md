@@ -1,7 +1,7 @@
 # Branding
 
 To add custom branding to Worldview,
-[create a custom configuration](configuration.md) and modify it:
+[create a custom configuration](config/configuration.md) and modify it:
 
 ## Customizing
 

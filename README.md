@@ -78,7 +78,7 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 
 ## Other Information
 
-- [Configuration](doc/configuration.md)
+- [Configuration](doc/config/configuration.md)
 - [Custom Branding](doc/branding.md)
 - [Optional Features](doc/features.md)
 - [Data Download](doc/data_download.md)
