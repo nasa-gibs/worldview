@@ -68,6 +68,12 @@
   border-bottom-right-radius: 10px;
 }
 
+@media (max-width: 740px) {
+  .wv-map-zoom-in, .wv-map-zoom-out {
+    display: none;
+  }
+}
+
 @media only screen and (max-device-width: 740px) and (orientation: landscape) {
   .wv-map-reset-rotation {
     top: auto;

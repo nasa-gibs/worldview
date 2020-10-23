@@ -77,6 +77,7 @@ export default function mapui(models, config, store, ui) {
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
+  self.zoomButtonListeners = []; // Track debounced zoom button listeners
   self.selected = null; // The map for the selected projection
   self.events = util.events();
   const layerBuilder = self.layerBuilder = mapLayerBuilder(
@@ -298,17 +299,19 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function onResize() {
+    const state = store.getState();
+    const { browser } = state;
+    const isMobile = browser.lessThan.medium;
     const map = self.selected;
-    if (map.small !== util.browser.small) {
-      if (util.browser.small) {
-        map.removeControl(map.wv.scaleImperial);
-        map.removeControl(map.wv.scaleMetric);
-        $(`#${map.getTarget()} .select-wrapper`).hide();
-      } else {
-        map.addControl(map.wv.scaleImperial);
-        map.addControl(map.wv.scaleMetric);
-        $(`#${map.getTarget()} .select-wrapper`).show();
-      }
+
+    if (isMobile) {
+      map.removeControl(map.wv.scaleImperial);
+      map.removeControl(map.wv.scaleMetric);
+      $(`#${map.getTarget()} .select-wrapper`).hide();
+    } else {
+      map.addControl(map.wv.scaleImperial);
+      map.addControl(map.wv.scaleMetric);
+      $(`#${map.getTarget()} .select-wrapper`).show();
     }
   }
   /*
@@ -817,7 +820,6 @@ export default function mapui(models, config, store, ui) {
       loadTilesWhileAnimating: true,
     });
     map.wv = {
-      small: false,
       scaleMetric,
       scaleImperial,
     };
@@ -897,7 +899,11 @@ export default function mapui(models, config, store, ui) {
 
     const $zoomOut = $('<div></div>')
       .addClass('wv-map-zoom-out')
-      .addClass('wv-map-zoom');
+      .addClass('wv-map-zoom')
+      .attr(
+        'title',
+        'Zoom out map view',
+      );
     const $outIcon = $(faIconMinusSVGDomEl);
     $zoomOut.append($outIcon);
     $map.append($zoomOut);
@@ -911,7 +917,11 @@ export default function mapui(models, config, store, ui) {
 
     const $zoomIn = $('<div></div>')
       .addClass('wv-map-zoom-in')
-      .addClass('wv-map-zoom');
+      .addClass('wv-map-zoom')
+      .attr(
+        'title',
+        'Zoom in map view',
+      );
     const $inIcon = $(faIconPlusSVGDomEl);
     $zoomIn.append($inIcon);
     $map.append($zoomIn);
@@ -964,7 +974,14 @@ export default function mapui(models, config, store, ui) {
     map.getView().on('change:resolution', lodashDebounce(debouncedZoomChange, 30));
     onZoomChange();
   }
-
+  /*
+   * @method onRotate
+   * @static
+   *
+   * @param {Object} val "change:rotation" Object
+   *
+   * @returns {void}
+   */
   function onRotate(val) {
     rotation.updateRotation(val);
     updateExtent();
@@ -990,10 +1007,12 @@ export default function mapui(models, config, store, ui) {
 
     function onMouseMove(e) {
       const state = store.getState();
+      const { browser } = state;
+      const isMobile = browser.lessThan.medium;
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
       // if mobile return
-      if (util.browser.small) return;
+      if (isMobile) return;
       // if measure is active return
       if (state.measure.isActive) return;
       // if over coords return
@@ -1008,7 +1027,7 @@ export default function mapui(models, config, store, ui) {
       if (!coords) return;
 
       // setting a limit on running-data retrievel
-      if (self.mapIsbeingDragged || util.browser.small) {
+      if (self.mapIsbeingDragged) {
         return;
       }
       // Don't add data runners if we're on the events or data tabs, or if map is animating
