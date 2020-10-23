@@ -27,3 +27,6 @@
 .cursor-pointer {
   cursor: pointer;
 }
+.cursor-crosshair {
+  cursor: crosshair;
+}
