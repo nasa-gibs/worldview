@@ -24,7 +24,7 @@ export default class OlCoordinates extends React.Component {
 
   componentWillUnmount() {
     const { mouseEvents } = this.props;
-    mouseEvents.on('click', this.mouseClick);
+    mouseEvents.off('click', this.mouseClick);
     mouseEvents.off('mousemove', this.mouseMove);
     mouseEvents.off('mouseout', this.mouseOut);
   }
