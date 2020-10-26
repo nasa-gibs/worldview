@@ -199,17 +199,40 @@ export default function mapui(models, config, store, ui) {
     updateProjection(true);
   };
 
-  // add map coordinate marker
-  const addMapMarker = () => {
+  /*
+   * Handle reverse geocode and add map marker with results
+   *
+   * @method handleActiveMapMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const handleActiveMapMarker = () => {
     const state = store.getState();
     const { geosearch } = state;
     const { activeMarker, coordinates } = geosearch;
     if (coordinates && coordinates.length > 0) {
       reverseGeocode(coordinates).then((results) => {
-        const marker = addCoordinatesMarker(activeMarker, config, { ui: self }, coordinates, results);
-        store.dispatch({ type: UPDATE_ACTIVE_MARKER, value: marker });
+        addMarkerAndUpdateStore(activeMarker, coordinates, results);
       });
     }
+  };
+
+  /*
+   * Add map coordinate marker and update store
+   *
+   * @method addMarkerAndUpdateStore
+   * @static
+   *
+   * @param {Object} activeMarker
+   * @param {Array} coordinates
+   * @param {Object} results
+   *
+   * @returns {void}
+   */
+  const addMarkerAndUpdateStore = (activeMarker, coordinates, results) => {
+    const marker = addCoordinatesMarker(activeMarker, config, { ui: self }, coordinates, results);
+    store.dispatch({ type: UPDATE_ACTIVE_MARKER, value: marker, reverseGeocodeResults: results });
   };
 
   const flyToNewExtent = function(extent, rotation) {
@@ -304,7 +327,7 @@ export default function mapui(models, config, store, ui) {
     }
     updateExtent();
     onResize();
-    addMapMarker();
+    handleActiveMapMarker();
   }
   /*
    * When page is resised set for mobile or desktop
@@ -390,12 +413,14 @@ export default function mapui(models, config, store, ui) {
   const reloadLayers = self.reloadLayers = function(map) {
     map = map || self.selected;
     const state = store.getState();
-    const { layers, proj } = state;
+    const { geosearch, layers, proj } = state;
     const compareState = state.compare;
     const layerGroupStr = compareState.activeString;
     const activeLayers = layers[layerGroupStr];
+    const { activeMarker, coordinates, reverseGeocodeResults } = geosearch;
     if (!config.features.compare || !compareState.active) {
-      if (!compareState.active && compareMapUi.active) {
+      const compareMapDestroyed = !compareState.active && compareMapUi.active;
+      if (compareMapDestroyed) {
         compareMapUi.destroy();
       }
       clearLayers(map);
@@ -409,6 +434,10 @@ export default function mapui(models, config, store, ui) {
       lodashEach(defs, (def) => {
         map.addLayer(createLayer(def));
       });
+      // add active map marker back after destroying compare mode post createLayer
+      if (compareMapDestroyed && activeMarker) {
+        addMarkerAndUpdateStore(activeMarker, coordinates, reverseGeocodeResults);
+      }
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
@@ -423,6 +452,10 @@ export default function mapui(models, config, store, ui) {
         map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state));
       });
       compareMapUi.create(map, compareState.mode);
+      // add active map marker back in compare mode post createLayer
+      if (activeMarker) {
+        addMarkerAndUpdateStore(activeMarker, coordinates, reverseGeocodeResults);
+      }
     }
     updateLayerVisibilities();
   };
