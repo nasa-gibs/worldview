@@ -14,6 +14,7 @@ const geosearchState = {
   isExpanded: !localStorageCollapseState,
   coordinates: [],
   activeMarker: null,
+  reverseGeocodeResults: null,
 };
 
 export default function geosearchReducer(state = geosearchState, action) {
@@ -21,6 +22,7 @@ export default function geosearchReducer(state = geosearchState, action) {
     case UPDATE_ACTIVE_MARKER:
       return lodashAssign({}, state, {
         activeMarker: action.value,
+        reverseGeocodeResults: action.reverseGeocodeResults,
       });
     case TOGGLE_SHOW_GEOSEARCH:
       return lodashAssign({}, state, {
@@ -31,11 +33,13 @@ export default function geosearchReducer(state = geosearchState, action) {
         isCoordinateSearchActive: action.value,
         coordinates: action.coordinates,
         activeMarker: action.activeMarker,
+        reverseGeocodeResults: action.reverseGeocodeResults,
       });
     case CLEAR_COORDINATES:
       return lodashAssign({}, state, {
         coordinates: [],
         activeMarker: null,
+        reverseGeocodeResults: null,
       });
     case TOGGLE_REVERSE_GEOCODE_ACTIVE:
       return lodashAssign({}, state, {

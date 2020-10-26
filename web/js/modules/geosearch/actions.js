@@ -73,6 +73,7 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
     dispatch({
       type: SELECT_COORDINATES_TO_FLY,
       value: false,
+      reverseGeocodeResults,
       coordinates,
       activeMarker: marker,
     });
