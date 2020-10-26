@@ -53,7 +53,7 @@ export default function MapRunningData(models, compareUi, store) {
       if (!def) return;
       const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-      if (!isRenderedFeature || !isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
+      if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv, state.compare, swipeOffset)) return;
       let color;
       const identifier = def.palette.styleProperty;
       const layerId = def.id;
@@ -80,7 +80,7 @@ export default function MapRunningData(models, compareUi, store) {
     map.forEachLayerAtPixel(pixels, (layer, data) => {
       if (!layer.wv) return;
       const { def } = layer.wv;
-      if (!isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
+      if (!isFromActiveCompareRegion(pixels, layer.wv, state.compare, swipeOffset)) return;
       if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
         activeLayerObj[def.id] = {
           paletteLegends: getPalette(def.id, undefined, undefined, state),

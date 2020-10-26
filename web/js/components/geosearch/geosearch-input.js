@@ -82,6 +82,7 @@ class SearchBox extends Component {
       coordinates, inputValue, isMobile,
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
+    // eslint-disable-next-line no-nested-ternary
     const buttonContainerRight = hasCoordinates
       ? isMobile ? '67px' : '62px'
       : '31px';
