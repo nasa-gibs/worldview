@@ -23,6 +23,7 @@ export default {
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
     HIDE_TOUR: 'hideTour',
+    HIDE_EDS_WARNING: 'hideEDS',
     SIDEBAR_COLLAPSED: 'sidebarState',
     COORDINATE_FORMAT: 'coordinateFormat',
     NOTIFICATION_OUTAGE: 'outage',

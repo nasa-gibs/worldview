@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import {
-  InputGroup, InputGroupText,
-} from 'reactstrap';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import safeLocalStorage from '../../util/local-storage';
@@ -20,7 +17,6 @@ function SmartHandoffModal({
 }) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
-
   const { title, subtitle } = selectedLayer;
   const date = moment.utc(selectedDate).format('YYYY MMM DD');
 
@@ -89,12 +85,6 @@ function SmartHandoffModal({
 
       <div className="button-group">
         <Button
-          onClick={() => console.log('closing')}
-          id="cancel-btn"
-          text="Cancel"
-        />
-
-        <Button
           onClick={() => goToEarthDataSearch()} // Need to pass reference of current state of boundaries
           id="continue-btn"
           text="Continue"
@@ -102,9 +92,18 @@ function SmartHandoffModal({
         />
       </div>
 
-      <div className="checkbox-footer">
-        <input name="show-earthdata-modal" id="hide-earthdata-modal-checkbox" type="checkbox" />
-        <label htmlFor="show-earthdata-modal">Do not show this message again.</label>
+      <div id="checkbox-footer">
+        <div id="checkbox-footer-container">
+          <Checkbox
+            id="hide-eds-checkbox"
+            name="hide-eds"
+            onCheck={() => hideModal()}
+            checked={false}
+            color="gray"
+            aria-label="Do not show the Earthdata Search message again."
+            label="Do not show this message again."
+          />
+        </div>
       </div>
 
     </div>
@@ -112,9 +111,13 @@ function SmartHandoffModal({
   );
 }
 
-function hideEarthdataModal() {
-  console.log('ticked');
-}
+const hideModal = () => {
+  const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
+  const shouldHideWarning = safeLocalStorage.getItem(HIDE_EDS_WARNING);
+  if (!shouldHideWarning) safeLocalStorage.setItem(HIDE_EDS_WARNING, true);
+  else safeLocalStorage.removeItem(HIDE_EDS_WARNING);
+};
+
 
 /**
  * Handle type-checking of defined properties

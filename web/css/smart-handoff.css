@@ -191,22 +191,20 @@ label[for=chk-crop-toggle] {
     background:#191a1b;
     padding:0 15px;
 }
-.checkbox-footer {
-    margin-top: 15px;
-    border-top: 1px solid #333;
+
+#checkbox-footer {
+    display: inline-block;
     text-align: center;
+    width: 100%;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
 }
-.checkbox-footer label{
-    vertical-align: top;
-    padding: 2px;
-    margin-top: 20px;
+
+#checkbox-footer-container {
+    display: inline-block;
 }
-#hide-earthdata-modal-checkbox {
-    margin: 20px 5px 5px 0px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
+
 /** Overrides the modal component styles */
 #transferring-to-earthdata-search.modal-dialog .modal-body {
     background: #191a1b !important;

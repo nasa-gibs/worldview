@@ -13,7 +13,7 @@ import { getLayers } from '../../modules/layers/selectors';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
 import getSelectedDate from '../../modules/date/selectors';
-
+import safeLocalStorage from '../../util/local-storage';
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -192,9 +192,10 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-
-    // Default modal state
-    const showModal = false;
+    // Used to determine if modal should be shown
+    const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
+    let showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
+    showModal = true;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
     const isLayerStillActive = activeLayers.find((layer) => selectedLayer === layer && layer.visible);
