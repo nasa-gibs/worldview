@@ -49,10 +49,10 @@ IGNORE_ERRORS=true npm run build:config
 
 ## New Map Sources
 
-Modify the JSON document, `config/default/common/config/wv.json/sources.json`. There is a *sources*
+Modify the [`sources.json`](../../config/default/common/config/wv.json/sources.json) file. Within this file there is a *sources*
 object that contains an object for each map source keyed by the source identifier.
 For layers that can be configured via a GIBS WMTS GetCapabilities document or
-for WMS layers, the only property required is:
+for WMS layers, the only property required is `url`
 
 * **url**: Either a string or array of strings where the map service is found.
 * **matrixSets**: For WMTS layers that cannot be configured with a GetCapabilities document, an
@@ -63,16 +63,12 @@ object must exist that contains an object for each matrix set, keyed by the matr
   * **tileSize**: Array of pixel dimensions for each tile. Example; `[512, 512]`
 
 ### Example sources.json
-
+[`config/default/common/config/wv.json/sources.json`](../../config/default/common/config/wv.json/sources.json)
 ```json
 {
   "sources": {
     "GIBS:arctic": {
-      "url": [
-        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
-      ],
+      "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi",
       "matrixSets": {
         "EPSG3413_250m": {
           "id": "EPSG3413_250m",
@@ -91,7 +87,7 @@ object must exist that contains an object for each matrix set, keyed by the matr
 ## GetCapabilities
 
 To automatically fetch configuration information from the GetCapabilities
-document, modify the `config/default/release/config.json` file and add an object to the
+document, modify the [`config.json`](../../config/default/release/config.json) file and add an object to the
 `wv-options-fetch` array with the following properties:
 
 * **from**: The URL to fetch the GetCapabilities document
@@ -106,14 +102,15 @@ Now add an object to the `wv-options-wmts` array with the following properties:
 * **maxResolution**: The resolution of first tile matrix entry.
 
 ### Example config.json
+[`config/default/release/config.json`](../../config/default/release/config.json)
 
 ```json
 {
   "wv-options-fetch": [
     {
-      "from": "https://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?request=GetCapabilities",
+      "from": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
       "to": "gibs-geographic.xml"
-    },
+    }
   ],
   "wv-options-wmts": [
     {

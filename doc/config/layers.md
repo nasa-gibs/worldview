@@ -12,7 +12,7 @@
 
 ## Adding New Layers
 
-Create a new JSON document in `config/default/common/config/wv.json/layers` named `X.json` where `X`
+Create a new JSON document in [`config/default/common/config/wv.json/layers`](`../../config/default/common/config/wv.json/layers`) named `X.json` where `X`
 is the layer identifier used in the WMTS or WMS API call. This file can be
 placed in any subdirectory as needed for organizational purposes.
 
@@ -36,7 +36,22 @@ WMTS of WMS API call.
 
 ## Layer Order
 
-The `config/default/common/config/wv.json/layerOrder.json` file must be updated to include the new layer identifier. This file determines the order that layers are displayed in the add layers tab.
+The [`layerOrder.json`](../../config/default/common/config/wv.json/layerOrder.json) file must be updated to include the new layer identifier. This file determines the order that layers are displayed in the add layers tab.
+
+### Layer Order Example
+
+[`config/default/common/config/wv.json/layerOrder.json`](../../config/default/common/config/wv.json/layerOrder.json)
+
+```json
+{
+  "layerOrder": [
+    "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+    "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
+    "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+    ...
+  ]
+}
+```
 
 ## Required Properties
 
@@ -60,7 +75,13 @@ The following properties are required if this information is not available via t
 * **futureLayer**: Use `true` if the layer has an end date after the current date.
 * **futureTime**: Use `[number][type="D,M,Y"]` (i.e. "3D")  with the `futurelayer` parameter to denote a layer that has a dynamic, future end date. The `[number]` parameter represents the dateInterval, `[type]` can be equal to `"D"`, `"M"`, or `"Y"` to represent day, month or year interval.
 
-A *projections* object must exist which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in `config/default/common/config/wv.json/projections`). Example:
+The following is only required if not provided by the WMTS GetCapabilities:
+
+* **projections**: An object which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in [`config/default/common/config/wv.json/projections`](../../config/default/common/config/wv.json/projections)).
+  * **source**: Identifier that indicates which endpoint contains this layer (see [`sources.json`](../../config/default/common/config/wv.json/sources.json))
+  * **matrixSet**: For WMTS layers only, the name of the matrix set as defined in the endpoint's GetCapabilities document.
+
+Example:
 
 ```json
 "projections": {
@@ -75,10 +96,9 @@ A *projections* object must exist which contains an object for each projection s
 }
 ```
 
-The projection parameters are as follows:
 
-* **source**: Identifier that indicates which endpoint contains this layer (see `config/default/common/config/wv.json/sources.json`)
-* **matrixSet**: For WMTS layers only, the name of the matrix set as defined in the endpoint's GetCapabilities document.
+
+
 
 ## Optional Properties
 
@@ -95,7 +115,7 @@ The projection parameters are as follows:
 * **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
 * **palette**: To display a color palette legend, a `palette` object should exist with the following properties:
   * **id**: Identifier of the palette. This should match the name of the colormap file without the extension.
-  * **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see `config/default/common/config/palettes-custom.json`). Example, *["orange_1", "red_1"]*
+  * **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see [`config/default/common/config/palettes-custom.json`](../../config/default/common/config/palettes-custom.json)). Example, *["orange_1", "red_1"]*
   * **immutable**(optional): When this flag is set to true, the options to adjust thresholds and colormaps are removed.
 * **availability**: Used to denote datetime availability info that cannot be gleaned from the capabilities document. Primarily for our geostationary layers which only have historical coverage going back ~30 days. Represented as an object with the following properties:
   * **rollingWindow**: Number of days, counting backwards from app load time, that a layer has avilable coverage.  Setting this will cause a layer's `startDate` property to be dynamically set at app load time.
