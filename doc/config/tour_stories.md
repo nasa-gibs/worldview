@@ -13,7 +13,7 @@
 ## Adding New Tour Stories
 
 Create a new JSON document in `config/default/common/config/wv.json/stories/` named `X.json` where `X`
-is the story identifier. This file can be placed in any subdirectory as needed for organizational purposes.
+is the story identifier. This file can be placed in any subdirectory as needed for organizational purposes. All properties should be in an object keyed by the story identifier.
 
 Here's an example of a minimum configuration for the Hurricane Florence story:
 
@@ -34,7 +34,9 @@ Here's an example of a minimum configuration for the Hurricane Florence story:
 }
 ```
 
-All properties should be in an object keyed by the story identifier.
+## Story Order
+
+The `config/default/common/config/wv.json/storyOrder.json` file must be updated to include the new story identifier. This file determines the order that stories are displayed in the overview modal.
 
 ## Required Properties
 
@@ -65,12 +67,12 @@ The minimum set of required properties are as follows:
 * **type**: Use `wildfire`, `volcano`, `snow`, `sea-and-lake-ice`, `iceberg`, `water-color`, `dust-and-haze`, `severe-storm`, `man-made` or `critical` to set the display styling of the story. Each story will have a color and icon associated with it's type. If left blank, the story styling will default to dark blue and a world icon.
 * **description**: A description of the story displayed to the end user when hovering the story's box on the overview modal.
 * **backgroundImage**: The background image shown on the story overview modal. This image should be **396px x 396px**, a JPG/JPEG, GIF or PNG, and optimized in size for the web. If no image is provided, a NASA logo will be shown as a placeholder.
-* **backgroundImageHover**: The image shown when overing the background image on the story overview modal. This image should be **396px x 396px**, a JPG/JPEG, GIF or PNG, and optimized in size for the web. If no image is provided, no roll-over image will appear.
+* **backgroundImageHover**: The image shown when hovering over the background image in the story overview modal. This image should be **396px x 396px**, a JPG/JPEG, GIF or PNG, and optimized in size for the web. If no image is provided, no roll-over image will appear.
 * **readMoreLinks[]**: To display links for additional reading at the end of story modal, an array of objects should exist with the following properties:
   * **title**: The name of the link being displayed.
   * **link**: The url of the link being displayed.
 
-## Full Example
+### Full Example
 
 ```json
 {
@@ -115,9 +117,57 @@ The minimum set of required properties are as follows:
 }
 ```
 
-## Story Order
+## Joyride Interactive Tour Steps
 
-The `config/default/common/config/wv.json/storyOrder.json` file must be updated to include the new story identifier. This file determines the order that stories are displayed in the overview modal.
+Tour stories support spotlighting tutorial steps via [React Joyride](https://react-joyride.com/).  Each tour step can include any number of Joyride tour steps which will place a beacon on the target DOM element.  Clicking the beacon will open a tooltip that shows the provided `content`.  Configuration properties are as follows:
+
+* **joyride**: The root object added to the tour step.
+  * **continuous**: Boolean.  Should closing a tooltip advance to the next step.
+  * **spotlightClicks**:  Boolean.  Should mouse hover/click interactions be allowed within the target DOM element while the tooltip is open.  By default, clicking within this area closes the tooltip.
+  * **steps**: The array of Joyride steps for use within this tour step. Each object can have the following properties:
+    * **target**: Required.  The DOM selector on which to place the beacon for this step.
+    * **targetCoordinates**: Can be used to place a beacon/spotlight on the map itself instead of a DOM element.  This object has two properties, `topLeft` and `bottomRight` which are arrays of coordinates that indicate the bounding area on the map you want to highlight.  If `targetCoordinates` are defined, the `target` property should be set to an id that doesn't exist on the DOM since it will be created temporarily on the fly. (e.g. `#my-map-target1`)
+    * **placementBeacon**: Where to place the beacon in relation to the element. (`top`, `bottom`, `left`, `right`)
+    * **content**: The content to show within the tooltip that opens when the beacon is clicked.
+
+### Joyride Example:
+
+```json
+{
+  "stories": {
+    "joyride_tour": {
+      "id": "joyride_tour",
+      "title": "Joyride Tour",
+      "steps": [
+        {
+          "description": "step001.html",
+          "stepLink": "...",
+          "joyride": {
+            "continuous": true,
+            "spotlightClicks": true,
+            "steps": [
+              {
+                "target": "#map-target-1",
+                "targetCoordinates": {
+                  "topLeft": [-79, 29.5],
+                  "bottomRight": [-72, 23]
+                },
+                "content": "Hover over the different colors in the image on the map...",
+                "placementBeacon": "top"
+              },
+              {
+                "target": "#GOES-East_ABI_Band13_Clean_Infrared-Clean_Longwave_Infrared_Window_Band_0_legend0colorbar",
+                "content": "...to see the corresponding temperature value here.",
+                "placementBeacon": "top"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+```
 
 ## Adding Stories to Worldview Tour Modals
 
