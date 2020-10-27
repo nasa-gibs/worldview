@@ -4,7 +4,7 @@ import Overlay from 'ol/Overlay';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import CoordinatesDialog from './coordinates-dialog';
-import { polarCoordinatesTransform } from '../../modules/geosearch/selectors';
+import { coordinatesCRSTransform } from '../../modules/projection/util';
 
 /**
  * Get parsed precision coordinate number
@@ -31,8 +31,10 @@ function getCoordinateDisplayPrecision(coordinate) {
  *
  * @returns {Void}
  */
-function renderTooltip(map, coordinates, coordinatesMetadata) {
+function renderTooltip(map, config, coordinates, coordinatesMetadata) {
+  const { projections } = config;
   const { proj } = map;
+  const { crs } = projections[proj];
   const [latitude, longitude] = coordinates;
 
   // create tooltip overlay
@@ -51,8 +53,7 @@ function renderTooltip(map, coordinates, coordinatesMetadata) {
   if (proj === 'geographic') {
     coordinatesPosition = [longitude, latitude];
   } else {
-    const transformedCoordinates = polarCoordinatesTransform([longitude, latitude], map.proj);
-    coordinatesPosition = transformedCoordinates;
+    coordinatesPosition = coordinatesCRSTransform([longitude, latitude], 'EPSG:4326', crs);
   }
 
   // add tooltip overlay to map and position based on marker coordinates
@@ -80,7 +81,7 @@ function renderTooltip(map, coordinates, coordinatesMetadata) {
  *
  * @returns {Void}
  */
-export default function getCoordinatesDialogAtMapPixel(pixels, map) {
+export default function getCoordinatesDialogAtMapPixel(pixels, map, config) {
   // check for existing coordinate marker tooltip overlay and prevent multiple renders
   const mapOverlays = map.getOverlays().getArray();
   const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
@@ -132,7 +133,7 @@ export default function getCoordinatesDialogAtMapPixel(pixels, map) {
       };
 
       // create tooltip overlay React DOM element
-      renderTooltip(map, [latitude, longitude], coordinatesMetadata);
+      renderTooltip(map, config, [latitude, longitude], coordinatesMetadata);
     }
   });
 }

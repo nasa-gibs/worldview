@@ -4,7 +4,7 @@ import { get as lodashGet, assign as lodashAssign } from 'lodash';
 import { modalReducer, modalAboutPage } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
-import geosearchReducer from './geosearch/reducers';
+import { geosearchReducer } from './geosearch/reducers';
 import { shortLink } from './link/reducers';
 import {
   requestedEvents,

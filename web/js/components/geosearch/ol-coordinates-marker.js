@@ -71,6 +71,7 @@ export class CoordinatesInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
+    config,
     map,
     measure,
     geosearch,
@@ -81,7 +82,7 @@ function mapStateToProps(state) {
     map,
     coordinates,
     isShowingClick: map.isClickable,
-    getCoordinatesDialog: (pixels, olMap) => getCoordinatesDialogAtMapPixel(pixels, olMap),
+    getCoordinatesDialog: (pixels, olMap) => getCoordinatesDialogAtMapPixel(pixels, olMap, config),
     measureIsActive: measure.isActive,
   };
 } const mapDispatchToProps = (dispatch) => ({
