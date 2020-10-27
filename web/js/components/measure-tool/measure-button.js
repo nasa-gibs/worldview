@@ -84,17 +84,13 @@ class MeasureButton extends React.Component {
           onMouseDown={this.onButtonClick}
           disabled={isActive}
         >
-<<<<<<< HEAD
           <UncontrolledTooltip
             placement="top"
             target={buttonId}
           >
             {labelText}
           </UncontrolledTooltip>
-          <FontAwesomeIcon icon="ruler" size="2x" />
-=======
-          <FontAwesomeIcon icon={faRuler} size={faSize} />
->>>>>>> 859ca3689 (add ismobile check for conditional fa button size, clean up geosearch container)
+          <FontAwesomeIcon icon="ruler" size={faSize} />
         </Button>
       </>
     );

@@ -18,9 +18,16 @@ module.exports = {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
   },
   // load A|B and verify that it is active
+<<<<<<< HEAD
   'A|B is loaded': (c) => {
     c.url(c.globals.url + localQuerystrings.swipeAndAIsActive);
     c.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
+=======
+  'A|B is loaded': function(client) {
+    client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
+    client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
+    client.pause(1000);
+>>>>>>> 6001fb02e (add delay for compare test, add class back to measure tooltip for tests)
   },
 
   'Animation is disabled when compare mode active': (c) => {
