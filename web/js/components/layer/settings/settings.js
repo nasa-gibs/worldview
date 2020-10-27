@@ -28,6 +28,7 @@ import {
   setCustomPalette,
   clearCustomPalette,
   setToggledClassification,
+  refreshDisabledClassification,
 } from '../../../modules/palettes/actions';
 import {
   setFilterRange,
@@ -70,6 +71,7 @@ class LayerSettings extends React.Component {
       setThresholdRange,
       layer,
       toggleClassification,
+      toggleAllClassification,
       screenHeight,
     } = this.props;
     const { activeIndex } = this.state;
@@ -96,7 +98,13 @@ class LayerSettings extends React.Component {
       if (legend.type === 'classification' && legend.colors.length > 1) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
-            <ClassificationToggle height={Math.ceil(screenHeight / 3)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)} legend={legend} />
+            <ClassificationToggle
+              height={Math.ceil(screenHeight / 3)}
+              palette={palette}
+              toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)}
+              legend={legend}
+              toggleAll={(disabledArray) => { toggleAllClassification(layer.id, disabledArray, i, groupName); }}
+            />
           </TabPane>
         );
       } else if (
@@ -176,6 +184,7 @@ class LayerSettings extends React.Component {
       groupName,
       layer,
       toggleClassification,
+      toggleAllClassification,
       screenHeight,
     } = this.props;
     const paletteLegends = getPaletteLegends(layer.id);
@@ -189,7 +198,15 @@ class LayerSettings extends React.Component {
     if (len > 1) {
       return this.renderMultiColormapCustoms(paletteLegends);
     } if (legend.type === 'classification' && legend.colors.length > 1) {
-      return (<ClassificationToggle height={Math.ceil(screenHeight / 2)} palette={palette} toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)} legend={legend} />);
+      return (
+        <ClassificationToggle
+          height={Math.ceil(screenHeight / 2)}
+          palette={palette}
+          toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)}
+          legend={legend}
+          toggleAll={(disabledArray) => { toggleAllClassification(layer.id, disabledArray, 0, groupName); }}
+        />
+      );
     }
     return (
       <>
@@ -320,6 +337,12 @@ const mapDispatchToProps = (dispatch) => ({
       setToggledClassification(layerId, classIndex, index, groupName),
     );
   },
+  toggleAllClassification: (layerId, disabledArray, index, groupName) => {
+    console.log(disabledArray);
+    dispatch(
+      refreshDisabledClassification(layerId, disabledArray, index, groupName),
+    );
+  },
   setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
       setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName),
@@ -376,5 +399,6 @@ LayerSettings.propTypes = {
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
+  toggleAllClassification: PropTypes.func,
   vectorStyles: PropTypes.object,
 };

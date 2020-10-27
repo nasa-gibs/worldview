@@ -2,6 +2,13 @@
   display: flex;
   margin-bottom: 7px;
 }
+.react-switch.header {
+  margin-bottom: 14px;
+  flex-direction: row-reverse;
+  .switch-label-text {
+    font-size: 14px;
+  }
+}
 .react-switch .switch-col {
   align-items: flex-start;
   display: flex;

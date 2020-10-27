@@ -27,7 +27,7 @@ const Switch = (props) => {
     toggleActive(active);
   }, [active]);
 
-  function toggleSwitch () {
+  function toggleSwitch() {
     // wait for css animation to complete before firing action
     setTimeout(toggle, 200);
     toggleActive(!isActive);
@@ -90,4 +90,5 @@ Switch.propTypes = {
   toggle: PropTypes.func,
   tooltip: PropTypes.object,
 };
+
 export default Switch;
