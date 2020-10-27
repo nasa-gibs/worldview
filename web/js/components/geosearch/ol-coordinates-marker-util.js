@@ -39,7 +39,7 @@ function renderTooltip(map, config, coordinates, coordinatesMetadata) {
 
   // create tooltip overlay
   const tooltipElement = document.createElement('div');
-  const tooltipId = `coordinates-map-maker-${latitude},${longitude}`;
+  const tooltipId = `coordinates-map-marker-${latitude},${longitude}`;
   const tooltipOverlay = new Overlay({
     id: tooltipId,
     element: tooltipElement,
@@ -86,7 +86,7 @@ export default function getCoordinatesDialogAtMapPixel(pixels, map, config) {
   const mapOverlays = map.getOverlays().getArray();
   const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
     const { id } = overlay;
-    return id && id.contains('coordinates-map-maker');
+    return id && id.includes('coordinates-map-marker');
   });
   if (coordinatesTooltipOverlay.length > 0) {
     return;
@@ -94,7 +94,7 @@ export default function getCoordinatesDialogAtMapPixel(pixels, map, config) {
 
   map.forEachFeatureAtPixel(pixels, (feature) => {
     const featureId = feature.getId();
-    if (featureId === 'coordinates-map-maker') {
+    if (featureId === 'coordinates-map-marker') {
       const featureProperties = feature.getProperties();
 
       const { latitude, longitude, reverseGeocodeResults } = featureProperties;

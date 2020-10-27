@@ -50,17 +50,17 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
       if (error) {
-        console.log('ERROR REVERSE GEOCODING - Typically, the coordinates are not geocoding with data.', error);
+        console.log(`ERROR REVERSE GEOCODING - ${error.message} ${error.details}`);
       }
     }
 
     const marker = addCoordinatesMarker(activeMarker, config, map, coordinates, reverseGeocodeResults);
     if (!marker) {
       console.log('ERROR ADDING MARKER - Coordinates are outside range of current map projection extent.');
-      dispatch({
+      return dispatch({
         type: SELECT_COORDINATES_TO_FLY,
         value: false,
-        coordinates,
+        coordinates: [],
         activeMarker: null,
       });
     }

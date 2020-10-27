@@ -72,7 +72,7 @@ export function removeCoordinatesMarker(activeMarker, map) {
       const mapOverlays = proj[mapProjection].getOverlays().getArray();
       const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
         const { id } = overlay;
-        return id && id.contains('coordinates-map-maker');
+        return id && id.includes('coordinates-map-marker');
       });
       if (coordinatesTooltipOverlay.length > 0) {
         proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
@@ -102,7 +102,7 @@ const createPin = function(coordinates, transformedCoordinates = false, reverseG
   });
 
   iconFeature.setStyle(iconStyle);
-  iconFeature.setId('coordinates-map-maker');
+  iconFeature.setId('coordinates-map-marker');
 
   const vectorSource = new OlSourceVector({
     wrapX: false,

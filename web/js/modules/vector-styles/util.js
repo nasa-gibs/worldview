@@ -220,7 +220,7 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
   const { pixels, map, swipeOffset } = mapProps;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const featureId = feature.getId();
-    if (featureId === 'coordinates-map-maker') {
+    if (featureId === 'coordinates-map-marker') {
       isCoordinatesMarker = true;
       return;
     }

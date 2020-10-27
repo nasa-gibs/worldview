@@ -40,7 +40,7 @@ export class CoordinatesInteractions extends React.Component {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixels, (feature) => {
         const featureId = feature.getId();
-        const isMarker = featureId === 'coordinates-map-maker';
+        const isMarker = featureId === 'coordinates-map-marker';
         if (isMarker) {
           isActiveLayer = true;
         }
