@@ -55,15 +55,16 @@ For layers that can be configured via a GIBS WMTS GetCapabilities document or
 for WMS layers, the only property required is `url`
 
 * **url**: Either a string or array of strings where the map service is found.
-* **matrixSets**: For WMTS layers that cannot be configured with a GetCapabilities document, an
-object must exist that contains an object for each matrix set, keyed by the matrix set identifier.
+* **matrixSets**: Only required for WMTS layers that cannot be configured with a GetCapabilities document. An
+object that contains an object for each matrix set, keyed by the matrix set identifier.
   * **id**: The identifier for this matrix set.
-  * **maxResolution**: The maximum resolution of this of this matrix tile set as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution). This property might be deprecated in the future as it can be obtained from the *resolutions* property.
-  * **resolutions**: Array of resolutions for each zoom level as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution).
+  * **resolutions**: Array of resolutions for each zoom level.
   * **tileSize**: Array of pixel dimensions for each tile. Example; `[512, 512]`
 
 ### Example sources.json
+
 [`config/default/common/config/wv.json/sources.json`](../../config/default/common/config/wv.json/sources.json)
+
 ```json
 {
   "sources": {
@@ -102,6 +103,7 @@ Now add an object to the `wv-options-wmts` array with the following properties:
 * **maxResolution**: The resolution of first tile matrix entry.
 
 ### Example config.json
+
 [`config/default/release/config.json`](../../config/default/release/config.json)
 
 ```json

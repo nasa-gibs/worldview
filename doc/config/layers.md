@@ -12,7 +12,7 @@
 
 ## Adding New Layers
 
-Create a new JSON document in [`config/default/common/config/wv.json/layers`](`../../config/default/common/config/wv.json/layers`) named `X.json` where `X`
+Create a new JSON document in [`config/default/common/config/wv.json/layers`](../../config/default/common/config/wv.json/layers) named `X.json` where `X`
 is the layer identifier used in the WMTS or WMS API call. This file can be
 placed in any subdirectory as needed for organizational purposes.
 
@@ -78,7 +78,7 @@ The following properties are required if this information is not available via t
 The following is only required if not provided by the WMTS GetCapabilities:
 
 * **projections**: An object which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in [`config/default/common/config/wv.json/projections`](../../config/default/common/config/wv.json/projections)).
-  * **source**: Identifier that indicates which endpoint contains this layer (see [`sources.json`](../../config/default/common/config/wv.json/sources.json))
+  * **source**: Identifier that indicates which endpoint contains this layer (see [`sources.json`](../../config/default/release/config/wv.json/sources.json))
   * **matrixSet**: For WMTS layers only, the name of the matrix set as defined in the endpoint's GetCapabilities document.
 
 Example:
@@ -95,10 +95,6 @@ Example:
   }
 }
 ```
-
-
-
-
 
 ## Optional Properties
 
