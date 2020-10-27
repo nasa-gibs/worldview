@@ -42,8 +42,9 @@ Within the `hazards and disasters` tab we can also see the first three categorie
 
 ### Category Group Order
 
-The names of each category group, which are treated as unique identifiers and referenced in each category config, should be placed in the file `config/default/common/config/wv.json/categoryGroupOrder.json`.  This allows setting the order of the category group tabs within the layer picker.  If a category group is referenced in a category config, it **must also be defined here**.
+The names of each category group, which are treated as unique identifiers and referenced in each category config, should be placed in the `categoryGroupOrder.json` file.  This allows setting the order of the category group tabs within the layer picker.  If a category group is referenced in a category config, it **must also be defined here**.
 
+[`config/default/common/config/wv.json/categoryGroupOrder.json`](../../config/default/common/config/wv.json/categoryGroupOrder.json)
 ```json
 {
   "categoryGroupOrder": [
@@ -56,7 +57,8 @@ The names of each category group, which are treated as unique identifiers and re
 
 ### Category Config Example
 
-`config/default/common/config/wv.json/categories/hazards_and_disasters/Air Quality.json`
+[`config/default/common/config/wv.json/categories/hazards_and_disasters/Air Quality.json`](../../config/default/common/config/wv.json/categories/hazards_and_disasters/Air%20Quality.json)
+
 ```json
 {
     "categories": {
@@ -88,7 +90,9 @@ When a category is selected in the layer picker, the view transitions to the mea
 In the measurement config example below, we can see the layer ids for each layer that belongs to a `source` is placed within the `settings` array for that source.
 
 ### Measurement Config Example
-`config/default/common/config/wv.json/measurements/Aerosol Index.json`
+
+[`config/default/common/config/wv.json/measurements/Aerosol Index.json`](../../config/default/common/config/wv.json/measurements/Aerosol%20Index.json)
+
 ```json
 {
     "measurements": {
