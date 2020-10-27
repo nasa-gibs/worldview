@@ -1,5 +1,17 @@
 import { get as lodashGet } from 'lodash';
 import update from 'immutability-helper';
+import * as olProj from 'ol/proj';
+
+/**
+ * Transform coordinates from one projection to another
+ *
+ * @param {Array} coordinates | longitude, latitude ex: [40.21875, -76.218750]
+ * @param {String} inputCRS | coordinate system of coordinates ex: "EPSG:4326"
+ * @param {String} targetCRS | target output with transformed cooridnates ex: "EPSG:3031"
+ */
+export function coordinatesCRSTransform(coordinates, inputCRS, targetCRS) {
+  return olProj.transform(coordinates, inputCRS, targetCRS);
+}
 
 export function getProjInitialState(config) {
   const selected = lodashGet(
