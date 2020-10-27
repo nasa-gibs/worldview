@@ -235,8 +235,6 @@ class toolbarContainer extends Component {
         id="wv-geosearch-button"
         className="wv-toolbar-button"
         title="Search by place name or reverse search using coordinates"
-        // onTouchEnd={toggleShowGeosearch}
-        // onMouseDown={toggleShowGeosearch}
         onClick={handleButtonClick}
       >
         <FontAwesomeIcon icon="search-location" size={faSize} />

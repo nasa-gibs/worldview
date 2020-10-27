@@ -6,39 +6,35 @@ import {
   Style as OlStyle,
   Icon as OlIcon,
 } from 'ol/style';
-import * as olProj from 'ol/proj';
 import { containsXY } from 'ol/extent';
+import { coordinatesCRSTransform } from '../projection/util';
 
-export function animateCoordinates(map, coordinates, zoom) {
-  const { ui } = map;
-  const { proj } = ui.selected;
+export function animateCoordinates(map, config, coordinates, zoom) {
+  const { projections } = config;
+  const { selected } = map.ui;
+  const { proj } = selected;
+  const { crs } = projections[proj];
+
   let targetCoordinates = coordinates;
   if (proj !== 'geographic') {
-    targetCoordinates = polarCoordinatesTransform(coordinates, proj);
+    targetCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
   }
-  ui.animate.fly(targetCoordinates, zoom);
-}
-
-export function polarCoordinatesTransform(coordinates, proj) {
-  const projObj = {
-    arctic: 'EPSG:3413',
-    antarctic: 'EPSG:3031',
-  };
-  return olProj.transform(coordinates, 'EPSG:4326', projObj[proj]);
+  map.ui.animate.fly(targetCoordinates, zoom);
 }
 
 export function areCoordinatesWithinExtent(map, config, coordinates) {
   const { projections } = config;
   const { selected } = map.ui;
-  const projMaxExtent = projections[selected.proj].maxExtent;
+  const { proj } = selected;
+  const { maxExtent, crs } = projections[proj];
 
   let coordinatesWithinExtent;
   let transformedCoordinates;
-  if (selected.proj !== 'geographic') {
-    transformedCoordinates = polarCoordinatesTransform(coordinates, selected.proj);
-    coordinatesWithinExtent = containsXY(projMaxExtent, transformedCoordinates[0], transformedCoordinates[1]);
+  if (proj !== 'geographic') {
+    transformedCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    coordinatesWithinExtent = containsXY(maxExtent, transformedCoordinates[0], transformedCoordinates[1]);
   } else {
-    coordinatesWithinExtent = containsXY(projMaxExtent, coordinates[0], coordinates[1]);
+    coordinatesWithinExtent = containsXY(maxExtent, coordinates[0], coordinates[1]);
   }
   return {
     coordinatesWithinExtent,
@@ -76,7 +72,7 @@ export function removeCoordinatesMarker(activeMarker, map) {
       const mapOverlays = proj[mapProjection].getOverlays().getArray();
       const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
         const { id } = overlay;
-        return id && id.contains('coordinates-map-maker');
+        return id && id.includes('coordinates-map-marker');
       });
       if (coordinatesTooltipOverlay.length > 0) {
         proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
@@ -106,7 +102,7 @@ const createPin = function(coordinates, transformedCoordinates = false, reverseG
   });
 
   iconFeature.setStyle(iconStyle);
-  iconFeature.setId('coordinates-map-maker');
+  iconFeature.setId('coordinates-map-marker');
 
   const vectorSource = new OlSourceVector({
     wrapX: false,

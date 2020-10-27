@@ -40,7 +40,7 @@ export class CoordinatesInteractions extends React.Component {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixels, (feature) => {
         const featureId = feature.getId();
-        const isMarker = featureId === 'coordinates-map-maker';
+        const isMarker = featureId === 'coordinates-map-marker';
         if (isMarker) {
           isActiveLayer = true;
         }
@@ -71,6 +71,7 @@ export class CoordinatesInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
+    config,
     map,
     measure,
     geosearch,
@@ -81,7 +82,7 @@ function mapStateToProps(state) {
     map,
     coordinates,
     isShowingClick: map.isClickable,
-    getCoordinatesDialog: (pixels, olMap) => getCoordinatesDialogAtMapPixel(pixels, olMap),
+    getCoordinatesDialog: (pixels, olMap) => getCoordinatesDialogAtMapPixel(pixels, olMap, config),
     measureIsActive: measure.isActive,
   };
 } const mapDispatchToProps = (dispatch) => ({

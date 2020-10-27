@@ -246,7 +246,6 @@ export default connect(
   mapDispatchToProps,
 )(App);
 App.propTypes = {
-  // config: PropTypes.object,
   isAnimationWidgetActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,

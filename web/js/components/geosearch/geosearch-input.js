@@ -11,6 +11,7 @@ class SearchBox extends Component {
     this.state = {
     };
     this.highlightedItem = null;
+    this.geosearchInput = null;
   }
 
   componentDidMount() {
@@ -18,7 +19,9 @@ class SearchBox extends Component {
     // timeout necessary to trigger input focus
     if (isExpanded || geosearchMobileModalOpen) {
       setTimeout(() => {
-        this.geosearchInput.focus();
+        if (this.geosearchInput) {
+          this.geosearchInput.focus();
+        }
       }, 1);
     }
   }

@@ -9,7 +9,7 @@ import {
 import { getLocalStorageCollapseState } from './util';
 
 const localStorageCollapseState = getLocalStorageCollapseState();
-const geosearchState = {
+export const geosearchState = {
   isCoordinateSearchActive: false,
   isExpanded: !localStorageCollapseState,
   coordinates: [],
@@ -17,7 +17,7 @@ const geosearchState = {
   reverseGeocodeResults: null,
 };
 
-export default function geosearchReducer(state = geosearchState, action) {
+export function geosearchReducer(state = geosearchState, action) {
   switch (action.type) {
     case UPDATE_ACTIVE_MARKER:
       return lodashAssign({}, state, {

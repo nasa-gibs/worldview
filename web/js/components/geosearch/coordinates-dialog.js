@@ -18,7 +18,7 @@ class CoordinatesDialog extends PureComponent {
     const latitudeText = `Latitude: ${features.latitude} °`;
     const longitudeText = `Longitude: ${features.longitude} °`;
     return (
-      <div className="tooltip-custom-black tooltip-static">
+      <div className="tooltip-custom-black tooltip-static tooltip-coordinates-container">
         <div className="tooltip-coordinates-title">{title}</div>
         <div className="tooltip-coordinates-group">
           <div>
@@ -28,7 +28,7 @@ class CoordinatesDialog extends PureComponent {
             {longitudeText}
           </div>
         </div>
-        <span className="close-tooltip coordinates-dialog-close" onClick={toggleWithClose}>
+        <span className="close-tooltip close-coordinates-tooltip" onClick={toggleWithClose}>
           <FontAwesomeIcon icon={faTimes} fixedWidth />
         </span>
       </div>
