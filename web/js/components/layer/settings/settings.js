@@ -212,20 +212,20 @@ class LayerSettings extends React.Component {
       <>
         {legend.type !== 'classification'
           && (
-          <PaletteThreshold
-            key={`${layer.id}0_threshold`}
-            legend={legend}
-            setRange={setThresholdRange}
-            min={0}
-            max={max}
-            start={start}
-            layerId={layer.id}
-            end={end}
-            squashed={!!palette.squash}
-            groupName={groupName}
-            index={0}
-            palette={palette}
-          />
+            <PaletteThreshold
+              key={`${layer.id}0_threshold`}
+              legend={legend}
+              setRange={setThresholdRange}
+              min={0}
+              max={max}
+              start={start}
+              layerId={layer.id}
+              end={end}
+              squashed={!!palette.squash}
+              groupName={groupName}
+              index={0}
+              palette={palette}
+            />
           )}
         <Palette
           setCustomPalette={setCustomPalette}
@@ -338,7 +338,6 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   toggleAllClassification: (layerId, disabledArray, index, groupName) => {
-    console.log(disabledArray);
     dispatch(
       refreshDisabledClassification(layerId, disabledArray, index, groupName),
     );
