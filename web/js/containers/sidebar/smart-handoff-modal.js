@@ -25,8 +25,10 @@ function SmartHandoffModal({
     <div>
 
       <div id="smart-handoff-heading">
-        <img src="../../../images/earth-data-search-logo.jpg" />
-        <h1>search.earthdata.nasa.gov</h1>
+        <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">
+          <img src="../../../images/earth-data-search-logo.jpg" />
+          <h1>search.earthdata.nasa.gov</h1>
+        </a>
       </div>
 
       <div id="smart-handoff-message">
