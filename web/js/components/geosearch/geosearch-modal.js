@@ -62,18 +62,22 @@ class SearchComponent extends Component {
     reverseGeocode([longitude, latitude]).then((results) => {
       selectCoordinatesToFly([longitude, latitude], results);
     });
-    this.updatePendingCoordinates([]);
+    this.setState({
+      inputValue: '',
+      coordinatesPending: [],
+      searchResults: [],
+    });
   }
 
   // handle selecting menu item in search results
   onSelect=(value, item) => {
     const { selectCoordinatesToFly } = this.props;
-
-    this.updateSearchResults([item]);
-    this.updateValue(value);
+    this.setState({
+      inputValue: value,
+      searchResults: [item],
+    });
     const {
       magicKey,
-      // text,
     } = item;
 
     processMagicKey(magicKey).then((result) => {
@@ -158,7 +162,7 @@ class SearchComponent extends Component {
     } = this.state;
     const hasCoordinates = coordinates.length > 0;
 
-    const alertMessage = `${isTouchDevice ? 'Tap' : 'Click'} on map to add a reverse geocode marker.`;
+    const alertMessage = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a point on the map.`;
     const coordinateButtonGroupContainerClassName = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
     return (
       <>

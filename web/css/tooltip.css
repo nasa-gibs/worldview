@@ -121,7 +121,7 @@
     border-top-color: #000;
   }
   &.tooltip-coordinates-container {
-    max-width: 320px;
+    max-width: 420px;
   }
   .tooltip-coordinates-title {
     white-space: pre-wrap;
@@ -153,6 +153,14 @@
     &:hover {
       cursor: pointer;
       color: #fff;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .tooltip-custom-black {
+    &.tooltip-coordinates-container {
+      max-width: 320px;
     }
   }
 }
