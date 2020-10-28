@@ -1,5 +1,9 @@
 
 /** Smart handoff side panel **/
+#smart-handoff-side-panel {
+    overflow-y: scroll;
+    max-height: calc(var(--vh, 1vh) * 100 - 200px);
+}
 #smart-handoff-side-panel h1 {
     margin-top: 10px;
     margin-left: 5px;
@@ -21,12 +25,12 @@
 }
 #esd-notification {
     display: block;
-    margin: 10px 31px;
-    text-align: justify;
-    font-size: 7pt;
-    font-style: italic;
-    color: #7bf;
+    margin: 10px 25px;
+    font-size: 8.5pt;
+    text-align: center;
+    color: white;
 }
+
 #smart-handoff-layer-list {
     margin-top: 15px;
     display: block;

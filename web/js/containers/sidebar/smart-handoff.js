@@ -214,14 +214,18 @@ class SmartHandoff extends Component {
         <h1>Select an available layer to download:</h1>
 
         <div id="esd-notification">
-          Downloading layer granules and map imagery will be performed using NASA's Earthdata Search application.
+          Downloading data will be performed using NASA's Earthdata Search application.
+          <br />
+          {' '}
+          <br />
+          <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">search.earthdata.nasa.gov</a>
         </div>
 
         <hr />
 
         <div id="smart-handoff-layer-list">
           {activeLayers.map((layer, index) => {
-            if (layer.conceptId && layer.visible) {
+            if (layer.conceptId) {
               return (
                 <div className="layer-item">
                   <input
@@ -280,28 +284,6 @@ class SmartHandoff extends Component {
           className="red"
           valid={selectedLayer && (totalGranules !== 0)}
         />
-
-        {/** Listing of layers that are excluded from downloading */}
-        { areHiddenLayersAvailable > 0 && (
-          <div>
-            <hr />
-            <div id="smart-handoff-hidden-layer-list">
-              <h1>Hidden layers:</h1>
-              {activeLayers.map((layer, i) => {
-                if (layer.conceptId && !layer.visible) {
-                  return (
-                    <div className="hidden-layer">
-                      <p>{layer.title}</p>
-                      <p>{layer.subtitle}</p>
-                    </div>
-                  );
-                }
-                return null;
-              })}
-            </div>
-          </div>
-        )}
-
 
         { /** Image crop overlay used to determine user's area of interest */ }
         { showBoundingBox && (
