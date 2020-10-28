@@ -116,7 +116,6 @@ const createPin = function(coordinates, transformedCoordinates = false, reverseG
 };
 
 // ArcGIS World Geocoding Service API Requests and Options
-
 const GEOCODE_OPTIONS = {
   urlBase: 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/',
   requestOptions: {
@@ -124,7 +123,7 @@ const GEOCODE_OPTIONS = {
     redirect: 'follow',
   },
 };
-
+// language code EN (English) and required f request format parameters
 const constantRequestParameters = '&langCode=en&f=json';
 
 // https://developers.arcgis.com/rest/geocode/api-reference/geocoding-category-filtering.htm
