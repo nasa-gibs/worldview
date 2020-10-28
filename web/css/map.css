@@ -72,32 +72,51 @@
   border-bottom-right-radius: 10px;
 }
 
-@media (max-width: 740px) {
+@media (max-width: 768px) {
   .wv-map-zoom-in, .wv-map-zoom-out {
     display: none;
   }
+  .wv-map-rotate-left {
+    top: 96px;
+  }
+  .wv-map-rotate-right {
+    top: 187px;
+  }
+  .wv-map-rotate-left svg.svg-inline--fa,
+  .wv-map-rotate-right svg.svg-inline--fa {
+    width: 47px;
+    padding: 8px;
+  }
+  .wv-map-reset-rotation {
+    top: 134px;
+    font-size: 1.35em;
+    width: 49px;
+  }
 }
 
-@media only screen and (max-device-width: 740px) and (orientation: landscape) {
-  .wv-map-reset-rotation {
-    top: auto;
-    bottom: 5px;
-    right: 53px;
+/* handle rotation and zoom button placement on large landscape device (like iPhone X) */
+@media only screen and (max-device-width: 980px) and (max-device-height: 600px) and (orientation: landscape),
+  (max-height: 600px) {
+  div[data-proj='arctic'] .wv-map-zoom-in,
+  div[data-proj='antarctic'] .wv-map-zoom-in,
+  div[data-proj='arctic'] .wv-map-zoom-out,
+  div[data-proj='antarctic'] .wv-map-zoom-out, {
+    right: 54px;
   }
-
+  .wv-map-zoom-in {
+    top: 58px;
+  }
+  .wv-map-zoom-out {
+    top: 96px;
+  }
   .wv-map-rotate-left {
-    top: auto;
-    bottom: 5px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 0;
-    right: 96px;
+    top: 58px;
   }
-
+  .wv-map-reset-rotation {
+    top: 96px;
+  }
   .wv-map-rotate-right {
-    top: auto;
-    bottom: 5px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 0;
+    top: 149px;
   }
 }
 
