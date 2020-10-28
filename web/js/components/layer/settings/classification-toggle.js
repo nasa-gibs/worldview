@@ -34,7 +34,7 @@ export default function ClassificationToggle(props) {
         />
 
       </div>
-      <Scrollbar style={{ maxHeight: `${height}px` }}>
+      <Scrollbar className="classification-list" style={{ maxHeight: `${height}px` }}>
         {legend.colors.map((color, index) => {
           const id = legend.id + index;
           const tooltip = tooltips[index];
