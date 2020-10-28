@@ -20,12 +20,12 @@ To quickly switch between different configurations, use a symlink for `config/ac
 
 ## Updating the Configuration
 
-After making any changes to a custom configuration, rebuild the app for the changes to take effect.
+After making any changes to configuration files, rebuild the app for the changes to take effect.
 Use the `npm run build` command to make a request to [the GIBS GetCapabilities API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers) to update layer configurations and rebuild the
-configuration file `wv.json` used by the application.
+configuration file used by the application. After a successful buid, this file can be found at: `build/options/config/wv.json`
 
-If you just want to rebuild `wv.json` based on the last GetCapabilities files that were previously requested,
-for example if you are modifying configs locally and want to see/test your changes,
+If you want to only rebuild `wv.json`, using GetCapabilities files that were previously requested,
+(e.g. if you are just modifying some configs locally and want to test your changes)
 you can simply run `npm run build:config`
 
 ### Subdirectories
@@ -49,7 +49,7 @@ IGNORE_ERRORS=true npm run build:config
 
 ## New Map Sources
 
-Modify the [`sources.json`](../../config/default/common/config/wv.json/sources.json) file. Within this file there is a *sources*
+Modify the [`sources.json`](../../config/default/release/config/sources.json) file. Within this file there is a *sources*
 object that contains an object for each map source keyed by the source identifier.
 For layers that can be configured via a GIBS WMTS GetCapabilities document or
 for WMS layers, the only property required is `url`
@@ -63,7 +63,7 @@ object that contains an object for each matrix set, keyed by the matrix set iden
 
 ### Example sources.json
 
-[`config/default/common/config/wv.json/sources.json`](../../config/default/common/config/wv.json/sources.json)
+[`config/default/common/config/wv.json/sources.json`](../../config/default/release/config/sources.json)
 
 ```json
 {
