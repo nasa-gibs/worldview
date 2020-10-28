@@ -4,16 +4,16 @@
 }
 
 .classification-switch-header {
- display: flex;
- justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
   .react-switch {
     flex-direction: row-reverse;
   }
   .react-switch-case {
-    width: 30px
+    width: 30px;
   }
-  .react-switch-label-case{
-    width: 20px
+  .react-switch-label-case {
+    width: 20px;
   }
 }
 .react-switch .switch-col {
