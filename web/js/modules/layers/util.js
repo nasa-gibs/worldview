@@ -1324,30 +1324,18 @@ export function adjustEndDates(layers) {
 }
 
 /**
- * Build end date for future layer
+ * Add mockFutureTime value to target layer object futureTime key
  *
  * @method mockFutureTimeLayerOptions
  * @param  {Array} layers array
  * @param  {String} mockFutureLayerParameters 'targetLayerId, mockFutureTime'
- * @returns {Array} array of layers
+ * @returns {Void}
  */
 export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
   const urlParameters = mockFutureLayerParameters.split(',');
   const [targetLayerId, mockFutureTime] = urlParameters;
 
-  if (!targetLayerId || !mockFutureTime) {
-    return;
+  if (targetLayerId && mockFutureTime && layers[targetLayerId]) {
+    layers[targetLayerId].futureTime = mockFutureTime;
   }
-
-  const addFutureTimeOptions = (layer) => {
-    const { futureTime, id } = layer;
-    if (id !== targetLayerId || futureTime) {
-      return;
-    }
-    layer.futureTime = mockFutureTime;
-    const futureEndDate = getFutureLayerEndDate(layer);
-    layer.endDate = util.toISOStringSeconds(futureEndDate);
-  };
-
-  return Object.values(layers).forEach(addFutureTimeOptions);
 }

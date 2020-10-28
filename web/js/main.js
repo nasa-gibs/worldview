@@ -174,6 +174,10 @@ window.onload = () => {
     const legacyState = parse(parameters, config, errors);
     layerValidate(errors, config);
     adjustStartDates(config.layers);
+    // handle add mock future time to provided layer id
+    if (parameters.mockFutureLayer) {
+      mockFutureTimeLayerOptions(config.layers, parameters.mockFutureLayer);
+    }
     adjustEndDates(config.layers);
     // Remove any mock stories
     if (!parameters.mockTour) {
@@ -183,9 +187,6 @@ window.onload = () => {
           config.storyOrder = config.storyOrder.filter((id) => id !== storyId);
         }
       });
-    }
-    if (parameters.mockFutureLayer) {
-      mockFutureTimeLayerOptions(config.layers, parameters.mockFutureLayer);
     }
     preloadPalettes(layers, {}, false).then((obj) => {
       config.palettes = {
