@@ -55,19 +55,19 @@ class SearchComponent extends Component {
 
   // handle submitting search after inputing coordinates
   onCoordinateInputSelect = () => {
-    const { handleSelectCordinatesToFly } = this.props;
+    const { selectCoordinatesToFly } = this.props;
     const { coordinatesPending } = this.state;
 
     const [longitude, latitude] = coordinatesPending;
     reverseGeocode([longitude, latitude]).then((results) => {
-      handleSelectCordinatesToFly([longitude, latitude], results);
+      selectCoordinatesToFly([longitude, latitude], results);
     });
     this.updatePendingCoordinates([]);
   }
 
   // handle selecting menu item in search results
   onSelect=(value, item) => {
-    const { handleSelectCordinatesToFly } = this.props;
+    const { selectCoordinatesToFly } = this.props;
 
     this.updateSearchResults([item]);
     this.updateValue(value);
@@ -85,7 +85,7 @@ class SearchComponent extends Component {
         const { x, y } = location;
         const parsedX = parseFloat(x.toPrecision(9));
         const parsedY = parseFloat(y.toPrecision(9));
-        handleSelectCordinatesToFly([parsedX, parsedY], addressAttributes);
+        selectCoordinatesToFly([parsedX, parsedY], addressAttributes);
       }
     });
   }
@@ -120,12 +120,12 @@ class SearchComponent extends Component {
     }
   }
 
-  // initiate instruction alert and activate store level handleReverseGeocodeActive
+  // initiate instruction alert and activate store level toggleReverseGeocodeActive
   selectCoordinatesFromMap = (e) => {
     e.preventDefault();
     const isTouchDevice = e.type === 'touchend';
-    const { handleReverseGeocodeActive } = this.props;
-    handleReverseGeocodeActive(true);
+    const { toggleReverseGeocodeActive } = this.props;
+    toggleReverseGeocodeActive(true);
     this.setState({
       isTouchDevice,
       showAlert: true,
@@ -137,8 +137,8 @@ class SearchComponent extends Component {
   clearCoordinatesMarker = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { handleClearCoordinatesClick } = this.props;
-    handleClearCoordinatesClick();
+    const { clearCoordinates } = this.props;
+    clearCoordinates();
   }
 
   render() {
@@ -238,13 +238,13 @@ class SearchComponent extends Component {
 }
 
 SearchComponent.propTypes = {
-  handleClearCoordinatesClick: PropTypes.func,
+  clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
   geosearchMobileModalOpen: PropTypes.bool,
   isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
-  handleSelectCordinatesToFly: PropTypes.func,
-  handleReverseGeocodeActive: PropTypes.func,
+  selectCoordinatesToFly: PropTypes.func,
+  toggleReverseGeocodeActive: PropTypes.func,
   toggleShowGeosearch: PropTypes.func,
 };
 

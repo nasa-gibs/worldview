@@ -120,7 +120,13 @@
   &.tooltip-static::before {
     border-top-color: #000;
   }
+  &.tooltip-coordinates-container {
+    max-width: 320px;
+  }
   .tooltip-coordinates-title {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 17px;
     font-size: 16px;
     padding-right: 23px;
   }
@@ -135,7 +141,7 @@
     margin-left: 8px;
     border-left: 1px solid #777;
     padding-left: 6px;
-    &.coordinates-dialog-close {
+    &.close-coordinates-tooltip {
       position: absolute;
       top: 4px;
       right: 6px;
