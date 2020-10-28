@@ -71,7 +71,7 @@ class LayerSettings extends React.Component {
       setThresholdRange,
       layer,
       toggleClassification,
-      toggleAllClassification,
+      toggleAllClassifications,
       screenHeight,
     } = this.props;
     const { activeIndex } = this.state;
@@ -103,7 +103,7 @@ class LayerSettings extends React.Component {
               palette={palette}
               toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)}
               legend={legend}
-              toggleAll={(disabledArray) => { toggleAllClassification(layer.id, disabledArray, i, groupName); }}
+              toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, i, groupName); }}
             />
           </TabPane>
         );
@@ -184,7 +184,7 @@ class LayerSettings extends React.Component {
       groupName,
       layer,
       toggleClassification,
-      toggleAllClassification,
+      toggleAllClassifications,
       screenHeight,
     } = this.props;
     const paletteLegends = getPaletteLegends(layer.id);
@@ -204,7 +204,7 @@ class LayerSettings extends React.Component {
           palette={palette}
           toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)}
           legend={legend}
-          toggleAll={(disabledArray) => { toggleAllClassification(layer.id, disabledArray, 0, groupName); }}
+          toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, 0, groupName); }}
         />
       );
     }
@@ -337,7 +337,7 @@ const mapDispatchToProps = (dispatch) => ({
       setToggledClassification(layerId, classIndex, index, groupName),
     );
   },
-  toggleAllClassification: (layerId, disabledArray, index, groupName) => {
+  toggleAllClassifications: (layerId, disabledArray, index, groupName) => {
     dispatch(
       refreshDisabledClassification(layerId, disabledArray, index, groupName),
     );
@@ -398,6 +398,6 @@ LayerSettings.propTypes = {
   setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
-  toggleAllClassification: PropTypes.func,
+  toggleAllClassifications: PropTypes.func,
   vectorStyles: PropTypes.object,
 };

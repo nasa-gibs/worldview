@@ -18,18 +18,22 @@ export default function ClassificationToggle(props) {
 
   return (
     <div className="layer-classification-toggle settings-component">
-      <Switch
-        id="header-disable"
-        key="header-disable"
-        label="Disable/Enable"
-        containerClassAddition="header"
-        active={!isEnableAllSelected}
-        toggle={() => {
-          const arrayOfIndices = !isEnableAllSelected ? [...Array(switchLength).keys()] : [];
-          toggleAll(arrayOfIndices);
-          toggleEnableAll(!isEnableAllSelected);
-        }}
-      />
+      <div className="classification-switch-header">
+        <h2 className="wv-header">Disable/Enable</h2>
+        <Switch
+          id="header-disable"
+          key="header-disable"
+          label="All"
+          active={!isEnableAllSelected}
+          containerClassAddition="header"
+          toggle={() => {
+            const arrayOfIndices = !isEnableAllSelected ? [...Array(switchLength).keys()] : [];
+            toggleAll(arrayOfIndices);
+            toggleEnableAll(!isEnableAllSelected);
+          }}
+        />
+
+      </div>
       <Scrollbar style={{ maxHeight: `${height}px` }}>
         {legend.colors.map((color, index) => {
           const id = legend.id + index;

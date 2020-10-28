@@ -2,11 +2,18 @@
   display: flex;
   margin-bottom: 7px;
 }
-.react-switch.header {
-  margin-bottom: 14px;
-  flex-direction: row-reverse;
-  .switch-label-text {
-    font-size: 14px;
+
+.classification-switch-header {
+ display: flex;
+ justify-content: space-between;
+  .react-switch {
+    flex-direction: row-reverse;
+  }
+  .react-switch-case {
+    width: 30px
+  }
+  .react-switch-label-case{
+    width: 20px
   }
 }
 .react-switch .switch-col {
