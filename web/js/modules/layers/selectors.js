@@ -247,11 +247,11 @@ export function getFutureLayerEndDate(layer) {
   const dateInterval = futureTime.slice(0, -1);
 
   if (dateType === 'D') {
-    max.setDate(max.getDate() + parseInt(dateInterval, 10));
+    max.setUTCDate(max.getUTCDate() + parseInt(dateInterval, 10));
   } else if (dateType === 'M') {
-    max.setMonth(max.getMonth() + parseInt(dateInterval, 10));
+    max.setUTCMonth(max.getUTCMonth() + parseInt(dateInterval, 10));
   } else if (dateType === 'Y') {
-    max.setYear(max.getUTCFullYear() + parseInt(dateInterval, 10));
+    max.setUTCFullYear(max.getUTCFullYear() + parseInt(dateInterval, 10));
   }
   return util.roundTimeQuarterHour(max);
 }
