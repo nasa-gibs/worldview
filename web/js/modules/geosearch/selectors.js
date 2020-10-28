@@ -125,6 +125,8 @@ const GEOCODE_OPTIONS = {
   },
 };
 
+const constantRequestParameters = '&langCode=en&f=json';
+
 // https://developers.arcgis.com/rest/geocode/api-reference/geocoding-category-filtering.htm
 // necessary to filter to remove fast food type suggestions, but still include relavant Places of Interest
 const GEOCODE_SUGGEST_CATEGORIES = [
@@ -143,9 +145,10 @@ export async function suggest(val) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
   const encodedValue = encodeURIComponent(val);
   const encodedCategories = encodeURIComponent(GEOCODE_SUGGEST_CATEGORIES.join(','));
+  const request = `${urlBase}suggest?text=${encodedValue}${constantRequestParameters}&category=${encodedCategories}`;
 
   try {
-    const response = await fetch(`${urlBase}suggest?text=${encodedValue}&f=json&category=${encodedCategories}`, requestOptions);
+    const response = await fetch(request, requestOptions);
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {
@@ -155,9 +158,10 @@ export async function suggest(val) {
 
 export async function processMagicKey(magicKey) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
+  const request = `${urlBase}findAddressCandidates?outFields=*${constantRequestParameters}&magicKey=${magicKey}=`;
 
   try {
-    const response = await fetch(`${urlBase}findAddressCandidates?f=json&outFields=*&magicKey=${magicKey}=`, requestOptions);
+    const response = await fetch(request, requestOptions);
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {
@@ -167,9 +171,10 @@ export async function processMagicKey(magicKey) {
 
 export async function reverseGeocode(coordinates) {
   const { requestOptions, urlBase } = GEOCODE_OPTIONS;
+  const request = `${urlBase}reverseGeocode?location=${coordinates}${constantRequestParameters}`;
 
   try {
-    const response = await fetch(`${urlBase}reverseGeocode?location=${coordinates}&f=json`, requestOptions);
+    const response = await fetch(request, requestOptions);
     const result = await response.text();
     return JSON.parse(result);
   } catch (error) {

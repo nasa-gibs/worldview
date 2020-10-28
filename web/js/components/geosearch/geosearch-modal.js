@@ -73,7 +73,6 @@ class SearchComponent extends Component {
     this.updateValue(value);
     const {
       magicKey,
-      // text,
     } = item;
 
     processMagicKey(magicKey).then((result) => {
