@@ -108,9 +108,18 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
     const { proj } = store.getState();
     let newTrackDetails;
     const { trackDetails } = self;
+    const createAndAddTrack = () => {
+      newTrackDetails = createTrack(
+        proj,
+        event,
+        selectedMap,
+        selectedDate,
+        callback,
+      );
+      selectedMap.addLayer(newTrackDetails.track);
+    };
+
     if (!event || event.geometry.length < 2) {
-      // If track exists remove it.
-      // Else return empty Object
       newTrackDetails = trackDetails.id
         ? self.removeTrack(selectedMap, trackDetails)
         : {};
@@ -123,18 +132,10 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
           const isClusteredSelection = !document.getElementById(
             `track-marker-${selectedDate}`,
           );
-          // If New Date is in cluster
-          // build new track
+          // If New Date is in cluster build new track
           if (isClusteredSelection) {
             newTrackDetails = self.removeTrack(selectedMap, trackDetails);
-            newTrackDetails = createTrack(
-              proj,
-              event,
-              selectedMap,
-              selectedDate,
-              callback,
-            );
-            selectedMap.addLayer(newTrackDetails.track);
+            createAndAddTrack();
           } else {
             newTrackDetails = trackDetails;
             updateSelection(selectedDate);
@@ -148,26 +149,12 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
       } else {
         // Remove old DOM Elements
         newTrackDetails = self.removeTrack(selectedMap, trackDetails);
-        newTrackDetails = createTrack(
-          proj,
-          event,
-          selectedMap,
-          selectedDate,
-          callback,
-        );
-        selectedMap.addLayer(newTrackDetails.track);
+        createAndAddTrack();
       }
     } else {
       // If no track element currenlty exists,
       // but there is a multiday event, build a new track
-      newTrackDetails = createTrack(
-        proj,
-        event,
-        selectedMap,
-        selectedDate,
-        callback,
-      );
-      selectedMap.addLayer(newTrackDetails.track);
+      createAndAddTrack();
     }
     self.active = true;
     self.trackDetails = newTrackDetails;
@@ -286,6 +273,7 @@ const naturalEventsTrackPoint = function(
     id: eventID + date.toString(),
   });
 };
+
 /**
  * @param  {Array} coordinateArray
  * @return {Object} Openlayers Feature
@@ -295,6 +283,7 @@ const naturalEventsTrackLine = function(coordinateArray) {
     geometry: new OlGeomMultiLineString(coordinateArray),
   });
 };
+
 /**
  * @param  {String} color
  * @param  {Number} Width
@@ -308,6 +297,7 @@ const getLineStyle = function(color, width) {
     }),
   });
 };
+
 /**
  * Loop through event geometries and create
  * track points and line
@@ -401,6 +391,7 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
     hidden: false,
   };
 };
+
 /**
  * Remove Point overlays to DOM
  *
@@ -428,6 +419,7 @@ const addPointOverlays = function(map, pointOverlayArray) {
     addOverlayIfIsVisible(map, pointOverlay);
   });
 };
+
 /**
  * Change selected point
  *
@@ -444,6 +436,7 @@ const updateSelection = function(newDate) {
   if (oldSelectedPoint) oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
 };
+
 /**
  * Create rotated element that displays arrows between points
  * as repeated css background image
@@ -489,6 +482,7 @@ const createArrows = function(lineSegmentCoords, map) {
     id: `arrow${pixelMidPoint[0].toString()}${pixelMidPoint[1].toString()}`,
   });
 };
+
 /**
  * Loop through clustered point array and create elements
  *
@@ -555,6 +549,7 @@ const addPoints = function(proj, clusters, map, selectedDate, callback) {
   });
   return { trackArray, overlayArray: overlays };
 };
+
 /**
  * Create cluster point
  *
@@ -607,6 +602,7 @@ function getClusterPointEl(proj, cluster, map, pointClusterObj, callback) {
     id: clusterId + properties.startDate + properties.endDate,
   });
 }
+
 function addOverlayIfIsVisible(map, overlay) {
   if (
     olExtent.containsCoordinate(
