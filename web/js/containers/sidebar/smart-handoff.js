@@ -147,12 +147,13 @@ class SmartHandoff extends Component {
     let totalGranules = 0;
     let selectedGranules = 0;
 
-    const urlTotalGranules = 'https://cmr.earthdata.nasa.gov/search/granules.json?'
+    let urlTotalGranules = 'https://cmr.earthdata.nasa.gov/search/granules.json?'
                 + `temporal=${dateRange}&`
                 + `collection_concept_id=${selectedLayer.conceptId}&`
-                + `day_night_flag=${selectedLayer.daynight}&`
                 + 'include_facets=v2&'
                 + 'page_size=0';
+
+    if (selectedLayer.daynight) urlTotalGranules += `&day_night_flag=${selectedLayer.daynight}`;
 
     let urlSelectedGranules = urlTotalGranules;
 
