@@ -2,6 +2,20 @@
   display: flex;
   margin-bottom: 7px;
 }
+
+.classification-switch-header {
+  display: flex;
+  justify-content: space-between;
+  .react-switch {
+    flex-direction: row-reverse;
+  }
+  .react-switch-case {
+    width: 30px;
+  }
+  .react-switch-label-case {
+    width: 20px;
+  }
+}
 .react-switch .switch-col {
   align-items: flex-start;
   display: flex;
