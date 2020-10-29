@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD": {
+      "id": "HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD",
+      "title": "Reflectance (Nadir BRDF-Adjusted, v1.5)",
+      "subtitle": "Sentinel 2A & B / MSI",
+      "description": "hls/HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD",
+      "tags": "corrected surface",
+      "group": "baselayers",
+      "layergroup": [
+        "hls"
+      ],
+      "product": "",
+      "wrapX": true,
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}
