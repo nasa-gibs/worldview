@@ -87,8 +87,11 @@ class SearchBox extends Component {
     const hasCoordinates = coordinates.length > 0;
     // eslint-disable-next-line no-nested-ternary
     const buttonContainerRight = hasCoordinates
-      ? isMobile ? '67px' : '62px'
-      : '31px';
+      ? isMobile ? '67px' : '60px'
+      : '30px';
+    const submitButtonStyle = inputValue
+      ? { color: '#0070c8', cursor: 'pointer' }
+      : {};
 
     return (
       <InputGroupAddon
@@ -99,10 +102,7 @@ class SearchBox extends Component {
         }}
       >
         <Button
-          style={{
-            color: `${inputValue ? '#0070c8' : ''}`,
-            boxShadow: 'none',
-          }}
+          style={submitButtonStyle}
           disabled={!inputValue}
           onClick={this.handleSubmitClick}
           className="geosearch-search-submit-button"
@@ -124,6 +124,9 @@ class SearchBox extends Component {
       width: isMobile ? '90%' : wrapperStyleWidth,
       paddingRight: isMobile ? '0' : '26px',
     };
+    const placeHolderText = isMobile
+      ? 'Enter place name or coordinates'
+      : 'Search for places or enter coordinates';
     return (
       <div
         className="geosearch-input-container"
@@ -135,7 +138,7 @@ class SearchBox extends Component {
           inputProps={{
             className: 'form-control geosearch-autocomplete dark-input',
             id: 'geosearch-autocomplete',
-            placeholder: 'Search for places or enter coordinates',
+            placeholder: placeHolderText,
           }}
           wrapperStyle={wrapperStyle}
           value={inputValue}

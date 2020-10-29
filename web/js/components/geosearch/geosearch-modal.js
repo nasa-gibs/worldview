@@ -157,7 +157,7 @@ class SearchComponent extends Component {
     } = this.state;
     const hasCoordinates = coordinates.length > 0;
 
-    const alertMessage = `${isTouchDevice ? 'Tap' : 'Click'} on map to add a reverse geocode marker.`;
+    const alertMessage = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a point on the map.`;
     const coordinateButtonGroupContainerClassName = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
     return (
       <>
