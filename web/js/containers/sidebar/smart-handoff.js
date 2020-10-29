@@ -50,18 +50,30 @@ class SmartHandoff extends Component {
       coordinates: {},
     };
 
-
+    this.baseState = this.state;
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.updateExtent = this.updateExtent.bind(this);
     this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 250);
   }
 
   componentDidUpdate(prevProps) {
-    const { selectedDate } = this.props;
-    const { currentExtent } = this.state;
+    const { selectedDate, activeLayers } = this.props;
+    const { currentExtent, selectedLayer } = this.state;
+
+    // Determine if existing selected layer is active still and visibility toggle is 'ON'
+    const isLayerStillActive = activeLayers.find((layer) => selectedLayer.conceptId === layer.conceptId);
+
+    if (!isLayerStillActive) {
+      console.log('no longer active');
+      this.resetState();
+    }
 
     const didDateChange = selectedDate !== prevProps.selectedDate;
     if (didDateChange) this.updateGranuleCount(currentExtent);
+  }
+
+  resetState() {
+    this.setState(this.baseState);
   }
 
   updateExtent() {
@@ -197,121 +209,118 @@ class SmartHandoff extends Component {
     let showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
     showModal = true;
 
-    // Determine if existing selected layer is active still and visibility toggle is 'ON'
-    const isLayerStillActive = activeLayers.find((layer) => selectedLayer === layer && layer.visible);
+    const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
+    const areThereLayersToDownload = availableLayers > 0;
 
-    // Determine if any hidden layers are available for download; if so, displays hidden layers */
-    const areHiddenLayersAvailable = activeLayers.filter((layer) => layer.conceptId !== undefined && !layer.visible).length;
+    if (areThereLayersToDownload) {
+      return (
+        <div id="smart-handoff-side-panel">
 
-    if (!isLayerStillActive) {
-      // Need to handle cases here when a layer has been toggled to 'hidden'.
+          <h1>Select an available layer to download:</h1>
+
+          <div id="esd-notification">
+            Downloading data will be performed using NASA's Earthdata Search application.
+            <br />
+            {' '}
+            <br />
+            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">search.earthdata.nasa.gov</a>
+          </div>
+
+          <hr />
+
+          <div id="smart-handoff-layer-list">
+            {activeLayers.map((layer, index) => {
+              if (layer.conceptId) {
+                return (
+                  <div className="layer-item">
+                    <input
+                      id={layer.id}
+                      type="radio"
+                      value={layer.conceptId}
+                      name="smart-handoff-layer-radio"
+                      checked={selectedLayer && selectedLayer.id === layer.id}
+                      onChange={() => this.onLayerChange(layer, currentExtent)}
+                    />
+                    <label htmlFor={layer.id}>{layer.title}</label>
+                    <span>{layer.subtitle}</span>
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
+
+          <hr />
+
+          <div id="crop-toggle">
+            <Checkbox
+              id="chk-crop-toggle"
+              label="Toggle Bounding Box"
+              text="Toggle boundary selection."
+              checked={showBoundingBox}
+              onCheck={() => {
+                this.setState({ showBoundingBox: !showBoundingBox }, () => {
+                  if (selectedLayer) this.updateGranuleCount(currentExtent);
+                });
+              }}
+            />
+          </div>
+
+          <hr />
+
+          <div id="granule-count">
+            <h1>
+              Granules available:
+              {' '}
+              { showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
+              { !showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{totalGranules}</span>)}
+              { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
+            </h1>
+          </div>
+
+          <Button
+            onClick={() => {
+              if (showModal) showWarningModal(selectedDate, selectedLayer, currentExtent, showBoundingBox);
+              else openEarthDataSearch(selectedDate, selectedLayer, currentExtent, showBoundingBox)();
+            }}
+            id="download-btn"
+            text="GO TO EARTHDATA SEARCH"
+            className="red"
+            valid={selectedLayer && (totalGranules !== 0)}
+          />
+
+          { showBoundingBox && (
+            <Crop
+              className="download-extent"
+              x={x}
+              y={y}
+              width={x2 - x}
+              height={y2 - y}
+              maxHeight={screenHeight}
+              maxWidth={screenWidth}
+              onChange={this.onBoundaryChange}
+              onClose={onClose}
+              keepSelection
+              bottomLeftStyle={{
+                left: x,
+                top: y2 + 5,
+                width: x2 - x,
+              }}
+              topRightStyle={{
+                left: x,
+                top: y - 20,
+                width: x2 - x,
+              }}
+              coordinates={coordinates}
+              showCoordinates
+            />
+          )}
+        </div>
+      );
     }
-
     return (
       <div id="smart-handoff-side-panel">
-
-        {/** Listing of layers that are available to download via Earthdata Search */}
-        <h1>Select an available layer to download:</h1>
-
-        <div id="esd-notification">
-          Downloading data will be performed using NASA's Earthdata Search application.
-          <br />
-          {' '}
-          <br />
-          <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">search.earthdata.nasa.gov</a>
-        </div>
-
-        <hr />
-
-        <div id="smart-handoff-layer-list">
-          {activeLayers.map((layer, index) => {
-            if (layer.conceptId) {
-              return (
-                <div className="layer-item">
-                  <input
-                    id={layer.id}
-                    type="radio"
-                    value={layer.conceptId}
-                    name="smart-handoff-layer-radio"
-                    checked={selectedLayer && selectedLayer.id === layer.id}
-                    onChange={() => this.onLayerChange(layer, currentExtent)}
-                  />
-                  <label htmlFor={layer.id}>{layer.title}</label>
-                  <span>{layer.subtitle}</span>
-                </div>
-              );
-            }
-            return null;
-          })}
-        </div>
-
-        <hr />
-
-        <div id="crop-toggle">
-          <Checkbox
-            id="chk-crop-toggle"
-            label="Toggle Bounding Box"
-            text="Toggle boundary selection."
-            checked={showBoundingBox}
-            onCheck={() => {
-              this.setState({ showBoundingBox: !showBoundingBox }, () => {
-                if (selectedLayer) this.updateGranuleCount(currentExtent);
-              });
-            }}
-          />
-        </div>
-
-        <hr />
-
-        <div id="granule-count">
-          <h1>
-            Granules available:
-            {' '}
-            { showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
-            { !showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{totalGranules}</span>)}
-            { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
-          </h1>
-        </div>
-
-        { /** Download button that transfers user to NASA's Earthdata Search */ }
-        <Button
-          onClick={() => {
-            if (showModal) showWarningModal(selectedDate, selectedLayer, currentExtent, showBoundingBox);
-            else openEarthDataSearch(selectedDate, selectedLayer, currentExtent, showBoundingBox)();
-          }}
-          id="download-btn"
-          text="GO TO EARTHDATA SEARCH"
-          className="red"
-          valid={selectedLayer && (totalGranules !== 0)}
-        />
-
-        { /** Image crop overlay used to determine user's area of interest */ }
-        { showBoundingBox && (
-        <Crop
-          className="download-extent"
-          x={x}
-          y={y}
-          width={x2 - x}
-          height={y2 - y}
-          maxHeight={screenHeight}
-          maxWidth={screenWidth}
-          onChange={this.onBoundaryChange}
-          onClose={onClose}
-          keepSelection
-          bottomLeftStyle={{
-            left: x,
-            top: y2 + 5,
-            width: x2 - x,
-          }}
-          topRightStyle={{
-            left: x,
-            top: y - 20,
-            width: x2 - x,
-          }}
-          coordinates={coordinates}
-          showCoordinates
-        />
-        )}
+        <h1>None of your currently listed layers are available for data download.</h1>
       </div>
     );
   }

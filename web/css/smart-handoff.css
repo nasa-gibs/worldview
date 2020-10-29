@@ -2,6 +2,7 @@
 /** Smart handoff side panel **/
 #smart-handoff-side-panel {
     overflow-y: scroll;
+    min-height: 40px;
     max-height: calc(var(--vh, 1vh) * 100 - 200px);
 }
 #smart-handoff-side-panel h1 {
