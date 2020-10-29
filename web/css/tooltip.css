@@ -122,6 +122,11 @@
   }
   &.tooltip-coordinates-container {
     max-width: 420px;
+    & svg.svg-inline--fa.fa-copy {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+    }
   }
   .tooltip-coordinates-title {
     white-space: pre-wrap;
@@ -135,6 +140,7 @@
     margin-top: 6px;
     & div:nth-child(2) {
       padding-left: 15px;
+      padding-right: 26px;
     }
   }
   .close-tooltip {
