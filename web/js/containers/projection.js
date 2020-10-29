@@ -31,6 +31,7 @@ const DEFAULT_PROJ_ARRAY = [
     key: 'antarctic',
   },
 ];
+
 const getInfoArray = function(projArray) {
   return projArray.map((el) => ({
     text: el.name,
@@ -40,20 +41,27 @@ const getInfoArray = function(projArray) {
     key: el.id,
   }));
 };
+
 class ProjectionList extends Component {
   constructor(props) {
     super(props);
-    this.updateProjection = this.updateProjection.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
-  updateProjection(id) {
-    const { updateProjection, config, onCloseModal } = this.props;
-    updateProjection(id, config);
-    onCloseModal();
+  onClick(id) {
+    const {
+      updateProjection, projection, config, onCloseModal,
+    } = this.props;
+
+    if (id !== projection) {
+      updateProjection(id, config);
+    }
+
     googleTagManager.pushEvent({
       event: 'change_projection',
       projection: id,
     });
+    onCloseModal();
   }
 
   render() {
@@ -62,13 +70,14 @@ class ProjectionList extends Component {
       <IconList
         list={projectionArray}
         active={projection}
-        onClick={this.updateProjection}
+        onClick={this.onClick}
         size="small"
       />
     );
   }
 }
-function mapStateToProps(state) {
+
+const mapStateToProps = (state) => {
   const projArray = lodashGet(state, 'config.ui.projections');
   const projectionArray = projArray
     ? getInfoArray(projArray)
@@ -79,7 +88,8 @@ function mapStateToProps(state) {
     projection: state.proj.id,
     projectionArray,
   };
-}
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateProjection: (id, config) => {
     dispatch(changeProjection(id));
