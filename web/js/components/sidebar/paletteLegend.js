@@ -242,7 +242,7 @@ class PaletteLegend extends React.Component {
     const toolTipLength = legend.tooltips.length;
     // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = getLegendObject(legend, colorHex, 5); // {label,len,index}
+      legendObj = getLegendObject(legend, colorHex, 3); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
