@@ -6,7 +6,7 @@
       "subtitle": "Sentinel 2A & B / MSI",
       "description": "hls/HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD",
       "tags": "corrected surface",
-      "group": "baselayers",
+      "group": "overlays",
       "layergroup": [
         "hls"
       ],

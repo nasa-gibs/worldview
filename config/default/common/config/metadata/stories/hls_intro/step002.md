@@ -1,0 +1,4 @@
+The Harmonized Landsat Sentinel-2 (HLS) project brings us imagery from the Operational Land Imager (OLI) instrument aboard the NASA/USGS Landsat 8 satellite, and Multi-Spectral Instrument (MSI) aboard the European Space Agency (ESA) Sentinel 2A and Sentinel 2B satellites that have been processed through a set of algorithms to make the imagery consistent across the instruments. The imagery are at 30 meter resolution, that is 8 times higher resolution than the MODIS and VIIRS surface reflectance layers!
+
+
+(show comparison of MODIS to HLS)

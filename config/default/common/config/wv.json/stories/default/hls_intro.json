@@ -1,7 +1,7 @@
 {
   "stories": {
-    "HLS": {
-      "id": "hls",
+    "hls_intro": {
+      "id": "hls_intro",
       "type": "default",
       "title": "Harmonized Landsat Sentinel-2",
       "description": "Introducing daily 30 meter resolution imagery!",
@@ -14,7 +14,7 @@
       },
       {
         "title": "Earthdata article",
-        "link": ""
+        "link": "https://earthdata.nasa.gov"
       }
     ],
       "steps": [
