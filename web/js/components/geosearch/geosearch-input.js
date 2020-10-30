@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
 import { Button, InputGroupAddon } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 
 class SearchBox extends Component {
   constructor(props) {
@@ -114,15 +114,50 @@ class SearchBox extends Component {
     );
   }
 
+  // render alert icon
+  renderAlertIcon = () => {
+    const {
+      coordinates, isMobile, showExtentAlert,
+    } = this.props;
+    const hasCoordinates = coordinates.length > 0;
+    // eslint-disable-next-line no-nested-ternary
+    const buttonContainerRight = hasCoordinates
+      ? isMobile ? '121px' : '121px'
+      : '92px';
+
+    return (
+      showExtentAlert && (
+      <InputGroupAddon
+        className="geosearch-submit-input-group-addon"
+        addonType="append"
+        style={{
+          right: buttonContainerRight,
+        }}
+        title="The entered coordinates are outside of the current map extent."
+      >
+        <FontAwesomeIcon icon={faExclamationTriangle} size="1x" />
+      </InputGroupAddon>
+      )
+    );
+  }
+
   render() {
     const {
-      coordinates, inputValue, isMobile, onChange, onSelect, searchResults,
+      coordinates,
+      inputValue,
+      isMobile,
+      onChange,
+      onSelect,
+      searchResults,
+      showExtentAlert,
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
     const wrapperStyleWidth = hasCoordinates ? '268px' : '299px';
     const wrapperStyle = {
       width: isMobile ? '90%' : wrapperStyleWidth,
-      paddingRight: isMobile ? '0' : '26px',
+      paddingRight: isMobile
+        ? '0'
+        : showExtentAlert ? '48px' : '26px',
     };
     const placeHolderText = isMobile
       ? 'Enter place name or coordinates'
@@ -150,6 +185,7 @@ class SearchBox extends Component {
           renderMenu={this.renderMenu}
           renderItem={this.renderItem}
         />
+        {this.renderAlertIcon()}
         {this.renderSubmitButton()}
       </div>
     );
@@ -167,6 +203,7 @@ SearchBox.propTypes = {
   isMobile: PropTypes.bool,
   onSelect: PropTypes.func,
   onChange: PropTypes.func,
+  showExtentAlert: PropTypes.bool,
 };
 
 export default SearchBox;

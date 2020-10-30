@@ -31,7 +31,7 @@ function getCoordinateDisplayPrecision(coordinate) {
  *
  * @returns {Void}
  */
-function renderTooltip(map, config, coordinates, coordinatesMetadata) {
+export function renderTooltip(map, config, coordinates, coordinatesMetadata) {
   const { projections } = config;
   const { proj } = map;
   const { crs } = projections[proj];
@@ -74,6 +74,52 @@ function renderTooltip(map, config, coordinates, coordinatesMetadata) {
 }
 
 /**
+ * getCoordinatesMetadata for tooltip display
+ *
+ * @param {Object} geocodeProperties
+ *
+ * @returns {Object} coordinatesMetadata
+ */
+export function getCoordinatesMetadata(geocodeProperties) {
+  const { latitude, longitude, reverseGeocodeResults } = geocodeProperties;
+  const { address, error } = reverseGeocodeResults;
+
+  const parsedLatitude = getCoordinateDisplayPrecision(latitude);
+  const parsedLongitude = getCoordinateDisplayPrecision(longitude);
+
+  // build title and metadata based on available parameters
+  let title;
+  if (error) {
+    title = `${parsedLatitude}, ${parsedLongitude}`;
+  } else if (address) {
+    /* eslint-disable camelcase */
+    const {
+      Addr_type,
+      Match_addr,
+      ShortLabel,
+      City,
+      Region,
+    } = address;
+    if (Addr_type === 'PointAddress') {
+      title = `${ShortLabel}, ${City}, ${Region}`;
+    } else if (City && Region) {
+      title = `${City}, ${Region}`;
+    } else {
+      title = `${Match_addr}`;
+    }
+  }
+  const coordinatesMetadata = {
+    features: {
+      latitude: parsedLatitude,
+      longitude: parsedLongitude,
+    },
+    title,
+  };
+
+  return coordinatesMetadata;
+}
+
+/**
  * Get coordinate dialog feature at clicked map pixel
  *
  * @param {Array} pixels
@@ -81,7 +127,7 @@ function renderTooltip(map, config, coordinates, coordinatesMetadata) {
  *
  * @returns {Void}
  */
-export default function getCoordinatesDialogAtMapPixel(pixels, map, config) {
+export function getCoordinatesDialogAtMapPixel(pixels, map, config) {
   // check for existing coordinate marker tooltip overlay and prevent multiple renders
   const mapOverlays = map.getOverlays().getArray();
   const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
@@ -96,41 +142,10 @@ export default function getCoordinatesDialogAtMapPixel(pixels, map, config) {
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-marker') {
       const featureProperties = feature.getProperties();
+      const { latitude, longitude } = featureProperties;
 
-      const { latitude, longitude, reverseGeocodeResults } = featureProperties;
-      const { address, error } = reverseGeocodeResults;
-
-      const parsedLatitude = getCoordinateDisplayPrecision(latitude);
-      const parsedLongitude = getCoordinateDisplayPrecision(longitude);
-
-      // build title and metadata based on available parameters
-      let title;
-      if (error) {
-        title = `${parsedLatitude}, ${parsedLongitude}`;
-      } else if (address) {
-        /* eslint-disable camelcase */
-        const {
-          Addr_type,
-          Match_addr,
-          ShortLabel,
-          City,
-          Region,
-        } = address;
-        if (Addr_type === 'PointAddress') {
-          title = `${ShortLabel}, ${City}, ${Region}`;
-        } else if (City && Region) {
-          title = `${City}, ${Region}`;
-        } else {
-          title = `${Match_addr}`;
-        }
-      }
-      const coordinatesMetadata = {
-        features: {
-          latitude: parsedLatitude,
-          longitude: parsedLongitude,
-        },
-        title,
-      };
+      // get metadata for tooltip
+      const coordinatesMetadata = getCoordinatesMetadata(featureProperties);
 
       // create tooltip overlay React DOM element
       renderTooltip(map, config, [latitude, longitude], coordinatesMetadata);

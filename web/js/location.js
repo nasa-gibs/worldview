@@ -446,7 +446,7 @@ const getParameters = function(config, parameters) {
         serialize: (coordinates, state) => {
           const { map } = state;
           if (map.ui.selected) {
-            const { coordinatesWithinExtent } = areCoordinatesWithinExtent(map, config, coordinates);
+            const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
             if (!coordinatesWithinExtent) {
               return;
             }

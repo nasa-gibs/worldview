@@ -12,6 +12,7 @@ import {
 } from './selectors';
 import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
 import { setLocalStorageCollapseState } from './util';
+import { getCoordinatesMetadata, renderTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
 
 export function toggleShowGeosearch() {
   return (dispatch, getState) => {
@@ -69,6 +70,12 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
 
     animateCoordinates(map, config, coordinates, maxZoom);
+
+    // handle render initial tooltip
+    const [longitude, latitude] = coordinates;
+    const geocodeProperties = { latitude, longitude, reverseGeocodeResults };
+    const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
+    renderTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata);
 
     dispatch({
       type: SELECT_COORDINATES_TO_FLY,

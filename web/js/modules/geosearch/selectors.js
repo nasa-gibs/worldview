@@ -29,27 +29,31 @@ export function areCoordinatesWithinExtent(map, config, coordinates) {
   const { maxExtent, crs } = projections[proj];
 
   let coordinatesWithinExtent;
-  let transformedCoordinates;
   if (proj !== 'geographic') {
-    transformedCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    const transformedCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
     coordinatesWithinExtent = containsXY(maxExtent, transformedCoordinates[0], transformedCoordinates[1]);
   } else {
     coordinatesWithinExtent = containsXY(maxExtent, coordinates[0], coordinates[1]);
   }
-  return {
-    coordinatesWithinExtent,
-    transformedCoordinates,
-  };
+  return coordinatesWithinExtent;
 }
 
 export function addCoordinatesMarker(activeMarker, config, map, coordinates, reverseGeocodeResults) {
+  const { projections } = config;
   const { selected } = map.ui;
+  const { proj } = selected;
+  const { crs } = projections[proj];
 
   removeCoordinatesMarker(activeMarker, map);
 
-  const { coordinatesWithinExtent, transformedCoordinates } = areCoordinatesWithinExtent(map, config, coordinates);
+  const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
   if (!coordinatesWithinExtent) {
     return false;
+  }
+
+  let transformedCoordinates = false;
+  if (proj !== 'geographic') {
+    transformedCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
   }
 
   const marker = createPin(coordinates, transformedCoordinates, reverseGeocodeResults);

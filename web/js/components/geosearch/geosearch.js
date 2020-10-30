@@ -9,6 +9,9 @@ import {
   toggleShowGeosearch,
   toggleReverseGeocodeActive,
 } from '../../modules/geosearch/actions';
+import {
+  areCoordinatesWithinExtent,
+} from '../../modules/geosearch/selectors';
 
 class Geosearch extends React.Component {
   constructor(props) {
@@ -26,6 +29,7 @@ class Geosearch extends React.Component {
 
   renderSearchComponent = (isMobile) => {
     const {
+      isCoordinatePairWithinExtent,
       clearCoordinates,
       coordinates,
       geosearchMobileModalOpen,
@@ -37,6 +41,7 @@ class Geosearch extends React.Component {
 
     return (
       <GeosearchModal
+        isCoordinatePairWithinExtent={isCoordinatePairWithinExtent}
         coordinates={coordinates}
         geosearchMobileModalOpen={geosearchMobileModalOpen}
         isExpanded={isExpanded}
@@ -75,6 +80,7 @@ const mapStateToProps = (state) => {
   const {
     browser,
     config,
+    map,
     modal,
     measure,
     animation,
@@ -96,6 +102,7 @@ const mapStateToProps = (state) => {
     coordinates,
     isExpanded,
     geosearchMobileModalOpen,
+    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(map, config, targetCoordinates),
     isMobile,
     shouldCollapseFromOtherUI,
     isFeatureEnabled,
@@ -118,6 +125,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 Geosearch.propTypes = {
+  isCoordinatePairWithinExtent: PropTypes.func,
   isFeatureEnabled: PropTypes.bool,
   clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
