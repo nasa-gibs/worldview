@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "HLS_MGRS_Granule_Grid": {
+      "id": "HLS_MGRS_Granule_Grid",
+      "title": "MGRS/HLS Grid",
+      "subtitle": "MGRS/HLS",
+      "description": "hls/HLS_MGRS_Granule_Grid",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "hls"
+      ],
+      "product": "",
+      "type": "vector",
+      "wrapX": true
+    }
+  }
+}

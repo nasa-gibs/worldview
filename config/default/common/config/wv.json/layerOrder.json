@@ -915,6 +915,7 @@
 		"Reference_Features",
 		"Reference_Labels",
 		"Graticule",
+		"HLS_MGRS_Granule_Grid",
 		"MODIS_Water_Mask",
 		"MODIS_Terra_Data_No_Data",
 		"MODIS_Aqua_Data_No_Data",
