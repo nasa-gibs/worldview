@@ -83,7 +83,7 @@ class SearchComponent extends Component {
 
   // handle selecting menu item in search results
   onSelect=(value, item) => {
-    const { selectCoordinatesToFly } = this.props;
+    const { isCoordinatePairWithinExtent, selectCoordinatesToFly } = this.props;
     this.setState({
       inputValue: value,
       searchResults: [item],
@@ -101,7 +101,15 @@ class SearchComponent extends Component {
         const { x, y } = location;
         const parsedX = parseFloat(x.toPrecision(9));
         const parsedY = parseFloat(y.toPrecision(9));
-        selectCoordinatesToFly([parsedX, parsedY], addressAttributes);
+
+        const coordinatesWithinExtent = isCoordinatePairWithinExtent([parsedX, parsedY]);
+        if (coordinatesWithinExtent === false) {
+          this.setState({
+            showExtentAlert: true,
+          });
+        } else {
+          selectCoordinatesToFly([parsedX, parsedY], addressAttributes);
+        }
       }
     });
   }
@@ -178,7 +186,7 @@ class SearchComponent extends Component {
     const hasCoordinates = coordinates.length > 0;
 
     const alertMessage = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a point on the map.`;
-    const extentAlertMessage = 'Provided coordinates are outside of the map extent. Revise or try a different projection.';
+    const extentAlertMessage = 'Provided location is outside of the map extent. Revise or try a different projection.';
     const coordinateButtonGroupContainerClassName = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
     return (
       <>
