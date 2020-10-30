@@ -54,6 +54,12 @@
       top: 13px;
     }
   }
+  & svg.svg-inline--fa.fa-exclamation-triangle {
+    color: #d54e21;
+    position: absolute;
+    left: 8px;
+    top: 13px;
+  }
 }
 
 /* Geosearch Component */

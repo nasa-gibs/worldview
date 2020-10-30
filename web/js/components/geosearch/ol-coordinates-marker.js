@@ -6,7 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
-import getCoordinatesDialogAtMapPixel from './ol-coordinates-marker-util';
+import { getCoordinatesDialogAtMapPixel } from './ol-coordinates-marker-util';
 
 export class CoordinatesInteractions extends React.Component {
   constructor(props) {
