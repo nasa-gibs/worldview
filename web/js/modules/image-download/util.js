@@ -35,8 +35,9 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
  * @param {Object} dimensions
  * @param {Date} dateTime
  * @param {Boolean} isWorldfile
+ * @param {Array} markerCoordinates
  */
-export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile) {
+export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
   const { crs } = proj.selected;
   const layersArray = imageUtilGetLayers(layerDefs, proj.id);
   const layerWraps = imageUtilGetLayerWrap(layerDefs);
@@ -60,6 +61,9 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
   }
   if (isWorldfile) {
     params.push('WORLDFILE=true');
+  }
+  if (markerCoordinates.length > 0) {
+    params.push(`MARKER=${markerCoordinates[0]},${markerCoordinates[1]}`);
   }
   return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
