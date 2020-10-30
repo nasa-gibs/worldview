@@ -1,4 +1,1 @@
-As seen from this HLS grid, the project focuses on surface reflectance over land masses, but will also include coastal zones and inland water.
-
-
-(show HLS grid)
+As seen from this HLS grid, the project focuses on surface reflectance over land masses, but will also include coastal zones and inland water. Each grid cell represents an area with a potential satellite observation.
