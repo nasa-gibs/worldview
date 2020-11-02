@@ -34,29 +34,29 @@ export function tryCatchDate(str, initialState) {
  * Parse permalink date string and handle max dates if out of valid range or in future
  *
  * @method parsePermalinkDate
- * @param  {String} date string (now or nowMinusSevenDays if B side for compare mode)
+ * @param  {Object} date object (now or nowMinusSevenDays if B side for compare mode)
  * @param  {String} date string in querystring
  * @param  {String} layerParameters (A or B depending if compare mode is active)
  * @param  {Object} config object
  * @returns {Object} date object
  */
-export function parsePermalinkDate(defaultStr, str, layerParameters, config) {
-  let time = tryCatchDate(str, defaultStr);
+export function parsePermalinkDate(defaultDate, str, layerParameters, config) {
+  let time = tryCatchDate(str, defaultDate);
   if (time instanceof Date) {
     const startDate = new Date(config.startDate);
     if (time < startDate) {
       time = startDate;
-    } else if (time > defaultStr) {
+    } else if (time > defaultDate) {
       // get permalink layers
       const layersParsed = layersParse12(layerParameters, config);
       const layersDateRange = getDateRange({}, layersParsed);
-      // determine max date "defaultStr" or use permalink layer futureTime
+      // determine max date "defaultDate" or use permalink layer futureTime
       if (layersDateRange && layersDateRange.end) {
         if (time > layersDateRange.end) {
           time = layersDateRange.end;
         }
       } else {
-        time = defaultStr;
+        time = defaultDate;
       }
     }
   }
