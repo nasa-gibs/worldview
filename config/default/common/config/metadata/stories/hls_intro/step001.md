@@ -1,1 +1,1 @@
-For the past 10 years, Worldview has been providing daily, global, true color, surface reflectance imagery at 250 meter resolution and the time has come for a major update!
+Worldview has been providing daily, global, true color, surface reflectance imagery at 250 meter resolution and the time has come for a major update!

@@ -1,1 +1,1 @@
-Coastal - suspended sediments
+The HLS project focuses on retrieving surface reflectance over land masses (excluding Antarctica), but will also include coastal zones and inland water. Each grid cell shown here represents an area with a potential satellite observation.

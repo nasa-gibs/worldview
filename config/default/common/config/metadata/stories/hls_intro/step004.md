@@ -1,1 +1,2 @@
-This grid shows the areas of focus for this project, to retrieve surface reflectance over3 land masses, but will also include coastal zones and inland water. Each grid cell represents an area with a potential satellite observation.
+In order to retrieve the data at higher spatial resolution, there is a tradeoff with the temporal resolution. In comparison to MODIS, it takes 2 to 3 days for global coverage (Antarctica is excluded) and the swath width coverage is less wide.
+
