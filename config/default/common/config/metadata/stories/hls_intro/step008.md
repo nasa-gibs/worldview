@@ -1,1 +1,1 @@
-all the other cool examples and comparisons
+Three burned areas in Oregon are clearly visible in this image from 29 September 2020. Turn on and off the Sentinel 2A & B Reflectance layer to see difference between that layer and the Terra/MODIS Corrected Reflectance layer.

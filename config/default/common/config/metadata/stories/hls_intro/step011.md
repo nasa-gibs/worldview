@@ -1,0 +1,1 @@
+This image of Hong Kong's Chek Lap Kok Airport shows land reclamation under progress toward the north of the airport to create a new runway and passenger concourse for the airport expansion.

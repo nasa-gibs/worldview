@@ -1,0 +1,1 @@
+See agricultural fields turn from green to brown as they get plowed in Oklahoma between 29 September and 16 October 2020.
