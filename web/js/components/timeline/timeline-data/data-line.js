@@ -165,15 +165,15 @@ class DataLine extends PureComponent {
 }
 
 DataLine.propTypes = {
-  positionTransformX: PropTypes.number,
-  id: PropTypes.string,
-  options: PropTypes.object,
-  lineType: PropTypes.string,
-  startDate: PropTypes.string,
-  endDate: PropTypes.string,
   color: PropTypes.string,
-  layerPeriod: PropTypes.string,
+  endDate: PropTypes.string,
+  id: PropTypes.string,
   index: PropTypes.string,
+  layerPeriod: PropTypes.string,
+  lineType: PropTypes.string,
+  options: PropTypes.object,
+  positionTransformX: PropTypes.number,
+  startDate: PropTypes.string,
 };
 
 export default DataLine;

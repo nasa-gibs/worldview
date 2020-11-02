@@ -2,7 +2,9 @@ import { assign as lodashAssign, get } from 'lodash';
 import update from 'immutability-helper';
 import { encode } from './modules/link/util';
 // legacy crutches
-import { serializeDate, tryCatchDate, mapLocationToDateState } from './modules/date/util';
+import {
+  serializeDate, tryCatchDate, parsePermalinkDate, mapLocationToDateState,
+} from './modules/date/util';
 import {
   checkTourBuildTimestamp,
   mapLocationToTourState,
@@ -161,18 +163,7 @@ const getParameters = function(config, parameters) {
                 ? undefined
                 : serializeDate(currentItemState);
         },
-        parse: (str) => {
-          let time = tryCatchDate(str, now);
-          if (time instanceof Date) {
-            const startDate = new Date(config.startDate);
-            if (time < startDate) {
-              time = startDate;
-            } else if (time > now) {
-              time = now;
-            }
-          }
-          return time;
-        },
+        parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
       },
     },
     t1: {
@@ -195,7 +186,7 @@ const getParameters = function(config, parameters) {
             ? undefined
             : serializeDate(currentItemState || appNowMinusSevenDays);
         },
-        parse: (str) => tryCatchDate(str, nowMinusSevenDays),
+        parse: (str) => parsePermalinkDate(nowMinusSevenDays, str, parameters.l1, config),
       },
     },
     z: {

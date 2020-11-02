@@ -41,26 +41,32 @@ class LayerInfo extends React.Component {
   render() {
     const { layer, screenHeight } = this.props;
     const { metaData } = this.state;
-    const layerId = layer.id;
-    const hasLayerDateRange = layer.dateRanges && layer.dateRanges.length > 1;
-    const dateRanges = hasLayerDateRange
-      ? dateOverlap(layer.period, layer.dateRanges)
+    const {
+      dateRanges,
+      endDate,
+      id,
+      period,
+      startDate,
+    } = layer;
+    const hasLayerDateRange = dateRanges && dateRanges.length > 1
+      ? dateOverlap(period, dateRanges)
       : [];
+
     return (
       <div id="layer-description" className="layer-description">
-        {layer.startDate || layer.endDate ? (
+        {startDate || endDate ? (
           <div id="layer-date-range" className="layer-date-range">
-            <span id={`${layerId}-startDate`} className="layer-date-start">
-              {layer.startDate
+            <span id={`${id}-startDate`} className="layer-date-start">
+              {startDate
                 ? `Temporal coverage: ${
-                  configureTemporalDate('START-DATE', layer.startDate, layer.period)}`
+                  configureTemporalDate('START-DATE', startDate, period)}`
                 : ''}
             </span>
-            <span id={`${layerId}-endDate`} className="layer-date-end">
-              {layer.startDate && layer.endDate
+            <span id={`${id}-endDate`} className="layer-date-end">
+              {startDate && endDate
                 ? ` - ${
-                  configureTemporalDate('END-DATE', layer.endDate, layer.period)}`
-                : layer.startDate
+                  configureTemporalDate('END-DATE', endDate, period)}`
+                : startDate
                   ? ' - Present'
                   : ''}
             </span>

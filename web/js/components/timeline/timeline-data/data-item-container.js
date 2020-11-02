@@ -56,18 +56,17 @@ class DataItemContainer extends Component {
   */
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
-    const { inactive } = layer;
-
     const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
-      // multi time unit range - no year time unit
-      const endDateLimit = getMaxEndDate(inactive, isLastInRange);
+      // get max end date based on axis, appNow, and futureTime (if applicable)
+      const endDateLimit = getMaxEndDate(layer, isLastInRange);
       // get dates based on date ranges
-      const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
       const startDateTime = new Date(startDate).getTime();
       const endDateTime = new Date(endDate).getTime();
+      const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
+
       // add date intervals to mutliCoverageDates object to catch repeats
       dateIntervalStartDates.forEach((dateIntStartDate) => {
         const dateIntTime = new Date(dateIntStartDate).getTime();
@@ -109,6 +108,7 @@ class DataItemContainer extends Component {
       dataDateRanges,
     } = this.state;
 
+    // layer options
     const {
       endDate,
       id,
@@ -140,7 +140,7 @@ class DataItemContainer extends Component {
                 const { date, interval } = itemRange;
                 const dateObj = new Date(date);
                 const nextDate = array[multiIndex + 1];
-                const rangeDateEnd = getRangeDateEndWithAddedInterval(dateObj, layerPeriod, interval, nextDate);
+                const rangeDateEnd = getRangeDateEndWithAddedInterval(layer, dateObj, layerPeriod, interval, nextDate);
                 // get range line dimensions
                 const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, dateObj, rangeDateEnd);
                 // create DOM line element
@@ -158,7 +158,7 @@ class DataItemContainer extends Component {
                         endDate={rangeDateEnd}
                         color={lineBackgroundColor}
                         layerPeriod={layerPeriod}
-                        index={`${id}-${multiIndex}`}
+                        index={key}
                       />
                     </React.Fragment>
                   );

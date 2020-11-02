@@ -8,6 +8,10 @@ import {
 import {
   timeScaleOptions,
 } from '../../../modules/date/constants';
+import {
+  filterProjLayersWithStartDate,
+  getMaxLayerEndDates,
+} from '../../../modules/date/util';
 import Scrollbars from '../../util/scrollbar';
 import Switch from '../../util/switch';
 import DataItemList from './data-item-list';
@@ -123,6 +127,9 @@ class TimelineData extends Component {
       timeScale,
       timelineStartDateLimit,
     } = this.props;
+    const {
+      endDate, futureTime, startDate, inactive,
+    } = layer;
 
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
     const axisFrontDate = new Date(frontDate).getTime();
@@ -130,13 +137,15 @@ class TimelineData extends Component {
     let layerStart;
     let layerEnd;
 
-    if (rangeStart || layer.startDate) {
-      layerStart = new Date(rangeStart || layer.startDate).getTime();
+    if (rangeStart || startDate) {
+      layerStart = new Date(rangeStart || startDate).getTime();
     } else {
       layerStart = new Date(timelineStartDateLimit).getTime();
     }
-    if (rangeEnd || layer.inactive === true) {
-      layerEnd = new Date(rangeEnd || layer.endDate).getTime();
+    if (rangeEnd || inactive === true) {
+      layerEnd = new Date(rangeEnd || endDate).getTime();
+    } else if (futureTime && endDate) {
+      layerEnd = new Date(endDate).getTime();
     } else {
       layerEnd = new Date(appNow).getTime();
     }
@@ -234,7 +243,7 @@ class TimelineData extends Component {
         }
       }
       // for each end date, find earliest that is still after start date
-      const endDates = layers.reduce((acc, x) => (x.endDate ? acc.concat(x.endDate) : acc), []);
+      const endDates = getMaxLayerEndDates(layers, appNow);
       for (let i = 0; i < endDates.length; i += 1) {
         const date = new Date(endDates[i]);
         if (i === 0) {
@@ -367,7 +376,7 @@ function mapStateToProps(state) {
   // handle active layer filtering
   const activeLayers = layers[compare.activeString];
   const projection = proj.id;
-  const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
+  const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
 
   const { hoveredLayer } = layers;
   const isProductPickerOpen = modal.isOpen && modal.id === 'LAYER_PICKER_COMPONENT';

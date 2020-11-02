@@ -8,6 +8,7 @@ import {
   dateRange,
   pushToBottom,
   moveBefore,
+  getFutureLayerEndDate,
 } from './selectors';
 
 const config = fixtures.config();
@@ -371,4 +372,28 @@ test('no date range with static', () => {
   const range = dateRange({}, layers, state.config);
 
   expect(range).toBeFalsy();
+});
+
+test('get future layer end date is 5 days after mock current date', () => {
+  const testLayer = { futureTime: '5D' };
+  // current date floored to quarter hour
+  const currentDate = util.roundTimeQuarterHour(new Date());
+  // test date to comopare is floored to quarter hour and added 5 days using util
+  const testDate = util.dateAdd(util.roundTimeQuarterHour(new Date()), 'day', 5);
+  const futureEndDate = getFutureLayerEndDate(testLayer);
+
+  const testDateMinutes = testDate.getUTCMinutes();
+  const testDateHours = testDate.getUTCHours();
+  const testDateDays = testDate.getUTCDate();
+
+  const minutesCompareFuture = futureEndDate.getUTCMinutes();
+  const hoursCompareFuture = futureEndDate.getUTCHours();
+  const daysCompareFuture = futureEndDate.getUTCDate();
+
+  // check that future date time is greater than current time (ms)
+  expect(futureEndDate.getTime()).toBeGreaterThan(currentDate.getTime());
+  // check for equality of unchanged date units (minutes/hours) and changed (days)
+  expect(testDateMinutes).toEqual(minutesCompareFuture);
+  expect(testDateHours).toEqual(hoursCompareFuture);
+  expect(testDateDays).toEqual(daysCompareFuture);
 });

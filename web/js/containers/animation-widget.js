@@ -44,6 +44,7 @@ import {
 import {
   hasSubDaily as hasSubDailySelector,
   getLayers,
+  dateRange as getDateRange,
 } from '../modules/layers/selectors';
 import {
   play,
@@ -128,8 +129,15 @@ class AnimationWidget extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { userHasMovedWidget } = this.state;
-    const { subDailyMode, screenWidth } = this.props;
+    const {
+      appNow, hasFutureLayers, onUpdateEndDate, subDailyMode, screenWidth,
+    } = this.props;
     const subdailyChange = subDailyMode !== prevProps.subDailyMode;
+
+    // handle removing futureTime layer to stop animation/update end date range
+    if (prevProps.hasFutureLayers && !hasFutureLayers) {
+      onUpdateEndDate(appNow);
+    }
 
     // If toggling between subdaily/regular mode and widget hasn't been manually moved
     // yet, try to keep it centered
@@ -671,13 +679,21 @@ function mapStateToProps(state) {
     { proj: proj.id },
     state,
   );
+  const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
+  const layerDateRange = getDateRange({}, activeLayersForProj);
   const activePalettes = palettes[activeStr];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
     activePalettes,
   );
   const minDate = new Date(config.startDate);
-  const maxDate = appNow;
+  let maxDate;
+  if (layerDateRange && layerDateRange.end > appNow) {
+    maxDate = layerDateRange.end;
+  } else {
+    maxDate = appNow;
+  }
+
   const animationIsActive = isActive
     && browser.greaterThan.small
     && lodashGet(map, 'ui.selected.frameState_')
@@ -701,6 +717,7 @@ function mapStateToProps(state) {
   );
   const { rotation } = map;
   return {
+    appNow,
     screenWidth: browser.screenWidth,
     animationCustomModalOpen,
     customSelected,
@@ -711,6 +728,7 @@ function mapStateToProps(state) {
     minDate,
     maxDate,
     isActive: animationIsActive,
+    hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
     delta: customSelected && customDelta ? customDelta : delta,
@@ -824,6 +842,7 @@ RangeHandle.propTypes = {
   value: PropTypes.number,
 };
 AnimationWidget.propTypes = {
+  appNow: PropTypes.object,
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
   changeCustomInterval: PropTypes.func,
@@ -834,6 +853,7 @@ AnimationWidget.propTypes = {
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasCustomPalettes: PropTypes.bool,
+  hasFutureLayers: PropTypes.bool,
   hasGraticule: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,

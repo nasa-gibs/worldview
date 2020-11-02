@@ -86,21 +86,27 @@ class Layer extends React.Component {
   }
 
   getDisabledTitle = (layer) => {
-    let startDate; let
-      endDate;
+    const {
+      endDate,
+      period,
+      startDate,
+    } = layer;
 
-    if (layer.startDate) {
-      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
+    // start date
+    let layerStartDate;
+    if (startDate) {
+      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
+    }
+    // end date
+    let layerEndDate;
+    if (layerEndDate) {
+      layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
     }
 
-    if (layer.endDate) {
-      endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
-    }
-
-    if (startDate && endDate) {
-      return `Data available between ${startDate} - ${endDate}`;
-    } if (startDate) {
-      return `Data available between ${startDate} - Present`;
+    if (layerStartDate && layerEndDate) {
+      return `Data available between ${layerStartDate} - ${layerEndDate}`;
+    } if (layerStartDate) {
+      return `Data available between ${layerStartDate} - Present`;
     }
     return 'No data on selected date for this layer';
   }

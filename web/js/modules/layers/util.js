@@ -13,7 +13,9 @@ import {
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
-import { addLayer, resetLayers } from './selectors';
+import {
+  addLayer, resetLayers, getFutureLayerEndDate,
+} from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
@@ -640,6 +642,7 @@ const getSubdailyDateRange = ({
 export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
   const {
     dateRanges,
+    futureTime,
     period,
     inactive,
   } = def;
@@ -726,7 +729,11 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
       }
       // set maxDate to current date if layer coverage is ongoing
       if (index === dateRanges.length - 1 && !inactive) {
-        maxDate = new Date(appNow);
+        if (futureTime) {
+          maxDate = new Date(endDate);
+        } else {
+          maxDate = new Date(appNow);
+        }
       }
     }
 
@@ -1287,4 +1294,48 @@ export function adjustStartDates(layers) {
   };
 
   return Object.values(layers).forEach(applyDateAdjustment);
+}
+
+/**
+ * Change end dates for future layers to add 'futureTime' (ex: '3D')
+ * Adjust def.endDate and, if applicable, the last endDate in dateRange object
+ *
+ * @method adjustEndDates
+ * @param  {Array} layers array
+ * @returns {Array} array of layers
+ */
+export function adjustEndDates(layers) {
+  const applyDateAdjustment = (layer) => {
+    const { futureTime, dateRanges } = layer;
+    if (!futureTime) {
+      return;
+    }
+
+    const futureEndDate = getFutureLayerEndDate(layer);
+    layer.endDate = util.toISOStringSeconds(futureEndDate);
+
+    if (dateRanges.length) {
+      const lastDateRange = dateRanges[dateRanges.length - 1];
+      lastDateRange.endDate = util.toISOStringSeconds(futureEndDate);
+    }
+  };
+
+  return Object.values(layers).forEach(applyDateAdjustment);
+}
+
+/**
+ * Add mockFutureTime value to target layer object futureTime key
+ *
+ * @method mockFutureTimeLayerOptions
+ * @param  {Array} layers array
+ * @param  {String} mockFutureLayerParameters 'targetLayerId, mockFutureTime'
+ * @returns {Void}
+ */
+export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
+  const urlParameters = mockFutureLayerParameters.split(',');
+  const [targetLayerId, mockFutureTime] = urlParameters;
+
+  if (targetLayerId && mockFutureTime && layers[targetLayerId]) {
+    layers[targetLayerId].futureTime = mockFutureTime;
+  }
 }

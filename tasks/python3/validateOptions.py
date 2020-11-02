@@ -143,7 +143,7 @@ for layer_id in list(wv["layers"].keys()):
     if layer.get("futureTime"):
         if "endDate" in layer:
            del layer["endDate"]
-    if layer.get("inactive", False) or layer.get("futureLayer", False):
+    if layer.get("inactive", False) or layer.get("futureTime", False):
         pass
     else:
         if "endDate" in layer:

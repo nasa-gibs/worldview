@@ -44,9 +44,14 @@ module.exports = {
   },
 
   // verify default right arrow disabled since loaded on current day
-  'Right timeline arrow will be disabled by default': (client) => {
+  'Right timeline arrow will be disabled by default - unless past 00:00 UTC but before 04:00': (client) => {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
-    client.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
+    // accomodate for config.initialDate past 00:00 UTC but before 04:00
+    if (new Date().getUTCHours() < 3) {
+      client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+    } else {
+      client.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
+    }
   },
 
   // verify valid right arrow enabled since NOT loaded on current day
@@ -112,6 +117,17 @@ module.exports = {
     client.assert.attributeContains(dateSelectorDayInput, 'value', '28');
     client.assert.attributeContains(dateSelectorMonthInput, 'value', 'FEB');
     client.assert.attributeContains(dateSelectorYearInput, 'value', '2013');
+  },
+
+  // verify right timeline arrow is not disabled for future date
+  'Added future layer and right timeline arrow is not disabled': (client) => {
+    client.url(`${client.globals.url}?mockFutureLayer=VIIRS_SNPP_CorrectedReflectance_TrueColor,3D`);
+    client.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
+    client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+    client.click('#right-arrow-group');
+    client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+    client.click('#right-arrow-group');
+    client.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
   },
 
   after: (client) => {

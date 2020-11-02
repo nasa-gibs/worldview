@@ -91,14 +91,16 @@ class DataItemList extends Component {
 
   /**
   * @desc get range date end with added interval based on period
+  * @param {Object} layer def object
   * @param {Object} range date object
   * @param {String} time unit period
   * @param {Number} itemRangeInterval
   * @param {Object} nextDate range object with date
   * @returns {String} rangeDateEnd date ISO string
   */
-  getRangeDateEndWithAddedInterval = (rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
+  getRangeDateEndWithAddedInterval = (layer, rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
     const { appNow } = this.props;
+    const { endDate, futureTime } = layer;
     const {
       minYear,
       minMonth,
@@ -132,7 +134,13 @@ class DataItemList extends Component {
     }
     // prevent range end exceeding appNow
     if (appNow < rangeDateEnd) {
-      rangeDateEnd = appNow;
+      if (futureTime) {
+        rangeDateEnd = new Date(endDate) > rangeDateEnd
+          ? rangeDateEnd
+          : new Date(endDate);
+      } else {
+        rangeDateEnd = appNow;
+      }
     }
     return new Date(rangeDateEnd).toISOString();
   }
@@ -144,7 +152,9 @@ class DataItemList extends Component {
   */
   getFormattedDateRange = (layer) => {
     // get start date -or- 'start'
-    const { endDate, startDate } = layer;
+    const {
+      endDate, startDate,
+    } = layer;
     let dateRangeStart;
     if (startDate) {
       const yearMonthDaySplit = startDate.split('T')[0].split('-');
@@ -180,28 +190,35 @@ class DataItemList extends Component {
 
   /**
   * @desc get endDateLimit based on axis and appNow
-  * @param {Boolean} layer inactive
+  * @param {Object} layer def object
   * @param {Boolean} isLastInRange
   * @returns {Object} endDateLimit date object
   */
-  getMaxEndDate = (inactive, isLastInRange) => {
+  getMaxEndDate = (layer, isLastInRange) => {
     const {
       appNow,
       backDate,
     } = this.props;
+    const { endDate, futureTime, inactive } = layer;
 
     let endDateLimit = new Date(backDate);
+    const layerEndDate = new Date(endDate);
     const appNowDate = new Date(appNow);
     // appNow will override max range endDate
-    if (appNowDate < endDateLimit) {
+    if (endDateLimit > appNowDate && !futureTime) {
       endDateLimit = appNowDate;
     }
     // if last date of multiple ranges check for endDate over appNow date
     if (!inactive && isLastInRange) {
-      if (endDateLimit > appNowDate) {
+      if (futureTime && endDate) {
+        if (endDateLimit > layerEndDate) {
+          endDateLimit = layerEndDate;
+        }
+      } else if (endDateLimit > appNowDate) {
         endDateLimit = appNowDate;
       }
     }
+
     return endDateLimit;
   }
 
@@ -219,8 +236,9 @@ class DataItemList extends Component {
       backDate,
       frontDate,
     } = this.props;
-
-    const { period, id, inactive } = def;
+    const {
+      futureTime, period, id, inactive,
+    } = def;
     const { dateInterval, startDate, endDate } = range;
 
     const layerPeriod = this.getFormattedTimePeriod(period);
@@ -243,7 +261,11 @@ class DataItemList extends Component {
     // rangeEnd for last time coverage section of active layers can't be greater than appNow
     const appNowDate = new Date(appNow);
     if (!inactive && isLastInRange) {
-      rangeEnd = appNowDate;
+      if (futureTime) {
+        rangeEnd = new Date(endDate);
+      } else {
+        rangeEnd = appNowDate;
+      }
     }
 
     // get dates within given date range
@@ -382,7 +404,8 @@ class DataItemList extends Component {
           const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1;
           // determine date range building vs using startDate to endDate single coverage
           const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage));
-          const key = index;
+          const encodedId = util.encodeId(id);
+          const key = `data-item-${encodedId}-${index}`;
 
           return (
             <div

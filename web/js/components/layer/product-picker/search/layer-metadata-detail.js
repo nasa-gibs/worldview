@@ -79,29 +79,36 @@ class LayerMetadataDetail extends React.Component {
      * @return {string}       Return a string with temporal range information
      */
   dateRangeText = (layer) => {
-    let startDate;
+    const {
+      endDate,
+      id,
+      inactive,
+      period,
+      startDate,
+    } = layer;
+    let layerStartDate;
     let startDateId;
-    let endDate;
+    let layerEndDate;
     let endDateId;
 
-    if (layer.startDate) {
-      startDateId = `${layer.id}-startDate`;
-      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
+    if (startDate) {
+      startDateId = `${id}-startDate`;
+      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
     }
-    if (layer.endDate) {
-      endDateId = `${layer.id}-endDate`;
-      endDate = util.parseDate(layer.endDate);
-      if (endDate <= util.today() && !layer.inactive) {
-        endDate = 'Present';
+    if (endDate) {
+      endDateId = `${id}-endDate`;
+      layerEndDate = util.parseDate(endDate);
+      if (layerEndDate <= util.today() && !inactive) {
+        layerEndDate = 'Present';
       } else {
-        endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
+        layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
       }
     } else {
-      endDate = 'Present';
+      layerEndDate = 'Present';
     }
     return `Temporal coverage:
-          <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
-          <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>`;
+          <span class="layer-date-start" id='${startDateId}'> ${layerStartDate} </span> -
+          <span class="layer-end-date" id='${endDateId}'> ${layerEndDate} </span>`;
   }
 
   renderLayerDates() {

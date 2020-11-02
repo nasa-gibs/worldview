@@ -34,6 +34,7 @@ import {
   getISODateFormatted,
 } from '../../components/timeline/date-util';
 import {
+  dateRange as getDateRange,
   hasSubDaily,
 } from '../../modules/layers/selectors';
 import {
@@ -44,6 +45,9 @@ import {
   updateAppNow,
   toggleCustomModal,
 } from '../../modules/date/actions';
+import {
+  filterProjLayersWithStartDate,
+} from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
   onActivate as openAnimation,
@@ -58,6 +62,7 @@ import {
   timeScaleOptions,
   customModalType,
 } from '../../modules/date/constants';
+import util from '../../util/util';
 
 const ANIMATION_DELAY = 500;
 const preventDefaultFunc = (e) => {
@@ -970,6 +975,7 @@ class Timeline extends React.Component {
       activeLayers,
       dateA,
       dateB,
+      hasFutureLayers,
       hasSubdailyLayers,
       draggerSelected,
       leftArrowDisabled,
@@ -1198,6 +1204,7 @@ class Timeline extends React.Component {
                         animStartLocationDate={animStartLocationDate}
                         animEndLocationDate={animEndLocationDate}
                         debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
+                        onDateChange={this.onDateChange}
                         updatePositioning={this.updatePositioning}
                         updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
                         updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
@@ -1206,6 +1213,7 @@ class Timeline extends React.Component {
                         showHoverOn={this.showHoverOn}
                         showHoverOff={this.showHoverOff}
                         showHover={this.showHover}
+                        hasFutureLayers={hasFutureLayers}
                         hasSubdailyLayers={hasSubdailyLayers}
                         isCompareModeActive={isCompareModeActive}
                         isAnimationPlaying={isAnimationPlaying}
@@ -1388,10 +1396,27 @@ function mapStateToProps(state) {
   // handle active layer filtering and check for subdaily
   const activeLayers = layers[compare.activeString];
   const projection = proj.id;
-  const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
+  const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
   const hasSubdailyLayers = isCompareModeActive
     ? hasSubDaily(layers.active) || hasSubDaily(layers.activeB)
     : hasSubDaily(activeLayers);
+
+  // if future layers are included, timeline axis end date will extend past appNow
+  let hasFutureLayers;
+  if (isCompareModeActive) {
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB, proj.id);
+    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
+  } else {
+    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime).length > 0;
+  }
+
+  let timelineEndDateLimit;
+  if (hasFutureLayers) {
+    timelineEndDateLimit = getTimelineEndDateLimit(state);
+  } else {
+    timelineEndDateLimit = getISODateFormatted(appNow);
+  }
 
   let updatedInterval = interval;
   let updatedCustomInterval = customInterval;
@@ -1413,8 +1438,6 @@ function mapStateToProps(state) {
     screenWidth,
     hasSubdailyLayers,
   );
-  const timelineEndDateLimit = getISODateFormatted(appNow);
-
   const selectedDate = isCompareA ? selected : selectedB;
   const deltaChangeAmt = customSelected ? customDelta : delta;
   const timeScaleChangeUnit = customSelected
@@ -1444,6 +1467,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     customSelected,
     isCompareModeActive,
+    hasFutureLayers,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
     timelineStartDateLimit: config.startDate, // same as startDate
@@ -1545,6 +1569,7 @@ Timeline.propTypes = {
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
   draggerSelected: PropTypes.string,
+  hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hideTimeline: PropTypes.bool,
   isAnimationPlaying: PropTypes.bool,
@@ -1662,4 +1687,37 @@ const checkRightArrowDisabled = (
   const nextIncrementDateTime = nextIncrementDate.getTime();
   const maxPlusDeltaDateTime = maxPlusDeltaDate.getTime();
   return nextIncrementDateTime >= maxPlusDeltaDateTime;
+};
+
+// get timelineEndDateLimit based on potential future layers
+const getTimelineEndDateLimit = (state) => {
+  const {
+    date, layers, compare, proj,
+  } = state;
+  const { appNow } = date;
+  const activeLayers = layers[compare.activeString];
+
+  let layerDateRange;
+  if (compare.active) {
+    // use all layers to keep timeline axis range consistent when switching between A/B
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB, proj.id);
+    layerDateRange = getDateRange({}, [...compareALayersFiltered, ...compareBLayersFiltered]);
+  } else {
+    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
+    layerDateRange = getDateRange({}, activeLayersFiltered);
+  }
+
+  let timelineEndDateLimit;
+  if (layerDateRange && layerDateRange.end > appNow) {
+    const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
+    const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);
+    if (layerDateRangeEndRoundedQuarterHour.getTime() > appNowRoundedQuarterHour.getTime()) {
+      // if layerDateRange.end is after the set rounded quarter hour time, then update
+      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndRoundedQuarterHour);
+    }
+  } else {
+    timelineEndDateLimit = getISODateFormatted(appNow);
+  }
+  return timelineEndDateLimit;
 };

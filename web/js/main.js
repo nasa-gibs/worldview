@@ -36,7 +36,9 @@ import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
   validate as layerValidate,
   layersParse12,
+  adjustEndDates,
   adjustStartDates,
+  mockFutureTimeLayerOptions,
 } from './modules/layers/util';
 import { debugConfig } from './debug';
 import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
@@ -172,7 +174,11 @@ window.onload = () => {
     const legacyState = parse(parameters, config, errors);
     layerValidate(errors, config);
     adjustStartDates(config.layers);
-
+    // handle add mock future time to provided layer id
+    if (parameters.mockFutureLayer) {
+      mockFutureTimeLayerOptions(config.layers, parameters.mockFutureLayer);
+    }
+    adjustEndDates(config.layers);
     // Remove any mock stories
     if (!parameters.mockTour) {
       Object.keys(config.stories).forEach((storyId) => {
@@ -182,7 +188,6 @@ window.onload = () => {
         }
       });
     }
-
     preloadPalettes(layers, {}, false).then((obj) => {
       config.palettes = {
         custom: obj.custom,
