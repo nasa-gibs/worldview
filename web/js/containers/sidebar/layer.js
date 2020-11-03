@@ -7,10 +7,6 @@ import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes, faSlidersH, faInfo, faBan, faHandPointer,
-} from '@fortawesome/free-solid-svg-icons';
-import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
 import {
@@ -136,7 +132,7 @@ class Layer extends React.Component {
           className="button wv-layers-close"
           onClick={() => onRemoveClick(layer.id)}
         >
-          <FontAwesomeIcon icon={faTimes} fixedWidth />
+          <FontAwesomeIcon icon="times" fixedWidth />
         </a>
         <a
           title={`Layer options for ${title}`}
@@ -144,7 +140,7 @@ class Layer extends React.Component {
           onMouseDown={this.stopPropagation}
           onClick={() => onOptionsClick(layer, title)}
         >
-          <FontAwesomeIcon icon={faSlidersH} className="wv-layers-options-icon" />
+          <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
         </a>
         <a
           title={`Layer description for ${title}`}
@@ -152,7 +148,7 @@ class Layer extends React.Component {
           onMouseDown={this.stopPropagation}
           onClick={() => onInfoClick(layer, title)}
         >
-          <FontAwesomeIcon icon={faInfo} className="wv-layers-info-icon" />
+          <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
         </a>
       </>
     );
@@ -172,7 +168,7 @@ class Layer extends React.Component {
       <div title={title} className={runningObject ? `${clasNames} running` : clasNames} onClick={openVectorAlertModal}>
         {' '}
         <FontAwesomeIcon
-          icon={faHandPointer}
+          icon="hand-pointer"
           fixedWidth
         />
       </div>
@@ -216,10 +212,10 @@ class Layer extends React.Component {
         ? this.getDisabledTitle(layer)
         : 'Hide Layer';
     const visibilityIconClass = isDisabled
-      ? faBan
+      ? 'ban'
       : !isVisible
-        ? faEyeSlash
-        : faEye;
+        ? ['far', 'eye-slash']
+        : ['far', 'eye'];
 
     return (
       <Draggable

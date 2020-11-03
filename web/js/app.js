@@ -22,6 +22,7 @@ import Brand from './brand';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
+import './font-awesome-library';
 
 // actions
 import Tour from './containers/tour';

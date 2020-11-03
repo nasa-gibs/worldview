@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faVideo } from '@fortawesome/free-solid-svg-icons';
 
 class AnimationButton extends PureComponent {
   render() {
@@ -14,7 +12,7 @@ class AnimationButton extends PureComponent {
         title={title || 'Set up animation'}
       >
         <div id="animate-button" onClick={clickAnimationButton}>
-          <FontAwesomeIcon icon={faVideo} className="wv-animate" size="3x" />
+          <FontAwesomeIcon icon="video" className="wv-animate" size="3x" />
         </div>
       </div>
     );

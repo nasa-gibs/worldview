@@ -2,17 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 import { Portal } from 'react-portal';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faLayerGroup, faTimes, faRuler, faExclamationTriangle,
-} from '@fortawesome/free-solid-svg-icons';
-
-// icons used with alert by passing string as prop iconClassName
-const alertIcons = {
-  faRuler,
-  faLayerGroup,
-};
 
 /*
  * A react component, Builds a rather specific
@@ -52,9 +42,7 @@ export default class AlertUtil extends React.Component {
       onClick,
     } = this.props;
 
-    const icon = iconClassName
-      ? alertIcons[iconClassName] || faExclamationTriangle
-      : faExclamationTriangle;
+    const icon = iconClassName || 'exclamation-triangle';
     return (
       <Alert
         id={id}
@@ -73,7 +61,7 @@ export default class AlertUtil extends React.Component {
         </div>
         {onDismiss && (
           <div id={`${id}-close`} className="close-alert" onClick={onDismiss}>
-            <FontAwesomeIcon icon={faTimes} className="exit" size="1x" />
+            <FontAwesomeIcon icon="times" className="exit" size="1x" />
           </div>
         )}
       </Alert>

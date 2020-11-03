@@ -1,9 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const TourIntro = (props) => (
   <div className="tour-intro">
@@ -13,7 +11,7 @@ const TourIntro = (props) => (
       {' '}
       <a href="#" title="Start using Worldview" onClick={props.toggleModalStart}>
         Start using Worldview
-        <FontAwesomeIcon icon={faArrowRight} />
+        <FontAwesomeIcon icon="arrow-right" />
       </a>
     </p>
   </div>

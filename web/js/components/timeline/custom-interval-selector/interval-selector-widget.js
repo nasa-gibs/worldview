@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import DeltaInput from './delta-input';
 import TimeScaleSelect from './interval-select';
 import {
@@ -75,7 +74,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>
-        <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={closeModal} />
+        <FontAwesomeIcon icon="times" className="wv-close" onClick={closeModal} />
       </div>
     );
   }

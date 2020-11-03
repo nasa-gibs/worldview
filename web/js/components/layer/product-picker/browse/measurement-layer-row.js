@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { ListGroupItem, UncontrolledTooltip } from 'reactstrap';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { available, getActiveLayers } from '../../../../modules/layers/selectors';
 import Checkbox from '../../../util/checkbox';
 import {
@@ -59,8 +58,8 @@ function MeasurementLayerRow (props) {
         label={title}
         classNames="settings-check"
       >
-        {layerIsUnavailable && (<FontAwesomeIcon icon={faBan} id="availability-info" />)}
-        {layerNotices && (<FontAwesomeIcon icon={faExclamationTriangle} id="notice-info" />)}
+        {layerIsUnavailable && (<FontAwesomeIcon icon="ban" id="availability-info" />)}
+        {layerNotices && (<FontAwesomeIcon icon="exclamation-triangle" id="notice-info" />)}
         {(layerNotices || layerIsUnavailable) && (
           <UncontrolledTooltip
             target={itemElementId}

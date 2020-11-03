@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMap, faMeteor } from '@fortawesome/free-solid-svg-icons';
 import util from '../../../../util/util';
 import { getMeasurementSource } from '../../../../modules/product-picker/selectors';
 
@@ -85,7 +84,7 @@ class MeasurementMetadataDetail extends React.Component {
     if (!isMobile && !source) {
       return (
         <div className="no-results">
-          <FontAwesomeIcon icon={faMap} />
+          <FontAwesomeIcon icon="map" />
           <h3>{categoryTitle}</h3>
           <h5> Select a measurement to view details here!</h5>
         </div>
@@ -96,7 +95,7 @@ class MeasurementMetadataDetail extends React.Component {
     if (!description) {
       return (
         <div className="no-results">
-          <FontAwesomeIcon icon={faMeteor} />
+          <FontAwesomeIcon icon="meteor" />
           <h3> No metadata found. </h3>
         </div>
       );

@@ -25,7 +25,7 @@ class NavCase extends React.Component {
           id="download"
           iconClassName="icon-download"
           disabled={!!isCompareMode}
-          title={
+          label={
             isCompareMode
               ? 'You must exit comparison mode to download data'
               : 'Data download'

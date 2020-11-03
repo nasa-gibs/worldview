@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 const Steps = (props) => {
   const {
@@ -15,7 +13,7 @@ const Steps = (props) => {
         aria-label="Previous"
         onClick={decreaseStep}
       >
-        <FontAwesomeIcon icon={faArrowCircleLeft} />
+        <FontAwesomeIcon icon="arrow-circle-left" />
       </a>
       <div className="step-counter">
         <p>
@@ -32,8 +30,8 @@ const Steps = (props) => {
         onClick={incrementStep}
       >
         {currentStep === totalSteps
-          ? <FontAwesomeIcon icon={faCheckCircle} />
-          : <FontAwesomeIcon icon={faArrowCircleRight} />}
+          ? <FontAwesomeIcon icon="check-circle" />
+          : <FontAwesomeIcon icon="arrow-circle-right" />}
       </a>
     </div>
   );

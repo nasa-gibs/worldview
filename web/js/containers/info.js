@@ -41,10 +41,10 @@ function InfoList (props) {
       iconClass: 'ui-icon',
       // eslint-disable-next-line no-nested-ternary
       iconName: type === 'message'
-        ? 'faGift'
+        ? 'gift'
         : type === 'outage'
-          ? 'faExclamationCircle'
-          : 'faBolt',
+          ? 'exclamation-circle'
+          : ['fas', 'bolt'],
       id: 'notifications_info_item',
       badge: number,
       className: type ? `${type}-notification` : '',
@@ -58,7 +58,7 @@ function InfoList (props) {
     const distractionFreeObj = {
       text: isDistractionFreeModeActive ? 'Exit Distraction Free' : 'Distraction Free',
       iconClass: 'ui-icon',
-      iconName: 'faEye',
+      iconName: ['far', 'eye'],
       id: 'distraction_free_info_item',
       onClick: () => {
         toggleDistractionFreeMode();
@@ -76,28 +76,28 @@ function InfoList (props) {
         {
           text: 'Send feedback',
           iconClass: 'ui-icon',
-          iconName: 'faEnvelope',
+          iconName: 'envelope',
           id: 'send_feedback_info_item',
           ...feedbackAction,
         },
         {
           text: 'Source Code',
           iconClass: 'ui-icon',
-          iconName: 'faCode',
+          iconName: 'code',
           id: 'source_code_info_item',
           href: 'https://github.com/nasa-gibs/worldview',
         },
         {
           text: 'What\'s new',
           iconClass: 'ui-icon',
-          iconName: 'faFlag',
+          iconName: 'flag',
           id: 'whats_new_info_item',
           href: 'https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS',
         },
         {
           text: 'About',
           iconClass: 'ui-icon',
-          iconName: 'faFile',
+          iconName: 'file',
           id: 'about_info_item',
           onClick: () => {
             aboutClick();
@@ -115,7 +115,7 @@ function InfoList (props) {
           const exploreWorlviewObj = {
             text: 'Explore Worldview',
             iconClass: 'ui-icon',
-            iconName: 'faTruck',
+            iconName: 'truck',
             id: 'start_tour_info_item',
             onClick: () => {
               startTour(isTourActive);

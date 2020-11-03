@@ -1,19 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBolt,
-  faExclamationCircle,
-  faGift,
-} from '@fortawesome/free-solid-svg-icons';
 import util from '../../util/util';
 
 // icons used with NotificationBlock by passing string as prop type
 const listIcons = {
-  alert: faBolt,
-  message: faGift,
-  outage: faExclamationCircle,
+  alert: ['fas', 'bolt'],
+  message: 'gift',
+  outage: 'exclamation-circle',
 };
 
 const NotificationBlock = (props) => {

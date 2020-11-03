@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSatellite } from '@fortawesome/free-solid-svg-icons';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import {
   getPalette,
@@ -47,7 +46,7 @@ class OrbitTrack extends React.Component {
     return (
       <div className={containerClasses}>
         {hasPalette ? this.getPaletteLegend() : ''}
-        <FontAwesomeIcon icon={faSatellite} />
+        <FontAwesomeIcon icon="satellite" />
         <span className="wv-orbit-track-label">
           {getOrbitTrackTitle(trackLayer)}
         </span>

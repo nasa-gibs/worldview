@@ -2,13 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMinus,
-  faPlus,
-  faGlobeAmericas,
-} from '@fortawesome/free-solid-svg-icons';
 import util from '../../../../util/util';
 import { dateOverlap } from '../../../../modules/layers/util';
 import {
@@ -162,7 +156,7 @@ class LayerMetadataDetail extends React.Component {
       ? (<RecentLayersInfo />)
       : (
         <div className="no-results">
-          <FontAwesomeIcon icon={faGlobeAmericas} />
+          <FontAwesomeIcon icon="globe-americas" />
           <h3> No layer selected. </h3>
           <h5> Select a layer to view details here!</h5>
         </div>
@@ -180,14 +174,14 @@ class LayerMetadataDetail extends React.Component {
     const previewUrl = `images/layers/previews/${selectedProjection}/${layer.id}.jpg`;
     const buttonText = isActive ? 'Remove Layer' : 'Add Layer';
     const btnClass = isActive ? 'add-to-map-btn text-center is-active' : 'add-to-map-btn text-center';
-    const btnIconClass = isActive ? faMinus : faPlus;
+    const btnIconClass = isActive ? 'minus' : 'plus';
     return (
       <div className="layers-all-layer">
         <div className="layers-all-header">
           <RenderSplitLayerTitle layer={layer} />
-          {/* NOTE - NEED TO ADD faChevronDown TO FONT AWESOME IMPORT ABOVE FROM '@fortawesome/free-solid-svg-icons'
+          {/*
             <Button className="close-details" onClick={() => selectLayer(null)}>
-              <FontAwesomeIcon icon={faChevronDown} />
+              <FontAwesomeIcon icon="chevron-down" />
             </Button>
           */}
         </div>

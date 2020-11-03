@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRuler } from '@fortawesome/free-solid-svg-icons';
 import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
@@ -66,7 +65,7 @@ class MeasureButton extends React.Component {
         <AlertUtil
           id="measurement-alert"
           isOpen
-          iconClassName="faRuler"
+          iconClassName="ruler"
           title="Measure Tool"
           message={message}
           onDismiss={this.dismissAlert}
@@ -82,7 +81,7 @@ class MeasureButton extends React.Component {
           onMouseDown={this.onButtonClick}
           disabled={isActive}
         >
-          <FontAwesomeIcon icon={faRuler} size="2x" />
+          <FontAwesomeIcon icon="ruler" size="2x" />
         </Button>
       </>
     );

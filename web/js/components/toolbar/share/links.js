@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { faFacebookF, faTwitter, faRedditAlien } from '@fortawesome/free-brands-svg-icons';
 
 class ShareLinks extends React.Component {
   onClick(event, type) {
@@ -21,7 +18,7 @@ class ShareLinks extends React.Component {
           onClick={(e) => this.onClick(e, 'facebook')}
           title="Share via Facebook!"
         >
-          <FontAwesomeIcon icon={faFacebookF} />
+          <FontAwesomeIcon icon={['fab', 'facebook-f']} />
         </a>
         <a
           id="tw-share"
@@ -29,7 +26,7 @@ class ShareLinks extends React.Component {
           onClick={(e) => this.onClick(e, 'twitter')}
           title="Share via Twitter!"
         >
-          <FontAwesomeIcon icon={faTwitter} />
+          <FontAwesomeIcon icon={['fab', 'twitter']} />
         </a>
         <a
           id="rd-share"
@@ -37,7 +34,7 @@ class ShareLinks extends React.Component {
           onClick={(e) => this.onClick(e, 'reddit')}
           title="Share via Reddit!"
         >
-          <FontAwesomeIcon icon={faRedditAlien} />
+          <FontAwesomeIcon icon={['fab', 'reddit-alien']} />
         </a>
         <a
           id="email-share"
@@ -45,7 +42,7 @@ class ShareLinks extends React.Component {
           onClick={(e) => this.onClick(e, 'email')}
           title="Share via Email!"
         >
-          <FontAwesomeIcon icon={faEnvelope} />
+          <FontAwesomeIcon icon="envelope" />
         </a>
       </div>
     );
