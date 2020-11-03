@@ -194,8 +194,7 @@ if __name__ == "__main__":
             except Exception as e:
                 sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, id, str(e)))
                 error_count += 1
-
-print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
+    print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
 
 if error_count > 0:
     sys.exit(1)
