@@ -1159,7 +1159,7 @@ class Timeline extends React.Component {
                       <AnimationButton
                         clickAnimationButton={this.clickAnimationButton}
                         disabled={animationDisabled}
-                        title={
+                        label={
                         // eslint-disable-next-line no-nested-ternary
                         isCompareModeActive
                           ? 'Animation feature is deactivated when Compare feature is active'
