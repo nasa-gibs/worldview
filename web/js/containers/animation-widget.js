@@ -8,7 +8,7 @@ import {
 import googleTagManager from 'googleTagManager';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
-import { Tooltip } from 'reactstrap';
+import { Button, Tooltip, UncontrolledTooltip } from 'reactstrap';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../util/util';
@@ -104,7 +104,6 @@ class AnimationWidget extends React.Component {
     const halfWidgetWidth = (props.subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
     this.state = {
       speed: props.speed,
-      hoverGif: false,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
         y: -10,
@@ -116,8 +115,6 @@ class AnimationWidget extends React.Component {
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
     this.onLoop = this.onLoop.bind(this);
-    this.openGif = this.openGif.bind(this);
-    this.toggleHoverGif = this.toggleHoverGif.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onCollapsedDrag = this.onCollapsedDrag.bind(this);
@@ -196,58 +193,6 @@ class AnimationWidget extends React.Component {
       return notify(type, action);
     }
     return Promise.resolve(type);
-  }
-
-  openGif() {
-    const {
-      toggleGif,
-      onUpdateStartAndEndDate,
-      hasCustomPalettes,
-      isRotated,
-      hasGraticule,
-      rotation,
-      activePalettes,
-      numberOfFrames,
-      refreshStateAfterGif,
-    } = this.props;
-    const {
-      startDate,
-      endDate,
-    } = this.zeroDates();
-
-    if (numberOfFrames >= maxFrames) {
-      return;
-    }
-    const paletteStore = lodashCloneDeep(activePalettes);
-
-    this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice').then(
-      () => {
-        this.getPromise(
-          isRotated,
-          'rotate',
-          clearRotate,
-          'Reset rotation',
-        ).then(() => {
-          this.getPromise(
-            hasGraticule,
-            'graticule',
-            clearGraticule,
-            'Remove Graticule?',
-          ).then(() => {
-            onUpdateStartAndEndDate(startDate, endDate);
-          }).then(() => {
-            googleTagManager.pushEvent({
-              event: 'GIF_create_animated_button',
-            });
-            this.onCloseGif = () => {
-              refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule);
-              toggleGif();
-            };
-            toggleGif();
-          });
-        });
-      },
-    );
   }
 
   /**
@@ -387,30 +332,6 @@ class AnimationWidget extends React.Component {
     changeCustomInterval(delta, timeScale);
   };
 
-  toggleHoverGif() {
-    const { hoverGif } = this.state;
-    this.setState({ hoverGif: !hoverGif });
-  }
-
-  renderToolTip() {
-    const { numberOfFrames } = this.props;
-    const { hoverGif } = this.state;
-    const elemExists = document.querySelector('#create-gif-button');
-    const showTooltip = elemExists && hoverGif && numberOfFrames >= maxFrames;
-    return (
-      <Tooltip
-        placement="right"
-        isOpen={showTooltip}
-        target="create-gif-button"
-      >
-        Too many frames were selected.
-        {' '}
-        <br />
-        Please request less than 40 frames if you would like to generate a GIF.
-      </Tooltip>
-    );
-  }
-
   renderCollapsedWidget() {
     const {
       onClose,
@@ -446,6 +367,74 @@ class AnimationWidget extends React.Component {
     );
   }
 
+  renderCreateGifButton() {
+    const {
+      toggleGif,
+      onUpdateStartAndEndDate,
+      hasCustomPalettes,
+      isRotated,
+      hasGraticule,
+      rotation,
+      activePalettes,
+      numberOfFrames,
+      refreshStateAfterGif,
+    } = this.props;
+    const gifDisabled = numberOfFrames >= maxFrames;
+    const elemExists = document.querySelector('#create-gif-button');
+    const showWarning = elemExists && numberOfFrames >= maxFrames;
+    const warningMessage = (
+      <span>
+        Too many frames were selected.
+        <br />
+        Please request less than 40 frames if you would like to generate a GIF.
+      </span>
+    );
+    const labelText = 'Create an animated gif';
+
+    const openGif = async () => {
+      const { startDate, endDate } = this.zeroDates();
+      if (numberOfFrames >= maxFrames) {
+        return;
+      }
+      const paletteStore = lodashCloneDeep(activePalettes);
+      await this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
+      await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
+      await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+      await onUpdateStartAndEndDate(startDate, endDate);
+      googleTagManager.pushEvent({
+        event: 'GIF_create_animated_button',
+      });
+      this.onCloseGif = () => {
+        refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule);
+        toggleGif();
+      };
+      toggleGif();
+    };
+
+    return (
+      <a
+        id="create-gif-button"
+        title={!gifDisabled ? 'Create Animated GIF' : ''}
+        aria-label={labelText}
+        className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
+        onClick={openGif}
+      >
+        <FontAwesomeIcon
+          id="wv-animation-widget-file-video-icon"
+          className="wv-animation-widget-icon"
+          icon="file-video"
+        />
+        <UncontrolledTooltip
+          placement="right"
+          target="create-gif-button"
+        >
+          {showWarning ? warningMessage : labelText}
+        </UncontrolledTooltip>
+      </a>
+
+    );
+  }
+
   renderExpandedWidget() {
     const {
       onClose,
@@ -463,12 +452,11 @@ class AnimationWidget extends React.Component {
       customSelected,
       customDelta,
       customInterval,
-      numberOfFrames,
       animationCustomModalOpen,
       hasSubdailyLayers,
     } = this.props;
     const { speed, widgetPosition } = this.state;
-    const gifDisabled = numberOfFrames >= maxFrames;
+
     return (
       <Draggable
         bounds="body"
@@ -517,17 +505,7 @@ class AnimationWidget extends React.Component {
             </div>
 
             {/* Create Gif */}
-            <a
-              id="create-gif-button"
-              title={!gifDisabled ? 'Create Animated GIF' : ''}
-              className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
-              onClick={this.openGif}
-              onMouseEnter={this.toggleHoverGif}
-              onMouseLeave={this.toggleHoverGif}
-            >
-              <FontAwesomeIcon icon="file-video" id="wv-animation-widget-file-video-icon" className="wv-animation-widget-icon" />
-            </a>
-            {this.renderToolTip()}
+            {this.renderCreateGifButton()}
 
             {/* From/To Date/Time Selection */}
             <div className="wv-anim-dates-case">

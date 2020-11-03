@@ -1,17 +1,26 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UncontrolledTooltip } from 'reactstrap';
 
 class AnimationButton extends PureComponent {
   render() {
     const className = 'button-action-group animate-button';
-    const { disabled, title, clickAnimationButton } = this.props;
+    const { disabled, label, clickAnimationButton } = this.props;
+    const buttonId = 'animate-button';
+    const labelText = label || 'Set up animation';
     return (
       <div
         className={disabled ? `wv-disabled-button ${className}` : className}
-        title={title || 'Set up animation'}
+        aria-label={labelText}
       >
-        <div id="animate-button" onClick={clickAnimationButton}>
+        <div id={buttonId} onClick={clickAnimationButton}>
+          <UncontrolledTooltip
+            placement="right"
+            target={buttonId}
+          >
+            {labelText}
+          </UncontrolledTooltip>
           <FontAwesomeIcon icon="video" className="wv-animate" size="3x" />
         </div>
       </div>
@@ -22,7 +31,7 @@ class AnimationButton extends PureComponent {
 AnimationButton.propTypes = {
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
-  title: PropTypes.string,
+  label: PropTypes.string,
 };
 
 export default AnimationButton;
