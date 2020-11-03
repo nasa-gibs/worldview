@@ -4,116 +4,99 @@ import { Nav } from 'reactstrap';
 import CustomNavItem from './nav-item';
 
 const tabClasses = 'sidebar-tab';
-class NavCase extends React.Component {
-  renderDataDownload() {
-    const {
-      tabTypes,
-      isMobile,
-      isCompareMode,
-      onTabClick,
-      activeTab,
-      isDataDisabled,
-    } = this.props;
-    if (tabTypes.download) {
-      return (
-        <CustomNavItem
-          isMobile={isMobile}
-          shouldHideInMobile
-          isDisabled={!!isCompareMode || isDataDisabled}
-          onTabClick={onTabClick}
-          text="Data"
-          id="download"
-          iconClassName="icon-download"
-          disabled={!!isCompareMode}
-          label={
-            isCompareMode
-              ? 'You must exit comparison mode to download data'
-              : 'Data download'
-          }
-          className={
-            activeTab === 'download'
-              ? `${tabClasses} third-tab active`
-              : isCompareMode
-                ? `${tabClasses} third-tab disabled`
-                : `${tabClasses} third-tab`
-          }
-        />
-      );
-    }
-  }
 
-  renderEvents() {
-    const {
-      tabTypes,
-      isMobile,
-      isCompareMode,
-      onTabClick,
-      activeTab,
-    } = this.props;
-    if (tabTypes.events) {
-      return (
-        <CustomNavItem
-          isMobile={isMobile}
-          shouldHideInMobile={false}
-          isDisabled={!!isCompareMode}
-          onTabClick={onTabClick}
-          text="Events"
-          id="events"
-          iconClassName="icon-events"
-          disabled={!!isCompareMode}
-          title={
-            isCompareMode
-              ? 'You must exit comparison mode to use the natural events feature'
-              : 'Events'
-          }
-          className={
-            activeTab === 'events'
-              ? `${tabClasses} second-tab active`
-              : isCompareMode
-                ? `${tabClasses} second-tab disabled`
-                : `${tabClasses} second-tab`
-          }
-        />
-      );
-    }
-  }
+function NavCase (props) {
+  const {
+    tabTypes,
+    isMobile,
+    isCompareMode,
+    onTabClick,
+    activeTab,
+    isDataDisabled,
+    toggleSidebar,
+  } = props;
 
-  render() {
-    const {
-      isMobile, onTabClick, activeTab, toggleSidebar,
-    } = this.props;
+  const renderDataDownload = () => tabTypes.download && (
+  <CustomNavItem
+    isMobile={isMobile}
+    shouldHideInMobile
+    isDisabled={!!isCompareMode || isDataDisabled}
+    onTabClick={onTabClick}
+    text="Data"
+    id="download"
+    iconClassName="icon-download"
+    disabled={!!isCompareMode}
+    label={
+          isCompareMode
+            ? 'You must exit comparison mode to download data'
+            : 'Data download'
+        }
+    className={
+          activeTab === 'download'
+            ? `${tabClasses} third-tab active`
+            : isCompareMode
+              ? `${tabClasses} third-tab disabled`
+              : `${tabClasses} third-tab`
+        }
+  />
+  );
 
-    return (
-      <Nav tabs className="main-nav">
-        <CustomNavItem
-          id="layers"
-          isMobile={isMobile}
-          shouldHideInMobile={false}
-          onTabClick={onTabClick}
-          text="Layers"
-          iconClassName="icon-layers"
-          disabled={false}
-          title="Layers"
-          className={
-            activeTab === 'layers'
-              ? `${tabClasses} first-tab active`
-              : `${tabClasses} first-tab`
-          }
+  const renderEvents = () => tabTypes.events && (
+  <CustomNavItem
+    id="events"
+    isMobile={isMobile}
+    shouldHideInMobile={false}
+    isDisabled={!!isCompareMode}
+    onTabClick={onTabClick}
+    text="Events"
+    iconClassName="icon-events"
+    disabled={!!isCompareMode}
+    label={
+          isCompareMode
+            ? 'You must exit comparison mode to use the natural events feature'
+            : 'Natural Events'
+        }
+    className={
+          activeTab === 'events'
+            ? `${tabClasses} second-tab active`
+            : isCompareMode
+              ? `${tabClasses} second-tab disabled`
+              : `${tabClasses} second-tab`
+        }
+  />
+  );
+
+  return (
+    <Nav tabs className="main-nav">
+      <CustomNavItem
+        id="layers"
+        isMobile={isMobile}
+        shouldHideInMobile={false}
+        onTabClick={onTabClick}
+        text="Layers"
+        iconClassName="icon-layers"
+        disabled={false}
+        label="Map Layers"
+        className={
+          activeTab === 'layers'
+            ? `${tabClasses} first-tab active`
+            : `${tabClasses} first-tab`
+        }
+      />
+      {renderEvents()}
+      {renderDataDownload()}
+      <div className="toggleIconHolder">
+        <a
+          id="accordionTogglerButton"
+          className="accordionToggler atcollapse arrow"
+          onClick={toggleSidebar}
+          title="Hide"
         />
-        {this.renderEvents()}
-        {this.renderDataDownload()}
-        <div className="toggleIconHolder">
-          <a
-            id="accordionTogglerButton"
-            className="accordionToggler atcollapse arrow"
-            onClick={toggleSidebar}
-            title="Hide"
-          />
-        </div>
-      </Nav>
-    );
-  }
+      </div>
+    </Nav>
+  );
 }
+
 NavCase.propTypes = {
   activeTab: PropTypes.string,
   isCompareMode: PropTypes.bool,
