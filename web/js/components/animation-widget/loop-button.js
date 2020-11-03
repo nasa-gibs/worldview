@@ -23,7 +23,7 @@ const LoopButton = ({ looping, onLoop }) => {
       onClick={onLoop}
     >
       <UncontrolledTooltip
-        placement="right"
+        placement="top"
         target={buttonId}
       >
         {labelText}

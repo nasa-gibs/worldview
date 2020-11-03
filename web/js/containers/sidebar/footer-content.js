@@ -55,6 +55,7 @@ class FooterContent extends React.Component {
       compareFeature,
       showAll,
     } = this.props;
+    const compareBtnText = !isCompareActive ? 'Start Comparison' : 'Exit Comparison';
     if (isCompareActive && isMobile) {
       toggleCompare();
     }
@@ -68,9 +69,10 @@ class FooterContent extends React.Component {
           />
           <div className="product-buttons">
             <Button
-              text="+ Add Layers"
               id="layers-add"
+              aria-label="Add layers"
               className="layers-add red"
+              text="+ Add Layers"
               onClick={(e) => {
                 e.stopPropagation();
                 addLayers();
@@ -80,6 +82,10 @@ class FooterContent extends React.Component {
               }}
             />
             <Button
+              id="compare-toggle-button"
+              aria-label={compareBtnText}
+              className="compare-toggle-button"
+              style={isMobile || !compareFeature ? { display: 'none' } : null}
               onClick={(e) => {
                 e.stopPropagation();
                 toggleCompare();
@@ -87,10 +93,7 @@ class FooterContent extends React.Component {
                   event: 'comparison_mode',
                 });
               }}
-              className="compare-toggle-button"
-              id="compare-toggle-button"
-              style={isMobile || !compareFeature ? { display: 'none' } : null}
-              text={!isCompareActive ? 'Start Comparison' : 'Exit Comparison'}
+              text={compareBtnText}
             />
           </div>
         </>

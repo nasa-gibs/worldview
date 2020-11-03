@@ -414,7 +414,6 @@ class AnimationWidget extends React.Component {
     return (
       <a
         id="create-gif-button"
-        title={!gifDisabled ? 'Create Animated GIF' : ''}
         aria-label={labelText}
         className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
         onClick={openGif}

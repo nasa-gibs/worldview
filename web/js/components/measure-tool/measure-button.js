@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MeasureMenu from './measure-menu';
@@ -58,6 +58,8 @@ class MeasureButton extends React.Component {
     const { showAlert, isTouchDevice } = this.state;
     const shouldShowAlert = isActive && showAlert;
     const message = isTouchDevice ? mobileHelpMsg : helpMsg;
+    const buttonId = 'wv-measure-button';
+    const labelText = 'Measure distances & areas';
 
     return (
       <>
@@ -74,13 +76,19 @@ class MeasureButton extends React.Component {
 
         <Button
           style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}
-          id="wv-measure-button"
+          id={buttonId}
           className="wv-measure-button wv-toolbar-button"
-          title="Measure distances &amp; areas"
+          aria-label={labelText}
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
           disabled={isActive}
         >
+          <UncontrolledTooltip
+            placement="top"
+            target={buttonId}
+          >
+            {labelText}
+          </UncontrolledTooltip>
           <FontAwesomeIcon icon="ruler" size="2x" />
         </Button>
       </>

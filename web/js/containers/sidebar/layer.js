@@ -7,6 +7,7 @@ import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UncontrolledTooltip } from 'reactstrap';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
 import {
@@ -124,30 +125,50 @@ class Layer extends React.Component {
       onOptionsClick,
     } = this.props;
     const { title } = names;
+    const removeLayerBtnId = `close${layerGroupName}${util.encodeId(layer.id)}`;
+    const removeLayerBtnTitle = 'Remove Layer';
+
+    const layerOptionsBtnId = `layer-options-btn-${util.encodeId(layer.id)}`;
+    const layerOptionsBtnTitle = 'View layer options';
+
+    const layerInfoBtnId = `layer-info-btn-${util.encodeId(layer.id)}`;
+    const layerInfoBtnTitle = 'View layer description';
+
     return (
       <>
         <a
-          id={`close${layerGroupName}${util.encodeId(layer.id)}`}
-          title="Remove Layer"
+          id={removeLayerBtnId}
+          arira-label={removeLayerBtnTitle}
           className="button wv-layers-close"
           onClick={() => onRemoveClick(layer.id)}
         >
+          <UncontrolledTooltip placement="top" target={removeLayerBtnId}>
+            {removeLayerBtnTitle}
+          </UncontrolledTooltip>
           <FontAwesomeIcon icon="times" fixedWidth />
         </a>
         <a
-          title={`Layer options for ${title}`}
+          id={layerOptionsBtnId}
+          aria-label={layerOptionsBtnTitle}
           className={isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'}
           onMouseDown={this.stopPropagation}
           onClick={() => onOptionsClick(layer, title)}
         >
+          <UncontrolledTooltip placement="top" target={layerOptionsBtnId}>
+            {layerOptionsBtnTitle}
+          </UncontrolledTooltip>
           <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
         </a>
         <a
-          title={`Layer description for ${title}`}
+          id={layerInfoBtnId}
+          aria-label={layerInfoBtnTitle}
           className={isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'}
           onMouseDown={this.stopPropagation}
           onClick={() => onInfoClick(layer, title)}
         >
+          <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
+            {layerInfoBtnTitle}
+          </UncontrolledTooltip>
           <FontAwesomeIcon icon="info" className="wv-layers-info-icon" />
         </a>
       </>
@@ -238,11 +259,18 @@ class Layer extends React.Component {
             onMouseLeave={() => hover(layer.id, false)}
           >
             <a
-              className={visibilityToggleClass}
               id={`hide${util.encodeId(layer.id)}`}
+              className={visibilityToggleClass}
+              aria-label={visibilityTitle}
               onClick={() => toggleVisibility(layer.id, !isVisible)}
               title={visibilityTitle}
             >
+              <UncontrolledTooltip
+                placement="right"
+                target={`hide${util.encodeId(layer.id)}`}
+              >
+                {visibilityTitle}
+              </UncontrolledTooltip>
               <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
             </a>
 

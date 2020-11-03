@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Nav } from 'reactstrap';
+import { Nav, UncontrolledTooltip } from 'reactstrap';
 import CustomNavItem from './nav-item';
+
 
 const tabClasses = 'sidebar-tab';
 
@@ -27,17 +28,17 @@ function NavCase (props) {
     iconClassName="icon-download"
     disabled={!!isCompareMode}
     label={
-          isCompareMode
-            ? 'You must exit comparison mode to download data'
-            : 'Data download'
-        }
+      isCompareMode
+        ? 'You must exit comparison mode to download data'
+        : 'Data download'
+    }
     className={
-          activeTab === 'download'
-            ? `${tabClasses} third-tab active`
-            : isCompareMode
-              ? `${tabClasses} third-tab disabled`
-              : `${tabClasses} third-tab`
-        }
+      activeTab === 'download'
+        ? `${tabClasses} third-tab active`
+        : isCompareMode
+          ? `${tabClasses} third-tab disabled`
+          : `${tabClasses} third-tab`
+    }
   />
   );
 
@@ -52,17 +53,17 @@ function NavCase (props) {
     iconClassName="icon-events"
     disabled={!!isCompareMode}
     label={
-          isCompareMode
-            ? 'You must exit comparison mode to use the natural events feature'
-            : 'Natural Events'
-        }
+      isCompareMode
+        ? 'You must exit comparison mode to use the natural events feature'
+        : 'Natural Events'
+    }
     className={
-          activeTab === 'events'
-            ? `${tabClasses} second-tab active`
-            : isCompareMode
-              ? `${tabClasses} second-tab disabled`
-              : `${tabClasses} second-tab`
-        }
+      activeTab === 'events'
+        ? `${tabClasses} second-tab active`
+        : isCompareMode
+          ? `${tabClasses} second-tab disabled`
+          : `${tabClasses} second-tab`
+    }
   />
   );
 
@@ -86,11 +87,14 @@ function NavCase (props) {
       {renderEvents()}
       {renderDataDownload()}
       <div className="toggleIconHolder">
+        <UncontrolledTooltip placement="right" target="accordion-toggler-Button">
+          Hide Sidebar
+        </UncontrolledTooltip>
         <a
-          id="accordionTogglerButton"
+          id="accordion-toggler-Button"
           className="accordionToggler atcollapse arrow"
           onClick={toggleSidebar}
-          title="Hide"
+          aria-label="Hide Sidebar"
         />
       </div>
     </Nav>
