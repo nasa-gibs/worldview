@@ -81,10 +81,6 @@
         "endDate": {
           "$ref": "#/definitions/date"
         },
-        "futureLayer": {
-          "type": "boolean",
-          "description": "TODO Do we really need this?"
-        },
         "futureTime": {
           "type": "string",
           "pattern": "^[1-9][DMY]$"
