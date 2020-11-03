@@ -10,7 +10,7 @@ import { changeUnits } from '../../modules/measure/actions';
 const DOWNLOAD_GEOJSON = {
   text: 'Download as GeoJSON',
   iconClass: 'ui-icon icon-large',
-  iconName: 'faDownload',
+  iconName: 'download',
   id: 'download-geojson-button',
   key: 'measure-download-geojson',
   className: 'measure-download',
@@ -18,7 +18,7 @@ const DOWNLOAD_GEOJSON = {
 const DOWNLOAD_SHAPEFILE = {
   text: 'Download as Shapefiles',
   iconClass: 'ui-icon icon-large',
-  iconName: 'faDownload',
+  iconName: 'download',
   id: 'download-shapefiles-button',
   key: 'measure-download-shapefile',
 };
@@ -26,21 +26,21 @@ const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
     iconClass: 'ui-icon icon-large',
-    iconName: 'faRuler',
+    iconName: 'ruler',
     id: 'measure-distance-button',
     key: 'measure-distance',
   },
   {
     text: 'Measure area',
     iconClass: 'ui-icon icon-large',
-    iconName: 'faRulerCombined',
+    iconName: 'ruler-combined',
     id: 'measure-area-button',
     key: 'measure-area',
   },
   {
     text: 'Remove Measurements',
     iconClass: 'ui-icon icon-large',
-    iconName: 'faTrash',
+    iconName: 'trash',
     id: 'clear-measurements-button',
     key: 'measure-clear',
   },

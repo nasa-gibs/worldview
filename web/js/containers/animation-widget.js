@@ -11,9 +11,6 @@ import Slider, { Handle } from 'rc-slider';
 import { Tooltip } from 'reactstrap';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChevronUp, faChevronDown, faTimes, faFileVideo,
-} from '@fortawesome/free-solid-svg-icons';
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
 import TimeSelector from '../components/date-selector/date-selector';
@@ -441,8 +438,8 @@ class AnimationWidget extends React.Component {
               play={this.onPushPlay}
               pause={onPushPause}
             />
-            <FontAwesomeIcon icon={faChevronUp} className="wv-expand" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
+            <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
           </div>
         </div>
       </Draggable>
@@ -528,7 +525,7 @@ class AnimationWidget extends React.Component {
               onMouseEnter={this.toggleHoverGif}
               onMouseLeave={this.toggleHoverGif}
             >
-              <FontAwesomeIcon icon={faFileVideo} id="wv-animation-widget-file-video-icon" className="wv-animation-widget-icon" />
+              <FontAwesomeIcon icon="file-video" id="wv-animation-widget-file-video-icon" className="wv-animation-widget-icon" />
             </a>
             {this.renderToolTip()}
 
@@ -554,8 +551,8 @@ class AnimationWidget extends React.Component {
                 subDailyMode={subDailyMode}
               />
             </div>
-            <FontAwesomeIcon icon={faChevronDown} className="wv-minimize" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
+            <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
             {/* Custom time interval selection */}
             <CustomIntervalSelectorWidget

@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import util from '../../util/util';
 
 function Event (props) {
@@ -117,7 +115,7 @@ function Event (props) {
                 e.stopPropagation();
               }}
             >
-              <FontAwesomeIcon icon={faExternalLinkAlt} />
+              <FontAwesomeIcon icon="external-link-alt" />
               {` ${source.title}`}
             </a>
           );

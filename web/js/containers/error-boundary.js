@@ -1,16 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { openCustomContent } from '../modules/modal/actions';
 
 const HEADER_TEXT = 'Error!';
 const BODY_COMPONENT = () => (
   <>
     <div className="error-header">
-      <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" size="3x" />
+      <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" size="3x" />
       An unexpected error has occurred!
     </div>
     <div className="error-body">

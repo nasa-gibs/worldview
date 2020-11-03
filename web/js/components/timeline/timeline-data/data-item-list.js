@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { datesinDateRanges } from '../../../modules/layers/util';
 import util from '../../../util/util';
 import {
@@ -335,7 +334,7 @@ class DataItemList extends Component {
   createEmptyLayersDOMEl = () => (
     <div className="data-panel-layer-empty">
       <div className="data-item-empty">
-        <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
+        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" />
         <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
       </div>
     </div>

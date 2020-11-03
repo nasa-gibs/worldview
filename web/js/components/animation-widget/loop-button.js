@@ -1,9 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRetweet } from '@fortawesome/free-solid-svg-icons';
 
 /*
  * @class LoopButton
@@ -19,7 +17,7 @@ const LoopButton = (props) => (
         }
     onClick={props.onLoop}
   >
-    <FontAwesomeIcon icon={faRetweet} className="wv-animation-widget-icon" />
+    <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" />
   </a>
 );
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export default function FilterChips(props) {
   const {
@@ -31,7 +30,7 @@ export default function FilterChips(props) {
         >
           {displayValue}
           <FontAwesomeIcon
-            icon={faTimes}
+            icon="timies"
             fixedWidth
           />
         </div>

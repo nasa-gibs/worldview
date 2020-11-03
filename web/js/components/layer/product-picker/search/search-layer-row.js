@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import {
   addLayer as addLayerAction,
@@ -134,7 +133,7 @@ class SearchLayerRow extends React.Component {
             <FontAwesomeIcon
               id={`${encodedId}-notice-info`}
               className="layer-notice-icon"
-              icon={faExclamationTriangle}
+              icon="exclamation-triangle"
             />
             <UncontrolledTooltip
               className="zot-tooltip"
@@ -157,7 +156,7 @@ class SearchLayerRow extends React.Component {
               title="Remove from recent layers list."
               onClick={(e) => clearSingleRecentLayer(e, layer)}
             >
-              <FontAwesomeIcon icon={faTrash} />
+              <FontAwesomeIcon icon="trash" />
             </Button>
           )}
         </div>

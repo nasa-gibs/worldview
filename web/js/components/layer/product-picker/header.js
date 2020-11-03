@@ -9,7 +9,6 @@ import {
   BreadcrumbItem,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { withSearch } from '@elastic/react-search-ui';
 import {
   selectLayer as selectLayerAction,
@@ -153,7 +152,7 @@ class ProductPickerHeader extends React.Component {
                 color="secondary"
                 onClick={this.revertToInitialScreen}
               >
-                <FontAwesomeIcon icon={faArrowLeft} />
+                <FontAwesomeIcon icon="arrow-left" />
               </Button>
               {isBreadCrumb && this.renderBreadCrumb()}
             </>
@@ -174,7 +173,7 @@ class ProductPickerHeader extends React.Component {
               onClick={filterBtnFn}
               title="Filter layer results"
             >
-              <FontAwesomeIcon icon={faFilter} />
+              <FontAwesomeIcon icon="filter" />
             </Button>
           )}
 

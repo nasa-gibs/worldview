@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 /*
  * @class PlayButton
@@ -17,8 +15,8 @@ const PlayButton = (props) => {
       onClick={playing ? pause : play}
     >
       {playing
-        ? <FontAwesomeIcon icon={faPause} className="wv-animation-widget-icon" />
-        : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />}
+        ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" />
+        : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" />}
     </a>
   );
 };

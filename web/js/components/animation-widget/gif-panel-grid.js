@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 /*
  * A table that updates with image
@@ -18,7 +16,7 @@ export default class GifPanelGrid extends React.Component {
     if (!valid) {
       return (
         <div id="gif-size" className="gif-size gif-size-invalid grid-child">
-          <FontAwesomeIcon icon={faTimes} fixedWidth />
+          <FontAwesomeIcon icon="times" fixedWidth />
           <span>{`${maxGifSize} MB ~${roundedSize} MB`}</span>
         </div>
       );

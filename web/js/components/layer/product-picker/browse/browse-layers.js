@@ -13,7 +13,6 @@ import {
   Tooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 import BrowseLayerList from './browse-layers-list';
 import CategoryGrid from './category-grid';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
@@ -109,7 +108,7 @@ function BrowseLayers (props) {
       : 'layer-category-navigation');
     const recentTab = (sortKey) => (
       <NavLink onClick={() => selectTab(sortKey)}>
-        <FontAwesomeIcon icon={faClock} />
+        <FontAwesomeIcon icon="clock" />
         Recent
       </NavLink>
     );
@@ -154,7 +153,7 @@ function BrowseLayers (props) {
           <FontAwesomeIcon
             id="recent-tooltip-target"
             className="recent-tooltip-icon"
-            icon={faQuestionCircle}
+            icon="question-circle"
           />
           <Button
             id="clear-recent-layers"
@@ -177,7 +176,7 @@ function BrowseLayers (props) {
           className="categories-dropdown"
         >
           <DropdownToggle caret>
-            {categoryType === 'recent' && (<FontAwesomeIcon icon={faClock} />)}
+            {categoryType === 'recent' && (<FontAwesomeIcon icon="clock" />)}
             {categoryType}
           </DropdownToggle>
           <DropdownMenu className="categories-dropdown-menu">
