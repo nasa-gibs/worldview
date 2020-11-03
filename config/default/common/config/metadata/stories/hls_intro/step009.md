@@ -1,1 +1,1 @@
-Pivot irrigation in Egypt comes into view with the higher resolution imagery.
+Pivot irrigation in Egypt comes into view with this higher resolution imagery.
