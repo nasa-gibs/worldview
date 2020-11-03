@@ -1,7 +1,11 @@
-import lodashEach from 'lodash/each';
-import lodashGet from 'lodash/get';
+import {
+  each as lodashEach,
+  get as lodashGet,
+} from 'lodash';
+import { boundingExtent, containsCoordinate } from 'ol/extent';
 import util from '../../util/util';
 import { nearestInterval } from '../layers/util';
+import { coordinatesCRSTransform } from '../projection/util';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -62,8 +66,17 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
   if (isWorldfile) {
     params.push('WORLDFILE=true');
   }
+  // handle adding coordinates marker
   if (markerCoordinates.length > 0) {
-    params.push(`MARKER=${markerCoordinates[0]},${markerCoordinates[1]}`);
+    // transform for WVS
+    const coordinates = coordinatesCRSTransform(markerCoordinates, 'EPSG:4326', crs);
+    const [longitude, latitude] = coordinates;
+    // prevent marker requests outside selected bounding box
+    const bboxExtent = boundingExtent([lonlats[0], lonlats[1]]);
+    const coordinatesWithinBbox = containsCoordinate(bboxExtent, coordinates);
+    if (coordinatesWithinBbox) {
+      params.push(`MARKER=${longitude},${latitude}`);
+    }
   }
   return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
