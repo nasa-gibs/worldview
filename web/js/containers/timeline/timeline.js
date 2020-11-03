@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
+import { UncontrolledTooltip } from 'reactstrap';
 
 import {
   debounce as lodashDebounce,
@@ -1343,7 +1344,14 @@ class Timeline extends React.Component {
                     />
 
                     {/* Open/Close Chevron */}
-                    <div id="timeline-hide" onClick={this.toggleHideTimeline}>
+                    <div
+                      id="timeline-hide"
+                      aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
+                      onClick={this.toggleHideTimeline}
+                    >
+                      <UncontrolledTooltip target="timeline-hide" placement="top">
+                        {isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
+                      </UncontrolledTooltip>
                       <div
                         className={`wv-timeline-hide wv-timeline-hide-double-chevron-${chevronDirection}`}
                       />

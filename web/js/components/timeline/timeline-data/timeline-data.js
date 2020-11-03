@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { UncontrolledTooltip } from 'reactstrap';
 import moment from 'moment';
 import {
   isEqual as lodashIsEqual,
@@ -298,17 +299,23 @@ class TimelineData extends Component {
 
     const animateBottomClassName = `animate-timeline-data-panel-slide-${isDataCoveragePanelOpen ? 'up' : 'down'}`;
     const panelChevronClassName = `wv-timeline-data-availability-handle-chevron-${isDataCoveragePanelOpen ? 'open' : 'closed'}`;
+    const panelToggleLabelText = isDataCoveragePanelOpen ? 'Collapse data coverage panel' : 'Show data coverage panel';
+
     return (
       <>
         {/* Data Coverage Panel open/close handle */}
         <div
           id="timeline-data-availability-panel-handle"
+          aria-label={panelToggleLabelText}
           onClick={this.togglePanelOpenClose}
           style={{
             right: Math.floor((axisWidth + 75) / 2),
             top: isDataCoveragePanelOpen ? dataAvailabilityHandleTopOffset : '-19px',
           }}
         >
+          <UncontrolledTooltip placement="top" target="timeline-data-availability-panel-handle">
+            {panelToggleLabelText}
+          </UncontrolledTooltip>
           <div className={`wv-timeline-data-availability-handle-chevron ${panelChevronClassName}`} />
         </div>
         <div

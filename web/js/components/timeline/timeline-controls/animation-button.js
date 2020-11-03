@@ -16,7 +16,7 @@ class AnimationButton extends PureComponent {
       >
         <div id={buttonId} onClick={clickAnimationButton}>
           <UncontrolledTooltip
-            placement="right"
+            placement="top"
             target={buttonId}
           >
             {labelText}

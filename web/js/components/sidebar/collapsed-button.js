@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UncontrolledTooltip } from 'reactstrap';
 
 class CollapsedButton extends PureComponent {
   render() {
@@ -11,6 +12,8 @@ class CollapsedButton extends PureComponent {
       numberOfLayers,
       onclick,
     } = this.props;
+    const buttonId = 'accordion-toggler-bButton';
+    const labelText = 'Expand sidebar';
 
     return (
       <div
@@ -19,11 +22,14 @@ class CollapsedButton extends PureComponent {
         style={!isCollapsed || isDistractionFreeModeActive ? { display: 'none' } : {}}
       >
         <a
-          id="accordionTogglerButton"
+          id={buttonId}
+          aria-label={labelText}
           className="accordionToggler dateHolder staticLayers"
-          title="Show Layer Selector"
           onClick={onclick}
         >
+          <UncontrolledTooltip placement="right" target={buttonId}>
+            {labelText}
+          </UncontrolledTooltip>
           <FontAwesomeIcon icon="layer-group" />
           {isMobile
             ? (
