@@ -17,6 +17,9 @@ class Geosearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      inputValue: '',
+      searchResults: [],
+      coordinatesPending: [],
     };
   }
 
@@ -27,29 +30,50 @@ class Geosearch extends React.Component {
     }
   }
 
+  // update input value
+  updateValue = (inputValue) => this.setState({ inputValue });
+
+  // update list of suggested search results
+  updateSearchResults = (searchResults) => this.setState({ searchResults });
+
+  // update array of pending coordinates
+  updatePendingCoordinates = (coordinatesPending) => this.setState({ coordinatesPending });
+
   renderSearchComponent = (isMobile) => {
     const {
-      isCoordinatePairWithinExtent,
       clearCoordinates,
       coordinates,
       geosearchMobileModalOpen,
+      isCoordinatePairWithinExtent,
       isExpanded,
       selectCoordinatesToFly,
       toggleReverseGeocodeActive,
       toggleShowGeosearch,
     } = this.props;
+    const {
+      coordinatesPending,
+      inputValue,
+      searchResults,
+    } = this.state;
 
     return (
       <GeosearchModal
-        isCoordinatePairWithinExtent={isCoordinatePairWithinExtent}
+        clearCoordinates={clearCoordinates}
         coordinates={coordinates}
+        coordinatesPending={coordinatesPending}
         geosearchMobileModalOpen={geosearchMobileModalOpen}
+        inputValue={inputValue}
+        isCoordinatePairWithinExtent={isCoordinatePairWithinExtent}
         isExpanded={isExpanded}
         isMobile={isMobile}
-        clearCoordinates={clearCoordinates}
+        searchResults={searchResults}
         selectCoordinatesToFly={selectCoordinatesToFly}
         toggleReverseGeocodeActive={toggleReverseGeocodeActive}
         toggleShowGeosearch={toggleShowGeosearch}
+        updatePendingCoordinates={this.updatePendingCoordinates}
+        updateSearchResults={this.updateSearchResults}
+        updateValue={this.updateValue}
+
       />
     );
   }

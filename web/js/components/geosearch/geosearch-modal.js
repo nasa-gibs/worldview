@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 import {
   ButtonGroup, Button, InputGroup, InputGroupAddon,
 } from 'reactstrap';
-import { get as lodashGet } from 'lodash';
+import {
+  throttle as lodashThrottle,
+  get as lodashGet,
+} from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMapMarkerAlt,
@@ -19,14 +22,11 @@ class SearchComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: '',
       isTouchDevice: false,
-      searchResults: [],
-      coordinatesPending: [],
       showAlert: false,
       showExtentAlert: false,
     };
-    this.requestTimer = null;
+    this.throttleSuggest = lodashThrottle(suggest.bind(this), 500);
   }
 
   componentDidUpdate(prevProps) {
@@ -42,15 +42,6 @@ class SearchComponent extends Component {
     }
   }
 
-  // update input value
-  updateValue = (inputValue) => this.setState({ inputValue });
-
-  // update list of suggested search results
-  updateSearchResults = (searchResults) => this.setState({ searchResults });
-
-  // update array of pending coordinates
-  updatePendingCoordinates = (coordinatesPending) => this.setState({ coordinatesPending });
-
   // dismiss message instruction alert
   dismissAlert = () => this.setState({ showAlert: false });
 
@@ -59,8 +50,14 @@ class SearchComponent extends Component {
 
   // handle submitting search after inputing coordinates
   onCoordinateInputSelect = () => {
-    const { isCoordinatePairWithinExtent, selectCoordinatesToFly } = this.props;
-    const { coordinatesPending } = this.state;
+    const {
+      coordinatesPending,
+      isCoordinatePairWithinExtent,
+      selectCoordinatesToFly,
+      updatePendingCoordinates,
+      updateSearchResults,
+      updateValue,
+    } = this.props;
 
     const coordinatesWithinExtent = isCoordinatePairWithinExtent(coordinatesPending);
     if (coordinatesWithinExtent === false) {
@@ -73,21 +70,24 @@ class SearchComponent extends Component {
         selectCoordinatesToFly([longitude, latitude], results);
       });
       this.setState({
-        inputValue: '',
-        coordinatesPending: [],
         showExtentAlert: false,
-        searchResults: [],
       });
+      updateValue('');
+      updateSearchResults([]);
+      updatePendingCoordinates([]);
     }
   }
 
   // handle selecting menu item in search results
   onSelect=(value, item) => {
-    const { isCoordinatePairWithinExtent, selectCoordinatesToFly } = this.props;
-    this.setState({
-      inputValue: value,
-      searchResults: [item],
-    });
+    const {
+      isCoordinatePairWithinExtent,
+      selectCoordinatesToFly,
+      updateSearchResults,
+      updateValue,
+    } = this.props;
+    updateValue(value);
+    updateSearchResults([item]);
     const {
       magicKey,
     } = item;
@@ -117,28 +117,29 @@ class SearchComponent extends Component {
   // handle input value change including text/coordinates typing, pasting, cutting
   onChange=(e, value) => {
     e.preventDefault();
-    this.updateValue(value);
+    const { updateSearchResults, updateValue, updatePendingCoordinates } = this.props;
+    updateValue(value);
 
     // check for coordinate value
     const coordinatesInputValue = isValidCoordinates(value);
     if (coordinatesInputValue) {
-      clearTimeout(this.requestTimer);
+      this.throttleSuggest.cancel();
       const { latitude, longitude } = coordinatesInputValue;
       this.setState({
-        searchResults: [],
-        coordinatesPending: [longitude, latitude],
         showExtentAlert: false,
       });
+      updateSearchResults([]);
+      updatePendingCoordinates([longitude, latitude]);
     } else {
-      clearTimeout(this.requestTimer);
+      this.throttleSuggest.cancel();
       if (!value) {
-        this.updateSearchResults([]);
+        updateSearchResults([]);
       } else {
         // provide suggestions to populate search result menu item(s)
-        this.requestTimer = suggest(value).then((items) => {
+        return this.throttleSuggest(value).then((items) => {
           if (lodashGet(items, 'suggestions')) {
             const { suggestions } = items;
-            this.updateSearchResults(suggestions);
+            updateSearchResults(suggestions);
           }
         });
       }
@@ -149,14 +150,14 @@ class SearchComponent extends Component {
   selectCoordinatesFromMap = (e) => {
     e.preventDefault();
     const isTouchDevice = e.type === 'touchend';
-    const { toggleReverseGeocodeActive } = this.props;
+    const { toggleReverseGeocodeActive, updateValue } = this.props;
     toggleReverseGeocodeActive(true);
     this.setState({
       isTouchDevice,
       showAlert: true,
       showExtentAlert: false,
-      inputValue: '',
     });
+    updateValue('');
   }
 
   // clear selected marker/coordinates from map
@@ -174,12 +175,12 @@ class SearchComponent extends Component {
       isExpanded,
       isMobile,
       toggleShowGeosearch,
-    } = this.props;
-    const {
       coordinatesPending,
       inputValue,
-      isTouchDevice,
       searchResults,
+    } = this.props;
+    const {
+      isTouchDevice,
       showAlert,
       showExtentAlert,
     } = this.state;
@@ -277,15 +278,21 @@ class SearchComponent extends Component {
 }
 
 SearchComponent.propTypes = {
-  isCoordinatePairWithinExtent: PropTypes.func,
   clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
+  coordinatesPending: PropTypes.array,
   geosearchMobileModalOpen: PropTypes.bool,
+  inputValue: PropTypes.string,
+  isCoordinatePairWithinExtent: PropTypes.func,
   isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
+  searchResults: PropTypes.array,
   selectCoordinatesToFly: PropTypes.func,
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowGeosearch: PropTypes.func,
+  updatePendingCoordinates: PropTypes.func,
+  updateSearchResults: PropTypes.func,
+  updateValue: PropTypes.func,
 };
 
 export default SearchComponent;
