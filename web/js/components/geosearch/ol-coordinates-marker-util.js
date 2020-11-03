@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import CoordinatesDialog from './coordinates-dialog';
 import { coordinatesCRSTransform } from '../../modules/projection/util';
+import util from '../../util/util';
 
 /**
  * Get parsed precision coordinate number
@@ -108,15 +109,21 @@ export function getCoordinatesMetadata(geocodeProperties) {
       title = `${Match_addr}`;
     }
   }
-  const coordinatesMetadata = {
-    features: {
-      latitude: parsedLatitude,
-      longitude: parsedLongitude,
-    },
+
+  // format coordinates based on localStorage preference
+  const format = util.getCoordinateFormat();
+  const coordinates = util.formatCoordinate(
+    [parsedLongitude, parsedLatitude],
+    format,
+  );
+  const formattedCoordinates = coordinates.split(',');
+  const [formattedLatitude, formattedLongitude] = formattedCoordinates;
+
+  return {
+    latitude: formattedLatitude.trim(),
+    longitude: formattedLongitude.trim(),
     title,
   };
-
-  return coordinatesMetadata;
 }
 
 /**

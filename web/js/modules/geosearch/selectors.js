@@ -134,14 +134,17 @@ const constantRequestParameters = '&langCode=en&f=json';
 // necessary to filter to remove fast food type suggestions, but still include relavant Places of Interest
 const GEOCODE_SUGGEST_CATEGORIES = [
   'Address',
+  'Street Address',
   'Populated Place',
-  'Education,Land Features',
+  'Education',
+  'Land Features',
   'Water Features',
   'Museum',
   'Tourist Attraction',
   'Scientific Research',
   'Government Office',
   'Business Facility',
+  'Primary Postal',
 ];
 
 export async function suggest(val) {

@@ -30,12 +30,13 @@ class CoordinatesDialog extends Component {
     } = this.state;
 
     const {
-      features, // parsed { latitude, longitude }
-      title, // "Wairau Valley"
+      latitude,
+      longitude,
+      title,
     } = coordinatesMetadata;
 
-    const latitudeText = `Latitude: ${features.latitude} °`;
-    const longitudeText = `Longitude: ${features.longitude} °`;
+    const latitudeText = `Latitude: ${latitude}`;
+    const longitudeText = `Longitude: ${longitude}`;
     return (
       <div className="tooltip-custom-black tooltip-static tooltip-coordinates-container">
         <CopyClipboardTooltip
@@ -55,7 +56,7 @@ class CoordinatesDialog extends Component {
         </span>
         <CopyToClipboard
           options={window.clipboardData ? {} : { format: 'text/plain' }}
-          text={`${features.latitude}, ${features.longitude}`}
+          text={`${latitude}, ${longitude}`}
           onCopy={this.onCopyToClipboard}
         >
           <FontAwesomeIcon id="copy-coordinates-to-clipboard-button" icon={faCopy} fixedWidth />
