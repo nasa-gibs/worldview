@@ -72,7 +72,6 @@ class Geosearch extends React.Component {
         updatePendingCoordinates={this.updatePendingCoordinates}
         updateSearchResults={this.updateSearchResults}
         updateValue={this.updateValue}
-
       />
     );
   }
