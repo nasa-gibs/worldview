@@ -155,7 +155,7 @@ class SearchBox extends Component {
       // eslint-disable-next-line no-nested-ternary
       paddingRight: isMobile
         ? '0'
-        : showExtentAlert ? '48px' : '26px',
+        : showExtentAlert ? '53px' : '26px',
     };
   }
 
