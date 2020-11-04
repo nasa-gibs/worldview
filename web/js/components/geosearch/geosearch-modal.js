@@ -7,6 +7,7 @@ import {
   throttle as lodashThrottle,
   get as lodashGet,
 } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMapMarkerAlt,
@@ -92,6 +93,9 @@ class SearchComponent extends Component {
       magicKey,
     } = item;
 
+    googleTagManager.pushEvent({
+      event: 'geosearch_selected_suggested_menu_item',
+    });
     processMagicKey(magicKey).then((result) => {
       if (lodashGet(result, 'candidates[0]')) {
         const firstCandidate = result.candidates[0];
@@ -158,6 +162,9 @@ class SearchComponent extends Component {
       showExtentAlert: false,
     });
     updateValue('');
+    googleTagManager.pushEvent({
+      event: 'geosearch_reverse_geocode',
+    });
   }
 
   // clear selected marker/coordinates from map
@@ -212,7 +219,6 @@ class SearchComponent extends Component {
           onDismiss={this.dismissExtentAlert}
         />
         )}
-
         <div className="geosearch-component">
           <InputGroup className="geosearch-search-input-group">
             {!isMobile
