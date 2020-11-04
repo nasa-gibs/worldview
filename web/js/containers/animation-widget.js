@@ -8,7 +8,7 @@ import {
 import googleTagManager from 'googleTagManager';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
-import { Button, Tooltip, UncontrolledTooltip } from 'reactstrap';
+import { UncontrolledTooltip } from 'reactstrap';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../util/util';
