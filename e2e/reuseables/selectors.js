@@ -96,7 +96,7 @@ module.exports = {
   filterButton: '.btn.filter-button',
   resetButton: '.btn.clear-filters',
   applyButton: '.btn.apply-facets',
-  collapsedLayerButton: '#accordionTogglerButton',
+  collapsedLayerButton: '#accordion-toggler-button',
   layerCount: '.layer-count.mobile',
   layerContainer: '.layer-container.sidebar-panel',
   sourceMetadataCollapsed: '.source-metadata.overflow',

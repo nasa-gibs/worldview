@@ -87,11 +87,11 @@ function NavCase (props) {
       {renderEvents()}
       {renderDataDownload()}
       <div className="toggleIconHolder">
-        <UncontrolledTooltip placement="right" target="accordion-toggler-Button">
+        <UncontrolledTooltip placement="right" target="accordion-toggler-button">
           Hide Sidebar
         </UncontrolledTooltip>
         <a
-          id="accordion-toggler-Button"
+          id="accordion-toggler-button"
           className="accordionToggler atcollapse arrow"
           onClick={toggleSidebar}
           aria-label="Hide Sidebar"
