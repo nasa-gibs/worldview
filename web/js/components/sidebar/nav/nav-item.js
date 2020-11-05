@@ -26,17 +26,11 @@ const CustomNavItem = (props) => {
       <NavLink
         disabled={isDisabled}
         aria-label={label}
+        title={label}
         className={className}
         id={tabId}
         onClick={() => onTabClick(id)}
       >
-        <UncontrolledTooltip
-          target={tabId}
-          boundariesElement="window"
-          placement="bottom"
-        >
-          {label}
-        </UncontrolledTooltip>
         <i className={`productsIcon selected ${iconClassName}`} />
         {text}
       </NavLink>
