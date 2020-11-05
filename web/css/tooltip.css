@@ -1,6 +1,8 @@
 /* Bootstrap override */
 .tooltip {
   z-index: 1050;
+  /* Fixes issue with flicker but, breaks autohide=false */
+  pointer-events: none;
 }
 
 .tooltip-icon {
