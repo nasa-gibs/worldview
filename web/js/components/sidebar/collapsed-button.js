@@ -12,7 +12,7 @@ class CollapsedButton extends PureComponent {
       numberOfLayers,
       onclick,
     } = this.props;
-    const buttonId = 'accordion-toggler-bButton';
+    const buttonId = 'accordion-toggler-button';
     const labelText = 'Expand sidebar';
 
     return (
