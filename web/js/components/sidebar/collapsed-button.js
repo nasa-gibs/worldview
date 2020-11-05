@@ -8,18 +8,16 @@ class CollapsedButton extends PureComponent {
     const {
       isMobile,
       isDistractionFreeModeActive,
-      isCollapsed,
       numberOfLayers,
       onclick,
     } = this.props;
     const buttonId = 'accordion-toggler-button';
     const labelText = 'Expand sidebar';
 
-    return (
+    return !isDistractionFreeModeActive && (
       <div
         id="productsHoldertoggleButtonHolder"
         className="toggleButtonHolder"
-        style={!isCollapsed || isDistractionFreeModeActive ? { display: 'none' } : {}}
       >
         <a
           id={buttonId}
@@ -39,9 +37,7 @@ class CollapsedButton extends PureComponent {
             )
             : (
               <span className="layer-count ">
-                {numberOfLayers.toString()}
-                {' '}
-                Layers
+                {`${numberOfLayers.toString()} Layers`}
               </span>
             )}
         </a>
@@ -50,7 +46,6 @@ class CollapsedButton extends PureComponent {
   }
 }
 CollapsedButton.propTypes = {
-  isCollapsed: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
