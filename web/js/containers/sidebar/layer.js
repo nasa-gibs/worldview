@@ -263,7 +263,6 @@ class Layer extends React.Component {
               className={visibilityToggleClass}
               aria-label={visibilityTitle}
               onClick={() => toggleVisibility(layer.id, !isVisible)}
-              title={visibilityTitle}
             >
               <UncontrolledTooltip
                 placement="right"
