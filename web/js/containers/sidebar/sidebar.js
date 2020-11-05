@@ -192,13 +192,14 @@ class Sidebar extends React.Component {
             ref={(iconElement) => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}
           />
-          <CollapsedButton
-            isMobile={isMobile}
-            isCollapsed={isCollapsed}
-            onclick={this.toggleSidebar}
-            numberOfLayers={numberOfLayers}
-            isDistractionFreeModeActive={isDistractionFreeModeActive}
-          />
+          {isCollapsed && (
+            <CollapsedButton
+              isMobile={isMobile}
+              onclick={this.toggleSidebar}
+              numberOfLayers={numberOfLayers}
+              isDistractionFreeModeActive={isDistractionFreeModeActive}
+            />
+          )}
           <div
             id="productsHolder"
             className="products-holder-case"
