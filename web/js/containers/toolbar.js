@@ -135,6 +135,7 @@ class toolbarContainer extends Component {
 
   renderTooltip = (buttonId, labelText) => (
     <UncontrolledTooltip
+      trigger="hover"
       target={buttonId}
       boundariesElement="window"
       placement="bottom"
