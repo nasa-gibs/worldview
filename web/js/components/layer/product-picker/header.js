@@ -7,6 +7,7 @@ import {
   Button,
   Breadcrumb,
   BreadcrumbItem,
+  UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withSearch } from '@elastic/react-search-ui';
@@ -148,10 +149,17 @@ class ProductPickerHeader extends React.Component {
           {showBackButton && (
             <>
               <Button
+                id="layer-back-button"
                 className="back-button"
                 color="secondary"
                 onClick={this.revertToInitialScreen}
               >
+                <UncontrolledTooltip
+                  placement="right"
+                  target="layer-back-button"
+                >
+                  Return to category view
+                </UncontrolledTooltip>
                 <FontAwesomeIcon icon="arrow-left" />
               </Button>
               {isBreadCrumb && this.renderBreadCrumb()}
@@ -169,10 +177,17 @@ class ProductPickerHeader extends React.Component {
 
           {showFilterBn && (
             <Button
+              id="layer-filter-button"
               className="filter-button"
               onClick={filterBtnFn}
-              title="Filter layer results"
+              aria-label="Filtered layer search"
             >
+              <UncontrolledTooltip
+                placement="right"
+                target="layer-filter-button"
+              >
+                Filtered layer search
+              </UncontrolledTooltip>
               <FontAwesomeIcon icon="filter" />
             </Button>
           )}
