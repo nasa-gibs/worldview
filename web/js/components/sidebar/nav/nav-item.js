@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavItem, NavLink, UncontrolledTooltip } from 'reactstrap';
+import { NavItem, NavLink } from 'reactstrap';
 
 const CustomNavItem = (props) => {
   const {

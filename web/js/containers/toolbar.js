@@ -198,20 +198,23 @@ class toolbarContainer extends Component {
         : 'Take a snapshot';
 
     return !isDistractionFreeModeActive && (
-      <Button
-        id={buttonId}
-        className={
+      <div id="snapshot-btn-wrapper">
+        {this.renderTooltip('snapshot-btn-wrapper', labelText)}
+        <Button
+          id={buttonId}
+          className={
           isImageDownloadActive
             ? 'wv-toolbar-button'
             : 'wv-toolbar-button disabled'
         }
-        disabled={!isImageDownloadActive}
-        aria-label={labelText}
-        onClick={this.openImageDownload}
-      >
-        {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="camera" size="2x" />
-      </Button>
+          disabled={!isImageDownloadActive}
+          aria-label={labelText}
+          onClick={this.openImageDownload}
+        >
+          <FontAwesomeIcon icon="camera" size="2x" />
+        </Button>
+      </div>
+
     );
   }
 

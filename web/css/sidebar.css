@@ -75,6 +75,9 @@
 }
 .products-holder-case .nav-tabs .nav-link {
   padding: 4px 8px;
+  &.disabled {
+    pointer-events: auto;
+  }
 }
 .products-holder-case .main-nav .nav-link {
   margin: 1px 0;

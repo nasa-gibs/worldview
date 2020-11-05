@@ -37,6 +37,7 @@
 
 .wv-toolbar .btn.disabled {
   pointer-events: auto;
+  cursor: default;
 }
 
 .wv-toolbar .btn.disabled:hover i {
