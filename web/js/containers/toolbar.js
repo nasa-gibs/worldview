@@ -133,16 +133,19 @@ class toolbarContainer extends Component {
     }
   }
 
-  renderTooltip = (buttonId, labelText) => (
-    <UncontrolledTooltip
-      trigger="hover"
-      target={buttonId}
-      boundariesElement="window"
-      placement="bottom"
-    >
-      {labelText}
-    </UncontrolledTooltip>
-  )
+  renderTooltip = (buttonId, labelText) => {
+    const { isMobile } = this.props;
+    return !isMobile && (
+      <UncontrolledTooltip
+        trigger="hover"
+        target={buttonId}
+        boundariesElement="window"
+        placement="bottom"
+      >
+        {labelText}
+      </UncontrolledTooltip>
+    );
+  }
 
   renderShareButton() {
     const { openModal, isDistractionFreeModeActive } = this.props;
@@ -267,7 +270,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    notifications, palettes, compare, map, layers, proj, data, ui,
+    notifications, palettes, compare, map, layers, proj, data, ui, browser,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -292,6 +295,7 @@ const mapStateToProps = (state) => {
       && !isDataDownloadActive,
     ),
     isCompareActive,
+    isMobile: browser.lessThan.medium,
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
       activePalettes,
@@ -375,6 +379,7 @@ toolbarContainer.propTypes = {
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isRotated: PropTypes.bool,
   notificationContentNumber: PropTypes.number,
   notificationType: PropTypes.string,
