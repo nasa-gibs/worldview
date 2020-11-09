@@ -30,7 +30,7 @@ export default function FilterChips(props) {
         >
           {displayValue}
           <FontAwesomeIcon
-            icon="timies"
+            icon="times"
             fixedWidth
           />
         </div>
