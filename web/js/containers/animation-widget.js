@@ -389,7 +389,7 @@ class AnimationWidget extends React.Component {
         Please request less than 40 frames if you would like to generate a GIF.
       </span>
     );
-    const labelText = 'Create an animated gif';
+    const labelText = 'Create an animated GIF';
 
     const openGif = async () => {
       const { startDate, endDate } = this.zeroDates();
