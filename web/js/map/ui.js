@@ -56,6 +56,7 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
 import { addCoordinatesMarker, reverseGeocode } from '../modules/geosearch/selectors';
+import { getCoordinatesMetadata, renderTooltip } from '../components/geosearch/ol-coordinates-marker-util';
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -232,6 +233,13 @@ export default function mapui(models, config, store, ui) {
    */
   const addMarkerAndUpdateStore = (activeMarker, coordinates, results) => {
     const marker = addCoordinatesMarker(activeMarker, config, { ui: self }, coordinates, results);
+
+    // handle render initial tooltip
+    const [longitude, latitude] = coordinates;
+    const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
+    const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
+    renderTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata);
+
     store.dispatch({ type: UPDATE_ACTIVE_MARKER, value: marker, reverseGeocodeResults: results });
   };
 
