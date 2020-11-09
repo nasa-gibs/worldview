@@ -115,7 +115,9 @@ class SearchComponent extends Component {
   // handle input value change including text/coordinates typing, pasting, cutting
   onChange=(e, value) => {
     e.preventDefault();
-    const { updateSearchResults, updateValue, updatePendingCoordinates } = this.props;
+    const {
+      updateSearchResults, updateValue, updatePendingCoordinates,
+    } = this.props;
     updateValue(value);
 
     // check for coordinate value
@@ -136,6 +138,8 @@ class SearchComponent extends Component {
           if (lodashGet(items, 'suggestions')) {
             const { suggestions } = items;
             updateSearchResults(suggestions);
+          } else {
+            updateSearchResults([]);
           }
         });
       }
@@ -173,7 +177,7 @@ class SearchComponent extends Component {
       isTouchDevice,
       showReverseGeocodeAlert,
     } = this.state;
-    const message = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a point on the map.`;
+    const message = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a location.`;
 
     return showReverseGeocodeAlert && (
       <Alert
@@ -231,7 +235,7 @@ class SearchComponent extends Component {
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
     const containerClass = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
-    const buttonRightMargin = { marginRight: hasCoordinates && isMobile ? '6px' : '0' };
+    const buttonRightMargin = { marginRight: hasCoordinates && isMobile ? '6px' : '1px' };
 
     return (
       <InputGroupAddon

@@ -29,10 +29,12 @@ class SearchBox extends Component {
   // handle submit button click - required to select coordinates since no suggestions menu
   handleSubmitClick = (e) => {
     e.preventDefault();
-    const { onSelect, coordinatesPending, onCoordinateInputSelect } = this.props;
+    const {
+      onSelect, coordinatesPending, onCoordinateInputSelect, searchResults,
+    } = this.props;
     if (coordinatesPending.length > 0) {
       onCoordinateInputSelect();
-    } else if (this.highlightedItem) {
+    } else if (searchResults.length > 0 && this.highlightedItem) {
       onSelect(this.highlightedItem.text, this.highlightedItem);
     }
   }
