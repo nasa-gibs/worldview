@@ -36,13 +36,12 @@ export default class AlertUtil extends React.Component {
       id,
       title,
       message,
-      iconClassName,
+      icon,
       isOpen,
       onDismiss,
       onClick,
     } = this.props;
 
-    const icon = iconClassName || 'exclamation-triangle';
     return (
       <Alert
         id={id}
@@ -54,7 +53,11 @@ export default class AlertUtil extends React.Component {
           title={title}
           onClick={onClick}
         >
-          <FontAwesomeIcon icon={icon} className="wv-alert-icon" size="1x" />
+          <FontAwesomeIcon
+            icon={icon || 'exclamation-triangle'}
+            className="wv-alert-icon"
+            size="1x"
+          />
           <div className="wv-alert-message">
             {message}
           </div>
@@ -81,11 +84,11 @@ export default class AlertUtil extends React.Component {
 }
 
 AlertUtil.defaultProps = {
-  iconClassName: '',
+  icon: '',
   title: '',
 };
 AlertUtil.propTypes = {
-  iconClassName: PropTypes.string,
+  icon: PropTypes.string,
   id: PropTypes.string,
   isOpen: PropTypes.bool,
   message: PropTypes.string,

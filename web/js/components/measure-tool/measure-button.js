@@ -67,7 +67,7 @@ class MeasureButton extends React.Component {
         <AlertUtil
           id="measurement-alert"
           isOpen
-          iconClassName="ruler"
+          icon="ruler"
           title="Measure Tool"
           message={message}
           onDismiss={this.dismissAlert}
