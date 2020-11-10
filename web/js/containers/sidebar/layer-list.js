@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as lodashGet } from 'lodash';
 import Layer from './layer';
 import {
@@ -19,56 +20,29 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-class LayerList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      palettes: {},
-    };
-    this.promises = {};
-    this.onDragEnd = this.onDragEnd.bind(this);
-    this.renderLayer = this.renderLayer.bind(this);
-  }
+function LayerList(props) {
+  const {
+    layerGroupName,
+    reorderLayers,
+    layerSplit,
+    activeLayers,
+    layers,
+    zots,
+    runningLayers,
+    projId,
+    getNames,
+    available,
+    groupId,
+    title,
+  } = props;
 
-  /**
-   * Get Palette and setState with promise results when palette is retrieved
-   * @param {Object} layer | Layer
-   * @param {Function} palettePromise | Retrieve palette
-   */
-  getPalette(layer, palettePromise) {
-    const { renderedPalettes } = this.props;
-    if (renderedPalettes[layer.id]) {
-      return renderedPalettes[layer.id];
-    } if (this.promises[layer.id]) {
-      return null;
-    } if (layer.palette) {
-      this.promises[layer.id] = true;
-      const promise = palettePromise(layer.id);
-      promise.then((palette) => {
-        const { palettes } = this.state;
-        delete this.promises[layer.id];
-        palettes[layer.id] = palette;
-        this.setState({
-          palettes,
-        });
-      });
-    }
-    return null;
-  }
+  const [collapsed, toggleCollapse] = useState(false);
 
   /**
    * Update Layer order after drag
    * @param {Object} result | Result of layer drag
    */
-  onDragEnd(result) {
-    const {
-      layerGroupName,
-      groupId,
-      reorderLayers,
-      layerSplit,
-      activeLayers,
-      layers,
-    } = this.props;
+  const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     if (!destination || source.index === destination.index) {
       return;
@@ -88,28 +62,17 @@ class LayerList extends React.Component {
       layerId,
       nextLayerId,
       activeLayers,
-      groupId,
       layerSplit,
     );
     reorderLayers(newLayers);
-  }
+  };
 
-  renderLayer(layer, index) {
-    const {
-      groupId,
-      layerGroupName,
-      zots,
-      runningLayers,
-      projId,
-      getNames,
-      available,
-    } = this.props;
+  const renderLayer = (layer, index) => {
     const { id, projections, visible } = layer;
 
     return (
       <Layer
         layer={layer}
-        groupId={groupId}
         layerGroupName={layerGroupName}
         isInProjection={!!projections[projId]}
         key={id}
@@ -122,20 +85,19 @@ class LayerList extends React.Component {
         runningObject={runningLayers && runningLayers[id]}
       />
     );
-  }
+  };
 
-  render() {
-    const {
-      groupId,
-      title,
-      layerGroupName,
-      layers,
-    } = this.props;
-    return (
-      <div className="layer-group-case">
-        <h3 className="head">{title}</h3>
+  return (
+    <div className="layer-group-case">
+      <h3 className="layer-group-title">{`${title} (${layers.length})`}</h3>
+      <FontAwesomeIcon
+        className="layer-group-collapse"
+        icon={!collapsed ? 'caret-down' : 'caret-left'}
+        onClick={() => toggleCollapse(!collapsed)}
+      />
 
-        <DragDropContext onDragEnd={this.onDragEnd}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        {!collapsed && (
           <Droppable
             droppableId={`${layerGroupName}-${groupId}`}
             type={`layerSubGroup${groupId}`}
@@ -149,15 +111,15 @@ class LayerList extends React.Component {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.droppableProps}
               >
-                {layers.map(this.renderLayer)}
+                {layers.map(renderLayer)}
                 {provided.placeholder}
               </ul>
             )}
           </Droppable>
-        </DragDropContext>
-      </div>
-    );
-  }
+        )}
+      </DragDropContext>
+    </div>
+  );
 }
 
 LayerList.propTypes = {
@@ -169,7 +131,6 @@ LayerList.propTypes = {
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
   projId: PropTypes.string,
-  renderedPalettes: PropTypes.string,
   reorderLayers: PropTypes.func,
   runningLayers: PropTypes.object,
   title: PropTypes.string,

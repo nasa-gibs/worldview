@@ -124,7 +124,7 @@
 }
 
 #productsHolder footer {
-  padding: 5px;
+padding: 5px;
   width: initial;
 }
 footer .product-buttons {
@@ -143,7 +143,20 @@ footer .compare-toggle-button {
 }
 .layer-group-case {
   overflow: hidden;
+  .layer-group-title {
+    display: inline-block;
+    margin: 5px;
+  }
+  .layer-group-collapse {
+    display: inline;
+    color: #fff;
+    font-size: 20px;
+    position: absolute;
+    right: 5px;
+    cursor: pointer;
+  }
 }
+
 .wv-ab-mode-selection-case {
   margin: 5px;
   color: #fff;
