@@ -62,7 +62,7 @@ const CompareCase = (props) => {
               <Layers
                 isActive={isCompareA}
                 activeOverlays={layersA}
-                layerGroupName="active"
+                compareState="active"
                 height={height - tabHeight}
               />
             </TabPane>
@@ -70,7 +70,7 @@ const CompareCase = (props) => {
               <Layers
                 isActive={!isCompareA}
                 activeOverlays={layersB}
-                layerGroupName="activeB"
+                compareState="activeB"
                 height={height - tabHeight}
               />
             </TabPane>

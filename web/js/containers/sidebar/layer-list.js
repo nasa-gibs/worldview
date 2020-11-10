@@ -22,7 +22,7 @@ const reorder = (list, startIndex, endIndex) => {
 
 function LayerList(props) {
   const {
-    layerGroupName,
+    compareState,
     reorderLayers,
     layerSplit,
     activeLayers,
@@ -47,7 +47,7 @@ function LayerList(props) {
     if (!destination || source.index === destination.index) {
       return;
     }
-    const regex = new RegExp(`-${layerGroupName}$`);
+    const regex = new RegExp(`-${compareState}$`);
     const layerId = draggableId.replace(regex, '');
     const newLayerArray = reorder(layers, source.index, destination.index);
 
@@ -73,7 +73,7 @@ function LayerList(props) {
     return (
       <Layer
         layer={layer}
-        layerGroupName={layerGroupName}
+        compareState={compareState}
         isInProjection={!!projections[projId]}
         key={id}
         index={index}
@@ -99,8 +99,8 @@ function LayerList(props) {
       <DragDropContext onDragEnd={onDragEnd}>
         {!collapsed && (
           <Droppable
-            droppableId={`${layerGroupName}-${groupId}`}
-            type={`layerSubGroup${groupId}`}
+            droppableId={`${compareState}-${groupId}`}
+            type={`layerGroup${groupId}`}
             direction="vertical"
           >
             {(provided, snapshot) => (
@@ -127,7 +127,7 @@ LayerList.propTypes = {
   available: PropTypes.func,
   getNames: PropTypes.func,
   groupId: PropTypes.string,
-  layerGroupName: PropTypes.string,
+  compareState: PropTypes.string,
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
   projId: PropTypes.string,
@@ -138,13 +138,13 @@ LayerList.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { layerGroupName } = ownProps;
+  const { compareState } = ownProps;
   const {
     proj, config, map,
   } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
-  const activeLayers = state.layers[layerGroupName];
+  const activeLayers = state.layers[compareState];
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)
     : {};

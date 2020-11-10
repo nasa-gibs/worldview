@@ -150,7 +150,7 @@ class Sidebar extends React.Component {
         <Layers
           height={subComponentHeight - 20}
           isActive={activeTab === 'layers'}
-          layerGroupName={activeString}
+          compareState={activeString}
         />
       );
     }

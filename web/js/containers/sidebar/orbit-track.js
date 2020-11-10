@@ -70,14 +70,14 @@ OrbitTrack.propTypes = {
 function mapStateToProps(state, ownProps) {
   const {
     trackLayer,
-    layerGroupName,
+    compareState,
   } = ownProps;
   const { palettes, config } = state;
   const renderedPalettes = palettes.rendered;
   const hasPalette = !lodashIsEmpty(trackLayer.palette);
   const paletteName = lodashGet(config, `layers['${trackLayer.id}'].palette.id`);
   const paletteLegends = hasPalette && renderedPalettes[paletteName]
-    ? getPaletteLegends(trackLayer.id, layerGroupName, state)
+    ? getPaletteLegends(trackLayer.id, compareState, state)
     : [];
   const isCustomPalette = hasPalette && palettes.custom[trackLayer.id];
 
@@ -89,7 +89,7 @@ function mapStateToProps(state, ownProps) {
     renderedPalette: renderedPalettes[paletteName],
     isMobile: state.browser.lessThan.medium,
     hasPalette,
-    getPalette: (layerId, index) => getPalette(trackLayer.id, index, layerGroupName, state),
+    getPalette: (layerId, index) => getPalette(trackLayer.id, index, compareState, state),
   };
 }
 
