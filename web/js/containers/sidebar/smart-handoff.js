@@ -34,6 +34,7 @@ class SmartHandoff extends Component {
       screenHeight,
     } = props;
 
+    // Set default state
     this.state = {
       boundaries: props.boundaries || {
         x: screenWidth / 2 - 100,
@@ -56,6 +57,11 @@ class SmartHandoff extends Component {
     this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 250);
   }
 
+  /**
+   * When fired, compare prevProps to determine if previously selected layer is still active
+   * and whether or not to update granule data base don data changes.
+   * @param {*} prevProps
+   */
   componentDidUpdate(prevProps) {
     const { selectedDate, activeLayers } = this.props;
     const { currentExtent, selectedLayer } = this.state;
@@ -64,18 +70,24 @@ class SmartHandoff extends Component {
     const isLayerStillActive = activeLayers.find((layer) => selectedLayer.conceptId === layer.conceptId);
 
     if (!isLayerStillActive) {
-      console.log('no longer active');
       this.resetState();
     }
 
+    // Determine if date changed; if so, fire update on granule count
     const didDateChange = selectedDate !== prevProps.selectedDate;
     if (didDateChange) this.updateGranuleCount(currentExtent);
   }
 
+  /**
+   * Resets this component to it's default state
+   */
   resetState() {
     this.setState(this.baseState);
   }
 
+  /**
+   * Fires when the bounding box / crop toggle is activated and changed
+   */
   updateExtent() {
     const { currentExtent, selectedLayer } = this.state;
     if (selectedLayer && currentExtent) {
@@ -90,54 +102,82 @@ class SmartHandoff extends Component {
   onBoundaryChange(boundaries) {
     const { proj, map } = this.props;
     const { selectedLayer } = this.state;
-    const {
-      x, y, width, height,
-    } = boundaries;
-    const newBoundaries = {
-      x,
-      y,
-      x2: x + width,
-      y2: y + height,
-    };
 
-    const lonlats = imageUtilGetCoordsFromPixelValues(
-      newBoundaries,
-      map.ui.selected,
-    );
-    const { crs } = proj;
-    // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    if (selectedLayer.id) {
+      const {
+        x, y, width, height,
+      } = boundaries;
+      const newBoundaries = {
+        x,
+        y,
+        x2: x + width,
+        y2: y + height,
+      };
 
-    const currentExtent = {
-      southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
-      northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
-    };
+      const lonlats = imageUtilGetCoordsFromPixelValues(
+        newBoundaries,
+        map.ui.selected,
+      );
+      const { crs } = proj;
 
-    const coordinates = {
-      bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-      topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
-    };
+      // Retrieve the lat/lon coordinates based on the defining boundary and map projection
+      const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+      const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
-    this.setState({
-      boundaries: newBoundaries,
-      coordinates,
-      currentExtent,
-    }, () => {
-      if (selectedLayer && currentExtent) {
-        this.debouncedUpdateExtent();
-      }
-    });
+      // Determine longitude out of bounds areas and reset to limits
+      if (geolonlat1[0] > 180) geolonlat1[0] = 180;
+      else if (geolonlat1[0] < -180) geolonlat1[0] = -180;
+      if (geolonlat2[0] > 180) geolonlat2[0] = 180;
+      else if (geolonlat2[0] < -180) geolonlat2[0] = -180;
+
+      // Determine latitude out of bounds areas and reset to limits
+      if (geolonlat1[1] > 90) geolonlat1[1] = 90;
+      else if (geolonlat1[1] < -90) geolonlat1[1] = -90;
+      if (geolonlat2[1] > 90) geolonlat2[1] = 90;
+      else if (geolonlat2[1] < -90) geolonlat2[1] = -90;
+
+      const currentExtent = {
+        southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
+        northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
+      };
+
+      const coordinates = {
+        bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
+        topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
+      };
+
+      this.setState({
+        boundaries: newBoundaries,
+        coordinates,
+        currentExtent,
+      }, () => {
+        if (selectedLayer && currentExtent) {
+          this.debouncedUpdateExtent();
+        }
+      });
+    }
   }
 
+  /**
+   * Fires when user selected a different layer
+   * @param {*} layer - the specified layer designated by the user
+   * @param {*} currentExtent - the current boundaries of the bounding box
+   */
   onLayerChange(layer, currentExtent) {
     this.setState({ selectedLayer: layer }, () => this.updateGranuleCount(currentExtent));
   }
 
+  /**
+   * Asynchronous call to fetch granule data for the specified selected layer. Contains
+   * conditional logic to determine which counts are provided back to the user; total
+   * count vs selected count (that is if the bounding box has been enabled by the user)
+   * @param {*} currentExtent
+   */
   async updateGranuleCount(currentExtent) {
     const { selectedDate } = this.props;
     const { selectedLayer, showBoundingBox } = this.state;
 
+    // Places the compoent state in a loading state; triggers {...} animation.
     this.setState({ isSearchingForGranules: true });
 
     const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
@@ -157,6 +197,7 @@ class SmartHandoff extends Component {
 
     let urlSelectedGranules = urlTotalGranules;
 
+    // Gets the total amount of granules that the layer has
     totalGranules = await fetch(urlTotalGranules, { timeout: 5000 })
       .then(async(response) => {
         const result = await response.json();
@@ -164,6 +205,7 @@ class SmartHandoff extends Component {
       })
       .catch((error) => 0);
 
+    // Gets the total subset of granules that are within the defining bounding box
     if (showBoundingBox) {
       urlSelectedGranules += `&bounding_box=${currentExtent.southWest},${currentExtent.northEast}`;
       selectedGranules = await fetch(urlSelectedGranules, { timeout: 5000 })
@@ -199,16 +241,18 @@ class SmartHandoff extends Component {
     // Determine if data-download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
-    // Bounardies referencing the coordinates displayed around image crop
     const { boundaries } = this.state;
     const {
       x, y, x2, y2,
     } = boundaries;
 
-    // Used to determine if modal should be shown
+    // Used to determine if the added smart-handoff modal should be shown
     const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
     let showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
     showModal = true;
+
+    // Determine if the download button is enabled
+    const isValidDownload = selectedLayer.id !== undefined;
 
     const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
     const areThereLayersToDownload = availableLayers > 0;
@@ -220,11 +264,11 @@ class SmartHandoff extends Component {
           <h1>Select an available layer to download:</h1>
 
           <div id="esd-notification">
-            Downloading data will be performed using NASA's Earthdata Search application.
-            <br />
+            Downloading data will be performed using
             {' '}
-            <br />
-            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">search.earthdata.nasa.gov</a>
+            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">NASA's Earthdata Search</a>
+            {' '}
+            application.
           </div>
 
           <hr />
@@ -239,7 +283,7 @@ class SmartHandoff extends Component {
                       type="radio"
                       value={layer.conceptId}
                       name="smart-handoff-layer-radio"
-                      checked={selectedLayer && selectedLayer.id === layer.id}
+                      checked={selectedLayer.id === layer.id}
                       onChange={() => this.onLayerChange(layer, currentExtent)}
                     />
                     <label htmlFor={layer.id}>{layer.title}</label>
@@ -258,10 +302,11 @@ class SmartHandoff extends Component {
               id="chk-crop-toggle"
               label="Toggle Bounding Box"
               text="Toggle boundary selection."
+              color="gray"
               checked={showBoundingBox}
               onCheck={() => {
                 this.setState({ showBoundingBox: !showBoundingBox }, () => {
-                  if (selectedLayer) this.updateGranuleCount(currentExtent);
+                  if (selectedLayer.id) this.updateGranuleCount(currentExtent);
                 });
               }}
             />
@@ -273,8 +318,9 @@ class SmartHandoff extends Component {
             <h1>
               Granules available:
               {' '}
-              { showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
-              { !showBoundingBox && !isSearchingForGranules && (<span className="fade-in constant-width">{totalGranules}</span>)}
+              { !isSearchingForGranules && totalGranules === 0 && (<span className="fade-in constant-width">NONE</span>)}
+              { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{totalGranules}</span>)}
+              { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
               { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
             </h1>
           </div>
@@ -287,7 +333,7 @@ class SmartHandoff extends Component {
             id="download-btn"
             text="GO TO EARTHDATA SEARCH"
             className="red"
-            valid={selectedLayer && (totalGranules !== 0)}
+            valid={isValidDownload}
           />
 
           { showBoundingBox && (
@@ -327,6 +373,14 @@ class SmartHandoff extends Component {
   }
 }
 
+/**
+ * Method call to direct the user to Earthdata Search with the necessary URL parameters that
+ * encapsulate what the user is intending to try and download data / granules from
+ * @param {*} selectedDate
+ * @param {*} selectedLayer
+ * @param {*} extentCoords
+ * @param {*} showBoundingBox
+ */
 const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords, showBoundingBox) => () => {
   const { conceptId, daynight } = selectedLayer;
   const { southWest, northEast } = extentCoords;
