@@ -247,7 +247,6 @@ export default function naturalEventsUI(ui, config, store, models) {
     const category = event && event.categories[0].title;
     const isSameCategory = category === prevCategory;
     if (!event) {
-      wvui.notify(`The event with an id of ${id} is no longer active.`);
       return;
     }
     date = date || getDefaultEventDate(event);

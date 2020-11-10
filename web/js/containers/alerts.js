@@ -41,7 +41,7 @@ class DismissableAlerts extends React.Component {
     if (isSmall || !HAS_LOCAL_STORAGE) return null;
     return (
       <>
-        {!hasDismissedEvents && isEventsActive ? (
+        {!hasDismissedEvents && isEventsActive && (
           <AlertUtil
             id="event-alert"
             isOpen
@@ -50,8 +50,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
             message="Events may not be visible at all times."
           />
-        ) : null}
-        {!hasDismissedCompare && isCompareActive ? (
+        )}
+        {!hasDismissedCompare && isCompareActive && (
           <AlertUtil
             isOpen
             noPortal
@@ -59,8 +59,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
             message="You are now in comparison mode."
           />
-        ) : null}
-        {isVectorAlertPresent ? (
+        )}
+        {isVectorAlertPresent && (
           <AlertUtil
             isOpen
             noPortal
@@ -68,7 +68,7 @@ class DismissableAlerts extends React.Component {
             onDismiss={dismissVectorAlert}
             message="Vector features may not be clickable at all zoom levels."
           />
-        ) : null}
+        )}
       </>
     );
   }
