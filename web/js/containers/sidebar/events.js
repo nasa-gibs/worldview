@@ -18,6 +18,7 @@ import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
 import getSelectedDate from '../../modules/date/selectors';
 import { getEventCategories } from '../../modules/natural-events/selectors';
+import AlertUtil from '../../components/util/alert';
 
 function Events(props) {
   const {
@@ -47,6 +48,7 @@ function Events(props) {
   const ALL_CATEGORY = 'All Event Categories';
   const [selectedCategory, selectCategory] = useState(ALL_CATEGORY);
 
+  const [showInactiveEventAlert, setInactiveEventAlert] = useState(selected.id && !selected.date);
 
   const initRequests = () => {
     let eventsRequestURL = `${apiURL}/events`;
@@ -154,6 +156,14 @@ function Events(props) {
         </div>
       </Scrollbars>
 
+      {showInactiveEventAlert && (
+        <AlertUtil
+          id="event-unavailable-alert"
+          isOpen
+          onDismiss={() => { setInactiveEventAlert(false); }}
+          message={`The event with an id of ${selected.id} is no longer active.`}
+        />
+      )}
     </div>
   );
 }
