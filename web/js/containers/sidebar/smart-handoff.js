@@ -266,7 +266,7 @@ class SmartHandoff extends Component {
           <div id="esd-notification">
             Downloading data will be performed using
             {' '}
-            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">NASA's Earthdata Search</a>
+            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">NASA&apos;s Earthdata Search</a>
             {' '}
             application.
           </div>
