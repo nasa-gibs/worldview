@@ -268,7 +268,6 @@ class Tour extends React.Component {
         isOpen
         timeout={10000}
         onDismiss={endTour}
-        iconClassName=" "
         message="Sorry, this tour is no longer supported."
       />
     );
@@ -281,7 +280,6 @@ class Tour extends React.Component {
         isOpen
         timeout={10000}
         onDismiss={endTour}
-        iconClassName=" "
         message="To view these tours again, click the 'Explore Worldview' link in the “i” menu."
       />
     );
