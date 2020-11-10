@@ -8,8 +8,6 @@ import { faExclamationTriangle, faSearchLocation } from '@fortawesome/free-solid
 class SearchBox extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
     this.highlightedItem = null;
     this.geosearchInput = null;
   }
@@ -124,7 +122,7 @@ class SearchBox extends Component {
     const hasCoordinates = coordinates.length > 0;
     // eslint-disable-next-line no-nested-ternary
     const rightPositioning = hasCoordinates
-      ? isMobile ? '121px' : '121px'
+      ? isMobile ? '130px' : '121px'
       : '92px';
 
     return (
