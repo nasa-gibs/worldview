@@ -8,11 +8,8 @@ import util from '../../util/util';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import * as EVENT_CONSTANTS from '../../modules/natural-events/constants';
 import { activateLayersForEventCategory } from '../../modules/layers/actions';
-import {
-  deselectEvent as deselectEventAction,
-  selected as selectedAction,
-} from '../../modules/natural-events/actions';
-import { getDefaultEventDate, naturalEventsUtilGetEventById } from './util';
+import { selected as selectedAction } from '../../modules/natural-events/actions';
+import { getDefaultEventDate } from './util';
 import { selectDate } from '../../modules/date/actions';
 import { UPDATE_MAP_UI } from '../../modules/map/constants';
 import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
@@ -166,7 +163,7 @@ export default function naturalEventsUI(ui, config, store, models) {
           filterEventList();
         }
         if (self.selected.date) {
-          const event = naturalEventsUtilGetEventById(self.eventsData, self.selected.id);
+          const event = self.eventsData.find((e) => e.id === self.selected.id);
           setTimeout(() => {
             naturalEventsTrack.update(event, self.selected.date);
             zoomToEvent(event, self.selected.date, null, false);
@@ -244,9 +241,9 @@ export default function naturalEventsUI(ui, config, store, models) {
   const selectEvent = function(id, date, rotation, isInitialLoad) {
     const isIdChange = !self.selected || self.selected.id !== id;
     const prevId = self.selected.id ? self.selected.id : false;
-    const prevEvent = prevId && naturalEventsUtilGetEventById(self.eventsData, prevId);
+    const prevEvent = prevId && self.eventsData.find((e) => e.id === prevId);
     const prevCategory = prevEvent ? prevEvent.categories[0].title : false;
-    const event = naturalEventsUtilGetEventById(self.eventsData, id);
+    const event = self.eventsData.find((e) => e.id === id);
     const category = event && event.categories[0].title;
     const isSameCategory = category === prevCategory;
     if (!event) {
@@ -314,7 +311,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       self.markers = naturalEventMarkers.draw();
       naturalEventsTrack.update(null);
     }
-    store.dispatch(deselectEventAction);
+    // store.dispatch(deselectEventAction);
     self.events.trigger('change');
   };
 
