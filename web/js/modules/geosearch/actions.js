@@ -12,8 +12,9 @@ import {
 } from './selectors';
 import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
 import { setLocalStorageCollapseState } from './util';
-import { getCoordinatesMetadata, renderTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
+import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
 
+// toggle show geosearch component
 export function toggleShowGeosearch() {
   return (dispatch, getState) => {
     const state = getState();
@@ -31,6 +32,7 @@ export function toggleShowGeosearch() {
   };
 }
 
+// toggle reverse geocode - if active, next click on map will add marker and get coordinates
 export function toggleReverseGeocodeActive(isCoordinateSearchActive) {
   return {
     type: TOGGLE_REVERSE_GEOCODE_ACTIVE,
@@ -38,15 +40,17 @@ export function toggleReverseGeocodeActive(isCoordinateSearchActive) {
   };
 }
 
+// use given coordinates to fly to that point, add marker, and display initial coordinates dialog
 export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      config, geosearch, map, layers, proj,
+      browser, config, geosearch, map, layers, proj,
     } = state;
     const { sources } = config;
     const { active } = layers;
     const { activeMarker } = geosearch;
+    const isMobile = browser.lessThan.medium;
 
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
@@ -65,17 +69,28 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
         activeMarker: null,
       });
     }
+
+    // fly to coordinates and render coordinates tooltip
     const zoom = map.ui.selected.getView().getZoom();
     const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-
     animateCoordinates(map, config, coordinates, maxZoom);
 
     // handle render initial tooltip
     const [longitude, latitude] = coordinates;
-    const geocodeProperties = { latitude, longitude, reverseGeocodeResults };
+    const geocodeProperties = {
+      latitude,
+      longitude,
+      reverseGeocodeResults,
+    };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-    renderTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata);
+    const clearMarkerAndCoordinates = () => {
+      removeCoordinatesMarker(marker, map);
+      dispatch({
+        type: CLEAR_COORDINATES,
+      });
+    };
+    renderCoordinatesTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarkerAndCoordinates);
 
     dispatch({
       type: SELECT_COORDINATES_TO_FLY,
@@ -87,6 +102,7 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
   };
 }
 
+// clear coordinates including marker and dialog (if open), adding new marker will clear any active marker
 export function clearCoordinates() {
   return (dispatch, getState) => {
     const state = getState();

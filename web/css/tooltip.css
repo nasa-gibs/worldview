@@ -127,13 +127,20 @@
       right: 6px;
       bottom: 6px;
     }
+    & .copy-coordinates-to-clipboard-button {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 20px;
+      width: 23px;
+    }
   }
   .tooltip-coordinates-title {
     white-space: pre-wrap;
     word-wrap: break-word;
     line-height: 17px;
     font-size: 16px;
-    padding-right: 23px;
+    padding-right: 50px;
   }
   .tooltip-coordinates-group {
     display: flex;
@@ -143,14 +150,21 @@
       padding-right: 26px;
     }
   }
-  .close-tooltip {
+  .close-tooltip,
+  .minimize-tooltip {
     margin-left: 8px;
     border-left: 1px solid #777;
-    padding-left: 6px;
-    &.close-coordinates-tooltip {
+    &.close-coordinates-tooltip,
+    &.minimize-coordinates-tooltip {
       position: absolute;
-      top: 4px;
+      padding: 3px 0 3px 6px;
+      top: 0;
+    }
+    &.close-coordinates-tooltip {
       right: 6px;
+    }
+    &.minimize-coordinates-tooltip {
+      right: 30px;
     }
   }
   .svg-inline--fa {

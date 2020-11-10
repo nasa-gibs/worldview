@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
-  ButtonGroup, Button, InputGroup, InputGroupAddon,
+  Button, InputGroup, InputGroupAddon, UncontrolledTooltip,
 } from 'reactstrap';
 import {
   throttle as lodashThrottle,
@@ -9,10 +9,6 @@ import {
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMapMarkerAlt,
-  faSlash,
-} from '@fortawesome/free-solid-svg-icons';
 import SearchBox from './geosearch-input';
 import Alert from '../util/alert';
 
@@ -32,13 +28,14 @@ class SearchComponent extends Component {
 
   componentDidUpdate(prevProps) {
     const { coordinates } = this.props;
-    const { showReverseGeocodeAlert } = this.state;
+    const { showExtentAlert, showReverseGeocodeAlert } = this.state;
 
-    if (showReverseGeocodeAlert && coordinates.length > 0) {
+    if ((showReverseGeocodeAlert || showExtentAlert) && coordinates.length > 0) {
       const [prevLong, prevLat] = prevProps.coordinates;
       const [long, lat] = coordinates;
       if (prevLong !== long || prevLat !== lat) {
         this.dismissReverseGeocodeAlert();
+        this.setExtentAlert(false);
       }
     }
   }
@@ -146,6 +143,19 @@ class SearchComponent extends Component {
     }
   }
 
+  // clear text input and search results
+  clearInput = () => {
+    const {
+      updateSearchResults, updateValue,
+    } = this.props;
+    updateValue('');
+    updateSearchResults([]);
+    this.setState({
+      showReverseGeocodeAlert: false,
+      showExtentAlert: false,
+    });
+  }
+
   // initiate instruction alert and activate store level toggleReverseGeocodeActive
   initReverseGeocode = (e) => {
     e.preventDefault();
@@ -163,12 +173,19 @@ class SearchComponent extends Component {
     });
   }
 
-  // clear selected marker/coordinates from map
-  clearCoordinatesMarker = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { clearCoordinates } = this.props;
-    clearCoordinates();
+  // render hover tooltip
+  renderTooltip = (buttonId, labelText) => {
+    const { isMobile } = this.props;
+    return !isMobile && (
+      <UncontrolledTooltip
+        trigger="hover"
+        target={buttonId}
+        boundariesElement="window"
+        placement="bottom"
+      >
+        {labelText}
+      </UncontrolledTooltip>
+    );
   }
 
   // render alert message to instruct user map interaction
@@ -214,59 +231,38 @@ class SearchComponent extends Component {
   // render geosearch component minimize button (not visible in mobile)
   renderMinimizeButton = () => {
     const { toggleShowGeosearch } = this.props;
+    const buttonId = 'geosearch-search-minimize-button';
+    const labelText = 'Hide Geosearch';
     return (
       <InputGroupAddon addonType="prepend">
         <Button
+          id={buttonId}
           className="geosearch-search-minimize-button"
-          title="Minimize search box"
           onClick={toggleShowGeosearch}
         >
+          {this.renderTooltip(buttonId, labelText)}
           <div className="geosearch-search-minimize-button-chevron" />
         </Button>
       </InputGroupAddon>
     );
   }
 
-  // render coordinate button group with buttons 1) reverse geocode and 2) clear map marker (conditional)
-  renderCoordinateButtonGroup = () => {
-    const {
-      coordinates,
-      isMobile,
-    } = this.props;
-    const hasCoordinates = coordinates.length > 0;
-    const containerClass = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
-    const buttonRightMargin = { marginRight: hasCoordinates && isMobile ? '6px' : '1px' };
+  // render add coordinate marker button for reverse geocode
+  renderAddCoordinateButton = () => {
+    const addCoordinateButtonId = 'geosearch-coordinate-button-addpoint';
+    const addCoordinateLabelText = 'Add marker on map';
 
     return (
-      <InputGroupAddon
-        addonType="append"
-        className={containerClass}
-      >
-        <ButtonGroup
-          className="geosearch-coordinate-button-group"
+      <InputGroupAddon addonType="append">
+        <Button
+          id={addCoordinateButtonId}
+          onTouchEnd={this.initReverseGeocode}
+          onMouseDown={this.initReverseGeocode}
+          className="geosearch-coordinate-button-addpoint"
         >
-          <Button
-            onTouchEnd={this.initReverseGeocode}
-            onMouseDown={this.initReverseGeocode}
-            className="geosearch-coordinate-button-addpoint"
-            title="Add coordinates marker onto map"
-            style={buttonRightMargin}
-          >
-            <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
-          </Button>
-          {hasCoordinates
-        && (
-          <Button
-            onTouchEnd={this.clearCoordinatesMarker}
-            onMouseDown={this.clearCoordinatesMarker}
-            className="geosearch-coordinate-button-remove"
-            title="Clear coordinates marker from map"
-          >
-            <FontAwesomeIcon icon={faSlash} />
-            <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
-          </Button>
-        )}
-        </ButtonGroup>
+          {this.renderTooltip(addCoordinateButtonId, addCoordinateLabelText)}
+          <FontAwesomeIcon icon="map-marker-alt" size="1x" />
+        </Button>
       </InputGroupAddon>
     );
   }
@@ -295,6 +291,7 @@ class SearchComponent extends Component {
             {/* Minimize button not visible in mobile */}
             {!isMobile && this.renderMinimizeButton()}
             <SearchBox
+              clearInput={this.clearInput}
               coordinates={coordinates}
               coordinatesPending={coordinatesPending}
               inputValue={inputValue}
@@ -307,8 +304,8 @@ class SearchComponent extends Component {
               isMobile={isMobile}
               showExtentAlert={showExtentAlert}
             />
-            {/* Coordinate button group */}
-            {this.renderCoordinateButtonGroup()}
+            {/* Add coordinate marker button */}
+            {this.renderAddCoordinateButton()}
           </InputGroup>
         </div>
       </>
@@ -317,7 +314,6 @@ class SearchComponent extends Component {
 }
 
 SearchComponent.propTypes = {
-  clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
   coordinatesPending: PropTypes.array,
   geosearchMobileModalOpen: PropTypes.bool,

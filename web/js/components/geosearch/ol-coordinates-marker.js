@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
 import { getCoordinatesDialogAtMapPixel } from './ol-coordinates-marker-util';
+import { clearCoordinates } from '../../modules/geosearch/actions';
 
 export class CoordinatesInteractions extends React.Component {
   constructor(props) {
@@ -56,12 +57,21 @@ export class CoordinatesInteractions extends React.Component {
   singleClick(e, map) {
     e.stopPropagation();
     const {
-      getCoordinatesDialog, measureIsActive,
+      measureIsActive,
     } = this.props;
 
     if (measureIsActive) return;
     const pixels = e.pixel;
-    getCoordinatesDialog(pixels, map);
+    this.getCoordinatesDialog(pixels, map);
+  }
+
+  getCoordinatesDialog = (pixels, olMap) => {
+    const {
+      config,
+      clearCoordinates,
+      isMobile,
+    } = this.props;
+    getCoordinatesDialogAtMapPixel(pixels, olMap, config, isMobile, clearCoordinates);
   }
 
   render() {
@@ -71,28 +81,36 @@ export class CoordinatesInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
+    browser,
     config,
     map,
     measure,
     geosearch,
   } = state;
   const { coordinates } = geosearch;
+  const isMobile = browser.lessThan.medium;
 
   return {
+    config,
     map,
     coordinates,
+    isMobile,
     isShowingClick: map.isClickable,
-    getCoordinatesDialog: (pixels, olMap) => getCoordinatesDialogAtMapPixel(pixels, olMap, config),
     measureIsActive: measure.isActive,
   };
 } const mapDispatchToProps = (dispatch) => ({
   changeCursor: (bool) => {
     dispatch(changeCursorActionCreator(bool));
   },
+  clearCoordinates: () => {
+    dispatch(clearCoordinates());
+  },
 });
 CoordinatesInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
-  getCoordinatesDialog: PropTypes.func.isRequired,
+  config: PropTypes.object.isRequired,
+  clearCoordinates: PropTypes.func.isRequired,
+  isMobile: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   mouseEvents: PropTypes.object.isRequired,

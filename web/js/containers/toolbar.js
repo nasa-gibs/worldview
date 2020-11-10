@@ -161,7 +161,8 @@ class toolbarContainer extends Component {
   }
 
   renderShareButton() {
-    const { openModal, isDistractionFreeModeActive } = this.props;
+    const { openModal, isDistractionFreeModeActive, isMobile } = this.props;
+    const faSize = isMobile ? '2x' : '1x';
     const buttonId = 'wv-link-button';
     const labelText = 'Share this map';
     return !isDistractionFreeModeActive && (
@@ -175,13 +176,16 @@ class toolbarContainer extends Component {
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="share-square" size="2x" />
+        <FontAwesomeIcon icon="share-square" size={faSize} />
       </Button>
     );
   }
 
   renderProjectionButton() {
-    const { config, openModal, isDistractionFreeModeActive } = this.props;
+    const {
+      config, openModal, isDistractionFreeModeActive, isMobile,
+    } = this.props;
+    const faSize = isMobile ? '2x' : '1x';
     const buttonId = 'wv-proj-button';
     const labelText = 'Switch projection';
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
@@ -195,7 +199,7 @@ class toolbarContainer extends Component {
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="globe-asia" size="2x" />
+        <FontAwesomeIcon icon="globe-asia" size={faSize} />
       </Button>
     );
   }
@@ -212,6 +216,8 @@ class toolbarContainer extends Component {
     } = this.props;
     const { features: { geocodeSearch: isFeatureEnabled } } = config;
     const faSize = isMobile ? '2x' : '1x';
+    const buttonId = 'wv-geosearch-button';
+    const labelText = 'Search places by location';
 
     // do not render if geosearch feature isn't enabled
     if (!isFeatureEnabled) {
@@ -231,12 +237,13 @@ class toolbarContainer extends Component {
         style={{
           display: buttonDisplayConditions ? 'inline-block' : 'none',
         }}
-        type="button"
-        id="wv-geosearch-button"
+        id={buttonId}
         className="wv-toolbar-button"
+        aria-label={labelText}
         title="Search by place name or reverse search using coordinates"
         onClick={handleButtonClick}
       >
+        {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="search-location" size={faSize} />
       </Button>
     );
@@ -247,6 +254,7 @@ class toolbarContainer extends Component {
       isImageDownloadActive,
       isCompareActive,
       isDistractionFreeModeActive,
+      isMobile,
     } = this.props;
     const buttonId = 'wv-image-button';
     const labelText = isCompareActive
@@ -254,6 +262,7 @@ class toolbarContainer extends Component {
       : !isImageDownloadActive
         ? 'You must exit data download mode to use the snapshot feature'
         : 'Take a snapshot';
+    const faSize = isMobile ? '2x' : '1x';
 
     return !isDistractionFreeModeActive && (
       <div id="snapshot-btn-wrapper">
@@ -269,7 +278,7 @@ class toolbarContainer extends Component {
           aria-label={labelText}
           onClick={this.openImageDownload}
         >
-          <FontAwesomeIcon icon="camera" size="2x" />
+          <FontAwesomeIcon icon="camera" size={faSize} />
         </Button>
       </div>
 
@@ -282,10 +291,12 @@ class toolbarContainer extends Component {
       notificationType,
       notificationContentNumber,
       isDistractionFreeModeActive,
+      isMobile,
     } = this.props;
     const notificationClass = notificationType
       ? ` wv-status-${notificationType}`
       : ' wv-status-hide';
+    const faSize = isMobile ? '2x' : '1x';
     const buttonId = 'wv-info-button';
     const labelText = 'Information';
 
@@ -301,7 +312,7 @@ class toolbarContainer extends Component {
         data-content={notificationContentNumber}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="info-circle" size="2x" />
+        <FontAwesomeIcon icon="info-circle" size={faSize} />
       </Button>
     );
   }
@@ -313,8 +324,8 @@ class toolbarContainer extends Component {
           id="wv-toolbar"
           className="wv-toolbar"
         >
-          {this.renderShareButton()}
           {this.renderGeosearchButtonComponent()}
+          {this.renderShareButton()}
           {this.renderProjectionButton()}
           {this.renderSnapshotsButton()}
           {this.renderInfoButton()}

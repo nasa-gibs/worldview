@@ -34,7 +34,7 @@ import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { UPDATE_ACTIVE_MARKER } from '../modules/geosearch/constants';
+import { CLEAR_COORDINATES, UPDATE_ACTIVE_MARKER } from '../modules/geosearch/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
@@ -55,8 +55,8 @@ import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
-import { addCoordinatesMarker, reverseGeocode } from '../modules/geosearch/selectors';
-import { getCoordinatesMetadata, renderTooltip } from '../components/geosearch/ol-coordinates-marker-util';
+import { addCoordinatesMarker, reverseGeocode, removeCoordinatesMarker } from '../modules/geosearch/selectors';
+import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../components/geosearch/ol-coordinates-marker-util';
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -231,13 +231,27 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   const addMarkerAndUpdateStore = (activeMarker, coordinates, results) => {
+    const state = store.getState();
+    const { browser } = state;
+    const isMobile = browser.lessThan.medium;
     const marker = addCoordinatesMarker(activeMarker, config, { ui: self }, coordinates, results);
+
+    // prevent marker if outside of extent
+    if (!marker) {
+      return false;
+    }
 
     // handle render initial tooltip
     const [longitude, latitude] = coordinates;
     const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-    renderTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata);
+
+    // handle clearing cooridnates using created marker
+    const clearCoordinates = () => {
+      removeCoordinatesMarker(marker, { ui: self });
+      store.dispatch({ type: CLEAR_COORDINATES });
+    };
+    renderCoordinatesTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearCoordinates);
 
     store.dispatch({ type: UPDATE_ACTIVE_MARKER, value: marker, reverseGeocodeResults: results });
   };

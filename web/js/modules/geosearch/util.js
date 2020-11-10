@@ -14,7 +14,7 @@ export function mapLocationToGeosearchState(
 ) {
   const { marker } = parameters;
   const coordinates = marker
-    ? marker.split(',')
+    ? marker.split(',').map((coord) => Number(coord))
     : [];
 
   const isMobile = state.browser.lessThan.medium;
