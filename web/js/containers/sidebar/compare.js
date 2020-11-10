@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import Layers from './layers';
 import { getLayers } from '../../modules/layers/selectors';
-import { toggleActiveCompareState } from '../../modules/compare/actions';
+import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
 import util from '../../util/util';
 
 
@@ -21,7 +21,6 @@ const CompareCase = (props) => {
     height,
     layersA,
     layersB,
-    checkerBoardPattern,
   } = props;
 
   const outerClass = 'layer-container sidebar-panel';
@@ -65,7 +64,6 @@ const CompareCase = (props) => {
                 activeOverlays={layersA}
                 layerGroupName="active"
                 height={height - tabHeight}
-                checkerBoardPattern={checkerBoardPattern}
               />
             </TabPane>
             <TabPane tabId="2">
@@ -74,7 +72,6 @@ const CompareCase = (props) => {
                 activeOverlays={layersB}
                 layerGroupName="activeB"
                 height={height - tabHeight}
-                checkerBoardPattern={checkerBoardPattern}
               />
             </TabPane>
           </TabContent>
@@ -86,14 +83,14 @@ const CompareCase = (props) => {
 
 const mapDispatchToProps = (dispatch) => ({
   toggleActiveCompareState: () => {
-    dispatch(toggleActiveCompareState());
+    dispatch(toggleActiveCompareStateAction());
   },
 });
-function mapStateToProps(state) {
+
+const mapStateToProps = (state) => {
   const {
     layers, compare, date,
   } = state;
-
 
   return {
     isCompareA: compare.isCompareA,
@@ -103,9 +100,9 @@ function mapStateToProps(state) {
     dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,
   };
-}
+};
+
 CompareCase.propTypes = {
-  checkerBoardPattern: PropTypes.object,
   dateStringA: PropTypes.string,
   dateStringB: PropTypes.string,
   height: PropTypes.number,
@@ -115,6 +112,7 @@ CompareCase.propTypes = {
   layersB: PropTypes.object,
   toggleActiveCompareState: PropTypes.func,
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
