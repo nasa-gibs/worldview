@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
-import { Button, InputGroupAddon } from 'reactstrap';
+import { Button, InputGroupAddon, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchBox extends Component {
@@ -81,11 +81,11 @@ class SearchBox extends Component {
   // render submit button
   renderSubmitButton = () => {
     const {
-      coordinates, inputValue, isMobile, renderTooltip,
+      coordinates, inputValue, isMobile,
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
     const buttonId = 'geosearch-search-submit-button';
-    const labelText = 'Submit and fly to location';
+    const labelText = 'Submit and navigate to location';
     // eslint-disable-next-line no-nested-ternary
     const rightPositioning = hasCoordinates
       ? isMobile ? '67px' : '60px'
@@ -93,7 +93,7 @@ class SearchBox extends Component {
     const buttonStyle = inputValue
       ? { color: '#0070c8', cursor: 'pointer' }
       : {};
-
+    const tooltipVisibilityCondition = inputValue && !isMobile;
     return (
       <InputGroupAddon
         className="geosearch-submit-input-group-addon"
@@ -109,7 +109,16 @@ class SearchBox extends Component {
           onClick={this.handleSubmitClick}
           className="geosearch-search-submit-button"
         >
-          {renderTooltip(buttonId, labelText)}
+          {tooltipVisibilityCondition && (
+          <UncontrolledTooltip
+            trigger="hover"
+            target={buttonId}
+            boundariesElement="window"
+            placement="bottom"
+          >
+            {labelText}
+          </UncontrolledTooltip>
+          )}
           <FontAwesomeIcon icon="search-location" size="1x" />
         </Button>
       </InputGroupAddon>
@@ -213,7 +222,6 @@ SearchBox.propTypes = {
   isMobile: PropTypes.bool,
   onSelect: PropTypes.func,
   onChange: PropTypes.func,
-  renderTooltip: PropTypes.func,
   showExtentAlert: PropTypes.bool,
 };
 

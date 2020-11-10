@@ -325,7 +325,6 @@ class SearchComponent extends Component {
               geosearchMobileModalOpen={geosearchMobileModalOpen}
               isExpanded={isExpanded}
               isMobile={isMobile}
-              renderTooltip={this.renderTooltip}
               showExtentAlert={showExtentAlert}
             />
             {/* Coordinate button group */}
