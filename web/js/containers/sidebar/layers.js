@@ -5,6 +5,23 @@ import LayerList from './layer-list';
 import { getLayers } from '../../modules/layers/selectors';
 import Scrollbars from '../../components/util/scrollbar';
 
+const getGroupedLayers = (layers) => {
+  const allLayerGroups = {};
+  layers.forEach((layer) => {
+    const { layergroup } = layer;
+    if (layergroup && layergroup.length) {
+      // TODO just using first group in array for now
+      const [groupName] = layergroup;
+      if (allLayerGroups[groupName]) {
+        allLayerGroups[groupName].push(layer);
+      } else {
+        allLayerGroups[groupName] = [layer];
+      }
+    }
+  });
+  return allLayerGroups;
+};
+
 function Layers (props) {
   const {
     overlays,
@@ -15,28 +32,29 @@ function Layers (props) {
     layerSplit,
   } = props;
   const outterClass = 'layer-container sidebar-panel';
+
   return isActive && (
-  <Scrollbars style={{ maxHeight: `${height}px` }}>
-    <div
-      className={isActive ? outterClass : `hidden ${outterClass}`}
-      style={{ display: isActive ? 'block' : 'none' }}
-    >
-      <LayerList
-        title="Overlays"
-        groupId="overlays"
-        layerGroupName={layerGroupName}
-        layerSplit={layerSplit}
-        layers={overlays}
-      />
-      <LayerList
-        title="Base Layers"
-        groupId="baselayers"
-        layerGroupName={layerGroupName}
-        layers={baselayers}
-        layerSplit={layerSplit}
-      />
-    </div>
-  </Scrollbars>
+    <Scrollbars style={{ maxHeight: `${height}px` }}>
+      <div className={outterClass}>
+        {Object.keys(overlays).map((groupName) => (
+          <LayerList
+            key={groupName}
+            title={groupName}
+            groupId={groupName}
+            layerGroupName={layerGroupName}
+            layerSplit={layerSplit}
+            layers={overlays[groupName]}
+          />
+        ))}
+        <LayerList
+          title="Base Layers"
+          groupId="baselayers"
+          layerGroupName={layerGroupName}
+          layers={baselayers}
+          layerSplit={layerSplit}
+        />
+      </div>
+    </Scrollbars>
   );
 }
 
@@ -45,10 +63,11 @@ const mapStateToProps = (state, ownProps) => {
   const { layerGroupName } = ownProps;
   const componentLayers = layers[layerGroupName];
   const layerObj = getLayers(componentLayers, { proj: proj.id, group: 'all' });
+  const overlays = getGroupedLayers(layerObj.overlays);
 
   return {
     baselayers: layerObj.baselayers,
-    overlays: layerObj.overlays,
+    overlays,
     layerSplit: layerObj.overlays.length,
     layerGroupName,
   };
@@ -65,5 +84,5 @@ Layers.propTypes = {
   isActive: PropTypes.bool,
   layerGroupName: PropTypes.string,
   layerSplit: PropTypes.number,
-  overlays: PropTypes.array,
+  overlays: PropTypes.object,
 };

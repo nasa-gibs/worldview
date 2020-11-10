@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
 import React from 'react';

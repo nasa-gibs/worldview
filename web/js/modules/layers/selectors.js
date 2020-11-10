@@ -477,7 +477,6 @@ export function replaceSubGroup(
   layerId,
   nextLayerId,
   layers,
-  subGroup,
   layerSplit,
 ) {
   if (nextLayerId) {
