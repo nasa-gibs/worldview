@@ -145,6 +145,7 @@ const GEOCODE_SUGGEST_CATEGORIES = [
   'Government Office',
   'Business Facility',
   'Primary Postal',
+  'Airport',
 ];
 
 export async function suggest(val) {
