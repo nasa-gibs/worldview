@@ -42,11 +42,12 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      config, geosearch, map, layers, proj,
+      browser, config, geosearch, map, layers, proj,
     } = state;
     const { sources } = config;
     const { active } = layers;
     const { activeMarker } = geosearch;
+    const isMobile = browser.lessThan.medium;
 
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
@@ -75,7 +76,7 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
     const [longitude, latitude] = coordinates;
     const geocodeProperties = { latitude, longitude, reverseGeocodeResults };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-    renderTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata);
+    renderTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile);
 
     dispatch({
       type: SELECT_COORDINATES_TO_FLY,

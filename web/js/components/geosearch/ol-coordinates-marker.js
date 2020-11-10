@@ -71,18 +71,20 @@ export class CoordinatesInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
+    browser,
     config,
     map,
     measure,
     geosearch,
   } = state;
   const { coordinates } = geosearch;
+  const isMobile = browser.lessThan.medium;
 
   return {
     map,
     coordinates,
     isShowingClick: map.isClickable,
-    getCoordinatesDialog: (pixels, olMap) => getCoordinatesDialogAtMapPixel(pixels, olMap, config),
+    getCoordinatesDialog: (pixels, olMap) => getCoordinatesDialogAtMapPixel(pixels, olMap, config, isMobile),
     measureIsActive: measure.isActive,
   };
 } const mapDispatchToProps = (dispatch) => ({

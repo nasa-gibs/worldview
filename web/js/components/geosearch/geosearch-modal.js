@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
-  ButtonGroup, Button, InputGroup, InputGroupAddon,
+  ButtonGroup, Button, InputGroup, InputGroupAddon, UncontrolledTooltip,
 } from 'reactstrap';
 import {
   throttle as lodashThrottle,
@@ -9,10 +9,6 @@ import {
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMapMarkerAlt,
-  faSlash,
-} from '@fortawesome/free-solid-svg-icons';
 import SearchBox from './geosearch-input';
 import Alert from '../util/alert';
 
@@ -171,6 +167,21 @@ class SearchComponent extends Component {
     clearCoordinates();
   }
 
+  // render tooltip
+  renderTooltip = (buttonId, labelText) => {
+    const { isMobile } = this.props;
+    return !isMobile && (
+      <UncontrolledTooltip
+        trigger="hover"
+        target={buttonId}
+        boundariesElement="window"
+        placement="bottom"
+      >
+        {labelText}
+      </UncontrolledTooltip>
+    );
+  }
+
   // render alert message to instruct user map interaction
   renderReverseGeocodeAlert = () => {
     const {
@@ -214,13 +225,16 @@ class SearchComponent extends Component {
   // render geosearch component minimize button (not visible in mobile)
   renderMinimizeButton = () => {
     const { toggleShowGeosearch } = this.props;
+    const buttonId = 'geosearch-search-minimize-button';
+    const labelText = 'Hide Geosearch';
     return (
       <InputGroupAddon addonType="prepend">
         <Button
+          id={buttonId}
           className="geosearch-search-minimize-button"
-          title="Minimize search box"
           onClick={toggleShowGeosearch}
         >
+          {this.renderTooltip(buttonId, labelText)}
           <div className="geosearch-search-minimize-button-chevron" />
         </Button>
       </InputGroupAddon>
@@ -236,6 +250,10 @@ class SearchComponent extends Component {
     const hasCoordinates = coordinates.length > 0;
     const containerClass = `geosearch-coordinate-group-container ${hasCoordinates ? 'grouped' : ''}`;
     const buttonRightMargin = { marginRight: hasCoordinates && isMobile ? '6px' : '1px' };
+    const addCoordinateButtonId = 'geosearch-coordinate-button-addpoint';
+    const addCoordinateLabelText = 'Add marker on map';
+    const clearCoordinateButtonId = 'geosearch-coordinate-button-remove';
+    const clearCoordinateLabelText = 'Clear marker from map';
 
     return (
       <InputGroupAddon
@@ -246,24 +264,26 @@ class SearchComponent extends Component {
           className="geosearch-coordinate-button-group"
         >
           <Button
+            id={addCoordinateButtonId}
             onTouchEnd={this.initReverseGeocode}
             onMouseDown={this.initReverseGeocode}
             className="geosearch-coordinate-button-addpoint"
-            title="Add coordinates marker onto map"
             style={buttonRightMargin}
           >
-            <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
+            {this.renderTooltip(addCoordinateButtonId, addCoordinateLabelText)}
+            <FontAwesomeIcon icon="map-marker-alt" size="1x" />
           </Button>
           {hasCoordinates
         && (
           <Button
+            id={clearCoordinateButtonId}
             onTouchEnd={this.clearCoordinatesMarker}
             onMouseDown={this.clearCoordinatesMarker}
             className="geosearch-coordinate-button-remove"
-            title="Clear coordinates marker from map"
           >
-            <FontAwesomeIcon icon={faSlash} />
-            <FontAwesomeIcon icon={faMapMarkerAlt} size="1x" />
+            {this.renderTooltip(clearCoordinateButtonId, clearCoordinateLabelText)}
+            <FontAwesomeIcon icon="slash" />
+            <FontAwesomeIcon icon="map-marker-alt" size="1x" />
           </Button>
         )}
         </ButtonGroup>
@@ -305,6 +325,7 @@ class SearchComponent extends Component {
               geosearchMobileModalOpen={geosearchMobileModalOpen}
               isExpanded={isExpanded}
               isMobile={isMobile}
+              renderTooltip={this.renderTooltip}
               showExtentAlert={showExtentAlert}
             />
             {/* Coordinate button group */}

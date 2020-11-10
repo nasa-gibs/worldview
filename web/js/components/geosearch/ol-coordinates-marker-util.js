@@ -27,12 +27,14 @@ function getCoordinateDisplayPrecision(coordinate) {
  * Create tooltip React DOM element
  *
  * @param {Object} map
+ * @param {Object} config
  * @param {Array} coordinates
  * @param {Object} coordinatesMetadata
+ * @param {Boolean} isMobile
  *
  * @returns {Void}
  */
-export function renderTooltip(map, config, coordinates, coordinatesMetadata) {
+export function renderTooltip(map, config, coordinates, coordinatesMetadata, isMobile) {
   const { projections } = config;
   const { proj } = map;
   const { crs } = projections[proj];
@@ -70,6 +72,7 @@ export function renderTooltip(map, config, coordinates, coordinatesMetadata) {
     <CoordinatesDialog
       coordinatesMetadata={coordinatesMetadata}
       toggleWithClose={removeTooltip}
+      isMobile={isMobile}
     />
   ), tooltipOverlay.getElement());
 }
@@ -131,10 +134,12 @@ export function getCoordinatesMetadata(geocodeProperties) {
  *
  * @param {Array} pixels
  * @param {Object} map
+ * @param {Object} config
+ * @param {Boolean} isMobile
  *
  * @returns {Void}
  */
-export function getCoordinatesDialogAtMapPixel(pixels, map, config) {
+export function getCoordinatesDialogAtMapPixel(pixels, map, config, isMobile) {
   // check for existing coordinate marker tooltip overlay and prevent multiple renders
   const mapOverlays = map.getOverlays().getArray();
   const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
@@ -155,7 +160,7 @@ export function getCoordinatesDialogAtMapPixel(pixels, map, config) {
       const coordinatesMetadata = getCoordinatesMetadata(featureProperties);
 
       // create tooltip overlay React DOM element
-      renderTooltip(map, config, [latitude, longitude], coordinatesMetadata);
+      renderTooltip(map, config, [latitude, longitude], coordinatesMetadata, isMobile);
     }
   });
 }

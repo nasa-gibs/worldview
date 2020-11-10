@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
 import { Button, InputGroupAddon } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle, faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 
 class SearchBox extends Component {
   constructor(props) {
@@ -82,9 +81,11 @@ class SearchBox extends Component {
   // render submit button
   renderSubmitButton = () => {
     const {
-      coordinates, inputValue, isMobile,
+      coordinates, inputValue, isMobile, renderTooltip,
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
+    const buttonId = 'geosearch-search-submit-button';
+    const labelText = 'Submit and fly to location';
     // eslint-disable-next-line no-nested-ternary
     const rightPositioning = hasCoordinates
       ? isMobile ? '67px' : '60px'
@@ -102,13 +103,14 @@ class SearchBox extends Component {
         }}
       >
         <Button
+          id={buttonId}
           style={buttonStyle}
           disabled={!inputValue}
           onClick={this.handleSubmitClick}
           className="geosearch-search-submit-button"
-          title="Search by place name or reverse search using coordinates"
         >
-          <FontAwesomeIcon icon={faSearchLocation} size="1x" />
+          {renderTooltip(buttonId, labelText)}
+          <FontAwesomeIcon icon="search-location" size="1x" />
         </Button>
       </InputGroupAddon>
     );
@@ -135,7 +137,7 @@ class SearchBox extends Component {
         }}
         title="The entered location is outside of the current map extent."
       >
-        <FontAwesomeIcon icon={faExclamationTriangle} size="1x" />
+        <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
       </InputGroupAddon>
       )
     );
@@ -211,6 +213,7 @@ SearchBox.propTypes = {
   isMobile: PropTypes.bool,
   onSelect: PropTypes.func,
   onChange: PropTypes.func,
+  renderTooltip: PropTypes.func,
   showExtentAlert: PropTypes.bool,
 };
 

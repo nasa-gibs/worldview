@@ -127,6 +127,13 @@
       right: 6px;
       bottom: 6px;
     }
+    & .copy-coordinates-to-clipboard-button {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 20px;
+      width: 23px;
+    }
   }
   .tooltip-coordinates-title {
     white-space: pre-wrap;

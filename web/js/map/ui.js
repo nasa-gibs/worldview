@@ -232,13 +232,16 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   const addMarkerAndUpdateStore = (activeMarker, coordinates, results) => {
+    const state = store.getState();
+    const { browser } = state;
+    const isMobile = browser.lessThan.medium;
     const marker = addCoordinatesMarker(activeMarker, config, { ui: self }, coordinates, results);
 
     // handle render initial tooltip
     const [longitude, latitude] = coordinates;
     const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-    renderTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata);
+    renderTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata, isMobile);
 
     store.dispatch({ type: UPDATE_ACTIVE_MARKER, value: marker, reverseGeocodeResults: results });
   };
