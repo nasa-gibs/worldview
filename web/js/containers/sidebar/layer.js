@@ -45,7 +45,7 @@ class Layer extends React.Component {
     const {
       compare,
       layer,
-      layerGroupName,
+      compareState,
       runningObject,
       paletteLegends,
       getPalette,
@@ -59,13 +59,13 @@ class Layer extends React.Component {
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
       const isRunningData = compare.active
-        ? compare.activeString === layerGroupName && !!runningObject
+        ? compare.activeString === compareState && !!runningObject
         : !!runningObject;
       const colorHex = isRunningData ? runningObject.paletteHex : null;
       return (
         <PaletteLegend
           layer={layer}
-          layerGroupName={layerGroupName}
+          compareState={compareState}
           paletteId={palette.id}
           getPalette={getPalette}
           width={zot ? 220 : 231}
@@ -116,7 +116,7 @@ class Layer extends React.Component {
   renderControls() {
     const {
       layer,
-      layerGroupName,
+      compareState,
       names,
       isMobile,
       onRemoveClick,
@@ -124,7 +124,7 @@ class Layer extends React.Component {
       onOptionsClick,
     } = this.props;
     const { title } = names;
-    const removeLayerBtnId = `close${layerGroupName}${util.encodeId(layer.id)}`;
+    const removeLayerBtnId = `close${compareState}${util.encodeId(layer.id)}`;
     const removeLayerBtnTitle = 'Remove Layer';
 
     const layerOptionsBtnId = `layer-options-btn-${util.encodeId(layer.id)}`;
@@ -197,7 +197,7 @@ class Layer extends React.Component {
 
   render() {
     const {
-      layerGroupName,
+      compareState,
       isMobile,
       toggleVisibility,
       hover,
@@ -239,13 +239,13 @@ class Layer extends React.Component {
 
     return (
       <Draggable
-        draggableId={`${util.encodeId(layer.id)}-${layerGroupName}`}
+        draggableId={`${util.encodeId(layer.id)}-${compareState}`}
         index={index}
         direction="vertical"
       >
         {(provided, snapshot) => (isInProjection ? (
           <li
-            id={`${layerGroupName}-${util.encodeId(layer.id)}`}
+            id={`${compareState}-${util.encodeId(layer.id)}`}
             className={containerClass}
             style={getItemStyle(
               snapshot.isDragging,
@@ -316,7 +316,7 @@ function mapStateToProps(state, ownProps) {
   const {
     layer,
     isVisible,
-    layerGroupName,
+    compareState,
   } = ownProps;
   const {
     palettes, config, map, layers, compare, proj,
@@ -325,10 +325,10 @@ function mapStateToProps(state, ownProps) {
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
   const paletteLegends = hasPalette && renderedPalettes[paletteName]
-    ? getPaletteLegends(layer.id, layerGroupName, state)
+    ? getPaletteLegends(layer.id, compareState, state)
     : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
-  const tracksForLayer = layers[layerGroupName].filter((activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track));
+  const tracksForLayer = layers[compareState].filter((activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track));
   const selectedMap = lodashGet(map, 'ui.selected');
   const isVector = layer.type === 'vector';
   const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
@@ -342,12 +342,11 @@ function mapStateToProps(state, ownProps) {
     isCustomPalette,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
-    layerGroupName,
     isVectorLayer: isVector,
     hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id),
     isMobile: state.browser.lessThan.medium,
     hasPalette,
-    getPalette: (layerId, i) => getPalette(layer.id, i, layerGroupName, state),
+    getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
     runningObject: map.runningDataObj[layer.id],
   };
 }
@@ -431,7 +430,7 @@ Layer.propTypes = {
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
   layerClasses: PropTypes.string,
-  layerGroupName: PropTypes.string,
+  compareState: PropTypes.string,
   names: PropTypes.object,
   onInfoClick: PropTypes.func,
   onOptionsClick: PropTypes.func,

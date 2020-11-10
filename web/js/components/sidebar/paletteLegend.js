@@ -286,7 +286,7 @@ class PaletteLegend extends React.Component {
   renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
     const {
-      layer, parentLayer, layerGroupName, getPalette,
+      layer, parentLayer, compareState, getPalette,
     } = this.props;
     const activeKeyObj = isRunningData && colorHex && getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
@@ -311,7 +311,7 @@ class PaletteLegend extends React.Component {
               let palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
               const parentLayerId = isSubLayer ? `-${parentLayer.id}` : '';
-              const keyId = `${legend.id}-color${parentLayerId}-${layerGroupName}${keyIndex}`;
+              const keyId = `${legend.id}-color${parentLayerId}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
               const tooltipText = singleKey
@@ -407,7 +407,7 @@ PaletteLegend.propTypes = {
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
   layer: PropTypes.object,
-  layerGroupName: PropTypes.string,
+  compareState: PropTypes.string,
   paletteId: PropTypes.string,
   paletteLegends: PropTypes.array,
   parentLayer: PropTypes.object,

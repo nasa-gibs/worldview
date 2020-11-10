@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import { getLayers } from '../../modules/layers/selectors';
@@ -27,7 +28,7 @@ function Layers (props) {
     overlays,
     baselayers,
     isActive,
-    layerGroupName,
+    compareState,
     height,
     layerSplit,
   } = props;
@@ -36,20 +37,38 @@ function Layers (props) {
   return isActive && (
     <Scrollbars style={{ maxHeight: `${height}px` }}>
       <div className={outterClass}>
-        {Object.keys(overlays).map((groupName) => (
-          <LayerList
-            key={groupName}
-            title={groupName}
-            groupId={groupName}
-            layerGroupName={layerGroupName}
-            layerSplit={layerSplit}
-            layers={overlays[groupName]}
-          />
-        ))}
+        <DragDropContext onDragEnd={() => { console.log('dropped'); }}>
+          <Droppable
+            droppableId="layerGroup"
+            type="overlayGroups"
+            direction="vertical"
+          >
+            {(provided, snapshot) => (
+              <ul
+                id=""
+                ref={provided.innerRef}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...provided.droppableProps}
+              >
+                {Object.keys(overlays).map((groupName) => (
+                  <LayerList
+                    key={groupName}
+                    title={groupName}
+                    groupId={groupName}
+                    compareState={compareState}
+                    layerSplit={layerSplit}
+                    layers={overlays[groupName]}
+                  />
+                ))}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </DragDropContext>
         <LayerList
           title="Base Layers"
           groupId="baselayers"
-          layerGroupName={layerGroupName}
+          compareState={compareState}
           layers={baselayers}
           layerSplit={layerSplit}
         />
@@ -60,8 +79,8 @@ function Layers (props) {
 
 const mapStateToProps = (state, ownProps) => {
   const { layers, proj } = state;
-  const { layerGroupName } = ownProps;
-  const componentLayers = layers[layerGroupName];
+  const { compareState } = ownProps;
+  const componentLayers = layers[compareState];
   const layerObj = getLayers(componentLayers, { proj: proj.id, group: 'all' });
   const overlays = getGroupedLayers(layerObj.overlays);
 
@@ -69,7 +88,6 @@ const mapStateToProps = (state, ownProps) => {
     baselayers: layerObj.baselayers,
     overlays,
     layerSplit: layerObj.overlays.length,
-    layerGroupName,
   };
 };
 
@@ -82,7 +100,7 @@ Layers.propTypes = {
   baselayers: PropTypes.array,
   height: PropTypes.number,
   isActive: PropTypes.bool,
-  layerGroupName: PropTypes.string,
+  compareState: PropTypes.string,
   layerSplit: PropTypes.number,
   overlays: PropTypes.object,
 };
