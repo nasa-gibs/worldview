@@ -12,7 +12,6 @@ import FooterContent from './footer-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import {
-  getCheckerboard,
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
@@ -55,7 +54,6 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { subComponentHeight: 700 };
-    this.checkerBoardPattern = getCheckerboard();
     const customPalettePromise = loadCustomPalette(props.config);
     customPalettePromise.done((customs) => {
       props.loadedCustomPalettes(customs);
@@ -145,7 +143,6 @@ class Sidebar extends React.Component {
         <CompareCase
           isActive={activeTab === 'layers'}
           height={subComponentHeight}
-          checkerBoardPattern={this.checkerBoardPattern}
         />
       );
     } if (!isCompareMode) {
@@ -154,7 +151,6 @@ class Sidebar extends React.Component {
           height={subComponentHeight - 20}
           isActive={activeTab === 'layers'}
           layerGroupName={activeString}
-          checkerBoardPattern={this.checkerBoardPattern}
         />
       );
     }

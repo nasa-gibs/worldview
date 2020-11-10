@@ -47,7 +47,6 @@ class Layer extends React.Component {
       layerGroupName,
       runningObject,
       paletteLegends,
-      checkerBoardPattern,
       getPalette,
       palette,
       renderedPalette,
@@ -72,7 +71,6 @@ class Layer extends React.Component {
           paletteLegends={paletteLegends}
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
-          checkerBoardPattern={checkerBoardPattern}
           colorHex={colorHex}
           isMobile={isMobile}
         />
@@ -419,7 +417,6 @@ export default connect(
   mapDispatchToProps,
 )(Layer);
 Layer.propTypes = {
-  checkerBoardPattern: PropTypes.object,
   compare: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,

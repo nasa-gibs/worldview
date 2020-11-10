@@ -10,7 +10,7 @@ import {
   getTitles,
   memoizedAvailable as availableSelector,
 } from '../../modules/layers/selectors';
-import { reorderLayers } from '../../modules/layers/actions';
+import { reorderLayers as reorderLayersAction } from '../../modules/layers/actions';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -27,6 +27,7 @@ class LayerList extends React.Component {
     };
     this.promises = {};
     this.onDragEnd = this.onDragEnd.bind(this);
+    this.renderLayer = this.renderLayer.bind(this);
   }
 
   /**
@@ -93,18 +94,42 @@ class LayerList extends React.Component {
     reorderLayers(newLayers);
   }
 
+  renderLayer(layer, index) {
+    const {
+      groupId,
+      layerGroupName,
+      zots,
+      runningLayers,
+      projId,
+      getNames,
+      available,
+    } = this.props;
+    const { id, projections, visible } = layer;
+
+    return (
+      <Layer
+        layer={layer}
+        groupId={groupId}
+        layerGroupName={layerGroupName}
+        isInProjection={!!projections[projId]}
+        key={id}
+        index={index}
+        layerClasses="item productsitem"
+        zot={zots[id]}
+        names={getNames(id)}
+        isDisabled={!available(id)}
+        isVisible={visible}
+        runningObject={runningLayers && runningLayers[id]}
+      />
+    );
+  }
+
   render() {
     const {
       groupId,
       title,
       layerGroupName,
-      zots,
       layers,
-      runningLayers,
-      projId,
-      checkerBoardPattern,
-      getNames,
-      available,
     } = this.props;
     return (
       <div className="layer-group-case">
@@ -121,29 +146,10 @@ class LayerList extends React.Component {
                 id={groupId}
                 className="category"
                 ref={provided.innerRef}
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.droppableProps}
               >
-                {layers.map((object, i) => (
-                  <Layer
-                    layer={object}
-                    groupId={groupId}
-                    layerGroupName={layerGroupName}
-                    isInProjection={!!object.projections[projId]}
-                    key={object.id}
-                    index={i}
-                    layerClasses="item productsitem"
-                    zot={zots[object.id]}
-                    names={getNames(object.id)}
-                    checkerBoardPattern={checkerBoardPattern}
-                    isDisabled={!available(object.id)}
-                    isVisible={object.visible}
-                    runningObject={
-                      runningLayers && runningLayers[object.id]
-                        ? runningLayers[object.id]
-                        : null
-                    }
-                  />
-                ))}
+                {layers.map(this.renderLayer)}
                 {provided.placeholder}
               </ul>
             )}
@@ -153,10 +159,10 @@ class LayerList extends React.Component {
     );
   }
 }
+
 LayerList.propTypes = {
   activeLayers: PropTypes.array,
   available: PropTypes.func,
-  checkerBoardPattern: PropTypes.object,
   getNames: PropTypes.func,
   groupId: PropTypes.string,
   layerGroupName: PropTypes.string,
@@ -170,7 +176,7 @@ LayerList.propTypes = {
   zots: PropTypes.object,
 };
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   const { layerGroupName } = ownProps;
   const {
     proj, config, map,
@@ -189,13 +195,14 @@ function mapStateToProps(state, ownProps) {
     getNames: (layerId) => getTitles(config, layerId, id),
     available: (layerId) => availableSelector(state)(layerId),
   };
-}
+};
 
 const mapDispatchToProps = (dispatch) => ({
   reorderLayers: (newLayerArray) => {
-    dispatch(reorderLayers(newLayerArray));
+    dispatch(reorderLayersAction(newLayerArray));
   },
 });
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

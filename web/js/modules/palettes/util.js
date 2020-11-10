@@ -23,7 +23,7 @@ import util from '../../util/util';
  * Create checkerboard canvas pattern object
  * to use on background of legend colorbars
  */
-export function getCheckerboard() {
+export const checkerBoardPattern = (() => {
   const size = 2;
   const canvas = document.createElement('canvas');
 
@@ -41,7 +41,7 @@ export function getCheckerboard() {
   g.fillRect(size, 0, size, size);
 
   return g.createPattern(canvas, 'repeat');
-}
+})();
 
 export function palettesTranslate(source, target) {
   const translation = [];
@@ -52,15 +52,14 @@ export function palettesTranslate(source, target) {
   });
   return translation;
 }
+
 /**
  * Redraw canvas with selected colormap
  * @param {String} ctxStr | String of wanted cavnas
- * @param {Object} checkerBoardPattern | Background for canvas threshold
  * @param {Array} colors | array of color values
  */
 export function drawPaletteOnCanvas(
   ctx,
-  checkerBoardPattern,
   colors,
   width,
   height,
@@ -78,15 +77,14 @@ export function drawPaletteOnCanvas(
     });
   }
 }
+
 /**
  * Redraw canvas with selected colormap
  * @param {String} ctxStr | String of wanted cavnas
- * @param {Object} checkerBoardPattern | Background for canvas threshold
  * @param {Array} colors | array of color values
  */
 export function drawSidebarPaletteOnCanvas(
   ctx,
-  checkerBoardPattern,
   colors,
   width,
 ) {
@@ -110,6 +108,7 @@ export function drawSidebarPaletteOnCanvas(
     ctx.stroke();
   }
 }
+
 export function drawTicksOnCanvas(ctx, legend, width) {
   const canvasHeight = 24;
   const { ticks } = legend;
@@ -132,6 +131,7 @@ export function drawTicksOnCanvas(ctx, legend, width) {
     ctx.closePath();
   }
 }
+
 export function lookup(sourcePalette, targetPalette) {
   const lookup = {};
   lodashEach(sourcePalette.colors, (sourceColor, index) => {
@@ -153,6 +153,7 @@ export function lookup(sourcePalette, targetPalette) {
   });
   return lookup;
 }
+
 export function loadRenderedPalette(config, layerId) {
   const layer = config.layers[layerId];
   return util.load.config(
@@ -161,6 +162,7 @@ export function loadRenderedPalette(config, layerId) {
     `config/palettes/${layer.palette.id}.json`,
   );
 }
+
 export function loadCustom(config) {
   return util.load.config(
     config.palettes,
@@ -168,6 +170,7 @@ export function loadCustom(config) {
     'config/palettes-custom.json',
   );
 }
+
 export function getMinValue(v) {
   return v.length ? v[0] : v;
 }
@@ -175,6 +178,7 @@ export function getMinValue(v) {
 export function getMaxValue(v) {
   return v.length ? v[v.length - 1] : v;
 }
+
 /**
  * Legacy palette parser
  * &palettes=something no longer promoted
@@ -214,10 +218,12 @@ export function parseLegacyPalettes(
   });
   return stateFromLocation;
 }
+
 export function isSupported() {
   const { browser } = util;
   return !(browser.ie || !browser.webWorkers || !browser.cors);
 }
+
 /**
  * Serialize palette info for layer
  *
@@ -303,6 +309,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     return [];
   }
 }
+
 const createPaletteAttributeObject = function(def, value, attrObj, count) {
   const { key } = attrObj;
   const attrArray = attrObj.array;
@@ -446,6 +453,7 @@ export function loadPalettes(permlinkState, state) {
   });
   return state;
 }
+
 export function mapLocationToPaletteState(
   parameters,
   stateFromLocation,
@@ -472,6 +480,7 @@ export function mapLocationToPaletteState(
   }
   return stateFromLocation;
 }
+
 /**
  * Request palettes before page load
  * @param {Array} layersArray Array of active layers
@@ -527,6 +536,7 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
   }
   return Promise.resolve({ custom, rendered });
 }
+
 export function hasCustomPaletteInActiveProjection(
   activeLayers,
   activePalettes,
@@ -538,6 +548,7 @@ export function hasCustomPaletteInActiveProjection(
   }
   return false;
 }
+
 export function hasCustomTypePalette(str) {
   let bool = false;
   PALETTE_STRINGS_PERMALINK_ARRAY.forEach((element) => {

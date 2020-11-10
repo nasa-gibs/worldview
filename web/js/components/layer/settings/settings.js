@@ -12,7 +12,6 @@ import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 
 import {
-  getCheckerboard,
   palettesTranslate,
 } from '../../../modules/palettes/util';
 import {
@@ -51,7 +50,6 @@ class LayerSettings extends React.Component {
     this.canvas = document.createElement('canvas');
     this.canvas.width = 120;
     this.canvas.height = 10;
-    this.checkerboard = getCheckerboard();
   }
 
   /**
@@ -145,7 +143,6 @@ class LayerSettings extends React.Component {
               getCustomPalette={getCustomPalette}
               palettesTranslate={palettesTranslate}
               activePalette={palette.custom || '__default'}
-              checkerboard={this.checkerboard}
               layer={layer}
               canvas={this.canvas}
               index={i}
@@ -234,7 +231,6 @@ class LayerSettings extends React.Component {
           getCustomPalette={getCustomPalette}
           palettesTranslate={palettesTranslate}
           activePalette={palette.custom || '__default'}
-          checkerboard={this.checkerboard}
           layer={layer}
           canvas={this.canvas}
           groupName={groupName}
