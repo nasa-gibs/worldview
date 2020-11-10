@@ -13,7 +13,6 @@ import {
   debounce as lodashDebounce,
 } from 'lodash';
 
-import { naturalEventsUtilGetEventById } from './util';
 import {
   naturalEventsClusterPointToGeoJSON,
   naturalEventsClusterGetPoints,
@@ -30,6 +29,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
   const self = {};
   self.trackDetails = {};
   self.active = false;
+
   /**
    * @return {void}
    */
@@ -161,16 +161,13 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
   };
 
   const debounceTrackUpdate = lodashDebounce(() => {
-    const selectedEvent = ui.naturalEvents.selected;
+    const { eventsData, selected } = ui.naturalEvents;
 
-    if (!selectedEvent.id || !selectedEvent.date) {
+    if (!selected.id || !selected.date) {
       return;
     }
-    const event = naturalEventsUtilGetEventById(
-      ui.naturalEvents.eventsData,
-      selectedEvent.id,
-    );
-    self.update(event, selectedEvent.date, (id, date) => {
+    const event = eventsData.find((e) => e.id === selected.id);
+    self.update(event, selected.date, (id, date) => {
       store.dispatch(selectEventAction(id, date));
     });
   }, 250);

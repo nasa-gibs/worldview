@@ -3,18 +3,6 @@ import * as olProj from 'ol/proj';
 import * as olExtent from 'ol/extent';
 
 /**
- * Find event in array of events
- * using event id
- *
- * @param  {Array} events Array of Eonet Events
- * @param  {String} id Event Id
- * @return {Object} Eonet Event Object
- */
-export function naturalEventsUtilGetEventById(events, id) {
-  return lodashFind(events, (e) => e.id === id);
-}
-
-/**
  *
  * @param {*} event
  */

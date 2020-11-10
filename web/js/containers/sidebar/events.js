@@ -73,9 +73,10 @@ function Events(props) {
     initRequests();
   }
 
-  if (selected.id && !visibleWithinMapExtent[selected.id] && events && events.length) {
+  if (selected.id && selected.date && !visibleWithinMapExtent[selected.id] && events && events.length) {
     deselectEvent();
   }
+
   const errorOrLoadingText = isLoading
     ? 'Loading...'
     : hasRequestError
@@ -167,7 +168,7 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(selectDate(new Date(dateStr)));
     }
   },
-  deselectEvent: (id, date) => {
+  deselectEvent: () => {
     dispatch(deselectEventActionCreator());
   },
   requestEvents: (url) => {

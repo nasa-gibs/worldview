@@ -47,8 +47,6 @@ export function selectEvent(id, date) {
 export function deselectEvent(id, date) {
   return {
     type: DESELECT_EVENT,
-    id,
-    date,
   };
 }
 
