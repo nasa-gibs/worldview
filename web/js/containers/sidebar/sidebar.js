@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { get as lodashGet } from 'lodash';
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
-import Layers from './layers';
+import LayersContainer from './layers-container';
 import Events from './events';
 import Data from './data';
 import CompareCase from './compare';
@@ -15,7 +15,7 @@ import {
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
-import { getLayers } from '../../modules/layers/selectors';
+import { getLayers, getActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
@@ -147,7 +147,7 @@ class Sidebar extends React.Component {
       );
     } if (!isCompareMode) {
       return (
-        <Layers
+        <LayersContainer
           height={subComponentHeight - 20}
           isActive={activeTab === 'layers'}
           compareState={activeString}
@@ -264,7 +264,6 @@ function mapStateToProps(state) {
     browser,
     sidebar,
     compare,
-    layers,
     config,
     modal,
     measure,
@@ -276,7 +275,7 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
-  const numberOfLayers = getLayers(layers[activeString], {}, state).length;
+  const numberOfLayers = getLayers(getActiveLayers(state), {}, state).length;
   const tabTypes = getActiveTabs(config);
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const isMobile = browser.lessThan.medium;

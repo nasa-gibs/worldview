@@ -33,9 +33,9 @@ export const initialState = {
   activeB: [],
   hoveredLayer: '',
   layerConfig: {},
-  facetArray: [],
   startingLayers: [],
 };
+
 export function getInitialState(config) {
   return lodashAssign({}, initialState, {
     active: resetLayers(config.defaults.startingLayers, config.layers),
@@ -45,7 +45,7 @@ export function getInitialState(config) {
 }
 
 export function layerReducer(state = initialState, action) {
-  const layerGroupStr = action.activeString;
+  const compareState = action.activeString;
   switch (action.type) {
     case RESET_LAYERS:
     case ADD_LAYER:
@@ -53,7 +53,7 @@ export function layerReducer(state = initialState, action) {
     case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
       return lodashAssign({}, state, {
-        [layerGroupStr]: action.layers,
+        [compareState]: action.layers,
       });
     case INIT_SECOND_LAYER_GROUP:
       return lodashAssign({}, state, {
@@ -65,17 +65,17 @@ export function layerReducer(state = initialState, action) {
       });
     case TOGGLE_LAYER_VISIBILITY:
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [action.index]: { visible: { $set: action.visible } },
         },
       });
     case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_DISABLED_CLASSIFICATION: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
+      const layerIndex = lodashFindIndex(state[compareState], {
         id: action.layerId,
       });
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [layerIndex]: {
             $merge: action.props,
           },
@@ -83,12 +83,12 @@ export function layerReducer(state = initialState, action) {
       });
     }
     case CLEAR_CUSTOM_PALETTE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
+      const layerIndex = lodashFindIndex(state[compareState], {
         id: action.layerId,
       });
 
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [layerIndex]: {
             custom: {
               $set: undefined,
@@ -98,11 +98,11 @@ export function layerReducer(state = initialState, action) {
       });
     }
     case SET_CUSTOM_PALETTE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
+      const layerIndex = lodashFindIndex(state[compareState], {
         id: action.layerId,
       });
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [layerIndex]: {
             custom: {
               $set: [action.paletteId],
@@ -112,11 +112,11 @@ export function layerReducer(state = initialState, action) {
       });
     }
     case SET_FILTER_RANGE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
+      const layerIndex = lodashFindIndex(state[compareState], {
         id: action.layerId,
       });
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [layerIndex]: {
             $merge: action.props,
           },
@@ -124,12 +124,12 @@ export function layerReducer(state = initialState, action) {
       });
     }
     case CLEAR_VECTORSTYLE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
+      const layerIndex = lodashFindIndex(state[compareState], {
         id: action.layerId,
       });
 
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [layerIndex]: {
             custom: {
               $set: undefined,
@@ -139,11 +139,11 @@ export function layerReducer(state = initialState, action) {
       });
     }
     case SET_VECTORSTYLE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
+      const layerIndex = lodashFindIndex(state[compareState], {
         id: action.layerId,
       });
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [layerIndex]: {
             custom: {
               $set: action.vectorStyleId,
@@ -154,7 +154,7 @@ export function layerReducer(state = initialState, action) {
     }
     case UPDATE_OPACITY:
       return update(state, {
-        [layerGroupStr]: {
+        [compareState]: {
           [action.index]: { opacity: { $set: action.opacity } },
         },
       });

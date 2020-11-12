@@ -37,6 +37,7 @@ import {
 import {
   dateRange as getDateRange,
   hasSubDaily,
+  getActiveLayers,
 } from '../../modules/layers/selectors';
 import {
   selectDate,
@@ -1402,7 +1403,7 @@ function mapStateToProps(state) {
   const isScreenWidthLessThan450 = screenWidth < 450;
 
   // handle active layer filtering and check for subdaily
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
   const hasSubdailyLayers = isCompareModeActive
@@ -1703,7 +1704,7 @@ const getTimelineEndDateLimit = (state) => {
     date, layers, compare, proj,
   } = state;
   const { appNow } = date;
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
 
   let layerDateRange;
   if (compare.active) {

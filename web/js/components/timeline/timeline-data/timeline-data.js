@@ -13,6 +13,7 @@ import {
   filterProjLayersWithStartDate,
   getMaxLayerEndDates,
 } from '../../../modules/date/util';
+import { getActiveLayers } from '../../../modules/layers/selectors';
 import Scrollbars from '../../util/scrollbar';
 import Switch from '../../util/switch';
 import DataItemList from './data-item-list';
@@ -370,7 +371,6 @@ class TimelineData extends Component {
 
 function mapStateToProps(state) {
   const {
-    compare,
     date,
     layers,
     modal,
@@ -381,7 +381,7 @@ function mapStateToProps(state) {
   } = date;
 
   // handle active layer filtering
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
 

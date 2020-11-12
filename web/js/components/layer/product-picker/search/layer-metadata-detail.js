@@ -12,7 +12,7 @@ import {
 import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers } from '../../../../modules/layers/selectors';
+import { getActiveLayersMap } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import RecentLayersInfo from '../browse/recent-layers-info';
 
@@ -225,7 +225,7 @@ const mapStateToProps = (state) => {
     config,
   } = state;
   const { selectedLayer, categoryType } = productPicker;
-  const activeLayers = getActiveLayers(state);
+  const activeLayers = getActiveLayersMap(state);
   const isActive = selectedLayer && !!activeLayers[selectedLayer.id];
   return {
     layer: selectedLayer,

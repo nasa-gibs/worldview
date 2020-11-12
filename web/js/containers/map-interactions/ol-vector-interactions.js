@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
 import { hasNonClickableVectorLayer } from '../../modules/layers/util';
+import { getActiveLayers } from '../../modules/layers/selectors';
 import vectorDialog from '../vector-dialog';
 import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
@@ -107,10 +108,10 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj, ui, layers,
+    modal, map, measure, vectorStyles, browser, compare, proj, ui,
   } = state;
   let swipeOffset;
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
     swipeOffset = browser.screenWidth * (percentOffset / 100);
