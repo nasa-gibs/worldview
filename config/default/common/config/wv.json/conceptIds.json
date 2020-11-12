@@ -557,22 +557,22 @@
     },
     "AMSRU2_Sea_Ice_Brightness_Temp_6km_89H": {
       "conceptId": [
-        "C1886605828-LANCEAMSR2"
+        "C1451715376-NSIDC_ECS"
       ]
     },
     "AMSRU2_Sea_Ice_Brightness_Temp_6km_89V": {
       "conceptId": [
-        "C1886605828-LANCEAMSR2"
+        "C1451715376-NSIDC_ECS"
       ]
     },
     "AMSRU2_Sea_Ice_Concentration_12km": {
       "conceptId": [
-        "C1886605827-LANCEAMSR2"
+        "C1542606326-NSIDC_ECS"
       ]
     },
     "AMSRU2_Sea_Ice_Concentration_25km": {
       "conceptId": [
-        "C1886605830-LANCEAMSR2"
+        "C1542606320-NSIDC_ECS"
       ]
     },
     "AMSRU2_Snow_Water_Equivalent": {
