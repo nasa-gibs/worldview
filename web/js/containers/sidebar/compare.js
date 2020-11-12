@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   Nav, NavItem, NavLink, TabContent, TabPane,
 } from 'reactstrap';
-import Layers from './layers';
+import LayersContainer from './layers-container';
 import { getLayers } from '../../modules/layers/selectors';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
 import util from '../../util/util';
@@ -59,7 +59,7 @@ const CompareCase = (props) => {
           </Nav>
           <TabContent activeTab={isCompareA ? '1' : '2'}>
             <TabPane tabId="1">
-              <Layers
+              <LayersContainer
                 isActive={isCompareA}
                 activeOverlays={layersA}
                 compareState="active"
@@ -67,7 +67,7 @@ const CompareCase = (props) => {
               />
             </TabPane>
             <TabPane tabId="2">
-              <Layers
+              <LayersContainer
                 isActive={!isCompareA}
                 activeOverlays={layersB}
                 compareState="activeB"

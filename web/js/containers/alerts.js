@@ -7,6 +7,7 @@ import { openCustomContent } from '../modules/modal/actions';
 import { hasVectorLayers } from '../modules/layers/util';
 import { DISABLE_VECTOR_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
+import { getActiveLayers } from '../modules/layers/selectors';
 
 const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
 const { DISMISSED_COMPARE_ALERT, DISMISSED_EVENT_VIS_ALERT } = safeLocalStorage.keys;
@@ -81,16 +82,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => {
   const {
-    browser, events, sidebar, compare, layers, alerts,
+    browser, events, sidebar, compare, alerts,
   } = state;
-  const { activeString } = compare;
   const { isVectorAlertActive } = alerts;
+  const activeLayers = getActiveLayers(state);
 
   return {
     isSmall: browser.lessThan.small,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
     isCompareActive: compare.active,
-    isVectorAlertPresent: hasVectorLayers(layers[activeString]) && isVectorAlertActive,
+    isVectorAlertPresent: hasVectorLayers(activeLayers) && isVectorAlertActive,
   };
 };
 export default connect(

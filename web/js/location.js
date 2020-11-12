@@ -21,7 +21,7 @@ import {
   serializeLayers,
   mapLocationToLayerState,
 } from './modules/layers/util';
-import { resetLayers, hasSubDaily } from './modules/layers/selectors';
+import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
@@ -204,8 +204,7 @@ const getParameters = function(config, parameters) {
           let zoom = currentItemState;
           // check if subdaily timescale zoom to determine if reset is needed
           if (zoom > 3) {
-            const { layers, compare } = state;
-            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
             if (!hasSubdailyLayers) {
               zoom = 3; // reset to day
             }
@@ -224,8 +223,7 @@ const getParameters = function(config, parameters) {
           let interval = currentItemState;
           // check if subdaily timescale zoom to determine if reset is needed
           if (interval > 3) {
-            const { layers, compare } = state;
-            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
             if (!hasSubdailyLayers) {
               interval = 3; // reset to day
             }
@@ -262,8 +260,7 @@ const getParameters = function(config, parameters) {
           let customInterval = currentItemState;
           // check if subdaily customInterval to determine if reset is needed
           if (customInterval > 3) {
-            const { layers, compare } = state;
-            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
             if (!hasSubdailyLayers) {
               customInterval = 3; // reset to day
             }

@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as lodashGet } from 'lodash';
-import Layer from './layer';
+import LayerRow from './layer-row';
 import {
   replaceSubGroup,
   getZotsForActiveLayers,
   getTitles,
+  getActiveLayers,
   memoizedAvailable as availableSelector,
 } from '../../modules/layers/selectors';
 import { reorderLayers as reorderLayersAction } from '../../modules/layers/actions';
@@ -28,7 +29,6 @@ function LayerList(props) {
     activeLayers,
     layers,
     zots,
-    runningLayers,
     projId,
     getNames,
     available,
@@ -71,7 +71,7 @@ function LayerList(props) {
     const { id, projections, visible } = layer;
 
     return (
-      <Layer
+      <LayerRow
         layer={layer}
         compareState={compareState}
         isInProjection={!!projections[projId]}
@@ -82,7 +82,6 @@ function LayerList(props) {
         names={getNames(id)}
         isDisabled={!available(id)}
         isVisible={visible}
-        runningObject={runningLayers && runningLayers[id]}
       />
     );
   };
@@ -105,7 +104,6 @@ function LayerList(props) {
           >
             {(provided, snapshot) => (
               <ul
-                id={groupId}
                 className="category"
                 ref={provided.innerRef}
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -138,22 +136,15 @@ LayerList.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { compareState } = ownProps;
-  const {
-    proj, config, map,
-  } = state;
-  const { runningLayers } = state.layers;
-  const { id } = proj;
-  const activeLayers = state.layers[compareState];
+  const { proj, config, map } = state;
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)
     : {};
   return {
     zots,
-    activeLayers,
-    runningLayers,
-    projId: id,
-    getNames: (layerId) => getTitles(config, layerId, id),
+    activeLayers: getActiveLayers(state),
+    projId: proj.id,
+    getNames: (layerId) => getTitles(config, layerId, proj.id),
     available: (layerId) => availableSelector(state)(layerId),
   };
 };

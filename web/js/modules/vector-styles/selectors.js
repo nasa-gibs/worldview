@@ -245,6 +245,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
 export const applyStyle = (def, olVectorLayer, state, options) => {
   const { config, layers, compare } = state;
   const activeGroupStr = options.group ? options.group : compare.activeString;
+  // TODO may not be able to rely on getActiveLayers() here
   const activeLayers = layers[activeGroupStr];
   const layerName = def.layer || def.id;
   if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {

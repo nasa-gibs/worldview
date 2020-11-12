@@ -29,9 +29,9 @@ import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
-import { getLayers } from '../modules/layers/selectors';
 import Geosearch from '../components/geosearch/geosearch';
 import { toggleShowGeosearch, toggleDialogVisible } from '../modules/geosearch/actions';
+import { getLayers, getActiveLayers } from '../modules/layers/selectors';
 
 
 Promise.config({ cancellation: true });
@@ -339,13 +339,14 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, browser, notifications, palettes, compare, map, measure, modal, layers, proj, data, ui, geosearch,
+    animation, browser, notifications, palettes, compare, map, measure, modal, proj, data, ui, geosearch,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
   const { activeString } = compare;
+  const activeLayers = getActiveLayers(state);
   const activeLayersForProj = getLayers(
-    layers[activeString],
+    activeLayers,
     { proj: proj.id },
     state,
   );
@@ -383,7 +384,7 @@ const mapStateToProps = (state) => {
     isRotated: Boolean(map.rotation !== 0),
     hasGraticule: Boolean(
       lodashGet(
-        lodashFind(layers[activeString], { id: 'Graticule' }) || {},
+        lodashFind(activeLayers, { id: 'Graticule' }) || {},
         'visible',
       ),
     ),

@@ -16,7 +16,7 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constant
 import { toggleGranule } from '../../modules/data/actions';
 import { SELECT_DATE } from '../../modules/date/constants';
 import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
-import { getLayers } from '../../modules/layers/selectors';
+import { getLayers, getActiveLayers } from '../../modules/layers/selectors';
 import { getDataProductsFromActiveLayers, doesSelectedExist } from '../../modules/data/selectors';
 import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
@@ -83,11 +83,8 @@ export default function dataUi(store, ui, config) {
   };
   const updateLayers = function() {
     const state = store.getState();
-    const {
-      layers, compare, proj, data,
-    } = state;
-    const { activeString } = compare;
-    const activeLayers = getLayers(layers[activeString], { proj: proj.id }, state);
+    const { proj, data } = state;
+    const activeLayers = getLayers(getActiveLayers(state), { proj: proj.id }, state);
 
     // If a layer was removed and the product no longer exists,
     // remove any selected items in that product
@@ -95,7 +92,8 @@ export default function dataUi(store, ui, config) {
     // everything changes to models.
     const products = getDataProductsFromActiveLayers(activeLayers, config, proj.id);
     lodashEach(data.selectedGranules, (selected) => {
-      if (!products[selected.product] && !lodashFind(layers[activeString], { product: selected.product })) {
+      const { product } = selected;
+      if (!products[product] && !lodashFind(getActiveLayers(state), { product })) {
         store.dispatch(toggleGranule(selected));
       }
     });
@@ -103,8 +101,8 @@ export default function dataUi(store, ui, config) {
   const query = function() {
     const state = store.getState();
     const dataState = state.data;
-    const { compare, layers, proj } = state;
-    const activeLayers = getLayers(layers[compare.activeString], { proj: proj.id });
+    const { proj } = state;
+    const activeLayers = getLayers(getActiveLayers(state), { proj: proj.id });
     if (state.sidebar.activeTab !== 'download') {
       return;
     }

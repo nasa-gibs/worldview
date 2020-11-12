@@ -12,24 +12,23 @@ import { createSelector } from 'reselect';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
+import getSelectedDate from '../date/selectors';
 
-// State selectors
-const getLayersState = ({ layers }) => layers;
-const getActiveCompareState = ({ compare }) => (compare.isCompareA ? 'active' : 'activeB');
-const getCurrentDate = ({ date, compare }) => date[compare.isCompareA ? 'selected' : 'selectedB'];
-const getCurrentActiveLayers = ({ compare, layers }) => (compare.isCompareA ? layers.active : layers.activeB);
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
+
+/**
+ * Return a list of layers for the currently active compare state
+ */
+export const getActiveLayers = ({ compare, layers }) => (compare.isCompareA ? layers.active : layers.activeB);
 
 /**
  * Return a map of active layers where key is layer id
  */
-export const getActiveLayers = createSelector(
-  [getLayersState, getActiveCompareState],
-  (layers, activeCompare) => {
+export const getActiveLayersMap = createSelector(
+  [getActiveLayers],
+  (activeLayers) => {
     const activeLayerMap = {};
-    layers[activeCompare].forEach((layer) => {
-      activeLayerMap[layer.id] = layer;
-    });
+    activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
     return activeLayerMap;
   },
 );
@@ -356,7 +355,7 @@ export function available(id, date, layers, parameters) {
  * @param {*} id - the layer id
  */
 export const memoizedAvailable = createSelector(
-  [getCurrentDate, getCurrentActiveLayers, getConfigParameters],
+  [getSelectedDate, getActiveLayers, getConfigParameters],
   (currentDate, activeLayers, parameters) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
 );
 
@@ -370,8 +369,7 @@ export const memoizedAvailable = createSelector(
  */
 export function isRenderable(id, activeLayers, date, state) {
   const { parameters } = state.config || {};
-  const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-  date = date || state.date[activeDateStr];
+  date = date || getSelectedDate(state);
   const def = lodashFind(activeLayers, { id });
   const notAvailable = !available(id, date, activeLayers, parameters);
 
@@ -402,9 +400,9 @@ export function isRenderable(id, activeLayers, date, state) {
 }
 
 export function activateLayersForEventCategory(activeLayers, state) {
-  const { layers, compare } = state;
+  const { layerConfig } = state.layers;
   // Turn off all layers in list first
-  let newLayers = layers[compare.activeString];
+  let newLayers = getActiveLayers(state);
   lodashEach(newLayers, (layer, index) => {
     newLayers = update(newLayers, {
       [index]: { visible: { $set: false } },
@@ -424,7 +422,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
         id,
         { visible },
         newLayers,
-        layers.layerConfig,
+        layerConfig,
         getLayers(newLayers, { group: 'all' }, state).overlays.length,
       );
     }
@@ -493,7 +491,7 @@ export function getZotsForActiveLayers(state) {
   const { sources } = config;
   const projection = proj.selected.id;
   const zoom = map.ui.selected.getView().getZoom();
-  lodashEach(getActiveLayers(state), (layer) => {
+  lodashEach(getActiveLayersMap(state), (layer) => {
     if (layer.projections[projection]) {
       const overZoomValue = getZoomLevel(layer, zoom, projection, sources);
       const layerNotices = getLayerNoticesForLayer(layer.id, notifications);

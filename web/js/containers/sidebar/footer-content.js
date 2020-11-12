@@ -16,6 +16,7 @@ import { openCustomContent } from '../../modules/modal/actions';
 import { toggleListAll } from '../../modules/natural-events/actions';
 import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
+import { getActiveLayers } from '../../modules/layers/selectors';
 
 class FooterContent extends React.Component {
   constructor(props) {
@@ -174,14 +175,12 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    requestedEvents, config, layers, data, compare, browser,
+    requestedEvents, config, data, compare, browser,
   } = state;
   const { showAll } = state.events;
   const { selectedGranules } = data;
   const events = lodashGet(requestedEvents, 'response');
-  const { activeString } = compare;
-  const activeLayers = layers[activeString];
-  const counts = getSelectionCounts(activeLayers, selectedGranules);
+  const counts = getSelectionCounts(getActiveLayers(state), selectedGranules);
   const dataSelectionSize = getDataSelectionSize(selectedGranules);
 
   return {

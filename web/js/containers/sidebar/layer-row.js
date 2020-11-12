@@ -28,6 +28,7 @@ import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
+import { getActiveLayers } from '../../modules/layers/selectors';
 
 const { vectorModalProps } = MODAL_PROPERTIES;
 
@@ -40,7 +41,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   left: null,
 });
 
-class Layer extends React.Component {
+class LayerRow extends React.Component {
   getPaletteLegend = () => {
     const {
       compare,
@@ -308,18 +309,14 @@ class Layer extends React.Component {
   }
 }
 
-Layer.defaultProps = {
-  palette: {},
-};
-
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   const {
     layer,
     isVisible,
     compareState,
   } = ownProps;
   const {
-    palettes, config, map, layers, compare, proj,
+    palettes, config, map, compare, proj,
   } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
@@ -328,10 +325,12 @@ function mapStateToProps(state, ownProps) {
     ? getPaletteLegends(layer.id, compareState, state)
     : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
-  const tracksForLayer = layers[compareState].filter((activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track));
   const selectedMap = lodashGet(map, 'ui.selected');
   const isVector = layer.type === 'vector';
   const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
+  const tracksForLayer = getActiveLayers(state).filter(
+    (activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track),
+  );
 
   return {
     compare,
@@ -349,7 +348,7 @@ function mapStateToProps(state, ownProps) {
     getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
     runningObject: map.runningDataObj[layer.id],
   };
-}
+};
 
 const mapDispatchToProps = (dispatch) => ({
   hover: (id, value) => {
@@ -412,11 +411,17 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(requestPalette(id));
   },
 });
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Layer);
-Layer.propTypes = {
+)(LayerRow);
+
+LayerRow.defaultProps = {
+  palette: {},
+};
+
+LayerRow.propTypes = {
   compare: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,

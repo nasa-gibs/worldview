@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ListGroupItem, UncontrolledTooltip } from 'reactstrap';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { available, getActiveLayers } from '../../../../modules/layers/selectors';
+import { available, getActiveLayersMap } from '../../../../modules/layers/selectors';
 import Checkbox from '../../../util/checkbox';
 import {
   addLayer as addLayerAction,
@@ -101,7 +101,7 @@ MeasurementLayerRow.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { notifications, browser } = state;
-  const activeLayerMap = getActiveLayers(state);
+  const activeLayerMap = getActiveLayersMap(state);
   const { id } = ownProps.layer;
   return {
     isEnabled: !!activeLayerMap[id],
