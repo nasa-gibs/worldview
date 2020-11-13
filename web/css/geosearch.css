@@ -93,15 +93,15 @@
   border-radius: 0;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-    width: 31px;
-    border: none;
-    background: #00457b;
-    &:focus,
-    &:hover {
-      box-shadow: none;
-      background-color: #eee;
-      color: #00457b;
-    }
+  width: 31px;
+  border: none;
+  background: #00457b;
+  &:focus,
+  &:hover {
+    box-shadow: none;
+    background-color: #eee;
+    color: #00457b;
+  }
 }
 
 .geosearch-coordinate-button-remove svg.svg-inline--fa.fa-slash {
