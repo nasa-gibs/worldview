@@ -10,6 +10,7 @@ import {
   REORDER_LAYERS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
+  TOGGLE_LAYER_GROUPS,
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
@@ -82,6 +83,12 @@ export function layerReducer(state = initialState, action) {
             layers: { $set: action.layers },
           },
         });
+
+    case TOGGLE_LAYER_GROUPS:
+      return {
+        ...state,
+        showGroups: !state.showGroups,
+      };
 
     case INIT_SECOND_LAYER_GROUP:
       return {

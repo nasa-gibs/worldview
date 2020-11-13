@@ -4,7 +4,7 @@
     user-select: none;
   }
 }
-#productsHolder {
+.products-holder-case {
   position: absolute;
   z-index: 2;
   min-width: 286px;
@@ -19,29 +19,33 @@
   border-top: none;
   transition: max-height 0.1s ease;
   overflow: hidden;
+  .layer-container {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    position: relative;
+    border: 1px solid transparent;
+  }
+  .scrollbar-visible .sidebar-panel {
+    padding-right: 10px;
+  }
+  .main-nav {
+    background: rgba(40, 40, 40, 0.85);
+    border-right: 1px solid #333;
+    border-left: 1px solid #333;
+  }
+  > .tab-content {
+    background: rgba(40, 40, 40, 0.85);
+    border: 1px solid #333;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .react-switch {
+    margin: 5px 0 0 10px;
+  }
 }
-#productsHolder .layer-container {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  position: relative;
-  border: 1px solid transparent;
-}
-#productsHolder .scrollbar-visible .sidebar-panel {
-  padding-right: 10px;
-}
-#productsHolder .main-nav {
-  background: rgba(40, 40, 40, 0.85);
-  border-right: 1px solid #333;
-  border-left: 1px solid #333;
-}
-#productsHolder > .tab-content {
-  background: rgba(40, 40, 40, 0.85);
-  border: 1px solid #333;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
+
 #wv-logo {
   background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center rgba(40, 40, 40, 0.85);
   display: block;
