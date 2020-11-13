@@ -40,7 +40,6 @@ export const getActiveLayersMap = createSelector(
     return activeLayerMap;
   },
 );
-
 export const getGroupedOverlays = createSelector(
   [getActiveLayers, getActiveGroups],
   (activeLayers, activeGroups) => {
@@ -63,6 +62,25 @@ export const getGroupedOverlays = createSelector(
     }));
   },
 );
+// export const getGroupedOverlays = (state) => {
+//   const allGroupsMap = {};
+//   getActiveLayers(state).forEach((layer) => {
+//     const { layergroup, group } = layer;
+//     if (group === 'overlays' && layergroup && layergroup.length) {
+//       // TODO just using first group in array for now
+//       const [groupName] = layergroup;
+//       if (allGroupsMap[groupName]) {
+//         allGroupsMap[groupName].push(layer);
+//       } else {
+//         allGroupsMap[groupName] = [layer];
+//       }
+//     }
+//   });
+//   return Object.keys(allGroupsMap).map((group) => ({
+//     groupName: group,
+//     layers: allGroupsMap[group],
+//   }));
+// };
 
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;

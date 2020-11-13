@@ -66,7 +66,7 @@ export default function dataUi(store, ui, config) {
       case LAYER_CONSTANTS.REMOVE_LAYER:
       case LAYER_CONSTANTS.RESET_LAYERS:
       case LAYER_CONSTANTS.ADD_LAYER:
-      case LAYER_CONSTANTS.REORDER_LAYER_GROUP:
+      case LAYER_CONSTANTS.REORDER_LAYERS:
       case LAYER_CONSTANTS.ADD_LAYERS_FOR_EVENT:
         return updateLayers();
       case SELECT_DATE:

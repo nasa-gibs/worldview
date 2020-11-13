@@ -7,13 +7,13 @@ import {
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
-  getActiveLayers,
 } from './selectors';
 import {
   RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
-  REORDER_LAYER_GROUP,
+  REORDER_LAYERS,
+  REORDER_LAYER_GROUPS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
@@ -30,12 +30,17 @@ export function resetLayers(activeString) {
       config.defaults.startingLayers,
       config.layers,
     );
-
     dispatch({
       type: RESET_LAYERS,
       activeString,
       layers: newLayers,
     });
+  };
+}
+
+export function initSecondLayerGroup() {
+  return {
+    type: INIT_SECOND_LAYER_GROUP,
   };
 }
 
@@ -46,7 +51,6 @@ export function activateLayersForEventCategory(activeLayers) {
       activeLayers,
       state,
     );
-
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
       activeString: state.compare.activeString,
@@ -67,14 +71,14 @@ export function addLayer(id, spec = {}) {
     } = state;
     const layerObj = layers.layerConfig[id];
     const activeLayers = getLayersSelector(
-      getActiveLayers(state),
+      getActiveLayersSelector(state),
       { group: 'all' },
       state,
     );
     const newLayers = addLayerSelector(
       id,
       spec,
-      getActiveLayers(state),
+      getActiveLayersSelector(state),
       layers.layerConfig,
       activeLayers.overlays.length || 0,
       proj.id,
@@ -90,28 +94,50 @@ export function addLayer(id, spec = {}) {
   };
 }
 
-export function clearGraticule() {
-  return (dispatch) => {
-    dispatch(toggleVisibility('Graticule', false));
+export function reorderLayers(reorderedLayers) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    dispatch({
+      type: REORDER_LAYERS,
+      layers: reorderedLayers,
+      activeString: compare.activeString,
+    });
   };
 }
 
-export function refreshGraticule() {
-  return (dispatch) => {
-    dispatch(toggleVisibility('Graticule', true));
+export function reorderLayerGroups(layers, groups) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    dispatch({
+      type: REORDER_LAYER_GROUPS,
+      activeString: compare.activeString,
+      layers,
+      groups,
+    });
   };
 }
 
-export function initSecondLayerGroup() {
-  return {
-    type: INIT_SECOND_LAYER_GROUP,
-  };
-}
-
-export function reorderLayers(layerArray) {
-  return {
-    type: REORDER_LAYER_GROUP,
-    layers: layerArray,
+export function removeLayer(id) {
+  return (dispatch, getState) => {
+    const { compare, data } = getState();
+    const { activeString } = compare;
+    const activeLayers = getActiveLayersSelector(getState());
+    const index = lodashFindIndex(activeLayers, { id });
+    if (index === -1) {
+      return console.warn(`Invalid layer ID: ${id}`);
+    }
+    const def = activeLayers[index];
+    if (def.product && def.product === data.selectedProduct) {
+      dispatch(selectProduct('')); // Clear selected Data product
+    }
+    dispatch({
+      type: REMOVE_LAYER,
+      id,
+      index,
+      activeString,
+      def,
+      layers: update(activeLayers, { $splice: [[index, 1]] }),
+    });
   };
 }
 
@@ -139,30 +165,6 @@ export function toggleVisibility(id, visible) {
   };
 }
 
-export function removeLayer(id) {
-  return (dispatch, getState) => {
-    const { compare, data } = getState();
-    const { activeString } = compare;
-    const activeLayers = getActiveLayers(getState());
-    const index = lodashFindIndex(activeLayers, { id });
-    if (index === -1) {
-      return console.warn(`Invalid layer ID: ${id}`);
-    }
-    const def = activeLayers[index];
-    if (def.product && def.product === data.selectedProduct) {
-      dispatch(selectProduct('')); // Clear selected Data product
-    }
-    dispatch({
-      type: REMOVE_LAYER,
-      id,
-      index,
-      activeString,
-      def,
-      layers: update(activeLayers, { $splice: [[index, 1]] }),
-    });
-  };
-}
-
 export function setOpacity(id, opacity) {
   return (dispatch, getState) => {
     const { compare } = getState();
@@ -171,7 +173,6 @@ export function setOpacity(id, opacity) {
     if (index === -1) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
-
     dispatch({
       type: UPDATE_OPACITY,
       id,
@@ -179,5 +180,17 @@ export function setOpacity(id, opacity) {
       opacity: Number(opacity),
       activeString: compare.activeString,
     });
+  };
+}
+
+export function clearGraticule() {
+  return (dispatch) => {
+    dispatch(toggleVisibility('Graticule', false));
+  };
+}
+
+export function refreshGraticule() {
+  return (dispatch) => {
+    dispatch(toggleVisibility('Graticule', true));
   };
 }

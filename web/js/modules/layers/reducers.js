@@ -7,12 +7,13 @@ import {
   RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
-  REORDER_LAYER_GROUP,
+  REORDER_LAYERS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
+  REORDER_LAYER_GROUPS,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -63,16 +64,24 @@ export function layerReducer(state = initialState, action) {
   switch (action.type) {
     case RESET_LAYERS:
     case ADD_LAYER:
-    case REORDER_LAYER_GROUP:
+    case REORDER_LAYER_GROUPS:
     case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
       return {
         ...state,
         [compareState]: {
           layers: action.layers,
-          groups: getOverlayGroups(action.layers),
+          groups: action.groups || getOverlayGroups(action.layers),
         },
       };
+
+    case REORDER_LAYERS:
+      return update(state,
+        {
+          [compareState]: {
+            layers: { $set: action.layers },
+          },
+        });
 
     case INIT_SECOND_LAYER_GROUP:
       return {
