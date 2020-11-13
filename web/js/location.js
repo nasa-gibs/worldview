@@ -1,4 +1,4 @@
-import { assign as lodashAssign, get } from 'lodash';
+import { get } from 'lodash';
 import update from 'immutability-helper';
 import { encode } from './modules/link/util';
 // legacy crutches
@@ -101,7 +101,7 @@ export const mapLocationToState = (state, location) => {
 
     // one level deep merge of newState with defaultState
     Object.keys(stateFromLocation).forEach((key) => {
-      const obj = lodashAssign({}, state[key], stateFromLocation[key]);
+      const obj = { ...state[key], ...stateFromLocation[key] };
       stateFromLocation = update(stateFromLocation, {
         [key]: { $set: obj },
       });
@@ -323,7 +323,7 @@ const getParameters = function(config, parameters) {
       },
     },
     l: {
-      stateKey: 'layers.active',
+      stateKey: 'layers.active.layers',
       initialState: resetLayers(config.defaults.startingLayers, config.layers),
       type: 'array',
       options: {
@@ -332,15 +332,28 @@ const getParameters = function(config, parameters) {
         serialize: (currentLayers, state) => {
           const compareIsActive = get(state, 'compare.active');
           const isCompareA = get(state, 'compare.isCompareA');
-          const activeLayersB = get(state, 'layers.activeB');
+          const activeLayersB = get(state, 'layers.activeB.layers');
           return !isCompareA && !compareIsActive
             ? serializeLayers(activeLayersB, state, 'activeB')
             : serializeLayers(currentLayers, state, 'active');
         },
       },
     },
+    lg: {
+      stateKey: 'layers.showGroups',
+      initialState: true,
+      type: 'bool',
+      options: {
+        setAsEmptyItem: true,
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const showGroups = get(state, 'layers.showGroups');
+          return !showGroups ? currentItemState : undefined;
+        },
+      },
+    },
     l1: {
-      stateKey: 'layers.activeB',
+      stateKey: 'layers.activeB.layers',
       initialState: [],
       type: 'array',
       options: {
@@ -468,13 +481,11 @@ export function getParamObject(
     legacyState,
     errors,
   );
-  const obj = lodashAssign(
-    {},
-    mapParamObject,
-    getParameters(config, parameters),
-  );
   return {
-    global: obj,
+    global: {
+      ...mapParamObject,
+      ...getParameters(config, parameters),
+    },
     RLSCONFIG: {
       queryParser: (q) => q.match(/^.*?(?==)|[^=\n\r].*$/gm),
     },

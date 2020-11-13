@@ -94,8 +94,8 @@ const mapStateToProps = (state) => {
 
   return {
     isCompareA: compare.isCompareA,
-    layersA: getLayers(layers.active, { group: 'all', proj: 'all' }, state),
-    layersB: getLayers(layers.activeB, { group: 'all', proj: 'all' }, state),
+    layersA: getLayers(layers.active.layers, { group: 'all', proj: 'all' }, state),
+    layersB: getLayers(layers.activeB.layers, { group: 'all', proj: 'all' }, state),
     dateStringA: util.toISOStringDate(date.selected),
     dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,

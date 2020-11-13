@@ -199,18 +199,20 @@ export function parseLegacyPalettes(
     const items = part.split(',');
     const layerId = items[0];
     const paletteId = items[1];
-    const index = lodashFindIndex(stateFromLocation.layers.active, {
+    const index = lodashFindIndex(stateFromLocation.layers.active.layers, {
       id: layerId,
     });
     if (
       index >= 0
-      && lodashGet(stateFromLocation, `layers.active.${index}`)
-      && !lodashGet(stateFromLocation, `layers.active.${index}.custom`)
+      && lodashGet(stateFromLocation, `layers.active.layers.${index}`)
+      && !lodashGet(stateFromLocation, `layers.active.layers.${index}.custom`)
     ) {
       stateFromLocation = update(stateFromLocation, {
         layers: {
           active: {
-            [index]: { custom: { $set: paletteId } },
+            layers: {
+              [index]: { custom: { $set: paletteId } },
+            },
           },
         },
       });
@@ -347,7 +349,7 @@ export function loadPalettes(permlinkState, state) {
     ];
   }
   lodashEach(stateArray, (stateObj) => {
-    lodashEach(state.layers[stateObj.groupStr], (layerDef) => {
+    lodashEach(state.layers[stateObj.groupStr].layers, (layerDef) => {
       if (layerDef.palette) {
         const layerId = layerDef.id;
         const min = [];
@@ -470,7 +472,7 @@ export function mapLocationToPaletteState(
     );
   }
   // legacy palettes permalink
-  if (parameters.palettes && lodashGet(stateFromLocation, 'layers.active')) {
+  if (parameters.palettes && lodashGet(stateFromLocation, 'layers.active.layers')) {
     stateFromLocation = parseLegacyPalettes(
       parameters,
       stateFromLocation,

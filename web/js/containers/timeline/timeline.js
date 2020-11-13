@@ -1407,14 +1407,14 @@ function mapStateToProps(state) {
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
   const hasSubdailyLayers = isCompareModeActive
-    ? hasSubDaily(layers.active) || hasSubDaily(layers.activeB)
+    ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
     : hasSubDaily(activeLayers);
 
   // if future layers are included, timeline axis end date will extend past appNow
   let hasFutureLayers;
   if (isCompareModeActive) {
-    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active, proj.id);
-    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB, proj.id);
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
     hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
   } else {
     hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime).length > 0;
@@ -1709,8 +1709,8 @@ const getTimelineEndDateLimit = (state) => {
   let layerDateRange;
   if (compare.active) {
     // use all layers to keep timeline axis range consistent when switching between A/B
-    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active, proj.id);
-    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB, proj.id);
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
     layerDateRange = getDateRange({}, [...compareALayersFiltered, ...compareBLayersFiltered]);
   } else {
     const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);

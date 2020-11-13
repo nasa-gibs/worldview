@@ -779,8 +779,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
   return dateArray;
 }
 
-export function serializeLayers(currentLayers, state, groupName) {
-  const layers = currentLayers;
+export function serializeLayers(layers, state, groupName) {
   const palettes = state.palettes[groupName];
 
   return layers.map((def, i) => {
@@ -1034,6 +1033,7 @@ export function layersParse12(stateObj, config) {
     return resetLayers(config.defaults.startingLayers, config.layers);
   }
 }
+
 const createLayerArrayFromState = function(state, config) {
   let layerArray = [];
   lodashEach(state, (obj) => {
@@ -1139,6 +1139,7 @@ const createLayerArrayFromState = function(state, config) {
   });
   return layerArray;
 };
+
 export function validate(errors, config) {
   const error = function(layerId, cause) {
     errors.push({
@@ -1169,6 +1170,7 @@ export function validate(errors, config) {
     }
   });
 }
+
 export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
@@ -1176,17 +1178,42 @@ export function mapLocationToLayerState(
   config,
 ) {
   let newStateFromLocation = stateFromLocation;
+  const { active, activeB } = stateFromLocation.layers;
   if (!parameters.l1 && parameters.ca !== undefined) {
-    newStateFromLocation = update(stateFromLocation, {
-      layers: { activeB: { $set: stateFromLocation.layers.active } },
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          layers: { $set: active.layers },
+          groups: { $set: getOverlayGroups(active.layers) },
+        },
+      },
     });
   }
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
-    newStateFromLocation = update(stateFromLocation, {
+    newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
-          $set: layersParse11(parameters.products, config),
+          layers: { $set: layersParse11(parameters.products, config) },
+        },
+      },
+    });
+  }
+  // Layers are grouped
+  if (parameters.l && !parameters.lg) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        active: {
+          groups: { $set: getOverlayGroups(active.layers) },
+        },
+      },
+    });
+  }
+  if (parameters.l1 && !parameters.lg) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          groups: { $set: getOverlayGroups(activeB.layers) },
         },
       },
     });
@@ -1338,4 +1365,25 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
   if (targetLayerId && mockFutureTime && layers[targetLayerId]) {
     layers[targetLayerId].futureTime = mockFutureTime;
   }
+}
+
+export function getOverlayGroups(layers) {
+  const allGroupsMap = {};
+  layers.forEach((layer) => {
+    const { layergroup, group } = layer;
+    if (!layergroup) {
+      // TODO remove if we aren't using this property
+      console.warn('Layer has no layergroup: ', layer.id);
+    }
+    if (group === 'overlays') {
+      // TODO just using first group in array for now
+      const groupName = layergroup && layergroup.length ? layergroup[0] : 'Other';
+      if (allGroupsMap[groupName]) {
+        allGroupsMap[groupName].push(layer);
+      } else {
+        allGroupsMap[groupName] = [layer];
+      }
+    }
+  });
+  return Object.keys(allGroupsMap);
 }
