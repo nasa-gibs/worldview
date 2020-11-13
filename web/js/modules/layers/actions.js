@@ -16,6 +16,7 @@ import {
   REORDER_LAYER_GROUPS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
+  TOGGLE_LAYER_GROUPS,
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
@@ -56,6 +57,12 @@ export function activateLayersForEventCategory(activeLayers) {
       activeString: state.compare.activeString,
       layers: newLayers,
     });
+  };
+}
+
+export function toggleLayerGroups() {
+  return {
+    type: TOGGLE_LAYER_GROUPS,
   };
 }
 
