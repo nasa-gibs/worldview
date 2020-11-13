@@ -87,7 +87,7 @@ class SearchBox extends Component {
     const labelText = 'Submit and navigate to location';
     const rightPositioning = '31px';
     const buttonStyle = inputValue
-      ? { color: '#d54e21', cursor: 'pointer' }
+      ? { background: isMobile ? '#d54e21' : 'none', color: isMobile ? '#fff' : '#d54e21', cursor: 'pointer' }
       : {};
     const tooltipVisibilityCondition = inputValue && !isMobile;
 
@@ -125,9 +125,9 @@ class SearchBox extends Component {
   // render alert icon
   renderAlertIcon = () => {
     const {
-      showExtentAlert,
+      showExtentAlert, isMobile,
     } = this.props;
-    const rightPositioning = '120px';
+    const rightPositioning = isMobile ? '130px' : '120px';
 
     return (
       showExtentAlert && (
@@ -150,7 +150,7 @@ class SearchBox extends Component {
     const {
       inputValue, isMobile, clearInput,
     } = this.props;
-    const rightPositioning = '62px';
+    const rightPositioning = isMobile ? '70px' : '62px';
     const buttonId = 'geosearch-search-clear-button';
     const labelText = 'Clear search text';
     const tooltipVisibilityCondition = inputValue && !isMobile;
@@ -189,27 +189,20 @@ class SearchBox extends Component {
   // condtional autocomplete wrapper styling
   getWrapperStyle = () => {
     const {
-      coordinates,
       isMobile,
       showExtentAlert,
       inputValue,
     } = this.props;
-    const hasCoordinates = coordinates.length > 0;
-    const wrapperStyleWidth = '298px';
+
+    const paddingRightStyle = inputValue
+      ? showExtentAlert
+        ? isMobile ? '68px' : '84px'
+        : isMobile ? '42px' : '60px'
+      : '0';
 
     return {
-      width: isMobile ? '90%' : wrapperStyleWidth,
-      paddingRight: isMobile
-        ? inputValue
-          ? hasCoordinates
-            ? '46px'
-            : '39px'
-          : '0'
-        : showExtentAlert
-          ? '80px'
-          : inputValue
-            ? '60px'
-            : '26px',
+      width: isMobile ? '90%' : '298px',
+      paddingRight: paddingRightStyle,
     };
   }
 
@@ -257,7 +250,6 @@ class SearchBox extends Component {
 
 SearchBox.propTypes = {
   clearInput: PropTypes.func,
-  coordinates: PropTypes.array,
   coordinatesPending: PropTypes.array,
   onCoordinateInputSelect: PropTypes.func,
   searchResults: PropTypes.array,

@@ -57,7 +57,7 @@ class CoordinatesDialog extends Component {
         <span className="close-tooltip close-coordinates-tooltip" onClick={clearCoordinates}>
           <FontAwesomeIcon icon="times" fixedWidth />
         </span>
-        <span className="close-tooltip close-coordinates-tooltip" style={{ right: '30px' }} onClick={toggleWithClose}>
+        <span className="minimize-tooltip minimize-coordinates-tooltip" onClick={toggleWithClose}>
           <FontAwesomeIcon icon="minus" fixedWidth />
         </span>
         <CopyToClipboard

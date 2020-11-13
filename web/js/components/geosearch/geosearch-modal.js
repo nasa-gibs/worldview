@@ -248,22 +248,16 @@ class SearchComponent extends Component {
 
   // render add coordinate marker button for reverse geocode
   renderAddCoordinateButton = () => {
-    const {
-      isMobile,
-    } = this.props;
-    const containerClass = 'geosearch-coordinate-group-container';
-    const buttonRightMargin = { marginRight: isMobile ? '6px' : '1px' };
     const addCoordinateButtonId = 'geosearch-coordinate-button-addpoint';
     const addCoordinateLabelText = 'Add marker on map';
 
     return (
-      <InputGroupAddon addonType="append" className={containerClass}>
+      <InputGroupAddon addonType="append">
         <Button
           id={addCoordinateButtonId}
           onTouchEnd={this.initReverseGeocode}
           onMouseDown={this.initReverseGeocode}
           className="geosearch-coordinate-button-addpoint"
-          style={buttonRightMargin}
         >
           {this.renderTooltip(addCoordinateButtonId, addCoordinateLabelText)}
           <FontAwesomeIcon icon="map-marker-alt" size="1x" />

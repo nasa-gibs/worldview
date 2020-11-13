@@ -140,7 +140,6 @@
     word-wrap: break-word;
     line-height: 17px;
     font-size: 16px;
-    /* padding-right: 23px; */
     padding-right: 50px;
   }
   .tooltip-coordinates-group {
@@ -151,14 +150,21 @@
       padding-right: 26px;
     }
   }
-  .close-tooltip {
+  .close-tooltip,
+  .minimize-tooltip {
     margin-left: 8px;
     border-left: 1px solid #777;
     padding-left: 6px;
-    &.close-coordinates-tooltip {
+    &.close-coordinates-tooltip,
+    &.minimize-coordinates-tooltip {
       position: absolute;
       top: 4px;
+    }
+    &.close-coordinates-tooltip {
       right: 6px;
+    }
+    &.minimize-coordinates-tooltip {
+      right: 30px;
     }
   }
   .svg-inline--fa {
