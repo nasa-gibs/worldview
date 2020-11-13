@@ -609,26 +609,25 @@ export default function mapui(models, config, store, ui) {
     }
     updateLayerVisibilities();
   };
+
   /**
    * Create a Layergroup given the date and layerGroups
-   * @param {Array} arr | Array of date/layer group strings
    */
-  function getCompareLayerGroup(arr, layersState, projId, state) {
+  function getCompareLayerGroup([compareActiveString, compareDateString], layersState, projId, state) {
+    const activeLayers = layersState[compareActiveString].layers;
+    const layers = getLayers(activeLayers, { reverse: true }, state)
+      .filter(() => true)
+      .map((def) => createLayer(def, {
+        date: state.date[compareDateString],
+        group: compareActiveString,
+      }));
     return new OlLayerGroup({
-      layers: getLayers(
-        layersState[arr[0]],
-        { reverse: true },
-        store.getState(),
-      )
-        .filter(() => true)
-        .map((def) => createLayer(def, {
-          date: state.date[arr[1]],
-          group: arr[0],
-        })),
-      group: arr[0],
-      date: arr[1],
+      layers,
+      group: compareActiveString,
+      date: compareDateString,
     });
   }
+
   /*
    * Function called when layers need to be updated
    * e.g: can be the result of new data or another display
@@ -639,12 +638,12 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function updateLayerVisibilities() {
-    const state = store.getState();
     let renderable;
+    const state = store.getState();
     const layers = self.selected.getLayers();
-    const layersState = state.layers;
     layers.forEach((layer) => {
-      const group = layer.get('group');
+      const compareActiveString = layer.get('group');
+
       // Not in A|B
       if (layer.wv) {
         renderable = isRenderableLayer(
@@ -654,18 +653,21 @@ export default function mapui(models, config, store, ui) {
           state,
         );
         layer.setVisible(renderable);
+
         // If in A|B layer-group will have a 'group' string
-      } else if (group) {
+      } else if (compareActiveString) {
         lodashEach(layer.getLayers().getArray(), (subLayer) => {
-          if (subLayer.wv) {
-            renderable = isRenderableLayer(
-              subLayer.wv.id,
-              layersState[group],
-              state.date[layer.get('date')],
-              state,
-            );
-            subLayer.setVisible(renderable);
+          if (!subLayer.wv) {
+            return;
           }
+          const compareDateString = layer.get('date');
+          renderable = isRenderableLayer(
+            subLayer.wv.id,
+            state.layers[compareActiveString].layers,
+            state.date[compareDateString],
+            state,
+          );
+          subLayer.setVisible(renderable);
         });
         layer.setVisible(true);
       }

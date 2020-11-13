@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
-import { getLayers, getActiveLayers } from '../../modules/layers/selectors';
+import { getLayers, getActiveLayers, getGroupedOverlays } from '../../modules/layers/selectors';
 import Scrollbars from '../../components/util/scrollbar';
 
 const reorder = (list, startIndex, endIndex) => {
@@ -12,26 +12,6 @@ const reorder = (list, startIndex, endIndex) => {
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
   return result;
-};
-
-const getGroupedLayers = (layers) => {
-  const allGroupsMap = {};
-  layers.forEach((layer) => {
-    const { layergroup } = layer;
-    if (layergroup && layergroup.length) {
-      // TODO just using first group in array for now
-      const [groupName] = layergroup;
-      if (allGroupsMap[groupName]) {
-        allGroupsMap[groupName].push(layer);
-      } else {
-        allGroupsMap[groupName] = [layer];
-      }
-    }
-  });
-  return Object.keys(allGroupsMap).map((group) => ({
-    groupName: group,
-    layers: allGroupsMap[group],
-  }));
 };
 
 function LayersContainer (props) {
@@ -47,7 +27,7 @@ function LayersContainer (props) {
 
   const renderLayerList = (group, idx) => {
     const { groupName, layers } = group;
-    return ((
+    return layers && ((
       <Draggable
         key={groupName}
         draggableId={groupName}
@@ -98,7 +78,6 @@ function LayersContainer (props) {
             {(provided, snapshot) => (
               <ul
                 ref={provided.innerRef}
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.droppableProps}
               >
                 {overlayGroups.map(renderLayerList)}
@@ -124,7 +103,7 @@ const mapStateToProps = (state, ownProps) => {
   const { proj } = state;
   const activeLayers = getActiveLayers(state);
   const layerObj = getLayers(activeLayers, { proj: proj.id, group: 'all' });
-  const overlayGroups = getGroupedLayers(layerObj.overlays);
+  const overlayGroups = getGroupedOverlays(state);
 
   return {
     baselayers: layerObj.baselayers,

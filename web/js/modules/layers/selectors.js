@@ -19,7 +19,15 @@ const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 /**
  * Return a list of layers for the currently active compare state
  */
-export const getActiveLayers = ({ compare, layers }) => (compare.isCompareA ? layers.active : layers.activeB);
+export const getActiveLayers = (state) => {
+  const { compare, layers } = state;
+  return compare.isCompareA ? layers.active.layers : layers.activeB.layers;
+};
+
+const getActiveGroups = (state) => {
+  const { compare, layers } = state;
+  return compare.isCompareA ? layers.active.groups : layers.activeB.groups;
+};
 
 /**
  * Return a map of active layers where key is layer id
@@ -30,6 +38,29 @@ export const getActiveLayersMap = createSelector(
     const activeLayerMap = {};
     activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
     return activeLayerMap;
+  },
+);
+
+export const getGroupedOverlays = createSelector(
+  [getActiveLayers, getActiveGroups],
+  (activeLayers, activeGroups) => {
+    const allGroupsMap = {};
+    activeLayers.forEach((layer) => {
+      const { layergroup, group } = layer;
+      if (group === 'overlays' && layergroup && layergroup.length) {
+        // TODO just using first group in array for now
+        const [groupName] = layergroup;
+        if (allGroupsMap[groupName]) {
+          allGroupsMap[groupName].push(layer);
+        } else {
+          allGroupsMap[groupName] = [layer];
+        }
+      }
+    });
+    return activeGroups.map((group) => ({
+      groupName: group,
+      layers: allGroupsMap[group],
+    }));
   },
 );
 

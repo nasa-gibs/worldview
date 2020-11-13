@@ -167,9 +167,7 @@ export function setOpacity(id, opacity) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeLayers = getActiveLayersSelector(getState());
-    const index = lodashFindIndex(activeLayers, {
-      id,
-    });
+    const index = lodashFindIndex(activeLayers, { id });
     if (index === -1) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
