@@ -48,7 +48,7 @@ function Events(props) {
   const ALL_CATEGORY = 'All Event Categories';
   const [selectedCategory, selectCategory] = useState(ALL_CATEGORY);
 
-  const [showInactiveEventAlert, setInactiveEventAlert] = useState(selected.id && !selected.date);
+  let showInactiveEventAlert = selected.id && !selected.date;
 
   const initRequests = () => {
     let eventsRequestURL = `${apiURL}/events`;
@@ -160,7 +160,7 @@ function Events(props) {
         <AlertUtil
           id="event-unavailable-alert"
           isOpen
-          onDismiss={() => { setInactiveEventAlert(false); }}
+          onDismiss={() => { showInactiveEventAlert = false; }}
           message={`The event with an id of ${selected.id} is no longer active.`}
         />
       )}

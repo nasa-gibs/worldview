@@ -261,7 +261,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       !isIdChange,
       isInitialLoad,
     );
-    // highlightEventInList(id, date);
+
     // Remove previously stored markers
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
@@ -285,7 +285,9 @@ export default function naturalEventsUI(ui, config, store, models) {
             selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1)),
           );
         }
-      } else if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
+      } else if (!isInitialLoad) {
+        store.dispatch(selectDate(util.parseDateUTC(date)));
+      }
       self.selecting = false;
       if (isIdChange && !isSameCategory && !isInitialLoad) {
         activateLayersForCategory(event.categories[0].title);

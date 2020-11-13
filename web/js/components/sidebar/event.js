@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getDefaultEventDate } from '../../map/natural-events/util';
 import util from '../../util/util';
 
 function Event (props) {
@@ -34,10 +35,32 @@ function Event (props) {
     }
   }, [isSelected]);
 
+
+  /**
+   *
+   * @param {String} date | Date of event clicked
+   * @param {Boolean} isSelected | Is this event already selected
+   * @param {Object} e | Event Object
+   */
+  function onEventSelect(date) {
+    if (isSelected && (!date || date === selectedDate)) {
+      deselectEvent();
+    } else {
+      const selectedEventDate = date || getDefaultEventDate(event);
+      selectEvent(event.id, selectedEventDate);
+      googleTagManager.pushEvent({
+        event: 'natural_event_selected',
+        natural_events: {
+          category: event.categories[0].title,
+        },
+      });
+    }
+  }
+
   /**
    * Return date list for selected event
    */
-  function getDateLists() {
+  function renderDateLists() {
     if (event.geometry.length > 1) {
       return (
         <ul
@@ -51,7 +74,7 @@ function Event (props) {
                 <a
                   onClick={(e) => {
                     e.stopPropagation();
-                    onClick(date);
+                    onEventSelect(date);
                   }}
                   className={
                     selectedDate === date
@@ -70,29 +93,9 @@ function Event (props) {
   }
 
   /**
-   *
-   * @param {String} date | Date of event clicked
-   * @param {Boolean} isSelected | Is this event already selected
-   * @param {Object} e | Event Object
-   */
-  function onClick(date) {
-    if (isSelected && (!date || date === selectedDate)) {
-      deselectEvent();
-    } else {
-      selectEvent(event.id, date);
-      googleTagManager.pushEvent({
-        event: 'natural_event_selected',
-        natural_events: {
-          category: event.categories[0].title,
-        },
-      });
-    }
-  }
-
-  /**
    * Return reference list for an event
    */
-  function getReferenceList() {
+  function renderReferenceList() {
     if (!isSelected) return;
 
     const references = Array.isArray(event.sources)
@@ -132,7 +135,7 @@ function Event (props) {
       className={itemClass}
       onClick={(e) => {
         e.stopPropagation();
-        onClick();
+        onEventSelect();
       }}
     >
       <i
@@ -144,8 +147,8 @@ function Event (props) {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: `${event.title}<br />${dateString}` }}
       />
-      <p className="subtitle">{getReferenceList()}</p>
-      {getDateLists()}
+      <p className="subtitle">{renderReferenceList()}</p>
+      {renderDateLists()}
     </li>
   );
 }
