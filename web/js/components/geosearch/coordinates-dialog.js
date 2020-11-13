@@ -23,7 +23,7 @@ class CoordinatesDialog extends Component {
 
   render() {
     const {
-      toggleWithClose, coordinatesMetadata, isMobile,
+      clearCoordinates, toggleWithClose, coordinatesMetadata, isMobile,
     } = this.props;
     const {
       tooltipToggleTime,
@@ -54,8 +54,11 @@ class CoordinatesDialog extends Component {
             {longitudeText}
           </div>
         </div>
-        <span className="close-tooltip close-coordinates-tooltip" onClick={toggleWithClose}>
+        <span className="close-tooltip close-coordinates-tooltip" onClick={clearCoordinates}>
           <FontAwesomeIcon icon="times" fixedWidth />
+        </span>
+        <span className="close-tooltip close-coordinates-tooltip" style={{ right: '30px' }} onClick={toggleWithClose}>
+          <FontAwesomeIcon icon="minus" fixedWidth />
         </span>
         <CopyToClipboard
           options={window.clipboardData ? {} : { format: 'text/plain' }}
@@ -79,9 +82,9 @@ class CoordinatesDialog extends Component {
   }
 }
 
-
 export default CoordinatesDialog;
 CoordinatesDialog.propTypes = {
+  clearCoordinates: PropTypes.func,
   toggleWithClose: PropTypes.func,
   coordinatesMetadata: PropTypes.object,
   isMobile: PropTypes.bool,

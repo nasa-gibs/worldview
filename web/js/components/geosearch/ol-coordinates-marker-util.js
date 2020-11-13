@@ -34,7 +34,7 @@ function getCoordinateDisplayPrecision(coordinate) {
  *
  * @returns {Void}
  */
-export function renderTooltip(map, config, coordinates, coordinatesMetadata, isMobile) {
+export function renderCoordinatesTooltip(map, config, coordinates, coordinatesMetadata, isMobile, clearCoordinates) {
   const { projections } = config;
   const { proj } = map;
   const { crs } = projections[proj];
@@ -63,7 +63,7 @@ export function renderTooltip(map, config, coordinates, coordinatesMetadata, isM
   map.addOverlay(tooltipOverlay);
   tooltipOverlay.setPosition(coordinatesPosition);
 
-  // helper function to remove tooltip overlay
+  // helper function to remove/hide tooltip overlay
   const removeTooltip = () => {
     map.removeOverlay(tooltipOverlay);
   };
@@ -72,6 +72,7 @@ export function renderTooltip(map, config, coordinates, coordinatesMetadata, isM
     <CoordinatesDialog
       coordinatesMetadata={coordinatesMetadata}
       toggleWithClose={removeTooltip}
+      clearCoordinates={clearCoordinates}
       isMobile={isMobile}
     />
   ), tooltipOverlay.getElement());
@@ -139,7 +140,7 @@ export function getCoordinatesMetadata(geocodeProperties) {
  *
  * @returns {Void}
  */
-export function getCoordinatesDialogAtMapPixel(pixels, map, config, isMobile) {
+export function getCoordinatesDialogAtMapPixel(pixels, map, config, isMobile, clearCoordinates) {
   // check for existing coordinate marker tooltip overlay and prevent multiple renders
   const mapOverlays = map.getOverlays().getArray();
   const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
@@ -160,7 +161,7 @@ export function getCoordinatesDialogAtMapPixel(pixels, map, config, isMobile) {
       const coordinatesMetadata = getCoordinatesMetadata(featureProperties);
 
       // create tooltip overlay React DOM element
-      renderTooltip(map, config, [latitude, longitude], coordinatesMetadata, isMobile);
+      renderCoordinatesTooltip(map, config, [latitude, longitude], coordinatesMetadata, isMobile, clearCoordinates);
     }
   });
 }

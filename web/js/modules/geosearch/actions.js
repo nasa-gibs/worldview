@@ -12,7 +12,7 @@ import {
 } from './selectors';
 import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
 import { setLocalStorageCollapseState } from './util';
-import { getCoordinatesMetadata, renderTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
+import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
 
 export function toggleShowGeosearch() {
   return (dispatch, getState) => {
@@ -70,13 +70,20 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
     const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
 
-    animateCoordinates(map, config, coordinates, maxZoom);
-
     // handle render initial tooltip
     const [longitude, latitude] = coordinates;
     const geocodeProperties = { latitude, longitude, reverseGeocodeResults };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-    renderTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile);
+    const clearMarkerAndCoordinates = () => {
+      removeCoordinatesMarker(marker, map);
+      dispatch({
+        type: CLEAR_COORDINATES,
+      });
+    };
+
+    // fly to coordinates and render coordinates tooltip
+    animateCoordinates(map, config, coordinates, maxZoom);
+    renderCoordinatesTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarkerAndCoordinates);
 
     dispatch({
       type: SELECT_COORDINATES_TO_FLY,

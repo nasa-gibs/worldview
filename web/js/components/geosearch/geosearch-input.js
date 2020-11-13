@@ -81,23 +81,20 @@ class SearchBox extends Component {
   // render submit button
   renderSubmitButton = () => {
     const {
-      coordinates, inputValue, isMobile,
+      inputValue, isMobile,
     } = this.props;
-    const hasCoordinates = coordinates.length > 0;
     const buttonId = 'geosearch-search-submit-button';
     const labelText = 'Submit and navigate to location';
-    // eslint-disable-next-line no-nested-ternary
-    const rightPositioning = hasCoordinates
-      ? isMobile ? '67px' : '60px'
-      : '30px';
+    const rightPositioning = '31px';
     const buttonStyle = inputValue
-      ? { color: '#0070c8', cursor: 'pointer' }
+      ? { color: '#d54e21', cursor: 'pointer' }
       : {};
     const tooltipVisibilityCondition = inputValue && !isMobile;
+
     return (
       <InputGroupAddon
         className="geosearch-submit-input-group-addon"
-        addonType="append"
+        addonType="prepend"
         style={{
           right: rightPositioning,
         }}
@@ -128,13 +125,9 @@ class SearchBox extends Component {
   // render alert icon
   renderAlertIcon = () => {
     const {
-      coordinates, isMobile, showExtentAlert,
+      showExtentAlert,
     } = this.props;
-    const hasCoordinates = coordinates.length > 0;
-    // eslint-disable-next-line no-nested-ternary
-    const rightPositioning = hasCoordinates
-      ? isMobile ? '130px' : '121px'
-      : '92px';
+    const rightPositioning = '120px';
 
     return (
       showExtentAlert && (
@@ -152,21 +145,71 @@ class SearchBox extends Component {
     );
   }
 
+  // render clear input X
+  renderClearInput = () => {
+    const {
+      inputValue, isMobile, clearInput,
+    } = this.props;
+    const rightPositioning = '62px';
+    const buttonId = 'geosearch-search-clear-button';
+    const labelText = 'Clear search text';
+    const tooltipVisibilityCondition = inputValue && !isMobile;
+
+    return (
+      inputValue && (
+      <InputGroupAddon
+        className="geosearch-submit-input-group-addon"
+        addonType="append"
+        style={{
+          right: rightPositioning,
+        }}
+      >
+        <Button
+          id={buttonId}
+          onClick={clearInput}
+          className="geosearch-search-clear-button"
+        >
+          {tooltipVisibilityCondition && (
+          <UncontrolledTooltip
+            trigger="hover"
+            target={buttonId}
+            boundariesElement="window"
+            placement="bottom"
+          >
+            {labelText}
+          </UncontrolledTooltip>
+          )}
+          <FontAwesomeIcon icon="times" size="1x" />
+        </Button>
+      </InputGroupAddon>
+      )
+    );
+  }
+
   // condtional autocomplete wrapper styling
   getWrapperStyle = () => {
     const {
       coordinates,
       isMobile,
       showExtentAlert,
+      inputValue,
     } = this.props;
     const hasCoordinates = coordinates.length > 0;
-    const wrapperStyleWidth = hasCoordinates ? '268px' : '299px';
+    const wrapperStyleWidth = '298px';
+
     return {
       width: isMobile ? '90%' : wrapperStyleWidth,
-      // eslint-disable-next-line no-nested-ternary
       paddingRight: isMobile
-        ? '0'
-        : showExtentAlert ? '53px' : '26px',
+        ? inputValue
+          ? hasCoordinates
+            ? '46px'
+            : '39px'
+          : '0'
+        : showExtentAlert
+          ? '80px'
+          : inputValue
+            ? '60px'
+            : '26px',
     };
   }
 
@@ -204,6 +247,7 @@ class SearchBox extends Component {
           renderMenu={this.renderMenu}
           renderItem={this.renderItem}
         />
+        {this.renderClearInput()}
         {this.renderAlertIcon()}
         {this.renderSubmitButton()}
       </div>
@@ -212,6 +256,7 @@ class SearchBox extends Component {
 }
 
 SearchBox.propTypes = {
+  clearInput: PropTypes.func,
   coordinates: PropTypes.array,
   coordinatesPending: PropTypes.array,
   onCoordinateInputSelect: PropTypes.func,
