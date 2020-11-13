@@ -152,7 +152,8 @@ export default function mapui(models, config, store, ui) {
           return reloadLayers();
         }
         return;
-      case layerConstants.REORDER_LAYER_GROUP:
+      case layerConstants.REORDER_LAYERS:
+      case layerConstants.REORDER_LAYER_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         return reloadLayers();

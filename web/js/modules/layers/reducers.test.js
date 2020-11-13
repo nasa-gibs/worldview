@@ -44,13 +44,13 @@ describe('layer Reducer tests', () => {
       }),
     ).toEqual(newState);
   });
-  test('REORDER_LAYER_GROUP action updates active layer array with new layer array', () => {
+  test('REORDER_LAYERS action updates active layer array with new layer array', () => {
     const newState = update(initalState, {
       active: { $set: ['updated-layer-array'] },
     });
     expect(
       layerReducer(initalState, {
-        type: CONSTANTS.REORDER_LAYER_GROUP,
+        type: CONSTANTS.REORDER_LAYERS,
         activeString: 'active',
         layers: ['updated-layer-array'],
       }),

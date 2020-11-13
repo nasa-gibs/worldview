@@ -1200,6 +1200,8 @@ export function mapLocationToLayerState(
     });
   }
   // Layers are grouped
+
+  // TODO need to set layer order as well based on the groups
   if (parameters.l && !parameters.lg) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {

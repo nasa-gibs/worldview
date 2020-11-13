@@ -5,14 +5,8 @@ import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import { getLayers, getActiveLayers, getGroupedOverlays } from '../../modules/layers/selectors';
+import { reorderLayerGroups as reorderLayerGroupsAction } from '../../modules/layers/actions';
 import Scrollbars from '../../components/util/scrollbar';
-
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
 
 function LayersContainer (props) {
   const {
@@ -22,6 +16,7 @@ function LayersContainer (props) {
     compareState,
     height,
     layerSplit,
+    reorderLayerGroups,
   } = props;
   const outterClass = 'layer-container sidebar-panel';
 
@@ -62,7 +57,13 @@ function LayersContainer (props) {
     if (!destination || source.index === destination.index) {
       return;
     }
-    reorder(overlayGroups, source.index, destination.index);
+    const newList = Array.from(overlayGroups);
+    const [removed] = newList.splice(source.index, 1);
+    newList.splice(destination.index, 0, removed);
+    const newLayers = newList.flatMap((group) => group.layers).concat(baselayers);
+    const newGroups = newList.map((g) => g.groupName);
+
+    reorderLayerGroups(newLayers, newGroups);
   };
 
   return isActive && (
@@ -112,9 +113,15 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => ({
+  reorderLayerGroups: (layers, groups) => {
+    dispatch(reorderLayerGroupsAction(layers, groups));
+  },
+});
+
 export default connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 )(LayersContainer);
 
 LayersContainer.propTypes = {
@@ -124,4 +131,5 @@ LayersContainer.propTypes = {
   compareState: PropTypes.string,
   layerSplit: PropTypes.number,
   overlayGroups: PropTypes.array,
+  reorderLayerGroups: PropTypes.func,
 };

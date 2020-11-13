@@ -61,7 +61,7 @@ function LayerList(props) {
     const newLayers = replaceSubGroup(
       layerId,
       nextLayerId,
-      activeLayers,
+      Array.from(activeLayers),
       layerSplit,
     );
     reorderLayers(newLayers);
