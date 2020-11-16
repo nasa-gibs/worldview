@@ -31,9 +31,8 @@ import { resetLayers } from './selectors';
 import { getOverlayGroups } from './util';
 
 export const initialState = {
-  active: { layers: [], groups: [] },
-  activeB: { layers: [], groups: [] },
-  showGroups: true,
+  active: { groupOverlays: true, layers: [], overlayGroups: [] },
+  activeB: { groupOverlays: true, layers: [], overlayGroups: [] },
   hoveredLayer: '',
   layerConfig: {},
   startingLayers: [],
@@ -46,7 +45,8 @@ export function getInitialState(config) {
     ...initialState,
     active: {
       layers: startingLayers,
-      groups: getOverlayGroups(startingLayers),
+      groupOverlays: true,
+      overlayGroups: getOverlayGroups(startingLayers),
     },
     layerConfig,
     startingLayers: defaults.startingLayers,
@@ -57,37 +57,31 @@ export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
   const getLayerIndex = () => {
     const activeLayers = state[compareState].layers;
-    return lodashFindIndex(activeLayers, {
-      id: action.layerId,
-    });
+    return lodashFindIndex(activeLayers, { id: action.id });
   };
 
   switch (action.type) {
     case RESET_LAYERS:
-    case ADD_LAYER:
     case REORDER_LAYER_GROUPS:
+    case ADD_LAYER:
     case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
-      return {
-        ...state,
-        [compareState]: {
-          layers: action.layers,
-          groups: action.groups || getOverlayGroups(action.layers),
-        },
-      };
-
     case REORDER_LAYERS:
-      return update(state,
-        {
-          [compareState]: {
-            layers: { $set: action.layers },
-          },
-        });
+      return update(state, {
+        [compareState]: {
+          layers: { $set: action.layers },
+          overlayGroups: { $set: action.overlayGroups || getOverlayGroups(action.layers) },
+        },
+      });
 
     case TOGGLE_LAYER_GROUPS:
       return {
         ...state,
-        showGroups: !state.showGroups,
+        [compareState]: {
+          groupOverlays: action.groupOverlays,
+          layers: action.layers,
+          overlayGroups: action.overlayGroups,
+        },
       };
 
     case INIT_SECOND_LAYER_GROUP:
@@ -106,7 +100,7 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         [compareState]: {
           layers: {
-            [action.index]: {
+            [getLayerIndex()]: {
               visible: {
                 $set: action.visible,
               },
@@ -200,7 +194,7 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         [compareState]: {
           layers: {
-            [action.index]: {
+            [getLayerIndex()]: {
               opacity: { $set: action.opacity },
             },
           },

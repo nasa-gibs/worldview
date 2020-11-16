@@ -24,9 +24,9 @@ export const getActiveLayers = (state) => {
   return compare.isCompareA ? layers.active.layers : layers.activeB.layers;
 };
 
-const getActiveGroups = (state) => {
+export const getActiveOverlayGroups = (state) => {
   const { compare, layers } = state;
-  return compare.isCompareA ? layers.active.groups : layers.activeB.groups;
+  return compare.isCompareA ? layers.active.overlayGroups : layers.activeB.overlayGroups;
 };
 
 /**
@@ -40,47 +40,6 @@ export const getActiveLayersMap = createSelector(
     return activeLayerMap;
   },
 );
-export const getGroupedOverlays = createSelector(
-  [getActiveLayers, getActiveGroups],
-  (activeLayers, activeGroups) => {
-    const allGroupsMap = {};
-    activeLayers.forEach((layer) => {
-      const { layergroup, group } = layer;
-      if (group === 'overlays' && layergroup && layergroup.length) {
-        // TODO just using first group in array for now
-        const [groupName] = layergroup;
-        if (allGroupsMap[groupName]) {
-          allGroupsMap[groupName].push(layer);
-        } else {
-          allGroupsMap[groupName] = [layer];
-        }
-      }
-    });
-    return activeGroups.map((group) => ({
-      groupName: group,
-      layers: allGroupsMap[group],
-    }));
-  },
-);
-// export const getGroupedOverlays = (state) => {
-//   const allGroupsMap = {};
-//   getActiveLayers(state).forEach((layer) => {
-//     const { layergroup, group } = layer;
-//     if (group === 'overlays' && layergroup && layergroup.length) {
-//       // TODO just using first group in array for now
-//       const [groupName] = layergroup;
-//       if (allGroupsMap[groupName]) {
-//         allGroupsMap[groupName].push(layer);
-//       } else {
-//         allGroupsMap[groupName] = [layer];
-//       }
-//     }
-//   });
-//   return Object.keys(allGroupsMap).map((group) => ({
-//     groupName: group,
-//     layers: allGroupsMap[group],
-//   }));
-// };
 
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;
@@ -141,7 +100,7 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection) {
+export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays) {
   let layers = lodashCloneDeep(layersParam);
   if (projection) {
     layers = layers.filter((layer) => layer.projections[projection]);
@@ -153,25 +112,35 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   if (!def) {
     throw new Error(`No such layer: ${id}`);
   }
+
+  // Set layer properties
   def.visible = spec.visible || true;
   def.min = spec.min || undefined;
   def.custom = spec.custom || undefined;
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
-
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
   } else if (!lodashIsUndefined(spec.hidden)) {
     def.visible = !spec.hidden;
   }
   def.opacity = lodashIsUndefined(spec.opacity) ? 1.0 : spec.opacity;
+
+  // Place new layer in the appropriate array position
   if (def.group === 'overlays') {
-    layers.unshift(def);
+    // TODO assuming first group in the array again here
+    const groupIdx = layers.findIndex((l) => (l.layergroup || [])[0] === (def.layergroup || [])[0]);
+    if (groupOverlays && groupIdx) {
+      layers.splice(groupIdx, 0, def);
+    } else {
+      layers.unshift(def);
+    }
   } else {
     const overlaysLength = overlayLength || layers.filter((layer) => layer.group === 'overlays').length;
     layers.splice(overlaysLength, 0, def);
   }
+
   return layers;
 }
 

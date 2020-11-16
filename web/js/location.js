@@ -340,14 +340,14 @@ const getParameters = function(config, parameters) {
       },
     },
     lg: {
-      stateKey: 'layers.showGroups',
+      stateKey: 'layers.active.groupOverlays',
       initialState: true,
       type: 'bool',
       options: {
         setAsEmptyItem: true,
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
-          const showGroups = get(state, 'layers.showGroups');
+          const showGroups = get(state, 'layers.active.groupOverlays');
           return !showGroups ? currentItemState : undefined;
         },
       },
@@ -364,6 +364,19 @@ const getParameters = function(config, parameters) {
           return compareIsActive
             ? serializeLayers(currentLayers, state, 'activeB')
             : undefined;
+        },
+      },
+    },
+    lg1: {
+      stateKey: 'layers.activeB.groupOverlays',
+      initialState: true,
+      type: 'bool',
+      options: {
+        setAsEmptyItem: true,
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const showGroups = get(state, 'layers.activeB.groupOverlays');
+          return !showGroups ? currentItemState : undefined;
         },
       },
     },
