@@ -104,13 +104,6 @@
   }
 }
 
-.geosearch-coordinate-button-remove svg.svg-inline--fa.fa-slash {
-  position: absolute;
-  top: 10px;
-  left: 6px;
-  font-size: 1.25em;
-}
-
 /* Geosearch Component Minimize Button */
 .geosearch-search-minimize-button {
   background: rgba(40, 40, 40, 0.15);
