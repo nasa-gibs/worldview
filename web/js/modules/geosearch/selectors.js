@@ -9,6 +9,7 @@ import {
 import { containsXY } from 'ol/extent';
 import { coordinatesCRSTransform } from '../projection/util';
 
+// animate coordinates marker
 export function animateCoordinates(map, config, coordinates, zoom) {
   const { projections } = config;
   const { selected } = map.ui;
@@ -22,46 +23,67 @@ export function animateCoordinates(map, config, coordinates, zoom) {
   map.ui.animate.fly(targetCoordinates, zoom);
 }
 
+// check if coordinates are within selected map extent
 export function areCoordinatesWithinExtent(map, config, coordinates) {
   const { projections } = config;
   const { selected } = map.ui;
   const { proj } = selected;
   const { maxExtent, crs } = projections[proj];
 
-  let coordinatesWithinExtent;
+  let [x, y] = coordinates;
   if (proj !== 'geographic') {
-    const transformedCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
-    coordinatesWithinExtent = containsXY(maxExtent, transformedCoordinates[0], transformedCoordinates[1]);
-  } else {
-    coordinatesWithinExtent = containsXY(maxExtent, coordinates[0], coordinates[1]);
+    const transformedXY = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    [x, y] = transformedXY;
   }
+  const coordinatesWithinExtent = containsXY(maxExtent, x, y);
   return coordinatesWithinExtent;
 }
 
+// add coordinates marker
 export function addCoordinatesMarker(activeMarker, config, map, coordinates, reverseGeocodeResults) {
   const { projections } = config;
   const { selected } = map.ui;
   const { proj } = selected;
   const { crs } = projections[proj];
 
+  // remove any markers
   removeCoordinatesMarker(activeMarker, map);
 
+  // only add marker within current map extent
   const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
   if (!coordinatesWithinExtent) {
     return false;
   }
 
+  // transform coordinates if not CRS EPSG:4326
   let transformedCoordinates = false;
   if (proj !== 'geographic') {
     transformedCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
   }
 
+  // create Ol vector layer map pin
   const marker = createPin(coordinates, transformedCoordinates, reverseGeocodeResults);
   selected.addLayer(marker);
   selected.renderSync();
   return marker;
 }
 
+// remove coordinates tooltip from all projections
+export const removeCoordinatesOverlayFromAllProjections = (proj) => {
+  const mapProjections = Object.keys(proj);
+  mapProjections.forEach((mapProjection) => {
+    const mapOverlays = proj[mapProjection].getOverlays().getArray();
+    const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
+      const { id } = overlay;
+      return id && id.includes('coordinates-map-marker');
+    });
+    if (coordinatesTooltipOverlay.length > 0) {
+      proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
+    }
+  });
+};
+
+// remove coordinates marker
 export function removeCoordinatesMarker(activeMarker, map) {
   const { selected, proj } = map.ui;
   // remove marker
@@ -69,23 +91,11 @@ export function removeCoordinatesMarker(activeMarker, map) {
     activeMarker.setMap(null);
     selected.removeLayer(activeMarker);
   }
-  // remove tooltip
-  const removeOverlayFromAllProjections = () => {
-    const mapProjections = Object.keys(proj);
-    mapProjections.forEach((mapProjection) => {
-      const mapOverlays = proj[mapProjection].getOverlays().getArray();
-      const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
-        const { id } = overlay;
-        return id && id.includes('coordinates-map-marker');
-      });
-      if (coordinatesTooltipOverlay.length > 0) {
-        proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
-      }
-    });
-  };
-  removeOverlayFromAllProjections();
+  // remove tooltip from all projections
+  removeCoordinatesOverlayFromAllProjections(proj);
 }
 
+// create Ol vector layer map pin
 const createPin = function(coordinates, transformedCoordinates = false, reverseGeocodeResults = {}) {
   const [longitude, latitude] = coordinates;
   const iconFeature = new OlFeature({

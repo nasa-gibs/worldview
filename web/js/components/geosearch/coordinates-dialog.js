@@ -23,7 +23,7 @@ class CoordinatesDialog extends Component {
 
   render() {
     const {
-      clearCoordinates, toggleWithClose, coordinatesMetadata, isMobile,
+      clearCoordinates, toggleWithClose, coordinatesMetadata, isMobile, tooltipId,
     } = this.props;
     const {
       tooltipToggleTime,
@@ -41,24 +41,24 @@ class CoordinatesDialog extends Component {
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
     return (
-      <div className="tooltip-custom-black tooltip-static tooltip-coordinates-container">
+      <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
         <CopyClipboardTooltip
           tooltipToggleTime={tooltipToggleTime}
         />
         <div className="tooltip-coordinates-title">{title}</div>
         <div className="tooltip-coordinates-group">
-          <div>
+          <div className="tooltip-coordinates-latitude">
             {latitudeText}
           </div>
-          <div>
+          <div className="tooltip-coordinates-longitude">
             {longitudeText}
           </div>
         </div>
-        <span className="close-tooltip close-coordinates-tooltip" onClick={clearCoordinates}>
-          <FontAwesomeIcon icon="times" fixedWidth />
+        <span className="close-tooltip close-coordinates-tooltip">
+          <FontAwesomeIcon onClick={clearCoordinates} icon="times" fixedWidth />
         </span>
-        <span className="minimize-tooltip minimize-coordinates-tooltip" onClick={toggleWithClose}>
-          <FontAwesomeIcon icon="minus" fixedWidth />
+        <span className="minimize-tooltip minimize-coordinates-tooltip">
+          <FontAwesomeIcon onClick={toggleWithClose} icon="minus" fixedWidth />
         </span>
         <CopyToClipboard
           options={window.clipboardData ? {} : { format: 'text/plain' }}
@@ -88,4 +88,5 @@ CoordinatesDialog.propTypes = {
   toggleWithClose: PropTypes.func,
   coordinatesMetadata: PropTypes.object,
   isMobile: PropTypes.bool,
+  tooltipId: PropTypes.string,
 };

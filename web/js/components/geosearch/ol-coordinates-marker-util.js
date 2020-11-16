@@ -42,7 +42,7 @@ export function renderCoordinatesTooltip(map, config, coordinates, coordinatesMe
 
   // create tooltip overlay
   const tooltipElement = document.createElement('div');
-  const tooltipId = `coordinates-map-marker-${latitude},${longitude}`;
+  const tooltipId = util.encodeId(`coordinates-map-marker_${latitude},${longitude}`);
   const tooltipOverlay = new Overlay({
     id: tooltipId,
     element: tooltipElement,
@@ -74,6 +74,7 @@ export function renderCoordinatesTooltip(map, config, coordinates, coordinatesMe
       toggleWithClose={removeTooltip}
       clearCoordinates={clearCoordinates}
       isMobile={isMobile}
+      tooltipId={tooltipId}
     />
   ), tooltipOverlay.getElement());
 }
@@ -92,10 +93,19 @@ export function getCoordinatesMetadata(geocodeProperties) {
   const parsedLatitude = getCoordinateDisplayPrecision(latitude);
   const parsedLongitude = getCoordinateDisplayPrecision(longitude);
 
+  // format coordinates based on localStorage preference
+  const format = util.getCoordinateFormat();
+  const coordinates = util.formatCoordinate(
+    [parsedLongitude, parsedLatitude],
+    format,
+  );
+  const formattedCoordinates = coordinates.split(',');
+  const [formattedLatitude, formattedLongitude] = formattedCoordinates;
+
   // build title and metadata based on available parameters
   let title;
   if (error) {
-    title = `${parsedLatitude}, ${parsedLongitude}`;
+    title = `${formattedLatitude.trim()}, ${formattedLongitude.trim()}`;
   } else if (address) {
     /* eslint-disable camelcase */
     const {
@@ -113,15 +123,6 @@ export function getCoordinatesMetadata(geocodeProperties) {
       title = `${Match_addr}`;
     }
   }
-
-  // format coordinates based on localStorage preference
-  const format = util.getCoordinateFormat();
-  const coordinates = util.formatCoordinate(
-    [parsedLongitude, parsedLatitude],
-    format,
-  );
-  const formattedCoordinates = coordinates.split(',');
-  const [formattedLatitude, formattedLongitude] = formattedCoordinates;
 
   return {
     latitude: formattedLatitude.trim(),

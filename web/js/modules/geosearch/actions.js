@@ -14,6 +14,7 @@ import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
 import { setLocalStorageCollapseState } from './util';
 import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
 
+// toggle show geosearch component
 export function toggleShowGeosearch() {
   return (dispatch, getState) => {
     const state = getState();
@@ -31,6 +32,7 @@ export function toggleShowGeosearch() {
   };
 }
 
+// toggle reverse geocode - if active, next click on map will add marker and get coordinates
 export function toggleReverseGeocodeActive(isCoordinateSearchActive) {
   return {
     type: TOGGLE_REVERSE_GEOCODE_ACTIVE,
@@ -38,6 +40,7 @@ export function toggleReverseGeocodeActive(isCoordinateSearchActive) {
   };
 }
 
+// use given coordinates to fly to that point, add marker, and display initial coordinates dialog
 export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
   return (dispatch, getState) => {
     const state = getState();
@@ -95,6 +98,7 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
   };
 }
 
+// clear coordinates including marker and dialog (if open), adding new marker will clear any active marker
 export function clearCoordinates() {
   return (dispatch, getState) => {
     const state = getState();
