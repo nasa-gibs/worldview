@@ -16,11 +16,11 @@ export function animateCoordinates(map, config, coordinates, zoom) {
   const { proj } = selected;
   const { crs } = projections[proj];
 
-  let targetCoordinates = coordinates;
+  let [x, y] = coordinates;
   if (proj !== 'geographic') {
-    targetCoordinates = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
+    [x, y] = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
   }
-  map.ui.animate.fly(targetCoordinates, zoom);
+  map.ui.animate.fly([x, y], zoom);
 }
 
 // check if coordinates are within selected map extent
@@ -69,7 +69,7 @@ export function addCoordinatesMarker(activeMarker, config, map, coordinates, rev
 }
 
 // remove coordinates tooltip from all projections
-export const removeCoordinatesOverlayFromAllProjections = (proj) => {
+export function removeCoordinatesOverlayFromAllProjections(proj) {
   const mapProjections = Object.keys(proj);
   mapProjections.forEach((mapProjection) => {
     const mapOverlays = proj[mapProjection].getOverlays().getArray();
@@ -81,7 +81,7 @@ export const removeCoordinatesOverlayFromAllProjections = (proj) => {
       proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
     }
   });
-};
+}
 
 // remove coordinates marker
 export function removeCoordinatesMarker(activeMarker, map) {

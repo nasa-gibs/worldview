@@ -69,13 +69,20 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
         activeMarker: null,
       });
     }
+
+    // fly to coordinates and render coordinates tooltip
     const zoom = map.ui.selected.getView().getZoom();
     const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
     const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
+    animateCoordinates(map, config, coordinates, maxZoom);
 
     // handle render initial tooltip
     const [longitude, latitude] = coordinates;
-    const geocodeProperties = { latitude, longitude, reverseGeocodeResults };
+    const geocodeProperties = {
+      latitude,
+      longitude,
+      reverseGeocodeResults,
+    };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
     const clearMarkerAndCoordinates = () => {
       removeCoordinatesMarker(marker, map);
@@ -83,9 +90,6 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
         type: CLEAR_COORDINATES,
       });
     };
-
-    // fly to coordinates and render coordinates tooltip
-    animateCoordinates(map, config, coordinates, maxZoom);
     renderCoordinatesTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarkerAndCoordinates);
 
     dispatch({
