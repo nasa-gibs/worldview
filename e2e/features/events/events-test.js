@@ -19,6 +19,16 @@ module.exports = {
   before(c) {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
   },
+  'Loading an inactive event shows an alert': (c) => {
+    const inactiveEventAlert = '#event-unavailable-alert';
+    const inactiveAlertMsgContainer = `${inactiveEventAlert} .wv-alert-message`;
+    const inactiveEventMsg = 'The event with an id of EONET_5133 is no longer active.';
+
+    c.url(c.globals.url + localQuerystrings.closedEvent);
+    c.waitForElementVisible(inactiveEventAlert, TIME_LIMIT);
+    c.expect.element(inactiveEventAlert).to.be.present;
+    c.assert.containsText(inactiveAlertMsgContainer, inactiveEventMsg);
+  },
   'Make sure that 4 fire layers are not present in layer list: use mock': (c) => {
     c.url(c.globals.url + localQuerystrings.mockEvents);
     c.waitForElementVisible(
@@ -133,15 +143,6 @@ module.exports = {
     c.windowHandles((tabs) => {
       c.assert.equal(tabs.value.length, 2);
     });
-  },
-  'Loading an inactive event shows an alert': (c) => {
-    const inactiveEventAlert = '#event-unavailable-alert';
-    const inactiveAlertMsgContainer = `${inactiveEventAlert} .wv-alert-message`;
-    const inactiveEventMsg = 'The event with an id of EONET_5133 is no longer active.';
-
-    c.url(c.globals.url + localQuerystrings.closedEvent);
-    c.expect.element(inactiveEventAlert).to.be.present;
-    c.assert.containsText(inactiveAlertMsgContainer, inactiveEventMsg);
   },
   after(c) {
     c.end();
