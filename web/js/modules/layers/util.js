@@ -1183,8 +1183,9 @@ export function mapLocationToLayerState(
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
+          groupOverlays: { $set: activeB.getOverlayGroups },
           layers: { $set: active.layers },
-          groups: { $set: getOverlayGroups(active.layers) },
+          overlayGroups: { $set: getOverlayGroups(active.layers) },
         },
       },
     });
@@ -1194,7 +1195,9 @@ export function mapLocationToLayerState(
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
-          layers: { $set: layersParse11(parameters.products, config) },
+          overlayGroups: {
+            $set: getOverlayGroups(layersParse11(parameters.products, config)),
+          },
         },
       },
     });
@@ -1202,20 +1205,22 @@ export function mapLocationToLayerState(
   // Layers are grouped
 
   // TODO need to set layer order as well based on the groups
-  if (parameters.l && !parameters.lg) {
+  if (parameters.l && parameters.lg === undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
-          groups: { $set: getOverlayGroups(active.layers) },
+          groupOverlays: { $set: active.groupOverlays },
+          overlayGroups: { $set: getOverlayGroups(active.layers) },
         },
       },
     });
   }
-  if (parameters.l1 && !parameters.lg) {
+  if (parameters.l1 && parameters.lg1 === undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
-          groups: { $set: getOverlayGroups(activeB.layers) },
+          groupOverlays: { $set: activeB.groupOverlays },
+          overlayGroups: { $set: getOverlayGroups(activeB.layers) },
         },
       },
     });
@@ -1387,5 +1392,8 @@ export function getOverlayGroups(layers) {
       }
     }
   });
-  return Object.keys(allGroupsMap);
+  return Object.keys(allGroupsMap).map((group) => ({
+    groupName: group,
+    layers: allGroupsMap[group],
+  }));
 }

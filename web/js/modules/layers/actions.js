@@ -23,6 +23,8 @@ import {
 } from './constants';
 import { selectProduct } from '../data/actions';
 import { updateRecentLayers } from '../product-picker/util';
+import { getOverlayGroups } from './util';
+
 
 export function resetLayers(activeString) {
   return (dispatch, getState) => {
@@ -60,9 +62,39 @@ export function activateLayersForEventCategory(activeLayers) {
   };
 }
 
-export function toggleLayerGroups() {
-  return {
-    type: TOGGLE_LAYER_GROUPS,
+export function toggleOverlayGroups() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { activeString } = state.compare;
+    const { groupOverlays, layers, overlayGroups } = state.layers[activeString];
+    const getLayersFromGroups = (groups) => {
+      const { overlays, baselayers } = getLayersSelector(layers, { group: 'all' }, state);
+      return groups
+        ? groups.flatMap((g) => g.layers.map((l) => overlays.find((o) => o.id === l.id))).concat(baselayers)
+        : [];
+    };
+
+    // Disabling Groups
+    if (groupOverlays) {
+      dispatch({
+        type: TOGGLE_LAYER_GROUPS,
+        activeString,
+        groupOverlays: false,
+        layers: getLayersFromGroups(overlayGroups),
+        overlayGroups: [],
+      });
+
+    // Enabling Groups
+    } else {
+      const groups = getOverlayGroups(layers);
+      dispatch({
+        type: TOGGLE_LAYER_GROUPS,
+        groupOverlays: true,
+        activeString,
+        layers: getLayersFromGroups(groups),
+        overlayGroups: groups,
+      });
+    }
   };
 }
 
@@ -77,18 +109,17 @@ export function addLayer(id, spec = {}) {
       layers, compare, proj, config,
     } = state;
     const layerObj = layers.layerConfig[id];
-    const activeLayers = getLayersSelector(
-      getActiveLayersSelector(state),
-      { group: 'all' },
-      state,
-    );
+    const { groupOverlays } = layers[compare.activeString];
+    const activeLayers = getActiveLayersSelector(state);
+    const overlays = getLayersSelector(activeLayers, { group: 'overlays' }, state);
     const newLayers = addLayerSelector(
       id,
       spec,
-      getActiveLayersSelector(state),
+      activeLayers,
       layers.layerConfig,
-      activeLayers.overlays.length || 0,
+      overlays.length || 0,
       proj.id,
+      groupOverlays,
     );
     const projections = Object.keys(config.projections);
     updateRecentLayers(layerObj, projections);
@@ -106,20 +137,21 @@ export function reorderLayers(reorderedLayers) {
     const { compare } = getState();
     dispatch({
       type: REORDER_LAYERS,
-      layers: reorderedLayers,
       activeString: compare.activeString,
+      layers: reorderedLayers,
+      overlayGroups: getOverlayGroups(reorderedLayers),
     });
   };
 }
 
-export function reorderLayerGroups(layers, groups) {
+export function reorderLayerGroups(layers, overlayGroups) {
   return (dispatch, getState) => {
     const { compare } = getState();
     dispatch({
       type: REORDER_LAYER_GROUPS,
       activeString: compare.activeString,
       layers,
-      groups,
+      overlayGroups,
     });
   };
 }
@@ -140,7 +172,6 @@ export function removeLayer(id) {
     dispatch({
       type: REMOVE_LAYER,
       id,
-      index,
       activeString,
       def,
       layers: update(activeLayers, { $splice: [[index, 1]] }),
@@ -159,13 +190,9 @@ export function layerHover(id, isMouseOver) {
 export function toggleVisibility(id, visible) {
   return (dispatch, getState) => {
     const { compare } = getState();
-    const activeLayers = getActiveLayersSelector(getState());
-    const index = lodashFindIndex(activeLayers, { id });
-
     dispatch({
       type: TOGGLE_LAYER_VISIBILITY,
       id,
-      index,
       visible,
       activeString: compare.activeString,
     });
@@ -183,7 +210,6 @@ export function setOpacity(id, opacity) {
     dispatch({
       type: UPDATE_OPACITY,
       id,
-      index,
       opacity: Number(opacity),
       activeString: compare.activeString,
     });

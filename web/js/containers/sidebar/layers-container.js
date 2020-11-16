@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
-import { getLayers, getActiveLayers, getGroupedOverlays } from '../../modules/layers/selectors';
+import { getLayers, getActiveLayers, getActiveOverlayGroups } from '../../modules/layers/selectors';
 import {
   reorderLayerGroups as reorderLayerGroupsAction,
-  toggleLayerGroups as toggleLayerGroupsAction,
+  toggleOverlayGroups as toggleOverlayGroupsAction,
 } from '../../modules/layers/actions';
 import Scrollbars from '../../components/util/scrollbar';
 import Switch from '../../components/util/switch';
@@ -17,13 +17,13 @@ function LayersContainer (props) {
     overlayGroups,
     overlays,
     baselayers,
-    showGroups,
+    groupOverlays,
     isActive,
     compareState,
     height,
     layerSplit,
     reorderLayerGroups,
-    toggleLayerGroups,
+    toggleOverlayGroups,
   } = props;
 
   /**
@@ -35,17 +35,16 @@ function LayersContainer (props) {
     if (!destination || source.index === destination.index) {
       return;
     }
-    const newList = Array.from(overlayGroups);
-    const [removed] = newList.splice(source.index, 1);
-    newList.splice(destination.index, 0, removed);
-    const newLayers = newList.flatMap((group) => group.layers).concat(baselayers);
-    const newGroups = newList.map((g) => g.groupName);
-
+    const newGroups = Array.from(overlayGroups);
+    const [removed] = newGroups.splice(source.index, 1);
+    newGroups.splice(destination.index, 0, removed);
+    const newLayers = newGroups.flatMap(({ layers }) => layers).concat(baselayers);
     reorderLayerGroups(newLayers, newGroups);
   };
 
   const renderLayerList = (group, idx) => {
     const { groupName, layers } = group;
+    const layersForGroup = layers.map(({ id }) => overlays.find((o) => o.id === id));
     return layers && ((
       <Draggable
         key={groupName}
@@ -64,7 +63,7 @@ function LayersContainer (props) {
               groupId={groupName}
               compareState={compareState}
               layerSplit={layerSplit}
-              layers={layers}
+              layers={layersForGroup}
             />
           </li>
         )}
@@ -72,7 +71,7 @@ function LayersContainer (props) {
     ));
   };
 
-  const renderLayerGroups = () => (
+  const renderOverlayGroups = () => (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable
         droppableId="layerGroup"
@@ -96,14 +95,14 @@ function LayersContainer (props) {
     <>
       <Switch
         id="layer-group-toggle"
-        label="Toggle Groups"
-        active={showGroups}
-        toggle={toggleLayerGroups}
+        label="Group Overlays"
+        active={groupOverlays}
+        toggle={toggleOverlayGroups}
       />
       <Scrollbars style={{ maxHeight: `${height}px` }}>
         <div className="layer-container sidebar-panel">
 
-          {showGroups ? renderLayerGroups() : (
+          {groupOverlays ? renderOverlayGroups() : (
             <LayerList
               title="Overlays"
               groupId="overlays"
@@ -127,17 +126,18 @@ function LayersContainer (props) {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  const { compareState } = ownProps;
   const { proj, layers } = state;
-  const { showGroups } = layers;
+  const { groupOverlays } = layers[compareState];
   const activeLayers = getActiveLayers(state);
   const layerObj = getLayers(activeLayers, { proj: proj.id, group: 'all' });
-  const overlayGroups = showGroups ? getGroupedOverlays(state) : [];
+  const overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
 
   return {
     baselayers: layerObj.baselayers,
     overlays: layerObj.overlays,
     overlayGroups,
-    showGroups,
+    groupOverlays,
     layerSplit: layerObj.overlays.length,
   };
 };
@@ -146,8 +146,8 @@ const mapDispatchToProps = (dispatch) => ({
   reorderLayerGroups: (layers, groups) => {
     dispatch(reorderLayerGroupsAction(layers, groups));
   },
-  toggleLayerGroups: () => {
-    dispatch(toggleLayerGroupsAction());
+  toggleOverlayGroups: () => {
+    dispatch(toggleOverlayGroupsAction());
   },
 });
 
@@ -165,6 +165,6 @@ LayersContainer.propTypes = {
   overlayGroups: PropTypes.array,
   overlays: PropTypes.array,
   reorderLayerGroups: PropTypes.func,
-  showGroups: PropTypes.bool,
-  toggleLayerGroups: PropTypes.func,
+  groupOverlays: PropTypes.bool,
+  toggleOverlayGroups: PropTypes.func,
 };
