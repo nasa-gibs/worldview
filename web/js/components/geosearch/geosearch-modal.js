@@ -27,7 +27,7 @@ class SearchComponent extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { coordinates } = this.props;
+    const { coordinates, isCoordinateSearchActive } = this.props;
     const { showExtentAlert, showReverseGeocodeAlert } = this.state;
 
     if ((showReverseGeocodeAlert || showExtentAlert) && coordinates.length > 0) {
@@ -37,6 +37,10 @@ class SearchComponent extends Component {
         this.dismissReverseGeocodeAlert();
         this.setExtentAlert(false);
       }
+    }
+    // clear geocode click instruction alert if search no longer active
+    if (!isCoordinateSearchActive && prevProps.isCoordinateSearchActive) {
+      this.dismissReverseGeocodeAlert();
     }
   }
 
@@ -319,6 +323,7 @@ SearchComponent.propTypes = {
   geosearchMobileModalOpen: PropTypes.bool,
   inputValue: PropTypes.string,
   isCoordinatePairWithinExtent: PropTypes.func,
+  isCoordinateSearchActive: PropTypes.bool,
   isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
   searchResults: PropTypes.array,
