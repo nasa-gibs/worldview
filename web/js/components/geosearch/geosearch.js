@@ -44,6 +44,7 @@ class Geosearch extends React.Component {
       coordinates,
       geosearchMobileModalOpen,
       isCoordinatePairWithinExtent,
+      isCoordinateSearchActive,
       isExpanded,
       selectCoordinatesToFly,
       toggleReverseGeocodeActive,
@@ -63,6 +64,7 @@ class Geosearch extends React.Component {
         geosearchMobileModalOpen={geosearchMobileModalOpen}
         inputValue={inputValue}
         isCoordinatePairWithinExtent={isCoordinatePairWithinExtent}
+        isCoordinateSearchActive={isCoordinateSearchActive}
         isExpanded={isExpanded}
         isMobile={isMobile}
         searchResults={searchResults}
@@ -112,7 +114,7 @@ const mapStateToProps = (state) => {
   const { features: { geocodeSearch: isFeatureEnabled } } = config;
   const { isActive } = measure;
   const { gifActive } = animation;
-  const { coordinates, isExpanded } = geosearch;
+  const { coordinates, isCoordinateSearchActive, isExpanded } = geosearch;
   const { isDistractionFreeModeActive } = ui;
   const isMobile = browser.lessThan.medium;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
@@ -122,6 +124,7 @@ const mapStateToProps = (state) => {
 
   return {
     coordinates,
+    isCoordinateSearchActive,
     isExpanded,
     geosearchMobileModalOpen,
     isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(map, config, targetCoordinates),
@@ -148,6 +151,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 Geosearch.propTypes = {
   isCoordinatePairWithinExtent: PropTypes.func,
+  isCoordinateSearchActive: PropTypes.bool,
   isFeatureEnabled: PropTypes.bool,
   clearCoordinates: PropTypes.func,
   coordinates: PropTypes.array,
