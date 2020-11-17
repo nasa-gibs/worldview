@@ -57,7 +57,7 @@ export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
   const getLayerIndex = () => {
     const activeLayers = state[compareState].layers;
-    return lodashFindIndex(activeLayers, { id: action.id });
+    return lodashFindIndex(activeLayers, { id: action.id || action.layerId });
   };
 
   switch (action.type) {
@@ -69,8 +69,12 @@ export function layerReducer(state = initialState, action) {
     case REORDER_LAYERS:
       return update(state, {
         [compareState]: {
-          layers: { $set: action.layers },
-          overlayGroups: { $set: action.overlayGroups || getOverlayGroups(action.layers) },
+          layers: {
+            $set: action.layers,
+          },
+          overlayGroups: {
+            $set: action.overlayGroups || getOverlayGroups(action.layers),
+          },
         },
       });
 
