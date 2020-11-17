@@ -17,7 +17,7 @@ import {
 } from '../../modules/palettes/selectors';
 import { toggleCustomContent, openCustomContent } from '../../modules/modal/actions';
 import LayerInfo from '../../components/layer/info/info';
-import LayerSettings from '../../components/layer/settings/settings';
+import LayerSettings from '../../components/layer/settings/layer-settings';
 import { requestPalette } from '../../modules/palettes/actions';
 import {
   toggleVisibility,
