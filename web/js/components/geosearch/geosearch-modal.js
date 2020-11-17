@@ -28,13 +28,14 @@ class SearchComponent extends Component {
 
   componentDidUpdate(prevProps) {
     const { coordinates } = this.props;
-    const { showReverseGeocodeAlert } = this.state;
+    const { showExtentAlert, showReverseGeocodeAlert } = this.state;
 
-    if (showReverseGeocodeAlert && coordinates.length > 0) {
+    if ((showReverseGeocodeAlert || showExtentAlert) && coordinates.length > 0) {
       const [prevLong, prevLat] = prevProps.coordinates;
       const [long, lat] = coordinates;
       if (prevLong !== long || prevLat !== lat) {
         this.dismissReverseGeocodeAlert();
+        this.setExtentAlert(false);
       }
     }
   }

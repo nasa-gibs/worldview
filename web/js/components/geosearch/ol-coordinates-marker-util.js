@@ -24,6 +24,62 @@ const getCoordinateDisplayPrecision = (coordinate) => {
 };
 
 /**
+ * getFormattedCoordinates
+ *
+ * @param {String} latitude
+ * @param {String} longitude
+ *
+ * @returns {Array} formattedCoordinates
+ */
+const getFormattedCoordinates = (latitude, longitude) => {
+  const parsedLatitude = getCoordinateDisplayPrecision(latitude);
+  const parsedLongitude = getCoordinateDisplayPrecision(longitude);
+
+  // format coordinates based on localStorage preference
+  const format = util.getCoordinateFormat();
+  const coordinates = util.formatCoordinate(
+    [parsedLongitude, parsedLatitude],
+    format,
+  );
+  const formattedCoordinates = coordinates.split(',');
+  return formattedCoordinates;
+};
+
+/**
+ * getCoordinatesDialogTitle
+ *
+ * @param {Object} address
+ * @param {Object} error
+ * @param {String} formattedLatitude
+ * @param {String} formattedLongitude
+ *
+ * @returns {String} title
+ */
+const getCoordinatesDialogTitle = (address, error, formattedLatitude, formattedLongitude) => {
+  let title;
+  if (error) {
+    title = `${formattedLatitude.trim()}, ${formattedLongitude.trim()}`;
+  } else if (address) {
+    /* eslint-disable camelcase */
+    const {
+      Addr_type,
+      Match_addr,
+      ShortLabel,
+      City,
+      Region,
+    } = address;
+    if (Addr_type === 'PointAddress') {
+      title = `${ShortLabel}, ${City}, ${Region}`;
+    } else if (City && Region) {
+      title = `${City}, ${Region}`;
+    } else {
+      title = `${Match_addr}`;
+    }
+  }
+  return title;
+};
+
+/**
  * Create tooltip React DOM element
  *
  * @param {Object} map
@@ -64,14 +120,14 @@ export const renderCoordinatesTooltip = (map, config, coordinates, coordinatesMe
   tooltipOverlay.setPosition(coordinatesPosition);
 
   // helper function to remove/hide tooltip overlay
-  const removeTooltip = () => {
+  const removeCoordinatesDialog = () => {
     map.removeOverlay(tooltipOverlay);
   };
 
   ReactDOM.render((
     <CoordinatesDialog
       coordinatesMetadata={coordinatesMetadata}
-      toggleWithClose={removeTooltip}
+      removeCoordinatesDialog={removeCoordinatesDialog}
       clearCoordinates={clearCoordinates}
       isMobile={isMobile}
       tooltipId={tooltipId}
@@ -90,39 +146,11 @@ export const getCoordinatesMetadata = (geocodeProperties) => {
   const { latitude, longitude, reverseGeocodeResults } = geocodeProperties;
   const { address, error } = reverseGeocodeResults;
 
-  const parsedLatitude = getCoordinateDisplayPrecision(latitude);
-  const parsedLongitude = getCoordinateDisplayPrecision(longitude);
+  // get formatted coordinates
+  const [formattedLatitude, formattedLongitude] = getFormattedCoordinates(latitude, longitude);
 
-  // format coordinates based on localStorage preference
-  const format = util.getCoordinateFormat();
-  const coordinates = util.formatCoordinate(
-    [parsedLongitude, parsedLatitude],
-    format,
-  );
-  const formattedCoordinates = coordinates.split(',');
-  const [formattedLatitude, formattedLongitude] = formattedCoordinates;
-
-  // build title and metadata based on available parameters
-  let title;
-  if (error) {
-    title = `${formattedLatitude.trim()}, ${formattedLongitude.trim()}`;
-  } else if (address) {
-    /* eslint-disable camelcase */
-    const {
-      Addr_type,
-      Match_addr,
-      ShortLabel,
-      City,
-      Region,
-    } = address;
-    if (Addr_type === 'PointAddress') {
-      title = `${ShortLabel}, ${City}, ${Region}`;
-    } else if (City && Region) {
-      title = `${City}, ${Region}`;
-    } else {
-      title = `${Match_addr}`;
-    }
-  }
+  // build title based on available parameters
+  const title = getCoordinatesDialogTitle(address, error, formattedLatitude, formattedLongitude);
 
   return {
     latitude: formattedLatitude.trim(),
