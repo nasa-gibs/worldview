@@ -125,18 +125,14 @@ class SearchBox extends Component {
   // render alert icon
   renderAlertIcon = () => {
     const {
-      showExtentAlert, isMobile,
+      showExtentAlert,
     } = this.props;
-    const rightPositioning = isMobile ? '130px' : '120px';
 
     return (
       showExtentAlert && (
       <InputGroupAddon
-        className="geosearch-submit-input-group-addon"
+        className="geosearch-submit-input-group-addon geosearch-input-alert-icon"
         addonType="append"
-        style={{
-          right: rightPositioning,
-        }}
         title="The entered location is outside of the current map extent."
       >
         <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
@@ -150,7 +146,6 @@ class SearchBox extends Component {
     const {
       inputValue, isMobile, clearInput,
     } = this.props;
-    const rightPositioning = isMobile ? '70px' : '62px';
     const buttonId = 'geosearch-search-clear-button';
     const labelText = 'Clear search text';
     const tooltipVisibilityCondition = inputValue && !isMobile;
@@ -158,11 +153,8 @@ class SearchBox extends Component {
     return (
       inputValue && (
       <InputGroupAddon
-        className="geosearch-submit-input-group-addon"
+        className="geosearch-submit-input-group-addon geosearch-input-clear-container"
         addonType="append"
-        style={{
-          right: rightPositioning,
-        }}
       >
         <Button
           id={buttonId}
@@ -194,6 +186,7 @@ class SearchBox extends Component {
       inputValue,
     } = this.props;
 
+    // handle mobile/desktop input padding with/without alert
     const paddingRightStyle = inputValue
       ? showExtentAlert
         ? isMobile ? '68px' : '84px'

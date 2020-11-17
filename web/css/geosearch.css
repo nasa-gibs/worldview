@@ -150,6 +150,14 @@
   box-shadow: none;
 }
 
+.geosearch-input-alert-icon {
+  right: 120px;
+}
+
+.geosearch-input-clear-container {
+  right: 62px;
+}
+
 /* Mobile Styling */
 @media only screen and (max-width: 768px) {
   .geosearch-component {
@@ -158,6 +166,12 @@
   }
   .geosearch-input-container {
     width: 100%;
+  }
+  .geosearch-input-clear-container {
+    right: 70px;
+  }
+  .geosearch-input-alert-icon {
+    right: 130px;
   }
   .geosearch-autocomplete {
     font-size: 16px;

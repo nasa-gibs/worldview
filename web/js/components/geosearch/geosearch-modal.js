@@ -173,7 +173,7 @@ class SearchComponent extends Component {
     });
   }
 
-  // render tooltip
+  // render hover tooltip
   renderTooltip = (buttonId, labelText) => {
     const { isMobile } = this.props;
     return !isMobile && (
