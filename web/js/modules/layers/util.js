@@ -1376,20 +1376,16 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
 
 export function getOverlayGroups(layers) {
   const allGroupsMap = {};
-  layers.forEach((layer) => {
-    const { layergroup, group } = layer;
-    if (!layergroup) {
-      // TODO remove if we aren't using this property
-      console.warn('Layer has no layergroup: ', layer.id);
+  layers.forEach(({ id, group, layergroup }) => {
+    if (group !== 'overlays') {
+      return;
     }
-    if (group === 'overlays') {
-      // TODO just using first group in array for now
-      const groupName = layergroup && layergroup.length ? layergroup[0] : 'Other';
-      if (allGroupsMap[groupName]) {
-        allGroupsMap[groupName].push(layer);
-      } else {
-        allGroupsMap[groupName] = [layer];
-      }
+    // TODO just using first group in array for now
+    const groupName = layergroup && layergroup.length ? layergroup[0] : 'Other';
+    if (allGroupsMap[groupName]) {
+      allGroupsMap[groupName].push(id);
+    } else {
+      allGroupsMap[groupName] = [id];
     }
   });
   return Object.keys(allGroupsMap).map((group) => ({

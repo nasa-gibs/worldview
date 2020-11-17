@@ -7,6 +7,7 @@ import {
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
+  getActiveLayersMap,
 } from './selectors';
 import {
   RESET_LAYERS,
@@ -68,9 +69,12 @@ export function toggleOverlayGroups() {
     const { activeString } = state.compare;
     const { groupOverlays, layers, overlayGroups } = state.layers[activeString];
     const getLayersFromGroups = (groups) => {
-      const { overlays, baselayers } = getLayersSelector(layers, { group: 'all' }, state);
+      const baselayers = getLayersSelector(layers, { group: 'baselayers' }, state);
+      const activeLayersMap = getActiveLayersMap(state);
       return groups
-        ? groups.flatMap((g) => g.layers.map((l) => overlays.find((o) => o.id === l.id))).concat(baselayers)
+        ? groups.flatMap((g) => g.layers)
+          .map((id) => activeLayersMap[id])
+          .concat(baselayers)
         : [];
     };
 

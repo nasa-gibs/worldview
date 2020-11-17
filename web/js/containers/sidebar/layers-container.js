@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
-import { getLayers, getActiveLayers, getActiveOverlayGroups } from '../../modules/layers/selectors';
+import {
+  getLayers, getActiveLayers, getActiveOverlayGroups, getActiveLayersMap,
+} from '../../modules/layers/selectors';
 import {
   reorderLayerGroups as reorderLayerGroupsAction,
   toggleOverlayGroups as toggleOverlayGroupsAction,
@@ -14,6 +16,7 @@ import Switch from '../../components/util/switch';
 
 function LayersContainer (props) {
   const {
+    activeLayersMap,
     overlayGroups,
     overlays,
     baselayers,
@@ -21,7 +24,6 @@ function LayersContainer (props) {
     isActive,
     compareState,
     height,
-    layerSplit,
     reorderLayerGroups,
     toggleOverlayGroups,
   } = props;
@@ -38,13 +40,16 @@ function LayersContainer (props) {
     const newGroups = Array.from(overlayGroups);
     const [removed] = newGroups.splice(source.index, 1);
     newGroups.splice(destination.index, 0, removed);
-    const newLayers = newGroups.flatMap(({ layers }) => layers).concat(baselayers);
+    const newLayers = newGroups
+      .flatMap(({ layers }) => layers)
+      .map((id) => activeLayersMap[id])
+      .concat(baselayers);
     reorderLayerGroups(newLayers, newGroups);
   };
 
   const renderLayerList = (group, idx) => {
     const { groupName, layers } = group;
-    const layersForGroup = layers.map(({ id }) => overlays.find((o) => o.id === id));
+    const layersForGroup = layers.map((id) => activeLayersMap[id]);
     return layers && ((
       <Draggable
         key={groupName}
@@ -62,7 +67,7 @@ function LayersContainer (props) {
               title={groupName}
               groupId={groupName}
               compareState={compareState}
-              layerSplit={layerSplit}
+              layerSplit={overlays.length}
               layers={layersForGroup}
             />
           </li>
@@ -108,7 +113,7 @@ function LayersContainer (props) {
               groupId="overlays"
               compareState={compareState}
               layers={overlays}
-              layerSplit={layerSplit}
+              layerSplit={overlays.length}
             />
           )}
 
@@ -117,7 +122,7 @@ function LayersContainer (props) {
             groupId="baselayers"
             compareState={compareState}
             layers={baselayers}
-            layerSplit={layerSplit}
+            layerSplit={overlays.length}
           />
         </div>
       </Scrollbars>
@@ -130,15 +135,16 @@ const mapStateToProps = (state, ownProps) => {
   const { proj, layers } = state;
   const { groupOverlays } = layers[compareState];
   const activeLayers = getActiveLayers(state);
-  const layerObj = getLayers(activeLayers, { proj: proj.id, group: 'all' });
+  const { baselayers, overlays } = getLayers(activeLayers, { proj: proj.id, group: 'all' });
   const overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
 
   return {
-    baselayers: layerObj.baselayers,
-    overlays: layerObj.overlays,
+    baselayers,
+    overlays,
     overlayGroups,
     groupOverlays,
-    layerSplit: layerObj.overlays.length,
+    activeLayersMap: getActiveLayersMap(state),
+    layerSplit: overlays.length,
   };
 };
 
@@ -157,11 +163,11 @@ export default connect(
 )(LayersContainer);
 
 LayersContainer.propTypes = {
+  activeLayersMap: PropTypes.object,
   baselayers: PropTypes.array,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   compareState: PropTypes.string,
-  layerSplit: PropTypes.number,
   overlayGroups: PropTypes.array,
   overlays: PropTypes.array,
   reorderLayerGroups: PropTypes.func,
