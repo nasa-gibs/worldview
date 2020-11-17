@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem,
+} from 'reactstrap';
 import { get as lodashGet } from 'lodash';
 import LayerRow from './layer-row';
+import GroupSettings from '../../components/layer/settings/group-settings';
 import {
   replaceSubGroup,
   getZotsForActiveLayers,
@@ -12,7 +16,12 @@ import {
   getActiveLayers,
   memoizedAvailable as availableSelector,
 } from '../../modules/layers/selectors';
-import { reorderLayers as reorderLayersAction } from '../../modules/layers/actions';
+import {
+  reorderLayers as reorderLayersAction,
+  removeLayer as removeLayerAction,
+  toggleVisibility as toggleVisibilityAction,
+} from '../../modules/layers/actions';
+import { toggleCustomContent } from '../../modules/modal/actions';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -34,9 +43,13 @@ function LayerList(props) {
     available,
     groupId,
     title,
+    removeLayers,
+    toggleVisibility,
+    launchOpacityModal,
   } = props;
 
   const [collapsed, toggleCollapse] = useState(false);
+  const groupLayerIds = layers.map(({ id }) => id);
 
   /**
    * Update Layer order after drag
@@ -69,7 +82,6 @@ function LayerList(props) {
 
   const renderLayer = (layer, index) => {
     const { id, projections, visible } = layer;
-
     return (
       <LayerRow
         layer={layer}
@@ -86,14 +98,44 @@ function LayerList(props) {
     );
   };
 
+  const renderDropdownMenu = () => (
+    <UncontrolledDropdown className="layer-group-more-options">
+      <DropdownToggle>
+        <FontAwesomeIcon
+          className="layer-group-more"
+          icon="ellipsis-v"
+        />
+      </DropdownToggle>
+      <DropdownMenu>
+        <DropdownItem onClick={() => toggleVisibility(groupLayerIds, true)}>
+          Show All Layers
+        </DropdownItem>
+        <DropdownItem onClick={() => toggleVisibility(groupLayerIds, false)}>
+          Hide All Layers
+        </DropdownItem>
+        <DropdownItem onClick={() => launchOpacityModal(groupLayerIds, title)}>
+          Set Opacity
+        </DropdownItem>
+        <DropdownItem onClick={() => removeLayers(groupLayerIds)}>
+          Remove Group
+        </DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+  );
+
   return (
     <div className="layer-group-case">
       <h3 className="layer-group-title">{`${title} (${layers.length})`}</h3>
-      <FontAwesomeIcon
-        className="layer-group-collapse"
-        icon={!collapsed ? 'caret-down' : 'caret-left'}
-        onClick={() => toggleCollapse(!collapsed)}
-      />
+
+      <div className="layer-group-icons">
+        {renderDropdownMenu()}
+
+        <FontAwesomeIcon
+          className="layer-group-collapse"
+          icon={!collapsed ? 'caret-down' : 'caret-left'}
+          onClick={() => toggleCollapse(!collapsed)}
+        />
+      </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
         {!collapsed && (
@@ -131,6 +173,9 @@ LayerList.propTypes = {
   projId: PropTypes.string,
   reorderLayers: PropTypes.func,
   runningLayers: PropTypes.object,
+  removeLayers: PropTypes.func,
+  toggleVisibility: PropTypes.func,
+  launchOpacityModal: PropTypes.func,
   title: PropTypes.string,
   zots: PropTypes.object,
 };
@@ -152,6 +197,34 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => ({
   reorderLayers: (newLayerArray) => {
     dispatch(reorderLayersAction(newLayerArray));
+  },
+  removeLayers: (layerIds) => {
+    layerIds.forEach((id) => {
+      dispatch(removeLayerAction(id));
+    });
+  },
+  toggleVisibility: (layerIds, visible) => {
+    layerIds.forEach((id) => {
+      dispatch(toggleVisibilityAction(id, visible));
+    });
+  },
+  launchOpacityModal: (layers, title) => {
+    const key = `LAYER_INFO_MODAL-${title}`;
+    dispatch(
+      toggleCustomContent(key, {
+        headerText: title || 'Layer Options',
+        backdrop: false,
+        bodyComponent: GroupSettings,
+        bodyComponentProps: {
+          layers,
+        },
+        // Using clickableBehindModal: true here causes an issue where switching sidebar
+        // tabs does not close this modal
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: ' layer-info-settings-modal layer-settings-modal',
+        timeout: 150,
+      }),
+    );
   },
 });
 

@@ -11,7 +11,6 @@ import {
   reorderLayerGroups as reorderLayerGroupsAction,
   toggleOverlayGroups as toggleOverlayGroupsAction,
 } from '../../modules/layers/actions';
-import Scrollbars from '../../components/util/scrollbar';
 import Switch from '../../components/util/switch';
 
 function LayersContainer (props) {
@@ -104,7 +103,7 @@ function LayersContainer (props) {
         active={groupOverlays}
         toggle={toggleOverlayGroups}
       />
-      <Scrollbars style={{ maxHeight: `${height}px` }}>
+      <div style={{ maxHeight: `${height}px`, overflowY: 'auto' }}>
         <div className="layer-container sidebar-panel">
 
           {groupOverlays ? renderOverlayGroups() : (
@@ -117,15 +116,17 @@ function LayersContainer (props) {
             />
           )}
 
-          <LayerList
-            title="Base Layers"
-            groupId="baselayers"
-            compareState={compareState}
-            layers={baselayers}
-            layerSplit={overlays.length}
-          />
+          {baselayers.length && (
+            <LayerList
+              title="Base Layers"
+              groupId="baselayers"
+              compareState={compareState}
+              layers={baselayers}
+              layerSplit={overlays.length}
+            />
+          )}
         </div>
-      </Scrollbars>
+      </div>
     </>
   );
 }

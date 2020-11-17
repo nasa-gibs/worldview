@@ -42,7 +42,7 @@
     border-bottom-right-radius: 5px;
   }
   .react-switch {
-    margin: 5px 0 0 10px;
+    margin: 5px 0 3px 8px;
   }
 }
 
@@ -149,15 +149,82 @@ footer .compare-toggle-button {
   overflow: hidden;
   .layer-group-title {
     display: inline-block;
-    margin: 5px;
+    margin: 5px 0 5px;
+    font-size: 14px;
   }
-  .layer-group-collapse {
-    display: inline;
+  > .svg-inline--fa,
+  .layer-group-icons > .svg-inline--fa {
+    margin: 0 4px;
     color: #fff;
-    font-size: 20px;
-    position: absolute;
-    right: 5px;
+    font-size: 16px;
     cursor: pointer;
+    display: inline;
+  }
+  .dropdown {
+    border: 1px solid rgba(250, 250, 250, 0.5);
+    border: none;
+    .dropdown-toggle {
+      background-color: #333;
+      border: none;
+      font-size: 14px;
+      border-radius: 0;
+      padding: 4px;
+      &:hover {
+        background-color: #555;
+        color: #fff;
+      }
+      &:focus {
+        box-shadow: none;
+      }
+    }
+    .dropdown-menu {
+      margin: 0;
+      background-color: #3a3a3a;
+      color: #eee;
+      border-radius: 0;
+      box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.75);
+    }
+    .dropdown-item {
+      color: #eee;
+      font-size: 14px;
+      padding: 6px 12px;
+      &:hover {
+        color: #fff;
+        background-color: #d54e21;
+      }
+      &:active, &.active {
+        background: #d54e21;
+        color: #fff;
+        text-shadow: 1px 1px 0 #000;
+      }
+    }
+  }
+  .layer-group-more-options {
+    display: inline;
+    > button {
+      background: transparent;
+      border: none;
+      &:active, &:focus {
+        border: none;
+        box-shadow: none;
+        color: #ddd;
+      }
+    }
+  }
+  .layer-group-icons {
+    position: absolute;
+    right: 0;
+    display: inline;
+    .layer-group-more {
+      font-size: 16px;
+    }
+    .layer-group-collapse {
+      font-size: 22px;
+      width: 15px;
+    }
+  }
+  .layer-group-visibility {
+    margin: 0 5px;
   }
 }
 
