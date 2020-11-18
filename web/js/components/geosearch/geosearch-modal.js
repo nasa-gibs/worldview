@@ -77,7 +77,7 @@ class SearchComponent extends Component {
   }
 
   // handle selecting menu item in search results
-  onSelect=(value, item) => {
+  onSelect = (value, item) => {
     const {
       isCoordinatePairWithinExtent,
       selectCoordinatesToFly,
@@ -114,7 +114,7 @@ class SearchComponent extends Component {
   }
 
   // handle input value change including text/coordinates typing, pasting, cutting
-  onChange=(e, value) => {
+  onChange = (e, value) => {
     e.preventDefault();
     const {
       updateSearchResults, updateValue, updatePendingCoordinates,
@@ -198,13 +198,13 @@ class SearchComponent extends Component {
       isTouchDevice,
       showReverseGeocodeAlert,
     } = this.state;
-    const message = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a location.`;
+    const message = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a location.${isTouchDevice ? '' : ' Right click to cancel.'}`;
 
     return showReverseGeocodeAlert && (
       <Alert
         id="geosearch-select-coordinates-alert"
         isOpen
-        iconClassName="faMapMarkerAlt"
+        icon="map-marker-alt"
         title="Geosearch Select Coordinates"
         timeout={6000}
         message={message}

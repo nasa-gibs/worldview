@@ -54,14 +54,14 @@ class SearchBox extends Component {
   }
 
   // render search result menu item container
-  renderMenu= (children) => (
+  renderMenu = (children) => (
     <div className="geosearch-results-menu">
       {children}
     </div>
   )
 
   // render individual menu items with conditional styling
-  renderItem=(item, isHighlighted) => {
+  renderItem = (item, isHighlighted) => {
     if (isHighlighted) {
       this.highlightedItem = item;
     }
@@ -218,8 +218,7 @@ class SearchBox extends Component {
         onKeyPress={this.handleKeyPress}
       >
         <Autocomplete
-          // eslint-disable-next-line no-return-assign
-          ref={(el) => this.geosearchInput = el}
+          ref={(el) => { this.geosearchInput = el; }}
           inputProps={{
             className: 'form-control geosearch-autocomplete dark-input',
             id: 'geosearch-autocomplete',

@@ -14,12 +14,13 @@ beforeEach(() => {
   document.body.appendChild(container);
   registerProjections();
   events = util.events();
+
   map = {
     getEventPixel: jest.fn(),
     getCoordinateFromPixel: () => [0, 0],
   };
   act(() => {
-    render(<OlCoordinates mouseEvents={events} />, container);
+    render(<OlCoordinates mouseEvents={events} isDistractionFreeModeActive={false} />, container);
   });
 });
 

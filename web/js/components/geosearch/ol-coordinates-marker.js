@@ -21,23 +21,23 @@ export class CoordinatesMarker extends Component {
       showExtentAlert: false,
     };
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
-    this.mouseClick = this.mouseClick.bind(this);
-    this.singleClick = this.singleClick.bind(this);
+    this.singleclick = this.singleclick.bind(this);
+    this.rightClick = this.rightClick.bind(this);
     this.registerMouseListeners();
   }
 
   componentWillUnmount() {
     const { mouseEvents } = this.props;
     mouseEvents.off('mousemove', this.mouseMove);
-    mouseEvents.off('click', this.mouseClick);
-    mouseEvents.OFF('singleclick', this.singleClick);
+    mouseEvents.off('singleclick', this.singleclick);
+    mouseEvents.off('contextmenu', this.rightClick);
   }
 
   registerMouseListeners() {
     const { mouseEvents } = this.props;
     mouseEvents.on('mousemove', this.mouseMove);
-    mouseEvents.on('click', this.mouseClick);
-    mouseEvents.on('singleclick', this.singleClick);
+    mouseEvents.on('singleclick', this.singleclick);
+    mouseEvents.on('contextmenu', this.rightClick);
   }
 
   mouseMove(event, map, crs) {
@@ -73,18 +73,18 @@ export class CoordinatesMarker extends Component {
     this.setState({ latitude: lat, longitude: lon });
   }
 
-  singleClick(e, map) {
-    e.stopPropagation();
+  rightClick(e) {
     const {
-      measureIsActive,
+      isCoordinateSearchActive,
+      toggleReverseGeocodeActive,
     } = this.props;
 
-    if (measureIsActive) return;
-    const pixels = e.pixel;
-    this.getCoordinatesDialog(pixels, map);
+    if (!isCoordinateSearchActive) return;
+    e.preventDefault();
+    toggleReverseGeocodeActive(false);
   }
 
-  mouseClick(e, map) {
+  singleclick(e, map) {
     const {
       config,
       measureIsActive,
@@ -113,6 +113,11 @@ export class CoordinatesMarker extends Component {
         selectCoordinatesToFly([longitude, latitude], results);
       });
       this.setState({ showExtentAlert: false });
+    } else {
+      // handle clicking on pixel and/or map marker
+      e.stopPropagation();
+      const pixels = e.pixel;
+      this.getCoordinatesDialog(pixels, map);
     }
   }
 

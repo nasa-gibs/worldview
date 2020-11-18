@@ -161,8 +161,7 @@ class toolbarContainer extends Component {
   }
 
   renderShareButton() {
-    const { openModal, isDistractionFreeModeActive, isMobile } = this.props;
-    const faSize = isMobile ? '2x' : '1x';
+    const { faSize, openModal, isDistractionFreeModeActive } = this.props;
     const buttonId = 'wv-link-button';
     const labelText = 'Share this map';
     return !isDistractionFreeModeActive && (
@@ -183,9 +182,8 @@ class toolbarContainer extends Component {
 
   renderProjectionButton() {
     const {
-      config, openModal, isDistractionFreeModeActive, isMobile,
+      config, faSize, openModal, isDistractionFreeModeActive,
     } = this.props;
-    const faSize = isMobile ? '2x' : '1x';
     const buttonId = 'wv-proj-button';
     const labelText = 'Switch projection';
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
@@ -208,6 +206,7 @@ class toolbarContainer extends Component {
   renderGeosearchButtonComponent = () => {
     const {
       config,
+      faSize,
       isGeosearchExpanded,
       isMobile,
       openModal,
@@ -215,7 +214,6 @@ class toolbarContainer extends Component {
       toggleShowGeosearch,
     } = this.props;
     const { features: { geocodeSearch: isFeatureEnabled } } = config;
-    const faSize = isMobile ? '2x' : '1x';
     const buttonId = 'wv-geosearch-button';
     const labelText = 'Search places by location';
 
@@ -251,10 +249,10 @@ class toolbarContainer extends Component {
 
   renderSnapshotsButton () {
     const {
+      faSize,
       isImageDownloadActive,
       isCompareActive,
       isDistractionFreeModeActive,
-      isMobile,
     } = this.props;
     const buttonId = 'wv-image-button';
     const labelText = isCompareActive
@@ -262,7 +260,6 @@ class toolbarContainer extends Component {
       : !isImageDownloadActive
         ? 'You must exit data download mode to use the snapshot feature'
         : 'Take a snapshot';
-    const faSize = isMobile ? '2x' : '1x';
 
     return !isDistractionFreeModeActive && (
       <div id="snapshot-btn-wrapper">
@@ -287,16 +284,15 @@ class toolbarContainer extends Component {
 
   renderInfoButton() {
     const {
+      faSize,
       openModal,
       notificationType,
       notificationContentNumber,
       isDistractionFreeModeActive,
-      isMobile,
     } = this.props;
     const notificationClass = notificationType
       ? ` wv-status-${notificationType}`
       : ' wv-status-hide';
-    const faSize = isMobile ? '2x' : '1x';
     const buttonId = 'wv-info-button';
     const labelText = 'Information';
 
@@ -348,6 +344,7 @@ const mapStateToProps = (state) => {
     state,
   );
   const isMobile = browser.lessThan.medium;
+  const faSize = isMobile ? '2x' : '1x';
   const isCompareActive = compare.active;
   const isDataDownloadActive = data.active;
   const isGeosearchExpanded = geosearch.isExpanded;
@@ -358,6 +355,7 @@ const mapStateToProps = (state) => {
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
 
   return {
+    faSize,
     notificationType: type,
     notificationContentNumber: number,
     config: state.config,
@@ -453,6 +451,7 @@ export default connect(
 toolbarContainer.propTypes = {
   activePalettes: PropTypes.object,
   config: PropTypes.object,
+  faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
   isCompareActive: PropTypes.bool,
