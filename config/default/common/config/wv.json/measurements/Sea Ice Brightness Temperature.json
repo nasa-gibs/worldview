@@ -27,8 +27,8 @@
                     "description": "amsr2/SeaIceBrightnessTemperature",
                     "image": "",
                     "settings": [
-                        "AMSRU2_Sea_Ice_Brightness_Temp_89H",
-                        "AMSRU2_Sea_Ice_Brightness_Temp_89V",
+                        "AMSRU2_Sea_Ice_Brightness_Temp_6km_89H",
+                        "AMSRU2_Sea_Ice_Brightness_Temp_6km_89V",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
                     ]
