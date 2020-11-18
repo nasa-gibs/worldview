@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Slider from 'rc-slider';
+import lodashDebounce from 'lodash/debounce';
 import { setOpacity as setOpacityAction } from '../../../modules/layers/actions';
 import { getActiveLayersMap } from '../../../modules/layers/selectors';
 
@@ -16,15 +17,18 @@ function GroupSettings(props) {
   const averageLayerOpacities = opacities.reduce((acc, curr) => acc + curr) / layers.length;
   const valuesAligned = opacities.every((o) => o === opacities[0]);
   const adjustedPercentage = Math.ceil(averageLayerOpacities * 100);
+  const debouncedOnChange = lodashDebounce(
+    (val) => {
+      setOpacity(layers, (val / 100).toFixed(2));
+    }, 150,
+  );
 
   return (
     <div className="layer-opacity-select settings-component">
       <h2 className="wv-header"> Opacity </h2>
       <Slider
         defaultValue={adjustedPercentage}
-        onChange={(val) => {
-          setOpacity(layers, (val / 100).toFixed(2));
-        }}
+        onChange={debouncedOnChange}
       />
       <div className="wv-label wv-label-opacity">
         {`${adjustedPercentage}%`}
