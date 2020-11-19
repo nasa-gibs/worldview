@@ -1,259 +1,278 @@
-
 /** Smart handoff side panel **/
 #smart-handoff-side-panel h1 {
-    margin-top: 10px;
-    margin-left: 5px;
-    color: #BBB;
+  margin-top: 10px;
+  margin-left: 5px;
+  color: #bbb;
 }
 #smart-handoff-product-list {
-    color: white;
+  color: white;
 }
 .button-group {
-    text-align: center;
+  text-align: center;
 }
-#cancel-btn, #continue-btn {
-    width: 200px;
-    margin: 5px;
+#cancel-btn,
+#continue-btn {
+  width: 200px;
+  margin: 5px;
 }
 #download-btn {
-    display: block;
-    margin: 15px auto 10px auto;
+  display: block;
+  margin: 15px auto 10px auto;
 }
 #esd-notification {
-    display: block;
-    margin: 10px 25px;
-    font-size: 8.5pt;
-    text-align: center;
-    color: white;
+  display: block;
+  margin: 10px 25px;
+  font-size: 8.5pt;
+  text-align: center;
+  color: #fff;
 }
 #smart-handoff-layer-list {
-    margin-top: 15px;
-    display: block;
-    color: white;
-    overflow-y: scroll;
-    min-height: 40px;
-    max-height: calc(var(--vh, 1vh) * 100 - 500px);
+  margin-top: 15px;
+  display: block;
+  color: #fff;
+  overflow-y: scroll;
+  min-height: 40px;
+  max-height: calc(var(--vh, 1vh) * 100 - 500px);
 }
 #smart-handoff-layer-list .layer-item {
-    padding: 10px 15px;
+  padding: 10px 15px;
 }
 #smart-handoff-layer-list .layer-item label {
-    display: block;
-    margin-top: -20px;
-    margin-left: 25px;
+  display: block;
+  margin-top: -20px;
+  margin-left: 25px;
 }
 
 #smart-handoff-layer-list .layer-item span {
-    color: gray;
-    display: block;
-    margin-left: 25px;
-    margin-top: 5px;
-    font-size: 8pt;
+  color: gray;
+  display: block;
+  margin-left: 25px;
+  margin-top: 5px;
+  font-size: 8pt;
 }
 
 #smart-handoff-side-panel h1 {
-    margin-left: 0;
-    text-align: center;
+  margin-left: 0;
+  text-align: center;
 }
 
 #smart-handoff-side-panel hr {
-    border-top: 1px solid rgba(150,150,150,0.25);
-    margin: 0;
-    padding: 0;
-    margin-top: 15px;
+  border-top: 1px solid rgba(150, 150, 150, 0.25);
+  margin: 0;
+  padding: 0;
+  margin-top: 15px;
 }
 
 #crop-toggle {
-    display: inline-block;
-    margin-top: 15px;
-    margin-left: 65px;
+  display: inline-block;
+  margin-top: 15px;
+  margin-left: 65px;
 }
 
-label[for=chk-crop-toggle] {
-    color: white;
+label[for='chk-crop-toggle'] {
+  color: #fff;
 }
 
 #granule-count {
-    margin: 15px auto;
-    margin-bottom: 0;
+  margin: 15px auto;
+  margin-bottom: 0;
 }
 #granule-count span {
-    color: white;
-    font-size: 9pt;
-    font-weight: bold;
+  color: #fff;
+  font-size: 9pt;
+  font-weight: bold;
 }
 .loading-granule-count {
-    font-size: 30px;
+  font-size: 30px;
+}
+
+.loading-granule-count:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+  animation: ellipsis steps(4, end) 900ms infinite;
+  content: '\2026'; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;
   }
+}
 
-  .loading-granule-count:after {
-    overflow: hidden;
-    display: inline-block;
-    vertical-align: bottom;
-    -webkit-animation: ellipsis steps(4,end) 900ms infinite;
-    animation: ellipsis steps(4,end) 900ms infinite;
-    content: "\2026"; /* ascii code for the ellipsis character */
-    width: 0px;
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1.25em;
   }
+}
 
-  @keyframes ellipsis {
-    to {
-      width: 1.25em;
-    }
+.fade-in {
+  animation: fadeIn ease 1s;
+  -webkit-animation: fadeIn ease 1s;
+  -moz-animation: fadeIn ease 1s;
+  -o-animation: fadeIn ease 1s;
+  -ms-animation: fadeIn ease 1s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
   }
-
-  @-webkit-keyframes ellipsis {
-    to {
-      width: 1.25em;
-    }
+  100% {
+    opacity: 1;
   }
+}
 
-  .fade-in {
-    animation: fadeIn ease 1s;
-    -webkit-animation: fadeIn ease 1s;
-    -moz-animation: fadeIn ease 1s;
-    -o-animation: fadeIn ease 1s;
-    -ms-animation: fadeIn ease 1s;
-    }
-    @keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
-    @-moz-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
-    @-webkit-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
-    @-o-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
-
-    @-ms-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
-
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 /** Overrides react image crop component  **/
 .ReactCrop {
-    cursor: default !important;
-    z-index: 0 !important;
+  cursor: default !important;
+  z-index: 0 !important;
 }
 
 /** Smart handoff modal */
 #smart-handoff-heading {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 #smart-handoff-heading h1 {
-    float: right;
-    font-size: 14pt;
-    line-height: 32px;
-    color: white;
+  float: right;
+  font-size: 14pt;
+  line-height: 32px;
+  color: #fff;
 }
 #smart-handoff-message {
-    line-height: 1.25em;
-    text-align: left;
-    font-size: 12pt;
-    color: #DDD;
+  line-height: 1.25em;
+  text-align: left;
+  font-size: 12pt;
+  color: #ddd;
 }
 #smart-handoff-about hr {
-    border-bottom: 1px solid #333;
-   margin-top: 15px;
-   margin-bottom: -10px;
+  border-bottom: 1px solid #333;
+  margin-top: 15px;
+  margin-bottom: -10px;
 }
 #about-section {
-    overflow-y: scroll;
-    height: 400px;
+  overflow-y: scroll;
+  height: 400px;
 }
 #about-section p {
-    color: #BBB;
-    margin-bottom: 10px;
-    margin-right: 5px;
+  color: #bbb;
+  margin-bottom: 10px;
+  margin-right: 5px;
 }
 .about-heading {
-    font-size: 9pt !important;
-    color: white;
-    margin: 25px 0 10px 0;
+  font-size: 9pt !important;
+  color: white;
+  margin: 25px 0 10px 0;
 }
 #earth-data-gif {
-    padding-top: 10px;
-    display: block;
-    margin: 0 auto;
-    width: 92%;
+  padding-top: 10px;
+  display: block;
+  margin: 0 auto;
+  width: 92%;
 }
 #earth-data-caption {
-    font-style: italic;
-    margin: 20px;
-    padding-bottom: 25px;
-    width: 94%;
-    text-align: center;
+  font-style: italic;
+  margin: 20px;
+  padding-bottom: 25px;
+  width: 94%;
+  text-align: center;
 }
 #layer-info {
-    text-align: center;
-    background: #343434;
-    color: white;
-    width: 100%;
-    padding: 20px;
-    margin: 25px 0;
-    border-radius: 10px;
+  text-align: center;
+  background: #343434;
+  color: white;
+  width: 100%;
+  padding: 20px;
+  margin: 25px 0;
+  border-radius: 10px;
 }
 #layer-info h1 {
-    font-size: 10pt;
-    color: white;
-    margin: 0;
-    margin-bottom: 0.5em;
+  font-size: 10pt;
+  color: #fff;
+  margin: 0;
+  margin-bottom: 0.5em;
 }
 #toggle-more-info {
-    margin-top: 25px;
-    color: #7bf;
-    font-size: 12pt;
-    text-align: center;
+  margin-top: 25px;
+  color: #7bf;
+  font-size: 12pt;
+  text-align: center;
 }
 #toggle-more-info:hover {
-    color: #9df;
-    cursor: pointer;
-    text-decoration: underline;
+  color: #9df;
+  cursor: pointer;
+  text-decoration: underline;
 }
 #toggle-more-info h2 {
-    width: 100%;
-   text-align: center;
-   border-bottom: 1px solid #333;
-   line-height: 0.1em;
-   margin: 10px 0 20px;
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  line-height: 0.1em;
+  margin: 10px 0 20px;
 }
 #toggle-more-info h2 span {
-    background:#191a1b;
-    padding:0 15px;
+  background: #191a1b;
+  padding: 0 15px;
 }
 #checkbox-footer {
-    display: inline-block;
-    text-align: center;
-    width: 100%;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #333;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #333;
 }
 #checkbox-footer-container {
-    display: inline-block;
+  display: inline-block;
 }
 
 /** Overrides the modal component styles */
 #transferring-to-earthdata-search.modal-dialog .modal-body {
-    background: #191a1b !important;
-    border: 1px solid #444 !important;
+  background: #191a1b !important;
+  border: 1px solid #444 !important;
 }
 #transferring-to-earthdata-search .modal-header {
-    border-bottom: 1px solid #444 !important;
+  border-bottom: 1px solid #444 !important;
 }
 
 .constant-width {
-    display: inline-block;
-    width: 60px;
+  display: inline-block;
+  width: 60px;
 }
