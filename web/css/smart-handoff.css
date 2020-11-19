@@ -1,8 +1,9 @@
 /** Smart handoff side panel **/
 #smart-handoff-side-panel h1 {
   margin-top: 10px;
-  margin-left: 5px;
+  margin-left: 0;
   color: #bbb;
+  text-align: center;
 }
 #smart-handoff-product-list {
   color: #fff;
@@ -51,11 +52,6 @@
   font-size: 11px;
 }
 
-#smart-handoff-side-panel h1 {
-  margin-left: 0;
-  text-align: center;
-}
-
 #smart-handoff-side-panel hr {
   border-top: 1px solid rgba(150, 150, 150, 0.25);
   margin: 0;
@@ -80,7 +76,7 @@ label[for='chk-crop-toggle'] {
 #granule-count span {
   color: #fff;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 900;
 }
 .loading-granule-count {
   font-size: 30px;
@@ -198,7 +194,7 @@ label[for='chk-crop-toggle'] {
 }
 .about-heading {
   font-size: 12px !important;
-  color: white;
+  color: #fff;
   margin: 25px 0 10px;
 }
 #earth-data-gif {
@@ -217,7 +213,7 @@ label[for='chk-crop-toggle'] {
 #layer-info {
   text-align: center;
   background: #343434;
-  color: white;
+  color: #fff;
   width: 100%;
   padding: 20px;
   margin: 25px 0;
