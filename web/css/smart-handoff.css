@@ -5,7 +5,7 @@
   color: #bbb;
 }
 #smart-handoff-product-list {
-  color: white;
+  color: #fff;
 }
 .button-group {
   text-align: center;
@@ -17,12 +17,12 @@
 }
 #download-btn {
   display: block;
-  margin: 15px auto 10px auto;
+  margin: 15px auto 10px;
 }
 #esd-notification {
   display: block;
   margin: 10px 25px;
-  font-size: 8.5pt;
+  font-size: 11px;
   text-align: center;
   color: #fff;
 }
@@ -44,11 +44,11 @@
 }
 
 #smart-handoff-layer-list .layer-item span {
-  color: gray;
+  color: #999;
   display: block;
   margin-left: 25px;
   margin-top: 5px;
-  font-size: 8pt;
+  font-size: 11px;
 }
 
 #smart-handoff-side-panel h1 {
@@ -79,7 +79,7 @@ label[for='chk-crop-toggle'] {
 }
 #granule-count span {
   color: #fff;
-  font-size: 9pt;
+  font-size: 12px;
   font-weight: bold;
 }
 .loading-granule-count {
@@ -109,13 +109,13 @@ label[for='chk-crop-toggle'] {
 }
 
 .fade-in {
-  animation: fadeIn ease 1s;
-  -webkit-animation: fadeIn ease 1s;
-  -moz-animation: fadeIn ease 1s;
-  -o-animation: fadeIn ease 1s;
-  -ms-animation: fadeIn ease 1s;
+  animation: fadein ease 1s;
+  -webkit-animation: fadein ease 1s;
+  -moz-animation: fadein ease 1s;
+  -o-animation: fadein ease 1s;
+  -ms-animation: fadein ease 1s;
 }
-@keyframes fadeIn {
+@keyframes fadein {
   0% {
     opacity: 0;
   }
@@ -124,7 +124,7 @@ label[for='chk-crop-toggle'] {
   }
 }
 
-@-moz-keyframes fadeIn {
+@-moz-keyframes fadein {
   0% {
     opacity: 0;
   }
@@ -133,7 +133,7 @@ label[for='chk-crop-toggle'] {
   }
 }
 
-@-webkit-keyframes fadeIn {
+@-webkit-keyframes fadein {
   0% {
     opacity: 0;
   }
@@ -142,7 +142,7 @@ label[for='chk-crop-toggle'] {
   }
 }
 
-@-o-keyframes fadeIn {
+@-o-keyframes fadein {
   0% {
     opacity: 0;
   }
@@ -151,7 +151,7 @@ label[for='chk-crop-toggle'] {
   }
 }
 
-@-ms-keyframes fadeIn {
+@-ms-keyframes fadein {
   0% {
     opacity: 0;
   }
@@ -172,14 +172,14 @@ label[for='chk-crop-toggle'] {
 }
 #smart-handoff-heading h1 {
   float: right;
-  font-size: 14pt;
+  font-size: 18px;
   line-height: 32px;
   color: #fff;
 }
 #smart-handoff-message {
   line-height: 1.25em;
   text-align: left;
-  font-size: 12pt;
+  font-size: 17px;
   color: #ddd;
 }
 #smart-handoff-about hr {
@@ -197,9 +197,9 @@ label[for='chk-crop-toggle'] {
   margin-right: 5px;
 }
 .about-heading {
-  font-size: 9pt !important;
+  font-size: 12px !important;
   color: white;
-  margin: 25px 0 10px 0;
+  margin: 25px 0 10px;
 }
 #earth-data-gif {
   padding-top: 10px;
@@ -224,7 +224,7 @@ label[for='chk-crop-toggle'] {
   border-radius: 10px;
 }
 #layer-info h1 {
-  font-size: 10pt;
+  font-size: 14px;
   color: #fff;
   margin: 0;
   margin-bottom: 0.5em;
@@ -232,7 +232,7 @@ label[for='chk-crop-toggle'] {
 #toggle-more-info {
   margin-top: 25px;
   color: #7bf;
-  font-size: 12pt;
+  font-size: 17px;
   text-align: center;
 }
 #toggle-more-info:hover {
