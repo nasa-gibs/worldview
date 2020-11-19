@@ -11,19 +11,17 @@ import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBox from './geosearch-input';
 import Alert from '../util/alert';
-
 import isValidCoordinates from './util';
-import { reverseGeocode, suggest, processMagicKey } from '../../modules/geosearch/selectors';
 
-class SearchComponent extends Component {
+class GeosearchModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isTouchDevice: false,
-      showReverseGeocodeAlert: false,
       showExtentAlert: false,
+      showReverseGeocodeAlert: false,
     };
-    this.throttleSuggest = lodashThrottle(suggest.bind(this), 500);
+    this.throttlegetSuggestions = lodashThrottle(this.getSuggestions, 400, { leading: true, trailing: true });
   }
 
   componentDidUpdate(prevProps) {
@@ -44,6 +42,12 @@ class SearchComponent extends Component {
     }
   }
 
+  // suggest place with text input to get place suggestions
+  getSuggestions = (val) => {
+    const { getSuggestions } = this.props;
+    getSuggestions(val);
+  }
+
   // dismiss message instruction alert
   dismissReverseGeocodeAlert = () => this.setState({ showReverseGeocodeAlert: false });
 
@@ -53,11 +57,12 @@ class SearchComponent extends Component {
   // handle submitting search after inputing coordinates
   onCoordinateInputSelect = () => {
     const {
+      clearSuggestions,
       coordinatesPending,
       isCoordinatePairWithinExtent,
+      reverseGeocode,
       selectCoordinatesToFly,
       updatePendingCoordinates,
-      updateSearchResults,
       updateValue,
     } = this.props;
 
@@ -71,7 +76,7 @@ class SearchComponent extends Component {
       });
       this.setExtentAlert(false);
       updateValue('');
-      updateSearchResults([]);
+      clearSuggestions();
       updatePendingCoordinates([]);
     }
   }
@@ -80,12 +85,13 @@ class SearchComponent extends Component {
   onSelect = (value, item) => {
     const {
       isCoordinatePairWithinExtent,
+      processMagicKey,
       selectCoordinatesToFly,
-      updateSearchResults,
+      setSuggestion,
       updateValue,
     } = this.props;
     updateValue(value);
-    updateSearchResults([item]);
+    setSuggestion([item]);
     const {
       magicKey,
     } = item;
@@ -117,43 +123,38 @@ class SearchComponent extends Component {
   onChange = (e, value) => {
     e.preventDefault();
     const {
-      updateSearchResults, updateValue, updatePendingCoordinates,
+      clearSuggestions,
+      updateValue,
+      updatePendingCoordinates,
     } = this.props;
     updateValue(value);
 
     // check for coordinate value
     const coordinatesInputValue = isValidCoordinates(value);
     if (coordinatesInputValue) {
-      this.throttleSuggest.cancel();
+      this.throttlegetSuggestions.cancel();
       const { latitude, longitude } = coordinatesInputValue;
       this.setExtentAlert(false);
-      updateSearchResults([]);
+      clearSuggestions();
       updatePendingCoordinates([longitude, latitude]);
+    } else if (!value) {
+      // clear on empty input
+      this.throttlegetSuggestions.cancel();
+      clearSuggestions();
     } else {
-      this.throttleSuggest.cancel();
-      if (!value) {
-        updateSearchResults([]);
-      } else {
-        // provide suggestions to populate search result menu item(s)
-        return this.throttleSuggest(value).then((items) => {
-          if (lodashGet(items, 'suggestions')) {
-            const { suggestions } = items;
-            updateSearchResults(suggestions);
-          } else {
-            updateSearchResults([]);
-          }
-        });
-      }
+      // provide suggestions to populate search result menu item(s)
+      this.throttlegetSuggestions(value);
     }
   }
 
   // clear text input and search results
   clearInput = () => {
     const {
-      updateSearchResults, updateValue,
+      clearSuggestions,
+      updateValue,
     } = this.props;
     updateValue('');
-    updateSearchResults([]);
+    clearSuggestions();
     this.setState({
       showReverseGeocodeAlert: false,
       showExtentAlert: false,
@@ -279,7 +280,7 @@ class SearchComponent extends Component {
       isMobile,
       coordinatesPending,
       inputValue,
-      searchResults,
+      suggestions,
     } = this.props;
     const {
       showExtentAlert,
@@ -298,15 +299,15 @@ class SearchComponent extends Component {
               clearInput={this.clearInput}
               coordinates={coordinates}
               coordinatesPending={coordinatesPending}
+              geosearchMobileModalOpen={geosearchMobileModalOpen}
               inputValue={inputValue}
+              isExpanded={isExpanded}
+              isMobile={isMobile}
               onChange={this.onChange}
               onCoordinateInputSelect={this.onCoordinateInputSelect}
               onSelect={this.onSelect}
-              searchResults={searchResults}
-              geosearchMobileModalOpen={geosearchMobileModalOpen}
-              isExpanded={isExpanded}
-              isMobile={isMobile}
               showExtentAlert={showExtentAlert}
+              suggestions={suggestions}
             />
             {/* Add coordinate marker button */}
             {this.renderAddCoordinateButton()}
@@ -317,7 +318,8 @@ class SearchComponent extends Component {
   }
 }
 
-SearchComponent.propTypes = {
+GeosearchModal.propTypes = {
+  clearSuggestions: PropTypes.func,
   coordinates: PropTypes.array,
   coordinatesPending: PropTypes.array,
   geosearchMobileModalOpen: PropTypes.bool,
@@ -326,13 +328,16 @@ SearchComponent.propTypes = {
   isCoordinateSearchActive: PropTypes.bool,
   isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
-  searchResults: PropTypes.array,
+  processMagicKey: PropTypes.func,
+  reverseGeocode: PropTypes.func,
   selectCoordinatesToFly: PropTypes.func,
+  setSuggestion: PropTypes.func,
+  suggestions: PropTypes.array,
+  getSuggestions: PropTypes.func,
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowGeosearch: PropTypes.func,
   updatePendingCoordinates: PropTypes.func,
-  updateSearchResults: PropTypes.func,
   updateValue: PropTypes.func,
 };
 
-export default SearchComponent;
+export default GeosearchModal;

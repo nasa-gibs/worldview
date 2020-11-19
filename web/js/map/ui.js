@@ -55,7 +55,8 @@ import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
-import { addCoordinatesMarker, reverseGeocode, removeCoordinatesMarker } from '../modules/geosearch/selectors';
+import { addCoordinatesMarker, removeCoordinatesMarker } from '../modules/geosearch/selectors';
+import { reverseGeocode } from '../modules/geosearch/util';
 import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../components/geosearch/ol-coordinates-marker-util';
 
 export default function mapui(models, config, store, ui) {
@@ -212,7 +213,7 @@ export default function mapui(models, config, store, ui) {
     const { geosearch } = state;
     const { activeMarker, coordinates } = geosearch;
     if (coordinates && coordinates.length > 0) {
-      reverseGeocode(coordinates).then((results) => {
+      reverseGeocode(coordinates, config).then((results) => {
         addMarkerAndUpdateStore(activeMarker, coordinates, results);
       });
     }

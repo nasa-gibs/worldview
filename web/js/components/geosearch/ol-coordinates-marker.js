@@ -10,7 +10,8 @@ import Alert from '../util/alert';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
 import { getCoordinatesDialogAtMapPixel } from './ol-coordinates-marker-util';
 import { clearCoordinates, selectCoordinatesToFly, toggleReverseGeocodeActive } from '../../modules/geosearch/actions';
-import { areCoordinatesWithinExtent, reverseGeocode } from '../../modules/geosearch/selectors';
+import { areCoordinatesWithinExtent } from '../../modules/geosearch/selectors';
+import { reverseGeocode } from '../../modules/geosearch/util';
 
 export class CoordinatesMarker extends Component {
   constructor(props) {
@@ -109,7 +110,7 @@ export class CoordinatesMarker extends Component {
         return;
       }
       // get available reverse geocoding for coordinates and fly to point
-      reverseGeocode([longitude, latitude]).then((results) => {
+      reverseGeocode([longitude, latitude], config).then((results) => {
         selectCoordinatesToFly([longitude, latitude], results);
       });
       this.setState({ showExtentAlert: false });

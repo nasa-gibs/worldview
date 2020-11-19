@@ -151,10 +151,10 @@ export const getCoordinatesMetadata = (geocodeProperties) => {
 
   // build title based on available parameters
   const title = getCoordinatesDialogTitle(address, error, formattedLatitude, formattedLongitude);
+  const coordinates = `${formattedLatitude.trim()}, ${formattedLongitude.trim()}`;
 
   return {
-    latitude: formattedLatitude.trim(),
-    longitude: formattedLongitude.trim(),
+    coordinates,
     title,
   };
 };

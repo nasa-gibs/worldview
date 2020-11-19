@@ -90,14 +90,14 @@ class CoordinatesDialog extends Component {
   // render copy to clipboard button
   renderCopyToClipboardButton = () => {
     const { coordinatesMetadata, isMobile } = this.props;
-    const { latitude, longitude } = coordinatesMetadata;
+    const { coordinates } = coordinatesMetadata;
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
     return (
       <CopyToClipboard
         options={window.clipboardData ? {} : { format: 'text/plain' }}
-        text={`${latitude}, ${longitude}`}
+        text={coordinates}
         onCopy={this.onCopyToClipboard}
       >
         <div
@@ -124,13 +124,9 @@ class CoordinatesDialog extends Component {
     } = this.state;
 
     const {
-      latitude,
-      longitude,
+      coordinates,
       title,
     } = coordinatesMetadata;
-
-    const latitudeText = `Latitude: ${latitude}`;
-    const longitudeText = `Longitude: ${longitude}`;
 
     return (
       <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
@@ -138,14 +134,7 @@ class CoordinatesDialog extends Component {
           tooltipToggleTime={tooltipToggleTime}
         />
         <div className="tooltip-coordinates-title">{title}</div>
-        <div className="tooltip-coordinates-group">
-          <div className="tooltip-coordinates-latitude">
-            {latitudeText}
-          </div>
-          <div className="tooltip-coordinates-longitude">
-            {longitudeText}
-          </div>
-        </div>
+        <div className="tooltip-coordinates">{coordinates}</div>
         {this.renderDialogButtonControls()}
         {this.renderCopyToClipboardButton()}
       </div>

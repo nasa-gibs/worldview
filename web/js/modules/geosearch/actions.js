@@ -1,7 +1,9 @@
 
 import {
   CLEAR_COORDINATES,
+  CLEAR_SUGGESTIONS,
   SELECT_COORDINATES_TO_FLY,
+  SET_SUGGESTION,
   TOGGLE_REVERSE_GEOCODE_ACTIVE,
   TOGGLE_SHOW_GEOSEARCH,
 } from './constants';
@@ -11,8 +13,12 @@ import {
   removeCoordinatesMarker,
 } from './selectors';
 import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
-import { setLocalStorageCollapseState } from './util';
+import {
+  GEOSEARCH_REQUEST_OPTIONS,
+  setLocalStorageCollapseState,
+} from './util';
 import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
+import { requestAction } from '../core/actions';
 
 // toggle show geosearch component
 export function toggleShowGeosearch() {
@@ -115,5 +121,48 @@ export function clearCoordinates() {
     dispatch({
       type: CLEAR_COORDINATES,
     });
+  };
+}
+
+export function clearSuggestions() {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_SUGGESTIONS,
+    });
+  };
+}
+
+export function setSuggestion(suggestion) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_SUGGESTION,
+      value: suggestion,
+    });
+  };
+}
+
+const {
+  REQUEST_OPTIONS,
+  GEOCODE_SUGGEST_CATEGORIES,
+  CONSTANT_REQUEST_PARAMETERS,
+} = GEOSEARCH_REQUEST_OPTIONS;
+
+export function getSuggestions(val) {
+  return (dispatch, getState) => {
+    const { config } = getState();
+    const { features: { geocodeSearch: { url: requestUrl } } } = config;
+
+    const encodedValue = encodeURIComponent(val);
+    const encodedCategories = encodeURIComponent(GEOCODE_SUGGEST_CATEGORIES.join(','));
+    const request = `${requestUrl}suggest?text=${encodedValue}${CONSTANT_REQUEST_PARAMETERS}&category=${encodedCategories}`;
+
+    return requestAction(
+      dispatch,
+      'GEOSEARCH/REQUEST_SUGGEST_PLACE',
+      request,
+      '',
+      'geosearch-suggest-place',
+      REQUEST_OPTIONS,
+    );
   };
 }

@@ -28,11 +28,14 @@ class SearchBox extends Component {
   handleSubmitClick = (e) => {
     e.preventDefault();
     const {
-      onSelect, coordinatesPending, onCoordinateInputSelect, searchResults,
+      coordinatesPending,
+      onCoordinateInputSelect,
+      onSelect,
+      suggestions,
     } = this.props;
     if (coordinatesPending.length > 0) {
       onCoordinateInputSelect();
-    } else if (searchResults.length > 0 && this.highlightedItem) {
+    } else if (suggestions.length > 0 && this.highlightedItem) {
       onSelect(this.highlightedItem.text, this.highlightedItem);
     }
   }
@@ -182,9 +185,9 @@ class SearchBox extends Component {
   // condtional autocomplete wrapper styling
   getWrapperStyle = () => {
     const {
+      inputValue,
       isMobile,
       showExtentAlert,
-      inputValue,
     } = this.props;
 
     // handle mobile/desktop input padding with/without alert
@@ -206,7 +209,7 @@ class SearchBox extends Component {
       isMobile,
       onChange,
       onSelect,
-      searchResults,
+      suggestions,
     } = this.props;
 
     const placeHolderText = isMobile
@@ -226,7 +229,7 @@ class SearchBox extends Component {
           }}
           wrapperStyle={this.getWrapperStyle()}
           value={inputValue}
-          items={searchResults}
+          items={suggestions}
           getItemValue={(item) => item.text}
           onSelect={onSelect}
           onChange={onChange}
@@ -244,15 +247,15 @@ class SearchBox extends Component {
 SearchBox.propTypes = {
   clearInput: PropTypes.func,
   coordinatesPending: PropTypes.array,
-  onCoordinateInputSelect: PropTypes.func,
-  searchResults: PropTypes.array,
   geosearchMobileModalOpen: PropTypes.bool,
   inputValue: PropTypes.string,
   isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
-  onSelect: PropTypes.func,
   onChange: PropTypes.func,
+  onCoordinateInputSelect: PropTypes.func,
+  onSelect: PropTypes.func,
   showExtentAlert: PropTypes.bool,
+  suggestions: PropTypes.array,
 };
 
 export default SearchBox;

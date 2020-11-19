@@ -130,6 +130,5 @@ module.exports = {
   geosearchMinimizeButton: '.geosearch-search-minimize-button',
   tooltipCoordinatesContainer: '.tooltip-coordinates-container',
   tooltipCoordinatesTitle: '.tooltip-coordinates-title',
-  tooltipCoordinatesLatitude: '.tooltip-coordinates-latitude',
-  tooltipCoordinatesLongitude: '.tooltip-coordinates-longitude',
+  tooltipCoordinates: '.tooltip-coordinates',
 };

@@ -12,8 +12,7 @@ const {
   geosearchMinimizeButton,
   tooltipCoordinatesContainer,
   tooltipCoordinatesTitle,
-  tooltipCoordinatesLatitude,
-  tooltipCoordinatesLongitude,
+  tooltipCoordinates,
 } = localSelectors;
 
 module.exports = {
@@ -47,8 +46,7 @@ module.exports = {
   },
   'Coordinates title and detailed coordinates are correct': (c) => {
     c.assert.containsText(tooltipCoordinatesTitle, 'Washington, District of Columbia');
-    c.assert.containsText(tooltipCoordinatesLatitude, 'Latitude: 38.8904°');
-    c.assert.containsText(tooltipCoordinatesLongitude, 'Longitude: -77.0320°');
+    c.assert.containsText(tooltipCoordinates, '38.8904°, -77.0320°');
   },
   'Clicking minimize tooltip hides the coordinates dialog': (c) => {
     c.click('.minimize-coordinates-tooltip');
@@ -60,8 +58,7 @@ module.exports = {
     c.waitForElementVisible(tooltipCoordinatesContainer, TIME_LIMIT);
     c.expect.element(testMarkerNoDetailsEncodedID).to.be.present;
     c.assert.containsText(tooltipCoordinatesTitle, '5.0000°, -51.5000°');
-    c.assert.containsText(tooltipCoordinatesLatitude, 'Latitude: 5.0000°');
-    c.assert.containsText(tooltipCoordinatesLongitude, 'Longitude: -51.5000°');
+    c.assert.containsText(tooltipCoordinates, '5.0000°, -51.5000°');
   },
   after(c) {
     c.end();

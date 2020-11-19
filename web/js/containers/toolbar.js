@@ -213,10 +213,10 @@ class toolbarContainer extends Component {
       shouldBeCollapsed,
       toggleShowGeosearch,
     } = this.props;
-    const { features: { geocodeSearch: isFeatureEnabled } } = config;
+    const { features: { geocodeSearch: { url: requestUrl } } } = config;
     const buttonId = 'wv-geosearch-button';
     const labelText = 'Search places by location';
-
+    const isFeatureEnabled = !!requestUrl;
     // do not render if geosearch feature isn't enabled
     if (!isFeatureEnabled) {
       return null;
