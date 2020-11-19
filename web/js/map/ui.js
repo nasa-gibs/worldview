@@ -53,6 +53,7 @@ import {
   getActiveLayers,
   isRenderable as isRenderableLayer,
   getMaxZoomLevelLayerCollection,
+  getAllActiveLayers,
 } from '../modules/layers/selectors';
 import getSelectedDate from '../modules/date/selectors';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
@@ -567,21 +568,17 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   const reloadLayers = self.reloadLayers = function(map) {
+    console.log('reload layers');
     map = map || self.selected;
     const state = store.getState();
-
-    const { layers, proj, compare } = state;
+    const { compare } = state;
     if (!config.features.compare || !compare.active) {
       const compareMapDestroyed = !compare.active && compareMapUi.active;
       if (compareMapDestroyed) {
         compareMapUi.destroy();
       }
       clearLayers(map);
-      const defs = getLayers(
-        getActiveLayers(state),
-        { reverse: true },
-        state,
-      );
+      const defs = getLayers(state, { reverse: true });
       lodashEach(defs, (def) => {
         map.addLayer(createLayer(def));
       });
@@ -600,7 +597,7 @@ export default function mapui(models, config, store, ui) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
       lodashEach(stateArray, (arr) => {
-        map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state));
+        map.addLayer(getCompareLayerGroup(arr, state));
       });
       compareMapUi.create(map, compare.mode);
       // add active map marker back in compare mode post createLayer
@@ -614,12 +611,12 @@ export default function mapui(models, config, store, ui) {
   /**
    * Create a Layergroup given the date and layerGroups
    */
-  function getCompareLayerGroup([compareActiveString, compareDateString], layersState, projId, state) {
-    const activeLayers = layersState[compareActiveString].layers;
-    const layers = getLayers(activeLayers, { reverse: true }, state)
+  function getCompareLayerGroup([compareActiveString, compareDateString], state) {
+    const compareSideLayers = getActiveLayers(state, compareActiveString);
+    const layers = getLayers(state, { reverse: true }, compareSideLayers)
       .filter(() => true)
       .map((def) => createLayer(def, {
-        date: state.date[compareDateString],
+        date: getSelectedDate(state, compareDateString),
         group: compareActiveString,
       }));
     return new OlLayerGroup({
@@ -642,6 +639,7 @@ export default function mapui(models, config, store, ui) {
     let renderable;
     const state = store.getState();
     const layers = self.selected.getLayers();
+    console.log('updatevisibilities');
     layers.forEach((layer) => {
       const compareActiveString = layer.get('group');
 
@@ -664,8 +662,8 @@ export default function mapui(models, config, store, ui) {
           const compareDateString = layer.get('date');
           renderable = isRenderableLayer(
             subLayer.wv.id,
-            state.layers[compareActiveString].layers,
-            state.date[compareDateString],
+            getActiveLayers(state, compareActiveString),
+            getSelectedDate(state, compareDateString),
             state,
           );
           subLayer.setVisible(renderable);
@@ -775,11 +773,7 @@ export default function mapui(models, config, store, ui) {
   const updateDate = self.updateDate = function() {
     const state = store.getState();
     const { compare } = state;
-    const activeLayers = getLayers(
-      getActiveLayers(state),
-      {},
-      state,
-    ).reverse();
+    const activeLayers = getAllActiveLayers(state);
     let layerGroups;
     let layerGroup;
     if (compare && compare.active) {
@@ -816,7 +810,9 @@ export default function mapui(models, config, store, ui) {
       } else {
         const index = findLayerIndex(def);
         const layerValue = self.selected.getLayers().getArray()[index];
-        self.selected.getLayers().setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
+        self.selected
+          .getLayers()
+          .setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         const { vectorStyles } = config;

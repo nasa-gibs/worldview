@@ -11,7 +11,7 @@ import {
 } from '../../modules/data/selectors';
 import { selectProduct } from '../../modules/data/actions';
 import { openCustomContent } from '../../modules/modal/actions';
-import { getLayers, getActiveLayers } from '../../modules/layers/selectors';
+import { getAllActiveLayers } from '../../modules/layers/selectors';
 
 const CustomBodyModalContent = () => (
   <>
@@ -132,10 +132,7 @@ function mapStateToProps(state, ownProps) {
     proj, data, config, sidebar,
   } = state;
   const { selectedProduct, selectedGranules } = data;
-  const activeLayers = getLayers(
-    getActiveLayers(state),
-    { proj: proj.id },
-  );
+  const activeLayers = getAllActiveLayers(state);
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const products = getDataProductsFromActiveLayers(
     activeLayers,

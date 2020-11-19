@@ -53,7 +53,7 @@ export default function getImageArray(
     } else {
       strDate = util.toISOStringDate(current);
     }
-    products = getProducts(getActiveLayers(state), current, state);
+    products = getProducts(current, state);
 
     const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
     const dlURL = getDownloadUrl(url, proj, products, lonlats, dimensions, current, false, false, markerCoordinates);
@@ -81,16 +81,15 @@ export default function getImageArray(
  * @returns {array} array of layer objects
  *
  */
-function getProducts(layers, date, state) {
+function getProducts(date, state) {
   const layersArray = [];
   const products = getLayers(
-    layers,
+    state,
     {
       reverse: true,
       renderable: true,
       date,
     },
-    state,
   );
   lodashEach(products, (layer) => {
     const layerDate = new Date(date);

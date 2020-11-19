@@ -16,7 +16,7 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constant
 import { toggleGranule } from '../../modules/data/actions';
 import { SELECT_DATE } from '../../modules/date/constants';
 import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
-import { getLayers, getActiveLayers } from '../../modules/layers/selectors';
+import { getActiveLayers, getAllActiveLayers } from '../../modules/layers/selectors';
 import { getDataProductsFromActiveLayers, doesSelectedExist } from '../../modules/data/selectors';
 import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
@@ -84,7 +84,7 @@ export default function dataUi(store, ui, config) {
   const updateLayers = function() {
     const state = store.getState();
     const { proj, data } = state;
-    const activeLayers = getLayers(getActiveLayers(state), { proj: proj.id }, state);
+    const activeLayers = getAllActiveLayers(state);
 
     // If a layer was removed and the product no longer exists,
     // remove any selected items in that product
@@ -102,7 +102,7 @@ export default function dataUi(store, ui, config) {
     const state = store.getState();
     const dataState = state.data;
     const { proj } = state;
-    const activeLayers = getLayers(getActiveLayers(state), { proj: proj.id });
+    const activeLayers = getAllActiveLayers(state);
     if (state.sidebar.activeTab !== 'download') {
       return;
     }
