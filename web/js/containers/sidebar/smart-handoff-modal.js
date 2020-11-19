@@ -17,7 +17,8 @@ function SmartHandoffModal({
 }) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
-  const { title, subtitle } = selectedLayer;
+  const { title, subtitle, conceptId } = selectedLayer;
+  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${conceptId}.html`;
   const date = moment.utc(selectedDate).format('YYYY MMM DD');
 
   return (
@@ -80,8 +81,10 @@ function SmartHandoffModal({
 
       <div id="layer-info">
         <h1> Selected layer to download: </h1>
-        <p id="layer-name">{`${title}`}</p>
-        <p id="layer-mata-data">{`${subtitle} (${date})`}</p>
+        <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
+          <p id="layer-name">{`${title}`}</p>
+          <p id="layer-mata-data">{`${subtitle} (${date})`}</p>
+        </a>
       </div>
 
 

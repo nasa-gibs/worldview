@@ -155,7 +155,7 @@ label[for=chk-crop-toggle] {
     float: right;
     font-size: 14pt;
     line-height: 32px;
-    color: #e94d19;
+    color: white;
 }
 #smart-handoff-message {
     line-height: 1.25em;
@@ -179,7 +179,7 @@ label[for=chk-crop-toggle] {
 }
 .about-heading {
     font-size: 9pt !important;
-    color: #e94d19;
+    color: white;
     margin: 25px 0 10px 0;
 }
 #earth-data-gif {
@@ -197,7 +197,7 @@ label[for=chk-crop-toggle] {
 }
 #layer-info {
     text-align: center;
-    background: #535353;
+    background: #343434;
     color: white;
     width: 100%;
     padding: 20px;
@@ -206,7 +206,7 @@ label[for=chk-crop-toggle] {
 }
 #layer-info h1 {
     font-size: 10pt;
-    color: #AAA;
+    color: white;
     margin: 0;
     margin-bottom: 0.5em;
 }

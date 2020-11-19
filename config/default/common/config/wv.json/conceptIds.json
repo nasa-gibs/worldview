@@ -92,152 +92,152 @@
     },
     "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Night": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Cloud_Top_Height_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Cloud_Top_Height_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Dust_Score_Day": {
       "conceptId": [
-        "C1345119372-GES_DISC"
+        "C1701805636-GES_DISC"
       ]
     },
     "AIRS_L2_Dust_Score_Night": {
       "conceptId": [
-        "C1345119372-GES_DISC"
+        "C1701805636-GES_DISC"
       ]
     },
     "AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Day": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Night": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_RelativeHumidity_500hPa_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_RelativeHumidity_500hPa_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_RelativeHumidity_700hPa_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_RelativeHumidity_700hPa_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_RelativeHumidity_850hPa_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_RelativeHumidity_850hPa_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Day": {
       "conceptId": [
-        "C1345119372-GES_DISC"
+        "C1701805636-GES_DISC"
       ]
     },
     "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night": {
       "conceptId": [
-        "C1345119372-GES_DISC"
+        "C1701805636-GES_DISC"
       ]
     },
     "AIRS_L2_Surface_Air_Temperature_Day": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Surface_Air_Temperature_Night": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Surface_Relative_Humidity_Day": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Surface_Relative_Humidity_Night": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Surface_Skin_Temperature_Day": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Surface_Skin_Temperature_Night": {
       "conceptId": [
-        "C1243477381-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Temperature_500hPa_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Temperature_500hPa_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Temperature_700hPa_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Temperature_700hPa_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Temperature_850hPa_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Temperature_850hPa_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Total_Cloud_Fraction_Day": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_L2_Total_Cloud_Fraction_Night": {
       "conceptId": [
-        "C1345119345-GES_DISC"
+        "C1701805625-GES_DISC"
       ]
     },
     "AIRS_Methane_Volume_Mixing_Ratio_Daily_Day": {
@@ -557,22 +557,22 @@
     },
     "AMSRU2_Sea_Ice_Brightness_Temp_6km_89H": {
       "conceptId": [
-        "C1451715376-NSIDC_ECS"
+        "C1886605828-LANCEAMSR2"
       ]
     },
     "AMSRU2_Sea_Ice_Brightness_Temp_6km_89V": {
       "conceptId": [
-        "C1451715376-NSIDC_ECS"
+        "C1886605828-LANCEAMSR2"
       ]
     },
     "AMSRU2_Sea_Ice_Concentration_12km": {
       "conceptId": [
-        "C1542606326-NSIDC_ECS"
+        "C1886605827-LANCEAMSR2"
       ]
     },
     "AMSRU2_Sea_Ice_Concentration_25km": {
       "conceptId": [
-        "C1542606320-NSIDC_ECS"
+        "C1886605830-LANCEAMSR2"
       ]
     },
     "AMSRU2_Snow_Water_Equivalent": {
@@ -3426,192 +3426,192 @@
     },
     "SMAP_L1_Passive_Brightness_Temp_Aft_H": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Aft_H_QA": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Aft_H_RFI": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Aft_V": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Aft_V_QA": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Aft_V_RFI": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Fore_H": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Fore_H_QA": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Fore_H_RFI": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Fore_V": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Fore_V_QA": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Brightness_Temp_Fore_V_RFI": {
       "conceptId": [
-        "C1236303848-NSIDC_ECS"
+        "C1931656617-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H_QA": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H_RFI": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V_QA": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V_RFI": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_RFI": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V_QA": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V_RFI": {
       "conceptId": [
-        "C1344054587-NSIDC_ECS"
+        "C1931657626-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Faraday_Rotation_Aft": {
       "conceptId": [
-        "C1236303830-NSIDC_ECS"
+        "C1931655418-NSIDC_ECS"
       ]
     },
     "SMAP_L1_Passive_Faraday_Rotation_Fore": {
       "conceptId": [
-        "C1236303830-NSIDC_ECS"
+        "C1931655418-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Day_Soil_Moisture_Option1": {
       "conceptId": [
-        "C1344054707-NSIDC_ECS"
+        "C1931658459-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Day_Soil_Moisture_Option2": {
       "conceptId": [
-        "C1344054707-NSIDC_ECS"
+        "C1931658459-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Day_Soil_Moisture_Option3": {
       "conceptId": [
-        "C1344054707-NSIDC_ECS"
+        "C1931658459-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Enhanced_Day_Soil_Moisture_Option1": {
       "conceptId": [
-        "C1344054581-NSIDC_ECS"
+        "C1931660485-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Enhanced_Day_Soil_Moisture_Option2": {
       "conceptId": [
-        "C1344054581-NSIDC_ECS"
+        "C1931660485-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Enhanced_Day_Soil_Moisture_Option3": {
       "conceptId": [
-        "C1344054581-NSIDC_ECS"
+        "C1931660485-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Enhanced_Night_Soil_Moisture_Option1": {
       "conceptId": [
-        "C1344054581-NSIDC_ECS"
+        "C1931660485-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Enhanced_Night_Soil_Moisture_Option2": {
       "conceptId": [
-        "C1344054581-NSIDC_ECS"
+        "C1931660485-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Enhanced_Night_Soil_Moisture_Option3": {
       "conceptId": [
-        "C1344054581-NSIDC_ECS"
+        "C1931660485-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Night_Soil_Moisture_Option1": {
       "conceptId": [
-        "C1344054707-NSIDC_ECS"
+        "C1931658459-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Night_Soil_Moisture_Option2": {
       "conceptId": [
-        "C1344054707-NSIDC_ECS"
+        "C1931658459-NSIDC_ECS"
       ]
     },
     "SMAP_L2_Passive_Night_Soil_Moisture_Option3": {
       "conceptId": [
-        "C1344054707-NSIDC_ECS"
+        "C1931658459-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Active_Day_Freeze_Thaw": {
@@ -3686,62 +3686,62 @@
     },
     "SMAP_L3_Passive_Brightness_Temp_H": {
       "conceptId": [
-        "C1344054706-NSIDC_ECS"
+        "C1931665364-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Brightness_Temp_V": {
       "conceptId": [
-        "C1344054706-NSIDC_ECS"
+        "C1931665364-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Day_Freeze_Thaw": {
       "conceptId": [
-        "C1344056442-NSIDC_ECS"
+        "C1931660632-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Day_Soil_Moisture": {
       "conceptId": [
-        "C1344054706-NSIDC_ECS"
+        "C1931665364-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Enhanced_Day_Freeze_Thaw": {
       "conceptId": [
-        "C1344054559-NSIDC_ECS"
+        "C1522343379-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Enhanced_Day_Soil_Moisture": {
       "conceptId": [
-        "C1344054580-NSIDC_ECS"
+        "C1931665183-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw": {
       "conceptId": [
-        "C1344054559-NSIDC_ECS"
+        "C1522343379-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Enhanced_Night_Soil_Moisture": {
       "conceptId": [
-        "C1344054580-NSIDC_ECS"
+        "C1931665183-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Night_Freeze_Thaw": {
       "conceptId": [
-        "C1344056442-NSIDC_ECS"
+        "C1931660632-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Passive_Night_Soil_Moisture": {
       "conceptId": [
-        "C1344054706-NSIDC_ECS"
+        "C1931665364-NSIDC_ECS"
       ]
     },
     "SMAP_L3_Sea_Surface_Salinity_CAP_8Day_RunningMean": {
       "conceptId": [
-        "C1702143322-PODAAC"
+        "C1666605161-PODAAC"
       ]
     },
     "SMAP_L3_Sea_Surface_Salinity_CAP_Monthly": {
       "conceptId": [
-        "C1702143760-PODAAC"
+        "C1666605132-PODAAC"
       ]
     },
     "SMAP_L3_Sea_Surface_Salinity_REMSS_8Day_RunningMean": {
@@ -3756,67 +3756,67 @@
     },
     "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture": {
       "conceptId": [
-        "C1396790061-NSIDC_ECS"
+        "C1939048058-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Analyzed_Surface_Soil_Moisture": {
       "conceptId": [
-        "C1396790061-NSIDC_ECS"
+        "C1939048058-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Emult_Average": {
       "conceptId": [
-        "C1402102441-NSIDC_ECS"
+        "C1920755742-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Frozen_Area": {
       "conceptId": [
-        "C1402102441-NSIDC_ECS"
+        "C1920755742-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Mean_Gross_Primary_Productivity": {
       "conceptId": [
-        "C1402102441-NSIDC_ECS"
+        "C1920755742-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Mean_Heterotrophic_Respiration": {
       "conceptId": [
-        "C1402102441-NSIDC_ECS"
+        "C1920755742-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Mean_Net_Ecosystem_Exchange": {
       "conceptId": [
-        "C1402102441-NSIDC_ECS"
+        "C1920755742-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Snow_Mass": {
       "conceptId": [
-        "C1396790066-NSIDC_ECS"
+        "C1920755538-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Soil_Temperature_Layer_1": {
       "conceptId": [
-        "C1396790061-NSIDC_ECS"
+        "C1939048058-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Uncertainty_Analyzed_Root_Zone_Soil_Moisture": {
       "conceptId": [
-        "C1396790061-NSIDC_ECS"
+        "C1939048058-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Uncertainty_Analyzed_Surface_Soil_Moisture": {
       "conceptId": [
-        "C1396790061-NSIDC_ECS"
+        "C1939048058-NSIDC_ECS"
       ]
     },
     "SMAP_L4_Uncertainty_Mean_Net_Ecosystem_Exchange": {
       "conceptId": [
-        "C1402102441-NSIDC_ECS"
+        "C1920755742-NSIDC_ECS"
       ]
     },
     "SMAP_Sentinel-1_L2_Active_Passive_Soil_Moisture": {
       "conceptId": [
-        "C1380587768-NSIDC_ECS"
+        "C1931663473-NSIDC_ECS"
       ]
     },
     "SRTM_Color_Index": {
