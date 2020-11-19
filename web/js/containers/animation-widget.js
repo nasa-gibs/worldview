@@ -40,8 +40,8 @@ import {
 } from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
-  getLayers,
   getActiveLayers,
+  getAllActiveLayers,
   dateRange as getDateRange,
 } from '../modules/layers/selectors';
 import getSelectedDate from '../modules/date/selectors';
@@ -629,7 +629,6 @@ function mapStateToProps(state) {
     palettes,
     config,
     map,
-    proj,
     browser,
   } = state;
   const {
@@ -648,11 +647,7 @@ function mapStateToProps(state) {
   } = date;
   const activeLayers = getActiveLayers(state);
   const hasSubdailyLayers = hasSubDailySelector(activeLayers);
-  const activeLayersForProj = getLayers(
-    activeLayers,
-    { proj: proj.id },
-    state,
-  );
+  const activeLayersForProj = getAllActiveLayers(state);
   const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
   const layerDateRange = getDateRange({}, activeLayersForProj);
   const activePalettes = palettes[compare.activeString];
@@ -711,7 +706,7 @@ function mapStateToProps(state) {
     customInterval: customInterval || 3,
     numberOfFrames,
     sliderLabel: 'Frames Per Second',
-    layers: getLayers(activeLayers, {}, state),
+    layers: getAllActiveLayers(state),
     speed,
     isPlaying,
     looping: loop,

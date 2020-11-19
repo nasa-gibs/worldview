@@ -191,12 +191,11 @@ function mapStateToProps(state) {
     markerCoordinates,
     date: getSelectedDate(state),
     getLayers: () => getLayers(
-      getActiveLayers(state),
+      state,
       {
         reverse: true,
         renderable: true,
       },
-      state,
     ),
   };
 }

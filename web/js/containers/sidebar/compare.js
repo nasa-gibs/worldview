@@ -5,7 +5,6 @@ import {
   Nav, NavItem, NavLink, TabContent, TabPane,
 } from 'reactstrap';
 import LayersContainer from './layers-container';
-import { getLayers } from '../../modules/layers/selectors';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
 import util from '../../util/util';
 
@@ -19,8 +18,6 @@ const CompareCase = (props) => {
     toggleActiveCompareState,
     isCompareA,
     height,
-    layersA,
-    layersB,
   } = props;
 
   const outerClass = 'layer-container sidebar-panel';
@@ -61,7 +58,6 @@ const CompareCase = (props) => {
             <TabPane tabId="1">
               <LayersContainer
                 isActive={isCompareA}
-                activeOverlays={layersA}
                 compareState="active"
                 height={height - tabHeight}
               />
@@ -69,7 +65,6 @@ const CompareCase = (props) => {
             <TabPane tabId="2">
               <LayersContainer
                 isActive={!isCompareA}
-                activeOverlays={layersB}
                 compareState="activeB"
                 height={height - tabHeight}
               />
@@ -87,15 +82,11 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-const mapStateToProps = (state) => {
-  const {
-    layers, compare, date,
-  } = state;
+const mapStateToProps = (state, ownProps) => {
+  const { compare, date } = state;
 
   return {
     isCompareA: compare.isCompareA,
-    layersA: getLayers(layers.active.layers, { group: 'all', proj: 'all' }, state),
-    layersB: getLayers(layers.activeB.layers, { group: 'all', proj: 'all' }, state),
     dateStringA: util.toISOStringDate(date.selected),
     dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,
@@ -108,8 +99,6 @@ CompareCase.propTypes = {
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isCompareA: PropTypes.bool,
-  layersA: PropTypes.object,
-  layersB: PropTypes.object,
   toggleActiveCompareState: PropTypes.func,
 };
 

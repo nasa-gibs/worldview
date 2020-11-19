@@ -15,7 +15,7 @@ import {
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
-import { getLayers, getActiveLayers } from '../../modules/layers/selectors';
+import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
@@ -275,7 +275,7 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
-  const numberOfLayers = getLayers(getActiveLayers(state), {}, state).length;
+  const numberOfLayers = getAllActiveLayers(state).length;
   const tabTypes = getActiveTabs(config);
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const isMobile = browser.lessThan.medium;

@@ -10,8 +10,7 @@ import { containsCoordinate } from 'ol/extent';
 import stylefunction from 'ol-mapbox-style/dist/stylefunction';
 import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
 import {
-  getActiveLayers,
-  getLayers,
+  getAllActiveLayers,
 } from '../layers/selectors';
 
 /**
@@ -87,11 +86,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const glStyle = vectorStyles[styleId];
   const olMap = lodashGet(state, 'map.ui.selected');
   const { selected } = state.vectorStyles;
-  const activeLayers = getLayers(
-    getActiveLayers(state),
-    {},
-    state,
-  ).reverse();
+  const activeLayers = getAllActiveLayers(state).reverse();
   let layerGroups;
   let layerGroup;
 

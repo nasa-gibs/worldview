@@ -5,7 +5,7 @@ import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import {
-  getLayers, getActiveLayers, getActiveOverlayGroups, getActiveLayersMap,
+  getAllActiveOverlaysBaselayers, getActiveOverlayGroups, getActiveLayersMap,
 } from '../../modules/layers/selectors';
 import {
   reorderLayerGroups as reorderLayerGroupsAction,
@@ -133,10 +133,9 @@ function LayersContainer (props) {
 
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
-  const { proj, layers } = state;
+  const { layers } = state;
   const { groupOverlays } = layers[compareState];
-  const activeLayers = getActiveLayers(state);
-  const { baselayers, overlays } = getLayers(activeLayers, { proj: proj.id, group: 'all' });
+  const { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
   const overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
 
   return {
