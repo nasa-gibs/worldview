@@ -19,7 +19,7 @@ import {
 import {
   reorderLayers as reorderLayersAction,
   removeLayer as removeLayerAction,
-  toggleVisibility as toggleVisibilityAction,
+  toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
 import { toggleCustomContent } from '../../modules/modal/actions';
 
@@ -204,9 +204,7 @@ const mapDispatchToProps = (dispatch) => ({
     });
   },
   toggleVisibility: (layerIds, visible) => {
-    layerIds.forEach((id) => {
-      dispatch(toggleVisibilityAction(id, visible));
-    });
+    dispatch(toggleGroupVisibilityAction(layerIds, visible));
   },
   launchOpacityModal: (layers, title) => {
     const key = `LAYER_INFO_MODAL-${title}`;
