@@ -8,7 +8,6 @@ import {
   getActiveLayers as getActiveLayersSelector,
   getActiveLayersMap,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
-  getActiveOverlayGroups,
 } from './selectors';
 import {
   RESET_LAYERS,
@@ -146,7 +145,6 @@ export function reorderLayers(reorderedLayers) {
       type: REORDER_LAYERS,
       activeString: compare.activeString,
       layers: reorderedLayers,
-      // overlayGroups: getOverlayGroups(reorderedLayers),
     });
   };
 }
