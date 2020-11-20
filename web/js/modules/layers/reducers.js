@@ -10,12 +10,13 @@ import {
   REORDER_LAYERS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
-  TOGGLE_GROUP_VISIBILITY,
-  TOGGLE_LAYER_GROUPS,
+  TOGGLE_COLLAPSE_OVERLAY_GROUP,
+  TOGGLE_OVERLAY_GROUP_VISIBILITY,
+  TOGGLE_OVERLAY_GROUPS,
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
-  REORDER_LAYER_GROUPS,
+  REORDER_OVERLAY_GROUPS,
   REMOVE_GROUP,
 } from './constants';
 import {
@@ -32,9 +33,15 @@ import {
 import { resetLayers } from './selectors';
 import { getOverlayGroups } from './util';
 
-export const initialState = {
-  active: { groupOverlays: true, layers: [], overlayGroups: [] },
-  activeB: { groupOverlays: true, layers: [], overlayGroups: [] },
+const groupState = {
+  groupOverlays: true,
+  layers: [],
+  overlayGroups: [],
+};
+
+const initialState = {
+  active: { ...groupState },
+  activeB: { ...groupState },
   hoveredLayer: '',
   layerConfig: {},
   startingLayers: [],
@@ -46,8 +53,8 @@ export function getInitialState(config) {
   return {
     ...initialState,
     active: {
+      ...groupState,
       layers: startingLayers,
-      groupOverlays: true,
       overlayGroups: getOverlayGroups(startingLayers),
     },
     layerConfig,
@@ -57,32 +64,38 @@ export function getInitialState(config) {
 
 export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
+  const getPrevOverlayGroups = () => state[compareState].overlayGroups;
   const getLayerIndex = () => {
     const activeLayers = state[compareState].layers;
     return lodashFindIndex(activeLayers, { id: action.id || action.layerId });
   };
+  const getGroupIndex = () => lodashFindIndex(
+    getPrevOverlayGroups(),
+    { groupName: action.groupName },
+  );
 
   switch (action.type) {
     case RESET_LAYERS:
-    case REORDER_LAYER_GROUPS:
+    case REORDER_OVERLAY_GROUPS:
     case ADD_LAYER:
     case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
     case REMOVE_GROUP:
     case REORDER_LAYERS:
-    case TOGGLE_GROUP_VISIBILITY:
+    case TOGGLE_OVERLAY_GROUP_VISIBILITY:
       return update(state, {
         [compareState]: {
           layers: {
             $set: action.layers,
           },
           overlayGroups: {
-            $set: action.overlayGroups || getOverlayGroups(action.layers),
+            $set: action.overlayGroups
+              || getOverlayGroups(action.layers, getPrevOverlayGroups()),
           },
         },
       });
 
-    case TOGGLE_LAYER_GROUPS:
+    case TOGGLE_OVERLAY_GROUPS:
       return {
         ...state,
         [compareState]: {
@@ -91,6 +104,17 @@ export function layerReducer(state = initialState, action) {
           overlayGroups: action.overlayGroups,
         },
       };
+
+    case TOGGLE_COLLAPSE_OVERLAY_GROUP:
+      return update(state, {
+        [compareState]: {
+          overlayGroups: {
+            [getGroupIndex()]: {
+              collapsed: { $set: action.collapsed },
+            },
+          },
+        },
+      });
 
     case INIT_SECOND_LAYER_GROUP:
       return {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
@@ -33,6 +33,7 @@ const reorder = (list, startIndex, endIndex) => {
 function LayerList(props) {
   const {
     compareState,
+    collapsed,
     reorderLayers,
     layerSplit,
     activeLayers,
@@ -45,10 +46,9 @@ function LayerList(props) {
     title,
     removeLayers,
     toggleVisibility,
+    toggleCollapse,
     launchOpacityModal,
   } = props;
-
-  const [collapsed, toggleCollapse] = useState(false);
   const groupLayerIds = layers.map(({ id }) => id);
 
   /**
@@ -133,7 +133,7 @@ function LayerList(props) {
         <FontAwesomeIcon
           className="layer-group-collapse"
           icon={!collapsed ? 'caret-down' : 'caret-left'}
-          onClick={() => toggleCollapse(!collapsed)}
+          onClick={() => toggleCollapse(groupId, !collapsed)}
         />
       </div>
 
@@ -165,6 +165,7 @@ function LayerList(props) {
 LayerList.propTypes = {
   activeLayers: PropTypes.array,
   available: PropTypes.func,
+  collapsed: PropTypes.bool,
   getNames: PropTypes.func,
   groupId: PropTypes.string,
   compareState: PropTypes.string,
@@ -174,6 +175,7 @@ LayerList.propTypes = {
   reorderLayers: PropTypes.func,
   runningLayers: PropTypes.object,
   removeLayers: PropTypes.func,
+  toggleCollapse: PropTypes.func,
   toggleVisibility: PropTypes.func,
   launchOpacityModal: PropTypes.func,
   title: PropTypes.string,

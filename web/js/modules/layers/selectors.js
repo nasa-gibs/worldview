@@ -22,10 +22,8 @@ const getLayerState = ({ layers }) => layers;
 /**
  * Is overlay grouping currently enabled?
  */
-export const isGroupingEnabled = (state) => {
-  const { compare, layers } = state;
-  return layers[compare.activeString].groupOverlays;
-};
+export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
+
 
 /**
  * Return a list of layers for the currently active compare state
@@ -42,7 +40,7 @@ export const getActiveLayers = (state, activeString) => {
  */
 export const getActiveOverlayGroups = (state) => {
   const { compare, layers, proj } = state;
-  const { overlayGroups } = compare.isCompareA ? layers.active : layers.activeB;
+  const { overlayGroups } = layers[compare.activeString];
   const activeLayersMap = getActiveLayersMap(state);
   return overlayGroups.filter(
     (group) => group.layers.filter(

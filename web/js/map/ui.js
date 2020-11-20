@@ -147,7 +147,7 @@ export default function mapui(models, config, store, ui) {
       case layerConstants.REMOVE_LAYER:
         return removeLayer(action.layersToRemove);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
-      case layerConstants.TOGGLE_GROUP_VISIBILITY:
+      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
         return updateLayerVisibilities();
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
@@ -156,14 +156,14 @@ export default function mapui(models, config, store, ui) {
           return reloadLayers();
         }
         return;
-      case layerConstants.TOGGLE_LAYER_GROUPS:
+      case layerConstants.TOGGLE_OVERLAY_GROUPS:
         if (isGroupingEnabled(store.getState())) {
           // Don't need to reloadlayers when turning groups off
           return reloadLayers();
         }
         break;
       case layerConstants.REORDER_LAYERS:
-      case layerConstants.REORDER_LAYER_GROUPS:
+      case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         return reloadLayers();
@@ -577,7 +577,6 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   const reloadLayers = self.reloadLayers = function(map) {
-    console.log('reload layers');
     map = map || self.selected;
     const state = store.getState();
     const { compare } = state;
@@ -648,7 +647,6 @@ export default function mapui(models, config, store, ui) {
     let renderable;
     const state = store.getState();
     const layers = self.selected.getLayers();
-    console.log('updatevisibilities');
     layers.forEach((layer) => {
       const compareActiveString = layer.get('group');
 

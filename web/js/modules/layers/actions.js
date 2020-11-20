@@ -8,17 +8,19 @@ import {
   getActiveLayers as getActiveLayersSelector,
   getActiveLayersMap,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
+  getActiveOverlayGroups,
 } from './selectors';
 import {
   RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
-  REORDER_LAYER_GROUPS,
+  REORDER_OVERLAY_GROUPS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
-  TOGGLE_GROUP_VISIBILITY,
-  TOGGLE_LAYER_GROUPS,
+  TOGGLE_COLLAPSE_OVERLAY_GROUP,
+  TOGGLE_OVERLAY_GROUP_VISIBILITY,
+  TOGGLE_OVERLAY_GROUPS,
   REMOVE_LAYER,
   REMOVE_GROUP,
   UPDATE_OPACITY,
@@ -82,7 +84,7 @@ export function toggleOverlayGroups() {
     // Disabling Groups
     if (groupOverlays) {
       dispatch({
-        type: TOGGLE_LAYER_GROUPS,
+        type: TOGGLE_OVERLAY_GROUPS,
         activeString,
         groupOverlays: false,
         layers: getLayersFromGroups(overlayGroups),
@@ -93,7 +95,7 @@ export function toggleOverlayGroups() {
     } else {
       const groups = getOverlayGroups(layers);
       dispatch({
-        type: TOGGLE_LAYER_GROUPS,
+        type: TOGGLE_OVERLAY_GROUPS,
         groupOverlays: true,
         activeString,
         layers: getLayersFromGroups(groups),
@@ -144,7 +146,7 @@ export function reorderLayers(reorderedLayers) {
       type: REORDER_LAYERS,
       activeString: compare.activeString,
       layers: reorderedLayers,
-      overlayGroups: getOverlayGroups(reorderedLayers),
+      // overlayGroups: getOverlayGroups(reorderedLayers),
     });
   };
 }
@@ -153,7 +155,7 @@ export function reorderLayerGroups(layers, overlayGroups) {
   return (dispatch, getState) => {
     const { compare } = getState();
     dispatch({
-      type: REORDER_LAYER_GROUPS,
+      type: REORDER_OVERLAY_GROUPS,
       activeString: compare.activeString,
       layers,
       overlayGroups,
@@ -230,9 +232,21 @@ export function toggleGroupVisibility(ids, visible) {
       }
     });
     dispatch({
-      type: TOGGLE_GROUP_VISIBILITY,
+      type: TOGGLE_OVERLAY_GROUP_VISIBILITY,
       layers: activeLayers,
       activeString: compare.activeString,
+    });
+  };
+}
+
+export function toggleGroupCollapsed(groupName, collapsed) {
+  return (dispatch, getState) => {
+    const state = getState();
+    dispatch({
+      type: TOGGLE_COLLAPSE_OVERLAY_GROUP,
+      groupName,
+      activeString: state.compare.activeString,
+      collapsed,
     });
   };
 }

@@ -1374,7 +1374,7 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
   }
 }
 
-export function getOverlayGroups(layers) {
+export function getOverlayGroups(layers, prevGroups = []) {
   const allGroupsMap = {};
   layers.forEach(({ id, group, layergroup }) => {
     if (group !== 'overlays') {
@@ -1388,8 +1388,12 @@ export function getOverlayGroups(layers) {
       allGroupsMap[groupName] = [id];
     }
   });
-  return Object.keys(allGroupsMap).map((group) => ({
-    groupName: group,
-    layers: allGroupsMap[group],
-  }));
+  return Object.keys(allGroupsMap).map((groupName) => {
+    const prevGroup = prevGroups.find((g) => g.groupName === groupName);
+    return {
+      groupName,
+      layers: allGroupsMap[groupName],
+      collapsed: prevGroup ? prevGroup.collapsed : false,
+    };
+  });
 }

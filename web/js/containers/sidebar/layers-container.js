@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
@@ -10,6 +10,7 @@ import {
 import {
   reorderLayerGroups as reorderLayerGroupsAction,
   toggleOverlayGroups as toggleOverlayGroupsAction,
+  toggleGroupCollapsed as toggleGroupCollapsedAction,
 } from '../../modules/layers/actions';
 import Switch from '../../components/util/switch';
 
@@ -25,7 +26,11 @@ function LayersContainer (props) {
     height,
     reorderLayerGroups,
     toggleOverlayGroups,
+    toggleCollapse,
   } = props;
+
+  const [overlaysCollapsed, toggleOverlaysCollapsed] = useState(false);
+  const [baselayersCollapsed, toggleBaselayersCollapsed] = useState(false);
 
   /**
    * Update layer group order after drag/drop
@@ -47,7 +52,7 @@ function LayersContainer (props) {
   };
 
   const renderLayerList = (group, idx) => {
-    const { groupName, layers } = group;
+    const { groupName, layers, collapsed } = group;
     const layersForGroup = layers.map((id) => activeLayersMap[id]);
     return layers && ((
       <Draggable
@@ -65,6 +70,8 @@ function LayersContainer (props) {
             <LayerList
               title={groupName}
               groupId={groupName}
+              collapsed={collapsed}
+              toggleCollapse={toggleCollapse}
               compareState={compareState}
               layerSplit={overlays.length}
               layers={layersForGroup}
@@ -111,6 +118,8 @@ function LayersContainer (props) {
               title="Overlays"
               groupId="overlays"
               compareState={compareState}
+              collapsed={overlaysCollapsed}
+              toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
               layers={overlays}
               layerSplit={overlays.length}
             />
@@ -120,6 +129,8 @@ function LayersContainer (props) {
             <LayerList
               title="Base Layers"
               groupId="baselayers"
+              collapsed={baselayersCollapsed}
+              toggleCollapse={() => toggleBaselayersCollapsed(!baselayersCollapsed)}
               compareState={compareState}
               layers={baselayers}
               layerSplit={overlays.length}
@@ -155,6 +166,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleOverlayGroups: () => {
     dispatch(toggleOverlayGroupsAction());
   },
+  toggleCollapse: (groupName, collapsed) => {
+    dispatch(toggleGroupCollapsedAction(groupName, collapsed));
+  },
 });
 
 export default connect(
@@ -173,4 +187,5 @@ LayersContainer.propTypes = {
   reorderLayerGroups: PropTypes.func,
   groupOverlays: PropTypes.bool,
   toggleOverlayGroups: PropTypes.func,
+  toggleCollapse: PropTypes.func,
 };
