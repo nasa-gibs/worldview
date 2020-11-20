@@ -20,6 +20,14 @@ const getCompareState = ({ compare }) => compare;
 const getLayerState = ({ layers }) => layers;
 
 /**
+ * Is overlay grouping currently enabled?
+ */
+export const isGroupingEnabled = (state) => {
+  const { compare, layers } = state;
+  return layers[compare.activeString].groupOverlays;
+};
+
+/**
  * Return a list of layers for the currently active compare state
  * regardless of projection
  */

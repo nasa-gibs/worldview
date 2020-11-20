@@ -64,6 +64,7 @@ export default function dataUi(store, ui, config) {
         self.events.trigger('granuleUnselect', action.granule);
         return updateSelection();
       case LAYER_CONSTANTS.REMOVE_LAYER:
+      case LAYER_CONSTANTS.REMOVE_GROUP:
       case LAYER_CONSTANTS.RESET_LAYERS:
       case LAYER_CONSTANTS.ADD_LAYER:
       case LAYER_CONSTANTS.REORDER_LAYERS:

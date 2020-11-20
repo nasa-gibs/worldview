@@ -17,15 +17,16 @@ import {
   REORDER_LAYER_GROUPS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
+  TOGGLE_GROUP_VISIBILITY,
   TOGGLE_LAYER_GROUPS,
   REMOVE_LAYER,
+  REMOVE_GROUP,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
 } from './constants';
 import { selectProduct } from '../data/actions';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups } from './util';
-
 
 export function resetLayers(activeString) {
   return (dispatch, getState) => {
@@ -175,10 +176,26 @@ export function removeLayer(id) {
     }
     dispatch({
       type: REMOVE_LAYER,
-      id,
       activeString,
-      def,
+      layersToRemove: [def],
       layers: update(activeLayers, { $splice: [[index, 1]] }),
+    });
+  };
+}
+
+export function removeGroup(ids) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    const { activeString } = compare;
+    const activeLayers = getActiveLayersSelector(getState());
+    const layersToRemove = activeLayers.filter((l) => ids.includes(l.id));
+    const newLayers = activeLayers.filter((l) => !ids.includes(l.id));
+
+    dispatch({
+      type: REMOVE_GROUP,
+      activeString,
+      layersToRemove,
+      layers: newLayers,
     });
   };
 }
@@ -198,6 +215,23 @@ export function toggleVisibility(id, visible) {
       type: TOGGLE_LAYER_VISIBILITY,
       id,
       visible,
+      activeString: compare.activeString,
+    });
+  };
+}
+
+export function toggleGroupVisibility(ids, visible) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    const activeLayers = getActiveLayersSelector(getState());
+    activeLayers.forEach((layer) => {
+      if (ids.includes(layer.id)) {
+        layer.visible = visible;
+      }
+    });
+    dispatch({
+      type: TOGGLE_GROUP_VISIBILITY,
+      layers: activeLayers,
       activeString: compare.activeString,
     });
   };

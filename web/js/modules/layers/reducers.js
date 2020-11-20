@@ -10,11 +10,13 @@ import {
   REORDER_LAYERS,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
+  TOGGLE_GROUP_VISIBILITY,
   TOGGLE_LAYER_GROUPS,
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
   REORDER_LAYER_GROUPS,
+  REMOVE_GROUP,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -66,7 +68,9 @@ export function layerReducer(state = initialState, action) {
     case ADD_LAYER:
     case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
+    case REMOVE_GROUP:
     case REORDER_LAYERS:
+    case TOGGLE_GROUP_VISIBILITY:
       return update(state, {
         [compareState]: {
           layers: {
@@ -112,6 +116,7 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
+
 
     case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_DISABLED_CLASSIFICATION: {
