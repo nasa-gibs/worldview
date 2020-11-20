@@ -3,11 +3,13 @@ import {
   geosearchState,
 } from './reducers';
 import {
-  CLEAR_COORDINATES,
-  SELECT_COORDINATES_TO_FLY,
-  TOGGLE_REVERSE_GEOCODE_ACTIVE,
+  CLEAR_MARKER,
+  CLEAR_SUGGESTIONS,
+  SET_MARKER,
+  SET_SUGGESTION,
+  TOGGLE_DIALOG_VISIBLE,
+  TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_GEOSEARCH,
-  UPDATE_ACTIVE_MARKER,
 } from './constants';
 
 // test variables
@@ -15,30 +17,19 @@ const reverseGeocodeResults = {
   address: {},
   location: {},
 };
+const suggestion = [{
+  isCollection: false,
+  magicKey: 'test1234=',
+  text: 'New York, NY, USA',
+}];
+const coordinates = [72, 40];
 
 describe('geosearchReducer', () => {
-  test(' should return the initial state', () => {
+  test('geosearchReducer should return the initial state', () => {
     expect(geosearchReducer(undefined, {})).toEqual(
       geosearchState,
     );
   });
-  test(
-    `${CLEAR_COORDINATES
-    } resets cooridnates, activeMarker, and geocode results`
-      + 'should return new state',
-    () => {
-      expect(
-        geosearchReducer(geosearchState, {
-          type: CLEAR_COORDINATES,
-        }),
-      ).toEqual({
-        ...geosearchState,
-        coordinates: [],
-        activeMarker: null,
-        reverseGeocodeResults: null,
-      });
-    },
-  );
   test(
     `${TOGGLE_SHOW_GEOSEARCH
     } shows geosearch isExpanded and `
@@ -56,13 +47,13 @@ describe('geosearchReducer', () => {
     },
   );
   test(
-    `${TOGGLE_REVERSE_GEOCODE_ACTIVE
+    `${TOGGLE_REVERSE_GEOCODE
     } toggles isCoordinateSearchActive to true and `
       + 'should return new state',
     () => {
       expect(
         geosearchReducer(geosearchState, {
-          type: TOGGLE_REVERSE_GEOCODE_ACTIVE,
+          type: TOGGLE_REVERSE_GEOCODE,
           value: true,
         }),
       ).toEqual({
@@ -72,42 +63,91 @@ describe('geosearchReducer', () => {
     },
   );
   test(
-    `${UPDATE_ACTIVE_MARKER
-    } updates action value and reverseGeocodeResults objects and `
+    `${TOGGLE_DIALOG_VISIBLE
+    } sets coordinate dialog visiblity and `
       + 'should return new state',
     () => {
       expect(
         geosearchReducer(geosearchState, {
-          type: UPDATE_ACTIVE_MARKER,
-          value: {},
-          reverseGeocodeResults,
+          type: TOGGLE_DIALOG_VISIBLE,
+          value: true,
         }),
       ).toEqual({
         ...geosearchState,
-        activeMarker: {},
-        reverseGeocodeResults,
+        isCoordinatesDialogOpen: true,
       });
     },
   );
   test(
-    `${SELECT_COORDINATES_TO_FLY
-    } updates activeMarker, coordinates, and reverseGeocodeResults `
+    `${SET_MARKER
+    } updates activeMarker, coordinates, reverseGeocodeResults `
     + 'and sets isCoordinateSearchActive to false and should return new state',
     () => {
       expect(
         geosearchReducer(geosearchState, {
-          type: SELECT_COORDINATES_TO_FLY,
-          value: false,
-          coordinates: [],
-          activeMarker: {},
+          type: SET_MARKER,
+          value: {},
+          coordinates,
           reverseGeocodeResults,
+          isCoordinatesDialogOpen: true,
         }),
       ).toEqual({
         ...geosearchState,
         isCoordinateSearchActive: false,
-        coordinates: [],
+        coordinates,
         activeMarker: {},
         reverseGeocodeResults,
+        isCoordinatesDialogOpen: true,
+      });
+    },
+  );
+  test(
+    `${CLEAR_MARKER
+    } resets cooridnates, activeMarker, and geocode results`
+      + 'should return new state',
+    () => {
+      expect(
+        geosearchReducer(geosearchState, {
+          type: CLEAR_MARKER,
+        }),
+      ).toEqual({
+        ...geosearchState,
+        coordinates: [],
+        activeMarker: null,
+        reverseGeocodeResults: null,
+        isCoordinatesDialogOpen: false,
+      });
+    },
+  );
+  test(
+    `${SET_SUGGESTION
+    } updates suggestions with value and `
+      + 'should return new state',
+    () => {
+      expect(
+        geosearchReducer(geosearchState, {
+          type: SET_SUGGESTION,
+          value: suggestion,
+        }),
+      ).toEqual({
+        ...geosearchState,
+        suggestions: suggestion,
+      });
+    },
+  );
+  test(
+    `${CLEAR_SUGGESTIONS
+    } updates suggestions with clear value and `
+      + 'should return new state',
+    () => {
+      expect(
+        geosearchReducer(geosearchState, {
+          type: CLEAR_SUGGESTIONS,
+          value: [],
+        }),
+      ).toEqual({
+        ...geosearchState,
+        suggestions: [],
       });
     },
   );

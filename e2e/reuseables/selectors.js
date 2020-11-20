@@ -131,4 +131,7 @@ module.exports = {
   tooltipCoordinatesContainer: '.tooltip-coordinates-container',
   tooltipCoordinatesTitle: '.tooltip-coordinates-title',
   tooltipCoordinates: '.tooltip-coordinates',
+  tooltipCoordinatesMinimizeButton: '.minimize-coordinates-tooltip',
+  tooltipCoordinatesCloseButton: '.close-coordinates-tooltip',
+  coordinatesMapMarker: '.coordinates-map-marker',
 };

@@ -214,7 +214,7 @@ test('Download URL', () => {
     height: 300,
   };
   const dateTime = new Date('2019-06-24T19:04:00Z');
-  const geosearchCoordinates = [-19.16086, 2.71169];
+  const geosearchCoordinates = [-19.1609, 2.7117];
   const dlURL = getDownloadUrl(url, proj, mockLayerDefs, lonlats, dimensions, dateTime, false, false, geosearchCoordinates);
   const expectedURL = 'http://localhost:3002/api/v1/snapshot'
     + '?REQUEST=GetSnapshot'
@@ -225,6 +225,6 @@ test('Download URL', () => {
     + '&WRAP=day'
     + '&FORMAT=image/jpeg'
     + '&WIDTH=300&HEIGHT=300'
-    + '&MARKER=-19.16086,2.71169';
+    + '&MARKER=-19.1609,2.7117';
   expect(dlURL.includes(expectedURL)).toBe(true);
 });

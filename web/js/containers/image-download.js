@@ -16,7 +16,7 @@ import {
   hasSubDaily as hasSubDailySelector,
   getLayers,
 } from '../modules/layers/selectors';
-import { removeCoordinatesOverlayFromAllProjections } from '../modules/geosearch/selectors';
+import { removeCoordinatesOverlayFromAllProjections } from '../modules/geosearch/util';
 import {
   resolutionsGeo,
   resolutionsPolar,

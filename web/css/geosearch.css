@@ -13,6 +13,13 @@
   }
 }
 
+.geosearch-autocomplete,
+.geosearch-autocomplete:focus {
+  background: none;
+  color: #fff;
+  box-shadow: none;
+}
+
 .geosearch-results-menu {
   position: absolute;
   width: 85%;
@@ -28,7 +35,7 @@
 }
 
 /* Autocomplete Input Submit Button */
-.geosearch-submit-input-group-addon {
+.geosearch-input-group-addon {
   height: 38px;
   position: absolute;
   top: 0;
@@ -40,6 +47,7 @@
     background: none;
     border: none;
     color: #999;
+    margin-right: 2px;
     border-left: 2px solid rgba(51, 51, 51, 0.65);
     border-radius: 0;
     box-sizing: border-box;
@@ -54,6 +62,9 @@
       left: 8px;
       top: 13px;
     }
+  }
+  &.submit-group {
+    right: 31px;
   }
   & .geosearch-search-clear-button {
     cursor: pointer;
@@ -89,7 +100,7 @@
 }
 
 /* Geosearch Component Coordinate Buttons */
-.geosearch-coordinate-button-addpoint {
+.geosearch-add-coordinate-button {
   border-radius: 0;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -143,13 +154,6 @@
 }
 
 /* Additional Styling */
-.dark-input,
-.dark-input:focus {
-  background: none;
-  color: #fff;
-  box-shadow: none;
-}
-
 .geosearch-input-alert-icon {
   right: 120px;
 }
@@ -187,11 +191,14 @@
     line-height: 16px;
     font-size: 16px;
   }
-  .geosearch-submit-input-group-addon {
+  .geosearch-input-group-addon {
     margin-right: 6px;
     background: none;
     & .geosearch-search-submit-button {
       border-left: none;
+    }
+    & .geosearch-search-clear-button {
+      background: #3b3b3b;
     }
   }
 }

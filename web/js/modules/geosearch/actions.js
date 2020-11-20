@@ -1,24 +1,33 @@
-
 import {
-  CLEAR_COORDINATES,
+  CLEAR_MARKER,
   CLEAR_SUGGESTIONS,
-  SELECT_COORDINATES_TO_FLY,
+  SET_MARKER,
   SET_SUGGESTION,
-  TOGGLE_REVERSE_GEOCODE_ACTIVE,
+  TOGGLE_DIALOG_VISIBLE,
+  TOGGLE_REVERSE_GEOCODE,
   TOGGLE_SHOW_GEOSEARCH,
 } from './constants';
+import { requestAction } from '../core/actions';
 import {
   addCoordinatesMarker,
   animateCoordinates,
   removeCoordinatesMarker,
-} from './selectors';
-import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
-import {
-  GEOSEARCH_REQUEST_OPTIONS,
   setLocalStorageCollapseState,
 } from './util';
-import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../../components/geosearch/ol-coordinates-marker-util';
-import { requestAction } from '../core/actions';
+import {
+  GEOSEARCH_REQUEST_OPTIONS,
+} from './util-api';
+import {
+  getCoordinatesMetadata,
+  renderCoordinatesTooltip,
+} from '../../components/geosearch/ol-coordinates-marker-util';
+import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
+
+const {
+  REQUEST_OPTIONS,
+  GEOCODE_SUGGEST_CATEGORIES,
+  CONSTANT_REQUEST_PARAMETERS,
+} = GEOSEARCH_REQUEST_OPTIONS;
 
 // toggle show geosearch component
 export function toggleShowGeosearch() {
@@ -41,7 +50,7 @@ export function toggleShowGeosearch() {
 // toggle reverse geocode - if active, next click on map will add marker and get coordinates
 export function toggleReverseGeocodeActive(isCoordinateSearchActive) {
   return {
-    type: TOGGLE_REVERSE_GEOCODE_ACTIVE,
+    type: TOGGLE_REVERSE_GEOCODE,
     value: isCoordinateSearchActive,
   };
 }
@@ -61,18 +70,17 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
       if (error) {
-        console.log(`ERROR REVERSE GEOCODING - ${error.message} ${error.details}`);
+        console.warn(`REVERSE GEOCODING WARNING - ${error.message} ${error.details}`);
       }
     }
 
     const marker = addCoordinatesMarker(activeMarker, config, map, coordinates, reverseGeocodeResults);
     if (!marker) {
-      console.log('ERROR ADDING MARKER - Coordinates are outside range of current map projection extent.');
       return dispatch({
-        type: SELECT_COORDINATES_TO_FLY,
-        value: false,
+        type: SET_MARKER,
+        value: null,
         coordinates: [],
-        activeMarker: null,
+        isCoordinatesDialogOpen: false,
       });
     }
 
@@ -90,20 +98,26 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
       reverseGeocodeResults,
     };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-    const clearMarkerAndCoordinates = () => {
+    const clearMarker = () => {
       removeCoordinatesMarker(marker, map);
       dispatch({
-        type: CLEAR_COORDINATES,
+        type: CLEAR_MARKER,
       });
     };
-    renderCoordinatesTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarkerAndCoordinates);
+    const toggleDialog = (isVisible) => {
+      dispatch({
+        type: TOGGLE_DIALOG_VISIBLE,
+        value: isVisible,
+      });
+    };
+    renderCoordinatesTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarker, toggleDialog);
 
     dispatch({
-      type: SELECT_COORDINATES_TO_FLY,
-      value: false,
+      type: SET_MARKER,
       reverseGeocodeResults,
       coordinates,
-      activeMarker: marker,
+      value: marker,
+      isCoordinatesDialogOpen: true,
     });
   };
 }
@@ -119,19 +133,32 @@ export function clearCoordinates() {
       removeCoordinatesMarker(activeMarker, map);
     }
     dispatch({
-      type: CLEAR_COORDINATES,
+      type: CLEAR_MARKER,
     });
   };
 }
 
+// clear place suggestions
+export function toggleDialogVisible(isVisible) {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_DIALOG_VISIBLE,
+      value: isVisible,
+    });
+  };
+}
+
+// clear place suggestions
 export function clearSuggestions() {
   return (dispatch) => {
     dispatch({
       type: CLEAR_SUGGESTIONS,
+      value: [],
     });
   };
 }
 
+// set place suggestion
 export function setSuggestion(suggestion) {
   return (dispatch) => {
     dispatch({
@@ -141,12 +168,7 @@ export function setSuggestion(suggestion) {
   };
 }
 
-const {
-  REQUEST_OPTIONS,
-  GEOCODE_SUGGEST_CATEGORIES,
-  CONSTANT_REQUEST_PARAMETERS,
-} = GEOSEARCH_REQUEST_OPTIONS;
-
+// get place suggestions using ArcGIS suggest API
 export function getSuggestions(val) {
   return (dispatch, getState) => {
     const { config } = getState();

@@ -34,7 +34,7 @@ import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
-import { CLEAR_COORDINATES, UPDATE_ACTIVE_MARKER } from '../modules/geosearch/constants';
+import { CLEAR_MARKER, SET_MARKER, TOGGLE_DIALOG_VISIBLE } from '../modules/geosearch/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
@@ -55,8 +55,8 @@ import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
-import { addCoordinatesMarker, removeCoordinatesMarker } from '../modules/geosearch/selectors';
-import { reverseGeocode } from '../modules/geosearch/util';
+import { addCoordinatesMarker, removeCoordinatesMarker } from '../modules/geosearch/util';
+import { reverseGeocode } from '../modules/geosearch/util-api';
 import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../components/geosearch/ol-coordinates-marker-util';
 
 export default function mapui(models, config, store, ui) {
@@ -233,9 +233,10 @@ export default function mapui(models, config, store, ui) {
    */
   const addMarkerAndUpdateStore = (activeMarker, coordinates, results) => {
     const state = store.getState();
-    const { browser } = state;
+    const { browser, geosearch } = state;
     const isMobile = browser.lessThan.medium;
     const marker = addCoordinatesMarker(activeMarker, config, { ui: self }, coordinates, results);
+    const { isCoordinatesDialogOpen } = geosearch;
 
     // prevent marker if outside of extent
     if (!marker) {
@@ -248,13 +249,28 @@ export default function mapui(models, config, store, ui) {
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
 
     // handle clearing cooridnates using created marker
-    const clearCoordinates = () => {
+    const clearMarker = () => {
       removeCoordinatesMarker(marker, { ui: self });
-      store.dispatch({ type: CLEAR_COORDINATES });
+      store.dispatch({ type: CLEAR_MARKER });
     };
-    renderCoordinatesTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearCoordinates);
+    // handle toggling dialog visibility to retain preference between proj changes
+    const toggleDialogVisible = (isVisible) => {
+      store.dispatch({ type: TOGGLE_DIALOG_VISIBLE, value: isVisible });
+    };
 
-    store.dispatch({ type: UPDATE_ACTIVE_MARKER, value: marker, reverseGeocodeResults: results });
+    // only render dialog if new marker or not previously minimized
+    const isDialogOpen = !activeMarker || (activeMarker && isCoordinatesDialogOpen);
+    if (isDialogOpen) {
+      renderCoordinatesTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarker, toggleDialogVisible);
+    }
+
+    store.dispatch({
+      type: SET_MARKER,
+      coordinates,
+      value: marker,
+      reverseGeocodeResults: results,
+      isCoordinatesDialogOpen: isDialogOpen,
+    });
   };
 
   const flyToNewExtent = function(extent, rotation) {

@@ -77,7 +77,7 @@ const CUSTOM_MODAL_PROPS = {
     backdrop: false,
     bodyComponent: Geosearch,
     clickableBehindModal: true,
-    headerText: 'Search for places or enter coordinates',
+    headerText: 'Search for places',
     mobileOnly: true,
     modalClassName: 'toolbar-geosearch-modal toolbar-modal toolbar-medium-modal',
     type: 'toolbar',

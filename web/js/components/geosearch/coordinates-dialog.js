@@ -55,7 +55,7 @@ class CoordinatesDialog extends Component {
     const tooltipVisibilityCondition = !isMobile && showTooltips;
     return (
       <>
-        <span id={closeButtonId} className="close-tooltip close-coordinates-tooltip">
+        <span id={closeButtonId} className={`close-tooltip ${closeButtonId}`}>
           {tooltipVisibilityCondition
           && (
             <UncontrolledTooltip
@@ -69,7 +69,7 @@ class CoordinatesDialog extends Component {
           )}
           <FontAwesomeIcon onClick={this.clearCoordinates} icon="times" fixedWidth />
         </span>
-        <span id={minimizeButtonId} className="minimize-tooltip minimize-coordinates-tooltip">
+        <span id={minimizeButtonId} className={`minimize-tooltip ${minimizeButtonId}`}>
           {tooltipVisibilityCondition
           && (
             <UncontrolledTooltip
@@ -102,7 +102,7 @@ class CoordinatesDialog extends Component {
       >
         <div
           id={buttonId}
-          className="copy-coordinates-to-clipboard-button"
+          className={buttonId}
         >
           {!isMobile && (
           <UncontrolledTooltip placement="bottom" trigger="hover" target={buttonId}>
@@ -122,7 +122,6 @@ class CoordinatesDialog extends Component {
     const {
       tooltipToggleTime,
     } = this.state;
-
     const {
       coordinates,
       title,
