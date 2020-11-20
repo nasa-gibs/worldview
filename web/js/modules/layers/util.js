@@ -1183,7 +1183,7 @@ export function mapLocationToLayerState(
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
-          groupOverlays: { $set: activeB.getOverlayGroups },
+          groupOverlays: { $set: activeB.groupOverlays },
           layers: { $set: active.layers },
           overlayGroups: { $set: getOverlayGroups(active.layers) },
         },
