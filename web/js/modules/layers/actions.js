@@ -69,7 +69,12 @@ export function toggleOverlayGroups() {
   return (dispatch, getState) => {
     const state = getState();
     const { activeString } = state.compare;
-    const { groupOverlays, layers, overlayGroups } = state.layers[activeString];
+    const {
+      groupOverlays,
+      layers,
+      prevLayers,
+      overlayGroups,
+    } = state.layers[activeString];
     const getLayersFromGroups = (groups) => {
       const baselayers = getLayersSelector(state, { group: 'baselayers' });
       const activeLayersMap = getActiveLayersMap(state);
@@ -82,11 +87,14 @@ export function toggleOverlayGroups() {
 
     // Disabling Groups
     if (groupOverlays) {
+      const ungroupedLayers = prevLayers && prevLayers.length
+        ? prevLayers
+        : getLayersFromGroups(overlayGroups);
       dispatch({
         type: TOGGLE_OVERLAY_GROUPS,
         activeString,
         groupOverlays: false,
-        layers: getLayersFromGroups(overlayGroups),
+        layers: ungroupedLayers,
         overlayGroups: [],
       });
 
@@ -99,6 +107,7 @@ export function toggleOverlayGroups() {
         activeString,
         layers: getLayersFromGroups(groups),
         overlayGroups: groups,
+        prevLayers: layers,
       });
     }
   };

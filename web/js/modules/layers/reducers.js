@@ -37,6 +37,7 @@ const groupState = {
   groupOverlays: true,
   layers: [],
   overlayGroups: [],
+  prevLayers: [],
 };
 
 const initialState = {
@@ -92,6 +93,7 @@ export function layerReducer(state = initialState, action) {
             $set: action.overlayGroups
               || getOverlayGroups(action.layers, getPrevOverlayGroups()),
           },
+          prevLayers: { $set: [] },
         },
       });
 
@@ -102,6 +104,7 @@ export function layerReducer(state = initialState, action) {
           groupOverlays: action.groupOverlays,
           layers: action.layers,
           overlayGroups: action.overlayGroups,
+          prevLayers: action.prevLayers,
         },
       };
 
