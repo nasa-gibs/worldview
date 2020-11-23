@@ -6,9 +6,7 @@
       "subtitle": "Suomi NPP / VIIRS via NASA Earth Observatory",
       "description": "viirs/VIIRS_Night_Lights",
       "tags": "night s-npp snpp night lights city urban nighttime",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Earth at Night",
       "group": "overlays",
       "inactive": true,
       "wrapX": true,

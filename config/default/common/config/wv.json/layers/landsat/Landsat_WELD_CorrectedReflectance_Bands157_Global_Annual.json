@@ -7,9 +7,7 @@
       "description": "landsat/Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual",
       "tags": "corrected snow ice bands 3-6-7",
       "group": "baselayers",
-      "layergroup": [
-        "landsat"
-      ],
+      "layergroup": "Corrected Reflectance",
       "product": "",
       "inactive": true,
       "wrapX": true,

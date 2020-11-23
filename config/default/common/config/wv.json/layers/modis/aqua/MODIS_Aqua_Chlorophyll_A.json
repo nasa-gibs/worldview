@@ -6,10 +6,7 @@
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Chlorophyll_A",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Chlorophyll A",
       "tracks": [
         "OrbitTracks_Aqua_Ascending"
       ],

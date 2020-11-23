@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Sentinel-1",
       "description": "smap/SMAP_Sentinel-1_L2_Active_Passive_Soil_Moisture",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "SPL2SMAP_S"
     }
   }

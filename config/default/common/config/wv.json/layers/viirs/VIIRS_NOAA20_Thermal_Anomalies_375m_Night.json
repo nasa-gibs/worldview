@@ -30,7 +30,7 @@
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "resolutionBreakPoint":  0.017578125,
+            "resolutionBreakPoint": 0.017578125,
             "source": "GIBS:wms"
           },
           "arctic": {
@@ -44,7 +44,8 @@
         "daynight": [
           "night"
         ]
-      }
+      },
+      "layergroup": "Fires and Thermal Anomalies"
     }
   }
 }

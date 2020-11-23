@@ -7,9 +7,7 @@
       "description": "landsat/Landsat_WELD_NDVI_Global_Monthly",
       "tags": "Nadir BRDF Adjusted Reflectance, Bi-directional Reflectance Distribution Function",
       "group": "baselayers",
-      "layergroup": [
-        "landsat"
-      ],
+      "layergroup": "Vegetation Indices",
       "product": "",
       "inactive": true,
       "daynight": [

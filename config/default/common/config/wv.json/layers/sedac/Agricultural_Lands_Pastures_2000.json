@@ -7,9 +7,7 @@
       "description": "sedac/Agricultural_Lands_Pastures_2000",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Land Cover",
       "product": "CIESIN_SEDAC_AGLANDS_PAS2000",
       "inactive": true,
       "wrapX": true

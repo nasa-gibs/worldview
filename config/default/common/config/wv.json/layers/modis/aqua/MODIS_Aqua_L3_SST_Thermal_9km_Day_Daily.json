@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_SST_Thermal_9km_Day_Daily",
       "group": "overlays",
       "tags": "ssc podaac PO.DAAC",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Sea Surface Temperature",
       "product": "MODIS_AQUA_L3_SST_THERMAL_DAILY_9KM_DAYTIME_V2014.0",
       "wrapadjacentdays": true,
       "tracks": [

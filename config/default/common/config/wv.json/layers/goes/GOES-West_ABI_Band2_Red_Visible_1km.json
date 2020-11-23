@@ -7,9 +7,7 @@
       "description": "goes/GOES-West_ABI_Band2_Red_Visible_1km",
       "group": "overlays",
       "tags": "geostationary geo",
-      "layergroup": [
-        "goes"
-      ],
+      "layergroup": "Geostationary",
       "product": "",
       "wrapX": true,
       "daynight": [

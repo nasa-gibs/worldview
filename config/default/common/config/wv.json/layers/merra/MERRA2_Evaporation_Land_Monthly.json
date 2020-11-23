@@ -7,9 +7,7 @@
       "description": "merra/MERRA2_Evaporation_Land_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "merra"
-      ],
+      "layergroup": "Evaporation",
       "product": "M2TMNXLND",
       "wrapadjacentdays": true
     }

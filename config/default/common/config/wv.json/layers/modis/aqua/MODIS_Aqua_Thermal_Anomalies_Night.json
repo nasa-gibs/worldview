@@ -1,18 +1,15 @@
 {
   "layers": {
     "MODIS_Aqua_Thermal_Anomalies_Night": {
-      "id":       "MODIS_Aqua_Thermal_Anomalies_Night",
-      "title":    "Fires and Thermal Anomalies (Night)",
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night",
+      "title": "Fires and Thermal Anomalies (Night)",
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Thermal_Anomalies_All",
-      "tags":     "hotspots vectors",
-      "group":    "overlays",
-      "type":     "vector",
+      "tags": "hotspots vectors",
+      "group": "overlays",
+      "type": "vector",
       "period": "daily",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Fires and Thermal Anomalies",
       "product": "MYD14",
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
@@ -21,8 +18,8 @@
         }
       },
       "palette": {
-          "id": "MODIS_All_Thermal_Anomalies",
-          "immutable": true
+        "id": "MODIS_All_Thermal_Anomalies",
+        "immutable": true
       },
       "transition": true,
       "tracks": [
@@ -34,12 +31,12 @@
       "breakPointLayer": {
         "id": "MODIS_Aqua_Thermal_Anomalies_Night",
         "type": "wms",
-        "format":   "image/png",
+        "format": "image/png",
         "breakPointType": "max",
         "projections": {
           "geographic": {
             "source": "GIBS:wms",
-            "resolutionBreakPoint":  0.017578125
+            "resolutionBreakPoint": 0.017578125
           },
           "arctic": {
             "resolutionBreakPoint": 2048,

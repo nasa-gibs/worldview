@@ -7,9 +7,7 @@
       "description": "merra/MERRA2_SO2_Column_Mass_Density_Monthly",
       "tags": "sulfur dioxide sulphur dioxide so2",
       "group": "overlays",
-      "layergroup": [
-        "merra"
-      ],
+      "layergroup": "Sulfur Dioxide",
       "product": "M2TMNXAER",
       "wrapadjacentdays": true
     }

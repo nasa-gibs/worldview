@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L3_Ice_Surface_Temp_Daily_Day",
       "tags": "ist",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Ice Surface Temperature",
       "product": "MOD29P1D",
       "wrapadjacentdays": true,
       "tracks": [

@@ -7,9 +7,7 @@
       "description": "gpm/GMI_Rain_Rate_Asc",
       "tags": "precipitation",
       "group": "overlays",
-      "layergroup": [
-        "gpm"
-      ],
+      "layergroup": "Precipitation Rate",
       "product": "GPM_2AGPROFGPMGMI",
       "tracks": [
         "OrbitTracks_GPM_Ascending"

@@ -7,9 +7,7 @@
       "description": "viirs/VIIRS_SNPP_Clear_Sky_Confidence_Night",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Clear Sky Confidence",
       "product": "CLDMSK_L2_VIIRS_SNPP_NRT",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Descending"

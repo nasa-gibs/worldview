@@ -7,9 +7,7 @@
       "description": "iss/LIS_ISS_Flash_Radiance",
       "tags": "lightning international space station iss",
       "group": "overlays",
-      "layergroup": [
-        "iss"
-      ],
+      "layergroup": "Lightning",
       "product": "isslis_p0_nrt",
       "wrapadjacentdays": true,
       "tracks": [

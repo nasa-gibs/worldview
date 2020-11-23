@@ -6,10 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Effective_Radius_16_PCL",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Cloud Effective Radius",
       "product": "MOD06_L2",
       "wrapadjacentdays": true,
       "tracks": [

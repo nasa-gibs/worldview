@@ -12,9 +12,7 @@
         512,
         512
       ],
-      "layergroup": [
-        "reference"
-      ],
+      "layergroup": "Reference",
       "projections": {
         "antarctic": {
           "layer": "SCAR_Land_Water_Map",

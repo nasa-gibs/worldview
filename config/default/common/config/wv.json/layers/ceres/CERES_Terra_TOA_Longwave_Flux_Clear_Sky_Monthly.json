@@ -7,9 +7,7 @@
       "description": "ceres/CERES_Terra_TOA_Longwave_Flux_Clear_Sky_Monthly",
       "tags": "top of atmosphere",
       "group": "overlays",
-      "layergroup": [
-        "ceres"
-      ],
+      "layergroup": "TOA Flux",
       "product": "CER_SYN1deg-Month_Terra-MODIS",
       "inactive": true,
       "wrapadjacentdays": true,

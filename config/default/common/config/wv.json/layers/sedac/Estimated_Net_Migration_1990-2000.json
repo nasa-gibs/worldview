@@ -7,9 +7,7 @@
       "description": "sedac/Estimated_Net_Migration_1990-2000",
       "tags": "human sedac population",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Net Migration",
       "product": "CIESIN_SEDAC_PD_NETMIG_1970_2000",
       "inactive": true,
       "wrapX": true

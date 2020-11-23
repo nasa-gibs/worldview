@@ -66,7 +66,7 @@ class CategoryLayerRow extends React.Component {
         return;
       }
 
-      if ((layer.layergroup || []).includes('reference_orbits')) {
+      if (layer.layergroup === 'Orbital Track') {
         orbitTitle = getOrbitTrackTitle(layer);
         OrbitSourceList.push(
           <MeasurementLayerRow

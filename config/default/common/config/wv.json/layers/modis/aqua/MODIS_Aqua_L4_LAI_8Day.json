@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_L4_LAI_8Day",
       "tags": "lai",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Leaf Area Index",
       "product": "MYD15A2H",
       "wrapadjacentdays": true,
       "daynight": [

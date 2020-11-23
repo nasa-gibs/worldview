@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L3_SurfaceReflectance_Bands121_8Day",
       "tags": "lsr 121 false color",
       "group": "baselayers",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Land Surface Reflectance",
       "product": "MOD09Q1",
       "wrapadjacentdays": true,
       "daynight": [

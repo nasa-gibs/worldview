@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_UV_Index",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Radiation",
       "product": "OMUVBd",
       "tags": "ultra violet",
       "tracks": [

@@ -14,9 +14,7 @@
         512
       ],
       "type": "wms",
-      "layergroup": [
-        "wdpa"
-      ],
+      "layergroup": "Reference",
       "wrapX": true,
       "projections": {
         "geographic": {

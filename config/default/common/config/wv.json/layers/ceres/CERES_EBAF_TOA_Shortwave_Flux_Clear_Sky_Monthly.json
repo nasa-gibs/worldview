@@ -7,9 +7,7 @@
       "description": "ceres/CERES_EBAF_TOA_Shortwave_Flux_Clear_Sky_Monthly",
       "tags": "top of atmosphere, energy balanced and filled",
       "group": "overlays",
-      "layergroup": [
-        "ceres"
-      ],
+      "layergroup": "TOA Flux",
       "product": "CERES_EBAF-TOA",
       "inactive": true,
       "wrapadjacentdays": true,

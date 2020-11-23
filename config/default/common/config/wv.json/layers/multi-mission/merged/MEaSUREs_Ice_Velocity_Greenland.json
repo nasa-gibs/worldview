@@ -6,10 +6,7 @@
       "subtitle": "ALOS/PALSAR, RADARSAT-1/SAR, TSX/SAR",
       "description": "multi-mission/merged/MEaSUREs_Ice_Velocity_Greenland",
       "tags": "",
-      "layergroup": [
-        "multi-mission",
-        "multi-mission_merged"
-      ],
+      "layergroup": "Ice Velocity Greenland",
       "product": "NSIDC-0478",
       "group": "overlays",
       "inactive": true

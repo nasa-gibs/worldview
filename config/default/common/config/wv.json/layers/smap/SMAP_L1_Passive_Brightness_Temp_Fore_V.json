@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Radiometer",
       "description": "smap/SMAP_L1_Passive_Brightness_Temp_Fore_V",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "SPL1CTB"
     }
   }

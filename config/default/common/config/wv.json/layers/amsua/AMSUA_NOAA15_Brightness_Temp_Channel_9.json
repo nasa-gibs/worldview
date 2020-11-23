@@ -6,9 +6,7 @@
       "subtitle": "NOAA-15 / AMSU-A",
       "description": "amsua/AMSUA_NOAA15_Brightness_Temp_Channel_9",
       "group": "overlays",
-      "layergroup": [
-        "noaa15"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "amsua15sp",
       "tags": ""
     }

@@ -6,10 +6,7 @@
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_Cloud_Top_Temp_Day",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Cloud Top Temperature",
       "product": "MYD06_L2_DAY",
       "wrapadjacentdays": true,
       "tracks": [

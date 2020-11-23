@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_NDVI_16Day",
       "tags": "ndvi normalized difference vegetation index",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Vegetation Indices",
       "product": "MYD13Q1",
       "wrapadjacentdays": true,
       "daynight": [

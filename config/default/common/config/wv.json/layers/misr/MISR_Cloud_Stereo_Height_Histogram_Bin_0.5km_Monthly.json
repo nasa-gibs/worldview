@@ -7,9 +7,7 @@
       "description": "misr/MISR_Cloud_Stereo_Height_Histogram_Bin_0_5km_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "misr"
-      ],
+      "layergroup": "Cloud Top Height",
       "product": "MIL3MCLD",
       "wrapadjacentdays": true
     }
