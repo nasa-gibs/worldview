@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_SO2_Planetary_Boundary_Layer",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Sulfur Dioxide",
       "product": "OMSO2e",
       "tags": "so2 sulphur dioxide",
       "tracks": [

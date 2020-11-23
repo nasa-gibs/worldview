@@ -8,10 +8,7 @@
       "group": "overlays",
       "type": "vector",
       "tags": "vectors",
-      "layergroup": [
-        "sedac",
-        "vector"
-      ],
+      "layergroup": "Reservoirs",
       "vectorStyle": {
         "id": "GRanD_Reservoirs"
       },

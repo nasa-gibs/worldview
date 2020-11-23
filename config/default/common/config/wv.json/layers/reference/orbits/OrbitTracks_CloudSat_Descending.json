@@ -14,11 +14,10 @@
       ],
       "period": "daily",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "reference",
-        "reference_orbits"
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "night"
       ],
-      "daynight": [ "night" ],
       "track": "descending",
       "startDate": "2006-06-06",
       "projections": {

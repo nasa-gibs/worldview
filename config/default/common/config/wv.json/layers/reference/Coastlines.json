@@ -12,9 +12,7 @@
         512
       ],
       "noTransition": "true",
-      "layergroup": [
-        "reference"
-      ],
+      "layergroup": "Reference",
       "projections": {
         "antarctic": {
           "subtitle": "SCAR Antarctic Digital Database / Coastlines",

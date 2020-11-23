@@ -7,9 +7,7 @@
       "description": "amsr2/AMSRU2_Sea_Ice_Concentration_25km",
       "tags": "amsr-u2",
       "group": "overlays",
-      "layergroup": [
-        "amsr2"
-      ],
+      "layergroup": "Sea Ice",
       "product": "AU_SI25"
     }
   }

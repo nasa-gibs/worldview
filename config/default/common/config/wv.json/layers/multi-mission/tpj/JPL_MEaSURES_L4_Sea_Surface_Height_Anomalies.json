@@ -7,10 +7,7 @@
       "description": "multi-mission/tpj/JPL_MEaSUREs_L4_Sea_Surface_Height_Anomalies",
       "tags": "ssh podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "multi-mission",
-        "multi-mission_tpj"
-      ],
+      "layergroup": "Sea Surface Height Anomalies",
       "product": "SEA_SURFACE_HEIGHT_ALT_GRIDS_L4_2SATS_5DAY_6THDEG_V_JPL1812",
       "inactive": true
     }

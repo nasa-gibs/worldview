@@ -15,11 +15,10 @@
       ],
       "period": "daily",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "reference",
-        "reference_orbits"
+      "layergroup": "Orbital Track",
+      "daynight": [
+        "day"
       ],
-      "daynight": [ "day" ],
       "track": "descending",
       "startDate": "2017-03-08",
       "projections": {

@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_Angstrom_Exponent_Ocean",
       "tags": "aod",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Aerosol Optical Depth",
       "product": "MOD04_L2",
       "wrapadjacentdays": true,
       "tracks": [

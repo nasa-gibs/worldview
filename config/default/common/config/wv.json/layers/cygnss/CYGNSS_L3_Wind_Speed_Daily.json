@@ -7,9 +7,7 @@
       "description": "cygnss/CYGNSS_L3_Wind_Speed_Daily",
       "group": "overlays",
       "tags": "podaac PO.DAAC",
-      "layergroup": [
-        "cygnss"
-      ],
+      "layergroup": "Wind Speed",
       "product": "CYGNSS_L3_V2.1"
     }
   }

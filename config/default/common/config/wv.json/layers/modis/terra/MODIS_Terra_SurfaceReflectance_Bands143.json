@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_SurfaceReflectance_Bands143",
       "tags": "lsr 143 true color",
       "group": "baselayers",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Land Surface Reflectance",
       "product": "MOD09GA",
       "wrapadjacentdays": true,
       "tracks": [

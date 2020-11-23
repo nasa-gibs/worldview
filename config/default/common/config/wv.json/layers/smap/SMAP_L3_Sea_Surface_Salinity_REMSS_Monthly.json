@@ -7,9 +7,7 @@
       "description": "smap/SMAP_L3_Sea_Surface_Salinity_REMSS_Monthly",
       "tags": "sss podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Sea Surface Salinity",
       "product": "SMAP_RSS_L3_SSS_SMI_MONTHLY_V4_70KM",
       "wrapadjacentdays": true
     }

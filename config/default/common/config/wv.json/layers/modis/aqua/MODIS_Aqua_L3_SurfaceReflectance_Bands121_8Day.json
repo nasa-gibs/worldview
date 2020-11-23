@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_L3_SurfaceReflectance_Bands121_8Day",
       "tags": "lsr 121 false color",
       "group": "baselayers",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Land Surface Reflectance",
       "product": "MYD09Q1",
       "wrapadjacentdays": true,
       "daynight": [

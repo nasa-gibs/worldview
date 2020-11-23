@@ -7,9 +7,7 @@
       "description": "amsr2/AMSRU2_Sea_Ice_Brightness_Temp_6km_89V",
       "tags": "amsr-u2",
       "group": "overlays",
-      "layergroup": [
-        "amsr2"
-      ],
+      "layergroup": "Sea Ice Brightness Temperature",
       "product": "AU_SI6"
     }
   }

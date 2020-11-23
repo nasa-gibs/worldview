@@ -7,9 +7,7 @@
       "description": "oco3/OCO-3_Carbon_Dioxide_Total_Column_Average",
       "tags": "oco3 co2",
       "group": "overlays",
-      "layergroup": [
-        "oco3"
-      ],
+      "layergroup": "Carbon Dioxide",
       "product": "OCO3_L2_Lite_FP",
       "wrapadjacentdays": true,
       "daynight": [

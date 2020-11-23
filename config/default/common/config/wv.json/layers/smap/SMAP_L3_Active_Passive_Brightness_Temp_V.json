@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Radar + Radiometer",
       "description": "smap/SMAP_L3_Active_Passive_Brightness_Temp_V",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "SPL3SMAP",
       "inactive": true,
       "wrapadjacentdays": true

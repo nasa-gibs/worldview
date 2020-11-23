@@ -10,9 +10,7 @@
       "product": "AIRX3C2M",
       "inactive": true,
       "wrapadjacentdays": true,
-      "layergroup": [
-        "airs"
-      ]
+      "layergroup": "Carbon Dioxide"
     }
   }
 }

@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_NDVI_8Day",
       "group": "overlays",
       "tags": "ndvi normalized difference vegetation index",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Vegetation Indices",
       "product": "MOD13Q4N",
       "wrapadjacentdays": true
     }

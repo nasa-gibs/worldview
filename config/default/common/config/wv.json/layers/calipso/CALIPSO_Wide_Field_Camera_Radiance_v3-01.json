@@ -6,9 +6,7 @@
       "subtitle": "CALIPSO / WFC",
       "description": "calipso/CALIPSO_Wide_Field_Camera_Radiance_v3-01",
       "group": "overlays",
-      "layergroup": [
-        "calipso"
-      ],
+      "layergroup": "Radiance",
       "product": "",
       "inactive": true,
       "tracks": [

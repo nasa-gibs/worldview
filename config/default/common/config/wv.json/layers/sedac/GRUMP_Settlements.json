@@ -9,10 +9,7 @@
       "tags": "vectors",
       "group": "overlays",
       "downloadId": "GRUMP_Settlements",
-      "layergroup": [
-        "sedac",
-        "vector"
-      ],
+      "layergroup": "Settlements",
       "product": "CIESIN_SEDAC_GRUMPv1_STLMNT01",
       "uniqueIdenitifier": "Latlongid",
       "inactive": true,
@@ -27,12 +24,12 @@
       "breakPointLayer": {
         "id": "GRUMP_Settlements",
         "type": "wms",
-        "format":   "image/png",
+        "format": "image/png",
         "breakPointType": "max",
         "projections": {
           "geographic": {
             "source": "GIBS:wms",
-            "resolutionBreakPoint":  0.017578125
+            "resolutionBreakPoint": 0.017578125
           }
         }
       }

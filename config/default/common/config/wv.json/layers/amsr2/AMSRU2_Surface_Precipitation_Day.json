@@ -7,9 +7,7 @@
       "description": "amsr2/AMSRU2_Surface_Precipitation_Day",
       "tags": "amsru2 rain",
       "group": "overlays",
-      "layergroup": [
-        "amsr2"
-      ],
+      "layergroup": "Precipitation Rate",
       "product": "AU_Rain_NRT_R01",
       "tracks": [
         "OrbitTracks_GCOM-W1_Ascending"

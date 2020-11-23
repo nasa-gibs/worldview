@@ -7,9 +7,7 @@
       "description": "ceres/CERES_EBAF_Surface_Net_Shortwave_Flux_Clear_Sky_Monthly",
       "tags": "energy balanced and filled",
       "group": "overlays",
-      "layergroup": [
-        "ceres"
-      ],
+      "layergroup": "Surface Flux",
       "product": "CERES_EBAF-Surface",
       "inactive": true,
       "wrapadjacentdays": true,

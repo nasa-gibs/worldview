@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_CorrectedReflectance_TrueColor",
       "tags": "natural color cr",
       "group": "baselayers",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Corrected Reflectance",
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_Aqua_Ascending"

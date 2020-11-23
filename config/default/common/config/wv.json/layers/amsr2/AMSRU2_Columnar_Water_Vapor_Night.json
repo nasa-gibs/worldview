@@ -7,9 +7,7 @@
       "description": "amsr2/AMSRU2_Columnar_Water_Vapor_Night",
       "tags": "amsru2",
       "group": "overlays",
-      "layergroup": [
-        "amsr2"
-      ],
+      "layergroup": "Water Vapor",
       "product": "AU_Rain_NRT_R01",
       "tracks": [
         "OrbitTracks_GCOM-W1_Descending"

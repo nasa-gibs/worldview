@@ -13,10 +13,7 @@
         512
       ],
       "period": "daily",
-      "layergroup": [
-        "reference",
-        "reference_orbits"
-      ],
+      "layergroup": "Orbital Track",
       "daynight": "",
       "track": "descending",
       "startDate": "2014-02-27",

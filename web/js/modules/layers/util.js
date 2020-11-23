@@ -1380,12 +1380,10 @@ export function getOverlayGroups(layers, prevGroups = []) {
     if (group !== 'overlays') {
       return;
     }
-    // TODO just using first group in array for now
-    const groupName = layergroup && layergroup.length ? layergroup[0] : 'Other';
-    if (allGroupsMap[groupName]) {
-      allGroupsMap[groupName].push(id);
+    if (allGroupsMap[layergroup]) {
+      allGroupsMap[layergroup].push(id);
     } else {
-      allGroupsMap[groupName] = [id];
+      allGroupsMap[layergroup] = [id];
     }
   });
   return Object.keys(allGroupsMap).map((groupName) => {

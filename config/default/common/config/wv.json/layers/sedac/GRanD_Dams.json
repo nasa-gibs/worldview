@@ -8,10 +8,7 @@
       "group": "overlays",
       "tags": "vectors",
       "type": "vector",
-      "layergroup": [
-        "sedac",
-        "vector"
-      ],
+      "layergroup": "Dams",
       "vectorStyle": {
         "id": "GRanD_Dams"
       },
@@ -25,7 +22,7 @@
       "breakPointLayer": {
         "id": "GRanD_Dams",
         "type": "wms",
-        "format":   "image/png",
+        "format": "image/png",
         "breakPointType": "max",
         "projections": {
           "geographic": {

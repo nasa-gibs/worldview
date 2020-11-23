@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Day",
       "tags": "lst",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Land Surface Temperature",
       "product": "MOD11_L2_DAY",
       "wrapadjacentdays": true,
       "tracks": [

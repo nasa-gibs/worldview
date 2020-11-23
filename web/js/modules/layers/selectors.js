@@ -97,10 +97,7 @@ export function hasMeasurementSetting(current, source, config, projId) {
     if (layer) {
       const proj = layer.projections;
       if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {
-        if (
-          layer.layergroup
-          && layer.layergroup.indexOf('reference_orbits') !== -1
-        ) {
+        if (layer.layergroup === 'Orbital Track') {
           if (current.id === 'orbital-track') {
             hasSetting = true;
           }
@@ -160,7 +157,7 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   // Place new layer in the appropriate array position
   if (def.group === 'overlays') {
     // TODO assuming first group in the array again here
-    const groupIdx = layers.findIndex((l) => (l.layergroup || [])[0] === (def.layergroup || [])[0]);
+    const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
     if (groupOverlays && groupIdx) {
       layers.splice(groupIdx, 0, def);
     } else {

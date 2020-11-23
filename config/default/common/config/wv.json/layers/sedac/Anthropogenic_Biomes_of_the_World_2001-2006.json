@@ -7,9 +7,7 @@
       "description": "sedac/Anthropogenic_Biomes_of_the_World_2001-2006",
       "tags": "human sedac biosphere anthrome",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Land Cover",
       "product": "CIESIN_SEDAC_ANTHROMES_v1",
       "inactive": true,
       "wrapX": true

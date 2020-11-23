@@ -6,9 +6,7 @@
       "subtitle": "GPM / GMI",
       "description": "gpm/GMI_Brightness_Temp_Asc",
       "group": "overlays",
-      "layergroup": [
-        "gpm"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "GPM_1CGPMGMI",
       "tracks": [
         "OrbitTracks_GPM_Ascending"
