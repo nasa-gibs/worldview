@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
-import { debounce as lodashDebounce } from 'lodash';
+import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import moment from 'moment';
 import SmartHandoffModal from './smart-handoff-modal';
 import Button from '../../components/util/button';
@@ -63,11 +63,17 @@ class SmartHandoff extends Component {
    * @param {*} prevProps
    */
   componentDidUpdate(prevProps) {
-    const { selectedDate, activeLayers } = this.props;
-    const { currentExtent, selectedLayer } = this.state;
+    const {
+      selectedDate,
+      activeLayers,
+    } = this.props;
+    const {
+      currentExtent,
+      selectedLayer,
+    } = this.state;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
-    const isLayerStillActive = activeLayers.find((layer) => selectedLayer.conceptId === layer.conceptId);
+    const isLayerStillActive = activeLayers.find(({ conceptId }) => selectedLayer.conceptId === conceptId);
 
     if (!isLayerStillActive) {
       this.resetState();
@@ -105,8 +111,12 @@ class SmartHandoff extends Component {
 
     if (selectedLayer.id) {
       const {
-        x, y, width, height,
+        x,
+        y,
+        width,
+        height,
       } = boundaries;
+
       const newBoundaries = {
         x,
         y,
@@ -175,7 +185,11 @@ class SmartHandoff extends Component {
    */
   async updateGranuleCount(currentExtent) {
     const { selectedDate } = this.props;
-    const { selectedLayer, showBoundingBox } = this.state;
+
+    const {
+      selectedLayer,
+      showBoundingBox,
+    } = this.state;
 
     // Places the compoent state in a loading state; triggers {...} animation.
     this.setState({ isSearchingForGranules: true });
@@ -198,26 +212,23 @@ class SmartHandoff extends Component {
     let urlSelectedGranules = urlTotalGranules;
 
     // Gets the total amount of granules that the layer has
-    totalGranules = await fetch(urlTotalGranules, { timeout: 5000 })
-      .then(async(response) => {
-        const result = await response.json();
-        return result.feed.facets.children[0].children[0].children[0].count;
-      })
-      .catch((error) => 0);
+    const totalGranuleResponse = await fetch(urlTotalGranules, { timeout: 5000 });
+    const totalResult = await totalGranuleResponse.json();
+    totalGranules = lodashGet(totalResult, 'feed.facets.children[0].children[0].children[0].count', 0);
 
     // Gets the total subset of granules that are within the defining bounding box
     if (showBoundingBox) {
       urlSelectedGranules += `&bounding_box=${currentExtent.southWest},${currentExtent.northEast}`;
-      selectedGranules = await fetch(urlSelectedGranules, { timeout: 5000 })
-        .then(async(response) => {
-          const result = await response.json();
-          return result.feed.facets.children[0].children[0].children[0].count;
-        })
-        .catch((error) => 0);
+      const selectedGranulesResponse = await fetch(urlSelectedGranules, { timeout: 5000 });
+      const selectedResult = await selectedGranulesResponse.json();
+      selectedGranules = lodashGet(selectedResult, 'feed.facets.children[0].children[0].children[0].count', 0);
     }
 
-    this.setState({ selectedGranules, totalGranules });
-    this.setState({ isSearchingForGranules: false });
+    this.setState({
+      selectedGranules,
+      totalGranules,
+      isSearchingForGranules: false,
+    });
   }
 
   /**
@@ -233,23 +244,30 @@ class SmartHandoff extends Component {
       selectedDate,
     } = this.props;
 
-    const { selectedLayer, isSearchingForGranules } = this.state;
     const {
-      selectedGranules, totalGranules, coordinates, currentExtent, showBoundingBox,
+      boundaries,
+      selectedLayer,
+      isSearchingForGranules,
+      selectedGranules,
+      totalGranules,
+      coordinates,
+      currentExtent,
+      showBoundingBox,
     } = this.state;
 
     // Determine if data-download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
-    const { boundaries } = this.state;
     const {
-      x, y, x2, y2,
+      x,
+      y,
+      x2,
+      y2,
     } = boundaries;
 
     // Used to determine if the added smart-handoff modal should be shown
     const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
-    let showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
-    showModal = true;
+    const showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
 
     // Determine if the download button is enabled
     const isValidDownload = selectedLayer.id !== undefined;
@@ -274,10 +292,10 @@ class SmartHandoff extends Component {
           <hr />
 
           <div id="smart-handoff-layer-list">
-            {activeLayers.map((layer, index) => {
+            {activeLayers.map((layer) => {
               if (layer.conceptId) {
                 return (
-                  <div className="layer-item">
+                  <div className="layer-item" key={layer.id}>
                     <input
                       id={layer.id}
                       type="radio"
@@ -382,8 +400,15 @@ class SmartHandoff extends Component {
  * @param {*} showBoundingBox
  */
 const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords, showBoundingBox) => () => {
-  const { conceptId, daynight } = selectedLayer;
-  const { southWest, northEast } = extentCoords;
+  const {
+    conceptId,
+    daynight,
+  } = selectedLayer;
+
+  const {
+    southWest,
+    northEast,
+  } = extentCoords;
 
   const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
   const endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
@@ -420,14 +445,26 @@ SmartHandoff.propTypes = {
  * @param {*} state | Encapsulates the entire Redux store state.
  * @param {*} ownProps | Data from SmartHandoff that is used to retrieve data from the store.
  */
-const mapStateToProps = (state, ownProps) => {
-  const { tabTypes } = ownProps;
+const mapStateToProps = (state) => {
   const {
-    browser, layers, map, proj, compare, sidebar, boundaries,
+    browser,
+    layers,
+    map,
+    proj,
+    compare,
+    sidebar,
+    boundaries,
   } = state;
-  const { screenWidth, screenHeight } = browser;
+
+  const {
+    screenWidth,
+    screenHeight,
+  } = browser;
+
   const { activeString } = compare;
+
   const activeLayers = getLayers(layers[activeString], { proj: proj.id });
+
   return {
     activeLayers,
     boundaries,
@@ -437,7 +474,6 @@ const mapStateToProps = (state, ownProps) => {
     screenWidth,
     screenHeight,
     selectedDate: getSelectedDate(state),
-    tabTypes,
   };
 };
 

@@ -134,24 +134,4 @@ SmartHandoffModal.propTypes = {
   selectedLayer: PropTypes.object,
 };
 
-/**
- * ReactRedux; used for selecting the part of the data from the store
- * that the Smarthandoff component needs. This is called every time the
- * store state changes.
- * @param {*} state | Encapsulates the entire Redux store state.
- * @param {*} ownProps | Data from SmartHandoff that is used to retrieve data from the store.
- */
-const mapStateToProps = (state, ownProps) => ({});
-
-/**
- * React-Redux; used for SmartHandoff component to fire specific actions events
- * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
- */
-const mapDispatchToProps = (dispatch) => ({
-
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SmartHandoffModal);
+export default connect()(SmartHandoffModal);
