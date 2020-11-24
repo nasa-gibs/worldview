@@ -11,8 +11,9 @@
                     "description": "viirs/EarthAtNight",
                     "image": "",
                     "settings": [
-                        "VIIRS_Night_Lights",
+                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
                         "VIIRS_SNPP_DayNightBand_ENCC",
+                        "VIIRS_Night_Lights",
                         "VIIRS_Black_Marble",
                         "VIIRS_CityLights_2012"
                     ]
