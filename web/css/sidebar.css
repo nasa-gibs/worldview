@@ -26,6 +26,9 @@
     -o-box-sizing: border-box;
     position: relative;
     border: 1px solid transparent;
+    ul li {
+      list-style: none;
+    }
   }
   .scrollbar-visible .sidebar-panel {
     padding-right: 10px;
