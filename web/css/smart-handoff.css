@@ -82,14 +82,17 @@ label[for='chk-crop-toggle'] {
   font-size: 30px;
 }
 
-.loading-granule-count:after {
+.loading-granule-count::after {
   overflow: hidden;
   display: inline-block;
   vertical-align: bottom;
+  -moz-animation: ellipsis steps(4, end) 900ms infinite;
+  -o-animation: ellipsis steps(4, end) 900ms infinite;
+  -ms-animation: ellipsis steps(4, end) 900ms infinite;
   -webkit-animation: ellipsis steps(4, end) 900ms infinite;
   animation: ellipsis steps(4, end) 900ms infinite;
   content: '\2026'; /* ascii code for the ellipsis character */
-  width: 0px;
+  width: 0;
 }
 
 @keyframes ellipsis {
@@ -98,19 +101,6 @@ label[for='chk-crop-toggle'] {
   }
 }
 
-@-webkit-keyframes ellipsis {
-  to {
-    width: 1.25em;
-  }
-}
-
-.fade-in {
-  animation: fadein ease 1s;
-  -webkit-animation: fadein ease 1s;
-  -moz-animation: fadein ease 1s;
-  -o-animation: fadein ease 1s;
-  -ms-animation: fadein ease 1s;
-}
 @keyframes fadein {
   0% {
     opacity: 0;
@@ -120,40 +110,12 @@ label[for='chk-crop-toggle'] {
   }
 }
 
-@-moz-keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@-o-keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@-ms-keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.fade-in {
+  animation: fadein ease 1s;
+  -webkit-animation: fadein ease 1s;
+  -moz-animation: fadein ease 1s;
+  -o-animation: fadein ease 1s;
+  -ms-animation: fadein ease 1s;
 }
 
 /** Overrides react image crop component  **/
