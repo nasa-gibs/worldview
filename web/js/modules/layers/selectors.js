@@ -158,7 +158,7 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   if (def.group === 'overlays') {
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
-    if (groupOverlays && groupIdx) {
+    if (groupOverlays && groupIdx >= 0) {
       layers.splice(groupIdx, 0, def);
     } else {
       layers.unshift(def);
