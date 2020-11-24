@@ -1224,7 +1224,26 @@ export function mapLocationToLayerState(
         activeB: {
           groupOverlays: { $set: activeB.groupOverlays },
           overlayGroups: { $set: getOverlayGroups(activeB.layers) },
-          layers: { $set: active.layers },
+          layers: { $set: activeB.layers },
+        },
+      },
+    });
+  }
+
+  if (active.layers && active.groupOverlays && !active.overlayGroups) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        active: {
+          overlayGroups: { $set: getOverlayGroups(active.layers) },
+        },
+      },
+    });
+  }
+  if (activeB.layers && activeB.groupOverlays && !activeB.overlayGroups) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          overlayGroups: { $set: getOverlayGroups(activeB.layers) },
         },
       },
     });

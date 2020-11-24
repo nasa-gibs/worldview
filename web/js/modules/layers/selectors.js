@@ -445,8 +445,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
   });
   // Turn on or add new layers
   lodashEach(activeLayers, (layer) => {
-    const id = layer[0];
-    const visible = layer[1];
+    const [id, visible] = layer;
     const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
       newLayers = update(newLayers, {
@@ -458,7 +457,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
         { visible },
         newLayers,
         layerConfig,
-        getLayers(newLayers, { group: 'overlays' }, state).length,
+        getLayers(state, { group: 'overlays' }, newLayers).length,
       );
     }
   });

@@ -1,4 +1,4 @@
-import { get, merge } from 'lodash';
+import { get } from 'lodash';
 import update from 'immutability-helper';
 import { encode } from './modules/link/util';
 // legacy crutches
@@ -99,8 +99,14 @@ export const mapLocationToState = (state, location) => {
       config,
     );
 
-    // deep merge of initial state with location state
-    return merge({}, state, stateFromLocation);
+    // one level deep merge of newState with defaultState
+    Object.keys(stateFromLocation).forEach((key) => {
+      const obj = { ...state[key], ...stateFromLocation[key] };
+      stateFromLocation = update(stateFromLocation, {
+        [key]: { $set: obj },
+      });
+    });
+    return update(state, { $merge: stateFromLocation });
   }
   const startTour = checkTourBuildTimestamp(state.config);
   if (
