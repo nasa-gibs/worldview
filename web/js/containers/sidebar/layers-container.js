@@ -102,6 +102,12 @@ function LayersContainer (props) {
     </DragDropContext>
   );
 
+  const scrollContainerStyles = {
+    maxHeight: `${height}px`,
+    overflowY: 'auto',
+    paddingBottom: '4px',
+  };
+
   return isActive && (
     <>
       <Switch
@@ -110,7 +116,7 @@ function LayersContainer (props) {
         active={groupOverlays}
         toggle={toggleOverlayGroups}
       />
-      <div style={{ maxHeight: `${height}px`, overflowY: 'auto' }}>
+      <div style={scrollContainerStyles}>
         <div className="layer-container sidebar-panel">
 
           {groupOverlays ? renderOverlayGroups() : (
@@ -126,15 +132,17 @@ function LayersContainer (props) {
           )}
 
           {baselayers.length && (
-            <LayerList
-              title="Base Layers"
-              groupId="baselayers"
-              collapsed={baselayersCollapsed}
-              toggleCollapse={() => toggleBaselayersCollapsed(!baselayersCollapsed)}
-              compareState={compareState}
-              layers={baselayers}
-              layerSplit={overlays.length}
-            />
+            <div className="layer-group-baselayers">
+              <LayerList
+                title="Base Layers"
+                groupId="baselayers"
+                collapsed={baselayersCollapsed}
+                toggleCollapse={() => toggleBaselayersCollapsed(!baselayersCollapsed)}
+                compareState={compareState}
+                layers={baselayers}
+                layerSplit={overlays.length}
+              />
+            </div>
           )}
         </div>
       </div>

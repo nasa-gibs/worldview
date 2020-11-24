@@ -128,7 +128,7 @@
 }
 
 #productsHolder footer {
-padding: 5px;
+  padding: 5px;
   width: initial;
 }
 footer .product-buttons {
@@ -145,12 +145,22 @@ footer .compare-toggle-button {
   right: 5px;
   border-bottom: none;
 }
+.layer-group-baselayers {
+  margin-top: 10px;
+}
 .layer-group-case {
   overflow: hidden;
+  .layer-group-header {
+    background: #333;
+    margin-top: 4px;
+    border: 1px solid #444;
+  }
   .layer-group-title {
     display: inline-block;
-    margin: 5px 0 5px;
-    font-size: 14px;
+    margin: 4px 0;
+    font-size: 13px;
+    max-width: 236px;
+    line-height: 15px;
   }
   > .svg-inline--fa,
   .layer-group-icons > .svg-inline--fa {
@@ -201,6 +211,7 @@ footer .compare-toggle-button {
   }
   .layer-group-more-options {
     display: inline;
+    top: -2px;
     > button {
       background: transparent;
       border: none;
