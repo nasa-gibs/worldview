@@ -8,7 +8,6 @@ import {
 } from 'reactstrap';
 import { get as lodashGet } from 'lodash';
 import LayerRow from './layer-row';
-import GroupSettings from '../../components/layer/settings/group-settings';
 import {
   replaceSubGroup,
   getZotsForActiveLayers,
@@ -21,7 +20,6 @@ import {
   removeLayer as removeLayerAction,
   toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
-import { toggleCustomContent } from '../../modules/modal/actions';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -47,7 +45,6 @@ function LayerList(props) {
     removeLayers,
     toggleVisibility,
     toggleCollapse,
-    launchOpacityModal,
   } = props;
   const groupLayerIds = layers.map(({ id }) => id);
 
@@ -113,9 +110,6 @@ function LayerList(props) {
         <DropdownItem onClick={() => toggleVisibility(groupLayerIds, false)}>
           Hide All Layers
         </DropdownItem>
-        <DropdownItem onClick={() => launchOpacityModal(groupLayerIds, title)}>
-          Set Opacity
-        </DropdownItem>
         <DropdownItem onClick={() => removeLayers(groupLayerIds)}>
           Remove Group
         </DropdownItem>
@@ -125,18 +119,17 @@ function LayerList(props) {
 
   return (
     <div className="layer-group-case">
-      <h3 className="layer-group-title">{`${title} (${layers.length})`}</h3>
-
-      <div className="layer-group-icons">
-        {renderDropdownMenu()}
-
-        <FontAwesomeIcon
-          className="layer-group-collapse"
-          icon={!collapsed ? 'caret-down' : 'caret-left'}
-          onClick={() => toggleCollapse(groupId, !collapsed)}
-        />
+      <div className="layer-group-header">
+        <h3 className="layer-group-title">{`${title} (${layers.length})`}</h3>
+        <div className="layer-group-icons">
+          {renderDropdownMenu()}
+          <FontAwesomeIcon
+            className="layer-group-collapse"
+            icon={!collapsed ? 'caret-down' : 'caret-left'}
+            onClick={() => toggleCollapse(groupId, !collapsed)}
+          />
+        </div>
       </div>
-
       <DragDropContext onDragEnd={onDragEnd}>
         {!collapsed && (
           <Droppable
@@ -207,24 +200,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   toggleVisibility: (layerIds, visible) => {
     dispatch(toggleGroupVisibilityAction(layerIds, visible));
-  },
-  launchOpacityModal: (layers, title) => {
-    const key = `LAYER_INFO_MODAL-${title}`;
-    dispatch(
-      toggleCustomContent(key, {
-        headerText: title || 'Layer Options',
-        backdrop: false,
-        bodyComponent: GroupSettings,
-        bodyComponentProps: {
-          layers,
-        },
-        // Using clickableBehindModal: true here causes an issue where switching sidebar
-        // tabs does not close this modal
-        wrapClassName: 'clickable-behind-modal',
-        modalClassName: ' layer-info-settings-modal layer-settings-modal',
-        timeout: 150,
-      }),
-    );
   },
 });
 
