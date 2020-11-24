@@ -119,10 +119,6 @@ a.atexpand {
   text-transform: uppercase;
 }
 
-.sidebar-panel .category {
-  overflow: hidden;
-}
-
 .sidebar-panel li.item {
   padding: 0;
   cursor: move;
@@ -135,12 +131,6 @@ a.atexpand {
 
 .sidebar-panel li.item-static:hover {
   background: rgba(220, 220, 220, 1);
-}
-
-.categoryContainer {
-  display: block;
-  width: 100%;
-  overflow: hidden;
 }
 
 .mCustomScrollBox > .mCSB_scrollTools {
@@ -176,6 +166,7 @@ li.item ul.palette li {
 .sidebar-panel ul.category {
   position: relative;
   overflow: hidden;
+  background: #333;
 }
 
 .sidebar-panel ul.category li h3,
