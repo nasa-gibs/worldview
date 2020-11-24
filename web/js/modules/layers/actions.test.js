@@ -12,7 +12,9 @@ function getState(layers) {
     config,
     proj: { id: 'geographic', selected: config.projections.geographic },
     layers: {
-      active: layers,
+      active: {
+        layers,
+      },
     },
     compare: {
       activeString: 'active',
@@ -25,10 +27,11 @@ function addMockLayer(layerId, layerArray) {
     {},
     layerArray,
     config.layers,
-    getLayers(layerArray, { group: 'all' }, getState(layerArray)).overlays
+    getLayers(getState(layerArray), { group: 'all' }, layerArray).overlays
       .length,
   );
 }
+
 describe('remove Layer action', () => {
   test('removeLayer action removed terra-cr base layer', () => {
     let layers = addLayer('terra-cr', {}, [], config.layers, 0);
@@ -45,10 +48,8 @@ describe('remove Layer action', () => {
 
     const expectedPayload = {
       type: LAYER_CONSTANTS.REMOVE_LAYER,
-      id: 'terra-cr',
-      index: 3,
       activeString: 'active',
-      def,
+      layersToRemove: [def],
       layers: responseLayers,
     };
     expect(actionResponse).toEqual(expectedPayload);

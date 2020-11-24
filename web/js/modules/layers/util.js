@@ -1192,12 +1192,14 @@ export function mapLocationToLayerState(
   }
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
+    const layers = layersParse11(parameters.products, config);
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
           overlayGroups: {
-            $set: getOverlayGroups(layersParse11(parameters.products, config)),
+            $set: getOverlayGroups(layers),
           },
+          layers: { $set: layers },
         },
       },
     });
@@ -1211,6 +1213,7 @@ export function mapLocationToLayerState(
         active: {
           groupOverlays: { $set: active.groupOverlays },
           overlayGroups: { $set: getOverlayGroups(active.layers) },
+          layers: { $set: active.layers },
         },
       },
     });
@@ -1221,6 +1224,7 @@ export function mapLocationToLayerState(
         activeB: {
           groupOverlays: { $set: activeB.groupOverlays },
           overlayGroups: { $set: getOverlayGroups(activeB.layers) },
+          layers: { $set: active.layers },
         },
       },
     });

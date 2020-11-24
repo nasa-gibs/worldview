@@ -21,9 +21,14 @@ const config = fixtures.config();
 function getState(layers) {
   return {
     config,
-    proj: { id: 'geographic', selected: config.projections.geographic },
+    proj: {
+      id: 'geographic',
+      selected: config.projections.geographic,
+    },
     layers: {
-      active: layers,
+      active: {
+        layers,
+      },
     },
     compare: {
       activeString: 'active',
@@ -36,7 +41,7 @@ function addMockLayer(layerId, layerArray) {
     {},
     layerArray,
     config.layers,
-    getLayers(layerArray, { group: 'all' }, getState(layerArray)).overlays
+    getLayers(getState(layerArray), { group: 'all' }).overlays
       .length,
   );
 }
@@ -59,6 +64,7 @@ describe('Date timescale changes', () => {
     };
     expect(changeTimeScale(interval)).toEqual(expectedAction);
   });
+
   test(`updateAppNow action returns ${UPDATE_APP_NOW}as type and ${
     mockDate} as value`, () => {
     const expectedAction = {
@@ -67,6 +73,7 @@ describe('Date timescale changes', () => {
     };
     expect(updateAppNow(mockDate)).toEqual(expectedAction);
   });
+
   test(`selectDate action returns ${SELECT_DATE}as type and selected `
        + `as activeString and ${mockDate} as value`, () => {
     const expectedAction = {
@@ -83,7 +90,9 @@ describe('Date timescale changes', () => {
         activeString: 'active',
       },
       layers: {
-        active: layers,
+        active: {
+          layers,
+        },
       },
       proj: {
         id: 'geographic',
@@ -92,6 +101,7 @@ describe('Date timescale changes', () => {
     store.dispatch(selectDate(mockDate));
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
+
   test(`selectDate action returns ${SELECT_DATE}as type and selectedB `
        + `as activeString and ${mockDate} as value`, () => {
     const expectedAction = {
@@ -108,7 +118,9 @@ describe('Date timescale changes', () => {
         activeString: 'activeB',
       },
       layers: {
-        activeB: layers,
+        activeB: {
+          layers,
+        },
       },
       proj: {
         id: 'geographic',
@@ -117,6 +129,7 @@ describe('Date timescale changes', () => {
     store.dispatch(selectDate(mockDate));
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
+
   test(`changeCustomInterval action returns ${CHANGE_CUSTOM_INTERVAL} as type and ${
     customInterval} as value and ${delta} as delta`, () => {
     const expectedAction = {
@@ -126,6 +139,7 @@ describe('Date timescale changes', () => {
     };
     expect(changeCustomInterval(delta, customInterval)).toEqual(expectedAction);
   });
+
   test(`selectInterval action returns ${CHANGE_INTERVAL} as type and ${
     interval} as value and ${delta} as delta and true as customSelected`, () => {
     const expectedAction = {

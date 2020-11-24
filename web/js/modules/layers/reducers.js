@@ -40,7 +40,7 @@ const groupState = {
   prevLayers: [],
 };
 
-const initialState = {
+export const initialState = {
   active: { ...groupState },
   activeB: { ...groupState },
   hoveredLayer: '',
