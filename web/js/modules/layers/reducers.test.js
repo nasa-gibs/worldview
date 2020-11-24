@@ -13,16 +13,18 @@ const initalState = getInitialState(config);
 
 describe('Initial layer state test', () => {
   test('initial state loads aqua-cr and terra-cr layers', () => {
-    expect(initalState.active.length).toEqual(2);
-    expect(initalState.active[0].id).toEqual('aqua-cr');
-    expect(initalState.active[1].id).toEqual('terra-cr');
+    expect(initalState.active.layers.length).toEqual(2);
+    expect(initalState.active.layers[0].id).toEqual('aqua-cr');
+    expect(initalState.active.layers[1].id).toEqual('terra-cr');
   });
 });
 
 describe('layer Reducer tests', () => {
   test('ADD_LAYER action updates active layer array with new layer array', () => {
     const newState = update(initalState, {
-      active: { $set: ['updated-layer-array'] },
+      active: {
+        layers: { $set: ['updated-layer-array'] },
+      },
     });
     expect(
       layerReducer(initalState, {
@@ -32,9 +34,12 @@ describe('layer Reducer tests', () => {
       }),
     ).toEqual(newState);
   });
+
   test('RESET_LAYERS action updates active layer array with new layer array', () => {
     const newState = update(initalState, {
-      active: { $set: ['updated-layer-array'] },
+      active: {
+        layers: { $set: ['updated-layer-array'] },
+      },
     });
     expect(
       layerReducer(initalState, {
@@ -44,9 +49,12 @@ describe('layer Reducer tests', () => {
       }),
     ).toEqual(newState);
   });
+
   test('REORDER_LAYERS action updates active layer array with new layer array', () => {
     const newState = update(initalState, {
-      active: { $set: ['updated-layer-array'] },
+      active: {
+        layers: { $set: ['updated-layer-array'] },
+      },
     });
     expect(
       layerReducer(initalState, {
@@ -56,73 +64,82 @@ describe('layer Reducer tests', () => {
       }),
     ).toEqual(newState);
   });
+
   test('REMOVE_LAYER action removes terra-cr from layer array', () => {
     const response = layerReducer(initalState, {
       type: CONSTANTS.REMOVE_LAYER,
       activeString: 'active',
-      index: 1,
-      layers: initalState.active,
+      id: 'terra-cr',
+      layers: initalState.active.layers,
     });
-    expect(response.active).toEqual(initalState.active);
+    expect(response.active.layers).toEqual(initalState.active.layers);
   });
+
   test('INIT_SECOND_LAYER_GROUP copies current layer state', () => {
     const response = layerReducer(initalState, {
       type: CONSTANTS.INIT_SECOND_LAYER_GROUP,
     });
-    expect(initalState.activeB).toEqual([]);
+    expect(initalState.activeB.layers).toEqual([]);
     expect(initalState.active).toEqual(response.activeB);
   });
+
   test('TOGGLE_LAYER_VISIBILITY action toggles layer state visibility', () => {
     const response = layerReducer(initalState, {
       type: CONSTANTS.TOGGLE_LAYER_VISIBILITY,
-      index: 1,
+      id: 'terra-cr',
       visible: false,
       activeString: 'active',
     });
-    expect(initalState.active[1].visible).toBeTruthy();
-    expect(response.active[1].visible).toBeFalsy();
+    expect(initalState.active.layers[1].visible).toBeTruthy();
+    expect(response.active.layers[1].visible).toBeFalsy();
   });
+
   test('SET_THRESHOLD_RANGE_AND_SQUASH action updates palette-related props', () => {
     const response = layerReducer(initalState, {
       type: SET_THRESHOLD_RANGE_AND_SQUASH,
       props: { squash: true, min: 0.3 },
-      layerId: 'terra-cr',
+      id: 'terra-cr',
       activeString: 'active',
     });
-    expect(initalState.active[1].squash).toEqual(undefined);
-    expect(response.active[1].squash).toBeTruthy();
-    expect(response.active[1].min).toEqual(0.3);
+    expect(initalState.active.layers[1].squash).toEqual(undefined);
+    expect(response.active.layers[1].squash).toBeTruthy();
+    expect(response.active.layers[1].min).toEqual(0.3);
   });
+
   test('CLEAR_CUSTOM_PALETTE action removed custom value', () => {
     const customInitial = update(initalState, {
-      active: { 1: { custom: { $set: 'custom-id' } } },
+      active: {
+        layers: { 1: { custom: { $set: 'custom-id' } } },
+      },
     });
     const response = layerReducer(customInitial, {
       type: CLEAR_CUSTOM_PALETTE,
-      layerId: 'terra-cr',
+      id: 'terra-cr',
       activeString: 'active',
     });
-    expect(customInitial.active[1].custom).toEqual('custom-id');
-    expect(response.active[1].custom).toEqual(undefined);
+    expect(customInitial.active.layers[1].custom).toEqual('custom-id');
+    expect(response.active.layers[1].custom).toEqual(undefined);
   });
+
   test('SET_CUSTOM_PALETTE action removed custom value', () => {
     const response = layerReducer(initalState, {
       type: SET_CUSTOM_PALETTE,
-      layerId: 'terra-cr',
+      id: 'terra-cr',
       activeString: 'active',
       paletteId: 'custom-id',
     });
 
-    expect(initalState.active[1].custom).toEqual(undefined);
-    expect(response.active[1].custom).toEqual(['custom-id']);
+    expect(initalState.active.layers[1].custom).toEqual(undefined);
+    expect(response.active.layers[1].custom).toEqual(['custom-id']);
   });
+
   test('REMOVE_LAYER action removes terra-cr from layer array', () => {
     const response = layerReducer(initalState, {
       type: CONSTANTS.UPDATE_OPACITY,
       activeString: 'active',
       opacity: 0.4,
-      index: 1,
+      id: 'terra-cr',
     });
-    expect(response.active[1].opacity).toEqual(0.4);
+    expect(response.active.layers[1].opacity).toEqual(0.4);
   });
 });
