@@ -12,7 +12,7 @@ import {
   toggleOverlayGroups as toggleOverlayGroupsAction,
   toggleGroupCollapsed as toggleGroupCollapsedAction,
 } from '../../modules/layers/actions';
-import Switch from '../../components/util/switch';
+import Checkbox from '../../components/util/checkbox';
 
 function LayersContainer (props) {
   const {
@@ -106,16 +106,11 @@ function LayersContainer (props) {
     maxHeight: `${height}px`,
     overflowY: 'auto',
     paddingBottom: '4px',
+    minHeight: '100px',
   };
 
   return isActive && (
     <>
-      <Switch
-        id="layer-group-toggle"
-        label="Group Overlays"
-        active={groupOverlays}
-        toggle={toggleOverlayGroups}
-      />
       <div style={scrollContainerStyles}>
         <div className="layer-container sidebar-panel">
 
@@ -131,20 +126,26 @@ function LayersContainer (props) {
             />
           )}
 
-          {baselayers.length && (
-            <div className="layer-group-baselayers">
-              <LayerList
-                title="Base Layers"
-                groupId="baselayers"
-                collapsed={baselayersCollapsed}
-                toggleCollapse={() => toggleBaselayersCollapsed(!baselayersCollapsed)}
-                compareState={compareState}
-                layers={baselayers}
-                layerSplit={overlays.length}
-              />
-            </div>
-          )}
+          <div className="layer-group-baselayers">
+            <LayerList
+              title="Base Layers"
+              groupId="baselayers"
+              collapsed={baselayersCollapsed}
+              toggleCollapse={() => toggleBaselayersCollapsed(!baselayersCollapsed)}
+              compareState={compareState}
+              layers={baselayers}
+              layerSplit={overlays.length}
+            />
+          </div>
         </div>
+      </div>
+      <div className="group-overlays-checkbox">
+        <Checkbox
+          id="group-overlays-checkbox"
+          checked={groupOverlays}
+          onCheck={toggleOverlayGroups}
+          label="Group Similar Layers"
+        />
       </div>
     </>
   );

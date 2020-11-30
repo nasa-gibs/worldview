@@ -14,6 +14,7 @@
   left: 0;
 }
 .wv-checkbox label {
+  color: #fff;
   cursor: pointer;
 }
 .wv-checkbox::before {
