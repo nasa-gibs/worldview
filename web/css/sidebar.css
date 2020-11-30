@@ -45,7 +45,10 @@
     border-bottom-right-radius: 5px;
   }
   .react-switch {
-    margin: 5px 0 3px 8px;
+    margin: 6px 0 3px 8px;
+    .switch-label-text {
+      padding-top: 1px;
+    }
   }
 }
 
@@ -148,6 +151,7 @@ footer .compare-toggle-button {
   right: 5px;
   border-bottom: none;
 }
+
 .layer-group-baselayers {
   margin-top: 10px;
 }
@@ -169,7 +173,6 @@ footer .compare-toggle-button {
   .layer-group-icons > .svg-inline--fa {
     margin: 0 4px;
     color: #fff;
-    font-size: 16px;
     cursor: pointer;
     display: inline;
   }
@@ -229,16 +232,44 @@ footer .compare-toggle-button {
     position: absolute;
     right: 0;
     display: inline;
-    .layer-group-more {
-      font-size: 16px;
-    }
-    .layer-group-collapse {
-      font-size: 22px;
-      width: 15px;
-    }
+  }
+  .layer-group-more {
+    font-size: 16px;
+  }
+  .layer-group-collapse {
+    font-size: 22px;
+    width: 15px;
   }
   .layer-group-visibility {
     margin: 0 5px;
+  }
+}
+
+@media (max-width: 739px) {
+  .layer-group-case .layer-group-header {
+    min-height: 32px;
+    margin-top: 10px;
+    .layer-group-title {
+      font-size: 16px;
+      margin: 6px 0 2px 3px;
+      max-width: 304px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .layer-group-icons {
+      margin-top: 2px;
+    }
+    .layer-group-more-options {
+      top: 0;
+    }
+    .layer-group-collapse {
+      font-size: 32px;
+      width: 21px;
+      vertical-align: top;
+      position: relative;
+      top: -5px;
+    }
   }
 }
 
