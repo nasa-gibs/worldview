@@ -148,7 +148,7 @@ class Sidebar extends React.Component {
     } if (!isCompareMode) {
       return (
         <LayersContainer
-          height={subComponentHeight - 20}
+          height={subComponentHeight - 48}
           isActive={activeTab === 'layers'}
           compareState={activeString}
         />
