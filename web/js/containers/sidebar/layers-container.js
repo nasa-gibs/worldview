@@ -8,7 +8,7 @@ import {
   getAllActiveOverlaysBaselayers, getActiveOverlayGroups, getActiveLayersMap,
 } from '../../modules/layers/selectors';
 import {
-  reorderLayerGroups as reorderLayerGroupsAction,
+  reorderOverlayGroups as reorderOverlayGroupsAction,
   toggleOverlayGroups as toggleOverlayGroupsAction,
   toggleGroupCollapsed as toggleGroupCollapsedAction,
 } from '../../modules/layers/actions';
@@ -24,7 +24,7 @@ function LayersContainer (props) {
     isActive,
     compareState,
     height,
-    reorderLayerGroups,
+    reorderOverlayGroups,
     toggleOverlayGroups,
     toggleCollapse,
   } = props;
@@ -48,7 +48,7 @@ function LayersContainer (props) {
       .flatMap(({ layers }) => layers)
       .map((id) => activeLayersMap[id])
       .concat(baselayers);
-    reorderLayerGroups(newLayers, newGroups);
+    reorderOverlayGroups(newLayers, newGroups);
   };
 
   const renderLayerList = (group, idx) => {
@@ -168,8 +168,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  reorderLayerGroups: (layers, groups) => {
-    dispatch(reorderLayerGroupsAction(layers, groups));
+  reorderOverlayGroups: (layers, groups) => {
+    dispatch(reorderOverlayGroupsAction(layers, groups));
   },
   toggleOverlayGroups: () => {
     dispatch(toggleOverlayGroupsAction());
@@ -192,7 +192,7 @@ LayersContainer.propTypes = {
   compareState: PropTypes.string,
   overlayGroups: PropTypes.array,
   overlays: PropTypes.array,
-  reorderLayerGroups: PropTypes.func,
+  reorderOverlayGroups: PropTypes.func,
   groupOverlays: PropTypes.bool,
   toggleOverlayGroups: PropTypes.func,
   toggleCollapse: PropTypes.func,
