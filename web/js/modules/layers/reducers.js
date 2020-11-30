@@ -77,7 +77,6 @@ export function layerReducer(state = initialState, action) {
 
   switch (action.type) {
     case RESET_LAYERS:
-    case REORDER_OVERLAY_GROUPS:
     case ADD_LAYER:
     case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
@@ -86,12 +85,20 @@ export function layerReducer(state = initialState, action) {
     case TOGGLE_OVERLAY_GROUP_VISIBILITY:
       return update(state, {
         [compareState]: {
+          layers: { $set: action.layers },
+          overlayGroups: { $set: getOverlayGroups(action.layers, getPrevOverlayGroups()) },
+          prevLayers: { $set: [] },
+        },
+      });
+
+    case REORDER_OVERLAY_GROUPS:
+      return update(state, {
+        [compareState]: {
           layers: {
             $set: action.layers,
           },
           overlayGroups: {
-            $set: action.overlayGroups
-              || getOverlayGroups(action.layers, getPrevOverlayGroups()),
+            $set: action.overlayGroups,
           },
           prevLayers: { $set: [] },
         },
@@ -143,7 +150,6 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
-
 
     case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_DISABLED_CLASSIFICATION: {

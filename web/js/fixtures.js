@@ -196,7 +196,11 @@ fixtures.config = function() {
     now: new Date(),
     defaults: {
       projection: 'geographic',
-      startingLayers: [{ id: 'terra-cr' }, { id: 'aqua-cr', hidden: 'true' }],
+      startingLayers: [
+        { id: 'terra-aod' },
+        { id: 'terra-cr' },
+        { id: 'aqua-cr', hidden: 'true' },
+      ],
     },
     projections: {
       geographic: {
@@ -275,6 +279,7 @@ fixtures.config = function() {
         group: 'overlays',
         period: 'daily',
         startDate: '2000-01-01',
+        layergroup: 'AOD',
         projections: {
           geographic: {},
         },
@@ -287,6 +292,7 @@ fixtures.config = function() {
         group: 'overlays',
         period: 'daily',
         startDate: '2002-01-01',
+        layergroup: 'AOD',
         projections: {
           geographic: {},
         },
@@ -297,6 +303,7 @@ fixtures.config = function() {
       'combo-aod': {
         id: 'combo-aod',
         group: 'overlays',
+        layergroup: 'AOD',
         projections: {
           geographic: {},
         },
@@ -309,7 +316,7 @@ fixtures.config = function() {
         type: 'vector',
         tags: 'vector vectors',
         group: 'overlays',
-        layergroup: ['vector'],
+        layergroup: 'Orbital Track',
         inactive: true,
         vectorStyle: {
           id: 'OrbitTracks_Aqua_Ascending',
