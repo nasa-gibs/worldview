@@ -273,6 +273,15 @@ footer .compare-toggle-button {
   }
 }
 
+.group-overlays-checkbox {
+  margin: 4px 0 0 4px;
+}
+@media (max-width: 739px) {
+  .group-overlays-checkbox {
+    margin: 4px 0 0 10px;
+  }
+}
+
 .wv-ab-mode-selection-case {
   margin: 5px;
   color: #fff;
