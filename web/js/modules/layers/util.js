@@ -1179,6 +1179,7 @@ export function mapLocationToLayerState(
 ) {
   let newStateFromLocation = stateFromLocation;
   const { active, activeB } = stateFromLocation.layers;
+
   if (!parameters.l1 && parameters.ca !== undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
@@ -1206,7 +1207,7 @@ export function mapLocationToLayerState(
   }
   // Layers are grouped
 
-  // TODO need to set layer order as well based on the groups
+  // TODO need to set layer order as well based on the groups?
   if (parameters.l && parameters.lg === undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
@@ -1230,20 +1231,27 @@ export function mapLocationToLayerState(
     });
   }
 
-  if (active.layers && active.groupOverlays && !active.overlayGroups) {
+  if (active && active.layers) {
+    const populateGroups = active.groupOverlays && !active.overlayGroups;
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
-          overlayGroups: { $set: getOverlayGroups(active.layers) },
+          overlayGroups: {
+            $set: populateGroups ? getOverlayGroups(active.layers) : [],
+          },
         },
       },
     });
   }
-  if (activeB && activeB.layers && activeB.groupOverlays && !activeB.overlayGroups) {
+
+  if (activeB && activeB.layers) {
+    const populateGroups = activeB.groupOverlays && !activeB.overlayGroups;
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
-          overlayGroups: { $set: getOverlayGroups(activeB.layers) },
+          overlayGroups: {
+            $set: populateGroups ? getOverlayGroups(activeB.layers) : [],
+          },
         },
       },
     });

@@ -13,6 +13,7 @@ import {
   toggleGroupCollapsed as toggleGroupCollapsedAction,
 } from '../../modules/layers/actions';
 import Checkbox from '../../components/util/checkbox';
+import util from '../../util/util';
 
 function LayersContainer (props) {
   const {
@@ -62,7 +63,7 @@ function LayersContainer (props) {
       >
         {(provided) => (
           <li
-            id={`${compareState}-${groupName}`}
+            id={`${compareState}-${util.cleanId(groupName)}`}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}

@@ -148,6 +148,7 @@ export function layerReducer(state = initialState, action) {
               },
             },
           },
+          prevLayers: { $set: [] },
         },
       });
 
