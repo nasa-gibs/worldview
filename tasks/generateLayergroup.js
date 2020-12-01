@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const fs = require('fs');
-// const dir = require('node-dir');
+const dir = require('node-dir');
 
 const allLayerPropsMap = {};
 const SOURCE_DIR = './config/default/common/config/wv.json/layers/';
