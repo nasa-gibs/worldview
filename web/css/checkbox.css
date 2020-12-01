@@ -28,6 +28,9 @@
   line-height: 20px;
   margin-right: 5px;
 }
+.wv-checkbox.gray label{
+  color: #666;
+}
 .wv-checkbox.gray::before {
   border: 2px solid #808080;
 }
