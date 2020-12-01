@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const fs = require('fs');
-const dir = require('node-dir');
+// const dir = require('node-dir');
 
 const allLayerPropsMap = {};
 const SOURCE_DIR = './config/default/common/config/wv.json/layers/';
@@ -15,10 +15,6 @@ const errCallback = (err) => {
     throw err;
   }
 };
-
-function capitalizeFirstLetter(string) {
-  return !string ? '' : string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 function setLayerProp (layer, prop, value) {
   const featuredMeasurement = prop === 'measurements' && (value && value.includes('Featured'));

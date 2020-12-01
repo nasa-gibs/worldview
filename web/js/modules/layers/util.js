@@ -1239,7 +1239,7 @@ export function mapLocationToLayerState(
       },
     });
   }
-  if (activeB.layers && activeB.groupOverlays && !activeB.overlayGroups) {
+  if (activeB && activeB.layers && activeB.groupOverlays && !activeB.overlayGroups) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
