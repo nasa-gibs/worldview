@@ -9,18 +9,14 @@ import { getFormattedCoordinates } from './util';
 /**
  * getCoordinatesDialogTitle
  *
- * @param {Object} address
- * @param {Object} error
- * @param {String} formattedLatitude
- * @param {String} formattedLongitude
+ * @param {Object} geocodeProperties | address, error
  *
- * @returns {String} title
+ * @returns {String | undefined} title
  */
-const getCoordinatesDialogTitle = (address, error, formattedLatitude, formattedLongitude) => {
+const getCoordinatesDialogTitle = (geocodeProperties) => {
+  const { address, error } = geocodeProperties;
   let title;
-  if (error) {
-    title = `${formattedLatitude.trim()}, ${formattedLongitude.trim()}`;
-  } else if (address) {
+  if (address && !error) {
     /* eslint-disable camelcase */
     const {
       Addr_type,
@@ -80,12 +76,10 @@ export const renderCoordinatesTooltip = (map, config, coordinates, coordinatesMe
 
   // add tooltip overlay to map and position based on marker coordinates
   map.addOverlay(tooltipOverlay);
-  toggleDialogVisible(true);
   tooltipOverlay.setPosition(coordinatesPosition);
 
   // helper function to remove/hide tooltip overlay
   const removeCoordinatesDialog = () => {
-    map.removeOverlay(tooltipOverlay);
     toggleDialogVisible(false);
   };
 
@@ -109,18 +103,17 @@ export const renderCoordinatesTooltip = (map, config, coordinates, coordinatesMe
  */
 export const getCoordinatesMetadata = (geocodeProperties) => {
   const { latitude, longitude, reverseGeocodeResults } = geocodeProperties;
-  const { address, error } = reverseGeocodeResults;
 
   // get formatted coordinates
   const [formattedLatitude, formattedLongitude] = getFormattedCoordinates(latitude, longitude);
 
   // build title based on available parameters
-  const title = getCoordinatesDialogTitle(address, error, formattedLatitude, formattedLongitude);
+  const title = getCoordinatesDialogTitle(reverseGeocodeResults, formattedLatitude, formattedLongitude);
   const coordinates = `${formattedLatitude.trim()}, ${formattedLongitude.trim()}`;
 
   return {
     coordinates,
-    title,
+    title: title || coordinates,
   };
 };
 
@@ -129,14 +122,10 @@ export const getCoordinatesMetadata = (geocodeProperties) => {
  *
  * @param {Array} pixels
  * @param {Object} map
- * @param {Object} config
- * @param {Boolean} isMobile
- * @param {Function} clearCoordinates
- * @param {Function} toggleDialogVisible
  *
  * @returns {Void}
  */
-export const getCoordinatesDialogAtMapPixel = (pixels, map, config, isMobile, clearCoordinates, toggleDialogVisible) => {
+export const isCoordinatesDialogAvailableAtPixel = (pixels, map) => {
   // check for existing coordinate marker tooltip overlay and prevent multiple renders
   const mapOverlays = map.getOverlays().getArray();
   const mapMarkerId = 'coordinates-map-marker';
@@ -148,17 +137,6 @@ export const getCoordinatesDialogAtMapPixel = (pixels, map, config, isMobile, cl
     return;
   }
 
-  map.forEachFeatureAtPixel(pixels, (feature) => {
-    const featureId = feature.getId();
-    if (featureId === mapMarkerId) {
-      const featureProperties = feature.getProperties();
-      const { latitude, longitude } = featureProperties;
-
-      // get metadata for tooltip
-      const coordinatesMetadata = getCoordinatesMetadata(featureProperties);
-
-      // create tooltip overlay React DOM element
-      renderCoordinatesTooltip(map, config, [latitude, longitude], coordinatesMetadata, isMobile, clearCoordinates, toggleDialogVisible);
-    }
-  });
+  const featureCheck = (feature) => feature.getId() === mapMarkerId;
+  return map.forEachFeatureAtPixel(pixels, featureCheck);
 };

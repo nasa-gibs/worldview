@@ -8,9 +8,9 @@ import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import Alert from '../util/alert';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
-import { getCoordinatesDialogAtMapPixel } from './ol-coordinates-marker-util';
+import { isCoordinatesDialogAvailableAtPixel } from './ol-coordinates-marker-util';
 import {
-  clearCoordinates, selectCoordinatesToFly, toggleDialogVisible, toggleReverseGeocodeActive,
+  setPlaceMarker, toggleDialogVisible, toggleReverseGeocodeActive,
 } from '../../modules/geosearch/actions';
 import { areCoordinatesWithinExtent } from '../../modules/geosearch/util';
 import { reverseGeocode } from '../../modules/geosearch/util-api';
@@ -60,14 +60,8 @@ export class CoordinatesMarker extends Component {
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
     if (hasFeatures && !isShowingClick && !measureIsActive) {
-      let isActiveLayer = false;
-      map.forEachFeatureAtPixel(pixels, (feature) => {
-        const featureId = feature.getId();
-        const isMarker = featureId === 'coordinates-map-marker';
-        if (isMarker) {
-          isActiveLayer = true;
-        }
-      });
+      const featureCheck = (feature) => feature.getId() === 'coordinates-map-marker';
+      const isActiveLayer = map.forEachFeatureAtPixel(pixels, featureCheck);
       if (isActiveLayer) {
         changeCursor(true);
       }
@@ -93,9 +87,9 @@ export class CoordinatesMarker extends Component {
   singleclick(e, map) {
     const {
       config,
-      measureIsActive,
-      selectCoordinatesToFly,
       isCoordinateSearchActive,
+      measureIsActive,
+      setPlaceMarker,
       toggleReverseGeocodeActive,
     } = this.props;
     const {
@@ -116,7 +110,7 @@ export class CoordinatesMarker extends Component {
       }
       // get available reverse geocoding for coordinates and fly to point
       reverseGeocode([longitude, latitude], config).then((results) => {
-        selectCoordinatesToFly([longitude, latitude], results);
+        setPlaceMarker([longitude, latitude], results);
       });
       this.setState({ showExtentAlert: false });
     } else {
@@ -129,12 +123,13 @@ export class CoordinatesMarker extends Component {
 
   getCoordinatesDialog = (pixels, olMap) => {
     const {
-      config,
-      clearCoordinates,
-      isMobile,
       toggleDialogVisible,
     } = this.props;
-    getCoordinatesDialogAtMapPixel(pixels, olMap, config, isMobile, clearCoordinates, toggleDialogVisible);
+    const isMarker = isCoordinatesDialogAvailableAtPixel(pixels, olMap);
+
+    if (isMarker) {
+      toggleDialogVisible(true);
+    }
   }
 
   // render geosearch extent alert for selecting points outside of the current map extent
@@ -154,9 +149,7 @@ export class CoordinatesMarker extends Component {
 
   render() {
     const { showExtentAlert } = this.state;
-    return showExtentAlert
-      ? this.renderExtentAlert()
-      : null;
+    return showExtentAlert && this.renderExtentAlert();
   }
 }
 
@@ -183,32 +176,27 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  selectCoordinatesToFly: (coordinates, reverseGeocodeResults) => {
-    dispatch(selectCoordinatesToFly(coordinates, reverseGeocodeResults));
-  },
-  toggleReverseGeocodeActive: (isActive) => {
-    dispatch(toggleReverseGeocodeActive(isActive));
-  },
   changeCursor: (bool) => {
     dispatch(changeCursorActionCreator(bool));
   },
-  clearCoordinates: () => {
-    dispatch(clearCoordinates());
+  setPlaceMarker: (coordinates, reverseGeocodeResults) => {
+    dispatch(setPlaceMarker(coordinates, reverseGeocodeResults));
   },
   toggleDialogVisible: (isVisible) => {
     dispatch(toggleDialogVisible(isVisible));
+  },
+  toggleReverseGeocodeActive: (isActive) => {
+    dispatch(toggleReverseGeocodeActive(isActive));
   },
 });
 CoordinatesMarker.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
-  clearCoordinates: PropTypes.func.isRequired,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
-  isMobile: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   mouseEvents: PropTypes.object.isRequired,
-  selectCoordinatesToFly: PropTypes.func.isRequired,
+  setPlaceMarker: PropTypes.func.isRequired,
   toggleDialogVisible: PropTypes.func.isRequired,
   toggleReverseGeocodeActive: PropTypes.func.isRequired,
 };

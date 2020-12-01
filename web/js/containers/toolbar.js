@@ -30,9 +30,8 @@ import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
-// GeoSearch
 import Geosearch from '../components/geosearch/geosearch';
-import { toggleShowGeosearch } from '../modules/geosearch/actions';
+import { toggleShowGeosearch, toggleDialogVisible } from '../modules/geosearch/actions';
 
 
 Promise.config({ cancellation: true });
@@ -102,10 +101,18 @@ class toolbarContainer extends Component {
 
   async openImageDownload() {
     const {
-      openModal, hasCustomPalette, isRotated, hasGraticule, activePalettes, rotation, refreshStateAfterImageDownload,
+      openModal,
+      hasCustomPalette,
+      isRotated,
+      hasGraticule,
+      activePalettes,
+      rotation,
+      refreshStateAfterImageDownload,
+      toggleDialogVisible,
     } = this.props;
 
     const paletteStore = lodashCloneDeep(activePalettes);
+    toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
@@ -389,6 +396,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDistractionFreeMode: () => {
     dispatch(toggleDistractionFreeMode());
   },
+  toggleDialogVisible: (isVisible) => {
+    dispatch(toggleDialogVisible(isVisible));
+  },
   toggleShowGeosearch: () => {
     dispatch(toggleShowGeosearch());
   },
@@ -468,5 +478,6 @@ toolbarContainer.propTypes = {
   requestNotifications: PropTypes.func,
   rotation: PropTypes.number,
   shouldBeCollapsed: PropTypes.bool,
+  toggleDialogVisible: PropTypes.func,
   toggleShowGeosearch: PropTypes.func,
 };

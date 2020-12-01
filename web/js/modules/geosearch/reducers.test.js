@@ -80,13 +80,12 @@ describe('geosearchReducer', () => {
   );
   test(
     `${SET_MARKER
-    } updates activeMarker, coordinates, reverseGeocodeResults `
+    } updates coordinates, reverseGeocodeResults `
     + 'and sets isCoordinateSearchActive to false and should return new state',
     () => {
       expect(
         geosearchReducer(geosearchState, {
           type: SET_MARKER,
-          value: {},
           coordinates,
           reverseGeocodeResults,
           isCoordinatesDialogOpen: true,
@@ -95,7 +94,6 @@ describe('geosearchReducer', () => {
         ...geosearchState,
         isCoordinateSearchActive: false,
         coordinates,
-        activeMarker: {},
         reverseGeocodeResults,
         isCoordinatesDialogOpen: true,
       });
@@ -103,7 +101,7 @@ describe('geosearchReducer', () => {
   );
   test(
     `${CLEAR_MARKER
-    } resets cooridnates, activeMarker, and geocode results`
+    } resets cooridnates and geocode results`
       + 'should return new state',
     () => {
       expect(
@@ -113,7 +111,6 @@ describe('geosearchReducer', () => {
       ).toEqual({
         ...geosearchState,
         coordinates: [],
-        activeMarker: null,
         reverseGeocodeResults: null,
         isCoordinatesDialogOpen: false,
       });

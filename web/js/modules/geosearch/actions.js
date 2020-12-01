@@ -9,19 +9,12 @@ import {
 } from './constants';
 import { requestAction } from '../core/actions';
 import {
-  addCoordinatesMarker,
-  animateCoordinates,
-  removeCoordinatesMarker,
+  areCoordinatesWithinExtent,
   setLocalStorageCollapseState,
 } from './util';
 import {
   GEOSEARCH_REQUEST_OPTIONS,
 } from './util-api';
-import {
-  getCoordinatesMetadata,
-  renderCoordinatesTooltip,
-} from '../../components/geosearch/ol-coordinates-marker-util';
-import { getMaxZoomLevelLayerCollection } from '../layers/selectors';
 
 const {
   REQUEST_OPTIONS,
@@ -29,7 +22,9 @@ const {
   CONSTANT_REQUEST_PARAMETERS,
 } = GEOSEARCH_REQUEST_OPTIONS;
 
-// toggle show geosearch component
+/**
+ * Toggle show geosearch component
+ */
 export function toggleShowGeosearch() {
   return (dispatch, getState) => {
     const state = getState();
@@ -47,25 +42,28 @@ export function toggleShowGeosearch() {
   };
 }
 
-// toggle reverse geocode - if active, next click on map will add marker and get coordinates
-export function toggleReverseGeocodeActive(isCoordinateSearchActive) {
+/**
+ * Toggle reverse geocode
+ * @param {Boolean} isActive
+ */
+export function toggleReverseGeocodeActive(isActive) {
   return {
     type: TOGGLE_REVERSE_GEOCODE,
-    value: isCoordinateSearchActive,
+    value: isActive,
   };
 }
 
-// use given coordinates to fly to that point, add marker, and display initial coordinates dialog
-export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
+/**
+ * Set coordinates and reverse geocode results for place
+ * @param {Array} coordinates
+ * @param {Object} reverseGeocodeResults
+ */
+export function setPlaceMarker(coordinates, reverseGeocodeResults) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      browser, config, geosearch, map, layers, proj,
+      config, map,
     } = state;
-    const { sources } = config;
-    const { active } = layers;
-    const { activeMarker } = geosearch;
-    const isMobile = browser.lessThan.medium;
 
     if (reverseGeocodeResults) {
       const { error } = reverseGeocodeResults;
@@ -74,71 +72,39 @@ export function selectCoordinatesToFly(coordinates, reverseGeocodeResults) {
       }
     }
 
-    const marker = addCoordinatesMarker(activeMarker, config, map, coordinates, reverseGeocodeResults);
-    if (!marker) {
+    const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
+    if (!coordinatesWithinExtent) {
       return dispatch({
         type: SET_MARKER,
-        value: null,
         coordinates: [],
         isCoordinatesDialogOpen: false,
       });
     }
 
-    // fly to coordinates and render coordinates tooltip
-    const zoom = map.ui.selected.getView().getZoom();
-    const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
-    const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-    animateCoordinates(map, config, coordinates, maxZoom);
-
-    // handle render initial tooltip
-    const [longitude, latitude] = coordinates;
-    const geocodeProperties = {
-      latitude,
-      longitude,
-      reverseGeocodeResults,
-    };
-    const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-    const clearMarker = () => {
-      removeCoordinatesMarker(marker, map);
-      dispatch({
-        type: CLEAR_MARKER,
-      });
-    };
-    const toggleDialog = (isVisible) => {
-      dispatch({
-        type: TOGGLE_DIALOG_VISIBLE,
-        value: isVisible,
-      });
-    };
-    renderCoordinatesTooltip(map.ui.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarker, toggleDialog);
-
     dispatch({
       type: SET_MARKER,
       reverseGeocodeResults,
       coordinates,
-      value: marker,
       isCoordinatesDialogOpen: true,
     });
   };
 }
 
-// clear coordinates including marker and dialog (if open), adding new marker will clear any active marker
+/**
+ * Clear coordinates including marker and dialog (if open)
+ */
 export function clearCoordinates() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const { map, geosearch } = state;
-    const { activeMarker } = geosearch;
-
-    if (activeMarker) {
-      removeCoordinatesMarker(activeMarker, map);
-    }
+  return (dispatch) => {
     dispatch({
       type: CLEAR_MARKER,
     });
   };
 }
 
-// clear place suggestions
+/**
+ * Toggle show coordinates dialog
+ * @param {Boolean} isVisible
+ */
 export function toggleDialogVisible(isVisible) {
   return (dispatch) => {
     dispatch({
@@ -148,7 +114,9 @@ export function toggleDialogVisible(isVisible) {
   };
 }
 
-// clear place suggestions
+/**
+ * Clear place suggestions
+ */
 export function clearSuggestions() {
   return (dispatch) => {
     dispatch({
@@ -158,7 +126,10 @@ export function clearSuggestions() {
   };
 }
 
-// set place suggestion
+/**
+ * Set place suggestion
+ * @param {Array} suggestion | suggestion object
+ */
 export function setSuggestion(suggestion) {
   return (dispatch) => {
     dispatch({
@@ -168,7 +139,10 @@ export function setSuggestion(suggestion) {
   };
 }
 
-// get place suggestions using ArcGIS suggest API
+/**
+ * Get place suggestions using ArcGIS suggest API
+ * @param {String} val | input text to suggest places
+ */
 export function getSuggestions(val) {
   return (dispatch, getState) => {
     const { config } = getState();
@@ -176,7 +150,7 @@ export function getSuggestions(val) {
 
     const encodedValue = encodeURIComponent(val);
     const encodedCategories = encodeURIComponent(GEOCODE_SUGGEST_CATEGORIES.join(','));
-    const request = `${requestUrl}suggest?text=${encodedValue}${CONSTANT_REQUEST_PARAMETERS}&category=${encodedCategories}`;
+    const request = `${requestUrl}suggest?${CONSTANT_REQUEST_PARAMETERS}&text=${encodedValue}&category=${encodedCategories}`;
 
     return requestAction(
       dispatch,

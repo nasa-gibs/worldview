@@ -15,11 +15,11 @@ import Alert from '../util/alert';
 import { getCoordinateFixedPrecision, isValidCoordinates } from './util';
 import {
   clearSuggestions,
-  selectCoordinatesToFly,
-  toggleShowGeosearch,
-  toggleReverseGeocodeActive,
-  setSuggestion,
   getSuggestions,
+  setPlaceMarker,
+  setSuggestion,
+  toggleReverseGeocodeActive,
+  toggleShowGeosearch,
 } from '../../modules/geosearch/actions';
 import {
   areCoordinatesWithinExtent,
@@ -106,19 +106,19 @@ class GeosearchModal extends Component {
       coordinatesPending,
       isCoordinatePairWithinExtent,
       reverseGeocode,
-      selectCoordinatesToFly,
+      setPlaceMarker,
       updatePendingCoordinates,
       updateValue,
     } = this.props;
 
     const coordinatesWithinExtent = isCoordinatePairWithinExtent(coordinatesPending);
-    if (coordinatesWithinExtent === false) {
+    if (!coordinatesWithinExtent) {
       this.setExtentAlert(true);
       this.setInputAlertIcon(true);
     } else {
       const [longitude, latitude] = coordinatesPending;
       reverseGeocode([longitude, latitude]).then((results) => {
-        selectCoordinatesToFly([longitude, latitude], results);
+        setPlaceMarker([longitude, latitude], results);
       });
       this.clearAlerts();
       updateValue('');
@@ -132,7 +132,7 @@ class GeosearchModal extends Component {
     const {
       isCoordinatePairWithinExtent,
       processMagicKey,
-      selectCoordinatesToFly,
+      setPlaceMarker,
       setSuggestion,
       updateValue,
     } = this.props;
@@ -156,14 +156,14 @@ class GeosearchModal extends Component {
         const parsedY = getCoordinateFixedPrecision(y);
 
         const coordinatesWithinExtent = isCoordinatePairWithinExtent([parsedX, parsedY]);
-        if (coordinatesWithinExtent === false) {
+        if (!coordinatesWithinExtent) {
           this.setExtentAlert(true);
           this.setInputAlertIcon(true);
         } else {
-          selectCoordinatesToFly([parsedX, parsedY], addressAttributes);
+          setPlaceMarker([parsedX, parsedY], addressAttributes);
         }
       }
-    });
+    }).catch((error) => console.error(error));
   }
 
   // handle input value change including text/coordinates typing, pasting, cutting
@@ -411,8 +411,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  selectCoordinatesToFly: (coordinates, addressAttributes) => {
-    dispatch(selectCoordinatesToFly(coordinates, addressAttributes));
+  setPlaceMarker: (coordinates, addressAttributes) => {
+    dispatch(setPlaceMarker(coordinates, addressAttributes));
   },
   toggleReverseGeocodeActive: (isActive) => {
     dispatch(toggleReverseGeocodeActive(isActive));
@@ -444,7 +444,7 @@ GeosearchModal.propTypes = {
   isMobile: PropTypes.bool,
   processMagicKey: PropTypes.func,
   reverseGeocode: PropTypes.func,
-  selectCoordinatesToFly: PropTypes.func,
+  setPlaceMarker: PropTypes.func,
   setSuggestion: PropTypes.func,
   suggestions: PropTypes.array,
   toggleReverseGeocodeActive: PropTypes.func,

@@ -14,7 +14,13 @@ import safeLocalStorage from '../../util/local-storage';
 
 const { GEOSEARCH_COLLAPSED } = safeLocalStorage.keys;
 
-// animate coordinates marker
+/**
+ * Animate coordinates marker
+ * @param {Object} map
+ * @param {Object} config
+ * @param {Array} coordinates
+ * @param {Number} zoom
+ */
 export function animateCoordinates(map, config, coordinates, zoom) {
   const { projections } = config;
   const { selected } = map.ui;
@@ -28,7 +34,12 @@ export function animateCoordinates(map, config, coordinates, zoom) {
   map.ui.animate.fly([x, y], zoom);
 }
 
-// check if coordinates are within selected map extent
+/**
+ * Check if coordinates are within selected map extent
+ * @param {Object} map
+ * @param {Object} config
+ * @param {Array} coordinates
+ */
 export function areCoordinatesWithinExtent(map, config, coordinates) {
   const { projections } = config;
   const { selected } = map.ui;
@@ -44,15 +55,18 @@ export function areCoordinatesWithinExtent(map, config, coordinates) {
   return coordinatesWithinExtent;
 }
 
-// add coordinates marker
-export function addCoordinatesMarker(activeMarker, config, map, coordinates, reverseGeocodeResults) {
+/**
+ * Get coordinates marker
+ * @param {Object} map
+ * @param {Object} config
+ * @param {Array} coordinates
+ * @param {Object} reverseGeocodeResults
+ */
+export function getCoordinatesMarker(map, config, coordinates, reverseGeocodeResults) {
   const { projections } = config;
   const { selected } = map.ui;
   const { proj } = selected;
   const { crs } = projections[proj];
-
-  // remove any markers
-  removeCoordinatesMarker(activeMarker, map);
 
   // only add marker within current map extent
   const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
@@ -68,39 +82,15 @@ export function addCoordinatesMarker(activeMarker, config, map, coordinates, rev
 
   // create Ol vector layer map pin
   const marker = createPin(coordinates, transformedCoordinates, reverseGeocodeResults);
-  selected.addLayer(marker);
-  selected.renderSync();
   return marker;
 }
 
-// remove coordinates tooltip from all projections
-export function removeCoordinatesOverlayFromAllProjections(proj) {
-  const mapProjections = Object.keys(proj);
-  mapProjections.forEach((mapProjection) => {
-    const mapOverlays = proj[mapProjection].getOverlays().getArray();
-    const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
-      const { id } = overlay;
-      return id && id.includes('coordinates-map-marker');
-    });
-    if (coordinatesTooltipOverlay.length > 0) {
-      proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
-    }
-  });
-}
-
-// remove coordinates marker
-export function removeCoordinatesMarker(activeMarker, map) {
-  const { selected, proj } = map.ui;
-  // remove marker
-  if (activeMarker) {
-    activeMarker.setMap(null);
-    selected.removeLayer(activeMarker);
-  }
-  // remove tooltip from all projections
-  removeCoordinatesOverlayFromAllProjections(proj);
-}
-
-// create Ol vector layer map pin
+/**
+ * Create Ol vector layer map pin
+ * @param {Array} coordinates
+ * @param {Array} transformedCoordinates
+ * @param {Object} reverseGeocodeResults
+ */
 const createPin = function(coordinates, transformedCoordinates = false, reverseGeocodeResults = {}) {
   const [longitude, latitude] = coordinates;
   const iconFeature = new OlFeature({
@@ -136,8 +126,9 @@ const createPin = function(coordinates, transformedCoordinates = false, reverseG
 
 /**
  *
- * @param {*} parameters
- * @param {*} stateFromLocation
+ * @param {Object} parameters
+ * @param {Object} stateFromLocation
+ * @param {Object} state
  */
 export function mapLocationToGeosearchState(
   parameters,
@@ -150,7 +141,8 @@ export function mapLocationToGeosearchState(
       .map((coord) => Number(coord))
       .filter((coord) => !lodashIsNaN(parseFloat(coord)))
     : [];
-  const coordinates = validCoordinates.length === 2
+  const isValid = validCoordinates.length === 2;
+  const coordinates = isValid
     ? validCoordinates
     : [];
 
@@ -162,6 +154,7 @@ export function mapLocationToGeosearchState(
     geosearch: {
       coordinates: { $set: coordinates },
       isExpanded: { $set: isExpanded },
+      isCoordinatesDialogOpen: { $set: isValid },
     },
   });
 

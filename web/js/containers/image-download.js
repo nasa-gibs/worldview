@@ -16,7 +16,6 @@ import {
   hasSubDaily as hasSubDailySelector,
   getLayers,
 } from '../modules/layers/selectors';
-import { removeCoordinatesOverlayFromAllProjections } from '../modules/geosearch/util';
 import {
   resolutionsGeo,
   resolutionsPolar,
@@ -178,11 +177,6 @@ function mapStateToProps(state) {
   if ('imageDownload' in config.parameters) {
     url = config.parameters.imageDownload;
     util.warn(`Redirecting image download to: ${url}`);
-  }
-
-  if (markerCoordinates.length > 0) {
-    // clear coordinates dialog for image crop panel
-    removeCoordinatesOverlayFromAllProjections(map.ui.proj);
   }
 
   return {

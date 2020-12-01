@@ -22,7 +22,7 @@ export const GEOSEARCH_REQUEST_OPTIONS = {
     'Airport',
   ],
   // language code EN (English) and required f request format parameters
-  CONSTANT_REQUEST_PARAMETERS: '&langCode=en&f=json',
+  CONSTANT_REQUEST_PARAMETERS: 'f=json&langCode=en',
 };
 
 const {
@@ -30,9 +30,13 @@ const {
   CONSTANT_REQUEST_PARAMETERS,
 } = GEOSEARCH_REQUEST_OPTIONS;
 
+/**
+ * @param {String} magicKey
+ * @param {Object} config
+ */
 export async function processMagicKey(magicKey, config) {
   const { features: { geocodeSearch: { url: requestUrl } } } = config;
-  const request = `${requestUrl}findAddressCandidates?outFields=*${CONSTANT_REQUEST_PARAMETERS}&magicKey=${magicKey}=`;
+  const request = `${requestUrl}findAddressCandidates?${CONSTANT_REQUEST_PARAMETERS}&outFields=*&magicKey=${magicKey}=`;
 
   try {
     const response = await fetch(request, REQUEST_OPTIONS);
@@ -43,9 +47,13 @@ export async function processMagicKey(magicKey, config) {
   }
 }
 
+/**
+ * @param {Array} coordinates
+ * @param {Object} config
+ */
 export async function reverseGeocode(coordinates, config) {
   const { features: { geocodeSearch: { url: requestUrl } } } = config;
-  const request = `${requestUrl}reverseGeocode?location=${coordinates}${CONSTANT_REQUEST_PARAMETERS}`;
+  const request = `${requestUrl}reverseGeocode?${CONSTANT_REQUEST_PARAMETERS}&location=${coordinates}`;
 
   try {
     const response = await fetch(request, REQUEST_OPTIONS);

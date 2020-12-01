@@ -3,6 +3,7 @@ import {
   CLEAR_SUGGESTIONS,
   REQUEST_SUGGEST_PLACE_FAILURE,
   REQUEST_SUGGEST_PLACE_SUCCESS,
+  SET_REVERSE_GEOCODE_RESULTS,
   SET_MARKER,
   SET_SUGGESTION,
   TOGGLE_DIALOG_VISIBLE,
@@ -13,7 +14,6 @@ import { getLocalStorageCollapseState } from './util';
 
 const localStorageCollapseState = getLocalStorageCollapseState();
 export const geosearchState = {
-  activeMarker: null,
   coordinates: [],
   isCoordinateSearchActive: false,
   isCoordinatesDialogOpen: false,
@@ -39,10 +39,14 @@ export function geosearchReducer(state = geosearchState, action) {
         ...state,
         isCoordinateSearchActive: action.value,
       };
+    case SET_REVERSE_GEOCODE_RESULTS:
+      return {
+        ...state,
+        reverseGeocodeResults: action.value,
+      };
     case SET_MARKER:
       return {
         ...state,
-        activeMarker: action.value,
         coordinates: action.coordinates,
         isCoordinateSearchActive: false,
         reverseGeocodeResults: action.reverseGeocodeResults,
@@ -51,7 +55,6 @@ export function geosearchReducer(state = geosearchState, action) {
     case CLEAR_MARKER:
       return {
         ...state,
-        activeMarker: null,
         coordinates: [],
         reverseGeocodeResults: null,
         isCoordinatesDialogOpen: false,
