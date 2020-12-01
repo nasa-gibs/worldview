@@ -104,13 +104,13 @@ function LayerList(props) {
         />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem onClick={() => toggleVisibility(groupLayerIds, true)}>
+        <DropdownItem id="show-all" onClick={() => toggleVisibility(groupLayerIds, true)}>
           Show All Layers
         </DropdownItem>
-        <DropdownItem onClick={() => toggleVisibility(groupLayerIds, false)}>
+        <DropdownItem id="hide-all" onClick={() => toggleVisibility(groupLayerIds, false)}>
           Hide All Layers
         </DropdownItem>
-        <DropdownItem onClick={() => removeLayers(groupLayerIds)}>
+        <DropdownItem id="remove-group" onClick={() => removeLayers(groupLayerIds)}>
           Remove Group
         </DropdownItem>
       </DropdownMenu>
@@ -118,7 +118,7 @@ function LayerList(props) {
   );
 
   return (
-    <div className="layer-group-case">
+    <div className="layer-group-case" id={`${compareState}-${groupId}`}>
       <div className="layer-group-header">
         <h3 className="layer-group-title">{`${title} (${layers.length})`}</h3>
         <div className="layer-group-icons">
