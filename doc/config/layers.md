@@ -61,7 +61,7 @@ The minimum set of required properties are as follows:
 * **title**: Title of the layer displayed to the end user. This is the first line displayed in the active layers list.
 * **subtitle**: Subtitle of the layer displayed to the end user. This is the second line displayed in the active layers list and usually includes platform, sensor, and/or attribution information.
 * **group**: The group this layer is found in, either `baselayers` or `overlays`
-* **layergroup**: A reference to the layer group the layer belongs to (usually the folder name it's contained in; i.e. airs, modis, reference_orbits).
+* **layergroup**: A string representing the group that this layer belongs to when shown in the sidebar. `Orbital Track` can used as a special identifier here to indicate layers which are orbit tracks.
 
 The following properties are required if this information is not available via the GIBS WMTS GetCapabilities document:
 
@@ -140,9 +140,7 @@ Example:
           "matrixSet": "EPSG4326_2km"
         }
       },
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Relative Humidity",
       "daynight": [ "day" ],
       "track": "descending",
       "palette": {
