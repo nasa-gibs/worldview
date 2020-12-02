@@ -166,15 +166,8 @@ footer .compare-toggle-button {
     display: inline-block;
     margin: 4px 0;
     font-size: 13px;
-    max-width: 236px;
+    max-width: 232px;
     line-height: 15px;
-  }
-  > .svg-inline--fa,
-  .layer-group-icons > .svg-inline--fa {
-    margin: 0 4px;
-    color: #fff;
-    cursor: pointer;
-    display: inline;
   }
   .dropdown {
     border: 1px solid rgba(250, 250, 250, 0.5);
@@ -239,6 +232,10 @@ footer .compare-toggle-button {
   .layer-group-collapse {
     font-size: 22px;
     width: 15px;
+    margin-right: 8px;
+    color: #fff;
+    cursor: pointer;
+    display: inline;
   }
   .layer-group-visibility {
     margin: 0 5px;
@@ -269,6 +266,10 @@ footer .compare-toggle-button {
       vertical-align: top;
       position: relative;
       top: -5px;
+      margin: 0 10px 0 4px;
+      color: #fff;
+      cursor: pointer;
+      display: inline;
     }
   }
 }
