@@ -16,10 +16,15 @@ class CopyClipboardTooltip extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { tooltipToggleTime } = this.props;
+    const { clearCopyToClipboardTooltip, tooltipToggleTime } = this.props;
     const toolTipChange = tooltipToggleTime !== prevProps.tooltipToggleTime;
     if (toolTipChange) {
-      this.updateToolTipState(toolTipChange);
+      this.updateToolTipState();
+      clearTimeout(this.showCopiedToolTipTimeout);
+      this.showCopiedToolTipTimeout = setTimeout(() => {
+        clearCopyToClipboardTooltip();
+        this.setState({ showCopiedToolTip: false });
+      }, 2000);
     }
   }
 
@@ -28,36 +33,29 @@ class CopyClipboardTooltip extends PureComponent {
     clearTimeout(this.showCopiedToolTipTimeout);
   }
 
-  updateToolTipState = (toolTipChange) => {
+  updateToolTipState = () => {
     this.setState({
-      showCopiedToolTip: toolTipChange,
+      showCopiedToolTip: true,
     });
   }
 
   render() {
     const { showCopiedToolTip } = this.state;
-    if (showCopiedToolTip) {
-      clearTimeout(this.showCopiedToolTipTimeout);
-      this.showCopiedToolTipTimeout = setTimeout(() => {
-        this.setState({ showCopiedToolTip: false });
-      }, 2000);
-    }
     return (
-      <>
-        <Tooltip
-          placement="bottom"
-          isOpen={showCopiedToolTip}
-          hideArrow
-          target="copy-coordinates-to-clipboard-button"
-        >
-          Copied to clipboard!
-        </Tooltip>
-      </>
+      <Tooltip
+        placement="bottom"
+        isOpen={showCopiedToolTip}
+        hideArrow
+        target="copy-coordinates-to-clipboard-button"
+      >
+        Copied to clipboard!
+      </Tooltip>
     );
   }
 }
 
 CopyClipboardTooltip.propTypes = {
+  clearCopyToClipboardTooltip: PropTypes.func,
   tooltipToggleTime: PropTypes.number,
 };
 

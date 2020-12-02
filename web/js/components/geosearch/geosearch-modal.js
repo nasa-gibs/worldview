@@ -5,7 +5,7 @@ import {
   Button, InputGroup, InputGroupAddon, UncontrolledTooltip,
 } from 'reactstrap';
 import {
-  throttle as lodashThrottle,
+  debounce as lodashDebounce,
   get as lodashGet,
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
@@ -39,7 +39,7 @@ class GeosearchModal extends Component {
       showReverseGeocodeAlert: false,
       showNoSuggestionsAlert: false,
     };
-    this.throttleGetSuggestions = lodashThrottle(this.getSuggestions, 400, { leading: true, trailing: true });
+    this.debounceGetSuggestions = lodashDebounce(this.getSuggestions, 400, { leading: true, trailing: true });
   }
 
   componentDidUpdate(prevProps) {
@@ -63,8 +63,15 @@ class GeosearchModal extends Component {
     }
     // handle add/remove no suggestion alert based on inputValue and suggestions
     if (inputValue && suggestions.length === 0 && prevProps.suggestions.length > 0) {
-      this.setNoSuggestionsAlert(true);
-      this.setInputAlertIcon(true);
+      const prevInputValue = prevProps.inputValue;
+      const prevSuggestedPlace = prevProps.suggestedPlace;
+      const newSuggestedPlaceSelected = prevInputValue && prevSuggestedPlace.length > 0 && prevSuggestedPlace[0].text === prevInputValue;
+      const isCoordinates = isValidCoordinates(inputValue);
+      // prevent flag error on new place/coordinates being copy pasted
+      if (!newSuggestedPlaceSelected && !isCoordinates) {
+        this.setNoSuggestionsAlert(true);
+        this.setInputAlertIcon(true);
+      }
     } else if ((showNoSuggestionsAlert || showInputAlert) && (!inputValue || suggestions.length > 0)) {
       this.setNoSuggestionsAlert(false);
       this.setInputAlertIcon(false);
@@ -179,18 +186,18 @@ class GeosearchModal extends Component {
     // check for coordinate value
     const coordinatesInputValue = isValidCoordinates(value);
     if (coordinatesInputValue) {
-      this.throttleGetSuggestions.cancel();
+      this.debounceGetSuggestions.cancel();
       const { latitude, longitude } = coordinatesInputValue;
       this.clearAlerts();
       clearSuggestions();
       updatePendingCoordinates([longitude, latitude]);
     } else if (!value) {
       // clear on empty input
-      this.throttleGetSuggestions.cancel();
+      this.debounceGetSuggestions.cancel();
       clearSuggestions();
     } else {
       // provide suggestions to populate search result menu item(s)
-      this.throttleGetSuggestions(value);
+      this.debounceGetSuggestions(value);
     }
   }
 
@@ -391,7 +398,7 @@ const mapStateToProps = (state) => {
     geosearch,
   } = state;
   const {
-    coordinates, isCoordinateSearchActive, isExpanded, suggestions,
+    coordinates, isCoordinateSearchActive, isExpanded, suggestions, suggestedPlace,
   } = geosearch;
   const isMobile = browser.lessThan.medium;
   const geosearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_GEOSEARCH_MOBILE';
@@ -407,6 +414,7 @@ const mapStateToProps = (state) => {
     processMagicKey: (magicKey) => processMagicKey(magicKey, config),
     reverseGeocode: (coords) => reverseGeocode(coords, config),
     suggestions,
+    suggestedPlace,
   };
 };
 
@@ -447,6 +455,7 @@ GeosearchModal.propTypes = {
   setPlaceMarker: PropTypes.func,
   setSuggestion: PropTypes.func,
   suggestions: PropTypes.array,
+  suggestedPlace: PropTypes.array,
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowGeosearch: PropTypes.func,
   updatePendingCoordinates: PropTypes.func,

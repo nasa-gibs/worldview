@@ -37,7 +37,7 @@ const getCoordinatesDialogTitle = (geocodeProperties) => {
 };
 
 /**
- * Create tooltip React DOM element
+ * Create dialog React DOM element
  *
  * @param {Object} map
  * @param {Object} config
@@ -49,7 +49,7 @@ const getCoordinatesDialogTitle = (geocodeProperties) => {
  *
  * @returns {Void}
  */
-export const renderCoordinatesTooltip = (map, config, coordinates, coordinatesMetadata, isMobile, clearCoordinates, toggleDialogVisible) => {
+export const renderCoordinatesDialog = (map, config, coordinates, coordinatesMetadata, isMobile, clearCoordinates, toggleDialogVisible) => {
   const { projections } = config;
   const { proj } = map;
   const { crs } = projections[proj];
@@ -60,6 +60,7 @@ export const renderCoordinatesTooltip = (map, config, coordinates, coordinatesMe
   const tooltipId = util.encodeId(`coordinates-map-marker_${latitude},${longitude}`);
   const tooltipOverlay = new Overlay({
     id: tooltipId,
+    className: 'coordinates-map-marker-dialog',
     element: tooltipElement,
     offset: [0, -40],
     positioning: 'bottom-center',
@@ -78,9 +79,12 @@ export const renderCoordinatesTooltip = (map, config, coordinates, coordinatesMe
   map.addOverlay(tooltipOverlay);
   tooltipOverlay.setPosition(coordinatesPosition);
 
+  const coordinatesTooltipDOMEl = tooltipOverlay.getElement();
+
   // helper function to remove/hide tooltip overlay
   const removeCoordinatesDialog = () => {
     toggleDialogVisible(false);
+    ReactDOM.unmountComponentAtNode(coordinatesTooltipDOMEl);
   };
 
   ReactDOM.render((
@@ -91,7 +95,9 @@ export const renderCoordinatesTooltip = (map, config, coordinates, coordinatesMe
       isMobile={isMobile}
       tooltipId={tooltipId}
     />
-  ), tooltipOverlay.getElement());
+  ), coordinatesTooltipDOMEl);
+
+  return coordinatesTooltipDOMEl;
 };
 
 /**
@@ -122,10 +128,11 @@ export const getCoordinatesMetadata = (geocodeProperties) => {
  *
  * @param {Array} pixels
  * @param {Object} map
+ * @param {Boolean} isMobile
  *
  * @returns {Void}
  */
-export const isCoordinatesDialogAvailableAtPixel = (pixels, map) => {
+export const isCoordinatesDialogAvailableAtPixel = (pixels, map, isMobile) => {
   // check for existing coordinate marker tooltip overlay and prevent multiple renders
   const mapOverlays = map.getOverlays().getArray();
   const mapMarkerId = 'coordinates-map-marker';
@@ -137,6 +144,7 @@ export const isCoordinatesDialogAvailableAtPixel = (pixels, map) => {
     return;
   }
 
+  const featureOptions = isMobile ? { hitTolerance: 5 } : {};
   const featureCheck = (feature) => feature.getId() === mapMarkerId;
-  return map.forEachFeatureAtPixel(pixels, featureCheck);
+  return map.forEachFeatureAtPixel(pixels, featureCheck, featureOptions);
 };

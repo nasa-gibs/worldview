@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import {
-  debounce as lodashDebounce,
   isNaN as lodashIsNaN,
 } from 'lodash';
 import React, { Component } from 'react';
@@ -20,12 +19,10 @@ export class CoordinatesMarker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: null,
-      longitude: null,
       showExtentAlert: false,
     };
-    this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
-    this.singleclick = this.singleclick.bind(this);
+    this.mouseMove = this.mouseMove.bind(this);
+    this.singleClick = this.singleClick.bind(this);
     this.rightClick = this.rightClick.bind(this);
     this.registerMouseListeners();
   }
@@ -33,14 +30,14 @@ export class CoordinatesMarker extends Component {
   componentWillUnmount() {
     const { mouseEvents } = this.props;
     mouseEvents.off('mousemove', this.mouseMove);
-    mouseEvents.off('singleclick', this.singleclick);
+    mouseEvents.off('singleclick', this.singleClick);
     mouseEvents.off('contextmenu', this.rightClick);
   }
 
   registerMouseListeners() {
     const { mouseEvents } = this.props;
     mouseEvents.on('mousemove', this.mouseMove);
-    mouseEvents.on('singleclick', this.singleclick);
+    mouseEvents.on('singleclick', this.singleClick);
     mouseEvents.on('contextmenu', this.rightClick);
   }
 
@@ -53,9 +50,12 @@ export class CoordinatesMarker extends Component {
       changeCursor,
       measureIsActive,
     } = this.props;
+
+    if (!coord) {
+      return;
+    }
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
-      this.setState({ latitude: null, longitude: null });
       return;
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
@@ -68,9 +68,6 @@ export class CoordinatesMarker extends Component {
     } else if (!hasFeatures && isShowingClick) {
       changeCursor(false);
     }
-    const latFormat = getCoordinateFixedPrecision(lat);
-    const lonFormat = getCoordinateFixedPrecision(lon);
-    this.setState({ latitude: latFormat, longitude: lonFormat });
   }
 
   rightClick(e) {
@@ -84,7 +81,7 @@ export class CoordinatesMarker extends Component {
     toggleReverseGeocodeActive(false);
   }
 
-  singleclick(e, map) {
+  singleClick(e, map, crs) {
     const {
       config,
       isCoordinateSearchActive,
@@ -92,10 +89,14 @@ export class CoordinatesMarker extends Component {
       setPlaceMarker,
       toggleReverseGeocodeActive,
     } = this.props;
-    const {
-      latitude,
-      longitude,
-    } = this.state;
+
+    const pixels = e.pixel;
+    const coord = map.getCoordinateFromPixel(pixels);
+
+    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
+
+    const latitude = getCoordinateFixedPrecision(lat);
+    const longitude = getCoordinateFixedPrecision(lon);
 
     if (measureIsActive) return;
     // handle reverse geocoding mouse click
@@ -116,16 +117,16 @@ export class CoordinatesMarker extends Component {
     } else {
       // handle clicking on pixel and/or map marker
       e.stopPropagation();
-      const pixels = e.pixel;
       this.getCoordinatesDialog(pixels, map);
     }
   }
 
   getCoordinatesDialog = (pixels, olMap) => {
     const {
+      isMobile,
       toggleDialogVisible,
     } = this.props;
-    const isMarker = isCoordinatesDialogAvailableAtPixel(pixels, olMap);
+    const isMarker = isCoordinatesDialogAvailableAtPixel(pixels, olMap, isMobile);
 
     if (isMarker) {
       toggleDialogVisible(true);
@@ -193,6 +194,7 @@ CoordinatesMarker.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
+  isMobile: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   mouseEvents: PropTypes.object.isRequired,

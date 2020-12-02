@@ -245,7 +245,6 @@ class toolbarContainer extends Component {
         id={buttonId}
         className="wv-toolbar-button"
         aria-label={labelText}
-        title="Search by place name or reverse search using coordinates"
         onClick={handleButtonClick}
       >
         {this.renderTooltip(buttonId, labelText)}

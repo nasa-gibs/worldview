@@ -132,7 +132,7 @@ class SearchBox extends Component {
       <InputGroupAddon
         className="geosearch-input-group-addon geosearch-input-alert-icon"
         addonType="append"
-        title="The entered location is not avaialable."
+        title="The entered location is not available."
       >
         <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
       </InputGroupAddon>

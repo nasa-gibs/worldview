@@ -154,6 +154,10 @@
 }
 
 /* Additional Styling */
+.coordinates-map-marker-dialog {
+  z-index: 1;
+}
+
 .geosearch-input-alert-icon {
   right: 120px;
 }
@@ -175,7 +179,7 @@
     right: 70px;
   }
   .geosearch-input-alert-icon {
-    right: 130px;
+    right: 135px;
   }
   .geosearch-autocomplete {
     font-size: 16px;

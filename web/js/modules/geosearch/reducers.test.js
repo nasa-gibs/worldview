@@ -128,13 +128,13 @@ describe('geosearchReducer', () => {
         }),
       ).toEqual({
         ...geosearchState,
-        suggestions: suggestion,
+        suggestedPlace: suggestion,
       });
     },
   );
   test(
     `${CLEAR_SUGGESTIONS
-    } updates suggestions with clear value and `
+    } updates suggestions and suggestedPlace with clear value and `
       + 'should return new state',
     () => {
       expect(
@@ -145,6 +145,7 @@ describe('geosearchReducer', () => {
       ).toEqual({
         ...geosearchState,
         suggestions: [],
+        suggestedPlace: [],
       });
     },
   );

@@ -20,6 +20,7 @@ export const geosearchState = {
   isExpanded: !localStorageCollapseState,
   reverseGeocodeResults: null,
   suggestions: [],
+  suggestedPlace: [],
 };
 
 export function geosearchReducer(state = geosearchState, action) {
@@ -62,7 +63,7 @@ export function geosearchReducer(state = geosearchState, action) {
     case SET_SUGGESTION:
       return {
         ...state,
-        suggestions: action.value,
+        suggestedPlace: action.value,
       };
     case REQUEST_SUGGEST_PLACE_SUCCESS:
       return {
@@ -78,6 +79,7 @@ export function geosearchReducer(state = geosearchState, action) {
       return {
         ...state,
         suggestions: action.value,
+        suggestedPlace: action.value,
       };
     default:
       return state;

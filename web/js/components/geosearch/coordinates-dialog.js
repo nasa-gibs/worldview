@@ -12,6 +12,7 @@ class CoordinatesDialog extends Component {
     this.state = {
       tooltipToggleTime: 0,
       showTooltips: true,
+      isCopyToClipboardTooltipVisible: false,
     };
   }
 
@@ -19,6 +20,7 @@ class CoordinatesDialog extends Component {
   onCopyToClipboard = () => {
     this.setState({
       tooltipToggleTime: Date.now(),
+      isCopyToClipboardTooltipVisible: true,
     });
   }
 
@@ -38,6 +40,12 @@ class CoordinatesDialog extends Component {
       showTooltips: false,
     });
     removeCoordinatesDialog();
+  }
+
+  clearCopyToClipboardTooltip = () => {
+    this.setState({
+      isCopyToClipboardTooltipVisible: false,
+    });
   }
 
   // render minimize and remove dialog button controls
@@ -91,9 +99,11 @@ class CoordinatesDialog extends Component {
   renderCopyToClipboardButton = () => {
     const { coordinatesMetadata, isMobile } = this.props;
     const { coordinates } = coordinatesMetadata;
+    const { isCopyToClipboardTooltipVisible, showTooltips } = this.state;
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
+    const tooltipVisibilityCondition = !isMobile && !isCopyToClipboardTooltipVisible && showTooltips;
     return (
       <CopyToClipboard
         options={window.clipboardData ? {} : { format: 'text/plain' }}
@@ -104,8 +114,12 @@ class CoordinatesDialog extends Component {
           id={buttonId}
           className={buttonId}
         >
-          {!isMobile && (
-          <UncontrolledTooltip placement="bottom" trigger="hover" target={buttonId}>
+          {tooltipVisibilityCondition && (
+          <UncontrolledTooltip
+            placement="bottom"
+            trigger="hover"
+            target={buttonId}
+          >
             {labelText}
           </UncontrolledTooltip>
           )}
@@ -120,6 +134,7 @@ class CoordinatesDialog extends Component {
       coordinatesMetadata, tooltipId,
     } = this.props;
     const {
+      showTooltips,
       tooltipToggleTime,
     } = this.state;
     const {
@@ -129,9 +144,12 @@ class CoordinatesDialog extends Component {
 
     return (
       <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
+        {showTooltips && (
         <CopyClipboardTooltip
           tooltipToggleTime={tooltipToggleTime}
+          clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
         />
+        )}
         <div className="tooltip-coordinates-title">{title}</div>
         <div className="tooltip-coordinates">{coordinates}</div>
         {this.renderDialogButtonControls()}

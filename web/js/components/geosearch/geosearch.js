@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GeosearchModal from './geosearch-modal';
+import {
+  toggleShowGeosearch,
+} from '../../modules/geosearch/actions';
 
 class Geosearch extends Component {
   constructor(props) {
@@ -92,6 +95,12 @@ const mapStateToProps = (state) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => ({
+  toggleShowGeosearch: () => {
+    dispatch(toggleShowGeosearch());
+  },
+});
+
 Geosearch.propTypes = {
   isExpanded: PropTypes.bool,
   isFeatureEnabled: PropTypes.bool,
@@ -102,4 +111,5 @@ Geosearch.propTypes = {
 
 export default connect(
   mapStateToProps,
+  mapDispatchToProps,
 )(Geosearch);

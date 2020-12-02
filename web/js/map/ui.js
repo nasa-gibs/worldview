@@ -9,6 +9,7 @@ import {
   cloneDeep as lodashCloneDeep,
   find as lodashFind,
 } from 'lodash';
+import ReactDOM from 'react-dom';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlKinetic from 'ol/Kinetic';
@@ -63,7 +64,7 @@ import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/geosearch/util';
 import { reverseGeocode } from '../modules/geosearch/util-api';
-import { getCoordinatesMetadata, renderCoordinatesTooltip } from '../components/geosearch/ol-coordinates-marker-util';
+import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/geosearch/ol-coordinates-marker-util';
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -101,6 +102,7 @@ export default function mapui(models, config, store, ui) {
   self.promiseDay = precache.promiseDay;
   self.selectedVectors = {};
   self.activeMarker = null;
+  self.coordinatesDialogDOMEl = null;
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -307,7 +309,18 @@ export default function mapui(models, config, store, ui) {
     const toggleDialogVisible = (isVisible) => {
       store.dispatch({ type: TOGGLE_DIALOG_VISIBLE, value: isVisible });
     };
-    renderCoordinatesTooltip(self.selected, config, [latitude, longitude], coordinatesMetadata, isMobile, clearMarker, toggleDialogVisible);
+
+    // render coordinates dialog
+    const coordinatesTooltipDOMEl = renderCoordinatesDialog(
+      self.selected,
+      config,
+      [latitude, longitude],
+      coordinatesMetadata,
+      isMobile,
+      clearMarker,
+      toggleDialogVisible,
+    );
+    self.coordinatesDialogDOMEl = coordinatesTooltipDOMEl;
   };
 
   /*
@@ -333,6 +346,11 @@ export default function mapui(models, config, store, ui) {
     const { sources } = config;
     const { active } = layers;
 
+    // unmount coordinate dialog to prevent residual tooltips being hovered
+    if (self.coordinatesDialogDOMEl) {
+      ReactDOM.unmountComponentAtNode(self.coordinatesDialogDOMEl);
+      self.coordinatesDialogDOMEl = null;
+    }
     // clear previous marker (if present) and get new marker
     removeCoordinatesMarker();
     const marker = getCoordinatesMarker({ ui: self }, config, coordinates, results);
