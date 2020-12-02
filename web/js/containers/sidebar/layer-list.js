@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
@@ -47,6 +47,9 @@ function LayerList(props) {
     toggleCollapse,
   } = props;
   const groupLayerIds = layers.map(({ id }) => id);
+  const [showDropdown, toggleDropdown] = useState(false);
+  const mouseEnter = () => { toggleDropdown(true); };
+  const mouseLeave = () => { toggleDropdown(false); };
 
   /**
    * Update Layer order after drag
@@ -118,11 +121,19 @@ function LayerList(props) {
   );
 
   return (
-    <div className="layer-group-case" id={`${compareState}-${groupId}`}>
+    <div
+      id={`${compareState}-${groupId}`}
+      className="layer-group-case"
+      onMouseEnter={mouseEnter}
+      onMouseLeave={mouseLeave}
+    >
       <div className="layer-group-header">
-        <h3 className="layer-group-title">{`${title} (${layers.length})`}</h3>
+        <h3 className="layer-group-title">
+          {title}
+          {collapsed ? ` (${layers.length})` : ''}
+        </h3>
         <div className="layer-group-icons">
-          {renderDropdownMenu()}
+          {showDropdown ? renderDropdownMenu() : null}
           <FontAwesomeIcon
             className="layer-group-collapse"
             icon={!collapsed ? 'caret-down' : 'caret-left'}
