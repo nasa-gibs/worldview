@@ -47,10 +47,7 @@ function generateMeasurements (layers, measurementsConfig) {
       // eslint-disable-next-line prefer-destructuring
       measurementsMap[id] = measurements[0];
     }
-    // Unmodified output (all measurements):
-    // measurementsMap[id] = measurements;
   });
-  // fs.writeFile(`${DEST_DIR}measurements.json`, JSON.stringify(measurementsMap, null, 2), errCallback);
 }
 
 
