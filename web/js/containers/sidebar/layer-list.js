@@ -127,7 +127,11 @@ function LayerList(props) {
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
     >
-      <div className="layer-group-header">
+      <div
+        className="layer-group-header"
+        onMouseEnter={mouseEnter}
+        onMouseLeave={mouseLeave}
+      >
         <h3 className="layer-group-title">
           {title}
           {collapsed ? ` (${layers.length})` : ''}

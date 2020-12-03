@@ -1,4 +1,5 @@
-const skipTour = require('../../reuseables/skip-tour.js');
+const { loadAndSkipTour } = require('../../reuseables/skip-tour.js');
+const { checkElementOrdering } = require('../../reuseables/check-element-ordering.js');
 const {
   infoButton,
   infoDialog,
@@ -15,8 +16,10 @@ const {
   firesLayer,
   firesRemove,
   aodGroup,
+  aodGroupHeader,
   overlaysGroup,
   baselayersGroup,
+  baselayersGroupHeader,
   groupOptionsBtn,
   groupShow,
   groupHide,
@@ -56,7 +59,7 @@ const ungroupedReorderdLayerIdOrder = [
 
 module.exports = {
   before: (c) => {
-    skipTour.loadAndSkipTour(c, TIME_LIMIT);
+    loadAndSkipTour(c, TIME_LIMIT);
   },
 
   // Individual layer interactions
@@ -115,7 +118,10 @@ module.exports = {
   },
 
   'Removing a group removes all layers and the group header': (c) => {
+    c.url(c.globals.url + twoGroupsQueryString);
     c.waitForElementVisible(aodGroup, TIME_LIMIT);
+    c.moveToElement(aodGroupHeader, 0, 0);
+    c.waitForElementVisible(`${aodGroup} ${groupOptionsBtn}`);
     c.click(`${aodGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${aodGroup} ${groupRemove}`).pause(200);
     c.expect.element(aodGroup).to.not.be.present;
@@ -142,6 +148,9 @@ module.exports = {
   },
 
   'Hide all ...': (c) => {
+    c.moveToElement(sidebarContainer, 0, 0);
+    c.moveToElement(aodGroupHeader, 0, 0);
+    c.waitForElementVisible(`${aodGroup} ${groupOptionsBtn}`);
     c.click(`${aodGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${aodGroup} ${groupHide}`).pause(200);
     c.expect.elements(`${aodGroup} ${layerHidden}`).count.to.equal(2);
@@ -149,6 +158,9 @@ module.exports = {
   },
 
   'Show all ...': (c) => {
+    c.moveToElement(sidebarContainer, 0, 0);
+    c.moveToElement(aodGroupHeader, 0, 0);
+    c.waitForElementVisible(`${aodGroup} ${groupOptionsBtn}`);
     c.click(`${aodGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${aodGroup} ${groupShow}`).pause(200);
     c.expect.elements(`${aodGroup} ${layerHidden}`).count.to.equal(0);
@@ -158,8 +170,14 @@ module.exports = {
   'Ungrouped: Removing baselayers/overlays removes the layers but not the header': (c) => {
     c.click(groupCheckbox);
     c.expect.element(groupCheckbox).to.not.have.attribute('checked');
+
+    c.moveToElement(overlaysGroup, 0, 0);
+    c.waitForElementVisible(`${overlaysGroup} ${groupOptionsBtn}`);
     c.click(`${overlaysGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${overlaysGroup} ${groupRemove}`).pause(200);
+
+    c.moveToElement(baselayersGroupHeader, 0, 0);
+    c.waitForElementVisible(`${baselayersGroupHeader} ${groupOptionsBtn}`);
     c.click(`${baselayersGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${baselayersGroup} ${groupRemove}`).pause(200);
 
@@ -172,20 +190,14 @@ module.exports = {
 
   'Re-ordering groups, then disabling groups keeps individual layer order': (c) => {
     c.url(c.globals.url + twoGroupsQueryString);
-    c.pause(2000);
-    c.moveToElement(aodGroup, 5, 5);
+    c.waitForElementVisible(aodGroup, TIME_LIMIT);
+    c.moveToElement(aodGroupHeader, 0, 0);
     c.mouseButtonDown(0).pause(200);
     c.moveTo(null, 50, 0).pause(200);
     c.moveTo(null, -50, -150).pause(200);
     c.mouseButtonUp(0).pause(1000);
     c.click(groupCheckbox).pause(200);
-    c.elements('css selector', `${overlaysGroup} ul > li`, (result) => {
-      result.value.forEach((el, idx) => {
-        c.elementIdAttribute(el.ELEMENT, 'id', ({ value }) => {
-          c.assert.equal(value, ungroupedReorderdLayerIdOrder[idx], 'Layer ids match');
-        });
-      });
-    });
+    checkElementOrdering(c, `${overlaysGroup} ul > li`, ungroupedReorderdLayerIdOrder);
   },
 
   // begin with "mixed" interspersed layers
@@ -193,24 +205,12 @@ module.exports = {
     c.url(c.globals.url + mixedLayersGroupsDisabledQueryString);
     c.waitForElementVisible(sidebarContainer, TIME_LIMIT);
     // confirm mixed layer ordering
-    c.elements('css selector', `${overlaysGroup} ul > li`, (result) => {
-      result.value.forEach((el, idx) => {
-        c.elementIdAttribute(el.ELEMENT, 'id', ({ value }) => {
-          c.assert.equal(value, mixedLayerIdOrder[idx], 'Layer ids match');
-        });
-      });
-    });
+    checkElementOrdering(c, `${overlaysGroup} ul > li`, mixedLayerIdOrder);
     c.click(groupCheckbox).pause(200);
     c.expect.element(aodGroup).to.be.present;
     c.expect.element(firesGroup).to.be.present;
     // confirm layers ordered by their groups
-    c.elements('css selector', groupedOverlaysAllLayers, (result) => {
-      result.value.forEach((el, idx) => {
-        c.elementIdAttribute(el.ELEMENT, 'id', ({ value }) => {
-          c.assert.equal(value, groupedLayerIdOrder[idx], 'Layer ids match');
-        });
-      });
-    });
+    checkElementOrdering(c, groupedOverlaysAllLayers, groupedLayerIdOrder);
   },
 
   'Immediately disabling groups restores mixed ordering': (c) => {
@@ -218,13 +218,7 @@ module.exports = {
     c.expect.element(aodGroup).to.not.be.present;
     c.expect.element(firesGroup).to.not.be.present;
     // confirm pre-group ordering
-    c.elements('css selector', `${overlaysGroup} ul > li`, (result) => {
-      result.value.forEach((el, idx) => {
-        c.elementIdAttribute(el.ELEMENT, 'id', ({ value }) => {
-          c.assert.equal(value, mixedLayerIdOrder[idx], 'Layer ids match');
-        });
-      });
-    });
+    checkElementOrdering(c, `${overlaysGroup} ul > li`, mixedLayerIdOrder);
   },
 
   'Making a change to grouped layers causes group ordering to be retained when ungrouped': (c) => {
@@ -232,18 +226,15 @@ module.exports = {
     // Turn on groups
     c.click(groupCheckbox).pause(200);
     // Modify by setting AOD layers to hidden
+    c.moveToElement(sidebarContainer, 0, 0);
+    c.moveToElement(aodGroup, 0, 0);
+    c.waitForElementVisible(`${aodGroup} ${groupOptionsBtn}`);
     c.click(`${aodGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${aodGroup} ${groupHide}`).pause(200);
     // Turn off groups
     c.click(groupCheckbox).pause(200);
     // Confirm ungrouped layer order matches grouped order
-    c.elements('css selector', `${overlaysGroup} ul > li`, (result) => {
-      result.value.forEach((el, idx) => {
-        c.elementIdAttribute(el.ELEMENT, 'id', ({ value }) => {
-          c.assert.equal(value, groupedLayerIdOrder[idx], `Layer ids match: ${value}`);
-        });
-      });
-    });
+    checkElementOrdering(c, `${overlaysGroup} ul > li`, groupedLayerIdOrder);
   },
 
   // Vector layers
