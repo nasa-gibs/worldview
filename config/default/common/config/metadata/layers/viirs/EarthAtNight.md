@@ -1,5 +1,5 @@
 
-### At Sensor Radiance (Day/Night Band)
+### Black Marble Nighttime At Sensor Radiance (Day/Night Band)
 Temporal coverage: 18 November 2020 - present
 
 The Black Marble Nighttime At Sensor Radiance (Day/Night Band) layer is created from NASA’s Black Marble daily at-sensor top-of-atmosphere nighttime radiance product (VNP46A1). It is displayed as a grayscale image. The layer is expressed in radiance units (nW/(cm<sup>2</sup> sr))  with log10 conversion. It is stretched up to 38 nW/(cm<sup>2</sup> sr) resulting in improvements in capturing city lights in greater spatial detail than traditional Nighttime Imagery resampled at 0-255 (e.g., Day/Night Band, Enhanced Near Constant Contrast).
