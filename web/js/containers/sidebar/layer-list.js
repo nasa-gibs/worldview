@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem,
+  Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import { get as lodashGet } from 'lodash';
 import LayerRow from './layer-row';
@@ -48,9 +48,21 @@ function LayerList(props) {
     isMobile,
   } = props;
   const groupLayerIds = layers.map(({ id }) => id);
-  const [showDropdown, toggleDropdown] = useState(false);
-  const mouseEnter = () => { toggleDropdown(true); };
-  const mouseLeave = () => { toggleDropdown(false); };
+  const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
+  const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
+  const toggleDropdownMenuVisible = () => {
+    if (showDropdownMenu) {
+      setDropdownBtnVisible(false);
+    }
+    setDropdownMenuVisible(!showDropdownMenu);
+  };
+
+  const mouseEnter = () => { setDropdownBtnVisible(true); };
+  const mouseLeave = () => {
+    if (showDropdownMenu) return;
+    setDropdownBtnVisible(false);
+  };
+
 
   /**
    * Update Layer order after drag
@@ -100,7 +112,7 @@ function LayerList(props) {
   };
 
   const renderDropdownMenu = () => (
-    <UncontrolledDropdown className="layer-group-more-options">
+    <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
       <DropdownToggle>
         <FontAwesomeIcon
           className="layer-group-more"
@@ -118,7 +130,7 @@ function LayerList(props) {
           Remove Group
         </DropdownItem>
       </DropdownMenu>
-    </UncontrolledDropdown>
+    </Dropdown>
   );
 
   return (
@@ -136,7 +148,7 @@ function LayerList(props) {
           {collapsed ? ` (${layers.length})` : ''}
         </h3>
         <div className="layer-group-icons">
-          {showDropdown || isMobile ? renderDropdownMenu() : null}
+          {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
           <FontAwesomeIcon
             className="layer-group-collapse"
             icon={!collapsed ? 'caret-down' : 'caret-left'}
