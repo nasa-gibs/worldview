@@ -78,7 +78,6 @@ export function layerReducer(state = initialState, action) {
   switch (action.type) {
     case RESET_LAYERS:
     case ADD_LAYER:
-    case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
     case REMOVE_GROUP:
     case REORDER_LAYERS:
@@ -91,15 +90,12 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
+    case ADD_LAYERS_FOR_EVENT:
     case REORDER_OVERLAY_GROUPS:
       return update(state, {
         [compareState]: {
-          layers: {
-            $set: action.layers,
-          },
-          overlayGroups: {
-            $set: action.overlayGroups,
-          },
+          layers: { $set: action.layers },
+          overlayGroups: { $set: action.overlayGroups },
           prevLayers: { $set: [] },
         },
       });
