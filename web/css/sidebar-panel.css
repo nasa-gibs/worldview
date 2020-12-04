@@ -527,6 +527,7 @@ li.item.productsitem.inmotion,
     h4 {
       font-size: 16px;
       padding: 6px 4px 4px;
+      width: calc(100vw - 85px);
     }
     p {
       font-size: 12px;
@@ -551,15 +552,19 @@ li.item.productsitem.inmotion,
       min-height: 44px;
       .layer-buttons {
         height: 26px;
-        width: 40px;
+        width: 26px;
+        background: #ccc;
         .wv-layers-close {
-          height: 20px;
+          height: 25px;
           width: 25px;
           svg.svg-inline--fa {
             font-size: 20px;
           }
         }
       }
+    }
+    &.layer-hidden .layer-info .layer-buttons {
+      background: #666;
     }
     .layer-eye-icon {
       top: 50%;
