@@ -161,11 +161,14 @@ footer .compare-toggle-button {
     background: #333;
     margin-top: 4px;
     border: 1px solid #444;
+    &:hover {
+      border-color: #aaa;
+    }
   }
   .layer-group-title {
     display: inline-block;
     margin: 4px 0;
-    font-size: 13px;
+    font-size: 12px;
     max-width: 232px;
     line-height: 15px;
   }

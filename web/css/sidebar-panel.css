@@ -139,8 +139,8 @@ a.atexpand {
 
 .sidebar-panel li.item h4,
 .inmotion h4 {
-  font-size: 0.9em;
-  line-height: 14px;
+  font-size: 12px;
+  line-height: 16px;
   padding: 3px 3px 0;
 }
 
@@ -234,7 +234,7 @@ li.item.productsitem.inmotion,
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
   position: relative;
-  border: 1px solid transparent;
+  border: 1px solid #333;
   overflow: hidden;
 }
 
@@ -249,6 +249,7 @@ li.item.productsitem.inmotion,
   top: 0;
   bottom: 0;
   cursor: pointer;
+  border-right: 1px solid #333;
 }
 
 .productsitem.layer-visible a.hdanchor:hover {
@@ -371,7 +372,7 @@ li.item.productsitem.inmotion,
 }
 
 .productsitem div.zot {
-  margin-left: 31px;
+  margin-left: 30px;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -450,10 +451,26 @@ li.item.productsitem.inmotion,
   & .layer-info {
     background-color: #ccc;
     min-height: 40px;
+    & .layer-buttons {
+      position: absolute;
+      right: 0;
+      background: #ccc;
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, #ccc 30%);
+      width: 100px;
+    }
+  }
+  &.layer-hidden {
+    .layer-info {
+      background-color: #666;
+    }
+    .layer-buttons {
+      background: #666;
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, #666 30%);
+    }
   }
   & .layer-main {
     width: auto;
-    margin-left: 31px;
+    margin-left: 30px;
     cursor: default;
     min-height: 40px;
     overflow: hidden;
@@ -461,12 +478,11 @@ li.item.productsitem.inmotion,
 }
 
 .productsitem.zotted .layer-main {
-  margin-left: 42px;
+  margin-left: 41px;
 }
 
-.productsitem.layer-hidden .layer-info,
 .productsitem.layer-hidden a.hdanchor {
-  background: rgba(255, 255, 255, 0.2);
+  background: #666;
 }
 
 .productsitem.layer-hidden a.hdanchor:hover {
@@ -533,13 +549,25 @@ li.item.productsitem.inmotion,
     }
     .layer-info {
       min-height: 44px;
+      .layer-buttons {
+        height: 26px;
+        width: 40px;
+        .wv-layers-close {
+          height: 20px;
+          width: 25px;
+          svg.svg-inline--fa {
+            font-size: 20px;
+          }
+        }
+      }
     }
     .layer-eye-icon {
-      top: 18px;
+      top: 50%;
       font-size: 26px;
+      margin-top: -13px;
     }
     a.hdanchor.hideReg {
-      width: 44px;
+      width: 45px;
     }
   }
 }
