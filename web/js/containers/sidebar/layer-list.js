@@ -45,6 +45,7 @@ function LayerList(props) {
     removeLayers,
     toggleVisibility,
     toggleCollapse,
+    isMobile,
   } = props;
   const groupLayerIds = layers.map(({ id }) => id);
   const [showDropdown, toggleDropdown] = useState(false);
@@ -124,8 +125,6 @@ function LayerList(props) {
     <div
       id={`${compareState}-${groupId}`}
       className="layer-group-case"
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
     >
       <div
         className="layer-group-header"
@@ -137,7 +136,7 @@ function LayerList(props) {
           {collapsed ? ` (${layers.length})` : ''}
         </h3>
         <div className="layer-group-icons">
-          {showDropdown ? renderDropdownMenu() : null}
+          {showDropdown || isMobile ? renderDropdownMenu() : null}
           <FontAwesomeIcon
             className="layer-group-collapse"
             icon={!collapsed ? 'caret-down' : 'caret-left'}
@@ -174,9 +173,11 @@ LayerList.propTypes = {
   activeLayers: PropTypes.array,
   available: PropTypes.func,
   collapsed: PropTypes.bool,
+  compareState: PropTypes.string,
   getNames: PropTypes.func,
   groupId: PropTypes.string,
-  compareState: PropTypes.string,
+  isMobile: PropTypes.bool,
+  launchOpacityModal: PropTypes.func,
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
   projId: PropTypes.string,
@@ -185,7 +186,6 @@ LayerList.propTypes = {
   removeLayers: PropTypes.func,
   toggleCollapse: PropTypes.func,
   toggleVisibility: PropTypes.func,
-  launchOpacityModal: PropTypes.func,
   title: PropTypes.string,
   zots: PropTypes.object,
 };
@@ -197,6 +197,7 @@ const mapStateToProps = (state, ownProps) => {
     : {};
   return {
     zots,
+    isMobile: state.browser.lessThan.medium,
     activeLayers: getActiveLayers(state),
     projId: proj.id,
     getNames: (layerId) => getTitles(config, layerId, proj.id),
