@@ -75,8 +75,9 @@ label[for='chk-crop-toggle'] {
 }
 #granule-count span {
   color: #fff;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 900;
+  margin: 14px 0 10px
 }
 .loading-granule-count {
   font-size: 30px;

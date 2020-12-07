@@ -232,7 +232,7 @@ class SmartHandoff extends Component {
   }
 
   /**
-   * Default render which displays the data-download panel
+   * Default render which displays the download panel
    */
   render() {
     const {
@@ -255,7 +255,7 @@ class SmartHandoff extends Component {
       showBoundingBox,
     } = this.state;
 
-    // Determine if data-download 'smart-handoff' tab is activated by user
+    // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
     const {
@@ -274,6 +274,8 @@ class SmartHandoff extends Component {
 
     const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
     const areThereLayersToDownload = availableLayers > 0;
+
+    const dateSelection = moment.utc(selectedDate).format('YYYY MMM DD');
 
     if (areThereLayersToDownload) {
       return (
@@ -334,7 +336,10 @@ class SmartHandoff extends Component {
 
           <div id="granule-count">
             <h1>
-              Granules available:
+              Granules available for
+              {' '}
+              {dateSelection}
+              :
               {' '}
               { !isSearchingForGranules && totalGranules === 0 && (<span className="fade-in constant-width">NONE</span>)}
               { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{totalGranules}</span>)}
@@ -349,7 +354,7 @@ class SmartHandoff extends Component {
               else openEarthDataSearch(selectedDate, selectedLayer, currentExtent, showBoundingBox)();
             }}
             id="download-btn"
-            text="GO TO EARTHDATA SEARCH"
+            text="DOWNLOAD VIA EARTHDATA SEARCH"
             className="red"
             valid={isValidDownload}
           />

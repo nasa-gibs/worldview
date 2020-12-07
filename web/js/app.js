@@ -69,7 +69,6 @@ import '../css/tour.css';
 import '../css/products.css';
 import '../css/indicator.css';
 import '../css/events.css';
-import '../css/dataDownload.css';
 import '../css/smart-handoff.css';
 import '../css/sidebar.css';
 import '../css/layer-categories.css';
@@ -133,13 +132,13 @@ class App extends React.Component {
 
     // get user IP address for GTM/GA using https://www.ipify.org/ API
     const getIpAddress = async() => {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const json = await response.json();
-      const ipAddress = json.ip;
+      // const response = await fetch('https://api.ipify.org?format=json');
+      // const json = await response.json();
+      // const ipAddress = json.ip;
 
       googleTagManager.pushEvent({
         event: 'ipAddress',
-        ipAddress,
+        // ipAddress,
       });
     };
 
