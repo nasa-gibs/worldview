@@ -9,6 +9,7 @@ import {
   isNaN as lodashIsNaN,
   startCase as lodashStartCase,
   isArray,
+  isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
@@ -827,6 +828,30 @@ export function serializeLayers(layers, state, groupName) {
   });
 }
 
+export function serializeGroupOverlays (currentItemState, state, activeString) {
+  const { config, parameters } = state;
+  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const layersOnState = lodashGet(state, `layers.${activeString}.layers`);
+  const showGroups = lodashGet(state, `layers.${activeString}.groupOverlays`);
+  const layersParam = activeString === 'active' ? parameters.l : parameters.l1;
+  const layerGroupParam = activeString === 'active' ? parameters.lg : parameters.lg1;
+  const layersChanged = !lodashIsEqual(layersOnState, startingLayers);
+
+  // Old permalink => disable groups
+  if (!!layersParam && !layerGroupParam) {
+    return false;
+  }
+  // If any change is made to layers, include group param
+  if (layersChanged) {
+    return showGroups;
+  }
+  // If app was loaded without layer parameters, only include param if grouping disabled
+  if (layersParam === undefined && layerGroupParam === undefined) {
+    return !showGroups ? currentItemState : undefined;
+  }
+  return showGroups;
+}
+
 export function toggleVisibility(id, layers) {
   const index = lodashFindIndex(layers, {
     id,
@@ -1191,6 +1216,7 @@ export function mapLocationToLayerState(
       },
     });
   }
+
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
     const layers = layersParse11(parameters.products, config);
@@ -1205,15 +1231,14 @@ export function mapLocationToLayerState(
       },
     });
   }
-  // Layers are grouped
 
-  // TODO need to set layer order as well based on the groups?
+  // If permallink  without grou param
   if (parameters.l && parameters.lg === undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
-          groupOverlays: { $set: active.groupOverlays },
-          overlayGroups: { $set: getOverlayGroups(active.layers) },
+          groupOverlays: { $set: false },
+          overlayGroups: { $set: [] },
           layers: { $set: active.layers },
         },
       },
@@ -1223,8 +1248,8 @@ export function mapLocationToLayerState(
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
-          groupOverlays: { $set: activeB.groupOverlays },
-          overlayGroups: { $set: getOverlayGroups(activeB.layers) },
+          groupOverlays: { $set: false },
+          overlayGroups: { $set: [] },
           layers: { $set: activeB.layers },
         },
       },

@@ -19,6 +19,7 @@ import {
 import {
   layersParse12,
   serializeLayers,
+  serializeGroupOverlays,
   mapLocationToLayerState,
 } from './modules/layers/util';
 import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/selectors';
@@ -126,6 +127,7 @@ const getParameters = function(config, parameters) {
   const now = config.pageLoadTime;
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
   const { initialDate } = config;
+  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
   return {
     p: {
       stateKey: 'proj.id',
@@ -324,7 +326,7 @@ const getParameters = function(config, parameters) {
     },
     l: {
       stateKey: 'layers.active.layers',
-      initialState: resetLayers(config.defaults.startingLayers, config.layers),
+      initialState: startingLayers,
       type: 'array',
       options: {
         parse: (permalink) => layersParse12(permalink, config),
@@ -346,10 +348,7 @@ const getParameters = function(config, parameters) {
       options: {
         setAsEmptyItem: true,
         serializeNeedsGlobalState: true,
-        serialize: (currentItemState, state) => {
-          const showGroups = get(state, 'layers.active.groupOverlays');
-          return !showGroups ? currentItemState : undefined;
-        },
+        serialize: (currentItemState, state) => serializeGroupOverlays(currentItemState, state, 'active'),
       },
     },
     l1: {
@@ -359,10 +358,10 @@ const getParameters = function(config, parameters) {
       options: {
         parse: (permalink) => layersParse12(permalink, config),
         serializeNeedsGlobalState: true,
-        serialize: (currentLayers, state) => {
+        serialize: (currentBLayers, state) => {
           const compareIsActive = get(state, 'compare.active');
           return compareIsActive
-            ? serializeLayers(currentLayers, state, 'activeB')
+            ? serializeLayers(currentBLayers, state, 'activeB')
             : undefined;
         },
       },
@@ -375,8 +374,10 @@ const getParameters = function(config, parameters) {
         setAsEmptyItem: true,
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
-          const showGroups = get(state, 'layers.activeB.groupOverlays');
-          return !showGroups ? currentItemState : undefined;
+          const compareIsActive = get(state, 'compare.active');
+          return compareIsActive
+            ? serializeGroupOverlays(currentItemState, state, 'activeB')
+            : undefined;
         },
       },
     },
