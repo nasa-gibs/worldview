@@ -48,9 +48,11 @@ class LayerInfo extends React.Component {
       period,
       startDate,
     } = layer;
-    const hasLayerDateRange = dateRanges && dateRanges.length > 1
+    const hasLayerDateRange = dateRanges && dateRanges.length > 1;
+    const overlapDateRanges = hasLayerDateRange
       ? dateOverlap(period, dateRanges)
       : [];
+    const needDateRanges = hasLayerDateRange && overlapDateRanges.overlap === false;
 
     return (
       <div id="layer-description" className="layer-description">
@@ -70,11 +72,8 @@ class LayerInfo extends React.Component {
                   ? ' - Present'
                   : ''}
             </span>
-
-            {hasLayerDateRange && dateRanges.overlap === false ? (
-              <DateRanges layer={layer} dateRanges={dateRanges} screenHeight={screenHeight} />
-            )
-              : ''}
+            {needDateRanges
+              && <DateRanges layer={layer} screenHeight={screenHeight} />}
           </div>
         )
           : ''}
