@@ -145,8 +145,6 @@ class App extends React.Component {
     };
 
     const main = function() {
-      const { models } = self.props;
-
       // Load any additional scripts as needed
       if (config.scripts) {
         lodashEach(config.scripts, (script) => {
@@ -244,13 +242,13 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(App);
+
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
-  mapMouseEvents: PropTypes.object,
   modalId: PropTypes.string,
   parameters: PropTypes.object,
 };

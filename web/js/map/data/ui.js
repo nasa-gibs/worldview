@@ -440,8 +440,6 @@ const dataUiDownloadListPanel = function(config, store) {
   let urs = false;
   let $dialog;
 
-  events = util.events;
-
   self.show = function() {
     $dialog = wvui.getDialog().attr('id', 'wv-data-selection');
 
