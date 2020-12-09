@@ -15,7 +15,11 @@ import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
-  addLayer, resetLayers, getFutureLayerEndDate,
+  addLayer,
+  resetLayers,
+  getLayers,
+  getFutureLayerEndDate,
+  getActiveLayersMap,
 } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
@@ -1232,7 +1236,7 @@ export function mapLocationToLayerState(
     });
   }
 
-  // If permallink  without grou param
+  // If loading via permalink  without group param
   if (parameters.l && parameters.lg === undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
@@ -1450,4 +1454,14 @@ export function getOverlayGroups(layers, prevGroups = []) {
       collapsed: prevGroup ? prevGroup.collapsed : false,
     };
   });
+}
+
+export function getLayersFromGroups (state, groups) {
+  const baselayers = getLayers(state, { group: 'baselayers' });
+  const activeLayersMap = getActiveLayersMap(state);
+  return groups
+    ? groups.flatMap((g) => g.layers)
+      .map((id) => activeLayersMap[id])
+      .concat(baselayers)
+    : [];
 }

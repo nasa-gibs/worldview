@@ -6,7 +6,6 @@ import {
   resetLayers as resetLayersSelector,
   getLayers as getLayersSelector,
   getActiveLayers as getActiveLayersSelector,
-  getActiveLayersMap,
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
 } from './selectors';
 import {
@@ -26,7 +25,7 @@ import {
 } from './constants';
 import { selectProduct } from '../data/actions';
 import { updateRecentLayers } from '../product-picker/util';
-import { getOverlayGroups } from './util';
+import { getOverlayGroups, getLayersFromGroups } from './util';
 
 export function resetLayers(activeString) {
   return (dispatch, getState) => {
@@ -78,21 +77,11 @@ export function toggleOverlayGroups() {
       overlayGroups,
     } = state.layers[activeString];
 
-    const getLayersFromGroups = (groups) => {
-      const baselayers = getLayersSelector(state, { group: 'baselayers' });
-      const activeLayersMap = getActiveLayersMap(state);
-      return groups
-        ? groups.flatMap((g) => g.layers)
-          .map((id) => activeLayersMap[id])
-          .concat(baselayers)
-        : [];
-    };
-
     // Disabling Groups
     if (groupOverlays) {
       const ungroupedLayers = prevLayers && prevLayers.length
         ? prevLayers
-        : getLayersFromGroups(overlayGroups);
+        : getLayersFromGroups(state, overlayGroups);
 
       dispatch({
         type: TOGGLE_OVERLAY_GROUPS,
@@ -109,7 +98,7 @@ export function toggleOverlayGroups() {
         type: TOGGLE_OVERLAY_GROUPS,
         activeString,
         groupOverlays: true,
-        layers: getLayersFromGroups(groups),
+        layers: getLayersFromGroups(state, groups),
         overlayGroups: groups,
         prevLayers: layers,
       });
