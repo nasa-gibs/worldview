@@ -29,13 +29,13 @@ export class VectorInteractions extends React.Component {
   }
 
   componentDidMount() {
-    events.on('mousemove', this.mouseMove);
-    events.on('singleclick', this.singleClick);
+    events.on('map:mousemove', this.mouseMove);
+    events.on('map:singleclick', this.singleClick);
   }
 
   componentWillUnmount() {
-    events.off('mousemove', this.mouseMove);
-    events.off('singleclick', this.singleClick);
+    events.off('map:mousmove', this.mouseMove);
+    events.off('map:singleclick', this.singleClick);
   }
 
   mouseMove(event, map, crs) {

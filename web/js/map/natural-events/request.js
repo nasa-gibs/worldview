@@ -8,9 +8,6 @@ const { events } = util;
 export default function naturalEventsRequest(models, ui, config) {
   const self = {};
 
-  self.EVENT_QUERY_RESULTS = 'queryResults';
-  self.EVENT_SELECT = 'select';
-
   self.apiURL = config.features.naturalEvents.host;
   self.querySuccessFlag = false;
   const model = models.naturalEvents;
@@ -18,7 +15,7 @@ export default function naturalEventsRequest(models, ui, config) {
   model.data = {};
 
   const init = function() {
-    events.on('queryResults', onQueryResults);
+    events.on('natural-events:query-results', onQueryResults);
     self.query();
   };
 
@@ -59,7 +56,6 @@ export default function naturalEventsRequest(models, ui, config) {
         'desc',
       );
       ui.sidebar.renderEvents();
-      if (model.active) events.trigger('hasData');
     }
   };
 
@@ -113,7 +109,7 @@ export default function naturalEventsRequest(models, ui, config) {
       model.data.types = res[0].categories;
       model.data.events = res[1].events;
       model.data.sources = res[2].sources;
-      events.trigger('queryResults');
+      events.trigger('natural-events:query-results');
     });
   };
 

@@ -33,7 +33,6 @@ import { getActiveLayers } from '../../modules/layers/selectors';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
-
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
@@ -43,13 +42,11 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   left: null,
 });
 
-
 function LayerRow (props) {
   const {
     compare,
     layer,
     compareState,
-    runningObject,
     paletteLegends,
     getPalette,
     palette,
@@ -68,12 +65,12 @@ function LayerRow (props) {
     toggleVisibility,
     isDisabled,
     isVisible,
-    layerClasses,
     index,
     hasPalette,
     isInProjection,
     tracksForLayer,
     isVectorLayer,
+    runningObject,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -208,23 +205,24 @@ function LayerRow (props) {
 
   const mouseOver = () => {
     if (isMobile) return;
-    events.trigger('layer-hover', layer.id, true);
+    events.trigger('sidebar:layer-hover', layer.id, true);
     toggleShowButtons(true);
   };
 
   const mouseLeave = () => {
     if (isMobile) return;
-    events.trigger('layer-hover', layer.id, false);
+    events.trigger('sidebar:layer-hover', layer.id, false);
     toggleShowButtons(false);
   };
 
+  const baseClasses = 'item productsitem';
   const containerClass = isDisabled
-    ? `${layerClasses} disabled layer-hidden`
+    ? `${baseClasses} disabled layer-hidden`
     : !isVisible
-      ? `${layerClasses} layer-hidden`
+      ? `${baseClasses} layer-hidden`
       : zot
-        ? `${layerClasses} layer-enabled layer-visible zotted`
-        : `${layerClasses} layer-enabled layer-visible`;
+        ? `${baseClasses} layer-enabled layer-visible zotted`
+        : `${baseClasses} layer-enabled layer-visible`;
   const visibilityToggleClass = isDisabled
     ? `${visibilityButtonClasses} layer-hidden`
     : !isVisible
@@ -350,7 +348,6 @@ const mapStateToProps = (state, ownProps) => {
     isMobile: state.browser.lessThan.medium,
     hasPalette,
     getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
-    runningObject: map.runningDataObj[layer.id],
   };
 };
 
@@ -435,7 +432,6 @@ LayerRow.propTypes = {
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
-  layerClasses: PropTypes.string,
   compareState: PropTypes.string,
   names: PropTypes.object,
   onInfoClick: PropTypes.func,

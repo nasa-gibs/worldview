@@ -68,17 +68,17 @@ function OlMeasureTool (props) {
     const dlGeoJSON = () => downloadGeoJSON(allMeasurements[crs], crs);
 
     if (map && map.rendered) {
-      events.on('measure-distance', initDistanceMeasurement);
-      events.on('measure-area', initAreaMeasurement);
-      events.on('measure-clear', clearMeasurements);
-      events.on('measure-download-geojson', dlGeoJSON);
+      events.on('measure:distance', initDistanceMeasurement);
+      events.on('measure:area', initAreaMeasurement);
+      events.on('measure:clear', clearMeasurements);
+      events.on('measure:download-geojson', dlGeoJSON);
     }
     return () => {
       if (map && map.rendered) {
-        events.off('measure-distance', initDistanceMeasurement);
-        events.off('measure-area', initAreaMeasurement);
-        events.off('measure-clear', clearMeasurements);
-        events.off('measure-download-geojson', dlGeoJSON);
+        events.off('measure:distance', initDistanceMeasurement);
+        events.off('measure:area', initAreaMeasurement);
+        events.off('measure:clear', clearMeasurements);
+        events.off('measure:download-geojson', dlGeoJSON);
       }
     };
   }, [map, unitOfMeasure]);
@@ -178,12 +178,12 @@ function OlMeasureTool (props) {
     OlObservableUnByKey(drawChangeListener);
     OlObservableUnByKey(rightClickListener);
     OlObservableUnByKey(twoFingerTouchListener);
-    events.trigger('enable-click-zoom');
+    events.trigger('map:enable-click-zoom');
   };
 
   const drawStartCallback = ({ feature }) => {
     let tooltipCoord;
-    events.trigger('disable-click-zoom');
+    events.trigger('map:disable-click-zoom');
     drawChangeListener = feature.getGeometry().on('change', (e) => {
       const geom = e.target;
       if (geom instanceof OlGeomPolygon) {

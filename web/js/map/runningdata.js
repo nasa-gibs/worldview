@@ -6,12 +6,10 @@ import {
 import util from '../util/util';
 import { getPalette } from '../modules/palettes/selectors';
 import {
-  runningData as runningDataAction,
-  clearRunningData as clearRunningDataAction,
-} from '../modules/map/actions';
-import {
   isFromActiveCompareRegion,
 } from '../modules/compare/util';
+
+const { events } = util;
 
 export default function MapRunningData(models, compareUi, store) {
   const self = this;
@@ -22,7 +20,7 @@ export default function MapRunningData(models, compareUi, store) {
   self.clearAll = function() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
-      store.dispatch(clearRunningDataAction());
+      events.trigger('map:running-data', dataObj);
     }
   };
   /*
@@ -90,7 +88,7 @@ export default function MapRunningData(models, compareUi, store) {
     });
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
-      store.dispatch(runningDataAction(dataObj));
+      events.trigger('map:running-data', dataObj);
     }
   };
   return self;
