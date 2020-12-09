@@ -6,6 +6,9 @@ import { Form } from 'reactstrap';
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits } from '../../modules/measure/actions';
+import util from '../../util/util';
+
+const { events } = util;
 
 const DOWNLOAD_GEOJSON = {
   text: 'Download as GeoJSON',
@@ -60,8 +63,8 @@ class MeasureMenu extends Component {
   }
 
   triggerEvent(eventName) {
-    const { map, onCloseModal } = this.props;
-    map.ui.events.trigger(eventName);
+    const { onCloseModal } = this.props;
+    events.trigger(eventName);
     onCloseModal();
   }
 

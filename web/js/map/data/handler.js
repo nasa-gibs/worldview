@@ -40,6 +40,8 @@ import {
   dataResultsTagVersionRegex,
 } from './results';
 
+const { events } = util;
+
 export function dataHandlerGetByName(name) {
   const map = {
     AquaSwathMultiDay: dataHandlerAquaSwathMultiDay,
@@ -66,8 +68,6 @@ export function dataHandlerGetByName(name) {
 
 export function dataHandlerBase(config, store) {
   const self = {};
-
-  self.events = util.events();
   self.cmr = null;
   self.ajax = null;
 
@@ -109,27 +109,27 @@ export function dataHandlerBase(config, store) {
       .done((data) => {
         try {
           if (dataState.selectedProduct !== queriedProduct) {
-            self.events.trigger('results', {
+            events.trigger('results', {
               granules: [],
               meta: {},
             });
             return;
           }
           const results = self._processResults(data, queriedProduct);
-          self.events.trigger('results', results);
+          events.trigger('results', results);
         } catch (error) {
-          self.events.trigger('error', 'exception', error);
+          events.trigger('error', 'exception', error);
         }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
         if (textStatus === 'timeout') {
-          self.events.trigger('timeout');
+          events.trigger('timeout');
         } else {
-          self.events.trigger('error', textStatus, errorThrown);
+          events.trigger('error', textStatus, errorThrown);
         }
       });
     if (promise.state() === 'pending') {
-      self.events.trigger('query');
+      events.trigger('query');
     }
   };
 

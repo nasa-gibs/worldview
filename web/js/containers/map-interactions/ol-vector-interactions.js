@@ -17,19 +17,25 @@ import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
 import { ACTIVATE_VECTOR_ALERT } from '../../modules/alerts/constants';
+import util from '../../util/util';
+
+const { events } = util;
 
 export class VectorInteractions extends React.Component {
   constructor(props) {
     super(props);
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
-    this.registerMouseListeners();
   }
 
-  registerMouseListeners() {
-    const { mouseEvents } = this.props;
-    mouseEvents.on('mousemove', this.mouseMove);
-    mouseEvents.on('singleclick', this.singleClick);
+  componentDidMount() {
+    events.on('mousemove', this.mouseMove);
+    events.on('singleclick', this.singleClick);
+  }
+
+  componentWillUnmount() {
+    events.off('mousemove', this.mouseMove);
+    events.off('singleclick', this.singleClick);
   }
 
   mouseMove(event, map, crs) {
@@ -175,13 +181,13 @@ function mapStateToProps(state) {
       }));
   },
 });
+
 VectorInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,
-  mouseEvents: PropTypes.object.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
@@ -193,6 +199,7 @@ VectorInteractions.propTypes = {
   activeLayers: PropTypes.array,
   activateVectorAlert: PropTypes.func,
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

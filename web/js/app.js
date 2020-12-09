@@ -92,6 +92,8 @@ import '../pages/css/document.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
+const { events } = util;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -172,7 +174,7 @@ class App extends React.Component {
         self.props.screenResize(window);
       });
       self.props.screenResize(window);
-      models.wv.events.trigger('startup');
+      events.trigger('startup');
       self.setVhCSSProperty();
     };
     util.wrap(main)();
@@ -184,7 +186,6 @@ class App extends React.Component {
       isMobile,
       isTourActive,
       locationKey,
-      mapMouseEvents,
       modalId,
       parameters,
     } = this.props;
@@ -192,7 +193,7 @@ class App extends React.Component {
       <div className="wv-content" id="wv-content" data-role="content">
         {!isMobile && <Geosearch />}
         <Toolbar />
-        <MapInteractions mouseEvents={mapMouseEvents} />
+        <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />

@@ -61,13 +61,15 @@ import {
   CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE,
 } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
-
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/geosearch/util';
 import { reverseGeocode } from '../modules/geosearch/util-api';
 import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/geosearch/ol-coordinates-marker-util';
+
+const { events } = util;
+
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -92,7 +94,6 @@ export default function mapui(models, config, store, ui) {
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
-  self.events = util.events();
   const layerBuilder = self.layerBuilder = mapLayerBuilder(
     models,
     config,
@@ -216,16 +217,16 @@ export default function mapui(models, config, store, ui) {
       const map = createMap(proj);
       self.proj[proj.id] = map;
     });
-    self.events.on('update-layers', reloadLayers);
-    self.events.on('disable-click-zoom', () => {
+    events.on('update-layers', reloadLayers);
+    events.on('disable-click-zoom', () => {
       doubleClickZoom.setActive(false);
     });
-    self.events.on('enable-click-zoom', () => {
+    events.on('enable-click-zoom', () => {
       setTimeout(() => {
         doubleClickZoom.setActive(true);
       }, 100);
     });
-    ui.events.on('last-action', subscribeToStore);
+    events.on('last-action', subscribeToStore);
     updateProjection(true);
   };
 
@@ -735,7 +736,7 @@ export default function mapui(models, config, store, ui) {
     }
     updateLayerVisibilities();
 
-    self.events.trigger('added-layer');
+    events.trigger('added-layer');
   }
 
   function removeLayer(layersToRemove) {
@@ -902,7 +903,7 @@ export default function mapui(models, config, store, ui) {
 
   const triggerExtent = lodashThrottle(
     () => {
-      self.events.trigger('extent');
+      events.trigger('extent');
     },
     500,
     {
@@ -1027,20 +1028,20 @@ export default function mapui(models, config, store, ui) {
     map.getView().on('change:rotation', lodashThrottle(onRotate, 300));
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
-      self.events.trigger('drag');
+      events.trigger('drag');
     });
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
-          self.events.trigger('zooming');
+          events.trigger('zooming');
           break;
         default:
           break;
       }
     });
     map.on('moveend', (e) => {
-      self.events.trigger('moveend');
+      events.trigger('moveend');
       setTimeout(() => {
         self.mapIsbeingDragged = false;
         self.mapIsbeingZoomed = false;

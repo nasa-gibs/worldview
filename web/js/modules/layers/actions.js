@@ -15,7 +15,6 @@ import {
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
   REORDER_OVERLAY_GROUPS,
-  ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
   TOGGLE_COLLAPSE_OVERLAY_GROUP,
   TOGGLE_OVERLAY_GROUP_VISIBILITY,
@@ -211,14 +210,6 @@ export function removeGroup(ids) {
       layersToRemove,
       layers: newLayers,
     });
-  };
-}
-
-export function layerHover(id, isMouseOver) {
-  return {
-    type: ON_LAYER_HOVER,
-    id,
-    active: isMouseOver,
   };
 }
 
