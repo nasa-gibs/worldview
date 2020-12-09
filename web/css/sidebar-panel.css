@@ -455,11 +455,7 @@ li.item.productsitem.inmotion,
       position: absolute;
       right: 0;
       background: #ccc;
-      background: linear-gradient(
-        90deg,
-        rgba(204,204,204,0) 0%,
-        rgba(204,204,204,1) 30%
-      );
+      background: linear-gradient(90deg, rgba(204, 204, 204, 0) 0%, rgba(204, 204, 204, 1) 30%);
       width: 100px;
     }
   }
@@ -469,7 +465,7 @@ li.item.productsitem.inmotion,
     }
     .layer-buttons {
       background: #666;
-      background: linear-gradient(90deg, rgba(102,102,102,0) 0%, rgba(102,102,102,1) 30%);
+      background: linear-gradient(90deg, rgba(102, 102, 102, 0) 0%, rgba(102, 102, 102, 1) 30%);
     }
   }
   & .layer-main {

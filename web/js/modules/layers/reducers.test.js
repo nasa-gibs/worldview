@@ -69,14 +69,12 @@ describe('layer Reducer tests', () => {
     const actions = [
       RESET_LAYERS,
       ADD_LAYER,
-      ADD_LAYERS_FOR_EVENT,
       REMOVE_LAYER,
       REMOVE_GROUP,
       REORDER_LAYERS,
       TOGGLE_OVERLAY_GROUP_VISIBILITY,
     ];
     actions.forEach((ACTION) => {
-      const layers = [...initialLayers, newLayer];
       const expectedState = update(initialState, {
         active: {
           layers: { $push: [newLayer] },
@@ -86,10 +84,34 @@ describe('layer Reducer tests', () => {
       const resultState = layerReducer(initialState, {
         type: ACTION,
         activeString: 'active',
-        layers,
+        layers: [...initialLayers, newLayer],
       });
       expect(resultState).toEqual(expectedState);
     });
+  });
+
+  test('ADD_LAYERS_FOR_EVENT sets new groups, layers, and clears prevLayeers', () => {
+    const response = layerReducer(initialState, {
+      type: ADD_LAYERS_FOR_EVENT,
+      activeString: 'active',
+      layers: initialLayers,
+      overlayGroups: initialGroups,
+    });
+    expect(response.active.layers).toEqual(initialLayers);
+    expect(response.active.overlayGroups).toEqual(initialGroups);
+    expect(response.active.prevLayers).toEqual([]);
+  });
+
+  test('REORDER_OVERLAY_GROUPS sets new groups, layers, and clears prevLayeers', () => {
+    const response = layerReducer(initialState, {
+      type: REORDER_OVERLAY_GROUPS,
+      activeString: 'active',
+      layers: initialLayers,
+      overlayGroups: initialGroups,
+    });
+    expect(response.active.layers).toEqual(initialLayers);
+    expect(response.active.overlayGroups).toEqual(initialGroups);
+    expect(response.active.prevLayers).toEqual([]);
   });
 
   test('INIT_SECOND_LAYER_GROUP copies current layer state', () => {
@@ -150,18 +172,6 @@ describe('layer Reducer tests', () => {
     expect(response.active.layers).toEqual(initialLayers);
     expect(response.active.overlayGroups).toEqual(initialGroups);
     expect(response.active.prevLayers).toEqual(initialLayers);
-  });
-
-  test('REORDER_OVERLAY_GROUPS sets new groups, layers, and clears prevLayeers', () => {
-    const response = layerReducer(initialState, {
-      type: REORDER_OVERLAY_GROUPS,
-      activeString: 'active',
-      layers: initialLayers,
-      overlayGroups: initialGroups,
-    });
-    expect(response.active.layers).toEqual(initialLayers);
-    expect(response.active.overlayGroups).toEqual(initialGroups);
-    expect(response.active.prevLayers).toEqual([]);
   });
 
   test('SET_THRESHOLD_RANGE_AND_SQUASH action updates palette-related props', () => {

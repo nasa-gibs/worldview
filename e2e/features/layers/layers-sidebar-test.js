@@ -18,6 +18,7 @@ const {
   aodGroup,
   aodGroupHeader,
   overlaysGroup,
+  overlaysGroupHeader,
   baselayersGroup,
   baselayersGroupHeader,
   groupOptionsBtn,
@@ -32,8 +33,8 @@ const {
 
 const vectorsQueryString = '?v=-70.43215000968726,28.678203599725197,-59.81569241792232,31.62330063930118&l=GRanD_Dams,Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor';
 const TIME_LIMIT = 10000;
-const someGroupsQueryString = '?l=MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Labels(hidden),Reference_Features,MODIS_Terra_CorrectedReflectance_TrueColor';
-const twoGroupsQueryString = '?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=VIIRS_SNPP_Thermal_Anomalies_375m_All,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Features,MODIS_Terra_CorrectedReflectance_TrueColor';
+const someGroupsQueryString = '?l=MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Labels(hidden),Reference_Features,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true';
+const twoGroupsQueryString = '?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=VIIRS_SNPP_Thermal_Anomalies_375m_All,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Features,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true';
 const mixedLayersGroupsDisabledQueryString = '?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=Reference_Features,VIIRS_SNPP_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false';
 const mixedLayerIdOrder = [
   'active-Reference_Features',
@@ -64,18 +65,21 @@ module.exports = {
 
   // Individual layer interactions
   'Toggle layer Info': (c) => {
+    c.url(c.globals.url + twoGroupsQueryString);
+    c.moveToElement(firesLayer, 0, 0);
+    c.waitForElementVisible(infoButton, TIME_LIMIT);
     c.click(infoButton);
-    c.waitForElementVisible(infoDialog, TIME_LIMIT, (e) => {
-      c.click(infoButton).pause(100);
-      c.expect.element(infoDialog).to.not.be.present;
-    });
+    c.waitForElementVisible(infoDialog, TIME_LIMIT);
+    c.click(infoButton).pause(100);
+    c.expect.element(infoDialog).to.not.be.present;
   },
   'Toggle Layer Options': (c) => {
+    c.moveToElement(firesLayer, 0, 0);
+    c.waitForElementVisible(optionsButton, TIME_LIMIT);
     c.click(optionsButton);
-    c.waitForElementVisible(optionsDialog, TIME_LIMIT, (e) => {
-      c.click(optionsButton).pause(100);
-      c.expect.element(optionsDialog).to.not.be.present;
-    });
+    c.waitForElementVisible(optionsDialog, TIME_LIMIT);
+    c.click(optionsButton).pause(100);
+    c.expect.element(optionsDialog).to.not.be.present;
   },
 
   // Layer grouping
@@ -113,6 +117,8 @@ module.exports = {
   },
 
   'Removing the last layer in a group removes the group': (c) => {
+    c.moveToElement(firesLayer, 0, 0);
+    c.waitForElementVisible(firesRemove, TIME_LIMIT);
     c.click(firesRemove).pause(500);
     c.expect.element(firesGroup).to.not.be.present;
   },
@@ -171,8 +177,8 @@ module.exports = {
     c.click(groupCheckbox);
     c.expect.element(groupCheckbox).to.not.have.attribute('checked');
 
-    c.moveToElement(overlaysGroup, 0, 0);
-    c.waitForElementVisible(`${overlaysGroup} ${groupOptionsBtn}`);
+    c.moveToElement(overlaysGroupHeader, 0, 0);
+    c.waitForElementVisible(`${overlaysGroupHeader} ${groupOptionsBtn}`);
     c.click(`${overlaysGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${overlaysGroup} ${groupRemove}`).pause(200);
 
@@ -227,7 +233,7 @@ module.exports = {
     c.click(groupCheckbox).pause(200);
     // Modify by setting AOD layers to hidden
     c.moveToElement(sidebarContainer, 0, 0);
-    c.moveToElement(aodGroup, 0, 0);
+    c.moveToElement(aodGroupHeader, 0, 0);
     c.waitForElementVisible(`${aodGroup} ${groupOptionsBtn}`);
     c.click(`${aodGroup} ${groupOptionsBtn}`).pause(200);
     c.click(`${aodGroup} ${groupHide}`).pause(200);

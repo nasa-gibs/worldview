@@ -86,7 +86,7 @@ class MeasureMenu extends Component {
       isTouchDevice, unitOfMeasure, measurementsInProj, isMobile,
     } = this.props;
     const listSize = isTouchDevice ? 'medium' : 'small';
-    DOWNLOAD_SHAPEFILE.hidden = !measurementsInProj || isMobile;
+    // DOWNLOAD_SHAPEFILE.hidden = !measurementsInProj || isMobile;
     DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
     return (
       <>
@@ -129,6 +129,7 @@ const mapStateToProps = (state) => {
     measurementsInProj,
   };
 };
+
 const mapDispatchToProps = (dispatch) => ({
   onToggleUnits: (unitOfMeasure) => {
     dispatch(changeUnits(unitOfMeasure));
@@ -146,7 +147,6 @@ export default connect(
 MeasureMenu.propTypes = {
   isMobile: PropTypes.bool,
   isTouchDevice: PropTypes.bool,
-  map: PropTypes.object,
   measurementsInProj: PropTypes.bool,
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,

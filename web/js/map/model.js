@@ -3,9 +3,6 @@ import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
-import util from '../util/util';
-
-const { events } = util;
 
 export default function mapModel(models, config) {
   const self = {};
