@@ -12,6 +12,9 @@ import { find as lodashFind, each as lodashEach } from 'lodash';
 import { toggleGranule } from '../../modules/data/actions';
 
 import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map';
+import util from '../../util/util';
+
+const { events } = util;
 
 export default function dataMap(store, maps, dataUi, ui) {
   const self = {};
@@ -27,7 +30,7 @@ export default function dataMap(store, maps, dataUi, ui) {
   let hovering = null;
   let selectedFeatures = null;
   const init = function() {
-    dataUi.events
+    events
       .on('activate', updateProjection)
       .on('query', clear)
       .on('queryResults', updateGranules)

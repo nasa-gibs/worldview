@@ -8,7 +8,6 @@ import {
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
-  ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
   TOGGLE_COLLAPSE_OVERLAY_GROUP,
   TOGGLE_OVERLAY_GROUP_VISIBILITY,
@@ -43,7 +42,6 @@ const groupState = {
 export const initialState = {
   active: { ...groupState },
   activeB: { ...groupState },
-  hoveredLayer: '',
   layerConfig: {},
   startingLayers: [],
 };
@@ -126,12 +124,6 @@ export function layerReducer(state = initialState, action) {
       return {
         ...state,
         activeB: lodashCloneDeep(state.active),
-      };
-
-    case ON_LAYER_HOVER:
-      return {
-        ...state,
-        hoveredLayer: action.active ? action.id : '',
       };
 
     case TOGGLE_LAYER_VISIBILITY:

@@ -1,8 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import Coordinates from './coordinates';
 import util from '../../util/util';
+
+const { events } = util;
 
 export default class OlCoordinates extends React.Component {
   constructor(props) {
@@ -17,19 +18,16 @@ export default class OlCoordinates extends React.Component {
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
     this.changeFormat = this.changeFormat.bind(this);
-    this.registerMouseListeners();
+  }
+
+  componentDidMount() {
+    events.on('mousemove', this.mouseMove);
+    events.on('mouseout', this.mouseOut);
   }
 
   componentWillUnmount() {
-    const { mouseEvents } = this.props;
-    mouseEvents.off('mousemove', this.mouseMove);
-    mouseEvents.off('mouseout', this.mouseOut);
-  }
-
-  registerMouseListeners() {
-    const { mouseEvents } = this.props;
-    mouseEvents.on('mousemove', this.mouseMove);
-    mouseEvents.on('mouseout', this.mouseOut);
+    events.off('mousemove', this.mouseMove);
+    events.off('mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {
@@ -86,12 +84,11 @@ export default class OlCoordinates extends React.Component {
   }
 
   render() {
-    const { isDistractionFreeModeActive } = this.props;
     const {
       hasMouse, format, latitude, longitude, crs,
     } = this.state;
     // Don't render until a mouse is being used
-    if (isDistractionFreeModeActive || !hasMouse) {
+    if (!hasMouse) {
       return null;
     }
 
@@ -108,8 +105,3 @@ export default class OlCoordinates extends React.Component {
     );
   }
 }
-
-OlCoordinates.propTypes = {
-  mouseEvents: PropTypes.object.isRequired,
-  isDistractionFreeModeActive: PropTypes.bool.isRequired,
-};

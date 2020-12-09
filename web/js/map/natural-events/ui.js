@@ -13,6 +13,8 @@ import { selectDate } from '../../modules/date/actions';
 import { UPDATE_MAP_UI } from '../../modules/map/constants';
 import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
 
+const { events } = util;
+
 const zoomLevelReference = {
   Wildfires: 8,
   Volcanoes: 6,
@@ -25,7 +27,7 @@ export default function naturalEventsUI(ui, config, store, models) {
   let isLoading = true;
   self.eventsData = [];
   self.layers = config.naturalEvents.layers;
-  self.events = util.events();
+  self.events = util.events;
   self.markers = [];
   self.selected = {};
   self.selecting = false;
@@ -213,7 +215,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     naturalEventsTrack = naturalEventsTracks[store.getState().proj.id];
     // Display loading information for user feedback on slow network
     view = map.getView();
-    ui.events.on('last-action', subscribeToStore);
+    events.on('last-action', subscribeToStore);
   };
 
   const getZoomPromise = function(
@@ -312,7 +314,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       naturalEventsTrack.update(null);
     }
     // store.dispatch(deselectEventAction);
-    self.events.trigger('change');
+    events.trigger('change');
   };
 
   /**
@@ -380,7 +382,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     } else {
       showListAllButton = false;
     }
-    self.events.trigger('list-change', visibleListEvents, showListAllButton);
+    events.trigger('list-change', visibleListEvents, showListAllButton);
   };
 
   /**

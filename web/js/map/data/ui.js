@@ -22,6 +22,8 @@ import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import { faIconInfoCircleSVGDomEl } from '../fa-map-icons';
 
+const { events } = util;
+
 export default function dataUi(store, ui, config) {
   let queryActive = false;
   let mapController = null;
@@ -39,7 +41,6 @@ export default function dataUi(store, ui, config) {
   };
 
   const self = {};
-  self.events = util.events();
   self.EVENT_QUERY = 'query';
   self.EVENT_QUERY_RESULTS = 'queryResults';
   self.EVENT_QUERY_CANCEL = 'queryCancel';
@@ -58,10 +59,10 @@ export default function dataUi(store, ui, config) {
       case DATA_CONSTANTS.DATA_GET_DATA_CLICK:
         return self.showDownloadList();
       case DATA_CONSTANTS.DATA_GRANULE_SELECT:
-        self.events.trigger('granuleSelect', action.granule);
+        events.trigger('granuleSelect', action.granule);
         return updateSelection();
       case DATA_CONSTANTS.DATA_GRANULE_UNSELECT:
-        self.events.trigger('granuleUnselect', action.granule);
+        events.trigger('granuleUnselect', action.granule);
         return updateSelection();
       case LAYER_CONSTANTS.REMOVE_LAYER:
       case LAYER_CONSTANTS.REMOVE_GROUP:
@@ -80,7 +81,7 @@ export default function dataUi(store, ui, config) {
   const changeProjection = function() {
     updateLayers();
     query();
-    self.events.trigger('projectionUpdate');
+    events.trigger('projectionUpdate');
   };
   const updateLayers = function() {
     const state = store.getState();
@@ -113,7 +114,7 @@ export default function dataUi(store, ui, config) {
       proj.id,
     );
     if (!dataState.selectedProduct || (dataState.selectedProduct && !doesSelectedExist(Object.entries(products), dataState.selectedProduct))) {
-      self.events.trigger(self.EVENT_QUERY_RESULTS, {
+      events.trigger(self.EVENT_QUERY_RESULTS, {
         meta: {},
         granules: [],
       });
@@ -129,12 +130,12 @@ export default function dataUi(store, ui, config) {
     const handler = handlerFactory(config, store);
     handler.events
       .on('query', () => {
-        self.events.trigger(self.EVENT_QUERY);
+        events.trigger(self.EVENT_QUERY);
       })
       .on('results', (results) => {
         queryExecuting = false;
         if (self.active && !nextQuery) {
-          self.events.trigger(self.EVENT_QUERY_RESULTS, results);
+          events.trigger(self.EVENT_QUERY_RESULTS, results);
         }
         if (nextQuery) {
           const q = nextQuery;
@@ -145,13 +146,13 @@ export default function dataUi(store, ui, config) {
       .on('error', (textStatus, errorThrown) => {
         queryExecuting = false;
         if (self.active) {
-          self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
+          events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
         }
       })
       .on('timeout', () => {
         queryExecuting = false;
         if (self.active) {
-          self.events.trigger(self.EVENT_QUERY_TIMEOUT);
+          events.trigger(self.EVENT_QUERY_TIMEOUT);
         }
       });
     executeQuery(handler);
@@ -171,9 +172,9 @@ export default function dataUi(store, ui, config) {
     }
   };
   const init = function() {
-    ui.events.on('last-action', subscribeToStore);
-    ui.map.events.on('extent', self.onViewChange);
-    self.events.on('query', onQuery)
+    events.on('last-action', subscribeToStore);
+    events.on('extent', self.onViewChange);
+    events.on('query', onQuery)
       .on('queryResults', (results) => {
         onQueryResults(results);
         self.onViewChange(results);
@@ -216,7 +217,7 @@ export default function dataUi(store, ui, config) {
   };
   const onActivate = function() {
     self.active = true;
-    self.events.trigger('activate');
+    events.trigger('activate');
     if (!mapController) {
       mapController = dataMap(store, maps, self, ui);
     }
@@ -293,7 +294,7 @@ export default function dataUi(store, ui, config) {
     }
     if (!downloadListPanel) {
       downloadListPanel = dataUiDownloadListPanel(config, store);
-      downloadListPanel.events.on('close', () => {
+      events.on('close', () => {
         if (selectionListPanel) {
           selectionListPanel.setVisible(true);
         }
@@ -439,7 +440,7 @@ const dataUiDownloadListPanel = function(config, store) {
   let urs = false;
   let $dialog;
 
-  self.events = util.events();
+  events = util.events;
 
   self.show = function() {
     $dialog = wvui.getDialog().attr('id', 'wv-data-selection');
@@ -466,7 +467,7 @@ const dataUiDownloadListPanel = function(config, store) {
     $('a.curl').click(showCurlPage);
 
     $dialog.on('dialogclose', () => {
-      self.events.trigger('close');
+      events.trigger('close');
     });
     self.refresh();
   };
@@ -767,7 +768,7 @@ const dataUiDownloadListPanel = function(config, store) {
 
   const onHoverOver = function() {
     const dataState = store.getState().data;
-    self.events.trigger(
+    events.trigger(
       'hoverOver',
       dataState.selectedGranules[$(this).attr('data-granule')],
     );
@@ -775,7 +776,7 @@ const dataUiDownloadListPanel = function(config, store) {
 
   const onHoverOut = function() {
     const dataState = store.getState().data;
-    self.events.trigger(
+    events.trigger(
       'hoverOut',
       dataState.selectedGranules[$(this).attr('data-granule')],
     );
@@ -789,7 +790,7 @@ const dataUiSelectionListPanel = function(dataUi, results, store) {
   const granules = {};
   let $dialog;
   const init = function() {
-    dataUi.events.on('granuleUnselect', onGranuleUnselect);
+    events.on('granuleUnselect', onGranuleUnselect);
   };
 
   self.show = function() {

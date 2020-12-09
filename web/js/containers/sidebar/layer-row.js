@@ -24,7 +24,6 @@ import { requestPalette } from '../../modules/palettes/actions';
 import {
   toggleVisibility,
   removeLayer,
-  layerHover,
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
 import Zot from './zot';
@@ -32,6 +31,7 @@ import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import { getActiveLayers } from '../../modules/layers/selectors';
 
+const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
@@ -42,6 +42,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   top: null,
   left: null,
 });
+
 
 function LayerRow (props) {
   const {
@@ -65,7 +66,6 @@ function LayerRow (props) {
     hasClickableFeature,
     openVectorAlertModal,
     toggleVisibility,
-    hover,
     isDisabled,
     isVisible,
     layerClasses,
@@ -206,15 +206,15 @@ function LayerRow (props) {
     );
   };
 
-  const mouseEnter = () => {
+  const mouseOver = () => {
     if (isMobile) return;
-    hover(layer.id, true);
+    events.trigger('layer-hover', layer.id, true);
     toggleShowButtons(true);
   };
 
   const mouseLeave = () => {
     if (isMobile) return;
-    hover(layer.id, false);
+    events.trigger('layer-hover', layer.id, false);
     toggleShowButtons(false);
   };
 
@@ -258,7 +258,7 @@ function LayerRow (props) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          onMouseEnter={mouseEnter}
+          onMouseOver={mouseOver}
           onMouseLeave={mouseLeave}
         >
           <a
@@ -355,9 +355,6 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  hover: (id, value) => {
-    dispatch(layerHover(id, value));
-  },
   toggleVisibility: (id, isVisible) => {
     dispatch(toggleVisibility(id, isVisible));
   },

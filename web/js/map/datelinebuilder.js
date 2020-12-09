@@ -11,6 +11,8 @@ import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import getSelectedDate from '../modules/date/selectors';
 
+const { events } = util;
+
 let map;
 let overlay1;
 let overlay2;
@@ -63,6 +65,7 @@ export default function mapDateLineBuilder(models, config, store, ui) {
         break;
     }
   };
+
   self.init = function(Parent, olMap, date) {
     let dimensions;
     map = olMap;
@@ -70,7 +73,7 @@ export default function mapDateLineBuilder(models, config, store, ui) {
     [self.date] = date.toISOString().split('T');
     proj = store.getState().proj.id;
 
-    Parent.events.on('moveend', () => {
+    events.on('moveend', () => {
       if (!isGeoProjection()) {
         return;
       }
@@ -78,26 +81,28 @@ export default function mapDateLineBuilder(models, config, store, ui) {
       dimensions = position(map);
       update(dimensions);
     });
-    Parent.events.on('drag', () => {
+    events.on('drag', () => {
       if (!isGeoProjection()) {
         return;
       }
       updateLineVisibility(false);
     });
-    Parent.events.on('movestart', () => {
+    events.on('movestart', () => {
       if (!isGeoProjection()) {
         return;
       }
       updateLineVisibility(false);
     });
-    ui.events.on('last-action', subscribeToStore);
+    events.on('last-action', subscribeToStore);
   };
+
   const isGeoProjection = function() {
     if (proj === 'geographic') {
       return true;
     }
     return false;
   };
+
   /*
    * Add Props to React Compents that creates
    *  a hoverable line SVG

@@ -104,15 +104,13 @@ function render (config, legacyState) {
   listenForHistoryChange(store, history);
   elapsed('Render', startTime, parameters);
 
-  const mouseMoveEvents = util.events();
-
   ReactDOM.render(
     <Provider store={store}>
-      <App models={models} mapMouseEvents={mouseMoveEvents} />
+      <App models={models} />
     </Provider>,
     document.getElementById('app'),
   );
-  combineUi(models, config, mouseMoveEvents, store); // Legacy UI
+  combineUi(models, config, store); // Legacy UI
   util.errorReport(errors);
 }
 

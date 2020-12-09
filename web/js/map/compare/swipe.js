@@ -200,7 +200,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   function move(evt) {
     if (!dragging) {
       dragging = true;
-      events.trigger('movestart');
+      events.trigger('compare:movestart');
     }
     const windowWidth = util.browser.dimensions[0];
     if (listenerObj.type === 'default') evt.preventDefault();
