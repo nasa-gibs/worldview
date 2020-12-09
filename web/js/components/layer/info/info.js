@@ -37,22 +37,26 @@ class LayerInfo extends React.Component {
     }
   }
 
+  getDateOverlapDateRanges = () => {
+    const { layer } = this.props;
+    const { dateRanges, period } = layer;
+    const hasLayerDateRange = dateRanges && dateRanges.length > 1;
+    const overlapDateRanges = hasLayerDateRange
+      ? dateOverlap(period, dateRanges)
+      : [];
+    return hasLayerDateRange && overlapDateRanges.overlap === false;
+  }
 
   render() {
     const { layer, screenHeight } = this.props;
     const { metaData } = this.state;
     const {
-      dateRanges,
       endDate,
       id,
       period,
       startDate,
     } = layer;
-    const hasLayerDateRange = dateRanges && dateRanges.length > 1;
-    const overlapDateRanges = hasLayerDateRange
-      ? dateOverlap(period, dateRanges)
-      : [];
-    const needDateRanges = hasLayerDateRange && overlapDateRanges.overlap === false;
+    const needDateRanges = this.getDateOverlapDateRanges();
 
     return (
       <div id="layer-description" className="layer-description">
