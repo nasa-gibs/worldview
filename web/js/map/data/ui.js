@@ -172,8 +172,8 @@ export default function dataUi(store, ui, config) {
     }
   };
   const init = function() {
-    events.on('last-action', subscribeToStore);
-    events.on('extent', self.onViewChange);
+    events.on('redux:action-dispatched', subscribeToStore);
+    events.on('map:extent', self.onViewChange);
     events.on('query', onQuery)
       .on('queryResults', (results) => {
         onQueryResults(results);

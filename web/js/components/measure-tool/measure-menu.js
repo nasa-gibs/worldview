@@ -15,37 +15,37 @@ const DOWNLOAD_GEOJSON = {
   iconClass: 'ui-icon icon-large',
   iconName: 'download',
   id: 'download-geojson-button',
-  key: 'measure-download-geojson',
+  key: 'measure:download-geojson',
   className: 'measure-download',
 };
-const DOWNLOAD_SHAPEFILE = {
-  text: 'Download as Shapefiles',
-  iconClass: 'ui-icon icon-large',
-  iconName: 'download',
-  id: 'download-shapefiles-button',
-  key: 'measure-download-shapefile',
-};
+// const DOWNLOAD_SHAPEFILE = {
+//   text: 'Download as Shapefiles',
+//   iconClass: 'ui-icon icon-large',
+//   iconName: 'download',
+//   id: 'download-shapefiles-button',
+//   key: 'measure:download-shapefile',
+// };
 const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
     iconClass: 'ui-icon icon-large',
     iconName: 'ruler',
     id: 'measure-distance-button',
-    key: 'measure-distance',
+    key: 'measure:distance',
   },
   {
     text: 'Measure area',
     iconClass: 'ui-icon icon-large',
     iconName: 'ruler-combined',
     id: 'measure-area-button',
-    key: 'measure-area',
+    key: 'measure:area',
   },
   {
     text: 'Remove Measurements',
     iconClass: 'ui-icon icon-large',
     iconName: 'trash',
     id: 'clear-measurements-button',
-    key: 'measure-clear',
+    key: 'measure:clear',
   },
   DOWNLOAD_GEOJSON,
   // DOWNLOAD_SHAPEFILE,

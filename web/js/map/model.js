@@ -44,13 +44,11 @@ export default function mapModel(models, config) {
    */
   self.update = function(extent) {
     self.extent = extent;
-    events.trigger('update', extent);
   };
   // Give other components access to zoom Level
   self.updateMap = function(map, ui) {
     self.selectedMap = map;
     self.ui = ui;
-    events.trigger('update-map');
   };
   self.getZoom = function() {
     return self.selectedMap ? self.selectedMap.getView().getZoom() : null;

@@ -21,13 +21,13 @@ export default class OlCoordinates extends React.Component {
   }
 
   componentDidMount() {
-    events.on('mousemove', this.mouseMove);
-    events.on('mouseout', this.mouseOut);
+    events.on('map:mousemove', this.mouseMove);
+    events.on('map:mouseout', this.mouseOut);
   }
 
   componentWillUnmount() {
-    events.off('mousemove', this.mouseMove);
-    events.off('mouseout', this.mouseOut);
+    events.off('map:mousmove', this.mouseMove);
+    events.off('map:mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {

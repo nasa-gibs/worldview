@@ -17,7 +17,7 @@ export default function combineUi(models, config, store) {
   const subscribeToStore = function() {
     const state = store.getState();
     const action = state.lastAction;
-    return events.trigger('last-action', action);
+    return events.trigger('redux:action-dispatched', action);
   };
   store.subscribe(subscribeToStore);
   ui.map = mapui(models, config, store, ui);
@@ -62,19 +62,19 @@ function registerMapMouseHandlers(maps) {
       .getProjection()
       .getCode();
     element.addEventListener('mousemove', (event) => {
-      events.trigger('mousemove', event, map, crs);
+      events.trigger('map:mousemove', event, map, crs);
     });
     element.addEventListener('mouseout', (event) => {
-      events.trigger('mouseout', event, map, crs);
+      events.trigger('map:mouseout', event, map, crs);
     });
     map.on('singleclick', (event) => {
-      events.trigger('singleclick', event, map, crs);
+      events.trigger('map:singleclick', event, map, crs);
     });
     map.on('contextmenu', (event) => {
       events.trigger('contextmenu', event, map, crs);
     });
     element.addEventListener('click', (event) => {
-      events.trigger('click', event, map, crs);
+      events.trigger('map:click', event, map, crs);
     });
   });
 }

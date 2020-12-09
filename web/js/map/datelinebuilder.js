@@ -73,7 +73,7 @@ export default function mapDateLineBuilder(models, config, store, ui) {
     [self.date] = date.toISOString().split('T');
     proj = store.getState().proj.id;
 
-    events.on('moveend', () => {
+    events.on('map:moveend', () => {
       if (!isGeoProjection()) {
         return;
       }
@@ -81,19 +81,19 @@ export default function mapDateLineBuilder(models, config, store, ui) {
       dimensions = position(map);
       update(dimensions);
     });
-    events.on('drag', () => {
+    events.on('map:drag', () => {
       if (!isGeoProjection()) {
         return;
       }
       updateLineVisibility(false);
     });
-    events.on('movestart', () => {
+    events.on('map:movestart', () => {
       if (!isGeoProjection()) {
         return;
       }
       updateLineVisibility(false);
     });
-    events.on('last-action', subscribeToStore);
+    events.on('redux:action-dispatched', subscribeToStore);
   };
 
   const isGeoProjection = function() {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
@@ -20,6 +20,9 @@ import {
   removeLayer as removeLayerAction,
   toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
+import util from '../../util/util';
+
+const { events } = util;
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -50,6 +53,15 @@ function LayerList(props) {
   const groupLayerIds = layers.map(({ id }) => id);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
+  const [runningDataObj, setRunningDataObj] = useState({});
+
+  useEffect(() => {
+    events.on('map:running-data', setRunningDataObj);
+    return () => {
+      events.off('map:running-data', setRunningDataObj);
+    };
+  }, []);
+
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
       setDropdownBtnVisible(false);
@@ -102,11 +114,11 @@ function LayerList(props) {
         isInProjection={!!projections[projId]}
         key={id}
         index={index}
-        layerClasses="item productsitem"
         zot={zots[id]}
         names={getNames(id)}
         isDisabled={!available(id)}
         isVisible={visible}
+        runningObject={runningDataObj[id]}
       />
     );
   };

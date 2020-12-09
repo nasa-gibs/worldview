@@ -217,16 +217,15 @@ export default function mapui(models, config, store, ui) {
       const map = createMap(proj);
       self.proj[proj.id] = map;
     });
-    events.on('update-layers', reloadLayers);
-    events.on('disable-click-zoom', () => {
+    events.on('map:disable-click-zoom', () => {
       doubleClickZoom.setActive(false);
     });
-    events.on('enable-click-zoom', () => {
+    events.on('map:enable-click-zoom', () => {
       setTimeout(() => {
         doubleClickZoom.setActive(true);
       }, 100);
     });
-    events.on('last-action', subscribeToStore);
+    events.on('redux:action-dispatched', subscribeToStore);
     updateProjection(true);
   };
 
@@ -735,8 +734,6 @@ export default function mapui(models, config, store, ui) {
       self.selected.getLayers().insertAt(mapIndex, createLayer(def));
     }
     updateLayerVisibilities();
-
-    events.trigger('added-layer');
   }
 
   function removeLayer(layersToRemove) {
@@ -902,13 +899,9 @@ export default function mapui(models, config, store, ui) {
   }
 
   const triggerExtent = lodashThrottle(
-    () => {
-      events.trigger('extent');
-    },
+    () => events.trigger('map:extent'),
     500,
-    {
-      trailing: true,
-    },
+    { trailing: true },
   );
 
   /*
@@ -1028,20 +1021,20 @@ export default function mapui(models, config, store, ui) {
     map.getView().on('change:rotation', lodashThrottle(onRotate, 300));
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
-      events.trigger('drag');
+      events.trigger('map:drag');
     });
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
-          events.trigger('zooming');
+          events.trigger('map:zooming');
           break;
         default:
           break;
       }
     });
     map.on('moveend', (e) => {
-      events.trigger('moveend');
+      events.trigger('map:moveend');
       setTimeout(() => {
         self.mapIsbeingDragged = false;
         self.mapIsbeingZoomed = false;
@@ -1172,9 +1165,7 @@ export default function mapui(models, config, store, ui) {
    * @todo move this component to another Location
    */
   function createMousePosSel(map, proj) {
-    let hoverThrottle;
-
-    function onMouseMove(e) {
+    const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
       const { browser } = state;
       const isMobile = browser.lessThan.medium;
@@ -1184,14 +1175,8 @@ export default function mapui(models, config, store, ui) {
       if (isMobile) return;
       // if measure is active return
       if (state.measure.isActive) return;
-      // if over coords return
-      if (
-        $(e.relatedTarget).hasClass('map-coord')
-        || $(e.relatedTarget).hasClass('coord-btn')
-      ) {
-        return;
-      }
-      const pixels = map.getEventPixel(e.originalEvent);
+
+      const pixels = map.getEventPixel(e);
       const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
@@ -1199,6 +1184,7 @@ export default function mapui(models, config, store, ui) {
       if (self.mapIsbeingDragged) {
         return;
       }
+
       // Don't add data runners if we're on the events or data tabs, or if map is animating
       const isEventsTabActive = typeof state.events !== 'undefined' && state.events.active;
       const isDataTabActive = typeof state.data !== 'undefined' && state.data.active;
@@ -1206,19 +1192,13 @@ export default function mapui(models, config, store, ui) {
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
 
       dataRunner.newPoint(pixels, map);
-    }
-    $(map.getViewport())
-      .mouseout((e) => {
-        if (
-          $(e.relatedTarget).hasClass('map-coord')
-          || $(e.relatedTarget).hasClass('coord-btn')
-        ) {
-          return;
-        }
-        hoverThrottle.cancel();
-        dataRunner.clearAll();
-      })
-      .mousemove(hoverThrottle = lodashThrottle(onMouseMove, 300));
+    }, 300);
+
+    events.on('map:mousemove', throttledOnMouseMove);
+    events.on('map:mouseout', (e) => {
+      throttledOnMouseMove.cancel();
+      dataRunner.clearAll();
+    });
   }
 
   init();

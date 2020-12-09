@@ -35,11 +35,11 @@ class DataItemList extends Component {
   }
 
   componentDidMount() {
-    events.on('layer-hover', this.layerHoverCallback);
+    events.on('sidebar:layer-hover', this.layerHoverCallback);
   }
 
   componentWillUnmount() {
-    events.off('layer-hover', this.layerHoverCallback);
+    events.off('sidebar:layer-hover', this.layerHoverCallback);
   }
 
   layerHoverCallback = (id, active) => {
