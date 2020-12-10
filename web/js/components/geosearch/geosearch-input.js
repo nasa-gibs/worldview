@@ -13,12 +13,16 @@ class SearchBox extends Component {
   }
 
   componentDidMount() {
-    const { geosearchMobileModalOpen, isExpanded } = this.props;
+    const { geosearchMobileModalOpen, isExpanded, suggestions } = this.props;
     // timeout necessary to trigger input focus
     if (isExpanded || geosearchMobileModalOpen) {
       setTimeout(() => {
         if (this.geosearchInput) {
           this.geosearchInput.focus();
+          // handle hide results menu when expanding with pending suggestions
+          if (suggestions.length > 0) {
+            this.geosearchInput.setState({ isOpen: false });
+          }
         }
       }, 1);
     }
@@ -35,8 +39,16 @@ class SearchBox extends Component {
     } = this.props;
     if (coordinatesPending.length > 0) {
       onCoordinateInputSelect();
-    } else if (suggestions.length > 0 && this.highlightedItem) {
-      onSelect(this.highlightedItem.text, this.highlightedItem);
+    } else if (suggestions.length > 0) {
+      // submit hightlighted item in search result menu
+      if (this.highlightedItem) {
+        onSelect(this.highlightedItem.text, this.highlightedItem);
+      } else {
+        // submit first of results, in the event desired text is input value
+        // and the component is minimized then expanded
+        const firstSuggestion = suggestions[0];
+        onSelect(firstSuggestion.text, firstSuggestion);
+      }
     }
   }
 
