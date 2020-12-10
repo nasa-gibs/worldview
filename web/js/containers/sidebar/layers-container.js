@@ -112,7 +112,7 @@ function LayersContainer (props) {
 
   return isActive && (
     <>
-      <div style={scrollContainerStyles}>
+      <div id="layers-scroll-container" style={scrollContainerStyles}>
         <div className="layer-container sidebar-panel">
 
           {groupOverlays ? renderOverlayGroups() : (
