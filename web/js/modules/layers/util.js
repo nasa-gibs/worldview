@@ -833,7 +833,7 @@ export function serializeLayers(layers, state, groupName) {
 }
 
 export function serializeGroupOverlays (currentItemState, state, activeString) {
-  const { config, parameters } = state;
+  const { config, parameters, compare } = state;
   const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
   const layersOnState = lodashGet(state, `layers.${activeString}.layers`);
   const showGroups = lodashGet(state, `layers.${activeString}.groupOverlays`);
@@ -850,7 +850,7 @@ export function serializeGroupOverlays (currentItemState, state, activeString) {
     return showGroups;
   }
   // If app was loaded without layer parameters, only include param if grouping disabled
-  if (layersParam === undefined && layerGroupParam === undefined) {
+  if (layersParam === undefined && layerGroupParam === undefined && !compare.active) {
     return !showGroups ? currentItemState : undefined;
   }
   return showGroups;
@@ -1207,15 +1207,17 @@ export function mapLocationToLayerState(
   config,
 ) {
   let newStateFromLocation = stateFromLocation;
-  const { active, activeB } = stateFromLocation.layers;
+  const { layers } = stateFromLocation;
+  const { active, activeB } = layers;
 
+  // No B group layers param but compare active param is present
   if (!parameters.l1 && parameters.ca !== undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
-          groupOverlays: { $set: activeB.groupOverlays },
+          groupOverlays: { $set: false },
           layers: { $set: active.layers },
-          overlayGroups: { $set: getOverlayGroups(active.layers) },
+          overlayGroups: { $set: [] },
         },
       },
     });
@@ -1223,20 +1225,20 @@ export function mapLocationToLayerState(
 
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
-    const layers = layersParse11(parameters.products, config);
+    const parsedLayers = layersParse11(parameters.products, config);
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
           overlayGroups: {
-            $set: getOverlayGroups(layers),
+            $set: getOverlayGroups(parsedLayers),
           },
-          layers: { $set: layers },
+          layers: { $set: parsedLayers },
         },
       },
     });
   }
 
-  // If loading via permalink  without group param
+  // If loading via permalink without group param, GROUPS DISABLED
   if (parameters.l && parameters.lg === undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
@@ -1248,6 +1250,7 @@ export function mapLocationToLayerState(
       },
     });
   }
+
   if (parameters.l1 && parameters.lg1 === undefined) {
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
@@ -1260,26 +1263,36 @@ export function mapLocationToLayerState(
     });
   }
 
-  if (active && active.layers) {
-    const populateGroups = active.groupOverlays && !active.overlayGroups;
+  if (active && active.layers.length) {
+    const {
+      groupOverlays,
+      overlayGroups,
+      layers: stateLayers,
+    } = newStateFromLocation.layers.active;
+    const populateGroups = groupOverlays && !overlayGroups;
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
           overlayGroups: {
-            $set: populateGroups ? getOverlayGroups(active.layers) : [],
+            $set: populateGroups ? getOverlayGroups(stateLayers) : [],
           },
         },
       },
     });
   }
 
-  if (activeB && activeB.layers) {
-    const populateGroups = activeB.groupOverlays && !activeB.overlayGroups;
+  if (activeB && activeB.layers.length) {
+    const {
+      groupOverlays,
+      overlayGroups,
+      layers: stateLayers,
+    } = newStateFromLocation.layers.activeB;
+    const populateGroups = groupOverlays && !overlayGroups;
     newStateFromLocation = update(newStateFromLocation, {
       layers: {
         activeB: {
           overlayGroups: {
-            $set: populateGroups ? getOverlayGroups(activeB.layers) : [],
+            $set: populateGroups ? getOverlayGroups(stateLayers) : [],
           },
         },
       },

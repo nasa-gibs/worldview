@@ -31,6 +31,9 @@ import {
 } from '../vector-styles/constants';
 import { resetLayers } from './selectors';
 import { getOverlayGroups } from './util';
+import safeLocalStorage from '../../util/local-storage';
+
+const { GROUP_OVERLAYS } = safeLocalStorage.keys;
 
 const groupState = {
   groupOverlays: true,
@@ -49,10 +52,12 @@ export const initialState = {
 export function getInitialState(config) {
   const { layers: layerConfig, defaults } = config;
   const startingLayers = resetLayers(defaults.startingLayers, layerConfig);
+  const groupsALocalStorage = safeLocalStorage.getItem(GROUP_OVERLAYS) !== 'disabled';
   return {
     ...initialState,
     active: {
       ...groupState,
+      groupOverlays: groupsALocalStorage,
       layers: startingLayers,
       overlayGroups: getOverlayGroups(startingLayers),
     },
