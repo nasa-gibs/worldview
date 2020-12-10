@@ -4,11 +4,12 @@ import util from '../../util/util';
 
 import { faIconArrowsAltHSVGDomEl } from '../fa-map-icons';
 
+const { events } = util;
+
 let swipeOffset = null;
 let line = null;
 let bottomLayers = [];
 let topLayers = [];
-let events;
 let mapCase;
 let listenerObj;
 let percentSwipe = null;
@@ -19,14 +20,12 @@ export default class Swipe {
   constructor(
     olMap,
     isActive,
-    compareEvents,
     eventListenerStringObj,
     valueOverride,
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;
     percentSwipe = valueOverride / 100;
-    events = compareEvents;
     this.create();
     $(window).resize(() => {
       if (document.querySelector('.ab-swipe-line')) {

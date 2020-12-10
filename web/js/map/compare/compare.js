@@ -64,7 +64,6 @@ export default function mapCompare(config, store) {
       comparison = new self[compareMode](
         map,
         state.compare.isCompareA,
-        self.events,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()
@@ -73,7 +72,6 @@ export default function mapCompare(config, store) {
       comparison = new self[compareMode](
         map,
         state.compare.isCompareA,
-        self.events,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()
