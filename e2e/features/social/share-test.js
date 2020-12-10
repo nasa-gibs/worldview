@@ -31,7 +31,10 @@ module.exports = {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
     client.waitForElementVisible(socialCopyLinkButton, TIME_LIMIT);
     client.click(socialCopyLinkButton);
-    const date = new Date();
+    let date = new Date();
+    if (date.getUTCHours() < 3) {
+      date = new Date(date.getTime() - 86400000);
+    }
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth() + 1;
     const day = date.getUTCDate();
