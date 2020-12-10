@@ -60,7 +60,7 @@ class PaletteLegend extends React.Component {
   componentDidMount() {
     this.updateCanvas();
     this.setState(() => ({
-      scrollContainerEl: document.querySelector('#productsHolder .simplebar-wrapper'),
+      scrollContainerEl: document.querySelector('#layers-scroll-container'),
     }));
   }
 
