@@ -27,7 +27,6 @@ export default function naturalEventsUI(ui, config, store, models) {
   let isLoading = true;
   self.eventsData = [];
   self.layers = config.naturalEvents.layers;
-  self.events = util.events;
   self.markers = [];
   self.selected = {};
   self.selecting = false;
