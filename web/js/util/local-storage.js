@@ -28,6 +28,7 @@ export default {
     NOTIFICATION_OUTAGE: 'outage',
     NOTIFICATION_ALERT: 'alert',
     NOTIFICATION_MSG: 'message',
+    GROUP_OVERLAYS: 'groupOverlays',
   },
   getItem(key) {
     return enabled && localStorage.getItem(key);

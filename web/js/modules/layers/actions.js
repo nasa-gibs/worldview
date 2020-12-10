@@ -26,6 +26,7 @@ import {
 import { selectProduct } from '../data/actions';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
+import safeLocalStorage from '../../util/local-storage';
 
 export function resetLayers(activeString) {
   return (dispatch, getState) => {
@@ -76,9 +77,11 @@ export function toggleOverlayGroups() {
       prevLayers,
       overlayGroups,
     } = state.layers[activeString];
+    const { GROUP_OVERLAYS } = safeLocalStorage.keys;
 
     // Disabling Groups
     if (groupOverlays) {
+      safeLocalStorage.setItem(GROUP_OVERLAYS, 'disabled');
       const ungroupedLayers = prevLayers && prevLayers.length
         ? prevLayers
         : getLayersFromGroups(state, overlayGroups);
@@ -93,6 +96,7 @@ export function toggleOverlayGroups() {
 
     // Enabling Groups
     } else {
+      safeLocalStorage.removeItem(GROUP_OVERLAYS);
       const groups = getOverlayGroups(layers);
       dispatch({
         type: TOGGLE_OVERLAY_GROUPS,
