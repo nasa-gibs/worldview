@@ -28,7 +28,7 @@ export default function FilterChips(props) {
           className="filter-chip"
           onClick={() => removeFilter(field, value)}
         >
-          {displayValue}
+          <span dangerouslySetInnerHTML={{ __html: displayValue }} />
           <FontAwesomeIcon
             icon="times"
             fixedWidth

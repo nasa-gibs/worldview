@@ -5,12 +5,7 @@ import {
 import { createSelector } from 'reselect';
 import buildLayerFacetProps from './format-config';
 import getSelectedDate from '../date/selectors';
-
-const decodeHtml = (html) => {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value;
-};
+import util from '../../util/util';
 
 // State selectors
 const getConfig = ({ config }) => config;
@@ -31,7 +26,7 @@ export const getLayersForProjection = createSelector(
         if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
         // Decode HTML entities in the subtitle
         if (layer.subtitle && layer.subtitle.includes('&')) {
-          layer.subtitle = decodeHtml(layer.subtitle);
+          layer.subtitle = util.decodeHTML(layer.subtitle);
         }
         return layer;
       });
