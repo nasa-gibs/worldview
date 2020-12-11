@@ -13,42 +13,35 @@ const correctedReflectanceOptionsPanelBody = '#layer_options_modal-modis_terra_c
 const correctedReflectanceInfoPanel = '#layer_info_modal-modis_terra_correctedreflectance_truecolor';
 
 module.exports = {
-  before(client) {
-    reuseables.loadAndSkipTour(client, TIME_LIMIT);
+  before(c) {
+    reuseables.loadAndSkipTour(c, TIME_LIMIT);
   },
-  'Layer option features work in A|B mode': function(client) {
-    client.url(client.globals.url + localQuerystrings.swipeAOD);
-
-    client.waitForElementVisible(aerosolLayer, TIME_LIMIT, () => {
-      client.expect.element(AodOptionsPanelBody).to.not.be.present;
-      client.click(`${aerosolLayer} .wv-layers-options`);
-      client.waitForElementVisible(
-        '.layer-settings-modal',
-        TIME_LIMIT,
-        () => {
-          client.pause(1000);
-          client
-            .useCss()
-            .assert.containsText(
-              `${AodOptionsPanelHeader} .modal-title`,
-              'Aerosol Optical Depth',
-            );
-          if (client.options.desiredCapabilities.browser !== 'ie') {
-            client.expect.element(`${AodOptionsPanelBody} .wv-palette-selector`)
-              .to.be.visible;
-          }
-        },
-      );
-    });
+  'Layer option features work in A|B mode': (c) => {
+    c.url(c.globals.url + localQuerystrings.swipeAOD);
+    c.waitForElementVisible(aerosolLayer, TIME_LIMIT);
+    c.expect.element(AodOptionsPanelBody).to.not.be.present;
+    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.click(`${aerosolLayer} .wv-layers-options`);
+    c.waitForElementVisible('.layer-settings-modal', TIME_LIMIT);
+    c.pause(500);
+    c.assert.containsText(
+      `${AodOptionsPanelHeader} .modal-title`,
+      'Aerosol Optical Depth',
+    );
+    if (c.options.desiredCapabilities.browser !== 'ie') {
+      c.expect.element(`${AodOptionsPanelBody} .wv-palette-selector`)
+        .to.be.visible;
+    }
   },
-  'Layer info dialog works in A|B mode': function(client) {
-    client.click(`${AodOptionsPanelHeader} .close`).pause(1000);
-    client.click(`${aerosolLayer} .wv-layers-info`);
-    client.waitForElementVisible(
+  'Layer info dialog works in A|B mode': (c) => {
+    c.click(`${AodOptionsPanelHeader} .close`).pause(500);
+    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.click(`${aerosolLayer} .wv-layers-info`);
+    c.waitForElementVisible(
       `${AodInfoPanel} .layer-description`,
       TIME_LIMIT,
       () => {
-        client
+        c
           .useCss()
           .assert.containsText(
             AodInfoPanel,
@@ -57,36 +50,38 @@ module.exports = {
       },
     );
   },
-  'expect clicking A|B button to close options dialog': function(client) {
-    client.click(`${AodInfoPanel} .close`).pause(1000);
-    client.click(localSelectors.compareButton);
-    client.waitForElementVisible(aerosolLayer, TIME_LIMIT, () => {
-      client.expect.element(AodOptionsPanelBody).to.not.be.present;
+  'expect clicking A|B button to close options dialog': (c) => {
+    c.click(`${AodInfoPanel} .close`).pause(500);
+    c.click(localSelectors.compareButton);
+    c.waitForElementVisible(aerosolLayer, TIME_LIMIT, () => {
+      c.expect.element(AodOptionsPanelBody).to.not.be.present;
     });
   },
-  'Layer option features after exiting A|B mode': function(client) {
-    client.click(`${aerosolLayer} .wv-layers-options`);
-    client.waitForElementVisible(AodOptionsPanelBody, TIME_LIMIT, () => {
-      client
+  'Layer option features after exiting A|B mode': (c) => {
+    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.click(`${aerosolLayer} .wv-layers-options`);
+    c.waitForElementVisible(AodOptionsPanelBody, TIME_LIMIT, () => {
+      c
         .useCss()
         .assert.containsText(
           `${AodOptionsPanelHeader} .modal-title`,
           'Aerosol Optical Depth',
         );
-      if (client.options.desiredCapabilities.browser !== 'ie') {
-        client.expect.element(`${AodOptionsPanelBody} .wv-palette-selector`).to
+      if (c.options.desiredCapabilities.browser !== 'ie') {
+        c.expect.element(`${AodOptionsPanelBody} .wv-palette-selector`).to
           .be.visible;
       }
     });
   },
-  'Layer info dialog works after exiting A|B mode': function(client) {
-    client.click(`${AodOptionsPanelHeader} .close`).pause(1000);
-    client.click(`${aerosolLayer} .wv-layers-info`);
-    client.waitForElementVisible(
+  'Layer info dialog works after exiting A|B mode': (c) => {
+    c.click(`${AodOptionsPanelHeader} .close`).pause(500);
+    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.click(`${aerosolLayer} .wv-layers-info`);
+    c.waitForElementVisible(
       `${AodInfoPanel} .layer-description`,
       TIME_LIMIT,
       () => {
-        client
+        c
           .useCss()
           .assert.containsText(
             AodInfoPanel,
@@ -96,55 +91,46 @@ module.exports = {
     );
   },
   'expect reactivating A|B to close options dialog and activate B state': function(
-    client,
+    c,
   ) {
-    client.click(`${AodInfoPanel} .close`).pause(1000);
-    client.click(`${aerosolLayer} .wv-layers-options`).pause(1000);
-    client.click(`${AodOptionsPanelHeader} .close`).pause(1000);
-    client.click(localSelectors.compareButton);
-    client.waitForElementVisible(aerosolLayer, TIME_LIMIT, () => {
-      client.pause(1000);
-      client.expect.element(AodOptionsPanelBody).to.not.be.present;
-      client.click(localSelectors.bTab);
+    c.click(`${AodInfoPanel} .close`).pause(500);
+    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.click(`${aerosolLayer} .wv-layers-options`).pause(500);
+    c.click(`${AodOptionsPanelHeader} .close`).pause(500);
+    c.click(localSelectors.compareButton);
+    c.waitForElementVisible(aerosolLayer, TIME_LIMIT, () => {
+      c.pause(500);
+      c.expect.element(AodOptionsPanelBody).to.not.be.present;
+      c.click(localSelectors.bTab);
     });
   },
-  'Layer option features work in B state': function(client) {
-    client.waitForElementVisible(
-      correctedReflectanceBLayer,
-      TIME_LIMIT,
-      () => {
-        client.expect.element(AodOptionsPanelBody).to.not.be.present;
-        client.click(`${correctedReflectanceBLayer} .wv-layers-options`);
-        client.waitForElementVisible(
-          '.layer-settings-modal',
-          TIME_LIMIT,
-          () => {
-            client
-              .useCss()
-              .assert.containsText(
-                `${correctedReflectanceOptionsPanelHeader} .modal-title`,
-                'Corrected Reflectance (True Color)',
-              );
-            if (client.options.desiredCapabilities.browser !== 'ie') {
-              client.expect.element(
-                `${correctedReflectanceOptionsPanelBody} .wv-palette-selector`,
-              ).to.not.be.present;
-            }
-          },
-        );
-      },
+  'Layer option features work in B state': (c) => {
+    c.waitForElementVisible(correctedReflectanceBLayer, TIME_LIMIT);
+    c.expect.element(AodOptionsPanelBody).to.not.be.present;
+    c.moveToElement(correctedReflectanceBLayer, 1, 1).pause(200);
+    c.click(`${correctedReflectanceBLayer} .wv-layers-options`);
+    c.waitForElementVisible('.layer-settings-modal', TIME_LIMIT);
+    c.assert.containsText(
+      `${correctedReflectanceOptionsPanelHeader} .modal-title`,
+      'Corrected Reflectance (True Color)',
     );
+    if (c.options.desiredCapabilities.browser !== 'ie') {
+      c.expect.element(
+        `${correctedReflectanceOptionsPanelBody} .wv-palette-selector`,
+      ).to.not.be.present;
+    }
   },
-  'Layer info dialog works after clicking into B mode': function(client) {
-    client.click(`${correctedReflectanceOptionsPanelHeader} .close`);
-    client.waitForElementNotPresent('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header', TIME_LIMIT);
-    client.click(`${correctedReflectanceBLayer} .wv-layers-info`);
-    client.pause(500);
-    client.waitForElementVisible(
+  'Layer info dialog works after clicking into B mode': (c) => {
+    c.click(`${correctedReflectanceOptionsPanelHeader} .close`);
+    c.waitForElementNotPresent('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header', TIME_LIMIT);
+    c.moveToElement(correctedReflectanceBLayer, 1, 1).pause(200);
+    c.click(`${correctedReflectanceBLayer} .wv-layers-info`);
+    c.pause(500);
+    c.waitForElementVisible(
       `${correctedReflectanceInfoPanel} .layer-metadata`,
       TIME_LIMIT,
       () => {
-        client
+        c
           .useCss()
           .assert.containsText(
             correctedReflectanceInfoPanel,
@@ -153,7 +139,7 @@ module.exports = {
       },
     );
   },
-  after(client) {
-    client.end();
+  after(c) {
+    c.end();
   },
 };
