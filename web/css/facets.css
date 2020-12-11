@@ -9,14 +9,16 @@
     padding: 3px;
   }
   & .filter-chip {
-    padding: 3px 20px 3px 5px;
+    padding: 3px 20px 3px 7px;
     margin: 4px;
     background: #ccc;
     color: #333;
     border-radius: 20px;
     position: relative;
     display: inline-block;
-    font-weight: 500;
+    span {
+      font-weight: 500;
+    }
     cursor: pointer;
     &:hover {
       background: #eee;
@@ -28,6 +30,7 @@
     & .svg-inline--fa {
       position: absolute;
       right: 2px;
+      top: calc(50% - 7px);
       color: #666;
     }
   }
