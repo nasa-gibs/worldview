@@ -169,25 +169,23 @@ function LayerList(props) {
         </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        {!collapsed && (
-          <Droppable
-            droppableId={`${compareState}-${groupId}`}
-            type={`layerGroup${groupId}`}
-            direction="vertical"
-          >
-            {(provided, snapshot) => (
-              <ul
-                className="category"
-                ref={provided.innerRef}
+        <Droppable
+          droppableId={`${compareState}-${groupId}`}
+          type={`layerGroup${groupId}`}
+          direction="vertical"
+        >
+          {(provided, snapshot) => (
+            <ul
+              className={collapsed ? 'category hidden' : 'category'}
+              ref={provided.innerRef}
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                {...provided.droppableProps}
-              >
-                {layers.map(renderLayer)}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        )}
+              {...provided.droppableProps}
+            >
+              {layers.map(renderLayer)}
+              {provided.placeholder}
+            </ul>
+          )}
+        </Droppable>
       </DragDropContext>
     </div>
   );
