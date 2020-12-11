@@ -71,6 +71,7 @@ import '../css/layers.css';
 import '../css/scrollbar.css';
 import '../css/switch.css';
 import '../css/timeline.css';
+import '../css/data-coverage-panel.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';

@@ -33,6 +33,28 @@ class ModalContainer extends Component {
     this.onResize = this.onResize.bind(this);
   }
 
+  componentDidUpdate() {
+    const {
+      isCustom,
+      id,
+      isOpen,
+      customProps,
+      isMobile,
+    } = this.props;
+    // Populate props from custom obj
+    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+    const {
+      onToggle,
+      onClose,
+      desktopOnly,
+    } = newProps;
+
+    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+    if (isMobile && isOpen && desktopOnly) {
+      toggleFunction();
+    }
+  }
+
   getStyle() {
     const {
       offsetLeft, offsetRight, offsetTop, width, height,
@@ -74,7 +96,6 @@ class ModalContainer extends Component {
       isOpen,
       isTemplateModal,
       customProps,
-      isMobile,
       screenHeight,
     } = this.props;
     const { width, height } = this.state;
@@ -97,8 +118,6 @@ class ModalContainer extends Component {
       CompletelyCustomModal,
       bodyComponentProps,
       timeout,
-      desktopOnly,
-      mobileOnly,
       size,
       isDraggable,
       isResizable,
@@ -111,12 +130,6 @@ class ModalContainer extends Component {
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-    const shouldToggleMobile = isMobile && desktopOnly;
-    const shouldToggleDesktop = !isMobile && mobileOnly;
-    const toggleConditon = isOpen && (shouldToggleMobile || shouldToggleDesktop);
-    if (toggleConditon) {
-      toggleFunction();
-    }
     return (
       <ErrorBoundary>
         <InteractionWrap
@@ -145,7 +158,6 @@ class ModalContainer extends Component {
                 : children}
             </Draggable>
           )}
-
         >
           <Modal
             isOpen={isOpen}
