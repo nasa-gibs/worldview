@@ -89,7 +89,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleActiveCompareState());
   },
 });
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const {
     layers, compare, date,
   } = state;
@@ -102,7 +102,6 @@ function mapStateToProps(state, ownProps) {
     dateStringA: util.toISOStringDate(date.selected),
     dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,
-    height: ownProps.height,
   };
 }
 CompareCase.propTypes = {

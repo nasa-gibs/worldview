@@ -111,7 +111,7 @@ class MeasureMenu extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     modal, map, measure, proj, browser,
   } = state;
@@ -126,7 +126,7 @@ const mapStateToProps = (state, ownProps) => {
     measurementsInProj,
   };
 };
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   onToggleUnits: (unitOfMeasure) => {
     dispatch(changeUnits(unitOfMeasure));
   },

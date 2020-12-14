@@ -239,7 +239,7 @@ CategoryLayerRow.propTypes = {
   selectedMeasurementSourceIndex: PropTypes.number,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     config,
     browser,

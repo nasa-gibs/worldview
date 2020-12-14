@@ -218,7 +218,7 @@ LayerMetadataDetail.propTypes = {
   showPreviewImage: PropTypes.bool,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     productPicker,
     proj,

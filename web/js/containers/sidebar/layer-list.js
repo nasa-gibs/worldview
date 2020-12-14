@@ -171,14 +171,7 @@ LayerList.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const {
-    layers,
-    groupId,
-    title,
-    layerGroupName,
-    checkerBoardPattern,
-    layerSplit,
-  } = ownProps;
+  const { layerGroupName } = ownProps;
   const {
     proj, config, map,
   } = state;
@@ -190,15 +183,9 @@ function mapStateToProps(state, ownProps) {
     : {};
   return {
     zots,
-    layers,
-    groupId,
-    title,
-    layerGroupName,
     activeLayers,
     runningLayers,
     projId: id,
-    checkerBoardPattern,
-    layerSplit,
     getNames: (layerId) => getTitles(config, layerId, id),
     available: (layerId) => availableSelector(state)(layerId),
   };

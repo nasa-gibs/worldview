@@ -206,7 +206,7 @@ SearchLayerList.propTypes = {
   selectLayer: PropTypes.func,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { productPicker, browser } = state;
   const { selectedLayer, categoryType } = productPicker;
   return {

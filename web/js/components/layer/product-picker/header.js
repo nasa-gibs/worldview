@@ -259,7 +259,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { productPicker, browser, proj } = state;
   const {
     mode,

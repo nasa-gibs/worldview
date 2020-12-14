@@ -207,7 +207,7 @@ class App extends React.Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
@@ -215,8 +215,6 @@ function mapStateToProps(state, ownProps) {
     tour: state.tour,
     config: state.config,
     parameters: state.parameters,
-    models: ownProps.models,
-    mapMouseEvents: ownProps.mapMouseEvents,
     locationKey: state.location.key,
     modalId: state.modal.id,
   };

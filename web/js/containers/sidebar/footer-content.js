@@ -172,8 +172,7 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
 });
-function mapStateToProps(state, ownProps) {
-  const { activeTab } = ownProps;
+function mapStateToProps(state) {
   const {
     requestedEvents, config, layers, data, compare, browser,
   } = state;
@@ -187,7 +186,6 @@ function mapStateToProps(state, ownProps) {
 
   return {
     showAll,
-    activeTab,
     events,
     counts,
     isMobile: browser.lessThan.medium,

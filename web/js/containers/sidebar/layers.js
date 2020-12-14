@@ -45,9 +45,7 @@ const Layers = (props) => {
 
 function mapStateToProps(state, ownProps) {
   const { layers, proj } = state;
-  const {
-    isActive, layerGroupName, height, checkerBoardPattern,
-  } = ownProps;
+  const { layerGroupName } = ownProps;
   const componentLayers = layers[layerGroupName];
   const layerObj = getLayers(componentLayers, { proj: proj.id, group: 'all' });
 
@@ -55,10 +53,6 @@ function mapStateToProps(state, ownProps) {
     baselayers: layerObj.baselayers,
     overlays: layerObj.overlays,
     layerSplit: layerObj.overlays.length,
-    layerGroupName,
-    height,
-    isActive,
-    checkerBoardPattern,
   };
 }
 const mapDispatchToProps = (dispatch) => ({});

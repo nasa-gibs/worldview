@@ -87,7 +87,6 @@ function mapStateToProps(state, ownProps) {
     isCustomPalette,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
-    layerGroupName,
     isMobile: state.browser.lessThan.medium,
     hasPalette,
     getPalette: (layerId, index) => getPalette(trackLayer.id, index, layerGroupName, state),
