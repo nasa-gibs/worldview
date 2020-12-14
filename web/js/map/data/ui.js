@@ -100,6 +100,7 @@ export default function dataUi(store, ui, config) {
       }
     });
   };
+
   const query = function() {
     const state = store.getState();
     const dataState = state.data;
@@ -128,33 +129,32 @@ export default function dataUi(store, ui, config) {
 
     const handlerFactory = dataHandlerGetByName(productConfig.handler);
     const handler = handlerFactory(config, store);
-    handler.events
-      .on('query', () => {
-        events.trigger(self.EVENT_QUERY);
-      })
-      .on('results', (results) => {
-        queryExecuting = false;
-        if (self.active && !nextQuery) {
-          events.trigger(self.EVENT_QUERY_RESULTS, results);
-        }
-        if (nextQuery) {
-          const q = nextQuery;
-          nextQuery = null;
-          executeQuery(q);
-        }
-      })
-      .on('error', (textStatus, errorThrown) => {
-        queryExecuting = false;
-        if (self.active) {
-          events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
-        }
-      })
-      .on('timeout', () => {
-        queryExecuting = false;
-        if (self.active) {
-          events.trigger(self.EVENT_QUERY_TIMEOUT);
-        }
-      });
+
+    events.on('results', (results) => {
+      queryExecuting = false;
+      if (self.active && !nextQuery) {
+        events.trigger(self.EVENT_QUERY_RESULTS, results);
+      }
+      if (nextQuery) {
+        const q = nextQuery;
+        nextQuery = null;
+        executeQuery(q);
+      }
+    });
+
+    events.on('error', (textStatus, errorThrown) => {
+      queryExecuting = false;
+      if (self.active) {
+        events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
+      }
+    });
+
+    events.on('timeout', () => {
+      queryExecuting = false;
+      if (self.active) {
+        events.trigger(self.EVENT_QUERY_TIMEOUT);
+      }
+    });
     executeQuery(handler);
   };
 
@@ -171,17 +171,19 @@ export default function dataUi(store, ui, config) {
       nextQuery = handler;
     }
   };
+
   const init = function() {
     events.on('redux:action-dispatched', subscribeToStore);
     events.on('map:extent', self.onViewChange);
-    events.on('query', onQuery)
-      .on('queryResults', (results) => {
-        onQueryResults(results);
-        self.onViewChange(results);
-      })
-      .on('queryError', onQueryError)
-      .on('queryTimeout', onQueryTimeout);
+    events.on('query', onQuery);
+    events.on('queryResults', (results) => {
+      onQueryResults(results);
+      self.onViewChange(results);
+    });
+    events.on('queryError', onQueryError);
+    events.on('queryTimeout', onQueryTimeout);
   };
+
   self.onViewChange = function(results) {
     results = results || lastResults;
     const state = store.getState();

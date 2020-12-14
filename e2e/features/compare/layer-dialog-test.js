@@ -20,10 +20,9 @@ module.exports = {
     c.url(c.globals.url + localQuerystrings.swipeAOD);
     c.waitForElementVisible(aerosolLayer, TIME_LIMIT);
     c.expect.element(AodOptionsPanelBody).to.not.be.present;
-    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.moveToElement(aerosolLayer, 0, 0).pause(200);
     c.click(`${aerosolLayer} .wv-layers-options`);
     c.waitForElementVisible('.layer-settings-modal', TIME_LIMIT);
-    c.pause(500);
     c.assert.containsText(
       `${AodOptionsPanelHeader} .modal-title`,
       'Aerosol Optical Depth',
@@ -34,20 +33,14 @@ module.exports = {
     }
   },
   'Layer info dialog works in A|B mode': (c) => {
-    c.click(`${AodOptionsPanelHeader} .close`).pause(500);
-    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.click(`${AodOptionsPanelHeader} .close`).pause(1000);
+    c.moveToElement(aerosolLayer, 1, 1);
+    c.waitForElementVisible(`${aerosolLayer} .wv-layers-info`);
     c.click(`${aerosolLayer} .wv-layers-info`);
-    c.waitForElementVisible(
-      `${AodInfoPanel} .layer-description`,
-      TIME_LIMIT,
-      () => {
-        c
-          .useCss()
-          .assert.containsText(
-            AodInfoPanel,
-            'The Aerosol Optical Depth layer is useful for studying aerosol optical depth',
-          );
-      },
+    c.waitForElementVisible(`${AodInfoPanel} .layer-description`, TIME_LIMIT);
+    c.assert.containsText(
+      AodInfoPanel,
+      'The Aerosol Optical Depth layer is useful for studying aerosol optical depth',
     );
   },
   'expect clicking A|B button to close options dialog': (c) => {
@@ -75,7 +68,7 @@ module.exports = {
   },
   'Layer info dialog works after exiting A|B mode': (c) => {
     c.click(`${AodOptionsPanelHeader} .close`).pause(500);
-    c.moveToElement(aerosolLayer, 1, 1).pause(200);
+    c.moveToElement(aerosolLayer, 0, 0).pause(200);
     c.click(`${aerosolLayer} .wv-layers-info`);
     c.waitForElementVisible(
       `${AodInfoPanel} .layer-description`,
@@ -123,7 +116,7 @@ module.exports = {
   'Layer info dialog works after clicking into B mode': (c) => {
     c.click(`${correctedReflectanceOptionsPanelHeader} .close`);
     c.waitForElementNotPresent('#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header', TIME_LIMIT);
-    c.moveToElement(correctedReflectanceBLayer, 1, 1).pause(200);
+    c.moveToElement(correctedReflectanceBLayer, 0, 0).pause(200);
     c.click(`${correctedReflectanceBLayer} .wv-layers-info`);
     c.pause(500);
     c.waitForElementVisible(
