@@ -316,11 +316,7 @@ Layer.defaultProps = {
 function mapStateToProps(state, ownProps) {
   const {
     layer,
-    isDisabled,
     isVisible,
-    layerClasses,
-    names,
-    index,
     layerGroupName,
   } = ownProps;
   const {
@@ -342,12 +338,8 @@ function mapStateToProps(state, ownProps) {
     compare,
     tracksForLayer,
     layer,
-    isDisabled,
     isVisible,
-    layerClasses,
     paletteLegends,
-    names,
-    index,
     isCustomPalette,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],

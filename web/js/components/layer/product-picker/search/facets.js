@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const { browser, productPicker } = state;
   const { showMobileFacets, collapsedFacets } = productPicker;
 

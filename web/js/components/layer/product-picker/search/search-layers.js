@@ -47,7 +47,7 @@ SearchLayers.propTypes = {
   showMobileFacets: PropTypes.bool,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const { browser, productPicker } = state;
   const { selectedLayer, showMobileFacets } = productPicker;
 

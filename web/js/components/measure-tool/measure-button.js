@@ -96,7 +96,7 @@ class MeasureButton extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   isActive: state.measure.isActive,
   isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
 });

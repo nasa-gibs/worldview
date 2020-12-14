@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const {
     proj,
     config,

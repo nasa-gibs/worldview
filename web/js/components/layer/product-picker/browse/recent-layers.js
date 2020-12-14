@@ -74,7 +74,7 @@ RecentLayersList.propTypes = {
   recentLayers: PropTypes.array,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { browser, productPicker } = state;
   const {
     selectedLayer,

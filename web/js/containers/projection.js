@@ -90,7 +90,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   updateProjection: (id, config) => {
     dispatch(changeProjection(id));
     dispatch(resetProductPickerState(id));

@@ -106,7 +106,7 @@ Data.propTypes = {
   tabTypes: PropTypes.object,
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   showUnavailableReason: () => {
     dispatch(
       openCustomContent('data_download_no_data_notify', {

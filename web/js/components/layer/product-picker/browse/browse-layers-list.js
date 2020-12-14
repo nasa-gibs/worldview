@@ -50,7 +50,7 @@ BrowseLayerList.propTypes = {
   selectedMeasurement: PropTypes.string,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     productPicker,
     proj,
