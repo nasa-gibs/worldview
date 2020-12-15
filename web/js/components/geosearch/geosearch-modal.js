@@ -346,11 +346,11 @@ class GeosearchModal extends Component {
 
   render() {
     const {
-      geosearchMobileModalOpen,
-      isExpanded,
-      isMobile,
       coordinatesPending,
+      geosearchMobileModalOpen,
       inputValue,
+      isMobile,
+      preventInputFocus,
       suggestions,
     } = this.props;
     const {
@@ -372,8 +372,8 @@ class GeosearchModal extends Component {
               coordinatesPending={coordinatesPending}
               geosearchMobileModalOpen={geosearchMobileModalOpen}
               inputValue={inputValue}
-              isExpanded={isExpanded}
               isMobile={isMobile}
+              preventInputFocus={preventInputFocus}
               onChange={this.onChange}
               onCoordinateInputSelect={this.onCoordinateInputSelect}
               onSelect={this.onSelect}
@@ -393,23 +393,28 @@ const mapStateToProps = (state) => {
   const {
     browser,
     config,
+    lastAction,
     map,
     modal,
     geosearch,
   } = state;
   const {
-    coordinates, isCoordinateSearchActive, isExpanded, suggestions, suggestedPlace,
+    coordinates,
+    isCoordinateSearchActive,
+    suggestions,
+    suggestedPlace,
   } = geosearch;
   const isMobile = browser.lessThan.medium;
   const geosearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_GEOSEARCH_MOBILE';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
+  const measureToggledOff = lastAction.type === 'MEASURE/TOGGLE_MEASURE_ACTIVE' && lastAction.value === false;
 
   return {
+    preventInputFocus: measureToggledOff,
     coordinates,
     geosearchMobileModalOpen,
     isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(map, config, targetCoordinates),
     isCoordinateSearchActive,
-    isExpanded,
     isMobile,
     processMagicKey: (magicKey) => processMagicKey(magicKey, config),
     reverseGeocode: (coords) => reverseGeocode(coords, config),
@@ -448,8 +453,8 @@ GeosearchModal.propTypes = {
   inputValue: PropTypes.string,
   isCoordinatePairWithinExtent: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
-  isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
+  preventInputFocus: PropTypes.bool,
   processMagicKey: PropTypes.func,
   reverseGeocode: PropTypes.func,
   setPlaceMarker: PropTypes.func,

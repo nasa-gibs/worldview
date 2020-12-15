@@ -76,7 +76,6 @@ const mapStateToProps = (state) => {
   } = state;
   const { features: { geocodeSearch: { url: requestUrl } } } = config;
   const isFeatureEnabled = !!requestUrl;
-  const { isActive } = measure;
   const { gifActive } = animation;
   const {
     isExpanded,
@@ -85,7 +84,7 @@ const mapStateToProps = (state) => {
   const isMobile = browser.lessThan.medium;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
-  const shouldCollapseFromOtherUI = snapshotModalOpen || isActive || gifActive || isDistractionFreeModeActive;
+  const shouldCollapseFromOtherUI = snapshotModalOpen || measure.isActive || gifActive || isDistractionFreeModeActive;
 
   return {
     isExpanded,

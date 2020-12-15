@@ -13,9 +13,13 @@ class SearchBox extends Component {
   }
 
   componentDidMount() {
-    const { geosearchMobileModalOpen, isExpanded, suggestions } = this.props;
+    const {
+      geosearchMobileModalOpen,
+      preventInputFocus,
+      suggestions,
+    } = this.props;
     // timeout necessary to trigger input focus
-    if (isExpanded || geosearchMobileModalOpen) {
+    if (!preventInputFocus || geosearchMobileModalOpen) {
       setTimeout(() => {
         if (this.geosearchInput) {
           this.geosearchInput.focus();
@@ -257,8 +261,8 @@ SearchBox.propTypes = {
   coordinatesPending: PropTypes.array,
   geosearchMobileModalOpen: PropTypes.bool,
   inputValue: PropTypes.string,
-  isExpanded: PropTypes.bool,
   isMobile: PropTypes.bool,
+  preventInputFocus: PropTypes.bool,
   onChange: PropTypes.func,
   onCoordinateInputSelect: PropTypes.func,
   onSelect: PropTypes.func,
