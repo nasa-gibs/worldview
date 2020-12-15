@@ -229,14 +229,18 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const handleActiveMapMarker = () => {
+  const handleActiveMapMarker = (start) => {
     const state = store.getState();
     const { geosearch } = state;
-    const { coordinates } = geosearch;
+    const { coordinates, reverseGeocodeResults } = geosearch;
     if (coordinates && coordinates.length > 0) {
-      reverseGeocode(coordinates, config).then((results) => {
-        addMarkerAndUpdateStore(results);
-      });
+      if (start) {
+        reverseGeocode(coordinates, config).then((results) => {
+          addMarkerAndUpdateStore(results);
+        });
+      } else {
+        addMarkerAndUpdateStore(reverseGeocodeResults);
+      }
     }
   };
 
@@ -330,11 +334,11 @@ export default function mapui(models, config, store, ui) {
    * @static
    *
    * @param {Object} geocodeResults
-   * @param {Boolean} isInit
+   * @param {Boolean} shouldFlyToCoordinates
    *
    * @returns {void}
    */
-  const addMarkerAndUpdateStore = (geocodeResults, isInit) => {
+  const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
     const state = store.getState();
     const {
       geosearch, layers, proj,
@@ -364,7 +368,7 @@ export default function mapui(models, config, store, ui) {
     self.selected.addLayer(marker);
     self.selected.renderSync();
 
-    if (isInit) {
+    if (shouldFlyToCoordinates) {
       // fly to coordinates and render coordinates tooltip on init SET_MARKER
       const zoom = self.selected.getView().getZoom();
       const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
@@ -373,7 +377,7 @@ export default function mapui(models, config, store, ui) {
     }
 
     // handle render initial tooltip
-    const isDialogOpen = isInit || isCoordinatesDialogOpen;
+    const isDialogOpen = shouldFlyToCoordinates || isCoordinatesDialogOpen;
     if (isDialogOpen) {
       addCoordinatesTooltip(results);
     }
@@ -476,7 +480,7 @@ export default function mapui(models, config, store, ui) {
     }
     updateExtent();
     onResize();
-    handleActiveMapMarker();
+    handleActiveMapMarker(start);
   }
   /*
    * When page is resised set for mobile or desktop

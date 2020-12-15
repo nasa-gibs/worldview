@@ -19,16 +19,15 @@ const getCoordinatesDialogTitle = (geocodeProperties) => {
   if (address && !error) {
     /* eslint-disable camelcase */
     const {
-      Addr_type,
       Match_addr,
-      ShortLabel,
       City,
       Region,
+      Subregion,
     } = address;
-    if (Addr_type === 'PointAddress') {
-      title = `${ShortLabel}, ${City}, ${Region}`;
-    } else if (City && Region) {
+    if (City && Region) {
       title = `${City}, ${Region}`;
+    } else if (Subregion && Region) {
+      title = `${Subregion}, ${Region}`;
     } else {
       title = `${Match_addr}`;
     }
