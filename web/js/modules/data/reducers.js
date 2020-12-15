@@ -12,7 +12,7 @@ export const defaultDataState = {
   prefer: 'science',
   active: false,
 };
-export default function dataDownloadReducer(state = defaultDataState, action) {
+export default function reducers(state = defaultDataState, action) {
   switch (action.type) {
     case SELECT_PRODUCT:
       return lodashAssign({}, state, {

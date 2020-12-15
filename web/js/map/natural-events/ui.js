@@ -18,7 +18,7 @@ const zoomLevelReference = {
   Volcanoes: 6,
 };
 
-export default function naturalEventsUI(ui, config, store, models) {
+export default function ui(ui, config, store, models) {
   const self = {};
   let map;
   let view;

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
-import Steps from './widget-steps';
+import Steps from './tour-steps';
 
-class ModalInProgress extends React.Component {
+class ModalTourInProgress extends React.Component {
   componentDidUpdate() {
     // eslint-disable-next-line react/no-string-refs
     if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
@@ -64,7 +64,7 @@ class ModalInProgress extends React.Component {
   }
 }
 
-ModalInProgress.propTypes = {
+ModalTourInProgress.propTypes = {
   currentStep: PropTypes.number.isRequired,
   currentStory: PropTypes.object.isRequired,
   decreaseStep: PropTypes.func.isRequired,
@@ -77,4 +77,4 @@ ModalInProgress.propTypes = {
   description: PropTypes.string,
 };
 
-export default ModalInProgress;
+export default ModalTourInProgress;

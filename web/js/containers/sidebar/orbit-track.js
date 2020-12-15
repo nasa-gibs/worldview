@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PaletteLegend from '../../components/sidebar/paletteLegend';
+import PaletteLegend from '../../components/sidebar/palette-legend';
 import {
   getPalette,
   getPaletteLegends,

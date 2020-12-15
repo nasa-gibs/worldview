@@ -8,7 +8,7 @@ import {
 } from '../../modules/image-download/util';
 
 import SelectionList from '../util/selector';
-import ResTable from './grid';
+import ResTable from './resolution-table';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -28,7 +28,7 @@ const RESOLUTION_KEY = {
  * @class resolutionSelection
  * @extends React.Component
  */
-export default class ImageResSelection extends React.Component {
+export default class ResolutionSelection extends React.Component {
   constructor(props) {
     super(props);
 
@@ -189,7 +189,7 @@ export default class ImageResSelection extends React.Component {
   }
 }
 
-ImageResSelection.defaultProps = {
+ResolutionSelection.defaultProps = {
   fileType: 'image/jpeg',
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
@@ -199,7 +199,7 @@ ImageResSelection.defaultProps = {
   secondLabel: 'Format',
   worldFileOptions: true,
 };
-ImageResSelection.propTypes = {
+ResolutionSelection.propTypes = {
   date: PropTypes.object,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,

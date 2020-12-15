@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 /**
  * Component that alerts if you click outside of it
  */
-export default class OutsideAlerter extends Component {
+export default class DetectOuterClick extends Component {
   constructor(props) {
     super(props);
 
@@ -47,10 +47,10 @@ export default class OutsideAlerter extends Component {
     return <div ref={this.setWrapperRef}>{children}</div>;
   }
 }
-OutsideAlerter.defaultProps = {
+DetectOuterClick.defaultProps = {
   disabled: false,
 };
-OutsideAlerter.propTypes = {
+DetectOuterClick.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

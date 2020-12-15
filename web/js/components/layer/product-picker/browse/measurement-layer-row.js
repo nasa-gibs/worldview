@@ -10,7 +10,7 @@ import {
   removeLayer as removeLayerAction,
 } from '../../../../modules/layers/actions';
 import SelectedDate from '../../../selected-date';
-import getSelectedDate from '../../../../modules/date/selectors';
+import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 
 /*

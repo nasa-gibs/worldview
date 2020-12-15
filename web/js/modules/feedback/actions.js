@@ -1,6 +1,7 @@
 import { INIT_FEEDBACK } from './constants';
 
-export default function initFeedback() {
+// eslint-disable-next-line import/prefer-default-export
+export function initFeedback() {
   return {
     type: INIT_FEEDBACK,
   };

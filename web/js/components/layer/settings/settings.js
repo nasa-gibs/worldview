@@ -6,9 +6,9 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import Opacity from './opacity';
-import Palette from './palette';
+import Palette from './palette-select';
 import OrbitTracks from './orbit-tracks-toggle';
-import VectorStyle from './vector-style';
+import VectorStyle from './vector-style-select';
 import PaletteThreshold from './palette-threshold';
 
 import {

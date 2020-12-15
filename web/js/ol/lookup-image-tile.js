@@ -1,17 +1,17 @@
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';
 
-class LookupImageTile extends OlImageTile {
+class Lookup extends OlImageTile {
   constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions) {
     super(tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions);
     this.lookup_ = lookup;
     this.canvas_ = null;
   }
 }
-LookupImageTile.prototype.getImage = function() {
+Lookup.prototype.getImage = function() {
   return this.canvas_;
 };
-LookupImageTile.prototype.load = function() {
+Lookup.prototype.load = function() {
   if (this.state === OlTileState.IDLE) {
     this.state = OlTileState.LOADING;
     this.changed();
@@ -51,9 +51,9 @@ LookupImageTile.prototype.load = function() {
   }
 };
 
-export default function lookupFactory(lookup, sourceOptions) {
+export default function LookupImageTile(lookup, sourceOptions) {
   return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
-    return new LookupImageTile(lookup, tileCoord, state, src,
+    return new Lookup(lookup, tileCoord, state, src,
       crossOrigin, tileLoadFunction, sourceOptions);
   };
 }

@@ -2,7 +2,7 @@ import * as olExtent from 'ol/extent';
 import OlGeomLineString from 'ol/geom/LineString';
 import Promise from 'bluebird';
 
-export default function mapAnimate(config, ui, store) {
+export default function Animate(config, ui, store) {
   const self = {};
 
   /**

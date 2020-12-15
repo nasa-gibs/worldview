@@ -1,6 +1,6 @@
-import EventsAlertModalBody from '../../components/events/alert-body';
-import CompareAlertModalBody from '../../components/compare/alert';
-import VectorAlertModalBody from '../../components/feature-alert/vector-alert-modal';
+import EventsAlertModalBody from '../../components/events/events-alert';
+import CompareAlertModalBody from '../../components/compare/compare-alert';
+import VectorAlertModalBody from '../../components/feature-alert/vector-alert';
 
 export const TOGGLE_VECTOR_ALERT = 'ALERTS/TOGGLE_VECTOR_ALERT';
 export const DISABLE_VECTOR_ALERT = 'ALERTS/DISABLE_VECTOR_ALERT';

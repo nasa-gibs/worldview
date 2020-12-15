@@ -8,7 +8,7 @@ import util from '../../util/util';
  * @class LineText
  * @extends React.Component
  */
-class LineText extends React.Component {
+class DatelineText extends React.Component {
   /*
    * Sets state and extents props
    */
@@ -74,7 +74,7 @@ class LineText extends React.Component {
     );
   }
 }
-LineText.defaultProps = {
+DatelineText.defaultProps = {
   textOpacity: 0.7,
   rectOpacity: 1,
   width: '300',
@@ -86,7 +86,7 @@ LineText.defaultProps = {
   recRadius: 3,
 };
 
-LineText.propTypes = {
+DatelineText.propTypes = {
   color: PropTypes.string,
   dateLeft: PropTypes.string,
   dateRight: PropTypes.string,
@@ -100,4 +100,4 @@ LineText.propTypes = {
   width: PropTypes.string,
 };
 
-export default LineText;
+export default DatelineText;

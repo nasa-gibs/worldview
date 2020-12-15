@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
 
-class OpacitySelect extends React.Component {
+class Opacity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,13 +30,13 @@ class OpacitySelect extends React.Component {
     );
   }
 }
-OpacitySelect.defaultProps = {
+Opacity.defaultProps = {
   start: 100,
 };
-OpacitySelect.propTypes = {
+Opacity.propTypes = {
   layer: PropTypes.object,
   setOpacity: PropTypes.func,
   start: PropTypes.number,
 };
 
-export default OpacitySelect;
+export default Opacity;

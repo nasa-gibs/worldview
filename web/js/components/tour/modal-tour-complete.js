@@ -4,7 +4,7 @@ import {
   Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 
-const ModalComplete = (props) => {
+const ModalTourComplete = (props) => {
   const {
     currentStory, modalComplete, resetTour, endTour,
   } = props;
@@ -73,11 +73,11 @@ const ModalComplete = (props) => {
   );
 };
 
-ModalComplete.propTypes = {
+ModalTourComplete.propTypes = {
   currentStory: PropTypes.object.isRequired,
   endTour: PropTypes.func.isRequired,
   modalComplete: PropTypes.bool.isRequired,
   resetTour: PropTypes.func.isRequired,
 };
 
-export default ModalComplete;
+export default ModalTourComplete;

@@ -12,7 +12,7 @@ import { timeScaleOptions } from '../../modules/date/constants';
  *
  * @class TimelineRangeSelector
  */
-class TimelineRangeSelector extends React.Component {
+class RangeSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -332,7 +332,7 @@ class TimelineRangeSelector extends React.Component {
   }
 }
 
-TimelineRangeSelector.defaultProps = {
+RangeSelector.defaultProps = {
   pinWidth: 5,
   rangeOpacity: 0.3,
   rangeColor: '#45bdff',
@@ -342,7 +342,7 @@ TimelineRangeSelector.defaultProps = {
   endTriangleColor: '#4b7aab',
 };
 
-TimelineRangeSelector.propTypes = {
+RangeSelector.propTypes = {
   axisWidth: PropTypes.number,
   endColor: PropTypes.string,
   endLocation: PropTypes.number,
@@ -366,4 +366,4 @@ TimelineRangeSelector.propTypes = {
   width: PropTypes.number,
 };
 
-export default TimelineRangeSelector;
+export default RangeSelector;

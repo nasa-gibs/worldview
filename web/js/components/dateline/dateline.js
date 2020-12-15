@@ -8,7 +8,7 @@ import util from '../../util/util';
  * @class Line
  * @extends React.Component
  */
-class Line extends React.Component {
+class Dateline extends React.Component {
   /*
    * Sets state and extents props
    */
@@ -143,7 +143,7 @@ class Line extends React.Component {
     );
   }
 }
-Line.defaultProps = {
+Dateline.defaultProps = {
   dashArray: '5, 10',
   opacity: '0.5',
   width: '10',
@@ -155,7 +155,7 @@ Line.defaultProps = {
   },
 };
 
-Line.propTypes = {
+Dateline.propTypes = {
   classes: PropTypes.string,
   color: PropTypes.string,
   dashArray: PropTypes.string,
@@ -172,4 +172,4 @@ Line.propTypes = {
   width: PropTypes.string,
 };
 
-export default Line;
+export default Dateline;

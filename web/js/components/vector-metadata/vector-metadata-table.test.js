@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import VectorMetaTable from './table';
+import VectorMetaTable from './vector-metadata-table';
 
 let component;
 beforeEach(() => {

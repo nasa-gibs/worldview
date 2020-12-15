@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 
-class DistractionFreeTimeUI extends PureComponent {
+class DistractionFreeTime extends PureComponent {
   handleMouseOver = () => {
     const { hoverOverDistractionFreeTimeUI } = this.props;
     hoverOverDistractionFreeTimeUI(true);
@@ -45,11 +45,11 @@ class DistractionFreeTimeUI extends PureComponent {
   }
 }
 
-DistractionFreeTimeUI.propTypes = {
+DistractionFreeTime.propTypes = {
   date: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   hoverOverDistractionFreeTimeUI: PropTypes.func,
   isHoverOverDistractionFreeTimeUI: PropTypes.bool,
 };
 
-export default DistractionFreeTimeUI;
+export default DistractionFreeTime;

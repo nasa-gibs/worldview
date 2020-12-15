@@ -22,7 +22,7 @@ import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import { faIconInfoCircleSVGDomEl } from '../fa-map-icons';
 
-export default function dataUi(store, ui, config) {
+export default function ui(store, ui, config) {
   let queryActive = false;
   let mapController = null;
   let selectionListPanel = null;

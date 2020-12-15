@@ -9,11 +9,11 @@ import {
   InputGroup,
   Button,
 } from 'reactstrap';
-import ShareLinks from '../components/toolbar/share/links';
-import ShareToolTips from '../components/toolbar/share/tooltips';
+import ShareLinks from '../components/toolbar/share-links';
+import ShareToolTips from '../components/toolbar/share-tooltips';
 import { encode, getSharelink } from '../modules/link/util';
 import { serializeDate } from '../modules/date/util';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';

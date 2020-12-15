@@ -3,8 +3,8 @@ import {
   indexOf as lodashIndexOf,
 } from 'lodash';
 import { createSelector } from 'reselect';
-import buildLayerFacetProps from './format-config';
-import getSelectedDate from '../date/selectors';
+import { buildLayerFacetProps } from './format-config';
+import { getSelectedDate } from '../date/selectors';
 import util from '../../util/util';
 
 // State selectors

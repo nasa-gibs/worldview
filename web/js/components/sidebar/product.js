@@ -5,7 +5,7 @@ import util from '../../util/util';
 
 const listId = 'wv-data';
 
-class Data extends React.Component {
+class Product extends React.Component {
   getHeaderContents() {
     const {
       id,
@@ -86,7 +86,7 @@ class Data extends React.Component {
   }
 }
 
-Data.propTypes = {
+Product.propTypes = {
   countsObject: PropTypes.object,
   id: PropTypes.string,
   isSelected: PropTypes.bool,
@@ -95,4 +95,4 @@ Data.propTypes = {
   showUnavailableReason: PropTypes.func,
 };
 
-export default Data;
+export default Product;

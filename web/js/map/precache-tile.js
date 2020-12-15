@@ -2,7 +2,7 @@ import lodashEach from 'lodash/each';
 import * as olExtent from 'ol/extent';
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 
-export default function mapPrecacheTile(models, config, cache, parent) {
+export default function precacheTile(models, config, cache, parent) {
   /**
    * Loads the layers that are needed for any one date.
    * Checks the cache to see if a layer has already been added to cache.

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  * @class TimeScaleIntervalChange
  * @extends PureComponent
  */
-class TimeScaleIntervalChange extends PureComponent {
+class IntervalTimescaleChange extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -194,7 +194,7 @@ class TimeScaleIntervalChange extends PureComponent {
   }
 }
 
-TimeScaleIntervalChange.propTypes = {
+IntervalTimescaleChange.propTypes = {
   customDelta: PropTypes.number,
   customIntervalZoomLevel: PropTypes.string,
   customSelected: PropTypes.bool,
@@ -203,4 +203,4 @@ TimeScaleIntervalChange.propTypes = {
   timeScaleChangeUnit: PropTypes.string,
 };
 
-export default TimeScaleIntervalChange;
+export default IntervalTimescaleChange;

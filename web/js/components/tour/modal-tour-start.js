@@ -9,12 +9,12 @@ import {
   InputGroupText,
 } from 'reactstrap';
 import Checkbox from '../util/checkbox';
-import TourIntro from './content-intro';
+import TourIntro from './tour-intro';
 import TourBoxes from './tour-boxes';
 import safeLocalStorage from '../../util/local-storage';
 import Scrollbars from '../util/scrollbar';
 
-class ModalStart extends React.Component {
+class ModalTourStart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -117,7 +117,7 @@ class ModalStart extends React.Component {
   }
 }
 
-ModalStart.propTypes = {
+ModalTourStart.propTypes = {
   checked: PropTypes.bool.isRequired,
   endTour: PropTypes.func.isRequired,
   hideTour: PropTypes.func.isRequired,
@@ -132,4 +132,4 @@ ModalStart.propTypes = {
   height: PropTypes.number,
 };
 
-export default ModalStart;
+export default ModalTourStart;

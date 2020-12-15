@@ -5,7 +5,7 @@ export const uiState = {
   isDistractionFreeModeActive: false,
 };
 
-export default function uiReducers(state = uiState, action) {
+export default function reducers(state = uiState, action) {
   switch (action.type) {
     case TOGGLE_DISTRACTION_FREE_MODE:
       return lodashAssign({}, state, {

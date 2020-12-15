@@ -1,4 +1,4 @@
-import dataParser from './data';
+import { dataParser } from './data';
 
 function testConfig() {
   return {

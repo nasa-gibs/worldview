@@ -6,7 +6,7 @@ import CategoryLayerRow from './category-layer-row';
 import {
   hasMeasurementSource as hasSourceSelector,
 } from '../../../../modules/layers/selectors';
-import getSelectedDate from '../../../../modules/date/selectors';
+import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getCategoryConfig } from '../../../../modules/product-picker/selectors';
 
 function BrowseLayerList (props) {

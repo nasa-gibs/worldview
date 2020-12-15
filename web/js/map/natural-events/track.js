@@ -25,7 +25,7 @@ import { selectEvent as selectEventAction } from '../../modules/natural-events/a
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
 
-export default function naturalEventsTrack(ui, store, selectedMap) {
+export default function track(ui, store, selectedMap) {
   const self = {};
   self.trackDetails = {};
   self.active = false;

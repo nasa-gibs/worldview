@@ -1,3 +1,4 @@
+/* eslint-disable filenames/match-exported */
 /* global DEBUG */
 // IE11 corejs polyfills container
 import 'core-js/stable';

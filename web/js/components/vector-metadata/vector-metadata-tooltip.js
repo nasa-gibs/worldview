@@ -4,7 +4,7 @@ import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../../util/util';
 
-export default class VectorMetaTooltip extends React.Component {
+export default class VectorMetadataTooltip extends React.Component {
   constructor(props) {
     super(props);
 
@@ -62,7 +62,7 @@ export default class VectorMetaTooltip extends React.Component {
   }
 }
 
-VectorMetaTooltip.propTypes = {
+VectorMetadataTooltip.propTypes = {
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   description: PropTypes.string,

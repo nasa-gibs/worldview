@@ -5,7 +5,7 @@ const feedbackState = {
   isInitiated: false,
 };
 
-export default function projectionReducer(state = feedbackState, action) {
+export default function reducers(state = feedbackState, action) {
   switch (action.type) {
     case INIT_FEEDBACK:
       return lodashAssign({}, state, {

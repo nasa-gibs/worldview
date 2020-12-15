@@ -5,13 +5,12 @@ import googleTagManager from 'googleTagManager';
 import {
   openCustomContent,
 } from '../modules/modal/actions';
-import toggleDistractionFreeModeAction from '../modules/ui/actions';
+import { toggleDistractionFreeMode as toggleDistractionFreeModeAction } from '../modules/ui/actions';
 import AboutPage from '../components/about/about-page';
 import IconList from '../components/util/list';
-import onClickFeedback from '../modules/feedback/util';
+import { onClickFeedback } from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
-
-import initFeedback from '../modules/feedback/actions';
+import { initFeedback } from '../modules/feedback/actions';
 import {
   startTour as startTourAction,
   endTour as endTourAction,

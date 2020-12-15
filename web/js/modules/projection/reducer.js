@@ -6,7 +6,7 @@ export const projectionState = {
   selected: {},
 };
 
-export default function projectionReducer(state = projectionState, action) {
+export default function reducer(state = projectionState, action) {
   switch (action.type) {
     case CHANGE_PROJECTION:
       return lodashAssign({}, state, {

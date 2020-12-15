@@ -13,7 +13,9 @@ import { CLOSE as CLOSE_MODAL } from '../modal/constants';
  * @param {Boolean} is ctrlOrCmdKey down
  * @param {Boolean} is key pressed within an INPUT element
  */
-export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput) {
+
+// eslint-disable-next-line import/prefer-default-export
+export function keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput) {
   return (dispatch, getState) => {
     const {
       modal, animation, tour, ui,

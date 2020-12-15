@@ -7,7 +7,7 @@ import { getOrbitTrackTitle } from '../../../modules/layers/util';
  * onto separate lines
  *
  */
-export default function RenderSplitLayerTitle(props) {
+export default function RenderSplitTitle(props) {
   const { layer } = props;
   const { title, subtitle } = layer;
   const layerIsOrbitTrack = (layer.layergroup || []).includes('reference_orbits');
@@ -31,6 +31,6 @@ export default function RenderSplitLayerTitle(props) {
     );
 }
 
-RenderSplitLayerTitle.propTypes = {
+RenderSplitTitle.propTypes = {
   layer: PropTypes.object,
 };

@@ -9,7 +9,7 @@ import {
 } from 'lodash';
 import GridRange from './grid-range/grid-range';
 
-import getTimeRange from './date-calc';
+import getTimeRange from './get-time-range';
 import {
   timeScaleOptions,
   timeScaleToNumberKey,

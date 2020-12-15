@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Nav, UncontrolledTooltip } from 'reactstrap';
-import CustomNavItem from './nav-item';
+import CustomNavItem from './custom-nav-item';
 
 
 const tabClasses = 'sidebar-tab';

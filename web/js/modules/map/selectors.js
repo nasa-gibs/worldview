@@ -4,7 +4,9 @@ import { promiseLayerGroup } from './util';
  * @param  {object} time of data to be displayed on the map.
  * @return {object}      Promise.all
  */
-export default function promiseImageryForTime(date, layers, state) {
+
+// eslint-disable-next-line import/prefer-default-export
+export function promiseImageryForTime(date, layers, state) {
   const { map } = state;
   const { cache } = map.ui;
   const mapUi = map.ui;

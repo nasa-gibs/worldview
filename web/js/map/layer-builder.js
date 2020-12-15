@@ -17,7 +17,7 @@ import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import util from '../util/util';
-import lookupFactory from '../ol/lookupimagetile';
+import lookupFactory from '../ol/lookup-image-tile';
 import { createVectorUrl, mergeBreakpointLayerAttributes } from './util';
 import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import {
@@ -34,7 +34,7 @@ import {
   nearestInterval,
 } from '../modules/layers/util';
 
-export default function mapLayerBuilder(models, config, cache, ui, store) {
+export default function layerBuilder(models, config, cache, ui, store) {
   const self = {};
 
   self.init = function() {

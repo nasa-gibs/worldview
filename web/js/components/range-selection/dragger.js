@@ -7,10 +7,10 @@ import lodashRound from 'lodash/round';
  * A react component, is a draggable svg
  * group
  *
- * @class TimelineDragger
+ * @class Dragger
  * @extends React.Component
  */
-class TimelineDragger extends PureComponent {
+class Dragger extends PureComponent {
   /*
    * @constructor
    */
@@ -188,7 +188,7 @@ class TimelineDragger extends PureComponent {
     );
   }
 }
-TimelineDragger.defaultProps = {
+Dragger.defaultProps = {
   color: '#fff',
   height: 45,
   path: null,
@@ -198,7 +198,7 @@ TimelineDragger.defaultProps = {
   yOffset: 23,
 };
 
-TimelineDragger.propTypes = {
+Dragger.propTypes = {
   backgroundColor: PropTypes.string,
   color: PropTypes.string,
   draggerID: PropTypes.string,
@@ -215,4 +215,4 @@ TimelineDragger.propTypes = {
   yOffset: PropTypes.number,
 };
 
-export default TimelineDragger;
+export default Dragger;

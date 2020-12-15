@@ -66,7 +66,7 @@
       }
     ],
     "no-storage/no-browser-storage": "error",
-    "filenames/match-exported": [ 2, "kebab" ]
+    "filenames/match-exported": [ "error", "kebab" ]
   },
   "overrides": [
     {

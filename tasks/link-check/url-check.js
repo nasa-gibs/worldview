@@ -35,7 +35,7 @@ const requestCheck = async(urls) => {
 };
 
 // Get urls with errors/status codes organized into an object
-const getURLStatusCodeCollection = async function(urls) {
+module.exports = async function(urls) {
   const checkStatus = await requestCheck(urls);
   // Log out number of links with errors/status codes
   console.log(`
@@ -55,5 +55,3 @@ ${'-'.repeat(66)}
   });
   return checkStatus;
 };
-
-module.exports = getURLStatusCodeCollection;

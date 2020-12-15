@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert } from 'reactstrap';
+import { Alert as ReactStrapAlert } from 'reactstrap';
 import { Portal } from 'react-portal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  * @class AlertComponent
  * @extends React.Component
  */
-export default class AlertUtil extends React.Component {
+export default class Alert extends React.Component {
   constructor(props) {
     super(props);
     if (props.timeout && props.onDismiss) {
@@ -43,7 +43,7 @@ export default class AlertUtil extends React.Component {
     } = this.props;
 
     return (
-      <Alert
+      <ReactStrapAlert
         id={id}
         className="wv-alert"
         isOpen={isOpen}
@@ -67,7 +67,7 @@ export default class AlertUtil extends React.Component {
             <FontAwesomeIcon icon="times" className="exit" size="1x" />
           </div>
         )}
-      </Alert>
+      </ReactStrapAlert>
     );
   }
 
@@ -83,11 +83,11 @@ export default class AlertUtil extends React.Component {
   }
 }
 
-AlertUtil.defaultProps = {
+Alert.defaultProps = {
   icon: '',
   title: '',
 };
-AlertUtil.propTypes = {
+Alert.propTypes = {
   icon: PropTypes.string,
   id: PropTypes.string,
   isOpen: PropTypes.bool,

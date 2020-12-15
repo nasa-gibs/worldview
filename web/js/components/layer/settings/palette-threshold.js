@@ -4,7 +4,7 @@ import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
 import Checkbox from '../../util/checkbox';
 
-class ThresholdSelect extends React.Component {
+class PaletteThreshold extends React.Component {
   constructor(props) {
     super(props);
     const { start, end, squashed } = props;
@@ -133,7 +133,7 @@ class ThresholdSelect extends React.Component {
     );
   }
 }
-ThresholdSelect.propTypes = {
+PaletteThreshold.propTypes = {
   end: PropTypes.number,
   groupName: PropTypes.string,
   index: PropTypes.number,
@@ -147,4 +147,4 @@ ThresholdSelect.propTypes = {
   start: PropTypes.number,
 };
 
-export default ThresholdSelect;
+export default PaletteThreshold;

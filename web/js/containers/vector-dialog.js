@@ -6,7 +6,7 @@ import {
   ModalBody, ModalHeader, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import Scrollbars from '../components/util/scrollbar';
-import VectorMetaTable from '../components/vector-metadata/table';
+import VectorMetaTable from '../components/vector-metadata/vector-metadata-table';
 
 class VectorDialog extends React.Component {
   constructor(props) {

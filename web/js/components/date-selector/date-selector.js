@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DateInputColumn from './input';
+import DateInputColumn from './date-input';
 import util from '../../util/util';
 
 /*

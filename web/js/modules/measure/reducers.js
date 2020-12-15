@@ -14,7 +14,7 @@ const defaultState = {
   },
 };
 
-export default function measureReducer(state = defaultState, action) {
+export default function reducers(state = defaultState, action) {
   switch (action.type) {
     case CHANGE_UNITS:
       return {

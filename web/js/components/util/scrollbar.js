@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 /**
  * Wrapper component for SimpleBar
  */
-export default function Scrollbars(props) {
+export default function Scrollbar(props) {
   const ref = useRef();
   const {
     style,
@@ -52,7 +52,7 @@ export default function Scrollbars(props) {
   );
 }
 
-Scrollbars.propTypes = {
+Scrollbar.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   style: PropTypes.object,

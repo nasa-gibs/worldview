@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
  * TimeScaleSelect for Custom Interval Selector
  * group. It is a child component.
  *
- * @class TimeScaleSelect
+ * @class IntervalSelect
  */
-class TimeScaleSelect extends PureComponent {
+class IntervalSelect extends PureComponent {
   handleChangeZoomLevel = (e) => {
     const { changeZoomLevel } = this.props;
     const zoomLevel = e.target.value;
@@ -50,10 +50,10 @@ class TimeScaleSelect extends PureComponent {
   }
 }
 
-TimeScaleSelect.propTypes = {
+IntervalSelect.propTypes = {
   changeZoomLevel: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   zoomLevel: PropTypes.string,
 };
 
-export default TimeScaleSelect;
+export default IntervalSelect;

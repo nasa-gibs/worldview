@@ -17,7 +17,9 @@ import { timeScaleFromNumberKey } from '../date/constants';
  * @returns {array} array of jpg urls
  *
  */
-export default function getImageArray(
+
+// eslint-disable-next-line import/prefer-default-export
+export function getImageArray(
   gifComponentState,
   gifComponentProps,
   dimensions,

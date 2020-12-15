@@ -4,12 +4,12 @@ import ReactDOM from 'react-dom';
 import OlOverlay from 'ol/Overlay';
 import util from '../util/util';
 import DateLine from '../components/dateline/dateline';
-import LineText from '../components/dateline/text';
+import LineText from '../components/dateline/dateline-text';
 import { CHANGE_STATE as COMPARE_CHANGE_STATE } from '../modules/compare/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 
 let map;
 let overlay1;
@@ -22,7 +22,7 @@ let textLeft;
 let textRight;
 let proj;
 
-export default function mapDateLineBuilder(models, config, store, ui) {
+export default function datelineBuilder(models, config, store, ui) {
   const self = {};
   // formatted YYYY-MM-DD (e.g., 2019-06-25) for checking daily change for dateline
   self.date = {};

@@ -9,7 +9,7 @@ import {
  * @class ShareToolTips
  * @extends React.PureComponent
  */
-class ShareToolTips extends PureComponent {
+class ShareTooltips extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,9 +75,9 @@ class ShareToolTips extends PureComponent {
   }
 }
 
-ShareToolTips.propTypes = {
+ShareTooltips.propTypes = {
   tooltipErrorTime: PropTypes.number,
   tooltipToggleTime: PropTypes.number,
 };
 
-export default ShareToolTips;
+export default ShareTooltips;

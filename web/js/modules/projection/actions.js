@@ -1,6 +1,7 @@
 import { CHANGE_PROJECTION } from './constants';
 
-export default function changeProjection(id) {
+// eslint-disable-next-line import/prefer-default-export
+export function changeProjection(id) {
   return (dispatch, getState) => {
     const { config } = getState();
     const proj = config.projections[id];

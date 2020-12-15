@@ -13,7 +13,7 @@ import { getLayersActiveAtDate } from '../../modules/date/util';
  * @class PlayAnimation
  * @extends React.Component
  */
-class PlayAnimation extends React.Component {
+class PlayQueue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -478,7 +478,7 @@ class PlayAnimation extends React.Component {
   }
 }
 
-PlayAnimation.propTypes = {
+PlayQueue.propTypes = {
   endDate: PropTypes.object.isRequired,
   isPlaying: PropTypes.bool.isRequired,
   layers: PropTypes.array.isRequired,
@@ -498,4 +498,4 @@ PlayAnimation.propTypes = {
   onClose: PropTypes.func,
 };
 
-export default PlayAnimation;
+export { PlayQueue };

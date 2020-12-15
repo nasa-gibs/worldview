@@ -8,14 +8,14 @@ import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
-import PaletteLegend from '../../components/sidebar/paletteLegend';
+import PaletteLegend from '../../components/sidebar/palette-legend';
 import util from '../../util/util';
 import {
   getPalette,
   getPaletteLegends,
 } from '../../modules/palettes/selectors';
 import { toggleCustomContent, openCustomContent } from '../../modules/modal/actions';
-import LayerInfo from '../../components/layer/info/info';
+import LayerInfo from '../../components/layer/info/layer-info';
 import LayerSettings from '../../components/layer/settings/settings';
 import { requestPalette } from '../../modules/palettes/actions';
 import {

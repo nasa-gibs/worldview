@@ -9,7 +9,7 @@ import { assign as lodashAssign, get } from 'lodash';
  * @param {Object} state | initial state before location POP action
  * @param {Object} config
  */
-export default function mapLocationToSidebarState(
+export function mapLocationToSidebarState(
   parameters,
   stateFromLocation,
   state,

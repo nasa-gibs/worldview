@@ -28,10 +28,10 @@ const getToolTipTime = (time, hasSubdailyLayers) => {
 /*
  * Date tooltip for hover and draggers
  *
- * @class DateToolTip
+ * @class DateTooltip
  * @extends PureComponent
  */
-class DateToolTip extends PureComponent {
+class DateTooltip extends PureComponent {
   render() {
     const {
       activeLayers,
@@ -137,7 +137,7 @@ class DateToolTip extends PureComponent {
   }
 }
 
-DateToolTip.propTypes = {
+DateTooltip.propTypes = {
   activeLayers: PropTypes.array,
   axisWidth: PropTypes.number,
   draggerPosition: PropTypes.number,
@@ -154,4 +154,4 @@ DateToolTip.propTypes = {
   showHoverLine: PropTypes.bool,
 };
 
-export default DateToolTip;
+export default DateTooltip;

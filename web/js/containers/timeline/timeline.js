@@ -26,7 +26,7 @@ import DateChangeArrows from '../../components/timeline/timeline-controls/date-c
 
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
-import TimelineRangeSelector from '../../components/range-selection/range-selection';
+import TimelineRangeSelector from '../../components/range-selection/range-selector';
 
 import DistractionFreeTimeUI from '../../components/timeline/distraction-free-time';
 

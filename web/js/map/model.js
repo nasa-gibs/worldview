@@ -5,7 +5,7 @@ import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
 import util from '../util/util';
 
-export default function mapModel(models, config) {
+export default function model(models, config) {
   const self = {};
 
   self.extent = null;

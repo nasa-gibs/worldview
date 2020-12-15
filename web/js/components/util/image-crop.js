@@ -12,7 +12,7 @@ const TRANSPARENT_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAA
  * @class List
  * @extends React.Component
  */
-export default class Crop extends React.Component {
+export default class ImageCrop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -90,7 +90,7 @@ export default class Crop extends React.Component {
     );
   }
 }
-Crop.defaultProps = {
+ImageCrop.defaultProps = {
   height: 10,
   maxHeight: window.innerWidth,
   maxWidth: window.innerHeight,
@@ -98,7 +98,7 @@ Crop.defaultProps = {
   x: 20,
   y: 10,
 };
-Crop.propTypes = {
+ImageCrop.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   bottomLeftStyle: PropTypes.object,

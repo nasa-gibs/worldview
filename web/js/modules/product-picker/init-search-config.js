@@ -10,7 +10,7 @@ import moment from 'moment';
 import { getTitles } from '../layers/selectors';
 import { getLayersForProjection } from './selectors';
 import facetConfig from './facet-config';
-import getSelectedDate from '../date/selectors';
+import { getSelectedDate } from '../date/selectors';
 
 let initialLayersArray;
 let configRef;
@@ -168,7 +168,7 @@ async function onSearch ({ filters, searchTerm }) {
  * @returns a SearchProvider configuration object.
  * https://github.com/elastic/search-ui/blob/master/ADVANCED.md#advanced-configuration
  */
-export default function initSearch(state) {
+export default function initSearchConfig(state) {
   const { productPicker, config, proj } = state;
   const { filters, searchTerm } = productPicker;
   const selectedDate = getSelectedDate(state);

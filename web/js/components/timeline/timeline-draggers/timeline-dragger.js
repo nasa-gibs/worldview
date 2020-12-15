@@ -8,7 +8,7 @@ import Draggable from 'react-draggable';
  * @class Dragger
  * @extends PureComponent
  */
-class Dragger extends PureComponent {
+class TimelineDragger extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -230,7 +230,7 @@ class Dragger extends PureComponent {
   }
 }
 
-Dragger.propTypes = {
+TimelineDragger.propTypes = {
   axisWidth: PropTypes.number,
   disabled: PropTypes.bool,
   draggerName: PropTypes.string,
@@ -243,4 +243,4 @@ Dragger.propTypes = {
   transformX: PropTypes.number,
 };
 
-export default Dragger;
+export default TimelineDragger;

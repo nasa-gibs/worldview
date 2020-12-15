@@ -3,7 +3,7 @@ import {
   forOwn as lodashForOwn,
 } from 'lodash';
 import { dataCmrMockClient, dataCmrClient } from './cmr';
-import getSelectedDate from '../../modules/date/selectors';
+import { getSelectedDate } from '../../modules/date/selectors';
 import util from '../../util/util';
 import brand from '../../brand';
 import { CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84 } from '../map';

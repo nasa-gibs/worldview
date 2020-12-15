@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EventsAlertModalBody = () => (
+const EventsAlert = () => (
   <div className="event-alert-modal-body">
     <h3 className="wv-data-unavailable-header">
       Why can’t I see an event?
@@ -46,4 +46,4 @@ const EventsAlertModalBody = () => (
   </div>
 );
 
-export default EventsAlertModalBody;
+export default EventsAlert;

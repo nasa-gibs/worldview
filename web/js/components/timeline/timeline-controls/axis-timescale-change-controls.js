@@ -9,7 +9,7 @@ import Arrow from '../../util/arrow';
  * @class AxisTimeScaleChangeControls
  * @extends PureComponent
  */
-class AxisTimeScaleChangeControls extends PureComponent {
+class AxisTimescaleChangeControls extends PureComponent {
   onClickUp = () => {
     const { decrementTimeScale } = this.props;
     decrementTimeScale();
@@ -50,7 +50,7 @@ class AxisTimeScaleChangeControls extends PureComponent {
   }
 }
 
-AxisTimeScaleChangeControls.propTypes = {
+AxisTimescaleChangeControls.propTypes = {
   changeTimeScale: PropTypes.func,
   decrementTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
@@ -59,4 +59,4 @@ AxisTimeScaleChangeControls.propTypes = {
   toolTipHovered: PropTypes.bool,
 };
 
-export default AxisTimeScaleChangeControls;
+export default AxisTimescaleChangeControls;

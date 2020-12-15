@@ -118,7 +118,7 @@ function setCoverageFacetProp(layer, selectedDate) {
  * Derive and format facet props from config
  * @param {*} config
  */
-export default function buildLayerFacetProps(config, selectedDate) {
+export function buildLayerFacetProps(config, selectedDate) {
   const layers = formatFacetProps(config);
 
   return lodashMap(layers, (layer) => {

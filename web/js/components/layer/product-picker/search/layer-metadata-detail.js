@@ -13,7 +13,7 @@ import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
-import RenderSplitLayerTitle from '../renderSplitTitle';
+import RenderSplitLayerTitle from '../render-split-title';
 import RecentLayersInfo from '../browse/recent-layers-info';
 
 class LayerMetadataDetail extends React.Component {

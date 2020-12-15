@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Steps = (props) => {
+const TourSteps = (props) => {
   const {
     currentStep, decreaseStep, incrementStep, totalSteps,
   } = props;
@@ -37,11 +37,11 @@ const Steps = (props) => {
   );
 };
 
-Steps.propTypes = {
+TourSteps.propTypes = {
   currentStep: PropTypes.number.isRequired,
   decreaseStep: PropTypes.func.isRequired,
   incrementStep: PropTypes.func.isRequired,
   totalSteps: PropTypes.number.isRequired,
 };
 
-export default Steps;
+export default TourSteps;

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
  * @class AxisTimeScaleChangeTooltip
  * @extends PureComponent
  */
-class AxisTimeScaleChangeTooltip extends PureComponent {
+class AxisTimescaleChangeTooltip extends PureComponent {
   // Handle change axis timescale
   changeTimeScale = (timeScale) => {
     // eslint-disable-next-line react/destructuring-assignment
@@ -109,11 +109,11 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
   }
 }
 
-AxisTimeScaleChangeTooltip.propTypes = {
+AxisTimescaleChangeTooltip.propTypes = {
   changeTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   timeScale: PropTypes.string,
   toolTipHovered: PropTypes.bool,
 };
 
-export default AxisTimeScaleChangeTooltip;
+export default AxisTimescaleChangeTooltip;

@@ -8,7 +8,7 @@ import { find as lodashFind, get as lodashGet } from 'lodash';
  * @param {Object} state | initial state before location POP action
  * @param {Object} config
  */
-export default function mapLocationToDataState(
+export function mapLocationToDataState(
   parameters,
   stateFromLocation,
   state,

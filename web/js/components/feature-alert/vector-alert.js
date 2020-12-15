@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 
-const VectorAlertModalBody = () => (
+const VectorAlert = () => (
 
   <Container className="event-alert-modal-body">
     <Row className="p-2">
@@ -56,4 +56,4 @@ const VectorAlertModalBody = () => (
   </Container>
 );
 
-export default VectorAlertModalBody;
+export default VectorAlert;

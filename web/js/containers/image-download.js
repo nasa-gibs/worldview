@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce } from 'lodash';
-import Panel from '../components/image-download/panel';
-import Crop from '../components/util/image-crop';
+import ResolutionSelection from '../components/image-download/resolution-selection';
+import ImageCrop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import {
@@ -103,7 +103,7 @@ class ImageDownloadContainer extends Component {
     const boxBottomLongitude = Math.abs(geolonlat2[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat2[0]) : geolonlat2[0];
     return (
       <ErrorBoundary>
-        <Panel
+        <ResolutionSelection
           projection={proj}
           fileTypes={fileTypes}
           fileType={fileType}
@@ -118,7 +118,7 @@ class ImageDownloadContainer extends Component {
           getLayers={getLayers}
           onPanelChange={onPanelChange}
         />
-        <Crop
+        <ImageCrop
           x={x}
           y={y}
           width={x2 - x}

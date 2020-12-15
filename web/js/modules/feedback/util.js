@@ -7,7 +7,7 @@
 
 import util from '../../util/util';
 
-export default function onClickFeedback(wasInitiated) {
+export function onClickFeedback(wasInitiated) {
   if (!util.browser.small && window.feedback) {
     // eslint-disable-next-line no-restricted-globals
     event.preventDefault();

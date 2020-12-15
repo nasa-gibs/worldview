@@ -9,7 +9,7 @@ import util from '../../util/util';
  *
  * @class DateInputColumn
  */
-class DateInputColumn extends Component {
+class DateInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -370,7 +370,7 @@ class DateInputColumn extends Component {
   }
 }
 
-DateInputColumn.propTypes = {
+DateInput.propTypes = {
   changeTab: PropTypes.func,
   date: PropTypes.object,
   focused: PropTypes.bool,
@@ -387,4 +387,4 @@ DateInputColumn.propTypes = {
   value: PropTypes.node,
 };
 
-export default DateInputColumn;
+export default DateInput;

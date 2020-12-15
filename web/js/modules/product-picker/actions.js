@@ -1,4 +1,4 @@
-import initSearch from './search-config';
+import initSearch from './init-search-config';
 import {
   getRecentLayers,
   clearRecentLayers as clearRecentFromLocalStorage,

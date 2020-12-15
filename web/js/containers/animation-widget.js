@@ -18,9 +18,9 @@ import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/interval-timescale-change';
 import CustomIntervalSelectorWidget from '../components/timeline/custom-interval-selector/interval-selector-widget';
-import PlayQueue from '../components/animation-widget/play-queue';
+import { PlayQueue } from '../components/animation-widget/play-queue';
 import Notify from '../components/image-download/notify';
-import promiseImageryForTime from '../modules/map/selectors';
+import { promiseImageryForTime } from '../modules/map/selectors';
 import GifContainer from './gif';
 import {
   selectDate,

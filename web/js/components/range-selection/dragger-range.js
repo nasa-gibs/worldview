@@ -6,9 +6,9 @@ import { timeScaleOptions } from '../../modules/date/constants';
  * A react component, is a draggable svg
  * rect element
  *
- * @class TimelineDraggerRange
+ * @class DraggerRange
  */
-class TimelineDraggerRange extends PureComponent {
+class DraggerRange extends PureComponent {
   constructor(props) {
     super(props);
     const { startLocation } = props;
@@ -237,7 +237,7 @@ class TimelineDraggerRange extends PureComponent {
   }
 }
 
-TimelineDraggerRange.propTypes = {
+DraggerRange.propTypes = {
   color: PropTypes.string,
   deltaStart: PropTypes.number,
   draggerID: PropTypes.string,
@@ -254,4 +254,4 @@ TimelineDraggerRange.propTypes = {
   width: PropTypes.number,
 };
 
-export default TimelineDraggerRange;
+export default DraggerRange;

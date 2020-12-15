@@ -10,7 +10,7 @@ import {
 import Promise from 'bluebird';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { openCustomContent, onToggle } from '../modules/modal/actions';
-import toggleDistractionFreeMode from '../modules/ui/actions';
+import { toggleDistractionFreeMode as toggleDistractionFreeModeAction } from '../modules/ui/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
@@ -313,7 +313,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   toggleDistractionFreeMode: () => {
-    dispatch(toggleDistractionFreeMode());
+    dispatch(toggleDistractionFreeModeAction());
   },
   refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule) => {
     if (activePalettes) {

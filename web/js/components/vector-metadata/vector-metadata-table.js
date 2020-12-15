@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'reactstrap';
-import VectorMetaTooltip from './tooltip';
+import { Table as ReactStrapTable } from 'reactstrap';
+import VectorMetaTooltip from './vector-metadata-tooltip';
 import util from '../../util/util';
 
-export default class VectorMetaTable extends React.Component {
+export default class VectorMetadataTable extends React.Component {
   shouldComponentUpdate(nextProps) {
     const { id, title } = this.props;
     if (id && title && nextProps.id && nextProps.title && id === nextProps.id && title === nextProps.title) {
@@ -24,7 +24,7 @@ export default class VectorMetaTable extends React.Component {
           const title = obj.featureTitle;
           return (
             <div key={util.encodeId(`${title}_${metaIndex}`)}>
-              <Table size="sm">
+              <ReactStrapTable size="sm">
                 <thead>
                   <tr>
                     <th>{title || `${obj.title} ${metaIndex + 1}`}</th>
@@ -63,7 +63,7 @@ export default class VectorMetaTable extends React.Component {
                     );
                   })}
                 </tbody>
-              </Table>
+              </ReactStrapTable>
             </div>
           );
         })}
@@ -71,7 +71,7 @@ export default class VectorMetaTable extends React.Component {
     );
   }
 }
-VectorMetaTable.propTypes = {
+VectorMetadataTable.propTypes = {
   id: PropTypes.number,
   metaArray: PropTypes.array,
   title: PropTypes.string,

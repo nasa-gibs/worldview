@@ -11,8 +11,8 @@ import {
   clearSingleRecentLayer as clearSingleRecentLayerAction,
 } from '../../../../modules/product-picker/actions';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
-import RenderSplitLayerTitle from '../renderSplitTitle';
-import getSelectedDate from '../../../../modules/date/selectors';
+import RenderSplitLayerTitle from '../render-split-title';
+import { getSelectedDate } from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 import util from '../../../../util/util';
 

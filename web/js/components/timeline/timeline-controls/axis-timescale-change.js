@@ -11,7 +11,7 @@ import { timeScaleToNumberKey } from '../../../modules/date/constants';
  * @class AxisTimeScaleChange
  * @extends React.Component
  */
-class AxisTimeScaleChange extends PureComponent {
+class AxisTimescaleChange extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -126,7 +126,7 @@ class AxisTimeScaleChange extends PureComponent {
   }
 }
 
-AxisTimeScaleChange.propTypes = {
+AxisTimescaleChange.propTypes = {
   changeTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
@@ -135,4 +135,4 @@ AxisTimeScaleChange.propTypes = {
   timeScale: PropTypes.string,
 };
 
-export default AxisTimeScaleChange;
+export default AxisTimescaleChange;

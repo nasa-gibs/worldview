@@ -30,7 +30,7 @@ import Timeline from './containers/timeline/timeline';
 import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
-import keyPress from './modules/key-press/actions';
+import { keyPress } from './modules/key-press/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';

@@ -16,7 +16,7 @@ import {
 import { getEventsWithinExtent } from '../../map/natural-events/util';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
-import getSelectedDate from '../../modules/date/selectors';
+import { getSelectedDate } from '../../modules/date/selectors';
 import { getEventCategories } from '../../modules/natural-events/selectors';
 import AlertUtil from '../../components/util/alert';
 
