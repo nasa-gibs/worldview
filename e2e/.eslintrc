@@ -49,6 +49,7 @@
     "func-names": "off",
     "no-shadow": "off",
     "no-plusplus": "off",
-    "prefer-arrow-callback": "off"
+    "prefer-arrow-callback": "off",
+    "filenames/match-exported": "off"
   }
 }

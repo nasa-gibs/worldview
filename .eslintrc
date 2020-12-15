@@ -15,7 +15,8 @@
   "plugins": [
     "react",
     "jest",
-    "no-storage"
+    "no-storage",
+    "filenames"
   ],
   "extends": "airbnb",
   "parser": "babel-eslint",
@@ -50,6 +51,7 @@
     "no-useless-call": "error",
     "no-extra-parens": "error",
     "space-before-function-paren": "off",
+    "import/named": "error",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -63,7 +65,8 @@
         ]
       }
     ],
-    "no-storage/no-browser-storage": "error"
+    "no-storage/no-browser-storage": "error",
+    "filenames/match-exported": [ 2, "kebab" ]
   },
   "overrides": [
     {
@@ -104,6 +107,9 @@
 
         // Import rules overrides
         "import/no-cycle": "warn",
+
+        // Prefer named export in most cases
+        "import/prefer-default-export": "off",
 
         // Accesibility rules overrides
         "jsx-a11y/no-noninteractive-tabindex": "off",
