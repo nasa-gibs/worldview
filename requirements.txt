@@ -4,4 +4,3 @@ six==1.11.0
 xmltodict==0.11.0
 urllib3[secure]==1.24.3
 requests==2.20.0
-urllib3>=1.25.9 # not directly required, pinned by Snyk to avoid a vulnerability
