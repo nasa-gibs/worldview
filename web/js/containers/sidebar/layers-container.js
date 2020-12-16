@@ -55,7 +55,7 @@ function LayersContainer (props) {
   const renderLayerList = (group, idx) => {
     const { groupName, layers, collapsed } = group;
     const layersForGroup = layers.map((id) => activeLayersMap[id]);
-    return layers && ((
+    return layers && (
       <Draggable
         key={groupName}
         draggableId={groupName}
@@ -80,7 +80,7 @@ function LayersContainer (props) {
           </li>
         )}
       </Draggable>
-    ));
+    );
   };
 
   const renderOverlayGroups = () => (
@@ -165,7 +165,6 @@ const mapStateToProps = (state, ownProps) => {
     overlayGroups,
     groupOverlays,
     activeLayersMap: getActiveLayersMap(state),
-    layerSplit: overlays.length,
   };
 };
 
