@@ -1,3 +1,7 @@
+**8 November 2020 Notice**: The MODIS instrument aboard the Terra satellite experienced a Printed Wire Assembly (PWA) failure on 5 October 2020. This has resulted in a reduction in the overall Terra daytime coverage and many of the MODIS/Terra imagery layers have a slightly jagged appearance with less coverage over the northern high latitude regions. This issue will affect land daytime MODIS/Terra products that primarily rely on the Reflective Solar Bands (RSB) (i.e. visible bands) indefinitely. [Learn more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/displayCase.cgi?esdt=MOD&caseNum=PM_MOD_20280&caseLocation=cases_data&type=C6).
+
+---
+
 The MODIS Cloud Multi Layer Flag layer indicates the detection of multi layer clouds from MODIS shortwave observations expressed through 9 categories ranging from single layer cloud to the lowest confidence multi-layer cloud to the highest confidence multi-layer cloud with a range of intermediary confidence levels. This layer is useful for identifying areas of cloud overlap and flagging pixels where cloud microphysical retrievals would be adversely affected by cloud overlap.
 
 The MODIS Cloud Multi Layer Flag layer is available from both the Terra (MOD06) and Aqua (MYD06) satellites for daytime overpasses. The sensor resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
