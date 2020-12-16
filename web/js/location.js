@@ -435,7 +435,7 @@ const getParameters = function(config, parameters) {
         },
       },
     },
-    marker: {
+    gm: {
       stateKey: 'geosearch.coordinates',
       initialState: [],
       type: 'string',

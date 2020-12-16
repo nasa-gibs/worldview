@@ -43,7 +43,7 @@ module.exports = {
     c.expect.element(geosearchComponent).to.be.present;
   },
   'Coordinates dialog for permalink marker is visible by default on page load': (c) => {
-    c.url(`${c.globals.url}?v=-176.3167432493038,-16.70650759975561,-16.988618249303812,108.30938074294103&marker=-77.032,38.8904`);
+    c.url(`${c.globals.url}?v=-176.3167432493038,-16.70650759975561,-16.988618249303812,108.30938074294103&gm=-77.032,38.8904`);
     c.waitForElementVisible(tooltipCoordinatesContainer, TIME_LIMIT);
     c.expect.element(testMarkerEncodedID).to.be.present;
   },
@@ -57,7 +57,7 @@ module.exports = {
     c.expect.element(tooltipCoordinatesContainer).to.not.be.present;
   },
   'Coordinate title for no suggested place results displays correct coordinates instead': (c) => {
-    c.url(`${c.globals.url}?marker=-51.5,5`);
+    c.url(`${c.globals.url}?gm=-51.5,5`);
     c.waitForElementVisible(tooltipCoordinatesContainer, TIME_LIMIT);
     c.expect.element(testMarkerNoDetailsEncodedID).to.be.present;
     c.assert.containsText(tooltipCoordinatesTitle, '5.0000°, -51.5000°');
@@ -70,7 +70,7 @@ module.exports = {
     c.assert.not.urlContains('marker');
   },
   'Invalid marker query string parameter prevents state update': (c) => {
-    c.url(`${c.globals.url}?marker=-51.5,invalidtext`);
+    c.url(`${c.globals.url}?gm=-51.5,invalidtext`);
     c.expect.element(coordinatesMapMarker).to.not.be.present;
     c.assert.not.urlContains('marker');
   },

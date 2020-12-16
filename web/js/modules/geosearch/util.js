@@ -135,9 +135,9 @@ export function mapLocationToGeosearchState(
   stateFromLocation,
   state,
 ) {
-  const { marker } = parameters;
-  const validCoordinates = marker
-    ? marker.split(',')
+  const { gm } = parameters;
+  const validCoordinates = gm
+    ? gm.split(',')
       .map((coord) => Number(coord))
       .filter((coord) => !lodashIsNaN(parseFloat(coord)))
     : [];
