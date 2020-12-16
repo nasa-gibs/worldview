@@ -1,10 +1,8 @@
 import 'jquery-ui-bundle/jquery-ui';
 import { debounce } from 'lodash';
-import util from '../util/util';
 import { faIconUndoSVGDomEl, faIconRedoSVGDomEl } from './fa-map-icons';
 
 export default function MapRotate(ui, models, store) {
-  this.evts = util.events;
   this.intervalId = null;
   const self = this;
 

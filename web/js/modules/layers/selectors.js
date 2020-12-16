@@ -251,11 +251,9 @@ function forGroup(group, spec = {}, activeLayers, state) {
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
-    const dynamic = spec.dynamic
-      && !['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period);
     const notRenderable = spec.renderable
       && !isRenderable(def.id, activeLayers, spec.date, state);
-    if (notInProj || dynamic || notRenderable) {
+    if (notInProj || notRenderable) {
       return;
     }
     results.push(def);
