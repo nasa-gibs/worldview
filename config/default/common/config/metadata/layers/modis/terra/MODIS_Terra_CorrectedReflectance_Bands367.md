@@ -1,3 +1,7 @@
+**8 November 2020 Notice**: The MODIS instrument aboard the Terra satellite experienced a Printed Wire Assembly (PWA) failure on 5 October 2020. This has resulted in a reduction in the overall Terra daytime coverage and many of the MODIS/Terra imagery layers have a slightly jagged appearance with less coverage over the northern high latitude regions. This issue will affect land daytime MODIS/Terra products that primarily rely on the Reflective Solar Bands (RSB) (i.e. visible bands) indefinitely. [Learn more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/displayCase.cgi?esdt=MOD&caseNum=PM_MOD_20280&caseLocation=cases_data&type=C6).
+
+---
+
 False Color: Red = Band 3, Green = Band 6, Blue = Band 7
 
 This combination is used to map snow and ice. Snow and ice are very reflective in the visible part of the spectrum (Band 3), and very absorbent in Bands 6 and 7 (short-wave infrared, or SWIR). This band combination is good for distinguishing liquid water from frozen water, for example, clouds over snow, ice cloud versus water cloud; or floods from dense vegetation. This band combination is only available for MODIS (Terra) because 70% of the band 6 sensors on the MODIS instrument on the Aqua satellite failed shortly after launch.
