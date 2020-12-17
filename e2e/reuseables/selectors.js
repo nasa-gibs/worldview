@@ -122,4 +122,16 @@ module.exports = {
   socialToolbar: '#toolbar_share_link',
   socialCopyLinkButton: '#wv-link-button',
   socialLinkInput: '#permalink_content',
+
+  // geosearch
+  geosearchToolbarButton: '#wv-geosearch-button',
+  geosearchComponent: '.geosearch-component',
+  geosearchMobileDialog: '#toolbar_geosearch_mobile',
+  geosearchMinimizeButton: '.geosearch-search-minimize-button',
+  tooltipCoordinatesContainer: '.tooltip-coordinates-container',
+  tooltipCoordinatesTitle: '.tooltip-coordinates-title',
+  tooltipCoordinates: '.tooltip-coordinates',
+  tooltipCoordinatesMinimizeButton: '.minimize-coordinates-tooltip',
+  tooltipCoordinatesCloseButton: '.close-coordinates-tooltip',
+  coordinatesMapMarker: '.coordinates-map-marker',
 };

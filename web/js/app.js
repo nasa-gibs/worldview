@@ -16,6 +16,8 @@ import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
+// Geosearch
+import Geosearch from './components/geosearch/geosearch';
 
 // Other/MISC
 import Brand from './brand';
@@ -85,6 +87,7 @@ import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
+import '../css/geosearch.css';
 import '../pages/css/document.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
@@ -177,10 +180,17 @@ class App extends React.Component {
 
   render() {
     const {
-      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, parameters,
+      isAnimationWidgetActive,
+      isMobile,
+      isTourActive,
+      locationKey,
+      mapMouseEvents,
+      modalId,
+      parameters,
     } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
+        {!isMobile && <Geosearch />}
         <Toolbar />
         <MapInteractions mouseEvents={mapMouseEvents} />
         <div id="wv-alert-container" className="wv-alert-container">
@@ -211,6 +221,7 @@ function mapStateToProps(state) {
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
+    isMobile: state.browser.lessThan.medium,
     isTourActive: state.tour.active,
     tour: state.tour,
     config: state.config,
@@ -234,6 +245,7 @@ export default connect(
 )(App);
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,

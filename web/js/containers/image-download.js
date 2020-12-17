@@ -74,6 +74,7 @@ class ImageDownloadContainer extends Component {
       date,
       getLayers,
       hasSubdailyLayers,
+      markerCoordinates,
       onPanelChange,
     } = this.props;
     const {
@@ -112,6 +113,7 @@ class ImageDownloadContainer extends Component {
           resolution={newResolution}
           isWorldfile={isWorldfile}
           hasSubdailyLayers={hasSubdailyLayers}
+          markerCoordinates={markerCoordinates}
           date={date}
           url={url}
           crs={crs}
@@ -153,6 +155,7 @@ function mapStateToProps(state) {
     config,
     proj,
     browser,
+    geosearch,
     layers,
     compare,
     date,
@@ -163,6 +166,7 @@ function mapStateToProps(state) {
     isWorldfile, fileType, resolution, boundaries,
   } = imageDownload;
   const { screenWidth, screenHeight } = browser;
+  const markerCoordinates = geosearch.coordinates;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   const activeStr = compare.activeString;
   const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
@@ -186,6 +190,7 @@ function mapStateToProps(state) {
     resolution,
     boundaries,
     hasSubdailyLayers,
+    markerCoordinates,
     date: date[activeDateStr],
     getLayers: () => getLayers(
       layers[compare.activeString],
@@ -230,6 +235,7 @@ ImageDownloadContainer.propTypes = {
   getLayers: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
+  markerCoordinates: PropTypes.array,
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,

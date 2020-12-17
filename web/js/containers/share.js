@@ -234,8 +234,8 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = (dispatch) => ({
-  requestShortLink: (location, signal) => dispatch(
-    requestShortLink(location, 'application/json', null, signal),
+  requestShortLink: (location, options) => dispatch(
+    requestShortLink(location, 'application/json', null, options),
   ),
 });
 

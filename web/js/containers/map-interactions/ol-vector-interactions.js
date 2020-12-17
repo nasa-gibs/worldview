@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-
 import {
   debounce as lodashDebounce,
   get as lodashGet,
@@ -51,7 +50,7 @@ export class VectorInteractions extends React.Component {
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType())) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature && isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
+        if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
@@ -63,7 +62,7 @@ export class VectorInteractions extends React.Component {
 
   singleClick(e, map) {
     const {
-      lastSelected, openVectorDiaglog, onCloseModal, selectVectorFeatures,
+      lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
       activateVectorAlert, proj,
     } = this.props;
@@ -76,10 +75,15 @@ export class VectorInteractions extends React.Component {
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
+    const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
     const dialogId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
 
+    if (isCoordinatesMarker) {
+      return;
+    }
+
     if (metaArray.length) {
-      openVectorDiaglog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
+      openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
     } else {
       const mapRes = map.getView().getResolution();
       const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
@@ -101,24 +105,6 @@ export class VectorInteractions extends React.Component {
   }
 }
 
-VectorInteractions.propTypes = {
-  changeCursor: PropTypes.func.isRequired,
-  getDialogObject: PropTypes.func.isRequired,
-  isShowingClick: PropTypes.bool.isRequired,
-  measureIsActive: PropTypes.bool.isRequired,
-  modalState: PropTypes.object.isRequired,
-  mouseEvents: PropTypes.object.isRequired,
-  onCloseModal: PropTypes.func.isRequired,
-  openVectorDiaglog: PropTypes.func.isRequired,
-  selectVectorFeatures: PropTypes.func.isRequired,
-  compareState: PropTypes.object,
-  isMobile: PropTypes.bool,
-  lastSelected: PropTypes.object,
-  proj: PropTypes.object,
-  swipeOffset: PropTypes.number,
-  activeLayers: PropTypes.array,
-  activateVectorAlert: PropTypes.func,
-};
 function mapStateToProps(state) {
   const {
     modal, map, measure, vectorStyles, browser, compare, proj, ui, layers,
@@ -159,7 +145,7 @@ function mapStateToProps(state) {
     dispatch(onClose());
   },
   activateVectorAlert: () => dispatch({ type: ACTIVATE_VECTOR_ALERT }),
-  openVectorDiaglog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
+  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
     const dialogKey = new Date().getUTCMilliseconds();
     dispatch(openCustomContent(dialogId,
       {
@@ -196,7 +182,7 @@ VectorInteractions.propTypes = {
   modalState: PropTypes.object.isRequired,
   mouseEvents: PropTypes.object.isRequired,
   onCloseModal: PropTypes.func.isRequired,
-  openVectorDiaglog: PropTypes.func.isRequired,
+  openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
   compareState: PropTypes.object,
   isMobile: PropTypes.bool,

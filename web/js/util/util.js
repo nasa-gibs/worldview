@@ -903,7 +903,7 @@ export default (function(self) {
 
   // Converts a string to a form that can be safely used as an identifier.
   //
-  // Currently only converts '.' and ':' to __xx__ where xx is the hex
+  // Currently only converts '.' and ':' and ',' to __xx__ where xx is the hex
   // value of that character. Add more here as needed.
   //
   // When GIBS added the 'Particulate_Matter_Below_2.5micrometers_2001-2010'
@@ -917,7 +917,7 @@ export default (function(self) {
   // became confusing as element attributes would need one escape character
   // but the selector would need two (\. vs \\.)
   self.encodeId = function(str) {
-    return str.replace(/[.:]/g, (match) => `__${match.charCodeAt(0).toString(16).toUpperCase()}__`);
+    return str.replace(/[.:,]/g, (match) => `__${match.charCodeAt(0).toString(16).toUpperCase()}__`);
   };
 
   // Converts an encoded identifier back to its original value.

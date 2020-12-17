@@ -21,6 +21,7 @@ module.exports = {
   'A|B is loaded': (c) => {
     c.url(c.globals.url + localQuerystrings.swipeAndAIsActive);
     c.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
+    c.pause(1000);
   },
 
   'Animation is disabled when compare mode active': (c) => {

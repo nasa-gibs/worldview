@@ -30,6 +30,8 @@ import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import { getLayers } from '../modules/layers/selectors';
+import Geosearch from '../components/geosearch/geosearch';
+import { toggleShowGeosearch, toggleDialogVisible } from '../modules/geosearch/actions';
 
 
 Promise.config({ cancellation: true });
@@ -70,6 +72,16 @@ const CUSTOM_MODAL_PROPS = {
     desktopOnly: true,
     clickableBehindModal: true,
   },
+  TOOLBAR_GEOSEARCH_MOBILE: {
+    backdrop: false,
+    bodyComponent: Geosearch,
+    clickableBehindModal: true,
+    headerText: 'Search for places',
+    mobileOnly: true,
+    modalClassName: 'toolbar-geosearch-modal toolbar-modal toolbar-medium-modal',
+    type: 'toolbar',
+    wrapClassName: 'toolbar_modal_outer',
+  },
 };
 
 class toolbarContainer extends Component {
@@ -89,10 +101,18 @@ class toolbarContainer extends Component {
 
   async openImageDownload() {
     const {
-      openModal, hasCustomPalette, isRotated, hasGraticule, activePalettes, rotation, refreshStateAfterImageDownload,
+      openModal,
+      hasCustomPalette,
+      isRotated,
+      hasGraticule,
+      activePalettes,
+      rotation,
+      refreshStateAfterImageDownload,
+      toggleDialogVisible,
     } = this.props;
 
     const paletteStore = lodashCloneDeep(activePalettes);
+    toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
@@ -148,7 +168,7 @@ class toolbarContainer extends Component {
   }
 
   renderShareButton() {
-    const { openModal, isDistractionFreeModeActive } = this.props;
+    const { faSize, openModal, isDistractionFreeModeActive } = this.props;
     const buttonId = 'wv-link-button';
     const labelText = 'Share this map';
     return !isDistractionFreeModeActive && (
@@ -162,13 +182,15 @@ class toolbarContainer extends Component {
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="share-square" size="2x" />
+        <FontAwesomeIcon icon="share-square" size={faSize} />
       </Button>
     );
   }
 
   renderProjectionButton() {
-    const { config, openModal, isDistractionFreeModeActive } = this.props;
+    const {
+      config, faSize, openModal, isDistractionFreeModeActive,
+    } = this.props;
     const buttonId = 'wv-proj-button';
     const labelText = 'Switch projection';
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
@@ -182,13 +204,58 @@ class toolbarContainer extends Component {
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="globe-asia" size="2x" />
+        <FontAwesomeIcon icon="globe-asia" size={faSize} />
+      </Button>
+    );
+  }
+
+  // handle rendering of geosearch button 1) visibility and 2) control of click (mobile vs desktop)
+  renderGeosearchButtonComponent = () => {
+    const {
+      config,
+      faSize,
+      isGeosearchExpanded,
+      isMobile,
+      openModal,
+      shouldBeCollapsed,
+      toggleShowGeosearch,
+    } = this.props;
+    const { features: { geocodeSearch: { url: requestUrl } } } = config;
+    const buttonId = 'wv-geosearch-button';
+    const labelText = 'Search places by location';
+    const isFeatureEnabled = !!requestUrl;
+    // do not render if geosearch feature isn't enabled
+    if (!isFeatureEnabled) {
+      return null;
+    }
+
+    const handleButtonClick = isMobile
+      ? () => openModal(
+        'TOOLBAR_GEOSEARCH_MOBILE',
+        CUSTOM_MODAL_PROPS.TOOLBAR_GEOSEARCH_MOBILE,
+      )
+      : () => toggleShowGeosearch();
+
+    const buttonDisplayConditions = isMobile || (!isMobile && !isGeosearchExpanded) || shouldBeCollapsed;
+    return (
+      <Button
+        style={{
+          display: buttonDisplayConditions ? 'inline-block' : 'none',
+        }}
+        id={buttonId}
+        className="wv-toolbar-button"
+        aria-label={labelText}
+        onClick={handleButtonClick}
+      >
+        {this.renderTooltip(buttonId, labelText)}
+        <FontAwesomeIcon icon="search-location" size={faSize} />
       </Button>
     );
   }
 
   renderSnapshotsButton () {
     const {
+      faSize,
       isImageDownloadActive,
       isCompareActive,
       isDistractionFreeModeActive,
@@ -214,7 +281,7 @@ class toolbarContainer extends Component {
           aria-label={labelText}
           onClick={this.openImageDownload}
         >
-          <FontAwesomeIcon icon="camera" size="2x" />
+          <FontAwesomeIcon icon="camera" size={faSize} />
         </Button>
       </div>
 
@@ -223,6 +290,7 @@ class toolbarContainer extends Component {
 
   renderInfoButton() {
     const {
+      faSize,
       openModal,
       notificationType,
       notificationContentNumber,
@@ -246,7 +314,7 @@ class toolbarContainer extends Component {
         data-content={notificationContentNumber}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="info-circle" size="2x" />
+        <FontAwesomeIcon icon="info-circle" size={faSize} />
       </Button>
     );
   }
@@ -258,6 +326,7 @@ class toolbarContainer extends Component {
           id="wv-toolbar"
           className="wv-toolbar"
         >
+          {this.renderGeosearchButtonComponent()}
           {this.renderShareButton()}
           {this.renderProjectionButton()}
           {this.renderSnapshotsButton()}
@@ -270,7 +339,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    notifications, palettes, compare, map, layers, proj, data, ui, browser,
+    animation, browser, notifications, palettes, compare, map, measure, modal, layers, proj, data, ui, geosearch,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -280,10 +349,19 @@ const mapStateToProps = (state) => {
     { proj: proj.id },
     state,
   );
+  const isMobile = browser.lessThan.medium;
+  const faSize = isMobile ? '2x' : '1x';
   const isCompareActive = compare.active;
   const isDataDownloadActive = data.active;
+  const isGeosearchExpanded = geosearch.isExpanded;
   const activePalettes = palettes[activeString];
+
+  // Collapse when Image download / GIF /  is open or measure tool active
+  const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
+  const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
+
   return {
+    faSize,
     notificationType: type,
     notificationContentNumber: number,
     config: state.config,
@@ -295,7 +373,9 @@ const mapStateToProps = (state) => {
       && !isDataDownloadActive,
     ),
     isCompareActive,
-    isMobile: browser.lessThan.medium,
+    isGeosearchExpanded,
+    isMobile,
+    shouldBeCollapsed,
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
       activePalettes,
@@ -314,6 +394,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   toggleDistractionFreeMode: () => {
     dispatch(toggleDistractionFreeMode());
+  },
+  toggleDialogVisible: (isVisible) => {
+    dispatch(toggleDialogVisible(isVisible));
+  },
+  toggleShowGeosearch: () => {
+    dispatch(toggleShowGeosearch());
   },
   refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule) => {
     if (activePalettes) {
@@ -374,10 +460,12 @@ export default connect(
 toolbarContainer.propTypes = {
   activePalettes: PropTypes.object,
   config: PropTypes.object,
+  faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isGeosearchExpanded: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRotated: PropTypes.bool,
@@ -388,4 +476,7 @@ toolbarContainer.propTypes = {
   refreshStateAfterImageDownload: PropTypes.func,
   requestNotifications: PropTypes.func,
   rotation: PropTypes.number,
+  shouldBeCollapsed: PropTypes.bool,
+  toggleDialogVisible: PropTypes.func,
+  toggleShowGeosearch: PropTypes.func,
 };

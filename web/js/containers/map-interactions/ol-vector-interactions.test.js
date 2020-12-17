@@ -10,12 +10,12 @@ let map;
 let changeCursor;
 let selectVectorFeatures;
 let getDialogObject;
-let openVectorDiaglog;
+let openVectorDialog;
 beforeEach(() => {
   registerProjections();
   events = util.events();
   changeCursor = jest.fn();
-  openVectorDiaglog = jest.fn();
+  openVectorDialog = jest.fn();
   selectVectorFeatures = jest.fn();
   getDialogObject = () => ({
     metaArray: [0], selected: [1], offsetLeft: 100, offsetTop: 100,
@@ -26,7 +26,7 @@ beforeEach(() => {
       isShowingClick={false}
       changeCursor={changeCursor}
       getDialogObject={getDialogObject}
-      openVectorDiaglog={openVectorDiaglog}
+      openVectorDialog={openVectorDialog}
       selectVectorFeatures={selectVectorFeatures}
       lastSelected={{}}
       measureIsActive={false}
@@ -51,7 +51,7 @@ test('if there is a feature at pixel on click get dialog', () => {
   events.trigger('singleclick', { pixel: [0, 0] }, map, 'EPSG:4326');
   expect(changeCursor.mock.calls.length).toBe(0);
   expect(selectVectorFeatures.mock.calls.length).toBe(1);
-  expect(openVectorDiaglog.mock.calls.length).toBe(1);
+  expect(openVectorDialog.mock.calls.length).toBe(1);
 });
 test('if there is not a feature at pixel do not dispatch changeCursor action', () => {
   map.hasFeatureAtPixel = () => false;

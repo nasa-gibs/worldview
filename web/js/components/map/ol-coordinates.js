@@ -86,11 +86,12 @@ export default class OlCoordinates extends React.Component {
   }
 
   render() {
+    const { isDistractionFreeModeActive } = this.props;
     const {
       hasMouse, format, latitude, longitude, crs,
     } = this.state;
     // Don't render until a mouse is being used
-    if (!hasMouse) {
+    if (isDistractionFreeModeActive || !hasMouse) {
       return null;
     }
 
@@ -110,4 +111,5 @@ export default class OlCoordinates extends React.Component {
 
 OlCoordinates.propTypes = {
   mouseEvents: PropTypes.object.isRequired,
+  isDistractionFreeModeActive: PropTypes.bool.isRequired,
 };

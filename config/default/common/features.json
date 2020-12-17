@@ -20,6 +20,9 @@
         },
         "naturalEvents": {
             "host": "https://eonet.sci.gsfc.nasa.gov/api/v3"
+        },
+        "geocodeSearch": {
+            "url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/"
         }
     },
     "scripts": [

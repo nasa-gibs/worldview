@@ -9,6 +9,7 @@ import {
   cloneDeep as lodashCloneDeep,
   find as lodashFind,
 } from 'lodash';
+import ReactDOM from 'react-dom';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlKinetic from 'ol/Kinetic';
@@ -34,6 +35,12 @@ import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import {
+  CLEAR_MARKER,
+  SET_MARKER,
+  SET_REVERSE_GEOCODE_RESULTS,
+  TOGGLE_DIALOG_VISIBLE,
+} from '../modules/geosearch/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
@@ -44,6 +51,7 @@ import { setStyleFunction } from '../modules/vector-styles/selectors';
 import {
   getLayers,
   isRenderable as isRenderableLayer,
+  getMaxZoomLevelLayerCollection,
 } from '../modules/layers/selectors';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
@@ -54,6 +62,9 @@ import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
+import { animateCoordinates, getCoordinatesMarker } from '../modules/geosearch/util';
+import { reverseGeocode } from '../modules/geosearch/util-api';
+import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/geosearch/ol-coordinates-marker-util';
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -90,6 +101,8 @@ export default function mapui(models, config, store, ui) {
   const createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
   self.selectedVectors = {};
+  self.activeMarker = null;
+  self.coordinatesDialogDOMEl = null;
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -99,6 +112,18 @@ export default function mapui(models, config, store, ui) {
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
+      }
+      case CLEAR_MARKER:
+        return removeCoordinatesMarker();
+      case SET_MARKER:
+        return addMarkerAndUpdateStore(null, true);
+      case TOGGLE_DIALOG_VISIBLE: {
+        if (action.value) {
+          addCoordinatesTooltip();
+        } else {
+          removeCoordinatesTooltip();
+        }
+        return;
       }
       case CLEAR_ROTATE:
         return rotation.reset(self.selected);
@@ -196,6 +221,173 @@ export default function mapui(models, config, store, ui) {
     updateProjection(true);
   };
 
+  /*
+   * Handle reverse geocode and add map marker with results
+   *
+   * @method handleActiveMapMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const handleActiveMapMarker = (start) => {
+    const state = store.getState();
+    const { geosearch } = state;
+    const { coordinates, reverseGeocodeResults } = geosearch;
+    if (coordinates && coordinates.length > 0) {
+      if (start) {
+        reverseGeocode(coordinates, config).then((results) => {
+          addMarkerAndUpdateStore(results);
+        });
+      } else {
+        addMarkerAndUpdateStore(reverseGeocodeResults);
+      }
+    }
+  };
+
+  /*
+   * Remove coordinates tooltip from all projections
+   *
+   * @method removeCoordinatesTooltip
+   * @static
+   *
+   * @returns {void}
+   */
+  const removeCoordinatesTooltip = () => {
+    const mapProjections = Object.keys(self.proj);
+    mapProjections.forEach((mapProjection) => {
+      const mapOverlays = self.proj[mapProjection].getOverlays().getArray();
+      const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
+        const { id } = overlay;
+        return id && id.includes('coordinates-map-marker');
+      });
+      if (coordinatesTooltipOverlay.length > 0) {
+        self.proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
+      }
+    });
+  };
+
+  /*
+   * Remove coordinates marker
+   *
+   * @method removeCoordinatesMarker
+   * @static
+   *
+   * @returns {void}
+   */
+  const removeCoordinatesMarker = () => {
+    if (self.activeMarker) {
+      self.activeMarker.setMap(null);
+      self.selected.removeLayer(self.activeMarker);
+    }
+    // remove tooltip from all projections
+    removeCoordinatesTooltip();
+  };
+
+  /*
+   * Add map marker coordinate tooltip
+   *
+   * @method addCoordinatesTooltip
+   * @static
+   *
+   * @param {Object} geocodeResults
+   *
+   * @returns {void}
+   */
+  const addCoordinatesTooltip = (geocodeResults) => {
+    const state = store.getState();
+    const {
+      browser, geosearch,
+    } = state;
+    const { coordinates, reverseGeocodeResults } = geosearch;
+    const results = geocodeResults || reverseGeocodeResults;
+    const isMobile = browser.lessThan.medium;
+    const [longitude, latitude] = coordinates;
+    const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
+    const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
+
+    // handle clearing cooridnates using created marker
+    const clearMarker = () => {
+      store.dispatch({ type: CLEAR_MARKER });
+    };
+    // handle toggling dialog visibility to retain preference between proj changes
+    const toggleDialogVisible = (isVisible) => {
+      store.dispatch({ type: TOGGLE_DIALOG_VISIBLE, value: isVisible });
+    };
+
+    // render coordinates dialog
+    const coordinatesTooltipDOMEl = renderCoordinatesDialog(
+      self.selected,
+      config,
+      [latitude, longitude],
+      coordinatesMetadata,
+      isMobile,
+      clearMarker,
+      toggleDialogVisible,
+    );
+    self.coordinatesDialogDOMEl = coordinatesTooltipDOMEl;
+  };
+
+  /*
+   * Add map coordinate marker and update store
+   *
+   * @method addMarkerAndUpdateStore
+   * @static
+   *
+   * @param {Object} geocodeResults
+   * @param {Boolean} shouldFlyToCoordinates
+   *
+   * @returns {void}
+   */
+  const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
+    const state = store.getState();
+    const {
+      geosearch, layers, proj,
+    } = state;
+    const {
+      coordinates, isCoordinatesDialogOpen, reverseGeocodeResults,
+    } = geosearch;
+    const results = geocodeResults || reverseGeocodeResults;
+    const { sources } = config;
+    const { active } = layers;
+
+    // unmount coordinate dialog to prevent residual tooltips being hovered
+    if (self.coordinatesDialogDOMEl) {
+      ReactDOM.unmountComponentAtNode(self.coordinatesDialogDOMEl);
+      self.coordinatesDialogDOMEl = null;
+    }
+    // clear previous marker (if present) and get new marker
+    removeCoordinatesMarker();
+    const marker = getCoordinatesMarker({ ui: self }, config, coordinates, results);
+
+    // prevent marker if outside of extent
+    if (!marker) {
+      return false;
+    }
+
+    self.activeMarker = marker;
+    self.selected.addLayer(marker);
+    self.selected.renderSync();
+
+    if (shouldFlyToCoordinates) {
+      // fly to coordinates and render coordinates tooltip on init SET_MARKER
+      const zoom = self.selected.getView().getZoom();
+      const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
+      const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
+      animateCoordinates({ ui: self }, config, coordinates, maxZoom);
+    }
+
+    // handle render initial tooltip
+    const isDialogOpen = shouldFlyToCoordinates || isCoordinatesDialogOpen;
+    if (isDialogOpen) {
+      addCoordinatesTooltip(results);
+    }
+
+    store.dispatch({
+      type: SET_REVERSE_GEOCODE_RESULTS,
+      value: results,
+    });
+  };
+
   const flyToNewExtent = function(extent, rotation) {
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
@@ -288,6 +480,7 @@ export default function mapui(models, config, store, ui) {
     }
     updateExtent();
     onResize();
+    handleActiveMapMarker(start);
   }
   /*
    * When page is resised set for mobile or desktop
@@ -378,7 +571,8 @@ export default function mapui(models, config, store, ui) {
     const layerGroupStr = compareState.activeString;
     const activeLayers = layers[layerGroupStr];
     if (!config.features.compare || !compareState.active) {
-      if (!compareState.active && compareMapUi.active) {
+      const compareMapDestroyed = !compareState.active && compareMapUi.active;
+      if (compareMapDestroyed) {
         compareMapUi.destroy();
       }
       clearLayers(map);
@@ -392,6 +586,10 @@ export default function mapui(models, config, store, ui) {
       lodashEach(defs, (def) => {
         map.addLayer(createLayer(def));
       });
+      // add active map marker back after destroying from layer/compare change
+      if (self.activeMarker) {
+        addMarkerAndUpdateStore();
+      }
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
@@ -406,6 +604,10 @@ export default function mapui(models, config, store, ui) {
         map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state));
       });
       compareMapUi.create(map, compareState.mode);
+      // add active map marker back in compare mode post createLayer
+      if (self.activeMarker) {
+        addMarkerAndUpdateStore();
+      }
     }
     updateLayerVisibilities();
   };

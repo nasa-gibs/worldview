@@ -69,6 +69,9 @@ function registerMapMouseHandlers(maps, events) {
     map.on('singleclick', (event) => {
       events.trigger('singleclick', event, map, crs);
     });
+    map.on('contextmenu', (event) => {
+      events.trigger('contextmenu', event, map, crs);
+    });
     element.addEventListener('click', (event) => {
       events.trigger('click', event, map, crs);
     });

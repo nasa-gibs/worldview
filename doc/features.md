@@ -26,6 +26,11 @@ to disable, set:
 This feature uses CGI scripts to query the CMR API on the server. To enable,
 edit `config/default/common/features.json` and set `"dataDownload": true`.
 
+## GeocodeSearch
+
+This feature uses the [ArcGIS World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) to find addresses based on input text, coordinates, and by clicking a spot on the map. To enable,
+edit `config/default/common/features.json` and set `"geocodeSearch"` object `"url"` to use the ArcGIS request URL used by the [ArcGIS World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm).
+
 ## URL Shortening
 
 This feature uses

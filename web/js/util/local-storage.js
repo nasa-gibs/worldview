@@ -19,6 +19,7 @@ export default {
   enabled,
   keys: {
     RECENT_LAYERS: 'recentLayers',
+    GEOSEARCH_COLLAPSED: 'geosearchState',
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
     HIDE_TOUR: 'hideTour',
