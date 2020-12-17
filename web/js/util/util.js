@@ -796,10 +796,7 @@ export default (function(self) {
        * are cached.
        */
       submit(parameters) {
-        let key = `url=${parameters.url}`;
-        if (parameters.data) {
-          key += `&query=${$.param(parameters.data, true)}`;
-        }
+        const key = `url=${parameters.url}`;
         const results = cache.getItem(key);
 
         if (results) {

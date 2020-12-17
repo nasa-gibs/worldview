@@ -7,14 +7,9 @@ import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
-import {
-  getSelectionCounts,
-  getDataSelectionSize,
-} from '../../modules/data/selectors';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { toggleListAll } from '../../modules/natural-events/actions';
-import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
 class FooterContent extends React.Component {
@@ -121,9 +116,6 @@ const mapDispatchToProps = (dispatch) => ({
   changeCompareMode: (str) => {
     dispatch(changeMode(str));
   },
-  onGetData: () => {
-    dispatch({ type: DATA_GET_DATA_CLICK });
-  },
   toggleListAll: () => {
     dispatch(toggleListAll());
   },
@@ -142,22 +134,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    requestedEvents, config, layers, data, compare, browser,
+    requestedEvents, config, compare, browser,
   } = state;
   const { showAll } = state.events;
-  const { selectedGranules } = data;
   const events = lodashGet(requestedEvents, 'response');
-  const { activeString } = compare;
-  const activeLayers = layers[activeString];
-  const counts = getSelectionCounts(activeLayers, selectedGranules);
-  const dataSelectionSize = getDataSelectionSize(selectedGranules);
 
   return {
     showAll,
     events,
-    counts,
     isMobile: browser.lessThan.medium,
-    dataSelectionSize,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
     compareMode: compare.mode,

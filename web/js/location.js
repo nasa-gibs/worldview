@@ -1,6 +1,5 @@
 import { assign as lodashAssign, get } from 'lodash';
 import update from 'immutability-helper';
-import { encode } from './modules/link/util';
 // legacy crutches
 import {
   serializeDate, tryCatchDate, parsePermalinkDate, mapLocationToDateState,
@@ -28,7 +27,6 @@ import { mapLocationToAnimationState } from './modules/animation/util';
 import { areCoordinatesWithinExtent, mapLocationToGeosearchState } from './modules/geosearch/util';
 import mapLocationToSidebarState from './modules/sidebar/util';
 import util from './util/util';
-import mapLocationToDataState from './modules/data/util';
 
 /**
  * Override state with information from location.search when "REDUX-LOCATION-POP-ACTION"
@@ -67,12 +65,6 @@ export const mapLocationToState = (state, location) => {
     stateFromLocation = mapLocationToCompareState(
       parameters,
       stateFromLocation,
-    );
-    stateFromLocation = mapLocationToDataState(
-      parameters,
-      stateFromLocation,
-      state,
-      config,
     );
     stateFromLocation = mapLocationToPaletteState(
       parameters,
@@ -415,26 +407,26 @@ const getParameters = function(config, parameters) {
         parse: (str) => str === 'on',
       },
     },
-    download: {
-      stateKey: 'data.selectedProduct',
-      initialState: '',
-      type: 'string',
-      options: {
-        delimiter: ',',
-        serializeNeedsGlobalState: true,
-        parse: (id) => {
-          if (!config.products[id]) {
-            console.warn(`No such product: ${id}`);
-            return '';
-          }
-          return id;
-        },
-        serialize: (currentItemState, state) => {
-          if (state.sidebar.activeTab !== 'download') return undefined;
-          return encode(currentItemState);
-        },
-      },
-    },
+    // download: {
+    //   stateKey: 'data.selectedProduct',
+    //   initialState: '',
+    //   type: 'string',
+    //   options: {
+    //     delimiter: ',',
+    //     serializeNeedsGlobalState: true,
+    //     parse: (id) => {
+    //       if (!config.products[id]) {
+    //         console.warn(`No such product: ${id}`);
+    //         return '';
+    //       }
+    //       return id;
+    //     },
+    //     serialize: (currentItemState, state) => {
+    //       if (state.sidebar.activeTab !== 'download') return undefined;
+    //       return encode(currentItemState);
+    //     },
+    //   },
+    // },
     gm: {
       stateKey: 'geosearch.coordinates',
       initialState: [],

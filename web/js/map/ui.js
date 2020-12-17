@@ -1072,7 +1072,6 @@ export default function mapui(models, config, store, ui) {
       store.dispatch({ type: RENDERED });
       store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: self.selected.getView().getRotation() });
       map.un('rendercomplete', onRenderComplete);
-      if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
     window.addEventListener('resize', () => {
@@ -1220,11 +1219,11 @@ export default function mapui(models, config, store, ui) {
       if (self.mapIsbeingDragged) {
         return;
       }
-      // Don't add data runners if we're on the events or data tabs, or if map is animating
+      // Don't add data runners if we're on the events or smart handoffs tabs, or if map is animating
       const isEventsTabActive = typeof state.events !== 'undefined' && state.events.active;
-      const isDataTabActive = typeof state.data !== 'undefined' && state.data.active;
       const isMapAnimating = state.animation.isPlaying;
-      if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
+      // TODO handle smart handoffs
+      if (isEventsTabActive || isMapAnimating) return;
 
       dataRunner.newPoint(pixels, map);
     }

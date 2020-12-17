@@ -18,7 +18,6 @@ import {
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
 } from './constants';
-import { selectProduct } from '../data/actions';
 import { updateRecentLayers } from '../product-picker/util';
 
 export function resetLayers(activeString) {
@@ -143,7 +142,7 @@ export function toggleVisibility(id, visible) {
 export function removeLayer(id) {
   return (dispatch, getState) => {
     const {
-      layers, compare, data,
+      layers, compare,
     } = getState();
     const { activeString } = compare;
     const index = lodashFindIndex(layers[activeString], {
@@ -154,9 +153,6 @@ export function removeLayer(id) {
     }
 
     const def = layers[activeString][index];
-    if (def.product && def.product === data.selectedProduct) {
-      dispatch(selectProduct('')); // Clear selected Data product
-    }
     dispatch({
       type: REMOVE_LAYER,
       id,
