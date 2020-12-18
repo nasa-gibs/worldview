@@ -42,7 +42,7 @@ class SmartHandoff extends Component {
         x2: screenWidth / 2 + 100,
         y2: screenHeight / 2 + 100,
       },
-      selectedLayer: {},
+      selectedLayer: undefined,
       showBoundingBox: false,
       isSearchingForGranules: false,
       selectedGranules: 0,
@@ -73,9 +73,10 @@ class SmartHandoff extends Component {
     } = this.state;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
-    const isLayerStillActive = activeLayers.find(({ conceptId }) => selectedLayer.conceptId === conceptId);
+    const selectedConceptId = selectedLayer && selectedLayer.conceptId;
+    const isLayerStillActive = activeLayers.find(({ conceptId }) => selectedConceptId === conceptId);
 
-    if (!isLayerStillActive) {
+    if (selectedConceptId && !isLayerStillActive) {
       this.resetState();
     }
 
@@ -109,63 +110,63 @@ class SmartHandoff extends Component {
     const { proj, map } = this.props;
     const { selectedLayer } = this.state;
 
-    if (selectedLayer.id) {
-      const {
-        x,
-        y,
-        width,
-        height,
-      } = boundaries;
+    if (!selectedLayer) return;
 
-      const newBoundaries = {
-        x,
-        y,
-        x2: x + width,
-        y2: y + height,
-      };
+    const {
+      x,
+      y,
+      width,
+      height,
+    } = boundaries;
 
-      const lonlats = imageUtilGetCoordsFromPixelValues(
-        newBoundaries,
-        map.ui.selected,
-      );
-      const { crs } = proj;
+    const newBoundaries = {
+      x,
+      y,
+      x2: x + width,
+      y2: y + height,
+    };
 
-      // Retrieve the lat/lon coordinates based on the defining boundary and map projection
-      const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-      const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    const lonlats = imageUtilGetCoordsFromPixelValues(
+      newBoundaries,
+      map.ui.selected,
+    );
+    const { crs } = proj;
 
-      // Determine longitude out of bounds areas and reset to limits
-      if (geolonlat1[0] > 180) geolonlat1[0] = 180;
-      else if (geolonlat1[0] < -180) geolonlat1[0] = -180;
-      if (geolonlat2[0] > 180) geolonlat2[0] = 180;
-      else if (geolonlat2[0] < -180) geolonlat2[0] = -180;
+    // Retrieve the lat/lon coordinates based on the defining boundary and map projection
+    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
-      // Determine latitude out of bounds areas and reset to limits
-      if (geolonlat1[1] > 90) geolonlat1[1] = 90;
-      else if (geolonlat1[1] < -90) geolonlat1[1] = -90;
-      if (geolonlat2[1] > 90) geolonlat2[1] = 90;
-      else if (geolonlat2[1] < -90) geolonlat2[1] = -90;
+    // Determine longitude out of bounds areas and reset to limits
+    if (geolonlat1[0] > 180) geolonlat1[0] = 180;
+    else if (geolonlat1[0] < -180) geolonlat1[0] = -180;
+    if (geolonlat2[0] > 180) geolonlat2[0] = 180;
+    else if (geolonlat2[0] < -180) geolonlat2[0] = -180;
 
-      const currentExtent = {
-        southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
-        northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
-      };
+    // Determine latitude out of bounds areas and reset to limits
+    if (geolonlat1[1] > 90) geolonlat1[1] = 90;
+    else if (geolonlat1[1] < -90) geolonlat1[1] = -90;
+    if (geolonlat2[1] > 90) geolonlat2[1] = 90;
+    else if (geolonlat2[1] < -90) geolonlat2[1] = -90;
 
-      const coordinates = {
-        bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-        topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
-      };
+    const currentExtent = {
+      southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
+      northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
+    };
 
-      this.setState({
-        boundaries: newBoundaries,
-        coordinates,
-        currentExtent,
-      }, () => {
-        if (selectedLayer && currentExtent) {
-          this.debouncedUpdateExtent();
-        }
-      });
-    }
+    const coordinates = {
+      bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
+      topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]]),
+    };
+
+    this.setState({
+      boundaries: newBoundaries,
+      coordinates,
+      currentExtent,
+    }, () => {
+      if (selectedLayer && currentExtent) {
+        this.debouncedUpdateExtent();
+      }
+    });
   }
 
   /**
@@ -185,11 +186,12 @@ class SmartHandoff extends Component {
    */
   async updateGranuleCount(currentExtent) {
     const { selectedDate } = this.props;
-
     const {
       selectedLayer,
       showBoundingBox,
     } = this.state;
+
+    if (!selectedLayer) return;
 
     // Places the compoent state in a loading state; triggers {...} animation.
     this.setState({ isSearchingForGranules: true });
@@ -270,7 +272,7 @@ class SmartHandoff extends Component {
     const showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer.id !== undefined;
+    const isValidDownload = selectedLayer && selectedLayer.id !== undefined;
 
     const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
     const areThereLayersToDownload = availableLayers > 0;
@@ -303,7 +305,7 @@ class SmartHandoff extends Component {
                       type="radio"
                       value={layer.conceptId}
                       name="smart-handoff-layer-radio"
-                      checked={selectedLayer.id === layer.id}
+                      checked={selectedLayer && selectedLayer.id === layer.id}
                       onChange={() => this.onLayerChange(layer, currentExtent)}
                     />
                     <label htmlFor={layer.id}>{layer.title}</label>
@@ -326,7 +328,7 @@ class SmartHandoff extends Component {
               checked={showBoundingBox}
               onCheck={() => {
                 this.setState({ showBoundingBox: !showBoundingBox }, () => {
-                  if (selectedLayer.id) this.updateGranuleCount(currentExtent);
+                  if (selectedLayer && selectedLayer.id) this.updateGranuleCount(currentExtent);
                 });
               }}
             />
