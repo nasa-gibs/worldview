@@ -118,6 +118,7 @@ Example:
     * startDate - `YYYY-MM-DDTHH:MM:SSZ`
     * endDate - `YYYY-MM-DDTHH:MM:SSZ`
     * dateInterval - Number of days (or minutes for subdaily layers)
+* **temporal**: Used to override the layer temporal availability declared in the capabilities document. Note: Changing the temporal availability can cause missing layer coverage within the interface for layers tiles that aren't available from the source at the revised temporal range. This option can be added as a string with the new availability range. For example, `"1981-10-13/2019-10-11/P1M"`.
 
 ## Full Example
 
@@ -146,7 +147,8 @@ Example:
       "track": "descending",
       "palette": {
         "id": "AIRS_RH400_A"
-      }
+      },
+      "temporal": "1981-10-13/2019-10-11/P1M"
     }
   }
 }
