@@ -2,20 +2,22 @@ import React from 'react';
 
 const DataPanelInfoModal = () => (
   <div className="data-panel-info">
-    <p>
-      Layers with temporal coverage are visualized in the data panel as blue lines which represent coverage relative to the current timeline zoom level. Total layer coverage is displayed on the right.
-    </p>
-    <p>
-      Matching coverage for layer(s) in the data panel is shown on the timeline, as highlighted by the orange arrow below. Use this matching coverage to view the best times that multiple layers have data availability.
-    </p>
-    <div>
-      <div className="data-panel-info-item">
+    <header>
+      <p>
+        Temporal coverage of activated time-varying layers are shown in the layer coverage panel as striped blue lines in relation to the current timeline zoom level. The total temporal coverage dates are shown on the right.
+      </p>
+      <p>
+        Time-varying layers that are temporally coincident/have matching temporal coverage are shown in the timeline as a solid blue line, making it easier to find out when multiple layers have concurrent imagery available.
+      </p>
+    </header>
+    <div className="data-panel-info-item-container">
+      <section className="data-panel-info-item-left">
         <img src="images/dp-axis.png" />
-      </div>
-      <div className="data-panel-info-item">
+      </section>
+      <section className="data-panel-info-item-right">
         <div>
           <p>
-            Toggle to include layers that are currently hidden. This will affect matching coverage on the timeline.
+            The “Include Hidden Layers” toggle will display hidden layers in the layer coverage panel and may affect the display of the matching coverage solid blue line.
           </p>
           <img src="images/dp-toggle.png" />
         </div>
@@ -26,7 +28,7 @@ const DataPanelInfoModal = () => (
             Active layers showing available coverage may not have imagery available yet (e.g., monthly layers that are processed later in the month).
           </p>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 );
