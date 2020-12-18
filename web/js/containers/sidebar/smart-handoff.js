@@ -9,7 +9,7 @@ import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
-import { getLayers } from '../../modules/layers/selectors';
+import GranuleAlertModalBody from './smart-handoff-granule-alert';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
 import getSelectedDate from '../../modules/date/selectors';
@@ -243,6 +243,7 @@ class SmartHandoff extends Component {
       activeLayers,
       isActive,
       showWarningModal,
+      showGranuleHelpModal,
       selectedDate,
     } = this.props;
 
@@ -281,11 +282,11 @@ class SmartHandoff extends Component {
 
     if (areThereLayersToDownload) {
       return (
-        <div id="smart-handoff-side-panel">
+        <div className="smart-handoff-side-panel">
 
           <h1>Select an available layer to download:</h1>
 
-          <div id="esd-notification">
+          <div className="esd-notification">
             Downloading data will be performed using
             {' '}
             <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">NASA&apos;s Earthdata Search</a>
@@ -295,7 +296,7 @@ class SmartHandoff extends Component {
 
           <hr />
 
-          <div id="smart-handoff-layer-list">
+          <div className="smart-handoff-layer-list">
             {activeLayers.map((layer) => {
               if (layer.conceptId) {
                 return (
@@ -319,10 +320,10 @@ class SmartHandoff extends Component {
 
           <hr />
 
-          <div id="crop-toggle">
+          <div className="smart-handoff-crop-toggle">
             <Checkbox
               id="chk-crop-toggle"
-              label="Toggle Bounding Box"
+              label="Target Area Selection"
               text="Toggle boundary selection."
               color="gray"
               checked={showBoundingBox}
@@ -336,28 +337,32 @@ class SmartHandoff extends Component {
 
           <hr />
 
-          <div id="granule-count">
-            <h1>
-              Granules available for
-              {' '}
-              {dateSelection}
-              :
-              {' '}
-              { !isSearchingForGranules && totalGranules === 0 && (<span className="fade-in constant-width">NONE</span>)}
-              { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{totalGranules}</span>)}
-              { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
-              { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
-            </h1>
-          </div>
+          {selectedLayer && selectedLayer.conceptId && (
+            <div className="granule-count">
+              <h1>
+                Available granules for
+                {' '}
+                {dateSelection}
+                :
+                {' '}
+                { !isSearchingForGranules && totalGranules === 0 && (<span className="fade-in constant-width">NONE</span>)}
+                { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{totalGranules}</span>)}
+                { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
+                { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
+
+                <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>(?)</span>
+
+              </h1>
+            </div>
+          )}
 
           <Button
             onClick={() => {
-              if (showModal) showWarningModal(selectedDate, selectedLayer, currentExtent, showBoundingBox);
+              if (!showModal) showWarningModal(selectedDate, selectedLayer, currentExtent, showBoundingBox);
               else openEarthDataSearch(selectedDate, selectedLayer, currentExtent, showBoundingBox)();
             }}
-            id="download-btn"
             text="DOWNLOAD VIA EARTHDATA SEARCH"
-            className="red"
+            className="download-btn red"
             valid={isValidDownload}
           />
 
@@ -391,8 +396,21 @@ class SmartHandoff extends Component {
       );
     }
     return (
-      <div id="smart-handoff-side-panel">
-        <h1>None of your currently listed layers are available for data download.</h1>
+      <div className="smart-handoff-side-panel">
+        <h1>
+          None of your currently listed layers are available for downloading.
+        </h1>
+        <hr />
+        <h2>Why are my current layers not available?</h2>
+        <p>
+          Some layers in Worldview do not have corresponding source data products available for download.
+        </p>
+        <p>
+          These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
+        </p>
+        <p>
+          If you would like to download only an image, please use the “camera” icon in the upper right.
+        </p>
       </div>
     );
   }
@@ -443,6 +461,7 @@ SmartHandoff.propTypes = {
   screenWidth: PropTypes.number,
   selectedDate: PropTypes.instanceOf(Date),
   showWarningModal: PropTypes.func,
+  showGranuleHelpModal: PropTypes.func,
 };
 
 /**
@@ -450,7 +469,6 @@ SmartHandoff.propTypes = {
  * that the Smarthandoff component needs. This is called every time the
  * store state changes.
  * @param {*} state | Encapsulates the entire Redux store state.
- * @param {*} ownProps | Data from SmartHandoff that is used to retrieve data from the store.
  */
 const mapStateToProps = (state) => {
   const {
@@ -469,8 +487,7 @@ const mapStateToProps = (state) => {
   } = browser;
 
   const { activeString } = compare;
-
-  const activeLayers = getLayers(layers[activeString], { proj: proj.id });
+  const activeLayers = layers[activeString].filter((layer) => layer.projections[proj.id]);
 
   return {
     activeLayers,
@@ -501,6 +518,15 @@ const mapDispatchToProps = (dispatch) => ({
           showBoundingBox,
           goToEarthDataSearch: openEarthDataSearch(selectedDate, selectedLayer, extentCoords, showBoundingBox),
         },
+        size: 'lg',
+      }),
+    );
+  },
+  showGranuleHelpModal: () => {
+    dispatch(
+      openCustomContent('granule-help', {
+        headerText: 'Granule Availablilty',
+        bodyComponent: GranuleAlertModalBody,
         size: 'lg',
       }),
     );

@@ -25,32 +25,32 @@ function SmartHandoffModal({
 
     <div>
 
-      <div id="smart-handoff-heading">
+      <div className="smart-handoff-heading">
         <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">
           <img src="../../../images/earth-data-search-logo.jpg" />
           <h1>search.earthdata.nasa.gov</h1>
         </a>
       </div>
 
-      <div id="smart-handoff-message">
+      <div className="smart-handoff-message">
         You are about to be transferred to the NASA Earthdata Search tool. This tool is used to download
         data granules using the selected layer, area of interest, and current date.
       </div>
 
       { showMoreInfo
       && (
-      <div id="smart-handoff-about">
+      <div className="smart-handoff-about">
         <hr />
         <h1 className="about-heading">About Earthdata Search</h1>
-        <div id="about-section">
+        <div className="about-section">
           <p>
             Earthdata Search provides the only means for data discovery, filtering, visualization, and
             access across all of NASA Earth science data holdings. The current selected layer and the designated
             viewport region in Worldview will be used to derive data granules within Earthdata Search.
           </p>
 
-          <img id="earth-data-gif" src="../../../images/earth-data-search-preview.gif" />
-          <p id="earth-data-caption">
+          <img className="earth-data-gif" src="../../../images/earth-data-search-preview.gif" />
+          <p className="earth-data-caption">
             Granules that are available to download will be listed in the white pull out menu. Each granule listed can be
             downloaded individually or the entire set contained within the bounding box can be downloaded as a zip file.
           </p>
@@ -75,20 +75,20 @@ function SmartHandoffModal({
       </div>
       )}
 
-      <div id="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
+      <div className="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
         <h2><span>{showMoreInfo ? 'Hide Info' : 'Show More Info'}</span></h2>
       </div>
 
-      <div id="layer-info">
+      <div className="smart-handoff-layer-info">
         <h1> Selected layer to download: </h1>
         <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
-          <p id="layer-name">{`${title}`}</p>
-          <p id="layer-mata-data">{`${subtitle} (${date})`}</p>
+          <p className="smart-handoff-layer-name">{`${title}`}</p>
+          <p className="smart-handoff-layer-mata-data">{`${subtitle} (${date})`}</p>
         </a>
       </div>
 
 
-      <div className="button-group">
+      <div className="smart-handoff-button-group">
         <Button
           onClick={() => goToEarthDataSearch()} // Need to pass reference of current state of boundaries
           id="continue-btn"
@@ -97,8 +97,8 @@ function SmartHandoffModal({
         />
       </div>
 
-      <div id="checkbox-footer">
-        <div id="checkbox-footer-container">
+      <div className="checkbox-footer">
+        <div className="checkbox-footer-container">
           <Checkbox
             id="hide-eds-checkbox"
             name="hide-eds"

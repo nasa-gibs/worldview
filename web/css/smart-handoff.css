@@ -1,33 +1,53 @@
-/** Smart handoff side panel **/
-#smart-handoff-side-panel h1 {
-  margin-top: 10px;
-  margin-left: 0;
+/* Smart handoff side panel */
+.smart-handoff-side-panel {
+  margin: 10px;
   color: #bbb;
+}
+
+.smart-handoff-side-panel h1 {
+  margin: 15px 5px;
+  font-size: 13px;
+  line-height: 18px;
   text-align: center;
 }
-#smart-handoff-product-list {
+
+.smart-handoff-side-panel hr {
+  margin-top: 10px;
+  border-bottom: 1px solid #555;
+}
+
+.smart-handoff-side-panel h2 {
+  margin-top: 18px;
+  color: #eee;
+}
+
+.smart-handoff-side-panel p {
+  margin-top: 10px;
+}
+
+.smart-handoff-product-list {
   color: #fff;
 }
-.button-group {
+.smart-handoff-button-group {
   text-align: center;
 }
-#cancel-btn,
-#continue-btn {
+.cancel-btn,
+.continue-btn {
   width: 200px;
   margin: 5px;
 }
-#download-btn {
+.download-btn {
   display: block;
   margin: 15px auto 10px;
 }
-#esd-notification {
+.esd-notification {
   display: block;
-  margin: 10px 25px;
+  margin: 15px 20px;
   font-size: 11px;
   text-align: center;
   color: #fff;
 }
-#smart-handoff-layer-list {
+.smart-handoff-layer-list {
   margin-top: 15px;
   display: block;
   color: #fff;
@@ -35,16 +55,16 @@
   min-height: 40px;
   max-height: calc(var(--vh, 1vh) * 100 - 500px);
 }
-#smart-handoff-layer-list .layer-item {
+.smart-handoff-layer-list .layer-item {
   padding: 10px 15px;
 }
-#smart-handoff-layer-list .layer-item label {
+.smart-handoff-layer-list .layer-item label {
   display: block;
   margin-top: -20px;
   margin-left: 25px;
 }
 
-#smart-handoff-layer-list .layer-item span {
+.smart-handoff-layer-list .layer-item span {
   color: #999;
   display: block;
   margin-left: 25px;
@@ -52,28 +72,28 @@
   font-size: 11px;
 }
 
-#smart-handoff-side-panel hr {
-  border-top: 1px solid rgba(150, 150, 150, 0.25);
-  margin: 0;
-  padding: 0;
-  margin-top: 15px;
-}
-
-#crop-toggle {
+.smart-handoff-crop-toggle {
   display: inline-block;
-  margin-top: 15px;
-  margin-left: 65px;
+  margin: 5px 0;
+  margin-left: 52px;
 }
 
 label[for='chk-crop-toggle'] {
   color: #fff;
 }
 
-#granule-count {
+.granule-count {
   margin: 15px auto;
   margin-bottom: 0;
 }
-#granule-count span {
+.granule-help-link {
+  color: #7bf !important;
+}
+.granule-help-link:hover {
+  color: #9df !important;
+  cursor: pointer;
+}
+.granule-count span {
   color: #fff;
   font-size: 16px;
   font-weight: 900;
@@ -119,38 +139,39 @@ label[for='chk-crop-toggle'] {
   -ms-animation: fadein ease 1s;
 }
 
-/** Overrides react image crop component  **/
+/* Overrides react image crop component  */
 .ReactCrop {
   cursor: default !important;
   z-index: 0 !important;
 }
 
-/** Smart handoff modal */
-#smart-handoff-heading {
+/* Smart handoff modal */
+.smart-handoff-heading {
   margin-bottom: 15px;
 }
-#smart-handoff-heading h1 {
+.smart-handoff-heading h1 {
   float: right;
   font-size: 18px;
   line-height: 32px;
   color: #fff;
 }
-#smart-handoff-message {
+.smart-handoff-message {
   line-height: 1.25em;
+  margin: 15px 0;
   text-align: left;
   font-size: 17px;
   color: #ddd;
 }
-#smart-handoff-about hr {
+.smart-handoff-about hr {
   border-bottom: 1px solid #333;
   margin-top: 15px;
   margin-bottom: -10px;
 }
-#about-section {
+.about-section {
   overflow-y: scroll;
   height: 400px;
 }
-#about-section p {
+.about-section p {
   color: #bbb;
   margin-bottom: 10px;
   margin-right: 5px;
@@ -160,20 +181,20 @@ label[for='chk-crop-toggle'] {
   color: #fff;
   margin: 25px 0 10px;
 }
-#earth-data-gif {
+.earth-data-gif {
   padding-top: 10px;
   display: block;
   margin: 0 auto;
   width: 92%;
 }
-#earth-data-caption {
+.earth-data-caption {
   font-style: italic;
   margin: 20px;
   padding-bottom: 25px;
   width: 94%;
   text-align: center;
 }
-#layer-info {
+.smart-handoff-layer-info {
   text-align: center;
   background: #343434;
   color: #fff;
@@ -182,35 +203,35 @@ label[for='chk-crop-toggle'] {
   margin: 25px 0;
   border-radius: 10px;
 }
-#layer-info h1 {
+.smart-handoff-layer-info h1 {
   font-size: 14px;
   color: #fff;
   margin: 0;
   margin-bottom: 0.5em;
 }
-#toggle-more-info {
+.toggle-more-info {
   margin-top: 25px;
   color: #7bf;
   font-size: 17px;
   text-align: center;
 }
-#toggle-more-info:hover {
+.toggle-more-info:hover {
   color: #9df;
   cursor: pointer;
   text-decoration: underline;
 }
-#toggle-more-info h2 {
+.toggle-more-info h2 {
   width: 100%;
   text-align: center;
   border-bottom: 1px solid #333;
   line-height: 0.1em;
   margin: 10px 0 20px;
 }
-#toggle-more-info h2 span {
+.toggle-more-info h2 span {
   background: #191a1b;
   padding: 0 15px;
 }
-#checkbox-footer {
+.checkbox-footer {
   display: inline-block;
   text-align: center;
   width: 100%;
@@ -218,20 +239,55 @@ label[for='chk-crop-toggle'] {
   padding-top: 15px;
   border-top: 1px solid #333;
 }
-#checkbox-footer-container {
+.checkbox-footer-container {
   display: inline-block;
 }
 
+/** Granule alert modal */
+.smart-handoff-granule-alert {
+  padding: 20px;
+}
+
+.smart-handoff-granule-alert hr {
+  border-color: #333;
+  margin: 25px 0;
+}
+
+.smart-handoff-granule-alert h1 {
+  font-weight: 900;
+  color: #fff;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.smart-handoff-granule-alert p {
+  line-height: 18px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: #ddd;
+}
+
+.smart-handoff-granule-alert ol {
+  margin: 15px 0;
+  color: #ddd;
+}
+
+.smart-handoff-granule-alert ol li {
+  margin-left: 30px;
+  margin-top: 10px;
+  line-height: 18px;
+}
+
 /** Overrides the modal component styles */
-#transferring-to-earthdata-search.modal-dialog .modal-body {
+.transferring-to-earthdata-search.modal-dialog .modal-body {
   background: #191a1b !important;
   border: 1px solid #444 !important;
 }
-#transferring-to-earthdata-search .modal-header {
+.transferring-to-earthdata-search .modal-header {
   border-bottom: 1px solid #444 !important;
 }
 
 .constant-width {
   display: inline-block;
-  width: 60px;
+  width: 125px;
 }

@@ -1670,36 +1670,6 @@
         "C1517101319-SEDAC"
       ]
     },
-    "Landsat_WELD_CorrectedReflectance_Bands157_Global_Annual": {
-      "conceptId": [
-        "C1517858238-LPDAAC_ECS"
-      ]
-    },
-    "Landsat_WELD_CorrectedReflectance_Bands157_Global_Monthly": {
-      "conceptId": [
-        "C1517852891-LPDAAC_ECS"
-      ]
-    },
-    "Landsat_WELD_CorrectedReflectance_Bands743_Global_Annual": {
-      "conceptId": [
-        "C1517858238-LPDAAC_ECS"
-      ]
-    },
-    "Landsat_WELD_CorrectedReflectance_Bands743_Global_Monthly": {
-      "conceptId": [
-        "C1517852891-LPDAAC_ECS"
-      ]
-    },
-    "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual": {
-      "conceptId": [
-        "C1517858238-LPDAAC_ECS"
-      ]
-    },
-    "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly": {
-      "conceptId": [
-        "C1517852891-LPDAAC_ECS"
-      ]
-    },
     "Landsat_WELD_NDVI_Global_Annual": {
       "conceptId": [
         "C1517858238-LPDAAC_ECS"
@@ -2198,20 +2168,6 @@
     "MODIS_Aqua_Cloud_Water_Path_PCL": {
       "conceptId": [
         "C1443536017-LAADS"
-      ]
-    },
-    "MODIS_Aqua_CorrectedReflectance_Bands721": {
-      "conceptId": [
-        "C1426616847-LANCEMODIS",
-        "C1426617060-LANCEMODIS",
-        "C1426621826-LANCEMODIS"
-      ]
-    },
-    "MODIS_Aqua_CorrectedReflectance_TrueColor": {
-      "conceptId": [
-        "C1426616847-LANCEMODIS",
-        "C1426617060-LANCEMODIS",
-        "C1426621826-LANCEMODIS"
       ]
     },
     "MODIS_Aqua_Data_No_Data": {
@@ -2724,27 +2680,6 @@
     "MODIS_Terra_Cloud_Water_Path_PCL": {
       "conceptId": [
         "C1443535037-LAADS"
-      ]
-    },
-    "MODIS_Terra_CorrectedReflectance_Bands367": {
-      "conceptId": [
-        "C1426414410-LANCEMODIS",
-        "C1426415307-LANCEMODIS",
-        "C1426416980-LANCEMODIS"
-      ]
-    },
-    "MODIS_Terra_CorrectedReflectance_Bands721": {
-      "conceptId": [
-        "C1426414410-LANCEMODIS",
-        "C1426415307-LANCEMODIS",
-        "C1426416980-LANCEMODIS"
-      ]
-    },
-    "MODIS_Terra_CorrectedReflectance_TrueColor": {
-      "conceptId": [
-        "C1426414410-LANCEMODIS",
-        "C1426415307-LANCEMODIS",
-        "C1426416980-LANCEMODIS"
       ]
     },
     "MODIS_Terra_Data_No_Data": {
@@ -4277,21 +4212,6 @@
     "VIIRS_SNPP_Cloud_Mask_Night": {
       "conceptId": [
         "C1607563719-ASIPS"
-      ]
-    },
-    "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1": {
-      "conceptId": [
-        "C1344298008-LANCEMODIS"
-      ]
-    },
-    "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11": {
-      "conceptId": [
-        "C1344298008-LANCEMODIS"
-      ]
-    },
-    "VIIRS_SNPP_CorrectedReflectance_TrueColor": {
-      "conceptId": [
-        "C1344298008-LANCEMODIS"
       ]
     },
     "WELD_Alaska_Annual": {
