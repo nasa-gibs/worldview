@@ -1,0 +1,22 @@
+{
+  "layers": {
+    "VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Night": {
+      "id": "VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Night",
+      "title": "Band 33 Fusion Brightness Temperature (Night)",
+      "subtitle": "NOAA 20 / VIIRS+CrIS",
+      "description": "viirs/VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Night",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": [
+        "viirs"
+      ],
+      "product": "FSNRAD_L2_VIIRS_CRIS_NOAA20",
+      "tracks": [
+        "OrbitTracks_NOAA-20_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}
