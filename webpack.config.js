@@ -7,9 +7,9 @@ const WriteFilePlugin = require('write-file-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const postcssNesting = require('postcss-nesting');
 // production optimizations
+const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 // environment dev flag
 const devMode = process.env.NODE_ENV !== 'production';
@@ -118,20 +118,13 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          ecma: 5, // dependent on ie11 support
-          compress: true,
-          mangle: false,
-          topLevel: true,
-          safari10: true,
-          output: {
-            comments: false,
-            beautify: false,
-          },
+      new TerserPlugin({
+        terserOptions: {
+          ecma: 5,
+          parallel: true,
+          toplevel: true,
+          extractComments: true,
         },
-        cache: true,
-        parallel: true,
       }),
       new OptimizeCSSAssetsPlugin({
         cssProcessor: cssnano,
