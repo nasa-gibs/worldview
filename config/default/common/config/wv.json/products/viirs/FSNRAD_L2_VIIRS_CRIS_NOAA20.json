@@ -1,0 +1,11 @@
+{
+    "products": {
+        "FSNRAD_L2_VIIRS_CRIS_NOAA20": {
+            "name": "NOAA20 VIIRS+CrIS Fusion 6-Min L2 Swath 750m",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "FSNRAD_L2_VIIRS_CRIS_NOAA20"
+            }
+        }
+    }
+}
