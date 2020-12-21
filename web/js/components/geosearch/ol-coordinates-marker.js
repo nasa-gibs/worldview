@@ -14,6 +14,9 @@ import {
 import { areCoordinatesWithinExtent } from '../../modules/geosearch/util';
 import { reverseGeocode } from '../../modules/geosearch/util-api';
 import { getCoordinateFixedPrecision } from './util';
+import util from '../../util/util';
+
+const { events } = util;
 
 export class CoordinatesMarker extends Component {
   constructor(props) {
@@ -28,17 +31,15 @@ export class CoordinatesMarker extends Component {
   }
 
   componentWillUnmount() {
-    const { mouseEvents } = this.props;
-    mouseEvents.off('mousemove', this.mouseMove);
-    mouseEvents.off('singleclick', this.singleClick);
-    mouseEvents.off('contextmenu', this.rightClick);
+    events.off('mousemove', this.mouseMove);
+    events.off('singleclick', this.singleClick);
+    events.off('contextmenu', this.rightClick);
   }
 
   registerMouseListeners() {
-    const { mouseEvents } = this.props;
-    mouseEvents.on('mousemove', this.mouseMove);
-    mouseEvents.on('singleclick', this.singleClick);
-    mouseEvents.on('contextmenu', this.rightClick);
+    events.on('mousemove', this.mouseMove);
+    events.on('singleclick', this.singleClick);
+    events.on('contextmenu', this.rightClick);
   }
 
   mouseMove(event, map, crs) {
@@ -197,7 +198,6 @@ CoordinatesMarker.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
-  mouseEvents: PropTypes.object.isRequired,
   setPlaceMarker: PropTypes.func.isRequired,
   toggleDialogVisible: PropTypes.func.isRequired,
   toggleReverseGeocodeActive: PropTypes.func.isRequired,
