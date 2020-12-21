@@ -280,6 +280,7 @@ class SmartHandoff extends Component {
 
     const dateSelection = moment.utc(selectedDate).format('YYYY MMM DD');
 
+
     if (areThereLayersToDownload) {
       return (
         <div className="smart-handoff-side-panel">
@@ -299,17 +300,18 @@ class SmartHandoff extends Component {
           <div className="smart-handoff-layer-list">
             {activeLayers.map((layer) => {
               if (layer.conceptId) {
+                const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
                 return (
-                  <div className="layer-item" key={layer.id}>
+                  <div className="layer-item" key={inputId}>
                     <input
-                      id={layer.id}
+                      id={inputId}
                       type="radio"
                       value={layer.conceptId}
                       name="smart-handoff-layer-radio"
                       checked={selectedLayer && selectedLayer.id === layer.id}
                       onChange={() => this.onLayerChange(layer, currentExtent)}
                     />
-                    <label htmlFor={layer.id}>{layer.title}</label>
+                    <label htmlFor={inputId}>{layer.title}</label>
                     <span>{layer.subtitle}</span>
                   </div>
                 );

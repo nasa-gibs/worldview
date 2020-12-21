@@ -10,6 +10,7 @@ const TIME_LIMIT = 10000;
 
 const layersTab = '#layers-sidebar-tab';
 const dataTabButton = '#download-sidebar-tab';
+const cloudRadiusRadioButton = '#MODIS_Aqua_Cloud_Effective_Radius-smart-handoff-choice';
 
 module.exports = {
 
@@ -46,11 +47,9 @@ module.exports = {
     c.click(dataTabButton);
 
     // Ensure layer is now showing as an option for download
-    c.expect
-      .element('.smart-handoff-layer-list > .layer-item > #MODIS_Aqua_Cloud_Effective_Radius')
-      .to.be.present;
+    c.expect.element(cloudRadiusRadioButton).to.be.present;
 
-    c.click('#MODIS_Aqua_Cloud_Effective_Radius');
+    c.click(cloudRadiusRadioButton);
 
     // Verify granules and date are correct
     c.expect
