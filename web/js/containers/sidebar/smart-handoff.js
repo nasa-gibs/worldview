@@ -365,7 +365,7 @@ class SmartHandoff extends Component {
             }}
             text="DOWNLOAD VIA EARTHDATA SEARCH"
             className="download-btn red"
-            valid={isValidDownload}
+            valid={!!isValidDownload}
           />
 
           { showBoundingBox && (
