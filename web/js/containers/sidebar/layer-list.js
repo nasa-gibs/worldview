@@ -51,6 +51,7 @@ function LayerList(props) {
     isMobile,
   } = props;
   const groupLayerIds = layers.map(({ id }) => id);
+  const layersInProj = layers.filter(({ projections }) => projections[projId]);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
   const [runningDataObj, setRunningDataObj] = useState({});
@@ -157,7 +158,7 @@ function LayerList(props) {
       >
         <h3 className="layer-group-title">
           {title}
-          {collapsed ? ` (${layers.length})` : ''}
+          {collapsed ? ` (${layersInProj.length})` : ''}
         </h3>
         <div className="layer-group-icons">
           {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
