@@ -132,13 +132,13 @@ class App extends React.Component {
 
     // get user IP address for GTM/GA using https://www.ipify.org/ API
     const getIpAddress = async() => {
-      // const response = await fetch('https://api.ipify.org?format=json');
-      // const json = await response.json();
-      // const ipAddress = json.ip;
+      const response = await fetch('https://api.ipify.org?format=json');
+      const json = await response.json();
+      const ipAddress = json.ip;
 
       googleTagManager.pushEvent({
         event: 'ipAddress',
-        // ipAddress,
+        ipAddress,
       });
     };
 
