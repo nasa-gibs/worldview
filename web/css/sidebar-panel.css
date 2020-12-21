@@ -451,6 +451,7 @@ li.item.productsitem.inmotion,
   & .layer-info {
     background-color: #ccc;
     min-height: 40px;
+    cursor: grab;
     & .layer-buttons {
       position: absolute;
       right: 0;
