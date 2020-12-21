@@ -348,15 +348,12 @@ export default function mapui(models, config, store, ui) {
    */
   const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
     const state = store.getState();
-    const {
-      geosearch, layers, proj,
-    } = state;
+    const { geosearch, proj } = state;
     const {
       coordinates, isCoordinatesDialogOpen, reverseGeocodeResults,
     } = geosearch;
     const results = geocodeResults || reverseGeocodeResults;
     const { sources } = config;
-    const { active } = layers;
 
     // unmount coordinate dialog to prevent residual tooltips being hovered
     if (self.coordinatesDialogDOMEl) {
@@ -379,7 +376,7 @@ export default function mapui(models, config, store, ui) {
     if (shouldFlyToCoordinates) {
       // fly to coordinates and render coordinates tooltip on init SET_MARKER
       const zoom = self.selected.getView().getZoom();
-      const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
+      const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
       const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
       animateCoordinates({ ui: self }, config, coordinates, maxZoom);
     }

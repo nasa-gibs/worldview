@@ -27,19 +27,18 @@ export class CoordinatesMarker extends Component {
     this.mouseMove = this.mouseMove.bind(this);
     this.singleClick = this.singleClick.bind(this);
     this.rightClick = this.rightClick.bind(this);
-    this.registerMouseListeners();
+  }
+
+  componentDidMount() {
+    events.on('map:mousemove', this.mouseMove);
+    events.on('map:singleclick', this.singleClick);
+    events.on('map:contextmenu', this.rightClick);
   }
 
   componentWillUnmount() {
-    events.off('mousemove', this.mouseMove);
-    events.off('singleclick', this.singleClick);
-    events.off('contextmenu', this.rightClick);
-  }
-
-  registerMouseListeners() {
-    events.on('mousemove', this.mouseMove);
-    events.on('singleclick', this.singleClick);
-    events.on('contextmenu', this.rightClick);
+    events.off('map:mousemove', this.mouseMove);
+    events.off('map:singleclick', this.singleClick);
+    events.off('map:contextmenu', this.rightClick);
   }
 
   mouseMove(event, map, crs) {
