@@ -23,10 +23,6 @@ class MapInteractions extends PureComponent {
     const mapClasses = this.getMapClasses();
     return (
       <>
-        <div
-          id="wv-map"
-          className={mapClasses}
-        />
         <div id="wv-map" className={mapClasses} />
         {!isDistractionFreeModeActive && (
           <OlCoordinates />
