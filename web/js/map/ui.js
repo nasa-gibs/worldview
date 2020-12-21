@@ -1132,7 +1132,7 @@ export default function mapui(models, config, store, ui) {
     };
     map.getView().on('change:resolution', () => {
       onZoomChange();
-      events.trigger('movestart');
+      events.trigger('map:movestart');
     });
     onZoomChange();
   }
