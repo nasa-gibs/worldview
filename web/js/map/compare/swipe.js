@@ -224,7 +224,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   function end(evt) {
     dragging = false;
     events.trigger(
-      'moveend',
+      'compare:moveend',
       lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0),
     );
 
