@@ -408,9 +408,11 @@ const mapStateToProps = (state) => {
   const geosearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_GEOSEARCH_MOBILE';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
   const measureToggledOff = lastAction.type === 'MEASURE/TOGGLE_MEASURE_ACTIVE' && lastAction.value === false;
+  const distractionFreeModeToggledOff = lastAction.type === 'UI/TOGGLE_DISTRACTION_FREE_MODE';
+  const preventInputFocus = measureToggledOff || distractionFreeModeToggledOff;
 
   return {
-    preventInputFocus: measureToggledOff,
+    preventInputFocus,
     coordinates,
     geosearchMobileModalOpen,
     isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(map, config, targetCoordinates),

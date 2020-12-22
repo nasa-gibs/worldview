@@ -1,50 +1,61 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 
+const {
+  geosearchMinimizeButton,
+  geosearchToolbarButton,
+  sidebarContainer,
+  measureBtn,
+} = localSelectors;
+
 const TIME_LIMIT = 5000;
 
 module.exports = {
-  before: (client) => {
-    reuseables.loadAndSkipTour(client, TIME_LIMIT);
+  before: (c) => {
+    reuseables.loadAndSkipTour(c, TIME_LIMIT);
+    // ensure geosearch is minimized
+    c.click(geosearchMinimizeButton);
   },
 
   // verify distraction free mode shortcut hides ui elements
-  'Enabling distraction free mode with shortcut key hides UI elements': (client) => {
-    client.pause(300);
-    client.sendKeys('body', [client.Keys.SHIFT, 'd', client.Keys.NULL]);
-    client.pause(300);
+  'Enabling distraction free mode with shortcut key hides UI elements': (c) => {
+    c.pause(300);
+    c.sendKeys('body', [c.Keys.SHIFT, 'd', c.Keys.NULL]);
+    c.pause(300);
 
-    client.waitForElementNotVisible('.timeline-container', TIME_LIMIT);
-    client.waitForElementNotVisible(localSelectors.sidebarContainer, TIME_LIMIT);
-    client.waitForElementNotPresent('#wv-link-button', TIME_LIMIT);
-    client.waitForElementNotPresent('#wv-proj-button', TIME_LIMIT);
-    client.waitForElementNotPresent('#wv-image-button', TIME_LIMIT);
-    client.waitForElementNotVisible(localSelectors.measureBtn, TIME_LIMIT);
-    client.waitForElementNotVisible('.wv-map-zoom-in', TIME_LIMIT);
-    client.waitForElementNotVisible('.wv-map-zoom-out', TIME_LIMIT);
-    client.waitForElementNotVisible('.wv-map-scale-metric', TIME_LIMIT);
-    client.waitForElementNotVisible('.wv-map-scale-imperial', TIME_LIMIT);
+    c.waitForElementNotVisible('.timeline-container', TIME_LIMIT);
+    c.waitForElementNotVisible(sidebarContainer, TIME_LIMIT);
+    c.waitForElementNotVisible(geosearchToolbarButton, TIME_LIMIT);
+    c.waitForElementNotPresent('#wv-link-button', TIME_LIMIT);
+    c.waitForElementNotPresent('#wv-proj-button', TIME_LIMIT);
+    c.waitForElementNotPresent('#wv-image-button', TIME_LIMIT);
+    c.waitForElementNotVisible(measureBtn, TIME_LIMIT);
+    c.waitForElementNotVisible('.wv-map-zoom-in', TIME_LIMIT);
+    c.waitForElementNotVisible('.wv-map-zoom-out', TIME_LIMIT);
+    c.waitForElementNotVisible('.wv-map-scale-metric', TIME_LIMIT);
+    c.waitForElementNotVisible('.wv-map-scale-imperial', TIME_LIMIT);
   },
 
   // verify turning off distraction free mode shortcut returns hidden ui elements
-  'Disabling distraction free mode with shortcut key returns UI elements': (client) => {
-    client.pause(300);
-    client.sendKeys('body', [client.Keys.SHIFT, 'd', client.Keys.NULL]);
-    client.pause(300);
+  'Disabling distraction free mode with shortcut key returns UI elements': (c) => {
+    c.pause(300);
+    c.sendKeys('body', [c.Keys.SHIFT, 'd', c.Keys.NULL]);
+    c.pause(300);
 
-    client.waitForElementVisible('.timeline-container', TIME_LIMIT);
-    client.waitForElementVisible(localSelectors.sidebarContainer, TIME_LIMIT);
-    client.waitForElementVisible('#wv-link-button', TIME_LIMIT);
-    client.waitForElementPresent('#wv-proj-button', TIME_LIMIT);
-    client.waitForElementPresent('#wv-image-button', TIME_LIMIT);
-    client.waitForElementVisible(localSelectors.measureBtn, TIME_LIMIT);
-    client.waitForElementPresent('.wv-map-zoom-in', TIME_LIMIT);
-    client.waitForElementPresent('.wv-map-zoom-out', TIME_LIMIT);
-    client.waitForElementPresent('.wv-map-scale-metric', TIME_LIMIT);
-    client.waitForElementPresent('.wv-map-scale-imperial', TIME_LIMIT);
+    c.waitForElementVisible('.timeline-container', TIME_LIMIT);
+    c.waitForElementVisible(sidebarContainer, TIME_LIMIT);
+    c.waitForElementVisible(geosearchToolbarButton, TIME_LIMIT);
+    c.waitForElementVisible('#wv-link-button', TIME_LIMIT);
+    c.waitForElementPresent('#wv-proj-button', TIME_LIMIT);
+    c.waitForElementPresent('#wv-image-button', TIME_LIMIT);
+    c.waitForElementVisible(measureBtn, TIME_LIMIT);
+    c.waitForElementPresent('.wv-map-zoom-in', TIME_LIMIT);
+    c.waitForElementPresent('.wv-map-zoom-out', TIME_LIMIT);
+    c.waitForElementPresent('.wv-map-scale-metric', TIME_LIMIT);
+    c.waitForElementPresent('.wv-map-scale-imperial', TIME_LIMIT);
   },
 
-  after: (client) => {
-    client.end();
+  after: (c) => {
+    c.end();
   },
 };
