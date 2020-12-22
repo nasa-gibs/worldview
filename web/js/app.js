@@ -153,7 +153,9 @@ class App extends React.Component {
       }
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
-        getIpAddress();
+        if (!/localhost/.test(window.location.href)) {
+          getIpAddress();
+        }
       }
 
       // Console notifications
