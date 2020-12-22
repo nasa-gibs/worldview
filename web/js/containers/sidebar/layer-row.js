@@ -239,6 +239,51 @@ function LayerRow (props) {
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
 
+
+  const renderLayerRow = () => (
+    <>
+      <a
+        id={`hide${encodedLayerId}`}
+        className={visibilityToggleClass}
+        aria-label={visibilityTitle}
+        onClick={() => toggleVisibility(layer.id, !isVisible)}
+      >
+        <UncontrolledTooltip
+          placement="right"
+          target={`hide${encodedLayerId}`}
+        >
+          {visibilityTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
+      </a>
+
+      <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
+
+      <div className="layer-main">
+        <div className="layer-info">
+          <div className="layer-buttons">
+            {showButtons && renderControls()}
+          </div>
+          <h4 title={names.title}>{names.title}</h4>
+          <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+          {hasPalette ? getPaletteLegend() : ''}
+        </div>
+        {isVectorLayer && isVisible ? renderVectorIcon() : null}
+        {tracksForLayer.length > 0 && (
+          <div className="layer-tracks">
+            {tracksForLayer.map((track) => (
+              <OrbitTrack
+                key={track.id}
+                trackLayer={track}
+                parentLayer={layer}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+
   return (
     <Draggable
       draggableId={`${encodedLayerId}-${compareState}`}
@@ -249,55 +294,14 @@ function LayerRow (props) {
         <li
           id={`${compareState}-${encodedLayerId}`}
           className={containerClass}
-          style={getItemStyle(
-            snapshot.isDragging,
-            provided.draggableProps.style,
-          )}
+          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
           ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
           onMouseOver={mouseOver}
           onMouseLeave={mouseLeave}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
         >
-          <a
-            id={`hide${encodedLayerId}`}
-            className={visibilityToggleClass}
-            aria-label={visibilityTitle}
-            onClick={() => toggleVisibility(layer.id, !isVisible)}
-          >
-            <UncontrolledTooltip
-              placement="right"
-              target={`hide${encodedLayerId}`}
-            >
-              {visibilityTitle}
-            </UncontrolledTooltip>
-            <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
-          </a>
-
-          <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
-
-          <div className="layer-main">
-            <div className="layer-info">
-              <div className="layer-buttons">
-                {showButtons && renderControls()}
-              </div>
-              <h4 title={names.title}>{names.title}</h4>
-              <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-              {hasPalette ? getPaletteLegend() : ''}
-            </div>
-            {isVectorLayer && isVisible ? renderVectorIcon() : null}
-            {tracksForLayer.length > 0 && (
-              <div className="layer-tracks">
-                {tracksForLayer.map((track) => (
-                  <OrbitTrack
-                    key={track.id}
-                    trackLayer={track}
-                    parentLayer={layer}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+          {renderLayerRow()}
         </li>
       ) : (
         <li

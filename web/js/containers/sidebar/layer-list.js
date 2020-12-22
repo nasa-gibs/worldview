@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -50,6 +51,7 @@ function LayerList(props) {
     toggleCollapse,
     isMobile,
   } = props;
+  const { dragHandleProps = {} } = props;
   const groupLayerIds = layers.map(({ id }) => id);
   const layersInProj = layers.filter(({ projections }) => projections[projId]);
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
@@ -146,29 +148,36 @@ function LayerList(props) {
     </Dropdown>
   );
 
+  const renderHeader = () => (
+    <div
+      className="layer-group-header"
+      onMouseEnter={mouseEnter}
+      onMouseLeave={mouseLeave}
+      {...dragHandleProps}
+    >
+      <h3 className="layer-group-title">
+        {title}
+        {collapsed ? ` (${layersInProj.length})` : ''}
+      </h3>
+      <div className="layer-group-icons">
+        {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
+        <FontAwesomeIcon
+          className="layer-group-collapse"
+          icon={!collapsed ? 'caret-down' : 'caret-left'}
+          onClick={() => toggleCollapse(groupId, !collapsed)}
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div
       id={`${compareState}-${groupId}`}
       className="layer-group-case"
     >
-      <div
-        className="layer-group-header"
-        onMouseEnter={mouseEnter}
-        onMouseLeave={mouseLeave}
-      >
-        <h3 className="layer-group-title">
-          {title}
-          {collapsed ? ` (${layersInProj.length})` : ''}
-        </h3>
-        <div className="layer-group-icons">
-          {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
-          <FontAwesomeIcon
-            className="layer-group-collapse"
-            icon={!collapsed ? 'caret-down' : 'caret-left'}
-            onClick={() => toggleCollapse(groupId, !collapsed)}
-          />
-        </div>
-      </div>
+
+      {renderHeader()}
+
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId={`${compareState}-${groupId}`}
@@ -179,7 +188,6 @@ function LayerList(props) {
             <ul
               className={collapsed ? 'category hidden' : 'category'}
               ref={provided.innerRef}
-                // eslint-disable-next-line react/jsx-props-no-spreading
               {...provided.droppableProps}
             >
               {layers.map(renderLayer)}
@@ -197,6 +205,7 @@ LayerList.propTypes = {
   available: PropTypes.func,
   collapsed: PropTypes.bool,
   compareState: PropTypes.string,
+  dragHandleProps: PropTypes.object,
   getNames: PropTypes.func,
   groupId: PropTypes.string,
   isMobile: PropTypes.bool,
