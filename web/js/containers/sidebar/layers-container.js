@@ -66,7 +66,6 @@ function LayersContainer (props) {
             id={`${compareState}-${util.cleanId(groupName)}`}
             ref={provided.innerRef}
             {...provided.draggableProps}
-            {...provided.dragHandleProps}
           >
             <LayerList
               title={groupName}
@@ -76,6 +75,7 @@ function LayersContainer (props) {
               compareState={compareState}
               layerSplit={overlays.length}
               layers={layersForGroup}
+              dragHandleProps={provided.dragHandleProps}
             />
           </li>
         )}
