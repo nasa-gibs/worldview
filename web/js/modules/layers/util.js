@@ -832,28 +832,31 @@ export function serializeLayers(layers, state, groupName) {
   });
 }
 
-export function serializeGroupOverlays (currentItemState, state, activeString) {
+export function serializeGroupOverlays (groupOverlays, state, activeString) {
   const { config, parameters, compare } = state;
   const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
   const layersOnState = lodashGet(state, `layers.${activeString}.layers`);
-  const showGroups = lodashGet(state, `layers.${activeString}.groupOverlays`);
+  const layersChanged = !lodashIsEqual(layersOnState, startingLayers);
   const layersParam = activeString === 'active' ? parameters.l : parameters.l1;
   const layerGroupParam = activeString === 'active' ? parameters.lg : parameters.lg1;
-  const layersChanged = !lodashIsEqual(layersOnState, startingLayers);
 
-  // Old permalink => disable groups
+  // Old permalink; disable groups
   if (!!layersParam && !layerGroupParam) {
     return false;
   }
   // If any change is made to layers, include group param
   if (layersChanged) {
-    return showGroups;
+    return groupOverlays;
   }
   // If app was loaded without layer parameters, only include param if grouping disabled
-  if (layersParam === undefined && layerGroupParam === undefined && !compare.active) {
-    return !showGroups ? currentItemState : undefined;
+  if (!layersParam && layerGroupParam === undefined && !compare.active) {
+    return !groupOverlays ? groupOverlays : undefined;
   }
-  return showGroups;
+  // No need to include param when it's set to the default(true) and no layer params are present
+  if (!layersParam && groupOverlays) {
+    return undefined;
+  }
+  return groupOverlays;
 }
 
 export function toggleVisibility(id, layers) {
