@@ -18,7 +18,7 @@ import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
-import { createVectorUrl, mergeBreakpointLayerAttributes } from './util';
+import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import {
   isActive as isPaletteActive,
@@ -514,19 +514,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
 
     const transparent = def.format === 'image/png';
     if (selectedProj.id === 'geographic') {
-      res = [
-        0.28125,
-        0.140625,
-        0.0703125,
-        0.03515625,
-        0.017578125,
-        0.0087890625,
-        0.00439453125,
-        0.002197265625,
-        0.0010986328125,
-        0.00054931640625,
-        0.00027465820313,
-      ];
+      res = getGeographicResolutionWMS(def.tileSize);
     }
     if (day) {
       if (day === 1) {
