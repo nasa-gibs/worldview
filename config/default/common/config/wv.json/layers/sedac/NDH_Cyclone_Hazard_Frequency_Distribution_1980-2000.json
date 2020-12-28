@@ -7,9 +7,7 @@
       "description": "sedac/NDH_Cyclone_Hazard_Frequency_Distribution_1980-2000",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Cyclone Hazard",
       "product": "CIESIN_CHRR_NDH_CYCLONE_HFD",
       "inactive": true,
       "wrapX": true

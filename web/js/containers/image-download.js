@@ -15,7 +15,9 @@ import util from '../util/util';
 import {
   hasSubDaily as hasSubDailySelector,
   getLayers,
+  getActiveLayers,
 } from '../modules/layers/selectors';
+import getSelectedDate from '../modules/date/selectors';
 import {
   resolutionsGeo,
   resolutionsPolar,
@@ -156,9 +158,6 @@ function mapStateToProps(state) {
     proj,
     browser,
     geosearch,
-    layers,
-    compare,
-    date,
     map,
     imageDownload,
   } = state;
@@ -167,9 +166,8 @@ function mapStateToProps(state) {
   } = imageDownload;
   const { screenWidth, screenHeight } = browser;
   const markerCoordinates = geosearch.coordinates;
-  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-  const activeStr = compare.activeString;
-  const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
+  const activeLayers = getActiveLayers(state);
+  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -191,14 +189,13 @@ function mapStateToProps(state) {
     boundaries,
     hasSubdailyLayers,
     markerCoordinates,
-    date: date[activeDateStr],
+    date: getSelectedDate(state),
     getLayers: () => getLayers(
-      layers[compare.activeString],
+      state,
       {
         reverse: true,
         renderable: true,
       },
-      state,
     ),
   };
 }

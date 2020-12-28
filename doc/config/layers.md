@@ -61,7 +61,7 @@ The minimum set of required properties are as follows:
 * **title**: Title of the layer displayed to the end user. This is the first line displayed in the active layers list.
 * **subtitle**: Subtitle of the layer displayed to the end user. This is the second line displayed in the active layers list and usually includes platform, sensor, and/or attribution information.
 * **group**: The group this layer is found in, either `baselayers` or `overlays`
-* **layergroup**: A reference to the layer group the layer belongs to (usually the folder name it's contained in; i.e. airs, modis, reference_orbits).
+* **layergroup**: A string representing the group that this layer belongs to when shown in the sidebar. `Orbital Track` can used as a special identifier here to indicate layers which are orbit tracks.
 
 The following properties are required if this information is not available via the GIBS WMTS GetCapabilities document:
 
@@ -118,6 +118,7 @@ Example:
     * startDate - `YYYY-MM-DDTHH:MM:SSZ`
     * endDate - `YYYY-MM-DDTHH:MM:SSZ`
     * dateInterval - Number of days (or minutes for subdaily layers)
+* **temporal**: Used to override the layer temporal availability declared in the capabilities document. Note: Changing the temporal availability can cause missing layer coverage within the interface for layers tiles that aren't available from the source at the revised temporal range. This option can be added as a string with the new availability range. For example, `"1981-10-13/2019-10-11/P1M"`.
 
 ## Full Example
 
@@ -139,14 +140,13 @@ Example:
           "matrixSet": "EPSG4326_2km"
         }
       },
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Relative Humidity",
       "daynight": [ "day" ],
       "track": "descending",
       "palette": {
         "id": "AIRS_RH400_A"
-      }
+      },
+      "temporal": "1981-10-13/2019-10-11/P1M"
     }
   }
 }

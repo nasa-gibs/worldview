@@ -7,9 +7,7 @@
       "description": "goes/GOES-West_ABI_Band13_Clean_Infrared",
       "group": "overlays",
       "tags": "geostationary geo",
-      "layergroup": [
-        "goes"
-      ],
+      "layergroup": "Geostationary",
       "product": "",
       "palette": {
         "immutable": true

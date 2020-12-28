@@ -10,6 +10,8 @@ import {
 } from '../../../modules/date/constants';
 import DataItemContainer from './data-item-container';
 
+const { events } = util;
+
 // ignore multiple date ranges due to WV config not building to
 // handle varying periods in same layer (example: M and D)
 const ignoredLayer = {
@@ -24,9 +26,24 @@ const ignoredLayer = {
 class DataItemList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      hoveredLayer: undefined,
+    };
 
     // cache for queried date arrays
     this.layerDateArrayCache = {};
+  }
+
+  componentDidMount() {
+    events.on('sidebar:layer-hover', this.layerHoverCallback);
+  }
+
+  componentWillUnmount() {
+    events.off('sidebar:layer-hover', this.layerHoverCallback);
+  }
+
+  layerHoverCallback = (id, active) => {
+    this.setState({ hoveredLayer: active ? id : undefined });
   }
 
   /**
@@ -298,7 +315,7 @@ class DataItemList extends Component {
   *   @param {String} layerItemOutline
   */
   getLayerItemStyles = (visible, id) => {
-    const { hoveredLayer } = this.props;
+    const { hoveredLayer } = this.state;
     // condtional styling for line/background colors
     const containerBackgroundColor = visible
       ? 'rgb(204, 204, 204)'
@@ -455,7 +472,6 @@ DataItemList.propTypes = {
   backDate: PropTypes.string,
   frontDate: PropTypes.string,
   getMatchingCoverageLineDimensions: PropTypes.func,
-  hoveredLayer: PropTypes.string,
   positionTransformX: PropTypes.number,
   timeScale: PropTypes.string,
 };

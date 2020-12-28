@@ -21,11 +21,10 @@
   display: flex;
 }
 .react-switch-case {
-  width: 20%;
+  width: 40px;
   align-items: flex-start;
 }
 .react-switch-label-case {
-  width: 80%;
   svg.svg-inline--fa {
     margin-left: 5px;
   }
@@ -78,4 +77,5 @@
 
 .switch-label-text {
   cursor: pointer;
+  color: #fff;
 }

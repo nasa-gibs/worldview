@@ -9,9 +9,7 @@
       "group": "overlays",
       "type": "wmts",
       "noTransition": "true",
-      "layergroup": [
-        "reference"
-      ],
+      "layergroup": "Reference",
       "wrapX": true
     }
   }

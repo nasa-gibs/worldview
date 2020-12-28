@@ -6,10 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_Cloud_Phase_Infrared_Day",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Cloud Phase",
       "product": "MOD06_L2_DAY",
       "wrapadjacentdays": true,
       "tracks": [

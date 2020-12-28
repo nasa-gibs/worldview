@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_SO2_Middle_Troposphere",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Sulfur Dioxide",
       "product": "OMSO2",
       "tags": "so2 sulphur dioxide",
       "tracks": [

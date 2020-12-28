@@ -7,9 +7,7 @@
       "description": "oco3/OCO-3_Water_Vapor_Total_Column_Average",
       "tags": "oco3",
       "group": "overlays",
-      "layergroup": [
-        "oco3"
-      ],
+      "layergroup": "Water Vapor",
       "product": "OCO3_L2_Lite_FP",
       "wrapadjacentdays": true,
       "daynight": [

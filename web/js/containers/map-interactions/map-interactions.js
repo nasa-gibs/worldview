@@ -19,26 +19,17 @@ class MapInteractions extends PureComponent {
   render() {
     const {
       isDistractionFreeModeActive,
-      mouseEvents,
     } = this.props;
     const mapClasses = this.getMapClasses();
     return (
       <>
-        <div
-          id="wv-map"
-          className={mapClasses}
-        />
-        <OlCoordinates
-          mouseEvents={mouseEvents}
-          isDistractionFreeModeActive={isDistractionFreeModeActive}
-        />
-        <OlVectorInteractions
-          mouseEvents={mouseEvents}
-        />
+        <div id="wv-map" className={mapClasses} />
+        {!isDistractionFreeModeActive && (
+          <OlCoordinates />
+        )}
+        <OlVectorInteractions />
         <OlMeasureTool />
-        <OlCoordinatesMarker
-          mouseEvents={mouseEvents}
-        />
+        <OlCoordinatesMarker />
       </>
     );
   }
@@ -60,7 +51,6 @@ function mapStateToProps(state) {
 MapInteractions.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
-  mouseEvents: PropTypes.object.isRequired,
   isCoordinateSearchActive: PropTypes.bool,
 };
 export default connect(

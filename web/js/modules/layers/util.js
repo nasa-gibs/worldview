@@ -9,12 +9,17 @@ import {
   isNaN as lodashIsNaN,
   startCase as lodashStartCase,
   isArray,
+  isEqual as lodashIsEqual,
 } from 'lodash';
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
 import update from 'immutability-helper';
 import {
-  addLayer, resetLayers, getFutureLayerEndDate,
+  addLayer,
+  resetLayers,
+  getLayers,
+  getFutureLayerEndDate,
+  getActiveLayersMap,
 } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
@@ -779,8 +784,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
   return dateArray;
 }
 
-export function serializeLayers(currentLayers, state, groupName) {
-  const layers = currentLayers;
+export function serializeLayers(layers, state, groupName) {
   const palettes = state.palettes[groupName];
 
   return layers.map((def, i) => {
@@ -826,6 +830,33 @@ export function serializeLayers(currentLayers, state, groupName) {
 
     return util.appendAttributesForURL(item);
   });
+}
+
+export function serializeGroupOverlays (groupOverlays, state, activeString) {
+  const { config, parameters, compare } = state;
+  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const layersOnState = lodashGet(state, `layers.${activeString}.layers`);
+  const layersChanged = !lodashIsEqual(layersOnState, startingLayers);
+  const layersParam = activeString === 'active' ? parameters.l : parameters.l1;
+  const layerGroupParam = activeString === 'active' ? parameters.lg : parameters.lg1;
+
+  // Old permalink; disable groups
+  if (!!layersParam && !layerGroupParam) {
+    return false;
+  }
+  // If any change is made to layers, include group param
+  if (layersChanged) {
+    return groupOverlays;
+  }
+  // If app was loaded without layer parameters, only include param if grouping disabled
+  if (!layersParam && layerGroupParam === undefined && !compare.active) {
+    return !groupOverlays ? groupOverlays : undefined;
+  }
+  // No need to include param when it's set to the default(true) and no layer params are present
+  if (!layersParam && groupOverlays) {
+    return undefined;
+  }
+  return groupOverlays;
 }
 
 export function toggleVisibility(id, layers) {
@@ -1034,6 +1065,7 @@ export function layersParse12(stateObj, config) {
     return resetLayers(config.defaults.startingLayers, config.layers);
   }
 }
+
 const createLayerArrayFromState = function(state, config) {
   let layerArray = [];
   lodashEach(state, (obj) => {
@@ -1139,6 +1171,7 @@ const createLayerArrayFromState = function(state, config) {
   });
   return layerArray;
 };
+
 export function validate(errors, config) {
   const error = function(layerId, cause) {
     errors.push({
@@ -1169,6 +1202,7 @@ export function validate(errors, config) {
     }
   });
 }
+
 export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
@@ -1176,17 +1210,93 @@ export function mapLocationToLayerState(
   config,
 ) {
   let newStateFromLocation = stateFromLocation;
+  const { layers } = stateFromLocation;
+  const { active, activeB } = layers;
+
+  // No B group layers param but compare active param is present
   if (!parameters.l1 && parameters.ca !== undefined) {
-    newStateFromLocation = update(stateFromLocation, {
-      layers: { activeB: { $set: stateFromLocation.layers.active } },
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          groupOverlays: { $set: false },
+          layers: { $set: active.layers },
+          overlayGroups: { $set: [] },
+        },
+      },
     });
   }
+
   // legacy layers permalink
   if (parameters.products && !parameters.l) {
-    newStateFromLocation = update(stateFromLocation, {
+    const parsedLayers = layersParse11(parameters.products, config);
+    newStateFromLocation = update(newStateFromLocation, {
       layers: {
         active: {
-          $set: layersParse11(parameters.products, config),
+          overlayGroups: {
+            $set: getOverlayGroups(parsedLayers),
+          },
+          layers: { $set: parsedLayers },
+        },
+      },
+    });
+  }
+
+  // If loading via permalink without group param, GROUPS DISABLED
+  if (parameters.l && parameters.lg === undefined) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        active: {
+          groupOverlays: { $set: false },
+          overlayGroups: { $set: [] },
+          layers: { $set: active.layers },
+        },
+      },
+    });
+  }
+
+  if (parameters.l1 && parameters.lg1 === undefined) {
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          groupOverlays: { $set: false },
+          overlayGroups: { $set: [] },
+          layers: { $set: activeB.layers },
+        },
+      },
+    });
+  }
+
+  if (active && active.layers.length) {
+    const {
+      groupOverlays,
+      overlayGroups,
+      layers: stateLayers,
+    } = newStateFromLocation.layers.active;
+    const populateGroups = groupOverlays && !overlayGroups;
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        active: {
+          overlayGroups: {
+            $set: populateGroups ? getOverlayGroups(stateLayers) : [],
+          },
+        },
+      },
+    });
+  }
+
+  if (activeB && activeB.layers.length) {
+    const {
+      groupOverlays,
+      overlayGroups,
+      layers: stateLayers,
+    } = newStateFromLocation.layers.activeB;
+    const populateGroups = groupOverlays && !overlayGroups;
+    newStateFromLocation = update(newStateFromLocation, {
+      layers: {
+        activeB: {
+          overlayGroups: {
+            $set: populateGroups ? getOverlayGroups(stateLayers) : [],
+          },
         },
       },
     });
@@ -1338,4 +1448,36 @@ export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
   if (targetLayerId && mockFutureTime && layers[targetLayerId]) {
     layers[targetLayerId].futureTime = mockFutureTime;
   }
+}
+
+export function getOverlayGroups(layers, prevGroups = []) {
+  const allGroupsMap = {};
+  layers.forEach(({ id, group, layergroup }) => {
+    if (group !== 'overlays') {
+      return;
+    }
+    if (allGroupsMap[layergroup]) {
+      allGroupsMap[layergroup].push(id);
+    } else {
+      allGroupsMap[layergroup] = [id];
+    }
+  });
+  return Object.keys(allGroupsMap).map((groupName) => {
+    const prevGroup = prevGroups.find((g) => g.groupName === groupName);
+    return {
+      groupName,
+      layers: allGroupsMap[groupName],
+      collapsed: prevGroup ? prevGroup.collapsed : false,
+    };
+  });
+}
+
+export function getLayersFromGroups (state, groups) {
+  const baselayers = getLayers(state, { group: 'baselayers' });
+  const activeLayersMap = getActiveLayersMap(state);
+  return groups
+    ? groups.flatMap((g) => g.layers)
+      .map((id) => activeLayersMap[id])
+      .concat(baselayers)
+    : [];
 }

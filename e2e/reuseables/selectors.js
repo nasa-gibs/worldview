@@ -14,8 +14,31 @@ module.exports = {
   animationWidget: '#wv-animation-widget',
   animationButton: '#animate-button',
 
-  // sidebar
+  // sidebar, layers
   sidebarContainer: '#productsHolder',
+  infoButton: '.wv-layers-info',
+  optionsButton: '.wv-layers-options',
+  infoDialog: '.layer-info-settings-modal',
+  optionsDialog: '.layer-info-settings-modal',
+  addLayers: '#layers-add',
+  groupCheckbox: '#group-overlays-checkbox',
+  viirsFiresCheckbox: '#VIIRS_NOAA20_Thermal_Anomalies_375m_All-checkbox',
+  firesGroup: '#active-Fires_and_Thermal_Anomalies',
+  firesLayer: '#active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
+  firesRemove: '#close-activeVIIRS_NOAA20_Thermal_Anomalies_375m_All',
+  aodGroup: '#active-Aerosol_Optical_Depth',
+  aodGroupHeader: '#active-Aerosol_Optical_Depth .layer-group-header',
+  overlaysGroup: '#active-overlays',
+  overlaysGroupHeader: '#active-overlays .layer-group-header',
+  baselayersGroup: '#active-baselayers',
+  baselayersGroupHeader: '#active-baselayers .layer-group-header',
+  groupOptionsBtn: '.layer-group-more-options > button',
+  groupHide: '.layer-group-more-options #hide-all',
+  groupShow: '.layer-group-more-options #show-all',
+  groupRemove: '.layer-group-more-options #remove-group',
+  layerVisible: 'li.layer-visible',
+  layerHidden: 'li.layer-hidden',
+  groupedOverlaysAllLayers: '.layer-container > ul .item.productsitem',
 
   // compare
   swipeButton: '#compare-swipe-button',
@@ -50,11 +73,6 @@ module.exports = {
 
 
   // layers
-  infoButton: '.wv-layers-info',
-  optionsButton: '.wv-layers-options',
-  infoDialog: '.layer-info-settings-modal',
-  optionsDialog: '.layer-info-settings-modal',
-  addLayers: '#layers-add',
   layersModalCloseButton: '.custom-layer-dialog .modal-header .close',
   aerosolOpticalDepth: '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth',
   layersSearchField: 'input#layers-search-input',

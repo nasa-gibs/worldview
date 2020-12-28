@@ -3,12 +3,10 @@ import lodashOrderBy from 'lodash/orderBy';
 import lodashUniqBy from 'lodash/uniqBy';
 import util from '../../util/util';
 
+const { events } = util;
+
 export default function naturalEventsRequest(models, ui, config) {
   const self = {};
-  self.events = util.events();
-
-  self.EVENT_QUERY_RESULTS = 'queryResults';
-  self.EVENT_SELECT = 'select';
 
   self.apiURL = config.features.naturalEvents.host;
   self.querySuccessFlag = false;
@@ -17,7 +15,7 @@ export default function naturalEventsRequest(models, ui, config) {
   model.data = {};
 
   const init = function() {
-    self.events.on('queryResults', onQueryResults);
+    events.on('natural-events:query-results', onQueryResults);
     self.query();
   };
 
@@ -58,7 +56,6 @@ export default function naturalEventsRequest(models, ui, config) {
         'desc',
       );
       ui.sidebar.renderEvents();
-      if (model.active) model.events.trigger('hasData');
     }
   };
 
@@ -112,7 +109,7 @@ export default function naturalEventsRequest(models, ui, config) {
       model.data.types = res[0].categories;
       model.data.events = res[1].events;
       model.data.sources = res[2].sources;
-      self.events.trigger('queryResults');
+      events.trigger('natural-events:query-results');
     });
   };
 

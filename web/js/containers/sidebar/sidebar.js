@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { get as lodashGet } from 'lodash';
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
-import Layers from './layers';
+import LayersContainer from './layers-container';
 import Events from './events';
 import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
@@ -12,11 +12,10 @@ import FooterContent from './footer-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import {
-  getCheckerboard,
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
-import { getLayers } from '../../modules/layers/selectors';
+import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
@@ -55,7 +54,6 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { subComponentHeight: 700 };
-    this.checkerBoardPattern = getCheckerboard();
     const customPalettePromise = loadCustomPalette(props.config);
     customPalettePromise.done((customs) => {
       props.loadedCustomPalettes(customs);
@@ -145,16 +143,14 @@ class Sidebar extends React.Component {
         <CompareCase
           isActive={activeTab === 'layers'}
           height={subComponentHeight}
-          checkerBoardPattern={this.checkerBoardPattern}
         />
       );
     } if (!isCompareMode) {
       return (
-        <Layers
-          height={subComponentHeight - 20}
+        <LayersContainer
+          height={subComponentHeight - 48}
           isActive={activeTab === 'layers'}
-          layerGroupName={activeString}
-          checkerBoardPattern={this.checkerBoardPattern}
+          compareState={activeString}
         />
       );
     }
@@ -267,7 +263,6 @@ function mapStateToProps(state) {
     browser,
     sidebar,
     compare,
-    layers,
     config,
     modal,
     measure,
@@ -279,7 +274,7 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
-  const numberOfLayers = getLayers(layers[activeString], {}, state).length;
+  const numberOfLayers = getAllActiveLayers(state).length;
   const tabTypes = getActiveTabs(config);
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const isMobile = browser.lessThan.medium;

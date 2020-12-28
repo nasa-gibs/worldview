@@ -79,10 +79,10 @@ module.exports = {
     c.click(secondEvent);
     c.waitForElementVisible(trackMarker, TIME_LIMIT, () => {
       c.expect.elements(trackMarker).count.to.equal(5);
-      c.click(globalSelectors.dataTab).pause(2000);
+      c.click(layersTab).pause(500);
       c.expect.element(trackMarker).to.not.be.present;
       c.expect.element(eventIcons).to.not.be.present;
-      c.click(globalSelectors.eventsTab).pause(2000);
+      c.click(globalSelectors.eventsTab).pause(500);
       c.expect.element(trackMarker).to.be.present;
       c.expect.element(eventIcons).to.be.present;
     });
@@ -119,14 +119,14 @@ module.exports = {
   'Clicking event notification opens explanation in dialog': (c) => {
     const globalSelectors = c.globals.selectors;
 
-    c.click(globalSelectors.notifyMessage).pause(2000);
+    c.click(globalSelectors.notifyMessage).pause(500);
     c.assert.containsText(
       '#event_visibility_info .wv-data-unavailable-header',
       'Why can’t I see an event?',
     );
-    c.click('#event_visibility_info .close').pause(2000);
+    c.click('#event_visibility_info .close').pause(500);
     c.expect.element('#event_visibility_info').to.not.be.present;
-    c.click(globalSelectors.notificationDismissButton).pause(2000);
+    c.click(globalSelectors.notificationDismissButton).pause(500);
     c.expect.element(globalSelectors.notificationDismissButton).to.not.be
       .present;
   },
@@ -139,7 +139,7 @@ module.exports = {
     c.windowHandles((tabs) => {
       c.assert.equal(tabs.value.length, 1);
     });
-    c.click(firstExternalEventLink).pause(2000);
+    c.click(firstExternalEventLink).pause(500);
     c.windowHandles((tabs) => {
       c.assert.equal(tabs.value.length, 2);
     });

@@ -8,9 +8,7 @@
       "tags": "gdem",
       "group": "baselayers",
       "type": "wmts",
-      "layergroup": [
-        "aster"
-      ],
+      "layergroup": "Global Digital Elevation Map",
       "product": "ASTGTM",
       "wrapX": true
     }

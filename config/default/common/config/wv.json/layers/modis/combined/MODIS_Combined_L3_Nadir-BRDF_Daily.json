@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_L3_Nadir-BRDF_Daily",
       "tags": "",
       "group": "baselayers",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "Reflectance",
       "product": "MCD43A4",
       "wrapadjacentdays": true,
       "daynight": [

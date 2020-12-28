@@ -43,7 +43,7 @@ function ProductFacet(props) {
       />
       <FontAwesomeIcon
         className={`facet-collapse-toggle ${!data.length && 'hidden'}`}
-        icon={!collapsed ? 'caret-down' : 'caret-right'}
+        icon={!collapsed ? 'caret-down' : 'caret-left'}
         onClick={() => toggleCollapse(field)}
       />
     </>

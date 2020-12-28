@@ -13,6 +13,7 @@ import {
   filterProjLayersWithStartDate,
   getMaxLayerEndDates,
 } from '../../../modules/date/util';
+import { getActiveLayers } from '../../../modules/layers/selectors';
 import Scrollbars from '../../util/scrollbar';
 import Switch from '../../util/switch';
 import DataItemList from './data-item-list';
@@ -268,7 +269,6 @@ class TimelineData extends Component {
       axisWidth,
       backDate,
       frontDate,
-      hoveredLayer,
       isDataCoveragePanelOpen,
       parentOffset,
       positionTransformX,
@@ -355,7 +355,6 @@ class TimelineData extends Component {
                 backDate={backDate}
                 frontDate={frontDate}
                 getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
-                hoveredLayer={hoveredLayer}
                 timeScale={timeScale}
                 positionTransformX={positionTransformX}
               />
@@ -370,9 +369,7 @@ class TimelineData extends Component {
 
 function mapStateToProps(state) {
   const {
-    compare,
     date,
-    layers,
     modal,
     proj,
   } = state;
@@ -381,16 +378,13 @@ function mapStateToProps(state) {
   } = date;
 
   // handle active layer filtering
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
-
-  const { hoveredLayer } = layers;
   const isProductPickerOpen = modal.isOpen && modal.id === 'LAYER_PICKER_COMPONENT';
 
   return {
     activeLayers: activeLayersFiltered,
-    hoveredLayer,
     appNow,
     isProductPickerOpen,
     projection,
@@ -406,7 +400,6 @@ TimelineData.propTypes = {
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,
-  hoveredLayer: PropTypes.string,
   isDataCoveragePanelOpen: PropTypes.bool,
   isProductPickerOpen: PropTypes.bool,
   parentOffset: PropTypes.number,

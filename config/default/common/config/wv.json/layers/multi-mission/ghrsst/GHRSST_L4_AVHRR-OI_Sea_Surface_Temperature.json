@@ -7,10 +7,7 @@
       "description": "multi-mission/ghrsst/GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
       "tags": "sst ghrsst podaac PO.DAAC",
       "group": "overlays",
-      "layergroup": [
-        "multi-mission",
-        "multi-mission_ghrsst"
-      ],
+      "layergroup": "Sea Surface Temperature",
       "product": "AVHRR_OI-NCEI-L4-GLOB-v2.0",
       "wrapadjacentdays": true
     }

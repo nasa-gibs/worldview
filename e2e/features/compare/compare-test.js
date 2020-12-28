@@ -79,7 +79,8 @@ module.exports = {
 
   'Removing layer removes correct layer from correct layer group': (c) => {
     c.expect.element(ModisTruecolorLayerA).to.be.visible;
-    c.click('#closeactiveMODIS_Terra_CorrectedReflectance_TrueColor');
+    c.moveToElement(ModisTruecolorLayerA, 1, 1).pause(200);
+    c.click('#close-activeMODIS_Terra_CorrectedReflectance_TrueColor');
     c.pause(100);
     c.expect.element(ModisTruecolorLayerA).to.not.be.present;
     c.expect.element(ModisTruecolorLayerB).to.not.be.present;
@@ -115,11 +116,20 @@ module.exports = {
       .to.be.visible;
     c.expect.element('#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor')
       .to.be.visible;
-    c.click('#closeactiveBReference_Labels');
-    c.click('#closeactiveBReference_Features');
-    c.click('#closeactiveBVIIRS_SNPP_CorrectedReflectance_TrueColor');
-    c.click('#closeactiveBMODIS_Aqua_CorrectedReflectance_TrueColor');
-    c.pause(1000);
+
+    c.moveToElement('#activeB-Reference_Labels', 1, 1).pause(200);
+    c.click('#close-activeBReference_Labels');
+
+    c.moveToElement('#activeB-Reference_Features', 1, 1).pause(200);
+    c.click('#close-activeBReference_Features');
+
+    c.moveToElement('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor', 1, 1).pause(200);
+    c.click('#close-activeBVIIRS_SNPP_CorrectedReflectance_TrueColor');
+
+    c.moveToElement('#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor', 1, 1).pause(200);
+    c.click('#close-activeBMODIS_Aqua_CorrectedReflectance_TrueColor');
+
+    c.pause(500);
     c.click(localSelectors.compareButton);
     c.waitForElementNotPresent(
       '.timeline-dragger.draggerA',

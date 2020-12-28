@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_SurfaceReflectance_Bands121",
       "tags": "lsr 121 false color",
       "group": "baselayers",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Land Surface Reflectance",
       "product": "MYD09GQ",
       "wrapadjacentdays": true,
       "tracks": [

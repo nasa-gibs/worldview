@@ -13,9 +13,7 @@
       ],
       "noTransition": "true",
       "type": "variable",
-      "layergroup": [
-        "reference"
-      ],
+      "layergroup": "Latitude-Longitude Lines",
       "projections": {
         "arctic": {
           "subtitle": "Polarview / Graticule",

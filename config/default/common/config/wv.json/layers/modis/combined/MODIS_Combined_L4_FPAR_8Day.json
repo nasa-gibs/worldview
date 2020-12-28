@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_L4_FPAR_8Day",
       "tags": "fpar",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "FPAR",
       "product": "MCD15A2H",
       "wrapadjacentdays": true,
       "daynight": [

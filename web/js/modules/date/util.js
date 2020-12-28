@@ -3,7 +3,7 @@ import update from 'immutability-helper';
 import util from '../../util/util';
 import { layersParse12 } from '../layers/util';
 import {
-  dateRange as getDateRange,
+  dateRange as getDateRange, getActiveLayers,
 } from '../layers/selectors';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
@@ -72,11 +72,11 @@ export function parsePermalinkDate(defaultDate, str, layerParameters, config) {
  */
 export function getMaxActiveLayersDate(state) {
   const {
-    date, layers, compare, proj,
+    date, proj,
   } = state;
 
   const { appNow } = date;
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
   const layersDateRange = getDateRange({}, activeLayersFiltered);

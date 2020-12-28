@@ -8,9 +8,7 @@
       "tags": "ai",
       "group": "overlays",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "omps"
-      ],
+      "layergroup": "Aerosol Index",
       "product": "OMPS_NPP_NMMIEAI_L2",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Ascending"

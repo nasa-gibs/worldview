@@ -11,6 +11,7 @@ import SearchUiProvider from '../../components/layer/product-picker/search-ui-pr
 import { openCustomContent } from '../../modules/modal/actions';
 import { toggleListAll } from '../../modules/natural-events/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
+import { getActiveLayers } from '../../modules/layers/selectors';
 
 class FooterContent extends React.Component {
   constructor(props) {

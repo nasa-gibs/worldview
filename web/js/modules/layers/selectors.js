@@ -12,26 +12,63 @@ import { createSelector } from 'reselect';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
+import getSelectedDate from '../date/selectors';
 
-// State selectors
-const getLayersState = ({ layers }) => layers;
-const getActiveCompareState = ({ compare }) => (compare.isCompareA ? 'active' : 'activeB');
-const getCurrentDate = ({ date, compare }) => date[compare.isCompareA ? 'selected' : 'selectedB'];
-const getCurrentActiveLayers = ({ compare, layers }) => (compare.isCompareA ? layers.active : layers.activeB);
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
+const getProjState = ({ proj }) => proj;
+const getCompareState = ({ compare }) => compare;
+const getLayerState = ({ layers }) => layers;
+
+/**
+ * Is overlay grouping currently enabled?
+ */
+export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
+
+
+/**
+ * Return a list of layers for the currently active compare state
+ * regardless of projection
+ */
+export const getActiveLayers = (state, activeString) => {
+  const { compare, layers } = state;
+  return layers[activeString || compare.activeString].layers;
+};
+
+/**
+ * Return an array of overlay groups for the currently active compare state
+ * that are available for the currently active projection
+ */
+export const getActiveOverlayGroups = (state) => {
+  const { compare, layers, proj } = state;
+  const { overlayGroups } = layers[compare.activeString];
+  const activeLayersMap = getActiveLayersMap(state);
+  return overlayGroups.filter(
+    (group) => group.layers.filter(
+      (id) => !!activeLayersMap[id].projections[proj.id],
+    ).length,
+  );
+};
 
 /**
  * Return a map of active layers where key is layer id
  */
-export const getActiveLayers = createSelector(
-  [getLayersState, getActiveCompareState],
-  (layers, activeCompare) => {
+export const getActiveLayersMap = createSelector(
+  [getActiveLayers],
+  (activeLayers) => {
     const activeLayerMap = {};
-    layers[activeCompare].forEach((layer) => {
-      activeLayerMap[layer.id] = layer;
-    });
+    activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
     return activeLayerMap;
   },
+);
+
+export const getAllActiveLayers = createSelector(
+  [getProjState, getCompareState, getLayerState],
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}),
+);
+
+export const getAllActiveOverlaysBaselayers = createSelector(
+  [getProjState, getCompareState, getLayerState],
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
 );
 
 export function hasMeasurementSource(current, config, projId) {
@@ -60,10 +97,7 @@ export function hasMeasurementSetting(current, source, config, projId) {
     if (layer) {
       const proj = layer.projections;
       if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {
-        if (
-          layer.layergroup
-          && layer.layergroup.indexOf('reference_orbits') !== -1
-        ) {
+        if (layer.layergroup === 'Orbital Track') {
           if (current.id === 'orbital-track') {
             hasSetting = true;
           }
@@ -93,7 +127,7 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection) {
+export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays) {
   let layers = lodashCloneDeep(layersParam);
   if (projection) {
     layers = layers.filter((layer) => layer.projections[projection]);
@@ -105,25 +139,35 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   if (!def) {
     throw new Error(`No such layer: ${id}`);
   }
+
+  // Set layer properties
   def.visible = spec.visible || true;
   def.min = spec.min || undefined;
   def.custom = spec.custom || undefined;
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
   def.disabled = spec.disabled || undefined;
-
   if (!lodashIsUndefined(spec.visible)) {
     def.visible = spec.visible;
   } else if (!lodashIsUndefined(spec.hidden)) {
     def.visible = !spec.hidden;
   }
   def.opacity = lodashIsUndefined(spec.opacity) ? 1.0 : spec.opacity;
+
+  // Place new layer in the appropriate array position
   if (def.group === 'overlays') {
-    layers.unshift(def);
+    // TODO assuming first group in the array again here
+    const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
+    if (groupOverlays && groupIdx >= 0) {
+      layers.splice(groupIdx, 0, def);
+    } else {
+      layers.unshift(def);
+    }
   } else {
     const overlaysLength = overlayLength || layers.filter((layer) => layer.group === 'overlays').length;
     layers.splice(overlaysLength, 0, def);
   }
+
   return layers;
 }
 
@@ -182,10 +226,10 @@ export function getTitles(config, layerId, projId) {
  * @param {*} spec
  * @param {*} state
  */
-export function getLayers(layers, spec = {}, state) {
+export function getLayers(state, spec = {}, layersParam) {
+  const layers = layersParam || getActiveLayers(state);
   const baselayers = forGroup('baselayers', spec, layers, state);
   const overlays = forGroup('overlays', spec, layers, state);
-
   if (spec.group === 'baselayers') {
     return baselayers;
   }
@@ -202,27 +246,14 @@ export function getLayers(layers, spec = {}, state) {
 }
 
 function forGroup(group, spec = {}, activeLayers, state) {
-  const projId = spec.proj || state.proj.id;
+  const projId = state.proj.id;
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
-    // Skip if this layer isn't available for the selected projection
-    if (!def.projections[projId] && projId !== 'all') {
-      return;
-    }
-    if (
-      spec.dynamic
-      && !['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)
-    ) {
-      return;
-    }
-    if (
-      spec.renderable
-      && !isRenderable(def.id, activeLayers, spec.date, state)
-    ) {
-      return;
-    }
-    if (spec.visible && !def.visible) {
+    const notInProj = !def.projections[projId];
+    const notRenderable = spec.renderable
+      && !isRenderable(def.id, activeLayers, spec.date, state);
+    if (notInProj || notRenderable) {
       return;
     }
     results.push(def);
@@ -356,7 +387,7 @@ export function available(id, date, layers, parameters) {
  * @param {*} id - the layer id
  */
 export const memoizedAvailable = createSelector(
-  [getCurrentDate, getCurrentActiveLayers, getConfigParameters],
+  [getSelectedDate, getActiveLayers, getConfigParameters],
   (currentDate, activeLayers, parameters) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
 );
 
@@ -368,12 +399,11 @@ export const memoizedAvailable = createSelector(
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, activeLayers, date, state) {
+export function isRenderable(id, layers, date, state) {
   const { parameters } = state.config || {};
-  const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-  date = date || state.date[activeDateStr];
-  const def = lodashFind(activeLayers, { id });
-  const notAvailable = !available(id, date, activeLayers, parameters);
+  date = date || getSelectedDate(state);
+  const def = lodashFind(layers, { id });
+  const notAvailable = !available(id, date, layers, parameters);
 
   if (!def || notAvailable || !def.visible || def.opacity === 0) {
     return false;
@@ -382,8 +412,9 @@ export function isRenderable(id, activeLayers, date, state) {
     return true;
   }
   let obscured = false;
+  const baselayers = getLayers(state, { group: 'baselayers' }, layers);
   lodashEach(
-    getLayers(activeLayers, { group: 'baselayers' }, state),
+    baselayers,
     (otherDef) => {
       if (otherDef.id === def.id) {
         return false;
@@ -391,7 +422,7 @@ export function isRenderable(id, activeLayers, date, state) {
       if (
         otherDef.visible
         && otherDef.opacity === 1.0
-        && available(otherDef.id, date, activeLayers, parameters)
+        && available(otherDef.id, date, layers, parameters)
       ) {
         obscured = true;
         return false;
@@ -402,9 +433,9 @@ export function isRenderable(id, activeLayers, date, state) {
 }
 
 export function activateLayersForEventCategory(activeLayers, state) {
-  const { layers, compare } = state;
+  const { layerConfig } = state.layers;
   // Turn off all layers in list first
-  let newLayers = layers[compare.activeString];
+  let newLayers = getActiveLayers(state);
   lodashEach(newLayers, (layer, index) => {
     newLayers = update(newLayers, {
       [index]: { visible: { $set: false } },
@@ -412,8 +443,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
   });
   // Turn on or add new layers
   lodashEach(activeLayers, (layer) => {
-    const id = layer[0];
-    const visible = layer[1];
+    const [id, visible] = layer;
     const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
       newLayers = update(newLayers, {
@@ -424,8 +454,8 @@ export function activateLayersForEventCategory(activeLayers, state) {
         id,
         { visible },
         newLayers,
-        layers.layerConfig,
-        getLayers(newLayers, { group: 'all' }, state).overlays.length,
+        layerConfig,
+        getLayers(state, { group: 'overlays' }, newLayers).length,
       );
     }
   });
@@ -477,7 +507,6 @@ export function replaceSubGroup(
   layerId,
   nextLayerId,
   layers,
-  subGroup,
   layerSplit,
 ) {
   if (nextLayerId) {
@@ -494,7 +523,7 @@ export function getZotsForActiveLayers(state) {
   const { sources } = config;
   const projection = proj.selected.id;
   const zoom = map.ui.selected.getView().getZoom();
-  lodashEach(getActiveLayers(state), (layer) => {
+  lodashEach(getActiveLayersMap(state), (layer) => {
     if (layer.projections[projection]) {
       const overZoomValue = getZoomLevel(layer, zoom, projection, sources);
       const layerNotices = getLayerNoticesForLayer(layer.id, notifications);

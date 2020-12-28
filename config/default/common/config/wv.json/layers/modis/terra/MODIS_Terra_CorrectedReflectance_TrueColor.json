@@ -18,7 +18,8 @@
       },
       "daynight": [
         "day"
-      ]
+      ],
+      "layergroup": "Corrected Reflectance"
     }
   }
 }

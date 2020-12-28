@@ -7,9 +7,7 @@
       "description": "sedac/Ground_Level_Nitrogen_Dioxide_3_Year_Running_Mean_1996-1998",
       "tags": "human sedac NO2",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Nitrogen Dioxide",
       "product": "CIESIN_SEDAC_SDEI_NO2",
       "inactive": true,
       "wrapX": true

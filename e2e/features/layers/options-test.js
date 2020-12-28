@@ -15,13 +15,14 @@ module.exports = {
   },
   'Verify that settings button opens settings modal': function(client) {
     client.url(client.globals.url + customsSquashedQuerystring);
+    client.moveToElement('#active-MODIS_Combined_Value_Added_AOD', 1, 1);
     client.waitForElementVisible(
       combinedAodSettingsButton,
       TIME_LIMIT,
       (e) => {
         if (client.options.desiredCapabilities.browser !== 'ie') {
           client.expect.element(thresholdMinLabel).to.not.be.present;
-          client.click(combinedAodSettingsButton).pause(1000);
+          client.click(combinedAodSettingsButton);
           client.waitForElementPresent(thresholdMinLabel, TIME_LIMIT);
         }
       },
@@ -39,7 +40,8 @@ module.exports = {
     if (client.options.desiredCapabilities.browser !== 'ie') {
       client.useCss().assert.containsText(thresholdMinLabel, '0.1 – 0.105');
       client.useCss().assert.containsText(opacityLabel, '70%');
-      client.click(terraAodSettingsButton).pause(1000);
+      client.moveToElement('#active-MODIS_Terra_Aerosol', 1, 1).pause(200);
+      client.click(terraAodSettingsButton);
       client.waitForElementPresent(
         terraAodSettingsDialog,
         TIME_LIMIT,

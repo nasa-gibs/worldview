@@ -12,6 +12,7 @@ import util from '../../util/util';
 import GranuleAlertModalBody from './smart-handoff-granule-alert';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
+import { getActiveLayers } from '../../modules/layers/selectors';
 import getSelectedDate from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 
@@ -475,10 +476,8 @@ SmartHandoff.propTypes = {
 const mapStateToProps = (state) => {
   const {
     browser,
-    layers,
     map,
     proj,
-    compare,
     sidebar,
     boundaries,
   } = state;
@@ -488,8 +487,7 @@ const mapStateToProps = (state) => {
     screenHeight,
   } = browser;
 
-  const { activeString } = compare;
-  const activeLayers = layers[activeString].filter((layer) => layer.projections[proj.id]);
+  const activeLayers = getActiveLayers(state).filter((layer) => layer.projections[proj.id]);
 
   return {
     activeLayers,

@@ -48,6 +48,9 @@ function Events(props) {
   const ALL_CATEGORY = 'All Event Categories';
   const [selectedCategory, selectCategory] = useState(ALL_CATEGORY);
 
+  const dropdownHeight = 34;
+  const scrollbarMaxHeight = height - dropdownHeight;
+
   let showInactiveEventAlert = selected.id && !selected.date;
 
   const initRequests = () => {
@@ -123,7 +126,7 @@ function Events(props) {
       </Dropdown>
 
       <Scrollbars
-        style={{ maxHeight: `${height}px` }}
+        style={{ maxHeight: `${scrollbarMaxHeight}px` }}
       >
         <div id="wv-events">
           {(isLoading || hasRequestError) && (

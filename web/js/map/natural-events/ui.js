@@ -13,6 +13,8 @@ import { selectDate } from '../../modules/date/actions';
 import { UPDATE_MAP_UI } from '../../modules/map/constants';
 import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
 
+const { events } = util;
+
 const zoomLevelReference = {
   Wildfires: 8,
   Volcanoes: 6,
@@ -25,7 +27,6 @@ export default function naturalEventsUI(ui, config, store, models) {
   let isLoading = true;
   self.eventsData = [];
   self.layers = config.naturalEvents.layers;
-  self.events = util.events();
   self.markers = [];
   self.selected = {};
   self.selecting = false;
@@ -213,7 +214,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     naturalEventsTrack = naturalEventsTracks[store.getState().proj.id];
     // Display loading information for user feedback on slow network
     view = map.getView();
-    ui.events.on('last-action', subscribeToStore);
+    events.on('redux:action-dispatched', subscribeToStore);
   };
 
   const getZoomPromise = function(
@@ -311,8 +312,6 @@ export default function naturalEventsUI(ui, config, store, models) {
       self.markers = naturalEventMarkers.draw();
       naturalEventsTrack.update(null);
     }
-    // store.dispatch(deselectEventAction);
-    self.events.trigger('change');
   };
 
   /**
@@ -325,11 +324,9 @@ export default function naturalEventsUI(ui, config, store, models) {
     const { proj } = state;
     const { showAll } = state.events;
     if (isLoading || !state.sidebar.activeTab === 'events') return;
-    let hiddenEventsCounter = self.markers.length;
     const extent = view.calculateExtent();
     const { maxExtent } = proj.selected;
     const visibleListEvents = {};
-    let showListAllButton = false;
 
     self.eventsData.forEach((naturalEvent) => {
       const isSelectedEvent = self.selected.id === naturalEvent.id;
@@ -369,18 +366,8 @@ export default function naturalEventsUI(ui, config, store, models) {
       }
       if (isVisible || isSelectedEvent) {
         visibleListEvents[naturalEvent.id] = true;
-      } else {
-        hiddenEventsCounter += 1;
       }
     });
-
-    // hide footer 'List All' button/message if all events are visible
-    if (hiddenEventsCounter > self.eventsData.length) {
-      showListAllButton = true;
-    } else {
-      showListAllButton = false;
-    }
-    self.events.trigger('list-change', visibleListEvents, showListAllButton);
   };
 
   /**

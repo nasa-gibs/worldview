@@ -7,9 +7,7 @@
       "description": "viirs/VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Aerosol Optical Depth",
       "product": "AERDT_L2_VIIRS_SNPP",
       "wrapadjacentdays": true,
       "tracks": [

@@ -7,9 +7,7 @@
       "description": "sedac/GRUMP_Urban_Extents_Grid_1995",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Urban Extents",
       "product": "CIESIN_SEDAC_GRUMPv1_EXT",
       "inactive": true,
       "wrapX": true

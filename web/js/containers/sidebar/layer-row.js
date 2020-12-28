@@ -1,13 +1,16 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UncontrolledTooltip } from 'reactstrap';
+import {
+  UncontrolledTooltip,
+} from 'reactstrap';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
 import {
@@ -16,20 +19,20 @@ import {
 } from '../../modules/palettes/selectors';
 import { toggleCustomContent, openCustomContent } from '../../modules/modal/actions';
 import LayerInfo from '../../components/layer/info/info';
-import LayerSettings from '../../components/layer/settings/settings';
+import LayerSettings from '../../components/layer/settings/layer-settings';
 import { requestPalette } from '../../modules/palettes/actions';
 import {
   toggleVisibility,
   removeLayer,
-  layerHover,
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
+import { getActiveLayers } from '../../modules/layers/selectors';
 
+const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
-
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
@@ -39,40 +42,56 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   left: null,
 });
 
-class Layer extends React.Component {
-  getPaletteLegend = () => {
-    const {
-      compare,
-      layer,
-      layerGroupName,
-      runningObject,
-      paletteLegends,
-      checkerBoardPattern,
-      getPalette,
-      palette,
-      renderedPalette,
-      requestPalette,
-      isCustomPalette,
-      isLoading,
-      isMobile,
-      zot,
-    } = this.props;
+function LayerRow (props) {
+  const {
+    compare,
+    layer,
+    compareState,
+    paletteLegends,
+    getPalette,
+    palette,
+    renderedPalette,
+    requestPalette,
+    isCustomPalette,
+    isLoading,
+    isMobile,
+    zot,
+    names,
+    onRemoveClick,
+    onInfoClick,
+    onOptionsClick,
+    hasClickableFeature,
+    openVectorAlertModal,
+    toggleVisibility,
+    isDisabled,
+    isVisible,
+    index,
+    hasPalette,
+    isInProjection,
+    tracksForLayer,
+    isVectorLayer,
+    runningObject,
+  } = props;
+
+  const encodedLayerId = util.encodeId(layer.id);
+  const [showButtons, toggleShowButtons] = useState(isMobile);
+
+  const getPaletteLegend = () => {
     if (!lodashIsEmpty(renderedPalette)) {
       const isRunningData = compare.active
-        ? compare.activeString === layerGroupName && !!runningObject
+        ? compare.activeString === compareState && !!runningObject
         : !!runningObject;
       const colorHex = isRunningData ? runningObject.paletteHex : null;
       return (
         <PaletteLegend
           layer={layer}
-          layerGroupName={layerGroupName}
+          compareState={compareState}
           paletteId={palette.id}
           getPalette={getPalette}
           width={zot ? 220 : 231}
           paletteLegends={paletteLegends}
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
-          checkerBoardPattern={checkerBoardPattern}
           colorHex={colorHex}
           isMobile={isMobile}
         />
@@ -80,9 +99,9 @@ class Layer extends React.Component {
     } if (!isLoading) {
       requestPalette(layer.id);
     }
-  }
+  };
 
-  getDisabledTitle = (layer) => {
+  const getDisabledTitle = (layer) => {
     const {
       endDate,
       period,
@@ -106,33 +125,24 @@ class Layer extends React.Component {
       return `Data available between ${layerStartDate} - Present`;
     }
     return 'No data on selected date for this layer';
-  }
+  };
 
-  stopPropagation = (e) => {
+  const stopPropagation = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
     e.preventDefault();
-  }
+  };
 
-  renderControls() {
-    const {
-      layer,
-      layerGroupName,
-      names,
-      isMobile,
-      onRemoveClick,
-      onInfoClick,
-      onOptionsClick,
-    } = this.props;
+  const renderControls = () => {
     const { title } = names;
-    const removeLayerBtnId = `close${layerGroupName}${util.encodeId(layer.id)}`;
+    const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
     const removeLayerBtnTitle = 'Remove Layer';
 
-    const layerOptionsBtnId = `layer-options-btn-${util.encodeId(layer.id)}`;
-    const layerOptionsBtnTitle = 'View layer options';
+    const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
+    const layerOptionsBtnTitle = 'View Options';
 
-    const layerInfoBtnId = `layer-info-btn-${util.encodeId(layer.id)}`;
-    const layerInfoBtnTitle = 'View layer description';
+    const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
+    const layerInfoBtnTitle = 'View Description';
 
     return (
       <>
@@ -151,7 +161,7 @@ class Layer extends React.Component {
           id={layerOptionsBtnId}
           aria-label={layerOptionsBtnTitle}
           className={isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'}
-          onMouseDown={this.stopPropagation}
+          onMouseDown={stopPropagation}
           onClick={() => onOptionsClick(layer, title)}
         >
           <UncontrolledTooltip placement="top" target={layerOptionsBtnId}>
@@ -163,7 +173,7 @@ class Layer extends React.Component {
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
           className={isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'}
-          onMouseDown={this.stopPropagation}
+          onMouseDown={stopPropagation}
           onClick={() => onInfoClick(layer, title)}
         >
           <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
@@ -173,12 +183,9 @@ class Layer extends React.Component {
         </a>
       </>
     );
-  }
+  };
 
-  renderVectorIcon() {
-    const {
-      hasClickableFeature, openVectorAlertModal, runningObject,
-    } = this.props;
+  const renderVectorIcon = () => {
     const clasNames = hasClickableFeature
       ? 'layer-pointer-icon'
       : 'layer-pointer-icon disabled';
@@ -194,145 +201,142 @@ class Layer extends React.Component {
         />
       </div>
     );
-  }
+  };
 
-  render() {
-    const {
-      layerGroupName,
-      isMobile,
-      toggleVisibility,
-      hover,
-      layer,
-      isDisabled,
-      isVisible,
-      layerClasses,
-      names,
-      index,
-      hasPalette,
-      zot,
-      isInProjection,
-      tracksForLayer,
-      isVectorLayer,
-    } = this.props;
+  const mouseOver = () => {
+    if (isMobile) return;
+    events.trigger('sidebar:layer-hover', layer.id, true);
+    toggleShowButtons(true);
+  };
 
-    const containerClass = isDisabled
-      ? `${layerClasses} disabled layer-hidden`
-      : !isVisible
-        ? `${layerClasses} layer-hidden`
-        : zot
-          ? `${layerClasses} layer-enabled layer-visible zotted`
-          : `${layerClasses} layer-enabled layer-visible`;
-    const visibilityToggleClass = isDisabled
+  const mouseLeave = () => {
+    if (isMobile) return;
+    events.trigger('sidebar:layer-hover', layer.id, false);
+    toggleShowButtons(false);
+  };
+
+  const baseClasses = 'item productsitem';
+  const containerClass = isDisabled
+    ? `${baseClasses} disabled layer-hidden`
+    : !isVisible
+      ? `${baseClasses} layer-hidden`
+      : zot
+        ? `${baseClasses} layer-enabled layer-visible zotted`
+        : `${baseClasses} layer-enabled layer-visible`;
+  const visibilityToggleClass = isDisabled
+    ? `${visibilityButtonClasses} layer-hidden`
+    : !isVisible
       ? `${visibilityButtonClasses} layer-hidden`
-      : !isVisible
-        ? `${visibilityButtonClasses} layer-hidden`
-        : `${visibilityButtonClasses} layer-enabled layer-visible`;
-    const visibilityTitle = !isVisible && !isDisabled
-      ? 'Show Layer'
-      : isDisabled
-        ? this.getDisabledTitle(layer)
-        : 'Hide Layer';
-    const visibilityIconClass = isDisabled
-      ? 'ban'
-      : !isVisible
-        ? ['far', 'eye-slash']
-        : ['far', 'eye'];
+      : `${visibilityButtonClasses} layer-enabled layer-visible`;
+  const visibilityTitle = !isVisible && !isDisabled
+    ? 'Show Layer'
+    : isDisabled
+      ? getDisabledTitle(layer)
+      : 'Hide Layer';
+  const visibilityIconClass = isDisabled
+    ? 'ban'
+    : !isVisible
+      ? ['far', 'eye-slash']
+      : ['far', 'eye'];
 
-    return (
-      <Draggable
-        draggableId={`${util.encodeId(layer.id)}-${layerGroupName}`}
-        index={index}
-        direction="vertical"
+
+  const renderLayerRow = () => (
+    <>
+      <a
+        id={`hide${encodedLayerId}`}
+        className={visibilityToggleClass}
+        aria-label={visibilityTitle}
+        onClick={() => toggleVisibility(layer.id, !isVisible)}
       >
-        {(provided, snapshot) => (isInProjection ? (
-          <li
-            id={`${layerGroupName}-${util.encodeId(layer.id)}`}
-            className={containerClass}
-            style={getItemStyle(
-              snapshot.isDragging,
-              provided.draggableProps.style,
-            )}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            onMouseEnter={() => hover(layer.id, true)}
-            onMouseLeave={() => hover(layer.id, false)}
-          >
-            <a
-              id={`hide${util.encodeId(layer.id)}`}
-              className={visibilityToggleClass}
-              aria-label={visibilityTitle}
-              onClick={() => toggleVisibility(layer.id, !isVisible)}
-            >
-              <UncontrolledTooltip
-                placement="right"
-                target={`hide${util.encodeId(layer.id)}`}
-              >
-                {visibilityTitle}
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
-            </a>
+        <UncontrolledTooltip
+          placement="right"
+          target={`hide${encodedLayerId}`}
+        >
+          {visibilityTitle}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
+      </a>
 
-            <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
+      <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
-            <div className="layer-main">
-              <div className="layer-info">
-                {this.renderControls()}
-                <h4 title={names.title}>{names.title}</h4>
-                <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-                {hasPalette ? this.getPaletteLegend() : ''}
-              </div>
-              {isVectorLayer && isVisible ? this.renderVectorIcon() : null}
-              {tracksForLayer.length > 0 && (
-              <div className="layer-tracks">
-                {tracksForLayer.map((track) => (
-                  <OrbitTrack
-                    key={track.id}
-                    trackLayer={track}
-                    parentLayer={layer}
-                  />
-                ))}
-              </div>
-              )}
-            </div>
-          </li>
-        ) : (
-          <li
-            className="layer-list-placeholder"
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          />
-        ))}
-      </Draggable>
-    );
-  }
+      <div className="layer-main">
+        <div className="layer-info">
+          <div className="layer-buttons">
+            {showButtons && renderControls()}
+          </div>
+          <h4 title={names.title}>{names.title}</h4>
+          <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
+          {hasPalette ? getPaletteLegend() : ''}
+        </div>
+        {isVectorLayer && isVisible ? renderVectorIcon() : null}
+        {tracksForLayer.length > 0 && (
+          <div className="layer-tracks">
+            {tracksForLayer.map((track) => (
+              <OrbitTrack
+                key={track.id}
+                trackLayer={track}
+                parentLayer={layer}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+
+  return (
+    <Draggable
+      draggableId={`${encodedLayerId}-${compareState}`}
+      index={index}
+      direction="vertical"
+    >
+      {(provided, snapshot) => (isInProjection ? (
+        <li
+          id={`${compareState}-${encodedLayerId}`}
+          className={containerClass}
+          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+          ref={provided.innerRef}
+          onMouseOver={mouseOver}
+          onMouseLeave={mouseLeave}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          {renderLayerRow()}
+        </li>
+      ) : (
+        <li
+          className="layer-list-placeholder"
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        />
+      ))}
+    </Draggable>
+  );
 }
 
-Layer.defaultProps = {
-  palette: {},
-};
-
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   const {
     layer,
     isVisible,
-    layerGroupName,
+    compareState,
   } = ownProps;
   const {
-    palettes, config, map, layers, compare, proj,
+    palettes, config, map, compare, proj,
   } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
   const paletteLegends = hasPalette && renderedPalettes[paletteName]
-    ? getPaletteLegends(layer.id, layerGroupName, state)
+    ? getPaletteLegends(layer.id, compareState, state)
     : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
-  const tracksForLayer = layers[layerGroupName].filter((activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track));
   const selectedMap = lodashGet(map, 'ui.selected');
   const isVector = layer.type === 'vector';
   const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
+  const tracksForLayer = getActiveLayers(state).filter(
+    (activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track),
+  );
 
   return {
     compare,
@@ -343,20 +347,15 @@ function mapStateToProps(state, ownProps) {
     isCustomPalette,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
-    layerGroupName,
     isVectorLayer: isVector,
     hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id),
     isMobile: state.browser.lessThan.medium,
     hasPalette,
-    getPalette: (layerId, i) => getPalette(layer.id, i, layerGroupName, state),
-    runningObject: map.runningDataObj[layer.id],
+    getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
   };
-}
+};
 
 const mapDispatchToProps = (dispatch) => ({
-  hover: (id, value) => {
-    dispatch(layerHover(id, value));
-  },
   toggleVisibility: (id, isVisible) => {
     dispatch(toggleVisibility(id, isVisible));
   },
@@ -414,12 +413,17 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(requestPalette(id));
   },
 });
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Layer);
-Layer.propTypes = {
-  checkerBoardPattern: PropTypes.object,
+)(LayerRow);
+
+LayerRow.defaultProps = {
+  palette: {},
+};
+
+LayerRow.propTypes = {
   compare: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
@@ -432,8 +436,7 @@ Layer.propTypes = {
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
-  layerClasses: PropTypes.string,
-  layerGroupName: PropTypes.string,
+  compareState: PropTypes.string,
   names: PropTypes.object,
   onInfoClick: PropTypes.func,
   onOptionsClick: PropTypes.func,

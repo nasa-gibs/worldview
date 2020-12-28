@@ -7,10 +7,7 @@
       "description": "modis/aqua/MODIS_Aqua_Land_Surface_Temp_Night",
       "tags": "lst",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_aqua"
-      ],
+      "layergroup": "Land Surface Temperature",
       "product": "MYD11_L2_NIGHT",
       "tracks": [
         "OrbitTracks_Aqua_Descending"

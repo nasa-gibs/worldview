@@ -6,9 +6,7 @@
       "subtitle": "Aqua / AMSR-E",
       "description": "amsre/MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE",
       "group": "overlays",
-      "layergroup": [
-        "measures"
-      ],
+      "layergroup": "Freeze/Thaw",
       "product": "NSIDC-0477",
       "inactive": true,
       "projections": {

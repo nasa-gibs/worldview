@@ -7,9 +7,7 @@
       "description": "oco3/OCO-3_Solar_Induced_Florescence_771nm",
       "tags": "oco3",
       "group": "overlays",
-      "layergroup": [
-        "oco3"
-      ],
+      "layergroup": "Solar Induced Chlorophyll Fluorescence",
       "product": "OCO3_L2_Lite_SIF",
       "wrapadjacentdays": true,
       "daynight": [

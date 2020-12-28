@@ -7,9 +7,7 @@
       "description": "orbview/OTD_OrbView1_Flash_Radiance",
       "tags": "lightning",
       "group": "overlays",
-      "layergroup": [
-        "orbview"
-      ],
+      "layergroup": "Lightning",
       "product": "otdlip",
       "inactive": true,
       "wrapadjacentdays": true

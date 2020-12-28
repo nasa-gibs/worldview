@@ -40,9 +40,11 @@ import {
 } from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
-  getLayers,
+  getActiveLayers,
+  getAllActiveLayers,
   dateRange as getDateRange,
 } from '../modules/layers/selectors';
+import getSelectedDate from '../modules/date/selectors';
 import {
   play,
   onClose,
@@ -619,7 +621,6 @@ class AnimationWidget extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    layers,
     compare,
     animation,
     date,
@@ -628,7 +629,6 @@ function mapStateToProps(state) {
     palettes,
     config,
     map,
-    proj,
     browser,
   } = state;
   const {
@@ -645,17 +645,12 @@ function mapStateToProps(state) {
     interval,
     customInterval,
   } = date;
-  const activeStr = compare.activeString;
-  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-  const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
-  const activeLayersForProj = getLayers(
-    layers[activeStr],
-    { proj: proj.id },
-    state,
-  );
+  const activeLayers = getActiveLayers(state);
+  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
+  const activeLayersForProj = getAllActiveLayers(state);
   const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
   const layerDateRange = getDateRange({}, activeLayersForProj);
-  const activePalettes = palettes[activeStr];
+  const activePalettes = palettes[compare.activeString];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
     activePalettes,
@@ -698,7 +693,7 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     activePalettes,
-    currentDate: date[activeDateStr],
+    currentDate: getSelectedDate(state),
     minDate,
     maxDate,
     isActive: animationIsActive,
@@ -711,7 +706,7 @@ function mapStateToProps(state) {
     customInterval: customInterval || 3,
     numberOfFrames,
     sliderLabel: 'Frames Per Second',
-    layers: getLayers(layers[activeStr], {}, state),
+    layers: getAllActiveLayers(state),
     speed,
     isPlaying,
     looping: loop,
@@ -724,7 +719,7 @@ function mapStateToProps(state) {
     rotation,
     hasGraticule: Boolean(
       lodashGet(
-        lodashFind(layers[activeStr], { id: 'Graticule' }) || {},
+        lodashFind(activeLayers, { id: 'Graticule' }) || {},
         'visible',
       ),
     ),

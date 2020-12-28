@@ -4,7 +4,7 @@ import {
   imageUtilGetCoordsFromPixelValues,
   getDownloadUrl,
 } from '../image-download/util';
-import { getLayers, hasSubDaily } from '../layers/selectors';
+import { getActiveLayers, getLayers, hasSubDaily } from '../layers/selectors';
 import { timeScaleFromNumberKey } from '../date/constants';
 /*
  * loops through dates and created image
@@ -24,19 +24,18 @@ export default function getImageArray(
   state,
 ) {
   const {
-    animation, proj, map, date, layers, compare, geosearch,
+    animation, proj, map, date, geosearch,
   } = state;
   const { startDate, endDate, url } = gifComponentProps;
   const { boundaries, showDates } = gifComponentState;
   const {
     customInterval, interval, customDelta, delta, customSelected,
   } = date;
-  const { activeString } = compare;
   const a = [];
   const fromDate = new Date(startDate);
   const toDate = new Date(endDate);
-  const isSubDaily = hasSubDaily(layers[activeString]);
   const markerCoordinates = geosearch.coordinates;
+  const isSubDaily = hasSubDaily(getActiveLayers(state));
   let current = fromDate;
   let j = 0;
   let src;
@@ -54,7 +53,7 @@ export default function getImageArray(
     } else {
       strDate = util.toISOStringDate(current);
     }
-    products = getProducts(layers[activeString], current, state);
+    products = getProducts(current, state);
 
     const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
     const dlURL = getDownloadUrl(url, proj, products, lonlats, dimensions, current, false, false, markerCoordinates);
@@ -82,16 +81,15 @@ export default function getImageArray(
  * @returns {array} array of layer objects
  *
  */
-function getProducts(layers, date, state) {
+function getProducts(date, state) {
   const layersArray = [];
   const products = getLayers(
-    layers,
+    state,
     {
       reverse: true,
       renderable: true,
       date,
     },
-    state,
   );
   lodashEach(products, (layer) => {
     const layerDate = new Date(date);

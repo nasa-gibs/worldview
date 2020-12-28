@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import OpacitySlider from '../../components/compare/opacity-slider';
+import util from '../../util/util';
+
+const { events } = util;
 
 let slider;
 let value = 50;
 
 export default class Opacity {
-  constructor(olMap, isAactive, events, eventListenerStringObj, valueOverride) {
+  constructor(olMap, isAactive, eventListenerStringObj, valueOverride) {
     this.map = olMap;
-    this.compareEvents = events;
     this.sliderCase = document.createElement('div');
     value = Number(valueOverride) || value;
     this.create();
@@ -61,6 +63,6 @@ export default class Opacity {
     const convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);
     this.secondLayer.setOpacity(convertedValue);
-    this.compareEvents.trigger('moveend', value);
+    events.trigger('compare:moveend', value);
   }
 }

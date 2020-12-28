@@ -10,25 +10,32 @@ import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
 import { hasNonClickableVectorLayer } from '../../modules/layers/util';
+import { getActiveLayers } from '../../modules/layers/selectors';
 import vectorDialog from '../vector-dialog';
 import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
 import { ACTIVATE_VECTOR_ALERT } from '../../modules/alerts/constants';
+import util from '../../util/util';
+
+const { events } = util;
 
 export class VectorInteractions extends React.Component {
   constructor(props) {
     super(props);
     this.mouseMove = lodashDebounce(this.mouseMove.bind(this), 8);
     this.singleClick = this.singleClick.bind(this);
-    this.registerMouseListeners();
   }
 
-  registerMouseListeners() {
-    const { mouseEvents } = this.props;
-    mouseEvents.on('mousemove', this.mouseMove);
-    mouseEvents.on('singleclick', this.singleClick);
+  componentDidMount() {
+    events.on('map:mousemove', this.mouseMove);
+    events.on('map:singleclick', this.singleClick);
+  }
+
+  componentWillUnmount() {
+    events.off('map:mousmove', this.mouseMove);
+    events.off('map:singleclick', this.singleClick);
   }
 
   mouseMove(event, map, crs) {
@@ -107,10 +114,10 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj, ui, layers,
+    modal, map, measure, vectorStyles, browser, compare, proj, ui,
   } = state;
   let swipeOffset;
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
   if (compare.active && compare.mode === 'swipe') {
     const percentOffset = state.compare.value || 50;
     swipeOffset = browser.screenWidth * (percentOffset / 100);
@@ -174,13 +181,13 @@ function mapStateToProps(state) {
       }));
   },
 });
+
 VectorInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   modalState: PropTypes.object.isRequired,
-  mouseEvents: PropTypes.object.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
@@ -192,6 +199,7 @@ VectorInteractions.propTypes = {
   activeLayers: PropTypes.array,
   activateVectorAlert: PropTypes.func,
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

@@ -10,7 +10,7 @@ import {
 import {
   clearSingleRecentLayer as clearSingleRecentLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers } from '../../../../modules/layers/selectors';
+import { getActiveLayersMap } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import getSelectedDate from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
@@ -180,7 +180,7 @@ SearchLayerRow.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { productPicker, browser, notifications } = state;
-  const activeLayerMap = getActiveLayers(state);
+  const activeLayerMap = getActiveLayersMap(state);
   const { categoryType, selectedLayer } = productPicker;
   return {
     scrollIntoView: browser.screenWidth < 1024,

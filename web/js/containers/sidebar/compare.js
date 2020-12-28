@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import {
   Nav, NavItem, NavLink, TabContent, TabPane,
 } from 'reactstrap';
-import Layers from './layers';
-import { getLayers } from '../../modules/layers/selectors';
-import { toggleActiveCompareState } from '../../modules/compare/actions';
+import LayersContainer from './layers-container';
+import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
 import util from '../../util/util';
 
 
@@ -19,9 +18,6 @@ const CompareCase = (props) => {
     toggleActiveCompareState,
     isCompareA,
     height,
-    layersA,
-    layersB,
-    checkerBoardPattern,
   } = props;
 
   const outerClass = 'layer-container sidebar-panel';
@@ -60,21 +56,17 @@ const CompareCase = (props) => {
           </Nav>
           <TabContent activeTab={isCompareA ? '1' : '2'}>
             <TabPane tabId="1">
-              <Layers
+              <LayersContainer
                 isActive={isCompareA}
-                activeOverlays={layersA}
-                layerGroupName="active"
+                compareState="active"
                 height={height - tabHeight}
-                checkerBoardPattern={checkerBoardPattern}
               />
             </TabPane>
             <TabPane tabId="2">
-              <Layers
+              <LayersContainer
                 isActive={!isCompareA}
-                activeOverlays={layersB}
-                layerGroupName="activeB"
+                compareState="activeB"
                 height={height - tabHeight}
-                checkerBoardPattern={checkerBoardPattern}
               />
             </TabPane>
           </TabContent>
@@ -86,35 +78,30 @@ const CompareCase = (props) => {
 
 const mapDispatchToProps = (dispatch) => ({
   toggleActiveCompareState: () => {
-    dispatch(toggleActiveCompareState());
+    dispatch(toggleActiveCompareStateAction());
   },
 });
-function mapStateToProps(state) {
-  const {
-    layers, compare, date,
-  } = state;
 
+const mapStateToProps = (state, ownProps) => {
+  const { compare, date } = state;
 
   return {
     isCompareA: compare.isCompareA,
-    layersA: getLayers(layers.active, { group: 'all', proj: 'all' }, state),
-    layersB: getLayers(layers.activeB, { group: 'all', proj: 'all' }, state),
     dateStringA: util.toISOStringDate(date.selected),
     dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,
   };
-}
+};
+
 CompareCase.propTypes = {
-  checkerBoardPattern: PropTypes.object,
   dateStringA: PropTypes.string,
   dateStringB: PropTypes.string,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isCompareA: PropTypes.bool,
-  layersA: PropTypes.object,
-  layersB: PropTypes.object,
   toggleActiveCompareState: PropTypes.func,
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

@@ -50,21 +50,26 @@ import * as vectorStyleConstants from '../modules/vector-styles/constants';
 import { setStyleFunction } from '../modules/vector-styles/selectors';
 import {
   getLayers,
+  getActiveLayers,
   isRenderable as isRenderableLayer,
   getMaxZoomLevelLayerCollection,
+  getAllActiveLayers,
 } from '../modules/layers/selectors';
+import getSelectedDate from '../modules/date/selectors';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
   CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE,
 } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
-
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/geosearch/util';
 import { reverseGeocode } from '../modules/geosearch/util-api';
 import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/geosearch/ol-coordinates-marker-util';
+
+const { events } = util;
+
 
 export default function mapui(models, config, store, ui) {
   const id = 'wv-map';
@@ -89,7 +94,6 @@ export default function mapui(models, config, store, ui) {
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
-  self.events = util.events();
   const layerBuilder = self.layerBuilder = mapLayerBuilder(
     models,
     config,
@@ -139,10 +143,12 @@ export default function mapui(models, config, store, ui) {
         }
         return;
       }
+      case layerConstants.REMOVE_GROUP:
       case layerConstants.REMOVE_LAYER:
-        return removeLayer(action);
+        return removeLayer(action.layersToRemove);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
-        return updateLayerVisibilities(action);
+      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
+        return updateLayerVisibilities();
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
@@ -150,7 +156,10 @@ export default function mapui(models, config, store, ui) {
           return reloadLayers();
         }
         return;
-      case layerConstants.REORDER_LAYER_GROUP:
+      case layerConstants.TOGGLE_OVERLAY_GROUPS:
+        return reloadLayers();
+      case layerConstants.REORDER_LAYERS:
+      case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         return reloadLayers();
@@ -170,9 +179,11 @@ export default function mapui(models, config, store, ui) {
         const type = 'selection';
         const newSelection = action.payload;
         const state = store.getState();
-        const { compare, layers } = state;
-        const activeLayerStr = compare.activeString;
-        updateVectorSelection(action.payload, self.selectedVectors, layers[activeLayerStr], type, state);
+        updateVectorSelection(
+          action.payload,
+          self.selectedVectors,
+          getActiveLayers(state), type, state,
+        );
         self.selectedVectors = newSelection;
         return;
       }
@@ -186,9 +197,7 @@ export default function mapui(models, config, store, ui) {
     }
   };
   const onStopAnimation = function() {
-    const { compare, layers } = store.getState();
-    const activeLayerStr = compare.activeString;
-    const hasActiveVectors = hasVectorLayers(layers[activeLayerStr]);
+    const hasActiveVectors = hasVectorLayers(getActiveLayers(store.getState()));
     if (hasActiveVectors) {
       reloadLayers();
     }
@@ -208,16 +217,15 @@ export default function mapui(models, config, store, ui) {
       const map = createMap(proj);
       self.proj[proj.id] = map;
     });
-    self.events.on('update-layers', reloadLayers);
-    self.events.on('disable-click-zoom', () => {
+    events.on('map:disable-click-zoom', () => {
       doubleClickZoom.setActive(false);
     });
-    self.events.on('enable-click-zoom', () => {
+    events.on('map:enable-click-zoom', () => {
       setTimeout(() => {
         doubleClickZoom.setActive(true);
       }, 100);
     });
-    ui.events.on('last-action', subscribeToStore);
+    events.on('redux:action-dispatched', subscribeToStore);
     updateProjection(true);
   };
 
@@ -340,15 +348,12 @@ export default function mapui(models, config, store, ui) {
    */
   const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
     const state = store.getState();
-    const {
-      geosearch, layers, proj,
-    } = state;
+    const { geosearch, proj } = state;
     const {
       coordinates, isCoordinatesDialogOpen, reverseGeocodeResults,
     } = geosearch;
     const results = geocodeResults || reverseGeocodeResults;
     const { sources } = config;
-    const { active } = layers;
 
     // unmount coordinate dialog to prevent residual tooltips being hovered
     if (self.coordinatesDialogDOMEl) {
@@ -371,7 +376,7 @@ export default function mapui(models, config, store, ui) {
     if (shouldFlyToCoordinates) {
       // fly to coordinates and render coordinates tooltip on init SET_MARKER
       const zoom = self.selected.getView().getZoom();
-      const activeLayers = active.filter((layer) => layer.projections[proj.id] !== undefined);
+      const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
       const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
       animateCoordinates({ ui: self }, config, coordinates, maxZoom);
     }
@@ -566,23 +571,14 @@ export default function mapui(models, config, store, ui) {
   const reloadLayers = self.reloadLayers = function(map) {
     map = map || self.selected;
     const state = store.getState();
-    const { layers, proj } = state;
-    const compareState = state.compare;
-    const layerGroupStr = compareState.activeString;
-    const activeLayers = layers[layerGroupStr];
-    if (!config.features.compare || !compareState.active) {
-      const compareMapDestroyed = !compareState.active && compareMapUi.active;
+    const { compare } = state;
+    if (!config.features.compare || !compare.active) {
+      const compareMapDestroyed = !compare.active && compareMapUi.active;
       if (compareMapDestroyed) {
         compareMapUi.destroy();
       }
       clearLayers(map);
-      const defs = getLayers(
-        activeLayers,
-        {
-          reverse: true,
-        },
-        state,
-      );
+      const defs = getLayers(state, { reverse: true });
       lodashEach(defs, (def) => {
         map.addLayer(createLayer(def));
       });
@@ -594,16 +590,16 @@ export default function mapui(models, config, store, ui) {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
       if (
-        compareState
-        && !compareState.isCompareA
-        && compareState.mode === 'spy'
+        compare
+        && !compare.isCompareA
+        && compare.mode === 'spy'
       ) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
       lodashEach(stateArray, (arr) => {
-        map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state));
+        map.addLayer(getCompareLayerGroup(arr, state));
       });
-      compareMapUi.create(map, compareState.mode);
+      compareMapUi.create(map, compare.mode);
       // add active map marker back in compare mode post createLayer
       if (self.activeMarker) {
         addMarkerAndUpdateStore();
@@ -611,26 +607,25 @@ export default function mapui(models, config, store, ui) {
     }
     updateLayerVisibilities();
   };
+
   /**
    * Create a Layergroup given the date and layerGroups
-   * @param {Array} arr | Array of date/layer group strings
    */
-  function getCompareLayerGroup(arr, layersState, projId, state) {
+  function getCompareLayerGroup([compareActiveString, compareDateString], state) {
+    const compareSideLayers = getActiveLayers(state, compareActiveString);
+    const layers = getLayers(state, { reverse: true }, compareSideLayers)
+      .filter(() => true)
+      .map((def) => createLayer(def, {
+        date: getSelectedDate(state, compareDateString),
+        group: compareActiveString,
+      }));
     return new OlLayerGroup({
-      layers: getLayers(
-        layersState[arr[0]],
-        { reverse: true },
-        store.getState(),
-      )
-        .filter(() => true)
-        .map((def) => createLayer(def, {
-          date: state.date[arr[1]],
-          group: arr[0],
-        })),
-      group: arr[0],
-      date: arr[1],
+      layers,
+      group: compareActiveString,
+      date: compareDateString,
     });
   }
+
   /*
    * Function called when layers need to be updated
    * e.g: can be the result of new data or another display
@@ -641,35 +636,36 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function updateLayerVisibilities() {
-    const state = store.getState();
     let renderable;
+    const state = store.getState();
     const layers = self.selected.getLayers();
-    const layersState = state.layers;
-    const activeGroupStr = state.compare.activeString;
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     layers.forEach((layer) => {
-      const group = layer.get('group');
+      const compareActiveString = layer.get('group');
+
       // Not in A|B
       if (layer.wv) {
         renderable = isRenderableLayer(
           layer.wv.id,
-          layersState[activeGroupStr],
-          state.date[activeDateStr],
+          getActiveLayers(state),
+          getSelectedDate(state),
           state,
         );
         layer.setVisible(renderable);
+
         // If in A|B layer-group will have a 'group' string
-      } else if (group) {
+      } else if (compareActiveString) {
         lodashEach(layer.getLayers().getArray(), (subLayer) => {
-          if (subLayer.wv) {
-            renderable = isRenderableLayer(
-              subLayer.wv.id,
-              layersState[group],
-              state.date[layer.get('date')],
-              state,
-            );
-            subLayer.setVisible(renderable);
+          if (!subLayer.wv) {
+            return;
           }
+          const compareDateString = layer.get('date');
+          renderable = isRenderableLayer(
+            subLayer.wv.id,
+            getActiveLayers(state, compareActiveString),
+            getSelectedDate(state, compareDateString),
+            state,
+          );
+          subLayer.setVisible(renderable);
         });
         layer.setVisible(true);
       }
@@ -689,12 +685,10 @@ export default function mapui(models, config, store, ui) {
    */
   function updateOpacity(action) {
     const state = store.getState();
-    const { layers, compare } = state;
-    const activeStr = compare.isCompareA ? 'active' : 'activeB';
-    const def = lodashFind(layers[activeStr], {
+    const def = lodashFind(getActiveLayers(state), {
       id: action.id,
     });
-    const layer = findLayer(def, activeStr);
+    const layer = findLayer(def, state.compare.activeString);
 
     layer.setOpacity(action.opacity);
     updateLayerVisibilities();
@@ -712,11 +706,9 @@ export default function mapui(models, config, store, ui) {
 
   function addLayer(def, date, activeLayers) {
     const state = store.getState();
-    const { compare, layers } = state;
-    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
-    date = date || state.date[activeDateStr];
-    activeLayers = activeLayers || layers[activeLayerStr];
+    const { compare } = state;
+    date = date || getSelectedDate(state);
+    activeLayers = activeLayers || getActiveLayers(state);
     const reverseLayers = lodashCloneDeep(activeLayers).reverse();
     const mapIndex = lodashFindIndex(reverseLayers, {
       id: def.id,
@@ -726,12 +718,12 @@ export default function mapui(models, config, store, ui) {
     if (firstLayer && firstLayer.get('group')) {
       // Find which map layer-group is the active LayerGroup
       // and add layer to layerGroup in correct location
-      const activelayer = firstLayer.get('group') === activeLayerStr
+      const activelayer = firstLayer.get('group') === compare.activeString
         ? firstLayer
         : mapLayers[1];
       const newLayer = createLayer(def, {
         date,
-        group: activeLayerStr,
+        group: compare.activeString,
       });
       activelayer.getLayers().insertAt(mapIndex, newLayer);
       compareMapUi.create(self.selected, compare.mode);
@@ -739,32 +731,21 @@ export default function mapui(models, config, store, ui) {
       self.selected.getLayers().insertAt(mapIndex, createLayer(def));
     }
     updateLayerVisibilities();
-
-    self.events.trigger('added-layer');
   }
-  /*
-   *Initiates the adding of a layer or Graticule
-   *
-   * @method removeLayer
-   * @static
-   *
-   * @param {object} def - layer Specs
-   *
-   * @returns {void}
-   */
-  function removeLayer(action) {
+
+  function removeLayer(layersToRemove) {
     const state = store.getState();
     const { compare } = state;
-    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
-    const { def } = action;
 
-    const layer = findLayer(def, activeLayerStr);
-    if (compare && compare.active) {
-      const layerGroup = getActiveLayerGroup(self.selected, activeLayerStr);
-      if (layerGroup) layerGroup.getLayers().remove(layer);
-    } else {
-      self.selected.removeLayer(layer);
-    }
+    layersToRemove.forEach((def) => {
+      const layer = findLayer(def, compare.activeString);
+      if (compare && compare.active) {
+        const layerGroup = getActiveLayerGroup(self.selected, compare.activeString);
+        if (layerGroup) layerGroup.getLayers().remove(layer);
+      } else {
+        self.selected.removeLayer(layer);
+      }
+    });
 
     updateLayerVisibilities();
   }
@@ -781,22 +762,15 @@ export default function mapui(models, config, store, ui) {
   const updateDate = self.updateDate = function() {
     const state = store.getState();
     const { compare } = state;
-    const layerState = state.layers;
-    const activeLayerStr = compare.activeString;
-    const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
-    const activeLayers = getLayers(
-      layerState[activeLayerStr],
-      {},
-      state,
-    ).reverse();
+    const activeLayers = getAllActiveLayers(state);
     let layerGroups;
     let layerGroup;
     if (compare && compare.active) {
       layerGroups = self.selected.getLayers().getArray();
       if (layerGroups.length === 2) {
-        layerGroup = layerGroups[0].get('group') === activeLayerStr
+        layerGroup = layerGroups[0].get('group') === compare.activeString
           ? layerGroups[0]
-          : layerGroups[1].get('group') === activeLayerStr
+          : layerGroups[1].get('group') === compare.activeString
             ? layerGroups[1]
             : null;
       }
@@ -815,26 +789,27 @@ export default function mapui(models, config, store, ui) {
           layerGroup.getLayers().setAt(
             index,
             createLayer(def, {
-              group: activeLayerStr,
-              date: state.date[activeDate],
+              group: compare.activeString,
+              date: getSelectedDate(state),
               previousLayer: layerValue ? layerValue.wv : null,
             }),
           );
-          compareMapUi.update(activeLayerStr);
+          compareMapUi.update(compare.activeString);
         }
       } else {
         const index = findLayerIndex(def);
         const layerValue = self.selected.getLayers().getArray()[index];
-        self.selected.getLayers().setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
+        self.selected
+          .getLayers()
+          .setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         const { vectorStyles } = config;
         let vectorStyleId;
 
         vectorStyleId = def.vectorStyle.id;
-        if (state.layers[activeLayerStr]) {
-          const layers = state.layers[activeLayerStr];
-          layers.forEach((layer) => {
+        if (getActiveLayers(state)) {
+          getActiveLayers(state).forEach((layer) => {
             if (layer.id === layerName && layer.custom) {
               vectorStyleId = layer.custom;
             }
@@ -872,7 +847,7 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {object} Layer object
    */
-  function findLayer(def, layerGroupStr) {
+  function findLayer(def, activeCompareState) {
     const layers = self.selected.getLayers().getArray();
     let layer = lodashFind(layers, {
       wv: {
@@ -883,7 +858,7 @@ export default function mapui(models, config, store, ui) {
     if (!layer && layers.length && layers[0].get('group')) {
       let olGroupLayer;
       lodashEach(layers, (layerGroup) => {
-        if (layerGroup.get('group') === layerGroupStr) {
+        if (layerGroup.get('group') === activeCompareState) {
           olGroupLayer = layerGroup;
         }
       });
@@ -921,13 +896,9 @@ export default function mapui(models, config, store, ui) {
   }
 
   const triggerExtent = lodashThrottle(
-    () => {
-      self.events.trigger('extent');
-    },
+    () => events.trigger('map:extent'),
     500,
-    {
-      trailing: true,
-    },
+    { trailing: true },
   );
 
   /*
@@ -961,9 +932,7 @@ export default function mapui(models, config, store, ui) {
    */
   function createMap(proj, dateSelected) {
     const state = store.getState();
-    const { date, compare } = state;
-    const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
-    dateSelected = dateSelected || date[activeDate];
+    dateSelected = dateSelected || getSelectedDate(state);
     const id = `wv-map-${proj.id}`;
     const $map = $('<div></div>')
       .attr('id', id)
@@ -1049,20 +1018,20 @@ export default function mapui(models, config, store, ui) {
     map.getView().on('change:rotation', lodashThrottle(onRotate, 300));
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
-      self.events.trigger('drag');
+      events.trigger('map:drag');
     });
     map.getView().on('propertychange', (e) => {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
-          self.events.trigger('zooming');
+          events.trigger('map:zooming');
           break;
         default:
           break;
       }
     });
     map.on('moveend', (e) => {
-      self.events.trigger('moveend');
+      events.trigger('map:moveend');
       setTimeout(() => {
         self.mapIsbeingDragged = false;
         self.mapIsbeingZoomed = false;
@@ -1159,7 +1128,7 @@ export default function mapui(models, config, store, ui) {
     };
     map.getView().on('change:resolution', () => {
       onZoomChange();
-      self.events.trigger('movestart');
+      events.trigger('map:movestart');
     });
     onZoomChange();
   }
@@ -1192,9 +1161,7 @@ export default function mapui(models, config, store, ui) {
    * @todo move this component to another Location
    */
   function createMousePosSel(map, proj) {
-    let hoverThrottle;
-
-    function onMouseMove(e) {
+    const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
       const { browser } = state;
       const isMobile = browser.lessThan.medium;
@@ -1204,14 +1171,8 @@ export default function mapui(models, config, store, ui) {
       if (isMobile) return;
       // if measure is active return
       if (state.measure.isActive) return;
-      // if over coords return
-      if (
-        $(e.relatedTarget).hasClass('map-coord')
-        || $(e.relatedTarget).hasClass('coord-btn')
-      ) {
-        return;
-      }
-      const pixels = map.getEventPixel(e.originalEvent);
+
+      const pixels = map.getEventPixel(e);
       const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
@@ -1226,19 +1187,13 @@ export default function mapui(models, config, store, ui) {
       if (isEventsTabActive || isMapAnimating) return;
 
       dataRunner.newPoint(pixels, map);
-    }
-    $(map.getViewport())
-      .mouseout((e) => {
-        if (
-          $(e.relatedTarget).hasClass('map-coord')
-          || $(e.relatedTarget).hasClass('coord-btn')
-        ) {
-          return;
-        }
-        hoverThrottle.cancel();
-        dataRunner.clearAll();
-      })
-      .mousemove(hoverThrottle = lodashThrottle(onMouseMove, 300));
+    }, 300);
+
+    events.on('map:mousemove', throttledOnMouseMove);
+    events.on('map:mouseout', (e) => {
+      throttledOnMouseMove.cancel();
+      dataRunner.clearAll();
+    });
   }
 
   init();

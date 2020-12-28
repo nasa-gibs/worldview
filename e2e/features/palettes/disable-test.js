@@ -12,6 +12,7 @@ module.exports = {
   'Verify that toggling class updates permalink and layer-legend': (client) => {
     client.waitForElementVisible('#active-Last_of_the_Wild_1995-2004', TIME_LIMIT, () => {
       client.expect.element('#active-Last_of_the_Wild_1995-2004 .disabled-classification').to.not.be.present;
+      client.moveToElement('#active-Last_of_the_Wild_1995-2004', 1, 1).pause(200);
       client.click('#active-Last_of_the_Wild_1995-2004 .wv-layers-options');
       client.waitForElementVisible('.layer-classification-toggle', 2000, () => {
         client.click('.classification-list .react-switch-case .react-switch-button');

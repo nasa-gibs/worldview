@@ -4,6 +4,8 @@ import Spy from './spy';
 import util from '../../util/util';
 import { setValue } from '../../modules/compare/actions';
 
+const { events } = util;
+
 const TOUCH_EVENT = {
   type: 'touch',
   start: 'touchstart',
@@ -21,7 +23,7 @@ export default function mapCompare(config, store) {
   let comparison = null;
   let mode = 'swipe';
   let proj = '';
-  self.events = util.events();
+
   self.swipe = Swipe;
   self.opacity = Opacity;
   self.spy = Spy;
@@ -32,15 +34,15 @@ export default function mapCompare(config, store) {
     : MOUSE_EVENT;
 
   const init = function() {
-    self.events
-      .on('movestart', () => {
-        self.dragging = true;
-      })
-      .on('moveend', (value) => {
-        self.dragging = false;
-        store.dispatch(setValue(value));
-      });
+    events.on('compare:movestart', () => {
+      self.dragging = true;
+    });
+    events.on('compare:moveend', (value) => {
+      self.dragging = false;
+      store.dispatch(setValue(value));
+    });
   };
+
   self.update = function(group) {
     const state = store.getState();
     if (comparison) {
@@ -62,7 +64,6 @@ export default function mapCompare(config, store) {
       comparison = new self[compareMode](
         map,
         state.compare.isCompareA,
-        self.events,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()
@@ -71,7 +72,6 @@ export default function mapCompare(config, store) {
       comparison = new self[compareMode](
         map,
         state.compare.isCompareA,
-        self.events,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()
