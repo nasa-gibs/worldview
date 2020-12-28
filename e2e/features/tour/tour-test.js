@@ -1,5 +1,10 @@
 const { normalizeViewport } = require('../../reuseables/normalize-viewport.js');
 const { localStorageEnabled } = require('../../reuseables/local-storage-check.js');
+const localSelectors = require('../../reuseables/selectors.js');
+
+const {
+  infoToolbarButton,
+} = localSelectors;
 
 const TIME_LIMIT = 10000;
 const runTour = function(c) {
@@ -32,8 +37,8 @@ module.exports = {
       [],
       function({ value }) {
         if (!value) {
-          c.waitForElementVisible('#wv-info-button', 1000);
-          c.click('#wv-info-button');
+          c.waitForElementVisible(infoToolbarButton, 1000);
+          c.click(infoToolbarButton);
           c.waitForElementVisible('#start_tour_info_item', 1000);
           c.click('#start_tour_info_item');
           runTour(c);

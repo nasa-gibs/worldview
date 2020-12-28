@@ -40,6 +40,7 @@ module.exports = {
   downloadShapefileBtn: '#download-shapefiles-button',
 
   // timeline
+  timelineContainer: '.timeline-container',
   dragger: '.timeline-dragger',
   dayDown: '.input-wrapper-day > div.date-arrows.date-arrow-down',
   dayUp: '.input-wrapper-day > div.date-arrows.date-arrow-up',
@@ -115,8 +116,21 @@ module.exports = {
   measurementMoreButton: '#measurements-facet .sui-facet-view-more',
   sourcesMERRALabel: '#sources-facet [for="example_facet_SourceMERRA-2"]',
 
-  // ui
-  uiInfoButton: '#wv-info-button',
+  // map
+  geographicMap: '#wv-map-geographic',
+  arcticMap: '#wv-map-arctic',
+  antarcticMap: '#wv-map-antarctic',
+  zoomInButton: '.wv-map-zoom-in',
+  zoomOutButton: '.wv-map-zoom-out',
+  mapScaleMetric: '.wv-map-scale-metric',
+  mapScaleImperial: '.wv-map-scale-imperial',
+
+  // ui toolbar
+  geosearchToolbarButton: '#wv-geosearch-button',
+  shareToolbarButton: '#wv-link-button',
+  projToolbarButton: '#wv-proj-button',
+  snapshotToolbarButton: '#wv-image-button',
+  infoToolbarButton: '#wv-info-button',
 
   // social
   socialToolbar: '#toolbar_share_link',
@@ -124,7 +138,6 @@ module.exports = {
   socialLinkInput: '#permalink_content',
 
   // geosearch
-  geosearchToolbarButton: '#wv-geosearch-button',
   geosearchComponent: '.geosearch-component',
   geosearchMobileDialog: '#toolbar_geosearch_mobile',
   geosearchMinimizeButton: '.geosearch-search-minimize-button',

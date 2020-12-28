@@ -1,11 +1,17 @@
 const TIME_LIMIT = 30000;
 const mockParam = '?mockAlerts=';
 const layerNoticesTestParams = '?l=Coastlines,MODIS_Aqua_CorrectedReflectance_TrueColor,Particulate_Matter_Below_2.5micrometers_2001-2010';
-const { addLayers, layersSearchField, categoriesNav } = require('../../reuseables/selectors.js');
+const localSelectors = require('../../reuseables/selectors.js');
+
+const {
+  addLayers,
+  layersSearchField,
+  categoriesNav,
+  infoToolbarButton,
+} = localSelectors;
 
 // Selectors
-const infoButton = '#wv-info-button';
-const infoButtonIcon = '#wv-info-button svg.svg-inline--fa';
+const infoButtonIcon = `${infoToolbarButton} svg.svg-inline--fa`;
 const infoMenu = '#toolbar_info';
 const giftListItem = '#toolbar_info li.gift';
 const boltListItem = '#toolbar_info li.bolt';
@@ -32,7 +38,7 @@ module.exports = {
   'Outage takes precedence when all three notifications are present': function(c) {
     c.url(`${c.globals.url + layerNoticesTestParams}&mockAlerts=all_types`);
     c.waitForElementVisible(infoButtonIcon, TIME_LIMIT);
-    c.expect.element(`${infoButton}.wv-status-outage`).to.be.present;
+    c.expect.element(`${infoToolbarButton}.wv-status-outage`).to.be.present;
     c.click(infoButtonIcon);
     c.pause(2000);
     c.assert.containsText(infoMenu, 'Notifications');
@@ -63,7 +69,7 @@ module.exports = {
     c.click('#notification_list_modal .close')
       .pause(500);
     c.waitForElementVisible(infoButtonIcon, TIME_LIMIT);
-    c.expect.element(`${infoButton}.wv-status-hide`).to.be.present;
+    c.expect.element(`${infoToolbarButton}.wv-status-hide`).to.be.present;
   },
 
   // Layer notice tests

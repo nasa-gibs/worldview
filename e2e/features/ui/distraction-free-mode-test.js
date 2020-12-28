@@ -4,10 +4,17 @@ const localSelectors = require('../../reuseables/selectors.js');
 const {
   geosearchMinimizeButton,
   geosearchToolbarButton,
-  sidebarContainer,
+  mapScaleImperial,
+  mapScaleMetric,
   measureBtn,
+  projToolbarButton,
+  shareToolbarButton,
+  sidebarContainer,
+  snapshotToolbarButton,
+  timelineContainer,
+  zoomInButton,
+  zoomOutButton,
 } = localSelectors;
-
 const TIME_LIMIT = 5000;
 
 module.exports = {
@@ -23,17 +30,17 @@ module.exports = {
     c.sendKeys('body', [c.Keys.SHIFT, 'd', c.Keys.NULL]);
     c.pause(300);
 
-    c.waitForElementNotVisible('.timeline-container', TIME_LIMIT);
+    c.waitForElementNotVisible(timelineContainer, TIME_LIMIT);
     c.waitForElementNotVisible(sidebarContainer, TIME_LIMIT);
     c.waitForElementNotVisible(geosearchToolbarButton, TIME_LIMIT);
-    c.waitForElementNotPresent('#wv-link-button', TIME_LIMIT);
-    c.waitForElementNotPresent('#wv-proj-button', TIME_LIMIT);
-    c.waitForElementNotPresent('#wv-image-button', TIME_LIMIT);
+    c.waitForElementNotPresent(shareToolbarButton, TIME_LIMIT);
+    c.waitForElementNotPresent(projToolbarButton, TIME_LIMIT);
+    c.waitForElementNotPresent(snapshotToolbarButton, TIME_LIMIT);
     c.waitForElementNotVisible(measureBtn, TIME_LIMIT);
-    c.waitForElementNotVisible('.wv-map-zoom-in', TIME_LIMIT);
-    c.waitForElementNotVisible('.wv-map-zoom-out', TIME_LIMIT);
-    c.waitForElementNotVisible('.wv-map-scale-metric', TIME_LIMIT);
-    c.waitForElementNotVisible('.wv-map-scale-imperial', TIME_LIMIT);
+    c.waitForElementNotVisible(zoomInButton, TIME_LIMIT);
+    c.waitForElementNotVisible(zoomOutButton, TIME_LIMIT);
+    c.waitForElementNotVisible(mapScaleMetric, TIME_LIMIT);
+    c.waitForElementNotVisible(mapScaleImperial, TIME_LIMIT);
   },
 
   // verify turning off distraction free mode shortcut returns hidden ui elements
@@ -42,17 +49,17 @@ module.exports = {
     c.sendKeys('body', [c.Keys.SHIFT, 'd', c.Keys.NULL]);
     c.pause(300);
 
-    c.waitForElementVisible('.timeline-container', TIME_LIMIT);
+    c.waitForElementVisible(timelineContainer, TIME_LIMIT);
     c.waitForElementVisible(sidebarContainer, TIME_LIMIT);
     c.waitForElementVisible(geosearchToolbarButton, TIME_LIMIT);
-    c.waitForElementVisible('#wv-link-button', TIME_LIMIT);
-    c.waitForElementPresent('#wv-proj-button', TIME_LIMIT);
-    c.waitForElementPresent('#wv-image-button', TIME_LIMIT);
+    c.waitForElementVisible(shareToolbarButton, TIME_LIMIT);
+    c.waitForElementPresent(projToolbarButton, TIME_LIMIT);
+    c.waitForElementPresent(snapshotToolbarButton, TIME_LIMIT);
     c.waitForElementVisible(measureBtn, TIME_LIMIT);
-    c.waitForElementPresent('.wv-map-zoom-in', TIME_LIMIT);
-    c.waitForElementPresent('.wv-map-zoom-out', TIME_LIMIT);
-    c.waitForElementPresent('.wv-map-scale-metric', TIME_LIMIT);
-    c.waitForElementPresent('.wv-map-scale-imperial', TIME_LIMIT);
+    c.waitForElementPresent(zoomInButton, TIME_LIMIT);
+    c.waitForElementPresent(zoomOutButton, TIME_LIMIT);
+    c.waitForElementPresent(mapScaleMetric, TIME_LIMIT);
+    c.waitForElementPresent(mapScaleImperial, TIME_LIMIT);
   },
 
   after: (c) => {
