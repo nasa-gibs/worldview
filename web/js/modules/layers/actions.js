@@ -168,7 +168,7 @@ export function reorderOverlayGroups(layers, overlayGroups) {
 
 export function removeLayer(id) {
   return (dispatch, getState) => {
-    const { compare, data } = getState();
+    const { compare } = getState();
     const { activeString } = compare;
     const activeLayers = getActiveLayersSelector(getState());
     const index = lodashFindIndex(activeLayers, { id });
@@ -176,9 +176,6 @@ export function removeLayer(id) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
     const def = activeLayers[index];
-    if (def.product && def.product === data.selectedProduct) {
-      dispatch(selectProduct('')); // Clear selected Data product
-    }
     dispatch({
       type: REMOVE_LAYER,
       activeString,

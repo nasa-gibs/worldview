@@ -37,7 +37,7 @@ class SmartHandoff extends Component {
 
     // Set default state
     this.state = {
-      boundaries: props.boundaries || {
+      boundaries: {
         x: screenWidth / 2 - 100,
         y: screenHeight / 2 - 100,
         x2: screenWidth / 2 + 100,
@@ -65,7 +65,7 @@ class SmartHandoff extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      selectedDate,
+      dateSelection,
       activeLayers,
     } = this.props;
     const {
@@ -82,7 +82,7 @@ class SmartHandoff extends Component {
     }
 
     // Determine if date changed; if so, fire update on granule count
-    const didDateChange = selectedDate !== prevProps.selectedDate;
+    const didDateChange = dateSelection !== prevProps.dateSelection;
     if (didDateChange) this.updateGranuleCount(currentExtent);
   }
 
@@ -186,7 +186,7 @@ class SmartHandoff extends Component {
    * @param {*} currentExtent
    */
   async updateGranuleCount(currentExtent) {
-    const { selectedDate } = this.props;
+    const { dateSelection } = this.props;
     const {
       selectedLayer,
       showBoundingBox,
@@ -197,8 +197,8 @@ class SmartHandoff extends Component {
     // Places the compoent state in a loading state; triggers {...} animation.
     this.setState({ isSearchingForGranules: true });
 
-    const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
-    const endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
+    const startDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T00:00:00.000Z`;
+    const endDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
 
     let totalGranules = 0;
@@ -235,26 +235,176 @@ class SmartHandoff extends Component {
   }
 
   /**
-   * Default render which displays the download panel
+   * Render radio buttons for layer selection
    */
-  render() {
+  renderLayerChoices() {
+    const { activeLayers } = this.props;
+    const { selectedLayer, currentExtent } = this.state;
+
+    return (
+      <div className="smart-handoff-layer-list">
+        {activeLayers.map((layer) => {
+          if (layer.conceptId) {
+            const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
+            return (
+              <div className="layer-item" key={inputId}>
+                <input
+                  id={inputId}
+                  type="radio"
+                  value={layer.conceptId}
+                  name="smart-handoff-layer-radio"
+                  checked={selectedLayer && selectedLayer.id === layer.id}
+                  onChange={() => this.onLayerChange(layer, currentExtent)}
+                />
+                <label htmlFor={inputId}>{layer.title}</label>
+                <span>{layer.subtitle}</span>
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    );
+  }
+
+  /**
+   * Render the checkbox to toggle the cropbox and the cropbox itself
+   */
+  renderCropBox() {
     const {
       screenWidth,
       screenHeight,
-      activeLayers,
-      isActive,
-      showWarningModal,
-      showGranuleHelpModal,
-      selectedDate,
     } = this.props;
 
     const {
       boundaries,
       selectedLayer,
+      coordinates,
+      currentExtent,
+      showBoundingBox,
+    } = this.state;
+
+    const {
+      x, y, x2, y2,
+    } = boundaries;
+
+    return (
+      <>
+        <div className="smart-handoff-crop-toggle">
+          <Checkbox
+            id="chk-crop-toggle"
+            label="Target Area Selection"
+            text="Toggle boundary selection."
+            color="gray"
+            checked={showBoundingBox}
+            onCheck={() => {
+              this.setState({ showBoundingBox: !showBoundingBox }, () => {
+                if (selectedLayer && selectedLayer.id) this.updateGranuleCount(currentExtent);
+              });
+            }}
+          />
+        </div>
+
+        { showBoundingBox && (
+          <Crop
+            className="download-extent"
+            x={x}
+            y={y}
+            width={x2 - x}
+            height={y2 - y}
+            maxHeight={screenHeight}
+            maxWidth={screenWidth}
+            onChange={this.onBoundaryChange}
+            onClose={onClose}
+            keepSelection
+            bottomLeftStyle={{
+              left: x,
+              top: y2 + 5,
+              width: x2 - x,
+            }}
+            topRightStyle={{
+              left: x,
+              top: y - 20,
+              width: x2 - x,
+            }}
+            coordinates={coordinates}
+            showCoordinates
+          />
+        )}
+      </>
+    );
+  }
+
+  /**
+   * Render the granule count
+   */
+  renderGranuleCount() {
+    const {
+      showGranuleHelpModal,
+      dateSelection,
+    } = this.props;
+
+    const {
+      selectedLayer,
       isSearchingForGranules,
       selectedGranules,
       totalGranules,
-      coordinates,
+      showBoundingBox,
+    } = this.state;
+    return selectedLayer && selectedLayer.conceptId && (
+      <div className="granule-count">
+        <h1>
+          Available granules for
+          {' '}
+          {dateSelection}
+          :
+          {' '}
+          { !isSearchingForGranules && totalGranules === 0 && (<span className="fade-in constant-width">NONE</span>)}
+          { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{totalGranules}</span>)}
+          { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
+          { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
+
+          <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>(?)</span>
+        </h1>
+      </div>
+    );
+  }
+
+  /**
+   * Render "no layers to download" message
+   */
+  renderNoLayersToDownload = () => (
+    <div className="smart-handoff-side-panel">
+      <h1>
+        None of your currently listed layers are available for downloading.
+      </h1>
+      <hr />
+      <h2>Why are my current layers not available?</h2>
+      <p>
+        Some layers in Worldview do not have corresponding source data products available for download.
+      </p>
+      <p>
+        These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
+      </p>
+      <p>
+        If you would like to download only an image, please use the “camera” icon in the upper right.
+      </p>
+    </div>
+  )
+
+  /**
+   * Default render which displays the download panel
+   */
+  render() {
+    const {
+      activeLayers,
+      isActive,
+      showWarningModal,
+      dateSelection,
+    } = this.props;
+
+    const {
+      selectedLayer,
       currentExtent,
       showBoundingBox,
     } = this.state;
@@ -262,24 +412,14 @@ class SmartHandoff extends Component {
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
 
-    const {
-      x,
-      y,
-      x2,
-      y2,
-    } = boundaries;
-
     // Used to determine if the added smart-handoff modal should be shown
     const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
     const showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
 
     // Determine if the download button is enabled
     const isValidDownload = selectedLayer && selectedLayer.id !== undefined;
-
     const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
     const areThereLayersToDownload = availableLayers > 0;
-
-    const dateSelection = moment.utc(selectedDate).format('YYYY MMM DD');
 
 
     if (areThereLayersToDownload) {
@@ -287,147 +427,41 @@ class SmartHandoff extends Component {
         <div className="smart-handoff-side-panel">
 
           <h1>Select an available layer to download:</h1>
-
           <div className="esd-notification">
             Downloading data will be performed using
-            {' '}
-            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">NASA&apos;s Earthdata Search</a>
-            {' '}
+            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
             application.
           </div>
-
           <hr />
-
-          <div className="smart-handoff-layer-list">
-            {activeLayers.map((layer) => {
-              if (layer.conceptId) {
-                const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
-                return (
-                  <div className="layer-item" key={inputId}>
-                    <input
-                      id={inputId}
-                      type="radio"
-                      value={layer.conceptId}
-                      name="smart-handoff-layer-radio"
-                      checked={selectedLayer && selectedLayer.id === layer.id}
-                      onChange={() => this.onLayerChange(layer, currentExtent)}
-                    />
-                    <label htmlFor={inputId}>{layer.title}</label>
-                    <span>{layer.subtitle}</span>
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </div>
-
+          {this.renderLayerChoices()}
           <hr />
-
-          <div className="smart-handoff-crop-toggle">
-            <Checkbox
-              id="chk-crop-toggle"
-              label="Target Area Selection"
-              text="Toggle boundary selection."
-              color="gray"
-              checked={showBoundingBox}
-              onCheck={() => {
-                this.setState({ showBoundingBox: !showBoundingBox }, () => {
-                  if (selectedLayer && selectedLayer.id) this.updateGranuleCount(currentExtent);
-                });
-              }}
-            />
-          </div>
-
+          {this.renderCropBox()}
           <hr />
-
-          {selectedLayer && selectedLayer.conceptId && (
-            <div className="granule-count">
-              <h1>
-                Available granules for
-                {' '}
-                {dateSelection}
-                :
-                {' '}
-                { !isSearchingForGranules && totalGranules === 0 && (<span className="fade-in constant-width">NONE</span>)}
-                { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{totalGranules}</span>)}
-                { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
-                { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
-
-                <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>(?)</span>
-
-              </h1>
-            </div>
-          )}
-
+          {this.renderGranuleCount()}
           <Button
             onClick={() => {
-              if (!showModal) showWarningModal(selectedDate, selectedLayer, currentExtent, showBoundingBox);
-              else openEarthDataSearch(selectedDate, selectedLayer, currentExtent, showBoundingBox)();
+              if (!showModal) showWarningModal(dateSelection, selectedLayer, currentExtent, showBoundingBox);
+              else openEarthDataSearch(dateSelection, selectedLayer, currentExtent, showBoundingBox);
             }}
             text="DOWNLOAD VIA EARTHDATA SEARCH"
             className="download-btn red"
             valid={!!isValidDownload}
           />
-
-          { showBoundingBox && (
-            <Crop
-              className="download-extent"
-              x={x}
-              y={y}
-              width={x2 - x}
-              height={y2 - y}
-              maxHeight={screenHeight}
-              maxWidth={screenWidth}
-              onChange={this.onBoundaryChange}
-              onClose={onClose}
-              keepSelection
-              bottomLeftStyle={{
-                left: x,
-                top: y2 + 5,
-                width: x2 - x,
-              }}
-              topRightStyle={{
-                left: x,
-                top: y - 20,
-                width: x2 - x,
-              }}
-              coordinates={coordinates}
-              showCoordinates
-            />
-          )}
         </div>
       );
     }
-    return (
-      <div className="smart-handoff-side-panel">
-        <h1>
-          None of your currently listed layers are available for downloading.
-        </h1>
-        <hr />
-        <h2>Why are my current layers not available?</h2>
-        <p>
-          Some layers in Worldview do not have corresponding source data products available for download.
-        </p>
-        <p>
-          These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
-        </p>
-        <p>
-          If you would like to download only an image, please use the “camera” icon in the upper right.
-        </p>
-      </div>
-    );
+    return this.renderNoLayersToDownload();
   }
 }
 
 /**
  * Method call to direct the user to Earthdata Search with the necessary URL parameters that
  * encapsulate what the user is intending to try and download data / granules from
- * @param {*} selectedDate
  * @param {*} selectedLayer
  * @param {*} extentCoords
  * @param {*} showBoundingBox
  */
-const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords, showBoundingBox) => () => {
+const openEarthDataSearch = (dateSelection, selectedLayer, extentCoords, showBoundingBox) => {
   const {
     conceptId,
     daynight,
@@ -438,8 +472,8 @@ const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords, showBoun
     northEast,
   } = extentCoords;
 
-  const startDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T00:00:00.000Z`;
-  const endDate = `${moment.utc(selectedDate).format('YYYY-MM-DD')}T23:59:59.999Z`;
+  const startDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T00:00:00.000Z`;
+  const endDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T23:59:59.999Z`;
 
   const dateRange = `${startDate},${endDate}`;
 
@@ -457,12 +491,11 @@ const openEarthDataSearch = (selectedDate, selectedLayer, extentCoords, showBoun
 SmartHandoff.propTypes = {
   isActive: PropTypes.bool,
   activeLayers: PropTypes.array,
+  dateSelection: PropTypes.string,
   map: PropTypes.object.isRequired,
-  boundaries: PropTypes.object,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  selectedDate: PropTypes.instanceOf(Date),
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
 };
@@ -479,7 +512,6 @@ const mapStateToProps = (state) => {
     map,
     proj,
     sidebar,
-    boundaries,
   } = state;
 
   const {
@@ -491,13 +523,12 @@ const mapStateToProps = (state) => {
 
   return {
     activeLayers,
-    boundaries,
+    dateSelection: moment.utc(getSelectedDate(state)).format('YYYY MMM DD'),
     isActive: sidebar.activeTab === 'download',
     map,
     proj: proj.selected,
     screenWidth,
     screenHeight,
-    selectedDate: getSelectedDate(state),
   };
 };
 
@@ -506,17 +537,17 @@ const mapStateToProps = (state) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: (selectedDate, selectedLayer, extentCoords, showBoundingBox) => {
+  showWarningModal: (dateSelection, selectedLayer, showBoundingBox) => {
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
         headerText: 'Leaving Worldview',
         bodyComponent: SmartHandoffModal,
+        desktopOnly: true,
         bodyComponentProps: {
-          selectedDate,
+          dateSelection,
           selectedLayer,
-          extentCoords,
           showBoundingBox,
-          goToEarthDataSearch: openEarthDataSearch(selectedDate, selectedLayer, extentCoords, showBoundingBox),
+          goToEarthDataSearch: openEarthDataSearch,
         },
         size: 'lg',
       }),
@@ -525,6 +556,7 @@ const mapDispatchToProps = (dispatch) => ({
   showGranuleHelpModal: () => {
     dispatch(
       openCustomContent('granule-help', {
+        desktopOnly: true,
         headerText: 'Granule Availablilty',
         bodyComponent: GranuleAlertModalBody,
         size: 'lg',

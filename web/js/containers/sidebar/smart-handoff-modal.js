@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import moment from 'moment';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import safeLocalStorage from '../../util/local-storage';
@@ -13,13 +11,12 @@ import safeLocalStorage from '../../util/local-storage';
  * layer data and granule files that are available for download.
  */
 function SmartHandoffModal({
-  selectedDate, selectedLayer, extentCoords, goToEarthDataSearch,
+  dateSelection, selectedLayer, goToEarthDataSearch, showBoundingBox,
 }) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
   const { title, subtitle, conceptId } = selectedLayer;
   const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${conceptId}.html`;
-  const date = moment.utc(selectedDate).format('YYYY MMM DD');
 
   return (
 
@@ -83,14 +80,14 @@ function SmartHandoffModal({
         <h1> Selected layer to download: </h1>
         <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
           <p className="smart-handoff-layer-name">{`${title}`}</p>
-          <p className="smart-handoff-layer-mata-data">{`${subtitle} (${date})`}</p>
+          <p className="smart-handoff-layer-mata-data">{`${subtitle} (${dateSelection})`}</p>
         </a>
       </div>
 
 
       <div className="smart-handoff-button-group">
         <Button
-          onClick={() => goToEarthDataSearch()} // Need to pass reference of current state of boundaries
+          onClick={() => goToEarthDataSearch(dateSelection, selectedLayer, showBoundingBox)} // Need to pass reference of current state of boundaries
           id="continue-btn"
           text="Continue"
           className="red"
@@ -128,10 +125,10 @@ const hideModal = () => {
  * Handle type-checking of defined properties
  */
 SmartHandoffModal.propTypes = {
-  extentCoords: PropTypes.object,
   goToEarthDataSearch: PropTypes.func,
-  selectedDate: PropTypes.instanceOf(Date),
+  dateSelection: PropTypes.string,
   selectedLayer: PropTypes.object,
+  showBoundingBox: PropTypes.bool,
 };
 
-export default connect()(SmartHandoffModal);
+export default SmartHandoffModal;
