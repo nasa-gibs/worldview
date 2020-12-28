@@ -2,12 +2,26 @@ const _ = require('lodash');
 const fs = require('fs');
 const dir = require('node-dir');
 
-const allLayerPropsMap = {};
 const SOURCE_DIR = './config/default/common/config/wv.json/layers/';
 const WV_JSON_PATH = './build/options/config/wv.json';
 
 const measurementsMap = {};
 const measurementsArray = [];
+
+// This is a set of layer IDs which we do not wish to generate (or re-generate)
+const EXCEPTIONS = [
+  'World_Database_on_Protected_Areas',
+  'Reference_Labels',
+  'Reference_Features',
+  'Land_Water_Map',
+  'Land_Mask',
+  'Coastlines',
+  'MODIS_Terra_L3_Land_Water_Mask',
+  'AMSRE_Sea_Ice_Brightness_Temp_89V',
+  'AMSRE_Sea_Ice_Brightness_Temp_89H',
+  'AMSRU2_Sea_Ice_Brightness_Temp_6km_89V',
+  'AMSRU2_Sea_Ice_Brightness_Temp_6km_89H',
+];
 
 const errCallback = (err) => {
   if (err) {
@@ -50,7 +64,6 @@ function generateMeasurements (layers, measurementsConfig) {
   });
 }
 
-
 function modifyProps (layer) {
   const { id } = layer;
   layer.layergroup = measurementsMap[id];
@@ -75,22 +88,18 @@ function migrate(filePath) {
   if (fileLayerId !== objPropLayerId) {
     console.log('Mismatched ids!', filePath);
   }
-  const layerPropsObj = layerJson.layers[objPropLayerId];
-  if (layerPropsObj) {
-    Object.keys(layerPropsObj).forEach((key) => {
-      allLayerPropsMap[key] = fileLayerId;
-    });
-  } else {
-    console.log('No layer data for:', filePath);
+  const layer = layerJson.layers[objPropLayerId];
+
+  if (EXCEPTIONS.includes(layer.id)) {
+    return;
   }
 
   fs.writeFile(
     `${filePath}`,
-    JSON.stringify({ layers: modifyProps(layerPropsObj) }, null, 2),
+    JSON.stringify({ layers: modifyProps(layer) }, null, 2),
     errCallback,
   );
 }
-
 
 dir.files(SOURCE_DIR, (err, files) => {
   if (err) throw err;
