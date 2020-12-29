@@ -42,8 +42,10 @@ const officialName = brand.officialName || brand.name;
 const longName = brand.longName || brand.name;
 const shortName = brand.shortName || brand.name;
 const email = brand.email || 'support@example.com';
+const url = brand.url || 'https://worldview.earthdata.nasa.gov/';
 
 shell.sed('-i', /@OFFICIAL_NAME@/g, officialName, applyTo);
+shell.sed('-i', /@URL@/g, url, applyTo);
 shell.sed('-i', /@LONG_NAME@/g, longName, applyTo);
 shell.sed('-i', /@NAME@/g, shortName, applyTo);
 shell.sed('-i', /@MAIL@/g, email, applyTo);
