@@ -55,21 +55,26 @@
   min-height: 40px;
   max-height: calc(var(--vh, 1vh) * 100 - 500px);
 }
+
 .smart-handoff-layer-list .layer-item {
   padding: 10px 15px;
-}
-.smart-handoff-layer-list .layer-item label {
-  display: block;
-  margin-top: -20px;
-  margin-left: 25px;
-}
-
-.smart-handoff-layer-list .layer-item span {
-  color: #999;
-  display: block;
-  margin-left: 25px;
-  margin-top: 5px;
-  font-size: 11px;
+  input {
+    cursor: pointer;
+  }
+  label {
+    cursor: pointer;
+    display: block;
+    margin-top: -20px;
+    margin-left: 20px;
+  }
+  span {
+    cursor: pointer;
+    color: #999;
+    display: block;
+    margin-left: 20px;
+    margin-top: 3px;
+    font-size: 11px;
+  }
 }
 
 .smart-handoff-crop-toggle {
@@ -78,8 +83,9 @@
   margin-left: 52px;
 }
 
-label[for='chk-crop-toggle'] {
+label[for='chk-crop-toggle'] span{
   color: #fff;
+  cursor: pointer;
 }
 
 .granule-count {

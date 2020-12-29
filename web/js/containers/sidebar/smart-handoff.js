@@ -240,6 +240,7 @@ class SmartHandoff extends Component {
   renderLayerChoices() {
     const { activeLayers } = this.props;
     const { selectedLayer, currentExtent } = this.state;
+    const selectedId = selectedLayer && selectedLayer.id;
 
     return (
       <div className="smart-handoff-layer-list">
@@ -253,7 +254,7 @@ class SmartHandoff extends Component {
                   type="radio"
                   value={layer.conceptId}
                   name="smart-handoff-layer-radio"
-                  checked={selectedLayer && selectedLayer.id === layer.id}
+                  checked={selectedId === layer.id}
                   onChange={() => this.onLayerChange(layer, currentExtent)}
                 />
                 <label htmlFor={inputId}>{layer.title}</label>
@@ -288,7 +289,7 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-    return (
+    return selectedLayer && (
       <>
         <div className="smart-handoff-crop-toggle">
           <Checkbox
@@ -331,6 +332,7 @@ class SmartHandoff extends Component {
             showCoordinates
           />
         )}
+        <hr />
       </>
     );
   }
@@ -436,7 +438,6 @@ class SmartHandoff extends Component {
           {this.renderLayerChoices()}
           <hr />
           {this.renderCropBox()}
-          <hr />
           {this.renderGranuleCount()}
           <Button
             onClick={() => {
