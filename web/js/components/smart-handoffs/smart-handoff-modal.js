@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../components/util/button';
-import Checkbox from '../../components/util/checkbox';
+import Button from '../util/button';
+import Checkbox from '../util/checkbox';
 import safeLocalStorage from '../../util/local-storage';
+import openEarthDataSearch from './util';
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -11,7 +12,7 @@ import safeLocalStorage from '../../util/local-storage';
  * layer data and granule files that are available for download.
  */
 function SmartHandoffModal({
-  dateSelection, selectedLayer, goToEarthDataSearch, showBoundingBox,
+  proj, dateSelection, selectedLayer, currentExtent, showBoundingBox,
 }) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
@@ -87,7 +88,7 @@ function SmartHandoffModal({
 
       <div className="smart-handoff-button-group">
         <Button
-          onClick={() => goToEarthDataSearch(dateSelection, selectedLayer, showBoundingBox)} // Need to pass reference of current state of boundaries
+          onClick={() => openEarthDataSearch(proj, dateSelection, selectedLayer, currentExtent, showBoundingBox)}
           id="continue-btn"
           text="Continue"
           className="red"
@@ -125,8 +126,9 @@ const hideModal = () => {
  * Handle type-checking of defined properties
  */
 SmartHandoffModal.propTypes = {
-  goToEarthDataSearch: PropTypes.func,
   dateSelection: PropTypes.string,
+  proj: PropTypes.string,
+  currentExtent: PropTypes.object,
   selectedLayer: PropTypes.object,
   showBoundingBox: PropTypes.bool,
 };

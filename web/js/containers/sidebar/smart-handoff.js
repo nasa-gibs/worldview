@@ -4,17 +4,18 @@ import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import moment from 'moment';
-import SmartHandoffModal from './smart-handoff-modal';
+import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
-import GranuleAlertModalBody from './smart-handoff-granule-alert';
+import GranuleAlertModalBody from '../../components/smart-handoffs/smart-handoff-granule-alert';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
 import { getActiveLayers } from '../../modules/layers/selectors';
 import getSelectedDate from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
+import openEarthDataSearch from '../../components/smart-handoffs/util';
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -67,6 +68,7 @@ class SmartHandoff extends Component {
     const {
       dateSelection,
       activeLayers,
+      proj,
     } = this.props;
     const {
       currentExtent,
@@ -78,19 +80,16 @@ class SmartHandoff extends Component {
     const isLayerStillActive = activeLayers.find(({ conceptId }) => selectedConceptId === conceptId);
 
     if (selectedConceptId && !isLayerStillActive) {
-      this.resetState();
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState(this.baseState);
     }
-
-    // Determine if date changed; if so, fire update on granule count
-    const didDateChange = dateSelection !== prevProps.dateSelection;
-    if (didDateChange) this.updateGranuleCount(currentExtent);
-  }
-
-  /**
-   * Resets this component to it's default state
-   */
-  resetState() {
-    this.setState(this.baseState);
+    if (dateSelection !== prevProps.dateSelection) {
+      this.updateGranuleCount(currentExtent);
+    }
+    if (proj.id !== prevProps.proj.id) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ showBoundingBox: false });
+    }
   }
 
   /**
@@ -200,29 +199,30 @@ class SmartHandoff extends Component {
     const startDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T00:00:00.000Z`;
     const endDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
+    const { daynight } = selectedLayer;
 
     let totalGranules = 0;
     let selectedGranules = 0;
 
-    let urlTotalGranules = 'https://cmr.earthdata.nasa.gov/search/granules.json?'
-                + `temporal=${dateRange}&`
-                + `collection_concept_id=${selectedLayer.conceptId}&`
-                + 'include_facets=v2&'
-                + 'page_size=0';
+    const params = {
+      temporal: dateRange,
+      collection_concept_id: selectedLayer.conceptId,
+      include_facets: 'v2',
+      page_size: 0,
+      day_night_flag: daynight || undefined,
+    };
 
-    if (selectedLayer.daynight) urlTotalGranules += `&day_night_flag=${selectedLayer.daynight}`;
-
-    let urlSelectedGranules = urlTotalGranules;
+    let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/granules.json${util.toQueryString(params)}`;
 
     // Gets the total amount of granules that the layer has
-    const totalGranuleResponse = await fetch(urlTotalGranules, { timeout: 5000 });
+    const totalGranuleResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
     const totalResult = await totalGranuleResponse.json();
     totalGranules = lodashGet(totalResult, 'feed.facets.children[0].children[0].children[0].count', 0);
 
     // Gets the total subset of granules that are within the defining bounding box
     if (showBoundingBox) {
-      urlSelectedGranules += `&bounding_box=${currentExtent.southWest},${currentExtent.northEast}`;
-      const selectedGranulesResponse = await fetch(urlSelectedGranules, { timeout: 5000 });
+      granuleRequestUrl += `&bounding_box=${currentExtent.southWest},${currentExtent.northEast}`;
+      const selectedGranulesResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
       const selectedResult = await selectedGranulesResponse.json();
       selectedGranules = lodashGet(selectedResult, 'feed.facets.children[0].children[0].children[0].count', 0);
     }
@@ -361,11 +361,18 @@ class SmartHandoff extends Component {
           {dateSelection}
           :
           {' '}
-          { !isSearchingForGranules && totalGranules === 0 && (<span className="fade-in constant-width">NONE</span>)}
-          { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{totalGranules}</span>)}
-          { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (<span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>)}
-          { isSearchingForGranules && (<span className="loading-granule-count fade-in constant-width" />)}
-
+          { !isSearchingForGranules && totalGranules === 0 && (
+            <span className="fade-in constant-width">NONE</span>
+          )}
+          { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (
+            <span className="fade-in constant-width">{totalGranules}</span>
+          )}
+          { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (
+            <span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>
+          )}
+          { isSearchingForGranules && (
+            <span className="loading-granule-count fade-in constant-width" />
+          )}
           <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>(?)</span>
         </h1>
       </div>
@@ -403,6 +410,7 @@ class SmartHandoff extends Component {
       isActive,
       showWarningModal,
       dateSelection,
+      proj,
     } = this.props;
 
     const {
@@ -416,7 +424,7 @@ class SmartHandoff extends Component {
 
     // Used to determine if the added smart-handoff modal should be shown
     const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
-    const showModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
+    const hideModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
 
     // Determine if the download button is enabled
     const isValidDownload = selectedLayer && selectedLayer.id !== undefined;
@@ -441,8 +449,8 @@ class SmartHandoff extends Component {
           {this.renderGranuleCount()}
           <Button
             onClick={() => {
-              if (!showModal) showWarningModal(dateSelection, selectedLayer, currentExtent, showBoundingBox);
-              else openEarthDataSearch(dateSelection, selectedLayer, currentExtent, showBoundingBox);
+              if (!hideModal) showWarningModal(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
+              else openEarthDataSearch(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
             }}
             text="DOWNLOAD VIA EARTHDATA SEARCH"
             className="download-btn red"
@@ -454,37 +462,6 @@ class SmartHandoff extends Component {
     return this.renderNoLayersToDownload();
   }
 }
-
-/**
- * Method call to direct the user to Earthdata Search with the necessary URL parameters that
- * encapsulate what the user is intending to try and download data / granules from
- * @param {*} selectedLayer
- * @param {*} extentCoords
- * @param {*} showBoundingBox
- */
-const openEarthDataSearch = (dateSelection, selectedLayer, extentCoords, showBoundingBox) => {
-  const {
-    conceptId,
-    daynight,
-  } = selectedLayer;
-
-  const {
-    southWest,
-    northEast,
-  } = extentCoords;
-
-  const startDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T00:00:00.000Z`;
-  const endDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T23:59:59.999Z`;
-
-  const dateRange = `${startDate},${endDate}`;
-
-  let earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules?p=${conceptId}&[qt]=${dateRange}&m=0.0!-180.0!0!1!0!0,2`;
-
-  if (daynight) earthDataSearchURL += `&pg[0][dnf]=${daynight}`;
-  if (showBoundingBox) earthDataSearchURL += `&sb=${southWest},${northEast}`;
-
-  window.open(earthDataSearchURL, '_blank');
-};
 
 /**
  * Handle type-checking of defined properties
@@ -538,15 +515,17 @@ const mapStateToProps = (state) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: (dateSelection, selectedLayer, showBoundingBox) => {
+  showWarningModal: (proj, dateSelection, selectedLayer, currentExtent, showBoundingBox) => {
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
         headerText: 'Leaving Worldview',
         bodyComponent: SmartHandoffModal,
         desktopOnly: true,
         bodyComponentProps: {
+          proj,
           dateSelection,
           selectedLayer,
+          currentExtent,
           showBoundingBox,
           goToEarthDataSearch: openEarthDataSearch,
         },

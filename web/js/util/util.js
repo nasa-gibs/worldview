@@ -99,8 +99,9 @@ export default (function(self) {
     console.log(t, message);
     return t;
   };
+
   /**
-   * Converts an object to a query string. For exaple, the following
+   * Converts an object to a query string. For example, the following
    * object:
    *
    *     { foo: "a", format: "image/png" }
@@ -120,10 +121,10 @@ export default (function(self) {
    *     "format=image/png"
    * @return {String} converted query string
    */
-  self.toQueryString = function(kvps, exceptions) {
-    exceptions = exceptions || {};
+  self.toQueryString = function(kvps, exceptions = {}) {
     const parts = [];
     lodashEach(kvps, (value, key) => {
+      if (!value) return;
       let part = `${key}=${encodeURIComponent(value)}`;
       lodashEach(exceptions, (exception) => {
         const regexp = new RegExp(exception, 'ig');
