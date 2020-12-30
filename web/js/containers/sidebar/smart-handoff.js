@@ -245,24 +245,21 @@ class SmartHandoff extends Component {
     return (
       <div className="smart-handoff-layer-list">
         {activeLayers.map((layer) => {
-          if (layer.conceptId) {
-            const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
-            return (
-              <div className="layer-item" key={inputId}>
-                <input
-                  id={inputId}
-                  type="radio"
-                  value={layer.conceptId}
-                  name="smart-handoff-layer-radio"
-                  checked={selectedId === layer.id}
-                  onChange={() => this.onLayerChange(layer, currentExtent)}
-                />
-                <label htmlFor={inputId}>{layer.title}</label>
-                <span>{layer.subtitle}</span>
-              </div>
-            );
-          }
-          return null;
+          const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
+          return layer.conceptId && (
+            <div className="layer-item" key={inputId}>
+              <input
+                id={inputId}
+                type="radio"
+                value={layer.conceptId}
+                name="smart-handoff-layer-radio"
+                checked={selectedId === layer.id}
+                onChange={() => this.onLayerChange(layer, currentExtent)}
+              />
+              <label htmlFor={inputId}>{layer.title}</label>
+              <span>{layer.subtitle}</span>
+            </div>
+          );
         })}
       </div>
     );
@@ -275,6 +272,7 @@ class SmartHandoff extends Component {
     const {
       screenWidth,
       screenHeight,
+      proj,
     } = this.props;
 
     const {
@@ -289,7 +287,7 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-    return selectedLayer && (
+    return selectedLayer && proj.id === 'geographic' && (
       <>
         <div className="smart-handoff-crop-toggle">
           <Checkbox
@@ -429,37 +427,35 @@ class SmartHandoff extends Component {
     // Determine if the download button is enabled
     const isValidDownload = selectedLayer && selectedLayer.id !== undefined;
     const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
-    const areThereLayersToDownload = availableLayers > 0;
 
-
-    if (areThereLayersToDownload) {
-      return (
-        <div className="smart-handoff-side-panel">
-
-          <h1>Select an available layer to download:</h1>
-          <div className="esd-notification">
-            Downloading data will be performed using
-            <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
-            application.
-          </div>
-          <hr />
-          {this.renderLayerChoices()}
-          <hr />
-          {this.renderCropBox()}
-          {this.renderGranuleCount()}
-          <Button
-            onClick={() => {
-              if (!hideModal) showWarningModal(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
-              else openEarthDataSearch(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
-            }}
-            text="DOWNLOAD VIA EARTHDATA SEARCH"
-            className="download-btn red"
-            valid={!!isValidDownload}
-          />
-        </div>
-      );
+    if (!availableLayers > 0) {
+      return this.renderNoLayersToDownload();
     }
-    return this.renderNoLayersToDownload();
+    return (
+      <div className="smart-handoff-side-panel">
+
+        <h1>Select an available layer to download:</h1>
+        <div className="esd-notification">
+          Downloading data will be performed using
+          <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
+          application.
+        </div>
+        <hr />
+        {this.renderLayerChoices()}
+        <hr />
+        {this.renderCropBox()}
+        {this.renderGranuleCount()}
+        <Button
+          onClick={() => {
+            if (!hideModal) showWarningModal(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
+            else openEarthDataSearch(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
+          }}
+          text="DOWNLOAD VIA EARTHDATA SEARCH"
+          className="download-btn red"
+          valid={!!isValidDownload}
+        />
+      </div>
+    );
   }
 }
 
@@ -489,7 +485,6 @@ const mapStateToProps = (state) => {
     browser,
     map,
     proj,
-    sidebar,
   } = state;
 
   const {
@@ -497,12 +492,9 @@ const mapStateToProps = (state) => {
     screenHeight,
   } = browser;
 
-  const activeLayers = getActiveLayers(state).filter((layer) => layer.projections[proj.id]);
-
   return {
-    activeLayers,
+    activeLayers: getActiveLayers(state).filter((layer) => layer.projections[proj.id]),
     dateSelection: moment.utc(getSelectedDate(state)).format('YYYY MMM DD'),
-    isActive: sidebar.activeTab === 'download',
     map,
     proj: proj.selected,
     screenWidth,

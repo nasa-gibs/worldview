@@ -174,8 +174,8 @@ class Sidebar extends React.Component {
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
-    const naturalEventsFeatureActive = config.features.naturalEvents;
-    const dataDownloadFeatureActive = config.features.dataDownload;
+    const naturalEventsFeatureEnabled = config.features.naturalEvents;
+    const dataDownloadFeatureEnabled = config.features.dataDownload;
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
@@ -224,24 +224,20 @@ class Sidebar extends React.Component {
                     {this.getProductsToRender(activeTab, isCompareMode)}
                   </TabPane>
                   <TabPane tabId="events">
-                    {naturalEventsFeatureActive
-                      ? (
-                        <Events
-                          isActive={activeTab === 'events'}
-                          height={subComponentHeight}
-                        />
-                      )
-                      : null}
+                    {naturalEventsFeatureEnabled && (
+                    <Events
+                      isActive={activeTab === 'events'}
+                      height={subComponentHeight}
+                    />
+                    )}
                   </TabPane>
                   <TabPane tabId="download">
-                    {dataDownloadFeatureActive
-                      ? (
-                        <SmartHandoff
-                          isActive={activeTab === 'download'}
-                          tabTypes={tabTypes}
-                        />
-                      )
-                      : null}
+                    {dataDownloadFeatureEnabled && (
+                      <SmartHandoff
+                        isActive={activeTab === 'download'}
+                        tabTypes={tabTypes}
+                      />
+                    )}
                   </TabPane>
                   <footer
                     // eslint-disable-next-line no-return-assign
