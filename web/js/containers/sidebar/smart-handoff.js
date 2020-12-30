@@ -48,7 +48,7 @@ class SmartHandoff extends Component {
       showBoundingBox: false,
       isSearchingForGranules: false,
       selectedGranules: 0,
-      totalGranules: 0,
+      totalGranules: undefined,
       currentExtent: {},
       coordinates: {},
     };
@@ -84,7 +84,10 @@ class SmartHandoff extends Component {
       this.setState(this.baseState);
     }
     if (dateSelection !== prevProps.dateSelection) {
-      this.updateGranuleCount(currentExtent);
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ totalGranules: undefined }, () => {
+        this.updateGranuleCount(currentExtent);
+      });
     }
     if (proj.id !== prevProps.proj.id) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -175,7 +178,10 @@ class SmartHandoff extends Component {
    * @param {*} currentExtent - the current boundaries of the bounding box
    */
   onLayerChange(layer, currentExtent) {
-    this.setState({ selectedLayer: layer }, () => this.updateGranuleCount(currentExtent));
+    this.setState({
+      selectedLayer: layer,
+      totalGranules: undefined,
+    }, () => this.updateGranuleCount(currentExtent));
   }
 
   /**
@@ -184,11 +190,12 @@ class SmartHandoff extends Component {
    * count vs selected count (that is if the bounding box has been enabled by the user)
    * @param {*} currentExtent
    */
-  async updateGranuleCount(currentExtent) {
+  async updateGranuleCount({ southWest, northEast }) {
     const { dateSelection } = this.props;
     const {
       selectedLayer,
       showBoundingBox,
+      totalGranules,
     } = this.state;
 
     if (!selectedLayer) return;
@@ -200,10 +207,6 @@ class SmartHandoff extends Component {
     const endDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
     const { daynight } = selectedLayer;
-
-    let totalGranules = 0;
-    let selectedGranules = 0;
-
     const params = {
       temporal: dateRange,
       collection_concept_id: selectedLayer.conceptId,
@@ -211,27 +214,26 @@ class SmartHandoff extends Component {
       page_size: 0,
       day_night_flag: daynight || undefined,
     };
+    const newState = { isSearchingForGranules: false };
 
     let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/granules.json${util.toQueryString(params)}`;
 
-    // Gets the total amount of granules that the layer has
-    const totalGranuleResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
-    const totalResult = await totalGranuleResponse.json();
-    totalGranules = lodashGet(totalResult, 'feed.facets.children[0].children[0].children[0].count', 0);
-
-    // Gets the total subset of granules that are within the defining bounding box
-    if (showBoundingBox) {
-      granuleRequestUrl += `&bounding_box=${currentExtent.southWest},${currentExtent.northEast}`;
-      const selectedGranulesResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
-      const selectedResult = await selectedGranulesResponse.json();
-      selectedGranules = lodashGet(selectedResult, 'feed.facets.children[0].children[0].children[0].count', 0);
+    if (!totalGranules) {
+      // Gets the total amount of granules that the layer has
+      const totalGranuleResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
+      const totalResult = await totalGranuleResponse.json();
+      newState.totalGranules = lodashGet(totalResult, 'feed.facets.children[0].children[0].children[0].count', 0);
     }
 
-    this.setState({
-      selectedGranules,
-      totalGranules,
-      isSearchingForGranules: false,
-    });
+    // Gets the total subset of granules that are within the defining bounding box
+    if (showBoundingBox && southWest && northEast) {
+      granuleRequestUrl += `&bounding_box=${southWest},${northEast}`;
+      const selectedGranulesResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
+      const selectedResult = await selectedGranulesResponse.json();
+      newState.selectedGranules = lodashGet(selectedResult, 'feed.facets.children[0].children[0].children[0].count', 0);
+    }
+
+    this.setState(newState);
   }
 
   /**
@@ -279,7 +281,6 @@ class SmartHandoff extends Component {
       boundaries,
       selectedLayer,
       coordinates,
-      currentExtent,
       showBoundingBox,
     } = this.state;
 
@@ -297,9 +298,14 @@ class SmartHandoff extends Component {
             color="gray"
             checked={showBoundingBox}
             onCheck={() => {
-              this.setState({ showBoundingBox: !showBoundingBox }, () => {
-                if (selectedLayer && selectedLayer.id) this.updateGranuleCount(currentExtent);
-              });
+              if (!showBoundingBox) {
+                this.setState({
+                  showBoundingBox: !showBoundingBox,
+                  isSearchingForGranules: true,
+                });
+              } else {
+                this.setState({ showBoundingBox: !showBoundingBox });
+              }
             }}
           />
         </div>
@@ -355,19 +361,19 @@ class SmartHandoff extends Component {
       <div className="granule-count">
         <h1>
           Available granules for
-          {' '}
-          {dateSelection}
-          :
-          {' '}
+          {` ${dateSelection}: `}
+
           { !isSearchingForGranules && totalGranules === 0 && (
             <span className="fade-in constant-width">NONE</span>
           )}
-          { !showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (
-            <span className="fade-in constant-width">{totalGranules}</span>
+
+          { !isSearchingForGranules && totalGranules !== 0 && (
+            <span className="fade-in constant-width">
+              {showBoundingBox && `${selectedGranules} of `}
+              {totalGranules}
+            </span>
           )}
-          { showBoundingBox && !isSearchingForGranules && totalGranules !== 0 && (
-            <span className="fade-in constant-width">{`${selectedGranules} of ${totalGranules}`}</span>
-          )}
+
           { isSearchingForGranules && (
             <span className="loading-granule-count fade-in constant-width" />
           )}
