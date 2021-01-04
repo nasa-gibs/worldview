@@ -214,6 +214,7 @@ class toolbarContainer extends Component {
     const {
       config,
       faSize,
+      isDistractionFreeModeActive,
       isGeosearchExpanded,
       isMobile,
       openModal,
@@ -240,7 +241,7 @@ class toolbarContainer extends Component {
     return (
       <Button
         style={{
-          display: buttonDisplayConditions ? 'inline-block' : 'none',
+          display: !isDistractionFreeModeActive && buttonDisplayConditions ? 'inline-block' : 'none',
         }}
         id={buttonId}
         className="wv-toolbar-button"
