@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { each as lodashEach } from 'lodash';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
 import googleTagManager from 'googleTagManager';
@@ -36,8 +35,6 @@ import keyPress from './modules/key-press/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.min.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css';
 import '../../node_modules/simplebar/dist/simplebar.min.css';
@@ -67,7 +64,6 @@ import '../css/image.css';
 import '../css/projection.css';
 import '../css/tour.css';
 import '../css/products.css';
-import '../css/indicator.css';
 import '../css/events.css';
 import '../css/smart-handoff.css';
 import '../css/sidebar.css';
@@ -147,9 +143,7 @@ class App extends React.Component {
     const main = function() {
       // Load any additional scripts as needed
       if (config.scripts) {
-        lodashEach(config.scripts, (script) => {
-          $.getScript(script);
-        });
+        util.loadScipts(config.scripts);
       }
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager

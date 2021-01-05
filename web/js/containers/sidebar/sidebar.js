@@ -54,14 +54,15 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { subComponentHeight: 700 };
-    const customPalettePromise = loadCustomPalette(props.config);
-    customPalettePromise.done((customs) => {
-      props.loadedCustomPalettes(customs);
-    });
     this.toggleSidebar = this.toggleSidebar.bind(this);
   }
 
   componentDidMount() {
+    const { config, loadedCustomPalettes } = this.props;
+    const customPalettePromise = loadCustomPalette(config);
+    customPalettePromise.then((customs) => {
+      loadedCustomPalettes(customs);
+    });
     this.updateDimensions();
     // prevent browserzooming in safari
     if (util.browser.safari) {

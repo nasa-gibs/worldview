@@ -2,9 +2,7 @@ import {
   isObject as lodashIsObject,
   each as lodashEach,
 } from 'lodash';
-import Cache from 'cachai';
 import moment from 'moment';
-import wvui from '../ui/ui';
 import browser from './browser';
 import events from './events';
 import load from './load';
@@ -694,22 +692,6 @@ export default (function(self) {
   };
 
   /**
-   * General error handler.
-   *
-   * This function delegates to
-   * {{#crossLink "wv.ui/error:method"}}wv.ui.error{{/crossLink}}.
-   * For custom error handling, replace this function.
-   *
-   * @method error
-   * @static
-   * @param {string} message Message to display to the end user.
-   * @param {Exception} cause The exception object that caused the error
-   */
-  self.error = function(message, cause) {
-    wvui.error(message, cause);
-  };
-
-  /**
    * General warning handler.
    *
    * Prints the messages to the console.
@@ -755,64 +737,18 @@ export default (function(self) {
     // eslint-disable-next-line no-restricted-properties
     return Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2));
   };
+
   self.fetch = function(url, mimeType) {
-    return new Promise((resolve, reject) => fetch(url)
-      .then((response) => (mimeType === 'application/json'
-        ? response.json()
-        : response.text()))
-      .then((data) => {
-        resolve(data);
-      })
-      .catch((error) => {
-        reject(error);
-      }));
+    return new Promise(
+      (resolve, reject) => fetch(url)
+        .then((response) => (mimeType === 'application/json'
+          ? response.json()
+          : response.text()))
+        .then(resolve)
+        .catch(reject),
+    );
   };
 
-  /**
-   * Submits an AJAX request or retreives the result from the cache.
-   *
-   * @class wv.util.ajaxCache
-   * @constructor
-   * @param {Number} [spec.size] maximum number of items to store in the
-   * cache.
-   * @param {Object} [spec.options] options to pass to jscache on setItem.
-   *
-   */
-  self.ajaxCache = function(spec) {
-    spec = spec || {};
-    const size = spec.size || null;
-    const options = spec.options || {};
-    const cache = new Cache(size);
-
-    return {
-      /**
-       * Submits an AJAX request using jQuery.ajax or retrieves the
-       * results from cache.
-       *
-       * @method submit
-       * @param {Object} parameters Parameters to pass to the jQuery.ajax
-       * call.
-       * @return {jQuery.Deferred} a deferred object that will resolve
-       * when the query returns, or resolves immediately if the results
-       * are cached.
-       */
-      submit(parameters) {
-        const key = `url=${parameters.url}`;
-        const results = cache.getItem(key);
-
-        if (results) {
-          return $.Deferred()
-            .resolve(results)
-            .promise();
-        }
-        const promise = $.ajax(parameters);
-        promise.done((results) => {
-          cache.setItem(key, results, options);
-        });
-        return promise;
-      },
-    };
-  };
   self.errorReport = function(errors) {
     // eslint-disable-next-line no-unused-vars
     let layersRemoved = 0;
@@ -824,9 +760,9 @@ export default (function(self) {
       }
     });
   };
+
   /**
-   * Wraps a function in a try/catch block that invokes wv.util.error
-   * if an exception is thrown.
+   * Wraps a function in a try/catch block that logs error if thrown
    *
    * @param {function} func the function to wrap
    * @return the function wrapped in a try/catch block.
@@ -836,7 +772,7 @@ export default (function(self) {
       try {
         return func.apply(func, args);
       } catch (error) {
-        self.error(error);
+        console.error(error);
       }
     };
   };
@@ -875,28 +811,6 @@ export default (function(self) {
       // Make the request
       req.send();
     });
-  };
-
-  // FIXME: Should be replaced with $.when
-  self.ajaxJoin = function(calls) {
-    let completed = 0;
-    const result = {};
-    const deferred = $.Deferred();
-
-    $.each(calls, (index, call) => {
-      call.promise.done((data) => {
-        result[call.item] = data;
-        completed += 1;
-        if (completed === calls.length) {
-          deferred.resolve(result);
-        }
-      })
-        .fail((jqXHR, textStatus, errorThrown) => {
-          deferred.reject(jqXHR, textStatus, errorThrown);
-        });
-    });
-
-    return deferred.promise();
   };
 
   // Converts a string to a form that can be safely used as an identifier.
@@ -1126,6 +1040,28 @@ export default (function(self) {
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
+  };
+
+  /**
+   * Load additional scripts sequentially
+   * @param {*} scripts
+   * @param {*} fn
+   */
+  self.loadScipts = (scripts = [], fn) => {
+    const head = document.head || document.getElementsByTagName('head')[0];
+    const loadFile = (index) => {
+      if (scripts.length > index) {
+        const fileref = document.createElement('script');
+        fileref.setAttribute('type', 'text/javascript');
+        fileref.setAttribute('src', scripts[index]);
+        head.appendChild(fileref);
+        // Load next script
+        fileref.onload = () => { loadFile(index + 1); };
+      } else if (fn) {
+        fn();
+      }
+    };
+    loadFile(0);
   };
 
   return self;

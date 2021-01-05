@@ -59,47 +59,50 @@ export default function naturalEventsRequest(models, ui, config) {
     }
   };
 
-  const queryEvents = function() {
-    return new Promise((resolve) => {
-      let url = `${self.apiURL}/events`;
-      if (config.parameters.mockEvents) {
-        console.warn(`Using mock events data: ${config.parameters.mockEvents}`);
-        url = `mock/events_data.json-${config.parameters.mockEvents}`;
-      }
-      $.getJSON(url, (data) => {
-        resolve(data);
-      });
-    });
+  const queryEvents = async () => {
+    let url = `${self.apiURL}/events`;
+    if (config.parameters.mockEvents) {
+      console.warn(`Using mock events data: ${config.parameters.mockEvents}`);
+      url = `mock/events_data.json-${config.parameters.mockEvents}`;
+    }
+    const response = await fetch(url);
+    const json = await response.json();
+    if (!response.ok) {
+      throw Error('Request for events failed.');
+    }
+    return json;
   };
 
-  const queryTypes = function() {
-    return new Promise((resolve) => {
-      let url = `${self.apiURL}/categories`;
-      if (config.parameters.mockCategories) {
-        console.warn(
-          `Using mock categories data: ${config.parameters.mockEvents}`,
-        );
-        url = `mock/categories_data.json-${config.parameters.mockCategories}`;
-      }
-      $.getJSON(url, (data) => {
-        resolve(data);
-      });
-    });
+  const queryTypes = async () => {
+    let url = `${self.apiURL}/categories`;
+    if (config.parameters.mockCategories) {
+      console.warn(
+        `Using mock categories data: ${config.parameters.mockEvents}`,
+      );
+      url = `mock/categories_data.json-${config.parameters.mockCategories}`;
+    }
+    const response = await fetch(url);
+    const json = await response.json();
+    if (!response.ok) {
+      throw Error('Request for event types failed.');
+    }
+    return json;
   };
 
-  const querySources = function() {
-    return new Promise((resolve) => {
-      let url = `${self.apiURL}/sources`;
-      if (config.parameters.mockSources) {
-        console.warn(
-          `Using mock sources data: ${config.parameters.mockEvents}`,
-        );
-        url = `mock/sources_data.json-${config.parameters.mockSources}`;
-      }
-      $.getJSON(url, (data) => {
-        resolve(data);
-      });
-    });
+  const querySources = async () => {
+    let url = `${self.apiURL}/sources`;
+    if (config.parameters.mockSources) {
+      console.warn(
+        `Using mock sources data: ${config.parameters.mockEvents}`,
+      );
+      url = `mock/sources_data.json-${config.parameters.mockSources}`;
+    }
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw Error('Request for event sources failed.');
+    }
+    const json = await response.json();
+    return json;
   };
 
   self.query = function() {

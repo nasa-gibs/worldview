@@ -38,14 +38,15 @@ export default function combineUi(models, config, store) {
     ui.naturalEvents = naturalEventsUI(ui, config, store, models);
   }
   registerMapMouseHandlers(ui.map.proj);
+
   // Sink all focus on inputs if click unhandled
-  $(document).click((event) => {
-    if (event.target.nodeName !== 'INPUT') {
-      $('input').blur();
+  document.addEventListener('click', (e) => {
+    if (e.target.nodeName !== 'INPUT') {
+      document.querySelectorAll('input').forEach((el) => el.blur());
     }
   });
   document.activeElement.blur();
-  $('input').blur();
+  document.querySelectorAll('input').forEach((el) => el.blur());
 
   return ui;
 }
