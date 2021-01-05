@@ -69,7 +69,7 @@ import '../css/tour.css';
 import '../css/products.css';
 import '../css/indicator.css';
 import '../css/events.css';
-import '../css/dataDownload.css';
+import '../css/smart-handoff.css';
 import '../css/sidebar.css';
 import '../css/layer-categories.css';
 import '../css/layers.css';

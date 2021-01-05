@@ -7,16 +7,10 @@ import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
-import {
-  getSelectionCounts,
-  getDataSelectionSize,
-} from '../../modules/data/selectors';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { toggleListAll } from '../../modules/natural-events/actions';
-import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
-import { getActiveLayers } from '../../modules/layers/selectors';
 
 class FooterContent extends React.Component {
   constructor(props) {
@@ -47,12 +41,9 @@ class FooterContent extends React.Component {
       compareMode,
       isMobile,
       activeTab,
-      onGetData,
       changeCompareMode,
       addLayers,
       toggleCompare,
-      counts,
-      dataSelectionSize,
       compareFeature,
       showAll,
     } = this.props;
@@ -113,37 +104,8 @@ class FooterContent extends React.Component {
         </div>
       );
     }
-    const countArray = Object.values(counts);
-    const noDataSelected = countArray.length === 0
-      ? true
-      : countArray.reduce((a, b) => a + b, 0) === 0;
     return (
-      <div className="data-download-footer-case">
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onGetData();
-            googleTagManager.pushEvent({
-              event: 'data_download_button',
-            });
-          }}
-          className={
-              noDataSelected
-                ? 'wv-data-download-button black no-pointer-events'
-                : 'wv-data-download-button red'
-            }
-          id="compare-toggle-button"
-          text={
-              dataSelectionSize
-                ? `Download Data (${
-                  Math.round(dataSelectionSize * 100) / 100
-                } MB)`
-                : noDataSelected
-                  ? 'No Data Selected'
-                  : 'Download Selected Data'
-            }
-        />
-      </div>
+      <div className="data-download-footer-case" />
     );
   }
 }
@@ -153,9 +115,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   changeCompareMode: (str) => {
     dispatch(changeMode(str));
-  },
-  onGetData: () => {
-    dispatch({ type: DATA_GET_DATA_CLICK });
   },
   toggleListAll: () => {
     dispatch(toggleListAll());
@@ -175,20 +134,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    requestedEvents, config, data, compare, browser,
+    requestedEvents, config, compare, browser,
   } = state;
   const { showAll } = state.events;
-  const { selectedGranules } = data;
   const events = lodashGet(requestedEvents, 'response');
-  const counts = getSelectionCounts(getActiveLayers(state), selectedGranules);
-  const dataSelectionSize = getDataSelectionSize(selectedGranules);
 
   return {
     showAll,
     events,
-    counts,
     isMobile: browser.lessThan.medium,
-    dataSelectionSize,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
     compareMode: compare.mode,
@@ -206,11 +160,8 @@ FooterContent.propTypes = {
   changeCompareMode: PropTypes.func,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
-  counts: PropTypes.object,
-  dataSelectionSize: PropTypes.number,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  onGetData: PropTypes.func,
   showAll: PropTypes.bool,
   toggleCompare: PropTypes.func,
   toggleListAll: PropTypes.func,

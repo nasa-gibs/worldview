@@ -340,7 +340,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, browser, notifications, palettes, compare, map, measure, modal, data, ui, geosearch,
+    animation, browser, notifications, palettes, compare, map, measure, modal, ui, geosearch,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -349,7 +349,6 @@ const mapStateToProps = (state) => {
   const isMobile = browser.lessThan.medium;
   const faSize = isMobile ? '2x' : '1x';
   const isCompareActive = compare.active;
-  const isDataDownloadActive = data.active;
   const isGeosearchExpanded = geosearch.isExpanded;
   const activePalettes = palettes[activeString];
 
@@ -364,10 +363,10 @@ const mapStateToProps = (state) => {
     config: state.config,
     rotation: map.rotation,
     activePalettes,
+    // TODO should this be disabled if on the smart-handoffs tab?
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
-      && !isCompareActive
-      && !isDataDownloadActive,
+      && !isCompareActive,
     ),
     isCompareActive,
     isGeosearchExpanded,

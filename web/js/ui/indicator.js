@@ -101,7 +101,7 @@ export default (function() {
     if (hides) {
       self.hide(hides);
     }
-    return self.show('No Data Available', 'images/red-x.svg');
+    // return self.show('No Data Available', 'images/red-x.svg');
   };
 
   self.delayed = function(promise, delay) {

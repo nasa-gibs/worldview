@@ -36,7 +36,6 @@ import {
   vectorStyleReducer,
   getInitialVectorStyleState,
 } from './vector-styles/reducers';
-import dataDownloadReducer from './data/reducers';
 import { imageDownloadReducer } from './image-download/reducers';
 import measureReducer from './measure/reducers';
 import {
@@ -116,7 +115,6 @@ const reducers = {
   compare: compareReducer,
   layers: layerReducer,
   events: eventsReducer,
-  data: dataDownloadReducer,
   palettes: paletteReducer,
   vectorStyles: vectorStyleReducer,
   tour: tourReducer,

@@ -62,7 +62,7 @@ module.exports = {
     // Clicking does not switch tabs
     c.click(dataDownloadTabButton);
     c.pause(100);
-    c.expect.element('#wv-datacontent').to.not.be.visible;
+    c.expect.element('#smart-handoff-side-panel').to.not.be.present;
   },
 
   'Events disabled when compare mode active': (c) => {

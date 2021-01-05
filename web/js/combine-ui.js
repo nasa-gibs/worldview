@@ -1,7 +1,6 @@
 import util from './util/util';
 import mapui from './map/ui';
 import mapAnimate from './map/animate';
-import dataUi from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
 
 const { events } = util;
@@ -34,9 +33,6 @@ export default function combineUi(models, config, store) {
     window.removeEventListener('testPassive', null, opts);
   } catch (e) {
     util.warn(e);
-  }
-  if (config.features.dataDownload) {
-    ui.data = dataUi(store, ui, config);
   }
   if (config.features.naturalEvents) {
     ui.naturalEvents = naturalEventsUI(ui, config, store, models);
