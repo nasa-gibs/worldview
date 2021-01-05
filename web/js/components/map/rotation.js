@@ -51,10 +51,11 @@ class Rotation extends React.Component {
   }
 
   render() {
-    const { rotation, proj } = this.props;
+    const { rotation, proj, isDistractionFreeModeActive } = this.props;
     const currentRotation = Number(rotation * (180 / Math.PI)).toFixed();
+    const isPolarProj = proj.id !== 'geographic' && proj.id !== 'webmerc';
 
-    return proj.id !== 'geographic' && proj.id !== 'webmerc' && (
+    return !isDistractionFreeModeActive && isPolarProj && (
       <>
         <button
           type="button"
@@ -97,11 +98,12 @@ class Rotation extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { map, proj } = state;
+  const { map, proj, ui } = state;
   return {
     map,
     proj,
     rotation: map.rotation,
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
   };
 };
 
@@ -117,6 +119,7 @@ const mapDispatchToProps = (dispatch) => ({
 Rotation.propTypes = {
   map: PropTypes.object,
   rotation: PropTypes.number,
+  isDistractionFreeModeActive: PropTypes.bool,
   proj: PropTypes.object,
   updateRotationState: PropTypes.func,
 };
