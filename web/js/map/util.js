@@ -113,3 +113,21 @@ export function mergeBreakpointLayerAttributes(def, projId) {
     return { ...def, breakPointLayer: updatedBreakPointLayer };
   } return def;
 }
+
+/**
+   *
+   * @param {*} currentDeg
+   * @param {*} currentView
+   */
+export function saveRotation(currentDeg, currentView) {
+  if (Math.abs(currentDeg) === 360) {
+    currentView.setRotation(0);
+  } else if (Math.abs(currentDeg) >= 360) {
+    const newNadVal = (360 - Math.abs(currentDeg)) * (Math.PI / 180);
+    if (currentDeg < 0) {
+      currentView.setRotation(newNadVal);
+    } else {
+      currentView.setRotation(-newNadVal);
+    }
+  }
+}

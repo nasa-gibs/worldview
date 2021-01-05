@@ -51,8 +51,14 @@ const compose = DEBUG === false || DEBUG === 'logger'
     stateSanitizer: (state) => {
       const sanitizedState = {
         ...state,
+        map: {
+          ...state.map,
+          ui: {
+            ...state.map.ui,
+          },
+        },
       };
-      delete sanitizedState.map;
+      delete sanitizedState.map.ui;
       return sanitizedState;
     },
   });
