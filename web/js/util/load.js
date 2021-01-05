@@ -23,6 +23,7 @@ export default (function() {
         .then((response) => response.json())
         .then((result) => {
           root[attr] = result;
+          return result;
         })
         .finally(() => {
           delete configPromises[url];

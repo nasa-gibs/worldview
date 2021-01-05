@@ -20,14 +20,17 @@ const TIME_LIMIT = 5000;
 module.exports = {
   before: (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
+    c.url(`${c.globals.url}?p=arctic`);
     // ensure geosearch is minimized
     c.click(geosearchMinimizeButton);
   },
 
   // verify distraction free mode shortcut hides ui elements
   'Enabling distraction free mode with shortcut key hides UI elements': (c) => {
-    c.pause(300);
-    c.sendKeys('body', [c.Keys.SHIFT, 'd', c.Keys.NULL]);
+    c.waitForElementVisible('#wv-info-button');
+    c.click('#wv-info-button');
+    c.waitForElementVisible('#distraction_free_info_item');
+    c.click('#distraction_free_info_item');
     c.pause(300);
 
     c.waitForElementNotVisible(timelineContainer, TIME_LIMIT);
@@ -37,17 +40,19 @@ module.exports = {
     c.waitForElementNotPresent(projToolbarButton, TIME_LIMIT);
     c.waitForElementNotPresent(snapshotToolbarButton, TIME_LIMIT);
     c.waitForElementNotVisible(measureBtn, TIME_LIMIT);
-    c.waitForElementNotVisible(zoomInButton, TIME_LIMIT);
-    c.waitForElementNotVisible(zoomOutButton, TIME_LIMIT);
+    c.waitForElementNotPresent(zoomInButton, TIME_LIMIT);
+    c.waitForElementNotPresent(zoomOutButton, TIME_LIMIT);
     c.waitForElementNotVisible(mapScaleMetric, TIME_LIMIT);
     c.waitForElementNotVisible(mapScaleImperial, TIME_LIMIT);
+    c.waitForElementNotPresent('.wv-map-rotate-left', TIME_LIMIT);
+    c.waitForElementNotPresent('.wv-map-reset-rotation', TIME_LIMIT);
+    c.waitForElementNotPresent('.wv-map-rotate-right', TIME_LIMIT);
   },
 
   // verify turning off distraction free mode shortcut returns hidden ui elements
   'Disabling distraction free mode with shortcut key returns UI elements': (c) => {
-    c.pause(300);
     c.sendKeys('body', [c.Keys.SHIFT, 'd', c.Keys.NULL]);
-    c.pause(300);
+    c.pause(500);
 
     c.waitForElementVisible(timelineContainer, TIME_LIMIT);
     c.waitForElementVisible(sidebarContainer, TIME_LIMIT);
@@ -60,6 +65,9 @@ module.exports = {
     c.waitForElementPresent(zoomOutButton, TIME_LIMIT);
     c.waitForElementPresent(mapScaleMetric, TIME_LIMIT);
     c.waitForElementPresent(mapScaleImperial, TIME_LIMIT);
+    c.waitForElementPresent('.wv-map-rotate-left', TIME_LIMIT);
+    c.waitForElementPresent('.wv-map-reset-rotation', TIME_LIMIT);
+    c.waitForElementPresent('.wv-map-rotate-right', TIME_LIMIT);
   },
 
   after: (c) => {
