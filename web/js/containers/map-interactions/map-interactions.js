@@ -5,6 +5,8 @@ import OlCoordinates from '../../components/map/ol-coordinates';
 import OlVectorInteractions from './ol-vector-interactions';
 import OlMeasureTool from '../../components/map/ol-measure-tool';
 import OlCoordinatesMarker from '../../components/geosearch/ol-coordinates-marker';
+import OlRotationButtons from '../../components/map/rotation';
+import OlZoomButtons from '../../components/map/zoom';
 
 class MapInteractions extends PureComponent {
   getMapClasses = () => {
@@ -23,6 +25,8 @@ class MapInteractions extends PureComponent {
     const mapClasses = this.getMapClasses();
     return (
       <>
+        <OlZoomButtons />
+        <OlRotationButtons />
         <div id="wv-map" className={mapClasses} />
         {!isDistractionFreeModeActive && (
           <OlCoordinates />

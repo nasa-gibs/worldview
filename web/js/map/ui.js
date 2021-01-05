@@ -1,4 +1,5 @@
 /* eslint-disable no-multi-assign */
+import ReactDOM from 'react-dom';
 import {
   throttle as lodashThrottle,
   forOwn as lodashForOwn,
@@ -9,7 +10,6 @@ import {
   cloneDeep as lodashCloneDeep,
   find as lodashFind,
 } from 'lodash';
-import ReactDOM from 'react-dom';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlKinetic from 'ol/Kinetic';
@@ -26,12 +26,11 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
-import MapRotate from './rotation';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
 import mapPrecacheTile from './precachetile';
-import { mapUtilZoomAction, getActiveLayerGroup } from './util';
+import { getActiveLayerGroup, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
@@ -58,26 +57,22 @@ import {
 import getSelectedDate from '../modules/date/selectors';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
-  CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE,
+  RENDERED, UPDATE_MAP_UI, UPDATE_MAP_EXTENT, UPDATE_MAP_ROTATION, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE, CLEAR_ROTATE,
 } from '../modules/map/constants';
 import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
-import { faIconPlusSVGDomEl, faIconMinusSVGDomEl } from './fa-map-icons';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/geosearch/util';
 import { reverseGeocode } from '../modules/geosearch/util-api';
 import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/geosearch/ol-coordinates-marker-util';
 
+
 const { events } = util;
 
-
 export default function mapui(models, config, store, ui) {
-  const id = 'wv-map';
-  const selector = `#${id}`;
   const animationDuration = 250;
   const self = {};
   let cache;
-  const rotation = new MapRotate(self, models, store);
   const dateline = mapDateLineBuilder(models, config, store, ui);
   const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(config, store);
@@ -129,10 +124,20 @@ export default function mapui(models, config, store, ui) {
         }
         return;
       }
-      case CLEAR_ROTATE:
-        return rotation.reset(self.selected);
-      case REFRESH_ROTATE:
-        return rotation.setRotation(action.rotation, 500, self.selected);
+      case CLEAR_ROTATE: {
+        self.selected.getView().animate({
+          duration: 500,
+          rotation: 0,
+        });
+        return;
+      }
+      case REFRESH_ROTATE: {
+        self.selected.getView().animate({
+          rotation: action.rotation,
+          duration: 500,
+        });
+        return;
+      }
       case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(action, 'payload.query.map.extent');
@@ -202,6 +207,7 @@ export default function mapui(models, config, store, ui) {
       reloadLayers();
     }
   };
+
   /*
    * Sets up map listeners
    *
@@ -430,22 +436,18 @@ export default function mapui(models, config, store, ui) {
     const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
 
-    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: start ? rotationStart : currentRotation });
+    store.dispatch({
+      type: UPDATE_MAP_UI,
+      ui: self,
+      rotation: start ? rotationStart : currentRotation,
+    });
     reloadLayers();
-
-    // Update the rotation buttons if polar projection to display correct value
-    if (isProjectionRotatable) {
-      rotation.setResetButton(currentRotation);
-    }
 
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
     // using the previous value.
     showMap(map);
     map.updateSize();
-    if (isProjectionRotatable) {
-      rotation.setResetButton(currentRotation);
-    }
 
     if (self.selected.previousCenter) {
       self.selected.setCenter(self.selected.previousCenter);
@@ -470,7 +472,6 @@ export default function mapui(models, config, store, ui) {
         callback = () => {
           const map = self.selected;
           const view = map.getView();
-          rotation.setResetButton(rotationStart);
           view.setRotation(rotationStart);
         };
       }
@@ -487,6 +488,7 @@ export default function mapui(models, config, store, ui) {
     onResize();
     handleActiveMapMarker(start);
   }
+
   /*
    * When page is resised set for mobile or desktop
    *
@@ -504,11 +506,9 @@ export default function mapui(models, config, store, ui) {
     if (isMobile) {
       map.removeControl(map.wv.scaleImperial);
       map.removeControl(map.wv.scaleMetric);
-      $(`#${map.getTarget()} .select-wrapper`).hide();
     } else {
       map.addControl(map.wv.scaleImperial);
       map.addControl(map.wv.scaleMetric);
-      $(`#${map.getTarget()} .select-wrapper`).show();
     }
   }
   /*
@@ -522,7 +522,7 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function hideMap(map) {
-    $(`#${map.getTarget()}`).hide();
+    document.getElementById(`${map.getTarget()}`).style.display = 'none';
   }
   /*
    * Show Map
@@ -535,7 +535,7 @@ export default function mapui(models, config, store, ui) {
    * @returns {void}
    */
   function showMap(map) {
-    $(`#${map.getTarget()}`).show();
+    document.getElementById(`${map.getTarget()}`).style.display = 'block';
   }
   /*
    * Remove Layers from map
@@ -895,38 +895,21 @@ export default function mapui(models, config, store, ui) {
     return index;
   }
 
-  const triggerExtent = lodashThrottle(
-    () => events.trigger('map:extent'),
-    500,
-    { trailing: true },
-  );
+  const updateExtent = () => {
+    const view = self.selected.getView();
+    const extent = view.calculateExtent(self.selected.getSize());
+    store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
+    lodashThrottle(
+      () => events.trigger('map:extent'),
+      500,
+      { trailing: true },
+    )();
+  };
 
   /*
-   * Updates the extents of OpenLayers map
-   *
-   *
-   * @method updateExtent
-   * @static
-   *
-   * @returns {void}
-   */
-  function updateExtent() {
-    const map = self.selected;
-    const view = map.getView();
-    const extent = view.calculateExtent(map.getSize());
-    store.dispatch({ type: 'MAP/UPDATE_MAP_EXTENT', extent });
-    triggerExtent();
-  }
-
-  /*
-   * Updates the extents of OpenLayers map
-   *
-   *
-   * @method updateExtent
-   * @static
+   * Create a map for a given projection
    *
    * @param {object} proj - Projection properties
-   *
    *
    * @returns {object} OpenLayers Map Object
    */
@@ -934,12 +917,13 @@ export default function mapui(models, config, store, ui) {
     const state = store.getState();
     dateSelected = dateSelected || getSelectedDate(state);
     const id = `wv-map-${proj.id}`;
-    const $map = $('<div></div>')
-      .attr('id', id)
-      .attr('data-proj', proj.id)
-      .addClass('wv-map')
-      .hide();
-    $(selector).append($map);
+    const mapEl = document.createElement('div');
+    mapEl.setAttribute('id', id);
+    mapEl.setAttribute('data-proj', proj.id);
+    mapEl.classList.add('wv-map');
+    mapEl.style.display = 'none';
+
+    document.getElementById('wv-map').insertAdjacentElement('afterbegin', mapEl);
 
     // Create two specific controls
     const scaleMetric = new OlControlScaleLine({
@@ -994,28 +978,41 @@ export default function mapui(models, config, store, ui) {
       scaleImperial,
     };
     map.proj = proj.id;
-    createZoomButtons(map, proj);
     createMousePosSel(map, proj);
+    map.getView().on('change:resolution', () => {
+      events.trigger('map:movestart');
+    });
 
     // This component is inside the map viewport container. Allowing
     // mouse move events to bubble up displays map coordinates--let those
     // be blank when over a component.
-    $('.wv-map-scale-metric').mousemove((e) => e.stopPropagation());
-    $('.wv-map-scale-imperial').mousemove((e) => e.stopPropagation());
+    document.querySelector('.wv-map-scale-metric').addEventListener('mousemove', (e) => e.stopPropagation());
+    document.querySelector('.wv-map-scale-imperial').addEventListener('mousemove', (e) => e.stopPropagation());
 
-    // allow rotation by dragging for polar projections
+    // Allow rotation by dragging for polar projections
     if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
-      rotation.init(map, proj.id);
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
     } else if (proj.id === 'geographic') {
       dateline.init(self, map, dateSelected);
     }
 
+    const onRotate = () => {
+      const radians = map.getView().getRotation();
+      store.dispatch({
+        type: UPDATE_MAP_ROTATION,
+        rotation: radians,
+      });
+      const currentDeg = radians * (180.0 / Math.PI);
+      saveRotation(currentDeg, map.getView());
+      updateExtent();
+    };
+
     // Set event listeners for changes on the map view (when rotated, zoomed, panned)
     map.getView().on('change:center', lodashDebounce(updateExtent, 300));
     map.getView().on('change:resolution', lodashDebounce(updateExtent, 300));
     map.getView().on('change:rotation', lodashThrottle(onRotate, 300));
+
     map.on('pointerdrag', () => {
       self.mapIsbeingDragged = true;
       events.trigger('map:drag');
@@ -1039,7 +1036,11 @@ export default function mapui(models, config, store, ui) {
     });
     const onRenderComplete = () => {
       store.dispatch({ type: RENDERED });
-      store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: self.selected.getView().getRotation() });
+      store.dispatch({
+        type: UPDATE_MAP_UI,
+        ui: self,
+        rotation: self.selected.getView().getRotation(),
+      });
       map.un('rendercomplete', onRenderComplete);
     };
     map.on('rendercomplete', onRenderComplete);
@@ -1049,101 +1050,7 @@ export default function mapui(models, config, store, ui) {
 
     return map;
   }
-  /*
-   * Creates map zoom buttons
-   *
-   *
-   * @method createZoomButtons
-   * @static
-   *
-   * @param {object} map - OpenLayers Map Object
-   *
-   * @param {object} proj - Projection properties
-   *
-   *
-   * @returns {void}
-   */
-  function createZoomButtons(map, proj) {
-    const $map = $(`#${map.getTarget()}`);
 
-    const $zoomOut = $('<div></div>')
-      .addClass('wv-map-zoom-out')
-      .addClass('wv-map-zoom')
-      .attr(
-        'title',
-        'Zoom out map view',
-      );
-    const $outIcon = $(faIconMinusSVGDomEl);
-    $zoomOut.append($outIcon);
-    $map.append($zoomOut);
-    $zoomOut.button({
-      text: false,
-    });
-    $zoomOut.click(() => {
-      mapUtilZoomAction(map, -1);
-    });
-    $zoomOut.mousemove((e) => e.stopPropagation());
-
-    const $zoomIn = $('<div></div>')
-      .addClass('wv-map-zoom-in')
-      .addClass('wv-map-zoom')
-      .attr(
-        'title',
-        'Zoom in map view',
-      );
-    const $inIcon = $(faIconPlusSVGDomEl);
-    $zoomIn.append($inIcon);
-    $map.append($zoomIn);
-    $zoomIn.button({
-      text: false,
-    });
-    $zoomIn.click(() => {
-      mapUtilZoomAction(map, 1);
-    });
-    $zoomIn.mousemove((e) => e.stopPropagation());
-
-    /*
-     * Sets zoom buttons as active or inactive based
-     * on the zoom level
-     *
-     * @funct onZoomChange
-     * @static
-     *
-     * @returns {void}
-     *
-     */
-    const onZoomChange = function() {
-      const { numZoomLevels } = proj;
-      const zoom = map.getView().getZoom();
-      if (zoom === 0) {
-        $zoomIn.button('enable');
-        $zoomOut.button('disable');
-      } else if (zoom === numZoomLevels) {
-        $zoomIn.button('disable');
-        $zoomOut.button('enable');
-      } else {
-        $zoomIn.button('enable');
-        $zoomOut.button('enable');
-      }
-    };
-    map.getView().on('change:resolution', () => {
-      onZoomChange();
-      events.trigger('map:movestart');
-    });
-    onZoomChange();
-  }
-  /*
-   * @method onRotate
-   * @static
-   *
-   * @param {Object} val "change:rotation" Object
-   *
-   * @returns {void}
-   */
-  function onRotate(val) {
-    rotation.updateRotation(val);
-    updateExtent();
-  }
   /*
    * Creates map events based on mouse position
    *
