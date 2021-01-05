@@ -184,9 +184,6 @@
     "geographiclib": "^1.50.0",
     "history": "^4.7.2",
     "immutability-helper": "^3.0.1",
-    "jquery": "^3.5.0",
-    "jquery-ui-bundle": "1.12.1-migrate",
-    "jquery-ui-touch-punch": "0.2.3",
     "lodash": "^4.17.19",
     "moment": "^2.19.3",
     "moment-locales-webpack-plugin": "^1.1.2",
@@ -229,9 +226,6 @@
     "web-streams-polyfill": "^2.0.6",
     "what-input": "^5.2.7",
     "whatwg-fetch": "^3.0.0"
-  },
-  "browser": {
-    "jquery": "./node_modules/jquery/dist/jquery.js"
   },
   "browserslist": [
     "last 4 versions",

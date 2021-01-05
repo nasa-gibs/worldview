@@ -17,13 +17,14 @@ const INITIAL_STATE = {
   rendered: false,
   leadingExtent: [],
   isClickable: false,
-
 };
 
 export default function mapReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case UPDATE_MAP_EXTENT:
-      return update(state, { extent: { $set: action.extent } });
+      return update(state, {
+        extent: { $set: action.extent },
+      });
     case UPDATE_MAP_UI:
       return lodashAssign({}, state, {
         ui: action.ui,
@@ -31,7 +32,9 @@ export default function mapReducer(state = INITIAL_STATE, action) {
       });
     case UPDATE_MAP_ROTATION:
     case REFRESH_ROTATE:
-      return update(state, { rotation: { $set: action.rotation } });
+      return update(state, {
+        rotation: { $set: action.rotation },
+      });
     case RENDERED:
       return lodashAssign({}, state, {
         rendered: true,

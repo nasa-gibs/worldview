@@ -1,8 +1,9 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
-
-import { faIconArrowsAltHSVGDomEl } from '../fa-map-icons';
 
 const { events } = util;
 
@@ -27,7 +28,7 @@ export default class Swipe {
     this.map = olMap;
     percentSwipe = valueOverride / 100;
     this.create();
-    $(window).resize(() => {
+    window.addEventListener('resize', () => {
       if (document.querySelector('.ab-swipe-line')) {
         this.destroy();
         this.create();
@@ -153,7 +154,7 @@ const addLineOverlay = function(map) {
   lineCaseEl.appendChild(firstLabel);
   lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(draggerCircleEl);
-  draggerCircleEl.insertAdjacentHTML('beforeend', faIconArrowsAltHSVGDomEl);
+  ReactDOM.render(<FontAwesomeIcon icon="arrows-alt-h" />, draggerCircleEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe

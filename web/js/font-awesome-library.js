@@ -22,6 +22,7 @@ import {
   faArrowCircleUp,
   faArrowLeft,
   faArrowRight,
+  faArrowsAltH,
   faBan,
   faBolt,
   faCamera,
@@ -63,6 +64,7 @@ import {
   faPlay,
   faPlus,
   faQuestionCircle,
+  faRedo,
   faRetweet,
   faRuler,
   faRulerCombined,
@@ -74,6 +76,7 @@ import {
   faTimes,
   faTrash,
   faTruck,
+  faUndo,
   faVideo,
 } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faTwitter, faRedditAlien } from '@fortawesome/free-brands-svg-icons';
@@ -87,6 +90,7 @@ library.add(
   faArrowCircleUp,
   faArrowLeft,
   faArrowRight,
+  faArrowsAltH,
   faBan,
   faBolt,
   faCamera,
@@ -131,6 +135,7 @@ library.add(
   faPlay,
   faPlus,
   faQuestionCircle,
+  faRedo,
   faRetweet,
   faRedditAlien,
   faRuler,
@@ -144,5 +149,6 @@ library.add(
   faTrash,
   faTruck,
   faTwitter,
+  faUndo,
   faVideo,
 );

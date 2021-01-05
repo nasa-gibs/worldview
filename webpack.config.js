@@ -157,13 +157,6 @@ module.exports = {
         exclude: babelLoaderExcludes,
       },
       {
-        test: require.resolve('jquery'),
-        loader: 'expose-loader',
-        options: {
-          exposes: ['$', 'jQuery'],
-        },
-      },
-      {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {
