@@ -18,36 +18,21 @@ class Rotation extends React.Component {
     this.resetRotation = this.resetRotation.bind(this);
   }
 
-  componentDidUpdate() {
-    // const { rotatation } = this.props;
-
-    // Clear interval if being reset?
-  }
-
   clearInterval() {
     const { intervalId } = this.state;
     clearInterval(intervalId);
   }
 
-  /**
-   *
-   * @param {*} radians
-   */
-  rotate(radians) {
+  rotate(degrees) {
     const { map, updateRotationState } = this.props;
     const mapView = map.ui.selected.getView();
     const currentDeg = mapView.getRotation() * (180.0 / Math.PI);
+    const rotation = mapView.getRotation() - Math.PI / degrees;
     saveRotation(currentDeg, mapView);
-    mapView.animate({
-      rotation: mapView.getRotation() - Math.PI / radians,
-      duration,
-    });
-    updateRotationState(radians);
+    mapView.animate({ rotation, duration });
+    updateRotationState(rotation);
   }
 
-  /**
-   * @param {*} radians
-   */
   rotateOnClick = (radians) => {
     const newIntervalId = setInterval(() => {
       this.rotate(radians);
