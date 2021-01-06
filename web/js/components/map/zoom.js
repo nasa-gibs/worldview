@@ -4,42 +4,44 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { mapUtilZoomAction } from '../../map/util';
 
-function Zoom({ map, proj, isDistractionFreeModeActive }) {
+function Zoom({
+  map, zoomLevel, numZoomLevels, isDistractionFreeModeActive,
+}) {
   if (!map) return null;
-  const zoomLevel = map.getView().getZoom();
-  const { numZoomLevels } = proj;
 
   return !isDistractionFreeModeActive && (
     <>
       <button
         type="button"
         disabled={zoomLevel === numZoomLevels}
-        className="wv-map-zoom wv-map-zoom-in ui-button ui-corner-all ui-widget"
+        className="wv-map-zoom wv-map-zoom-in"
         title="Zoom in view."
         onClick={() => { mapUtilZoomAction(map, 1); }}
         onMouseMove={(e) => e.stopPropagation()}
       >
         <FontAwesomeIcon icon="plus" />
       </button>
-      <div
+      <button
         type="button"
         disabled={zoomLevel === 0}
-        className="wv-map-zoom wv-map-zoom-out ui-button ui-corner-all ui-widget"
+        className="wv-map-zoom wv-map-zoom-out"
         title="Zoom out view."
         onClick={() => { mapUtilZoomAction(map, -1); }}
         onMouseMove={(e) => e.stopPropagation()}
       >
         <FontAwesomeIcon icon="minus" />
-      </div>
+      </button>
     </>
   );
 }
 
 const mapStateToProps = (state) => {
   const { map, proj, ui } = state;
+  const activeMap = map.ui.selected;
   return {
-    map: map.ui.selected,
-    proj,
+    map: activeMap,
+    zoomLevel: activeMap && activeMap.getView().getZoom(),
+    numZoomLevels: proj.selected.numZoomLevels,
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
   };
 };
@@ -47,7 +49,8 @@ const mapStateToProps = (state) => {
 Zoom.propTypes = {
   map: PropTypes.object,
   isDistractionFreeModeActive: PropTypes.bool,
-  proj: PropTypes.object,
+  numZoomLevels: PropTypes.number,
+  zoomLevel: PropTypes.number,
 };
 
 export default connect(

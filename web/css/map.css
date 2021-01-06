@@ -16,6 +16,23 @@
   background: none rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
   margin-right: 0;
+  border-radius: 0;
+  padding: 0;
+  color: #eee;
+  &:hover {
+    background-color: #fff;
+    color: #1a1a1a;
+    border: 1px solid #333;
+  }
+  &[disabled] {
+    background: #ccc;
+    color: #888;
+    &:hover {
+      background-color: #ccc;
+      color: #666;
+      cursor: not-allowed;
+    }
+  }
 }
 
 .wv-map-zoom.ui-button-click-prevent {
@@ -33,12 +50,6 @@
   width: 36px;
   padding: 12px;
   height: 37px;
-}
-
-.wv-map-zoom:hover {
-  background-color: #fff;
-  color: #1a1a1a;
-  border: 1px solid #333;
 }
 
 .wv-map-zoom-in {
@@ -97,11 +108,9 @@
 /* handle rotation and zoom button placement on large landscape device (like iPhone X) */
 @media only screen and (max-device-width: 980px) and (max-device-height: 600px) and (orientation: landscape),
   (max-height: 600px) {
-  div[data-proj='arctic'] .wv-map-zoom-in,
-  div[data-proj='antarctic'] .wv-map-zoom-in,
-  div[data-proj='arctic'] .wv-map-zoom-out,
-  div[data-proj='antarctic'] .wv-map-zoom-out, {
-    right: 54px;
+  .wv-map-zoom-in,
+  .wv-map-zoom-out, {
+    display: none;
   }
   .wv-map-zoom-in {
     top: 58px;
