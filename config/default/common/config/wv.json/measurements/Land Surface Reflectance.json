@@ -3,7 +3,7 @@
         "Land Surface Reflectance": {
             "id": "land-surface-reflectance",
             "title":    "Land Surface Reflectance",
-            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua & Terra/MODIS, Terra/MISR, Harmonized Landsat Sentinel-2",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -35,6 +35,34 @@
                         "MODIS_Terra_L3_SurfaceReflectance_Bands121_8Day",
                         "MODIS_Terra_L3_SurfaceReflectance_Bands721_8Day",
                         "OrbitTracks_Terra_Descending"
+                    ]
+                },
+                "Aqua and Terra/MODIS": {
+                    "id": "aqua-terra-modis",
+                    "title": "Aqua and Terra/MODIS",
+                    "description": "modis/combined/Reflectance",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Combined_MAIAC_L2G_BidirectionalReflectance_Bands143",
+                        "MODIS_Combined_L3_Nadir-BRDF_Daily"
+                    ]
+                },
+                 "Terra/MISR": {
+                     "id": "terra-misr",
+                    "title": "Terra/MISR",
+                    "description": "misr/DHRReflectance",
+                    "image": "",
+                    "settings": [
+                        "MISR_Directional_Hemispherical_Reflectance_Average_Natural_Color_Monthly"
+                    ]
+                 },
+                "HLS": {
+                    "id": "Harmonized Landsat Sentinel-2",
+                    "title": "Harmonized Landsat Sentinel-2",
+                    "description": "multi-mission/hls/reflectance",
+                    "image": "",
+                    "settings": [
+                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD"
                     ]
                 }
             }

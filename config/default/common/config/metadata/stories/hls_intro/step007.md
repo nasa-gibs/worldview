@@ -1,0 +1,1 @@
+The HLS project focuses on retrieving surface reflectance over land masses (excluding Antarctica), but also includes coastal zones and inland water. Each grid cell shown here represents an area with a potential satellite observation. There will be a 2 to 4 day latency period from when the satellites obtain the imagery, and when the imagery will be available in Worldview.

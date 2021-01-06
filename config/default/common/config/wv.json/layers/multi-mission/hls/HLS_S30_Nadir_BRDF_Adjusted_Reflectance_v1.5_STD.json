@@ -1,0 +1,23 @@
+{
+  "layers": {
+    "HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD": {
+      "id": "HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD",
+      "title": "Reflectance (Nadir BRDF-Adjusted, v1.5)",
+      "subtitle": "Sentinel 2A & 2B / MSI",
+      "description": "multi-mission/hls/HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD",
+      "tags": "corrected surface landsat oli sentinel msi s30",
+      "group": "overlays",
+      "layergroup": [
+        "hls"
+      ],
+      "product": "HLSS30",
+      "tracks": [
+        "OrbitTracks_Sentinel-2A_Descending",
+        "OrbitTracks_Sentinel-2B_Descending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}

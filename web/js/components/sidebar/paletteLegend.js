@@ -217,7 +217,7 @@ class PaletteLegend extends React.Component {
         className={
           legendObj ? 'wv-running wv-palettes-legend' : 'wv-palettes-legend'
         }
-        id={`${layer.id}_${legend.id}_${index}`}
+        id={`${util.encodeId(layer.id)}_${util.encodeId(legend.id)}_${index}`}
         key={`${layer.id}_${legend.id}_${index}`}
       >
         {isMoreThanOneColorBar ? (
@@ -227,7 +227,7 @@ class PaletteLegend extends React.Component {
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
-            id={`${layer.id}-${legend.id}${index}colorbar`}
+            id={`${util.encodeId(layer.id)}-${util.encodeId(legend.id)}${index}colorbar`}
             width={width}
             height={24}
             ref={this[`canvas_${index}`]}
@@ -311,7 +311,7 @@ class PaletteLegend extends React.Component {
               let palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
               const parentLayerId = isSubLayer ? `-${parentLayer.id}` : '';
-              const keyId = `${legend.id}-color${parentLayerId}-${compareState}${keyIndex}`;
+              const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
               const tooltipText = singleKey

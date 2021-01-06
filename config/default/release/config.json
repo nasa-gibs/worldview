@@ -1,7 +1,7 @@
 {
     "wv-options-fetch": [
         {
-            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
+            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/all/wmts.cgi?request=GetCapabilities",
             "to": "gibs-geographic.xml"
         },
         {
