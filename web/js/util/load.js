@@ -17,21 +17,21 @@ export default (function() {
     }
 
     if (root[attr] && lodashSize(root[attr]) > 0) {
-      promise.resolve(root[attr]);
-    } else {
-      promise = fetch(brand.url(url))
-        .then((response) => response.json())
-        .then((result) => {
-          root[attr] = result;
-          return result;
-        })
-        .finally(() => {
-          delete configPromises[url];
-        })
-        .catch((err) => console.log(err));
-
-      configPromises[url] = promise;
+      return promise.resolve(root[attr]);
     }
+    promise = fetch(brand.url(url))
+      .then((response) => response.json())
+      .then((result) => {
+        root[attr] = result;
+        return result;
+      })
+      .catch((err) => console.error(err))
+      .finally(() => {
+        delete configPromises[url];
+      });
+
+    configPromises[url] = promise;
+
     return promise;
   };
 

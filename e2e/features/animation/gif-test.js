@@ -6,7 +6,7 @@ const TIME_LIMIT = 30000; // Sometimes takes a while to generate GIFs
 const askDialog = '.modal-body .notify';
 const paletteDialogOkButton = '#image_download_notify_palette .accept-notify';
 const rotationDialogOkButton = '#image_download_notify_rotate .accept-notify';
-const articeRotationResetButton = '#wv-map-arctic .wv-map-reset-rotation';
+const articeRotationResetButton = '.wv-map-reset-rotation';
 
 module.exports = {
   before(client) {
