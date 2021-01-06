@@ -1,0 +1,151 @@
+{
+  "stories": {
+    "hls_intro": {
+      "id": "hls_intro",
+      "type": "default",
+      "title": "Harmonized Landsat Sentinel-2",
+      "description": "Introducing daily 30 meter resolution imagery!",
+      "backgroundImage": "",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+      {
+        "title": "Release of HLS Sentinel-2 Version 1.5 Provisional Data",
+        "link": "https://lpdaac.usgs.gov/news/release-hls-sentinel-2-provisional-data/"
+      },
+      {
+        "title": "Earthdata article",
+        "link": "https://earthdata.nasa.gov"
+      }
+    ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-190.17099702033968,-86.52209371542455,181.43813376534368,89.5139950740695&t=2020-10-15-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines,HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-190.17099702033968,-86.52209371542455,181.43813376534368,89.5139950740695&t=2020-10-15-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines,HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-74.20806631434345,40.63047424543632,-73.63543268836074,40.90173825774467&t=2020-10-09-T16%3A46%3A06Z&t1=2020-10-09-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden,opacity=0.19),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&l1=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden,opacity=0.19),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&ca=false"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=101.38005643312914,-40.699344146724975,164.80133884059143,-10.192404942637639&t=2020-11-10-T18%3A20%3A38Z&l=OrbitTracks_Sentinel-2A_Descending,OrbitTracks_Sentinel-2B_Descending,Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden,opacity=0.19),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(opacity=0.8)"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-190.17099702033968,-86.52209371542455,181.43813376534368,89.5139950740695&t=2020-10-09-T16%3A46%3A06Z&t1=2020-10-09-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines,HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&l1=Reference_Labels(hidden),Reference_Features(hidden),Coastlines,HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&ca=true&cv=49"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-121.803594488863,-60.895132646107534,124.81203420749846,76.29394322514027&t=2020-10-13-T16%3A46%3A06Z&l=OrbitTracks_Terra_Descending(hidden),OrbitTracks_Landsat-8_Descending,OrbitTracks_Sentinel-2A_Descending,OrbitTracks_Sentinel-2B_Descending,Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden,opacity=0.19),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,Land_Water_Map,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "id": "007",
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-190.17099702033968,-86.52209371542455,181.43813376534368,89.5139950740695&t=2020-10-10-T16%3A46%3A06Z&l=HLS_MGRS_Granule_Grid,OrbitTracks_Landsat-8_Descending(hidden),OrbitTracks_Sentinel-2B_Descending(hidden),OrbitTracks_Sentinel-2A_Descending(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden,opacity=0.19),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,Land_Water_Map,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+        },
+        {
+          "id": "008",
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=54.67080906057276,24.839785607297348,55.43580177250946,25.20217262582158&t=2020-10-15-T16%3A46%3A06Z&t1=2020-10-15-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&l1=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&ca=true"
+        },
+        {
+          "id": "009",
+          "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-124.67942109969188,43.677909925772674,-120.55080408522316,45.633689617730745&t=2020-09-29-T16%3A46%3A06Z&l=Reference_Labels,Reference_Features,Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+        },
+        {
+          "id": "010",
+          "description": "step010.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=30.84197228888685,22.441222543567932,31.664540777425188,22.812719268749596&t=2020-10-05-T16%3A46%3A06Z&t1=2020-09-30-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&l1=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&ca=true"
+        },
+        {
+          "id": "011",
+          "description": "step011.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=152.61235801724814,-24.991308376210153,153.83429226630926,-24.412462195795097&t=2020-10-16-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+        },
+        {
+          "id": "012",
+          "description": "step012.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=113.77634562298367,22.235648474330507,114.0587396773078,22.35443814718207&t=2000-01-01-T16%3A46%3A06Z&t1=2020-10-26-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&l1=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&ca=true"
+        },
+        {
+          "id": "013",
+          "description": "step013.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-98.79554961173093,35.54648790283309,-98.53709624259031,35.668920632464335&t=2020-09-29-T16%3A46%3A06Z&t1=2020-10-16-T16%3A46%3A06Z&ics=true&ici=3&icd=5&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&l1=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&ca=false&cv=53"
+        }
+        ,
+        {
+          "id": "014",
+          "description": "step014.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-80.20705740601146,9.157925711216516,-79.62606579214857,9.433149011321335&t=2020-10-01-T16%3A46%3A06Z&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines(hidden),HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+        }
+      ]
+    }
+  }
+}

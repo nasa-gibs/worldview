@@ -1,0 +1,1 @@
+ The HLS imagery are approximately 8 times higher spatial resolution than the MODIS and VIIRS surface reflectance layers - watch New York City come in focus as you swipe to the left! The data from the two instruments aboard the three satellites are processed through a set of algorithms to make the imagery consistent and comparable across the instruments.

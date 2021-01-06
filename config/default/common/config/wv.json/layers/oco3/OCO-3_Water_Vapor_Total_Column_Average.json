@@ -10,6 +10,10 @@
       "layergroup": "Water Vapor",
       "product": "OCO3_L2_Lite_FP",
       "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_ISS_Ascending",
+        "OrbitTracks_ISS_Descending"
+      ],
       "daynight": [
         "day"
       ]
