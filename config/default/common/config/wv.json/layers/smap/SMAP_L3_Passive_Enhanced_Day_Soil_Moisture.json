@@ -10,7 +10,7 @@
       "layergroup": [
         "smap"
       ],
-      "product": "SPL3SMP",
+      "product": "SPL3SMP_E",
       "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_SMAP_Descending"

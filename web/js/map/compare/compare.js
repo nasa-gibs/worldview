@@ -27,11 +27,13 @@ export default function mapCompare(config, store) {
   self.spy = Spy;
   self.active = false;
   self.dragging = false;
+  self.value = 50;
+
   self.EventTypeObject = util.browser.mobileAndTabletDevice
     ? TOUCH_EVENT
     : MOUSE_EVENT;
 
-  const init = function() {
+  const init = function () {
     self.events
       .on('movestart', () => {
         self.dragging = true;
@@ -41,7 +43,7 @@ export default function mapCompare(config, store) {
         store.dispatch(setValue(value));
       });
   };
-  self.update = function(group) {
+  self.update = function (group) {
     const state = store.getState();
     if (comparison) {
       comparison.update(state.compare.isCompareA, group);
@@ -52,9 +54,10 @@ export default function mapCompare(config, store) {
    * @param {Object} map | OpenLayers Map object
    * @param {String} compareMode | Active compare mode
    */
-  self.create = function(map, compareMode) {
+  self.create = function (map, compareMode) {
     const state = store.getState();
-    if (compareMode === mode && comparison && proj === state.proj.selected) {
+
+    if (compareMode === mode && comparison && proj === state.proj.selected && self.value === state.compare.value) {
       comparison.update(state.compare.isCompareA);
     } else if (comparison) {
       mode = compareMode;
@@ -77,12 +80,13 @@ export default function mapCompare(config, store) {
       ); // e.g. new self.swipe()
     }
     self.active = true;
+    self.value = state.compare.value || 50;
     proj = state.proj.selected;
   };
   /**
    * Return offset value (for running-data use)
    */
-  self.getOffset = function() {
+  self.getOffset = function () {
     if (mode === 'swipe' && comparison) {
       return comparison.getSwipeOffset();
     }
@@ -91,7 +95,7 @@ export default function mapCompare(config, store) {
   /**
    * Destroy instance in full and nullify vars
    */
-  self.destroy = function() {
+  self.destroy = function () {
     comparison.destroy();
     store.dispatch(setValue(50)); // set Value to default
     comparison = null;
