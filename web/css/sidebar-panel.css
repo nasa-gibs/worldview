@@ -416,7 +416,7 @@ li.item.productsitem.inmotion,
   display: block;
 }
 
-.zot-tooltip {
+.zot-tooltip .tooltip {
   pointer-events: all;
   .tooltip-inner {
     max-width: 280px;
