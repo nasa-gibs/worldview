@@ -46,7 +46,6 @@ import '../css/fonts.css';
 import '../css/alert.css';
 import '../css/reset.css';
 import '../css/compare.css';
-import '../css/jquery-ui-override.css';
 import '../css/search-ui-override.css';
 import '../css/rc-slider-overrides.css';
 import '../css/react-joyride-override.css';

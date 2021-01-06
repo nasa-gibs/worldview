@@ -59,7 +59,7 @@ class Rotation extends React.Component {
       <>
         <button
           type="button"
-          className="wv-map-rotate-left wv-map-zoom ui-button ui-corner-all ui-widget"
+          className="wv-map-rotate-left wv-map-zoom"
           title="You may also rotate by holding Alt and dragging the mouse"
           onMouseDown={() => { this.rotateOnClick(10); }}
           onMouseUp={this.clearInterval}
@@ -71,7 +71,7 @@ class Rotation extends React.Component {
 
         <button
           type="button"
-          className="wv-map-reset-rotation wv-map-zoom ui-button ui-corner-all ui-widget"
+          className="wv-map-reset-rotation wv-map-zoom"
           title="Reset rotation"
           onMouseDown={this.resetRotation}
           onMouseUp={this.clearInterval}
@@ -83,7 +83,7 @@ class Rotation extends React.Component {
 
         <button
           type="button"
-          className="wv-map-rotate-right wv-map-zoom ui-button ui-corner-all ui-widget"
+          className="wv-map-rotate-right wv-map-zoom"
           title="You may also rotate by holding Alt and dragging the mouse"
           onMouseDown={() => { this.rotateOnClick(-10); }}
           onMouseUp={this.clearInterval}
