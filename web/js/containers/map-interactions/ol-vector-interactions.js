@@ -34,7 +34,7 @@ export class VectorInteractions extends React.Component {
   }
 
   componentWillUnmount() {
-    events.off('map:mousmove', this.mouseMove);
+    events.off('map:mousemove', this.mouseMove);
     events.off('map:singleclick', this.singleClick);
   }
 
