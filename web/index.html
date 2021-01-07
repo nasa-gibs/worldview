@@ -15,11 +15,9 @@ Licensed under the NASA Open Source Agreement, Version 1.3 (https://opensource.g
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <script type="text/javascript">
-    if (/MSIE (\d+\.\d+);/.test(navigator.userAgent) && ! /unsupported/.test(location.search)) {
-      var version = parseFloat(navigator.appVersion.split("MSIE")[1]);
-      if (version < 11) {
-        document.location.replace("pages/unsupported_browser.html" + location.search);
-      }
+    // detect IE <= version 11
+    if (navigator.userAgent.match(/MSIE|Trident/) !== null) {
+      document.location.replace("pages/unsupported_browser.html" + location.search);
     }
   </script>
 
