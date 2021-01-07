@@ -2,7 +2,12 @@ import { get } from 'lodash';
 import update from 'immutability-helper';
 // legacy crutches
 import {
-  serializeDate, tryCatchDate, parsePermalinkDate, mapLocationToDateState,
+  serializeDate,
+  serializeDateWrapper,
+  serializeDateBWrapper,
+  tryCatchDate,
+  parsePermalinkDate,
+  mapLocationToDateState,
 } from './modules/date/util';
 import {
   checkTourBuildTimestamp,
@@ -139,54 +144,6 @@ const getParameters = function(config, parameters) {
           ? util.toISOStringSeconds(currentItemState)
           : undefined),
         parse: (str) => tryCatchDate(str, now),
-      },
-    },
-    t: {
-      stateKey: 'date.selected',
-      initialState: new Date(initialDate),
-      type: 'date',
-      options: {
-        serializeNeedsGlobalState: true,
-        setAsEmptyItem: true,
-        serialize: (currentItemState, state) => {
-          const compareIsActive = get(state, 'compare.active');
-          const isCompareA = get(state, 'compare.isCompareA');
-          const dateB = get(state, 'date.selectedB');
-          const initialDateString = util.toISOStringSeconds(initialDate);
-          return !compareIsActive && !isCompareA
-            ? util.toISOStringSeconds(dateB) === initialDateString
-              ? undefined
-              : serializeDate(dateB)
-            : util.toISOStringSeconds(currentItemState) === initialDateString
-              ? undefined
-              : !currentItemState
-                ? undefined
-                : serializeDate(currentItemState);
-        },
-        parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
-      },
-    },
-    t1: {
-      stateKey: 'date.selectedB',
-      initialState: nowMinusSevenDays,
-      type: 'date',
-      options: {
-        serializeNeedsGlobalState: true,
-        setAsEmptyItem: true,
-        serialize: (currentItemState, state) => {
-          const isActive = get(state, 'compare.active');
-          const initialDateString = util.toISOStringSeconds(initialDate);
-          const appNowMinusSevenDays = util.dateAdd(initialDateString, 'day', -7);
-          const appNowMinusSevenDaysString = util.toISOStringSeconds(
-            appNowMinusSevenDays,
-          );
-          if (!isActive) return undefined;
-          return appNowMinusSevenDaysString
-            === util.toISOStringSeconds(currentItemState)
-            ? undefined
-            : serializeDate(currentItemState || appNowMinusSevenDays);
-        },
-        parse: (str) => parsePermalinkDate(nowMinusSevenDays, str, parameters.l1, config),
       },
     },
     z: {
@@ -468,6 +425,30 @@ const getParameters = function(config, parameters) {
           }
           return coordinates;
         },
+      },
+    },
+    t: {
+      stateKey: 'date.selected',
+      initialState: new Date(initialDate),
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serializeNeedsPrev: true,
+        setAsEmptyItem: true,
+        serialize: serializeDateWrapper,
+        parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
+      },
+    },
+    t1: {
+      stateKey: 'date.selectedB',
+      initialState: nowMinusSevenDays,
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serializeNeedsPrev: true,
+        setAsEmptyItem: true,
+        serialize: serializeDateBWrapper,
+        parse: (str) => parsePermalinkDate(nowMinusSevenDays, str, parameters.l1, config),
       },
     },
   };

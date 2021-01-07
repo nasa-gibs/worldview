@@ -31,6 +31,63 @@ export function tryCatchDate(str, initialState) {
 }
 
 /**
+ * Serialize date A for location
+ *
+ * @method serializeDateWrapper
+ * @param  {Object} currentItemState
+ * @param  {Object} state
+ * @param  {Object} prev
+ * @returns {String | undefined} serialized time string OR undefined
+ */
+export function serializeDateWrapper(currentItemState, state, prev) {
+  const prevParams = Object.keys(prev).length > 0;
+  const initialDate = get(state, 'config.initialDate');
+  const initialDateString = util.toISOStringSeconds(initialDate);
+  const compareIsActive = get(state, 'compare.active');
+  const isCompareA = get(state, 'compare.isCompareA');
+
+  // exit compare mode with dateB selected, dateB now primary date 't='
+  const dateBSelected = !compareIsActive && !isCompareA;
+  if (dateBSelected) {
+    const dateB = get(state, 'date.selectedB');
+    const defaultDateB = util.toISOStringSeconds(dateB) === initialDateString;
+    return !prevParams && defaultDateB
+      ? undefined
+      : serializeDate(dateB);
+  }
+  // dateA 't=' serialization
+  const defaultDate = util.toISOStringSeconds(currentItemState) === initialDateString;
+  return !prevParams && defaultDate
+    ? undefined
+    : serializeDate(currentItemState);
+}
+
+/**
+ * Serialize date B for location
+ *
+ * @method serializeDateBWrapper
+ * @param  {Object} currentItemState
+ * @param  {Object} state
+ * @param  {Object} prev
+ * @returns {String | undefined} serialized time string OR undefined
+ */
+export function serializeDateBWrapper(currentItemState, state, prev) {
+  const prevParams = Object.keys(prev).length > 0;
+  const initialDate = get(state, 'config.initialDate');
+  const compareIsActive = get(state, 'compare.active');
+  if (!compareIsActive) return undefined;
+
+  const initialDateString = util.toISOStringSeconds(initialDate);
+  const appNowMinusSevenDays = util.dateAdd(initialDateString, 'day', -7);
+  const appNowMinusSevenDaysString = util.toISOStringSeconds(appNowMinusSevenDays);
+  // dateB 't1=' serialization
+  const defaultDate = util.toISOStringSeconds(currentItemState) === appNowMinusSevenDaysString;
+  return !prevParams && defaultDate
+    ? undefined
+    : serializeDate(currentItemState);
+}
+
+/**
  * Parse permalink date string and handle max dates if out of valid range or in future
  *
  * @method parsePermalinkDate
