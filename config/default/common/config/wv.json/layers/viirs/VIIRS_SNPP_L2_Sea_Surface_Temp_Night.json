@@ -9,13 +9,7 @@
       "group": "overlays",
       "layergroup": "Sea Surface Temperature",
       "product": "",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

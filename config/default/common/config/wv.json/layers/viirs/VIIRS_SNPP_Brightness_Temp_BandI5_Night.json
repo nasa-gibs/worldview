@@ -5,13 +5,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Brightness Temperature",
-      "product": "VNP02IMG_NRT",
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "VNP02IMG_NRT"
     }
   }
 }

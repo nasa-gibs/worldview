@@ -5,13 +5,7 @@
       "tags": "n2o",
       "group": "overlays",
       "layergroup": "Nitrous Oxide",
-      "product": "ML2N2O",
-      "tracks": [
-        "OrbitTracks_Aura_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "ML2N2O"
     }
   }
 }

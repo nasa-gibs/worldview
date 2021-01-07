@@ -6,13 +6,7 @@
       "group": "overlays",
       "product": "AE_Rain",
       "layergroup": "Precipitation Rate",
-      "inactive": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "inactive": true
     }
   }
 }

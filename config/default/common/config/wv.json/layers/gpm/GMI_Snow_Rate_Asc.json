@@ -5,10 +5,7 @@
       "tags": "precipitation",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
-      "product": "GPM_2AGPROFGPMGMI",
-      "tracks": [
-        "OrbitTracks_GPM_Ascending"
-      ]
+      "product": "GPM_2AGPROFGPMGMI"
     }
   }
 }

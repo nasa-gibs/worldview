@@ -6,13 +6,7 @@
       "inactive": true,
       "group": "overlays",
       "layergroup": "Water Vapor",
-      "product": "A2_RainOcn_NRT",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "product": "A2_RainOcn_NRT"
     }
   }
 }

@@ -4,13 +4,7 @@
       "description": "modis/terra/MODIS_Terra_Ice_Surface_Temp_Night",
       "group": "overlays",
       "layergroup": "Ice Surface Temperature",
-      "product": "MOD29",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "MOD29"
     }
   }
 }

@@ -5,13 +5,7 @@
       "tags": "enhanced",
       "group": "overlays",
       "layergroup": "Soil Moisture",
-      "product": "SPL2SMP_E",
-      "tracks": [
-        "OrbitTracks_SMAP_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "SPL2SMP_E"
     }
   }
 }

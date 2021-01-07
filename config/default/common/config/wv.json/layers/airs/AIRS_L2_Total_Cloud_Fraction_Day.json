@@ -5,13 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS2RET",
-      "layergroup": "Cloud Fraction",
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Cloud Fraction"
     }
   }
 }

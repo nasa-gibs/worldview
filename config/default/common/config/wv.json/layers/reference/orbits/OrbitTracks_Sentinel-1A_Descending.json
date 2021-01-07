@@ -9,9 +9,6 @@
       "type": "wms",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": [
-        "day"
-      ],
       "track": "descending",
       "startDate": "2014-06-23",
       "projections": {

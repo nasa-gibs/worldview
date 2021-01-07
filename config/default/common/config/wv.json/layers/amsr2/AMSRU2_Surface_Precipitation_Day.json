@@ -5,13 +5,7 @@
       "tags": "amsru2 rain",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
-      "product": "AU_Rain_NRT_R01",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "product": "AU_Rain_NRT_R01"
     }
   }
 }

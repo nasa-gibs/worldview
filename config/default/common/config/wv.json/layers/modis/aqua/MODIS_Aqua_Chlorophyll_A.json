@@ -3,13 +3,7 @@
     "MODIS_Aqua_Chlorophyll_A": {
       "description": "modis/aqua/MODIS_Aqua_Chlorophyll_A",
       "group": "overlays",
-      "layergroup": "Chlorophyll A",
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Chlorophyll A"
     }
   }
 }

@@ -3,12 +3,6 @@
     "MODIS_Terra_Chlorophyll_A": {
       "description": "modis/terra/MODIS_Terra_Chlorophyll_A",
       "group": "overlays",
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ],
       "layergroup": "Chlorophyll A"
     }
   }

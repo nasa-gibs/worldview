@@ -4,13 +4,7 @@
       "description": "calipso/CALIPSO_Wide_Field_Camera_Radiance_v3-02",
       "group": "overlays",
       "layergroup": "Radiance",
-      "product": "",
-      "tracks": [
-        "OrbitTracks_Calipso_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "product": ""
     }
   }
 }

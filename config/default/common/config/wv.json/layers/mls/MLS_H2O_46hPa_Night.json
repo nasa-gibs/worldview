@@ -5,13 +5,7 @@
       "tags": "h2o",
       "group": "overlays",
       "layergroup": "Water Vapor",
-      "product": "ML2H2O",
-      "tracks": [
-        "OrbitTracks_Aura_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "ML2H2O"
     }
   }
 }

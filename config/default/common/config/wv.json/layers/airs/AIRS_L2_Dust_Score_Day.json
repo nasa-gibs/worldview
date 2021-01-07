@@ -5,13 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS2SUP",
-      "layergroup": "Dust",
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Dust"
     }
   }
 }

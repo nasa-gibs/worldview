@@ -4,13 +4,7 @@
       "description": "smap/SMAP_L3_Passive_Day_Freeze_Thaw",
       "group": "overlays",
       "layergroup": "Freeze/Thaw",
-      "product": "SPL3FTP",
-      "tracks": [
-        "OrbitTracks_SMAP_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "product": "SPL3FTP"
     }
   }
 }

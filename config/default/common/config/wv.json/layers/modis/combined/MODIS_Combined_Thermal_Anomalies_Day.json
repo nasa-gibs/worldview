@@ -12,9 +12,6 @@
           "id": "FIRMS_MODIS_Thermal_Anomalies_polar"
         }
       },
-      "daynight": [
-        "day"
-      ],
       "layergroup": "Fires and Thermal Anomalies",
       "palette": {
         "id": "MODIS_All_Thermal_Anomalies",

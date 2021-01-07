@@ -5,13 +5,7 @@
       "tags": "amsru2",
       "group": "overlays",
       "layergroup": "Cloud Liquid Water",
-      "product": "AU_Ocean_NRT_R01",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "product": "AU_Ocean_NRT_R01"
     }
   }
 }

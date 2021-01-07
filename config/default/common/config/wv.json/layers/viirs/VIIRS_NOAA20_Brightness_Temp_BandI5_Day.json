@@ -9,13 +9,7 @@
       "group": "overlays",
       "layergroup": "Brightness Temperature",
       "product": "",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_NOAA-20_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

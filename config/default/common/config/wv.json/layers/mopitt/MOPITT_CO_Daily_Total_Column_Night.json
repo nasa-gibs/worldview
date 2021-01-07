@@ -5,13 +5,7 @@
       "tags": "co",
       "group": "overlays",
       "layergroup": "Carbon Monoxide",
-      "product": "MOP03J",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "MOP03J"
     }
   }
 }

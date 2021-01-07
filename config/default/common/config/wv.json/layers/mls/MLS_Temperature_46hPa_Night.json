@@ -4,13 +4,7 @@
       "description": "mls/MLS_Temperature_46hPa_Night",
       "group": "overlays",
       "layergroup": "Temperature",
-      "product": "ML2T",
-      "tracks": [
-        "OrbitTracks_Aura_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "ML2T"
     }
   }
 }

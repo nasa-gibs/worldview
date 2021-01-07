@@ -6,13 +6,7 @@
       "group": "overlays",
       "product": "AIRS3STD",
       "wrapadjacentdays": true,
-      "layergroup": "Outgoing Radiation",
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Outgoing Radiation"
     }
   }
 }

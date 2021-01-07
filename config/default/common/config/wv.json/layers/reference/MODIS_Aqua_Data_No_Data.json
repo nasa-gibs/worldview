@@ -4,13 +4,7 @@
       "description": "reference/MODIS_Aqua_Data_No_Data",
       "group": "overlays",
       "layergroup": "Areas of No Data (mask)",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

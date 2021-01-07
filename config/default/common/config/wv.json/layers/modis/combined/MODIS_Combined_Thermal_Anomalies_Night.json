@@ -17,9 +17,6 @@
         "immutable": true
       },
       "layergroup": "Fires and Thermal Anomalies",
-      "daynight": [
-        "night"
-      ],
       "breakPointLayer": {
         "id": "MODIS_Combined_Thermal_Anomalies_Night",
         "type": "wms",

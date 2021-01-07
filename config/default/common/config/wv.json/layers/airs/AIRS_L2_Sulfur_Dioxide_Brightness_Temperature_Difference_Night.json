@@ -5,13 +5,7 @@
       "tags": "SO2 Bt sulphur dioxide",
       "group": "overlays",
       "product": "AIRS2SUP",
-      "layergroup": "Sulfur Dioxide",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Sulfur Dioxide"
     }
   }
 }

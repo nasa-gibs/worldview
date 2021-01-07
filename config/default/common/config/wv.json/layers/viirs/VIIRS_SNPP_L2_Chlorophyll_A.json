@@ -9,13 +9,7 @@
       "group": "overlays",
       "layergroup": "Chlorophyll A",
       "product": "",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

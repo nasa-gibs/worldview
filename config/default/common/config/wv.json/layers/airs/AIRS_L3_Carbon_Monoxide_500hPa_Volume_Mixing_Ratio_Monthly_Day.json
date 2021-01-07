@@ -5,10 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS3STM",
-      "layergroup": "Carbon Monoxide",
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Carbon Monoxide"
     }
   }
 }

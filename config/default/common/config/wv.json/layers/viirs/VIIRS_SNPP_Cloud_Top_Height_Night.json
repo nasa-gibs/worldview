@@ -5,13 +5,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Cloud Top Height",
-      "product": "CLDPROP_L2_VIIRS_SNPP",
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "CLDPROP_L2_VIIRS_SNPP"
     }
   }
 }

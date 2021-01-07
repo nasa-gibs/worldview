@@ -4,13 +4,7 @@
       "description": "modis/aqua/MODIS_Aqua_Cloud_Fraction_Night",
       "group": "overlays",
       "layergroup": "Cloud Fraction",
-      "product": "MYD06_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "MYD06_L2_NIGHT"
     }
   }
 }

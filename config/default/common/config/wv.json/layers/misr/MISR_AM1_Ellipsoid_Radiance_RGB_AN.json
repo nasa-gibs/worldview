@@ -5,13 +5,7 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Radiance",
-      "product": "MI1B2_ELLIPSOID_AN",
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "product": "MI1B2_ELLIPSOID_AN"
     }
   }
 }

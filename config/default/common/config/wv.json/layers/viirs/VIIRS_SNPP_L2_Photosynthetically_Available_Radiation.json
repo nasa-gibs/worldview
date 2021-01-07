@@ -9,13 +9,7 @@
       "group": "overlays",
       "layergroup": "Photosynthetically Available Radiation",
       "product": "",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

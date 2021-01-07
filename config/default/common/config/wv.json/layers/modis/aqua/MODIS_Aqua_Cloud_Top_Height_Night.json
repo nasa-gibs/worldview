@@ -4,13 +4,7 @@
       "description": "modis/aqua/MODIS_Aqua_Cloud_Top_Height_Night",
       "group": "overlays",
       "layergroup": "Cloud Top Height",
-      "product": "MYD06_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "MYD06_L2_NIGHT"
     }
   }
 }

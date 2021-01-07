@@ -5,13 +5,7 @@
       "group": "overlays",
       "tags": "ssc podaac PO.DAAC",
       "layergroup": "Sea Surface Temperature",
-      "product": "MODIS_TERRA_L3_SST_THERMAL_DAILY_9KM_NIGHTTIME_V2014.0",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "MODIS_TERRA_L3_SST_THERMAL_DAILY_9KM_NIGHTTIME_V2014.0"
     }
   }
 }

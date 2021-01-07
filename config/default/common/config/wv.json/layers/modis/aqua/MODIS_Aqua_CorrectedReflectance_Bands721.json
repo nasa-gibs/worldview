@@ -5,13 +5,7 @@
       "tags": "cr m11-i2-i1",
       "group": "baselayers",
       "layergroup": "Corrected Reflectance",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

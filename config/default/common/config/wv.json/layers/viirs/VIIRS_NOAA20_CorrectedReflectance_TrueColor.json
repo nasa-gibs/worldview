@@ -8,13 +8,7 @@
       "tags": "natural color cr jpss1",
       "layergroup": "Corrected Reflectance",
       "group": "baselayers",
-      "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_NOAA-20_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "wrapadjacentdays": true
     }
   }
 }

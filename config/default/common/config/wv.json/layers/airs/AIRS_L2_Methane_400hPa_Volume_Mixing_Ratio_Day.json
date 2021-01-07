@@ -5,13 +5,7 @@
       "tags": "CH4",
       "group": "overlays",
       "product": "AIRS2RET",
-      "layergroup": "Methane",
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Methane"
     }
   }
 }

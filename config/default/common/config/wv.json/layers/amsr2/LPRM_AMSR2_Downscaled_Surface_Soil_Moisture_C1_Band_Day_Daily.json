@@ -5,13 +5,7 @@
       "tags": "amsr-2",
       "group": "overlays",
       "layergroup": "Soil Moisture",
-      "product": "LPRM_AMSR2_DS_A_SOILM3",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "product": "LPRM_AMSR2_DS_A_SOILM3"
     }
   }
 }

@@ -5,10 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS3STM",
-      "layergroup": "Methane",
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Methane"
     }
   }
 }

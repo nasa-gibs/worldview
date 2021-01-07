@@ -4,13 +4,7 @@
       "description": "modis/terra/MODIS_Terra_Cloud_Phase_Infrared_Night",
       "group": "overlays",
       "layergroup": "Cloud Phase",
-      "product": "MOD06_L2_NIGHT",
-      "tracks": [
-        "OrbitTracks_Terra_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "MOD06_L2_NIGHT"
     }
   }
 }

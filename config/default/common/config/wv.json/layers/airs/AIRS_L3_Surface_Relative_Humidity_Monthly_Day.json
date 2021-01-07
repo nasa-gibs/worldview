@@ -5,10 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS3STM",
-      "layergroup": "Relative Humidity",
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Relative Humidity"
     }
   }
 }

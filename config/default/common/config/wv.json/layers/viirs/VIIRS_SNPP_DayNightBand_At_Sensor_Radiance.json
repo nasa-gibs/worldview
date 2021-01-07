@@ -8,13 +8,7 @@
       "tags": "dnb night s-npp snpp lights city urban nighttime black marble vnp46a1",
       "layergroup": "Earth at Night",
       "product": "VNP46A1",
-      "group": "overlays",
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "group": "overlays"
     }
   }
 }

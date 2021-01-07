@@ -6,13 +6,7 @@
       "inactive": true,
       "group": "overlays",
       "layergroup": "Cloud Liquid Water",
-      "product": "A2_RainOcn_NRT",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "A2_RainOcn_NRT"
     }
   }
 }

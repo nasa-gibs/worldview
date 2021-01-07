@@ -4,13 +4,7 @@
       "description": "smap/SMAP_L2_Passive_Night_Soil_Moisture_Option2",
       "group": "overlays",
       "layergroup": "Soil Moisture",
-      "product": "SPL2SMP",
-      "tracks": [
-        "OrbitTracks_SMAP_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "SPL2SMP"
     }
   }
 }

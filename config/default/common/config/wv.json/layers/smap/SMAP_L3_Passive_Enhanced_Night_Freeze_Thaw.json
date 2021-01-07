@@ -5,13 +5,7 @@
       "group": "overlays",
       "tags": "enhanced",
       "layergroup": "Freeze/Thaw",
-      "product": "SPL3FTP_E",
-      "tracks": [
-        "OrbitTracks_SMAP_Ascending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "SPL3FTP_E"
     }
   }
 }

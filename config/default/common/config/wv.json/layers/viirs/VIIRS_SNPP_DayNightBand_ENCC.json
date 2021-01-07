@@ -4,13 +4,7 @@
       "description": "viirs/VIIRS_SNPP_DayNightBand_ENCC",
       "tags": "dnb night s-npp snpp night city urban lights nighttime",
       "layergroup": "Earth at Night",
-      "group": "overlays",
-      "tracks": [
-        "OrbitTracks_Suomi_NPP_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "group": "overlays"
     }
   }
 }

@@ -5,13 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS2RET",
-      "layergroup": "Temperature",
-      "tracks": [
-        "OrbitTracks_Aqua_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Temperature"
     }
   }
 }

@@ -5,10 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS3STM",
-      "layergroup": "Outgoing Radiation",
-      "daynight": [
-        "night"
-      ]
+      "layergroup": "Outgoing Radiation"
     }
   }
 }

@@ -5,13 +5,7 @@
       "tags": "amsru2",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
-      "product": "AU_Ocean_NRT_R01",
-      "tracks": [
-        "OrbitTracks_GCOM-W1_Descending"
-      ],
-      "daynight": [
-        "night"
-      ]
+      "product": "AU_Ocean_NRT_R01"
     }
   }
 }

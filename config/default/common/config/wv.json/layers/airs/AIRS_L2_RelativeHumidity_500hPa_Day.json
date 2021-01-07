@@ -5,13 +5,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS2RET",
-      "layergroup": "Relative Humidity",
-      "tracks": [
-        "OrbitTracks_Aqua_Ascending"
-      ],
-      "daynight": [
-        "day"
-      ]
+      "layergroup": "Relative Humidity"
     }
   }
 }

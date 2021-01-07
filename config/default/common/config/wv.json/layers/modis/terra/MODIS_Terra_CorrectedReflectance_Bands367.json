@@ -5,12 +5,6 @@
       "tags": "cr m3-i3-m11",
       "group": "baselayers",
       "wrapadjacentdays": true,
-      "tracks": [
-        "OrbitTracks_Terra_Descending"
-      ],
-      "daynight": [
-        "day"
-      ],
       "layergroup": "Corrected Reflectance"
     }
   }
