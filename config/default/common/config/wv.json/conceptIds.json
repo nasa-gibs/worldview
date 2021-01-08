@@ -4194,6 +4194,11 @@
         "C1607549631-ASIPS"
       ]
     },
+    "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance": {
+      "conceptId": [
+        "C1897815356-LAADS"
+      ]
+    },
     "VIIRS_SNPP_Clear_Sky_Confidence_Day": {
       "conceptId": [
         "C1607563719-ASIPS"
