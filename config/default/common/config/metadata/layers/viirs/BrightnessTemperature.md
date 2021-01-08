@@ -8,4 +8,4 @@ The VIIRS Brightness Temperature layer is calculated from VIIRS Calibrated Radia
 References: [VIIRS SDR Users Guide](https://lpdaac.usgs.gov/documents/134/VNP03_User_Guide_V1.2.pdf)
 
 ### Band 33 Fusion Brightness Temperature (Day | Night)
-Temporal coverage: 1 March 2012 - present (Suomi NPP and NOAA-20)
+Temporal coverage: 17 April 2012 - present (Suomi NPP); 17 February 2018 - present (NOAA-20)
