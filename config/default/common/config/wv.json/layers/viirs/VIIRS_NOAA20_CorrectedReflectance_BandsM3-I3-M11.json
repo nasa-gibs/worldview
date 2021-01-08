@@ -1,9 +1,6 @@
 {
   "layers": {
     "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11": {
-      "id": "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
-      "title": "Corrected Reflectance (Bands M3-I3-M11)",
-      "subtitle": "NOAA-20 / VIIRS",
       "description": "viirs/VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
       "tags": "false color jpss1 3-6-7",
       "layergroup": "Corrected Reflectance",

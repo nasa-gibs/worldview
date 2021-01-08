@@ -1,9 +1,6 @@
 {
   "layers": {
     "VIIRS_SNPP_L2_Sea_Surface_Temp_Day": {
-      "id": "VIIRS_SNPP_L2_Sea_Surface_Temp_Day",
-      "title": "Sea Surface Temperature (Day, L2)",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_L2_Sea_Surface_Temp_Day",
       "tags": "sst",
       "group": "overlays",

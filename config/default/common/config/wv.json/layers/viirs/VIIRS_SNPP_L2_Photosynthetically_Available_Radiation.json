@@ -1,9 +1,6 @@
 {
   "layers": {
     "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation": {
-      "id": "VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
-      "title": "Photosynthetically Available Radiation (L2)",
-      "subtitle": "Suomi NPP / VIIRS",
       "description": "viirs/VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
       "tags": "par",
       "group": "overlays",

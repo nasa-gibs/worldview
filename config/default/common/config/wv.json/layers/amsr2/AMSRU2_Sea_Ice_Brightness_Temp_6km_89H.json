@@ -1,9 +1,6 @@
 {
   "layers": {
     "AMSRU2_Sea_Ice_Brightness_Temp_6km_89H": {
-      "id": "AMSRU2_Sea_Ice_Brightness_Temp_6km_89H",
-      "title": "Brightness Temperature for Sea Ice (89H Ghz)",
-      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Sea_Ice_Brightness_Temp_6km_89H",
       "tags": "amsr-u2",
       "group": "overlays",
