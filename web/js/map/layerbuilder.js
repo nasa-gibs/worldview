@@ -178,47 +178,46 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.getRequestDates = function(def, options) {
     const state = store.getState();
+    const { animation, date } = state;
+    const { endDate, startDate, isPlaying } = animation;
+    const {
+      appNow,
+    } = date;
     const stateCurrentDate = new Date(getSelectedDate(state));
     const previousLayer = options.previousLayer || {};
-    let date = options.date || stateCurrentDate;
+    let closestDate = options.date || stateCurrentDate;
+
     let previousDateFromRange;
     let previousLayerDate = previousLayer.previousDate;
     let nextLayerDate = previousLayer.nextDate;
-    if (!state.animation.isPlaying) {
-      // need to get previous available date to prevent unnecessary requests
-      let dateRange;
-      if (previousLayer.previousDate && previousLayer.nextDate) {
-        const dateTime = date.getTime();
-        const previousDateTime = previousLayer.previousDate.getTime();
-        const nextDateTime = previousLayer.nextDate.getTime();
-        // if current date is outside previous and next dates available, recheck range
-        if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
-          dateRange = datesinDateRanges(def, date);
-          const { next, previous } = prevDateInDateRange(def, date, dateRange);
-          previousDateFromRange = previous;
-          previousLayerDate = previous;
-          nextLayerDate = next;
-        } else {
-          previousDateFromRange = previousLayer.previousDate;
-        }
-      } else {
-        dateRange = datesinDateRanges(def, date);
-        const { next, previous } = prevDateInDateRange(def, date, dateRange);
-        previousDateFromRange = previous;
-        previousLayerDate = previous;
-        nextLayerDate = next;
-      }
+
+    const dateTime = closestDate.getTime();
+    // if current date is outside previous and next available dates, recheck date range
+    if (previousLayerDate && nextLayerDate
+      && dateTime > previousLayerDate.getTime()
+      && dateTime < nextLayerDate.getTime()
+    ) {
+      previousDateFromRange = previousLayerDate;
+    } else {
+      // limit range animation requests
+      const dateRange = isPlaying
+        ? datesinDateRanges(def, closestDate, startDate, endDate, appNow)
+        : datesinDateRanges(def, closestDate);
+      const { next, previous } = prevDateInDateRange(def, closestDate, dateRange);
+      previousDateFromRange = previous;
+      previousLayerDate = previous;
+      nextLayerDate = next;
     }
 
     if (def.period === 'subdaily') {
-      date = nearestInterval(def, date);
+      closestDate = nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
-      date = util.clearTimeUTC(previousDateFromRange);
+      closestDate = util.clearTimeUTC(previousDateFromRange);
     } else {
-      date = util.clearTimeUTC(date);
+      closestDate = util.clearTimeUTC(closestDate);
     }
 
-    return { closestDate: date, previousDate: previousLayerDate, nextDate: nextLayerDate };
+    return { closestDate, previousDate: previousLayerDate, nextDate: nextLayerDate };
   };
 
   /**
