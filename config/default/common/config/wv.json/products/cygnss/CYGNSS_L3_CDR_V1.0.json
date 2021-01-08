@@ -1,0 +1,11 @@
+{
+    "products": {
+        "CYGNSS_L3_CDR_V1.0": {
+            "name": "CYGNSS_L3_CDR_V1.0",
+            "handler": "List",
+            "query": {
+                "shortName": "CYGNSS_L3_CDR_V1.0"
+            }
+        }
+    }
+}

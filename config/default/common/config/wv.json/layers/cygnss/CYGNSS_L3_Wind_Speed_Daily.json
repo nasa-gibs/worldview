@@ -8,7 +8,7 @@
       "group": "overlays",
       "tags": "podaac PO.DAAC",
       "layergroup": "Wind Speed",
-      "product": "CYGNSS_L3_V2.1"
+      "product": "CYGNSS_L3_CDR_V1.0"
     }
   }
 }
