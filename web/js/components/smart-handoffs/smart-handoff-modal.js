@@ -118,7 +118,7 @@ const hideModal = () => {
   if (!shouldHideWarning) {
     safeLocalStorage.setItem(HIDE_EDS_WARNING, true);
     googleTagManager.pushEvent({
-      event: 'smart_handoffs_hide_eds_warning_checkbox',
+      event: 'smart_handoffs_toggle_true_hide_warning',
     });
   } else {
     safeLocalStorage.removeItem(HIDE_EDS_WARNING);

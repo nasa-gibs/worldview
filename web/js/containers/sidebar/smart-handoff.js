@@ -182,7 +182,7 @@ class SmartHandoff extends Component {
     const { showBoundingBox } = this.state;
     if (!showBoundingBox) {
       googleTagManager.pushEvent({
-        event: 'smart_handoffs_check_target_area',
+        event: 'smart_handoffs_toggle_true_target_area',
       });
       this.setState({
         showBoundingBox: true,
@@ -553,7 +553,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   showWarningModal: (displayDate, selectedLayer, continueToEDS) => {
     googleTagManager.pushEvent({
-      event: 'smart_handoffs_warning_modal',
+      event: 'smart_handoffs_open_warning_modal',
     });
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
@@ -571,7 +571,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   showGranuleHelpModal: () => {
     googleTagManager.pushEvent({
-      event: 'smart_handoffs_granule_help_link',
+      event: 'smart_handoffs_open_granule_help_link',
     });
     dispatch(
       openCustomContent('granule-help', {
