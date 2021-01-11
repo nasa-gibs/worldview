@@ -41,12 +41,7 @@
           "enum": ["overlays", "baselayers"]
         },
         "layergroup": {
-          "description": "TODO this seems to only be used to check for 'reference_orbits' to determine if a layer is an orbit track",
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "type": "string"
-          }
+          "type": "string"
         },
         "product": {
           "anyOf": [
@@ -65,6 +60,19 @@
         },
         "format": {
           "$ref": "#/definitions/format"
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "daynight": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["day", "night"]
+          }
         },
         "period": {
           "type": "string",
