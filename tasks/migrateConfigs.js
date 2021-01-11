@@ -3,14 +3,14 @@ const _ = require('lodash');
 const fs = require('fs');
 const dir = require('node-dir');
 
-const allLayerPropsMap = {};
+// const allLayerPropsMap = {};
 const { GIT_HOME } = process.env;
 const SOURCE_DIR = './config/default/common/config/wv.json/layers/';
 const DEST_DIR = `${GIT_HOME}/layers-config/layer-metadata/v1.0/`;
 const CONCEPT_ID_PATH = './config/default/common/config/wv.json/conceptIds.json';
 const WV_JSON_PATH = './build/options/config/wv.json';
 
-let noWrapCount = 0;
+
 let conceptIdsMap = {};
 let wvJson = {};
 const measurementsMap = {};
@@ -107,25 +107,19 @@ function setPeriodProps(wvJsonLayer, outputLayer) {
   }
 }
 
-function modifyProps (layerObj) {
+function modifyProps (id, layerObj) {
   const {
-    id, title, subtitle, tracks, daynight, inactive,
+    title, subtitle, tracks, daynight, inactive,
   } = layerObj;
   const wvJsonLayerObj = wvJson.layers[id];
   if (!wvJsonLayerObj) {
-    console.log('Layer not found in wv.json, run build script!', title);
+    console.error('Layer not found in wv.json, run build script!', layerObj);
   }
 
   const {
-    startDate, endDate, dateRanges, period, wrapX, wrapadjacentdays,
+    startDate, endDate, dateRanges, period, // wrapX, wrapadjacentdays,
   } = wvJsonLayerObj;
   const staticLayer = !startDate && !endDate && !dateRanges;
-
-  if (!wrapX && !wrapadjacentdays && !staticLayer) {
-    // console.log(id);
-    noWrapCount += 1;
-  }
-
 
   const modifiedObj = {
     title,
@@ -173,23 +167,22 @@ function migrate(filePath) {
 
   const layerJson = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   const fileLayerId = fileName.slice(0, fileName.length - 5);
-  const objPropLayerId = Object.keys(layerJson.layers)[0];
-  if (fileLayerId !== objPropLayerId) {
+  const id = Object.keys(layerJson.layers)[0];
+  if (fileLayerId !== id) {
     console.log('Mismatched ids!', filePath);
   }
-  const layerPropsObj = layerJson.layers[objPropLayerId];
+  const layerPropsObj = layerJson.layers[id];
   if (layerPropsObj) {
-    Object.keys(layerPropsObj).forEach((key) => {
-      allLayerPropsMap[key] = fileLayerId;
-    });
+    // Object.keys(layerPropsObj).forEach((key) => {
+    //   allLayerPropsMap[key] = fileLayerId;
+    // });
   } else {
     console.log('No layer data for:', filePath);
   }
 
-  const newObj = modifyProps(layerPropsObj);
+  const newObj = modifyProps(id, layerPropsObj);
   fs.writeFile(`${DEST_DIR}${fileName}`, JSON.stringify(newObj, null, 2), errCallback);
 }
-
 
 dir.files(SOURCE_DIR, (err, files) => {
   if (err) throw err;
@@ -197,5 +190,4 @@ dir.files(SOURCE_DIR, (err, files) => {
   wvJson = JSON.parse(fs.readFileSync(WV_JSON_PATH, 'utf-8'));
   generateMeasurements(wvJson.layers, wvJson.measurements);
   files.forEach(migrate);
-  // console.log(noWrapCount);
 });
