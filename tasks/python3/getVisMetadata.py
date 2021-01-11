@@ -16,7 +16,8 @@ parser = OptionParser(usage="Usage: %s <input_file> <output_file>" % prog)
 input_file = args[0]
 output_file = args[1]
 
-gibs_url = 'localhost:8080/layer-metadata/v1.0/'
+# TODO pull from features config?
+gibs_url = 'https://uat.gibs.earthdata.nasa.gov/layer-metadata/v1.0/'
 remove_keys = ['measurement']
 layer_metadata = {}
 
