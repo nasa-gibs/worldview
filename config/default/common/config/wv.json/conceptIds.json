@@ -4196,7 +4196,7 @@
     },
     "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance": {
       "conceptId": [
-        "C1897815356-LAADS"
+        "C1989175258-LANCEMODIS"
       ]
     },
     "VIIRS_SNPP_Clear_Sky_Confidence_Day": {
