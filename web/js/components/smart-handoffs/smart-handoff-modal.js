@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import googleTagManager from 'googleTagManager';
 import Button from '../util/button';
 import Checkbox from '../util/checkbox';
 import safeLocalStorage from '../../util/local-storage';
-import openEarthDataSearch from './util';
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -11,9 +11,7 @@ import openEarthDataSearch from './util';
  * to NASA's Earthdata Search web tool that will proceed in fetching corresponding
  * layer data and granule files that are available for download.
  */
-function SmartHandoffModal({
-  proj, dateSelection, selectedLayer, currentExtent, showBoundingBox,
-}) {
+function SmartHandoffModal({ displayDate, selectedLayer, continueToEDS }) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
   const { title, subtitle, conceptId } = selectedLayer;
@@ -81,14 +79,14 @@ function SmartHandoffModal({
         <h1> Selected layer to download: </h1>
         <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
           <p className="smart-handoff-layer-name">{`${title}`}</p>
-          <p className="smart-handoff-layer-mata-data">{`${subtitle} (${dateSelection})`}</p>
+          <p className="smart-handoff-layer-mata-data">{`${subtitle} (${displayDate})`}</p>
         </a>
       </div>
 
 
       <div className="smart-handoff-button-group">
         <Button
-          onClick={() => openEarthDataSearch(proj, dateSelection, selectedLayer, currentExtent, showBoundingBox)}
+          onClick={continueToEDS}
           id="continue-btn"
           text="Continue"
           className="red"
@@ -117,20 +115,23 @@ function SmartHandoffModal({
 const hideModal = () => {
   const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
   const shouldHideWarning = safeLocalStorage.getItem(HIDE_EDS_WARNING);
-  if (!shouldHideWarning) safeLocalStorage.setItem(HIDE_EDS_WARNING, true);
-  else safeLocalStorage.removeItem(HIDE_EDS_WARNING);
+  if (!shouldHideWarning) {
+    safeLocalStorage.setItem(HIDE_EDS_WARNING, true);
+    googleTagManager.pushEvent({
+      event: 'smart_handoffs_hide_eds_warning_checkbox',
+    });
+  } else {
+    safeLocalStorage.removeItem(HIDE_EDS_WARNING);
+  }
 };
-
 
 /**
  * Handle type-checking of defined properties
  */
 SmartHandoffModal.propTypes = {
-  dateSelection: PropTypes.string,
-  proj: PropTypes.string,
-  currentExtent: PropTypes.object,
+  continueToEDS: PropTypes.func,
+  displayDate: PropTypes.string,
   selectedLayer: PropTypes.object,
-  showBoundingBox: PropTypes.bool,
 };
 
 export default SmartHandoffModal;
