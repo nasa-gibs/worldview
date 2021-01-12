@@ -23,6 +23,9 @@ layer_metadata = {}
 
 def get_metadata(layer_id):
   response = http.request('GET', gibs_url + layer_id + '.json')
+  if (response.status != 200):
+    print('%s WARNING: No metadata config found for [%s]' % (prog, layer_id))
+    return
   layer_metadata[layer_id] = json.loads(response.data.decode('utf-8'))
 
   # Remove any props we don't expect to use
