@@ -415,7 +415,7 @@ class Tour extends React.Component {
     return (
       <ErrorBoundary>
         <div>
-          {currentStory && currentStory.steps && (
+          {currentStory && currentStory.steps && currentStep && (
             <JoyrideWrapper
               currentTourStep={currentStep}
               tourSteps={currentStory.steps}
