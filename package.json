@@ -64,7 +64,6 @@
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
     "lint:js": "eslint . --quiet",
-    "migrate-configs": "node --experimental-modules tasks/migrateConfigs.js",
     "notes": "node ./tasks/releaseNotes.js",
     "preinstall": "node tasks/checkNodeVersion.js",
     "postinstall": "npm run python",

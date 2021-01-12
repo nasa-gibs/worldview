@@ -3,16 +3,15 @@ const _ = require('lodash');
 const fs = require('fs');
 const dir = require('node-dir');
 
-const allLayerPropsMap = {};
 const { GIT_HOME } = process.env;
 const SOURCE_DIR = './config/default/common/config/wv.json/layers/';
 const DEST_DIR = `${GIT_HOME}/layers-config/layer-metadata/v1.0/`;
-const CONCEPT_ID_PATH = './config/default/common/config/wv.json/conceptIds.json';
 const WV_JSON_PATH = './build/options/config/wv.json';
 
-let noWrapCount = 0;
-let conceptIdsMap = {};
+const OVERWRITE_EXISTING = false;
+
 let wvJson = {};
+let metadataCount = 0;
 const measurementsMap = {};
 const measurementsArray = [];
 const periodIntervalMap = {
@@ -113,19 +112,14 @@ function modifyProps (layerObj) {
   } = layerObj;
   const wvJsonLayerObj = wvJson.layers[id];
   if (!wvJsonLayerObj) {
-    console.log('Layer not found in wv.json, run build script!', title);
+    console.error(`Layer ${title} not found in wv.json, run build script!`);
+    return;
   }
 
   const {
-    startDate, endDate, dateRanges, period, wrapX, wrapadjacentdays,
+    startDate, endDate, dateRanges, period,
   } = wvJsonLayerObj;
   const staticLayer = !startDate && !endDate && !dateRanges;
-
-  if (!wrapX && !wrapadjacentdays && !staticLayer) {
-    // console.log(id);
-    noWrapCount += 1;
-  }
-
 
   const modifiedObj = {
     title,
@@ -139,9 +133,6 @@ function modifyProps (layerObj) {
     modifiedObj.daynight = daynight;
   }
 
-  if (conceptIdsMap[id]) {
-    modifiedObj.conceptIds = conceptIdsMap[id].conceptId;
-  }
   if (tracks && period !== 'monthly') {
     modifiedObj.orbitTracks = [];
     modifiedObj.orbitDirection = [];
@@ -159,8 +150,6 @@ function modifyProps (layerObj) {
     // modifiedObj.period = wvJsonLayerObj.period;
     setPeriodProps(wvJsonLayerObj, modifiedObj);
   }
-
-  // console.log(layerObj.measurements);
   return modifiedObj;
 }
 
@@ -173,29 +162,35 @@ function migrate(filePath) {
 
   const layerJson = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   const fileLayerId = fileName.slice(0, fileName.length - 5);
-  const objPropLayerId = Object.keys(layerJson.layers)[0];
-  if (fileLayerId !== objPropLayerId) {
-    console.log('Mismatched ids!', filePath);
+  const id = Object.keys(layerJson.layers)[0];
+  if (fileLayerId !== id) {
+    console.warn('Mismatched ids!', filePath);
   }
-  const layerPropsObj = layerJson.layers[objPropLayerId];
-  if (layerPropsObj) {
-    Object.keys(layerPropsObj).forEach((key) => {
-      allLayerPropsMap[key] = fileLayerId;
-    });
-  } else {
-    console.log('No layer data for:', filePath);
+  const layerPropsObj = layerJson.layers[id];
+  if (!layerPropsObj) {
+    console.error('No layer data for:', filePath);
+    return;
   }
 
   const newObj = modifyProps(layerPropsObj);
-  fs.writeFile(`${DEST_DIR}${fileName}`, JSON.stringify(newObj, null, 2), errCallback);
+  fs.open(`${DEST_DIR}${fileName}`, 'wx', (err) => {
+    if (err && err.code === 'EEXIST' && !OVERWRITE_EXISTING) {
+      return;
+    }
+    fs.writeFile(`${DEST_DIR}${fileName}`, JSON.stringify(newObj, null, 2), errCallback);
+    metadataCount += 1;
+  });
 }
-
 
 dir.files(SOURCE_DIR, (err, files) => {
   if (err) throw err;
-  conceptIdsMap = JSON.parse(fs.readFileSync(CONCEPT_ID_PATH, 'utf-8')).layers;
   wvJson = JSON.parse(fs.readFileSync(WV_JSON_PATH, 'utf-8'));
   generateMeasurements(wvJson.layers, wvJson.measurements);
   files.forEach(migrate);
-  // console.log(noWrapCount);
+
+  if (metadataCount > 0) {
+    console.log(`Successfully generated ${metadataCount} metadata configs.`);
+  } else {
+    console.log('No metadata configs were generateed');
+  }
 });
