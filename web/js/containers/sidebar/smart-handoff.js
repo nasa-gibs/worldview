@@ -79,10 +79,10 @@ class SmartHandoff extends Component {
     } = this.state;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
-    const selectedConceptId = selectedLayer && selectedLayer.conceptId;
-    const isLayerStillActive = activeLayers.find(({ conceptId }) => selectedConceptId === conceptId);
+    const selectedConceptIds = selectedLayer && selectedLayer.conceptIds;
+    const isLayerStillActive = activeLayers.find(({ conceptIds }) => selectedConceptIds === conceptIds);
 
-    if (selectedConceptId && !isLayerStillActive) {
+    if (selectedConceptIds && !isLayerStillActive) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState(this.baseState);
     }
@@ -263,7 +263,7 @@ class SmartHandoff extends Component {
     const { daynight } = selectedLayer;
     const params = {
       temporal: dateRange,
-      collection_concept_id: selectedLayer.conceptId,
+      collection_concept_id: selectedLayer.conceptIds[0],
       include_facets: 'v2',
       page_size: 0,
       day_night_flag: daynight || undefined,
@@ -302,12 +302,12 @@ class SmartHandoff extends Component {
       <div className="smart-handoff-layer-list">
         {activeLayers.map((layer) => {
           const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
-          return layer.conceptId && (
+          return layer.conceptIds && (
             <div className="layer-item" key={inputId}>
               <input
                 id={inputId}
                 type="radio"
-                value={layer.conceptId}
+                value={layer.conceptIds[0]}
                 name="smart-handoff-layer-radio"
                 checked={selectedId === layer.id}
                 onChange={() => this.onLayerChange(layer, currentExtent)}
@@ -402,7 +402,7 @@ class SmartHandoff extends Component {
       showBoundingBox,
       totalGranules,
     } = this.state;
-    return selectedLayer && selectedLayer.conceptId && (
+    return selectedLayer && selectedLayer.conceptIds && (
       <div className="granule-count">
         <h1>
           Available granules for
@@ -466,8 +466,8 @@ class SmartHandoff extends Component {
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer && selectedLayer.id !== undefined;
-    const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
+    const isValidDownload = selectedLayer && selectedLayer.id;
+    const availableLayers = activeLayers.filter(({ conceptIds }) => conceptIds).length;
 
     if (!availableLayers > 0) {
       return this.renderNoLayersToDownload();

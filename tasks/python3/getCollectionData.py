@@ -95,7 +95,7 @@ def process_requests(wv_product_dict):
   futures = []
   with ThreadPoolExecutor() as executor:
     for wv_id, val in wv_product_dict.items():
-      c_id = val['conceptId']
+      c_id = val['conceptIds']
       futures.append(executor.submit(get_cmr_data, wv_id, c_id))
       futures.append(executor.submit(get_cmr_umm_data, wv_id, c_id))
   for f in futures:
