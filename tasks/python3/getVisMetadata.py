@@ -18,7 +18,7 @@ output_file = args[1]
 
 # TODO pull from features config?
 gibs_url = 'https://uat.gibs.earthdata.nasa.gov/layer-metadata/v1.0/'
-remove_keys = ['measurement']
+use_keys = ['conceptIds']
 layer_metadata = {}
 
 def get_metadata(layer_id):
@@ -26,11 +26,10 @@ def get_metadata(layer_id):
   layer_metadata[layer_id] = json.loads(response.data.decode('utf-8'))
 
   # Remove any props we don't expect to use
-  for key in remove_keys:
-    layer_metadata[layer_id].pop(key, None)
-
-  # TODO consider also removing any keys found in the corresponding WV config
-  # as a way of letting those properties take precedence over vis metadata?
+  metadata_keys = dict(layer_metadata[layer_id]).keys()
+  for key in metadata_keys:
+    if key not in use_keys:
+      layer_metadata[layer_id].pop(key, None)
 
 #MAIN
 if __name__ == "__main__":
