@@ -12,7 +12,7 @@
 .wv-map-zoom {
   right: 10px;
   position: absolute;
-  z-index: 10000;
+  z-index: 1;
   background: none rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
   margin-right: 0;

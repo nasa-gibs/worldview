@@ -312,7 +312,6 @@ class SmartHandoff extends Component {
 
         { showBoundingBox && (
           <Crop
-            className="download-extent"
             x={x}
             y={y}
             width={x2 - x}
@@ -334,6 +333,7 @@ class SmartHandoff extends Component {
             }}
             coordinates={coordinates}
             showCoordinates
+            zIndex={1}
           />
         )}
         <hr />
