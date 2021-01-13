@@ -1,13 +1,17 @@
+/* eslint-disable no-console */
 
 const _ = require('lodash');
 const fs = require('fs');
+const util = require('util');
 const dir = require('node-dir');
+
+const fsAccess = util.promisify(fs.access);
+const fsWriteFile = util.promisify(fs.writeFile);
 
 const { GIT_HOME } = process.env;
 const SOURCE_DIR = './config/default/common/config/wv.json/layers/';
 const DEST_DIR = `${GIT_HOME}/layers-config/layer-metadata/v1.0/`;
 const WV_JSON_PATH = './build/options/config/wv.json';
-
 const OVERWRITE_EXISTING = false;
 
 let wvJson = {};
@@ -75,7 +79,7 @@ function setPeriodProps(wvJsonLayer, outputLayer) {
   }
 
   if (!dateRanges) {
-    outputLayer.period = capitalizeFirstLetter(period);
+    outputLayer.layerPeriod = capitalizeFirstLetter(period);
     return;
   }
   const dateIntervals = (dateRanges || []).map(({ dateInterval }) => dateInterval);
@@ -85,24 +89,24 @@ function setPeriodProps(wvJsonLayer, outputLayer) {
     return parsedInterval === firstInterval;
   });
 
-  outputLayer.period = capitalizeFirstLetter(period);
+  outputLayer.layerPeriod = capitalizeFirstLetter(period);
 
   if (period === 'subdaily' || firstInterval === 1) {
     return;
   }
 
   if (consistentIntervals && firstInterval <= 16) {
-    outputLayer.period = `${firstInterval}-${periodIntervalMap[period]}`;
+    outputLayer.layerPeriod = `${firstInterval}-${periodIntervalMap[period]}`;
   } else if (id.includes('7Day')) {
-    outputLayer.period = '7-Day';
+    outputLayer.layerPeriod = '7-Day';
   } else if (id.includes('5Day')) {
-    outputLayer.period = '5-Day';
+    outputLayer.layerPeriod = '5-Day';
   } else if (id.includes('Monthly')) {
-    outputLayer.period = 'Monthly';
+    outputLayer.layerPeriod = 'Monthly';
   } else if (id.includes('Weekly')) {
-    outputLayer.period = '7-Day';
+    outputLayer.layerPeriod = '7-Day';
   } else {
-    outputLayer.period = `Multi-${periodIntervalMap[period]}`;
+    outputLayer.layerPeriod = `Multi-${periodIntervalMap[period]}`;
   }
 }
 
@@ -153,7 +157,12 @@ function modifyProps (layerObj) {
   return modifiedObj;
 }
 
-function migrate(filePath) {
+
+/**
+ *
+ * @param {*} filePath
+ */
+async function migrate(filePath) {
   const pathStrings = filePath.split('/');
   const fileName = pathStrings[pathStrings.length - 1];
   if (!fileName.includes('.json')) {
@@ -164,7 +173,7 @@ function migrate(filePath) {
   const fileLayerId = fileName.slice(0, fileName.length - 5);
   const id = Object.keys(layerJson.layers)[0];
   if (fileLayerId !== id) {
-    console.warn('Mismatched ids!', filePath);
+    console.warn('File name did not match id:', filePath);
   }
   const layerPropsObj = layerJson.layers[id];
   if (!layerPropsObj) {
@@ -172,25 +181,34 @@ function migrate(filePath) {
     return;
   }
 
+  const path = `${DEST_DIR}${fileName}`;
   const newObj = modifyProps(layerPropsObj);
-  fs.open(`${DEST_DIR}${fileName}`, 'wx', (err) => {
-    if (err && err.code === 'EEXIST' && !OVERWRITE_EXISTING) {
-      return;
+  const output = JSON.stringify(newObj, null, 2);
+
+  try {
+    await fsAccess(path, fs.constants.F_OK);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      metadataCount += 1;
+      await fsWriteFile(path, output, errCallback);
     }
-    fs.writeFile(`${DEST_DIR}${fileName}`, JSON.stringify(newObj, null, 2), errCallback);
+  }
+
+  if (OVERWRITE_EXISTING) {
     metadataCount += 1;
-  });
+    await fsWriteFile(path, output, errCallback);
+  }
 }
 
-dir.files(SOURCE_DIR, (err, files) => {
+dir.files(SOURCE_DIR, async (err, files) => {
   if (err) throw err;
   wvJson = JSON.parse(fs.readFileSync(WV_JSON_PATH, 'utf-8'));
   generateMeasurements(wvJson.layers, wvJson.measurements);
-  files.forEach(migrate);
+  await Promise.all(files.map(migrate));
 
   if (metadataCount > 0) {
     console.log(`Successfully generated ${metadataCount} metadata configs.`);
   } else {
-    console.log('No metadata configs were generateed');
+    console.log('No metadata configs were generated');
   }
 });
