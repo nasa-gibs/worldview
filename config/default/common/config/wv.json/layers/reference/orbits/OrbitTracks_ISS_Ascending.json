@@ -11,7 +11,6 @@
       "type": "wms",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "daynight": "",
       "track": "ascending",
       "startDate": "1998-11-20",
       "projections": {
