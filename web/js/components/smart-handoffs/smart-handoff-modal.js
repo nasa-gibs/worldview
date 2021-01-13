@@ -25,7 +25,7 @@ function SmartHandoffModal({
 
       <div className="smart-handoff-heading">
         <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">
-          <img src="../../../images/earth-data-search-logo.png" />
+          <img src="images/earth-data-search-logo.png" />
           <h1>search.earthdata.nasa.gov</h1>
         </a>
       </div>
@@ -47,7 +47,7 @@ function SmartHandoffModal({
             viewport region in Worldview will be used to derive data granules within Earthdata Search.
           </p>
 
-          <img className="earth-data-gif" src="../../../images/earth-data-search-preview.gif" />
+          <img className="earth-data-gif" src="images/earth-data-search-preview.gif" />
           <p className="earth-data-caption">
             Granules that are available to download will be listed in the white pull out menu. Each granule listed can be
             downloaded individually or the entire set contained within the bounding box can be downloaded as a zip file.
