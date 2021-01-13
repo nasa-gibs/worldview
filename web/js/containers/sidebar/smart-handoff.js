@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
 import Button from '../../components/util/button';
@@ -55,6 +56,8 @@ class SmartHandoff extends Component {
 
     this.baseState = this.state;
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
+    this.onCheckboxToggle = this.onCheckboxToggle.bind(this);
+    this.onClickDownload = this.onClickDownload.bind(this);
     this.updateExtent = this.updateExtent.bind(this);
     this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 250);
   }
@@ -66,8 +69,8 @@ class SmartHandoff extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      dateSelection,
       activeLayers,
+      displayDate,
       proj,
     } = this.props;
     const {
@@ -83,7 +86,7 @@ class SmartHandoff extends Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState(this.baseState);
     }
-    if (dateSelection !== prevProps.dateSelection) {
+    if (displayDate !== prevProps.displayDate) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ totalGranules: undefined }, () => {
         this.updateGranuleCount(currentExtent);
@@ -173,6 +176,57 @@ class SmartHandoff extends Component {
   }
 
   /**
+   * Handle bounding box checkbox toggle
+   */
+  onCheckboxToggle() {
+    const { showBoundingBox } = this.state;
+    if (!showBoundingBox) {
+      googleTagManager.pushEvent({
+        event: 'smart_handoffs_toggle_true_target_area',
+      });
+      this.setState({
+        showBoundingBox: true,
+        isSearchingForGranules: true,
+      });
+    } else {
+      this.setState({
+        showBoundingBox: false,
+      });
+    }
+  }
+
+  /**
+   * Handle clicking 'Download Via Earthdata Search"
+   * Will open warning/info modal or go directly to EDS (if modal was hidden by user)
+   */
+  onClickDownload() {
+    const {
+      displayDate,
+      proj,
+      selectedDate,
+      showWarningModal,
+    } = this.props;
+    const {
+      currentExtent,
+      selectedLayer,
+      showBoundingBox,
+    } = this.state;
+
+    // Used to determine if the added smart-handoff modal should be shown
+    const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
+    const hideModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
+
+    const continueToEDS = () => openEarthDataSearch(
+      proj.id, selectedDate, selectedLayer, currentExtent, showBoundingBox,
+    );
+    if (!hideModal) {
+      showWarningModal(displayDate, selectedLayer, continueToEDS);
+    } else {
+      continueToEDS();
+    }
+  }
+
+  /**
    * Fires when user selected a different layer
    * @param {*} layer - the specified layer designated by the user
    * @param {*} currentExtent - the current boundaries of the bounding box
@@ -191,7 +245,7 @@ class SmartHandoff extends Component {
    * @param {*} currentExtent
    */
   async updateGranuleCount({ southWest, northEast }) {
-    const { dateSelection } = this.props;
+    const { selectedDate } = this.props;
     const {
       selectedLayer,
       showBoundingBox,
@@ -203,8 +257,8 @@ class SmartHandoff extends Component {
     // Places the compoent state in a loading state; triggers {...} animation.
     this.setState({ isSearchingForGranules: true });
 
-    const startDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T00:00:00.000Z`;
-    const endDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T23:59:59.999Z`;
+    const startDate = `${selectedDate}T00:00:00.000Z`;
+    const endDate = `${selectedDate}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
     const { daynight } = selectedLayer;
     const params = {
@@ -272,15 +326,15 @@ class SmartHandoff extends Component {
    */
   renderCropBox() {
     const {
-      screenWidth,
-      screenHeight,
       proj,
+      screenHeight,
+      screenWidth,
     } = this.props;
 
     const {
       boundaries,
-      selectedLayer,
       coordinates,
+      selectedLayer,
       showBoundingBox,
     } = this.state;
 
@@ -297,16 +351,7 @@ class SmartHandoff extends Component {
             text="Toggle boundary selection."
             color="gray"
             checked={showBoundingBox}
-            onCheck={() => {
-              if (!showBoundingBox) {
-                this.setState({
-                  showBoundingBox: !showBoundingBox,
-                  isSearchingForGranules: true,
-                });
-              } else {
-                this.setState({ showBoundingBox: !showBoundingBox });
-              }
-            }}
+            onCheck={this.onCheckboxToggle}
           />
         </div>
 
@@ -346,22 +391,22 @@ class SmartHandoff extends Component {
    */
   renderGranuleCount() {
     const {
+      displayDate,
       showGranuleHelpModal,
-      dateSelection,
     } = this.props;
 
     const {
-      selectedLayer,
       isSearchingForGranules,
       selectedGranules,
-      totalGranules,
+      selectedLayer,
       showBoundingBox,
+      totalGranules,
     } = this.state;
     return selectedLayer && selectedLayer.conceptId && (
       <div className="granule-count">
         <h1>
           Available granules for
-          {` ${dateSelection}: `}
+          {` ${displayDate}: `}
 
           { !isSearchingForGranules && totalGranules === 0 && (
             <span className="fade-in constant-width">NONE</span>
@@ -412,23 +457,13 @@ class SmartHandoff extends Component {
     const {
       activeLayers,
       isActive,
-      showWarningModal,
-      dateSelection,
-      proj,
     } = this.props;
-
     const {
       selectedLayer,
-      currentExtent,
-      showBoundingBox,
     } = this.state;
 
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
-
-    // Used to determine if the added smart-handoff modal should be shown
-    const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
-    const hideModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
 
     // Determine if the download button is enabled
     const isValidDownload = selectedLayer && selectedLayer.id !== undefined;
@@ -452,10 +487,7 @@ class SmartHandoff extends Component {
         {this.renderCropBox()}
         {this.renderGranuleCount()}
         <Button
-          onClick={() => {
-            if (!hideModal) showWarningModal(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
-            else openEarthDataSearch(proj.id, dateSelection, selectedLayer, currentExtent, showBoundingBox);
-          }}
+          onClick={this.onClickDownload}
           text="DOWNLOAD VIA EARTHDATA SEARCH"
           className="download-btn red"
           valid={!!isValidDownload}
@@ -471,11 +503,12 @@ class SmartHandoff extends Component {
 SmartHandoff.propTypes = {
   isActive: PropTypes.bool,
   activeLayers: PropTypes.array,
-  dateSelection: PropTypes.string,
+  displayDate: PropTypes.string,
   map: PropTypes.object.isRequired,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
+  selectedDate: PropTypes.string,
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
 };
@@ -498,13 +531,18 @@ const mapStateToProps = (state) => {
     screenHeight,
   } = browser;
 
+  const selectedDate = getSelectedDate(state);
+  const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
+  const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
+
   return {
     activeLayers: getActiveLayers(state).filter((layer) => layer.projections[proj.id]),
-    dateSelection: moment.utc(getSelectedDate(state)).format('YYYY MMM DD'),
+    displayDate,
     map,
     proj: proj.selected,
-    screenWidth,
     screenHeight,
+    screenWidth,
+    selectedDate: selectedDateFormatted,
   };
 };
 
@@ -513,25 +551,28 @@ const mapStateToProps = (state) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: (proj, dateSelection, selectedLayer, currentExtent, showBoundingBox) => {
+  showWarningModal: (displayDate, selectedLayer, continueToEDS) => {
+    googleTagManager.pushEvent({
+      event: 'smart_handoffs_open_warning_modal',
+    });
     dispatch(
       openCustomContent('transferring-to-earthdata-search', {
         headerText: 'Leaving Worldview',
         bodyComponent: SmartHandoffModal,
         desktopOnly: true,
         bodyComponentProps: {
-          proj,
-          dateSelection,
+          displayDate,
           selectedLayer,
-          currentExtent,
-          showBoundingBox,
-          goToEarthDataSearch: openEarthDataSearch,
+          continueToEDS,
         },
         size: 'lg',
       }),
     );
   },
   showGranuleHelpModal: () => {
+    googleTagManager.pushEvent({
+      event: 'smart_handoffs_open_granule_help_link',
+    });
     dispatch(
       openCustomContent('granule-help', {
         desktopOnly: true,

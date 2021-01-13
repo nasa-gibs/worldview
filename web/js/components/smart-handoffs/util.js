@@ -1,14 +1,19 @@
-import moment from 'moment';
+import googleTagManager from 'googleTagManager';
 import util from '../../util/util';
 
 /**
  * Method call to direct the user to Earthdata Search with the necessary URL parameters that
  * encapsulate what the user is intending to try and download data / granules from
+ * @param {*} proj
+ * @param {*} selectedDate
  * @param {*} selectedLayer
  * @param {*} extentCoords
  * @param {*} showBoundingBox
  */
-export default function openEarthDataSearch(proj, dateSelection, selectedLayer, extentCoords, showBoundingBox) {
+export default function openEarthDataSearch(proj, selectedDate, selectedLayer, extentCoords, showBoundingBox) {
+  googleTagManager.pushEvent({
+    event: 'smart_handoffs_open_eds',
+  });
   const PROJ_CODES = {
     arctic: '90!0!0!0!0!0',
     geographic: '0.0!-180.0!0!1!0!0,2',
@@ -16,8 +21,8 @@ export default function openEarthDataSearch(proj, dateSelection, selectedLayer, 
   };
   const { conceptId, daynight } = selectedLayer;
   const { southWest, northEast } = extentCoords;
-  const startDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T00:00:00.000Z`;
-  const endDate = `${moment.utc(dateSelection).format('YYYY-MM-DD')}T23:59:59.999Z`;
+  const startDate = `${selectedDate}T00:00:00.000Z`;
+  const endDate = `${selectedDate}T23:59:59.999Z`;
   const params = {
     p: conceptId,
     '[qt]': `${startDate},${endDate}`,
