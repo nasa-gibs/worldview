@@ -175,3 +175,9 @@ export function getLocalStorageCollapseState() {
 export function setLocalStorageCollapseState(storageValue) {
   safeLocalStorage.setItem(GEOSEARCH_COLLAPSED, storageValue);
 }
+
+/**
+ * @param {Object} config
+ * @return {Boolean} is geosearch feature enabled
+ */
+export const isGeosearchFeatureEnabled = ({ features }) => !!(features.geocodeSearch && features.geocodeSearch.url);

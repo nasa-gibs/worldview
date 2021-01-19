@@ -31,6 +31,7 @@ import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import Geosearch from '../components/geosearch/geosearch';
 import { toggleShowGeosearch, toggleDialogVisible } from '../modules/geosearch/actions';
+import { isGeosearchFeatureEnabled } from '../modules/geosearch/util';
 import { getAllActiveLayers } from '../modules/layers/selectors';
 
 
@@ -221,15 +222,13 @@ class toolbarContainer extends Component {
       shouldBeCollapsed,
       toggleShowGeosearch,
     } = this.props;
-    const { features: { geocodeSearch: { url: requestUrl } } } = config;
-    const buttonId = 'wv-geosearch-button';
-    const labelText = 'Search places by location';
-    const isFeatureEnabled = !!requestUrl;
+    const isFeatureEnabled = isGeosearchFeatureEnabled(config);
     // do not render if geosearch feature isn't enabled
     if (!isFeatureEnabled) {
       return null;
     }
-
+    const buttonId = 'wv-geosearch-button';
+    const labelText = 'Search places by location';
     const handleButtonClick = isMobile
       ? () => openModal(
         'TOOLBAR_GEOSEARCH_MOBILE',

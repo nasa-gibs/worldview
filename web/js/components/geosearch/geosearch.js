@@ -5,6 +5,7 @@ import GeosearchModal from './geosearch-modal';
 import {
   toggleShowGeosearch,
 } from '../../modules/geosearch/actions';
+import { isGeosearchFeatureEnabled } from '../../modules/geosearch/util';
 
 class Geosearch extends Component {
   constructor(props) {
@@ -74,8 +75,7 @@ const mapStateToProps = (state) => {
     geosearch,
     ui,
   } = state;
-  const { features: { geocodeSearch: { url: requestUrl } } } = config;
-  const isFeatureEnabled = !!requestUrl;
+  const isFeatureEnabled = isGeosearchFeatureEnabled(config);
   const { gifActive } = animation;
   const {
     isExpanded,
