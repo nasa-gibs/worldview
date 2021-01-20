@@ -1,4 +1,4 @@
-### Reflectance (Nadir BRDF-Adjusted, v1.5) Sentinel 2A & 2B/MSI
+### Sentinel 2A & 2B/MSI Reflectance (Nadir BRDF-Adjusted, v1.5)
 Temporal coverage: 29 September 2020 - Present
 
 The Reflectance (Nadir BRDF Adjusted, v1.5) imagery layer from Sentinel 2A and 2B/MSI is a true-color or natural color image because this combination of wavelengths is similar to what the human eye would see. It consists of natural-looking images of land surface, oceanic and atmospheric features. The Reflectance (Nadir BRDF Adjusted, v1.5) imagery layer from Sentinel 2A and 2B/MSI provides 30m Nadir Bidirectional Reflectance Distribution Function (BRDF)-Adjusted Reflectance (NBAR) and is derived from a combination of the European Union’s Copernicus Sentinel-2A and Sentinel-2B Multi-Spectral Instrument (MSI) data products through the Harmonized Landsat and Sentinel-2 (HLS) project.
@@ -9,10 +9,10 @@ The Reflectance (Nadir BRDF-Adjusted, v1.5) product (S30) is available through t
 
 Note: PROVISIONAL - The Harmonized Landsat and Sentinel-2 (HLS) data have not been validated for their science quality and should not be used in science research or applications.
 
-References: [HLSS30 v015: HLS Sentinel-2 Multi-Spectral Instrument Surface Reflectance Daily Global 30 m](https://lpdaac.usgs.gov/products/hlss30v015/)
+### Landsat 8/OLI Reflectance (Nadir BRDF-Adjusted, v1.5)
+Temporal coverage: 15 January 2020 - Present
 
-### Reflectance (Nadir BRDF-Adjusted, v1.5) Landsat 8/OLI
-Temporal coverage: Day Month 2020 - present
+The Reflectance (Nadir BRDF Adjusted, v1.5) imagery layer from Landsat 8/OLI i is a true-color or natural color image because this combination of wavelengths is similar to what the human eye would see. It consists of natural-looking images of land surface, oceanic and atmospheric features. The Reflectance (Nadir BRDF Adjusted, v1.5) imagery layer from Landsat 8/OLI provides 30m Nadir Bidirectional Reflectance Distribution Function (BRDF)-Adjusted Reflectance (NBAR) and is derived from the joint NASA/USGS Landsat 8 Operational Land Imager (OLI) data product through the Harmonized Landsat and Sentinel-2 (HLS) project.
 
 The HLS project provides consistent surface reflectance data from the Operational Land Imager (OLI) aboard the joint NASA/USGS Landsat 8 satellite and the Multi-Spectral Instrument (MSI) aboard the European Union’s Copernicus Sentinel-2A and Sentinel-2B satellites. The combined measurements between Landsat 8, Sentinel-2A, and Sentinel-2B enable global observations of the land every 2-3 days at 30 meter (m) spatial resolution. The HLS project uses a set of algorithms to obtain seamless products from OLI and MSI that include atmospheric correction, cloud and cloud-shadow masking, spatial co-registration and common gridding, illumination and view angle normalization, and spectral bandpass adjustment.
 
@@ -20,4 +20,4 @@ The Reflectance (Nadir BRDF Adjusted, v1.5) imagery layer from Landsat 8/OLI pro
 
 Note: PROVISIONAL - The Harmonized Landsat and Sentinel-2 (HLS) data have not been validated for their science quality and should not be used in science research or applications.
 
-References: [HLSL30 v015: HLS Sentinel-2 Multi-Spectral Instrument Surface Reflectance Daily Global 30 m](https://lpdaac.usgs.gov/products/hlsl30v015/)
+References: [HLSS30 v015: HLS Sentinel-2 Multi-Spectral Instrument Surface Reflectance Daily Global 30 m](https://lpdaac.usgs.gov/products/hlss30v015/); [Harmonized Landsat Sentinel-2 (HLS) Product User Guide](https://lpdaac.usgs.gov/documents/770/HLS_User_Guide_V15_provisional.pdf)

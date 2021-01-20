@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Land Surface Reflectance - Featured": {
+            "id": "featured-land-surface-reflectance",
+            "title":    "Land Surface Reflectance",
+            "subtitle": "Harmonized Landsat Sentinel-2",
+            "sources": {
+                "HLS": {
+                    "id": "Harmonized Landsat Sentinel-2",
+                    "title": "Harmonized Landsat Sentinel-2",
+                    "description": "multi-mission/hls/reflectance",
+                    "image": "",
+                    "settings": [
+                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
+                        "HLS_L30_Nadir_BRDF_Adjusted_Reflectance"
+                    ]
+                }
+            }
+        }
+    }
+}
