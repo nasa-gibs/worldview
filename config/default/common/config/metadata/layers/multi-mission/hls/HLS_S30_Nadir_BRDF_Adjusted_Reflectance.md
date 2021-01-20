@@ -6,4 +6,4 @@ The Reflectance (Nadir BRDF-Adjusted, v1.5) product (S30) is available through t
 
 Note: PROVISIONAL - The Harmonized Landsat and Sentinel-2 (HLS) data have not been validated for their science quality and should not be used in science research or applications.
 
-References: [HLSS30 v015: HLS Sentinel-2 Multi-Spectral Instrument Surface Reflectance Daily Global 30 m](https://lpdaac.usgs.gov/products/hlss30v015/)
+References: [HLSS30 v015: HLS Sentinel-2 Multi-Spectral Instrument Surface Reflectance Daily Global 30 m](https://lpdaac.usgs.gov/products/hlss30v015/); [Harmonized Landsat Sentinel-2 (HLS) Product User Guide](https://lpdaac.usgs.gov/documents/770/HLS_User_Guide_V15_provisional.pdf)

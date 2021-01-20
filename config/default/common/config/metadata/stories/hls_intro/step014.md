@@ -1,1 +1,1 @@
-This image shows the city of Colon, where the Panama Canal exits into the Atlantic Ocean. Note that you can see ships in Gatun Lake, as well as in the Atlantic Ocean.
+See agricultural fields turn from green to brown as they get plowed in Oklahoma between 29 September and 16 October 2020. To see more changes in the fields, set the time interval in the custom interval selector to 5 days and click on the forward and back arrows in the timeline.
