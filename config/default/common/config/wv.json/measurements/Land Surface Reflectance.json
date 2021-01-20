@@ -62,7 +62,8 @@
                     "description": "multi-mission/hls/reflectance",
                     "image": "",
                     "settings": [
-                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance_v1.5_STD"
+                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
+                        "HLS_L30_Nadir_BRDF_Adjusted_Reflectance"
                     ]
                 }
             }

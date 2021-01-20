@@ -1,1 +1,1 @@
-Three burned areas in Oregon are clearly visible in this image from 29 September 2020. Turn on and off the Sentinel 2A & 2B Reflectance layer by clicking on the eye icon to see difference between that layer and the Terra/MODIS Corrected Reflectance layer.
+Swipe left and right to compare and contrast the imagery from MODIS on the left (A) side, and the Sentinel 2A and 2B imagery on the right (B) side showing the Palm Islands in Dubai.
