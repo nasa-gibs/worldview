@@ -122,6 +122,13 @@ fi
 #         "$BUILD_DIR/config/wv.json/collections.json"
 # fi
 
+# Throw error if no categoryGroupOrder.json file present
+if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
+    echo "categoryGroupOrder.json not found.  Generating..."
+    "$PYTHON_SCRIPTS_DIR/generateCategoryGroupOrder.py" "$SRC_DIR/common/config/wv.json/categories/" \
+        "$SRC_DIR/common/config/wv.json/"
+fi
+
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
