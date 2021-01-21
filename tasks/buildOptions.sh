@@ -124,7 +124,9 @@ fi
 
 # Throw error if no categoryGroupOrder.json file present
 if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
-    die "config/wv.json/categoryGroupOrder.json does not exist"
+    echo "categoryGroupOrder.json not found.  Generating..."
+    "$PYTHON_SCRIPTS_DIR/generateCategoryGroupOrder.py" "$SRC_DIR/common/config/wv.json/categories/" \
+        "$SRC_DIR/common/config/wv.json/"
 fi
 
 # Run mergeConfig.py on all directories in /config
