@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
-import googleTagManager from 'googleTagManager';
+// import googleTagManager from 'googleTagManager';
 
 // Utils
 import { calculateResponsiveState } from 'redux-responsive';
@@ -128,28 +128,28 @@ class App extends React.Component {
     config.parameters = state;
 
     // get user IP address for GTM/GA using https://www.ipify.org/ API
-    const getIpAddress = async() => {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const json = await response.json();
-      const ipAddress = json.ip;
+    // const getIpAddress = async() => {
+    //   const response = await fetch('https://api.ipify.org?format=json');
+    //   const json = await response.json();
+    //   const ipAddress = json.ip;
 
-      googleTagManager.pushEvent({
-        event: 'ipAddress',
-        ipAddress,
-      });
-    };
+    //   googleTagManager.pushEvent({
+    //     event: 'ipAddress',
+    //     ipAddress,
+    //   });
+    // };
 
     const main = function() {
       // Load any additional scripts as needed
       if (config.scripts) {
         util.loadScipts(config.scripts);
       }
-      if (config.features.googleTagManager) {
-        googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
-        if (!/localhost/.test(window.location.href)) {
-          getIpAddress();
-        }
-      }
+      // if (config.features.googleTagManager) {
+      //   googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
+      //   if (!/localhost/.test(window.location.href)) {
+      //     getIpAddress();
+      //   }
+      // }
 
       // Console notifications
       if (Brand.release()) {
