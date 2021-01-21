@@ -297,7 +297,7 @@ export default function AboutPage() {
         <hr />
         <h2>License</h2>
         <p>
-          Copyright &copy; 2013 - 2020 United States Government as represented by the Administrator of the National Aeronautics and
+          Copyright &copy; 2013 - 2021 United States Government as represented by the Administrator of the National Aeronautics and
           Space Administration. All Rights Reserved. This software is licensed under the
           {' '}
           <a href="https://ti.arc.nasa.gov/opensource/nosa/" target="_blank" rel="noopener noreferrer">NASA Open Source Software Agreement, Version 1.3</a>

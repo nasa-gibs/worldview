@@ -12,7 +12,7 @@ shell.mkdir('-p', 'build/worldview');
 shell.cp('-rf', 'web/*', 'build/worldview');
 
 // Remove preview images, if that feature is disabled, for smaller dist file size
-const { CONFIG_ENV } = process.env;
+const { CONFIG_ENV, GTM_ID } = process.env;
 const featuresConfigPath = CONFIG_ENV
   ? `config/active/${CONFIG_ENV}/features.json`
   : 'config/default/common/features.json';
@@ -52,6 +52,10 @@ shell.sed('-i', /@MAIL@/g, email, applyTo);
 shell.sed('-i', /@BUILD_NONCE/g, buildNonce, applyTo);
 shell.sed('-i', /@BUILD_TIMESTAMP@/g, buildTimestamp, applyTo);
 shell.sed('-i', /@BUILD_VERSION@/g, pkg.version, applyTo);
+
+// replace google tag manager id
+const googleTagManagerID = GTM_ID || '';
+shell.sed('-i', /@GTM_ID@/g, googleTagManagerID, applyTo);
 
 const dist = 'dist/worldview.tar.gz';
 console.log(`Creating distribution: ${dist}`);
