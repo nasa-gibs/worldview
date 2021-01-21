@@ -1,0 +1,11 @@
+{
+    "products": {
+        "HLSL30": {
+            "name": "HLS Operational Land Imager Surface Reflectance and TOA Brightness Daily Global 30 m V1.5",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "HLSL30"
+            }
+        }
+    }
+}
