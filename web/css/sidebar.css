@@ -6,7 +6,7 @@
 }
 .products-holder-case {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   min-width: 286px;
   width: 286px;
   background: transparent;
@@ -65,7 +65,7 @@
   border-bottom: 1px solid transparent;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
-  z-index: 1;
+  z-index: 3;
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;

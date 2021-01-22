@@ -325,11 +325,13 @@ class SmartHandoff extends Component {
               left: x,
               top: y2 + 5,
               width: x2 - x,
+              zIndex: 2,
             }}
             topRightStyle={{
               left: x,
               top: y - 20,
               width: x2 - x,
+              zIndex: 2,
             }}
             coordinates={coordinates}
             showCoordinates

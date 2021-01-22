@@ -101,7 +101,7 @@ Crop.defaultProps = {
   width: 30,
   x: 20,
   y: 10,
-  zIndex: 10,
+  zIndex: 3,
 };
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
