@@ -330,9 +330,16 @@ class TimelineData extends Component {
     const mainContainerHeight = `${Math.min(35 + layerListItemHeigthConstant, 240)}px`;
     const mainContainerLeftOffset = `${parentOffset - 10}px`;
 
-    const animateBottomClassName = `animate-timeline-data-panel-slide-${isDataCoveragePanelOpen ? 'up' : 'down'}`;
+    const isPanelOpenClassName = `timeline-data-panel-${isDataCoveragePanelOpen ? 'open' : 'closed'}`;
     const panelChevronClassName = `wv-timeline-data-availability-handle-chevron-${isDataCoveragePanelOpen ? 'open' : 'closed'}`;
     const panelToggleLabelText = isDataCoveragePanelOpen ? 'Collapse data coverage panel' : 'Show data coverage panel';
+
+    const panelContainerStyle = {
+      width: mainContainerWidth,
+      height: isDataCoveragePanelOpen ? mainContainerHeight : 0,
+      left: mainContainerLeftOffset,
+      display: isDataCoveragePanelOpen ? 'block' : 'none',
+    };
 
     return (
       <>
@@ -352,13 +359,8 @@ class TimelineData extends Component {
           <div className={`wv-timeline-data-availability-handle-chevron ${panelChevronClassName}`} />
         </div>
         <div
-          className={`timeline-data-panel-container ${animateBottomClassName}`}
-          style={{
-            width: mainContainerWidth,
-            height: mainContainerHeight,
-            left: mainContainerLeftOffset,
-            display: isDataCoveragePanelOpen ? 'block' : 'none',
-          }}
+          className={`timeline-data-panel-container ${isPanelOpenClassName}`}
+          style={panelContainerStyle}
         >
           {/* Data Coverage Panel */}
           {isDataCoveragePanelOpen

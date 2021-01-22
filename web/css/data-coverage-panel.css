@@ -5,16 +5,12 @@
   border-top-left-radius: 5px;
 }
 
-.animate-timeline-data-panel-slide-up {
-  z-index: 5;
+.timeline-data-panel-open {
   bottom: 66px;
-  opacity: 1;
 }
 
-.animate-timeline-data-panel-slide-down {
-  z-index: -5;
+.timeline-data-panel-closed {
   bottom: -12px;
-  opacity: 0;
 }
 
 .timeline-data-panel i.wv-close:hover {
