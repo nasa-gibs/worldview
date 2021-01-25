@@ -3,7 +3,7 @@
         "Brightness Temperature": {
             "id": "brightness-temperature",
             "title":    "Brightness Temperature",
-            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI,  NOAA-20/VIIRS, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, NOAA-15/AMSU-A, NOAA-16/AMSU-A, NOAA-17/AMSU-A",
+            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI,  NOAA-20/VIIRS, NOAA-20/VIIRS+CrIS, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, Suomi NPP/VIIRS+CrIS, NOAA-15/AMSU-A, NOAA-16/AMSU-A, NOAA-17/AMSU-A",
             "sources": {
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsre",
@@ -81,6 +81,18 @@
                         "OrbitTracks_NOAA-20_Descending"
                     ]
                 },
+                "NOAA-20/VIIRS+CrIS": {
+                    "id": "noaa20-viirs=cris",
+                    "title": "NOAA-20/VIIRS+CrIS",
+                    "description": "viirs/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Day",
+                        "VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Night",
+                        "OrbitTracks_NOAA-20_Ascending",
+                        "OrbitTracks_NOAA-20_Descending"
+                    ]
+                },
                 "TRMM": {
                     "id": "trmm",
                     "title": "TRMM",
@@ -98,7 +110,7 @@
                     "image": "",
                     "settings": [
                         "SMAP_L3_Active_Passive_Brightness_Temp_H",
-			                  "SMAP_L3_Active_Passive_Brightness_Temp_V",
+			            "SMAP_L3_Active_Passive_Brightness_Temp_V",
                         "OrbitTracks_SMAP_Ascending",
                         "OrbitTracks_SMAP_Descending"
 		    ]
@@ -147,6 +159,19 @@
                     "settings": [
                         "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
                         "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+                        "OrbitTracks_Suomi_NPP_Ascending",
+                        "OrbitTracks_Suomi_NPP_Descending"
+                    ]
+                },
+                "Suomi NPP/VIIRS+CrIS": {
+                    "id": "suomi-npp-viirs-cris",
+                    "title": "Suomi NPP/VIIRS+CrIS",
+                    "description": "viirs/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Day",
+                        "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night",
+
                         "OrbitTracks_Suomi_NPP_Ascending",
                         "OrbitTracks_Suomi_NPP_Descending"
                     ]

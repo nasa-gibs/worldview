@@ -7,9 +7,7 @@
       "description": "viirs/VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Night",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "FSNRAD_L2_VIIRS_CRIS_NOAA20",
       "tracks": [
         "OrbitTracks_NOAA-20_Descending"

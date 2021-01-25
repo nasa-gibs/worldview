@@ -7,9 +7,7 @@
       "description": "viirs/VIIRS_CrIS_SNPP_BT_Band33_Fusion_Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "FSNRAD_L2_VIIRS_CRIS_SNPP",
       "wrapadjacentdays": true,
       "tracks": [
