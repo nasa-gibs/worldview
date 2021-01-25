@@ -58,22 +58,26 @@
 
 .smart-handoff-layer-list .layer-item {
   padding: 10px 15px;
-  input {
-    cursor: pointer;
+  .layer-title {
+    font-size: 14px;
   }
-  label {
-    cursor: pointer;
-    display: block;
-    margin-top: -20px;
-    margin-left: 20px;
-  }
-  span {
-    cursor: pointer;
+  .layer-subtitle {
+    margin: 3px 0 8px;
     color: #999;
-    display: block;
-    margin-left: 20px;
-    margin-top: 3px;
-    font-size: 11px;
+  }
+  .collection-choice {
+    margin: 5px  5px 10px;
+    input {
+      cursor: pointer;
+      top: 2px;
+      position: relative;
+    }
+    label {
+      color: #eee;
+      cursor: pointer;
+      margin: 0 5px 0 7px;
+      font-size: 12px;
+    }
   }
 }
 

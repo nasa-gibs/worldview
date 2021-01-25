@@ -5,6 +5,7 @@ import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
@@ -46,6 +47,7 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       selectedLayer: undefined,
+      selectedCollection: undefined,
       showBoundingBox: false,
       isSearchingForGranules: false,
       selectedGranules: 0,
@@ -76,13 +78,13 @@ class SmartHandoff extends Component {
     const {
       currentExtent,
       selectedLayer,
+      selectedCollection,
     } = this.state;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
-    const selectedConceptIds = selectedLayer && selectedLayer.conceptIds;
-    const isLayerStillActive = activeLayers.find(({ conceptIds }) => selectedConceptIds === conceptIds);
+    const isLayerStillActive = activeLayers.find(({ id }) => selectedLayer && selectedLayer.id);
 
-    if (selectedConceptIds && !isLayerStillActive) {
+    if (selectedCollection && !isLayerStillActive) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState(this.baseState);
     }
@@ -114,9 +116,9 @@ class SmartHandoff extends Component {
    */
   onBoundaryChange(boundaries) {
     const { proj, map } = this.props;
-    const { selectedLayer } = this.state;
+    const { selectedCollection } = this.state;
 
-    if (!selectedLayer) return;
+    if (!selectedCollection) return;
 
     const {
       x,
@@ -169,7 +171,7 @@ class SmartHandoff extends Component {
       coordinates,
       currentExtent,
     }, () => {
-      if (selectedLayer && currentExtent) {
+      if (selectedCollection && currentExtent) {
         this.debouncedUpdateExtent();
       }
     });
@@ -209,6 +211,7 @@ class SmartHandoff extends Component {
     const {
       currentExtent,
       selectedLayer,
+      selectedCollection,
       showBoundingBox,
     } = this.state;
 
@@ -217,10 +220,10 @@ class SmartHandoff extends Component {
     const hideModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
 
     const continueToEDS = () => openEarthDataSearch(
-      proj.id, selectedDate, selectedLayer, currentExtent, showBoundingBox,
+      proj.id, selectedDate, selectedCollection, currentExtent, showBoundingBox,
     );
     if (!hideModal) {
-      showWarningModal(displayDate, selectedLayer, continueToEDS);
+      showWarningModal(displayDate, selectedLayer, selectedCollection, continueToEDS);
     } else {
       continueToEDS();
     }
@@ -228,12 +231,13 @@ class SmartHandoff extends Component {
 
   /**
    * Fires when user selected a different layer
-   * @param {*} layer - the specified layer designated by the user
+   * @param {*} collection
    * @param {*} currentExtent - the current boundaries of the bounding box
    */
-  onLayerChange(layer, currentExtent) {
+  onLayerChange(layer, collection, currentExtent) {
     this.setState({
       selectedLayer: layer,
+      selectedCollection: collection,
       totalGranules: undefined,
     }, () => this.updateGranuleCount(currentExtent));
   }
@@ -248,6 +252,7 @@ class SmartHandoff extends Component {
     const { selectedDate } = this.props;
     const {
       selectedLayer,
+      selectedCollection,
       showBoundingBox,
       totalGranules,
     } = this.state;
@@ -259,16 +264,12 @@ class SmartHandoff extends Component {
 
     const startDate = `${selectedDate}T00:00:00.000Z`;
     const endDate = `${selectedDate}T23:59:59.999Z`;
-    // Use an NRT collection if one is present, otherwise use STD
-    const bestConceptId = selectedLayer.conceptIds.reduce((prev, curr) => (curr.type === 'NRT' ? curr : prev)).value;
     const dateRange = `${startDate},${endDate}`;
-    const { daynight } = selectedLayer;
     const params = {
       temporal: dateRange,
-      collection_concept_id: bestConceptId,
+      collection_concept_id: selectedCollection,
       include_facets: 'v2',
       page_size: 0,
-      day_night_flag: daynight || undefined,
     };
     const newState = { isSearchingForGranules: false };
 
@@ -297,27 +298,38 @@ class SmartHandoff extends Component {
    */
   renderLayerChoices() {
     const { activeLayers } = this.props;
-    const { selectedLayer, currentExtent } = this.state;
-    const selectedId = selectedLayer && selectedLayer.id;
+    const { selectedCollection, currentExtent } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
-        {activeLayers.map((layer) => {
-          const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
-          return layer.conceptIds && (
-            <div className="layer-item" key={inputId}>
-              <input
-                id={inputId}
-                type="radio"
-                name="smart-handoff-layer-radio"
-                checked={selectedId === layer.id}
-                onChange={() => this.onLayerChange(layer, currentExtent)}
-              />
-              <label htmlFor={inputId}>{layer.title}</label>
-              <span>{layer.subtitle}</span>
-            </div>
-          );
-        })}
+
+        {activeLayers.map((layer) => layer.conceptIds && (
+        <div className="layer-item" key={`${util.encodeId(layer.id)}-layer-choice`}>
+          <div className="layer-title">{layer.title}</div>
+          <div className="layer-subtitle">{layer.subtitle}</div>
+
+          {layer.conceptIds.map(({ type, value }) => {
+            const inputId = `${util.encodeId(value)}-collection-choice`;
+            const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
+            return (
+              <div className="collection-choice" key={inputId}>
+                <input
+                  id={inputId}
+                  type="radio"
+                  name="smart-handoff-layer-radio"
+                  checked={selectedCollection === value}
+                  onChange={() => this.onLayerChange(layer, value, currentExtent)}
+                />
+                <label htmlFor={inputId}>{`${type} - ${value}`}</label>
+                <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer">
+                  <FontAwesomeIcon icon="info-circle" />
+                </a>
+              </div>
+            );
+          })}
+
+        </div>
+        ))}
       </div>
     );
   }
@@ -397,13 +409,13 @@ class SmartHandoff extends Component {
     } = this.props;
 
     const {
+      selectedCollection,
       isSearchingForGranules,
       selectedGranules,
-      selectedLayer,
       showBoundingBox,
       totalGranules,
     } = this.state;
-    return selectedLayer && selectedLayer.conceptIds && (
+    return selectedCollection && (
       <div className="granule-count">
         <h1>
           Available granules for
@@ -423,7 +435,9 @@ class SmartHandoff extends Component {
           { isSearchingForGranules && (
             <span className="loading-granule-count fade-in constant-width" />
           )}
-          <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>(?)</span>
+          <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>
+            <FontAwesomeIcon icon="question-circle" />
+          </span>
         </h1>
       </div>
     );

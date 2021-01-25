@@ -11,11 +11,13 @@ import safeLocalStorage from '../../util/local-storage';
  * to NASA's Earthdata Search web tool that will proceed in fetching corresponding
  * layer data and granule files that are available for download.
  */
-function SmartHandoffModal({ displayDate, selectedLayer, continueToEDS }) {
+function SmartHandoffModal({
+  displayDate, selectedLayer, selectedCollection, continueToEDS,
+}) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
-  const { title, subtitle, conceptIds } = selectedLayer;
-  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${conceptIds[0]}.html`;
+  const { title, subtitle } = selectedLayer;
+  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${selectedCollection}.html`;
 
   return (
 
@@ -75,14 +77,30 @@ function SmartHandoffModal({ displayDate, selectedLayer, continueToEDS }) {
         <h2><span>{showMoreInfo ? 'Hide Info' : 'Show More Info'}</span></h2>
       </div>
 
-      <div className="smart-handoff-layer-info">
-        <h1> Selected layer to download: </h1>
-        <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
-          <p className="smart-handoff-layer-name">{`${title}`}</p>
-          <p className="smart-handoff-layer-mata-data">{`${subtitle} (${displayDate})`}</p>
-        </a>
-      </div>
+      <div className="smart-handoff-layer-info row">
+        <div className="col">
+          <h1> Selected layer: </h1>
+          <p className="smart-handoff-layer-name">
+            {title}
+          </p>
+          <p className="smart-handoff-layer-name">
+            {subtitle}
+          </p>
+        </div>
 
+        <div className="col">
+          <h1> Selected date:</h1>
+          <p><span style={{ fontFamily: 'monospace' }}>{displayDate}</span></p>
+        </div>
+
+        <div className="col">
+          <h1> Selected collection: </h1>
+          <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
+            <p>{selectedCollection}</p>
+          </a>
+        </div>
+
+      </div>
 
       <div className="smart-handoff-button-group">
         <Button
