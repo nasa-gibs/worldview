@@ -259,11 +259,13 @@ class SmartHandoff extends Component {
 
     const startDate = `${selectedDate}T00:00:00.000Z`;
     const endDate = `${selectedDate}T23:59:59.999Z`;
+    // Use an NRT collection if one is present, otherwise use STD
+    const bestConceptId = selectedLayer.conceptIds.reduce((prev, curr) => (curr.type === 'NRT' ? curr : prev)).value;
     const dateRange = `${startDate},${endDate}`;
     const { daynight } = selectedLayer;
     const params = {
       temporal: dateRange,
-      collection_concept_id: selectedLayer.conceptIds[0],
+      collection_concept_id: bestConceptId,
       include_facets: 'v2',
       page_size: 0,
       day_night_flag: daynight || undefined,
@@ -307,7 +309,6 @@ class SmartHandoff extends Component {
               <input
                 id={inputId}
                 type="radio"
-                value={layer.conceptIds[0]}
                 name="smart-handoff-layer-radio"
                 checked={selectedId === layer.id}
                 onChange={() => this.onLayerChange(layer, currentExtent)}

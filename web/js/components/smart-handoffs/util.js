@@ -23,8 +23,9 @@ export default function openEarthDataSearch(proj, selectedDate, selectedLayer, e
   const { southWest, northEast } = extentCoords;
   const startDate = `${selectedDate}T00:00:00.000Z`;
   const endDate = `${selectedDate}T23:59:59.999Z`;
+  const bestConceptId = conceptIds.reduce((prev, curr) => (curr.type === 'NRT' ? curr : prev)).value;
   const params = {
-    p: conceptIds[0],
+    p: bestConceptId,
     '[qt]': `${startDate},${endDate}`,
     m: PROJ_CODES[proj],
     'pg[0][dnf]': daynight !== undefined ? daynight : undefined,
