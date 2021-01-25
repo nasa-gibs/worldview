@@ -6,27 +6,22 @@ import os
 import json
 import urllib3
 import certifi
+
+prog = os.path.basename(__file__)
+parser = OptionParser(usage="Usage: %s <config> <output_dir>" % prog)
+(options, args) = parser.parse_args()
+
 http = urllib3.PoolManager(
     cert_reqs='CERT_REQUIRED',
     ca_certs=certifi.where()
   )
 prog = os.path.basename(__file__)
-root_dir = 'config/default/common/'
 
-# Use config/active dir if present
-if os.path.isdir('config/active'):
-  root_dir = 'config/active/common/'
+features_file = args[0]
+input_file = args[1]
+output_file = args[2]
 
-CONFIG_ENV = os.environ.get('CONFIG_ENV')
-
-# If a config enviroment was passed, use the coresponding dir
-if CONFIG_ENV is not None:
-  root_dir = 'config/active/' + CONFIG_ENV + '/'
-
-features_file = root_dir + 'features.json'
-input_file = root_dir + 'config/wv.json/layerOrder.json'
-output_file = 'build/options-build/config/wv.json/visMetadata.json'
-
+# NOTE:  Only using these properties at this time
 use_keys = ['conceptIds']
 layer_metadata = {}
 

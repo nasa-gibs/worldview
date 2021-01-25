@@ -3,12 +3,11 @@
 PROG=$(basename "$0")
 BASE=$(dirname "$0")/..
 
-TASKS_DIR="$BASE/tasks"
 SRC_DIR="$BASE/config/default"
 OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
-PYTHON_SCRIPTS_DIR="$TASKS_DIR/python3"
+PYTHON_SCRIPTS_DIR="$BASE/tasks/python3"
 
 
 # If there is an active directory, use instead of defaults
@@ -132,9 +131,9 @@ if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
         "$SRC_DIR/common/config/wv.json/"
 fi
 
-# Run getVisMetadata.py to fetch visualization (layer) metadata
-"$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/config/wv.json/layerOrder.json" \
-    "$BUILD_DIR/config/wv.json/visMetadata.json"
+# Get visualization metadata (if configured)
+"$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
+    "$BUILD_DIR/config/wv.json/layerOrder.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
 
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
