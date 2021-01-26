@@ -6,6 +6,7 @@ import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UncontrolledTooltip } from 'reactstrap';
 import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
@@ -18,6 +19,11 @@ import { getActiveLayers } from '../../modules/layers/selectors';
 import getSelectedDate from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
+
+const STD_NRT_MAP = {
+  STD: 'Standard',
+  NRT: 'Near Real-Time',
+};
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -267,7 +273,7 @@ class SmartHandoff extends Component {
     const dateRange = `${startDate},${endDate}`;
     const params = {
       temporal: dateRange,
-      collection_concept_id: selectedCollection,
+      collection_concept_id: selectedCollection.value,
       include_facets: 'v2',
       page_size: 0,
     };
@@ -293,6 +299,26 @@ class SmartHandoff extends Component {
     this.setState(newState);
   }
 
+  renderCollectionTooltip = ({ value, title, type }) => {
+    const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
+    return (
+      <UncontrolledTooltip
+        className="zot-tooltip"
+        boundariesElement="window"
+        target={`${util.encodeId(value)}-tooltp`}
+        placement="right"
+        trigger="hover"
+        autohide={false}
+        delay={{ show: 50, hide: 500 }}
+      >
+        <div>{title}</div>
+        <div>
+          <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer"> View Details in CMR </a>
+        </div>
+      </UncontrolledTooltip>
+    );
+  }
+
   /**
    * Render radio buttons for layer selection
    */
@@ -308,22 +334,24 @@ class SmartHandoff extends Component {
           <div className="layer-title">{layer.title}</div>
           <div className="layer-subtitle">{layer.subtitle}</div>
 
-          {layer.conceptIds.map(({ type, value }) => {
+          {layer.conceptIds.map((collection) => {
+            const {
+              type, value, version,
+            } = collection;
             const inputId = `${util.encodeId(value)}-collection-choice`;
-            const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
+
             return (
               <div className="collection-choice" key={inputId}>
                 <input
                   id={inputId}
                   type="radio"
                   name="smart-handoff-layer-radio"
-                  checked={selectedCollection === value}
-                  onChange={() => this.onLayerChange(layer, value, currentExtent)}
+                  checked={(selectedCollection || {}).value === value}
+                  onChange={() => this.onLayerChange(layer, collection, currentExtent)}
                 />
-                <label htmlFor={inputId}>{`${type} - ${value}`}</label>
-                <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer">
-                  <FontAwesomeIcon icon="info-circle" />
-                </a>
+                <label htmlFor={inputId}>{`${STD_NRT_MAP[type]} - v${version}`}</label>
+                <FontAwesomeIcon id={`${util.encodeId(value)}-tooltp`} icon="info-circle" />
+                {this.renderCollectionTooltip(collection)}
               </div>
             );
           })}
@@ -566,7 +594,7 @@ const mapStateToProps = (state) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: (displayDate, selectedLayer, continueToEDS) => {
+  showWarningModal: (displayDate, selectedLayer, selectedCollection, continueToEDS) => {
     googleTagManager.pushEvent({
       event: 'smart_handoffs_open_warning_modal',
     });
@@ -578,6 +606,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           displayDate,
           selectedLayer,
+          selectedCollection,
           continueToEDS,
         },
         size: 'lg',

@@ -17,7 +17,7 @@ function SmartHandoffModal({
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
   const { title, subtitle } = selectedLayer;
-  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${selectedCollection}.html`;
+  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${selectedCollection.value}.html`;
 
   return (
 
@@ -79,7 +79,7 @@ function SmartHandoffModal({
 
       <div className="smart-handoff-layer-info row">
         <div className="col">
-          <h1> Selected layer: </h1>
+          <h1> Selected Worldview layer: </h1>
           <p className="smart-handoff-layer-name">
             {title}
           </p>
@@ -94,9 +94,9 @@ function SmartHandoffModal({
         </div>
 
         <div className="col">
-          <h1> Selected collection: </h1>
+          <h1> Collection details: </h1>
           <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
-            <p>{selectedCollection}</p>
+            <p>{`${selectedCollection.title}`}</p>
           </a>
         </div>
 
@@ -149,6 +149,7 @@ const hideModal = () => {
 SmartHandoffModal.propTypes = {
   continueToEDS: PropTypes.func,
   displayDate: PropTypes.string,
+  selectedCollection: PropTypes.string,
   selectedLayer: PropTypes.object,
 };
 

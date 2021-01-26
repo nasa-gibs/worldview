@@ -23,8 +23,8 @@ export default function openEarthDataSearch(proj, selectedDate, selectedCollecti
   const startDate = `${selectedDate}T00:00:00.000Z`;
   const endDate = `${selectedDate}T23:59:59.999Z`;
   const params = {
-    q: selectedCollection,
-    p: selectedCollection,
+    q: selectedCollection.value,
+    p: selectedCollection.value,
     '[qt]': `${startDate},${endDate}`,
     m: PROJ_CODES[proj],
     'sb[0]': showBoundingBox ? `${southWest},${northEast}` : undefined,

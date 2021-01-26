@@ -126,11 +126,11 @@ fi
 
 # Get visualization metadata (if configured)
 "$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
-    "$BUILD_DIR/config/wv.json/layerOrder.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+    "$BUILD_DIR/config/wv.json/layerOrder.json" "$BUILD_DIR/config/wv.json/layerMetadata.json"
 
     # Run getCollectionData.py to fetch collection metadata
-if [ -e "$BUILD_DIR/config/wv.json/layer-metadata.json" ] ; then
-    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+if [ -e "$BUILD_DIR/config/wv.json/layerMetadata.json" ] ; then
+    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/layerMetadata.json"
 fi
 
 # Run mergeConfig.py on all directories in /config
