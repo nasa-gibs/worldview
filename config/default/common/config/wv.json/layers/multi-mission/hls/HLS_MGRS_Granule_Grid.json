@@ -7,9 +7,7 @@
       "description": "multi-mission/hls/HLS_MGRS_Granule_Grid",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "hls"
-      ],
+      "layergroup": "Land Surface Reflectance",
       "product": "",
       "type": "vector",
       "wrapX": true
