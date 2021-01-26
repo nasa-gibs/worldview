@@ -117,13 +117,6 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
             "$BUILD_DIR/config/palettes"
 fi
 
-# Run getCollectionData.py to fetch collection metadata
-# Disabled for now
-# if [ -e "$BUILD_DIR/config/wv.json/conceptIds.json" ] ; then
-#     "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/conceptIds.json" \
-#         "$BUILD_DIR/config/wv.json/collections.json"
-# fi
-
 # Throw error if no categoryGroupOrder.json file present
 if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
     echo "categoryGroupOrder.json not found.  Generating..."
@@ -134,6 +127,11 @@ fi
 # Get visualization metadata (if configured)
 "$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
     "$BUILD_DIR/config/wv.json/layerOrder.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+
+    # Run getCollectionData.py to fetch collection metadata
+if [ -e "$BUILD_DIR/config/wv.json/layer-metadata.json" ] ; then
+    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/layer-metadata.json"
+fi
 
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
