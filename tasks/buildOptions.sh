@@ -132,10 +132,6 @@ if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
         "$SRC_DIR/common/config/wv.json/"
 fi
 
-# Run getVisMetadata.py to fetch visualization (layer) metadata
-"$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/config/wv.json/layerOrder.json" \
-    "$BUILD_DIR/config/wv.json/visMetadata.json"
-
 # Run mergeConfig.py on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
