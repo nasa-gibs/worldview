@@ -4,17 +4,11 @@ from concurrent.futures import ThreadPoolExecutor
 from optparse import OptionParser
 import os
 import json
-import urllib3
-import certifi
+import requests
 
 prog = os.path.basename(__file__)
 parser = OptionParser(usage="Usage: %s <config> <output_dir>" % prog)
 (options, args) = parser.parse_args()
-
-http = urllib3.PoolManager(
-    cert_reqs='CERT_REQUIRED',
-    ca_certs=certifi.where()
-  )
 prog = os.path.basename(__file__)
 
 features_file = args[0]
@@ -26,11 +20,11 @@ use_keys = ['conceptIds']
 layer_metadata = {}
 
 def get_metadata(layer_id, base_url):
-  response = http.request('GET', base_url + layer_id + '.json')
-  if (response.status != 200):
+  response = requests.get(base_url + layer_id + '.json')
+  if (response.status_code != 200):
     print('%s WARNING: No metadata config found for [%s]' % (prog, layer_id))
     return
-  layer_metadata[layer_id] = json.loads(response.data.decode('utf-8'))
+  layer_metadata[layer_id] = response.json()
 
   # Remove any props we don't expect to use
   metadata_keys = dict(layer_metadata[layer_id]).keys()
