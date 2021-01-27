@@ -313,7 +313,7 @@ class SmartHandoff extends Component {
       >
         <div>{title}</div>
         <div>
-          <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer"> View Details in CMR </a>
+          <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer"> View Collection Details </a>
         </div>
       </UncontrolledTooltip>
     );
