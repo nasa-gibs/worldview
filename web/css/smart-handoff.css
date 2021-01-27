@@ -148,7 +148,6 @@ label[for='chk-crop-toggle'] span {
 /* Overrides react image crop component  */
 .ReactCrop {
   cursor: default !important;
-  z-index: 0 !important;
 }
 
 /* Smart handoff modal */

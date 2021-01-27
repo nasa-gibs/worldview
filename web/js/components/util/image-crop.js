@@ -58,6 +58,7 @@ export default class Crop extends React.Component {
       maxHeight,
       showCoordinates,
       keepSelection,
+      zIndex,
     } = this.props;
     const { crop } = this.state;
     return (
@@ -69,7 +70,7 @@ export default class Crop extends React.Component {
           style={{
             background:
               crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',
-            zIndex: 10,
+            zIndex,
           }}
           imageStyle={{
             width: maxWidth,
@@ -100,6 +101,7 @@ Crop.defaultProps = {
   width: 30,
   x: 20,
   y: 10,
+  zIndex: 3,
 };
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -115,4 +117,5 @@ Crop.propTypes = {
   width: PropTypes.number,
   x: PropTypes.number,
   y: PropTypes.number,
+  zIndex: PropTypes.number,
 };
