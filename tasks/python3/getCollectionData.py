@@ -56,7 +56,7 @@ def process_requests(wv_product_dict):
       failed_id = str(e)
       if cmr_fails.get(failed_id, None) is None:
         cmr_fails[failed_id] = True
-        print("%s: ERROR: No response for collection: [%s]" % (prog, failed_id))
+        print("%s: WARNING: No CMR entry for collection: [%s]" % (prog, failed_id))
   print("%s: %s collections returned metadata." % (prog, len(cmr_data)))
   print("%s: %s collections did not reutrn any metadata." % (prog, len(cmr_fails)))
 
