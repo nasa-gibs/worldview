@@ -21,10 +21,10 @@ This feature provides natural events queried by Earth Observatory Natural Event 
 to disable, set:
 `"naturalEvents": false`
 
-## Data Download
+## Smart Handoffs
 
-This feature uses CGI scripts to query the CMR API on the server. To enable,
-edit `config/default/common/features.json` and set `"dataDownload": true`.
+This feature allows directing users to [Earthadata Search](https://search.earthdata.nasa.gov/) to download the underlying data for layers.  For more information see the [Smart Handoffs docs](./smart_handoffs.md). To enable,
+edit `config/default/common/features.json` and set `"smartHandoffs": true`.
 
 ## GeocodeSearch
 
