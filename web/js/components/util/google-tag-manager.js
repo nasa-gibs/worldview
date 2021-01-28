@@ -29,7 +29,7 @@ export default {
     const json = await response.json();
     const ipAddress = json.ip;
 
-    pushEvent({
+    this.pushEvent({
       event: 'ipAddress',
       ipAddress,
     });
