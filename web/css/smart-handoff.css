@@ -63,11 +63,11 @@
     line-height: 15px;
   }
   .layer-subtitle {
-    margin: 3px 0 8px;
+    margin: 3px 0 4px;
     color: #999;
   }
   .collection-choice {
-    margin: 10px 5px 10px 15px;
+    margin: 4px 5px 8px 15px;
     input {
       cursor: pointer;
       top: 2px;

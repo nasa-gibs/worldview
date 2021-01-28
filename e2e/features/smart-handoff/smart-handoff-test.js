@@ -10,19 +10,21 @@ const TIME_LIMIT = 10000;
 
 const layersTab = '#layers-sidebar-tab';
 const dataTabButton = '#download-sidebar-tab';
-const cloudRadiusRadioButton = '#MODIS_Aqua_Cloud_Effective_Radius-smart-handoff-choice';
+const cloudRadiusRadioButton = '#C1443536017-LAADS-collection-choice';
+const urlParams = '?l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-12-01';
 
 module.exports = {
 
   'Data tab is available and in default state when clicked': (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    c.url(`${c.globals.url}?t=2019-12-01`);
+    c.url(c.globals.url + urlParams);
 
     // Verify Data tab is in sidebar
     c.expect.element(dataTabButton).to.be.visible;
 
     // Click Data Download tab to switch to Data with 'No Data Selected'
     c.click(dataTabButton);
+
     c.expect
       .element('.smart-handoff-side-panel > h1')
       .to.have.text.equal('None of your currently listed layers are available for downloading.');
@@ -54,12 +56,12 @@ module.exports = {
     // Verify granules and date are correct
     c.expect
       .element('.granule-count > h1')
-      .to.have.text.equal('Available granules for 2019 Dec 01: 128(?)');
+      .to.have.text.equal('Available granules for 2019 Dec 01: 289');
   },
 
   'Enable target area selection': (c) => {
     c.click('#chk-crop-toggle');
-    c.assert.containsText('.granule-count > h1', 'of 128');
+    c.assert.containsText('.granule-count > h1', 'of 289');
   },
 
   'Download via Earthdata Search': (c) => {
