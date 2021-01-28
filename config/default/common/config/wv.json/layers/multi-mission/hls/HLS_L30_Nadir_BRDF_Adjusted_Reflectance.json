@@ -3,7 +3,7 @@
     "HLS_L30_Nadir_BRDF_Adjusted_Reflectance": {
       "id": "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
       "title": "Reflectance (Nadir BRDF-Adjusted, v1.5)",
-      "subtitle": "Landsat 8 / MSI",
+      "subtitle": "Landsat 8 / OLI",
       "description": "multi-mission/hls/HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
       "tags": "corrected surface landsat oli sentinel msi s30",
       "group": "overlays",
