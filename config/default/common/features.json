@@ -1,6 +1,6 @@
 {
     "features": {
-        "dataDownload": true,
+        "smartHandoffs": true,
         "animation": true,
         "urlShortening": true,
         "customPalettes": true,

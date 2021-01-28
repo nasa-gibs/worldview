@@ -31,7 +31,7 @@ const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 const getActiveTabs = function(config) {
   const { features } = config;
   return {
-    download: features.dataDownload,
+    download: features.smartHandoffs,
     layers: true,
     events: features.naturalEvents,
   };
@@ -175,8 +175,8 @@ class Sidebar extends React.Component {
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
-    const naturalEventsFeatureEnabled = config.features.naturalEvents;
-    const dataDownloadFeatureEnabled = config.features.dataDownload;
+    const { naturalEvents } = config.features;
+    const { smartHandoffs } = config.features;
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
@@ -225,7 +225,7 @@ class Sidebar extends React.Component {
                     {this.getProductsToRender(activeTab, isCompareMode)}
                   </TabPane>
                   <TabPane tabId="events">
-                    {naturalEventsFeatureEnabled && (
+                    {naturalEvents && (
                     <Events
                       isActive={activeTab === 'events'}
                       height={subComponentHeight}
@@ -233,7 +233,7 @@ class Sidebar extends React.Component {
                     )}
                   </TabPane>
                   <TabPane tabId="download">
-                    {dataDownloadFeatureEnabled && (
+                    {smartHandoffs && (
                       <SmartHandoff
                         isActive={activeTab === 'download'}
                         tabTypes={tabTypes}
