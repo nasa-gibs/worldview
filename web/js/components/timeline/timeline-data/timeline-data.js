@@ -324,6 +324,7 @@ class TimelineData extends Component {
             width: mainContainerWidth,
             height: mainContainerHeight,
             left: mainContainerLeftOffset,
+            display: isDataCoveragePanelOpen ? 'block' : 'none',
           }}
         >
           {/* Data Coverage Panel */}
