@@ -7,11 +7,12 @@ import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
-import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
+import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
+import SmartHandoffNotAvailableModal from '../../components/smart-handoffs/smart-handoff-not-available-modal';
 import GranuleAlertModalBody from '../../components/smart-handoffs/smart-handoff-granule-alert';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
@@ -465,7 +466,7 @@ class SmartHandoff extends Component {
           { isSearchingForGranules && (
             <span className="loading-granule-count fade-in constant-width" />
           )}
-          <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>
+          <span className="help-link" onClick={showGranuleHelpModal}>
             <FontAwesomeIcon icon="question-circle" />
           </span>
         </h1>
@@ -476,24 +477,22 @@ class SmartHandoff extends Component {
   /**
    * Render "no layers to download" message
    */
-  renderNoLayersToDownload = () => (
-    <div className="smart-handoff-side-panel">
-      <h1>
-        None of your currently listed layers are available for downloading.
-      </h1>
-      <hr />
-      <h2>Why are my current layers not available?</h2>
-      <p>
-        Some layers in Worldview do not have corresponding source data products available for download.
-      </p>
-      <p>
-        These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
-      </p>
-      <p>
-        If you would like to download only an image, please use the “camera” icon in the upper right.
-      </p>
-    </div>
-  )
+  renderNoLayersToDownload = () => {
+    const { showNotAvailableModal } = this.props;
+    return (
+      <div className="smart-handoff-side-panel">
+        <h1>
+          None of your current layers are available for download.
+        </h1>
+        <hr />
+        <h2>
+          <a href className="help-link" onClick={showNotAvailableModal}>
+            Why are my layers not available?
+          </a>
+        </h2>
+      </div>
+    );
+  }
 
   /**
    * Default render which displays the download panel
@@ -502,6 +501,7 @@ class SmartHandoff extends Component {
     const {
       activeLayers,
       isActive,
+      showNotAvailableModal,
     } = this.props;
     const {
       selectedLayer,
@@ -520,12 +520,14 @@ class SmartHandoff extends Component {
     return (
       <div className="smart-handoff-side-panel">
 
-        <h1>Select an available layer to download:</h1>
         <div className="esd-notification">
           Downloading data will be performed using
           <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
           application.
         </div>
+        <a href className="help-link" onClick={showNotAvailableModal}>
+          Why are some layers not available?
+        </a>
         <hr />
         {this.renderLayerChoices()}
         <hr />
@@ -556,6 +558,7 @@ SmartHandoff.propTypes = {
   selectedDate: PropTypes.string,
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
+  showNotAvailableModal: PropTypes.func,
 };
 
 /**
@@ -579,9 +582,10 @@ const mapStateToProps = (state) => {
   const selectedDate = getSelectedDate(state);
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
+  const filterForSmartHandoff = ({ projections, disableSmartHandoff }) => projections[proj.id] && !disableSmartHandoff;
 
   return {
-    activeLayers: getActiveLayers(state).filter((layer) => layer.projections[proj.id]),
+    activeLayers: getActiveLayers(state).filter(filterForSmartHandoff),
     displayDate,
     map,
     proj: proj.selected,
@@ -611,7 +615,17 @@ const mapDispatchToProps = (dispatch) => ({
           selectedCollection,
           continueToEDS,
         },
-        size: 'lg',
+        size: 'md',
+      }),
+    );
+  },
+  showNotAvailableModal: () => {
+    dispatch(
+      openCustomContent('layers-not-available', {
+        desktopOnly: true,
+        headerText: 'Layer Download Availability',
+        bodyComponent: SmartHandoffNotAvailableModal,
+        size: 'md',
       }),
     );
   },
@@ -624,7 +638,7 @@ const mapDispatchToProps = (dispatch) => ({
         desktopOnly: true,
         headerText: 'Granule Availablilty',
         bodyComponent: GranuleAlertModalBody,
-        size: 'lg',
+        size: 'md',
       }),
     );
   },

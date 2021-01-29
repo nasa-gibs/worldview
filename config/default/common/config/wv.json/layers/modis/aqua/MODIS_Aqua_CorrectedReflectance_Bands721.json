@@ -14,7 +14,8 @@
       ],
       "daynight": [
         "day"
-      ]
+      ],
+      "disableSmartHandoff": true
     }
   }
 }

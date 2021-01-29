@@ -42,8 +42,9 @@
 }
 .esd-notification {
   display: block;
-  margin: 15px 20px;
-  font-size: 11px;
+  margin: 15px 5px;
+  font-size: 12px;
+  line-height: 14px;
   text-align: center;
   color: #fff;
 }
@@ -97,13 +98,14 @@ label[for='chk-crop-toggle'] span {
   margin: 15px auto;
   margin-bottom: 0;
 }
-.granule-help-link {
-  color: #7bf !important;
+.help-link, a.help-link {
+  color: #007bff !important;
+  &:hover {
+    color: #7bf !important;
+    cursor: pointer;
+  }
 }
-.granule-help-link:hover {
-  color: #9df !important;
-  cursor: pointer;
-}
+
 .granule-count span {
   color: #fff;
   font-size: 16px;
