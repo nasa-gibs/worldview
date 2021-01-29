@@ -127,27 +127,14 @@ class App extends React.Component {
     const { config } = self.props;
     config.parameters = state;
 
-    // get user IP address for GTM/GA using https://www.ipify.org/ API
-    const getIpAddress = async() => {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const json = await response.json();
-      const ipAddress = json.ip;
-
-      googleTagManager.pushEvent({
-        event: 'ipAddress',
-        ipAddress,
-      });
-    };
-
     const main = function() {
       // Load any additional scripts as needed
       if (config.scripts) {
         util.loadScipts(config.scripts);
       }
       if (config.features.googleTagManager) {
-        googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
         if (!/localhost/.test(window.location.href)) {
-          getIpAddress();
+          googleTagManager.getIpAddress();
         }
       }
 

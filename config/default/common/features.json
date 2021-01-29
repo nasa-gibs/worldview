@@ -8,9 +8,7 @@
         "tour": true,
         "feedback": true,
         "previewSnapshots": true,
-        "googleTagManager": {
-            "id": "GTM-WNP7MLF"
-        },
+        "googleTagManager": true,
         "notification": {
             "url": "https://status.earthdata.nasa.gov/api/v1/notifications",
             "releases": "https://github.com/nasa-gibs/worldview/releases"
