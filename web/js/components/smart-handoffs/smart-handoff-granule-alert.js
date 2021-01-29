@@ -1,9 +1,9 @@
 import React from 'react';
 
 const GranuleAlertModalBody = () => (
-  <div className="smart-handoff-granule-alert">
+  <div className="basic-modal">
 
-    <h1 className="granule-unavailable-header">
+    <h1>
       Why am I seeing NONE when data is being shown?
     </h1>
 
@@ -29,7 +29,7 @@ const GranuleAlertModalBody = () => (
 
     <hr />
 
-    <h1 className="granule-unavailable-header">
+    <h1>
       Why am I seeing &quot;0 out of n&quot; granules when there is imagery displayed on the map?
     </h1>
 

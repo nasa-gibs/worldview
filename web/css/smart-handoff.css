@@ -253,41 +253,6 @@ label[for='chk-crop-toggle'] span {
   display: inline-block;
 }
 
-/** Granule alert modal */
-.smart-handoff-granule-alert {
-  padding: 20px;
-}
-
-.smart-handoff-granule-alert hr {
-  border-color: #333;
-  margin: 25px 0;
-}
-
-.smart-handoff-granule-alert h1 {
-  font-weight: 900;
-  color: #fff;
-  font-size: 15px;
-  line-height: 20px;
-}
-
-.smart-handoff-granule-alert p {
-  line-height: 18px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  color: #ddd;
-}
-
-.smart-handoff-granule-alert ol {
-  margin: 15px 0;
-  color: #ddd;
-}
-
-.smart-handoff-granule-alert ol li {
-  margin-left: 30px;
-  margin-top: 10px;
-  line-height: 18px;
-}
-
 /** Overrides the modal component styles */
 #transferring-to-earthdata-search.modal-dialog .modal-body {
   background: #191a1b !important;
