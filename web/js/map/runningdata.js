@@ -52,13 +52,16 @@ export default function MapRunningData(models, compareUi, store) {
       const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
       if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv, state.compare, swipeOffset)) return;
-      let color;
+
+      const hasPalette = !lodashIsEmpty(def.palette);
+      if (!hasPalette) return;
       const identifier = def.palette.styleProperty;
       const layerId = def.id;
       const paletteLegends = getPalette(layerId, undefined, undefined, state);
       const { legend } = paletteLegends;
 
       if (!identifier && legend.colors.length > 1) return;
+      let color;
       if (identifier) {
         const properties = feature.getProperties();
         const value = properties[identifier] || def.palette.unclassified;
