@@ -23,7 +23,7 @@ to disable, set:
 
 ## Smart Handoffs
 
-This feature allows directing users to [Earthadata Search](https://search.earthdata.nasa.gov/) to download the underlying data for layers.  For more information see the [Smart Handoffs docs](./smart_handoffs.md). To enable,
+This feature allows directing users to [Earthdata Search](https://search.earthdata.nasa.gov/) to download the underlying data for layers.  For more information see the [Smart Handoffs docs](./smart_handoffs.md). To enable,
 edit `config/default/common/features.json` and set `"smartHandoffs": true`.
 
 ## GeocodeSearch
