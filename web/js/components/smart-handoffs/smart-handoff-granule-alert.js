@@ -17,22 +17,15 @@ const GranuleAlertModalBody = () => (
       basis, showing Standard-quality imagery if it is available, NRT otherwise.
     </p>
     <p>
-      This initial release of the &quot;data download via Earthdata Search&quot; feature currently links to either
-      the NRT or Standard product but not to both; in most cases, it links to NRT. That may mean that if
-      you are looking at a date older than ~7 days, the NRT product may not be available and the listing of
-      granules will be set to &quot;NONE&quot; even though standard granules exist.
+      Often layers will have both NRT and Standard collections available for download in Earthdata Search. If you are looking
+      for data within the last ~7 days you will likely want to use the NRT collection.  If you have the NRT collection
+      selected and the granule count shows &quot;NONE&quot;, this may be an indication that your selected date is too far in the past and you
+      may have better luck with the Standard collection.
     </p>
-    <p>
-      Please note that the next version of this feature will further enhance Worldview&apos;s downloading capabilities and
-      allow for standard products to be included in the listings.
-    </p>
-
     <hr />
-
     <h1>
       Why am I seeing &quot;0 out of n&quot; granules when there is imagery displayed on the map?
     </h1>
-
     <ol>
       <li>
         The target area selection does not encompass any of the imagery displayed on the map.

@@ -6,7 +6,7 @@ export default function SmartHandoffNotAvailableModal() {
       <h1>Why are some layers not available for download?</h1>
       <p>
         Some layers in Worldview do not have corresponding source data products available for download.
-        These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
+        These include Geostationary, Reference, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
       </p>
       <p>
         For a downloadable product similar to MODIS Corrected Reflectance,
