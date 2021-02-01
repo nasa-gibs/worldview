@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
@@ -96,10 +96,12 @@ function LayerRow (props) {
           isMobile={isMobile}
         />
       );
-    } if (!isLoading) {
-      requestPalette(layer.id);
     }
   };
+
+  useEffect(() => {
+    if (!isLoading && layer && hasPalette) requestPalette(layer.id);
+  }, [layer]);
 
   const getDisabledTitle = (layer) => {
     const {
