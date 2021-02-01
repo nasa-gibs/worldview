@@ -190,7 +190,7 @@
     "moment-locales-webpack-plugin": "^1.1.2",
     "node-dir": "^0.1.17",
     "ol": "6.4.x",
-    "ol-mapbox-style": "6.1.x",
+    "ol-mapbox-style": "6.3.x",
     "proj4": "2.6.1",
     "promise-queue": "2.2.5",
     "prop-types": "^15.7.2",
