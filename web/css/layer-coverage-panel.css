@@ -1,24 +1,24 @@
-.timeline-data-panel-container {
+.timeline-layer-coverage-container {
   position: absolute;
   background: rgba(40, 40, 40, 1);
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
 }
 
-.timeline-data-panel-open {
+.timeline-layer-coverage-open {
   bottom: 66px;
 }
 
-.timeline-data-panel-closed {
+.timeline-layer-coverage-closed {
   bottom: -12px;
 }
 
-.timeline-data-panel i.wv-close:hover {
+.timeline-layer-coverage i.wv-close:hover {
   color: #999;
   cursor: pointer;
 }
 
-.timeline-data-panel-header {
+.timeline-layer-coverage-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,17 +26,17 @@
   padding: 5px;
 }
 
-.timeline-data-panel-header-title {
+.timeline-layer-coverage-header-title {
   width: 125px;
   padding: 5px;
 }
 
-.data-panel-info-button {
+.layer-coverage-info-button {
   margin-right: 25px;
   margin-bottom: 2px;
 }
 
-.data-panel-info-button-icon {
+.layer-coverage-info-button-icon {
   border: thin solid #fff;
   width: 1.1em !important;
   height: 14px;
@@ -44,6 +44,7 @@
   border-radius: 50%;
   padding: 1px;
   margin-top: 3px;
+  cursor: pointer;
 }
 
 .label-layer-active {
@@ -54,22 +55,22 @@
   color: #999;
 }
 
-.wv-toggle-data-matching-main {
+.toggle-layer-coverage-include-hidden {
   align-items: center;
   margin: 0;
   white-space: nowrap;
   flex-grow: 1;
 }
 
-.wv-toggle-data-matching-main .react-switch-case {
-  width: 38px;
+.toggle-layer-coverage-include-hidden .react-switch-case {
+  width: 45px;
 }
 
-.wv-toggle-data-matching-main > div.react-switch-label-case.switch-col {
+.toggle-layer-coverage-include-hidden > div.react-switch-label-case.switch-col {
   padding-left: 5px;
 }
 
-.timeline-data-panel {
+.timeline-layer-coverage {
   position: relative;
   background-color: #212121;
   color: #fff;
@@ -80,30 +81,30 @@
   border-top-left-radius: 5px;
 }
 
-.data-panel-layer-item {
+.layer-coverage-layer-list-item {
   position: relative;
   border-bottom: thin solid #3c3c3c;
   padding-bottom: 5px;
 }
 
-.data-panel-layer-item-header {
+.layer-coverage-item-header {
   display: flex;
   align-items: center;
   padding: 5px 3px;
 }
 
-.data-panel-layer-item-title {
+.layer-coverage-item-title {
   white-space: nowrap;
   font-size: 1em;
 }
 
-.data-panel-layer-item-subtitle {
+.layer-coverage-item-subtitle {
   font-style: italic;
   font-size: 0.9em;
   padding-left: 3px;
 }
 
-.data-panel-layer-item-date-range {
+.layer-coverage-item-date-range {
   position: absolute;
   font-size: 0.9em;
   right: 0;
@@ -111,59 +112,59 @@
   padding: 4px 10px;
 }
 
-.data-panel-layer-list {
+.layer-coverage-layer-list {
   overflow: hidden;
 }
 
-.data-panel-layer-coverage-line-container {
+.layer-coverage-line-container {
   overflow: hidden;
   height: 12px;
 }
 
-.data-panel-coverage-line-container {
+.layer-coverage-line-group {
   position: absolute;
 }
 
-.data-panel-coverage-line {
+.layer-coverage-line {
   position: absolute;
   height: 12px;
 }
 
-.data-panel-layer-empty {
+.layer-coverage-list-empty {
   height: 41px;
   padding: 6px;
 }
 
-.data-item-empty {
+.layer-coverage-item-empty {
   display: flex;
   flex-direction: row;
 }
 
 /* INFO DIALOG */
-.data-panel-info-modal .modal-header .close {
+.timeline-layer-coverage-info-modal .modal-header .close {
   font-size: 22px;
   padding: 12px 14px;
 }
 
-.data-panel-info-modal .modal-title {
+.timeline-layer-coverage-info-modal .modal-title {
   font-size: 14px;
   font-weight: 600;
 }
 
-.data-panel-info-modal {
+.timeline-layer-coverage-info-modal {
   margin-left: auto;
   margin-right: auto;
   border-radius: 6px;
   width: 510px;
 }
 
-.data-panel-info {
+.layer-coverage-info {
   & p {
     padding: 5px;
   }
 }
 
-.data-panel-info-item-container {
+.layer-coverage-info-item-container {
   display: flex;
   flex: 1 1 0;
 
@@ -173,14 +174,14 @@
   }
 }
 
-.data-panel-info-item-left {
+.layer-coverage-info-item-left {
   & img {
     margin: 10px 0;
     width: 212px;
   }
 }
 
-.data-panel-info-item-right {
+.layer-coverage-info-item-right {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

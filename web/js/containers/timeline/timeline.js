@@ -14,7 +14,7 @@ import ErrorBoundary from '../error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
-import TimelineData from '../../components/timeline/timeline-data/timeline-data';
+import TimelineLayerCoveragePanel from '../../components/timeline/timeline-coverage/timeline-coverage';
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
 import DraggerContainer from '../../components/timeline/timeline-draggers/dragger-container';
 import AxisHoverLine from '../../components/timeline/timeline-axis/date-tooltip/axis-hover-line';
@@ -106,7 +106,7 @@ class Timeline extends React.Component {
         end: false, start: false, startOffset: -50, width: 50000,
       },
       matchingTimelineCoverage: {},
-      isDataCoveragePanelOpen: false,
+      isTimelineLayerCoveragePanelOpen: false,
       shouldIncludeHiddenLayers: false,
     };
 
@@ -838,7 +838,7 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc set matching data coverage range for selected layers timeline
+  * @desc set matching layer coverage range for selected layers timeline
   * @param {Object} dateRange
   * @returns {void}
   */
@@ -850,18 +850,18 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc toggle data coverage panel open/closed
+  * @desc toggle layer coverage panel open/closed
   * @param {Boolean} isOpen
   * @returns {void}
   */
-  toggleDataCoveragePanel = (isOpen) => {
+  toggleLayerCoveragePanel = (isOpen) => {
     if (!isOpen) {
       googleTagManager.pushEvent({
         event: 'open_data_coverage_panel',
       });
     }
     this.setState({
-      isDataCoveragePanelOpen: isOpen,
+      isTimelineLayerCoveragePanelOpen: isOpen,
     });
   }
 
@@ -913,10 +913,10 @@ class Timeline extends React.Component {
             isTimelineDragging,
             isDraggerDragging,
             isAnimationDraggerDragging,
-            isDataCoveragePanelOpen,
+            isTimelineLayerCoveragePanelOpen,
           } = self.state;
           const { isAnimationPlaying } = self.props;
-          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging || isDataCoveragePanelOpen;
+          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging || isTimelineLayerCoveragePanelOpen;
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
@@ -1030,7 +1030,7 @@ class Timeline extends React.Component {
       isTimelineDragging,
       isDraggerDragging,
       isAnimationDraggerDragging,
-      isDataCoveragePanelOpen,
+      isTimelineLayerCoveragePanelOpen,
       matchingTimelineCoverage,
       isHoverOverDistractionFreeTimeUI,
       showHoverLine,
@@ -1238,23 +1238,23 @@ class Timeline extends React.Component {
                         draggerSelected={draggerSelected}
                         draggerPosition={draggerPosition}
                         draggerPositionB={draggerPositionB}
-                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                       />
 
-                      {/* Data Coverage Panel */}
-                      <TimelineData
+                      {/* Timeline Layer Coverage Panel */}
+                      <TimelineLayerCoveragePanel
                         appNow={appNow}
-                        positionTransformX={position + transformX}
-                        timeScale={timeScale}
-                        frontDate={frontDate}
-                        backDate={backDate}
-                        timelineStartDateLimit={timelineStartDateLimit}
-                        parentOffset={parentOffset}
                         axisWidth={axisWidth}
-                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
+                        backDate={backDate}
+                        frontDate={frontDate}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                         matchingTimelineCoverage={matchingTimelineCoverage}
-                        toggleDataCoveragePanel={this.toggleDataCoveragePanel}
-                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
+                        parentOffset={parentOffset}
+                        positionTransformX={position + transformX}
+                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
+                        timelineStartDateLimit={timelineStartDateLimit}
+                        timeScale={timeScale}
+                        toggleLayerCoveragePanel={this.toggleLayerCoveragePanel}
                       />
 
                       {isAnimationWidgetReady
@@ -1320,7 +1320,7 @@ class Timeline extends React.Component {
                         hasSubdailyLayers={hasSubdailyLayers}
                         showDraggerTime={showDraggerTime}
                         showHoverLine={showHoverLine}
-                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                       />
                       )}
                     </div>

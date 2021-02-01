@@ -546,13 +546,13 @@ button:focus {
 }
 
 #timeline-hide:hover,
-#timeline-data-availability-panel-handle:hover {
+#timeline-layer-coverage-panel-handle:hover {
   background-color: #fff;
   border-color: #000;
 }
 
 #timeline-hide:hover .wv-timeline-hide,
-#timeline-data-availability-panel-handle:hover .wv-timeline-data-availability-handle-chevron {
+#timeline-layer-coverage-panel-handle:hover .timeline-layer-coverage-panel-handle-chevron {
   background-position: -206px -63px;
 }
 
@@ -581,7 +581,7 @@ button:focus {
   transform: rotate(270deg);
 }
 
-#timeline-data-availability-panel-handle {
+#timeline-layer-coverage-panel-handle {
   position: absolute;
   height: 19px;
   width: 57px;
@@ -595,7 +595,7 @@ button:focus {
   overflow: hidden;
 }
 
-.wv-timeline-data-availability-handle-chevron {
+.timeline-layer-coverage-panel-handle-chevron {
   position: absolute;
   background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
   -webkit-box-sizing: border-box;
@@ -605,13 +605,13 @@ button:focus {
   height: 20px;
 }
 
-.wv-timeline-data-availability-handle-chevron-open {
+.timeline-layer-coverage-panel-handle-chevron-open {
   top: 2.5px;
   margin-left: -43px;
   transform: rotate(180deg);
 }
 
-.wv-timeline-data-availability-handle-chevron-closed {
+.timeline-layer-coverage-panel-handle-chevron-closed {
   top: -4px;
   margin-left: -14px;
 }

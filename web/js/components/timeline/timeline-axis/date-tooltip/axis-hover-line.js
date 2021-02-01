@@ -15,7 +15,7 @@ class AxisHoverLine extends PureComponent {
       draggerSelected,
       draggerPosition,
       draggerPositionB,
-      isDataCoveragePanelOpen,
+      isTimelineLayerCoveragePanelOpen,
       isDraggerDragging,
       isTimelineDragging,
       isAnimationDraggerDragging,
@@ -26,7 +26,7 @@ class AxisHoverLine extends PureComponent {
     // check for timeline/animation dragging and showhover handled by parent
     const isNoBlockingDragging = !isTimelineDragging && !isAnimationDraggerDragging;
     const showHover = isNoBlockingDragging && showHoverLine;
-    const panelDraggerHoverLine = isDataCoveragePanelOpen && isNoBlockingDragging && isDraggerDragging;
+    const panelDraggerHoverLine = isTimelineLayerCoveragePanelOpen && isNoBlockingDragging && isDraggerDragging;
     const shouldDisplayHoverLine = showHover || panelDraggerHoverLine;
 
     // init normal (no data coverage panel) line heights (svg container, inner line)
@@ -41,7 +41,7 @@ class AxisHoverLine extends PureComponent {
     // min 1 layer for error message display
     const layerLengthCoef = Math.max(layers.length, 1);
     // handle active layer count dependent tooltip height
-    if (isDataCoveragePanelOpen) {
+    if (isTimelineLayerCoveragePanelOpen) {
       lineHeight = 112;
       const addHeight = Math.min(layerLengthCoef, 5) * 40;
       lineHeight += addHeight;
@@ -91,7 +91,7 @@ AxisHoverLine.propTypes = {
   draggerSelected: PropTypes.string,
   hoverLinePosition: PropTypes.number,
   isAnimationDraggerDragging: PropTypes.bool,
-  isDataCoveragePanelOpen: PropTypes.bool,
+  isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   isTimelineDragging: PropTypes.bool,
   shouldIncludeHiddenLayers: PropTypes.bool,

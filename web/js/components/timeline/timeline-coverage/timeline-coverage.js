@@ -17,16 +17,16 @@ import { getActiveLayers } from '../../../modules/layers/selectors';
 import { toggleCustomContent } from '../../../modules/modal/actions';
 import Scrollbars from '../../util/scrollbar';
 import Switch from '../../util/switch';
-import DataPanelInfo from './info-modal';
-import DataItemList from './data-item-list';
+import LayerCoverageInfoModal from './info-modal';
+import CoverageItemList from './coverage-item-list';
 
 /*
- * Timeline Data Panel for layer coverage.
+ * Timeline Layer Coverage Panel for temporal coverage.
  *
- * @class TimelineData
+ * @class TimelineLayerCoveragePanel
  */
 
-class TimelineData extends Component {
+class TimelineLayerCoveragePanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,12 +42,12 @@ class TimelineData extends Component {
     const layers = this.getActiveLayers(activeLayers);
     this.setActiveLayers(layers);
     // prevent bubbling to parent which the wheel event is blocked for timeline zoom in/out wheel event
-    document.querySelector('.timeline-data-panel-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
+    document.querySelector('.timeline-layer-coverage-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
     // init populate of activeLayers
     this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, layers);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const {
       timeScale,
       frontDate,
@@ -69,12 +69,12 @@ class TimelineData extends Component {
     const {
       activeLayers,
       isProductPickerOpen,
-      isDataCoveragePanelOpen,
+      isTimelineLayerCoveragePanelOpen,
       projection,
     } = this.props;
     const { shouldIncludeHiddenLayers } = this.state;
 
-    if (!prevProps.isProductPickerOpen && isProductPickerOpen && isDataCoveragePanelOpen) {
+    if (!prevProps.isProductPickerOpen && isProductPickerOpen && isTimelineLayerCoveragePanelOpen) {
       this.togglePanelOpenClose();
       return;
     }
@@ -198,10 +198,10 @@ class TimelineData extends Component {
   */
   togglePanelOpenClose = () => {
     const {
-      isDataCoveragePanelOpen,
-      toggleDataCoveragePanel,
+      isTimelineLayerCoveragePanelOpen,
+      toggleLayerCoveragePanel,
     } = this.props;
-    toggleDataCoveragePanel(!isDataCoveragePanelOpen);
+    toggleLayerCoveragePanel(!isTimelineLayerCoveragePanelOpen);
   }
 
   /**
@@ -272,13 +272,13 @@ class TimelineData extends Component {
   }
 
   /**
-  * @desc render info button for data panel coverage info modal
+  * @desc render info button for layer coverage panel coverage info modal
   * @returns {DOM Object}
   */
   renderInfoButton = () => {
     const { onInfoClick } = this.props;
-    const layerInfoBtnId = 'data-panel-info-button';
-    const layerInfoBtnTitle = 'Data Coverage Panel Information';
+    const layerInfoBtnId = 'layer-coverage-info-button';
+    const layerInfoBtnTitle = 'Timeline Layer Coverage Information';
 
     return (
       <a
@@ -288,10 +288,7 @@ class TimelineData extends Component {
         onMouseDown={this.stopPropagation}
         onClick={() => onInfoClick()}
       >
-        <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
-          {layerInfoBtnTitle}
-        </UncontrolledTooltip>
-        <FontAwesomeIcon icon="info" className="data-panel-info-button-icon" />
+        <FontAwesomeIcon icon="info" className="layer-coverage-info-button-icon" />
       </a>
     );
   }
@@ -302,7 +299,7 @@ class TimelineData extends Component {
       axisWidth,
       backDate,
       frontDate,
-      isDataCoveragePanelOpen,
+      isTimelineLayerCoveragePanelOpen,
       parentOffset,
       positionTransformX,
       timeScale,
@@ -324,68 +321,68 @@ class TimelineData extends Component {
       ? 41
       : layers.length * 41;
 
-    const dataAvailabilityHandleTopOffset = `${Math.max(-54 - layerListItemHeigthConstant, -259)}px`;
+    const layerCoveragePanelHandleTopOffset = `${Math.max(-54 - layerListItemHeigthConstant, -259)}px`;
 
     const mainContainerWidth = `${axisWidth + 1}px`;
     const mainContainerHeight = `${Math.min(35 + layerListItemHeigthConstant, 240)}px`;
     const mainContainerLeftOffset = `${parentOffset - 10}px`;
 
-    const isPanelOpenClassName = `timeline-data-panel-${isDataCoveragePanelOpen ? 'open' : 'closed'}`;
-    const panelChevronClassName = `wv-timeline-data-availability-handle-chevron-${isDataCoveragePanelOpen ? 'open' : 'closed'}`;
-    const panelToggleLabelText = isDataCoveragePanelOpen ? 'Collapse data coverage panel' : 'Show data coverage panel';
+    const isPanelOpenClassName = `timeline-layer-coverage-${isTimelineLayerCoveragePanelOpen ? 'open' : 'closed'}`;
+    const panelChevronClassName = `timeline-layer-coverage-panel-handle-chevron-${isTimelineLayerCoveragePanelOpen ? 'open' : 'closed'}`;
+    const panelToggleLabelText = isTimelineLayerCoveragePanelOpen ? 'Collapse layer coverage panel' : 'Show layer coverage panel';
 
     const panelContainerStyle = {
       width: mainContainerWidth,
-      height: isDataCoveragePanelOpen ? mainContainerHeight : 0,
+      height: isTimelineLayerCoveragePanelOpen ? mainContainerHeight : 0,
       left: mainContainerLeftOffset,
-      display: isDataCoveragePanelOpen ? 'block' : 'none',
+      display: isTimelineLayerCoveragePanelOpen ? 'block' : 'none',
     };
 
     return (
       <>
-        {/* Data Coverage Panel open/close handle */}
+        {/* Timeline Layer Coverage Panel open/close handle */}
         <div
-          id="timeline-data-availability-panel-handle"
+          id="timeline-layer-coverage-panel-handle"
           aria-label={panelToggleLabelText}
           onClick={this.togglePanelOpenClose}
           style={{
             right: Math.floor((axisWidth + 75) / 2),
-            top: isDataCoveragePanelOpen ? dataAvailabilityHandleTopOffset : '-19px',
+            top: isTimelineLayerCoveragePanelOpen ? layerCoveragePanelHandleTopOffset : '-19px',
           }}
         >
-          <UncontrolledTooltip placement="top" target="timeline-data-availability-panel-handle">
+          <UncontrolledTooltip placement="top" target="timeline-layer-coverage-panel-handle">
             {panelToggleLabelText}
           </UncontrolledTooltip>
-          <div className={`wv-timeline-data-availability-handle-chevron ${panelChevronClassName}`} />
+          <div className={`timeline-layer-coverage-panel-handle-chevron ${panelChevronClassName}`} />
         </div>
         <div
-          className={`timeline-data-panel-container ${isPanelOpenClassName}`}
+          className={`timeline-layer-coverage-container ${isPanelOpenClassName}`}
           style={panelContainerStyle}
         >
-          {/* Data Coverage Panel */}
-          {isDataCoveragePanelOpen
+          {/* Timeline Layer Coverage Panel */}
+          {isTimelineLayerCoveragePanelOpen
           && (
           <div
-            className="timeline-data-panel"
+            className="timeline-layer-coverage"
             style={{
               width: mainContainerWidth,
             }}
           >
-            <header className="timeline-data-panel-header">
-              <h3 className="timeline-data-panel-header-title">LAYER COVERAGE</h3>
+            <header className="timeline-layer-coverage-header">
+              <h3 className="timeline-layer-coverage-header-title">LAYER COVERAGE</h3>
               {this.renderInfoButton()}
               <Switch
                 active={shouldIncludeHiddenLayers}
                 border
                 color="00457b"
-                id="wv-toggle-data-matching-toggle"
-                containerClassAddition="wv-toggle-data-matching-main"
+                id="toggle-layer-coverage-include-hidden"
+                containerClassAddition="toggle-layer-coverage-include-hidden"
                 label="Include Hidden Layers"
                 toggle={() => this.addMatchingCoverageToTimeline(!shouldIncludeHiddenLayers)}
               />
             </header>
             <Scrollbars style={{ maxHeight: maxHeightScrollBar }}>
-              <DataItemList
+              <CoverageItemList
                 activeLayers={activeLayers}
                 appNow={appNow}
                 axisWidth={axisWidth}
@@ -430,17 +427,17 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => ({
   onInfoClick: () => {
-    const key = 'DATA_PANEL_INFO_MODAL';
+    const key = 'TIMELINE_LAYER_COVERAGE_INFO_MODAL';
     googleTagManager.pushEvent({
-      event: 'data_panel_info',
+      event: 'data_coverage_panel_info',
     });
     dispatch(
       toggleCustomContent(key, {
-        headerText: 'Data Coverage Panel',
+        headerText: 'Timeline Layer Coverage',
         backdrop: false,
         size: 'lg',
-        bodyComponent: DataPanelInfo,
-        modalClassName: ' data-panel-info-modal',
+        bodyComponent: LayerCoverageInfoModal,
+        modalClassName: ' timeline-layer-coverage-info-modal',
         wrapClassName: 'clickable-behind-modal',
         desktopOnly: true,
       }),
@@ -448,13 +445,13 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-TimelineData.propTypes = {
+TimelineLayerCoveragePanel.propTypes = {
   activeLayers: PropTypes.array,
   appNow: PropTypes.object,
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,
-  isDataCoveragePanelOpen: PropTypes.bool,
+  isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   isProductPickerOpen: PropTypes.bool,
   onInfoClick: PropTypes.func,
   parentOffset: PropTypes.number,
@@ -463,10 +460,10 @@ TimelineData.propTypes = {
   setMatchingTimelineCoverage: PropTypes.func,
   timelineStartDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
-  toggleDataCoveragePanel: PropTypes.func,
+  toggleLayerCoveragePanel: PropTypes.func,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TimelineData);
+)(TimelineLayerCoveragePanel);
