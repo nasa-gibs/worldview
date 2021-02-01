@@ -106,6 +106,7 @@
 
 .products-holder-case .nav-item {
   color: #fff;
+  cursor: pointer;
 }
 .nav-item .active {
   cursor: pointer;

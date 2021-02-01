@@ -62,6 +62,7 @@
     margin: 0 8px 0 0;
     color: #383838;
     background: #fff;
+    cursor: pointer;
   }
   & .active {
     background: #00457b;
