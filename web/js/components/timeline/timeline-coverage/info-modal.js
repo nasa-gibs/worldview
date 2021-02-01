@@ -4,10 +4,10 @@ const LayerCoverageInfoModal = () => (
   <div className="layer-coverage-info">
     <header>
       <p>
-        Temporal coverage of activated time-varying layers are shown in the layer coverage panel as striped blue lines in relation to the current timeline zoom level. The total temporal coverage dates are shown on the right.
+        Temporal availability of active time-varying layers is shown as a set of striped horizontal blue lines in the panel. The total temporal coverage of the layers is shown on the far right.
       </p>
       <p>
-        Time-varying layers that are temporally coincident/have matching temporal coverage are shown in the timeline as a solid blue line, making it easier to find out when multiple layers have concurrent imagery available.
+        Time-varying layers that have matching temporal coverage are shown in the timeline (bottom of screen) as a solid blue line, making it easier to determine when multiple layers have temporally coincident imagery.
       </p>
     </header>
     <div className="layer-coverage-info-item-container">
@@ -17,7 +17,7 @@ const LayerCoverageInfoModal = () => (
       <section className="layer-coverage-info-item-right">
         <div>
           <p>
-            The “Include Hidden Layers” toggle will display hidden layers in the layer coverage panel and may affect the display of the matching coverage solid blue line.
+            Including layers that are hidden may affect the display of the timeline’s solid blue overlapping coverage line as it will take into account the dates of those layers, too.
           </p>
           <img src="images/lc-toggle.png" />
         </div>
@@ -25,7 +25,7 @@ const LayerCoverageInfoModal = () => (
           <p>
             <strong>Note:</strong>
             {' '}
-            Active layers showing available coverage may not have imagery available yet (e.g., monthly layers that are processed later in the month).
+            Note: Active layers showing available temporal coverage may not have imagery available yet (e.g., monthly layers that are processed later in the month).
           </p>
         </div>
       </section>

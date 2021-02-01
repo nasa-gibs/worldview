@@ -91,45 +91,53 @@ class ModalContainer extends Component {
 
   render() {
     const {
-      isCustom,
+      customProps,
       id,
+      isCustom,
+      isMobile,
       isOpen,
       isTemplateModal,
-      customProps,
       screenHeight,
     } = this.props;
     const { width, height } = this.state;
     // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
-      onToggle,
-      bodyText,
+      autoFocus,
+      backdrop,
+      bodyComponent,
+      bodyComponentProps,
       bodyHeader,
+      bodyText,
+      clickableBehindModal,
+      CompletelyCustomModal,
+      desktopOnly,
+      dragHandle,
       headerComponent,
       headerText,
-      modalClassName,
-      backdrop,
-      autoFocus,
-      type,
-      wrapClassName,
-      clickableBehindModal,
-      bodyComponent,
-      onClose,
-      CompletelyCustomModal,
-      bodyComponentProps,
-      timeout,
-      size,
       isDraggable,
       isResizable,
-      dragHandle,
+      mobileOnly,
+      modalClassName,
+      onClose,
+      onToggle,
+      size,
+      timeout,
+      type,
+      wrapClassName,
     } = newProps;
 
+    const isRestrictedDisplay = (isMobile && desktopOnly) || (!isMobile && mobileOnly);
+    if (isRestrictedDisplay) {
+      return null;
+    }
     const style = this.getStyle();
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+
     return (
       <ErrorBoundary>
         <InteractionWrap
