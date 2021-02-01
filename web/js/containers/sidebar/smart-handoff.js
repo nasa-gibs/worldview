@@ -615,7 +615,7 @@ const mapDispatchToProps = (dispatch) => ({
           selectedCollection,
           continueToEDS,
         },
-        size: 'md',
+        size: 'lg',
       }),
     );
   },

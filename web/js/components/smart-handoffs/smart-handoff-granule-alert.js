@@ -4,7 +4,7 @@ const GranuleAlertModalBody = () => (
   <div className="basic-modal">
 
     <h1>
-      Why am I seeing NONE when data is being shown?
+      Why am I seeing NONE or “0 out of n” granules when there is imagery displayed on the map?
     </h1>
 
     <p>
@@ -22,18 +22,14 @@ const GranuleAlertModalBody = () => (
       selected and the granule count shows &quot;NONE&quot;, this may be an indication that your selected date is too far in the past and you
       may have better luck with the Standard collection.
     </p>
-    <hr />
-    <h1>
-      Why am I seeing &quot;0 out of n&quot; granules when there is imagery displayed on the map?
-    </h1>
+    <p>You may also see NONE or “0 out of n” granules when:</p>
     <ol>
       <li>
         The target area selection does not encompass any of the imagery displayed on the map.
       </li>
       <li>
         The target area selection is encompassing imagery but the collection&apos;s metadata record does not contain the appropriate spatial
-        information for this feature to work. You can either uncheck the Target Area Selection box in Worldview or click Download Via
-        Earthdata Search and remove the spatial filter there.
+        information for this feature to work. Unchecking the &quot;Target Area Selection&quot; box should address this.
       </li>
     </ol>
 

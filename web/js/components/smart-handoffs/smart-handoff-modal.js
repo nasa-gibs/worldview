@@ -149,7 +149,7 @@ const hideModal = () => {
 SmartHandoffModal.propTypes = {
   continueToEDS: PropTypes.func,
   displayDate: PropTypes.string,
-  selectedCollection: PropTypes.string,
+  selectedCollection: PropTypes.object,
   selectedLayer: PropTypes.object,
 };
 
