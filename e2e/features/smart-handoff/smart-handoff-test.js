@@ -10,7 +10,7 @@ const TIME_LIMIT = 10000;
 
 const layersTab = '#layers-sidebar-tab';
 const dataTabButton = '#download-sidebar-tab';
-const cloudRadiusRadioButton = '#C1443536017-LAADS-collection-choice';
+const cloudRadiusRadioButton = '#C1443536017-LAADS-MODIS_Aqua_Cloud_Effective_Radius-collection-choice-label';
 const urlParams = '?l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-12-01';
 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
 
     c.expect
       .element('.smart-handoff-side-panel > h1')
-      .to.have.text.equal('None of your currently listed layers are available for downloading.');
+      .to.have.text.equal('None of your current layers are available for download.');
   },
 
   'Select "Cloud Effective Radius" layer and check that it is available for download': (c) => {
