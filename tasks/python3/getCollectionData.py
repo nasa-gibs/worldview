@@ -20,7 +20,6 @@ cmr_collection_url = 'http://cmr.earthdata.nasa.gov/search/collections.json?conc
 cmr_keys_map = {
     'title': 'title',
     'version_id': 'version',
-    'data_center': 'dataCenter',
 }
 cmr_data = {}
 cmr_fails = {}
