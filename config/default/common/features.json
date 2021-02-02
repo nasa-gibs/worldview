@@ -1,6 +1,6 @@
 {
     "features": {
-        "dataDownload": true,
+        "smartHandoffs": true,
         "animation": true,
         "urlShortening": true,
         "customPalettes": true,
@@ -11,9 +11,7 @@
         "vismetadata": {
             "url": "https://uat.gibs.earthdata.nasa.gov/layer-metadata/v1.0/"
         },
-        "googleTagManager": {
-            "id": "GTM-WNP7MLF"
-        },
+        "googleTagManager": true,
         "notification": {
             "url": "https://status.earthdata.nasa.gov/api/v1/notifications",
             "releases": "https://github.com/nasa-gibs/worldview/releases"

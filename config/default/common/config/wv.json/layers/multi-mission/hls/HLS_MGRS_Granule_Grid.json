@@ -5,9 +5,9 @@
       "title": "MGRS/HLS Grid",
       "subtitle": "MGRS/HLS",
       "description": "multi-mission/hls/HLS_MGRS_Granule_Grid",
-      "tags": "",
+      "tags": "military grid reference system harmonized landsat sentinel-2",
       "group": "overlays",
-      "layergroup": "Land Surface Reflectance",
+      "layergroup": "Reference",
       "product": "",
       "type": "vector",
       "wrapX": true

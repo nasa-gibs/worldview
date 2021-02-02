@@ -26,8 +26,6 @@ Newly added layers require some additional steps and configuration in order to p
   * *Worldview Snapshots Team adds layers to Image Download*
 * Add Layer descriptions/metadata, if it exists
   * Create .md file in `config/default/common/config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
-* Add Data Download for product, if it exists
-  * Refer to [Data Download](../data_download.md) and create JSON file in `config/default/common/config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
 * Rebuild the configuration with `npm run build` for use by the application.
 
 ## Adding New Categories

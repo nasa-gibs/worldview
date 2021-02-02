@@ -115,7 +115,7 @@ function LayerRow (props) {
     }
     // end date
     let layerEndDate;
-    if (layerEndDate) {
+    if (endDate) {
       layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
     }
 
@@ -186,19 +186,25 @@ function LayerRow (props) {
   };
 
   const renderVectorIcon = () => {
-    const clasNames = hasClickableFeature
+    const classNames = hasClickableFeature
       ? 'layer-pointer-icon'
       : 'layer-pointer-icon disabled';
     const title = hasClickableFeature
-      ? 'You can click the features of this layer to see metadata associated with the feature.'
+      ? 'You can click the features of this layer to see associated metadata.'
       : 'Zoom in further to click features.';
+    const layerVectorBtnId = `layer-vector-hand-btn-${encodedLayerId}`;
     return (
-      <div title={title} className={runningObject ? `${clasNames} running` : clasNames} onClick={openVectorAlertModal}>
-        {' '}
-        <FontAwesomeIcon
-          icon="hand-pointer"
-          fixedWidth
-        />
+      <div
+        id={layerVectorBtnId}
+        aria-label={title}
+        className={runningObject ? `${classNames} running` : classNames}
+        onMouseDown={stopPropagation}
+        onClick={openVectorAlertModal}
+      >
+        <UncontrolledTooltip placement="top" target={layerVectorBtnId}>
+          {title}
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="hand-pointer" fixedWidth />
       </div>
     );
   };
@@ -260,7 +266,7 @@ function LayerRow (props) {
       <Zot zot={zot} layer={layer.id} isMobile={isMobile} />
 
       <div className="layer-main">
-        <div className="layer-info">
+        <div className="layer-info" style={{ minHeight: isVectorLayer ? '60px' : '40px' }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>
