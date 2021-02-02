@@ -273,20 +273,19 @@ class SmartHandoff extends Component {
     const endDate = `${selectedDate}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
     const params = {
+      include_granule_counts: true,
       temporal: dateRange,
-      collection_concept_id: selectedCollection.value,
-      include_facets: 'v2',
-      page_size: 0,
+      concept_id: selectedCollection.value,
     };
     const newState = { isSearchingForGranules: false };
 
-    let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/granules.json${util.toQueryString(params)}`;
+    let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/collections.json${util.toQueryString(params)}`;
 
     if (!totalGranules) {
       // Gets the total amount of granules that the layer has
       const totalGranuleResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
       const totalResult = await totalGranuleResponse.json();
-      newState.totalGranules = lodashGet(totalResult, 'feed.facets.children[0].children[0].children[0].count', 0);
+      newState.totalGranules = lodashGet(totalResult, 'feed.entry[0].granule_count', 0);
     }
 
     // Gets the total subset of granules that are within the defining bounding box
@@ -294,7 +293,7 @@ class SmartHandoff extends Component {
       granuleRequestUrl += `&bounding_box=${southWest},${northEast}`;
       const selectedGranulesResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
       const selectedResult = await selectedGranulesResponse.json();
-      newState.selectedGranules = lodashGet(selectedResult, 'feed.facets.children[0].children[0].children[0].count', 0);
+      newState.selectedGranules = lodashGet(selectedResult, 'feed.entry[0].granule_count', 0);
     }
 
     this.setState(newState);
