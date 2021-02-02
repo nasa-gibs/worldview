@@ -299,13 +299,13 @@ class SmartHandoff extends Component {
     this.setState(newState);
   }
 
-  renderCollectionTooltip = ({ value, title, type }) => {
+  renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
     const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
     return (
       <UncontrolledTooltip
         className="zot-tooltip"
         boundariesElement="window"
-        target={`${util.encodeId(value)}-tooltp`}
+        target={tooltipTarget}
         placement="right"
         trigger="hover"
         autohide={false}
@@ -324,40 +324,52 @@ class SmartHandoff extends Component {
    */
   renderLayerChoices() {
     const { activeLayers } = this.props;
-    const { selectedCollection, currentExtent } = this.state;
+    const { selectedCollection, selectedLayer, currentExtent } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
 
-        {activeLayers.map((layer) => layer.conceptIds && (
-        <div className="layer-item" key={`${util.encodeId(layer.id)}-layer-choice`}>
-          <div className="layer-title">{layer.title}</div>
-          <div className="layer-subtitle">{layer.subtitle}</div>
+        {activeLayers.map((layer) => {
+          if (!layer.conceptIds) return;
 
-          {layer.conceptIds.map((collection) => {
-            const {
-              type, value, version,
-            } = collection;
-            const inputId = `${util.encodeId(value)}-collection-choice`;
+          const layerIsSelected = (selectedLayer || {}).id === layer.id;
+          const itemClass = layerIsSelected ? 'layer-item selected' : 'layer-item';
 
-            return (
-              <div className="collection-choice" key={inputId}>
-                <input
-                  id={inputId}
-                  type="radio"
-                  name="smart-handoff-layer-radio"
-                  checked={(selectedCollection || {}).value === value}
-                  onChange={() => this.onLayerChange(layer, collection, currentExtent)}
-                />
-                <label htmlFor={inputId}>{`${STD_NRT_MAP[type]} - v${version}`}</label>
-                <FontAwesomeIcon id={`${util.encodeId(value)}-tooltp`} icon="info-circle" />
-                {this.renderCollectionTooltip(collection)}
-              </div>
-            );
-          })}
+          return (
+            <div className={itemClass} key={`${util.encodeId(layer.id)}-layer-choice`}>
+              <div className="layer-title">{layer.title}</div>
+              <div className="layer-subtitle">{layer.subtitle}</div>
 
-        </div>
-        ))}
+              {layer.conceptIds.map((collection) => {
+                const {
+                  type, value, version,
+                } = collection;
+                const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
+                const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
+                const labelId = `${inputId}-label`;
+
+                return (
+                  <div className="collection-choice" key={inputId}>
+                    <input
+                      id={inputId}
+                      type="radio"
+                      name="smart-handoff-layer-radio"
+                      checked={isSelected}
+                      onChange={() => this.onLayerChange(layer, collection, currentExtent)}
+                    />
+                    <label id={labelId} htmlFor={inputId}>
+                      {`${STD_NRT_MAP[type]} - v${version}`}
+                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltp`} icon="info-circle" />
+                    </label>
+
+                    {this.renderCollectionTooltip(collection, labelId)}
+                  </div>
+                );
+              })}
+
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -614,7 +626,7 @@ const mapDispatchToProps = (dispatch) => ({
           selectedCollection,
           continueToEDS,
         },
-        size: 'lg',
+        size: 'md',
       }),
     );
   },
