@@ -1,6 +1,6 @@
 /* Smart handoff side panel */
 .smart-handoff-side-panel {
-  margin: 10px;
+  margin: 5px;
   color: #bbb;
 }
 
@@ -73,6 +73,7 @@
       cursor: pointer;
       top: 2px;
       position: relative;
+      top: -2px;
     }
     label {
       color: #eee;
