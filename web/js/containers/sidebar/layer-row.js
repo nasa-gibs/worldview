@@ -115,7 +115,7 @@ function LayerRow (props) {
     }
     // end date
     let layerEndDate;
-    if (layerEndDate) {
+    if (endDate) {
       layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
     }
 
