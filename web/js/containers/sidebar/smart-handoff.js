@@ -164,8 +164,8 @@ class SmartHandoff extends Component {
     else if (geolonlat2[1] < -90) geolonlat2[1] = -90;
 
     const currentExtent = {
-      southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
-      northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
+      southWest: `${geolonlat1[0].toFixed(5)},${geolonlat1[1].toFixed(5)}`,
+      northEast: `${geolonlat2[0].toFixed(5)},${geolonlat2[1].toFixed(5)}`,
     };
 
     const coordinates = {
