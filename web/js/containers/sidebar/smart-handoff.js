@@ -536,9 +536,11 @@ class SmartHandoff extends Component {
           <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
           application.
         </div>
-        <a className="help-link" onClick={showNotAvailableModal}>
-          Why are some layers not available?
-        </a>
+        <h2>
+          <a className="help-link" onClick={showNotAvailableModal}>
+            Why are some layers not available?
+          </a>
+        </h2>
         <hr />
         {this.renderLayerChoices()}
         <hr />
