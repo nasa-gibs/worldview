@@ -40,12 +40,14 @@ class FooterContent extends React.Component {
       isCompareActive,
       compareMode,
       isMobile,
+      isPlaying,
       activeTab,
       changeCompareMode,
       addLayers,
       toggleCompare,
       compareFeature,
       showAll,
+      stopAnimation,
     } = this.props;
     const compareBtnText = !isCompareActive ? 'Start Comparison' : 'Exit Comparison';
     if (isCompareActive && isMobile) {
@@ -67,6 +69,9 @@ class FooterContent extends React.Component {
               text="+ Add Layers"
               onClick={(e) => {
                 e.stopPropagation();
+                if (isPlaying) {
+                  stopAnimation();
+                }
                 addLayers();
                 googleTagManager.pushEvent({
                   event: 'add_layers',
@@ -120,7 +125,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleListAll());
   },
   addLayers: () => {
-    dispatch(stopAnimationAction());
     dispatch(
       openCustomContent('LAYER_PICKER_COMPONENT', {
         headerText: null,
@@ -131,18 +135,23 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
+  stopAnimation: () => {
+    dispatch(stopAnimationAction());
+  },
 });
 function mapStateToProps(state) {
   const {
-    requestedEvents, config, compare, browser,
+    animation, requestedEvents, config, compare, browser,
   } = state;
   const { showAll } = state.events;
   const events = lodashGet(requestedEvents, 'response');
+  const { isPlaying } = animation;
 
   return {
     showAll,
     events,
     isMobile: browser.lessThan.medium,
+    isPlaying,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
     compareMode: compare.mode,
@@ -162,7 +171,9 @@ FooterContent.propTypes = {
   compareMode: PropTypes.string,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isPlaying: PropTypes.bool,
   showAll: PropTypes.bool,
+  stopAnimation: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleListAll: PropTypes.func,
 };
