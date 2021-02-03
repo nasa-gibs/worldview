@@ -57,7 +57,7 @@ module.exports = {
     c.expect.element(tooltipCoordinatesContainer).to.not.be.present;
   },
   'Coordinate title for no suggested place results displays correct coordinates instead': (c) => {
-    c.url(`${c.globals.url}?gm=-51.5,5`);
+    c.url(`${c.globals.url}?v=-141.32806305066077,-56.35574752202643,18.000061949339212,60.01695346916299&gm=-51.5,5`);
     c.waitForElementVisible(tooltipCoordinatesContainer, TIME_LIMIT);
     c.expect.element(testMarkerNoDetailsEncodedID).to.be.present;
     c.assert.containsText(tooltipCoordinatesTitle, '5.0000°, -51.5000°');
@@ -67,12 +67,12 @@ module.exports = {
     c.click(tooltipCoordinatesCloseButton);
     c.pause(500);
     c.expect.element(coordinatesMapMarker).to.not.be.present;
-    c.assert.not.urlContains('marker');
+    c.assert.not.urlContains('gm');
   },
   'Invalid marker query string parameter prevents state update': (c) => {
     c.url(`${c.globals.url}?gm=-51.5,invalidtext`);
     c.expect.element(coordinatesMapMarker).to.not.be.present;
-    c.assert.not.urlContains('marker');
+    c.assert.not.urlContains('gm');
   },
   after(c) {
     c.end();
