@@ -433,7 +433,6 @@ li.item.productsitem.inmotion,
   width: 20px;
   height: 20px;
   position: relative;
-  cursor: pointer;
 }
 
 .productsitem a.button.wv-layers-close svg.svg-inline--fa {
@@ -458,6 +457,9 @@ li.item.productsitem.inmotion,
       background: #ccc;
       background: linear-gradient(90deg, rgba(204, 204, 204, 0) 0%, rgba(204, 204, 204, 1) 30%);
       width: 100px;
+      & .button {
+        cursor: pointer;
+      }
     }
   }
   &.layer-hidden {
