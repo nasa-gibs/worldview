@@ -121,7 +121,7 @@ module.exports = {
 
     c.click(globalSelectors.notifyMessage).pause(500);
     c.assert.containsText(
-      '#event_visibility_info .wv-data-unavailable-header',
+      '#event_visibility_info h1',
       'Why can’t I see an event?',
     );
     c.click('#event_visibility_info .close').pause(500);
