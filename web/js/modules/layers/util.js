@@ -715,7 +715,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
       }
     }
 
-    // DATA PANEL SPECIFIC
+    // LAYER COVERAGE PANEL SPECIFIC
     if (rangeLimitsProvided) {
       // handle single date coverage by adding date to date array
       if (startDate === endDate) {

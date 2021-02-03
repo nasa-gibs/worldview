@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DataLine from './data-line';
+import CoverageLine from './coverage-line';
 
 /*
- * Data Item Container for individual layer data coverage.
+ * Coverage Item Container for individual layer temporal coverage.
  *
- * @class DataItemContainer
+ * @class CoverageItemContainer
  */
 
-class DataItemContainer extends Component {
+class CoverageItemContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataDateRanges: [],
+      layerDateRanges: [],
     };
   }
 
@@ -29,7 +29,7 @@ class DataItemContainer extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
       layer,
       frontDate,
@@ -89,7 +89,7 @@ class DataItemContainer extends Component {
   */
   updateDateRangeState = (dateRange) => {
     this.setState({
-      dataDateRanges: dateRange,
+      layerDateRanges: dateRange,
     });
   }
 
@@ -105,7 +105,7 @@ class DataItemContainer extends Component {
       needDateRangeBuilt,
     } = this.props;
     const {
-      dataDateRanges,
+      layerDateRanges,
     } = this.state;
 
     // layer options
@@ -126,17 +126,17 @@ class DataItemContainer extends Component {
     return (
       <>
         <div
-          className="data-panel-coverage-line"
+          className="layer-coverage-line"
           style={{
             width: `${axisWidth}px`,
           }}
         >
           <svg
-            className="data-panel-coverage-line-svg"
+            className="layer-coverage-line-svg"
             width={`${axisWidth}px`}
           >
             {needDateRangeBuilt
-              ? dataDateRanges.map((itemRange, multiIndex, array) => {
+              ? layerDateRanges.map((itemRange, multiIndex, array) => {
                 const { date, interval } = itemRange;
                 const dateObj = new Date(date);
                 const nextDate = array[multiIndex + 1];
@@ -148,7 +148,7 @@ class DataItemContainer extends Component {
                 return multiLineRangeOptions.visible
                   && (
                     <React.Fragment key={key}>
-                      <DataLine
+                      <CoverageLine
                         axisWidth={axisWidth}
                         positionTransformX={positionTransformX}
                         id={id}
@@ -164,7 +164,7 @@ class DataItemContainer extends Component {
                   );
               })
               : containerLineDimensions.visible && (
-                <DataLine
+                <CoverageLine
                   axisWidth={axisWidth}
                   positionTransformX={positionTransformX}
                   id={id}
@@ -184,7 +184,7 @@ class DataItemContainer extends Component {
   }
 }
 
-DataItemContainer.propTypes = {
+CoverageItemContainer.propTypes = {
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,
@@ -199,4 +199,4 @@ DataItemContainer.propTypes = {
   positionTransformX: PropTypes.number,
 };
 
-export default DataItemContainer;
+export default CoverageItemContainer;

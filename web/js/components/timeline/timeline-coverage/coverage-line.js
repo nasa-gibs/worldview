@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * Data Line for DOM Element layer data coverage.
+ * Coverage Line for DOM Element layer coverage.
  *
- * @class DataLine PureComponent
+ * @class CoverageLine PureComponent
  */
 
-class DataLine extends PureComponent {
+class CoverageLine extends PureComponent {
   /**
   * @desc get formatted display dates for line tooltips and selectors
   * @param {String} lineType
@@ -91,8 +91,8 @@ class DataLine extends PureComponent {
 
     // candy stripe color
     const patternType = color === 'rgb(0, 69, 123)'
-      ? 'url(#data-line-pattern)'
-      : 'url(#data-line-pattern-hidden)';
+      ? 'url(#coverage-line-pattern)'
+      : 'url(#coverage-line-pattern-hidden)';
 
     // allow moving striped background for large width lines
     let rectTransform = leftOffset === 0 && isWidthGreaterThanRendered && !layerEndBeforeAxisBack
@@ -117,11 +117,11 @@ class DataLine extends PureComponent {
     return (
       <g
         key={index}
-        className="data-panel-coverage-line-container"
+        className="layer-coverage-line-group"
       >
         <rect
-          id={`data-coverage-line-${dateRangeStartEnd}`}
-          className="data-panel-coverage-line"
+          id={`layer-coverage-line-${dateRangeStartEnd}`}
+          className="layer-coverage-line"
           width={`${lineWidth}px`}
           height="12px"
           x="0"
@@ -148,7 +148,7 @@ class DataLine extends PureComponent {
       index,
     } = this.props;
     return (
-      <g clipPath="url(#dataLineBoundary)">
+      <g clipPath="url(#coverageLineBoundary)">
         {this.createMatchingCoverageLineDOMEl(
           id,
           options,
@@ -164,7 +164,7 @@ class DataLine extends PureComponent {
   }
 }
 
-DataLine.propTypes = {
+CoverageLine.propTypes = {
   color: PropTypes.string,
   endDate: PropTypes.string,
   id: PropTypes.string,
@@ -176,4 +176,4 @@ DataLine.propTypes = {
   startDate: PropTypes.string,
 };
 
-export default DataLine;
+export default CoverageLine;

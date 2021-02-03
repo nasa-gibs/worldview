@@ -296,7 +296,7 @@ describe('permalink 1.1', () => {
     const dates = datesinDateRanges(activeLayers[0], new Date('2030-01-01'));
     expect(dates.length).toBe(0);
   });
-  test('test date range returned from given start/end date range for data panel', () => {
+  test('test date range returned from given start/end date range for layer coverage panel', () => {
     const parameters = {
       products: 'terra-cr',
     };

@@ -1382,7 +1382,7 @@ class TimelineAxis extends Component {
     const { leftOffset, visible, width } = lineCoverageOptions;
     return (
       <g
-        className="axis-data-coverage-line"
+        className="axis-matching-layer-coverage-line"
         transform={`translate(${-transformX})`}
         clipPath="url(#matchingCoverage)"
       >
@@ -1466,12 +1466,12 @@ class TimelineAxis extends Component {
                   <clipPath id="timelineBoundary">
                     <rect x={-position} y="0" width={axisWidthStr} height="64px" />
                   </clipPath>
-                  {/* data line boundary and background patterns  */}
-                  <clipPath id="dataLineBoundary">
+                  {/* coverage line boundary and background patterns  */}
+                  <clipPath id="coverageLineBoundary">
                     <rect x="0" y="0" width={`${axisWidth}px`} height="12" />
                   </clipPath>
                   <pattern
-                    id="data-line-pattern"
+                    id="coverage-line-pattern"
                     x="0"
                     y="0"
                     width="30px"
@@ -1483,7 +1483,7 @@ class TimelineAxis extends Component {
                     <line stroke="#164e7a" strokeWidth="30px" y1="12" />
                   </pattern>
                   <pattern
-                    id="data-line-pattern-hidden"
+                    id="coverage-line-pattern-hidden"
                     x="0"
                     y="0"
                     width="30px"

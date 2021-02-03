@@ -8,7 +8,7 @@ import util from '../../../util/util';
 import {
   timeScaleToNumberKey,
 } from '../../../modules/date/constants';
-import DataItemContainer from './data-item-container';
+import CoverageItemContainer from './coverage-item-container';
 
 const { events } = util;
 
@@ -19,11 +19,11 @@ const ignoredLayer = {
 };
 
 /*
- * Layer Data Container for layer coverage.
+ * Layer Coverage Container item list.
  *
- * @class DataItemList
+ * @class CoverageItemList
  */
-class DataItemList extends Component {
+class CoverageItemList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,9 +60,9 @@ class DataItemList extends Component {
     const { subtitle, title } = layer;
     return (
       <>
-        <div className="data-panel-layer-item-header">
+        <div className="layer-coverage-item-header">
           <div
-            className="data-panel-layer-item-title"
+            className="layer-coverage-item-title"
             style={{
               color: titleColor,
             }}
@@ -70,7 +70,7 @@ class DataItemList extends Component {
             {title}
             {' '}
             <span
-              className="data-panel-layer-item-subtitle"
+              className="layer-coverage-item-subtitle"
               style={{
                 color: textColor,
               }}
@@ -79,7 +79,7 @@ class DataItemList extends Component {
             </span>
           </div>
           <div
-            className="data-panel-layer-item-date-range"
+            className="layer-coverage-item-date-range"
             style={{
               background: layerItemBackground,
               color: textColor,
@@ -320,7 +320,7 @@ class DataItemList extends Component {
     const containerBackgroundColor = visible
       ? 'rgb(204, 204, 204)'
       : 'rgb(79, 79, 79)';
-    // lighten data panel layer container on sidebar hover
+    // lighten layer container on sidebar hover
     const containerHoveredBackgroundColor = visible
       ? 'rgb(230, 230, 230)'
       : 'rgb(101, 101, 101)';
@@ -349,8 +349,8 @@ class DataItemList extends Component {
   * @returns {DOM Element} div contained message
   */
   createEmptyLayersDOMEl = () => (
-    <div className="data-panel-layer-empty">
-      <div className="data-item-empty">
+    <div className="layer-coverage-list-empty">
+      <div className="layer-coverage-item-empty">
         <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" />
         <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
       </div>
@@ -369,12 +369,12 @@ class DataItemList extends Component {
     } = this.props;
     const emptyLayers = activeLayers.length === 0;
     return (
-      <div className="data-panel-layer-list">
-        {/* Empty layer data message */
+      <div className="layer-coverage-layer-list">
+        {/* Empty layer coverage message */
           emptyLayers && this.createEmptyLayersDOMEl()
         }
 
-        {/* Build individual layer data components */
+        {/* Build individual layer coverage components */
         activeLayers.map((layer, index) => {
           const {
             dateRanges,
@@ -415,18 +415,18 @@ class DataItemList extends Component {
             ? Number(dateRanges[0].dateInterval)
             : 1;
 
-          // conditional check to determine how data line will be built in child component
+          // conditional check to determine how layer coverage line will be built in child component
           const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
           const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1;
           // determine date range building vs using startDate to endDate single coverage
           const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage));
           const encodedId = util.encodeId(id);
-          const key = `data-item-${encodedId}-${index}`;
+          const key = `layer-coverage-item-${encodedId}-${index}`;
 
           return (
             <div
               key={key}
-              className="data-panel-layer-item"
+              className="layer-coverage-layer-list-item"
               style={{
                 background: layerItemBackground,
                 outline: layerItemOutline,
@@ -436,12 +436,12 @@ class DataItemList extends Component {
                 this.getHeaderDOMEl(layer, visible, dateRange, layerItemBackground)
               }
               <div
-                className="data-panel-layer-coverage-line-container"
+                className="layer-coverage-line-container"
                 style={{
                   maxWidth: `${axisWidth}px`,
                 }}
               >
-                <DataItemContainer
+                <CoverageItemContainer
                   frontDate={frontDate}
                   backDate={backDate}
                   getLayerItemStyles={this.getLayerItemStyles}
@@ -465,7 +465,7 @@ class DataItemList extends Component {
   }
 }
 
-DataItemList.propTypes = {
+CoverageItemList.propTypes = {
   activeLayers: PropTypes.array,
   appNow: PropTypes.object,
   axisWidth: PropTypes.number,
@@ -476,4 +476,4 @@ DataItemList.propTypes = {
   timeScale: PropTypes.string,
 };
 
-export default DataItemList;
+export default CoverageItemList;
