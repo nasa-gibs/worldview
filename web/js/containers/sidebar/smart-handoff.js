@@ -238,10 +238,11 @@ class SmartHandoff extends Component {
 
   /**
    * Fires when user selected a different layer
-   * @param {*} collection
-   * @param {*} currentExtent - the current boundaries of the bounding box
+   * @param {*} layer - the layer being selected
+   * @param {*} collection - the layer being selected
    */
-  onLayerChange(layer, collection, currentExtent) {
+  onLayerChange(layer, collection) {
+    const { currentExtent } = this.state;
     this.setState({
       selectedLayer: layer,
       selectedCollection: collection,
@@ -324,7 +325,7 @@ class SmartHandoff extends Component {
    */
   renderLayerChoices() {
     const { activeLayers } = this.props;
-    const { selectedCollection, selectedLayer, currentExtent } = this.state;
+    const { selectedCollection, selectedLayer } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
@@ -355,11 +356,11 @@ class SmartHandoff extends Component {
                       type="radio"
                       name="smart-handoff-layer-radio"
                       checked={isSelected}
-                      onChange={() => this.onLayerChange(layer, collection, currentExtent)}
+                      onChange={() => this.onLayerChange(layer, collection)}
                     />
                     <label id={labelId} htmlFor={inputId}>
                       {`${STD_NRT_MAP[type]} - v${version}`}
-                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltp`} icon="info-circle" />
+                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" />
                     </label>
 
                     {this.renderCollectionTooltip(collection, labelId)}

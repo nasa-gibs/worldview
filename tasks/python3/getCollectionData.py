@@ -57,7 +57,7 @@ def process_requests(wv_product_dict):
         cmr_fails[failed_id] = True
         print("%s: WARNING: No CMR entry for collection: [%s]" % (prog, failed_id))
   print("%s: %s collections returned metadata." % (prog, len(cmr_data)))
-  print("%s: %s collections did not reutrn any metadata." % (prog, len(cmr_fails)))
+  print("%s: %s collections did not return any metadata." % (prog, len(cmr_fails)))
 
 #MAIN
 with open(input_file, 'rt') as concept_id_map:
