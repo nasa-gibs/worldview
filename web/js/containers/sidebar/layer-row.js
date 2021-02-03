@@ -101,7 +101,7 @@ function LayerRow (props) {
 
   useEffect(() => {
     if (!isLoading && layer && hasPalette) requestPalette(layer.id);
-  }, [layer]);
+  }, [layer.id]);
 
   const getDisabledTitle = (layer) => {
     const {
