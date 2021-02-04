@@ -173,7 +173,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(reorderOverlayGroupsAction(layers, groups));
   },
   toggleOverlayGroups: () => {
-    dispatch(toggleOverlayGroupsAction());
+    setTimeout(() => {
+      dispatch(toggleOverlayGroupsAction());
+    });
   },
   toggleCollapse: (groupName, collapsed) => {
     dispatch(toggleGroupCollapsedAction(groupName, collapsed));
