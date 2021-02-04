@@ -19,7 +19,8 @@
       },
       "daynight": [
         "day"
-      ]
+      ],
+      "disableSmartHandoff": true
     }
   }
 }

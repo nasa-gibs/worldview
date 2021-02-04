@@ -8,6 +8,9 @@
         "tour": true,
         "feedback": true,
         "previewSnapshots": true,
+        "vismetadata": {
+            "url": "https://uat.gibs.earthdata.nasa.gov/layer-metadata/v1.0/"
+        },
         "googleTagManager": true,
         "notification": {
             "url": "https://status.earthdata.nasa.gov/api/v1/notifications",

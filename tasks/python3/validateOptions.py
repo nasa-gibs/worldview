@@ -71,11 +71,7 @@ start_date = datetime.max
 
 for layer_id in list(wv["layers"].keys()):
     layer = wv["layers"][layer_id]
-    # Sometimes we pull a layer id from the ICD appendices for layers that
-    # don't exist in WV configs yet.  If we find this kind of entry, remove it.
-    if (layer.get("conceptId") is not None and layer.get('id') is None):
-        remove_layer(wv, layer_id)
-        continue
+    
     if layer_id != layer.get('id'):
         error("[%s] layer id does not match id of %s" % (layer_id, layer.get('id')))
     if layer_id not in wv["layerOrder"]:

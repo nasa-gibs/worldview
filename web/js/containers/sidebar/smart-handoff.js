@@ -5,11 +5,14 @@ import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
-import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UncontrolledTooltip } from 'reactstrap';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
 import Crop from '../../components/util/image-crop';
 import util from '../../util/util';
+import SmartHandoffModal from '../../components/smart-handoffs/smart-handoff-modal';
+import SmartHandoffNotAvailableModal from '../../components/smart-handoffs/smart-handoff-not-available-modal';
 import GranuleAlertModalBody from '../../components/smart-handoffs/smart-handoff-granule-alert';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
@@ -17,6 +20,11 @@ import { getActiveLayers } from '../../modules/layers/selectors';
 import getSelectedDate from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
+
+const STD_NRT_MAP = {
+  STD: 'Standard',
+  NRT: 'Near Real-Time',
+};
 
 /**
  * The Smart-Handoff components replaces the existing data download capability
@@ -46,6 +54,7 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       selectedLayer: undefined,
+      selectedCollection: undefined,
       showBoundingBox: false,
       isSearchingForGranules: false,
       selectedGranules: 0,
@@ -76,13 +85,13 @@ class SmartHandoff extends Component {
     const {
       currentExtent,
       selectedLayer,
+      selectedCollection,
     } = this.state;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
-    const selectedConceptId = selectedLayer && selectedLayer.conceptId;
-    const isLayerStillActive = activeLayers.find(({ conceptId }) => selectedConceptId === conceptId);
+    const isLayerStillActive = activeLayers.find(({ id }) => selectedLayer && selectedLayer.id);
 
-    if (selectedConceptId && !isLayerStillActive) {
+    if (selectedCollection && !isLayerStillActive) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState(this.baseState);
     }
@@ -114,9 +123,9 @@ class SmartHandoff extends Component {
    */
   onBoundaryChange(boundaries) {
     const { proj, map } = this.props;
-    const { selectedLayer } = this.state;
+    const { selectedCollection } = this.state;
 
-    if (!selectedLayer) return;
+    if (!selectedCollection) return;
 
     const {
       x,
@@ -155,8 +164,8 @@ class SmartHandoff extends Component {
     else if (geolonlat2[1] < -90) geolonlat2[1] = -90;
 
     const currentExtent = {
-      southWest: `${geolonlat1[0]},${geolonlat1[1]}`,
-      northEast: `${geolonlat2[0]},${geolonlat2[1]}`,
+      southWest: `${geolonlat1[0].toFixed(5)},${geolonlat1[1].toFixed(5)}`,
+      northEast: `${geolonlat2[0].toFixed(5)},${geolonlat2[1].toFixed(5)}`,
     };
 
     const coordinates = {
@@ -169,7 +178,7 @@ class SmartHandoff extends Component {
       coordinates,
       currentExtent,
     }, () => {
-      if (selectedLayer && currentExtent) {
+      if (selectedCollection && currentExtent) {
         this.debouncedUpdateExtent();
       }
     });
@@ -209,6 +218,7 @@ class SmartHandoff extends Component {
     const {
       currentExtent,
       selectedLayer,
+      selectedCollection,
       showBoundingBox,
     } = this.state;
 
@@ -217,10 +227,10 @@ class SmartHandoff extends Component {
     const hideModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
 
     const continueToEDS = () => openEarthDataSearch(
-      proj.id, selectedDate, selectedLayer, currentExtent, showBoundingBox,
+      proj.id, selectedDate, selectedCollection, currentExtent, showBoundingBox,
     );
     if (!hideModal) {
-      showWarningModal(displayDate, selectedLayer, continueToEDS);
+      showWarningModal(displayDate, selectedLayer, selectedCollection, continueToEDS);
     } else {
       continueToEDS();
     }
@@ -228,12 +238,14 @@ class SmartHandoff extends Component {
 
   /**
    * Fires when user selected a different layer
-   * @param {*} layer - the specified layer designated by the user
-   * @param {*} currentExtent - the current boundaries of the bounding box
+   * @param {*} layer - the layer being selected
+   * @param {*} collection - the layer being selected
    */
-  onLayerChange(layer, currentExtent) {
+  onLayerChange(layer, collection) {
+    const { currentExtent } = this.state;
     this.setState({
       selectedLayer: layer,
+      selectedCollection: collection,
       totalGranules: undefined,
     }, () => this.updateGranuleCount(currentExtent));
   }
@@ -248,6 +260,7 @@ class SmartHandoff extends Component {
     const { selectedDate } = this.props;
     const {
       selectedLayer,
+      selectedCollection,
       showBoundingBox,
       totalGranules,
     } = this.state;
@@ -260,23 +273,20 @@ class SmartHandoff extends Component {
     const startDate = `${selectedDate}T00:00:00.000Z`;
     const endDate = `${selectedDate}T23:59:59.999Z`;
     const dateRange = `${startDate},${endDate}`;
-    const { daynight } = selectedLayer;
     const params = {
+      include_granule_counts: true,
       temporal: dateRange,
-      collection_concept_id: selectedLayer.conceptId,
-      include_facets: 'v2',
-      page_size: 0,
-      day_night_flag: daynight || undefined,
+      concept_id: selectedCollection.value,
     };
     const newState = { isSearchingForGranules: false };
 
-    let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/granules.json${util.toQueryString(params)}`;
+    let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/collections.json${util.toQueryString(params)}`;
 
     if (!totalGranules) {
       // Gets the total amount of granules that the layer has
       const totalGranuleResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
       const totalResult = await totalGranuleResponse.json();
-      newState.totalGranules = lodashGet(totalResult, 'feed.facets.children[0].children[0].children[0].count', 0);
+      newState.totalGranules = lodashGet(totalResult, 'feed.entry[0].granule_count', 0);
     }
 
     // Gets the total subset of granules that are within the defining bounding box
@@ -284,10 +294,30 @@ class SmartHandoff extends Component {
       granuleRequestUrl += `&bounding_box=${southWest},${northEast}`;
       const selectedGranulesResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
       const selectedResult = await selectedGranulesResponse.json();
-      newState.selectedGranules = lodashGet(selectedResult, 'feed.facets.children[0].children[0].children[0].count', 0);
+      newState.selectedGranules = lodashGet(selectedResult, 'feed.entry[0].granule_count', 0);
     }
 
     this.setState(newState);
+  }
+
+  renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
+    const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
+    return (
+      <UncontrolledTooltip
+        className="zot-tooltip"
+        boundariesElement="window"
+        target={tooltipTarget}
+        placement="right"
+        trigger="hover"
+        autohide={false}
+        delay={{ show: 50, hide: 500 }}
+      >
+        <div>{title}</div>
+        <div>
+          <a href={cmrSearchDetailURL} target="_blank" rel="noreferrer"> View Collection Details </a>
+        </div>
+      </UncontrolledTooltip>
+    );
   }
 
   /**
@@ -295,25 +325,49 @@ class SmartHandoff extends Component {
    */
   renderLayerChoices() {
     const { activeLayers } = this.props;
-    const { selectedLayer, currentExtent } = this.state;
-    const selectedId = selectedLayer && selectedLayer.id;
+    const { selectedCollection, selectedLayer } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
+
         {activeLayers.map((layer) => {
-          const inputId = `${util.encodeId(layer.id)}-smart-handoff-choice`;
-          return layer.conceptId && (
-            <div className="layer-item" key={inputId}>
-              <input
-                id={inputId}
-                type="radio"
-                value={layer.conceptId}
-                name="smart-handoff-layer-radio"
-                checked={selectedId === layer.id}
-                onChange={() => this.onLayerChange(layer, currentExtent)}
-              />
-              <label htmlFor={inputId}>{layer.title}</label>
-              <span>{layer.subtitle}</span>
+          if (!layer.conceptIds) return;
+
+          const layerIsSelected = (selectedLayer || {}).id === layer.id;
+          const itemClass = layerIsSelected ? 'layer-item selected' : 'layer-item';
+
+          return (
+            <div className={itemClass} key={`${util.encodeId(layer.id)}-layer-choice`}>
+              <div className="layer-title">{layer.title}</div>
+              <div className="layer-subtitle">{layer.subtitle}</div>
+
+              {layer.conceptIds.map((collection) => {
+                const {
+                  type, value, version,
+                } = collection;
+                const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
+                const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
+                const labelId = `${inputId}-label`;
+
+                return (
+                  <div className="collection-choice" key={inputId}>
+                    <input
+                      id={inputId}
+                      type="radio"
+                      name="smart-handoff-layer-radio"
+                      checked={isSelected}
+                      onChange={() => this.onLayerChange(layer, collection)}
+                    />
+                    <label id={labelId} htmlFor={inputId}>
+                      {`${STD_NRT_MAP[type]} - v${version}`}
+                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" />
+                    </label>
+
+                    {this.renderCollectionTooltip(collection, labelId)}
+                  </div>
+                );
+              })}
+
             </div>
           );
         })}
@@ -398,13 +452,13 @@ class SmartHandoff extends Component {
     } = this.props;
 
     const {
+      selectedCollection,
       isSearchingForGranules,
       selectedGranules,
-      selectedLayer,
       showBoundingBox,
       totalGranules,
     } = this.state;
-    return selectedLayer && selectedLayer.conceptId && (
+    return selectedCollection && (
       <div className="granule-count">
         <h1>
           Available granules for
@@ -424,7 +478,9 @@ class SmartHandoff extends Component {
           { isSearchingForGranules && (
             <span className="loading-granule-count fade-in constant-width" />
           )}
-          <span className="granule-help-link" onClick={() => showGranuleHelpModal()}>(?)</span>
+          <span className="help-link" onClick={showGranuleHelpModal}>
+            <FontAwesomeIcon icon="question-circle" />
+          </span>
         </h1>
       </div>
     );
@@ -433,24 +489,22 @@ class SmartHandoff extends Component {
   /**
    * Render "no layers to download" message
    */
-  renderNoLayersToDownload = () => (
-    <div className="smart-handoff-side-panel">
-      <h1>
-        None of your currently listed layers are available for downloading.
-      </h1>
-      <hr />
-      <h2>Why are my current layers not available?</h2>
-      <p>
-        Some layers in Worldview do not have corresponding source data products available for download.
-      </p>
-      <p>
-        These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.
-      </p>
-      <p>
-        If you would like to download only an image, please use the “camera” icon in the upper right.
-      </p>
-    </div>
-  )
+  renderNoLayersToDownload = () => {
+    const { showNotAvailableModal } = this.props;
+    return (
+      <div className="smart-handoff-side-panel">
+        <h1>
+          None of your current layers are available for download.
+        </h1>
+        <hr />
+        <h2>
+          <a className="help-link" onClick={showNotAvailableModal}>
+            Why are my layers not available?
+          </a>
+        </h2>
+      </div>
+    );
+  }
 
   /**
    * Default render which displays the download panel
@@ -459,6 +513,7 @@ class SmartHandoff extends Component {
     const {
       activeLayers,
       isActive,
+      showNotAvailableModal,
     } = this.props;
     const {
       selectedLayer,
@@ -468,8 +523,8 @@ class SmartHandoff extends Component {
     if (!isActive) return null;
 
     // Determine if the download button is enabled
-    const isValidDownload = selectedLayer && selectedLayer.id !== undefined;
-    const availableLayers = activeLayers.filter((layer) => layer.conceptId !== undefined).length;
+    const isValidDownload = selectedLayer && selectedLayer.id;
+    const availableLayers = activeLayers.filter(({ conceptIds }) => conceptIds).length;
 
     if (!availableLayers > 0) {
       return this.renderNoLayersToDownload();
@@ -477,12 +532,16 @@ class SmartHandoff extends Component {
     return (
       <div className="smart-handoff-side-panel">
 
-        <h1>Select an available layer to download:</h1>
         <div className="esd-notification">
           Downloading data will be performed using
           <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer"> NASA&apos;s Earthdata Search </a>
           application.
         </div>
+        <h2>
+          <a className="help-link" onClick={showNotAvailableModal}>
+            Why are some layers not available?
+          </a>
+        </h2>
         <hr />
         {this.renderLayerChoices()}
         <hr />
@@ -513,6 +572,7 @@ SmartHandoff.propTypes = {
   selectedDate: PropTypes.string,
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
+  showNotAvailableModal: PropTypes.func,
 };
 
 /**
@@ -536,9 +596,10 @@ const mapStateToProps = (state) => {
   const selectedDate = getSelectedDate(state);
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
+  const filterForSmartHandoff = ({ projections, disableSmartHandoff }) => projections[proj.id] && !disableSmartHandoff;
 
   return {
-    activeLayers: getActiveLayers(state).filter((layer) => layer.projections[proj.id]),
+    activeLayers: getActiveLayers(state).filter(filterForSmartHandoff),
     displayDate,
     map,
     proj: proj.selected,
@@ -553,7 +614,7 @@ const mapStateToProps = (state) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
-  showWarningModal: (displayDate, selectedLayer, continueToEDS) => {
+  showWarningModal: (displayDate, selectedLayer, selectedCollection, continueToEDS) => {
     googleTagManager.pushEvent({
       event: 'smart_handoffs_open_warning_modal',
     });
@@ -565,9 +626,20 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           displayDate,
           selectedLayer,
+          selectedCollection,
           continueToEDS,
         },
-        size: 'lg',
+        size: 'md',
+      }),
+    );
+  },
+  showNotAvailableModal: () => {
+    dispatch(
+      openCustomContent('layers-not-available', {
+        desktopOnly: true,
+        headerText: 'Layer Download Availability',
+        bodyComponent: SmartHandoffNotAvailableModal,
+        size: 'md',
       }),
     );
   },
@@ -580,7 +652,7 @@ const mapDispatchToProps = (dispatch) => ({
         desktopOnly: true,
         headerText: 'Granule Availablilty',
         bodyComponent: GranuleAlertModalBody,
-        size: 'lg',
+        size: 'md',
       }),
     );
   },

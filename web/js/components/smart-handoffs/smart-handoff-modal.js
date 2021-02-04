@@ -5,17 +5,26 @@ import Button from '../util/button';
 import Checkbox from '../util/checkbox';
 import safeLocalStorage from '../../util/local-storage';
 
+const STD_NRT_MAP = {
+  STD: 'Standard',
+  NRT: 'Near Real-Time',
+};
+
 /**
  * The Smart-Handoff components replaces the existing data download capability
  * by directing users to select specific layer products within Worldview and 'hand' them 'off'
  * to NASA's Earthdata Search web tool that will proceed in fetching corresponding
  * layer data and granule files that are available for download.
  */
-function SmartHandoffModal({ displayDate, selectedLayer, continueToEDS }) {
+function SmartHandoffModal({
+  displayDate, selectedLayer, selectedCollection, continueToEDS,
+}) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
-  const { title, subtitle, conceptId } = selectedLayer;
-  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${conceptId}.html`;
+  const {
+    value, title, type, version,
+  } = selectedCollection;
+  const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
 
   return (
 
@@ -23,8 +32,8 @@ function SmartHandoffModal({ displayDate, selectedLayer, continueToEDS }) {
 
       <div className="smart-handoff-heading">
         <a href="https://search.earthdata.nasa.gov" target="_blank" rel="noopener noreferrer">
-          <img src="images/earth-data-search-logo.png" />
-          <h1>search.earthdata.nasa.gov</h1>
+          <img src="images/nasa-logo.png" style={{ maxHeight: '38px' }} />
+          <img src="images/earthdata-search.png" />
         </a>
       </div>
 
@@ -76,13 +85,28 @@ function SmartHandoffModal({ displayDate, selectedLayer, continueToEDS }) {
       </div>
 
       <div className="smart-handoff-layer-info">
-        <h1> Selected layer to download: </h1>
-        <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
-          <p className="smart-handoff-layer-name">{`${title}`}</p>
-          <p className="smart-handoff-layer-mata-data">{`${subtitle} (${displayDate})`}</p>
-        </a>
-      </div>
 
+        <h1> Collection: </h1>
+        <div className="handoff-modal-link">
+          {`${STD_NRT_MAP[type]} - v${version}`}
+          <br />
+          <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
+            {`${title}`}
+          </a>
+        </div>
+
+        <h1> Layer: </h1>
+
+        <div className="handoff-modal-layer-title">
+          {selectedLayer.title}
+        </div>
+        <div className="handoff-modal-layer-subtitle">
+          {selectedLayer.subtitle}
+        </div>
+
+        <h1> Date:</h1>
+        <div className="handoff-modal-date">{displayDate}</div>
+      </div>
 
       <div className="smart-handoff-button-group">
         <Button
@@ -131,6 +155,7 @@ const hideModal = () => {
 SmartHandoffModal.propTypes = {
   continueToEDS: PropTypes.func,
   displayDate: PropTypes.string,
+  selectedCollection: PropTypes.object,
   selectedLayer: PropTypes.object,
 };
 

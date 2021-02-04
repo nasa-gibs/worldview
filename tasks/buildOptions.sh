@@ -3,12 +3,11 @@
 PROG=$(basename "$0")
 BASE=$(dirname "$0")/..
 
-TASKS_DIR="$BASE/tasks"
 SRC_DIR="$BASE/config/default"
 OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
-PYTHON_SCRIPTS_DIR="$TASKS_DIR/python3"
+PYTHON_SCRIPTS_DIR="$BASE/tasks/python3"
 
 
 # If there is an active directory, use instead of defaults
@@ -118,18 +117,20 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
             "$BUILD_DIR/config/palettes"
 fi
 
-# Run getCollectionData.py to fetch collection metadata
-# Disabled for now
-# if [ -e "$BUILD_DIR/config/wv.json/conceptIds.json" ] ; then
-#     "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/conceptIds.json" \
-#         "$BUILD_DIR/config/wv.json/collections.json"
-# fi
-
 # Throw error if no categoryGroupOrder.json file present
 if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
     echo "categoryGroupOrder.json not found.  Generating..."
     "$PYTHON_SCRIPTS_DIR/generateCategoryGroupOrder.py" "$SRC_DIR/common/config/wv.json/categories/" \
         "$SRC_DIR/common/config/wv.json/"
+fi
+
+# Get visualization metadata (if configured)
+"$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
+    "$BUILD_DIR/config/wv.json/layerOrder.json" "$BUILD_DIR/config/wv.json/layerMetadata.json"
+
+    # Run getCollectionData.py to fetch collection metadata
+if [ -e "$BUILD_DIR/config/wv.json/layerMetadata.json" ] ; then
+    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/layerMetadata.json"
 fi
 
 # Run mergeConfig.py on all directories in /config

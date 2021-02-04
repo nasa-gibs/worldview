@@ -1,6 +1,6 @@
 /* Smart handoff side panel */
 .smart-handoff-side-panel {
-  margin: 10px;
+  margin: 5px;
   color: #bbb;
 }
 
@@ -19,6 +19,7 @@
 .smart-handoff-side-panel h2 {
   margin-top: 18px;
   color: #eee;
+  text-align: center;
 }
 
 .smart-handoff-side-panel p {
@@ -42,8 +43,9 @@
 }
 .esd-notification {
   display: block;
-  margin: 15px 20px;
-  font-size: 11px;
+  margin: 15px 5px;
+  font-size: 12px;
+  line-height: 14px;
   text-align: center;
   color: #fff;
 }
@@ -51,29 +53,44 @@
   margin-top: 15px;
   display: block;
   color: #fff;
-  overflow-y: scroll;
+  overflow-y: auto;
   min-height: 40px;
   max-height: calc(var(--vh, 1vh) * 100 - 500px);
 }
 
 .smart-handoff-layer-list .layer-item {
-  padding: 10px 15px;
-  input {
-    cursor: pointer;
+  padding: 8px;
+  margin: 10px 0;
+  background: #404040;
+  border: 1px solid #333;
+  &.selected {
+    border: 1px solid #bbb;
+    background: #333;
   }
-  label {
-    cursor: pointer;
-    display: block;
-    margin-top: -20px;
-    margin-left: 20px;
+  .layer-title {
+    font-size: 14px;
+    line-height: 15px;
   }
-  span {
-    cursor: pointer;
+  .layer-subtitle {
+    margin: 3px 0 4px;
     color: #999;
-    display: block;
-    margin-left: 20px;
-    margin-top: 3px;
-    font-size: 11px;
+  }
+  .collection-choice {
+    margin: 8px 5px 8px 15px;
+    input {
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
+    label {
+      color: #eee;
+      cursor: pointer;
+      margin: 0 5px 0 7px;
+      font-size: 13px;
+    }
+    svg {
+      margin-left: 3px;
+    }
   }
 }
 
@@ -92,13 +109,14 @@ label[for='chk-crop-toggle'] span {
   margin: 15px auto;
   margin-bottom: 0;
 }
-.granule-help-link {
-  color: #7bf !important;
+.help-link, a.help-link {
+  color: #007bff !important;
+  &:hover {
+    color: #7bf !important;
+    cursor: pointer;
+  }
 }
-.granule-help-link:hover {
-  color: #9df !important;
-  cursor: pointer;
-}
+
 .granule-count span {
   color: #fff;
   font-size: 16px;
@@ -161,10 +179,10 @@ label[for='chk-crop-toggle'] span {
   color: #fff;
 }
 .smart-handoff-message {
-  line-height: 1.25em;
   margin: 15px 0;
   text-align: left;
-  font-size: 17px;
+  font-size: 15px;
+  line-height: 16px;
   color: #ddd;
 }
 .smart-handoff-about hr {
@@ -204,15 +222,40 @@ label[for='chk-crop-toggle'] span {
   background: #343434;
   color: #fff;
   width: 100%;
-  padding: 20px;
+  padding: 1px 20px 30px;
   margin: 25px 0;
   border-radius: 10px;
 }
 .smart-handoff-layer-info h1 {
   font-size: 14px;
   color: #fff;
-  margin: 0;
-  margin-bottom: 0.5em;
+  margin: 30px 0 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: left;
+  display: block;
+}
+
+.handoff-modal-layer-title {
+  font-size: 14px;
+  margin: 0 0 4px;
+  color: #fff;
+  text-align: left;
+}
+.handoff-modal-layer-subtitle {
+  text-align: left;
+  color: #ccc;
+  margin: 0 0 10px;
+}
+.handoff-modal-date {
+  font-family: monospace;
+  font-size: 16px;
+  text-align: left;
+}
+.handoff-modal-link {
+  text-align: left;
+  font-size: 14px;
+  line-height: 18px;
 }
 .toggle-more-info {
   margin-top: 25px;
@@ -246,41 +289,6 @@ label[for='chk-crop-toggle'] span {
 }
 .checkbox-footer-container {
   display: inline-block;
-}
-
-/** Granule alert modal */
-.smart-handoff-granule-alert {
-  padding: 20px;
-}
-
-.smart-handoff-granule-alert hr {
-  border-color: #333;
-  margin: 25px 0;
-}
-
-.smart-handoff-granule-alert h1 {
-  font-weight: 900;
-  color: #fff;
-  font-size: 15px;
-  line-height: 20px;
-}
-
-.smart-handoff-granule-alert p {
-  line-height: 18px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  color: #ddd;
-}
-
-.smart-handoff-granule-alert ol {
-  margin: 15px 0;
-  color: #ddd;
-}
-
-.smart-handoff-granule-alert ol li {
-  margin-left: 30px;
-  margin-top: 10px;
-  line-height: 18px;
 }
 
 /** Overrides the modal component styles */

@@ -167,6 +167,9 @@
         },
         "layer": {
           "type": "string"
+        },
+        "disableSmartHandoff": {
+          "type": "boolean"
         }
       },
       "allOf": [
