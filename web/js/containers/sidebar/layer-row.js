@@ -160,7 +160,7 @@ function LayerRow (props) {
         <a
           id={layerOptionsBtnId}
           aria-label={layerOptionsBtnTitle}
-          className={isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'}
+          className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
           onMouseDown={stopPropagation}
           onClick={() => onOptionsClick(layer, title)}
         >
@@ -172,7 +172,7 @@ function LayerRow (props) {
         <a
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
-          className={isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'}
+          className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
           onMouseDown={stopPropagation}
           onClick={() => onInfoClick(layer, title)}
         >
