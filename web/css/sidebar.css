@@ -409,29 +409,41 @@ footer .compare-toggle-button {
   font-weight: 600;
 }
 
-.layer-settings-modal .nav-item {
-  width: 100%;
-  border: 1px solid transparent;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-.layer-settings-modal .nav-item.dual {
-  width: 136px;
-}
-
-.layer-settings-modal .nav-item:hover {
-  border: 1px solid #fff;
-}
-
-.layer-settings-modal .nav-link {
-  border: none;
-}
-
-.layer-settings-modal .nav-item.active {
-  background: #fff;
-  border-color: #fff;
-  color: #000;
+.layer-settings-modal {
+  .nav-tabs {
+    border-bottom: none;
+  }
+  .nav-item {
+    width: 100%;
+    border: 1px solid #111;
+    border-bottom-color: transparent;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    background: #333;
+    &.dual {
+      width: 136px;
+    }
+    &:hover {
+      border: 1px solid #eee;
+    }
+    a.nav-link {
+      border: 1px solid transparent;
+      color: #fff;
+    }
+    &.active {
+      background: #484848;
+      border-color: transparent;
+      color: #000;
+      &:hover {
+        cursor: default;
+        border: 1px solid transparent;
+      }
+      a.nav-link {
+        color: #eee;
+      }
+    }
+  }
 }
 
 .layer-settings-modal .tab-content {
