@@ -4,6 +4,10 @@
 
   /* Fixes issue with flicker but, breaks autohide=false */
   pointer-events: none;
+
+  a {
+    color: #7bf;
+  }
 }
 
 .tooltip-icon {

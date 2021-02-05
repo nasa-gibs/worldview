@@ -48,6 +48,9 @@
   line-height: 14px;
   text-align: center;
   color: #fff;
+  a {
+    color: #7bf;
+  }
 }
 .smart-handoff-layer-list {
   margin-top: 15px;
@@ -110,10 +113,11 @@ label[for='chk-crop-toggle'] span {
   margin-bottom: 0;
 }
 .help-link, a.help-link {
-  color: #007bff !important;
+  color: #7bf;
   &:hover {
-    color: #7bf !important;
+    color: #7bf;
     cursor: pointer;
+    text-decoration: underline;
   }
 }
 
