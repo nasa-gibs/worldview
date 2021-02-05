@@ -147,13 +147,12 @@
 
 .layer-date-range .layer-date-ranges-button,
 .layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]) {
-  color: #7bf;
   cursor: pointer;
 }
 
 .layer-date-range .layer-date-ranges-button:hover,
 .layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]):hover {
-  color: #9df;
+  text-decoration: underline;
 }
 
 .layer-description .layer-title,
