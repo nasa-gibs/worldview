@@ -12,6 +12,9 @@
   p {
     line-height: 16px;
   }
+  a {
+    color: #7bf;
+  }
 
   .modal-header {
     padding: 8px 10px;

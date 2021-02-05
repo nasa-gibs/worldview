@@ -57,11 +57,15 @@
   .modal-body {
     border-radius: 6px;
   }
+  a {
+    color: #fff;
+    &:hover {
+      color: #000;
+      text-decoration: none;
+    }
+  }
 }
 
-.toolbar-list-modal a:hover {
-  text-decoration: none;
-}
 .toolbar-list-modal.modal-dialog {
   width: 160px;
 }
