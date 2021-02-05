@@ -178,11 +178,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.getRequestDates = function(def, options) {
     const state = store.getState();
-    const { animation, date } = state;
-    const { endDate, startDate, isPlaying } = animation;
-    const {
-      appNow,
-    } = date;
     const stateCurrentDate = new Date(getSelectedDate(state));
     const previousLayer = options.previousLayer || {};
     let closestDate = options.date || stateCurrentDate;
@@ -199,10 +194,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
-      // limit range animation requests
-      const dateRange = isPlaying
-        ? datesinDateRanges(def, closestDate, startDate, endDate, appNow)
-        : datesinDateRanges(def, closestDate);
+      const dateRange = datesinDateRanges(def, closestDate);
       const { next, previous } = prevDateInDateRange(def, closestDate, dateRange);
       previousDateFromRange = previous;
       previousLayerDate = previous;
