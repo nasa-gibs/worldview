@@ -27,13 +27,6 @@
     padding-top: 2px;
   }
 
-  /* Target FireFox only */
-  @-moz-document url-prefix("") {
-    .sui-multi-checkbox-facet__checkbox {
-      margin-top: -4px;
-    }
-  }
-
   .sui-multi-checkbox-facet label {
     height: 24px;
   }
@@ -128,6 +121,7 @@
       & .sui-multi-checkbox-facet label .sui-multi-checkbox-facet__input-text,
       & .sui-boolean-facet__option-label .sui-boolean-facet__input-text {
         padding: 0;
+        line-height: 20px;
       }
     }
 
