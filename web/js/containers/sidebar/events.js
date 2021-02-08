@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
@@ -32,6 +32,7 @@ function Events(props) {
     isLoading,
     selectEvent,
     selected,
+    prevSelected,
     visibleWithinMapExtent,
     visibleEvents,
     height,
@@ -40,17 +41,15 @@ function Events(props) {
     isMobile,
     showAlert,
     selectedDate,
+    proj,
   } = props;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
-
   const ALL_CATEGORY = 'All Event Categories';
   const [selectedCategory, selectCategory] = useState(ALL_CATEGORY);
-
   const dropdownHeight = 34;
   const scrollbarMaxHeight = height - dropdownHeight;
-
   let showInactiveEventAlert = selected.id && !selected.date;
 
   const initRequests = () => {
@@ -78,9 +77,17 @@ function Events(props) {
     initRequests();
   }
 
-  if (selected.id && selected.date && !visibleWithinMapExtent[selected.id] && events && events.length) {
-    deselectEvent();
-  }
+  useEffect(() => {
+    if (selected.id && selected.date && !visibleWithinMapExtent[selected.id] && events && events.length) {
+      deselectEvent();
+    }
+  });
+
+  useEffect(() => {
+    if (!selected.id && prevSelected && visibleWithinMapExtent[prevSelected.id]) {
+      selectEvent(prevSelected.id, prevSelected.date, isMobile);
+    }
+  }, [proj]);
 
   const errorOrLoadingText = isLoading
     ? 'Loading...'
@@ -200,7 +207,7 @@ const mapStateToProps = (state) => {
     proj,
     browser,
   } = state;
-  const { selected, showAll } = state.events;
+  const { selected, prevSelected, showAll } = state.events;
   const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoading = requestedEvents.isLoading
     || requestedEventSources.isLoading;
@@ -238,6 +245,8 @@ const mapStateToProps = (state) => {
     isLoading,
     hasRequestError,
     selected,
+    prevSelected,
+    proj,
     visibleWithinMapExtent,
     visibleEvents,
     apiURL,
@@ -261,6 +270,8 @@ Events.propTypes = {
   height: PropTypes.number,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
+  prevSelected: PropTypes.object,
+  proj: PropTypes.object,
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
   selected: PropTypes.object,
