@@ -47,6 +47,7 @@ const formatResponse = function(item, ignored) {
 };
 
 export const eventsReducerState = {
+  prevSelected: null,
   selected: {
     id: '',
     date: null,
@@ -59,43 +60,51 @@ export const eventsReducerState = {
 export function eventsReducer(state = eventsReducerState, action) {
   switch (action.type) {
     case SELECT_EVENT:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         selected: {
           id: action.id,
           date: action.date,
         },
         isAnimatingToEvent: true,
-      });
+      };
     case DESELECT_EVENT:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
+        prevSelected: state.selected,
         selected: {
           id: '',
           date: null,
         },
-      });
+      };
     case SHOW_ALL_EVENTS:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         showAll: true,
-      });
+      };
     case TOGGLE_SHOW_ALL:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         showAll: !state.showAll,
-      });
+      };
     case ONLY_SHOW_VISIBLE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         showAll: false,
-      });
+      };
     case CHANGE_SIDEBAR_TAB: {
       const isActive = action.activeTab === 'events';
       if (isActive === state.active) return state;
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         active: isActive,
-      });
+      };
     }
     case FINISHED_ANIMATING_TO_EVENT:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isAnimatingToEvent: false,
-      });
+      };
     default:
       return state;
   }
