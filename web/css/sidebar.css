@@ -493,6 +493,9 @@ footer .compare-toggle-button {
 .layer-settings-modal .wv-palette-squash {
   float: right;
   margin-top: -26px;
+  .wv-checkbox.gray span {
+    color: #eee;
+  }
 }
 
 /** inline-block extra spacing */
