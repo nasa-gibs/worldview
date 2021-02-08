@@ -42,7 +42,7 @@ export const getActiveOverlayGroups = (state) => {
   const { compare, layers, proj } = state;
   const { overlayGroups } = layers[compare.activeString];
   const activeLayersMap = getActiveLayersMap(state);
-  return overlayGroups.filter(
+  return (overlayGroups || []).filter(
     (group) => group.layers.filter(
       (id) => !!activeLayersMap[id].projections[proj.id],
     ).length,
