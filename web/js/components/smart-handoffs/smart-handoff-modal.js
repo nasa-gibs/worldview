@@ -24,6 +24,7 @@ function SmartHandoffModal({
   const {
     value, title, type, version,
   } = selectedCollection;
+  const { dateRanges } = selectedLayer;
   const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
 
   return (
@@ -96,7 +97,6 @@ function SmartHandoffModal({
         </div>
 
         <h1> Layer: </h1>
-
         <div className="handoff-modal-layer-title">
           {selectedLayer.title}
         </div>
@@ -104,8 +104,13 @@ function SmartHandoffModal({
           {selectedLayer.subtitle}
         </div>
 
-        <h1> Date:</h1>
-        <div className="handoff-modal-date">{displayDate}</div>
+        {dateRanges && (
+          <>
+            <h1> Date:</h1>
+            <div className="handoff-modal-date">{displayDate}</div>
+          </>
+        )}
+
       </div>
 
       <div className="smart-handoff-button-group">
