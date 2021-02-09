@@ -11,7 +11,7 @@ export default function SmartHandoffNotAvailableModal() {
       <p>
         For a downloadable product similar to MODIS Corrected Reflectance,
         please try the MODIS Land Surface Reflectance layers available in Worldview.
-        If you would like to generate MODIS Corrected Reflectance imagery yourself, please &nbsp;
+        If you would like to generate MODIS Corrected Reflectance imagery yourself, please&nbsp;
         <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank" rel="noreferrer">
           see this document
         </a>
