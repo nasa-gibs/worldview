@@ -59,7 +59,7 @@
 }
 
 .wv-map-zoom-out {
-  top: 189px;
+  top: 188px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -84,7 +84,8 @@
 }
 
 @media (max-width: 768px) {
-  .wv-map-zoom-in, .wv-map-zoom-out {
+  .wv-map-zoom-in,
+  .wv-map-zoom-out {
     display: none;
   }
   .wv-map-rotate-left {
@@ -105,18 +106,47 @@
   }
 }
 
-/* handle rotation and zoom button placement on large landscape device (like iPhone X) */
-@media only screen and (max-device-width: 980px) and (max-device-height: 600px) and (orientation: landscape),
-  (max-height: 600px) {
-  .wv-map-zoom-in,
-  .wv-map-zoom-out, {
-    display: none;
+@media (max-height: 667px) {
+  .wv-map-zoom-in {
+    top: calc(var(--vh, 1vh) * 100 - 516px);
   }
+  .wv-map-zoom-out {
+    top: calc(var(--vh, 1vh) * 100 - 478px);
+  }
+  .wv-map-rotate-left {
+    top: calc(var(--vh, 1vh) * 100 - 415px);
+  }
+  .wv-map-reset-rotation {
+    top: calc(var(--vh, 1vh) * 100 - 376px);
+  }
+  .wv-map-rotate-right {
+    top: calc(var(--vh, 1vh) * 100 - 322px);
+  }
+}
+
+@media (max-height: 578px) {
   .wv-map-zoom-in {
     top: 58px;
   }
   .wv-map-zoom-out {
     top: 96px;
+  }
+  .wv-map-rotate-left {
+    top: 160px;
+  }
+  .wv-map-reset-rotation {
+    top: 198px;
+  }
+  .wv-map-rotate-right {
+    top: 251px;
+  }
+}
+
+/* handle rotation and zoom button placement on large landscape device (like iPhone X) */
+@media only screen and (max-device-height: 375px) and (orientation: landscape) {
+  .wv-map-zoom-in,
+  .wv-map-zoom-out, {
+    display: none;
   }
   .wv-map-rotate-left {
     top: 58px;
