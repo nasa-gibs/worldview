@@ -15,9 +15,10 @@ export default function SmartHandoffNotAvailableModal() {
         <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank" rel="noreferrer">
           see this document
         </a>
+        .
       </p>
       <p>
-        If you would like to download only an image, please use the “camera” icon in the upper right.
+        If you would like to download only an image, please use the “camera” icon in the upper right.  Options include a georeferenced image snapshot in GeoTIFF, JPG with Worldfile, PNG with Worldfile, and KMZ formats.
       </p>
     </div>
   );
