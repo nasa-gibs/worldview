@@ -225,10 +225,13 @@ class SmartHandoff extends Component {
     // Used to determine if the added smart-handoff modal should be shown
     const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
     const hideModal = safeLocalStorage.getItem(HIDE_EDS_WARNING);
+    const { dateRanges } = selectedLayer;
+    const includeDates = dateRanges && dateRanges.length;
 
     const continueToEDS = () => openEarthDataSearch(
-      proj.id, selectedDate, selectedCollection, currentExtent, showBoundingBox,
+      proj.id, includeDates, selectedDate, selectedCollection, currentExtent, showBoundingBox,
     );
+
     if (!hideModal) {
       showWarningModal(displayDate, selectedLayer, selectedCollection, continueToEDS);
     } else {
@@ -270,14 +273,17 @@ class SmartHandoff extends Component {
     // Places the compoent state in a loading state; triggers {...} animation.
     this.setState({ isSearchingForGranules: true });
 
-    const startDate = `${selectedDate}T00:00:00.000Z`;
-    const endDate = `${selectedDate}T23:59:59.999Z`;
-    const dateRange = `${startDate},${endDate}`;
+    const { dateRanges } = selectedLayer;
     const params = {
       include_granule_counts: true,
-      temporal: dateRange,
       concept_id: selectedCollection.value,
     };
+
+    if (dateRanges) {
+      const startDate = `${selectedDate}T00:00:00.000Z`;
+      const endDate = `${selectedDate}T23:59:59.999Z`;
+      params.temporal = `${startDate},${endDate}`;
+    }
     const newState = { isSearchingForGranules: false };
 
     let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/collections.json${util.toQueryString(params)}`;

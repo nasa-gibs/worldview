@@ -10,7 +10,7 @@ import util from '../../util/util';
  * @param {*} extentCoords
  * @param {*} showBoundingBox
  */
-export default function openEarthDataSearch(proj, selectedDate, selectedCollection, extentCoords, showBoundingBox) {
+export default function openEarthDataSearch(proj, includeDates, selectedDate, selectedCollection, extentCoords, showBoundingBox) {
   googleTagManager.pushEvent({
     event: 'smart_handoffs_open_eds',
   });
@@ -20,15 +20,19 @@ export default function openEarthDataSearch(proj, selectedDate, selectedCollecti
     antarctic: '-90!180!0!2!0!0',
   };
   const { southWest, northEast } = extentCoords;
-  const startDate = `${selectedDate}T00:00:00.000Z`;
-  const endDate = `${selectedDate}T23:59:59.999Z`;
   const params = {
     q: selectedCollection.value,
     p: selectedCollection.value,
-    '[qt]': `${startDate},${endDate}`,
     m: PROJ_CODES[proj],
     'sb[0]': showBoundingBox ? `${southWest},${northEast}` : undefined,
   };
+
+  if (includeDates) {
+    const startDate = `${selectedDate}T00:00:00.000Z`;
+    const endDate = `${selectedDate}T23:59:59.999Z`;
+    params['[qt]'] = `${startDate},${endDate}`;
+  }
+
   const earthDataSearchURL = `https://search.earthdata.nasa.gov/search/granules${util.toQueryString(params)}`;
   window.open(earthDataSearchURL, '_blank');
 }
