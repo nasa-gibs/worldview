@@ -637,7 +637,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       openCustomContent('layers-not-available', {
         desktopOnly: true,
-        headerText: 'Layer Download Availability',
+        headerText: 'Data Download Availability',
         bodyComponent: SmartHandoffNotAvailableModal,
         size: 'md',
       }),
