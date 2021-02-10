@@ -29,7 +29,6 @@ export default function mapCompare(config, store) {
   self.spy = Spy;
   self.active = false;
   self.dragging = false;
-  self.value = 50;
 
   self.EventTypeObject = util.browser.mobileAndTabletDevice
     ? TOUCH_EVENT
@@ -60,7 +59,7 @@ export default function mapCompare(config, store) {
   self.create = function (map, compareMode) {
     const state = store.getState();
 
-    if (compareMode === mode && comparison && proj === state.proj.selected && self.value === state.compare.value) {
+    if (compareMode === mode && comparison && proj === state.proj.selected) {
       comparison.update(state.compare.isCompareA);
     } else if (comparison) {
       mode = compareMode;
@@ -81,7 +80,6 @@ export default function mapCompare(config, store) {
       ); // e.g. new self.swipe()
     }
     self.active = true;
-    self.value = state.compare.value || 50;
     proj = state.proj.selected;
   };
   /**
