@@ -17,8 +17,8 @@ const LoopButton = ({ looping, onLoop }) => {
       aria-label={labelText}
       className={
             looping
-              ? 'wv-loop-icon-case wv-icon-case active'
-              : 'wv-loop-icon-case wv-icon-case'
+              ? 'wv-loop-icon-case wv-icon-case no-drag active'
+              : 'wv-loop-icon-case wv-icon-case no-drag'
           }
       onClick={onLoop}
     >

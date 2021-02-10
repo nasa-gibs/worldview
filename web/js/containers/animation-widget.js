@@ -342,9 +342,11 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
+    const cancelSelector = '.no-drag, svg';
     return (
       <Draggable
         bounds="body"
+        cancel={cancelSelector}
         onStart={this.handleDragStart}
         position={collapsedWidgetPosition}
         onDrag={this.onCollapsedDrag}
@@ -417,7 +419,7 @@ class AnimationWidget extends React.Component {
       <a
         id="create-gif-button"
         aria-label={labelText}
-        className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
+        className={gifDisabled ? 'wv-icon-case no-drag disabled' : 'wv-icon-case no-drag'}
         onClick={openGif}
       >
         <FontAwesomeIcon
@@ -457,10 +459,13 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers,
     } = this.props;
     const { speed, widgetPosition } = this.state;
+    const cancelSelector = '.no-drag, .interval-btn-container, .date-arrows';
 
     return (
       <Draggable
         bounds="body"
+        cancel={cancelSelector}
+        handle=".wv-animation-widget-header"
         position={widgetPosition}
         onDrag={this.onExpandedDrag}
         onStart={this.handleDragStart}

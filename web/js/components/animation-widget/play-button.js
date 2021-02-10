@@ -15,7 +15,7 @@ const PlayButton = (props) => {
     <a
       id={buttonId}
       aria-label={labelText}
-      className="wv-anim-play-case wv-icon-case"
+      className="wv-anim-play-case wv-icon-case no-drag"
       onClick={playing ? pause : play}
     >
       <UncontrolledTooltip
