@@ -459,7 +459,7 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers,
     } = this.props;
     const { speed, widgetPosition } = this.state;
-    const cancelSelector = '.no-drag, .interval-btn-container, .date-arrows';
+    const cancelSelector = '.no-drag, .date-arrows';
 
     return (
       <Draggable
