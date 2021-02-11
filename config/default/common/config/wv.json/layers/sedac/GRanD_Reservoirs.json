@@ -16,7 +16,19 @@
         "id": "GRanD_Reservoirs",
         "immutable": true
       },
-      "wrapX": true
+      "wrapX": true,
+      "breakPointLayer": {
+        "id": "GRanD_Reservoirs",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.03515625
+          }
+        }
+      }
     }
   }
 }

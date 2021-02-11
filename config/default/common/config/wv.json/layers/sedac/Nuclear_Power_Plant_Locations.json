@@ -16,7 +16,19 @@
       "vectorStyle": {
         "id": "Nuclear_Power_Plant_Locations"
       },
-      "wrapX": true
+      "wrapX": true,
+      "breakPointLayer": {
+        "id": "Nuclear_Power_Plant_Locations",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.03515625
+          }
+        }
+      }
     }
   }
 }
