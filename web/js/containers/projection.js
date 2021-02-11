@@ -5,6 +5,7 @@ import { get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
+import { stop } from '../modules/animation/actions';
 import { resetProductPickerState } from '../modules/product-picker/actions';
 import IconList from '../components/util/list';
 
@@ -94,6 +95,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateProjection: (id, config) => {
     dispatch(changeProjection(id));
     dispatch(resetProductPickerState(id));
+    dispatch(stop());
   },
   onCloseModal: () => {
     dispatch(onToggle());
