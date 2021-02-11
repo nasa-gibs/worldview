@@ -2,8 +2,8 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 
 const {
-  geosearchComponent,
-  geosearchToolbarButton,
+  locationSearchComponent,
+  locationSearchToolbarButton,
   measureBtn,
   projToolbarButton,
   shareToolbarButton,
@@ -17,9 +17,9 @@ module.exports = {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
   },
 
-  'Verify toolbar buttons are visible by default - excluding geosearch': (c) => {
-    c.expect.element(geosearchComponent).to.be.visible;
-    c.expect.element(geosearchToolbarButton).to.not.be.visible;
+  'Verify toolbar buttons are visible by default - excluding Location Search': (c) => {
+    c.expect.element(locationSearchComponent).to.be.visible;
+    c.expect.element(locationSearchToolbarButton).to.not.be.visible;
     c.expect.element(shareToolbarButton).to.be.visible;
     c.expect.element(projToolbarButton).to.be.visible;
     c.expect.element(snapshotToolbarButton).to.be.visible;

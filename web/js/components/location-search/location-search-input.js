@@ -9,23 +9,23 @@ class SearchBox extends Component {
   constructor(props) {
     super(props);
     this.highlightedItem = null;
-    this.geosearchInput = null;
+    this.locationSearchInput = null;
   }
 
   componentDidMount() {
     const {
-      geosearchMobileModalOpen,
+      locationSearchMobileModalOpen,
       preventInputFocus,
       suggestions,
     } = this.props;
     // timeout necessary to trigger input focus
-    if (!preventInputFocus || geosearchMobileModalOpen) {
+    if (!preventInputFocus || locationSearchMobileModalOpen) {
       setTimeout(() => {
-        if (this.geosearchInput) {
-          this.geosearchInput.focus();
+        if (this.locationSearchInput) {
+          this.locationSearchInput.focus();
           // handle hide results menu when expanding with pending suggestions
           if (suggestions.length > 0) {
-            this.geosearchInput.setState({ isOpen: false });
+            this.locationSearchInput.setState({ isOpen: false });
           }
         }
       }, 1);
@@ -73,7 +73,7 @@ class SearchBox extends Component {
 
   // render search result menu item container
   renderMenu = (children) => (
-    <div className="geosearch-results-menu">
+    <div className="location-search-results-menu">
       {children}
     </div>
   )
@@ -85,7 +85,7 @@ class SearchBox extends Component {
     }
     return (
       <div
-        className="geosearch-item highlighted-render-item"
+        className="location-search-item highlighted-render-item"
         style={{
           background: isHighlighted ? '#0070c8' : '#fff',
           color: isHighlighted ? '#fff' : '#000',
@@ -102,7 +102,7 @@ class SearchBox extends Component {
     const {
       inputValue, isMobile,
     } = this.props;
-    const buttonId = 'geosearch-search-submit-button';
+    const buttonId = 'location-search-submit-button';
     const labelText = 'Submit and navigate to location';
     const buttonStyle = inputValue
       ? { background: isMobile ? '#d54e21' : 'none', color: isMobile ? '#fff' : '#d54e21', cursor: 'pointer' }
@@ -111,7 +111,7 @@ class SearchBox extends Component {
 
     return (
       <InputGroupAddon
-        className="geosearch-input-group-addon submit-group"
+        className="location-search-input-group-addon submit-group"
         addonType="prepend"
       >
         <Button
@@ -146,7 +146,7 @@ class SearchBox extends Component {
     return (
       activeAlert && (
       <InputGroupAddon
-        className="geosearch-input-group-addon geosearch-input-alert-icon"
+        className="location-search-input-group-addon location-search-input-alert-icon"
         addonType="append"
         title="The entered location is not available."
       >
@@ -161,14 +161,14 @@ class SearchBox extends Component {
     const {
       inputValue, isMobile, clearInput,
     } = this.props;
-    const buttonId = 'geosearch-search-clear-button';
+    const buttonId = 'location-search-clear-button';
     const labelText = 'Clear search text';
     const tooltipVisibilityCondition = inputValue && !isMobile;
 
     return (
       inputValue && (
       <InputGroupAddon
-        className="geosearch-input-group-addon geosearch-input-clear-container"
+        className="location-search-input-group-addon location-search-input-clear-container"
         addonType="append"
       >
         <Button
@@ -228,14 +228,14 @@ class SearchBox extends Component {
       : 'Search for places or enter coordinates';
     return (
       <div
-        className="geosearch-input-container"
+        className="location-search-input-container"
         onKeyPress={this.handleKeyPress}
       >
         <Autocomplete
-          ref={(el) => { this.geosearchInput = el; }}
+          ref={(el) => { this.locationSearchInput = el; }}
           inputProps={{
-            className: 'form-control geosearch-autocomplete',
-            id: 'geosearch-autocomplete',
+            className: 'form-control location-search-autocomplete',
+            id: 'location-search-autocomplete',
             placeholder: placeHolderText,
           }}
           wrapperStyle={this.getWrapperStyle()}
@@ -259,7 +259,7 @@ SearchBox.propTypes = {
   activeAlert: PropTypes.bool,
   clearInput: PropTypes.func,
   coordinatesPending: PropTypes.array,
-  geosearchMobileModalOpen: PropTypes.bool,
+  locationSearchMobileModalOpen: PropTypes.bool,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
   preventInputFocus: PropTypes.bool,

@@ -12,7 +12,7 @@ import { containsXY } from 'ol/extent';
 import { coordinatesCRSTransform } from '../projection/util';
 import safeLocalStorage from '../../util/local-storage';
 
-const { GEOSEARCH_COLLAPSED } = safeLocalStorage.keys;
+const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
 
 /**
  * Animate coordinates marker
@@ -130,14 +130,14 @@ const createPin = function(coordinates, transformedCoordinates = false, reverseG
  * @param {Object} stateFromLocation
  * @param {Object} state
  */
-export function mapLocationToGeosearchState(
+export function mapLocationToLocationSearchState(
   parameters,
   stateFromLocation,
   state,
 ) {
-  const { gm } = parameters;
-  const validCoordinates = gm
-    ? gm.split(',')
+  const { s } = parameters;
+  const validCoordinates = s
+    ? s.split(',')
       .map((coord) => Number(coord))
       .filter((coord) => !lodashIsNaN(parseFloat(coord)))
     : [];
@@ -151,7 +151,7 @@ export function mapLocationToGeosearchState(
   const isExpanded = !isMobile && !localStorageCollapseState;
 
   stateFromLocation = update(stateFromLocation, {
-    geosearch: {
+    locationSearch: {
       coordinates: { $set: coordinates },
       isExpanded: { $set: isExpanded },
       isCoordinatesDialogOpen: { $set: isValid },
@@ -162,10 +162,10 @@ export function mapLocationToGeosearchState(
 }
 
 /**
- * @return {Boolean} is geosearch local storage set to 'collapsed'
+ * @return {Boolean} is Location Search local storage set to 'collapsed'
  */
 export function getLocalStorageCollapseState() {
-  return safeLocalStorage.getItem(GEOSEARCH_COLLAPSED) === 'collapsed';
+  return safeLocalStorage.getItem(LOCATION_SEARCH_COLLAPSED) === 'collapsed';
 }
 
 /**
@@ -173,11 +173,11 @@ export function getLocalStorageCollapseState() {
  * @return {Void}
  */
 export function setLocalStorageCollapseState(storageValue) {
-  safeLocalStorage.setItem(GEOSEARCH_COLLAPSED, storageValue);
+  safeLocalStorage.setItem(LOCATION_SEARCH_COLLAPSED, storageValue);
 }
 
 /**
  * @param {Object} config
- * @return {Boolean} is geosearch feature enabled
+ * @return {Boolean} is Location Search feature enabled
  */
-export const isGeosearchFeatureEnabled = ({ features }) => !!(features.geocodeSearch && features.geocodeSearch.url);
+export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch && features.locationSearch.url);

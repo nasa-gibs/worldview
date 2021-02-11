@@ -144,7 +144,7 @@ module.exports = {
   mapScaleImperial: '.wv-map-scale-imperial',
 
   // ui toolbar
-  geosearchToolbarButton: '#wv-geosearch-button',
+  locationSearchToolbarButton: '#wv-location-search-button',
   shareToolbarButton: '#wv-link-button',
   projToolbarButton: '#wv-proj-button',
   snapshotToolbarButton: '#wv-image-button',
@@ -155,10 +155,10 @@ module.exports = {
   socialCopyLinkButton: '#wv-link-button',
   socialLinkInput: '#permalink_content',
 
-  // geosearch
-  geosearchComponent: '.geosearch-component',
-  geosearchMobileDialog: '#toolbar_geosearch_mobile',
-  geosearchMinimizeButton: '.geosearch-search-minimize-button',
+  // Location Search
+  locationSearchComponent: '.location-search-component',
+  locationSearchMobileDialog: '#toolbar_location_search_mobile',
+  locationSearchMinimizeButton: '.location-search-minimize-button',
   tooltipCoordinatesContainer: '.tooltip-coordinates-container',
   tooltipCoordinatesTitle: '.tooltip-coordinates-title',
   tooltipCoordinates: '.tooltip-coordinates',

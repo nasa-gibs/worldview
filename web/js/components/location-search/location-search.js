@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import GeosearchModal from './geosearch-modal';
+import LocationSearchModal from './location-search-modal';
 import {
-  toggleShowGeosearch,
-} from '../../modules/geosearch/actions';
-import { isGeosearchFeatureEnabled } from '../../modules/geosearch/util';
+  toggleShowLocationSearch,
+} from '../../modules/location-search/actions';
+import { isLocationSearchFeatureEnabled } from '../../modules/location-search/util';
 
-class Geosearch extends Component {
+class LocationSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,9 +17,9 @@ class Geosearch extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { isExpanded, isMobile, toggleShowGeosearch } = this.props;
+    const { isExpanded, isMobile, toggleShowLocationSearch } = this.props;
     if (isExpanded && prevProps.isMobile !== isMobile) {
-      toggleShowGeosearch();
+      toggleShowLocationSearch();
     }
   }
 
@@ -36,7 +36,7 @@ class Geosearch extends Component {
     } = this.state;
 
     return (
-      <GeosearchModal
+      <LocationSearchModal
         coordinatesPending={coordinatesPending}
         inputValue={inputValue}
         updatePendingCoordinates={this.updatePendingCoordinates}
@@ -72,14 +72,14 @@ const mapStateToProps = (state) => {
     modal,
     measure,
     animation,
-    geosearch,
+    locationSearch,
     ui,
   } = state;
-  const isFeatureEnabled = isGeosearchFeatureEnabled(config);
+  const isFeatureEnabled = isLocationSearchFeatureEnabled(config);
   const { gifActive } = animation;
   const {
     isExpanded,
-  } = geosearch;
+  } = locationSearch;
   const { isDistractionFreeModeActive } = ui;
   const isMobile = browser.lessThan.medium;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
@@ -95,20 +95,20 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleShowGeosearch: () => {
-    dispatch(toggleShowGeosearch());
+  toggleShowLocationSearch: () => {
+    dispatch(toggleShowLocationSearch());
   },
 });
 
-Geosearch.propTypes = {
+LocationSearch.propTypes = {
   isExpanded: PropTypes.bool,
   isFeatureEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   shouldCollapseFromOtherUI: PropTypes.bool,
-  toggleShowGeosearch: PropTypes.func,
+  toggleShowLocationSearch: PropTypes.func,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Geosearch);
+)(LocationSearch);

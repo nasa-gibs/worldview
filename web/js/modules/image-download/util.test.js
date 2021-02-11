@@ -214,8 +214,8 @@ test('Download URL', () => {
     height: 300,
   };
   const dateTime = new Date('2019-06-24T19:04:00Z');
-  const geosearchCoordinates = [-19.1609, 2.7117];
-  const dlURL = getDownloadUrl(url, proj, mockLayerDefs, lonlats, dimensions, dateTime, false, false, geosearchCoordinates);
+  const locationSearchCoordinates = [-19.1609, 2.7117];
+  const dlURL = getDownloadUrl(url, proj, mockLayerDefs, lonlats, dimensions, dateTime, false, false, locationSearchCoordinates);
   const expectedURL = 'http://localhost:3002/api/v1/snapshot'
     + '?REQUEST=GetSnapshot'
     + '&TIME=2019-06-24T00:00:00Z'

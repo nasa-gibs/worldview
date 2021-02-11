@@ -8,12 +8,12 @@ import {
   SET_SUGGESTION,
   TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
-  TOGGLE_SHOW_GEOSEARCH,
+  TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
 import { getLocalStorageCollapseState } from './util';
 
 const localStorageCollapseState = getLocalStorageCollapseState();
-export const geosearchState = {
+export const locationSearchState = {
   coordinates: [],
   isCoordinateSearchActive: false,
   isCoordinatesDialogOpen: false,
@@ -23,14 +23,14 @@ export const geosearchState = {
   suggestedPlace: [],
 };
 
-export function geosearchReducer(state = geosearchState, action) {
+export function locationSearchReducer(state = locationSearchState, action) {
   switch (action.type) {
     case TOGGLE_DIALOG_VISIBLE:
       return {
         ...state,
         isCoordinatesDialogOpen: action.value,
       };
-    case TOGGLE_SHOW_GEOSEARCH:
+    case TOGGLE_SHOW_LOCATION_SEARCH:
       return {
         ...state,
         isExpanded: action.value,
