@@ -29,6 +29,7 @@ export default function mapCompare(config, store) {
   self.spy = Spy;
   self.active = false;
   self.dragging = false;
+  self.value = 50;
 
   self.EventTypeObject = util.browser.mobileAndTabletDevice
     ? TOUCH_EVENT
@@ -40,6 +41,7 @@ export default function mapCompare(config, store) {
     });
     events.on('compare:moveend', (value) => {
       self.dragging = false;
+      self.value = value;
       store.dispatch(setValue(value));
     });
   };
@@ -59,7 +61,7 @@ export default function mapCompare(config, store) {
   self.create = function (map, compareMode) {
     const state = store.getState();
 
-    if (compareMode === mode && comparison && proj === state.proj.selected) {
+    if (compareMode === mode && comparison && proj === state.proj.selected && self.value === state.compare.value) {
       comparison.update(state.compare.isCompareA);
     } else if (comparison) {
       mode = compareMode;
@@ -79,6 +81,7 @@ export default function mapCompare(config, store) {
         state.compare.value || null,
       ); // e.g. new self.swipe()
     }
+    self.value = state.compare.value || 50;
     self.active = true;
     proj = state.proj.selected;
   };
@@ -96,6 +99,7 @@ export default function mapCompare(config, store) {
    */
   self.destroy = function () {
     comparison.destroy();
+    self.value = 50;
     store.dispatch(setValue(50)); // set Value to default
     comparison = null;
     self.active = false;
