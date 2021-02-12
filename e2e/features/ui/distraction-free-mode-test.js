@@ -2,8 +2,8 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 
 const {
-  geosearchMinimizeButton,
-  geosearchToolbarButton,
+  locationSearchMinimizeButton,
+  locationSearchToolbarButton,
   mapScaleImperial,
   mapScaleMetric,
   measureBtn,
@@ -21,8 +21,8 @@ module.exports = {
   before: (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
     c.url(`${c.globals.url}?p=arctic`);
-    // ensure geosearch is minimized
-    c.click(geosearchMinimizeButton);
+    // ensure Location Search is minimized
+    c.click(locationSearchMinimizeButton);
   },
 
   // verify distraction free mode shortcut hides ui elements
@@ -35,7 +35,7 @@ module.exports = {
 
     c.waitForElementNotVisible(timelineContainer, TIME_LIMIT);
     c.waitForElementNotVisible(sidebarContainer, TIME_LIMIT);
-    c.waitForElementNotVisible(geosearchToolbarButton, TIME_LIMIT);
+    c.waitForElementNotVisible(locationSearchToolbarButton, TIME_LIMIT);
     c.waitForElementNotPresent(shareToolbarButton, TIME_LIMIT);
     c.waitForElementNotPresent(projToolbarButton, TIME_LIMIT);
     c.waitForElementNotPresent(snapshotToolbarButton, TIME_LIMIT);
@@ -56,7 +56,7 @@ module.exports = {
 
     c.waitForElementVisible(timelineContainer, TIME_LIMIT);
     c.waitForElementVisible(sidebarContainer, TIME_LIMIT);
-    c.waitForElementVisible(geosearchToolbarButton, TIME_LIMIT);
+    c.waitForElementVisible(locationSearchToolbarButton, TIME_LIMIT);
     c.waitForElementVisible(shareToolbarButton, TIME_LIMIT);
     c.waitForElementPresent(projToolbarButton, TIME_LIMIT);
     c.waitForElementPresent(snapshotToolbarButton, TIME_LIMIT);

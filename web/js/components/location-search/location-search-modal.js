@@ -10,7 +10,7 @@ import {
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SearchBox from './geosearch-input';
+import SearchBox from './location-search-input';
 import Alert from '../util/alert';
 import { getCoordinateFixedPrecision, isValidCoordinates } from './util';
 import {
@@ -19,17 +19,17 @@ import {
   setPlaceMarker,
   setSuggestion,
   toggleReverseGeocodeActive,
-  toggleShowGeosearch,
-} from '../../modules/geosearch/actions';
+  toggleShowLocationSearch,
+} from '../../modules/location-search/actions';
 import {
   areCoordinatesWithinExtent,
-} from '../../modules/geosearch/util';
+} from '../../modules/location-search/util';
 import {
   processMagicKey,
   reverseGeocode,
-} from '../../modules/geosearch/util-api';
+} from '../../modules/location-search/util-api';
 
-class GeosearchModal extends Component {
+class LocationSearchModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -150,7 +150,7 @@ class GeosearchModal extends Component {
     } = item;
 
     googleTagManager.pushEvent({
-      event: 'geosearch_selected_suggested_menu_item',
+      event: 'location_search_selected_suggested_menu_item',
     });
     processMagicKey(magicKey).then((result) => {
       if (lodashGet(result, 'candidates[0]')) {
@@ -227,7 +227,7 @@ class GeosearchModal extends Component {
     });
     updateValue('');
     googleTagManager.pushEvent({
-      event: 'geosearch_reverse_geocode',
+      event: 'location_search_reverse_geocode',
     });
   }
 
@@ -256,10 +256,10 @@ class GeosearchModal extends Component {
 
     return showReverseGeocodeAlert && (
       <Alert
-        id="geosearch-select-coordinates-alert"
+        id="location-search-select-coordinates-alert"
         isOpen
         icon="map-marker-alt"
-        title="Geosearch Select Coordinates"
+        title="Location Search Select Coordinates"
         timeout={6000}
         message={message}
         onDismiss={this.dismissReverseGeocodeAlert}
@@ -276,7 +276,7 @@ class GeosearchModal extends Component {
 
     return showExtentAlert && (
       <Alert
-        id="geosearch-select-coordinates-extent-alert"
+        id="location-search-select-coordinates-extent-alert"
         isOpen
         title="Selected Coordinates Outside Current Map Projection"
         timeout={12000}
@@ -295,7 +295,7 @@ class GeosearchModal extends Component {
 
     return showNoSuggestionsAlert && (
       <Alert
-        id="geosearch-no-suggestions-available-alert"
+        id="location-search-no-suggestions-available-alert"
         isOpen
         title="No suggested places are available"
         timeout={12000}
@@ -305,17 +305,17 @@ class GeosearchModal extends Component {
     );
   }
 
-  // render geosearch component minimize button (not visible in mobile)
+  // render Location Search component minimize button (not visible in mobile)
   renderMinimizeButton = () => {
-    const { toggleShowGeosearch } = this.props;
-    const buttonId = 'geosearch-search-minimize-button';
-    const labelText = 'Hide Geosearch';
+    const { toggleShowLocationSearch } = this.props;
+    const buttonId = 'location-search-minimize-button';
+    const labelText = 'Hide Location Search';
     return (
       <InputGroupAddon addonType="prepend">
         <Button
           id={buttonId}
           className={buttonId}
-          onClick={toggleShowGeosearch}
+          onClick={toggleShowLocationSearch}
         >
           {this.renderTooltip(buttonId, labelText)}
           <div className={`${buttonId}-chevron`} />
@@ -326,7 +326,7 @@ class GeosearchModal extends Component {
 
   // render add coordinate marker button for reverse geocode
   renderAddCoordinateButton = () => {
-    const buttonId = 'geosearch-add-coordinate-button';
+    const buttonId = 'location-search-add-coordinate-button';
     const labelText = 'Add marker on map';
 
     return (
@@ -347,7 +347,7 @@ class GeosearchModal extends Component {
   render() {
     const {
       coordinatesPending,
-      geosearchMobileModalOpen,
+      locationSearchMobileModalOpen,
       inputValue,
       isMobile,
       preventInputFocus,
@@ -363,14 +363,14 @@ class GeosearchModal extends Component {
         {this.renderReverseGeocodeAlert()}
         {this.renderNoSuggestionsAlert()}
         {this.renderExtentAlert()}
-        <div className="geosearch-component">
-          <InputGroup className="geosearch-search-input-group">
+        <div className="location-search-component">
+          <InputGroup className="location-search-input-group">
             {/* Minimize button not visible in mobile */}
             {!isMobile && this.renderMinimizeButton()}
             <SearchBox
               clearInput={this.clearInput}
               coordinatesPending={coordinatesPending}
-              geosearchMobileModalOpen={geosearchMobileModalOpen}
+              locationSearchMobileModalOpen={locationSearchMobileModalOpen}
               inputValue={inputValue}
               isMobile={isMobile}
               preventInputFocus={preventInputFocus}
@@ -396,16 +396,16 @@ const mapStateToProps = (state) => {
     lastAction,
     map,
     modal,
-    geosearch,
+    locationSearch,
   } = state;
   const {
     coordinates,
     isCoordinateSearchActive,
     suggestions,
     suggestedPlace,
-  } = geosearch;
+  } = locationSearch;
   const isMobile = browser.lessThan.medium;
-  const geosearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_GEOSEARCH_MOBILE';
+  const locationSearchMobileModalOpen = modal.isOpen && modal.id === 'TOOLBAR_LOCATION_SEARCH_MOBILE';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
   const measureToggledOff = lastAction.type === 'MEASURE/TOGGLE_MEASURE_ACTIVE' && lastAction.value === false;
   const distractionFreeModeToggledOff = lastAction.type === 'UI/TOGGLE_DISTRACTION_FREE_MODE';
@@ -414,7 +414,7 @@ const mapStateToProps = (state) => {
   return {
     preventInputFocus,
     coordinates,
-    geosearchMobileModalOpen,
+    locationSearchMobileModalOpen,
     isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(map, config, targetCoordinates),
     isCoordinateSearchActive,
     isMobile,
@@ -432,8 +432,8 @@ const mapDispatchToProps = (dispatch) => ({
   toggleReverseGeocodeActive: (isActive) => {
     dispatch(toggleReverseGeocodeActive(isActive));
   },
-  toggleShowGeosearch: () => {
-    dispatch(toggleShowGeosearch());
+  toggleShowLocationSearch: () => {
+    dispatch(toggleShowLocationSearch());
   },
   getSuggestions: (val) => {
     dispatch(getSuggestions(val));
@@ -446,11 +446,11 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-GeosearchModal.propTypes = {
+LocationSearchModal.propTypes = {
   clearSuggestions: PropTypes.func,
   coordinates: PropTypes.array,
   coordinatesPending: PropTypes.array,
-  geosearchMobileModalOpen: PropTypes.bool,
+  locationSearchMobileModalOpen: PropTypes.bool,
   getSuggestions: PropTypes.func,
   inputValue: PropTypes.string,
   isCoordinatePairWithinExtent: PropTypes.func,
@@ -464,7 +464,7 @@ GeosearchModal.propTypes = {
   suggestions: PropTypes.array,
   suggestedPlace: PropTypes.array,
   toggleReverseGeocodeActive: PropTypes.func,
-  toggleShowGeosearch: PropTypes.func,
+  toggleShowLocationSearch: PropTypes.func,
   updatePendingCoordinates: PropTypes.func,
   updateValue: PropTypes.func,
 };
@@ -472,4 +472,4 @@ GeosearchModal.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(GeosearchModal);
+)(LocationSearchModal);

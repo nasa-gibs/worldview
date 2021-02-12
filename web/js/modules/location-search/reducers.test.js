@@ -1,6 +1,6 @@
 import {
-  geosearchReducer,
-  geosearchState,
+  locationSearchReducer,
+  locationSearchState,
 } from './reducers';
 import {
   CLEAR_MARKER,
@@ -9,7 +9,7 @@ import {
   SET_SUGGESTION,
   TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
-  TOGGLE_SHOW_GEOSEARCH,
+  TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
 
 // test variables
@@ -24,24 +24,24 @@ const suggestion = [{
 }];
 const coordinates = [72, 40];
 
-describe('geosearchReducer', () => {
-  test('geosearchReducer should return the initial state', () => {
-    expect(geosearchReducer(undefined, {})).toEqual(
-      geosearchState,
+describe('locationSearch', () => {
+  test('locationSearch should return the initial state', () => {
+    expect(locationSearchReducer(undefined, {})).toEqual(
+      locationSearchState,
     );
   });
   test(
-    `${TOGGLE_SHOW_GEOSEARCH
-    } shows geosearch isExpanded and `
+    `${TOGGLE_SHOW_LOCATION_SEARCH
+    } shows Location Search isExpanded and `
       + 'should return new state',
     () => {
       expect(
-        geosearchReducer(geosearchState, {
-          type: TOGGLE_SHOW_GEOSEARCH,
+        locationSearchReducer(locationSearchState, {
+          type: TOGGLE_SHOW_LOCATION_SEARCH,
           value: true,
         }),
       ).toEqual({
-        ...geosearchState,
+        ...locationSearchState,
         isExpanded: true,
       });
     },
@@ -52,12 +52,12 @@ describe('geosearchReducer', () => {
       + 'should return new state',
     () => {
       expect(
-        geosearchReducer(geosearchState, {
+        locationSearchReducer(locationSearchState, {
           type: TOGGLE_REVERSE_GEOCODE,
           value: true,
         }),
       ).toEqual({
-        ...geosearchState,
+        ...locationSearchState,
         isCoordinateSearchActive: true,
       });
     },
@@ -68,12 +68,12 @@ describe('geosearchReducer', () => {
       + 'should return new state',
     () => {
       expect(
-        geosearchReducer(geosearchState, {
+        locationSearchReducer(locationSearchState, {
           type: TOGGLE_DIALOG_VISIBLE,
           value: true,
         }),
       ).toEqual({
-        ...geosearchState,
+        ...locationSearchState,
         isCoordinatesDialogOpen: true,
       });
     },
@@ -84,14 +84,14 @@ describe('geosearchReducer', () => {
     + 'and sets isCoordinateSearchActive to false and should return new state',
     () => {
       expect(
-        geosearchReducer(geosearchState, {
+        locationSearchReducer(locationSearchState, {
           type: SET_MARKER,
           coordinates,
           reverseGeocodeResults,
           isCoordinatesDialogOpen: true,
         }),
       ).toEqual({
-        ...geosearchState,
+        ...locationSearchState,
         isCoordinateSearchActive: false,
         coordinates,
         reverseGeocodeResults,
@@ -105,11 +105,11 @@ describe('geosearchReducer', () => {
       + 'should return new state',
     () => {
       expect(
-        geosearchReducer(geosearchState, {
+        locationSearchReducer(locationSearchState, {
           type: CLEAR_MARKER,
         }),
       ).toEqual({
-        ...geosearchState,
+        ...locationSearchState,
         coordinates: [],
         reverseGeocodeResults: null,
         isCoordinatesDialogOpen: false,
@@ -122,12 +122,12 @@ describe('geosearchReducer', () => {
       + 'should return new state',
     () => {
       expect(
-        geosearchReducer(geosearchState, {
+        locationSearchReducer(locationSearchState, {
           type: SET_SUGGESTION,
           value: suggestion,
         }),
       ).toEqual({
-        ...geosearchState,
+        ...locationSearchState,
         suggestedPlace: suggestion,
       });
     },
@@ -138,12 +138,12 @@ describe('geosearchReducer', () => {
       + 'should return new state',
     () => {
       expect(
-        geosearchReducer(geosearchState, {
+        locationSearchReducer(locationSearchState, {
           type: CLEAR_SUGGESTIONS,
           value: [],
         }),
       ).toEqual({
-        ...geosearchState,
+        ...locationSearchState,
         suggestions: [],
         suggestedPlace: [],
       });

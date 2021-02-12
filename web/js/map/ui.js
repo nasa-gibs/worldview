@@ -39,7 +39,7 @@ import {
   SET_MARKER,
   SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
-} from '../modules/geosearch/constants';
+} from '../modules/location-search/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
@@ -62,9 +62,9 @@ import {
 import { getLeadingExtent } from '../modules/map/util';
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
-import { animateCoordinates, getCoordinatesMarker } from '../modules/geosearch/util';
-import { reverseGeocode } from '../modules/geosearch/util-api';
-import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/geosearch/ol-coordinates-marker-util';
+import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
+import { reverseGeocode } from '../modules/location-search/util-api';
+import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/location-search/ol-coordinates-marker-util';
 
 
 const { events } = util;
@@ -245,8 +245,8 @@ export default function mapui(models, config, store, ui) {
    */
   const handleActiveMapMarker = (start) => {
     const state = store.getState();
-    const { geosearch } = state;
-    const { coordinates, reverseGeocodeResults } = geosearch;
+    const { locationSearch } = state;
+    const { coordinates, reverseGeocodeResults } = locationSearch;
     if (coordinates && coordinates.length > 0) {
       if (start) {
         reverseGeocode(coordinates, config).then((results) => {
@@ -310,9 +310,9 @@ export default function mapui(models, config, store, ui) {
   const addCoordinatesTooltip = (geocodeResults) => {
     const state = store.getState();
     const {
-      browser, geosearch,
+      browser, locationSearch,
     } = state;
-    const { coordinates, reverseGeocodeResults } = geosearch;
+    const { coordinates, reverseGeocodeResults } = locationSearch;
     const results = geocodeResults || reverseGeocodeResults;
     const isMobile = browser.lessThan.medium;
     const [longitude, latitude] = coordinates;
@@ -354,10 +354,10 @@ export default function mapui(models, config, store, ui) {
    */
   const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
     const state = store.getState();
-    const { geosearch, proj } = state;
+    const { locationSearch, proj } = state;
     const {
       coordinates, isCoordinatesDialogOpen, reverseGeocodeResults,
-    } = geosearch;
+    } = locationSearch;
     const results = geocodeResults || reverseGeocodeResults;
     const { sources } = config;
 

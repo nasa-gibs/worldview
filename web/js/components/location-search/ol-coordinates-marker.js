@@ -10,9 +10,9 @@ import { changeCursor as changeCursorActionCreator } from '../../modules/map/act
 import { isCoordinatesDialogAvailableAtPixel } from './ol-coordinates-marker-util';
 import {
   setPlaceMarker, toggleDialogVisible, toggleReverseGeocodeActive,
-} from '../../modules/geosearch/actions';
-import { areCoordinatesWithinExtent } from '../../modules/geosearch/util';
-import { reverseGeocode } from '../../modules/geosearch/util-api';
+} from '../../modules/location-search/actions';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
+import { reverseGeocode } from '../../modules/location-search/util-api';
 import { getCoordinateFixedPrecision } from './util';
 import util from '../../util/util';
 
@@ -133,12 +133,12 @@ export class CoordinatesMarker extends Component {
     }
   }
 
-  // render geosearch extent alert for selecting points outside of the current map extent
+  // render Location Search extent alert for selecting points outside of the current map extent
   renderExtentAlert = () => {
     const message = 'The selected coordinates are outside of the current map extent. Select a new point or try a different projection.';
     return (
       <Alert
-        id="ol-coordinates-geosearch-select-coordinates-extent-alert"
+        id="ol-coordinates-location-search-select-coordinates-extent-alert"
         isOpen
         title="Selected Coordinates Outside Current Map Projection"
         timeout={15000}
@@ -160,9 +160,9 @@ function mapStateToProps(state) {
     config,
     map,
     measure,
-    geosearch,
+    locationSearch,
   } = state;
-  const { coordinates, isCoordinateSearchActive } = geosearch;
+  const { coordinates, isCoordinateSearchActive } = locationSearch;
   const isMobile = browser.lessThan.medium;
 
   return {

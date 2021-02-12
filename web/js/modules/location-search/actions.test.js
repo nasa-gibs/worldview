@@ -3,14 +3,14 @@ import thunk from 'redux-thunk';
 import {
   clearSuggestions,
   toggleDialogVisible,
-  toggleShowGeosearch,
+  toggleShowLocationSearch,
   toggleReverseGeocodeActive,
   setSuggestion,
 } from './actions';
 import {
   TOGGLE_REVERSE_GEOCODE,
   TOGGLE_DIALOG_VISIBLE,
-  TOGGLE_SHOW_GEOSEARCH,
+  TOGGLE_SHOW_LOCATION_SEARCH,
   CLEAR_SUGGESTIONS,
   SET_SUGGESTION,
 } from './constants';
@@ -26,19 +26,19 @@ const suggestion = [{
   text: 'New York, NY, USA',
 }];
 
-describe('Geosearch actions', () => {
-  test(`toggleShowGeosearch action returns ${TOGGLE_SHOW_GEOSEARCH} as type and ${
+describe('Location Search actions', () => {
+  test(`toggleShowLocationSearch action returns ${TOGGLE_SHOW_LOCATION_SEARCH} as type and ${
     !isExpanded} as value`, () => {
     const expectedAction = {
-      type: TOGGLE_SHOW_GEOSEARCH,
+      type: TOGGLE_SHOW_LOCATION_SEARCH,
       value: false,
     };
     const store = mockStore({
-      geosearch: {
+      locationSearch: {
         isExpanded: true,
       },
     });
-    store.dispatch(toggleShowGeosearch());
+    store.dispatch(toggleShowLocationSearch());
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
   test(`toggleReverseGeocodeActive action returns ${TOGGLE_REVERSE_GEOCODE} as type and ${
@@ -56,7 +56,7 @@ describe('Geosearch actions', () => {
       value: true,
     };
     const store = mockStore({
-      geosearch: {
+      locationSearch: {
         isCoordinatesDialogOpen: false,
       },
     });
@@ -69,7 +69,7 @@ describe('Geosearch actions', () => {
       value: suggestion,
     };
     const store = mockStore({
-      geosearch: {
+      locationSearch: {
         suggestions: [],
       },
     });
@@ -82,7 +82,7 @@ describe('Geosearch actions', () => {
       value: [],
     };
     const store = mockStore({
-      geosearch: {
+      locationSearch: {
         suggestions: [{}, {}],
       },
     });

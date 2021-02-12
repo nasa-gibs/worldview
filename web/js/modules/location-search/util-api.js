@@ -1,5 +1,5 @@
 // ArcGIS World Geocoding Service API Request Options
-export const GEOSEARCH_REQUEST_OPTIONS = {
+export const LOCATION_SEARCH_REQUEST_OPTIONS = {
   REQUEST_OPTIONS: {
     method: 'GET',
     redirect: 'follow',
@@ -28,14 +28,14 @@ export const GEOSEARCH_REQUEST_OPTIONS = {
 const {
   REQUEST_OPTIONS,
   CONSTANT_REQUEST_PARAMETERS,
-} = GEOSEARCH_REQUEST_OPTIONS;
+} = LOCATION_SEARCH_REQUEST_OPTIONS;
 
 /**
  * @param {String} magicKey
  * @param {Object} config
  */
 export async function processMagicKey(magicKey, config) {
-  const { features: { geocodeSearch: { url: requestUrl } } } = config;
+  const { features: { locationSearch: { url: requestUrl } } } = config;
   const request = `${requestUrl}findAddressCandidates?${CONSTANT_REQUEST_PARAMETERS}&outFields=*&magicKey=${magicKey}=`;
 
   try {
@@ -52,7 +52,7 @@ export async function processMagicKey(magicKey, config) {
  * @param {Object} config
  */
 export async function reverseGeocode(coordinates, config) {
-  const { features: { geocodeSearch: { url: requestUrl } } } = config;
+  const { features: { locationSearch: { url: requestUrl } } } = config;
   const request = `${requestUrl}reverseGeocode?${CONSTANT_REQUEST_PARAMETERS}&location=${coordinates}`;
 
   try {

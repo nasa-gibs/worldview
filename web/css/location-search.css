@@ -1,9 +1,9 @@
 /* Autocomplete Input */
-.geosearch-search-input-group {
+.location-search-input-group {
   flex-wrap: nowrap;
 }
 
-.geosearch-autocomplete {
+.location-search-autocomplete {
   height: 38px;
   padding: 0 5px;
   border-radius: 0;
@@ -13,19 +13,19 @@
   }
 }
 
-.geosearch-autocomplete,
-.geosearch-autocomplete:focus {
+.location-search-autocomplete,
+.location-search-autocomplete:focus {
   background: none;
   color: #fff;
   box-shadow: none;
 }
 
-.geosearch-results-menu {
+.location-search-results-menu {
   position: absolute;
   width: 85%;
 }
 
-.geosearch-item {
+.location-search-item {
   word-wrap: break-word;
   padding: 5px 0 5px 7px;
   color: #333;
@@ -35,15 +35,15 @@
 }
 
 /* Autocomplete Input Submit Button */
-.geosearch-input-group-addon {
+.location-search-input-group-addon {
   height: 38px;
   position: absolute;
   top: 0;
   right: 62px;
   margin-right: 0;
   background: none;
-  & .geosearch-search-submit-button,
-  & .geosearch-search-clear-button {
+  & .location-search-submit-button,
+  & .location-search-clear-button {
     background: none;
     border: none;
     color: #999;
@@ -66,7 +66,7 @@
   &.submit-group {
     right: 31px;
   }
-  & .geosearch-search-clear-button {
+  & .location-search-clear-button {
     cursor: pointer;
     color: #fff;
     position: absolute;
@@ -87,8 +87,8 @@
   }
 }
 
-/* Geosearch Component */
-.geosearch-component {
+/* Location Search Component */
+.location-search-component {
   position: absolute;
   right: 182px;
   top: 10px;
@@ -99,8 +99,8 @@
   z-index: 1;
 }
 
-/* Geosearch Component Coordinate Buttons */
-.geosearch-add-coordinate-button {
+/* Location Search Component Coordinate Buttons */
+.location-search-add-coordinate-button {
   border-radius: 0;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -115,8 +115,8 @@
   }
 }
 
-/* Geosearch Component Minimize Button */
-.geosearch-search-minimize-button {
+/* Location Search Component Minimize Button */
+.location-search-minimize-button {
   background: rgba(40, 40, 40, 0.15);
   width: 21px;
   margin-right: 2px;
@@ -138,7 +138,7 @@
   }
 }
 
-.geosearch-search-minimize-button-chevron {
+.location-search-minimize-button-chevron {
   position: absolute;
   background: url('../images/icon-sprite.svg') -201px -5px no-repeat;
   -webkit-box-sizing: border-box;
@@ -158,50 +158,50 @@
   z-index: 1;
 }
 
-.geosearch-input-alert-icon {
+.location-search-input-alert-icon {
   right: 120px;
 }
 
-.geosearch-input-clear-container {
+.location-search-input-clear-container {
   right: 62px;
 }
 
 /* Mobile Styling */
 @media only screen and (max-width: 768px) {
-  .geosearch-component {
+  .location-search-component {
     position: static;
     width: 100%;
   }
-  .geosearch-input-container {
+  .location-search-input-container {
     width: 100%;
   }
-  .geosearch-input-clear-container {
+  .location-search-input-clear-container {
     right: 70px;
   }
-  .geosearch-input-alert-icon {
+  .location-search-input-alert-icon {
     right: 135px;
   }
-  .geosearch-autocomplete {
+  .location-search-autocomplete {
     font-size: 16px;
     &::placeholder {
       font-size: 14px;
     }
   }
-  .geosearch-results-menu {
+  .location-search-results-menu {
     width: 100%;
   }
-  .geosearch-item {
+  .location-search-item {
     padding: 8px 0 8px 7px;
     line-height: 16px;
     font-size: 16px;
   }
-  .geosearch-input-group-addon {
+  .location-search-input-group-addon {
     margin-right: 6px;
     background: none;
-    & .geosearch-search-submit-button {
+    & .location-search-submit-button {
       border-left: none;
     }
-    & .geosearch-search-clear-button {
+    & .location-search-clear-button {
       background: #3b3b3b;
     }
   }

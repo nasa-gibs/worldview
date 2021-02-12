@@ -26,10 +26,10 @@ to disable, set:
 This feature allows directing users to [Earthdata Search](https://search.earthdata.nasa.gov/) to download the underlying data for layers.  For more information see the [Smart Handoffs docs](./smart_handoffs.md). To enable,
 edit `config/default/common/features.json` and set `"smartHandoffs": true`.
 
-## GeocodeSearch
+## Location Search
 
 This feature uses the [ArcGIS World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) to find addresses based on input text, coordinates, and by clicking a spot on the map. To enable,
-edit `config/default/common/features.json` and set `"geocodeSearch"` object `"url"` to use the ArcGIS request URL used by the [ArcGIS World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm).
+edit `config/default/common/features.json` and set `"locationSearch"` object `"url"` to use the ArcGIS request URL used by the [ArcGIS World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm).
 
 ## URL Shortening
 

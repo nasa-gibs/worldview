@@ -24,7 +24,7 @@ export default function getImageArray(
   state,
 ) {
   const {
-    animation, proj, map, date, geosearch,
+    animation, proj, map, date, locationSearch,
   } = state;
   const { startDate, endDate, url } = gifComponentProps;
   const { boundaries, showDates } = gifComponentState;
@@ -34,7 +34,7 @@ export default function getImageArray(
   const a = [];
   const fromDate = new Date(startDate);
   const toDate = new Date(endDate);
-  const markerCoordinates = geosearch.coordinates;
+  const markerCoordinates = locationSearch.coordinates;
   const isSubDaily = hasSubDaily(getActiveLayers(state));
   let current = fromDate;
   let j = 0;

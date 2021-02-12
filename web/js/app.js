@@ -15,8 +15,8 @@ import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
-// Geosearch
-import Geosearch from './components/geosearch/geosearch';
+// Location Search
+import LocationSearch from './components/location-search/location-search';
 
 // Other/MISC
 import Brand from './brand';
@@ -83,7 +83,7 @@ import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
-import '../css/geosearch.css';
+import '../css/location-search.css';
 import '../pages/css/document.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
@@ -172,7 +172,7 @@ class App extends React.Component {
     } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
-        {!isMobile && <Geosearch />}
+        {!isMobile && <LocationSearch />}
         <Toolbar />
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">

@@ -157,7 +157,7 @@ function mapStateToProps(state) {
     config,
     proj,
     browser,
-    geosearch,
+    locationSearch,
     map,
     imageDownload,
   } = state;
@@ -165,7 +165,7 @@ function mapStateToProps(state) {
     isWorldfile, fileType, resolution, boundaries,
   } = imageDownload;
   const { screenWidth, screenHeight } = browser;
-  const markerCoordinates = geosearch.coordinates;
+  const markerCoordinates = locationSearch.coordinates;
   const activeLayers = getActiveLayers(state);
   const hasSubdailyLayers = hasSubDailySelector(activeLayers);
   let url = DEFAULT_URL;

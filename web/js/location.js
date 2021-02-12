@@ -30,7 +30,7 @@ import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/sele
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
-import { areCoordinatesWithinExtent, mapLocationToGeosearchState } from './modules/geosearch/util';
+import { areCoordinatesWithinExtent, mapLocationToLocationSearchState } from './modules/location-search/util';
 import mapLocationToSidebarState from './modules/sidebar/util';
 import util from './util/util';
 
@@ -63,7 +63,7 @@ export const mapLocationToState = (state, location) => {
       state,
       config,
     );
-    stateFromLocation = mapLocationToGeosearchState(
+    stateFromLocation = mapLocationToLocationSearchState(
       parameters,
       stateFromLocation,
       state,
@@ -408,8 +408,8 @@ const getParameters = function(config, parameters) {
     //     },
     //   },
     // },
-    gm: {
-      stateKey: 'geosearch.coordinates',
+    s: {
+      stateKey: 'locationSearch.coordinates',
       initialState: [],
       type: 'string',
       options: {

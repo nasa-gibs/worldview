@@ -5,7 +5,7 @@ import {
   SET_SUGGESTION,
   TOGGLE_DIALOG_VISIBLE,
   TOGGLE_REVERSE_GEOCODE,
-  TOGGLE_SHOW_GEOSEARCH,
+  TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
 import { requestAction } from '../core/actions';
 import {
@@ -13,30 +13,30 @@ import {
   setLocalStorageCollapseState,
 } from './util';
 import {
-  GEOSEARCH_REQUEST_OPTIONS,
+  LOCATION_SEARCH_REQUEST_OPTIONS,
 } from './util-api';
 
 const {
   REQUEST_OPTIONS,
   GEOCODE_SUGGEST_CATEGORIES,
   CONSTANT_REQUEST_PARAMETERS,
-} = GEOSEARCH_REQUEST_OPTIONS;
+} = LOCATION_SEARCH_REQUEST_OPTIONS;
 
 /**
- * Toggle show geosearch component
+ * Toggle show Location Search component
  */
-export function toggleShowGeosearch() {
+export function toggleShowLocationSearch() {
   return (dispatch, getState) => {
     const state = getState();
-    const { geosearch } = state;
-    const { isExpanded } = geosearch;
+    const { locationSearch } = state;
+    const { isExpanded } = locationSearch;
 
     // handle localStorage user browser preference of expanded/collapsed
     const storageValue = isExpanded ? 'collapsed' : 'expanded';
     setLocalStorageCollapseState(storageValue);
 
     dispatch({
-      type: TOGGLE_SHOW_GEOSEARCH,
+      type: TOGGLE_SHOW_LOCATION_SEARCH,
       value: !isExpanded,
     });
   };
@@ -146,7 +146,7 @@ export function setSuggestion(suggestion) {
 export function getSuggestions(val) {
   return (dispatch, getState) => {
     const { config } = getState();
-    const { features: { geocodeSearch: { url: requestUrl } } } = config;
+    const { features: { locationSearch: { url: requestUrl } } } = config;
 
     const encodedValue = encodeURIComponent(val);
     const encodedCategories = encodeURIComponent(GEOCODE_SUGGEST_CATEGORIES.join(','));
@@ -154,10 +154,10 @@ export function getSuggestions(val) {
 
     return requestAction(
       dispatch,
-      'GEOSEARCH/REQUEST_SUGGEST_PLACE',
+      'LOCATION_SEARCH/REQUEST_SUGGEST_PLACE',
       request,
       '',
-      'geosearch-suggest-place',
+      'location-search-suggest-place',
       REQUEST_OPTIONS,
     );
   };

@@ -130,8 +130,8 @@
   width: 100%;
 }
 
-/* Geosearch Mobile Modal */
-.toolbar-geosearch-modal {
+/* Location Search Mobile Modal */
+.toolbar-location-search-modal {
   top: 100px;
   left: 0;
   right: 0;
@@ -139,8 +139,8 @@
   margin-right: auto;
 }
 
-.toolbar-geosearch-modal,
-.toolbar-geosearch-modal .modal-content {
+.toolbar-location-search-modal,
+.toolbar-location-search-modal .modal-content {
   width: 100%;
 }
 
@@ -149,7 +149,7 @@
     top: 33px;
   }
 
-  .toolbar-geosearch-modal {
+  .toolbar-location-search-modal {
     top: 84px;
   }
 

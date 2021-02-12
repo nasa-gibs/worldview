@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import OlCoordinates from '../../components/map/ol-coordinates';
 import OlVectorInteractions from './ol-vector-interactions';
 import OlMeasureTool from '../../components/map/ol-measure-tool';
-import OlCoordinatesMarker from '../../components/geosearch/ol-coordinates-marker';
+import OlCoordinatesMarker from '../../components/location-search/ol-coordinates-marker';
 import OlRotationButtons from '../../components/map/rotation';
 import OlZoomButtons from '../../components/map/zoom';
 
@@ -40,10 +40,10 @@ class MapInteractions extends PureComponent {
 }
 function mapStateToProps(state) {
   const {
-    config, geosearch, map, ui,
+    config, locationSearch, map, ui,
   } = state;
   const { isDistractionFreeModeActive } = ui;
-  const { isCoordinateSearchActive } = geosearch;
+  const { isCoordinateSearchActive } = locationSearch;
   return {
     config,
     isShowingClick: map.isClickable,

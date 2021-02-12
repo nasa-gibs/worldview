@@ -7,9 +7,9 @@ const testMarkerNoDetailsEncodedID = '.coordinates-map-marker_5__2C__-51__2E__5'
 const TIME_LIMIT = 10000;
 
 const {
-  geosearchToolbarButton,
-  geosearchComponent,
-  geosearchMinimizeButton,
+  locationSearchToolbarButton,
+  locationSearchComponent,
+  locationSearchMinimizeButton,
   tooltipCoordinatesContainer,
   tooltipCoordinatesTitle,
   tooltipCoordinates,
@@ -22,28 +22,28 @@ module.exports = {
   before(c) {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
   },
-  'Geosearch component is visible by default': (c) => {
-    c.waitForElementVisible(geosearchComponent, TIME_LIMIT);
-    c.expect.element(geosearchComponent).to.be.present;
+  'Location Search component is visible by default': (c) => {
+    c.waitForElementVisible(locationSearchComponent, TIME_LIMIT);
+    c.expect.element(locationSearchComponent).to.be.present;
   },
-  'Clicking the minimize button minimizes the geosearch component': (c) => {
-    c.waitForElementVisible(geosearchComponent, TIME_LIMIT);
-    c.click(geosearchMinimizeButton);
+  'Clicking the minimize button minimizes the Location Search component': (c) => {
+    c.waitForElementVisible(locationSearchComponent, TIME_LIMIT);
+    c.click(locationSearchMinimizeButton);
     c.pause(500);
-    c.expect.element(geosearchComponent).to.not.be.present;
+    c.expect.element(locationSearchComponent).to.not.be.present;
   },
-  'Geosearch component remains hidden on subsequent page loads per user preference': (c) => {
+  'Location Search component remains hidden on subsequent page loads per user preference': (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    c.waitForElementVisible(geosearchToolbarButton, TIME_LIMIT);
-    c.expect.element(geosearchComponent).to.not.be.present;
+    c.waitForElementVisible(locationSearchToolbarButton, TIME_LIMIT);
+    c.expect.element(locationSearchComponent).to.not.be.present;
   },
-  'Clicking geosearch toolbar button expands the geosearch component': (c) => {
-    c.click(geosearchToolbarButton);
+  'Clicking Location Search toolbar button expands the Location Search component': (c) => {
+    c.click(locationSearchToolbarButton);
     c.pause(500);
-    c.expect.element(geosearchComponent).to.be.present;
+    c.expect.element(locationSearchComponent).to.be.present;
   },
   'Coordinates dialog for permalink marker is visible by default on page load': (c) => {
-    c.url(`${c.globals.url}?v=-176.3167432493038,-16.70650759975561,-16.988618249303812,108.30938074294103&gm=-77.032,38.8904`);
+    c.url(`${c.globals.url}?v=-176.3167432493038,-16.70650759975561,-16.988618249303812,108.30938074294103&s=-77.032,38.8904`);
     c.waitForElementVisible(tooltipCoordinatesContainer, TIME_LIMIT);
     c.expect.element(testMarkerEncodedID).to.be.present;
   },
@@ -57,7 +57,7 @@ module.exports = {
     c.expect.element(tooltipCoordinatesContainer).to.not.be.present;
   },
   'Coordinate title for no suggested place results displays correct coordinates instead': (c) => {
-    c.url(`${c.globals.url}?v=-141.32806305066077,-56.35574752202643,18.000061949339212,60.01695346916299&gm=-51.5,5`);
+    c.url(`${c.globals.url}?v=-141.32806305066077,-56.35574752202643,18.000061949339212,60.01695346916299&s=-51.5,5`);
     c.waitForElementVisible(tooltipCoordinatesContainer, TIME_LIMIT);
     c.expect.element(testMarkerNoDetailsEncodedID).to.be.present;
     c.assert.containsText(tooltipCoordinatesTitle, '5.0000°, -51.5000°');
@@ -67,12 +67,12 @@ module.exports = {
     c.click(tooltipCoordinatesCloseButton);
     c.pause(500);
     c.expect.element(coordinatesMapMarker).to.not.be.present;
-    c.assert.not.urlContains('gm');
+    c.assert.not.urlContains('s=');
   },
   'Invalid marker query string parameter prevents state update': (c) => {
-    c.url(`${c.globals.url}?gm=-51.5,invalidtext`);
+    c.url(`${c.globals.url}?s=-51.5,invalidtext`);
     c.expect.element(coordinatesMapMarker).to.not.be.present;
-    c.assert.not.urlContains('gm');
+    c.assert.not.urlContains('s=');
   },
   after(c) {
     c.end();
