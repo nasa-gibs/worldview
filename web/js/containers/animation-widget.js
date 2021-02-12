@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   find as lodashFind,
+  filter as lodashFilter,
   get as lodashGet,
   cloneDeep as lodashCloneDeep,
 } from 'lodash';
@@ -60,8 +61,11 @@ import { notificationWarnings } from '../modules/image-download/constants';
 import { onToggle, openCustomContent } from '../modules/modal/actions';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
-import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
+import {
+  clearGraticule, refreshGraticule, hideLayers, showLayers,
+} from '../modules/layers/actions';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
+import { getNonDownloadableLayers, getNonDownloadableLayerWarning, hasNonDownloadableVisibleLayer } from '../modules/image-download/util';
 
 
 const RangeHandle = (props) => {
@@ -189,10 +193,11 @@ class AnimationWidget extends React.Component {
     });
   }
 
-  getPromise(bool, type, action, title) {
+  getPromise(bool, type, action) {
+    const { visibleLayersForProj } = this.props;
     const { notify } = this.props;
     if (bool) {
-      return notify(type, action);
+      return notify(type, action, visibleLayersForProj);
     }
     return Promise.resolve(type);
   }
@@ -382,6 +387,8 @@ class AnimationWidget extends React.Component {
       activePalettes,
       numberOfFrames,
       refreshStateAfterGif,
+      hasNonDownloadableLayer,
+      visibleLayersForProj,
     } = this.props;
     const gifDisabled = numberOfFrames >= maxFrames;
     const elemExists = document.querySelector('#create-gif-button');
@@ -400,16 +407,19 @@ class AnimationWidget extends React.Component {
       if (numberOfFrames >= maxFrames) {
         return;
       }
+      const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
       const paletteStore = lodashCloneDeep(activePalettes);
+
       await this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
       await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
       await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+      await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
       await onUpdateStartAndEndDate(startDate, endDate);
       googleTagManager.pushEvent({
         event: 'GIF_create_animated_button',
       });
       this.onCloseGif = () => {
-        refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule);
+        refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule, nonDownloadableLayers);
         toggleGif();
       };
       toggleGif();
@@ -690,6 +700,7 @@ function mapStateToProps(state) {
     maxFrames,
   );
   const { rotation } = map;
+  const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   return {
     appNow,
     screenWidth: browser.screenWidth,
@@ -717,6 +728,8 @@ function mapStateToProps(state) {
     looping: loop,
     hasCustomPalettes,
     map,
+    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
+    visibleLayersForProj,
     promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
     isGifActive: gifActive,
     isCompareActive: compare.active,
@@ -734,14 +747,15 @@ const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
     dispatch(selectDate(val));
   },
-  notify: (type, action, title) => new Promise((resolve, reject, cancel) => {
+  notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
+    const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj);
     const bodyComponentProps = {
-      bodyText: notificationWarnings[type],
+      bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers),
       cancel: () => {
         dispatch(onToggle());
       },
       accept: () => {
-        dispatch(action());
+        dispatch(action(nonDownloadableLayers));
         dispatch(onToggle());
         resolve();
       },
@@ -771,7 +785,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleGif: () => {
     dispatch(toggleComponentGifActive());
   },
-  refreshStateAfterGif: (activePalettes, rotation, isGraticule) => {
+  refreshStateAfterGif: (activePalettes, rotation, isGraticule, nonDownloadableLayers) => {
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
     }
@@ -780,6 +794,9 @@ const mapDispatchToProps = (dispatch) => ({
     }
     if (isGraticule) {
       dispatch(refreshGraticule(isGraticule));
+    }
+    if (nonDownloadableLayers) {
+      dispatch(showLayers(nonDownloadableLayers));
     }
   },
   toggleCustomModal: (open, toggleBy) => {
@@ -819,6 +836,7 @@ AnimationWidget.propTypes = {
   appNow: PropTypes.object,
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
+  visibleLayersForProj: PropTypes.array,
   changeCustomInterval: PropTypes.func,
   currentDate: PropTypes.object,
   customDelta: PropTypes.number,
@@ -829,6 +847,7 @@ AnimationWidget.propTypes = {
   hasCustomPalettes: PropTypes.bool,
   hasFutureLayers: PropTypes.bool,
   hasGraticule: PropTypes.bool,
+  hasNonDownloadableLayer: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,

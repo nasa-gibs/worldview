@@ -271,3 +271,18 @@ export function refreshGraticule() {
     dispatch(toggleVisibility('Graticule', true));
   };
 }
+
+export function hideLayers(layers) {
+  return (dispatch) => {
+    layers.forEach((obj) => {
+      dispatch(toggleVisibility(obj.id, false));
+    });
+  };
+}
+export function showLayers(layers) {
+  return (dispatch) => {
+    layers.forEach((obj) => {
+      dispatch(toggleVisibility(obj.id, true));
+    });
+  };
+}

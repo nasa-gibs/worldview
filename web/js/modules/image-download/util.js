@@ -1,6 +1,8 @@
 import {
   each as lodashEach,
   get as lodashGet,
+  find as lodashFind,
+  filter as lodashFilter,
 } from 'lodash';
 import { boundingExtent, containsCoordinate } from 'ol/extent';
 import util from '../../util/util';
@@ -286,4 +288,54 @@ export function getPercentageFromPixel(maxDimension, dimension) {
 }
 export function getPixelFromPercentage(maxDimension, percent) {
   return Math.round((percent / 100) * maxDimension);
+}
+
+/**
+ * Find if there are layers that cannot be downloaded
+ * @param {Array} visibleLayers
+ *
+ * @return {Bool}
+ */
+export function hasNonDownloadableVisibleLayer(visibleLayers) {
+  const notDownloadable = !!lodashFind(visibleLayers, { snapshot: false });
+  return notDownloadable;
+}
+/**
+ * Get string of layers to be removed if alert is accepted
+ * @param {Array} nonDownloadableLayers
+ *
+ * @return {String}
+ */
+export function getNamesOfNondownloadableLayers(nonDownloadableLayers) {
+  let names = '';
+  if (nonDownloadableLayers.length) {
+    nonDownloadableLayers.forEach((obj) => {
+      const str = names ? `, ${obj.title || obj.id}` : obj.title || obj.id;
+      names += str;
+    });
+  }
+  return names;
+}
+/**
+ * Get warning that shows layers that will be removed if nofication is accepted
+ * @param {Array} nonDownloadableLayers
+ *
+ * @return {String}
+ */
+export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
+  const layerStr = getNamesOfNondownloadableLayers(nonDownloadableLayer);
+  if (!layerStr) return '';
+  const multiLayers = layerStr.indexOf(',') > -1;
+  return multiLayers ? `The ${layerStr} layers cannot be used to take a snapshot. Would you `
+  + 'like to temporarily hide these layers?' : `The ${layerStr} layer cannot be used to take a snapshot. Would you `
+  + 'like to temporarily hide this layer?';
+}
+/**
+ * Get array of layers that will be removed if nofication is accepted
+ * @param {Array} visibleLayers
+ *
+ * @return {Array}
+ */
+export function getNonDownloadableLayers(visibleLayers) {
+  return lodashFilter(visibleLayers, { snapshot: false });
 }

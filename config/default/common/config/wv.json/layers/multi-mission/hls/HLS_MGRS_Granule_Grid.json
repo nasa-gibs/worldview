@@ -10,7 +10,8 @@
       "layergroup": "Reference",
       "product": "",
       "type": "vector",
-      "wrapX": true
+      "wrapX": true,
+      "snapshot": false
     }
   }
 }
