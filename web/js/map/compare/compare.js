@@ -41,6 +41,7 @@ export default function mapCompare(config, store) {
     });
     events.on('compare:moveend', (value) => {
       self.dragging = false;
+      self.value = value;
       store.dispatch(setValue(value));
     });
   };
@@ -80,8 +81,8 @@ export default function mapCompare(config, store) {
         state.compare.value || null,
       ); // e.g. new self.swipe()
     }
-    self.active = true;
     self.value = state.compare.value || 50;
+    self.active = true;
     proj = state.proj.selected;
   };
   /**
@@ -98,6 +99,7 @@ export default function mapCompare(config, store) {
    */
   self.destroy = function () {
     comparison.destroy();
+    self.value = 50;
     store.dispatch(setValue(50)); // set Value to default
     comparison = null;
     self.active = false;
