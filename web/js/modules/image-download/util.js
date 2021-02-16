@@ -287,3 +287,52 @@ export function getPercentageFromPixel(maxDimension, dimension) {
 export function getPixelFromPercentage(maxDimension, percent) {
   return Math.round((percent / 100) * maxDimension);
 }
+
+/**
+ * Find if there are layers that cannot be downloaded
+ * @param {Array} visibleLayers
+ *
+ * @return {Bool}
+ */
+export function hasNonDownloadableVisibleLayer(visibleLayers) {
+  return visibleLayers.some(({ disableSnapshot = false }) => disableSnapshot);
+}
+/**
+ * Get string of layers to be removed if alert is accepted
+ * @param {Array} nonDownloadableLayers
+ *
+ * @return {String}
+ */
+export function getNamesOfNondownloadableLayers(nonDownloadableLayers) {
+  let names = '';
+  if (nonDownloadableLayers.length) {
+    nonDownloadableLayers.forEach((obj) => {
+      const str = names ? `, ${obj.title || obj.id}` : obj.title || obj.id;
+      names += str;
+    });
+  }
+  return names;
+}
+/**
+ * Get warning that shows layers that will be removed if nofication is accepted
+ * @param {Array} nonDownloadableLayers
+ *
+ * @return {String}
+ */
+export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
+  const layerStr = getNamesOfNondownloadableLayers(nonDownloadableLayer);
+  if (!layerStr) return '';
+  const multiLayers = layerStr.indexOf(',') > -1;
+  const layerPluralStr = multiLayers ? 'layers' : 'layer';
+  const thisTheseStr = multiLayers ? 'these' : 'this';
+  return `The ${layerStr} ${layerPluralStr} cannot be included in a snapshot. Would you like to temporarily hide ${thisTheseStr} layer?`;
+}
+/**
+ * Get array of layers that will be removed if nofication is accepted
+ * @param {Array} visibleLayers
+ *
+ * @return {Array}
+ */
+export function getNonDownloadableLayers(visibleLayers) {
+  return visibleLayers.filter(({ disableSnapshot = false }) => disableSnapshot);
+}

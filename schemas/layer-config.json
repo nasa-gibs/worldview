@@ -5,12 +5,14 @@
   "description": "Layer Configuration Schema",
   "type": "object",
   "properties": {
-   "layers": {
-     "type": "object",
-     "patternProperties": {
-        "^.": { "$ref": "#/definitions/layer" }
-     }
-   }
+    "layers": {
+      "type": "object",
+      "patternProperties": {
+        "^.": {
+          "$ref": "#/definitions/layer"
+        }
+      }
+    }
   },
   "definitions": {
     "layer": {
@@ -36,17 +38,27 @@
         "tags": {
           "type": "string"
         },
+        "disableSnapshot": {
+          "type": "boolean"
+        },
         "group": {
           "type": "string",
-          "enum": ["overlays", "baselayers"]
+          "enum": [
+            "overlays",
+            "baselayers"
+          ]
         },
         "layergroup": {
           "type": "string"
         },
         "product": {
           "anyOf": [
-            { "type": "string" },
-            { "type": "array" }
+            {
+              "type": "string"
+            },
+            {
+              "type": "array"
+            }
           ]
         },
         "palette": {
@@ -71,7 +83,10 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["day", "night"]
+            "enum": [
+              "day",
+              "night"
+            ]
           }
         },
         "period": {
@@ -178,14 +193,18 @@
           "if": {
             "properties": {
               "id": {
-                "not": { "const": "World_Database_on_Protected_Areas" }
+                "not": {
+                  "const": "World_Database_on_Protected_Areas"
+                }
               }
             }
           },
           "then": {
             "properties": {
               "layer": {
-                "not": { "type": "string" }
+                "not": {
+                  "type": "string"
+                }
               }
             }
           }
@@ -194,12 +213,18 @@
           "description": "",
           "if": {
             "properties": {
-              "type": { "const": "wms" }
+              "type": {
+                "const": "wms"
+              }
             },
-            "required": [ "type" ]
+            "required": [
+              "type"
+            ]
           },
           "then": {
-            "required": [ "format" ]
+            "required": [
+              "format"
+            ]
           }
         }
       ]
@@ -246,7 +271,9 @@
           "type": "string"
         }
       },
-      "required": [ "id" ]
+      "required": [
+        "id"
+      ]
     },
     "palette": {
       "type": "object",
@@ -300,7 +327,9 @@
         }
       },
       "additionalProperties": true,
-      "required": [ "source" ]
+      "required": [
+        "source"
+      ]
     }
   }
 }

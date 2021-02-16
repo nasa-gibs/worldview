@@ -6,6 +6,7 @@ import {
   get as lodashGet,
   find as lodashFind,
   cloneDeep as lodashCloneDeep,
+  filter as lodashFilter,
 } from 'lodash';
 import Promise from 'bluebird';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,7 +26,9 @@ import {
 } from '../modules/notifications/constants';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
-import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
+import {
+  showLayers, clearGraticule, hideLayers, refreshGraticule,
+} from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
@@ -33,6 +36,7 @@ import LocationSearch from '../components/location-search/location-search';
 import { toggleShowLocationSearch, toggleDialogVisible } from '../modules/location-search/actions';
 import { isLocationSearchFeatureEnabled } from '../modules/location-search/util';
 import { getAllActiveLayers } from '../modules/layers/selectors';
+import { hasNonDownloadableVisibleLayer, getNonDownloadableLayerWarning, getNonDownloadableLayers } from '../modules/image-download/util';
 
 
 Promise.config({ cancellation: true });
@@ -93,9 +97,10 @@ class toolbarContainer extends Component {
   }
 
   getPromise(bool, type, action, title) {
+    const { visibleLayersForProj } = this.props;
     const { notify } = this.props;
     if (bool) {
-      return notify(type, action);
+      return notify(type, action, visibleLayersForProj);
     }
     return Promise.resolve(type);
   }
@@ -110,20 +115,23 @@ class toolbarContainer extends Component {
       rotation,
       refreshStateAfterImageDownload,
       toggleDialogVisible,
+      hasNonDownloadableLayer,
+      visibleLayersForProj,
     } = this.props;
-
+    const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+    await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await openModal(
       'TOOLBAR_SNAPSHOT',
       {
         ...CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT,
         onClose: () => {
           refreshStateAfterImageDownload(
-            hasCustomPalette ? paletteStore : undefined, rotation, hasGraticule,
+            hasCustomPalette ? paletteStore : undefined, rotation, hasGraticule, nonDownloadableLayers,
           );
         },
       },
@@ -354,7 +362,7 @@ const mapStateToProps = (state) => {
   // Collapse when Image download / GIF /  is open or measure tool active
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
-
+  const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   return {
     faSize,
     notificationType: type,
@@ -367,6 +375,7 @@ const mapStateToProps = (state) => {
       lodashGet(state, 'map.ui.selected')
       && !isCompareActive,
     ),
+    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     isCompareActive,
     isLocationSearchExpanded,
     isMobile,
@@ -375,6 +384,7 @@ const mapStateToProps = (state) => {
       activeLayersForProj,
       activePalettes,
     ),
+    visibleLayersForProj,
     isRotated: Boolean(map.rotation !== 0),
     hasGraticule: Boolean(
       lodashGet(
@@ -396,7 +406,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleShowLocationSearch: () => {
     dispatch(toggleShowLocationSearch());
   },
-  refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule) => {
+  refreshStateAfterImageDownload: (activePalettes, rotation, isGraticule, nonDownloadableLayers) => {
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
     }
@@ -406,6 +416,9 @@ const mapDispatchToProps = (dispatch) => ({
     if (isGraticule) {
       dispatch(refreshGraticule(isGraticule));
     }
+    if (nonDownloadableLayers) {
+      dispatch(showLayers(nonDownloadableLayers));
+    }
   },
   openModal: (key, customParams, actions) => {
     dispatch(openCustomContent(
@@ -413,14 +426,15 @@ const mapDispatchToProps = (dispatch) => ({
       customParams,
     ));
   },
-  notify: (type, action, title) => new Promise((resolve, reject, cancel) => {
+  notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
+    const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj);
     const bodyComponentProps = {
-      bodyText: notificationWarnings[type],
+      bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers),
       cancel: () => {
         dispatch(onToggle());
       },
       accept: () => {
-        dispatch(action());
+        dispatch(action(nonDownloadableLayers));
         resolve();
       },
     };
@@ -454,6 +468,8 @@ export default connect(
 
 toolbarContainer.propTypes = {
   activePalettes: PropTypes.object,
+  hasNonDownloadableLayer: PropTypes.bool,
+  visibleLayersForProj: PropTypes.array,
   config: PropTypes.object,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
