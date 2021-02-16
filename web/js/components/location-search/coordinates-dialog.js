@@ -27,7 +27,7 @@ class CoordinatesDialog extends Component {
 
       // Prevnet keyboard overlay in iOS
       setTimeout(() => {
-        document.getElementById('geosearch-autocomplete').blur();
+        document.getElementById('location-search-autocomplete').blur();
       }, 50);
     };
     copy(coords, options);
