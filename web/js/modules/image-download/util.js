@@ -297,8 +297,7 @@ export function getPixelFromPercentage(maxDimension, percent) {
  * @return {Bool}
  */
 export function hasNonDownloadableVisibleLayer(visibleLayers) {
-  const notDownloadable = !!lodashFind(visibleLayers, { snapshot: false });
-  return notDownloadable;
+  return visibleLayers.some(({ disableSnapshot = false }) => disableSnapshot);
 }
 /**
  * Get string of layers to be removed if alert is accepted
@@ -337,5 +336,5 @@ export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
  * @return {Array}
  */
 export function getNonDownloadableLayers(visibleLayers) {
-  return lodashFilter(visibleLayers, { snapshot: false });
+  return visibleLayers.filter(({ disableSnapshot = false }) => disableSnapshot);
 }

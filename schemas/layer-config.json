@@ -38,7 +38,7 @@
         "tags": {
           "type": "string"
         },
-        "snapshot": {
+        "disableSnapshot": {
           "type": "boolean"
         },
         "group": {

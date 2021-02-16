@@ -11,7 +11,7 @@
       "product": "",
       "type": "vector",
       "wrapX": true,
-      "snapshot": false
+      "disableSnapshot": true
     }
   }
 }

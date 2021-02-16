@@ -105,7 +105,7 @@ Example:
 * **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 * **description**: Point to a markdown file within the metadata folder to provide a layer description.
 * **wrapX**: Wrap the layer across the anti-meridian.
-* **snapshot**: Ability to be downloaded via worldview snapshots (WVS). Default is `true`.
+* **disableSnapshot**: Disable downloaded via worldview snapshots (WVS).
 * **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
 * **palette**: To display a color palette legend, a `palette` object should exist with the following properties:
   * **id**: Identifier of the palette. This should match the name of the colormap file without the extension.
