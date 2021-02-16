@@ -46,20 +46,9 @@ class AxisTimeScaleChange extends PureComponent {
   disableMapScales = (disable) => {
     const imperialMapScale = document.getElementsByClassName('wv-map-scale-imperial');
     const metricMapScale = document.getElementsByClassName('wv-map-scale-metric');
-    if (disable) {
-      for (const el of imperialMapScale) {
-        el.style.display = 'none';
-      }
-      for (const el of metricMapScale) {
-        el.style.display = 'none';
-      }
-    } else {
-      for (const el of imperialMapScale) {
-        el.style.display = 'block';
-      }
-      for (const el of metricMapScale) {
-        el.style.display = 'block';
-      }
+    const opacity = disable ? '0' : '1';
+    for (const el of [...imperialMapScale, ...metricMapScale]) {
+      el.style.opacity = opacity;
     }
   }
 
