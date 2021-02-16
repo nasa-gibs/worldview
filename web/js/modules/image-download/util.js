@@ -1,8 +1,6 @@
 import {
   each as lodashEach,
   get as lodashGet,
-  find as lodashFind,
-  filter as lodashFilter,
 } from 'lodash';
 import { boundingExtent, containsCoordinate } from 'ol/extent';
 import util from '../../util/util';
