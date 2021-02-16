@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import copy from 'copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CopyClipboardTooltip from './copy-tooltip';
 
@@ -14,14 +14,23 @@ class CoordinatesDialog extends Component {
       showTooltips: true,
       isCopyToClipboardTooltipVisible: false,
     };
+    this.copyToClipboard = this.copyToClipboard.bind(this);
   }
 
-  // set copy tooltip time
-  onCopyToClipboard = () => {
-    this.setState({
-      tooltipToggleTime: Date.now(),
-      isCopyToClipboardTooltipVisible: true,
-    });
+  copyToClipboard(coords) {
+    const options = window.clipboardData ? {} : { format: 'text/plain' };
+    options.onCopy = () => {
+      this.setState({
+        tooltipToggleTime: Date.now(),
+        isCopyToClipboardTooltipVisible: true,
+      });
+
+      // Prevnet keyboard overlay in iOS
+      setTimeout(() => {
+        document.getElementById('geosearch-autocomplete').blur();
+      }, 50);
+    };
+    copy(coords, options);
   }
 
   // close dialog and remove map marker
@@ -63,7 +72,11 @@ class CoordinatesDialog extends Component {
     const tooltipVisibilityCondition = !isMobile && showTooltips;
     return (
       <>
-        <span id={closeButtonId} className={`close-tooltip ${closeButtonId}`}>
+        <span
+          id={closeButtonId}
+          className={`close-tooltip ${closeButtonId}`}
+          onTouchEnd={this.clearCoordinates}
+        >
           {tooltipVisibilityCondition
           && (
             <UncontrolledTooltip
@@ -77,7 +90,11 @@ class CoordinatesDialog extends Component {
           )}
           <FontAwesomeIcon onClick={this.clearCoordinates} icon="times" fixedWidth />
         </span>
-        <span id={minimizeButtonId} className={`minimize-tooltip ${minimizeButtonId}`}>
+        <span
+          id={minimizeButtonId}
+          className={`minimize-tooltip ${minimizeButtonId}`}
+          onTouchEnd={this.minimizeDialog}
+        >
           {tooltipVisibilityCondition
           && (
             <UncontrolledTooltip
@@ -105,16 +122,13 @@ class CoordinatesDialog extends Component {
     const labelText = 'Copy coordinates to clipboard';
     const tooltipVisibilityCondition = !isMobile && !isCopyToClipboardTooltipVisible && showTooltips;
     return (
-      <CopyToClipboard
-        options={window.clipboardData ? {} : { format: 'text/plain' }}
-        text={coordinates}
-        onCopy={this.onCopyToClipboard}
+      <div
+        id={buttonId}
+        className={buttonId}
+        onClick={() => this.copyToClipboard(coordinates)}
+        onTouchEnd={() => this.copyToClipboard(coordinates)}
       >
-        <div
-          id={buttonId}
-          className={buttonId}
-        >
-          {tooltipVisibilityCondition && (
+        {tooltipVisibilityCondition && (
           <UncontrolledTooltip
             placement="bottom"
             trigger="hover"
@@ -122,10 +136,9 @@ class CoordinatesDialog extends Component {
           >
             {labelText}
           </UncontrolledTooltip>
-          )}
-          <FontAwesomeIcon icon="copy" fixedWidth />
-        </div>
-      </CopyToClipboard>
+        )}
+        <FontAwesomeIcon icon="copy" fixedWidth />
+      </div>
     );
   }
 
