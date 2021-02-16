@@ -51,11 +51,11 @@ class ProjectionList extends Component {
 
   onClick(id) {
     const {
-      updateProjection, projection, config, onCloseModal,
+      updateProjection, projection, config, onCloseModal, isPlaying,
     } = this.props;
 
     if (id !== projection) {
-      updateProjection(id, config);
+      updateProjection(id, config, isPlaying);
     }
 
     googleTagManager.pushEvent({
@@ -79,23 +79,29 @@ class ProjectionList extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const projArray = lodashGet(state, 'config.ui.projections');
+  const {
+    config, models, animation, proj,
+  } = state;
+  const projArray = lodashGet(config, 'ui.projections');
   const projectionArray = projArray
     ? getInfoArray(projArray)
     : DEFAULT_PROJ_ARRAY;
   return {
-    models: state.models,
-    config: state.config,
-    projection: state.proj.id,
+    models,
+    config,
+    isPlaying: animation.isPlaying,
+    projection: proj.id,
     projectionArray,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  updateProjection: (id, config) => {
+  updateProjection: (id, config, isPlaying) => {
     dispatch(changeProjection(id));
     dispatch(resetProductPickerState(id));
-    dispatch(stop());
+    if (isPlaying) {
+      dispatch(stop());
+    }
   },
   onCloseModal: () => {
     dispatch(onToggle());
@@ -110,6 +116,7 @@ export default connect(
 ProjectionList.propTypes = {
   config: PropTypes.object,
   onCloseModal: PropTypes.func,
+  isPlaying: PropTypes.bool,
   projection: PropTypes.string,
   projectionArray: PropTypes.array,
   updateProjection: PropTypes.func,
