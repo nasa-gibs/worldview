@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import copy from 'copy-to-clipboard';
 import {
   InputGroupAddon,
   Input,
@@ -100,11 +100,14 @@ class ShareLinkContainer extends Component {
     }
   }
 
-  // set copy tooltip time
-  onCopyToClipboard = () => {
-    this.setState({
-      tooltipToggleTime: Date.now(),
-    });
+  copyToClipboard = (url) => {
+    const options = window.clipboardData ? {} : { format: 'text/plain' };
+    options.onCopy = () => {
+      this.setState({
+        tooltipToggleTime: Date.now(),
+      });
+    };
+    copy(url, options);
   }
 
   getPermalink = () => {
@@ -195,15 +198,15 @@ class ShareLinkContainer extends Component {
                 e.preventDefault();
               }}
             />
-            <CopyToClipboard
-              options={window.clipboardData ? {} : { format: 'text/plain' }}
-              text={value}
-              onCopy={this.onCopyToClipboard}
-            >
-              <InputGroupAddon addonType="append">
-                <Button id="copy-to-clipboard-button">COPY</Button>
-              </InputGroupAddon>
-            </CopyToClipboard>
+            <InputGroupAddon addonType="append">
+              <Button
+                id="copy-to-clipboard-button"
+                onClick={() => this.copyToClipboard(value)}
+                onTouchEnd={() => this.copyToClipboard(value)}
+              >
+                COPY
+              </Button>
+            </InputGroupAddon>
           </InputGroup>
           <br />
           <Checkbox
