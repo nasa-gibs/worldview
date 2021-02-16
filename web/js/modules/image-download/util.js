@@ -326,9 +326,9 @@ export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
   const layerStr = getNamesOfNondownloadableLayers(nonDownloadableLayer);
   if (!layerStr) return '';
   const multiLayers = layerStr.indexOf(',') > -1;
-  return multiLayers ? `The ${layerStr} layers cannot be used to take a snapshot. Would you `
-  + 'like to temporarily hide these layers?' : `The ${layerStr} layer cannot be used to take a snapshot. Would you `
-  + 'like to temporarily hide this layer?';
+  const layerPluralStr = multiLayers ? 'layers' : 'layer';
+  const thisTheseStr = multiLayers ? 'these' : 'this';
+  return `The ${layerStr} ${layerPluralStr} cannot be included in a snapshot. Would you like to temporarily hide ${thisTheseStr} layer?`;
 }
 /**
  * Get array of layers that will be removed if nofication is accepted
