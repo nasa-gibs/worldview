@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "AMSRE_Soil_Mositure_NPD_Day": {
+      "id": "AMSRE_Soil_Mositure_NPD_Day",
+      "title": "Soil Moisture (Normalized Polarization Difference, Day)",
+      "subtitle": "Aqua / AMSR-E",
+      "description": "amsre/AMSRE_Soil_Mositure_NPD_Day",
+      "group": "overlays",
+      "tags": "soil moisture npd",
+      "layergroup": "Soil Moisture",
+      "inactive": true,
+      "tracks": [
+        "OrbitTracks_Aqua_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
+    }
+  }
+}
