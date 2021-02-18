@@ -5,7 +5,6 @@
             "title":    "Soil Moisture",
             "subtitle": "Aqua/AMSR-E, GCOM-W1/AMSR2, SMAP/Radar, SMAP/Radiometer, SMAP/Model Value-Added, SMAP/Radiometer and Sentinel-1/Radar, SAC-D/Aquarius, GLDAS, NLDAS, MERRA-2",
             "sources": {
-
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
                     "title": "Aqua/AMSR-E",
