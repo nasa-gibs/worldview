@@ -9,7 +9,7 @@
         "feedback": true,
         "previewSnapshots": true,
         "vismetadata": {
-            "url": "https://uat.gibs.earthdata.nasa.gov/layer-metadata/v1.0/"
+            "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/"
         },
         "googleTagManager": true,
         "notification": {
