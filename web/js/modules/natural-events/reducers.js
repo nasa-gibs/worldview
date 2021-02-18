@@ -4,11 +4,13 @@ import {
   uniqBy as lodashUniqBy,
 } from 'lodash';
 import {
+  ALL_CATEGORY,
   REQUEST_EVENTS,
   REQUEST_SOURCES,
   REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
+  SELECT_CATEGORY,
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
@@ -55,6 +57,7 @@ export const eventsReducerState = {
   active: false,
   showAll: true,
   isAnimatingToEvent: false,
+  category: ALL_CATEGORY,
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -76,6 +79,11 @@ export function eventsReducer(state = eventsReducerState, action) {
           id: '',
           date: null,
         },
+      };
+    case SELECT_CATEGORY:
+      return {
+        ...state,
+        category: action.category,
       };
     case SHOW_ALL_EVENTS:
       return {

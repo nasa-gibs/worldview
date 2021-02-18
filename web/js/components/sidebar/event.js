@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
@@ -16,7 +16,6 @@ function Event (props) {
     sources,
     isVisible,
   } = props;
-  const ref = React.createRef();
   const eventDate = util.parseDateUTC(event.geometry[0].date);
   let dateString = `${util.giveWeekDay(eventDate)}, ${util.giveMonth(eventDate)} ${eventDate.getUTCDate()}`;
   if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
@@ -29,12 +28,13 @@ function Event (props) {
       ? 'selectorItem item'
       : 'selectorItem item hidden';
 
-  useEffect(() => {
-    if (isSelected) {
-      ref.current.scrollIntoView();
+  const refCallback = useCallback((node) => {
+    if (node && isSelected) {
+      setTimeout(() => {
+        node.scrollIntoView();
+      });
     }
   }, [isSelected]);
-
 
   /**
    *
@@ -131,7 +131,7 @@ function Event (props) {
   return (
     <li
       id={`sidebar-event-${util.encodeId(event.id)}`}
-      ref={ref}
+      ref={refCallback}
       className={itemClass}
       onClick={(e) => {
         e.stopPropagation();

@@ -12,7 +12,9 @@ import {
   requestSources as requestSourcesActionCreator,
   selectEvent as selectEventActionCreator,
   deselectEvent as deselectEventActionCreator,
+  selectCategory as selectCategoryActionCreator,
 } from '../../modules/natural-events/actions';
+import { ALL_CATEGORY } from '../../modules/natural-events/constants';
 import { getEventsWithinExtent } from '../../map/natural-events/util';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
@@ -32,6 +34,8 @@ function Events(props) {
     isLoading,
     selectEvent,
     selected,
+    selectCategory,
+    selectedCategory,
     prevSelected,
     visibleWithinMapExtent,
     visibleEvents,
@@ -46,8 +50,7 @@ function Events(props) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const ALL_CATEGORY = 'All Event Categories';
-  const [selectedCategory, selectCategory] = useState(ALL_CATEGORY);
+
   const dropdownHeight = 34;
   const scrollbarMaxHeight = height - dropdownHeight;
   let showInactiveEventAlert = selected.id && !selected.date;
@@ -191,6 +194,9 @@ const mapDispatchToProps = (dispatch) => ({
   deselectEvent: () => {
     dispatch(deselectEventActionCreator());
   },
+  selectCategory: (category) => {
+    dispatch(selectCategoryActionCreator(category));
+  },
   requestEvents: (url) => {
     dispatch(requestEventsActionCreator(url));
   },
@@ -207,7 +213,9 @@ const mapStateToProps = (state) => {
     proj,
     browser,
   } = state;
-  const { selected, prevSelected, showAll } = state.events;
+  const {
+    selected, prevSelected, showAll, category,
+  } = state.events;
   const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoading = requestedEvents.isLoading
     || requestedEventSources.isLoading;
@@ -253,6 +261,7 @@ const mapStateToProps = (state) => {
     config,
     isMobile: browser.lessThan.medium,
     selectedDate: getSelectedDate(state).toISOString().split('T')[0],
+    selectedCategory: category,
   };
 };
 export default connect(
@@ -277,6 +286,8 @@ Events.propTypes = {
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
+  selectCategory: PropTypes.func,
+  selectedCategory: PropTypes.string,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
   visibleEvents: PropTypes.object,
