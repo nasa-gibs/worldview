@@ -239,6 +239,8 @@
     overflow-y: auto;
     border-bottom: 2px solid #fff;
     -ms-flex: 1 1 25px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
     p {
       font-size: 13px;
       line-height: 20px;
@@ -697,12 +699,25 @@
 }
 
 @media (max-height: 665px) {
-  .tour-in-progress .modal {
-    bottom: 178px;
-  }
 
-  .tour-in-progress .modal-content {
-    height: 200px;
+  .tour-in-progress .modal {
+    bottom: 365px;
+    right: 55px;
+    .modal-dialog {
+      box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.45);
+      .modal-content {
+        height: 400px;
+        border-radius: 8px;
+      }
+      .modal-header {
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+      }
+      .modal-footer {
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+      }
+    }
   }
 }
 
