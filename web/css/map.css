@@ -23,15 +23,15 @@
     background-color: #fff;
     color: #1a1a1a;
     border: 1px solid #333;
-  }
-  &[disabled] {
-    background: #ccc;
-    color: #888;
-    &:hover {
-      background-color: #ccc;
-      color: #666;
+    &[disabled] {
+      opacity: 0.5;
+      color: #eee;
+      background-color: #333;
       cursor: not-allowed;
     }
+  }
+  &[disabled] {
+    opacity: 0.5;
   }
 }
 
