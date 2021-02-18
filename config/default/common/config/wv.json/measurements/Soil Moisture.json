@@ -14,7 +14,9 @@
                         "AMSRE_Soil_Moisture_NPD_Day",
                         "AMSRE_Soil_Moisture_NPD_Night",
                         "AMSRE_Soil_Moisture_SCA_Day",
-                        "AMSRE_Soil_Moisture_SCA_Night"
+                        "AMSRE_Soil_Moisture_SCA_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
               "GCOM-W1/AMSR2": {
@@ -30,7 +32,9 @@
                       "LPRM_AMSR2_Surface_Soil_Moisture_C1_Band_Day_Daily",
                       "LPRM_AMSR2_Surface_Soil_Moisture_C1_Band_Night_Daily",
                       "LPRM_AMSR2_Downscaled_Surface_Soil_Moisture_C1_Band_Day_Daily",
-                      "LPRM_AMSR2_Downscaled_Surface_Soil_Moisture_C1_Band_Night_Daily"
+                      "LPRM_AMSR2_Downscaled_Surface_Soil_Moisture_C1_Band_Night_Daily",
+                      "OrbitTracks_GCOM-W1_Ascending",
+                      "OrbitTracks_GCOM-W1_Descending"
                   ]
               },
                 "SMAP/Radar": {
