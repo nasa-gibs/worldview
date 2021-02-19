@@ -681,31 +681,19 @@
 
 @media (max-height: 776px) {
   .tour-in-progress .modal {
-    bottom: 278px;
+    bottom: 290px;
   }
   .tour-in-progress .modal-content {
     height: 300px;
   }
 }
 
-@media (max-height: 712px) {
+@media (max-height: 720px) {
   .tour-in-progress .modal {
-    bottom: 232px;
-  }
-  .tour-in-progress .modal-content {
-    height: 250px;
-  }
-}
-
-@media (max-height: 665px) {
-
-  .tour-in-progress .modal {
-    bottom: 365px;
     right: 55px;
     .modal-dialog {
       box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.45);
       .modal-content {
-        height: 400px;
         border-radius: 8px;
       }
       .modal-header {
@@ -719,6 +707,13 @@
     }
   }
 }
+
+@media (max-height: 550px) {
+  .tour-in-progress .modal {
+    bottom: calc(var(--vh, 1vh) * 100 - 265px);
+  }
+}
+
 
 @media (min-height: 450px) {
   .tour {
