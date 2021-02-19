@@ -59,7 +59,7 @@ module.exports = {
       .to.have.text.equal('Available granules for 2019 Dec 01: 289');
   },
 
-  'Enable target area selection': (c) => {
+  'Enable area of interest': (c) => {
     c.click('#chk-crop-toggle');
     c.assert.containsText('.granule-count > h1', 'of 289');
   },
