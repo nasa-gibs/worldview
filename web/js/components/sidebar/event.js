@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
@@ -28,12 +28,12 @@ function Event (props) {
       ? 'selectorItem item'
       : 'selectorItem item hidden';
 
-  const refCallback = useCallback((node) => {
-    if (node && isSelected) {
-      setTimeout(() => {
-        node.scrollIntoView();
-      });
-    }
+  const elRef = useRef();
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      if (!elRef || !elRef.current || !isSelected) return;
+      elRef.current.scrollIntoView();
+    });
   }, [isSelected]);
 
   /**
@@ -131,7 +131,7 @@ function Event (props) {
   return (
     <li
       id={`sidebar-event-${util.encodeId(event.id)}`}
-      ref={refCallback}
+      ref={(node) => { elRef.current = node; }}
       className={itemClass}
       onClick={(e) => {
         e.stopPropagation();
