@@ -78,7 +78,7 @@ class SmartHandoff extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      activeLayers,
+      availableLayers,
       displayDate,
       proj,
     } = this.props;
@@ -89,7 +89,7 @@ class SmartHandoff extends Component {
     } = this.state;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
-    const isLayerStillActive = activeLayers.find(({ id }) => selectedLayer && selectedLayer.id);
+    const isLayerStillActive = availableLayers.find(({ id }) => selectedLayer && selectedLayer.id);
 
     if (selectedCollection && !isLayerStillActive) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -330,15 +330,13 @@ class SmartHandoff extends Component {
    * Render radio buttons for layer selection
    */
   renderLayerChoices() {
-    const { activeLayers } = this.props;
+    const { availableLayers } = this.props;
     const { selectedCollection, selectedLayer } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
 
-        {activeLayers.map((layer) => {
-          if (!layer.conceptIds) return;
-
+        {availableLayers.map((layer) => {
           const layerIsSelected = (selectedLayer || {}).id === layer.id;
           const itemClass = layerIsSelected ? 'layer-item selected' : 'layer-item';
 
@@ -407,7 +405,7 @@ class SmartHandoff extends Component {
         <div className="smart-handoff-crop-toggle">
           <Checkbox
             id="chk-crop-toggle"
-            label="Target Area Selection"
+            label="Set Area of Interest"
             text="Toggle boundary selection."
             color="gray"
             checked={showBoundingBox}
@@ -517,7 +515,7 @@ class SmartHandoff extends Component {
    */
   render() {
     const {
-      activeLayers,
+      availableLayers,
       isActive,
       showNotAvailableModal,
     } = this.props;
@@ -530,9 +528,8 @@ class SmartHandoff extends Component {
 
     // Determine if the download button is enabled
     const isValidDownload = selectedLayer && selectedLayer.id;
-    const availableLayers = activeLayers.filter(({ conceptIds }) => conceptIds).length;
 
-    if (!availableLayers > 0) {
+    if (!availableLayers.length) {
       return this.renderNoLayersToDownload();
     }
     return (
@@ -569,7 +566,7 @@ class SmartHandoff extends Component {
  */
 SmartHandoff.propTypes = {
   isActive: PropTypes.bool,
-  activeLayers: PropTypes.array,
+  availableLayers: PropTypes.array,
   displayDate: PropTypes.string,
   map: PropTypes.object.isRequired,
   proj: PropTypes.object,
@@ -602,10 +599,14 @@ const mapStateToProps = (state) => {
   const selectedDate = getSelectedDate(state);
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
-  const filterForSmartHandoff = ({ projections, disableSmartHandoff }) => projections[proj.id] && !disableSmartHandoff;
+  const filterForSmartHandoff = (layer) => {
+    const { projections, disableSmartHandoff, conceptIds } = layer;
+    const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
+    return projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
+  };
 
   return {
-    activeLayers: getActiveLayers(state).filter(filterForSmartHandoff),
+    availableLayers: getActiveLayers(state).filter(filterForSmartHandoff),
     displayDate,
     map,
     proj: proj.selected,

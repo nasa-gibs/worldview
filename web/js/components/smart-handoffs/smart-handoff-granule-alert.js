@@ -25,11 +25,11 @@ const GranuleAlertModalBody = () => (
     <p>You may also see NONE or “0 out of n” granules when:</p>
     <ol>
       <li>
-        The target area selection does not encompass any of the imagery displayed on the map.
+        The area of interest does not encompass any of the imagery displayed on the map.
       </li>
       <li>
-        The target area selection is encompassing imagery but the collection&apos;s metadata record does not contain the appropriate spatial
-        information for this feature to work. Unchecking the &quot;Target Area Selection&quot; box should address this.
+        The area of interest is encompassing imagery but the collection&apos;s metadata record does not contain the appropriate spatial
+        information for this feature to work. Unchecking the &quot;Set Area of Interest&quot; box should address this.
       </li>
     </ol>
 
