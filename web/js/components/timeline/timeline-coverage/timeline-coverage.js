@@ -429,7 +429,7 @@ const mapDispatchToProps = (dispatch) => ({
   onInfoClick: () => {
     const key = 'TIMELINE_LAYER_COVERAGE_INFO_MODAL';
     googleTagManager.pushEvent({
-      event: 'data_coverage_panel_info',
+      event: 'layer_coverage_panel_info',
     });
     dispatch(
       toggleCustomContent(key, {
