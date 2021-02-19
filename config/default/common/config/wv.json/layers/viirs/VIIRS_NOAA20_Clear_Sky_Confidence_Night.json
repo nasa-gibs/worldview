@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Clear_Sky_Confidence_Night": {
+      "id": "VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+      "title": "Clear Sky Confidence (Night)",
+      "subtitle": "NOAA-20 / VIIRS",
+      "description": "viirs/VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+      "tags": "cloud mask",
+      "group": "overlays",
+      "layergroup": "Clear Sky Confidence",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_NOAA-20_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}
