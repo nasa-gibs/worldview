@@ -185,8 +185,7 @@ class Sidebar extends React.Component {
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
             onClick={(e) => resetWorldview(e, isDistractionFreeModeActive)}
-            // eslint-disable-next-line no-return-assign
-            ref={(iconElement) => (this.iconElement = iconElement)}
+            ref={(iconElement) => { this.iconElement = iconElement; }}
             onWheel={wheelCallBack}
           />
           {isCollapsed && (
@@ -225,9 +224,8 @@ class Sidebar extends React.Component {
                     {this.getProductsToRender(activeTab, isCompareMode)}
                   </TabPane>
                   <TabPane tabId="events">
-                    {naturalEvents && (
+                    {naturalEvents && activeTab === 'events' && (
                     <Events
-                      isActive={activeTab === 'events'}
                       height={subComponentHeight}
                     />
                     )}
@@ -241,8 +239,7 @@ class Sidebar extends React.Component {
                     )}
                   </TabPane>
                   <footer
-                    // eslint-disable-next-line no-return-assign
-                    ref={(footerElement) => (this.footerElement = footerElement)}
+                    ref={(footerElement) => { this.footerElement = footerElement; }}
                   >
                     <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
                   </footer>

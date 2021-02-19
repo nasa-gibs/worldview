@@ -55,37 +55,40 @@ function Events(props) {
   const scrollbarMaxHeight = height - dropdownHeight;
   let showInactiveEventAlert = selected.id && !selected.date;
 
-  const initRequests = () => {
-    let eventsRequestURL = `${apiURL}/events`;
-    let sourceRequestURL = `${apiURL}/sources`;
+  // init requests
+  useEffect(() => {
+    if (!isLoading && !hasRequestError && !events) {
+      let eventsRequestURL = `${apiURL}/events`;
+      let sourceRequestURL = `${apiURL}/sources`;
 
-    const mockEvents = lodashGet(config, 'parameters.mockEvents');
-    const mockSources = lodashGet(config, 'parameters.mockSources');
+      const mockEvents = lodashGet(config, 'parameters.mockEvents');
+      const mockSources = lodashGet(config, 'parameters.mockSources');
 
-    if (mockEvents) {
-      console.warn(`Using mock events data: ${mockEvents}`);
-      eventsRequestURL = mockEvents === 'true'
-        ? 'mock/events_data.json'
-        : `mock/events_data.json-${mockEvents}`;
+      if (mockEvents) {
+        console.warn(`Using mock events data: ${mockEvents}`);
+        eventsRequestURL = mockEvents === 'true'
+          ? 'mock/events_data.json'
+          : `mock/events_data.json-${mockEvents}`;
+      }
+      if (mockSources) {
+        console.warn(`Using mock categories data: ${mockSources}`);
+        sourceRequestURL = `mock/categories_data.json-${mockSources}`;
+      }
+      requestEvents(eventsRequestURL);
+      requestSources(sourceRequestURL);
     }
-    if (mockSources) {
-      console.warn(`Using mock categories data: ${mockSources}`);
-      sourceRequestURL = `mock/categories_data.json-${mockSources}`;
-    }
-    requestEvents(eventsRequestURL);
-    requestSources(sourceRequestURL);
-  };
+  });
 
-  if (!isLoading && !hasRequestError && !events) {
-    initRequests();
-  }
-
+  // Deselect event if it's not visible in the map extent
   useEffect(() => {
     if (selected.id && selected.date && !visibleWithinMapExtent[selected.id] && events && events.length) {
       deselectEvent();
     }
   });
 
+  // When switching between projections, select an event that was previous selected
+  // if user had switched to projection where it was not visible then back to one where
+  // it is visible
   useEffect(() => {
     if (!selected.id && prevSelected && visibleWithinMapExtent[prevSelected.id]) {
       selectEvent(prevSelected.id, prevSelected.date, isMobile);
