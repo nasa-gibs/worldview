@@ -71,7 +71,7 @@ module.exports = {
     c.moveToElement(eventsTabButton, 1, 1);
     c.click(eventsTabButton);
     c.pause(100);
-    c.expect.element('#wv-eventscontent').to.not.be.visible;
+    c.expect.element('#wv-eventscontent').to.not.be.present;
     c.assert.cssClassPresent(eventsTabButton, 'disabled');
     c.assert.attributeContains(eventsTabButton, 'aria-label', disableMessage);
     c.assert.attributeContains(eventsTabButton, 'title', disableMessage);
