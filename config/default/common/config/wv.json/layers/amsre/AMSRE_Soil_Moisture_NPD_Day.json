@@ -1,10 +1,10 @@
 {
   "layers": {
-    "AMSRE_Soil_Mositure_NPD_Day": {
-      "id": "AMSRE_Soil_Mositure_NPD_Day",
+    "AMSRE_Soil_Moisture_NPD_Day": {
+      "id": "AMSRE_Soil_Moisture_NPD_Day",
       "title": "Soil Moisture (Normalized Polarization Difference, Day)",
       "subtitle": "Aqua / AMSR-E",
-      "description": "amsre/AMSRE_Soil_Mositure_NPD_Day",
+      "description": "amsre/AMSRE_Soil_Moisture_NPD_Day",
       "group": "overlays",
       "tags": "soil moisture npd",
       "layergroup": "Soil Moisture",
