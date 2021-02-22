@@ -31,6 +31,48 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
 }
 
 /**
+ * Process original orbit track layers to split into two separate layers and repeat
+ * wrap and opacity values for original
+ * @param {Array} layersArray
+ * @param {Array} layerWraps
+ * @param {Array} opacities
+ */
+const addOrbitTrackRevisions = function(layersArray, layerWraps, opacities) {
+  const revisedLayersArray = [...layersArray];
+  const revisedLayerWraps = [...layerWraps];
+  const revisedOpacities = [...opacities];
+  let mod = 0;
+
+  // check for OrbitTracks in layersArray
+  for (let i = 0; i < layersArray.length; i += 1) {
+    const layerId = layersArray[i];
+    if (layerId.includes('OrbitTracks')) {
+      // track index for modifications from splicing
+      const idx = i + mod;
+      // revise OrbitTracks layerId requested to indiviudal 'Lines' and 'Points' layers
+      // ex: 'OrbitTracks_Aqua_Ascending' is revised in the request as:
+      // 'OrbitTracks_Aqua_Ascending_Points' and 'OrbitTracks_Aqua_Ascending_Lines'
+      revisedLayersArray.splice(idx, 1, `${layerId}_Lines`, `${layerId}_Points`);
+      // repeat wrap and opacity values for revised 'Lines' and 'Points' layers
+      const wrap = revisedLayerWraps[idx];
+      revisedLayerWraps.splice(idx, 0, wrap);
+      if (opacities.length > 0) {
+        const opacity = revisedOpacities[idx];
+        revisedOpacities.splice(idx, 0, opacity);
+      }
+
+      mod += 1;
+    }
+  }
+
+  return {
+    revisedLayersArray,
+    revisedLayerWraps,
+    revisedOpacities,
+  };
+};
+
+/**
  * Get the snapshots URL to download an image
  * @param {String} url
  * @param {Object} proj
@@ -43,9 +85,23 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
  */
 export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
   const { crs } = proj.selected;
-  const layersArray = imageUtilGetLayers(layerDefs, proj.id);
-  const layerWraps = imageUtilGetLayerWrap(layerDefs);
-  const opacities = imageUtilGetLayerOpacities(layerDefs);
+  let layersArray = imageUtilGetLayers(layerDefs, proj.id);
+  let layerWraps = imageUtilGetLayerWrap(layerDefs);
+  let opacities = imageUtilGetLayerOpacities(layerDefs);
+
+  // check for orbit tracks, split to individual 'Lines' and 'Points' layers for request while retaining order
+  if (layersArray.some((id) => id.includes('OrbitTracks'))) {
+    const {
+      revisedLayersArray,
+      revisedLayerWraps,
+      revisedOpacities,
+    } = addOrbitTrackRevisions(layersArray, layerWraps, opacities);
+
+    layersArray = revisedLayersArray;
+    layerWraps = revisedLayerWraps;
+    opacities = revisedOpacities;
+  }
+
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
