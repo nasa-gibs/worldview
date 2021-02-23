@@ -31,21 +31,72 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
 }
 
 /**
+ * Process original orbit track layers to split into two separate layers and repeat
+ * wrap and opacity values for original
+ * @param {Array} layersArray
+ * @param {Array} layerWraps
+ * @param {Array} opacities
+ * @returns {Object} layersArray, layerWraps, opacities
+ */
+const imageUtilProcessOrbitTracks = function(layersArray, layerWraps, opacities) {
+  const processedLayersArray = [...layersArray];
+  const processedLayerWraps = [...layerWraps];
+  const processedOpacities = [...opacities];
+  let mod = 0;
+
+  // check for OrbitTracks in layersArray
+  for (let i = 0; i < layersArray.length; i += 1) {
+    const layerId = layersArray[i];
+    if (layerId.includes('OrbitTracks')) {
+      // track index for modifications from splicing
+      const idx = i + mod;
+      // revise OrbitTracks layerId requested to indiviudal 'Lines' and 'Points' layers
+      // ex: 'OrbitTracks_Aqua_Ascending' is revised in the request as:
+      // 'OrbitTracks_Aqua_Ascending_Points' and 'OrbitTracks_Aqua_Ascending_Lines'
+      processedLayersArray.splice(idx, 1, `${layerId}_Lines`, `${layerId}_Points`);
+      // repeat wrap and opacity values for revised 'Lines' and 'Points' layers
+      const wrap = processedLayerWraps[idx];
+      processedLayerWraps.splice(idx, 0, wrap);
+      if (opacities.length > 0) {
+        const opacity = processedOpacities[idx];
+        processedOpacities.splice(idx, 0, opacity);
+      }
+
+      mod += 1;
+    }
+  }
+
+  return {
+    layersArray: processedLayersArray,
+    layerWraps: processedLayerWraps,
+    opacities: processedOpacities,
+  };
+};
+
+/**
  * Get the snapshots URL to download an image
  * @param {String} url
  * @param {Object} proj
- * @param {Array} layers
- * @param {Object} lonlats
+ * @param {Array} layer(s) objects
+ * @param {Array} lonlats
  * @param {Object} dimensions
  * @param {Date} dateTime
+ * @param {String/Boolean} fileType (false for default 'image/jpeg')
  * @param {Boolean} isWorldfile
  * @param {Array} markerCoordinates
  */
 export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
   const { crs } = proj.selected;
-  const layersArray = imageUtilGetLayers(layerDefs, proj.id);
-  const layerWraps = imageUtilGetLayerWrap(layerDefs);
-  const opacities = imageUtilGetLayerOpacities(layerDefs);
+  const {
+    layersArray,
+    layerWraps,
+    opacities,
+  } = imageUtilProcessOrbitTracks(
+    imageUtilGetLayers(layerDefs, proj.id),
+    imageUtilGetLayerWrap(layerDefs),
+    imageUtilGetLayerOpacities(layerDefs),
+  );
+
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
