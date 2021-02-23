@@ -187,7 +187,7 @@
     "jquery": "^3.5.0",
     "jquery-ui-bundle": "1.12.1-migrate",
     "jquery-ui-touch-punch": "0.2.3",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.19.3",
     "moment-locales-webpack-plugin": "^1.1.2",
     "ol": "6.4.x",
