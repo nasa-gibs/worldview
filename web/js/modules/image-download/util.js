@@ -36,11 +36,12 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
  * @param {Array} layersArray
  * @param {Array} layerWraps
  * @param {Array} opacities
+ * @returns {Object} layersArray, layerWraps, opacities
  */
-const addOrbitTrackRevisions = function(layersArray, layerWraps, opacities) {
-  const revisedLayersArray = [...layersArray];
-  const revisedLayerWraps = [...layerWraps];
-  const revisedOpacities = [...opacities];
+const imageUtilProcessOrbitTracks = function(layersArray, layerWraps, opacities) {
+  const processedLayersArray = [...layersArray];
+  const processedLayerWraps = [...layerWraps];
+  const processedOpacities = [...opacities];
   let mod = 0;
 
   // check for OrbitTracks in layersArray
@@ -52,13 +53,13 @@ const addOrbitTrackRevisions = function(layersArray, layerWraps, opacities) {
       // revise OrbitTracks layerId requested to indiviudal 'Lines' and 'Points' layers
       // ex: 'OrbitTracks_Aqua_Ascending' is revised in the request as:
       // 'OrbitTracks_Aqua_Ascending_Points' and 'OrbitTracks_Aqua_Ascending_Lines'
-      revisedLayersArray.splice(idx, 1, `${layerId}_Lines`, `${layerId}_Points`);
+      processedLayersArray.splice(idx, 1, `${layerId}_Lines`, `${layerId}_Points`);
       // repeat wrap and opacity values for revised 'Lines' and 'Points' layers
-      const wrap = revisedLayerWraps[idx];
-      revisedLayerWraps.splice(idx, 0, wrap);
+      const wrap = processedLayerWraps[idx];
+      processedLayerWraps.splice(idx, 0, wrap);
       if (opacities.length > 0) {
-        const opacity = revisedOpacities[idx];
-        revisedOpacities.splice(idx, 0, opacity);
+        const opacity = processedOpacities[idx];
+        processedOpacities.splice(idx, 0, opacity);
       }
 
       mod += 1;
@@ -66,9 +67,9 @@ const addOrbitTrackRevisions = function(layersArray, layerWraps, opacities) {
   }
 
   return {
-    revisedLayersArray,
-    revisedLayerWraps,
-    revisedOpacities,
+    layersArray: processedLayersArray,
+    layerWraps: processedLayerWraps,
+    opacities: processedOpacities,
   };
 };
 
@@ -76,31 +77,25 @@ const addOrbitTrackRevisions = function(layersArray, layerWraps, opacities) {
  * Get the snapshots URL to download an image
  * @param {String} url
  * @param {Object} proj
- * @param {Array} layers
- * @param {Object} lonlats
+ * @param {Array} layer(s) objects
+ * @param {Array} lonlats
  * @param {Object} dimensions
  * @param {Date} dateTime
+ * @param {String/Boolean} fileType (false for default 'image/jpeg')
  * @param {Boolean} isWorldfile
  * @param {Array} markerCoordinates
  */
 export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
   const { crs } = proj.selected;
-  let layersArray = imageUtilGetLayers(layerDefs, proj.id);
-  let layerWraps = imageUtilGetLayerWrap(layerDefs);
-  let opacities = imageUtilGetLayerOpacities(layerDefs);
-
-  // check for orbit tracks, split to individual 'Lines' and 'Points' layers for request while retaining order
-  if (layersArray.some((id) => id.includes('OrbitTracks'))) {
-    const {
-      revisedLayersArray,
-      revisedLayerWraps,
-      revisedOpacities,
-    } = addOrbitTrackRevisions(layersArray, layerWraps, opacities);
-
-    layersArray = revisedLayersArray;
-    layerWraps = revisedLayerWraps;
-    opacities = revisedOpacities;
-  }
+  const {
+    layersArray,
+    layerWraps,
+    opacities,
+  } = imageUtilProcessOrbitTracks(
+    imageUtilGetLayers(layerDefs, proj.id),
+    imageUtilGetLayerWrap(layerDefs),
+    imageUtilGetLayerOpacities(layerDefs),
+  );
 
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
