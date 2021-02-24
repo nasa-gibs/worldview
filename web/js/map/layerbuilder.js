@@ -357,6 +357,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     }
     return new OlLayerTile({
       preload: Infinity,
+      className: def.id,
       extent,
       source: new OlSourceWMTS(sourceOptions),
     });
@@ -445,6 +446,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       extent: layerExtent,
       source: sourceOptions,
       renderMode: 'image',
+      className: def.id,
       vector: true,
       preload: 10,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
@@ -551,6 +553,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const layer = new OlLayerTile({
       preload: Infinity,
+      className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: new OlSourceTileWMS(sourceOptions),
