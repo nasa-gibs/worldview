@@ -2,7 +2,7 @@
   "layers": {
     "CYGNSS_L3_Wind_Speed_SDR_Daily": {
       "id": "CYGNSS_L3_Wind_Speed_SDR_Daily",
-      "title": "Wind Speed (Daily)",
+      "title": "Wind Speed (SDR, Daily)",
       "subtitle": "CYGNSS / DDMI",
       "description": "cygnss/CYGNSS_L3_Wind_Speed_SDR_Daily",
       "group": "overlays",
