@@ -25,7 +25,7 @@
                     "description": "cygnss/WindSpeed",
                     "image": "",
                     "settings": [
-                        "CYGNSS_L3_Wind_Speed_Daily",
+                        "CYGNSS_L3_Wind_Speed_SDR_Daily",
                         "CYGNSS_L3_Wind_Speed_Daily"
                     ]
                 },
