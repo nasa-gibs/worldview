@@ -31,19 +31,19 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
 }
 
 /**
- * Process original orbit track layers to split into two separate layers and repeat
- * wrap and opacity values for original
+ * KMZ Only: Process original orbit track layers to split into two separate
+ * ayers and repeat wrap and opacity values for original
  * @param {Array} layersArray
  * @param {Array} layerWraps
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessOrbitTracks = function(layersArray, layerWraps, opacities) {
+const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opacities) {
   const processedLayersArray = [...layersArray];
   const processedLayerWraps = [...layerWraps];
   const processedOpacities = [...opacities];
-  let mod = 0;
 
+  let mod = 0;
   // check for OrbitTracks in layersArray
   for (let i = 0; i < layersArray.length; i += 1) {
     const layerId = layersArray[i];
@@ -74,6 +74,25 @@ const imageUtilProcessOrbitTracks = function(layersArray, layerWraps, opacities)
 };
 
 /**
+ * Wrap to handle image util processes with additional KMZ processing if applicable
+ * @param {String/Boolean} fileType (false for default 'image/jpeg')
+ * @param {Array} layersArray
+ * @param {Array} layerWraps
+ * @param {Array} opacities
+ * @returns {Object} layersArray, layerWraps, opacities
+ */
+const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities) {
+  if (fileType === 'application/vnd.google-earth.kmz') {
+    return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities);
+  }
+  return {
+    layersArray,
+    layerWraps,
+    opacities,
+  };
+};
+
+/**
  * Get the snapshots URL to download an image
  * @param {String} url
  * @param {Object} proj
@@ -91,7 +110,8 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
     layersArray,
     layerWraps,
     opacities,
-  } = imageUtilProcessOrbitTracks(
+  } = imageUtilProcessWrap(
+    fileType,
     imageUtilGetLayers(layerDefs, proj.id),
     imageUtilGetLayerWrap(layerDefs),
     imageUtilGetLayerOpacities(layerDefs),
