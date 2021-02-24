@@ -636,7 +636,7 @@ const getSubdailyDateRange = ({
 /**
    * Return an array of dates based on the dateRange the current date falls in.
    *
-   * @method datesinDateRangesDataPanel
+   * @method datesinDateRanges
    * @param  {Object} def            A layer object
    * @param  {Object} date           A date object for currently selected date
    * @param  {Object} startDateLimit A date object used as start date of timeline range for available data

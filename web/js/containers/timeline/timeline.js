@@ -855,9 +855,9 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   toggleLayerCoveragePanel = (isOpen) => {
-    if (!isOpen) {
+    if (isOpen) {
       googleTagManager.pushEvent({
-        event: 'open_data_coverage_panel',
+        event: 'open_layer_coverage_panel',
       });
     }
     this.setState({

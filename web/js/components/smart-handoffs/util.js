@@ -5,14 +5,17 @@ import util from '../../util/util';
  * Method call to direct the user to Earthdata Search with the necessary URL parameters that
  * encapsulate what the user is intending to try and download data / granules from
  * @param {*} proj
+ * @param {*} includeDates
  * @param {*} selectedDate
- * @param {*} selectedLayer
+ * @param {*} selectedCollection
  * @param {*} extentCoords
  * @param {*} showBoundingBox
  */
 export default function openEarthDataSearch(proj, includeDates, selectedDate, selectedCollection, extentCoords, showBoundingBox) {
+  const { value } = selectedCollection;
   googleTagManager.pushEvent({
-    event: 'smart_handoffs_open_eds',
+    event: 'smart_handoffs_open_eds_data_query',
+    selected_collection: value,
   });
   const PROJ_CODES = {
     arctic: '90!0!0!0!0!0',
@@ -21,8 +24,8 @@ export default function openEarthDataSearch(proj, includeDates, selectedDate, se
   };
   const { southWest, northEast } = extentCoords;
   const params = {
-    q: selectedCollection.value,
-    p: selectedCollection.value,
+    q: value,
+    p: value,
     m: PROJ_CODES[proj],
     'sb[0]': showBoundingBox ? `${southWest},${northEast}` : undefined,
   };
