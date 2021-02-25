@@ -311,7 +311,7 @@ class PaletteLegend extends React.Component {
               let palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
               const parentLayerId = isSubLayer ? `-${parentLayer.id}` : '';
-              const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${compareState}${keyIndex}`;
+              const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${util.encodeId(layer.id)}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
               const tooltipText = singleKey
