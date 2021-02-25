@@ -3,7 +3,7 @@ const { normalizeViewport } = require('../../reuseables/normalize-viewport.js');
 const TIME_LIMIT = 10000;
 const enabledPermalink = '?l=Last_of_the_Wild_1995-2004';
 const disabledPermalink = '?l=Last_of_the_Wild_1995-2004(disabled=0-13-12-1-2-6)';
-const classColorBoxId = '#Last_of_the_Wild_1995-2004_0_legend-color-active';
+const classColorBoxId = '#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active';
 module.exports = {
   before(client) {
     normalizeViewport(client, 1000, 850);
