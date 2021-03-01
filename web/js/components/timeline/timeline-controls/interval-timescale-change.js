@@ -31,7 +31,15 @@ class TimeScaleIntervalChange extends PureComponent {
       timeScaleChangeUnit,
       customSelected,
     } = this.props;
-    if (customSelected && customDelta && timeScaleChangeUnit) {
+    const {
+      customIntervalText,
+    } = this.state;
+    const isCustomIntervalTextSet = customIntervalText !== 'Custom';
+    const defaultDelta = !customDelta || customDelta === 1;
+    if (!customSelected && isCustomIntervalTextSet && (defaultDelta || !timeScaleChangeUnit)) {
+      // reset from tour step change where previous step has custom interval and next step doesn't
+      this.resetCustomIntervalText();
+    } else if (customSelected && customDelta && timeScaleChangeUnit) {
       const didCustomDeltaChange = customDelta !== prevProps.customDelta;
       const didTimeScaleChangeUnitChange = timeScaleChangeUnit !== prevProps.timeScaleChangeUnit;
       if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
@@ -75,6 +83,13 @@ class TimeScaleIntervalChange extends PureComponent {
     const { customDelta, customIntervalZoomLevel } = this.props;
     this.setState({
       customIntervalText: `${customDelta} ${customIntervalZoomLevel}`,
+    });
+  }
+
+  // reset custom text for custom interval
+  resetCustomIntervalText = () => {
+    this.setState({
+      customIntervalText: 'Custom',
     });
   }
 
