@@ -42,10 +42,7 @@ class TimeScaleIntervalChange extends PureComponent {
     } else if (customSelected && customDelta && timeScaleChangeUnit) {
       const didCustomDeltaChange = customDelta !== prevProps.customDelta;
       const didTimeScaleChangeUnitChange = timeScaleChangeUnit !== prevProps.timeScaleChangeUnit;
-      if (isCustomIntervalTextSet && defaultDelta) {
-        // setting custom to '1' will reset; ex: '1 day' won't be duplicated in interval list
-        this.resetCustomIntervalText();
-      } else if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
+      if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
         this.setCustomIntervalText();
       }
     }
