@@ -99,8 +99,11 @@ function LayerRow (props) {
     }
   };
 
+  // Request the layer palette only if it hasn't been loaded and is not currently being loaded
   useEffect(() => {
-    if (!isLoading && layer && hasPalette) requestPalette(layer.id);
+    if (!isLoading && layer && hasPalette && lodashIsEmpty(renderedPalette)) {
+      requestPalette(layer.id);
+    }
   }, [layer.id]);
 
   const getDisabledTitle = (layer) => {
