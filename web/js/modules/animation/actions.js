@@ -13,15 +13,15 @@ import {
 } from './constants';
 import util from '../../util/util';
 import { timeScaleFromNumberKey } from '../date/constants';
+import getSelectedDate from '../date/selectors';
 
 export function onActivate() {
   return (dispatch, getState) => {
-    const { compare, date, animation } = getState();
+    const { date, animation } = getState();
     const {
       customSelected, customDelta, delta, customInterval, interval,
     } = date;
-    const dateStr = compare.isCompareA ? 'selected' : 'selectedB';
-    const activeDate = date[dateStr];
+    const activeDate = getSelectedDate(getState());
     if (!animation.startDate || !animation.endDate) {
       const timeScaleChangeUnit = customSelected
         ? timeScaleFromNumberKey[customInterval]

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 
 import SearchLayerList from '../search/search-layers-list';
 import LayerMetadataDetail from '../search/layer-metadata-detail';
@@ -44,7 +43,7 @@ function RecentLayersList(props) {
           id="recent-layer-tooltip-target"
           className="tooltip-icon"
           size="lg"
-          icon={faQuestionCircle}
+          icon="question-circle"
         />
         <Button id="clear-recent-layers" size="sm" onClick={clearRecentLayers}>
           Clear List
@@ -75,7 +74,7 @@ RecentLayersList.propTypes = {
   recentLayers: PropTypes.array,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { browser, productPicker } = state;
   const {
     selectedLayer,

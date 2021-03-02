@@ -1,6 +1,6 @@
 # [Worldview](https://worldview.earthdata.nasa.gov)
 
-[![Worldview Screenshot](/web/images/preview.gif)](https://worldview.earthdata.nasa.gov)
+[![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
 [![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
@@ -78,16 +78,16 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 
 ## Other Information
 
-- [Configuration](doc/configuration.md)
+- [Configuration](doc/config/configuration.md)
 - [Custom Branding](doc/branding.md)
 - [Optional Features](doc/features.md)
-- [Data Download](doc/data_download.md)
-- [URL Parameters](doc/url_parameters.md)
 - [Developing](doc/developing.md)
 - [Deployment](doc/deployment.md)
 - [Testing](doc/testing.md)
+- [URL Parameters](doc/url_parameters.md)
 - [Uploading](doc/upload.md)
 - [Docker](doc/docker.md)
+- [Smart Handoffs](doc/smart_handoffs.md)
 - [Release Notes](doc/release_notes.md)
 - [Changelog](CHANGELOG.md)
 

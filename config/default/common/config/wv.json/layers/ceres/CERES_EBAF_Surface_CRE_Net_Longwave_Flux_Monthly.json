@@ -7,9 +7,7 @@
       "description": "ceres/CERES_EBAF_Surface_CRE_Net_Longwave_Flux_Monthly",
       "tags": "cloud radiative effect, energy balanced and filled",
       "group": "overlays",
-      "layergroup": [
-        "ceres"
-      ],
+      "layergroup": "Surface Flux",
       "product": "CERES_EBAF-Surface",
       "inactive": true,
       "wrapadjacentdays": true,

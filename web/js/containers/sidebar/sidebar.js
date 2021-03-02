@@ -4,19 +4,18 @@ import PropTypes from 'prop-types';
 import { get as lodashGet } from 'lodash';
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
-import Layers from './layers';
+import LayersContainer from './layers-container';
 import Events from './events';
-import Data from './data';
+import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import {
-  getCheckerboard,
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
-import { getLayers } from '../../modules/layers/selectors';
+import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
@@ -32,7 +31,7 @@ const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 const getActiveTabs = function(config) {
   const { features } = config;
   return {
-    download: features.dataDownload,
+    download: features.smartHandoffs,
     layers: true,
     events: features.naturalEvents,
   };
@@ -55,15 +54,15 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { subComponentHeight: 700 };
-    this.checkerBoardPattern = getCheckerboard();
-    const customPalettePromise = loadCustomPalette(props.config);
-    customPalettePromise.done((customs) => {
-      props.loadedCustomPalettes(customs);
-    });
     this.toggleSidebar = this.toggleSidebar.bind(this);
   }
 
   componentDidMount() {
+    const { config, loadedCustomPalettes } = this.props;
+    const customPalettePromise = loadCustomPalette(config);
+    customPalettePromise.then((customs) => {
+      loadedCustomPalettes(customs);
+    });
     this.updateDimensions();
     // prevent browserzooming in safari
     if (util.browser.safari) {
@@ -145,16 +144,14 @@ class Sidebar extends React.Component {
         <CompareCase
           isActive={activeTab === 'layers'}
           height={subComponentHeight}
-          checkerBoardPattern={this.checkerBoardPattern}
         />
       );
     } if (!isCompareMode) {
       return (
-        <Layers
-          height={subComponentHeight - 20}
+        <LayersContainer
+          height={subComponentHeight - 48}
           isActive={activeTab === 'layers'}
-          layerGroupName={activeString}
-          checkerBoardPattern={this.checkerBoardPattern}
+          compareState={activeString}
         />
       );
     }
@@ -178,8 +175,8 @@ class Sidebar extends React.Component {
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
-    const naturalEventsFeatureActive = config.features.naturalEvents;
-    const dataDownloadFeatureActive = config.features.dataDownload;
+    const { naturalEvents } = config.features;
+    const { smartHandoffs } = config.features;
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
@@ -188,17 +185,17 @@ class Sidebar extends React.Component {
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
             onClick={(e) => resetWorldview(e, isDistractionFreeModeActive)}
-            // eslint-disable-next-line no-return-assign
-            ref={(iconElement) => (this.iconElement = iconElement)}
+            ref={(iconElement) => { this.iconElement = iconElement; }}
             onWheel={wheelCallBack}
           />
-          <CollapsedButton
-            isMobile={isMobile}
-            isCollapsed={isCollapsed}
-            onclick={this.toggleSidebar}
-            numberOfLayers={numberOfLayers}
-            isDistractionFreeModeActive={isDistractionFreeModeActive}
-          />
+          {isCollapsed && (
+            <CollapsedButton
+              isMobile={isMobile}
+              onclick={this.toggleSidebar}
+              numberOfLayers={numberOfLayers}
+              isDistractionFreeModeActive={isDistractionFreeModeActive}
+            />
+          )}
           <div
             id="productsHolder"
             className="products-holder-case"
@@ -227,29 +224,22 @@ class Sidebar extends React.Component {
                     {this.getProductsToRender(activeTab, isCompareMode)}
                   </TabPane>
                   <TabPane tabId="events">
-                    {naturalEventsFeatureActive
-                      ? (
-                        <Events
-                          isActive={activeTab === 'events'}
-                          height={subComponentHeight}
-                        />
-                      )
-                      : null}
+                    {naturalEvents && activeTab === 'events' && (
+                    <Events
+                      height={subComponentHeight}
+                    />
+                    )}
                   </TabPane>
                   <TabPane tabId="download">
-                    {dataDownloadFeatureActive
-                      ? (
-                        <Data
-                          isActive={activeTab === 'download'}
-                          height={subComponentHeight}
-                          tabTypes={tabTypes}
-                        />
-                      )
-                      : null}
+                    {smartHandoffs && (
+                      <SmartHandoff
+                        isActive={activeTab === 'download'}
+                        tabTypes={tabTypes}
+                      />
+                    )}
                   </TabPane>
                   <footer
-                    // eslint-disable-next-line no-return-assign
-                    ref={(footerElement) => (this.footerElement = footerElement)}
+                    ref={(footerElement) => { this.footerElement = footerElement; }}
                   >
                     <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
                   </footer>
@@ -267,7 +257,6 @@ function mapStateToProps(state) {
     browser,
     sidebar,
     compare,
-    layers,
     config,
     modal,
     measure,
@@ -279,7 +268,7 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
-  const numberOfLayers = getLayers(layers[activeString], {}, state).length;
+  const numberOfLayers = getAllActiveLayers(state).length;
   const tabTypes = getActiveTabs(config);
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const isMobile = browser.lessThan.medium;

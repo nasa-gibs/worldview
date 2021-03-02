@@ -9,16 +9,8 @@
       "group": "overlays",
       "format": "image/png",
       "type": "wms",
-      "tileSize": [
-        512,
-        512
-      ],
       "period": "daily",
-      "layergroup": [
-        "reference",
-        "reference_orbits"
-      ],
-      "daynight": "",
+      "layergroup": "Orbital Track",
       "track": "ascending",
       "startDate": "1998-11-20",
       "projections": {

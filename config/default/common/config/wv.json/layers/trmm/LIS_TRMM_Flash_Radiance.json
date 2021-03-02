@@ -7,9 +7,7 @@
       "description": "trmm/LIS_TRMM_Flash_Radiance",
       "tags": "lightning",
       "group": "overlays",
-      "layergroup": [
-        "trmm"
-      ],
+      "layergroup": "Lightning",
       "product": "lislip",
       "inactive": true,
       "wrapadjacentdays": true

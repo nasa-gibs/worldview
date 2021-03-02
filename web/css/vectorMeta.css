@@ -43,10 +43,14 @@
 .vector-modal .active .nav-link {
   border: 1px solid #a5a6a7;
   border-bottom: none;
+  color: #666;
+  cursor: default;
 }
 .vector-modal .nav-link {
   border: 1px solid #fff;
   border-bottom: none;
+  color: #333;
+  cursor: pointer;
 }
 .vector-modal .vector-feature-name-cell {
   margin-left: 20px;

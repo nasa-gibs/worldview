@@ -1,5 +1,4 @@
 import { requestAction } from '../core/actions';
-
 import {
   REQUEST_NOTIFICATIONS,
   SET_NOTIFICATIONS,

@@ -6,10 +6,7 @@
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_L3_EVI_16Day",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Vegetation Indices",
       "product": "MOD13Q1",
       "wrapadjacentdays": true,
       "daynight": [

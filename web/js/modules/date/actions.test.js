@@ -14,6 +14,37 @@ import {
   SELECT_DATE,
   UPDATE_APP_NOW,
 } from './constants';
+import fixtures from '../../fixtures';
+import { addLayer, getLayers } from '../layers/selectors';
+
+const config = fixtures.config();
+function getState(layers) {
+  return {
+    config,
+    proj: {
+      id: 'geographic',
+      selected: config.projections.geographic,
+    },
+    layers: {
+      active: {
+        layers,
+      },
+    },
+    compare: {
+      activeString: 'active',
+    },
+  };
+}
+function addMockLayer(layerId, layerArray) {
+  return addLayer(
+    layerId,
+    {},
+    layerArray,
+    config.layers,
+    getLayers(getState(layerArray), { group: 'all' }).overlays
+      .length,
+  );
+}
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -33,6 +64,7 @@ describe('Date timescale changes', () => {
     };
     expect(changeTimeScale(interval)).toEqual(expectedAction);
   });
+
   test(`updateAppNow action returns ${UPDATE_APP_NOW}as type and ${
     mockDate} as value`, () => {
     const expectedAction = {
@@ -41,6 +73,7 @@ describe('Date timescale changes', () => {
     };
     expect(updateAppNow(mockDate)).toEqual(expectedAction);
   });
+
   test(`selectDate action returns ${SELECT_DATE}as type and selected `
        + `as activeString and ${mockDate} as value`, () => {
     const expectedAction = {
@@ -48,15 +81,27 @@ describe('Date timescale changes', () => {
       activeString: 'selected',
       value: mockDate,
     };
+    let layers = addLayer('terra-cr', {}, [], config.layers, 0);
+    layers = addMockLayer('aqua-cr', layers);
     const store = mockStore({
       date: {},
       compare: {
         isCompareA: true,
+        activeString: 'active',
+      },
+      layers: {
+        active: {
+          layers,
+        },
+      },
+      proj: {
+        id: 'geographic',
       },
     });
     store.dispatch(selectDate(mockDate));
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
+
   test(`selectDate action returns ${SELECT_DATE}as type and selectedB `
        + `as activeString and ${mockDate} as value`, () => {
     const expectedAction = {
@@ -64,15 +109,27 @@ describe('Date timescale changes', () => {
       activeString: 'selectedB',
       value: mockDate,
     };
+    let layers = addLayer('terra-cr', {}, [], config.layers, 0);
+    layers = addMockLayer('aqua-cr', layers);
     const store = mockStore({
       date: {},
       compare: {
         isCompareA: false,
+        activeString: 'activeB',
+      },
+      layers: {
+        activeB: {
+          layers,
+        },
+      },
+      proj: {
+        id: 'geographic',
       },
     });
     store.dispatch(selectDate(mockDate));
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
+
   test(`changeCustomInterval action returns ${CHANGE_CUSTOM_INTERVAL} as type and ${
     customInterval} as value and ${delta} as delta`, () => {
     const expectedAction = {
@@ -82,6 +139,7 @@ describe('Date timescale changes', () => {
     };
     expect(changeCustomInterval(delta, customInterval)).toEqual(expectedAction);
   });
+
   test(`selectInterval action returns ${CHANGE_INTERVAL} as type and ${
     interval} as value and ${delta} as delta and true as customSelected`, () => {
     const expectedAction = {

@@ -5,7 +5,6 @@ import {
   get as lodashGet,
   includes as lodashIncludes,
 } from 'lodash';
-
 import {
   Stroke, Style, Fill, Circle,
 } from 'ol/style';
@@ -217,8 +216,15 @@ function getModalOffset(dimensionProps) {
 function getModalContentsAtPixel(mapProps, config, compareState) {
   const metaArray = [];
   const selected = {};
+  let isCoordinatesMarker = false;
   const { pixels, map, swipeOffset } = mapProps;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+    const featureId = feature.getId();
+    if (featureId === 'coordinates-map-marker') {
+      isCoordinatesMarker = true;
+      return;
+    }
+
     const def = lodashGet(layer, 'wv.def');
     if (!def) {
       return;
@@ -226,7 +232,7 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
 
     const type = feature.getType();
     if (lodashIncludes(def.clickDisabledFeatures, type)
-      || !isFromActiveCompareRegion(map, pixels, layer.wv, compareState, swipeOffset)) {
+      || !isFromActiveCompareRegion(pixels, layer.wv, compareState, swipeOffset)) {
       return;
     }
     if (def.vectorData && def.vectorData.id && def.title) {
@@ -257,7 +263,7 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
-  return { selected, metaArray };
+  return { selected, metaArray, isCoordinatesMarker };
 }
 /**
  * Get organized vector modal contents for clicked
@@ -281,12 +287,13 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   };
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
-  const { selected, metaArray } = getModalContentsAtPixel(mapProps, config, compare);
+  const { selected, metaArray, isCoordinatesMarker } = getModalContentsAtPixel(mapProps, config, compare);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
+    isCoordinatesMarker,
   };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {

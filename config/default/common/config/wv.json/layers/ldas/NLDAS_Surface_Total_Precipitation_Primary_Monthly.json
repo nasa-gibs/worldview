@@ -7,9 +7,7 @@
       "description": "ldas/NLDAS_Surface_Total_Precipitation_Primary_Monthly",
       "tags": "north american land data assimilation system rain",
       "group": "overlays",
-      "layergroup": [
-        "ldas"
-      ],
+      "layergroup": "Precipitation Rate",
       "product": "NLDAS_FORA0125_M"
     }
   }

@@ -4,12 +4,12 @@ export function requestAction(
   url,
   mimeType,
   id,
-  signal,
+  options,
   TIMEOUT_AMOUNT,
 ) {
   // let didTimeOut = false;
   dispatch(startRequest(actionName, id));
-  return new Promise((resolve, reject) => fetch(url, { signal })
+  return new Promise((resolve, reject) => fetch(url, options)
     .then((response) => (mimeType === 'application/json'
       ? response.json()
       : response.text()

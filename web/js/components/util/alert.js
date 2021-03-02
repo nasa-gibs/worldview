@@ -2,17 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 import { Portal } from 'react-portal';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faLayerGroup, faTimes, faRuler, faExclamationTriangle,
-} from '@fortawesome/free-solid-svg-icons';
-
-// icons used with alert by passing string as prop iconClassName
-const alertIcons = {
-  faRuler,
-  faLayerGroup,
-};
 
 /*
  * A react component, Builds a rather specific
@@ -46,15 +36,12 @@ export default class AlertUtil extends React.Component {
       id,
       title,
       message,
-      iconClassName,
+      icon,
       isOpen,
       onDismiss,
       onClick,
     } = this.props;
 
-    const icon = iconClassName
-      ? alertIcons[iconClassName] || faExclamationTriangle
-      : faExclamationTriangle;
     return (
       <Alert
         id={id}
@@ -66,14 +53,18 @@ export default class AlertUtil extends React.Component {
           title={title}
           onClick={onClick}
         >
-          <FontAwesomeIcon icon={icon} className="wv-alert-icon" size="1x" />
+          <FontAwesomeIcon
+            icon={icon || 'exclamation-triangle'}
+            className="wv-alert-icon"
+            size="1x"
+          />
           <div className="wv-alert-message">
             {message}
           </div>
         </div>
         {onDismiss && (
           <div id={`${id}-close`} className="close-alert" onClick={onDismiss}>
-            <FontAwesomeIcon icon={faTimes} className="exit" size="1x" />
+            <FontAwesomeIcon icon="times" className="exit" size="1x" />
           </div>
         )}
       </Alert>
@@ -93,11 +84,11 @@ export default class AlertUtil extends React.Component {
 }
 
 AlertUtil.defaultProps = {
-  iconClassName: '',
+  icon: '',
   title: '',
 };
 AlertUtil.propTypes = {
-  iconClassName: PropTypes.string,
+  icon: PropTypes.string,
   id: PropTypes.string,
   isOpen: PropTypes.bool,
   message: PropTypes.string,

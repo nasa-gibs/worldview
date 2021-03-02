@@ -16,7 +16,7 @@ prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
 version = "1.0.0"
 help_description = """\
-Fetches options from remote locations
+Pulls GetCapabilities XML and linked metadata from configured locations
 """
 
 parser = OptionParser(usage="Usage: %s <config> <output_dir>" % prog,

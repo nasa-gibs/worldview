@@ -1,16 +1,29 @@
-import React from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+} from 'reactstrap';
 import { get as lodashGet } from 'lodash';
-import Layer from './layer';
+import LayerRow from './layer-row';
 import {
   replaceSubGroup,
   getZotsForActiveLayers,
   getTitles,
+  getActiveLayers,
   memoizedAvailable as availableSelector,
 } from '../../modules/layers/selectors';
-import { reorderLayers } from '../../modules/layers/actions';
+import {
+  reorderLayers as reorderLayersAction,
+  removeLayer as removeLayerAction,
+  toggleGroupVisibility as toggleGroupVisibilityAction,
+} from '../../modules/layers/actions';
+import util from '../../util/util';
+
+const { events } = util;
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -19,60 +32,63 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-class LayerList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      palettes: {},
-    };
-    this.promises = {};
-    this.onDragEnd = this.onDragEnd.bind(this);
-  }
+function LayerList(props) {
+  const {
+    compareState,
+    collapsed,
+    reorderLayers,
+    layerSplit,
+    activeLayers,
+    layers,
+    zots,
+    projId,
+    getNames,
+    available,
+    groupId,
+    title,
+    removeLayers,
+    toggleVisibility,
+    toggleCollapse,
+    isMobile,
+  } = props;
+  const { dragHandleProps = {} } = props;
+  const groupLayerIds = layers.map(({ id }) => id);
+  const layersInProj = layers.filter(({ projections }) => projections[projId]);
+  const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
+  const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
+  const [runningDataObj, setRunningDataObj] = useState({});
 
-  /**
-   * Get Palette and setState with promise results when palette is retrieved
-   * @param {Object} layer | Layer
-   * @param {Function} palettePromise | Retrieve palette
-   */
-  getPalette(layer, palettePromise) {
-    const { renderedPalettes } = this.props;
-    if (renderedPalettes[layer.id]) {
-      return renderedPalettes[layer.id];
-    } if (this.promises[layer.id]) {
-      return null;
-    } if (layer.palette) {
-      this.promises[layer.id] = true;
-      const promise = palettePromise(layer.id);
-      promise.then((palette) => {
-        const { palettes } = this.state;
-        delete this.promises[layer.id];
-        palettes[layer.id] = palette;
-        this.setState({
-          palettes,
-        });
-      });
+  useEffect(() => {
+    events.on('map:running-data', setRunningDataObj);
+    return () => {
+      events.off('map:running-data', setRunningDataObj);
+    };
+  }, []);
+
+  const toggleDropdownMenuVisible = () => {
+    if (showDropdownMenu) {
+      setDropdownBtnVisible(false);
     }
-    return null;
-  }
+    setDropdownMenuVisible(!showDropdownMenu);
+  };
+
+  const mouseEnter = () => { setDropdownBtnVisible(true); };
+  const mouseLeave = () => {
+    if (showDropdownMenu) return;
+    setDropdownBtnVisible(false);
+  };
+
 
   /**
    * Update Layer order after drag
    * @param {Object} result | Result of layer drag
    */
-  onDragEnd(result) {
-    const {
-      layerGroupName,
-      groupId,
-      reorderLayers,
-      layerSplit,
-      activeLayers,
-      layers,
-    } = this.props;
+  const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     if (!destination || source.index === destination.index) {
       return;
     }
-    const regex = new RegExp(`-${layerGroupName}$`);
+    const regex = new RegExp(`-${compareState}$`);
     const layerId = draggableId.replace(regex, '');
     const newLayerArray = reorder(layers, source.index, destination.index);
 
@@ -86,129 +102,153 @@ class LayerList extends React.Component {
     const newLayers = replaceSubGroup(
       layerId,
       nextLayerId,
-      activeLayers,
-      groupId,
+      Array.from(activeLayers),
       layerSplit,
     );
     reorderLayers(newLayers);
-  }
+  };
 
-  render() {
-    const {
-      groupId,
-      title,
-      layerGroupName,
-      zots,
-      layers,
-      runningLayers,
-      projId,
-      checkerBoardPattern,
-      getNames,
-      available,
-    } = this.props;
+  const renderLayer = (layer, index) => {
+    const { id, projections, visible } = layer;
     return (
-      <div className="layer-group-case">
-        <h3 className="head">{title}</h3>
-
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Droppable
-            droppableId={`${layerGroupName}-${groupId}`}
-            type={`layerSubGroup${groupId}`}
-            direction="vertical"
-          >
-            {(provided, snapshot) => (
-              <ul
-                id={groupId}
-                className="category"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                {layers.map((object, i) => (
-                  <Layer
-                    layer={object}
-                    groupId={groupId}
-                    layerGroupName={layerGroupName}
-                    isInProjection={!!object.projections[projId]}
-                    key={object.id}
-                    index={i}
-                    layerClasses="item productsitem"
-                    zot={zots[object.id] ? zots[object.id].value : null}
-                    names={getNames(object.id)}
-                    checkerBoardPattern={checkerBoardPattern}
-                    isDisabled={!available(object.id)}
-                    isVisible={object.visible}
-                    runningObject={
-                      runningLayers && runningLayers[object.id]
-                        ? runningLayers[object.id]
-                        : null
-                    }
-                  />
-                ))}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
+      <LayerRow
+        layer={layer}
+        compareState={compareState}
+        isInProjection={!!projections[projId]}
+        key={id}
+        index={index}
+        zot={zots[id]}
+        names={getNames(id)}
+        isDisabled={!available(id)}
+        isVisible={visible}
+        runningObject={runningDataObj[id]}
+      />
     );
-  }
+  };
+
+  const renderDropdownMenu = () => (
+    <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
+      <DropdownToggle>
+        <FontAwesomeIcon
+          className="layer-group-more"
+          icon="ellipsis-v"
+        />
+      </DropdownToggle>
+      <DropdownMenu>
+        <DropdownItem id="show-all" onClick={() => toggleVisibility(groupLayerIds, true)}>
+          Show All Layers
+        </DropdownItem>
+        <DropdownItem id="hide-all" onClick={() => toggleVisibility(groupLayerIds, false)}>
+          Hide All Layers
+        </DropdownItem>
+        <DropdownItem id="remove-group" onClick={() => removeLayers(groupLayerIds)}>
+          Remove Group
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  );
+
+  const renderHeader = () => (
+    <div
+      className="layer-group-header"
+      onMouseEnter={mouseEnter}
+      onMouseLeave={mouseLeave}
+      {...dragHandleProps}
+    >
+      <h3 className="layer-group-title">
+        {title}
+        {collapsed ? ` (${layersInProj.length})` : ''}
+      </h3>
+      <div className="layer-group-icons">
+        {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
+        <FontAwesomeIcon
+          className="layer-group-collapse"
+          icon={!collapsed ? 'caret-down' : 'caret-left'}
+          onClick={() => toggleCollapse(groupId, !collapsed)}
+        />
+      </div>
+    </div>
+  );
+
+  return (
+    <div
+      id={`${compareState}-${groupId}`}
+      className="layer-group-case"
+    >
+
+      {renderHeader()}
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable
+          droppableId={`${compareState}-${groupId}`}
+          type={`layerGroup${groupId}`}
+          direction="vertical"
+        >
+          {(provided, snapshot) => (
+            <ul
+              className={collapsed ? 'category hidden' : 'category'}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {layers.map(renderLayer)}
+              {provided.placeholder}
+            </ul>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </div>
+  );
 }
+
 LayerList.propTypes = {
   activeLayers: PropTypes.array,
   available: PropTypes.func,
-  checkerBoardPattern: PropTypes.object,
+  collapsed: PropTypes.bool,
+  compareState: PropTypes.string,
+  dragHandleProps: PropTypes.object,
   getNames: PropTypes.func,
   groupId: PropTypes.string,
-  layerGroupName: PropTypes.string,
+  isMobile: PropTypes.bool,
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
   projId: PropTypes.string,
-  renderedPalettes: PropTypes.string,
   reorderLayers: PropTypes.func,
-  runningLayers: PropTypes.object,
+  removeLayers: PropTypes.func,
+  toggleCollapse: PropTypes.func,
+  toggleVisibility: PropTypes.func,
   title: PropTypes.string,
   zots: PropTypes.object,
 };
 
-function mapStateToProps(state, ownProps) {
-  const {
-    layers,
-    groupId,
-    title,
-    layerGroupName,
-    checkerBoardPattern,
-    layerSplit,
-  } = ownProps;
-  const {
-    proj, config, map,
-  } = state;
-  const { runningLayers } = state.layers;
-  const { id } = proj;
-  const activeLayers = state.layers[layerGroupName];
+const mapStateToProps = (state, ownProps) => {
+  const { proj, config, map } = state;
   const zots = lodashGet(map, 'ui.selected')
-    ? getZotsForActiveLayers(config, proj, map, activeLayers)
+    ? getZotsForActiveLayers(state)
     : {};
   return {
     zots,
-    layers,
-    groupId,
-    title,
-    layerGroupName,
-    activeLayers,
-    runningLayers,
-    projId: id,
-    checkerBoardPattern,
-    layerSplit,
-    getNames: (layerId) => getTitles(config, layerId, id),
+    isMobile: state.browser.lessThan.medium,
+    activeLayers: getActiveLayers(state),
+    projId: proj.id,
+    getNames: (layerId) => getTitles(config, layerId, proj.id),
     available: (layerId) => availableSelector(state)(layerId),
   };
-}
+};
 
 const mapDispatchToProps = (dispatch) => ({
   reorderLayers: (newLayerArray) => {
-    dispatch(reorderLayers(newLayerArray));
+    dispatch(reorderLayersAction(newLayerArray));
+  },
+  removeLayers: (layerIds) => {
+    layerIds.forEach((id) => {
+      dispatch(removeLayerAction(id));
+    });
+  },
+  toggleVisibility: (layerIds, visible) => {
+    dispatch(toggleGroupVisibilityAction(layerIds, visible));
   },
 });
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

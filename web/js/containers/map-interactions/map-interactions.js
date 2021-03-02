@@ -1,54 +1,61 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import OlCoordinates from '../../components/map/ol-coordinates';
 import OlVectorInteractions from './ol-vector-interactions';
 import OlMeasureTool from '../../components/map/ol-measure-tool';
+import OlCoordinatesMarker from '../../components/location-search/ol-coordinates-marker';
+import OlRotationButtons from '../../components/map/rotation';
+import OlZoomButtons from '../../components/map/zoom';
 
-class MapInteractions extends React.PureComponent {
+class MapInteractions extends PureComponent {
+  getMapClasses = () => {
+    const { isShowingClick, isDistractionFreeModeActive, isCoordinateSearchActive } = this.props;
+    let mapClasses = 'wv-map';
+    mapClasses += isShowingClick && !isCoordinateSearchActive ? ' cursor-pointer' : '';
+    mapClasses += !isDistractionFreeModeActive && isCoordinateSearchActive ? ' cursor-crosshair' : '';
+    mapClasses += isDistractionFreeModeActive ? ' distraction-free-active' : '';
+    return mapClasses;
+  };
+
   render() {
     const {
       isDistractionFreeModeActive,
-      isShowingClick,
-      mouseEvents,
     } = this.props;
-    let mapClasses = isShowingClick
-      ? 'wv-map cursor-pointer'
-      : 'wv-map';
-    mapClasses = isDistractionFreeModeActive
-      ? `${mapClasses} distraction-free-active`
-      : mapClasses;
-
+    const mapClasses = this.getMapClasses();
     return (
       <>
+        <OlZoomButtons />
+        <OlRotationButtons />
         <div id="wv-map" className={mapClasses} />
         {!isDistractionFreeModeActive && (
-          <>
-            <OlCoordinates
-              mouseEvents={mouseEvents}
-            />
-          </>
-
+          <OlCoordinates />
         )}
-        <OlVectorInteractions
-          mouseEvents={mouseEvents}
-        />
+        <OlVectorInteractions />
         <OlMeasureTool />
+        <OlCoordinatesMarker />
       </>
     );
   }
 }
 function mapStateToProps(state) {
-  const { map, ui } = state;
+  const {
+    config, locationSearch, map, ui,
+  } = state;
+  const { isDistractionFreeModeActive } = ui;
+  const { isCoordinateSearchActive } = locationSearch;
   return {
+    config,
     isShowingClick: map.isClickable,
-    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    isDistractionFreeModeActive,
+    isCoordinateSearchActive,
   };
 }
+
 MapInteractions.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
-  mouseEvents: PropTypes.object.isRequired,
+  isCoordinateSearchActive: PropTypes.bool,
 };
 export default connect(
   mapStateToProps,

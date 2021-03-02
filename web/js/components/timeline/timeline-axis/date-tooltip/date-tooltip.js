@@ -44,7 +44,7 @@ class DateToolTip extends PureComponent {
       draggerTimeState,
       draggerTimeStateB,
       hoverTime,
-      isDataCoveragePanelOpen,
+      isTimelineLayerCoveragePanelOpen,
       showHoverLine,
       shouldIncludeHiddenLayers,
       axisWidth,
@@ -90,7 +90,7 @@ class DateToolTip extends PureComponent {
 
     // handle active layer count dependent tooltip height
     toolTipHeightOffset = -100;
-    if (isDataCoveragePanelOpen) {
+    if (isTimelineLayerCoveragePanelOpen) {
       toolTipHeightOffset = -136;
       const layers = activeLayers.filter((layer) => (shouldIncludeHiddenLayers
         ? layer.startDate
@@ -147,7 +147,7 @@ DateToolTip.propTypes = {
   draggerTimeStateB: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
-  isDataCoveragePanelOpen: PropTypes.bool,
+  isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   leftOffset: PropTypes.number,
   shouldIncludeHiddenLayers: PropTypes.bool,
   showDraggerTime: PropTypes.bool,

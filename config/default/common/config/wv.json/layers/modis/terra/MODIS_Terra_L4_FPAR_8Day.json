@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L4_FPAR_8Day",
       "tags": "fpar",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "FPAR",
       "product": "MOD15A2H",
       "wrapadjacentdays": true,
       "daynight": [

@@ -2,8 +2,7 @@
   "env": {
     "browser": true,
     "node": true,
-    "jest/globals": true,
-    "jquery": true
+    "jest/globals": true
   },
   "parserOptions": {
     "ecmaVersion": 2019,

@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import { assign as lodashAssign, get } from 'lodash';
+import { assign as lodashAssign } from 'lodash';
 
 /**
  * Update sidebar state when location-pop action occurs
@@ -22,13 +22,7 @@ export default function mapLocationToSidebarState(
     stateFromLocation = update(stateFromLocation, {
       sidebar: { $set: sidebarState },
     });
-  } else if (get(stateFromLocation, 'data.active')) {
-    const sidebarState = lodashAssign({}, state.sidebar, {
-      activeTab: 'download',
-    });
-    stateFromLocation = update(stateFromLocation, {
-      sidebar: { $set: sidebarState },
-    });
+    // TODO need to handle smart-handoffs param here?
   } else {
     const sidebarState = lodashAssign({}, state.sidebar, {
       activeTab: 'layers',

@@ -1,0 +1,21 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Other": {
+                "title": "Other",
+                "id": "scientific-other",
+                "placement": "last",
+                "description": "",
+                "measurements": [
+                    "Areas of No Data (mask)",
+                    "Blue Marble",
+                    "Global Digital Elevation Map",
+                    "Latitude-Longitude Lines",
+                    "Orbital Track",
+                    "Reference Map",
+                    "Water Bodies"
+                ]
+            }
+        }
+    }
+}

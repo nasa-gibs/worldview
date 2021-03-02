@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_Absorbing_Aerosol_Optical_Depth",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Aerosol Optical Depth",
       "product": "OMAERUVd",
       "tags": "aod",
       "tracks": [

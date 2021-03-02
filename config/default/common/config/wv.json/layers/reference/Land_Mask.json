@@ -8,13 +8,7 @@
       "group": "overlays",
       "format": "image/png",
       "type": "wmts",
-      "tileSize": [
-        512,
-        512
-      ],
-      "layergroup": [
-        "reference"
-      ],
+      "layergroup": "Reference",
       "projections": {
         "antarctic": {
           "layer": "SCAR_Land_Mask",

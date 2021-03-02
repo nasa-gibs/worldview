@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_Value_Added_AOD",
       "tags": "aod",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "Aerosol Optical Depth",
       "product": "MCDAODHD",
       "wrapadjacentdays": true,
       "palette": {

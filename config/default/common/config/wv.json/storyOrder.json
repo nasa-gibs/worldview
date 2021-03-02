@@ -1,5 +1,6 @@
 {
     "storyOrder": [
+        "hls_intro",
         "clouds",
         "australia_fires_2019_2020",
         "dust_storms_overview_2019",
@@ -14,6 +15,7 @@
         "california_british_columbia_wildfires_summer_2018",
         "swath_gaps",
         "sinabung_volcano_eruption_february_2018",
-        "hurricane_maria_september_2017"
+        "hurricane_maria_september_2017",
+        "hurricane_dorian_september_joyride"
     ]
 }

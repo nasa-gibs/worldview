@@ -7,6 +7,7 @@ import { openCustomContent } from '../modules/modal/actions';
 import { hasVectorLayers } from '../modules/layers/util';
 import { DISABLE_VECTOR_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
+import { getActiveLayers } from '../modules/layers/selectors';
 
 const HAS_LOCAL_STORAGE = safeLocalStorage.enabled;
 const { DISMISSED_COMPARE_ALERT, DISMISSED_EVENT_VIS_ALERT } = safeLocalStorage.keys;
@@ -41,7 +42,7 @@ class DismissableAlerts extends React.Component {
     if (isSmall || !HAS_LOCAL_STORAGE) return null;
     return (
       <>
-        {!hasDismissedEvents && isEventsActive ? (
+        {!hasDismissedEvents && isEventsActive && (
           <AlertUtil
             id="event-alert"
             isOpen
@@ -50,8 +51,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
             message="Events may not be visible at all times."
           />
-        ) : null}
-        {!hasDismissedCompare && isCompareActive ? (
+        )}
+        {!hasDismissedCompare && isCompareActive && (
           <AlertUtil
             isOpen
             noPortal
@@ -59,8 +60,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
             message="You are now in comparison mode."
           />
-        ) : null}
-        {isVectorAlertPresent ? (
+        )}
+        {isVectorAlertPresent && (
           <AlertUtil
             isOpen
             noPortal
@@ -68,7 +69,7 @@ class DismissableAlerts extends React.Component {
             onDismiss={dismissVectorAlert}
             message="Vector features may not be clickable at all zoom levels."
           />
-        ) : null}
+        )}
       </>
     );
   }
@@ -81,16 +82,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => {
   const {
-    browser, events, sidebar, compare, layers, alerts,
+    browser, events, sidebar, compare, alerts,
   } = state;
-  const { activeString } = compare;
   const { isVectorAlertActive } = alerts;
+  const activeLayers = getActiveLayers(state);
 
   return {
     isSmall: browser.lessThan.small,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
     isCompareActive: compare.active,
-    isVectorAlertPresent: hasVectorLayers(layers[activeString]) && isVectorAlertActive,
+    isVectorAlertPresent: hasVectorLayers(activeLayers) && isVectorAlertActive,
   };
 };
 export default connect(

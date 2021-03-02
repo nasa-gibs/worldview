@@ -7,9 +7,7 @@
       "description": "ssmi/SSMI_DMSP_F10_Cloud_Liquid_Water_Over_Oceans_Descending",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "ssmi"
-      ],
+      "layergroup": "Cloud Liquid Water",
       "product": "rssmif10d",
       "inactive": true
     }

@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Radar",
       "description": "smap/SMAP_L3_Active_Day_Freeze_Thaw",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Freeze/Thaw",
       "product": "SPL3FTA",
       "inactive": true,
       "tracks": [

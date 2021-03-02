@@ -7,9 +7,7 @@
       "description": "smap/SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA",
       "tags": "enhanced",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Brightness Temperature",
       "product": "SPL1CTB_E"
     }
   }

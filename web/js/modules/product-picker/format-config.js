@@ -4,6 +4,7 @@ import {
 } from 'lodash';
 import moment from 'moment';
 import { available } from '../layers/selectors';
+import util from '../../util/util';
 
 const periodIntervalMap = {
   daily: 'Day',
@@ -19,13 +20,14 @@ function capitalizeFirstLetter(string) {
 
 function setLayerProp (layer, prop, value) {
   const featuredMeasurement = prop === 'measurements' && (value && value.includes('Featured'));
-  if (!layer || featuredMeasurement) {
+  if (!layer || featuredMeasurement || !value) {
     return;
   }
+  const decodedValue = value.includes('&') ? util.decodeHTML(value) : value;
   if (!layer[prop]) {
-    layer[prop] = [value];
-  } else if (!layer[prop].includes(value)) {
-    layer[prop].push(value);
+    layer[prop] = [decodedValue];
+  } else if (!layer[prop].includes(decodedValue)) {
+    layer[prop].push(decodedValue);
   }
 }
 

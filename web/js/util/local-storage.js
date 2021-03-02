@@ -19,14 +19,17 @@ export default {
   enabled,
   keys: {
     RECENT_LAYERS: 'recentLayers',
+    LOCATION_SEARCH_COLLAPSED: 'locationSearchState',
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
     HIDE_TOUR: 'hideTour',
+    HIDE_EDS_WARNING: 'hideEDS',
     SIDEBAR_COLLAPSED: 'sidebarState',
     COORDINATE_FORMAT: 'coordinateFormat',
     NOTIFICATION_OUTAGE: 'outage',
     NOTIFICATION_ALERT: 'alert',
     NOTIFICATION_MSG: 'message',
+    GROUP_OVERLAYS: 'groupOverlays',
   },
   getItem(key) {
     return enabled && localStorage.getItem(key);

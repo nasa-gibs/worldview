@@ -214,7 +214,8 @@ test('Download URL', () => {
     height: 300,
   };
   const dateTime = new Date('2019-06-24T19:04:00Z');
-  const dlURL = getDownloadUrl(url, proj, mockLayerDefs, lonlats, dimensions, dateTime);
+  const locationSearchCoordinates = [-19.1609, 2.7117];
+  const dlURL = getDownloadUrl(url, proj, mockLayerDefs, lonlats, dimensions, dateTime, false, false, locationSearchCoordinates);
   const expectedURL = 'http://localhost:3002/api/v1/snapshot'
     + '?REQUEST=GetSnapshot'
     + '&TIME=2019-06-24T00:00:00Z'
@@ -223,6 +224,7 @@ test('Download URL', () => {
     + '&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor'
     + '&WRAP=day'
     + '&FORMAT=image/jpeg'
-    + '&WIDTH=300&HEIGHT=300';
+    + '&WIDTH=300&HEIGHT=300'
+    + '&MARKER=-19.1609,2.7117';
   expect(dlURL.includes(expectedURL)).toBe(true);
 });

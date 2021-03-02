@@ -1,22 +1,22 @@
 import util from './util/util';
 import mapui from './map/ui';
 import mapAnimate from './map/animate';
-import dataUi from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
+
+const { events } = util;
 
 /**
  *  Legacy UI Rendering
  * @param {Object} models | Legacy Models Object
  * @param {Object} config
- * @param {Object} MapMouseEvents | Map events object that is registered here and used in react to render coords
+ * @param {Object} store
  */
-export default function combineUi(models, config, MapMouseEvents, store) {
+export default function combineUi(models, config, store) {
   const ui = {};
-  ui.events = util.events();
   const subscribeToStore = function() {
     const state = store.getState();
     const action = state.lastAction;
-    return ui.events.trigger('last-action', action);
+    return events.trigger('redux:action-dispatched', action);
   };
   store.subscribe(subscribeToStore);
   ui.map = mapui(models, config, store, ui);
@@ -34,26 +34,24 @@ export default function combineUi(models, config, MapMouseEvents, store) {
   } catch (e) {
     util.warn(e);
   }
-  if (config.features.dataDownload) {
-    ui.data = dataUi(store, ui, config);
-  }
   if (config.features.naturalEvents) {
     ui.naturalEvents = naturalEventsUI(ui, config, store, models);
   }
-  registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
+  registerMapMouseHandlers(ui.map.proj);
+
   // Sink all focus on inputs if click unhandled
-  $(document).click((event) => {
-    if (event.target.nodeName !== 'INPUT') {
-      $('input').blur();
+  document.addEventListener('click', (e) => {
+    if (e.target.nodeName !== 'INPUT') {
+      document.querySelectorAll('input').forEach((el) => el.blur());
     }
   });
   document.activeElement.blur();
-  $('input').blur();
+  document.querySelectorAll('input').forEach((el) => el.blur());
 
   return ui;
 }
 
-function registerMapMouseHandlers(maps, events) {
+function registerMapMouseHandlers(maps) {
   Object.values(maps).forEach((map) => {
     const element = map.getTargetElement();
     const crs = map
@@ -61,16 +59,19 @@ function registerMapMouseHandlers(maps, events) {
       .getProjection()
       .getCode();
     element.addEventListener('mousemove', (event) => {
-      events.trigger('mousemove', event, map, crs);
+      events.trigger('map:mousemove', event, map, crs);
     });
     element.addEventListener('mouseout', (event) => {
-      events.trigger('mouseout', event, map, crs);
+      events.trigger('map:mouseout', event, map, crs);
     });
     map.on('singleclick', (event) => {
-      events.trigger('singleclick', event, map, crs);
+      events.trigger('map:singleclick', event, map, crs);
+    });
+    map.on('contextmenu', (event) => {
+      events.trigger('map:contextmenu', event, map, crs);
     });
     element.addEventListener('click', (event) => {
-      events.trigger('click', event, map, crs);
+      events.trigger('map:click', event, map, crs);
     });
   });
 }

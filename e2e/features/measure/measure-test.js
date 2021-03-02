@@ -16,7 +16,6 @@ const {
   sidebarContainer,
   unitOfMeasureToggle,
   downloadGeojsonBtn,
-  downloadShapefileBtn,
 } = localSelectors;
 
 function createDistanceMeasurement(c, [startX, startY], [endX, endY]) {
@@ -59,18 +58,13 @@ module.exports = {
     if (c.options.desiredCapabilities.browserName === 'firefox') { // right click doesn't work in firefox
       return;
     }
-    c.useCss().click(measureBtn);
-    c.waitForElementVisible(measureMenu);
-    c.waitForElementVisible(measureDistanceBtn, TIME_LIMIT);
-    c.click(measureDistanceBtn);
-    c.pause(300);
     c.moveToElement('#wv-map-geographic', 200, 110)
       .mouseButtonClick(0)
       .moveTo(null, 200, 210)
       .mouseButtonClick(1)
       .mouseButtonClick(0);
     c.pause(300);
-    // c.expect.element('#measurement-alert').to.not.be.present;
+    c.expect.element('#measurement-alert').to.not.be.present;
     c.expect.element(sidebarContainer)
       .to.have.css('max-height').which.does.not.equal('0px');
   },
@@ -112,7 +106,6 @@ module.exports = {
     }
     c.click(measureBtn);
     c.waitForElementVisible(downloadGeojsonBtn);
-    c.waitForElementVisible(downloadShapefileBtn);
     c.click('.modal');
   },
   'Switching to arctic projection, no measurements show': (c) => {
@@ -128,7 +121,6 @@ module.exports = {
     }
     c.click(measureBtn);
     c.expect.element(downloadGeojsonBtn).to.not.be.present;
-    c.expect.element(downloadShapefileBtn).to.not.be.present;
     c.click('.modal');
   },
   'Creating measurements in arctic projection causes tooltips to show': (c) => {

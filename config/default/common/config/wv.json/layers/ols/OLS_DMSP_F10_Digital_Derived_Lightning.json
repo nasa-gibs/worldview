@@ -7,9 +7,7 @@
       "description": "ols/OLS_DMSP_F10_Digital_Derived_Lightning",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "trmm"
-      ],
+      "layergroup": "Lightning",
       "product": "olsdig10",
       "inactive": true,
       "wrapadjacentdays": true

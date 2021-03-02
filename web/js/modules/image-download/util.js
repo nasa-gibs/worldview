@@ -1,7 +1,11 @@
-import lodashEach from 'lodash/each';
-import lodashGet from 'lodash/get';
+import {
+  each as lodashEach,
+  get as lodashGet,
+} from 'lodash';
+import { boundingExtent, containsCoordinate } from 'ol/extent';
 import util from '../../util/util';
 import { nearestInterval } from '../layers/util';
+import { coordinatesCRSTransform } from '../projection/util';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -27,20 +31,92 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
 }
 
 /**
+ * KMZ Only: Process original orbit track layers to split into two separate
+ * ayers and repeat wrap and opacity values for original
+ * @param {Array} layersArray
+ * @param {Array} layerWraps
+ * @param {Array} opacities
+ * @returns {Object} layersArray, layerWraps, opacities
+ */
+const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opacities) {
+  const processedLayersArray = [...layersArray];
+  const processedLayerWraps = [...layerWraps];
+  const processedOpacities = [...opacities];
+
+  let mod = 0;
+  // check for OrbitTracks in layersArray
+  for (let i = 0; i < layersArray.length; i += 1) {
+    const layerId = layersArray[i];
+    if (layerId.includes('OrbitTracks')) {
+      // track index for modifications from splicing
+      const idx = i + mod;
+      // revise OrbitTracks layerId requested to indiviudal 'Lines' and 'Points' layers
+      // ex: 'OrbitTracks_Aqua_Ascending' is revised in the request as:
+      // 'OrbitTracks_Aqua_Ascending_Points' and 'OrbitTracks_Aqua_Ascending_Lines'
+      processedLayersArray.splice(idx, 1, `${layerId}_Lines`, `${layerId}_Points`);
+      // repeat wrap and opacity values for revised 'Lines' and 'Points' layers
+      const wrap = processedLayerWraps[idx];
+      processedLayerWraps.splice(idx, 0, wrap);
+      if (opacities.length > 0) {
+        const opacity = processedOpacities[idx];
+        processedOpacities.splice(idx, 0, opacity);
+      }
+
+      mod += 1;
+    }
+  }
+
+  return {
+    layersArray: processedLayersArray,
+    layerWraps: processedLayerWraps,
+    opacities: processedOpacities,
+  };
+};
+
+/**
+ * Wrap to handle image util processes with additional KMZ processing if applicable
+ * @param {String/Boolean} fileType (false for default 'image/jpeg')
+ * @param {Array} layersArray
+ * @param {Array} layerWraps
+ * @param {Array} opacities
+ * @returns {Object} layersArray, layerWraps, opacities
+ */
+const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities) {
+  if (fileType === 'application/vnd.google-earth.kmz') {
+    return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities);
+  }
+  return {
+    layersArray,
+    layerWraps,
+    opacities,
+  };
+};
+
+/**
  * Get the snapshots URL to download an image
  * @param {String} url
  * @param {Object} proj
- * @param {Array} layers
- * @param {Object} lonlats
+ * @param {Array} layer(s) objects
+ * @param {Array} lonlats
  * @param {Object} dimensions
  * @param {Date} dateTime
+ * @param {String/Boolean} fileType (false for default 'image/jpeg')
  * @param {Boolean} isWorldfile
+ * @param {Array} markerCoordinates
  */
-export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile) {
+export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile, markerCoordinates) {
   const { crs } = proj.selected;
-  const layersArray = imageUtilGetLayers(layerDefs, proj.id);
-  const layerWraps = imageUtilGetLayerWrap(layerDefs);
-  const opacities = imageUtilGetLayerOpacities(layerDefs);
+  const {
+    layersArray,
+    layerWraps,
+    opacities,
+  } = imageUtilProcessWrap(
+    fileType,
+    imageUtilGetLayers(layerDefs, proj.id),
+    imageUtilGetLayerWrap(layerDefs),
+    imageUtilGetLayerOpacities(layerDefs),
+  );
+
   const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
@@ -60,6 +136,18 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
   }
   if (isWorldfile) {
     params.push('WORLDFILE=true');
+  }
+  // handle adding coordinates marker
+  if (markerCoordinates.length > 0) {
+    // transform for WVS
+    const coordinates = coordinatesCRSTransform(markerCoordinates, 'EPSG:4326', crs);
+    const [longitude, latitude] = coordinates;
+    // prevent marker requests outside selected bounding box
+    const bboxExtent = boundingExtent([lonlats[0], lonlats[1]]);
+    const coordinatesWithinBbox = containsCoordinate(bboxExtent, coordinates);
+    if (coordinatesWithinBbox) {
+      params.push(`MARKER=${longitude},${latitude}`);
+    }
   }
   return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
@@ -269,4 +357,53 @@ export function getPercentageFromPixel(maxDimension, dimension) {
 }
 export function getPixelFromPercentage(maxDimension, percent) {
   return Math.round((percent / 100) * maxDimension);
+}
+
+/**
+ * Find if there are layers that cannot be downloaded
+ * @param {Array} visibleLayers
+ *
+ * @return {Bool}
+ */
+export function hasNonDownloadableVisibleLayer(visibleLayers) {
+  return visibleLayers.some(({ disableSnapshot = false }) => disableSnapshot);
+}
+/**
+ * Get string of layers to be removed if alert is accepted
+ * @param {Array} nonDownloadableLayers
+ *
+ * @return {String}
+ */
+export function getNamesOfNondownloadableLayers(nonDownloadableLayers) {
+  let names = '';
+  if (nonDownloadableLayers.length) {
+    nonDownloadableLayers.forEach((obj) => {
+      const str = names ? `, ${obj.title || obj.id}` : obj.title || obj.id;
+      names += str;
+    });
+  }
+  return names;
+}
+/**
+ * Get warning that shows layers that will be removed if nofication is accepted
+ * @param {Array} nonDownloadableLayers
+ *
+ * @return {String}
+ */
+export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
+  const layerStr = getNamesOfNondownloadableLayers(nonDownloadableLayer);
+  if (!layerStr) return '';
+  const multiLayers = layerStr.indexOf(',') > -1;
+  const layerPluralStr = multiLayers ? 'layers' : 'layer';
+  const thisTheseStr = multiLayers ? 'these' : 'this';
+  return `The ${layerStr} ${layerPluralStr} cannot be included in a snapshot. Would you like to temporarily hide ${thisTheseStr} layer?`;
+}
+/**
+ * Get array of layers that will be removed if nofication is accepted
+ * @param {Array} visibleLayers
+ *
+ * @return {Array}
+ */
+export function getNonDownloadableLayers(visibleLayers) {
+  return visibleLayers.filter(({ disableSnapshot = false }) => disableSnapshot);
 }

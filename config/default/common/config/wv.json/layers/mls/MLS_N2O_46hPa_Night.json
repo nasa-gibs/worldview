@@ -7,9 +7,7 @@
       "description": "mls/MLS_N2O_46hPa_Night",
       "tags": "n2o",
       "group": "overlays",
-      "layergroup": [
-        "mls"
-      ],
+      "layergroup": "Nitrous Oxide",
       "product": "ML2N2O",
       "tracks": [
         "OrbitTracks_Aura_Descending"

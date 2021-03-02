@@ -7,10 +7,7 @@
       "description": "modis/terra/MODIS_Terra_L3_SST_Thermal_9km_Night_Annual",
       "group": "overlays",
       "tags": "ssc podaac PO.DAAC",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Sea Surface Temperature",
       "product": "MODIS_TERRA_L3_SST_THERMAL_ANNUAL_9KM_NIGHTTIME_V2014.0",
       "wrapadjacentdays": true,
       "daynight": [

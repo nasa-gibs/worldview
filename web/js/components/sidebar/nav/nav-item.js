@@ -7,13 +7,14 @@ const CustomNavItem = (props) => {
     isMobile,
     shouldHideInMobile,
     isDisabled,
-    title,
+    label,
     className,
     onTabClick,
     id,
     iconClassName,
     text,
   } = props;
+  const tabId = `${id}-sidebar-tab`;
   return (
     <NavItem
       style={
@@ -24,9 +25,10 @@ const CustomNavItem = (props) => {
     >
       <NavLink
         disabled={isDisabled}
-        title={title}
+        aria-label={label}
+        title={label}
         className={className}
-        id={`${id}-sidebar-tab`}
+        id={tabId}
         onClick={() => onTabClick(id)}
       >
         <i className={`productsIcon selected ${iconClassName}`} />
@@ -45,7 +47,7 @@ CustomNavItem.propTypes = {
   onTabClick: PropTypes.func,
   shouldHideInMobile: PropTypes.bool,
   text: PropTypes.string,
-  title: PropTypes.string,
+  label: PropTypes.string,
 };
 
 export default CustomNavItem;

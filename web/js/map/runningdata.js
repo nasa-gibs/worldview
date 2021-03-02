@@ -6,12 +6,10 @@ import {
 import util from '../util/util';
 import { getPalette } from '../modules/palettes/selectors';
 import {
-  runningData as runningDataAction,
-  clearRunningData as clearRunningDataAction,
-} from '../modules/map/actions';
-import {
   isFromActiveCompareRegion,
 } from '../modules/compare/util';
+
+const { events } = util;
 
 export default function MapRunningData(models, compareUi, store) {
   const self = this;
@@ -22,7 +20,7 @@ export default function MapRunningData(models, compareUi, store) {
   self.clearAll = function() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
-      store.dispatch(clearRunningDataAction());
+      events.trigger('map:running-data', dataObj);
     }
   };
   /*
@@ -53,14 +51,17 @@ export default function MapRunningData(models, compareUi, store) {
       if (!def) return;
       const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-      if (!isRenderedFeature || !isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
-      let color;
+      if (!isRenderedFeature || !isFromActiveCompareRegion(pixels, layer.wv, state.compare, swipeOffset)) return;
+
+      const hasPalette = !lodashIsEmpty(def.palette);
+      if (!hasPalette) return;
       const identifier = def.palette.styleProperty;
       const layerId = def.id;
       const paletteLegends = getPalette(layerId, undefined, undefined, state);
       const { legend } = paletteLegends;
 
       if (!identifier && legend.colors.length > 1) return;
+      let color;
       if (identifier) {
         const properties = feature.getProperties();
         const value = properties[identifier] || def.palette.unclassified;
@@ -80,7 +81,7 @@ export default function MapRunningData(models, compareUi, store) {
     map.forEachLayerAtPixel(pixels, (layer, data) => {
       if (!layer.wv) return;
       const { def } = layer.wv;
-      if (!isFromActiveCompareRegion(map, pixels, layer.wv, state.compare, swipeOffset)) return;
+      if (!isFromActiveCompareRegion(pixels, layer.wv, state.compare, swipeOffset)) return;
       if (def.palette && !lodashGet(layer, 'wv.def.disableHoverValue')) {
         activeLayerObj[def.id] = {
           paletteLegends: getPalette(def.id, undefined, undefined, state),
@@ -90,7 +91,7 @@ export default function MapRunningData(models, compareUi, store) {
     });
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
-      store.dispatch(runningDataAction(dataObj));
+      events.trigger('map:running-data', dataObj);
     }
   };
   return self;

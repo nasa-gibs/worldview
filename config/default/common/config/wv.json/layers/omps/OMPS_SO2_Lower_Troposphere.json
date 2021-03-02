@@ -8,9 +8,7 @@
       "tags": "SO2, sulphur",
       "group": "overlays",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "omps"
-      ],
+      "layergroup": "Sulfur Dioxide",
       "product": "NMSO2-PCA-L2",
       "tracks": [
         "OrbitTracks_Suomi_NPP_Ascending"

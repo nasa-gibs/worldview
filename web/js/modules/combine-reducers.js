@@ -4,6 +4,7 @@ import { get as lodashGet, assign as lodashAssign } from 'lodash';
 import { modalReducer, modalAboutPage } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
+import { locationSearchReducer } from './location-search/reducers';
 import { shortLink } from './link/reducers';
 import {
   requestedEvents,
@@ -35,7 +36,6 @@ import {
   vectorStyleReducer,
   getInitialVectorStyleState,
 } from './vector-styles/reducers';
-import dataDownloadReducer from './data/reducers';
 import { imageDownloadReducer } from './image-download/reducers';
 import measureReducer from './measure/reducers';
 import {
@@ -105,6 +105,7 @@ const reducers = {
   modal: modalReducer,
   date: dateReducer,
   feedback: feedbackReducer,
+  locationSearch: locationSearchReducer,
   notifications: notificationsReducer,
   config: defaultReducer,
   models: defaultReducer,
@@ -114,7 +115,6 @@ const reducers = {
   compare: compareReducer,
   layers: layerReducer,
   events: eventsReducer,
-  data: dataDownloadReducer,
   palettes: paletteReducer,
   vectorStyles: vectorStyleReducer,
   tour: tourReducer,

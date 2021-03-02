@@ -1,0 +1,54 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Atmosphere": {
+                "title": "Atmosphere",
+                "id": "atmosphere",
+                "image": "atmosphere.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Albedo",
+                    "Aerosol Index",
+                    "Aerosol Optical Depth",
+                    "Cloud Albedo",
+                    "Carbon Dioxide",
+                    "Carbon Monoxide",
+                    "Clear Sky Confidence",
+                    "Cloud Effective Radius",
+                    "Cloud Fraction",
+                    "Cloud Liquid Water",
+		            "Cloud Multi Layer Flag",
+                    "Cloud Optical Thickness",
+                    "Cloud Phase",
+                    "Cloud Pressure",
+                    "Cloud Top Height",
+                    "Cloud Top Temperature",
+                    "Cloud Water Path",
+                    "Convective Rainwater Source",
+                    "Dust",
+                    "Evaporation",
+                    "Geostationary",
+                    "Land Surface Temperature",
+                    "Lightning",
+                    "Methane",
+                    "Nitric Acid",
+                    "Nitrogen Dioxide",
+                    "Nitrous Oxide",
+                    "Outgoing Radiation",
+                    "Ozone",
+                    "Particulate Matter",
+                    "Precipitation Estimate",
+		            "Precipitation Rate",
+                    "Radiation",
+                    "Relative Humidity",
+                    "Sulfur Dioxide",
+                    "Temperature",
+                    "TOA Albedo",
+                    "TOA Flux",
+                    "Water Vapor",
+                    "Wind Speed"
+                ]
+            }
+        }
+    }
+}

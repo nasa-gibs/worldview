@@ -5,6 +5,7 @@ import {
   SELECT_EVENT,
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
+  SELECT_CATEGORY,
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
   FINISHED_ANIMATING_TO_EVENT,
@@ -47,8 +48,6 @@ export function selectEvent(id, date) {
 export function deselectEvent(id, date) {
   return {
     type: DESELECT_EVENT,
-    id,
-    date,
   };
 }
 
@@ -57,6 +56,14 @@ export function showAll() {
     type: SHOW_ALL_EVENTS,
   };
 }
+
+export function selectCategory(category) {
+  return {
+    type: SELECT_CATEGORY,
+    category,
+  };
+}
+
 export function toggleListAll() {
   return {
     type: TOGGLE_SHOW_ALL,

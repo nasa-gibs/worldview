@@ -13,7 +13,6 @@ import {
   Tooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 import BrowseLayerList from './browse-layers-list';
 import CategoryGrid from './category-grid';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
@@ -30,25 +29,10 @@ import {
 import RecentLayersList from './recent-layers';
 import safeLocalStorage from '../../../../util/local-storage';
 
-const CATEGORIES = [
-  'hazards and disasters',
-  'scientific',
-  'featured',
-];
-const GEOGRAPHIC_TAB_KEYS = [
-  ...CATEGORIES,
-];
-const POLAR_TAB_KEYS = [
-  'measurements',
-];
-if (safeLocalStorage.enabled) {
-  GEOGRAPHIC_TAB_KEYS.push('recent');
-  POLAR_TAB_KEYS.push('recent');
-}
-
 function BrowseLayers (props) {
   const {
     browser,
+    categoryTabNames,
     categoryType,
     mode,
     width,
@@ -60,6 +44,17 @@ function BrowseLayers (props) {
     toggleRecentLayersTab,
     clearRecentLayers,
   } = props;
+
+  const GEOGRAPHIC_TAB_KEYS = [
+    ...categoryTabNames,
+  ];
+  const POLAR_TAB_KEYS = [
+    'measurements',
+  ];
+  if (safeLocalStorage.enabled) {
+    GEOGRAPHIC_TAB_KEYS.push('recent');
+    POLAR_TAB_KEYS.push('recent');
+  }
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [tooltipVisible, toggleTooltip] = useState(false);
@@ -83,7 +78,7 @@ function BrowseLayers (props) {
       toggleRecentLayersTab();
     } else if (key === 'measurements') {
       toggleMeasurementsTab();
-    } else if (CATEGORIES.includes(key)) {
+    } else if (categoryTabNames.includes(key)) {
       selectCategoryType(key);
     }
   };
@@ -113,13 +108,13 @@ function BrowseLayers (props) {
       : 'layer-category-navigation');
     const recentTab = (sortKey) => (
       <NavLink onClick={() => selectTab(sortKey)}>
-        <FontAwesomeIcon icon={faClock} />
+        <FontAwesomeIcon icon="clock" />
         Recent
       </NavLink>
     );
     const tab = (sortKey) => (
       <NavLink onClick={() => selectTab(sortKey)}>
-        {sortKey === 'scientific' ? 'Science Disciplines' : sortKey}
+        {sortKey}
       </NavLink>
     );
 
@@ -158,7 +153,7 @@ function BrowseLayers (props) {
           <FontAwesomeIcon
             id="recent-tooltip-target"
             className="recent-tooltip-icon"
-            icon={faQuestionCircle}
+            icon="question-circle"
           />
           <Button
             id="clear-recent-layers"
@@ -181,7 +176,7 @@ function BrowseLayers (props) {
           className="categories-dropdown"
         >
           <DropdownToggle caret>
-            {categoryType === 'recent' && (<FontAwesomeIcon icon={faClock} />)}
+            {categoryType === 'recent' && (<FontAwesomeIcon icon="clock" />)}
             {categoryType}
           </DropdownToggle>
           <DropdownMenu className="categories-dropdown-menu">
@@ -218,6 +213,7 @@ function BrowseLayers (props) {
 
 BrowseLayers.propTypes = {
   browser: PropTypes.object,
+  categoryTabNames: PropTypes.array,
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
   mode: PropTypes.string,
@@ -248,7 +244,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const {
     config,
     browser,
@@ -268,6 +264,7 @@ function mapStateToProps(state, ownProps) {
     browser,
     mode,
     categoryType,
+    categoryTabNames: config.categoryGroupOrder,
     measurementConfig: config.measurements,
     layerConfig: layers.layerConfig,
     listScrollTop,

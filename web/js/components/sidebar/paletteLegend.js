@@ -9,28 +9,6 @@ import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/pal
 import util from '../../util/util';
 
 /**
-   * @param {Number} index | Selected label Index
-   * @param {Number} boxWidth | Width of Each label box
-   * @param {Number} textWidth | Label width
-   * @param {Number} width | Case width
-   */
-// const getClassLabelStyle = (index, boxWidth, textWidth, width, rowEndIndex) => {
-//   const halfTextWidth = textWidth / 2 || 0;
-//   const xOffset = boxWidth * (index - rowEndIndex) + boxWidth / 2 || 0;
-
-//   if (halfTextWidth > xOffset) {
-//     return { textAlign: 'left', visibility: 'visible' };
-//   } if (xOffset + halfTextWidth > width) {
-//     return { textAlign: 'right', visibility: 'visible' };
-//   }
-//   return {
-//     marginLeft: `${xOffset - halfTextWidth}px`,
-//     visibility: 'visible',
-//     textAlign: 'left',
-//   };
-// };
-
-/**
    * Find wanted legend object from Hex
    * @param {Object} legend
    * @param {String} hex
@@ -82,7 +60,7 @@ class PaletteLegend extends React.Component {
   componentDidMount() {
     this.updateCanvas();
     this.setState(() => ({
-      scrollContainerEl: document.querySelector('#productsHolder .simplebar-wrapper'),
+      scrollContainerEl: document.querySelector('#layers-scroll-container'),
     }));
   }
 
@@ -168,7 +146,7 @@ class PaletteLegend extends React.Component {
    */
   updateCanvas() {
     const {
-      checkerBoardPattern, height, width, paletteLegends,
+      height, width, paletteLegends,
     } = this.props;
 
     paletteLegends.forEach((colorMap, index) => {
@@ -185,7 +163,6 @@ class PaletteLegend extends React.Component {
           const ctx = this[ctxStr].current.getContext('2d');
           drawSidebarPaletteOnCanvas(
             ctx,
-            checkerBoardPattern,
             colorMap.colors,
             width,
             height,
@@ -199,28 +176,6 @@ class PaletteLegend extends React.Component {
         }
       }
     });
-  }
-
-  /**
-   * Redraw canvas with selected colormap
-   * @param {*} ctxStr | String of wanted cavnas
-   * @param {*} checkerBoardPattern | Background for canvas threshold
-   * @param {*} colors | array of color values
-   */
-  drawOnCanvas(ctx, checkerBoardPattern, colors) {
-    const { height, width } = this.props;
-    ctx.fillStyle = checkerBoardPattern;
-    ctx.fillRect(0, 0, width, height);
-
-    if (colors) {
-      const bins = colors.length;
-      const binWidth = width / bins;
-      const drawWidth = Math.ceil(binWidth);
-      colors.forEach((color, i) => {
-        ctx.fillStyle = util.hexToRGBA(color);
-        ctx.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
-      });
-    }
   }
 
   /**
@@ -242,7 +197,7 @@ class PaletteLegend extends React.Component {
     const toolTipLength = legend.tooltips.length;
     // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = getLegendObject(legend, colorHex, 5); // {label,len,index}
+      legendObj = getLegendObject(legend, colorHex, 3); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
@@ -262,7 +217,7 @@ class PaletteLegend extends React.Component {
         className={
           legendObj ? 'wv-running wv-palettes-legend' : 'wv-palettes-legend'
         }
-        id={`${layer.id}_${legend.id}_${index}`}
+        id={`${util.encodeId(layer.id)}_${util.encodeId(legend.id)}_${index}`}
         key={`${layer.id}_${legend.id}_${index}`}
       >
         {isMoreThanOneColorBar ? (
@@ -272,10 +227,9 @@ class PaletteLegend extends React.Component {
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
-            id={`${layer.id}-${legend.id}${index}colorbar`}
+            id={`${util.encodeId(layer.id)}-${util.encodeId(legend.id)}${index}colorbar`}
             width={width}
             height={24}
-            style={{ width }}
             ref={this[`canvas_${index}`]}
             onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
             onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
@@ -332,7 +286,7 @@ class PaletteLegend extends React.Component {
   renderClasses(legend, legendIndex) {
     const { isRunningData, colorHex, scrollContainerEl } = this.state;
     const {
-      layer, parentLayer, layerGroupName, getPalette,
+      layer, parentLayer, compareState, getPalette,
     } = this.props;
     const activeKeyObj = isRunningData && colorHex && getLegendObject(legend, colorHex, 5);
     const legendClass = activeKeyObj
@@ -357,7 +311,7 @@ class PaletteLegend extends React.Component {
               let palletteClass = isActiveKey ? 'wv-active wv-palettes-class' : 'wv-palettes-class';
               const isSubLayer = !!parentLayer;
               const parentLayerId = isSubLayer ? `-${parentLayer.id}` : '';
-              const keyId = `${legend.id}-color${parentLayerId}-${layerGroupName}${keyIndex}`;
+              const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${util.encodeId(layer.id)}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
               const tooltipText = singleKey
@@ -446,7 +400,6 @@ PaletteLegend.defaultProps = {
   height: 12,
 };
 PaletteLegend.propTypes = {
-  checkerBoardPattern: PropTypes.object,
   colorHex: PropTypes.string,
   getPalette: PropTypes.func,
   height: PropTypes.number,
@@ -454,7 +407,7 @@ PaletteLegend.propTypes = {
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
   layer: PropTypes.object,
-  layerGroupName: PropTypes.string,
+  compareState: PropTypes.string,
   paletteId: PropTypes.string,
   paletteLegends: PropTypes.array,
   parentLayer: PropTypes.object,

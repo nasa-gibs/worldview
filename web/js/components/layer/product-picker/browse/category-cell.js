@@ -7,7 +7,6 @@ const CategoryCell = (props) => {
     measurementConfig,
     drawMeasurements,
     hasMeasurementSource,
-    categoryType,
   } = props;
   const bgImage = category.image
     ? `images/layers/categories/${category.image}`
@@ -21,9 +20,7 @@ const CategoryCell = (props) => {
   return (
     <div
       key={category.id}
-      className={
-          `layer-category layer-category${interestCssName(categoryType)}`
-        }
+      className="layer-category layer-category"
       id={category.id}
     >
       <div className="category-background-cover" style={categoryBgImage}>
@@ -98,15 +95,9 @@ const CategoryCell = (props) => {
     </div>
   );
 };
-const interestCssName = function(name) {
-  if (name === 'hazards and disasters') {
-    return 'legacy';
-  }
-  return name;
-};
+
 CategoryCell.propTypes = {
   category: PropTypes.object,
-  categoryType: PropTypes.string,
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
   measurementConfig: PropTypes.object,

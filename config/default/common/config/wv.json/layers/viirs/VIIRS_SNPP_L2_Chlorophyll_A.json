@@ -1,23 +1,21 @@
 {
-    "layers": {
-        "VIIRS_SNPP_L2_Chlorophyll_A": {
-            "id":       "VIIRS_SNPP_L2_Chlorophyll_A",
-            "title":    "Chlorophyll A (L2)",
-            "subtitle": "Suomi NPP / VIIRS",
-            "description": "viirs/VIIRS_SNPP_L2_Chlorophyll_A",
-            "tags":     "ocean color",
-            "group":    "overlays",
-            "layergroup": [
-              "viirs"
-            ],
-            "product":  "",
-            "wrapadjacentdays": true,
-            "tracks": [
-                "OrbitTracks_Suomi_NPP_Ascending"
-            ],
-            "daynight": [
-              "day"
-            ]
-        }
+  "layers": {
+    "VIIRS_SNPP_L2_Chlorophyll_A": {
+      "id": "VIIRS_SNPP_L2_Chlorophyll_A",
+      "title": "Chlorophyll a (L2)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_L2_Chlorophyll_A",
+      "tags": "ocean color",
+      "group": "overlays",
+      "layergroup": "Chlorophyll A",
+      "product": "",
+      "wrapadjacentdays": true,
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Ascending"
+      ],
+      "daynight": [
+        "day"
+      ]
     }
+  }
 }

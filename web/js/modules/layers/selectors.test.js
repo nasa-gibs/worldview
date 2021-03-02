@@ -8,6 +8,7 @@ import {
   dateRange,
   pushToBottom,
   moveBefore,
+  getFutureLayerEndDate,
 } from './selectors';
 
 const config = fixtures.config();
@@ -16,9 +17,11 @@ function getState(layers) {
     config,
     proj: { id: 'geographic', selected: config.projections.geographic },
     layers: {
-      active: layers,
+      active: {
+        layers,
+      },
     },
-    compare: { isCompareA: true },
+    compare: { isCompareA: true, activeString: 'active' },
     date: { selected: new Date(Date.UTC(2014, 0, 1)) },
   };
 }
@@ -28,7 +31,7 @@ test('adds base layer', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers, 0);
   layers = addLayer('mask', {}, layers, config.layers, 1);
 
-  const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
+  const layerList = getLayers(getState(layers), {}).map((x) => x.id);
 
   expect(layerList).toEqual(['mask', 'terra-cr', 'terra-aod']);
 });
@@ -38,7 +41,7 @@ test('adds overlay layer', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers, 0);
   layers = addLayer('combo-aod', {}, layers, config.layers, 1);
 
-  const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
+  const layerList = getLayers(getState(layers), {}).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'combo-aod', 'terra-aod']);
 });
 
@@ -47,7 +50,7 @@ test('does not add duplicate layer', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers, 0);
   layers = addLayer('terra-cr', {}, layers, config.layers, 1);
 
-  const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
+  const layerList = getLayers(getState(layers), {}).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'terra-aod']);
 });
 
@@ -63,7 +66,7 @@ test('resets to default layers', () => {
     ],
     config.layers,
   );
-  const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
+  const layerList = getLayers(getState(layers), {}).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'terra-aod']);
 });
 
@@ -73,7 +76,7 @@ test('gets layers in reverse', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
 
-  const layerList = getLayers(layers, { reverse: true }, getState(layers)).map(
+  const layerList = getLayers(getState(layers), { reverse: true }).map(
     (x) => x.id,
   );
   expect(layerList).toEqual(['terra-cr', 'aqua-cr', 'terra-aod', 'aqua-aod']);
@@ -85,9 +88,8 @@ test('gets base layers', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
   const layerList = getLayers(
-    layers,
-    { group: 'baselayers' },
     getState(layers),
+    { group: 'baselayers' },
   ).map((x) => x.id);
   expect(layerList).toEqual(['aqua-cr', 'terra-cr']);
 });
@@ -98,9 +100,8 @@ test('gets overlay layers', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
   const layerList = getLayers(
-    layers,
-    { group: 'overlays' },
     getState(layers),
+    { group: 'overlays' },
   ).map((x) => x.id);
   expect(layerList).toEqual(['aqua-aod', 'terra-aod']);
 });
@@ -111,30 +112,33 @@ test('gets all groups', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
 
-  const layerList = getLayers(layers, { group: 'all' }, getState(layers));
+  const layerList = getLayers(getState(layers), { group: 'all' });
   expect(layerList.baselayers[0].id).toBe('aqua-cr');
   expect(layerList.baselayers[1].id).toBe('terra-cr');
   expect(layerList.overlays[0].id).toBe('aqua-aod');
   expect(layerList.overlays[1].id).toBe('terra-aod');
 });
 
-test('gets layers for other projection', () => {
-  let layers = addLayer('terra-cr', {}, [], config.layers);
-  layers = addLayer('aqua-cr', {}, layers, config.layers);
-  layers = addLayer('terra-aod', {}, layers, config.layers);
-  layers = addLayer('aqua-aod', {}, layers, config.layers);
-  const layerList = getLayers(layers, { proj: 'arctic' }, getState(layers)).map(
-    (x) => x.id,
-  );
-  expect(layerList).toEqual(['aqua-cr', 'terra-cr']);
-});
+// NOTE: Not currently using getLayers to get layers from any
+// projection other than the currently active proj
+
+// test('gets layers for other projection', () => {
+//   let layers = addLayer('terra-cr', {}, [], config.layers);
+//   layers = addLayer('aqua-cr', {}, layers, config.layers);
+//   layers = addLayer('terra-aod', {}, layers, config.layers);
+//   layers = addLayer('aqua-aod', {}, layers, config.layers);
+//   const layerList = getLayers(getState(layers), { proj: 'arctic' }).map(
+//     (x) => x.id,
+//   );
+//   expect(layerList).toEqual(['aqua-cr', 'terra-cr']);
+// });
 
 test('obscured base layer is not renderable', () => {
   let layers = addLayer('terra-cr', {}, [], config.layers);
   layers = addLayer('aqua-cr', {}, layers, config.layers);
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
-  const layerList = getLayers(layers, { renderable: true }, getState(layers)).map(
+  const layerList = getLayers(getState(layers), { renderable: true }).map(
     (x) => x.id,
   );
   expect(layerList).toEqual(['aqua-cr', 'aqua-aod', 'terra-aod']);
@@ -146,7 +150,7 @@ test('base layer is not obscured by a hidden layer', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
 
-  const layerList = getLayers(layers, { renderable: true }, getState(layers)).map(
+  const layerList = getLayers(getState(layers), { renderable: true }).map(
     (x) => x.id,
   );
   expect(layerList).toEqual(['terra-cr', 'aqua-aod', 'terra-aod']);
@@ -158,7 +162,7 @@ test('layer with zero opacity is not renderable', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', { opacity: 0 }, layers, config.layers);
 
-  const layerList = getLayers(layers, { renderable: true }, getState(layers)).map(
+  const layerList = getLayers(getState(layers), { renderable: true }).map(
     (x) => x.id,
   );
   expect(layerList).toEqual(['aqua-cr', 'terra-aod']);
@@ -174,7 +178,7 @@ test('layer outside date range is not renderable', () => {
     date: { selected: { $set: new Date(Date.UTC(2001, 0, 1)) } },
   });
 
-  const layerList = getLayers(layers, { renderable: true }, state).map((x) => x.id);
+  const layerList = getLayers(state, { renderable: true }).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'terra-aod']);
 });
 
@@ -184,23 +188,26 @@ test('all layers are visible', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
 
-  const layerList = getLayers(layers, { visible: true }, getState(layers)).map(
+  const layerList = getLayers(getState(layers)).map(
     (x) => x.id,
   );
   expect(layerList).toEqual(['aqua-cr', 'terra-cr', 'aqua-aod', 'terra-aod']);
 });
 
-test('only visible layers', () => {
-  let layers = addLayer('terra-cr', { visible: false }, [], config.layers);
-  layers = addLayer('aqua-cr', {}, layers, config.layers);
-  layers = addLayer('terra-aod', { visible: false }, layers, config.layers);
-  layers = addLayer('aqua-aod', {}, layers, config.layers);
+// NOTE: Not currently using getLayers to retrive layers that are
+// specifically either visible or not visible
 
-  const layerList = getLayers(layers, { visible: true }, getState(layers)).map(
-    (x) => x.id,
-  );
-  expect(layerList).toEqual(['aqua-cr', 'aqua-aod']);
-});
+// test('only visible layers', () => {
+//   let layers = addLayer('terra-cr', { visible: false }, [], config.layers);
+//   layers = addLayer('aqua-cr', {}, layers, config.layers);
+//   layers = addLayer('terra-aod', { visible: false }, layers, config.layers);
+//   layers = addLayer('aqua-aod', {}, layers, config.layers);
+
+//   const layerList = getLayers(getState(layers), { visible: true }).map(
+//     (x) => x.id,
+//   );
+//   expect(layerList).toEqual(['aqua-cr', 'aqua-aod']);
+// });
 
 test('push overlay to bottom', () => {
   let layers = addLayer('terra-cr', {}, [], config.layers);
@@ -208,7 +215,7 @@ test('push overlay to bottom', () => {
   layers = addLayer('terra-aod', {}, layers, config.layers);
   layers = addLayer('aqua-aod', {}, layers, config.layers);
   layers = pushToBottom('aqua-cr', layers);
-  const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
+  const layerList = getLayers(getState(layers), {}).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'aqua-cr', 'aqua-aod', 'terra-aod']);
 });
 
@@ -219,7 +226,7 @@ test('move base layer before', () => {
   layers = addLayer('aqua-aod', {}, layers, config.layers);
   moveBefore('terra-cr', 'aqua-cr', layers);
 
-  const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
+  const layerList = getLayers(getState(layers), {}).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'aqua-cr', 'aqua-aod', 'terra-aod']);
 });
 
@@ -230,7 +237,7 @@ test('move overlay before', () => {
   layers = addLayer('aqua-aod', {}, layers, config.layers);
   moveBefore('terra-aod', 'aqua-aod', layers);
 
-  const layerList = getLayers(layers, {}, getState(layers)).map((x) => x.id);
+  const layerList = getLayers(getState(layers), {}).map((x) => x.id);
   expect(layerList).toEqual(['aqua-cr', 'terra-cr', 'terra-aod', 'aqua-aod']);
 });
 
@@ -371,4 +378,28 @@ test('no date range with static', () => {
   const range = dateRange({}, layers, state.config);
 
   expect(range).toBeFalsy();
+});
+
+test('get future layer end date is 5 days after mock current date', () => {
+  const testLayer = { futureTime: '5D' };
+  // current date floored to quarter hour
+  const currentDate = util.roundTimeQuarterHour(new Date());
+  // test date to comopare is floored to quarter hour and added 5 days using util
+  const testDate = util.dateAdd(util.roundTimeQuarterHour(new Date()), 'day', 5);
+  const futureEndDate = getFutureLayerEndDate(testLayer);
+
+  const testDateMinutes = testDate.getUTCMinutes();
+  const testDateHours = testDate.getUTCHours();
+  const testDateDays = testDate.getUTCDate();
+
+  const minutesCompareFuture = futureEndDate.getUTCMinutes();
+  const hoursCompareFuture = futureEndDate.getUTCHours();
+  const daysCompareFuture = futureEndDate.getUTCDate();
+
+  // check that future date time is greater than current time (ms)
+  expect(futureEndDate.getTime()).toBeGreaterThan(currentDate.getTime());
+  // check for equality of unchanged date units (minutes/hours) and changed (days)
+  expect(testDateMinutes).toEqual(minutesCompareFuture);
+  expect(testDateHours).toEqual(hoursCompareFuture);
+  expect(testDateDays).toEqual(daysCompareFuture);
 });

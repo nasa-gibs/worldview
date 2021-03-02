@@ -4,11 +4,13 @@ import {
   uniqBy as lodashUniqBy,
 } from 'lodash';
 import {
+  ALL_CATEGORY,
   REQUEST_EVENTS,
   REQUEST_SOURCES,
   REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
+  SELECT_CATEGORY,
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
@@ -17,13 +19,20 @@ import {
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 
 const sortEvents = function(events) {
-  return events.map((e) => {
-    e.geometries = lodashOrderBy(e.geometries, 'date', 'desc');
-    // Discard duplicate geometry dates
-    e.geometries = lodashUniqBy(e.geometries, (g) => g.date.split('T')[0]);
-    return e;
-  });
+  return events
+    .map((e) => {
+      e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
+      // Discard duplicate geometry dates
+      e.geometry = lodashUniqBy(e.geometry, (g) => g.date.split('T')[0]);
+      return e;
+    })
+    .sort((eventA, eventB) => {
+      const dateA = new Date(eventA.geometry[0].date).valueOf();
+      const dateB = new Date(eventB.geometry[0].date).valueOf();
+      return dateB - dateA;
+    });
 };
+
 const formatResponse = function(item, ignored) {
   if (item.categories) {
     const category = Array.isArray(item.categories)
@@ -40,6 +49,7 @@ const formatResponse = function(item, ignored) {
 };
 
 export const eventsReducerState = {
+  prevSelected: null,
   selected: {
     id: '',
     date: null,
@@ -47,53 +57,67 @@ export const eventsReducerState = {
   active: false,
   showAll: true,
   isAnimatingToEvent: false,
+  category: ALL_CATEGORY,
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
   switch (action.type) {
     case SELECT_EVENT:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         selected: {
           id: action.id,
           date: action.date,
         },
         isAnimatingToEvent: true,
-      });
-
+      };
     case DESELECT_EVENT:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
+        prevSelected: state.selected,
         selected: {
           id: '',
           date: null,
         },
-      });
+      };
+    case SELECT_CATEGORY:
+      return {
+        ...state,
+        category: action.category,
+      };
     case SHOW_ALL_EVENTS:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         showAll: true,
-      });
+      };
     case TOGGLE_SHOW_ALL:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         showAll: !state.showAll,
-      });
+      };
     case ONLY_SHOW_VISIBLE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         showAll: false,
-      });
+      };
     case CHANGE_SIDEBAR_TAB: {
       const isActive = action.activeTab === 'events';
       if (isActive === state.active) return state;
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         active: isActive,
-      });
+      };
     }
     case FINISHED_ANIMATING_TO_EVENT:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         isAnimatingToEvent: false,
-      });
+      };
     default:
       return state;
   }
 }
+
 export const defaultRequestState = {
   isLoading: false,
   error: null,
@@ -101,13 +125,16 @@ export const defaultRequestState = {
   type: null,
   ignore: [],
 };
+
 export function eventRequestResponse(props = {}) {
   return lodashAssign({}, defaultRequestState, props);
 }
+
 export function eventsRequestReducer(actionName, state, action) {
   const START = `${actionName}_START`;
   const SUCCESS = `${actionName}_SUCCESS`;
   const FAILURE = `${actionName}_FAILURE`;
+
   switch (action.type) {
     case START:
       return eventRequestResponse({
@@ -115,6 +142,7 @@ export function eventsRequestReducer(actionName, state, action) {
         response: null,
       });
     case SUCCESS: {
+      // eslint-disable-next-line no-nested-ternary
       const key = actionName === REQUEST_EVENTS
         ? 'events'
         : actionName === REQUEST_CATEGORIES
@@ -122,8 +150,9 @@ export function eventsRequestReducer(actionName, state, action) {
           : 'sources';
       const filtered = action.response[key].filter((item) => formatResponse(item, state.ignore));
       return eventRequestResponse({
-        response:
-          actionName === REQUEST_EVENTS ? sortEvents(filtered) : filtered,
+        response: actionName === REQUEST_EVENTS
+          ? sortEvents(filtered)
+          : filtered,
         isLoading: false,
       });
     }
@@ -137,6 +166,7 @@ export function eventsRequestReducer(actionName, state, action) {
       return eventRequestResponse(state);
   }
 }
+
 export function requestedEvents(state = {}, action) {
   return eventsRequestReducer(REQUEST_EVENTS, state, action);
 }

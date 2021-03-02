@@ -32,7 +32,6 @@
 .wv-palettes-legend {
   position: relative;
   margin-top: 0;
-  margin-left: 5px;
 }
 .sidebar-panel div .colorbar-case {
   position: relative;
@@ -88,8 +87,7 @@
 }
 
 .wv-palettes-panel {
-  padding-left: 3px;
-  padding-right: 5px;
+  margin: 0 6px;
   width: auto;
   position: relative;
 }
@@ -171,10 +169,11 @@
 .wv-palettes-colorbar {
   height: 24px;
   margin-bottom: 13px;
-  max-width: 231px;
+  width: 100%;
+  max-width: 240px;
   margin-left: 0;
 }
-@media (max-width: 740px) {
+@media (max-width: 768px) {
   .wv-palettes-colorbar {
     width: 100%;
     max-width: 100%;

@@ -8,15 +8,8 @@
       "group": "overlays",
       "format": "image/png",
       "type": "wms",
-      "tileSize": [
-        512,
-        512
-      ],
       "period": "daily",
-      "layergroup": [
-        "reference",
-        "reference_orbits"
-      ],
+      "layergroup": "Orbital Track",
       "track": "descending",
       "startDate": "2018-12-01",
       "projections": {

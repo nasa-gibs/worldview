@@ -6,6 +6,10 @@ const {
   NOTIFICATION_MSG,
 } = safeLocalStorage.keys;
 
+// Notifications containing this string in their path property will be treated
+// as layer notices which only show if the specified layers are in the active list
+const LAYER_NOTICE = 'layer-notice';
+
 /**
  * Categorizes the returned array
  * @function separateByType
@@ -13,54 +17,38 @@ const {
  * @param {object} obj - array from API
  * @returns {void}
  */
-export function separateByType(array) {
-  let type;
-  let subObj;
+export function separateByType(notifications) {
   const messages = [];
   const alerts = [];
   const outages = [];
+  const layerNotices = [];
+  const orderByDate = (obj) => {
+    obj.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return obj;
+  };
 
-  for (let i = 0, len = array.length; i < len; i += 1) {
-    subObj = array[i];
-    type = subObj.notification_type;
+  notifications.forEach((notification) => {
+    const { notification_type: type, path } = notification;
 
-    if (type === NOTIFICATION_MSG) {
-      messages.push(subObj);
-    } else if (type === NOTIFICATION_ALERT) {
-      alerts.push(subObj);
-    } else {
-      outages.push(subObj);
+    if (path.includes(LAYER_NOTICE)) {
+      layerNotices.push(notification);
+      return;
     }
-  }
+    if (type === NOTIFICATION_MSG) {
+      messages.push(notification);
+    } else if (type === NOTIFICATION_ALERT) {
+      alerts.push(notification);
+    } else if (type === NOTIFICATION_OUTAGE) {
+      outages.push(notification);
+    }
+  });
 
   return {
     messages: orderByDate(messages),
     alerts: orderByDate(alerts),
     outages: orderByDate(outages),
+    layerNotices: transformLayerNotices(orderByDate(layerNotices)),
   };
-}
-/**
- * Organizes array by date created
- * @function orderByDate
- * @private
- * @param {object} obj - array
- * @returns {void}
- */
-function orderByDate(obj) {
-  obj.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  return obj;
-}
-/**
- * Checks to see if id or smaller #id is in localstorage
- * @function localStorageValueMatches
- * @private
- * @param {String} property - name of category type
- * @param {string} value - id of notification
- * @returns {Boolean}
- */
-function localStorageValueMatches(property, value) {
-  const oldValue = safeLocalStorage.getItem(property);
-  return oldValue && new Date(value) <= new Date(oldValue);
 }
 
 /**
@@ -88,21 +76,26 @@ export function getPriority(sortedNotifications) {
   if (outage && !objectAlreadySeen(outage)) {
     priority = NOTIFICATION_OUTAGE;
   }
-
   return priority;
 }
+
 /**
  * Gets a total count of the unseen notifications
  * @function getCounts
  * @private
  * @returns {Number}
  */
-export function getCount({ messages, outages, alerts }) {
+export function getCount(notifications) {
+  const {
+    messages, outages, alerts,
+  } = notifications;
   const messageCount = getNumberOfTypeNotSeen(NOTIFICATION_MSG, messages);
   const alertCount = getNumberOfTypeNotSeen(NOTIFICATION_ALERT, alerts);
   const outageCount = getNumberOfTypeNotSeen(NOTIFICATION_OUTAGE, outages);
+
   return messageCount + outageCount + alertCount;
 }
+
 export function addToLocalStorage({ messages, outages, alerts }) {
   const [message] = messages;
   const [outage] = outages;
@@ -118,6 +111,7 @@ export function addToLocalStorage({ messages, outages, alerts }) {
     safeLocalStorage.setItem(NOTIFICATION_MSG, message.created_at);
   }
 }
+
 /**
  * Determines the number of status of this type that the user is yet to see
  * @function getNumberOfTypeNotSeen
@@ -145,6 +139,7 @@ export function getNumberOfTypeNotSeen(type, arra) {
 
   return count;
 }
+
 /**
  * Determines if most recent notification has already been seen
  * @function objectAlreadySeen
@@ -157,10 +152,30 @@ function objectAlreadySeen(obj) {
   const idString = obj.created_at.toString();
   let fieldValueMatches = false;
   const fieldExists = !!safeLocalStorage.getItem(type);
+  const localStorageValueMatches = (property, value) => {
+    const oldValue = safeLocalStorage.getItem(property);
+    return oldValue && new Date(value) <= new Date(oldValue);
+  };
 
   if (fieldExists) {
     fieldValueMatches = localStorageValueMatches(type, idString);
   }
-
   return fieldValueMatches;
+}
+
+export function transformLayerNotices(notifications) {
+  return notifications.map((notice) => {
+    const splitPath = notice.path.split('/');
+    const layers = splitPath.slice(2, splitPath.length);
+    return {
+      ...notice,
+      layers,
+    };
+  });
+}
+
+export function getLayerNoticesForLayer(layer, notifications) {
+  const { layerNotices } = notifications.object;
+  const notices = (layerNotices || []).filter((notice) => notice.layers.includes(layer));
+  return notices.reduce((noticeStr, notice) => `${noticeStr}  <div>${notice.message}</div>`, '');
 }

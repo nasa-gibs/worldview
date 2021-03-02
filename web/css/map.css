@@ -12,9 +12,27 @@
 .wv-map-zoom {
   right: 10px;
   position: absolute;
-  z-index: 10000;
+  z-index: 1;
   background: none rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
+  margin-right: 0;
+  border-radius: 0;
+  padding: 0;
+  color: #eee;
+  &:hover {
+    background-color: #fff;
+    color: #1a1a1a;
+    border: 1px solid #333;
+    &[disabled] {
+      opacity: 0.5;
+      color: #eee;
+      background-color: #333;
+      cursor: not-allowed;
+    }
+  }
+  &[disabled] {
+    opacity: 0.5;
+  }
 }
 
 .wv-map-zoom.ui-button-click-prevent {
@@ -25,17 +43,13 @@
   opacity: 0.4;
 }
 
-.wv-map-zoom svg.svg-inline--fa {
+.wv-map-zoom svg.svg-inline--fa,
+.wv-map-rotate-left svg.svg-inline--fa,
+.wv-map-rotate-right svg.svg-inline--fa {
   display: block;
-  width: 40px;
-  padding: 14px;
-  height: 45px;
-}
-
-.wv-map-zoom:hover {
-  background-color: #fff;
-  color: #1a1a1a;
-  border: 1px solid #333;
+  width: 36px;
+  padding: 12px;
+  height: 37px;
 }
 
 .wv-map-zoom-in {
@@ -45,15 +59,16 @@
 }
 
 .wv-map-zoom-out {
-  top: 195px;
+  top: 188px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 
 .wv-map-reset-rotation {
-  top: 296px;
+  top: 290px;
   border: 1px solid #333;
   height: 54px;
+  width: 38px;
 }
 
 .wv-map-rotate-left {
@@ -63,31 +78,84 @@
 }
 
 .wv-map-rotate-right {
-  top: 350px;
+  top: 344px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 
-@media only screen and (max-device-width: 740px) and (orientation: landscape) {
-  .wv-map-reset-rotation {
-    top: auto;
-    bottom: 5px;
-    right: 53px;
+@media (max-width: 768px) {
+  .wv-map-zoom-in,
+  .wv-map-zoom-out {
+    display: none;
   }
-
   .wv-map-rotate-left {
-    top: auto;
-    bottom: 5px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 0;
-    right: 96px;
+    top: 96px;
   }
-
   .wv-map-rotate-right {
-    top: auto;
-    bottom: 5px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 0;
+    top: 187px;
+  }
+  .wv-map-rotate-left svg.svg-inline--fa,
+  .wv-map-rotate-right svg.svg-inline--fa {
+    width: 47px;
+    padding: 8px;
+  }
+  .wv-map-reset-rotation {
+    top: 134px;
+    font-size: 1.35em;
+    width: 49px;
+  }
+}
+
+@media (max-height: 667px) {
+  .wv-map-zoom-in {
+    top: calc(var(--vh, 1vh) * 100 - 516px);
+  }
+  .wv-map-zoom-out {
+    top: calc(var(--vh, 1vh) * 100 - 478px);
+  }
+  .wv-map-rotate-left {
+    top: calc(var(--vh, 1vh) * 100 - 415px);
+  }
+  .wv-map-reset-rotation {
+    top: calc(var(--vh, 1vh) * 100 - 376px);
+  }
+  .wv-map-rotate-right {
+    top: calc(var(--vh, 1vh) * 100 - 322px);
+  }
+}
+
+@media (max-height: 578px) {
+  .wv-map-zoom-in {
+    top: 58px;
+  }
+  .wv-map-zoom-out {
+    top: 96px;
+  }
+  .wv-map-rotate-left {
+    top: 160px;
+  }
+  .wv-map-reset-rotation {
+    top: 198px;
+  }
+  .wv-map-rotate-right {
+    top: 251px;
+  }
+}
+
+/* handle rotation and zoom button placement on large landscape device (like iPhone X) */
+@media only screen and (max-device-height: 375px) and (orientation: landscape) {
+  .wv-map-zoom-in,
+  .wv-map-zoom-out, {
+    display: none;
+  }
+  .wv-map-rotate-left {
+    top: 58px;
+  }
+  .wv-map-reset-rotation {
+    top: 96px;
+  }
+  .wv-map-rotate-right {
+    top: 149px;
   }
 }
 
@@ -95,24 +163,23 @@
 .wv-map-scale-metric {
   position: absolute;
   z-index: 10;
-  right: 75px;
+  right: 58px;
   color: #fff;
   background-color: rgba(40, 40, 40, 0.85);
   text-shadow: -1px -1px 0 #000,
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000;
-  padding: 3px;
+  padding: 2px;
   border-left: 2px solid #fff;
-  border-right: 2px solid #fff;
 }
 .wv-map-scale-imperial {
-  bottom: 150px;
+  bottom: 148px;
   border-top: 2px solid #fff;
 }
 
 .wv-map-scale-metric {
-  bottom: 169px;
+  bottom: 165px;
   border-bottom: 2px solid #fff;
 }
 

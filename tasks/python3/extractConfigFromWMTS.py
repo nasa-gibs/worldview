@@ -14,7 +14,7 @@ prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
 version = "2.0.0"
 help_description = """\
-Extracts configuration information from a WMTS GetCapabilities file.
+Extracts configuration information from a WMTS GetCapabilities file, converts the XML to JSON
 """
 
 parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,

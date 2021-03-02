@@ -44,7 +44,7 @@ describe('notificationsReducer', () => {
   });
   test(
     `${constants.SET_NOTIFICATIONS
-    }action type should return object containing sorted mock object`,
+    } action type should return object containing sorted mock object`,
     () => {
       expect(
         notificationsReducer([], {
@@ -61,7 +61,7 @@ describe('notificationsReducer', () => {
   );
   test(
     `${constants.SET_NOTIFICATIONS
-    }action type should return object containing sorted mock object`,
+    } action type should return object containing sorted mock object`,
     () => {
       expect(
         notificationsReducer(notificationReducerState, {

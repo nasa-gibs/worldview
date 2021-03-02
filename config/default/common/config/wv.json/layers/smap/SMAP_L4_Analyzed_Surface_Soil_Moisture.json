@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Model Value-Added",
       "description": "smap/SMAP_L4_Analyzed_Surface_Soil_Moisture",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "SPL4SMAU",
       "wrapadjacentdays": true
     }

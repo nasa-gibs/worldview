@@ -6,9 +6,7 @@
       "subtitle": "SMAP / Radar",
       "description": "smap/SMAP_L3_Active_Sigma0_HH_RFI",
       "group": "overlays",
-      "layergroup": [
-        "smap"
-      ],
+      "layergroup": "Sigma0",
       "inactive": true,
       "wrapadjacentdays": true
     }

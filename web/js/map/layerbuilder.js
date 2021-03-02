@@ -18,8 +18,9 @@ import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
-import { createVectorUrl, mergeBreakpointLayerAttributes } from './util';
+import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import getSelectedDate from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
   getKey as getPaletteKeys,
@@ -93,7 +94,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.createLayer = function(def, options) {
     const state = store.getState();
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
     const group = options.group || null;
     const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
@@ -107,7 +107,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
 
     if (!layer) {
       // layer is not in the cache
-      if (!date) date = options.date || state.date[activeDateStr];
+      if (!date) date = options.date || getSelectedDate(state);
       const cacheOptions = getCacheOptions(def.period, date, state);
       const attributes = {
         id: def.id,
@@ -178,48 +178,38 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.getRequestDates = function(def, options) {
     const state = store.getState();
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    const stateCurrentDate = new Date(state.date[activeDateStr]);
+    const stateCurrentDate = new Date(getSelectedDate(state));
     const previousLayer = options.previousLayer || {};
-    let date = options.date || stateCurrentDate;
+    let closestDate = options.date || stateCurrentDate;
+
     let previousDateFromRange;
     let previousLayerDate = previousLayer.previousDate;
     let nextLayerDate = previousLayer.nextDate;
-    if (!state.animation.isPlaying) {
-      // need to get previous available date to prevent unnecessary requests
-      let dateRange;
-      if (previousLayer.previousDate && previousLayer.nextDate) {
-        const dateTime = date.getTime();
-        const previousDateTime = previousLayer.previousDate.getTime();
-        const nextDateTime = previousLayer.nextDate.getTime();
-        // if current date is outside previous and next dates available, recheck range
-        if (dateTime <= previousDateTime || dateTime >= nextDateTime) {
-          dateRange = datesinDateRanges(def, date);
-          const { next, previous } = prevDateInDateRange(def, date, dateRange);
-          previousDateFromRange = previous;
-          previousLayerDate = previous;
-          nextLayerDate = next;
-        } else {
-          previousDateFromRange = previousLayer.previousDate;
-        }
-      } else {
-        dateRange = datesinDateRanges(def, date);
-        const { next, previous } = prevDateInDateRange(def, date, dateRange);
-        previousDateFromRange = previous;
-        previousLayerDate = previous;
-        nextLayerDate = next;
-      }
+
+    const dateTime = closestDate.getTime();
+    // if current date is outside previous and next available dates, recheck date range
+    if (previousLayerDate && nextLayerDate
+      && dateTime > previousLayerDate.getTime()
+      && dateTime < nextLayerDate.getTime()
+    ) {
+      previousDateFromRange = previousLayerDate;
+    } else {
+      const dateRange = datesinDateRanges(def, closestDate);
+      const { next, previous } = prevDateInDateRange(def, closestDate, dateRange);
+      previousDateFromRange = previous;
+      previousLayerDate = previous;
+      nextLayerDate = next;
     }
 
     if (def.period === 'subdaily') {
-      date = nearestInterval(def, date);
+      closestDate = nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
-      date = util.clearTimeUTC(previousDateFromRange);
+      closestDate = util.clearTimeUTC(previousDateFromRange);
     } else {
-      date = util.clearTimeUTC(date);
+      closestDate = util.clearTimeUTC(closestDate);
     }
 
-    return { closestDate: date, previousDate: previousLayerDate, nextDate: nextLayerDate };
+    return { closestDate, previousDate: previousLayerDate, nextDate: nextLayerDate };
   };
 
   /**
@@ -320,7 +310,6 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   const createLayerWMTS = function(def, options, day, state) {
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const proj = state.proj.selected;
     const source = config.sources[def.source];
     if (!source) {
@@ -330,7 +319,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
-    let date = options.date || state.date[activeDateStr];
+    let date = options.date || getSelectedDate(state);
     if (def.period === 'subdaily' && !date) {
       date = self.getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
@@ -368,6 +357,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     }
     return new OlLayerTile({
       preload: Infinity,
+      className: def.id,
       extent,
       source: new OlSourceWMTS(sourceOptions),
     });
@@ -382,14 +372,13 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     * @param {object} attributes
     */
   const createLayerVector = function(def, options, day, state, attributes) {
-    const { proj, compare, animation } = state;
+    const { proj, animation } = state;
     let date;
     let gridExtent;
     let matrixIds;
     let start;
     let layerExtent;
     const selectedProj = proj.selected;
-    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const source = config.sources[def.source];
     const animationIsPlaying = animation.isPlaying;
     gridExtent = selectedProj.maxExtent;
@@ -426,7 +415,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
 
     const layerName = def.layer || def.id;
     const tileMatrixSet = def.matrixSet;
-    date = options.date || state.date[activeDateStr];
+    date = options.date || getSelectedDate(state);
 
     if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
     const urlParameters = createVectorUrl(date, layerName, tileMatrixSet);
@@ -457,6 +446,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
       extent: layerExtent,
       source: sourceOptions,
       renderMode: 'image',
+      className: def.id,
       vector: true,
       preload: 10,
       ...isMaxBreakPoint && { maxResolution: breakPointResolution },
@@ -495,8 +485,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    * @returns {object} OpenLayers WMS layer
    */
   const createLayerWMS = function(def, options, day, state) {
-    const { proj, compare } = state;
-    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    const { proj } = state;
     const selectedProj = proj.selected;
     let urlParameters;
     let date;
@@ -514,19 +503,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
 
     const transparent = def.format === 'image/png';
     if (selectedProj.id === 'geographic') {
-      res = [
-        0.28125,
-        0.140625,
-        0.0703125,
-        0.03515625,
-        0.017578125,
-        0.0087890625,
-        0.00439453125,
-        0.002197265625,
-        0.0010986328125,
-        0.00054931640625,
-        0.00027465820313,
-      ];
+      res = getGeographicResolutionWMS(def.tileSize);
     }
     if (day) {
       if (day === 1) {
@@ -549,7 +526,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
 
     urlParameters = '';
 
-    date = options.date || state.date[activeDateStr];
+    date = options.date || getSelectedDate(state);
     if (day && def.wrapadjacentdays) {
       date = util.dateAdd(date, 'day', day);
     }
@@ -576,6 +553,7 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const layer = new OlLayerTile({
       preload: Infinity,
+      className: def.id,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
       source: new OlSourceTileWMS(sourceOptions),

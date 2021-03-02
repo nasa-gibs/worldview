@@ -10,7 +10,7 @@ import { getOrbitTrackTitle } from '../../../modules/layers/util';
 export default function RenderSplitLayerTitle(props) {
   const { layer } = props;
   const { title, subtitle } = layer;
-  const layerIsOrbitTrack = (layer.layergroup || []).includes('reference_orbits');
+  const layerIsOrbitTrack = layer.layergroup === 'Orbital Track';
   const layerTitle = !layerIsOrbitTrack ? title : `${title} (${getOrbitTrackTitle(layer)})`;
   const splitIdx = layerTitle.indexOf('(');
   const attrs = layerTitle.slice(splitIdx);

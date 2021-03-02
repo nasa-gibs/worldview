@@ -1,6 +1,12 @@
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
 import util from '../../util/util';
+import { layersParse12 } from '../layers/util';
+import {
+  dateRange as getDateRange, getActiveLayers,
+} from '../layers/selectors';
+
+export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 
 export function serializeDate(date) {
   return (
@@ -25,12 +31,145 @@ export function tryCatchDate(str, initialState) {
 }
 
 /**
+ * Serialize date A for location
+ *
+ * @method serializeDateWrapper
+ * @param  {Object} currentItemState
+ * @param  {Object} state
+ * @param  {Object} prev
+ * @returns {String | undefined} serialized time string OR undefined
+ */
+export function serializeDateWrapper(currentItemState, state, prev) {
+  const prevParams = Object.keys(prev).length > 0;
+  const initialDate = get(state, 'config.initialDate');
+  const initialDateString = util.toISOStringSeconds(initialDate);
+  const compareIsActive = get(state, 'compare.active');
+  const isCompareA = get(state, 'compare.isCompareA');
+
+  // exit compare mode with dateB selected, dateB now primary date 't='
+  const dateBSelected = !compareIsActive && !isCompareA;
+  if (dateBSelected) {
+    const dateB = get(state, 'date.selectedB');
+    const defaultDateB = util.toISOStringSeconds(dateB) === initialDateString;
+    return !prevParams && defaultDateB
+      ? undefined
+      : serializeDate(dateB);
+  }
+  // dateA 't=' serialization
+  const defaultDate = util.toISOStringSeconds(currentItemState) === initialDateString;
+  return !prevParams && defaultDate
+    ? undefined
+    : serializeDate(currentItemState);
+}
+
+/**
+ * Serialize date B for location
+ *
+ * @method serializeDateBWrapper
+ * @param  {Object} currentItemState
+ * @param  {Object} state
+ * @param  {Object} prev
+ * @returns {String | undefined} serialized time string OR undefined
+ */
+export function serializeDateBWrapper(currentItemState, state, prev) {
+  const prevParams = Object.keys(prev).length > 0;
+  const initialDate = get(state, 'config.initialDate');
+  const compareIsActive = get(state, 'compare.active');
+  if (!compareIsActive) return undefined;
+
+  const initialDateString = util.toISOStringSeconds(initialDate);
+  const appNowMinusSevenDays = util.dateAdd(initialDateString, 'day', -7);
+  const appNowMinusSevenDaysString = util.toISOStringSeconds(appNowMinusSevenDays);
+  // dateB 't1=' serialization
+  const defaultDate = util.toISOStringSeconds(currentItemState) === appNowMinusSevenDaysString;
+  return !prevParams && defaultDate
+    ? undefined
+    : serializeDate(currentItemState);
+}
+
+/**
+ * Parse permalink date string and handle max dates if out of valid range or in future
+ *
+ * @method parsePermalinkDate
+ * @param  {Object} date object (now or nowMinusSevenDays if B side for compare mode)
+ * @param  {String} date string in querystring
+ * @param  {String} layerParameters (A or B depending if compare mode is active)
+ * @param  {Object} config object
+ * @returns {Object} date object
+ */
+export function parsePermalinkDate(defaultDate, str, layerParameters, config) {
+  let time = tryCatchDate(str, defaultDate);
+  if (time instanceof Date) {
+    const startDate = new Date(config.startDate);
+    if (time < startDate) {
+      time = startDate;
+    } else if (time > defaultDate) {
+      // get permalink layers
+      const layersParsed = layersParse12(layerParameters, config);
+      const layersDateRange = getDateRange({}, layersParsed);
+      // determine max date "defaultDate" or use permalink layer futureTime
+      if (layersDateRange && layersDateRange.end) {
+        if (time > layersDateRange.end) {
+          time = layersDateRange.end;
+        }
+      } else {
+        time = defaultDate;
+      }
+    }
+  }
+  return time;
+}
+
+/**
+ * Checks the date provided against the active layers.
+ *
+ * @method getMaxActiveLayersDate
+ * @param  {Object} state
+ * @returns {Object} date object
+ */
+export function getMaxActiveLayersDate(state) {
+  const {
+    date, proj,
+  } = state;
+
+  const { appNow } = date;
+  const activeLayers = getActiveLayers(state);
+  const projection = proj.id;
+  const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
+  const layersDateRange = getDateRange({}, activeLayersFiltered);
+
+  let maxDate;
+  if (layersDateRange && layersDateRange.end > appNow) {
+    maxDate = layersDateRange.end;
+  } else {
+    maxDate = appNow;
+  }
+
+  return maxDate;
+}
+
+/**
+ * Checks the date provided against the active layers.
+ *
+ * @method getLayersActiveAtDate
+ * @param  {Array} layers
+ * @param  {Object} appNow date object
+ * @returns {Array} Array of max layer end dates
+ */
+export function getMaxLayerEndDates(layers, appNow) {
+  return layers.reduce((layerEndDates, { endDate }) => {
+    const layerEndDate = new Date(endDate || appNow);
+    return layerEndDates.concat(layerEndDate);
+  }, []);
+}
+
+/**
  * Checks the date provided against the active layers.
  *
  * @method getLayersActiveAtDate
  * @param  {Array} layers
  * @param  {object} date Date of data to be displayed on the map.
- * @return {array}       An array of visible layers within the date.
+ * @returns {array} Array of visible layers within the date.
  */
 export function getLayersActiveAtDate(layers, date) {
   const arra = [];

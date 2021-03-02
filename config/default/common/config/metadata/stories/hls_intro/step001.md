@@ -1,0 +1,1 @@
+Worldview has been providing daily, global, true color, surface reflectance imagery at 250 meter resolution, like this MODIS image from the Terra satellite, and the time has come for a major update!

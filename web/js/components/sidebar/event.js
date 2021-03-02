@@ -1,37 +1,80 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { getDefaultEventDate } from '../../map/natural-events/util';
 import util from '../../util/util';
 
-class Event extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
+function Event (props) {
+  const {
+    deselectEvent,
+    event,
+    isSelected,
+    selectedDate,
+    selectEvent,
+    sources,
+    isVisible,
+  } = props;
+  const eventDate = util.parseDateUTC(event.geometry[0].date);
+  let dateString = `${util.giveWeekDay(eventDate)}, ${util.giveMonth(eventDate)} ${eventDate.getUTCDate()}`;
+  if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
+    dateString += `, ${eventDate.getUTCFullYear()}`;
+  }
+  // eslint-disable-next-line no-nested-ternary
+  const itemClass = isSelected
+    ? 'item-selected selectorItem item item-visible'
+    : isVisible
+      ? 'selectorItem item'
+      : 'selectorItem item hidden';
+
+  const elRef = useRef();
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      if (!elRef || !elRef.current || !isSelected) return;
+      elRef.current.scrollIntoView();
+    });
+  }, [isSelected]);
+
+  /**
+   *
+   * @param {String} date | Date of event clicked
+   * @param {Boolean} isSelected | Is this event already selected
+   * @param {Object} e | Event Object
+   */
+  function onEventSelect(date) {
+    if (isSelected && (!date || date === selectedDate)) {
+      deselectEvent();
+    } else {
+      const selectedEventDate = date || getDefaultEventDate(event);
+      selectEvent(event.id, selectedEventDate);
+      googleTagManager.pushEvent({
+        event: 'natural_event_selected',
+        natural_events: {
+          category: event.categories[0].title,
+        },
+      });
+    }
   }
 
   /**
    * Return date list for selected event
    */
-  getDateLists() {
-    const { event, isSelected, selectedDate } = this.props;
-    if (event.geometries.length > 1) {
+  function renderDateLists() {
+    if (event.geometry.length > 1) {
       return (
         <ul
           className="dates"
           style={!isSelected ? { display: 'none' } : { display: 'block' }}
         >
-          {event.geometries.map((geometry, index) => {
+          {event.geometry.map((geometry, index) => {
             const date = geometry.date.split('T')[0];
             return (
               <li key={`${event.id}-${date}`} className="dates">
                 <a
                   onClick={(e) => {
                     e.stopPropagation();
-                    this.onClick(date);
+                    onEventSelect(date);
                   }}
                   className={
                     selectedDate === date
@@ -50,37 +93,9 @@ class Event extends React.Component {
   }
 
   /**
-   *
-   * @param {String} date | Date of event clicked
-   * @param {Boolean} isSelected | Is this event already selected
-   * @param {Object} e | Event Object
-   */
-  onClick(date) {
-    const {
-      selectEvent,
-      event,
-      deselectEvent,
-      isSelected,
-      selectedDate,
-    } = this.props;
-    if (isSelected && (!date || date === selectedDate)) {
-      deselectEvent();
-    } else {
-      selectEvent(event.id, date);
-      googleTagManager.pushEvent({
-        event: 'natural_event_selected',
-        natural_events: {
-          category: event.categories[0].title,
-        },
-      });
-    }
-  }
-
-  /**
    * Return reference list for an event
    */
-  getReferenceList() {
-    const { sources, event, isSelected } = this.props;
+  function renderReferenceList() {
     if (!isSelected) return;
 
     const references = Array.isArray(event.sources)
@@ -103,7 +118,7 @@ class Event extends React.Component {
                 e.stopPropagation();
               }}
             >
-              <FontAwesomeIcon icon={faExternalLinkAlt} />
+              <FontAwesomeIcon icon="external-link-alt" />
               {` ${source.title}`}
             </a>
           );
@@ -113,49 +128,31 @@ class Event extends React.Component {
     }
   }
 
-  render() {
-    const { event, isVisible, isSelected } = this.props;
-    const eventDate = util.parseDateUTC(event.geometries[0].date);
-    let dateString = `${util.giveWeekDay(eventDate)
-    }, ${
-      util.giveMonth(eventDate)
-    } ${
-      eventDate.getUTCDate()}`;
-    if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
-      dateString += `, ${eventDate.getUTCFullYear()}`;
-    }
-    return (
-      <li
-        className={
-          isSelected
-            ? 'item-selected selectorItem item item-visible'
-            : isVisible
-              ? 'selectorItem item'
-              : 'selectorItem item hidden'
-        }
-        onClick={(e) => {
-          e.stopPropagation();
-          this.onClick();
-        }}
-        id={`sidebar-event-${util.encodeId(event.id)}`}
-      >
-        <i
-          className={`event-icon event-icon-${event.categories[0].slug}`}
-          title={event.categories[0].title}
-        />
-        <h4
-          className="title"
-          dangerouslySetInnerHTML={{
-            __html: `${event.title}<br />${dateString}`,
-          }}
-        />
-        <p className="subtitle">{this.getReferenceList()}</p>
-
-        {this.getDateLists()}
-      </li>
-    );
-  }
+  return (
+    <li
+      id={`sidebar-event-${util.encodeId(event.id)}`}
+      ref={(node) => { elRef.current = node; }}
+      className={itemClass}
+      onClick={(e) => {
+        e.stopPropagation();
+        onEventSelect();
+      }}
+    >
+      <i
+        className={`event-icon event-icon-${event.categories[0].slug}`}
+        title={event.categories[0].title}
+      />
+      <h4
+        className="title"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: `${event.title}<br />${dateString}` }}
+      />
+      <p className="subtitle">{renderReferenceList()}</p>
+      {renderDateLists()}
+    </li>
+  );
 }
+
 Event.propTypes = {
   deselectEvent: PropTypes.func,
   event: PropTypes.object,

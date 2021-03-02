@@ -94,7 +94,7 @@ module.exports = {
     c.waitForElementVisible(sourceMetadataExpanded, TIME_LIMIT, (e) => {
       c.assert.containsText(aquaTerraModisHeader, 'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth');
       c.assert.containsText(maiacHeader, 'MAIAC Aerosol Optical Depth');
-      c.expect.elements('.source-metadata > p').count.to.equal(7);
+      c.expect.elements('.source-metadata > p').count.to.equal(10);
       c.expect.element('.ellipsis.up').to.be.present;
     });
   },

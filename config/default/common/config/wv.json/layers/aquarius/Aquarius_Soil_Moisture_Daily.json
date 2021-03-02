@@ -7,9 +7,7 @@
       "description": "aquarius/Aquarius_Soil_Moisture_Daily",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "aquarius"
-      ],
+      "layergroup": "Soil Moisture",
       "product": "AQ3_DYSM",
       "inactive": true
     }

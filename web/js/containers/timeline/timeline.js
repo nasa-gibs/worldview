@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
+import { UncontrolledTooltip } from 'reactstrap';
 
 import {
   debounce as lodashDebounce,
@@ -13,7 +14,7 @@ import ErrorBoundary from '../error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
-import TimelineData from '../../components/timeline/timeline-data/timeline-data';
+import TimelineLayerCoveragePanel from '../../components/timeline/timeline-coverage/timeline-coverage';
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
 import DraggerContainer from '../../components/timeline/timeline-draggers/dragger-container';
 import AxisHoverLine from '../../components/timeline/timeline-axis/date-tooltip/axis-hover-line';
@@ -34,7 +35,9 @@ import {
   getISODateFormatted,
 } from '../../components/timeline/date-util';
 import {
+  dateRange as getDateRange,
   hasSubDaily,
+  getActiveLayers,
 } from '../../modules/layers/selectors';
 import {
   selectDate,
@@ -44,6 +47,9 @@ import {
   updateAppNow,
   toggleCustomModal,
 } from '../../modules/date/actions';
+import {
+  filterProjLayersWithStartDate,
+} from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
   onActivate as openAnimation,
@@ -58,6 +64,7 @@ import {
   timeScaleOptions,
   customModalType,
 } from '../../modules/date/constants';
+import util from '../../util/util';
 
 const ANIMATION_DELAY = 500;
 const preventDefaultFunc = (e) => {
@@ -99,7 +106,7 @@ class Timeline extends React.Component {
         end: false, start: false, startOffset: -50, width: 50000,
       },
       matchingTimelineCoverage: {},
-      isDataCoveragePanelOpen: false,
+      isTimelineLayerCoveragePanelOpen: false,
       shouldIncludeHiddenLayers: false,
     };
 
@@ -831,7 +838,7 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc set matching data coverage range for selected layers timeline
+  * @desc set matching layer coverage range for selected layers timeline
   * @param {Object} dateRange
   * @returns {void}
   */
@@ -843,18 +850,18 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc toggle data coverage panel open/closed
+  * @desc toggle layer coverage panel open/closed
   * @param {Boolean} isOpen
   * @returns {void}
   */
-  toggleDataCoveragePanel = (isOpen) => {
-    if (!isOpen) {
+  toggleLayerCoveragePanel = (isOpen) => {
+    if (isOpen) {
       googleTagManager.pushEvent({
-        event: 'open_data_coverage_panel',
+        event: 'open_layer_coverage_panel',
       });
     }
     this.setState({
-      isDataCoveragePanelOpen: isOpen,
+      isTimelineLayerCoveragePanelOpen: isOpen,
     });
   }
 
@@ -906,10 +913,10 @@ class Timeline extends React.Component {
             isTimelineDragging,
             isDraggerDragging,
             isAnimationDraggerDragging,
-            isDataCoveragePanelOpen,
+            isTimelineLayerCoveragePanelOpen,
           } = self.state;
           const { isAnimationPlaying } = self.props;
-          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging || isDataCoveragePanelOpen;
+          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging || isTimelineLayerCoveragePanelOpen;
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
@@ -970,6 +977,7 @@ class Timeline extends React.Component {
       activeLayers,
       dateA,
       dateB,
+      hasFutureLayers,
       hasSubdailyLayers,
       draggerSelected,
       leftArrowDisabled,
@@ -1022,7 +1030,7 @@ class Timeline extends React.Component {
       isTimelineDragging,
       isDraggerDragging,
       isAnimationDraggerDragging,
-      isDataCoveragePanelOpen,
+      isTimelineLayerCoveragePanelOpen,
       matchingTimelineCoverage,
       isHoverOverDistractionFreeTimeUI,
       showHoverLine,
@@ -1153,7 +1161,7 @@ class Timeline extends React.Component {
                       <AnimationButton
                         clickAnimationButton={this.clickAnimationButton}
                         disabled={animationDisabled}
-                        title={
+                        label={
                         // eslint-disable-next-line no-nested-ternary
                         isCompareModeActive
                           ? 'Animation feature is deactivated when Compare feature is active'
@@ -1198,6 +1206,7 @@ class Timeline extends React.Component {
                         animStartLocationDate={animStartLocationDate}
                         animEndLocationDate={animEndLocationDate}
                         debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
+                        onDateChange={this.onDateChange}
                         updatePositioning={this.updatePositioning}
                         updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
                         updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
@@ -1206,6 +1215,7 @@ class Timeline extends React.Component {
                         showHoverOn={this.showHoverOn}
                         showHoverOff={this.showHoverOff}
                         showHover={this.showHover}
+                        hasFutureLayers={hasFutureLayers}
                         hasSubdailyLayers={hasSubdailyLayers}
                         isCompareModeActive={isCompareModeActive}
                         isAnimationPlaying={isAnimationPlaying}
@@ -1228,23 +1238,23 @@ class Timeline extends React.Component {
                         draggerSelected={draggerSelected}
                         draggerPosition={draggerPosition}
                         draggerPositionB={draggerPositionB}
-                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                       />
 
-                      {/* Data Coverage Panel */}
-                      <TimelineData
+                      {/* Timeline Layer Coverage Panel */}
+                      <TimelineLayerCoveragePanel
                         appNow={appNow}
-                        positionTransformX={position + transformX}
-                        timeScale={timeScale}
-                        frontDate={frontDate}
-                        backDate={backDate}
-                        timelineStartDateLimit={timelineStartDateLimit}
-                        parentOffset={parentOffset}
                         axisWidth={axisWidth}
-                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
+                        backDate={backDate}
+                        frontDate={frontDate}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                         matchingTimelineCoverage={matchingTimelineCoverage}
-                        toggleDataCoveragePanel={this.toggleDataCoveragePanel}
-                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
+                        parentOffset={parentOffset}
+                        positionTransformX={position + transformX}
+                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
+                        timelineStartDateLimit={timelineStartDateLimit}
+                        timeScale={timeScale}
+                        toggleLayerCoveragePanel={this.toggleLayerCoveragePanel}
                       />
 
                       {isAnimationWidgetReady
@@ -1310,7 +1320,7 @@ class Timeline extends React.Component {
                         hasSubdailyLayers={hasSubdailyLayers}
                         showDraggerTime={showDraggerTime}
                         showHoverLine={showHoverLine}
-                        isDataCoveragePanelOpen={isDataCoveragePanelOpen}
+                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                       />
                       )}
                     </div>
@@ -1335,7 +1345,14 @@ class Timeline extends React.Component {
                     />
 
                     {/* Open/Close Chevron */}
-                    <div id="timeline-hide" onClick={this.toggleHideTimeline}>
+                    <div
+                      id="timeline-hide"
+                      aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
+                      onClick={this.toggleHideTimeline}
+                    >
+                      <UncontrolledTooltip target="timeline-hide" placement="top">
+                        {isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
+                      </UncontrolledTooltip>
                       <div
                         className={`wv-timeline-hide wv-timeline-hide-double-chevron-${chevronDirection}`}
                       />
@@ -1386,12 +1403,29 @@ function mapStateToProps(state) {
   const isScreenWidthLessThan450 = screenWidth < 450;
 
   // handle active layer filtering and check for subdaily
-  const activeLayers = layers[compare.activeString];
+  const activeLayers = getActiveLayers(state);
   const projection = proj.id;
-  const activeLayersFiltered = activeLayers.filter((layer) => layer.startDate && layer.projections[projection]);
+  const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
   const hasSubdailyLayers = isCompareModeActive
-    ? hasSubDaily(layers.active) || hasSubDaily(layers.activeB)
+    ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
     : hasSubDaily(activeLayers);
+
+  // if future layers are included, timeline axis end date will extend past appNow
+  let hasFutureLayers;
+  if (isCompareModeActive) {
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
+    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
+  } else {
+    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime).length > 0;
+  }
+
+  let timelineEndDateLimit;
+  if (hasFutureLayers) {
+    timelineEndDateLimit = getTimelineEndDateLimit(state);
+  } else {
+    timelineEndDateLimit = getISODateFormatted(appNow);
+  }
 
   let updatedInterval = interval;
   let updatedCustomInterval = customInterval;
@@ -1413,8 +1447,6 @@ function mapStateToProps(state) {
     screenWidth,
     hasSubdailyLayers,
   );
-  const timelineEndDateLimit = getISODateFormatted(appNow);
-
   const selectedDate = isCompareA ? selected : selectedB;
   const deltaChangeAmt = customSelected ? customDelta : delta;
   const timeScaleChangeUnit = customSelected
@@ -1444,6 +1476,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     customSelected,
     isCompareModeActive,
+    hasFutureLayers,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
     timelineStartDateLimit: config.startDate, // same as startDate
@@ -1545,6 +1578,7 @@ Timeline.propTypes = {
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
   draggerSelected: PropTypes.string,
+  hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   hideTimeline: PropTypes.bool,
   isAnimationPlaying: PropTypes.bool,
@@ -1662,4 +1696,37 @@ const checkRightArrowDisabled = (
   const nextIncrementDateTime = nextIncrementDate.getTime();
   const maxPlusDeltaDateTime = maxPlusDeltaDate.getTime();
   return nextIncrementDateTime >= maxPlusDeltaDateTime;
+};
+
+// get timelineEndDateLimit based on potential future layers
+const getTimelineEndDateLimit = (state) => {
+  const {
+    date, layers, compare, proj,
+  } = state;
+  const { appNow } = date;
+  const activeLayers = getActiveLayers(state);
+
+  let layerDateRange;
+  if (compare.active) {
+    // use all layers to keep timeline axis range consistent when switching between A/B
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
+    layerDateRange = getDateRange({}, [...compareALayersFiltered, ...compareBLayersFiltered]);
+  } else {
+    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
+    layerDateRange = getDateRange({}, activeLayersFiltered);
+  }
+
+  let timelineEndDateLimit;
+  if (layerDateRange && layerDateRange.end > appNow) {
+    const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
+    const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);
+    if (layerDateRangeEndRoundedQuarterHour.getTime() > appNowRoundedQuarterHour.getTime()) {
+      // if layerDateRange.end is after the set rounded quarter hour time, then update
+      timelineEndDateLimit = getISODateFormatted(layerDateRangeEndRoundedQuarterHour);
+    }
+  } else {
+    timelineEndDateLimit = getISODateFormatted(appNow);
+  }
+  return timelineEndDateLimit;
 };

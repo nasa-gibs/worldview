@@ -1,7 +1,0 @@
-Options +ExecCGI
-AddHandler cgi-script .cgi
-
-ExpiresDefault A0
-Header set Cache-Control "no-cache, no-store, must-revalidate"
-Header set Pragma "no-cache"
-

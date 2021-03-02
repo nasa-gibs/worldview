@@ -1,10 +1,10 @@
 import React from 'react';
 
 const EventsAlertModalBody = () => (
-  <div className="event-alert-modal-body">
-    <h3 className="wv-data-unavailable-header">
+  <div className="basic-modal event-alert-modal-body">
+    <h1>
       Why can’t I see an event?
-    </h3>
+    </h1>
     <p>
       There are a variety of factors as to why you may not be seeing an
       event in Worldview at the moment.

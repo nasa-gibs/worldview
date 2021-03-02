@@ -11,6 +11,7 @@ import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
+import { getDefaultEventDate } from './util';
 
 export default function markers(ui, store) {
   const self = {};
@@ -24,13 +25,13 @@ export default function markers(ui, store) {
       const marker = {};
       const { selected } = ui.naturalEvents;
       const isSelected = event.id === selected.id;
-      let date = ui.naturalEvents.getDefaultEventDate(event);
+      let date = getDefaultEventDate(event);
 
       if (isSelected && selected.date) {
         date = selected.date;
       }
 
-      const geometry = lodashFind(event.geometries, (geom) => geom.date.split('T')[0] === date) || event.geometries[0];
+      const geometry = lodashFind(event.geometry, (geom) => geom.date.split('T')[0] === date) || event.geometry[0];
       if (!geometry) return marker;
 
       let { coordinates } = geometry;

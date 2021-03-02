@@ -7,10 +7,7 @@
       "description": "srtm/SRTM_Color_Index",
       "tags": "srtm gdem",
       "group": "overlays",
-      "type": "wmts",
-      "layergroup": [
-        "srtm"
-      ],
+      "layergroup": "Global Digital Elevation Map",
       "product": "SRTMGL1",
       "wrapadjacentdays": true
     }

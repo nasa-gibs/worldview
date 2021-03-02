@@ -8,9 +8,7 @@
       "tags": "amsr-2 rain",
       "inactive": true,
       "group": "overlays",
-      "layergroup": [
-        "amsr2"
-      ],
+      "layergroup": "Precipitation Rate",
       "product": "A2_RainOcn_NRT",
       "tracks": [
         "OrbitTracks_GCOM-W1_Ascending"

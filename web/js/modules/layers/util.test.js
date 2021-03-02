@@ -15,7 +15,9 @@ import fixtures from '../../fixtures';
 
 let defaultStateFromLocation = {
   layers: {
-    active: [],
+    active: {
+      layers: [],
+    },
   },
 };
 const globalState = fixtures.getState();
@@ -112,11 +114,15 @@ test('toggleVisibility util function', () => {
   const newLayers = toggleVisibility('terra-cr', layers);
   expect(newLayers[1].visible).toBe(true);
 });
+
+// Permalionk 1.0
 describe('permalink 1.0', () => {
   beforeEach(() => {
     defaultStateFromLocation = {
       layers: {
-        active: [],
+        active: {
+          layers: [],
+        },
       },
     };
   });
@@ -130,7 +136,7 @@ describe('permalink 1.0', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
 
     expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
     expect(activeLayers.find((x) => x.id === 'terra-aod')).toBeTruthy();
@@ -138,11 +144,14 @@ describe('permalink 1.0', () => {
   });
 });
 
+// Permalionk 1.1
 describe('permalink 1.1', () => {
   beforeEach(() => {
     defaultStateFromLocation = {
       layers: {
-        active: [],
+        active: {
+          layers: [],
+        },
       },
     };
   });
@@ -158,7 +167,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    expect(stateFromLocation.layers.active[0].id).toBe('terra-cr');
+    expect(stateFromLocation.layers.active.layers[0].id).toBe('terra-cr');
   });
   test('parses only one overlay', () => {
     const parameters = {
@@ -171,7 +180,7 @@ describe('permalink 1.1', () => {
       config,
     );
 
-    expect(stateFromLocation.layers.active[0].id).toBe('terra-aod');
+    expect(stateFromLocation.layers.active.layers[0].id).toBe('terra-aod');
   });
   test('parses multiple layers', () => {
     const parameters = {
@@ -183,7 +192,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
     expect(activeLayers.find((x) => x.id === 'terra-aod')).toBeTruthy();
     expect(activeLayers.find((x) => x.id === 'aqua-aod')).toBeTruthy();
@@ -198,7 +207,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers).toHaveLength(0);
   });
   test('skips invalid layers and records an error', () => {
@@ -211,7 +220,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
     expect(activeLayers.find((x) => x.id === 'aqua-aod')).toBeTruthy();
   });
@@ -225,7 +234,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers).toHaveLength(0);
   });
   test('hidden layers', () => {
@@ -238,7 +247,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers[0].id).toBe('terra-cr');
     expect(activeLayers[0].visible).toBeFalsy();
   });
@@ -253,7 +262,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesinDateRanges(activeLayers[0], new Date('2020-01-01'));
     expect(dates.length).toBe(3);
   });
@@ -268,7 +277,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesinDateRanges(activeLayers[0], new Date('1990-01-01'));
     expect(dates.length).toBe(1);
   });
@@ -283,11 +292,11 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesinDateRanges(activeLayers[0], new Date('2030-01-01'));
     expect(dates.length).toBe(0);
   });
-  test('test date range returned from given start/end date range for data panel', () => {
+  test('test date range returned from given start/end date range for layer coverage panel', () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -298,7 +307,7 @@ describe('permalink 1.1', () => {
       globalState,
       config,
     );
-    const activeLayers = stateFromLocation.layers.active;
+    const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesinDateRanges(activeLayers[0], new Date('2018-01-01'), new Date('2017-12-01'), new Date('2018-02-01'), new Date('2020-01-01'));
     const isFirstDateEqual = dates[0].toISOString() === '2017-12-01T00:00:00.000Z';
     const isLastDateEqual = dates[dates.length - 1].toISOString() === '2018-01-31T00:00:00.000Z';
