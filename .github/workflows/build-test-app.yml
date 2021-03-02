@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [macOS-latest, windows-latest]
+        os: [macOS-10.15, windows-latest, ubuntu-latest]
 
     steps:
     - name: Checkout the code
@@ -19,11 +19,6 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
-
-    # - name: Install Python dependencies
-    #   run: |
-    #     python -m pip install --upgrade pip
-    #     bash -c 'tasks/pythonInstall.sh'
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.1.5
@@ -40,13 +35,20 @@ jobs:
 
     - name: Build the application
       run: |
-        npm run build:ci
-        npm run start
+        npm run build
 
-    - name: Run E2E tests
+    - name: Run E2E tests - Chrome
+      if: ${{ runner.os == 'macOS' }}
       run: |
         npm run start &
         npm run e2e:headless:chrome:localStorageDisabled
         npm run e2e:headless:chrome
+
+    - name: Run E2E tests - Firefox
+      if: ${{ runner.os == 'Windows' }}
+      run: |
+        npm run start &
+        npm run e2e:headless:firefox:localStorageDisabled
+        npm run e2e:headless:firefox
 
 
