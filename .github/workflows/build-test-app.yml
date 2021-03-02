@@ -9,8 +9,9 @@ jobs:
     runs-on: ${{matrix.os}}
     name: Build and Test - ${{matrix.os}}
     strategy:
+      fail-fast: false
       matrix:
-        os: [macOS-10.15, ubuntu-latest]
+        os: [macOS-10.15, ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout the code
