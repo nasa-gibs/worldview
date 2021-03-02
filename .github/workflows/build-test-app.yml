@@ -1,5 +1,5 @@
 
-name: Build/Test
+name: Build and Test
 
 on: [push]
 
@@ -7,24 +7,24 @@ jobs:
 
   build:
     runs-on: ${{matrix.os}}
-    name: Build and Test ${{matrix.os}}
+    name: Build and Test - ${{matrix.os}}
     strategy:
       matrix:
-        os: [macOS-10.15, windows-latest, ubuntu-latest]
+        os: [macOS-10.15, ubuntu-latest]
 
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.9
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.8.5
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
         with:
-          node-version: 14.16.0
+          node-version: 12.13.0
 
       - name: Install NPM dependencies
         run: |
