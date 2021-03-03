@@ -36,6 +36,12 @@ jobs:
         run: |
           npm ci
 
+      - name: Windows - Activate python virtualenv
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          .python/Scripts/activate.bat
+          python3 -m pip list
+
       - name: Linting and Unit testing
         run: |
           npm test
