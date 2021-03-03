@@ -22,6 +22,11 @@ jobs:
         with:
           python-version: 3.8.5
 
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v2
+        with:
+          path: "requirements.txt"
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
         with:
