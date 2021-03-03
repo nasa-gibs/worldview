@@ -66,7 +66,6 @@
     "lint:js": "eslint . --quiet",
     "notes": "node ./tasks/releaseNotes.js",
     "preinstall": "node tasks/checkNodeVersion.js",
-    "postinstall": "npm run python",
     "python": "run-script-os",
     "python:darwin:linux": "bash -c 'tasks/pythonInstall.sh linux'",
     "python:win32": "bash -c 'tasks/pythonInstall.sh'",
