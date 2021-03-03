@@ -142,6 +142,9 @@ module.exports = {
   zoomOutButton: '.wv-map-zoom-out',
   mapScaleMetric: '.wv-map-scale-metric',
   mapScaleImperial: '.wv-map-scale-imperial',
+  mapRotateLeft: '.wv-map-rotate-left',
+  mapRotateReset: '.wv-map-reset-rotation',
+  mapRotateRight: '.wv-map-rotate-right',
 
   // ui toolbar
   locationSearchToolbarButton: '#wv-location-search-button',

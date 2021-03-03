@@ -196,7 +196,7 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('ABOUT_MODAL', {
         headerText: 'About',
         bodyComponent: AboutPage,
-        wrapClassName: 'about-page',
+        wrapClassName: 'about-page-modal',
       }),
     );
   },

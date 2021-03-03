@@ -1,11 +1,41 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
+import Alert from '../util/alert';
 
-class DistractionFreeTimeUI extends PureComponent {
+class DistractionFreeTimeUI extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDistractionFreeAlert: true,
+    };
+  }
+
+  // dismiss message instruction alert
+  dismissDistractionFreeAlert = () => this.setState({ showDistractionFreeAlert: false });
+
   handleMouseOver = () => {
     const { hoverOverDistractionFreeTimeUI } = this.props;
     hoverOverDistractionFreeTimeUI(true);
+  }
+
+  // render alert message to let desktop users know they are in distraction free mode
+  renderDistractionFreeAlert = () => {
+    const {
+      showDistractionFreeAlert,
+    } = this.state;
+    const message = 'You are now in distraction free mode. Click on the i to exit.';
+
+    return showDistractionFreeAlert && (
+      <Alert
+        id="distraction-free-mode-active-alert"
+        isOpen
+        title="Distraction Free Mode is Active"
+        timeout={6000}
+        message={message}
+        onDismiss={this.dismissDistractionFreeAlert}
+      />
+    );
   }
 
   render() {
@@ -31,16 +61,18 @@ class DistractionFreeTimeUI extends PureComponent {
       displayDate = dateFirstHalfYMD.join(' ');
     }
 
+    const opacityStyle = { opacity: isHoverOverDistractionFreeTimeUI ? '0' : '1' };
     return (
-      <div
-        className="distraction-free-date"
-        style={{
-          opacity: isHoverOverDistractionFreeTimeUI ? '0' : '1',
-        }}
-        onMouseOver={this.handleMouseOver}
-      >
-        {displayDate}
-      </div>
+      <>
+        {this.renderDistractionFreeAlert()}
+        <div
+          className="distraction-free-date"
+          style={opacityStyle}
+          onMouseOver={this.handleMouseOver}
+        >
+          {displayDate}
+        </div>
+      </>
     );
   }
 }
