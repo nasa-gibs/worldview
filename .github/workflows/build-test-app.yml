@@ -11,7 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macOS-10.15, ubuntu-latest, windows-latest]
+        # os: [macOS-10.15, ubuntu-latest, windows-latest]
+        os: [windows-latest]
 
     steps:
       - name: Checkout the code
@@ -22,10 +23,14 @@ jobs:
         with:
           python-version: 3.8.5
 
-      - name: Install Python dependencies
-        uses: py-actions/py-dependency-install@v2
-        with:
-          path: "requirements.txt"
+      - name: Windows - Install python deps
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          python -m pip install --user virtualenv
+          python -m virtualenv .python
+          .\.python\Scripts\activate.ps1
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
@@ -36,18 +41,13 @@ jobs:
         run: |
           npm ci
 
-      - name: Windows - Activate python virtualenv
-        if: ${{ runner.os == 'Windows' }}
-        run: |
-          .python/Scripts/activate.bat
-          python3 -m pip list
-
-      - name: Linting and Unit testing
-        run: |
-          npm test
+      # - name: Linting and Unit testing
+      #   run: |
+      #     npm test
 
       - name: Build the application
         run: |
+          .\.python\Scripts\activate.ps1
           npm run build
 
       - name: Run E2E tests - Chrome
