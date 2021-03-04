@@ -11,8 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # os: [macOS-10.15, ubuntu-latest, windows-latest]
-        os: [windows-latest]
+        os: [macOS-10.15, ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout the code
@@ -22,12 +21,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
-      - name: Windows - Install python deps
-        if: ${{ runner.os == 'Windows' }}
-        run: |
-          python3 -m pip install pipenv
-          python3 -m pipenv install
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
@@ -44,6 +37,7 @@ jobs:
 
       - name: Build the application
         run: |
+          pipenv graph
           npm run build
 
       - name: Run E2E tests - Chrome
