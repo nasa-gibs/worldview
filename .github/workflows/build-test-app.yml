@@ -31,9 +31,9 @@ jobs:
         run: |
           npm ci
 
-      - name: Linting and Unit testing
-        run: |
-          npm test
+      # - name: Linting and Unit testing
+      #   run: |
+      #     npm test
 
       - name: Build the application
         run: |
@@ -42,9 +42,6 @@ jobs:
       - name: Run E2E tests - Chrome / MacOS
         if: ${{ runner.os == 'macOS' }}
         run: |
-          sudo apt-get update
-          sudo apt-get --only-upgrade install google-chrome-stable
-          google-chrome --version
           npm run start &
           npm run e2e:headless:chrome:localStorageDisabled
           npm run e2e:headless:chrome
