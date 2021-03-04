@@ -1,6 +1,6 @@
 {
   "name": "@gov.nasa.jpl.podaac/worldview",
-  "version": "0.1.0-0",
+  "version": "0.1.0-1",
   "upstream-version": "3.9.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
