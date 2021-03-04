@@ -23,13 +23,11 @@ jobs:
         with:
           python-version: 3.9
 
-      # - name: Windows - Install python deps
-      #   if: ${{ runner.os == 'Windows' }}
-      #   run: |
-      #     python -m pip install --user virtualenv
-      #     python -m virtualenv .python
-      #     python3 -m pip install --upgrade pip
-      #     python3 -m pip install -r requirements.txt
+      - name: Windows - Install python deps
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          python3 -m pip install pipenv
+          python3 -m pipenv install
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
