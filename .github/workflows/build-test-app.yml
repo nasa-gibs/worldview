@@ -7,7 +7,7 @@ jobs:
 
   build:
     runs-on: ${{matrix.os}}
-    name: ${{matrix.os}}, ${{matrix.node}}
+    name: ${{matrix.os}}, Node ${{matrix.node}}
     strategy:
       fail-fast: false
       matrix:
