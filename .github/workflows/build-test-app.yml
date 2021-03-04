@@ -31,17 +31,18 @@ jobs:
         run: |
           npm ci
 
-      # - name: Linting and Unit testing
-      #   run: |
-      #     npm test
+      - name: Linting and Unit testing
+        run: |
+          npm test
 
       - name: Build the application
         run: |
-          pipenv run npm run build
+          pipenv run npm run build:ci
 
       - name: Run E2E tests - Chrome / MacOS
         if: ${{ runner.os == 'macOS' }}
         run: |
+          google-chrome --version
           npm run start &
           npm run e2e:headless:chrome:localStorageDisabled
           npm run e2e:headless:chrome
