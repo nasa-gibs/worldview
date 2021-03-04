@@ -7,11 +7,12 @@ jobs:
 
   build:
     runs-on: ${{matrix.os}}
-    name: Build and Test - ${{matrix.os}}
+    name: ${{matrix.os}}, ${{matrix.node}}
     strategy:
       fail-fast: false
       matrix:
         os: [macOS-10.15, ubuntu-latest, windows-latest]
+        node: [12, 14]
 
     steps:
       - name: Checkout the code
@@ -25,15 +26,15 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
         with:
-          node-version: 12.13.0
+          node-version: ${{matrix.node}}
 
       - name: Install Dependencies
         run: |
           npm ci
 
-      # - name: Linting and Unit testing
-      #   run: |
-      #     npm test
+      - name: Linting and Unit testing
+        run: |
+          npm test
 
       - name: Build the application
         run: |
