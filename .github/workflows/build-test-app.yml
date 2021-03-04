@@ -37,17 +37,16 @@ jobs:
 
       - name: Build the application
         run: |
-          pipenv graph
           npm run build
 
-      - name: Run E2E tests - Chrome
+      - name: Run E2E tests - Chrome / MacOS
         if: ${{ runner.os == 'macOS' }}
         run: |
           npm run start &
           npm run e2e:headless:chrome:localStorageDisabled
           npm run e2e:headless:chrome
 
-      - name: Run E2E tests - Firefox
+      - name: Run E2E tests - Firefox / Windows
         if: ${{ runner.os == 'Windows' }}
         run: |
           npm run start &
