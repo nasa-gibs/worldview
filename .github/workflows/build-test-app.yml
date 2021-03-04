@@ -37,7 +37,7 @@ jobs:
 
       - name: Build the application
         run: |
-          pipenv run npm run build:ci
+          npm run build:ci
 
       - name: Run E2E tests - Chrome / MacOS
         if: ${{ runner.os == 'macOS' }}
