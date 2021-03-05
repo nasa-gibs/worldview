@@ -35,15 +35,6 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Cache Python Deps/Virutal
-        uses: actions/cache@v2
-        id: pipenv-cache
-        with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pipenv-
-
       - name: Install NPM Dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: |
@@ -52,9 +43,8 @@ jobs:
       # For now we only need to install Python deps if the
       # previous step did not run due to an existing cache since
       # we run `npm run python` as a `postinstall` npm script.
-      # Or, if ther wasn't already a pipenv cache with the same key
       - name: Install Python Dependencies
-        if: steps.node-cache.outputs.cache-hit == 'true' && steps.pipenv-cache.outputs.cache-hit != 'true'
+        if: steps.node-cache.outputs.cache-hit == 'true'
         run: |
           npm run python
 
