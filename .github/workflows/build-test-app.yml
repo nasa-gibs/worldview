@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-${{matrix.node}}-node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Install NPM Dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
