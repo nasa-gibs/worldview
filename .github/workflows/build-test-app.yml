@@ -1,5 +1,5 @@
 
-name: Build and Test
+name: CI
 
 on: [push]
 
