@@ -28,25 +28,12 @@ jobs:
         with:
           node-version: ${{matrix.node}}
 
-      - name: Cache Node Modules
-        id: node-cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{matrix.node}}-node-modules-${{ hashFiles('package-lock.json') }}
+      # Cache node modules
+      - uses: c-hive/gha-npm-cache@v1
 
       - name: Install NPM Dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
         run: |
           npm ci
-
-      # For now we only need to install Python deps if the
-      # previous step did not run due to an existing cache since
-      # we run `npm run python` as a `postinstall` npm script.
-      - name: Install Python Dependencies
-        if: steps.node-cache.outputs.cache-hit == 'true'
-        run: |
-          npm run python
 
       - name: Linting and Unit testing
         run: |
