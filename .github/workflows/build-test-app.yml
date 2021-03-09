@@ -28,29 +28,9 @@ jobs:
         with:
           node-version: ${{matrix.node}}
 
-      # Cache node modules
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-
-      - name: Cache NPM modules
-        id: npm-cache
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ matrix.node}}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node}}-
-
       - name: Install NPM Dependencies
-        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: |
           npm ci
-
-      - name: Install Python Dependencies
-        run: |
-          npm run python
 
       - name: Linting and Unit testing
         run: |
