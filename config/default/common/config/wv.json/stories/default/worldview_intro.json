@@ -16,7 +16,78 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-01-30-T00%3A00%3A00Z&z=3&v=-159.5935080199115,-46.546875,46.24975801991151,53.015625"
+          "stepLink": "v=75.72683660566734,3.594575493216052,167.65210289422777,52.91437307698551&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true",
+          "joyride": {
+            "continuous": true,
+            "spotlightClicks": true,
+            "steps": [
+              {
+                "target": "#layers-sidebar-tab",
+                "title": "Layer List",
+                "content": "The Layer List shows all the layers that are loaded on the map. Click on \"+ Add Layers...",
+                "placementBeacon": "top"
+              },
+              {
+                "target": "#layers-add",
+                "title": "Layer List",
+                "content": "...to find imagery layers. Discover and add relevant layers by science discipline, by natural hazard and disaster category, by typing in a keyword or using the facets.",
+                "placementBeacon": "bottom"
+              },
+              {
+                "target": "#events-sidebar-tab",
+                "title": "Events",
+                "content": "Select the Events tab to view current natural events around the world.",
+                "placementBeacon": "right"
+              },
+              {
+                "target": "#download-sidebar-tab",
+                "title": "Data Download",
+                "content": "Select the Data tab to download the underlying data for the imagery layers displayed on the map! Once you have selected your desired layer it will direct you to Earthdata Search to download the data.",
+                "placementBeacon": "right"
+              },
+              {
+                "target": "#timeline",
+                "title": "Timeline",
+                "content": "Use the Timeline at the bottom to choose the date of observation. You can change the date by typing in the date fields, clicking on the up and down arrows by each field, click on the back and forward arrows and change the temporal zoom level. You can also use the slider on the right to change the date. You can animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.",
+                "placementBeacon": "right"
+              },
+              {
+                "target": ".location-search-component",
+                "content": "Use Location Search by entering a place name or coordinates to place a map marker on the map. Conversely, place a map marker on the map to find out the place name and coordinates",
+                "placementBeacon": "bottom"
+              },
+              {
+                "target": "#wv-link-button",
+                "content": "Save the URL of the current state of the website and share it with your friends!",
+                "placementBeacon": "bottom"
+              },
+              {
+                "target": "#wv-proj-button",
+                "content": "The \"Globe\" icon allows you to change the projection from Geographic to Arctic or Antarctic.",
+                "placementBeacon": "bottom"
+              },
+              {
+                "target": "#wv-image-button",
+                "content": "The \"Camera\" icon allows you to take a snapshot of the imagery show on the map.",
+                "placementBeacon": "bottom"
+              },
+              {
+                "target": "#wv-info-button",
+                "content": "The Information icon provides you a place where you can provide feedback, initiate the tour stories, provide information about Worldview's source code, let you know what we've been working on recently with \"What's new\", notifications, background information and the Distraction Free mode which removes all of the unnecessary elements so you can focus solely on the map.",
+                "placementBeacon": "bottom"
+              },
+              {
+                "target": "#wv-measure-button",
+                "content": "Measure Distance and Area and export as GeoJSON.",
+                "placementBeacon": "left"
+              },
+              {
+                "target": "#coords-panel",
+                "content": "Click to change map coordinates which are available in Degrees Minutes Seconds, Decimal Degrees, and Degrees Decimal Minutes",
+                "placementBeacon": "left"
+              }
+            ]
+          }
         },
         {
           "id": "002",
@@ -25,7 +96,22 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&%3A00%3A00Z&z=3&v=-159.5935080199115,-46.546875,46.24975801991151,53.015625"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&%3A00%3A00Z&z=3&v=-159.5935080199115,-46.546875,46.24975801991151,53.015625",
+        "joyride": {
+          "continuous": true,
+          "spotlightClicks": true,
+          "steps": [
+        {
+          "target": "#my-zoom-target1",
+          "targetCoordinates": {
+            "topLeft": [-79, 29.5],
+            "bottomRight": [-72, 23]
+          },
+          "content": "Zoom in and out.",
+          "placementBeacon": "left"
+        }
+      ]
+    }
         },
         {
           "id": "003",
