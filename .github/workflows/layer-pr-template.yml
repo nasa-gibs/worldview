@@ -1,0 +1,22 @@
+# Template for layer PRs
+
+on:
+  push:
+    paths:
+      - 'config/default/common/config/wv.json/layers/*'
+
+jobs:
+  layer-pr-template:
+    name: 'Create PR with Layers Template'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        destination_branch: "develop"
+        pr_title: "Add/modify layers ${{ github.ref }}"
+        pr_label: "layers"
+        pr_template: ".github/LAYER_PULL_REQUEST_TEMPLATE.md"
+        pr_draft: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
