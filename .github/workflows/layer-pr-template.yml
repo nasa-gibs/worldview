@@ -16,7 +16,7 @@ jobs:
       with:
         destination_branch: "develop"
         pr_title: "Add/modify layers ${{ github.ref }}"
-        pr_label: "layers"
+        pr_label: "layer"
         pr_template: ".github/LAYER_PULL_REQUEST_TEMPLATE.md"
         pr_draft: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
