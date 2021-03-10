@@ -20,7 +20,9 @@ const zoomLevelReference = {
   Volcanoes: 6,
 };
 
-export default function naturalEventsUI(ui, config, store, models) {
+// ui.map = state.map.ui
+
+export default function naturalEventsUI(ui, config, store) {
   const self = {};
   let map;
   let view;
@@ -44,7 +46,6 @@ export default function naturalEventsUI(ui, config, store, models) {
     const {
       requestedEvents,
       requestedEventSources,
-      requestedEventCategories,
     } = state;
     switch (action.type) {
       case LOCATION_POP_ACTION: {
@@ -67,11 +68,9 @@ export default function naturalEventsUI(ui, config, store, models) {
         return;
       case EVENT_CONSTANTS.REQUEST_EVENTS_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_SOURCES_SUCCESS:
-      case EVENT_CONSTANTS.REQUEST_CATEGORIES_SUCCESS:
         if (!isLoading) return;
         isLoading = requestedEvents.isLoading
-          || requestedEventSources.isLoading
-          || requestedEventCategories.isLoading;
+          || requestedEventSources.isLoading;
         if (!isLoading) {
           self.eventsData = requestedEvents.response;
         }
