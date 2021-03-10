@@ -7,7 +7,6 @@ import {
   ALL_CATEGORY,
   REQUEST_EVENTS,
   REQUEST_SOURCES,
-  REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
   SELECT_CATEGORY,
@@ -142,11 +141,7 @@ export function eventsRequestReducer(actionName, state, action) {
         response: null,
       });
     case SUCCESS: {
-      const key = actionName === REQUEST_EVENTS
-        ? 'events'
-        : actionName === REQUEST_CATEGORIES
-          ? 'categories'
-          : 'sources';
+      const key = actionName === REQUEST_EVENTS ? 'events' : 'sources';
       const filtered = action.response[key].filter((item) => formatResponse(item, state.ignore));
       return eventRequestResponse({
         response: actionName === REQUEST_EVENTS
@@ -168,10 +163,6 @@ export function eventsRequestReducer(actionName, state, action) {
 
 export function requestedEvents(state = {}, action) {
   return eventsRequestReducer(REQUEST_EVENTS, state, action);
-}
-
-export function requestedEventCategories(state = {}, action) {
-  return eventsRequestReducer(REQUEST_CATEGORIES, state, action);
 }
 
 export function requestedEventSources(state = {}, action) {
