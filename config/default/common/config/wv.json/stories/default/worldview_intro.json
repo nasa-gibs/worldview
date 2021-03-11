@@ -16,7 +16,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=75.72683660566734,3.594575493216052,167.65210289422777,52.91437307698551&l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true",
+          "stepLink": "v=-128.3178541244519,12.27474925781691,-75.86594458383696,48.16528597635188&z=4&l=Himawari_AHI_Band3_Red_Visible_1km(hidden),GOES-West_ABI_Band2_Red_Visible_1km(hidden),GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&tr=worldview_intro&t=2021-03-10-T19%3A49%3A25Z",
           "joyride": {
             "continuous": true,
             "spotlightClicks": true,
@@ -49,6 +49,40 @@
                 "target": "#timeline",
                 "title": "Timeline",
                 "content": "Use the Timeline at the bottom to choose the date of observation. You can change the date by typing in the date fields, clicking on the up and down arrows by each field, click on the back and forward arrows and change the temporal zoom level. You can also use the slider on the right to change the date. You can animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.",
+                "placementBeacon": "right"
+              },
+              {
+                "target": "#date-selector-main",
+                "content": "Change the date (and time if you have Geostationary layers loaded) by using the up and down arrows or entering with your keyboard.",
+                "placementBeacon": "right"
+              },
+              {
+              "target": "#timeline-interval-btn-container",
+              "title": "Interval Selector",
+              "content": "Select the timeline interval you are interested in, or set your own.",
+              "placementBeacon": "right"
+            },
+            {
+              "target": "#zoom-buttons-group",
+              "content": "Use the back and forward arrows to step backward or forward in time according to the selected interval.",
+              "placementBeacon": "right"
+            },
+              {
+                "target": "#animate-button",
+                "title": "Timeline Animation",
+                "content": "You can animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.",
+                "placementBeacon": "right"
+              },
+              {
+                "target": "#timeline-layer-coverage-panel-handle",
+                "title": "Timeline Layer Coverage",
+                "content": "Click here to open the timeline layer coverage panel. Temporal availability of active time-varying layers is shown as a set of striped horizontal blue lines in the panel. The total temporal coverage of the layers is shown on the far right.",
+                "placementBeacon": "right"
+              },
+              {
+                "target": ".zoom-level-change",
+                "title": "Timescale Zoom",
+                "content": "Adjust the timeline view to view the timescale in years, months, and days (And, hours and minutes if you have a Geostationary layer loaded).",
                 "placementBeacon": "right"
               },
               {
@@ -104,8 +138,8 @@
         {
           "target": "#my-zoom-target1",
           "targetCoordinates": {
-            "topLeft": [-79, 29.5],
-            "bottomRight": [-72, 23]
+            "topLeft": [43, 176],
+            "bottomRight": [39, 179]
           },
           "content": "Zoom in and out.",
           "placementBeacon": "left"
