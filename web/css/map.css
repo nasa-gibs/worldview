@@ -170,11 +170,16 @@
   display: none;
 }
 
-.wv-coords-map {
+.wv-coords-container {
   position: absolute;
+  height: 35px;
+  width: 256px;
   top: auto;
   right: 10px;
   bottom: 103px;
+}
+
+.wv-coords-map {
   white-space: pre;
   outline: none;
   color: #fff;
