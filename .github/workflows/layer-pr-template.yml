@@ -4,7 +4,7 @@ name: Layer PR Checklist
 on:
   push:
     paths:
-      - 'config/default/common/config/wv.json/layers/*'
+      - 'config/default/common/config/wv.json/layers/**'
 
 jobs:
   layer-pr-template:
