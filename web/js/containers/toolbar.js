@@ -247,20 +247,19 @@ class toolbarContainer extends Component {
       )
       : () => toggleShowLocationSearch();
 
-    const buttonDisplayConditions = isMobile || (!isMobile && !isLocationSearchExpanded) || shouldBeCollapsed;
-    return !isDistractionFreeModeActive && (
-      <Button
-        style={{
-          display: buttonDisplayConditions ? 'inline-block' : 'none',
-        }}
-        id={buttonId}
-        className="wv-toolbar-button"
-        aria-label={labelText}
-        onClick={handleButtonClick}
-      >
-        {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="search-location" size={faSize} />
-      </Button>
+    const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded) || shouldBeCollapsed) && !isDistractionFreeModeActive;
+    return showButton && (
+      <div id="location-search-wrapper">
+        <Button
+          id={buttonId}
+          className="wv-toolbar-button"
+          aria-label={labelText}
+          onClick={handleButtonClick}
+        >
+          {this.renderTooltip(buttonId, labelText)}
+          <FontAwesomeIcon icon="search-location" size={faSize} />
+        </Button>
+      </div>
     );
   }
 
