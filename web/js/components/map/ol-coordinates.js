@@ -93,7 +93,7 @@ export default class OlCoordinates extends React.Component {
     }
 
     return (
-      <div id="ol-coords-case">
+      <div id="ol-coords-case" className="wv-coords-container">
         <Coordinates
           format={format}
           latitude={latitude}
