@@ -56,7 +56,7 @@ class Rotation extends React.Component {
     const isPolarProj = proj.id !== 'geographic' && proj.id !== 'webmerc';
 
     return !isDistractionFreeModeActive && isPolarProj && (
-      <>
+      <div className="wv-rotation-buttons">
         <button
           type="button"
           className="wv-map-rotate-left wv-map-zoom"
@@ -92,7 +92,7 @@ class Rotation extends React.Component {
         >
           <FontAwesomeIcon icon="redo" className="cursor-pointer" />
         </button>
-      </>
+      </div>
     );
   }
 }
