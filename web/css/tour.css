@@ -1,11 +1,17 @@
-.tour a {
-  color: #00457b;
-  font-weight: 400;
-}
-
-.tour a:hover {
-  color: #2276ac;
-  text-decoration: none;
+.tour {
+  a {
+    color: #00457b;
+    font-weight: 400;
+    &:hover {
+      color: #2276ac;
+      text-decoration: none;
+    }
+  }
+  .modal-body {
+    h1, h2, h3, h4 {
+      margin-bottom: 15px;
+    }
+  }
 }
 
 .about-page .modal-dialog .modal-header .close,
