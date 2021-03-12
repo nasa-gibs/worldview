@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const {
   dayUp,
@@ -11,7 +11,7 @@ const {
 const {
   knownDate,
   subdailyLayerIntervalTimescale,
-} = localQuerystrings;
+} = localQueryStrings;
 
 const dateSelectorMinuteInput = '#date-selector-main .input-wrapper-minute input';
 const dateSelectorHourInput = '#date-selector-main .input-wrapper-hour input';

@@ -1,5 +1,5 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const layerCoverageContainer = '.timeline-layer-coverage-container';
 const layerCoverageHandle = '#timeline-layer-coverage-panel-handle';
@@ -18,7 +18,7 @@ module.exports = {
 
   // verify no layer coverage is visible on the timeline axis with just reference layers loaded
   'No layer coverage is shown by default': (client) => {
-    client.url(client.globals.url + localQuerystrings.referenceLayersOnly);
+    client.url(client.globals.url + localQueryStrings.referenceLayersOnly);
     client.waitForElementVisible(layerCoverageHandle, TIME_LIMIT);
     client.expect.element(matchingLayerCoverageAxisLine).to.not.be.present;
   },

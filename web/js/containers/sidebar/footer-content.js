@@ -49,15 +49,15 @@ class FooterContent extends React.Component {
       showAll,
       stopAnimation,
     } = this.props;
-    const compareBtnText = !isCompareActive ? 'Start Comparison' : 'Exit Comparison';
-    if (isCompareActive && isMobile) {
-      toggleCompare();
-    }
+    const compareBtnText = !isCompareActive
+      ? `Start Comparison${isMobile ? ' Mode' : ''}`
+      : `Exit Comparison${isMobile ? ' Mode' : ''}`;
     if (activeTab === 'layers') {
       return (
         <>
           <ModeSelection
             isActive={isCompareActive}
+            isMobile={isMobile}
             selected={compareMode}
             onclick={changeCompareMode}
           />
@@ -82,7 +82,7 @@ class FooterContent extends React.Component {
               id="compare-toggle-button"
               aria-label={compareBtnText}
               className="compare-toggle-button"
-              style={isMobile || !compareFeature ? { display: 'none' } : null}
+              style={!compareFeature ? { display: 'none' } : null}
               onClick={(e) => {
                 e.stopPropagation();
                 toggleCompare();

@@ -118,7 +118,8 @@
     display: none !important;
   }
 
-  button#layers-add {
+  button#layers-add,
+  button#compare-toggle-button {
     width: 100%;
     position: relative;
     left: 0;

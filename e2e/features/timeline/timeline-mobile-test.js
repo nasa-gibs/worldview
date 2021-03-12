@@ -1,6 +1,6 @@
 const skipTour = require('../../reuseables/skip-tour.js');
 
-const mobileDatePickerSelectBtn = '#date-selector-main .mobile-date-picker-select-btn';
+const mobileDatePickerSelectBtn = '.mobile-date-picker-select-btn';
 const nextDayArrowContainer = '#right-arrow-group';
 const datepickerHeader = '.datepicker .datepicker-header';
 const TIME_LIMIT = 10000;

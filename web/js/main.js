@@ -14,7 +14,7 @@ import {
   compose as defaultCompose,
 } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { responsiveStoreEnhancer } from 'redux-responsive';
+import { calculateResponsiveState, responsiveStoreEnhancer } from 'redux-responsive';
 import {
   createReduxLocationActions,
   listenForHistoryChange,
@@ -143,6 +143,9 @@ window.onload = () => {
         parameters = util.fromQueryString(hasTour.steps[0].stepLink);
         parameters.mockTour = isMockTour;
       }
+
+      const crs = calculateResponsiveState(window);
+      config.initialIsMobile = crs.innerWidth <= 768;
 
       config.pageLoadTime = parameters.now
         ? util.parseDateUTC(parameters.now) || new Date()

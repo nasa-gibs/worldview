@@ -66,6 +66,8 @@ import {
 } from '../../modules/date/constants';
 import util from '../../util/util';
 
+import MobileComparisonToggle from '../../components/compare/mobile-toggle';
+
 const ANIMATION_DELAY = 500;
 const preventDefaultFunc = (e) => {
   e.preventDefault();
@@ -965,95 +967,116 @@ class Timeline extends React.Component {
     this.debounceDateUpdate(dateObj, draggerSelected);
   }
 
+  /**
+  * @desc hoverOverDistractionFreeTimeUI to determine if timeline should open
+  * @param {Boolean} isHover
+  * @returns {void}
+  */
   hoverOverDistractionFreeTimeUI = (isHover) => {
     this.setState({
       isHoverOverDistractionFreeTimeUI: isHover,
     });
   }
 
-  render() {
+  /**
+  * @desc getMobileDateButtonStyle date change button style for smaller displays
+  * @returns {Object} style { left, bottom }
+  */
+  getMobileDateButtonStyle = () => {
     const {
-      appNow,
-      activeLayers,
-      dateA,
-      dateB,
-      hasFutureLayers,
       hasSubdailyLayers,
-      draggerSelected,
-      leftArrowDisabled,
-      rightArrowDisabled,
-      customSelected,
-      customIntervalValue,
-      customIntervalZoomLevel,
-      isAnimationPlaying,
-      isDistractionFreeModeActive,
       isCompareModeActive,
-      axisWidth,
-      timelineEndDateLimit,
-      timelineStartDateLimit,
-      timeScaleChangeUnit,
-      animStartLocationDate,
-      animEndLocationDate,
-      isAnimationWidgetOpen,
-      animationDisabled,
-      hideTimeline,
-      timeScale,
-      isSmallScreen,
       isScreenWidthLessThan350,
       isScreenWidthLessThan450,
-      toggleActiveCompareState,
-      parentOffset,
-      isTourActive,
+    } = this.props;
+    // eslint-disable-next-line no-nested-ternary
+    const mobileLeft = hasSubdailyLayers
+      // eslint-disable-next-line no-nested-ternary
+      ? isScreenWidthLessThan450
+        ? isCompareModeActive ? '112px' : '10px'
+        : '277px'
+      // eslint-disable-next-line no-nested-ternary
+      : isScreenWidthLessThan350
+        ? isCompareModeActive ? '112px' : '10px'
+        : '180px';
+    const mobileBottom = (hasSubdailyLayers && isScreenWidthLessThan450) || isScreenWidthLessThan350
+      ? '65px'
+      : '10px';
+    return {
+      left: mobileLeft,
+      bottom: mobileBottom,
+    };
+  }
+
+  render() {
+    const {
+      activeLayers,
+      animationDisabled,
+      animEndLocationDate,
+      animStartLocationDate,
+      appNow,
+      axisWidth,
+      customIntervalValue,
+      customIntervalZoomLevel,
+      customSelected,
+      dateA,
+      dateB,
+      draggerSelected,
+      hasFutureLayers,
+      hasSubdailyLayers,
+      hideTimeline,
+      isAnimationPlaying,
+      isAnimationWidgetOpen,
+      isCompareModeActive,
       isDataDownload,
+      isDistractionFreeModeActive,
+      isSmallScreen,
+      isTourActive,
+      leftArrowDisabled,
+      parentOffset,
+      rightArrowDisabled,
       timelineCustomModalOpen,
+      timelineEndDateLimit,
+      timelineStartDateLimit,
+      timeScale,
+      timeScaleChangeUnit,
+      toggleActiveCompareState,
     } = this.props;
     const {
-      initialLoadComplete,
-      timelineHidden,
-      draggerTimeState,
-      draggerTimeStateB,
-      draggerPosition,
-      draggerPositionB,
-      draggerVisible,
-      draggerVisibleB,
-      animationStartLocationDate,
+      animationEndLocation,
       animationEndLocationDate,
       animationStartLocation,
-      animationEndLocation,
-      rangeSelectorMax,
-      transformX,
-      position,
-      leftOffset,
-      hoverTime,
-      frontDate,
+      animationStartLocationDate,
       backDate,
-      isTimelineDragging,
-      isDraggerDragging,
-      isAnimationDraggerDragging,
-      isTimelineLayerCoveragePanelOpen,
-      matchingTimelineCoverage,
-      isHoverOverDistractionFreeTimeUI,
-      showHoverLine,
-      showDraggerTime,
+      draggerPosition,
+      draggerPositionB,
+      draggerTimeState,
+      draggerTimeStateB,
+      draggerVisible,
+      draggerVisibleB,
+      frontDate,
       hoverLinePosition,
+      hoverTime,
+      initialLoadComplete,
+      isAnimationDraggerDragging,
+      isDraggerDragging,
+      isHoverOverDistractionFreeTimeUI,
+      isTimelineDragging,
+      isTimelineLayerCoveragePanelOpen,
+      leftOffset,
+      matchingTimelineCoverage,
+      position,
+      rangeSelectorMax,
       shouldIncludeHiddenLayers,
+      showDraggerTime,
+      showHoverLine,
+      timelineHidden,
+      transformX,
     } = this.state;
     const selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
     // timeline open/closed styling
     const isTimelineHidden = timelineHidden || hideTimeline;
     const chevronDirection = isTimelineHidden ? 'left' : 'right';
-    // handle mobile size styling
-    // eslint-disable-next-line no-nested-ternary
-    const mobileLeft = hasSubdailyLayers
-      ? isScreenWidthLessThan450
-        ? '10px'
-        : '277px'
-      : isScreenWidthLessThan350
-        ? '10px'
-        : '180px';
-    const mobileBottom = (hasSubdailyLayers && isScreenWidthLessThan450) || isScreenWidthLessThan350
-      ? '65px'
-      : '10px';
     const isAnimationWidgetReady = isAnimationWidgetOpen
       && !animationDisabled
       && animationStartLocation
@@ -1089,21 +1112,17 @@ class Timeline extends React.Component {
               /* Mobile Timeline Size */
                 ? (
                   <div id="timeline-header" className="timeline-header-mobile">
-                    <div id="date-selector-main">
-                      <MobileDatePicker
-                        date={selectedDate}
-                        startDateLimit={timelineStartDateLimit}
-                        endDateLimit={timelineEndDateLimit}
-                        onDateChange={this.onDateChange}
-                        hasSubdailyLayers={hasSubdailyLayers}
-                      />
-                    </div>
+                    <MobileDatePicker
+                      date={selectedDate}
+                      startDateLimit={timelineStartDateLimit}
+                      endDateLimit={timelineEndDateLimit}
+                      onDateChange={this.onDateChange}
+                      hasSubdailyLayers={hasSubdailyLayers}
+                    />
+                    <MobileComparisonToggle />
                     <div
                       className="mobile-date-change-arrows-btn"
-                      style={{
-                        left: mobileLeft,
-                        bottom: mobileBottom,
-                      }}
+                      style={this.getMobileDateButtonStyle()}
                     >
                       <div id="zoom-buttons-group">
                         <DateChangeArrows
@@ -1173,8 +1192,7 @@ class Timeline extends React.Component {
                     <div
                       id="timeline-footer"
                       style={{
-                        display:
-                        isTimelineHidden ? 'none' : 'block',
+                        display: isTimelineHidden ? 'none' : 'block',
                       }}
                     >
                       {/* Axis */}
@@ -1300,7 +1318,7 @@ class Timeline extends React.Component {
                         isDraggerDragging={isDraggerDragging}
                         isAnimationPlaying={isAnimationPlaying}
                       />
-                      ) }
+                      )}
 
                       {!isTimelineDragging
                       && (
