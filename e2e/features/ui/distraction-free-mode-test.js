@@ -2,6 +2,7 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 
 const {
+  infoToolbarButton,
   locationSearchMinimizeButton,
   locationSearchToolbarButton,
   mapRotateLeft,
@@ -32,12 +33,13 @@ const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
   const visibleEls = [
     timelineContainer,
     sidebarContainer,
-    locationSearchToolbarButton,
     measureBtn,
     mapScaleMetricProj,
     mapScaleImperialProj,
   ];
   let presentEls = [
+    infoToolbarButton,
+    locationSearchToolbarButton,
     shareToolbarButton,
     projToolbarButton,
     snapshotToolbarButton,
@@ -45,7 +47,7 @@ const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
     zoomOutButton,
   ];
 
-  // add rotate buttons for polar projs
+  // add rotate buttons for polar projections
   if (proj !== 'geographic') {
     presentEls = [
       ...presentEls,
@@ -76,8 +78,8 @@ module.exports = {
 
   // verify distraction free mode shortcut hides ui elements
   'Enabling distraction free mode with shortcut key hides UI elements': (c) => {
-    c.waitForElementVisible('#wv-info-button');
-    c.click('#wv-info-button');
+    c.waitForElementVisible(infoToolbarButton);
+    c.click(infoToolbarButton);
     c.waitForElementVisible('#distraction_free_info_item');
     c.click('#distraction_free_info_item');
 
@@ -96,7 +98,7 @@ module.exports = {
   // verify distraction free mode activates with query string parameter df (in geographic projection)
   'Enabling distraction free mode activates query string parameter df': (c) => {
     c.url(`${c.globals.url}?df=true`);
-    c.waitForElementVisible('#wv-info-button');
+    c.waitForElementVisible('#wv-exit-distraction-free-mode-button');
 
     closeDistractionFreeAlert(c);
     distractionFreeModeValidElsRemoved(c, 'geographic', true);

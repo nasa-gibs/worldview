@@ -198,7 +198,10 @@ class toolbarContainer extends Component {
 
   renderProjectionButton() {
     const {
-      config, faSize, openModal, isDistractionFreeModeActive,
+      config,
+      faSize,
+      isDistractionFreeModeActive,
+      openModal,
     } = this.props;
     const buttonId = 'wv-proj-button';
     const labelText = 'Switch projection';
@@ -223,12 +226,12 @@ class toolbarContainer extends Component {
     const {
       config,
       faSize,
-      isDistractionFreeModeActive,
       isLocationSearchExpanded,
       isMobile,
       openModal,
       shouldBeCollapsed,
       toggleShowLocationSearch,
+      isDistractionFreeModeActive,
     } = this.props;
     const isFeatureEnabled = isLocationSearchFeatureEnabled(config);
     // do not render if Location Search feature isn't enabled
@@ -245,10 +248,10 @@ class toolbarContainer extends Component {
       : () => toggleShowLocationSearch();
 
     const buttonDisplayConditions = isMobile || (!isMobile && !isLocationSearchExpanded) || shouldBeCollapsed;
-    return (
+    return !isDistractionFreeModeActive && (
       <Button
         style={{
-          display: !isDistractionFreeModeActive && buttonDisplayConditions ? 'inline-block' : 'none',
+          display: buttonDisplayConditions ? 'inline-block' : 'none',
         }}
         id={buttonId}
         className="wv-toolbar-button"
@@ -310,19 +313,35 @@ class toolbarContainer extends Component {
     const buttonId = 'wv-info-button';
     const labelText = 'Information';
 
-    return (
+    return !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
         aria-label={labelText}
-        className={
-              `wv-toolbar-button${notificationClass}
-              ${isDistractionFreeModeActive ? 'wv-info-button-distraction-free-mode' : ''}`
-            }
+        className={`wv-toolbar-button${notificationClass}`}
         onClick={() => openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)}
         data-content={notificationContentNumber}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="info-circle" size={faSize} />
+      </Button>
+    );
+  }
+
+  renderDistractionFreeExitButton() {
+    const {
+      faSize, isDistractionFreeModeActive, toggleDistractionFreeModeAction,
+    } = this.props;
+    const buttonId = 'wv-exit-distraction-free-mode-button';
+    const labelText = 'Exit distraction free mode';
+    return isDistractionFreeModeActive && (
+      <Button
+        id={buttonId}
+        className="wv-toolbar-button wv-exit-distraction-free-mode-button"
+        aria-label={labelText}
+        onClick={() => toggleDistractionFreeModeAction()}
+      >
+        {this.renderTooltip(buttonId, labelText)}
+        <FontAwesomeIcon icon={['far', 'eye']} size={faSize} />
       </Button>
     );
   }
@@ -334,6 +353,7 @@ class toolbarContainer extends Component {
           id="wv-toolbar"
           className="wv-toolbar"
         >
+          {this.renderDistractionFreeExitButton()}
           {this.renderLocationSearchButtonComponent()}
           {this.renderShareButton()}
           {this.renderProjectionButton()}
@@ -397,7 +417,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDistractionFreeMode: () => {
+  toggleDistractionFreeModeAction: () => {
     dispatch(toggleDistractionFreeMode());
   },
   toggleDialogVisible: (isVisible) => {
@@ -489,5 +509,6 @@ toolbarContainer.propTypes = {
   rotation: PropTypes.number,
   shouldBeCollapsed: PropTypes.bool,
   toggleDialogVisible: PropTypes.func,
+  toggleDistractionFreeModeAction: PropTypes.func,
   toggleShowLocationSearch: PropTypes.func,
 };

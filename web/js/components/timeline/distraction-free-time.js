@@ -24,7 +24,7 @@ class DistractionFreeTimeUI extends Component {
     const {
       showDistractionFreeAlert,
     } = this.state;
-    const message = 'You are now in distraction free mode. Click on the i to exit.';
+    const message = 'You are now in distraction free mode. Click the eye button to exit.';
 
     return showDistractionFreeAlert && (
       <Alert
