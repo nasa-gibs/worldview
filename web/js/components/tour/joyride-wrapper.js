@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Joyride, { STATUS, ACTIONS, EVENTS } from 'react-joyride';
+import util from '../../util/util';
 
+const { events } = util;
 const placeholderElements = [];
 let key = 0;
 let joyrideProps;
@@ -19,23 +21,30 @@ export default function JoyrideWrapper ({
   const projParam = stepLink.split('&').filter((param) => param.includes('p='));
   const stepProj = projParam.length ? projParam[0].substr(2) : 'geographic';
   const projMatches = stepProj === proj;
+  const styles = {
+    options: {
+      arrowColor: '#ccc',
+      backgroundColor: '#ccc',
+      beaconSize: 50,
+      overlayColor: 'rgba(0, 0, 0, 0.5)',
+      primaryColor: '#d54e21',
+      spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
+      textColor: '#333',
+      width: undefined,
+      zIndex: 1050,
+    },
+  };
+
+  // Joyride config properties.  Some can also be configured per-step.
+  // See https://docs.react-joyride.com/step#common-props-inheritance for more info.
   const {
     continuous,
     disableOverlayClose,
     spotlightClicks,
     steps,
+    hideCloseButton,
+    eventTriggersIncrement,
   } = (currentStepObj || {}).joyride || {};
-  const styleOptions = {
-    arrowColor: '#ccc',
-    backgroundColor: '#ccc',
-    beaconSize: 50,
-    overlayColor: 'rgba(0, 0, 0, 0.5)',
-    primaryColor: '#d54e21',
-    spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
-    textColor: '#333',
-    width: undefined,
-    zIndex: 1050,
-  };
 
   const [elementPositionKey, setElementPositionKey] = useState(key);
   const [stepIndex, setStepIndex] = useState();
@@ -45,6 +54,23 @@ export default function JoyrideWrapper ({
     key += 1;
     setElementPositionKey(key);
   };
+
+  const currentJoyrideStep = steps && steps[stepIndex];
+
+  if (currentJoyrideStep) {
+    const { hideNextButton } = currentJoyrideStep;
+    if (hideNextButton) styles.buttonNext = { display: 'none' };
+    if (hideCloseButton) styles.buttonClose = { display: 'none' };
+  }
+  // Allow triggering step increment via event
+  useEffect(() => {
+    events.on('joyride:increment', () => {
+      if (run && eventTriggersIncrement) setStepIndex(stepIndex + 1);
+    });
+    return () => {
+      events.off('joyride:increment', incrementKey);
+    };
+  });
 
   /**
    * Set a placeholder DOM element's position based on map coords
@@ -131,7 +157,6 @@ export default function JoyrideWrapper ({
     }
   }
 
-
   /**
    * Forcing a re-render on a target resize (by calling incrementKey())
    * was causing the beacon to be skipped due to this line in the
@@ -189,7 +214,8 @@ export default function JoyrideWrapper ({
       callback={joyrideStateCallback}
       spotlightClicks={spotlightClicks}
       disableOverlayClose={disableOverlayClose}
-      styles={{ options: styleOptions }}
+      hideCloseButton={hideCloseButton}
+      styles={styles}
       disableScrolling
       disableScrollParentFix
     />
