@@ -70,19 +70,19 @@ export default function AboutPage() {
             </thead>
             <tbody>
               <tr>
-                <td><code>Arrow-Up</code></td>
-                <td>Change date to a greater interval (e.g., days &rarr; months)</td>
+                <td><code>&uarr;</code></td>
+                <td>Change date to a greater interval (e.g., days to months)</td>
               </tr>
               <tr>
-                <td><code>Arrow-Down</code></td>
-                <td>Change date to a smaller interval (e.g., months &rarr; days</td>
+                <td><code>&darr;</code></td>
+                <td>Change date to a smaller interval (e.g., months to days</td>
               </tr>
               <tr>
-                <td><code>Arrow-Left</code></td>
+                <td><code>&larr;</code></td>
                 <td>Move backward one time interval</td>
               </tr>
               <tr>
-                <td><code>Arrow-Right</code></td>
+                <td><code>&rarr;</code></td>
                 <td>Move forward one time interval</td>
               </tr>
               <tr>

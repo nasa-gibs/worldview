@@ -101,9 +101,6 @@
 .about-page .keyboard-shortcuts-table {
   width: 100%;
   margin-top: 20px;
-  thead {
-    padding-top: 10px;
-  }
   tr {
     :first-child {
       text-align: left;
@@ -117,6 +114,8 @@
   }
   code {
     color: #f60;
+    padding: 1px 8px;
+    border: thin solid;
   }
 }
 

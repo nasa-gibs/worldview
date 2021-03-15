@@ -11,7 +11,6 @@ class DistractionFreeTimeUI extends Component {
     };
   }
 
-  // dismiss message instruction alert
   dismissDistractionFreeAlert = () => this.setState({ showDistractionFreeAlert: false });
 
   handleMouseOver = () => {
@@ -19,7 +18,6 @@ class DistractionFreeTimeUI extends Component {
     hoverOverDistractionFreeTimeUI(true);
   }
 
-  // render alert message to let desktop users know they are in distraction free mode
   renderDistractionFreeAlert = () => {
     const {
       showDistractionFreeAlert,
