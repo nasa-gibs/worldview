@@ -1,7 +1,6 @@
 import util from './util/util';
 import mapui from './map/ui';
 import mapAnimate from './map/animate';
-import naturalEventsUI from './map/natural-events/ui';
 
 const { events } = util;
 
@@ -34,9 +33,7 @@ export default function combineUi(models, config, store) {
   } catch (e) {
     util.warn(e);
   }
-  if (config.features.naturalEvents) {
-    ui.naturalEvents = naturalEventsUI(ui, config, store, models);
-  }
+
   registerMapMouseHandlers(ui.map.proj);
 
   // Sink all focus on inputs if click unhandled
