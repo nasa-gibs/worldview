@@ -13,7 +13,7 @@ let joyrideProps;
  * @param {*} props
  */
 export default function JoyrideWrapper ({
-  tourSteps, currentTourStep, map, proj, tourComplete,
+  tourSteps, currentTourStep, map, proj, tourComplete, resetProductPicker,
 }) {
   if (!map) return null;
   const currentStepObj = tourSteps[currentTourStep - 1];
@@ -62,15 +62,24 @@ export default function JoyrideWrapper ({
     if (hideNextButton) styles.buttonNext = { display: 'none' };
     if (hideCloseButton) styles.buttonClose = { display: 'none' };
   }
+
   // Allow triggering step increment via event
   useEffect(() => {
-    events.on('joyride:increment', () => {
+    const incrementStep = () => {
       if (run && eventTriggersIncrement) setStepIndex(stepIndex + 1);
-    });
+    };
+    events.on('joyride:increment', incrementStep);
     return () => {
-      events.off('joyride:increment', incrementKey);
+      events.off('joyride:increment', incrementStep);
     };
   });
+
+  // For the tutorial tour, we need to reset the product picker to initial state
+  useEffect(() => {
+    if (eventTriggersIncrement) {
+      resetProductPicker();
+    }
+  }, [currentTourStep]);
 
   /**
    * Set a placeholder DOM element's position based on map coords
@@ -228,4 +237,5 @@ JoyrideWrapper.propTypes = {
   proj: PropTypes.string,
   tourComplete: PropTypes.bool,
   tourSteps: PropTypes.array,
+  resetProductPicker: PropTypes.func,
 };

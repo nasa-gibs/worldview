@@ -109,7 +109,7 @@ class ProductPickerHeader extends React.Component {
     if (mode !== 'search') {
       setTimeout(() => {
         events.trigger('joyride:increment');
-      }, 1500);
+      }, 4000);
       toggleSearchMode();
     }
   }
