@@ -111,7 +111,7 @@ function render (config, legacyState) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <App models={models} />
+      <App models={models} store={store} />
     </Provider>,
     document.getElementById('app'),
   );
