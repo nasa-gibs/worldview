@@ -18,12 +18,13 @@ import {
   TOGGLE_MOBILE_FACETS,
   CLEAR_RECENT_LAYERS,
   CLEAR_SINGLE_RECENT_LAYER,
+  PROJ_SWITCH,
   RESET_STATE,
 } from './constants';
 
 let CATEGORY_GROUP_ORDER = [];
 
-export const productPickerState = {
+const productPickerState = {
   mode: 'category',
   category: undefined,
   categoryType: undefined,
@@ -225,7 +226,7 @@ export function productPickerReducer(state = productPickerState, action) {
       };
     }
 
-    case RESET_STATE: {
+    case PROJ_SWITCH: {
       // When switching projections: if we were in 'search'
       // mode stay there.  Otherwise if in a polar projection
       // show 'measurement' rather than 'category'
@@ -252,6 +253,15 @@ export function productPickerReducer(state = productPickerState, action) {
         ...newState,
       };
     }
+
+    // When running the product picker tutorial, need to start with a known clear state
+    case RESET_STATE: {
+      return {
+        ...productPickerState,
+        categoryType: CATEGORY_GROUP_ORDER[0],
+      };
+    }
+
     default:
       return state;
   }
