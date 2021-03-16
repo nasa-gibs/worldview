@@ -37,44 +37,62 @@ class EventTrack extends React.Component {
       active: false,
       trackDetails: {},
     };
+
+    this.onMoveEnd = this.onMoveEnd.bind(this);
+    this.onPropertyChange = this.onPropertyChange.bind(this);
+  }
+
+  componentDidMount() {
+    const { map, selectedEvent } = this.props;
+    if (map && selectedEvent.id && selectedEvent.date) {
+      this.updateCurrentTrack();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { trackDetails } = this.state;
-    const { map, eventsActive } = this.props;
-
-    // Previously onSidebarChange
-    if (eventsActive !== prevProps.eventsActive) {
-      this.debounceTrackUpdate();
-    } else if (trackDetails.id) this.update(null);
+    const {
+      map, selectedEvent, selectedDate,
+    } = this.props;
+    const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
+    const selectedDateChange = selectedDate !== prevProps.selectedDate;
 
     if (map !== prevProps.map) {
       map.on('moveend', this.onMoveEnd);
-
-      // reset track on change to resolution or rotation
       map.getView().on('propertychange', this.onPropertyChange);
+    }
+
+    if (selectedEvent && (selectedEventChange || selectedDateChange)) {
+      this.updateCurrentTrack();
     }
   }
 
   componentWillUnmount() {
     const { map } = this.props;
+    this.update(null);
     map.un('moveend', this.onMoveEnd);
     map.getView().un('propertychange', this.onPropertyChange);
   }
 
-  debounceTrackUpdate = lodashDebounce(function () {
-    const { selectEvent, eventsData, selectedEvent } = this.props;
+  updateCurrentTrack() {
+    const { selectedEvent, eventsData } = this.props;
+    const { id, date } = selectedEvent;
+    const event = eventsData.find((e) => e.id === id);
+    this.update(event, date);
+  }
 
-    if (!selectedEvent.id || !selectedEvent.date) {
-      return;
-    }
-    const event = eventsData.find((e) => e.id === selectedEvent.id);
-    this.update(event, selectedEvent.date, (id, date) => {
-      selectEvent(id, date);
-    });
-  }, 250);
+  // debounceTrackUpdate = lodashDebounce(function () {
+  //   const { selectEvent, eventsData, selectedEvent } = this.props;
 
-  onMoveEnd = (e) => {
+  //   if (!selectedEvent.id || !selectedEvent.date) {
+  //     return;
+  //   }
+  //   const event = eventsData.find((e) => e.id === selectedEvent.id);
+  //   this.update(event, selectedEvent.date, (id, date) => {
+  //     selectEvent(id, date);
+  //   });
+  // }, 250);
+
+  onMoveEnd = function(e) {
     const { map } = this.props;
     const { trackDetails, active } = this.state;
 
@@ -82,7 +100,7 @@ class EventTrack extends React.Component {
     if (trackDetails.id) {
       addPointOverlays(map, trackDetails.pointArray);
     } else {
-      this.debounceTrackUpdate();
+      // this.debounceTrackUpdate();
     }
   }
 
@@ -139,20 +157,22 @@ class EventTrack extends React.Component {
    * @param  {Object} event EONET event object
    * @param  {Object} map Ol map object
    * @param  {String} selectedDate
-   * @param  {Function} callback event change callback
    * @return {[type]}
    */
-  update = function(event, selectedDate, callback) {
-    const { proj, map } = this.props;
+  update = function(event, date, callbackParam) {
+    const {
+      proj, map, selectEventCallback,
+    } = this.props;
     const { trackDetails } = this.state;
     let newTrackDetails;
+    const callback = callbackParam || selectEventCallback;
 
     const createAndAddTrack = () => {
       newTrackDetails = createTrack(
         proj,
         event,
         map,
-        selectedDate,
+        date,
         callback,
       );
       map.addLayer(newTrackDetails.track);
@@ -167,9 +187,9 @@ class EventTrack extends React.Component {
       if (trackDetails.id === event.id) {
         // If same Track but different selection
         // Just update classNames
-        if (trackDetails.selectedDate !== selectedDate) {
+        if (trackDetails.selectedDate !== date) {
           const isClusteredSelection = !document.getElementById(
-            `track-marker-${selectedDate}`,
+            `track-marker-${date}`,
           );
           // If New Date is in cluster build new track
           if (isClusteredSelection) {
@@ -177,8 +197,8 @@ class EventTrack extends React.Component {
             createAndAddTrack();
           } else {
             newTrackDetails = trackDetails;
-            updateSelection(selectedDate);
-            newTrackDetails.selectedDate = selectedDate;
+            updateSelection(date);
+            newTrackDetails.selectedDate = date;
           }
         } else {
           // If the date and event are the same
@@ -643,11 +663,12 @@ function addOverlayIfIsVisible(map, overlay) {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents,
+    map, proj, events, requestedEvents, date,
   } = state;
   return {
     map: map.ui.selected,
     proj,
+    selectedDate: date.selected,
     selectedEvent: events.selected,
     eventsData: requestedEvents.response,
     eventsActive: events.active,
@@ -661,12 +682,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 EventTrack.propTypes = {
-  eventsActive: PropTypes.bool,
   eventsData: PropTypes.array,
   map: PropTypes.object,
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
+  selectEventCallback: PropTypes.func,
   selectedEvent: PropTypes.object,
+  selectedDate: PropTypes.object,
 };
 
 export default connect(

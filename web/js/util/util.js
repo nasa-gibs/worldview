@@ -691,6 +691,11 @@ export default (function(self) {
     return self.now();
   };
 
+  self.yesterday = function() {
+    const now = new Date();
+    return new Date(now.setDate(now.getDate() - 1));
+  };
+
   /**
    * General warning handler.
    *
