@@ -34,14 +34,15 @@ class EventMarkers extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      proj, eventsDataIsLoading, eventsActive, selectedEvent,
+      proj, eventsDataIsLoading, eventsActive, selectedEvent, selectedDate,
     } = this.props;
     const activeChange = eventsActive !== prevProps.eventsActive;
     const finishedLoading = !eventsDataIsLoading && (eventsDataIsLoading !== prevProps.eventsDataIsLoading);
     const projChange = proj !== prevProps.proj;
     const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
+    const selectedDateChange = selectedDate !== prevProps.selectedDate;
 
-    if (activeChange || finishedLoading || projChange || selectedEventChange) {
+    if (activeChange || finishedLoading || projChange || selectedEventChange || selectedDateChange) {
       this.remove();
       this.draw();
     }
@@ -53,7 +54,7 @@ class EventMarkers extends React.Component {
 
   draw() {
     const {
-      eventsData, selectEvent, selectedEvent, proj, map,
+      eventsData, selectEvent, selectedEvent, proj, map, mapUi,
     } = this.props;
 
     if (!eventsData || eventsData.length < 1) return null;
@@ -141,8 +142,7 @@ class EventMarkers extends React.Component {
               willSelect = true;
               moveCount = 0;
             },
-            // TODO get from Redux state?
-            // ui.supportsPassive ? { passive: true } : false,
+            mapUi.supportsPassive ? { passive: true } : false,
           );
         });
         ['pointermove', 'mousemove'].forEach((type) => {
@@ -154,8 +154,7 @@ class EventMarkers extends React.Component {
                 willSelect = false;
               }
             },
-            // TODO get from Redux state?
-            // ui.supportsPassive ? { passive: true } : false,
+            mapUi.supportsPassive ? { passive: true } : false,
           );
         });
         ['touchend', 'click'].forEach((type) => {
@@ -173,8 +172,7 @@ class EventMarkers extends React.Component {
                 });
               }
             },
-            // TODO get from Redux state?
-            // ui.supportsPassive ? { passive: true } : false,
+            mapUi.supportsPassive ? { passive: true } : false,
           );
         });
       }
@@ -266,6 +264,7 @@ const mapStateToProps = (state) => {
   return {
     activeTab: sidebar.activeTab,
     map: map.ui.selected,
+    mapUi: map.ui,
     proj,
     selectedEvent: events.selected,
     eventsData: requestedEvents.response,
@@ -285,9 +284,11 @@ EventMarkers.propTypes = {
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
   map: PropTypes.object,
+  mapUi: PropTypes.object,
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
+  selectedDate: PropTypes.object,
 };
 
 export default connect(
