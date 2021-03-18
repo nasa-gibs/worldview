@@ -583,7 +583,6 @@ const getSubdailyDateRange = ({
   }
   let minMinuteDate;
   if (rangeLimitsProvided) {
-  // eslint-disable-next-line no-nested-ternary
     minMinuteDate = hourBeforeStartDateLimit < minDate
       ? hourBeforeStartDateLimit
       : hourBeforeStartDateLimit > minMinuteDateMinusIntervalOffset

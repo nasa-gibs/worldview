@@ -142,7 +142,6 @@ export function eventsRequestReducer(actionName, state, action) {
         response: null,
       });
     case SUCCESS: {
-      // eslint-disable-next-line no-nested-ternary
       const key = actionName === REQUEST_EVENTS
         ? 'events'
         : actionName === REQUEST_CATEGORIES

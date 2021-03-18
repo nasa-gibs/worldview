@@ -986,22 +986,32 @@ class Timeline extends React.Component {
     const {
       hasSubdailyLayers,
       isCompareModeActive,
-      isScreenWidthLessThan350,
-      isScreenWidthLessThan450,
+      screenWidth,
     } = this.props;
-    // eslint-disable-next-line no-nested-ternary
-    const mobileLeft = hasSubdailyLayers
-      // eslint-disable-next-line no-nested-ternary
-      ? isScreenWidthLessThan450
-        ? isCompareModeActive ? '112px' : '10px'
-        : '277px'
-      // eslint-disable-next-line no-nested-ternary
-      : isScreenWidthLessThan350
-        ? isCompareModeActive ? '112px' : '10px'
-        : '180px';
-    const mobileBottom = (hasSubdailyLayers && isScreenWidthLessThan450) || isScreenWidthLessThan350
-      ? '65px'
-      : '10px';
+
+    const isScreenWidthLessThan350 = screenWidth < 350;
+    const isScreenWidthLessThan450 = screenWidth < 450;
+
+    // default positioning
+    let mobileLeft = '180px';
+    let mobileBottom = '10px';
+
+    // positioning will change depending on a combination of:
+    // 1) subdaily (mobile date picker width);
+    // 2) screen width; and
+    // 3) compare mode
+    if (hasSubdailyLayers) {
+      if (isScreenWidthLessThan450) {
+        mobileLeft = isCompareModeActive ? '112px' : '10px';
+        mobileBottom = '65px';
+      } else {
+        mobileLeft = '277px';
+      }
+    } else if (isScreenWidthLessThan350) {
+      mobileLeft = isCompareModeActive ? '112px' : '10px';
+      mobileBottom = '65px';
+    }
+
     return {
       left: mobileLeft,
       bottom: mobileBottom,
@@ -1179,7 +1189,6 @@ class Timeline extends React.Component {
                         clickAnimationButton={this.clickAnimationButton}
                         disabled={animationDisabled}
                         label={
-                        // eslint-disable-next-line no-nested-ternary
                         isCompareModeActive
                           ? 'Animation feature is deactivated when Compare feature is active'
                           : isDataDownload
@@ -1189,158 +1198,155 @@ class Timeline extends React.Component {
                       />
                     </div>
 
-                    <div
-                      id="timeline-footer"
-                      style={{
-                        display: isTimelineHidden ? 'none' : 'block',
-                      }}
-                    >
-                      {/* Axis */}
-                      <TimelineAxis
-                        axisWidth={axisWidth}
-                        parentOffset={parentOffset}
-                        leftOffset={leftOffset}
-                        position={position}
-                        transformX={transformX}
-                        timeScale={timeScale}
-                        timelineStartDateLimit={timelineStartDateLimit}
-                        timelineEndDateLimit={timelineEndDateLimit}
-                        frontDate={frontDate}
-                        backDate={backDate}
-                        dateA={dateA}
-                        dateB={dateB}
-                        hoverTime={hoverTime}
-                        draggerSelected={draggerSelected}
-                        draggerTimeState={draggerTimeState}
-                        draggerTimeStateB={draggerTimeStateB}
-                        draggerPosition={draggerPosition}
-                        draggerPositionB={draggerPositionB}
-                        draggerVisible={draggerVisible}
-                        draggerVisibleB={draggerVisibleB}
-                        animationStartLocation={animationStartLocation}
-                        animationEndLocation={animationEndLocation}
-                        animStartLocationDate={animStartLocationDate}
-                        animEndLocationDate={animEndLocationDate}
-                        debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
-                        onDateChange={this.onDateChange}
-                        updatePositioning={this.updatePositioning}
-                        updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
-                        updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
-                        updatePositioningOnAxisStopDrag={this.updatePositioningOnAxisStopDrag}
-                        updateDraggerDatePosition={this.updateDraggerDatePosition}
-                        showHoverOn={this.showHoverOn}
-                        showHoverOff={this.showHoverOff}
-                        showHover={this.showHover}
-                        hasFutureLayers={hasFutureLayers}
-                        hasSubdailyLayers={hasSubdailyLayers}
-                        isCompareModeActive={isCompareModeActive}
-                        isAnimationPlaying={isAnimationPlaying}
-                        isTourActive={isTourActive}
-                        isAnimationDraggerDragging={isAnimationDraggerDragging}
-                        isDraggerDragging={isDraggerDragging}
-                        isTimelineDragging={isTimelineDragging}
-                        matchingTimelineCoverage={matchingTimelineCoverage}
-                      />
-
-                      <AxisHoverLine
-                        activeLayers={activeLayers}
-                        shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
-                        axisWidth={axisWidth}
-                        hoverLinePosition={hoverLinePosition}
-                        showHoverLine={showHoverLine}
-                        isTimelineDragging={isTimelineDragging}
-                        isAnimationDraggerDragging={isAnimationDraggerDragging}
-                        isDraggerDragging={isDraggerDragging}
-                        draggerSelected={draggerSelected}
-                        draggerPosition={draggerPosition}
-                        draggerPositionB={draggerPositionB}
-                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
-                      />
-
-                      {/* Timeline Layer Coverage Panel */}
-                      <TimelineLayerCoveragePanel
-                        appNow={appNow}
-                        axisWidth={axisWidth}
-                        backDate={backDate}
-                        frontDate={frontDate}
-                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
-                        matchingTimelineCoverage={matchingTimelineCoverage}
-                        parentOffset={parentOffset}
-                        positionTransformX={position + transformX}
-                        setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
-                        timelineStartDateLimit={timelineStartDateLimit}
-                        timeScale={timeScale}
-                        toggleLayerCoveragePanel={this.toggleLayerCoveragePanel}
-                      />
-
-                      {isAnimationWidgetReady
+                    {!isTimelineHidden
                       && (
-                      <TimelineRangeSelector
-                        axisWidth={axisWidth}
-                        position={position}
-                        transformX={transformX}
-                        timeScale={timeScale}
-                        timelineStartDateLimit={timelineStartDateLimit}
-                        timelineEndDateLimit={timelineEndDateLimit}
-                        frontDate={frontDate}
-                        startLocation={animationStartLocation}
-                        endLocation={animationEndLocation}
-                        startLocationDate={animationStartLocationDate}
-                        endLocationDate={animationEndLocationDate}
-                        updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
-                        max={rangeSelectorMax}
-                      />
-                      )}
+                      <div id="timeline-footer">
+                        {/* Axis */}
+                        <TimelineAxis
+                          axisWidth={axisWidth}
+                          parentOffset={parentOffset}
+                          leftOffset={leftOffset}
+                          position={position}
+                          transformX={transformX}
+                          timeScale={timeScale}
+                          timelineStartDateLimit={timelineStartDateLimit}
+                          timelineEndDateLimit={timelineEndDateLimit}
+                          frontDate={frontDate}
+                          backDate={backDate}
+                          dateA={dateA}
+                          dateB={dateB}
+                          hoverTime={hoverTime}
+                          draggerSelected={draggerSelected}
+                          draggerTimeState={draggerTimeState}
+                          draggerTimeStateB={draggerTimeStateB}
+                          draggerPosition={draggerPosition}
+                          draggerPositionB={draggerPositionB}
+                          draggerVisible={draggerVisible}
+                          draggerVisibleB={draggerVisibleB}
+                          animationStartLocation={animationStartLocation}
+                          animationEndLocation={animationEndLocation}
+                          animStartLocationDate={animStartLocationDate}
+                          animEndLocationDate={animEndLocationDate}
+                          debounceChangeTimeScaleWheel={this.debounceChangeTimeScaleWheel}
+                          onDateChange={this.onDateChange}
+                          updatePositioning={this.updatePositioning}
+                          updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
+                          updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
+                          updatePositioningOnAxisStopDrag={this.updatePositioningOnAxisStopDrag}
+                          updateDraggerDatePosition={this.updateDraggerDatePosition}
+                          showHoverOn={this.showHoverOn}
+                          showHoverOff={this.showHoverOff}
+                          showHover={this.showHover}
+                          hasFutureLayers={hasFutureLayers}
+                          hasSubdailyLayers={hasSubdailyLayers}
+                          isCompareModeActive={isCompareModeActive}
+                          isAnimationPlaying={isAnimationPlaying}
+                          isTourActive={isTourActive}
+                          isAnimationDraggerDragging={isAnimationDraggerDragging}
+                          isDraggerDragging={isDraggerDragging}
+                          isTimelineDragging={isTimelineDragging}
+                          matchingTimelineCoverage={matchingTimelineCoverage}
+                        />
 
-                      {frontDate
-                      && (
-                      <DraggerContainer
-                        axisWidth={axisWidth}
-                        position={position}
-                        transformX={transformX}
-                        timeScale={timeScale}
-                        timelineStartDateLimit={timelineStartDateLimit}
-                        timelineEndDateLimit={timelineEndDateLimit}
-                        frontDate={frontDate}
-                        backDate={backDate}
-                        draggerSelected={draggerSelected}
-                        draggerTimeState={draggerTimeState}
-                        draggerTimeStateB={draggerTimeStateB}
-                        draggerPosition={draggerPosition}
-                        draggerPositionB={draggerPositionB}
-                        draggerVisible={draggerVisible}
-                        draggerVisibleB={draggerVisibleB}
-                        setDraggerVisibility={this.setDraggerVisibility}
-                        toggleShowDraggerTime={this.toggleShowDraggerTime}
-                        onChangeSelectedDragger={toggleActiveCompareState}
-                        updateDraggerDatePosition={this.updateDraggerDatePosition}
-                        isCompareModeActive={isCompareModeActive}
-                        isDraggerDragging={isDraggerDragging}
-                        isAnimationPlaying={isAnimationPlaying}
-                      />
-                      )}
+                        <AxisHoverLine
+                          activeLayers={activeLayers}
+                          shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
+                          axisWidth={axisWidth}
+                          hoverLinePosition={hoverLinePosition}
+                          showHoverLine={showHoverLine}
+                          isTimelineDragging={isTimelineDragging}
+                          isAnimationDraggerDragging={isAnimationDraggerDragging}
+                          isDraggerDragging={isDraggerDragging}
+                          draggerSelected={draggerSelected}
+                          draggerPosition={draggerPosition}
+                          draggerPositionB={draggerPositionB}
+                          isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
+                        />
 
-                      {!isTimelineDragging
-                      && (
-                      <DateToolTip
-                        activeLayers={activeLayers}
-                        shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
-                        axisWidth={axisWidth}
-                        leftOffset={leftOffset}
-                        hoverTime={hoverTime}
-                        draggerSelected={draggerSelected}
-                        draggerTimeState={draggerTimeState}
-                        draggerTimeStateB={draggerTimeStateB}
-                        draggerPosition={draggerPosition}
-                        draggerPositionB={draggerPositionB}
-                        hasSubdailyLayers={hasSubdailyLayers}
-                        showDraggerTime={showDraggerTime}
-                        showHoverLine={showHoverLine}
-                        isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
-                      />
-                      )}
-                    </div>
+                        {/* Timeline Layer Coverage Panel */}
+                        <TimelineLayerCoveragePanel
+                          appNow={appNow}
+                          axisWidth={axisWidth}
+                          backDate={backDate}
+                          frontDate={frontDate}
+                          isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
+                          matchingTimelineCoverage={matchingTimelineCoverage}
+                          parentOffset={parentOffset}
+                          positionTransformX={position + transformX}
+                          setMatchingTimelineCoverage={this.setMatchingTimelineCoverage}
+                          timelineStartDateLimit={timelineStartDateLimit}
+                          timeScale={timeScale}
+                          toggleLayerCoveragePanel={this.toggleLayerCoveragePanel}
+                        />
 
+                        {isAnimationWidgetReady
+                          && (
+                          <TimelineRangeSelector
+                            axisWidth={axisWidth}
+                            position={position}
+                            transformX={transformX}
+                            timeScale={timeScale}
+                            timelineStartDateLimit={timelineStartDateLimit}
+                            timelineEndDateLimit={timelineEndDateLimit}
+                            frontDate={frontDate}
+                            startLocation={animationStartLocation}
+                            endLocation={animationEndLocation}
+                            startLocationDate={animationStartLocationDate}
+                            endLocationDate={animationEndLocationDate}
+                            updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
+                            max={rangeSelectorMax}
+                          />
+                          )}
+
+                        {frontDate
+                          && (
+                          <DraggerContainer
+                            axisWidth={axisWidth}
+                            position={position}
+                            transformX={transformX}
+                            timeScale={timeScale}
+                            timelineStartDateLimit={timelineStartDateLimit}
+                            timelineEndDateLimit={timelineEndDateLimit}
+                            frontDate={frontDate}
+                            backDate={backDate}
+                            draggerSelected={draggerSelected}
+                            draggerTimeState={draggerTimeState}
+                            draggerTimeStateB={draggerTimeStateB}
+                            draggerPosition={draggerPosition}
+                            draggerPositionB={draggerPositionB}
+                            draggerVisible={draggerVisible}
+                            draggerVisibleB={draggerVisibleB}
+                            setDraggerVisibility={this.setDraggerVisibility}
+                            toggleShowDraggerTime={this.toggleShowDraggerTime}
+                            onChangeSelectedDragger={toggleActiveCompareState}
+                            updateDraggerDatePosition={this.updateDraggerDatePosition}
+                            isCompareModeActive={isCompareModeActive}
+                            isDraggerDragging={isDraggerDragging}
+                            isAnimationPlaying={isAnimationPlaying}
+                          />
+                          )}
+
+                        {!isTimelineDragging
+                          && (
+                          <DateToolTip
+                            activeLayers={activeLayers}
+                            shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
+                            axisWidth={axisWidth}
+                            leftOffset={leftOffset}
+                            hoverTime={hoverTime}
+                            draggerSelected={draggerSelected}
+                            draggerTimeState={draggerTimeState}
+                            draggerTimeStateB={draggerTimeStateB}
+                            draggerPosition={draggerPosition}
+                            draggerPositionB={draggerPositionB}
+                            hasSubdailyLayers={hasSubdailyLayers}
+                            showDraggerTime={showDraggerTime}
+                            showHoverLine={showHoverLine}
+                            isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
+                          />
+                          )}
+                      </div>
+                      )}
                     {/* Custom Interval Selector Widget */}
                     <CustomIntervalSelectorWidget
                       customDelta={customIntervalValue}
@@ -1415,8 +1421,6 @@ function mapStateToProps(state) {
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
   const isSmallScreen = lessThan.medium;
-  const isScreenWidthLessThan350 = screenWidth < 350;
-  const isScreenWidthLessThan450 = screenWidth < 450;
 
   // handle active layer filtering and check for subdaily
   const activeLayers = getActiveLayers(state);
@@ -1486,8 +1490,7 @@ function mapStateToProps(state) {
     activeLayers: activeLayersFiltered,
     isTourActive: tour.active,
     isSmallScreen,
-    isScreenWidthLessThan350,
-    isScreenWidthLessThan450,
+    screenWidth,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
     customSelected,
@@ -1603,8 +1606,6 @@ Timeline.propTypes = {
   isDataDownload: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
-  isScreenWidthLessThan350: PropTypes.bool,
-  isScreenWidthLessThan450: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
@@ -1614,6 +1615,7 @@ Timeline.propTypes = {
   openAnimation: PropTypes.func,
   parentOffset: PropTypes.number,
   rightArrowDisabled: PropTypes.bool,
+  screenWidth: PropTypes.number,
   selectedDate: PropTypes.object,
   selectInterval: PropTypes.func,
   timelineCustomModalOpen: PropTypes.bool,

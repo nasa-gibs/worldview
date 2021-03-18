@@ -105,7 +105,10 @@ function LayersContainer (props) {
     </DragDropContext>
   );
 
-  const maxHeight = isCompareActive && isMobile ? height - 94 : height;
+  const mobileHeightCoeff = isCompareActive ? -30 : 20;
+  const maxHeight = isMobile
+    ? height + mobileHeightCoeff
+    : height;
   const scrollContainerStyles = {
     maxHeight: `${maxHeight}px`,
     overflowY: 'auto',

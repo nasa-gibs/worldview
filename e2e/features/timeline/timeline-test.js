@@ -22,8 +22,9 @@ module.exports = {
     c.expect.element('#timeline-footer').to.be.visible;
     // hide timeline
     c.click('#timeline-hide')
-      .waitForElementNotVisible('#timeline-footer', TIME_LIMIT);
-    c.expect.element('#timeline-footer').to.not.be.visible;
+      .waitForElementNotPresent('#timeline-footer', TIME_LIMIT);
+    c.expect.element('#timeline-footer').to.not.be.present;
+
     // expand timeline
     c.click('#timeline-hide')
       .waitForElementVisible('#timeline-footer', TIME_LIMIT);

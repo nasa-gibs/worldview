@@ -102,7 +102,6 @@ class DateToolTip extends PureComponent {
       toolTipHeightOffset = Math.max(toolTipHeightOffset, -357);
     }
 
-    // eslint-disable-next-line no-nested-ternary
     const toolTipWidth = hasSubdailyLayers
       ? toolTipDayOfYear >= 100
         ? '239px'
