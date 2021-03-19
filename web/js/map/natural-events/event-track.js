@@ -586,7 +586,7 @@ const addPoints = function(proj, clusters, map, selectedDate, callback) {
  * @param  {Function} callback
  * @return {Object} Openlayers overlay object
  */
-function getClusterPointEl(proj, cluster, map, pointClusterObj, callback) {
+function getClusterPointEl(proj, cluster, map, pointClusterObj) {
   const overlayEl = document.createElement('div');
   const circleEl = document.createElement('div');
   const innerCircleEl = document.createElement('div');
