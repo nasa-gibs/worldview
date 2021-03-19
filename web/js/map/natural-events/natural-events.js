@@ -24,19 +24,10 @@ class NaturalEvents extends React.Component {
     super(props);
 
     this.state = {
-      filteredEvents: [],
       prevSelectedEvent: {},
     };
 
     this.selectEvent = this.selectEvent.bind(this);
-    this.filterEventList = this.filterEventList.bind(this);
-  }
-
-  componentDidMount() {
-    const { map, eventsDataIsLoading, eventsData } = this.props;
-    if (map && !eventsDataIsLoading && eventsData) {
-      this.filterEventList();
-    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -48,15 +39,17 @@ class NaturalEvents extends React.Component {
     } = this.props;
     const loadingChange = eventsDataIsLoading !== prevProps.eventsDataIsLoading;
     const projChange = proj !== prevProps.proj;
-    const mapChange = map !== prevProps.map;
     const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
 
     if (!map || eventsDataIsLoading) return;
 
-    if (loadingChange || projChange || mapChange) {
-      map.on('moveend', this.filterEventList);
-      // TODO unbind when map changes?
-      this.filterEventList();
+    // When changing projection, zoom to the selected event if it is visible
+    if (projChange && selectedEvent) {
+      const { id, date } = selectedEvent;
+      const event = this.filterEventList().find((e) => e.id === id);
+      if (event) {
+        this.zoomToEvent(event, date);
+      }
     }
 
     if (selectedEventChange) {
@@ -69,22 +62,14 @@ class NaturalEvents extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    const { map } = this.props;
-    map.un('moveend', this.filterEventList);
-  }
-
   filterEventList() {
     const {
-      map, proj, eventsData, selectedEvent, isZoomed,
+      map, proj, eventsData, selectedEvent,
     } = this.props;
-    // const extent = map.getView().calculateExtent();
-    // const shouldFilter = isZoomed || proj.selected.id !== 'geographic';
 
-    // const filteredEvents = shouldFilter
-    //   ? getEventsWithinExtent(eventsData, selectedEvent, extent, proj.selected)
-    //   : eventsData;
-    this.setState({ filteredEvents: eventsData });
+    const extent = map.getView().calculateExtent();
+    const eventsInExtentMap = getEventsWithinExtent(eventsData, selectedEvent, extent, proj.selected);
+    return eventsData.filter((e) => eventsInExtentMap[e.id]);
   }
 
   getZoomPromise = function(
@@ -99,16 +84,16 @@ class NaturalEvents extends React.Component {
   };
 
   selectEvent(id, date, isInitialLoad) {
-    const { filteredEvents, prevSelectedEvent } = this.state;
+    const { prevSelectedEvent } = this.state;
     const {
-      mapUi, selectDate, selectEventFinished,
+      mapUi, selectDate, selectEventFinished, eventsData,
     } = this.props;
 
     const isIdChange = !prevSelectedEvent || prevSelectedEvent.id !== id;
     const prevId = prevSelectedEvent.id ? prevSelectedEvent.id : false;
-    const prevEvent = prevId && filteredEvents.find((e) => e.id === prevId);
+    const prevEvent = prevId && eventsData.find((e) => e.id === prevId);
     const prevCategory = prevEvent ? prevEvent.categories[0].title : false;
-    const event = filteredEvents.find((e) => e.id === id);
+    const event = eventsData.find((e) => e.id === id);
     const category = event && event.categories[0].title;
     const isSameCategory = category === prevCategory;
     if (!event) {
@@ -180,9 +165,10 @@ class NaturalEvents extends React.Component {
   }
 
   render() {
-    return (
+    const { eventsData } = this.props;
+    return !eventsData ? null : (
       <>
-        <EventTrack selectEventCallback={this.selectEvent} />
+        <EventTrack />
         <EventMarkers />
       </>
     );
@@ -199,8 +185,6 @@ const mapStateToProps = (state) => {
     mapUi: map.ui,
     config,
     proj,
-    active: events.active,
-    isZoomed: selectedMap && Math.floor(selectedMap.getView().getZoom()) >= 3,
     eventsDataIsLoading: requestedEvents.isLoading,
     eventsData: requestedEvents.response,
     selectedEvent: events.selected,
@@ -221,7 +205,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 NaturalEvents.propTypes = {
   activateLayersForEventCategory: PropTypes.func,
-  isZoomed: PropTypes.bool,
   config: PropTypes.object,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
