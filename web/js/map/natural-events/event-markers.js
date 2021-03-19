@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import lodashFind from 'lodash/find';
 import lodashIsEmpty from 'lodash/isEmpty';
 import * as olExtent from 'ol/extent';
 import OlOverlay from 'ol/Overlay';
@@ -15,6 +14,19 @@ import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from './util';
+
+const icons = [
+  'Dust and Haze',
+  'Icebergs',
+  'Manmade',
+  'Sea and Lake Ice',
+  'Severe Storms',
+  'Snow',
+  'Temperature Extremes',
+  'Volcanoes',
+  'Water Color',
+  'Wildfires',
+];
 
 class EventMarkers extends React.Component {
   constructor(props) {
@@ -52,29 +64,31 @@ class EventMarkers extends React.Component {
 
   draw() {
     const {
-      eventsData, selectEvent, selectedEvent, proj, map, mapUi,
+      eventsData, selectedEvent, proj, map,
     } = this.props;
 
     if (!eventsData || eventsData.length < 1) return null;
+
     const markers = eventsData.reduce((collection, event) => {
       const marker = {};
       const isSelected = event.id === selectedEvent.id;
+      const { maxExtent, crs } = proj.selected;
       let date = getDefaultEventDate(event);
-
       if (isSelected && selectedEvent.date) {
         date = selectedEvent.date;
       }
-
-      const geometry = lodashFind(event.geometry, (geom) => geom.date.split('T')[0] === date) || event.geometry[0];
+      const geometry = event.geometry.find((geom) => geom.date.split('T')[0] === date) || event.geometry[0];
       if (!geometry) return marker;
 
       let { coordinates } = geometry;
+
+      const transformCoords = (coords) => olProj.transform(coords, 'EPSG:4326', crs);
 
       // polar projections require transform of coordinates to crs
       if (proj.selected.id !== 'geographic') {
         // check for polygon geometries
         if (geometry.type === 'Polygon') {
-          const coordinatesTransform = coordinates[0].map((coordinate) => olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs));
+          const coordinatesTransform = coordinates[0].map(transformCoords);
           const extent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(extent);
           if (isSelected) {
@@ -83,11 +97,7 @@ class EventMarkers extends React.Component {
           }
         } else {
           // if normal geometries, transform given lon/lat array
-          coordinates = olProj.transform(
-            coordinates,
-            'EPSG:4326',
-            proj.selected.crs,
-          );
+          coordinates = transformCoords(coordinates);
         }
       } else if (geometry.type === 'Polygon') {
         const extent = olExtent.boundingExtent(geometry.coordinates[0]);
@@ -100,79 +110,18 @@ class EventMarkers extends React.Component {
 
       let category = event.categories[0];
       // Assign a default category if we don't have an icon
-      const icons = [
-        'Dust and Haze',
-        'Icebergs',
-        'Manmade',
-        'Sea and Lake Ice',
-        'Severe Storms',
-        'Snow',
-        'Temperature Extremes',
-        'Volcanoes',
-        'Water Color',
-        'Wildfires',
-      ];
       category = icons.includes(category.title)
         ? category
         : { title: 'Default', slug: 'default' };
 
       // get maxExtent of current projection and check if marker is within range
-      const { maxExtent } = proj.selected;
       const maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
       // only create marker if within projection extent range
       if (maxExtentCheck) {
         marker.pin = createPin(event.id, category, isSelected, event.title);
         marker.pin.setPosition(coordinates);
         map.addOverlay(marker.pin);
-
-        // Add event listeners
-        let willSelect = true;
-        let moveCount = 0;
-        // The pin element used to be on `element_` but now it looks like it
-        // moved to `element`. Maybe this was a change to OpenLayers.
-        const pinEl = marker.pin.element_ || marker.pin.element;
-
-        // Use passiveSupport detect in ui. passive applied if supported, capture will be false either way.
-        ['pointerdown', 'mousedown', 'touchstart'].forEach((type) => {
-          pinEl.addEventListener(
-            type,
-            (e) => {
-              willSelect = true;
-              moveCount = 0;
-            },
-            mapUi.supportsPassive ? { passive: true } : false,
-          );
-        });
-        ['pointermove', 'mousemove'].forEach((type) => {
-          pinEl.addEventListener(
-            type,
-            (e) => {
-              moveCount += 1;
-              if (moveCount > 2) {
-                willSelect = false;
-              }
-            },
-            mapUi.supportsPassive ? { passive: true } : false,
-          );
-        });
-        ['touchend', 'click'].forEach((type) => {
-          pinEl.addEventListener(
-            type,
-            (e) => {
-              if (willSelect && !isSelected) {
-                e.stopPropagation();
-                selectEvent(event.id, date);
-                googleTagManager.pushEvent({
-                  event: 'natural_event_selected',
-                  natural_events: {
-                    category: category.title,
-                  },
-                });
-              }
-            },
-            mapUi.supportsPassive ? { passive: true } : false,
-          );
-        });
+        this.addInteractions(marker, event, date, isSelected);
       }
       // empty objects (i.e., markers not within projection range) are not pushed to collection
       if (lodashIsEmpty(marker) !== true) {
@@ -183,6 +132,48 @@ class EventMarkers extends React.Component {
 
     map.renderSync(); // Marker position will be off until this is called
     this.setState({ markers });
+  }
+
+  addInteractions(marker, event, isSelected, date) {
+    const { selectEvent, mapUi } = this.props;
+    const category = event.categories[0];
+    let willSelect = true;
+    let moveCount = 0;
+    const pinEl = marker.pin.element_ || marker.pin.element;
+    // Use passiveSupport detect in ui. passive applied if supported, capture will be false either way.
+    const options = mapUi.supportsPassive ? { passive: true } : false;
+    const onMouseDownTouchStart = (e) => {
+      willSelect = true;
+      moveCount = 0;
+    };
+    const onMouseMove = (e) => {
+      moveCount += 1;
+      if (moveCount > 2) {
+        willSelect = false;
+      }
+    };
+    const onClickTouchEnd = (e) => {
+      if (willSelect && !isSelected) {
+        e.stopPropagation();
+        selectEvent(event.id, date);
+        googleTagManager.pushEvent({
+          event: 'natural_event_selected',
+          natural_events: {
+            category: category.title,
+          },
+        });
+      }
+    };
+
+    ['pointerdown', 'mousedown', 'touchstart'].forEach((type) => {
+      pinEl.addEventListener(type, onMouseDownTouchStart, options);
+    });
+    ['touchend', 'click'].forEach((type) => {
+      pinEl.addEventListener(type, onClickTouchEnd, options);
+    });
+    ['pointermove', 'mousemove'].forEach((type) => {
+      pinEl.addEventListener(type, onMouseMove, options);
+    });
   }
 
   remove() {
