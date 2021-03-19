@@ -38,7 +38,12 @@ class EventTrack extends React.Component {
     };
 
     this.onMoveEnd = this.onMoveEnd.bind(this);
-    this.onPropertyChange = this.onPropertyChange.bind(this);
+    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 250);
+    this.debouncedOnPropertyChange = lodashDebounce(
+      this.onPropertyChange.bind(this),
+      500,
+      { leading: true, trailing: false },
+    );
   }
 
   componentDidMount() {
@@ -68,7 +73,7 @@ class EventTrack extends React.Component {
     }
 
     if (selectedEventChange || selectedDateChange || finishedAnimating) {
-      this.debounceTrackUpdate();
+      this.debouncedTrackUpdate();
     }
   }
 
@@ -76,7 +81,7 @@ class EventTrack extends React.Component {
     const { map } = this.props;
     this.update(null);
     map.un('moveend', this.onMoveEnd);
-    map.getView().un('propertychange', this.onPropertyChange);
+    map.getView().un('propertychange', this.debouncedOnPropertyChange);
   }
 
   initialize() {
@@ -84,8 +89,8 @@ class EventTrack extends React.Component {
     if (!map) return;
     // NOTE: Does not cause additional listeners to be registered on subsequent calls
     map.on('moveend', this.onMoveEnd);
-    map.getView().on('propertychange', this.onPropertyChange);
-    this.debounceTrackUpdate();
+    map.getView().on('propertychange', this.debouncedOnPropertyChange);
+    this.debouncedTrackUpdate();
   }
 
   updateCurrentTrack() {
@@ -97,8 +102,6 @@ class EventTrack extends React.Component {
     this.update(event, date);
   }
 
-  debounceTrackUpdate = lodashDebounce(this.updateCurrentTrack, 250);
-
   onMoveEnd = function(e) {
     const { map } = this.props;
     const { trackDetails } = this.state;
@@ -106,11 +109,10 @@ class EventTrack extends React.Component {
     if (trackDetails.id) {
       addPointOverlays(map, trackDetails.pointArray);
     } else {
-      this.debounceTrackUpdate();
+      this.debouncedTrackUpdate();
     }
   }
 
-  // TODO throttle or debounce this? so many calls...
   onPropertyChange = (e) => {
     const { map } = this.props;
     const { trackDetails } = this.state;
