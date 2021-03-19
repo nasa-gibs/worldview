@@ -48,10 +48,11 @@ const formatResponse = function(item, ignored) {
 };
 
 export const eventsReducerState = {
-  prevSelected: null,
   selected: {
     id: '',
     date: null,
+    eventObject: null,
+    geometryForDate: null,
   },
   active: false,
   showAll: true,
@@ -61,23 +62,24 @@ export const eventsReducerState = {
 
 export function eventsReducer(state = eventsReducerState, action) {
   switch (action.type) {
-    case SELECT_EVENT:
+    case SELECT_EVENT: {
+      const {
+        id, date, eventObject,
+      } = action;
       return {
         ...state,
         selected: {
-          id: action.id,
-          date: action.date,
+          id,
+          date,
+          eventObject,
         },
         isAnimatingToEvent: true,
       };
+    }
     case DESELECT_EVENT:
       return {
         ...state,
-        prevSelected: state.selected,
-        selected: {
-          id: '',
-          date: null,
-        },
+        selected: eventsReducerState.selected,
       };
     case SELECT_CATEGORY:
       return {
