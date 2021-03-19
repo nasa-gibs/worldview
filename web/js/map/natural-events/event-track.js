@@ -34,7 +34,6 @@ class EventTrack extends React.Component {
     super(props);
 
     this.state = {
-      active: false,
       trackDetails: {},
     };
 
@@ -43,26 +42,33 @@ class EventTrack extends React.Component {
   }
 
   componentDidMount() {
-    const { map, selectedEvent } = this.props;
-    if (map && selectedEvent.id && selectedEvent.date) {
-      this.updateCurrentTrack();
-    }
+    this.initialize();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      map, selectedEvent, selectedDate,
+      map, selectedEvent, selectedDate, isAnimatingToEvent,
     } = this.props;
-    const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
-    const selectedDateChange = selectedDate !== prevProps.selectedDate;
+    const selectedEventChange = (selectedEvent && selectedEvent.id)
+      !== (prevProps.selectedEvent && prevProps.selectedEvent.id);
+    const selectedDateChange = (selectedDate && selectedDate.valueOf())
+      !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
+    const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevProps.isAnimatingToEvent);
+    const prevMap = prevProps.map;
+    const { trackDetails } = this.state;
 
-    if (map !== prevProps.map) {
-      map.on('moveend', this.onMoveEnd);
-      map.getView().on('propertychange', this.onPropertyChange);
+
+    if (map !== prevMap) {
+      if (prevMap) {
+        this.update(null);
+        this.removeTrack(prevMap);
+        removeOldPoints(prevMap, trackDetails);
+      }
+      this.initialize();
     }
 
-    if (selectedEvent && (selectedEventChange || selectedDateChange)) {
-      this.updateCurrentTrack();
+    if (selectedEventChange || selectedDateChange || finishedAnimating) {
+      this.debounceTrackUpdate();
     }
   }
 
@@ -73,48 +79,46 @@ class EventTrack extends React.Component {
     map.getView().un('propertychange', this.onPropertyChange);
   }
 
+  initialize() {
+    const { map } = this.props;
+    if (!map) return;
+    // NOTE: Does not cause additional listeners to be registered on subsequent calls
+    map.on('moveend', this.onMoveEnd);
+    map.getView().on('propertychange', this.onPropertyChange);
+    this.debounceTrackUpdate();
+  }
+
   updateCurrentTrack() {
     const { selectedEvent, eventsData } = this.props;
     const { id, date } = selectedEvent;
-    const event = eventsData.find((e) => e.id === id);
+    if (!selectedEvent.id || !selectedEvent.date) return;
+    const event = (eventsData || []).find((e) => e.id === id);
+    if (!event) return;
     this.update(event, date);
   }
 
-  // debounceTrackUpdate = lodashDebounce(function () {
-  //   const { selectEvent, eventsData, selectedEvent } = this.props;
-
-  //   if (!selectedEvent.id || !selectedEvent.date) {
-  //     return;
-  //   }
-  //   const event = eventsData.find((e) => e.id === selectedEvent.id);
-  //   this.update(event, selectedEvent.date, (id, date) => {
-  //     selectEvent(id, date);
-  //   });
-  // }, 250);
+  debounceTrackUpdate = lodashDebounce(this.updateCurrentTrack, 250);
 
   onMoveEnd = function(e) {
     const { map } = this.props;
-    const { trackDetails, active } = this.state;
+    const { trackDetails } = this.state;
 
-    if (!active) return;
     if (trackDetails.id) {
       addPointOverlays(map, trackDetails.pointArray);
     } else {
-      // this.debounceTrackUpdate();
+      this.debounceTrackUpdate();
     }
   }
 
+  // TODO throttle or debounce this? so many calls...
   onPropertyChange = (e) => {
     const { map } = this.props;
-    const { trackDetails, active } = this.state;
+    const { trackDetails } = this.state;
+
     if (e.key === 'resolution' || e.key === 'rotation') {
-      this.setState({
-        trackDetails: trackDetails.id
-          ? this.removeTrack(map, trackDetails)
-          : {},
-      });
+      const newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
+      this.setState({ trackDetails: newTrackDetails });
     } else if (e.key === 'center') {
-      if (!active) return;
       // if old values equal target, map is not moving
       // restricts track/cluster points from disappearing on min/max zoom
       let isNewTarget = true;
@@ -128,26 +132,23 @@ class EventTrack extends React.Component {
         const targetLon = targetValues[0];
         const targetLat = targetValues[1];
 
-        // compare oldValues and target values
         isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
       }
       if (isNewTarget) {
-        removeOldPoints(map, trackDetails.pointArray);
+        removeOldPoints(map, trackDetails);
       }
     }
   }
 
   /**
-   * Remove track
-   *
    * @param  {Object} map Openlayers map object
-   * @param  {Object} trackObj Object containig info related
-   *                            to track
    * @return {Object} Empty object
    */
-  removeTrack = function(map, trackObj) {
-    map.removeLayer(trackObj.track);
-    removeOldPoints(map, trackObj.pointArray);
+  removeTrack = function(map) {
+    const { trackDetails } = this.state;
+    const { track } = trackDetails;
+    map.removeLayer(track);
+    removeOldPoints(map, trackDetails);
     return {};
   };
 
@@ -159,55 +160,37 @@ class EventTrack extends React.Component {
    * @param  {String} selectedDate
    * @return {[type]}
    */
-  update = function(event, date, callbackParam) {
+  update = function(event, date) {
     const {
-      proj, map, selectEventCallback,
+      proj, map, selectEvent,
     } = this.props;
     const { trackDetails } = this.state;
     let newTrackDetails;
-    const callback = callbackParam || selectEventCallback;
-
+    const sameEvent = event && trackDetails.id === event.id;
+    const sameDate = trackDetails.selectedDate === date;
     const createAndAddTrack = () => {
-      newTrackDetails = createTrack(
-        proj,
-        event,
-        map,
-        date,
-        callback,
-      );
+      newTrackDetails = createTrack(proj, event, map, date, selectEvent);
       map.addLayer(newTrackDetails.track);
     };
 
     if (!event || event.geometry.length < 2) {
-      newTrackDetails = trackDetails.id
-        ? this.removeTrack(map, trackDetails)
-        : {};
-      this.setState({ active: false });
+      newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
     } else if (trackDetails.id) {
-      if (trackDetails.id === event.id) {
-        // If same Track but different selection
-        // Just update classNames
-        if (trackDetails.selectedDate !== date) {
-          const isClusteredSelection = !document.getElementById(
-            `track-marker-${date}`,
-          );
-          // If New Date is in cluster build new track
-          if (isClusteredSelection) {
-            newTrackDetails = this.removeTrack(map, trackDetails);
-            createAndAddTrack();
-          } else {
-            newTrackDetails = trackDetails;
-            updateSelection(date);
-            newTrackDetails.selectedDate = date;
-          }
+      if (sameEvent && !sameDate) {
+        const isClusteredSelection = !document.getElementById(`track-marker-${date}`);
+        // If New Date is in cluster build new track
+        if (isClusteredSelection) {
+          newTrackDetails = this.removeTrack(map);
+          createAndAddTrack();
         } else {
-          // If the date and event are the same
-          // Return the same Object and do nothing
-          return trackDetails;
+          // Just update classNames
+          newTrackDetails = trackDetails;
+          updateSelection(date);
+          newTrackDetails.selectedDate = date;
         }
       } else {
         // Remove old DOM Elements
-        newTrackDetails = this.removeTrack(map, trackDetails);
+        newTrackDetails = this.removeTrack(map);
         createAndAddTrack();
       }
     } else {
@@ -215,10 +198,7 @@ class EventTrack extends React.Component {
       // but there is a multiday event, build a new track
       createAndAddTrack();
     }
-    this.setState({
-      active: true,
-      trackDetails: newTrackDetails,
-    });
+    this.setState({ trackDetails: newTrackDetails });
   };
 
   render() {
@@ -446,8 +426,8 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
  * @param  {Array} pointOverlayArray
  * @return {void}
  */
-const removeOldPoints = function(map, pointOverlayArray) {
-  lodashEach(pointOverlayArray, (pointOverlay) => {
+const removeOldPoints = function(map, { pointArray }) {
+  lodashEach(pointArray, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
       map.removeOverlay(pointOverlay);
     }
@@ -665,13 +645,14 @@ const mapStateToProps = (state) => {
   const {
     map, proj, events, requestedEvents, date,
   } = state;
+  const { isAnimatingToEvent } = events;
   return {
     map: map.ui.selected,
     proj,
     selectedDate: date.selected,
     selectedEvent: events.selected,
     eventsData: requestedEvents.response,
-    eventsActive: events.active,
+    isAnimatingToEvent,
   };
 };
 
@@ -684,9 +665,9 @@ const mapDispatchToProps = (dispatch) => ({
 EventTrack.propTypes = {
   eventsData: PropTypes.array,
   map: PropTypes.object,
+  isAnimatingToEvent: PropTypes.bool,
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
-  selectEventCallback: PropTypes.func,
   selectedEvent: PropTypes.object,
   selectedDate: PropTypes.object,
 };

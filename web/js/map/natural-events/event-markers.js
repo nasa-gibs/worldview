@@ -26,23 +26,21 @@ class EventMarkers extends React.Component {
   }
 
   componentDidMount() {
-    const { eventsActive, eventsDataIsLoading } = this.props;
-    if (eventsActive && !eventsDataIsLoading) {
+    const { eventsDataIsLoading } = this.props;
+    if (!eventsDataIsLoading) {
       this.draw();
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      proj, eventsDataIsLoading, eventsActive, selectedEvent, selectedDate,
+      proj, eventsDataIsLoading, selectedEvent,
     } = this.props;
-    const activeChange = eventsActive !== prevProps.eventsActive;
     const finishedLoading = !eventsDataIsLoading && (eventsDataIsLoading !== prevProps.eventsDataIsLoading);
     const projChange = proj !== prevProps.proj;
     const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
-    const selectedDateChange = selectedDate !== prevProps.selectedDate;
 
-    if (activeChange || finishedLoading || projChange || selectedEventChange || selectedDateChange) {
+    if (finishedLoading || projChange || selectedEventChange) {
       this.remove();
       this.draw();
     }
@@ -259,7 +257,7 @@ const createBoundingBox = function(coordinates) {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, sidebar,
+    map, proj, events, requestedEvents, sidebar, date,
   } = state;
   return {
     activeTab: sidebar.activeTab,
@@ -267,9 +265,9 @@ const mapStateToProps = (state) => {
     mapUi: map.ui,
     proj,
     selectedEvent: events.selected,
+    selectedDate: date.selected,
     eventsData: requestedEvents.response,
     eventsDataIsLoading: requestedEvents.isLoading,
-    eventsActive: events.active,
   };
 };
 
@@ -280,7 +278,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 EventMarkers.propTypes = {
-  eventsActive: PropTypes.bool,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
   map: PropTypes.object,
@@ -288,7 +285,6 @@ EventMarkers.propTypes = {
   proj: PropTypes.object,
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
-  selectedDate: PropTypes.object,
 };
 
 export default connect(
