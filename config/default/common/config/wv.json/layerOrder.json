@@ -949,10 +949,10 @@
 		"OrbitTracks_GCOM-C_Descending",
 		"OrbitTracks_GCOM-W1_Ascending",
 		"OrbitTracks_GCOM-W1_Descending",
-		"OrbitTracks_GOSAT-2_Ascending",
 		"OrbitTracks_GOSAT-2_Descending",
-		"OrbitTracks_GOSAT_Ascending",
+		"OrbitTracks_GOSAT-2_Ascending",
 		"OrbitTracks_GOSAT_Descending",
+		"OrbitTracks_GOSAT_Ascending",
 		"OrbitTracks_GPM_Ascending",
 		"OrbitTracks_GPM_Descending",
 		"OrbitTracks_ICESAT-2_Ascending",
@@ -989,8 +989,9 @@
 		"OrbitTracks_Sentinel-5P_Descending",
 		"OrbitTracks_Suomi_NPP_Ascending",
 		"OrbitTracks_Suomi_NPP_Descending",
-		"OrbitTracks_Terra_Ascending",
-		"OrbitTracks_Terra_Descending"
+		"OrbitTracks_Terra_Descending",
+		"OrbitTracks_Terra_Ascending"
+
 	],
 	"layerOrderExceptions": [
 		"SCAR_Land_Mask",
