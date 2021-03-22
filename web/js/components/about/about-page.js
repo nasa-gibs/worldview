@@ -326,7 +326,7 @@ export default function AboutPage() {
             .
             We are grateful for the many third-party projects we depend on which are listed in
             {' '}
-            <a href="https://github.com/nasa-gibs/worldview/blob/master/package.json" target="_blank" rel="noopener noreferrer">our package.json file</a>
+            <a href="https://github.com/nasa-gibs/worldview/blob/main/package.json" target="_blank" rel="noopener noreferrer">our package.json file</a>
             {' '}
             under &quot;dependencies&quot;.
           </li>
