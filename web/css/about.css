@@ -1,0 +1,126 @@
+.about-page {
+  background-color: #282828;
+  padding: 5px;
+}
+
+.about-page div,
+.about-page h1,
+.about-page h2,
+.about-page li,
+.about-page p {
+  color: #eee;
+  font-weight: 100;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.about-page div,
+.about-page li,
+.about-page p {
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.about-page h1 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1em;
+}
+
+.about-page h2 {
+  font-size: 18px;
+  margin: 0.75em 0;
+  font-weight: 600;
+}
+
+.about-page p {
+  margin: 1.12em 0;
+}
+
+.about-page hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #404040;
+  margin: 1em 0;
+  padding: 0;
+}
+
+.about-page ul {
+  margin-left: 2em;
+}
+
+.about-page li {
+  display: list-item;
+}
+
+.about-page a {
+  color: #7bf;
+  text-decoration: none;
+  &:hover {
+    color: #7df;
+    text-decoration: none;
+  }
+}
+
+.about-page .right {
+  float: right;
+  margin: 0 1em 1em;
+}
+
+.about-page .caption {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.about-page .gibs-caption {
+  margin-top: 3px;
+  width: 64px;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Override default modal CSS */
+
+.about-page-modal .modal-dialog {
+  border: none;
+}
+
+.about-page-modal .modal-body {
+  padding: 0;
+}
+
+.about-page-modal .about-page {
+  padding: 10px 15px 0 10px;
+}
+
+/* Keyboard shortcuts section */
+
+.about-page .keyboard-shortcuts-section {
+  display: none;
+}
+.about-page .keyboard-shortcuts-table {
+  width: 100%;
+  margin-top: 20px;
+  tr {
+    :first-child {
+      text-align: left;
+    }
+    :last-child {
+      text-align: right;
+    }
+  }
+  td {
+    padding: 7px 0;
+  }
+  code {
+    color: #f60;
+    padding: 1px 8px;
+    border: thin solid;
+  }
+}
+
+@media (min-width: 769px) {
+  .about-page .keyboard-shortcuts-section {
+    display: block;
+  }
+}

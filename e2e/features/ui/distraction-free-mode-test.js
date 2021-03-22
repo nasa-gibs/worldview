@@ -2,8 +2,12 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 
 const {
+  infoToolbarButton,
   locationSearchMinimizeButton,
   locationSearchToolbarButton,
+  mapRotateLeft,
+  mapRotateReset,
+  mapRotateRight,
   mapScaleImperial,
   mapScaleMetric,
   measureBtn,
@@ -17,6 +21,53 @@ const {
 } = localSelectors;
 const TIME_LIMIT = 5000;
 
+const closeDistractionFreeAlert = (c) => {
+  c.waitForElementVisible('#distraction-free-mode-active-alert-close');
+  c.click('#distraction-free-mode-active-alert-close');
+};
+
+// helper to confirm target els are removed/hidden in distraction free mode
+const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
+  const mapScaleMetricProj = `#wv-map-${proj} ${mapScaleMetric}`;
+  const mapScaleImperialProj = `#wv-map-${proj} ${mapScaleImperial}`;
+  const visibleEls = [
+    timelineContainer,
+    sidebarContainer,
+    measureBtn,
+    mapScaleMetricProj,
+    mapScaleImperialProj,
+  ];
+  let presentEls = [
+    infoToolbarButton,
+    locationSearchToolbarButton,
+    shareToolbarButton,
+    projToolbarButton,
+    snapshotToolbarButton,
+    zoomInButton,
+    zoomOutButton,
+  ];
+
+  // add rotate buttons for polar projections
+  if (proj !== 'geographic') {
+    presentEls = [
+      ...presentEls,
+      mapRotateLeft,
+      mapRotateReset,
+      mapRotateRight,
+    ];
+  }
+
+  if (isActive) {
+    // distraction free mode is active and els should be removed/hidden
+    visibleEls.forEach((el) => c.waitForElementNotVisible(el, TIME_LIMIT));
+    presentEls.forEach((el) => c.waitForElementNotPresent(el, TIME_LIMIT));
+  } else {
+    // els should be added/visible
+    visibleEls.forEach((el) => c.waitForElementVisible(el, TIME_LIMIT));
+    presentEls.forEach((el) => c.waitForElementPresent(el, TIME_LIMIT));
+  }
+};
+
 module.exports = {
   before: (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
@@ -27,47 +78,30 @@ module.exports = {
 
   // verify distraction free mode shortcut hides ui elements
   'Enabling distraction free mode with shortcut key hides UI elements': (c) => {
-    c.waitForElementVisible('#wv-info-button');
-    c.click('#wv-info-button');
+    c.waitForElementVisible(infoToolbarButton);
+    c.click(infoToolbarButton);
     c.waitForElementVisible('#distraction_free_info_item');
     c.click('#distraction_free_info_item');
-    c.pause(300);
 
-    c.waitForElementNotVisible(timelineContainer, TIME_LIMIT);
-    c.waitForElementNotVisible(sidebarContainer, TIME_LIMIT);
-    c.waitForElementNotVisible(locationSearchToolbarButton, TIME_LIMIT);
-    c.waitForElementNotPresent(shareToolbarButton, TIME_LIMIT);
-    c.waitForElementNotPresent(projToolbarButton, TIME_LIMIT);
-    c.waitForElementNotPresent(snapshotToolbarButton, TIME_LIMIT);
-    c.waitForElementNotVisible(measureBtn, TIME_LIMIT);
-    c.waitForElementNotPresent(zoomInButton, TIME_LIMIT);
-    c.waitForElementNotPresent(zoomOutButton, TIME_LIMIT);
-    c.waitForElementNotVisible(mapScaleMetric, TIME_LIMIT);
-    c.waitForElementNotVisible(mapScaleImperial, TIME_LIMIT);
-    c.waitForElementNotPresent('.wv-map-rotate-left', TIME_LIMIT);
-    c.waitForElementNotPresent('.wv-map-reset-rotation', TIME_LIMIT);
-    c.waitForElementNotPresent('.wv-map-rotate-right', TIME_LIMIT);
+    closeDistractionFreeAlert(c);
+    distractionFreeModeValidElsRemoved(c, 'arctic', true);
   },
 
   // verify turning off distraction free mode shortcut returns hidden ui elements
   'Disabling distraction free mode with shortcut key returns UI elements': (c) => {
     c.sendKeys('body', [c.Keys.SHIFT, 'd', c.Keys.NULL]);
-    c.pause(500);
+    c.pause(300);
 
-    c.waitForElementVisible(timelineContainer, TIME_LIMIT);
-    c.waitForElementVisible(sidebarContainer, TIME_LIMIT);
-    c.waitForElementVisible(locationSearchToolbarButton, TIME_LIMIT);
-    c.waitForElementVisible(shareToolbarButton, TIME_LIMIT);
-    c.waitForElementPresent(projToolbarButton, TIME_LIMIT);
-    c.waitForElementPresent(snapshotToolbarButton, TIME_LIMIT);
-    c.waitForElementVisible(measureBtn, TIME_LIMIT);
-    c.waitForElementPresent(zoomInButton, TIME_LIMIT);
-    c.waitForElementPresent(zoomOutButton, TIME_LIMIT);
-    c.waitForElementPresent(mapScaleMetric, TIME_LIMIT);
-    c.waitForElementPresent(mapScaleImperial, TIME_LIMIT);
-    c.waitForElementPresent('.wv-map-rotate-left', TIME_LIMIT);
-    c.waitForElementPresent('.wv-map-reset-rotation', TIME_LIMIT);
-    c.waitForElementPresent('.wv-map-rotate-right', TIME_LIMIT);
+    distractionFreeModeValidElsRemoved(c, 'arctic', false);
+  },
+
+  // verify distraction free mode activates with query string parameter df (in geographic projection)
+  'Enabling distraction free mode activates query string parameter df': (c) => {
+    c.url(`${c.globals.url}?df=true`);
+    c.waitForElementVisible('#wv-exit-distraction-free-mode-button');
+
+    closeDistractionFreeAlert(c);
+    distractionFreeModeValidElsRemoved(c, 'geographic', true);
   },
 
   after: (c) => {

@@ -75,6 +75,7 @@ import '../css/layer-coverage-panel.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
+import '../css/about.css';
 import '../css/mobile.css';
 import '../css/measure.css';
 import '../css/list.css';
@@ -84,7 +85,6 @@ import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
 import '../css/location-search.css';
-import '../pages/css/document.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
 

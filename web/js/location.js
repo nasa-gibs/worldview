@@ -264,6 +264,18 @@ const getParameters = function(config, parameters) {
         parse: (str) => tryCatchDate(str, now),
       },
     },
+    df: {
+      stateKey: 'ui.isDistractionFreeModeActive',
+      initialState: false,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (boo, state) => {
+          const isDistractionFreeModeActive = get(state, 'ui.isDistractionFreeModeActive');
+          return isDistractionFreeModeActive ? boo : undefined;
+        },
+      },
+    },
     e: {
       stateKey: 'events',
       type: 'object',

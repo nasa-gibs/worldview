@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
 
     <Scrollbar style={{ height: 'calc(100vh - 200px)' }}>
-      <div id="page" className="wv-document">
+      <div className="about-page">
         <div className="right">
           <div className="caption">
             Version @BUILD_VERSION@
@@ -34,7 +34,7 @@ export default function AboutPage() {
         </p>
 
         <div className="right">
-          <a href="https://earthdata.nasa.gov/gibs" className="gibs-logo" target="_blank" rel="noopener noreferrer"><img src="../../../pages/images/gibs.png" /></a>
+          <a href="https://earthdata.nasa.gov/gibs" className="gibs-logo" target="_blank" rel="noopener noreferrer"><img src="images/gibs.png" /></a>
           <div className="caption gibs-caption">Powered by GIBS</div>
         </div>
 
@@ -59,6 +59,54 @@ export default function AboutPage() {
           <a href="https://earthdata.nasa.gov/faq/worldview-gibs-faq" target="_blank" rel="noopener noreferrer">Frequently Asked Questions</a>
         </p>
         <hr />
+        <section className="keyboard-shortcuts-section">
+          <h2>Keyboard Shortcuts</h2>
+          <table className="keyboard-shortcuts-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>&uarr;</code></td>
+                <td>Change date to a greater interval (e.g., days to months)</td>
+              </tr>
+              <tr>
+                <td><code>&darr;</code></td>
+                <td>Change date to a smaller interval (e.g., months to days</td>
+              </tr>
+              <tr>
+                <td><code>&larr;</code></td>
+                <td>Move backward one time interval</td>
+              </tr>
+              <tr>
+                <td><code>&rarr;</code></td>
+                <td>Move forward one time interval</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>Shift</code>
+                  {' '}
+                  +
+                  {' '}
+                  <code>D</code>
+                </td>
+                <td>Toggle distraction free mode</td>
+              </tr>
+              <tr>
+                <td><code>Space</code></td>
+                <td>Animation play/pause</td>
+              </tr>
+              <tr>
+                <td><code>Esc</code></td>
+                <td>Stop animation/close modal</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr />
+        </section>
         <h2>Imagery Use</h2>
         <p>
           NASA supports an
