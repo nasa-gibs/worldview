@@ -33,6 +33,10 @@ import { mapLocationToAnimationState } from './modules/animation/util';
 import { areCoordinatesWithinExtent, mapLocationToLocationSearchState } from './modules/location-search/util';
 import mapLocationToSidebarState from './modules/sidebar/util';
 import util from './util/util';
+import {
+  serializeSmartHandoff,
+  parseSmartHandoff,
+} from './modules/smart-handoff/util';
 
 /**
  * Override state with information from location.search when "REDUX-LOCATION-POP-ACTION"
@@ -406,26 +410,17 @@ const getParameters = function(config, parameters) {
         parse: (str) => str === 'on',
       },
     },
-    // download: {
-    //   stateKey: 'data.selectedProduct',
-    //   initialState: '',
-    //   type: 'string',
-    //   options: {
-    //     delimiter: ',',
-    //     serializeNeedsGlobalState: true,
-    //     parse: (id) => {
-    //       if (!config.products[id]) {
-    //         console.warn(`No such product: ${id}`);
-    //         return '';
-    //       }
-    //       return id;
-    //     },
-    //     serialize: (currentItemState, state) => {
-    //       if (state.sidebar.activeTab !== 'download') return undefined;
-    //       return encode(currentItemState);
-    //     },
-    //   },
-    // },
+    sh: {
+      stateKey: 'smartHandoffs',
+      initialState: '',
+      type: 'string',
+      options: {
+        setAsEmptyItem: true,
+        serializeNeedsGlobalState: true,
+        serialize: serializeSmartHandoff,
+        parse: parseSmartHandoff,
+      },
+    },
     s: {
       stateKey: 'locationSearch.coordinates',
       initialState: [],

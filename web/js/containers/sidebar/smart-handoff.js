@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -20,6 +21,7 @@ import { getActiveLayers } from '../../modules/layers/selectors';
 import getSelectedDate from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
+import selectCollection from '../../modules/smart-handoff/actions';
 
 const STD_NRT_MAP = {
   STD: 'Standard',
@@ -53,8 +55,6 @@ class SmartHandoff extends Component {
         x2: screenWidth / 2 + 100,
         y2: screenHeight / 2 + 100,
       },
-      selectedLayer: undefined,
-      selectedCollection: undefined,
       showBoundingBox: false,
       isSearchingForGranules: false,
       selectedGranules: 0,
@@ -71,6 +71,14 @@ class SmartHandoff extends Component {
     this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 250);
   }
 
+  componentDidMount() {
+    const { currentExtent } = this.state;
+    const { selectedCollection, selectedLayer } = this.props;
+    if (selectedCollection && selectedLayer) {
+      this.updateGranuleCount(currentExtent);
+    }
+  }
+
   /**
    * When fired, compare prevProps to determine if previously selected layer is still active
    * and whether or not to update granule data base don data changes.
@@ -81,28 +89,25 @@ class SmartHandoff extends Component {
       availableLayers,
       displayDate,
       proj,
+      selectedLayer,
+      selectedCollection,
     } = this.props;
     const {
       currentExtent,
-      selectedLayer,
-      selectedCollection,
     } = this.state;
 
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
     const isLayerStillActive = availableLayers.find(({ id }) => selectedLayer && selectedLayer.id);
 
     if (selectedCollection && !isLayerStillActive) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState(this.baseState);
     }
     if (displayDate !== prevProps.displayDate) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ totalGranules: undefined }, () => {
         this.updateGranuleCount(currentExtent);
       });
     }
     if (proj.id !== prevProps.proj.id) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ showBoundingBox: false });
     }
   }
@@ -111,7 +116,8 @@ class SmartHandoff extends Component {
    * Fires when the bounding box / crop toggle is activated and changed
    */
   updateExtent() {
-    const { currentExtent, selectedLayer } = this.state;
+    const { selectedLayer } = this.props;
+    const { currentExtent } = this.state;
     if (selectedLayer && currentExtent) {
       this.updateGranuleCount(currentExtent);
     }
@@ -122,8 +128,7 @@ class SmartHandoff extends Component {
    * @param {*} boundaries - the focal point to which layer data should be contained within
    */
   onBoundaryChange(boundaries) {
-    const { proj, map } = this.props;
-    const { selectedCollection } = this.state;
+    const { proj, map, selectedCollection } = this.props;
 
     if (!selectedCollection) return;
 
@@ -213,12 +218,12 @@ class SmartHandoff extends Component {
       displayDate,
       proj,
       selectedDate,
+      selectedLayer,
+      selectedCollection,
       showWarningModal,
     } = this.props;
     const {
       currentExtent,
-      selectedLayer,
-      selectedCollection,
       showBoundingBox,
     } = this.state;
 
@@ -246,9 +251,9 @@ class SmartHandoff extends Component {
    */
   onLayerChange(layer, collection) {
     const { currentExtent } = this.state;
+    const { selectCollection } = this.props;
+    selectCollection(collection.value, layer.id);
     this.setState({
-      selectedLayer: layer,
-      selectedCollection: collection,
       totalGranules: undefined,
     }, () => this.updateGranuleCount(currentExtent));
   }
@@ -260,10 +265,12 @@ class SmartHandoff extends Component {
    * @param {*} currentExtent
    */
   async updateGranuleCount({ southWest, northEast }) {
-    const { selectedDate } = this.props;
     const {
+      selectedDate,
       selectedLayer,
       selectedCollection,
+    } = this.props;
+    const {
       showBoundingBox,
       totalGranules,
     } = this.state;
@@ -330,8 +337,7 @@ class SmartHandoff extends Component {
    * Render radio buttons for layer selection
    */
   renderLayerChoices() {
-    const { availableLayers } = this.props;
-    const { selectedCollection, selectedLayer } = this.state;
+    const { availableLayers, selectedCollection, selectedLayer } = this.props;
 
     return (
       <div className="smart-handoff-layer-list">
@@ -387,12 +393,12 @@ class SmartHandoff extends Component {
       proj,
       screenHeight,
       screenWidth,
+      selectedLayer,
     } = this.props;
 
     const {
       boundaries,
       coordinates,
-      selectedLayer,
       showBoundingBox,
     } = this.state;
 
@@ -453,10 +459,10 @@ class SmartHandoff extends Component {
     const {
       displayDate,
       showGranuleHelpModal,
+      selectedCollection,
     } = this.props;
 
     const {
-      selectedCollection,
       isSearchingForGranules,
       selectedGranules,
       showBoundingBox,
@@ -518,10 +524,8 @@ class SmartHandoff extends Component {
       availableLayers,
       isActive,
       showNotAvailableModal,
-    } = this.props;
-    const {
       selectedLayer,
-    } = this.state;
+    } = this.props;
 
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
@@ -572,7 +576,10 @@ SmartHandoff.propTypes = {
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
+  selectCollection: PropTypes.func,
   selectedDate: PropTypes.string,
+  selectedLayer: PropTypes.object,
+  selectedCollection: PropTypes.object,
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
   showNotAvailableModal: PropTypes.func,
@@ -589,7 +596,10 @@ const mapStateToProps = (state) => {
     browser,
     map,
     proj,
+    smartHandoffs,
   } = state;
+
+  const { conceptId, layerId } = smartHandoffs;
 
   const {
     screenWidth,
@@ -604,15 +614,21 @@ const mapStateToProps = (state) => {
     const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
     return projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
   };
+  const availableLayers = getActiveLayers(state).filter(filterForSmartHandoff);
+
+  const selectedLayer = availableLayers.find(({ id }) => id === layerId);
+  const selectedCollection = selectedLayer && (selectedLayer.conceptIds || []).find(({ value }) => value === conceptId);
 
   return {
-    availableLayers: getActiveLayers(state).filter(filterForSmartHandoff),
+    availableLayers,
     displayDate,
     map,
     proj: proj.selected,
     screenHeight,
     screenWidth,
     selectedDate: selectedDateFormatted,
+    selectedLayer,
+    selectedCollection,
   };
 };
 
@@ -621,6 +637,9 @@ const mapStateToProps = (state) => {
  * @param {*} dispatch | A function of the Redux store that is triggered upon a change of state.
  */
 const mapDispatchToProps = (dispatch) => ({
+  selectCollection: (conceptId, layerId) => {
+    dispatch(selectCollection(conceptId, layerId));
+  },
   showWarningModal: (displayDate, selectedLayer, selectedCollection, continueToEDS) => {
     googleTagManager.pushEvent({
       event: 'smart_handoffs_open_warning_modal',

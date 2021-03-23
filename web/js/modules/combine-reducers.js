@@ -45,6 +45,7 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
 import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
+import { smartHandoffReducer } from './smart-handoff/reducer';
 
 function lastAction(state = null, action) {
   return action;
@@ -123,6 +124,7 @@ const reducers = {
   requestedEventSources,
   modalAboutPage,
   shortLink,
+  smartHandoffs: smartHandoffReducer,
   notificationsRequest,
   lastAction,
   location: locationReducer,
