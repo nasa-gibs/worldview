@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as lodashGet } from 'lodash';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
+
+const granulesBaseUrl = 'https://cmr.earthdata.nasa.gov/search/granules.json';
 
 export default function GranuleCount (props) {
   const {
@@ -12,83 +14,128 @@ export default function GranuleCount (props) {
     selectedLayer,
     selectedCollection,
     selectedDate,
-    showBoundingBox,
   } = props;
 
-  const [isLoading, setLoading] = useState(false);
-  const [selectedGranules, setSelectedGranules] = useState(0);
-  const [totalGranules, setTotalGranules] = useState(0);
+  if (!selectedCollection) return null;
+
+  const [state, setState] = useState({
+    isLoading: false,
+    selectedGranules: 0,
+    totalGranules: 0,
+    granuleDownloadSize: 0,
+  });
+  const {
+    isLoading, totalGranules, selectedGranules, granuleDownloadSize,
+  } = state;
+
+  const requestGranules = async (url) => {
+    const granulesResponse = await fetch(url, { timeout: 5000 });
+    const result = await granulesResponse.json();
+    return lodashGet(result, 'feed.entry', []);
+  };
+
+  const getDownloadSize = (entries) => entries.reduce(
+    (prev, curr) => prev + parseInt(curr.granule_size, 10), 0,
+  );
 
   const updateGranules = async () => {
-    const { southWest, northEast } = currentExtent;
-    if (!selectedLayer) return;
-
+    const { southWest, northEast } = currentExtent || {};
+    let newTotalGranules = 0;
+    let newSelectedGranules;
+    let newGranuleDownloadSize = 0;
     const { dateRanges } = selectedLayer;
     const params = {
-      include_granule_counts: true,
-      concept_id: selectedCollection.value,
+      collection_concept_id: selectedCollection.value,
+      pageSize: 500,
     };
-
     if (dateRanges) {
       const startDate = `${selectedDate}T00:00:00.000Z`;
       const endDate = `${selectedDate}T23:59:59.999Z`;
       params.temporal = `${startDate},${endDate}`;
     }
 
-    let granuleRequestUrl = `https://cmr.earthdata.nasa.gov/search/collections.json${util.toQueryString(params)}`;
+    const granulesRequestUrl = granulesBaseUrl + util.toQueryString(params);
 
-    if (!totalGranules) {
-      // Gets the total amount of granules that the layer has
-      const totalGranuleResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
-      const totalResult = await totalGranuleResponse.json();
-      const newTotalGranules = lodashGet(totalResult, 'feed.entry[0].granule_count', 0);
-      setTotalGranules(newTotalGranules);
+    if (currentExtent) {
+      const bboxRequestUrl = `${granulesRequestUrl}&bounding_box=${southWest},${northEast}`;
+      const selectedEntries = await requestGranules(bboxRequestUrl);
+      newSelectedGranules = selectedEntries.length;
+      newGranuleDownloadSize = getDownloadSize(selectedEntries);
     }
 
-    // Gets the total subset of granules that are within the defining bounding box
-    if (showBoundingBox && southWest && northEast) {
-      granuleRequestUrl += `&bounding_box=${southWest},${northEast}`;
-      const selectedGranulesResponse = await fetch(granuleRequestUrl, { timeout: 5000 });
-      const selectedResult = await selectedGranulesResponse.json();
-      const newSelectedGranules = lodashGet(selectedResult, 'feed.entry[0].granule_count', 0);
-      setSelectedGranules(newSelectedGranules);
+    const totalEntries = await requestGranules(granulesRequestUrl);
+    newTotalGranules = totalEntries.length;
+    if (newGranuleDownloadSize === 0) {
+      newGranuleDownloadSize = getDownloadSize(totalEntries);
     }
-    setLoading(false);
+
+    setState({
+      isLoading: false,
+      totalGranules: newTotalGranules,
+      selectedGranules: newSelectedGranules,
+      granuleDownloadSize: newGranuleDownloadSize,
+    });
   };
 
   /**
    * Fetch granule data for the specified selected layer/collection
    */
   useEffect(() => {
-    setTotalGranules(0);
-    setLoading(true);
+    setState({
+      isLoading: true,
+      totalGranules: 0,
+      selectedGranules: 0,
+    });
     updateGranules();
-  }, [currentExtent, selectedCollection, displayDate]);
+  }, [currentExtent, selectedCollection, selectedDate]);
 
-  return !selectedCollection ? null : (
-    <div className="granule-count">
-      <h1>
-        Available granules for
-        {` ${displayDate}: `}
+  const granulesExist = !isLoading && totalGranules !== 0;
 
-        { !isLoading && totalGranules === 0 && (
-        <span className="fade-in constant-width">NONE</span>
-        )}
+  const renderLoading = () => (
+    <span className="loading-granule-count" />
+  );
 
-        { !isLoading && totalGranules !== 0 && (
-        <span className="fade-in constant-width">
-          {showBoundingBox && `${selectedGranules} of `}
-          {totalGranules}
-        </span>
-        )}
-
-        { isLoading && (
-        <span className="loading-granule-count fade-in constant-width" />
+  const renderDownloadSize = () => {
+    const printSize = (s) => Number(s).toFixed(0).toLocaleString();
+    let sizeText;
+    if (granuleDownloadSize > 1000) {
+      sizeText = `${printSize(granuleDownloadSize / 1000)} GB`;
+    } else {
+      sizeText = `${printSize(granuleDownloadSize)} MB`;
+    }
+    return (
+      <>
+        { granulesExist && (
+          <span className="granule-size fade-in">{`(${sizeText})`}</span>
         )}
         <span className="help-link" onClick={showGranuleHelpModal}>
           <FontAwesomeIcon icon="question-circle" />
         </span>
-      </h1>
+      </>
+    );
+  };
+
+  return (
+    <div className="granule-count">
+      <div className="granule-count-header">
+        Available granules for
+        {` ${displayDate}: `}
+      </div>
+
+      <div className="granule-count-info">
+
+        {!isLoading && (
+          <>
+            <span className="fade-in">
+              {granulesExist && selectedGranules && `${selectedGranules} of `}
+              {granulesExist ? totalGranules : 'NONE'}
+            </span>
+          </>
+        )}
+
+        {!isLoading ? renderDownloadSize() : renderLoading()}
+
+      </div>
     </div>
   );
 }
@@ -99,6 +146,5 @@ GranuleCount.propTypes = {
   selectedLayer: PropTypes.object,
   selectedDate: PropTypes.string,
   selectedCollection: PropTypes.object,
-  showBoundingBox: PropTypes.bool,
   showGranuleHelpModal: PropTypes.func,
 };

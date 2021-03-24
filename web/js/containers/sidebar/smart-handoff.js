@@ -57,7 +57,7 @@ class SmartHandoff extends Component {
         y2: screenHeight / 2 + 100,
       },
       showBoundingBox: false,
-      currentExtent: {},
+      currentExtent: undefined,
       coordinates: {},
     };
 
@@ -66,7 +66,7 @@ class SmartHandoff extends Component {
     this.onCheckboxToggle = this.onCheckboxToggle.bind(this);
     this.onClickDownload = this.onClickDownload.bind(this);
     this.updateExtent = this.updateExtent.bind(this);
-    this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 250);
+    this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 500, { leading: true });
   }
 
   componentDidUpdate(prevProps) {
@@ -155,7 +155,7 @@ class SmartHandoff extends Component {
     };
 
     if (selectedCollection && extent) {
-      this.debouncedUpdateExtent(coordinates, boundaries, extent);
+      this.debouncedUpdateExtent(coordinates, newBoundaries, extent);
     }
   }
 
@@ -417,11 +417,10 @@ class SmartHandoff extends Component {
         {this.renderCropBox()}
         <GranuleCount
           displayDate={displayDate}
-          currentExtent={currentExtent}
+          currentExtent={showBoundingBox && currentExtent}
           selectedDate={selectedDate}
           selectedLayer={selectedLayer}
           selectedCollection={selectedCollection}
-          showBoundingBox={showBoundingBox}
           showGranuleHelpModal={showGranuleHelpModal}
         />
         <Button
