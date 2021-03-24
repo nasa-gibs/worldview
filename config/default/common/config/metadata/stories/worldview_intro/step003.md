@@ -1,2 +1,2 @@
-<h1>Timeline</h1>
-<p>Use the Timeline at the bottom to choose the date of observation. You can change the date by typing in the date fields, clicking on the up and down arrows by each field, click on the back and forward arrows and change the temporal zoom level. You can also use the slider on the right to change the date. You can animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.</p>
+<h2>Comparison</h2>
+<p>Worldview also has a Comparison feature that allows users to compare imagery from two different dates, or two sets of imagery from the same date or even two sets of imagery from different dates! Click on the pulsing red dot by "Start Comparison" to begin!
