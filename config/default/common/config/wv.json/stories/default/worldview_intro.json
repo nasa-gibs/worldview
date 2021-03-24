@@ -3,7 +3,7 @@
     "worldview_intro": {
       "id": "worldview_intro",
       "type": "default",
-      "title": "Intro to Worldview",
+      "title": "Introduction to Worldview",
       "description": "Discover and learn how to use Worldview's tools and features!",
       "backgroundImage": "wv_background.png",
       "backgroundImageHover": "",
@@ -12,38 +12,44 @@
         {
           "id": "001",
           "description": "step001.html",
-          "stepLink": "v=-128.3178541244519,12.27474925781691,-75.86594458383696,48.16528597635188&z=4&l=Himawari_AHI_Band3_Red_Visible_1km(hidden),GOES-West_ABI_Band2_Red_Visible_1km(hidden),GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&tr=worldview_intro&t=2021-03-10-T19%3A49%3A25Z",
+          "stepLink": "v=-108.00920361862684,-63.57842410029712,116.2759949373298,68.07713930391033&lg=false&tr=worldview_intro&t=2021-03-22-T16%3A21%3A03Z",
           "joyride": {
             "continuous": true,
             "spotlightClicks": true,
             "steps": [
               {
+                "target": "#productsHolder",
+                "content": "To start, let's explore the Layers, Events and Data tabs.",
+                "placement": "right-start"
+              },
+              {
                 "target": "#layers-sidebar-tab",
                 "title": "Layer List",
-                "content": "The Layer List shows all the layers that are loaded on the map.",
+                "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers under the overlays and only the top most activated base layer will display.",
                 "placementBeacon": "top"
               },
               {
                 "target": "#events-sidebar-tab",
                 "title": "Events",
-                "content": "Select the Events tab to view current natural events around the world.",
+                "content": "Select the Events tab to view a curated list of current natural events around the world.",
                 "placementBeacon": "right"
               },
               {
                 "target": "#download-sidebar-tab",
                 "title": "Data Download",
-                "content": "Select the Data tab to download the underlying data for the imagery layers displayed on the map! Once you have selected your desired layer it will direct you to Earthdata Search to download the data.",
+                "content": "Select the Data tab to download the underlying data for the imagery layers displayed on the map. Once you have selected your desired layer it will direct you to Earthdata Search to download the data.",
                 "placementBeacon": "right"
               },
               {
                 "target": "#timeline",
                 "title": "Timeline",
-                "content": "Use the Timeline at the bottom to choose the date of observation. You can change the date by typing in the date fields, clicking on the up and down arrows by each field, click on the back and forward arrows and change the temporal zoom level. You can also use the slider on the right to change the date. You can animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.",
+                "content": "The Timeline allows you to choose the date of observation and much more!",
                 "placementBeacon": "right"
               },
               {
                 "target": "#date-selector-main",
-                "content": "Change the date (and time if you have Geostationary layers loaded) by using the up and down arrows or entering with your keyboard.",
+                "title": "Date Selector",
+                "content": "Change the date (and time if you have Geostationary layers loaded) by selecting and typing into the date fields, clicking on the up and down arrows by each field.",
                 "placementBeacon": "right"
               },
               {
@@ -60,13 +66,13 @@
               {
                 "target": "#animate-button",
                 "title": "Timeline Animation",
-                "content": "You can animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.",
+                "content": "Animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.",
                 "placementBeacon": "right"
               },
               {
                 "target": "#timeline-layer-coverage-panel-handle",
                 "title": "Timeline Layer Coverage",
-                "content": "Click here to open the timeline layer coverage panel. Temporal availability of active time-varying layers is shown as a set of striped horizontal blue lines in the panel. The total temporal coverage of the layers is shown on the far right.",
+                "content": "Click here to open the timeline layer coverage panel. Temporal availability of active time-varying layers are shown as a set of striped horizontal blue lines in the panel. The total temporal coverage of the layers is shown on the far right.",
                 "placementBeacon": "right"
               },
               {
@@ -97,17 +103,22 @@
               },
               {
                 "target": "#wv-info-button",
-                "content": "The Information icon provides you a place where you can provide feedback, initiate the tour stories, provide information about Worldview's source code, let you know what we've been working on recently with \"What's new\", notifications, background information and the Distraction Free mode which removes all of the unnecessary elements so you can focus solely on the map.",
+                "content": "Here you may provide feedback, initiate tour stories, access Worldview's source code, find out what we've been working on recently with \"What's new\", read notifications, find background information, and access Distraction Free mode. It which removes all of the unnecessary elements so you can focus solely on the map.",
                 "placementBeacon": "bottom"
               },
               {
-                "target": "#wv-measure-button",
-                "content": "Measure Distance and Area and export as GeoJSON.",
+                "target": ".wv-zoom-buttons",
+                "content": "Use these to zoom in and out of the map. Alternatively, use your mouse scroll wheel or trackpad.",
                 "placementBeacon": "left"
               },
               {
-                "target": "#coords-panel",
-                "content": "Click to change map coordinates which are available in Degrees Minutes Seconds, Decimal Degrees, and Degrees Decimal Minutes",
+                "target": "#wv-measure-button",
+                "content": "Measure Distance and Area in kilometers (km) or miles (mi) and export as GeoJSON.",
+                "placementBeacon": "left"
+              },
+              {
+                "target": "#ol-coords-case",
+                "content": "When outside of the tour mode, you can hover the cursor on the map to see the map coordinates here. Click on the coordinates to change map coordinates between Degrees Minutes Seconds, Decimal Degrees, and Degrees Decimal Minutes",
                 "placementBeacon": "left"
               }
             ]
@@ -116,7 +127,7 @@
         {
           "id": "002",
           "description": "step002.html",
-          "stepLink": "v=-128.3178541244519,12.27474925781691,-75.86594458383696,48.16528597635188&z=4&l=Himawari_AHI_Band3_Red_Visible_1km(hidden),GOES-West_ABI_Band2_Red_Visible_1km(hidden),GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&tr=worldview_intro&t=2021-03-10-T19%3A49%3A25Z",
+          "stepLink": "v=-108.00920361862684,-63.57842410029712,116.2759949373298,68.07713930391033&lg=false&tr=worldview_intro&t=2021-03-22-T16%3A21%3A03Z",
           "joyride": {
             "continuous": true,
             "disableOverlayClose": true,
@@ -134,14 +145,14 @@
               {
                 "target": "#categories-nav",
                 "title": "Layer Browsing",
-                "content": "Here you can discover and add relevant layers by science discipline, by natural hazard and disaster category. The most recent layers you've added will show in the \"Recent\" tab making it easier to find your favorites on return vists.",
+                "content": "Here you can discover and add relevant layers sorted by Hazards and Disasters categories, by Science Discipline, or by Featured, which include new and noteworthy imagery layers. The most recent layers you've added will show in the \"Recent\" tab making it easier to find your favorites on return vists.",
                 "placement": "left",
                 "hideBackButton": true
               },
               {
                 "target": "#layers-search-input",
                 "title": "Layer Search",
-                "content": "The search bar allows free text searching for layers. Try searching for \"cloud\"",
+                "content": "The Search bar allows free text searching for layers. Try searching for \"cloud\".",
                 "placement": "left",
                 "spotlightClicks": true,
                 "hideNextButton": true
@@ -149,7 +160,7 @@
               {
                 "target": ".facet-container",
                 "title": "Faceted Filtering",
-                "content": "You can use the facets to further refine your result set.",
+                "content": "You can use the facets to further refine your results.",
                 "placement": "right-start",
                 "placementBeacon": "top",
                 "hideBackButton": true,
@@ -158,14 +169,14 @@
               {
                 "target": ".search-row:first-of-type",
                 "title": "Search Results",
-                "content": "You can click a search result entry to see the details for the layer. You can also click the checkbox to add a layer to the map.",
+                "content": "Click on a search result entry to see the details for the layer. You can also click the checkbox to add a layer to the map.",
                 "placement": "bottom",
                 "spotlightClicks": true
               },
               {
                 "target": ".layer-detail-container",
                 "title": "Layer Details",
-                "content": "Information about the layer such as ... can be seen here.  You can also add or remove a layer from the map from here.",
+                "content": "Information about the layer including temporal coverage, a description of the imagery layer and reference links can be seen here.  You can also click on \"+ Add Layer\" to add or \"+ Remove Layer\" remove a layer from the map.",
                 "placement": "left",
                 "spotlightClicks": true
               }
@@ -179,43 +190,28 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-01-30-T00%3A00%3A00Z&z=3&v=-159.5935080199115,-46.546875,46.24975801991151,53.015625"
-        },
-        {
-          "id": "004",
-          "description": "step004.html",
-          "transition": {
-            "element": "",
-            "action": ""
-          },
-          "stepLink": "p=arctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-01-30-T00%3A00%3A00Z&z=3&v=-7655424,-3702784,7655424,3702784"
-        },
-        {
-          "id": "005",
-          "description": "step005.html",
-          "transition": {
-            "element": "",
-            "action": ""
-          },
-          "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&t=2019-01-30-T00%3A00%3A00Z&z=3&v=-7655424,-3702784,7655424,3702784&e=true"
-        },
-        {
-          "id": "006",
-          "description": "step006.html",
-          "transition": {
-            "element": "",
-            "action": ""
-          },
-          "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2019-01-25-T00%3A00%3A00Z&z=3&v=-2235528.9522572393,3385501.7307898873,-1278600.9522572395,3848349.7307898873&e=EONET_2875,2019-01-25"
-        },
-        {
-          "id": "007",
-          "description": "step007.html",
-          "transition": {
-            "element": "",
-            "action": ""
-          },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels,Reference_Features,Coastlines&t=2019-01-25-T00%3A00%3A00Z&z=3&v=-263.08556370887516,-157.595374192472,262.57068629112484,96.65462580752799&e=EONET_2875,2019-01-25"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-01-30-T00%3A00%3A00Z&z=3&v=-159.5935080199115,-46.546875,46.24975801991151,53.015625",
+              "joyride": {
+                "continuous": true,
+                "disableOverlayClose": true,
+                "hideCloseButton": true,
+                "eventTriggersIncrement": true,
+                "steps": [
+                  {
+                    "target": "#compare-toggle-button",
+                    "content": "Click on \"Start Comparison\" to compare imagery layers!",
+                    "placement": "bottom",
+                    "spotlightClicks": true,
+                    "hideNextButton": true
+                  },
+                  {
+                    "target": "#tab-content",
+                    "content": "The Layer List and the screen has now split into two sides, the A and B sides.",
+                    "placement": "bottom",
+                    "hideBackButton": true
+                  }
+                ]
+              }
         }
       ]
     }
