@@ -38,6 +38,9 @@ export default function GranuleCount (props) {
     (prev, curr) => prev + parseInt(curr.granule_size, 10), 0,
   );
 
+  /**
+   * Fetch granule data for the specified selected layer/collection
+   */
   const updateGranules = async () => {
     const { southWest, northEast } = currentExtent || {};
     let newTotalGranules = 0;
@@ -68,7 +71,6 @@ export default function GranuleCount (props) {
     if (newGranuleDownloadSize === 0) {
       newGranuleDownloadSize = getDownloadSize(totalEntries);
     }
-
     setState({
       isLoading: false,
       totalGranules: newTotalGranules,
@@ -77,9 +79,7 @@ export default function GranuleCount (props) {
     });
   };
 
-  /**
-   * Fetch granule data for the specified selected layer/collection
-   */
+  /** Trigger granule request when extent, collection, or date changes */
   useEffect(() => {
     setState({
       isLoading: true,
