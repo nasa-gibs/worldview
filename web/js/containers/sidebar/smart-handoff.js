@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
-import { debounce as lodashDebounce } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,16 +29,11 @@ const STD_NRT_MAP = {
 };
 
 /**
- * The Smart-Handoff components replaces the existing data download capability
- * by directing users to select specific layer products within Worldview and 'hand' them 'off'
- * to NASA's Earthdata Search web tool that will proceed in fetching corresponding
+ * The Smart-Handoff component directs users to select specific layer products
+ * in NASA's Earthdata Search web tool that will proceed in fetching corresponding
  * layer data and granule files that are available for download.
  */
 class SmartHandoff extends Component {
-  /**
-   * SmartHandoff's default constructor
-   * @param {*} props | A read-only object used to transfer data from a parent component
-   */
   constructor(props) {
     super(props);
 
@@ -48,7 +42,6 @@ class SmartHandoff extends Component {
       screenHeight,
     } = props;
 
-    // Set default state
     this.state = {
       boundaries: {
         x: screenWidth / 2 - 100,
@@ -66,7 +59,6 @@ class SmartHandoff extends Component {
     this.onCheckboxToggle = this.onCheckboxToggle.bind(this);
     this.onClickDownload = this.onClickDownload.bind(this);
     this.updateExtent = this.updateExtent.bind(this);
-    this.debouncedUpdateExtent = lodashDebounce(this.updateExtent, 500, { leading: true });
   }
 
   componentDidUpdate(prevProps) {
@@ -92,18 +84,20 @@ class SmartHandoff extends Component {
    * Fires when the bounding box / crop toggle is activated and changed
    */
   updateExtent(coordinates, boundaries, extent) {
-    this.setState({
-      boundaries,
-      coordinates,
-      currentExtent: extent,
-    });
+    const newState = { boundaries, coordinates };
+    if (extent) {
+      newState.currentExtent = extent;
+    }
+    this.setState(newState);
   }
 
   /**
    * Fires when the image cropper is moved around on the map; updates the SW and NE lat/lon coordinates.
    * @param {*} boundaries - the focal point to which layer data should be contained within
+   * @param {boolean} setExtent - should the subsequent setState call set the extent, which will trigger
+   *                              the granule count async requests
    */
-  onBoundaryChange(boundaries) {
+  onBoundaryChange(boundaries, setExtent) {
     const { proj, map, selectedCollection } = this.props;
 
     if (!selectedCollection) return;
@@ -155,7 +149,7 @@ class SmartHandoff extends Component {
     };
 
     if (selectedCollection && extent) {
-      this.debouncedUpdateExtent(coordinates, newBoundaries, extent);
+      this.updateExtent(coordinates, newBoundaries, setExtent && extent);
     }
   }
 
@@ -329,6 +323,9 @@ class SmartHandoff extends Component {
             maxHeight={screenHeight}
             maxWidth={screenWidth}
             onChange={this.onBoundaryChange}
+            onDragStop={(crop) => {
+              this.onBoundaryChange(crop, true);
+            }}
             onClose={onClose}
             keepSelection
             bottomLeftStyle={{
