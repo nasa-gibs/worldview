@@ -28,8 +28,6 @@ module.exports = {
 
   // verify about menu item opens about modal
   'About menu item opens about modal': (c) => {
-    c.waitForElementVisible('#toolbar_info', TIME_LIMIT);
-    c.waitForElementVisible('#about_info_item', TIME_LIMIT);
     c.click('#about_info_item');
     c.pause(500);
 

@@ -20,7 +20,7 @@ If you want to submit your own contributions, follow these steps:
 
 * Fork the Worldview repo.
 * Create a new branch from the branch you'd like to contribute to.
-* *Note:* If you're not branching from an existing feature branch, create your branch from `develop` for the majority of contributions. Branching from `master` is reserved for urgent patches.
+* *Note:* If you're not branching from an existing feature branch, create your branch from `develop` for the majority of contributions. Branching from `main` is reserved for urgent patches.
 * If an issue doesn't already exist, [submit one](#submitting-an-issue).
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the `nasa-gibs/worldview` repo.
 * Be sure to [mention the issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes [#480](https://github.com/nasa-gibs/worldview/issues/480)".

@@ -1054,35 +1054,33 @@ class Timeline extends React.Component {
     const mobileBottom = (hasSubdailyLayers && isScreenWidthLessThan450) || isScreenWidthLessThan350
       ? '65px'
       : '10px';
-
     const isAnimationWidgetReady = isAnimationWidgetOpen
       && !animationDisabled
       && animationStartLocation
       && animationStartLocationDate
       && animationEndLocation
       && animationEndLocationDate;
+
+    const containerMouseLeave = isDistractionFreeModeActive && !isDraggerDragging && !isTimelineDragging
+      ? () => this.hoverOverDistractionFreeTimeUI(false)
+      : null;
+    const containerDisplayStyle = {
+      display: isDistractionFreeModeActive && !isHoverOverDistractionFreeTimeUI ? 'none' : 'block',
+    };
     return (
       <>
-        {isDistractionFreeModeActive
-          ? (
-            <DistractionFreeTimeUI
-              date={selectedDate}
-              hasSubdailyLayers={hasSubdailyLayers}
-              hoverOverDistractionFreeTimeUI={this.hoverOverDistractionFreeTimeUI}
-              isHoverOverDistractionFreeTimeUI={isHoverOverDistractionFreeTimeUI}
-            />
-          )
-          : null}
+        {(initialLoadComplete && isDistractionFreeModeActive) && (
+        <DistractionFreeTimeUI
+          date={selectedDate}
+          hasSubdailyLayers={hasSubdailyLayers}
+          hoverOverDistractionFreeTimeUI={this.hoverOverDistractionFreeTimeUI}
+          isHoverOverDistractionFreeTimeUI={isHoverOverDistractionFreeTimeUI}
+        />
+        )}
         <div
           className="timeline-container"
-          onMouseLeave={
-            isDistractionFreeModeActive && !isDraggerDragging && !isTimelineDragging
-              ? () => this.hoverOverDistractionFreeTimeUI(false)
-              : null
-          }
-          style={{
-            display: isDistractionFreeModeActive && !isHoverOverDistractionFreeTimeUI ? 'none' : 'block',
-          }}
+          onMouseLeave={containerMouseLeave}
+          style={containerDisplayStyle}
         >
           {initialLoadComplete
             && (
