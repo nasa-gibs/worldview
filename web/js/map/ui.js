@@ -1073,28 +1073,22 @@ export default function mapui(models, config, store, ui) {
   function createMousePosSel(map, proj) {
     const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
-      const { browser } = state;
+      const { browser, sidebar } = state;
       const isMobile = browser.lessThan.medium;
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
-      // if mobile return
       if (isMobile) return;
-      // if measure is active return
       if (state.measure.isActive) return;
 
       const pixels = map.getEventPixel(e);
       const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
-      // setting a limit on running-data retrieval
-      if (self.mapIsbeingDragged) {
-        return;
-      }
+      if (self.mapIsbeingDragged) return;
       // Don't add data runners if we're on the events or smart handoffs tabs, or if map is animating
       const isEventsTabActive = typeof state.events !== 'undefined' && state.events.active;
       const isMapAnimating = state.animation.isPlaying;
-      // TODO handle smart handoffs
-      if (isEventsTabActive || isMapAnimating) return;
+      if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
       dataRunner.newPoint(pixels, map);
     }, 300);
