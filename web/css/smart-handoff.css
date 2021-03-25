@@ -126,6 +126,7 @@ label[for='chk-crop-toggle'] span {
 .granule-count-info {
   margin: 0 30px;
   text-align: center;
+  height: 28px;
   span {
     color: #fff;
     font-size: 16px;
