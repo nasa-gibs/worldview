@@ -35,14 +35,16 @@ export default function GranuleCount (props) {
   };
 
   const getDownloadSize = (entries) => entries.reduce(
-    (prev, curr) => prev + parseInt(curr.granule_size, 10), 0,
+    (prev, curr) => (
+      curr.granule_size ? prev + parseInt(curr.granule_size, 10) : 0),
+    0,
   );
 
   /**
    * Fetch granule data for the specified selected layer/collection
    */
   const updateGranules = async () => {
-    const { southWest, northEast } = currentExtent || {};
+    const { southWest, northEast } = currentExtent;
     let newTotalGranules = 0;
     let newSelectedGranules;
     let newGranuleDownloadSize = 0;
@@ -59,7 +61,7 @@ export default function GranuleCount (props) {
 
     const granulesRequestUrl = granulesBaseUrl + util.toQueryString(params);
 
-    if (currentExtent) {
+    if (southWest && northEast) {
       const bboxRequestUrl = `${granulesRequestUrl}&bounding_box=${southWest},${northEast}`;
       const selectedEntries = await requestGranules(bboxRequestUrl);
       newSelectedGranules = selectedEntries.length;
@@ -96,7 +98,10 @@ export default function GranuleCount (props) {
   );
 
   const renderDownloadSize = () => {
-    const printSize = (s) => Number(s).toFixed(0).toLocaleString();
+    const printSize = (s) => {
+      const wholeNum = Number(s).toFixed(0);
+      return Number(wholeNum).toLocaleString();
+    };
     let sizeText;
     if (granuleDownloadSize > 1000) {
       sizeText = `${printSize(granuleDownloadSize / 1000)} GB`;
