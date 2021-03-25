@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const draggerA = '.timeline-dragger.draggerA ';
 const dateSelectorDayInput = '#date-selector-main .input-wrapper-day input';
@@ -22,8 +22,9 @@ module.exports = {
     c.expect.element('#timeline-footer').to.be.visible;
     // hide timeline
     c.click('#timeline-hide')
-      .waitForElementNotVisible('#timeline-footer', TIME_LIMIT);
-    c.expect.element('#timeline-footer').to.not.be.visible;
+      .waitForElementNotPresent('#timeline-footer', TIME_LIMIT);
+    c.expect.element('#timeline-footer').to.not.be.present;
+
     // expand timeline
     c.click('#timeline-hide')
       .waitForElementVisible('#timeline-footer', TIME_LIMIT);
@@ -63,7 +64,7 @@ module.exports = {
 
   // verify interval state restored from permalink
   'Interval state of HOUR restored from permalink': (c) => {
-    c.url(c.globals.url + localQuerystrings.subdailyLayerIntervalTimescale);
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
     c.useCss()
       .moveToElement('#timeline-interval-btn-container', 0, 0)
       .waitForElementVisible('#current-interval', TIME_LIMIT);
@@ -90,7 +91,7 @@ module.exports = {
 
   // verify changing custom interval changes current interval and how many time units change with date arrows
   'Select custom interval changes current interval and changes date by current interval': (c) => {
-    c.url(c.globals.url + localQuerystrings.knownDate);
+    c.url(c.globals.url + localQueryStrings.knownDate);
     c.assert.attributeContains(dateSelectorDayInput, 'value', '22');
     c.useCss()
       .moveToElement('#timeline-interval-btn-container', 0, 0)
@@ -114,7 +115,7 @@ module.exports = {
 
   // verify subdaily default year, month, day, hour, minute, and custom intervals
   'Timescale zoom subdaily default year, month, day, hour, minute, and custom intervals': (c) => {
-    c.url(c.globals.url + localQuerystrings.subdailyLayerIntervalTimescale);
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
     c.useCss()
       .moveToElement('#current-zoom', 0, 0)
       .waitForElementVisible('#zoom-years', TIME_LIMIT);
@@ -152,7 +153,7 @@ module.exports = {
 
   // subdaily valid date tooltip date is present on hovering over timeline axis
   'Subdaily date tooltip date is present on hovering over timeline axis': (c) => {
-    c.url(c.globals.url + localQuerystrings.subdailyLayerIntervalTimescale);
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
     c.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
     c.useCss()
       .moveToElement(draggerA, 15, 15)

@@ -75,7 +75,7 @@ export default function mapui(models, config, store, ui) {
   let cache;
   const dateline = mapDateLineBuilder(models, config, store, ui);
   const precache = mapPrecacheTile(models, config, cache, self);
-  const compareMapUi = mapCompare(config, store);
+  const compareMapUi = mapCompare(store);
   const dataRunner = self.runningdata = new MapRunningData(
     models,
     compareMapUi,
@@ -103,7 +103,7 @@ export default function mapui(models, config, store, ui) {
   self.activeMarker = null;
   self.coordinatesDialogDOMEl = null;
   /**
-   * Suscribe to redux store and listen for
+   * Subscribe to redux store and listen for
    * specific action types
    */
   const subscribeToStore = function(action) {
@@ -320,7 +320,7 @@ export default function mapui(models, config, store, ui) {
     const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
 
-    // handle clearing cooridnates using created marker
+    // handle clearing coordinates using created marker
     const clearMarker = () => {
       store.dispatch({ type: CLEAR_MARKER });
     };
@@ -491,7 +491,7 @@ export default function mapui(models, config, store, ui) {
   }
 
   /*
-   * When page is resised set for mobile or desktop
+   * When page is resized set for mobile or desktop
    *
    * @method onResize
    * @static
@@ -840,7 +840,7 @@ export default function mapui(models, config, store, ui) {
   /*
    * Get a layer object from id
    *
-   * @method findlayer
+   * @method findLayer
    * @static
    *
    * @param {object} def - Layer Specs
@@ -1087,7 +1087,7 @@ export default function mapui(models, config, store, ui) {
       const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
-      // setting a limit on running-data retrievel
+      // setting a limit on running-data retrieval
       if (self.mapIsbeingDragged) {
         return;
       }

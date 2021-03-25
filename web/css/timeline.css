@@ -677,6 +677,7 @@ button:focus {
 }
 
 .mobile-date-picker-select-btn {
+  user-select: none;
   position: absolute;
   left: 10px;
   bottom: 10px;

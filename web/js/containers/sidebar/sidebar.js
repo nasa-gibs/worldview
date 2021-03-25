@@ -64,7 +64,7 @@ class Sidebar extends React.Component {
       loadedCustomPalettes(customs);
     });
     this.updateDimensions();
-    // prevent browserzooming in safari
+    // prevent browser zooming in safari
     if (util.browser.safari) {
       const onGestureCallback = (e) => {
         e.preventDefault();

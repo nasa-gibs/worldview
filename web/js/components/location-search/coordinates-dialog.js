@@ -25,7 +25,7 @@ class CoordinatesDialog extends Component {
         isCopyToClipboardTooltipVisible: true,
       });
 
-      // Prevnet keyboard overlay in iOS
+      // Prevent keyboard overlay in iOS
       setTimeout(() => {
         document.getElementById('location-search-autocomplete').blur();
       }, 50);

@@ -82,7 +82,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { compare, date } = state;
 
   return {

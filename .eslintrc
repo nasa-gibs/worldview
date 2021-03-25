@@ -80,7 +80,7 @@
         */
 
         // Base rule overrides
-        "no-nested-ternary": "warn", // 58 errors
+        "no-nested-ternary": "off", // 58 errors
         "no-shadow": "warn", // 136 errors
         "max-len": "off",
         "consistent-return": "off", // 73 errors
