@@ -414,7 +414,7 @@ class SmartHandoff extends Component {
         {this.renderCropBox()}
         <GranuleCount
           displayDate={displayDate}
-          currentExtent={showBoundingBox && currentExtent}
+          currentExtent={showBoundingBox ? currentExtent : undefined}
           selectedDate={selectedDate}
           selectedLayer={selectedLayer}
           selectedCollection={selectedCollection}
