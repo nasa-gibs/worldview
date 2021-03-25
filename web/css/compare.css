@@ -122,3 +122,42 @@
   display: block;
   max-width: 100%;
 }
+
+/* Mobile */
+.comparison-mobile-select-toggle {
+  border-radius: 5px;
+  height: 44px;
+  border: thin solid #333;
+  background-color: rgba(40, 40, 40, 0.85);
+  position: absolute;
+  bottom: 65px;
+  left: 10px;
+  display: flex;
+  overflow: hidden;
+}
+
+.compare-toggle-selected-btn {
+  cursor: pointer;
+  user-select: none;
+  font-size: 25px;
+  padding: 13.5px;
+  color: #fff;
+  border: thin solid transparent;
+  &:first-child {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+  &:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  &:hover:not(.compare-btn-selected) {
+    border-color: #fff;
+  }
+}
+
+.compare-btn-selected {
+  color: #495057;
+  background-color: #fff;
+  border-color: #fff;
+}

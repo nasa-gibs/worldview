@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 10000;
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
     });
   },
   'Opening custom interval widget': (client) => {
-    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
+    client.url(client.globals.url + localQueryStrings.activeAnimationWidget);
     client.waitForElementVisible(
       localSelectors.animationButton,
       TIME_LIMIT,
@@ -42,7 +42,7 @@ module.exports = {
    * in the animation widget date selector
    */
   'Changing date range of animation': (client) => {
-    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
+    client.url(client.globals.url + localQueryStrings.activeAnimationWidget);
     // Test Permalink opens widget
     client.waitForElementVisible(
       '#day-animation-widget-start',

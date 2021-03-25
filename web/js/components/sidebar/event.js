@@ -21,7 +21,6 @@ function Event (props) {
   if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
     dateString += `, ${eventDate.getUTCFullYear()}`;
   }
-  // eslint-disable-next-line no-nested-ternary
   const itemClass = isSelected
     ? 'item-selected selectorItem item item-visible'
     : isVisible
