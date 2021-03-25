@@ -275,6 +275,10 @@ footer .compare-toggle-button {
       display: inline;
     }
   }
+
+  #productsHolder footer .product-buttons {
+    height: 110px;
+  }
 }
 
 .group-overlays-checkbox {

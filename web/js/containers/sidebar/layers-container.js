@@ -18,16 +18,18 @@ import util from '../../util/util';
 function LayersContainer (props) {
   const {
     activeLayersMap,
+    baselayers,
+    compareState,
+    groupOverlays,
+    height,
+    isActive,
+    isCompareActive,
+    isMobile,
     overlayGroups,
     overlays,
-    baselayers,
-    groupOverlays,
-    isActive,
-    compareState,
-    height,
     reorderOverlayGroups,
-    toggleOverlayGroups,
     toggleCollapse,
+    toggleOverlayGroups,
   } = props;
 
   const [overlaysCollapsed, toggleOverlaysCollapsed] = useState(false);
@@ -103,8 +105,12 @@ function LayersContainer (props) {
     </DragDropContext>
   );
 
+  const mobileHeightCoeff = isCompareActive ? -30 : 20;
+  const maxHeight = isMobile
+    ? height + mobileHeightCoeff
+    : height;
   const scrollContainerStyles = {
-    maxHeight: `${height}px`,
+    maxHeight: `${maxHeight}px`,
     overflowY: 'auto',
     paddingBottom: '4px',
     minHeight: '100px',
@@ -154,12 +160,16 @@ function LayersContainer (props) {
 
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
-  const { layers } = state;
+  const { browser, compare, layers } = state;
+  const isCompareActive = compare.active;
+  const isMobile = browser.lessThan.medium;
   const { groupOverlays } = layers[compareState];
   const { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
   const overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
 
   return {
+    isCompareActive,
+    isMobile,
     baselayers,
     overlays,
     overlayGroups,
@@ -190,13 +200,15 @@ export default connect(
 LayersContainer.propTypes = {
   activeLayersMap: PropTypes.object,
   baselayers: PropTypes.array,
+  compareState: PropTypes.string,
+  groupOverlays: PropTypes.bool,
   height: PropTypes.number,
   isActive: PropTypes.bool,
-  compareState: PropTypes.string,
+  isCompareActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   overlayGroups: PropTypes.array,
   overlays: PropTypes.array,
   reorderOverlayGroups: PropTypes.func,
-  groupOverlays: PropTypes.bool,
-  toggleOverlayGroups: PropTypes.func,
   toggleCollapse: PropTypes.func,
+  toggleOverlayGroups: PropTypes.func,
 };
