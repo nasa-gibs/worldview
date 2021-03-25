@@ -36,7 +36,7 @@ export default function GranuleCount (props) {
 
   const getDownloadSize = (entries) => entries.reduce(
     (prev, curr) => (
-      curr.granule_size ? prev + parseInt(curr.granule_size, 10) : 0),
+      curr.granule_size ? prev + parseFloat(curr.granule_size, 10) : 0),
     0,
   );
 
@@ -44,7 +44,7 @@ export default function GranuleCount (props) {
    * Fetch granule data for the specified selected layer/collection
    */
   const updateGranules = async () => {
-    const { southWest, northEast } = currentExtent;
+    const { southWest, northEast } = currentExtent || {};
     let newTotalGranules = 0;
     let newSelectedGranules;
     let newGranuleDownloadSize = 0;
@@ -86,7 +86,7 @@ export default function GranuleCount (props) {
     setState({
       isLoading: true,
       totalGranules: 0,
-      selectedGranules: 0,
+      selectedGranules: false,
     });
     updateGranules();
   }, [currentExtent, selectedCollection, selectedDate]);
@@ -99,7 +99,8 @@ export default function GranuleCount (props) {
 
   const renderDownloadSize = () => {
     const printSize = (s) => {
-      const wholeNum = Number(s).toFixed(0);
+      const precision = s > 9 ? 0 : 2;
+      const wholeNum = Number(s).toFixed(precision);
       return Number(wholeNum).toLocaleString();
     };
     let sizeText;
@@ -132,7 +133,7 @@ export default function GranuleCount (props) {
         {!isLoading && (
           <>
             <span className="fade-in">
-              {granulesExist && selectedGranules && `${selectedGranules} of `}
+              {granulesExist && selectedGranules >= 0 && `${selectedGranules} of `}
               {granulesExist ? totalGranules : 'NONE'}
             </span>
           </>
