@@ -32,15 +32,15 @@ const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
   const mapScaleImperialProj = `#wv-map-${proj} ${mapScaleImperial}`;
   const visibleEls = [
     timelineContainer,
-    sidebarContainer,
-    measureBtn,
     mapScaleMetricProj,
     mapScaleImperialProj,
   ];
   let presentEls = [
     infoToolbarButton,
     locationSearchToolbarButton,
+    measureBtn,
     shareToolbarButton,
+    sidebarContainer,
     projToolbarButton,
     snapshotToolbarButton,
     zoomInButton,
@@ -100,7 +100,6 @@ module.exports = {
     c.url(`${c.globals.url}?df=true`);
     c.waitForElementVisible('#wv-exit-distraction-free-mode-button');
 
-    closeDistractionFreeAlert(c);
     distractionFreeModeValidElsRemoved(c, 'geographic', true);
   },
 

@@ -22,6 +22,7 @@ export default {
     LOCATION_SEARCH_COLLAPSED: 'locationSearchState',
     DISMISSED_EVENT_VIS_ALERT: 'dismissedEventVisibilityAlert',
     DISMISSED_COMPARE_ALERT: 'dismissedCompareAlert',
+    DISMISSED_DISTRACTION_FREE_ALERT: 'dismissedDistractionFreeAlert',
     HIDE_TOUR: 'hideTour',
     HIDE_EDS_WARNING: 'hideEDS',
     SIDEBAR_COLLAPSED: 'sidebarState',

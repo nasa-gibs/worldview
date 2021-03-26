@@ -222,69 +222,73 @@ class Sidebar extends React.Component {
             ref={(iconElement) => { this.iconElement = iconElement; }}
             onWheel={wheelCallBack}
           />
-          {isCollapsed && (
-            <CollapsedButton
-              isMobile={isMobile}
-              onclick={this.toggleSidebar}
-              numberOfLayers={numberOfLayers}
-              isDistractionFreeModeActive={isDistractionFreeModeActive}
-            />
-          )}
-          <div
-            id="productsHolder"
-            className="products-holder-case"
-            ref={(el) => {
-              this.sideBarCase = el;
-            }}
-            style={{
-              maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
-              display: isDistractionFreeModeActive ? 'none' : 'block',
-            }}
-            onWheel={wheelCallBack}
-          >
-            {!isCollapsed && (
+          {isDistractionFreeModeActive
+            ? null
+            : (
               <>
-                <NavCase
-                  activeTab={activeTab}
-                  onTabClick={onTabClick}
-                  tabTypes={tabTypes}
+                {isCollapsed && (
+                <CollapsedButton
                   isMobile={isMobile}
-                  toggleSidebar={this.toggleSidebar}
-                  isCompareMode={isCompareMode}
-                  isDataDisabled={isDataDisabled}
+                  onclick={this.toggleSidebar}
+                  numberOfLayers={numberOfLayers}
                 />
-                <TabContent activeTab={activeTab}>
-                  <TabPane tabId="layers">
-                    {this.getProductsToRender(activeTab, isCompareMode)}
-                  </TabPane>
-                  <TabPane tabId="events">
-                    {naturalEvents && activeTab === 'events' && (
-                    <Events
-                      height={subComponentHeight}
-                      isLoading={isLoadingEvents}
-                      hasRequestError={hasEventRequestError}
-                      eventsData={eventsData}
-                      sources={eventsSources}
-                    />
-                    )}
-                  </TabPane>
-                  <TabPane tabId="download">
-                    {smartHandoffs && (
-                      <SmartHandoff
-                        isActive={activeTab === 'download'}
+                )}
+                <div
+                  id="productsHolder"
+                  className="products-holder-case"
+                  ref={(el) => {
+                    this.sideBarCase = el;
+                  }}
+                  style={{
+                    maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
+                  }}
+                  onWheel={wheelCallBack}
+                >
+                  {!isCollapsed && (
+                    <>
+                      <NavCase
+                        activeTab={activeTab}
+                        onTabClick={onTabClick}
                         tabTypes={tabTypes}
+                        isMobile={isMobile}
+                        toggleSidebar={this.toggleSidebar}
+                        isCompareMode={isCompareMode}
+                        isDataDisabled={isDataDisabled}
                       />
-                    )}
-                  </TabPane>
-                  <footer
-                    ref={(footerElement) => { this.footerElement = footerElement; }}
-                  >
-                    <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
-                  </footer>
-                </TabContent>
+                      <TabContent activeTab={activeTab}>
+                        <TabPane tabId="layers">
+                          {this.getProductsToRender(activeTab, isCompareMode)}
+                        </TabPane>
+                        <TabPane tabId="events">
+                          {naturalEvents && activeTab === 'events' && (
+                          <Events
+                            height={subComponentHeight}
+                            isLoading={isLoadingEvents}
+                            hasRequestError={hasEventRequestError}
+                            eventsData={eventsData}
+                            sources={eventsSources}
+                          />
+                          )}
+                        </TabPane>
+                        <TabPane tabId="download">
+                          {smartHandoffs && (
+                          <SmartHandoff
+                            isActive={activeTab === 'download'}
+                            tabTypes={tabTypes}
+                          />
+                          )}
+                        </TabPane>
+                        <footer
+                          ref={(footerElement) => { this.footerElement = footerElement; }}
+                        >
+                          <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
+                        </footer>
+                      </TabContent>
+                    </>
+                  )}
+                </div>
               </>
             )}
-          </div>
         </section>
       </ErrorBoundary>
     );

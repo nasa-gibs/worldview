@@ -1052,7 +1052,7 @@ export default (function(self) {
    * @param {*} scripts
    * @param {*} fn
    */
-  self.loadScipts = (scripts = [], fn) => {
+  self.loadScripts = (scripts = [], fn) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {
       if (scripts.length > index) {
