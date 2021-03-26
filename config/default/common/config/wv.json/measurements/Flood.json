@@ -1,0 +1,22 @@
+{
+    "measurements": {
+        "Flood": {
+            "id": "flood",
+            "title":    "Flood",
+            "subtitle": "Terra and Aqua/MODIS",
+            "sources": {
+                "Terra and Aqua/MODIS": {
+                    "id": "terra-aqua-modis",
+                    "title": "Terra and Aqua/MODIS",
+                    "description": "modis/combined/Flood",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Combined_Flood_1-Day",
+                        "MODIS_Combined_Flood_2-Day",
+                        "MODIS_Combined_Flood_3-Day"
+                    ]
+                }
+            }
+        }
+    }
+}
