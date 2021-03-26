@@ -25,6 +25,7 @@ module.exports = {
   // events
   eventsTabActive: '?e=true',
   mockEvents: '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-05-02-T00%3A00%3A00Z&z=3&v=-409.00147812273656,-205.62883007565202,270.5880270080828,219.11461063111003&e=true&mockEvents=20170530',
+  stormEventSelected: '?v=175.65863037109375,10.918751525878907,182.25042724609375,22.643360900878907&e=EONET_2777,2017-05-31&l=IMERG_Precipitation_Rate,VIIRS_SNPP_DayNightBand_ENCC(hidden),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),Reference_Labels,Reference_Features,Coastlines(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2017-05-31-T00%3A00%3A00Z&mockEvents=20170530',
   closedEvent: '?e=EONET_5133',
 
   // layers

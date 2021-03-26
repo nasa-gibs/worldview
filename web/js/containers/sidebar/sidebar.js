@@ -15,13 +15,16 @@ import {
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
+import {
+  requestEvents as requestEventsActionCreator,
+  requestSources as requestSourcesActionCreator,
+} from '../../modules/natural-events/actions';
 import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
   changeTab as changeTabAction,
   toggleSidebarCollapse as toggleSidebarCollapseAction,
-  collapseSidebar as collapseSidebarAction,
   expandSidebar as expandSidebarAction,
 } from '../../modules/sidebar/actions';
 import safeLocalStorage from '../../util/local-storage';
@@ -64,6 +67,7 @@ class Sidebar extends React.Component {
       loadedCustomPalettes(customs);
     });
     this.updateDimensions();
+    this.loadEvents();
     // prevent browser zooming in safari
     if (util.browser.safari) {
       const onGestureCallback = (e) => {
@@ -77,6 +81,39 @@ class Sidebar extends React.Component {
 
   componentDidUpdate() {
     this.updateDimensions();
+  }
+
+  loadEvents() {
+    const {
+      isLoadingEvents,
+      hasEventRequestError,
+      eventsData,
+      eventRequestUrl,
+      config,
+      requestEvents,
+      requestSources,
+    } = this.props;
+
+    if (!isLoadingEvents && !hasEventRequestError && !eventsData) {
+      let eventsRequestURL = `${eventRequestUrl}/events`;
+      let sourceRequestURL = `${eventRequestUrl}/sources`;
+
+      const mockEvents = lodashGet(config, 'parameters.mockEvents');
+      const mockSources = lodashGet(config, 'parameters.mockSources');
+
+      if (mockEvents) {
+        console.warn(`Using mock events data: ${mockEvents}`);
+        eventsRequestURL = mockEvents === 'true'
+          ? 'mock/events_data.json'
+          : `mock/events_data.json-${mockEvents}`;
+      }
+      if (mockSources) {
+        console.warn(`Using mock categories data: ${mockSources}`);
+        sourceRequestURL = `mock/categories_data.json-${mockSources}`;
+      }
+      requestEvents(eventsRequestURL);
+      requestSources(sourceRequestURL);
+    }
   }
 
   updateDimensions() {
@@ -106,15 +143,6 @@ class Sidebar extends React.Component {
       if (Math.abs(subComponentHeight - newHeight) > 1) {
         this.setState({ subComponentHeight: newHeight });
       }
-    }
-  }
-
-  selectEvent(id, date) {
-    const { selectEvent } = this.state;
-    const { isMobile, collapseSidebar } = this.props;
-    selectEvent(id, date);
-    if (isMobile) {
-      collapseSidebar();
     }
   }
 
@@ -172,11 +200,16 @@ class Sidebar extends React.Component {
       isMobile,
       changeTab,
       isDataDisabled,
+      isLoadingEvents,
+      hasEventRequestError,
+      eventsData,
+      eventsSources,
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     const { naturalEvents } = config.features;
     const { smartHandoffs } = config.features;
+
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
@@ -228,6 +261,10 @@ class Sidebar extends React.Component {
                     {naturalEvents && activeTab === 'events' && (
                     <Events
                       height={subComponentHeight}
+                      isLoading={isLoadingEvents}
+                      hasRequestError={hasEventRequestError}
+                      eventsData={eventsData}
+                      sources={eventsSources}
                     />
                     )}
                   </TabPane>
@@ -263,8 +300,19 @@ function mapStateToProps(state) {
     measure,
     animation,
     events,
+    requestedEvents,
+    requestedEventSources,
     ui,
   } = state;
+
+  const eventRequestUrl = lodashGet(state, 'config.features.naturalEvents.host');
+  const isLoadingEvents = requestedEvents.isLoading
+    || requestedEventSources.isLoading;
+  const hasEventRequestError = requestedEvents.error
+    || requestedEventSources.error;
+  const eventsData = lodashGet(requestedEvents, 'response');
+  const eventsSources = lodashGet(requestedEventSources, 'response');
+
   const { screenHeight } = browser;
   const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
@@ -277,16 +325,21 @@ function mapStateToProps(state) {
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   return {
     activeTab,
+    activeString,
+    config,
+    eventRequestUrl,
+    eventsData,
+    eventsSources,
+    numberOfLayers,
+    hasEventRequestError,
+    isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
+    isCompareMode: compare.active,
+    isDataDisabled: events.isAnimatingToEvent,
+    isDistractionFreeModeActive,
+    isLoadingEvents,
     isMobile,
     screenHeight,
-    isCompareMode: compare.active,
-    activeString,
-    numberOfLayers,
-    isDataDisabled: events.isAnimatingToEvent,
-    isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
     tabTypes,
-    config,
-    isDistractionFreeModeActive,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -303,14 +356,17 @@ const mapDispatchToProps = (dispatch) => ({
   collapseExpandToggle: () => {
     dispatch(toggleSidebarCollapseAction());
   },
-  collapseSidebar: () => {
-    dispatch(collapseSidebarAction());
-  },
   expandSidebar: () => {
     dispatch(expandSidebarAction());
   },
   loadedCustomPalettes: (customs) => {
     dispatch(loadedCustomPalettes(customs));
+  },
+  requestEvents: (url) => {
+    dispatch(requestEventsActionCreator(url));
+  },
+  requestSources: (url) => {
+    dispatch(requestSourcesActionCreator(url));
   },
 });
 
@@ -325,16 +381,22 @@ Sidebar.propTypes = {
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
   collapseExpandToggle: PropTypes.func,
-  collapseSidebar: PropTypes.func,
   config: PropTypes.object,
+  eventsData: PropTypes.array,
+  eventsSources: PropTypes.array,
+  eventRequestUrl: PropTypes.string,
+  hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isLoadingEvents: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
   tabTypes: PropTypes.object,
+  requestEvents: PropTypes.func,
+  requestSources: PropTypes.func,
 };
