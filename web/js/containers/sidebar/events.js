@@ -8,8 +8,6 @@ import {
 import Event from '../../components/sidebar/event';
 import Scrollbars from '../../components/util/scrollbar';
 import {
-  requestEvents as requestEventsActionCreator,
-  requestSources as requestSourcesActionCreator,
   selectEvent as selectEventActionCreator,
   deselectEvent as deselectEventActionCreator,
   selectCategory as selectCategoryActionCreator,
@@ -25,10 +23,6 @@ import util from '../../util/util';
 
 function Events(props) {
   const {
-    requestSources,
-    requestEvents,
-    apiURL,
-    config,
     eventsData,
     eventCategories,
     sources,
@@ -56,30 +50,6 @@ function Events(props) {
   const dropdownHeight = 34;
   const scrollbarMaxHeight = height - dropdownHeight;
   let showInactiveEventAlert = selected.id && !selected.date;
-
-  // init requests
-  useEffect(() => {
-    if (!isLoading && !hasRequestError && !eventsData) {
-      let eventsRequestURL = `${apiURL}/events`;
-      let sourceRequestURL = `${apiURL}/sources`;
-
-      const mockEvents = lodashGet(config, 'parameters.mockEvents');
-      const mockSources = lodashGet(config, 'parameters.mockSources');
-
-      if (mockEvents) {
-        console.warn(`Using mock events data: ${mockEvents}`);
-        eventsRequestURL = mockEvents === 'true'
-          ? 'mock/events_data.json'
-          : `mock/events_data.json-${mockEvents}`;
-      }
-      if (mockSources) {
-        console.warn(`Using mock categories data: ${mockSources}`);
-        sourceRequestURL = `mock/categories_data.json-${mockSources}`;
-      }
-      requestEvents(eventsRequestURL);
-      requestSources(sourceRequestURL);
-    }
-  });
 
   // Deselect event if it's not visible in the map extent
   useEffect(() => {
@@ -206,35 +176,21 @@ const mapDispatchToProps = (dispatch) => ({
   selectCategory: (category) => {
     dispatch(selectCategoryActionCreator(category));
   },
-  requestEvents: (url) => {
-    dispatch(requestEventsActionCreator(url));
-  },
-  requestSources: (url) => {
-    dispatch(requestSourcesActionCreator(url));
-  },
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const {
     animation,
-    requestedEvents,
-    requestedEventSources,
-    config,
     proj,
     browser,
     events,
   } = state;
+  const { eventsData } = ownProps;
   const {
     selected, showAll, category,
   } = events;
-  const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
-  const isLoading = requestedEvents.isLoading
-    || requestedEventSources.isLoading;
-  const hasRequestError = requestedEvents.error
-    || requestedEventSources.error;
   let visibleEvents = {};
-  const eventsData = lodashGet(requestedEvents, 'response');
-  const sources = lodashGet(requestedEventSources, 'response');
+
   const mapExtent = lodashGet(state, 'map.extent');
   let visibleWithinMapExtent = {};
 
@@ -257,17 +213,11 @@ const mapStateToProps = (state) => {
   }
 
   return {
-    eventsData,
     eventCategories: getEventCategories(state),
-    sources,
     showAll,
-    isLoading,
-    hasRequestError,
     selected,
     visibleWithinMapExtent,
     visibleEvents,
-    apiURL,
-    config,
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
     isAnimatingToEvent: events.isAnimatingToEvent,
@@ -281,9 +231,7 @@ export default connect(
 )(Events);
 
 Events.propTypes = {
-  apiURL: PropTypes.string,
   eventCategories: PropTypes.array,
-  config: PropTypes.object,
   deselectEvent: PropTypes.func,
   eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
@@ -292,8 +240,6 @@ Events.propTypes = {
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isAnimatingToEvent: PropTypes.bool,
-  requestEvents: PropTypes.func,
-  requestSources: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
