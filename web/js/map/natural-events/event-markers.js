@@ -134,7 +134,7 @@ class EventMarkers extends React.Component {
     this.setState({ markers });
   }
 
-  addInteractions(marker, event, isSelected, date) {
+  addInteractions(marker, event, date, isSelected) {
     const { selectEvent, mapUi } = this.props;
     const category = event.categories[0];
     let willSelect = true;
