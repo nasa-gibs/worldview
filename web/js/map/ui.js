@@ -139,9 +139,10 @@ export default function mapui(models, config, store, ui) {
         return;
       }
       case LOCATION_POP_ACTION: {
+        const state = store.getState();
         const newState = util.fromQueryString(action.payload.search);
-        const extent = lodashGet(action, 'payload.query.map.extent');
-        const rotate = lodashGet(action, 'payload.query.map.rotation') || 0;
+        const extent = lodashGet(state, 'map.extent');
+        const rotate = lodashGet(state, 'map.rotation') || 0;
         updateProjection();
         if (newState.v && !newState.e && extent) {
           flyToNewExtent(extent, rotate);
