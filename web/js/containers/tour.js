@@ -20,6 +20,7 @@ import {
 import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
+import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { layersParse12 } from '../modules/layers/util';
 import {
   endTour as endTourAction,
@@ -470,10 +471,10 @@ const mapDispatchToProps = (dispatch) => ({
           type: BULK_PALETTE_RENDERING_SUCCESS,
           rendered: obj.rendered,
         });
-        dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+        dispatch({ type: LOCATION_POP_ACTION, payload: location });
       });
     } else {
-      dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+      dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
   },
   startTour: () => {
