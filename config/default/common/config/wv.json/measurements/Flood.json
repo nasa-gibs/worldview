@@ -11,7 +11,6 @@
                     "description": "modis/combined/Flood",
                     "image": "",
                     "settings": [
-                        "MODIS_Combined_Flood_1-Day",
                         "MODIS_Combined_Flood_2-Day",
                         "MODIS_Combined_Flood_3-Day"
                     ]
