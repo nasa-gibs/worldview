@@ -5,10 +5,10 @@ Buildings, canopy cover, cloud and cloud-shadow can obscure flood detection, and
 It is advised to compare the flood products against the contributing MODIS Corrected Reflectance (or Surface Reflectance) imagery, to ensure reported flood areas do not correspond to areas of cloud shadow. For the 3-day product, this would include the current day and the two preceding days. [Learn more...](https://earthdata.nasa.gov/earth-observation-data/near-real-time/mcdwd-nrt#ed-flood-faq)
 
 #### Sensor/Image Resolution
-Nominal equatorial resolution is ~232 m per pixel, and decreasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data. The imagery resolution in Worldview/GIBS is 250 m.
+Nominal equatorial resolution is ~232 m per pixel, and decreasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.
 
 #### Coverage
-Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in User Guide for included tiles).
+Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevA_08Mar2021.pdf) for included tiles).
 
 #### Frequency
 One product per day, per tile. During the day, data products are updated as NRT MOD09 data are received (an initial product may be updated if additional intersecting swath data is later received).
