@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "CYGNSS_L3_Soil_Moisture_SDR_Daily": {
+      "id": "CYGNSS_L3_Soil_Moisture_SDR_Daily",
+      "title": "Soil Moisture (UCAR, SDR, Daily)",
+      "subtitle": "CYGNSS / DDMI",
+      "description": "cygnss/CYGNSS_L3_Soil_Moisture_SDR_Daily",
+      "group": "overlays",
+      "tags": "podaac PO.DAAC",
+      "layergroup": "Soil Moisture"
+    }
+  }
+}

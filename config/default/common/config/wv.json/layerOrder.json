@@ -395,6 +395,7 @@
 		"AMSUA_NOAA17_Brightness_Temp_Channel_15",
 		"CYGNSS_L3_Wind_Speed_SDR_Daily",
 		"CYGNSS_L3_Wind_Speed_Daily",
+		"CYGNSS_L3_Soil_Moisture_SDR_Daily",
 		"CCMP_REMSS_Meridional_Wind_Speed_Monthly",
 		"CCMP_REMSS_Scalar_Wind_Speed_Monthly",
 		"CCMP_REMSS_Zonal_Wind_Speed_Monthly",
