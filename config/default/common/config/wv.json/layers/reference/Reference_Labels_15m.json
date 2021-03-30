@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "Reference_Labels_15m": {
+      "id": "Reference_Labels_15m",
+      "title": "Reference Labels (15m)",
+      "subtitle": "Reference_Labels_15m_LL - OSM",
+      "group": "overlays"
+    }
+  }
+}
