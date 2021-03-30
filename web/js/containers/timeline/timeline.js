@@ -1088,7 +1088,7 @@ class Timeline extends React.Component {
           className="timeline-container"
           style={containerDisplayStyle}
         >
-          {initialLoadComplete
+          {initialLoadComplete && !isDistractionFreeModeActive
             && (
             <ErrorBoundary>
               {isSmallScreen
@@ -1121,7 +1121,7 @@ class Timeline extends React.Component {
                   </div>
                 )
                 /* Normal Timeline Size */
-                : (
+                : !isDistractionFreeModeActive && (
                   <section id="timeline" className="timeline-inner clearfix">
                     <div
                       id="timeline-header"

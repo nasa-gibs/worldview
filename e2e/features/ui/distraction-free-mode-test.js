@@ -8,14 +8,12 @@ const {
   mapRotateLeft,
   mapRotateReset,
   mapRotateRight,
-  mapScaleImperial,
-  mapScaleMetric,
   measureBtn,
   projToolbarButton,
   shareToolbarButton,
   sidebarContainer,
   snapshotToolbarButton,
-  timelineContainer,
+  timelineHeader,
   zoomInButton,
   zoomOutButton,
 } = localSelectors;
@@ -28,21 +26,15 @@ const closeDistractionFreeAlert = (c) => {
 
 // helper to confirm target els are removed/hidden in distraction free mode
 const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
-  const mapScaleMetricProj = `#wv-map-${proj} ${mapScaleMetric}`;
-  const mapScaleImperialProj = `#wv-map-${proj} ${mapScaleImperial}`;
-  const visibleEls = [
-    timelineContainer,
-    mapScaleMetricProj,
-    mapScaleImperialProj,
-  ];
   let presentEls = [
     infoToolbarButton,
     locationSearchToolbarButton,
     measureBtn,
+    projToolbarButton,
     shareToolbarButton,
     sidebarContainer,
-    projToolbarButton,
     snapshotToolbarButton,
+    timelineHeader,
     zoomInButton,
     zoomOutButton,
   ];
@@ -59,11 +51,9 @@ const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
 
   if (isActive) {
     // distraction free mode is active and els should be removed/hidden
-    visibleEls.forEach((el) => c.waitForElementNotVisible(el, TIME_LIMIT));
     presentEls.forEach((el) => c.waitForElementNotPresent(el, TIME_LIMIT));
   } else {
     // els should be added/visible
-    visibleEls.forEach((el) => c.waitForElementVisible(el, TIME_LIMIT));
     presentEls.forEach((el) => c.waitForElementPresent(el, TIME_LIMIT));
   }
 };
@@ -98,7 +88,6 @@ module.exports = {
   // verify distraction free mode activates with query string parameter df (in geographic projection)
   'Enabling distraction free mode activates query string parameter df': (c) => {
     c.url(`${c.globals.url}?df=true`);
-    c.waitForElementVisible('#wv-exit-distraction-free-mode-button');
 
     distractionFreeModeValidElsRemoved(c, 'geographic', true);
   },

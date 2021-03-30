@@ -69,6 +69,7 @@ module.exports = {
 
   // timeline
   timelineContainer: '.timeline-container',
+  timelineHeader: '#timeline-header',
   mobileDatePickerSelectButton: '.mobile-date-picker-select-btn',
   dragger: '.timeline-dragger',
   dayDown: '.input-wrapper-day > div.date-arrows.date-arrow-down',
