@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "Coastlines_15m": {
+      "id": "Coastlines_15m",
+      "title": "Coastlines (15m)",
+      "subtitle": "OSM",
+      "group": "overlays"
+    }
+  }
+}
