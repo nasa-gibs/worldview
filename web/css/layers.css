@@ -283,7 +283,14 @@
   line-height: 16px;
   margin-bottom: 15px;
 }
+.source-metadata ul,
+.layer-metadata ul {
+  list-style-position: inside;
+}
 
+.layer-metadata ul {
+  list-style-position: inside;
+}
 .layers-all .source-metadata div,
 .layers-all .source-metadata p,
 .layers-all .source-metadata span,
