@@ -6,11 +6,11 @@ Users are advised to compare the flood product against the contributing MODIS re
 
 Common situations in which the flood product may be unable to accurately identify flood include:
 
-<li>Surface obscuration: clouds and canopy cover can block view of water on the surface. Buildings can also provide a “dry” roof, diluting the signal from surrounding water. </li>
-<li>Cloud shadow false-positives: cloud shadows are detected as water by the algorithm; when they recur in the same location over the compositing period, false positives are likely to be reported. Longer compositing periods help minimize this.  Please check reflectance imagery of dates contributing to composite to rule these out, if reported flood looks unusual or suspicious.</li>
-<li>Terrain shadow false-positives: terrain shadows can create false-positives in mountains, generally only in wintertime. These are typically easy to identify due to their pattern (reflecting topography), and by comparison to reflectance imagery.</li>
-<li>Dark volcanic rock or soils: such areas can be identified as water, and thus will routinely show up as flood.</li>
-<li>Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields.  Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.</li>
+- Surface obscuration: clouds and canopy cover can block view of water on the surface. Buildings can also provide a “dry” roof, diluting the signal from surrounding water.
+- Cloud shadow false-positives: cloud shadows are detected as water by the algorithm; when they recur in the same location over the compositing period, false positives are likely to be reported. Longer compositing periods help minimize this.  Please check reflectance imagery of dates contributing to composite to rule these out, if reported flood looks unusual or suspicious.
+- Terrain shadow false-positives: terrain shadows can create false-positives in mountains, generally only in wintertime. These are typically easy to identify due to their pattern (reflecting topography), and by comparison to reflectance imagery.
+- Dark volcanic rock or soils: such areas can be identified as water, and thus will routinely show up as flood.
+- Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields.  Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
 
 #### Spatial Coverage
 Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevA_08Mar2021.pdf) for included tiles).
