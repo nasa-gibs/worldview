@@ -932,6 +932,9 @@
 		"Coastlines",
 		"Reference_Features",
 		"Reference_Labels",
+		"Coastlines_15m",
+		"Reference_Features_15m",
+		"Reference_Labels_15m",
 		"Graticule",
 		"HLS_MGRS_Granule_Grid",
 		"MODIS_Water_Mask",
@@ -994,7 +997,6 @@
 		"OrbitTracks_Suomi_NPP_Descending",
 		"OrbitTracks_Terra_Descending",
 		"OrbitTracks_Terra_Ascending"
-
 	],
 	"layerOrderExceptions": [
 		"SCAR_Land_Mask",

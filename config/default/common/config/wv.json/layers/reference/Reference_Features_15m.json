@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "Reference_Features_15m": {
+      "id": "Reference_Features_15m",
+      "title": "Reference Features (15m)",
+      "subtitle": "OSM",
+      "group": "overlays"
+    }
+  }
+}
