@@ -5,7 +5,7 @@
       "title": "Flood (3-Day Window)",
       "subtitle": "Terra and Aqua / MODIS",
       "description": "modis/combined/MODIS_Combined_Flood_3-Day",
-      "tags": "",
+      "tags": "floods",
       "group": "overlays",
       "layergroup": "Flood"
     }

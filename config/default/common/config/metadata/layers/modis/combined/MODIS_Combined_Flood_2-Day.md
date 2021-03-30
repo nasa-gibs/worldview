@@ -2,19 +2,18 @@ The MODIS Near Real-Time (NRT) Global Flood Product  provides a daily global map
 
 Users are advised to compare the flood product against the contributing MODIS reflectance imagery (such as 7-2-1 Corrected Reflectance; search for “721” after clicking “Add Layers”) , for the compositing period to ensure reported flood areas do not correspond to areas of cloud shadow. [Learn more...](https://earthdata.nasa.gov/earth-observation-data/near-real-time/mcdwd-nrt#ed-flood-faq)
 
-**Limitations**
-
+#### Limitations
 Common situations in which the flood product may be unable to accurately identify flood include:
 
 - Surface obscuration: clouds and canopy cover can block view of water on the surface. Buildings can also provide a “dry” roof, diluting the signal from surrounding water.
-- Cloud shadow false-positives: cloud shadows are detected as water by the algorithm; when they recur in the same location over the compositing period, false positives are likely to be reported. Longer compositing periods help minimize this.  Please check reflectance imagery of dates contributing to composite to rule these out, if reported flood looks unusual or suspicious.
+- Cloud shadow false-positives: cloud shadows are detected as water by the algorithm; when they recur in the same location over the compositing period, false positives are likely to be reported. Longer compositing periods help minimize this. Please check reflectance imagery of dates contributing to composite to rule these out, if reported flood looks unusual or suspicious.
 - Terrain shadow false-positives: terrain shadows can create false-positives in mountains, generally only in wintertime. These are typically easy to identify due to their pattern (reflecting topography), and by comparison to reflectance imagery.
-- Dark volcanic rock or soils: such areas can be identified as water, and thus will routinely show up as flood.
-- Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields.  Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
+- Dark volcanic rock or soils: such areas can be identified as water, and thus will routinely be reported as flood.
+- Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields. Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
 
 
 #### Spatial Coverage
-Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevA_08Mar2021.pdf) for included tiles).
+Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevA.pdf) for included tiles).
 
 #### Sensor/Image Resolution
 Nominal equatorial resolution is ~232 m per pixel, and decreasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.
