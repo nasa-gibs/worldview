@@ -14,6 +14,7 @@ Common situations in which the flood product may be unable to accurately identif
 - Dark volcanic rock or soils: such areas can be identified as water, and thus will routinely show up as flood
 - Springtime snow melt ponding on fields: such water can appear as pixellated flood across flat areas of agricultural fields.  Although this is unusual water, it is often very shallow, and not moving, and thus typically not a flood in the normal sense. Checking the reflectance imagery will typically show such areas on the edge of larger areas of snow extent, or, looking back in time, will show them recently covered by snow.
 
+
 #### Spatial Coverage
 Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevA_08Mar2021.pdf) for included tiles).
 
