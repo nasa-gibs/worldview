@@ -2,9 +2,26 @@
   "layers": {
     "Reference_Features_15m": {
       "id": "Reference_Features_15m",
-      "title": "Reference Features (15m)",
-      "subtitle": "OSM",
-      "group": "overlays"
+      "title": "Coastlines / Borders / Roads",
+      "subtitle": "&copy; OpenStreetMap contributors, Natural Earth",
+      "description": "reference/Reference_Features_15m",
+      "tags": "osm reference, country, countries, state, province",
+      "group": "overlays",
+      "layergroup": "Reference",
+      "wrapX": true,
+      "projections": {
+        "arctic": {
+          "id": "Reference_Features",
+          "tags": "osm reference, country, countries, state, province",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        },
+        "geographic": {
+          "subtitle": "&copy; OpenStreetMap contributors",
+          "tags": "borders reference osm",
+          "source": "GIBS:geographic"
+        }
+      }
     }
   }
 }
