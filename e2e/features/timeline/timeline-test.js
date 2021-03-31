@@ -2,7 +2,7 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQueryStrings = require('../../reuseables/querystrings.js');
 
-const draggerA = '.timeline-dragger.draggerA ';
+const draggerA = '.timeline-dragger.draggerA';
 const dateSelectorDayInput = '#date-selector-main .input-wrapper-day input';
 const TIME_LIMIT = 20000;
 
@@ -134,21 +134,15 @@ module.exports = {
     c.assert.containsText('#current-zoom', 'HOUR');
   },
 
-  // blue hover line and valid date tooltip date are present on hovering over timeline axis
-  'Blue hover line is present on hovering over timeline axis': (c) => {
+  // valid date tooltip date present on clicking on dragger on timeline axis
+  'Date tooltip date present on clicking on dragger on timeline axis': (c) => {
     c.url(`${c.globals.url}?t=2019-02-22`);
     c.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
     c.useCss()
       .moveToElement(draggerA, 15, 15)
       .mouseButtonDown(0)
       .waitForElementVisible('.date-tooltip', TIME_LIMIT)
-      .assert.containsText('.date-tooltip', '2019-02-22 (53)')
-      .mouseButtonUp(0)
-      .moveTo(null, -200, 0);
-
-    c.waitForElementVisible('.axis-hover-line-container', TIME_LIMIT);
-    c.expect.element('.axis-hover-line-container').to.be.visible;
-    c.expect.element('.date-tooltip').to.be.visible;
+      .assert.containsText('.date-tooltip', '2019-02-22 (DOY 53)');
   },
 
   // subdaily valid date tooltip date is present on hovering over timeline axis
@@ -159,7 +153,7 @@ module.exports = {
       .moveToElement(draggerA, 15, 15)
       .mouseButtonDown(0)
       .waitForElementVisible('.date-tooltip', TIME_LIMIT)
-      .assert.containsText('.date-tooltip', '2019-10-04 09:46Z (277)');
+      .assert.containsText('.date-tooltip', '2019-10-04 09:46Z (DOY 277)');
   },
 
   after: (c) => {

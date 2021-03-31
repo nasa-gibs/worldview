@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getDaysInYear } from '../../date-util';
 
@@ -8,7 +8,7 @@ import { getDaysInYear } from '../../date-util';
 * @param {Boolean} hasSubdailyLayers
 * @returns {String} formatted yearMonthDay -OR- yearMonthDayHourMin (subdaily)
 */
-const getToolTipTime = (time, hasSubdailyLayers) => {
+const getTooltipTime = (time, hasSubdailyLayers) => {
   const timeSplit = time.split('T');
   const yearMonthDay = timeSplit[0];
 
@@ -28,106 +28,158 @@ const getToolTipTime = (time, hasSubdailyLayers) => {
 /*
  * Date tooltip for hover and draggers
  *
- * @class DateToolTip
- * @extends PureComponent
+ * @class DateTooltip
+ * @extends Component
  */
-class DateToolTip extends PureComponent {
-  render() {
+class DateTooltip extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showTooltip: false,
+    };
+    this.showTooltipTimeout = 0;
+  }
+
+  componentDidMount() {
+    this.displayAndTimeoutTooltip();
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      hoverTime,
+      selectedDate,
+      showDraggerTime,
+      showHoverLine,
+    } = this.props;
+
+    const hoverTimeChange = hoverTime !== prevProps.hoverTime;
+    const selectedDateChange = selectedDate !== prevProps.selectedDate;
+    const isShowHover = showHoverLine || showDraggerTime;
+    if (hoverTimeChange) {
+      clearTimeout(this.showTooltipTimeout);
+      this.updateTooltipDisplayState(false);
+    } else if (selectedDateChange && !isShowHover) {
+      this.displayAndTimeoutTooltip();
+    }
+  }
+
+  componentWillUnmount() {
+    // clear pending timeout
+    clearTimeout(this.showTooltipTimeout);
+  }
+
+  updateTooltipDisplayState = (shouldDisplay) => {
+    this.setState({
+      showTooltip: shouldDisplay,
+    });
+  }
+
+  displayAndTimeoutTooltip = () => {
+    clearTimeout(this.showTooltipTimeout);
+    this.updateTooltipDisplayState(true);
+    this.showTooltipTimeout = setTimeout(() => {
+      this.updateTooltipDisplayState(false);
+    }, 1800);
+  }
+
+  getTooltipStyle = (dayOfYear, showDraggerTooltip, showHoverTooltip) => {
+    const { showTooltip } = this.state;
     const {
       activeLayers,
-      draggerSelected,
-      draggerPosition,
-      draggerPositionB,
-      hasSubdailyLayers,
-      leftOffset,
-      showDraggerTime,
-      draggerTimeState,
-      draggerTimeStateB,
-      hoverTime,
-      isTimelineLayerCoveragePanelOpen,
-      showHoverLine,
-      shouldIncludeHiddenLayers,
       axisWidth,
+      hasSubdailyLayers,
+      isTimelineLayerCoveragePanelOpen,
+      leftOffset,
+      selectedDraggerPosition,
+      shouldIncludeHiddenLayers,
     } = this.props;
-    // checks for dragger and hover handled by parent
-    const showDraggerToolTip = !!(showDraggerTime && draggerTimeState);
-    const showHoverToolTip = !!(showHoverLine && hoverTime);
-    const shouldDisplayDraggerToolTip = showDraggerToolTip || showHoverToolTip;
+    let tooltipLeftOffset;
+    let display;
+    let tooltipHeightOffset;
 
-    let toolTipLeftOffset;
-    let toolTipDate;
-    let toolTipDayOfYear;
-    let toolTipDisplay;
-    let toolTipHeightOffset;
-
-    if (showDraggerToolTip) {
-      // handle dragger tooltip
-      let draggerTime;
-      let position;
-      // determine A or B dragger and set variables
-      if (draggerSelected === 'selected') {
-        draggerTime = draggerTimeState;
-        position = draggerPosition;
-      } else {
-        draggerTime = draggerTimeStateB;
-        position = draggerPositionB;
-      }
-      toolTipLeftOffset = position - (hasSubdailyLayers ? 68 : 35);
-      toolTipDate = getToolTipTime(draggerTime, hasSubdailyLayers);
-      toolTipDayOfYear = getDaysInYear(draggerTime);
-      toolTipDisplay = position > -49 && position < axisWidth - 49
+    if (showTooltip || showDraggerTooltip) {
+      tooltipLeftOffset = selectedDraggerPosition - (hasSubdailyLayers ? 85 : 52);
+      display = selectedDraggerPosition > -49 && selectedDraggerPosition < axisWidth - 49
         ? 'block'
         : 'none';
-    } else if (showHoverToolTip) {
-      // handle hover tooltip
-      toolTipLeftOffset = hasSubdailyLayers
-        ? leftOffset - 117
-        : leftOffset - 84;
-      toolTipDate = getToolTipTime(hoverTime, hasSubdailyLayers);
-      toolTipDayOfYear = getDaysInYear(hoverTime);
-      toolTipDisplay = 'block';
+    } else if (showHoverTooltip) {
+      tooltipLeftOffset = hasSubdailyLayers
+        ? leftOffset - 134
+        : leftOffset - 101;
+      display = 'block';
     }
 
-    // handle active layer count dependent tooltip height
-    toolTipHeightOffset = -100;
+    tooltipHeightOffset = -100;
     if (isTimelineLayerCoveragePanelOpen) {
-      toolTipHeightOffset = -136;
+      tooltipHeightOffset = -136;
       const layers = activeLayers.filter((layer) => (shouldIncludeHiddenLayers
         ? layer.startDate
         : layer.startDate && layer.visible));
       // min 1 layer for error message display
       const layerLengthCoef = Math.max(layers.length, 1);
       const addHeight = Math.min(layerLengthCoef, 5) * 40;
-      toolTipHeightOffset -= addHeight;
-      toolTipHeightOffset = Math.max(toolTipHeightOffset, -357);
+      tooltipHeightOffset -= addHeight;
+      tooltipHeightOffset = Math.max(tooltipHeightOffset, -357);
     }
 
-    const toolTipWidth = hasSubdailyLayers
-      ? toolTipDayOfYear >= 100
-        ? '239px'
-        : '232px'
-      : '165px';
+    const width = hasSubdailyLayers
+      ? dayOfYear >= 100
+        ? 274
+        : 267
+      : 200;
+
+    return {
+      transform: `translate(${tooltipLeftOffset}px, ${tooltipHeightOffset}px)`,
+      display,
+      width: `${width}px`,
+    };
+  }
+
+  render() {
+    const { showTooltip } = this.state;
+    const {
+      hasSubdailyLayers,
+      hoverTime,
+      selectedDate,
+      showDraggerTime,
+      showHoverLine,
+    } = this.props;
+    // checks for dragger and hover handled by parent
+    const showDraggerTooltip = !!(showDraggerTime && selectedDate);
+    const showHoverTooltip = !!(showHoverLine && hoverTime);
+    const shouldDisplayDraggerTooltip = showTooltip || showDraggerTooltip || showHoverTooltip;
+
+    let tooltipDate;
+    let dayOfYear;
+
+    if (showTooltip || showDraggerTooltip) {
+      // handle dragger tooltip
+      tooltipDate = getTooltipTime(selectedDate, hasSubdailyLayers);
+      dayOfYear = getDaysInYear(selectedDate);
+    } else if (showHoverTooltip) {
+      // handle hover tooltip
+      tooltipDate = getTooltipTime(hoverTime, hasSubdailyLayers);
+      dayOfYear = getDaysInYear(hoverTime);
+    }
+
+    const tooltipStyle = this.getTooltipStyle(dayOfYear, showDraggerTooltip, showHoverTooltip);
 
     // add leading zero for single digits
-    toolTipDayOfYear = toolTipDayOfYear < 10
-      ? `0${toolTipDayOfYear}`
-      : toolTipDayOfYear;
+    dayOfYear = dayOfYear < 10
+      ? `0${dayOfYear}`
+      : dayOfYear;
 
     return (
-      shouldDisplayDraggerToolTip && (
+      shouldDisplayDraggerTooltip && (
         <div
           className="date-tooltip"
-          style={{
-            transform: `translate(${toolTipLeftOffset}px, ${toolTipHeightOffset}px)`,
-            display: toolTipDisplay,
-            width: toolTipWidth,
-          }}
+          style={tooltipStyle}
         >
-          { toolTipDate }
+          { tooltipDate }
           {' '}
           <span className="date-tooltip-day">
             (
-            { toolTipDayOfYear }
+            { `DOY ${dayOfYear}` }
             )
           </span>
         </div>
@@ -136,21 +188,18 @@ class DateToolTip extends PureComponent {
   }
 }
 
-DateToolTip.propTypes = {
+DateTooltip.propTypes = {
   activeLayers: PropTypes.array,
   axisWidth: PropTypes.number,
-  draggerPosition: PropTypes.number,
-  draggerPositionB: PropTypes.number,
-  draggerSelected: PropTypes.string,
-  draggerTimeState: PropTypes.string,
-  draggerTimeStateB: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
   isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   leftOffset: PropTypes.number,
+  selectedDate: PropTypes.string,
+  selectedDraggerPosition: PropTypes.number,
   shouldIncludeHiddenLayers: PropTypes.bool,
   showDraggerTime: PropTypes.bool,
   showHoverLine: PropTypes.bool,
 };
 
-export default DateToolTip;
+export default DateTooltip;

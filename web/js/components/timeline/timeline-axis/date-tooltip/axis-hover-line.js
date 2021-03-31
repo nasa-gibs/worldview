@@ -12,9 +12,7 @@ class AxisHoverLine extends PureComponent {
     const {
       activeLayers,
       axisWidth,
-      draggerSelected,
-      draggerPosition,
-      draggerPositionB,
+      selectedDraggerPosition,
       isTimelineLayerCoveragePanelOpen,
       isDraggerDragging,
       isTimelineDragging,
@@ -38,7 +36,6 @@ class AxisHoverLine extends PureComponent {
       ? layer.startDate
       : layer.startDate && layer.visible));
 
-    // min 1 layer for error message display
     const layerLengthCoef = Math.max(layers.length, 1);
     // handle active layer count dependent tooltip height
     if (isTimelineLayerCoveragePanelOpen) {
@@ -50,11 +47,8 @@ class AxisHoverLine extends PureComponent {
 
     // hoverline positioning based on dragger position
     if (panelDraggerHoverLine) {
-      const selectedDraggerPosition = draggerSelected === 'selected'
-        ? draggerPosition
-        : draggerPositionB;
       linePosition = selectedDraggerPosition + 47;
-      // lineheight for dragger
+      // lineHeight for dragger
       const minusY1Height = Math.min(layerLengthCoef, 5) * 40.5;
       lineHeightInner = 47 + minusY1Height;
     }
@@ -86,14 +80,12 @@ class AxisHoverLine extends PureComponent {
 AxisHoverLine.propTypes = {
   activeLayers: PropTypes.array,
   axisWidth: PropTypes.number,
-  draggerPosition: PropTypes.number,
-  draggerPositionB: PropTypes.number,
-  draggerSelected: PropTypes.string,
   hoverLinePosition: PropTypes.number,
   isAnimationDraggerDragging: PropTypes.bool,
   isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   isTimelineDragging: PropTypes.bool,
+  selectedDraggerPosition: PropTypes.number,
   shouldIncludeHiddenLayers: PropTypes.bool,
   showHoverLine: PropTypes.bool,
 };
