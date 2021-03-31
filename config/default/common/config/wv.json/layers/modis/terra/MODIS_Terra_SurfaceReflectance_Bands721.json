@@ -5,7 +5,7 @@
       "title": "Land Surface Reflectance (Bands 7-2-1)",
       "subtitle": "Terra / MODIS",
       "description": "modis/terra/MODIS_Terra_SurfaceReflectance_Bands721",
-      "tags": "lsr m11-i2-i1 721 false color",
+      "tags": "lsr m11-i2-i1 721 false color mod09",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
       "product": "MOD09GA",
