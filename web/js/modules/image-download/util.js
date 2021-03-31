@@ -236,6 +236,8 @@ export function imageUtilGetLayers(products, proj) {
   lodashEach(products, (layer) => {
     if (layer.downloadId) {
       layers.push(layer.downloadId);
+    } else if (layer.projections[proj].id) {
+      layers.push(layer.projections[proj].id);
     } else if (layer.projections[proj].layer) {
       layers.push(layer.projections[proj].layer);
     } else {

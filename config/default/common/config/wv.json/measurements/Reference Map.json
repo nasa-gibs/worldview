@@ -2,7 +2,7 @@
     "measurements": {
         "Reference Map": {
             "id": "reference-map",
-            "title":    "Reference Map",
+            "title": "Reference Map",
             "subtitle": "OpenStreetMap.org, WDPA",
             "multichoice": true,
             "sources": {
@@ -12,22 +12,22 @@
                     "description": "reference/ReferenceMap",
                     "image": "",
                     "settings": [
-                        "Reference_Features",
-                        "Reference_Labels",
-                        "Coastlines",
+                        "Reference_Features_15m",
+                        "Reference_Labels_15m",
+                        "Coastlines_15m",
                         "Land_Mask",
                         "Land_Water_Map"
                     ]
                 },
-                  "WDPA": {
-                      "id": "wdpa",
-                      "title": "WDPA",
-                      "description": "wdpa/ProtectedAreas",
-                      "image": "",
-                      "settings": [
-                          "World_Database_on_Protected_Areas"
-                      ]
-                  }
+                "WDPA": {
+                    "id": "wdpa",
+                    "title": "WDPA",
+                    "description": "wdpa/ProtectedAreas",
+                    "image": "",
+                    "settings": [
+                        "World_Database_on_Protected_Areas"
+                    ]
+                }
             }
         }
     }

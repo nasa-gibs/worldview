@@ -3,32 +3,26 @@
     "layers": {
       "polarview:graticuleN": "Graticule",
       "polarview:graticule3031_10x30": "Graticule",
-
       "Aqua_Antarctic_Orbit_Asc": "OrbitTracks_Aqua_Ascending",
       "Aqua_Arctic_Orbit_Asc": "OrbitTracks_Aqua_Ascending",
       "Aqua_Antarctic_Orbit_Dsc": "OrbitTracks_Aqua_Descending",
       "Aqua_Arctic_Orbit_Dsc": "OrbitTracks_Aqua_Descending",
-
       "Aura_Antarctic_Orbit_Asc": "OrbitTracks_Aura_Ascending",
       "Aura_Arctic_Orbit_Asc": "OrbitTracks_Aura_Ascending",
       "Aura_Antarctic_Orbit_Dsc": "OrbitTracks_Aura_Descending",
       "Aura_Arctic_Orbit_Dsc": "OrbitTracks_Aura_Descending",
-
       "antarctic_graticule": "Graticule",
-      "antarctic_coastlines": "Coastlines",
-      "arctic_coastlines_3413": "Coastlines",
+      "antarctic_coastlines": "Coastlines_15m",
+      "arctic_coastlines_3413": "Coastlines_15m",
       "arctic_graticule_3413": "Graticule",
-      "gpw-v3-coastlines": "Coastlines",
+      "gpw-v3-coastlines": "Coastlines_15m",
       "land_water_map": "Land_Water_Map",
       "land_mask": "Land_Mask",
       "ol_graticule": "Graticule",
-
-      "sedac_bound": "Coastlines",
-      "cartographic:esri-administrative-boundaries_level-1": "Reference_Features",
-      "cartographic:00-global-labels": "Reference_Labels",
-
+      "sedac_bound": "Coastlines_15m",
+      "cartographic:esri-administrative-boundaries_level-1": "Reference_Features_15m",
+      "cartographic:00-global-labels": "Reference_Labels_15m",
       "grump-v1-population-count_2000": "GPW_Population_Density_2000",
-
       "Aqua_Orbit_Asc": "OrbitTracks_Aqua_Ascending",
       "Aqua_Orbit_Dsc": "OrbitTracks_Aqua_Descending",
       "Aura_Orbit_Asc": "OrbitTracks_Aura_Ascending",
@@ -75,12 +69,14 @@
       "Suomi_NPP_Orbit_Dsc": "OrbitTracks_Suomi_NPP_Descending",
       "Terra_Orbit_Asc": "OrbitTracks_Terra_Ascending",
       "Terra_Orbit_Dsc": "OrbitTracks_Terra_Descending",
-
       "VIIRS_SNPP_Fires_375m_Day": "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
       "VIIRS_SNPP_Fires_375m_Night": "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
       "MODIS_Fires_All": "MODIS_Combined_Thermal_Anomalies_All",
       "MODIS_Fires_Terra": "MODIS_Terra_Thermal_Anomalies_All",
-      "MODIS_Fires_Aqua": "MODIS_Aqua_Thermal_Anomalies_All"
+      "MODIS_Fires_Aqua": "MODIS_Aqua_Thermal_Anomalies_All",
+      "Reference_Features": "Reference_Features_15m",
+      "Reference_Labels": "Reference_Labels_15",
+      "Coastlines": "Coastlines_15"
     }
   }
 }
