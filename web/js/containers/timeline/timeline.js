@@ -28,8 +28,6 @@ import AnimationButton from '../../components/timeline/timeline-controls/animati
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 import TimelineRangeSelector from '../../components/range-selection/range-selection';
 
-import DistractionFreeTimeUI from '../../components/timeline/distraction-free-time';
-
 import {
   getIsBetween,
   getISODateFormatted,
@@ -99,7 +97,6 @@ class Timeline extends React.Component {
       isAnimationDraggerDragging: false,
       // eslint-disable-next-line react/no-unused-state
       isArrowDown: false,
-      isHoverOverDistractionFreeTimeUI: false,
       isDraggerDragging: false,
       isTimelineDragging: false,
       initialLoadComplete: false,
@@ -968,17 +965,6 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc hoverOverDistractionFreeTimeUI to determine if timeline should open
-  * @param {Boolean} isHover
-  * @returns {void}
-  */
-  hoverOverDistractionFreeTimeUI = (isHover) => {
-    this.setState({
-      isHoverOverDistractionFreeTimeUI: isHover,
-    });
-  }
-
-  /**
   * @desc getMobileDateButtonStyle date change button style for smaller displays
   * @returns {Object} style { left, bottom }
   */
@@ -1070,7 +1056,6 @@ class Timeline extends React.Component {
       initialLoadComplete,
       isAnimationDraggerDragging,
       isDraggerDragging,
-      isHoverOverDistractionFreeTimeUI,
       isTimelineDragging,
       isTimelineLayerCoveragePanelOpen,
       leftOffset,
@@ -1094,28 +1079,16 @@ class Timeline extends React.Component {
       && animationEndLocation
       && animationEndLocationDate;
 
-    const containerMouseLeave = isDistractionFreeModeActive && !isDraggerDragging && !isTimelineDragging
-      ? () => this.hoverOverDistractionFreeTimeUI(false)
-      : null;
     const containerDisplayStyle = {
-      display: isDistractionFreeModeActive && !isHoverOverDistractionFreeTimeUI ? 'none' : 'block',
+      display: isDistractionFreeModeActive ? 'none' : 'block',
     };
     return (
       <>
-        {(initialLoadComplete && isDistractionFreeModeActive) && (
-        <DistractionFreeTimeUI
-          date={selectedDate}
-          hasSubdailyLayers={hasSubdailyLayers}
-          hoverOverDistractionFreeTimeUI={this.hoverOverDistractionFreeTimeUI}
-          isHoverOverDistractionFreeTimeUI={isHoverOverDistractionFreeTimeUI}
-        />
-        )}
         <div
           className="timeline-container"
-          onMouseLeave={containerMouseLeave}
           style={containerDisplayStyle}
         >
-          {initialLoadComplete
+          {initialLoadComplete && !isDistractionFreeModeActive
             && (
             <ErrorBoundary>
               {isSmallScreen
@@ -1148,7 +1121,7 @@ class Timeline extends React.Component {
                   </div>
                 )
                 /* Normal Timeline Size */
-                : (
+                : !isDistractionFreeModeActive && (
                   <section id="timeline" className="timeline-inner clearfix">
                     <div
                       id="timeline-header"
@@ -1361,7 +1334,6 @@ class Timeline extends React.Component {
                       timeScale={timeScale}
                       changeTimeScale={this.changeTimeScale}
                       isDraggerDragging={isDraggerDragging}
-                      isDistractionFreeModeActive={isDistractionFreeModeActive}
                       hasSubdailyLayers={hasSubdailyLayers}
                       timelineHidden={isTimelineHidden}
                     />
