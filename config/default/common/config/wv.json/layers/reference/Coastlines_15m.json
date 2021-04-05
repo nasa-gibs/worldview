@@ -3,7 +3,7 @@
     "Coastlines_15m": {
       "id": "Coastlines_15m",
       "title": "Coastlines",
-      "description": "reference/Coastlines_15",
+      "description": "reference/Coastlines_15m",
       "group": "overlays",
       "format": "image/png",
       "layergroup": "Reference",
