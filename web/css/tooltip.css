@@ -78,6 +78,12 @@
   padding-left: 8px;
   position: relative;
   z-index: 101;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.date-tooltip-fade {
+  opacity: 1;
 }
 
 .date-tooltip-day {

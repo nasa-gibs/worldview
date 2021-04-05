@@ -2,29 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getDaysInYear } from '../../date-util';
 
-/**
-* @desc helper function to format date string for tooltip display
-* @param {String} time
-* @param {Boolean} hasSubdailyLayers
-* @returns {String} formatted yearMonthDay -OR- yearMonthDayHourMin (subdaily)
-*/
-const getTooltipTime = (time, hasSubdailyLayers) => {
-  const timeSplit = time.split('T');
-  const yearMonthDay = timeSplit[0];
-
-  // if no subdaily, return YEAR-MON-DAY / 2020-02-15
-  if (!hasSubdailyLayers) {
-    return yearMonthDay;
-  }
-
-  const hourMinSecZ = timeSplit[1].split(':');
-  const hourMinZ = `${[hourMinSecZ[0], hourMinSecZ[1]].join(':')}Z`;
-  const yearMonthDayHourMin = `${yearMonthDay} ${hourMinZ}`;
-
-  // if subdaily, return YEAR-MON-DAY HOUR-MIN-Z / 2020-02-15 18:00Z
-  return yearMonthDayHourMin;
-};
-
 /*
  * Date tooltip for hover and draggers
  *
@@ -82,7 +59,32 @@ class DateTooltip extends Component {
     }, 1800);
   }
 
-  getTooltipStyle = (dayOfYear, showDraggerTooltip, showHoverTooltip) => {
+  /**
+  * @param {String} time
+  * @returns {String} formatted yearMonthDay -OR- yearMonthDayHourMin (subdaily)
+  */
+  getTooltipTime = (time) => {
+    const { hasSubdailyLayers } = this.props;
+    const timeSplit = time.split('T');
+    const yearMonthDay = timeSplit[0];
+
+    // if no subdaily, return YEAR-MON-DAY / 2020-02-15
+    if (!hasSubdailyLayers) {
+      return yearMonthDay;
+    }
+    const hourMinSecZ = timeSplit[1].split(':');
+    const hourMinZ = `${[hourMinSecZ[0], hourMinSecZ[1]].join(':')}Z`;
+    const yearMonthDayHourMin = `${yearMonthDay} ${hourMinZ}`;
+    // if subdaily, return YEAR-MON-DAY HOUR-MIN-Z / 2020-02-15 18:00Z
+    return yearMonthDayHourMin;
+  };
+
+  /**
+  * @param {Boolean} showDraggerTooltip
+  * @param {Boolean} showHoverTooltip
+  * @returns {Object} style object
+  */
+  getTooltipStyle = (showDraggerTooltip, showHoverTooltip) => {
     const { showTooltip } = this.state;
     const {
       activeLayers,
@@ -123,9 +125,7 @@ class DateTooltip extends Component {
     }
 
     const width = hasSubdailyLayers
-      ? dayOfYear >= 100
-        ? 274
-        : 267
+      ? 274
       : 200;
 
     return {
@@ -148,42 +148,46 @@ class DateTooltip extends Component {
     const showDraggerTooltip = !!(showDraggerTime && selectedDate);
     const showHoverTooltip = !!(showHoverLine && hoverTime);
     const shouldDisplayDraggerTooltip = showTooltip || showDraggerTooltip || showHoverTooltip;
-
     let tooltipDate;
     let dayOfYear;
 
     if (showTooltip || showDraggerTooltip) {
       // handle dragger tooltip
-      tooltipDate = getTooltipTime(selectedDate, hasSubdailyLayers);
+      tooltipDate = this.getTooltipTime(selectedDate, hasSubdailyLayers);
       dayOfYear = getDaysInYear(selectedDate);
     } else if (showHoverTooltip) {
       // handle hover tooltip
-      tooltipDate = getTooltipTime(hoverTime, hasSubdailyLayers);
+      tooltipDate = this.getTooltipTime(hoverTime, hasSubdailyLayers);
       dayOfYear = getDaysInYear(hoverTime);
     }
 
-    const tooltipStyle = this.getTooltipStyle(dayOfYear, showDraggerTooltip, showHoverTooltip);
+    const tooltipStyle = this.getTooltipStyle(showDraggerTooltip, showHoverTooltip);
 
-    // add leading zero for single digits
+    // add leading zero(s) for single digits
     dayOfYear = dayOfYear < 10
-      ? `0${dayOfYear}`
-      : dayOfYear;
+      ? `00${dayOfYear}`
+      : dayOfYear < 100
+        ? `0${dayOfYear}`
+        : dayOfYear;
 
+    const tooltipClass = `date-tooltip ${shouldDisplayDraggerTooltip ? 'date-tooltip-fade' : ''}`;
     return (
-      shouldDisplayDraggerTooltip && (
-        <div
-          className="date-tooltip"
-          style={tooltipStyle}
-        >
-          { tooltipDate }
-          {' '}
-          <span className="date-tooltip-day">
-            (
-            { `DOY ${dayOfYear}` }
-            )
-          </span>
-        </div>
-      )
+      <div
+        className={tooltipClass}
+        style={tooltipStyle}
+      >
+        {shouldDisplayDraggerTooltip && (
+          <>
+            { tooltipDate }
+            {' '}
+            <span className="date-tooltip-day">
+              (
+              { `DOY ${dayOfYear}` }
+              )
+            </span>
+          </>
+        )}
+      </div>
     );
   }
 }
