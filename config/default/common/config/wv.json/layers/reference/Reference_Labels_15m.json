@@ -4,7 +4,7 @@
       "id": "Reference_Labels_15m",
       "title": "Place Labels",
       "subtitle": "&copy; OpenStreetMap contributors, Natural Earth",
-      "description": "reference/Reference_Labels_15",
+      "description": "reference/Reference_Labels_15m",
       "tags": "osm reference, country, countries, state, province, cities, city, towns, town, lakes, lake, parks, park, airports, airport",
       "group": "overlays",
       "layergroup": "Reference",
