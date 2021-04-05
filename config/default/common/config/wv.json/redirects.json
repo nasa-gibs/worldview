@@ -75,8 +75,8 @@
       "MODIS_Fires_Terra": "MODIS_Terra_Thermal_Anomalies_All",
       "MODIS_Fires_Aqua": "MODIS_Aqua_Thermal_Anomalies_All",
       "Reference_Features": "Reference_Features_15m",
-      "Reference_Labels": "Reference_Labels_15",
-      "Coastlines": "Coastlines_15"
+      "Reference_Labels": "Reference_Labels_15m",
+      "Coastlines": "Coastlines_15m"
     }
   }
 }
