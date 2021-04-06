@@ -5,7 +5,7 @@
       "title": "Land Surface Reflectance (Bands 1-2-1)",
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_SurfaceReflectance_Bands121",
-      "tags": "lsr 121 false color",
+      "tags": "lsr 121 false color myd09",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
       "product": "MYD09GQ",
