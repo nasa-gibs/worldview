@@ -1,11 +1,11 @@
 {
   "stories": {
-    "worldview_intro": {
-      "id": "worldview_intro",
+    "worldview_layerpicker": {
+      "id": "worldview_layerpicker",
       "type": "default",
-      "title": "Introduction to Worldview",
-      "description": "Discover and learn how to use Worldview's tools and features!",
-      "backgroundImage": "wv_background.png",
+      "title": "Worldview's Layer Picker",
+      "description": "Discover all the imagery and imagery visualizations available in Worldview!",
+      "backgroundImage": "",
       "backgroundImageHover": "",
       "readMoreLinks": [],
       "steps": [
@@ -107,6 +107,11 @@
                 "placementBeacon": "bottom"
               },
               {
+                "target": ".wv-zoom-buttons",
+                "content": "Use these to zoom in and out of the map. Alternatively, use your mouse scroll wheel or trackpad.",
+                "placementBeacon": "left"
+              },
+              {
                 "target": "#wv-measure-button",
                 "content": "Measure Distance and Area in kilometers (km) or miles (mi) and export as GeoJSON.",
                 "placementBeacon": "left"
@@ -115,6 +120,65 @@
                 "target": "#ol-coords-case",
                 "content": "When outside of the tour mode, you can hover the cursor on the map to see the map coordinates here. Click on the coordinates to change map coordinates between Degrees Minutes Seconds, Decimal Degrees, and Degrees Decimal Minutes",
                 "placementBeacon": "left"
+              }
+            ]
+          }
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "stepLink": "v=-108.00920361862684,-63.57842410029712,116.2759949373298,68.07713930391033&lg=false&tr=worldview_intro&t=2021-03-22-T16%3A21%3A03Z",
+          "joyride": {
+            "continuous": true,
+            "disableOverlayClose": true,
+            "hideCloseButton": true,
+            "eventTriggersIncrement": true,
+            "steps": [
+              {
+                "target": "#layers-add",
+                "title": "Layer Picker",
+                "content": "The Layer Picker allows you to browse and search for imagery layers. Click \"+Add Layers\" to learn more!",
+                "placement": "bottom",
+                "spotlightClicks": true,
+                "hideNextButton": true
+              },
+              {
+                "target": "#categories-nav",
+                "title": "Layer Browsing",
+                "content": "Here you can discover and add relevant layers sorted by Hazards and Disasters categories, by Science Discipline, or by Featured, which include new and noteworthy imagery layers. The most recent layers you've added will show in the \"Recent\" tab making it easier to find your favorites on return vists.",
+                "placement": "left",
+                "hideBackButton": true
+              },
+              {
+                "target": "#layers-search-input",
+                "title": "Layer Search",
+                "content": "The Search bar allows free text searching for layers. Try searching for \"cloud\".",
+                "placement": "left",
+                "spotlightClicks": true,
+                "hideNextButton": true
+              },
+              {
+                "target": ".facet-container",
+                "title": "Faceted Filtering",
+                "content": "You can use the facets to further refine your results.",
+                "placement": "right-start",
+                "placementBeacon": "top",
+                "hideBackButton": true,
+                "spotlightClicks": true
+              },
+              {
+                "target": ".search-row:first-of-type",
+                "title": "Search Results",
+                "content": "Click on a search result entry to see the details for the layer. You can also click the checkbox to add a layer to the map.",
+                "placement": "bottom",
+                "spotlightClicks": true
+              },
+              {
+                "target": ".layer-detail-container",
+                "title": "Layer Details",
+                "content": "Information about the layer including temporal coverage, a description of the imagery layer and reference links can be seen here.  You can also click on \"+ Add Layer\" to add or \"+ Remove Layer\" remove a layer from the map.",
+                "placement": "left",
+                "spotlightClicks": true
               }
             ]
           }

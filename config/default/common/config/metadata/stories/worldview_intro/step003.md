@@ -1,2 +1,0 @@
-<h2>Comparison</h2>
-<p>Worldview also has a Comparison feature that allows users to compare imagery from two different dates, or two sets of imagery from the same date or even two sets of imagery from different dates! Click on the pulsing red dot by "Start Comparison" to begin!
