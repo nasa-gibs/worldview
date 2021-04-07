@@ -18,6 +18,7 @@ import { loadedCustomPalettes } from '../../modules/palettes/actions';
 import {
   requestEvents as requestEventsActionCreator,
   requestSources as requestSourcesActionCreator,
+  requestCategories as requestCategoriesActionCreator,
 } from '../../modules/natural-events/actions';
 import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
@@ -28,6 +29,7 @@ import {
   expandSidebar as expandSidebarAction,
 } from '../../modules/sidebar/actions';
 import safeLocalStorage from '../../util/local-storage';
+import { initialEventsLoad } from '../../map/natural-events/util';
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 
@@ -67,7 +69,6 @@ class Sidebar extends React.Component {
       loadedCustomPalettes(customs);
     });
     this.updateDimensions();
-    this.loadEvents();
     // prevent browser zooming in safari
     if (util.browser.safari) {
       const onGestureCallback = (e) => {
@@ -80,6 +81,10 @@ class Sidebar extends React.Component {
   }
 
   componentDidUpdate() {
+    const { activeTab } = this.props;
+    if (activeTab === 'events') {
+      this.loadEvents();
+    }
     this.updateDimensions();
   }
 
@@ -88,31 +93,18 @@ class Sidebar extends React.Component {
       isLoadingEvents,
       hasEventRequestError,
       eventsData,
-      eventRequestUrl,
       config,
       requestEvents,
       requestSources,
+      requestCategories,
+      selectedYear,
     } = this.props;
 
     if (!isLoadingEvents && !hasEventRequestError && !eventsData) {
-      let eventsRequestURL = `${eventRequestUrl}/events`;
-      let sourceRequestURL = `${eventRequestUrl}/sources`;
-
-      const mockEvents = lodashGet(config, 'parameters.mockEvents');
-      const mockSources = lodashGet(config, 'parameters.mockSources');
-
-      if (mockEvents) {
-        console.warn(`Using mock events data: ${mockEvents}`);
-        eventsRequestURL = mockEvents === 'true'
-          ? 'mock/events_data.json'
-          : `mock/events_data.json-${mockEvents}`;
-      }
-      if (mockSources) {
-        console.warn(`Using mock categories data: ${mockSources}`);
-        sourceRequestURL = `mock/categories_data.json-${mockSources}`;
-      }
-      requestEvents(eventsRequestURL);
-      requestSources(sourceRequestURL);
+      const { sourcesURL, eventsURL, categoriesURL } = initialEventsLoad(config, selectedYear);
+      requestEvents(eventsURL);
+      requestSources(sourcesURL);
+      requestCategories(categoriesURL);
     }
   }
 
@@ -291,7 +283,8 @@ class Sidebar extends React.Component {
     );
   }
 }
-function mapStateToProps(state) {
+
+const mapStateToProps = (state) => {
   const {
     browser,
     sidebar,
@@ -303,17 +296,18 @@ function mapStateToProps(state) {
     events,
     requestedEvents,
     requestedEventSources,
+    requestedEventCategories,
     ui,
   } = state;
 
-  const eventRequestUrl = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoadingEvents = requestedEvents.isLoading
-    || requestedEventSources.isLoading;
-  const hasEventRequestError = requestedEvents.error
-    || requestedEventSources.error;
+    || requestedEventSources.isLoading
+    || requestedEventCategories.isLoading;
+  const hasEventRequestError = !!(requestedEvents.error
+    || requestedEventSources.error
+    || requestedEventCategories.error);
   const eventsData = lodashGet(requestedEvents, 'response');
   const eventsSources = lodashGet(requestedEventSources, 'response');
-
   const { screenHeight } = browser;
   const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
@@ -324,11 +318,11 @@ function mapStateToProps(state) {
   const isMobile = browser.lessThan.medium;
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
+
   return {
     activeTab,
     activeString,
     config,
-    eventRequestUrl,
     eventsData,
     eventsSources,
     numberOfLayers,
@@ -339,10 +333,12 @@ function mapStateToProps(state) {
     isDistractionFreeModeActive,
     isLoadingEvents,
     isMobile,
+    selectedYear: events.selectedYear,
     screenHeight,
     tabTypes,
   };
-}
+};
+
 const mapDispatchToProps = (dispatch) => ({
   changeTab: (str) => {
     dispatch(changeTabAction(str));
@@ -369,6 +365,9 @@ const mapDispatchToProps = (dispatch) => ({
   requestSources: (url) => {
     dispatch(requestSourcesActionCreator(url));
   },
+  requestCategories: (url) => {
+    dispatch(requestCategoriesActionCreator(url));
+  },
 });
 
 export default connect(
@@ -385,7 +384,6 @@ Sidebar.propTypes = {
   config: PropTypes.object,
   eventsData: PropTypes.array,
   eventsSources: PropTypes.array,
-  eventRequestUrl: PropTypes.string,
   hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
@@ -397,7 +395,9 @@ Sidebar.propTypes = {
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
+  selectedYear: PropTypes.number,
   tabTypes: PropTypes.object,
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
+  requestCategories: PropTypes.func,
 };

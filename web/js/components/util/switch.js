@@ -59,11 +59,11 @@ const Switch = (props) => {
         {tooltip
           && (
             <>
-              <FontAwesomeIcon icon="info-circle" id="switch-tooltip" />
+              <FontAwesomeIcon icon="info-circle" id={`${id}-switch-tooltip`} />
               <Tooltip
                 placement="right"
                 isOpen={tooltipOpen}
-                target="switch-tooltip"
+                target={`${id}-switch-tooltip`}
                 toggle={() => { toggleTooltip(!tooltipOpen); }}
               >
                 {tooltip}

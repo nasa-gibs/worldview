@@ -9,6 +9,7 @@ import { shortLink } from './link/reducers';
 import {
   requestedEvents,
   requestedEventSources,
+  requestedEventCategories,
   eventsReducer,
   eventRequestResponse,
 } from './natural-events/reducers';
@@ -86,6 +87,7 @@ export function getInitialState(models, config, parameters) {
     layers: getLayersInitialState(config),
     requestedEvents: eventRequestResponse(eventsIgnoreArray),
     requestedEventSources: eventRequestResponse(eventsIgnoreArray),
+    requestedEventCategories: eventRequestResponse(eventsIgnoreArray),
     palettes: getInitialPaletteState(config),
     productPicker: getProductPickerInitialState(config),
     vectorStyles: getInitialVectorStyleState(config),
@@ -122,6 +124,7 @@ const reducers = {
   imageDownload: imageDownloadReducer,
   requestedEvents,
   requestedEventSources,
+  requestedEventCategories,
   modalAboutPage,
   shortLink,
   smartHandoffs: smartHandoffReducer,

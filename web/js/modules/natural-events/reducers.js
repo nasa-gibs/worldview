@@ -2,23 +2,32 @@ import {
   assign as lodashAssign,
   orderBy as lodashOrderBy,
   uniqBy as lodashUniqBy,
+  get as lodashGet,
 } from 'lodash';
 import {
-  ALL_CATEGORY,
   REQUEST_EVENTS,
   REQUEST_SOURCES,
+  REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
-  SELECT_CATEGORY,
+  SET_EVENTS_FILTER,
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
   FINISHED_ANIMATING_TO_EVENT,
+  REQUEST_CATEGORIES_SUCCESS,
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 
-const sortEvents = function(events) {
+
+const sortEvents = function(events, categories) {
   return events
+    .filter((e) => {
+      if (!categories.length) {
+        return true;
+      }
+      return e.categories.some(({ title }) => categories.includes(title));
+    })
     .map((e) => {
       e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
       // Discard duplicate geometry dates
@@ -57,7 +66,8 @@ export const eventsReducerState = {
   active: false,
   showAll: true,
   isAnimatingToEvent: false,
-  category: ALL_CATEGORY,
+  selectedCategories: [],
+  selectedYear: new Date().getFullYear(),
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -80,10 +90,16 @@ export function eventsReducer(state = eventsReducerState, action) {
         ...state,
         selected: eventsReducerState.selected,
       };
-    case SELECT_CATEGORY:
+    case REQUEST_CATEGORIES_SUCCESS:
       return {
         ...state,
-        category: action.category,
+        selectedCategories: action.response.categories.map(({ title }) => title),
+      };
+    case SET_EVENTS_FILTER:
+      return {
+        ...state,
+        selectedCategories: action.categories,
+        selectedYear: action.year,
       };
     case SHOW_ALL_EVENTS:
       return {
@@ -134,23 +150,31 @@ export function eventsRequestReducer(actionName, state, action) {
   const START = `${actionName}_START`;
   const SUCCESS = `${actionName}_SUCCESS`;
   const FAILURE = `${actionName}_FAILURE`;
+  const selectedCategories = lodashGet(action, 'state.events.selectedCategories') || [];
 
   switch (action.type) {
     case START:
       return eventRequestResponse({
+        ...state,
         isLoading: true,
         response: null,
       });
+
     case SUCCESS: {
-      const key = actionName === REQUEST_EVENTS ? 'events' : 'sources';
+      const key = actionName === REQUEST_EVENTS
+        ? 'events'
+        : actionName === REQUEST_CATEGORIES
+          ? 'categories'
+          : 'sources';
       const filtered = action.response[key].filter((item) => formatResponse(item, state.ignore));
       return eventRequestResponse({
         response: actionName === REQUEST_EVENTS
-          ? sortEvents(filtered)
+          ? sortEvents(filtered, selectedCategories)
           : filtered,
         isLoading: false,
       });
     }
+
     case FAILURE:
       return eventRequestResponse({
         response: null,
@@ -168,4 +192,8 @@ export function requestedEvents(state = {}, action) {
 
 export function requestedEventSources(state = {}, action) {
   return eventsRequestReducer(REQUEST_SOURCES, state, action);
+}
+
+export function requestedEventCategories(state = {}, action) {
+  return eventsRequestReducer(REQUEST_CATEGORIES, state, action);
 }
