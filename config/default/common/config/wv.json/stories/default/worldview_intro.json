@@ -5,14 +5,14 @@
       "type": "default",
       "title": "Introduction to Worldview",
       "description": "Discover and learn how to use Worldview's tools and features!",
-      "backgroundImage": "wv_background.png",
+      "backgroundImage": "wv_intro.png",
       "backgroundImageHover": "",
       "readMoreLinks": [],
       "steps": [
         {
           "id": "001",
           "description": "step001.html",
-          "stepLink": "v=-108.00920361862684,-63.57842410029712,116.2759949373298,68.07713930391033&lg=false&tr=worldview_intro&t=2021-03-22-T16%3A21%3A03Z",
+          "stepLink": "v=-108.00920361862684,-63.57842410029712,116.2759949373298,68.07713930391033",
           "joyride": {
             "continuous": true,
             "spotlightClicks": true,
@@ -25,7 +25,7 @@
               {
                 "target": "#layers-sidebar-tab",
                 "title": "Layer List",
-                "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers under the overlays and only the top most activated base layer will display.",
+                "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers appear under the overlays and only the top most activated base layer will display.",
                 "placementBeacon": "top"
               },
               {
@@ -37,7 +37,7 @@
               {
                 "target": "#download-sidebar-tab",
                 "title": "Data Download",
-                "content": "Select the Data tab to download the underlying data for the imagery layers displayed on the map. Once you have selected your desired layer it will direct you to Earthdata Search to download the data.",
+                "content": "Select the Data tab to download the underlying data for the imagery layers displayed on the map. Once you have selected your desired layer, it will direct you to the Earthdata Search tool to download the data.",
                 "placementBeacon": "right"
               },
               {
@@ -83,12 +83,12 @@
               },
               {
                 "target": "#location-search-wrapper",
-                "content": "Use Location Search by entering a place name or coordinates to place a map marker on the map. Conversely, place a map marker on the map to find out the place name and coordinates",
+                "content": "Use Location Search by entering a place name or coordinates to place a map marker on the map. Conversely, place a map marker on the map to find out the place name and coordinates.",
                 "placementBeacon": "bottom"
               },
               {
                 "target": "#wv-link-button",
-                "content": "Save the URL of the current state of the website and share it with your friends!",
+                "content": "Save the URL of the current state of the site and share it with others!",
                 "placementBeacon": "bottom"
               },
               {
@@ -98,12 +98,12 @@
               },
               {
                 "target": "#wv-image-button",
-                "content": "The \"Camera\" icon allows you to take a snapshot of the imagery show on the map.",
+                "content": "The \"Camera\" icon allows you to take a snapshot of the imagery shown on the map and export the imagery to GIS clients.",
                 "placementBeacon": "bottom"
               },
               {
                 "target": "#wv-info-button",
-                "content": "Here you may provide feedback, initiate tour stories, access Worldview's source code, find out what we've been working on recently with \"What's new\", read notifications, find background information, and access Distraction Free mode. It which removes all of the unnecessary elements so you can focus solely on the map.",
+                "content": "Here you may provide feedback, initiate tour stories, find out what we've been working on recently and learn more about Worldview. You can also access the Distraction Free mode which removes all of the unnecessary elements so you can focus solely on the map.",
                 "placementBeacon": "bottom"
               },
               {
@@ -113,7 +113,7 @@
               },
               {
                 "target": "#ol-coords-case",
-                "content": "When outside of the tour mode, you can hover the cursor on the map to see the map coordinates here. Click on the coordinates to change map coordinates between Degrees Minutes Seconds, Decimal Degrees, and Degrees Decimal Minutes",
+                "content": "When outside of the tour mode, you can hover the cursor on the map and see map coordinates here. Click on the coordinates box to change map coordinates between Degrees Minutes Seconds, Decimal Degrees, and Degrees Decimal Minutes.",
                 "placementBeacon": "left"
               }
             ]
