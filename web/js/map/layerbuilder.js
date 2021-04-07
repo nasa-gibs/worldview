@@ -178,6 +178,8 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
    */
   self.getRequestDates = function(def, options) {
     const state = store.getState();
+    const { date } = state;
+    const { appNow } = date;
     const stateCurrentDate = new Date(getSelectedDate(state));
     const previousLayer = options.previousLayer || {};
     let closestDate = options.date || stateCurrentDate;
@@ -194,7 +196,40 @@ export default function mapLayerBuilder(models, config, cache, ui, store) {
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
-      const dateRange = datesinDateRanges(def, closestDate);
+      const { dateRanges, inactive, period } = def;
+      let dateRange;
+      if (inactive) {
+        dateRange = datesinDateRanges(def, closestDate);
+      } else {
+        let endDateLimit;
+        let startDateLimit;
+
+        let interval = 1;
+        if (dateRanges && dateRanges.length > 0) {
+          for (let i = 0; i < dateRanges.length; i += 1) {
+            const d = dateRanges[i];
+            const int = Number(d.dateInterval);
+            if (int > interval) {
+              interval = int;
+            }
+          }
+        }
+
+        if (period === 'daily') {
+          endDateLimit = util.dateAdd(closestDate, 'day', interval);
+          startDateLimit = util.dateAdd(closestDate, 'day', -interval);
+        } else if (period === 'monthly') {
+          endDateLimit = util.dateAdd(closestDate, 'month', interval);
+          startDateLimit = util.dateAdd(closestDate, 'month', -interval);
+        } else if (period === 'yearly') {
+          endDateLimit = util.dateAdd(closestDate, 'year', interval);
+          startDateLimit = util.dateAdd(closestDate, 'year', -interval);
+        } else {
+          endDateLimit = new Date(closestDate);
+          startDateLimit = new Date(closestDate);
+        }
+        dateRange = datesinDateRanges(def, closestDate, startDateLimit, endDateLimit, appNow);
+      }
       const { next, previous } = prevDateInDateRange(def, closestDate, dateRange);
       previousDateFromRange = previous;
       previousLayerDate = previous;
