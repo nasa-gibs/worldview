@@ -65,7 +65,7 @@ export function nearestInterval(def, date) {
    * @param  {object} def       A layer definition
    * @param  {object} date      A date to compare against the array of dates
    * @param  {array} dateArray  An array of dates
-   * @return {object}           The date object with normalized timeszone.
+   * @return {object}           The date object with normalized timezone.
    */
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
