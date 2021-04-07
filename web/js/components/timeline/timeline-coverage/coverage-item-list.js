@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { datesinDateRanges } from '../../../modules/layers/util';
+import { datesInDateRanges } from '../../../modules/layers/util';
 import util from '../../../util/util';
 import {
   timeScaleToNumberKey,
@@ -295,7 +295,7 @@ class CoverageItemList extends Component {
 
       const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
       if (this.layerDateArrayCache[id][layerIdDates] === undefined) {
-        dateIntervalStartDates = datesinDateRanges(def, startDateLimit, startDateLimit, endDateLimit, appNow);
+        dateIntervalStartDates = datesInDateRanges(def, startDateLimit, startDateLimit, endDateLimit, appNow);
         this.layerDateArrayCache[id][layerIdDates] = dateIntervalStartDates;
       } else {
         dateIntervalStartDates = this.layerDateArrayCache[id][layerIdDates];
@@ -315,7 +315,7 @@ class CoverageItemList extends Component {
   */
   getLayerItemStyles = (visible, id) => {
     const { hoveredLayer } = this.state;
-    // condtional styling for line/background colors
+    // conditional styling for line/background colors
     const containerBackgroundColor = visible
       ? 'rgb(204, 204, 204)'
       : 'rgb(79, 79, 79)';
@@ -402,7 +402,7 @@ class CoverageItemList extends Component {
           // concat (ex: day to days) for moment manipulation below
           layerPeriod += 's';
 
-          // condtional styling for line/background colors
+          // conditional styling for line/background colors
           const {
             layerItemBackground,
             layerItemOutline,
