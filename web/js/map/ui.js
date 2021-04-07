@@ -90,10 +90,8 @@ export default function mapui(models, config, store, ui) {
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
   const layerBuilder = self.layerBuilder = mapLayerBuilder(
-    models,
     config,
     cache,
-    ui,
     store,
   );
   self.layerKey = layerBuilder.layerKey;

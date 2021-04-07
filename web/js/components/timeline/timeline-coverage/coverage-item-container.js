@@ -116,7 +116,7 @@ class CoverageItemContainer extends Component {
       visible,
     } = layer;
 
-    // condtional styling for line/background colors
+    // conditional styling for line/background colors
     const {
       lineBackgroundColor,
     } = getLayerItemStyles(visible, id);

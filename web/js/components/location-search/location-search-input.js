@@ -43,7 +43,7 @@ class SearchBox extends Component {
     if (coordinatesPending.length > 0) {
       onCoordinateInputSelect();
     } else if (suggestions.length > 0) {
-      // submit hightlighted item in search result menu
+      // submit highlighted item in search result menu
       if (this.highlightedItem) {
         onSelect(this.highlightedItem.text, this.highlightedItem);
       } else {
@@ -192,7 +192,7 @@ class SearchBox extends Component {
     );
   }
 
-  // condtional autocomplete wrapper styling
+  // conditional autocomplete wrapper styling
   getWrapperStyle = () => {
     const {
       inputValue,

@@ -274,6 +274,37 @@ fixtures.config = function() {
         },
         inactive: true,
       },
+      MODIS_Combined_L4_LAI_4Day: {
+        id: 'MODIS_Combined_L4_LAI_4Day',
+        title: 'Leaf Area Index (L4, 4-Day)',
+        subtitle: 'Terra and Aqua / MODIS',
+        description: 'modis/combined/MODIS_Combined_L4_LAI_4Day',
+        group: 'overlays',
+        product: 'MCD15A3H',
+        layergroup: 'Leaf Area Index',
+        dateRanges: [
+          {
+            startDate: '2018-01-01T00:00:00Z',
+            endDate: '2018-12-27T00:00:00Z',
+            dateInterval: '4',
+          },
+          {
+            startDate: '2019-01-01T00:00:00Z',
+            endDate: '2019-12-27T00:00:00Z',
+            dateInterval: '4',
+          },
+          {
+            startDate: '2020-01-01T00:00:00Z',
+            endDate: '2020-09-26T00:00:00Z',
+            dateInterval: '4',
+          },
+        ],
+        projections: {
+          geographic: {},
+          arctic: {},
+          antarctic: {},
+        },
+      },
       'terra-aod': {
         id: 'terra-aod',
         group: 'overlays',
