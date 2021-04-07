@@ -20,6 +20,7 @@ import { getPermalink } from '../../modules/link/util';
 import {
   requestEvents as requestEventsActionCreator,
   requestSources as requestSourcesActionCreator,
+  requestCategories as requestCategoriesActionCreator,
 } from '../../modules/natural-events/actions';
 import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
@@ -31,6 +32,7 @@ import {
 } from '../../modules/sidebar/actions';
 import history from '../../main';
 import safeLocalStorage from '../../util/local-storage';
+import { initialEventsLoad } from '../../map/natural-events/util';
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 
@@ -84,6 +86,10 @@ class Sidebar extends React.Component {
   }
 
   componentDidUpdate() {
+    const { activeTab } = this.props;
+    if (activeTab === 'events') {
+      this.loadEvents();
+    }
     this.updateDimensions();
   }
 
@@ -92,31 +98,18 @@ class Sidebar extends React.Component {
       isLoadingEvents,
       hasEventRequestError,
       eventsData,
-      eventRequestUrl,
       config,
       requestEvents,
       requestSources,
+      requestCategories,
+      selectedYear,
     } = this.props;
 
     if (!isLoadingEvents && !hasEventRequestError && !eventsData) {
-      let eventsRequestURL = `${eventRequestUrl}/events`;
-      let sourceRequestURL = `${eventRequestUrl}/sources`;
-
-      const mockEvents = lodashGet(config, 'parameters.mockEvents');
-      const mockSources = lodashGet(config, 'parameters.mockSources');
-
-      if (mockEvents) {
-        console.warn(`Using mock events data: ${mockEvents}`);
-        eventsRequestURL = mockEvents === 'true'
-          ? 'mock/events_data.json'
-          : `mock/events_data.json-${mockEvents}`;
-      }
-      if (mockSources) {
-        console.warn(`Using mock categories data: ${mockSources}`);
-        sourceRequestURL = `mock/categories_data.json-${mockSources}`;
-      }
-      requestEvents(eventsRequestURL);
-      requestSources(sourceRequestURL);
+      const { sourcesURL, eventsURL, categoriesURL } = initialEventsLoad(config, selectedYear);
+      requestEvents(eventsURL);
+      requestSources(sourcesURL);
+      requestCategories(categoriesURL);
     }
   }
 
@@ -342,7 +335,8 @@ class Sidebar extends React.Component {
     );
   }
 }
-function mapStateToProps(state) {
+
+const mapStateToProps = (state) => {
   const {
     animation,
     browser,
@@ -355,17 +349,18 @@ function mapStateToProps(state) {
     requestedEvents,
     requestedEventSources,
     sidebar,
+    requestedEventCategories,
     ui,
   } = state;
 
-  const eventRequestUrl = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoadingEvents = requestedEvents.isLoading
-    || requestedEventSources.isLoading;
-  const hasEventRequestError = requestedEvents.error
-    || requestedEventSources.error;
+    || requestedEventSources.isLoading
+    || requestedEventCategories.isLoading;
+  const hasEventRequestError = !!(requestedEvents.error
+    || requestedEventSources.error
+    || requestedEventCategories.error);
   const eventsData = lodashGet(requestedEvents, 'response');
   const eventsSources = lodashGet(requestedEventSources, 'response');
-
   const { screenHeight } = browser;
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
@@ -381,11 +376,11 @@ function mapStateToProps(state) {
   const isMobile = browser.lessThan.medium;
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
+
   return {
     activeTab,
     activeString,
     config,
-    eventRequestUrl,
     eventsData,
     eventsSources,
     numberOfLayers,
@@ -397,11 +392,13 @@ function mapStateToProps(state) {
     isEmbedModeActive,
     isLoadingEvents,
     isMobile,
+    selectedYear: events.selectedYear,
     screenHeight,
     selectedDate: getSelectedDate(state),
     tabTypes,
   };
-}
+};
+
 const mapDispatchToProps = (dispatch) => ({
   changeTab: (str) => {
     dispatch(changeTabAction(str));
@@ -428,6 +425,9 @@ const mapDispatchToProps = (dispatch) => ({
   requestSources: (url) => {
     dispatch(requestSourcesActionCreator(url));
   },
+  requestCategories: (url) => {
+    dispatch(requestCategoriesActionCreator(url));
+  },
 });
 
 export default connect(
@@ -442,7 +442,6 @@ Sidebar.propTypes = {
   changeTab: PropTypes.func,
   collapseExpandToggle: PropTypes.func,
   config: PropTypes.object,
-  eventRequestUrl: PropTypes.string,
   eventsData: PropTypes.array,
   eventsSources: PropTypes.array,
   hasEventRequestError: PropTypes.bool,
@@ -461,4 +460,6 @@ Sidebar.propTypes = {
   screenHeight: PropTypes.number,
   selectedDate: PropTypes.object,
   tabTypes: PropTypes.object,
+  selectedYear: PropTypes.number,
+  requestCategories: PropTypes.func,
 };
