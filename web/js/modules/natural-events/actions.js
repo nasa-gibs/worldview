@@ -1,15 +1,20 @@
 import {
+  get as lodashGet,
+} from 'lodash';
+import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
+  REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
-  SELECT_CATEGORY,
+  SET_EVENTS_FILTER,
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
   FINISHED_ANIMATING_TO_EVENT,
 } from './constants';
 import { requestAction } from '../core/actions';
+import { getEventsRequestURL } from '../../map/natural-events/util';
 
 export function requestEvents(location) {
   return (dispatch) => requestAction(
@@ -24,6 +29,15 @@ export function requestSources(location) {
   return (dispatch) => requestAction(
     dispatch,
     REQUEST_SOURCES,
+    location,
+    'application/json',
+  );
+}
+
+export function requestCategories(location) {
+  return (dispatch) => requestAction(
+    dispatch,
+    REQUEST_CATEGORIES,
     location,
     'application/json',
   );
@@ -49,10 +63,17 @@ export function showAll() {
   };
 }
 
-export function selectCategory(category) {
-  return {
-    type: SELECT_CATEGORY,
-    category,
+export function setEventsFilter(categories, year) {
+  return (dispatch, getState) => {
+    const { config } = getState();
+    const baseUrl = lodashGet(config, 'features.naturalEvents.host');
+    const requestUrl = getEventsRequestURL(baseUrl, year);
+    dispatch(requestEvents(requestUrl));
+    dispatch({
+      type: SET_EVENTS_FILTER,
+      categories,
+      year,
+    });
   };
 }
 

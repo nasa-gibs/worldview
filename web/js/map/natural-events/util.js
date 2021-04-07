@@ -1,6 +1,48 @@
-import lodashFind from 'lodash/find';
+import {
+  find as lodashFind,
+  get as lodashGet,
+} from 'lodash';
 import * as olProj from 'ol/proj';
 import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
+import moment from 'moment';
+import util from '../../util/util';
+
+export function getEventsRequestURL (baseUrl, year) {
+  const params = {
+    status: 'all',
+  };
+  if (year) {
+    params.start = moment.utc(`01-01-${year}`).format('YYYY-MM-DD');
+    params.end = moment.utc(`12-31-${year}`).format('YYYY-MM-DD');
+  }
+  return `${baseUrl}/events${util.toQueryString(params)}`;
+}
+
+export function initialEventsLoad (config, selectedYear) {
+  const baseUrl = lodashGet(config, 'features.naturalEvents.host');
+  let eventsURL = getEventsRequestURL(baseUrl, selectedYear);
+  let sourcesURL = `${baseUrl}/sources`;
+  const categoriesURL = `${baseUrl}/categories`;
+
+  const mockEvents = lodashGet(config, 'parameters.mockEvents');
+  const mockSources = lodashGet(config, 'parameters.mockSources');
+
+  if (mockEvents) {
+    console.warn(`Using mock events data: ${mockEvents}`);
+    eventsURL = mockEvents === 'true'
+      ? 'mock/events_data.json'
+      : `mock/events_data.json-${mockEvents}`;
+  }
+  if (mockSources) {
+    console.warn(`Using mock categories data: ${mockSources}`);
+    sourcesURL = `mock/categories_data.json-${mockSources}`;
+  }
+  return {
+    sourcesURL,
+    eventsURL,
+    categoriesURL,
+  };
+}
 
 /**
  *
