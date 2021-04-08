@@ -60,7 +60,7 @@
             },
             {
               "target": "#zoom-buttons-group",
-              "content": "Use the back and forward arrows to step backward or forward in time according to the selected interval.",
+              "content": "Use the left and right arrows to step backward or forward in time according to the selected interval.",
               "placementBeacon": "right"
             },
               {
