@@ -83,7 +83,7 @@
               },
               {
                 "target": "#location-search-wrapper",
-                "content": "Use Location Search by entering a place name or coordinates to place a map marker on the map. Conversely, place a map marker on the map to find out the place name and coordinates",
+                "content": "Use the Location Search by typing a place name or coordinates to place a map marker on the map. Conversely, place a map marker on the map to find out the place name and coordinates",
                 "placementBeacon": "bottom"
               },
               {
