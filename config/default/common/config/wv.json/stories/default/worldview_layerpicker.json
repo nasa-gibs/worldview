@@ -103,7 +103,7 @@
               },
               {
                 "target": "#wv-info-button",
-                "content": "Here you may provide feedback, initiate tour stories, access Worldview's source code, find out what we've been working on recently with \"What's new\", read notifications, find background information, and access Distraction Free mode. It which removes all of the unnecessary elements so you can focus solely on the map.",
+                "content": "Click here for ways to provide feedback, initiate tour stories, view service notifications, and find out more about developing the Worldview application including links to its open source code and recent changes with \"What's new\". You can also access Distraction Free mode, which hides most of the application so you can focus solely on the map imagery.",
                 "placementBeacon": "bottom"
               },
               {
