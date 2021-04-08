@@ -145,7 +145,7 @@
               {
                 "target": "#categories-nav",
                 "title": "Layer Browsing",
-                "content": "Here you can discover and add relevant layers sorted by Hazards and Disasters categories, by Science Discipline, or by Featured, which include new and noteworthy imagery layers. The most recent layers you've added will show in the \"Recent\" tab making it easier to find your favorites on return vists.",
+                "content": "Here you can discover and add relevant layers sorted by Hazards and Disasters categories, by Science Discipline, or by Featured, which include new and noteworthy imagery layers. The most recent layers you've added will show in the \"Recent\" tab making it easier to find your favorites on return visits.",
                 "placement": "left",
                 "hideBackButton": true
               },
