@@ -66,7 +66,7 @@
               {
                 "target": "#animate-button",
                 "title": "Timeline Animation",
-                "content": "Animate the imagery by clicking on the video camera icon. Click on Play in the animation box to watch the imagery change day by day. You can even  export it as an animated GIF.",
+                "content": "Animate the imagery by clicking on the video camera icon. Click on the Play button to watch the imagery change. You can also select an area to export as an animated GIF.",
                 "placementBeacon": "right"
               },
               {
