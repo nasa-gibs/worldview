@@ -88,7 +88,7 @@
               },
               {
                 "target": "#wv-link-button",
-                "content": "Save the URL of the current state of the website and share it with your friends!",
+                "content": "Create a custom URL of your Worldview page to share with friends and colleagues!",
                 "placementBeacon": "bottom"
               },
               {
