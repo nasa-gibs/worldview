@@ -49,7 +49,7 @@
               {
                 "target": "#date-selector-main",
                 "title": "Date Selector",
-                "content": "Change the date (and time if you have Geostationary layers loaded) by selecting and typing into the date fields, clicking on the up and down arrows by each field.",
+                "content": "Change the date (and time if you have Geostationary layers loaded) by typing in the date fields or clicking on the up and down arrows for each field.",
                 "placementBeacon": "right"
               },
               {
