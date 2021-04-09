@@ -19,15 +19,16 @@ import {
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 
-
+/**
+ * Sort events by date, filter by categories
+ *
+ * @param {*} events
+ * @param {*} categories
+ * @returns
+ */
 const sortEvents = function(events, categories) {
   return events
-    .filter((e) => {
-      if (!categories.length) {
-        return true;
-      }
-      return e.categories.some(({ title }) => categories.includes(title));
-    })
+    .filter((e) => e.categories.some(({ title }) => categories.includes(title)))
     .map((e) => {
       e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
       // Discard duplicate geometry dates
@@ -56,6 +57,8 @@ const formatResponse = function(item, ignored) {
   return !ignored.includes(item.title);
 };
 
+const endDate = new Date();
+
 export const eventsReducerState = {
   selected: {
     id: '',
@@ -67,7 +70,8 @@ export const eventsReducerState = {
   showAll: true,
   isAnimatingToEvent: false,
   selectedCategories: [],
-  selectedYear: new Date().getFullYear(),
+  selectedStartDate: new Date().setDate(endDate.getDate() - 60),
+  selectedEndDate: new Date(),
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -99,7 +103,8 @@ export function eventsReducer(state = eventsReducerState, action) {
       return {
         ...state,
         selectedCategories: action.categories,
-        selectedYear: action.year,
+        selectedStartDate: action.startDate,
+        selectedEndDate: action.endDate,
       };
     case SHOW_ALL_EVENTS:
       return {

@@ -63,16 +63,17 @@ export function showAll() {
   };
 }
 
-export function setEventsFilter(categories, year) {
+export function setEventsFilter(categories, startDate, endDate) {
   return (dispatch, getState) => {
     const { config } = getState();
     const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-    const requestUrl = getEventsRequestURL(baseUrl, year);
+    const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate);
     dispatch(requestEvents(requestUrl));
     dispatch({
       type: SET_EVENTS_FILTER,
       categories,
-      year,
+      startDate,
+      endDate,
     });
   };
 }

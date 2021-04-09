@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Portal } from 'react-portal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import Switch from '../util/switch';
-import Arrow from '../util/arrow';
 import {
   setEventsFilter as setEventsFilterAction,
 } from '../../modules/natural-events/actions';
@@ -12,18 +13,15 @@ function EventsFilter (props) {
   const {
     eventCategories,
     selectedCategories,
-    selectedYear,
+    selectedStartDate,
+    selectedEndDate,
     setFilter,
     closeModal,
   } = props;
 
-  const [year, setYear] = useState(selectedYear);
-  const onYearChange = (e) => {
-    setYear(e.target.value);
-  };
-  const onYearClick = (increment) => {
-    setYear(year + increment);
-  };
+  const [dateRange, setDateRange] = useState([selectedStartDate, selectedEndDate]);
+  const [allNone, setAllNone] = useState(!!selectedCategories.length);
+
 
   const [categories, setCategories] = useState(selectedCategories);
   const toggleCategory = (categoryTitle) => {
@@ -38,14 +36,37 @@ function EventsFilter (props) {
   };
 
   const applyFilter = () => {
-    setFilter(categories, year);
+    const [startDate, endDate] = dateRange;
+    setFilter(categories, startDate, endDate);
     closeModal();
   };
 
+  const selectAllNone = () => {
+    if (allNone) {
+      setCategories([]);
+    } else {
+      setCategories(eventCategories.map(({ title }) => title));
+    }
+    setAllNone(!allNone);
+  };
+
+  const portalNode = document.querySelector('.modal-footer');
+
   return (
-    <div>
+    <div className="events-filter">
+
+      <DateRangePicker
+        onChange={setDateRange}
+        value={dateRange}
+      />
 
       <div className="category-toggles">
+        <Switch
+          id="select-all-none"
+          label="Select/Deselect All"
+          active={allNone}
+          toggle={selectAllNone}
+        />
         {eventCategories.map((category) => {
           const { id, title, description } = category;
           const switchId = `${id}-switch`;
@@ -64,37 +85,17 @@ function EventsFilter (props) {
         })}
       </div>
 
-      <div className="year-selector">
-        <Arrow
-          direction="up"
-          onClick={() => onYearClick(1)}
-          type="year"
-        />
-        <input
-          type="text"
-          size={4}
-          maxLength={4}
-          // className={inputClassName}
-          id="year-selector-input"
-          value={year}
-          onChange={onYearChange}
-          // style={fontSizeStyle}
-          onBlur={onYearChange}
-          // onFocus={this.handleFocus}
-        />
-        <Arrow
-          direction="down"
-          onClick={() => onYearClick(-1)}
-          type="year"
-        />
-      </div>
+      <Portal node={portalNode}>
+        {/* <div className="modal-footer"> */}
+        <Button color="primary" onClick={applyFilter}>
+          Apply
+        </Button>
+        <Button color="secondary" onClick={closeModal}>
+          Cancel
+        </Button>
+        {/* </div> */}
+      </Portal>
 
-      <Button onClick={applyFilter}>
-        Apply
-      </Button>
-      <Button onClick={closeModal}>
-        Cancel
-      </Button>
     </div>
   );
 }
@@ -103,23 +104,25 @@ EventsFilter.propTypes = {
   closeModal: PropTypes.func,
   eventCategories: PropTypes.array,
   selectedCategories: PropTypes.array,
-  selectedYear: PropTypes.number,
+  selectedStartDate: PropTypes.object,
+  selectedEndDate: PropTypes.object,
   setFilter: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
   const { events, requestedEventCategories } = state;
-  const { selectedCategories, selectedYear } = events;
+  const { selectedCategories, selectedStartDate, selectedEndDate } = events;
   return {
     eventCategories: requestedEventCategories.response || [],
     selectedCategories,
-    selectedYear,
+    selectedStartDate,
+    selectedEndDate,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  setFilter: (categories, year) => {
-    dispatch(setEventsFilterAction(categories, year));
+  setFilter: (categories, startDate, endDate) => {
+    dispatch(setEventsFilterAction(categories, startDate, endDate));
   },
 });
 
