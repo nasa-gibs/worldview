@@ -27,6 +27,7 @@
                 "title": "Layer List",
                 "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers appear under the overlays and only the top most activated base layer will display. Toggle on and off the layers by clicking on the \"eye\" icon to the left of the layer name.",
                 "spotlightClicks": false,
+                "disableOverlayClose": true,
                 "placementBeacon": "bottom"
               },
               {
@@ -34,6 +35,7 @@
                 "title": "Events",
                 "content": "Select the Events tab to view a curated list of current natural events around the world.",
                 "spotlightClicks": false,
+                "disableOverlayClose": true,
                 "placementBeacon": "bottom"
               },
               {
@@ -41,6 +43,7 @@
                 "title": "Data Download",
                 "content": "Select the Data tab to download the underlying data for the imagery layers displayed on the map. You will be directed to the Earthdata Search tool to download data granules of the selected layer, chosen area of interest, and current date.",
                 "spotlightClicks": false,
+                "disableOverlayClose": true,
                 "placementBeacon": "bottom"
               },
               {
@@ -78,12 +81,13 @@
                 "title": "Timeline Layer Coverage Panel",
                 "content": "To open the timeline layer coverage panel, click on the double chevrons. Temporal availability of active time-varying layers are shown as a set of striped horizontal blue lines in the panel. The total temporal coverage of the layers is shown on the far right.",
                 "spotlightClicks": false,
+                "disableOverlayClose": true,
                 "placementBeacon": "top"
               },
               {
                 "target": ".zoom-level-change",
                 "title": "Timescale Zoom",
-                "content": "Adjust the timescale to years, months, and days (And, hours and minutes if you have a Geostationary layer loaded).",
+                "content": "Adjust the timescale to years, months, and days (and, hours and minutes if you have a Geostationary layer loaded).",
                 "placementBeacon": "top"
               },
               {
@@ -100,7 +104,7 @@
               },
               {
                 "target": "#location-search-wrapper",
-                "content": "Search by location name or coordinates which then places a marker on the map. Conversely, place a map marker on the map to find out the place name and coordinates.",
+                "content": "Search by location name or coordinates which then places a marker on the map. Conversely, place a marker on the map to find out the place name and coordinates.",
                 "placementBeacon": "bottom"
               },
               {
