@@ -349,7 +349,7 @@ class DateInputColumn extends Component {
           }}
           size={size}
           maxLength={size}
-          className={inputClassName}
+          className={`${inputClassName} date-input-column`}
           id={inputId}
           value={value}
           tabIndex={tabIndex}
