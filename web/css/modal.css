@@ -41,6 +41,9 @@
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
   }
+  .modal-footer {
+    border-top: 1px solid #666;
+  }
 }
 
 .modal-body .basic-modal {

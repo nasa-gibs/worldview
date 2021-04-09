@@ -7,20 +7,20 @@ import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
 import moment from 'moment';
 import util from '../../util/util';
 
-export function getEventsRequestURL (baseUrl, year) {
+export function getEventsRequestURL (baseUrl, startDate, endDate) {
   const params = {
     status: 'all',
   };
-  if (year) {
-    params.start = moment.utc(`01-01-${year}`).format('YYYY-MM-DD');
-    params.end = moment.utc(`12-31-${year}`).format('YYYY-MM-DD');
+  if (startDate && endDate) {
+    params.start = moment.utc(startDate).format('YYYY-MM-DD');
+    params.end = moment.utc(endDate).format('YYYY-MM-DD');
   }
   return `${baseUrl}/events${util.toQueryString(params)}`;
 }
 
-export function initialEventsLoad (config, selectedYear) {
+export function initialEventsLoad (config, startDate, endDate) {
   const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-  let eventsURL = getEventsRequestURL(baseUrl, selectedYear);
+  let eventsURL = getEventsRequestURL(baseUrl, startDate, endDate);
   let sourcesURL = `${baseUrl}/sources`;
   const categoriesURL = `${baseUrl}/categories`;
 

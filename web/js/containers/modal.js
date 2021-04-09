@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import { toLower as lodashToLower } from 'lodash';
-import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import {
+  Modal, ModalBody, ModalHeader, ModalFooter,
+} from 'reactstrap';
 import Draggable from 'react-draggable';
 import { Resizable } from 'react-resizable';
 import { onToggle } from '../modules/modal/actions';
@@ -20,6 +22,7 @@ const toggleWithClose = (onToggle, onClose, isOpen) => {
   }
   return onToggle;
 };
+
 class ModalContainer extends Component {
   constructor(props) {
     super(props);
@@ -115,6 +118,7 @@ class ModalContainer extends Component {
       dragHandle,
       headerComponent,
       headerText,
+      footer,
       isDraggable,
       isResizable,
       mobileOnly,
@@ -213,6 +217,9 @@ class ModalContainer extends Component {
                       )
                       : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
                   </ModalBody>
+                  {footer ? (
+                    <ModalFooter />
+                  ) : null}
                 </DetectOuterClick>
               )}
           </Modal>

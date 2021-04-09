@@ -97,11 +97,14 @@ class Sidebar extends React.Component {
       requestEvents,
       requestSources,
       requestCategories,
-      selectedYear,
+      selectedStartDate,
+      selectedEndDate,
     } = this.props;
 
     if (!isLoadingEvents && !hasEventRequestError && !eventsData) {
-      const { sourcesURL, eventsURL, categoriesURL } = initialEventsLoad(config, selectedYear);
+      const {
+        sourcesURL, eventsURL, categoriesURL,
+      } = initialEventsLoad(config, selectedStartDate, selectedEndDate);
       requestEvents(eventsURL);
       requestSources(sourcesURL);
       requestCategories(categoriesURL);
@@ -333,7 +336,8 @@ const mapStateToProps = (state) => {
     isDistractionFreeModeActive,
     isLoadingEvents,
     isMobile,
-    selectedYear: events.selectedYear,
+    selectedStartDate: events.selectedStartDate,
+    selectedEndDate: events.selectedEndDate,
     screenHeight,
     tabTypes,
   };
@@ -395,7 +399,8 @@ Sidebar.propTypes = {
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
-  selectedYear: PropTypes.number,
+  selectedStartDate: PropTypes.object,
+  selectedEndDate: PropTypes.object,
   tabTypes: PropTypes.object,
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
