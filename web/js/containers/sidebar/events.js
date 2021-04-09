@@ -62,9 +62,12 @@ function Events(props) {
           className="filter-button"
           aria-label="Filtered layer search"
           onClick={openFilterModal}
+          color="primary"
+          size="sm"
+          block
         >
           <FontAwesomeIcon icon="filter" />
-          Filter Events
+          &nbsp; Filter Events
         </Button>
       )}
       <Scrollbars
@@ -141,14 +144,21 @@ const mapDispatchToProps = (dispatch) => ({
       headerText: 'Filter Events',
       backdrop: false,
       bodyComponent: EventFilter,
+      footer: true,
+      // footerComponent: (
+      //   <>
+      //     <Button color="primary" onClick={() => {}}>
+      //       Apply
+      //     </Button>
+      //     <Button color="secondary" onClick={() => {}}>
+      //       Cancel
+      //     </Button>
+      //   </>),
       // Using clickableBehindModal: true here causes an issue where switching sidebar
       // tabs does not close this modal
       wrapClassName: 'clickable-behind-modal',
       modalClassName: ' layer-info-settings-modal layer-settings-modal',
       timeout: 150,
-      bodyComponentProps: {
-
-      },
     }));
   },
 });
