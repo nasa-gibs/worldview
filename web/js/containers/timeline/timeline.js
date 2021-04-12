@@ -18,7 +18,7 @@ import TimelineLayerCoveragePanel from '../../components/timeline/timeline-cover
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
 import DraggerContainer from '../../components/timeline/timeline-draggers/dragger-container';
 import AxisHoverLine from '../../components/timeline/timeline-axis/date-tooltip/axis-hover-line';
-import DateToolTip from '../../components/timeline/timeline-axis/date-tooltip/date-tooltip';
+import DateTooltip from '../../components/timeline/timeline-axis/date-tooltip/date-tooltip';
 import CustomIntervalSelectorWidget from '../../components/timeline/custom-interval-selector/interval-selector-widget';
 
 import DateSelector from '../../components/date-selector/date-selector';
@@ -467,10 +467,10 @@ class Timeline extends React.Component {
 
   /**
   * @desc handle left/right arrow decrement/increment date
-  * @param {Number} signconstant - used to determine if decrement (-1) or increment (1)
+  * @param {Number} signConstant - used to determine if decrement (-1) or increment (1)
   * @returns {void}
   */
-  handleArrowDateChange(signconstant) {
+  handleArrowDateChange(signConstant) {
     const {
       customSelected,
       deltaChangeAmt,
@@ -486,8 +486,8 @@ class Timeline extends React.Component {
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
       return;
     }
-    delta = Number(delta * signconstant); // determine if negative or positive change
-    const disabled = signconstant > 0 ? rightArrowDisabled : leftArrowDisabled;
+    delta = Number(delta * signConstant); // determine if negative or positive change
+    const disabled = signConstant > 0 ? rightArrowDisabled : leftArrowDisabled;
     if (!disabled) {
       const minDate = new Date(timelineStartDateLimit);
       const maxDate = new Date(timelineEndDateLimit);
@@ -1068,7 +1068,12 @@ class Timeline extends React.Component {
       timelineHidden,
       transformX,
     } = this.state;
-    const selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    const selectedDate = draggerSelected === 'selected'
+      ? draggerTimeState
+      : draggerTimeStateB;
+    const selectedDraggerPosition = draggerSelected === 'selected'
+      ? draggerPosition
+      : draggerPositionB;
     // timeline open/closed styling
     const isTimelineHidden = timelineHidden || hideTimeline;
     const chevronDirection = isTimelineHidden ? 'left' : 'right';
@@ -1230,9 +1235,7 @@ class Timeline extends React.Component {
                           isTimelineDragging={isTimelineDragging}
                           isAnimationDraggerDragging={isAnimationDraggerDragging}
                           isDraggerDragging={isDraggerDragging}
-                          draggerSelected={draggerSelected}
-                          draggerPosition={draggerPosition}
-                          draggerPositionB={draggerPositionB}
+                          selectedDraggerPosition={selectedDraggerPosition}
                           isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                         />
 
@@ -1301,17 +1304,14 @@ class Timeline extends React.Component {
 
                         {!isTimelineDragging
                           && (
-                          <DateToolTip
+                          <DateTooltip
                             activeLayers={activeLayers}
                             shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
                             axisWidth={axisWidth}
                             leftOffset={leftOffset}
                             hoverTime={hoverTime}
-                            draggerSelected={draggerSelected}
-                            draggerTimeState={draggerTimeState}
-                            draggerTimeStateB={draggerTimeStateB}
-                            draggerPosition={draggerPosition}
-                            draggerPositionB={draggerPositionB}
+                            selectedDate={selectedDate}
+                            selectedDraggerPosition={selectedDraggerPosition}
                             hasSubdailyLayers={hasSubdailyLayers}
                             showDraggerTime={showDraggerTime}
                             showHoverLine={showHoverLine}

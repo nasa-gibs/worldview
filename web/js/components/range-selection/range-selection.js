@@ -363,7 +363,6 @@ TimelineRangeSelector.propTypes = {
   timeScale: PropTypes.string,
   transformX: PropTypes.number,
   updateAnimationDateAndLocation: PropTypes.func,
-  width: PropTypes.number,
 };
 
 export default TimelineRangeSelector;
