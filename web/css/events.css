@@ -430,3 +430,12 @@
     margin: 14px 10px 0px 10px;
   }
 }
+
+.react-calendar {
+  color: #000;
+  border-radius: 6px;
+  padding: 3px;
+  background: #bbb;
+  border-color: #666;
+  box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.75);
+}
