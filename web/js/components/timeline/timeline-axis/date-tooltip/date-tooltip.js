@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getDaysInYear } from '../../date-util';
+import util from '../../../../util/util';
 
 /*
  * Date tooltip for hover and draggers
@@ -61,22 +62,18 @@ class DateTooltip extends Component {
 
   /**
   * @param {String} time
-  * @returns {String} formatted yearMonthDay -OR- yearMonthDayHourMin (subdaily)
+  * @returns {String} formatted YYYY-MM-DD -OR- YYYY-MM-DD hh:mmZ (subdaily)
   */
   getTooltipTime = (time) => {
     const { hasSubdailyLayers } = this.props;
-    const timeSplit = time.split('T');
-    const yearMonthDay = timeSplit[0];
+    const date = new Date(time);
 
-    // if no subdaily, return YEAR-MON-DAY / 2020-02-15
-    if (!hasSubdailyLayers) {
-      return yearMonthDay;
+    // if subdaily, return YYYY-MM-DD hh:mmZ / 2020-02-15 18:00Z
+    if (hasSubdailyLayers) {
+      return util.toISOStringMinutes(date).replace('T', ' ');
     }
-    const hourMinSecZ = timeSplit[1].split(':');
-    const hourMinZ = `${[hourMinSecZ[0], hourMinSecZ[1]].join(':')}Z`;
-    const yearMonthDayHourMin = `${yearMonthDay} ${hourMinZ}`;
-    // if subdaily, return YEAR-MON-DAY HOUR-MIN-Z / 2020-02-15 18:00Z
-    return yearMonthDayHourMin;
+    // if no subdaily, return YYYY-MM-DD / 2020-02-15
+    return util.toISOStringDate(date);
   };
 
   /**
