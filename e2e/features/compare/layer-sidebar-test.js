@@ -30,7 +30,7 @@ module.exports = {
   },
   'Toggle compare mode to Active state B': (client) => {
     client.click(`${selectors.bTab} .productsIcon`);
-    client.waitForElementVisible('#activeB-Coastlines', client.globals.timeout);
+    client.waitForElementVisible('#activeB-Coastlines_15m', client.globals.timeout);
   },
   'Verify that AOD layer is not visible': (client) => {
     client.expect.element(`#active-${aodCombinedValueId}`).to.not.be.present;

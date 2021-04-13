@@ -11,7 +11,7 @@ const TIME_LIMIT = 10000;
 const layersTab = '#layers-sidebar-tab';
 const dataTabButton = '#download-sidebar-tab';
 const cloudRadiusRadioButton = '#C1443536017-LAADS-MODIS_Aqua_Cloud_Effective_Radius-collection-choice-label';
-const urlParams = '?l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-12-01';
+const urlParams = '?l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-12-01';
 
 module.exports = {
 

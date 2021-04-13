@@ -103,7 +103,7 @@ module.exports = {
       c.useCss().assert.containsText(collapsedToggleButton, '6');
       c.click(collapsedToggleButton);
       c.pause(100);
-      c.waitForElementVisible('#activeB-Reference_Features', TIME_LIMIT);
+      c.waitForElementVisible('#activeB-Reference_Features_15m', TIME_LIMIT);
     });
   },
 
@@ -117,11 +117,11 @@ module.exports = {
     c.expect.element('#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor')
       .to.be.visible;
 
-    c.moveToElement('#activeB-Reference_Labels', 1, 1).pause(200);
-    c.click('#close-activeBReference_Labels');
+    c.moveToElement('#activeB-Reference_Labels_15m', 1, 1).pause(200);
+    c.click('#close-activeBReference_Labels_15m');
 
-    c.moveToElement('#activeB-Reference_Features', 1, 1).pause(200);
-    c.click('#close-activeBReference_Features');
+    c.moveToElement('#activeB-Reference_Features_15m', 1, 1).pause(200);
+    c.click('#close-activeBReference_Features_15m');
 
     c.moveToElement('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor', 1, 1).pause(200);
     c.click('#close-activeBVIIRS_SNPP_CorrectedReflectance_TrueColor');
@@ -135,7 +135,7 @@ module.exports = {
       '.timeline-dragger.draggerA',
       TIME_LIMIT,
       () => {
-        c.expect.element('#activeB-Coastlines').to.be.visible;
+        c.expect.element('#activeB-Coastlines_15m').to.be.visible;
         c.expect.element(
           '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor',
         ).to.be.visible;
