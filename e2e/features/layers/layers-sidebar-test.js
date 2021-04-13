@@ -31,20 +31,20 @@ const {
   groupedOverlaysAllLayers,
 } = require('../../reuseables/selectors.js');
 
-const vectorsQueryString = '?v=-70.43215000968726,28.678203599725197,-59.81569241792232,31.62330063930118&l=GRanD_Dams,Reference_Labels(hidden),Reference_Features(hidden),Coastlines,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor';
+const vectorsQueryString = '?v=-70.43215000968726,28.678203599725197,-59.81569241792232,31.62330063930118&l=GRanD_Dams,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor';
 const TIME_LIMIT = 10000;
-const someGroupsQueryString = '?l=MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Labels(hidden),Reference_Features,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true';
-const twoGroupsQueryString = '?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=VIIRS_SNPP_Thermal_Anomalies_375m_All,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Features,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true';
-const mixedLayersGroupsDisabledQueryString = '?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=Reference_Features,VIIRS_SNPP_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false';
+const someGroupsQueryString = '?l=MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Labels_15m(hidden),Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true';
+const twoGroupsQueryString = '?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=VIIRS_SNPP_Thermal_Anomalies_375m_All,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true';
+const mixedLayersGroupsDisabledQueryString = '?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=Reference_Features_15m,VIIRS_SNPP_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false';
 const mixedLayerIdOrder = [
-  'active-Reference_Features',
+  'active-Reference_Features_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_Value_Added_AOD',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
 ];
 const groupedLayerIdOrder = [
-  'active-Reference_Features',
+  'active-Reference_Features_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_Value_Added_AOD',
@@ -55,7 +55,7 @@ const ungroupedReorderdLayerIdOrder = [
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
-  'active-Reference_Features',
+  'active-Reference_Features_15m',
 ];
 
 module.exports = {
