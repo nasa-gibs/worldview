@@ -23,12 +23,13 @@ export default function JoyrideWrapper ({
   const projMatches = stepProj === proj;
   const styles = {
     options: {
-      arrowColor: '#ccc',
-      backgroundColor: '#ccc',
+      arrowColor: '#eee',
+      backgroundColor: '#eee',
       beaconSize: 50,
       overlayColor: 'rgba(0, 0, 0, 0.5)',
       primaryColor: '#d54e21',
       spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
+      lineHeight: '16px',
       textColor: '#333',
       width: undefined,
       zIndex: 1050,
