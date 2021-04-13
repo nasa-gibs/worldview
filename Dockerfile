@@ -1,7 +1,6 @@
 FROM centos:7
 
 RUN yum install -y epel-release && \
-    yum install -y https://centos7.iuscommunity.org/ius-release.rpm && \
     yum install -y \
     "@Development Tools" \
     cairo-devel \
@@ -19,27 +18,26 @@ RUN yum install -y epel-release && \
     openssl-devel \
     xz
 RUN cd /usr/src && \
-    wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz  && \
-    tar xzf Python-3.7.4.tgz && \
-    rm Python-3.7.4.tgz && \
-    cd Python-3.7.4 && \
+    wget https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz  && \
+    tar xzf Python-3.9.4.tgz && \
+    rm Python-3.9.4.tgz && \
+    cd Python-3.9.4 && \
     ./configure --enable-optimizations && \
     make altinstall && \
-    ln -sf /usr/local/bin/python3.7 /usr/local/bin/python3 && \
+    ln -sf /usr/local/bin/python3.9 /usr/local/bin/python3 && \
     python3 -V && \
     curl -O https://bootstrap.pypa.io/get-pip.py && \
     python3 get-pip.py && \
     python3 -m ensurepip && \
-    pip install virtualenv && \
+    pip install --upgrade pip && \
     pip --version
 RUN mkdir -p /usr/local/stow
 RUN cd /usr/local/stow && \
-    curl -O https://nodejs.org/download/release/v10.19.0/node-v10.19.0-linux-x64.tar.xz && \
-    tar xf node-v10.19.0-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node/node-v10.19.0-linux-x64.tar.xz && \
-    rm -f /usr/local/stow/node-v10.19.0-linux-x64/{LICENSE,*.md} && \
-    stow -S node-v10.19.0-linux-x64
-RUN ln -s /usr/bin/virtualenv-3.7.4 /usr/bin/virtualenv
+    curl -O https://nodejs.org/download/release/v14.16.0/node-v14.16.0-linux-x64.tar.xz && \
+    tar xf node-v14.16.0-linux-x64.tar.xz && \
+    rm -f /usr/local/stow/node/node-v14.16.0-linux-x64.tar.xz && \
+    rm -f /usr/local/stow/node-v14.16.0-linux-x64/{LICENSE,*.md} && \
+    stow -S node-v14.16.0-linux-x64
 
 WORKDIR /build
 # Only what is needed to run the development server and run the Selenium tests

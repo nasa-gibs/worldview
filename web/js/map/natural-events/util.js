@@ -1,6 +1,6 @@
 import lodashFind from 'lodash/find';
 import * as olProj from 'ol/proj';
-import * as olExtent from 'ol/extent';
+import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
 
 /**
  *
@@ -32,9 +32,8 @@ export function getEventsWithinExtent(
   selected,
   extent,
   selectedProj,
-  showAll,
 ) {
-  const { maxExtent } = selectedProj;
+  const { maxExtent, crs } = selectedProj;
   const visibleListEvents = {};
 
   loadedEvents.forEach((naturalEvent) => {
@@ -43,42 +42,36 @@ export function getEventsWithinExtent(
     if (selected && selected.date) {
       date = selected.date;
     }
-    const geometry = lodashFind(naturalEvent.geometry, (geometry) => geometry.date.split('T')[0] === date) || naturalEvent.geometry[0];
+    const geometry = lodashFind(
+      naturalEvent.geometry,
+      (geom) => geom.date.split('T')[0] === date,
+    ) || naturalEvent.geometry[0];
 
     let { coordinates } = geometry;
 
     if (selectedProj.id !== 'geographic') {
-      // check for polygon geometries for targeted projection coordinate transform
       if (geometry.type === 'Polygon') {
-        const coordinatesTransform = coordinates[0].map((coordinate) => olProj.transform(coordinate, 'EPSG:4326', selectedProj.crs));
-        const geomExtent = olExtent.boundingExtent(coordinatesTransform);
-        coordinates = olExtent.getCenter(geomExtent);
-      } else {
-        // if normal geometries, transform given lon/lat array
-        coordinates = olProj.transform(
-          coordinates,
-          'EPSG:4326',
-          selectedProj.crs,
+        const coordinatesTransform = coordinates[0].map(
+          (coordinate) => olProj.transform(coordinate, 'EPSG:4326', crs),
         );
+        const geomExtent = boundingExtent(coordinatesTransform);
+        coordinates = getCenter(geomExtent);
+      } else {
+        coordinates = olProj.transform(coordinates, 'EPSG:4326', crs);
       }
     } else if (geometry.type === 'Polygon') {
-      const geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
-      coordinates = olExtent.getCenter(geomExtent);
+      const geomExtent = boundingExtent(geometry.coordinates[0]);
+      coordinates = getCenter(geomExtent);
     }
 
     // limit to maxExtent while allowing zoom and filter 'out of extent' events
-    const isVisible = olExtent.containsCoordinate(extent, coordinates)
-      && olExtent.containsCoordinate(maxExtent, coordinates);
+    const coordsInProjExtent = containsCoordinate(maxExtent, coordinates);
+    const isVisible = containsCoordinate(extent, coordinates) && coordsInProjExtent;
 
-    if (isVisible) {
-      visibleListEvents[naturalEvent.id] = true;
-    } else if (
-      // Keep selected in event list if within proj limits
-      isSelectedEvent
-      && olExtent.containsCoordinate(maxExtent, coordinates)
-    ) {
+    if (isVisible || (isSelectedEvent && coordsInProjExtent)) {
       visibleListEvents[naturalEvent.id] = true;
     }
   });
+
   return visibleListEvents;
 }

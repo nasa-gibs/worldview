@@ -1,3 +1,6 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import OlFeature from 'ol/Feature';
 import OlOverlay from 'ol/Overlay';
 import OlLayerVector from 'ol/layer/Vector';
@@ -25,73 +28,129 @@ import { selectEvent as selectEventAction } from '../../modules/natural-events/a
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
 
-export default function naturalEventsTrack(ui, store, selectedMap) {
-  const self = {};
-  self.trackDetails = {};
-  self.active = false;
+
+class EventTrack extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      trackDetails: {},
+    };
+
+    this.onMoveEnd = this.onMoveEnd.bind(this);
+    this.debouncedTrackUpdate = lodashDebounce(this.updateCurrentTrack, 250);
+    this.debouncedOnPropertyChange = lodashDebounce(
+      this.onPropertyChange.bind(this),
+      500,
+      { leading: true, trailing: false },
+    );
+  }
+
+  componentDidMount() {
+    this.initialize();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const {
+      map, selectedEvent, selectedDate, isAnimatingToEvent,
+    } = this.props;
+    const selectedEventChange = (selectedEvent && selectedEvent.id)
+      !== (prevProps.selectedEvent && prevProps.selectedEvent.id);
+    const selectedDateChange = (selectedDate && selectedDate.valueOf())
+      !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
+    const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevProps.isAnimatingToEvent);
+    const prevMap = prevProps.map;
+    const { trackDetails } = this.state;
+
+
+    if (map !== prevMap) {
+      if (prevMap) {
+        this.update(null);
+        this.removeTrack(prevMap);
+        removeOldPoints(prevMap, trackDetails);
+      }
+      this.initialize();
+    }
+
+    if (selectedEventChange || selectedDateChange || finishedAnimating) {
+      this.debouncedTrackUpdate();
+    }
+  }
+
+  componentWillUnmount() {
+    const { map } = this.props;
+    this.update(null);
+    map.un('moveend', this.onMoveEnd);
+    map.getView().un('propertychange', this.debouncedOnPropertyChange);
+  }
+
+  initialize() {
+    const { map } = this.props;
+    if (!map) return;
+    // NOTE: Does not cause additional listeners to be registered on subsequent calls
+    map.on('moveend', this.onMoveEnd);
+    map.getView().on('propertychange', this.debouncedOnPropertyChange);
+    this.debouncedTrackUpdate();
+  }
+
+  updateCurrentTrack() {
+    const { selectedEvent, eventsData } = this.props;
+    const { id, date } = selectedEvent;
+    if (!selectedEvent.id || !selectedEvent.date) return;
+    const event = (eventsData || []).find((e) => e.id === id);
+    if (!event) return;
+    this.update(event, date);
+  }
+
+  onMoveEnd = function(e) {
+    const { map } = this.props;
+    const { trackDetails } = this.state;
+
+    if (trackDetails.id) {
+      addPointOverlays(map, trackDetails.pointArray);
+    } else {
+      this.debouncedTrackUpdate();
+    }
+  }
+
+  onPropertyChange = (e) => {
+    const { map } = this.props;
+    const { trackDetails } = this.state;
+
+    if (e.key === 'resolution' || e.key === 'rotation') {
+      const newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
+      this.setState({ trackDetails: newTrackDetails });
+    } else if (e.key === 'center') {
+      // if old values equal target, map is not moving
+      // restricts track/cluster points from disappearing on min/max zoom
+      let isNewTarget = true;
+      if (e.target) {
+        const valueCheck = (val) => (typeof val === 'number' ? val.toFixed(6) : 0);
+        const oldValues = e.oldValue.map((val) => valueCheck(val));
+        const targetValues = e.target.values_.center.map((val) => valueCheck(val));
+
+        const oldLon = oldValues[0];
+        const oldLat = oldValues[1];
+        const targetLon = targetValues[0];
+        const targetLat = targetValues[1];
+
+        isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
+      }
+      if (isNewTarget) {
+        removeOldPoints(map, trackDetails);
+      }
+    }
+  }
 
   /**
-   * @return {void}
-   */
-  const init = function() {
-    selectedMap.on('moveend', (e) => {
-      if (self.active && store.getState().events.active) {
-        if (self.trackDetails.id) {
-          addPointOverlays(selectedMap, self.trackDetails.pointArray);
-        } else {
-          debounceTrackUpdate();
-        }
-      }
-    });
-    // reset track on change to resolution or rotation
-    selectedMap.getView().on('propertychange', (e) => {
-      if (e.key === 'resolution' || e.key === 'rotation') {
-        self.trackDetails = self.trackDetails.id
-          ? self.removeTrack(selectedMap, self.trackDetails)
-          : {};
-      } else if (e.key === 'center') {
-        if (self.active) {
-          // if old values equal target, map is not moving
-          // restricts track/cluster points from disappearing on min/max zoom
-          let isNewTarget = true;
-          if (e.target) {
-            const valueCheck = (val) => (typeof val === 'number' ? val.toFixed(6) : 0);
-            const oldValues = e.oldValue.map((val) => valueCheck(val));
-            const targetValues = e.target.values_.center.map((val) => valueCheck(val));
-
-            const oldLon = oldValues[0];
-            const oldLat = oldValues[1];
-            const targetLon = targetValues[0];
-            const targetLat = targetValues[1];
-
-            // compare oldValues and target values
-            isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
-          }
-          if (isNewTarget) {
-            removeOldPoints(selectedMap, self.trackDetails.pointArray);
-          }
-        }
-      }
-    });
-  };
-
-  self.onSidebarChange = function(tab) {
-    if (tab === 'events') {
-      debounceTrackUpdate();
-    } else if (self.trackDetails.id) self.update(null);
-  };
-
-  /**
-   * Remove track
-   *
    * @param  {Object} map Openlayers map object
-   * @param  {Object} trackObj Object containig info related
-   *                            to track
    * @return {Object} Empty object
    */
-  self.removeTrack = function(map, trackObj) {
-    map.removeLayer(trackObj.track);
-    removeOldPoints(map, trackObj.pointArray);
+  removeTrack = function(map) {
+    const { trackDetails } = this.state;
+    const { track } = trackDetails;
+    map.removeLayer(track);
+    removeOldPoints(map, trackDetails);
     return {};
   };
 
@@ -101,54 +160,39 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
    * @param  {Object} event EONET event object
    * @param  {Object} map Ol map object
    * @param  {String} selectedDate
-   * @param  {Function} callback event change callback
    * @return {[type]}
    */
-  self.update = function(event, selectedDate, callback) {
-    const { proj } = store.getState();
+  update = function(event, date) {
+    const {
+      proj, map, selectEvent,
+    } = this.props;
+    const { trackDetails } = this.state;
     let newTrackDetails;
-    const { trackDetails } = self;
+    const sameEvent = event && trackDetails.id === event.id;
+    const sameDate = trackDetails.selectedDate === date;
     const createAndAddTrack = () => {
-      newTrackDetails = createTrack(
-        proj,
-        event,
-        selectedMap,
-        selectedDate,
-        callback,
-      );
-      selectedMap.addLayer(newTrackDetails.track);
+      newTrackDetails = createTrack(proj, event, map, date, selectEvent);
+      map.addLayer(newTrackDetails.track);
     };
 
     if (!event || event.geometry.length < 2) {
-      newTrackDetails = trackDetails.id
-        ? self.removeTrack(selectedMap, trackDetails)
-        : {};
-      self.active = false;
+      newTrackDetails = trackDetails.id ? this.removeTrack(map) : {};
     } else if (trackDetails.id) {
-      if (trackDetails.id === event.id) {
-        // If same Track but different selection
-        // Just update classNames
-        if (trackDetails.selectedDate !== selectedDate) {
-          const isClusteredSelection = !document.getElementById(
-            `track-marker-${selectedDate}`,
-          );
-          // If New Date is in cluster build new track
-          if (isClusteredSelection) {
-            newTrackDetails = self.removeTrack(selectedMap, trackDetails);
-            createAndAddTrack();
-          } else {
-            newTrackDetails = trackDetails;
-            updateSelection(selectedDate);
-            newTrackDetails.selectedDate = selectedDate;
-          }
+      if (sameEvent && !sameDate) {
+        const isClusteredSelection = !document.getElementById(`track-marker-${date}`);
+        // If New Date is in cluster build new track
+        if (isClusteredSelection) {
+          newTrackDetails = this.removeTrack(map);
+          createAndAddTrack();
         } else {
-          // If the date and event are the same
-          // Return the same Object and do nothing
-          return self.trackDetails;
+          // Just update classNames
+          newTrackDetails = trackDetails;
+          updateSelection(date);
+          newTrackDetails.selectedDate = date;
         }
       } else {
         // Remove old DOM Elements
-        newTrackDetails = self.removeTrack(selectedMap, trackDetails);
+        newTrackDetails = this.removeTrack(map);
         createAndAddTrack();
       }
     } else {
@@ -156,33 +200,21 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
       // but there is a multiday event, build a new track
       createAndAddTrack();
     }
-    self.active = true;
-    self.trackDetails = newTrackDetails;
+    this.setState({ trackDetails: newTrackDetails });
   };
 
-  const debounceTrackUpdate = lodashDebounce(() => {
-    const { eventsData, selected } = ui.naturalEvents;
-
-    if (!selected.id || !selected.date) {
-      return;
-    }
-    const event = eventsData.find((e) => e.id === selected.id);
-    self.update(event, selected.date, (id, date) => {
-      store.dispatch(selectEventAction(id, date));
-    });
-  }, 250);
-
-  init();
-  return self;
+  render() {
+    return null;
+  }
 }
 
 /**
- * Determine if track point is across the date line from the
- * selected point
- * @param {Array} activeCoord Coordinate array of selected track point
- * @param {Array} nextCoord Coordinate to test against active coord
- * @return {Boolean}
- */
+   * Determine if track point is across the date line from the
+   * selected point
+   * @param {Array} activeCoord Coordinate array of selected track point
+   * @param {Array} nextCoord Coordinate to test against active coord
+   * @return {Boolean}
+   */
 const crossesDateLine = function(activeCoord, nextCoord) {
   return Math.abs(activeCoord[0] - nextCoord[0]) > 180;
 };
@@ -396,8 +428,8 @@ const createTrack = function(proj, eventObj, map, selectedDate, callback) {
  * @param  {Array} pointOverlayArray
  * @return {void}
  */
-const removeOldPoints = function(map, pointOverlayArray) {
-  lodashEach(pointOverlayArray, (pointOverlay) => {
+const removeOldPoints = function(map, { pointArray }) {
+  lodashEach(pointArray, (pointOverlay) => {
     if (map.getOverlayById(pointOverlay.getId())) {
       map.removeOverlay(pointOverlay);
     }
@@ -556,7 +588,7 @@ const addPoints = function(proj, clusters, map, selectedDate, callback) {
  * @param  {Function} callback
  * @return {Object} Openlayers overlay object
  */
-function getClusterPointEl(proj, cluster, map, pointClusterObj, callback) {
+function getClusterPointEl(proj, cluster, map, pointClusterObj) {
   const overlayEl = document.createElement('div');
   const circleEl = document.createElement('div');
   const innerCircleEl = document.createElement('div');
@@ -610,3 +642,39 @@ function addOverlayIfIsVisible(map, overlay) {
     map.addOverlay(overlay);
   }
 }
+
+const mapStateToProps = (state) => {
+  const {
+    map, proj, events, requestedEvents, date,
+  } = state;
+  const { isAnimatingToEvent } = events;
+  return {
+    map: map.ui.selected,
+    proj,
+    selectedDate: date.selected,
+    selectedEvent: events.selected,
+    eventsData: requestedEvents.response,
+    isAnimatingToEvent,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  selectEvent: (id, date) => {
+    dispatch(selectEventAction(id, date));
+  },
+});
+
+EventTrack.propTypes = {
+  eventsData: PropTypes.array,
+  map: PropTypes.object,
+  isAnimatingToEvent: PropTypes.bool,
+  proj: PropTypes.object,
+  selectEvent: PropTypes.func,
+  selectedEvent: PropTypes.object,
+  selectedDate: PropTypes.object,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EventTrack);

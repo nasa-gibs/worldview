@@ -1,5 +1,5 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 10000;
 const layersTab = '#layers-sidebar-tab';
@@ -8,7 +8,7 @@ const eventsTab = '#events-sidebar-tab';
 module.exports = {
   before(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
-    client.url(client.globals.url + localQuerystrings.mockEvents);
+    client.url(client.globals.url + localQueryStrings.mockEvents);
   },
   'Seleting a category filters events': function(client) {
     client.click('#event-category-dropdown');

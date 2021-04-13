@@ -72,17 +72,23 @@
   font-family: 'Roboto Mono', monospace;
   border-radius: 5px;
   height: 25px;
-  line-height: 25px;
+  line-height: 23px;
   white-space: nowrap;
   user-select: none;
   padding-left: 8px;
   position: relative;
   z-index: 101;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.date-tooltip-fade {
+  opacity: 1;
 }
 
 .date-tooltip-day {
   position: relative;
-  bottom: 2px;
+  bottom: 1px;
   font-size: 14px;
   font-family: "Lucida Console", monospace;
   font-weight: 300;

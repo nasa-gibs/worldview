@@ -691,6 +691,11 @@ export default (function(self) {
     return self.now();
   };
 
+  self.yesterday = function() {
+    const now = new Date();
+    return new Date(now.setDate(now.getDate() - 1));
+  };
+
   /**
    * General warning handler.
    *
@@ -1047,7 +1052,7 @@ export default (function(self) {
    * @param {*} scripts
    * @param {*} fn
    */
-  self.loadScipts = (scripts = [], fn) => {
+  self.loadScripts = (scripts = [], fn) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {
       if (scripts.length > index) {

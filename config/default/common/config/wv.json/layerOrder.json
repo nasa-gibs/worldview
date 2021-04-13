@@ -92,6 +92,8 @@
 		"GHRSST_L4_GAMSSA_GDS2_Sea_Ice_Concentration",
 		"VIIRS_SNPP_L2_Sea_Surface_Temp_Day",
 		"VIIRS_SNPP_L2_Sea_Surface_Temp_Night",
+		"MODIS_Combined_Flood_2-Day",
+		"MODIS_Combined_Flood_3-Day",
 		"MODIS_Terra_Aerosol",
 		"MODIS_Aqua_Aerosol",
 		"MODIS_Combined_Value_Added_AOD",
@@ -395,6 +397,7 @@
 		"AMSUA_NOAA17_Brightness_Temp_Channel_15",
 		"CYGNSS_L3_Wind_Speed_SDR_Daily",
 		"CYGNSS_L3_Wind_Speed_Daily",
+		"CYGNSS_L3_Soil_Moisture_SDR_Daily",
 		"CCMP_REMSS_Meridional_Wind_Speed_Monthly",
 		"CCMP_REMSS_Scalar_Wind_Speed_Monthly",
 		"CCMP_REMSS_Zonal_Wind_Speed_Monthly",
@@ -949,10 +952,10 @@
 		"OrbitTracks_GCOM-C_Descending",
 		"OrbitTracks_GCOM-W1_Ascending",
 		"OrbitTracks_GCOM-W1_Descending",
-		"OrbitTracks_GOSAT-2_Ascending",
 		"OrbitTracks_GOSAT-2_Descending",
-		"OrbitTracks_GOSAT_Ascending",
+		"OrbitTracks_GOSAT-2_Ascending",
 		"OrbitTracks_GOSAT_Descending",
+		"OrbitTracks_GOSAT_Ascending",
 		"OrbitTracks_GPM_Ascending",
 		"OrbitTracks_GPM_Descending",
 		"OrbitTracks_ICESAT-2_Ascending",
@@ -989,8 +992,9 @@
 		"OrbitTracks_Sentinel-5P_Descending",
 		"OrbitTracks_Suomi_NPP_Ascending",
 		"OrbitTracks_Suomi_NPP_Descending",
-		"OrbitTracks_Terra_Ascending",
-		"OrbitTracks_Terra_Descending"
+		"OrbitTracks_Terra_Descending",
+		"OrbitTracks_Terra_Ascending"
+
 	],
 	"layerOrderExceptions": [
 		"SCAR_Land_Mask",

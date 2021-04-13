@@ -516,18 +516,6 @@ button:focus {
   padding: 2px 0;
 }
 
-.distraction-free-date {
-  color: #fff;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 24px;
-  font-weight: 400;
-  position: absolute;
-  bottom: 36px;
-  left: 15px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
 .zoom-btn:hover, .interval-btn:hover {
   background-color: #fff;
   color: #1a1a1a;
@@ -677,6 +665,7 @@ button:focus {
 }
 
 .mobile-date-picker-select-btn {
+  user-select: none;
   position: absolute;
   left: 10px;
   bottom: 10px;

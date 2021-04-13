@@ -75,8 +75,8 @@ class MeasureButton extends React.Component {
         />
         )}
 
+        {!isDistractionFreeModeActive && (
         <Button
-          style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}
           id={buttonId}
           className="wv-measure-button wv-toolbar-button"
           aria-label={labelText}
@@ -92,6 +92,7 @@ class MeasureButton extends React.Component {
           </UncontrolledTooltip>
           <FontAwesomeIcon icon="ruler" size={faSize} />
         </Button>
+        )}
       </>
     );
   }

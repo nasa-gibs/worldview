@@ -8,8 +8,6 @@ import {
 import Event from '../../components/sidebar/event';
 import Scrollbars from '../../components/util/scrollbar';
 import {
-  requestEvents as requestEventsActionCreator,
-  requestSources as requestSourcesActionCreator,
   selectEvent as selectEventActionCreator,
   deselectEvent as deselectEventActionCreator,
   selectCategory as selectCategoryActionCreator,
@@ -21,22 +19,19 @@ import { selectDate } from '../../modules/date/actions';
 import getSelectedDate from '../../modules/date/selectors';
 import { getEventCategories } from '../../modules/natural-events/selectors';
 import AlertUtil from '../../components/util/alert';
+import util from '../../util/util';
 
 function Events(props) {
   const {
-    requestSources,
-    requestEvents,
-    apiURL,
-    config,
-    events,
+    eventsData,
     eventCategories,
     sources,
+    isPlaying,
     isLoading,
     selectEvent,
     selected,
     selectCategory,
     selectedCategory,
-    prevSelected,
     visibleWithinMapExtent,
     visibleEvents,
     height,
@@ -45,7 +40,8 @@ function Events(props) {
     isMobile,
     showAlert,
     selectedDate,
-    proj,
+    updateEventSelect,
+    isAnimatingToEvent,
   } = props;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -55,45 +51,22 @@ function Events(props) {
   const scrollbarMaxHeight = height - dropdownHeight;
   let showInactiveEventAlert = selected.id && !selected.date;
 
-  // init requests
-  useEffect(() => {
-    if (!isLoading && !hasRequestError && !events) {
-      let eventsRequestURL = `${apiURL}/events`;
-      let sourceRequestURL = `${apiURL}/sources`;
-
-      const mockEvents = lodashGet(config, 'parameters.mockEvents');
-      const mockSources = lodashGet(config, 'parameters.mockSources');
-
-      if (mockEvents) {
-        console.warn(`Using mock events data: ${mockEvents}`);
-        eventsRequestURL = mockEvents === 'true'
-          ? 'mock/events_data.json'
-          : `mock/events_data.json-${mockEvents}`;
-      }
-      if (mockSources) {
-        console.warn(`Using mock categories data: ${mockSources}`);
-        sourceRequestURL = `mock/categories_data.json-${mockSources}`;
-      }
-      requestEvents(eventsRequestURL);
-      requestSources(sourceRequestURL);
-    }
-  });
-
   // Deselect event if it's not visible in the map extent
   useEffect(() => {
-    if (selected.id && selected.date && !visibleWithinMapExtent[selected.id] && events && events.length) {
+    if (selected.id && selected.date && !visibleWithinMapExtent[selected.id] && eventsData && eventsData.length) {
       deselectEvent();
     }
   });
 
-  // When switching between projections, select an event that was previous selected
-  // if user had switched to projection where it was not visible then back to one where
-  // it is visible
+  // If the date was changed to one that this event has, re-select it to move the marker
   useEffect(() => {
-    if (!selected.id && prevSelected && visibleWithinMapExtent[prevSelected.id]) {
-      selectEvent(prevSelected.id, prevSelected.date, isMobile);
+    if (isPlaying || isAnimatingToEvent) return;
+    const geometry = selected.eventObject && selected.eventObject.geometry;
+    const geometryForDate = (geometry || []).find((g) => g.date.split('T')[0] === selectedDate);
+    if (geometryForDate) {
+      updateEventSelect(selected.id, selectedDate);
     }
-  }, [proj]);
+  }, [selectedDate]);
 
   const errorOrLoadingText = isLoading
     ? 'Loading...'
@@ -101,7 +74,7 @@ function Events(props) {
       ? 'There has been an ERROR retrieving events from the EONET events API'
       : '';
 
-  const eventsForSelectedCategory = !isLoading && (events || []).filter((event) => {
+  const eventsForSelectedCategory = !isLoading && (eventsData || []).filter((event) => {
     if (selectedCategory === ALL_CATEGORY) return event;
     if (event.categories.find((category) => category.title === selectedCategory)) {
       return event;
@@ -194,45 +167,36 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(selectDate(new Date(dateStr)));
     }
   },
+  updateEventSelect: (id, dateStr) => {
+    dispatch(selectEventActionCreator(id, dateStr));
+  },
   deselectEvent: () => {
     dispatch(deselectEventActionCreator());
   },
   selectCategory: (category) => {
     dispatch(selectCategoryActionCreator(category));
   },
-  requestEvents: (url) => {
-    dispatch(requestEventsActionCreator(url));
-  },
-  requestSources: (url) => {
-    dispatch(requestSourcesActionCreator(url));
-  },
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const {
-    requestedEvents,
-    requestedEventSources,
-    config,
+    animation,
     proj,
     browser,
+    events,
   } = state;
+  const { eventsData } = ownProps;
   const {
-    selected, prevSelected, showAll, category,
-  } = state.events;
-  const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
-  const isLoading = requestedEvents.isLoading
-    || requestedEventSources.isLoading;
-  const hasRequestError = requestedEvents.error
-    || requestedEventSources.error;
+    selected, showAll, category,
+  } = events;
   let visibleEvents = {};
-  const events = lodashGet(requestedEvents, 'response');
-  const sources = lodashGet(requestedEventSources, 'response');
+
   const mapExtent = lodashGet(state, 'map.extent');
   let visibleWithinMapExtent = {};
 
-  if (events && mapExtent) {
+  if (eventsData && mapExtent) {
     visibleWithinMapExtent = getEventsWithinExtent(
-      events,
+      eventsData,
       selected,
       proj.selected.maxExtent,
       proj.selected,
@@ -240,7 +204,7 @@ const mapStateToProps = (state) => {
     );
     const extent = showAll ? proj.selected.maxExtent : mapExtent;
     visibleEvents = getEventsWithinExtent(
-      events,
+      eventsData,
       selected,
       extent,
       proj.selected,
@@ -249,21 +213,15 @@ const mapStateToProps = (state) => {
   }
 
   return {
-    events,
     eventCategories: getEventCategories(state),
-    sources,
     showAll,
-    isLoading,
-    hasRequestError,
     selected,
-    prevSelected,
-    proj,
     visibleWithinMapExtent,
     visibleEvents,
-    apiURL,
-    config,
+    isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
-    selectedDate: getSelectedDate(state).toISOString().split('T')[0],
+    isAnimatingToEvent: events.isAnimatingToEvent,
+    selectedDate: util.toISOStringDate(getSelectedDate(state)),
     selectedCategory: category,
   };
 };
@@ -273,19 +231,15 @@ export default connect(
 )(Events);
 
 Events.propTypes = {
-  apiURL: PropTypes.string,
   eventCategories: PropTypes.array,
-  config: PropTypes.object,
   deselectEvent: PropTypes.func,
-  events: PropTypes.array,
+  eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
+  isPlaying: PropTypes.bool,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
-  prevSelected: PropTypes.object,
-  proj: PropTypes.object,
-  requestEvents: PropTypes.func,
-  requestSources: PropTypes.func,
+  isAnimatingToEvent: PropTypes.bool,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
@@ -293,6 +247,7 @@ Events.propTypes = {
   selectedCategory: PropTypes.string,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
+  updateEventSelect: PropTypes.func,
   visibleEvents: PropTypes.object,
   visibleWithinMapExtent: PropTypes.object,
 };

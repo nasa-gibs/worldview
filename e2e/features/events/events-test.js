@@ -1,5 +1,5 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 10000;
 /**
@@ -24,13 +24,13 @@ module.exports = {
     const inactiveAlertMsgContainer = `${inactiveEventAlert} .wv-alert-message`;
     const inactiveEventMsg = 'The event with an id of EONET_5133 is no longer active.';
 
-    c.url(c.globals.url + localQuerystrings.closedEvent);
+    c.url(c.globals.url + localQueryStrings.closedEvent);
     c.waitForElementVisible(inactiveEventAlert, TIME_LIMIT);
     c.expect.element(inactiveEventAlert).to.be.present;
     c.assert.containsText(inactiveAlertMsgContainer, inactiveEventMsg);
   },
   'Make sure that 4 fire layers are not present in layer list: use mock': (c) => {
-    c.url(c.globals.url + localQuerystrings.mockEvents);
+    c.url(c.globals.url + localQueryStrings.mockEvents);
     c.waitForElementVisible(
       '#sidebar-event-EONET_3931',
       TIME_LIMIT,
@@ -65,13 +65,13 @@ module.exports = {
     );
   },
   'Use Mock to make sure appropriate number of event markers are appended to map': (c) => {
-    c.url(c.globals.url + localQuerystrings.mockEvents);
+    c.url(c.globals.url + localQueryStrings.mockEvents);
     c.waitForElementVisible(listOfEvents, TIME_LIMIT, () => {
       c.expect.elements(eventIcons).count.to.equal(9);
     });
   },
   'On events tab click events list is loaded': (c) => {
-    c.url(c.globals.url + localQuerystrings.mockEvents);
+    c.url(c.globals.url + localQueryStrings.mockEvents);
     c.waitForElementVisible(listOfEvents, TIME_LIMIT);
   },
   'Use Mock to ensure number of event track points is correct and event markers and tabs are not visible when layer tab is clicked': (c) => {
@@ -88,7 +88,7 @@ module.exports = {
     });
   },
   'Click Events tab and select an Event from the List': (c) => {
-    c.url(c.globals.url + localQuerystrings.mockEvents);
+    c.url(c.globals.url + localQueryStrings.mockEvents);
     c.waitForElementVisible(listOfEvents, TIME_LIMIT, () => {
       c.click(firstEvent);
       c.waitForElementVisible(selectedMarker, TIME_LIMIT, () => {

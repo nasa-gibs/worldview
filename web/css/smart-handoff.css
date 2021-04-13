@@ -120,13 +120,33 @@ label[for='chk-crop-toggle'] span {
     text-decoration: underline;
   }
 }
-
-.granule-count span {
-  color: #fff;
-  font-size: 16px;
-  font-weight: 900;
-  margin: 14px 0 10px;
+.granule-count-header {
+  text-align: center;
 }
+.granule-count-info {
+  margin: 0 30px;
+  text-align: center;
+  height: 28px;
+  span {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    margin: 14px 5px 5px;
+    display: inline-block;
+    text-align: center;
+    &.help-link {
+      text-align: left;
+      display: inline;
+    }
+    &.granule-size {
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 14px;
+      vertical-align: bottom;
+    }
+  }
+}
+
 .loading-granule-count {
   font-size: 30px;
 }
@@ -135,11 +155,11 @@ label[for='chk-crop-toggle'] span {
   overflow: hidden;
   display: inline-block;
   vertical-align: bottom;
-  -moz-animation: ellipsis steps(4, end) 900ms infinite;
-  -o-animation: ellipsis steps(4, end) 900ms infinite;
-  -ms-animation: ellipsis steps(4, end) 900ms infinite;
-  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
-  animation: ellipsis steps(4, end) 900ms infinite;
+  -moz-animation: ellipsis steps(4, end) 600ms infinite;
+  -o-animation: ellipsis steps(4, end) 600ms infinite;
+  -ms-animation: ellipsis steps(4, end) 600ms infinite;
+  -webkit-animation: ellipsis steps(4, end) 600ms infinite;
+  animation: ellipsis steps(4, end) 600ms infinite;
   content: '\2026'; /* ascii code for the ellipsis character */
   width: 0;
 }
@@ -160,11 +180,11 @@ label[for='chk-crop-toggle'] span {
 }
 
 .fade-in {
-  animation: fadein ease 1s;
-  -webkit-animation: fadein ease 1s;
-  -moz-animation: fadein ease 1s;
-  -o-animation: fadein ease 1s;
-  -ms-animation: fadein ease 1s;
+  animation: fadein ease 0.25s;
+  -webkit-animation: fadein ease 0.25s;
+  -moz-animation: fadein ease 0.25s;
+  -o-animation: fadein ease 0.25s;
+  -ms-animation: fadein ease 0.25s;
 }
 
 /* Overrides react image crop component  */

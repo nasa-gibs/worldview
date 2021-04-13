@@ -18,7 +18,7 @@ const MOUSE_EVENT = {
   move: 'mousemove',
   end: 'mouseup',
 };
-export default function mapCompare(config, store) {
+export default function mapCompare(store) {
   const self = {};
   let comparison = null;
   let mode = 'swipe';

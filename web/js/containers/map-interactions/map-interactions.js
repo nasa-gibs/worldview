@@ -7,6 +7,7 @@ import OlMeasureTool from '../../components/map/ol-measure-tool';
 import OlCoordinatesMarker from '../../components/location-search/ol-coordinates-marker';
 import OlRotationButtons from '../../components/map/rotation';
 import OlZoomButtons from '../../components/map/zoom';
+import NaturalEvents from '../../map/natural-events/natural-events';
 
 class MapInteractions extends PureComponent {
   getMapClasses = () => {
@@ -21,6 +22,7 @@ class MapInteractions extends PureComponent {
   render() {
     const {
       isDistractionFreeModeActive,
+      isNaturalEventsActive,
     } = this.props;
     const mapClasses = this.getMapClasses();
     return (
@@ -34,21 +36,27 @@ class MapInteractions extends PureComponent {
         <OlVectorInteractions />
         <OlMeasureTool />
         <OlCoordinatesMarker />
+        {isNaturalEventsActive && (
+          <NaturalEvents />
+        )}
       </>
     );
   }
 }
 function mapStateToProps(state) {
   const {
-    config, locationSearch, map, ui,
+    config, locationSearch, map, ui, events,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { isCoordinateSearchActive } = locationSearch;
+  const eventsEnabled = config.features.naturalEvents;
+
   return {
     config,
     isShowingClick: map.isClickable,
     isDistractionFreeModeActive,
     isCoordinateSearchActive,
+    isNaturalEventsActive: eventsEnabled && events.active,
   };
 }
 
@@ -56,6 +64,7 @@ MapInteractions.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   isCoordinateSearchActive: PropTypes.bool,
+  isNaturalEventsActive: PropTypes.bool,
 };
 export default connect(
   mapStateToProps,

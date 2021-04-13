@@ -131,7 +131,7 @@ class App extends React.Component {
     const main = function() {
       // Load any additional scripts as needed
       if (config.scripts) {
-        util.loadScipts(config.scripts);
+        util.loadScripts(config.scripts);
       }
       if (config.features.googleTagManager) {
         if (!/localhost/.test(window.location.href)) {
@@ -186,7 +186,7 @@ class App extends React.Component {
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <Timeline />
-        <div id="wv-animation-widet-case">
+        <div id="wv-animation-widget-case">
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />

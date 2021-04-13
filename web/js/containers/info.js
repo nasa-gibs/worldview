@@ -39,7 +39,6 @@ function InfoList (props) {
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
-      // eslint-disable-next-line no-nested-ternary
       iconName: type === 'message'
         ? 'gift'
         : type === 'outage'
