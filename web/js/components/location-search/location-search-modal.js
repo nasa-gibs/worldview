@@ -358,7 +358,7 @@ class LocationSearchModal extends Component {
     } = this.state;
 
     return (
-      <>
+      <div id="location-search-wrapper" className="location-search-expanded">
         {/* Alerts */}
         {this.renderReverseGeocodeAlert()}
         {this.renderNoSuggestionsAlert()}
@@ -384,7 +384,7 @@ class LocationSearchModal extends Component {
             {this.renderAddCoordinateButton()}
           </InputGroup>
         </div>
-      </>
+      </div>
     );
   }
 }

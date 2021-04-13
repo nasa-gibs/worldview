@@ -19,7 +19,9 @@ import {
   saveSearchState as saveSearchStateAction,
 } from '../../../modules/product-picker/actions';
 import { getLayersForProjection } from '../../../modules/product-picker/selectors';
+import util from '../../../util/util';
 
+const { events } = util;
 
 class ProductPickerHeader extends React.Component {
   constructor(props) {
@@ -105,6 +107,9 @@ class ProductPickerHeader extends React.Component {
   onSearchInputFocus (e) {
     const { mode, toggleSearchMode } = this.props;
     if (mode !== 'search') {
+      setTimeout(() => {
+        events.trigger('joyride:increment');
+      }, 4000);
       toggleSearchMode();
     }
   }

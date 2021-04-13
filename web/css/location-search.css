@@ -88,10 +88,20 @@
 }
 
 /* Location Search Component */
+@media (min-width: 576px) {
+
+  /* Class for wrapper element in desktop sizes for joyride tour targeting */
+  .location-search-expanded {
+    position: absolute;
+    right: 182px;
+    top: 10px;
+    width: 350px;
+    height: 38px;
+  }
+}
+
 .location-search-component {
   position: absolute;
-  right: 182px;
-  top: 10px;
   width: 350px;
   margin-right: 1px;
   background: rgba(40, 40, 40, 0.85);

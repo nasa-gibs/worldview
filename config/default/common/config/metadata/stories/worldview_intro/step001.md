@@ -1,1 +1,1 @@
-<p>NASA's Worldview provides the capability to interactively browse over 800 global, full-resolution satellite imagery layers and then download the underlying data. Many of these layers are updated within three hours of satellite observation, essentially showing the entire Earth as it looks "right now".</p>
+Discover and learn how to use NASA Worldview's tools and features! Start by clicking on the pulsing orange dot in the upper left corner and follow the tour around the site!

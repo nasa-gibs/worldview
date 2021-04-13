@@ -26,6 +26,7 @@ import {
   selectStory as selectStoryAction,
   startTour as startTourAction,
 } from '../modules/tour/actions';
+import { resetProductPickerState as resetProductPickerStateAction } from '../modules/product-picker/actions';
 
 import ErrorBoundary from './error-boundary';
 import history from '../main';
@@ -63,6 +64,8 @@ class Tour extends React.Component {
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
     this.endTour = this.endTour.bind(this);
+    this.showTour = this.showTour.bind(this);
+    this.hideTour = this.hideTour.bind(this);
     this.selectTour = this.selectTour.bind(this);
     this.resetTour = this.resetTour.bind(this);
   }
@@ -73,6 +76,26 @@ class Tour extends React.Component {
     if (currentStory && currentStoryIndex !== -1) {
       this.selectTour(null, currentStory, 1, currentStoryId);
     }
+  }
+
+  hideTour() {
+    const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
+    googleTagManager.pushEvent({
+      event: 'tour_hide_checked',
+    });
+    this.setState({ showDisabledAlert: true });
+    if (shouldHideTour) return;
+    safeLocalStorage.setItem(HIDE_TOUR, new Date());
+  }
+
+  showTour() {
+    const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
+    googleTagManager.pushEvent({
+      event: 'tour_hide_unchecked',
+    });
+    this.setState({ showDisabledAlert: false });
+    if (!shouldHideTour) return;
+    safeLocalStorage.removeItem(HIDE_TOUR);
   }
 
   toggleModalStart(e) {
@@ -289,9 +312,6 @@ class Tour extends React.Component {
     const {
       stories,
       storyOrder,
-      showTourAlert,
-      hideTour,
-      showTour,
       screenHeight,
     } = this.props;
     const { modalStart } = this.state;
@@ -307,15 +327,8 @@ class Tour extends React.Component {
         toggleModalInProgress={this.toggleModalInProgress}
         toggleModalComplete={this.toggleModalComplete}
         selectTour={this.selectTour}
-        showTourAlert={showTourAlert}
-        hideTour={() => {
-          hideTour();
-          this.setState({ showDisabledAlert: true });
-        }}
-        showTour={() => {
-          showTour();
-          this.setState({ showDisabledAlert: false });
-        }}
+        hideTour={this.hideTour}
+        showTour={this.showTour}
         endTour={this.endTour}
       />
     );
@@ -324,7 +337,6 @@ class Tour extends React.Component {
   renderTourInProgress() {
     const {
       stories,
-      showTourAlert,
       config,
     } = this.props;
     const {
@@ -356,7 +368,6 @@ class Tour extends React.Component {
         stories={stories}
         currentStoryId={currentStoryId}
         currentStory={currentStory}
-        showTourAlert={showTourAlert}
         metaLoaded={metaLoaded}
         isLoadingMeta={isLoadingMeta}
         description={description}
@@ -387,6 +398,7 @@ class Tour extends React.Component {
       screenWidth,
       isActive,
       endTour,
+      resetProductPicker,
     } = this.props;
     const {
       currentStory,
@@ -421,6 +433,7 @@ class Tour extends React.Component {
               tourSteps={currentStory.steps}
               map={map.ui.selected}
               proj={map.ui.selected && map.ui.selected.proj}
+              resetProductPicker={resetProductPicker}
               tourComplete={!modalInProgress}
             />
           )}
@@ -482,15 +495,15 @@ const mapDispatchToProps = (dispatch) => ({
   endTour: () => {
     dispatch(endTourAction());
   },
-  showTourAlert: (message) => {
-    // dispatch(showAlert(message));
-  },
   selectTour: (id) => {
     dispatch(selectStoryAction(id));
   },
+  resetProductPicker: () => {
+    dispatch(resetProductPickerStateAction());
+  },
 });
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   const {
     browser, config, tour, palettes, models, compare, map,
   } = state;
@@ -505,13 +518,11 @@ function mapStateToProps(state) {
     stories: config.stories,
     storyOrder: config.storyOrder,
     currentStoryId: tour.selected,
-    hideTour,
     screenWidth,
     screenHeight,
-    showTour,
     renderedPalettes: palettes.rendered,
   };
-}
+};
 
 const getTransitionAttr = function(transition) {
   if (!transition) return '';
@@ -522,37 +533,15 @@ const getTransitionAttr = function(transition) {
   return '';
 };
 
-const hideTour = function(e) {
-  const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
-  // Checkbox to "hide tour modal until a new story has been added" has been checked
-  googleTagManager.pushEvent({
-    event: 'tour_hide_checked',
-  });
-  if (shouldHideTour) return;
-  safeLocalStorage.setItem(HIDE_TOUR, new Date());
-};
-
-const showTour = function(e) {
-  const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
-  // Checkbox to "hide tour modal until a new story has been added" has been checked
-  googleTagManager.pushEvent({
-    event: 'tour_hide_unchecked',
-  });
-  if (!shouldHideTour) return;
-  safeLocalStorage.removeItem(HIDE_TOUR);
-};
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Tour);
+
 Tour.propTypes = {
   config: PropTypes.object.isRequired,
-  hideTour: PropTypes.func.isRequired,
   map: PropTypes.object,
   selectTour: PropTypes.func.isRequired,
-  showTour: PropTypes.func.isRequired,
-  showTourAlert: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   currentStoryId: PropTypes.string,
@@ -560,6 +549,7 @@ Tour.propTypes = {
   isActive: PropTypes.bool,
   processStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
+  resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   startTour: PropTypes.func,
