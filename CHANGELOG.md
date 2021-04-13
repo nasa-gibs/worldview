@@ -1,12 +1,228 @@
 # Changelog
 
-## [v3.9.0-rc3](https://github.com/nasa-gibs/worldview/tree/v3.9.0-rc3) (2021-02-25)
+## [v3.9.2](https://github.com/nasa-gibs/worldview/tree/v3.9.2) (2021-04-13)
 
-[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.9.0-rc2...v3.9.0-rc3)
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/main...release-3.9.2)
+
+## Implemented Enhancements:
+
+- Add 15m OSM Reference [\#886](https://github.com/nasa-gibs/worldview/issues/886)
+
+## Merged PRs:
+
+- Add 15m OSM reference layers [\#3443](https://github.com/nasa-gibs/worldview/pull/3443)
+
+## [v3.9.1-rc1](https://github.com/nasa-gibs/worldview/tree/v3.9.1-rc1) (2021-04-06)
+
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.9.1...v3.9.1-rc1)
+
+## [v3.9.1](https://github.com/nasa-gibs/worldview/tree/v3.9.1) (2021-04-06)
+
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.9.0...v3.9.1)
+
+## Implemented Enhancements:
+
+- Update PR doc template to include testing [\#2968](https://github.com/nasa-gibs/worldview/issues/2968)
+
+## Closed Issues:
+
+- update dates for Clear Sky confidence layers [\#3424](https://github.com/nasa-gibs/worldview/issues/3424)
+- Renaming of default branch to `main` [\#3316](https://github.com/nasa-gibs/worldview/issues/3316)
+
+## Merged PRs:
+
+- Update dockerfile [\#3447](https://github.com/nasa-gibs/worldview/pull/3447)
+
+## [v3.9.0](https://github.com/nasa-gibs/worldview/tree/v3.9.0) (2021-03-02)
+
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.9.0-rc4...v3.9.0)
+
+## Implemented Enhancements:
+
+- Remove TOPEX-Poseidon\_JASON\_Sea\_Surface\_Height\_Anomalies\_GDR\_Cycles [\#3371](https://github.com/nasa-gibs/worldview/issues/3371)
+- Update SMAP SSS CAP Products [\#3368](https://github.com/nasa-gibs/worldview/issues/3368)
+- Add VIIRS ClearSky/CYGNSS WS SDR [\#3367](https://github.com/nasa-gibs/worldview/issues/3367)
+- Added AMSR-E SM STD L2/v11 new products. [\#3358](https://github.com/nasa-gibs/worldview/issues/3358)
+- Stop animation action called when opening product picker if animation isn't playing [\#3311](https://github.com/nasa-gibs/worldview/issues/3311)
+- JSON Schema validation for layer configs [\#3291](https://github.com/nasa-gibs/worldview/issues/3291)
+- Added ISS/LIS FC and RAD QC [\#3285](https://github.com/nasa-gibs/worldview/issues/3285)
+- Allow flexible categories naming for product picker layers [\#3282](https://github.com/nasa-gibs/worldview/issues/3282)
+- Update IE detection and unsupported page [\#3262](https://github.com/nasa-gibs/worldview/issues/3262)
+- Add current date to URL if any other parameters are changed [\#3242](https://github.com/nasa-gibs/worldview/issues/3242)
+- Add Smart handoffs GTM event triggers [\#3238](https://github.com/nasa-gibs/worldview/issues/3238)
+- Replace uglify-js with terser for webpack optimization minimizer [\#3234](https://github.com/nasa-gibs/worldview/issues/3234)
+- Replaced old CYGNSS layer with updated CDR CYGNSS layer - Best endpoint remains the same [\#3222](https://github.com/nasa-gibs/worldview/issues/3222)
+- Update repository GIF preview image and related screenshots for UI changes v3.9.0 [\#3215](https://github.com/nasa-gibs/worldview/issues/3215)
+- Remove use of mouse hover/move Redux actions  [\#3194](https://github.com/nasa-gibs/worldview/issues/3194)
+- Remove unused references to ownProps [\#3192](https://github.com/nasa-gibs/worldview/issues/3192)
+- Add data panel info hover tooltip in header [\#3170](https://github.com/nasa-gibs/worldview/issues/3170)
+- Break up configuration.md file into smaller files [\#3166](https://github.com/nasa-gibs/worldview/issues/3166)
+- Fully integrate futureLayers into the app [\#3162](https://github.com/nasa-gibs/worldview/issues/3162)
+- Remove jQuery, jQuery-UI dependencies [\#3161](https://github.com/nasa-gibs/worldview/issues/3161)
+- Remove map zoom buttons in mobile [\#3156](https://github.com/nasa-gibs/worldview/issues/3156)
+- Category groups should be less hard-coded, more config-based [\#3130](https://github.com/nasa-gibs/worldview/issues/3130)
+- Remove deprecated polyfill.js [\#3108](https://github.com/nasa-gibs/worldview/issues/3108)
+- Better notifications for layer problems/outages [\#3066](https://github.com/nasa-gibs/worldview/issues/3066)
+- Copy coordinates to clipboard [\#3032](https://github.com/nasa-gibs/worldview/issues/3032)
+- Added AMSRU2 Sea Ice vR04 NRT [\#2984](https://github.com/nasa-gibs/worldview/issues/2984)
+- Allow disable/enable all for toggling classifications [\#2931](https://github.com/nasa-gibs/worldview/issues/2931)
+- Migrate to EONET V3 [\#2634](https://github.com/nasa-gibs/worldview/issues/2634)
+- Provide method in layer config to override GC ISO8601 durations [\#2617](https://github.com/nasa-gibs/worldview/issues/2617)
+- Icons should have hover tooltips & aria labels for accessibility [\#2564](https://github.com/nasa-gibs/worldview/issues/2564)
+- Optimize date request within animation for layers that don't require multiple requests [\#2435](https://github.com/nasa-gibs/worldview/issues/2435)
+- Provide ability to filter events by type [\#2057](https://github.com/nasa-gibs/worldview/issues/2057)
+- Epic - Gazetteer / Omni Search [\#1688](https://github.com/nasa-gibs/worldview/issues/1688)
 
 ## Technical Updates / Bugfixes:
 
+- Error thrown on changing date on tour step  [\#3392](https://github.com/nasa-gibs/worldview/issues/3392)
+- Can't advance days in tour story when changing to a custom interval [\#3389](https://github.com/nasa-gibs/worldview/issues/3389)
+- Smart handoffs should not show entries for layers with invalid concept ids [\#3373](https://github.com/nasa-gibs/worldview/issues/3373)
+- perm.in.layers.8, perm.in.pal.1, etc: Layer panel is mostly transparent on iPad [\#3370](https://github.com/nasa-gibs/worldview/issues/3370)
 - geosearch.permalink.1: Map marker is not on map [\#3362](https://github.com/nasa-gibs/worldview/issues/3362)
+- In mobile view, event list does not show selected event after selection [\#3361](https://github.com/nasa-gibs/worldview/issues/3361)
+- Matching coverage not updating to correct matching coverage in timeline  [\#3360](https://github.com/nasa-gibs/worldview/issues/3360)
+- Hovering over timescale change prevents hiding map scale in distraction free mode [\#3357](https://github.com/nasa-gibs/worldview/issues/3357)
+- Animation does not stop playing when you change the projection [\#3347](https://github.com/nasa-gibs/worldview/issues/3347)
+- Trying to Download image with HLS grid active returns an error [\#3343](https://github.com/nasa-gibs/worldview/issues/3343)
+- Map won't drag after removing/re-adding layers in Compare mode  [\#3341](https://github.com/nasa-gibs/worldview/issues/3341)
+- Tour steps modal is squashed on iPad [\#3340](https://github.com/nasa-gibs/worldview/issues/3340)
+- Vector layers with too many points can crash the browser \(iPad\) [\#3339](https://github.com/nasa-gibs/worldview/issues/3339)
+- Can't drag to move vector modal \(iPad\) [\#3338](https://github.com/nasa-gibs/worldview/issues/3338)
+- Animation panel buttons unresponsive to touch event \(iPad\) [\#3337](https://github.com/nasa-gibs/worldview/issues/3337)
+- Geosearch marker/measurement tooltips hard to close \(iPad\) [\#3336](https://github.com/nasa-gibs/worldview/issues/3336)
+- Smart handoff URL should not include date range for non-temporal layers [\#3334](https://github.com/nasa-gibs/worldview/issues/3334)
+- Can't click on zots or settings buttons in layer list in landscape mode on iPad [\#3331](https://github.com/nasa-gibs/worldview/issues/3331)
+- events.notfocus.4 - When switching projections from previously selected event, it is no longer at the top of the list  [\#3326](https://github.com/nasa-gibs/worldview/issues/3326)
+- layer.mob.init.12 - Upper portion of text slightly obscured in facets in mobile view [\#3325](https://github.com/nasa-gibs/worldview/issues/3325)
+- Zoom buttons not visible [\#3324](https://github.com/nasa-gibs/worldview/issues/3324)
+- perm.in.anim.2 & date.animation.3 - animation doesn't load the last time step on map [\#3323](https://github.com/nasa-gibs/worldview/issues/3323)
+- perm.in.layers.3 - URL returns an unexpected error [\#3322](https://github.com/nasa-gibs/worldview/issues/3322)
+- Change color of Squash palette text [\#3321](https://github.com/nasa-gibs/worldview/issues/3321)
+- Geosearch place map marker - Right click doesn't cancel [\#3318](https://github.com/nasa-gibs/worldview/issues/3318)
+- Blue hyperlinks are harder to read  [\#3317](https://github.com/nasa-gibs/worldview/issues/3317)
+- Cursors incorrect [\#3309](https://github.com/nasa-gibs/worldview/issues/3309)
+- Desktop only modal is overlaying in mobile and preventing interaction [\#3307](https://github.com/nasa-gibs/worldview/issues/3307)
+- Tooltip date range incorrect [\#3299](https://github.com/nasa-gibs/worldview/issues/3299)
+- Warning on mouseover of HLS\_MGRS\_Granule\_Grid related to palette [\#3297](https://github.com/nasa-gibs/worldview/issues/3297)
+- Console warning when adding layers in product picker [\#3293](https://github.com/nasa-gibs/worldview/issues/3293)
+- Clicking More Stories at end of tour causes unexpected error [\#3278](https://github.com/nasa-gibs/worldview/issues/3278)
+- Preview image for og:image is not present [\#3244](https://github.com/nasa-gibs/worldview/issues/3244)
+- Distraction free mode not firing for Geosearch [\#3240](https://github.com/nasa-gibs/worldview/issues/3240)
+- When trying to click on a hyperlink in the layer-notice box, the box disappears [\#3229](https://github.com/nasa-gibs/worldview/issues/3229)
+- Events mobile hides sidebar Layers/Events tabs after selecting event [\#3223](https://github.com/nasa-gibs/worldview/issues/3223)
+- Share e2e test fails regularly on UTC day crossover [\#3211](https://github.com/nasa-gibs/worldview/issues/3211)
+- undefined in sources facet doesn't display anything [\#3210](https://github.com/nasa-gibs/worldview/issues/3210)
+- Sources Facet with copyright sign does not display correctly [\#3209](https://github.com/nasa-gibs/worldview/issues/3209)
+- Trying to view the description for certain orbit track layers throws an error [\#3206](https://github.com/nasa-gibs/worldview/issues/3206)
+- Dateline is missing at certain zoom levels [\#3187](https://github.com/nasa-gibs/worldview/issues/3187)
+- Permalinks with closed EONET events should show an alert [\#3186](https://github.com/nasa-gibs/worldview/issues/3186)
+- Orbit tracks aren't showing on the left wing when zoomed out [\#3177](https://github.com/nasa-gibs/worldview/issues/3177)
+- Periods in layer ids break the UI \(again\) [\#3167](https://github.com/nasa-gibs/worldview/issues/3167)
+- Data panel incorrect date ranges on some updates [\#3163](https://github.com/nasa-gibs/worldview/issues/3163)
+- Notification e2e test breaking intermittently  [\#3159](https://github.com/nasa-gibs/worldview/issues/3159)
+- "Error loading metadata" message shows when no error has occurred [\#3136](https://github.com/nasa-gibs/worldview/issues/3136)
+- Can't add layers when configured projections don't match those in local storage recent layers object [\#3133](https://github.com/nasa-gibs/worldview/issues/3133)
+- Mobile date picker buttons highlight misaligned [\#3119](https://github.com/nasa-gibs/worldview/issues/3119)
+- Black Marble config should set wrapx: true [\#3114](https://github.com/nasa-gibs/worldview/issues/3114)
+- Initial click of "Shorten Link" returns "Link cannot be shortened at this time" [\#3107](https://github.com/nasa-gibs/worldview/issues/3107)
+- Custom palette revert to original intermittently breaks for snapshots [\#3098](https://github.com/nasa-gibs/worldview/issues/3098)
+- Style bug -- A | B opacity compare [\#3035](https://github.com/nasa-gibs/worldview/issues/3035)
+- When switching from events in Geographic to Antarctic, the map goes blank [\#2865](https://github.com/nasa-gibs/worldview/issues/2865)
+- Zero and 1 value displays differently depending on palette for Probabilities for Urban Expansion [\#2716](https://github.com/nasa-gibs/worldview/issues/2716)
+
+## Layer Changes:
+
+- Update AIRS L3 filenames and conceptIDs [\#3276](https://github.com/nasa-gibs/worldview/issues/3276)
+- Update AIRS L2 conceptIDs [\#3275](https://github.com/nasa-gibs/worldview/issues/3275)
+- Add MAIAC descriptions [\#3270](https://github.com/nasa-gibs/worldview/issues/3270)
+- Add conceptID for new VIIRS At Sensor Radiance DNB layer [\#3269](https://github.com/nasa-gibs/worldview/issues/3269)
+- Adding VIIRS Fusion v1.0 STD products [\#3196](https://github.com/nasa-gibs/worldview/issues/3196)
+- Remove inactive:true for 2 RSS layers [\#3169](https://github.com/nasa-gibs/worldview/issues/3169)
+- Update IMERG description [\#3132](https://github.com/nasa-gibs/worldview/issues/3132)
+- AIRS L2 NRT v7 version upgrade [\#3129](https://github.com/nasa-gibs/worldview/issues/3129)
+- Add Chlorophyll a descriptions [\#3128](https://github.com/nasa-gibs/worldview/issues/3128)
+
+## Closed Issues:
+
+- Update text in Layer Download Availability box [\#3332](https://github.com/nasa-gibs/worldview/issues/3332)
+- Determine daynight flag approach for smart handoffs [\#3289](https://github.com/nasa-gibs/worldview/issues/3289)
+- Update vis metadata config concept ids [\#3271](https://github.com/nasa-gibs/worldview/issues/3271)
+- Update data download page [\#3267](https://github.com/nasa-gibs/worldview/issues/3267)
+- Update ASDC related config links [\#3263](https://github.com/nasa-gibs/worldview/issues/3263)
+- Investigate grouping of related layers \(e.g. all OSM layers in one "group"\) [\#3185](https://github.com/nasa-gibs/worldview/issues/3185)
+- Colormap Legend units aren't at the end of the colorbar on mobile [\#3125](https://github.com/nasa-gibs/worldview/issues/3125)
+- Event list doesn't always scroll to the listing in the Events tab [\#3122](https://github.com/nasa-gibs/worldview/issues/3122)
+- Organize events by latest date [\#3121](https://github.com/nasa-gibs/worldview/issues/3121)
+- Reverse AMSU-A and satellite order [\#3116](https://github.com/nasa-gibs/worldview/issues/3116)
+- Add spotlight/pointing capability to tours [\#3075](https://github.com/nasa-gibs/worldview/issues/3075)
+- Include ability to add marker/pin by entering specific lat/long coordinates [\#97](https://github.com/nasa-gibs/worldview/issues/97)
+
+## Merged PRs:
+
+- Release 3.9.0 =\> master [\#3388](https://github.com/nasa-gibs/worldview/pull/3388)
+- Fix tour step with custom palette issues [\#3395](https://github.com/nasa-gibs/worldview/pull/3395)
+- Reset custom interval selector on tour step change without interval, or if delta is 1 [\#3393](https://github.com/nasa-gibs/worldview/pull/3393)
+- new preview image with HLS imagery [\#3383](https://github.com/nasa-gibs/worldview/pull/3383)
+- Limit splitting of orbit tracks image download processing to KMZ only [\#3382](https://github.com/nasa-gibs/worldview/pull/3382)
+- Handle splitting orbit track id into two separate layer ids for image download requests [\#3378](https://github.com/nasa-gibs/worldview/pull/3378)
+- Add z index to entire sidebar instead of individual elements [\#3377](https://github.com/nasa-gibs/worldview/pull/3377)
+- Update GTM event names for 3.9.0 changes [\#3375](https://github.com/nasa-gibs/worldview/pull/3375)
+- Handle undefined conceptids [\#3374](https://github.com/nasa-gibs/worldview/pull/3374)
+- Disabled zoom button hover styles [\#3366](https://github.com/nasa-gibs/worldview/pull/3366)
+- Move tour modal on short windows [\#3365](https://github.com/nasa-gibs/worldview/pull/3365)
+- Restore event state on sidebar collapse/expand [\#3364](https://github.com/nasa-gibs/worldview/pull/3364)
+- Fix end date used for matching coverage in layer panel, add back error css [\#3363](https://github.com/nasa-gibs/worldview/pull/3363)
+- Use opacity to hide map scales on hover [\#3359](https://github.com/nasa-gibs/worldview/pull/3359)
+- Change feature name to Location Search [\#3350](https://github.com/nasa-gibs/worldview/pull/3350)
+- Stop animation on projection switch [\#3349](https://github.com/nasa-gibs/worldview/pull/3349)
+- remove self value check against state value [\#3348](https://github.com/nasa-gibs/worldview/pull/3348)
+- Fix animation widget interactions on touch devices [\#3346](https://github.com/nasa-gibs/worldview/pull/3346)
+- Fix map zoom breakpoint hiding buttons, add responsive position change between breakpoints [\#3345](https://github.com/nasa-gibs/worldview/pull/3345)
+- No Smart Handoff dates for non-temporal layers [\#3335](https://github.com/nasa-gibs/worldview/pull/3335)
+- Revert animation daterange condition that limited closestdate from being used at end of range [\#3333](https://github.com/nasa-gibs/worldview/pull/3333)
+- Event re-focus when switching projections [\#3330](https://github.com/nasa-gibs/worldview/pull/3330)
+- fix label cutoff in firefox [\#3329](https://github.com/nasa-gibs/worldview/pull/3329)
+- handle empty layers param [\#3328](https://github.com/nasa-gibs/worldview/pull/3328)
+- Add map:contextmenu event trigger [\#3320](https://github.com/nasa-gibs/worldview/pull/3320)
+- fix hyperlink color [\#3319](https://github.com/nasa-gibs/worldview/pull/3319)
+- Prevent calling stop animation action when opening product picker if animation isn't playing [\#3312](https://github.com/nasa-gibs/worldview/pull/3312)
+- Fix sidebar layer options button cursor [\#3310](https://github.com/nasa-gibs/worldview/pull/3310)
+- Fix failing firefox e2e tests [\#3308](https://github.com/nasa-gibs/worldview/pull/3308)
+- Fix mouseover feature check and sidebar layer row height for vector layers with features that don't have palette\(s\) [\#3306](https://github.com/nasa-gibs/worldview/pull/3306)
+- Fix wrong variable for endDate check condition [\#3305](https://github.com/nasa-gibs/worldview/pull/3305)
+- Fix console warning [\#3304](https://github.com/nasa-gibs/worldview/pull/3304)
+- Update download docs [\#3296](https://github.com/nasa-gibs/worldview/pull/3296)
+- Vis metadata [\#3294](https://github.com/nasa-gibs/worldview/pull/3294)
+- JSON Schema layer validation [\#3292](https://github.com/nasa-gibs/worldview/pull/3292)
+- Build categoryGroupOrder if missing during config [\#3283](https://github.com/nasa-gibs/worldview/pull/3283)
+- fix image paths in smart handoffs modal [\#3280](https://github.com/nasa-gibs/worldview/pull/3280)
+- Prevent zero currentStep from triggering Joyride wrapper [\#3279](https://github.com/nasa-gibs/worldview/pull/3279)
+- Include animations in getRequestDates optimization, fix flakey timeline e2e test, fix data panel z-index [\#3277](https://github.com/nasa-gibs/worldview/pull/3277)
+- Add Smart Handoffs GTM trigger events, fix moment date warning [\#3274](https://github.com/nasa-gibs/worldview/pull/3274)
+- updated CYGNSS wind speed data download and links [\#3268](https://github.com/nasa-gibs/worldview/pull/3268)
+- updated links to point to new asdc site [\#3265](https://github.com/nasa-gibs/worldview/pull/3265)
+- Update unsupported browser detection to IE \<= 11 [\#3264](https://github.com/nasa-gibs/worldview/pull/3264)
+- Remove jquery [\#3261](https://github.com/nasa-gibs/worldview/pull/3261)
+- Make sure tooltips stay open when mousing over them [\#3257](https://github.com/nasa-gibs/worldview/pull/3257)
+- Add data panel info dialog [\#3247](https://github.com/nasa-gibs/worldview/pull/3247)
+- Add time parameter to browser URL if other parameter is present [\#3243](https://github.com/nasa-gibs/worldview/pull/3243)
+- Add geosearch distraction free, projections, toolbar E2E tests [\#3241](https://github.com/nasa-gibs/worldview/pull/3241)
+- Add dropdown height offset to scrollbar maxheight [\#3237](https://github.com/nasa-gibs/worldview/pull/3237)
+- Layer grouping [\#3201](https://github.com/nasa-gibs/worldview/pull/3201)
+
+## [v3.9.0-rc4](https://github.com/nasa-gibs/worldview/tree/v3.9.0-rc4) (2021-03-01)
+
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.9.0-rc3...v3.9.0-rc4)
+
+## Merged PRs:
+
+- updated url [\#3390](https://github.com/nasa-gibs/worldview/pull/3390)
+- Release 3.9.0 [\#3387](https://github.com/nasa-gibs/worldview/pull/3387)
+
+## [v3.9.0-rc3](https://github.com/nasa-gibs/worldview/tree/v3.9.0-rc3) (2021-02-25)
+
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.9.0-rc2...v3.9.0-rc3)
 
 ## Closed Issues:
 
@@ -17,47 +233,20 @@
 - Add clearsky cygnss layers [\#3386](https://github.com/nasa-gibs/worldview/pull/3386)
 - Add amsre layers [\#3385](https://github.com/nasa-gibs/worldview/pull/3385)
 - Fix running data issue [\#3384](https://github.com/nasa-gibs/worldview/pull/3384)
-- new preview image with HLS imagery [\#3383](https://github.com/nasa-gibs/worldview/pull/3383)
-- Limit splitting of orbit tracks image download processing to KMZ only [\#3382](https://github.com/nasa-gibs/worldview/pull/3382)
 - dont require escaping underscores mid-word [\#3381](https://github.com/nasa-gibs/worldview/pull/3381)
-- Handle splitting orbit track id into two separate layer ids for image download requests [\#3378](https://github.com/nasa-gibs/worldview/pull/3378)
-- Add z index to entire sidebar instead of individual elements [\#3377](https://github.com/nasa-gibs/worldview/pull/3377)
-- Update GTM event names for 3.9.0 changes [\#3375](https://github.com/nasa-gibs/worldview/pull/3375)
-- Handle undefined conceptids [\#3374](https://github.com/nasa-gibs/worldview/pull/3374)
-- Disabled zoom button hover styles [\#3366](https://github.com/nasa-gibs/worldview/pull/3366)
-- Move tour modal on short windows [\#3365](https://github.com/nasa-gibs/worldview/pull/3365)
-- Restore event state on sidebar collapse/expand [\#3364](https://github.com/nasa-gibs/worldview/pull/3364)
-- Fix end date used for matching coverage in layer panel, add back error css [\#3363](https://github.com/nasa-gibs/worldview/pull/3363)
-- Use opacity to hide map scales on hover [\#3359](https://github.com/nasa-gibs/worldview/pull/3359)
 
 ## [v3.9.0-rc2](https://github.com/nasa-gibs/worldview/tree/v3.9.0-rc2) (2021-02-16)
 
 [Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.9.0-rc1...v3.9.0-rc2)
-
-## Technical Updates / Bugfixes:
-
-- Can't click on zots or settings buttons in layer list in landscape mode on iPad [\#3331](https://github.com/nasa-gibs/worldview/issues/3331)
-- Change color of Squash palette text [\#3321](https://github.com/nasa-gibs/worldview/issues/3321)
 
 ## Merged PRs:
 
 - Fix location/measure tooltip interactions on tablet [\#3356](https://github.com/nasa-gibs/worldview/pull/3356)
 - hide layers without snapshot \#3343 [\#3352](https://github.com/nasa-gibs/worldview/pull/3352)
 - Revert "Bump react-draggable from 4.1.0 to 4.4.3" [\#3351](https://github.com/nasa-gibs/worldview/pull/3351)
-- Change feature name to Location Search [\#3350](https://github.com/nasa-gibs/worldview/pull/3350)
-- Stop animation on projection switch [\#3349](https://github.com/nasa-gibs/worldview/pull/3349)
-- remove self value check against state value [\#3348](https://github.com/nasa-gibs/worldview/pull/3348)
-- Fix animation widget interactions on touch devices [\#3346](https://github.com/nasa-gibs/worldview/pull/3346)
-- Fix map zoom breakpoint hiding buttons, add responsive position change between breakpoints [\#3345](https://github.com/nasa-gibs/worldview/pull/3345)
 - Add WMS breakpoint to Reservoir & powerplant layers  [\#3344](https://github.com/nasa-gibs/worldview/pull/3344)
 - Update data download availability text [\#3342](https://github.com/nasa-gibs/worldview/pull/3342)
-- No Smart Handoff dates for non-temporal layers [\#3335](https://github.com/nasa-gibs/worldview/pull/3335)
-- Revert animation daterange condition that limited closestdate from being used at end of range [\#3333](https://github.com/nasa-gibs/worldview/pull/3333)
-- fix label cutoff in firefox [\#3329](https://github.com/nasa-gibs/worldview/pull/3329)
-- handle empty layers param [\#3328](https://github.com/nasa-gibs/worldview/pull/3328)
 - updates to AOD descriptions [\#3327](https://github.com/nasa-gibs/worldview/pull/3327)
-- Add map:contextmenu event trigger [\#3320](https://github.com/nasa-gibs/worldview/pull/3320)
-- fix hyperlink color [\#3319](https://github.com/nasa-gibs/worldview/pull/3319)
 
 ## [v3.9.0-rc1](https://github.com/nasa-gibs/worldview/tree/v3.9.0-rc1) (2021-02-04)
 
@@ -67,48 +256,18 @@
 
 - Add different array of WMS res for 512px tiles \#3177 [\#3239](https://github.com/nasa-gibs/worldview/pull/3239)
 
-## Closed Issues:
-
-- Determine daynight flag approach for smart handoffs [\#3289](https://github.com/nasa-gibs/worldview/issues/3289)
-- Update vis metadata config concept ids [\#3271](https://github.com/nasa-gibs/worldview/issues/3271)
-
 ## Merged PRs:
 
-- Event re-focus when switching projections [\#3330](https://github.com/nasa-gibs/worldview/pull/3330)
-- Prevent calling stop animation action when opening product picker if animation isn't playing [\#3312](https://github.com/nasa-gibs/worldview/pull/3312)
-- Fix sidebar layer options button cursor [\#3310](https://github.com/nasa-gibs/worldview/pull/3310)
-- Fix failing firefox e2e tests [\#3308](https://github.com/nasa-gibs/worldview/pull/3308)
-- Fix mouseover feature check and sidebar layer row height for vector layers with features that don't have palette\(s\) [\#3306](https://github.com/nasa-gibs/worldview/pull/3306)
-- Fix wrong variable for endDate check condition [\#3305](https://github.com/nasa-gibs/worldview/pull/3305)
-- Fix console warning [\#3304](https://github.com/nasa-gibs/worldview/pull/3304)
 - Add hls latency [\#3298](https://github.com/nasa-gibs/worldview/pull/3298)
-- Update download docs [\#3296](https://github.com/nasa-gibs/worldview/pull/3296)
 - Add maiac descriptions [\#3295](https://github.com/nasa-gibs/worldview/pull/3295)
-- Vis metadata [\#3294](https://github.com/nasa-gibs/worldview/pull/3294)
-- JSON Schema layer validation [\#3292](https://github.com/nasa-gibs/worldview/pull/3292)
 - 3196 add viirs bt layers [\#3290](https://github.com/nasa-gibs/worldview/pull/3290)
 - Add GTM to index html, use deployment environment variable for ID [\#3288](https://github.com/nasa-gibs/worldview/pull/3288)
 - 3.8.5 -\> develop [\#3287](https://github.com/nasa-gibs/worldview/pull/3287)
-- Build categoryGroupOrder if missing during config [\#3283](https://github.com/nasa-gibs/worldview/pull/3283)
 - Revise geosearch config feature check [\#3281](https://github.com/nasa-gibs/worldview/pull/3281)
-- fix image paths in smart handoffs modal [\#3280](https://github.com/nasa-gibs/worldview/pull/3280)
-- Prevent zero currentStep from triggering Joyride wrapper [\#3279](https://github.com/nasa-gibs/worldview/pull/3279)
-- Include animations in getRequestDates optimization, fix flakey timeline e2e test, fix data panel z-index [\#3277](https://github.com/nasa-gibs/worldview/pull/3277)
-- Add Smart Handoffs GTM trigger events, fix moment date warning [\#3274](https://github.com/nasa-gibs/worldview/pull/3274)
 - Add dnb data download [\#3273](https://github.com/nasa-gibs/worldview/pull/3273)
-- updated CYGNSS wind speed data download and links [\#3268](https://github.com/nasa-gibs/worldview/pull/3268)
-- updated links to point to new asdc site [\#3265](https://github.com/nasa-gibs/worldview/pull/3265)
-- Update unsupported browser detection to IE \<= 11 [\#3264](https://github.com/nasa-gibs/worldview/pull/3264)
-- Remove jquery [\#3261](https://github.com/nasa-gibs/worldview/pull/3261)
-- Make sure tooltips stay open when mousing over them [\#3257](https://github.com/nasa-gibs/worldview/pull/3257)
-- Add data panel info dialog [\#3247](https://github.com/nasa-gibs/worldview/pull/3247)
 - Remove legacy events service [\#3246](https://github.com/nasa-gibs/worldview/pull/3246)
 - Add preview image screenshot generation script, modify dist to use brand url [\#3245](https://github.com/nasa-gibs/worldview/pull/3245)
-- Add time parameter to browser URL if other parameter is present [\#3243](https://github.com/nasa-gibs/worldview/pull/3243)
-- Add geosearch distraction free, projections, toolbar E2E tests [\#3241](https://github.com/nasa-gibs/worldview/pull/3241)
-- Add dropdown height offset to scrollbar maxheight [\#3237](https://github.com/nasa-gibs/worldview/pull/3237)
 - Add terser webpack plugin, remove uglify js [\#3235](https://github.com/nasa-gibs/worldview/pull/3235)
-- Layer grouping [\#3201](https://github.com/nasa-gibs/worldview/pull/3201)
 - Smart handoffs [\#3195](https://github.com/nasa-gibs/worldview/pull/3195)
 
 ## [v3.8.5](https://github.com/nasa-gibs/worldview/tree/v3.8.5) (2021-01-21)
@@ -124,11 +283,6 @@
 ## Technical Updates / Bugfixes:
 
 - ruler/timeline cover rotation buttons in arctic and antarctic projections on Android tablet [\#2832](https://github.com/nasa-gibs/worldview/issues/2832)
-
-## Layer Changes:
-
-- Update AIRS L3 filenames and conceptIDs [\#3276](https://github.com/nasa-gibs/worldview/issues/3276)
-- Update AIRS L2 conceptIDs [\#3275](https://github.com/nasa-gibs/worldview/issues/3275)
 
 ## Story Changes:
 
@@ -165,8 +319,6 @@
 ## Technical Updates / Bugfixes:
 
 - Trackpad zoom is too fast/sensitive [\#3109](https://github.com/nasa-gibs/worldview/issues/3109)
-- Initial click of "Shorten Link" returns "Link cannot be shortened at this time" [\#3107](https://github.com/nasa-gibs/worldview/issues/3107)
-- Custom palette revert to original intermittently breaks for snapshots [\#3098](https://github.com/nasa-gibs/worldview/issues/3098)
 - Console warning on layer add [\#2921](https://github.com/nasa-gibs/worldview/issues/2921)
 
 ## Closed Issues:
@@ -429,7 +581,6 @@
 - Make sure styles in FireFox look right [\#2941](https://github.com/nasa-gibs/worldview/pull/2941)
 - Use getElementsByClassName method [\#2938](https://github.com/nasa-gibs/worldview/pull/2938)
 - Focus search input when product picker opened [\#2926](https://github.com/nasa-gibs/worldview/pull/2926)
-- Minor metadata updates [\#2908](https://github.com/nasa-gibs/worldview/pull/2908)
 - Enable redux devtools [\#2907](https://github.com/nasa-gibs/worldview/pull/2907)
 - No previews dist build [\#2905](https://github.com/nasa-gibs/worldview/pull/2905)
 - Update GRUMP\_Settlements.jpg [\#2964](https://github.com/nasa-gibs/worldview/pull/2964)
@@ -492,6 +643,7 @@
 - Fix settlements colormap [\#2914](https://github.com/nasa-gibs/worldview/pull/2914)
 - half Vector /  half WMS layers [\#2913](https://github.com/nasa-gibs/worldview/pull/2913)
 - Metadata fixes [\#2912](https://github.com/nasa-gibs/worldview/pull/2912)
+- Minor metadata updates [\#2908](https://github.com/nasa-gibs/worldview/pull/2908)
 - Phase 2 product picker [\#2904](https://github.com/nasa-gibs/worldview/pull/2904)
 - Added geostationary availability caveat [\#2901](https://github.com/nasa-gibs/worldview/pull/2901)
 - Daynight layer props [\#2891](https://github.com/nasa-gibs/worldview/pull/2891)
@@ -676,6 +828,7 @@
 
 ## Implemented Enhancements:
 
+- Combine date-range code in product picker and layer-info modal [\#1749](https://github.com/nasa-gibs/worldview/issues/1749)
 - Turn opaque classification values to transparent [\#232](https://github.com/nasa-gibs/worldview/issues/232)
 
 ## Technical Updates / Bugfixes:
@@ -865,8 +1018,6 @@
 - wrap the snapshot label \#2551 [\#2633](https://github.com/nasa-gibs/worldview/pull/2633)
 - Added padding modification to slightly tweak white space of GIF modal… [\#2630](https://github.com/nasa-gibs/worldview/pull/2630)
 - Add windows docker shell script [\#2602](https://github.com/nasa-gibs/worldview/pull/2602)
-- Updated copyright year and add geostationary information [\#2560](https://github.com/nasa-gibs/worldview/pull/2560)
-- Add scroll bar to layer info temporal scroll [\#2546](https://github.com/nasa-gibs/worldview/pull/2546)
 
 ## [v3.4.1](https://github.com/nasa-gibs/worldview/tree/v3.4.1) (2020-01-22)
 
@@ -962,6 +1113,7 @@
 
 ## Merged PRs:
 
+- Updated copyright year and add geostationary information [\#2560](https://github.com/nasa-gibs/worldview/pull/2560)
 - Australia fire tour [\#2559](https://github.com/nasa-gibs/worldview/pull/2559)
 - Add orbit daynight tags [\#2555](https://github.com/nasa-gibs/worldview/pull/2555)
 - Removed wrap on AIRS L2 CO and Methane [\#2553](https://github.com/nasa-gibs/worldview/pull/2553)
@@ -997,6 +1149,7 @@
 
 ## Merged PRs:
 
+- Add scroll bar to layer info temporal scroll [\#2546](https://github.com/nasa-gibs/worldview/pull/2546)
 - Vector bug fixes [\#2541](https://github.com/nasa-gibs/worldview/pull/2541)
 - Update contribute docs [\#2531](https://github.com/nasa-gibs/worldview/pull/2531)
 - Wrap vector layers at dateline [\#2523](https://github.com/nasa-gibs/worldview/pull/2523)
@@ -1899,7 +2052,6 @@
 
 ## Implemented Enhancements:
 
-- Combine date-range code in product picker and layer-info modal [\#1749](https://github.com/nasa-gibs/worldview/issues/1749)
 - Running lat-lon doesn't work across the dateline [\#1671](https://github.com/nasa-gibs/worldview/issues/1671)
 
 ## Closed Issues:
@@ -1948,6 +2100,7 @@
 
 - v2.16.2 [\#1746](https://github.com/nasa-gibs/worldview/pull/1746)
 - Fix broken date selector in comparison mode [\#1745](https://github.com/nasa-gibs/worldview/pull/1745)
+- Fix link errors [\#1744](https://github.com/nasa-gibs/worldview/pull/1744)
 - Added AMSRU2 SWE descriptions [\#1740](https://github.com/nasa-gibs/worldview/pull/1740)
 
 ## [v2.16.1](https://github.com/nasa-gibs/worldview/tree/v2.16.1) (2019-05-29)
@@ -1956,7 +2109,6 @@
 
 ## Merged PRs:
 
-- Fix link errors [\#1744](https://github.com/nasa-gibs/worldview/pull/1744)
 - rename category to Urban extents [\#1733](https://github.com/nasa-gibs/worldview/pull/1733)
 
 ## [v2.16.0](https://github.com/nasa-gibs/worldview/tree/v2.16.0) (2019-05-28)
@@ -2076,6 +2228,7 @@
 
 - added backticks for more product names and data parameters [\#1670](https://github.com/nasa-gibs/worldview/pull/1670)
 - Change code block to grey in layer panel and info panels [\#1669](https://github.com/nasa-gibs/worldview/pull/1669)
+- Added backticks to overcome italics issue [\#1667](https://github.com/nasa-gibs/worldview/pull/1667)
 
 ## [v2.14.0-rc.1](https://github.com/nasa-gibs/worldview/tree/v2.14.0-rc.1) (2019-03-12)
 
@@ -2112,7 +2265,6 @@
 
 ## Merged PRs:
 
-- Added backticks to overcome italics issue [\#1667](https://github.com/nasa-gibs/worldview/pull/1667)
 - Update layerorder ompsso2 [\#1658](https://github.com/nasa-gibs/worldview/pull/1658)
 - Fix palette export class name [\#1657](https://github.com/nasa-gibs/worldview/pull/1657)
 - Added TRMM precipitation and brightness temp layers [\#1655](https://github.com/nasa-gibs/worldview/pull/1655)
@@ -2235,8 +2387,10 @@
 - edited SEDAC titles [\#1632](https://github.com/nasa-gibs/worldview/pull/1632)
 - Add orbit tracks 1625 [\#1628](https://github.com/nasa-gibs/worldview/pull/1628)
 - Add hbase gmis layers [\#1627](https://github.com/nasa-gibs/worldview/pull/1627)
+- Added more measurements to categories [\#1626](https://github.com/nasa-gibs/worldview/pull/1626)
 - Allow event tracks to go over date line [\#1620](https://github.com/nasa-gibs/worldview/pull/1620)
 - New Feature: Tour Overhaul [\#1618](https://github.com/nasa-gibs/worldview/pull/1618)
+- Added measurement for protected areas [\#1604](https://github.com/nasa-gibs/worldview/pull/1604)
 
 ## [v2.12.0](https://github.com/nasa-gibs/worldview/tree/v2.12.0) (2019-01-29)
 
@@ -2244,12 +2398,10 @@
 
 ## Merged PRs:
 
-- Added more measurements to categories [\#1626](https://github.com/nasa-gibs/worldview/pull/1626)
 - v2.12.0 [\#1616](https://github.com/nasa-gibs/worldview/pull/1616)
 - removed relevant WDPA entries [\#1615](https://github.com/nasa-gibs/worldview/pull/1615)
 - Make Favicon Sharper [\#1614](https://github.com/nasa-gibs/worldview/pull/1614)
 - Switch sourceMetaData state key to use source description in place of id [\#1611](https://github.com/nasa-gibs/worldview/pull/1611)
-- Added measurement for protected areas [\#1604](https://github.com/nasa-gibs/worldview/pull/1604)
 - Prevent highlight of text while using slider [\#1599](https://github.com/nasa-gibs/worldview/pull/1599)
 
 ## [v2.12.0-rc.2](https://github.com/nasa-gibs/worldview/tree/v2.12.0-rc.2) (2019-01-22)
@@ -2328,7 +2480,9 @@
 - Add condition to check for swipe-line node before performing window resize functions [\#1520](https://github.com/nasa-gibs/worldview/pull/1520)
 - Add status flag to prevent multiple GIFs from being creating while one is in progress [\#1519](https://github.com/nasa-gibs/worldview/pull/1519)
 - Check for dialog to be initialized prior to closing [\#1518](https://github.com/nasa-gibs/worldview/pull/1518)
+- Show/select first valid available layer measurement in product picker [\#1513](https://github.com/nasa-gibs/worldview/pull/1513)
 - Fix button Border [\#1509](https://github.com/nasa-gibs/worldview/pull/1509)
+- Migrate to Font Awesome v5 [\#1508](https://github.com/nasa-gibs/worldview/pull/1508)
 
 ## [v2.11.0](https://github.com/nasa-gibs/worldview/tree/v2.11.0) (2018-12-05)
 
@@ -2456,8 +2610,6 @@
 
 ## Merged PRs:
 
-- Show/select first valid available layer measurement in product picker [\#1513](https://github.com/nasa-gibs/worldview/pull/1513)
-- Migrate to Font Awesome v5 [\#1508](https://github.com/nasa-gibs/worldview/pull/1508)
 - Remove date key for static layers [\#1504](https://github.com/nasa-gibs/worldview/pull/1504)
 - Fix timeline data bar colors not updating [\#1502](https://github.com/nasa-gibs/worldview/pull/1502)
 - Fix timeline forward arrow missing [\#1501](https://github.com/nasa-gibs/worldview/pull/1501)
@@ -2573,6 +2725,7 @@
 - Add notificationURL testing parameter and documentation [\#1353](https://github.com/nasa-gibs/worldview/pull/1353)
 - Fix sub-daily permalink flag \#1344 [\#1347](https://github.com/nasa-gibs/worldview/pull/1347)
 - Add .stylelintignore [\#1343](https://github.com/nasa-gibs/worldview/pull/1343)
+- Check that granule to remove has been selected [\#1321](https://github.com/nasa-gibs/worldview/pull/1321)
 - Remove 'Events may not be visible at all times' notice when not in events mode [\#1319](https://github.com/nasa-gibs/worldview/pull/1319)
 - Add vendor prefix IE11/Edge scrollbar fix for cut off layer list text [\#1318](https://github.com/nasa-gibs/worldview/pull/1318)
 - Only hoist links when more than one granule is present [\#1317](https://github.com/nasa-gibs/worldview/pull/1317)
@@ -2580,7 +2733,8 @@
 - Add reverse tab \(shift tab\) functionality to date selector input [\#1308](https://github.com/nasa-gibs/worldview/pull/1308)
 - Links in about section open in a new tab/window [\#1306](https://github.com/nasa-gibs/worldview/pull/1306)
 - Add "wrapX" configuration parameter [\#1303](https://github.com/nasa-gibs/worldview/pull/1303)
-- Fix compare styling  [\#1295](https://github.com/nasa-gibs/worldview/pull/1295)
+- Change getCapabilities script to use urllib3 [\#1302](https://github.com/nasa-gibs/worldview/pull/1302)
+- Selenium testing in docker container [\#1296](https://github.com/nasa-gibs/worldview/pull/1296)
 - Remove additional timezone offset compensation for year zoom timeline [\#1294](https://github.com/nasa-gibs/worldview/pull/1294)
 - Event marker hover IE11 CustomEvent fix [\#1289](https://github.com/nasa-gibs/worldview/pull/1289)
 - Webpack build enhancements - Part 1 [\#1275](https://github.com/nasa-gibs/worldview/pull/1275)
@@ -2707,7 +2861,6 @@
 - Fix polar drag and dropping [\#1337](https://github.com/nasa-gibs/worldview/pull/1337)
 - Make A|B draggers work the same as guitar pick [\#1331](https://github.com/nasa-gibs/worldview/pull/1331)
 - Remove dangling apache config link [\#1325](https://github.com/nasa-gibs/worldview/pull/1325)
-- Check that granule to remove has been selected [\#1321](https://github.com/nasa-gibs/worldview/pull/1321)
 
 ## [v2.9.0-rc.3](https://github.com/nasa-gibs/worldview/tree/v2.9.0-rc.3) (2018-09-18)
 
@@ -2735,12 +2888,11 @@
 - Fix Image download coordinate offset [\#1322](https://github.com/nasa-gibs/worldview/pull/1322)
 - Only trigger hasData event if events is active \#1314 [\#1315](https://github.com/nasa-gibs/worldview/pull/1315)
 - Remove guitar pick when in A|B [\#1313](https://github.com/nasa-gibs/worldview/pull/1313)
-- Change getCapabilities script to use urllib3 [\#1302](https://github.com/nasa-gibs/worldview/pull/1302)
 - Make Tab hover border not overlap blue area  [\#1301](https://github.com/nasa-gibs/worldview/pull/1301)
 - Fix fuzzy logo  [\#1300](https://github.com/nasa-gibs/worldview/pull/1300)
 - Update tour image  [\#1299](https://github.com/nasa-gibs/worldview/pull/1299)
 - Fix discrete palettes with multiple rows [\#1297](https://github.com/nasa-gibs/worldview/pull/1297)
-- Selenium testing in docker container [\#1296](https://github.com/nasa-gibs/worldview/pull/1296)
+- Fix compare styling  [\#1295](https://github.com/nasa-gibs/worldview/pull/1295)
 - Fix map shift when clicking on image download [\#1291](https://github.com/nasa-gibs/worldview/pull/1291)
 - Button styling 1276 1281 [\#1287](https://github.com/nasa-gibs/worldview/pull/1287)
 - Constrain drag-drop to within parent layer-group \#1256 [\#1285](https://github.com/nasa-gibs/worldview/pull/1285)
@@ -2753,10 +2905,11 @@
 - Fix tour break when not in geographic projection [\#1253](https://github.com/nasa-gibs/worldview/pull/1253)
 - Fix collapse spacing  [\#1249](https://github.com/nasa-gibs/worldview/pull/1249)
 - Update developing docs [\#1240](https://github.com/nasa-gibs/worldview/pull/1240)
+- Checkbox label position fix [\#1233](https://github.com/nasa-gibs/worldview/pull/1233)
 
 ## [v2.9.0-rc.1](https://github.com/nasa-gibs/worldview/tree/v2.9.0-rc.1) (2018-09-05)
 
-[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v2.9.0-rc.2...v2.9.0-rc.1)
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v2.8.0...v2.9.0-rc.1)
 
 ## Technical Updates / Bugfixes:
 
@@ -2768,13 +2921,13 @@
 - Update package-lock for wvo-rc.3 [\#1243](https://github.com/nasa-gibs/worldview/pull/1243)
 - A|B Comparison Feature [\#1084](https://github.com/nasa-gibs/worldview/pull/1084)
 
-## [v2.9.0-rc.2](https://github.com/nasa-gibs/worldview/tree/v2.9.0-rc.2) (2018-09-04)
-
-[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v2.8.0...v2.9.0-rc.2)
-
 ## [v2.8.0](https://github.com/nasa-gibs/worldview/tree/v2.8.0) (2018-09-04)
 
-[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v2.8.0-rc.4...v2.8.0)
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v2.9.0-rc.2...v2.8.0)
+
+## [v2.9.0-rc.2](https://github.com/nasa-gibs/worldview/tree/v2.9.0-rc.2) (2018-09-04)
+
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v2.8.0-rc.4...v2.9.0-rc.2)
 
 ## Implemented Enhancements:
 
@@ -2864,7 +3017,6 @@
 
 ## Merged PRs:
 
-- Checkbox label position fix [\#1233](https://github.com/nasa-gibs/worldview/pull/1233)
 - Remove unneeded style [\#1220](https://github.com/nasa-gibs/worldview/pull/1220)
 - Remove time adjustment for general case in favor of when needed [\#1218](https://github.com/nasa-gibs/worldview/pull/1218)
 - Fix state rotation parameter when switching projections [\#1209](https://github.com/nasa-gibs/worldview/pull/1209)
@@ -2872,11 +3024,14 @@
 - Override JQuery UI style for map buttons [\#1203](https://github.com/nasa-gibs/worldview/pull/1203)
 - Change tour to not scroll [\#1200](https://github.com/nasa-gibs/worldview/pull/1200)
 - Fix missing token replacement bug with dist build and webpack [\#1198](https://github.com/nasa-gibs/worldview/pull/1198)
-- Update for el7 build [\#1197](https://github.com/nasa-gibs/worldview/pull/1197)
 
 ## [v2.8.0-rc.2](https://github.com/nasa-gibs/worldview/tree/v2.8.0-rc.2) (2018-08-17)
 
 [Full Changelog](https://github.com/nasa-gibs/worldview/compare/v2.8.0-rc.1...v2.8.0-rc.2)
+
+## Merged PRs:
+
+- Update for el7 build [\#1197](https://github.com/nasa-gibs/worldview/pull/1197)
 
 ## [v2.8.0-rc.1](https://github.com/nasa-gibs/worldview/tree/v2.8.0-rc.1) (2018-08-15)
 
@@ -2897,7 +3052,6 @@
 - Upgrade jquery-ui [\#1167](https://github.com/nasa-gibs/worldview/pull/1167)
 - Encode/decode identifiers  [\#1163](https://github.com/nasa-gibs/worldview/pull/1163)
 - Multiple products per layer [\#1151](https://github.com/nasa-gibs/worldview/pull/1151)
-- Update URL parameter documentation [\#1150](https://github.com/nasa-gibs/worldview/pull/1150)
 - Replace Grunt scripts with NPM scripts [\#1144](https://github.com/nasa-gibs/worldview/pull/1144)
 - Vector layer support [\#1106](https://github.com/nasa-gibs/worldview/pull/1106)
 - Support selecting layers with future dates [\#1091](https://github.com/nasa-gibs/worldview/pull/1091)
@@ -3046,6 +3200,7 @@
 
 - Prevent track and point removal beyond min/max zoom with mousewheel [\#1153](https://github.com/nasa-gibs/worldview/pull/1153)
 - Fix date time for animation dragger, GIF dialog text, and updated url [\#1152](https://github.com/nasa-gibs/worldview/pull/1152)
+- Update URL parameter documentation [\#1150](https://github.com/nasa-gibs/worldview/pull/1150)
 - Close layer setting dialogs when showing Add Layers modal [\#1148](https://github.com/nasa-gibs/worldview/pull/1148)
 - Add 'showSubdaily' mock URL parameter \#866 [\#1146](https://github.com/nasa-gibs/worldview/pull/1146)
 - Add vscode directory and settings [\#1142](https://github.com/nasa-gibs/worldview/pull/1142)
@@ -3054,6 +3209,7 @@
 - Check for transparent colormap before legend [\#1134](https://github.com/nasa-gibs/worldview/pull/1134)
 - Data download scrollbar overflow [\#1131](https://github.com/nasa-gibs/worldview/pull/1131)
 - Remove warnings when GIBS layers are not used [\#1130](https://github.com/nasa-gibs/worldview/pull/1130)
+- Add a Worldview client identifier in CMR requests [\#1129](https://github.com/nasa-gibs/worldview/pull/1129)
 
 ## [v2.6.0](https://github.com/nasa-gibs/worldview/tree/v2.6.0) (2018-06-26)
 
@@ -3313,7 +3469,6 @@
 
 ## Technical Updates / Bugfixes:
 
-- Edge style - year, month, and day text is being cut off in timeline when using TAB to navigate [\#874](https://github.com/nasa-gibs/worldview/issues/874)
 - IE11 style issue - download links table has text that isn't aligned \[dd.link.6\] [\#864](https://github.com/nasa-gibs/worldview/issues/864)
 - Fix how options dependency is included [\#929](https://github.com/nasa-gibs/worldview/pull/929)
 
@@ -3332,7 +3487,6 @@
 - Fix year jump [\#900](https://github.com/nasa-gibs/worldview/pull/900)
 - Ignore offline granules in data download [\#899](https://github.com/nasa-gibs/worldview/pull/899)
 - Gif improvements [\#897](https://github.com/nasa-gibs/worldview/pull/897)
-- Margin on subheading in layer list [\#892](https://github.com/nasa-gibs/worldview/pull/892)
 - Visualize Multi-day Events [\#818](https://github.com/nasa-gibs/worldview/pull/818)
 
 ## [v2.3.1](https://github.com/nasa-gibs/worldview/tree/v2.3.1) (2018-05-01)
@@ -3349,6 +3503,7 @@
 ## Technical Updates / Bugfixes:
 
 - Clicking a new date in the month zoom level increases days input by 1 [\#894](https://github.com/nasa-gibs/worldview/issues/894)
+- Edge style - year, month, and day text is being cut off in timeline when using TAB to navigate [\#874](https://github.com/nasa-gibs/worldview/issues/874)
 - IE11 Create Animated GIF download button is unresponsive [\#859](https://github.com/nasa-gibs/worldview/issues/859)
 - Animation play button unresponsive after cancelling Create An Animated GIF dialog \[date.animation.14\] [\#857](https://github.com/nasa-gibs/worldview/issues/857)
 - Unable to change image output options in image-download [\#851](https://github.com/nasa-gibs/worldview/issues/851)
@@ -3464,6 +3619,7 @@
 
 - Timeline click fix [\#858](https://github.com/nasa-gibs/worldview/pull/858)
 - Pass filetype to react component when updated  [\#855](https://github.com/nasa-gibs/worldview/pull/855)
+- Correct image-download coordinate labels \#833 [\#842](https://github.com/nasa-gibs/worldview/pull/842)
 
 ## [v2.3.0-rc.2](https://github.com/nasa-gibs/worldview/tree/v2.3.0-rc.2) (2018-04-05)
 
@@ -3481,7 +3637,6 @@
 ## Merged PRs:
 
 - Update react & react-dom [\#850](https://github.com/nasa-gibs/worldview/pull/850)
-- Correct image-download coordinate labels \#833 [\#842](https://github.com/nasa-gibs/worldview/pull/842)
 - Fix timeline flicker when adjusting layer attributes [\#840](https://github.com/nasa-gibs/worldview/pull/840)
 
 ## [v2.3.0-rc.1](https://github.com/nasa-gibs/worldview/tree/v2.3.0-rc.1) (2018-04-03)
@@ -3540,6 +3695,7 @@
 ## Merged PRs:
 
 - Worldfile hotfix 3 [\#792](https://github.com/nasa-gibs/worldview/pull/792)
+- Worldfile hotfix [\#790](https://github.com/nasa-gibs/worldview/pull/790)
 - Release 2.2.2 [\#788](https://github.com/nasa-gibs/worldview/pull/788)
 
 ## [v2.2.2](https://github.com/nasa-gibs/worldview/tree/v2.2.2) (2018-03-15)
@@ -3608,10 +3764,8 @@
 
 ## Merged PRs:
 
-- Worldfile hotfix [\#790](https://github.com/nasa-gibs/worldview/pull/790)
 - v2.1.0 [\#765](https://github.com/nasa-gibs/worldview/pull/765)
 - Layer daynight attribute check [\#760](https://github.com/nasa-gibs/worldview/pull/760)
-- Remove rotation buttons in webmercator view [\#755](https://github.com/nasa-gibs/worldview/pull/755)
 - Remove stub.js [\#753](https://github.com/nasa-gibs/worldview/pull/753)
 - Detect temporal range on build [\#750](https://github.com/nasa-gibs/worldview/pull/750)
 - Add "day of year" label on timeline [\#746](https://github.com/nasa-gibs/worldview/pull/746)
@@ -3681,6 +3835,7 @@
 
 ## Merged PRs:
 
+- Remove rotation buttons in webmercator view [\#755](https://github.com/nasa-gibs/worldview/pull/755)
 - Update description [\#718](https://github.com/nasa-gibs/worldview/pull/718)
 
 ## [v2.0.0](https://github.com/nasa-gibs/worldview/tree/v2.0.0) (2018-01-23)
@@ -3822,6 +3977,7 @@
 ## Merged PRs:
 
 - Fix sidebar row spacing issue in Chrome 62 [\#608](https://github.com/nasa-gibs/worldview/pull/608)
+- update active layers when layer is added or removed  [\#605](https://github.com/nasa-gibs/worldview/pull/605)
 - Fix JS nonce [\#589](https://github.com/nasa-gibs/worldview/pull/589)
 - Sort search results by config.layerOrder [\#587](https://github.com/nasa-gibs/worldview/pull/587)
 - Restore modal offset [\#586](https://github.com/nasa-gibs/worldview/pull/586)
@@ -3899,7 +4055,6 @@
 - Show All Active Event Markers on Map [\#407](https://github.com/nasa-gibs/worldview/issues/407)
 - Update MISR NRT data download to filter by camera [\#352](https://github.com/nasa-gibs/worldview/issues/352)
 - New MISR NRT Layers [\#342](https://github.com/nasa-gibs/worldview/issues/342)
-- Reduce zot indicator to 2 decimal places [\#272](https://github.com/nasa-gibs/worldview/issues/272)
 - Add test for removed layers [\#267](https://github.com/nasa-gibs/worldview/issues/267)
 - tour.state.1 [\#211](https://github.com/nasa-gibs/worldview/issues/211)
 - Investigate/develop style guide for code [\#120](https://github.com/nasa-gibs/worldview/issues/120)
@@ -4058,6 +4213,7 @@
 - Switch jshint for eslint [\#348](https://github.com/nasa-gibs/worldview/issues/348)
 - Font Awesome icons not loading in IE11 [\#338](https://github.com/nasa-gibs/worldview/issues/338)
 - Investigate npm install node-gyp contextify issue [\#303](https://github.com/nasa-gibs/worldview/issues/303)
+- Reduce zot indicator to 2 decimal places [\#272](https://github.com/nasa-gibs/worldview/issues/272)
 
 ## Merged PRs:
 
@@ -4098,6 +4254,7 @@
 - Activate MERRA2/NLDAS/OMI STD Layers [\#343](https://github.com/nasa-gibs/worldview/issues/343)
 - Add Aquarius Soil Moisture descriptions [\#333](https://github.com/nasa-gibs/worldview/issues/333)
 - Add layer description option to Product Picker search area [\#317](https://github.com/nasa-gibs/worldview/issues/317)
+- Add layer description option to Layer List [\#316](https://github.com/nasa-gibs/worldview/issues/316)
 - Improve WMTS interoperability [\#314](https://github.com/nasa-gibs/worldview/issues/314)
 - Change GPM Snow and Rain Rate end date [\#270](https://github.com/nasa-gibs/worldview/issues/270)
 - Consider using svg for WV logo and icons [\#206](https://github.com/nasa-gibs/worldview/issues/206)
@@ -4167,7 +4324,6 @@
 - Installation currently breaking on master [\#339](https://github.com/nasa-gibs/worldview/issues/339)
 - \#Installation Section on README.md [\#331](https://github.com/nasa-gibs/worldview/issues/331)
 - Release 1.4.5 [\#326](https://github.com/nasa-gibs/worldview/issues/326)
-- Add layer description option to Layer List [\#316](https://github.com/nasa-gibs/worldview/issues/316)
 - GIBS imagery review [\#315](https://github.com/nasa-gibs/worldview/issues/315)
 - Get Social media ids for sharing [\#305](https://github.com/nasa-gibs/worldview/issues/305)
 
