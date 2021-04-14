@@ -63,7 +63,7 @@ module.exports = {
   },
   'Click B tab to ensure that loaded layers are correct': function(client) {
     client.click(localSelectors.bTab);
-    client.waitForElementVisible('#activeB-Coastlines', TIME_LIMIT, () => {
+    client.waitForElementVisible('#activeB-Coastlines_15m', TIME_LIMIT, () => {
       client.expect.element(
         '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor.layer-hidden',
       ).to.be.visible;
@@ -71,12 +71,12 @@ module.exports = {
         '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-Reference_Labels.layer-hidden',
+        '#activeB-Reference_Labels_15m.layer-hidden',
       ).to.be.visible;
       client.expect.element(
-        '#activeB-Reference_Features.layer-hidden',
+        '#activeB-Reference_Features_15m.layer-hidden',
       ).to.be.visible;
-      client.expect.element('#activeB-Coastlines.layer-visible').to.be.visible;
+      client.expect.element('#activeB-Coastlines_15m.layer-visible').to.be.visible;
       client.expect.element(
         '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor.layer-visible',
       ).to.be.visible;

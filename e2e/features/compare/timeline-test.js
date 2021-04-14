@@ -48,7 +48,7 @@ module.exports = {
       .mouseButtonUp(0);
     // Reference labels were not active in A but are in B
     client.waitForElementVisible(
-      '#activeB-Reference_Features',
+      '#activeB-Reference_Features_15m',
       TIME_LIMIT,
       () => {
         client.assert.attributeContains(dateSelectorDayInput, 'value', '16');

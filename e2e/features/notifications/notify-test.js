@@ -1,6 +1,6 @@
 const TIME_LIMIT = 30000;
 const mockParam = '?mockAlerts=';
-const layerNoticesTestParams = '?l=Coastlines,MODIS_Aqua_CorrectedReflectance_TrueColor,Particulate_Matter_Below_2.5micrometers_2001-2010';
+const layerNoticesTestParams = '?l=Coastlines_15m,MODIS_Aqua_CorrectedReflectance_TrueColor,Particulate_Matter_Below_2.5micrometers_2001-2010';
 const localSelectors = require('../../reuseables/selectors.js');
 
 const {

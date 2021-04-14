@@ -49,9 +49,9 @@ param_dict = {
 # These layers should not be combined with the reference layer
 standalone_layers = [
   'Graticule',
-  'Coastlines',
-  'Reference_Features',
-  'Reference_Labels'
+  'Coastlines_15m',
+  'Reference_Features_15m',
+  'Reference_Labels_15m'
 ]
 dest_img_dir = './web/images/layers/previews/'
 reference_layers = {

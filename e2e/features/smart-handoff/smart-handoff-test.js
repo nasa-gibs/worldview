@@ -12,8 +12,9 @@ const layersTab = '#layers-sidebar-tab';
 const dataTabButton = '#download-sidebar-tab';
 const cloudRadiusRadioButton = '#C1443536017-LAADS-MODIS_Aqua_Cloud_Effective_Radius-collection-choice-label';
 const SSTRadioButton = '#C1664741463-PODAAC-GHRSST_L4_MUR_Sea_Surface_Temperature-collection-choice-label';
-const urlParams = '?l=Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-12-01';
+const urlParams = '?l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2019-12-01';
 const permalinkParams = '?l=GHRSST_L4_MUR_Sea_Surface_Temperature,MODIS_Aqua_Aerosol_Optical_Depth_3km&lg=true&sh=MODIS_Aqua_Aerosol_Optical_Depth_3km,C1443528505-LAADS&t=2020-02-06-T06%3A00%3A00Z';
+
 
 module.exports = {
 
