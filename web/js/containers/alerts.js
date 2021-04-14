@@ -23,7 +23,28 @@ class DismissableAlerts extends React.Component {
       hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
       hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
       hasDismissedDistractionFree: !!safeLocalStorage.getItem(DISMISSED_DISTRACTION_FREE_ALERT),
+      distractionFreeModeInitLoad: false,
     };
+  }
+
+  componentDidMount() {
+    const { isDistractionFreeModeActive } = this.props;
+    if (isDistractionFreeModeActive) {
+      this.toggleDistractionFreeModeInitLoad(true);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isDistractionFreeModeActive } = this.props;
+    const { distractionFreeModeInitLoad } = this.state;
+    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+    if (distractionFreeModeInitLoad && isDistractionFreeModeActiveChanged) {
+      this.toggleDistractionFreeModeInitLoad(false);
+    }
+  }
+
+  toggleDistractionFreeModeInitLoad(isActive) {
+    this.setState({ distractionFreeModeInitLoad: isActive });
   }
 
   /**
@@ -48,21 +69,28 @@ class DismissableAlerts extends React.Component {
       isVectorAlertPresent,
       openAlertModal,
     } = this.props;
-    const { hasDismissedEvents, hasDismissedCompare, hasDismissedDistractionFree } = this.state;
+    const {
+      hasDismissedEvents,
+      hasDismissedCompare,
+      hasDismissedDistractionFree,
+      distractionFreeModeInitLoad,
+    } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
+    if (distractionFreeModeInitLoad) return null;
     if (isSmall || !HAS_LOCAL_STORAGE) return null;
-    return (
-      <>
-        {!hasDismissedDistractionFree && isDistractionFreeModeActive && (
-          <AlertUtil
-            id="distraction-free-mode-active-alert"
-            isOpen
-            noPortal
-            onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
-            message="You are now in distraction free mode. Click the eye button to exit."
-          />
-        )}
-        {!hasDismissedEvents && isEventsActive && (
+
+    return isDistractionFreeModeActive
+      ? !hasDismissedDistractionFree && (
+      <AlertUtil
+        id="distraction-free-mode-active-alert"
+        isOpen
+        noPortal
+        onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
+        message="You are now in distraction free mode. Click the eye button to exit."
+      />
+      ) : (
+        <>
+          {!hasDismissedEvents && isEventsActive && (
           <AlertUtil
             id="event-alert"
             isOpen
@@ -71,8 +99,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
             message="Events may not be visible at all times."
           />
-        )}
-        {!hasDismissedCompare && isCompareActive && (
+          )}
+          {!hasDismissedCompare && isCompareActive && (
           <AlertUtil
             isOpen
             noPortal
@@ -80,8 +108,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
             message="You are now in comparison mode."
           />
-        )}
-        {isVectorAlertPresent && (
+          )}
+          {isVectorAlertPresent && (
           <AlertUtil
             isOpen
             noPortal
@@ -89,9 +117,9 @@ class DismissableAlerts extends React.Component {
             onDismiss={dismissVectorAlert}
             message="Vector features may not be clickable at all zoom levels."
           />
-        )}
-      </>
-    );
+          )}
+        </>
+      );
   }
 }
 const mapDispatchToProps = (dispatch) => ({
