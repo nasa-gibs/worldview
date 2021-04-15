@@ -22,13 +22,13 @@ function EventsFilter (props) {
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
   const [categories, setCategories] = useState(selectedCategories);
 
-  const toggleCategory = (categoryTitle) => {
-    const isActive = categories.includes(categoryTitle);
+  const toggleCategory = (category) => {
+    const isActive = categories.some(({ id }) => id === category.id);
     let newCategories;
     if (isActive) {
-      newCategories = categories.filter((category) => category !== categoryTitle);
+      newCategories = categories.filter(({ id }) => id !== category.id);
     } else {
-      newCategories = [categoryTitle].concat(categories);
+      newCategories = [category].concat(categories);
     }
     setCategories(newCategories);
   };
@@ -42,7 +42,7 @@ function EventsFilter (props) {
     if (allNone) {
       setCategories([]);
     } else {
-      setCategories(eventCategories.map(({ title }) => title));
+      setCategories(eventCategories);
     }
     setAllNone(!allNone);
   };
@@ -81,7 +81,7 @@ function EventsFilter (props) {
         {eventCategories.map((category) => {
           const { id, title, description } = category;
           const switchId = `${id}-switch`;
-          const isActive = categories.includes(title);
+          const isActive = categories.some((c) => c.title === title);
           return (
             <Switch
               id={switchId}
@@ -89,7 +89,7 @@ function EventsFilter (props) {
               label={title}
               active={isActive}
               tooltip={description}
-              toggle={() => toggleCategory(title)}
+              toggle={() => toggleCategory(category)}
             />
           );
         })}
