@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import { toLower as lodashToLower } from 'lodash';
 import {
-  Modal, ModalBody, ModalHeader, ModalFooter,
+  Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
 import Draggable from 'react-draggable';
 import { Resizable } from 'react-resizable';
@@ -118,7 +118,6 @@ class ModalContainer extends Component {
       dragHandle,
       headerComponent,
       headerText,
-      footer,
       isDraggable,
       isResizable,
       mobileOnly,
@@ -217,9 +216,6 @@ class ModalContainer extends Component {
                       )
                       : isTemplateModal ? this.getTemplateBody() : bodyText || ''}
                   </ModalBody>
-                  {footer ? (
-                    <ModalFooter />
-                  ) : null}
                 </DetectOuterClick>
               )}
           </Modal>

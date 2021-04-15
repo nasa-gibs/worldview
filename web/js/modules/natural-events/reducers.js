@@ -94,11 +94,17 @@ export function eventsReducer(state = eventsReducerState, action) {
         ...state,
         selected: eventsReducerState.selected,
       };
-    case REQUEST_CATEGORIES_SUCCESS:
+    case REQUEST_CATEGORIES_SUCCESS: {
+      const skipCategories = lodashGet(action.state, 'config.naturalEvents.skip') || [];
+      const { categories } = action.response;
       return {
         ...state,
-        selectedCategories: action.response.categories.map(({ title }) => title),
+        selectedCategories: categories
+          .filter(({ title }) => !skipCategories.includes(title))
+          .map(({ title }) => title),
       };
+    }
+
     case SET_EVENTS_FILTER:
       return {
         ...state,

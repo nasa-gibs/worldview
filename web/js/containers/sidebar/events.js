@@ -8,6 +8,7 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Event from '../../components/sidebar/event';
+import EventIcon from '../../components/sidebar/event-icon';
 import EventFilter from '../../components/sidebar/events-filter';
 import Scrollbars from '../../components/util/scrollbar';
 import {
@@ -37,6 +38,9 @@ function Events(props) {
     isMobile,
     showAlert,
     selectedDate,
+    selectedStartDate,
+    selectedEndDate,
+    selectedCategories,
   } = props;
 
 
@@ -50,10 +54,10 @@ function Events(props) {
       ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
 
-
   return (
     <div className="event-container">
-      {!isLoading && (
+      <div className="filter-controls">
+
         <Button
           id="event-filter-button"
           className="filter-button"
@@ -62,11 +66,24 @@ function Events(props) {
           color="primary"
           size="sm"
           block
+          disable={isLoading}
         >
           <FontAwesomeIcon icon="filter" />
-          &nbsp; Filter Events
         </Button>
-      )}
+
+        <div className="filter-dates-icons">
+          <div className="filter-dates">
+            {`${selectedStartDate} - ${selectedEndDate}`}
+          </div>
+
+          <div className="filter-icons">
+            {selectedCategories.map((category) => (
+              <EventIcon id="filter-" category={category} title={category} />
+            ))}
+          </div>
+        </div>
+      </div>
+
       <Scrollbars
         style={{ maxHeight: `${scrollbarMaxHeight}px` }}
       >
@@ -124,9 +141,6 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(selectDate(new Date(dateStr)));
     }
   },
-  updateEventSelect: (id, dateStr) => {
-    dispatch(selectEventActionCreator(id, dateStr));
-  },
   deselectEvent: () => {
     dispatch(deselectEventActionCreator());
   },
@@ -135,16 +149,6 @@ const mapDispatchToProps = (dispatch) => ({
       headerText: 'Filter Events',
       backdrop: false,
       bodyComponent: EventFilter,
-      footer: true,
-      // footerComponent: (
-      //   <>
-      //     <Button color="primary" onClick={() => {}}>
-      //       Apply
-      //     </Button>
-      //     <Button color="secondary" onClick={() => {}}>
-      //       Cancel
-      //     </Button>
-      //   </>),
       // Using clickableBehindModal: true here causes an issue where switching sidebar
       // tabs does not close this modal
       wrapClassName: 'clickable-behind-modal',
@@ -163,7 +167,7 @@ const mapStateToProps = (state, ownProps) => {
   } = state;
   const { eventsData } = ownProps;
   const {
-    selected, showAll,
+    selected, showAll, selectedStartDate, selectedEndDate, selectedCategories,
   } = events;
   let visibleEvents = {};
   const mapExtent = lodashGet(state, 'map.extent');
@@ -195,6 +199,9 @@ const mapStateToProps = (state, ownProps) => {
     visibleEvents,
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
+    selectedCategories,
+    selectedStartDate: util.toISOStringDate(new Date(selectedStartDate)),
+    selectedEndDate: util.toISOStringDate(new Date(selectedEndDate)),
     selectedDate: util.toISOStringDate(getSelectedDate(state)),
   };
 };
@@ -213,6 +220,9 @@ Events.propTypes = {
   openFilterModal: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
+  selectedStartDate: PropTypes.string,
+  selectedEndDate: PropTypes.string,
+  selectedCategories: PropTypes.array,
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,

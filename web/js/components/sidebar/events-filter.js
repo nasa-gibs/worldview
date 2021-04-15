@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Portal } from 'react-portal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Button, ModalFooter } from 'reactstrap';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import Switch from '../util/switch';
 import {
@@ -36,7 +35,6 @@ function EventsFilter (props) {
   };
 
   const applyFilter = () => {
-    const [startDate, endDate] = dateRange;
     setFilter(categories, startDate, endDate);
     closeModal();
   };
@@ -50,7 +48,7 @@ function EventsFilter (props) {
     setAllNone(!allNone);
   };
 
-  const portalNode = document.querySelector('.modal-footer');
+  const [startDate, endDate] = dateRange || [];
 
   return (
     <div className="events-filter">
@@ -58,6 +56,7 @@ function EventsFilter (props) {
       <DateRangePicker
         onChange={setDateRange}
         value={dateRange}
+        required
       />
 
       <div className="category-toggles">
@@ -75,7 +74,6 @@ function EventsFilter (props) {
             <Switch
               id={switchId}
               key={switchId}
-              // color={}
               label={title}
               active={isActive}
               tooltip={description}
@@ -85,16 +83,14 @@ function EventsFilter (props) {
         })}
       </div>
 
-      <Portal node={portalNode}>
-        {/* <div className="modal-footer"> */}
-        <Button color="primary" onClick={applyFilter}>
+      <ModalFooter>
+        <Button color="primary" onClick={applyFilter} disabled={!startDate || !endDate}>
           Apply
         </Button>
         <Button color="secondary" onClick={closeModal}>
           Cancel
         </Button>
-        {/* </div> */}
-      </Portal>
+      </ModalFooter>
 
     </div>
   );
