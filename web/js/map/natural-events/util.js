@@ -7,13 +7,17 @@ import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
 import moment from 'moment';
 import util from '../../util/util';
 
-export function getEventsRequestURL (baseUrl, startDate, endDate) {
+export function getEventsRequestURL (baseUrl, startDate, endDate, categories = []) {
   const params = {
     status: 'all',
+    limit: 50,
   };
   if (startDate && endDate) {
     params.start = moment.utc(startDate).format('YYYY-MM-DD');
     params.end = moment.utc(endDate).format('YYYY-MM-DD');
+  }
+  if (categories.length) {
+    params.category = categories.map(({ id }) => id).join(',');
   }
   return `${baseUrl}/events${util.toQueryString(params)}`;
 }

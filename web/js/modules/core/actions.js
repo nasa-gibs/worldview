@@ -5,6 +5,7 @@ export function requestAction(
   mimeType,
   id,
   options,
+  state,
 ) {
   dispatch(startRequest(actionName, id));
   return new Promise((resolve, reject) => fetch(url, options)
@@ -13,7 +14,7 @@ export function requestAction(
       : response.text()
     ))
     .then((data) => {
-      dispatch(fetchSuccess(actionName, data, id));
+      dispatch(fetchSuccess(actionName, data, id, state));
       resolve(data);
     })
     .catch((error) => {
@@ -32,12 +33,13 @@ export function startRequest(actionName, id) {
 export function fetchSuccess(actionName, response, id) {
   return (dispatch, getState) => {
     const state = getState();
-    dispatch({
+    const action = {
       type: `${actionName}_SUCCESS`,
       response,
       ...!!id && { id },
-      state,
-    });
+    };
+    if (state) action.state = state;
+    dispatch(action);
   };
 }
 
