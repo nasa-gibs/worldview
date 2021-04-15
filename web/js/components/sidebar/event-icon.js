@@ -21,6 +21,7 @@ export default function EventIcon ({ id, category, title }) {
 }
 
 EventIcon.propTypes = {
+  id: PropTypes.string,
   category: PropTypes.string,
   title: PropTypes.string,
 };

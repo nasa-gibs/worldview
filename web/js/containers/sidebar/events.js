@@ -62,6 +62,17 @@ function Events(props) {
     <div className="event-container">
       <div className="filter-controls">
 
+        <div className="filter-dates-icons">
+          <div className="filter-dates">
+            {`${selectedStartDate} - ${selectedEndDate}`}
+          </div>
+
+          <div className="filter-icons">
+            {selectedCategories.map((category) => (
+              <EventIcon id="filter-" category={category} title={category} />
+            ))}
+          </div>
+        </div>
         <Button
           id="event-filter-button"
           className="filter-button"
@@ -74,18 +85,6 @@ function Events(props) {
         >
           <FontAwesomeIcon icon="filter" />
         </Button>
-
-        <div className="filter-dates-icons">
-          <div className="filter-dates">
-            {`${selectedStartDate} - ${selectedEndDate}`}
-          </div>
-
-          <div className="filter-icons">
-            {selectedCategories.map((category) => (
-              <EventIcon id="filter-" category={category} title={category} />
-            ))}
-          </div>
-        </div>
       </div>
 
       <Scrollbars
