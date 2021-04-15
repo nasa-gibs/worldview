@@ -40,6 +40,10 @@
     background-color: #222;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
+    & .modal-footer {
+      padding-bottom: 0;
+      margin: 14px -13px 0 -13px;
+    }
   }
   .modal-footer {
     border-top: 1px solid #666;

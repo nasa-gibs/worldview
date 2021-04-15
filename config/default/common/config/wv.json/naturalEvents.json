@@ -1016,7 +1016,8 @@
             "Floods",
             "Earthquakes",
             "Drought",
-            "Landslides"
+            "Landslides",
+            "Temperature Extremes"
         ]
     }
 }
