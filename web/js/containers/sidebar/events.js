@@ -64,8 +64,8 @@ function Events(props) {
           </div>
 
           <div className="filter-icons">
-            {selectedCategories.map((category) => (
-              <EventIcon id="filter-" category={category} title={category} />
+            {selectedCategories.map(({ title }) => (
+              <EventIcon id="filter-" category={title} title={title} />
             ))}
           </div>
         </div>
@@ -199,8 +199,8 @@ const mapStateToProps = (state, ownProps) => {
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
     selectedCategories,
-    selectedStartDate: util.toISOStringDate(new Date(selectedStartDate)),
-    selectedEndDate: util.toISOStringDate(new Date(selectedEndDate)),
+    selectedStartDate: util.toISOStringDate(selectedStartDate),
+    selectedEndDate: util.toISOStringDate(selectedEndDate),
     selectedDate: util.toISOStringDate(getSelectedDate(state)),
   };
 };
