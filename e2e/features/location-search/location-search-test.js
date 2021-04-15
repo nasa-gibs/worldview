@@ -3,7 +3,7 @@ const localSelectors = require('../../reuseables/selectors.js');
 
 // encoded id; originally coordinates-map-marker_38.8904,-77.032
 const testMarkerEncodedID = '.coordinates-map-marker_38__2E__8904__2C__-77__2E__032';
-const testMarkerNoDetailsEncodedID = '.coordinates-map-marker_5__2C__-51__2E__5';
+const testMarkerNoDetailsEncodedID = '.coordinates-map-marker_-75__2C__10';
 const TIME_LIMIT = 10000;
 
 const {
@@ -57,11 +57,11 @@ module.exports = {
     c.expect.element(tooltipCoordinatesContainer).to.not.be.present;
   },
   'Coordinate title for no suggested place results displays correct coordinates instead': (c) => {
-    c.url(`${c.globals.url}?v=-141.32806305066077,-56.35574752202643,18.000061949339212,60.01695346916299&s=-51.5,5`);
+    c.url(`${c.globals.url}?v=-39.980778604772254,-93.78047406661956,48.73858468999798,-50.229432449264905&s=10,-75`);
     c.waitForElementVisible(tooltipCoordinatesContainer, TIME_LIMIT);
     c.expect.element(testMarkerNoDetailsEncodedID).to.be.present;
-    c.assert.containsText(tooltipCoordinatesTitle, '5.0000°, -51.5000°');
-    c.assert.containsText(tooltipCoordinates, '5.0000°, -51.5000°');
+    c.assert.containsText(tooltipCoordinatesTitle, '-75.0000°, 10.0000°');
+    c.assert.containsText(tooltipCoordinates, '-75.0000°, 10.0000°');
   },
   'Clicking close tooltip removes the marker and coordinates dialog': (c) => {
     c.click(tooltipCoordinatesCloseButton);
