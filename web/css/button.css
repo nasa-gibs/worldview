@@ -46,3 +46,12 @@
   color: #eee;
   cursor: not-allowed;
 }
+
+
+/*
+* Bootstrap/Reactstrap Button Overrides
+*/
+
+.btn.disabled, .btn:disabled {
+  cursor: not-allowed;
+}
