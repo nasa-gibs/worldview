@@ -1,6 +1,7 @@
 import {
   get as lodashGet,
 } from 'lodash';
+import { _ } from 'core-js';
 import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
@@ -35,12 +36,18 @@ export function requestSources(location) {
 }
 
 export function requestCategories(location) {
-  return (dispatch) => requestAction(
-    dispatch,
-    REQUEST_CATEGORIES,
-    location,
-    'application/json',
-  );
+  return (dispatch, getState) => {
+    const state = getState();
+    return requestAction(
+      dispatch,
+      REQUEST_CATEGORIES,
+      location,
+      'application/json',
+      null,
+      null,
+      state,
+    );
+  };
 }
 
 export function selectEvent(id, eventDate) {
@@ -67,7 +74,7 @@ export function setEventsFilter(categories, startDate, endDate) {
   return (dispatch, getState) => {
     const { config } = getState();
     const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-    const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate);
+    const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate, categories);
     dispatch(requestEvents(requestUrl));
     dispatch({
       type: SET_EVENTS_FILTER,

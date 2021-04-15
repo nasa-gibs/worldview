@@ -26,9 +26,8 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
  * @param {*} categories
  * @returns
  */
-const sortEvents = function(events, categories) {
+const sortEvents = function(events) {
   return events
-    .filter((e) => e.categories.some(({ title }) => categories.includes(title)))
     .map((e) => {
       e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
       // Discard duplicate geometry dates
@@ -70,7 +69,7 @@ export const eventsReducerState = {
   showAll: true,
   isAnimatingToEvent: false,
   selectedCategories: [],
-  selectedStartDate: new Date().setDate(endDate.getDate() - 60),
+  selectedStartDate: new Date(new Date().setDate(endDate.getDate() - 60)),
   selectedEndDate: new Date(),
 };
 
@@ -100,8 +99,7 @@ export function eventsReducer(state = eventsReducerState, action) {
       return {
         ...state,
         selectedCategories: categories
-          .filter(({ title }) => !skipCategories.includes(title))
-          .map(({ title }) => title),
+          .filter(({ title }) => !skipCategories.includes(title)),
       };
     }
 
