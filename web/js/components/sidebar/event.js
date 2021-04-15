@@ -5,6 +5,7 @@ import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDefaultEventDate } from '../../map/natural-events/util';
 import util from '../../util/util';
+import EventIcon from './event-icon';
 
 function Event (props) {
   const {
@@ -137,10 +138,7 @@ function Event (props) {
         onEventSelect();
       }}
     >
-      <i
-        className={`event-icon event-icon-${event.categories[0].slug}`}
-        title={event.categories[0].title}
-      />
+      <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
       <h4
         className="title"
         // eslint-disable-next-line react/no-danger
