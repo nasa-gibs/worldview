@@ -20,11 +20,10 @@ function EventsFilter (props) {
 
   const [dateRange, setDateRange] = useState([selectedStartDate, selectedEndDate]);
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
-
-
   const [categories, setCategories] = useState(selectedCategories);
+
   const toggleCategory = (categoryTitle) => {
-    const isActive = selectedCategories.includes(categoryTitle);
+    const isActive = categories.includes(categoryTitle);
     let newCategories;
     if (isActive) {
       newCategories = categories.filter((category) => category !== categoryTitle);
@@ -49,6 +48,17 @@ function EventsFilter (props) {
   };
 
   const [startDate, endDate] = dateRange || [];
+  const disableApply = !startDate || !endDate || !categories.length;
+  const getDisableApplyMsg = () => {
+    let msg = '';
+    if (!startDate || !endDate) {
+      msg += 'Date range must be set.';
+    }
+    if (!categories.length) {
+      msg += ' At least one category must be selected';
+    }
+    return msg;
+  };
 
   return (
     <div className="events-filter">
@@ -56,6 +66,8 @@ function EventsFilter (props) {
       <DateRangePicker
         onChange={setDateRange}
         value={dateRange}
+        minDate={new Date('01-01-1975')}
+        maxDate={new Date()}
         required
       />
 
@@ -84,7 +96,13 @@ function EventsFilter (props) {
       </div>
 
       <ModalFooter>
-        <Button color="primary" onClick={applyFilter} disabled={!startDate || !endDate}>
+        <Button
+          id="filter-apply-btn"
+          color="primary"
+          onClick={applyFilter}
+          disabled={disableApply}
+          title={getDisableApplyMsg()}
+        >
           Apply
         </Button>
         <Button color="secondary" onClick={closeModal}>
