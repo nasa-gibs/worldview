@@ -318,7 +318,7 @@
   font-size: 11px;
 }
 .event-icon {
-  display: block;
+  display: inline-block;
   height: 30px;
   width: 30px;
   background: url("../images/natural-events/icon-critical.svg");
@@ -405,16 +405,47 @@
   border-top: 0.5px solid rgba(250, 250, 250, 0.5);
 }
 
+.filter-controls {
+  background: #333;
+  padding: 5px;
+  border-bottom: 1px solid #666;
+  border-top: 1px solid #666;
+  & .filter-dates-icons {
+    display: inline-block;
+    max-width: 227px;
+  }
+  & .filter-dates {
+    color: #fff;
+    font-family: 'Roboto Mono';
+    text-align: center;
+    padding: 3px 5px 6px;
+    font-size: 14px;
+  }
+  & .filter-icons {
+    text-align: center;
+    max-width: 225px;
+    overflow: hidden;
+    max-height: 32px;
+  }
+  & .filter-button {
+    width: 40px;
+    margin: 5px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
 .events-filter {
   & .react-daterange-picker {
-    margin: 4px 12px;
-    width: 250px;
+    margin: 4px auto;
+    width: 272px;
     text-align: center;
     & input {
       color: #fff;
       font-family: 'Roboto Mono', monospace;
       font-size: 16px;
-      margin: 0px 1px;
+      margin: 0;
     }
     & span {
       font-size: 16px;

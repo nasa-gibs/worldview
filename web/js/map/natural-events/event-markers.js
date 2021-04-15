@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashIsEmpty from 'lodash/isEmpty';
@@ -12,6 +13,7 @@ import OlSourceVector from 'ol/source/Vector';
 import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
+import EventIcon from '../../components/sidebar/event-icon';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from './util';
 
@@ -202,12 +204,17 @@ class EventMarkers extends React.Component {
 
 const createPin = function(id, category, isSelected, title) {
   const overlayEl = document.createElement('div');
-  const icon = document.createElement('i');
   overlayEl.className = 'marker';
   if (isSelected) overlayEl.classList.add('marker-selected');
-  icon.className = `event-icon event-icon-${category.slug}`;
-  icon.title = title || category.title;
-  overlayEl.appendChild(icon);
+
+  ReactDOM.render(
+    React.createElement(EventIcon, {
+      category: category.title,
+      title,
+      id,
+    }),
+    overlayEl,
+  );
   return new OlOverlay({
     element: overlayEl,
     positioning: 'bottom-center',
