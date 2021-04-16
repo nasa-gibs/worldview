@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 import {
   get as lodashGet,
   cloneDeep as lodashCloneDeep,
@@ -650,8 +651,9 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
     period,
     inactive,
   } = def;
-  const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let dateArray = [];
+  if (!dateRanges) { return dateArray; }
+  const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let currentDate = new Date(date);
 
   let inputStartDate;
@@ -665,8 +667,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
     inputStartDateTime = inputStartDate.getTime();
     inputEndDateTime = inputEndDate.getTime();
   } else {
-    singleDateRangeAndInterval = dateRanges
-    && dateRanges.length === 1
+    singleDateRangeAndInterval = dateRanges.length === 1
     && dateRanges[0].dateInterval === '1';
   }
 
@@ -674,7 +675,10 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
   let hitMaxLimitOfRange = false;
   // runningMinDate used for overlapping ranges
   let runningMinDate;
-  lodashEach(dateRanges, (dateRange, index) => {
+
+  const dateRangesIteration = [...dateRanges];
+  for (let index = 0; index < dateRangesIteration.length; index += 1) {
+    const dateRange = dateRangesIteration[index];
     const {
       startDate,
       endDate,
@@ -709,7 +713,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
             dateArray.push(minDate);
           }
           hitMaxLimitOfRange = true;
-          return;
+          continue;
         }
       }
     }
@@ -721,7 +725,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
         if (minDateTime >= inputStartDateTime && maxDate <= inputEndDateTime) {
           dateArray.push(minDate);
         }
-        return;
+        continue;
       }
 
       // revise currentDate to minDate to reduce earlier minDate than needed
@@ -732,9 +736,24 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
         currentDateTime = currentDate.getTime();
       }
       // set maxDate to current date if layer coverage is ongoing
-      if (index === dateRanges.length - 1 && !inactive) {
+      if (index === dateRangesIteration.length - 1 && !inactive) {
         if (futureTime) {
           maxDate = new Date(endDate);
+        } else if (dateIntervalNum > 1 && period !== 'subdaily') {
+          // create/add dynamic date to iterated dateRanges for active, multi-day layer coverage
+          const dynamicStartDate = new Date(startDate);
+          dynamicStartDate.setFullYear(dynamicStartDate.getUTCFullYear());
+          if (dynamicStartDate < new Date(appNow)) {
+            const dynamicDateRange = {
+              startDate: util.toISOStringSeconds(dynamicStartDate),
+              endDate: util.toISOStringSeconds(new Date(appNow)),
+              dateInterval,
+            };
+            dateRangesIteration.push(dynamicDateRange);
+          } else {
+            // extend current year endDate to appNow
+            maxDate = new Date(appNow);
+          }
         } else {
           maxDate = new Date(appNow);
         }
@@ -746,7 +765,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
     if (singleDateRangeAndInterval) {
       const limitedDateRange = getLimitedDateRange(def, currentDate);
       dateArray = [...limitedDateRange];
-      return;
+      continue;
     }
 
     // Yearly layers
@@ -779,7 +798,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
       dateArray = [...subdailyArray];
     }
     runningMinDate = minDate;
-  });
+  }
   return dateArray;
 }
 
