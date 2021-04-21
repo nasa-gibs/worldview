@@ -1,7 +1,8 @@
 import { get } from 'lodash';
+import update from 'immutability-helper';
 
-export function eventParse(state) {
-  const values = state.split(',');
+export function parseEvent(eventString) {
+  const values = eventString.split(',');
   let id = values[0] || '';
   let date = values[1] || '';
   id = id.match(/^EONET_[0-9]+/i) ? values[0] : '';
@@ -26,4 +27,24 @@ export function serializeEvent(currentItemState) {
       : eventsTabActive
         ? 'true'
         : undefined;
+}
+
+export function serializeCategories(categories, state) {
+  const eventsTabActive = state.events.active;
+  return eventsTabActive && categories.map(({ id }) => id);
+}
+
+export function mapLocationToEventFilterState(parameters, stateFromLocation, state) {
+  const allCategories = state.config.naturalEvents.categories;
+  const selectedIds = parameters.efc.split(',');
+  const selectedCategories = !allCategories.length
+    ? []
+    : selectedIds.map((id) => allCategories.find((c) => c.id === id));
+  return update(stateFromLocation, {
+    events: {
+      selectedCategories: {
+        $set: selectedCategories,
+      },
+    },
+  });
 }
