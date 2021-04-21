@@ -22,11 +22,10 @@ export function getEventsRequestURL (baseUrl, startDate, endDate, categories = [
   return `${baseUrl}/events${util.toQueryString(params)}`;
 }
 
-export function initialEventsLoad (config, startDate, endDate) {
+export function initialEventsLoad (config, startDate, endDate, categories) {
   const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-  let eventsURL = getEventsRequestURL(baseUrl, startDate, endDate);
+  let eventsURL = getEventsRequestURL(baseUrl, startDate, endDate, categories);
   let sourcesURL = `${baseUrl}/sources`;
-  const categoriesURL = `${baseUrl}/categories`;
 
   const mockEvents = lodashGet(config, 'parameters.mockEvents');
   const mockSources = lodashGet(config, 'parameters.mockSources');
@@ -44,7 +43,6 @@ export function initialEventsLoad (config, startDate, endDate) {
   return {
     sourcesURL,
     eventsURL,
-    categoriesURL,
   };
 }
 

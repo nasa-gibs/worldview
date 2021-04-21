@@ -1,11 +1,9 @@
 import {
   get as lodashGet,
 } from 'lodash';
-import { _ } from 'core-js';
 import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
-  REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
@@ -33,21 +31,6 @@ export function requestSources(location) {
     location,
     'application/json',
   );
-}
-
-export function requestCategories(location) {
-  return (dispatch, getState) => {
-    const state = getState();
-    return requestAction(
-      dispatch,
-      REQUEST_CATEGORIES,
-      location,
-      'application/json',
-      null,
-      null,
-      state,
-    );
-  };
 }
 
 export function selectEvent(id, eventDate) {
@@ -96,6 +79,7 @@ export function onlyShowVisible() {
     type: ONLY_SHOW_VISIBLE,
   };
 }
+
 export function selected() {
   return {
     type: FINISHED_ANIMATING_TO_EVENT,
