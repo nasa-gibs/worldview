@@ -1,5 +1,84 @@
 {
     "naturalEvents": {
+        "categories": [
+            {
+                "id": "drought",
+                "title": "Drought",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/drought",
+                "description": "Long lasting absence of precipitation affecting agriculture and livestock, and the overall availability of food and water.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/drought"
+            },
+            {
+                "id": "dustHaze",
+                "title": "Dust and Haze",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/dustHaze",
+                "description": "Related to dust storms, air pollution and other non-volcanic aerosols. Volcano-related plumes shall be included with the originating eruption event.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/dustHaze"
+            },
+            {
+                "id": "earthquakes",
+                "title": "Earthquakes",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/earthquakes",
+                "description": "Related to all manner of shaking and displacement. Certain aftermath of earthquakes may also be found under landslides and floods.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/earthquakes"
+            },
+            {
+                "id": "manmade",
+                "title": "Manmade",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/manmade",
+                "description": "Events that have been human-induced and are extreme in their extent.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/manmade"
+            },
+            {
+                "id": "seaLakeIce",
+                "title": "Sea and Lake Ice",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/seaLakeIce",
+                "description": "Related to all ice that resides on oceans and lakes, including sea and lake ice (permanent and seasonal) and icebergs.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/seaLakeIce"
+            },
+            {
+                "id": "severeStorms",
+                "title": "Severe Storms",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/severeStorms",
+                "description": "Related to the atmospheric aspect of storms (hurricanes, cyclones, tornadoes, etc.). Results of storms may be included under floods, landslides, etc.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/severeStorms"
+            },
+            {
+                "id": "snow",
+                "title": "Snow",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/snow",
+                "description": "Related to snow events, particularly extreme/anomalous snowfall in either timing or extent/depth.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/snow"
+            },
+            {
+                "id": "tempExtremes",
+                "title": "Temperature Extremes",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/tempExtremes",
+                "description": "Related to anomalous land temperatures, either heat or cold.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/tempExtremes"
+            },
+            {
+                "id": "volcanoes",
+                "title": "Volcanoes",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/volcanoes",
+                "description": "Related to both the physical effects of an eruption (rock, ash, lava) and the atmospheric (ash and gas plumes).",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/volcanoes"
+            },
+            {
+                "id": "waterColor",
+                "title": "Water Color",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/waterColor",
+                "description": "Related to events that alter the appearance of water: phytoplankton, red tide, algae, sediment, whiting, etc.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/waterColor"
+            },
+            {
+                "id": "wildfires",
+                "title": "Wildfires",
+                "link": "https://eonet.sci.gsfc.nasa.gov/api/v3/categories/wildfires",
+                "description": "Wildfires includes all nature of fire, including forest and plains fires, as well as urban and industrial fire events. Fires may be naturally caused or manmade.",
+                "layers": "https://eonet.sci.gsfc.nasa.gov/api/v3/layers/wildfires"
+            }
+        ],
         "layers": {
             "arctic": {
                 "Wildfires": [

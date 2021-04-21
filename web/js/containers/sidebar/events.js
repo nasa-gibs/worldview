@@ -65,7 +65,12 @@ function Events(props) {
 
           <div className="filter-icons">
             {selectedCategories.map(({ title }) => (
-              <EventIcon id="filter-" category={title} title={title} />
+              <EventIcon
+                id="filter-"
+                key={title}
+                category={title}
+                title={title}
+              />
             ))}
           </div>
         </div>
@@ -77,7 +82,7 @@ function Events(props) {
           color="primary"
           size="sm"
           block
-          disable={isLoading}
+          disabled={isLoading}
         >
           <FontAwesomeIcon icon="filter" />
         </Button>
@@ -199,8 +204,8 @@ const mapStateToProps = (state, ownProps) => {
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
     selectedCategories,
-    selectedStartDate: util.toISOStringDate(selectedStartDate),
-    selectedEndDate: util.toISOStringDate(selectedEndDate),
+    selectedStartDate,
+    selectedEndDate,
     selectedDate: util.toISOStringDate(getSelectedDate(state)),
   };
 };

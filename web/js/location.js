@@ -14,7 +14,9 @@ import {
   mapLocationToTourState,
 } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
-import { eventParse, serializeEvent } from './modules/natural-events/util';
+import {
+  parseEvent, serializeEvent, serializeCategories, mapLocationToEventFilterState,
+} from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
 import {
   mapLocationToProjState,
@@ -99,6 +101,11 @@ export const mapLocationToState = (state, location) => {
       stateFromLocation,
       state,
       config,
+    );
+    stateFromLocation = mapLocationToEventFilterState(
+      parameters,
+      stateFromLocation,
+      state,
     );
 
     // one level deep merge of newState with defaultState
@@ -285,8 +292,35 @@ const getParameters = function(config, parameters) {
       type: 'object',
       initialState: eventsReducerState,
       options: {
-        parse: eventParse,
+        parse: parseEvent,
         serialize: serializeEvent,
+      },
+    },
+    efsd: {
+      stateKey: 'events.selectedStartDate',
+      type: 'string',
+      initialState: eventsReducerState.selectedStartDate,
+      options: {
+        parse: (date) => date,
+        serialize: (date) => date,
+      },
+    },
+    efed: {
+      stateKey: 'events.selectedEndDate',
+      type: 'string',
+      initialState: eventsReducerState.selectedEndDate,
+      options: {
+        parse: (date) => date,
+        serialize: (date) => date,
+      },
+    },
+    efc: {
+      stateKey: 'events.selectedCategories',
+      type: 'array',
+      initialState: [],
+      options: {
+        serialize: serializeCategories,
+        serializeNeedsGlobalState: true,
       },
     },
     l: {
