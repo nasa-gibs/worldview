@@ -7,6 +7,7 @@ import Switch from '../util/switch';
 import {
   setEventsFilter as setEventsFilterAction,
 } from '../../modules/natural-events/actions';
+import util from '../../util/util';
 
 function EventsFilter (props) {
   const {
@@ -18,9 +19,13 @@ function EventsFilter (props) {
     closeModal,
   } = props;
 
-  const [dateRange, setDateRange] = useState([selectedStartDate, selectedEndDate]);
+  const [dateRange, setDateRange] = useState([
+    new Date(selectedStartDate),
+    new Date(selectedEndDate),
+  ]);
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
   const [categories, setCategories] = useState(selectedCategories);
+  const [startDate, endDate] = dateRange || [];
 
   const toggleCategory = (category) => {
     const isActive = categories.some(({ id }) => id === category.id);
@@ -34,7 +39,9 @@ function EventsFilter (props) {
   };
 
   const applyFilter = () => {
-    setFilter(categories, startDate, endDate);
+    const start = util.toISOStringDate(startDate);
+    const end = util.toISOStringDate(endDate);
+    setFilter(categories, start, end);
     closeModal();
   };
 
@@ -47,7 +54,7 @@ function EventsFilter (props) {
     setAllNone(!allNone);
   };
 
-  const [startDate, endDate] = dateRange || [];
+
   const disableApply = !startDate || !endDate || !categories.length;
   const getDisableApplyMsg = () => {
     let msg = '';
@@ -118,16 +125,18 @@ EventsFilter.propTypes = {
   closeModal: PropTypes.func,
   eventCategories: PropTypes.array,
   selectedCategories: PropTypes.array,
-  selectedStartDate: PropTypes.object,
-  selectedEndDate: PropTypes.object,
+  selectedStartDate: PropTypes.string,
+  selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
-  const { events, requestedEventCategories } = state;
-  const { selectedCategories, selectedStartDate, selectedEndDate } = events;
+  const { events } = state;
+  const {
+    selectedCategories, selectedStartDate, selectedEndDate, allCategories,
+  } = events;
   return {
-    eventCategories: requestedEventCategories.response || [],
+    eventCategories: allCategories,
     selectedCategories,
     selectedStartDate,
     selectedEndDate,
@@ -136,7 +145,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setFilter: (categories, startDate, endDate) => {
-    dispatch(setEventsFilterAction(categories, startDate, endDate));
+    dispatch(
+      setEventsFilterAction(
+        categories,
+        startDate,
+        endDate,
+      ),
+    );
   },
 });
 

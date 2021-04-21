@@ -385,7 +385,7 @@
     margin-left: 6px;
     justify-content: center;
     display: grid;
-    grid-template-columns: repeat(auto-fit,  minmax(10px, max-content)) ;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
     max-width: 205px;
     max-height: 32px;
   }
@@ -415,12 +415,12 @@
     & svg {
       stroke: #fff;
       &:hover {
-        stroke: #007bff
+        stroke: #007bff;
       }
     }
   }
   & .category-toggles {
-    margin: 14px 10px 0px 10px;
+    margin: 14px 10px 0;
   }
 }
 
