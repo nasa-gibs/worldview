@@ -86,7 +86,7 @@ Switch.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
   toggle: PropTypes.func,
-  tooltip: PropTypes.object,
+  tooltip: PropTypes.string,
 };
 
 export default Switch;

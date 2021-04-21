@@ -42,7 +42,7 @@
     border-bottom-right-radius: 6px;
     & .modal-footer {
       padding-bottom: 0;
-      margin: 14px -13px 0 -13px;
+      margin: 14px -13px 0;
     }
   }
   .modal-footer {

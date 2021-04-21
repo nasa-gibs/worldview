@@ -2,12 +2,10 @@ import {
   assign as lodashAssign,
   orderBy as lodashOrderBy,
   uniqBy as lodashUniqBy,
-  get as lodashGet,
 } from 'lodash';
 import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
-  REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
   SET_EVENTS_FILTER,
@@ -15,9 +13,9 @@ import {
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
   FINISHED_ANIMATING_TO_EVENT,
-  REQUEST_CATEGORIES_SUCCESS,
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
+import util from '../../util/util';
 
 /**
  * Sort events by date, filter by categories
@@ -41,22 +39,17 @@ const sortEvents = function(events) {
     });
 };
 
-const formatResponse = function(item, ignored) {
-  if (item.categories) {
-    const category = Array.isArray(item.categories)
-      ? item.categories[0]
-      : item.categories;
-    // Add slug to categories
-    category.slug = category.title
-      .toLowerCase()
-      .split(' ')
-      .join('-');
-    return !ignored.includes(category.title);
-  }
-  return !ignored.includes(item.title);
-};
+const endDate = util.toISOStringDate(new Date());
+const startDate = util.toISOStringDate(new Date(new Date().setDate(new Date().getDate() - 60)));
 
-const endDate = new Date();
+export function getInitialEventsState(config) {
+  const { categories } = config.naturalEvents;
+  return {
+    ...eventsReducerState,
+    allCategories: categories,
+    selectedCategories: categories,
+  };
+}
 
 export const eventsReducerState = {
   selected: {
@@ -68,9 +61,10 @@ export const eventsReducerState = {
   active: false,
   showAll: true,
   isAnimatingToEvent: false,
+  allCategories: [],
   selectedCategories: [],
-  selectedStartDate: new Date(new Date().setDate(endDate.getDate() - 60)),
-  selectedEndDate: new Date(),
+  selectedStartDate: startDate,
+  selectedEndDate: endDate,
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -93,15 +87,6 @@ export function eventsReducer(state = eventsReducerState, action) {
         ...state,
         selected: eventsReducerState.selected,
       };
-    case REQUEST_CATEGORIES_SUCCESS: {
-      const skipCategories = lodashGet(action.state, 'config.naturalEvents.skip') || [];
-      const { categories } = action.response;
-      return {
-        ...state,
-        selectedCategories: categories
-          .filter(({ title }) => !skipCategories.includes(title)),
-      };
-    }
 
     case SET_EVENTS_FILTER:
       return {
@@ -159,7 +144,6 @@ export function eventsRequestReducer(actionName, state, action) {
   const START = `${actionName}_START`;
   const SUCCESS = `${actionName}_SUCCESS`;
   const FAILURE = `${actionName}_FAILURE`;
-  const selectedCategories = lodashGet(action, 'state.events.selectedCategories') || [];
 
   switch (action.type) {
     case START:
@@ -172,14 +156,11 @@ export function eventsRequestReducer(actionName, state, action) {
     case SUCCESS: {
       const key = actionName === REQUEST_EVENTS
         ? 'events'
-        : actionName === REQUEST_CATEGORIES
-          ? 'categories'
-          : 'sources';
-      const filtered = action.response[key].filter((item) => formatResponse(item, state.ignore));
+        : 'sources';
       return eventRequestResponse({
         response: actionName === REQUEST_EVENTS
-          ? sortEvents(filtered, selectedCategories)
-          : filtered,
+          ? sortEvents(action.response[key])
+          : action.response[key],
         isLoading: false,
       });
     }
@@ -201,8 +182,4 @@ export function requestedEvents(state = {}, action) {
 
 export function requestedEventSources(state = {}, action) {
   return eventsRequestReducer(REQUEST_SOURCES, state, action);
-}
-
-export function requestedEventCategories(state = {}, action) {
-  return eventsRequestReducer(REQUEST_CATEGORIES, state, action);
 }

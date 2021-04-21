@@ -18,7 +18,6 @@ import { loadedCustomPalettes } from '../../modules/palettes/actions';
 import {
   requestEvents as requestEventsActionCreator,
   requestSources as requestSourcesActionCreator,
-  requestCategories as requestCategoriesActionCreator,
 } from '../../modules/natural-events/actions';
 import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
@@ -96,18 +95,17 @@ class Sidebar extends React.Component {
       config,
       requestEvents,
       requestSources,
-      requestCategories,
       selectedStartDate,
       selectedEndDate,
+      selectedCategories,
     } = this.props;
 
     if (!isLoadingEvents && !hasEventRequestError && !eventsData) {
       const {
-        sourcesURL, eventsURL, categoriesURL,
-      } = initialEventsLoad(config, selectedStartDate, selectedEndDate);
+        sourcesURL, eventsURL,
+      } = initialEventsLoad(config, selectedStartDate, selectedEndDate, selectedCategories);
       requestEvents(eventsURL);
       requestSources(sourcesURL);
-      requestCategories(categoriesURL);
     }
   }
 
@@ -299,16 +297,13 @@ const mapStateToProps = (state) => {
     events,
     requestedEvents,
     requestedEventSources,
-    requestedEventCategories,
     ui,
   } = state;
 
   const isLoadingEvents = requestedEvents.isLoading
-    || requestedEventSources.isLoading
-    || requestedEventCategories.isLoading;
+    || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
-    || requestedEventSources.error
-    || requestedEventCategories.error);
+    || requestedEventSources.error);
   const eventsData = lodashGet(requestedEvents, 'response');
   const eventsSources = lodashGet(requestedEventSources, 'response');
   const { screenHeight } = browser;
@@ -338,6 +333,7 @@ const mapStateToProps = (state) => {
     isMobile,
     selectedStartDate: events.selectedStartDate,
     selectedEndDate: events.selectedEndDate,
+    selectedCategories: events.selectedCategories,
     screenHeight,
     tabTypes,
   };
@@ -369,9 +365,6 @@ const mapDispatchToProps = (dispatch) => ({
   requestSources: (url) => {
     dispatch(requestSourcesActionCreator(url));
   },
-  requestCategories: (url) => {
-    dispatch(requestCategoriesActionCreator(url));
-  },
 });
 
 export default connect(
@@ -399,10 +392,10 @@ Sidebar.propTypes = {
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
-  selectedStartDate: PropTypes.object,
-  selectedEndDate: PropTypes.object,
+  selectedStartDate: PropTypes.string,
+  selectedEndDate: PropTypes.string,
+  selectedCategories: PropTypes.array,
   tabTypes: PropTypes.object,
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
-  requestCategories: PropTypes.func,
 };
