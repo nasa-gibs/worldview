@@ -31,12 +31,14 @@ export function serializeEvent(currentItemState) {
 
 export function serializeCategories(categories, state) {
   const eventsTabActive = state.events.active;
-  return eventsTabActive && categories.map(({ id }) => id);
+  return eventsTabActive ? categories.map(({ id }) => id) : undefined;
 }
 
 export function mapLocationToEventFilterState(parameters, stateFromLocation, state) {
   const allCategories = state.config.naturalEvents.categories;
-  const selectedIds = parameters.efc.split(',');
+  const selectedIds = parameters.efc
+    ? parameters.efc.split(',')
+    : allCategories.map(({ id }) => id);
   const selectedCategories = !allCategories.length
     ? []
     : selectedIds.map((id) => allCategories.find((c) => c.id === id));
