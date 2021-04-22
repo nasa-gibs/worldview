@@ -557,15 +557,18 @@ function getZoomLevel(layer, zoom, proj, sources) {
 
 export function getMaxZoomLevelLayerCollection(layers, zoom, proj, sources) {
   const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
-  let maxZoom = zoom;
+  let maxZoom;
 
   lodashEach(layers, (layer) => {
     const { matrixSet } = layer.projections[proj];
     if (matrixSet !== undefined && layer.type !== 'vector') {
       const { source } = layer.projections[proj];
       const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
-      maxZoom = Math.max(maxZoom, zoomLimit);
+      if (!maxZoom) {
+        maxZoom = zoomLimit;
+      }
+      maxZoom = Math.min(maxZoom, zoomLimit);
     }
   });
-  return maxZoom;
+  return maxZoom || zoom;
 }
