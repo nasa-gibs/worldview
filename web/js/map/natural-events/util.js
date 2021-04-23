@@ -21,22 +21,22 @@ export function getDefaultEventDate(event) {
 
 /**
  *
- * @param {*} loadedEvents
+ * @param {*} events
  * @param {*} selected
  * @param {*} extent
  * @param {*} selectedProj
  * @param {*} showAll
  */
 export function getEventsWithinExtent(
-  loadedEvents,
+  events,
   selected,
-  extent,
+  currentExtent,
   selectedProj,
 ) {
   const { maxExtent, crs } = selectedProj;
   const visibleListEvents = {};
 
-  loadedEvents.forEach((naturalEvent) => {
+  events.forEach((naturalEvent) => {
     const isSelectedEvent = selected.id === naturalEvent.id;
     let date = getDefaultEventDate(naturalEvent);
     if (selected && selected.date) {
@@ -64,11 +64,10 @@ export function getEventsWithinExtent(
       coordinates = getCenter(geomExtent);
     }
 
-    // limit to maxExtent while allowing zoom and filter 'out of extent' events
-    const coordsInProjExtent = containsCoordinate(maxExtent, coordinates);
-    const isVisible = containsCoordinate(extent, coordinates) && coordsInProjExtent;
+    const visibleInProj = containsCoordinate(maxExtent, coordinates);
+    const visibleInExtent = containsCoordinate(currentExtent, coordinates) && visibleInProj;
 
-    if (isVisible || (isSelectedEvent && coordsInProjExtent)) {
+    if (visibleInExtent || (isSelectedEvent && visibleInProj)) {
       visibleListEvents[naturalEvent.id] = true;
     }
   });
