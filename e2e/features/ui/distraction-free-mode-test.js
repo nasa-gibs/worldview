@@ -32,11 +32,13 @@ const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
     measureBtn,
     projToolbarButton,
     shareToolbarButton,
-    sidebarContainer,
     snapshotToolbarButton,
     timelineHeader,
     zoomInButton,
     zoomOutButton,
+  ];
+  const visibleEls = [
+    sidebarContainer,
   ];
 
   // add rotate buttons for polar projections
@@ -52,9 +54,11 @@ const distractionFreeModeValidElsRemoved = (c, proj, isActive) => {
   if (isActive) {
     // distraction free mode is active and els should be removed/hidden
     presentEls.forEach((el) => c.waitForElementNotPresent(el, TIME_LIMIT));
+    visibleEls.forEach((el) => c.waitForElementNotVisible(el, TIME_LIMIT));
   } else {
     // els should be added/visible
     presentEls.forEach((el) => c.waitForElementPresent(el, TIME_LIMIT));
+    visibleEls.forEach((el) => c.waitForElementVisible(el, TIME_LIMIT));
   }
 };
 
