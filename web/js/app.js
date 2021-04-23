@@ -133,14 +133,14 @@ class App extends React.Component {
       if (config.scripts) {
         util.loadScripts(config.scripts);
       }
-      if (config.features.googleTagManager) {
-        if (!/localhost/.test(window.location.href)) {
-          googleTagManager.getIpAddress();
-        }
-      }
 
-      // Console notifications
       if (Brand.release()) {
+        if (config.features.googleTagManager) {
+          if (window.location.href.includes(Brand.BRAND_URL)) {
+            googleTagManager.getIpAddress();
+          }
+        }
+        // Console build version notifications
         console.info(
           `${Brand.NAME
           } - Version ${
