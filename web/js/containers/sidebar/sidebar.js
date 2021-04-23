@@ -222,73 +222,70 @@ class Sidebar extends React.Component {
             ref={(iconElement) => { this.iconElement = iconElement; }}
             onWheel={wheelCallBack}
           />
-          {isDistractionFreeModeActive
-            ? null
-            : (
-              <>
-                {isCollapsed && (
-                <CollapsedButton
-                  isMobile={isMobile}
-                  onclick={this.toggleSidebar}
-                  numberOfLayers={numberOfLayers}
-                />
-                )}
-                <div
-                  id="productsHolder"
-                  className="products-holder-case"
-                  ref={(el) => {
-                    this.sideBarCase = el;
-                  }}
-                  style={{
-                    maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
-                  }}
-                  onWheel={wheelCallBack}
-                >
-                  {!isCollapsed && (
-                    <>
-                      <NavCase
-                        activeTab={activeTab}
-                        onTabClick={onTabClick}
-                        tabTypes={tabTypes}
-                        isMobile={isMobile}
-                        toggleSidebar={this.toggleSidebar}
-                        isCompareMode={isCompareMode}
-                        isDataDisabled={isDataDisabled}
-                      />
-                      <TabContent activeTab={activeTab}>
-                        <TabPane tabId="layers">
-                          {this.getProductsToRender(activeTab, isCompareMode)}
-                        </TabPane>
-                        <TabPane tabId="events">
-                          {naturalEvents && activeTab === 'events' && (
-                          <Events
-                            height={subComponentHeight}
-                            isLoading={isLoadingEvents}
-                            hasRequestError={hasEventRequestError}
-                            eventsData={eventsData}
-                            sources={eventsSources}
-                          />
-                          )}
-                        </TabPane>
-                        <TabPane tabId="download">
-                          {smartHandoffs && (
-                          <SmartHandoff
-                            isActive={activeTab === 'download'}
-                            tabTypes={tabTypes}
-                          />
-                          )}
-                        </TabPane>
-                        <footer
-                          ref={(footerElement) => { this.footerElement = footerElement; }}
-                        >
-                          <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
-                        </footer>
-                      </TabContent>
-                    </>
-                  )}
-                </div>
-              </>
+          <>
+            {!isDistractionFreeModeActive && isCollapsed && (
+            <CollapsedButton
+              isMobile={isMobile}
+              onclick={this.toggleSidebar}
+              numberOfLayers={numberOfLayers}
+            />
             )}
+            <div
+              id="productsHolder"
+              className="products-holder-case"
+              ref={(el) => {
+                this.sideBarCase = el;
+              }}
+              style={{
+                maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
+                display: isDistractionFreeModeActive ? 'none' : 'block',
+              }}
+              onWheel={wheelCallBack}
+            >
+              {!isCollapsed && (
+                <>
+                  <NavCase
+                    activeTab={activeTab}
+                    onTabClick={onTabClick}
+                    tabTypes={tabTypes}
+                    isMobile={isMobile}
+                    toggleSidebar={this.toggleSidebar}
+                    isCompareMode={isCompareMode}
+                    isDataDisabled={isDataDisabled}
+                  />
+                  <TabContent activeTab={activeTab}>
+                    <TabPane tabId="layers">
+                      {this.getProductsToRender(activeTab, isCompareMode)}
+                    </TabPane>
+                    <TabPane tabId="events">
+                      {naturalEvents && activeTab === 'events' && (
+                      <Events
+                        height={subComponentHeight}
+                        isLoading={isLoadingEvents}
+                        hasRequestError={hasEventRequestError}
+                        eventsData={eventsData}
+                        sources={eventsSources}
+                      />
+                      )}
+                    </TabPane>
+                    <TabPane tabId="download">
+                      {smartHandoffs && (
+                      <SmartHandoff
+                        isActive={activeTab === 'download'}
+                        tabTypes={tabTypes}
+                      />
+                      )}
+                    </TabPane>
+                    <footer
+                      ref={(footerElement) => { this.footerElement = footerElement; }}
+                    >
+                      <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
+                    </footer>
+                  </TabContent>
+                </>
+              )}
+            </div>
+          </>
         </section>
       </ErrorBoundary>
     );
