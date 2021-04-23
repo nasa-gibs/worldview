@@ -64,14 +64,13 @@ export function eventsReducer(state = eventsReducerState, action) {
   switch (action.type) {
     case SELECT_EVENT: {
       const {
-        id, date, eventObject,
+        id, date,
       } = action;
       return {
         ...state,
         selected: {
           id,
           date,
-          eventObject,
         },
         isAnimatingToEvent: true,
       };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
@@ -26,13 +26,11 @@ function Events(props) {
     eventsData,
     eventCategories,
     sources,
-    isPlaying,
     isLoading,
     selectEvent,
     selected,
     selectCategory,
     selectedCategory,
-    visibleWithinMapExtent,
     visibleEvents,
     height,
     deselectEvent,
@@ -40,8 +38,6 @@ function Events(props) {
     isMobile,
     showAlert,
     selectedDate,
-    updateEventSelect,
-    isAnimatingToEvent,
   } = props;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -50,23 +46,6 @@ function Events(props) {
   const dropdownHeight = 34;
   const scrollbarMaxHeight = height - dropdownHeight;
   let showInactiveEventAlert = selected.id && !selected.date;
-
-  // Deselect event if it's not visible in the map extent
-  useEffect(() => {
-    if (selected.id && selected.date && !visibleWithinMapExtent[selected.id] && eventsData && eventsData.length) {
-      deselectEvent();
-    }
-  });
-
-  // If the date was changed to one that this event has, re-select it to move the marker
-  useEffect(() => {
-    if (isPlaying || isAnimatingToEvent) return;
-    const geometry = selected.eventObject && selected.eventObject.geometry;
-    const geometryForDate = (geometry || []).find((g) => g.date.split('T')[0] === selectedDate);
-    if (geometryForDate) {
-      updateEventSelect(selected.id, selectedDate);
-    }
-  }, [selectedDate]);
 
   const errorOrLoadingText = isLoading
     ? 'Loading...'
@@ -190,7 +169,6 @@ const mapStateToProps = (state, ownProps) => {
     selected, showAll, category,
   } = events;
   let visibleEvents = {};
-
   const mapExtent = lodashGet(state, 'map.extent');
   let visibleWithinMapExtent = {};
 
@@ -236,10 +214,8 @@ Events.propTypes = {
   eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
-  isPlaying: PropTypes.bool,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
-  isAnimatingToEvent: PropTypes.bool,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
@@ -247,7 +223,5 @@ Events.propTypes = {
   selectedCategory: PropTypes.string,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
-  updateEventSelect: PropTypes.func,
   visibleEvents: PropTypes.object,
-  visibleWithinMapExtent: PropTypes.object,
 };

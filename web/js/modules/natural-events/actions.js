@@ -30,16 +30,10 @@ export function requestSources(location) {
 }
 
 export function selectEvent(id, eventDate) {
-  return (dispatch, getState) => {
-    const { requestedEvents } = getState();
-    const eventObject = requestedEvents.response.find((e) => e.id === id);
-
-    dispatch({
-      type: SELECT_EVENT,
-      id,
-      date: eventDate,
-      eventObject,
-    });
+  return {
+    type: SELECT_EVENT,
+    id,
+    date: eventDate,
   };
 }
 
