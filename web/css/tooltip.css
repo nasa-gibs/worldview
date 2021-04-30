@@ -79,6 +79,7 @@
   position: relative;
   z-index: 101;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 150ms ease;
 }
 
