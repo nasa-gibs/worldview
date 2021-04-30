@@ -112,7 +112,7 @@ class AnimationWidget extends React.Component {
       speed: props.speed,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
-        y: -10,
+        y: -25,
       },
       collapsed: false,
       collapsedWidgetPosition: { x: 0, y: 0 },
