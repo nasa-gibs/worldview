@@ -9,6 +9,7 @@
 
 .event-container {
   .no-events {
+    text-align: center;
     color: #eee;
     font-size: 16px;
     padding: 20px;
@@ -365,10 +366,12 @@
 
 .events-loading-text {
   display: block;
+  text-align: center;
   color: #fff;
   padding: 10px;
-  margin: 10px auto;
+  margin: 50px auto;
   font-size: 18px;
+  line-height: 22px;
   height: 100px;
 }
 

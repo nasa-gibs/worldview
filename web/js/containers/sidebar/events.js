@@ -5,6 +5,7 @@ import { get as lodashGet } from 'lodash';
 import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Event from '../../components/sidebar/event';
 import Scrollbars from '../../components/util/scrollbar';
 import {
@@ -50,7 +51,7 @@ function Events(props) {
   const errorOrLoadingText = isLoading
     ? 'Loading...'
     : hasRequestError
-      ? 'There has been an ERROR retrieving events from the EONET events API'
+      ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
 
   const eventsForSelectedCategory = !isLoading && (eventsData || []).filter((event) => {
@@ -96,6 +97,7 @@ function Events(props) {
         <div id="wv-events">
           {(isLoading || hasRequestError) && (
             <div className="events-loading-text">
+              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
               {errorOrLoadingText}
             </div>
           )}
