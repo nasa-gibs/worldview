@@ -173,10 +173,11 @@
 .wv-coords-container {
   position: absolute;
   height: 35px;
-  width: 256px;
+  width: 260px;
   top: auto;
   right: 10px;
   bottom: 103px;
+  overflow: hidden;
 }
 
 .wv-coords-map {
@@ -209,15 +210,17 @@
   background-position: 0;
 }
 
+.map-coord-format {
+  float: right;
+  pointer-events: none;
+}
+
 .wv-coords-map span.map-coord {
   line-height: 35px;
   float: left;
   height: 35px;
   vertical-align: middle;
-}
-
-.wv-coords-map span.map-coord.latlon-selected {
-  display: inline-block !important;
+  pointer-events: none;
 }
 
 .wv-coords-map div.coord-btn {

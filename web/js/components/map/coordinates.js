@@ -48,10 +48,15 @@ export default class Coordinates extends React.Component {
           Change coordinates format
         </UncontrolledTooltip>
         <span className="map-coord">
-          {`${coords} ${crs}`}
+          {`${coords}`}
         </span>
-        <div aria-label="Change coordinates format" className="coord-btn">
-          <i className="coord-switch" />
+        <div className="map-coord-format">
+          <span className="map-coord">
+            {`${crs}`}
+          </span>
+          <div aria-label="Change coordinates format" className="coord-btn">
+            <i className="coord-switch" />
+          </div>
         </div>
       </div>
     );
