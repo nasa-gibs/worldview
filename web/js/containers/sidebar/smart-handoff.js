@@ -264,7 +264,7 @@ class SmartHandoff extends Component {
                       onChange={() => selectCollection(collection.value, layer.id)}
                     />
                     <label id={labelId} htmlFor={inputId}>
-                      {`${STD_NRT_MAP[type]} - v${version}`}
+                      {STD_NRT_MAP[type] + (version ? ` - v${version}` : '')}
                       <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" />
                     </label>
 
