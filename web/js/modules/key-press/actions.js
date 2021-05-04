@@ -34,7 +34,8 @@ export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput) {
           type: ANIMATION_KEY_PRESS_ACTION,
           keyCode,
         });
-      } else if (!isInput && !ctrlOrCmdKey && shiftKey && keyCode === 68) {
+      }
+      if (!isInput && !ctrlOrCmdKey && shiftKey && keyCode === 68) {
         dispatch({ type: TOGGLE_DISTRACTION_FREE_MODE });
         if (!isDistractionFreeModeActive && isOpen) {
           dispatch({ type: CLOSE_MODAL });
