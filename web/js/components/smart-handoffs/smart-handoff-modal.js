@@ -89,10 +89,10 @@ function SmartHandoffModal({
 
         <h1> Collection: </h1>
         <div className="handoff-modal-link">
-          {`${STD_NRT_MAP[type]} - v${version}`}
+          {STD_NRT_MAP[type] + (version ? ` - v${version}` : '')}
           <br />
           <a href={cmrSearchDetailURL} target="_blank" rel="noopener noreferrer">
-            {`${title}`}
+            {`${title || 'Details'}`}
           </a>
         </div>
 
