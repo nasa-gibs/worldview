@@ -33,6 +33,7 @@
 		"BlueMarble_ShadedRelief",
 		"BlueMarble_ShadedRelief_Bathymetry",
 		"VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+		"VIIRS_SNPP_DayNightBand_AtSensor_M15",
 		"VIIRS_SNPP_DayNightBand_ENCC",
 		"VIIRS_Black_Marble",
 		"VIIRS_Night_Lights",
