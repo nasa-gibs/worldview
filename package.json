@@ -36,7 +36,7 @@
     "build": "pipenv run run-s clean getcapabilities build:config build:dev",
     "build:ci": "pipenv run run-s getcapabilities build:config build:prod",
     "build:dev": "cross-env NODE_ENV=development webpack",
-    "build:options": "bash -c 'tasks/buildOptions.sh'",
+    "build:options": "bash -c 'pipenv run tasks/buildOptions.sh'",
     "build:config": "pipenv run run-s build:options && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "clean": "node ./tasks/clean.js",
