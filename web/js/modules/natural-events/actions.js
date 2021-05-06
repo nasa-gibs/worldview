@@ -1,7 +1,6 @@
 import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
-  REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
@@ -20,14 +19,7 @@ export function requestEvents(location) {
     'application/json',
   );
 }
-export function requestCategories(location) {
-  return (dispatch) => requestAction(
-    dispatch,
-    REQUEST_CATEGORIES,
-    location,
-    'application/json',
-  );
-}
+
 export function requestSources(location) {
   return (dispatch) => requestAction(
     dispatch,
@@ -37,11 +29,11 @@ export function requestSources(location) {
   );
 }
 
-export function selectEvent(id, date) {
+export function selectEvent(id, eventDate) {
   return {
     type: SELECT_EVENT,
     id,
-    date,
+    date: eventDate,
   };
 }
 

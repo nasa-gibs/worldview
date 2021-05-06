@@ -1,4 +1,3 @@
-/* eslint no-nested-ternary: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
@@ -169,8 +168,8 @@ class TimelineAxis extends Component {
     // update scale if end time limit has changed (e.g. time has elapsed since the app was started)
     const hasFutureLayersUpdated = prevProps.hasFutureLayers !== hasFutureLayers;
     const isTimelineInteracting = isDraggerDragging || isTimelineDragging;
-    const didtTimelineEndDateLimitUpdate = timelineEndDateLimit !== prevProps.timelineEndDateLimit;
-    if (didtTimelineEndDateLimitUpdate && (!isAnimationPlaying || hasFutureLayersUpdated) && !isTimelineInteracting) {
+    const didTimelineEndDateLimitUpdate = timelineEndDateLimit !== prevProps.timelineEndDateLimit;
+    if (didTimelineEndDateLimitUpdate && (!isAnimationPlaying || hasFutureLayersUpdated) && !isTimelineInteracting) {
       const updatedDraggerDate = hasFutureLayersUpdated
         ? new Date(draggerDate) > new Date(timelineEndDateLimit)
           ? timelineEndDateLimit
@@ -460,6 +459,7 @@ class TimelineAxis extends Component {
       wheelZoom: false,
       hitLeftBound: false,
       hitRightBound: false,
+      updatedTimeScale: true,
     }, updatePositioning(updatePositioningArguments, isYearOrMonth ? hoverTime : hoverTimeString));
   }
 
@@ -628,7 +628,7 @@ class TimelineAxis extends Component {
     * @param {String} sharedDraggerVisibilityParams.backDate
     * @param {Number} sharedDraggerVisibilityParams.position
     * @param {Number} sharedDraggerVisibilityParams.transform
-  * @returns {Object} output - return params used for dragger visibilty/updating dragger position
+  * @returns {Object} output - return params used for dragger visibility/updating dragger position
     * @returns {Boolean} output.newDraggerPosition
     * @returns {Boolean} output.isVisible - dragger within visible range
   */
@@ -695,7 +695,7 @@ class TimelineAxis extends Component {
    * @desc check if selectedDate will be within acceptable visible axis width
    * @param {String} previousDate
    * @param {Boolean} isDraggerB - draggerB being checked?
-   * @returns {Object} output - return params used for dragger visibilty/updating axis
+   * @returns {Object} output - return params used for dragger visibility/updating axis
    * @returns {Boolean} output.withinRange - within visible range
    * @returns {Boolean} output.newDateInThePast - new date older than previous date
    */
@@ -759,7 +759,7 @@ class TimelineAxis extends Component {
 
   // #### Drag/mouse handlers ####
   /**
-  * @desc show hover line - additional parent conditons required
+  * @desc show hover line - additional parent conditions required
   * @param {Event} mouse event
   * @returns {void}
   */
@@ -993,7 +993,7 @@ class TimelineAxis extends Component {
       // get ms time value
       const draggerDateAddedValue = new Date(draggerDateAdded).getTime();
       let newDraggerTime;
-      if (!diffZeroValues) { // unknown scaleMs due to varying number of days per month and year (leapyears)
+      if (!diffZeroValues) { // unknown scaleMs due to varying number of days per month and year (leap years)
         let daysCount;
         if (timeScale === 'year') {
           daysCount = draggerDateAdded.isLeapYear() ? 366 : 365;
@@ -1007,7 +1007,7 @@ class TimelineAxis extends Component {
         newDraggerTime = draggerDateAddedValue + (diffZeroValues * gridWidthCoefRemainder);
       }
 
-      // check other dragger visibilty on update
+      // check other dragger visibility on update
       let otherDraggerVisible;
       if (draggerSelected === 'selected') {
         // check Dragger B visibility and then update Dragger A
@@ -1264,7 +1264,7 @@ class TimelineAxis extends Component {
       wheelZoom: !!wheelZoom,
     });
 
-    // hoverTime conditional calculation necessary for touchpad horizontal scroll gesture
+    // hoverTime conditional calculation necessary for touch-pad horizontal scroll gesture
     let hoverTimeDate;
     if (hasMoved) {
       const options = timeScaleOptions[timeScale].timeAxis;
@@ -1272,7 +1272,7 @@ class TimelineAxis extends Component {
       const diffZeroValues = options.scaleMs;
       const newHoverTimeValue = new Date(frontDate).getTime();
       if (!diffZeroValues) {
-        // calculate based on frontDate due to varying number of days per month and per year (leapyears)
+        // calculate based on frontDate due to varying number of days per month and per year (leap years)
         const hoverLinePositionRelativeToFrontDate = leftOffset - midPoint - newTransformX;
         const gridWidthCoef = hoverLinePositionRelativeToFrontDate / gridWidth;
         const hoverTimeAdded = moment.utc(frontDate).add(gridWidthCoef, timeScale);
@@ -1329,7 +1329,7 @@ class TimelineAxis extends Component {
       endDate,
     } = matchingTimelineCoverage;
 
-    const postionTransformX = position + transformX;
+    const positionTransformX = position + transformX;
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
     const axisFrontDate = new Date(frontDate).getTime();
     const axisBackDate = new Date(backDate).getTime();
@@ -1354,14 +1354,14 @@ class TimelineAxis extends Component {
         // positive diff means layerStart more recent than axisFrontDate
         const diff = moment.utc(layerStart).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
-        leftOffset = gridDiff + postionTransformX;
+        leftOffset = gridDiff + positionTransformX;
       }
 
       if (layerEndBeforeAxisBack) {
         // positive diff means layerEnd earlier than back date
         const diff = moment.utc(layerEnd).diff(axisFrontDate, timeScale, true);
         const gridDiff = gridWidth * diff;
-        width = Math.max(gridDiff + postionTransformX - leftOffset, 0);
+        width = Math.max(gridDiff + positionTransformX - leftOffset, 0);
       }
     }
 

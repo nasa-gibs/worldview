@@ -275,6 +275,8 @@
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
 .layer-date-range,
 .layer-date-wrap,
+.layer-metadata ul,
+.source-metadata ul,
 .layer-metadata a,
 .layer-metadata p {
   font-family: 'Open Sans', sans-serif;
@@ -282,6 +284,14 @@
   font-size: 13px;
   line-height: 16px;
   margin-bottom: 15px;
+}
+.layer-metadata li,
+.source-metadata li {
+  line-height: 16px;
+}
+.source-metadata ul,
+.layer-metadata ul {
+  list-style-position: inside;
 }
 
 .layers-all .source-metadata div,

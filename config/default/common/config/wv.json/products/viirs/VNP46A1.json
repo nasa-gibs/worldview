@@ -1,0 +1,11 @@
+{
+    "products": {
+        "VNP46A1": {
+            "name": "VIIRS/NPP Daily Gridded Day Night Band 500m Linear Lat Lon Grid Night",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "VNP46A1"
+            }
+        }
+    }
+}

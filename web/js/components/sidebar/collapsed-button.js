@@ -7,14 +7,13 @@ class CollapsedButton extends PureComponent {
   render() {
     const {
       isMobile,
-      isDistractionFreeModeActive,
       numberOfLayers,
       onclick,
     } = this.props;
     const buttonId = 'accordion-toggler-button';
     const labelText = 'Expand sidebar';
 
-    return !isDistractionFreeModeActive && (
+    return (
       <div
         id="productsHoldertoggleButtonHolder"
         className="toggleButtonHolder"
@@ -46,7 +45,6 @@ class CollapsedButton extends PureComponent {
   }
 }
 CollapsedButton.propTypes = {
-  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onclick: PropTypes.func,

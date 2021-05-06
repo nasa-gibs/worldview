@@ -1,13 +1,18 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
-const animationButtonCase = '#timeline-header .animate-button';
-const ImageDownloadButton = '#wv-image-button';
-const eventsTabButton = '#events-sidebar-tab';
-const dataDownloadTabButton = '#download-sidebar-tab';
-const ModisTruecolorLayerA = '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
-const ModisTruecolorLayerB = '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
+const {
+  animationButtonCase,
+  animationWidget,
+  dataDownloadTabButton,
+  eventsSidebarTabButton,
+  snapshotToolbarButton,
+  swipeDragger,
+} = localSelectors;
+
+const ModisTrueColorLayerA = '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
+const ModisTrueColorLayerB = '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
 const toggleButton = '.toggleIconHolder .accordionToggler';
 const collapsedToggleButton = '#productsHoldertoggleButtonHolder .accordionToggler';
 const tooltipSelector = '.tooltip-inner';
@@ -19,8 +24,8 @@ module.exports = {
   },
   // load A|B and verify that it is active
   'A|B is loaded': (c) => {
-    c.url(c.globals.url + localQuerystrings.swipeAndAIsActive);
-    c.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
+    c.url(c.globals.url + localQueryStrings.swipeAndAIsActive);
+    c.waitForElementVisible(swipeDragger, TIME_LIMIT);
     c.pause(1000);
   },
 
@@ -35,20 +40,20 @@ module.exports = {
 
     // Clicking does not activate animation
     c.click(animationButtonCase);
-    c.expect.element('#wv-animation-widget').to.not.be.present;
+    c.expect.element(animationWidget).to.not.be.present;
   },
 
   'Image download is disabled when compare mode active': (c) => {
     const disableMessage = 'You must exit comparison mode to use the snapshot feature';
-    c.assert.cssClassPresent(ImageDownloadButton, 'disabled');
-    c.assert.attributeContains(ImageDownloadButton, 'aria-label', disableMessage);
+    c.assert.cssClassPresent(snapshotToolbarButton, 'disabled');
+    c.assert.attributeContains(snapshotToolbarButton, 'aria-label', disableMessage);
     c.moveToElement('#snapshot-btn-wrapper svg', 10, 10);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT, (e) => {
       c.assert.containsText(tooltipSelector, disableMessage);
     });
 
     // Clicking does not activate image download
-    c.click(ImageDownloadButton);
+    c.click(snapshotToolbarButton);
     c.pause(100);
     c.expect.element('#wv-image-resolution').to.not.be.present;
   },
@@ -68,31 +73,31 @@ module.exports = {
   'Events disabled when compare mode active': (c) => {
     const disableMessage = 'You must exit comparison mode to use the natural events feature';
 
-    c.moveToElement(eventsTabButton, 1, 1);
-    c.click(eventsTabButton);
+    c.moveToElement(eventsSidebarTabButton, 1, 1);
+    c.click(eventsSidebarTabButton);
     c.pause(100);
     c.expect.element('#wv-eventscontent').to.not.be.present;
-    c.assert.cssClassPresent(eventsTabButton, 'disabled');
-    c.assert.attributeContains(eventsTabButton, 'aria-label', disableMessage);
-    c.assert.attributeContains(eventsTabButton, 'title', disableMessage);
+    c.assert.cssClassPresent(eventsSidebarTabButton, 'disabled');
+    c.assert.attributeContains(eventsSidebarTabButton, 'aria-label', disableMessage);
+    c.assert.attributeContains(eventsSidebarTabButton, 'title', disableMessage);
   },
 
   'Removing layer removes correct layer from correct layer group': (c) => {
-    c.expect.element(ModisTruecolorLayerA).to.be.visible;
-    c.moveToElement(ModisTruecolorLayerA, 1, 1).pause(200);
+    c.expect.element(ModisTrueColorLayerA).to.be.visible;
+    c.moveToElement(ModisTrueColorLayerA, 1, 1).pause(200);
     c.click('#close-activeMODIS_Terra_CorrectedReflectance_TrueColor');
     c.pause(100);
-    c.expect.element(ModisTruecolorLayerA).to.not.be.present;
-    c.expect.element(ModisTruecolorLayerB).to.not.be.present;
+    c.expect.element(ModisTrueColorLayerA).to.not.be.present;
+    c.expect.element(ModisTrueColorLayerB).to.not.be.present;
     c.click(localSelectors.bTab);
-    c.waitForElementVisible(ModisTruecolorLayerB, TIME_LIMIT);
+    c.waitForElementVisible(ModisTrueColorLayerB, TIME_LIMIT);
   },
 
   /**
    * B state can layer list collapse
    */
   'Collapse layer list with B state and test label shows correct number of layers': (c) => {
-    c.url(c.globals.url + localQuerystrings.spyAndBIsActive);
+    c.url(c.globals.url + localQueryStrings.spyAndBIsActive);
 
     c.waitForElementVisible(toggleButton, TIME_LIMIT, () => {
       c.expect.element(collapsedToggleButton).to.not.be.present;
@@ -103,7 +108,7 @@ module.exports = {
       c.useCss().assert.containsText(collapsedToggleButton, '6');
       c.click(collapsedToggleButton);
       c.pause(100);
-      c.waitForElementVisible('#activeB-Reference_Features', TIME_LIMIT);
+      c.waitForElementVisible('#activeB-Reference_Features_15m', TIME_LIMIT);
     });
   },
 
@@ -117,11 +122,11 @@ module.exports = {
     c.expect.element('#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor')
       .to.be.visible;
 
-    c.moveToElement('#activeB-Reference_Labels', 1, 1).pause(200);
-    c.click('#close-activeBReference_Labels');
+    c.moveToElement('#activeB-Reference_Labels_15m', 1, 1).pause(200);
+    c.click('#close-activeBReference_Labels_15m');
 
-    c.moveToElement('#activeB-Reference_Features', 1, 1).pause(200);
-    c.click('#close-activeBReference_Features');
+    c.moveToElement('#activeB-Reference_Features_15m', 1, 1).pause(200);
+    c.click('#close-activeBReference_Features_15m');
 
     c.moveToElement('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor', 1, 1).pause(200);
     c.click('#close-activeBVIIRS_SNPP_CorrectedReflectance_TrueColor');
@@ -135,7 +140,7 @@ module.exports = {
       '.timeline-dragger.draggerA',
       TIME_LIMIT,
       () => {
-        c.expect.element('#activeB-Coastlines').to.be.visible;
+        c.expect.element('#activeB-Coastlines_15m').to.be.visible;
         c.expect.element(
           '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor',
         ).to.be.visible;

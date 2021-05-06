@@ -5,7 +5,7 @@
       "title": "Land Surface Reflectance (True Color)",
       "subtitle": "Aqua / MODIS",
       "description": "modis/aqua/MODIS_Aqua_SurfaceReflectance_Bands143",
-      "tags": "lsr true color",
+      "tags": "lsr true color myd09",
       "group": "baselayers",
       "layergroup": "Land Surface Reflectance",
       "product": "MYD09GA",

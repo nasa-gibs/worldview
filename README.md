@@ -2,7 +2,7 @@
 
 [![Worldview Screenshot](/web/images/readme-preview.jpg)](https://worldview.earthdata.nasa.gov)
 
-[![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
+[![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=main)](https://travis-ci.org/nasa-gibs/worldview)
 
 Interactive interface for browsing full-resolution, global satellite imagery.
 
@@ -72,7 +72,7 @@ See [Developing](doc/developing.md) for more usage details.
 
 ## Updates
 
-To update Worldview, pull down any branch or tag from GitHub. From the `master` branch (default), to update to the latest stable version of Worldview, run `git pull`.
+To update Worldview, pull down any branch or tag from GitHub. From the `main` branch (default), to update to the latest stable version of Worldview, run `git pull`.
 
 **Note:** This project uses [Semantic Versioning](https://semver.org/). Updates to the major version number in [package.json](package.json) indicate a breaking change; _update with caution_.
 

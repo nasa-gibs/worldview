@@ -88,7 +88,7 @@
 }
 
 /* Location Search Component */
-.location-search-component {
+.location-search-expanded {
   position: absolute;
   right: 182px;
   top: 10px;
@@ -168,7 +168,7 @@
 
 /* Mobile Styling */
 @media only screen and (max-width: 768px) {
-  .location-search-component {
+  .location-search-expanded {
     position: static;
     width: 100%;
   }

@@ -14,10 +14,12 @@ export default class OutsideAlerter extends Component {
   }
 
   componentDidMount() {
+    document.addEventListener('touchstart', this.handleClickOutside);
     document.addEventListener('mousedown', this.handleClickOutside);
   }
 
   componentWillUnmount() {
+    document.addEventListener('touchstart', this.handleClickOutside);
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 

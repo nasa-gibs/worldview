@@ -19,7 +19,7 @@ module.exports = {
 
   'Verify toolbar buttons are visible by default - excluding Location Search': (c) => {
     c.expect.element(locationSearchComponent).to.be.visible;
-    c.expect.element(locationSearchToolbarButton).to.not.be.visible;
+    c.expect.element(locationSearchToolbarButton).to.not.be.present;
     c.expect.element(shareToolbarButton).to.be.visible;
     c.expect.element(projToolbarButton).to.be.visible;
     c.expect.element(snapshotToolbarButton).to.be.visible;

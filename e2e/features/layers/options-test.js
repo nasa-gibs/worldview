@@ -1,4 +1,4 @@
-const customsSquashedQuerystring = '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD(opacity=0.7,palette=blue_2,min=0.1,0.105,max=0.56,0.565),MODIS_Terra_Aerosol,Reference_Labels(opacity=0.94),Reference_Features(hidden),Coastlines&t=2019-01-15-T00%3A00%3A00Z&z=3&v=-271.7031658620978,-216.84375,370.1093341379022,36.84375';
+const customsSquashedQuerystring = '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD(opacity=0.7,palette=blue_2,min=0.1,0.105,max=0.56,0.565),MODIS_Terra_Aerosol,Reference_Labels_15m(opacity=0.94),Reference_Features_15m(hidden),Coastlines_15m&t=2019-01-15-T00%3A00%3A00Z&z=3&v=-271.7031658620978,-216.84375,370.1093341379022,36.84375';
 const TIME_LIMIT = 10000;
 const skipTour = require('../../reuseables/skip-tour.js');
 

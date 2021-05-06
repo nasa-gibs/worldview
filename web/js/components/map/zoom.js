@@ -10,7 +10,7 @@ function Zoom({
   if (!map) return null;
 
   return !isDistractionFreeModeActive && (
-    <>
+    <div className="wv-zoom-buttons">
       <button
         type="button"
         disabled={zoomLevel === numZoomLevels}
@@ -31,7 +31,7 @@ function Zoom({
       >
         <FontAwesomeIcon icon="minus" />
       </button>
-    </>
+    </div>
   );
 }
 

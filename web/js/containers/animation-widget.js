@@ -112,7 +112,7 @@ class AnimationWidget extends React.Component {
       speed: props.speed,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
-        y: -10,
+        y: -25,
       },
       collapsed: false,
       collapsedWidgetPosition: { x: 0, y: 0 },
@@ -572,6 +572,7 @@ class AnimationWidget extends React.Component {
       isActive,
       layers,
       hasCustomPalettes,
+      isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
       currentDate,
@@ -626,9 +627,11 @@ class AnimationWidget extends React.Component {
             onClose={onPushPause}
           />
         )}
-
-        {collapsed ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
-
+        {!isDistractionFreeModeActive && (
+          <>
+            {collapsed ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
+          </>
+        )}
       </ErrorBoundary>
     );
   }
@@ -645,6 +648,7 @@ function mapStateToProps(state) {
     config,
     map,
     browser,
+    ui,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
@@ -678,6 +682,7 @@ function mapStateToProps(state) {
     maxDate = appNow;
   }
 
+  const { isDistractionFreeModeActive } = ui;
   const animationIsActive = isActive
     && browser.greaterThan.small
     && lodashGet(map, 'ui.selected.frameState_')
@@ -713,6 +718,7 @@ function mapStateToProps(state) {
     minDate,
     maxDate,
     isActive: animationIsActive,
+    isDistractionFreeModeActive,
     hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
@@ -851,6 +857,7 @@ AnimationWidget.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,

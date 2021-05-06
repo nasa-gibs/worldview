@@ -32,8 +32,6 @@ OPT_SUBDIR="${CONFIG_ENV-release}"
 CONFIG=$(echo $SRC_DIR | sed s_tasks/../__)
 echo "Using $CONFIG ($OPT_SUBDIR)"
 
-# Activate virtual Python environment
-PATH=.python/bin:.python/Scripts:${PATH}
 
 # If $FETCH_GC is set, make request to GIBS GetCapabilities API
 if [ "$FETCH_GC" ] ; then

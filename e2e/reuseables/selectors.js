@@ -12,6 +12,7 @@ module.exports = {
   gifDownloadButton: '.animation-gif-dialog-wrapper .wv-button',
   gifResults: '.gif-results-dialog-case img',
   animationWidget: '#wv-animation-widget',
+  animationButtonCase: '#timeline-header .animate-button',
   animationButton: '#animate-button',
 
   // sidebar, layers
@@ -21,6 +22,8 @@ module.exports = {
   infoDialog: '.layer-info-settings-modal',
   optionsDialog: '.layer-info-settings-modal',
   addLayers: '#layers-add',
+  dataDownloadTabButton: '#download-sidebar-tab',
+  eventsSidebarTabButton: '#events-sidebar-tab',
   groupCheckbox: '#group-overlays-checkbox',
   viirsFiresCheckbox: '#VIIRS_NOAA20_Thermal_Anomalies_375m_All-checkbox',
   firesGroup: '#active-Fires_and_Thermal_Anomalies',
@@ -48,6 +51,8 @@ module.exports = {
   bTab: '.ab-tabs-case .ab-tab.second-tab',
   swipeDragger: '.ab-swipe-line .ab-swipe-dragger',
   compareButton: '#compare-toggle-button',
+  compareButtonText: '#compare-toggle-button > span',
+  compareMobileSelectToggle: '.comparison-mobile-select-toggle',
 
   // measure
   measureBtn: '#wv-measure-button',
@@ -64,6 +69,8 @@ module.exports = {
 
   // timeline
   timelineContainer: '.timeline-container',
+  timelineHeader: '#timeline-header',
+  mobileDatePickerSelectButton: '.mobile-date-picker-select-btn',
   dragger: '.timeline-dragger',
   dayDown: '.input-wrapper-day > div.date-arrows.date-arrow-down',
   dayUp: '.input-wrapper-day > div.date-arrows.date-arrow-up',
@@ -142,6 +149,9 @@ module.exports = {
   zoomOutButton: '.wv-map-zoom-out',
   mapScaleMetric: '.wv-map-scale-metric',
   mapScaleImperial: '.wv-map-scale-imperial',
+  mapRotateLeft: '.wv-map-rotate-left',
+  mapRotateReset: '.wv-map-reset-rotation',
+  mapRotateRight: '.wv-map-rotate-right',
 
   // ui toolbar
   locationSearchToolbarButton: '#wv-location-search-button',

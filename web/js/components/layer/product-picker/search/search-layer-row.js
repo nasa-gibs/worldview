@@ -16,6 +16,8 @@ import getSelectedDate from '../../../../modules/date/selectors';
 import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
 import util from '../../../../util/util';
 
+const { events } = util;
+
 /**
  * A single layer search result row
  * @class LayerRow
@@ -28,7 +30,7 @@ class SearchLayerRow extends React.Component {
       showDeleteIcon: false,
     };
     this.toggleEnabled = this.toggleEnabled.bind(this);
-    this.toggleShowMetadata = this.toggleShowMetadata.bind(this);
+    this.onRowClick = this.onRowClick.bind(this);
     this.ref = React.createRef();
   }
 
@@ -37,6 +39,13 @@ class SearchLayerRow extends React.Component {
     if (selectedLayer && selectedLayer.id === layer.id) {
       this.ref.current.scrollIntoView(true);
     }
+  }
+
+  onRowClick() {
+    this.toggleShowMetadata();
+    setTimeout(() => {
+      events.trigger('joyride:increment');
+    });
   }
 
   /**
@@ -147,7 +156,7 @@ class SearchLayerRow extends React.Component {
             </UncontrolledTooltip>
           </div>
         )}
-        <div className={headerClassName} onClick={this.toggleShowMetadata}>
+        <div className={headerClassName} onClick={this.onRowClick}>
           <RenderSplitLayerTitle layer={layer} />
           {recentLayerMode && showDeleteIcon && (
             <Button

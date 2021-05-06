@@ -1,8 +1,7 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
-const draggerA = '.timeline-dragger.draggerA ';
 const dateSelectorDayInput = '#date-selector-main .input-wrapper-day input';
 const TIME_LIMIT = 20000;
 
@@ -22,8 +21,9 @@ module.exports = {
     c.expect.element('#timeline-footer').to.be.visible;
     // hide timeline
     c.click('#timeline-hide')
-      .waitForElementNotVisible('#timeline-footer', TIME_LIMIT);
-    c.expect.element('#timeline-footer').to.not.be.visible;
+      .waitForElementNotPresent('#timeline-footer', TIME_LIMIT);
+    c.expect.element('#timeline-footer').to.not.be.present;
+
     // expand timeline
     c.click('#timeline-hide')
       .waitForElementVisible('#timeline-footer', TIME_LIMIT);
@@ -63,9 +63,8 @@ module.exports = {
 
   // verify interval state restored from permalink
   'Interval state of HOUR restored from permalink': (c) => {
-    c.url(c.globals.url + localQuerystrings.subdailyLayerIntervalTimescale);
-    c.useCss()
-      .moveToElement('#timeline-interval-btn-container', 0, 0)
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
+    c.moveToElement('#timeline-interval-btn-container', 0, 0)
       .waitForElementVisible('#current-interval', TIME_LIMIT);
     c.assert.containsText('#current-interval', '1 HOUR');
   },
@@ -82,18 +81,16 @@ module.exports = {
 
   // verify custom interval widget panel opens
   'Custom interval widget opens on selecting custom': (c) => {
-    c.useCss()
-      .click('#interval-custom-static')
+    c.click('#interval-custom-static')
       .waitForElementVisible('.custom-interval-widget', TIME_LIMIT);
     c.expect.element('.custom-interval-widget').to.be.visible;
   },
 
   // verify changing custom interval changes current interval and how many time units change with date arrows
   'Select custom interval changes current interval and changes date by current interval': (c) => {
-    c.url(c.globals.url + localQuerystrings.knownDate);
+    c.url(c.globals.url + localQueryStrings.knownDate);
     c.assert.attributeContains(dateSelectorDayInput, 'value', '22');
-    c.useCss()
-      .moveToElement('#timeline-interval-btn-container', 0, 0)
+    c.moveToElement('#timeline-interval-btn-container', 0, 0)
       .pause(100)
       .click('#interval-custom-static')
       .pause(100)
@@ -114,9 +111,8 @@ module.exports = {
 
   // verify subdaily default year, month, day, hour, minute, and custom intervals
   'Timescale zoom subdaily default year, month, day, hour, minute, and custom intervals': (c) => {
-    c.url(c.globals.url + localQuerystrings.subdailyLayerIntervalTimescale);
-    c.useCss()
-      .moveToElement('#current-zoom', 0, 0)
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
+    c.moveToElement('#current-zoom', 0, 0)
       .waitForElementVisible('#zoom-years', TIME_LIMIT);
 
     c.expect.element('#zoom-years').to.be.visible;
@@ -128,37 +124,22 @@ module.exports = {
 
   // verify timescale zoom state restored from permalink
   'Timescale zoom HOUR restored from permalink': (c) => {
-    c.useCss()
-      .waitForElementVisible('#current-zoom', TIME_LIMIT);
+    c.waitForElementVisible('#current-zoom', TIME_LIMIT);
     c.assert.containsText('#current-zoom', 'HOUR');
   },
 
-  // blue hover line and valid date tooltip date are present on hovering over timeline axis
-  'Blue hover line is present on hovering over timeline axis': (c) => {
+  // date tooltip date present on load
+  'Date tooltip date present load': (c) => {
     c.url(`${c.globals.url}?t=2019-02-22`);
-    c.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
-    c.useCss()
-      .moveToElement(draggerA, 15, 15)
-      .mouseButtonDown(0)
-      .waitForElementVisible('.date-tooltip', TIME_LIMIT)
-      .assert.containsText('.date-tooltip', '2019-02-22 (53)')
-      .mouseButtonUp(0)
-      .moveTo(null, -200, 0);
-
-    c.waitForElementVisible('.axis-hover-line-container', TIME_LIMIT);
-    c.expect.element('.axis-hover-line-container').to.be.visible;
-    c.expect.element('.date-tooltip').to.be.visible;
+    c.waitForElementVisible('.date-tooltip', TIME_LIMIT)
+      .assert.containsText('.date-tooltip', '2019-02-22 (DOY 053)');
   },
 
-  // subdaily valid date tooltip date is present on hovering over timeline axis
-  'Subdaily date tooltip date is present on hovering over timeline axis': (c) => {
-    c.url(c.globals.url + localQuerystrings.subdailyLayerIntervalTimescale);
-    c.waitForElementVisible(localSelectors.dragger, TIME_LIMIT);
-    c.useCss()
-      .moveToElement(draggerA, 15, 15)
-      .mouseButtonDown(0)
-      .waitForElementVisible('.date-tooltip', TIME_LIMIT)
-      .assert.containsText('.date-tooltip', '2019-10-04 09:46Z (277)');
+  // date subdaily tooltip date present on load
+  'Date subdaily tooltip date present load': (c) => {
+    c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
+    c.waitForElementVisible('.date-tooltip', TIME_LIMIT)
+      .assert.containsText('.date-tooltip', '2019-10-04 09:46Z (DOY 277)');
   },
 
   after: (c) => {

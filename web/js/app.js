@@ -75,6 +75,7 @@ import '../css/layer-coverage-panel.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
+import '../css/about.css';
 import '../css/mobile.css';
 import '../css/measure.css';
 import '../css/list.css';
@@ -84,7 +85,6 @@ import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
 import '../css/location-search.css';
-import '../pages/css/document.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
@@ -131,16 +131,16 @@ class App extends React.Component {
     const main = function() {
       // Load any additional scripts as needed
       if (config.scripts) {
-        util.loadScipts(config.scripts);
-      }
-      if (config.features.googleTagManager) {
-        if (!/localhost/.test(window.location.href)) {
-          googleTagManager.getIpAddress();
-        }
+        util.loadScripts(config.scripts);
       }
 
-      // Console notifications
       if (Brand.release()) {
+        if (config.features.googleTagManager) {
+          if (window.location.href.includes(Brand.BRAND_URL)) {
+            googleTagManager.getIpAddress();
+          }
+        }
+        // Console build version notifications
         console.info(
           `${Brand.NAME
           } - Version ${
@@ -186,7 +186,7 @@ class App extends React.Component {
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <Timeline />
-        <div id="wv-animation-widet-case">
+        <div id="wv-animation-widget-case">
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />

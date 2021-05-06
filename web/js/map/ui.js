@@ -75,7 +75,7 @@ export default function mapui(models, config, store, ui) {
   let cache;
   const dateline = mapDateLineBuilder(models, config, store, ui);
   const precache = mapPrecacheTile(models, config, cache, self);
-  const compareMapUi = mapCompare(config, store);
+  const compareMapUi = mapCompare(store);
   const dataRunner = self.runningdata = new MapRunningData(
     models,
     compareMapUi,
@@ -103,7 +103,7 @@ export default function mapui(models, config, store, ui) {
   self.activeMarker = null;
   self.coordinatesDialogDOMEl = null;
   /**
-   * Suscribe to redux store and listen for
+   * Subscribe to redux store and listen for
    * specific action types
    */
   const subscribeToStore = function(action) {
@@ -139,9 +139,10 @@ export default function mapui(models, config, store, ui) {
         return;
       }
       case LOCATION_POP_ACTION: {
+        const state = store.getState();
         const newState = util.fromQueryString(action.payload.search);
-        const extent = lodashGet(action, 'payload.query.map.extent');
-        const rotate = lodashGet(action, 'payload.query.map.rotation') || 0;
+        const extent = lodashGet(state, 'map.extent');
+        const rotate = lodashGet(state, 'map.rotation') || 0;
         updateProjection();
         if (newState.v && !newState.e && extent) {
           flyToNewExtent(extent, rotate);
@@ -319,7 +320,7 @@ export default function mapui(models, config, store, ui) {
     const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
     const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
 
-    // handle clearing cooridnates using created marker
+    // handle clearing coordinates using created marker
     const clearMarker = () => {
       store.dispatch({ type: CLEAR_MARKER });
     };
@@ -490,7 +491,7 @@ export default function mapui(models, config, store, ui) {
   }
 
   /*
-   * When page is resised set for mobile or desktop
+   * When page is resized set for mobile or desktop
    *
    * @method onResize
    * @static
@@ -839,7 +840,7 @@ export default function mapui(models, config, store, ui) {
   /*
    * Get a layer object from id
    *
-   * @method findlayer
+   * @method findLayer
    * @static
    *
    * @param {object} def - Layer Specs
@@ -1073,28 +1074,22 @@ export default function mapui(models, config, store, ui) {
   function createMousePosSel(map, proj) {
     const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
-      const { browser } = state;
+      const { browser, sidebar } = state;
       const isMobile = browser.lessThan.medium;
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
-      // if mobile return
       if (isMobile) return;
-      // if measure is active return
       if (state.measure.isActive) return;
 
       const pixels = map.getEventPixel(e);
       const coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
 
-      // setting a limit on running-data retrievel
-      if (self.mapIsbeingDragged) {
-        return;
-      }
+      if (self.mapIsbeingDragged) return;
       // Don't add data runners if we're on the events or smart handoffs tabs, or if map is animating
       const isEventsTabActive = typeof state.events !== 'undefined' && state.events.active;
       const isMapAnimating = state.animation.isPlaying;
-      // TODO handle smart handoffs
-      if (isEventsTabActive || isMapAnimating) return;
+      if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
       dataRunner.newPoint(pixels, map);
     }, 300);

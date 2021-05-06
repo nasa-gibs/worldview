@@ -11,7 +11,7 @@
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [
-        "day"
+        "night"
       ],
       "track": "ascending",
       "startDate": "2009-01-23",

@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const draggerA = '.timeline-dragger.draggerA ';
 const draggerB = '.timeline-dragger.draggerB ';
@@ -14,7 +14,7 @@ module.exports = {
   },
   // load A|B and verify that it is active
   'A|B is loaded': function(client) {
-    client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
+    client.url(client.globals.url + localQueryStrings.swipeAndAIsActive);
     client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
   },
   'Verify that A|B draggers are visible': function(client) {
@@ -48,7 +48,7 @@ module.exports = {
       .mouseButtonUp(0);
     // Reference labels were not active in A but are in B
     client.waitForElementVisible(
-      '#activeB-Reference_Features',
+      '#activeB-Reference_Features_15m',
       TIME_LIMIT,
       () => {
         client.assert.attributeContains(dateSelectorDayInput, 'value', '16');

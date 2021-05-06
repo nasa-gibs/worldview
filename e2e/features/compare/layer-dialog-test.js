@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 20000;
 const aerosolLayer = '#active-MODIS_Terra_Aerosol';
@@ -17,7 +17,7 @@ module.exports = {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
   },
   'Layer option features work in A|B mode': (c) => {
-    c.url(c.globals.url + localQuerystrings.swipeAOD);
+    c.url(c.globals.url + localQueryStrings.swipeAOD);
     c.waitForElementVisible(aerosolLayer, TIME_LIMIT);
     c.expect.element(AodOptionsPanelBody).to.not.be.present;
     c.moveToElement(aerosolLayer, 0, 0).pause(200);

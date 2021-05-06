@@ -1,0 +1,26 @@
+{
+  "layers": {
+    "Reference_Labels_15m": {
+      "id": "Reference_Labels_15m",
+      "title": "Place Labels",
+      "subtitle": "&copy; OpenStreetMap contributors, Natural Earth",
+      "description": "reference/Reference_Labels_15m",
+      "tags": "osm reference, country, countries, state, province, cities, city, towns, town, lakes, lake, parks, park, airports, airport",
+      "group": "overlays",
+      "layergroup": "Reference",
+      "noTransition": true,
+      "wrapX": true,
+      "projections": {
+        "arctic": {
+          "id": "Reference_Labels",
+          "tags": "osm reference, country, countries, state, province, cities, city",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        },
+        "geographic": {
+          "source": "GIBS:geographic"
+        }
+      }
+    }
+  }
+}

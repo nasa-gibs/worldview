@@ -54,6 +54,7 @@ export default class Crop extends React.Component {
     const {
       onClose,
       onChange,
+      onDragStop,
       maxWidth,
       maxHeight,
       showCoordinates,
@@ -78,6 +79,7 @@ export default class Crop extends React.Component {
           }}
           keepSelection={keepSelection}
           onComplete={(crop) => {
+            onDragStop(crop);
             if (!crop.width || !crop.height) {
               onClose();
             }
@@ -97,6 +99,7 @@ Crop.defaultProps = {
   height: 10,
   maxHeight: window.innerWidth,
   maxWidth: window.innerHeight,
+  onDragStop: () => {},
   keepSelection: false,
   width: 30,
   x: 20,
@@ -106,6 +109,7 @@ Crop.defaultProps = {
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onDragStop: PropTypes.func,
   bottomLeftStyle: PropTypes.object,
   coordinates: PropTypes.object,
   height: PropTypes.number,

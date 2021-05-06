@@ -22,6 +22,7 @@ import {
   TOGGLE_MOBILE_FACETS,
   CLEAR_RECENT_LAYERS,
   CLEAR_SINGLE_RECENT_LAYER,
+  PROJ_SWITCH,
   RESET_STATE,
 } from './constants';
 
@@ -154,9 +155,15 @@ export function clearSingleRecentLayer(layer) {
   };
 }
 
-export function resetProductPickerState(projection) {
+export function onProjectionSwitch(projection) {
+  return {
+    type: PROJ_SWITCH,
+    projection,
+  };
+}
+
+export function resetProductPickerState() {
   return {
     type: RESET_STATE,
-    projection,
   };
 }
