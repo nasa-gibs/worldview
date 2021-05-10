@@ -106,7 +106,7 @@ class LocationSearchModal extends Component {
     });
   }
 
-  // handle submitting search after inputing coordinates
+  // handle submitting search after inputting coordinates
   onCoordinateInputSelect = () => {
     const {
       clearSuggestions,
@@ -427,7 +427,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setPlaceMarker: (coordinates, addressAttributes) => {
-    dispatch(setPlaceMarker(coordinates, addressAttributes));
+    dispatch(setPlaceMarker(coordinates, addressAttributes, true));
   },
   toggleReverseGeocodeActive: (isActive) => {
     dispatch(toggleReverseGeocodeActive(isActive));
