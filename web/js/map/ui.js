@@ -114,8 +114,9 @@ export default function mapui(models, config, store, ui) {
       }
       case CLEAR_MARKER:
         return removeCoordinatesMarker();
-      case SET_MARKER:
-        return addMarkerAndUpdateStore(null, true);
+      case SET_MARKER: {
+        return addMarkerAndUpdateStore(null, action.isInputSearch);
+      }
       case TOGGLE_DIALOG_VISIBLE: {
         if (action.value) {
           addCoordinatesTooltip();
@@ -349,8 +350,7 @@ export default function mapui(models, config, store, ui) {
    * @static
    *
    * @param {Object} geocodeResults
-   * @param {Boolean} shouldFlyToCoordinates
-   *
+   * @param {Boolean} shouldFlyToCoordinates - if location search via input
    * @returns {void}
    */
   const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
