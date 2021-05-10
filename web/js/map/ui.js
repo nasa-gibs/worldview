@@ -768,7 +768,7 @@ export default function mapui(models, config, store, ui) {
     let layerGroup;
     if (compare && compare.active) {
       layerGroups = self.selected.getLayers().getArray();
-      if (layerGroups.length === 2) {
+      if (layerGroups.length > 1) {
         layerGroup = layerGroups[0].get('group') === compare.activeString
           ? layerGroups[0]
           : layerGroups[1].get('group') === compare.activeString
