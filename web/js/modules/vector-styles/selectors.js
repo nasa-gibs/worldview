@@ -93,7 +93,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   if (olMap) {
     layerGroups = olMap.getLayers().getArray();
     if (compare && compare.active) {
-      if (layerGroups.length === 2) {
+      if (layerGroups.length > 1) {
         layerGroup = layerGroups[0].get('group') === compare.activeString
           ? layerGroups[0]
           : layerGroups[1].get('group') === compare.activeString
