@@ -14,17 +14,18 @@
   background: #212121;
   color: #fff;
   padding: 1px 0;
-  cursor: move;
   &.minimized {
     height: 52px;
     width: 80px;
     background: rgba(40, 40, 40, 0.85);
+    cursor: move;
   }
   & .wv-animation-widget-header {
     display: block;
     margin: 7px 45px 10px 5px;
     text-align: center;
     text-transform: capitalize;
+    cursor: move;
     & .interval-btn-container,
     & .interval-btn.interval-btn-active {
       color: #ce4c21;

@@ -3,14 +3,12 @@ import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
-import util from '../util/util';
 
 export default function mapModel(models, config) {
   const self = {};
 
   self.extent = null;
   self.selectedMap = null;
-  self.events = util.events();
   self.ui = null;
   self.rotation = 0;
   const init = function() {
@@ -43,13 +41,11 @@ export default function mapModel(models, config) {
    */
   self.update = function(extent) {
     self.extent = extent;
-    self.events.trigger('update', extent);
   };
   // Give other components access to zoom Level
   self.updateMap = function(map, ui) {
     self.selectedMap = map;
     self.ui = ui;
-    self.events.trigger('update-map');
   };
   self.getZoom = function() {
     return self.selectedMap ? self.selectedMap.getView().getZoom() : null;

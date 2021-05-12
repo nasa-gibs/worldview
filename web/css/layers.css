@@ -38,6 +38,9 @@
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
+    & .layer-notice-icon {
+      color: #666;
+    }
     & .layers-all-header > h3 {
       transition: all 200ms ease;
       color: #000;
@@ -144,13 +147,12 @@
 
 .layer-date-range .layer-date-ranges-button,
 .layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]) {
-  color: #7bf;
   cursor: pointer;
 }
 
 .layer-date-range .layer-date-ranges-button:hover,
 .layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]):hover {
-  color: #9df;
+  text-decoration: underline;
 }
 
 .layer-description .layer-title,
@@ -195,8 +197,20 @@
 
 .layers-all-layer.search-row {
   padding: 8px 5px;
+
+  .layer-notice-icon {
+    color: #eee;
+    height: 24px;
+    width: 24px;
+    display: inline;
+    position: absolute;
+    left: 40px;
+  }
   .layers-all-header {
     padding: 0 0 0 40px;
+    &.notice {
+      padding: 0 0 0 70px;
+    }
   }
   &:hover {
     .wv-checkbox::before {
@@ -261,6 +275,8 @@
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
 .layer-date-range,
 .layer-date-wrap,
+.layer-metadata ul,
+.source-metadata ul,
 .layer-metadata a,
 .layer-metadata p {
   font-family: 'Open Sans', sans-serif;
@@ -268,6 +284,14 @@
   font-size: 13px;
   line-height: 16px;
   margin-bottom: 15px;
+}
+.layer-metadata li,
+.source-metadata li {
+  line-height: 16px;
+}
+.source-metadata ul,
+.layer-metadata ul {
+  list-style-position: inside;
 }
 
 .layers-all .source-metadata div,
@@ -575,7 +599,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .category-width .layer-modal-content {
     height: calc(var(--vh, 1vh) * 100 - 135px);
   }

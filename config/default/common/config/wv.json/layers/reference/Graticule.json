@@ -7,15 +7,9 @@
       "description": "reference/Graticule",
       "group": "overlays",
       "format": "image/png",
-      "tileSize": [
-        512,
-        512
-      ],
-      "noTransition": "true",
+      "noTransition": true,
       "type": "variable",
-      "layergroup": [
-        "reference"
-      ],
+      "layergroup": "Latitude-Longitude Lines",
       "projections": {
         "arctic": {
           "subtitle": "Polarview / Graticule",
@@ -31,7 +25,8 @@
         },
         "geographic": {
           "subtitle": "OpenLayers / Graticule Control",
-          "type": "graticule"
+          "type": "graticule",
+          "source": ""
         }
       }
     }

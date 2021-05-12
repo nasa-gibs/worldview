@@ -33,3 +33,5 @@ e2e/reports
 gc
 # Jest
 /coverage
+
+.idea

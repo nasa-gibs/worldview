@@ -44,7 +44,7 @@ export default class ImageResSelection extends React.Component {
 
   onDownload(width, height) {
     const {
-      getLayers, url, lonlats, projection, date,
+      getLayers, url, lonlats, projection, date, markerCoordinates,
     } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
     const time = new Date(date.getTime());
@@ -59,6 +59,7 @@ export default class ImageResSelection extends React.Component {
       time,
       fileType,
       fileType === 'application/vnd.google-earth.kmz' ? false : isWorldfile,
+      markerCoordinates,
     );
 
     if (url) {
@@ -209,6 +210,7 @@ ImageResSelection.propTypes = {
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
+  markerCoordinates: PropTypes.array,
   onPanelChange: PropTypes.func,
   projection: PropTypes.object,
   resolution: PropTypes.string,

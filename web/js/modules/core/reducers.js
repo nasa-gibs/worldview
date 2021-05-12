@@ -9,7 +9,7 @@ export const defaultRequestState = {
 export function requestResponse(props = {}) {
   return lodashAssign({}, defaultRequestState, props);
 }
-export function requestReducer(actionName, state, action, callback) {
+export function requestReducer(actionName, state, action) {
   const START = `${actionName}_START`;
   const SUCCESS = `${actionName}_SUCCESS`;
   const FAILURE = `${actionName}_FAILURE`;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { each as lodashEach } from 'lodash';
 // eslint-disable-next-line no-unused-vars
 import whatInput from 'what-input';
 import googleTagManager from 'googleTagManager';
@@ -16,12 +15,15 @@ import Toolbar from './containers/toolbar';
 import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
+// Location Search
+import LocationSearch from './components/location-search/location-search';
 
 // Other/MISC
 import Brand from './brand';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
+import './font-awesome-library';
 
 // actions
 import Tour from './containers/tour';
@@ -33,8 +35,6 @@ import keyPress from './modules/key-press/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.min.css';
-import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css';
 import '../../node_modules/simplebar/dist/simplebar.min.css';
@@ -46,9 +46,9 @@ import '../css/fonts.css';
 import '../css/alert.css';
 import '../css/reset.css';
 import '../css/compare.css';
-import '../css/jquery-ui-override.css';
 import '../css/search-ui-override.css';
 import '../css/rc-slider-overrides.css';
+import '../css/react-joyride-override.css';
 import '../css/util.css';
 import '../css/toolbar.css';
 import '../css/notifications.css';
@@ -63,18 +63,19 @@ import '../css/image.css';
 import '../css/projection.css';
 import '../css/tour.css';
 import '../css/products.css';
-import '../css/indicator.css';
 import '../css/events.css';
-import '../css/dataDownload.css';
+import '../css/smart-handoff.css';
 import '../css/sidebar.css';
 import '../css/layer-categories.css';
 import '../css/layers.css';
 import '../css/scrollbar.css';
 import '../css/switch.css';
 import '../css/timeline.css';
+import '../css/layer-coverage-panel.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
+import '../css/about.css';
 import '../css/mobile.css';
 import '../css/measure.css';
 import '../css/list.css';
@@ -83,9 +84,11 @@ import '../css/geostationary-modal.css';
 import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
-import '../pages/css/document.css';
+import '../css/location-search.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
+
+const { events } = util;
 
 class App extends React.Component {
   constructor(props) {
@@ -125,34 +128,19 @@ class App extends React.Component {
     const { config } = self.props;
     config.parameters = state;
 
-    // get user IP address for GTM/GA using https://www.ipify.org/ API
-    const getIpAddress = async() => {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const json = await response.json();
-      const ipAddress = json.ip;
-
-      googleTagManager.pushEvent({
-        event: 'ipAddress',
-        ipAddress,
-      });
-    };
-
     const main = function() {
-      const { models } = self.props;
-
       // Load any additional scripts as needed
       if (config.scripts) {
-        lodashEach(config.scripts, (script) => {
-          $.getScript(script);
-        });
-      }
-      if (config.features.googleTagManager) {
-        googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
-        getIpAddress();
+        util.loadScripts(config.scripts);
       }
 
-      // Console notifications
       if (Brand.release()) {
+        if (config.features.googleTagManager) {
+          if (window.location.href.includes(Brand.BRAND_URL)) {
+            googleTagManager.getIpAddress();
+          }
+        }
+        // Console build version notifications
         console.info(
           `${Brand.NAME
           } - Version ${
@@ -167,7 +155,7 @@ class App extends React.Component {
         self.props.screenResize(window);
       });
       self.props.screenResize(window);
-      models.wv.events.trigger('startup');
+      events.trigger('startup');
       self.setVhCSSProperty();
     };
     util.wrap(main)();
@@ -175,12 +163,18 @@ class App extends React.Component {
 
   render() {
     const {
-      isAnimationWidgetActive, isTourActive, locationKey, modalId, mapMouseEvents, parameters,
+      isAnimationWidgetActive,
+      isMobile,
+      isTourActive,
+      locationKey,
+      modalId,
+      parameters,
     } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
+        {!isMobile && <LocationSearch />}
         <Toolbar />
-        <MapInteractions mouseEvents={mapMouseEvents} />
+        <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
           <FeatureAlert />
           <Alerts />
@@ -191,8 +185,8 @@ class App extends React.Component {
         <div id="layer-settings-modal" />
         <div id="eventsHolder" />
         <div id="imagedownload" />
-        <Timeline key={locationKey || '1'} />
-        <div id="wv-animation-widet-case">
+        <Timeline />
+        <div id="wv-animation-widget-case">
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
@@ -205,16 +199,15 @@ class App extends React.Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
+    isMobile: state.browser.lessThan.medium,
     isTourActive: state.tour.active,
     tour: state.tour,
     config: state.config,
     parameters: state.parameters,
-    models: ownProps.models,
-    mapMouseEvents: ownProps.mapMouseEvents,
     locationKey: state.location.key,
     modalId: state.modal.id,
   };
@@ -232,12 +225,13 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(App);
+
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
   locationKey: PropTypes.string,
-  mapMouseEvents: PropTypes.object,
   modalId: PropTypes.string,
   parameters: PropTypes.object,
 };

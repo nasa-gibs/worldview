@@ -1,0 +1,326 @@
+/* Smart handoff side panel */
+.smart-handoff-side-panel {
+  margin: 5px;
+  color: #bbb;
+}
+
+.smart-handoff-side-panel h1 {
+  margin: 15px 5px;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.smart-handoff-side-panel hr {
+  margin-top: 10px;
+  border-bottom: 1px solid #555;
+}
+
+.smart-handoff-side-panel h2 {
+  margin-top: 18px;
+  color: #eee;
+  text-align: center;
+}
+
+.smart-handoff-side-panel p {
+  margin-top: 10px;
+}
+
+.smart-handoff-product-list {
+  color: #fff;
+}
+.smart-handoff-button-group {
+  text-align: center;
+}
+.cancel-btn,
+.continue-btn {
+  width: 200px;
+  margin: 5px;
+}
+.download-btn {
+  display: block;
+  margin: 15px auto 10px;
+}
+.esd-notification {
+  display: block;
+  margin: 15px 5px;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  color: #fff;
+  a {
+    color: #7bf;
+  }
+}
+.smart-handoff-layer-list {
+  margin-top: 15px;
+  display: block;
+  color: #fff;
+  overflow-y: auto;
+  min-height: 40px;
+  max-height: calc(var(--vh, 1vh) * 100 - 500px);
+}
+
+.smart-handoff-layer-list .layer-item {
+  padding: 8px;
+  margin: 10px 0;
+  background: #404040;
+  border: 1px solid #333;
+  &.selected {
+    border: 1px solid #bbb;
+    background: #333;
+  }
+  .layer-title {
+    font-size: 14px;
+    line-height: 15px;
+  }
+  .layer-subtitle {
+    margin: 3px 0 4px;
+    color: #999;
+  }
+  .collection-choice {
+    margin: 8px 5px 8px 15px;
+    input {
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
+    label {
+      color: #eee;
+      cursor: pointer;
+      margin: 0 5px 0 7px;
+      font-size: 13px;
+    }
+    svg {
+      margin-left: 3px;
+    }
+  }
+}
+
+.smart-handoff-crop-toggle {
+  display: inline-block;
+  margin: 5px 0;
+  margin-left: 52px;
+}
+
+label[for='chk-crop-toggle'] span {
+  color: #fff;
+  cursor: pointer;
+}
+
+.granule-count {
+  margin: 15px auto;
+  margin-bottom: 0;
+}
+.help-link, a.help-link {
+  color: #7bf;
+  &:hover {
+    color: #7bf;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+.granule-count-header {
+  text-align: center;
+}
+.granule-count-info {
+  margin: 0 30px;
+  text-align: center;
+  height: 28px;
+  span {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    margin: 14px 5px 5px;
+    display: inline-block;
+    text-align: center;
+    &.help-link {
+      text-align: left;
+      display: inline;
+    }
+    &.granule-size {
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 14px;
+      vertical-align: bottom;
+    }
+  }
+}
+
+.loading-granule-count {
+  font-size: 30px;
+}
+
+.loading-granule-count::after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -moz-animation: ellipsis steps(4, end) 600ms infinite;
+  -o-animation: ellipsis steps(4, end) 600ms infinite;
+  -ms-animation: ellipsis steps(4, end) 600ms infinite;
+  -webkit-animation: ellipsis steps(4, end) 600ms infinite;
+  animation: ellipsis steps(4, end) 600ms infinite;
+  content: '\2026'; /* ascii code for the ellipsis character */
+  width: 0;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadein ease 0.25s;
+  -webkit-animation: fadein ease 0.25s;
+  -moz-animation: fadein ease 0.25s;
+  -o-animation: fadein ease 0.25s;
+  -ms-animation: fadein ease 0.25s;
+}
+
+/* Overrides react image crop component  */
+.ReactCrop {
+  cursor: default !important;
+}
+
+/* Smart handoff modal */
+.smart-handoff-heading {
+  margin-bottom: 15px;
+}
+.smart-handoff-heading h1 {
+  float: right;
+  font-size: 18px;
+  line-height: 32px;
+  color: #fff;
+}
+.smart-handoff-message {
+  margin: 15px 0;
+  text-align: left;
+  font-size: 15px;
+  line-height: 16px;
+  color: #ddd;
+}
+.smart-handoff-about hr {
+  border-bottom: 1px solid #333;
+  margin-top: 15px;
+  margin-bottom: -10px;
+}
+.about-section {
+  overflow-y: scroll;
+  height: 400px;
+}
+.about-section p {
+  color: #bbb;
+  margin-bottom: 10px;
+  margin-right: 5px;
+}
+.about-heading {
+  font-size: 12px !important;
+  color: #fff;
+  margin: 25px 0 10px;
+}
+.earth-data-gif {
+  padding-top: 10px;
+  display: block;
+  margin: 0 auto;
+  width: 92%;
+}
+.earth-data-caption {
+  font-style: italic;
+  margin: 20px;
+  padding-bottom: 25px;
+  width: 94%;
+  text-align: center;
+}
+.smart-handoff-layer-info {
+  text-align: center;
+  background: #343434;
+  color: #fff;
+  width: 100%;
+  padding: 1px 20px 30px;
+  margin: 25px 0;
+  border-radius: 10px;
+}
+.smart-handoff-layer-info h1 {
+  font-size: 14px;
+  color: #fff;
+  margin: 30px 0 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: left;
+  display: block;
+}
+
+.handoff-modal-layer-title {
+  font-size: 14px;
+  margin: 0 0 4px;
+  color: #fff;
+  text-align: left;
+}
+.handoff-modal-layer-subtitle {
+  text-align: left;
+  color: #ccc;
+  margin: 0 0 10px;
+}
+.handoff-modal-date {
+  font-family: monospace;
+  font-size: 16px;
+  text-align: left;
+}
+.handoff-modal-link {
+  text-align: left;
+  font-size: 14px;
+  line-height: 18px;
+}
+.toggle-more-info {
+  margin-top: 25px;
+  color: #7bf;
+  font-size: 17px;
+  text-align: center;
+}
+.toggle-more-info:hover {
+  color: #9df;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.toggle-more-info h2 {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  line-height: 0.1em;
+  margin: 10px 0 20px;
+}
+.toggle-more-info h2 span {
+  background: #191a1b;
+  padding: 0 15px;
+}
+.checkbox-footer {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #333;
+}
+.checkbox-footer-container {
+  display: inline-block;
+}
+
+/** Overrides the modal component styles */
+#transferring-to-earthdata-search.modal-dialog .modal-body {
+  background: #191a1b !important;
+}
+
+.constant-width {
+  display: inline-block;
+  width: 125px;
+}

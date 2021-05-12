@@ -12,6 +12,9 @@
   p {
     line-height: 16px;
   }
+  a {
+    color: #7bf;
+  }
 
   .modal-header {
     padding: 8px 10px;
@@ -37,6 +40,34 @@
     background-color: #222;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
+  }
+}
+
+.modal-body .basic-modal {
+  h1 {
+    font-size: 18px;
+    line-height: 18px;
+    margin-bottom: 15px;
+  }
+  h2 {
+    font-size: 16px;
+    line-height: 16px;
+    margin-bottom: 15px;
+  }
+  h3 {
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 15px;
+  }
+  p, li {
+    line-height: 18px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+  }
+  ol li {
+    margin-left: 20px;
+    margin-top: 10px;
+    line-height: 18px;
   }
 }
 

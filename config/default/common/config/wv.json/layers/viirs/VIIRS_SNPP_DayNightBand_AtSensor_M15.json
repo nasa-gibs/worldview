@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "VIIRS_SNPP_DayNightBand_AtSensor_M15": {
+      "id": "VIIRS_SNPP_DayNightBand_AtSensor_M15",
+      "title": "Black Marble Nighttime Blue/Yellow Composite (Day/Night Band)",
+      "subtitle": "Suomi NPP / VIIRS",
+      "description": "viirs/VIIRS_SNPP_DayNightBand_AtSensor_M15",
+      "tags": "dnb night s-npp snpp lights city urban nighttime black marble vnp46a1 m15 blue yellow",
+      "layergroup": "Earth at Night",
+      "group": "overlays",
+      "tracks": [
+        "OrbitTracks_Suomi_NPP_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}

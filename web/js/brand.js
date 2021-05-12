@@ -47,6 +47,13 @@ export default (function() {
   self.BUILD_NONCE = '@BUILD_NONCE@';
 
   /**
+   * @attribute BRAND_URL
+   * @type String
+   * @static
+   */
+  self.BRAND_URL = '@URL@';
+
+  /**
    * Determines if this is a release build.
    *
    * @method release

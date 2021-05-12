@@ -6,12 +6,10 @@
       "subtitle": "Suomi NPP / VIIRS via NASA Earth Observatory",
       "description": "viirs/VIIRS_Black_Marble",
       "tags": "night s-npp snpp night lights city urban nighttime",
-      "layergroup": [
-        "viirs"
-      ],
+      "layergroup": "Earth at Night",
       "group": "baselayers",
       "inactive": true,
-      "wrapadjacentdays": true,
+      "wrapX": true,
       "daynight": [
         "night"
       ]

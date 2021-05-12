@@ -33,6 +33,28 @@ class ModalContainer extends Component {
     this.onResize = this.onResize.bind(this);
   }
 
+  componentDidUpdate() {
+    const {
+      isCustom,
+      id,
+      isOpen,
+      customProps,
+      isMobile,
+    } = this.props;
+    // Populate props from custom obj
+    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+    const {
+      onToggle,
+      onClose,
+      desktopOnly,
+    } = newProps;
+
+    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+    if (isMobile && isOpen && desktopOnly) {
+      toggleFunction();
+    }
+  }
+
   getStyle() {
     const {
       offsetLeft, offsetRight, offsetTop, width, height,
@@ -69,50 +91,53 @@ class ModalContainer extends Component {
 
   render() {
     const {
-      isCustom,
+      customProps,
       id,
+      isCustom,
+      isMobile,
       isOpen,
       isTemplateModal,
-      customProps,
-      isMobile,
       screenHeight,
     } = this.props;
     const { width, height } = this.state;
     // Populate props from custom obj
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
-      onToggle,
-      bodyText,
+      autoFocus,
+      backdrop,
+      bodyComponent,
+      bodyComponentProps,
       bodyHeader,
+      bodyText,
+      clickableBehindModal,
+      CompletelyCustomModal,
+      desktopOnly,
+      dragHandle,
       headerComponent,
       headerText,
-      modalClassName,
-      backdrop,
-      autoFocus,
-      type,
-      wrapClassName,
-      clickableBehindModal,
-      bodyComponent,
-      onClose,
-      CompletelyCustomModal,
-      bodyComponentProps,
-      timeout,
-      desktopOnly,
-      size,
       isDraggable,
       isResizable,
-      dragHandle,
+      mobileOnly,
+      modalClassName,
+      onClose,
+      onToggle,
+      size,
+      timeout,
+      type,
+      wrapClassName,
     } = newProps;
 
+    const isRestrictedDisplay = (isMobile && desktopOnly) || (!isMobile && mobileOnly);
+    if (isRestrictedDisplay) {
+      return null;
+    }
     const style = this.getStyle();
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
     const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
     const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-    if (isMobile && isOpen && desktopOnly) {
-      toggleFunction();
-    }
+
     return (
       <ErrorBoundary>
         <InteractionWrap
@@ -122,22 +147,25 @@ class ModalContainer extends Component {
               handle={dragHandle}
               disabled={!isDraggable}
             >
-              <Resizable
-                className="resize-box"
-                resizeHandles={['se']}
-                width={width || newProps.width}
-                height={height || newProps.height}
-                minConstraints={[250, 250]}
-                maxConstraints={[495, screenHeight]}
-                handleSize={[8, 8]}
-                onResize={this.onResize}
-                draggableOpts={{ disabled: !isResizable }}
-              >
-                {children}
-              </Resizable>
+              {isResizable
+                ? (
+                  <Resizable
+                    className="resize-box"
+                    resizeHandles={['se']}
+                    width={width || newProps.width}
+                    height={height || newProps.height}
+                    minConstraints={[250, 250]}
+                    maxConstraints={[495, screenHeight]}
+                    handleSize={[8, 8]}
+                    onResize={this.onResize}
+                    draggableOpts={{ disabled: !isResizable }}
+                  >
+                    {children}
+                  </Resizable>
+                )
+                : children}
             </Draggable>
           )}
-
         >
           <Modal
             isOpen={isOpen}

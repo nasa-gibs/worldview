@@ -7,9 +7,7 @@
       "description": "ssmi/SSMI_DMSP_F10_Water_Vapor_Over_Oceans_Descending",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "ssmi"
-      ],
+      "layergroup": "Water Vapor",
       "product": "rssmif10d",
       "inactive": true
     }

@@ -1,32 +1,33 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { UncontrolledTooltip } from 'reactstrap';
 
 class CollapsedButton extends PureComponent {
   render() {
     const {
       isMobile,
-      isDistractionFreeModeActive,
-      isCollapsed,
       numberOfLayers,
       onclick,
     } = this.props;
+    const buttonId = 'accordion-toggler-button';
+    const labelText = 'Expand sidebar';
 
     return (
       <div
         id="productsHoldertoggleButtonHolder"
         className="toggleButtonHolder"
-        style={!isCollapsed || isDistractionFreeModeActive ? { display: 'none' } : {}}
       >
         <a
-          id="accordionTogglerButton"
+          id={buttonId}
+          aria-label={labelText}
           className="accordionToggler dateHolder staticLayers"
-          title="Show Layer Selector"
           onClick={onclick}
         >
-          <FontAwesomeIcon icon={faLayerGroup} />
+          <UncontrolledTooltip placement="right" target={buttonId}>
+            {labelText}
+          </UncontrolledTooltip>
+          <FontAwesomeIcon icon="layer-group" />
           {isMobile
             ? (
               <span className="layer-count mobile">
@@ -35,9 +36,7 @@ class CollapsedButton extends PureComponent {
             )
             : (
               <span className="layer-count ">
-                {numberOfLayers.toString()}
-                {' '}
-                Layers
+                {`${numberOfLayers.toString()} Layers`}
               </span>
             )}
         </a>
@@ -46,8 +45,6 @@ class CollapsedButton extends PureComponent {
   }
 }
 CollapsedButton.propTypes = {
-  isCollapsed: PropTypes.bool,
-  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onclick: PropTypes.func,

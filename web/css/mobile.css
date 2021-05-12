@@ -1,4 +1,4 @@
-@media only screen and (max-width: 739px) {
+@media only screen and (max-width: 768px) {
   #wv-sidebar {
     position: static;
   }
@@ -90,6 +90,13 @@
     display: none;
   }
 
+  .wv-toolbar-button {
+    font-size: 14.3px;
+    height: 44px;
+    margin: 0 0 0 4px;
+    padding: 5.72px 9.1px;
+  }
+
   div.olControlScaleLineCustom {
     bottom: 10px;
   }
@@ -111,12 +118,15 @@
     display: none !important;
   }
 
-  button#layers-add {
+  button#layers-add,
+  button#compare-toggle-button {
     width: 100%;
     position: relative;
     left: 0;
     height: 50px;
-    font-size: 16px;
+    span {
+      font-size: 18px;
+    }
   }
 
   #selected-category .ui-tabs-panel {

@@ -7,10 +7,7 @@
       "description": "modis/combined/MODIS_Combined_MAIAC_L2G_ColumnWaterVapor",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "modis",
-        "modis_combined"
-      ],
+      "layergroup": "Water Vapor",
       "product": "",
       "wrapadjacentdays": true,
       "daynight": [

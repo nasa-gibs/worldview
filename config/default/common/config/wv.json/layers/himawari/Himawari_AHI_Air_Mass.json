@@ -7,9 +7,7 @@
       "description": "himawari/Himawari_AHI_Air_Mass",
       "group": "overlays",
       "tags": "geostationary geo",
-      "layergroup": [
-        "himawari"
-      ],
+      "layergroup": "Geostationary",
       "product": "",
       "wrapX": true,
       "daynight": [

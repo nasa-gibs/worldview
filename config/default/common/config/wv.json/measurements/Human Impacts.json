@@ -1,0 +1,33 @@
+{
+    "measurements": {
+        "Human Impacts": {
+            "id": "human-impacts",
+            "title":    "Human Impacts",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/HumanImpacts",
+                    "image": "",
+                    "settings": [
+                        "GRanD_Dams",
+                        "GRanD_Reservoirs",
+                        "Landsat_Human_Built-up_And_Settlement_Extent",
+                        "Landsat_Global_Man-made_Impervious_Surface",
+                        "GPW_Population_Density_2000",
+                        "GPW_Population_Density_2005",
+                        "GPW_Population_Density_2010",
+                        "GPW_Population_Density_2015",
+                        "GPW_Population_Density_2020",
+                        "GRUMP_Settlements",
+                        "GRUMP_Urban_Extents_Grid_1995",
+                        "LECZ_Urban_Rural_Extents_Below_10m",
+                        "Probabilities_of_Urban_Expansion_2000-2030"
+
+                    ]
+                }
+            }
+        }
+    }
+}

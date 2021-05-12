@@ -1,0 +1,208 @@
+/* Autocomplete Input */
+.location-search-input-group {
+  flex-wrap: nowrap;
+}
+
+.location-search-autocomplete {
+  height: 38px;
+  padding: 0 5px;
+  border-radius: 0;
+  border: none;
+  &::placeholder {
+    color: #999;
+  }
+}
+
+.location-search-autocomplete,
+.location-search-autocomplete:focus {
+  background: none;
+  color: #fff;
+  box-shadow: none;
+}
+
+.location-search-results-menu {
+  position: absolute;
+  width: 85%;
+}
+
+.location-search-item {
+  word-wrap: break-word;
+  padding: 5px 0 5px 7px;
+  color: #333;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+/* Autocomplete Input Submit Button */
+.location-search-input-group-addon {
+  height: 38px;
+  position: absolute;
+  top: 0;
+  right: 62px;
+  margin-right: 0;
+  background: none;
+  & .location-search-submit-button,
+  & .location-search-clear-button {
+    background: none;
+    border: none;
+    color: #999;
+    margin-right: 2px;
+    border-left: 2px solid rgba(51, 51, 51, 0.65);
+    border-radius: 0;
+    box-sizing: border-box;
+    width: 31px;
+    box-shadow: none;
+    cursor: default;
+    &:active:focus {
+      box-shadow: none;
+    }
+    & svg.svg-inline--fa.fa-search-location {
+      position: absolute;
+      left: 8px;
+      top: 13px;
+    }
+  }
+  &.submit-group {
+    right: 31px;
+  }
+  & .location-search-clear-button {
+    cursor: pointer;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 38px;
+  }
+  & svg.svg-inline--fa.fa-exclamation-triangle {
+    color: #d54e21;
+    position: absolute;
+    left: 8px;
+    top: 13px;
+  }
+  & svg.svg-inline--fa.fa-times {
+    position: absolute;
+    left: 10px;
+    top: 13px;
+  }
+}
+
+/* Location Search Component */
+.location-search-expanded {
+  position: absolute;
+  right: 182px;
+  top: 10px;
+  width: 350px;
+  margin-right: 1px;
+  background: rgba(40, 40, 40, 0.85);
+  border-radius: 5px;
+  z-index: 1;
+}
+
+/* Location Search Component Coordinate Buttons */
+.location-search-add-coordinate-button {
+  border-radius: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  width: 31px;
+  border: none;
+  background: #00457b;
+  &:focus,
+  &:hover {
+    box-shadow: none;
+    background-color: #eee;
+    color: #00457b;
+  }
+}
+
+/* Location Search Component Minimize Button */
+.location-search-minimize-button {
+  background: rgba(40, 40, 40, 0.15);
+  width: 21px;
+  margin-right: 2px;
+  border: none;
+  overflow: hidden;
+  &:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    background-color: #eee;
+    color: #1a1a1a;
+  }
+  &:hover {
+    background-color: #eee;
+    color: #1a1a1a;
+  }
+  &.disabled:hover {
+    background-color: rgba(40, 40, 40, 0.85);
+    color: #eee;
+  }
+}
+
+.location-search-minimize-button-chevron {
+  position: absolute;
+  background: url('../images/icon-sprite.svg') -201px -5px no-repeat;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 42px;
+  top: 9px;
+  left: -9px;
+  height: 24px;
+  transform: rotate(90deg);
+  &:hover {
+    background-position: -201px -65px;
+  }
+}
+
+/* Additional Styling */
+.coordinates-map-marker-dialog {
+  z-index: 1;
+}
+
+.location-search-input-alert-icon {
+  right: 120px;
+}
+
+.location-search-input-clear-container {
+  right: 62px;
+}
+
+/* Mobile Styling */
+@media only screen and (max-width: 768px) {
+  .location-search-expanded {
+    position: static;
+    width: 100%;
+  }
+  .location-search-input-container {
+    width: 100%;
+  }
+  .location-search-input-clear-container {
+    right: 70px;
+  }
+  .location-search-input-alert-icon {
+    right: 135px;
+  }
+  .location-search-autocomplete {
+    font-size: 16px;
+    &::placeholder {
+      font-size: 14px;
+    }
+  }
+  .location-search-results-menu {
+    width: 100%;
+  }
+  .location-search-item {
+    padding: 8px 0 8px 7px;
+    line-height: 16px;
+    font-size: 16px;
+  }
+  .location-search-input-group-addon {
+    margin-right: 6px;
+    background: none;
+    & .location-search-submit-button {
+      border-left: none;
+    }
+    & .location-search-clear-button {
+      background: #3b3b3b;
+    }
+  }
+}

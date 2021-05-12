@@ -13,7 +13,9 @@
       ],
       "daynight": [
         "day"
-      ]
+      ],
+      "layergroup": "Corrected Reflectance",
+      "disableSmartHandoff": true
     }
   }
 }

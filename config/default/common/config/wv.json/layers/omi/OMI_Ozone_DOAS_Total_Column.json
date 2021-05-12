@@ -6,9 +6,7 @@
       "subtitle": "Aura / OMI",
       "description": "omi/OMI_Ozone_DOAS_Total_Column",
       "group": "overlays",
-      "layergroup": [
-        "omi"
-      ],
+      "layergroup": "Ozone",
       "product": "OMDOAO3e",
       "tags": "Differential Absorption Spectroscopy",
       "tracks": [

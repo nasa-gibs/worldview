@@ -18,10 +18,7 @@
       "daynight": [
         "day"
       ],
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Fires and Thermal Anomalies",
       "palette": {
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
@@ -33,7 +30,7 @@
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "resolutionBreakPoint":  0.017578125,
+            "resolutionBreakPoint": 0.017578125,
             "source": "GIBS:wms"
           },
           "arctic": {

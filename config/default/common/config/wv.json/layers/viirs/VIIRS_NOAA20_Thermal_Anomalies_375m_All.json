@@ -1,48 +1,46 @@
 {
   "layers": {
-      "VIIRS_NOAA20_Thermal_Anomalies_375m_All": {
-          "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
-          "title": "Fires and Thermal Anomalies (Day and Night, 375m)",
-          "subtitle": "NOAA-20 / VIIRS",
-          "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_All",
-          "tags": "hotspots noaa20 jpss1 jpss vectors",
-          "group": "overlays",
-          "layergroup": [
-            "viirs"
-          ],
-          "type":     "vector",
-          "period": "daily",
-          "vectorStyle": {
-              "id": "FIRMS_VIIRS_Thermal_Anomalies",
-              "arctic": {
-                "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
-              }
+    "VIIRS_NOAA20_Thermal_Anomalies_375m_All": {
+      "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+      "title": "Fires and Thermal Anomalies (Day and Night, 375m)",
+      "subtitle": "NOAA-20 / VIIRS",
+      "description": "viirs/VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+      "tags": "hotspots noaa20 jpss1 jpss vectors",
+      "group": "overlays",
+      "layergroup": "Fires and Thermal Anomalies",
+      "type": "vector",
+      "period": "daily",
+      "vectorStyle": {
+        "id": "FIRMS_VIIRS_Thermal_Anomalies",
+        "arctic": {
+          "id": "FIRMS_VIIRS_Thermal_Anomalies_polar"
+        }
+      },
+      "transition": true,
+      "palette": {
+        "id": "VIIRS_All_Thermal_Anomalies",
+        "immutable": true
+      },
+      "daynight": [
+        "day",
+        "night"
+      ],
+      "breakPointLayer": {
+        "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "resolutionBreakPoint": 0.017578125,
+            "source": "GIBS:wms"
           },
-          "transition": "true",
-          "palette": {
-              "id": "VIIRS_All_Thermal_Anomalies",
-              "immutable": true
-          },
-          "daynight": [
-            "day",
-            "night"
-          ],
-          "breakPointLayer": {
-            "id": "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
-            "type": "wms",
-            "format":   "image/png",
-            "breakPointType": "max",
-            "projections": {
-              "geographic": {
-                "resolutionBreakPoint":  0.017578125,
-                "source": "GIBS:wms"
-              },
-              "arctic": {
-                "source": "GIBS:wms:arctic",
-                "resolutionBreakPoint": 2048
-              }
-            }
+          "arctic": {
+            "source": "GIBS:wms:arctic",
+            "resolutionBreakPoint": 2048
           }
+        }
       }
+    }
   }
 }

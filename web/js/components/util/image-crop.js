@@ -54,9 +54,12 @@ export default class Crop extends React.Component {
     const {
       onClose,
       onChange,
+      onDragStop,
       maxWidth,
       maxHeight,
       showCoordinates,
+      keepSelection,
+      zIndex,
     } = this.props;
     const { crop } = this.state;
     return (
@@ -68,13 +71,15 @@ export default class Crop extends React.Component {
           style={{
             background:
               crop.width && crop.height ? 'none' : 'rgba(0, 0, 0, 0.5)',
-            zIndex: 10,
+            zIndex,
           }}
           imageStyle={{
             width: maxWidth,
             height: maxHeight,
           }}
+          keepSelection={keepSelection}
           onComplete={(crop) => {
+            onDragStop(crop);
             if (!crop.width || !crop.height) {
               onClose();
             }
@@ -94,21 +99,27 @@ Crop.defaultProps = {
   height: 10,
   maxHeight: window.innerWidth,
   maxWidth: window.innerHeight,
+  onDragStop: () => {},
+  keepSelection: false,
   width: 30,
   x: 20,
   y: 10,
+  zIndex: 3,
 };
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onDragStop: PropTypes.func,
   bottomLeftStyle: PropTypes.object,
   coordinates: PropTypes.object,
   height: PropTypes.number,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
+  keepSelection: PropTypes.bool,
   showCoordinates: PropTypes.bool,
   topRightStyle: PropTypes.object,
   width: PropTypes.number,
   x: PropTypes.number,
   y: PropTypes.number,
+  zIndex: PropTypes.number,
 };

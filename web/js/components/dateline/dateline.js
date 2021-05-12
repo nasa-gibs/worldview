@@ -16,9 +16,21 @@ class Line extends React.Component {
     super(props);
     this.state = {
       hovered: false,
-      height: props.height,
+      height: 0,
       active: true,
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { active, height, hovered } = this.state;
+    const checkForStateUpdates = nextState.active === active
+      && nextState.height === height
+      && nextState.hovered === hovered;
+
+    if (checkForStateUpdates) {
+      return false;
+    }
+    return true;
   }
 
   /*
@@ -26,7 +38,7 @@ class Line extends React.Component {
    *
    * return {Void}
    */
-  mouseOver() {
+  mouseOver = () => {
     this.setState({
       hovered: true,
     });
@@ -37,7 +49,7 @@ class Line extends React.Component {
    *
    * return {Void}
    */
-  mouseOut() {
+  mouseOut = () => {
     this.setState({
       hovered: false,
     });
@@ -51,7 +63,7 @@ class Line extends React.Component {
    * @param {Object} e - React event object
    * return {Void}
    */
-  mouseOverHidden(e) {
+  mouseOverHidden = (e) => {
     const {
       lineOver, overlay, lineX, tooltip,
     } = this.props;
@@ -70,7 +82,7 @@ class Line extends React.Component {
    *
    * return {Void}
    */
-  mouseOutHidden() {
+  mouseOutHidden = () => {
     const { lineOut, tooltip } = this.props;
     lineOut(tooltip);
   }
@@ -90,8 +102,8 @@ class Line extends React.Component {
     const { height, active, hovered } = this.state;
     return (
       <svg
-        onMouseOver={this.mouseOver.bind(this)}
-        onMouseOut={this.mouseOut.bind(this)}
+        onMouseOver={this.mouseOver}
+        onMouseOut={this.mouseOut}
         style={svgStyle}
         width={width}
         id={id}
@@ -115,9 +127,9 @@ class Line extends React.Component {
         />
         <line
           className="dateline-hidden"
-          onMouseOver={this.mouseOverHidden.bind(this)}
-          onMouseMove={this.mouseOverHidden.bind(this)}
-          onMouseOut={this.mouseOutHidden.bind(this)}
+          onMouseOver={this.mouseOverHidden}
+          onMouseMove={this.mouseOverHidden}
+          onMouseOut={this.mouseOutHidden}
           style={style}
           opacity="0"
           x1={strokeWidth / 2}
@@ -137,7 +149,6 @@ Line.defaultProps = {
   width: '10',
   strokeWidth: '6',
   color: 'white',
-  height: 200,
   svgStyle: {
     margin: '0 40px 0 40px',
     transform: 'translateX(-43px)',
@@ -148,7 +159,6 @@ Line.propTypes = {
   classes: PropTypes.string,
   color: PropTypes.string,
   dashArray: PropTypes.string,
-  height: PropTypes.number,
   id: PropTypes.string,
   lineOut: PropTypes.func,
   lineOver: PropTypes.func,

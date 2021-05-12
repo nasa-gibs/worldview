@@ -2,6 +2,7 @@ const { assertCategories } = require('../../reuseables/layer-picker.js');
 const { switchProjection } = require('../../reuseables/switch-projection');
 const skipTour = require('../../reuseables/skip-tour.js');
 const {
+  collapsedLayerButton,
   layersSearchField,
   categoriesNav,
   allCategoryHeader,
@@ -264,7 +265,7 @@ module.exports = {
   'Collapsed sidebar shows updated layer count': (c) => {
     c.click('.toggleIconHolder');
     c.assert.containsText('.layer-count', '9 Layers');
-    c.click('#accordionTogglerButton');
+    c.click(collapsedLayerButton);
   },
   'When switching arctic projection, go straight to measurements browse list if previously in category mode': (c) => {
     // Switch projection and confirm measurement view

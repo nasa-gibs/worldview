@@ -9,7 +9,6 @@ import {
   ListGroup,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronCircleDown, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
 import { getOrbitTrackTitle } from '../../../../modules/layers/util';
 import MeasurementLayerRow from './measurement-layer-row';
 import MeasurementMetadataDetail from './measurement-metadata-detail';
@@ -67,7 +66,7 @@ class CategoryLayerRow extends React.Component {
         return;
       }
 
-      if ((layer.layergroup || []).includes('reference_orbits')) {
+      if (layer.layergroup === 'Orbital Track') {
         orbitTitle = getOrbitTrackTitle(layer);
         OrbitSourceList.push(
           <MeasurementLayerRow
@@ -92,7 +91,7 @@ class CategoryLayerRow extends React.Component {
       <div>
         {LayerSouceList.length > 0
           ? (
-            <ListGroup className="source-settings source-sub-group">
+            <ListGroup className="source-sub-group">
               {LayerSouceList}
             </ListGroup>
           )
@@ -215,8 +214,8 @@ class CategoryLayerRow extends React.Component {
           <h3>{measurement.title}</h3>
           {measurement.subtitle && !isSelected && <h5>{measurement.subtitle}</h5>}
           {isSelected
-            ? <FontAwesomeIcon icon={faChevronCircleDown} className="arrow-icon" />
-            : <FontAwesomeIcon icon={faChevronCircleRight} className="arrow-icon" />}
+            ? <FontAwesomeIcon icon="chevron-circle-down" className="arrow-icon" />
+            : <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon" />}
         </div>
         {isSelected ? this.renderContent() : ''}
       </div>
@@ -240,7 +239,7 @@ CategoryLayerRow.propTypes = {
   selectedMeasurementSourceIndex: PropTypes.number,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     config,
     browser,

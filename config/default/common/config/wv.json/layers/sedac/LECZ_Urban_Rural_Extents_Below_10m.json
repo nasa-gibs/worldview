@@ -7,9 +7,7 @@
       "description": "sedac/LECZ_Urban_Rural_Extents_Below_10m",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Urban Extents",
       "product": "CIESIN_SEDAC_LECZ_URPLAEv2",
       "inactive": true,
       "wrapX": true

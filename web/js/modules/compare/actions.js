@@ -7,7 +7,7 @@ import {
   CHANGE_MODE,
 } from './constants';
 
-export function toggleActiveCompareState(str) {
+export function toggleActiveCompareState() {
   return {
     type: CHANGE_STATE,
   };

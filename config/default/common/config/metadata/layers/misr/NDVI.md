@@ -5,4 +5,5 @@ The MISR Land NDVI Average layer displays the temporally averaged normalized dif
 
 This layer is produced from the NDVI average field of the MISR Level 3 Component Global Land Surface Product. It is available globally over land only on a monthly basis, with a spatial resolution of 0.5 degrees latitude by 0.5 degrees longitude. Coverage may be limited in areas with frequent cloudiness.
 
-References: [MISR Level 3 Component Global Land Surface Product](https://eosweb.larc.nasa.gov/project/misr/cgls_table)
+References: MISR Level 3 Component Global Land Product covering a month V004. [doi:10.5067/Terra/MISR/MIL3MLS_L3.004](https://doi.org/10.5067/Terra/MISR/MIL3MLS_L3.004)
+

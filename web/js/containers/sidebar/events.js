@@ -1,148 +1,146 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
+import {
+  Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Event from '../../components/sidebar/event';
 import Scrollbars from '../../components/util/scrollbar';
 import {
-  requestEvents,
-  requestCategories,
-  requestSources,
-  selectEvent,
-  deselectEvent,
+  selectEvent as selectEventActionCreator,
+  deselectEvent as deselectEventActionCreator,
+  selectCategory as selectCategoryActionCreator,
 } from '../../modules/natural-events/actions';
-import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
+import { ALL_CATEGORY } from '../../modules/natural-events/constants';
+import { getEventsWithinExtent } from '../../map/natural-events/util';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
 import getSelectedDate from '../../modules/date/selectors';
+import { getEventCategories } from '../../modules/natural-events/selectors';
+import AlertUtil from '../../components/util/alert';
+import util from '../../util/util';
 
-class Events extends React.Component {
-  constructor(props) {
-    super(props);
-    this.initRequests();
-  }
+function Events(props) {
+  const {
+    eventsData,
+    eventCategories,
+    sources,
+    isLoading,
+    selectEvent,
+    selected,
+    selectCategory,
+    selectedCategory,
+    visibleEvents,
+    height,
+    deselectEvent,
+    hasRequestError,
+    isMobile,
+    showAlert,
+    selectedDate,
+  } = props;
 
-  initRequests() {
-    const {
-      requestSources,
-      requestCategories,
-      requestEvents,
-      apiURL,
-      config,
-    } = this.props;
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-    let eventsRequestURL = `${apiURL}/events`;
-    let categoryRequestURL = `${apiURL}/categories`;
-    let sourceRequestURL = `${apiURL}/sources`;
+  const dropdownHeight = 34;
+  const scrollbarMaxHeight = height - dropdownHeight;
+  let showInactiveEventAlert = selected.id && !selected.date;
 
-    const mockEvents = lodashGet(config, 'parameters.mockEvents');
-    const mockCategories = lodashGet(config, 'parameters.mockCategories');
-    const mockSources = lodashGet(config, 'parameters.mockSources');
+  const errorOrLoadingText = isLoading
+    ? 'Loading...'
+    : hasRequestError
+      ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
+      : '';
 
-    if (mockEvents) {
-      console.warn(`Using mock events data: ${mockEvents}`);
-      eventsRequestURL = mockEvents === 'true'
-        ? 'mock/events_data.json'
-        : `mock/events_data.json-${mockEvents}`;
+  const eventsForSelectedCategory = !isLoading && (eventsData || []).filter((event) => {
+    if (selectedCategory === ALL_CATEGORY) return event;
+    if (event.categories.find((category) => category.title === selectedCategory)) {
+      return event;
     }
-    if (mockCategories) {
-      console.warn(`Using mock categories data: ${mockCategories}`);
-      categoryRequestURL = `mock/categories_data.json-${mockCategories}`;
-    }
-    if (mockSources) {
-      console.warn(`Using mock categories data: ${mockSources}`);
-      sourceRequestURL = `mock/categories_data.json-${mockSources}`;
-    }
-    requestEvents(eventsRequestURL);
-    requestCategories(categoryRequestURL);
-    requestSources(sourceRequestURL);
-  }
+    return false;
+  });
 
-  render() {
-    const {
-      events,
-      isLoading,
-      selectEvent,
-      selected,
-      visibleWithinMapExtent,
-      visibleEvents,
-      sources,
-      height,
-      deselectEvent,
-      hasRequestError,
-      isMobile,
-      showAlert,
-      selectedDate,
-    } = this.props;
-    if (selected.id && !visibleWithinMapExtent[selected.id] && events && events.length) {
-      deselectEvent();
-    }
-    const errorOrLoadingText = isLoading
-      ? 'Loading...'
-      : hasRequestError
-        ? 'There has been an ERROR retrieving events from the EONET events API'
-        : '';
+  return (
+    <div className="event-container">
+      <Dropdown id="event-category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
+        <DropdownToggle caret>
+          {selectedCategory}
+        </DropdownToggle>
+        <DropdownMenu id="event-category-menu">
+          <DropdownItem
+            id="event-category-item-all"
+            active={selectedCategory === ALL_CATEGORY}
+            onClick={() => selectCategory(ALL_CATEGORY)}
+          >
+            {ALL_CATEGORY}
+          </DropdownItem>
+          {
+            !isLoading && eventCategories.map((category) => (
+              <DropdownItem
+                id={`event-category-item-${category.toLowerCase()}`}
+                key={category}
+                onClick={() => selectCategory(category)}
+                active={category === selectedCategory}
+              >
+                {category}
+              </DropdownItem>
+            ))
+          }
+        </DropdownMenu>
+      </Dropdown>
 
-    let scrollBarVerticalTop = 0;
-    if (visibleEvents && selected.id) {
-      // find index for scrollBarVerticalTop calculation on selected event
-      const index = Object.keys(visibleEvents).indexOf(selected.id);
-      // 12 === li total top/bottom padding
-      // 32.2 === li height (varies slightly, Chrome 100% browser zoom height used)
-      scrollBarVerticalTop = index ? index * (12 + 32.2) : 0;
-    }
-
-    return (
-      <>
-        <Scrollbars
-          style={{ maxHeight: `${height}px` }}
-          scrollBarVerticalTop={scrollBarVerticalTop}
-        >
-          <div id="wv-events">
-            <span
-              className="events-loading-text"
-              style={
-                isLoading || hasRequestError
-                  ? { display: 'block' }
-                  : { display: 'none' }
-              }
-            >
+      <Scrollbars
+        style={{ maxHeight: `${scrollbarMaxHeight}px` }}
+      >
+        <div id="wv-events">
+          {(isLoading || hasRequestError) && (
+            <div className="events-loading-text">
+              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
               {errorOrLoadingText}
-            </span>
+            </div>
+          )}
 
-            <div
-              className="wv-eventslist sidebar-panel"
-              style={events ? { display: 'block' } : { display: 'none' }}
-            >
+          {eventsForSelectedCategory.length ? (
+            <div className="wv-eventslist sidebar-panel">
               <ul id="wv-eventscontent" className="content map-item-list">
-                {events && sources
-                  ? events.map((event) => (
-                    <Event
-                      showAlert={showAlert}
-                      key={event.id}
-                      event={event}
-                      selectEvent={(id, date) => selectEvent(id, date, isMobile)}
-                      deselectEvent={deselectEvent}
-                      isSelected={
-                        selected.id === event.id && visibleEvents[event.id]
-                      }
-                      selectedDate={selectedDate}
-                      isVisible={visibleEvents[event.id]}
-                      sources={sources}
-                    />
-                  ))
-                  : ''}
+                {sources && eventsForSelectedCategory.map((event) => (
+                  <Event
+                    showAlert={showAlert}
+                    key={event.id}
+                    event={event}
+                    selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+                    deselectEvent={deselectEvent}
+                    isSelected={selected.id === event.id && visibleEvents[event.id]}
+                    selectedDate={selectedDate}
+                    isVisible={visibleEvents[event.id]}
+                    sources={sources}
+                  />
+                ))}
               </ul>
             </div>
-          </div>
-        </Scrollbars>
-      </>
-    );
-  }
+          ) : !isLoading && (
+            <h3 className="no-events"> No events in this category.</h3>
+          )}
+        </div>
+      </Scrollbars>
+
+      {showInactiveEventAlert && (
+        <AlertUtil
+          id="event-unavailable-alert"
+          isOpen
+          onDismiss={() => { showInactiveEventAlert = false; }}
+          message={`The event with an id of ${selected.id} is no longer active.`}
+        />
+      )}
+    </div>
+  );
 }
+
 const mapDispatchToProps = (dispatch) => ({
   selectEvent: (id, dateStr, isMobile) => {
-    dispatch(selectEvent(id, dateStr));
+    dispatch(selectEventActionCreator(id, dateStr));
     if (isMobile) {
       dispatch(collapseSidebar());
     }
@@ -150,44 +148,35 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(selectDate(new Date(dateStr)));
     }
   },
-  deselectEvent: (id, date) => {
-    dispatch(deselectEvent());
+  updateEventSelect: (id, dateStr) => {
+    dispatch(selectEventActionCreator(id, dateStr));
   },
-  requestEvents: (url) => {
-    dispatch(requestEvents(url));
+  deselectEvent: () => {
+    dispatch(deselectEventActionCreator());
   },
-  requestSources: (url) => {
-    dispatch(requestSources(url));
-  },
-  requestCategories: (url) => {
-    dispatch(requestCategories(url));
+  selectCategory: (category) => {
+    dispatch(selectCategoryActionCreator(category));
   },
 });
-function mapStateToProps(state) {
+
+const mapStateToProps = (state, ownProps) => {
   const {
-    requestedEvents,
-    requestedEventSources,
-    requestedEventCategories,
-    config,
+    animation,
     proj,
     browser,
+    events,
   } = state;
-  const { selected, showAll } = state.events;
-  const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
-  const isLoading = requestedEvents.isLoading
-    || requestedEventSources.isLoading
-    || requestedEventCategories.isLoading;
-  const hasRequestError = requestedEvents.error
-    || requestedEventSources.error
-    || requestedEventCategories.error;
+  const { eventsData } = ownProps;
+  const {
+    selected, showAll, category,
+  } = events;
   let visibleEvents = {};
-  const events = lodashGet(requestedEvents, 'response');
-  const sources = lodashGet(requestedEventSources, 'response');
   const mapExtent = lodashGet(state, 'map.extent');
   let visibleWithinMapExtent = {};
-  if (events && mapExtent) {
+
+  if (eventsData && mapExtent) {
     visibleWithinMapExtent = getEventsWithinExtent(
-      events,
+      eventsData,
       selected,
       proj.selected.maxExtent,
       proj.selected,
@@ -195,7 +184,7 @@ function mapStateToProps(state) {
     );
     const extent = showAll ? proj.selected.maxExtent : mapExtent;
     visibleEvents = getEventsWithinExtent(
-      events,
+      eventsData,
       selected,
       extent,
       proj.selected,
@@ -204,42 +193,37 @@ function mapStateToProps(state) {
   }
 
   return {
-    events,
+    eventCategories: getEventCategories(state),
     showAll,
-    isLoading,
-    hasRequestError,
-    sources,
     selected,
     visibleWithinMapExtent,
     visibleEvents,
-    apiURL,
-    config,
+    isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
-    selectedDate: getSelectedDate(state).toISOString().split('T')[0],
+    isAnimatingToEvent: events.isAnimatingToEvent,
+    selectedDate: util.toISOStringDate(getSelectedDate(state)),
+    selectedCategory: category,
   };
-}
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Events);
 
 Events.propTypes = {
-  apiURL: PropTypes.string,
-  config: PropTypes.object,
+  eventCategories: PropTypes.array,
   deselectEvent: PropTypes.func,
-  events: PropTypes.array,
+  eventsData: PropTypes.array,
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
-  requestCategories: PropTypes.func,
-  requestEvents: PropTypes.func,
-  requestSources: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
+  selectCategory: PropTypes.func,
+  selectedCategory: PropTypes.string,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
   visibleEvents: PropTypes.object,
-  visibleWithinMapExtent: PropTypes.object,
 };

@@ -35,11 +35,11 @@
   display: none;
 }
 
-.wv-info-button-distraction-free-mode {
-  opacity: 0.5;
+.wv-exit-distraction-free-mode-button {
+  opacity: 0.75;
 }
 
-.wv-info-button-distraction-free-mode:hover {
+.wv-exit-distraction-free-mode-button:hover {
   opacity: 1;
 }
 

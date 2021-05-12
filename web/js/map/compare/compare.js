@@ -4,6 +4,8 @@ import Spy from './spy';
 import util from '../../util/util';
 import { setValue } from '../../modules/compare/actions';
 
+const { events } = util;
+
 const TOUCH_EVENT = {
   type: 'touch',
   start: 'touchstart',
@@ -16,45 +18,50 @@ const MOUSE_EVENT = {
   move: 'mousemove',
   end: 'mouseup',
 };
-export default function mapCompare(config, store) {
+export default function mapCompare(store) {
   const self = {};
   let comparison = null;
   let mode = 'swipe';
   let proj = '';
-  self.events = util.events();
+
   self.swipe = Swipe;
   self.opacity = Opacity;
   self.spy = Spy;
   self.active = false;
   self.dragging = false;
+  self.value = 50;
+
   self.EventTypeObject = util.browser.mobileAndTabletDevice
     ? TOUCH_EVENT
     : MOUSE_EVENT;
 
-  const init = function() {
-    self.events
-      .on('movestart', () => {
-        self.dragging = true;
-      })
-      .on('moveend', (value) => {
-        self.dragging = false;
-        store.dispatch(setValue(value));
-      });
+  const init = function () {
+    events.on('compare:movestart', () => {
+      self.dragging = true;
+    });
+    events.on('compare:moveend', (value) => {
+      self.dragging = false;
+      self.value = value;
+      store.dispatch(setValue(value));
+    });
   };
-  self.update = function(group) {
+
+  self.update = function (group) {
     const state = store.getState();
     if (comparison) {
       comparison.update(state.compare.isCompareA, group);
     }
   };
+
   /**
    * Create, update, or replace a Compare instance with a given compare-type
    * @param {Object} map | OpenLayers Map object
    * @param {String} compareMode | Active compare mode
    */
-  self.create = function(map, compareMode) {
+  self.create = function (map, compareMode) {
     const state = store.getState();
-    if (compareMode === mode && comparison && proj === state.proj.selected) {
+
+    if (compareMode === mode && comparison && proj === state.proj.selected && self.value === state.compare.value) {
       comparison.update(state.compare.isCompareA);
     } else if (comparison) {
       mode = compareMode;
@@ -62,7 +69,6 @@ export default function mapCompare(config, store) {
       comparison = new self[compareMode](
         map,
         state.compare.isCompareA,
-        self.events,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()
@@ -71,18 +77,18 @@ export default function mapCompare(config, store) {
       comparison = new self[compareMode](
         map,
         state.compare.isCompareA,
-        self.events,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()
     }
+    self.value = state.compare.value || 50;
     self.active = true;
     proj = state.proj.selected;
   };
   /**
    * Return offset value (for running-data use)
    */
-  self.getOffset = function() {
+  self.getOffset = function () {
     if (mode === 'swipe' && comparison) {
       return comparison.getSwipeOffset();
     }
@@ -91,8 +97,9 @@ export default function mapCompare(config, store) {
   /**
    * Destroy instance in full and nullify vars
    */
-  self.destroy = function() {
+  self.destroy = function () {
     comparison.destroy();
+    self.value = 50;
     store.dispatch(setValue(50)); // set Value to default
     comparison = null;
     self.active = false;

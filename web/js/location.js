@@ -1,8 +1,14 @@
-import { assign as lodashAssign, get } from 'lodash';
+import { get } from 'lodash';
 import update from 'immutability-helper';
-import { encode } from './modules/link/util';
 // legacy crutches
-import { serializeDate, tryCatchDate, mapLocationToDateState } from './modules/date/util';
+import {
+  serializeDate,
+  serializeDateWrapper,
+  serializeDateBWrapper,
+  tryCatchDate,
+  parsePermalinkDate,
+  mapLocationToDateState,
+} from './modules/date/util';
 import {
   checkTourBuildTimestamp,
   mapLocationToTourState,
@@ -17,15 +23,20 @@ import {
 import {
   layersParse12,
   serializeLayers,
+  serializeGroupOverlays,
   mapLocationToLayerState,
 } from './modules/layers/util';
-import { resetLayers, hasSubDaily } from './modules/layers/selectors';
+import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
+import { areCoordinatesWithinExtent, mapLocationToLocationSearchState } from './modules/location-search/util';
 import mapLocationToSidebarState from './modules/sidebar/util';
 import util from './util/util';
-import mapLocationToDataState from './modules/data/util';
+import {
+  serializeSmartHandoff,
+  parseSmartHandoff,
+} from './modules/smart-handoff/util';
 
 /**
  * Override state with information from location.search when "REDUX-LOCATION-POP-ACTION"
@@ -56,15 +67,14 @@ export const mapLocationToState = (state, location) => {
       state,
       config,
     );
-    stateFromLocation = mapLocationToCompareState(
-      parameters,
-      stateFromLocation,
-    );
-    stateFromLocation = mapLocationToDataState(
+    stateFromLocation = mapLocationToLocationSearchState(
       parameters,
       stateFromLocation,
       state,
-      config,
+    );
+    stateFromLocation = mapLocationToCompareState(
+      parameters,
+      stateFromLocation,
     );
     stateFromLocation = mapLocationToPaletteState(
       parameters,
@@ -93,7 +103,7 @@ export const mapLocationToState = (state, location) => {
 
     // one level deep merge of newState with defaultState
     Object.keys(stateFromLocation).forEach((key) => {
-      const obj = lodashAssign({}, state[key], stateFromLocation[key]);
+      const obj = { ...state[key], ...stateFromLocation[key] };
       stateFromLocation = update(stateFromLocation, {
         [key]: { $set: obj },
       });
@@ -118,6 +128,7 @@ const getParameters = function(config, parameters) {
   const now = config.pageLoadTime;
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
   const { initialDate } = config;
+  const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
   return {
     p: {
       stateKey: 'proj.id',
@@ -139,65 +150,6 @@ const getParameters = function(config, parameters) {
         parse: (str) => tryCatchDate(str, now),
       },
     },
-    t: {
-      stateKey: 'date.selected',
-      initialState: new Date(initialDate),
-      type: 'date',
-      options: {
-        serializeNeedsGlobalState: true,
-        setAsEmptyItem: true,
-        serialize: (currentItemState, state) => {
-          const compareIsActive = get(state, 'compare.active');
-          const isCompareA = get(state, 'compare.isCompareA');
-          const dateB = get(state, 'date.selectedB');
-          const initialDateString = util.toISOStringSeconds(initialDate);
-          return !compareIsActive && !isCompareA
-            ? util.toISOStringSeconds(dateB) === initialDateString
-              ? undefined
-              : serializeDate(dateB)
-            : util.toISOStringSeconds(currentItemState) === initialDateString
-              ? undefined
-              : !currentItemState
-                ? undefined
-                : serializeDate(currentItemState);
-        },
-        parse: (str) => {
-          let time = tryCatchDate(str, now);
-          if (time instanceof Date) {
-            const startDate = new Date(config.startDate);
-            if (time < startDate) {
-              time = startDate;
-            } else if (time > now) {
-              time = now;
-            }
-          }
-          return time;
-        },
-      },
-    },
-    t1: {
-      stateKey: 'date.selectedB',
-      initialState: nowMinusSevenDays,
-      type: 'date',
-      options: {
-        serializeNeedsGlobalState: true,
-        setAsEmptyItem: true,
-        serialize: (currentItemState, state) => {
-          const isActive = get(state, 'compare.active');
-          const initialDateString = util.toISOStringSeconds(initialDate);
-          const appNowMinusSevenDays = util.dateAdd(initialDateString, 'day', -7);
-          const appNowMinusSevenDaysString = util.toISOStringSeconds(
-            appNowMinusSevenDays,
-          );
-          if (!isActive) return undefined;
-          return appNowMinusSevenDaysString
-            === util.toISOStringSeconds(currentItemState)
-            ? undefined
-            : serializeDate(currentItemState || appNowMinusSevenDays);
-        },
-        parse: (str) => tryCatchDate(str, nowMinusSevenDays),
-      },
-    },
     z: {
       stateKey: 'date.selectedZoom',
       initialState: 3,
@@ -207,8 +159,7 @@ const getParameters = function(config, parameters) {
           let zoom = currentItemState;
           // check if subdaily timescale zoom to determine if reset is needed
           if (zoom > 3) {
-            const { layers, compare } = state;
-            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
             if (!hasSubdailyLayers) {
               zoom = 3; // reset to day
             }
@@ -227,8 +178,7 @@ const getParameters = function(config, parameters) {
           let interval = currentItemState;
           // check if subdaily timescale zoom to determine if reset is needed
           if (interval > 3) {
-            const { layers, compare } = state;
-            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
             if (!hasSubdailyLayers) {
               interval = 3; // reset to day
             }
@@ -265,8 +215,7 @@ const getParameters = function(config, parameters) {
           let customInterval = currentItemState;
           // check if subdaily customInterval to determine if reset is needed
           if (customInterval > 3) {
-            const { layers, compare } = state;
-            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const hasSubdailyLayers = hasSubDaily(getActiveLayers(state));
             if (!hasSubdailyLayers) {
               customInterval = 3; // reset to day
             }
@@ -319,6 +268,18 @@ const getParameters = function(config, parameters) {
         parse: (str) => tryCatchDate(str, now),
       },
     },
+    df: {
+      stateKey: 'ui.isDistractionFreeModeActive',
+      initialState: false,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (boo, state) => {
+          const isDistractionFreeModeActive = get(state, 'ui.isDistractionFreeModeActive');
+          return isDistractionFreeModeActive ? boo : undefined;
+        },
+      },
+    },
     e: {
       stateKey: 'events',
       type: 'object',
@@ -329,8 +290,8 @@ const getParameters = function(config, parameters) {
       },
     },
     l: {
-      stateKey: 'layers.active',
-      initialState: resetLayers(config.defaults.startingLayers, config.layers),
+      stateKey: 'layers.active.layers',
+      initialState: startingLayers,
       type: 'array',
       options: {
         parse: (permalink) => layersParse12(permalink, config),
@@ -338,24 +299,49 @@ const getParameters = function(config, parameters) {
         serialize: (currentLayers, state) => {
           const compareIsActive = get(state, 'compare.active');
           const isCompareA = get(state, 'compare.isCompareA');
-          const activeLayersB = get(state, 'layers.activeB');
+          const activeLayersB = get(state, 'layers.activeB.layers');
           return !isCompareA && !compareIsActive
             ? serializeLayers(activeLayersB, state, 'activeB')
             : serializeLayers(currentLayers, state, 'active');
         },
       },
     },
+    lg: {
+      stateKey: 'layers.active.groupOverlays',
+      initialState: true,
+      type: 'bool',
+      options: {
+        setAsEmptyItem: true,
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => serializeGroupOverlays(currentItemState, state, 'active'),
+      },
+    },
     l1: {
-      stateKey: 'layers.activeB',
+      stateKey: 'layers.activeB.layers',
       initialState: [],
       type: 'array',
       options: {
         parse: (permalink) => layersParse12(permalink, config),
         serializeNeedsGlobalState: true,
-        serialize: (currentLayers, state) => {
+        serialize: (currentBLayers, state) => {
           const compareIsActive = get(state, 'compare.active');
           return compareIsActive
-            ? serializeLayers(currentLayers, state, 'activeB')
+            ? serializeLayers(currentBLayers, state, 'activeB')
+            : undefined;
+        },
+      },
+    },
+    lg1: {
+      stateKey: 'layers.activeB.groupOverlays',
+      initialState: true,
+      type: 'bool',
+      options: {
+        setAsEmptyItem: true,
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const compareIsActive = get(state, 'compare.active');
+          return compareIsActive
+            ? serializeGroupOverlays(currentItemState, state, 'activeB')
             : undefined;
         },
       },
@@ -376,11 +362,17 @@ const getParameters = function(config, parameters) {
     cm: {
       stateKey: 'compare.mode',
       initialState: 'swipe',
+      options: {
+        parse: (param) => (config.initialIsMobile ? 'swipe' : param),
+      },
     },
     cv: {
       stateKey: 'compare.value',
       initialState: 50,
       type: 'number',
+      options: {
+        parse: (param) => (config.initialIsMobile ? 50 : param),
+      },
     },
     tr: {
       stateKey: 'tour.selected',
@@ -418,24 +410,58 @@ const getParameters = function(config, parameters) {
         parse: (str) => str === 'on',
       },
     },
-    download: {
-      stateKey: 'data.selectedProduct',
+    sh: {
+      stateKey: 'smartHandoffs',
       initialState: '',
       type: 'string',
       options: {
-        delimiter: ',',
+        setAsEmptyItem: true,
         serializeNeedsGlobalState: true,
-        parse: (id) => {
-          if (!config.products[id]) {
-            console.warn(`No such product: ${id}`);
-            return '';
+        serialize: serializeSmartHandoff,
+        parse: parseSmartHandoff,
+      },
+    },
+    s: {
+      stateKey: 'locationSearch.coordinates',
+      initialState: [],
+      type: 'string',
+      options: {
+        serializeNeedsGlobalState: true,
+        parse: (coordinates) => coordinates,
+        serialize: (coordinates, state) => {
+          const { map } = state;
+          if (map.ui.selected) {
+            const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
+            if (!coordinatesWithinExtent) {
+              return;
+            }
           }
-          return id;
+          return coordinates;
         },
-        serialize: (currentItemState, state) => {
-          if (state.sidebar.activeTab !== 'download') return undefined;
-          return encode(currentItemState);
-        },
+      },
+    },
+    t: {
+      stateKey: 'date.selected',
+      initialState: new Date(initialDate),
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serializeNeedsPrev: true,
+        setAsEmptyItem: true,
+        serialize: serializeDateWrapper,
+        parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
+      },
+    },
+    t1: {
+      stateKey: 'date.selectedB',
+      initialState: nowMinusSevenDays,
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serializeNeedsPrev: true,
+        setAsEmptyItem: true,
+        serialize: serializeDateBWrapper,
+        parse: (str) => parsePermalinkDate(nowMinusSevenDays, str, parameters.l1, config),
       },
     },
   };
@@ -455,13 +481,11 @@ export function getParamObject(
     legacyState,
     errors,
   );
-  const obj = lodashAssign(
-    {},
-    mapParamObject,
-    getParameters(config, parameters),
-  );
   return {
-    global: obj,
+    global: {
+      ...mapParamObject,
+      ...getParameters(config, parameters),
+    },
     RLSCONFIG: {
       queryParser: (q) => q.match(/^.*?(?==)|[^=\n\r].*$/gm),
     },

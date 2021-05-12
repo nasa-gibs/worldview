@@ -7,9 +7,7 @@
       "description": "amsr2/AMSRU2_Snow_Water_Equivalent_Daily",
       "tags": "amsr-u2 amsru2 swe",
       "group": "overlays",
-      "layergroup": [
-        "amsru2"
-      ],
+      "layergroup": "Snow Water Equivalent",
       "product": "AU_DySno"
     }
   }

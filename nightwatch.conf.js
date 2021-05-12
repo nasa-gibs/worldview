@@ -12,7 +12,7 @@ module.exports = {
     start_process: true,
     server_path: seleniumServer.path,
     port: 4444,
-    check_process_delay: 5000,
+    check_process_delay: 10000,
     cli_args: {
       'webdriver.chrome.driver': chromedriver.path,
       'webdriver.gecko.driver': geckodriver.path,

@@ -372,7 +372,7 @@ class GIF extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const {
     browser, proj, animation, map, date, config,
   } = state;
@@ -417,7 +417,6 @@ function mapStateToProps(state, ownProps) {
       dimensions,
       state,
     ),
-    onClose: ownProps.onClose,
   };
 }
 const mapDispatchToProps = (dispatch) => ({

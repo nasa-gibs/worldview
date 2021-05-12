@@ -1,3 +1,4 @@
+import { RESOLUTION_FOR_LARGE_WMS_TILES, RESOLUTION_FOR_SMALL_WMS_TILES } from '../modules/map/constants';
 import util from '../util/util';
 
 const ZOOM_DURATION = 250;
@@ -27,7 +28,6 @@ export function mapUtilZoomAction(map, amount, duration, center) {
   let newZoom = zoom + amount;
   const newZoomBelowMin = newZoom < minZoom;
   const newZoomExceedsMax = newZoom > maxZoom;
-
   // if newZoom is animating, it may not be an integer
   // and will require revising to within min/max zoom constraints
   if (zoom < maxZoom && newZoomExceedsMax) {
@@ -46,6 +46,16 @@ export function mapUtilZoomAction(map, amount, duration, center) {
   });
 }
 
+/**
+ *
+ * @param {Array} tileSize Size of tile to be returned in pixels
+ *
+ * @returns {Array} WMS Layer resolutions
+ */
+export function getGeographicResolutionWMS(tileSize) {
+  if (!tileSize || !tileSize.length) return RESOLUTION_FOR_LARGE_WMS_TILES;
+  return tileSize[0] === 256 ? RESOLUTION_FOR_SMALL_WMS_TILES : RESOLUTION_FOR_LARGE_WMS_TILES;
+}
 /**
  * getActiveLayerGroup
  * @param {Object} map
@@ -102,4 +112,22 @@ export function mergeBreakpointLayerAttributes(def, projId) {
     const updatedBreakPointLayer = { ...breakPointLayer, ...breakPointLayer.projections[projId] };
     return { ...def, breakPointLayer: updatedBreakPointLayer };
   } return def;
+}
+
+/**
+   *
+   * @param {*} currentDeg
+   * @param {*} currentView
+   */
+export function saveRotation(currentDeg, currentView) {
+  if (Math.abs(currentDeg) === 360) {
+    currentView.setRotation(0);
+  } else if (Math.abs(currentDeg) >= 360) {
+    const newNadVal = (360 - Math.abs(currentDeg)) * (Math.PI / 180);
+    if (currentDeg < 0) {
+      currentView.setRotation(newNadVal);
+    } else {
+      currentView.setRotation(-newNadVal);
+    }
+  }
 }

@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button } from 'reactstrap';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
@@ -11,9 +10,13 @@ import {
 import {
   clearSingleRecentLayer as clearSingleRecentLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers } from '../../../../modules/layers/selectors';
+import { getActiveLayersMap } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import getSelectedDate from '../../../../modules/date/selectors';
+import { getLayerNoticesForLayer } from '../../../../modules/notifications/util';
+import util from '../../../../util/util';
+
+const { events } = util;
 
 /**
  * A single layer search result row
@@ -27,7 +30,7 @@ class SearchLayerRow extends React.Component {
       showDeleteIcon: false,
     };
     this.toggleEnabled = this.toggleEnabled.bind(this);
-    this.toggleShowMetadata = this.toggleShowMetadata.bind(this);
+    this.onRowClick = this.onRowClick.bind(this);
     this.ref = React.createRef();
   }
 
@@ -36,6 +39,13 @@ class SearchLayerRow extends React.Component {
     if (selectedLayer && selectedLayer.id === layer.id) {
       this.ref.current.scrollIntoView(true);
     }
+  }
+
+  onRowClick() {
+    this.toggleShowMetadata();
+    setTimeout(() => {
+      events.trigger('joyride:increment');
+    });
   }
 
   /**
@@ -89,20 +99,30 @@ class SearchLayerRow extends React.Component {
 
   render() {
     const {
-      isEnabled, layer, selectedLayer, categoryType, clearSingleRecentLayer,
+      isEnabled,
+      isMobile,
+      layer,
+      selectedLayer,
+      categoryType,
+      clearSingleRecentLayer,
+      layerNotices,
     } = this.props;
     const { showDeleteIcon } = this.state;
     const { id } = layer;
+    const encodedId = util.encodeId(id);
     const isMetadataShowing = selectedLayer && id === selectedLayer.id;
     const rowClass = isMetadataShowing
       ? 'search-row layers-all-layer selected'
       : 'search-row layers-all-layer';
     const checkboxClass = isEnabled ? 'wv-checkbox checked' : 'wv-checkbox';
     const recentLayerMode = categoryType === 'recent';
+    const headerClassName = layerNotices
+      ? 'layers-all-header notice'
+      : 'layers-all-header';
 
     return (
       <div
-        id={`${id}-search-row`}
+        id={`${encodedId}-search-row`}
         className={rowClass}
         ref={this.ref}
         onMouseEnter={() => this.toggleDeleteIcon(true)}
@@ -111,13 +131,32 @@ class SearchLayerRow extends React.Component {
         <div className={checkboxClass}>
           <input
             type="checkbox"
-            id={`${id}-checkbox`}
-            name={`${id}-checkbox`}
+            id={`${encodedId}-checkbox`}
+            name={`${encodedId}-checkbox`}
             checked={isEnabled}
             onChange={this.toggleEnabled}
           />
         </div>
-        <div className="layers-all-header" onClick={this.toggleShowMetadata}>
+        {layerNotices && (
+          <div className="layer-notice-wrapper">
+            <FontAwesomeIcon
+              id={`${encodedId}-notice-info`}
+              className="layer-notice-icon"
+              icon="exclamation-triangle"
+            />
+            <UncontrolledTooltip
+              className="zot-tooltip"
+              placement="top"
+              target={`${encodedId}-notice-info`}
+              trigger="hover"
+              autohide={isMobile}
+              delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
+            >
+              <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
+            </UncontrolledTooltip>
+          </div>
+        )}
+        <div className={headerClassName} onClick={this.onRowClick}>
           <RenderSplitLayerTitle layer={layer} />
           {recentLayerMode && showDeleteIcon && (
             <Button
@@ -126,7 +165,7 @@ class SearchLayerRow extends React.Component {
               title="Remove from recent layers list."
               onClick={(e) => clearSingleRecentLayer(e, layer)}
             >
-              <FontAwesomeIcon icon={faTrash} />
+              <FontAwesomeIcon icon="trash" />
             </Button>
           )}
         </div>
@@ -141,6 +180,7 @@ SearchLayerRow.propTypes = {
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   layer: PropTypes.object,
+  layerNotices: PropTypes.string,
   removeLayer: PropTypes.func,
   scrollIntoView: PropTypes.bool,
   selectedLayer: PropTypes.object,
@@ -148,13 +188,14 @@ SearchLayerRow.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { productPicker, browser } = state;
-  const activeLayerMap = getActiveLayers(state);
+  const { productPicker, browser, notifications } = state;
+  const activeLayerMap = getActiveLayersMap(state);
   const { categoryType, selectedLayer } = productPicker;
   return {
     scrollIntoView: browser.screenWidth < 1024,
     isEnabled: !!activeLayerMap[ownProps.layer.id],
     isMobile: browser.lessThan.medium,
+    layerNotices: getLayerNoticesForLayer(ownProps.layer.id, notifications),
     selectedDate: getSelectedDate(state),
     selectedLayer,
     categoryType,

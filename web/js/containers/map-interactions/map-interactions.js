@@ -1,54 +1,70 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import OlCoordinates from '../../components/map/ol-coordinates';
 import OlVectorInteractions from './ol-vector-interactions';
 import OlMeasureTool from '../../components/map/ol-measure-tool';
+import OlCoordinatesMarker from '../../components/location-search/ol-coordinates-marker';
+import OlRotationButtons from '../../components/map/rotation';
+import OlZoomButtons from '../../components/map/zoom';
+import NaturalEvents from '../../map/natural-events/natural-events';
 
-class MapInteractions extends React.PureComponent {
+class MapInteractions extends PureComponent {
+  getMapClasses = () => {
+    const { isShowingClick, isDistractionFreeModeActive, isCoordinateSearchActive } = this.props;
+    let mapClasses = 'wv-map';
+    mapClasses += isShowingClick && !isCoordinateSearchActive ? ' cursor-pointer' : '';
+    mapClasses += !isDistractionFreeModeActive && isCoordinateSearchActive ? ' cursor-crosshair' : '';
+    mapClasses += isDistractionFreeModeActive ? ' distraction-free-active' : '';
+    return mapClasses;
+  };
+
   render() {
     const {
       isDistractionFreeModeActive,
-      isShowingClick,
-      mouseEvents,
+      isNaturalEventsActive,
     } = this.props;
-    let mapClasses = isShowingClick
-      ? 'wv-map cursor-pointer'
-      : 'wv-map';
-    mapClasses = isDistractionFreeModeActive
-      ? `${mapClasses} distraction-free-active`
-      : mapClasses;
-
+    const mapClasses = this.getMapClasses();
     return (
       <>
+        <OlZoomButtons />
+        <OlRotationButtons />
         <div id="wv-map" className={mapClasses} />
         {!isDistractionFreeModeActive && (
-          <>
-            <OlCoordinates
-              mouseEvents={mouseEvents}
-            />
-          </>
-
+          <OlCoordinates />
         )}
-        <OlVectorInteractions
-          mouseEvents={mouseEvents}
-        />
+        <OlVectorInteractions />
         <OlMeasureTool />
+        <OlCoordinatesMarker />
+        {isNaturalEventsActive && (
+          <NaturalEvents />
+        )}
       </>
     );
   }
 }
 function mapStateToProps(state) {
-  const { map, ui } = state;
+  const {
+    config, locationSearch, map, ui, events,
+  } = state;
+  const { isDistractionFreeModeActive } = ui;
+  const { isCoordinateSearchActive } = locationSearch;
+  const eventsEnabled = config.features.naturalEvents;
+
   return {
+    config,
     isShowingClick: map.isClickable,
-    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    isDistractionFreeModeActive,
+    isCoordinateSearchActive,
+    isNaturalEventsActive: eventsEnabled && events.active,
   };
 }
+
 MapInteractions.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
-  mouseEvents: PropTypes.object.isRequired,
+  isCoordinateSearchActive: PropTypes.bool,
+  isNaturalEventsActive: PropTypes.bool,
 };
 export default connect(
   mapStateToProps,

@@ -53,3 +53,15 @@
   min-height: inherit;
   font-size: 0;
 }
+
+/* ErrorBoundary */
+.error-icon {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.error-header {
+  margin-top: 5px;
+}
+.error-body {
+  margin-top: 10px;
+}

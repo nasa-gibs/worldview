@@ -15,7 +15,9 @@ import util from '../util/util';
 import {
   hasSubDaily as hasSubDailySelector,
   getLayers,
+  getActiveLayers,
 } from '../modules/layers/selectors';
+import getSelectedDate from '../modules/date/selectors';
 import {
   resolutionsGeo,
   resolutionsPolar,
@@ -74,6 +76,7 @@ class ImageDownloadContainer extends Component {
       date,
       getLayers,
       hasSubdailyLayers,
+      markerCoordinates,
       onPanelChange,
     } = this.props;
     const {
@@ -112,6 +115,7 @@ class ImageDownloadContainer extends Component {
           resolution={newResolution}
           isWorldfile={isWorldfile}
           hasSubdailyLayers={hasSubdailyLayers}
+          markerCoordinates={markerCoordinates}
           date={date}
           url={url}
           crs={crs}
@@ -153,9 +157,7 @@ function mapStateToProps(state) {
     config,
     proj,
     browser,
-    layers,
-    compare,
-    date,
+    locationSearch,
     map,
     imageDownload,
   } = state;
@@ -163,9 +165,9 @@ function mapStateToProps(state) {
     isWorldfile, fileType, resolution, boundaries,
   } = imageDownload;
   const { screenWidth, screenHeight } = browser;
-  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-  const activeStr = compare.activeString;
-  const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
+  const markerCoordinates = locationSearch.coordinates;
+  const activeLayers = getActiveLayers(state);
+  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -186,14 +188,14 @@ function mapStateToProps(state) {
     resolution,
     boundaries,
     hasSubdailyLayers,
-    date: date[activeDateStr],
+    markerCoordinates,
+    date: getSelectedDate(state),
     getLayers: () => getLayers(
-      layers[compare.activeString],
+      state,
       {
         reverse: true,
         renderable: true,
       },
-      state,
     ),
   };
 }
@@ -230,6 +232,7 @@ ImageDownloadContainer.propTypes = {
   getLayers: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
+  markerCoordinates: PropTypes.array,
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,

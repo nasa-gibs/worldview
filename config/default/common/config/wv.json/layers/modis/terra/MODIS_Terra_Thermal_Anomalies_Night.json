@@ -9,10 +9,7 @@
       "group": "overlays",
       "format": "image/png",
       "period": "daily",
-      "layergroup": [
-        "modis",
-        "modis_terra"
-      ],
+      "layergroup": "Fires and Thermal Anomalies",
       "type": "vector",
       "vectorStyle": {
         "id": "FIRMS_MODIS_Thermal_Anomalies",
@@ -33,7 +30,7 @@
         "breakPointType": "max",
         "projections": {
           "geographic": {
-            "resolutionBreakPoint":  0.017578125,
+            "resolutionBreakPoint": 0.017578125,
             "source": "GIBS:wms"
           },
           "arctic": {

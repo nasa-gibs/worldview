@@ -8,9 +8,7 @@
       "tags": "",
       "group": "overlays",
       "product": "AIRS3STM",
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Temperature",
       "daynight": [
         "night"
       ]

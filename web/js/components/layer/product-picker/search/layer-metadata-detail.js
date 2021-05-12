@@ -2,13 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMinus,
-  faPlus,
-  faGlobeAmericas,
-} from '@fortawesome/free-solid-svg-icons';
 import util from '../../../../util/util';
 import { dateOverlap } from '../../../../modules/layers/util';
 import {
@@ -18,7 +12,7 @@ import {
 import {
   selectLayer as selectLayerAction,
 } from '../../../../modules/product-picker/actions';
-import { getActiveLayers } from '../../../../modules/layers/selectors';
+import { getActiveLayersMap } from '../../../../modules/layers/selectors';
 import RenderSplitLayerTitle from '../renderSplitTitle';
 import RecentLayersInfo from '../browse/recent-layers-info';
 
@@ -79,29 +73,36 @@ class LayerMetadataDetail extends React.Component {
      * @return {string}       Return a string with temporal range information
      */
   dateRangeText = (layer) => {
-    let startDate;
+    const {
+      endDate,
+      id,
+      inactive,
+      period,
+      startDate,
+    } = layer;
+    let layerStartDate;
     let startDateId;
-    let endDate;
+    let layerEndDate;
     let endDateId;
 
-    if (layer.startDate) {
-      startDateId = `${layer.id}-startDate`;
-      startDate = util.coverageDateFormatter('START-DATE', layer.startDate, layer.period);
+    if (startDate) {
+      startDateId = `${id}-startDate`;
+      layerStartDate = util.coverageDateFormatter('START-DATE', startDate, period);
     }
-    if (layer.endDate) {
-      endDateId = `${layer.id}-endDate`;
-      endDate = util.parseDate(layer.endDate);
-      if (endDate <= util.today() && !layer.inactive) {
-        endDate = 'Present';
+    if (endDate) {
+      endDateId = `${id}-endDate`;
+      layerEndDate = util.parseDate(endDate);
+      if (layerEndDate <= util.today() && !inactive) {
+        layerEndDate = 'Present';
       } else {
-        endDate = util.coverageDateFormatter('END-DATE', layer.endDate, layer.period);
+        layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);
       }
     } else {
-      endDate = 'Present';
+      layerEndDate = 'Present';
     }
     return `Temporal coverage:
-          <span class="layer-date-start" id='${startDateId}'> ${startDate} </span> -
-          <span class="layer-end-date" id='${endDateId}'> ${endDate} </span>`;
+          <span class="layer-date-start" id='${startDateId}'> ${layerStartDate} </span> -
+          <span class="layer-end-date" id='${endDateId}'> ${layerEndDate} </span>`;
   }
 
   renderLayerDates() {
@@ -155,7 +156,7 @@ class LayerMetadataDetail extends React.Component {
       ? (<RecentLayersInfo />)
       : (
         <div className="no-results">
-          <FontAwesomeIcon icon={faGlobeAmericas} />
+          <FontAwesomeIcon icon="globe-americas" />
           <h3> No layer selected. </h3>
           <h5> Select a layer to view details here!</h5>
         </div>
@@ -173,14 +174,14 @@ class LayerMetadataDetail extends React.Component {
     const previewUrl = `images/layers/previews/${selectedProjection}/${layer.id}.jpg`;
     const buttonText = isActive ? 'Remove Layer' : 'Add Layer';
     const btnClass = isActive ? 'add-to-map-btn text-center is-active' : 'add-to-map-btn text-center';
-    const btnIconClass = isActive ? faMinus : faPlus;
+    const btnIconClass = isActive ? 'minus' : 'plus';
     return (
       <div className="layers-all-layer">
         <div className="layers-all-header">
           <RenderSplitLayerTitle layer={layer} />
-          {/* NOTE - NEED TO ADD faChevronDown TO FONT AWESOME IMPORT ABOVE FROM '@fortawesome/free-solid-svg-icons'
+          {/*
             <Button className="close-details" onClick={() => selectLayer(null)}>
-              <FontAwesomeIcon icon={faChevronDown} />
+              <FontAwesomeIcon icon="chevron-down" />
             </Button>
           */}
         </div>
@@ -217,14 +218,14 @@ LayerMetadataDetail.propTypes = {
   showPreviewImage: PropTypes.bool,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     productPicker,
     proj,
     config,
   } = state;
   const { selectedLayer, categoryType } = productPicker;
-  const activeLayers = getActiveLayers(state);
+  const activeLayers = getActiveLayersMap(state);
   const isActive = selectedLayer && !!activeLayers[selectedLayer.id];
   return {
     layer: selectedLayer,

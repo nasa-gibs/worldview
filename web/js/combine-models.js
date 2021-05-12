@@ -8,7 +8,7 @@ import mapModel from './map/model';
 export default function combineModels(config) {
   const models = {
     wv: {
-      events: util.events(),
+      events: util.events,
     },
   };
   models.map = mapModel(models, config);

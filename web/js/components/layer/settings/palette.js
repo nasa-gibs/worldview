@@ -103,13 +103,12 @@ class PaletteSelect extends React.Component {
    * @param {Boolean} isSelected | is this colormap active
    */
   renderSelectorItemScale(palette, id, legend, isSelected) {
-    const { canvas, checkerBoard } = this.props;
+    const { canvas } = this.props;
     const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
     const ctx = canvas.getContext('2d');
     drawPaletteOnCanvas(
       ctx,
-      checkerBoard,
       palette,
       canvas.width,
       canvas.height,
@@ -197,7 +196,6 @@ class PaletteSelect extends React.Component {
 PaletteSelect.propTypes = {
   activePalette: PropTypes.string,
   canvas: PropTypes.object,
-  checkerBoard: PropTypes.object,
   clearCustomPalette: PropTypes.func,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,

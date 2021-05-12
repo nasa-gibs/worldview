@@ -1,6 +1,13 @@
 /* Bootstrap override */
 .tooltip {
   z-index: 1050;
+
+  /* Fixes issue with flicker but, breaks autohide=false */
+  pointer-events: none;
+
+  a {
+    color: #7bf;
+  }
 }
 
 .tooltip-icon {
@@ -65,18 +72,123 @@
   font-family: 'Roboto Mono', monospace;
   border-radius: 5px;
   height: 25px;
-  line-height: 25px;
+  line-height: 23px;
   white-space: nowrap;
   user-select: none;
   padding-left: 8px;
   position: relative;
   z-index: 101;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.date-tooltip-fade {
+  opacity: 1;
 }
 
 .date-tooltip-day {
   position: relative;
-  bottom: 2px;
+  bottom: 1px;
   font-size: 14px;
   font-family: "Lucida Console", monospace;
   font-weight: 300;
+}
+
+/* Tooltip Custom - Measurement Tool, Location Search Coordinates */
+.tooltip-custom-black {
+  position: relative;
+  font-weight: 500;
+  font-size: 16px;
+  font-family: 'Roboto Mono', monospace;
+  background: #000;
+  border-radius: 4px;
+  color: #fff;
+  padding: 5px 8px;
+  white-space: nowrap;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  &.tooltip-active {
+    opacity: 0.85;
+    color: #ddd;
+    background-color: #333;
+  }
+  &.tooltip-static {
+    color: #fff;
+    background-color: #000;
+  }
+  &.tooltip-active::before,
+  &.tooltip-static::before {
+    border-top: 6px solid rgba(0, 0, 0, 1);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    margin-left: -7px;
+    left: 50%;
+  }
+  &.tooltip-static::before {
+    border-top-color: #000;
+  }
+  &.tooltip-coordinates-container {
+    max-width: 420px;
+    & svg.svg-inline--fa.fa-copy {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+    }
+    & .copy-coordinates-to-clipboard-button {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 20px;
+      width: 23px;
+    }
+  }
+  .tooltip-coordinates-title {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 17px;
+    font-size: 16px;
+    padding-right: 50px;
+  }
+  .tooltip-coordinates {
+    margin-top: 6px;
+    padding-right: 26px;
+  }
+  .close-tooltip,
+  .minimize-tooltip {
+    padding-left: 6px;
+    margin-left: 8px;
+    border-left: 1px solid #777;
+    &.close-coordinates-tooltip,
+    &.minimize-coordinates-tooltip {
+      position: absolute;
+      padding: 3px 0 3px 6px;
+      top: 0;
+    }
+    &.close-coordinates-tooltip {
+      right: 6px;
+    }
+    &.minimize-coordinates-tooltip {
+      right: 30px;
+    }
+  }
+  .svg-inline--fa {
+    width: 12px;
+    color: #ccc;
+    &:hover {
+      cursor: pointer;
+      color: #fff;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .tooltip-custom-black {
+    &.tooltip-coordinates-container {
+      max-width: 320px;
+    }
+  }
 }

@@ -1,10 +1,11 @@
-/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
 import update from 'immutability-helper';
+
+import JoyrideWrapper from '../components/tour/joyride-wrapper';
 import TourStart from '../components/tour/modal-tour-start';
 import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
@@ -18,12 +19,14 @@ import {
 import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
 import { stop as stopAnimation } from '../modules/animation/actions';
 import { onClose as closeModal } from '../modules/modal/actions';
+import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { layersParse12 } from '../modules/layers/util';
 import {
   endTour as endTourAction,
   selectStory as selectStoryAction,
   startTour as startTourAction,
 } from '../modules/tour/actions';
+import { resetProductPickerState as resetProductPickerStateAction } from '../modules/product-picker/actions';
 
 import ErrorBoundary from './error-boundary';
 import history from '../main';
@@ -34,14 +37,14 @@ const { HIDE_TOUR } = safeLocalStorage.keys;
 class Tour extends React.Component {
   constructor(props) {
     super(props);
-    const { storyOrder } = props;
-    const { stories } = props;
-    const currentStoryIndex = lodashFindIndex(storyOrder, (id) => id === props.currentStoryId) || null;
-    const currentStory = currentStoryIndex >= 0 ? stories[props.currentStoryId] : {};
+    const { storyOrder, stories, currentStoryId } = props;
+    const currentStoryIndex = lodashFindIndex(storyOrder, (id) => id === currentStoryId) || null;
+    const currentStory = currentStoryIndex >= 0 ? stories[currentStoryId] : {};
     const steps = lodashGet(currentStory, 'steps') || [];
+
     this.state = {
-      modalStart: !props.currentStoryId,
-      showSupportAlert: props.currentStoryId && currentStoryIndex === -1,
+      modalStart: !currentStoryId,
+      showSupportAlert: currentStoryId && currentStoryIndex === -1,
       showDisabledAlert: false,
       modalInProgress: currentStoryIndex !== -1,
       modalComplete: false,
@@ -50,7 +53,7 @@ class Tour extends React.Component {
       metaLoaded: false,
       isLoadingMeta: false,
       currentStory,
-      currentStoryId: props.currentStoryId,
+      currentStoryId,
       currentStoryIndex,
       tourEnded: false,
     };
@@ -61,6 +64,8 @@ class Tour extends React.Component {
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
     this.endTour = this.endTour.bind(this);
+    this.showTour = this.showTour.bind(this);
+    this.hideTour = this.hideTour.bind(this);
     this.selectTour = this.selectTour.bind(this);
     this.resetTour = this.resetTour.bind(this);
   }
@@ -71,6 +76,26 @@ class Tour extends React.Component {
     if (currentStory && currentStoryIndex !== -1) {
       this.selectTour(null, currentStory, 1, currentStoryId);
     }
+  }
+
+  hideTour() {
+    const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
+    googleTagManager.pushEvent({
+      event: 'tour_hide_checked',
+    });
+    this.setState({ showDisabledAlert: true });
+    if (shouldHideTour) return;
+    safeLocalStorage.setItem(HIDE_TOUR, new Date());
+  }
+
+  showTour() {
+    const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
+    googleTagManager.pushEvent({
+      event: 'tour_hide_unchecked',
+    });
+    this.setState({ showDisabledAlert: false });
+    if (!shouldHideTour) return;
+    safeLocalStorage.removeItem(HIDE_TOUR);
   }
 
   toggleModalStart(e) {
@@ -107,15 +132,12 @@ class Tour extends React.Component {
     selectTour(currentStoryId);
     this.fetchMetadata(currentStory, 0);
     const storyStep = currentStory.steps[0];
-    const transition = getTransitionAttr(
-      storyStep.transition.element,
-      storyStep.transition.action,
-    );
+    const transitionParam = getTransitionAttr(storyStep.transition);
     processStepLink(
       currentStoryId,
       1,
       currentStory.steps.length,
-      `${storyStep.stepLink}&tr=${currentStoryId}${transition}`,
+      `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}`,
       config,
       renderedPalettes,
     );
@@ -124,9 +146,7 @@ class Tour extends React.Component {
   fetchMetadata(currentStory, stepIndex) {
     const { description } = currentStory.steps[stepIndex];
     const errorMessage = '<p>There was an error loading this description.</p>';
-    const uri = `config/metadata/stories/${
-      currentStory.id
-    }/${description}`;
+    const uri = `config/metadata/stories/${currentStory.id}/${description}`;
     this.setState({
       isLoadingMeta: true,
       metaLoaded: false,
@@ -205,18 +225,13 @@ class Tour extends React.Component {
       this.fetchMetadata(currentStory, currentStep);
       this.setState({ currentStep: newStep });
       const storyStep = currentStory.steps[newStep - 1];
-      const transition = getTransitionAttr(
-        storyStep.transition.element,
-        storyStep.transition.action,
-      );
+      const { stepLink } = storyStep;
+      const transitionParam = getTransitionAttr(storyStep.transition);
       processStepLink(
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${currentStory.steps[newStep - 1].stepLink
-        }&tr=${
-          currentStoryId
-        }${transition}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
         config,
         renderedPalettes,
       );
@@ -239,18 +254,13 @@ class Tour extends React.Component {
       this.fetchMetadata(currentStory, newStep - 1);
       this.setState({ currentStep: newStep });
       const storyStep = currentStory.steps[newStep - 1];
-      const transition = getTransitionAttr(
-        storyStep.transition.element,
-        storyStep.transition.action,
-      );
+      const { stepLink } = storyStep;
+      const transitionParam = getTransitionAttr(storyStep.transition);
       processStepLink(
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        `${currentStory.steps[newStep - 1].stepLink
-        }&tr=${
-          currentStoryId
-        }${transition}`,
+        `${stepLink}&tr=${currentStoryId}${transitionParam}`,
         config,
         renderedPalettes,
       );
@@ -281,7 +291,6 @@ class Tour extends React.Component {
         isOpen
         timeout={10000}
         onDismiss={endTour}
-        iconClassName=" "
         message="Sorry, this tour is no longer supported."
       />
     );
@@ -294,24 +303,41 @@ class Tour extends React.Component {
         isOpen
         timeout={10000}
         onDismiss={endTour}
-        iconClassName=" "
         message="To view these tours again, click the 'Explore Worldview' link in the “i” menu."
       />
     );
   }
 
-  render() {
+  renderTourStart() {
     const {
       stories,
       storyOrder,
-      showTourAlert,
-      hideTour,
-      showTour,
-      config,
       screenHeight,
-      screenWidth,
-      isActive,
-      endTour,
+    } = this.props;
+    const { modalStart } = this.state;
+    const checked = !!safeLocalStorage.getItem(HIDE_TOUR);
+    return (
+      <TourStart
+        stories={stories}
+        storyOrder={storyOrder}
+        modalStart={modalStart}
+        height={screenHeight}
+        checked={checked}
+        toggleModalStart={this.toggleModalStart}
+        toggleModalInProgress={this.toggleModalInProgress}
+        toggleModalComplete={this.toggleModalComplete}
+        selectTour={this.selectTour}
+        hideTour={this.hideTour}
+        showTour={this.showTour}
+        endTour={this.endTour}
+      />
+    );
+  }
+
+  renderTourInProgress() {
+    const {
+      stories,
+      config,
     } = this.props;
     const {
       modalInProgress,
@@ -320,12 +346,66 @@ class Tour extends React.Component {
       currentStoryId,
       currentStep,
       totalSteps,
-      modalComplete,
       models,
-      modalStart,
       currentStoryIndex,
       description,
       isLoadingMeta,
+    } = this.state;
+    return (
+      <TourInProgress
+        config={config}
+        models={models}
+        endTour={this.endTour}
+        modalInProgress={modalInProgress}
+        toggleModalStart={this.toggleModalStart}
+        toggleModalInProgress={this.toggleModalInProgress}
+        toggleModalComplete={this.toggleModalComplete}
+        currentStep={currentStep}
+        totalSteps={totalSteps}
+        currentStoryIndex={currentStoryIndex}
+        incrementStep={this.incrementStep}
+        decreaseStep={this.decreaseStep}
+        stories={stories}
+        currentStoryId={currentStoryId}
+        currentStory={currentStory}
+        metaLoaded={metaLoaded}
+        isLoadingMeta={isLoadingMeta}
+        description={description}
+      />
+    );
+  }
+
+  renderTourComplete() {
+    const { currentStory, modalComplete } = this.state;
+    return (
+      <TourComplete
+        currentStory={currentStory}
+        modalComplete={modalComplete}
+        toggleModalStart={this.toggleModalStart}
+        toggleModalInProgress={this.toggleModalInProgress}
+        toggleModalComplete={this.toggleModalComplete}
+        resetTour={this.resetTour}
+        endTour={this.endTour}
+      />
+    );
+  }
+
+  render() {
+    const {
+      map,
+      stories,
+      screenHeight,
+      screenWidth,
+      isActive,
+      endTour,
+      resetProductPicker,
+    } = this.props;
+    const {
+      currentStory,
+      currentStep,
+      modalInProgress,
+      modalComplete,
+      modalStart,
       showSupportAlert,
       showDisabledAlert,
       tourEnded,
@@ -338,74 +418,33 @@ class Tour extends React.Component {
     if (showSupportAlert) {
       return this.renderSupportAlert();
     }
-    if (stories && isActive) {
-      if (!modalStart && !modalInProgress && !modalComplete) {
-        this.setState({ modalStart: true });
-      }
-      const checked = !!safeLocalStorage.getItem(HIDE_TOUR);
-      return (
-        <ErrorBoundary>
-          <div>
-            {modalStart ? (
-              <TourStart
-                stories={stories}
-                storyOrder={storyOrder}
-                modalStart={modalStart}
-                height={screenHeight}
-                checked={checked}
-                toggleModalStart={this.toggleModalStart}
-                toggleModalInProgress={this.toggleModalInProgress}
-                toggleModalComplete={this.toggleModalComplete}
-                selectTour={this.selectTour}
-                showTourAlert={showTourAlert}
-                hideTour={() => {
-                  hideTour();
-                  this.setState({ showDisabledAlert: true });
-                }}
-                showTour={() => {
-                  showTour();
-                  this.setState({ showDisabledAlert: false });
-                }}
-                endTour={this.endTour}
-              />
-            ) : modalInProgress ? (
-              <TourInProgress
-                config={config}
-                models={models}
-                endTour={this.endTour}
-                modalInProgress={modalInProgress}
-                toggleModalStart={this.toggleModalStart}
-                toggleModalInProgress={this.toggleModalInProgress}
-                toggleModalComplete={this.toggleModalComplete}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-                currentStoryIndex={currentStoryIndex}
-                incrementStep={this.incrementStep}
-                decreaseStep={this.decreaseStep}
-                stories={stories}
-                currentStoryId={currentStoryId}
-                currentStory={currentStory}
-                showTourAlert={showTourAlert}
-                metaLoaded={metaLoaded}
-                isLoadingMeta={isLoadingMeta}
-                description={description}
-              />
-            ) : (
-              <TourComplete
-                currentStory={currentStory}
-                modalComplete={modalComplete}
-                toggleModalStart={this.toggleModalStart}
-                toggleModalInProgress={this.toggleModalInProgress}
-                toggleModalComplete={this.toggleModalComplete}
-                resetTour={this.resetTour}
-                endTour={this.endTour}
-              />
-            )}
-          </div>
-        </ErrorBoundary>
-      );
+    if (!stories && !isActive) {
+      return null;
     }
-    return null;
+    if (!modalStart && !modalInProgress && !modalComplete) {
+      this.setState({ modalStart: true });
+    }
+    return (
+      <ErrorBoundary>
+        <div>
+          {currentStory && currentStory.steps && currentStep && (
+            <JoyrideWrapper
+              currentTourStep={currentStep}
+              tourSteps={currentStory.steps}
+              map={map.ui.selected}
+              proj={map.ui.selected && map.ui.selected.proj}
+              resetProductPicker={resetProductPicker}
+              tourComplete={!modalInProgress}
+            />
+          )}
+          {modalStart
+            ? this.renderTourStart()
+            : modalInProgress
+              ? this.renderTourInProgress()
+              : this.renderTourComplete()}
+        </div>
+      </ErrorBoundary>
+    );
   }
 }
 
@@ -444,10 +483,10 @@ const mapDispatchToProps = (dispatch) => ({
           type: BULK_PALETTE_RENDERING_SUCCESS,
           rendered: obj.rendered,
         });
-        dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+        dispatch({ type: LOCATION_POP_ACTION, payload: location });
       });
     } else {
-      dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+      dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
   },
   startTour: () => {
@@ -456,72 +495,53 @@ const mapDispatchToProps = (dispatch) => ({
   endTour: () => {
     dispatch(endTourAction());
   },
-  showTourAlert: (message) => {
-    // dispatch(showAlert(message));
-  },
   selectTour: (id) => {
     dispatch(selectStoryAction(id));
   },
+  resetProductPicker: () => {
+    dispatch(resetProductPickerStateAction());
+  },
 });
-function mapStateToProps(state) {
+
+const mapStateToProps = (state) => {
   const {
-    browser, config, tour, palettes,
+    browser, config, tour, palettes, models, compare, map,
   } = state;
   const { screenWidth, screenHeight } = browser;
 
   return {
     config,
     isActive: tour.active,
-    models: state.models,
-    compareState: state.compare,
+    map,
+    models,
+    compareState: compare,
     stories: config.stories,
     storyOrder: config.storyOrder,
     currentStoryId: tour.selected,
-    hideTour,
     screenWidth,
     screenHeight,
-    showTour,
     renderedPalettes: palettes.rendered,
   };
-}
+};
 
-const getTransitionAttr = function(el, action) {
-  if (el === 'animation' && action === 'play') {
+const getTransitionAttr = function(transition) {
+  if (!transition) return '';
+  const { element, action } = transition;
+  if (element === 'animation' && action === 'play') {
     return '&playanim=true';
   }
   return '';
-};
-
-const hideTour = function(e) {
-  const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
-  // Checkbox to "hide tour modal until a new story has been added" has been checked
-  googleTagManager.pushEvent({
-    event: 'tour_hide_checked',
-  });
-  if (shouldHideTour) return;
-  safeLocalStorage.setItem(HIDE_TOUR, new Date());
-};
-
-const showTour = function(e) {
-  const shouldHideTour = safeLocalStorage.getItem(HIDE_TOUR);
-  // Checkbox to "hide tour modal until a new story has been added" has been checked
-  googleTagManager.pushEvent({
-    event: 'tour_hide_unchecked',
-  });
-  if (!shouldHideTour) return;
-  safeLocalStorage.removeItem(HIDE_TOUR);
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Tour);
+
 Tour.propTypes = {
   config: PropTypes.object.isRequired,
-  hideTour: PropTypes.func.isRequired,
+  map: PropTypes.object,
   selectTour: PropTypes.func.isRequired,
-  showTour: PropTypes.func.isRequired,
-  showTourAlert: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   currentStoryId: PropTypes.string,
@@ -529,6 +549,7 @@ Tour.propTypes = {
   isActive: PropTypes.bool,
   processStepLink: PropTypes.func,
   renderedPalettes: PropTypes.object,
+  resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   startTour: PropTypes.func,

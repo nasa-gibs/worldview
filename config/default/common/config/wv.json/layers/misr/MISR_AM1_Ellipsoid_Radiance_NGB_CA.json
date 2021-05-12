@@ -7,9 +7,7 @@
       "description": "misr/MISR_AM1_Ellipsoid_Radiance_NGB_CA",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "misr"
-      ],
+      "layergroup": "Radiance",
       "product": "MI1B2_ELLIPSOID_CA",
       "tracks": [
         "OrbitTracks_Terra_Descending"

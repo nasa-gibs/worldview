@@ -2,8 +2,7 @@
   "env": {
     "browser": true,
     "node": true,
-    "jest/globals": true,
-    "jquery": true
+    "jest/globals": true
   },
   "parserOptions": {
     "ecmaVersion": 2019,
@@ -81,7 +80,7 @@
         */
 
         // Base rule overrides
-        "no-nested-ternary": "warn", // 58 errors
+        "no-nested-ternary": "off", // 58 errors
         "no-shadow": "warn", // 136 errors
         "max-len": "off",
         "consistent-return": "off", // 73 errors

@@ -2,18 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   find as lodashFind,
+  filter as lodashFilter,
   get as lodashGet,
   cloneDeep as lodashCloneDeep,
 } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
-import { Tooltip } from 'reactstrap';
+import { UncontrolledTooltip } from 'reactstrap';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChevronUp, faChevronDown, faTimes, faFileVideo,
-} from '@fortawesome/free-solid-svg-icons';
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
 import TimeSelector from '../components/date-selector/date-selector';
@@ -43,8 +41,11 @@ import {
 } from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
-  getLayers,
+  getActiveLayers,
+  getAllActiveLayers,
+  dateRange as getDateRange,
 } from '../modules/layers/selectors';
+import getSelectedDate from '../modules/date/selectors';
 import {
   play,
   onClose,
@@ -60,8 +61,11 @@ import { notificationWarnings } from '../modules/image-download/constants';
 import { onToggle, openCustomContent } from '../modules/modal/actions';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
-import { clearGraticule, refreshGraticule } from '../modules/layers/actions';
+import {
+  clearGraticule, refreshGraticule, hideLayers, showLayers,
+} from '../modules/layers/actions';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
+import { getNonDownloadableLayers, getNonDownloadableLayerWarning, hasNonDownloadableVisibleLayer } from '../modules/image-download/util';
 
 
 const RangeHandle = (props) => {
@@ -106,10 +110,9 @@ class AnimationWidget extends React.Component {
     const halfWidgetWidth = (props.subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
     this.state = {
       speed: props.speed,
-      hoverGif: false,
       widgetPosition: {
         x: (props.screenWidth / 2) - halfWidgetWidth,
-        y: -10,
+        y: -25,
       },
       collapsed: false,
       collapsedWidgetPosition: { x: 0, y: 0 },
@@ -118,8 +121,6 @@ class AnimationWidget extends React.Component {
     this.onDateChange = this.onDateChange.bind(this);
     this.onIntervalSelect = this.onIntervalSelect.bind(this);
     this.onLoop = this.onLoop.bind(this);
-    this.openGif = this.openGif.bind(this);
-    this.toggleHoverGif = this.toggleHoverGif.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onCollapsedDrag = this.onCollapsedDrag.bind(this);
@@ -128,8 +129,15 @@ class AnimationWidget extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { userHasMovedWidget } = this.state;
-    const { subDailyMode, screenWidth } = this.props;
+    const {
+      appNow, hasFutureLayers, onUpdateEndDate, subDailyMode, screenWidth,
+    } = this.props;
     const subdailyChange = subDailyMode !== prevProps.subDailyMode;
+
+    // handle removing futureTime layer to stop animation/update end date range
+    if (prevProps.hasFutureLayers && !hasFutureLayers) {
+      onUpdateEndDate(appNow);
+    }
 
     // If toggling between subdaily/regular mode and widget hasn't been manually moved
     // yet, try to keep it centered
@@ -185,64 +193,13 @@ class AnimationWidget extends React.Component {
     });
   }
 
-  getPromise(bool, type, action, title) {
+  getPromise(bool, type, action) {
+    const { visibleLayersForProj } = this.props;
     const { notify } = this.props;
     if (bool) {
-      return notify(type, action);
+      return notify(type, action, visibleLayersForProj);
     }
     return Promise.resolve(type);
-  }
-
-  openGif() {
-    const {
-      toggleGif,
-      onUpdateStartAndEndDate,
-      hasCustomPalettes,
-      isRotated,
-      hasGraticule,
-      rotation,
-      activePalettes,
-      numberOfFrames,
-      refreshStateAfterGif,
-    } = this.props;
-    const {
-      startDate,
-      endDate,
-    } = this.zeroDates();
-
-    if (numberOfFrames >= maxFrames) {
-      return;
-    }
-    const paletteStore = lodashCloneDeep(activePalettes);
-
-    this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice').then(
-      () => {
-        this.getPromise(
-          isRotated,
-          'rotate',
-          clearRotate,
-          'Reset rotation',
-        ).then(() => {
-          this.getPromise(
-            hasGraticule,
-            'graticule',
-            clearGraticule,
-            'Remove Graticule?',
-          ).then(() => {
-            onUpdateStartAndEndDate(startDate, endDate);
-          }).then(() => {
-            googleTagManager.pushEvent({
-              event: 'GIF_create_animated_button',
-            });
-            this.onCloseGif = () => {
-              refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule);
-              toggleGif();
-            };
-            toggleGif();
-          });
-        });
-      },
-    );
   }
 
   /**
@@ -382,30 +339,6 @@ class AnimationWidget extends React.Component {
     changeCustomInterval(delta, timeScale);
   };
 
-  toggleHoverGif() {
-    const { hoverGif } = this.state;
-    this.setState({ hoverGif: !hoverGif });
-  }
-
-  renderToolTip() {
-    const { numberOfFrames } = this.props;
-    const { hoverGif } = this.state;
-    const elemExists = document.querySelector('#create-gif-button');
-    const showTooltip = elemExists && hoverGif && numberOfFrames >= maxFrames;
-    return (
-      <Tooltip
-        placement="right"
-        isOpen={showTooltip}
-        target="create-gif-button"
-      >
-        Too many frames were selected.
-        {' '}
-        <br />
-        Please request less than 40 frames if you would like to generate a GIF.
-      </Tooltip>
-    );
-  }
-
   renderCollapsedWidget() {
     const {
       onClose,
@@ -414,9 +347,11 @@ class AnimationWidget extends React.Component {
       hasSubdailyLayers,
     } = this.props;
     const { collapsedWidgetPosition } = this.state;
+    const cancelSelector = '.no-drag, svg';
     return (
       <Draggable
         bounds="body"
+        cancel={cancelSelector}
         onStart={this.handleDragStart}
         position={collapsedWidgetPosition}
         onDrag={this.onCollapsedDrag}
@@ -433,11 +368,83 @@ class AnimationWidget extends React.Component {
               play={this.onPushPlay}
               pause={onPushPause}
             />
-            <FontAwesomeIcon icon={faChevronUp} className="wv-expand" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
+            <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
           </div>
         </div>
       </Draggable>
+    );
+  }
+
+  renderCreateGifButton() {
+    const {
+      toggleGif,
+      onUpdateStartAndEndDate,
+      hasCustomPalettes,
+      isRotated,
+      hasGraticule,
+      rotation,
+      activePalettes,
+      numberOfFrames,
+      refreshStateAfterGif,
+      hasNonDownloadableLayer,
+      visibleLayersForProj,
+    } = this.props;
+    const gifDisabled = numberOfFrames >= maxFrames;
+    const elemExists = document.querySelector('#create-gif-button');
+    const showWarning = elemExists && numberOfFrames >= maxFrames;
+    const warningMessage = (
+      <span>
+        Too many frames were selected.
+        <br />
+        Please request less than 40 frames if you would like to generate a GIF.
+      </span>
+    );
+    const labelText = 'Create an animated GIF';
+
+    const openGif = async () => {
+      const { startDate, endDate } = this.zeroDates();
+      if (numberOfFrames >= maxFrames) {
+        return;
+      }
+      const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
+      const paletteStore = lodashCloneDeep(activePalettes);
+
+      await this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
+      await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
+      await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+      await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
+      await onUpdateStartAndEndDate(startDate, endDate);
+      googleTagManager.pushEvent({
+        event: 'GIF_create_animated_button',
+      });
+      this.onCloseGif = () => {
+        refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, hasGraticule, nonDownloadableLayers);
+        toggleGif();
+      };
+      toggleGif();
+    };
+
+    return (
+      <a
+        id="create-gif-button"
+        aria-label={labelText}
+        className={gifDisabled ? 'wv-icon-case no-drag disabled' : 'wv-icon-case no-drag'}
+        onClick={openGif}
+      >
+        <FontAwesomeIcon
+          id="wv-animation-widget-file-video-icon"
+          className="wv-animation-widget-icon"
+          icon="file-video"
+        />
+        <UncontrolledTooltip
+          placement="right"
+          target="create-gif-button"
+        >
+          {showWarning ? warningMessage : labelText}
+        </UncontrolledTooltip>
+      </a>
+
     );
   }
 
@@ -458,15 +465,17 @@ class AnimationWidget extends React.Component {
       customSelected,
       customDelta,
       customInterval,
-      numberOfFrames,
       animationCustomModalOpen,
       hasSubdailyLayers,
     } = this.props;
     const { speed, widgetPosition } = this.state;
-    const gifDisabled = numberOfFrames >= maxFrames;
+    const cancelSelector = '.no-drag, .date-arrows';
+
     return (
       <Draggable
         bounds="body"
+        cancel={cancelSelector}
+        handle=".wv-animation-widget-header"
         position={widgetPosition}
         onDrag={this.onExpandedDrag}
         onStart={this.handleDragStart}
@@ -512,17 +521,7 @@ class AnimationWidget extends React.Component {
             </div>
 
             {/* Create Gif */}
-            <a
-              id="create-gif-button"
-              title={!gifDisabled ? 'Create Animated GIF' : ''}
-              className={gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'}
-              onClick={this.openGif}
-              onMouseEnter={this.toggleHoverGif}
-              onMouseLeave={this.toggleHoverGif}
-            >
-              <FontAwesomeIcon icon={faFileVideo} id="wv-animation-widget-file-video-icon" className="wv-animation-widget-icon" />
-            </a>
-            {this.renderToolTip()}
+            {this.renderCreateGifButton()}
 
             {/* From/To Date/Time Selection */}
             <div className="wv-anim-dates-case">
@@ -546,8 +545,8 @@ class AnimationWidget extends React.Component {
                 subDailyMode={subDailyMode}
               />
             </div>
-            <FontAwesomeIcon icon={faChevronDown} className="wv-minimize" onClick={this.toggleCollapse} />
-            <FontAwesomeIcon icon={faTimes} className="wv-close" onClick={onClose} />
+            <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
+            <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
             {/* Custom time interval selection */}
             <CustomIntervalSelectorWidget
@@ -573,6 +572,7 @@ class AnimationWidget extends React.Component {
       isActive,
       layers,
       hasCustomPalettes,
+      isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
       currentDate,
@@ -627,9 +627,11 @@ class AnimationWidget extends React.Component {
             onClose={onPushPause}
           />
         )}
-
-        {collapsed ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
-
+        {!isDistractionFreeModeActive && (
+          <>
+            {collapsed ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
+          </>
+        )}
       </ErrorBoundary>
     );
   }
@@ -637,7 +639,6 @@ class AnimationWidget extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    layers,
     compare,
     animation,
     date,
@@ -646,8 +647,8 @@ function mapStateToProps(state) {
     palettes,
     config,
     map,
-    proj,
     browser,
+    ui,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
@@ -663,21 +664,25 @@ function mapStateToProps(state) {
     interval,
     customInterval,
   } = date;
-  const activeStr = compare.activeString;
-  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
-  const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
-  const activeLayersForProj = getLayers(
-    layers[activeStr],
-    { proj: proj.id },
-    state,
-  );
-  const activePalettes = palettes[activeStr];
+  const activeLayers = getActiveLayers(state);
+  const hasSubdailyLayers = hasSubDailySelector(activeLayers);
+  const activeLayersForProj = getAllActiveLayers(state);
+  const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
+  const layerDateRange = getDateRange({}, activeLayersForProj);
+  const activePalettes = palettes[compare.activeString];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
     activePalettes,
   );
   const minDate = new Date(config.startDate);
-  const maxDate = appNow;
+  let maxDate;
+  if (layerDateRange && layerDateRange.end > appNow) {
+    maxDate = layerDateRange.end;
+  } else {
+    maxDate = appNow;
+  }
+
+  const { isDistractionFreeModeActive } = ui;
   const animationIsActive = isActive
     && browser.greaterThan.small
     && lodashGet(map, 'ui.selected.frameState_')
@@ -700,17 +705,21 @@ function mapStateToProps(state) {
     maxFrames,
   );
   const { rotation } = map;
+  const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   return {
+    appNow,
     screenWidth: browser.screenWidth,
     animationCustomModalOpen,
     customSelected,
     startDate,
     endDate,
     activePalettes,
-    currentDate: date[activeDateStr],
+    currentDate: getSelectedDate(state),
     minDate,
     maxDate,
     isActive: animationIsActive,
+    isDistractionFreeModeActive,
+    hasFutureLayers,
     hasSubdailyLayers,
     subDailyMode,
     delta: customSelected && customDelta ? customDelta : delta,
@@ -719,12 +728,14 @@ function mapStateToProps(state) {
     customInterval: customInterval || 3,
     numberOfFrames,
     sliderLabel: 'Frames Per Second',
-    layers: getLayers(layers[activeStr], {}, state),
+    layers: getAllActiveLayers(state),
     speed,
     isPlaying,
     looping: loop,
     hasCustomPalettes,
     map,
+    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
+    visibleLayersForProj,
     promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
     isGifActive: gifActive,
     isCompareActive: compare.active,
@@ -732,7 +743,7 @@ function mapStateToProps(state) {
     rotation,
     hasGraticule: Boolean(
       lodashGet(
-        lodashFind(layers[activeStr], { id: 'Graticule' }) || {},
+        lodashFind(activeLayers, { id: 'Graticule' }) || {},
         'visible',
       ),
     ),
@@ -742,14 +753,15 @@ const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
     dispatch(selectDate(val));
   },
-  notify: (type, action, title) => new Promise((resolve, reject, cancel) => {
+  notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
+    const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj);
     const bodyComponentProps = {
-      bodyText: notificationWarnings[type],
+      bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers),
       cancel: () => {
         dispatch(onToggle());
       },
       accept: () => {
-        dispatch(action());
+        dispatch(action(nonDownloadableLayers));
         dispatch(onToggle());
         resolve();
       },
@@ -779,7 +791,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleGif: () => {
     dispatch(toggleComponentGifActive());
   },
-  refreshStateAfterGif: (activePalettes, rotation, isGraticule) => {
+  refreshStateAfterGif: (activePalettes, rotation, isGraticule, nonDownloadableLayers) => {
     if (activePalettes) {
       dispatch(refreshPalettes(activePalettes));
     }
@@ -788,6 +800,9 @@ const mapDispatchToProps = (dispatch) => ({
     }
     if (isGraticule) {
       dispatch(refreshGraticule(isGraticule));
+    }
+    if (nonDownloadableLayers) {
+      dispatch(showLayers(nonDownloadableLayers));
     }
   },
   toggleCustomModal: (open, toggleBy) => {
@@ -824,8 +839,10 @@ RangeHandle.propTypes = {
   value: PropTypes.number,
 };
 AnimationWidget.propTypes = {
+  appNow: PropTypes.object,
   activePalettes: PropTypes.object,
   animationCustomModalOpen: PropTypes.bool,
+  visibleLayersForProj: PropTypes.array,
   changeCustomInterval: PropTypes.func,
   currentDate: PropTypes.object,
   customDelta: PropTypes.number,
@@ -834,10 +851,13 @@ AnimationWidget.propTypes = {
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasCustomPalettes: PropTypes.bool,
+  hasFutureLayers: PropTypes.bool,
   hasGraticule: PropTypes.bool,
+  hasNonDownloadableLayer: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,

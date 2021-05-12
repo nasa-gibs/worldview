@@ -7,7 +7,7 @@ import {
   removeLayer as removeLayerAction,
 } from '../../../modules/layers/actions';
 import { getOrbitTrackTitle } from '../../../modules/layers/util';
-import { getActiveLayers } from '../../../modules/layers/selectors';
+import { getActiveLayersMap } from '../../../modules/layers/selectors';
 
 const OrbitTracksToggle = (props) => {
   const {
@@ -44,7 +44,7 @@ const mapStateToProps = (state, ownProps) => {
   const { tracks } = ownProps.layer;
   return {
     trackLayers: tracks.map((trackName) => config.layers[trackName]),
-    activeLayers: getActiveLayers(state),
+    activeLayers: getActiveLayersMap(state),
   };
 };
 

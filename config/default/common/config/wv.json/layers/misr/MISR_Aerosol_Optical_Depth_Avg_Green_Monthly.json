@@ -7,9 +7,7 @@
       "description": "misr/MISR_Aerosol_Optical_Depth_Avg_Green_Monthly",
       "tags": "",
       "group": "overlays",
-      "layergroup": [
-        "misr"
-      ],
+      "layergroup": "Aerosol Optical Depth",
       "product": "MIL3MAE",
       "wrapadjacentdays": true
     }

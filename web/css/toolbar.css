@@ -8,13 +8,9 @@
 
 .wv-toolbar-button,
 [data-whatintent='mouse'] .wv-toolbar-button:focus {
-  font-size: 14.3px;
-  height: 44px;
   display: inline-block;
-  margin: 0 0 0 4px;
   background: rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
-  padding: 5.72px 14.3px;
   border-radius: 5px;
   &:focus {
     box-shadow: none;
@@ -35,8 +31,13 @@
   color: #1a1a1a;
 }
 
+.wv-toolbar-button svg[data-icon="share-square"] {
+  width: 1em;
+}
+
 .wv-toolbar .btn.disabled {
   pointer-events: auto;
+  cursor: default;
 }
 
 .wv-toolbar .btn.disabled:hover i {
@@ -56,11 +57,15 @@
   .modal-body {
     border-radius: 6px;
   }
+  a {
+    color: #fff;
+    &:hover {
+      color: #000;
+      text-decoration: none;
+    }
+  }
 }
 
-.toolbar-list-modal a:hover {
-  text-decoration: none;
-}
 .toolbar-list-modal.modal-dialog {
   width: 160px;
 }
@@ -125,9 +130,27 @@
   width: 100%;
 }
 
+/* Location Search Mobile Modal */
+.toolbar-location-search-modal {
+  top: 100px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.toolbar-location-search-modal,
+.toolbar-location-search-modal .modal-content {
+  width: 100%;
+}
+
 @media (min-width: 576px) {
   .toolbar-modal {
     top: 33px;
+  }
+
+  .toolbar-location-search-modal {
+    top: 84px;
   }
 
   .toolbar-info-modal {
@@ -149,7 +172,15 @@
   }
 }
 
-@media (min-width: 740px) {
+@media (min-width: 769px) {
+  .wv-toolbar-button,
+  [data-whatintent='mouse'] .wv-toolbar-button:focus {
+    font-size: 20px;
+    height: 38px;
+    margin: 0 0 0 5px;
+    padding: 2.5px 8px;
+  }
+
   .toolbar-projection-modal {
     right: 37px;
   }

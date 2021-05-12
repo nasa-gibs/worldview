@@ -1,4 +1,4 @@
-**29 June 2020 Notice**: High latitude artifacts have been identified and fixed for 26 June 2020 onward. It is expected that the imagery will be reprocessed back to the beginning of the mission. [Read more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/NPP_QA/displayCase.cgi?esdt=NPP_VDNE&caseNum=PM_NPP_VDNE_20178&caseLocation=cases_data&action=small).
+**29 June 2020 Notice**: High latitude artifacts have been identified and fixed for 26 June 2020 onward. It is expected that the imagery will be reprocessed back to the beginning of the mission. [Read more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/NPP_QA/displayCase.cgi?esdt=NPP_VDNE&caseNum=PM_NPP_VDNE_20178&caseLocation=cases_data&ver=C001).
 
 ---
 

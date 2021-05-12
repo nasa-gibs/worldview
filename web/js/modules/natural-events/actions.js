@@ -1,10 +1,10 @@
 import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
-  REQUEST_CATEGORIES,
   SELECT_EVENT,
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
+  SELECT_CATEGORY,
   ONLY_SHOW_VISIBLE,
   TOGGLE_SHOW_ALL,
   FINISHED_ANIMATING_TO_EVENT,
@@ -19,14 +19,7 @@ export function requestEvents(location) {
     'application/json',
   );
 }
-export function requestCategories(location) {
-  return (dispatch) => requestAction(
-    dispatch,
-    REQUEST_CATEGORIES,
-    location,
-    'application/json',
-  );
-}
+
 export function requestSources(location) {
   return (dispatch) => requestAction(
     dispatch,
@@ -36,19 +29,17 @@ export function requestSources(location) {
   );
 }
 
-export function selectEvent(id, date) {
+export function selectEvent(id, eventDate) {
   return {
     type: SELECT_EVENT,
     id,
-    date,
+    date: eventDate,
   };
 }
 
 export function deselectEvent(id, date) {
   return {
     type: DESELECT_EVENT,
-    id,
-    date,
   };
 }
 
@@ -57,6 +48,14 @@ export function showAll() {
     type: SHOW_ALL_EVENTS,
   };
 }
+
+export function selectCategory(category) {
+  return {
+    type: SELECT_CATEGORY,
+    category,
+  };
+}
+
 export function toggleListAll() {
   return {
     type: TOGGLE_SHOW_ALL,

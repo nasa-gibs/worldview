@@ -4,25 +4,27 @@ import PropTypes from 'prop-types';
 import { get as lodashGet } from 'lodash';
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
-import Layers from './layers';
+import LayersContainer from './layers-container';
 import Events from './events';
-import Data from './data';
+import SmartHandoff from './smart-handoff';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import {
-  getCheckerboard,
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
-import { getLayers } from '../../modules/layers/selectors';
+import {
+  requestEvents as requestEventsActionCreator,
+  requestSources as requestSourcesActionCreator,
+} from '../../modules/natural-events/actions';
+import { getAllActiveLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
   changeTab as changeTabAction,
   toggleSidebarCollapse as toggleSidebarCollapseAction,
-  collapseSidebar as collapseSidebarAction,
   expandSidebar as expandSidebarAction,
 } from '../../modules/sidebar/actions';
 import safeLocalStorage from '../../util/local-storage';
@@ -32,7 +34,7 @@ const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 const getActiveTabs = function(config) {
   const { features } = config;
   return {
-    download: features.dataDownload,
+    download: features.smartHandoffs,
     layers: true,
     events: features.naturalEvents,
   };
@@ -55,17 +57,18 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { subComponentHeight: 700 };
-    this.checkerBoardPattern = getCheckerboard();
-    const customPalettePromise = loadCustomPalette(props.config);
-    customPalettePromise.done((customs) => {
-      props.loadedCustomPalettes(customs);
-    });
     this.toggleSidebar = this.toggleSidebar.bind(this);
   }
 
   componentDidMount() {
+    const { config, loadedCustomPalettes } = this.props;
+    const customPalettePromise = loadCustomPalette(config);
+    customPalettePromise.then((customs) => {
+      loadedCustomPalettes(customs);
+    });
     this.updateDimensions();
-    // prevent browserzooming in safari
+    this.loadEvents();
+    // prevent browser zooming in safari
     if (util.browser.safari) {
       const onGestureCallback = (e) => {
         e.preventDefault();
@@ -78,6 +81,39 @@ class Sidebar extends React.Component {
 
   componentDidUpdate() {
     this.updateDimensions();
+  }
+
+  loadEvents() {
+    const {
+      isLoadingEvents,
+      hasEventRequestError,
+      eventsData,
+      eventRequestUrl,
+      config,
+      requestEvents,
+      requestSources,
+    } = this.props;
+
+    if (!isLoadingEvents && !hasEventRequestError && !eventsData) {
+      let eventsRequestURL = `${eventRequestUrl}/events`;
+      let sourceRequestURL = `${eventRequestUrl}/sources`;
+
+      const mockEvents = lodashGet(config, 'parameters.mockEvents');
+      const mockSources = lodashGet(config, 'parameters.mockSources');
+
+      if (mockEvents) {
+        console.warn(`Using mock events data: ${mockEvents}`);
+        eventsRequestURL = mockEvents === 'true'
+          ? 'mock/events_data.json'
+          : `mock/events_data.json-${mockEvents}`;
+      }
+      if (mockSources) {
+        console.warn(`Using mock categories data: ${mockSources}`);
+        sourceRequestURL = `mock/categories_data.json-${mockSources}`;
+      }
+      requestEvents(eventsRequestURL);
+      requestSources(sourceRequestURL);
+    }
   }
 
   updateDimensions() {
@@ -110,15 +146,6 @@ class Sidebar extends React.Component {
     }
   }
 
-  selectEvent(id, date) {
-    const { selectEvent } = this.state;
-    const { isMobile, collapseSidebar } = this.props;
-    selectEvent(id, date);
-    if (isMobile) {
-      collapseSidebar();
-    }
-  }
-
   toggleSidebar() {
     const {
       isCollapsed,
@@ -145,16 +172,14 @@ class Sidebar extends React.Component {
         <CompareCase
           isActive={activeTab === 'layers'}
           height={subComponentHeight}
-          checkerBoardPattern={this.checkerBoardPattern}
         />
       );
     } if (!isCompareMode) {
       return (
-        <Layers
-          height={subComponentHeight - 20}
+        <LayersContainer
+          height={subComponentHeight - 48}
           isActive={activeTab === 'layers'}
-          layerGroupName={activeString}
-          checkerBoardPattern={this.checkerBoardPattern}
+          compareState={activeString}
         />
       );
     }
@@ -175,11 +200,16 @@ class Sidebar extends React.Component {
       isMobile,
       changeTab,
       isDataDisabled,
+      isLoadingEvents,
+      hasEventRequestError,
+      eventsData,
+      eventsSources,
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
-    const naturalEventsFeatureActive = config.features.naturalEvents;
-    const dataDownloadFeatureActive = config.features.dataDownload;
+    const { naturalEvents } = config.features;
+    const { smartHandoffs } = config.features;
+
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
@@ -187,76 +217,75 @@ class Sidebar extends React.Component {
             href="/"
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
+            className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
             onClick={(e) => resetWorldview(e, isDistractionFreeModeActive)}
-            // eslint-disable-next-line no-return-assign
-            ref={(iconElement) => (this.iconElement = iconElement)}
+            ref={(iconElement) => { this.iconElement = iconElement; }}
             onWheel={wheelCallBack}
           />
-          <CollapsedButton
-            isMobile={isMobile}
-            isCollapsed={isCollapsed}
-            onclick={this.toggleSidebar}
-            numberOfLayers={numberOfLayers}
-            isDistractionFreeModeActive={isDistractionFreeModeActive}
-          />
-          <div
-            id="productsHolder"
-            className="products-holder-case"
-            ref={(el) => {
-              this.sideBarCase = el;
-            }}
-            style={{
-              maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
-              display: isDistractionFreeModeActive ? 'none' : 'block',
-            }}
-            onWheel={wheelCallBack}
-          >
-            {!isCollapsed && (
-              <>
-                <NavCase
-                  activeTab={activeTab}
-                  onTabClick={onTabClick}
-                  tabTypes={tabTypes}
-                  isMobile={isMobile}
-                  toggleSidebar={this.toggleSidebar}
-                  isCompareMode={isCompareMode}
-                  isDataDisabled={isDataDisabled}
-                />
-                <TabContent activeTab={activeTab}>
-                  <TabPane tabId="layers">
-                    {this.getProductsToRender(activeTab, isCompareMode)}
-                  </TabPane>
-                  <TabPane tabId="events">
-                    {naturalEventsFeatureActive
-                      ? (
-                        <Events
-                          isActive={activeTab === 'events'}
-                          height={subComponentHeight}
-                        />
-                      )
-                      : null}
-                  </TabPane>
-                  <TabPane tabId="download">
-                    {dataDownloadFeatureActive
-                      ? (
-                        <Data
-                          isActive={activeTab === 'download'}
-                          height={subComponentHeight}
-                          tabTypes={tabTypes}
-                        />
-                      )
-                      : null}
-                  </TabPane>
-                  <footer
-                    // eslint-disable-next-line no-return-assign
-                    ref={(footerElement) => (this.footerElement = footerElement)}
-                  >
-                    <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
-                  </footer>
-                </TabContent>
-              </>
+          <>
+            {!isDistractionFreeModeActive && isCollapsed && (
+            <CollapsedButton
+              isMobile={isMobile}
+              onclick={this.toggleSidebar}
+              numberOfLayers={numberOfLayers}
+            />
             )}
-          </div>
+            <div
+              id="productsHolder"
+              className="products-holder-case"
+              ref={(el) => {
+                this.sideBarCase = el;
+              }}
+              style={{
+                maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
+                display: isDistractionFreeModeActive ? 'none' : 'block',
+              }}
+              onWheel={wheelCallBack}
+            >
+              {!isCollapsed && (
+                <>
+                  <NavCase
+                    activeTab={activeTab}
+                    onTabClick={onTabClick}
+                    tabTypes={tabTypes}
+                    isMobile={isMobile}
+                    toggleSidebar={this.toggleSidebar}
+                    isCompareMode={isCompareMode}
+                    isDataDisabled={isDataDisabled}
+                  />
+                  <TabContent activeTab={activeTab}>
+                    <TabPane tabId="layers">
+                      {this.getProductsToRender(activeTab, isCompareMode)}
+                    </TabPane>
+                    <TabPane tabId="events">
+                      {naturalEvents && activeTab === 'events' && (
+                      <Events
+                        height={subComponentHeight}
+                        isLoading={isLoadingEvents}
+                        hasRequestError={hasEventRequestError}
+                        eventsData={eventsData}
+                        sources={eventsSources}
+                      />
+                      )}
+                    </TabPane>
+                    <TabPane tabId="download">
+                      {smartHandoffs && (
+                      <SmartHandoff
+                        isActive={activeTab === 'download'}
+                        tabTypes={tabTypes}
+                      />
+                      )}
+                    </TabPane>
+                    <footer
+                      ref={(footerElement) => { this.footerElement = footerElement; }}
+                    >
+                      <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
+                    </footer>
+                  </TabContent>
+                </>
+              )}
+            </div>
+          </>
         </section>
       </ErrorBoundary>
     );
@@ -267,19 +296,29 @@ function mapStateToProps(state) {
     browser,
     sidebar,
     compare,
-    layers,
     config,
     modal,
     measure,
     animation,
     events,
+    requestedEvents,
+    requestedEventSources,
     ui,
   } = state;
+
+  const eventRequestUrl = lodashGet(state, 'config.features.naturalEvents.host');
+  const isLoadingEvents = requestedEvents.isLoading
+    || requestedEventSources.isLoading;
+  const hasEventRequestError = requestedEvents.error
+    || requestedEventSources.error;
+  const eventsData = lodashGet(requestedEvents, 'response');
+  const eventsSources = lodashGet(requestedEventSources, 'response');
+
   const { screenHeight } = browser;
   const { isDistractionFreeModeActive } = ui;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
-  const numberOfLayers = getLayers(layers[activeString], {}, state).length;
+  const numberOfLayers = getAllActiveLayers(state).length;
   const tabTypes = getActiveTabs(config);
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const isMobile = browser.lessThan.medium;
@@ -287,16 +326,21 @@ function mapStateToProps(state) {
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   return {
     activeTab,
+    activeString,
+    config,
+    eventRequestUrl,
+    eventsData,
+    eventsSources,
+    numberOfLayers,
+    hasEventRequestError,
+    isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
+    isCompareMode: compare.active,
+    isDataDisabled: events.isAnimatingToEvent,
+    isDistractionFreeModeActive,
+    isLoadingEvents,
     isMobile,
     screenHeight,
-    isCompareMode: compare.active,
-    activeString,
-    numberOfLayers,
-    isDataDisabled: events.isAnimatingToEvent,
-    isCollapsed: isMobile ? mobileCollapsed : isCollapsed || shouldBeCollapsed,
     tabTypes,
-    config,
-    isDistractionFreeModeActive,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -313,14 +357,17 @@ const mapDispatchToProps = (dispatch) => ({
   collapseExpandToggle: () => {
     dispatch(toggleSidebarCollapseAction());
   },
-  collapseSidebar: () => {
-    dispatch(collapseSidebarAction());
-  },
   expandSidebar: () => {
     dispatch(expandSidebarAction());
   },
   loadedCustomPalettes: (customs) => {
     dispatch(loadedCustomPalettes(customs));
+  },
+  requestEvents: (url) => {
+    dispatch(requestEventsActionCreator(url));
+  },
+  requestSources: (url) => {
+    dispatch(requestSourcesActionCreator(url));
   },
 });
 
@@ -335,16 +382,22 @@ Sidebar.propTypes = {
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
   collapseExpandToggle: PropTypes.func,
-  collapseSidebar: PropTypes.func,
   config: PropTypes.object,
+  eventsData: PropTypes.array,
+  eventsSources: PropTypes.array,
+  eventRequestUrl: PropTypes.string,
+  hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isLoadingEvents: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
   tabTypes: PropTypes.object,
+  requestEvents: PropTypes.func,
+  requestSources: PropTypes.func,
 };

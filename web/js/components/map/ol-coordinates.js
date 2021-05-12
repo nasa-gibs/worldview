@@ -1,8 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import Coordinates from './coordinates';
 import util from '../../util/util';
+
+const { events } = util;
+const getContainerWidth = (format) => {
+  const formatWidth = {
+    'latlon-dd': 230,
+    'latlon-dm': 265,
+    'latlon-dms': 255,
+  };
+  return formatWidth[format];
+};
 
 export default class OlCoordinates extends React.Component {
   constructor(props) {
@@ -13,23 +22,23 @@ export default class OlCoordinates extends React.Component {
       longitude: null,
       crs: null,
       format: null,
+      width: null,
     };
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
     this.changeFormat = this.changeFormat.bind(this);
-    this.registerMouseListeners();
+    this.setInitFormat = this.setInitFormat.bind(this);
+  }
+
+  componentDidMount() {
+    events.on('map:mousemove', this.mouseMove);
+    events.on('map:mouseout', this.mouseOut);
+    this.setInitFormat();
   }
 
   componentWillUnmount() {
-    const { mouseEvents } = this.props;
-    mouseEvents.off('mousemove', this.mouseMove);
-    mouseEvents.off('mouseout', this.mouseOut);
-  }
-
-  registerMouseListeners() {
-    const { mouseEvents } = this.props;
-    mouseEvents.on('mousemove', this.mouseMove);
-    mouseEvents.on('mouseout', this.mouseOut);
+    events.off('map:mousemove', this.mouseMove);
+    events.off('map:mouseout', this.mouseOut);
   }
 
   mouseMove(event, map, crs) {
@@ -57,7 +66,6 @@ export default class OlCoordinates extends React.Component {
     }
     this.setState({
       hasMouse: true,
-      format: util.getCoordinateFormat(),
       latitude: pcoord[1],
       longitude: pcoord[0],
       crs,
@@ -69,7 +77,7 @@ export default class OlCoordinates extends React.Component {
       const cl = event.relatedTarget.classList;
       // Ignore when the mouse goes over the coordinate display. Clearing
       // the coordinates in this situation causes a flicker.
-      if (cl.contains('map-coord')) {
+      if (cl.contains('wv-coords-map')) {
         return;
       }
     }
@@ -80,14 +88,27 @@ export default class OlCoordinates extends React.Component {
     this.setState({ latitude: null, longitude: null });
   }
 
+  setInitFormat() {
+    const format = util.getCoordinateFormat();
+    const width = getContainerWidth(format);
+    this.setState({
+      format,
+      width,
+    });
+  }
+
   changeFormat(format) {
     util.setCoordinateFormat(format);
-    this.setState({ format });
+    const width = getContainerWidth(format);
+    this.setState({
+      format,
+      width,
+    });
   }
 
   render() {
     const {
-      hasMouse, format, latitude, longitude, crs,
+      hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
     // Don't render until a mouse is being used
     if (!hasMouse) {
@@ -95,7 +116,7 @@ export default class OlCoordinates extends React.Component {
     }
 
     return (
-      <div id="ol-coords-case">
+      <div id="ol-coords-case" className="wv-coords-container" style={{ width }}>
         <Coordinates
           format={format}
           latitude={latitude}
@@ -107,7 +128,3 @@ export default class OlCoordinates extends React.Component {
     );
   }
 }
-
-OlCoordinates.propTypes = {
-  mouseEvents: PropTypes.object.isRequired,
-};

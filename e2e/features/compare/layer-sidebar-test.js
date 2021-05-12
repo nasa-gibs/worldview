@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const selectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const aodCombinedValueId = 'MODIS_Combined_Value_Added_AOD';
 const aodMAIACId = 'MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth';
@@ -13,7 +13,7 @@ module.exports = {
     reuseables.loadAndSkipTour(client, client.globals.timeout);
   },
   'Add AOD Layer to Layer Group A': (client) => {
-    client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
+    client.url(client.globals.url + localQueryStrings.swipeAndAIsActive);
     client.waitForElementVisible(selectors.swipeDragger, client.globals.timeout, () => {
       client.click(selectors.addLayers);
       client.waitForElementVisible(selectors.aerosolOpticalDepth, client.globals.timeout, () => {
@@ -30,7 +30,7 @@ module.exports = {
   },
   'Toggle compare mode to Active state B': (client) => {
     client.click(`${selectors.bTab} .productsIcon`);
-    client.waitForElementVisible('#activeB-Coastlines', client.globals.timeout);
+    client.waitForElementVisible('#activeB-Coastlines_15m', client.globals.timeout);
   },
   'Verify that AOD layer is not visible': (client) => {
     client.expect.element(`#active-${aodCombinedValueId}`).to.not.be.present;

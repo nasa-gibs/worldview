@@ -2,4 +2,4 @@ The MISR Radiance Average layer displays the temporal average of all radiances m
 
 This layer is produced from the Average field of the MISR Level 3 Component Global Georectified Radiance Product. It is available globally over both land and ocean on a monthly basis, with a spatial resolution of 0.5 degrees latitude by 0.5 degrees longitude.
 
-References: [MISR Level 3 Component Global Georectified Radiance Product](https://eosweb.larc.nasa.gov/project/misr/cggrp_table)
+References: MISR Level 3 Component Global Radiance Product covering a month V005. [doi:10.5067/Terra/MISR/MIL3MRD_L3.005](https://doi.org/10.5067/Terra/MISR/MIL3MRD_L3.005)

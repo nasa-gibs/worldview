@@ -1,14 +1,16 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
 
-import { faIconArrowsAltHSVGDomEl } from '../fa-map-icons';
+const { events } = util;
 
 let swipeOffset = null;
 let line = null;
 let bottomLayers = [];
 let topLayers = [];
-let events;
 let mapCase;
 let listenerObj;
 let percentSwipe = null;
@@ -19,16 +21,14 @@ export default class Swipe {
   constructor(
     olMap,
     isActive,
-    compareEvents,
     eventListenerStringObj,
     valueOverride,
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;
     percentSwipe = valueOverride / 100;
-    events = compareEvents;
     this.create();
-    $(window).resize(() => {
+    window.addEventListener('resize', () => {
       if (document.querySelector('.ab-swipe-line')) {
         this.destroy();
         this.create();
@@ -154,7 +154,7 @@ const addLineOverlay = function(map) {
   lineCaseEl.appendChild(firstLabel);
   lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(draggerCircleEl);
-  draggerCircleEl.insertAdjacentHTML('beforeend', faIconArrowsAltHSVGDomEl);
+  ReactDOM.render(<FontAwesomeIcon icon="arrows-alt-h" />, draggerCircleEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe
@@ -200,7 +200,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   function move(evt) {
     if (!dragging) {
       dragging = true;
-      events.trigger('movestart');
+      events.trigger('compare:movestart');
     }
     const windowWidth = util.browser.dimensions[0];
     if (listenerObj.type === 'default') evt.preventDefault();
@@ -225,7 +225,7 @@ const dragLine = function(listenerObj, lineCaseEl, map) {
   function end(evt) {
     dragging = false;
     events.trigger(
-      'moveend',
+      'compare:moveend',
       lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0),
     );
 

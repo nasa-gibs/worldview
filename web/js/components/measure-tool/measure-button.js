@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRuler } from '@fortawesome/free-solid-svg-icons';
 import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
@@ -55,10 +54,13 @@ class MeasureButton extends React.Component {
   }
 
   render() {
-    const { isActive, isDistractionFreeModeActive } = this.props;
+    const { isActive, isDistractionFreeModeActive, isMobile } = this.props;
     const { showAlert, isTouchDevice } = this.state;
+    const faSize = isMobile ? '2x' : '1x';
     const shouldShowAlert = isActive && showAlert;
     const message = isTouchDevice ? mobileHelpMsg : helpMsg;
+    const buttonId = 'wv-measure-button';
+    const labelText = 'Measure distances & areas';
 
     return (
       <>
@@ -66,32 +68,40 @@ class MeasureButton extends React.Component {
         <AlertUtil
           id="measurement-alert"
           isOpen
-          iconClassName="faRuler"
+          icon="ruler"
           title="Measure Tool"
           message={message}
           onDismiss={this.dismissAlert}
         />
         )}
 
+        {!isDistractionFreeModeActive && (
         <Button
-          style={{ display: isDistractionFreeModeActive ? 'none' : 'block' }}
-          id="wv-measure-button"
+          id={buttonId}
           className="wv-measure-button wv-toolbar-button"
-          title="Measure distances &amp; areas"
+          aria-label={labelText}
           onTouchEnd={this.onButtonClick}
           onMouseDown={this.onButtonClick}
           disabled={isActive}
         >
-          <FontAwesomeIcon icon={faRuler} size="2x" />
+          <UncontrolledTooltip
+            placement="top"
+            target={buttonId}
+          >
+            {labelText}
+          </UncontrolledTooltip>
+          <FontAwesomeIcon icon="ruler" size={faSize} />
         </Button>
+        )}
       </>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   isActive: state.measure.isActive,
   isDistractionFreeModeActive: state.ui.isDistractionFreeModeActive,
+  isMobile: state.browser.lessThan.medium,
 });
 const mapDispatchToProps = (dispatch) => ({
   openModal: (key, customParams) => {
@@ -107,5 +117,6 @@ export default connect(
 MeasureButton.propTypes = {
   isActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   openModal: PropTypes.func,
 };

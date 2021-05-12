@@ -12,10 +12,36 @@ module.exports = {
   gifDownloadButton: '.animation-gif-dialog-wrapper .wv-button',
   gifResults: '.gif-results-dialog-case img',
   animationWidget: '#wv-animation-widget',
+  animationButtonCase: '#timeline-header .animate-button',
   animationButton: '#animate-button',
 
-  // sidebar
+  // sidebar, layers
   sidebarContainer: '#productsHolder',
+  infoButton: '.wv-layers-info',
+  optionsButton: '.wv-layers-options',
+  infoDialog: '.layer-info-settings-modal',
+  optionsDialog: '.layer-info-settings-modal',
+  addLayers: '#layers-add',
+  dataDownloadTabButton: '#download-sidebar-tab',
+  eventsSidebarTabButton: '#events-sidebar-tab',
+  groupCheckbox: '#group-overlays-checkbox',
+  viirsFiresCheckbox: '#VIIRS_NOAA20_Thermal_Anomalies_375m_All-checkbox',
+  firesGroup: '#active-Fires_and_Thermal_Anomalies',
+  firesLayer: '#active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
+  firesRemove: '#close-activeVIIRS_NOAA20_Thermal_Anomalies_375m_All',
+  aodGroup: '#active-Aerosol_Optical_Depth',
+  aodGroupHeader: '#active-Aerosol_Optical_Depth .layer-group-header',
+  overlaysGroup: '#active-overlays',
+  overlaysGroupHeader: '#active-overlays .layer-group-header',
+  baselayersGroup: '#active-baselayers',
+  baselayersGroupHeader: '#active-baselayers .layer-group-header',
+  groupOptionsBtn: '.layer-group-more-options > button',
+  groupHide: '.layer-group-more-options #hide-all',
+  groupShow: '.layer-group-more-options #show-all',
+  groupRemove: '.layer-group-more-options #remove-group',
+  layerVisible: 'li.layer-visible',
+  layerHidden: 'li.layer-hidden',
+  groupedOverlaysAllLayers: '.layer-container > ul .item.productsitem',
 
   // compare
   swipeButton: '#compare-swipe-button',
@@ -25,6 +51,8 @@ module.exports = {
   bTab: '.ab-tabs-case .ab-tab.second-tab',
   swipeDragger: '.ab-swipe-line .ab-swipe-dragger',
   compareButton: '#compare-toggle-button',
+  compareButtonText: '#compare-toggle-button > span',
+  compareMobileSelectToggle: '.comparison-mobile-select-toggle',
 
   // measure
   measureBtn: '#wv-measure-button',
@@ -40,6 +68,9 @@ module.exports = {
   downloadShapefileBtn: '#download-shapefiles-button',
 
   // timeline
+  timelineContainer: '.timeline-container',
+  timelineHeader: '#timeline-header',
+  mobileDatePickerSelectButton: '.mobile-date-picker-select-btn',
   dragger: '.timeline-dragger',
   dayDown: '.input-wrapper-day > div.date-arrows.date-arrow-down',
   dayUp: '.input-wrapper-day > div.date-arrows.date-arrow-up',
@@ -50,11 +81,6 @@ module.exports = {
 
 
   // layers
-  infoButton: '.wv-layers-info',
-  optionsButton: '.wv-layers-options',
-  infoDialog: '.layer-info-settings-modal',
-  optionsDialog: '.layer-info-settings-modal',
-  addLayers: '#layers-add',
   layersModalCloseButton: '.custom-layer-dialog .modal-header .close',
   aerosolOpticalDepth: '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth',
   layersSearchField: 'input#layers-search-input',
@@ -96,7 +122,7 @@ module.exports = {
   filterButton: '.btn.filter-button',
   resetButton: '.btn.clear-filters',
   applyButton: '.btn.apply-facets',
-  collapsedLayerButton: '#accordionTogglerButton',
+  collapsedLayerButton: '#accordion-toggler-button',
   layerCount: '.layer-count.mobile',
   layerContainer: '.layer-container.sidebar-panel',
   sourceMetadataCollapsed: '.source-metadata.overflow',
@@ -115,11 +141,38 @@ module.exports = {
   measurementMoreButton: '#measurements-facet .sui-facet-view-more',
   sourcesMERRALabel: '#sources-facet [for="example_facet_SourceMERRA-2"]',
 
-  // ui
-  uiInfoButton: '#wv-info-button',
+  // map
+  geographicMap: '#wv-map-geographic',
+  arcticMap: '#wv-map-arctic',
+  antarcticMap: '#wv-map-antarctic',
+  zoomInButton: '.wv-map-zoom-in',
+  zoomOutButton: '.wv-map-zoom-out',
+  mapScaleMetric: '.wv-map-scale-metric',
+  mapScaleImperial: '.wv-map-scale-imperial',
+  mapRotateLeft: '.wv-map-rotate-left',
+  mapRotateReset: '.wv-map-reset-rotation',
+  mapRotateRight: '.wv-map-rotate-right',
+
+  // ui toolbar
+  locationSearchToolbarButton: '#wv-location-search-button',
+  shareToolbarButton: '#wv-link-button',
+  projToolbarButton: '#wv-proj-button',
+  snapshotToolbarButton: '#wv-image-button',
+  infoToolbarButton: '#wv-info-button',
 
   // social
   socialToolbar: '#toolbar_share_link',
   socialCopyLinkButton: '#wv-link-button',
   socialLinkInput: '#permalink_content',
+
+  // Location Search
+  locationSearchComponent: '.location-search-component',
+  locationSearchMobileDialog: '#toolbar_location_search_mobile',
+  locationSearchMinimizeButton: '.location-search-minimize-button',
+  tooltipCoordinatesContainer: '.tooltip-coordinates-container',
+  tooltipCoordinatesTitle: '.tooltip-coordinates-title',
+  tooltipCoordinates: '.tooltip-coordinates',
+  tooltipCoordinatesMinimizeButton: '.minimize-coordinates-tooltip',
+  tooltipCoordinatesCloseButton: '.close-coordinates-tooltip',
+  coordinatesMapMarker: '.coordinates-map-marker',
 };

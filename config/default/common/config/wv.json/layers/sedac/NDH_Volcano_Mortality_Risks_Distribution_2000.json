@@ -7,9 +7,7 @@
       "description": "sedac/NDH_Volcano_Mortality_Risks_Distribution_2000",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Volcano Hazard",
       "product": "CIESIN_CHRR_NDH_VOLCANO_MRD",
       "inactive": true,
       "wrapX": true

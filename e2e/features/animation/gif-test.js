@@ -1,12 +1,12 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
-const localQuerystrings = require('../../reuseables/querystrings.js');
+const localQueryStrings = require('../../reuseables/querystrings.js');
 
 const TIME_LIMIT = 30000; // Sometimes takes a while to generate GIFs
 const askDialog = '.modal-body .notify';
 const paletteDialogOkButton = '#image_download_notify_palette .accept-notify';
 const rotationDialogOkButton = '#image_download_notify_rotate .accept-notify';
-const articeRotationResetButton = '#wv-map-arctic .wv-map-reset-rotation';
+const articeRotationResetButton = '.wv-map-reset-rotation';
 
 module.exports = {
   before(client) {
@@ -15,7 +15,7 @@ module.exports = {
   'Downloading GIF when custom colormap is activated': function(client) {
     if (client.options.desiredCapabilities.browserName !== 'ie') {
       // Custom colormaps down exist in IE
-      client.url(client.globals.url + localQuerystrings.activeCustomColormap);
+      client.url(client.globals.url + localQueryStrings.activeCustomColormap);
       client.waitForElementVisible(
         localSelectors.animationWidget,
         TIME_LIMIT,
@@ -46,7 +46,7 @@ module.exports = {
   },
   'Downloading GIF when polar projection is rotated': function(client) {
     client.url(
-      client.globals.url + localQuerystrings.animationProjectionRotated,
+      client.globals.url + localQueryStrings.animationProjectionRotated,
     );
     client.waitForElementVisible(
       localSelectors.animationWidget,
@@ -65,7 +65,7 @@ module.exports = {
   'GIF selection preview is Accurate and selections that are too high disable GIF download': function(
     client,
   ) {
-    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
+    client.url(client.globals.url + localQueryStrings.activeAnimationWidget);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
@@ -112,7 +112,7 @@ module.exports = {
   'GIF download is disabled when too many frames would be requested with standard interval': function(
     client,
   ) {
-    client.url(client.globals.url + localQuerystrings.animationTooManyFrames);
+    client.url(client.globals.url + localQueryStrings.animationTooManyFrames);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
@@ -124,7 +124,7 @@ module.exports = {
   'GIF download is disabled when too many frames would be requested with custom interval': function(
     client,
   ) {
-    client.url(client.globals.url + localQuerystrings.animationTooManyFramesCustomInterval);
+    client.url(client.globals.url + localQueryStrings.animationTooManyFramesCustomInterval);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,

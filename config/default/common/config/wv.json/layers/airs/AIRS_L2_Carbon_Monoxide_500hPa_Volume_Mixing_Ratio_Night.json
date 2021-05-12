@@ -8,9 +8,7 @@
       "tags": "CO",
       "group": "overlays",
       "product": "AIRS2RET",
-      "layergroup": [
-        "airs"
-      ],
+      "layergroup": "Carbon Monoxide",
       "tracks": [
         "OrbitTracks_Aqua_Descending"
       ],

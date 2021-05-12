@@ -7,9 +7,7 @@
       "description": "sedac/Landsat_Global_Man-made_Impervious_Surface",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": [
-        "sedac"
-      ],
+      "layergroup": "Impervious Surface",
       "product": "CIESIN_SEDAC_ULANDSAT_GMIS_V1",
       "inactive": true,
       "wrapX": true

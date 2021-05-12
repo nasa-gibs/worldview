@@ -1,14 +1,20 @@
-.tour a {
-  color: #00457b;
-  font-weight: 400;
+.tour {
+  a {
+    color: #00457b;
+    font-weight: 400;
+    &:hover {
+      color: #2276ac;
+      text-decoration: none;
+    }
+  }
+  .modal-body {
+    h1, h2, h3, h4 {
+      margin-bottom: 15px;
+    }
+  }
 }
 
-.tour a:hover {
-  color: #2276ac;
-  text-decoration: none;
-}
-
-.about-page .modal-dialog .modal-header .close,
+.about-page-modal .modal-dialog .modal-header .close,
 .tour-start .modal-dialog .modal-header .close,
 .tour-complete .modal-dialog .modal-header .close {
   font-size: 30px;
@@ -19,14 +25,14 @@
     color: #fff;
   }
 }
-.about-page .modal-header,
+.about-page-modal .modal-header,
 .tour-complete .modal-header,
 .tour-start .modal-header {
   position: relative;
   background-color: rgb(0, 69, 123);
   padding: 6px 8px;
 }
-.about-page .modal-title,
+.about-page-modal .modal-title,
 .tour-start .modal-title,
 .tour-complete .modal-title {
   color: #fff;
@@ -34,7 +40,7 @@
   line-height: 22px;
   font-weight: 300;
 }
-.about-page .modal-body,
+.about-page-modal .modal-body,
 .tour-complete .modal-body,
 .tour-start .modal-body {
   border-radius: 0;
@@ -223,7 +229,7 @@
     border-radius: 8px 0 0;
     background-color: rgb(0, 69, 123);
     padding: 8px 20px 8px 16px;
-    border-bottom: 2px solid #fff;
+    border-bottom: 1px solid #fff;
     .close {
       position: absolute;
       padding: 0;
@@ -237,8 +243,9 @@
     color: #fff;
     padding: 0;
     overflow-y: auto;
-    border-bottom: 2px solid #fff;
     -ms-flex: 1 1 25px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
     p {
       font-size: 13px;
       line-height: 20px;
@@ -649,7 +656,7 @@
   }
 }
 
-@media (min-width: 740px) {
+@media (min-width: 769px) {
   .tour {
     display: block;
   }
@@ -680,29 +687,36 @@
 
 @media (max-height: 776px) {
   .tour-in-progress .modal {
-    bottom: 278px;
+    bottom: 290px;
   }
   .tour-in-progress .modal-content {
     height: 300px;
   }
 }
 
-@media (max-height: 712px) {
+@media (max-height: 720px) {
   .tour-in-progress .modal {
-    bottom: 232px;
-  }
-  .tour-in-progress .modal-content {
-    height: 250px;
+    right: 55px;
+    .modal-dialog {
+      box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.45);
+      .modal-content {
+        border-radius: 8px;
+      }
+      .modal-header {
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+      }
+      .modal-footer {
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+      }
+    }
   }
 }
 
-@media (max-height: 665px) {
+@media (max-height: 550px) {
   .tour-in-progress .modal {
-    bottom: 178px;
-  }
-
-  .tour-in-progress .modal-content {
-    height: 200px;
+    bottom: calc(var(--vh, 1vh) * 100 - 265px);
   }
 }
 

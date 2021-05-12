@@ -1,6 +1,5 @@
 import {
   cloneDeep as lodashCloneDeep,
-  assign as lodashAssign,
   findIndex as lodashFindIndex,
 } from 'lodash';
 import update from 'immutability-helper';
@@ -8,12 +7,16 @@ import {
   RESET_LAYERS,
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
-  REORDER_LAYER_GROUP,
-  ON_LAYER_HOVER,
+  REORDER_LAYERS,
   TOGGLE_LAYER_VISIBILITY,
+  TOGGLE_COLLAPSE_OVERLAY_GROUP,
+  TOGGLE_OVERLAY_GROUP_VISIBILITY,
+  TOGGLE_OVERLAY_GROUPS,
   REMOVE_LAYER,
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT,
+  REORDER_OVERLAY_GROUPS,
+  REMOVE_GROUP,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -27,137 +30,213 @@ import {
   SET_FILTER_RANGE,
 } from '../vector-styles/constants';
 import { resetLayers } from './selectors';
+import { getOverlayGroups } from './util';
+import safeLocalStorage from '../../util/local-storage';
+
+const { GROUP_OVERLAYS } = safeLocalStorage.keys;
+
+const groupState = {
+  groupOverlays: true,
+  layers: [],
+  overlayGroups: [],
+  prevLayers: [],
+};
 
 export const initialState = {
-  active: [],
-  activeB: [],
-  hoveredLayer: '',
+  active: { ...groupState },
+  activeB: { ...groupState },
   layerConfig: {},
-  facetArray: [],
   startingLayers: [],
 };
+
 export function getInitialState(config) {
-  return lodashAssign({}, initialState, {
-    active: resetLayers(config.defaults.startingLayers, config.layers),
-    layerConfig: config.layers,
-    startingLayers: config.defaults.startingLayers,
-  });
+  const { layers: layerConfig, defaults } = config;
+  const startingLayers = resetLayers(defaults.startingLayers, layerConfig);
+  const groupsALocalStorage = safeLocalStorage.getItem(GROUP_OVERLAYS) !== 'disabled';
+  return {
+    ...initialState,
+    active: {
+      ...groupState,
+      groupOverlays: groupsALocalStorage,
+      layers: startingLayers,
+      overlayGroups: getOverlayGroups(startingLayers),
+    },
+    layerConfig,
+    startingLayers: defaults.startingLayers,
+  };
 }
 
 export function layerReducer(state = initialState, action) {
-  const layerGroupStr = action.activeString;
+  const compareState = action.activeString;
+  const getPrevOverlayGroups = () => state[compareState].overlayGroups;
+  const getLayerIndex = () => {
+    const activeLayers = state[compareState].layers;
+    return lodashFindIndex(activeLayers, { id: action.id || action.layerId });
+  };
+  const getGroupIndex = () => lodashFindIndex(
+    getPrevOverlayGroups(),
+    { groupName: action.groupName },
+  );
+
   switch (action.type) {
     case RESET_LAYERS:
     case ADD_LAYER:
-    case REORDER_LAYER_GROUP:
-    case ADD_LAYERS_FOR_EVENT:
     case REMOVE_LAYER:
-      return lodashAssign({}, state, {
-        [layerGroupStr]: action.layers,
+    case REMOVE_GROUP:
+    case REORDER_LAYERS:
+    case TOGGLE_OVERLAY_GROUP_VISIBILITY:
+      return update(state, {
+        [compareState]: {
+          layers: { $set: action.layers },
+          overlayGroups: { $set: getOverlayGroups(action.layers, getPrevOverlayGroups()) },
+          prevLayers: { $set: [] },
+        },
       });
+
+    case ADD_LAYERS_FOR_EVENT:
+    case REORDER_OVERLAY_GROUPS:
+      return update(state, {
+        [compareState]: {
+          layers: { $set: action.layers },
+          overlayGroups: { $set: action.overlayGroups },
+          prevLayers: { $set: [] },
+        },
+      });
+
+    case TOGGLE_OVERLAY_GROUPS:
+      return {
+        ...state,
+        [compareState]: {
+          groupOverlays: action.groupOverlays,
+          layers: action.layers,
+          overlayGroups: action.overlayGroups,
+          prevLayers: action.prevLayers,
+        },
+      };
+
+    case TOGGLE_COLLAPSE_OVERLAY_GROUP:
+      return update(state, {
+        [compareState]: {
+          overlayGroups: {
+            [getGroupIndex()]: {
+              collapsed: { $set: action.collapsed },
+            },
+          },
+        },
+      });
+
     case INIT_SECOND_LAYER_GROUP:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         activeB: lodashCloneDeep(state.active),
-      });
-    case ON_LAYER_HOVER:
-      return lodashAssign({}, state, {
-        hoveredLayer: action.active ? action.id : '',
-      });
+      };
+
     case TOGGLE_LAYER_VISIBILITY:
       return update(state, {
-        [layerGroupStr]: {
-          [action.index]: { visible: { $set: action.visible } },
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              visible: {
+                $set: action.visible,
+              },
+            },
+          },
+          prevLayers: { $set: [] },
         },
       });
+
     case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_DISABLED_CLASSIFICATION: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
-        id: action.layerId,
-      });
       return update(state, {
-        [layerGroupStr]: {
-          [layerIndex]: {
-            $merge: action.props,
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              $merge: action.props,
+            },
           },
         },
       });
     }
+
     case CLEAR_CUSTOM_PALETTE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
-        id: action.layerId,
-      });
-
       return update(state, {
-        [layerGroupStr]: {
-          [layerIndex]: {
-            custom: {
-              $set: undefined,
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              custom: {
+                $set: undefined,
+              },
             },
           },
         },
       });
     }
+
     case SET_CUSTOM_PALETTE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
-        id: action.layerId,
-      });
       return update(state, {
-        [layerGroupStr]: {
-          [layerIndex]: {
-            custom: {
-              $set: [action.paletteId],
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              custom: {
+                $set: [action.paletteId],
+              },
             },
           },
         },
       });
     }
-    case SET_FILTER_RANGE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
-        id: action.layerId,
-      });
-      return update(state, {
-        [layerGroupStr]: {
-          [layerIndex]: {
-            $merge: action.props,
-          },
-        },
-      });
-    }
-    case CLEAR_VECTORSTYLE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
-        id: action.layerId,
-      });
 
+    case SET_FILTER_RANGE: {
       return update(state, {
-        [layerGroupStr]: {
-          [layerIndex]: {
-            custom: {
-              $set: undefined,
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              $merge: action.props,
             },
           },
         },
       });
     }
+
+    case CLEAR_VECTORSTYLE: {
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              custom: {
+                $set: undefined,
+              },
+            },
+          },
+        },
+      });
+    }
+
     case SET_VECTORSTYLE: {
-      const layerIndex = lodashFindIndex(state[layerGroupStr], {
-        id: action.layerId,
-      });
       return update(state, {
-        [layerGroupStr]: {
-          [layerIndex]: {
-            custom: {
-              $set: action.vectorStyleId,
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              custom: {
+                $set: action.vectorStyleId,
+              },
             },
           },
         },
       });
     }
+
     case UPDATE_OPACITY:
       return update(state, {
-        [layerGroupStr]: {
-          [action.index]: { opacity: { $set: action.opacity } },
+        [compareState]: {
+          layers: {
+            [getLayerIndex()]: {
+              opacity: { $set: action.opacity },
+            },
+          },
         },
       });
+
     default:
       return state;
   }

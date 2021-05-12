@@ -7,8 +7,10 @@
               "id": "featured-all",
               "description": "",
               "measurements": [
+                "Land Surface Reflectance - Featured",
                 "Geostationary",
                 "Fires and Thermal Anomalies - Featured",
+                "Flood",
                 "Socioeconomic Data Vectors - Featured",
                 "Corrected Reflectance",
                 "Precipitation Rate - Featured",

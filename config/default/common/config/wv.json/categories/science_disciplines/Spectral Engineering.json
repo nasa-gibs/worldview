@@ -1,0 +1,21 @@
+{
+    "categories": {
+        "science disciplines": {
+            "Spectral/Engineering": {
+                "title": "Spectral/Engineering",
+                "id": "spectral-engineering",
+                "image": "spectral-engineering.png",
+                "description": "",
+                "measurements": [
+                    "Brightness Temperature",
+                    "Sigma0",
+                    "Faraday Rotation",
+                    "Outgoing Radiation",
+                    "Radiation",
+                    "Surface Flux",
+                    "TOA Flux"
+                ]
+            }
+        }
+    }
+}

@@ -22,11 +22,10 @@ class AxisTimeScaleChange extends PureComponent {
   // TimeScale select tooltip on
   toolTipHoverOn = () => {
     const {
-      isDistractionFreeModeActive,
       isDraggerDragging,
     } = this.props;
     // in event of dragging off axis, prevent tooltip display
-    if (!isDraggerDragging && !isDistractionFreeModeActive) {
+    if (!isDraggerDragging) {
       this.disableMapScales(true);
       this.setState({
         toolTipHovered: true,
@@ -46,20 +45,9 @@ class AxisTimeScaleChange extends PureComponent {
   disableMapScales = (disable) => {
     const imperialMapScale = document.getElementsByClassName('wv-map-scale-imperial');
     const metricMapScale = document.getElementsByClassName('wv-map-scale-metric');
-    if (disable) {
-      for (const el of imperialMapScale) {
-        el.style.display = 'none';
-      }
-      for (const el of metricMapScale) {
-        el.style.display = 'none';
-      }
-    } else {
-      for (const el of imperialMapScale) {
-        el.style.display = 'block';
-      }
-      for (const el of metricMapScale) {
-        el.style.display = 'block';
-      }
+    const opacity = disable ? '0' : '1';
+    for (const el of [...imperialMapScale, ...metricMapScale]) {
+      el.style.opacity = opacity;
     }
   }
 
@@ -129,7 +117,6 @@ class AxisTimeScaleChange extends PureComponent {
 AxisTimeScaleChange.propTypes = {
   changeTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
-  isDistractionFreeModeActive: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   timelineHidden: PropTypes.bool,
   timeScale: PropTypes.string,

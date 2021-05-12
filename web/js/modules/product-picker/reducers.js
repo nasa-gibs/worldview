@@ -18,13 +18,16 @@ import {
   TOGGLE_MOBILE_FACETS,
   CLEAR_RECENT_LAYERS,
   CLEAR_SINGLE_RECENT_LAYER,
+  PROJ_SWITCH,
   RESET_STATE,
 } from './constants';
 
-export const productPickerState = {
+let CATEGORY_GROUP_ORDER = [];
+
+const productPickerState = {
   mode: 'category',
   category: undefined,
-  categoryType: 'hazards and disasters',
+  categoryType: undefined,
   filters: [],
   showMobileFacets: true,
   searchTerm: '',
@@ -36,8 +39,21 @@ export const productPickerState = {
   recentLayers: [],
 };
 
-export function getInitialState(config) {
-  return productPickerState;
+
+export function getInitialState({ categories, categoryGroupOrder }) {
+  if (Object.keys(categories).length !== categoryGroupOrder.length) {
+    throw new Error(
+      'Number of category groups did not match defined category group order. '
+      + '\nCheck categoryGroupOrder.json',
+    );
+  }
+
+  CATEGORY_GROUP_ORDER = categoryGroupOrder;
+
+  return {
+    ...productPickerState,
+    categoryType: CATEGORY_GROUP_ORDER[0],
+  };
 }
 
 export function productPickerReducer(state = productPickerState, action) {
@@ -137,7 +153,7 @@ export function productPickerReducer(state = productPickerState, action) {
         selectedLayer: null,
         showMobileFacets: true,
         category: null,
-        categoryType: 'hazards and disasters',
+        categoryType: CATEGORY_GROUP_ORDER[0],
         selectedMeasurementSourceIndex: 0,
       };
     }
@@ -210,7 +226,7 @@ export function productPickerReducer(state = productPickerState, action) {
       };
     }
 
-    case RESET_STATE: {
+    case PROJ_SWITCH: {
       // When switching projections: if we were in 'search'
       // mode stay there.  Otherwise if in a polar projection
       // show 'measurement' rather than 'category'
@@ -228,7 +244,7 @@ export function productPickerReducer(state = productPickerState, action) {
         searchTerm: '',
         selectedLayer: null,
         category: null,
-        categoryType: action.projection === 'geographic' ? 'hazards and disasters' : 'measurements',
+        categoryType: action.projection === 'geographic' ? CATEGORY_GROUP_ORDER[0] : 'measurements',
         selectedMeasurement: null,
         selectedMeasurementSourceIndex: 0,
       };
@@ -237,6 +253,15 @@ export function productPickerReducer(state = productPickerState, action) {
         ...newState,
       };
     }
+
+    // When running the product picker tutorial, need to start with a known clear state
+    case RESET_STATE: {
+      return {
+        ...productPickerState,
+        categoryType: CATEGORY_GROUP_ORDER[0],
+      };
+    }
+
     default:
       return state;
   }

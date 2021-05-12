@@ -39,6 +39,32 @@
       "domains":["https://worldview.earthdata.nasa.gov"],
       "dismissible":true,
       "path":""
+    },
+    {
+      "id": 1185,
+      "notification_type": "outage",
+      "message": "The Aqua / MODIS Corrected Reflectance (True Color) layer is currently unavailable.",
+      "updated_at": "2020-09-11T10:37:41.393-04:00",
+      "created_at": "2020-09-11T10:37:41.393-04:00",
+      "starttime": null,
+      "endtime": null,
+      "applications":["Worldview (OPS)"],
+      "domains":["https://worldview.earthdata.nasa.gov"],
+      "dismissible": true,
+      "path": "/layer-notice/MODIS_Aqua_CorrectedReflectance_TrueColor/"
+    },
+    {
+      "id": 1181,
+      "notification_type": "alert",
+      "message": "Several layers are experiencing delays in processing.",
+      "updated_at": "2020-09-11T10:37:00.049-04:00",
+      "created_at": "2020-09-04T11:21:38.569-04:00",
+      "starttime": null,
+      "endtime": null,
+      "applications":["Worldview (OPS)"],
+      "domains":["https://worldview.earthdata.nasa.gov"],
+      "dismissible": true,
+      "path": "/layer-notice/MODIS_Aqua_CorrectedReflectance_TrueColor/Particulate_Matter_Below_2.5micrometers_2001-2010"
     }
   ]
 }

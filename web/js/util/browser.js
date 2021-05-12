@@ -60,7 +60,7 @@ export default (function() {
   self.touchDevice = false;
   self.mobileDevice = false;
   self.mobileAndTabletDevice = false;
-  self.mobileWidth = 740;
+  self.mobileWidth = 768;
   self.constrainedHeight = 320;
 
   const init = function() {
@@ -92,10 +92,8 @@ export default (function() {
       self.constrained = tests.constrained();
       self.dimensions = self.tests.getWindowDimensions();
     };
-    $(window).on('resize', onResize);
-    $(() => {
-      onResize();
-    });
+    window.addEventListener('resize', onResize);
+    onResize();
   };
 
   // The following functions should not be used directly. Use the values
@@ -225,7 +223,7 @@ export default (function() {
   };
 
   self.tests.getWindowDimensions = function() {
-    return [$(window).width(), $(window).height()];
+    return [window.innerWidth, window.innerHeight];
   };
 
   self.tests.constrained = function() {

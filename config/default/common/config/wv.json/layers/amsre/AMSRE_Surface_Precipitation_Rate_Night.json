@@ -8,9 +8,7 @@
       "tags": "rain snow",
       "group": "overlays",
       "product": "AE_Rain",
-      "layergroup": [
-        "amsre"
-      ],
+      "layergroup": "Precipitation Rate",
       "inactive": true,
       "tracks": [
         "OrbitTracks_Aqua_Descending"

@@ -64,14 +64,13 @@ class ModalStart extends React.Component {
 
   render() {
     const {
-      modalStart, endTour, showTourAlert, toggleModalStart, className, height, stories, storyOrder, selectTour,
+      modalStart, endTour, toggleModalStart, className, height, stories, storyOrder, selectTour,
     } = this.props;
     const { checked } = this.state;
     return (
       <Modal
         isOpen={modalStart}
         toggle={endTour}
-        onClosed={showTourAlert}
         wrapClassName="tour tour-start"
         className={className}
         backdrop
@@ -124,7 +123,6 @@ ModalStart.propTypes = {
   modalStart: PropTypes.bool.isRequired,
   selectTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
-  showTourAlert: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   toggleModalStart: PropTypes.func.isRequired,

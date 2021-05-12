@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { UncontrolledTooltip } from 'reactstrap';
 
 /*
  * @class PlayButton
@@ -10,15 +9,24 @@ import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
  */
 const PlayButton = (props) => {
   const { playing, pause, play } = props;
+  const buttonId = 'play-button';
+  const labelText = playing ? 'Pause animation' : 'Play animation';
   return (
     <a
-      title={playing ? 'Pause video' : 'Play video'}
-      className="wv-anim-play-case wv-icon-case"
+      id={buttonId}
+      aria-label={labelText}
+      className="wv-anim-play-case wv-icon-case no-drag"
       onClick={playing ? pause : play}
     >
+      <UncontrolledTooltip
+        target={buttonId}
+        placement="top"
+      >
+        {labelText}
+      </UncontrolledTooltip>
       {playing
-        ? <FontAwesomeIcon icon={faPause} className="wv-animation-widget-icon" />
-        : <FontAwesomeIcon icon={faPlay} className="wv-animation-widget-icon" />}
+        ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" />
+        : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" />}
     </a>
   );
 };

@@ -16,7 +16,7 @@ Radiance is a measure of the energy emitted and/or reflected by the Earth’s su
 
 These layers are produced from the NIR Radiance/RDQI, Green Radiance/RDQI, and Blue Radiance/RDQI fields of the MISR Level 1 Near Real Time Georectified Ellipsoid Radiance Product. They are available globally over both land and ocean on a daily basis, with a spatial resolution of 1 km per pixel. The images become available approximately three hours after they are captured by the MISR instrument. The images are processed in 10-50 minute portions of the complete MISR orbit.
 
-References: [MISR Level 1 Near Real Time Georectified Radiance Product](https://eosweb.larc.nasa.gov/project/misr/l1_nrt_products); [MISR Instrument: Viewing Angles](https://misr.jpl.nasa.gov/Mission/misrInstrument/viewingAngles/)
+References: MISR Near Real Time (NRT) Level 1B2 Ellipsoid Data V001. [doi:10.5067/Terra/MISR/MI1B2\_ELLIPSOID\_NRT\_L1.001](https://doi.org/10.5067/Terra/MISR/MI1B2_ELLIPSOID_NRT_L1.001); [MISR Instrument: Viewing Angles](https://misr.jpl.nasa.gov/Mission/misrInstrument/viewingAngles/)
 
 ### Radiance Average (Monthly, Natural Color)
 Temporal Coverage: March 2000 - present (Monthly)
@@ -32,4 +32,5 @@ The MISR Radiance Average layer displays the temporal average of all radiances m
 
 This layer is produced from the Average field of the MISR Level 3 Component Global Georectified Radiance Product. It is available globally over both land and ocean on a monthly basis, with a spatial resolution of 0.5 degrees latitude by 0.5 degrees longitude.
 
-References: [MISR Level 3 Component Global Georectified Radiance Product](https://eosweb.larc.nasa.gov/project/misr/cggrp_table)
+References: MISR Level 3 Component Global Radiance Product covering a month V005. [doi:10.5067/Terra/MISR/MIL3MRD_L3.005](https://doi.org/10.5067/Terra/MISR/MIL3MRD_L3.005)
+

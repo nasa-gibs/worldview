@@ -7,7 +7,11 @@ const showdown = require('showdown');
 const shell = require('shelljs');
 
 console.log('Converting markdown to html');
-const converter = new showdown.Converter({ openLinksInNewWindow: true });
+const converter = new showdown.Converter({
+  openLinksInNewWindow: true,
+  // don't require escaping underscores in the middle of a word
+  literalMidWordUnderscores: true,
+});
 
 const configFiles = glob.sync('build/options/config/metadata/**/*.md');
 for (const configFile of configFiles) {

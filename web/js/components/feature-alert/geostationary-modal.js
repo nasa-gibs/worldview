@@ -81,7 +81,7 @@ class GeostationaryModalBody extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   isMobile: state.browser.lessThan.medium,
 });
 

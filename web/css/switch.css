@@ -2,16 +2,29 @@
   display: flex;
   margin-bottom: 7px;
 }
+
+.classification-switch-header {
+  display: flex;
+  justify-content: space-between;
+  .react-switch {
+    flex-direction: row-reverse;
+  }
+  .react-switch-case {
+    width: 30px;
+  }
+  .react-switch-label-case {
+    width: 20px;
+  }
+}
 .react-switch .switch-col {
   align-items: flex-start;
   display: flex;
 }
 .react-switch-case {
-  width: 20%;
+  width: 40px;
   align-items: flex-start;
 }
 .react-switch-label-case {
-  width: 80%;
   svg.svg-inline--fa {
     margin-left: 5px;
   }
@@ -64,4 +77,5 @@
 
 .switch-label-text {
   cursor: pointer;
+  color: #fff;
 }

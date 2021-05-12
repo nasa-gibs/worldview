@@ -3,7 +3,7 @@
         "Land Surface Reflectance": {
             "id": "land-surface-reflectance",
             "title":    "Land Surface Reflectance",
-            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "subtitle": "Aqua & Terra/MODIS, Aqua/MODIS, Harmonized Landsat Sentinel-2 (HLS), Terra/MODIS, Terra/MISR",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -35,6 +35,48 @@
                         "MODIS_Terra_L3_SurfaceReflectance_Bands121_8Day",
                         "MODIS_Terra_L3_SurfaceReflectance_Bands721_8Day",
                         "OrbitTracks_Terra_Descending"
+                    ]
+                },
+                "Aqua and Terra/MODIS": {
+                    "id": "aqua-terra-modis",
+                    "title": "Aqua and Terra/MODIS",
+                    "description": "modis/combined/LandSurfaceReflectance",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Combined_MAIAC_L2G_BidirectionalReflectance_Bands143",
+                        "MODIS_Combined_L3_Nadir-BRDF_Daily"
+                    ]
+                },
+                 "Terra/MISR": {
+                     "id": "terra-misr",
+                    "title": "Terra/MISR",
+                    "description": "misr/DHRReflectance",
+                    "image": "",
+                    "settings": [
+                        "MISR_Directional_Hemispherical_Reflectance_Average_Natural_Color_Monthly"
+                    ]
+                 },
+                "HLS-Sentinel2": {
+                    "id": "HLS: Sentinel-2",
+                    "title": "HLS: Sentinel-2A & 2B/MSI",
+                    "description": "multi-mission/hls/ReflectanceSentinel2",
+                    "image": "",
+                    "settings": [
+                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
+                        "HLS_MGRS_Granule_Grid",
+                        "OrbitTracks_Sentinel-2A_Descending",
+                        "OrbitTracks_Sentinel-2B_Descending"
+                    ]
+                },
+                "HLS-Landsat8": {
+                    "id": "HLS: Landsat 8",
+                    "title": "HLS: Landsat 8/OLI",
+                    "description": "multi-mission/hls/ReflectanceLandsat",
+                    "image": "",
+                    "settings": [
+                        "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
+                        "HLS_MGRS_Granule_Grid",
+                        "OrbitTracks_Landsat-8_Descending"
                     ]
                 }
             }

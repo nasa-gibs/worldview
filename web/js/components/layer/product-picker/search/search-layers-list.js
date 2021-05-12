@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMeteor } from '@fortawesome/free-solid-svg-icons';
 import SwipeToDelete from 'react-swipe-to-delete-component';
 import SearchLayerRow from './search-layer-row';
 import 'whatwg-fetch'; // fetch() polyfill for IE
@@ -101,7 +100,7 @@ class SearchLayerList extends React.Component {
           // Check that we have a metadata html snippet, rather than a fully
           // formed HTML file. Also avoid executing any script or style tags.
           const isMetadataSnippet = !body.match(/<(head|body|html|style|script)[^>]*>/i);
-          layer.metadata = isMetadataSnippet ? body : errorMessage;
+          layer.metadata = isMetadataSnippet || !body.length ? body : errorMessage;
           selectLayer(layer);
         });
     } else {
@@ -140,13 +139,13 @@ class SearchLayerList extends React.Component {
     }
   }
 
-  renderNoResults () {
+  renderNoResults() {
     const { recentLayerMode } = this.props;
     return recentLayerMode
       ? (<RecentLayersInfo />)
       : (
         <div className="no-results">
-          <FontAwesomeIcon icon={faMeteor} size="5x" />
+          <FontAwesomeIcon icon="meteor" size="5x" />
           <h3> No layers found! </h3>
         </div>
       );
@@ -207,7 +206,7 @@ SearchLayerList.propTypes = {
   selectLayer: PropTypes.func,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { productPicker, browser } = state;
   const { selectedLayer, categoryType } = productPicker;
   return {

@@ -7,9 +7,7 @@
       "description": "mls/MLS_CO_215hPa_Day",
       "tags": "co",
       "group": "overlays",
-      "layergroup": [
-        "mls"
-      ],
+      "layergroup": "Carbon Monoxide",
       "product": "ML2CO",
       "tracks": [
         "OrbitTracks_Aura_Ascending"
