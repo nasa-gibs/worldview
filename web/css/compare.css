@@ -8,13 +8,25 @@
   cursor: move;
   cursor: grab;
   user-select: none;
+  & .show-date-label {
+    width: 98px;
+  }
+  & .left-label {
+    left: -23px;
+    &.show-date-label {
+      left: -107px;
+    }
+  }
+  & .right-label {
+    left: 13px;
+  }
 }
 .ab-swipe-line:active {
   cursor: grabbing;
 }
 .ab-swipe-dragger {
   position: absolute;
-  bottom: 30%;
+  bottom: 210px;
   width: 65px;
   height: 65px;
   margin-top: -45px;
@@ -38,19 +50,13 @@
   font-size: 26px;
   margin-top: 11px;
 }
-.ab-swipe-line .left-label {
-  left: -23px;
-}
-.ab-swipe-line .right-label {
-  left: 13px;
-}
 .ab-slider-case {
   position: absolute;
   margin-left: auto;
   margin-right: auto;
   left: 0;
   right: 0;
-  bottom: 25%;
+  bottom: 195px;
   width: 232px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
@@ -83,7 +89,7 @@
 }
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
-  bottom: 25%;
+  bottom: 195px;
   padding: 2px;
   background: #fff;
   color: #000;

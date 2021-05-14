@@ -51,7 +51,7 @@ const CUSTOM_MODAL_PROPS = {
     wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
   },
   TOOLBAR_SHARE_LINK: {
-    headerText: 'Copy Link to Share',
+    headerText: 'Share',
     type: 'toolbar',
     backdrop: false,
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',

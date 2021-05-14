@@ -20,6 +20,7 @@ import LocationSearch from './components/location-search/location-search';
 
 // Other/MISC
 import Brand from './brand';
+import Embed from './containers/embed';
 import MeasureButton from './components/measure-tool/measure-button';
 import FeatureAlert from './components/feature-alert/alert';
 import Alerts from './containers/alerts';
@@ -84,6 +85,7 @@ import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
 import '../css/location-search.css';
+import '../css/embedded.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
@@ -163,15 +165,17 @@ class App extends React.Component {
   render() {
     const {
       isAnimationWidgetActive,
+      isEmbedModeActive,
       isMobile,
       isTourActive,
       locationKey,
       modalId,
       parameters,
     } = this.props;
+    const appClass = `wv-content ${isEmbedModeActive ? 'embedded-mode' : ''}`;
     return (
-      <div className="wv-content" id="wv-content" data-role="content">
-        {!isMobile && <LocationSearch />}
+      <div className={appClass} id="wv-content" data-role="content">
+        {!isMobile && !isEmbedModeActive && <LocationSearch />}
         <Toolbar />
         <MapInteractions />
         <div id="wv-alert-container" className="wv-alert-container">
@@ -189,6 +193,7 @@ class App extends React.Component {
           {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
         </div>
         <MeasureButton />
+        <Embed />
         <Modal key={modalId} />
         <ErrorBoundary>
           <Debug parameters={parameters} />
@@ -202,6 +207,7 @@ function mapStateToProps(state) {
   return {
     state,
     isAnimationWidgetActive: state.animation.isActive,
+    isEmbedModeActive: state.embed.isEmbedModeActive,
     isMobile: state.browser.lessThan.medium,
     isTourActive: state.tour.active,
     tour: state.tour,
@@ -227,6 +233,7 @@ export default connect(
 
 App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,

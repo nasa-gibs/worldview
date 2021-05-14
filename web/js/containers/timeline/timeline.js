@@ -1026,6 +1026,7 @@ class Timeline extends React.Component {
       isCompareModeActive,
       isDataDownload,
       isDistractionFreeModeActive,
+      isEmbedModeActive,
       isSmallScreen,
       isTourActive,
       leftArrowDisabled,
@@ -1096,7 +1097,7 @@ class Timeline extends React.Component {
           {initialLoadComplete && !isDistractionFreeModeActive
             && (
             <ErrorBoundary>
-              {isSmallScreen
+              {isSmallScreen || isEmbedModeActive
               /* Mobile Timeline Size */
                 ? (
                   <div id="timeline-header" className="timeline-header-mobile">
@@ -1363,35 +1364,37 @@ class Timeline extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    config,
-    compare,
-    map,
-    layers,
-    browser,
-    date,
     animation,
+    browser,
+    compare,
+    config,
+    date,
+    embed,
+    layers,
+    map,
+    modal,
     proj,
     sidebar,
-    modal,
     tour,
     ui,
   } = state;
   const {
+    appNow,
+    customDelta,
+    customInterval,
     customSelected,
+    delta,
+    interval,
     selected,
     selectedB,
-    delta,
-    customDelta,
-    appNow,
-    timelineCustomModalOpen,
     selectedZoom,
-    interval,
-    customInterval,
+    timelineCustomModalOpen,
   } = date;
   const { screenWidth, lessThan } = browser;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
+  const { isEmbedModeActive } = embed;
   const isSmallScreen = lessThan.medium;
 
   // handle active layer filtering and check for subdaily
@@ -1496,6 +1499,7 @@ function mapStateToProps(state) {
     isGifActive: animation.gifActive,
     timelineCustomModalOpen,
     isDistractionFreeModeActive,
+    isEmbedModeActive,
   };
 }
 
@@ -1577,6 +1581,7 @@ Timeline.propTypes = {
   isCompareModeActive: PropTypes.bool,
   isDataDownload: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   isTourActive: PropTypes.bool,

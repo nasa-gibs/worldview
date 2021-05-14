@@ -14,7 +14,7 @@ Update the following fields in `config/default/common/brand.json` with custom br
 Naming can be more specific by omitting the `name` field and using
 the following instead:
 
-* `officalName`: Full name of the application (i.e. `EOSDIS Worldview`).
+* `officialName`: Full name of the application (i.e. `EOSDIS Worldview`).
 * `shortName`: Short name of the application (i.e. `Worldview`).
 
 To add a logo, replace `config/default/common/brand/images/wv-logo.png` with an image
