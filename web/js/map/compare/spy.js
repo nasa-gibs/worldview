@@ -8,11 +8,14 @@ const bottomLayers = [];
 const DEFAULT_RADIUS = 140;
 let radius = DEFAULT_RADIUS;
 let label = null;
+// state.compare.isCompareA
 
+const isCompareA = (state) => state.compare.isCompareA;
 export default class Spy {
-  constructor(olMap, isBInside) {
+  constructor(olMap, state) {
     this.mapCase = document.getElementById('wv-map');
     this.map = olMap;
+    const isBInside = isCompareA(state);
     this.create(isBInside);
   }
 
