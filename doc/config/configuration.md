@@ -22,7 +22,7 @@ To quickly switch between different configurations, use a symlink for `config/ac
 
 After making any changes to configuration files, rebuild the app for the changes to take effect.
 Use the `npm run build` command to make a request to [the GIBS GetCapabilities API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers) to update layer configurations and rebuild the
-configuration file used by the application. After a successful buid, this file can be found at: `build/options/config/wv.json`
+configuration file used by the application. After a successful build, this file can be found at: `build/options/config/wv.json`
 
 If you want to only rebuild `wv.json`, using GetCapabilities files that were previously requested,
 (e.g. if you are just modifying some configs locally and want to test your changes)
