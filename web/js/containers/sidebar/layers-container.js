@@ -24,6 +24,7 @@ function LayersContainer (props) {
     height,
     isActive,
     isCompareActive,
+    isEmbedModeActive,
     isMobile,
     overlayGroups,
     overlays,
@@ -106,22 +107,30 @@ function LayersContainer (props) {
   );
 
   const mobileHeightCoeff = isCompareActive ? -30 : 20;
-  const maxHeight = isMobile
+  let maxHeight = isMobile
     ? height + mobileHeightCoeff
     : height;
+
+  if (isEmbedModeActive) {
+    maxHeight = 'calc(var(--vh, 1vh) * 100 - 320px)';
+  } else {
+    maxHeight += 'px';
+  }
   const scrollContainerStyles = {
-    maxHeight: `${maxHeight}px`,
+    maxHeight,
     overflowY: 'auto',
     paddingBottom: '4px',
     minHeight: '100px',
   };
+  const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
+  const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
 
   return isActive && (
     <>
       <div id="layers-scroll-container" style={scrollContainerStyles}>
         <div className="layer-container sidebar-panel">
 
-          {groupOverlays ? renderOverlayGroups() : (
+          {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
             <LayerList
               title="Overlays"
               groupId="overlays"
@@ -133,6 +142,7 @@ function LayersContainer (props) {
             />
           )}
 
+          {!shouldHideForEmbedNoBaseLayers && (
           <div className="layer-group-baselayers">
             <LayerList
               title="Base Layers"
@@ -144,6 +154,7 @@ function LayersContainer (props) {
               layerSplit={overlays.length}
             />
           </div>
+          )}
         </div>
       </div>
       <div className="group-overlays-checkbox">
@@ -160,15 +171,23 @@ function LayersContainer (props) {
 
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
-  const { browser, compare, layers } = state;
+  const {
+    browser, compare, embed, layers,
+  } = state;
   const isCompareActive = compare.active;
+  const { isEmbedModeActive } = embed;
   const isMobile = browser.lessThan.medium;
   const { groupOverlays } = layers[compareState];
-  const { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
+  // eslint-disable-next-line prefer-const
+  let { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
   const overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
+  if (isEmbedModeActive) {
+    overlays = overlays.filter((layer) => layer.layergroup !== 'Reference');
+  }
 
   return {
     isCompareActive,
+    isEmbedModeActive,
     isMobile,
     baselayers,
     overlays,
@@ -205,6 +224,7 @@ LayersContainer.propTypes = {
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   overlayGroups: PropTypes.array,
   overlays: PropTypes.array,

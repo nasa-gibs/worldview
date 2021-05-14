@@ -1,156 +1,158 @@
 @media only screen and (max-width: 768px) {
-  #wv-sidebar {
-    position: static;
-  }
-  #productsHolder {
-    display: block;
-    float: left;
-    left: 0;
-    min-width: 238px;
-    width: 100%;
-    height: 100%;
-    position: absolute !important;
-    overflow: hidden;
-    background: rgb(38, 43, 49);
-    top: 0;
-    z-index: 1000;
-  }
-
-  .sidebar-panel {
-    height: 96%;
-  }
-
-  #selectorboxcontent {
-    max-height: 97%;
-  }
-
-  img.sidebar-panel-item-img {
-    display: block;
-    height: 1.6em;
-    width: auto;
-  }
-
-  #productsHolder li.third {
-    display: none;
-  }
-
-  #wv-logo {
-    background: url('../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@')
-      no-repeat center rgba(40, 40, 40, 0.85);
-    display: block;
-    height: 42px;
-    width: 56px;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #333;
-  }
-
-  a.staticLayers:not([href]):not([tabindex]) {
-    height: 45px;
-    width: 56px;
-    background-image: none;
-    border-radius: 5px;
-    top: 58px;
-    & svg.svg-inline--fa {
-      font-size: 33px;
-      position: absolute;
-      left: 10px;
-      top: 5px;
-      color: #fff;
+  #wv-content:not(.embedded-mode) {
+    #wv-sidebar {
+      position: static;
     }
-    & span.layer-count {
-      color: #fff;
+    #productsHolder {
+      display: block;
+      float: left;
+      left: 0;
+      min-width: 238px;
+      width: 100%;
+      height: 100%;
+      position: absolute !important;
+      overflow: hidden;
+      background: rgb(38, 43, 49);
+      top: 0;
+      z-index: 1000;
+    }
+
+    .sidebar-panel {
+      height: 96%;
+    }
+
+    #selectorboxcontent {
+      max-height: 97%;
+    }
+
+    img.sidebar-panel-item-img {
+      display: block;
+      height: 1.6em;
+      width: auto;
+    }
+
+    #productsHolder li.third {
+      display: none;
+    }
+
+    #wv-logo {
+      background: url('../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@')
+        no-repeat center rgba(40, 40, 40, 0.85);
+      display: block;
+      height: 42px;
+      width: 56px;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #333;
+    }
+
+    a.staticLayers:not([href]):not([tabindex]) {
+      height: 45px;
+      width: 56px;
+      background-image: none;
+      border-radius: 5px;
+      top: 58px;
+      & svg.svg-inline--fa {
+        font-size: 33px;
+        position: absolute;
+        left: 10px;
+        top: 5px;
+        color: #fff;
+      }
+      & span.layer-count {
+        color: #fff;
+        position: relative;
+        top: 9px;
+        font-size: 18px;
+        font-weight: 600;
+        background: #333;
+        border-radius: 50%;
+        padding: 0 5px;
+        text-align: center;
+        margin-left: 0;
+      }
+    }
+
+    a.staticLayers:not([href]):not([tabindex]):hover {
+      background-image: none;
+    }
+
+    a.staticLayers::after {
+      display: none;
+    }
+
+    #wv-toolbar li {
+      display: block;
+      float: left;
+      margin: 1px;
+    }
+
+    #wv-toolbar #wv-image-button {
+      display: none;
+    }
+
+    .wv-toolbar-button {
+      font-size: 14.3px;
+      height: 44px;
+      margin: 0 0 0 4px;
+      padding: 5.72px 9.1px;
+    }
+
+    div.olControlScaleLineCustom {
+      bottom: 10px;
+    }
+
+    .olControlScaleLineCustomBottom {
+      display: none;
+    }
+
+    div.olControlMousePosition {
+      display: none;
+    }
+
+    div.olControlMousePosition,
+    div.olControlScaleLineCustom {
+      display: none !important;
+    }
+
+    .wv-coords-map {
+      display: none !important;
+    }
+
+    button#layers-add,
+    button#compare-toggle-button {
+      width: 100%;
       position: relative;
-      top: 9px;
-      font-size: 18px;
-      font-weight: 600;
-      background: #333;
-      border-radius: 50%;
-      padding: 0 5px;
-      text-align: center;
+      left: 0;
+      height: 50px;
+      span {
+        font-size: 18px;
+      }
+    }
+
+    #selected-category .ui-tabs-panel {
+      clear: both;
+      margin-left: 0;
+      border-top: 2px solid #d54e21;
+      padding: 10px 0 0;
+    }
+
+    #selected-category .ui-tabs .ui-tabs-nav {
+      margin-bottom: 15px;
+    }
+
+    #categories-nav label {
+      font-size: 1em;
+      position: relative;
+      padding-top: 1px;
+    }
+
+    .button-label-scientific {
+      top: -2px;
+    }
+
+    #selected-category .ui-tabs-panel li.measurement-settings-item {
       margin-left: 0;
     }
-  }
-
-  a.staticLayers:not([href]):not([tabindex]):hover {
-    background-image: none;
-  }
-
-  a.staticLayers::after {
-    display: none;
-  }
-
-  #wv-toolbar li {
-    display: block;
-    float: left;
-    margin: 1px;
-  }
-
-  #wv-toolbar #wv-image-button {
-    display: none;
-  }
-
-  .wv-toolbar-button {
-    font-size: 14.3px;
-    height: 44px;
-    margin: 0 0 0 4px;
-    padding: 5.72px 9.1px;
-  }
-
-  div.olControlScaleLineCustom {
-    bottom: 10px;
-  }
-
-  .olControlScaleLineCustomBottom {
-    display: none;
-  }
-
-  div.olControlMousePosition {
-    display: none;
-  }
-
-  div.olControlMousePosition,
-  div.olControlScaleLineCustom {
-    display: none !important;
-  }
-
-  .wv-coords-map {
-    display: none !important;
-  }
-
-  button#layers-add,
-  button#compare-toggle-button {
-    width: 100%;
-    position: relative;
-    left: 0;
-    height: 50px;
-    span {
-      font-size: 18px;
-    }
-  }
-
-  #selected-category .ui-tabs-panel {
-    clear: both;
-    margin-left: 0;
-    border-top: 2px solid #d54e21;
-    padding: 10px 0 0;
-  }
-
-  #selected-category .ui-tabs .ui-tabs-nav {
-    margin-bottom: 15px;
-  }
-
-  #categories-nav label {
-    font-size: 1em;
-    position: relative;
-    padding-top: 1px;
-  }
-
-  .button-label-scientific {
-    top: -2px;
-  }
-
-  #selected-category .ui-tabs-panel li.measurement-settings-item {
-    margin-left: 0;
   }
 }

@@ -40,11 +40,11 @@ To display a custom vector layer style & legend, a *vectorStyle* property should
 
 ## Creating Custom Vector Styles
 
-Vector layers created from the Global Imagery Browse Services (GIBS) will have a default style.json file associated with the layer defined in the GIBS WMTS GetCapabilities document. The vector style JSON file follows the [mapbox-gl-js style spec](https://docs.mapbox.com/mapbox-gl-js/style-spec/). The layey's default style will be extracted from the GetCapabilities document and assigned to it's associated layer on build.
+Vector layers created from the Global Imagery Browse Services (GIBS) will have a default style.json file associated with the layer defined in the GIBS WMTS GetCapabilities document. The vector style JSON file follows the [mapbox-gl-js style spec](https://docs.mapbox.com/mapbox-gl-js/style-spec/). The layer's default style will be extracted from the GetCapabilities document and assigned to it's associated layer on build.
 
 ## Vector Style Example
 
-The following is an example of a basic vector style. This vector layer is referenced in the "source-layer" and has line, point, and label features being styled. Each unique "source" defined within the vector style document will add a new style option to the layer settings panel and can be passed to the layer's style param in the URL. The legend in the layer settings panel will be rendered using the color identified in the style's paint settings (with circle taking presendence over line, polygon and label).
+The following is an example of a basic vector style. This vector layer is referenced in the "source-layer" and has line, point, and label features being styled. Each unique "source" defined within the vector style document will add a new style option to the layer settings panel and can be passed to the layer's style param in the URL. The legend in the layer settings panel will be rendered using the color identified in the style's paint settings (with circle taking precedence over line, polygon and label).
 
 For more information on how to configure a mapbox-gl-js style spec, please refer to the [documentation]((https://docs.mapbox.com/mapbox-gl-js/style-spec/)).
 
