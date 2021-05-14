@@ -112,7 +112,7 @@ Example:
   * **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see [`config/default/common/config/palettes-custom.json`](../../config/default/common/config/palettes-custom.json)). Example, *["orange_1", "red_1"]*
   * **immutable**(optional): When this flag is set to true, the options to adjust thresholds and colormaps are removed.
 * **availability**: Used to denote datetime availability info that cannot be gleaned from the capabilities document. Primarily for our geostationary layers which only have historical coverage going back ~30 days. Represented as an object with the following properties:
-  * **rollingWindow**: Number of days, counting backwards from app load time, that a layer has avilable coverage.  Setting this will cause a layer's `startDate` property to be dynamically set at app load time.
+  * **rollingWindow**: Number of days, counting backwards from app load time, that a layer has available coverage.  Setting this will cause a layer's `startDate` property to be dynamically set at app load time.
   * **historicalRanges**: An array of date range objects denoting specific time periods in the past when imagery is available. Each range object should have the following properties:
     * startDate - `YYYY-MM-DDTHH:MM:SSZ`
     * endDate - `YYYY-MM-DDTHH:MM:SSZ`

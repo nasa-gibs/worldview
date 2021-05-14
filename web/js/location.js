@@ -29,6 +29,7 @@ import {
 import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
+import { mapLocationToEmbedState } from './modules/embed/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
 import { areCoordinatesWithinExtent, mapLocationToLocationSearchState } from './modules/location-search/util';
 import mapLocationToSidebarState from './modules/sidebar/util';
@@ -99,6 +100,10 @@ export const mapLocationToState = (state, location) => {
       stateFromLocation,
       state,
       config,
+    );
+    stateFromLocation = mapLocationToEmbedState(
+      parameters,
+      stateFromLocation,
     );
 
     // one level deep merge of newState with defaultState
@@ -278,6 +283,14 @@ const getParameters = function(config, parameters) {
           const isDistractionFreeModeActive = get(state, 'ui.isDistractionFreeModeActive');
           return isDistractionFreeModeActive ? boo : undefined;
         },
+      },
+    },
+    em: {
+      stateKey: 'embed.isEmbedModeActive',
+      initialState: false,
+      type: 'bool',
+      options: {
+        parse: (str) => str === 'true',
       },
     },
     e: {

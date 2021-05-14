@@ -34,7 +34,7 @@ To build the app with an incomplete configuration, prefix the command like this:
 
 **`npm run watch`**: Builds and serves local Development mode Webpack bundle in watch mode using Webpack Dev Server (*Note: It is necessary to wait for the initial build to finish before being able to develop*). JS and CSS bundles are updated automatically when source files change. You must run `npm run build` or `npm run build:config` first to make a request to the GIBS `GetCapabilities` API and build the configuration files.
 **`npm run watch:debug:logger`**: This will activate `redux-logger` which logs the before and after state of each action.
-**`npm run watch:debug:devtools`**: This will activate `redux-devtools` which allows using a browser exetension to debug Redux state.
+**`npm run watch:debug:devtools`**: This will activate `redux-devtools` which allows using a browser extension to debug Redux state.
 
 ## Starting
 

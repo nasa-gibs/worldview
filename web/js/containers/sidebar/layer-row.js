@@ -52,6 +52,7 @@ function LayerRow (props) {
     renderedPalette,
     requestPalette,
     isCustomPalette,
+    isEmbedModeActive,
     isLoading,
     isMobile,
     zot,
@@ -296,6 +297,7 @@ function LayerRow (props) {
 
   return (
     <Draggable
+      isDragDisabled={isEmbedModeActive}
       draggableId={`${encodedLayerId}-${compareState}`}
       index={index}
       direction="vertical"
@@ -332,7 +334,7 @@ const mapStateToProps = (state, ownProps) => {
     compareState,
   } = ownProps;
   const {
-    palettes, config, map, compare, proj,
+    palettes, config, embed, map, compare, proj,
   } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
@@ -341,6 +343,7 @@ const mapStateToProps = (state, ownProps) => {
     ? getPaletteLegends(layer.id, compareState, state)
     : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
+  const { isEmbedModeActive } = embed;
   const selectedMap = lodashGet(map, 'ui.selected');
   const isVector = layer.type === 'vector';
   const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
@@ -355,6 +358,7 @@ const mapStateToProps = (state, ownProps) => {
     isVisible,
     paletteLegends,
     isCustomPalette,
+    isEmbedModeActive,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     isVectorLayer: isVector,
@@ -441,6 +445,7 @@ LayerRow.propTypes = {
   index: PropTypes.number,
   isCustomPalette: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isInProjection: PropTypes.bool,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
