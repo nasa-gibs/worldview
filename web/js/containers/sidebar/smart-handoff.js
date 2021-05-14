@@ -584,7 +584,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       openCustomContent('granule-help', {
         desktopOnly: true,
-        headerText: 'Granule Availablilty',
+        headerText: 'Granule Availability',
         bodyComponent: GranuleAlertModalBody,
         size: 'md',
       }),

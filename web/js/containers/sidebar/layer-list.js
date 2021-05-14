@@ -220,7 +220,7 @@ LayerList.propTypes = {
   zots: PropTypes.object,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const { proj, config, map } = state;
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)

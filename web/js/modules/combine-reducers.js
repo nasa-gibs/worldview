@@ -43,6 +43,7 @@ import {
 } from './product-picker/reducers';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
+import embedReducers from './embed/reducers';
 import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
 import { smartHandoffReducer } from './smart-handoff/reducer';
@@ -129,6 +130,7 @@ const reducers = {
   lastAction,
   location: locationReducer,
   measure: measureReducer,
+  embed: embedReducers,
   ui: uiReducers,
   productPicker: productPickerReducer,
 };
