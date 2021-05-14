@@ -8,11 +8,12 @@ import {
   Input,
   InputGroup,
   Button,
+  Nav, NavItem, NavLink,
+  TabContent, TabPane,
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
-import { encode, getSharelink } from '../modules/link/util';
-import { serializeDate } from '../modules/date/util';
+import { getPermalink, getShareLink } from '../modules/link/util';
 import getSelectedDate from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
@@ -35,6 +36,7 @@ class ShareLinkContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeTab: 'link',
       shortLinkKey: '',
       isShort: false,
       tooltipToggleTime: 0,
@@ -110,37 +112,15 @@ class ShareLinkContainer extends Component {
     copy(url, options);
   }
 
-  getPermalink = () => {
+  getPermalink = (isEmbed) => {
     const { queryString } = this.state;
     const { selectedDate } = this.props;
-    const url = window.location.href;
-    const prefix = url.split('?')[0];
-
-    // if no time query string parameter, add to permalink
-    const isTimeInQueryString = queryString.includes('t=');
-    let timeParam = '';
-    if (!isTimeInQueryString) {
-      const serialized = serializeDate(selectedDate);
-      const encoded = encode(serialized);
-      timeParam = `t=${encoded}`;
-    }
-
-    // add to permalink based on existing querystring
-    let permalink = prefix;
-    if (!queryString) {
-      permalink += `?${timeParam}`;
-    } else if (!isTimeInQueryString) {
-      permalink += `${queryString}&${timeParam}`;
-    } else {
-      permalink = url;
-    }
-
-    return permalink;
+    return getPermalink(queryString, selectedDate, isEmbed);
   }
 
   onLinkClick = (type) => {
     const permalink = this.getPermalink();
-    let shareLink = getSharelink(type, permalink);
+    let shareLink = getShareLink(type, permalink);
 
     googleTagManager.pushEvent({
       event: 'social_share_platform',
@@ -151,13 +131,13 @@ class ShareLinkContainer extends Component {
     if (type === 'twitter') {
       const newTab = window.open('', '_blank');
       this.getShortLink().then(({ link }) => {
-        shareLink = getSharelink(type, link);
+        shareLink = getShareLink(type, link);
       }).finally(() => {
         newTab.location = shareLink;
       });
     } else if (type === 'email') {
       this.getShortLink().then(({ link }) => {
-        shareLink = getSharelink(type, link);
+        shareLink = getShareLink(type, link);
       }).finally(() => {
         window.location = shareLink;
       });
@@ -166,13 +146,37 @@ class ShareLinkContainer extends Component {
     }
   }
 
-  render() {
+  setActiveTab = (activeTab) => {
+    this.setState({ activeTab });
+  }
+
+  renderNavTabs = () => {
+    const {
+      activeTab,
+    } = this.state;
+
+    return (
+      <Nav tabs>
+        <NavItem>
+          <NavLink onClick={() => this.setActiveTab('link')} active={activeTab === 'link'}>Link</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink onClick={() => this.setActiveTab('embed')} active={activeTab === 'embed'}>Embed</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink onClick={() => this.setActiveTab('social')} active={activeTab === 'social'}>Social</NavLink>
+        </NavItem>
+      </Nav>
+    );
+  }
+
+  renderLinkTab = () => {
     const { shortLink } = this.props;
     const {
+      activeTab,
       isShort,
-      tooltipErrorTime,
-      tooltipToggleTime,
     } = this.state;
+
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
       : isShort
@@ -182,43 +186,133 @@ class ShareLinkContainer extends Component {
         : this.getPermalink();
 
     return (
+      <TabPane tabId="link" className="share-tab-link">
+        {activeTab === 'link' && (
+          <>
+            <p>
+              Copy URL to share link.
+
+            </p>
+            {' '}
+            <Checkbox
+              label="Shorten link"
+              id="wv-link-shorten"
+              onCheck={this.onToggleShorten}
+              checked={isShort}
+              disabled={!shortLink.isLoading}
+            />
+            <InputGroup>
+              <Input
+                type="text"
+                value={value}
+                name="permalink_content"
+                id="permalink_content"
+                onChange={(e) => {
+                  e.preventDefault();
+                }}
+              />
+              <InputGroupAddon addonType="append">
+                <Button
+                  id="copy-to-clipboard-button"
+                  onClick={() => this.copyToClipboard(value)}
+                  onTouchEnd={() => this.copyToClipboard(value)}
+                >
+                  COPY
+                </Button>
+              </InputGroupAddon>
+            </InputGroup>
+          </>
+        )}
+      </TabPane>
+    );
+  }
+
+  renderEmbedTab = () => {
+    const {
+      activeTab,
+    } = this.state;
+
+    const embedValue = this.getPermalink(true);
+
+    return (
+      <TabPane tabId="embed" className="share-tab-embed">
+        {activeTab === 'embed' && (
+          <>
+            <p>
+              Embed Worldview in your website. See our
+              {' '}
+              <a className="share-embed-doc-link" href="https://github.com/nasa-gibs/worldview/blob/main/doc/embed.md" target="_blank" rel="noopener noreferrer">documentation</a>
+              {' '}
+              for a guide.
+            </p>
+            <InputGroup>
+              <Input
+                type="text"
+                value={embedValue}
+                name="permalink_content"
+                id="permalink_content"
+                onChange={(e) => {
+                  e.preventDefault();
+                }}
+              />
+              <InputGroupAddon addonType="append">
+                <Button
+                  id="copy-to-clipboard-button"
+                  onClick={() => this.copyToClipboard(embedValue)}
+                  onTouchEnd={() => this.copyToClipboard(embedValue)}
+                >
+                  COPY
+                </Button>
+              </InputGroupAddon>
+            </InputGroup>
+          </>
+        )}
+      </TabPane>
+    );
+  }
+
+  renderSocialTab = () => {
+    const {
+      activeTab,
+    } = this.state;
+
+    return (
+      <TabPane tabId="social" className="share-tab-social">
+        {activeTab === 'social' && (
+          <>
+            <p>
+              Share Worldview on social media.
+            </p>
+            <ShareLinks onClick={this.onLinkClick} />
+          </>
+        )}
+      </TabPane>
+    );
+  }
+
+  render() {
+    const {
+      activeTab,
+      tooltipErrorTime,
+      tooltipToggleTime,
+    } = this.state;
+
+    return (
       <>
-        <div>
+        <div className="share-body">
           <ShareToolTips
             tooltipErrorTime={tooltipErrorTime}
             tooltipToggleTime={tooltipToggleTime}
           />
-          <InputGroup>
-            <Input
-              type="text"
-              value={value}
-              name="permalink_content"
-              id="permalink_content"
-              onChange={(e) => {
-                e.preventDefault();
-              }}
-            />
-            <InputGroupAddon addonType="append">
-              <Button
-                id="copy-to-clipboard-button"
-                onClick={() => this.copyToClipboard(value)}
-                onTouchEnd={() => this.copyToClipboard(value)}
-              >
-                COPY
-              </Button>
-            </InputGroupAddon>
-          </InputGroup>
-          <br />
-          <Checkbox
-            label="Shorten link"
-            id="wv-link-shorten"
-            onCheck={this.onToggleShorten}
-            checked={isShort}
-            disabled={!shortLink.isLoading}
-          />
-          <br />
+          <div className="share-nav-container">
+            {this.renderNavTabs()}
+            <TabContent activeTab={activeTab}>
+              {this.renderLinkTab()}
+              {this.renderEmbedTab()}
+              {this.renderSocialTab()}
+            </TabContent>
+          </div>
         </div>
-        <ShareLinks onClick={this.onLinkClick} />
       </>
     );
   }
