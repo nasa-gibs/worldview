@@ -4,7 +4,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 101;
 }
 
@@ -19,7 +19,7 @@
   left: 50%;
   margin-top: -50px;
   margin-left: -110px;
-  background-color: rgba(40,40,40,.85);
+  background-color: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
   border: 3px solid;
   border-color: #fff;
