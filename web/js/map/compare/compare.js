@@ -46,10 +46,9 @@ export default function mapCompare(store) {
     });
   };
 
-  self.update = function (group) {
-    const state = store.getState();
+  self.update = (state, group) => {
     if (comparison) {
-      comparison.update(state.compare.isCompareA, group);
+      comparison.update(state, group);
     }
   };
 
@@ -62,13 +61,13 @@ export default function mapCompare(store) {
     const state = store.getState();
 
     if (compareMode === mode && comparison && proj === state.proj.selected && self.value === state.compare.value) {
-      comparison.update(state.compare.isCompareA);
+      comparison.update(state);
     } else if (comparison) {
       mode = compareMode;
       self.destroy();
       comparison = new self[compareMode](
         map,
-        state.compare.isCompareA,
+        state,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()
@@ -76,7 +75,7 @@ export default function mapCompare(store) {
       mode = compareMode;
       comparison = new self[compareMode](
         map,
-        state.compare.isCompareA,
+        state,
         self.EventTypeObject,
         state.compare.value || null,
       ); // e.g. new self.swipe()

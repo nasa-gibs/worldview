@@ -795,7 +795,7 @@ export default function mapui(models, config, store, ui) {
               previousLayer: layerValue ? layerValue.wv : null,
             }),
           );
-          compareMapUi.update(compare.activeString);
+          compareMapUi.update(state);
         }
       } else {
         const index = findLayerIndex(def);
