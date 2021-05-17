@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Cirrus Reflectance": {
+            "id": "cirrus-reflectance",
+            "title":    "Cirrus Reflectance",
+            "subtitle": "Suomi NPP/VIIRS",
+            "sources": {
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/CirrusReflectance",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR",
+                        "VIIRS_SNPP_Cirrus_Reflectance_SWIR_M11",
+                        "VIIRS_SNPP_Apparent_Reflectance_VNP02MOD_M09",
+                        "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                }
+            }
+        }
+    }
+}
