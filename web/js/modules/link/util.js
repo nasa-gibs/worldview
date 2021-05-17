@@ -107,3 +107,5 @@ export function getPermalink(queryString, selectedDate, isEmbed) {
 
   return permalink;
 }
+
+export function wrapWithIframe(value) { return `<iframe src="${value}" role="application" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" width="100%" height="100%" allow="fullscreen; autoplay;" loading="lazy"></iframe>`; }
