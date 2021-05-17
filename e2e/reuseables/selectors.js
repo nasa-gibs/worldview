@@ -162,8 +162,8 @@ module.exports = {
 
   // social
   socialToolbar: '#toolbar_share_link',
-  socialCopyLinkButton: '#wv-link-button',
-  socialLinkInput: '#permalink_content',
+  socialCopyLinkButton: '#wv-share-button',
+  socialLinkInput: '#permalink-content-link',
 
   // Location Search
   locationSearchComponent: '.location-search-component',

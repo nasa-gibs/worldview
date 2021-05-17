@@ -178,7 +178,7 @@ class toolbarContainer extends Component {
 
   renderShareButton() {
     const { faSize, openModal, isDistractionFreeModeActive } = this.props;
-    const buttonId = 'wv-link-button';
+    const buttonId = 'wv-share-button';
     const labelText = 'Share this map';
     return !isDistractionFreeModeActive && (
       <Button
