@@ -9,7 +9,6 @@ import { getOverlayGroups } from '../layers/util';
  *
  * @param {Object} parameters | parameters parsed from permalink
  * @param {Object} stateFromLocation | State derived from permalink parsers
- * @param {Object} state
  */
 // eslint-disable-next-line import/prefer-default-export
 export function mapLocationToEmbedState(

@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import copy from 'copy-to-clipboard';
 import {
+  startCase as lodashStartCase,
+} from 'lodash';
+import {
   InputGroupAddon,
   Input,
   InputGroup,
@@ -31,6 +34,8 @@ const getShortenRequestString = (mock, permalink) => {
       encodeURIComponent(permalink)}`
   );
 };
+
+const SOCIAL_SHARE_TABS = ['link', 'embed', 'social'];
 
 class ShareLinkContainer extends Component {
   constructor(props) {
@@ -77,10 +82,10 @@ class ShareLinkContainer extends Component {
   }
 
   getShortLink = () => {
-    const { requestShortLink, mock } = this.props;
+    const { requestShortLinkAction, mock } = this.props;
     const link = this.getPermalink();
     const location = getShortenRequestString(mock, link);
-    return requestShortLink(location);
+    return requestShortLinkAction(location);
   }
 
   onToggleShorten = () => {
@@ -157,18 +162,42 @@ class ShareLinkContainer extends Component {
 
     return (
       <Nav tabs>
-        <NavItem>
-          <NavLink onClick={() => this.setActiveTab('link')} active={activeTab === 'link'}>Link</NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink onClick={() => this.setActiveTab('embed')} active={activeTab === 'embed'}>Embed</NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink onClick={() => this.setActiveTab('social')} active={activeTab === 'social'}>Social</NavLink>
-        </NavItem>
+        {SOCIAL_SHARE_TABS.map((type) => (
+          <NavItem key={type}>
+            <NavLink
+              onClick={() => this.setActiveTab(type)}
+              active={activeTab === type}
+            >
+              {lodashStartCase(type)}
+            </NavLink>
+          </NavItem>
+        ))}
       </Nav>
     );
   }
+
+  renderInputGroup = (value, type) => (
+    <InputGroup>
+      <Input
+        type="text"
+        value={value}
+        name={`permalink-content-${type}`}
+        id={`permalink-content-${type}`}
+        onChange={(e) => {
+          e.preventDefault();
+        }}
+      />
+      <InputGroupAddon addonType="append">
+        <Button
+          id={`copy-to-clipboard-button-${type}`}
+          onClick={() => this.copyToClipboard(value)}
+          onTouchEnd={() => this.copyToClipboard(value)}
+        >
+          COPY
+        </Button>
+      </InputGroupAddon>
+    </InputGroup>
+  )
 
   renderLinkTab = () => {
     const { shortLink } = this.props;
@@ -176,7 +205,6 @@ class ShareLinkContainer extends Component {
       activeTab,
       isShort,
     } = this.state;
-
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
       : isShort
@@ -191,7 +219,6 @@ class ShareLinkContainer extends Component {
           <>
             <p>
               Copy URL to share link.
-
             </p>
             {' '}
             <Checkbox
@@ -201,26 +228,7 @@ class ShareLinkContainer extends Component {
               checked={isShort}
               disabled={!shortLink.isLoading}
             />
-            <InputGroup>
-              <Input
-                type="text"
-                value={value}
-                name="permalink_content"
-                id="permalink_content"
-                onChange={(e) => {
-                  e.preventDefault();
-                }}
-              />
-              <InputGroupAddon addonType="append">
-                <Button
-                  id="copy-to-clipboard-button"
-                  onClick={() => this.copyToClipboard(value)}
-                  onTouchEnd={() => this.copyToClipboard(value)}
-                >
-                  COPY
-                </Button>
-              </InputGroupAddon>
-            </InputGroup>
+            {this.renderInputGroup(value, 'link')}
           </>
         )}
       </TabPane>
@@ -231,7 +239,6 @@ class ShareLinkContainer extends Component {
     const {
       activeTab,
     } = this.state;
-
     const embedValue = this.getPermalink(true);
 
     return (
@@ -245,26 +252,7 @@ class ShareLinkContainer extends Component {
               {' '}
               for a guide.
             </p>
-            <InputGroup>
-              <Input
-                type="text"
-                value={embedValue}
-                name="permalink_content"
-                id="permalink_content"
-                onChange={(e) => {
-                  e.preventDefault();
-                }}
-              />
-              <InputGroupAddon addonType="append">
-                <Button
-                  id="copy-to-clipboard-button"
-                  onClick={() => this.copyToClipboard(embedValue)}
-                  onTouchEnd={() => this.copyToClipboard(embedValue)}
-                >
-                  COPY
-                </Button>
-              </InputGroupAddon>
-            </InputGroup>
+            {this.renderInputGroup(embedValue, 'embed')}
           </>
         )}
       </TabPane>
@@ -301,6 +289,7 @@ class ShareLinkContainer extends Component {
       <>
         <div className="share-body">
           <ShareToolTips
+            activeTab={activeTab}
             tooltipErrorTime={tooltipErrorTime}
             tooltipToggleTime={tooltipToggleTime}
           />
@@ -319,10 +308,10 @@ class ShareLinkContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { config } = state;
+  const { config, shortLink } = state;
 
   return {
-    shortLink: state.shortLink,
+    shortLink,
     selectedDate: getSelectedDate(state),
     mock:
       config.parameters && config.parameters.shorten
@@ -331,7 +320,7 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = (dispatch) => ({
-  requestShortLink: (location, options) => dispatch(
+  requestShortLinkAction: (location, options) => dispatch(
     requestShortLink(location, 'application/json', null, options),
   ),
 });
@@ -343,7 +332,7 @@ export default connect(
 
 ShareLinkContainer.propTypes = {
   mock: PropTypes.string,
-  requestShortLink: PropTypes.func,
+  requestShortLinkAction: PropTypes.func,
   selectedDate: PropTypes.object,
   shortLink: PropTypes.object,
 };
