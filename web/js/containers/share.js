@@ -16,7 +16,7 @@ import {
 } from 'reactstrap';
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
-import { getPermalink, getShareLink } from '../modules/link/util';
+import { getPermalink, getShareLink, wrapWithIframe } from '../modules/link/util';
 import getSelectedDate from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import { requestShortLink } from '../modules/link/actions';
@@ -240,6 +240,7 @@ class ShareLinkContainer extends Component {
       activeTab,
     } = this.state;
     const embedValue = this.getPermalink(true);
+    const embedIframeHTMLCode = wrapWithIframe(embedValue);
 
     return (
       <TabPane tabId="embed" className="share-tab-embed">
@@ -252,7 +253,7 @@ class ShareLinkContainer extends Component {
               {' '}
               for a guide.
             </p>
-            {this.renderInputGroup(embedValue, 'embed')}
+            {this.renderInputGroup(embedIframeHTMLCode, 'embed')}
           </>
         )}
       </TabPane>
