@@ -8,7 +8,6 @@
       "tags": "cloud mask",
       "group": "overlays",
       "layergroup": "Clear Sky Confidence",
-      "wrapadjacentdays": true,
       "tracks": [
         "OrbitTracks_NOAA-20_Descending"
       ],
