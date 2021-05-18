@@ -56,7 +56,7 @@ module.exports = {
     );
   },
   'Dragging B dragger updates date in label': function(client) {
-    client.useCss().assert.containsText(localSelectors.bTab, '2018-08-16');
+    client.useCss().assert.containsText(localSelectors.bTab, '2018 AUG 16');
     client
       .useCss()
       .moveToElement(draggerB, 20, 20)
@@ -65,7 +65,7 @@ module.exports = {
       .mouseButtonUp(0)
       .pause(2000);
     client.getText(localSelectors.bTab, function(result) {
-      this.assert.notEqual('B: 2018-08-16', result.value);
+      this.assert.notEqual('B: 2018 AUG 16', result.value);
     });
   },
   'Deactivate A|B is no longer active': function(client) {

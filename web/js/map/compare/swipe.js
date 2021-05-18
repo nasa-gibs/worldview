@@ -39,8 +39,8 @@ export default class Swipe {
   create(state) {
     const { date } = state;
     const { selected, selectedB } = date;
-    this.dateA = util.toISOStringDate(selected);
-    this.dateB = util.toISOStringDate(selectedB);
+    this.dateA = util.toISOStringDateMonthAbbrev(selected);
+    this.dateB = util.toISOStringDateMonthAbbrev(selectedB);
     line = addLineOverlay(this.map, this.dateA, this.dateB);
     this.update(state);
   }
@@ -66,8 +66,8 @@ export default class Swipe {
   update(state, groupName) {
     const { date } = state;
     const { selected, selectedB } = date;
-    const dateA = util.toISOStringDate(selected);
-    const dateB = util.toISOStringDate(selectedB);
+    const dateA = util.toISOStringDateMonthAbbrev(selected);
+    const dateB = util.toISOStringDateMonthAbbrev(selectedB);
     if (dateA !== this.dateA || dateB !== this.dateB) {
       this.destroy();
       this.create(state);

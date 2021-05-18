@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import util from '../../../util/util';
 
 /*
  * Coverage Line for DOM Element layer coverage.
@@ -24,11 +25,14 @@ class CoverageLine extends PureComponent {
     let dateRangeEnd;
     let toolTipText;
 
+    // util.toISOStringDateMonthAbbrev(new Date(startDate));
+    // util.toISOStringDateMonthAbbrev(new Date(endDate));
+
     // eslint-disable-next-line default-case
     switch (lineType) {
       case 'SINGLE':
-        dateRangeStart = (startDate && startDate.split('T')[0]) || 'start';
-        dateRangeEnd = (endDate && endDate.split('T')[0]) || 'present';
+        dateRangeStart = (startDate && util.toISOStringDateMonthAbbrev(new Date(startDate))) || 'Start';
+        dateRangeEnd = (endDate && util.toISOStringDateMonthAbbrev(new Date(endDate))) || 'Present';
         toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         break;
       case 'MULTI':
@@ -42,9 +46,12 @@ class CoverageLine extends PureComponent {
           dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
           dateRangeEnd = dateRangeEnd.replace(/[.:]/g, '_');
         } else {
-          dateRangeStart = startDate.replace(/[.:]/g, '_');
-          dateRangeEnd = endDate.replace(/[.:]/g, '_');
-          toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
+          // dateRangeStart = startDate.replace(/[.:]/g, '_');
+          // dateRangeEnd = endDate.replace(/[.:]/g, '_');
+          // toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
+          dateRangeStart = util.toISOStringDateMonthAbbrev(new Date(startDate));
+          dateRangeEnd = util.toISOStringDateMonthAbbrev(new Date(endDate));
+          toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         }
         break;
     }

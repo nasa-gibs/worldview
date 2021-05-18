@@ -155,15 +155,14 @@ module.exports = {
 
   // ui toolbar
   locationSearchToolbarButton: '#wv-location-search-button',
-  shareToolbarButton: '#wv-link-button',
+  shareToolbarButton: '#wv-share-button',
   projToolbarButton: '#wv-proj-button',
   snapshotToolbarButton: '#wv-image-button',
   infoToolbarButton: '#wv-info-button',
 
-  // social
-  socialToolbar: '#toolbar_share_link',
-  socialCopyLinkButton: '#wv-share-button',
-  socialLinkInput: '#permalink-content-link',
+  // share
+  shareToolbar: '#toolbar_share_link',
+  shareLinkInput: '#permalink-content-link',
 
   // Location Search
   locationSearchComponent: '.location-search-component',
