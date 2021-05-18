@@ -979,7 +979,7 @@ class Timeline extends React.Component {
     const isScreenWidthLessThan450 = screenWidth < 450;
 
     // default positioning
-    let mobileLeft = '180px';
+    let mobileLeft = '190px';
     let mobileBottom = '10px';
 
     // positioning will change depending on a combination of:
@@ -991,7 +991,7 @@ class Timeline extends React.Component {
         mobileLeft = isCompareModeActive ? '112px' : '10px';
         mobileBottom = '65px';
       } else {
-        mobileLeft = '277px';
+        mobileLeft = '287px';
       }
     } else if (isScreenWidthLessThan350) {
       mobileLeft = isCompareModeActive ? '112px' : '10px';
