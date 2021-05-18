@@ -112,8 +112,13 @@
 }
 
 /* override bootstrap styles */
-.tab-content .ab-tabs-case .nav-item .active {
-  color: #495057;
+.tab-content .ab-tabs-case .nav-item {
+  .active {
+    color: #495057;
+  }
+  .ab-tab {
+    padding-left: 5px;
+  }
 }
 .nav-item .sidebar-tab.active {
   background: #00457b;

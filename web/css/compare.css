@@ -9,12 +9,12 @@
   cursor: grab;
   user-select: none;
   & .show-date-label {
-    width: 98px;
+    width: 109px;
   }
   & .left-label {
     left: -23px;
     &.show-date-label {
-      left: -107px;
+      left: -118px;
     }
   }
   & .right-label {
