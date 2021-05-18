@@ -84,11 +84,13 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   const { compare, date } = state;
+  const dateStringA = util.toISOStringDateMonthAbbrev(date.selected);
+  const dateStringB = util.toISOStringDateMonthAbbrev(date.selectedB);
 
   return {
     isCompareA: compare.isCompareA,
-    dateStringA: util.toISOStringDate(date.selected),
-    dateStringB: util.toISOStringDate(date.selectedB),
+    dateStringA,
+    dateStringB,
     isActive: compare.active,
   };
 };

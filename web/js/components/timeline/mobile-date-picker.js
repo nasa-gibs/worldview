@@ -1,11 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-mobile-datepicker';
-
-import { getISODateFormatted } from './date-util';
+import { getDisplayDate, getISODateFormatted } from './date-util';
 
 // https://www.npmjs.com/package/react-mobile-datepicker
 // configs for date order, caption, and date step
+const monthMap = {
+  1: 'Jan',
+  2: 'Feb',
+  3: 'Mar',
+  4: 'Apr',
+  5: 'May',
+  6: 'Jun',
+  7: 'Jul',
+  8: 'Aug',
+  9: 'Sep',
+  10: 'Oct',
+  11: 'Nov',
+  12: 'Dec',
+};
+
 const defaultDateConfig = {
   year: {
     format: 'YYYY',
@@ -13,8 +27,8 @@ const defaultDateConfig = {
     step: 1,
   },
   month: {
-    format: 'MM',
-    caption: 'Month',
+    format: (value) => monthMap[value.getMonth() + 1],
+    caption: 'Mon',
     step: 1,
   },
   date: {
@@ -31,7 +45,7 @@ const subDailyDateConfig = {
     step: 1,
   },
   month: {
-    format: 'MM',
+    format: (value) => monthMap[value.getMonth() + 1],
     caption: 'Mon',
     step: 1,
   },
@@ -82,16 +96,26 @@ class MobileDatePicker extends Component {
   }
 
   handleCancel = () => {
+    const {
+      date,
+    } = this.props;
     this.setState({
       isOpen: false,
+      time: this.convertToUTCDateObject(date),
+    });
+  }
+
+  handleChange = (date) => {
+    this.setState({
+      time: date,
     });
   }
 
   handleSelect = (time) => {
     const { onDateChange } = this.props;
     this.setState({
-      time,
       isOpen: false,
+      time,
     });
     // convert date back to local time
     const date = this.convertToLocalDateObject(time);
@@ -125,6 +149,12 @@ class MobileDatePicker extends Component {
     return dateLocal;
   }
 
+  getHeaderTime = (time, isSubdaily) => (
+    <div className="datepicker-header">
+      {getDisplayDate(new Date(this.convertToLocalDateObject(time)), isSubdaily)}
+    </div>
+  )
+
   render() {
     const {
       time,
@@ -136,35 +166,34 @@ class MobileDatePicker extends Component {
       date,
       hasSubdailyLayers,
     } = this.props;
-    // display date as '2000-10-28' for default or '2000-10-28 20:28Z' for subdaily
-    const displayDate = hasSubdailyLayers ? `${date.split('T').join(' ').split(':', 2).join(':')}Z` : date.split('T')[0];
+    const displayDate = getDisplayDate(date, hasSubdailyLayers);
+
     return (
-      time
-        ? (
-          <>
-            <div
-              className="mobile-date-picker-select-btn"
-              onClick={this.handleClickDateButton}
-            >
-              {displayDate}
-            </div>
-            <DatePicker
-              dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
-              showCaption
-              theme="android-dark"
-              headerFormat={hasSubdailyLayers ? 'YYYY-MM-DD hh:mmZ' : 'YYYY-MM-DD'}
-              confirmText="OK"
-              cancelText="CANCEL"
-              min={minDate}
-              max={maxDate}
-              value={time}
-              isOpen={isOpen}
-              onSelect={this.handleSelect}
-              onCancel={this.handleCancel}
-            />
-          </>
-        )
-        : null
+      time && (
+        <>
+          <div
+            className="mobile-date-picker-select-btn"
+            onClick={this.handleClickDateButton}
+          >
+            {displayDate}
+          </div>
+          <DatePicker
+            dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
+            showCaption
+            theme="android-dark"
+            customHeader={this.getHeaderTime(time, hasSubdailyLayers)}
+            confirmText="OK"
+            cancelText="CANCEL"
+            min={minDate}
+            max={maxDate}
+            value={time}
+            isOpen={isOpen}
+            onCancel={this.handleCancel}
+            onChange={this.handleChange}
+            onSelect={this.handleSelect}
+          />
+        </>
+      )
     );
   }
 }
