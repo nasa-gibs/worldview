@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getDaysInYear } from '../../date-util';
-import util from '../../../../util/util';
+import { getDaysInYear, getDisplayDate } from '../../date-util';
 
 /*
  * Date tooltip for hover and draggers
@@ -62,18 +61,11 @@ class DateTooltip extends Component {
 
   /**
   * @param {String} time
-  * @returns {String} formatted YYYY-MM-DD -OR- YYYY-MM-DD hh:mmZ (subdaily)
+  * @returns {String} formatted YYYY MMM DD  OR  YYYY MMM DD hh:mmZ (subdaily)
   */
   getTooltipTime = (time) => {
     const { hasSubdailyLayers } = this.props;
-    const date = new Date(time);
-
-    // if subdaily, return YYYY-MM-DD hh:mmZ / 2020-02-15 18:00Z
-    if (hasSubdailyLayers) {
-      return util.toISOStringMinutes(date).replace('T', ' ');
-    }
-    // if no subdaily, return YYYY-MM-DD / 2020-02-15
-    return util.toISOStringDate(date);
+    return getDisplayDate(new Date(time), hasSubdailyLayers);
   };
 
   /**
@@ -97,14 +89,14 @@ class DateTooltip extends Component {
     let tooltipHeightOffset;
 
     if (showTooltip || showDraggerTooltip) {
-      tooltipLeftOffset = selectedDraggerPosition - (hasSubdailyLayers ? 85 : 52);
+      tooltipLeftOffset = selectedDraggerPosition - (hasSubdailyLayers ? 97 : 60);
       display = selectedDraggerPosition > -49 && selectedDraggerPosition < axisWidth - 49
         ? 'block'
         : 'none';
     } else if (showHoverTooltip) {
       tooltipLeftOffset = hasSubdailyLayers
-        ? leftOffset - 134
-        : leftOffset - 101;
+        ? leftOffset - 146
+        : leftOffset - 109;
       display = 'block';
     }
 
@@ -122,8 +114,8 @@ class DateTooltip extends Component {
     }
 
     const width = hasSubdailyLayers
-      ? 274
-      : 200;
+      ? 286
+      : 212;
 
     return {
       transform: `translate(${tooltipLeftOffset}px, ${tooltipHeightOffset}px)`,
@@ -135,7 +127,6 @@ class DateTooltip extends Component {
   render() {
     const { showTooltip } = this.state;
     const {
-      hasSubdailyLayers,
       hoverTime,
       selectedDate,
       showDraggerTime,
@@ -150,11 +141,11 @@ class DateTooltip extends Component {
 
     if (showTooltip || showDraggerTooltip) {
       // handle dragger tooltip
-      tooltipDate = this.getTooltipTime(selectedDate, hasSubdailyLayers);
+      tooltipDate = this.getTooltipTime(selectedDate);
       dayOfYear = getDaysInYear(selectedDate);
     } else if (showHoverTooltip) {
       // handle hover tooltip
-      tooltipDate = this.getTooltipTime(hoverTime, hasSubdailyLayers);
+      tooltipDate = this.getTooltipTime(hoverTime);
       dayOfYear = getDaysInYear(hoverTime);
     }
 

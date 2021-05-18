@@ -311,6 +311,25 @@ export default (function(self) {
   };
 
   /**
+   * Converts a date into an ISO string with only the date portion and month abbreviation.
+   *
+   * @method toISOStringDateMonthAbbrev
+   * @static
+   * @param date {Date} the date to convert
+   * @return {string} ISO string in the form of ``YYYY-MMM-DD``.
+   */
+  self.toISOStringDateMonthAbbrev = function(date) {
+    const stringDate = self.toISOStringDate(date).split('-');
+    const year = stringDate[0];
+    const month = stringDate[1];
+    const day = stringDate[2];
+
+    const monthAbbrev = self.monthStringArray[Number(month) - 1];
+
+    return `${year} ${monthAbbrev} ${day}`;
+  };
+
+  /**
    * Converts a time into an ISO string without milliseconds.
    *
    * @method toISOStringSeconds
