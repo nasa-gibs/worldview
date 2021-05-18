@@ -172,14 +172,7 @@ class CoverageItemList extends Component {
     } = layer;
     let dateRangeStart;
     if (startDate) {
-      const yearMonthDaySplit = startDate.split('T')[0].split('-');
-      const year = yearMonthDaySplit[0];
-      const month = yearMonthDaySplit[1];
-      const day = yearMonthDaySplit[2];
-
-      const monthAbbrev = util.monthStringArray[Number(month) - 1];
-
-      dateRangeStart = `${year} ${monthAbbrev} ${day}`;
+      dateRangeStart = util.toISOStringDateMonthAbbrev(new Date(startDate));
     } else {
       dateRangeStart = 'Start';
     }
@@ -187,14 +180,7 @@ class CoverageItemList extends Component {
     // get end date -or- 'present'
     let dateRangeEnd;
     if (endDate) {
-      const yearMonthDaySplit = endDate.split('T')[0].split('-');
-      const year = yearMonthDaySplit[0];
-      const month = yearMonthDaySplit[1];
-      const day = yearMonthDaySplit[2];
-
-      const monthAbbrev = util.monthStringArray[Number(month) - 1];
-
-      dateRangeEnd = `${year} ${monthAbbrev} ${day}`;
+      dateRangeEnd = util.toISOStringDateMonthAbbrev(new Date(endDate));
     } else {
       dateRangeEnd = 'Present';
     }

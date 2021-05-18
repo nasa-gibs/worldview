@@ -132,14 +132,14 @@ module.exports = {
   'Date tooltip date present load': (c) => {
     c.url(`${c.globals.url}?t=2019-02-22`);
     c.waitForElementVisible('.date-tooltip', TIME_LIMIT)
-      .assert.containsText('.date-tooltip', '2019-02-22 (DOY 053)');
+      .assert.containsText('.date-tooltip', '2019 FEB 22 (DOY 053)');
   },
 
   // date subdaily tooltip date present on load
   'Date subdaily tooltip date present load': (c) => {
     c.url(c.globals.url + localQueryStrings.subdailyLayerIntervalTimescale);
     c.waitForElementVisible('.date-tooltip', TIME_LIMIT)
-      .assert.containsText('.date-tooltip', '2019-10-04 09:46Z (DOY 277)');
+      .assert.containsText('.date-tooltip', '2019 OCT 04 09:46Z (DOY 277)');
   },
 
   after: (c) => {
