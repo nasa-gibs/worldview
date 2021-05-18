@@ -127,6 +127,13 @@ class AnimationWidget extends React.Component {
     this.onExpandedDrag = this.onExpandedDrag.bind(this);
   }
 
+  componentDidMount() {
+    const { isEmbedModeActive } = this.props;
+    if (isEmbedModeActive) {
+      this.setState({ collapsed: true });
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { userHasMovedWidget } = this.state;
     const {
@@ -642,6 +649,7 @@ function mapStateToProps(state) {
     compare,
     animation,
     date,
+    embed,
     sidebar,
     modal,
     palettes,
@@ -683,6 +691,7 @@ function mapStateToProps(state) {
   }
 
   const { isDistractionFreeModeActive } = ui;
+  const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
     && browser.greaterThan.small
     && lodashGet(map, 'ui.selected.frameState_')
@@ -739,6 +748,7 @@ function mapStateToProps(state) {
     promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
     isGifActive: gifActive,
     isCompareActive: compare.active,
+    isEmbedModeActive,
     isRotated: Boolean(rotation !== 0),
     rotation,
     hasGraticule: Boolean(
@@ -858,6 +868,7 @@ AnimationWidget.propTypes = {
   interval: PropTypes.string,
   isActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
