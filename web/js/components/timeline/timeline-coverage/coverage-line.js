@@ -25,9 +25,6 @@ class CoverageLine extends PureComponent {
     let dateRangeEnd;
     let toolTipText;
 
-    // util.toISOStringDateMonthAbbrev(new Date(startDate));
-    // util.toISOStringDateMonthAbbrev(new Date(endDate));
-
     // eslint-disable-next-line default-case
     switch (lineType) {
       case 'SINGLE':
@@ -46,9 +43,6 @@ class CoverageLine extends PureComponent {
           dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
           dateRangeEnd = dateRangeEnd.replace(/[.:]/g, '_');
         } else {
-          // dateRangeStart = startDate.replace(/[.:]/g, '_');
-          // dateRangeEnd = endDate.replace(/[.:]/g, '_');
-          // toolTipText = `${dateRangeStart.split('T')[0]} to ${dateRangeEnd.split('T')[0]}`;
           dateRangeStart = util.toISOStringDateMonthAbbrev(new Date(startDate));
           dateRangeEnd = util.toISOStringDateMonthAbbrev(new Date(endDate));
           toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
