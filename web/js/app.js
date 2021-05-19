@@ -86,7 +86,7 @@ import '../css/orbitTracks.css';
 import '../css/facets.css';
 import '../css/recent-layers.css';
 import '../css/location-search.css';
-import '../css/embedded.css';
+import '../css/embed.css';
 
 require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
@@ -173,7 +173,7 @@ class App extends React.Component {
       modalId,
       parameters,
     } = this.props;
-    const appClass = `wv-content ${isEmbedModeActive ? 'embedded-mode' : ''}`;
+    const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
     return (
       <div className={appClass} id="wv-content" data-role="content">
         {!isMobile && !isEmbedModeActive && <LocationSearch />}

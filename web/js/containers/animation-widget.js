@@ -693,7 +693,7 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
-    && browser.greaterThan.small
+    && (browser.greaterThan.small || isEmbedModeActive)
     && lodashGet(map, 'ui.selected.frameState_')
     && sidebar.activeTab !== 'download' // No Animation when data download is active
     && !compare.active
