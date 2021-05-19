@@ -1,5 +1,23 @@
 @media only screen and (max-width: 768px) {
-  #wv-content:not(.embedded-mode) {
+  div.olControlScaleLineCustom {
+    bottom: 10px;
+  }
+  .olControlScaleLineCustomBottom {
+    display: none;
+  }
+  div.olControlMousePosition {
+    display: none;
+  }
+  div.olControlMousePosition,
+  div.olControlScaleLineCustom {
+    display: none !important;
+  }
+  .wv-coords-map {
+    display: none !important;
+  }
+
+  /* EMBED MODE */
+  #wv-content:not(.embed-mode) {
     #wv-sidebar {
       position: static;
     }
@@ -96,27 +114,6 @@
       height: 44px;
       margin: 0 0 0 4px;
       padding: 5.72px 9.1px;
-    }
-
-    div.olControlScaleLineCustom {
-      bottom: 10px;
-    }
-
-    .olControlScaleLineCustomBottom {
-      display: none;
-    }
-
-    div.olControlMousePosition {
-      display: none;
-    }
-
-    div.olControlMousePosition,
-    div.olControlScaleLineCustom {
-      display: none !important;
-    }
-
-    .wv-coords-map {
-      display: none !important;
     }
 
     button#layers-add,
