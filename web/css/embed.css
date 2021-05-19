@@ -61,6 +61,9 @@
       display: none;
     }
     .item.productsitem {
+      & .layer-info {
+        cursor: default;
+      }
       & .layer-main {
         margin-left: 0;
       }
