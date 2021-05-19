@@ -117,6 +117,9 @@
     color: #495057;
   }
   .ab-tab {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 141px;
     padding-left: 5px;
   }
 }
