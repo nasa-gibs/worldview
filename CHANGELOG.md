@@ -1,14 +1,59 @@
 # Changelog
 
+## [v3.10.1](https://github.com/nasa-gibs/worldview/tree/v3.10.1) (2021-05-19)
+
+[Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.10.0...v3.10.1)
+
+## Implemented Enhancements:
+
+- Switch to GitHub Actions for CI/CD [\#2689](https://github.com/nasa-gibs/worldview/issues/2689)
+
+## Technical Updates / Bugfixes:
+
+- `npm run build:options` fails if system python is not python3 [\#3496](https://github.com/nasa-gibs/worldview/issues/3496)
+- Distraction free keyboard shortcut doesn't work when animation panel is open [\#3491](https://github.com/nasa-gibs/worldview/issues/3491)
+- Fix EONET error message styling [\#3484](https://github.com/nasa-gibs/worldview/issues/3484)
+
+## Layer Changes:
+
+- Add/modify layers refs/heads/add-cirrus-layers [\#3513](https://github.com/nasa-gibs/worldview/pull/3513)
+
+## Merged PRs:
+
+- Fix active layers update condition, move conditional style [\#3507](https://github.com/nasa-gibs/worldview/pull/3507)
+- Location search compare fix and limit fly to coordinate on input search [\#3503](https://github.com/nasa-gibs/worldview/pull/3503)
+
 ## [v3.10.0](https://github.com/nasa-gibs/worldview/tree/v3.10.0) (2021-05-05)
 
 [Full Changelog](https://github.com/nasa-gibs/worldview/compare/v3.10.0-rc.2...v3.10.0)
 
+## Implemented Enhancements:
+
+- Add VIIRS SNPP DNB At Sensor M15 [\#3490](https://github.com/nasa-gibs/worldview/issues/3490)
+- Consider moving animation widget up so you can see date tooltip [\#3482](https://github.com/nasa-gibs/worldview/issues/3482)
+- Hide notifications in distraction free mode [\#3462](https://github.com/nasa-gibs/worldview/issues/3462)
+- Remove timeline from distraction free mode [\#3430](https://github.com/nasa-gibs/worldview/issues/3430)
+- Migrate natural events map code to React [\#3420](https://github.com/nasa-gibs/worldview/issues/3420)
+- Make Day of Year \(DOY\) indicator more prominent [\#3419](https://github.com/nasa-gibs/worldview/issues/3419)
+- Allow a joyride tour to open and point to elements in the Layer Picker [\#3407](https://github.com/nasa-gibs/worldview/issues/3407)
+- Add distraction-free mode query string option [\#3391](https://github.com/nasa-gibs/worldview/issues/3391)
+- Show estimated total granule download size for Smart Handoffs [\#3376](https://github.com/nasa-gibs/worldview/issues/3376)
+- Smart-handoffs permalink support [\#3233](https://github.com/nasa-gibs/worldview/issues/3233)
+- Create a template for PRs tagged with the "layer" label [\#3218](https://github.com/nasa-gibs/worldview/issues/3218)
+- Allow comparison mode to work on mobile [\#3188](https://github.com/nasa-gibs/worldview/issues/3188)
+
 ## Technical Updates / Bugfixes:
 
 - iPad styling issues with various responsive UI elements [\#3477](https://github.com/nasa-gibs/worldview/issues/3477)
+- Coordinates container changing width [\#3488](https://github.com/nasa-gibs/worldview/issues/3488)
+- Handle missing collection data from CMR gracefully [\#3487](https://github.com/nasa-gibs/worldview/issues/3487)
+- Location search iPad styling position off [\#3476](https://github.com/nasa-gibs/worldview/issues/3476)
+- Location search zooming in too far on select [\#3474](https://github.com/nasa-gibs/worldview/issues/3474)
 - events.trackupdate.2: Date updates but event marker doesn't move to new date [\#3472](https://github.com/nasa-gibs/worldview/issues/3472)
 - events.notfocus.3: When switching from Arctic back to Geo, previously selected Geo event is no longer selected [\#3471](https://github.com/nasa-gibs/worldview/issues/3471)
+- Permalink with distraction free and event included won't load \(iPad\) [\#3469](https://github.com/nasa-gibs/worldview/issues/3469)
+- Natural events icons are not visible in mobile when loading a url with an event selected [\#3429](https://github.com/nasa-gibs/worldview/issues/3429)
+- Map location not updating on tour step change [\#3418](https://github.com/nasa-gibs/worldview/issues/3418)
 
 ## Layer Changes:
 
@@ -22,6 +67,8 @@
 ## Closed Issues:
 
 - Can't replicate events.notfocus and events.trackupdate as those events no longer exist [\#3468](https://github.com/nasa-gibs/worldview/issues/3468)
+- Update any code/documentation references of `master` to `main` [\#3422](https://github.com/nasa-gibs/worldview/issues/3422)
+- Intro to Worldview Tour Story [\#3402](https://github.com/nasa-gibs/worldview/issues/3402)
 
 ## Merged PRs:
 
@@ -2174,6 +2221,7 @@
 - Fix broken date selector in comparison mode [\#1745](https://github.com/nasa-gibs/worldview/pull/1745)
 - Fix link errors [\#1744](https://github.com/nasa-gibs/worldview/pull/1744)
 - Added AMSRU2 SWE descriptions [\#1740](https://github.com/nasa-gibs/worldview/pull/1740)
+- Add amsru swe [\#1730](https://github.com/nasa-gibs/worldview/pull/1730)
 
 ## [v2.16.1](https://github.com/nasa-gibs/worldview/tree/v2.16.1) (2019-05-29)
 
@@ -2195,7 +2243,6 @@
 ## Merged PRs:
 
 - v2.16.0 [\#1732](https://github.com/nasa-gibs/worldview/pull/1732)
-- Add amsru swe [\#1730](https://github.com/nasa-gibs/worldview/pull/1730)
 - Tour Story for May - sunglint [\#1728](https://github.com/nasa-gibs/worldview/pull/1728)
 - Add se layers categories [\#1722](https://github.com/nasa-gibs/worldview/pull/1722)
 - Update rm ceres layers [\#1719](https://github.com/nasa-gibs/worldview/pull/1719)
