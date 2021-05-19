@@ -75,6 +75,7 @@ function EventsFilter (props) {
         value={dateRange}
         minDate={new Date('01-01-1975')}
         maxDate={new Date()}
+        disableCalendar
         required
       />
 

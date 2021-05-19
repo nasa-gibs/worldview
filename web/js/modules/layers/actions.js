@@ -48,13 +48,10 @@ export function initSecondLayerGroup() {
   };
 }
 
-export function activateLayersForEventCategory(activeLayers) {
+export function activateLayersForEventCategory(category) {
   return (dispatch, getState) => {
     const state = getState();
-    const newLayers = activateLayersForEventCategorySelector(
-      activeLayers,
-      state,
-    );
+    const newLayers = activateLayersForEventCategorySelector(state, category);
     const overlayGroups = getOverlayGroups(newLayers);
     overlayGroups.forEach((group) => { group.collapsed = true; });
     dispatch({
