@@ -3,7 +3,7 @@
   bottom: 88px;
   z-index: 100;
   &.minimized {
-    bottom: 80px;
+    bottom: 120px;
     left: 10px;
   }
 }
