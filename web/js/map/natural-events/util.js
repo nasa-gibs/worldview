@@ -10,7 +10,7 @@ import util from '../../util/util';
 export function getEventsRequestURL (baseUrl, startDate, endDate, categories = []) {
   const params = {
     status: 'all',
-    limit: 50,
+    limit: 100,
   };
   if (startDate && endDate) {
     params.start = moment.utc(startDate).format('YYYY-MM-DD');

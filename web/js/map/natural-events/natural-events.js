@@ -86,7 +86,7 @@ class NaturalEvents extends React.Component {
   selectEvent(id, date, isInitialLoad) {
     const { prevSelectedEvent } = this.state;
     const {
-      mapUi, selectDate, selectEventFinished, eventsData,
+      mapUi, selectDate, selectEventFinished, eventsData, activateLayersForEventCategory,
     } = this.props;
 
     const isIdChange = !prevSelectedEvent || prevSelectedEvent.id !== id;
@@ -120,7 +120,7 @@ class NaturalEvents extends React.Component {
         selectDate(util.parseDateUTC(date));
       }
       if (isIdChange && !isSameCategory && !isInitialLoad) {
-        this.activateLayersForCategory(event.categories[0].title);
+        activateLayersForEventCategory(event.categories[0].title);
       }
       // hack to update layers
       if (isIdChange) {
@@ -154,16 +154,6 @@ class NaturalEvents extends React.Component {
     return mapUi.animate.fly(coordinates, zoom, null);
   };
 
-  /**
-   * Add the relevant layers for event based on projection and category
-   * @param {*} category
-   */
-  activateLayersForCategory(category = 'Default') {
-    const { config, proj, activateLayersForEventCategory } = this.props;
-    const { layers } = config.naturalEvents;
-    activateLayersForEventCategory(layers[proj.id][category]);
-  }
-
   render() {
     const { eventsData } = this.props;
     return !eventsData ? null : (
@@ -177,13 +167,12 @@ class NaturalEvents extends React.Component {
 
 const mapStateToProps = (state) => {
   const {
-    events, config, map, proj, requestedEvents,
+    events, map, proj, requestedEvents,
   } = state;
   const selectedMap = map.ui.selected;
   return {
     map: selectedMap,
     mapUi: map.ui,
-    config,
     proj,
     eventsDataIsLoading: requestedEvents.isLoading,
     eventsData: requestedEvents.response,
@@ -192,8 +181,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  activateLayersForEventCategory: (layers) => {
-    dispatch(activateLayersForEventCategoryAction(layers));
+  activateLayersForEventCategory: (category = 'Default') => {
+    dispatch(activateLayersForEventCategoryAction(category));
   },
   selectDate: (date) => {
     dispatch(selectDateAction(date));
@@ -205,7 +194,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 NaturalEvents.propTypes = {
   activateLayersForEventCategory: PropTypes.func,
-  config: PropTypes.object,
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
   selectedEvent: PropTypes.object,
