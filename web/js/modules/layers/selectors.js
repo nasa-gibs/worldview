@@ -487,21 +487,27 @@ export function isRenderable(id, layers, date, state) {
   return !obscured;
 }
 
-export function activateLayersForEventCategory(activeLayers, state) {
+export function activateLayersForEventCategory(state, category) {
+  const projection = state.proj.id;
+  const { layers } = state.config.naturalEvents;
   const { layerConfig } = state.layers;
+  const categoryLayers = layers[projection][category];
+
   // Turn off all layers in list first
   let newLayers = getActiveLayers(state);
-  lodashEach(newLayers, (layer, index) => {
+  newLayers.forEach((layer, index) => {
     newLayers = update(newLayers, {
       [index]: { visible: { $set: false } },
     });
   });
   if (state.embed.isEmbedModeActive) {
-    activeLayers = activeLayers.filter((layer) => layer[1]);
+    newLayers = categoryLayers.filter((layer) => layer[1]);
   }
   // Turn on or add new layers
-  lodashEach(activeLayers, (layer) => {
+  categoryLayers.forEach((layer) => {
     const [id, visible] = layer;
+    // const isAvailable = available(state, id);
+    // console.log(isAvailable);
     const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
       newLayers = update(newLayers, {
