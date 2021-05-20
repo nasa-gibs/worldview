@@ -16,6 +16,7 @@ import googleTagManager from 'googleTagManager';
 import EventIcon from '../../components/sidebar/event-icon';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from './util';
+import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
 
 const icons = [
   'Dust and Haze',
@@ -255,15 +256,9 @@ const createBoundingBox = function(coordinates) {
 
 const mapStateToProps = (state) => {
   const {
-    embed, map, proj, events, requestedEvents, sidebar, date,
+    map, proj, events, requestedEvents, sidebar, date,
   } = state;
 
-  const { isEmbedModeActive } = embed;
-  const selectedEvent = events.selected;
-  let eventsData = requestedEvents.response;
-  if (isEmbedModeActive && requestedEvents.response && selectedEvent) {
-    eventsData = eventsData.filter((event) => event.id === selectedEvent.id);
-  }
   return {
     activeTab: sidebar.activeTab,
     map: map.ui.selected,
@@ -271,7 +266,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
-    eventsData,
+    eventsData: getEventsFilteredCategories(state),
     eventsDataIsLoading: requestedEvents.isLoading,
   };
 };

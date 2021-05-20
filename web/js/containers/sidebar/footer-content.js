@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { get as lodashGet } from 'lodash';
 import { connect } from 'react-redux';
 import Button from '../../components/util/button';
 import Checkbox from '../../components/util/checkbox';
@@ -141,15 +140,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 function mapStateToProps(state) {
   const {
-    animation, requestedEvents, config, compare, browser,
+    animation, config, compare, browser,
   } = state;
   const { showAll } = state.events;
-  const events = lodashGet(requestedEvents, 'response');
   const { isPlaying } = animation;
 
   return {
     showAll,
-    events,
     isMobile: browser.lessThan.medium,
     isPlaying,
     compareFeature: config.features.compare,

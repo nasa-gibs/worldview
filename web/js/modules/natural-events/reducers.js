@@ -63,8 +63,10 @@ export const eventsReducerState = {
   isAnimatingToEvent: false,
   allCategories: [],
   selectedCategories: [],
-  selectedStartDate: startDate,
-  selectedEndDate: endDate,
+  selectedDates: {
+    start: startDate,
+    end: endDate,
+  },
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -87,13 +89,14 @@ export function eventsReducer(state = eventsReducerState, action) {
         ...state,
         selected: eventsReducerState.selected,
       };
-
     case SET_EVENTS_FILTER:
       return {
         ...state,
         selectedCategories: action.categories,
-        selectedStartDate: action.startDate,
-        selectedEndDate: action.endDate,
+        selectedDates: {
+          start: action.startDate,
+          end: action.endDate,
+        },
       };
     case SHOW_ALL_EVENTS:
       return {

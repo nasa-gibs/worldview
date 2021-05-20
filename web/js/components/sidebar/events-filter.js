@@ -19,12 +19,12 @@ function EventsFilter (props) {
     closeModal,
   } = props;
 
-  const [dateRange, setDateRange] = useState([
-    new Date(selectedStartDate),
-    new Date(selectedEndDate),
-  ]);
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
   const [categories, setCategories] = useState(selectedCategories);
+
+  const parsedStartDate = selectedStartDate && new Date(selectedStartDate);
+  const parsedEndDate = selectedEndDate && new Date(selectedEndDate);
+  const [dateRange, setDateRange] = useState([parsedStartDate, parsedEndDate]);
   const [startDate, endDate] = dateRange || [];
 
   const toggleCategory = (category) => {
@@ -39,8 +39,8 @@ function EventsFilter (props) {
   };
 
   const applyFilter = () => {
-    const start = util.toISOStringDate(startDate);
-    const end = util.toISOStringDate(endDate);
+    const start = startDate && util.toISOStringDate(startDate);
+    const end = endDate && util.toISOStringDate(endDate);
     setFilter(categories, start, end);
     closeModal();
   };
@@ -54,12 +54,12 @@ function EventsFilter (props) {
     setAllNone(!allNone);
   };
 
+  const disableApply = !categories.length || (!startDate && endDate) || (!endDate && startDate);
 
-  const disableApply = !startDate || !endDate || !categories.length;
   const getDisableApplyMsg = () => {
     let msg = '';
     if (!startDate || !endDate) {
-      msg += 'Date range must be set.';
+      msg += 'Must have both start and end date (or neither).';
     }
     if (!categories.length) {
       msg += ' At least one category must be selected';
@@ -73,10 +73,9 @@ function EventsFilter (props) {
       <DateRangePicker
         onChange={setDateRange}
         value={dateRange}
-        minDate={new Date('01-01-1975')}
+        minDate={new Date('01-01-2000')}
         maxDate={new Date()}
         disableCalendar
-        required
       />
 
       <div className="category-toggles">
@@ -134,13 +133,13 @@ EventsFilter.propTypes = {
 const mapStateToProps = (state) => {
   const { events } = state;
   const {
-    selectedCategories, selectedStartDate, selectedEndDate, allCategories,
+    selectedCategories, selectedDates, allCategories,
   } = events;
   return {
     eventCategories: allCategories,
     selectedCategories,
-    selectedStartDate,
-    selectedEndDate,
+    selectedStartDate: selectedDates.start,
+    selectedEndDate: selectedDates.end,
   };
 };
 
