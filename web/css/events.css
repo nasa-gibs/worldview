@@ -398,7 +398,11 @@
   }
 }
 
+
 .events-filter {
+  & .react-daterange-picker__inputGroup__input:invalid {
+    background: rgba(255, 0, 0, 0.3);
+  }
   & .react-daterange-picker {
     margin: 4px auto;
     width: 272px;

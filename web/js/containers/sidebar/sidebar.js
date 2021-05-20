@@ -20,6 +20,7 @@ import {
   requestSources as requestSourcesActionCreator,
 } from '../../modules/natural-events/actions';
 import { getAllActiveLayers } from '../../modules/layers/selectors';
+import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
@@ -304,7 +305,8 @@ const mapStateToProps = (state) => {
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
     || requestedEventSources.error);
-  const eventsData = lodashGet(requestedEvents, 'response');
+
+  const eventsData = getEventsFilteredCategories(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
   const { screenHeight } = browser;
   const { isDistractionFreeModeActive } = ui;
@@ -331,8 +333,8 @@ const mapStateToProps = (state) => {
     isDistractionFreeModeActive,
     isLoadingEvents,
     isMobile,
-    selectedStartDate: events.selectedStartDate,
-    selectedEndDate: events.selectedEndDate,
+    selectedStartDate: events.selectedDates.start,
+    selectedEndDate: events.selectedDates.end,
     selectedCategories: events.selectedCategories,
     screenHeight,
     tabTypes,
