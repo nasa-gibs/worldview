@@ -10,6 +10,7 @@ import { selected as selectedAction } from '../../modules/natural-events/actions
 import {
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
 } from '../../modules/layers/actions';
+import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
 
 import EventTrack from './event-track';
 import EventMarkers from './event-markers';
@@ -175,7 +176,7 @@ const mapStateToProps = (state) => {
     mapUi: map.ui,
     proj,
     eventsDataIsLoading: requestedEvents.isLoading,
-    eventsData: requestedEvents.response,
+    eventsData: getEventsFilteredCategories(state),
     selectedEvent: events.selected,
   };
 };

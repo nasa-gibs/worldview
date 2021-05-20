@@ -38,6 +38,7 @@ function Events(props) {
     isMobile,
     showAlert,
     selectedDate,
+    showDates,
     selectedStartDate,
     selectedEndDate,
     selectedCategories,
@@ -60,7 +61,7 @@ function Events(props) {
 
         <div className="filter-dates-icons">
           <div className="filter-dates">
-            {`${selectedStartDate} - ${selectedEndDate}`}
+            {showDates && `${selectedStartDate} - ${selectedEndDate}`}
           </div>
 
           <div className="filter-icons">
@@ -171,7 +172,7 @@ const mapStateToProps = (state, ownProps) => {
   } = state;
   const { eventsData } = ownProps;
   const {
-    selected, showAll, selectedStartDate, selectedEndDate, selectedCategories,
+    selected, showAll, selectedDates, selectedCategories,
   } = events;
   let visibleEvents = {};
   const mapExtent = lodashGet(state, 'map.extent');
@@ -204,8 +205,9 @@ const mapStateToProps = (state, ownProps) => {
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
     selectedCategories,
-    selectedStartDate,
-    selectedEndDate,
+    showDates: !!(selectedDates.start && selectedDates.end),
+    selectedStartDate: selectedDates.start,
+    selectedEndDate: selectedDates.end,
     selectedDate: util.toISOStringDate(getSelectedDate(state)),
   };
 };
@@ -224,6 +226,7 @@ Events.propTypes = {
   openFilterModal: PropTypes.func,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
+  showDates: PropTypes.bool,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
   selectedCategories: PropTypes.array,

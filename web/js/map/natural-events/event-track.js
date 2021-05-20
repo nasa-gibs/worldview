@@ -24,6 +24,7 @@ import {
 } from './cluster';
 import { mapUtilZoomAction } from '../util';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
+import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
 
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
@@ -645,7 +646,7 @@ function addOverlayIfIsVisible(map, overlay) {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, date,
+    map, proj, events, date,
   } = state;
   const { isAnimatingToEvent } = events;
   return {
@@ -653,7 +654,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedDate: date.selected,
     selectedEvent: events.selected,
-    eventsData: requestedEvents.response,
+    eventsData: getEventsFilteredCategories(state),
     isAnimatingToEvent,
   };
 };

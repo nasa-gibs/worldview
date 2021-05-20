@@ -16,6 +16,7 @@ import googleTagManager from 'googleTagManager';
 import EventIcon from '../../components/sidebar/event-icon';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from './util';
+import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
 
 const icons = [
   'Dust and Haze',
@@ -264,7 +265,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
-    eventsData: requestedEvents.response,
+    eventsData: getEventsFilteredCategories(state),
     eventsDataIsLoading: requestedEvents.isLoading,
   };
 };
