@@ -15,7 +15,12 @@ import {
 } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
 import {
-  parseEvent, serializeEvent, serializeCategories, mapLocationToEventFilterState,
+  parseEvent,
+  serializeEvent,
+  serializeCategories,
+  mapLocationToEventFilterState,
+  serializeEventFilterDates,
+  parseEventFilterDates,
 } from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
 import {
@@ -309,22 +314,13 @@ const getParameters = function(config, parameters) {
         serialize: serializeEvent,
       },
     },
-    efsd: {
-      stateKey: 'events.selectedStartDate',
+    efd: {
+      stateKey: 'events.selectedDates',
       type: 'string',
-      initialState: eventsReducerState.selectedStartDate,
+      initialState: eventsReducerState.selectedDates,
       options: {
-        parse: (date) => date,
-        serialize: (date) => date,
-      },
-    },
-    efed: {
-      stateKey: 'events.selectedEndDate',
-      type: 'string',
-      initialState: eventsReducerState.selectedEndDate,
-      options: {
-        parse: (date) => date,
-        serialize: (date) => date,
+        parse: parseEventFilterDates,
+        serialize: serializeEventFilterDates,
       },
     },
     efc: {
