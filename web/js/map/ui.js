@@ -762,8 +762,8 @@ export default function mapui(models, config, store, ui) {
    */
   const updateDate = self.updateDate = function() {
     const state = store.getState();
-    const { compare } = state;
-    const activeLayers = getAllActiveLayers(state);
+    const { embed, compare } = state;
+    let activeLayers = getAllActiveLayers(state);
     let layerGroups;
     let layerGroup;
     if (compare && compare.active) {
@@ -775,6 +775,9 @@ export default function mapui(models, config, store, ui) {
             ? layerGroups[1]
             : null;
       }
+    }
+    if (embed.isEmbedModeActive) {
+      activeLayers = activeLayers.filter((layer) => layer.visible);
     }
     lodashEach(activeLayers, (def) => {
       const layerName = def.layer || def.id;

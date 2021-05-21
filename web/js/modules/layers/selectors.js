@@ -12,6 +12,10 @@ import { createSelector } from 'reselect';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
+import {
+  getActiveOverlayGroupsEmbed,
+  getActiveLayersEmbed,
+} from '../embed/util';
 import getSelectedDate from '../date/selectors';
 
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
@@ -30,7 +34,10 @@ export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeS
  * regardless of projection
  */
 export const getActiveLayers = (state, activeString) => {
-  const { compare, layers } = state;
+  const { embed, compare, layers } = state;
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveLayersEmbed(state, activeString);
+  }
   return layers[activeString || compare.activeString].layers;
 };
 
@@ -39,8 +46,13 @@ export const getActiveLayers = (state, activeString) => {
  * that are available for the currently active projection
  */
 export const getActiveOverlayGroups = (state) => {
-  const { compare, layers, proj } = state;
+  const {
+    embed, compare, layers, proj,
+  } = state;
   const { overlayGroups } = layers[compare.activeString];
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveOverlayGroupsEmbed(state);
+  }
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
@@ -441,6 +453,9 @@ export function activateLayersForEventCategory(activeLayers, state) {
       [index]: { visible: { $set: false } },
     });
   });
+  if (state.embed.isEmbedModeActive) {
+    activeLayers = activeLayers.filter((layer) => layer[1]);
+  }
   // Turn on or add new layers
   lodashEach(activeLayers, (layer) => {
     const [id, visible] = layer;
@@ -450,12 +465,13 @@ export function activateLayersForEventCategory(activeLayers, state) {
         [index]: { visible: { $set: visible } },
       });
     } else {
+      const overlays = getLayers(state, { group: 'overlays' }, newLayers);
       newLayers = addLayer(
         id,
         { visible },
         newLayers,
         layerConfig,
-        getLayers(state, { group: 'overlays' }, newLayers).length,
+        overlays.length,
       );
     }
   });
