@@ -316,17 +316,22 @@ const getParameters = function(config, parameters) {
     },
     efd: {
       stateKey: 'events.selectedDates',
-      type: 'string',
-      initialState: eventsReducerState.selectedDates,
+      type: 'object',
+      initialState: {
+        start: undefined,
+        end: undefined,
+      },
       options: {
         parse: parseEventFilterDates,
         serialize: serializeEventFilterDates,
+        serializeNeedsGlobalState: true,
+        setAsEmptyItem: true,
       },
     },
     efc: {
       stateKey: 'events.selectedCategories',
       type: 'array',
-      initialState: [],
+      initialState: eventsReducerState.selectedCategories,
       options: {
         serialize: serializeCategories,
         serializeNeedsGlobalState: true,
