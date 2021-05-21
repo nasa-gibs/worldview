@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 import {
   Button,
+  UncontrolledTooltip,
 } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,6 +23,7 @@ import getSelectedDate from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../../components/util/alert';
 import util from '../../util/util';
+import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
 function Events(props) {
   const {
@@ -54,6 +56,7 @@ function Events(props) {
     : hasRequestError
       ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
+  const eventLimitReach = eventsData && eventsData.length === LIMIT_EVENT_REQUEST_COUNT;
 
   return (
     <div className="event-container">
@@ -87,6 +90,24 @@ function Events(props) {
         >
           <FontAwesomeIcon icon="filter" />
         </Button>
+        {eventLimitReach && (
+        <div className="event-count">
+          Showing first
+          {` ${eventsData ? eventsData.length : ''} `}
+          events
+          <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
+          <UncontrolledTooltip
+            placement="top"
+            target="filter-info-icon"
+          >
+            More than
+            {' '}
+            {LIMIT_EVENT_REQUEST_COUNT}
+            {' '}
+            events matched the current filter criteria.
+          </UncontrolledTooltip>
+        </div>
+        )}
       </div>
 
       <Scrollbars
@@ -197,7 +218,6 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    eventsData,
     showAll,
     selected,
     visibleWithinMapExtent,

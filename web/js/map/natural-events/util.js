@@ -6,11 +6,12 @@ import * as olProj from 'ol/proj';
 import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
 import moment from 'moment';
 import util from '../../util/util';
+import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
 export function getEventsRequestURL (baseUrl, startDate, endDate, categories = []) {
   const params = {
     status: 'all',
-    limit: 100,
+    limit: LIMIT_EVENT_REQUEST_COUNT,
   };
   if (startDate && endDate) {
     params.start = moment.utc(startDate).format('YYYY-MM-DD');
