@@ -37,10 +37,13 @@ export function parseEventFilterDates(eventFilterDatesString) {
   };
 }
 
-export function serializeEventFilterDates(currentItemState) {
+export function serializeEventFilterDates(currentItemState, state) {
   const selectedStartDate = get(currentItemState, 'start');
   const selectedEndDate = get(currentItemState, 'end');
-  return selectedStartDate && selectedEndDate && `${selectedStartDate},${selectedEndDate}`;
+  const eventsTabActive = state.events.active;
+  return eventsTabActive && selectedStartDate && selectedEndDate
+    ? `${selectedStartDate},${selectedEndDate}`
+    : undefined;
 }
 
 export function serializeCategories(categories, state) {
@@ -50,15 +53,25 @@ export function serializeCategories(categories, state) {
 
 export function mapLocationToEventFilterState(parameters, stateFromLocation, state) {
   const allCategories = state.config.naturalEvents.categories;
+  const { selected, selectedDates } = stateFromLocation.events;
   const selectedIds = parameters.efc
     ? parameters.efc.split(',')
     : allCategories.map(({ id }) => id);
   const selectedCategories = !allCategories.length
     ? []
     : selectedIds.map((id) => allCategories.find((c) => c.id === id));
-  const [selectedStartDate, selectedEndDate] = parameters.efd
+
+  let [selectedStartDate, selectedEndDate] = parameters.efd
     ? parameters.efd.split(',')
-    : [undefined, undefined];
+    : [selectedDates.start, selectedDates.end];
+
+  const eventIsSelected = selected.id && selected.date;
+  const filterDatesAreSet = selectedStartDate && selectedEndDate;
+  if (eventIsSelected && !filterDatesAreSet) {
+    selectedStartDate = selected.date;
+    selectedEndDate = selected.date;
+  }
+
   return update(stateFromLocation, {
     events: {
       selectedCategories: {
