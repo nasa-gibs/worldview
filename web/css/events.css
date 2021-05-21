@@ -396,6 +396,15 @@
     display: inline-block;
     vertical-align: top;
   }
+  & .event-count {
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    width: 224px;
+    & svg {
+      margin-left: 6px;
+    }
+  }
 }
 
 
