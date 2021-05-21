@@ -367,11 +367,9 @@ function mapStateToProps(state) {
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
   const activeLayers = getAllActiveLayers(state);
-  let numberOfLayers;
+  let numberOfLayers = activeLayers.length;
   if (isEmbedModeActive) {
-    numberOfLayers = activeLayers.filter((layer) => layer.layergroup !== 'Reference').length;
-  } else {
-    numberOfLayers = activeLayers.length;
+    numberOfLayers = activeLayers.filter((layer) => layer.visible && layer.layergroup !== 'Reference').length;
   }
   const tabTypes = getActiveTabs(config);
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
