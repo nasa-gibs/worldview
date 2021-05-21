@@ -44,12 +44,28 @@
   #wv-toolbar {
     display: none;
   }
-
   #productsHolder {
     width: 125px !important;
-    height: calc(var(--vh, 1vh) * 100 - 220px);
+    height: 80vh;
   }
-
+  #layers-scroll-container {
+    min-height: 50px;
+  }
+  .event-container {
+    min-height: 25vh;
+  }
+  .layer-group-case .layer-group-header {
+    margin-top: 0;
+    &.layer-group-title {
+      font-size: 12px;
+    }
+  }
+  .layer-group-baselayers {
+    margin-top: 0;
+  }
+  .sidebar-panel li.item h4 {
+    font-size: 12px;
+  }
   #wv-sidebar {
     #download-sidebar-tab {
       display: none;
