@@ -50,6 +50,7 @@ function LayerList(props) {
     toggleVisibility,
     toggleCollapse,
     isMobile,
+    numVisible,
   } = props;
   const { dragHandleProps = {} } = props;
   const groupLayerIds = layers.map(({ id }) => id);
@@ -157,7 +158,7 @@ function LayerList(props) {
     >
       <h3 className="layer-group-title">
         {title}
-        {collapsed ? ` (${layersInProj.length})` : ''}
+        {collapsed ? ` (${numVisible}/${layersInProj.length})` : ''}
       </h3>
       <div className="layer-group-icons">
         {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
@@ -211,6 +212,7 @@ LayerList.propTypes = {
   isMobile: PropTypes.bool,
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
+  numVisible: PropTypes.number,
   projId: PropTypes.string,
   reorderLayers: PropTypes.func,
   removeLayers: PropTypes.func,
@@ -225,6 +227,10 @@ const mapStateToProps = (state, ownProps) => {
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)
     : {};
+  let numVisible = 0;
+  ownProps.layers.forEach((layer) => {
+    if (layer.visible) numVisible += 1;
+  });
   return {
     zots,
     isMobile: state.browser.lessThan.medium,
@@ -232,6 +238,7 @@ const mapStateToProps = (state, ownProps) => {
     projId: proj.id,
     getNames: (layerId) => getTitles(config, layerId, proj.id),
     available: (layerId) => availableSelector(state)(layerId),
+    numVisible,
   };
 };
 
