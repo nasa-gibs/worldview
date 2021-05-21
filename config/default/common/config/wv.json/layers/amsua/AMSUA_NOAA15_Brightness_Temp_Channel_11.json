@@ -8,7 +8,8 @@
       "group": "overlays",
       "layergroup": "Brightness Temperature",
       "product": "amsua15sp",
-      "tags": ""
+      "tags": "",
+      "inactive": true
     }
   }
 }
