@@ -50,6 +50,7 @@ function LayerList(props) {
     toggleVisibility,
     toggleCollapse,
     isMobile,
+    numVisible,
   } = props;
   const { dragHandleProps = {} } = props;
   const groupLayerIds = layers.map(({ id }) => id);
@@ -157,7 +158,7 @@ function LayerList(props) {
     >
       <h3 className="layer-group-title">
         {title}
-        {collapsed ? ` (${layersInProj.length})` : ''}
+        {collapsed ? ` (${numVisible}/${layersInProj.length})` : ''}
       </h3>
       <div className="layer-group-icons">
         {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
@@ -212,6 +213,7 @@ LayerList.propTypes = {
   isEmbedModeActive: PropTypes.bool,
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
+  numVisible: PropTypes.number,
   projId: PropTypes.string,
   reorderLayers: PropTypes.func,
   removeLayers: PropTypes.func,
@@ -221,7 +223,7 @@ LayerList.propTypes = {
   zots: PropTypes.object,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const {
     embed, proj, config, map,
   } = state;
@@ -233,6 +235,10 @@ const mapStateToProps = (state) => {
   if (isEmbedModeActive) {
     activeLayers = activeLayers.filter((layer) => layer.layergroup !== 'Reference');
   }
+  let numVisible = 0;
+  ownProps.layers.forEach((layer) => {
+    if (layer.visible) numVisible += 1;
+  });
   return {
     zots,
     isEmbedModeActive,
@@ -241,6 +247,7 @@ const mapStateToProps = (state) => {
     projId: proj.id,
     getNames: (layerId) => getTitles(config, layerId, proj.id),
     available: (layerId) => availableSelector(state)(layerId),
+    numVisible,
   };
 };
 
