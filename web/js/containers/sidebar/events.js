@@ -37,6 +37,7 @@ function Events(props) {
     deselectEvent,
     hasRequestError,
     isMobile,
+    isEmbedModeActive,
     showAlert,
     selectedDate,
   } = props;
@@ -45,7 +46,7 @@ function Events(props) {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   const dropdownHeight = 34;
-  const scrollbarMaxHeight = height - dropdownHeight;
+  const scrollbarMaxHeight = isEmbedModeActive ? '55vh' : `${height - dropdownHeight}px`;
   let showInactiveEventAlert = selected.id && !selected.date;
 
   const errorOrLoadingText = isLoading
@@ -92,7 +93,7 @@ function Events(props) {
       </Dropdown>
 
       <Scrollbars
-        style={{ maxHeight: `${scrollbarMaxHeight}px` }}
+        style={{ maxHeight: `${scrollbarMaxHeight}` }}
       >
         <div id="wv-events">
           {(isLoading || hasRequestError) && (
@@ -110,7 +111,7 @@ function Events(props) {
                     showAlert={showAlert}
                     key={event.id}
                     event={event}
-                    selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+                    selectEvent={(id, date) => selectEvent(id, date, isMobile && !isEmbedModeActive)}
                     deselectEvent={deselectEvent}
                     isSelected={selected.id === event.id && visibleEvents[event.id]}
                     selectedDate={selectedDate}
@@ -139,9 +140,9 @@ function Events(props) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  selectEvent: (id, dateStr, isMobile) => {
+  selectEvent: (id, dateStr, shouldCollapse) => {
     dispatch(selectEventActionCreator(id, dateStr));
-    if (isMobile) {
+    if (shouldCollapse) {
       dispatch(collapseSidebar());
     }
     if (dateStr) {
@@ -162,6 +163,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state, ownProps) => {
   const {
     animation,
+    embed,
     proj,
     browser,
     events,
@@ -174,6 +176,7 @@ const mapStateToProps = (state, ownProps) => {
   const mapExtent = lodashGet(state, 'map.extent');
   let visibleWithinMapExtent = {};
 
+  const { isEmbedModeActive } = embed;
   if (eventsData && mapExtent) {
     visibleWithinMapExtent = getEventsWithinExtent(
       eventsData,
@@ -200,6 +203,7 @@ const mapStateToProps = (state, ownProps) => {
     visibleEvents,
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
+    isEmbedModeActive,
     isAnimatingToEvent: events.isAnimatingToEvent,
     selectedDate: util.toISOStringDate(getSelectedDate(state)),
     selectedCategory: category,
@@ -218,6 +222,7 @@ Events.propTypes = {
   height: PropTypes.number,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   selected: PropTypes.object,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,

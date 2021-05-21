@@ -209,6 +209,7 @@ LayerList.propTypes = {
   getNames: PropTypes.func,
   groupId: PropTypes.string,
   isMobile: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
   projId: PropTypes.string,
@@ -221,14 +222,22 @@ LayerList.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { proj, config, map } = state;
+  const {
+    embed, proj, config, map,
+  } = state;
+  const { isEmbedModeActive } = embed;
   const zots = lodashGet(map, 'ui.selected')
     ? getZotsForActiveLayers(state)
     : {};
+  let activeLayers = getActiveLayers(state);
+  if (isEmbedModeActive) {
+    activeLayers = activeLayers.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
+  }
   return {
     zots,
+    isEmbedModeActive,
     isMobile: state.browser.lessThan.medium,
-    activeLayers: getActiveLayers(state),
+    activeLayers,
     projId: proj.id,
     getNames: (layerId) => getTitles(config, layerId, proj.id),
     available: (layerId) => availableSelector(state)(layerId),

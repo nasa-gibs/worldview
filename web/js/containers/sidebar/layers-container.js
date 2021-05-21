@@ -7,6 +7,7 @@ import LayerList from './layer-list';
 import {
   getAllActiveOverlaysBaselayers, getActiveOverlayGroups, getActiveLayersMap,
 } from '../../modules/layers/selectors';
+import { getFilteredOverlayGroups } from '../../modules/embed/util';
 import {
   reorderOverlayGroups as reorderOverlayGroupsAction,
   toggleOverlayGroups as toggleOverlayGroupsAction,
@@ -107,20 +108,21 @@ function LayersContainer (props) {
   );
 
   const mobileHeightCoeff = isCompareActive ? -30 : 20;
+  const minHeight = '100px';
   let maxHeight = isMobile
     ? height + mobileHeightCoeff
     : height;
 
   if (isEmbedModeActive) {
-    maxHeight = 'calc(var(--vh, 1vh) * 100 - 320px)';
+    maxHeight = '55vh';
   } else {
     maxHeight += 'px';
   }
   const scrollContainerStyles = {
+    minHeight,
     maxHeight,
     overflowY: 'auto',
     paddingBottom: '4px',
-    minHeight: '100px',
   };
   const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
   const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
@@ -178,11 +180,14 @@ const mapStateToProps = (state, ownProps) => {
   const { isEmbedModeActive } = embed;
   const isMobile = browser.lessThan.medium;
   const { groupOverlays } = layers[compareState];
-  // eslint-disable-next-line prefer-const
+  const activeLayersMap = getActiveLayersMap(state);
   let { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
-  const overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
+  let overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
   if (isEmbedModeActive) {
-    overlays = overlays.filter((layer) => layer.layergroup !== 'Reference');
+    // remove hidden layers and reference layers overlay group
+    baselayers = baselayers.filter((layer) => layer.visible);
+    overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
+    overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
   }
 
   return {
@@ -193,7 +198,7 @@ const mapStateToProps = (state, ownProps) => {
     overlays,
     overlayGroups,
     groupOverlays,
-    activeLayersMap: getActiveLayersMap(state),
+    activeLayersMap,
   };
 };
 
