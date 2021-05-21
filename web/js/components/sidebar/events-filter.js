@@ -54,7 +54,7 @@ function EventsFilter (props) {
     setAllNone(!allNone);
   };
 
-  const disableApply = !categories.length || (!startDate && endDate) || (!endDate && startDate);
+  const disableApply = !categories.length || !!(!startDate && endDate) || !!(!endDate && startDate);
 
   const getDisableApplyMsg = () => {
     let msg = '';
