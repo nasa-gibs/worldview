@@ -135,32 +135,6 @@
                         true
                     ]
                 ],
-                "Temperature Extremes": [
-                    [
-                        "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ]
-                ],
                 "Sea and Lake Ice": [
                     [
                         "Reference_Features_15m",
@@ -408,32 +382,6 @@
                         "Reference_Labels_15m",
                         true
                     ]
-                ],
-                "Default": [
-                    [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ],
-                    [
-                        "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ]
                 ]
             },
             "geographic": {
@@ -516,40 +464,6 @@
                     ],
                     [
                         "Reference_Labels_15m",
-                        true
-                    ]
-                ],
-                "Temperature Extremes": [
-                    [
-                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ],
-                    [
-                        "MODIS_Aqua_Land_Surface_Temp_Day",
-                        false
-                    ],
-                    [
-                        "MODIS_Terra_Land_Surface_Temp_Day",
                         true
                     ]
                 ],
@@ -679,10 +593,6 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
                         "MODIS_Aqua_CorrectedReflectance_TrueColor",
                         false
                     ],
@@ -692,7 +602,11 @@
                     ],
                     [
                         "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        false
+                        true
+                    ],
+                    [
+                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        true
                     ],
                     [
                         "IMERG_Precipitation_Rate",
@@ -709,14 +623,6 @@
                         true
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
-                        false
-                    ],
-                    [
                         "MODIS_Aqua_CorrectedReflectance_TrueColor",
                         false
                     ],
@@ -730,10 +636,18 @@
                     ],
                     [
                         "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        false
+                        true
                     ],
                     [
                         "MODIS_Terra_CorrectedReflectance_Bands367",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        true
+                    ],
+                    [
+                        "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
                         false
                     ],
                     [
@@ -746,32 +660,6 @@
                     ],
                     [
                         "IMERG_Precipitation_Rate",
-                        false
-                    ]
-                ],
-                "Floods": [
-                    [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ],
-                    [
-                        "MODIS_Aqua_CorrectedReflectance_Bands721",
-                        false
-                    ],
-                    [
-                        "MODIS_Terra_CorrectedReflectance_Bands721",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1",
                         false
                     ]
                 ],
@@ -842,54 +730,8 @@
                     ]
                 ],
                 "Manmade": [
-                    ["MODIS_Aqua_CorrectedReflectance_Bands721", false],
-                    ["MODIS_Aqua_CorrectedReflectance_TrueColor", true],
-                    ["MODIS_Aqua_SurfaceReflectance_Bands121", false],
-                    ["MODIS_Terra_CorrectedReflectance_Bands721", false],
-                    ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-                    ["MODIS_Terra_SurfaceReflectance_Bands121", false],
-                    ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true]
-                ],
-                "Dust and Haze": [
-                    ["AIRS_L2_Dust_Score_Day", true],
-                    ["AIRS_L2_Dust_Score_Night", true],
-                    ["AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day", false],
-                    ["AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day", false],
-	                ["AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Day", false],
-                    ["AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Night", false],
-                    ["AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night", false],
-	                ["AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night", false],
-                    ["MOPITT_CO_Daily_Total_Column_L2", false],
-                    ["OMI_Nitrogen_Dioxide_Tropo_Column", false],
-                    ["MODIS_Aqua_Aerosol", false],
-                    ["MODIS_Terra_Aerosol", false],
-                    ["MODIS_Combined_Value_Added_AOD", false],
-
-                    ["MODIS_Aqua_CorrectedReflectance_TrueColor", true],
-                    ["MODIS_Aqua_SurfaceReflectance_Bands721", false],
-                    ["MODIS_Terra_CorrectedReflectance_Bands367", false],
-                    ["MODIS_Terra_CorrectedReflectance_Bands721", false],
-                    ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
-                    ["MODIS_Terra_SurfaceReflectance_Bands721", false],
-                    ["VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1", false],
-                    ["VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11", false],
-                    ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true]
-                ],
-                "Default": [
                     [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ],
-                    [
-                        "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+                        "MODIS_Aqua_CorrectedReflectance_Bands721",
                         false
                     ],
                     [
@@ -897,8 +739,90 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "MODIS_Aqua_SurfaceReflectance_Bands121",
                         false
+                    ],
+                    [
+                        "MODIS_Terra_CorrectedReflectance_Bands721",
+                        false
+                    ],
+                    [
+                        "MODIS_Terra_CorrectedReflectance_TrueColor",
+                        true
+                    ],
+                    [
+                        "MODIS_Terra_SurfaceReflectance_Bands121",
+                        false
+                    ],
+                    [
+                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        true
+                    ]
+                ],
+                "Dust and Haze": [
+                    [
+                        "AIRS_L2_Dust_Score_Day",
+                        true
+                    ],
+                    [
+                        "AIRS_L2_Dust_Score_Night",
+                        false
+                    ],
+                    [
+                        "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
+                        false
+                    ],
+                    [
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day",
+                        false
+                    ],
+                    [
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Day",
+                        false
+                    ],
+                    [
+                        "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Night",
+                        false
+                    ],
+                    [
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night",
+                        false
+                    ],
+                    [
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night",
+                        false
+                    ],
+                    [
+                        "MOPITT_CO_Daily_Total_Column_L2",
+                        false
+                    ],
+                    [
+                        "OMI_Nitrogen_Dioxide_Tropo_Column",
+                        false
+                    ],
+                    [
+                        "MODIS_Aqua_Aerosol",
+                        false
+                    ],
+                    [
+                        "MODIS_Terra_Aerosol",
+                        false
+                    ],
+                    [
+                        "MODIS_Combined_Value_Added_AOD",
+                        false
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "MODIS_Terra_CorrectedReflectance_TrueColor",
+                        true
+                    ],
+                    [
+                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        true
                     ]
                 ]
             },
@@ -1062,36 +986,6 @@
                     ],
                     [
                         "MODIS_Terra_NDSI_Snow_Cover",
-                        false
-                    ]
-                ],
-                "Default": [
-                    [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ],
-                    [
-                        "Coastlines_15m",
-                        true
-                    ],
-                    [
-                        "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
                         false
                     ]
                 ]
