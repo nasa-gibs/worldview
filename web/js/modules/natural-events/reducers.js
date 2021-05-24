@@ -40,7 +40,7 @@ const sortEvents = function(events) {
 };
 
 const endDate = util.toISOStringDate(new Date());
-const startDate = util.toISOStringDate(new Date(new Date().setDate(new Date().getDate() - 60)));
+const startDate = util.toISOStringDate(new Date(new Date().setDate(new Date().getDate() - 120)));
 
 export function getInitialEventsState(config) {
   const { categories } = config.naturalEvents;
