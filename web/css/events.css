@@ -420,10 +420,12 @@
       color: #fff;
       font-family: 'Roboto Mono', monospace;
       font-size: 16px;
-      margin: 0;
     }
     & span {
       font-size: 16px;
+    }
+    .react-date-picker__inputGroup__divider {
+      margin-right: 2px;
     }
     & svg {
       stroke: #fff;
