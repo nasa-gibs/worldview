@@ -6,7 +6,7 @@ CGI files. Next, enable these features in your configuration file.
 
 ## Layer Preview Images
 
-By default during the build process we try to fetch images of layers from our Snapshots application to show as previews in the layer picker component.  However, this will only work for layers that are present in NASA GIBS (Global Imagery Browse Service).  If you are serving your own layers, you will likely wish to disable this feature by setting `"previewSnapshots": false` in `config/default/common/features.json`.
+By default during the build process we try to fetch images of layers from our Snapshots application to show as previews in the layer picker component.  However, this will only work for layers that are present in NASA GIBS (Global Imagery Browse Services).  If you are serving your own layers, you will likely wish to disable this feature by setting `"previewSnapshots": false` in `config/default/common/features.json`.
 
 ## Natural Events
 
@@ -21,9 +21,9 @@ This feature provides natural events queried by Earth Observatory Natural Event 
 to disable, set:
 `"naturalEvents": false`
 
-## Smart Handoffs
+## Data Download (Smart Handoffs)
 
-This feature allows directing users to [Earthdata Search](https://search.earthdata.nasa.gov/) to download the underlying data for layers.  For more information see the [Smart Handoffs docs](./smart_handoffs.md). To enable,
+This feature allows directing users to [Earthdata Search](https://search.earthdata.nasa.gov/) to download the underlying data for layers. For more information see the [Data Download (Smart Handoffs) docs](./smart_handoffs.md). To enable,
 edit `config/default/common/features.json` and set `"smartHandoffs": true`.
 
 ## Location Search
