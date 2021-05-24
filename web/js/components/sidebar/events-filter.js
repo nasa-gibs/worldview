@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, ModalFooter } from 'reactstrap';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import moment from 'moment';
 import Switch from '../util/switch';
 import {
   setEventsFilter as setEventsFilterAction,
@@ -22,8 +23,8 @@ function EventsFilter (props) {
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
   const [categories, setCategories] = useState(selectedCategories);
 
-  const parsedStartDate = selectedStartDate && new Date(selectedStartDate);
-  const parsedEndDate = selectedEndDate && new Date(selectedEndDate);
+  const parsedStartDate = selectedStartDate && new Date(moment(selectedStartDate).valueOf());
+  const parsedEndDate = selectedEndDate && new Date(moment(selectedEndDate).valueOf());
   const [dateRange, setDateRange] = useState([parsedStartDate, parsedEndDate]);
   const [startDate, endDate] = dateRange || [];
 
@@ -75,6 +76,8 @@ function EventsFilter (props) {
         value={dateRange}
         minDate={new Date('01-01-2000')}
         maxDate={new Date()}
+        rangeDivider=" to "
+        format="y-MM-dd"
         disableCalendar
       />
 
