@@ -33,7 +33,7 @@ function Events(props) {
     selectEvent,
     selected,
     openFilterModal,
-    visibleEvents,
+    visibleEventsInProjection,
     height,
     deselectEvent,
     hasRequestError,
@@ -60,6 +60,7 @@ function Events(props) {
     : hasRequestError
       ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
+
   const eventLimitReach = eventsData && eventsData.length === LIMIT_EVENT_REQUEST_COUNT;
 
   return (
@@ -101,14 +102,14 @@ function Events(props) {
           events
           <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
           <UncontrolledTooltip
-            placement="top"
+            placement="right"
             target="filter-info-icon"
           >
-            More than
-            {' '}
-            {LIMIT_EVENT_REQUEST_COUNT}
-            {' '}
-            events matched the current filter criteria.
+            <div>
+              More than
+              {` ${LIMIT_EVENT_REQUEST_COUNT} `}
+              events matched the current filter criteria.
+            </div>
           </UncontrolledTooltip>
         </div>
         )}
@@ -141,9 +142,9 @@ function Events(props) {
                     event={event}
                     selectEvent={(id, date) => selectEvent(id, date, isMobile && !isEmbedModeActive)}
                     deselectEvent={isEmbedModeActive ? () => null : deselectEvent}
-                    isSelected={selected.id === event.id && visibleEvents[event.id]}
+                    isSelected={selected.id === event.id && visibleEventsInProjection[event.id]}
                     selectedDate={selectedDate}
-                    isVisible={visibleEvents[event.id]}
+                    isVisible={visibleEventsInProjection[event.id]}
                     sources={sources}
                   />
                 ))}
@@ -206,21 +207,13 @@ const mapStateToProps = (state, ownProps) => {
   const {
     selected, showAll, selectedDates, selectedCategories,
   } = events;
-  let visibleEvents = {};
+  let visibleEventsInProjection = {};
   const mapExtent = lodashGet(state, 'map.extent');
-  let visibleWithinMapExtent = {};
 
   const { isEmbedModeActive } = embed;
   if (eventsData && mapExtent) {
-    visibleWithinMapExtent = getEventsWithinExtent(
-      eventsData,
-      selected,
-      proj.selected.maxExtent,
-      proj.selected,
-      true,
-    );
     const extent = showAll ? proj.selected.maxExtent : mapExtent;
-    visibleEvents = getEventsWithinExtent(
+    visibleEventsInProjection = getEventsWithinExtent(
       eventsData,
       selected,
       extent,
@@ -232,8 +225,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     showAll,
     selected,
-    visibleWithinMapExtent,
-    visibleEvents,
+    visibleEventsInProjection,
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
     isEmbedModeActive,
@@ -268,5 +260,5 @@ Events.propTypes = {
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
-  visibleEvents: PropTypes.object,
+  visibleEventsInProjection: PropTypes.object,
 };

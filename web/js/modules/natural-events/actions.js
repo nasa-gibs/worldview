@@ -55,9 +55,9 @@ export function showAll() {
 
 export function setEventsFilter(categories, startDate, endDate) {
   return (dispatch, getState) => {
-    const { config } = getState();
+    const { config, proj } = getState();
     const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-    const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate, categories);
+    const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate, categories, proj);
     dispatch(requestEvents(requestUrl));
     dispatch({
       type: SET_EVENTS_FILTER,

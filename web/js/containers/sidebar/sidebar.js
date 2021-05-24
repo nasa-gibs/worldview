@@ -32,7 +32,7 @@ import {
 } from '../../modules/sidebar/actions';
 import history from '../../main';
 import safeLocalStorage from '../../util/local-storage';
-import { initialEventsLoad } from '../../map/natural-events/util';
+import { getEventsRequestURL } from '../../map/natural-events/util';
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 
@@ -85,20 +85,22 @@ class Sidebar extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    const { activeTab } = this.props;
+  componentDidUpdate(prevProps) {
+    const { activeTab, proj } = this.props;
     if (activeTab === 'events') {
-      this.loadEvents();
+      const projChange = proj !== prevProps.proj;
+      this.loadEvents(projChange);
     }
     this.updateDimensions();
   }
 
-  loadEvents() {
+  loadEvents(projChanged) {
     const {
       isLoadingEvents,
       hasEventRequestError,
       eventsData,
       config,
+      proj,
       requestEvents,
       requestSources,
       selectedStartDate,
@@ -106,12 +108,29 @@ class Sidebar extends React.Component {
       selectedCategories,
     } = this.props;
 
-    if (!isLoadingEvents && !hasEventRequestError && !eventsData) {
-      const {
-        sourcesURL, eventsURL,
-      } = initialEventsLoad(config, selectedStartDate, selectedEndDate, selectedCategories);
+    const baseUrl = lodashGet(config, 'features.naturalEvents.host');
+    const mockEvents = lodashGet(config, 'parameters.mockEvents');
+    const mockSources = lodashGet(config, 'parameters.mockSources');
+    let eventsURL = getEventsRequestURL(baseUrl, selectedStartDate, selectedEndDate, selectedCategories, proj);
+    let sourcesURL = `${baseUrl}/sources`;
+
+    if (mockEvents) {
+      console.warn(`Using mock events data: ${mockEvents}`);
+      eventsURL = mockEvents === 'true'
+        ? 'mock/events_data.json'
+        : `mock/events_data.json-${mockEvents}`;
+    }
+    if (mockSources) {
+      console.warn(`Using mock categories data: ${mockSources}`);
+      sourcesURL = `mock/categories_data.json-${mockSources}`;
+    }
+
+    const initialLoad = !isLoadingEvents && !hasEventRequestError && !eventsData;
+    if (initialLoad) {
       requestEvents(eventsURL);
       requestSources(sourcesURL);
+    } else if (projChanged) {
+      requestEvents(eventsURL);
     }
   }
 
@@ -352,6 +371,7 @@ const mapStateToProps = (state) => {
     requestedEventSources,
     sidebar,
     ui,
+    proj,
   } = state;
 
   const isLoadingEvents = requestedEvents.isLoading
@@ -392,6 +412,7 @@ const mapStateToProps = (state) => {
     isEmbedModeActive,
     isLoadingEvents,
     isMobile,
+    proj,
     selectedStartDate: events.selectedDates.start,
     selectedEndDate: events.selectedDates.end,
     selectedCategories: events.selectedCategories,
@@ -454,6 +475,7 @@ Sidebar.propTypes = {
   loadedCustomPalettes: PropTypes.func,
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
+  proj: PropTypes.object,
   screenHeight: PropTypes.number,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
