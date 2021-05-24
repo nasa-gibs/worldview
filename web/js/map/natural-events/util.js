@@ -1,6 +1,5 @@
 import {
   find as lodashFind,
-  get as lodashGet,
 } from 'lodash';
 import * as olProj from 'ol/proj';
 import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
@@ -8,7 +7,7 @@ import moment from 'moment';
 import util from '../../util/util';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
-export function getEventsRequestURL (baseUrl, startDate, endDate, categories = []) {
+export function getEventsRequestURL (baseUrl, startDate, endDate, categories = [], proj) {
   const params = {
     status: 'all',
     limit: LIMIT_EVENT_REQUEST_COUNT,
@@ -20,31 +19,18 @@ export function getEventsRequestURL (baseUrl, startDate, endDate, categories = [
   if (categories.length) {
     params.category = categories.map(({ id }) => id).join(',');
   }
+
+  let [minLon, maxLat, maxLon, minLat] = [-180, 90, 180, -90];
+  const { crs } = proj.selected;
+  if (crs === 'EPSG:3413') {
+    [minLon, maxLat, maxLon, minLat] = [-180, 45, 180, 90];
+  }
+  if (crs === 'EPSG:3031') {
+    [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -45];
+  }
+  params.bbox = [minLon, maxLat, maxLon, minLat];
+
   return `${baseUrl}/events${util.toQueryString(params)}`;
-}
-
-export function initialEventsLoad (config, startDate, endDate, categories) {
-  const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-  let eventsURL = getEventsRequestURL(baseUrl, startDate, endDate, categories);
-  let sourcesURL = `${baseUrl}/sources`;
-
-  const mockEvents = lodashGet(config, 'parameters.mockEvents');
-  const mockSources = lodashGet(config, 'parameters.mockSources');
-
-  if (mockEvents) {
-    console.warn(`Using mock events data: ${mockEvents}`);
-    eventsURL = mockEvents === 'true'
-      ? 'mock/events_data.json'
-      : `mock/events_data.json-${mockEvents}`;
-  }
-  if (mockSources) {
-    console.warn(`Using mock categories data: ${mockSources}`);
-    sourcesURL = `mock/categories_data.json-${mockSources}`;
-  }
-  return {
-    sourcesURL,
-    eventsURL,
-  };
 }
 
 /**
