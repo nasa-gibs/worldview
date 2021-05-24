@@ -23,10 +23,10 @@ export function getEventsRequestURL (baseUrl, startDate, endDate, categories = [
   let [minLon, maxLat, maxLon, minLat] = [-180, 90, 180, -90];
   const { crs } = proj.selected;
   if (crs === 'EPSG:3413') {
-    [minLon, maxLat, maxLon, minLat] = [-180, 45, 180, 90];
+    [minLon, maxLat, maxLon, minLat] = [-180, 50, 180, 90];
   }
   if (crs === 'EPSG:3031') {
-    [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -45];
+    [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -50];
   }
   params.bbox = [minLon, maxLat, maxLon, minLat];
 
