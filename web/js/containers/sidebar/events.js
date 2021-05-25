@@ -46,7 +46,7 @@ function Events(props) {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   const dropdownHeight = 34;
-  const scrollbarMaxHeight = isEmbedModeActive ? '55vh' : `${height - dropdownHeight}px`;
+  const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${height - dropdownHeight}px`;
   let showInactiveEventAlert = selected.id && !selected.date;
 
   const errorOrLoadingText = isLoading
