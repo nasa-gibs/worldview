@@ -1,4 +1,4 @@
-**8 November 2020 Notice**: The MODIS instrument aboard the Terra satellite experienced a Printed Wire Assembly (PWA) failure on 5 October 2020. This has resulted in a reduction in the overall Terra daytime coverage and many of the MODIS/Terra imagery layers have a slightly jagged appearance with less coverage over the northern high latitude regions. This issue will affect land daytime MODIS/Terra products that primarily rely on the Reflective Solar Bands (RSB) (i.e. visible bands) indefinitely. [Learn more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/displayCase.cgi?esdt=MOD&caseNum=PM_MOD_20280&caseLocation=cases_data&type=C6).
+**4 May 2021 Notice**: The MODIS instrument aboard the Terra satellite experienced a Printed Wire Assembly (PWA) failure on 5 October 2020. This has resulted in a reduction in the overall Terra daytime coverage and many of the MODIS/Terra imagery layers have a slightly jagged appearance at the poles. This issue will affect land daytime MODIS/Terra products that primarily rely on the Reflective Solar Bands (RSB) (i.e. visible bands) indefinitely. [Learn more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/displayCase.cgi?esdt=MOD&caseNum=PM_MOD_20280&caseLocation=cases_data&type=C6).
 
 ---
 
@@ -6,4 +6,4 @@ The MODIS Sea Ice extent layer shows the presence of sea ice. Ice forms in the s
 
 The MODIS Sea Ice product is available from both the Terra (MOD29) and Aqua (MYD29) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [NSIDC - MOD29](https://nsidc.org/data/mod29); [NSIDC - MYD29](https://nsidc.org/data/myd29); [NASA Earth Observations - Sea Ice and Snow Extent](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=SCSIE_W)
+References: [MOD29 dataset doi:10.5067/MODIS/MOD29.061](https://doi.org/10.5067/MODIS/MOD29.061); [MYD29 dataset doi:10.5067/MODIS/MYD29.061](https://doi.org/10.5067/MODIS/MYD29.061); [NASA Earth Observations - Sea Ice and Snow Extent](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=SCSIE_W)

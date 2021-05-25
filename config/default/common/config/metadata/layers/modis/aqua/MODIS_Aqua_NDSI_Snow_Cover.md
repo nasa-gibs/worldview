@@ -2,4 +2,4 @@ The MODIS Normalized Difference Snow Index (NDSI) snow cover layer shows the pre
 
 The MODIS Snow Cover (Normalized Difference Snow Index) layer is available from both the Terra (MOD10) and Aqua (MYD10) satellites. The sensor and imagery resolution is 500 m and the temporal resolution is daily.
 
-References: [NSIDC - MYD10\_L2](https://nsidc.org/data/myd10_l2); [NASA Earth Observations - Snow Cover](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_M_SNOW)
+References: [MYD10_L2 dataset doi:10.5067/MODIS/MYD11_L2.061](https://doi.org/10.5067/MODIS/MYD11_L2.061); [NASA Earth Observations - Snow Cover](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD10C1_M_SNOW)
