@@ -46,17 +46,16 @@
   }
   #productsHolder {
     width: 125px !important;
-    height: 80vh;
   }
   #layers-scroll-container {
     min-height: 50px;
   }
   .event-container {
-    min-height: 25vh;
+    min-height: 175px;
   }
   .layer-group-case .layer-group-header {
     margin-top: 0;
-    &.layer-group-title {
+    & .layer-group-title {
       font-size: 12px;
     }
   }

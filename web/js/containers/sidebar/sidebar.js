@@ -263,6 +263,11 @@ class Sidebar extends React.Component {
     const { naturalEvents } = config.features;
     const { smartHandoffs } = config.features;
 
+    const maxHeight = isCollapsed
+      ? '0'
+      : isEmbedModeActive
+        ? '70vh'
+        : `${screenHeight}px`;
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
@@ -282,7 +287,7 @@ class Sidebar extends React.Component {
                 this.sideBarCase = el;
               }}
               style={{
-                maxHeight: isCollapsed ? '0' : `${screenHeight}px`,
+                maxHeight,
                 display: isDistractionFreeModeActive ? 'none' : 'block',
               }}
               onWheel={wheelCallBack}
