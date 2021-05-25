@@ -64,6 +64,7 @@ class DismissableAlerts extends React.Component {
       dismissVectorAlert,
       isCompareActive,
       isDistractionFreeModeActive,
+      isEmbedModeActive,
       isEventsActive,
       isSmall,
       isVectorAlertPresent,
@@ -76,8 +77,11 @@ class DismissableAlerts extends React.Component {
       distractionFreeModeInitLoad,
     } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
-    if (distractionFreeModeInitLoad) return null;
-    if (isSmall || !HAS_LOCAL_STORAGE) return null;
+    const hasFailCondition = isSmall
+    || !HAS_LOCAL_STORAGE
+    || isEmbedModeActive
+    || distractionFreeModeInitLoad;
+    if (hasFailCondition) return null;
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
@@ -130,7 +134,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => {
   const {
-    browser, events, sidebar, compare, alerts, ui,
+    browser, embed, events, sidebar, compare, alerts, ui,
   } = state;
   const { isVectorAlertActive } = alerts;
   const activeLayers = getActiveLayers(state);
@@ -138,6 +142,7 @@ const mapStateToProps = (state) => {
   return {
     isCompareActive: compare.active,
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    isEmbedModeActive: embed.isEmbedModeActive,
     isEventsActive: !!(events.selected.id && sidebar.activeTab === 'events'),
     isSmall: browser.lessThan.small,
     isVectorAlertPresent: hasVectorLayers(activeLayers) && isVectorAlertActive,
@@ -152,6 +157,7 @@ DismissableAlerts.propTypes = {
   dismissVectorAlert: PropTypes.func,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isEventsActive: PropTypes.bool,
   isSmall: PropTypes.bool,
   isVectorAlertPresent: PropTypes.bool,
