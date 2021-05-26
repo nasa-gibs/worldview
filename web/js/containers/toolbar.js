@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ButtonToolbar, Button, UncontrolledTooltip } from 'reactstrap';
+import { ButtonToolbar, Button } from 'reactstrap';
 import {
   get as lodashGet,
   find as lodashFind,
@@ -16,6 +16,7 @@ import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
 import ShareLinks from './share';
+import HoverTooltip from '../components/util/hover-tooltip';
 import ErrorBoundary from './error-boundary';
 import {
   requestNotifications,
@@ -164,15 +165,12 @@ class toolbarContainer extends Component {
 
   renderTooltip = (buttonId, labelText) => {
     const { isMobile } = this.props;
-    return !isMobile && (
-      <UncontrolledTooltip
-        trigger="hover"
+    return (
+      <HoverTooltip
+        isMobile={isMobile}
+        labelText={labelText}
         target={buttonId}
-        boundariesElement="window"
-        placement="bottom"
-      >
-        {labelText}
-      </UncontrolledTooltip>
+      />
     );
   }
 
