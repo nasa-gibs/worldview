@@ -103,6 +103,7 @@
 }
 
 .social-share {
+  padding-top: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -153,20 +154,29 @@
 }
 
 .share-nav-container {
+  .input-group {
+    padding-top: 10px;
+  }
   .share-tab-link {
     p {
-      padding: 10px 0 21px;
+      padding: 20px 1px;
     }
   }
   .share-tab-embed {
     p {
-      padding: 10px 0 5px;
+      padding: 10px 1px;
     }
   }
   .share-tab-social {
     p {
-      padding: 10px 0 5px;
+      padding: 10px 1px;
     }
+  }
+  & .nav-item {
+    flex: 1;
+  }
+  & .nav-link {
+    padding: 6px;
   }
 
   a:not(.share-embed-doc-link) {
@@ -187,6 +197,6 @@
   .wv-checkbox {
     position: absolute;
     right: 12px;
-    top: 55px;
+    bottom: 14px;
   }
 }

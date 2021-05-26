@@ -233,6 +233,7 @@ class ShareLinkContainer extends Component {
       <TabPane tabId="link" className="share-tab-link">
         {activeTab === 'link' && (
           <>
+            {this.renderInputGroup(value, 'link')}
             <p>
               Copy URL to share link.
             </p>
@@ -244,7 +245,7 @@ class ShareLinkContainer extends Component {
               checked={isShort}
               disabled={!shortLink.isLoading}
             />
-            {this.renderInputGroup(value, 'link')}
+            {/* {this.renderInputGroup(value, 'link')} */}
           </>
         )}
       </TabPane>
@@ -262,6 +263,7 @@ class ShareLinkContainer extends Component {
       <TabPane tabId="embed" className="share-tab-embed">
         {activeTab === 'embed' && (
           <>
+            {this.renderInputGroup(embedIframeHTMLCode, 'embed')}
             <p>
               Embed Worldview in your website. See our
               {' '}
@@ -269,7 +271,7 @@ class ShareLinkContainer extends Component {
               {' '}
               for a guide.
             </p>
-            {this.renderInputGroup(embedIframeHTMLCode, 'embed')}
+            {/* {this.renderInputGroup(embedIframeHTMLCode, 'embed')} */}
           </>
         )}
       </TabPane>
@@ -285,10 +287,10 @@ class ShareLinkContainer extends Component {
       <TabPane tabId="social" className="share-tab-social">
         {activeTab === 'social' && (
           <>
+            <ShareLinks onClick={this.onLinkClick} />
             <p>
               Share Worldview on social media.
             </p>
-            <ShareLinks onClick={this.onLinkClick} />
           </>
         )}
       </TabPane>
