@@ -18,7 +18,8 @@ export function mapLocationToTourState(
   state,
   config,
 ) {
-  if (parameters.tr) {
+  const isEmbedModeActive = parameters.em && parameters.em === 'true';
+  if (parameters.tr && !isEmbedModeActive) {
     stateFromLocation = update(stateFromLocation, {
       tour: { active: { $set: true } },
     });
