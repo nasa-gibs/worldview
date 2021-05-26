@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, UncontrolledTooltip } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getPermalink } from '../modules/link/util';
 import getSelectedDate from '../modules/date/selectors';
+import HoverTooltip from '../components/util/hover-tooltip';
 import history from '../main';
 
 class Embed extends React.Component {
@@ -22,20 +23,6 @@ class Embed extends React.Component {
     this.setState({ showOverlay: false });
   }
 
-  renderTooltip = (buttonId, labelText) => {
-    const { isMobile } = this.props;
-    return !isMobile && (
-      <UncontrolledTooltip
-        trigger="hover"
-        target={buttonId}
-        boundariesElement="window"
-        placement="bottom"
-      >
-        {labelText}
-      </UncontrolledTooltip>
-    );
-  }
-
   newTabLink() {
     const { selectedDate } = this.props;
     const queryString = history.location.search || '';
@@ -44,6 +31,7 @@ class Embed extends React.Component {
   }
 
   renderEmbedLinkBtn() {
+    const { isMobile } = this.props;
     const buttonId = 'wv-embed-button';
     const labelText = 'Open new tab with content in Worldview';
     return (
@@ -53,7 +41,11 @@ class Embed extends React.Component {
         aria-label={labelText}
         onClick={() => this.newTabLink()}
       >
-        {this.renderTooltip(buttonId, labelText)}
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText={labelText}
+          target={buttonId}
+        />
         <FontAwesomeIcon icon="external-link-alt" size="2x" fixedWidth />
       </Button>
     );
