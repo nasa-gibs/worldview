@@ -41,9 +41,8 @@
 }
 
 .embed-mode {
-  #wv-toolbar {
-    display: none;
-  }
+
+  /* SIDEBAR */
   #productsHolder {
     width: 125px !important;
   }
@@ -107,21 +106,38 @@
     }
   }
 
-  #wv-measure-button {
-    display: none;
+  /* COMPARE */
+  .ab-swipe-dragger {
+    bottom: 132px;
+  }
+  .ab-swipe-line .ab-swipe-span {
+    bottom: 119px;
+  }
+  .ab-slider-case {
+    bottom: 74px;
   }
 
+  /* COORDS/SCALE */
   #ol-coords-case {
     bottom: 8px;
   }
-
   .wv-map-scale-imperial {
     bottom: 50px;
     right: 12px;
   }
-
   .wv-map-scale-metric {
     bottom: 68px;
     right: 12px;
+  }
+
+  /* MISC */
+  #wv-toolbar {
+    display: none;
+  }
+  #wv-measure-button {
+    display: none;
+  }
+  .wv-animation-widget-wrapper.minimized {
+    bottom: 64px;
   }
 }
