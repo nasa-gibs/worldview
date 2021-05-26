@@ -19,6 +19,7 @@ import ShareToolTips from '../components/toolbar/share/tooltips';
 import { getPermalink, getShareLink, wrapWithIframe } from '../modules/link/util';
 import getSelectedDate from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
+import HoverTooltip from '../components/util/hover-tooltip';
 import { requestShortLink } from '../modules/link/actions';
 import history from '../main';
 
@@ -156,22 +157,37 @@ class ShareLinkContainer extends Component {
   }
 
   renderNavTabs = () => {
-    const {
-      activeTab,
-    } = this.state;
-
+    const { embedDisableNavLink, isMobile } = this.props;
+    const { activeTab } = this.state;
+    const isDisabled = {
+      embed: embedDisableNavLink,
+    };
     return (
       <Nav tabs>
-        {SOCIAL_SHARE_TABS.map((type) => (
-          <NavItem key={type}>
-            <NavLink
-              onClick={() => this.setActiveTab(type)}
-              active={activeTab === type}
-            >
-              {lodashStartCase(type)}
-            </NavLink>
-          </NavItem>
-        ))}
+        {SOCIAL_SHARE_TABS.map((type) => {
+          const navTitle = lodashStartCase(type);
+          const navDisabledMessage = `${navTitle} is not available when the current application features are in use.`;
+          const navTitleClass = `${navTitle}-nav`;
+          return (
+            <NavItem key={type} className={navTitleClass}>
+              <NavLink
+                onClick={() => this.setActiveTab(type)}
+                active={activeTab === type}
+                disabled={isDisabled[type]}
+              >
+                {isDisabled[type] && (
+                  <HoverTooltip
+                    isMobile={isMobile}
+                    labelText={navDisabledMessage}
+                    target={`.${navTitleClass}`}
+                    placement="top"
+                  />
+                )}
+                {navTitle}
+              </NavLink>
+            </NavItem>
+          );
+        })}
       </Nav>
     );
   }
@@ -309,9 +325,15 @@ class ShareLinkContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { config, shortLink } = state;
+  const {
+    browser, config, shortLink, sidebar, tour,
+  } = state;
 
+  const isMobile = browser.lessThan.medium;
+  const embedDisableNavLink = sidebar.activeTab === 'download' || tour.active;
   return {
+    embedDisableNavLink,
+    isMobile,
     shortLink,
     selectedDate: getSelectedDate(state),
     mock:
@@ -332,6 +354,8 @@ export default connect(
 )(ShareLinkContainer);
 
 ShareLinkContainer.propTypes = {
+  embedDisableNavLink: PropTypes.bool,
+  isMobile: PropTypes.bool,
   mock: PropTypes.string,
   requestShortLinkAction: PropTypes.func,
   selectedDate: PropTypes.object,
