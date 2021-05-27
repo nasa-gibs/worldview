@@ -84,7 +84,6 @@
 		"GOES-East_ABI_Air_Mass",
 		"GOES-West_ABI_Air_Mass",
 		"Himawari_AHI_Air_Mass",
-		"GHRSST_L4_G1SST_Sea_Surface_Temperature",
 		"GHRSST_L4_MUR_Sea_Surface_Temperature",
 		"GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
 		"GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
