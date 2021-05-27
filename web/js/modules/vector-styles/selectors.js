@@ -128,7 +128,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     const extentStartX = layerInLayerGroup.getExtent()[0];
     const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
 
-    styleFunction = stylefunction(layerInLayerGroup, glStyle, layerId);
+    styleFunction = stylefunction(layerInLayerGroup, glStyle, vectorStyleId, olMap, proj.selected.resolutions);
     // Filter Orbit Tracks
     if (glStyle.name === 'Orbit Tracks'
       && (selected[layerId] && selected[layerId].length)) {
