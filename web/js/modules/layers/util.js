@@ -1359,16 +1359,11 @@ export function adjustStartDates(layers) {
  * @returns {Array} array of layers
  */
 export function adjustActiveDateRanges(layers, appNow) {
-  // active layers that can't be future predicted reliably due to sparse coverage
-  const ignoredLayers = {
-    AMSRU2_Snow_Water_Equivalent_5Day: true,
-  };
   const appNowYear = appNow.getUTCFullYear();
   const applyDateRangeAdjustment = (layer) => {
     const { dateRanges } = layer;
-    const { inactive, id, period } = layer;
+    const { inactive, period } = layer;
     const failConditions = inactive
-      || ignoredLayers[id]
       || !dateRanges
       || period === 'subdaily';
     if (failConditions) {
@@ -1390,6 +1385,17 @@ export function adjustActiveDateRanges(layers, appNow) {
         const start = new Date(startDate);
         const startDateYear = start.getUTCFullYear();
 
+        // splice in modifiedDateRange to set endDate to appNow
+        if (startDateYear === appNowYear) {
+          const modifiedDateRange = {
+            startDate,
+            endDate: util.toISOStringSeconds(appNow),
+            dateInterval,
+          };
+          dateRangesModified.splice(i, 1, modifiedDateRange);
+        }
+
+        // check to see if dateRangesModified needs to be spliced or appended
         if (startDateYear < appNowYear) {
           const dynamicStartYear = start.getUTCFullYear() + 1;
           const dynamicStartDate = new Date(start.setUTCFullYear(dynamicStartYear));
