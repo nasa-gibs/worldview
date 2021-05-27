@@ -29,15 +29,6 @@ Temporal coverage: 23 July 2008 - present
 
 The Sea Surface Temperature (GAMSSA GDS2) layer is a Group for High Resolution Sea Surface Temperature (GHRSST) Level 4 sea surface temperature analysis, produced daily on an operational basis at the Australian Bureau of Meteorology (BoM) using optimal interpolation (OI) on a global 0.25 degree grid. This Global Australian Multi-Sensor SST Analysis (GAMSSA) v1.0 system blends satellite SST observations from passive infrared and passive microwave radiometers with in situ data from ships, drifting buoys and moorings from the Global Telecommunications System (GTS). SST observations that have experienced recent surface wind speeds less than 6 m/s during the day or less than 2 m/s during night are rejected from the analysis.  The processing results in daily foundation SST estimates that are largely free of nocturnal cooling and diurnal warming effects.  Sea ice concentrations are supplied by the NOAA/NCEP 12.7 km sea ice analysis.  In the absence of observations, the analysis relaxes to the Reynolds and Smith (1994) Monthly 1 degree SST climatology for 1961 - 1990.
 
-References: doi: [10.5067/GHGAM-4FA1A](https://doi.org/10.5067/GHGAM-4FA1A)
-
-### Sea Surface Temperature (L4, G1SST)
-Temporal coverage: 21 June 2010 - 8 December 2019
-
-**29 January 2020 Notice:** The GHRSST Sea Surface Temperature (L4, G1SST) has been producing poor quality SST results since 9 December 2019. The imagery has been removed from 9 December 2019 to present. We advise users to consider using the **GHRSST Sea Surface Temperature (L4, MUR)** layer, which provides comparable data at the same spatial sampling and coverage as G1SST.
-
-Read more about the [data outage](https://podaac.jpl.nasa.gov/announcements/2020-01-29_G1SST_Data_Outage_Alert) (29 January 2020).
-
-The GHRSST Sea Surface Temperature Level 4, G1SST sea surface temperature analysis product is created using a multi-scale two-dimensional variational (MS-2DVAR) blending algorithm on a global 0.009 degree grid. The Global 1 km SST (G1SST) analysis uses satellite data from sensors that include the Advanced Very High Resolution Radiometer (AVHRR), the Advanced Along Track Scanning Radiometer (AATSR), the Spinning Enhanced Visible and Infrared Imager (SEVIRI), the Advanced Microwave Scanning Radiometer-EOS (AMSRE), the Tropical Rainfall Measuring Mission Microwave Imager (TMI), the Moderate Resolution Imaging Spectroradiometer (MODIS), the Geostationary Operational Environmental Satellite (GOES) Imager, the Multi-Functional Transport Satellite 1R (MTSAT-1R) radiometer, and in situ data from drifting and moored buoys. The imagery resolution is 1 km, and the temporal resolution is daily.
+References: [doi:10.5067/GHGAM-4FA1A](https://doi.org/10.5067/GHGAM-4FA1A)
 
 
