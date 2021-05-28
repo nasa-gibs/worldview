@@ -76,31 +76,42 @@ function EventsFilter (props) {
         value={dateRange}
         minDate={new Date('01-01-2000')}
         maxDate={new Date()}
-        rangeDivider=" to "
-        format="y-MM-dd"
-        disableCalendar
+        dayPlaceholder="DD"
+        monthPlaceholder="MM"
+        yearPlaceholder="YYYY"
+        format="y-M-dd"
+        showDoubleView
+        hideCalenderOnInputFocus
       />
 
       <div className="category-toggles">
-        <Switch
-          id="select-all-none"
-          label="Select/Deselect All"
-          active={allNone}
-          toggle={selectAllNone}
-        />
+        <div className="classification-switch-header">
+          <h2 className="wv-header">Disable/Enable</h2>
+          <Switch
+            id="header-disable"
+            label="All"
+            containerClassAddition="header"
+            active={allNone}
+            toggle={selectAllNone}
+          />
+
+        </div>
+
         {eventCategories.map((category) => {
           const { id, title, description } = category;
           const switchId = `${id}-switch`;
           const isActive = categories.some((c) => c.title === title);
           return (
-            <Switch
-              id={switchId}
-              key={switchId}
-              label={title}
-              active={isActive}
-              tooltip={description}
-              toggle={() => toggleCategory(category)}
-            />
+            <div className="category-switch-row">
+              <Switch
+                id={switchId}
+                key={switchId}
+                label={title}
+                active={isActive}
+                tooltip={description}
+                toggle={() => toggleCategory(category)}
+              />
+            </div>
           );
         })}
       </div>
