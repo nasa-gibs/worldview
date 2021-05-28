@@ -442,7 +442,9 @@
   color: #000;
   border-radius: 6px;
   padding: 3px;
-  background: #bbb;
-  border-color: #666;
   box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.75);
+  max-width: unset;
+  .react-calendar__month-view__days__day--weekend {
+    color: #000;
+  }
 }
