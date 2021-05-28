@@ -140,4 +140,9 @@
   .wv-animation-widget-wrapper.minimized {
     bottom: 64px;
   }
+  @media only screen and (max-width: 350px) {
+    .wv-animation-widget-wrapper.minimized {
+      left: 110px;
+    }
+  }
 }

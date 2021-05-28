@@ -130,7 +130,13 @@ class AnimationWidget extends React.Component {
   componentDidMount() {
     const { isEmbedModeActive } = this.props;
     if (isEmbedModeActive) {
-      this.setState({ collapsed: true });
+      this.setState({
+        collapsed: true,
+        widgetPosition: {
+          x: 10,
+          y: 0,
+        },
+      });
     }
   }
 
