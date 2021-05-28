@@ -18,10 +18,7 @@ function Event (props) {
     isVisible,
   } = props;
   const eventDate = util.parseDateUTC(event.geometry[0].date);
-  let dateString = `${util.giveWeekDay(eventDate)}, ${util.giveMonth(eventDate)} ${eventDate.getUTCDate()}`;
-  if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
-    dateString += `, ${eventDate.getUTCFullYear()}`;
-  }
+  const dateString = `${util.giveWeekDay(eventDate)}, ${util.giveMonth(eventDate)} ${eventDate.getUTCDate()}, ${eventDate.getUTCFullYear()}`;
   const itemClass = isSelected
     ? 'item-selected selectorItem item item-visible'
     : isVisible
