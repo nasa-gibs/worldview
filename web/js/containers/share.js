@@ -245,7 +245,6 @@ class ShareLinkContainer extends Component {
               checked={isShort}
               disabled={!shortLink.isLoading}
             />
-            {/* {this.renderInputGroup(value, 'link')} */}
           </>
         )}
       </TabPane>
@@ -271,7 +270,6 @@ class ShareLinkContainer extends Component {
               {' '}
               for a guide.
             </p>
-            {/* {this.renderInputGroup(embedIframeHTMLCode, 'embed')} */}
           </>
         )}
       </TabPane>
