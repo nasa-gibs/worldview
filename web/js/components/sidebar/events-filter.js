@@ -5,8 +5,10 @@ import { Button, ModalFooter } from 'reactstrap';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import moment from 'moment';
 import Switch from '../util/switch';
+import Checkbox from '../util/checkbox';
 import {
   setEventsFilter as setEventsFilterAction,
+  toggleListAll as toggleListAllAction,
 } from '../../modules/natural-events/actions';
 import util from '../../util/util';
 
@@ -18,6 +20,8 @@ function EventsFilter (props) {
     selectedEndDate,
     setFilter,
     closeModal,
+    toggleListAll,
+    showAll
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
@@ -38,6 +42,19 @@ function EventsFilter (props) {
     }
     setCategories(newCategories);
   };
+
+  const toggleListAllCheckbox = () => {
+    toggleListAll();
+    if (showAll) {
+      googleTagManager.pushEvent({
+        event: 'natural_events_current_view_only',
+      });
+    } else {
+      googleTagManager.pushEvent({
+        event: 'natural_events_show_all',
+      });
+    }
+  }
 
   const applyFilter = () => {
     const start = startDate && util.toISOStringDate(startDate);
@@ -79,9 +96,11 @@ function EventsFilter (props) {
         dayPlaceholder="DD"
         monthPlaceholder="MM"
         yearPlaceholder="YYYY"
-        format="y-M-dd"
+        format="y-MM-dd"
+        rangeDivider=" to "
         showDoubleView
-        hideCalenderOnInputFocus
+        openCalendarOnFocus={false}
+        closeCalendar={false}
       />
 
       <div className="category-toggles">
@@ -102,10 +121,9 @@ function EventsFilter (props) {
           const switchId = `${id}-switch`;
           const isActive = categories.some((c) => c.title === title);
           return (
-            <div className="category-switch-row">
+            <div className="category-switch-row" key={switchId}>
               <Switch
                 id={switchId}
-                key={switchId}
                 label={title}
                 active={isActive}
                 tooltip={description}
@@ -115,6 +133,15 @@ function EventsFilter (props) {
           );
         })}
       </div>
+
+      <Checkbox
+        className="red"
+        id="events-footer-checkbox"
+        label="Only show events in current map view"
+        onCheck={toggleListAll}
+        text="List All"
+        checked={!showAll}
+      />
 
       <ModalFooter>
         <Button
@@ -142,18 +169,20 @@ EventsFilter.propTypes = {
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,
+  showAll: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
   const { events } = state;
   const {
-    selectedCategories, selectedDates, allCategories,
+    selectedCategories, selectedDates, allCategories, showAll
   } = events;
   return {
     eventCategories: allCategories,
     selectedCategories,
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
+    showAll,
   };
 };
 
@@ -166,6 +195,7 @@ const mapDispatchToProps = (dispatch) => ({
         endDate,
       ),
     );
+    dispatch(toggleListAllAction());
   },
 });
 
