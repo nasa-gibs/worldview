@@ -46,11 +46,8 @@
   #productsHolder {
     width: 125px !important;
   }
-  #layers-scroll-container {
-    min-height: 50px;
-  }
   .event-container {
-    min-height: 175px;
+    min-height: 75px;
   }
   .layer-group-case .layer-group-header {
     margin-top: 0;

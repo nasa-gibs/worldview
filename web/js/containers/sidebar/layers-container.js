@@ -108,12 +108,13 @@ function LayersContainer (props) {
   );
 
   const mobileHeightCoeff = isCompareActive ? -30 : 20;
-  const minHeight = '100px';
+  let minHeight = '100px';
   let maxHeight = isMobile
     ? height + mobileHeightCoeff
     : height;
 
   if (isEmbedModeActive) {
+    minHeight = '25px';
     maxHeight = '55vh';
   } else {
     maxHeight += 'px';
