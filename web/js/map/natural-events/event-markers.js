@@ -248,8 +248,15 @@ const createBoundingBox = function(coordinates) {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, sidebar, date,
+    embed, map, proj, events, requestedEvents, sidebar, date,
   } = state;
+
+  const { isEmbedModeActive } = embed;
+  const selectedEvent = events.selected;
+  let eventsData = requestedEvents.response;
+  if (isEmbedModeActive && requestedEvents.response && selectedEvent) {
+    eventsData = eventsData.filter((event) => event.id === selectedEvent.id);
+  }
   return {
     activeTab: sidebar.activeTab,
     map: map.ui.selected,
@@ -257,7 +264,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
-    eventsData: requestedEvents.response,
+    eventsData,
     eventsDataIsLoading: requestedEvents.isLoading,
   };
 };

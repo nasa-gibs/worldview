@@ -66,6 +66,7 @@ function Events(props) {
 
   return (
     <div className="event-container">
+      {!isEmbedModeActive && (
       <Dropdown id="event-category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle caret>
           {selectedCategory}
@@ -92,28 +93,34 @@ function Events(props) {
           }
         </DropdownMenu>
       </Dropdown>
-
+      )}
       <Scrollbars
         style={{ maxHeight: `${scrollbarMaxHeight}` }}
       >
         <div id="wv-events">
-          {(isLoading || hasRequestError) && (
+          {(isLoading || hasRequestError || (isEmbedModeActive && showInactiveEventAlert)) && (
             <div className="events-loading-text">
               {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
               {errorOrLoadingText}
+              {(isEmbedModeActive && showInactiveEventAlert) && (
+                <>
+                  <br />
+                  {`The event with an id of ${selected.id} is no longer active.`}
+                </>
+              )}
             </div>
           )}
 
           {eventsForSelectedCategory.length ? (
             <div className="wv-eventslist sidebar-panel">
               <ul id="wv-eventscontent" className="content map-item-list">
-                {sources && eventsForSelectedCategory.map((event) => (
+                {sources && eventsForSelectedCategory.filter((event) => (isEmbedModeActive ? selected.id === event.id : true)).map((event) => (
                   <Event
                     showAlert={showAlert}
                     key={event.id}
                     event={event}
                     selectEvent={(id, date) => selectEvent(id, date, isMobile && !isEmbedModeActive)}
-                    deselectEvent={deselectEvent}
+                    deselectEvent={isEmbedModeActive ? () => null : deselectEvent}
                     isSelected={selected.id === event.id && visibleEvents[event.id]}
                     selectedDate={selectedDate}
                     isVisible={visibleEvents[event.id]}
