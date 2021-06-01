@@ -32,7 +32,7 @@ class Embed extends React.Component {
 
   renderEmbedLinkBtn() {
     const { isMobile } = this.props;
-    const buttonId = 'wv-embed-button';
+    const buttonId = 'wv-embed-link-button';
     const labelText = 'Open new tab with content in Worldview';
     return (
       <Button

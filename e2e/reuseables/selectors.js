@@ -161,8 +161,10 @@ module.exports = {
   infoToolbarButton: '#wv-info-button',
 
   // share
-  shareToolbar: '#toolbar_share_link',
+  shareToolbar: '#toolbar_share',
   shareLinkInput: '#permalink-content-link',
+  shareEmbedInput: '#permalink-content-embed',
+  embedLinkButton: '#wv-embed-link-button',
 
   // Location Search
   locationSearchComponent: '.location-search-component',

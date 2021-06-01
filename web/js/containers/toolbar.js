@@ -51,7 +51,7 @@ const CUSTOM_MODAL_PROPS = {
     bodyComponent: Projection,
     wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
   },
-  TOOLBAR_SHARE_LINK: {
+  TOOLBAR_SHARE: {
     headerText: 'Share',
     type: 'toolbar',
     backdrop: false,
@@ -184,8 +184,8 @@ class toolbarContainer extends Component {
         className="wv-toolbar-button"
         aria-label={labelText}
         onClick={() => openModal(
-          'TOOLBAR_SHARE_LINK',
-          CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK,
+          'TOOLBAR_SHARE',
+          CUSTOM_MODAL_PROPS.TOOLBAR_SHARE,
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
