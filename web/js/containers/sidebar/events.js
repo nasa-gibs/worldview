@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
+import moment from 'moment';
 import {
   Button,
   UncontrolledTooltip,
@@ -46,9 +47,9 @@ function Events(props) {
     selectedCategories,
   } = props;
 
-
-  const dropdownHeight = 34;
-  const scrollbarMaxHeight = height - dropdownHeight;
+  const startDate = moment(selectedStartDate).format('YYYY MMM DD');
+  const endDate = moment(selectedEndDate).format('YYYY MMM DD');
+  const scrollbarMaxHeight = height - 80;
   let showInactiveEventAlert = selected.id && !selected.date;
 
   const errorOrLoadingText = isLoading
@@ -65,7 +66,7 @@ function Events(props) {
 
         <div className="filter-dates-icons">
           <div className="filter-dates">
-            {showDates && `${selectedStartDate} - ${selectedEndDate}`}
+            {showDates && `${startDate} - ${endDate}`}
           </div>
 
           <div className="filter-icons">
@@ -91,24 +92,6 @@ function Events(props) {
         >
           <FontAwesomeIcon icon="filter" />
         </Button>
-        {eventLimitReach && (
-        <div className="event-count">
-          Showing first
-          {` ${eventsData ? eventsData.length : ''} `}
-          events
-          <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
-          <UncontrolledTooltip
-            placement="right"
-            target="filter-info-icon"
-          >
-            <div>
-              More than
-              {` ${LIMIT_EVENT_REQUEST_COUNT} `}
-              events matched the current filter criteria.
-            </div>
-          </UncontrolledTooltip>
-        </div>
-        )}
       </div>
 
       <Scrollbars
@@ -146,6 +129,25 @@ function Events(props) {
         </div>
       </Scrollbars>
 
+      {eventLimitReach && (
+        <div className="event-count">
+          Showing the first
+          {` ${eventsData ? eventsData.length : ''} `}
+          events
+          <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
+          <UncontrolledTooltip
+            placement="right"
+            target="filter-info-icon"
+          >
+            <div>
+              More than
+              {` ${LIMIT_EVENT_REQUEST_COUNT} `}
+              events matched the current filter criteria.
+            </div>
+          </UncontrolledTooltip>
+        </div>
+        )}
+
       {showInactiveEventAlert && (
         <AlertUtil
           id="event-unavailable-alert"
@@ -179,7 +181,7 @@ const mapDispatchToProps = (dispatch) => ({
       // Using clickableBehindModal: true here causes an issue where switching sidebar
       // tabs does not close this modal
       wrapClassName: 'clickable-behind-modal',
-      modalClassName: ' layer-info-settings-modal layer-settings-modal',
+      modalClassName: 'sidebar-modal event-filter-modal',
       timeout: 150,
     }));
   },
