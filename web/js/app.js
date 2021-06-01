@@ -65,6 +65,7 @@ import '../css/projection.css';
 import '../css/tour.css';
 import '../css/products.css';
 import '../css/events.css';
+import '../css/event-filter.css';
 import '../css/smart-handoff.css';
 import '../css/sidebar.css';
 import '../css/layer-categories.css';
