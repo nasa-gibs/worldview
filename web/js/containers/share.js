@@ -167,7 +167,7 @@ class ShareLinkContainer extends Component {
         {SOCIAL_SHARE_TABS.map((type) => {
           const navTitle = lodashStartCase(type);
           const navDisabledMessage = `${navTitle} is not available when the current application features are in use.`;
-          const navTitleClass = `${navTitle}-nav`;
+          const navTitleClass = `${type}-share-nav`;
           return (
             <NavItem key={type} className={navTitleClass}>
               <NavLink
