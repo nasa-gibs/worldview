@@ -123,7 +123,7 @@
     "express": "^4.17.1",
     "fetch-mock": "^9.1.1",
     "file-loader": "^6.0.0",
-    "geckodriver": "^1.21.0",
+    "geckodriver": "^2.0.0",
     "glob": "^7.1.6",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
