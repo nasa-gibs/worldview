@@ -1,7 +1,7 @@
 import {
   find as lodashFind,
 } from 'lodash';
-import * as olProj from 'ol/proj';
+import { transform } from 'ol/proj';
 import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
 import moment from 'moment';
 import util from '../../util/util';
@@ -83,12 +83,12 @@ export function getEventsWithinExtent(
     if (selectedProj.id !== 'geographic') {
       if (geometry.type === 'Polygon') {
         const coordinatesTransform = coordinates[0].map(
-          (coordinate) => olProj.transform(coordinate, 'EPSG:4326', crs),
+          (coordinate) => transform(coordinate, 'EPSG:4326', crs),
         );
         const geomExtent = boundingExtent(coordinatesTransform);
         coordinates = getCenter(geomExtent);
       } else {
-        coordinates = olProj.transform(coordinates, 'EPSG:4326', crs);
+        coordinates = transform(coordinates, 'EPSG:4326', crs);
       }
     } else if (geometry.type === 'Polygon') {
       const geomExtent = boundingExtent(geometry.coordinates[0]);

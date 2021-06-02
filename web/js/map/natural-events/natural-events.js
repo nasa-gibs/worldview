@@ -136,21 +136,20 @@ class NaturalEvents extends React.Component {
 
   zoomToEvent = function(event, date, isSameEventID) {
     const { proj, map, mapUi } = this.props;
-    const { crs, id } = proj.selected;
+    const { crs } = proj.selected;
     const category = event.categories[0].title;
     const zoom = isSameEventID ? map.getView().getZoom() : zoomLevelReference[category];
     const geometry = event.geometry.find((geom) => geom.date.split('T')[0] === date);
 
     // check for polygon geometries and/or perform projection coordinate transform
-    let coordinates = geometry.type === 'Polygon'
-      ? olExtent.boundingExtent(
-        olProj.transform(geometry.coordinates[0], 'EPSG:4326', crs),
-      )
-      : olProj.transform(geometry.coordinates, 'EPSG:4326', crs);
+    let coordinates;
+    const transformCoords = (coords) => olProj.transform(coords, 'EPSG:4326', crs);
 
-    // handle extent transform for polar
-    if (geometry.type === 'Polygon' && id !== 'geographic') {
-      coordinates = olProj.transformExtent(coordinates, 'EPSG:4326', crs);
+    if (geometry.type === 'Polygon') {
+      const transformedCoords = geometry.coordinates[0].map(transformCoords);
+      coordinates = olExtent.boundingExtent(transformedCoords);
+    } else {
+      coordinates = olProj.transform(geometry.coordinates, 'EPSG:4326', crs);
     }
     return mapUi.animate.fly(coordinates, zoom, null);
   };
