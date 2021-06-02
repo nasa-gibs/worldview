@@ -93,11 +93,12 @@ class EventMarkers extends React.Component {
         if (geometry.type === 'Polygon') {
           const coordinatesTransform = coordinates[0].map(transformCoords);
           const extent = olExtent.boundingExtent(coordinatesTransform);
-          coordinates = olExtent.getCenter(extent);
+
           if (isSelected) {
-            marker.boundingBox = createBoundingBox(coordinatesTransform);
+            marker.boundingBox = createBoundingBox(coordinates, event.title, crs);
             map.addLayer(marker.boundingBox);
           }
+          coordinates = olExtent.getCenter(extent);
         } else {
           // if normal geometries, transform given lon/lat array
           coordinates = transformCoords(coordinates);
@@ -106,7 +107,7 @@ class EventMarkers extends React.Component {
         const extent = olExtent.boundingExtent(geometry.coordinates[0]);
         coordinates = olExtent.getCenter(extent);
         if (isSelected) {
-          marker.boundingBox = createBoundingBox(geometry.coordinates);
+          marker.boundingBox = createBoundingBox(geometry.coordinates, event.title);
           map.addLayer(marker.boundingBox);
         }
       }
@@ -133,8 +134,10 @@ class EventMarkers extends React.Component {
       return collection;
     }, []);
 
-    map.renderSync(); // Marker position will be off until this is called
-    this.setState({ markers });
+    this.setState({ markers }, () => {
+      map.getView().changed();
+      map.renderSync(); // Marker position will be off until this is called
+    });
   }
 
   addInteractions(marker, event, date, isSelected) {
@@ -224,12 +227,12 @@ const createPin = function(id, category, isSelected, title) {
   });
 };
 
-const createBoundingBox = function(coordinates) {
+const createBoundingBox = function(coordinates, title, proj = 'EPSG:4326') {
   const lightStroke = new OlStyleStyle({
     stroke: new OlStyleStroke({
       color: [255, 255, 255, 0.6],
       width: 2,
-      lineDash: [4, 8],
+      lineDash: [8, 12],
       lineDashOffset: 6,
     }),
   });
@@ -237,19 +240,21 @@ const createBoundingBox = function(coordinates) {
     stroke: new OlStyleStroke({
       color: [0, 0, 0, 0.6],
       width: 2,
-      lineDash: [4, 8],
+      lineDash: [8, 12],
     }),
   });
+  const boxPolygon = new OlGeomPolygon(coordinates).transform('EPSG:4326', proj);
+  const boxFeature = new OlFeature({
+    geometry: boxPolygon,
+    name: title,
+  });
+  const vectorSource = new OlSourceVector({
+    features: [boxFeature],
+    wrapX: false,
+  });
+
   return new OlLayerVector({
-    source: new OlSourceVector({
-      features: [
-        new OlFeature({
-          geometry: new OlGeomPolygon(coordinates),
-          name: 'NaturalEvent',
-        }),
-      ],
-      wrapX: false,
-    }),
+    source: vectorSource,
     style: [lightStroke, darkStroke],
   });
 };

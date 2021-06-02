@@ -11,24 +11,28 @@ export default function mapModel(models, config) {
   self.selectedMap = null;
   self.ui = null;
   self.rotation = 0;
+
   const init = function() {
     if (!config.projections) {
       return;
     }
 
-    Object.values(config.projections).forEach((proj) => {
-      if (proj.crs && proj.proj4) {
-        self.register(proj.crs, proj.proj4);
+    Object.values(config.projections).forEach((def) => {
+      if (def.crs && def.proj4) {
+        self.register(def);
       }
     });
   };
-  self.register = function(crs, def) {
-    if (def && proj4) {
-      proj4.defs(crs, def);
+
+  self.register = function(def) {
+    if (def && def.proj4) {
+      proj4.defs(def.crs, def.proj4);
       register(proj4);
-      olProj.get(crs).setExtent(def.maxExtent);
+      const olProjInstance = olProj.get(def.crs);
+      olProjInstance.setExtent(def.maxExtent);
     }
   };
+
   /*
    * Emits update event
    *
@@ -42,14 +46,17 @@ export default function mapModel(models, config) {
   self.update = function(extent) {
     self.extent = extent;
   };
+
   // Give other components access to zoom Level
   self.updateMap = function(map, ui) {
     self.selectedMap = map;
     self.ui = ui;
   };
+
   self.getZoom = function() {
     return self.selectedMap ? self.selectedMap.getView().getZoom() : null;
   };
+
   /*
    * Sets map view from parsed URL
    *
