@@ -134,12 +134,11 @@ function EventsFilter (props) {
         })}
       </div>
 
+      
       <Checkbox
-        className="red"
         id="events-footer-checkbox"
-        label="Only show events in current map view"
+        label="Only list events in current map view"
         onCheck={toggleListAll}
-        text="List All"
         checked={!showAll}
       />
 
