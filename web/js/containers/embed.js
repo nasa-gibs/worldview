@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getPermalink } from '../modules/link/util';
 import getSelectedDate from '../modules/date/selectors';
@@ -27,6 +28,9 @@ class Embed extends React.Component {
     const { selectedDate } = this.props;
     const queryString = history.location.search || '';
     const permalink = getPermalink(queryString, selectedDate);
+    googleTagManager.pushEvent({
+      event: 'embed_open_new_tab',
+    });
     window.open(permalink, '_blank');
   }
 
