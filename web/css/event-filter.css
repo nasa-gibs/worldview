@@ -68,10 +68,10 @@
     }
   }
   .category-toggles {
-    margin: 14px 10px 15px;
+    margin: 20px 10px 15px;
   }
   .wv-checkbox {
-    margin-left: 10px;
+    margin: 25px 10px 5px;
   }
 }
 
@@ -101,8 +101,17 @@
     border-radius: 6px;
     border: 1px solid #ddd;
   }
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: #dfdfdf;
+  }
   .react-calendar__month-view__days__day--weekend {
     color: #000;
+    &[disabled] {
+      color: #ccc !important;
+    }
+    &.react-calendar__month-view__days__day--neighboringMonth {
+      color: #dfdfdf !important;
+    }
   }
   .react-calendar__navigation__label__labelText--from {
     margin-right: 100px;
@@ -132,10 +141,10 @@
   .react-calendar__year-view__months {
     background: #fff;
   }
-  .react-calendar__tile:hover {
+  .react-calendar__tile:hover:not([disabled]) {
     background-color: #e7eeff;
   }
-  .react-calendar__tile--active:hover {
+  .react-calendar__tile--active:hover:not([disabled]) {
     color: #fff;
     background: #006edc;
   }
