@@ -94,7 +94,7 @@ class ShareLinkContainer extends Component {
     if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink().then(() => {
         googleTagManager.pushEvent({
-          event: 'social_link_shorten',
+          event: 'share_link_shorten',
         });
         this.setState({
           shortLinkKey: queryString,
@@ -109,7 +109,12 @@ class ShareLinkContainer extends Component {
   }
 
   copyToClipboard = (url) => {
+    const { activeTab } = this.state;
     const options = window.clipboardData ? {} : { format: 'text/plain' };
+    googleTagManager.pushEvent({
+      event: 'share_link_copy',
+      link_type: activeTab,
+    });
     options.onCopy = () => {
       this.setState({
         tooltipToggleTime: Date.now(),
@@ -129,7 +134,7 @@ class ShareLinkContainer extends Component {
     let shareLink = getShareLink(type, permalink);
 
     googleTagManager.pushEvent({
-      event: 'social_share_platform',
+      event: 'share_social_platform',
       social_type: type,
     });
 
