@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
 import Button from '../../components/util/button';
-import Checkbox from '../../components/util/checkbox';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
@@ -26,48 +25,48 @@ const FooterContent = (props) => {
   const compareBtnText = !isCompareActive
     ? `Start Comparison${isMobile ? ' Mode' : ''}`
     : `Exit Comparison${isMobile ? ' Mode' : ''}`;
-    return (activeTab === 'layers') ? (
-      <footer>
-        <ModeSelection
-          isActive={isCompareActive}
-          isMobile={isMobile}
-          selected={compareMode}
-          onclick={changeCompareMode}
+  return activeTab === 'layers' ? (
+    <footer>
+      <ModeSelection
+        isActive={isCompareActive}
+        isMobile={isMobile}
+        selected={compareMode}
+        onclick={changeCompareMode}
+      />
+      <div className="product-buttons">
+        <Button
+          id="layers-add"
+          aria-label="Add layers"
+          className="layers-add red"
+          text="+ Add Layers"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (isPlaying) {
+              stopAnimation();
+            }
+            addLayers();
+            googleTagManager.pushEvent({
+              event: 'add_layers',
+            });
+          }}
         />
-        <div className="product-buttons">
-          <Button
-            id="layers-add"
-            aria-label="Add layers"
-            className="layers-add red"
-            text="+ Add Layers"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (isPlaying) {
-                stopAnimation();
-              }
-              addLayers();
-              googleTagManager.pushEvent({
-                event: 'add_layers',
-              });
-            }}
-          />
-          <Button
-            id="compare-toggle-button"
-            aria-label={compareBtnText}
-            className="compare-toggle-button"
-            style={!compareFeature ? { display: 'none' } : null}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleCompare();
-              googleTagManager.pushEvent({
-                event: 'comparison_mode',
-              });
-            }}
-            text={compareBtnText}
-          />
-        </div>
-      </footer>
-    ) : null;
+        <Button
+          id="compare-toggle-button"
+          aria-label={compareBtnText}
+          className="compare-toggle-button"
+          style={!compareFeature ? { display: 'none' } : null}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleCompare();
+            googleTagManager.pushEvent({
+              event: 'comparison_mode',
+            });
+          }}
+          text={compareBtnText}
+        />
+      </div>
+    </footer>
+  ) : null;
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -106,7 +105,7 @@ const mapStateToProps = (state) => {
     isCompareActive: compare.active,
     compareMode: compare.mode,
   };
-}
+};
 
 export default connect(
   mapStateToProps,
@@ -122,7 +121,6 @@ FooterContent.propTypes = {
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool,
-  showAll: PropTypes.bool,
   stopAnimation: PropTypes.func,
   toggleCompare: PropTypes.func,
 };

@@ -146,7 +146,7 @@ function Events(props) {
             </div>
           </UncontrolledTooltip>
         </div>
-        )}
+      )}
 
       {showInactiveEventAlert && (
         <AlertUtil

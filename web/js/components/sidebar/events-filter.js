@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, ModalFooter } from 'reactstrap';
+import googleTagManager from 'googleTagManager';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import moment from 'moment';
 import Switch from '../util/switch';
@@ -21,7 +22,7 @@ function EventsFilter (props) {
     setFilter,
     closeModal,
     toggleListAll,
-    showAll
+    showAll,
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
@@ -54,7 +55,7 @@ function EventsFilter (props) {
         event: 'natural_events_show_all',
       });
     }
-  }
+  };
 
   const applyFilter = () => {
     const start = startDate && util.toISOStringDate(startDate);
@@ -134,11 +135,10 @@ function EventsFilter (props) {
         })}
       </div>
 
-      
       <Checkbox
         id="events-footer-checkbox"
         label="Only list events in current map view"
-        onCheck={toggleListAll}
+        onCheck={toggleListAllCheckbox}
         checked={!showAll}
       />
 
@@ -169,12 +169,13 @@ EventsFilter.propTypes = {
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,
   showAll: PropTypes.bool,
+  toggleListAll: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
   const { events } = state;
   const {
-    selectedCategories, selectedDates, allCategories, showAll
+    selectedCategories, selectedDates, allCategories, showAll,
   } = events;
   return {
     eventCategories: allCategories,
