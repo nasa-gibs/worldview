@@ -36,6 +36,27 @@
 }
 
 .events-filter {
+
+  .event-filter-date-range {
+    height: 50px;
+    .thru-label {
+      display: inline;
+      position: relative;
+      left: 30px;
+      top: 15px;
+    }
+    .wv-date-selector-widget {
+      &:first-of-type {
+        float: left;
+      }
+      &:last-of-type {
+        float: right;
+      }
+    }
+
+  }
+
+
   .react-daterange-picker__inputGroup__input:invalid {
     background: rgba(255, 0, 0, 0.3);
   }
