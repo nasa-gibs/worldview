@@ -127,6 +127,16 @@
     right: 12px;
   }
 
+  /* ANIMATION WIDGET */
+  .wv-animation-widget-wrapper.minimized {
+    bottom: 64px;
+  }
+  #wv-animation-widget .wv-close {
+    opacity: 0.3;
+    user-select: none;
+    pointer-events: none;
+  }
+
   /* MISC */
   #wv-toolbar {
     display: none;
@@ -134,8 +144,11 @@
   #wv-measure-button {
     display: none;
   }
-  .wv-animation-widget-wrapper.minimized {
-    bottom: 64px;
+
+  @media only screen and (max-width: 576px) {
+    .ab-slider-case {
+      bottom: 120px;
+    }
   }
   @media only screen and (max-width: 350px) {
     .wv-animation-widget-wrapper.minimized {

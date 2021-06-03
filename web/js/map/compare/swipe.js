@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
+import { getFormattedDates } from './util';
 
 const { events } = util;
 
@@ -37,10 +38,9 @@ export default class Swipe {
   }
 
   create(state) {
-    const { date } = state;
-    const { selected, selectedB } = date;
-    this.dateA = util.toISOStringDateMonthAbbrev(selected);
-    this.dateB = util.toISOStringDateMonthAbbrev(selectedB);
+    const { dateA, dateB } = getFormattedDates(state);
+    this.dateA = dateA;
+    this.dateB = dateB;
     line = addLineOverlay(this.map, this.dateA, this.dateB);
     this.update(state);
   }
@@ -64,10 +64,7 @@ export default class Swipe {
   }
 
   update(state, groupName) {
-    const { date } = state;
-    const { selected, selectedB } = date;
-    const dateA = util.toISOStringDateMonthAbbrev(selected);
-    const dateB = util.toISOStringDateMonthAbbrev(selectedB);
+    const { dateA, dateB } = getFormattedDates(state);
     if (dateA !== this.dateA || dateB !== this.dateB) {
       this.destroy();
       this.create(state);

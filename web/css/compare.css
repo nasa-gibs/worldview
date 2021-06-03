@@ -57,7 +57,6 @@
   left: 0;
   right: 0;
   bottom: 195px;
-  width: 232px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
   border-radius: 3px;
@@ -65,21 +64,19 @@
   height: 36px;
 }
 .ab-slider-case .input-range {
-  width: 146px;
+  width: 110px;
   display: inline-block;
-  margin: 6px 17px;
+  margin: 6px 14px;
 }
 .ab-slider-case .wv-slider-label {
   display: inline-block;
   vertical-align: top;
   margin-top: 12px;
-  width: 15px;
-  font-size: 16px;
-  text-align: center;
+  text-align: left;
+  white-space: nowrap;
 }
 .ab-slider-case .wv-slider-label h4 {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 400;
 }
 .ab-slider-case .input-range__slider {
   height: 20px;
@@ -106,6 +103,7 @@
   background: rgba(40, 40, 40, 0.8);
   color: rgba(255, 255, 255, 0.9);
   display: block;
+  white-space: nowrap;
   font-size: 14px;
   border-radius: 3px;
   border: 1px solid #000;
