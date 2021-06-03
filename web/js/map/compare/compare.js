@@ -46,7 +46,8 @@ export default function mapCompare(store) {
     });
   };
 
-  self.update = (state, group) => {
+  self.update = function (group) {
+    const state = store.getState();
     if (comparison) {
       comparison.update(state, group);
     }

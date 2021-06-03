@@ -48,7 +48,10 @@ function Events(props) {
   const dropdownHeight = 34;
   const maxHeight = Math.max(height - dropdownHeight, 166);
   const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
-  let showInactiveEventAlert = selected.id && !selected.date;
+
+  const missingEventDate = selected.id && !selected.date;
+  const selectedEventNotInData = !isLoading && (eventsData || []).filter((event) => event.id === selected.id).length === 0;
+  let showInactiveEventAlert = missingEventDate || selectedEventNotInData;
 
   const errorOrLoadingText = isLoading
     ? 'Loading...'

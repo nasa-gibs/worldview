@@ -33,10 +33,17 @@ export function mapLocationToEmbedState(
     layersClone.activeB.layers = activeBFiltered;
     layersClone.activeB.overlayGroups = activeBOverlayGroups;
 
-    stateFromLocation = lodashAssign({}, stateFromLocation, {
+    const updatedState = {
       embed: { isEmbedModeActive: true },
       layers: layersClone,
-    });
+    };
+
+    // revert to 'layers' tab if 'events' tab with no event selected
+    if (parameters.e === 'true') {
+      updatedState.sidebar = { activeTab: 'layers' };
+    }
+
+    stateFromLocation = lodashAssign({}, stateFromLocation, updatedState);
   }
 
   return stateFromLocation;

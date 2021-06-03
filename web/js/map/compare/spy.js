@@ -1,5 +1,6 @@
 import { each as lodashEach } from 'lodash';
 import { getRenderPixel } from 'ol/render';
+import { getFormattedDates } from './util';
 
 let mousePosition = null;
 let spy = null;
@@ -8,35 +9,43 @@ const bottomLayers = [];
 const DEFAULT_RADIUS = 140;
 let radius = DEFAULT_RADIUS;
 let label = null;
-// state.compare.isCompareA
 
-const isCompareA = (state) => state.compare.isCompareA;
 export default class Spy {
   constructor(olMap, state) {
     this.mapCase = document.getElementById('wv-map');
     this.map = olMap;
-    const isBInside = isCompareA(state);
-    this.create(isBInside);
+    const isBInside = state.compare.isCompareA;
+    this.isBInside = isBInside;
+    this.create(state);
   }
 
   /**
    * Init spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  create(isBInside) {
-    spy = this.addSpy(this.map, isBInside);
+  create(state) {
+    const isBInside = isCompareA(state);
+    spy = this.addSpy(this.map, state);
     this.isBInside = isBInside;
-    this.update(isBInside);
+    this.update(state);
   }
 
   /**
    * Update spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  update(isBInside) {
+  update(state) {
+    const isBInside = isCompareA(state);
+    const { dateA, dateB } = getFormattedDates(state);
+    if (dateA !== this.dateA || dateB !== this.dateB || dateA === dateB) {
+      const insideText = getDateText(state);
+      label.innerText = insideText;
+    }
+    this.dateA = dateA;
+    this.dateB = dateB;
     if (this.isBInside !== isBInside) {
       this.destroy();
-      this.create(isBInside);
+      this.create(state);
     } else {
       const mapLayers = this.map.getLayers().getArray();
       applyEventsToBaseLayers(
@@ -98,8 +107,8 @@ export default class Spy {
    * @param {Object} map | OL Map Object
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
-  addSpy(map, isBInside) {
-    const insideText = !isBInside ? 'A' : 'B';
+  addSpy(map, state) {
+    const insideText = getDateText(state);
     label = document.createElement('span');
     label.className = 'ab-spy-span inside-label';
     label.style.display = 'none';
@@ -115,7 +124,7 @@ export default class Spy {
   }
 }
 /**
- * Layers need to be inversly clipped so that they can't be seen through
+ * Layers need to be inversely clipped so that they can't be seen through
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
@@ -213,3 +222,17 @@ const applyEventsToBaseLayers = function(layer, map, callback) {
     callback(layer);
   }
 };
+
+const getDateText = function(state) {
+  const isBInside = isCompareA(state);
+  let insideText = isBInside ? 'B' : 'A';
+  const { dateA, dateB } = getFormattedDates(state);
+  const isSameDate = dateA === dateB;
+  if (!isSameDate) {
+    const dateText = isBInside ? dateB : dateA;
+    insideText += `: ${dateText}`;
+  }
+  return insideText;
+};
+
+const isCompareA = (state) => state.compare.isCompareA;
