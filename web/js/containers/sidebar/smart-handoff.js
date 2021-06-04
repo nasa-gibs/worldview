@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
+import { get as lodashGet, isEqual as lodashEqual } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,6 +53,8 @@ class SmartHandoff extends Component {
       showBoundingBox: false,
       currentExtent: {},
       coordinates: {},
+      validatedLayers: [],
+      validatedConceptIds: {},
     };
 
     this.baseState = this.state;
@@ -59,6 +62,10 @@ class SmartHandoff extends Component {
     this.onCheckboxToggle = this.onCheckboxToggle.bind(this);
     this.onClickDownload = this.onClickDownload.bind(this);
     this.updateExtent = this.updateExtent.bind(this);
+  }
+
+  componentDidMount() {
+    this.validateConceptIds();
   }
 
   componentDidUpdate(prevProps) {
@@ -72,12 +79,48 @@ class SmartHandoff extends Component {
     // Determine if existing selected layer is active still and visibility toggle is 'ON'
     const isLayerStillActive = availableLayers.find(({ id }) => selectedLayer && selectedLayer.id);
 
+    if (!lodashEqual(availableLayers, prevProps.availableLayers)) {
+      this.validateConceptIds();
+    }
     if (selectedCollection && !isLayerStillActive) {
       this.setState(this.baseState);
     }
     if (proj.id !== prevProps.proj.id) {
       this.setState({ showBoundingBox: false });
     }
+  }
+
+  async validateConceptIds() {
+    const { validatedConceptIds } = this.state;
+    const { availableLayers } = this.props;
+    const baseUrl = 'http://cmr.earthdata.nasa.gov/search/collections.json?concept_id=';
+    const conceptIdRequest = async (url) => {
+      const granulesResponse = await fetch(url, { timeout: 5000 });
+      const result = await granulesResponse.json();
+      return lodashGet(result, 'feed.entry', []);
+    };
+    const allConceptIds = availableLayers.reduce((prev, curr) => {
+      (curr.conceptIds || []).forEach(({ value }) => {
+        if (value) prev.push(value);
+      });
+      return prev;
+    }, []);
+
+    await Promise.all(allConceptIds.map(
+      async (id) => {
+        if (validatedConceptIds[id] !== undefined) return;
+        const response = await conceptIdRequest(baseUrl + id);
+        validatedConceptIds[id] = !!response.length;
+      },
+    ));
+
+    const validatedLayers = availableLayers.reduce((prev, curr) => {
+      const validIdsArray = (curr.conceptIds || []).filter(({ value }) => validatedConceptIds[value]);
+      if (validIdsArray.length) prev.push(curr);
+      return prev;
+    }, []);
+
+    this.setState({ validatedLayers, validatedConceptIds });
   }
 
   /**
@@ -228,16 +271,16 @@ class SmartHandoff extends Component {
    */
   renderLayerChoices() {
     const {
-      availableLayers,
       selectCollection,
       selectedCollection,
       selectedLayer,
     } = this.props;
+    const { validatedLayers, validatedConceptIds } = this.state;
 
     return (
       <div className="smart-handoff-layer-list">
 
-        {availableLayers.map((layer) => {
+        {validatedLayers.map((layer) => {
           const layerIsSelected = (selectedLayer || {}).id === layer.id;
           const itemClass = layerIsSelected ? 'layer-item selected' : 'layer-item';
 
@@ -246,7 +289,7 @@ class SmartHandoff extends Component {
               <div className="layer-title">{layer.title}</div>
               <div className="layer-subtitle">{layer.subtitle}</div>
 
-              {layer.conceptIds.map((collection) => {
+              {layer.conceptIds.filter(({ value }) => validatedConceptIds[value]).map((collection) => {
                 const {
                   type, value, version,
                 } = collection;
@@ -375,7 +418,6 @@ class SmartHandoff extends Component {
    */
   render() {
     const {
-      availableLayers,
       displayDate,
       isActive,
       showNotAvailableModal,
@@ -384,7 +426,7 @@ class SmartHandoff extends Component {
       selectedDate,
       showGranuleHelpModal,
     } = this.props;
-    const { showBoundingBox, currentExtent } = this.state;
+    const { showBoundingBox, currentExtent, validatedLayers } = this.state;
 
     // Determine if download 'smart-handoff' tab is activated by user
     if (!isActive) return null;
@@ -392,7 +434,7 @@ class SmartHandoff extends Component {
     // Determine if the download button is enabled
     const isValidDownload = selectedLayer && selectedLayer.id;
 
-    if (!availableLayers.length) {
+    if (!validatedLayers.length) {
       return this.renderNoLayersToDownload();
     }
     return (
