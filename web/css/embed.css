@@ -171,6 +171,11 @@
     user-select: none;
     pointer-events: none;
   }
+  #create-gif-button {
+    opacity: 0.3;
+    user-select: none;
+    pointer-events: none;
+  }
 
   /* MISC */
   #wv-toolbar {
