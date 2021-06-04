@@ -32,15 +32,6 @@ OPT_SUBDIR="${CONFIG_ENV-release}"
 CONFIG=$(echo $SRC_DIR | sed s_tasks/../__)
 echo "Using $CONFIG ($OPT_SUBDIR)"
 
-
-# If $FETCH_GC is set, make request to GIBS GetCapabilities API
-if [ "$FETCH_GC" ] ; then
-    rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
-    rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
-    "$PYTHON_SCRIPTS_DIR/getCapabilities.py" "$OPT_DIR/$OPT_SUBDIR/config.json" "$OPT_DIR/$OPT_SUBDIR/gc"
-    exit 0
-fi
-
 # Copy options files to build directory, and various other file operations
 rm -rf "$BUILD_DIR" "$DEST_DIR"
 mkdir -p "$BUILD_DIR" "$DEST_DIR"
@@ -57,6 +48,23 @@ mkdir -p "$DEST_DIR/config"
 mkdir -p "$BUILD_DIR/colormaps"
 mkdir -p "$BUILD_DIR/vectorstyles"
 mkdir -p "$BUILD_DIR/vectordata"
+
+# If $FETCH_GC is set, make various API requests
+if [ "$FETCH_GC" ] ; then
+    rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
+    rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
+    "$PYTHON_SCRIPTS_DIR/getCapabilities.py" "$OPT_DIR/$OPT_SUBDIR/config.json" "$OPT_DIR/$OPT_SUBDIR/gc"
+
+    # Get visualization metadata (if configured)
+    rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
+    "$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
+        "$BUILD_DIR/config/wv.json/layerOrder.json" "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"
+
+    # Run getCollectionData.py to fetch collection metadata - REMOVE ONCE GIBS-4756 IN PROD
+    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"
+    exit 0
+fi
 
 "$PYTHON_SCRIPTS_DIR/validateConfigs.py" "$SRC_DIR/common/config/wv.json/layers" \
     "$BASE/schemas/layer-config.json"
@@ -122,13 +130,8 @@ if [ ! -e "$BUILD_DIR/config/wv.json/categoryGroupOrder.json" ] ; then
         "$SRC_DIR/common/config/wv.json/"
 fi
 
-# Get visualization metadata (if configured)
-"$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
-    "$BUILD_DIR/config/wv.json/layerOrder.json" "$BUILD_DIR/config/wv.json/layerMetadata.json"
-
-    # Run getCollectionData.py to fetch collection metadata
-if [ -e "$BUILD_DIR/config/wv.json/layerMetadata.json" ] ; then
-    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$BUILD_DIR/config/wv.json/layerMetadata.json"
+if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
+    cp "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" "$BUILD_DIR/config/wv.json/layer-metadata.json"
 fi
 
 # Run mergeConfig.py on all directories in /config

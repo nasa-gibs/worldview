@@ -30,6 +30,7 @@ e2e/reports
 # Config
 /config/*
 !/config/default
-gc
+config/default/release/gc
+config/default/release/layer-metadata
 # Jest
 /coverage
