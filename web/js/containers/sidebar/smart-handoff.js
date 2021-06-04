@@ -93,7 +93,7 @@ class SmartHandoff extends Component {
   async validateConceptIds() {
     const { validatedConceptIds } = this.state;
     const { availableLayers } = this.props;
-    const baseUrl = 'http://cmr.earthdata.nasa.gov/search/collections.json?concept_id=';
+    const baseUrl = 'https://cmr.earthdata.nasa.gov/search/collections.json?concept_id=';
     const conceptIdRequest = async (url) => {
       const granulesResponse = await fetch(url, { timeout: 5000 });
       const result = await granulesResponse.json();
