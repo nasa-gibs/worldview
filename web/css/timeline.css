@@ -706,7 +706,7 @@ button:focus {
   border-radius: 5px;
   cursor: pointer;
   height: 44px;
-
+  width: 88px;
   & .button-action-group {
     height: 37px;
     border-top-right-radius: 5px;

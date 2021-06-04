@@ -972,35 +972,40 @@ class Timeline extends React.Component {
     const {
       hasSubdailyLayers,
       isCompareModeActive,
+      isEmbedModeActive,
       screenWidth,
     } = this.props;
 
-    const isScreenWidthLessThan350 = screenWidth < 350;
     const isScreenWidthLessThan450 = screenWidth < 450;
 
     // default positioning
-    let mobileLeft = '190px';
-    let mobileBottom = '10px';
-
+    let mobileLeft = 190;
+    let mobileBottom = 10;
+    if (isEmbedModeActive) {
+      mobileLeft = 135;
+      mobileBottom = 4;
+    }
     // positioning will change depending on a combination of:
     // 1) subdaily (mobile date picker width);
     // 2) screen width; and
     // 3) compare mode
-    if (hasSubdailyLayers) {
-      if (isScreenWidthLessThan450) {
-        mobileLeft = isCompareModeActive ? '112px' : '10px';
-        mobileBottom = '65px';
-      } else {
-        mobileLeft = '287px';
+    if (hasSubdailyLayers && screenWidth >= 450) {
+      mobileLeft = 287;
+      if (isEmbedModeActive) {
+        mobileLeft = 210;
       }
-    } else if (isScreenWidthLessThan350) {
-      mobileLeft = isCompareModeActive ? '112px' : '10px';
-      mobileBottom = '65px';
+    } else if (isScreenWidthLessThan450) {
+      mobileLeft = isCompareModeActive ? 112 : 10;
+      mobileBottom = 65;
+      if (isEmbedModeActive) {
+        mobileLeft = isCompareModeActive ? 80 : 0;
+        mobileBottom = 45;
+      }
     }
 
     return {
-      left: mobileLeft,
-      bottom: mobileBottom,
+      left: `${mobileLeft}px`,
+      bottom: `${mobileBottom}px`,
     };
   }
 

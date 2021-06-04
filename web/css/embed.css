@@ -36,7 +36,7 @@
   z-index: 102;
   top: 10px;
   right: 10px;
-  font-size: 14px;
+  font-size: 12px;
   padding: 2.5px 4px;
 }
 
@@ -49,19 +49,29 @@
   .event-container {
     min-height: 75px;
   }
+  #wv-eventscontent li h4.title {
+    width: 85%;
+  }
   .layer-group-case .layer-group-header {
     margin-top: 0;
     & .layer-group-title {
+      white-space: pre-wrap;
+      text-overflow: inherit;
       font-size: 12px;
     }
   }
   .layer-group-baselayers {
     margin-top: 0;
   }
+  .layer-group-more-options {
+    display: none;
+  }
   .sidebar-panel li.item h4 {
-    font-size: 12px;
+    width: 95%;
+    font-size: 13px;
   }
   #wv-sidebar {
+    transform: scale(0.75);
     #download-sidebar-tab {
       display: none;
     }
@@ -103,33 +113,58 @@
     }
   }
 
+  /* TIMELINE */
+  .mobile-date-picker-select-btn {
+    transform: scale(0.75);
+    transform-origin: bottom left;
+  }
+  .mobile-date-change-arrows-btn {
+    left: 168px;
+    transform: scale(0.75);
+  }
+
   /* COMPARE */
+  .comparison-mobile-select-toggle {
+    transform-origin: bottom left;
+    transform: scale(0.75);
+    bottom: 50px;
+  }
   .ab-swipe-dragger {
-    bottom: 132px;
+    bottom: 100px;
   }
   .ab-swipe-line .ab-swipe-span {
-    bottom: 119px;
+    bottom: 90px;
   }
   .ab-slider-case {
-    bottom: 74px;
+    bottom: 50px;
   }
 
   /* COORDS/SCALE */
   #ol-coords-case {
+    transform: scale(0.85);
+    transform-origin: right;
     bottom: 8px;
   }
   .wv-map-scale-imperial {
+    transform: scale(0.85);
+    transform-origin: right;
     bottom: 50px;
     right: 12px;
   }
   .wv-map-scale-metric {
+    transform: scale(0.85);
+    transform-origin: right;
     bottom: 68px;
     right: 12px;
   }
 
   /* ANIMATION WIDGET */
+  .wv-animation-widget {
+    transform: scale(0.85);
+    transform-origin: bottom left;
+  }
   .wv-animation-widget-wrapper.minimized {
-    bottom: 64px;
+    bottom: 55px;
   }
   #wv-animation-widget .wv-close {
     opacity: 0.3;
@@ -147,12 +182,12 @@
 
   @media only screen and (max-width: 576px) {
     .ab-slider-case {
-      bottom: 120px;
+      bottom: 90px;
     }
   }
-  @media only screen and (max-width: 350px) {
+  @media only screen and (max-width: 450px) {
     .wv-animation-widget-wrapper.minimized {
-      left: 110px;
+      left: 93px;
     }
   }
 }

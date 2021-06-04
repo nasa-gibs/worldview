@@ -114,7 +114,7 @@ function LayersContainer (props) {
     : height;
 
   if (isEmbedModeActive) {
-    minHeight = '100px';
+    minHeight = '25px';
     maxHeight = '55vh';
   } else {
     maxHeight += 'px';
