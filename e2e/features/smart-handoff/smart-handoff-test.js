@@ -52,9 +52,10 @@ module.exports = {
     c.click(dataTabButton);
 
     // Ensure layer is now showing as an option for download
-    c.expect.element(cloudRadiusRadioButton).to.be.present;
-
-    c.click(cloudRadiusRadioButton);
+    c.waitForElementVisible(cloudRadiusRadioButton, TIME_LIMIT, (e) => {
+      c.click(cloudRadiusRadioButton);
+      c.pause(500);
+    });
 
     // Verify granules and date are correct
     c.expect
