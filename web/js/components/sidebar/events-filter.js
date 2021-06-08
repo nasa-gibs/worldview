@@ -33,6 +33,8 @@ function EventsFilter (props) {
   const [dateRange, setDateRange] = useState([parsedStartDate, parsedEndDate]);
   const [startDate, endDate] = dateRange || [];
 
+  const [listAll, setListAll] = useState(showAll);
+
   const toggleCategory = (category) => {
     const isActive = categories.some(({ id }) => id === category.id);
     let newCategories;
@@ -44,23 +46,15 @@ function EventsFilter (props) {
     setCategories(newCategories);
   };
 
-  const toggleListAllCheckbox = () => {
-    toggleListAll();
-    if (showAll) {
-      googleTagManager.pushEvent({
-        event: 'natural_events_current_view_only',
-      });
-    } else {
-      googleTagManager.pushEvent({
-        event: 'natural_events_show_all',
-      });
-    }
-  };
-
   const applyFilter = () => {
     const start = startDate && util.toISOStringDate(startDate);
     const end = endDate && util.toISOStringDate(endDate);
     setFilter(categories, start, end);
+    if (showAll !== listAll) {
+      toggleListAll();
+      const event = showAll ? 'natural_events_show_all' : 'natural_events_current_view_only';
+      googleTagManager.pushEvent({ event });
+    }
     closeModal();
   };
 
@@ -136,8 +130,8 @@ function EventsFilter (props) {
       <Checkbox
         id="events-footer-checkbox"
         label="Only list events in current map view"
-        onCheck={toggleListAllCheckbox}
-        checked={!showAll}
+        onCheck={() => setListAll(!listAll)}
+        checked={!listAll}
       />
 
       <ModalFooter>
@@ -193,6 +187,8 @@ const mapDispatchToProps = (dispatch) => ({
         endDate,
       ),
     );
+  },
+  toggleListAll: () => {
     dispatch(toggleListAllAction());
   },
 });
