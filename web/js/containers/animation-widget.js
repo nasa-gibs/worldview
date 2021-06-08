@@ -14,7 +14,7 @@ import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
-import TimeSelector from '../components/date-selector/date-selector';
+import DateRangeSelector from '../components/date-selector/date-range-selector';
 import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/interval-timescale-change';
@@ -238,12 +238,15 @@ class AnimationWidget extends React.Component {
     onPushLoop(loop);
   }
 
-  onDateChange(date, id) {
-    const { onUpdateStartDate, onUpdateEndDate } = this.props;
-    if (id === 'start') {
-      onUpdateStartDate(date);
-    } else {
-      onUpdateEndDate(date);
+  onDateChange([newStartDate, newEndDate]) {
+    const {
+      onUpdateStartDate, onUpdateEndDate, startDate, endDate,
+    } = this.props;
+    if (newStartDate !== startDate) {
+      onUpdateStartDate(startDate);
+    }
+    if (newEndDate !== endDate) {
+      onUpdateEndDate(endDate);
     }
   }
 
@@ -537,27 +540,16 @@ class AnimationWidget extends React.Component {
             {this.renderCreateGifButton()}
 
             {/* From/To Date/Time Selection */}
-            <div className="wv-date-range-selector">
-              <TimeSelector
-                id="start"
-                idSuffix="animation-widget-start"
-                date={startDate}
-                onDateChange={this.onDateChange}
-                maxDate={endDate}
-                minDate={minDate}
-                subDailyMode={subDailyMode}
-              />
-              <div className="thru-label">To</div>
-              <TimeSelector
-                id="end"
-                idSuffix="animation-widget-end"
-                date={endDate}
-                onDateChange={this.onDateChange}
-                maxDate={maxDate}
-                minDate={startDate}
-                subDailyMode={subDailyMode}
-              />
-            </div>
+            <DateRangeSelector
+              idSuffix="animation-widget"
+              startDate={startDate}
+              endDate={endDate}
+              setDateRange={this.onDateChange}
+              minDate={minDate}
+              maxDate={maxDate}
+              subDailyMode={subDailyMode}
+            />
+
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
