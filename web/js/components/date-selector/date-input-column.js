@@ -12,12 +12,13 @@ import util from '../../util/util';
 class DateInputColumn extends Component {
   constructor(props) {
     super(props);
+    const { type, subDailyMode } = props;
     this.state = {
       value: '',
       selected: false,
       size: null,
+      lastPosition: subDailyMode ? type === 'minute' : type === 'day',
     };
-    this.inputs = [];
   }
 
   componentDidMount() {
@@ -26,10 +27,7 @@ class DateInputColumn extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { focused, tabIndex, value } = this.props;
-    if (focused) {
-      this.inputs[tabIndex].focus();
-    }
+    const { value } = this.props;
     if (value !== prevProps.value) {
       this.updateValue();
     }
@@ -51,16 +49,52 @@ class DateInputColumn extends Component {
     });
   }
 
-  // update input value
+  /**
+   * Handle changing to next input position when user hits enter, or
+   * return to first input when hitting tab/enter on the last input
+   */
+  nextTab = () => {
+    const { lastPosition } = this.state;
+    const {
+      type, subDailyMode, idSuffix, isEndDate, isStartDate,
+    } = this.props;
+    const unitCycle = ['year', 'month', 'day'];
+    if (subDailyMode) {
+      unitCycle.push('hour');
+      unitCycle.push('minute');
+    }
+    const currentPosition = unitCycle.indexOf(type);
+    const nextPosition = currentPosition === unitCycle.length - 1 ? 0 : currentPosition + 1;
+    const nextUnit = unitCycle[nextPosition];
+    let currentTarget = `#${type}-${idSuffix}`;
+    let nextTarget = `#${nextUnit}-${idSuffix}`;
+
+    if (isStartDate) {
+      currentTarget = `${currentTarget}-start`;
+      nextTarget = lastPosition
+        ? `#year-${idSuffix}-end`
+        : `${nextTarget}-start`;
+    } else if (isEndDate) {
+      currentTarget = `${currentTarget}-end`;
+      nextTarget = lastPosition
+        ? `#year-${idSuffix}-start`
+        : `${nextTarget}-end`;
+    }
+
+    document.querySelector(currentTarget).blur();
+    setTimeout(() => {
+      document.querySelector(nextTarget).focus();
+    }, 10);
+  }
+
   updateValue = () => {
     const { value } = this.props;
     this.setState({ value });
   }
 
   onKeyPress = (e) => {
-    // check tab and enter key code
     const { keyCode } = e;
-    const entered = keyCode === 13 || keyCode === 9;
+    const entered = keyCode === 13;
     if (entered) {
       e.preventDefault();
       e.stopPropagation();
@@ -70,49 +104,34 @@ class DateInputColumn extends Component {
   onKeyUp = (e) => {
     const { type } = this.props;
     const { keyCode } = e;
-    const entered = keyCode === 13 || keyCode === 9;
-    let shiftTab;
+    const entered = keyCode === 13;
+    const tabbed = keyCode === 9;
+    const backspace = keyCode === 8;
+    const numKeys = keyCode >= 48 && keyCode <= 57;
 
-    // shift down when tab pressed
-    if (e.shiftKey && keyCode === 9) {
-      shiftTab = true;
-    }
     if (keyCode === 38) {
       // up
       e.preventDefault();
-      this.onClickUp();
+      this.rollDate(1);
       return;
     }
     if (keyCode === 40) {
       // down
       e.preventDefault();
-      this.onClickDown();
+      this.rollDate(-1);
       return;
     }
-    if (e.type === 'focusout' || entered) {
+    if (e.type === 'focusout' || entered || tabbed) {
       if (type === 'year' || type === 'day') {
-        if (!((keyCode >= 48 && keyCode <= 57) || entered || keyCode === 8)) {
+        if (!(numKeys || entered || backspace)) {
           return;
         }
       }
       if (entered) {
-        if (shiftTab) {
-          // shift-tabbed - move backward
-          this.previousTab();
-        } else {
-          // entered or tabbed - move forward
-          this.nextTab();
-        }
+        // entered or tabbed - move forward
+        this.nextTab();
       }
     }
-  }
-
-  onClickUp = () => {
-    this.rollDate(1);
-  }
-
-  onClickDown = () => {
-    this.rollDate(-1);
   }
 
   validateBasedOnType = (value) => {
@@ -257,16 +276,14 @@ class DateInputColumn extends Component {
    * @param {Object} e | Event Object
    */
   handleFocus = (e) => {
-    const { setFocusedTab, tabIndex } = this.props;
+    const { onFocus, type } = this.props;
     e.target.select();
     this.setState({ selected: true });
-    setFocusedTab(tabIndex);
+    onFocus(type);
   }
 
   blur = (e) => {
-    const {
-      setFocusedTab, tabIndex, type, value,
-    } = this.props;
+    const { type, value } = this.props;
     // check for valid date on blur
     const inputValue = e.target.value;
     const newDate = this.validateBasedOnType(inputValue);
@@ -285,24 +302,12 @@ class DateInputColumn extends Component {
       value: newValue,
       selected: false,
     });
-
-    setFocusedTab(null, tabIndex);
   }
 
   onChange = (e) => {
     this.setState({
       value: e.target.value.toUpperCase(),
     });
-  }
-
-  nextTab = () => {
-    const { changeTab, tabIndex } = this.props;
-    changeTab(tabIndex + 1, tabIndex);
-  }
-
-  previousTab = () => {
-    const { changeTab, tabIndex } = this.props;
-    changeTab(tabIndex - 1, tabIndex);
   }
 
   validateDate = (date) => {
@@ -316,9 +321,10 @@ class DateInputColumn extends Component {
   render() {
     const {
       fontSize,
-      inputId,
+      idSuffix,
       isValid,
-      tabIndex,
+      isStartDate,
+      isEndDate,
       type,
     } = this.props;
     const {
@@ -332,6 +338,12 @@ class DateInputColumn extends Component {
     const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
     const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
     const fontSizeStyle = fontSize ? { fontSize: `${fontSize}px` } : {};
+    const inputId = isStartDate
+      ? `${type}-${idSuffix}-start`
+      : isEndDate
+        ? `${type}-${idSuffix}-end`
+        : `${type}-${idSuffix}`;
+
     return (
       <div
         className={containerClassName}
@@ -339,20 +351,16 @@ class DateInputColumn extends Component {
       >
         <Arrow
           direction="up"
-          onClick={this.onClickUp}
+          onClick={() => this.rollDate(1)}
           type={type}
         />
         <input
+          id={inputId}
           type="text"
-          ref={(input) => {
-            this.inputs[tabIndex] = input;
-          }}
           size={size}
           maxLength={size}
-          className={`${inputClassName} date-input-column`}
-          id={inputId}
+          className={inputClassName}
           value={value}
-          tabIndex={tabIndex}
           onKeyUp={this.onKeyUp}
           onKeyDown={this.onKeyPress}
           onChange={this.onChange}
@@ -362,7 +370,7 @@ class DateInputColumn extends Component {
         />
         <Arrow
           direction="down"
-          onClick={this.onClickDown}
+          onClick={() => this.rollDate(-1)}
           type={type}
         />
       </div>
@@ -371,16 +379,16 @@ class DateInputColumn extends Component {
 }
 
 DateInputColumn.propTypes = {
-  changeTab: PropTypes.func,
   date: PropTypes.object,
-  focused: PropTypes.bool,
   fontSize: PropTypes.number,
-  inputId: PropTypes.string,
+  idSuffix: PropTypes.string,
   isValid: PropTypes.bool,
+  isStartDate: PropTypes.bool,
+  isEndDate: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
-  setFocusedTab: PropTypes.func,
-  tabIndex: PropTypes.number,
+  onFocus: PropTypes.func,
+  subDailyMode: PropTypes.bool,
   type: PropTypes.string,
   updateDate: PropTypes.func,
   updateTimeUnitInput: PropTypes.func,

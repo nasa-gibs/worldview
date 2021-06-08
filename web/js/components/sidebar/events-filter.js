@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, ModalFooter } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
-// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import moment from 'moment';
 import Switch from '../util/switch';
 import Checkbox from '../util/checkbox';
@@ -12,7 +11,7 @@ import {
   toggleListAll as toggleListAllAction,
 } from '../../modules/natural-events/actions';
 import util from '../../util/util';
-import DateSelector from '../date-selector/date-selector';
+import DateRangeSelector from '../date-selector/date-range-selector';
 
 function EventsFilter (props) {
   const {
@@ -89,52 +88,19 @@ function EventsFilter (props) {
 
   const minDate = new Date('01-01-2000');
   const maxDate = new Date();
-  const setStartDate = (newStart, id) => {
-    setDateRange([newStart, endDate]);
-  };
-  const setEndDate = (newEnd, id) => {
-    setDateRange([startDate, newEnd]);
-  };
 
   return (
     <div className="events-filter">
 
-      {/* <DateRangePicker
-        onChange={setDateRange}
-        value={dateRange}
-        minDate={new Date('01-01-2000')}
-        maxDate={new Date()}
-        dayPlaceholder="DD"
-        monthPlaceholder="MM"
-        yearPlaceholder="YYYY"
-        format="y-MM-dd"
-        rangeDivider=" to "
-        showDoubleView
-        openCalendarOnFocus={false}
-        closeCalendar={false}
-      /> */}
-
-      <div className="wv-date-range-selector">
-        <DateSelector
-          id="event-filter-start"
-          idSuffix="event-filter-start"
-          date={startDate}
-          onDateChange={setStartDate}
-          minDate={minDate}
-          maxDate={maxDate}
-          subDailyMode={false}
-        />
-        <div className="thru-label">to</div>
-        <DateSelector
-          id="event-filter-end"
-          idSuffix="event-filter-end"
-          date={endDate}
-          onDateChange={setEndDate}
-          maxDate={maxDate}
-          minDate={startDate}
-          subDailyMode={false}
-        />
-      </div>
+      <DateRangeSelector
+        idSuffix="event-filter"
+        startDate={startDate}
+        endDate={endDate}
+        setDateRange={setDateRange}
+        minDate={minDate}
+        maxDate={maxDate}
+        subDailyMode={false}
+      />
 
       <div className="category-toggles">
         <div className="classification-switch-header">
