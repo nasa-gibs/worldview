@@ -1,3 +1,5 @@
+
+
 .wv-date-selector-widget .input-wrapper, .date-arrow-wrapper {
   background: transparent;
   border: 1px solid transparent;
@@ -163,4 +165,71 @@
 
 .wv-date-selector-widget .wv-animate:hover {
   color: #1a1a1a;
+}
+
+.wv-date-range-selector {
+  height: 48px;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  .wv-date-selector-widget {
+    position: absolute;
+    .input-wrapper {
+      z-index: 99;
+      text-align: center;
+      margin: 0 1px;
+    }
+    .input-wrapper-month {
+      width: 34px;
+    }
+    .input-wrapper-year {
+      width: 44px;
+    }
+    .input-wrapper-day,
+    .input-wrapper-hour,
+    .input-wrapper-minute {
+      width: 32px;
+    }
+    .input-wrapper-hour {
+      margin-left: 8px;
+    }
+    .input-time-divider {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 15px;
+      vertical-align: middle;
+      width: 5px;
+      margin-left: -5px;
+    }
+    .input-time-zmark {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 15px;
+      vertical-align: middle;
+      margin-top: 2px;
+      margin-left: -2px;
+    }
+    svg {
+      margin: 0 auto;
+    }
+    input {
+      height: inherit;
+      text-align: center;
+      width: 100%;
+    }
+  }
+  .wv-date-selector-widget:nth-child(1) {
+    left: 5px;
+  }
+  .wv-date-selector-widget:nth-child(3) {
+    right: 5px;
+  }
+  .thru-label {
+    position: absolute;
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+    color: #fff;
+    left: 50%;
+    text-align: center;
+    bottom: 16px;
+    z-index: 0;
+  }
 }
