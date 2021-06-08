@@ -1,6 +1,8 @@
 import {
   get as lodashGet,
+  isEqual as lodashEqual,
 } from 'lodash';
+
 import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
@@ -55,9 +57,15 @@ export function showAll() {
 
 export function setEventsFilter(categories, startDate, endDate) {
   return (dispatch, getState) => {
-    const { config, proj } = getState();
+    const { config, proj, events } = getState();
+    const { selectedCategories, selectedDates } = events;
     const baseUrl = lodashGet(config, 'features.naturalEvents.host');
     const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate, categories, proj);
+    const sameCategories = lodashEqual(selectedCategories, categories);
+    const sameDates = lodashEqual(selectedDates, { start: startDate, end: endDate });
+    if (sameCategories && sameDates) {
+      return;
+    }
     dispatch(requestEvents(requestUrl));
     dispatch({
       type: SET_EVENTS_FILTER,
