@@ -50,7 +50,7 @@ function Events(props) {
   const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
 
   const missingEventDate = selected.id && !selected.date;
-  const selectedEventNotInData = !isLoading && (eventsData || []).filter((event) => event.id === selected.id).length === 0;
+  const selectedEventNotInData = !isLoading && selected.id && (eventsData || []).filter((event) => event.id === selected.id).length === 0;
   let showInactiveEventAlert = missingEventDate || selectedEventNotInData;
 
   const errorOrLoadingText = isLoading
