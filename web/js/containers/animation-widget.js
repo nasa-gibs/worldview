@@ -524,7 +524,7 @@ class AnimationWidget extends React.Component {
             {this.renderCreateGifButton()}
 
             {/* From/To Date/Time Selection */}
-            <div className="wv-anim-dates-case">
+            <div className="wv-date-range-selector">
               <TimeSelector
                 id="start"
                 idSuffix="animation-widget-start"

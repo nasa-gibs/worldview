@@ -84,16 +84,6 @@
     padding-right: 3px;
     padding-left: 3px;
   }
-  & .thru-label {
-    position: absolute;
-    transform: translate(-50%, 0);
-    -webkit-transform: translate(-50%, 0);
-    color: #fff;
-    left: 50%;
-    text-align: center;
-    bottom: 16px;
-    z-index: 0;
-  }
   & .input-range {
     cursor: pointer;
     height: 13px;
@@ -118,6 +108,9 @@
       color: #999;
       cursor: pointer;
     }
+  }
+  .wv-date-range-selector {
+    margin: 0;
   }
 }
 
@@ -159,75 +152,11 @@ a .wv-animation-widget-icon {
   font-size: 11px;
   cursor: default;
 }
-.wv-animation-widget .wv-anim-dates-case {
-  height: 48px;
-  width: 100%;
-  position: relative;
-  margin: 0;
-}
 
 .wv-animation-widget .wv-date-selector-widget {
   display: inline-block;
   position: absolute;
   top: 6px;
-}
-
-.wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(1) {
-  left: 5px;
-}
-
-.wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(3) {
-  right: 10px;
-}
-
-.wv-animation-widget .wv-date-selector-widget svg {
-  margin: 0 auto;
-}
-
-.wv-animation-widget .wv-date-selector-widget input {
-  height: inherit;
-  text-align: center;
-  width: 100%;
-}
-
-.wv-animation-widget .wv-date-selector-widget .input-wrapper {
-  z-index: 99;
-  text-align: center;
-  margin: 0 1px;
-}
-
-.wv-animation-widget .wv-date-selector-widget .input-wrapper-year {
-  max-width: 38px;
-}
-
-.wv-animation-widget .wv-date-selector-widget .input-wrapper-month {
-  max-width: 30px;
-}
-
-.wv-animation-widget .wv-date-selector-widget .input-wrapper-day,
-.wv-animation-widget .wv-date-selector-widget .input-wrapper-hour,
-.wv-animation-widget .wv-date-selector-widget .input-wrapper-minute {
-  max-width: 25px;
-}
-
-.wv-animation-widget .wv-date-selector-widget .input-wrapper-hour {
-  margin-left: 8px;
-}
-
-.wv-animation-widget .wv-date-selector-widget .input-time-divider {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 15px;
-  vertical-align: middle;
-  width: 5px;
-  margin-left: -5px;
-}
-
-.wv-animation-widget .wv-date-selector-widget .input-time-zmark {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 15px;
-  vertical-align: middle;
-  margin-top: 2px;
-  margin-left: -2px;
 }
 
 #wv-rangeselector-case {
