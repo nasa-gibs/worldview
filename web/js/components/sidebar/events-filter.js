@@ -114,7 +114,7 @@ function EventsFilter (props) {
         closeCalendar={false}
       /> */}
 
-      <div className="event-filter-date-range">
+      <div className="wv-date-range-selector">
         <DateSelector
           id="event-filter-start"
           idSuffix="event-filter-start"
