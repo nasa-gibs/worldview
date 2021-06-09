@@ -31,6 +31,15 @@ const Switch = (props) => {
     toggleActive(!isActive);
   }
 
+  function onKeyDown(e) {
+    const entered = e.keyCode === 13;
+    if (entered) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleSwitch();
+    }
+  }
+
   return (
     <div className={containerClass}>
       <div className="react-switch-case switch-col">
@@ -45,6 +54,8 @@ const Switch = (props) => {
           className="react-switch-label"
           htmlFor={id}
           style={style}
+          tabIndex="0"
+          onKeyDown={onKeyDown}
         >
           <span className="react-switch-button" />
         </label>
@@ -59,7 +70,7 @@ const Switch = (props) => {
         {tooltip
           && (
             <>
-              <FontAwesomeIcon icon="info-circle" id={`${id}-switch-tooltip`} />
+              <FontAwesomeIcon icon="info-circle" id={`${id}-switch-tooltip`} tabIndex="-1" />
               <Tooltip
                 placement="right"
                 isOpen={tooltipOpen}

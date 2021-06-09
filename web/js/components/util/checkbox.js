@@ -26,6 +26,7 @@ export default function Checkbox (props) {
         checked={checked}
         className={classNames}
         onChange={onCheck}
+        tabIndex="0"
       />
       {children}
       <label htmlFor={id}>
