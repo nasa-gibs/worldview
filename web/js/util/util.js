@@ -17,20 +17,6 @@ export default (function(self) {
   self.browser = browser;
   self.events = events;
   self.load = load;
-  self.monthStringArray = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
-  ];
 
   self.repeat = function(value, length) {
     let result = '';

@@ -4,6 +4,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { datesInDateRanges } from '../../../modules/layers/util';
 import util from '../../../util/util';
+import { monthStringArray } from '../../date-selector/util';
 import {
   timeScaleToNumberKey,
 } from '../../../modules/date/constants';
@@ -177,7 +178,7 @@ class CoverageItemList extends Component {
       const month = yearMonthDaySplit[1];
       const day = yearMonthDaySplit[2];
 
-      const monthAbbrev = util.monthStringArray[Number(month) - 1];
+      const monthAbbrev = monthStringArray[Number(month) - 1];
 
       dateRangeStart = `${year} ${monthAbbrev} ${day}`;
     } else {
@@ -192,7 +193,7 @@ class CoverageItemList extends Component {
       const month = yearMonthDaySplit[1];
       const day = yearMonthDaySplit[2];
 
-      const monthAbbrev = util.monthStringArray[Number(month) - 1];
+      const monthAbbrev = monthStringArray[Number(month) - 1];
 
       dateRangeEnd = `${year} ${monthAbbrev} ${day}`;
     } else {
