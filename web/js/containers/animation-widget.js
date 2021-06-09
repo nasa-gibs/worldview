@@ -243,10 +243,10 @@ class AnimationWidget extends React.Component {
       onUpdateStartDate, onUpdateEndDate, startDate, endDate,
     } = this.props;
     if (newStartDate !== startDate) {
-      onUpdateStartDate(startDate);
+      onUpdateStartDate(newStartDate);
     }
     if (newEndDate !== endDate) {
-      onUpdateEndDate(endDate);
+      onUpdateEndDate(newEndDate);
     }
   }
 

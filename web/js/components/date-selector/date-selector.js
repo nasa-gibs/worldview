@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DateInputColumn from './date-input-column';
 import util from '../../util/util';
+import { monthStringArray } from './util';
 
 /*
  * DateSelector used within Timeline and AnimationWidget.
@@ -67,9 +68,10 @@ class DateSelector extends Component {
   componentDidUpdate(prevProps) {
     const {
       date,
-      id,
       minDate,
       maxDate,
+      isStartDate,
+      isEndDate,
     } = this.props;
     const {
       year,
@@ -84,8 +86,8 @@ class DateSelector extends Component {
       this.clearTimeValuesAndValidation();
     }
     // handle animation start/end date limit changes and pending invalid -> valid dates
-    const minDateChangeEndUpdate = id === 'end' && prevProps.minDate.getTime() !== minDate.getTime();
-    const maxDateChangeStartUpdate = id === 'start' && prevProps.maxDate.getTime() !== maxDate.getTime();
+    const minDateChangeEndUpdate = isEndDate && prevProps.minDate.getTime() !== minDate.getTime();
+    const maxDateChangeStartUpdate = isStartDate && prevProps.maxDate.getTime() !== maxDate.getTime();
     const anyPendingTimeUnits = year || month || day || hour || minute;
     if ((minDateChangeEndUpdate || maxDateChangeStartUpdate) && anyPendingTimeUnits) {
       this.updateDate();
@@ -166,7 +168,7 @@ class DateSelector extends Component {
       }
 
       if (month) {
-        const realMonth = util.stringInArray(util.monthStringArray, month);
+        const realMonth = util.stringInArray(monthStringArray, month);
         const maxDatePrev = new Date(
           date.getUTCFullYear(),
           date.getUTCMonth() + 1,
@@ -219,7 +221,7 @@ class DateSelector extends Component {
 
         let dateCheck;
         if (day <= maxDayDate) {
-          const realMonth = util.stringInArray(util.monthStringArray, month);
+          const realMonth = util.stringInArray(monthStringArray, month);
           date = new Date(new Date(date).setUTCDate(day));
           dateCheck = new Date(inputDate);
           dateCheck = new Date(new Date(date).setUTCDate(1));
@@ -300,11 +302,11 @@ class DateSelector extends Component {
   */
   // eslint-disable-next-line react/destructuring-assignment
   updateDate = (date = this.props.date, isRollDate = false) => {
-    const { id, onDateChange } = this.props;
+    const { onDateChange } = this.props;
     const newDate = this.updateDateCheck(date, isRollDate);
 
     if (newDate) {
-      onDateChange(newDate, id);
+      onDateChange(newDate);
       // clear the pending timeunit inputs and reset validation
       this.clearTimeValuesAndValidation();
     }
@@ -377,7 +379,7 @@ class DateSelector extends Component {
         <DateInputColumn
           {...sharedProps}
           type="month"
-          value={month || util.monthStringArray[date.getUTCMonth()]}
+          value={month || monthStringArray[date.getUTCMonth()]}
           isValid={monthValid}
         />
         <DateInputColumn
@@ -414,7 +416,6 @@ DateSelector.defaultProps = {
 DateSelector.propTypes = {
   date: PropTypes.object,
   fontSize: PropTypes.number,
-  id: PropTypes.string,
   idSuffix: PropTypes.string,
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,

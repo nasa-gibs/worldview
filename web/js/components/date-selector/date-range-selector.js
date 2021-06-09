@@ -7,10 +7,10 @@ export default function DateRangeSelector (props) {
     startDate, endDate, setDateRange, minDate, maxDate, subDailyMode, idSuffix,
   } = props;
 
-  const setStartDate = (newStart, id) => {
+  const setStartDate = (newStart) => {
     setDateRange([newStart, endDate]);
   };
-  const setEndDate = (newEnd, id) => {
+  const setEndDate = (newEnd) => {
     setDateRange([startDate, newEnd]);
   };
   return (
@@ -20,7 +20,7 @@ export default function DateRangeSelector (props) {
         date={startDate}
         onDateChange={setStartDate}
         minDate={minDate}
-        maxDate={maxDate}
+        maxDate={endDate}
         subDailyMode={subDailyMode}
         isStartDate
       />
