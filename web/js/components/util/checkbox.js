@@ -65,6 +65,7 @@ export default class Checkbox extends React.Component {
           checked={checked}
           className={classNames}
           onChange={this.handleChange}
+          tabIndex="0"
         />
         {children}
         <label htmlFor={id}>

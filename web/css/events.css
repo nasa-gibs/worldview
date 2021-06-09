@@ -8,6 +8,8 @@
 }
 
 .event-container {
+
+  background: #333;
   .no-events {
     text-align: center;
     color: #eee;
@@ -16,6 +18,14 @@
     margin: 15px auto;
   }
   min-height: 350px;
+  @media (max-width: 768px) {
+    height: calc(100vh - 36px)
+  }
+  .event-scroll-list {
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
+    background: #222;
+  }
 }
 
 .map-item-list li.item {
@@ -33,6 +43,9 @@
 
 .map-item-list li.item h4 {
   font-size: 0.85em;
+  @media (max-width: 768px) {
+    font-size: 1em;
+  }
   color: #ccc;
   padding: 0 3px;
   margin-left: 40px;
