@@ -1,7 +1,8 @@
 .filter-controls {
   background: #333;
   padding: 5px;
-  border-bottom: 1px solid #666;
+  max-width: 290px;
+  margin: 0 auto;
   .filter-dates-icons {
     display: inline-block;
     max-width: 224px;
@@ -36,7 +37,6 @@
 }
 
 .events-filter {
-
   .event-filter-date-range {
     height: 50px;
     .thru-label {
@@ -98,10 +98,9 @@
   color: #fff;
   text-align: center;
   padding: 10px 0;
-  width: 284px;
+  width: 100%;
   margin: 0 auto;
-  border-top: 1px solid #666;
-  background: #333;
+
   font-size: 15px;
   svg {
     margin-left: 6px;

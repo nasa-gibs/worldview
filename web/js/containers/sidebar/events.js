@@ -102,6 +102,7 @@ function Events(props) {
       </div>
 
       <Scrollbars
+        className="event-scroll-list"
         style={{ maxHeight: `${scrollbarMaxHeight}` }}
       >
         <div id="wv-events">
