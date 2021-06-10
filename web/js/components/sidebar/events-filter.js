@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, ModalFooter } from 'reactstrap';
+import { Button } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
+import { Portal } from 'react-portal';
 import Switch from '../util/switch';
 import Checkbox from '../util/checkbox';
 import {
@@ -21,6 +22,7 @@ function EventFilterModalBody (props) {
     setFilter,
     closeModal,
     showAll,
+    parentId,
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
@@ -46,12 +48,12 @@ function EventFilterModalBody (props) {
   const applyFilter = () => {
     const start = startDate && util.toISOStringDate(startDate);
     const end = endDate && util.toISOStringDate(endDate);
+    closeModal();
     setFilter(categories, start, end, listAll);
     if (showAll !== listAll) {
       const event = listAll ? 'natural_events_show_all' : 'natural_events_current_view_only';
       googleTagManager.pushEvent({ event });
     }
-    closeModal();
   };
 
   const selectAllNone = () => {
@@ -77,57 +79,55 @@ function EventFilterModalBody (props) {
   const maxDate = new Date();
 
   return (
-    <>
-      <div className="events-filter">
-        <DateRangeSelector
-          idSuffix="event-filter"
-          startDate={startDate}
-          endDate={endDate}
-          setDateRange={setDateRange}
-          minDate={minDate}
-          maxDate={maxDate}
-          subDailyMode={false}
-        />
+    <div className="events-filter">
+      <DateRangeSelector
+        idSuffix="event-filter"
+        startDate={startDate}
+        endDate={endDate}
+        setDateRange={setDateRange}
+        minDate={minDate}
+        maxDate={maxDate}
+        subDailyMode={false}
+      />
 
-        <div className="category-toggles">
-          <div className="classification-switch-header">
-            <h2 className="wv-header">Disable/Enable</h2>
-            <Switch
-              id="header-disable"
-              label="All"
-              containerClassAddition="header"
-              active={allNone}
-              toggle={selectAllNone}
-            />
-
-          </div>
-
-          {eventCategories.map((category) => {
-            const { id, title, description } = category;
-            const switchId = `${id}-switch`;
-            const isActive = categories.some((c) => c.title === title);
-            return (
-              <div className="category-switch-row" key={switchId}>
-                <Switch
-                  id={switchId}
-                  label={title}
-                  active={isActive}
-                  tooltip={description}
-                  toggle={() => toggleCategory(category)}
-                />
-              </div>
-            );
-          })}
+      <div className="category-toggles">
+        <div className="classification-switch-header">
+          <h2 className="wv-header">Disable/Enable</h2>
+          <Switch
+            id="header-disable"
+            label="All"
+            containerClassAddition="header"
+            active={allNone}
+            toggle={selectAllNone}
+          />
         </div>
 
-        <Checkbox
-          id="events-footer-checkbox"
-          label="Only list events in current map view"
-          onCheck={() => setListAll(!listAll)}
-          checked={!listAll}
-        />
+        {eventCategories.map((category) => {
+          const { id, title, description } = category;
+          const switchId = `${id}-switch`;
+          const isActive = categories.some((c) => c.title === title);
+          return (
+            <div className="category-switch-row" key={switchId}>
+              <Switch
+                id={switchId}
+                label={title}
+                active={isActive}
+                tooltip={description}
+                toggle={() => toggleCategory(category)}
+              />
+            </div>
+          );
+        })}
       </div>
-      <ModalFooter>
+
+      <Checkbox
+        id="events-footer-checkbox"
+        label="Only list events in current map view"
+        onCheck={() => setListAll(!listAll)}
+        checked={!listAll}
+      />
+
+      <Portal node={document.querySelector(`#${parentId} .modal-footer`)}>
         <Button
           id="filter-apply-btn"
           color="primary"
@@ -137,17 +137,21 @@ function EventFilterModalBody (props) {
         >
           Apply
         </Button>
-        <Button color="secondary" onClick={closeModal}>
+        <Button
+          color="secondary"
+          onClick={closeModal}
+        >
           Cancel
         </Button>
-      </ModalFooter>
-    </>
+      </Portal>
+    </div>
   );
 }
 
 EventFilterModalBody.propTypes = {
   closeModal: PropTypes.func,
   eventCategories: PropTypes.array,
+  parentId: PropTypes.string,
   selectedCategories: PropTypes.array,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
