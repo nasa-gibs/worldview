@@ -12,7 +12,7 @@ import {
 import util from '../../util/util';
 import DateRangeSelector from '../date-selector/date-range-selector';
 
-function EventsFilter (props) {
+function EventFilterModalBody (props) {
   const {
     eventCategories,
     selectedCategories,
@@ -77,56 +77,56 @@ function EventsFilter (props) {
   const maxDate = new Date();
 
   return (
-    <div className="events-filter">
+    <>
+      <div className="events-filter">
+        <DateRangeSelector
+          idSuffix="event-filter"
+          startDate={startDate}
+          endDate={endDate}
+          setDateRange={setDateRange}
+          minDate={minDate}
+          maxDate={maxDate}
+          subDailyMode={false}
+        />
 
-      <DateRangeSelector
-        idSuffix="event-filter"
-        startDate={startDate}
-        endDate={endDate}
-        setDateRange={setDateRange}
-        minDate={minDate}
-        maxDate={maxDate}
-        subDailyMode={false}
-      />
+        <div className="category-toggles">
+          <div className="classification-switch-header">
+            <h2 className="wv-header">Disable/Enable</h2>
+            <Switch
+              id="header-disable"
+              label="All"
+              containerClassAddition="header"
+              active={allNone}
+              toggle={selectAllNone}
+            />
 
-      <div className="category-toggles">
-        <div className="classification-switch-header">
-          <h2 className="wv-header">Disable/Enable</h2>
-          <Switch
-            id="header-disable"
-            label="All"
-            containerClassAddition="header"
-            active={allNone}
-            toggle={selectAllNone}
-          />
+          </div>
 
+          {eventCategories.map((category) => {
+            const { id, title, description } = category;
+            const switchId = `${id}-switch`;
+            const isActive = categories.some((c) => c.title === title);
+            return (
+              <div className="category-switch-row" key={switchId}>
+                <Switch
+                  id={switchId}
+                  label={title}
+                  active={isActive}
+                  tooltip={description}
+                  toggle={() => toggleCategory(category)}
+                />
+              </div>
+            );
+          })}
         </div>
 
-        {eventCategories.map((category) => {
-          const { id, title, description } = category;
-          const switchId = `${id}-switch`;
-          const isActive = categories.some((c) => c.title === title);
-          return (
-            <div className="category-switch-row" key={switchId}>
-              <Switch
-                id={switchId}
-                label={title}
-                active={isActive}
-                tooltip={description}
-                toggle={() => toggleCategory(category)}
-              />
-            </div>
-          );
-        })}
+        <Checkbox
+          id="events-footer-checkbox"
+          label="Only list events in current map view"
+          onCheck={() => setListAll(!listAll)}
+          checked={!listAll}
+        />
       </div>
-
-      <Checkbox
-        id="events-footer-checkbox"
-        label="Only list events in current map view"
-        onCheck={() => setListAll(!listAll)}
-        checked={!listAll}
-      />
-
       <ModalFooter>
         <Button
           id="filter-apply-btn"
@@ -141,12 +141,11 @@ function EventsFilter (props) {
           Cancel
         </Button>
       </ModalFooter>
-
-    </div>
+    </>
   );
 }
 
-EventsFilter.propTypes = {
+EventFilterModalBody.propTypes = {
   closeModal: PropTypes.func,
   eventCategories: PropTypes.array,
   selectedCategories: PropTypes.array,
@@ -183,4 +182,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventsFilter);
+export default connect(mapStateToProps, mapDispatchToProps)(EventFilterModalBody);
