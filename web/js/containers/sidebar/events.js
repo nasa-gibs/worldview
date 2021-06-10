@@ -130,24 +130,28 @@ function Events(props) {
         </div>
       </Scrollbars>
 
-      {eventLimitReach && (
-        <div className="event-count">
-          Showing the first
-          {` ${eventsData ? eventsData.length : ''} `}
-          events
-          <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
-          <UncontrolledTooltip
-            placement="right"
-            target="filter-info-icon"
-          >
-            <div>
-              More than
-              {` ${LIMIT_EVENT_REQUEST_COUNT} `}
-              events matched the current filter criteria.
-            </div>
-          </UncontrolledTooltip>
-        </div>
-      )}
+      <div className="event-count">
+        {eventLimitReach && (
+          <>
+            <span>
+              Showing the first
+              {` ${eventsData ? eventsData.length : ''} `}
+              events
+            </span>
+            <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
+            <UncontrolledTooltip
+              placement="right"
+              target="filter-info-icon"
+            >
+              <div>
+                More than
+                {` ${LIMIT_EVENT_REQUEST_COUNT} `}
+                events matched the current filter criteria.
+              </div>
+            </UncontrolledTooltip>
+          </>
+        )}
+      </div>
 
       {showInactiveEventAlert && (
         <AlertUtil

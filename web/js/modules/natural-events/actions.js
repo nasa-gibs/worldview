@@ -8,10 +8,7 @@ import {
   REQUEST_SOURCES,
   SELECT_EVENT,
   DESELECT_EVENT,
-  SHOW_ALL_EVENTS,
   SET_EVENTS_FILTER,
-  ONLY_SHOW_VISIBLE,
-  TOGGLE_SHOW_ALL,
   FINISHED_ANIMATING_TO_EVENT,
 } from './constants';
 import { requestAction } from '../core/actions';
@@ -49,13 +46,7 @@ export function deselectEvent(id, date) {
   };
 }
 
-export function showAll() {
-  return {
-    type: SHOW_ALL_EVENTS,
-  };
-}
-
-export function setEventsFilter(categories, startDate, endDate) {
+export function setEventsFilter(categories, startDate, endDate, showAll) {
   return (dispatch, getState) => {
     const { config, proj, events } = getState();
     const { selectedCategories, selectedDates } = events;
@@ -63,28 +54,17 @@ export function setEventsFilter(categories, startDate, endDate) {
     const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate, categories, proj);
     const sameCategories = lodashEqual(selectedCategories, categories);
     const sameDates = lodashEqual(selectedDates, { start: startDate, end: endDate });
-    if (sameCategories && sameDates) {
-      return;
+    if (!sameCategories || !sameDates) {
+      dispatch(requestEvents(requestUrl));
     }
-    dispatch(requestEvents(requestUrl));
+
     dispatch({
       type: SET_EVENTS_FILTER,
       categories,
       startDate,
       endDate,
+      showAll,
     });
-  };
-}
-
-export function toggleListAll() {
-  return {
-    type: TOGGLE_SHOW_ALL,
-  };
-}
-
-export function onlyShowVisible() {
-  return {
-    type: ONLY_SHOW_VISIBLE,
   };
 }
 

@@ -9,9 +9,6 @@ import {
   SELECT_EVENT,
   DESELECT_EVENT,
   SET_EVENTS_FILTER,
-  SHOW_ALL_EVENTS,
-  ONLY_SHOW_VISIBLE,
-  TOGGLE_SHOW_ALL,
   FINISHED_ANIMATING_TO_EVENT,
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
@@ -92,26 +89,12 @@ export function eventsReducer(state = eventsReducerState, action) {
     case SET_EVENTS_FILTER:
       return {
         ...state,
+        showAll: action.showAll,
         selectedCategories: action.categories,
         selectedDates: {
           start: action.startDate,
           end: action.endDate,
         },
-      };
-    case SHOW_ALL_EVENTS:
-      return {
-        ...state,
-        showAll: true,
-      };
-    case TOGGLE_SHOW_ALL:
-      return {
-        ...state,
-        showAll: !state.showAll,
-      };
-    case ONLY_SHOW_VISIBLE:
-      return {
-        ...state,
-        showAll: false,
       };
     case CHANGE_SIDEBAR_TAB: {
       const isActive = action.activeTab === 'events';
