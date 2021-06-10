@@ -183,9 +183,7 @@ const mapDispatchToProps = (dispatch) => ({
       headerText: 'Filter Events',
       backdrop: false,
       bodyComponent: EventFilterModalBody,
-      // Using clickableBehindModal: true here causes an issue where switching sidebar
-      // tabs does not close this modal
-      wrapClassName: 'clickable-behind-modal',
+      footer: true,
       modalClassName: 'sidebar-modal event-filter-modal',
       timeout: 150,
     }));
