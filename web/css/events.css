@@ -19,12 +19,16 @@
   }
   min-height: 166px;
   @media (max-width: 768px) {
-    height: calc(100vh - 36px)
+    height: calc(100vh - 36px);
   }
   .event-scroll-list {
     border-top: 1px solid #666;
     border-bottom: 1px solid #666;
     background: #222;
+    min-height: 260px;
+    @media (max-width: 768px) {
+      min-height: calc(100vh - 140px);
+    }
   }
 }
 
@@ -298,6 +302,17 @@
 .wv-map .event-icon {
   height: 26px;
   width: 26px;
+}
+
+@media (max-width: 768px) {
+  .event-scroll-list .event-icon {
+    height: 40px;
+    width: 40px;
+  }
+  .wv-map .event-icon {
+    height: 36px;
+    width: 36px;
+  }
 }
 
 .event-icon-dust-and-haze {
