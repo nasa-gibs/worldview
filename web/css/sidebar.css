@@ -419,7 +419,7 @@ footer .compare-toggle-button {
       width: calc(100vw - 2px);
     }
     .modal-body {
-      height: calc(100vh - 44px)
+      height: calc(100vh - 44px);
     }
     .modal-footer {
       position: absolute;

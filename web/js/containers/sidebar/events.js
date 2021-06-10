@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Event from '../../components/sidebar/event';
 import EventIcon from '../../components/sidebar/event-icon';
-import EventFilter from '../../components/sidebar/events-filter';
+import EventFilterModalBody from '../../components/sidebar/events-filter';
 import Scrollbars from '../../components/util/scrollbar';
 import {
   selectEvent as selectEventActionCreator,
@@ -182,7 +182,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleCustomContent('events-filter', {
       headerText: 'Filter Events',
       backdrop: false,
-      bodyComponent: EventFilter,
+      bodyComponent: EventFilterModalBody,
       // Using clickableBehindModal: true here causes an issue where switching sidebar
       // tabs does not close this modal
       wrapClassName: 'clickable-behind-modal',
