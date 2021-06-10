@@ -8,7 +8,6 @@ import Switch from '../util/switch';
 import Checkbox from '../util/checkbox';
 import {
   setEventsFilter as setEventsFilterAction,
-  toggleListAll as toggleListAllAction,
 } from '../../modules/natural-events/actions';
 import util from '../../util/util';
 import DateRangeSelector from '../date-selector/date-range-selector';
@@ -21,19 +20,17 @@ function EventsFilter (props) {
     selectedEndDate,
     setFilter,
     closeModal,
-    toggleListAll,
     showAll,
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
   const [categories, setCategories] = useState(selectedCategories);
+  const [listAll, setListAll] = useState(showAll);
 
   const parsedStartDate = selectedStartDate && new Date(moment(selectedStartDate).valueOf());
   const parsedEndDate = selectedEndDate && new Date(moment(selectedEndDate).valueOf());
   const [dateRange, setDateRange] = useState([parsedStartDate, parsedEndDate]);
   const [startDate, endDate] = dateRange || [];
-
-  const [listAll, setListAll] = useState(showAll);
 
   const toggleCategory = (category) => {
     const isActive = categories.some(({ id }) => id === category.id);
@@ -49,10 +46,9 @@ function EventsFilter (props) {
   const applyFilter = () => {
     const start = startDate && util.toISOStringDate(startDate);
     const end = endDate && util.toISOStringDate(endDate);
-    setFilter(categories, start, end);
+    setFilter(categories, start, end, listAll);
     if (showAll !== listAll) {
-      toggleListAll();
-      const event = showAll ? 'natural_events_show_all' : 'natural_events_current_view_only';
+      const event = listAll ? 'natural_events_show_all' : 'natural_events_current_view_only';
       googleTagManager.pushEvent({ event });
     }
     closeModal();
@@ -66,9 +62,7 @@ function EventsFilter (props) {
     }
     setAllNone(!allNone);
   };
-
   const disableApply = !categories.length || !!(!startDate && endDate) || !!(!endDate && startDate);
-
   const getDisableApplyMsg = () => {
     let msg = '';
     if (!startDate || !endDate) {
@@ -79,7 +73,6 @@ function EventsFilter (props) {
     }
     return msg;
   };
-
   const minDate = new Date('01-01-2000');
   const maxDate = new Date();
 
@@ -161,7 +154,6 @@ EventsFilter.propTypes = {
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,
   showAll: PropTypes.bool,
-  toggleListAll: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -179,17 +171,15 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  setFilter: (categories, startDate, endDate) => {
+  setFilter: (categories, startDate, endDate, showAll) => {
     dispatch(
       setEventsFilterAction(
         categories,
         startDate,
         endDate,
+        showAll,
       ),
     );
-  },
-  toggleListAll: () => {
-    dispatch(toggleListAllAction());
   },
 });
 
