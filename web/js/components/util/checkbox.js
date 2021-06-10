@@ -34,12 +34,10 @@ export default class Checkbox extends React.Component {
   }
 
   handleChange(e) {
-    this.setState((prevState) => {
-      const { onCheck } = this.props;
-      const checked = !prevState.checked;
-      if (onCheck) onCheck(checked);
-      return { checked };
-    });
+    const { checked } = this.state;
+    const { onCheck } = this.props;
+    onCheck(!checked);
+    this.setState({ checked: !checked });
   }
 
   render() {
