@@ -4,7 +4,7 @@ import Scrollbar from '../util/scrollbar';
 export default function AboutPage() {
   return (
 
-    <Scrollbar style={{ height: 'calc(100vh - 200px)' }}>
+    <Scrollbar style={{ height: 'calc(var(--vh, 1vh) * 100 - 200px)' }}>
       <div className="about-page">
         <div className="right">
           <div className="caption">

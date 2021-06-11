@@ -8,7 +8,6 @@
 }
 
 .event-container {
-
   background: #333;
   .no-events {
     text-align: center;
@@ -19,7 +18,7 @@
   }
   min-height: 166px;
   @media (max-width: 768px) {
-    height: calc(100vh - 36px);
+    height: calc(var(--vh, 1vh) * 100 - 36px);
   }
   .event-scroll-list {
     border-top: 1px solid #666;
@@ -27,7 +26,7 @@
     background: #222;
     min-height: 260px;
     @media (max-width: 768px) {
-      min-height: calc(100vh - 140px);
+      min-height: calc(var(--vh, 1vh) * 100 - 140px);
     }
   }
 }
