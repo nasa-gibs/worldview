@@ -417,7 +417,7 @@ footer .compare-toggle-button {
   @media (max-width: 768px) {
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     margin: 0;
     border-radius: 0;
     .modal-content, .modal-body, .modal-header, .modal-footer {
@@ -429,7 +429,7 @@ footer .compare-toggle-button {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        max-height: calc(100vh - 2px);
+        max-height: calc(var(--vh, 1vh) * 100 - 2px);
         height: 100%;
       }
     }

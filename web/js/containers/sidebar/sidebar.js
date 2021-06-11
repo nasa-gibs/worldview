@@ -343,6 +343,7 @@ class Sidebar extends React.Component {
                     </TabPane>
 
                     <FooterContent
+                      ref={(el) => { this.footerElement = el; }}
                       tabTypes={tabTypes}
                       activeTab={activeTab}
                     />

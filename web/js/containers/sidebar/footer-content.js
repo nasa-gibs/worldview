@@ -9,7 +9,7 @@ import SearchUiProvider from '../../components/layer/product-picker/search-ui-pr
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
 
-const FooterContent = (props) => {
+const FooterContent = React.forwardRef((props, ref) => {
   const {
     isCompareActive,
     compareMode,
@@ -20,13 +20,25 @@ const FooterContent = (props) => {
     addLayers,
     toggleCompare,
     compareFeature,
-    stopAnimation,
   } = props;
   const compareBtnText = !isCompareActive
     ? `Start Comparison${isMobile ? ' Mode' : ''}`
     : `Exit Comparison${isMobile ? ' Mode' : ''}`;
+
+  const onClickAddLayers = (e) => {
+    e.stopPropagation();
+    addLayers(isPlaying);
+    googleTagManager.pushEvent({ event: 'add_layers' });
+  };
+
+  const onClickToggleCompare = (e) => {
+    e.stopPropagation();
+    toggleCompare();
+    googleTagManager.pushEvent({ event: 'comparison_mode' });
+  };
+
   return activeTab === 'layers' ? (
-    <footer>
+    <footer ref={ref}>
       <ModeSelection
         isActive={isCompareActive}
         isMobile={isMobile}
@@ -39,35 +51,20 @@ const FooterContent = (props) => {
           aria-label="Add layers"
           className="layers-add red"
           text="+ Add Layers"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (isPlaying) {
-              stopAnimation();
-            }
-            addLayers();
-            googleTagManager.pushEvent({
-              event: 'add_layers',
-            });
-          }}
+          onClick={onClickAddLayers}
         />
         <Button
           id="compare-toggle-button"
           aria-label={compareBtnText}
           className="compare-toggle-button"
           style={!compareFeature ? { display: 'none' } : null}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleCompare();
-            googleTagManager.pushEvent({
-              event: 'comparison_mode',
-            });
-          }}
+          onClick={onClickToggleCompare}
           text={compareBtnText}
         />
       </div>
     </footer>
   ) : null;
-};
+});
 
 const mapDispatchToProps = (dispatch) => ({
   toggleCompare: () => {
@@ -76,7 +73,10 @@ const mapDispatchToProps = (dispatch) => ({
   changeCompareMode: (str) => {
     dispatch(changeMode(str));
   },
-  addLayers: () => {
+  addLayers: (isPlaying) => {
+    if (isPlaying) {
+      dispatch(stopAnimationAction());
+    }
     dispatch(
       openCustomContent('LAYER_PICKER_COMPONENT', {
         headerText: null,
@@ -86,9 +86,6 @@ const mapDispatchToProps = (dispatch) => ({
         wrapClassName: '',
       }),
     );
-  },
-  stopAnimation: () => {
-    dispatch(stopAnimationAction());
   },
 });
 
@@ -110,6 +107,8 @@ const mapStateToProps = (state) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
+  null,
+  { forwardRef: true },
 )(FooterContent);
 
 FooterContent.propTypes = {
@@ -121,6 +120,5 @@ FooterContent.propTypes = {
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool,
-  stopAnimation: PropTypes.func,
   toggleCompare: PropTypes.func,
 };
