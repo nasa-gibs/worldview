@@ -2,4 +2,4 @@ The Earth at Night layer is a night time view of the Earth, showing visible ligh
 
 The Earth at Night imagery is available only as a single snapshot in time for 2012. The sensor resolution is 750 m and the image resolution is 500 m. The imagery can be visualized in Worldview/Global Imagery Browse Services (GIBS). The imagery can be downloaded from [NASA Earth Observatory/Visible Earth](https://visibleearth.nasa.gov/view.php?id=79765).
 
-References: [Visible Earth - Night Lights 2012 - Flat Map](https://visibleearth.nasa.gov/view.php?id=79765)
+References: [Visible Earth - Night Lights 2012 - Flat Map](https://visibleearth.nasa.gov/view.php?id=79765); [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights)
