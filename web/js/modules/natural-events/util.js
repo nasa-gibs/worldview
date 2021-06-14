@@ -61,18 +61,20 @@ export function mapLocationToEventFilterState(parameters, stateFromLocation, sta
     ? []
     : selectedIds.map((id) => allCategories.find((c) => c.id === id));
 
-  let [selectedStartDate, selectedEndDate] = parameters.efd
-    ? parameters.efd.split(',')
-    : [selectedDates.start, selectedDates.end];
+  let [selectedStartDate, selectedEndDate] = (parameters.efd || ',').split(',');
 
   const eventIsSelected = selected.id && selected.date;
   const filterDatesAreSet = selectedStartDate && selectedEndDate;
   if (eventIsSelected && !filterDatesAreSet) {
     selectedStartDate = selected.date;
     selectedEndDate = selected.date;
+  } else {
+    selectedStartDate = selectedDates.start;
+    selectedEndDate = selectedDates.end;
   }
+
   let showAll;
-  if (parameters.efs === 'true') {
+  if (parameters.efs === 'true' || !parameters.efs) {
     showAll = true;
   } else if (parameters.efs === 'false') {
     showAll = false;

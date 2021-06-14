@@ -4,8 +4,11 @@ import {
 import { transform } from 'ol/proj';
 import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
 import moment from 'moment';
+import * as olProj from 'ol/proj';
 import util from '../../util/util';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
+
+const geographicProj = 'EPSG:4326';
 
 export function getEventsRequestURL (baseUrl, selectedDates, categories = [], proj, bbox) {
   const params = {
@@ -13,6 +16,9 @@ export function getEventsRequestURL (baseUrl, selectedDates, categories = [], pr
     limit: LIMIT_EVENT_REQUEST_COUNT,
   };
   const { start, end } = selectedDates;
+  const { crs } = proj.selected;
+  const transformCoords = (coords) => olProj.transform(coords, crs, geographicProj);
+
   if (start && end) {
     params.start = moment.utc(start).format('YYYY-MM-DD');
     params.end = moment.utc(end).format('YYYY-MM-DD');
@@ -20,8 +26,8 @@ export function getEventsRequestURL (baseUrl, selectedDates, categories = [], pr
   if (categories.length) {
     params.category = categories.map(({ id }) => id).join(',');
   }
+
   let [minLon, maxLat, maxLon, minLat] = [-180, 90, 180, -90];
-  const { crs } = proj.selected;
   if (crs === 'EPSG:3413') {
     [minLon, maxLat, maxLon, minLat] = [-180, 50, 180, 90];
   }
@@ -29,7 +35,9 @@ export function getEventsRequestURL (baseUrl, selectedDates, categories = [], pr
     [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -50];
   }
   if (bbox && bbox.length) {
-    [minLon, maxLat, maxLon, minLat] = bbox;
+    const [minLonA, maxLatA, maxLonA, minLatA] = bbox;
+    [minLon, maxLat] = transformCoords([minLonA, maxLatA]);
+    [maxLon, minLat] = transformCoords([maxLonA, minLatA]);
   }
   params.bbox = [minLon, maxLat, maxLon, minLat];
 
