@@ -7,19 +7,19 @@ import moment from 'moment';
 import util from '../../util/util';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
-export function getEventsRequestURL (baseUrl, startDate, endDate, categories = [], proj) {
+export function getEventsRequestURL (baseUrl, selectedDates, categories = [], proj, bbox) {
   const params = {
     status: 'all',
     limit: LIMIT_EVENT_REQUEST_COUNT,
   };
-  if (startDate && endDate) {
-    params.start = moment.utc(startDate).format('YYYY-MM-DD');
-    params.end = moment.utc(endDate).format('YYYY-MM-DD');
+  const { start, end } = selectedDates;
+  if (start && end) {
+    params.start = moment.utc(start).format('YYYY-MM-DD');
+    params.end = moment.utc(end).format('YYYY-MM-DD');
   }
   if (categories.length) {
     params.category = categories.map(({ id }) => id).join(',');
   }
-
   let [minLon, maxLat, maxLon, minLat] = [-180, 90, 180, -90];
   const { crs } = proj.selected;
   if (crs === 'EPSG:3413') {
@@ -27,6 +27,9 @@ export function getEventsRequestURL (baseUrl, startDate, endDate, categories = [
   }
   if (crs === 'EPSG:3031') {
     [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -50];
+  }
+  if (bbox && bbox.length) {
+    [minLon, maxLat, maxLon, minLat] = bbox;
   }
   params.bbox = [minLon, maxLat, maxLon, minLat];
 

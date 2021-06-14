@@ -71,6 +71,12 @@ export function mapLocationToEventFilterState(parameters, stateFromLocation, sta
     selectedStartDate = selected.date;
     selectedEndDate = selected.date;
   }
+  let showAll;
+  if (parameters.efs === 'true') {
+    showAll = true;
+  } else if (parameters.efs === 'false') {
+    showAll = false;
+  }
 
   return update(stateFromLocation, {
     events: {
@@ -80,6 +86,9 @@ export function mapLocationToEventFilterState(parameters, stateFromLocation, sta
       selectedDates: {
         start: { $set: selectedStartDate },
         end: { $set: selectedEndDate },
+      },
+      showAll: {
+        $set: showAll,
       },
     },
   });
