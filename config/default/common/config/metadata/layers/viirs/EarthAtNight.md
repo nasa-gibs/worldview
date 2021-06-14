@@ -10,7 +10,7 @@ The Black Marble Nighttime At Sensor Radiance (Day/Night Band) layer is availabl
 
 [Dataset doi:10.5067/VIIRS/VNP46A1.001](https://doi.org/10.5067/VIIRS/VNP46A1.001)
 
-References: [VNP46A1](https://blackmarble.gsfc.nasa.gov/VNP46A1.html); [Black Marble User Guide](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarbleUserGuide_V1.1.pdf); [Black Marble ATBD](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarble_ATBD_V1.1.pdf); [The Lights of London. NASA Earth Observatory](https://earthobservatory.nasa.gov/IOTD/view.php?id=78674); [Out of the Blue and Into the Black. NASA Earth Observatory](https://earthobservatory.nasa.gov/Features/IntotheBlack/).
+References: [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights);  [VNP46A1](https://blackmarble.gsfc.nasa.gov/VNP46A1.html); [Black Marble User Guide](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarbleUserGuide_V1.1.pdf); [Black Marble ATBD](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarble_ATBD_V1.1.pdf); [The Lights of London. NASA Earth Observatory](https://earthobservatory.nasa.gov/IOTD/view.php?id=78674); [Out of the Blue and Into the Black. NASA Earth Observatory](https://earthobservatory.nasa.gov/Features/IntotheBlack/).
 
 Román, M. O., Z. Wang, Q. Sun, V. Kalb, S. D. Miller, A. Molthan, L. Schultz, J. Bell, E. C. Stokes, B. Pandey, K. C. Seto, D. Hall, T. Oda, R. E. Wolfe, G. Lin, N. Golpayegani, S. Devadiga, C. Davidson, S. Sarkar, C. Praderas, J. Schmaltz, R. Boller, J. Stevens, O. M. Ramos Gonzalez, E. Padilla, J. Alonso, Y. Detrés, R. Armstrong, I. Miranda, Y. Conte, N. Marrero, K. MacManus, T. Esch, and E. J. Masuoka. 2018. "NASA’s Black Marble nighttime lights product suite." Remote Sensing of Environment 210 113-143 [doi:10.1016/j.rse.2018.03.017](https://doi.org/10.1016/j.rse.2018.03.017)
 
@@ -27,7 +27,7 @@ The Black Marble Nighttime Blue/Yellow Composite (Day/Night Band) layer is avail
 
 [Dataset doi:10.5067/VIIRS/VNP46A1.001](https://doi.org/10.5067/VIIRS/VNP46A1.001)
 
-References: [VNP46A1](https://blackmarble.gsfc.nasa.gov/VNP46A1.html); [Black Marble User Guide](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarbleUserGuide_V1.1.pdf); [Black Marble ATBD](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarble_ATBD_V1.1.pdf); [The Lights of London. NASA Earth Observatory](https://earthobservatory.nasa.gov/IOTD/view.php?id=78674); [Out of the Blue and Into the Black. NASA Earth Observatory](https://earthobservatory.nasa.gov/Features/IntotheBlack/).
+References: [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights); [VNP46A1](https://blackmarble.gsfc.nasa.gov/VNP46A1.html); [Black Marble User Guide](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarbleUserGuide_V1.1.pdf); [Black Marble ATBD](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarble_ATBD_V1.1.pdf); [The Lights of London. NASA Earth Observatory](https://earthobservatory.nasa.gov/IOTD/view.php?id=78674); [Out of the Blue and Into the Black. NASA Earth Observatory](https://earthobservatory.nasa.gov/Features/IntotheBlack/).
 
 Román, M. O., Z. Wang, Q. Sun, V. Kalb, S. D. Miller, A. Molthan, L. Schultz, J. Bell, E. C. Stokes, B. Pandey, K. C. Seto, D. Hall, T. Oda, R. E. Wolfe, G. Lin, N. Golpayegani, S. Devadiga, C. Davidson, S. Sarkar, C. Praderas, J. Schmaltz, R. Boller, J. Stevens, O. M. Ramos Gonzalez, E. Padilla, J. Alonso, Y. Detrés, R. Armstrong, I. Miranda, Y. Conte, N. Marrero, K. MacManus, T. Esch, and E. J. Masuoka. 2018. "NASA’s Black Marble nighttime lights product suite." Remote Sensing of Environment 210 113-143 [doi:10.1016/j.rse.2018.03.017](https://doi.org/10.1016/j.rse.2018.03.017)
 
@@ -48,7 +48,9 @@ The Visible Infrared Imaging Radiometer Suite (VIIRS) Nighttime Imagery (Day/Nig
 
 The current ENCC Nighttime Imagery layer is available from the VIIRS instrument aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite at a daily temporal resolution. The VIIRS Day/Night Band (DNB) sensor resolution is 750 m at nadir and the ENCC imagery layer’s gridded resolution is 15 arc-second (approximately 500 meters at the equator).
 
-References: Hillger, D., Seaman, C., Liang, C., Miller, S., Lindsey, D., & Kopp, T. (2014). Suomi NPP VIIRS imagery evaluation. Journal of Geophysical Research: Atmospheres, 119(11), 6440-6455, [doi:10.1002/2013JD021170](https://doi.org/10.1002/2013JD021170).
+References: [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights)
+
+Hillger, D., Seaman, C., Liang, C., Miller, S., Lindsey, D., & Kopp, T. (2014). Suomi NPP VIIRS imagery evaluation. Journal of Geophysical Research: Atmospheres, 119(11), 6440-6455, [doi:10.1002/2013JD021170](https://doi.org/10.1002/2013JD021170).
 
 Román, M. O., Wang, Z., Sun, Q., Kalb, V., Miller, S. D., Molthan, A., ... & Masuoka, E. J. (2018). NASA's Black Marble nighttime lights product suite. Remote Sensing of Environment, 210, 113-143, [doi:10.1016/j.rse.2018.03.017](https://doi.org/10.1016/j.rse.2018.03.017).
 
@@ -57,11 +59,11 @@ The Black Marble layer and the Black Marble – Nighttime Lights only layer is a
 
 Currently, the Black Marble imagery is available only as a single snapshot in time for 2012 and 2016. The sensor resolution is 750 m and the image resolution is 500 m. The imagery can be visualized in Worldview/Global Imagery Browse Services (GIBS).
 
-References: [NASA Earth Observatory: Night Light Maps Open Up New Applications](https://earthobservatory.nasa.gov/Features/NightLights)
+References: [NASA Earth Observatory: Night Light Maps Open Up New Applications](https://earthobservatory.nasa.gov/Features/NightLights); [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights)
 
 ### Earth at Night 2012: VIIRS City Lights 2012
 The Earth at Night layer is a night time view of the Earth, showing visible light emanating from sources such as city lights, gas flares, wildfires, auroras and reflected moonlight. The image is a composite of data from the Visible Infrared Imaging Radiometer Suite (VIIRS) instrument on board the joint NASA/NOAA Suomi National Polar-orbiting Partnership (Suomi NPP) satellite. The image composite was assembled from clear, cloud free images from 9 days in April 2012 and 13 days in October 2012.
 
 The Earth at Night imagery is available only as a single snapshot in time. The sensor resolution is 750 m and the image resolution is 500 m. The imagery can be visualized in Worldview/Global Imagery Browse Services (GIBS). The imagery can be downloaded from [NASA Earth Observatory/Visible Earth](https://visibleearth.nasa.gov/view.php?id=79765).
 
-References: [Visible Earth - Night Lights 2012 - Flat Map](https://visibleearth.nasa.gov/view.php?id=79765)
+References: [Visible Earth - Night Lights 2012 - Flat Map](https://visibleearth.nasa.gov/view.php?id=79765); [Earthdata - Nighttime Lights](https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights)
