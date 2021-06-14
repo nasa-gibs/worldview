@@ -34,7 +34,7 @@ import {
   mapLocationToLayerState,
 } from './modules/layers/util';
 import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/selectors';
-import { eventsReducerState } from './modules/natural-events/reducers';
+import { getInitialEventsState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToEmbedState } from './modules/embed/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
@@ -146,6 +146,7 @@ const getParameters = function(config, parameters) {
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
   const { initialDate } = config;
   const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const eventsReducerState = getInitialEventsState(config);
   return {
     p: {
       stateKey: 'proj.id',
@@ -314,13 +315,23 @@ const getParameters = function(config, parameters) {
         serialize: serializeEvent,
       },
     },
+    efs: {
+      stateKey: 'events.showAll',
+      initialState: true,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (showAll, state) => {
+          const eventsActive = get(state, 'events.active');
+          return eventsActive ? showAll : undefined;
+        },
+        setAsEmptyItem: true,
+      },
+    },
     efd: {
       stateKey: 'events.selectedDates',
       type: 'object',
-      initialState: {
-        start: undefined,
-        end: undefined,
-      },
+      initialState: eventsReducerState.selectedDates,
       options: {
         parse: parseEventFilterDates,
         serialize: serializeEventFilterDates,

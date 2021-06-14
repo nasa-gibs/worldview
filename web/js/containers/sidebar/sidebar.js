@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get as lodashGet } from 'lodash';
+import {
+  get as lodashGet,
+  isEqual as lodashEqual,
+} from 'lodash';
 import { TabContent, TabPane } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import LayersContainer from './layers-container';
@@ -88,30 +91,35 @@ class Sidebar extends React.Component {
   componentDidUpdate(prevProps) {
     const { activeTab, proj } = this.props;
     if (activeTab === 'events') {
-      const projChange = proj !== prevProps.proj;
+      const projChange = !lodashEqual(proj, prevProps.proj);
       this.loadEvents(projChange);
     }
     this.updateDimensions();
   }
 
-  loadEvents(projChanged) {
+  loadEvents(shouldUpdate) {
     const {
       isLoadingEvents,
       hasEventRequestError,
       eventsData,
       config,
       proj,
+      bbox,
       requestEvents,
       requestSources,
-      selectedStartDate,
-      selectedEndDate,
+      selectedDates,
       selectedCategories,
     } = this.props;
+
+    const initialLoad = !isLoadingEvents && !hasEventRequestError && !eventsData;
+    if (!initialLoad && !shouldUpdate) {
+      return;
+    }
 
     const baseUrl = lodashGet(config, 'features.naturalEvents.host');
     const mockEvents = lodashGet(config, 'parameters.mockEvents');
     const mockSources = lodashGet(config, 'parameters.mockSources');
-    let eventsURL = getEventsRequestURL(baseUrl, selectedStartDate, selectedEndDate, selectedCategories, proj);
+    let eventsURL = getEventsRequestURL(baseUrl, selectedDates, selectedCategories, proj, bbox);
     let sourcesURL = `${baseUrl}/sources`;
 
     if (mockEvents) {
@@ -125,11 +133,11 @@ class Sidebar extends React.Component {
       sourcesURL = `mock/categories_data.json-${mockSources}`;
     }
 
-    const initialLoad = !isLoadingEvents && !hasEventRequestError && !eventsData;
+
     if (initialLoad) {
       requestEvents(eventsURL);
       requestSources(sourcesURL);
-    } else if (projChanged) {
+    } else if (shouldUpdate) {
       requestEvents(eventsURL);
     }
   }
@@ -374,8 +382,10 @@ const mapStateToProps = (state) => {
     sidebar,
     ui,
     proj,
+    map,
   } = state;
 
+  const { selectedCategories, selectedDates } = events;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
@@ -398,10 +408,12 @@ const mapStateToProps = (state) => {
   const isMobile = browser.lessThan.medium;
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
+  const bbox = !events.showAll ? map.extent : [];
 
   return {
     activeTab,
     activeString,
+    bbox,
     config,
     eventsData,
     eventsSources,
@@ -415,9 +427,8 @@ const mapStateToProps = (state) => {
     isLoadingEvents,
     isMobile,
     proj,
-    selectedStartDate: events.selectedDates.start,
-    selectedEndDate: events.selectedDates.end,
-    selectedCategories: events.selectedCategories,
+    selectedDates,
+    selectedCategories,
     screenHeight,
     selectedDate: getSelectedDate(state),
     tabTypes,
@@ -461,6 +472,7 @@ export default connect(
 Sidebar.propTypes = {
   activeString: PropTypes.string,
   activeTab: PropTypes.string,
+  bbox: PropTypes.array,
   changeTab: PropTypes.func,
   collapseExpandToggle: PropTypes.func,
   config: PropTypes.object,
@@ -479,8 +491,7 @@ Sidebar.propTypes = {
   onTabClick: PropTypes.func,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
-  selectedStartDate: PropTypes.string,
-  selectedEndDate: PropTypes.string,
+  selectedDates: PropTypes.object,
   selectedCategories: PropTypes.array,
   tabTypes: PropTypes.object,
   requestEvents: PropTypes.func,

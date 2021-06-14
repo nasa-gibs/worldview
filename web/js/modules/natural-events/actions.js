@@ -46,23 +46,31 @@ export function deselectEvent(id, date) {
   };
 }
 
-export function setEventsFilter(categories, startDate, endDate, showAll) {
+export function setEventsFilter(categories, start, end, showAll) {
   return (dispatch, getState) => {
-    const { config, proj, events } = getState();
-    const { selectedCategories, selectedDates } = events;
+    const {
+      config, proj, events, map,
+    } = getState();
+    const {
+      selectedCategories,
+      selectedDates,
+      showAll: prevShowAll,
+    } = events;
+    const bbox = !showAll && map.ui.selected.getView().calculateExtent();
     const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-    const requestUrl = getEventsRequestURL(baseUrl, startDate, endDate, categories, proj);
+    const requestUrl = getEventsRequestURL(baseUrl, { start, end }, categories, proj, bbox);
     const sameCategories = lodashEqual(selectedCategories, categories);
-    const sameDates = lodashEqual(selectedDates, { start: startDate, end: endDate });
-    if (!sameCategories || !sameDates) {
+    const sameDates = lodashEqual(selectedDates, { start, end });
+
+    // Only make request if something has changed
+    if (!showAll || (prevShowAll !== showAll) || !sameCategories || !sameDates) {
       dispatch(requestEvents(requestUrl));
     }
-
     dispatch({
       type: SET_EVENTS_FILTER,
       categories,
-      startDate,
-      endDate,
+      start,
+      end,
       showAll,
     });
   };

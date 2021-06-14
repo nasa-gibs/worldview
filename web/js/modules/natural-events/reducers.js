@@ -92,8 +92,8 @@ export function eventsReducer(state = eventsReducerState, action) {
         showAll: action.showAll,
         selectedCategories: action.categories,
         selectedDates: {
-          start: action.startDate,
-          end: action.endDate,
+          start: action.start,
+          end: action.end,
         },
       };
     case CHANGE_SIDEBAR_TAB: {
