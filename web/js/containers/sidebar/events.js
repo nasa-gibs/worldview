@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get as lodashGet } from 'lodash';
 import moment from 'moment';
 import {
   Button,
@@ -216,33 +215,31 @@ const mapStateToProps = (state, ownProps) => {
     selected, showAll, selectedDates, selectedCategories,
   } = events;
   let visibleEventsInProjection = {};
-  const mapExtent = lodashGet(state, 'map.extent');
-
   const { isEmbedModeActive } = embed;
-  if (eventsData && mapExtent) {
-    const extent = showAll ? proj.selected.maxExtent : mapExtent;
+
+  if (eventsData) {
+    // TODO don't check this in mapStateToProps or memoize it
     visibleEventsInProjection = getEventsWithinExtent(
       eventsData,
       selected,
-      extent,
       proj.selected,
-      showAll,
+      proj.selected.maxExtent,
     );
   }
 
   return {
-    showAll,
-    selected,
-    visibleEventsInProjection,
     isPlaying: animation.isPlaying,
     isMobile: browser.lessThan.medium,
     isEmbedModeActive,
     isAnimatingToEvent: events.isAnimatingToEvent,
-    selectedCategories,
+    showAll,
     showDates: !!(selectedDates.start && selectedDates.end),
+    selected,
+    selectedCategories,
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
     selectedDate: util.toISOStringDate(getSelectedDate(state)),
+    visibleEventsInProjection,
   };
 };
 export default connect(

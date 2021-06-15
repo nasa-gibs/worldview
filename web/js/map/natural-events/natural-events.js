@@ -65,11 +65,15 @@ class NaturalEvents extends React.Component {
 
   filterEventList() {
     const {
-      map, proj, eventsData, selectedEvent,
+      proj, eventsData, selectedEvent,
     } = this.props;
 
-    const extent = map.getView().calculateExtent();
-    const eventsInExtentMap = getEventsWithinExtent(eventsData, selectedEvent, extent, proj.selected);
+    const eventsInExtentMap = getEventsWithinExtent(
+      eventsData,
+      selectedEvent,
+      proj.selected,
+      proj.selected.maxExtent,
+    );
     return eventsData.filter((e) => eventsInExtentMap[e.id]);
   }
 

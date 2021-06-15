@@ -2,6 +2,9 @@ import {
   get as lodashGet,
   isEqual as lodashEqual,
 } from 'lodash';
+import {
+  getEventsRequestURL,
+} from '../../map/natural-events/util';
 
 import {
   REQUEST_EVENTS,
@@ -12,7 +15,7 @@ import {
   FINISHED_ANIMATING_TO_EVENT,
 } from './constants';
 import { requestAction } from '../core/actions';
-import { getEventsRequestURL } from '../../map/natural-events/util';
+
 
 export function requestEvents(location) {
   return (dispatch) => requestAction(
