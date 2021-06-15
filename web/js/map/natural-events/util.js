@@ -6,17 +6,19 @@ import { getCenter, boundingExtent, containsCoordinate } from 'ol/extent';
 import moment from 'moment';
 import * as olProj from 'ol/proj';
 import util from '../../util/util';
-import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
+import {
+  LIMIT_EVENT_REQUEST_COUNT,
+} from '../../modules/natural-events/constants';
 
 const geographicProj = 'EPSG:4326';
 
 export function getEventsRequestURL (baseUrl, selectedDates, categories = [], proj, bbox) {
+  const { crs } = proj.selected;
   const params = {
     status: 'all',
     limit: LIMIT_EVENT_REQUEST_COUNT,
   };
   const { start, end } = selectedDates;
-  const { crs } = proj.selected;
   const transformCoords = (coords) => olProj.transform(coords, crs, geographicProj);
 
   if (start && end) {
@@ -34,8 +36,8 @@ export function getEventsRequestURL (baseUrl, selectedDates, categories = [], pr
   if (crs === 'EPSG:3031') {
     [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -50];
   }
-  if (bbox && bbox.length) {
-    const [minLonA, maxLatA, maxLonA, minLatA] = bbox;
+  if (bbox && bbox.length && crs === 'EPSG:4326') {
+    const [minLonA, minLatA, maxLonA, maxLatA] = bbox;
     [minLon, maxLat] = transformCoords([minLonA, maxLatA]);
     [maxLon, minLat] = transformCoords([maxLonA, minLatA]);
   }
@@ -72,14 +74,13 @@ export function getDefaultEventDate(event) {
 export function getEventsWithinExtent(
   events,
   selected,
-  currentExtent,
   selectedProj,
+  maxExtent,
 ) {
-  const { maxExtent, crs } = selectedProj;
+  const { crs } = selectedProj;
   const visibleListEvents = {};
 
   events.forEach((naturalEvent) => {
-    const isSelectedEvent = selected.id === naturalEvent.id;
     let date = getDefaultEventDate(naturalEvent);
     if (selected && selected.date) {
       date = selected.date;
@@ -106,10 +107,9 @@ export function getEventsWithinExtent(
       coordinates = getCenter(geomExtent);
     }
 
-    const visibleInProj = containsCoordinate(maxExtent, coordinates);
-    const visibleInExtent = containsCoordinate(currentExtent, coordinates) && visibleInProj;
+    const visibleInExtent = containsCoordinate(maxExtent, coordinates);
 
-    if (visibleInExtent || (isSelectedEvent && visibleInProj)) {
+    if (visibleInExtent) {
       visibleListEvents[naturalEvent.id] = true;
     }
   });

@@ -23,6 +23,7 @@ function EventFilterModalBody (props) {
     closeModal,
     showAll,
     parentId,
+    isPolarProj,
   } = props;
 
   const [allNone, setAllNone] = useState(!!selectedCategories.length);
@@ -120,12 +121,14 @@ function EventFilterModalBody (props) {
         })}
       </div>
 
-      <Checkbox
-        id="events-footer-checkbox"
-        label="Only list events in current map view"
-        onCheck={() => setListAll(!listAll)}
-        checked={!listAll}
-      />
+      {!isPolarProj && (
+        <Checkbox
+          id="events-footer-checkbox"
+          label="Only list events in current map view"
+          onCheck={() => setListAll(!listAll)}
+          checked={!listAll}
+        />
+      )}
 
       <Portal node={document.querySelector(`#${parentId} .modal-footer`)}>
         <Button
@@ -151,6 +154,7 @@ function EventFilterModalBody (props) {
 EventFilterModalBody.propTypes = {
   closeModal: PropTypes.func,
   eventCategories: PropTypes.array,
+  isPolarProj: PropTypes.bool,
   parentId: PropTypes.string,
   selectedCategories: PropTypes.array,
   selectedStartDate: PropTypes.string,
@@ -160,11 +164,15 @@ EventFilterModalBody.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { events } = state;
+  const { events, proj } = state;
   const {
     selectedCategories, selectedDates, allCategories, showAll,
   } = events;
+
+  const isPolarProj = proj.selected.crs === 'EPSG:3031' || proj.selected.crs === 'EPSG:3413';
+
   return {
+    isPolarProj,
     eventCategories: allCategories,
     selectedCategories,
     selectedStartDate: selectedDates.start,
