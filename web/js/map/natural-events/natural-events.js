@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
-import { getDefaultEventDate, getEventsWithinExtent } from './util';
+import { getDefaultEventDate } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import { selectDate as selectDateAction } from '../../modules/date/actions';
 import { selected as selectedAction } from '../../modules/natural-events/actions';
@@ -37,6 +37,7 @@ class NaturalEvents extends React.Component {
       proj,
       eventsDataIsLoading,
       selectedEvent,
+      eventsData,
     } = this.props;
     const loadingChange = eventsDataIsLoading !== prevProps.eventsDataIsLoading;
     const projChange = proj !== prevProps.proj;
@@ -47,7 +48,7 @@ class NaturalEvents extends React.Component {
     // When changing projection, zoom to the selected event if it is visible
     if (projChange && selectedEvent) {
       const { id, date } = selectedEvent;
-      const event = this.filterEventList().find((e) => e.id === id);
+      const event = eventsData.find((e) => e.id === id);
       if (event) {
         this.zoomToEvent(event, date);
       }
@@ -61,20 +62,6 @@ class NaturalEvents extends React.Component {
         this.deselectEvent();
       }
     }
-  }
-
-  filterEventList() {
-    const {
-      proj, eventsData, selectedEvent,
-    } = this.props;
-
-    const eventsInExtentMap = getEventsWithinExtent(
-      eventsData,
-      selectedEvent,
-      proj.selected,
-      proj.selected.maxExtent,
-    );
-    return eventsData.filter((e) => eventsInExtentMap[e.id]);
   }
 
   getZoomPromise = function(

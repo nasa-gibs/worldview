@@ -4,7 +4,7 @@ import {
 } from 'lodash';
 import {
   getEventsRequestURL,
-} from '../../map/natural-events/util';
+} from './util';
 
 import {
   REQUEST_EVENTS,

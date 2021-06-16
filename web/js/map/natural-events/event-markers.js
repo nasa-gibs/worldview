@@ -15,7 +15,7 @@ import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 import EventIcon from '../../components/sidebar/event-icon';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
-import { getDefaultEventDate } from './util';
+import { getDefaultEventDate } from '../../modules/natural-events/util';
 import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
 
 const icons = [

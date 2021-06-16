@@ -1,5 +1,10 @@
 import { get } from 'lodash';
 import update from 'immutability-helper';
+import moment from 'moment';
+import util from '../../util/util';
+import {
+  LIMIT_EVENT_REQUEST_COUNT,
+} from './constants';
 
 export function parseEvent(eventString) {
   const values = eventString.split(',');
@@ -94,4 +99,52 @@ export function mapLocationToEventFilterState(parameters, stateFromLocation, sta
       },
     },
   });
+}
+
+export function getEventsRequestURL (baseUrl, selectedDates, categories = [], proj, bbox) {
+  const { crs } = proj.selected;
+  const params = {
+    status: 'all',
+    limit: LIMIT_EVENT_REQUEST_COUNT,
+  };
+  const { start, end } = selectedDates;
+
+  if (start && end) {
+    params.start = moment.utc(start).format('YYYY-MM-DD');
+    params.end = moment.utc(end).format('YYYY-MM-DD');
+  }
+  if (categories.length) {
+    params.category = categories.map(({ id }) => id).join(',');
+  }
+
+  let [minLon, maxLat, maxLon, minLat] = [-180, 90, 180, -90];
+  if (crs === 'EPSG:3413') {
+    [minLon, maxLat, maxLon, minLat] = [-180, 50, 180, 90];
+  }
+  if (crs === 'EPSG:3031') {
+    [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -50];
+  }
+  if (bbox && bbox.length && crs === 'EPSG:4326') {
+    [minLon, maxLat, maxLon, minLat] = bbox;
+  }
+  params.bbox = [minLon, maxLat, maxLon, minLat];
+
+  return `${baseUrl}/events${util.toQueryString(params)}`;
+}
+
+/**
+ *
+ * @param {*} event
+ */
+export function getDefaultEventDate(event) {
+  const preDate = event.geometry[0] && event.geometry[0].date;
+  let date = new Date(preDate).toISOString().split('T')[0];
+  if (event.geometry.length < 2) return date;
+  const category = event.categories.title || event.categories[0].title;
+  const today = new Date().toISOString().split('T')[0];
+  // For storms that happened today, get previous date
+  if (date === today && category === 'Severe Storms') {
+    [date] = new Date(event.geometry[1].date).toISOString().split('T');
+  }
+  return date;
 }
