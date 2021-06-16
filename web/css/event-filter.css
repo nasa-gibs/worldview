@@ -14,6 +14,7 @@
     text-align: center;
     padding: 3px 5px 6px;
     font-size: 14px;
+    text-transform: uppercase;
   }
   .filter-icons {
     margin-left: 6px;
