@@ -11,7 +11,7 @@
 			"link": "http://www.example.com",
 			"categories": [
 				{
-					"id": 10,
+					"id": "severeStorms",
 					"title": "Severe Storms"
 				}
 			],
@@ -81,7 +81,7 @@
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2804",
 			"categories": [
 				{
-					"id": 10,
+					"id": "severeStorms",
 					"title": "Severe Storms"
 				}
 			],
@@ -138,7 +138,7 @@
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2804",
 			"categories": [
 				{
-					"id": 10,
+					"id": "severeStorms",
 					"title": "Severe Storms"
 				}
 			],
@@ -175,7 +175,7 @@
       "link": "https://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_3931",
       "categories": [
         {
-          "id": 8,
+          "id": "wildfires",
           "title": "Wildfires"
         }
       ],
@@ -194,43 +194,13 @@
       ]
     },
 		{
-			"id": "EONET_2792",
-			"title": "Santiago, Chile Flooding",
-            "description": "",
-			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2792",
-			"categories": [
-				{
-					"id": 9,
-					"title": "Floods"
-				}
-			],
-			"sources": [
-				{
-					"id": "IDC",
-					"url": "https://www.disasterscharter.org/web/guest/-/flood-in-chile-call-609-"
-				}
-
-			],
-			"geometry": [
-				{
-					"date": "2017-05-13T00:00:00Z",
-					"type": "Point", "coordinates": [ -70.6640625, -33.45894275368763 ]
-				},
-				{
-					"date": "2017-06-13T00:00:00Z",
-					"type": "Point", "coordinates": [ -70.6640625, -33.45894275368763 ]
-				}
-
-			]
-		},
-		{
 			"id": "EONET_2781",
 			"title": "Langila Volcano, Papua New Guinea",
             "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2781",
 			"categories": [
 				{
-					"id": 12,
+					"id": "volcanoes",
 					"title": "Volcanoes"
 				}
 			],
@@ -260,7 +230,7 @@
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2733",
 			"categories": [
 				{
-					"id": 15,
+					"id": "seaLakeIce",
 					"title": "Sea and Lake Ice"
 				}
 			],
@@ -398,11 +368,11 @@
 		{
 			"id": "EONET_2733",
 			"title": "Iceberg B30-TEST",
-            "description": "",
+      "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2733",
 			"categories": [
 				{
-					"id": 15,
+					"id": "seaLakeIce",
 					"title": "Sea and Lake Ice"
 				}
 			],
@@ -548,7 +518,7 @@
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_0001",
 			"categories": [
 				{
-					"id": 1,
+					"id": "seaLakeIce",
 					"title": "Sea and Lake Ice"
 				}
 			],

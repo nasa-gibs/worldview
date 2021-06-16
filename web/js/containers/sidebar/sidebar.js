@@ -134,10 +134,9 @@ class Sidebar extends React.Component {
     }
     if (mockSources) {
       // eslint-disable-next-line no-console
-      console.warn(`Using mock categories data: ${mockSources}`);
-      sourcesURL = `mock/categories_data.json-${mockSources}`;
+      console.warn(`Using mock sources data: ${mockSources}`);
+      sourcesURL = `mock/sources_data.json-${mockSources}`;
     }
-
 
     if (initialLoad) {
       requestEvents(eventsURL);
