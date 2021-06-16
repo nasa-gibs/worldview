@@ -16,12 +16,10 @@ import {
   selectEvent as selectEventActionCreator,
   deselectEvent as deselectEventActionCreator,
 } from '../../modules/natural-events/actions';
-import { getEventsWithinExtent } from '../../map/natural-events/util';
 import { collapseSidebar } from '../../modules/sidebar/actions';
 import { selectDate } from '../../modules/date/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
-import AlertUtil from '../../components/util/alert';
 import util from '../../util/util';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
@@ -33,7 +31,6 @@ function Events(props) {
     selectEvent,
     selected,
     openFilterModal,
-    visibleEventsInProjection,
     height,
     deselectEvent,
     hasRequestError,
@@ -51,10 +48,6 @@ function Events(props) {
   const maxHeight = Math.max(height - dropdownHeight, 166);
   const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
 
-  const missingEventDate = selected.id && !selected.date;
-  const selectedEventNotInData = !isLoading && selected.id && (eventsData || []).filter((event) => event.id === selected.id).length === 0;
-  let showInactiveEventAlert = missingEventDate || selectedEventNotInData;
-
   const startDate = moment(selectedStartDate).format('YYYY MMM DD');
   const endDate = moment(selectedEndDate).format('YYYY MMM DD');
 
@@ -65,114 +58,109 @@ function Events(props) {
       : '';
 
   const eventLimitReach = eventsData && eventsData.length === LIMIT_EVENT_REQUEST_COUNT;
+  const numEvents = eventsData ? eventsData.length : 0;
+
+  const renderFilterControls = () => (
+    <div className="filter-controls">
+      <div className="filter-dates-icons">
+        <div className="filter-dates">
+          {showDates && `${startDate} - ${endDate}`}
+        </div>
+        <div className="filter-icons">
+          {selectedCategories.map(({ title }) => (
+            <EventIcon
+              id="filter-"
+              key={title}
+              category={title}
+              title={title}
+            />
+          ))}
+        </div>
+      </div>
+      <Button
+        id="event-filter-button"
+        className="filter-button"
+        aria-label="Filtered layer search"
+        onClick={openFilterModal}
+        color="primary"
+        size="sm"
+        block
+        disabled={isLoading}
+      >
+        <FontAwesomeIcon icon="filter" />
+      </Button>
+    </div>
+  );
+
+  const renderEventList = () => (
+    <Scrollbars
+      className="event-scroll-list"
+      style={{ maxHeight: `${scrollbarMaxHeight}` }}
+    >
+      <div id="wv-events">
+        {(isLoading || hasRequestError) && (
+          <div className="events-loading-text">
+            {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
+            {errorOrLoadingText}
+          </div>
+        )}
+
+        {eventsData && eventsData.length ? (
+          <div className="wv-eventslist sidebar-panel">
+            <ul id="wv-eventscontent" className="content map-item-list">
+              {sources && eventsData.map((event) => (
+                <Event
+                  showAlert={showAlert}
+                  key={event.id}
+                  event={event}
+                  selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+                  deselectEvent={deselectEvent}
+                  isSelected={selected.id === event.id}
+                  selectedDate={selectedDate}
+                  sources={sources}
+                />
+              ))}
+            </ul>
+          </div>
+        ) : !isLoading && (
+          <h3 className="no-events"> No events meet current criteria</h3>
+        )}
+      </div>
+    </Scrollbars>
+  );
+
+  const renderEventCount = () => (
+    <div className="event-count">
+      {eventsData && eventLimitReach ? (
+        <>
+          <span>
+            {`Showing the first ${numEvents} events`}
+          </span>
+          <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
+          <UncontrolledTooltip
+            placement="right"
+            target="filter-info-icon"
+          >
+            <div>
+              More than
+              {` ${LIMIT_EVENT_REQUEST_COUNT} `}
+              events matched the current filter criteria.
+            </div>
+          </UncontrolledTooltip>
+        </>
+      ) : (
+        <span>
+          {`Showing ${numEvents} events`}
+        </span>
+      )}
+    </div>
+  );
 
   return (
     <div className="event-container">
-      <div className="filter-controls">
-
-        <div className="filter-dates-icons">
-          <div className="filter-dates">
-            {showDates && `${startDate} - ${endDate}`}
-          </div>
-
-          <div className="filter-icons">
-            {selectedCategories.map(({ title }) => (
-              <EventIcon
-                id="filter-"
-                key={title}
-                category={title}
-                title={title}
-              />
-            ))}
-          </div>
-        </div>
-        <Button
-          id="event-filter-button"
-          className="filter-button"
-          aria-label="Filtered layer search"
-          onClick={openFilterModal}
-          color="primary"
-          size="sm"
-          block
-          disabled={isLoading}
-        >
-          <FontAwesomeIcon icon="filter" />
-        </Button>
-      </div>
-
-      <Scrollbars
-        className="event-scroll-list"
-        style={{ maxHeight: `${scrollbarMaxHeight}` }}
-      >
-        <div id="wv-events">
-          {(isLoading || hasRequestError || (isEmbedModeActive && showInactiveEventAlert)) && (
-            <div className="events-loading-text">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
-              {errorOrLoadingText}
-              {(isEmbedModeActive && showInactiveEventAlert) && (
-                <>
-                  <br />
-                  {`The event with an id of ${selected.id} is no longer active.`}
-                </>
-              )}
-            </div>
-          )}
-
-          {eventsData && eventsData.length ? (
-            <div className="wv-eventslist sidebar-panel">
-              <ul id="wv-eventscontent" className="content map-item-list">
-                {sources && eventsData.map((event) => (
-                  <Event
-                    showAlert={showAlert}
-                    key={event.id}
-                    event={event}
-                    selectEvent={(id, date) => selectEvent(id, date, isMobile && !isEmbedModeActive)}
-                    deselectEvent={isEmbedModeActive ? () => null : deselectEvent}
-                    isSelected={selected.id === event.id && visibleEventsInProjection[event.id]}
-                    selectedDate={selectedDate}
-                    isVisible={visibleEventsInProjection[event.id]}
-                    sources={sources}
-                  />
-                ))}
-              </ul>
-            </div>
-          ) : !isLoading && (
-            <h3 className="no-events"> No events meet current criteria</h3>
-          )}
-        </div>
-      </Scrollbars>
-
-      <div className="event-count">
-        {eventLimitReach && (
-          <>
-            <span>
-              Showing the first
-              {` ${eventsData ? eventsData.length : ''} `}
-              events
-            </span>
-            <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
-            <UncontrolledTooltip
-              placement="right"
-              target="filter-info-icon"
-            >
-              <div>
-                More than
-                {` ${LIMIT_EVENT_REQUEST_COUNT} `}
-                events matched the current filter criteria.
-              </div>
-            </UncontrolledTooltip>
-          </>
-        )}
-      </div>
-
-      {showInactiveEventAlert && (
-        <AlertUtil
-          id="event-unavailable-alert"
-          isOpen
-          onDismiss={() => { showInactiveEventAlert = false; }}
-          message={`The event with an id of ${selected.id} is no longer active.`}
-        />
-      )}
+      {renderFilterControls()}
+      {renderEventList()}
+      {renderEventCount()}
     </div>
   );
 }
@@ -202,30 +190,18 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     animation,
     embed,
-    proj,
     browser,
     events,
   } = state;
-  const { eventsData } = ownProps;
+
   const {
     selected, showAll, selectedDates, selectedCategories,
   } = events;
-  let visibleEventsInProjection = {};
   const { isEmbedModeActive } = embed;
-
-  if (eventsData) {
-    // TODO don't check this in mapStateToProps or memoize it
-    visibleEventsInProjection = getEventsWithinExtent(
-      eventsData,
-      selected,
-      proj.selected,
-      proj.selected.maxExtent,
-    );
-  }
 
   return {
     isPlaying: animation.isPlaying,
@@ -239,7 +215,6 @@ const mapStateToProps = (state, ownProps) => {
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
     selectedDate: util.toISOStringDate(getSelectedDate(state)),
-    visibleEventsInProjection,
   };
 };
 export default connect(
@@ -265,5 +240,4 @@ Events.propTypes = {
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   sources: PropTypes.array,
-  visibleEventsInProjection: PropTypes.object,
 };

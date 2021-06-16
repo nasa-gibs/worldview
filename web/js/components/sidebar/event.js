@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getDefaultEventDate } from '../../map/natural-events/util';
+import { getDefaultEventDate } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import EventIcon from './event-icon';
 
@@ -15,15 +15,16 @@ function Event (props) {
     selectedDate,
     selectEvent,
     sources,
-    isVisible,
   } = props;
   const eventDate = util.parseDateUTC(event.geometry[0].date);
-  const dateString = `${util.giveWeekDay(eventDate)}, ${util.giveMonth(eventDate)} ${eventDate.getUTCDate()}, ${eventDate.getUTCFullYear()}`;
+  const weekday = util.giveWeekDay(eventDate);
+  const day = eventDate.getUTCDate();
+  const month = util.giveMonth(eventDate);
+  const year = eventDate.getUTCFullYear();
+  const dateString = `${weekday}, ${month} ${day}, ${year}`;
   const itemClass = isSelected
-    ? 'item-selected selectorItem item item-visible'
-    : isVisible
-      ? 'selectorItem item'
-      : 'selectorItem item hidden';
+    ? 'item-selected selectorItem item'
+    : 'selectorItem item';
 
   const elRef = useRef();
   useLayoutEffect(() => {
@@ -151,7 +152,6 @@ Event.propTypes = {
   deselectEvent: PropTypes.func,
   event: PropTypes.object,
   isSelected: PropTypes.bool,
-  isVisible: PropTypes.bool,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
   sources: PropTypes.array,

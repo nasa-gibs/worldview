@@ -17,9 +17,12 @@ import NavCase from '../../components/sidebar/nav/nav-case';
 import {
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
-import { loadedCustomPalettes } from '../../modules/palettes/actions';
+import {
+  loadedCustomPalettes as loadedCustomPalettesAction,
+} from '../../modules/palettes/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
 import { getPermalink } from '../../modules/link/util';
+
 import {
   requestEvents as requestEventsActionCreator,
   requestSources as requestSourcesActionCreator,
@@ -35,7 +38,7 @@ import {
 } from '../../modules/sidebar/actions';
 import history from '../../main';
 import safeLocalStorage from '../../util/local-storage';
-import { getEventsRequestURL } from '../../map/natural-events/util';
+import { getEventsRequestURL } from '../../modules/natural-events/util';
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 
@@ -123,12 +126,14 @@ class Sidebar extends React.Component {
     let sourcesURL = `${baseUrl}/sources`;
 
     if (mockEvents) {
+      // eslint-disable-next-line no-console
       console.warn(`Using mock events data: ${mockEvents}`);
       eventsURL = mockEvents === 'true'
         ? 'mock/events_data.json'
         : `mock/events_data.json-${mockEvents}`;
     }
     if (mockSources) {
+      // eslint-disable-next-line no-console
       console.warn(`Using mock categories data: ${mockSources}`);
       sourcesURL = `mock/categories_data.json-${mockSources}`;
     }
@@ -453,7 +458,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(expandSidebarAction());
   },
   loadedCustomPalettes: (customs) => {
-    dispatch(loadedCustomPalettes(customs));
+    dispatch(loadedCustomPalettesAction(customs));
   },
   requestEvents: (url) => {
     dispatch(requestEventsActionCreator(url));
