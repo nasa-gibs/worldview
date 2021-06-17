@@ -17,7 +17,7 @@ import {
 import ShareLinks from '../components/toolbar/share/links';
 import ShareToolTips from '../components/toolbar/share/tooltips';
 import { getPermalink, getShareLink, wrapWithIframe } from '../modules/link/util';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import Checkbox from '../components/util/checkbox';
 import HoverTooltip from '../components/util/hover-tooltip';
 import { requestShortLink } from '../modules/link/actions';

@@ -4,7 +4,7 @@ import {
 } from 'lodash';
 import { createSelector } from 'reselect';
 import buildLayerFacetProps from './format-config';
-import getSelectedDate from '../date/selectors';
+import { getSelectedDate } from '../date/selectors';
 import util from '../../util/util';
 
 // State selectors

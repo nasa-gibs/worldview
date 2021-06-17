@@ -1,6 +1,6 @@
 import { each as lodashEach } from 'lodash';
 import { getRenderPixel } from 'ol/render';
-import { getFormattedDates } from './util';
+import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
 
 let mousePosition = null;
 let spy = null;
@@ -36,7 +36,7 @@ export default class Spy {
    */
   update(state) {
     const isBInside = isCompareA(state);
-    const { dateA, dateB } = getFormattedDates(state);
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
     if (dateA !== this.dateA || dateB !== this.dateB || dateA === dateB) {
       const insideText = getDateText(state);
       label.innerText = insideText;
@@ -226,7 +226,7 @@ const applyEventsToBaseLayers = function(layer, map, callback) {
 const getDateText = function(state) {
   const isBInside = isCompareA(state);
   let insideText = isBInside ? 'B' : 'A';
-  const { dateA, dateB } = getFormattedDates(state);
+  const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
   const isSameDate = dateA === dateB;
   if (!isSameDate) {
     const dateText = isBInside ? dateB : dateA;

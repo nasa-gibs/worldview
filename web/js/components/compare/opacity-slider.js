@@ -43,8 +43,8 @@ class OpacitySlider extends React.Component {
   getDateTextOptions() {
     const { dateA, dateB } = this.props;
     const isSameDate = dateA === dateB;
-    let dateAText = 'A';
-    let dateBText = 'B';
+    let dateAText = '';
+    let dateBText = '';
     if (!isSameDate) {
       dateAText += `: ${dateA}`;
       dateBText += `: ${dateB}`;
@@ -67,7 +67,10 @@ class OpacitySlider extends React.Component {
     return (
       <div id="ab-slider-case" className="ab-slider-case" style={caseStyle}>
         <label className="wv-slider-label left" style={labelStyle}>
-          <h4>{dateAText}</h4>
+          <h4>
+            <span>A</span>
+            {dateAText}
+          </h4>
         </label>
         <div className="input-range ">
           <SliderWithTooltip
@@ -78,7 +81,10 @@ class OpacitySlider extends React.Component {
           />
         </div>
         <label className="wv-slider-label right" style={labelStyle}>
-          <h4>{dateBText}</h4>
+          <h4>
+            <span>B</span>
+            {dateBText}
+          </h4>
         </label>
       </div>
     );

@@ -17,7 +17,7 @@ import {
   getLayers,
   getActiveLayers,
 } from '../modules/layers/selectors';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import {
   resolutionsGeo,
   resolutionsPolar,

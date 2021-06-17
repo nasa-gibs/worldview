@@ -5,9 +5,11 @@ import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import {
-  getAllActiveOverlaysBaselayers, getActiveOverlayGroups, getActiveLayersMap,
+  getAllActiveOverlaysBaselayers,
+  getActiveOverlayGroups,
+  getActiveLayersMap,
+  getFilteredOverlayGroups,
 } from '../../modules/layers/selectors';
-import { getFilteredOverlayGroups } from '../../modules/embed/util';
 import {
   reorderOverlayGroups as reorderOverlayGroupsAction,
   toggleOverlayGroups as toggleOverlayGroupsAction,
@@ -64,6 +66,7 @@ function LayersContainer (props) {
         key={groupName}
         draggableId={groupName}
         index={idx}
+        isDragDisabled={isEmbedModeActive}
       >
         {(provided) => (
           <li

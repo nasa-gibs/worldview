@@ -10,7 +10,7 @@ import moment from 'moment';
 import { getTitles } from '../layers/selectors';
 import { getLayersForProjection } from './selectors';
 import facetConfig from './facet-config';
-import getSelectedDate from '../date/selectors';
+import { getSelectedDate } from '../date/selectors';
 
 let initialLayersArray;
 let configRef;

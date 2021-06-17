@@ -231,7 +231,7 @@ const mapStateToProps = (state) => {
     : {};
   let activeLayers = getActiveLayers(state);
   if (isEmbedModeActive) {
-    activeLayers = activeLayers.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
+    activeLayers = activeLayers.filter((layer) => layer.layergroup !== 'Reference');
   }
   return {
     zots,

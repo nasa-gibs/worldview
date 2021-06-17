@@ -2,24 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-mobile-datepicker';
 import { getDisplayDate, getISODateFormatted } from './date-util';
+import { monthMap } from '../../modules/date/constants';
 
 // https://www.npmjs.com/package/react-mobile-datepicker
 // configs for date order, caption, and date step
-const monthMap = {
-  1: 'Jan',
-  2: 'Feb',
-  3: 'Mar',
-  4: 'Apr',
-  5: 'May',
-  6: 'Jun',
-  7: 'Jul',
-  8: 'Aug',
-  9: 'Sep',
-  10: 'Oct',
-  11: 'Nov',
-  12: 'Dec',
-};
-
 const defaultDateConfig = {
   year: {
     format: 'YYYY',
