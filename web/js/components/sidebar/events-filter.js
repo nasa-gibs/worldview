@@ -123,7 +123,7 @@ function EventFilterModalBody (props) {
 
       {!isPolarProj && (
         <Checkbox
-          id="events-footer-checkbox"
+          id="map-extent-filter"
           label="Only list events in current map view"
           onCheck={() => setListAll(!listAll)}
           checked={!listAll}
@@ -141,6 +141,7 @@ function EventFilterModalBody (props) {
           Apply
         </Button>
         <Button
+          id="filter-cancel-btn"
           color="secondary"
           onClick={closeModal}
         >

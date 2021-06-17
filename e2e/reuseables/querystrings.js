@@ -23,10 +23,12 @@ module.exports = {
   subdailyLayerIntervalTimescale: '?t=2019-10-04-T09%3A46%3A32Z&z=4&i=4&l=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor',
 
   // events
-  eventsTabActive: '?e=true',
   mockEvents: '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m&t=2018-05-02-T00%3A00%3A00Z&z=3&v=-409.00147812273656,-205.62883007565202,270.5880270080828,219.11461063111003&e=true&mockEvents=20170530',
   stormEventSelected: '?v=175.65863037109375,10.918751525878907,182.25042724609375,22.643360900878907&e=EONET_2777,2017-05-31&l=IMERG_Precipitation_Rate,VIIRS_SNPP_DayNightBand_ENCC(hidden),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),Reference_Labels,Reference_Features,Coastlines(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2017-05-31-T00%3A00%3A00Z&mockEvents=20170530',
-  closedEvent: '?e=EONET_5133',
+  fixedAppNow: '?now=2012-01-01T00%3A00%3A00Z',
+  wildfiresWithDates: '?v=-139.02635001706034,25.660099233568406,-85.27770827186355,43.288373996427595&e=true&efs=false&efd=2020-01-16,2020-06-16&efc=wildfires&t=2020-06-16-T18%3A31%3A28Z',
+  backwardsCompatibleEventUrl: '?v=-49.6224609375,13.940234375000001,-26.5775390625,37.459765625&e=EONET_1874,2005-12-31&l=IMERG_Precipitation_Rate,Reference_Labels_15m,Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&t=2005-12-31-T00%3A00%3A00Z',
+
 
   // layers
   multipleDataLayers: '?p=geographic&l=MODIS_Terra_Aerosol,MODIS_Terra_Brightness_Temp_Band31_Day&t=2017-03-22&z=3&v=136.07019188386334,14.722152527011556,155.59817576644127,24.312819167567586',
