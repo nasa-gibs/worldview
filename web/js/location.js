@@ -346,6 +346,7 @@ const getParameters = function(config, parameters) {
       options: {
         serialize: serializeCategories,
         serializeNeedsGlobalState: true,
+        setAsEmptyItem: true,
       },
     },
     l: {

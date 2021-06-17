@@ -15,7 +15,7 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 import util from '../../util/util';
 
 /**
- * Sort events by date, filter by categories
+ * Sort events by date
  *
  * @param {*} events
  * @param {*} categories
@@ -36,19 +36,7 @@ const sortEvents = function(events) {
     });
 };
 
-const endDate = util.toISOStringDate(new Date());
-const startDate = util.toISOStringDate(new Date(new Date().setDate(new Date().getDate() - 120)));
-
-export function getInitialEventsState(config) {
-  const { categories } = config.naturalEvents;
-  return {
-    ...eventsReducerState,
-    allCategories: categories,
-    selectedCategories: categories,
-  };
-}
-
-export const eventsReducerState = {
+const eventsReducerState = {
   selected: {
     id: '',
     date: null,
@@ -61,10 +49,25 @@ export const eventsReducerState = {
   allCategories: [],
   selectedCategories: [],
   selectedDates: {
-    start: startDate,
-    end: endDate,
+    start: null,
+    end: null,
   },
 };
+
+export function getInitialEventsState(config) {
+  const { initialDate, naturalEvents } = config;
+  const { categories } = naturalEvents;
+  const endDate = util.toISOStringDate(new Date(initialDate));
+  return {
+    ...eventsReducerState,
+    allCategories: categories,
+    selectedCategories: categories,
+    selectedDates: {
+      start: util.toISOStringDate(new Date(new Date(initialDate).setDate(new Date(initialDate).getDate() - 120))),
+      end: endDate,
+    },
+  };
+}
 
 export function eventsReducer(state = eventsReducerState, action) {
   switch (action.type) {
