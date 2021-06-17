@@ -29,7 +29,8 @@ export default function keyPress(keyCode, shiftKey, ctrlOrCmdKey, isInput) {
         type: TOUR_KEY_PRESS_CLOSE,
       });
     } else if (!isProductPickerOpen) {
-      if (animation.isActive) {
+      const isLocationSearchInputFocused = document.activeElement.id === 'location-search-autocomplete';
+      if (animation.isActive && !isLocationSearchInputFocused) {
         dispatch({
           type: ANIMATION_KEY_PRESS_ACTION,
           keyCode,
