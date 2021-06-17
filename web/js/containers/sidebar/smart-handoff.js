@@ -19,7 +19,7 @@ import GranuleCount from '../../components/smart-handoffs/granule-count';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
 import { getActiveLayers } from '../../modules/layers/selectors';
-import getSelectedDate from '../../modules/date/selectors';
+import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
 import selectCollection from '../../modules/smart-handoff/actions';

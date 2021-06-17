@@ -45,7 +45,7 @@ import {
   getAllActiveLayers,
   dateRange as getDateRange,
 } from '../modules/layers/selectors';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import {
   play,
   onClose,

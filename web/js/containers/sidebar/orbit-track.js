@@ -19,6 +19,7 @@ function OrbitTrack(props) {
     renderedPalette,
     requestPalette,
     isLoading,
+    isDistractionFreeModeActive,
     isMobile,
     parentLayer,
     hasPalette,
@@ -38,6 +39,7 @@ function OrbitTrack(props) {
         parentLayer={parentLayer}
         getPalette={getPalette}
         paletteLegends={paletteLegends}
+        isDistractionFreeModeActive={isDistractionFreeModeActive}
         isMobile={isMobile}
       />
     ));
@@ -58,6 +60,7 @@ OrbitTrack.propTypes = {
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
   isLoading: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   paletteLegends: PropTypes.array,
   parentLayer: PropTypes.object,
@@ -71,7 +74,8 @@ function mapStateToProps(state, ownProps) {
     trackLayer,
     compareState,
   } = ownProps;
-  const { palettes, config } = state;
+  const { palettes, config, ui } = state;
+  const { isDistractionFreeModeActive } = ui;
   const renderedPalettes = palettes.rendered;
   const hasPalette = !lodashIsEmpty(trackLayer.palette);
   const paletteName = lodashGet(config, `layers['${trackLayer.id}'].palette.id`);
@@ -87,6 +91,7 @@ function mapStateToProps(state, ownProps) {
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     isMobile: state.browser.lessThan.medium,
+    isDistractionFreeModeActive,
     hasPalette,
     getPalette: (layerId, index) => getPaletteSelector(trackLayer.id, index, compareState, state),
   };

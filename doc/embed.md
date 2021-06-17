@@ -1,6 +1,6 @@
 # Embedding Worldview
 
-To embed NASA Worldview in your page, navigate to the share toolbar, select the `embed` tab, and copy the code that wraps the current Worldview instance in an `<iframe>` inline element. Add this HTML code to your website to embed Worldview. You will need to wrap the `<iframe>` code in a wrapper element (e.g., `<div>`) with your desired `width`, `height`, and any additional style changes.
+To embed NASA Worldview in your page, navigate to the `Share` button in the upper right toolbar of the application, select the `embed` tab, and copy the code that wraps the current Worldview instance in an `<iframe>` inline element. Add this HTML code to your website to embed Worldview. You will need to wrap the `<iframe>` code in a wrapper element (e.g., `<div>`) with your desired `width`, `height`, and any additional style changes.
 
 See [https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) for more information on the `<iframe>` inline element including an explanation of its attributes.
 

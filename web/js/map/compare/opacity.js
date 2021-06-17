@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import OpacitySlider from '../../components/compare/opacity-slider';
+import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
 import util from '../../util/util';
-import { getFormattedDates } from './util';
 
 const { events } = util;
 
@@ -18,7 +18,7 @@ export default class Opacity {
   }
 
   create(state) {
-    const { dateA, dateB } = getFormattedDates(state);
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
     this.dateA = dateA;
     this.dateB = dateB;
     slider = this.createSlider(this.map.getLayers().getArray());
@@ -29,7 +29,7 @@ export default class Opacity {
    * Refresh secondLayer layer group (after date change for example)
    */
   update(state) {
-    const { dateA, dateB } = getFormattedDates(state);
+    const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
     if (dateA !== this.dateA || dateB !== this.dateB) {
       this.destroy();
       this.create(state);

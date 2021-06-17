@@ -52,6 +52,7 @@ function LayerRow (props) {
     renderedPalette,
     requestPalette,
     isCustomPalette,
+    isDistractionFreeModeActive,
     isEmbedModeActive,
     isLoading,
     isMobile,
@@ -82,17 +83,23 @@ function LayerRow (props) {
         ? compare.activeString === compareState && !!runningObject
         : !!runningObject;
       const colorHex = isRunningData ? runningObject.paletteHex : null;
+      let width = zot ? 220 : 231;
+      if (isEmbedModeActive) {
+        width = 201;
+      }
       return (
         <PaletteLegend
           layer={layer}
           compareState={compareState}
           paletteId={palette.id}
           getPalette={getPalette}
-          width={zot ? 220 : 231}
+          width={width}
           paletteLegends={paletteLegends}
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
           colorHex={colorHex}
+          isDistractionFreeModeActive={isDistractionFreeModeActive}
+          isEmbedModeActive={isEmbedModeActive}
           isMobile={isMobile}
         />
       );
@@ -334,8 +341,9 @@ const mapStateToProps = (state, ownProps) => {
     compareState,
   } = ownProps;
   const {
-    palettes, config, embed, map, compare, proj,
+    palettes, config, embed, map, compare, proj, ui,
   } = state;
+  const { isDistractionFreeModeActive } = ui;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
@@ -358,6 +366,7 @@ const mapStateToProps = (state, ownProps) => {
     isVisible,
     paletteLegends,
     isCustomPalette,
+    isDistractionFreeModeActive,
     isEmbedModeActive,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
@@ -445,6 +454,7 @@ LayerRow.propTypes = {
   index: PropTypes.number,
   isCustomPalette: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isInProjection: PropTypes.bool,
   isLoading: PropTypes.bool,

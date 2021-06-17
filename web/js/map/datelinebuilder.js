@@ -9,7 +9,7 @@ import { CHANGE_STATE as COMPARE_CHANGE_STATE } from '../modules/compare/constan
 import { SELECT_DATE } from '../modules/date/constants';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 
 const { events } = util;
 

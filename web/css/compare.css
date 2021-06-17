@@ -78,6 +78,11 @@
 .ab-slider-case .wv-slider-label h4 {
   font-weight: 400;
 }
+.ab-slider-case .wv-slider-label span {
+  font-size: 15px;
+  font-weight: 700;
+  vertical-align: top;
+}
 .ab-slider-case .input-range__slider {
   height: 20px;
   width: 20px;

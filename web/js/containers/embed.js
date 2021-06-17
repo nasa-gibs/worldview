@@ -1,49 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getPermalink } from '../modules/link/util';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import HoverTooltip from '../components/util/hover-tooltip';
 import history from '../main';
 
-class Embed extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showOverlay: true,
-    };
-    this.clickOverlay = this.clickOverlay.bind(this);
-    this.renderEmbedLinkBtn = this.renderEmbedLinkBtn.bind(this);
-    this.newTabLink = this.newTabLink.bind(this);
-  }
+function Embed (props) {
+  const {
+    isEmbedModeActive,
+  } = props;
 
-  clickOverlay() {
-    this.setState({ showOverlay: false });
-  }
+  const [showOverlay, clickOverlay] = useState(true);
 
-  newTabLink() {
-    const { selectedDate } = this.props;
+  const newTabLink = function() {
+    const { selectedDate } = props;
     const queryString = history.location.search || '';
     const permalink = getPermalink(queryString, selectedDate);
     googleTagManager.pushEvent({
       event: 'embed_open_new_tab',
     });
     window.open(permalink, '_blank');
-  }
+  };
 
-  renderEmbedLinkBtn() {
-    const { isMobile } = this.props;
+  const renderEmbedLinkBtn = function() {
+    const { isMobile } = props;
     const buttonId = 'wv-embed-link-button';
-    const labelText = 'Open new tab with content in Worldview';
+    const labelText = 'Open this Worldview map in a new tab';
     return (
       <Button
         id={buttonId}
         className="wv-toolbar-button"
         aria-label={labelText}
-        onClick={() => this.newTabLink()}
+        onClick={() => newTabLink()}
       >
         <HoverTooltip
           isMobile={isMobile}
@@ -53,28 +45,24 @@ class Embed extends React.Component {
         <FontAwesomeIcon icon="external-link-alt" size="2x" fixedWidth />
       </Button>
     );
-  }
+  };
 
-  render() {
-    const { isEmbedModeActive } = this.props;
-    const { showOverlay } = this.state;
-    return (
-      isEmbedModeActive && (
-        <>
-          {showOverlay && (
-            <>
-              <div onClick={() => this.clickOverlay()} className="embed-overlay-bg" />
-              <div className="embed-overlay-btn">
-                <FontAwesomeIcon icon="hand-pointer" size="2x" fixedWidth />
-                <p>Click anywhere to interact</p>
-              </div>
-            </>
-          )}
-          {this.renderEmbedLinkBtn()}
-        </>
-      )
-    );
-  }
+  return (
+    isEmbedModeActive && (
+      <>
+        {showOverlay && (
+          <>
+            <div onClick={() => clickOverlay(false)} className="embed-overlay-bg" />
+            <div className="embed-overlay-btn">
+              <FontAwesomeIcon icon="hand-pointer" size="2x" fixedWidth />
+              <p>Click anywhere to interact</p>
+            </div>
+          </>
+        )}
+        {renderEmbedLinkBtn()}
+      </>
+    )
+  );
 }
 
 function mapStateToProps(state) {

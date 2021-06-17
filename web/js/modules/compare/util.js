@@ -1,5 +1,6 @@
 import update from 'immutability-helper';
 import { initialCompareState } from './reducers';
+import util from '../../util/util';
 
 export function mapLocationToCompareState(parameters, stateFromLocation) {
   if (parameters.ca !== undefined) {
@@ -42,3 +43,9 @@ export function isFromActiveCompareRegion(coords, layerAttributes, compareModel,
   }
   return true;
 }
+
+export const getFormattedMonthAbbrevDates = function(selected, selectedB) {
+  const dateA = util.toISOStringDateMonthAbbrev(selected);
+  const dateB = util.toISOStringDateMonthAbbrev(selectedB);
+  return { dateA, dateB };
+};

@@ -75,9 +75,12 @@ class PaletteLegend extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { layer, width } = this.props;
-    // Only updates when layer options/settings have changed or if ZOT changes the width of the palette
-    if (!lodashIsEqual(layer, prevProps.layer) || (prevProps.width !== width)) {
+    const { isDistractionFreeModeActive, layer, width } = this.props;
+    // Updates when layer options/settings changed, if ZOT changes the width of the palette, or distraction free mode exit
+    const layerChange = !lodashIsEqual(layer, prevProps.layer);
+    const widthChange = prevProps.width !== width;
+    const distractionFreeChange = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+    if (layerChange || widthChange || distractionFreeChange) {
       this.updateCanvas();
     }
   }
@@ -186,7 +189,7 @@ class PaletteLegend extends React.Component {
    */
   renderScale(legend, index, isMoreThanOneColorBar) {
     const {
-      layer, width, getPalette, isMobile,
+      layer, width, getPalette, isEmbedModeActive, isMobile,
     } = this.props;
     const { isRunningData, colorHex, isHoveringLegend } = this.state;
     const palette = getPalette(layer.id, index);
@@ -203,6 +206,10 @@ class PaletteLegend extends React.Component {
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
         // eslint-disable-next-line react/destructuring-assignment
         xOffset = Math.floor(this.state.width * percent);
+        if (isEmbedModeActive) {
+          // adjust xOffset per css scale transform
+          xOffset = Math.floor(xOffset / 0.75);
+        }
       }
     }
     let min = legend.minLabel || legend.tooltips[0];
@@ -404,6 +411,8 @@ PaletteLegend.propTypes = {
   getPalette: PropTypes.func,
   height: PropTypes.number,
   isCustomPalette: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
   layer: PropTypes.object,

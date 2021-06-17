@@ -20,7 +20,7 @@ import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import { createVectorUrl, getGeographicResolutionWMS, mergeBreakpointLayerAttributes } from './util';
 import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
   getKey as getPaletteKeys,

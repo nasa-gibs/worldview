@@ -15,7 +15,7 @@ import {
   loadCustom as loadCustomPalette,
 } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
-import getSelectedDate from '../../modules/date/selectors';
+import { getSelectedDate } from '../../modules/date/selectors';
 import { getPermalink } from '../../modules/link/util';
 import {
   requestEvents as requestEventsActionCreator,
@@ -217,7 +217,7 @@ class Sidebar extends React.Component {
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     const permalink = getPermalink(history.location.search, selectedDate);
     const WVLogoTitle = isEmbedModeActive
-      ? 'Click to Open New Tab of Worldview with Current Content'
+      ? 'Click to Open This Worldview Map in a New Tab'
       : 'Click to Reset Worldview to Defaults';
     const embedWVLogoLink = isEmbedModeActive ? permalink : '/';
 
