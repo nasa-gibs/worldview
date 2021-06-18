@@ -289,6 +289,21 @@ export default (function(self) {
       .split('T')[0];
   };
 
+  self.monthStringArray = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
+
   /**
    * Converts a date into an ISO string with only the date portion and month abbreviation.
    *
