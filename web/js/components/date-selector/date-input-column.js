@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Arrow from '../util/arrow';
 import util from '../../util/util';
-import { validateBasedOnType, monthStringArray } from './util';
+import {
+  yearValidation,
+  monthValidation,
+  dayValidation,
+  hourValidation,
+  minuteValidation,
+  monthStringArray,
+} from './util';
 
 /*
  * DateInputColumn used in DateSelector within
@@ -173,7 +180,36 @@ class DateInputColumn extends Component {
     const {
       date, type, minDate, maxDate, updateTimeUnitInput,
     } = this.props;
-    const newDate = validateBasedOnType(type, value, date, minDate, maxDate);
+    let newDate;
+    const validateDate = (dateParam) => dateParam > minDate && dateParam <= maxDate && dateParam;
+    switch (type) {
+      case 'year':
+        newDate = yearValidation(value, date, validateDate);
+        break;
+      case 'month':
+        newDate = monthValidation(value, date, validateDate);
+        // transform month number to string (e.g., 3 -> 'MAR')
+        // eslint-disable-next-line no-restricted-globals
+        if (newDate !== null && !isNaN(value)) {
+          value = monthStringArray[value - 1];
+        }
+        break;
+      case 'day':
+        newDate = dayValidation(value, date, validateDate);
+        break;
+      case 'hour':
+        newDate = hourValidation(value, date, validateDate);
+        break;
+      case 'minute':
+        newDate = minuteValidation(value, date, validateDate);
+        break;
+      default:
+        break;
+    }
+    // add leading '0' to single string number
+    if (newDate !== null && value.length === 1) {
+      value = `0${value}`;
+    }
     // update parent level time unit type value
     if (newDate !== null) {
       updateTimeUnitInput(type, value);
@@ -283,7 +319,9 @@ class DateInputColumn extends Component {
           onChange={this.onChange}
           style={fontSizeStyle}
           onBlur={this.blur}
+          onTouchCancel={this.blur}
           onFocus={this.handleFocus}
+          onTouchStart={this.handleFocus}
         />
         <Arrow
           direction="down"

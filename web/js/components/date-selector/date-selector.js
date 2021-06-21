@@ -368,24 +368,31 @@ class DateSelector extends Component {
       fontSize,
       updateTimeUnitInput: this.updateTimeUnitInput,
     };
+
+    const yearValue = year || date.getUTCFullYear();
+    const monthValue = month || monthStringArray[date.getUTCMonth()];
+    const dayValue = day || util.pad(date.getUTCDate(), 2, '0');
+    const hourValue = hour || util.pad(date.getUTCHours(), 2, '0');
+    const minuteValue = minute || util.pad(date.getUTCMinutes(), 2, '0');
+
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn
           {...sharedProps}
           type="year"
-          value={year || date.getUTCFullYear()}
+          value={yearValue}
           isValid={yearValid}
         />
         <DateInputColumn
           {...sharedProps}
           type="month"
-          value={month || monthStringArray[date.getUTCMonth()]}
+          value={monthValue}
           isValid={monthValid}
         />
         <DateInputColumn
           {...sharedProps}
           type="day"
-          value={day || util.pad(date.getUTCDate(), 2, '0')}
+          value={dayValue}
           isValid={dayValid}
         />
         { subDailyMode && (
@@ -393,14 +400,14 @@ class DateSelector extends Component {
             <DateInputColumn
               {...sharedProps}
               type="hour"
-              value={hour || util.pad(date.getUTCHours(), 2, '0')}
+              value={hourValue}
               isValid={hourValid}
             />
             <div className="input-time-divider">:</div>
             <DateInputColumn
               {...sharedProps}
               type="minute"
-              value={minute || util.pad(date.getUTCMinutes(), 2, '0')}
+              value={minuteValue}
               isValid={minuteValid}
             />
             <div className="input-time-zmark">Z</div>

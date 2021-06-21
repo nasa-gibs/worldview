@@ -1,8 +1,5 @@
 import util from '../../util/util';
 
-let minDate;
-let maxDate;
-
 export const monthStringArray = [
   'JAN',
   'FEB',
@@ -18,59 +15,17 @@ export const monthStringArray = [
   'DEC',
 ];
 
-export function validateBasedOnType(type, value, date, min, max) {
-  let newDate;
-  minDate = min;
-  maxDate = max;
-  switch (type) {
-    case 'year':
-      newDate = yearValidation(value, date);
-      break;
-    case 'month':
-      newDate = monthValidation(value, date);
-      // transform month number to string (e.g., 3 -> 'MAR')
-      // eslint-disable-next-line no-restricted-globals
-      if (newDate !== null && !isNaN(value)) {
-        value = monthStringArray[value - 1];
-      }
-      break;
-    case 'day':
-      newDate = dayValidation(value, date);
-      break;
-    case 'hour':
-      newDate = hourValidation(value, date);
-      break;
-    case 'minute':
-      newDate = minuteValidation(value, date);
-      break;
-    default:
-      break;
-  }
-  // add leading '0' to single string number
-  if (newDate !== null && value.length === 1) {
-    value = `0${value}`;
-  }
-  return newDate;
-}
-
-/**
- *
- * @param {*} date
- * @returns
- */
-const validateDate = (date) => date > minDate && date <= maxDate && date;
-
 /**
  *
  * @param {*} value
  * @param {*} date
  * @returns
  */
-const yearValidation = (value, dateParam) => {
+export const yearValidation = (value, dateParam, validate) => {
   const date = new Date(dateParam);
   if (value > 1000 && value < 9999) {
     const newDate = new Date(date.setUTCFullYear(value));
-    return validateDate(newDate);
+    return validate(newDate);
   }
   return null;
 };
@@ -81,14 +36,14 @@ const yearValidation = (value, dateParam) => {
  * @param {*} date
  * @returns
  */
-const monthValidation = (value, dateParam) => {
+export const monthValidation = (value, dateParam, validate) => {
   const date = new Date(dateParam);
   let newDate;
   // eslint-disable-next-line no-restricted-globals
   if (!isNaN(value) && value < 13 && value > 0) {
     newDate = new Date(date.setUTCMonth(value - 1));
     if (newDate) {
-      return validateDate(newDate);
+      return validate(newDate);
     }
     return null;
   }
@@ -106,7 +61,7 @@ const monthValidation = (value, dateParam) => {
     if (addedDayMonthNumber !== zeroAddedMonthNumber) {
       return false;
     }
-    return validateDate(addDay);
+    return validate(addDay);
   }
   return null;
 };
@@ -117,7 +72,7 @@ const monthValidation = (value, dateParam) => {
  * @param {*} date
  * @returns
  */
-const dayValidation = (value, dateParam) => {
+export const dayValidation = (value, dateParam, validate) => {
   const date = new Date(dateParam);
   const standardMaxDateForMonth = 31;
 
@@ -132,7 +87,7 @@ const dayValidation = (value, dateParam) => {
       return false;
     }
     const newDate = new Date(date.setUTCDate(value));
-    return validateDate(newDate);
+    return validate(newDate);
   }
   return null;
 };
@@ -143,11 +98,11 @@ const dayValidation = (value, dateParam) => {
  * @param {*} date
  * @returns
  */
-const hourValidation = (value, dateParam) => {
+export const hourValidation = (value, dateParam, validate) => {
   const date = new Date(dateParam);
   if (value >= 0 && value <= 23) {
     const newDate = new Date(date.setUTCHours(value));
-    return validateDate(newDate);
+    return validate(newDate);
   }
   return null;
 };
@@ -158,11 +113,11 @@ const hourValidation = (value, dateParam) => {
  * @param {*} date
  * @returns
  */
-const minuteValidation = (value, dateParam) => {
+export const minuteValidation = (value, dateParam, validate) => {
   const date = new Date(dateParam);
   if (value >= 0 && value <= 59) {
     const newDate = new Date(date.setUTCMinutes(value));
-    return validateDate(newDate);
+    return validate(newDate);
   }
   return null;
 };
