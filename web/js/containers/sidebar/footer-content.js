@@ -2,12 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import { connect } from 'react-redux';
+import {
+  UncontrolledTooltip,
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../components/util/button';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
+import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
+import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
 const FooterContent = React.forwardRef((props, ref) => {
   const {
@@ -20,6 +26,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     addLayers,
     toggleCompare,
     compareFeature,
+    eventsData,
   } = props;
   const compareBtnText = !isCompareActive
     ? `Start Comparison${isMobile ? ' Mode' : ''}`
@@ -37,8 +44,8 @@ const FooterContent = React.forwardRef((props, ref) => {
     googleTagManager.pushEvent({ event: 'comparison_mode' });
   };
 
-  return activeTab === 'layers' ? (
-    <footer ref={ref}>
+  const renderLayersFooter = () => (
+    <>
       <ModeSelection
         isActive={isCompareActive}
         isMobile={isMobile}
@@ -62,8 +69,47 @@ const FooterContent = React.forwardRef((props, ref) => {
           text={compareBtnText}
         />
       </div>
+    </>
+  );
+
+  const renderEventsFooter = () => {
+    const eventLimitReach = eventsData && eventsData.length === LIMIT_EVENT_REQUEST_COUNT;
+    const numEvents = eventsData ? eventsData.length : 0;
+    return (
+      <div className="event-count">
+        {eventsData && eventLimitReach ? (
+          <>
+            <span>
+              {`Showing the first ${numEvents} events`}
+            </span>
+            <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
+            <UncontrolledTooltip
+              placement="right"
+              target="filter-info-icon"
+            >
+              <div>
+                More than
+                {` ${LIMIT_EVENT_REQUEST_COUNT} `}
+                events matched the current filter criteria.
+              </div>
+            </UncontrolledTooltip>
+          </>
+        ) : (
+          <span>
+            {`Showing ${numEvents} events`}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+
+  return (
+    <footer ref={ref}>
+      {activeTab === 'layers' && renderLayersFooter()}
+      {activeTab === 'events' && renderEventsFooter()}
     </footer>
-  ) : null;
+  );
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -94,6 +140,7 @@ const mapStateToProps = (state) => {
     animation, config, compare, browser,
   } = state;
   const { isPlaying } = animation;
+  const eventsData = getEventsFilteredCategories(state);
 
   return {
     isMobile: browser.lessThan.medium,
@@ -101,6 +148,7 @@ const mapStateToProps = (state) => {
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
     compareMode: compare.mode,
+    eventsData,
   };
 };
 
@@ -117,6 +165,7 @@ FooterContent.propTypes = {
   changeCompareMode: PropTypes.func,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
+  eventsData: PropTypes.array,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool,

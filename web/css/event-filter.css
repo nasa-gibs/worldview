@@ -56,37 +56,6 @@
     }
   }
 
-  .react-daterange-picker__inputGroup__input:invalid {
-    background: rgba(255, 0, 0, 0.3);
-  }
-  .react-daterange-picker {
-    margin: 4px auto;
-    width: 272px;
-    text-align: center;
-    input,
-    .react-daterange-picker__inputGroup__leadingZero,
-    .react-daterange-picker__inputGroup__month {
-      color: #fff;
-      font-family: 'Roboto Mono', monospace;
-      font-size: 16px;
-    }
-    span {
-      font-size: 16px;
-    }
-    .react-daterange-picker__range-divider {
-      margin: 0 4px;
-      font-size: 12px;
-    }
-    .react-date-picker__inputGroup__divider {
-      margin-right: 2px;
-    }
-    svg {
-      stroke: #fff;
-      &:hover {
-        stroke: #007bff;
-      }
-    }
-  }
   .category-toggles {
     margin: 20px 10px 15px;
   }
@@ -97,6 +66,7 @@
 
 .event-count {
   color: #fff;
+  background: #333;
   text-align: center;
   padding: 10px 0;
   width: 100%;
@@ -105,66 +75,5 @@
   font-size: 15px;
   svg {
     margin-left: 6px;
-  }
-}
-
-.react-calendar {
-  color: #000;
-  border-radius: 6px;
-  padding: 3px;
-  box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.75);
-  max-width: unset;
-  background: #eee;
-  .react-calendar__month-view {
-    background: #fefefe;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-  }
-  .react-calendar__month-view__days__day--neighboringMonth {
-    color: #dfdfdf;
-  }
-  .react-calendar__month-view__days__day--weekend {
-    color: #000;
-    &[disabled] {
-      color: #ccc !important;
-    }
-    &.react-calendar__month-view__days__day--neighboringMonth {
-      color: #dfdfdf !important;
-    }
-  }
-  .react-calendar__navigation__label__labelText--from {
-    margin-right: 100px;
-  }
-  .react-calendar__navigation__label__labelText--to {
-    margin-left: 100px;
-  }
-  .react-calendar__navigation {
-    button {
-      min-width: 44px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      margin: 2px;
-      font-size: 23px;
-      background: #fff;
-      &:hover {
-        background: #e7eeff;
-      }
-    }
-    button.react-calendar__navigation__label {
-      background: #fff;
-      &:hover {
-        background: #e7eeff;
-      }
-    }
-  }
-  .react-calendar__year-view__months {
-    background: #fff;
-  }
-  .react-calendar__tile:hover:not([disabled]) {
-    background-color: #e7eeff;
-  }
-  .react-calendar__tile--active:hover:not([disabled]) {
-    color: #fff;
-    background: #006edc;
   }
 }
