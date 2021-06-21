@@ -1,1 +1,1 @@
-References: doi: [10.5067/AMSRU/AU_OCEAN_NRT_R01](https://doi.org/10.5067/AMSRU/AU_OCEAN_NRT_R01)
+References: [Dataset doi:10.5067/AMSRU/AU_OCEAN_NRT_R01](https://doi.org/10.5067/AMSRU/AU_OCEAN_NRT_R01)

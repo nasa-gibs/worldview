@@ -5,7 +5,7 @@
       "title": "Sea Ice Concentration (12 km)",
       "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Sea_Ice_Concentration_12km",
-      "tags": "amsr-u2",
+      "tags": "amsru2 amsr-u2",
       "group": "overlays",
       "layergroup": "Sea Ice",
       "product": "AU_SI12"
