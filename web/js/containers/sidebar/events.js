@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import {
   Button,
-  UncontrolledTooltip,
 } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,7 +20,6 @@ import { selectDate } from '../../modules/date/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
 import util from '../../util/util';
-import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
 function Events(props) {
   const {
@@ -44,8 +42,8 @@ function Events(props) {
     selectedCategories,
   } = props;
 
-  const dropdownHeight = 34;
-  const maxHeight = Math.max(height - dropdownHeight, 166);
+  const filterControlHeight = 72;
+  const maxHeight = Math.max(height - filterControlHeight, 166);
   const scrollbarMaxHeight = isEmbedModeActive ? '50vh' : `${maxHeight}px`;
 
   const startDate = moment(selectedStartDate).format('YYYY MMM DD');
@@ -57,8 +55,6 @@ function Events(props) {
       ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
       : '';
 
-  const eventLimitReach = eventsData && eventsData.length === LIMIT_EVENT_REQUEST_COUNT;
-  const numEvents = eventsData ? eventsData.length : 0;
 
   const renderFilterControls = () => (
     <div className="filter-controls">
@@ -129,38 +125,10 @@ function Events(props) {
     </Scrollbars>
   );
 
-  const renderEventCount = () => (
-    <div className="event-count">
-      {eventsData && eventLimitReach ? (
-        <>
-          <span>
-            {`Showing the first ${numEvents} events`}
-          </span>
-          <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
-          <UncontrolledTooltip
-            placement="right"
-            target="filter-info-icon"
-          >
-            <div>
-              More than
-              {` ${LIMIT_EVENT_REQUEST_COUNT} `}
-              events matched the current filter criteria.
-            </div>
-          </UncontrolledTooltip>
-        </>
-      ) : (
-        <span>
-          {`Showing ${numEvents} events`}
-        </span>
-      )}
-    </div>
-  );
-
   return (
     <div className="event-container">
       {renderFilterControls()}
       {renderEventList()}
-      {renderEventCount()}
     </div>
   );
 }

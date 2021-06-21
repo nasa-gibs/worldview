@@ -142,21 +142,20 @@
 }
 
 #productsHolder footer {
-  padding: 5px;
   width: initial;
 }
 footer .product-buttons {
-  padding: 5px;
-  height: 37px;
+  padding: 10px;
+  height: 47px;
   width: initial;
 }
 footer .layers-add {
   position: absolute;
-  left: 5px;
+  left: 10px;
 }
 footer .compare-toggle-button {
   position: absolute;
-  right: 5px;
+  right: 10px;
   border-bottom: none;
 }
 
@@ -285,7 +284,7 @@ footer .compare-toggle-button {
   }
 
   #productsHolder footer .product-buttons {
-    height: 110px;
+    height: 120px;
   }
 }
 
