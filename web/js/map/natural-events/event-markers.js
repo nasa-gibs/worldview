@@ -49,13 +49,13 @@ class EventMarkers extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      proj, eventsDataIsLoading, selectedEvent,
+      proj, eventsDataIsLoading, isAnimatingToEvent,
     } = this.props;
-    const finishedLoading = !eventsDataIsLoading && (eventsDataIsLoading !== prevProps.eventsDataIsLoading);
+    const finishedLoading = !eventsDataIsLoading && eventsDataIsLoading !== prevProps.eventsDataIsLoading;
     const projChange = proj !== prevProps.proj;
-    const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
+    const animationFinished = !isAnimatingToEvent && isAnimatingToEvent !== prevProps.isAnimatingToEvent;
 
-    if (finishedLoading || projChange || selectedEventChange) {
+    if (finishedLoading || projChange || animationFinished) {
       this.remove();
       this.draw();
     }
@@ -271,6 +271,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
+    isAnimatingToEvent: events.isAnimatingToEvent,
     eventsData: getEventsFilteredCategories(state),
     eventsDataIsLoading: requestedEvents.isLoading,
   };
@@ -285,6 +286,7 @@ const mapDispatchToProps = (dispatch) => ({
 EventMarkers.propTypes = {
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
+  isAnimatingToEvent: PropTypes.bool,
   map: PropTypes.object,
   mapUi: PropTypes.object,
   proj: PropTypes.object,
