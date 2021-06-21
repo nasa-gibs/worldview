@@ -2,10 +2,10 @@
   "layers": {
     "AMSRU2_Surface_Precipitation_Day": {
       "id": "AMSRU2_Surface_Precipitation_Day",
-      "title": "Surface Precipitation (Day, Near Real-Time)",
-      "subtitle": "GCOM-W1 / AMSRU2",
+      "title": "Surface Precipitation (Day)",
+      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Surface_Precipitation_Day",
-      "tags": "amsru2 rain",
+      "tags": "amsru2 amsr-u2 rain",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
       "product": "AU_Rain_NRT_R01",

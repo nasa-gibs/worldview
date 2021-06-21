@@ -3,9 +3,9 @@
     "AMSRU2_Total_Precipitable_Water_Day": {
       "id": "AMSRU2_Total_Precipitable_Water_Day",
       "title": "Total Precipitable Water (Day, Near Real-Time)",
-      "subtitle": "GCOM-W1 / AMSRU2",
+      "subtitle": "GCOM-W1 / AMSR2",
       "description": "amsr2/AMSRU2_Total_Precipitable_Water_Day",
-      "tags": "amsru2",
+      "tags": "amsru2 amsr-u2",
       "group": "overlays",
       "layergroup": "Precipitation Rate",
       "product": "AU_Ocean_NRT_R01",
