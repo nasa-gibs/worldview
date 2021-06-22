@@ -367,7 +367,7 @@ export default function mapui(models, config, store, ui) {
     }
     // clear previous marker (if present) and get new marker
     removeCoordinatesMarker();
-    const marker = getCoordinatesMarker({ ui: self }, config, coordinates, results);
+    const marker = getCoordinatesMarker(proj, coordinates, results);
 
     // prevent marker if outside of extent
     if (!marker) {

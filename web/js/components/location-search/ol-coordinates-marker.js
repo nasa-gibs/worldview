@@ -84,6 +84,7 @@ export class CoordinatesMarker extends Component {
   singleClick(e, map, crs) {
     const {
       config,
+      proj,
       isCoordinateSearchActive,
       measureIsActive,
       setPlaceMarker,
@@ -103,7 +104,7 @@ export class CoordinatesMarker extends Component {
     if (isCoordinateSearchActive) {
       // show alert warning and exit mode if outside current map extent
       const validNums = !lodashIsNaN(parseFloat(latitude)) && !lodashIsNaN(parseFloat(longitude));
-      const withinExtent = areCoordinatesWithinExtent({ ui: { selected: map } }, config, [longitude, latitude]);
+      const withinExtent = areCoordinatesWithinExtent(proj, [longitude, latitude]);
       if (!validNums || !withinExtent) {
         this.setState({ showExtentAlert: true });
         toggleReverseGeocodeActive(false);
@@ -159,6 +160,7 @@ function mapStateToProps(state) {
     browser,
     config,
     map,
+    proj,
     measure,
     locationSearch,
   } = state;
@@ -167,6 +169,7 @@ function mapStateToProps(state) {
 
   return {
     config,
+    proj,
     map,
     coordinates,
     isCoordinateSearchActive,
@@ -197,6 +200,7 @@ CoordinatesMarker.propTypes = {
   isMobile: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
+  proj: PropTypes.object,
   setPlaceMarker: PropTypes.func.isRequired,
   toggleDialogVisible: PropTypes.func.isRequired,
   toggleReverseGeocodeActive: PropTypes.func.isRequired,
