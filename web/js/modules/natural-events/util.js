@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get as lodashGet } from 'lodash';
 import update from 'immutability-helper';
 import moment from 'moment';
 import util from '../../util/util';
@@ -22,8 +22,8 @@ export function parseEvent(eventString) {
   };
 }
 export function serializeEvent(currentItemState) {
-  const eventId = get(currentItemState, 'selected.id');
-  const eventDate = get(currentItemState, 'selected.date');
+  const eventId = lodashGet(currentItemState, 'selected.id');
+  const eventDate = lodashGet(currentItemState, 'selected.date');
   const eventsTabActive = currentItemState.active;
   return eventsTabActive && eventDate && eventId
     ? [eventId, eventDate].join(',')
@@ -43,8 +43,8 @@ export function parseEventFilterDates(eventFilterDatesString) {
 }
 
 export function serializeEventFilterDates(currentItemState, state) {
-  const selectedStartDate = get(currentItemState, 'start');
-  const selectedEndDate = get(currentItemState, 'end');
+  const selectedStartDate = lodashGet(currentItemState, 'start');
+  const selectedEndDate = lodashGet(currentItemState, 'end');
   const eventsTabActive = state.events.active;
   return eventsTabActive && selectedStartDate && selectedEndDate
     ? `${selectedStartDate},${selectedEndDate}`
@@ -101,20 +101,42 @@ export function mapLocationToEventFilterState(parameters, stateFromLocation, sta
   });
 }
 
-export function getEventsRequestURL (baseUrl, selectedDates, categories = [], proj, bbox) {
+export function getEventsRequestURL (state) {
+  const {
+    config, proj, events, map,
+  } = state;
+  const {
+    selectedCategories,
+    selectedDates,
+    showAll,
+  } = events;
+
+  const baseUrl = lodashGet(config, 'features.naturalEvents.host');
+  const mockEvents = lodashGet(config, 'parameters.mockEvents');
+
+  if (mockEvents) {
+    // eslint-disable-next-line no-console
+    console.warn(`Using mock events data: ${mockEvents}`);
+    return mockEvents === 'true'
+      ? 'mock/events_data.json'
+      : `mock/events_data.json-${mockEvents}`;
+  }
+
   const { crs } = proj.selected;
+  const selectedMap = map && map.ui.selected;
+  const bbox = !showAll && selectedMap && selectedMap.getView().calculateExtent();
+  const { start, end } = selectedDates;
   const params = {
     status: 'all',
     limit: LIMIT_EVENT_REQUEST_COUNT,
   };
-  const { start, end } = selectedDates;
 
   if (start && end) {
     params.start = moment.utc(start).format('YYYY-MM-DD');
     params.end = moment.utc(end).format('YYYY-MM-DD');
   }
-  if (categories.length) {
-    params.category = categories.map(({ id }) => id).join(',');
+  if (selectedCategories.length) {
+    params.category = selectedCategories.map(({ id }) => id).join(',');
   }
 
   let [minLon, maxLat, maxLon, minLat] = [-180, 90, 180, -90];

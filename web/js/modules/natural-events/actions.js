@@ -16,23 +16,38 @@ import {
 } from './constants';
 import { requestAction } from '../core/actions';
 
-
-export function requestEvents(location) {
-  return (dispatch) => requestAction(
-    dispatch,
-    REQUEST_EVENTS,
-    location,
-    'application/json',
-  );
+export function requestEvents() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const requestUrl = getEventsRequestURL(state);
+    requestAction(
+      dispatch,
+      REQUEST_EVENTS,
+      requestUrl,
+      'application/json',
+    );
+  };
 }
 
-export function requestSources(location) {
-  return (dispatch) => requestAction(
-    dispatch,
-    REQUEST_SOURCES,
-    location,
-    'application/json',
-  );
+export function requestSources() {
+  return (dispatch, getState) => {
+    const { config } = getState();
+    const baseUrl = lodashGet(config, 'features.naturalEvents.host');
+    const mockSources = lodashGet(config, 'parameters.mockSources');
+    let sourcesURL = `${baseUrl}/sources`;
+
+    if (mockSources) {
+      // eslint-disable-next-line no-console
+      console.warn(`Using mock sources data: ${mockSources}`);
+      sourcesURL = `mock/sources_data.json-${mockSources}`;
+    }
+    requestAction(
+      dispatch,
+      REQUEST_SOURCES,
+      sourcesURL,
+      'application/json',
+    );
+  };
 }
 
 export function selectEvent(id, eventDate) {
@@ -52,23 +67,13 @@ export function deselectEvent(id, date) {
 export function setEventsFilter(categories, start, end, showAll) {
   return (dispatch, getState) => {
     const {
-      config, proj, events, map,
-    } = getState();
-    const {
       selectedCategories,
       selectedDates,
       showAll: prevShowAll,
-    } = events;
-    const bbox = !showAll && map.ui.selected.getView().calculateExtent();
-    const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-    const requestUrl = getEventsRequestURL(baseUrl, { start, end }, categories, proj, bbox);
+    } = getState().events;
+    const requestUrl = getEventsRequestURL(getState());
     const sameCategories = lodashEqual(selectedCategories, categories);
     const sameDates = lodashEqual(selectedDates, { start, end });
-
-    // Only make request if something has changed
-    if (!showAll || (prevShowAll !== showAll) || !sameCategories || !sameDates) {
-      dispatch(requestEvents(requestUrl));
-    }
     dispatch({
       type: SET_EVENTS_FILTER,
       categories,
@@ -76,6 +81,10 @@ export function setEventsFilter(categories, start, end, showAll) {
       end,
       showAll,
     });
+    // Only make request if something has changed
+    if (!showAll || (prevShowAll !== showAll) || !sameCategories || !sameDates) {
+      dispatch(requestEvents(requestUrl));
+    }
   };
 }
 

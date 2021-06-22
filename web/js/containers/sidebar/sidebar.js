@@ -38,7 +38,6 @@ import {
 } from '../../modules/sidebar/actions';
 import history from '../../main';
 import safeLocalStorage from '../../util/local-storage';
-import { getEventsRequestURL } from '../../modules/natural-events/util';
 
 const { SIDEBAR_COLLAPSED } = safeLocalStorage.keys;
 
@@ -67,14 +66,18 @@ class Sidebar extends React.Component {
 
   componentDidMount() {
     const {
-      activeTab, config, isEmbedModeActive, loadedCustomPalettes,
+      activeTab,
+      config,
+      isEmbedModeActive,
+      loadedCustomPalettes,
+      requestSources,
     } = this.props;
     const customPalettePromise = loadCustomPalette(config);
     customPalettePromise.then((customs) => {
       loadedCustomPalettes(customs);
     });
+    requestSources();
     this.updateDimensions();
-    this.loadEvents();
     // prevent events tab if embed init layers tab
     if (isEmbedModeActive && activeTab === 'layers') {
       this.setState({ isEventsTabDisabledEmbed: true });
@@ -92,58 +95,15 @@ class Sidebar extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { activeTab, proj } = this.props;
-    if (activeTab === 'events') {
-      const projChange = !lodashEqual(proj, prevProps.proj);
-      this.loadEvents(projChange);
+    const {
+      activeTab, requestEvents, selectedMap, mapIsRendered,
+    } = this.props;
+    const mapChange = mapIsRendered && !lodashEqual(selectedMap, prevProps.selectedMap);
+    const mapRenderedChange = mapIsRendered && mapIsRendered !== prevProps.mapIsRendered;
+    if (activeTab === 'events' && (mapRenderedChange || mapChange)) {
+      requestEvents();
     }
     this.updateDimensions();
-  }
-
-  loadEvents(shouldUpdate) {
-    const {
-      isLoadingEvents,
-      hasEventRequestError,
-      eventsData,
-      config,
-      proj,
-      bbox,
-      requestEvents,
-      requestSources,
-      selectedDates,
-      selectedCategories,
-    } = this.props;
-
-    const initialLoad = !isLoadingEvents && !hasEventRequestError && !eventsData;
-    if (!initialLoad && !shouldUpdate) {
-      return;
-    }
-
-    const baseUrl = lodashGet(config, 'features.naturalEvents.host');
-    const mockEvents = lodashGet(config, 'parameters.mockEvents');
-    const mockSources = lodashGet(config, 'parameters.mockSources');
-    let eventsURL = getEventsRequestURL(baseUrl, selectedDates, selectedCategories, proj, bbox);
-    let sourcesURL = `${baseUrl}/sources`;
-
-    if (mockEvents) {
-      // eslint-disable-next-line no-console
-      console.warn(`Using mock events data: ${mockEvents}`);
-      eventsURL = mockEvents === 'true'
-        ? 'mock/events_data.json'
-        : `mock/events_data.json-${mockEvents}`;
-    }
-    if (mockSources) {
-      // eslint-disable-next-line no-console
-      console.warn(`Using mock sources data: ${mockSources}`);
-      sourcesURL = `mock/sources_data.json-${mockSources}`;
-    }
-
-    if (initialLoad) {
-      requestEvents(eventsURL);
-      requestSources(sourcesURL);
-    } else if (shouldUpdate) {
-      requestEvents(eventsURL);
-    }
   }
 
   updateDimensions() {
@@ -381,15 +341,13 @@ const mapStateToProps = (state) => {
     events,
     measure,
     modal,
+    map,
     requestedEvents,
     requestedEventSources,
     sidebar,
     ui,
-    proj,
-    map,
   } = state;
 
-  const { selectedCategories, selectedDates } = events;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error
@@ -412,12 +370,11 @@ const mapStateToProps = (state) => {
   const isMobile = browser.lessThan.medium;
   // Collapse when Image download / GIF /  is open or measure tool active
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
-  const bbox = !events.showAll ? map.extent : [];
+  const selectedMap = map && map.ui && map.ui.selected;
 
   return {
     activeTab,
     activeString,
-    bbox,
     config,
     eventsData,
     eventsSources,
@@ -430,9 +387,8 @@ const mapStateToProps = (state) => {
     isEmbedModeActive,
     isLoadingEvents,
     isMobile,
-    proj,
-    selectedDates,
-    selectedCategories,
+    selectedMap,
+    mapIsRendered: selectedMap && selectedMap.isRendered(),
     screenHeight,
     selectedDate: getSelectedDate(state),
     tabTypes,
@@ -459,11 +415,11 @@ const mapDispatchToProps = (dispatch) => ({
   loadedCustomPalettes: (customs) => {
     dispatch(loadedCustomPalettesAction(customs));
   },
-  requestEvents: (url) => {
-    dispatch(requestEventsActionCreator(url));
+  requestEvents: () => {
+    dispatch(requestEventsActionCreator());
   },
-  requestSources: (url) => {
-    dispatch(requestSourcesActionCreator(url));
+  requestSources: () => {
+    dispatch(requestSourcesActionCreator());
   },
 });
 
@@ -476,7 +432,6 @@ export default connect(
 Sidebar.propTypes = {
   activeString: PropTypes.string,
   activeTab: PropTypes.string,
-  bbox: PropTypes.array,
   changeTab: PropTypes.func,
   collapseExpandToggle: PropTypes.func,
   config: PropTypes.object,
@@ -491,12 +446,11 @@ Sidebar.propTypes = {
   isLoadingEvents: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
+  mapIsRendered: PropTypes.bool,
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
-  proj: PropTypes.object,
   screenHeight: PropTypes.number,
-  selectedDates: PropTypes.object,
-  selectedCategories: PropTypes.array,
+  selectedMap: PropTypes.object,
   tabTypes: PropTypes.object,
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
