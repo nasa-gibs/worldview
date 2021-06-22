@@ -3,6 +3,7 @@ import {
   orderBy as lodashOrderBy,
   uniqBy as lodashUniqBy,
 } from 'lodash';
+import moment from 'moment';
 import {
   REQUEST_EVENTS,
   REQUEST_SOURCES,
@@ -12,7 +13,6 @@ import {
   FINISHED_ANIMATING_TO_EVENT,
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
-import util from '../../util/util';
 
 /**
  * Sort events by date
@@ -57,13 +57,14 @@ const eventsReducerState = {
 export function getInitialEventsState(config) {
   const { initialDate, naturalEvents } = config;
   const { categories } = naturalEvents;
-  const endDate = util.toISOStringDate(new Date(initialDate));
+  const endDate = moment.utc(initialDate).format('YYYY-MM-DD');
+  const startDate = moment.utc(endDate).subtract(120, 'days').format('YYYY-MM-DD');
   return {
     ...eventsReducerState,
     allCategories: categories,
     selectedCategories: categories,
     selectedDates: {
-      start: util.toISOStringDate(new Date(new Date(initialDate).setDate(new Date(initialDate).getDate() - 120))),
+      start: startDate,
       end: endDate,
     },
   };
