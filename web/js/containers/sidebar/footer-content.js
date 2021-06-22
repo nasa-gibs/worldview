@@ -12,7 +12,7 @@ import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
-import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
+import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { LIMIT_EVENT_REQUEST_COUNT } from '../../modules/natural-events/constants';
 
 const FooterContent = React.forwardRef((props, ref) => {
@@ -140,7 +140,7 @@ const mapStateToProps = (state) => {
     animation, config, compare, browser,
   } = state;
   const { isPlaying } = animation;
-  const eventsData = getEventsFilteredCategories(state);
+  const eventsData = getFilteredEvents(state);
 
   return {
     isMobile: browser.lessThan.medium,

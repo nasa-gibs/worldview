@@ -11,7 +11,7 @@ import { selected as selectedAction } from '../../modules/natural-events/actions
 import {
   activateLayersForEventCategory as activateLayersForEventCategoryAction,
 } from '../../modules/layers/actions';
-import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
+import { getFilteredEvents } from '../../modules/natural-events/selectors';
 
 import EventTrack from './event-track';
 import EventMarkers from './event-markers';
@@ -171,7 +171,7 @@ const mapStateToProps = (state) => {
     mapUi: map.ui,
     proj,
     eventsDataIsLoading: requestedEvents.isLoading,
-    eventsData: getEventsFilteredCategories(state),
+    eventsData: getFilteredEvents(state),
     selectedEvent: events.selected,
   };
 };
