@@ -67,11 +67,23 @@ module.exports = {
     c.waitForElementVisible(layersTab, TIME_LIMIT);
     c.click(eventsTab);
     c.expect.elements(filterIcons).count.to.equal(8);
-    c.assert.containsText(filterDates, '2011 SEP 01 - 2011 DEC 31');
+
+    // Print dates to log for debugging purposes
+    if (c.options.desiredCapabilities.browserName !== 'firefox') {
+      c.elements('css selector', filterDates, (result) => {
+        result.value.forEach((element, err) => {
+          c.elementIdAttribute(element.ELEMENT, 'innerText', (res) => {
+            console.log(`DATES => ${res.value}`);
+          });
+        });
+      });
+    }
+
+    c.assert.containsText(filterDates, '2011 SEP 02 - 2011 DEC 31');
   },
   'Filter modal inputs are correct': (c) => {
     openFilterModal(c);
-    assertDateInputValues(c, '2011-SEP-01', '2011-DEC-31');
+    assertDateInputValues(c, '2011-SEP-02', '2011-DEC-31');
     c.expect.element(dustSwitch).to.be.selected;
     c.expect.element(manmadeSwitch).to.be.selected;
     c.expect.element(seaLakeIceSwitch).to.be.selected;
@@ -85,7 +97,7 @@ module.exports = {
   'URL params for categories, dates, and extent filtering are present': (c) => {
     c.assert.urlParameterEquals('e', 'true');
     c.assert.urlParameterEquals('efc', 'dustHaze,manmade,seaLakeIce,severeStorms,snow,volcanoes,waterColor,wildfires');
-    c.assert.urlParameterEquals('efd', '2011-09-01,2011-12-31');
+    c.assert.urlParameterEquals('efd', '2011-09-02,2011-12-31');
     c.assert.urlParameterEquals('efs', 'true');
   },
 
