@@ -40,14 +40,10 @@ export function animateCoordinates(map, config, coordinates, zoom) {
  * @param {Object} config
  * @param {Array} coordinates
  */
-export function areCoordinatesWithinExtent(map, config, coordinates) {
-  const { projections } = config;
-  const { selected } = map.ui;
-  const { proj } = selected;
-  const { maxExtent, crs } = projections[proj];
-
+export function areCoordinatesWithinExtent(proj, coordinates) {
+  const { maxExtent, crs } = proj.selected;
   let [x, y] = coordinates;
-  if (proj !== 'geographic') {
+  if (crs !== 'EPSG:4326') {
     const transformedXY = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
     [x, y] = transformedXY;
   }
@@ -62,14 +58,11 @@ export function areCoordinatesWithinExtent(map, config, coordinates) {
  * @param {Array} coordinates
  * @param {Object} reverseGeocodeResults
  */
-export function getCoordinatesMarker(map, config, coordinates, reverseGeocodeResults) {
-  const { projections } = config;
-  const { selected } = map.ui;
-  const { proj } = selected;
-  const { crs } = projections[proj];
+export function getCoordinatesMarker(proj, coordinates, reverseGeocodeResults) {
+  const { crs } = proj.selected;
 
   // only add marker within current map extent
-  const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
+  const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
   if (!coordinatesWithinExtent) {
     return false;
   }

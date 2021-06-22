@@ -391,7 +391,7 @@ const mapStateToProps = (state) => {
     browser,
     config,
     lastAction,
-    map,
+    proj,
     modal,
     locationSearch,
   } = state;
@@ -412,7 +412,7 @@ const mapStateToProps = (state) => {
     preventInputFocus,
     coordinates,
     locationSearchMobileModalOpen,
-    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(map, config, targetCoordinates),
+    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(proj, targetCoordinates),
     isCoordinateSearchActive,
     isMobile,
     processMagicKey: (magicKey) => processMagicKey(magicKey, config),
