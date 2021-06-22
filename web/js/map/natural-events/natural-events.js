@@ -1,4 +1,5 @@
 import React from 'react';
+import { get as lodashGet } from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as olExtent from 'ol/extent';
@@ -14,6 +15,7 @@ import { getEventsFilteredCategories } from '../../modules/natural-events/select
 
 import EventTrack from './event-track';
 import EventMarkers from './event-markers';
+import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -49,7 +51,10 @@ class NaturalEvents extends React.Component {
     if (projChange && selectedEvent) {
       const { id, date } = selectedEvent;
       const event = eventsData.find((e) => e.id === id);
-      if (event) {
+      const eventCoords = lodashGet(event, 'geometry[0].coordinates');
+      const eventInExtent = eventCoords && areCoordinatesWithinExtent(proj, eventCoords);
+
+      if (event && eventInExtent) {
         this.zoomToEvent(event, date);
       }
     }
