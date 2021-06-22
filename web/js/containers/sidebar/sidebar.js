@@ -28,7 +28,7 @@ import {
   requestSources as requestSourcesActionCreator,
 } from '../../modules/natural-events/actions';
 import { getAllActiveLayers } from '../../modules/layers/selectors';
-import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
+import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
@@ -354,7 +354,7 @@ const mapStateToProps = (state) => {
   const hasEventRequestError = !!(requestedEvents.error
     || requestedEventSources.error);
 
-  const eventsData = getEventsFilteredCategories(state);
+  const eventsData = getFilteredEvents(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
   const { screenHeight } = browser;
   const { isDistractionFreeModeActive } = ui;

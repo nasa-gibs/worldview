@@ -16,7 +16,7 @@ import googleTagManager from 'googleTagManager';
 import EventIcon from '../../components/sidebar/event-icon';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
-import { getEventsFilteredCategories } from '../../modules/natural-events/selectors';
+import { getFilteredEvents } from '../../modules/natural-events/selectors';
 
 const icons = [
   'Dust and Haze',
@@ -75,7 +75,7 @@ class EventMarkers extends React.Component {
     const markers = eventsData.reduce((collection, event) => {
       const marker = {};
       const isSelected = event.id === selectedEvent.id;
-      const { maxExtent, crs } = proj.selected;
+      const { crs } = proj.selected;
       let date = getDefaultEventDate(event);
       if (isSelected && selectedEvent.date) {
         date = selectedEvent.date;
@@ -118,15 +118,11 @@ class EventMarkers extends React.Component {
         ? category
         : { title: 'Default', slug: 'default' };
 
-      // get maxExtent of current projection and check if marker is within range
-      const maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
-      // only create marker if within projection extent range
-      if (maxExtentCheck) {
-        marker.pin = createPin(event.id, category, isSelected, event.title);
-        marker.pin.setPosition(coordinates);
-        map.addOverlay(marker.pin);
-        this.addInteractions(marker, event, date, isSelected);
-      }
+      marker.pin = createPin(event.id, category, isSelected, event.title);
+      marker.pin.setPosition(coordinates);
+      map.addOverlay(marker.pin);
+      this.addInteractions(marker, event, date, isSelected);
+
       // empty objects (i.e., markers not within projection range) are not pushed to collection
       if (lodashIsEmpty(marker) !== true) {
         collection.push(marker);
@@ -272,7 +268,7 @@ const mapStateToProps = (state) => {
     selectedEvent: events.selected,
     selectedDate: date.selected,
     isAnimatingToEvent: events.isAnimatingToEvent,
-    eventsData: getEventsFilteredCategories(state),
+    eventsData: getFilteredEvents(state),
     eventsDataIsLoading: requestedEvents.isLoading,
   };
 };

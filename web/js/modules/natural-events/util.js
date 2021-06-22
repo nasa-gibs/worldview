@@ -21,6 +21,7 @@ export function parseEvent(eventString) {
     showAll: true,
   };
 }
+
 export function serializeEvent(currentItemState) {
   const eventId = lodashGet(currentItemState, 'selected.id');
   const eventDate = lodashGet(currentItemState, 'selected.date');
@@ -110,10 +111,8 @@ export function getEventsRequestURL (state) {
     selectedDates,
     showAll,
   } = events;
-
   const baseUrl = lodashGet(config, 'features.naturalEvents.host');
   const mockEvents = lodashGet(config, 'parameters.mockEvents');
-
   if (mockEvents) {
     // eslint-disable-next-line no-console
     console.warn(`Using mock events data: ${mockEvents}`);
@@ -121,7 +120,14 @@ export function getEventsRequestURL (state) {
       ? 'mock/events_data.json'
       : `mock/events_data.json-${mockEvents}`;
   }
-
+  // Rough extents used for EONET projection extent filtering.  Polar extents do not
+  // represent exact bounds seen in app since they are expressed in EPSG:4326
+  // format which is the only format the API supports
+  const extentBounds = {
+    'EPSG:4326': [-180, 90, 180, -90],
+    'EPSG:3413': [-180, 40, 180, 90],
+    'EPSG:3031': [-180, -90, 180, -40],
+  };
   const { crs } = proj.selected;
   const selectedMap = map && map.ui.selected;
   const bbox = !showAll && selectedMap && selectedMap.getView().calculateExtent();
@@ -130,6 +136,8 @@ export function getEventsRequestURL (state) {
     status: 'all',
     limit: LIMIT_EVENT_REQUEST_COUNT,
   };
+  const useBbox = bbox && bbox.length && crs === 'EPSG:4326';
+  params.bbox = useBbox ? bbox : extentBounds[crs];
 
   if (start && end) {
     params.start = moment.utc(start).format('YYYY-MM-DD');
@@ -138,19 +146,6 @@ export function getEventsRequestURL (state) {
   if (selectedCategories.length) {
     params.category = selectedCategories.map(({ id }) => id).join(',');
   }
-
-  let [minLon, maxLat, maxLon, minLat] = [-180, 90, 180, -90];
-  if (crs === 'EPSG:3413') {
-    [minLon, maxLat, maxLon, minLat] = [-180, 50, 180, 90];
-  }
-  if (crs === 'EPSG:3031') {
-    [minLon, maxLat, maxLon, minLat] = [-180, -90, 180, -50];
-  }
-  if (bbox && bbox.length && crs === 'EPSG:4326') {
-    [minLon, maxLat, maxLon, minLat] = bbox;
-  }
-  params.bbox = [minLon, maxLat, maxLon, minLat];
-
   return `${baseUrl}/events${util.toQueryString(params)}`;
 }
 
