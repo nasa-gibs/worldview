@@ -506,8 +506,6 @@ export function activateLayersForEventCategory(state, category) {
   // Turn on or add new layers
   categoryLayers.forEach((layer) => {
     const [id, visible] = layer;
-    // const isAvailable = available(state, id);
-    // console.log(isAvailable);
     const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
       newLayers = update(newLayers, {

@@ -235,10 +235,7 @@ const mapStateToProps = (state, ownProps) => {
   if (isEmbedModeActive) {
     activeLayers = activeLayers.filter((layer) => layer.layergroup !== 'Reference');
   }
-  let numVisible = 0;
-  ownProps.layers.forEach((layer) => {
-    if (layer.visible) numVisible += 1;
-  });
+  const numVisible = (ownProps.layers || []).filter(({ visible }) => visible).length;
   return {
     zots,
     isEmbedModeActive,

@@ -46,7 +46,6 @@ const eventsReducerState = {
   active: false,
   showAll: true,
   isAnimatingToEvent: false,
-  allCategories: [],
   selectedCategories: [],
   selectedDates: {
     start: null,
@@ -61,7 +60,6 @@ export function getInitialEventsState(config) {
   const startDate = moment.utc(endDate).subtract(120, 'days').format('YYYY-MM-DD');
   return {
     ...eventsReducerState,
-    allCategories: categories,
     selectedCategories: categories,
     selectedDates: {
       start: startDate,
