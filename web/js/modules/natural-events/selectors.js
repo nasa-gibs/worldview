@@ -23,10 +23,17 @@ export const getFilteredEvents = createSelector(
   [getActiveCategories, getEvents, getProjection],
   (activeCategories, events, projection) => {
     if (!events) return;
-    const filterGeoms = ({ coordinates }) => {
+    const filterGeoms = ({ coordinates, type }) => {
       const { crs, maxExtent } = projection;
-      const coords = transform(coordinates, 'EPSG:4326', crs);
-      return containsCoordinate(maxExtent, coords);
+      const passesFilter = (coords) => {
+        const tCoords = transform(coords, 'EPSG:4326', crs);
+        return containsCoordinate(maxExtent, tCoords);
+      };
+      if (type === 'Point') {
+        return passesFilter(coordinates);
+      } if (type === 'Polygon') {
+        return coordinates[0].every(passesFilter);
+      }
     };
     return events
       .reduce((filteredEvents, event) => {
