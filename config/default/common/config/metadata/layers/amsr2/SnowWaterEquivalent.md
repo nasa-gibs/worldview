@@ -1,5 +1,3 @@
-**6 May 2020 Notice**: The data provider has identified a potential irregularity in the Snow Water Equivalent (SWE) data sets that results in what appears to be an artificial, uniform boundary in SWE values extending across North America. The Principal Investigators are actively examining the data to determine the source of the artificial boundary. Where SWE data values exist, there is confidence that the SWE values are valid. However, users should be cautious when using the data where no data values exist in the northern hemisphere until further notice.
-
 ### Snow Water Equivalent (25 km, Daily)
 Temporal coverage: 2 July 2012 - present
 

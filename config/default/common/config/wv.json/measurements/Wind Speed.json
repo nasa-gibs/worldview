@@ -13,8 +13,6 @@
                     "settings": [
                         "AMSRU2_Wind_Speed_Day",
                         "AMSRU2_Wind_Speed_Night",
-                        "AMSR2_Wind_Speed_Day",
-                        "AMSR2_Wind_Speed_Night",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
                     ]

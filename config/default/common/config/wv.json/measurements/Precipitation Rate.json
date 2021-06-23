@@ -38,10 +38,6 @@
                         "AMSRU2_Surface_Precipitation_Night",
                         "AMSRU2_Total_Precipitable_Water_Day",
                         "AMSRU2_Total_Precipitable_Water_Night",
-                        "AMSR2_Surface_Precipitation_Rate_Day",
-                        "AMSR2_Surface_Precipitation_Rate_Night",
-                        "AMSR2_Surface_Rain_Rate_Day",
-                        "AMSR2_Surface_Rain_Rate_Night",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
                     ]
