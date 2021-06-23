@@ -8,11 +8,13 @@ The gridded data are derived from the SSHA data of TOPEX/Poseidon, Jason-1, Jaso
 References: doi [10.5067/SLREF-CDRV2](https://doi.org/10.5067/SLREF-CDRV2)
 
 ### Sea Surface Height Anomalies (GDR Cycles)
-Temporal coverage: 3 October 1992 - 22 November 2017
+Temporal coverage: 3 October 1992 - present (4 month latency)
 
-The Sea Surface Height Anomalies (GDR Cycles) layer is a part of the Integrated Multi-Mission Ocean Altimeter Data for Climate Research dataset which contains along track geo-referenced Sea Surface Height Anomalies (SSHA) from TOPEX/Poseidon, Jason-1 and OSTM/Jason-2 (depending on time period) merged into a single mean reference orbit.  All biases and cross-calibrations have been applied to the data so SSHA are consistent between satellites to form a single climate data record.  Altimeter data from the multi-mission Geophysical Data Records (GDRs) are interpolated to a common reference orbit facilitating direct time series analysis of the geo-referenced SSH.  The data are in netCDF format. Each file consists of one cycle of data, which is approximately 10 days long.  Cycle 001 coincides with cycle 001 of TOPEX/Poseidon (September 25-October 3, 1992).
+The Sea Surface Height Anomalies (GDR Cycles) layer displays along track Sea Surface Height Anomalies (SSHA) for individual 10-day cycles from the TOPEX/Poseidon, Jason-1, OSTM/Jason-2, and Jason-3 missions geo-referenced to a mean reference orbit. Altimeter data from the multi-mission Geophysical Data Records (GDRs) have been interpolated to a common reference orbit with biases and cross-calibrations applied so that the derived SSHA are consistent between satellites to form a single homogeneous climate data record. Version 5.0 updates include improved Precise Orbit Determination (POD) with GSFC std2006 standards, and the application of internal tides.
 
-References: doi:[10.5067/ALTCY-TJ124](https://doi.org/10.5067/ALTCY-TJ124)
+The sensor/algorithm resolution is 11.2 km along track and 5.1 km across track, imagery resolution is 2 km. The temporal resolution of the imagery is 10 days. The imagery latency is approximately 4 months.
+
+References: [doi:10.5067/ALTCY-TJA50](https://doi.org/10.5067/ALTCY-TJA50)
 
 ### Sea Surface Height Anomalies (Reconstructed)
 Temporal coverage: 3 January 1950 - 3 July 2009
@@ -23,4 +25,5 @@ References: doi:[10.5067/RECSL-000V1](https://doi.org/10.5067/RECSL-000V1)
 
 ### Sea Surface Height Anomalies (US West Coast, GAFECC)
 Temporal coverage: 14 October 1992 - 19 January 2011
+
 The Sea Surface Height Anomalies (US West Coast, GAFECC) layer is created from the Gridded Altimeter Fields with Enhanced Coastal Coverage data product. The product contains Sea Surface Height Anomalies (SSHA or SLA) and zonal and meridional geostrophic velocities for the US west coast encompassing 35.25 deg-48.5 deg N latitude and 227.75 deg-248.5 deg E longitude. This annually updated data product extends from October 14, 1992 through November 4, 2009. SSHA and current velocities are derived from the AVISO quarter degree DT UPD MSLA version 3.0 grids, 0.75 deg and greater away from the coast.  Values within 0.75 deg of the coast are derived from tide gauge observations and interpolated out to the altimeter filled region.  Details on how these data are derived can be found in: Saraceno, M., P. T. Strub, and P. M. Kosro (2008), Estimates of sea surface height and near-surface alongshore coastal currents from combinations of altimeters and tide gauges, J. Geophys. Res., 113, C11013, doi:[10.1029/2008JC004756](https://doi.org/10.1029/2008JC004756).
