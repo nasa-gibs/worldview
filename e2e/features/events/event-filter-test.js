@@ -69,15 +69,9 @@ module.exports = {
     c.expect.elements(filterIcons).count.to.equal(8);
 
     // Print dates to log for debugging purposes
-    if (c.options.desiredCapabilities.browserName !== 'firefox') {
-      c.elements('css selector', filterDates, (result) => {
-        result.value.forEach((element, err) => {
-          c.elementIdAttribute(element.ELEMENT, 'innerText', (res) => {
-            console.log(`DATES => ${res.value}`);
-          });
-        });
-      });
-    }
+    c.getElementProperty(filterDates, 'innerText', function(result) {
+      console.log('result', result);
+    });
 
     c.assert.containsText(filterDates, '2011 SEP 02 - 2011 DEC 31');
   },
@@ -183,6 +177,11 @@ module.exports = {
 
     // APPLY
     c.click(filterModalApply);
+
+    // Print dates to log for debugging purposes
+    c.getElementProperty(filterDates, 'innerText', function(result) {
+      console.log('result', result);
+    });
 
     // assert sidebar values
     c.assert.containsText(filterDates, '2000 APR 19 - 2001 NOV 11');
