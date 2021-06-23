@@ -58,8 +58,6 @@
                     "settings": [
                         "AMSRU2_Columnar_Water_Vapor_Day",
                         "AMSRU2_Columnar_Water_Vapor_Night",
-                        "AMSR2_Columnar_Water_Vapor_Day",
-                        "AMSR2_Columnar_Water_Vapor_Night",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
                     ]
