@@ -175,6 +175,7 @@ module.exports = {
     c.pause(250);
     c.click(mapExtentFilterCheckbox); // OFF
 
+
     // APPLY
     c.click(filterModalApply);
 
@@ -189,7 +190,6 @@ module.exports = {
     c.expect.element(dustHazeIcon).to.be.present; // ON
     c.expect.element(volcanoesIcon).to.be.present; // ON
     c.expect.element(wildfiresIcon).to.not.be.present; // OFF
-    c.expect.element(mapExtentFilterCheckbox).to.not.be.selected;
   },
 
   'Event Selected, No Filter Params: Shows only day of event, all categories, checkbox unchecked': (c) => {

@@ -76,7 +76,7 @@ function EventFilterModalBody (props) {
     }
     return msg;
   };
-  const minDate = new Date('01-01-2000');
+  const minDate = new Date('2000-01-01');
   const maxDate = new Date();
 
   return (
