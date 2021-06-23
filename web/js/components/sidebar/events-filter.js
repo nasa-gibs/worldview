@@ -165,16 +165,16 @@ EventFilterModalBody.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { events, proj } = state;
+  const { events, proj, config } = state;
   const {
-    selectedCategories, selectedDates, allCategories, showAll,
+    selectedCategories, selectedDates, showAll,
   } = events;
 
   const isPolarProj = proj.selected.crs === 'EPSG:3031' || proj.selected.crs === 'EPSG:3413';
 
   return {
     isPolarProj,
-    eventCategories: allCategories,
+    eventCategories: config.naturalEvents.categories,
     selectedCategories,
     selectedStartDate: selectedDates.start,
     selectedEndDate: selectedDates.end,
