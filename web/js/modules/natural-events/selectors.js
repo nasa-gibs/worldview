@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
-import { containsCoordinate } from 'ol/extent';
-import { transform } from 'ol/proj';
+import { validateEventCoords } from './util';
 
 const getActiveCategories = ({ events }) => events.selectedCategories;
 const getEvents = ({ requestedEvents }) => requestedEvents.response;
@@ -21,23 +20,12 @@ const getProjection = ({ proj }) => proj.selected;
 // eslint-disable-next-line import/prefer-default-export
 export const getFilteredEvents = createSelector(
   [getActiveCategories, getEvents, getProjection],
-  (activeCategories, events, projection) => {
+  (activeCategories, events, proj) => {
     if (!events) return;
-    const filterGeoms = ({ coordinates, type }) => {
-      const { crs, maxExtent } = projection;
-      const passesFilter = (coords) => {
-        const tCoords = transform(coords, 'EPSG:4326', crs);
-        return containsCoordinate(maxExtent, tCoords);
-      };
-      if (type === 'Point') {
-        return passesFilter(coordinates);
-      } if (type === 'Polygon') {
-        return coordinates[0].every(passesFilter);
-      }
-    };
     return events
       .reduce((filteredEvents, event) => {
-        const filteredGeometries = event.geometry.filter(filterGeoms);
+        const { geometry } = event;
+        const filteredGeometries = geometry.filter((e) => validateEventCoords(e, proj));
         if (filteredGeometries.length) {
           const newEvent = {
             ...event,

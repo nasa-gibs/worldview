@@ -1,6 +1,8 @@
 import { get as lodashGet } from 'lodash';
 import update from 'immutability-helper';
 import moment from 'moment';
+import { containsCoordinate } from 'ol/extent';
+import { transform } from 'ol/proj';
 import util from '../../util/util';
 import {
   LIMIT_EVENT_REQUEST_COUNT,
@@ -165,3 +167,25 @@ export function getDefaultEventDate(event) {
   }
   return date;
 }
+
+/**
+ * Validate whether an event and all it's points/polygons fall within
+ * the provded projection's maxExtent
+ *
+ * @param {*} event
+ * @param {*} proj
+ * @returns
+ */
+export const validateEventCoords = (event, proj) => {
+  const { coordinates, type } = event;
+  const { crs, maxExtent } = proj;
+  const passesFilter = (coords) => {
+    const tCoords = transform(coords, 'EPSG:4326', crs);
+    return containsCoordinate(maxExtent, tCoords);
+  };
+  if (type === 'Point') {
+    return passesFilter(coordinates);
+  } if (type === 'Polygon') {
+    return coordinates[0].every(passesFilter);
+  }
+};
