@@ -57,7 +57,7 @@ export function getInitialEventsState(config) {
   const { initialDate, naturalEvents } = config;
   const { categories } = naturalEvents;
   const endDate = moment.utc(initialDate).format('YYYY-MM-DD');
-  const startDate = moment.utc(endDate).subtract(120, 'days').format('YYYY-MM-DD');
+  const startDate = moment.utc(initialDate).subtract(120, 'days').format('YYYY-MM-DD');
   return {
     ...eventsReducerState,
     selectedCategories: categories,
