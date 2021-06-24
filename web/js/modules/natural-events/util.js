@@ -56,7 +56,8 @@ export function serializeEventFilterDates(currentItemState, state) {
 
 export function serializeCategories(categories, state) {
   const eventsTabActive = state.events.active;
-  return eventsTabActive ? categories.map(({ id }) => id).join(',') : undefined;
+  const usingDefaults = categories === state.config.naturalEvents.categories;
+  return eventsTabActive && !usingDefaults ? categories.map(({ id }) => id).join(',') : undefined;
 }
 
 export function mapLocationToEventFilterState(parameters, stateFromLocation, state) {
