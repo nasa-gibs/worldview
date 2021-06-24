@@ -53,7 +53,7 @@ class NaturalEvents extends React.Component {
     if (projChange && selectedEvent) {
       const { id, date } = selectedEvent;
       const event = eventsData.find((e) => e.id === id);
-      const eventInExtent = validateEventCoords(event, proj);
+      const eventInExtent = event && validateEventCoords(event, proj);
 
       if (event && eventInExtent) {
         this.zoomToEvent(event, date);
@@ -152,8 +152,7 @@ class NaturalEvents extends React.Component {
   };
 
   render() {
-    const { eventsData } = this.props;
-    return !eventsData ? null : (
+    return (
       <>
         <EventTrack />
         <EventMarkers />
