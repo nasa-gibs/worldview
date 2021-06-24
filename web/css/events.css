@@ -293,7 +293,7 @@
   font-size: 11px;
 }
 .event-icon {
-  display: inline-block;
+  display: block;
   height: 30px;
   width: 30px;
   background: url("../images/natural-events/icon-critical.svg");
@@ -303,7 +303,7 @@
   width: 26px;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .event-scroll-list .event-icon {
     height: 40px;
     width: 40px;
@@ -312,7 +312,7 @@
     height: 36px;
     width: 36px;
   }
-}
+} */
 
 .event-icon-dust-and-haze {
   background: url("../images/natural-events/icon-dust-and-haze.svg");
