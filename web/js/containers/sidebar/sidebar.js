@@ -96,12 +96,12 @@ class Sidebar extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      activeTab, requestEvents, selectedMap, mapIsRendered,
+      activeTab, requestEvents, selectedMap, mapIsRendered, eventsData,
     } = this.props;
     const mapChange = mapIsRendered && !lodashEqual(selectedMap, prevProps.selectedMap);
     const mapRenderedChange = mapIsRendered && mapIsRendered !== prevProps.mapIsRendered;
     const tabChange = activeTab !== prevProps.activeTab;
-    if (activeTab === 'events' && (mapRenderedChange || mapChange || tabChange)) {
+    if (activeTab === 'events' && (mapRenderedChange || mapChange || tabChange) && !eventsData) {
       requestEvents();
     }
     this.updateDimensions();
