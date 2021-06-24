@@ -21,11 +21,25 @@ function SmartHandoffModal({
 }) {
   // Hides Earthdata Search information by default
   const [showMoreInfo, toggleInfo] = useState(false);
+  const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
+  const [hideModal, setHideModal] = useState(safeLocalStorage.getItem(HIDE_EDS_WARNING) || false);
   const {
     value, title, type, version,
   } = selectedCollection;
   const { dateRanges } = selectedLayer;
   const cmrSearchDetailURL = `https://cmr.earthdata.nasa.gov/search/concepts/${value}.html`;
+
+  const onCheck = () => {
+    if (!hideModal) {
+      safeLocalStorage.setItem(HIDE_EDS_WARNING, true);
+      googleTagManager.pushEvent({
+        event: 'smart_handoffs_toggle_true_hide_warning',
+      });
+    } else {
+      safeLocalStorage.removeItem(HIDE_EDS_WARNING);
+    }
+    setHideModal(!hideModal);
+  };
 
   return (
 
@@ -127,8 +141,8 @@ function SmartHandoffModal({
           <Checkbox
             id="hide-eds-checkbox"
             name="hide-eds"
-            onCheck={() => hideModal()}
-            checked={false}
+            onCheck={onCheck}
+            checked={hideModal}
             color="gray"
             aria-label="Do not show the Earthdata Search message again."
             label="Do not show this message again."
@@ -141,18 +155,6 @@ function SmartHandoffModal({
   );
 }
 
-const hideModal = () => {
-  const { HIDE_EDS_WARNING } = safeLocalStorage.keys;
-  const shouldHideWarning = safeLocalStorage.getItem(HIDE_EDS_WARNING);
-  if (!shouldHideWarning) {
-    safeLocalStorage.setItem(HIDE_EDS_WARNING, true);
-    googleTagManager.pushEvent({
-      event: 'smart_handoffs_toggle_true_hide_warning',
-    });
-  } else {
-    safeLocalStorage.removeItem(HIDE_EDS_WARNING);
-  }
-};
 
 /**
  * Handle type-checking of defined properties
