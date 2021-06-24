@@ -30,8 +30,8 @@
 | `av` | number | <b>`1`</b> to <b>`10`</b> | The animation speed value from 1 to 10. 1 = slowest, 10 = fastest. |
 | `al` | boolean | <i>`true`</i> or <i>`false`</i> | If any value is set, the animation loop will be turned on. Animation looping is disabled by default. |
 | `ca` | boolean | <i>`true`</i> or <i>`false`</i> | Determines if the A or B state is active. If this parameter exists at all, compare mode will be active. If `ca=true`, Compare mode will be active in the A state. |
-| `cm` | string | <i>`swipe`</i> , <i>`spy`</i> or <i>`opacity`</i> | If comparison mode is active (\`ca=true |
-| `cv` | Number | <b>`0`</b> to <b>`100`</b> | If \`ca='true |
+| `cm`                 | string      | _`swipe`_ , _`spy`_ or _`opacity`_                     | If comparison mode is active (`ca=true\|false`) the `cm` parameter will determine which comparison mode to use. Default mode is `swipe`.                                                                                                                                                                        |
+| `cv`                 | Number      | **`0`** to **`100`**                                   | If `ca='true\|false'`, The `cv` parameter is used to determine the location of the swiper or the value of opacity depending on the selected mode. Default is `50` which will place the swiper on the middle of any screen. This parameter is irrelevant when the `spy` mode is active (`cm=spy`).                |
 | `download` | string | *`product_id`* | If any value is set, the data download tab will be activated. If a product identifier is set, the corresponding will be selected. |
 | `r` | number | <b>`-180.0000`</b> to <b>`180.0000`</b> | The degree of map rotation. Only applies when `arctic` or `antarctic` projection is selected. |
 | `df` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, distraction free mode will be activated. Distraction free mode is disabled by default and can be toggled from the Information toolbar menu. |
