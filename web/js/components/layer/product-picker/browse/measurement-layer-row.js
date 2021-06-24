@@ -36,7 +36,7 @@ function MeasurementLayerRow (props) {
   const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
   const checkboxId = `${layer.id.split('.').join('-')}-checkbox`;
 
-  function onClick() {
+  function onCheck() {
     if (isEnabled) {
       removeLayer(layer.id);
     } else {
@@ -53,7 +53,7 @@ function MeasurementLayerRow (props) {
       <Checkbox
         id={checkboxId}
         name={title}
-        onClick={onClick}
+        onCheck={onCheck}
         checked={isEnabled}
         label={title}
         classNames="settings-check"
