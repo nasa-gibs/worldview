@@ -76,6 +76,7 @@ const Switch = (props) => {
                 isOpen={tooltipOpen}
                 target={`${id}-switch-tooltip`}
                 toggle={() => { toggleTooltip(!tooltipOpen); }}
+                fade={false}
               >
                 {tooltip}
               </Tooltip>
