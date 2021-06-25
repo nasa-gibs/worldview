@@ -5,6 +5,7 @@ import { initialCompareState } from './modules/compare/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
 import { defaultAlertState } from './modules/alerts/reducer';
+import { getInitialEventsState } from './modules/natural-events/reducers';
 
 const fixtures = {
   red: 'ff0000ff',
@@ -23,7 +24,15 @@ fixtures.getState = function() {
     layers: initialLayerState,
     alerts: defaultAlertState,
     date: getInitialDateState(fixtures.config()),
+    events: getInitialEventsState(fixtures.config()),
+    map: fixtures.map(),
     animation: initialAnimationState,
+    proj: {
+      selected: {
+        id: 'geographic',
+        crs: 'EPSG:4326',
+      },
+    },
     palettes: {
       active: {},
       activeB: {},
@@ -188,6 +197,16 @@ fixtures.getState = function() {
     },
   };
 };
+
+fixtures.map = () => ({
+  ui: {
+    selected: {
+      getView: () => ({
+        calculateExtent: () => [-15.06, 27.16, 13.32, 56.06],
+      }),
+    },
+  },
+});
 
 fixtures.config = function() {
   return {
@@ -355,8 +374,32 @@ fixtures.config = function() {
         period: 'daily',
       },
     },
+    naturalEvents: {
+      categories: [
+        {
+          id: 'dustHaze',
+          title: 'Dust and Haze',
+          description: 'Related to dust storms, air pollution and other non-volcanic aerosols. Volcano-related plumes shall be included with the originating eruption event.',
+          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/dustHaze',
+        },
+        {
+          id: 'manmade',
+          title: 'Manmade',
+          description: 'Events that have been human-induced and are extreme in their extent.',
+          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/manmade',
+        },
+        {
+          id: 'seaLakeIce',
+          title: 'Sea and Lake Ice',
+          description: 'Related to all ice that resides on oceans and lakes, including sea and lake ice (permanent and seasonal) and icebergs.',
+          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/seaLakeIce',
+        }],
+    },
     features: {
       compare: true,
+      naturalEvents: {
+        host: 'fake.eonet.url/api',
+      },
     },
     palettes: {
       lookups: {
