@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Button, UncontrolledTooltip } from 'reactstrap';
 import googleTagManager from 'googleTagManager';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Portal } from 'react-portal';
 import Switch from '../util/switch';
 import Checkbox from '../util/checkbox';
@@ -122,12 +123,23 @@ function EventFilterModalBody (props) {
       </div>
 
       {!isPolarProj && (
-        <Checkbox
-          id="map-extent-filter"
-          label="Only list events in current map view"
-          onCheck={() => setListAll(!listAll)}
-          checked={!listAll}
-        />
+        <>
+          <Checkbox
+            id="map-extent-filter"
+            label="Only list events in current map view"
+            onCheck={() => setListAll(!listAll)}
+            checked={!listAll}
+          />
+          <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" />
+          <UncontrolledTooltip
+            placement="right"
+            target="bbox-limit-info"
+          >
+            If checked, limits event results to those located within the current map view.
+            If you move the map, you will need to open the filter and click &quot;Apply&quot; again
+            to update the results.
+          </UncontrolledTooltip>
+        </>
       )}
 
       <Portal node={document.querySelector(`#${parentId} .modal-footer`)}>

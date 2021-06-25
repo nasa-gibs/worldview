@@ -61,6 +61,10 @@
   }
   .wv-checkbox {
     margin: 25px 10px 5px;
+    display: inline-block;
+  }
+  .wv-checkbox + svg {
+    display: inline-block;
   }
 }
 
