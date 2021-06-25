@@ -31,7 +31,7 @@ const EventsAlertModalBody = () => (
         There are normal swath data gaps in some of the imagery layers due
         to way the satellite orbits the Earth, and an event may have
         occurred in the data gap. Learn more with the
-        {` `}
+        {' '}
         <a href="https://worldview.earthdata.nasa.gov/?v=-255.13947597940853,-142.5249083549454,242.67302402059147,109.63964770652301&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&tr=swath_gaps&t=2019-02-10-T00%3A00%3A00Z">
           Swath Gap tour story.
         </a>
