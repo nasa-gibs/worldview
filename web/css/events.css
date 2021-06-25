@@ -151,27 +151,27 @@
   color: #f00;
 }
 
-.marker {
+.marker div {
   display: block;
   height: 26px;
   width: 26px;
   background: url("../images/natural-events/dot.svg");
 }
-
-.marker-selected {
-  transform: scale(1.4);
-  transform-origin: center bottom;
-  position: relative;
+.marker.selected {
   z-index: 100;
-  height: 31px;
-  background: url("../images/natural-events/pin.svg");
+  div {
+    transform: scale(1.4);
+    transform-origin: center bottom;
+    position: relative;
+    height: 31px;
+    background: url("../images/natural-events/pin.svg");
+  }
 }
 
 .marker:not(.marker-selected):hover {
   transform: scale(1.2);
   transform-origin: center bottom;
   position: relative;
-  z-index: 100;
   cursor: pointer;
 }
 .track-marker-case {
