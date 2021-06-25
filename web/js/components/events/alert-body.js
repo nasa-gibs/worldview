@@ -19,7 +19,7 @@ const EventsAlertModalBody = () => (
       <li>
         Some events don’t appear on the day that they are reported, you may
         have to wait a day or two for an event to become visible. Try and
-        scroll through the days to see an event’s progression and/or change
+        step through the days to see an event’s progression and/or change
         the satellite/sensor. NOTE: Wildfire events are currently set to
         automatically display the next day, as fire events often do not
         appear in the satellite imagery on the day they are reported.
@@ -30,18 +30,24 @@ const EventsAlertModalBody = () => (
       <li>
         There are normal swath data gaps in some of the imagery layers due
         to way the satellite orbits the Earth, and an event may have
-        occurred in the data gap.
+        occurred in the data gap. Learn more with the
+        <a href="https://worldview.earthdata.nasa.gov/?v=-255.13947597940853,-142.5249083549454,242.67302402059147,109.63964770652301&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&tr=swath_gaps&t=2019-02-10-T00%3A00%3A00Z">
+          Swath Gap tour story.
+        </a>
+      </li>
+      <li>
+        Events listings currently only go back to 1 January 2000.
+      </li>
+      <li>
+        Not all categories have events that are populated back to 1 January 2000.
       </li>
     </ul>
     <p>
-      This is currently an experimental feature and we are working closely
-      with the provider of these events, the
+      Events are curated and provided by the
       {' '}
       <a href="https://eonet.sci.gsfc.nasa.gov/" target="_blank" rel="noopener noreferrer">
         Earth Observatory Natural Event Tracker
       </a>
-      , to refine this listing to only show events that are visible with our
-      satellite imagery.
     </p>
   </div>
 );
