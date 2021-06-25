@@ -205,9 +205,6 @@ class EventMarkers extends React.Component {
 
 const createPin = function(id, category, isSelected, title) {
   const overlayEl = document.createElement('div');
-  overlayEl.className = 'marker';
-  if (isSelected) overlayEl.classList.add('marker-selected');
-
   ReactDOM.render(
     React.createElement(EventIcon, {
       category: category.title,
@@ -220,6 +217,7 @@ const createPin = function(id, category, isSelected, title) {
     element: overlayEl,
     positioning: 'bottom-center',
     stopEvent: false,
+    className: isSelected ? 'marker selected' : 'marker',
     id,
   });
 };
