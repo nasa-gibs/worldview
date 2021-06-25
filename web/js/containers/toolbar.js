@@ -200,18 +200,21 @@ class toolbarContainer extends Component {
       faSize,
       isDistractionFreeModeActive,
       openModal,
+      isAnimatingToEvent,
     } = this.props;
     const buttonId = 'wv-proj-button';
     const labelText = 'Switch projection';
+    const onClick = () => openModal(
+      'TOOLBAR_PROJECTION',
+      CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
+    );
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
         className="wv-toolbar-button"
         aria-label={labelText}
-        onClick={() => openModal(
-          'TOOLBAR_PROJECTION',
-          CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
-        )}
+        onClick={onClick}
+        disabled={isAnimatingToEvent}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="globe-asia" size={faSize} />
@@ -364,7 +367,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch,
+    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -375,6 +378,7 @@ const mapStateToProps = (state) => {
   const isCompareActive = compare.active;
   const isLocationSearchExpanded = locationSearch.isExpanded;
   const activePalettes = palettes[activeString];
+  const { isAnimatingToEvent } = events;
 
   // Collapse when Image download / GIF /  is open or measure tool active
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
@@ -387,11 +391,11 @@ const mapStateToProps = (state) => {
     config: state.config,
     rotation: map.rotation,
     activePalettes,
-    // TODO should this be disabled if on the smart-handoffs tab?
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
       && !isCompareActive,
     ),
+    isAnimatingToEvent,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     isCompareActive,
     isLocationSearchExpanded,
@@ -491,6 +495,7 @@ toolbarContainer.propTypes = {
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
+  isAnimatingToEvent: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,
