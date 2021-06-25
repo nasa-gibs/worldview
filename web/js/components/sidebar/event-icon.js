@@ -9,6 +9,7 @@ export default function EventIcon ({ id, category, title }) {
       <UncontrolledTooltip
         placement="top"
         target={id + slug}
+        delay={{ show: 50, hide: 0 }}
       >
         {title || category}
       </UncontrolledTooltip>
