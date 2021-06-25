@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { validateEventCoords } from './util';
+import { validateGeometryCoords } from './util';
 
 const getActiveCategories = ({ events }) => events.selectedCategories;
 const getEvents = ({ requestedEvents }) => requestedEvents.response;
@@ -25,7 +25,7 @@ export const getFilteredEvents = createSelector(
     return events
       .reduce((filteredEvents, event) => {
         const { geometry } = event;
-        const filteredGeometries = geometry.filter((e) => validateEventCoords(e, proj));
+        const filteredGeometries = geometry.filter((g) => validateGeometryCoords(g, proj));
         if (filteredGeometries.length) {
           const newEvent = {
             ...event,

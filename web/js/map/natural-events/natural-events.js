@@ -5,7 +5,7 @@ import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
 import {
   getDefaultEventDate,
-  validateEventCoords,
+  validateGeometryCoords,
 } from '../../modules/natural-events/util';
 import util from '../../util/util';
 import { selectDate as selectDateAction } from '../../modules/date/actions';
@@ -38,26 +38,17 @@ class NaturalEvents extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const {
       map,
-      proj,
       eventsDataIsLoading,
       selectedEvent,
-      eventsData,
     } = this.props;
     const loadingChange = eventsDataIsLoading !== prevProps.eventsDataIsLoading;
-    const projChange = proj !== prevProps.proj;
     const selectedEventChange = selectedEvent !== prevProps.selectedEvent;
 
     if (!map || eventsDataIsLoading) return;
 
-    // When changing projection, zoom to the selected event if it is visible
-    if (projChange && selectedEvent) {
-      const { id, date } = selectedEvent;
-      const event = eventsData.find((e) => e.id === id);
-      const eventInExtent = event && validateEventCoords(event, proj);
-
-      if (event && eventInExtent) {
-        this.zoomToEvent(event, date);
-      }
+    // When events are (re)loaded, zoom to the selected event if it is visible
+    if (selectedEvent && loadingChange && !eventsDataIsLoading) {
+      this.zoomIfVisible(selectedEvent);
     }
 
     if (selectedEventChange) {
@@ -67,6 +58,18 @@ class NaturalEvents extends React.Component {
       } else {
         this.deselectEvent();
       }
+    }
+  }
+
+  zoomIfVisible({ id, date }) {
+    const { eventsData, proj } = this.props;
+    const event = eventsData.find((e) => e.id === id);
+    if (!event) {
+      return;
+    }
+    const visibleGeoms = event.geometry.filter((g) => validateGeometryCoords(g, proj.selected));
+    if (visibleGeoms.length) {
+      this.zoomToEvent(event, date);
     }
   }
 
@@ -167,6 +170,7 @@ const mapStateToProps = (state) => {
   } = state;
   const selectedMap = map.ui.selected;
   return {
+    eventsActive: events.active,
     map: selectedMap,
     mapUi: map.ui,
     proj,

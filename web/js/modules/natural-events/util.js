@@ -177,8 +177,8 @@ export function getDefaultEventDate(event) {
  * @param {*} proj
  * @returns
  */
-export const validateEventCoords = (event, proj) => {
-  const { coordinates, type } = event;
+export const validateGeometryCoords = (geometry, proj) => {
+  const { coordinates, type } = geometry;
   const { crs, maxExtent } = proj;
   const passesFilter = (coords) => {
     const tCoords = transform(coords, 'EPSG:4326', crs);
