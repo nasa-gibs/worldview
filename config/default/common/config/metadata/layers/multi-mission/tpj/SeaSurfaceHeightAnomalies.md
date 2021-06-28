@@ -10,7 +10,7 @@ References: doi [10.5067/SLREF-CDRV2](https://doi.org/10.5067/SLREF-CDRV2)
 ### Sea Surface Height Anomalies (GDR Cycles)
 Temporal coverage: 3 October 1992 - present (4 month latency)
 
-The Sea Surface Height Anomalies (GDR Cycles) layer displays along track Sea Surface Height Anomalies (SSHA) for individual 10-day cycles from the TOPEX/Poseidon, Jason-1, OSTM/Jason-2, and Jason-3 missions geo-referenced to a mean reference orbit. Altimeter data from the multi-mission Geophysical Data Records (GDRs) have been interpolated to a common reference orbit with biases and cross-calibrations applied so that the derived SSHA are consistent between satellites to form a single homogeneous climate data record. Version 5.0 updates include improved Precise Orbit Determination (POD) with GSFC std2006 standards, and the application of internal tides.
+The Sea Surface Height Anomalies (GDR Cycles) layer displays along track Sea Surface Height Anomalies (SSHA) for individual 10-day cycles from the TOPEX/Poseidon, Jason-1, OSTM/Jason-2, and Jason-3 missions geo-referenced to a mean reference orbit. Altimeter data from the multi-mission Geophysical Data Records (GDRs) has been interpolated to a common reference orbit with biases and cross-calibrations applied so that the derived SSHA are consistent between satellites to form a single homogeneous climate data record. Version 5.0 updates include improved Precise Orbit Determination (POD) with GSFC std2006 standards, and the application of internal tides.
 
 The sensor/algorithm resolution is 11.2 km along track and 5.1 km across track, imagery resolution is 2 km. The temporal resolution of the imagery is 10 days. The imagery latency is approximately 4 months.
 
