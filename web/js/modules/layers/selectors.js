@@ -493,8 +493,11 @@ export function activateLayersForEventCategory(state, category) {
   const { layerConfig } = state.layers;
   const categoryLayers = layers[projection][category];
 
-  // Turn off all layers in list first
   let newLayers = getActiveLayers(state);
+  if (!categoryLayers) {
+    return newLayers;
+  }
+  // Turn off all layers in list first
   newLayers.forEach((layer, index) => {
     newLayers = update(newLayers, {
       [index]: { visible: { $set: false } },
