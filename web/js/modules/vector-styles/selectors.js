@@ -132,22 +132,21 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     // Filter Orbit Tracks
     if (glStyle.name === 'Orbit Tracks'
       && (selected[layerId] && selected[layerId].length)) {
-      const selectedFeatures = selected[layerId];
-      layerInLayerGroup.setStyle((feature, resolution) => {
-        const data = state.config.vectorData[def.vectorData.id];
-        const properties = data.mvt_properties;
-        const features = feature.getProperties();
-        const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
-        const minutes = feature.get('label');
-        const uniqueIdentifier = features[idKey];
-        if (shouldRenderFeature(feature, acceptableExtent)) {
-          if (minutes && uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
-            return selectedStyleFunction(feature, styleFunction(feature, resolution), 1.5);
-          }
-          return styleFunction(feature, resolution);
-        }
-        return styleFunction(feature, resolution);
-      });
+      // const selectedFeatures = selected[layerId];
+      // layerInLayerGroup.setStyle((feature, resolution) => {
+      //   const data = state.config.vectorData[def.vectorData.id];
+      //   const properties = data.mvt_properties;
+      //   const features = feature.getProperties();
+      //   const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
+      //   const uniqueIdentifier = features[idKey];
+      //   if (feature.getType() === 'point' && shouldRenderFeature(feature, acceptableExtent)) {
+      //     if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
+      //       return selectedStyleFunction(feature, styleFunction(feature, resolution));
+      //     }
+      //     return styleFunction(feature, resolution);
+      //   }
+      //   return styleFunction(feature, resolution);
+      // });
     } else if ((glStyle.name !== 'Orbit Tracks')
       && (selected[layerId] && selected[layerId].length)) {
       const selectedFeatures = selected[layerId];
