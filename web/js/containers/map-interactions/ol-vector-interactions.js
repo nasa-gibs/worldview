@@ -7,6 +7,7 @@ import {
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as olExtent from 'ol/extent';
 import { transform } from 'ol/proj';
 import { isFromActiveCompareRegion } from '../../modules/compare/util';
 import { hasNonClickableVectorLayer } from '../../modules/layers/util';
@@ -54,7 +55,8 @@ export class VectorInteractions extends React.Component {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixels, (feature, layer) => {
         const def = lodashGet(layer, 'wv.def');
-        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType())) return;
+        const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), map.getCoordinateFromPixel(pixels));
+        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType()) || featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
         const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
         if (isRenderedFeature && isFromActiveCompareRegion(pixels, layer.wv, compareState, swipeOffset)) {
