@@ -12,7 +12,7 @@
   div.olControlScaleLineCustom {
     display: none !important;
   }
-  .wv-coords-map {
+  .wv-coords-map, .wv-coords-container {
     display: none !important;
   }
 
