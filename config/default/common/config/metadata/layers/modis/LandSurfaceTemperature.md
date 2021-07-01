@@ -5,7 +5,7 @@ The MODIS Land Surface Temperature (Day | Night) layers shows the temperature of
 
 The MODIS Land Surface Temperature product is available from both Terra (MOD11) and Aqua (MYD11) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [MYD11_L2 [doi:10.5067/MODIS/MYD11_L2.061](https://doi.org/10.5067/MODIS/MYD11_L2.061); MOD11_L2 [doi:10.5067/MODIS/MOD11_L2.061](https://doi.org/10.5067/MODIS/MOD11_L2.061); [NASA Earth Observations - Land Surface Temperature](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD11C1_M_LSTDA)
+References: MYD11_L2 [doi:10.5067/MODIS/MYD11_L2.061](https://doi.org/10.5067/MODIS/MYD11_L2.061); MOD11_L2 [doi:10.5067/MODIS/MOD11_L2.061](https://doi.org/10.5067/MODIS/MOD11_L2.061); [NASA Earth Observations - Land Surface Temperature](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD11C1_M_LSTDA)
 
 ### MODIS (Terra/Aqua) Land Surface Temperature (Level 3, Daily, Day | Night)
 Temporal coverage: 26 February 2000 - present (Terra); 3 July 2002 - present (Aqua)
@@ -19,7 +19,7 @@ Temporal coverage: 26 February 2000 - present (Terra); 4 July 2002 - present (Aq
 
 The Land Surface Temperature (L3, 8-Day, Day | Night) layers are created from The MOD11A2/MYD11A2 product which provides an average 8-day per-pixel Land Surface Temperature and Emissivity (LST&E) with a 1 kilometer (km) spatial resolution in a 1,200 by 1,200 km grid. Each pixel value in the MYD11A2 is a simple average of all the corresponding Aqua MODIS LST&E daily pixels collected within that 8-day period. The 8-day compositing period was chosen because twice that period is the exact ground track repeat period of the Terra and Aqua platforms. The Land Surface Temperature Day layer is a representation of daytime LST; the Land Surface Temperature Night layer is a representation of nighttime LST.
 
-References: MOD11A2 [doi:10.5067/MODIS/MOD11A2.061]](https://doi.org/10.5067/MODIS/MOD11A2.061); MYD11A2 [doi:10.5067/MODIS/MYD11A2.061](https://doi.org/10.5067/MODIS/MYD11A2.061)
+References: MOD11A2 [doi:10.5067/MODIS/MOD11A2.061](https://doi.org/10.5067/MODIS/MOD11A2.061); MYD11A2 [doi:10.5067/MODIS/MYD11A2.061](https://doi.org/10.5067/MODIS/MYD11A2.061)
 
 ### MODIS (Terra/Aqua) Land Surface Temperature (Level 3, Monthly, Day | Night)
 Temporal coverage: January 2003 - present (Terra); 1 July 2002 - present (Aqua)
