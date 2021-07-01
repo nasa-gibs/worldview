@@ -18,7 +18,7 @@ import GranuleAlertModalBody from '../../components/smart-handoffs/smart-handoff
 import GranuleCount from '../../components/smart-handoffs/granule-count';
 import { imageUtilGetCoordsFromPixelValues } from '../../modules/image-download/util';
 import { onClose, openCustomContent } from '../../modules/modal/actions';
-import { getActiveLayers } from '../../modules/layers/selectors';
+import { memoizedAvailable as availableSelector, getActiveLayers } from '../../modules/layers/selectors';
 import { getSelectedDate } from '../../modules/date/selectors';
 import safeLocalStorage from '../../util/local-storage';
 import openEarthDataSearch from '../../components/smart-handoffs/util';
@@ -518,9 +518,12 @@ const mapStateToProps = (state) => {
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const displayDate = moment.utc(selectedDate).format('YYYY MMM DD'); // 2020 JAN 01
   const filterForSmartHandoff = (layer) => {
-    const { projections, disableSmartHandoff, conceptIds } = layer;
+    const {
+      id, projections, disableSmartHandoff, conceptIds,
+    } = layer;
+    const isAvailable = availableSelector(state)(id);
     const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
-    return projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
+    return isAvailable && projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
   };
   const availableLayers = getActiveLayers(state).filter(filterForSmartHandoff);
 
