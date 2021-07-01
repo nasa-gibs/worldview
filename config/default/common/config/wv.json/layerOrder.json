@@ -114,6 +114,7 @@
 		"MODIS_Terra_AOD_Deep_Blue_Land",
 		"MODIS_Aqua_AOD_Deep_Blue_Land",
 		"MODIS_Combined_L3_White_Sky_Albedo_Daily",
+		"MODIS_Combined_L3_Black_Sky_Albedo_Daily",
 		"MODIS_Terra_Brightness_Temp_Band31_Day",
 		"MODIS_Terra_Brightness_Temp_Band31_Night",
 		"MODIS_Aqua_Brightness_Temp_Band31_Day",

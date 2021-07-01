@@ -7,7 +7,7 @@ This level 3 gridded product is designed for quantitative applications including
 
 The MODIS Combined Value-Added Aerosol Optical Depth layer is a near real-time layer and available as a combined Terra satellite and Aqua satellite layer (MCDAODHD). The sensor resolution is 0.5 degrees, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [NASA Earthdata - NRT Value-Added MODIS AOD Product](https://earthdata.nasa.gov/learn/articles/nrt-value-added-modis-aerosol-optical-depth-product-available); [doi: 10.5067/MODIS/MCDAODHD.NRT.061](https://doi.org/10.5067/MODIS/MCDAODHD.NRT.061)
+References: MCDAODHD NRT [doi:10.5067/MODIS/MCDAODHD.NRT.061](https://doi.org/10.5067/MODIS/MCDAODHD.NRT.061) [NASA Earthdata - NRT Value-Added MODIS AOD Product](https://earthdata.nasa.gov/learn/articles/nrt-value-added-modis-aerosol-optical-depth-product-available)
 
 ### MAIAC Aerosol Optical Depth
 Temporal coverage: 28 September 2019 - present
@@ -18,4 +18,4 @@ Aerosol Optical Depth (AOD) is a vertically integrated extinction by aerosol par
 
 The MAIAC Combined Aerosol Optical Depth layer is a near real-time layer and available as a combined Terra satellite and Aqua satellite layer (MCD19A2). The sensor resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [doi: 10.5067/MODIS/MCD19A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)
+References: MCD19A2N NRT [doi:10.5067/MODIS/MCD19A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)

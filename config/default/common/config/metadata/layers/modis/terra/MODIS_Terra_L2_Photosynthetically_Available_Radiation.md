@@ -1,0 +1,1 @@
+References: MODIST_L2_OC [doi:10.5067/TERRA/MODIS/L2/OC/2018](https://doi.org/10.5067/TERRA/MODIS/L2/OC/2018)
