@@ -68,7 +68,7 @@ class EventMarkers extends React.Component {
 
   draw() {
     const {
-      eventsData, selectedEvent, proj, map,
+      eventsData, selectedEvent, proj, map, isMobile,
     } = this.props;
 
     if (!eventsData || eventsData.length < 1) return null;
@@ -119,7 +119,7 @@ class EventMarkers extends React.Component {
         ? category
         : { title: 'Default', slug: 'default' };
 
-      marker.pin = createPin(event.id, category, isSelected, event.title);
+      marker.pin = createPin(event.id, category, isSelected, event.title, isMobile);
       marker.pin.setPosition(coordinates);
       map.addOverlay(marker.pin);
       this.addInteractions(marker, event, date, isSelected);
@@ -203,13 +203,14 @@ class EventMarkers extends React.Component {
   }
 }
 
-const createPin = function(id, category, isSelected, title) {
+const createPin = function(id, category, isSelected, title, isMobile) {
   const overlayEl = document.createElement('div');
   ReactDOM.render(
     React.createElement(EventIcon, {
       category: category.title,
       title,
       id,
+      hideTooltip: isMobile,
     }),
     overlayEl,
   );
@@ -256,7 +257,7 @@ const createBoundingBox = function(coordinates, title, proj = 'EPSG:4326') {
 
 const mapStateToProps = (state) => {
   const {
-    map, proj, events, requestedEvents, sidebar, date,
+    map, proj, events, requestedEvents, sidebar, date, browser,
   } = state;
 
   return {
@@ -266,6 +267,7 @@ const mapStateToProps = (state) => {
     proj,
     selectedEvent: events.selected,
     selectedDate: date.selected,
+    isMobile: browser.lessThan.medium,
     isAnimatingToEvent: events.isAnimatingToEvent,
     eventsData: getFilteredEvents(state),
     eventsDataIsLoading: requestedEvents.isLoading,
@@ -282,6 +284,7 @@ EventMarkers.propTypes = {
   eventsData: PropTypes.array,
   eventsDataIsLoading: PropTypes.bool,
   isAnimatingToEvent: PropTypes.bool,
+  isMobile: PropTypes.bool,
   map: PropTypes.object,
   mapUi: PropTypes.object,
   proj: PropTypes.object,
