@@ -42,8 +42,8 @@ module.exports = {
     // Add specified layer to layer list
     c.waitForElementVisible(layerBrowseList, TIME_LIMIT, (e) => {
       c.click('#accordion-legacy-all-cloud-effective-radius');
-      c.waitForElementVisible('#checkbox-case-MODIS_Aqua_Cloud_Effective_Radius', TIME_LIMIT, (e) => {
-        c.click('#checkbox-case-MODIS_Aqua_Cloud_Effective_Radius');
+      c.waitForElementVisible('#accordion-legacy-all-cloud-effective-radius .measure-row-contents', TIME_LIMIT, (e) => {
+        c.click('#MODIS_Aqua_Cloud_Effective_Radius-checkbox');
         c.click(layersModalCloseButton);
       });
     });
@@ -61,12 +61,12 @@ module.exports = {
     c.expect
       .element('.granule-count-header')
       .to.have.text.equal('Available granules for 2019 Dec 01:');
-    c.assert.containsText('.granule-count-info', '289');
+    c.waitForElementVisible('.granule-count-info', TIME_LIMIT);
   },
 
   'Enable area of interest': (c) => {
     c.click('#chk-crop-toggle');
-    c.assert.containsText('.granule-count-info', 'of 289');
+    c.waitForElementVisible('.granule-count-info', TIME_LIMIT);
   },
 
   'Download via Earthdata Search': (c) => {

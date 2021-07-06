@@ -43,6 +43,8 @@ const {
   dayDown,
 } = require('../../reuseables/selectors.js');
 
+const aodChoices = '#accordion-atmosphere-aerosol-optical-depth .measure-row-contents';
+
 const TIME_LIMIT = 10000;
 
 module.exports = {
@@ -223,17 +225,13 @@ module.exports = {
         c.expect.element(aodCheckboxMODIS).to.be.present;
         c.expect.element(aodCheckboxMAIAC).to.be.present;
         // Indicate that MODIS Combined layer has no available coverage
-        c
-          .assert
-          .cssClassPresent(aodCheckboxMODIS, 'unavailable list-group-item');
+        c.expect.element(`${aodCheckboxMODIS} + svg#availability-info`).to.be.present;
         // Indicate that MAIAC layer has no available coverage
-        c
-          .assert
-          .cssClassPresent(aodCheckboxMAIAC, 'unavailable list-group-item');
+        c.expect.element(`${aodCheckboxMAIAC} + svg#availability-info`).to.be.present;
       });
     });
   },
-  'Available grid source layer measuremet does not have unavaiable coverage class': (c) => {
+  'Available grid source layer measuremet does not have unavaiable coverage icon': (c) => {
     // swith to Aqua/MODIS measurement nav item
     c.click(aquaModisTab);
     c.waitForElementVisible(aodTabContentAquaMODIS, TIME_LIMIT, (e) => {
@@ -242,17 +240,14 @@ module.exports = {
         .containsText(layerDetailHeader, 'Aqua/MODIS');
       // Checkboxes for layer is visible
       c.expect.element(aodCheckboxAquaMODIS).to.be.present;
-      // Avaialable layer does not have unavailable class
-      c
-        .assert
-        .not
-        .cssClassPresent(aodCheckboxAquaMODIS, 'unavailable');
+      // Avaialable layer does not have unavailable icon
+      c.expect.element(`${aodCheckboxMODIS} + svg#availability-info`).to.not.be.present;
       // switch back to previous 'Aqua and Terra/MODIS' measurement nav item
       c.click(aquaTerraMODISTab);
     });
   },
   'Selecting layers from product picker adds them to the sidebar/map': (c) => {
-    c.waitForElementVisible(aodCheckboxMODIS, TIME_LIMIT, (e) => {
+    c.waitForElementVisible(aodChoices, TIME_LIMIT, (e) => {
       c.click(aodCheckboxMODIS);
       c.click(aodCheckboxMAIAC);
       // Reset to category mode view for future test
