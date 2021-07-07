@@ -118,6 +118,10 @@
     transform: scale(0.75);
     transform-origin: bottom left;
   }
+  .mobile-date-picker-select-btn:hover {
+    color: #000;
+    background-color: #fff;
+  }
   .mobile-date-change-arrows-btn {
     left: 168px;
     transform: scale(0.75);

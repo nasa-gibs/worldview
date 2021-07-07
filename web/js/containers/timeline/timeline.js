@@ -983,7 +983,7 @@ class Timeline extends React.Component {
     let mobileBottom = 10;
     if (isEmbedModeActive) {
       mobileLeft = 135;
-      mobileBottom = 5;
+      mobileBottom = 4;
     }
     // positioning will change depending on a combination of:
     // 1) subdaily (mobile date picker width);
@@ -1112,6 +1112,7 @@ class Timeline extends React.Component {
                       endDateLimit={timelineEndDateLimit}
                       onDateChange={this.onDateChange}
                       hasSubdailyLayers={hasSubdailyLayers}
+                      isMobile={isMobile}
                     />
                     <MobileComparisonToggle />
                     <div
