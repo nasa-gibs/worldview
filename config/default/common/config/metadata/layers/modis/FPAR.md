@@ -6,3 +6,5 @@ The Fraction of Photosynthetically Active Radiation (L4, 8-Day) layers are creat
 FPAR is defined as the fraction of incident photosynthetically active radiation (400-700 nm) absorbed by the green elements of a vegetation canopy.
 
 References: MOD15A2H [doi:10.5067/MODIS/MOD15A2H.061](https://doi.org/10.5067/MODIS/MOD15A2H.061); MYD15A2H [doi:10.5067/MODIS/MYD15A2H.061](https://doi.org/10.5067/MODIS/MYD15A2H.061)
+
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
