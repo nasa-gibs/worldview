@@ -60,9 +60,6 @@ if [ "$FETCH_GC" ] ; then
     mkdir -p "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
     "$PYTHON_SCRIPTS_DIR/getVisMetadata.py" "$BUILD_DIR/features.json" \
         "$BUILD_DIR/config/wv.json/layerOrder.json" "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"
-
-    # Run getCollectionData.py to fetch collection metadata - REMOVE ONCE GIBS-4756 IN PROD
-    "$PYTHON_SCRIPTS_DIR/getCollectionData.py" "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json"
     exit 0
 fi
 
