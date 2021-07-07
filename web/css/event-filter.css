@@ -26,7 +26,7 @@
   }
   .filter-button {
     width: 40px;
-    margin: 5px;
+    margin: 5px 0 5px 5px;
     height: 40px;
     display: inline-block;
     vertical-align: top;

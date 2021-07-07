@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import HoverTooltip from '../../util/hover-tooltip';
 
 const ANIMATION_DELAY = 200; // interval firing to trigger parent level arrow change
 const CLICK_TIMEOUT_DELAY = 500; // wait before click becomes a delay
@@ -80,6 +81,7 @@ class DateChangeArrows extends PureComponent {
 
   render() {
     const {
+      isMobile,
       leftArrowDisabled,
       rightArrowDisabled,
     } = this.props;
@@ -89,11 +91,16 @@ class DateChangeArrows extends PureComponent {
         <div
           className={`button-action-group ${leftArrowDisabled ? 'button-disabled' : ''}`}
           id="left-arrow-group"
-          title="Click and hold to animate backwards"
           onMouseDown={this.leftArrowDown}
           onMouseUp={this.leftArrowUp}
           onMouseLeave={this.leftArrowUp}
         >
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="Click and hold to animate backwards"
+            placement="top"
+            target="left-arrow-group"
+          />
           <svg width="24" height="30">
             <path
               d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
@@ -106,11 +113,16 @@ class DateChangeArrows extends PureComponent {
         <div
           className={`button-action-group ${rightArrowDisabled ? 'button-disabled' : ''}`}
           id="right-arrow-group"
-          title="Click and hold to animate forwards"
           onMouseDown={this.rightArrowDown}
           onMouseUp={this.rightArrowUp}
           onMouseLeave={this.rightArrowUp}
         >
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="Click and hold to animate forwards"
+            placement="top"
+            target="right-arrow-group"
+          />
           <svg width="24" height="30">
             <path
               d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
@@ -127,6 +139,7 @@ DateChangeArrows.propTypes = {
   leftArrowDisabled: PropTypes.bool,
   leftArrowDown: PropTypes.func,
   leftArrowUp: PropTypes.func,
+  isMobile: PropTypes.bool,
   rightArrowDisabled: PropTypes.bool,
   rightArrowDown: PropTypes.func,
   rightArrowUp: PropTypes.func,
