@@ -2,4 +2,6 @@ The MODIS Land Surface Temperature (Day) layer shows the temperature of the land
 
 The MODIS Land Surface Temperature product is available from both Terra (MOD11) and Aqua (MYD11) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
+
 References: MOD11_L2 [doi:10.5067/MODIS/MOD11_L2.061](https://doi.org/10.5067/MODIS/MOD11_L2.061); [NASA Earth Observations - Land Surface Temperature](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD11C1_M_LSTDA)

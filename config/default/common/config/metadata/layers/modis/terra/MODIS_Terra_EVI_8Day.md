@@ -2,4 +2,6 @@ The MODIS Enhanced Vegetation Index (EVI) is also used as a measure of the green
 
 The MODIS rolling 8-day EVI layer is available as a near real-time, rolling 8-day product (MOD13Q4N) from from the Terra satellite. It is created from a rolling 8-day land surface reflectance product, MOD09Q1N. The sensor resolution is 250 m, imagery resolution is 250 m, and the temporal resolution is an 8-day product which is updated daily.
 
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
+
 References: MOD13Q4N [doi:10.5067/MODIS/MOD13Q4N.NRT.061](https://doi.org/10.5067/MODIS/MOD13Q4N.NRT.061); [NASA Earth Observatory - Measuring Vegetation](https://earthobservatory.nasa.gov/Features/MeasuringVegetation/measuring_vegetation_4.php); [NASA Earthdata - New Vegetation Indices and Surface Reflectance Products Available from LANCE](https://earthdata.nasa.gov/learn/articles/new-vegetation-indices-and-surface-reflectance-products-available-from-lance); [NASA NEO - Vegetation Index](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD_NDVI_M)

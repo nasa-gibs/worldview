@@ -2,4 +2,6 @@ The MODIS Sea Ice Surface Temperature (Day) layer shows the surface temperature 
 
 The MODIS Ice Surface Temperature product is available from both the Terra (MOD29) and Aqua (MYD29) satellites. The sensor and imagery resolution is 1km, and the temporal resolution is daily.
 
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
+
 References: MOD29 [doi:10.5067/MODIS/MOD29.061](https://doi.org/10.5067/MODIS/MOD29.061)

@@ -49,3 +49,5 @@ The Enhanced Vegetation Index (L3, Monthly) layers are created from the Terra/Aq
 The Enhanced Vegetation Index (EVI) minimizes canopy background variations and maintains sensitivity over dense vegetation conditions. The EVI uses the blue band to remove residual atmosphere contamination caused by smoke and sub-pixel thin clouds. The MODIS EVI product is computed from surface reflectances corrected for molecular scattering, ozone absorption, and aerosols.
 
 References: MOD13A3 [doi:10.5067/MODIS/MOD13A3.061](https://doi.org/10.5067/MODIS/MOD13A3.061); MYD13A3 [doi:10.5067/MODIS/MYD13A3.061](https://doi.org/10.5067/MODIS/MYD13A3.061)
+
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.

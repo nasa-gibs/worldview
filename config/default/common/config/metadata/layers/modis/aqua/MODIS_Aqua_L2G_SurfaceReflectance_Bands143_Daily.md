@@ -5,4 +5,6 @@ The Land Surface Reflectance (L2G, Daily, True Color) later is created from the 
 
 These images are called true-color or natural color because this combination of wavelengths is similar to what the human eye would see. The images are natural-looking images of land surface, oceanic and atmospheric features.
 
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
+
 References: MYD09GA [doi:10.5067/MODIS/MYD09GA.061](https://doi.org/10.5067/MODIS/MYD09GA.061)

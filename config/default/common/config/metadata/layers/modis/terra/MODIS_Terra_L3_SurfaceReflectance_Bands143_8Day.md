@@ -4,4 +4,6 @@ The Land Surface Reflectance (L3, 8-Day, True Color) layer is created from the M
 
 These images are called true-color or natural color because this combination of wavelengths is similar to what the human eye would see. The images are natural-looking images of land surface, oceanic and atmospheric features.
 
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
+
 References: MOD09A1 [doi:10.5067/MODIS/MOD09A1.061](https://doi.org/10.5067/MODIS/MOD09A1.061)
