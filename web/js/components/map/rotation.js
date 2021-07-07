@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 import { saveRotation } from '../../map/util';
+import HoverTooltip from '../util/hover-tooltip';
 
 const duration = 500;
 
@@ -51,7 +52,9 @@ class Rotation extends React.Component {
   }
 
   render() {
-    const { rotation, proj, isDistractionFreeModeActive } = this.props;
+    const {
+      rotation, proj, isDistractionFreeModeActive, isMobile,
+    } = this.props;
     const currentRotation = Number(rotation * (180 / Math.PI)).toFixed();
     const isPolarProj = proj.id !== 'geographic' && proj.id !== 'webmerc';
 
@@ -60,36 +63,51 @@ class Rotation extends React.Component {
         <button
           type="button"
           className="wv-map-rotate-left wv-map-zoom"
-          title="You may also rotate by holding Alt and dragging the mouse"
           onMouseDown={() => { this.rotateOnClick(10); }}
           onMouseUp={this.clearInterval}
           onMouseOut={this.clearInterval}
           onMouseMove={(e) => { e.stopPropagation(); }}
         >
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="You may also rotate by holding Alt and dragging the mouse"
+            placement="left"
+            target=".wv-map-rotate-left"
+          />
           <FontAwesomeIcon icon="undo" className="cursor-pointer" />
         </button>
 
         <button
           type="button"
           className="wv-map-reset-rotation wv-map-zoom"
-          title="Reset rotation"
           onMouseDown={this.resetRotation}
           onMouseUp={this.clearInterval}
           onMouseOut={this.clearInterval}
           onMouseMove={(e) => { e.stopPropagation(); }}
         >
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="Reset rotation"
+            placement="left"
+            target=".wv-map-reset-rotation"
+          />
           {currentRotation}
         </button>
 
         <button
           type="button"
           className="wv-map-rotate-right wv-map-zoom"
-          title="You may also rotate by holding Alt and dragging the mouse"
           onMouseDown={() => { this.rotateOnClick(-10); }}
           onMouseUp={this.clearInterval}
           onMouseOut={this.clearInterval}
           onMouseMove={(e) => { e.stopPropagation(); }}
         >
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="You may also rotate by holding Alt and dragging the mouse"
+            placement="left"
+            target=".wv-map-rotate-right"
+          />
           <FontAwesomeIcon icon="redo" className="cursor-pointer" />
         </button>
       </div>
@@ -98,12 +116,16 @@ class Rotation extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { map, proj, ui } = state;
+  const {
+    browser, map, proj, ui,
+  } = state;
+  const isMobile = browser.lessThan.medium;
   return {
     map,
     proj,
     rotation: map.rotation,
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    isMobile,
   };
 };
 
@@ -120,6 +142,7 @@ Rotation.propTypes = {
   map: PropTypes.object,
   rotation: PropTypes.number,
   isDistractionFreeModeActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   proj: PropTypes.object,
   updateRotationState: PropTypes.func,
 };
