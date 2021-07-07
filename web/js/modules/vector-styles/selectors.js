@@ -8,7 +8,9 @@ import {
 import update from 'immutability-helper';
 import { containsCoordinate } from 'ol/extent';
 import stylefunction from 'ol-mapbox-style/dist/stylefunction';
-import { getMinValue, getMaxValue, selectedStyleFunction } from './util';
+import {
+  getMinValue, getMaxValue, selectedStyleFunction, orbitSelectedStyleFunction,
+} from './util';
 import {
   getAllActiveLayers,
 } from '../layers/selectors';
@@ -120,34 +122,34 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
     });
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
-
   lodashEach(layerArray, (layerInLayerGroup) => {
     if (layerInLayerGroup.isWMS) return; // WMS breakpoint tile
     layerInLayerGroup = layerInLayerGroup.getLayers ? lodashFind(layerInLayerGroup.getLayers().getArray(), 'isVector') : layerInLayerGroup;
     // Apply mapbox-gl styles
     const extentStartX = layerInLayerGroup.getExtent()[0];
     const acceptableExtent = extentStartX === 180 ? [-180, -90, -110, 90] : extentStartX === -250 ? [110, -90, 180, 90] : null;
-
     styleFunction = stylefunction(layerInLayerGroup, glStyle, vectorStyleId, olMap, proj.selected.resolutions);
     // Filter Orbit Tracks
-    if (glStyle.name === 'Orbit Tracks'
-      && (selected[layerId] && selected[layerId].length)) {
-      // const selectedFeatures = selected[layerId];
-      // layerInLayerGroup.setStyle((feature, resolution) => {
-      //   const data = state.config.vectorData[def.vectorData.id];
-      //   const properties = data.mvt_properties;
-      //   const features = feature.getProperties();
-      //   const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
-      //   const uniqueIdentifier = features[idKey];
-      //   if (feature.getType() === 'point' && shouldRenderFeature(feature, acceptableExtent)) {
-      //     if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
-      //       return selectedStyleFunction(feature, styleFunction(feature, resolution));
-      //     }
-      //     return styleFunction(feature, resolution);
-      //   }
-      //   return styleFunction(feature, resolution);
-      // });
-    } else if ((glStyle.name !== 'Orbit Tracks')
+
+    // if (glStyle.name === 'Orbit Tracks'
+    //   && (selected[layerId] && selected[layerId].length)) {
+    //   const selectedFeatures = selected[layerId];
+    //   layerInLayerGroup.setStyle((feature, resolution) => {
+    //     const data = state.config.vectorData[def.vectorData.id];
+    //     const properties = data.mvt_properties;
+    //     const features = feature.getProperties();
+    //     const idKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
+    //     const uniqueIdentifier = features[idKey];
+    //     if (feature.getType() === 'Point' && shouldRenderFeature(feature, acceptableExtent)) {
+    //       if (uniqueIdentifier && selectedFeatures && selectedFeatures.includes(uniqueIdentifier)) {
+    //         return orbitSelectedStyleFunction(feature, styleFunction(feature, resolution));
+    //       }
+    //       return styleFunction(feature, resolution);
+    //     }
+    //     return styleFunction(feature, resolution);
+    //   });
+    // }
+    if ((glStyle.name !== 'Orbit Tracks')
       && (selected[layerId] && selected[layerId].length)) {
       const selectedFeatures = selected[layerId];
 

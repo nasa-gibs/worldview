@@ -85,8 +85,7 @@ export class VectorInteractions extends React.Component {
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
     const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
-    const dialogId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
-
+    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
     if (isCoordinatesMarker) {
       return;
     }

@@ -46,7 +46,6 @@ export default function MapRunningData(models, compareUi, store) {
     if (compareUi && state.compare.active) {
       swipeOffset = Math.floor(compareUi.getOffset());
     }
-
     map.forEachFeatureAtPixel(pixels, (feature, layer) => {
       const def = lodashGet(layer, 'wv.def');
       if (!def) return;
