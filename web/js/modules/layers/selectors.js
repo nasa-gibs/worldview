@@ -503,9 +503,6 @@ export function activateLayersForEventCategory(state, category) {
       [index]: { visible: { $set: false } },
     });
   });
-  if (state.embed.isEmbedModeActive) {
-    newLayers = categoryLayers.filter((layer) => layer[1]);
-  }
   // Turn on or add new layers
   categoryLayers.forEach((layer) => {
     const [id, visible] = layer;
