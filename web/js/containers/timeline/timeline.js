@@ -983,7 +983,7 @@ class Timeline extends React.Component {
     let mobileBottom = 10;
     if (isEmbedModeActive) {
       mobileLeft = 135;
-      mobileBottom = 4;
+      mobileBottom = 5;
     }
     // positioning will change depending on a combination of:
     // 1) subdaily (mobile date picker width);
@@ -1032,7 +1032,7 @@ class Timeline extends React.Component {
       isDataDownload,
       isDistractionFreeModeActive,
       isEmbedModeActive,
-      isSmallScreen,
+      isMobile,
       isTourActive,
       leftArrowDisabled,
       parentOffset,
@@ -1102,7 +1102,7 @@ class Timeline extends React.Component {
           {initialLoadComplete && !isDistractionFreeModeActive
             && (
             <ErrorBoundary>
-              {isSmallScreen || isEmbedModeActive
+              {isMobile || isEmbedModeActive
               /* Mobile Timeline Size */
                 ? (
                   <div id="timeline-header" className="timeline-header-mobile">
@@ -1123,6 +1123,7 @@ class Timeline extends React.Component {
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
                           leftArrowDisabled={leftArrowDisabled}
+                          isMobile={isMobile}
                           rightArrowDown={this.throttleIncrementDate}
                           rightArrowUp={this.stopRightArrow}
                           rightArrowDisabled={rightArrowDisabled}
@@ -1164,6 +1165,7 @@ class Timeline extends React.Component {
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
                           leftArrowDisabled={leftArrowDisabled}
+                          isMobile={isMobile}
                           rightArrowDown={this.throttleIncrementDate}
                           rightArrowUp={this.stopRightArrow}
                           rightArrowDisabled={rightArrowDisabled}
@@ -1395,12 +1397,12 @@ function mapStateToProps(state) {
     selectedZoom,
     timelineCustomModalOpen,
   } = date;
-  const { screenWidth, lessThan } = browser;
+  const { screenWidth } = browser;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
-  const isSmallScreen = lessThan.medium;
+  const isMobile = browser.lessThan.medium;
 
   // handle active layer filtering and check for subdaily
   const activeLayers = getActiveLayers(state);
@@ -1469,7 +1471,7 @@ function mapStateToProps(state) {
     appNow,
     activeLayers: activeLayersFiltered,
     isTourActive: tour.active,
-    isSmallScreen,
+    isMobile,
     screenWidth,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
@@ -1588,7 +1590,7 @@ Timeline.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
-  isSmallScreen: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
   onUpdateEndDate: PropTypes.func,
