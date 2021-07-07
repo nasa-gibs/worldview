@@ -16,9 +16,9 @@ const infoMenu = '#toolbar_info';
 const giftListItem = '#toolbar_info li.gift';
 const boltListItem = '#toolbar_info li.bolt';
 const notificationsListItem = '#notifications_info_item .fa-exclamation-circle';
-const alertContentHightlighted = '#notification_list_modal .alert-notification-item';
-const outageContentHightlighted = '#notification_list_modal .outage-notification-item';
-const messageContentHightlighted = '#notification_list_modal .message-notification-item';
+const alertContentHighlighted = '#notification_list_modal .alert-notification-item';
+const outageContentHighlighted = '#notification_list_modal .outage-notification-item';
+const messageContentHighlighted = '#notification_list_modal .message-notification-item';
 const aquaNotice = 'The Aqua / MODIS Corrected Reflectance (True Color) layer is currently unavailable.';
 const multiNotice = 'Several layers are experiencing delays in processing.';
 const tooltipSelector = '.tooltip-inner div';
@@ -51,17 +51,17 @@ module.exports = {
   },
   'alert, outage, and message content is highlighted and found in modal': function(c) {
     c.click(notificationsListItem);
-    c.waitForElementVisible(outageContentHightlighted, TIME_LIMIT);
+    c.waitForElementVisible(outageContentHighlighted, TIME_LIMIT);
     c.assert.containsText(
-      `${outageContentHightlighted} span`,
+      `${outageContentHighlighted} span`,
       'Posted 20 May 2018',
     );
     c.assert.containsText(
-      `${alertContentHightlighted} p`,
+      `${alertContentHighlighted} p`,
       'learn how to visualize global satellite imagery',
     );
     c.assert.containsText(
-      `${messageContentHightlighted} p`,
+      `${messageContentHighlighted} p`,
       'This is a message test',
     );
   },
