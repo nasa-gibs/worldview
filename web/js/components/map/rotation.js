@@ -70,7 +70,7 @@ class Rotation extends React.Component {
         >
           <HoverTooltip
             isMobile={isMobile}
-            labelText="You may also rotate by holding Alt and dragging the mouse"
+            labelText="Rotate counterclockwise"
             placement="left"
             target=".wv-map-rotate-left"
           />
@@ -104,7 +104,7 @@ class Rotation extends React.Component {
         >
           <HoverTooltip
             isMobile={isMobile}
-            labelText="You may also rotate by holding Alt and dragging the mouse"
+            labelText="Rotate clockwise"
             placement="left"
             target=".wv-map-rotate-right"
           />
