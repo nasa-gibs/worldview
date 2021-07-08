@@ -97,7 +97,7 @@ class DateChangeArrows extends PureComponent {
         >
           <HoverTooltip
             isMobile={isMobile}
-            labelText="Click and hold to animate backwards"
+            labelText="Decrement date"
             placement="top"
             target="left-arrow-group"
           />
@@ -119,7 +119,7 @@ class DateChangeArrows extends PureComponent {
         >
           <HoverTooltip
             isMobile={isMobile}
-            labelText="Click and hold to animate forwards"
+            labelText="Increment date"
             placement="top"
             target="right-arrow-group"
           />
