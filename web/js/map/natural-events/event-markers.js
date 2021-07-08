@@ -68,7 +68,7 @@ class EventMarkers extends React.Component {
 
   draw() {
     const {
-      eventsData, selectedEvent, proj, map, isMobile,
+      eventsData, selectedEvent, proj, map, isMobile, isAnimatingToEvent,
     } = this.props;
 
     if (!eventsData || eventsData.length < 1) return null;
@@ -113,13 +113,14 @@ class EventMarkers extends React.Component {
         }
       }
 
+      const hideTooltips = isMobile || isAnimatingToEvent;
       let category = event.categories[0];
       // Assign a default category if we don't have an icon
       category = icons.includes(category.title)
         ? category
         : { title: 'Default', slug: 'default' };
 
-      marker.pin = createPin(event.id, category, isSelected, event.title, isMobile);
+      marker.pin = createPin(event.id, category, isSelected, event.title, hideTooltips);
       marker.pin.setPosition(coordinates);
       map.addOverlay(marker.pin);
       this.addInteractions(marker, event, date, isSelected);
@@ -203,14 +204,14 @@ class EventMarkers extends React.Component {
   }
 }
 
-const createPin = function(id, category, isSelected, title, isMobile) {
+const createPin = function(id, category, isSelected, title, hideTooltip) {
   const overlayEl = document.createElement('div');
   ReactDOM.render(
     React.createElement(EventIcon, {
       category: category.title,
       title,
       id,
-      hideTooltip: isMobile,
+      hideTooltip,
     }),
     overlayEl,
   );

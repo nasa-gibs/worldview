@@ -8,23 +8,22 @@ export default function EventIcon ({
   const slug = category.toLowerCase().split(' ').join('-');
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const toggle = ({ buttons }) => {
+    console.log(buttons);
     const open = buttons ? false : !tooltipOpen;
     setTooltipOpen(open);
   };
 
   return (
     <>
-      {!hideTooltip && (
       <Tooltip
         placement="top"
         target={id + slug}
         delay={{ show: 50, hide: 0 }}
         toggle={toggle}
-        isOpen={tooltipOpen}
+        isOpen={!hideTooltip && tooltipOpen}
       >
         {title || category}
       </Tooltip>
-      )}
       <i
         id={id + slug}
         className={`event-icon event-icon-${slug}`}
