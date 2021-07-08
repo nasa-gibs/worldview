@@ -11,6 +11,7 @@
                     "description": "goes/goes-east",
                     "image": "",
                     "settings": [
+                      "GOES-East_ABI_GeoColor",
                       "GOES-East_ABI_Band2_Red_Visible_1km",
                       "GOES-East_ABI_Band13_Clean_Infrared",
                       "GOES-East_ABI_Air_Mass"
@@ -22,6 +23,7 @@
                     "description": "goes/goes-west",
                     "image": "",
                     "settings": [
+                      "GOES-West_ABI_GeoColor",
                       "GOES-West_ABI_Band2_Red_Visible_1km",
                       "GOES-West_ABI_Band13_Clean_Infrared",
                       "GOES-West_ABI_Air_Mass"
