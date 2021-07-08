@@ -75,6 +75,8 @@
 		"VIIRS_SNPP_Apparent_Reflectance_VNP02MOD_M09",
 		"VIIRS_SNPP_L2_Chlorophyll_A",
 		"VIIRS_SNPP_L2_Photosynthetically_Available_Radiation",
+		"GOES-East_ABI_GeoColor",
+		"GOES-West_ABI_GeoColor",
 		"GOES-East_ABI_Band2_Red_Visible_1km",
 		"GOES-West_ABI_Band2_Red_Visible_1km",
 		"Himawari_AHI_Band3_Red_Visible_1km",
