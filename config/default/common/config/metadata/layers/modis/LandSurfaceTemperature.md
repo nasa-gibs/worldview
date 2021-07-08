@@ -1,7 +1,7 @@
 ### MODIS (Terra/Aqua) Land Surface Temperature (Day | Night)
 Temporal Coverage: 24 February 2000 - present (Terra); 3 July 2002 - present (Aqua)
 
-The MODIS Land Surface Temperature (Day | Night) layers shows the temperature of the land surface in Kelvin (K). This measurement differs from air temperature measurements as it provides the temperature of whatever is on the surface of the Earth for example, bare sand in the desert, ice and snow covered area, a leaf covered tree canopy and even the temperature of man-made buildings and roads. Land Surface Temperature is useful for monitoring changes in weather and climate patterns and used in agriculture to allow farmers to evaluate water requirements for wheat, or determine frost damage in orange groves.
+The MODIS Land Surface Temperature (Day | Night) layers show the temperature of the land surface in Kelvin (K). This measurement differs from air temperature measurements as it provides the temperature of whatever is on the surface of the Earth for example, bare sand in the desert, ice and snow covered area, a leaf covered tree canopy and even the temperature of man-made buildings and roads. Land Surface Temperature is useful for monitoring changes in weather and climate patterns and used in agriculture to allow farmers to evaluate water requirements for wheat, or determine frost damage in orange groves.
 
 The MODIS Land Surface Temperature product is available from both Terra (MOD11) and Aqua (MYD11) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
@@ -10,7 +10,7 @@ References: MYD11_L2 [doi:10.5067/MODIS/MYD11_L2.061](https://doi.org/10.5067/MO
 ### MODIS (Terra/Aqua) Land Surface Temperature (Level 3, Daily, Day | Night)
 Temporal coverage: 26 February 2000 - present (Terra); 3 July 2002 - present (Aqua)
 
-The MODIS Land Surface Temperature (L3, Daily, Day | Night) layers shows the daily, day-time | night-time land surface temperature in Kelvin (K). They are created from the MOD11A1/MYD11A1 product which provides daily per-pixel Land Surface Temperature and Emissivity (LST&E) with 1 kilometer (km) spatial resolution. The pixel temperature value is derived from the Terra MODIS LST&E swath product. Above 30 degrees latitude, some pixels may have multiple observations where the criteria for clear-sky are met. When this occurs, the pixel value is a result of the average of all qualifying observations. The Land Surface Temperature Day layer is a representation of daytime LST; and the Land Surface Temperature Night layer is a representation of nighttime LST.
+The MODIS Land Surface Temperature (L3, Daily, Day | Night) layers show the daily, day-time | night-time land surface temperature in Kelvin (K). They are created from the MOD11A1/MYD11A1 product which provides daily per-pixel Land Surface Temperature and Emissivity (LST&E) with 1 kilometer (km) spatial resolution. The pixel temperature value is derived from the Terra MODIS LST&E swath product. Above 30 degrees latitude, some pixels may have multiple observations where the criteria for clear-sky are met. When this occurs, the pixel value is a result of the average of all qualifying observations. The Land Surface Temperature Day layer is a representation of daytime LST; and the Land Surface Temperature Night layer is a representation of nighttime LST.
 
 References: MOD11A1 [doi:10.5067/MODIS/MOD11A1.061](https://doi.org/10.5067/MODIS/MOD11A1.061); MYD11A1 [doi:10.5067/MODIS/MYD11A1.061](https://doi.org/10.5067/MODIS/MYD11A1.061)
 
