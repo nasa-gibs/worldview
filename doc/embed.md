@@ -15,7 +15,7 @@ Note: You will need to wrap the `<iframe>` code in a wrapper element (e.g., `<di
 ```<iframe src="https://worldview.earthdata.nasa.gov/?em=true" role="application" sandbox="allow-modals allow-scripts allow-same-origin allow-forms allow-popups" width="100%" height="100%" allow="fullscreen; autoplay;" loading="lazy"></iframe>```
 
 ## Limited Features in an Embedded Worldview
-Compared to the full application, the embedded version of Worldview has intentionally limited functionality to give users a more streamlined experience. The following is a list of the features and button/tab interactions that are not available or altered in embed mode.
+Compared to the full application, the embedded version of Worldview has intentionally limited functionality to give users a more streamlined experience. The following is a list of the features and button/tab interactions that are not available or altered in embed mode:
 
 - Search places by location, Share this map, Switch projections, Take a snapshot, and Information buttons are disabled. These features have been replaced with a button that opens up a new tab with your current map view in the full featured Worldview.
 - The welcome page and its tour stories are disabled.
