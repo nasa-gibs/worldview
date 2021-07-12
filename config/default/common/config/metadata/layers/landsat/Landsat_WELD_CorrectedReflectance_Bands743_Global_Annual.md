@@ -9,6 +9,4 @@ If vegetation burns, bare soil in the area will become exposed. Burn scars appea
 #### Water
 Water will appear black. Sediments in water appear dark blue.
 
-The sensor resolution is 30 m with an imagery resolution is 31.25 m. The temporal availability is annual for 1989 - 2001.
-
-References: [LP DAAC GWELDYR Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDYR.031)
+The sensor resolution is 30 m with an imagery resolution is 31.25 m.
