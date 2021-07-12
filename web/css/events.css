@@ -94,13 +94,20 @@
 .map-item-list li.item p a {
   display: block;
   clear: both;
-  margin-top: 7px;
+  margin: 4px 0 6px;
   position: relative;
   padding-left: 15px;
 }
 
-.wv-eventslist li.item ul li.dates a.active {
-  font-weight: 700;
+.wv-eventslist li.item ul li.dates {
+  margin: 4px 0;
+  a {
+    font-size: 14px;
+    cursor: pointer;
+    &.active {
+      font-weight: 700;
+    }
+  }
 }
 
 .wv-eventslist .map-item-list li.item .fa-external-link-alt {
