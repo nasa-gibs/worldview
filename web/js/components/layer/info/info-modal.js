@@ -1,38 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import LayerInfo from './info';
-import util from '../../../util/util';
+import Scrollbars from '../../util/scrollbar';
 
 export default function LayerInfoModal(props) {
-  const { layer, measurementDescriptionPath } = props;
-  const [metadata, setMetadata] = useState();
-
-  const initMetadata = async () => {
-    if (!metadata && measurementDescriptionPath) {
-      const url = `config/metadata/layers/${measurementDescriptionPath}.html`;
-      const data = await util.get(url);
-      setMetadata(data);
-    }
-  };
-
-  useEffect(() => {
-    initMetadata();
-  }, [layer]);
+  const { screenHeight, layer } = props;
 
   return (
-    <div id="layer-description" className="layer-description">
+    <Scrollbars style={{ maxHeight: `${screenHeight - 200}px` }}>
       <LayerInfo layer={layer} />
-      {metadata && (
-        <div
-          className="layer-metadata"
-          dangerouslySetInnerHTML={{ __html: metadata }}
-        />
-      )}
-    </div>
+      {/*
+        Put the source specific metadata here as well
+      */}
+    </Scrollbars>
   );
 }
 
 LayerInfoModal.propTypes = {
+  screenHeight: PropTypes.number,
   layer: PropTypes.object,
-  measurementDescriptionPath: PropTypes.string,
 };
