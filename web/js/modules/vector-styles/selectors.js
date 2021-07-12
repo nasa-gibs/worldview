@@ -119,6 +119,9 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
+  if (!layer) {
+    return null;
+  }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
 
   lodashEach(layerArray, (layerInLayerGroup) => {
