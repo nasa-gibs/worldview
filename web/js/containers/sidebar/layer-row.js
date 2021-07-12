@@ -17,7 +17,7 @@ import {
   getPaletteLegends,
 } from '../../modules/palettes/selectors';
 import { toggleCustomContent, openCustomContent } from '../../modules/modal/actions';
-import LayerInfo from '../../components/layer/info/info';
+import LayerInfoModal from '../../components/layer/info/info-modal';
 import LayerSettings from '../../components/layer/settings/layer-settings';
 import { requestPalette } from '../../modules/palettes/actions';
 import {
@@ -419,7 +419,7 @@ const mapDispatchToProps = (dispatch) => ({
       toggleCustomContent(key, {
         headerText: title || 'Layer Description',
         backdrop: false,
-        bodyComponent: LayerInfo,
+        bodyComponent: LayerInfoModal,
         // Using clickableBehindModal: true here causes an issue where switching sidebar
         // tabs does not close this modal
         wrapClassName: 'clickable-behind-modal',

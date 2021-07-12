@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../../../../util/util';
 import { getMeasurementSource } from '../../../../modules/product-picker/selectors';
+import LayerInfo from '../../info/info';
 
 class MeasurementMetadataDetail extends React.Component {
   constructor(props) {
@@ -63,7 +64,7 @@ class MeasurementMetadataDetail extends React.Component {
   }
 
   renderDesktop(data) {
-    const { source } = this.props;
+    const { source, layers } = this.props;
     const { title } = source;
     return (
       <div className="layers-all-layer">
@@ -71,6 +72,12 @@ class MeasurementMetadataDetail extends React.Component {
           <h3>{title}</h3>
         </div>
         <div className="source-metadata">
+          {layers.map((layer) => (
+            <div key={layer.id}>
+              <h3>{layer.title}</h3>
+              <LayerInfo key={layer.id} layer={layer} />
+            </div>
+          ))}
           <div dangerouslySetInnerHTML={{ __html: data }} />
         </div>
       </div>
@@ -118,18 +125,25 @@ class MeasurementMetadataDetail extends React.Component {
 MeasurementMetadataDetail.propTypes = {
   categoryTitle: PropTypes.string,
   isMobile: PropTypes.bool,
+  layers: PropTypes.array,
   source: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { category } = state.productPicker;
+  const { productPicker, layers } = state;
+  const source = getMeasurementSource(state);
+  const { category } = productPicker;
+  const { layerConfig } = layers;
+  const settings = source ? source.settings : [];
+  const layersForSource = settings.map((id) => layerConfig[id]);
+
   return {
     categoryTitle: category && category.title,
-    source: getMeasurementSource(state),
+    source,
+    layers: layersForSource,
   };
 };
 
 export default connect(
   mapStateToProps,
-  () => ({}),
 )(MeasurementMetadataDetail);
