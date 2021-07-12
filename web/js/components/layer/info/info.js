@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
 import DateRanges from './date-ranges';
 import util from '../../../util/util';
-import Scrollbars from '../../util/scrollbar';
 
 function configureTemporalDate(dateType, date, period) {
   return util.coverageDateFormatter(dateType, date, period);
@@ -82,13 +81,12 @@ class LayerInfo extends React.Component {
         )
           : ''}
         {metaData ? (
-          <Scrollbars style={{ maxHeight: `${screenHeight - 200}px` }}>
-            <div
-              id="layer-metadata"
-              className="layer-metadata"
-              dangerouslySetInnerHTML={{ __html: metaData }}
-            />
-          </Scrollbars>
+
+          <div
+            id="layer-metadata"
+            className="layer-metadata"
+            dangerouslySetInnerHTML={{ __html: metaData }}
+          />
 
         ) : (
           <div id="layer-metadata" className="layer-metadata">
