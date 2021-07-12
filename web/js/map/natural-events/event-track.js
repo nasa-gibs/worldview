@@ -52,10 +52,11 @@ class EventTrack extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
-      map, selectedDate, isAnimatingToEvent, eventsData,
+      map, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
     } = this.props;
     const selectedDateChange = (selectedDate && selectedDate.valueOf())
       !== (prevProps.selectedDate && prevProps.selectedDate.valueOf());
+    const eventDeselect = (selectedEvent !== prevProps.selectedEvent.id) && !selectedEvent.id;
     const finishedAnimating = !isAnimatingToEvent && (isAnimatingToEvent !== prevProps.isAnimatingToEvent);
     const eventsLoaded = eventsData && eventsData.length && (eventsData !== prevProps.eventsData);
     const prevMap = prevProps.map;
@@ -72,6 +73,10 @@ class EventTrack extends React.Component {
 
     if (selectedDateChange || finishedAnimating || eventsLoaded) {
       this.debouncedTrackUpdate();
+    }
+
+    if (eventDeselect) {
+      this.removeTrack(map);
     }
   }
 
