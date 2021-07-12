@@ -175,10 +175,10 @@ module.exports = {
     c.click(availableFilterCheckbox);
     c.pause(200);
     c.expect.element(availableFilterCheckboxInput).to.not.be.selected;
-    c.expect.elements(layersSearchRow).count.to.equal(6);
+    c.expect.elements(layersSearchRow).count.to.equal(8);
     c
       .assert
-      .containsText(layerResultsCountText, 'Showing 6 out of');
+      .containsText(layerResultsCountText, 'Showing 8 out of');
   },
   'Finding layer by ID with search': (c) => {
     c.clearValue(layersSearchField);
