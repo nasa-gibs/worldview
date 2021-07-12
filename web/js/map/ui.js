@@ -760,7 +760,8 @@ export default function mapui(models, config, store, ui) {
    */
   const updateDate = self.updateDate = function() {
     const state = store.getState();
-    const { embed, compare } = state;
+    const { embed, events, compare } = state;
+    const { isAnimatingToEvent } = events;
     let activeLayers = getAllActiveLayers(state);
     let layerGroups;
     let layerGroup;
@@ -805,7 +806,7 @@ export default function mapui(models, config, store, ui) {
           .getLayers()
           .setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
       }
-      if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+      if (!isAnimatingToEvent && config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         const { vectorStyles } = config;
         let vectorStyleId;
 
