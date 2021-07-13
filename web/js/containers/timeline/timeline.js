@@ -44,6 +44,7 @@ import {
   changeCustomInterval,
   updateAppNow,
   toggleCustomModal,
+  triggerTodayButton,
 } from '../../modules/date/actions';
 import {
   filterProjLayersWithStartDate,
@@ -137,12 +138,6 @@ class Timeline extends React.Component {
 
     // change timescale
     this.debounceWheelTime = 60;
-
-    // IE11 specific - increase wheel timing to handle performance issues
-    if (window.navigator.userAgent.match(/Trident\/7\./)) {
-      this.debounceWheelTime = 2500;
-    }
-
     this.debounceChangeTimeScaleWheel = lodashDebounce(this.throttleChangeTimeScaleWheel, this.debounceWheelTime, throttleSettings);
     this.throttleChangeTimeScaleWheelFire = lodashThrottle(this.changeTimeScaleScroll, 200, throttleSettings);
 
@@ -964,6 +959,11 @@ class Timeline extends React.Component {
     this.debounceDateUpdate(dateObj, draggerSelected);
   }
 
+  handleSelectNowButton = () => {
+    const { triggerTodayButton } = this.props;
+    triggerTodayButton();
+  }
+
   /**
   * @desc getMobileDateButtonStyle date change button style for smaller displays
   * @returns {Object} style { left, bottom }
@@ -1121,6 +1121,7 @@ class Timeline extends React.Component {
                     >
                       <div id="zoom-buttons-group">
                         <DateChangeArrows
+                          handleSelectNowButton={this.handleSelectNowButton}
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
                           leftArrowDisabled={leftArrowDisabled}
@@ -1139,6 +1140,7 @@ class Timeline extends React.Component {
                     <div
                       id="timeline-header"
                       className={`timeline-header-desktop ${hasSubdailyLayers ? 'subdaily' : ''}`}
+                      style={{ marginRight: isTimelineHidden ? '20px' : '0' }}
                     >
                       {/* Date Selector, Interval, Arrow Controls */}
                       <div id="date-selector-main">
@@ -1163,6 +1165,7 @@ class Timeline extends React.Component {
                           hasSubdailyLayers={hasSubdailyLayers}
                         />
                         <DateChangeArrows
+                          handleSelectNowButton={this.handleSelectNowButton}
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
                           leftArrowDisabled={leftArrowDisabled}
@@ -1190,6 +1193,7 @@ class Timeline extends React.Component {
                       <div id="timeline-footer">
                         {/* Axis */}
                         <TimelineAxis
+                          appNow={appNow}
                           axisWidth={axisWidth}
                           parentOffset={parentOffset}
                           leftOffset={leftOffset}
@@ -1516,6 +1520,10 @@ const mapDispatchToProps = (dispatch) => ({
   updateAppNow: (date) => {
     dispatch(updateAppNow(date));
   },
+  // sets date to NOW based on state.date.appNow
+  triggerTodayButton: (date) => {
+    dispatch(triggerTodayButton(date));
+  },
   // changes date of active dragger 'selected' or 'selectedB'
   changeDate: (val) => {
     dispatch(selectDate(val));
@@ -1610,6 +1618,7 @@ Timeline.propTypes = {
   timeScaleChangeUnit: PropTypes.string,
   toggleActiveCompareState: PropTypes.func,
   toggleCustomModal: PropTypes.func,
+  triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
 };
 

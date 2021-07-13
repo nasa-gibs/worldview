@@ -7,7 +7,29 @@ import {
   TOGGLE_CUSTOM_MODAL,
   INIT_SECOND_DATE,
 } from './constants';
+import { getSelectedDate } from './selectors';
 import { getMaxActiveLayersDate } from './util';
+
+export function triggerTodayButton() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const {
+      date,
+      compare,
+    } = state;
+    const activeString = compare.isCompareA ? 'selected' : 'selectedB';
+    const selectedDate = getSelectedDate(state, activeString);
+    const { appNow } = date;
+
+    if (selectedDate < appNow) {
+      dispatch({
+        type: SELECT_DATE,
+        activeString,
+        value: appNow,
+      });
+    }
+  };
+}
 
 export function changeTimeScale(num) {
   return {
