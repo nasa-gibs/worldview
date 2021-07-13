@@ -25,7 +25,7 @@
               {
                 "target": "#layers-sidebar-tab",
                 "title": "Layer List",
-                "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers appear under the overlays and only the top most activated base layer will display. Toggle on and off the layers by clicking on the \"eye\" icon to the left of the layer name.",
+                "content": "The Layer List shows all the imagery layers that are loaded on the map. Base layers appear under the overlays and only the topmost active base layer will display. Toggle on and off the layers by clicking on the \"eye\" icon to the left of the layer name.",
                 "spotlightClicks": false,
                 "disableOverlayClose": true,
                 "placementBeacon": "bottom"
@@ -33,7 +33,7 @@
               {
                 "target": "#events-sidebar-tab",
                 "title": "Events",
-                "content": "Select the Events tab to view a curated list of current natural events around the world.",
+                "content": "Select the Events tab to view a curated list of current and historical natural events around the world.",
                 "spotlightClicks": false,
                 "disableOverlayClose": true,
                 "placementBeacon": "bottom"
@@ -108,8 +108,8 @@
                 "placementBeacon": "bottom"
               },
               {
-                "target": "#wv-link-button",
-                "content": "Create a custom URL of your Worldview page to share with friends and colleagues!",
+                "target": "#wv-share-button",
+                "content": "Create a custom URL link of your Worldview page, copy HTML code to embed Worldview into a web page, and share Worldview via social media with friends and colleagues!",
                 "placementBeacon": "bottom"
               },
               {
