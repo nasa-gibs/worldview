@@ -21,7 +21,7 @@ class AnimationButton extends PureComponent {
           >
             {labelText}
           </UncontrolledTooltip>
-          <FontAwesomeIcon icon="video" className="wv-animate" size="3x" />
+          <FontAwesomeIcon icon="video" className="wv-animate" size="2x" />
         </div>
       </div>
     );

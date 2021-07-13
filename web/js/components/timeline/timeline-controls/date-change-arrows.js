@@ -84,6 +84,7 @@ class DateChangeArrows extends PureComponent {
       isMobile,
       leftArrowDisabled,
       rightArrowDisabled,
+      handleSelectNowButton,
     } = this.props;
     return (
       <div>
@@ -94,6 +95,7 @@ class DateChangeArrows extends PureComponent {
           onMouseDown={this.leftArrowDown}
           onMouseUp={this.leftArrowUp}
           onMouseLeave={this.leftArrowUp}
+          aria-disabled={leftArrowDisabled}
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -116,6 +118,7 @@ class DateChangeArrows extends PureComponent {
           onMouseDown={this.rightArrowDown}
           onMouseUp={this.rightArrowUp}
           onMouseLeave={this.rightArrowUp}
+          aria-disabled={rightArrowDisabled}
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -130,12 +133,34 @@ class DateChangeArrows extends PureComponent {
             />
           </svg>
         </div>
+
+        {/* NOW BUTTON */}
+        <div
+          className={`button-action-group ${rightArrowDisabled ? 'button-disabled' : ''}`}
+          id="now-button-group"
+          onClick={handleSelectNowButton}
+          aria-disabled={rightArrowDisabled}
+        >
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="Now"
+            placement="top"
+            target="now-button-group"
+          />
+          <svg height="30" width="30" viewBox="0 0 40 28">
+            <path
+              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z M 26,30 26,0 34,0 34,30 z"
+              className="arrow arrow-now"
+            />
+          </svg>
+        </div>
       </div>
     );
   }
 }
 
 DateChangeArrows.propTypes = {
+  handleSelectNowButton: PropTypes.func,
   leftArrowDisabled: PropTypes.bool,
   leftArrowDown: PropTypes.func,
   leftArrowUp: PropTypes.func,
