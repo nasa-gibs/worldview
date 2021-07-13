@@ -91,6 +91,16 @@ export default function AboutPage() {
                   {' '}
                   +
                   {' '}
+                  <code>T</code>
+                </td>
+                <td>Jump to today/now on the timeline</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>Shift</code>
+                  {' '}
+                  +
+                  {' '}
                   <code>D</code>
                 </td>
                 <td>Toggle distraction free mode</td>

@@ -141,7 +141,6 @@ class TimelineAxis extends Component {
       timelineEndDateLimit,
     } = this.props;
     const { wheelZoom } = this.state;
-
     let draggerDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
 
     // update timescale axis focus
@@ -220,12 +219,12 @@ class TimelineAxis extends Component {
   * @desc main function to update axis scale, time range, grids tiles/text, dragger A/B positions, animation start/end draggers
   * @param {String} inputDate
   * @param {String} updatedTimeScale
-  * @param {Number} leftOffsetFixedCoeff
+  * @param {Number} leftOffsetFixedCoefficient
   * @param {Boolean} hoverChange
   * @param {String} previousTimeScale - limited use for hover timeScale change
   * @returns {void}
   */
-  updateScale = (inputDate, timeScale, leftOffsetFixedCoeff, hoverChange, previousTimeScale) => {
+  updateScale = (inputDate, timeScale, leftOffsetFixedCoefficient, hoverChange, previousTimeScale) => {
     const {
       dateA,
       dateB,
@@ -246,8 +245,8 @@ class TimelineAxis extends Component {
     const options = timeScaleOptions[timeScale].timeAxis;
     const { gridWidth } = options;
     const timelineAxisWidth = axisWidth;
-    const hoverLeftOffset = leftOffsetFixedCoeff
-      ? timelineAxisWidth * leftOffsetFixedCoeff
+    const hoverLeftOffset = leftOffsetFixedCoefficient
+      ? timelineAxisWidth * leftOffsetFixedCoefficient
       : leftOffset === 0
         ? timelineAxisWidth * 0.8
         : leftOffset;
@@ -255,8 +254,8 @@ class TimelineAxis extends Component {
     // visible tiles based on timeline axis width (screen/browser size dependent)
     const numberOfVisibleTiles = Number((timelineAxisWidth / gridWidth).toFixed(8));
     // grid overflow/cushion coefficient
-    const gridOverflowCoeff = 2.5;
-    let gridNumber = Math.floor(numberOfVisibleTiles * gridOverflowCoeff);
+    const gridOverflowCoefficient = 2.5;
+    let gridNumber = Math.floor(numberOfVisibleTiles * gridOverflowCoefficient);
     const dragSentinelChangeNumber = gridWidth * (Math.floor(numberOfVisibleTiles * 0.25) + 1);
     if (timeScale === 'year') {
       const endLimitYear = new Date(timelineEndDateLimit).getUTCFullYear() + 1;
@@ -268,7 +267,7 @@ class TimelineAxis extends Component {
       gridNumber = monthTotal;
     }
 
-    // this is the middle on the axis based on number of tiles determined from width of axis and gridwidth
+    // this is the middle on the axis based on number of tiles determined from width of axis and grid width
     // this is used to determine position and also to "reset" position after an axis drag has stopped
     // eslint-disable-next-line no-mixed-operators
     const midPoint = numberOfVisibleTiles / 2 * gridWidth - gridWidth * gridNumber / 2;
@@ -329,9 +328,9 @@ class TimelineAxis extends Component {
     const pixelsToAdd = diffStartAndZeroed / diffFactor;
 
     // offset grids needed since each zoom in won't be centered
-    const gridOffsetCoeff = 2.5;
+    const gridOffsetCoefficient = 2.5;
     const offSetGrids = Math.floor(hoverLeftOffset / gridWidth);
-    const offSetHalved = Math.floor(Math.floor(numberOfVisibleTiles * gridOffsetCoeff) / 2);
+    const offSetHalved = Math.floor(Math.floor(numberOfVisibleTiles * gridOffsetCoefficient) / 2);
     const offSetGridsDiff = offSetGrids - Math.floor(numberOfVisibleTiles / 2);
     let gridsToSubtract = offSetHalved + offSetGridsDiff;
     let gridsToAdd = offSetHalved - offSetGridsDiff;
@@ -521,7 +520,7 @@ class TimelineAxis extends Component {
   * @param {Number} draggerPosition
   * @param {Number} draggerPositionB
   * @param {Number} overDrag
-  * @returns {Object} output - return new time range and dragger visibilty/updated position
+  * @returns {Object} output - return new time range and dragger visibility/updated position
   * @returns {Array} output.currentTimeRange
   * @returns {Number} output.transformX
   * @returns {Boolean} output.draggerVisible
@@ -545,25 +544,25 @@ class TimelineAxis extends Component {
       isCompareModeActive,
       draggerSelected,
     } = this.props;
-    // get updated visible tiles with overdrag
+    // get updated visible tiles with over drag
     const updatedNumberOfVisibleTiles = Math.floor(numberOfVisibleTiles * 0.25);
     const overDragGrids = Math.ceil(overDrag / gridWidth);
-    const numVisibleTilesWithOverdrag = updatedNumberOfVisibleTiles + 1 + overDragGrids;
+    const numVisibleTilesWithOverDrag = updatedNumberOfVisibleTiles + 1 + overDragGrids;
     const newCurrentTimeRange = currentTimeRange;
     let timeRangeAdd;
     let transform;
     if (deltaX > 0) { // dragging right - exposing past dates
       const firstDateInRange = newCurrentTimeRange[0].rawDate;
-      timeRangeAdd = this.getTimeRangeArray(numVisibleTilesWithOverdrag, -1, firstDateInRange);
-      removeBackMultipleInPlace(newCurrentTimeRange, numVisibleTilesWithOverdrag);
+      timeRangeAdd = this.getTimeRangeArray(numVisibleTilesWithOverDrag, -1, firstDateInRange);
+      removeBackMultipleInPlace(newCurrentTimeRange, numVisibleTilesWithOverDrag);
       newCurrentTimeRange.unshift(...timeRangeAdd);
-      transform = transformX - numVisibleTilesWithOverdrag * gridWidth;
+      transform = transformX - numVisibleTilesWithOverDrag * gridWidth;
     } else { // dragging left - exposing future dates
       const lastDateInRange = newCurrentTimeRange[newCurrentTimeRange.length - 1].rawDate;
-      timeRangeAdd = this.getTimeRangeArray(-1, numVisibleTilesWithOverdrag, lastDateInRange);
-      removeFrontMultipleInPlace(newCurrentTimeRange, numVisibleTilesWithOverdrag);
+      timeRangeAdd = this.getTimeRangeArray(-1, numVisibleTilesWithOverDrag, lastDateInRange);
+      removeFrontMultipleInPlace(newCurrentTimeRange, numVisibleTilesWithOverDrag);
       newCurrentTimeRange.push(...timeRangeAdd);
-      transform = transformX + numVisibleTilesWithOverdrag * gridWidth;
+      transform = transformX + numVisibleTilesWithOverDrag * gridWidth;
     }
 
     // check if dragger is in between range and visible
@@ -701,6 +700,7 @@ class TimelineAxis extends Component {
    */
   checkDraggerMoveOrUpdateScale = (previousDate, isDraggerB) => {
     const {
+      appNow,
       dateA,
       dateB,
       draggerPosition,
@@ -734,7 +734,10 @@ class TimelineAxis extends Component {
     const rightEdgeOfVisibleAxis = axisWidth - 80;
     const isDraggerPositionWithinAxis = selectedDraggerPosition <= rightEdgeOfVisibleAxis
       && selectedDraggerPosition >= leftEdgeOfVisibleAxis;
-    const newDraggerWithinRangeCheck = isDraggerPositionWithinAxis && isDateWithinRange;
+    let newDraggerWithinRangeCheck = isDraggerPositionWithinAxis && isDateWithinRange;
+    if (new Date(backDate) > appNow && selectedDraggerTimeState === getISODateFormatted(appNow)) {
+      newDraggerWithinRangeCheck = false;
+    }
 
     return {
       withinRange: newDraggerWithinRangeCheck,
@@ -751,10 +754,10 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   updateScaleWithOffset = (date, timeScale, newDateInThePast) => {
-    const leftOffsetFixedCoeff = newDateInThePast
+    const leftOffsetFixedCoefficient = newDateInThePast
       ? 0.25
       : 0.75;
-    this.updateScale(date, timeScale, leftOffsetFixedCoeff);
+    this.updateScale(date, timeScale, leftOffsetFixedCoefficient);
   }
 
   // #### Drag/mouse handlers ####
@@ -826,7 +829,7 @@ class TimelineAxis extends Component {
 
     // handle horizontal scroll on x axis wheel event
     this.handleStartDrag();
-    // mutli-touch drag left
+    // multi-touch drag left
     if (e.deltaX > 0) {
       const scrollX = position - deltaChangeCoefficient;
       // cancel drag if exceeds axis leftBound and hitLeftBound flag hit
@@ -985,10 +988,10 @@ class TimelineAxis extends Component {
       // calculate position of touch click relative to front date
       const positionRelativeToFront = clientX - parentOffset - position - transformX - 2;
 
-      // determine approximate new dragger date and coefficient based on gridwidth
-      const gridWidthCoef = positionRelativeToFront / gridWidth;
-      const gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
-      const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
+      // determine approximate new dragger date and coefficient based on grid width
+      const gridWidthCoefficient = positionRelativeToFront / gridWidth;
+      const gridWidthCoefficientRemainder = gridWidthCoefficient - Math.floor(gridWidthCoefficient);
+      const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoefficient), timeScale);
 
       // get ms time value
       const draggerDateAddedValue = new Date(draggerDateAdded).getTime();
@@ -1001,10 +1004,10 @@ class TimelineAxis extends Component {
           daysCount = draggerDateAdded.daysInMonth();
         }
         // days times milliseconds in day times remainder
-        const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+        const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefficientRemainder;
         newDraggerTime = Math.floor(draggerDateAddedValue + remainderMilliseconds);
       } else { // known scaleMs (e.g. 86400000 for day)
-        newDraggerTime = draggerDateAddedValue + (diffZeroValues * gridWidthCoefRemainder);
+        newDraggerTime = draggerDateAddedValue + (diffZeroValues * gridWidthCoefficientRemainder);
       }
 
       // check other dragger visibility on update
@@ -1274,16 +1277,16 @@ class TimelineAxis extends Component {
       if (!diffZeroValues) {
         // calculate based on frontDate due to varying number of days per month and per year (leap years)
         const hoverLinePositionRelativeToFrontDate = leftOffset - midPoint - newTransformX;
-        const gridWidthCoef = hoverLinePositionRelativeToFrontDate / gridWidth;
-        const hoverTimeAdded = moment.utc(frontDate).add(gridWidthCoef, timeScale);
+        const gridWidthCoefficient = hoverLinePositionRelativeToFrontDate / gridWidth;
+        const hoverTimeAdded = moment.utc(frontDate).add(gridWidthCoefficient, timeScale);
         let daysCount;
         if (timeScale === 'year') {
           daysCount = hoverTimeAdded.isLeapYear() ? 366 : 365;
         } else if (timeScale === 'month') {
           daysCount = hoverTimeAdded.daysInMonth();
         }
-        const gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
-        const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+        const gridWidthCoefficientRemainder = gridWidthCoefficient - Math.floor(gridWidthCoefficient);
+        const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefficientRemainder;
         hoverTimeDate = getISODateFormatted(hoverTimeAdded.add(remainderMilliseconds));
       } else {
         // calculate based on known diffZeroValues (days, hours, minutes)
@@ -1306,7 +1309,7 @@ class TimelineAxis extends Component {
         ? timelineStartDateLimit
         : hoverTimeDate;
 
-    // parent update positioning and hovertime
+    // parent update positioning and hover time
     updatePositioningOnAxisStopDrag(updatePositioningArguments, hoverTimeDate);
   }
 
@@ -1531,6 +1534,7 @@ TimelineAxis.propTypes = {
   animationStartLocation: PropTypes.number,
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
+  appNow: PropTypes.object,
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   dateA: PropTypes.string,
