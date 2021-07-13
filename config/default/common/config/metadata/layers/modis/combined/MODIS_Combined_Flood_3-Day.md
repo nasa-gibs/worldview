@@ -13,7 +13,7 @@ Common situations in which the flood product may be unable to accurately identif
 
 
 #### Spatial Coverage
-Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevA.pdf) for included tiles).
+Non-polar global land areas (below 70 degrees latitude), comprising 223 10x10 degree tiles (see Figure 4 in [User Guide](https://earthdata.nasa.gov/files/MCDWD_UserGuide_RevB.pdf) for included tiles).
 
 #### Sensor/Image Resolution
 Nominal equatorial resolution is ~232 m per pixel, and decreasing toward the poles (~116 m at 60 degrees latitude). Note the higher apparent resolution towards the poles is simply an artifact of the lat/lon (geographic) projection used, and not intrinsic to the data.
