@@ -2,29 +2,29 @@
   "version": 8,
   "name": "Orbit Tracks",
   "sources": {
-    "OrbitTracks_Aqua_Ascending": {
+    "OrbitTracks_Calipso_Ascending": {
       "type": "vector",
       "tiles": [
-        "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Calipso_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     }
   },
   "layers": [
     {
-      "id": "OrbitTracks_Aqua_Ascending",
-      "source": "OrbitTracks_Aqua_Ascending",
-      "source-layer": "OrbitTracks_Aqua_Ascending",
+      "id": "OrbitTracks_Calipso_Ascending",
+      "source": "OrbitTracks_Calipso_Ascending",
+      "source-layer": "OrbitTracks_Calipso_Ascending",
       "source-description": "Default",
       "type": "line",
       "paint": {
-        "line-color": "rgb(21, 192, 230)",
+        "line-color": "rgb(216, 186, 25)",
         "line-width": 2
       }
     },
     {
-      "id": "OrbitTracks_Aqua_Ascending",
-      "source": "OrbitTracks_Aqua_Ascending",
-      "source-layer": "OrbitTracks_Aqua_Ascending",
+      "id": "OrbitTracks_Calipso_Ascending",
+      "source": "OrbitTracks_Calipso_Ascending",
+      "source-layer": "OrbitTracks_Calipso_Ascending",
       "source-description": "Default",
       "type": "circle",
       "paint": {
@@ -89,14 +89,14 @@
           5,
           5
         ],
-        "circle-color": "rgb(21, 192, 230)",
+        "circle-color": "rgb(216, 186, 25)",
         "circle-opacity": 1
       }
     },
     {
-      "id": "OrbitTracks_Aqua_Ascending",
-      "source": "OrbitTracks_Aqua_Ascending",
-      "source-layer": "OrbitTracks_Aqua_Ascending",
+      "id": "OrbitTracks_Calipso_Ascending",
+      "source": "OrbitTracks_Calipso_Ascending",
+      "source-layer": "OrbitTracks_Calipso_Ascending",
       "source-description": "Default",
       "type": "symbol",
       "layout": {
