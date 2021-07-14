@@ -73,7 +73,7 @@ export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
   const self = {};
   let cache;
-  const dateline = mapDateLineBuilder(models, config, store, ui);
+  const dateline = mapDateLineBuilder(store);
   const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(store);
   const dataRunner = self.runningdata = new MapRunningData(
@@ -998,7 +998,7 @@ export default function mapui(models, config, store, ui) {
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
     } else if (proj.id === 'geographic') {
-      dateline.init(self, map, dateSelected);
+      dateline.init(map, dateSelected);
     }
 
     const onRotate = () => {

@@ -150,8 +150,7 @@ Line.defaultProps = {
   strokeWidth: '6',
   color: 'white',
   svgStyle: {
-    margin: '0 40px 0 40px',
-    transform: 'translateX(-43px)',
+    transform: 'translateX(-3px)',
   },
 };
 
