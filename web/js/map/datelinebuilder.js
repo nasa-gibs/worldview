@@ -67,7 +67,6 @@ export default function mapDateLineBuilder(store) {
     let dimensions;
     map = olMap;
     drawDatelines(map, date);
-    // [self.date] = date.toISOString().split('T');
     proj = store.getState().proj.id;
 
     events.on('map:moveend', () => {
