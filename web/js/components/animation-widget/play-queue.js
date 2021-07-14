@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { isEmpty as lodashIsEmpty } from 'lodash';
@@ -7,80 +7,98 @@ import Queue from 'promise-queue';
 import util from '../../util/util';
 import { getLayersActiveAtDate } from '../../modules/date/util';
 
-/*
- * Preload and play animation
- *
- * @class PlayAnimation
- * @extends React.Component
- */
-class PlayAnimation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isPlaying: false,
+const queue = new Queue(5, Infinity);
+let isAnimating = false;
+
+function PlayAnimation (props) {
+  const {
+    isPlaying,
+    isLoopActive,
+    interval,
+    hasCustomPalettes,
+    startDate, endDate,
+    queueLength,
+    delta,
+    layers,
+    speed,
+    onClose,
+    togglePlaying,
+    selectDate,
+    currentDate,
+    promiseImageryForTime,
+    canPreloadAll,
+    maxQueueLength,
+  } = props;
+
+  let preloadObject = {};
+  let inQueueObject = {};
+  let preloadedArray = [];
+  const pastDates = {};
+  let timeout = 0;
+
+  useEffect(() => {
+    console.log('remount!', isAnimating, isPlaying);
+    checkQueue();
+
+    return () => {
+      queue.queue = [];
+      if (timeout) {
+        stopPlaying();
+      }
     };
-    this.queue = new Queue(5, Infinity);
-    this.preloadObject = {};
-    this.inQueueObject = {};
-    this.preloadedArray = [];
-    this.pastDates = {};
-    this.interval = 0;
-    this.currentPlayingDate = this.getStartDate();
-    this.checkQueue();
-    this.checkShouldPlay();
-  }
+  }, []);
 
-  componentDidMount() {
-    this.mounted = true;
-  }
+  const nextDate = (date) => util.dateAdd(date, interval, delta);
 
-  componentWillUnmount() {
-    this.mounted = false;
-    this.queue.queue = [];
-    if (this.interval) {
-      clearInterval(this.interval);
-    }
-  }
+  const getStartDate = () => {
+    const next = nextDate(currentDate);
+    const useStartDate = currentDate > startDate && next < endDate ? next : startDate;
+    return util.toISOStringSeconds(useStartDate);
+  };
+
+  let currentPlayingDate = getStartDate();
 
   /**
-   * Determines whether to start at
-   * current date or to start at the
-   * selected start date
+   * Gets next date based on current increments
+   * @param date {object} JS date obj
    *
-   * @returns {string} ISO string Date
+   * @returns {object} JS Date
    */
-  getStartDate() {
-    const { endDate, startDate, currentDate } = this.props;
-    const nextDate = this.nextDate(currentDate);
-    if (currentDate > startDate && nextDate < endDate) {
-      return util.toISOStringSeconds(nextDate);
+  const addDate = (date) => {
+    const strDate = util.toISOStringSeconds(date);
+    const activeLayers = getLayersActiveAtDate(layers, date);
+
+    if (inQueueObject[strDate] || preloadObject[strDate]) {
+      return;
     }
-    return util.toISOStringSeconds(startDate);
-  }
+    inQueueObject[strDate] = date;
+    preloadedArray.push(strDate);
+
+    queue.add(() => promiseImageryForTime(date, activeLayers)).then((addedDate) => {
+      preloadObject[strDate] = addedDate;
+      delete inQueueObject[strDate];
+      shiftCache();
+      checkQueue();
+      checkShouldPlay();
+    });
+  };
 
   /**
-   * Gets the last date that should be added
-   * to the queuer
-   *
-   * @param currentDate {object} JS date
-   * @param startDate {object} JS date
-   * @param endDate {object} JS date
-   *
+   * Gets the last date that should be added to the queuer
    * @returns {string} Date string
    */
-  getLastBufferDateStr = function(currentDate, startDate, endDate) {
-    const { queueLength, isLoopActive } = this.props;
+  const getLastBufferDateStr = () => {
     let day = currentDate;
     let i = 1;
 
     while (i < queueLength) {
-      if (this.nextDate(day) > endDate) {
+      if (nextDate(day) > endDate) {
         if (!isLoopActive) {
           return util.toISOStringSeconds(day);
         }
         day = startDate;
       } else {
-        day = this.nextDate(day);
+        day = nextDate(day);
       }
       i += 1;
     }
@@ -90,14 +108,10 @@ class PlayAnimation extends React.Component {
   /**
    * adds dates to precache queuer
    *
-   * @param currentDate {object} JS date
-   * @param startDate {object} JS date
-   * @param endDate {object} JS date
    * @param lastToQueue {string} date String
    */
-  initialPreload(currentDate, startDate, endDate, lastToQueue) {
-    const { queueLength, selectDate, togglePlaying } = this.props;
-    let day = currentDate;
+  const initialPreload = (lastToQueue) => {
+    let day = util.parseDateUTC(currentPlayingDate);
     if (queueLength <= 1) {
       // if only one frame will play just move to that date
       selectDate(startDate);
@@ -105,216 +119,156 @@ class PlayAnimation extends React.Component {
       return;
     }
     for (let i = 0; i < queueLength; i += 1) {
-      this.addDate(day);
-      day = this.getNextBufferDate(day, startDate, endDate);
+      addDate(day);
+      day = getNextBufferDate(day);
       if (util.toISOStringSeconds(day) === lastToQueue) {
-        this.addDate(day);
+        addDate(day);
       }
     }
-  }
+  };
 
   /**
    * Determine if we should play
    *
    * @param isLoopStart {Boolean}
    */
-  checkShouldPlay = function(isLoopStart) {
-    const { startDate, endDate, hasCustomPalettes } = this.props;
-    const { isPlaying } = this.state;
-    const currentDate = util.parseDateUTC(this.currentPlayingDate);
-    const lastToQueue = this.getLastBufferDateStr(currentDate, startDate, endDate);
+  const checkShouldPlay = (isLoopStart) => {
+    const current = util.parseDateUTC(currentPlayingDate);
+    const lastToQueue = getLastBufferDateStr(current);
 
-    if (isPlaying && !isLoopStart) {
+    if (isAnimating && !isLoopStart) {
       return false;
     }
-    if (this.preloadObject[lastToQueue]) {
-      return this.play(this.currentPlayingDate);
+    if (preloadObject[lastToQueue]) {
+      return play();
     }
     if (
       hasCustomPalettes
-      && this.preloadObject[this.currentPlayingDate]
-      && lodashIsEmpty(this.inQueueObject)
+      && preloadObject[currentPlayingDate]
+      && lodashIsEmpty(inQueueObject)
     ) {
-      return this.play(this.currentPlayingDate);
+      return play();
     }
-    if (isLoopStart && currentDate.getTime() === startDate.getTime()) {
-      return this.play(this.currentPlayingDate);
+    if (isLoopStart && current.getTime() === startDate.getTime()) {
+      return play();
     }
-    this.shiftCache();
+    shiftCache();
   };
 
-  /**
-   * Check if we should loop
-   */
-  checkShouldLoop() {
-    const { isLoopActive, startDate, togglePlaying } = this.props;
+  const checkShouldLoop = () => {
     if (isLoopActive) {
-      this.shiftCache();
-      this.currentPlayingDate = util.toISOStringSeconds(startDate);
+      shiftCache();
+      currentPlayingDate = util.toISOStringSeconds(startDate);
       setTimeout(() => {
-        this.checkShouldPlay(true);
-        this.checkQueue();
+        checkShouldPlay(true);
+        checkQueue();
       }, 1000);
     } else {
       togglePlaying();
     }
-  }
+  };
 
   /**
    * Determines what dates should be queued
-   *
    */
-  checkQueue() {
-    const {
-      startDate,
-      endDate,
-      hasCustomPalettes,
-      canPreloadAll,
-      queueLength,
-      maxQueueLength,
-    } = this.props;
-    const currentDate = util.parseDateUTC(this.currentPlayingDate);
-    const lastToQueue = this.getLastBufferDateStr(currentDate, startDate, endDate);
-    const nextDate = this.nextDate(currentDate);
+  const checkQueue = () => {
+    const current = util.parseDateUTC(currentPlayingDate);
+    const lastToQueue = getLastBufferDateStr(current);
+    const next = nextDate(current);
+    const lastPreloadArrayItem = preloadedArray[preloadedArray.length - 1];
 
     if (
-      !this.preloadedArray[0]
-      && !this.inQueueObject[this.currentPlayingDate]
+      !preloadedArray[0]
+      && !inQueueObject[currentPlayingDate]
     ) {
-      this.initialPreload(currentDate, startDate, endDate, lastToQueue);
+      initialPreload(current, lastToQueue);
     } else if (
-      // TODO Can't lookup this array entry with date string as key. Is this causing bugs?
-      !this.preloadedArray[lastToQueue]
-      && !this.inQueueObject[lastToQueue]
+      !lastPreloadArrayItem !== lastToQueue
+      && !inQueueObject[lastToQueue]
       && !hasCustomPalettes
       && !canPreloadAll
     ) {
       // if last preload date doesn't exist
-      this.addItemToQueue(currentDate, startDate, endDate);
+      addItemToQueue(current);
     } else if (
       hasCustomPalettes
-      && this.preloadedArray[0]
-      && !this.inQueueObject[nextDate]
+      && preloadedArray[0]
+      && !inQueueObject[next]
       && queueLength > maxQueueLength
     ) {
-      this.customQueuer(currentDate, startDate, endDate);
+      customQueuer(currentDate);
     }
-  }
+  };
 
-  /**
-   * Clears precache
-   */
-  clearCache() {
-    this.preloadObject = {};
-    this.preloadedArray = [];
-    this.inQueueObject = {};
-  }
+  const clearCache = () => {
+    preloadObject = {};
+    preloadedArray = [];
+    inQueueObject = {};
+  };
 
-  /**
-   * Gets next date based on current
-   * increments
-   * @param date {object} JS date obj
-   *
-   * @returns {object} JS Date
-   */
-  nextDate(date) {
-    const { interval, delta } = this.props;
-    return util.dateAdd(date, interval, delta);
-  }
-
-  /*
-   * Custom date queuer created for
-   * custom colormaps
-   *
-   * @param currentDate {object} JS date
-   * @param startDate {object} JS date
-   * @param endDate {object} JS date
-   */
-  customQueuer(currentDate, startDate, endDate) {
-    const { isPlaying } = this.state;
-    let nextDate = this.nextDate(currentDate);
-    if (nextDate > endDate) {
-      nextDate = startDate;
+  const customQueuer = () => {
+    let next = nextDate(currentDate);
+    if (next > endDate) {
+      next = startDate;
     }
-    const nextDateStr = util.toISOStringSeconds(nextDate);
+    const nextDateStr = util.toISOStringSeconds(next);
     if (
-      !this.preloadObject[nextDateStr]
-      && !this.inQueueObject[nextDateStr]
-      && !isPlaying
+      !preloadObject[nextDateStr]
+      && !inQueueObject[nextDateStr]
+      && !isAnimating
     ) {
-      this.clearCache();
-      this.checkQueue();
+      clearCache();
+      checkQueue();
     }
-  }
-
-  /*
-   * Add date to loading Queue obj
-   *
-   * @param date {object} JS date obj
-   */
-  addToInQueue(date) {
-    const strDate = util.toISOStringSeconds(date);
-    this.inQueueObject[strDate] = date;
-    this.preloadedArray.push(strDate);
-  }
+  };
 
   /**
    * removes item from cache after it has
    * been played and quelimit reached
    */
-  shiftCache() {
-    const { queueLength, canPreloadAll } = this.props;
+  const shiftCache = () => {
     if (
-      this.preloadObject[this.preloadedArray[0]]
-      && util.objectLength(this.preloadObject) > queueLength
-      && this.pastDates[this.preloadedArray[0]]
-      && !this.isInToPlayGroup(this.preloadedArray[0])
+      preloadObject[preloadedArray[0]]
+      && util.objectLength(preloadObject) > queueLength
+      && pastDates[preloadedArray[0]]
+      && !isInToPlayGroup(preloadedArray[0])
       && !canPreloadAll
     ) {
-      const key = this.preloadedArray.shift();
-      delete this.preloadObject[key];
-      delete this.pastDates[key];
+      const key = preloadedArray.shift();
+      delete preloadObject[key];
+      delete pastDates[key];
     }
-  }
+  };
 
-  /**
-   * @param currentDate {object} JS date
-   * @param startDate {object} JS date
-   * @param endDate {object} JS date
-   */
-  getNextBufferDate(currentDate, startDate, endDate) {
-    const strDate = this.preloadedArray[this.preloadedArray.length - 1];
+  const getNextBufferDate = () => {
+    const strDate = preloadedArray[preloadedArray.length - 1];
     const lastInBuffer = util.parseDateUTC(strDate);
-    const nextDate = this.nextDate(lastInBuffer);
-    if (lastInBuffer >= endDate || nextDate > endDate) {
+    const next = nextDate(lastInBuffer);
+    if (lastInBuffer >= endDate || next > endDate) {
       return startDate;
     }
-    return nextDate;
-  }
+    return next;
+  };
 
   /**
    * Verifies that date is valid and adds it to queuer
-   *
-   * @param startDate {object} JS date
-   * @param endDate {object} JS date
    */
-  addItemToQueue(currentDate, startDate, endDate) {
-    const { speed } = this.props;
-    const nextDate = this.getNextBufferDate(currentDate, startDate, endDate);
-    const nextDateStr = util.toISOStringSeconds(nextDate);
+  const addItemToQueue = () => {
+    const next = getNextBufferDate(currentDate);
+    const nextDateStr = util.toISOStringSeconds(next);
 
     if (
-      !this.inQueueObject[nextDateStr]
-      && !this.preloadObject[nextDateStr]
-      && nextDate <= endDate
-      && nextDate >= startDate
+      !inQueueObject[nextDateStr]
+      && !preloadObject[nextDateStr]
+      && next <= endDate
+      && next >= startDate
     ) {
       setTimeout(() => {
-        this.addDate(nextDate);
-        this.checkQueue();
+        addDate(next);
+        checkQueue();
       }, Math.floor(1000 / speed));
     }
-  }
+  };
 
   /**
    * checks if this date is in array of dates that need
@@ -322,21 +276,19 @@ class PlayAnimation extends React.Component {
    *
    * @param testDate {string} JS date string
    */
-  isInToPlayGroup(testDate) {
-    const {
-      startDate, endDate, isLoopActive, queueLength,
-    } = this.props;
+  const isInToPlayGroup = (testDate) => {
     let i = 0;
-    let day = util.parseDateUTC(this.currentPlayingDate);
+    let day = util.parseDateUTC(currentPlayingDate);
     const jsTestDate = util.parseDateUTC(testDate);
+
     while (i < queueLength) {
-      if (this.nextDate(day) > endDate) {
+      if (nextDate(day) > endDate) {
         if (!isLoopActive) {
           return false;
         }
         day = startDate;
       } else {
-        day = this.nextDate(day);
+        day = nextDate(day);
       }
       if (day.valueOf() === jsTestDate.valueOf()) {
         return true;
@@ -344,138 +296,89 @@ class PlayAnimation extends React.Component {
       i += 1;
     }
     return false;
-  }
+  };
 
-  /**
-   * Gets next date based on current increments
-   * @param date {object} JS date obj
-   *
-   * @returns {object} JS Date
-   */
-  addDate(date) {
-    const { layers, promiseImageryForTime } = this.props;
-    const activeLayers = getLayersActiveAtDate(layers, date);
-    const strDate = util.toISOStringSeconds(date);
 
-    if (this.inQueueObject[strDate] || this.preloadObject[strDate]) {
-      return;
-    }
-
-    this.addToInQueue(date);
-    this.queue
-      .add(() => promiseImageryForTime(date, activeLayers))
-      .then((addedDate) => {
-        if (this.mounted) {
-          this.preloadObject[strDate] = addedDate;
-          delete this.inQueueObject[strDate];
-          this.shiftCache();
-          this.checkQueue();
-          this.checkShouldPlay();
-        }
-      });
-  }
-
-  /**
-   * removes loader and starts the animation
-   *
-   * @param index {string} date string
-   */
-  play(dateStr) {
-    const { togglePlaying } = this.props;
-    const { isPlaying } = this.state;
-    if (!isPlaying) this.setState({ isPlaying: true });
-
-    this.animate(dateStr);
+  const play = () => {
+    if (!isAnimating) isAnimating = true;
+    animate();
     if (document.hidden) {
       togglePlaying();
     }
-  }
+  };
 
-  stopPlaying() {
-    clearInterval(this.interval);
-    this.setState({ isPlaying: false });
-  }
+  const stopPlaying = () => {
+    clearInterval(timeout);
+    isAnimating = false;
+    console.log('stop!', isAnimating, isPlaying);
+  };
 
-  /**
-   * loops through frame at a specified time interval
-   *
-   * @param index {string} Date string
-   */
-  animate(index) {
-    const {
-      selectDate, endDate, speed, isPlaying,
-    } = this.props;
-    let currentDateStr = index;
+  const animate = () => {
+    let currentDateStr = currentPlayingDate;
     let nextDateStr;
     let nextDateParsed;
+    console.log('animate!', isAnimating, isPlaying);
+
     const player = () => {
-      if (!this.mounted) {
-        return clearInterval(this.interval);
-      }
       const currentDateParsed = util.parseDateUTC(currentDateStr);
-      nextDateParsed = this.nextDate(currentDateParsed);
+      nextDateParsed = nextDate(currentDateParsed);
       nextDateStr = util.toISOStringSeconds(nextDateParsed);
 
-      this.shiftCache();
-      this.checkQueue();
+      shiftCache();
+      checkQueue();
+
       if (isPlaying) {
         selectDate(currentDateParsed);
       }
-      this.pastDates[currentDateStr] = currentDateParsed;
-      this.currentPlayingDate = currentDateStr;
+      pastDates[currentDateStr] = currentDateParsed;
+      currentPlayingDate = currentDateStr;
 
       // Advance to next
       currentDateStr = nextDateStr;
 
       // End of animation range
       if (nextDateParsed > endDate) {
-        clearInterval(this.interval);
-        this.checkShouldLoop();
+        clearInterval(interval);
+        checkShouldLoop();
         return;
       }
 
       // Reached the end of preload
-      if (!this.preloadObject[nextDateStr]) {
-        this.stopPlaying();
-        this.shiftCache();
-        this.checkQueue();
+      if (!preloadObject[nextDateStr]) {
+        stopPlaying();
+        shiftCache();
+        checkQueue();
         return;
       }
-      if (!isPlaying || !this.mounted) {
-        this.stopPlaying();
+      if (!isPlaying) {
+        stopPlaying();
       }
-      this.checkQueue();
-      this.interval = setTimeout(player, 1000 / speed);
+      checkQueue();
+      timeout = setTimeout(player, 1000 / speed);
     };
-    this.interval = setTimeout(player, speed);
-  }
+    timeout = setTimeout(player, speed);
+  };
 
-  renderSpinner() {
-    const { onClose } = this.props;
-    return (
-      <Modal
-        isOpen
-        toggle={onClose}
-        size="sm"
-        backdrop={false}
-        wrapClassName="clickable-behind-modal"
-      >
-        <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
-        <ModalBody>
-          <div style={{ minHeight: 50 }}>
-            <Spinner color="#fff" loaded={false}>
-              Loaded
-            </Spinner>
-          </div>
-        </ModalBody>
-      </Modal>
-    );
-  }
+  const renderSpinner = () => (
+    <Modal
+      isOpen
+      toggle={onClose}
+      size="sm"
+      backdrop={false}
+      wrapClassName="clickable-behind-modal"
+    >
+      <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
+      <ModalBody>
+        <div style={{ minHeight: 50 }}>
+          <Spinner color="#fff" loaded={false}>
+            Loaded
+          </Spinner>
+        </div>
+      </ModalBody>
+    </Modal>
+  );
 
-  render() {
-    const { isPlaying } = this.state;
-    return !isPlaying ? this.renderSpinner() : '';
-  }
+  return !isAnimating ? renderSpinner() : '';
 }
 
 PlayAnimation.propTypes = {
