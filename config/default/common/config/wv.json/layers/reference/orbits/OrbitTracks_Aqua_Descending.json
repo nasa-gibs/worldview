@@ -9,28 +9,34 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "daynight": [
         "night"
       ],
       "track": "descending",
       "startDate": "2002-05-04",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_Aqua_Descending",
         "immutable": true
       },
-      "tags": "tracks night"
+      "tags": "tracks night",
+      "vectorStyle": {
+        "id": "OrbitTracks_Aqua_Descending",
+        "antarctic": {
+          "id": "OrbitTracks_Aqua_Descending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Aqua_Descending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

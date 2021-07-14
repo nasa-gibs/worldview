@@ -11,27 +11,33 @@
       "type": "wms",
       "period": "daily",
       "wrapadjacentdays": true,
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "daynight": [
         "day"
       ],
       "track": "descending",
       "startDate": "2015-06-24",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_Sentinel-2A_Descending",
         "immutable": true
-      }
+      },
+      "vectorStyle": {
+        "id": "OrbitTracks_Sentinel-2A_Descending",
+        "antarctic": {
+          "id": "OrbitTracks_Sentinel-2A_Descending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Sentinel-2A_Descending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

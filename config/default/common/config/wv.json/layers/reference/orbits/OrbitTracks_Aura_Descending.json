@@ -7,30 +7,36 @@
       "description": "reference/orbits/OrbitTracks_Aura_Descending",
       "group": "overlays",
       "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "daynight": [
         "night"
       ],
       "track": "descending",
       "startDate": "2004-07-15",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_Aura_Descending",
         "immutable": true
       },
-      "tags": "tracks night"
+      "tags": "tracks night",
+      "vectorStyle": {
+        "id": "OrbitTracks_Aura_Descending",
+        "antarctic": {
+          "id": "OrbitTracks_Aura_Descending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Aura_Descending_polar"
+        }
+      },
+      "modalShouldFollowClicks": true
     }
   }
 }

@@ -9,28 +9,34 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "daynight": [
         "night"
       ],
       "track": "ascending",
       "startDate": "2009-01-23",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_GOSAT_Ascending",
         "immutable": true
       },
-      "tags": "tracks day"
+      "tags": "tracks day",
+      "vectorStyle": {
+        "id": "OrbitTracks_GOSAT_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_GOSAT_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_GOSAT_Ascending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

@@ -9,25 +9,31 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "track": "descending",
       "startDate": "2014-02-27",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_GPM_Descending",
         "immutable": true
       },
-      "tags": "tracks descending"
+      "tags": "tracks descending",
+      "vectorStyle": {
+        "id": "OrbitTracks_GPM_Descending",
+        "antarctic": {
+          "id": "OrbitTracks_GPM_Descending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_GPM_Descending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

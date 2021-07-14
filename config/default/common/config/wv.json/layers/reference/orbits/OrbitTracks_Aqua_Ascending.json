@@ -14,6 +14,10 @@
         "reference_orbits"
       ],
       "inactive": false,
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true,
       "vectorStyle": {
         "id": "OrbitTracks_Aqua_Ascending",
         "arctic": {
