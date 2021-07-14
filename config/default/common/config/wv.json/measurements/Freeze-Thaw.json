@@ -2,7 +2,7 @@
     "measurements": {
         "Freeze/Thaw": {
             "id": "freeze-thaw",
-            "title":    "Freeze/Thaw",
+            "title": "Freeze/Thaw",
             "subtitle": "Aqua/AMSR-E, DMSP/SSMI, SMAP/Radar, SMAP/Radiometer",
             "sources": {
                 "Aqua/AMSR-E": {
@@ -23,15 +23,6 @@
                         "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI"
                     ]
                 },
-                "SMAP/Radar": {
-                    "id": "smap-radar",
-                    "title": "SMAP/Radar",
-                    "description": "smap/FreezeThaw",
-                    "image": "",
-                    "settings": [
-                        "SMAP_L3_Active_Day_Freeze_Thaw"
-                    ]
-                },
                 "SMAP/Radiometer": {
                     "id": "smap-radiometer",
                     "title": "SMAP/Radiometer",
@@ -42,7 +33,6 @@
                         "SMAP_L3_Passive_Enhanced_Night_Freeze_Thaw",
                         "SMAP_L3_Passive_Day_Freeze_Thaw",
                         "SMAP_L3_Passive_Night_Freeze_Thaw"
-
                     ]
                 }
             }

@@ -10,24 +10,30 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "track": "ascending",
       "startDate": "1998-11-20",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_ISS_Ascending",
         "immutable": true
-      }
+      },
+      "vectorStyle": {
+        "id": "OrbitTracks_ISS_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_ISS_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_ISS_Ascending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

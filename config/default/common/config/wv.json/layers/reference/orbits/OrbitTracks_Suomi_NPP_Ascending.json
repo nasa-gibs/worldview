@@ -11,27 +11,33 @@
       "type": "wms",
       "period": "daily",
       "wrapadjacentdays": true,
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "daynight": [
         "day"
       ],
       "track": "ascending",
       "startDate": "2011-10-28",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_Suomi_NPP_Ascending",
         "immutable": true
-      }
+      },
+      "vectorStyle": {
+        "id": "OrbitTracks_Suomi_NPP_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_Suomi_NPP_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Suomi_NPP_Ascending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

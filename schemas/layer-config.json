@@ -51,6 +51,12 @@
         "layergroup": {
           "type": "string"
         },
+        "clickDisabledFeatures": {
+          "type": "array"
+        },
+        "modalShouldFollowClicks": {
+          "type": "boolean"
+        },
         "product": {
           "anyOf": [
             {

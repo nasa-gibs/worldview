@@ -2,7 +2,7 @@
     "measurements": {
         "Ice Velocity Antarctica": {
             "id": "ice-velocity-antarctica",
-            "title":    "Ice Velocity (Antarctica)",
+            "title": "Ice Velocity (Antarctica)",
             "subtitle": "MEaSUREs",
             "sources": {
                 "SSMI": {
@@ -10,9 +10,7 @@
                     "title": "SSMI",
                     "description": "multi-mission/IceVelocityAntarctica",
                     "image": "",
-                    "settings": [
-                        "MEaSUREs_Ice_Velocity_Antarctica"
-                    ]
+                    "settings": []
                 }
             }
         }

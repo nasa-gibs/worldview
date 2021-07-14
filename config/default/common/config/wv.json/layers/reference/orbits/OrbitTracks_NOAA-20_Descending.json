@@ -10,27 +10,33 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "daynight": [
         "night"
       ],
       "track": "descending",
       "startDate": "2017-11-19",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_NOAA-20_Descending",
         "immutable": true
-      }
+      },
+      "vectorStyle": {
+        "id": "OrbitTracks_NOAA-20_Descending",
+        "antarctic": {
+          "id": "OrbitTracks_NOAA-20_Descending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_NOAA-20_Descending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

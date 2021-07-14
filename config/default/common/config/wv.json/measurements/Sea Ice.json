@@ -2,7 +2,7 @@
     "measurements": {
         "Sea Ice": {
             "id": "sea-ice",
-            "title":    "Sea Ice",
+            "title": "Sea Ice",
             "subtitle": "Aqua/MODIS, Aqua/AMSR-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
             "sources": {
                 "Aqua/MODIS": {
@@ -58,33 +58,6 @@
                         "GHRSST_L4_MUR_Sea_Ice_Concentration",
                         "GHRSST_L4_MUR25_Sea_Ice_Concentration",
                         "GHRSST_L4_GAMSSA_GDS2_Sea_Ice_Concentration"
-                    ]
-                },
-                "SSMI": {
-                    "id": "ssmi",
-                    "title": "SSMI",
-                    "description": "ssmi/SeaIceConcentration",
-                    "image": "",
-                    "settings": [
-                        "SSMIS_Sea_Ice_Concentration"
-                    ]
-                },
-                "SSMIS": {
-                    "id": "ssmis",
-                    "title": "SSMIS",
-                    "description": "ssmi/SeaIceConcentrationSnowExtent",
-                    "image": "",
-                    "settings": [
-                        "SSMIS_Sea_Ice_Concentration_Snow_Extent"
-                    ]
-                },
-                "MEaSUREs": {
-                    "id": "measures",
-                    "title": "MEaSUREs",
-                    "description": "multi-mission/SeaIceandSnowExtent",
-                    "image": "",
-                    "settings": [
-                        "MEaSUREs_Sea_Ice_Snow_Extent"
                     ]
                 }
             }

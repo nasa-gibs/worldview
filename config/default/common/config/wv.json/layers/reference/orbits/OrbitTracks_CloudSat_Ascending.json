@@ -10,28 +10,34 @@
       "type": "wms",
       "period": "daily",
       "wrapadjacentdays": true,
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "daynight": [
         "day"
       ],
       "track": "ascending",
       "startDate": "2006-06-06",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_CloudSat_Ascending",
         "immutable": true
       },
-      "tags": "tracks day"
+      "tags": "tracks day",
+      "vectorStyle": {
+        "id": "OrbitTracks_CloudSat_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_CloudSat_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_CloudSat_Ascending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

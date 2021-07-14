@@ -17,21 +17,25 @@
       "source-description": "Default",
       "type": "circle",
       "paint": {
-        "circle-radius":[
+        "circle-radius": [
           "step",
           [
             "zoom"
           ],
           1,
-          17,
           2,
-          19,
+          2,
           3,
-          22,
+          3,
+          4,
           7
         ],
-        "circle-color": ["match",
-          ["get", "MAIN_USE"],
+        "circle-color": [
+          "match",
+          [
+            "get",
+            "MAIN_USE"
+          ],
           "Fisheries",
           "rgb(152, 230, 0)",
           "Flood control",

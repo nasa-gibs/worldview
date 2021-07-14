@@ -9,28 +9,34 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": "Orbital Track",
+      "layergroup": [
+        "vector",
+        "reference",
+        "reference_orbits"
+      ],
       "daynight": [
         "night"
       ],
       "track": "ascending",
       "startDate": "2013-02-11",
-      "projections": {
-        "antarctic": {
-          "source": "GIBS:wms:antarctic"
-        },
-        "arctic": {
-          "source": "GIBS:wms:arctic"
-        },
-        "geographic": {
-          "source": "GIBS:wms"
-        }
-      },
       "palette": {
         "id": "OrbitTracks_Landsat-8_Ascending",
         "immutable": true
       },
-      "tags": "tracks night"
+      "tags": "tracks night",
+      "vectorStyle": {
+        "id": "OrbitTracks_Landsat-8_Ascending",
+        "antarctic": {
+          "id": "OrbitTracks_Landsat-8_Ascending_polar"
+        },
+        "arctic": {
+          "id": "OrbitTracks_Landsat-8_Ascending_polar"
+        }
+      },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
+      "modalShouldFollowClicks": true
     }
   }
 }

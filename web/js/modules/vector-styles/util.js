@@ -60,17 +60,7 @@ export function adjustCircleRadius(style) {
     }),
   });
 }
-export function getOrbitPointStyles(feature, styleArray) {
-  return styleArray.map((style) => {
-    const type = feature.getType();
-    switch (type) {
-      case 'Point':
-        return adjustCircleRadius(style);
-      default:
-        return style;
-    }
-  });
-}
+
 export function selectedCircleStyle(style, size = 2) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
@@ -107,6 +97,7 @@ export function offsetLineStringStyle(feature, styleArray) {
     return style;
   });
 }
+
 export function selectedStyleFunction(feature, styleArray, size) {
   if (styleArray.length !== 1) return styleArray;
   return styleArray.map((style) => {
@@ -218,13 +209,13 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
   const selected = {};
   let isCoordinatesMarker = false;
   const { pixels, map, swipeOffset } = mapProps;
+  let modalShouldFollowClicks = false;
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-marker') {
       isCoordinatesMarker = true;
       return;
     }
-
     const def = lodashGet(layer, 'wv.def');
     if (!def) {
       return;
@@ -249,7 +240,7 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = titleKey ? features[titleKey] : 'Unknown title';
       if (selected[layerId].includes(uniqueIdentifier)) return;
-
+      if (def.modalShouldFollowClicks) modalShouldFollowClicks = true;
       const obj = {
         legend: properties,
         features,
@@ -263,7 +254,9 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       selected[layerId].push(uniqueIdentifier);
     }
   });
-  return { selected, metaArray, isCoordinatesMarker };
+  return {
+    selected, metaArray, isCoordinatesMarker, modalShouldFollowClicks,
+  };
 }
 /**
  * Get organized vector modal contents for clicked
@@ -287,13 +280,16 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   };
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
-  const { selected, metaArray, isCoordinatesMarker } = getModalContentsAtPixel(mapProps, config, compare);
+  const {
+    selected, metaArray, isCoordinatesMarker, modalShouldFollowClicks,
+  } = getModalContentsAtPixel(mapProps, config, compare);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
     isCoordinatesMarker,
+    modalShouldFollowClicks,
   };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {
