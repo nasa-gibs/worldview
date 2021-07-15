@@ -72,6 +72,7 @@
       "source": "MODIS_Aqua_Thermal_Anomalies_All",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -79,9 +80,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -92,6 +93,7 @@
       "source": "MODIS_Aqua_Thermal_Anomalies_Day",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_Day_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -99,9 +101,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -112,6 +114,7 @@
       "source": "MODIS_Aqua_Thermal_Anomalies_Night",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -119,9 +122,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -132,6 +135,7 @@
       "source": "MODIS_Combined_Thermal_Anomalies_All",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -139,9 +143,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -152,6 +156,7 @@
       "source": "MODIS_Combined_Thermal_Anomalies_Day",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_Day_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -159,9 +164,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -172,6 +177,7 @@
       "source": "MODIS_Combined_Thermal_Anomalies_Night",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -179,9 +185,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -192,6 +198,7 @@
       "source": "MODIS_Terra_Thermal_Anomalies_All",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -199,9 +206,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -212,6 +219,7 @@
       "source": "MODIS_Terra_Thermal_Anomalies_Day",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_Day_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -219,9 +227,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -232,6 +240,7 @@
       "source": "MODIS_Terra_Thermal_Anomalies_Night",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_Night_v6_NRT",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -239,9 +248,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -252,6 +261,7 @@
       "source": "MODIS_Aqua_Thermal_Anomalies_All",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -259,9 +269,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -272,6 +282,7 @@
       "source": "MODIS_Aqua_Thermal_Anomalies_Day",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_Day_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -279,9 +290,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -292,6 +303,7 @@
       "source": "MODIS_Aqua_Thermal_Anomalies_Night",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -299,9 +311,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -312,6 +324,7 @@
       "source": "MODIS_Combined_Thermal_Anomalies_All",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -319,9 +332,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -332,6 +345,7 @@
       "source": "MODIS_Combined_Thermal_Anomalies_Day",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_Day_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -339,9 +353,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -352,6 +366,7 @@
       "source": "MODIS_Combined_Thermal_Anomalies_Night",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -359,9 +374,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -372,6 +387,7 @@
       "source": "MODIS_Terra_Thermal_Anomalies_All",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -379,9 +395,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -392,6 +408,7 @@
       "source": "MODIS_Terra_Thermal_Anomalies_Day",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_Day_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -399,9 +416,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
@@ -412,6 +429,7 @@
       "source": "MODIS_Terra_Thermal_Anomalies_Night",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_Night_v6_STD",
       "type": "circle",
+      "square": true,
       "paint": {
         "circle-radius": [
           "step",
@@ -419,9 +437,9 @@
             "zoom"
           ],
           1,
+          5,
           2,
-          2,
-          4,
+          8,
           3
         ],
         "circle-color": "rgb(236, 98, 16)"
