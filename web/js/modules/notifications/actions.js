@@ -5,7 +5,7 @@ import {
   NOTIFICATIONS_SEEN,
 } from './constants';
 
-export function requestNotifications(location, type) {
+export function requestNotifications(location) {
   return (dispatch) => requestAction(dispatch, REQUEST_NOTIFICATIONS, location);
 }
 export function setNotifications(array) {

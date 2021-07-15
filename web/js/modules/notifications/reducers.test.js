@@ -53,6 +53,7 @@ describe('notificationsReducer', () => {
         }),
       ).toEqual({
         number: 1,
+        numberUnseen: 1,
         type: 'outage',
         isActive: true,
         object: constants.MOCK_SORTED_NOTIFICATIONS,
@@ -69,6 +70,7 @@ describe('notificationsReducer', () => {
         }),
       ).toEqual({
         number: null,
+        numberUnseen: null,
         type: '',
         isActive: true,
         object: {},
