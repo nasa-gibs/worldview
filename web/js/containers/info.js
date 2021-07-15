@@ -35,7 +35,7 @@ function InfoList (props) {
   } = props;
 
   function getNotificationListItem() {
-    const { number, type, object } = notifications;
+    const { numberUnseen, type, object } = notifications;
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
@@ -45,10 +45,10 @@ function InfoList (props) {
           ? 'exclamation-circle'
           : ['fas', 'bolt'],
       id: 'notifications_info_item',
-      badge: number,
+      badge: numberUnseen,
       className: type ? `${type}-notification` : '',
       onClick: () => {
-        notificationClick(object, number);
+        notificationClick(object, numberUnseen);
       },
     };
   }
@@ -135,7 +135,7 @@ function InfoList (props) {
         arr.splice(1, 0, getExploreWorldviewObj());
       }
     }
-    if (notifications.isActive) {
+    if (notifications.isActive && notifications.number > 0) {
       arr.splice(4, 0, getNotificationListItem());
     }
     arr.push(getDistractionFreeObj());
@@ -171,13 +171,13 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(initFeedback());
     }
   },
-  notificationClick: (obj, num) => {
+  notificationClick: (obj, numberUnseen) => {
     dispatch(
       openCustomContent('NOTIFICATION_LIST_MODAL', {
         headerText: 'Notifications',
         bodyComponent: Notifications,
         onClose: () => {
-          if (num > 0) {
+          if (numberUnseen > 0) {
             dispatch(notificationsSeen());
             addToLocalStorage(obj);
           }

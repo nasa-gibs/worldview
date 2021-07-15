@@ -44,7 +44,7 @@ module.exports = {
     c.assert.containsText(infoMenu, 'Notifications');
     c.expect.element(notificationsListItem).to.be.present;
   },
-  'Verify that layer notices don\'t show up in the nofication list or contribute to the count': function(c) {
+  'Verify that layer notices don\'t show up in the notification list or contribute to the count': function(c) {
     c.waitForElementVisible('#notifications_info_item', TIME_LIMIT);
     c.expect.element('span.badge').to.be.present;
     c.assert.containsText('span.badge', '3');
@@ -65,7 +65,7 @@ module.exports = {
       'This is a message test',
     );
   },
-  'Verify that the user is only alerted if he has not already stored all items in localStorage': function(c) {
+  'Verify that the user is only alerted if they have not already stored all items in localStorage': function(c) {
     c.click('#notification_list_modal .close')
       .pause(500);
     c.waitForElementVisible(infoButtonIcon, TIME_LIMIT);

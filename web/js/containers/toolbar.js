@@ -22,9 +22,6 @@ import {
   requestNotifications,
   setNotifications,
 } from '../modules/notifications/actions';
-import {
-  REQUEST_NOTIFICATIONS,
-} from '../modules/notifications/constants';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
@@ -471,7 +468,7 @@ const mapDispatchToProps = (dispatch) => ({
   }),
   requestNotifications: (location) => {
     const promise = dispatch(
-      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json'),
+      requestNotifications(location),
     );
     promise.then((data) => {
       const obj = JSON.parse(data);
