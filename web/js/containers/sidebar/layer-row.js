@@ -28,7 +28,7 @@ import OrbitTrack from './orbit-track';
 import Zot from './zot';
 import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
-import { getActiveLayers } from '../../modules/layers/selectors';
+import { getActiveLayers, makeGetDescription } from '../../modules/layers/selectors';
 
 const { events } = util;
 const { vectorModalProps } = MODAL_PROPERTIES;
@@ -72,6 +72,7 @@ function LayerRow (props) {
     tracksForLayer,
     isVectorLayer,
     runningObject,
+    measurementDescriptionPath,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -106,8 +107,8 @@ function LayerRow (props) {
     }
   };
 
-  // Request the layer palette only if it hasn't been loaded and is not currently being loaded
   useEffect(() => {
+    // Request the layer palette only if it hasn't been loaded and is not currently being loaded
     if (!isLoading && layer && hasPalette && lodashIsEmpty(renderedPalette)) {
       requestPalette(layer.id);
     }
@@ -186,7 +187,7 @@ function LayerRow (props) {
           aria-label={layerInfoBtnTitle}
           className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
           onMouseDown={stopPropagation}
-          onClick={() => onInfoClick(layer, title)}
+          onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
         >
           <UncontrolledTooltip placement="top" target={layerInfoBtnId}>
             {layerInfoBtnTitle}
@@ -334,49 +335,55 @@ function LayerRow (props) {
   );
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const {
-    layer,
-    isVisible,
-    compareState,
-  } = ownProps;
-  const {
-    palettes, config, embed, map, compare, proj, ui,
-  } = state;
-  const { isDistractionFreeModeActive } = ui;
-  const hasPalette = !lodashIsEmpty(layer.palette);
-  const renderedPalettes = palettes.rendered;
-  const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
-  const paletteLegends = hasPalette && renderedPalettes[paletteName]
-    ? getPaletteLegends(layer.id, compareState, state)
-    : [];
-  const isCustomPalette = hasPalette && palettes.custom[layer.id];
-  const { isEmbedModeActive } = embed;
-  const selectedMap = lodashGet(map, 'ui.selected');
-  const isVector = layer.type === 'vector';
-  const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
-  const tracksForLayer = getActiveLayers(state).filter(
-    (activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track),
-  );
+const makeMapStateToProps = () => {
+  const getDescriptionPath = makeGetDescription();
+  return (state, ownProps) => {
+    const {
+      layer,
+      isVisible,
+      compareState,
+    } = ownProps;
+    const {
+      palettes, config, embed, map, compare, proj, ui,
+    } = state;
+    const { isDistractionFreeModeActive } = ui;
+    const hasPalette = !lodashIsEmpty(layer.palette);
+    const renderedPalettes = palettes.rendered;
+    const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
+    const paletteLegends = hasPalette && renderedPalettes[paletteName]
+      ? getPaletteLegends(layer.id, compareState, state)
+      : [];
+    const isCustomPalette = hasPalette && palettes.custom[layer.id];
+    const { isEmbedModeActive } = embed;
+    const selectedMap = lodashGet(map, 'ui.selected');
+    const isVector = layer.type === 'vector';
+    const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
+    const tracksForLayer = getActiveLayers(state).filter(
+      (activeLayer) => (layer.tracks || []).some((track) => activeLayer.id === track),
+    );
+    const measurementDescriptionPath = getDescriptionPath(state, ownProps);
 
-  return {
-    compare,
-    tracksForLayer,
-    layer,
-    isVisible,
-    paletteLegends,
-    isCustomPalette,
-    isDistractionFreeModeActive,
-    isEmbedModeActive,
-    isLoading: palettes.isLoading[paletteName],
-    renderedPalette: renderedPalettes[paletteName],
-    isVectorLayer: isVector,
-    hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id),
-    isMobile: state.browser.lessThan.medium,
-    hasPalette,
-    getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
+    return {
+      compare,
+      tracksForLayer,
+      layer,
+      measurementDescriptionPath,
+      isCustomPalette,
+      isDistractionFreeModeActive,
+      isEmbedModeActive,
+      isLoading: palettes.isLoading[paletteName],
+      isMobile: state.browser.lessThan.medium,
+      isVisible,
+      isVectorLayer: isVector,
+      hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id),
+      hasPalette,
+      getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
+      paletteLegends,
+      renderedPalette: renderedPalettes[paletteName],
+    };
   };
 };
+
 
 const mapDispatchToProps = (dispatch) => ({
   toggleVisibility: (id, isVisible) => {
@@ -410,7 +417,7 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  onInfoClick: (layer, title) => {
+  onInfoClick: (layer, title, description) => {
     const key = `LAYER_INFO_MODAL-${layer.id}`;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_info',
@@ -428,6 +435,7 @@ const mapDispatchToProps = (dispatch) => ({
         size: 'lg',
         bodyComponentProps: {
           layer,
+          measurementDescriptionPath: description,
         },
       }),
     );
@@ -438,7 +446,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(
-  mapStateToProps,
+  makeMapStateToProps,
   mapDispatchToProps,
 )(LayerRow);
 
@@ -462,6 +470,7 @@ LayerRow.propTypes = {
   isVisible: PropTypes.bool,
   layer: PropTypes.object,
   compareState: PropTypes.string,
+  measurementDescriptionPath: PropTypes.string,
   names: PropTypes.object,
   onInfoClick: PropTypes.func,
   onOptionsClick: PropTypes.func,
