@@ -19,4 +19,4 @@ The MODIS Corrected Reflectance algorithm utilizes MODIS Level 1B data (the cali
 
 NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
 
-References: MOD09 NRT [doi:10.5067/MODIS/MOD09.NRT.061](https://doi.org/10.5067/MODIS/MOD09.NRT.061); MOD09 [doi:10.5067/MODIS/MOD09.061](https://doi.org/10.5067/MODIS/MOD09.061)
+References: MYD09 NRT [doi:10.5067/MODIS/MYD09.NRT.061](https://doi.org/10.5067/MODIS/MYD09.NRT.061); MYD09 [doi:10.5067/MODIS/MYD09.061](https://doi.org/10.5067/MODIS/MYD09.061)

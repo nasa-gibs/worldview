@@ -87,7 +87,8 @@
                         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
                         "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
-                        "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean"
+                        "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
+                        "OrbitTracks_Suomi_NPP_Ascending"
                       ]
                 },
                 "MERRA-2": {

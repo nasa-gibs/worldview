@@ -10,7 +10,7 @@ This layer is the combined Aerosol Optical Depth at 550 nm, only populated for t
 
 The VIIRS Deep Blue Aerosol Optical Thickness layer is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite (`AERDB_L2_VIIRS_SNPP_NRT`) for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
 
-References: [doi:10.5067/VIIRS/AERDB\_L2\_VIIRS\_SNPP\_NRT.001](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.001); [doi:10.5067/VIIRS/AERDB\_L2\_VIIRS\_SNPP.001](https://dx.doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.001)
+References: AERDB_L2_VIIRS_SNPP_NRT [doi:10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.001](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.001); AERDB_L2_VIIRS_SNPP [doi:10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.011](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.011)
 
 ### Deep Blue Aerosol Angstrom Exponent
 Temporal coverage: 1 March 2012 - present
@@ -21,7 +21,7 @@ The VIIRS Deep Blue Aerosol Angstrom Exponent layer can be used to provide addit
 
 The VIIRS Deep Blue Aerosol Ångström Exponent layer is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite (`AERDB_L2_VIIRS_SNPP_NRT`) for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
 
-References: [doi:10.5067/VIIRS/AERDB\_L2\_VIIRS\_SNPP\_NRT.001](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.001); [doi:10.5067/VIIRS/AERDB\_L2\_VIIRS\_SNPP.001](https://dx.doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.001)
+References: AERDB_L2_VIIRS_SNPP_NRT [doi:10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.001](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP_NRT.001); AERDB_L2_VIIRS_SNPP [doi:10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.011](https://doi.org/10.5067/VIIRS/AERDB_L2_VIIRS_SNPP.011)
 
 ### Dark Target Aerosol Optical Thickness
 Temporal coverage: 1 March 2012 - present
@@ -32,7 +32,7 @@ This layer is created from two separate and distinct DT algorithms. One helps re
 
 The VIIRS Dark Target Aerosol Ångström Exponent layer is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite (`AERDT_L2_VIIRS_SNPP`) for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
 
-References: [doi:10.5067/VIIRS/AERDT\_L2\_VIIRS\_SNPP.001](https://doi.org/10.5067/VIIRS/AERDT_L2_VIIRS_SNPP.001)
+References: AERDT_L2_VIIRS_SNPP [doi:10.5067/VIIRS/AERDT_L2_VIIRS_SNPP.001](https://doi.org/10.5067/VIIRS/AERDT_L2_VIIRS_SNPP.001)
 
 ### Dark Target Aerosol Angstrom Exponent
 Temporal coverage: 1 March 2012 - present
@@ -43,4 +43,4 @@ This layer is created from two separate and distinct DT algorithms. One helps re
 
 The VIIRS Dark Target Aerosol Ångström Exponent layer is available from the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite (`AERDT_L2_VIIRS_SNPP`) for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
 
-References: [doi:10.5067/VIIRS/AERDT\_L2\_VIIRS\_SNPP.001](https://doi.org/10.5067/VIIRS/AERDT_L2_VIIRS_SNPP.001)
+References: AERDT_L2_VIIRS_SNPP [doi:10.5067/VIIRS/AERDT_L2_VIIRS_SNPP.001](https://doi.org/10.5067/VIIRS/AERDT_L2_VIIRS_SNPP.001)
