@@ -12,7 +12,7 @@ const ZOOM_DURATION = 250;
  * @param {Object} map - OpenLayers Map Object
  * @param {number} amount - Direction and
  *  amount to zoom
- * @param {number} duation - length of animation
+ * @param {number} duration - length of animation
  * @param {array} center - point to center zoom
  *
  * @returns {void}

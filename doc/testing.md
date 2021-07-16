@@ -30,7 +30,7 @@ To run the end-to-end tests using Firefox in a docker container, create an image
 
 ### Browserstack
 
-Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, `Internet Explorer(windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
+Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
 
 To run tests in BrowserStack from your local machine:
 
