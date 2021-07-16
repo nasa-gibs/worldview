@@ -134,7 +134,7 @@ class ModalContainer extends Component {
 
     const isRestrictedDisplay = (isMobile && desktopOnly)
       || (!isMobile && mobileOnly)
-      || (isEmbedModeActive && size === 'lg');
+      || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
     if (isRestrictedDisplay) {
       return null;
     }
