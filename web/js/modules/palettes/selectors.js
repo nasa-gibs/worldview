@@ -7,7 +7,7 @@ import {
   cloneDeep as lodashCloneDeep,
 } from 'lodash';
 import update from 'immutability-helper';
-import { getMinValue, getMaxValue, isSupported } from './util';
+import { getMinValue, getMaxValue } from './util';
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -498,9 +498,6 @@ function prepare(layerId, palettesObj, state) {
 }
 
 export function isPaletteAllowed(layerId, config) {
-  if (!isSupported()) {
-    return false;
-  }
   const { palette } = config.layers[layerId];
   if (!palette || palette.immutable) {
     return false;

@@ -6,7 +6,6 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SwipeToDelete from 'react-swipe-to-delete-component';
 import SearchLayerRow from './search-layer-row';
-import 'whatwg-fetch'; // fetch() polyfill for IE
 import {
   selectLayer as selectLayerAction,
   clearSingleRecentLayer as clearSingleRecentLayerAction,

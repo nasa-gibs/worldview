@@ -137,12 +137,6 @@ class Timeline extends React.Component {
 
     // change timescale
     this.debounceWheelTime = 60;
-
-    // IE11 specific - increase wheel timing to handle performance issues
-    if (window.navigator.userAgent.match(/Trident\/7\./)) {
-      this.debounceWheelTime = 2500;
-    }
-
     this.debounceChangeTimeScaleWheel = lodashDebounce(this.throttleChangeTimeScaleWheel, this.debounceWheelTime, throttleSettings);
     this.throttleChangeTimeScaleWheelFire = lodashThrottle(this.changeTimeScaleScroll, 200, throttleSettings);
 

@@ -181,7 +181,6 @@
     "compression": "^1.7.4",
     "coordinate-parser": "^1.0.4",
     "copy-to-clipboard": "^3.3.1",
-    "core-js": "^3.6.4",
     "elm-pep": "^1.0.6",
     "file-saver": "^2.0.2",
     "geographiclib": "^1.50.0",
@@ -225,17 +224,13 @@
     "shp-write": "^0.3.2",
     "simplebar-react": "^2.1.0",
     "supercluster": "7.0.0",
-    "web-streams-polyfill": "^2.0.6",
-    "what-input": "^5.2.7",
-    "whatwg-fetch": "^3.0.0"
+    "what-input": "^5.2.7"
   },
   "browserslist": [
-    "last 4 versions",
-    "not ie < 11",
-    "not edge < 17",
-    "not IE_Mob 11",
+    "last 2 versions",
+    "not IE 11",
     "not dead",
-    "> 2%"
+    "> 1%"
   ],
   "jest": {
     "setupFiles": [

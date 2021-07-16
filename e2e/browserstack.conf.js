@@ -57,13 +57,6 @@ const nightwatchConfig = {
         'browserstack.geckodriver': '0.24.0',
       },
     },
-    ie: {
-      desiredCapabilities: {
-        browser: 'internet explorer',
-        'browserstack.selenium_version': '2.53.0',
-      },
-    },
-
   },
 };
 
