@@ -146,6 +146,17 @@ export function hasMeasurementSource(current, config, projId) {
   return hasSource;
 }
 
+export const makeGetDescription = () => createSelector(
+  [getConfig, getLayerId],
+  (config, layerId) => {
+    const measurements = Object.values(config.measurements);
+    const [setting] = measurements
+      .flatMap(({ sources }) => Object.values(sources))
+      .filter(({ settings }) => settings.find((id) => id === layerId));
+    return (setting || {}).description;
+  },
+);
+
 /**
  * Look up the measurement description path for a given layer
  * so that metadata can be shown in the layer info modal.  Ignore
