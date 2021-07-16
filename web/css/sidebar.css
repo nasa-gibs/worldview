@@ -459,6 +459,10 @@ footer .compare-toggle-button {
 
 .layer-info-modal {
   width: 500px;
+  .modal-body {
+    overflow-y: scroll;
+    max-height: calc(100vh - 200px);
+  }
 }
 
 .layer-settings-modal {

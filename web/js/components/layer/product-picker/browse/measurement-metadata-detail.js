@@ -72,13 +72,13 @@ class MeasurementMetadataDetail extends React.Component {
           <h3>{title}</h3>
         </div>
         <div className="source-metadata">
+          <div dangerouslySetInnerHTML={{ __html: data }} />
           {layers.map((layer) => (
-            <div key={layer.id}>
+            <div className="layer-descriptionx" key={layer.id}>
               <h3>{layer.title}</h3>
               <LayerInfo key={layer.id} layer={layer} />
             </div>
           ))}
-          <div dangerouslySetInnerHTML={{ __html: data }} />
         </div>
       </div>
     );

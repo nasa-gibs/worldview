@@ -293,6 +293,9 @@
 .layer-metadata ul {
   list-style-position: inside;
 }
+.layer-metadata hr {
+  background: #aaa;
+}
 
 .layers-all .source-metadata div,
 .layers-all .source-metadata p,

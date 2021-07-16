@@ -18,6 +18,8 @@ const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
 const getCompareState = ({ compare }) => compare;
 const getLayerState = ({ layers }) => layers;
+const getConfig = ({ config }) => config;
+const getLayerId = (state, { layer }) => layer.id;
 
 /**
  * Is overlay grouping currently enabled?
@@ -143,6 +145,17 @@ export function hasMeasurementSource(current, config, projId) {
   });
   return hasSource;
 }
+
+export const makeGetDescription = () => createSelector(
+  [getConfig, getLayerId],
+  (config, layerId) => {
+    const measurements = Object.values(config.measurements);
+    const [setting] = measurements
+      .flatMap(({ sources }) => Object.values(sources))
+      .filter(({ settings }) => settings.find((id) => id === layerId));
+    return (setting || {}).description;
+  },
+);
 
 /**
  * var hasMeasurementSetting - Checks the (current) measurement's source
