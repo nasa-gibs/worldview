@@ -89,7 +89,7 @@ function InfoList (props) {
       ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
       : {
         onClick: () => {
-          sendFeedback(feedbackIsInitiated);
+          sendFeedback(feedbackIsInitiated, isMobile);
         },
       };
     const arr = [
@@ -165,8 +165,8 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDistractionFreeMode: () => {
     dispatch(toggleDistractionFreeModeAction());
   },
-  sendFeedback: (isInitiated) => {
-    onClickFeedback(isInitiated);
+  sendFeedback: (isInitiated, isMobile) => {
+    onClickFeedback(isInitiated, isMobile);
     if (!isInitiated) {
       dispatch(initFeedback());
     }

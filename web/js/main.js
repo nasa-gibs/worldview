@@ -1,10 +1,8 @@
 /* global DEBUG */
-// IE11 corejs polyfills container
-import 'core-js/stable';
+// polyfills
 import 'elm-pep';
 import 'regenerator-runtime/runtime';
-// IE11 corejs polyfills container
-import 'whatwg-fetch';
+// polyfills
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

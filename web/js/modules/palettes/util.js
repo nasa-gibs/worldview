@@ -221,11 +221,6 @@ export function parseLegacyPalettes(
   return stateFromLocation;
 }
 
-export function isSupported() {
-  const { browser } = util;
-  return !(browser.ie || !browser.webWorkers || !browser.cors);
-}
-
 /**
  * Serialize palette info for layer
  *
@@ -339,9 +334,6 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
  */
 export function loadPalettes(permlinkState, state) {
   let stateArray = [{ stateStr: 'l', groupStr: 'active' }];
-  if (!isSupported()) {
-    return state;
-  }
   if (permlinkState.l1) {
     stateArray = [
       { stateStr: 'l', groupStr: 'active' },
