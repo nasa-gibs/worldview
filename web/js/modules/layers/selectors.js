@@ -158,7 +158,9 @@ export const makeGetDescription = () => createSelector(
     if (layergroup === 'Orbital Track') {
       return;
     }
-    const [setting] = Object.values(measurements)
+    const [setting] = Object.keys(measurements)
+      .filter((key) => !key.includes('Featured'))
+      .map((key) => measurements[key])
       .flatMap(({ sources }) => Object.values(sources))
       .filter(({ settings }) => settings.find((id) => id === layerId));
     return (setting || {}).description;
