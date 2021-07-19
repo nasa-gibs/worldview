@@ -146,11 +146,19 @@ export function hasMeasurementSource(current, config, projId) {
   return hasSource;
 }
 
+/**
+ * Look up the measurement description path for a given layer
+ * so that metadata can be shown in the layer info modal.  Ignore
+ * Orbital Track layers since they will be in multiple measurements.
+ */
 export const makeGetDescription = () => createSelector(
   [getConfig, getLayerId],
-  (config, layerId) => {
-    const measurements = Object.values(config.measurements);
-    const [setting] = measurements
+  ({ layers, measurements }, layerId) => {
+    const { layergroup } = layers[layerId];
+    if (layergroup === 'Orbital Track') {
+      return;
+    }
+    const [setting] = Object.values(measurements)
       .flatMap(({ sources }) => Object.values(sources))
       .filter(({ settings }) => settings.find((id) => id === layerId));
     return (setting || {}).description;
