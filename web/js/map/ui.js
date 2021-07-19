@@ -817,9 +817,7 @@ export default function mapui(models, config, store, ui) {
             }
           });
         }
-        setTimeout(() => {
-          setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
-        }, 10);
+        setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
       }
     });
     updateLayerVisibilities();
