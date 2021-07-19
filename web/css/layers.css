@@ -285,6 +285,7 @@
   line-height: 16px;
   margin-bottom: 15px;
 }
+
 .layer-metadata li,
 .source-metadata li {
   line-height: 16px;
@@ -301,7 +302,7 @@
 .layers-all .source-metadata p,
 .layers-all .source-metadata span,
 .layers-all .source-metadata code {
-  color: #bbb;
+  color: #666;
 }
 
 .layer-date-range,

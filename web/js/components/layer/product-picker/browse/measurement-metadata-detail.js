@@ -1,58 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { layer } from '@fortawesome/fontawesome-svg-core';
 import util from '../../../../util/util';
 import { getMeasurementSource } from '../../../../modules/product-picker/selectors';
 import LayerInfo from '../../info/info';
 
-class MeasurementMetadataDetail extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isMetadataExpanded: false,
-      sourceMetaData: {},
-    };
-  }
+function MeasurementMetadataDetail (props) {
+  const {
+    isMobile, source, layers, categoryTitle,
+  } = props;
+  const [isMetadataExpanded, setMetadataExpansion] = useState(false);
+  const [metadata, setMetadata] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  /**
-   * Toggle switch for the metadata info button and close arrow
-   * @method toggleMetadataButtons
-   * @return {void}
-   */
-  toggleMetadataExpansion() {
-    this.setState((prevState) => ({
-      isMetadataExpanded: !prevState.isMetadataExpanded,
-    }));
-  }
+  const metadataPath = source && source.description;
+  const metadataForSource = metadata[metadataPath] && metadata[metadataPath].data;
 
-  getSourceMetadata() {
-    const { source } = this.props;
-    if (source.description) {
-      util.get(`config/metadata/layers/${source.description}.html`).then((data) => {
-        if (data) {
-          const { sourceMetaData } = this.state;
-          sourceMetaData[source.description] = { data };
-          this.setState({ sourceMetaData });
-        }
-      });
+  useEffect(() => {
+    if (metadataPath && !metadataForSource) {
+      util
+        .get(`config/metadata/layers/${metadataPath}.html`)
+        .then((data) => {
+          metadata[metadataPath] = { data };
+          setMetadata(metadata);
+          setLoading(false);
+        }).catch(() => { setLoading(false); });
     }
-  }
+  }, [source]);
 
-  renderMobile(data) {
-    const { isMetadataExpanded } = this.state;
-    const doesMetaDataNeedExpander = data.length >= 1000;
+  const renderMetadataForLayers = () => layers.map((l) => (
+    <div className="layer-description" key={l.id}>
+      <h3>{l.title}</h3>
+      <LayerInfo key={l.id} layer={l} />
+    </div>
+  ));
+
+  const renderMobile = () => {
+    const sourceTextLong = metadataForSource && metadataForSource.length >= 1000;
+    const manylayers = layers && layer.length > 0;
+    const doesMetaDataNeedExpander = sourceTextLong || manylayers;
     const isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
     return (
       <div>
         <div
           className={isMetaVisible ? 'source-metadata ' : 'source-metadata overflow'}
-          dangerouslySetInnerHTML={{ __html: data }}
-        />
+        >
+          <div dangerouslySetInnerHTML={{ __html: metadataForSource }} />
+          {renderMetadataForLayers()}
+        </div>
         {doesMetaDataNeedExpander && (
           <div
             className="metadata-more"
-            onClick={() => this.toggleMetadataExpansion()}
+            onClick={() => setMetadataExpansion(!isMetadataExpanded)}
           >
             <span className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}>
               {isMetadataExpanded ? '^' : '...'}
@@ -61,10 +62,9 @@ class MeasurementMetadataDetail extends React.Component {
         )}
       </div>
     );
-  }
+  };
 
-  renderDesktop(data) {
-    const { source, layers } = this.props;
+  const renderDesktop = () => {
     const { title } = source;
     return (
       <div className="layers-all-layer">
@@ -72,54 +72,44 @@ class MeasurementMetadataDetail extends React.Component {
           <h3>{title}</h3>
         </div>
         <div className="source-metadata">
-          <div dangerouslySetInnerHTML={{ __html: data }} />
-          {layers.map((layer) => (
-            <div className="layer-descriptionx" key={layer.id}>
-              <h3>{layer.title}</h3>
-              <LayerInfo key={layer.id} layer={layer} />
-            </div>
-          ))}
+          <div dangerouslySetInnerHTML={{ __html: metadataForSource }} />
+          {renderMetadataForLayers()}
         </div>
+      </div>
+    );
+  };
+
+  /* No source selected yet */
+  if (!isMobile && !source) {
+    return (
+      <div className="no-results">
+        <FontAwesomeIcon icon="map" />
+        <h3>{categoryTitle}</h3>
+        <h5> Select a measurement to view details here!</h5>
       </div>
     );
   }
 
-  render() {
-    const { isMobile, source, categoryTitle } = this.props;
-    const { sourceMetaData } = this.state;
-
-    if (!isMobile && !source) {
-      return (
-        <div className="no-results">
-          <FontAwesomeIcon icon="map" />
-          <h3>{categoryTitle}</h3>
-          <h5> Select a measurement to view details here!</h5>
-        </div>
-      );
-    }
-
-    const description = source && source.description;
-    if (!description) {
-      return (
-        <div className="no-results">
-          <FontAwesomeIcon icon="meteor" />
-          <h3> No metadata found. </h3>
-        </div>
-      );
-    }
-
-    const data = sourceMetaData[description] && sourceMetaData[description].data;
-    if (!data) {
-      this.getSourceMetadata(source);
-      return (
-        <div className="no-results">
-          <h3> Loading metadata ... </h3>
-        </div>
-      );
-    }
-
-    return isMobile ? this.renderMobile(data) : this.renderDesktop(data);
+  /* No metadata configured for this source */
+  if (!metadataPath) {
+    return (
+      <div className="no-results">
+        <FontAwesomeIcon icon="meteor" />
+        <h3> No metadata found. </h3>
+      </div>
+    );
   }
+
+
+  if (!metadataForSource && loading) {
+    return (
+      <div className="no-results">
+        <h3> Loading metadata ... </h3>
+      </div>
+    );
+  }
+
+  return isMobile ? renderMobile() : renderDesktop();
 }
 
 MeasurementMetadataDetail.propTypes = {
