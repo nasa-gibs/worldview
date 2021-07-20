@@ -2,4 +2,4 @@ The Land Surface Temperature (Day) layer is a new Land Surface Temperature produ
 
 The MODIS Land Surface Temperature product is available from both Terra (MOD21) and Aqua (MYD21) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: MYD21 [10.5067/MODIS/MYD21.061](https://doi.org/10.5067/MODIS/MYD21.061)
+References: MYD21 [doi:10.5067/MODIS/MYD21.061](https://doi.org/10.5067/MODIS/MYD21.061)
