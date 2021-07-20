@@ -7,21 +7,21 @@ The MODIS Land Surface Temperature product is available from both Terra (MOD11) 
 
 References: MYD11_L2 [doi:10.5067/MODIS/MYD11_L2.061](https://doi.org/10.5067/MODIS/MYD11_L2.061); MOD11_L2 [doi:10.5067/MODIS/MOD11_L2.061](https://doi.org/10.5067/MODIS/MOD11_L2.061); [NASA Earth Observations - Land Surface Temperature](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD11C1_M_LSTDA)
 
+### MODIS (Terra/Aqua/ASTER) Land Surface Temperature (Day | Night)
+Temporal coverage: 8 July 2021 - present (Terra); 9 July 2021 - present (Aqua)
+
+The Land Surface Temperature (Day | Night) layer is a new Land Surface Temperature product (MOD/MYD21), in addition  to the heritage MOD11/MYD11 Land Surface Temperature (LST) product. It show the temperature of the land surface in Kelvin (K). The MOD21 Temperature/Emissivity Separation (TES) algorithm uses a physics-based algorithm to dynamically retrieve both LST and spectral emissivity simultaneously from the MODIS thermal infrared bands 29, 31, and 32. The TES algorithm is combined with an improved Water Vapor Scaling (WVS) atmospheric correction scheme to stabilize the retrieval during very warm and humid conditions. The MOD/MYD21 Land Surface Temperature (LST) algorithm differs from the MOD11/MYD11 L2 algorithm in that the MOD21/MYD21 LST algorithm is based on the ASTER Temperature/Emissivity Separation (TES) technique, whereas the MOD11/MYD11 L2 products uses the split-window technique.
+
+The MODIS Land Surface Temperature product is available from both Terra (MOD21) and Aqua (MYD21) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
+
+References: MOD21 [doi:10.5067/MODIS/MOD21.061](https://doi.org/10.5067/MODIS/MOD21.061); MYD21 [doi:10.5067/MODIS/MYD21.061](https://doi.org/10.5067/MODIS/MYD21.061)
+
 ### MODIS (Terra/Aqua) Land Surface Temperature (Level 3, Daily, Day | Night)
 Temporal coverage: 26 February 2000 - present (Terra); 3 July 2002 - present (Aqua)
 
 The MODIS Land Surface Temperature (L3, Daily, Day | Night) layers show the daily, day-time | night-time land surface temperature in Kelvin (K). They are created from the MOD11A1/MYD11A1 product which provides daily per-pixel Land Surface Temperature and Emissivity (LST&E) with 1 kilometer (km) spatial resolution. The pixel temperature value is derived from the Terra MODIS LST&E swath product. Above 30 degrees latitude, some pixels may have multiple observations where the criteria for clear-sky are met. When this occurs, the pixel value is a result of the average of all qualifying observations. The Land Surface Temperature Day layer is a representation of daytime LST; and the Land Surface Temperature Night layer is a representation of nighttime LST.
 
 References: MOD11A1 [doi:10.5067/MODIS/MOD11A1.061](https://doi.org/10.5067/MODIS/MOD11A1.061); MYD11A1 [doi:10.5067/MODIS/MYD11A1.061](https://doi.org/10.5067/MODIS/MYD11A1.061)
-
-### MODIS (Terra/Aqua/ASTER) Land Surface Temperature (Day | Night)
-Temporal coverage: 8 July 2021 - present (Terra); 9 July 2021 - present (Aqua)
-
-The Land Surface Temperature (Day | Night) layer is a new Land Surface Temperature product (MOD/MYD21), in addition  to the heritage MOD11/MYDD11 Land Surface Temperature (LST) product. It show the temperature of the land surface in Kelvin (K). The MOD21 Temperature/Emissivity Separation (TES) algorithm uses a physics-based algorithm to dynamically retrieve both LST and spectral emissivity simultaneously from the MODIS thermal infrared bands 29, 31, and 32. The TES algorithm is combined with an improved Water Vapor Scaling (WVS) atmospheric correction scheme to stabilize the retrieval during very warm and humid conditions. The MOD/MYD21 Land Surface Temperature (LST) algorithm differs from the MOD11/MYD11 L2 algorithm in that the MOD21/MYD21 LST algorithm is based on the ASTER Temperature/Emissivity Separation (TES) technique, whereas the MOD11/MYD11 L2 products uses the split-window technique.
-
-The MODIS Land Surface Temperature product is available from both Terra (MOD21) and Aqua (MYD21) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
-
-References: MOD21 [doi:10.5067/MODIS/MOD21.061](https://doi.org/10.5067/MODIS/MOD21.061); MYD21 [doi:10.5067/MODIS/MYD21.061](https://doi.org/10.5067/MODIS/MYD21.061)
 
 ### MODIS (Terra/Aqua) Land Surface Temperature (Level 3, 8-Day, Day | Night)
 Temporal coverage: 26 February 2000 - present (Terra); 4 July 2002 - present (Aqua)
