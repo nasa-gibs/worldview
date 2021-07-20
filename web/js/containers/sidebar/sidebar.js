@@ -255,7 +255,7 @@ class Sidebar extends React.Component {
     const maxHeight = isCollapsed
       ? '0'
       : isEmbedModeActive
-        ? '70vh'
+        ? '95vh'
         : `${screenHeight}px`;
     return (
       <ErrorBoundary>
