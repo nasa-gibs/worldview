@@ -89,6 +89,7 @@ module.exports = {
   'Verify that warning shows in the product picker category/measurement rows': function(c) {
     c.click(addLayers);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT);
+    c.pause(500);
     c.click('#layer-category-item-air-quality-corrected-reflectance');
     c.moveToElement('#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor', 2, 2);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);
