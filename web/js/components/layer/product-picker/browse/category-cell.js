@@ -17,6 +17,13 @@ const CategoryCell = (props) => {
     }
     : {};
 
+  const checkForSources = (measurement) => {
+    if (measurementConfig[measurement]) {
+      return hasMeasurementSource(measurementConfig[measurement]);
+    }
+    throw new Error(`No measurement config entry for "${measurement}".`);
+  };
+
   return (
     <div
       key={category.id}
@@ -36,7 +43,7 @@ const CategoryCell = (props) => {
           </h3>
           <ul>
             {category.measurements
-              .filter((measurement) => hasMeasurementSource(measurementConfig[measurement]))
+              .filter(checkForSources)
               .slice(0, 7)
               .map((measurement, index) => {
                 const current = measurementConfig[measurement];
