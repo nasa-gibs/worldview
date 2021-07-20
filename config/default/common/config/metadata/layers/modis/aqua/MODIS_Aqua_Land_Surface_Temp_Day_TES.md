@@ -1,0 +1,5 @@
+The Land Surface Temperature (Day) layer is a new Land Surface Temperature product (MOD/MYD21), in addition to the heritage MOD11/MYDD11 Land Surface Temperature (LST) product. The MOD21 Temperature/Emissivity Separation (TES) algorithm uses a physics-based algorithm to dynamically retrieve both LST and spectral emissivity simultaneously from the MODIS thermal infrared bands 29, 31, and 32. The TES algorithm is combined with an improved Water Vapor Scaling (WVS) atmospheric correction scheme to stabilize the retrieval during very warm and humid conditions. The MOD/MYD21 Land Surface Temperature (LST) algorithm differs from the MOD11/MYD11 L2 algorithm in that the MOD21/MYD21 LST algorithm is based on the ASTER Temperature/Emissivity Separation (TES) technique, whereas the MOD11/MYD11 L2 products uses the split-window technique.
+
+The MODIS Land Surface Temperature product is available from both Terra (MOD21) and Aqua (MYD21) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
+
+References: MYD21 [10.5067/MODIS/MYD21.061](https://doi.org/10.5067/MODIS/MYD21.061)
