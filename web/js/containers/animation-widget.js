@@ -14,7 +14,7 @@ import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../util/util';
 import ErrorBoundary from './error-boundary';
-import TimeSelector from '../components/date-selector/date-selector';
+import DateRangeSelector from '../components/date-selector/date-range-selector';
 import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import TimeScaleIntervalChange from '../components/timeline/timeline-controls/interval-timescale-change';
@@ -45,7 +45,7 @@ import {
   getAllActiveLayers,
   dateRange as getDateRange,
 } from '../modules/layers/selectors';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import {
   play,
   onClose,
@@ -125,6 +125,19 @@ class AnimationWidget extends React.Component {
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onCollapsedDrag = this.onCollapsedDrag.bind(this);
     this.onExpandedDrag = this.onExpandedDrag.bind(this);
+  }
+
+  componentDidMount() {
+    const { isEmbedModeActive } = this.props;
+    if (isEmbedModeActive) {
+      this.setState({
+        collapsed: true,
+        widgetPosition: {
+          x: 10,
+          y: 0,
+        },
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -225,12 +238,15 @@ class AnimationWidget extends React.Component {
     onPushLoop(loop);
   }
 
-  onDateChange(date, id) {
-    const { onUpdateStartDate, onUpdateEndDate } = this.props;
-    if (id === 'start') {
-      onUpdateStartDate(date);
-    } else {
-      onUpdateEndDate(date);
+  onDateChange([newStartDate, newEndDate]) {
+    const {
+      onUpdateStartDate, onUpdateEndDate, startDate, endDate,
+    } = this.props;
+    if (newStartDate !== startDate) {
+      onUpdateStartDate(newStartDate);
+    }
+    if (newEndDate !== endDate) {
+      onUpdateEndDate(newEndDate);
     }
   }
 
@@ -524,27 +540,16 @@ class AnimationWidget extends React.Component {
             {this.renderCreateGifButton()}
 
             {/* From/To Date/Time Selection */}
-            <div className="wv-anim-dates-case">
-              <TimeSelector
-                id="start"
-                idSuffix="animation-widget-start"
-                date={startDate}
-                onDateChange={this.onDateChange}
-                maxDate={endDate}
-                minDate={minDate}
-                subDailyMode={subDailyMode}
-              />
-              <div className="thru-label">To</div>
-              <TimeSelector
-                id="end"
-                idSuffix="animation-widget-end"
-                date={endDate}
-                onDateChange={this.onDateChange}
-                maxDate={maxDate}
-                minDate={startDate}
-                subDailyMode={subDailyMode}
-              />
-            </div>
+            <DateRangeSelector
+              idSuffix="animation-widget"
+              startDate={startDate}
+              endDate={endDate}
+              setDateRange={this.onDateChange}
+              minDate={minDate}
+              maxDate={maxDate}
+              subDailyMode={subDailyMode}
+            />
+
             <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={this.toggleCollapse} />
             <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
 
@@ -642,6 +647,7 @@ function mapStateToProps(state) {
     compare,
     animation,
     date,
+    embed,
     sidebar,
     modal,
     palettes,
@@ -683,8 +689,9 @@ function mapStateToProps(state) {
   }
 
   const { isDistractionFreeModeActive } = ui;
+  const { isEmbedModeActive } = embed;
   const animationIsActive = isActive
-    && browser.greaterThan.small
+    && (browser.greaterThan.small || isEmbedModeActive)
     && lodashGet(map, 'ui.selected.frameState_')
     && sidebar.activeTab !== 'download' // No Animation when data download is active
     && !compare.active
@@ -739,6 +746,7 @@ function mapStateToProps(state) {
     promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
     isGifActive: gifActive,
     isCompareActive: compare.active,
+    isEmbedModeActive,
     isRotated: Boolean(rotation !== 0),
     rotation,
     hasGraticule: Boolean(
@@ -858,6 +866,7 @@ AnimationWidget.propTypes = {
   interval: PropTypes.string,
   isActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,

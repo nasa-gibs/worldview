@@ -6,15 +6,14 @@ import {
 } from 'reactstrap';
 import LayersContainer from './layers-container';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
-import util from '../../util/util';
-
+import { memoizedDateMonthAbbrev } from '../../modules/compare/selectors';
 
 const tabHeight = 32;
 const CompareCase = (props) => {
   const {
     isActive,
-    dateStringA,
-    dateStringB,
+    dateA,
+    dateB,
     toggleActiveCompareState,
     isCompareA,
     height,
@@ -37,7 +36,7 @@ const CompareCase = (props) => {
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />
-                {` A: ${dateStringA}`}
+                {` A: ${dateA}`}
               </NavLink>
             </NavItem>
             <NavItem>
@@ -50,7 +49,7 @@ const CompareCase = (props) => {
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />
-                {` B: ${dateStringB}`}
+                {` B: ${dateB}`}
               </NavLink>
             </NavItem>
           </Nav>
@@ -83,19 +82,21 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { compare, date } = state;
+  const { compare } = state;
+  const { isCompareA, active } = compare;
+  const { dateA, dateB } = memoizedDateMonthAbbrev(state)();
 
   return {
-    isCompareA: compare.isCompareA,
-    dateStringA: util.toISOStringDate(date.selected),
-    dateStringB: util.toISOStringDate(date.selectedB),
-    isActive: compare.active,
+    isCompareA,
+    dateA,
+    dateB,
+    isActive: active,
   };
 };
 
 CompareCase.propTypes = {
-  dateStringA: PropTypes.string,
-  dateStringB: PropTypes.string,
+  dateA: PropTypes.string,
+  dateB: PropTypes.string,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isCompareA: PropTypes.bool,

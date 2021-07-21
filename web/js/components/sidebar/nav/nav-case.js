@@ -11,6 +11,7 @@ function NavCase (props) {
     tabTypes,
     isMobile,
     isCompareMode,
+    isEventsTabDisabledEmbed,
     onTabClick,
     activeTab,
     isDataDisabled,
@@ -84,7 +85,7 @@ function NavCase (props) {
             : `${tabClasses} first-tab`
         }
       />
-      {renderEvents()}
+      {!isEventsTabDisabledEmbed && renderEvents()}
       {renderDataDownload()}
       <div className="toggleIconHolder">
         <UncontrolledTooltip placement="right" target="accordion-toggler-button">
@@ -103,6 +104,7 @@ function NavCase (props) {
 
 NavCase.propTypes = {
   activeTab: PropTypes.string,
+  isEventsTabDisabledEmbed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
   isMobile: PropTypes.bool,

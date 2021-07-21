@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Aerosol Type": {
+            "id": "aerosol-type",
+            "title":    "Aerosol Type",
+            "subtitle": "Suomi NPP/VIIRS",
+            "sources": {
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/AerosolType",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate",
+                        "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -96,7 +96,7 @@ Example:
 
 ## Optional Properties
 
-* **tags**: Additional text used for matching this layer when searching in the add layers tab. This allows Aerosol Optical Depth layers to match when "aod" is typed in
+* **tags**: Additional text used for matching this layer when searching in the add layers tab. This allows Aerosol Optical Depth layers to match when "aod" is typed in.
 * **noTransition**: For WMTS layers only, if set to `true`, the map will not display lower-resolution tiles while loading.
 * **transition**: For WMS layers only, if set to `true`, the map will display lower-resolution tiles while loading.
 * **product**: Associated product in the Common Metadata Repository (CMR).
@@ -105,14 +105,14 @@ Example:
 * **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 * **description**: Point to a markdown file within the metadata folder to provide a layer description.
 * **wrapX**: Wrap the layer across the anti-meridian.
-* **disableSnapshot**: Disable worldview snapshots(WVS) for layer.
+* **disableSnapshot**: Disable Worldview Snapshots (WVS) for layer.
 * **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
 * **palette**: To display a color palette legend, a `palette` object should exist with the following properties:
   * **id**: Identifier of the palette. This should match the name of the colormap file without the extension.
   * **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see [`config/default/common/config/palettes-custom.json`](../../config/default/common/config/palettes-custom.json)). Example, *["orange_1", "red_1"]*
   * **immutable**(optional): When this flag is set to true, the options to adjust thresholds and colormaps are removed.
 * **availability**: Used to denote datetime availability info that cannot be gleaned from the capabilities document. Primarily for our geostationary layers which only have historical coverage going back ~30 days. Represented as an object with the following properties:
-  * **rollingWindow**: Number of days, counting backwards from app load time, that a layer has avilable coverage.  Setting this will cause a layer's `startDate` property to be dynamically set at app load time.
+  * **rollingWindow**: Number of days, counting backwards from app load time, that a layer has available coverage.  Setting this will cause a layer's `startDate` property to be dynamically set at app load time.
   * **historicalRanges**: An array of date range objects denoting specific time periods in the past when imagery is available. Each range object should have the following properties:
     * startDate - `YYYY-MM-DDTHH:MM:SSZ`
     * endDate - `YYYY-MM-DDTHH:MM:SSZ`

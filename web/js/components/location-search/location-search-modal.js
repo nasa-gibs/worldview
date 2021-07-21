@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Button, InputGroup, InputGroupAddon, UncontrolledTooltip,
+  Button, InputGroup, InputGroupAddon,
 } from 'reactstrap';
 import {
   debounce as lodashDebounce,
@@ -12,6 +12,7 @@ import googleTagManager from 'googleTagManager';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBox from './location-search-input';
 import Alert from '../util/alert';
+import HoverTooltip from '../util/hover-tooltip';
 import { getCoordinateFixedPrecision, isValidCoordinates } from './util';
 import {
   clearSuggestions,
@@ -231,18 +232,14 @@ class LocationSearchModal extends Component {
     });
   }
 
-  // render hover tooltip
   renderTooltip = (buttonId, labelText) => {
     const { isMobile } = this.props;
-    return !isMobile && (
-      <UncontrolledTooltip
-        trigger="hover"
+    return (
+      <HoverTooltip
+        isMobile={isMobile}
+        labelText={labelText}
         target={buttonId}
-        boundariesElement="window"
-        placement="bottom"
-      >
-        {labelText}
-      </UncontrolledTooltip>
+      />
     );
   }
 
@@ -394,7 +391,7 @@ const mapStateToProps = (state) => {
     browser,
     config,
     lastAction,
-    map,
+    proj,
     modal,
     locationSearch,
   } = state;
@@ -415,7 +412,7 @@ const mapStateToProps = (state) => {
     preventInputFocus,
     coordinates,
     locationSearchMobileModalOpen,
-    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(map, config, targetCoordinates),
+    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(proj, targetCoordinates),
     isCoordinateSearchActive,
     isMobile,
     processMagicKey: (magicKey) => processMagicKey(magicKey, config),

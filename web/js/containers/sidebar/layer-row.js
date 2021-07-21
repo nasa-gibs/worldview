@@ -52,6 +52,8 @@ function LayerRow (props) {
     renderedPalette,
     requestPalette,
     isCustomPalette,
+    isDistractionFreeModeActive,
+    isEmbedModeActive,
     isLoading,
     isMobile,
     zot,
@@ -81,17 +83,23 @@ function LayerRow (props) {
         ? compare.activeString === compareState && !!runningObject
         : !!runningObject;
       const colorHex = isRunningData ? runningObject.paletteHex : null;
+      let width = zot ? 220 : 231;
+      if (isEmbedModeActive) {
+        width = 201;
+      }
       return (
         <PaletteLegend
           layer={layer}
           compareState={compareState}
           paletteId={palette.id}
           getPalette={getPalette}
-          width={zot ? 220 : 231}
+          width={width}
           paletteLegends={paletteLegends}
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
           colorHex={colorHex}
+          isDistractionFreeModeActive={isDistractionFreeModeActive}
+          isEmbedModeActive={isEmbedModeActive}
           isMobile={isMobile}
         />
       );
@@ -296,6 +304,7 @@ function LayerRow (props) {
 
   return (
     <Draggable
+      isDragDisabled={isEmbedModeActive}
       draggableId={`${encodedLayerId}-${compareState}`}
       index={index}
       direction="vertical"
@@ -332,8 +341,9 @@ const mapStateToProps = (state, ownProps) => {
     compareState,
   } = ownProps;
   const {
-    palettes, config, map, compare, proj,
+    palettes, config, embed, map, compare, proj, ui,
   } = state;
+  const { isDistractionFreeModeActive } = ui;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
@@ -341,6 +351,7 @@ const mapStateToProps = (state, ownProps) => {
     ? getPaletteLegends(layer.id, compareState, state)
     : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
+  const { isEmbedModeActive } = embed;
   const selectedMap = lodashGet(map, 'ui.selected');
   const isVector = layer.type === 'vector';
   const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
@@ -355,6 +366,8 @@ const mapStateToProps = (state, ownProps) => {
     isVisible,
     paletteLegends,
     isCustomPalette,
+    isDistractionFreeModeActive,
+    isEmbedModeActive,
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     isVectorLayer: isVector,
@@ -389,7 +402,7 @@ const mapDispatchToProps = (dispatch) => ({
         // Using clickableBehindModal: true here causes an issue where switching sidebar
         // tabs does not close this modal
         wrapClassName: 'clickable-behind-modal',
-        modalClassName: ' layer-info-settings-modal layer-settings-modal',
+        modalClassName: ' sidebar-modal layer-settings-modal',
         timeout: 150,
         bodyComponentProps: {
           layer,
@@ -410,7 +423,7 @@ const mapDispatchToProps = (dispatch) => ({
         // Using clickableBehindModal: true here causes an issue where switching sidebar
         // tabs does not close this modal
         wrapClassName: 'clickable-behind-modal',
-        modalClassName: ' layer-info-settings-modal layer-info-modal',
+        modalClassName: ' sidebar-modal layer-info-modal',
         timeout: 150,
         size: 'lg',
         bodyComponentProps: {
@@ -441,6 +454,8 @@ LayerRow.propTypes = {
   index: PropTypes.number,
   isCustomPalette: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isInProjection: PropTypes.bool,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,

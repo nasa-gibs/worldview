@@ -19,8 +19,8 @@ module.exports = {
   sidebarContainer: '#productsHolder',
   infoButton: '.wv-layers-info',
   optionsButton: '.wv-layers-options',
-  infoDialog: '.layer-info-settings-modal',
-  optionsDialog: '.layer-info-settings-modal',
+  infoDialog: '.layer-info-modal',
+  optionsDialog: '.layer-settings-modal',
   addLayers: '#layers-add',
   dataDownloadTabButton: '#download-sidebar-tab',
   eventsSidebarTabButton: '#events-sidebar-tab',
@@ -102,10 +102,10 @@ module.exports = {
   aodMeasurementContents: '#accordion-atmosphere-aerosol-optical-depth .measure-row-contents',
   aodAllMeasurementContents: '#accordion-legacy-all-aerosol-optical-depth',
   aodTabContentAquaMODIS: '#aerosol-optical-depth-aqua-modis',
-  aodCheckbox: '#checkbox-case-MODIS_Aqua_Aerosol',
-  aodCheckboxMODIS: '#checkbox-case-MODIS_Combined_Value_Added_AOD',
-  aodCheckboxMAIAC: '#checkbox-case-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
-  aodCheckboxAquaMODIS: '#checkbox-case-MODIS_Aqua_Aerosol',
+  aodCheckbox: '#MODIS_Aqua_Aerosol-checkbox',
+  aodCheckboxMODIS: '#MODIS_Combined_Value_Added_AOD-checkbox',
+  aodCheckboxMAIAC: '#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox',
+  aodCheckboxAquaMODIS: '#MODIS_Aqua_Aerosol-checkbox',
   aquaTerraMODISTab: '#aqua-terra-modis-0-source-Nav',
   aquaModisTab: '#aqua-modis-1-source-Nav',
   correctedReflectanceCheckboxContainer: '#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor',
@@ -155,15 +155,16 @@ module.exports = {
 
   // ui toolbar
   locationSearchToolbarButton: '#wv-location-search-button',
-  shareToolbarButton: '#wv-link-button',
+  shareToolbarButton: '#wv-share-button',
   projToolbarButton: '#wv-proj-button',
   snapshotToolbarButton: '#wv-image-button',
   infoToolbarButton: '#wv-info-button',
 
-  // social
-  socialToolbar: '#toolbar_share_link',
-  socialCopyLinkButton: '#wv-link-button',
-  socialLinkInput: '#permalink_content',
+  // share
+  shareToolbar: '#toolbar_share',
+  shareLinkInput: '#permalink-content-link',
+  shareEmbedInput: '#permalink-content-embed',
+  embedLinkButton: '#wv-embed-link-button',
 
   // Location Search
   locationSearchComponent: '.location-search-component',

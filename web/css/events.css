@@ -8,6 +8,7 @@
 }
 
 .event-container {
+  background: #333;
   .no-events {
     text-align: center;
     color: #eee;
@@ -15,46 +16,17 @@
     padding: 20px;
     margin: 15px auto;
   }
-  min-height: 350px;
-  .dropdown {
-    border: 1px solid rgba(250, 250, 250, 0.5);
-    border-left: none;
-    border-top: none;
-    border-right: none;
-    .dropdown-toggle {
-      background-color: #333;
-      border: none;
-      width: 100%;
-      font-size: 14px;
-      border-radius: 0;
-      padding: 4px;
-      &:hover {
-        background-color: #555;
-        color: #fff;
-      }
-      &:focus {
-        box-shadow: none;
-      }
-    }
-    .dropdown-menu {
-      background-color: #3a3a3a;
-      color: #eee;
-      border-radius: 0;
-      box-shadow: 1px 1px 20px rgba(255, 255, 255, 0.15);
-      width: 284px;
-    }
-    .dropdown-item {
-      color: #eee;
-      font-size: 14px;
-      padding: 6px 12px;
-      &:hover {
-        color: #333;
-      }
-      &:active, &.active {
-        background: #d54e21;
-        color: #fff;
-        text-shadow: 1px 1px 0 #000;
-      }
+  min-height: 166px;
+  @media (max-width: 768px) {
+    height: calc(var(--vh, 1vh) * 100 - 75px);
+  }
+  .event-scroll-list {
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
+    background: #222;
+    min-height: 260px;
+    @media (max-width: 768px) {
+      min-height: calc(var(--vh, 1vh) * 100 - 140px);
     }
   }
 }
@@ -74,6 +46,9 @@
 
 .map-item-list li.item h4 {
   font-size: 0.85em;
+  @media (max-width: 768px) {
+    font-size: 1em;
+  }
   color: #ccc;
   padding: 0 3px;
   margin-left: 40px;
@@ -119,13 +94,20 @@
 .map-item-list li.item p a {
   display: block;
   clear: both;
-  margin-top: 7px;
+  margin: 4px 0 6px;
   position: relative;
   padding-left: 15px;
 }
 
-.wv-eventslist li.item ul li.dates a.active {
-  font-weight: 700;
+.wv-eventslist li.item ul li.dates {
+  margin: 4px 0;
+  a {
+    font-size: 14px;
+    cursor: pointer;
+    &.active {
+      font-weight: 700;
+    }
+  }
 }
 
 .wv-eventslist .map-item-list li.item .fa-external-link-alt {
@@ -176,27 +158,27 @@
   color: #f00;
 }
 
-.marker {
+.marker div {
   display: block;
   height: 26px;
   width: 26px;
   background: url("../images/natural-events/dot.svg");
 }
-
-.marker-selected {
-  transform: scale(1.4);
-  transform-origin: center bottom;
-  position: relative;
+.marker.selected {
   z-index: 100;
-  height: 31px;
-  background: url("../images/natural-events/pin.svg");
+  div {
+    transform: scale(1.4);
+    transform-origin: center bottom;
+    position: relative;
+    height: 31px;
+    background: url("../images/natural-events/pin.svg");
+  }
 }
 
 .marker:not(.marker-selected):hover {
   transform: scale(1.2);
   transform-origin: center bottom;
   position: relative;
-  z-index: 100;
   cursor: pointer;
 }
 .track-marker-case {
@@ -328,6 +310,17 @@
   width: 26px;
 }
 
+/* @media (max-width: 768px) {
+  .event-scroll-list .event-icon {
+    height: 40px;
+    width: 40px;
+  }
+  .wv-map .event-icon {
+    height: 36px;
+    width: 36px;
+  }
+} */
+
 .event-icon-dust-and-haze {
   background: url("../images/natural-events/icon-dust-and-haze.svg");
 }
@@ -341,7 +334,7 @@
 }
 
 .event-icon-sea-and-lake-ice {
-  background: url("../images/natural-events/icon-sea-and-lake-ice.svg");
+  background: url("../images/natural-events/icon-icebergs.svg");
 }
 
 .event-icon-severe-storms {

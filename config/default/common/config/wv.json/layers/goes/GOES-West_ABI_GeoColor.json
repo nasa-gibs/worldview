@@ -1,0 +1,22 @@
+{
+  "layers": {
+    "GOES-West_ABI_GeoColor": {
+      "id": "GOES-West_ABI_GeoColor",
+      "title": "GeoColor (True Color (Day), Multispectral IR (Night))",
+      "subtitle": "GOES-West/ABI",
+      "description": "goes/GOES-West_ABI_GeoColor",
+      "group": "overlays",
+      "tags": "geostationary geo",
+      "layergroup": "Geostationary",
+      "product": "",
+      "wrapX": true,
+      "daynight": [
+        "day",
+        "night"
+      ],
+      "availability": {
+        "rollingWindow": 30
+      }
+    }
+  }
+}

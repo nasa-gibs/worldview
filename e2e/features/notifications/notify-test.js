@@ -16,9 +16,9 @@ const infoMenu = '#toolbar_info';
 const giftListItem = '#toolbar_info li.gift';
 const boltListItem = '#toolbar_info li.bolt';
 const notificationsListItem = '#notifications_info_item .fa-exclamation-circle';
-const alertContentHightlighted = '#notification_list_modal .alert-notification-item';
-const outageContentHightlighted = '#notification_list_modal .outage-notification-item';
-const messageContentHightlighted = '#notification_list_modal .message-notification-item';
+const alertContentHighlighted = '#notification_list_modal .alert-notification-item';
+const outageContentHighlighted = '#notification_list_modal .outage-notification-item';
+const messageContentHighlighted = '#notification_list_modal .message-notification-item';
 const aquaNotice = 'The Aqua / MODIS Corrected Reflectance (True Color) layer is currently unavailable.';
 const multiNotice = 'Several layers are experiencing delays in processing.';
 const tooltipSelector = '.tooltip-inner div';
@@ -44,28 +44,28 @@ module.exports = {
     c.assert.containsText(infoMenu, 'Notifications');
     c.expect.element(notificationsListItem).to.be.present;
   },
-  'Verify that layer notices don\'t show up in the nofication list or contribute to the count': function(c) {
+  'Verify that layer notices don\'t show up in the notification list or contribute to the count': function(c) {
     c.waitForElementVisible('#notifications_info_item', TIME_LIMIT);
     c.expect.element('span.badge').to.be.present;
     c.assert.containsText('span.badge', '3');
   },
   'alert, outage, and message content is highlighted and found in modal': function(c) {
     c.click(notificationsListItem);
-    c.waitForElementVisible(outageContentHightlighted, TIME_LIMIT);
+    c.waitForElementVisible(outageContentHighlighted, TIME_LIMIT);
     c.assert.containsText(
-      `${outageContentHightlighted} span`,
+      `${outageContentHighlighted} span`,
       'Posted 20 May 2018',
     );
     c.assert.containsText(
-      `${alertContentHightlighted} p`,
+      `${alertContentHighlighted} p`,
       'learn how to visualize global satellite imagery',
     );
     c.assert.containsText(
-      `${messageContentHightlighted} p`,
+      `${messageContentHighlighted} p`,
       'This is a message test',
     );
   },
-  'Verify that the user is only alerted if he has not already stored all items in localStorage': function(c) {
+  'Verify that the user is only alerted if they have not already stored all items in localStorage': function(c) {
     c.click('#notification_list_modal .close')
       .pause(500);
     c.waitForElementVisible(infoButtonIcon, TIME_LIMIT);
@@ -89,6 +89,7 @@ module.exports = {
   'Verify that warning shows in the product picker category/measurement rows': function(c) {
     c.click(addLayers);
     c.waitForElementVisible(categoriesNav, TIME_LIMIT);
+    c.pause(500);
     c.click('#layer-category-item-air-quality-corrected-reflectance');
     c.moveToElement('#checkbox-case-MODIS_Aqua_CorrectedReflectance_TrueColor', 2, 2);
     c.waitForElementVisible(tooltipSelector, TIME_LIMIT);

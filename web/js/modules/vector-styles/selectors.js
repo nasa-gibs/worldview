@@ -86,7 +86,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   const glStyle = vectorStyles[styleId];
   const olMap = lodashGet(state, 'map.ui.selected');
   const { selected } = state.vectorStyles;
-  const activeLayers = getAllActiveLayers(state).reverse();
+  const activeLayers = [...getAllActiveLayers(state)].reverse();
   let layerGroups;
   let layerGroup;
 
@@ -118,6 +118,9 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
         });
       }
     });
+  }
+  if (!layer) {
+    return null;
   }
   const layerArray = layer.getLayers ? layer.getLayers().getArray() : [layer];
 

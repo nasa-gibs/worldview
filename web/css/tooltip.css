@@ -8,6 +8,10 @@
   a {
     color: #7bf;
   }
+
+  &.tooltip-inner:not(.zot-tooltip) {
+    user-select: none;
+  }
 }
 
 .tooltip-icon {

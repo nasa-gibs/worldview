@@ -5,6 +5,7 @@ import { initialCompareState } from './modules/compare/reducers';
 import { getInitialState as getInitialDateState } from './modules/date/reducers';
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
 import { defaultAlertState } from './modules/alerts/reducer';
+import { getInitialEventsState } from './modules/natural-events/reducers';
 
 const fixtures = {
   red: 'ff0000ff',
@@ -23,7 +24,15 @@ fixtures.getState = function() {
     layers: initialLayerState,
     alerts: defaultAlertState,
     date: getInitialDateState(fixtures.config()),
+    events: getInitialEventsState(fixtures.config()),
+    map: fixtures.map(),
     animation: initialAnimationState,
+    proj: {
+      selected: {
+        id: 'geographic',
+        crs: 'EPSG:4326',
+      },
+    },
     palettes: {
       active: {},
       activeB: {},
@@ -189,6 +198,16 @@ fixtures.getState = function() {
   };
 };
 
+fixtures.map = () => ({
+  ui: {
+    selected: {
+      getView: () => ({
+        calculateExtent: () => [-15.06, 27.16, 13.32, 56.06],
+      }),
+    },
+  },
+});
+
 fixtures.config = function() {
   return {
     pageLoadTime: new Date(),
@@ -274,6 +293,37 @@ fixtures.config = function() {
         },
         inactive: true,
       },
+      MODIS_Combined_L4_LAI_4Day: {
+        id: 'MODIS_Combined_L4_LAI_4Day',
+        title: 'Leaf Area Index (L4, 4-Day)',
+        subtitle: 'Terra and Aqua / MODIS',
+        description: 'modis/combined/MODIS_Combined_L4_LAI_4Day',
+        group: 'overlays',
+        product: 'MCD15A3H',
+        layergroup: 'Leaf Area Index',
+        dateRanges: [
+          {
+            startDate: '2018-01-01T00:00:00Z',
+            endDate: '2018-12-27T00:00:00Z',
+            dateInterval: '4',
+          },
+          {
+            startDate: '2019-01-01T00:00:00Z',
+            endDate: '2019-12-27T00:00:00Z',
+            dateInterval: '4',
+          },
+          {
+            startDate: '2020-01-01T00:00:00Z',
+            endDate: '2020-09-26T00:00:00Z',
+            dateInterval: '4',
+          },
+        ],
+        projections: {
+          geographic: {},
+          arctic: {},
+          antarctic: {},
+        },
+      },
       'terra-aod': {
         id: 'terra-aod',
         group: 'overlays',
@@ -324,8 +374,32 @@ fixtures.config = function() {
         period: 'daily',
       },
     },
+    naturalEvents: {
+      categories: [
+        {
+          id: 'dustHaze',
+          title: 'Dust and Haze',
+          description: 'Related to dust storms, air pollution and other non-volcanic aerosols. Volcano-related plumes shall be included with the originating eruption event.',
+          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/dustHaze',
+        },
+        {
+          id: 'manmade',
+          title: 'Manmade',
+          description: 'Events that have been human-induced and are extreme in their extent.',
+          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/manmade',
+        },
+        {
+          id: 'seaLakeIce',
+          title: 'Sea and Lake Ice',
+          description: 'Related to all ice that resides on oceans and lakes, including sea and lake ice (permanent and seasonal) and icebergs.',
+          layers: 'https://eonet.sci.gsfc.nasa.gov/api/v3/layers/seaLakeIce',
+        }],
+    },
     features: {
       compare: true,
+      naturalEvents: {
+        host: 'fake.eonet.url/api',
+      },
     },
     palettes: {
       lookups: {

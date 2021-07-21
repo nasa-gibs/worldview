@@ -12,12 +12,6 @@
       "tracks": [
         "OrbitTracks_Terra_Ascending"
       ],
-      "palette": {
-        "recommended": [
-          "rainbow_1",
-          "purple_2"
-        ]
-      },
       "daynight": [
         "night"
       ]

@@ -17,20 +17,6 @@ export default (function(self) {
   self.browser = browser;
   self.events = events;
   self.load = load;
-  self.monthStringArray = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
-  ];
 
   self.repeat = function(value, length) {
     let result = '';
@@ -90,12 +76,6 @@ export default (function(self) {
       result[key] = decodeURIComponent(value);
     }
     return result;
-  };
-  self.elapsed = function(message, startTime, parameters) {
-    if (parameters && !parameters.elapsed) return;
-    const t = Date.now() - startTime;
-    console.log(t, message);
-    return t;
   };
 
   /**
@@ -255,25 +235,24 @@ export default (function(self) {
 
   self.coverageDateFormatter = function(dateType, date, period) {
     let dateString;
-    date = this.parseDate(date);
-
+    const parsedDate = this.parseDate(date);
     switch (period) {
       case 'subdaily':
-        dateString = `${moment(date).format('DD MMMM YYYY HH:mm')}Z`;
+        dateString = `${moment(parsedDate).format('DD MMMM YYYY HH:mm')}Z`;
         break;
 
       case 'yearly':
-        if (dateType === 'END-DATE') date.setFullYear(date.getFullYear() - 1);
-        dateString = moment(date).format('YYYY');
+        if (dateType === 'END-DATE') parsedDate.setFullYear(parsedDate.getFullYear() - 1);
+        dateString = moment(parsedDate).format('YYYY');
         break;
 
       case 'monthly':
-        if (dateType === 'END-DATE') date.setMonth(date.getMonth() - 1);
-        dateString = moment(date).format('MMMM YYYY');
+        if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth() - 1);
+        dateString = moment(parsedDate).format('MMMM YYYY');
         break;
 
       default:
-        dateString = moment(date).format('DD MMMM YYYY');
+        dateString = moment(parsedDate).format('DD MMMM YYYY');
         break;
     }
 
@@ -308,6 +287,40 @@ export default (function(self) {
   self.toISOStringDate = function(date) {
     return date.toISOString()
       .split('T')[0];
+  };
+
+  self.monthStringArray = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
+
+  /**
+   * Converts a date into an ISO string with only the date portion and month abbreviation.
+   *
+   * @method toISOStringDateMonthAbbrev
+   * @static
+   * @param date {Date} the date to convert
+   * @return {string} ISO string in the form of ``YYYY-MMM-DD``.
+   */
+  self.toISOStringDateMonthAbbrev = function(date) {
+    const stringDate = self.toISOStringDate(date).split('-');
+    const year = stringDate[0];
+    const month = stringDate[1];
+    const day = stringDate[2];
+
+    const monthAbbrev = self.monthStringArray[Number(month) - 1];
+
+    return `${year} ${monthAbbrev} ${day}`;
   };
 
   /**
@@ -443,8 +456,7 @@ export default (function(self) {
     return newDate;
   };
 
-  self.getNumberOfDays = function(start, end, interval, increment, maxToCheck) {
-    increment = increment || 1;
+  self.getNumberOfDays = function(start, end, interval, increment = 1, maxToCheck) {
     let i = 1;
     let currentDate = start;
     while (currentDate < end) {
@@ -620,9 +632,7 @@ export default (function(self) {
     };
   };
 
-  self.rollDate = function(date, interval, amount, minDate, maxDate) {
-    minDate = minDate || self.minDate();
-    maxDate = maxDate || self.maxDate();
+  self.rollDate = function(date, interval, amount, minDate = self.minDate(), maxDate = self.maxDate()) {
     const range = self.rollRange(date, interval, minDate, maxDate);
     const min = range.first;
     const max = range.last;
@@ -756,13 +766,9 @@ export default (function(self) {
 
   self.errorReport = function(errors) {
     // eslint-disable-next-line no-unused-vars
-    let layersRemoved = 0;
     lodashEach(errors, (error) => {
       const cause = error.cause ? `: ${error.cause}` : '';
       self.warn(error.message + cause);
-      if (error.layerRemoved) {
-        layersRemoved += 1;
-      }
     });
   };
 

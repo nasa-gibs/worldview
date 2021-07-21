@@ -23,7 +23,7 @@ module.exports = {
         client.assert.cssClassPresent(localSelectors.aTab, 'active');
         client
           .useCss()
-          .assert.containsText(localSelectors.aTab, 'A: 2018-08-17');
+          .assert.containsText(localSelectors.aTab, 'A: 2018 AUG 17');
       },
     );
   },
@@ -34,7 +34,7 @@ module.exports = {
     client.waitForElementVisible('#ab-slider-case', TIME_LIMIT, () => {
       client.expect.element(localSelectors.opacityButton).to.not.be.enabled;
       client.assert.cssClassPresent(localSelectors.bTab, 'active');
-      client.useCss().assert.containsText(localSelectors.bTab, 'B: 2018-08-16');
+      client.useCss().assert.containsText(localSelectors.bTab, 'B: 2018 AUG 16');
     });
   },
   'Spy mode is active in B state': function(client) {
@@ -42,7 +42,7 @@ module.exports = {
     client.waitForElementPresent('.ab-spy-span', TIME_LIMIT, () => {
       client.expect.element(localSelectors.spyButton).to.not.be.enabled;
       client.assert.cssClassPresent(localSelectors.bTab, 'active');
-      client.useCss().assert.containsText(localSelectors.bTab, 'B: 2018-08-16');
+      client.useCss().assert.containsText(localSelectors.bTab, 'B: 2018 AUG 16');
     });
   },
   /**

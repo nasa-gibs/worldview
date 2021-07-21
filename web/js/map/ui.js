@@ -54,7 +54,7 @@ import {
   getMaxZoomLevelLayerCollection,
   getAllActiveLayers,
 } from '../modules/layers/selectors';
-import getSelectedDate from '../modules/date/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
   RENDERED, UPDATE_MAP_UI, UPDATE_MAP_EXTENT, UPDATE_MAP_ROTATION, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE, CLEAR_ROTATE,
@@ -73,7 +73,7 @@ export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
   const self = {};
   let cache;
-  const dateline = mapDateLineBuilder(models, config, store, ui);
+  const dateline = mapDateLineBuilder(store);
   const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(store);
   const dataRunner = self.runningdata = new MapRunningData(
@@ -90,10 +90,8 @@ export default function mapui(models, config, store, ui) {
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
   const layerBuilder = self.layerBuilder = mapLayerBuilder(
-    models,
     config,
     cache,
-    ui,
     store,
   );
   self.layerKey = layerBuilder.layerKey;
@@ -369,7 +367,7 @@ export default function mapui(models, config, store, ui) {
     }
     // clear previous marker (if present) and get new marker
     removeCoordinatesMarker();
-    const marker = getCoordinatesMarker({ ui: self }, config, coordinates, results);
+    const marker = getCoordinatesMarker(proj, coordinates, results);
 
     // prevent marker if outside of extent
     if (!marker) {
@@ -762,8 +760,8 @@ export default function mapui(models, config, store, ui) {
    */
   const updateDate = self.updateDate = function() {
     const state = store.getState();
-    const { compare } = state;
-    const activeLayers = getAllActiveLayers(state);
+    const { embed, compare } = state;
+    let activeLayers = getAllActiveLayers(state);
     let layerGroups;
     let layerGroup;
     if (compare && compare.active) {
@@ -775,6 +773,9 @@ export default function mapui(models, config, store, ui) {
             ? layerGroups[1]
             : null;
       }
+    }
+    if (embed.isEmbedModeActive) {
+      activeLayers = activeLayers.filter((layer) => layer.visible);
     }
     lodashEach(activeLayers, (def) => {
       const layerName = def.layer || def.id;
@@ -995,7 +996,7 @@ export default function mapui(models, config, store, ui) {
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
     } else if (proj.id === 'geographic') {
-      dateline.init(self, map, dateSelected);
+      dateline.init(map, dateSelected);
     }
 
     const onRotate = () => {

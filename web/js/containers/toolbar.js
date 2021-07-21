@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ButtonToolbar, Button, UncontrolledTooltip } from 'reactstrap';
+import { ButtonToolbar, Button } from 'reactstrap';
 import {
   get as lodashGet,
   find as lodashFind,
@@ -16,14 +16,12 @@ import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
 import ShareLinks from './share';
+import HoverTooltip from '../components/util/hover-tooltip';
 import ErrorBoundary from './error-boundary';
 import {
   requestNotifications,
   setNotifications,
 } from '../modules/notifications/actions';
-import {
-  REQUEST_NOTIFICATIONS,
-} from '../modules/notifications/constants';
 import { clearCustoms, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
@@ -50,8 +48,8 @@ const CUSTOM_MODAL_PROPS = {
     bodyComponent: Projection,
     wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
   },
-  TOOLBAR_SHARE_LINK: {
-    headerText: 'Copy Link to Share',
+  TOOLBAR_SHARE: {
+    headerText: 'Share',
     type: 'toolbar',
     backdrop: false,
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
@@ -164,21 +162,18 @@ class toolbarContainer extends Component {
 
   renderTooltip = (buttonId, labelText) => {
     const { isMobile } = this.props;
-    return !isMobile && (
-      <UncontrolledTooltip
-        trigger="hover"
+    return (
+      <HoverTooltip
+        isMobile={isMobile}
+        labelText={labelText}
         target={buttonId}
-        boundariesElement="window"
-        placement="bottom"
-      >
-        {labelText}
-      </UncontrolledTooltip>
+      />
     );
   }
 
   renderShareButton() {
     const { faSize, openModal, isDistractionFreeModeActive } = this.props;
-    const buttonId = 'wv-link-button';
+    const buttonId = 'wv-share-button';
     const labelText = 'Share this map';
     return !isDistractionFreeModeActive && (
       <Button
@@ -186,8 +181,8 @@ class toolbarContainer extends Component {
         className="wv-toolbar-button"
         aria-label={labelText}
         onClick={() => openModal(
-          'TOOLBAR_SHARE_LINK',
-          CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK,
+          'TOOLBAR_SHARE',
+          CUSTOM_MODAL_PROPS.TOOLBAR_SHARE,
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
@@ -202,18 +197,21 @@ class toolbarContainer extends Component {
       faSize,
       isDistractionFreeModeActive,
       openModal,
+      isAnimatingToEvent,
     } = this.props;
     const buttonId = 'wv-proj-button';
     const labelText = 'Switch projection';
+    const onClick = () => openModal(
+      'TOOLBAR_PROJECTION',
+      CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
+    );
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
         className="wv-toolbar-button"
         aria-label={labelText}
-        onClick={() => openModal(
-          'TOOLBAR_PROJECTION',
-          CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
-        )}
+        onClick={onClick}
+        disabled={isAnimatingToEvent}
       >
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="globe-asia" size={faSize} />
@@ -366,7 +364,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch,
+    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -377,6 +375,7 @@ const mapStateToProps = (state) => {
   const isCompareActive = compare.active;
   const isLocationSearchExpanded = locationSearch.isExpanded;
   const activePalettes = palettes[activeString];
+  const { isAnimatingToEvent } = events;
 
   // Collapse when Image download / GIF /  is open or measure tool active
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
@@ -389,11 +388,11 @@ const mapStateToProps = (state) => {
     config: state.config,
     rotation: map.rotation,
     activePalettes,
-    // TODO should this be disabled if on the smart-handoffs tab?
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
       && !isCompareActive,
     ),
+    isAnimatingToEvent,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     isCompareActive,
     isLocationSearchExpanded,
@@ -469,7 +468,7 @@ const mapDispatchToProps = (dispatch) => ({
   }),
   requestNotifications: (location) => {
     const promise = dispatch(
-      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json'),
+      requestNotifications(location),
     );
     promise.then((data) => {
       const obj = JSON.parse(data);
@@ -493,6 +492,7 @@ toolbarContainer.propTypes = {
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
+  isAnimatingToEvent: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,

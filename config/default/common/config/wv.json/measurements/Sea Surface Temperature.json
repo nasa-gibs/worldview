@@ -14,8 +14,7 @@
                         "GHRSST_L4_MUR_Sea_Surface_Temperature",
                         "GHRSST_L4_MUR25_Sea_Surface_Temperature",
                         "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
-                        "GHRSST_L4_GAMSSA_GDS2_Sea_Surface_Temperature",
-                        "GHRSST_L4_G1SST_Sea_Surface_Temperature"
+                        "GHRSST_L4_GAMSSA_GDS2_Sea_Surface_Temperature"
                     ]
                 },
                 "Aqua/MODIS": {
@@ -25,7 +24,7 @@
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_L2_Sea_Surface_Temp_Day",
-                        "MODIS_Aqua_L2_Sea_Surface_Temp_Night",  
+                        "MODIS_Aqua_L2_Sea_Surface_Temp_Night",
                         "MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily",
                         "MODIS_Aqua_L3_SST_MidIR_4km_Night_8Day",
                         "MODIS_Aqua_L3_SST_MidIR_4km_Night_Monthly",

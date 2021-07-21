@@ -14,7 +14,14 @@ import {
   mapLocationToTourState,
 } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
-import { eventParse, serializeEvent } from './modules/natural-events/util';
+import {
+  parseEvent,
+  serializeEvent,
+  serializeCategories,
+  mapLocationToEventFilterState,
+  serializeEventFilterDates,
+  parseEventFilterDates,
+} from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
 import {
   mapLocationToProjState,
@@ -27,8 +34,9 @@ import {
   mapLocationToLayerState,
 } from './modules/layers/util';
 import { resetLayers, hasSubDaily, getActiveLayers } from './modules/layers/selectors';
-import { eventsReducerState } from './modules/natural-events/reducers';
+import { getInitialEventsState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
+import { mapLocationToEmbedState } from './modules/embed/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
 import { areCoordinatesWithinExtent, mapLocationToLocationSearchState } from './modules/location-search/util';
 import mapLocationToSidebarState from './modules/sidebar/util';
@@ -100,6 +108,15 @@ export const mapLocationToState = (state, location) => {
       state,
       config,
     );
+    stateFromLocation = mapLocationToEmbedState(
+      parameters,
+      stateFromLocation,
+    );
+    stateFromLocation = mapLocationToEventFilterState(
+      parameters,
+      stateFromLocation,
+      state,
+    );
 
     // one level deep merge of newState with defaultState
     Object.keys(stateFromLocation).forEach((key) => {
@@ -129,6 +146,7 @@ const getParameters = function(config, parameters) {
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
   const { initialDate } = config;
   const startingLayers = resetLayers(config.defaults.startingLayers, config.layers);
+  const eventsReducerState = getInitialEventsState(config);
   return {
     p: {
       stateKey: 'proj.id',
@@ -280,13 +298,55 @@ const getParameters = function(config, parameters) {
         },
       },
     },
+    em: {
+      stateKey: 'embed.isEmbedModeActive',
+      initialState: false,
+      type: 'bool',
+      options: {
+        parse: (str) => str === 'true',
+      },
+    },
     e: {
       stateKey: 'events',
       type: 'object',
       initialState: eventsReducerState,
       options: {
-        parse: eventParse,
+        parse: parseEvent,
         serialize: serializeEvent,
+      },
+    },
+    efs: {
+      stateKey: 'events.showAll',
+      initialState: true,
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (showAll, state) => {
+          const eventsActive = get(state, 'events.active');
+          return eventsActive ? showAll : undefined;
+        },
+        setAsEmptyItem: true,
+      },
+    },
+    efd: {
+      stateKey: 'events.selectedDates',
+      type: 'object',
+      initialState: eventsReducerState.selectedDates,
+      options: {
+        parse: parseEventFilterDates,
+        serialize: serializeEventFilterDates,
+        serializeNeedsGlobalState: true,
+        setAsEmptyItem: true,
+      },
+    },
+    efc: {
+      stateKey: 'events.selectedCategories',
+      type: 'array',
+      initialState: eventsReducerState.selectedCategories,
+      options: {
+        serialize: serializeCategories,
+        serializeNeedsGlobalState: true,
+        setAsEmptyItem: true,
       },
     },
     l: {
@@ -429,9 +489,9 @@ const getParameters = function(config, parameters) {
         serializeNeedsGlobalState: true,
         parse: (coordinates) => coordinates,
         serialize: (coordinates, state) => {
-          const { map } = state;
+          const { map, proj } = state;
           if (map.ui.selected) {
-            const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
+            const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
             if (!coordinatesWithinExtent) {
               return;
             }

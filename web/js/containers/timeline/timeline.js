@@ -972,35 +972,40 @@ class Timeline extends React.Component {
     const {
       hasSubdailyLayers,
       isCompareModeActive,
+      isEmbedModeActive,
       screenWidth,
     } = this.props;
 
-    const isScreenWidthLessThan350 = screenWidth < 350;
     const isScreenWidthLessThan450 = screenWidth < 450;
 
     // default positioning
-    let mobileLeft = '180px';
-    let mobileBottom = '10px';
-
+    let mobileLeft = 190;
+    let mobileBottom = 10;
+    if (isEmbedModeActive) {
+      mobileLeft = 135;
+      mobileBottom = 4;
+    }
     // positioning will change depending on a combination of:
     // 1) subdaily (mobile date picker width);
     // 2) screen width; and
     // 3) compare mode
-    if (hasSubdailyLayers) {
-      if (isScreenWidthLessThan450) {
-        mobileLeft = isCompareModeActive ? '112px' : '10px';
-        mobileBottom = '65px';
-      } else {
-        mobileLeft = '277px';
+    if (hasSubdailyLayers && screenWidth >= 450) {
+      mobileLeft = 287;
+      if (isEmbedModeActive) {
+        mobileLeft = 210;
       }
-    } else if (isScreenWidthLessThan350) {
-      mobileLeft = isCompareModeActive ? '112px' : '10px';
-      mobileBottom = '65px';
+    } else if (isScreenWidthLessThan450) {
+      mobileLeft = isCompareModeActive ? 112 : 10;
+      mobileBottom = 65;
+      if (isEmbedModeActive) {
+        mobileLeft = isCompareModeActive ? 80 : 0;
+        mobileBottom = 45;
+      }
     }
 
     return {
-      left: mobileLeft,
-      bottom: mobileBottom,
+      left: `${mobileLeft}px`,
+      bottom: `${mobileBottom}px`,
     };
   }
 
@@ -1026,7 +1031,8 @@ class Timeline extends React.Component {
       isCompareModeActive,
       isDataDownload,
       isDistractionFreeModeActive,
-      isSmallScreen,
+      isEmbedModeActive,
+      isMobile,
       isTourActive,
       leftArrowDisabled,
       parentOffset,
@@ -1096,7 +1102,7 @@ class Timeline extends React.Component {
           {initialLoadComplete && !isDistractionFreeModeActive
             && (
             <ErrorBoundary>
-              {isSmallScreen
+              {isMobile || isEmbedModeActive
               /* Mobile Timeline Size */
                 ? (
                   <div id="timeline-header" className="timeline-header-mobile">
@@ -1106,6 +1112,7 @@ class Timeline extends React.Component {
                       endDateLimit={timelineEndDateLimit}
                       onDateChange={this.onDateChange}
                       hasSubdailyLayers={hasSubdailyLayers}
+                      isMobile={isMobile}
                     />
                     <MobileComparisonToggle />
                     <div
@@ -1117,6 +1124,7 @@ class Timeline extends React.Component {
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
                           leftArrowDisabled={leftArrowDisabled}
+                          isMobile={isMobile}
                           rightArrowDown={this.throttleIncrementDate}
                           rightArrowUp={this.stopRightArrow}
                           rightArrowDisabled={rightArrowDisabled}
@@ -1158,6 +1166,7 @@ class Timeline extends React.Component {
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
                           leftArrowDisabled={leftArrowDisabled}
+                          isMobile={isMobile}
                           rightArrowDown={this.throttleIncrementDate}
                           rightArrowUp={this.stopRightArrow}
                           rightArrowDisabled={rightArrowDisabled}
@@ -1363,36 +1372,38 @@ class Timeline extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    config,
-    compare,
-    map,
-    layers,
-    browser,
-    date,
     animation,
+    browser,
+    compare,
+    config,
+    date,
+    embed,
+    layers,
+    map,
+    modal,
     proj,
     sidebar,
-    modal,
     tour,
     ui,
   } = state;
   const {
+    appNow,
+    customDelta,
+    customInterval,
     customSelected,
+    delta,
+    interval,
     selected,
     selectedB,
-    delta,
-    customDelta,
-    appNow,
-    timelineCustomModalOpen,
     selectedZoom,
-    interval,
-    customInterval,
+    timelineCustomModalOpen,
   } = date;
-  const { screenWidth, lessThan } = browser;
+  const { screenWidth } = browser;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
   const { isDistractionFreeModeActive } = ui;
-  const isSmallScreen = lessThan.medium;
+  const { isEmbedModeActive } = embed;
+  const isMobile = browser.lessThan.medium;
 
   // handle active layer filtering and check for subdaily
   const activeLayers = getActiveLayers(state);
@@ -1461,7 +1472,7 @@ function mapStateToProps(state) {
     appNow,
     activeLayers: activeLayersFiltered,
     isTourActive: tour.active,
-    isSmallScreen,
+    isMobile,
     screenWidth,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
@@ -1496,6 +1507,7 @@ function mapStateToProps(state) {
     isGifActive: animation.gifActive,
     timelineCustomModalOpen,
     isDistractionFreeModeActive,
+    isEmbedModeActive,
   };
 }
 
@@ -1577,8 +1589,9 @@ Timeline.propTypes = {
   isCompareModeActive: PropTypes.bool,
   isDataDownload: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
-  isSmallScreen: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
   onUpdateEndDate: PropTypes.func,

@@ -7,11 +7,11 @@
 		{
 			"id": "EONET_2793",
 			"title": "Elm Fire, California",
-            "description": "",
+      "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2793",
 			"categories": [
 				{
-					"id": 8,
+					"id": "wildfires",
 					"title": "Wildfires"
 				}
 			],
@@ -37,11 +37,11 @@
 		{
 			"id": "EONET_2792",
 			"title": "Santiago, Chile Flooding",
-            "description": "",
+      "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2792",
 			"categories": [
 				{
-					"id": 9,
+					"id": "floods",
 					"title": "Floods"
 				}
 			],
@@ -67,11 +67,11 @@
 		{
 			"id": "EONET_2781",
 			"title": "Langila Volcano, Papua New Guinea",
-            "description": "",
+      "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2781",
 			"categories": [
 				{
-					"id": 12,
+					"id": "volcanoes",
 					"title": "Volcanoes"
 				}
 			],
@@ -97,11 +97,11 @@
 		{
 			"id": "EONET_2733",
 			"title": "Iceberg B30",
-            "description": "",
+      "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2733",
 			"categories": [
 				{
-					"id": 15,
+					"id": "seaLakeIce",
 					"title": "Sea and Lake Ice"
 				}
 			],
@@ -110,7 +110,6 @@
 					"id": "NATICE",
 					"url": ""
 				}
-
 			],
 			"geometry": [
 				{
@@ -239,11 +238,11 @@
 		{
 			"id": "EONET_2733",
 			"title": "Iceberg B30-TEST",
-            "description": "",
+      "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_2733",
 			"categories": [
 				{
-					"id": 15,
+					"id": "seaLakeIce",
 					"title": "Sea and Lake Ice"
 				}
 			],
@@ -385,11 +384,11 @@
 		{
 			"id": "EONET_0001",
 			"title": "Example id 1",
-            "description": "",
+      "description": "",
 			"link": "http://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_0001",
 			"categories": [
 				{
-					"id": 1,
+					"id": "seaLakeIce",
 					"title": "Sea and Lake Ice"
 				}
 			],
@@ -398,7 +397,6 @@
 					"id": "NATICE",
 					"url": ""
 				}
-
 			],
 			"geometry": [
 				{

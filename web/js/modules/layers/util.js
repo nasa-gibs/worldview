@@ -1,10 +1,7 @@
 import {
   get as lodashGet,
-  cloneDeep as lodashCloneDeep,
   eachRight as lodashEachRight,
   isUndefined as lodashIsUndefined,
-  remove as lodashRemove,
-  findIndex as lodashFindIndex,
   each as lodashEach,
   isNaN as lodashIsNaN,
   startCase as lodashStartCase,
@@ -65,7 +62,7 @@ export function nearestInterval(def, date) {
    * @param  {object} def       A layer definition
    * @param  {object} date      A date to compare against the array of dates
    * @param  {array} dateArray  An array of dates
-   * @return {object}           The date object with normalized timeszone.
+   * @return {object}           The date object with normalized timezone.
    */
 export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
@@ -635,7 +632,7 @@ const getSubdailyDateRange = ({
 /**
    * Return an array of dates based on the dateRange the current date falls in.
    *
-   * @method datesinDateRanges
+   * @method datesInDateRanges
    * @param  {Object} def            A layer object
    * @param  {Object} date           A date object for currently selected date
    * @param  {Object} startDateLimit A date object used as start date of timeline range for available data
@@ -643,15 +640,16 @@ const getSubdailyDateRange = ({
    * @param  {Object} appNow         A date object of appNow (current date or set explicitly)
    * @return {Array}                 An array of dates with normalized timezones
    */
-export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
+export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
   const {
     dateRanges,
     futureTime,
     period,
     inactive,
   } = def;
-  const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let dateArray = [];
+  if (!dateRanges) { return dateArray; }
+  const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let currentDate = new Date(date);
 
   let inputStartDate;
@@ -665,8 +663,7 @@ export function datesinDateRanges(def, date, startDateLimit, endDateLimit, appNo
     inputStartDateTime = inputStartDate.getTime();
     inputEndDateTime = inputEndDate.getTime();
   } else {
-    singleDateRangeAndInterval = dateRanges
-    && dateRanges.length === 1
+    singleDateRangeAndInterval = dateRanges.length === 1
     && dateRanges[0].dateInterval === '1';
   }
 
@@ -856,28 +853,6 @@ export function serializeGroupOverlays (groupOverlays, state, activeString) {
     return undefined;
   }
   return groupOverlays;
-}
-
-export function toggleVisibility(id, layers) {
-  const index = lodashFindIndex(layers, {
-    id,
-  });
-  if (index === -1) {
-    throw new Error(`Invalid layer ID: ${id}`);
-  }
-  const visibility = !layers[index].visible;
-
-  return update(layers, { [index]: { visible: { $set: visibility } } });
-}
-
-export function removeLayer(id, layers) {
-  const index = lodashFindIndex(layers, {
-    id,
-  });
-  if (index === -1) {
-    throw new Error(`Invalid layer ID: ${id}`);
-  }
-  return update(layers, { $splice: [[index, 1]] });
 }
 
 // this function takes an array of date ranges in this format:
@@ -1171,37 +1146,6 @@ const createLayerArrayFromState = function(state, config) {
   return layerArray;
 };
 
-export function validate(errors, config) {
-  const error = function(layerId, cause) {
-    errors.push({
-      message: `Invalid layer: ${layerId}`,
-      cause,
-      layerRemoved: true,
-    });
-    delete config.layers[layerId];
-    lodashRemove(config.layerOrder.baselayers, (e) => e === layerId);
-    lodashRemove(config.layerOrder.overlays, (e) => e === layerId);
-  };
-
-  const layers = lodashCloneDeep(config.layers);
-  lodashEach(layers, (layer) => {
-    if (!layer.group) {
-      error(layer.id, 'No group defined');
-      return;
-    }
-    if (!layer.projections) {
-      error(layer.id, 'No projections defined');
-    }
-  });
-
-  const orders = lodashCloneDeep(config.layerOrder);
-  lodashEach(orders, (layerId) => {
-    if (!config.layers[layerId]) {
-      error(layerId, 'No configuration');
-    }
-  });
-}
-
 export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
@@ -1403,6 +1347,98 @@ export function adjustStartDates(layers) {
   };
 
   return Object.values(layers).forEach(applyDateAdjustment);
+}
+
+/**
+ * For active, multi-interval layers with on going coverage,
+ * date ranges are modified and added for layer config
+ *
+ * @method adjustActiveDateRanges
+ * @param  {Array} layers array
+ * @param  {Object} appNow - pageLoadTime date
+ * @returns {Array} array of layers
+ */
+export function adjustActiveDateRanges(layers, appNow) {
+  const appNowYear = appNow.getUTCFullYear();
+  const applyDateRangeAdjustment = (layer) => {
+    const { dateRanges } = layer;
+    const { inactive, period } = layer;
+    const failConditions = inactive
+      || !dateRanges
+      || period === 'subdaily';
+    if (failConditions) {
+      return;
+    }
+
+    const dateRangesModified = [...dateRanges];
+    for (let i = 0; i < dateRangesModified.length; i += 1) {
+      const dateRange = dateRangesModified[i];
+      const {
+        endDate,
+        startDate,
+        dateInterval,
+      } = dateRange;
+
+      const dateIntervalNum = Number(dateInterval);
+      if (i === dateRangesModified.length - 1 && dateIntervalNum > 1) {
+        // create/add dynamic dates to iterated dateRange
+        const start = new Date(startDate);
+        const startDateYear = start.getUTCFullYear();
+
+        // splice in modifiedDateRange to set endDate to appNow
+        if (startDateYear === appNowYear) {
+          const modifiedDateRange = {
+            startDate,
+            endDate: util.toISOStringSeconds(appNow),
+            dateInterval,
+          };
+          dateRangesModified.splice(i, 1, modifiedDateRange);
+        }
+
+        // check to see if dateRangesModified needs to be spliced or appended
+        if (startDateYear < appNowYear) {
+          const dynamicStartYear = start.getUTCFullYear() + 1;
+          const dynamicStartDate = new Date(start.setUTCFullYear(dynamicStartYear));
+
+          const end = new Date(endDate);
+          const endDateYear = end.getUTCFullYear();
+          const dynamicEndYear = end.getUTCFullYear() + 1;
+          let dynamicEndDate = new Date(end.setUTCFullYear(dynamicEndYear));
+
+          // don't extend endDate past appNow
+          dynamicEndDate = dynamicEndDate < appNow
+            ? dynamicEndDate
+            : appNow;
+
+          // extend endDate till end of year if before appNow year
+          // ex: app build date 11/2020 and it's 04/2021 now, this will extend to end of 12/2020
+          if (endDateYear < appNowYear) {
+            let endOfYearDate = new Date('2021-12-31T00:00:00.000Z');
+            endOfYearDate = new Date(endOfYearDate.setUTCFullYear(endDateYear));
+            const modifiedDateRange = {
+              startDate,
+              endDate: util.toISOStringSeconds(endOfYearDate),
+              dateInterval,
+            };
+            dateRangesModified.splice(i, 1, modifiedDateRange);
+          }
+
+          // add date range to modified layer dateRanges
+          if (dynamicStartDate < appNow) {
+            const dynamicDateRange = {
+              startDate: util.toISOStringSeconds(dynamicStartDate),
+              endDate: util.toISOStringSeconds(dynamicEndDate),
+              dateInterval,
+            };
+            dateRangesModified.push(dynamicDateRange);
+          }
+        }
+      }
+    }
+    layer.dateRanges = dateRangesModified;
+  };
+
+  return Object.values(layers).forEach(applyDateRangeAdjustment);
 }
 
 /**

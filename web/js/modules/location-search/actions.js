@@ -63,7 +63,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
   return (dispatch, getState) => {
     const state = getState();
     const {
-      config, map,
+      proj,
     } = state;
 
     if (reverseGeocodeResults) {
@@ -73,7 +73,7 @@ export function setPlaceMarker(coordinates, reverseGeocodeResults, isInputSearch
       }
     }
 
-    const coordinatesWithinExtent = areCoordinatesWithinExtent(map, config, coordinates);
+    const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinates);
     if (!coordinatesWithinExtent) {
       return dispatch({
         type: SET_MARKER,

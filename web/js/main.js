@@ -33,9 +33,9 @@ import parse from './parse';
 import combineUi from './combine-ui';
 import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
 import {
-  validate as layerValidate,
   layersParse12,
   adjustEndDates,
+  adjustActiveDateRanges,
   adjustStartDates,
   mockFutureTimeLayerOptions,
 } from './modules/layers/util';
@@ -44,7 +44,6 @@ import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 
 const history = createBrowserHistory();
 const configURI = Brand.url('config/wv.json');
-const startTime = Date.now();
 const compose = DEBUG === false || DEBUG === 'logger'
   ? defaultCompose
   : DEBUG === 'devtools' && composeWithDevTools({
@@ -63,7 +62,6 @@ const compose = DEBUG === false || DEBUG === 'logger'
     },
   });
 let parameters = util.fromQueryString(window.location.search);
-let { elapsed } = util;
 const errors = [];
 
 /**
@@ -107,7 +105,6 @@ function render (config, legacyState) {
     ),
   );
   listenForHistoryChange(store, history);
-  elapsed('Render', startTime, parameters);
 
   ReactDOM.render(
     <Provider store={store}>
@@ -121,10 +118,6 @@ function render (config, legacyState) {
 
 // Document ready function
 window.onload = () => {
-  if (!parameters.elapsed) {
-    elapsed = function() {};
-  }
-  elapsed('loading config', startTime, parameters);
   const promise = fetch(configURI);
 
   promise
@@ -162,7 +155,6 @@ window.onload = () => {
         custom: {},
       };
 
-      elapsed('Config loaded', config.now, parameters);
       // Determine which layers need to be preloaded
       let layers = [];
       if (
@@ -185,8 +177,11 @@ window.onload = () => {
         });
       }
       const legacyState = parse(parameters, config, errors);
-      layerValidate(errors, config);
       adjustStartDates(config.layers);
+
+      // handle extending active layer date ranges
+      adjustActiveDateRanges(config.layers, pageLoadTime);
+
       // handle add mock future time to provided layer id
       if (parameters.mockFutureLayer) {
         mockFutureTimeLayerOptions(config.layers, parameters.mockFutureLayer);

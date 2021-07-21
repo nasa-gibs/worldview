@@ -18,11 +18,7 @@ class ThresholdSelect extends React.Component {
     this.updateThreshold = this.updateThreshold.bind(this);
   }
 
-  /**
-   * Apply squash
-   * @param {Boolean} boo
-   */
-  updateSquash(boo) {
+  updateSquash() {
     const {
       setRange, layerId, index, groupName, palette, legend,
     } = this.props;

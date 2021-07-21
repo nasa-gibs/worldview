@@ -3,20 +3,24 @@ import {
   orderBy as lodashOrderBy,
   uniqBy as lodashUniqBy,
 } from 'lodash';
+import moment from 'moment';
 import {
-  ALL_CATEGORY,
   REQUEST_EVENTS,
   REQUEST_SOURCES,
   SELECT_EVENT,
   DESELECT_EVENT,
-  SELECT_CATEGORY,
-  SHOW_ALL_EVENTS,
-  ONLY_SHOW_VISIBLE,
-  TOGGLE_SHOW_ALL,
+  SET_EVENTS_FILTER,
   FINISHED_ANIMATING_TO_EVENT,
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 
+/**
+ * Sort events by date
+ *
+ * @param {*} events
+ * @param {*} categories
+ * @returns
+ */
 const sortEvents = function(events) {
   return events
     .map((e) => {
@@ -32,22 +36,7 @@ const sortEvents = function(events) {
     });
 };
 
-const formatResponse = function(item, ignored) {
-  if (item.categories) {
-    const category = Array.isArray(item.categories)
-      ? item.categories[0]
-      : item.categories;
-    // Add slug to categories
-    category.slug = category.title
-      .toLowerCase()
-      .split(' ')
-      .join('-');
-    return !ignored.includes(category.title);
-  }
-  return !ignored.includes(item.title);
-};
-
-export const eventsReducerState = {
+const eventsReducerState = {
   selected: {
     id: '',
     date: null,
@@ -57,8 +46,27 @@ export const eventsReducerState = {
   active: false,
   showAll: true,
   isAnimatingToEvent: false,
-  category: ALL_CATEGORY,
+  selectedCategories: [],
+  selectedDates: {
+    start: null,
+    end: null,
+  },
 };
+
+export function getInitialEventsState(config) {
+  const { initialDate, naturalEvents } = config;
+  const { categories } = naturalEvents;
+  const endDate = moment.utc(initialDate).format('YYYY-MM-DD');
+  const startDate = moment.utc(initialDate).subtract(120, 'days').format('YYYY-MM-DD');
+  return {
+    ...eventsReducerState,
+    selectedCategories: categories,
+    selectedDates: {
+      start: startDate,
+      end: endDate,
+    },
+  };
+}
 
 export function eventsReducer(state = eventsReducerState, action) {
   switch (action.type) {
@@ -80,25 +88,15 @@ export function eventsReducer(state = eventsReducerState, action) {
         ...state,
         selected: eventsReducerState.selected,
       };
-    case SELECT_CATEGORY:
+    case SET_EVENTS_FILTER:
       return {
         ...state,
-        category: action.category,
-      };
-    case SHOW_ALL_EVENTS:
-      return {
-        ...state,
-        showAll: true,
-      };
-    case TOGGLE_SHOW_ALL:
-      return {
-        ...state,
-        showAll: !state.showAll,
-      };
-    case ONLY_SHOW_VISIBLE:
-      return {
-        ...state,
-        showAll: false,
+        showAll: action.showAll,
+        selectedCategories: action.categories,
+        selectedDates: {
+          start: action.start,
+          end: action.end,
+        },
       };
     case CHANGE_SIDEBAR_TAB: {
       const isActive = action.activeTab === 'events';
@@ -138,19 +136,23 @@ export function eventsRequestReducer(actionName, state, action) {
   switch (action.type) {
     case START:
       return eventRequestResponse({
+        ...state,
         isLoading: true,
         response: null,
       });
+
     case SUCCESS: {
-      const key = actionName === REQUEST_EVENTS ? 'events' : 'sources';
-      const filtered = action.response[key].filter((item) => formatResponse(item, state.ignore));
+      const key = actionName === REQUEST_EVENTS
+        ? 'events'
+        : 'sources';
       return eventRequestResponse({
         response: actionName === REQUEST_EVENTS
-          ? sortEvents(filtered)
-          : filtered,
+          ? sortEvents(action.response[key])
+          : action.response[key],
         isLoading: false,
       });
     }
+
     case FAILURE:
       return eventRequestResponse({
         response: null,

@@ -1,3 +1,5 @@
+import util from '../../util/util';
+
 // return boolean based on is dateChecking is between front and back dates
 export const getIsBetween = (date, frontDate, backDate) => {
   const dateValue = new Date(date).getTime();
@@ -16,6 +18,17 @@ export const getDaysInYear = (date) => {
 
 // return string in ISO format "2018-03-16T06:17:30Z"
 export const getISODateFormatted = (date) => `${new Date(date).toISOString().split('.')[0]}Z`;
+
+
+// display date as '2000 OCT 28' for default or '2000 OCT 28 20:28Z' for subdaily
+export const getDisplayDate = (date, isSubdaily) => {
+  let displayDate = util.toISOStringDateMonthAbbrev(new Date(date));
+  if (isSubdaily) {
+    const subdailyHHSSZ = `${getISODateFormatted(date).split('T')[1].split(':', 2).join(':')}Z`;
+    displayDate += ` ${subdailyHHSSZ}`;
+  }
+  return displayDate;
+};
 
 // timeRange extension to pop NUM times
 export const removeBackMultipleInPlace = (timeRange, num) => {

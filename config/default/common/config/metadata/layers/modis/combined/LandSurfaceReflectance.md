@@ -10,9 +10,11 @@ The MAIAC Reflectance (BRDF-Adjusted) layer is available as a combined Terra sat
 References: [doi: 10.5067/MODIS/MCD19A1N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A1N.NRT.006)
 
 ### MODIS (Terra and Aqua) Land Surface Reflectance (Level 3, Nadir BRDF-Adjusted (NBAR), Daily)
-Temporal coverage: 18 May 2000 - present
+Temporal coverage: 24 February 2000 - present
 
-The Moderate Resolution Imaging Spectroradiometer (MODIS) MCD43A4 Version 6 Nadir Bidirectional Reflectance Distribution Function (BRDF)-Adjusted Land Surface Reflectance (NBAR) dataset is produced daily using 16 days of Terra and Aqua MODIS data at 500 meter (m) resolution. The view angle effects are removed from the directional reflectances, resulting in a stable and consistent NBAR product. Data are temporally weighted to the ninth day which is reflected in the Julian date in the file name. This NBAR layer is a representation of MODIS reflectance bands 1, 4 and 3.
+The Land Surface Reflectance (L3, Nadir, BRDF-Adjusted (NBAR), Daily) layer is created from the Moderate Resolution Imaging Spectroradiometer (MODIS) MCD43A4 Nadir Bidirectional Reflectance Distribution Function (BRDF)-Adjusted Land Surface Reflectance (NBAR) dataset which is produced daily using 16 days of Terra and Aqua MODIS data at 500 meter (m) resolution. The view angle effects are removed from the directional reflectances, resulting in a stable and consistent NBAR product. Data are temporally weighted to the ninth day which is reflected in the Julian date in the file name. This NBAR layer is a representation of MODIS reflectance bands 1, 4 and 3.
 
-References: [LP DAAC - MCD43A4 Version 6](https://doi.org/10.5067/MODIS/MCD43A4.006)
+References: MCD43A4 [doi:10.5067/MODIS/MCD43A4.061](https://doi.org/10.5067/MODIS/MCD43A4.061)
+
+NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
 

@@ -12,7 +12,7 @@ import { createSelector } from 'reselect';
 import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
-import getSelectedDate from '../date/selectors';
+import { getSelectedDate } from '../date/selectors';
 
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
@@ -30,7 +30,10 @@ export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeS
  * regardless of projection
  */
 export const getActiveLayers = (state, activeString) => {
-  const { compare, layers } = state;
+  const { embed, compare, layers } = state;
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveLayersEmbed(state, activeString);
+  }
   return layers[activeString || compare.activeString].layers;
 };
 
@@ -39,14 +42,66 @@ export const getActiveLayers = (state, activeString) => {
  * that are available for the currently active projection
  */
 export const getActiveOverlayGroups = (state) => {
-  const { compare, layers, proj } = state;
+  const {
+    embed, compare, layers, proj,
+  } = state;
   const { overlayGroups } = layers[compare.activeString];
+  if (embed && embed.isEmbedModeActive) {
+    return getActiveOverlayGroupsEmbed(state);
+  }
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
       (id) => !!activeLayersMap[id].projections[proj.id],
     ).length,
   );
+};
+
+/**
+ * Return a list of layers for the currently active compare state
+ * regardless of projection (no hidden layers)
+ */
+const getActiveLayersEmbed = (state, activeString) => {
+  const { compare, layers } = state;
+  const activeLayers = layers[activeString || compare.activeString].layers;
+  return activeLayers.filter((layer) => layer.visible);
+};
+
+/**
+ * Return an array of filtered overlay groups for the currently active compare state
+ * that are available for the currently active projection (no hidden or reference layers)
+ *
+ * @param {Object} state
+ */
+const getActiveOverlayGroupsEmbed = (state) => {
+  const {
+    compare, layers, proj,
+  } = state;
+  const { overlayGroups } = layers[compare.activeString];
+  const activeLayersMap = getActiveLayersMap(state);
+  const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
+  return (overlayGroupsFiltered || []).filter(
+    (group) => group.layers.filter(
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
+          && !!activeLayersMap[id].visible,
+    ).length,
+  );
+};
+
+/**
+ * Return a list of layer groups that filter out removed, hidden layers
+ */
+export const getFilteredOverlayGroups = (overlayGroups, overlays) => {
+  const overlaysLayerIds = overlays.map((layer) => layer.id);
+  // remove reference layers and revise overlay layers group
+  return overlayGroups
+    .filter((group) => group.groupName !== 'Reference')
+    .map((group) => {
+      const filteredLayers = group.layers.filter((layer) => overlaysLayerIds.includes(layer));
+      const filteredGroup = { ...group };
+      filteredGroup.layers = filteredLayers;
+      return filteredGroup;
+    });
 };
 
 /**
@@ -432,17 +487,24 @@ export function isRenderable(id, layers, date, state) {
   return !obscured;
 }
 
-export function activateLayersForEventCategory(activeLayers, state) {
+export function activateLayersForEventCategory(state, category) {
+  const projection = state.proj.id;
+  const { layers } = state.config.naturalEvents;
   const { layerConfig } = state.layers;
-  // Turn off all layers in list first
+  const categoryLayers = layers[projection][category];
+
   let newLayers = getActiveLayers(state);
-  lodashEach(newLayers, (layer, index) => {
+  if (!categoryLayers) {
+    return newLayers;
+  }
+  // Turn off all layers in list first
+  newLayers.forEach((layer, index) => {
     newLayers = update(newLayers, {
       [index]: { visible: { $set: false } },
     });
   });
   // Turn on or add new layers
-  lodashEach(activeLayers, (layer) => {
+  categoryLayers.forEach((layer) => {
     const [id, visible] = layer;
     const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
@@ -450,12 +512,13 @@ export function activateLayersForEventCategory(activeLayers, state) {
         [index]: { visible: { $set: visible } },
       });
     } else {
+      const overlays = getLayers(state, { group: 'overlays' }, newLayers);
       newLayers = addLayer(
         id,
         { visible },
         newLayers,
         layerConfig,
-        getLayers(state, { group: 'overlays' }, newLayers).length,
+        overlays.length,
       );
     }
   });

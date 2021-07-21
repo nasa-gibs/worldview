@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 import { createResponsiveStateReducer } from 'redux-responsive';
-import { get as lodashGet, assign as lodashAssign } from 'lodash';
+import { assign as lodashAssign } from 'lodash';
 import { modalReducer, modalAboutPage } from './modal/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
 import { locationSearchReducer } from './location-search/reducers';
 import { shortLink } from './link/reducers';
 import {
+  getInitialEventsState,
   requestedEvents,
   requestedEventSources,
   eventsReducer,
@@ -43,6 +44,7 @@ import {
 } from './product-picker/reducers';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
+import embedReducers from './embed/reducers';
 import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
 import { smartHandoffReducer } from './smart-handoff/reducer';
@@ -73,10 +75,6 @@ const responsiveStateReducer = createResponsiveStateReducer(
  * @param {Object} parameters | parameters parsed from permalink
  */
 export function getInitialState(models, config, parameters) {
-  const eventsIgnoreArray = {
-    ignore: lodashGet(config, 'naturalEvents.skip') || [],
-  };
-
   return {
     parameters,
     config,
@@ -84,8 +82,9 @@ export function getInitialState(models, config, parameters) {
     date: getDateInitialState(config),
     proj: getProjInitialState(config),
     layers: getLayersInitialState(config),
-    requestedEvents: eventRequestResponse(eventsIgnoreArray),
-    requestedEventSources: eventRequestResponse(eventsIgnoreArray),
+    events: getInitialEventsState(config),
+    requestedEvents: eventRequestResponse(),
+    requestedEventSources: eventRequestResponse(),
     palettes: getInitialPaletteState(config),
     productPicker: getProductPickerInitialState(config),
     vectorStyles: getInitialVectorStyleState(config),
@@ -129,6 +128,7 @@ const reducers = {
   lastAction,
   location: locationReducer,
   measure: measureReducer,
+  embed: embedReducers,
   ui: uiReducers,
   productPicker: productPickerReducer,
 };

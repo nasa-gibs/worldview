@@ -702,13 +702,11 @@ button:focus {
   bottom: 10px;
   background: rgba(40, 40, 40, 0.85);
   border: thin solid #333;
-  padding: 3px;
   border-radius: 5px;
   cursor: pointer;
   height: 44px;
-
   & .button-action-group {
-    height: 37px;
+    height: 44px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }

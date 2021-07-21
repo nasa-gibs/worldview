@@ -5,7 +5,10 @@ import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
 import {
-  getAllActiveOverlaysBaselayers, getActiveOverlayGroups, getActiveLayersMap,
+  getAllActiveOverlaysBaselayers,
+  getActiveOverlayGroups,
+  getActiveLayersMap,
+  getFilteredOverlayGroups,
 } from '../../modules/layers/selectors';
 import {
   reorderOverlayGroups as reorderOverlayGroupsAction,
@@ -24,6 +27,7 @@ function LayersContainer (props) {
     height,
     isActive,
     isCompareActive,
+    isEmbedModeActive,
     isMobile,
     overlayGroups,
     overlays,
@@ -62,6 +66,7 @@ function LayersContainer (props) {
         key={groupName}
         draggableId={groupName}
         index={idx}
+        isDragDisabled={isEmbedModeActive}
       >
         {(provided) => (
           <li
@@ -106,22 +111,32 @@ function LayersContainer (props) {
   );
 
   const mobileHeightCoeff = isCompareActive ? -30 : 20;
-  const maxHeight = isMobile
+  let minHeight = '100px';
+  let maxHeight = isMobile
     ? height + mobileHeightCoeff
     : height;
+
+  if (isEmbedModeActive) {
+    minHeight = '25px';
+    maxHeight = '55vh';
+  } else {
+    maxHeight += 'px';
+  }
   const scrollContainerStyles = {
-    maxHeight: `${maxHeight}px`,
+    minHeight,
+    maxHeight,
     overflowY: 'auto',
     paddingBottom: '4px',
-    minHeight: '100px',
   };
+  const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
+  const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
 
   return isActive && (
     <>
       <div id="layers-scroll-container" style={scrollContainerStyles}>
         <div className="layer-container sidebar-panel">
 
-          {groupOverlays ? renderOverlayGroups() : (
+          {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
             <LayerList
               title="Overlays"
               groupId="overlays"
@@ -133,6 +148,7 @@ function LayersContainer (props) {
             />
           )}
 
+          {!shouldHideForEmbedNoBaseLayers && (
           <div className="layer-group-baselayers">
             <LayerList
               title="Base Layers"
@@ -144,6 +160,7 @@ function LayersContainer (props) {
               layerSplit={overlays.length}
             />
           </div>
+          )}
         </div>
       </div>
       <div className="group-overlays-checkbox">
@@ -160,21 +177,32 @@ function LayersContainer (props) {
 
 const mapStateToProps = (state, ownProps) => {
   const { compareState } = ownProps;
-  const { browser, compare, layers } = state;
+  const {
+    browser, compare, embed, layers,
+  } = state;
   const isCompareActive = compare.active;
+  const { isEmbedModeActive } = embed;
   const isMobile = browser.lessThan.medium;
   const { groupOverlays } = layers[compareState];
-  const { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
-  const overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
+  const activeLayersMap = getActiveLayersMap(state);
+  let { baselayers, overlays } = getAllActiveOverlaysBaselayers(state);
+  let overlayGroups = groupOverlays ? getActiveOverlayGroups(state) : [];
+  if (isEmbedModeActive) {
+    // remove hidden layers and reference layers overlay group
+    baselayers = baselayers.filter((layer) => layer.visible);
+    overlays = overlays.filter((layer) => layer.visible && layer.layergroup !== 'Reference');
+    overlayGroups = getFilteredOverlayGroups(overlayGroups, overlays);
+  }
 
   return {
     isCompareActive,
+    isEmbedModeActive,
     isMobile,
     baselayers,
     overlays,
     overlayGroups,
     groupOverlays,
-    activeLayersMap: getActiveLayersMap(state),
+    activeLayersMap,
   };
 };
 
@@ -205,6 +233,7 @@ LayersContainer.propTypes = {
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   overlayGroups: PropTypes.array,
   overlays: PropTypes.array,

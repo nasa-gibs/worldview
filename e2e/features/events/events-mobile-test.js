@@ -7,7 +7,7 @@ const sidebarButton = '#accordion-toggler-button';
 const sidebarContent = '#productsHolder';
 const eventsTab = '#events-sidebar-tab';
 const icebergEvent = '#wv-events #sidebar-event-EONET_2703';
-const selectedMarker = '.marker-selected';
+const selectedMarker = '.marker.selected';
 const trackMarker = '.track-marker';
 
 module.exports = {

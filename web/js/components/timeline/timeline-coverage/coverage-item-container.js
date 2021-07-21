@@ -56,7 +56,7 @@ class CoverageItemContainer extends Component {
   */
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
-    const multiDateToDisplay = dateRanges.reduce((mutliCoverageDates, range, innerIndex) => {
+    const multiDateToDisplay = dateRanges.reduce((multiCoverageDates, range, innerIndex) => {
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
@@ -67,16 +67,16 @@ class CoverageItemContainer extends Component {
       const endDateTime = new Date(endDate).getTime();
       const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
 
-      // add date intervals to mutliCoverageDates object to catch repeats
+      // add date intervals to multiCoverageDates object to catch repeats
       dateIntervalStartDates.forEach((dateIntStartDate) => {
         const dateIntTime = new Date(dateIntStartDate).getTime();
         // allow overwriting of subsequent date ranges
         if (dateIntTime >= startDateTime && startDateTime <= endDateTime) {
           const dateIntFormatted = dateIntStartDate.toISOString();
-          mutliCoverageDates[dateIntFormatted] = { date: dateIntFormatted, interval: rangeInterval };
+          multiCoverageDates[dateIntFormatted] = { date: dateIntFormatted, interval: rangeInterval };
         }
       });
-      return mutliCoverageDates;
+      return multiCoverageDates;
     }, {});
 
     return Object.values(multiDateToDisplay);
@@ -116,7 +116,7 @@ class CoverageItemContainer extends Component {
       visible,
     } = layer;
 
-    // condtional styling for line/background colors
+    // conditional styling for line/background colors
     const {
       lineBackgroundColor,
     } = getLayerItemStyles(visible, id);
