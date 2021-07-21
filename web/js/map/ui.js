@@ -69,34 +69,28 @@ const { events } = util;
 
 export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
-  const self = {};
-  let cache;
   const dateline = mapDateLineBuilder(store);
-  const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(store);
-  const dataRunner = self.runningdata = new MapRunningData(
-    models,
-    compareMapUi,
-    store,
-  );
+  const runningdata = new MapRunningData(models, compareMapUi, store);
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
-  const cache = self.cache = new Cache(400);
-  self.mapIsbeingDragged = false;
-  self.mapIsbeingZoomed = false;
-  self.proj = {}; // One map for each projection
-  self.selected = null; // The map for the selected projection
-  const layerBuilder = self.layerBuilder = mapLayerBuilder(
-    config,
+  const cache = new Cache(400);
+  const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
+  const self = {
     cache,
-    store,
-  );
-  self.layerKey = layerBuilder.layerKey;
-  const createLayer = self.createLayer = layerBuilder.createLayer;
-  self.selectedVectors = {};
-  self.activeMarker = null;
-  self.coordinatesDialogDOMEl = null;
+    mapIsbeingDragged: false,
+    mapIsbeingZoomed: false,
+    proj: {}, // One map for each projection
+    selected: null, // The map for the selected projection
+    selectedVectors: {},
+    activeMarker: null,
+    coordinatesDialogDOMEl: null,
+    runningdata,
+    layerKey,
+    createLayer,
+  };
+
   /**
    * Subscribe to redux store and listen for
    * specific action types
@@ -149,8 +143,12 @@ export default function mapui(models, config, store, ui) {
       case layerConstants.REMOVE_LAYER:
         return removeLayer(action.layersToRemove);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
-      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
-        return updateLayerVisibilities();
+      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
+        updateLayerVisibilities();
+        updateDate();
+        return;
+      }
+
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
@@ -507,6 +505,7 @@ export default function mapui(models, config, store, ui) {
       map.addControl(map.wv.scaleMetric);
     }
   }
+
   /*
    * Hide Map
    *
@@ -520,6 +519,7 @@ export default function mapui(models, config, store, ui) {
   function hideMap(map) {
     document.getElementById(`${map.getTarget()}`).style.display = 'none';
   }
+
   /*
    * Show Map
    *
@@ -533,6 +533,7 @@ export default function mapui(models, config, store, ui) {
   function showMap(map) {
     document.getElementById(`${map.getTarget()}`).style.display = 'block';
   }
+
   /*
    * Remove Layers from map
    *
@@ -553,6 +554,7 @@ export default function mapui(models, config, store, ui) {
     });
     cache.clear();
   };
+
   /*
    * get layers from models obj
    * and add each layer to the map
@@ -635,6 +637,7 @@ export default function mapui(models, config, store, ui) {
     let renderable;
     const state = store.getState();
     const layers = self.selected.getLayers();
+
     layers.forEach((layer) => {
       const compareActiveString = layer.get('group');
 
@@ -667,6 +670,7 @@ export default function mapui(models, config, store, ui) {
       }
     });
   }
+
   /*
    * Sets new opacity to layer
    *
@@ -689,6 +693,7 @@ export default function mapui(models, config, store, ui) {
     layer.setOpacity(action.opacity);
     updateLayerVisibilities();
   }
+
   /*
    *Initiates the adding of a layer or Graticule
    *
@@ -748,19 +753,14 @@ export default function mapui(models, config, store, ui) {
 
   /*
    * Update layers for the correct Date
-   *
-   * @method updateDate
-   * @static
-   *
-   *
-   * @returns {void}
    */
   const updateDate = self.updateDate = function() {
     const state = store.getState();
-    const { embed, compare } = state;
-    let activeLayers = getAllActiveLayers(state);
+    const { compare } = state;
+    const activeLayers = getAllActiveLayers(state);
     let layerGroups;
     let layerGroup;
+
     if (compare && compare.active) {
       layerGroups = self.selected.getLayers().getArray();
       if (layerGroups.length > 1) {
@@ -771,10 +771,17 @@ export default function mapui(models, config, store, ui) {
             : null;
       }
     }
-    if (embed.isEmbedModeActive) {
-      activeLayers = activeLayers.filter((layer) => layer.visible);
-    }
-    lodashEach(activeLayers, (def) => {
+
+    const group = compare && compare.active ? layerGroup : self.selected;
+    const layers = group.getLayers().getArray();
+    const visibleLayers = activeLayers.filter(
+      ({ id }) => layers
+        .filter((l) => l.getVisible())
+        .map(({ wv }) => wv.def.id)
+        .includes(id),
+    );
+
+    lodashEach(visibleLayers, (def) => {
       const layerName = def.layer || def.id;
 
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
@@ -782,7 +789,7 @@ export default function mapui(models, config, store, ui) {
       }
 
       if (compare && compare.active) {
-        if (layerGroup && layerGroup.getLayers().getArray().length) {
+        if (layers.length) {
           const index = findLayerIndex(def, layerGroup);
           const layerValue = self.selected.getLayers().getArray()[index];
           layerGroup.getLayers().setAt(
@@ -797,11 +804,10 @@ export default function mapui(models, config, store, ui) {
         }
       } else {
         const index = findLayerIndex(def);
-        const layerValue = self.selected.getLayers().getArray()[index];
-        self.selected
-          .getLayers()
-          .setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
+        const layer = createLayer(def, { previousLayer: layers[index] ? layers[index].wv : null });
+        self.selected.getLayers().setAt(index, layer);
       }
+
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         const { vectorStyles } = config;
         let vectorStyleId;
@@ -1089,13 +1095,13 @@ export default function mapui(models, config, store, ui) {
       const isMapAnimating = state.animation.isPlaying;
       if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
-      dataRunner.newPoint(pixels, map);
+      runningdata.newPoint(pixels, map);
     }, 300);
 
     events.on('map:mousemove', throttledOnMouseMove);
     events.on('map:mouseout', (e) => {
       throttledOnMouseMove.cancel();
-      dataRunner.clearAll();
+      runningdata.clearAll();
     });
   }
 

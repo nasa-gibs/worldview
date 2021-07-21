@@ -76,6 +76,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     return {
       expirationAbsolute: new Date(now + tenMin),
+      onPurge: (k, v) => { console.log('removed from cache', k, v); },
     };
   };
 
@@ -509,7 +510,7 @@ export default function mapLayerBuilder(config, cache, store) {
   /**
    * Create a new WMS Layer
    *
-   * @method createLayerWMTS
+   * @method createLayerWMS
    * @static
    * @param {object} def - Layer Specs
    * @param {object} options - Layer options
