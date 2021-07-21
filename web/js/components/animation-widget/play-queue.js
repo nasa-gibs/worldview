@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { isEmpty as lodashIsEmpty } from 'lodash';
@@ -6,6 +6,11 @@ import Spinner from 'react-loader';
 import Queue from 'promise-queue';
 import util from '../../util/util';
 import { getLayersActiveAtDate } from '../../modules/date/util';
+import {
+  getQueueLength,
+  getMaxQueueLength,
+  snapToIntervalDelta,
+} from '../../modules/animation/util';
 
 const queue = new Queue(5, Infinity);
 let isAnimating = false;
@@ -15,30 +20,46 @@ function PlayAnimation (props) {
     isPlaying,
     isLoopActive,
     interval,
-    hasCustomPalettes,
-    startDate, endDate,
-    queueLength,
+    startDate,
+    endDate,
     delta,
     layers,
+    hasCustomPalettes,
     speed,
-    onClose,
-    togglePlaying,
     selectDate,
-    currentDate,
+    selectedDate,
     promiseImageryForTime,
-    canPreloadAll,
-    maxQueueLength,
+    pause,
   } = props;
 
   let preloadObject = {};
   let inQueueObject = {};
-  let preloadedArray = [];
   const pastDates = {};
+  let preloadedArray = [];
   let timeout = 0;
 
+  const maxQueueLength = getMaxQueueLength(speed);
+  const queueLength = getQueueLength(
+    startDate,
+    endDate,
+    speed,
+    interval,
+    delta,
+  );
+  const canPreloadAll = queueLength <= maxQueueLength;
+  const currentDate = snapToIntervalDelta(
+    selectedDate,
+    startDate,
+    endDate,
+    interval,
+    delta,
+  );
+
   useEffect(() => {
-    console.log('remount!', isAnimating, isPlaying);
-    checkQueue();
+    if (isPlaying) {
+      console.log('remount!', queueLength, maxQueueLength);
+      checkQueue();
+    }
 
     return () => {
       queue.queue = [];
@@ -46,7 +67,7 @@ function PlayAnimation (props) {
         stopPlaying();
       }
     };
-  }, []);
+  }, [isPlaying]);
 
   const nextDate = (date) => util.dateAdd(date, interval, delta);
 
@@ -115,7 +136,7 @@ function PlayAnimation (props) {
     if (queueLength <= 1) {
       // if only one frame will play just move to that date
       selectDate(startDate);
-      togglePlaying();
+      pause();
       return;
     }
     for (let i = 0; i < queueLength; i += 1) {
@@ -164,7 +185,7 @@ function PlayAnimation (props) {
         checkQueue();
       }, 1000);
     } else {
-      togglePlaying();
+      pause();
     }
   };
 
@@ -175,15 +196,14 @@ function PlayAnimation (props) {
     const current = util.parseDateUTC(currentPlayingDate);
     const lastToQueue = getLastBufferDateStr(current);
     const next = nextDate(current);
-    const lastPreloadArrayItem = preloadedArray[preloadedArray.length - 1];
+    const [lastPreload] = preloadedArray.slice(-1);
 
-    if (
-      !preloadedArray[0]
-      && !inQueueObject[currentPlayingDate]
-    ) {
+    const nothingLoaded = !preloadedArray[0] && !inQueueObject[currentPlayingDate];
+
+    if (nothingLoaded) {
       initialPreload(current, lastToQueue);
     } else if (
-      !lastPreloadArrayItem !== lastToQueue
+      !lastPreload !== lastToQueue
       && !inQueueObject[lastToQueue]
       && !hasCustomPalettes
       && !canPreloadAll
@@ -241,7 +261,7 @@ function PlayAnimation (props) {
   };
 
   const getNextBufferDate = () => {
-    const strDate = preloadedArray[preloadedArray.length - 1];
+    const [strDate] = preloadedArray.slice(-1);
     const lastInBuffer = util.parseDateUTC(strDate);
     const next = nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || next > endDate) {
@@ -303,7 +323,7 @@ function PlayAnimation (props) {
     if (!isAnimating) isAnimating = true;
     animate();
     if (document.hidden) {
-      togglePlaying();
+      pause();
     }
   };
 
@@ -362,12 +382,12 @@ function PlayAnimation (props) {
   const renderSpinner = () => (
     <Modal
       isOpen
-      toggle={onClose}
+      toggle={pause}
       size="sm"
       backdrop={false}
       wrapClassName="clickable-behind-modal"
     >
-      <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
+      <ModalHeader toggle={pause}> Preloading imagery </ModalHeader>
       <ModalBody>
         <div style={{ minHeight: 50 }}>
           <Spinner color="#fff" loaded={false}>
@@ -378,26 +398,23 @@ function PlayAnimation (props) {
     </Modal>
   );
 
-  return !isAnimating ? renderSpinner() : '';
+  return !isAnimating && isPlaying ? renderSpinner() : null;
 }
 
 PlayAnimation.propTypes = {
+  startDate: PropTypes.object.isRequired,
   endDate: PropTypes.object.isRequired,
   isPlaying: PropTypes.bool.isRequired,
+  isLoopActive: PropTypes.bool,
   layers: PropTypes.array.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
-  queueLength: PropTypes.number.isRequired,
   selectDate: PropTypes.func.isRequired,
+  selectedDate: PropTypes.object.isRequired,
   speed: PropTypes.number.isRequired,
-  startDate: PropTypes.object.isRequired,
-  togglePlaying: PropTypes.func.isRequired,
-  canPreloadAll: PropTypes.bool,
-  currentDate: PropTypes.object,
+  // togglePlaying: PropTypes.func.isRequired,
   delta: PropTypes.number,
   hasCustomPalettes: PropTypes.bool,
   interval: PropTypes.string,
-  isLoopActive: PropTypes.bool,
-  maxQueueLength: PropTypes.number,
   onClose: PropTypes.func,
 };
 

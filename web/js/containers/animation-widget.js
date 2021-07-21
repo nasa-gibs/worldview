@@ -35,11 +35,6 @@ import {
   customModalType,
 } from '../modules/date/constants';
 import {
-  getQueueLength,
-  getMaxQueueLength,
-  snapToIntervalDelta,
-} from '../modules/animation/util';
-import {
   hasSubDaily as hasSubDailySelector,
   getActiveLayers,
   getAllActiveLayers,
@@ -580,28 +575,13 @@ class AnimationWidget extends React.Component {
       isDistractionFreeModeActive,
       promiseImageryForTime,
       selectDate,
-      currentDate,
+      selectedDate,
       isGifActive,
       delta,
       interval,
     } = this.props;
     const { speed, collapsed } = this.state;
-    const maxLength = getMaxQueueLength(speed);
-    const queueLength = getQueueLength(
-      startDate,
-      endDate,
-      speed,
-      interval,
-      delta,
-    );
 
-    const snappedCurrentDate = snapToIntervalDelta(
-      currentDate,
-      startDate,
-      endDate,
-      interval,
-      delta,
-    );
 
     if (!isActive) {
       return null;
@@ -611,27 +591,23 @@ class AnimationWidget extends React.Component {
     }
     return (
       <ErrorBoundary>
-        {isPlaying && (
-          <PlayQueue
-            isLoopActive={looping}
-            isPlaying={isPlaying}
-            canPreloadAll={queueLength <= maxLength}
-            currentDate={snappedCurrentDate}
-            startDate={startDate}
-            endDate={endDate}
-            hasCustomPalettes={hasCustomPalettes}
-            maxQueueLength={maxLength}
-            queueLength={queueLength}
-            layers={layers}
-            interval={interval}
-            delta={delta}
-            speed={speed}
-            selectDate={selectDate}
-            togglePlaying={onPushPause}
-            promiseImageryForTime={promiseImageryForTime}
-            onClose={onPushPause}
-          />
-        )}
+
+        <PlayQueue
+          isLoopActive={looping}
+          isPlaying={isPlaying}
+          startDate={startDate}
+          endDate={endDate}
+          hasCustomPalettes={hasCustomPalettes}
+          layers={layers}
+          interval={interval}
+          delta={delta}
+          speed={speed}
+          selectDate={selectDate}
+          selectedDate={selectedDate}
+          pause={onPushPause}
+          promiseImageryForTime={promiseImageryForTime}
+        />
+
         {!isDistractionFreeModeActive && (
           <>
             {collapsed ? this.renderCollapsedWidget() : this.renderExpandedWidget()}
@@ -721,7 +697,7 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     activePalettes,
-    currentDate: getSelectedDate(state),
+    selectedDate: getSelectedDate(state),
     minDate,
     maxDate,
     isActive: animationIsActive,
@@ -852,7 +828,7 @@ AnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
   changeCustomInterval: PropTypes.func,
-  currentDate: PropTypes.object,
+  selectedDate: PropTypes.object,
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
