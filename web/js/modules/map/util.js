@@ -109,6 +109,7 @@ export function mapIsExtentValid(extent) {
   });
   return valid;
 }
+
 /*
  * Set default extent according to time of day:
  *
@@ -223,6 +224,7 @@ export function calculateExtent(extent, viewportExtent) {
 function getExtent(extent1, extent2) {
   return olExtent.getIntersection(extent1, extent2);
 }
+
 /**
  * Returns a promise of the layer tilegrid.
  *
@@ -283,5 +285,31 @@ function promiseTileLayer(layer, extent, viewState, pixelRatio) {
       tileSource.on('tileloaderror', loader);
       i += 1;
     });
+  });
+}
+
+/*
+ * @method promiseImageryForTime
+ * @param  {object} time of data to be displayed on the map.
+ * @return {object}      Promise.all
+ */
+export default function promiseImageryForTime(date, layers, state) {
+  const { map } = state;
+  const {
+    cache, selected, createLayer, layerKey,
+  } = map.ui;
+  const { pixelRatio, viewState } = selected.frameState_; // OL object describing the current map frame
+
+  const promiseArray = layers.map((def) => {
+    const key = layerKey(def, { date }, state);
+    let layer = cache.getItem(key);
+
+    if (!layer) {
+      layer = createLayer(def, { date, precache: true });
+    }
+    return promiseLayerGroup(layer, viewState, pixelRatio, selected, def);
+  });
+  return new Promise((resolve) => {
+    Promise.all(promiseArray).then(() => resolve(date));
   });
 }

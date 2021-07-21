@@ -29,7 +29,6 @@ import Cache from 'cachai';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
-import mapPrecacheTile from './precachetile';
 import { getActiveLayerGroup, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
@@ -66,7 +65,6 @@ import { animateCoordinates, getCoordinatesMarker } from '../modules/location-se
 import { reverseGeocode } from '../modules/location-search/util-api';
 import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/location-search/ol-coordinates-marker-util';
 
-
 const { events } = util;
 
 export default function mapui(models, config, store, ui) {
@@ -84,7 +82,7 @@ export default function mapui(models, config, store, ui) {
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
-  cache = self.cache = new Cache(400);
+  const cache = self.cache = new Cache(400);
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
@@ -96,7 +94,6 @@ export default function mapui(models, config, store, ui) {
   );
   self.layerKey = layerBuilder.layerKey;
   const createLayer = self.createLayer = layerBuilder.createLayer;
-  self.promiseDay = precache.promiseDay;
   self.selectedVectors = {};
   self.activeMarker = null;
   self.coordinatesDialogDOMEl = null;
