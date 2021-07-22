@@ -39,7 +39,9 @@ export default function mapLayerBuilder(config, cache, store) {
   const self = {};
 
   /**
-   * Return a layer, or layergroup, created with the supplied function
+   * Return top level layer which may include prev/next days to cover
+   * crossing the dateline in both directions
+   *
    * @param {*} createLayerFunc
    * @param {*} def
    * @param {*} options
@@ -48,18 +50,14 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
-    const layer = createLayerFunc(def, options, null, state, attributes);
-    if (!wrapLayer) {
+    // yesterday, today, tommorrow for wings
+    const offsetArray = wrapLayer ? [-1, null, 1] : [null];
+    const layers = offsetArray.map((dayOffset) => {
+      const layer = createLayerFunc(def, options, dayOffset, state, attributes);
+      layer.wv = attributes;
       return layer;
-    }
-    const layerNext = createLayerFunc(def, options, 1, state, attributes);
-    const layerPrior = createLayerFunc(def, options, -1, state, attributes);
-    layer.wv = attributes;
-    layerPrior.wv = attributes;
-    layerNext.wv = attributes;
-    return new OlLayerGroup({
-      layers: [layer, layerNext, layerPrior],
     });
+    return new OlLayerGroup({ layers });
   };
 
   /**
@@ -251,7 +249,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @static
    * @param {Object} def - Layer properties
    * @param {number} options - Layer options
-   * @param {boolean} precache
    * @returns {object} layer key Object
    */
   self.layerKey = function(def, options, state) {
