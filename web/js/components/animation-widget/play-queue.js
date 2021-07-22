@@ -5,7 +5,7 @@ import { isEmpty as lodashIsEmpty } from 'lodash';
 import Spinner from 'react-loader';
 import Queue from 'promise-queue';
 import util from '../../util/util';
-import { getLayersActiveAtDate } from '../../modules/date/util';
+import { getAllActiveVisibleLayersAtDate } from '../../modules/layers/selectors';
 import {
   getQueueLength,
   getMaxQueueLength,
@@ -87,7 +87,7 @@ function PlayAnimation (props) {
    */
   const addDate = (date) => {
     const strDate = util.toISOStringSeconds(date);
-    const activeLayers = getLayersActiveAtDate(layers, date);
+    const visibleLayers = getAllActiveVisibleLayersAtDate(layers, date);
 
     if (inQueueObject[strDate] || preloadObject[strDate]) {
       return;
@@ -95,7 +95,9 @@ function PlayAnimation (props) {
     inQueueObject[strDate] = date;
     preloadedArray.push(strDate);
 
-    queue.add(() => promiseImageryForTime(date, activeLayers)).then((addedDate) => {
+    queue.add(
+      () => promiseImageryForTime(date, visibleLayers),
+    ).then((addedDate) => {
       preloadObject[strDate] = addedDate;
       delete inQueueObject[strDate];
       shiftCache();

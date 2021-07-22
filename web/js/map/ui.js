@@ -647,6 +647,7 @@ export default function mapui(models, config, store, ui) {
           layer.wv.id,
           getActiveLayers(state),
           getSelectedDate(state),
+          null,
           state,
         );
         layer.setVisible(renderable);
