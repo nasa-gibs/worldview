@@ -168,7 +168,6 @@
   "dependencies": {
     "@elastic/react-search-ui": "^1.5.1",
     "@elastic/react-search-ui-views": "^1.5.1",
-    "@entryline/gifstream": "^1.2.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
