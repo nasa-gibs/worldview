@@ -1,6 +1,7 @@
+/* eslint no-plusplus: 0 */
 import Promise from 'bluebird';
-import GifWriter from './gifwriter';
-import NeuQuant from './neuquant';
+import GifWriter from '../../lib/gifwriter';
+import NeuQuant from '../../lib/neuquant';
 
 Promise.config({ cancellation: true });
 export default class GifStream {
@@ -160,9 +161,10 @@ export default class GifStream {
               Math.round((processedImages / imageLength) * 100),
             );
             processedImages++;
-            setTimeout(() =>
+            setTimeout(() => {
               // This was needed in order for callback to be applied
-              pull(),
+              pull();
+            },
             10);
           }
         });
@@ -215,13 +217,6 @@ export default class GifStream {
       pull: function pull(controller) {
         const frame = frames.shift();
         if (!frame) controller.close();
-        let imgData;
-        let rgbComponents;
-        let paletteRGB;
-        let nq;
-        let paletteArray;
-        let numberPixels;
-        let pixels;
         let r;
         let g;
         let b;
@@ -232,13 +227,13 @@ export default class GifStream {
           ? delay + options.extraLastFrameDelay / 10
           : delay; // Add an extra
         ctx = self.addFrameDetails(ctx, frame);
-        imgData = ctx.getImageData(0, 0, width, height);
-        rgbComponents = dataToRGB(imgData.data, imgData.width, imgData.height);
-        nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
-        paletteRGB = nq.process();
-        paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
-        numberPixels = imgData.height * imgData.width;
-        pixels = new Uint8Array(imgData.height * imgData.width);
+        const imgData = ctx.getImageData(0, 0, width, height);
+        const rgbComponents = dataToRGB(imgData.data, imgData.width, imgData.height);
+        const nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
+        const paletteRGB = nq.process();
+        const paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
+        const numberPixels = imgData.height * imgData.width;
+        const pixels = new Uint8Array(imgData.height * imgData.width);
         for (let i = 0; i < numberPixels; i++) {
           r = rgbComponents[k++];
           g = rgbComponents[k++];
@@ -274,7 +269,7 @@ function componentizedPaletteToArray(paletteRGB) {
     r = paletteRGB[i];
     g = paletteRGB[i + 1];
     b = paletteRGB[i + 2];
-    paletteArray.push((r << 16) | (g << 8) | b);
+    paletteArray.push((r << 16) | (g << 8) | b); // eslint-disable-line no-bitwise
   }
   return paletteArray;
 }
