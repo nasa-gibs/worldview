@@ -74,7 +74,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -86,7 +92,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -98,7 +110,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -110,7 +128,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -122,7 +146,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -134,7 +164,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -146,7 +182,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -158,7 +200,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -170,7 +218,175 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_All_v61_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Day_v61_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Day_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night_v61_NRT",
+      "source": "MODIS_Aqua_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_All_v61_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Day_v61_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Day_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Combined_Thermal_Anomalies_Night_v61_NRT",
+      "source": "MODIS_Combined_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_All_v61_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_All",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Day_v61_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_Day",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Day_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
+        ],
+        "circle-color": "rgb(236, 98, 16)"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_Night_v61_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_Night",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_Night_v61_NRT",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -182,7 +398,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -194,7 +416,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -206,7 +434,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -218,7 +452,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -230,7 +470,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -242,7 +488,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -254,7 +506,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -266,7 +524,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
@@ -278,7 +542,13 @@
       "type": "circle",
       "paint": {
         "circle-radius": [
-          "step", ["zoom"], 2, 5, 3
+          "step",
+          [
+            "zoom"
+          ],
+          2,
+          5,
+          3
         ],
         "circle-color": "rgb(236, 98, 16)"
       }
