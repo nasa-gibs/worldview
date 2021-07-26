@@ -26,7 +26,11 @@ function MeasurementMetadataDetail (props) {
           metadata[metadataPath] = { data };
           setMetadata(metadata);
           setLoading(false);
-        }).catch(() => { setLoading(false); });
+        }).finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   }, [source]);
 
