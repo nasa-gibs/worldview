@@ -1187,7 +1187,7 @@ class Timeline extends React.Component {
 
                     {!isTimelineHidden
                       && (
-                      <div id="timeline-footer">
+                      <div id="timeline-footer" className="notranslate">
                         {/* Axis */}
                         <TimelineAxis
                           axisWidth={axisWidth}
