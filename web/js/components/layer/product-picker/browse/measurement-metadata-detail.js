@@ -26,7 +26,11 @@ function MeasurementMetadataDetail (props) {
           metadata[metadataPath] = { data };
           setMetadata(metadata);
           setLoading(false);
-        }).catch(() => { setLoading(false); });
+        }).finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   }, [source]);
 
@@ -91,7 +95,7 @@ function MeasurementMetadataDetail (props) {
   }
 
   /* No metadata configured for this source */
-  if (!metadataPath) {
+  if (!metadataPath && !layer.length) {
     return (
       <div className="no-results">
         <FontAwesomeIcon icon="meteor" />
