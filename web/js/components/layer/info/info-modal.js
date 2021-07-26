@@ -11,7 +11,7 @@ export default function LayerInfoModal(props) {
     if (!metadata && measurementDescriptionPath) {
       const url = `config/metadata/layers/${measurementDescriptionPath}.html`;
       const data = await util.get(url);
-      setMetadata(data || 'No metadata found.');
+      setMetadata(data);
     }
   };
 
