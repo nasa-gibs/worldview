@@ -1,6 +1,23 @@
 ### GHRSST Sea Surface Temperature
 The Group for High Resolution Sea Surface Temperature (GHRSST) layers are the “skin sea surface temperature” at approximately 10-20 µm depth in Celsius (°C). Changes in sea surface temperature have an impact on weather, oceanic and atmospheric current patterns, affects ocean ecology and even life on land. Sea surface temperatures are normally warmer near the equator and cooler near the poles, but ocean currents move warm and cold water around the Earth’s oceans. When these currents flow near the surface, they are typically visible in the sea surface imagery if not obscured by clouds. El Niño is an example of how changes in sea surface temperature affect weather around the world. El Niño occurs every 3 – 7 years and causes a wide swath of the eastern tropical Pacific Ocean around the equator to warm 2 – 3 °C (or even more during intense El Nino events). This anomalous warming in turn changes weather  patterns around the world. For example, increased precipitation typically occurs in the southern United States, and severe drought is found in Australia, Indonesia, and southern Asia during these periods. Other examples of SST effects on weather include the ocean temperature influence on the development of tropical cyclones like hurricanes and typhoons. Tropical cyclones are dependent on warm SST from which they draw heat and energy to form and intensify.
 
+References: [PO.DAAC - Group for High Resolution Sea Surface Temperature (GHRSST)](https://podaac.jpl.nasa.gov/GHRSST)
+
+### Sea Surface Temperature (L3, Daily, Metop-A)
+Temporal coverage: 1 December 2006 - present
+
+References: [10.5067/GHMTA-3US28](https://doi.org/10.5067/GHMTA-3US28)
+
+### Sea Surface Temperature (L3, Daily, Metop-B)
+Temporal coverage: 19 October 2012 - present
+
+References: [10.5067/GHMTB-3US28](https://doi.org/10.5067/GHMTB-3US28)
+
+### Sea Surface Temperature (L3, Daily, Metop-C)
+Temporal coverage: 4 December 2018 - present
+
+References: [10.5067/GHMTC-3US28](https://doi.org/10.5067/GHMTC-3US28)
+
 ### Sea Surface Temperature (L4, MUR)
 Temporal coverage: 1 June 2002 - present
 
@@ -17,7 +34,7 @@ This dataset is funded by the [NASA MEaSUREs program](https://earthdata.nasa.gov
 
 References: doi: [10.5067/GHM25-4FJ42](https://doi.org/10.5067/GHM25-4FJ42)
 
-### Sea Surface Temperature (L4)
+### Sea Surface Temperature (L4, AVHRR-OI)
 Temporal coverage: 1 September 1981 - Present
 
 The Sea Surface Temperature (L4) layer is a Group for High Resolution Sea Surface Temperature (GHRSST) global Level 4 sea surface temperature analysis produced daily on a 0.25 degree grid at the NOAA National Centers for Environmental Information. This product uses optimal interpolation (OI) by interpolating and extrapolating SST observations from different sources, resulting in a smoothed complete field. The sources of data are satellite (AVHRR) and in situ platforms (i.e., ships and buoys), and the specific datasets employed may change. At the marginal ice zone, sea ice concentrations are used to generate proxy SSTs. Note that this is the AVHRR-ONLY (AVHRR-OI), available from September 1, 1981, but there is a companion SST product that includes microwave satellite data, available from June 2002.
@@ -30,5 +47,4 @@ Temporal coverage: 23 July 2008 - present
 The Sea Surface Temperature (GAMSSA GDS2) layer is a Group for High Resolution Sea Surface Temperature (GHRSST) Level 4 sea surface temperature analysis, produced daily on an operational basis at the Australian Bureau of Meteorology (BoM) using optimal interpolation (OI) on a global 0.25 degree grid. This Global Australian Multi-Sensor SST Analysis (GAMSSA) v1.0 system blends satellite SST observations from passive infrared and passive microwave radiometers with in situ data from ships, drifting buoys and moorings from the Global Telecommunications System (GTS). SST observations that have experienced recent surface wind speeds less than 6 m/s during the day or less than 2 m/s during night are rejected from the analysis.  The processing results in daily foundation SST estimates that are largely free of nocturnal cooling and diurnal warming effects.  Sea ice concentrations are supplied by the NOAA/NCEP 12.7 km sea ice analysis.  In the absence of observations, the analysis relaxes to the Reynolds and Smith (1994) Monthly 1 degree SST climatology for 1961 - 1990.
 
 References: [doi:10.5067/GHGAM-4FA1A](https://doi.org/10.5067/GHGAM-4FA1A)
-
 
