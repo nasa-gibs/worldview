@@ -5,10 +5,9 @@
       "title": "ICESat-2 - Orbit Track & Time",
       "subtitle": "ICESat-2 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_ICESAT-2_Ascending",
-      "tags": "tracks",
+      "tags": "tracks vector",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "ascending",
@@ -17,6 +16,9 @@
         "id": "OrbitTracks_ICESAT-2_Ascending",
         "immutable": true
       },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_ICESAT-2_Ascending",
         "antarctic": {
@@ -26,9 +28,6 @@
           "id": "OrbitTracks_ICESAT-2_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

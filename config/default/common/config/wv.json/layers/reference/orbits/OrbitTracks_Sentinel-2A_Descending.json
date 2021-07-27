@@ -5,10 +5,9 @@
       "title": "Sentinel-2A - Orbit Track & Time",
       "subtitle": "Sentinel-2A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-2A_Descending",
-      "tags": "tracks day",
+      "tags": "tracks day vector",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
@@ -21,6 +20,9 @@
         "id": "OrbitTracks_Sentinel-2A_Descending",
         "immutable": true
       },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_Sentinel-2A_Descending",
         "antarctic": {
@@ -30,9 +32,6 @@
           "id": "OrbitTracks_Sentinel-2A_Descending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

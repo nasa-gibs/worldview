@@ -5,10 +5,9 @@
       "title": "NOAA-20 - Orbit Track & Time",
       "subtitle": "NOAA-20 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_NOAA-20_Ascending",
-      "tags": "JPSS-1 tracks day",
+      "tags": "JPSS-1 tracks day vector",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
@@ -21,6 +20,9 @@
         "id": "OrbitTracks_NOAA-20_Ascending",
         "immutable": true
       },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_NOAA-20_Ascending",
         "antarctic": {
@@ -30,9 +32,6 @@
           "id": "OrbitTracks_NOAA-20_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

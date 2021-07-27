@@ -6,8 +6,7 @@
       "subtitle": "GCOM-W1 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GCOM-W1_Ascending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
@@ -20,7 +19,10 @@
         "id": "OrbitTracks_GCOM-W1_Ascending",
         "immutable": true
       },
-      "tags": "tracks day",
+      "tags": "tracks day vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_GCOM-W1_Ascending",
         "antarctic": {
@@ -30,9 +32,6 @@
           "id": "OrbitTracks_GCOM-W1_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

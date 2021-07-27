@@ -6,8 +6,7 @@
       "subtitle": "GPM / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_GPM_Descending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
@@ -16,7 +15,10 @@
         "id": "OrbitTracks_GPM_Descending",
         "immutable": true
       },
-      "tags": "tracks descending",
+      "tags": "tracks descending vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_GPM_Descending",
         "antarctic": {
@@ -26,9 +28,6 @@
           "id": "OrbitTracks_GPM_Descending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

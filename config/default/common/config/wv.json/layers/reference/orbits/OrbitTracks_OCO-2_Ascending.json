@@ -6,8 +6,7 @@
       "subtitle": "OCO-2 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_OCO-2_Ascending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
@@ -20,7 +19,10 @@
         "id": "OrbitTracks_OCO-2_Ascending",
         "immutable": true
       },
-      "tags": "tracks day oco2",
+      "tags": "tracks day oco2 vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_OCO-2_Ascending",
         "antarctic": {
@@ -30,9 +32,6 @@
           "id": "OrbitTracks_OCO-2_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

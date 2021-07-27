@@ -6,9 +6,8 @@
       "subtitle": "Suomi NPP / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Suomi_NPP_Ascending",
       "group": "overlays",
-      "tags": "snpp s-npp tracks day",
-      "format": "image/png",
-      "type": "wms",
+      "tags": "snpp s-npp tracks day vector",
+      "type": "vector",
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
@@ -21,6 +20,9 @@
         "id": "OrbitTracks_Suomi_NPP_Ascending",
         "immutable": true
       },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_Suomi_NPP_Ascending",
         "antarctic": {
@@ -30,9 +32,6 @@
           "id": "OrbitTracks_Suomi_NPP_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

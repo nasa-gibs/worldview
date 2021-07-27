@@ -5,10 +5,9 @@
       "title": "NOAA-20 - Orbit Track & Time",
       "subtitle": "NOAA-20 / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_NOAA-20_Descending",
-      "tags": "JPSS-1 tracks night",
+      "tags": "JPSS-1 tracks night vector",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [
@@ -20,6 +19,9 @@
         "id": "OrbitTracks_NOAA-20_Descending",
         "immutable": true
       },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_NOAA-20_Descending",
         "antarctic": {
@@ -29,9 +31,6 @@
           "id": "OrbitTracks_NOAA-20_Descending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

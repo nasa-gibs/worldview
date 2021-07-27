@@ -5,10 +5,9 @@
       "title": "Sentinel-2B - Orbit Track & Time",
       "subtitle": "Sentinel-2B / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Sentinel-2B_Ascending",
-      "tags": "tracks night",
+      "tags": "tracks night vector",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [
@@ -20,6 +19,9 @@
         "id": "OrbitTracks_Sentinel-2B_Ascending",
         "immutable": true
       },
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_Sentinel-2B_Ascending",
         "antarctic": {
@@ -29,9 +31,6 @@
           "id": "OrbitTracks_Sentinel-2B_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

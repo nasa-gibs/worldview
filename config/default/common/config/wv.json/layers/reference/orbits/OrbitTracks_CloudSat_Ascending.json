@@ -6,8 +6,7 @@
       "subtitle": "CloudSat / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_CloudSat_Ascending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
@@ -20,7 +19,10 @@
         "id": "OrbitTracks_CloudSat_Ascending",
         "immutable": true
       },
-      "tags": "tracks day",
+      "tags": "tracks day vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_CloudSat_Ascending",
         "antarctic": {
@@ -30,9 +32,6 @@
           "id": "OrbitTracks_CloudSat_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

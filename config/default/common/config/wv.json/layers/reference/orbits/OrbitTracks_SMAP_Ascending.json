@@ -6,8 +6,7 @@
       "subtitle": "SMAP / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_SMAP_Ascending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [
@@ -19,7 +18,10 @@
         "id": "OrbitTracks_SMAP_Ascending",
         "immutable": true
       },
-      "tags": "tracks night",
+      "tags": "tracks night vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_SMAP_Ascending",
         "antarctic": {
@@ -29,9 +31,6 @@
           "id": "OrbitTracks_SMAP_Ascending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

@@ -6,8 +6,7 @@
       "subtitle": "SAOCOM-1A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_SAOCOM1-A_Descending",
       "group": "overlays",
-      "format": "image/png",
-      "type": "wms",
+      "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "daynight": [
@@ -19,7 +18,10 @@
         "id": "OrbitTracks_SAOCOM1-A_Descending",
         "immutable": true
       },
-      "tags": "tracks night",
+      "tags": "tracks night vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_SAOCOM1-A_Descending",
         "antarctic": {
@@ -29,9 +31,6 @@
           "id": "OrbitTracks_SAOCOM1-A_Descending_polar"
         }
       },
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "modalShouldFollowClicks": true
     }
   }

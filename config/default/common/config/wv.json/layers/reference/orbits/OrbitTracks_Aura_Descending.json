@@ -6,13 +6,9 @@
       "subtitle": "Aura / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_Aura_Descending",
       "group": "overlays",
-      "format": "image/png",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
-      "clickDisabledFeatures": [
-        "LineString"
-      ],
       "daynight": [
         "night"
       ],
@@ -22,7 +18,10 @@
         "id": "OrbitTracks_Aura_Descending",
         "immutable": true
       },
-      "tags": "tracks night",
+      "tags": "tracks night vector",
+      "clickDisabledFeatures": [
+        "LineString"
+      ],
       "vectorStyle": {
         "id": "OrbitTracks_Aura_Descending",
         "antarctic": {

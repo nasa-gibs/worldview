@@ -4,34 +4,35 @@
       "id": "OrbitTracks_Aqua_Ascending",
       "title": "Aqua - Orbit Track & Time",
       "subtitle": "Aqua / Space-Track.org",
-      "description": "vector/OrbitTracks_Aqua_Ascending",
-      "type": "vector",
-      "tags": "vector vectors tracks",
+      "description": "reference/orbits/OrbitTracks_Aqua_Ascending",
       "group": "overlays",
+      "type": "vector",
+      "period": "daily",
+      "wrapadjacentdays": true,
       "layergroup": "Orbital Track",
-      "inactive": false,
+      "daynight": [
+        "day"
+      ],
+      "track": "ascending",
+      "startDate": "2002-05-04",
+      "palette": {
+        "id": "OrbitTracks_Aqua_Ascending",
+        "immutable": true
+      },
+      "tags": "tracks day vector",
       "clickDisabledFeatures": [
         "LineString"
       ],
-      "modalShouldFollowClicks": true,
       "vectorStyle": {
         "id": "OrbitTracks_Aqua_Ascending",
-        "arctic": {
+        "antarctic": {
           "id": "OrbitTracks_Aqua_Ascending_polar"
         },
-        "antarctic": {
+        "arctic": {
           "id": "OrbitTracks_Aqua_Ascending_polar"
         }
       },
-      "daynight": "day",
-      "track": "ascending",
-      "startDate": "2019-12-28",
-      "palette": {
-        "immutable": true,
-        "id": "OrbitTracks_Aqua_Ascending"
-      },
-      "wrapadjacentdays": true,
-      "period": "daily"
+      "modalShouldFollowClicks": true
     }
   }
 }
