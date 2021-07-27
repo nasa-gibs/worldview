@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "AVHRR_MetOp-A_L3U_Sea_Surface_Temperature": {
+      "id": "AVHRR_MetOp-A_L3U_Sea_Surface_Temperature",
+      "title": "Sea Surface Temperature (L3, Daily)",
+      "subtitle": "GHRSST / AVHRR / Metop-A / NOAA",
+      "description": "multi-mission/ghrsst/AVHRR_MetOp-A_L3U_Sea_Surface_Temperature",
+      "tags": "sst ghrsst podaac PO.DAAC",
+      "group": "overlays",
+      "layergroup": "Sea Surface Temperature"
+    }
+  }
+}
