@@ -9,11 +9,7 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": [
-        "vector",
-        "reference",
-        "reference_orbits"
-      ],
+      "layergroup": "Orbital Track",
       "daynight": [
         "day"
       ],

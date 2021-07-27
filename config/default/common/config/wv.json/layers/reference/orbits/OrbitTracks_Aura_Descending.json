@@ -9,11 +9,7 @@
       "format": "image/png",
       "type": "vector",
       "period": "daily",
-      "layergroup": [
-        "vector",
-        "reference",
-        "reference_orbits"
-      ],
+      "layergroup": "Orbital Track",
       "clickDisabledFeatures": [
         "LineString"
       ],

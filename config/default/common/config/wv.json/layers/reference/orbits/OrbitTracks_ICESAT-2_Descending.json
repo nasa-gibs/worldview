@@ -10,11 +10,7 @@
       "format": "image/png",
       "type": "wms",
       "period": "daily",
-      "layergroup": [
-        "vector",
-        "reference",
-        "reference_orbits"
-      ],
+      "layergroup": "Orbital Track",
       "track": "descending",
       "startDate": "2018-09-15",
       "palette": {

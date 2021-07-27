@@ -8,11 +8,7 @@
       "type": "vector",
       "tags": "vector vectors tracks",
       "group": "overlays",
-      "layergroup": [
-        "vector",
-        "reference",
-        "reference_orbits"
-      ],
+      "layergroup": "Orbital Track",
       "inactive": false,
       "clickDisabledFeatures": [
         "LineString"

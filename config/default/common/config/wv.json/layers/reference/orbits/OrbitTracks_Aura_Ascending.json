@@ -10,11 +10,7 @@
       "type": "wms",
       "period": "daily",
       "wrapadjacentdays": true,
-      "layergroup": [
-        "vector",
-        "reference",
-        "reference_orbits"
-      ],
+      "layergroup": "Orbital Track",
       "clickDisabledFeatures": [
         "LineString"
       ],
