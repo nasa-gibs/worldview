@@ -24,6 +24,7 @@ nodeDir.readFiles('./config/default/common/config/wv.json/layers/reference/orbit
         const vectorStyle = { id: layer.id };
 
         if (projections) {
+          console.log(vectorStyle);
           if (projections.antarctic) {
             vectorStyle.antarctic = { id: `${layer.id}_polar` };
           }
@@ -33,17 +34,13 @@ nodeDir.readFiles('./config/default/common/config/wv.json/layers/reference/orbit
 
           delete layer.projections;
         }
-        layer.vectorStyle = vectorStyle;
-        layer.layergroup = [
-          'vector',
-          'reference',
-          'reference_orbits',
-        ];
-        if (layer.layerGroup) delete layer.layerGroup;
         layer.clickDisabledFeatures = [
           'LineString',
         ];
-
+        if (layer.format) delete layer.format;
+        layer.vectorStyle = vectorStyle;
+        layer.tags += ' vector';
+        layer.type = 'vector';
         layer.modalShouldFollowClicks = true;
       }
       const jsonDone = JSON.stringify(json, null, 2);
