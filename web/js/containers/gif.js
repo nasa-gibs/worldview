@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from 'react-loader';
 import { connect } from 'react-redux';
-import GifStream from '@entryline/gifstream';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
 import {
   Progress, Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
+import GifStream from '../modules/animation/gifstream';
 import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
 
