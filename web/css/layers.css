@@ -157,11 +157,7 @@
 
 .layer-description .layer-title,
 .layer-modal-content .source-metadata h1,
-.layer-modal-content .source-metadata h2,
-.layer-modal-content .source-metadata h3,
-.layer-modal-content .source-metadata h4,
-.layer-modal-content .source-metadata h5,
-.layer-modal-content .source-metadata h6 {
+.layer-modal-content .source-metadata h2 {
   color: #ddd;
   font-weight: 700;
 }
@@ -169,8 +165,8 @@
 .source-metadata h3 {
   font-weight: 500;
   margin: 10px 0 5px;
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 17px;
+  line-height: 17px;
   padding-top: 15px;
   border-top: 1px solid #aaa;
 }
