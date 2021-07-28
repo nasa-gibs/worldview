@@ -9,7 +9,7 @@ import LayerInfo from '../../info/info';
 
 function MeasurementMetadataDetail (props) {
   const {
-    isMobile, source, layers, categoryTitle,
+    isMobile, source, layers, categoryTitle, showPreviewImage, selectedProjection,
   } = props;
   const [isMetadataExpanded, setMetadataExpansion] = useState(false);
   const [metadata, setMetadata] = useState({});
@@ -37,6 +37,20 @@ function MeasurementMetadataDetail (props) {
   const renderMetadataForLayers = () => layers.map((l) => (
     <div className="layer-description" key={l.id}>
       <h3>{l.title}</h3>
+      {showPreviewImage && (
+        <div className="text-center">
+          <a
+            href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img
+              className="img-fluid layer-preview"
+              src={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
+            />
+          </a>
+        </div>
+      )}
       <LayerInfo key={l.id} layer={l} />
     </div>
   ));
@@ -124,7 +138,9 @@ MeasurementMetadataDetail.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { productPicker, layers } = state;
+  const {
+    productPicker, layers, config, proj,
+  } = state;
   const source = getMeasurementSource(state);
   const { category } = productPicker;
   const { layerConfig } = layers;
@@ -135,6 +151,8 @@ const mapStateToProps = (state) => {
     categoryTitle: category && category.title,
     source,
     layers: layersForSource,
+    selectedProjection: proj.id,
+    showPreviewImage: config.features.previewSnapshots,
   };
 };
 
