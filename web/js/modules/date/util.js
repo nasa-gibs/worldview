@@ -209,3 +209,50 @@ export function mapLocationToDateState(
   }
   return stateFromLocation;
 }
+
+/**
+ * @param  {Number} delta Date and direction to change
+ * @param  {Number} increment Zoom level of change
+ *                  e.g. months, minutes, years, days
+ * @param  {Object} prevDate JS Date Object
+ * @param  {Object} minDate timelineStartDateLimit JS Date Object
+ * @param  {Object} maxDate timelineEndDateLimit JS Date Object
+ * @return {Object} JS Date Object
+ */
+export const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDate) => {
+  let date;
+  // eslint-disable-next-line default-case
+  switch (increment) {
+    case 'year':
+      date = new Date(
+        new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta),
+      );
+      break;
+    case 'month':
+      date = new Date(
+        new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta),
+      );
+      break;
+    case 'day':
+      date = new Date(
+        new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta),
+      );
+      break;
+    case 'hour':
+      date = new Date(
+        new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta),
+      );
+      break;
+    case 'minute':
+      date = new Date(
+        new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta),
+      );
+      break;
+  }
+  if (date < minDate) {
+    return minDate;
+  } if (date > maxDate) {
+    return maxDate;
+  }
+  return date;
+};

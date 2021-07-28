@@ -9,6 +9,7 @@ import {
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 import Promise from 'bluebird';
 import { encode } from '../link/util';
+import { getActiveVisibleLayersAtDate } from '../layers/selectors';
 
 export function getMapParameterSetup(
   parameters,
@@ -201,7 +202,7 @@ function promiseTileLayer(layer, extent, map) {
   let i;
   let tileGrid;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!extent) {
       resolve('resolve tile layer');
     }
@@ -270,31 +271,27 @@ function promiseLayerGroup(layerGroup, map) {
       return promiseTileLayer(layer, extent, map);
     });
 
-    Promise.all(layerPromiseArray).then(() => {
-      resolve('resolve layer group');
-    });
+    Promise.all(layerPromiseArray).then(resolve);
   });
 }
 
 /**
  * @method promiseImageryForTime
- * @param  {object} time of data to be displayed on the map.
  * @return {object} Promise
  */
-export default function promiseImageryForTime(date, layers, state) {
+export async function promiseImageryForTime(state, date, activeString) {
   const { map } = state;
   const {
     cache, selected, createLayer, layerKey,
   } = map.ui;
-  const options = { date };
+  const options = { date, group: activeString };
+  const layers = getActiveVisibleLayersAtDate(state, date, activeString);
 
-  const promiseArray = layers.map((def) => {
-    const key = layerKey(def, options, state);
-    const layerGroup = cache.getItem(key) || createLayer(def, options);
+  await Promise.all(layers.map((layer) => {
+    const key = layerKey(layer, options, state);
+    const layerGroup = cache.getItem(key) || createLayer(layer, options);
     return promiseLayerGroup(layerGroup, selected);
-  });
+  }));
 
-  return new Promise((resolve) => {
-    Promise.all(promiseArray).then(() => resolve(date));
-  });
+  return date;
 }

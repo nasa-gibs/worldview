@@ -24,7 +24,6 @@ const getLayerState = ({ layers }) => layers;
  */
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
-
 /**
  * Return a list of layers for the currently active compare state
  * regardless of projection
@@ -126,7 +125,8 @@ export const getAllActiveOverlaysBaselayers = createSelector(
   (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
 );
 
-export const getAllActiveVisibleLayersAtDate = (layers, date) => {
+export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
+  const layers = getActiveLayers(state, activeString);
   const baseLayers = layers.filter(({ group }) => group === 'baselayers');
   return layers.filter((l) => isRenderable(l.id, layers, date, baseLayers, {}));
 };
