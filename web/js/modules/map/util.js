@@ -9,6 +9,7 @@ import {
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 import Promise from 'bluebird';
 import { encode } from '../link/util';
+import { getActiveVisibleLayersAtDate } from '../layers/selectors';
 
 export function getMapParameterSetup(
   parameters,
@@ -109,6 +110,7 @@ export function mapIsExtentValid(extent) {
   });
   return valid;
 }
+
 /*
  * Set default extent according to time of day:
  *
@@ -145,42 +147,6 @@ export function getLeadingExtent(loadtime) {
 }
 
 /**
- * Once a layer's group of layers (prev, current, next day) are fulfilled,
- * a promise with an array of their fulfilled values is returned.
- *
- * @method promiseLayerGroup
- * @param  {object} layer      ol_Layer_Group object, contains values.layers for prev, current, next days
- * @param  {object} viewState  Contains center, projection, resolution, rotation and zoom parameters
- * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
- * @param  {object} map        _ol_Map_ object
- * @return {object}            Promise.all
- */
-export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
-  let extent;
-  return new Promise((resolve, reject) => {
-    let layers;
-    // Current layer's 3 layer array (prev, current, next days)
-    layers = layer.values_.layers;
-    if (layer.values_.layers) {
-      layers = layer.getLayers().getArray();
-    } else {
-      layers = [layer];
-    }
-    // Calculate the extent of each layer in the layer group
-    // and create a promiseTileLayer for prev, current, next day
-    const layerPromiseArray = layers.map((layer) => {
-      extent = calculateExtent(
-        layer.getExtent(),
-        map.getView().calculateExtent(map.getSize()),
-      );
-      return promiseTileLayer(layer, extent, viewState, pixelRatio);
-    });
-    Promise.all(layerPromiseArray).then(() => {
-      resolve('resolve layer group');
-    });
-  });
-}
-/**
  * Calculate the current extent from the map's extent (boundaries) &
  * the viewport extent (boundaries).
  *
@@ -190,26 +156,22 @@ export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
  * @return {array}                An extent array. Used to calculate
  * the extent for prev, next & current day
  */
-export function calculateExtent(extent, viewportExtent) {
+function calculateExtent(extent, viewportExtent) {
+  const newExtent = getExtent(viewportExtent, extent);
   if (extent[1] < -180) {
     // Previous day
-    extent = getExtent(viewportExtent, extent);
-    extent[1] += 360;
-    extent[3] += 360;
+    newExtent[1] += 360;
+    newExtent[3] += 360;
   } else if (extent[1] > 180) {
     // Next day
-    extent = getExtent(viewportExtent, extent);
-    extent[1] -= 360;
-    extent[3] -= 360;
-  } else {
-    // Current day (within map extent)
-    extent = getExtent(extent, viewportExtent);
-  }
+    newExtent[1] -= 360;
+    newExtent[3] -= 360;
+  } else
   // eslint-disable-next-line no-restricted-globals
-  if (!isFinite(extent[0])) {
+  if (!isFinite(newExtent[0])) {
     return null;
   }
-  return extent;
+  return newExtent;
 }
 
 /**
@@ -223,6 +185,7 @@ export function calculateExtent(extent, viewportExtent) {
 function getExtent(extent1, extent2) {
   return olExtent.getIntersection(extent1, extent2);
 }
+
 /**
  * Returns a promise of the layer tilegrid.
  *
@@ -233,55 +196,102 @@ function getExtent(extent1, extent2) {
  * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
  * @return {object}            promise
  */
-function promiseTileLayer(layer, extent, viewState, pixelRatio) {
-  let renderer;
+function promiseTileLayer(layer, extent, map) {
   let tileSource;
   let currentZ;
   let i;
   let tileGrid;
-  let projection;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!extent) {
       resolve('resolve tile layer');
     }
-    projection = viewState.projection;
-    i = 0;
-    renderer = new OlRendererCanvasTileLayer(layer);
+    // OL object describing the current map frame
+    const { pixelRatio, viewState } = map.frameState_;
+    const { projection, resolution } = viewState;
+    const { zDirection } = new OlRendererCanvasTileLayer(layer);
     tileSource = layer.getSource();
     tileGrid = tileSource.getTileGridForProjection(projection);
-    currentZ = tileGrid.getZForResolution(
-      viewState.resolution,
-      renderer.zDirection,
-    );
-    tileGrid.forEachTileCoord(extent, currentZ, (tileCoord) => {
-      const tile = tileSource.getTile(
-        tileCoord[0],
-        tileCoord[1],
-        tileCoord[2],
-        pixelRatio,
-        projection,
-      );
-      tile.load();
+    currentZ = tileGrid.getZForResolution(resolution, zDirection);
+    i = 0;
 
-      if (tile.state === 2) resolve();
-
-      const loader = function(e) {
-        if (e.type === 'tileloadend') {
-          i -= 1;
-          if (i === 0) {
-            resolve();
-          }
-        } else {
-          console.error(`No response for tile request ${layer.wv.key}`);
-          resolve(); // some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
-        }
-        this.un('tileloadend', loader); // remove event listeners from memory
-        this.un('tileloaderror', loader);
+    const onLoad = function onLoad (e) {
+      const complete = function () {
+        tileSource.un('tileloadend', onLoad);
+        tileSource.un('tileloaderror', onLoad);
+        resolve();
       };
-      tileSource.on('tileloadend', loader);
-      tileSource.on('tileloaderror', loader);
+      if (e.type === 'tileloadend') {
+        i -= 1;
+        if (i === 0) {
+          complete();
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(`No response for tile request ${layer.wv.key}`);
+        // some gibs data is not accurate and rejecting here
+        // will break the animation if tile doesn't exist
+        complete();
+      }
+    };
+
+    const loadTile = function ([one, two, three]) {
+      const tile = tileSource.getTile(one, two, three, pixelRatio, projection);
+      tile.load();
+      if (tile.state === 2) resolve();
       i += 1;
-    });
+      tileSource.on('tileloadend', onLoad);
+      tileSource.on('tileloaderror', onLoad);
+    };
+
+    tileGrid.forEachTileCoord(extent, currentZ, loadTile);
   });
+}
+
+/**
+ * Once a layer's group of layers (prev, current, next day) are fulfilled,
+ * a promise with an array of their fulfilled values is returned.
+ *
+ * @method promiseLayerGroup
+ * @param  {object} layer      ol_Layer_Group object, contains values.layers for prev, current, next days
+ * @param  {object} viewState  Contains center, projection, resolution, rotation and zoom parameters
+ * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
+ * @param  {object} map        _ol_Map_ object
+ * @return {object}            Promise
+ */
+function promiseLayerGroup(layerGroup, map) {
+  return new Promise((resolve, reject) => {
+    // Current layer's 3 layer array (prev, current, next days)
+    const layers = layerGroup.getLayersArray() || [layerGroup];
+    const viewPortExtent = map.getView().calculateExtent(map.getSize());
+
+    const layerPromiseArray = layers.map((layer) => {
+      const layerExtent = layer.getExtent();
+      const extent = calculateExtent(layerExtent, viewPortExtent);
+      return promiseTileLayer(layer, extent, map);
+    });
+
+    Promise.all(layerPromiseArray).then(resolve);
+  });
+}
+
+/**
+ * @method promiseImageryForTime
+ * @return {object} Promise
+ */
+export async function promiseImageryForTime(state, date, activeString) {
+  const { map } = state;
+  const {
+    cache, selected, createLayer, layerKey,
+  } = map.ui;
+  const options = { date, group: activeString };
+  const layers = getActiveVisibleLayersAtDate(state, date, activeString);
+
+  await Promise.all(layers.map((layer) => {
+    const key = layerKey(layer, options, state);
+    const layerGroup = cache.getItem(key) || createLayer(layer, options);
+    return promiseLayerGroup(layerGroup, selected);
+  }));
+
+  return date;
 }
