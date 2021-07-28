@@ -38,7 +38,7 @@ import {
   getActiveLayers,
 } from '../../modules/layers/selectors';
 import {
-  selectDate,
+  selectDate as selectDateAction,
   changeTimeScale,
   selectInterval,
   changeCustomInterval,
@@ -49,6 +49,7 @@ import {
 import {
   checkHasFutureLayers,
   filterProjLayersWithStartDate,
+  getNextTimeSelection,
 } from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
@@ -112,7 +113,7 @@ class Timeline extends React.Component {
     };
 
     const {
-      changeDate,
+      selectDate,
       onUpdateStartDate,
       onUpdateEndDate,
       onUpdateStartAndEndDate,
@@ -120,7 +121,8 @@ class Timeline extends React.Component {
 
     // left/right arrows
     const throttleSettings = { leading: true, trailing: false };
-    this.debounceDateUpdate = lodashDebounce(changeDate, 8);
+    this.throttleSelectDate = lodashThrottle(selectDate, 100, throttleSettings);
+    this.debounceDraggerDateUpdate = lodashDebounce(this.onDateChange, 200);
     this.throttleDecrementDate = lodashThrottle(
       this.handleArrowDateChange.bind(this, -1),
       ANIMATION_DELAY,
@@ -806,7 +808,7 @@ class Timeline extends React.Component {
         draggerTimeState: newDate || draggerTimeState,
       });
       if (newDate) {
-        this.onDateChange(newDate, 'selected');
+        this.debounceDraggerDateUpdate(newDate, 'selected');
       }
     } else {
       this.setState({
@@ -816,7 +818,7 @@ class Timeline extends React.Component {
         draggerTimeStateB: newDate || draggerTimeStateB,
       });
       if (newDate) {
-        this.onDateChange(newDate, 'selectedB');
+        this.debounceDraggerDateUpdate(newDate, 'selectedB');
       }
     }
   }
@@ -945,7 +947,7 @@ class Timeline extends React.Component {
         draggerTimeStateB: dateISOFormatted,
       });
     }
-    this.debounceDateUpdate(dateObj, draggerSelected);
+    this.throttleSelectDate(dateObj, draggerSelected);
   }
 
   handleSelectNowButton = () => {
@@ -1524,8 +1526,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(triggerTodayButton());
   },
   // changes date of active dragger 'selected' or 'selectedB'
-  changeDate: (val) => {
-    dispatch(selectDate(val));
+  selectDate: (val) => {
+    dispatch(selectDateAction(val));
   },
   // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
@@ -1578,7 +1580,6 @@ Timeline.propTypes = {
   animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
   changeCustomInterval: PropTypes.func,
-  changeDate: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customIntervalValue: PropTypes.number,
@@ -1611,6 +1612,7 @@ Timeline.propTypes = {
   parentOffset: PropTypes.number,
   rightArrowDisabled: PropTypes.bool,
   screenWidth: PropTypes.number,
+  selectDate: PropTypes.func,
   selectedDate: PropTypes.object,
   selectInterval: PropTypes.func,
   timelineCustomModalOpen: PropTypes.bool,
@@ -1629,53 +1631,6 @@ const getOffsetValues = (innerWidth, hasSubDaily) => {
   const parentOffset = (hasSubDaily ? 414 : 310) + 10;
   const width = innerWidth - parentOffset - 88;
   return { width, parentOffset };
-};
-
-/**
- * @param  {Number} delta Date and direction to change
- * @param  {Number} increment Zoom level of change
- *                  e.g. months, minutes, years, days
- * @param  {Object} prevDate JS Date Object
- * @param  {Object} minDate timelineStartDateLimit JS Date Object
- * @param  {Object} maxDate timelineEndDateLimit JS Date Object
- * @return {Object} JS Date Object
- */
-const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDate) => {
-  let date;
-  // eslint-disable-next-line default-case
-  switch (increment) {
-    case 'year':
-      date = new Date(
-        new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta),
-      );
-      break;
-    case 'month':
-      date = new Date(
-        new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta),
-      );
-      break;
-    case 'day':
-      date = new Date(
-        new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta),
-      );
-      break;
-    case 'hour':
-      date = new Date(
-        new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta),
-      );
-      break;
-    case 'minute':
-      date = new Date(
-        new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta),
-      );
-      break;
-  }
-  if (date < minDate) {
-    return minDate;
-  } if (date > maxDate) {
-    return maxDate;
-  }
-  return date;
 };
 
 // check if left arrow should be disabled on predicted decrement

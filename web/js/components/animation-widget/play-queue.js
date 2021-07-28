@@ -5,7 +5,6 @@ import { isEmpty as lodashIsEmpty } from 'lodash';
 import Spinner from 'react-loader';
 import Queue from 'promise-queue';
 import util from '../../util/util';
-import { getLayersActiveAtDate } from '../../modules/date/util';
 
 /*
  * Preload and play animation
@@ -353,8 +352,7 @@ class PlayAnimation extends React.Component {
    * @returns {object} JS Date
    */
   addDate(date) {
-    const { layers, promiseImageryForTime } = this.props;
-    const activeLayers = getLayersActiveAtDate(layers, date);
+    const { promiseImageryForTime } = this.props;
     const strDate = util.toISOStringSeconds(date);
 
     if (this.inQueueObject[strDate] || this.preloadObject[strDate]) {
@@ -363,7 +361,7 @@ class PlayAnimation extends React.Component {
 
     this.addToInQueue(date);
     this.queue
-      .add(() => promiseImageryForTime(date, activeLayers))
+      .add(() => promiseImageryForTime(date))
       .then((addedDate) => {
         if (this.mounted) {
           this.preloadObject[strDate] = addedDate;
@@ -481,7 +479,6 @@ class PlayAnimation extends React.Component {
 PlayAnimation.propTypes = {
   endDate: PropTypes.object.isRequired,
   isPlaying: PropTypes.bool.isRequired,
-  layers: PropTypes.array.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
   queueLength: PropTypes.number.isRequired,
   selectDate: PropTypes.func.isRequired,

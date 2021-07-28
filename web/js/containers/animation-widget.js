@@ -21,7 +21,7 @@ import TimeScaleIntervalChange from '../components/timeline/timeline-controls/in
 import CustomIntervalSelectorWidget from '../components/timeline/custom-interval-selector/interval-selector-widget';
 import PlayQueue from '../components/animation-widget/play-queue';
 import Notify from '../components/image-download/notify';
-import promiseImageryForTime from '../modules/map/selectors';
+import { promiseImageryForTime } from '../modules/map/util';
 import GifContainer from './gif';
 import {
   selectDate,
@@ -575,7 +575,6 @@ class AnimationWidget extends React.Component {
       endDate,
       onPushPause,
       isActive,
-      layers,
       hasCustomPalettes,
       isDistractionFreeModeActive,
       promiseImageryForTime,
@@ -622,7 +621,6 @@ class AnimationWidget extends React.Component {
             hasCustomPalettes={hasCustomPalettes}
             maxQueueLength={maxLength}
             queueLength={queueLength}
-            layers={layers}
             interval={interval}
             delta={delta}
             speed={speed}
@@ -735,7 +733,6 @@ function mapStateToProps(state) {
     customInterval: customInterval || 3,
     numberOfFrames,
     sliderLabel: 'Frames Per Second',
-    layers: getAllActiveLayers(state),
     speed,
     isPlaying,
     looping: loop,
@@ -743,7 +740,7 @@ function mapStateToProps(state) {
     map,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     visibleLayersForProj,
-    promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
+    promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isGifActive: gifActive,
     isCompareActive: compare.active,
     isEmbedModeActive,
@@ -870,7 +867,6 @@ AnimationWidget.propTypes = {
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
-  layers: PropTypes.array,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
