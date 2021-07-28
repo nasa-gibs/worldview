@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { isEmpty as lodashIsEmpty } from 'lodash';
 import Spinner from 'react-loader';
-import Queue from 'promise-queue';
+import PQueue from 'p-queue/dist';
 import util from '../../util/util';
-import { getAllActiveVisibleLayersAtDate } from '../../modules/layers/selectors';
 import {
   getQueueLength,
   getMaxQueueLength,
   snapToIntervalDelta,
 } from '../../modules/animation/util';
 
-const queue = new Queue(5, Infinity);
+const queue = new PQueue({ concurrency: 5 });
 let isAnimating = false;
 
 function PlayAnimation (props) {
@@ -23,7 +22,6 @@ function PlayAnimation (props) {
     startDate,
     endDate,
     delta,
-    layers,
     hasCustomPalettes,
     speed,
     selectDate,
@@ -32,21 +30,17 @@ function PlayAnimation (props) {
     pause,
   } = props;
 
-  let preloadObject = {};
-  let inQueueObject = {};
+  let preloadedDates = {};
   const pastDates = {};
-  let preloadedArray = [];
   let timeout = 0;
+  const [animateDates, setAnimateDates] = useState([]);
+  const [lastToQueue, setLastToQueue] = useState();
+  const [queueLength, setQueueLength] = useState(0);
+  const [maxQueueLength, setMaxQueueLength] = useState(0);
+  const [canPreloadAll, setCanPreloadAll] = useState();
+  const [preloadArray, setPreLoadArray] = useState([]);
+  const [inQueueObject, setInQueueObject] = useState({});
 
-  const maxQueueLength = getMaxQueueLength(speed);
-  const queueLength = getQueueLength(
-    startDate,
-    endDate,
-    speed,
-    interval,
-    delta,
-  );
-  const canPreloadAll = queueLength <= maxQueueLength;
   const currentDate = snapToIntervalDelta(
     selectedDate,
     startDate,
@@ -56,18 +50,46 @@ function PlayAnimation (props) {
   );
 
   useEffect(() => {
+    setMaxQueueLength(getMaxQueueLength(speed));
+    setQueueLength(getQueueLength(
+      startDate,
+      endDate,
+      speed,
+      interval,
+      delta,
+    ));
+    setCanPreloadAll(queueLength <= maxQueueLength);
+  }, [startDate, endDate, interval, delta, speed]);
+
+  useEffect(() => {
     if (isPlaying) {
       console.log('remount!', queueLength, maxQueueLength);
-      checkQueue();
+      const nothingLoaded = !preloadArray[0] && !inQueueObject[currentPlayingDate];
+      if (nothingLoaded) {
+        initialPreload();
+      } else {
+        checkQueue();
+      }
     }
-
     return () => {
-      queue.queue = [];
+      queue.clear();
       if (timeout) {
         stopPlaying();
       }
     };
   }, [isPlaying]);
+
+  useEffect(() => {
+    const dates = [startDate];
+    let date = startDate;
+    while (date <= endDate) {
+      dates.push(date);
+      date = nextDate(date);
+    }
+    setAnimateDates(dates);
+    const last = dates[dates.length - 1];
+    setLastToQueue(util.toISOStringSeconds(last));
+  }, [startDate, endDate, interval, delta]);
 
   const nextDate = (date) => util.dateAdd(date, interval, delta);
 
@@ -79,75 +101,51 @@ function PlayAnimation (props) {
 
   let currentPlayingDate = getStartDate();
 
+  const addToInQueueObject = (key, val) => {
+    setInQueueObject({
+      ...inQueueObject,
+      [key]: val,
+    });
+  };
+
+  const removeFromInQueueObject = (strDate) => {
+    const deleteProperty = ({ [strDate]: _, ...newObj }, key) => newObj;
+    setInQueueObject(deleteProperty(inQueueObject, strDate));
+  };
+
   /**
    * Gets next date based on current increments
    * @param date {object} JS date obj
    *
    * @returns {object} JS Date
    */
-  const addDate = (date) => {
+  const addDate = async (date) => {
     const strDate = util.toISOStringSeconds(date);
-    const visibleLayers = getAllActiveVisibleLayersAtDate(layers, date);
+    console.log('addDate', date);
 
-    if (inQueueObject[strDate] || preloadObject[strDate]) {
+    if (inQueueObject[strDate] || preloadedDates[strDate]) {
       return;
     }
-    inQueueObject[strDate] = date;
-    preloadedArray.push(strDate);
+    addToInQueueObject(strDate, date);
+    setPreLoadArray([...preloadArray, strDate]);
 
-    queue.add(
-      () => promiseImageryForTime(date, visibleLayers),
-    ).then((addedDate) => {
-      preloadObject[strDate] = addedDate;
-      delete inQueueObject[strDate];
-      shiftCache();
-      checkQueue();
-      checkShouldPlay();
-    });
+    preloadedDates[strDate] = await queue.add(
+      () => promiseImageryForTime(date),
+    );
+    removeFromInQueueObject(strDate);
+    shiftCache();
+    checkQueue();
+    checkShouldPlay();
   };
 
-  /**
-   * Gets the last date that should be added to the queuer
-   * @returns {string} Date string
-   */
-  const getLastBufferDateStr = () => {
-    let day = currentDate;
-    let i = 1;
-
-    while (i < queueLength) {
-      if (nextDate(day) > endDate) {
-        if (!isLoopActive) {
-          return util.toISOStringSeconds(day);
-        }
-        day = startDate;
-      } else {
-        day = nextDate(day);
-      }
-      i += 1;
-    }
-    return util.toISOStringSeconds(day);
-  };
-
-  /**
-   * adds dates to precache queuer
-   *
-   * @param lastToQueue {string} date String
-   */
-  const initialPreload = (lastToQueue) => {
-    let day = util.parseDateUTC(currentPlayingDate);
+  const initialPreload = () => {
     if (queueLength <= 1) {
       // if only one frame will play just move to that date
       selectDate(startDate);
       pause();
       return;
     }
-    for (let i = 0; i < queueLength; i += 1) {
-      addDate(day);
-      day = getNextBufferDate(day);
-      if (util.toISOStringSeconds(day) === lastToQueue) {
-        addDate(day);
-      }
-    }
+    animateDates.forEach((d) => addDate(d));
   };
 
   /**
@@ -157,17 +155,18 @@ function PlayAnimation (props) {
    */
   const checkShouldPlay = (isLoopStart) => {
     const current = util.parseDateUTC(currentPlayingDate);
-    const lastToQueue = getLastBufferDateStr(current);
+
+    console.log('last2Q', lastToQueue);
 
     if (isAnimating && !isLoopStart) {
       return false;
     }
-    if (preloadObject[lastToQueue]) {
+    if (preloadedDates[lastToQueue]) {
       return play();
     }
     if (
       hasCustomPalettes
-      && preloadObject[currentPlayingDate]
+      && preloadedDates[currentPlayingDate]
       && lodashIsEmpty(inQueueObject)
     ) {
       return play();
@@ -196,16 +195,11 @@ function PlayAnimation (props) {
    */
   const checkQueue = () => {
     const current = util.parseDateUTC(currentPlayingDate);
-    const lastToQueue = getLastBufferDateStr(current);
     const next = nextDate(current);
-    const [lastPreload] = preloadedArray.slice(-1);
+    const [lastPreload] = preloadArray.slice(-1);
 
-    const nothingLoaded = !preloadedArray[0] && !inQueueObject[currentPlayingDate];
-
-    if (nothingLoaded) {
-      initialPreload(current, lastToQueue);
-    } else if (
-      !lastPreload !== lastToQueue
+    if (
+      lastPreload !== lastToQueue
       && !inQueueObject[lastToQueue]
       && !hasCustomPalettes
       && !canPreloadAll
@@ -214,18 +208,12 @@ function PlayAnimation (props) {
       addItemToQueue(current);
     } else if (
       hasCustomPalettes
-      && preloadedArray[0]
+      && preloadArray[0]
       && !inQueueObject[next]
       && queueLength > maxQueueLength
     ) {
       customQueuer(currentDate);
     }
-  };
-
-  const clearCache = () => {
-    preloadObject = {};
-    preloadedArray = [];
-    inQueueObject = {};
   };
 
   const customQueuer = () => {
@@ -235,11 +223,13 @@ function PlayAnimation (props) {
     }
     const nextDateStr = util.toISOStringSeconds(next);
     if (
-      !preloadObject[nextDateStr]
+      !preloadedDates[nextDateStr]
       && !inQueueObject[nextDateStr]
       && !isAnimating
     ) {
-      clearCache();
+      preloadedDates = {};
+      setPreLoadArray([]);
+      setInQueueObject({});
       checkQueue();
     }
   };
@@ -249,21 +239,23 @@ function PlayAnimation (props) {
    * been played and quelimit reached
    */
   const shiftCache = () => {
-    if (
-      preloadObject[preloadedArray[0]]
-      && util.objectLength(preloadObject) > queueLength
-      && pastDates[preloadedArray[0]]
-      && !isInToPlayGroup(preloadedArray[0])
-      && !canPreloadAll
-    ) {
-      const key = preloadedArray.shift();
-      delete preloadObject[key];
-      delete pastDates[key];
-    }
+    // if (
+    //   preloadedDates[preloadArray[0]]
+    //   && util.objectLength(preloadedDates) > queueLength
+    //   && pastDates[preloadArray[0]]
+    //   && !isInToPlayGroup(preloadArray[0])
+    //   && !canPreloadAll
+    // ) {
+    //   const key = preloadArray.shift();
+    //   setPreLoadArray([...preloadArray]);
+
+    //   delete preloadedDates[key];
+    //   delete pastDates[key];
+    // }
   };
 
   const getNextBufferDate = () => {
-    const [strDate] = preloadedArray.slice(-1);
+    const [strDate] = preloadArray.slice(-1);
     const lastInBuffer = util.parseDateUTC(strDate);
     const next = nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || next > endDate) {
@@ -281,7 +273,7 @@ function PlayAnimation (props) {
 
     if (
       !inQueueObject[nextDateStr]
-      && !preloadObject[nextDateStr]
+      && !preloadedDates[nextDateStr]
       && next <= endDate
       && next >= startDate
     ) {
@@ -302,7 +294,7 @@ function PlayAnimation (props) {
     let i = 0;
     let day = util.parseDateUTC(currentPlayingDate);
     const jsTestDate = util.parseDateUTC(testDate);
-
+    debugger;
     while (i < queueLength) {
       if (nextDate(day) > endDate) {
         if (!isLoopActive) {
@@ -332,6 +324,8 @@ function PlayAnimation (props) {
   const stopPlaying = () => {
     clearInterval(timeout);
     isAnimating = false;
+    queue.pause();
+    queue.clear();
     console.log('stop!', isAnimating, isPlaying);
   };
 
@@ -366,7 +360,7 @@ function PlayAnimation (props) {
       }
 
       // Reached the end of preload
-      if (!preloadObject[nextDateStr]) {
+      if (!preloadedDates[nextDateStr]) {
         stopPlaying();
         shiftCache();
         checkQueue();
@@ -413,7 +407,6 @@ PlayAnimation.propTypes = {
   selectDate: PropTypes.func.isRequired,
   selectedDate: PropTypes.object.isRequired,
   speed: PropTypes.number.isRequired,
-  // togglePlaying: PropTypes.func.isRequired,
   delta: PropTypes.number,
   hasCustomPalettes: PropTypes.bool,
   interval: PropTypes.string,

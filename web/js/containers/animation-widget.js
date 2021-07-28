@@ -21,7 +21,7 @@ import TimeScaleIntervalChange from '../components/timeline/timeline-controls/in
 import CustomIntervalSelectorWidget from '../components/timeline/custom-interval-selector/interval-selector-widget';
 import PlayQueue from '../components/animation-widget/play-queue';
 import Notify from '../components/image-download/notify';
-import promiseImageryForTime from '../modules/map/util';
+import { promiseImageryForTime } from '../modules/map/util';
 import GifContainer from './gif';
 import {
   selectDate,
@@ -711,7 +711,7 @@ function mapStateToProps(state) {
     customInterval: customInterval || 3,
     numberOfFrames,
     sliderLabel: 'Frames Per Second',
-    layers: getAllActiveLayers(state),
+    layers: activeLayersForProj,
     speed,
     isPlaying,
     looping: loop,
@@ -719,7 +719,7 @@ function mapStateToProps(state) {
     map,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     visibleLayersForProj,
-    promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
+    promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isGifActive: gifActive,
     isCompareActive: compare.active,
     isEmbedModeActive,
