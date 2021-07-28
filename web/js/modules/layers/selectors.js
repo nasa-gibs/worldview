@@ -24,7 +24,6 @@ const getLayerState = ({ layers }) => layers;
  */
 export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
 
-
 /**
  * Return a list of layers for the currently active compare state
  * regardless of projection
@@ -125,6 +124,12 @@ export const getAllActiveOverlaysBaselayers = createSelector(
   [getProjState, getCompareState, getLayerState],
   (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
 );
+
+export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
+  const layers = getActiveLayers(state, activeString);
+  const baseLayers = layers.filter(({ group }) => group === 'baselayers');
+  return layers.filter((l) => isRenderable(l.id, layers, date, baseLayers, {}));
+};
 
 export function hasMeasurementSource(current, config, projId) {
   let hasSource;
@@ -307,7 +312,7 @@ function forGroup(group, spec = {}, activeLayers, state) {
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
     const notRenderable = spec.renderable
-      && !isRenderable(def.id, activeLayers, spec.date, state);
+      && !isRenderable(def.id, activeLayers, spec.date, null, state);
     if (notInProj || notRenderable) {
       return;
     }
@@ -454,7 +459,7 @@ export const memoizedAvailable = createSelector(
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, layers, date, state) {
+export function isRenderable(id, layers, date, bLayers, state) {
   const { parameters } = state.config || {};
   date = date || getSelectedDate(state);
   const def = lodashFind(layers, { id });
@@ -467,7 +472,7 @@ export function isRenderable(id, layers, date, state) {
     return true;
   }
   let obscured = false;
-  const baselayers = getLayers(state, { group: 'baselayers' }, layers);
+  const baselayers = bLayers || getLayers(state, { group: 'baselayers' }, layers);
   lodashEach(
     baselayers,
     (otherDef) => {

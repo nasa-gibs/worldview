@@ -40,7 +40,7 @@ import {
   SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
 } from '../modules/location-search/constants';
-import { SELECT_DATE } from '../modules/date/constants';
+import * as dateConstants from '../modules/date/constants';
 import util from '../util/util';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -59,7 +59,9 @@ import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
   RENDERED, UPDATE_MAP_UI, UPDATE_MAP_EXTENT, UPDATE_MAP_ROTATION, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE, CLEAR_ROTATE,
 } from '../modules/map/constants';
-import { getLeadingExtent } from '../modules/map/util';
+import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
+import { getNextTimeSelection } from '../modules/date/util';
+
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
@@ -105,6 +107,7 @@ export default function mapui(models, config, store, ui) {
    * specific action types
    */
   const subscribeToStore = function(action) {
+    const state = store.getState();
     switch (action.type) {
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
@@ -138,7 +141,6 @@ export default function mapui(models, config, store, ui) {
         return;
       }
       case LOCATION_POP_ACTION: {
-        const state = store.getState();
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(state, 'map.extent');
         const rotate = lodashGet(state, 'map.rotation') || 0;
@@ -152,8 +154,12 @@ export default function mapui(models, config, store, ui) {
       case layerConstants.REMOVE_LAYER:
         return removeLayer(action.layersToRemove);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
-      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
-        return updateLayerVisibilities();
+      case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY: {
+        updateLayerVisibilities();
+        updateDate().then(preloadNextTiles);
+        return;
+      }
+
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
@@ -167,7 +173,9 @@ export default function mapui(models, config, store, ui) {
       case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
-        return reloadLayers();
+        reloadLayers();
+        preloadForCompareMode();
+        return;
       case CHANGE_PROJECTION:
         return updateProjection();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
@@ -183,7 +191,6 @@ export default function mapui(models, config, store, ui) {
       case vectorStyleConstants.SET_SELECTED_VECTORS: {
         const type = 'selection';
         const newSelection = action.payload;
-        const state = store.getState();
         updateVectorSelection(
           action.payload,
           self.selectedVectors,
@@ -195,12 +202,18 @@ export default function mapui(models, config, store, ui) {
       case STOP_ANIMATION:
       case EXIT_ANIMATION:
         return onStopAnimation();
-      case SELECT_DATE:
-        return updateDate();
+      case dateConstants.CHANGE_CUSTOM_INTERVAL:
+      case dateConstants.CHANGE_INTERVAL:
+        return preloadNextTiles();
+      case dateConstants.SELECT_DATE: {
+        updateDate().then(preloadNextTiles);
+        break;
+      }
       default:
         break;
     }
   };
+
   const onStopAnimation = function() {
     const hasActiveVectors = hasVectorLayers(getActiveLayers(store.getState()));
     if (hasActiveVectors) {
@@ -647,6 +660,7 @@ export default function mapui(models, config, store, ui) {
           layer.wv.id,
           getActiveLayers(state),
           getSelectedDate(state),
+          null,
           state,
         );
         layer.setVisible(renderable);
@@ -662,6 +676,7 @@ export default function mapui(models, config, store, ui) {
             subLayer.wv.id,
             getActiveLayers(state, compareActiveString),
             getSelectedDate(state, compareDateString),
+            null,
             state,
           );
           subLayer.setVisible(renderable);
@@ -730,6 +745,7 @@ export default function mapui(models, config, store, ui) {
       self.selected.getLayers().insertAt(mapIndex, createLayer(def));
     }
     updateLayerVisibilities();
+    preloadNextTiles();
   }
 
   function removeLayer(layersToRemove) {
@@ -758,70 +774,119 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const updateDate = self.updateDate = function() {
-    const state = store.getState();
-    const { embed, compare } = state;
-    let activeLayers = getAllActiveLayers(state);
-    let layerGroups;
-    let layerGroup;
-    if (compare && compare.active) {
-      layerGroups = self.selected.getLayers().getArray();
-      if (layerGroups.length > 1) {
-        layerGroup = layerGroups[0].get('group') === compare.activeString
-          ? layerGroups[0]
-          : layerGroups[1].get('group') === compare.activeString
-            ? layerGroups[1]
-            : null;
-      }
-    }
-    if (embed.isEmbedModeActive) {
-      activeLayers = activeLayers.filter((layer) => layer.visible);
-    }
-    lodashEach(activeLayers, (def) => {
-      const layerName = def.layer || def.id;
-
-      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
-        return;
-      }
+  const updateDate = self.updateDate = async function() {
+    return new Promise((resolve) => {
+      const state = store.getState();
+      const { compare } = state;
+      const activeLayers = getAllActiveLayers(state);
+      let layerGroups;
+      let layerGroup;
 
       if (compare && compare.active) {
-        if (layerGroup && layerGroup.getLayers().getArray().length) {
-          const index = findLayerIndex(def, layerGroup);
-          const layerValue = self.selected.getLayers().getArray()[index];
-          layerGroup.getLayers().setAt(
-            index,
-            createLayer(def, {
-              group: compare.activeString,
-              date: getSelectedDate(state),
-              previousLayer: layerValue ? layerValue.wv : null,
-            }),
-          );
-          compareMapUi.update(compare.activeString);
+        layerGroups = self.selected.getLayers().getArray();
+        if (layerGroups.length > 1) {
+          layerGroup = layerGroups[0].get('group') === compare.activeString
+            ? layerGroups[0]
+            : layerGroups[1].get('group') === compare.activeString
+              ? layerGroups[1]
+              : null;
         }
-      } else {
-        const index = findLayerIndex(def);
-        const layerValue = self.selected.getLayers().getArray()[index];
-        self.selected
-          .getLayers()
-          .setAt(index, createLayer(def, { previousLayer: layerValue ? layerValue.wv : null }));
       }
-      if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-        const { vectorStyles } = config;
-        let vectorStyleId;
 
-        vectorStyleId = def.vectorStyle.id;
-        if (getActiveLayers(state)) {
-          getActiveLayers(state).forEach((layer) => {
-            if (layer.id === layerName && layer.custom) {
-              vectorStyleId = layer.custom;
-            }
-          });
+      const group = compare && compare.active ? layerGroup : self.selected;
+      const layers = group.getLayers().getArray();
+      const visibleLayers = activeLayers.filter(
+        ({ id }) => layers
+          .filter((l) => l.getVisible())
+          .map(({ wv }) => wv.def.id)
+          .includes(id),
+      );
+
+      lodashEach(visibleLayers, (def) => {
+        const layerName = def.layer || def.id;
+
+        if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
+          return;
         }
-        setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
-      }
+
+        if (compare && compare.active) {
+          if (layers.length) {
+            const index = findLayerIndex(def, layerGroup);
+            const layerValue = self.selected.getLayers().getArray()[index];
+            layerGroup.getLayers().setAt(
+              index,
+              createLayer(def, {
+                group: compare.activeString,
+                date: getSelectedDate(state),
+                previousLayer: layerValue ? layerValue.wv : null,
+              }),
+            );
+            compareMapUi.update(compare.activeString);
+          }
+        } else {
+          const index = findLayerIndex(def);
+          const layer = createLayer(def, { previousLayer: layers[index] ? layers[index].wv : null });
+          self.selected.getLayers().setAt(index, layer);
+        }
+
+        if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+          const { vectorStyles } = config;
+          let vectorStyleId;
+
+          vectorStyleId = def.vectorStyle.id;
+          if (getActiveLayers(state)) {
+            getActiveLayers(state).forEach((layer) => {
+              if (layer.id === layerName && layer.custom) {
+                vectorStyleId = layer.custom;
+              }
+            });
+          }
+          setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+        }
+      });
+      updateLayerVisibilities();
+      resolve();
     });
-    updateLayerVisibilities();
   };
+
+  /**
+   * Preload tiles for the next and previous time interval so they are visible
+   * as soon as the user changes the date. We will usually only end up actually requesting
+   * either previous or next interval tiles since tiles are cached.
+   * (e.g. user adjust from July 1 => July 2, we preload July 3 which is "next"
+   * but no requests get made for "previous", July 1, since those are cached already.
+   */
+  async function preloadNextTiles(date, compareString) {
+    const state = store.getState();
+    const { timeScaleFromNumberKey } = dateConstants;
+    const { activeString } = state.compare;
+    const {
+      customSelected, customDelta, delta, customInterval, interval,
+    } = state.date;
+    const useActiveString = compareString || activeString;
+    const useDate = date || getSelectedDate(state);
+    const useDelta = customSelected ? customDelta : delta;
+    const changeUnit = customSelected
+      ? timeScaleFromNumberKey[customInterval]
+      : timeScaleFromNumberKey[interval];
+    const nextDate = getNextTimeSelection(useDelta, changeUnit, useDate);
+    const prevDate = getNextTimeSelection(useDelta * -1, changeUnit, useDate);
+    await promiseImageryForTime(state, nextDate, useActiveString);
+    await promiseImageryForTime(state, prevDate, useActiveString);
+    if (!date) {
+      preloadNextTiles(nextDate, useActiveString);
+      preloadNextTiles(prevDate, useActiveString);
+    }
+  }
+
+  function preloadForCompareMode() {
+    const { date, compare } = store.getState();
+    const { selected, selectedB } = date;
+    preloadNextTiles(selected, 'active');
+    if (compare.active) {
+      preloadNextTiles(selectedB, 'activeB');
+    }
+  }
 
   /*
    * Update layers for the correct Date
@@ -1046,6 +1111,7 @@ export default function mapui(models, config, store, ui) {
         ui: self,
         rotation: self.selected.getView().getRotation(),
       });
+      setTimeout(preloadForCompareMode, 250);
       map.un('rendercomplete', onRenderComplete);
     };
     map.on('rendercomplete', onRenderComplete);
