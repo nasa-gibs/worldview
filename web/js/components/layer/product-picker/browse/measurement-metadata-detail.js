@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { layer } from '@fortawesome/fontawesome-svg-core';
-import util from '../../../../util/util';
 import { getMeasurementSource } from '../../../../modules/product-picker/selectors';
 import LayerInfo from '../../info/info';
 
@@ -19,19 +17,28 @@ function MeasurementMetadataDetail (props) {
   const metadataForSource = metadata[metadataPath] && metadata[metadataPath].data;
 
   useEffect(() => {
+    setLoading(true);
+    let controller = new AbortController();
     if (metadataPath && !metadataForSource) {
-      util
-        .get(`config/metadata/layers/${metadataPath}.html`)
-        .then((data) => {
-          metadata[metadataPath] = { data };
+      try {
+        (async () => {
+          const options = { signal: controller.signal };
+          const data = await fetch(`config/metadata/layers/${metadataPath}.html`, options);
+          metadata[metadataPath] = { data: await data.text() };
+          controller = null;
           setMetadata(metadata);
           setLoading(false);
-        }).finally(() => {
+        })();
+      } catch (e) {
+        if (!controller.signal.aborted) {
           setLoading(false);
-        });
+          console.error(e);
+        }
+      }
     } else {
       setLoading(false);
     }
+    return () => (controller ? controller.abort() : null);
   }, [source]);
 
   const renderMetadataForLayers = () => layers.map((l) => (
@@ -57,7 +64,7 @@ function MeasurementMetadataDetail (props) {
 
   const renderMobile = () => {
     const sourceTextLong = metadataForSource && metadataForSource.length >= 1000;
-    const manylayers = layers && layer.length > 0;
+    const manylayers = layers && layers.length > 0;
     const doesMetaDataNeedExpander = sourceTextLong || manylayers;
     const isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
     return (
@@ -109,7 +116,7 @@ function MeasurementMetadataDetail (props) {
   }
 
   /* No metadata configured for this source */
-  if (!metadataPath && !layer.length) {
+  if (!metadataPath && !layers.length) {
     return (
       <div className="no-results">
         <FontAwesomeIcon icon="meteor" />

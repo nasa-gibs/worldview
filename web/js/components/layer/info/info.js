@@ -20,15 +20,23 @@ export default function LayerInfo ({ layer, screenHeight }) {
   const [metadata, setMetadata] = useState();
 
   useEffect(() => {
-    getSourceMetadata(layer);
+    let controller = new AbortController();
+    (async () => {
+      if (!layer.description) return;
+      try {
+        const options = { signal: controller.signal };
+        const data = await fetch(`config/metadata/layers/${layer.description}.html`, options);
+        const metadataHtml = await data.text();
+        controller = null;
+        setMetadata(metadataHtml || 'No description was found for this layer.');
+      } catch (e) {
+        if (!controller.signal.aborted) {
+          console.error(e);
+        }
+      }
+    })();
+    return () => (controller ? controller.abort() : null);
   }, [layer]);
-
-  const getSourceMetadata = async () => {
-    if (layer.description) {
-      const data = await util.get(`config/metadata/layers/${layer.description}.html`);
-      setMetadata(data || 'No description was found for this layer.');
-    }
-  };
 
   const getDateOverlapDateRanges = () => {
     const hasLayerDateRange = dateRanges && dateRanges.length > 1;
@@ -37,7 +45,6 @@ export default function LayerInfo ({ layer, screenHeight }) {
       : [];
     return hasLayerDateRange && overlapDateRanges.overlap === false;
   };
-
 
   const needDateRanges = getDateOverlapDateRanges();
 
