@@ -8,7 +8,7 @@
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsre",
                     "title": "Aqua/AMSR-E",
-                    "description": "amsre/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRE_Brightness_Temp_89H_Day",
@@ -48,7 +48,7 @@
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
                     "title": "GCOM-W1/AMSR2",
-                    "description": "amsr2/SeaIceBrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRU2_Sea_Ice_Brightness_Temp_6km_89H",
@@ -60,7 +60,7 @@
                 "GPM/GMI": {
                     "id": "gpm-gmi",
                     "title": "GPM/GMI",
-                    "description": "gpm/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GMI_Brightness_Temp_Asc",
@@ -72,7 +72,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
@@ -84,7 +84,7 @@
                 "NOAA-20/VIIRS+CrIS": {
                     "id": "noaa20-viirs=cris",
                     "title": "NOAA-20/VIIRS+CrIS",
-                    "description": "viirs/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_CrIS_NOAA20_BT_Band33_Fusion_Day",
@@ -96,7 +96,7 @@
                 "TRMM": {
                     "id": "trmm",
                     "title": "TRMM",
-                    "description": "trmm/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "TRMM_Brightness_Temp_Asc",
@@ -106,7 +106,7 @@
                 "SMAP/Radar/Radiometer": {
                     "id": "smap-radar-radiometer",
                     "title": "SMAP/Radar/Radiometer",
-                    "description": "smap/DisaggregatedBrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SMAP_L3_Active_Passive_Brightness_Temp_H",
@@ -121,10 +121,10 @@
                     "description": "smap/BrightnessTemperature",
                     "image": "",
                     "settings": [
-                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H",
-                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H",
-                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V",
-                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V",
                         "SMAP_L1_Passive_Brightness_Temp_Fore_H",
                         "SMAP_L1_Passive_Brightness_Temp_Aft_H",
                         "SMAP_L1_Passive_Brightness_Temp_Fore_V",
@@ -154,7 +154,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
@@ -166,12 +166,11 @@
                 "Suomi NPP/VIIRS+CrIS": {
                     "id": "suomi-npp-viirs-cris",
                     "title": "Suomi NPP/VIIRS+CrIS",
-                    "description": "viirs/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Day",
                         "VIIRS_CrIS_SNPP_BT_Band33_Fusion_Night",
-
                         "OrbitTracks_Suomi_NPP_Ascending",
                         "OrbitTracks_Suomi_NPP_Descending"
                     ]
@@ -179,7 +178,7 @@
                 "NOAA-15/AMSU-A": {
                     "id": "noaa15-amsua",
                     "title": "NOAA-15/AMSU-A",
-                    "description": "amsua/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "AMSUA_NOAA15_Brightness_Temp_Channel_1",
@@ -202,7 +201,7 @@
                 "NOAA-16/AMSU-A": {
                     "id": "noaa16-amsua",
                     "title": "NOAA-16/AMSU-A",
-                    "description": "amsua/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "AMSUA_NOAA16_Brightness_Temp_Channel_1",
@@ -225,7 +224,7 @@
                 "NOAA-17/AMSU-A": {
                     "id": "noaa17-amsua",
                     "title": "NOAA-17/AMSU-A",
-                    "description": "amsua/BrightnessTemperature",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "AMSUA_NOAA17_Brightness_Temp_Channel_1",

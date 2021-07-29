@@ -8,7 +8,7 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/Albedo",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_L3_White_Sky_Albedo_Daily",

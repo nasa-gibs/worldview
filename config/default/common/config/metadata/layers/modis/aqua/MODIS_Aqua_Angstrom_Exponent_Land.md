@@ -2,3 +2,4 @@ The MODIS Deep Blue Aerosol Ångström Exponent layer can be used to provide add
 
 The MODIS Deep Blue Aerosol Aerosol Ångström Exponent (Land) layer is available from both the Terra (`MOD04_L2`) and Aqua (`MYD04_L2`) satellites for daytime overpasses. The sensor/algorithm resolution is 10 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
 
+References: MYD04_L2 NRT [doi:10.5067/MODIS/MYD04_L2.NRT.061](https://doi.org/10.5067/MODIS/MYD04_L2.NRT.061); MYD04_L2 [10.5067/MODIS/MYD04_L2.061](https://doi.org/10.5067/MODIS/MYD04_L2.061)
