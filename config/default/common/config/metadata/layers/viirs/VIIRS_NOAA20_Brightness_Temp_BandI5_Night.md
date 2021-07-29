@@ -2,4 +2,5 @@ The VIIRS Brightness Temperature, Band I5 Night layer is the brightness temperat
 
 The VIIRS Brightness Temperature layer is calculated from VIIRS Calibrated Radiances.The VIIRS instrument is aboard the joint NASA/NOAA NOAA-20 (JPSS-1) satellite. The sensor resolution is 375m, the imagery resolution is 250m, and the temporal resolution is daily.
 
-References: [VIIRS SDR Users Guide](https://lpdaac.usgs.gov/documents/134/VNP03_User_Guide_V1.2.pdf)
+References: VJ102IMG_NRT [doi:10.5067/VIIRS/VJ102IMG_NRT.002](https://doi.org/10.5067/VIIRS/VJ102IMG_NRT.002)
+

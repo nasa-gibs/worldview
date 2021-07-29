@@ -1,3 +1,5 @@
 The Aerosol Optical Depth layer is useful for studying aerosol optical depth over the ocean as well as vegetation/dark-soiled land, which are both dark in the visible wavelengths. It is produced using two “Dark Target” (DT) algorithms for retrieving (1) over ocean (dark in visible and longer wavelengths) and (2) over vegetated/dark-soiled land (dark in the visible). Note: The algorithm is not applied over sunglint ocean regions or bright (desert) land regions, therefore gaps will occur at those locations.
 
 The MODIS Aerosol Optical Depth layer uses the Optical Depth Land And Ocean parameter from both the Terra (`MOD04_L2`) and Aqua (`MYD04_L2`) satellites for daytime overpasses. The sensor/algorithm resolution is 10 km at nadir, the imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.
+
+References: MYD04_L2 NRT [doi:10.5067/MODIS/MYD04_L2.NRT.061](https://doi.org/10.5067/MODIS/MYD04_L2.NRT.061); MYD04_L2 [10.5067/MODIS/MYD04_L2.061](https://doi.org/10.5067/MODIS/MYD04_L2.061)
