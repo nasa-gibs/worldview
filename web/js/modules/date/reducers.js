@@ -1,4 +1,3 @@
-import { assign as lodashAssign } from 'lodash';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
@@ -8,10 +7,13 @@ import {
   TOGGLE_CUSTOM_MODAL,
   customModalType,
   INIT_SECOND_DATE,
+  ARROW_DOWN,
+  ARROW_UP,
 } from './constants';
 import util from '../../util/util';
 
 export const dateReducerState = {
+  arrowDown: false,
   selectedZoom: 3,
   interval: 3,
   delta: 1,
@@ -24,51 +26,69 @@ export const dateReducerState = {
 };
 
 export function getInitialState(config) {
-  return lodashAssign({}, dateReducerState, {
+  return {
+    ...dateReducerState,
     selected: config.initialDate,
     selectedB: util.dateAdd(config.initialDate, 'day', -7),
     appNow: config.pageLoadTime,
-  });
+  };
 }
 
 export function dateReducer(state = dateReducerState, action) {
   switch (action.type) {
     case CHANGE_TIME_SCALE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         selectedZoom: action.value,
-      });
+      };
     case INIT_SECOND_DATE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         selectedB: util.dateAdd(state.selected, 'day', -7),
-      });
+      };
     case CHANGE_CUSTOM_INTERVAL:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         customInterval: action.value,
         customDelta: action.delta,
         customSelected: true,
-      });
+      };
     case CHANGE_INTERVAL:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         interval: action.value,
         delta: action.delta,
         customSelected: action.customSelected,
-      });
+      };
     case SELECT_DATE:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         [action.activeString]: action.value,
-      });
+      };
+    case ARROW_DOWN:
+      return {
+        ...state,
+        arrowDown: action.value,
+      };
+    case ARROW_UP:
+      return {
+        ...state,
+        arrowDown: false,
+      };
     case TOGGLE_CUSTOM_MODAL: {
       const timelineToggle = action.toggleBy === customModalType.TIMELINE;
       const animationToggle = action.toggleBy === customModalType.ANIMATION;
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         timelineCustomModalOpen: animationToggle ? false : action.value,
         animationCustomModalOpen: timelineToggle ? false : action.value,
-      });
+      };
     }
     case UPDATE_APP_NOW:
-      return lodashAssign({}, state, {
+      return {
+        ...state,
         appNow: action.value,
-      });
+      };
     default:
       return state;
   }

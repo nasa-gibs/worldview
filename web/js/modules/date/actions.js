@@ -6,6 +6,8 @@ import {
   UPDATE_APP_NOW,
   TOGGLE_CUSTOM_MODAL,
   INIT_SECOND_DATE,
+  ARROW_DOWN,
+  ARROW_UP,
 } from './constants';
 import { getSelectedDate } from './selectors';
 import { getMaxActiveLayersDate } from './util';
@@ -89,5 +91,16 @@ export function toggleCustomModal(open, toggleBy) {
     type: TOGGLE_CUSTOM_MODAL,
     value: open,
     toggleBy,
+  };
+}
+export function setArrowDown (value) {
+  return {
+    type: ARROW_DOWN,
+    value,
+  };
+}
+export function setArrowUp () {
+  return {
+    type: ARROW_UP,
   };
 }
