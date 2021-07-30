@@ -26,6 +26,7 @@ import getImageArray from '../modules/animation/selectors';
 import { getStampProps, svgToPng } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 
+const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 const gifStream = new GifStream();
 
 class GIF extends Component {
@@ -386,11 +387,15 @@ function mapStateToProps(state) {
   const increment = customSelected
     ? `${customDelta} ${timeScaleFromNumberKey[customInterval]}`
     : `1 ${timeScaleFromNumberKey[interval]}`;
-  let url = 'http://localhost:3002/api/v1/snapshot';
+  let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
+  }
+  if ('imageDownload' in config.parameters) {
+    url = config.parameters.imageDownload;
     util.warn(`Redirecting GIF download to: ${url}`);
   }
+
   return {
     screenWidth,
     screenHeight,
