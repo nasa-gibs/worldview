@@ -7,10 +7,10 @@ import {
   setArrowUp as setArrowUpAction,
 } from '../../../modules/date/actions';
 
-const ANIMATION_DELAY = 500; // interval firing to trigger parent level arrow change
-const CLICK_HOLD_DELAY = 300; // wait before click is considered a hold
+const ANIMATION_DELAY = 600; // interval for timestep
+const CLICK_HOLD_DELAY = 200; // wait before click is considered a hold
 
-let mouseHoldCheckTimer = null;
+let arrowDownCheckTimer = null;
 // left/right arrow intervals
 const intervals = {
   left: 0,
@@ -24,16 +24,18 @@ class DateChangeArrows extends PureComponent {
       left: props.leftArrowDown,
       right: props.rightArrowDown,
     };
-    this.arrowUpMap = {
-      left: props.leftArrowUp,
-      right: props.rightArrowUp,
-    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('keyup', this.handleKeyUp);
   }
 
   componentDidUpdate (prevProps) {
     const { tilesPreloaded, arrowDown } = this.props;
-    const finishedPreload = !prevProps.tilesPreloaded && tilesPreloaded;
-    if (finishedPreload && arrowDown) {
+    const notAnimating = !intervals.left && !intervals.right;
+
+    if (tilesPreloaded && arrowDown && notAnimating) {
       // set interval for holding arrow down
       intervals[arrowDown] = setInterval(this.arrowDownMap[arrowDown], ANIMATION_DELAY);
     }
@@ -42,28 +44,50 @@ class DateChangeArrows extends PureComponent {
   componentWillUnmount() {
     clearInterval(intervals.left);
     clearInterval(intervals.right);
+    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('keyup', this.handleKeyUp);
   }
 
   clickAndHold = (direction) => {
     const { setArrowDown } = this.props;
     setArrowDown(direction);
-    mouseHoldCheckTimer = null;
+    arrowDownCheckTimer = null;
   }
 
-  arrowDown = (direction) => {
+  handleKeyDown = (e) => {
+    const { arrowDown } = this.props;
+    const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
+    if (e.target.tagName === 'INPUT' || e.target.className === 'rc-slider-handle' || e.ctrlKey || e.metaKey) {
+      return;
+    }
+    if (direction) {
+      e.preventDefault();
+      if (!arrowDown) this.onArrowDown(direction);
+    }
+  }
+
+  handleKeyUp = (e) => {
+    const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
+    if (direction) {
+      e.preventDefault();
+      this.onArrowUp(direction);
+    }
+  };
+
+  onArrowDown = (direction) => {
     this.arrowDownMap[direction]();
-    mouseHoldCheckTimer = setTimeout(() => {
+    arrowDownCheckTimer = setTimeout(() => {
       this.clickAndHold(direction);
     }, CLICK_HOLD_DELAY);
   }
 
-  arrowUp = (direction) => {
+  onArrowUp = (direction) => {
     const { setArrowUp, arrowDown } = this.props;
-    if (mouseHoldCheckTimer) {
-      clearTimeout(mouseHoldCheckTimer);
+    if (arrowDownCheckTimer) {
+      clearTimeout(arrowDownCheckTimer);
     }
     clearInterval(intervals[direction]);
-    this.arrowUpMap[direction]();
+    intervals[direction] = 0;
     if (arrowDown) setArrowUp();
   }
 
@@ -76,10 +100,10 @@ class DateChangeArrows extends PureComponent {
       rightArrowDisabled,
     } = this.props;
 
-    const leftArrowDown = () => this.arrowDown('left');
-    const rightArrowDown = () => this.arrowDown('right');
-    const leftArrowUp = () => this.arrowUp('left');
-    const rightArrowUp = () => this.arrowUp('right');
+    const leftArrowDown = () => this.onArrowDown('left');
+    const rightArrowDown = () => this.onArrowDown('right');
+    const leftArrowUp = () => this.onArrowUp('left');
+    const rightArrowUp = () => this.onArrowUp('right');
 
     return (
       <div>
@@ -176,12 +200,10 @@ DateChangeArrows.propTypes = {
   arrowDown: PropTypes.string,
   leftArrowDisabled: PropTypes.bool,
   leftArrowDown: PropTypes.func,
-  leftArrowUp: PropTypes.func,
   isMobile: PropTypes.bool,
   nowButtonDisabled: PropTypes.bool,
   rightArrowDisabled: PropTypes.bool,
   rightArrowDown: PropTypes.func,
-  rightArrowUp: PropTypes.func,
   setArrowDown: PropTypes.func,
   setArrowUp: PropTypes.func,
   tilesPreloaded: PropTypes.bool,

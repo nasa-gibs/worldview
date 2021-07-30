@@ -69,7 +69,6 @@ import util from '../../util/util';
 
 import MobileComparisonToggle from '../../components/compare/mobile-toggle';
 
-const ANIMATION_DELAY = 500;
 const preventDefaultFunc = (e) => {
   e.preventDefault();
 };
@@ -121,16 +120,6 @@ class Timeline extends React.Component {
     const throttleSettings = { leading: true, trailing: false };
     this.throttleSelectDate = lodashThrottle(selectDate, 100, throttleSettings);
     this.debounceDraggerDateUpdate = lodashDebounce(this.onDateChange, 200);
-    this.throttleDecrementDate = lodashThrottle(
-      this.handleArrowDateChange.bind(this, -1),
-      ANIMATION_DELAY,
-      throttleSettings,
-    );
-    this.throttleIncrementDate = lodashThrottle(
-      this.handleArrowDateChange.bind(this, 1),
-      ANIMATION_DELAY,
-      throttleSettings,
-    );
 
     // animation dragger updates
     this.debounceOnUpdateStartDate = lodashDebounce(onUpdateStartDate, 30);
@@ -494,22 +483,6 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc stop animation from left arrows - clear throttle invocation
-  * @returns {void}
-  */
-  stopLeftArrow = () => {
-    this.throttleDecrementDate.cancel();
-  }
-
-  /**
-  * @desc stop animation from right arrows - clear throttle invocation
-  * @returns {void}
-  */
-  stopRightArrow = () => {
-    this.throttleIncrementDate.cancel();
-  }
-
-  /**
   * @desc handles left/right arrow down to decrement/increment date
   * @param {Event} mouse event
   * @returns {void}
@@ -521,16 +494,7 @@ class Timeline extends React.Component {
     if (e.target.tagName !== 'INPUT' && e.target.className !== 'rc-slider-handle' && !e.ctrlKey && !e.metaKey && !isTimelineDragging) {
       const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
       const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
-      // left arrow
-      if (e.keyCode === 37) {
-        e.preventDefault();
-        this.throttleDecrementDate();
-      // right arrow
-      } else if (e.keyCode === 39) {
-        e.preventDefault();
-        this.throttleIncrementDate();
-      // up arrow
-      } else if (e.keyCode === 38) {
+      if (e.keyCode === 38) {
         e.preventDefault();
         if (timeScaleNumber > 1) {
           this.changeTimeScale(timeScaleNumber - 1);
@@ -542,23 +506,6 @@ class Timeline extends React.Component {
           this.changeTimeScale(timeScaleNumber + 1);
         }
       }
-    }
-  };
-
-  /**
-  * @desc handles stopping change date in process and to allow faster key downs
-  * @param {Event} mouse event
-  * @returns {void}
-  */
-  handleKeyUp = (e) => {
-    // left arrow
-    if (e.keyCode === 37) {
-      e.preventDefault();
-      this.stopLeftArrow();
-    // right arrow
-    } else if (e.keyCode === 39) {
-      e.preventDefault();
-      this.stopRightArrow();
     }
   };
 
@@ -1077,6 +1024,19 @@ class Timeline extends React.Component {
     const containerDisplayStyle = {
       display: isDistractionFreeModeActive ? 'none' : 'block',
     };
+
+    const renderDateChangeArrows = () => (
+      <DateChangeArrows
+        leftArrowDown={() => this.handleArrowDateChange(-1)}
+        leftArrowDisabled={leftArrowDisabled}
+        isMobile={isMobile}
+        rightArrowDown={() => this.handleArrowDateChange(1)}
+        rightArrowDisabled={rightArrowDisabled}
+        nowButtonDisabled={nowButtonDisabled}
+        handleSelectNowButton={this.handleSelectNowButton}
+      />
+    );
+
     return (
       <>
         <div
@@ -1104,17 +1064,7 @@ class Timeline extends React.Component {
                       style={this.getMobileDateButtonStyle()}
                     >
                       <div id="zoom-buttons-group">
-                        <DateChangeArrows
-                          handleSelectNowButton={this.handleSelectNowButton}
-                          isMobile={isMobile}
-                          leftArrowDisabled={leftArrowDisabled}
-                          leftArrowDown={this.throttleDecrementDate}
-                          leftArrowUp={this.stopLeftArrow}
-                          nowButtonDisabled={nowButtonDisabled}
-                          rightArrowDisabled={rightArrowDisabled}
-                          rightArrowDown={this.throttleIncrementDate}
-                          rightArrowUp={this.stopRightArrow}
-                        />
+                        {renderDateChangeArrows()}
                       </div>
                     </div>
                   </div>
@@ -1149,17 +1099,7 @@ class Timeline extends React.Component {
                           timeScaleChangeUnit={timeScaleChangeUnit}
                           hasSubdailyLayers={hasSubdailyLayers}
                         />
-                        <DateChangeArrows
-                          handleSelectNowButton={this.handleSelectNowButton}
-                          isMobile={isMobile}
-                          leftArrowDisabled={leftArrowDisabled}
-                          leftArrowDown={this.throttleDecrementDate}
-                          leftArrowUp={this.stopLeftArrow}
-                          nowButtonDisabled={nowButtonDisabled}
-                          rightArrowDisabled={rightArrowDisabled}
-                          rightArrowDown={this.throttleIncrementDate}
-                          rightArrowUp={this.stopRightArrow}
-                        />
+                        {renderDateChangeArrows()}
                       </div>
                       <AnimationButton
                         clickAnimationButton={this.clickAnimationButton}
