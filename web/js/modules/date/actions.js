@@ -105,9 +105,10 @@ export function setArrowUp () {
     type: ARROW_UP,
   };
 }
-export function setPreload (value) {
+export function setPreload (preloaded, lastPreloadDate) {
   return {
     type: SET_PRELOAD,
-    value,
+    preloaded,
+    lastPreloadDate,
   };
 }

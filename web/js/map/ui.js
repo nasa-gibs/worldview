@@ -861,11 +861,28 @@ export default function mapui(models, config, store, ui) {
    */
   async function preloadNextTiles(date, compareString) {
     const state = store.getState();
+    const { lastPreloadDate, preloaded, arrowDown } = state.date;
     const { activeString } = state.compare;
     const useActiveString = compareString || activeString;
-    const useDate = date || getSelectedDate(state);
+    const useDate = date || lastPreloadDate || getSelectedDate(state);
     const nextDate = getNextDateTime(state, 1, useDate);
     const prevDate = getNextDateTime(state, -1, useDate);
+
+    // If we've preloaded N dates out, we need to use the latest
+    // preloaded date the next time we call this function or the buffer
+    // won't stay ahead of the 'animation' when holding down timetep arrows
+    if (preloaded && arrowDown) {
+      const subsequentDate = arrowDown === 'right' ? nextDate : prevDate;
+      console.log('preload step:', subsequentDate.toISOString());
+      store.dispatch({
+        type: dateConstants.SET_PRELOAD,
+        preloaded: true,
+        lastPreloadDate: subsequentDate,
+      });
+      await promiseImageryForTime(state, subsequentDate, useActiveString);
+      return;
+    }
+
     await promiseImageryForTime(state, nextDate, useActiveString);
     await promiseImageryForTime(state, prevDate, useActiveString);
     if (!date) {
@@ -892,15 +909,18 @@ export default function mapui(models, config, store, ui) {
     let nextDate = getNextDateTime(state, direction, currentDate);
 
     for (let step = 1; step <= BUFFER_SIZE; step += 1) {
-      console.log(nextDate.toISOString());
       preloadPromises.push(promiseImageryForTime(state, nextDate));
-      nextDate = getNextDateTime(state, direction, nextDate);
+      console.log(nextDate.toISOString());
+      if (step !== BUFFER_SIZE) {
+        nextDate = getNextDateTime(state, direction, nextDate);
+      }
     }
     await Promise.all(preloadPromises);
 
     store.dispatch({
       type: dateConstants.SET_PRELOAD,
-      value: true,
+      preloaded: true,
+      lastPreloadDate: nextDate,
     });
   }
 
