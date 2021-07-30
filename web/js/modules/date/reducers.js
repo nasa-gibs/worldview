@@ -9,11 +9,13 @@ import {
   INIT_SECOND_DATE,
   ARROW_DOWN,
   ARROW_UP,
+  SET_PRELOAD,
 } from './constants';
 import util from '../../util/util';
 
 export const dateReducerState = {
   arrowDown: false,
+  preloaded: false,
   selectedZoom: 3,
   interval: 3,
   delta: 1,
@@ -69,11 +71,17 @@ export function dateReducer(state = dateReducerState, action) {
       return {
         ...state,
         arrowDown: action.value,
+        preloaded: false,
       };
     case ARROW_UP:
       return {
         ...state,
         arrowDown: false,
+      };
+    case SET_PRELOAD:
+      return {
+        ...state,
+        preloaded: action.value,
       };
     case TOGGLE_CUSTOM_MODAL: {
       const timelineToggle = action.toggleBy === customModalType.TIMELINE;

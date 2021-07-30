@@ -897,6 +897,11 @@ export default function mapui(models, config, store, ui) {
       nextDate = getNextDateTime(state, direction, nextDate);
     }
     await Promise.all(preloadPromises);
+
+    store.dispatch({
+      type: dateConstants.SET_PRELOAD,
+      value: true,
+    });
   }
 
   /*

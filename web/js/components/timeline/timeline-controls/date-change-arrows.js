@@ -5,13 +5,13 @@ import HoverTooltip from '../../util/hover-tooltip';
 import {
   setArrowDown as setArrowDownAction,
   setArrowUp as setArrowUpAction,
+  setPreload as setPreloadAction,
 } from '../../../modules/date/actions';
 
-const ANIMATION_DELAY = 500; // interval firing to trigger parent level arrow change
-const CLICK_HOLD_DELAY = 500; // wait before click is considered a hold
+const ANIMATION_DELAY = 300; // interval firing to trigger parent level arrow change
+const CLICK_HOLD_DELAY = 300; // wait before click is considered a hold
 
 let mouseHoldCheckTimer = null;
-let isMouseHolding = false;
 // left/right arrow intervals
 const intervals = {
   left: 0,
@@ -21,16 +21,23 @@ const intervals = {
 class DateChangeArrows extends PureComponent {
   constructor(props) {
     super(props);
-
     this.arrowDownMap = {
       left: props.leftArrowDown,
       right: props.rightArrowDown,
     };
-
     this.arrowUpMap = {
       left: props.leftArrowUp,
       right: props.rightArrowUp,
     };
+  }
+
+  componentDidUpdate (prevProps) {
+    const { tilesPreloaded, arrowDown } = this.props;
+    const finishedPreload = !prevProps.tilesPreloaded && tilesPreloaded;
+    if (finishedPreload && arrowDown) {
+      // set interval for holding arrow down
+      intervals[arrowDown] = setInterval(this.arrowDownMap[arrowDown], ANIMATION_DELAY);
+    }
   }
 
   componentWillUnmount() {
@@ -42,9 +49,6 @@ class DateChangeArrows extends PureComponent {
     const { setArrowDown } = this.props;
     setArrowDown(direction);
     mouseHoldCheckTimer = null;
-    isMouseHolding = true;
-    // set interval for holding arrow down
-    intervals[direction] = setInterval(this.arrowDownMap[direction], ANIMATION_DELAY);
   }
 
   arrowDown = (direction) => {
@@ -58,8 +62,6 @@ class DateChangeArrows extends PureComponent {
     const { setArrowUp } = this.props;
     if (mouseHoldCheckTimer) {
       clearTimeout(mouseHoldCheckTimer);
-    } else if (isMouseHolding) {
-      isMouseHolding = false;
     }
     clearInterval(intervals[direction]);
     this.arrowUpMap[direction]();
@@ -153,7 +155,13 @@ class DateChangeArrows extends PureComponent {
   }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => {
+  const { date } = state;
+  return {
+    tilesPreloaded: date.preloaded,
+    arrowDown: date.arrowDown,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
   setArrowDown: (isDownDirection) => {
@@ -162,10 +170,14 @@ const mapDispatchToProps = (dispatch) => ({
   setArrowUp: () => {
     dispatch(setArrowUpAction());
   },
+  setPreload: (bool) => {
+    dispatch(setPreloadAction(bool));
+  },
 });
 
 DateChangeArrows.propTypes = {
   handleSelectNowButton: PropTypes.func,
+  arrowDown: PropTypes.string,
   leftArrowDisabled: PropTypes.bool,
   leftArrowDown: PropTypes.func,
   leftArrowUp: PropTypes.func,
@@ -176,6 +188,7 @@ DateChangeArrows.propTypes = {
   rightArrowUp: PropTypes.func,
   setArrowDown: PropTypes.func,
   setArrowUp: PropTypes.func,
+  tilesPreloaded: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DateChangeArrows);

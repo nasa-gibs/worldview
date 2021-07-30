@@ -8,6 +8,7 @@ import {
   INIT_SECOND_DATE,
   ARROW_DOWN,
   ARROW_UP,
+  SET_PRELOAD,
 } from './constants';
 import { getSelectedDate } from './selectors';
 import { getMaxActiveLayersDate } from './util';
@@ -102,5 +103,11 @@ export function setArrowDown (value) {
 export function setArrowUp () {
   return {
     type: ARROW_UP,
+  };
+}
+export function setPreload (value) {
+  return {
+    type: SET_PRELOAD,
+    value,
   };
 }
