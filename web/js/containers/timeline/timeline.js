@@ -98,8 +98,6 @@ class Timeline extends React.Component {
       showHoverLine: false,
       showDraggerTime: false,
       isAnimationDraggerDragging: false,
-      // eslint-disable-next-line react/no-unused-state
-      isArrowDown: false,
       isDraggerDragging: false,
       isTimelineDragging: false,
       initialLoadComplete: false,
@@ -493,8 +491,6 @@ class Timeline extends React.Component {
       const maxDate = new Date(timelineEndDateLimit);
       this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate, minDate, maxDate));
     }
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ isArrowDown: true });
   }
 
   /**
@@ -503,8 +499,6 @@ class Timeline extends React.Component {
   */
   stopLeftArrow = () => {
     this.throttleDecrementDate.cancel();
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ isArrowDown: false });
   }
 
   /**
@@ -513,8 +507,6 @@ class Timeline extends React.Component {
   */
   stopRightArrow = () => {
     this.throttleIncrementDate.cancel();
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ isArrowDown: false });
   }
 
   /**
@@ -895,13 +887,12 @@ class Timeline extends React.Component {
       return new Promise((resolve, reject) => {
         (function waitForSafeUpdate() {
           const {
-            isArrowDown,
             isTimelineDragging,
             isDraggerDragging,
             isAnimationDraggerDragging,
           } = self.state;
-          const { isAnimationPlaying } = self.props;
-          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
+          const { isAnimationPlaying, arrowDown } = self.props;
+          const userIsInteracting = arrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
