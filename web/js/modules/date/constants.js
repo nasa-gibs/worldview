@@ -7,6 +7,7 @@ export const TOGGLE_CUSTOM_MODAL = 'DATE/TOGGLE_CUSTOM_MODAL';
 export const INIT_SECOND_DATE = 'DATE/INIT_SECOND_DATE';
 export const ARROW_DOWN = 'DATE/ARROW_DOWN';
 export const ARROW_UP = 'DATE/ARROW_UP';
+export const SET_PRELOAD = 'DATE/SET_PRELOAD';
 
 export const monthMap = {
   1: 'Jan',
