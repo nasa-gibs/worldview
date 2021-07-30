@@ -5,10 +5,9 @@ import HoverTooltip from '../../util/hover-tooltip';
 import {
   setArrowDown as setArrowDownAction,
   setArrowUp as setArrowUpAction,
-  setPreload as setPreloadAction,
 } from '../../../modules/date/actions';
 
-const ANIMATION_DELAY = 300; // interval firing to trigger parent level arrow change
+const ANIMATION_DELAY = 500; // interval firing to trigger parent level arrow change
 const CLICK_HOLD_DELAY = 300; // wait before click is considered a hold
 
 let mouseHoldCheckTimer = null;
@@ -59,13 +58,13 @@ class DateChangeArrows extends PureComponent {
   }
 
   arrowUp = (direction) => {
-    const { setArrowUp } = this.props;
+    const { setArrowUp, arrowDown } = this.props;
     if (mouseHoldCheckTimer) {
       clearTimeout(mouseHoldCheckTimer);
     }
     clearInterval(intervals[direction]);
     this.arrowUpMap[direction]();
-    setArrowUp();
+    if (arrowDown) setArrowUp();
   }
 
   render() {
@@ -169,9 +168,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setArrowUp: () => {
     dispatch(setArrowUpAction());
-  },
-  setPreload: (bool) => {
-    dispatch(setPreloadAction(bool));
   },
 });
 

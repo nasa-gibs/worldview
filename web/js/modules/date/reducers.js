@@ -16,6 +16,7 @@ import util from '../../util/util';
 export const dateReducerState = {
   arrowDown: false,
   preloaded: false,
+  lastPreloadDate: undefined,
   selectedZoom: 3,
   interval: 3,
   delta: 1,
@@ -77,11 +78,13 @@ export function dateReducer(state = dateReducerState, action) {
       return {
         ...state,
         arrowDown: false,
+        lastPreloadDate: undefined,
       };
     case SET_PRELOAD:
       return {
         ...state,
-        preloaded: action.value,
+        preloaded: action.preloaded,
+        lastPreloadDate: action.lastPreloadDate,
       };
     case TOGGLE_CUSTOM_MODAL: {
       const timelineToggle = action.toggleBy === customModalType.TIMELINE;
