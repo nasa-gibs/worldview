@@ -5,6 +5,8 @@ import { layersParse12 } from '../layers/util';
 import {
   dateRange as getDateRange, getActiveLayers,
 } from '../layers/selectors';
+import { timeScaleFromNumberKey } from './constants';
+import { getSelectedDate } from './selectors';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 
@@ -277,4 +279,16 @@ export const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDat
     return maxDate;
   }
   return date;
+};
+
+export const getNextDateTime = (state, direction, date) => {
+  const {
+    customSelected, customDelta, delta, customInterval, interval,
+  } = state.date;
+  const useDate = date || getSelectedDate(state);
+  const useDelta = customSelected ? customDelta : delta;
+  const changeUnit = customSelected
+    ? timeScaleFromNumberKey[customInterval]
+    : timeScaleFromNumberKey[interval];
+  return getNextTimeSelection(useDelta * direction, changeUnit, useDate);
 };

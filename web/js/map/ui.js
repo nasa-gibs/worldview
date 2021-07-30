@@ -60,7 +60,7 @@ import {
   RENDERED, UPDATE_MAP_UI, UPDATE_MAP_EXTENT, UPDATE_MAP_ROTATION, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE, CLEAR_ROTATE,
 } from '../modules/map/constants';
 import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
-import { getNextTimeSelection } from '../modules/date/util';
+import { getNextDateTime } from '../modules/date/util';
 
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
@@ -209,6 +209,9 @@ export default function mapui(models, config, store, ui) {
         updateDate().then(preloadNextTiles);
         break;
       }
+      case dateConstants.ARROW_DOWN:
+        bufferQuickAnimate(action.value);
+        break;
       default:
         break;
     }
@@ -858,19 +861,11 @@ export default function mapui(models, config, store, ui) {
    */
   async function preloadNextTiles(date, compareString) {
     const state = store.getState();
-    const { timeScaleFromNumberKey } = dateConstants;
     const { activeString } = state.compare;
-    const {
-      customSelected, customDelta, delta, customInterval, interval,
-    } = state.date;
     const useActiveString = compareString || activeString;
     const useDate = date || getSelectedDate(state);
-    const useDelta = customSelected ? customDelta : delta;
-    const changeUnit = customSelected
-      ? timeScaleFromNumberKey[customInterval]
-      : timeScaleFromNumberKey[interval];
-    const nextDate = getNextTimeSelection(useDelta, changeUnit, useDate);
-    const prevDate = getNextTimeSelection(useDelta * -1, changeUnit, useDate);
+    const nextDate = getNextDateTime(state, 1, useDate);
+    const prevDate = getNextDateTime(state, -1, useDate);
     await promiseImageryForTime(state, nextDate, useActiveString);
     await promiseImageryForTime(state, prevDate, useActiveString);
     if (!date) {
@@ -886,6 +881,22 @@ export default function mapui(models, config, store, ui) {
     if (compare.active) {
       preloadNextTiles(selectedB, 'activeB');
     }
+  }
+
+  async function bufferQuickAnimate(arrowDown) {
+    const state = store.getState();
+    const BUFFER_SIZE = 8;
+    const preloadPromises = [];
+    const currentDate = getSelectedDate(state);
+    const direction = arrowDown === 'right' ? 1 : -1;
+    let nextDate = getNextDateTime(state, direction, currentDate);
+
+    for (let step = 1; step <= BUFFER_SIZE; step += 1) {
+      console.log(nextDate.toISOString());
+      preloadPromises.push(promiseImageryForTime(state, nextDate));
+      nextDate = getNextDateTime(state, direction, nextDate);
+    }
+    await Promise.all(preloadPromises);
   }
 
   /*
