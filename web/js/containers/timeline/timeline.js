@@ -976,7 +976,7 @@ class Timeline extends React.Component {
       screenWidth,
     } = this.props;
 
-    const isScreenWidthLessThan450 = screenWidth < 450;
+    const isScreenWidthLessThan484 = screenWidth < 484;
 
     // default positioning
     let mobileLeft = 190;
@@ -989,12 +989,12 @@ class Timeline extends React.Component {
     // 1) subdaily (mobile date picker width);
     // 2) screen width; and
     // 3) compare mode
-    if (hasSubdailyLayers && screenWidth >= 450) {
+    if (hasSubdailyLayers && screenWidth >= 484) {
       mobileLeft = 287;
       if (isEmbedModeActive) {
         mobileLeft = 210;
       }
-    } else if (isScreenWidthLessThan450) {
+    } else if (isScreenWidthLessThan484) {
       mobileLeft = isCompareModeActive ? 112 : 10;
       mobileBottom = 65;
       if (isEmbedModeActive) {
@@ -1035,6 +1035,7 @@ class Timeline extends React.Component {
       isMobile,
       isTourActive,
       leftArrowDisabled,
+      nowButtonDisabled,
       parentOffset,
       rightArrowDisabled,
       timelineCustomModalOpen,
@@ -1122,13 +1123,14 @@ class Timeline extends React.Component {
                       <div id="zoom-buttons-group">
                         <DateChangeArrows
                           handleSelectNowButton={this.handleSelectNowButton}
+                          isMobile={isMobile}
+                          leftArrowDisabled={leftArrowDisabled}
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
-                          leftArrowDisabled={leftArrowDisabled}
-                          isMobile={isMobile}
+                          nowButtonDisabled={nowButtonDisabled}
+                          rightArrowDisabled={rightArrowDisabled}
                           rightArrowDown={this.throttleIncrementDate}
                           rightArrowUp={this.stopRightArrow}
-                          rightArrowDisabled={rightArrowDisabled}
                         />
                       </div>
                     </div>
@@ -1166,13 +1168,14 @@ class Timeline extends React.Component {
                         />
                         <DateChangeArrows
                           handleSelectNowButton={this.handleSelectNowButton}
+                          isMobile={isMobile}
+                          leftArrowDisabled={leftArrowDisabled}
                           leftArrowDown={this.throttleDecrementDate}
                           leftArrowUp={this.stopLeftArrow}
-                          leftArrowDisabled={leftArrowDisabled}
-                          isMobile={isMobile}
+                          nowButtonDisabled={nowButtonDisabled}
+                          rightArrowDisabled={rightArrowDisabled}
                           rightArrowDown={this.throttleIncrementDate}
                           rightArrowUp={this.stopRightArrow}
-                          rightArrowDisabled={rightArrowDisabled}
                         />
                       </div>
                       <AnimationButton
@@ -1472,6 +1475,10 @@ function mapStateToProps(state) {
     timeScaleChangeUnit,
     timelineEndDateLimit,
   );
+  const nowButtonDisabled = checkNowButtonDisabled(
+    selectedDate,
+    timelineEndDateLimit,
+  );
   return {
     appNow,
     activeLayers: activeLayersFiltered,
@@ -1500,6 +1507,7 @@ function mapStateToProps(state) {
     timelineEndDateLimit,
     leftArrowDisabled,
     rightArrowDisabled,
+    nowButtonDisabled,
     hideTimeline:
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
@@ -1521,8 +1529,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateAppNow(date));
   },
   // sets date to NOW based on state.date.appNow
-  triggerTodayButton: (date) => {
-    dispatch(triggerTodayButton(date));
+  triggerTodayButton: () => {
+    dispatch(triggerTodayButton());
   },
   // changes date of active dragger 'selected' or 'selectedB'
   changeDate: (val) => {
@@ -1602,6 +1610,7 @@ Timeline.propTypes = {
   isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
+  nowButtonDisabled: PropTypes.bool,
   onUpdateEndDate: PropTypes.func,
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
@@ -1702,12 +1711,19 @@ const checkRightArrowDisabled = (
 ) => {
   const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
   const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
-  const maxPlusDeltaMoment = moment.utc(timelineEndDateLimit).add(delta, timeScaleChangeUnit);
-  const maxPlusDeltaDate = new Date(maxPlusDeltaMoment.seconds(0).format());
 
   const nextIncrementDateTime = nextIncrementDate.getTime();
-  const maxPlusDeltaDateTime = maxPlusDeltaDate.getTime();
-  return nextIncrementDateTime >= maxPlusDeltaDateTime;
+  const maxPlusDeltaDateTime = new Date(timelineEndDateLimit).getTime();
+  return nextIncrementDateTime > maxPlusDeltaDateTime;
+};
+
+const checkNowButtonDisabled = (
+  date,
+  timelineEndDateLimit,
+) => {
+  const dateTimeMoment = new Date(moment.utc(date).seconds(0).format());
+  const maxDateMoment = new Date(moment.utc(timelineEndDateLimit).seconds(0).format());
+  return dateTimeMoment.getTime() === maxDateMoment.getTime();
 };
 
 // get timelineEndDateLimit based on potential future layers
