@@ -178,11 +178,10 @@ button:focus {
     filter: FlipH;
     -ms-filter: 'FlipH';
   }
-
-  & #now-button-group {
+  & .now-button-group {
     width: 34px;
     height: 34px;
-    top: 2px;
+    top: -1px;
     & svg {
       top: 0;
       left: 3px;
@@ -215,7 +214,7 @@ button:focus {
     position: absolute;
     height: 34px;
     width: 37px;
-    top: 20px;
+    top: 16px;
     right: 4px;
     padding-left: 4px;
     padding-top: 5px;
@@ -551,22 +550,20 @@ button:focus {
   border-color: #000;
 }
 
-#timeline-hide:hover .wv-timeline-hide,
-#timeline-layer-coverage-panel-handle:hover .timeline-layer-coverage-panel-handle-chevron {
-  background-position: -206px -63px;
+#timeline-hide:hover .wv-timeline-hide {
+  background-position: -206px -68px;
 }
 
 .wv-timeline-hide {
   display: block;
-  top: 18px;
   right: -5px;
   color: #fff;
   cursor: pointer;
   user-select: none;
-  height: 30px;
+  height: 21px;
   width: 30px;
   position: absolute;
-  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
+  background: url('../images/icon-sprite.svg') -206px -8px no-repeat;
   border-radius: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -574,10 +571,12 @@ button:focus {
 }
 
 .wv-timeline-hide-double-chevron-left {
+  top: 26px;
   transform: rotate(90deg);
 }
 
 .wv-timeline-hide-double-chevron-right {
+  top: 22px;
   transform: rotate(270deg);
 }
 
@@ -614,6 +613,10 @@ button:focus {
 .timeline-layer-coverage-panel-handle-chevron-closed {
   top: -4px;
   margin-left: -14px;
+}
+
+#timeline-layer-coverage-panel-handle:hover .timeline-layer-coverage-panel-handle-chevron {
+  background-position: -206px -63px;
 }
 
 .dragger-container {
@@ -708,7 +711,7 @@ button:focus {
 }
 
 /* Mobile date change arrows */
-.mobile-date-change-arrows-btn {
+#timeline-header .mobile-date-change-arrows-btn {
   position: absolute;
   left: 120px;
   bottom: 10px;
@@ -719,8 +722,18 @@ button:focus {
   height: 44px;
   & .button-action-group {
     height: 44px;
+  }
+  & #left-arrow-group, #now-button-group {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+  & #now-button-group {
+    height: 44px;
+    width: 40px;
+    top: 0;
+    svg {
+      left: 18px;
+    }
   }
 }
 

@@ -55,20 +55,27 @@ module.exports = {
   },
 
   // verify default right arrow disabled since loaded on current day
-  'Right timeline arrow will be disabled by default - unless past 00:00 UTC but before 04:00': (c) => {
+  'Right timeline arrow will be disabled by defaul': (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
-    // accomodate for config.initialDate past 00:00 UTC but before 04:00
-    if (new Date().getUTCHours() < 3) {
-      c.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
-    } else {
-      c.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
-    }
+    c.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
+  },
+
+  // verify default not button disabled
+  'Now button will be disabled by default': (c) => {
+    reuseables.loadAndSkipTour(c, TIME_LIMIT);
+    c.assert.cssClassPresent('#now-button-group', 'button-disabled');
   },
 
   // verify valid right arrow enabled since NOT loaded on current day
   'Right timeline arrow will not be disabled': (c) => {
     c.url(c.globals.url + knownDate);
     c.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
+  },
+
+  // verify now button enabled since NOT loaded on current day
+  'Now button will not be disabled': (c) => {
+    c.url(c.globals.url + knownDate);
+    c.assert.not.cssClassPresent('#now-button-group', 'button-disabled');
   },
 
   // verify date selector is populated with date YYYY-MON-DD
@@ -146,7 +153,6 @@ module.exports = {
     c.click('#right-arrow-group');
     c.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
     c.click('#right-arrow-group');
-    c.assert.not.cssClassPresent('#right-arrow-group', 'button-disabled');
   },
 
   after: (c) => {

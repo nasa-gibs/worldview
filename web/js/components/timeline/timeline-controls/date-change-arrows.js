@@ -81,16 +81,17 @@ class DateChangeArrows extends PureComponent {
 
   render() {
     const {
+      handleSelectNowButton,
       isMobile,
       leftArrowDisabled,
+      nowButtonDisabled,
       rightArrowDisabled,
-      handleSelectNowButton,
     } = this.props;
     return (
       <div>
         {/* LEFT ARROW */}
         <div
-          className={`button-action-group ${leftArrowDisabled ? 'button-disabled' : ''}`}
+          className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''}`}
           id="left-arrow-group"
           onMouseDown={this.leftArrowDown}
           onMouseUp={this.leftArrowUp}
@@ -113,7 +114,7 @@ class DateChangeArrows extends PureComponent {
 
         {/* RIGHT ARROW */}
         <div
-          className={`button-action-group ${rightArrowDisabled ? 'button-disabled' : ''}`}
+          className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''}`}
           id="right-arrow-group"
           onMouseDown={this.rightArrowDown}
           onMouseUp={this.rightArrowUp}
@@ -136,10 +137,10 @@ class DateChangeArrows extends PureComponent {
 
         {/* NOW BUTTON */}
         <div
-          className={`button-action-group ${rightArrowDisabled ? 'button-disabled' : ''}`}
+          className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''}`}
           id="now-button-group"
           onClick={handleSelectNowButton}
-          aria-disabled={rightArrowDisabled}
+          aria-disabled={nowButtonDisabled}
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -165,6 +166,7 @@ DateChangeArrows.propTypes = {
   leftArrowDown: PropTypes.func,
   leftArrowUp: PropTypes.func,
   isMobile: PropTypes.bool,
+  nowButtonDisabled: PropTypes.bool,
   rightArrowDisabled: PropTypes.bool,
   rightArrowDown: PropTypes.func,
   rightArrowUp: PropTypes.func,
