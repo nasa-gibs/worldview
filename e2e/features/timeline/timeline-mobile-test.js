@@ -28,7 +28,7 @@ module.exports = {
       c.assert.containsText(mobileDatePickerSelectBtn, '2013 MAR 15');
     });
   },
-  'date.mob.init.3b:After 3:00 UTC: right button is  disabled': (c) => {
+  'date.mob.init.3b:After 3:00 UTC: right button is disabled': (c) => {
     c.expect.element(nextDayArrowContainer).to.be.present;
     c.expect.element(`${nextDayArrowContainer}.button-disabled`).to.be.present;
   },

@@ -21,7 +21,9 @@ export function triggerTodayButton() {
     const selectedDate = getSelectedDate(state, activeString);
     const { appNow } = date;
 
-    if (selectedDate < appNow) {
+    const selectedDateTime = selectedDate.getTime();
+    const appNowTime = appNow.getTime();
+    if (selectedDateTime < appNowTime) {
       dispatch({
         type: SELECT_DATE,
         activeString,
