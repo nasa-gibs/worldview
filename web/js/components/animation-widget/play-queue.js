@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { isEmpty as lodashIsEmpty } from 'lodash';
-import Spinner from 'react-loader';
 import Queue from 'promise-queue';
+import PreloadSpinner from './preload-spinner';
 import util from '../../util/util';
 
 /*
@@ -448,31 +447,19 @@ class PlayAnimation extends React.Component {
     this.interval = setTimeout(player, speed);
   }
 
-  renderSpinner() {
-    const { onClose } = this.props;
-    return (
-      <Modal
-        isOpen
-        toggle={onClose}
-        size="sm"
-        backdrop={false}
-        wrapClassName="clickable-behind-modal"
-      >
-        <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
-        <ModalBody>
-          <div style={{ minHeight: 50 }}>
-            <Spinner color="#fff" loaded={false}>
-              Loaded
-            </Spinner>
-          </div>
-        </ModalBody>
-      </Modal>
-    );
-  }
-
   render() {
     const { isPlaying } = this.state;
-    return !isPlaying ? this.renderSpinner() : '';
+    const { onClose } = this.props;
+
+    return isPlaying
+      ? ''
+      : (
+        <PreloadSpinner
+          title="Loading ..."
+          bodyMsg="Preloading imagery for smooth animation"
+          onClose={onClose}
+        />
+      );
   }
 }
 
