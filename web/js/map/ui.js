@@ -861,19 +861,20 @@ export default function mapui(models, config, store, ui) {
    */
   async function preloadNextTiles(date, compareString) {
     const state = store.getState();
-    const { lastPreloadDate, preloaded, arrowDown } = state.date;
+    const {
+      lastPreloadDate, preloaded, lastArrowDirection, arrowDown,
+    } = state.date;
     const { activeString } = state.compare;
     const useActiveString = compareString || activeString;
-    const useDate = date || lastPreloadDate || getSelectedDate(state);
+    const useDate = date || (preloaded ? lastPreloadDate : getSelectedDate(state));
     const nextDate = getNextDateTime(state, 1, useDate);
     const prevDate = getNextDateTime(state, -1, useDate);
+    const subsequentDate = lastArrowDirection === 'right' ? nextDate : prevDate;
 
     // If we've preloaded N dates out, we need to use the latest
     // preloaded date the next time we call this function or the buffer
     // won't stay ahead of the 'animation' when holding down timetep arrows
-    if (preloaded && arrowDown) {
-      const subsequentDate = arrowDown === 'right' ? nextDate : prevDate;
-      console.log('preload step:', subsequentDate.toISOString());
+    if (preloaded && lastArrowDirection) {
       store.dispatch({
         type: dateConstants.SET_PRELOAD,
         preloaded: true,
@@ -885,7 +886,7 @@ export default function mapui(models, config, store, ui) {
 
     await promiseImageryForTime(state, nextDate, useActiveString);
     await promiseImageryForTime(state, prevDate, useActiveString);
-    if (!date) {
+    if (!date && !arrowDown) {
       preloadNextTiles(nextDate, useActiveString);
       preloadNextTiles(prevDate, useActiveString);
     }
@@ -902,15 +903,15 @@ export default function mapui(models, config, store, ui) {
 
   async function bufferQuickAnimate(arrowDown) {
     const state = store.getState();
+    const { preloaded, lastPreloadDate } = state.date;
     const BUFFER_SIZE = 8;
     const preloadPromises = [];
-    const currentDate = getSelectedDate(state);
+    const currentDate = preloaded ? lastPreloadDate : getSelectedDate(state);
     const direction = arrowDown === 'right' ? 1 : -1;
     let nextDate = getNextDateTime(state, direction, currentDate);
 
     for (let step = 1; step <= BUFFER_SIZE; step += 1) {
       preloadPromises.push(promiseImageryForTime(state, nextDate));
-      console.log(nextDate.toISOString());
       if (step !== BUFFER_SIZE) {
         nextDate = getNextDateTime(state, direction, nextDate);
       }

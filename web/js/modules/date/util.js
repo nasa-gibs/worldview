@@ -281,6 +281,10 @@ export const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDat
   return date;
 };
 
+/**
+ * Get the next date when using left/right arrows based on
+ * current interval and delta
+ */
 export const getNextDateTime = (state, direction, date) => {
   const {
     customSelected, customDelta, delta, customInterval, interval,
@@ -291,4 +295,16 @@ export const getNextDateTime = (state, direction, date) => {
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
   return getNextTimeSelection(useDelta * direction, changeUnit, useDate);
+};
+
+/**
+ * Determine if the date change was not in sync with the current
+ * interval/delta step (e.g. a time unit was manually changed: 2003 -> 2004)
+ */
+export const outOfStepChange = (state, newDate) => {
+  const date = newDate.toISOString();
+  const previousSelectedDate = getSelectedDate(state);
+  const nextStepDate = getNextDateTime(state, 1, previousSelectedDate).toISOString();
+  const prevStepDate = getNextDateTime(state, -1, previousSelectedDate).toISOString();
+  return date !== nextStepDate && date !== prevStepDate;
 };
