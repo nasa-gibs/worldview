@@ -9,9 +9,10 @@ import {
   ARROW_DOWN,
   ARROW_UP,
   SET_PRELOAD,
+  CLEAR_PRELOAD,
 } from './constants';
 import { getSelectedDate } from './selectors';
-import { getMaxActiveLayersDate } from './util';
+import { getMaxActiveLayersDate, outOfStepChange } from './util';
 
 export function triggerTodayButton() {
   return (dispatch, getState) => {
@@ -53,38 +54,47 @@ export function initSecondDate() {
     type: INIT_SECOND_DATE,
   };
 }
-export function selectDate(value) {
+export function selectDate(date) {
   return (dispatch, getState) => {
     const state = getState();
-    const {
-      compare,
-    } = state;
-    const activeString = compare.isCompareA ? 'selected' : 'selectedB';
+    const { lastArrowDirection } = state.date;
+    const activeString = state.compare.isCompareA ? 'selected' : 'selectedB';
+    const prevDate = getSelectedDate(state);
     const maxDate = getMaxActiveLayersDate(state);
-    const selectedDate = value > maxDate
-      ? maxDate
-      : value;
+    const selectedDate = date > maxDate ? maxDate : date;
+    const direction = selectedDate > prevDate ? 'right' : 'left';
+    const directionChange = direction && lastArrowDirection !== direction;
 
+    if (directionChange || outOfStepChange(state, selectedDate)) {
+      dispatch(clearPreload());
+    }
     dispatch({
       type: SELECT_DATE,
       activeString,
       value: selectedDate,
+      lastArrowDirection: direction,
     });
   };
 }
 export function changeCustomInterval(delta, customInterval) {
-  return {
-    type: CHANGE_CUSTOM_INTERVAL,
-    value: customInterval,
-    delta,
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({
+      type: CHANGE_CUSTOM_INTERVAL,
+      value: customInterval,
+      delta,
+    });
   };
 }
 export function selectInterval(delta, interval, customSelected) {
-  return {
-    type: CHANGE_INTERVAL,
-    value: interval,
-    delta,
-    customSelected,
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({
+      type: CHANGE_INTERVAL,
+      value: interval,
+      delta,
+      customSelected,
+    });
   };
 }
 export function toggleCustomModal(open, toggleBy) {
@@ -94,10 +104,18 @@ export function toggleCustomModal(open, toggleBy) {
     toggleBy,
   };
 }
-export function setArrowDown (value) {
-  return {
-    type: ARROW_DOWN,
-    value,
+export function setArrowDown (direction) {
+  return (dispatch, getState) => {
+    const { date } = getState();
+    const { lastArrowDirection } = date;
+    const directionChange = direction && lastArrowDirection !== direction;
+    if (directionChange) {
+      dispatch(clearPreload());
+    }
+    dispatch({
+      type: ARROW_DOWN,
+      value: direction,
+    });
   };
 }
 export function setArrowUp () {
@@ -110,5 +128,10 @@ export function setPreload (preloaded, lastPreloadDate) {
     type: SET_PRELOAD,
     preloaded,
     lastPreloadDate,
+  };
+}
+export function clearPreload () {
+  return {
+    type: CLEAR_PRELOAD,
   };
 }

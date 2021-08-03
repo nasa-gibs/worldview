@@ -10,11 +10,13 @@ import {
   ARROW_DOWN,
   ARROW_UP,
   SET_PRELOAD,
+  CLEAR_PRELOAD,
 } from './constants';
 import util from '../../util/util';
 
 export const dateReducerState = {
-  arrowDown: false,
+  arrowDown: '',
+  lastArrowDirection: '',
   preloaded: false,
   lastPreloadDate: undefined,
   selectedZoom: 3,
@@ -67,18 +69,20 @@ export function dateReducer(state = dateReducerState, action) {
       return {
         ...state,
         [action.activeString]: action.value,
+        lastArrowDirection: action.lastArrowDirection,
       };
-    case ARROW_DOWN:
+    case ARROW_DOWN: {
+      const { value } = action;
       return {
         ...state,
-        arrowDown: action.value,
-        preloaded: false,
+        arrowDown: value,
+        lastArrowDirection: value,
       };
+    }
     case ARROW_UP:
       return {
         ...state,
-        arrowDown: false,
-        lastPreloadDate: undefined,
+        arrowDown: '',
       };
     case SET_PRELOAD:
       return {
@@ -86,6 +90,13 @@ export function dateReducer(state = dateReducerState, action) {
         preloaded: action.preloaded,
         lastPreloadDate: action.lastPreloadDate,
       };
+    case CLEAR_PRELOAD: {
+      return {
+        ...state,
+        preloaded: null,
+        lastPreloadDate: null,
+      };
+    }
     case TOGGLE_CUSTOM_MODAL: {
       const timelineToggle = action.toggleBy === customModalType.TIMELINE;
       const animationToggle = action.toggleBy === customModalType.ANIMATION;
