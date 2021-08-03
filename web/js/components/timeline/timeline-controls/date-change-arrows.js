@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import HoverTooltip from '../../util/hover-tooltip';
+import PreloadSpinner from '../../animation-widget/preload-spinner';
 import {
   setArrowDown as setArrowDownAction,
   setArrowUp as setArrowUpAction,
@@ -98,6 +99,8 @@ class DateChangeArrows extends PureComponent {
       leftArrowDisabled,
       nowButtonDisabled,
       rightArrowDisabled,
+      arrowDown,
+      tilesPreloaded,
     } = this.props;
 
     const leftArrowDown = () => this.onArrowDown('left');
@@ -107,6 +110,13 @@ class DateChangeArrows extends PureComponent {
 
     return (
       <div>
+        {arrowDown && !tilesPreloaded && (
+          <PreloadSpinner
+            title="Loading ..."
+            bodyMsg="Keep holding to animate the map!"
+          />
+        )}
+
         {/* LEFT ARROW */}
         <div
           className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''}`}
