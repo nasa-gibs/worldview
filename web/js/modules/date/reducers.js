@@ -16,7 +16,7 @@ import util from '../../util/util';
 
 export const dateReducerState = {
   arrowDown: '',
-  lastArrowDirection: '',
+  lastArrowDirection: undefined,
   preloaded: false,
   lastPreloadDate: undefined,
   selectedZoom: 3,
