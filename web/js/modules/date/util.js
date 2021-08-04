@@ -149,6 +149,28 @@ export function getMaxActiveLayersDate(state) {
 }
 
 /**
+ * Checks if future time layer is within included layers
+ *
+ * @method checkHasFutureLayers
+ * @param  {Object} state
+ * @returns {Boolean} hasFutureLayers
+ */
+export function checkHasFutureLayers(state) {
+  const { compare, proj, layers } = state;
+  let hasFutureLayers;
+  if (compare.active) {
+    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
+    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
+    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
+  } else {
+    const activeLayers = getActiveLayers(state);
+    const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
+    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime).length > 0;
+  }
+  return hasFutureLayers;
+}
+
+/**
  * Checks the date provided against the active layers.
  *
  * @method getLayersActiveAtDate

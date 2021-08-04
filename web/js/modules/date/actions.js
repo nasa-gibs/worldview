@@ -23,7 +23,7 @@ export function triggerTodayButton() {
 
     const selectedDateTime = selectedDate.getTime();
     const appNowTime = appNow.getTime();
-    if (selectedDateTime < appNowTime) {
+    if (selectedDateTime !== appNowTime) {
       dispatch({
         type: SELECT_DATE,
         activeString,

@@ -60,7 +60,7 @@ module.exports = {
     c.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
   },
 
-  // verify default not button disabled
+  // verify default now button disabled
   'Now button will be disabled by default': (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
     c.assert.cssClassPresent('#now-button-group', 'button-disabled');
@@ -73,7 +73,7 @@ module.exports = {
   },
 
   // verify now button enabled since NOT loaded on current day
-  'Now button will not be disabled': (c) => {
+  'Now button will not be disabled if date is not on now': (c) => {
     c.url(c.globals.url + knownDate);
     c.assert.not.cssClassPresent('#now-button-group', 'button-disabled');
   },
