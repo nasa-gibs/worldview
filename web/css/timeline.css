@@ -151,19 +151,17 @@ button:focus {
 
   & .date-arrows:hover,
   & > .button-action-group:hover,
-  & #zoom-buttons-group .button-action-group:hover {
+  & .button-action-group:hover {
     background-color: #fff;
     cursor: pointer;
   }
   & > .button-action-group .button-disabled:hover,
-  & #zoom-buttons-group .button-disabled:hover {
+  & .button-disabled:hover {
     background-color: transparent;
     cursor: default;
   }
   & .button-action-group svg {
     position: absolute;
-  }
-  & #zoom-buttons-group .button-action-group svg {
     top: 50%;
     margin-top: -15px;
     left: 50%;
@@ -178,20 +176,17 @@ button:focus {
     filter: FlipH;
     -ms-filter: 'FlipH';
   }
-  & .now-button-group {
+  & #now-button-group {
     width: 34px;
     height: 34px;
-    top: -1px;
-    & svg {
-      top: 0;
-      left: 3px;
-      margin: 0;
+    top: -2px;
+    svg {
+      left: 15px;
     }
   }
 
   & > .button-action-group:hover .arrow,
-  & #zoom-buttons-group .button-action-group:hover .arrow,
-  & #zoom-buttons-group .button-action-group:hover .circle {
+  & #zoom-buttons-group .button-action-group:hover .arrow {
     fill: #1a1a1a;
     fill-opacity: 1;
     stroke: none;
@@ -204,20 +199,17 @@ button:focus {
   & #zoom-buttons-group .button-disabled:hover .arrow {
     fill: #4d4d4d;
   }
-
-  & #animate-button {
-    width: 100%;
-    height: 100%;
-  }
-
   & .animate-button {
     position: absolute;
     height: 34px;
     width: 37px;
     top: 16px;
     right: 4px;
-    padding-left: 4px;
-    padding-top: 5px;
+    & svg {
+      top: 5px;
+      left: 4px;
+      margin: 0;
+    }
   }
   & .animate-button:hover svg.wv-animate path {
     fill: #1a1a1a;

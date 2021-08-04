@@ -11,10 +11,11 @@ class AnimationButton extends PureComponent {
     const labelText = label || 'Set up animation';
     return (
       <div
+        onClick={clickAnimationButton}
         className={disabled ? `wv-disabled-button ${className}` : className}
         aria-label={labelText}
       >
-        <div id={buttonId} onClick={clickAnimationButton}>
+        <div id={buttonId}>
           <UncontrolledTooltip
             placement="top"
             target={buttonId}

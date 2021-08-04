@@ -68,6 +68,7 @@ class TimelineAxis extends Component {
       draggerSelected,
       timeScale,
       isCompareModeActive,
+      isAnimatingToEvent,
       hasFutureLayers,
       hasSubdailyLayers,
       matchingTimelineCoverage,
@@ -82,6 +83,7 @@ class TimelineAxis extends Component {
 
     const checkForPropsUpdates = nextProps.axisWidth === axisWidth
       && nextProps.position === position
+      && nextProps.isAnimatingToEvent === isAnimatingToEvent
       && nextProps.dateA === dateA
       && nextProps.dateB === dateB
       && nextProps.draggerSelected === draggerSelected
@@ -134,6 +136,7 @@ class TimelineAxis extends Component {
       hasFutureLayers,
       onDateChange,
       isAnimationPlaying,
+      isAnimatingToEvent,
       isCompareModeActive,
       isTimelineDragging,
       draggerTimeState,
@@ -157,6 +160,11 @@ class TimelineAxis extends Component {
         updatedTimeScale: true,
       });
       this.updateScale(draggerDate, timeScale, leftOffset, true, prevProps.timeScale);
+    }
+
+    // update axis on finish animate to event
+    if (prevProps.isAnimatingToEvent && !isAnimatingToEvent) {
+      this.updateScale(draggerDate, timeScale, 0.5);
     }
 
     // update axis on browser width change
@@ -1553,6 +1561,7 @@ TimelineAxis.propTypes = {
   hoverTime: PropTypes.string,
   isAnimationDraggerDragging: PropTypes.bool,
   isAnimationPlaying: PropTypes.bool,
+  isAnimatingToEvent: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   isTimelineDragging: PropTypes.bool,
