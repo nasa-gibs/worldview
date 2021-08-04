@@ -29,7 +29,6 @@ import Cache from 'cachai';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
-import mapPrecacheTile from './precachetile';
 import { getActiveLayerGroup, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
@@ -73,35 +72,28 @@ const { events } = util;
 
 export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
-  const self = {};
-  let cache;
   const dateline = mapDateLineBuilder(store);
-  const precache = mapPrecacheTile(models, config, cache, self);
   const compareMapUi = mapCompare(store);
-  const dataRunner = self.runningdata = new MapRunningData(
-    models,
-    compareMapUi,
-    store,
-  );
+  const runningdata = new MapRunningData(models, compareMapUi, store);
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
-  cache = self.cache = new Cache(400);
-  self.mapIsbeingDragged = false;
-  self.mapIsbeingZoomed = false;
-  self.proj = {}; // One map for each projection
-  self.selected = null; // The map for the selected projection
-  const layerBuilder = self.layerBuilder = mapLayerBuilder(
-    config,
+  const cache = new Cache(400);
+  const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
+  const self = {
     cache,
-    store,
-  );
-  self.layerKey = layerBuilder.layerKey;
-  const createLayer = self.createLayer = layerBuilder.createLayer;
-  self.promiseDay = precache.promiseDay;
-  self.selectedVectors = {};
-  self.activeMarker = null;
-  self.coordinatesDialogDOMEl = null;
+    mapIsbeingDragged: false,
+    mapIsbeingZoomed: false,
+    proj: {}, // One map for each projection
+    selected: null, // The map for the selected projection
+    selectedVectors: {},
+    activeMarker: null,
+    coordinatesDialogDOMEl: null,
+    runningdata,
+    layerKey,
+    createLayer,
+  };
+
   /**
    * Subscribe to redux store and listen for
    * specific action types
@@ -1195,13 +1187,13 @@ export default function mapui(models, config, store, ui) {
       const isMapAnimating = state.animation.isPlaying;
       if (isEventsTabActive || isMapAnimating || sidebar.activeTab === 'download') return;
 
-      dataRunner.newPoint(pixels, map);
+      runningdata.newPoint(pixels, map);
     }, 300);
 
     events.on('map:mousemove', throttledOnMouseMove);
     events.on('map:mouseout', (e) => {
       throttledOnMouseMove.cancel();
-      dataRunner.clearAll();
+      runningdata.clearAll();
     });
   }
 
