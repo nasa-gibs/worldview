@@ -47,6 +47,7 @@ import {
   triggerTodayButton,
 } from '../../modules/date/actions';
 import {
+  checkHasFutureLayers,
   filterProjLayersWithStartDate,
 } from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
@@ -172,14 +173,18 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
+    const { nowOverride } = this.props;
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
     // that allows browser resize/zoom on certain wheel events
     document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
 
-    this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
-    this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 15);
+    // appNow will not update if set in query string using 'now' parameter
+    if (!nowOverride) {
+      this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
+      this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 15);
+    }
     this.setInitialState();
   }
 
@@ -897,7 +902,9 @@ class Timeline extends React.Component {
    * then update appNow to current time.
    */
   checkAndUpdateAppNow() {
-    const { updateAppNow } = this.props;
+    const {
+      updateAppNow,
+    } = this.props;
     const self = this;
     const ensureCanUpdate = function() {
       return new Promise((resolve, reject) => {
@@ -1425,15 +1432,7 @@ function mapStateToProps(state) {
     : hasSubDaily(activeLayers);
 
   // if future layers are included, timeline axis end date will extend past appNow
-  let hasFutureLayers;
-  if (isCompareModeActive) {
-    const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
-    const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
-    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
-  } else {
-    hasFutureLayers = activeLayersFiltered.filter((layer) => layer.futureTime).length > 0;
-  }
-
+  const hasFutureLayers = checkHasFutureLayers(state);
   let timelineEndDateLimit;
   if (hasFutureLayers) {
     timelineEndDateLimit = getTimelineEndDateLimit(state);
@@ -1457,6 +1456,7 @@ function mapStateToProps(state) {
     }
   }
 
+  const nowOverride = !!config.parameters.now;
   const dimensionsAndOffsetValues = getOffsetValues(
     screenWidth,
     hasSubdailyLayers,
@@ -1482,6 +1482,9 @@ function mapStateToProps(state) {
   const nowButtonDisabled = checkNowButtonDisabled(
     selectedDate,
     timelineEndDateLimit,
+    hasFutureLayers,
+    nowOverride,
+    appNow,
   );
   return {
     appNow,
@@ -1508,6 +1511,7 @@ function mapStateToProps(state) {
     customIntervalValue: customDelta || 1,
     customIntervalZoomLevel: updatedCustomInterval || 3,
     deltaChangeAmt,
+    nowOverride,
     parentOffset: dimensionsAndOffsetValues.parentOffset,
     timelineEndDateLimit,
     leftArrowDisabled,
@@ -1617,6 +1621,7 @@ Timeline.propTypes = {
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
   nowButtonDisabled: PropTypes.bool,
+  nowOverride: PropTypes.bool,
   onUpdateEndDate: PropTypes.func,
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
@@ -1726,9 +1731,17 @@ const checkRightArrowDisabled = (
 const checkNowButtonDisabled = (
   date,
   timelineEndDateLimit,
+  hasFutureLayers,
+  nowOverride,
+  appNow,
 ) => {
   const dateTimeMoment = new Date(moment.utc(date).seconds(0).format());
-  const maxDateMoment = new Date(moment.utc(timelineEndDateLimit).seconds(0).format());
+  let maxDateMoment;
+  if (nowOverride || hasFutureLayers) {
+    maxDateMoment = new Date(moment.utc(appNow).seconds(0).format());
+  } else {
+    maxDateMoment = new Date(moment.utc(timelineEndDateLimit).seconds(0).format());
+  }
   return dateTimeMoment.getTime() === maxDateMoment.getTime();
 };
 
