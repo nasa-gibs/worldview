@@ -55,7 +55,7 @@ module.exports = {
   },
 
   // verify default right arrow disabled since loaded on current day
-  'Right timeline arrow will be disabled by defaul': (c) => {
+  'Right timeline arrow will be disabled by default': (c) => {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
     c.assert.cssClassPresent('#right-arrow-group', 'button-disabled');
   },
