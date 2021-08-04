@@ -9,7 +9,7 @@ import {
 } from './actions';
 import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 import fixtures from '../../fixtures';
-import { INIT_SECOND_DATE } from '../date/constants';
+import { INIT_SECOND_DATE, CLEAR_PRELOAD } from '../date/constants';
 
 const middlewares = [thunk];
 const state = fixtures.getState();
@@ -30,10 +30,15 @@ test('toggleCompareOnOff dispactches two actions', () => {
 test(
   `toggleActiveCompareState returns ${CONSTANTS.CHANGE_STATE} action type`,
   () => {
-    const expectedAction = {
-      type: CONSTANTS.CHANGE_STATE,
-    };
-    expect(toggleActiveCompareState()).toEqual(expectedAction);
+    const mockStore = configureMockStore(middlewares);
+    const store = mockStore(state);
+    store.dispatch(toggleActiveCompareState());
+    const firstResponse = store.getActions()[0];
+    const secondResponse = store.getActions()[1];
+    const expectedFirst = { type: CLEAR_PRELOAD };
+    const expectedSecond = { type: CONSTANTS.CHANGE_STATE };
+    expect(firstResponse).toEqual(expectedFirst);
+    expect(secondResponse).toEqual(expectedSecond);
   },
 );
 test(

@@ -77,8 +77,7 @@ describe('dateReducer', () => {
     },
   );
   test(
-    `${SELECT_DATE
-    }action type and ${mockDate} as value and selected `
+    `${SELECT_DATE} action type and ${mockDate} as value and selected `
       + 'as activeString should return new state',
     () => {
       expect(
