@@ -151,7 +151,7 @@ class DateChangeArrows extends PureComponent {
           <svg height="30" width="30" viewBox="0 0 40 28">
             <path
               d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z M 26,30 26,0 34,0 34,30 z"
-              className="arrow arrow-now"
+              className="arrow"
             />
           </svg>
         </div>

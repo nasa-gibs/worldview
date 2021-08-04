@@ -1027,6 +1027,7 @@ class Timeline extends React.Component {
       hasSubdailyLayers,
       hideTimeline,
       isAnimationPlaying,
+      isAnimatingToEvent,
       isAnimationWidgetOpen,
       isCompareModeActive,
       isDataDownload,
@@ -1235,6 +1236,7 @@ class Timeline extends React.Component {
                           hasSubdailyLayers={hasSubdailyLayers}
                           isCompareModeActive={isCompareModeActive}
                           isAnimationPlaying={isAnimationPlaying}
+                          isAnimatingToEvent={isAnimatingToEvent}
                           isTourActive={isTourActive}
                           isAnimationDraggerDragging={isAnimationDraggerDragging}
                           isDraggerDragging={isDraggerDragging}
@@ -1384,6 +1386,7 @@ function mapStateToProps(state) {
     compare,
     config,
     date,
+    events,
     embed,
     layers,
     map,
@@ -1411,6 +1414,7 @@ function mapStateToProps(state) {
   const { isDistractionFreeModeActive } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = browser.lessThan.medium;
+  const { isAnimatingToEvent } = events;
 
   // handle active layer filtering and check for subdaily
   const activeLayers = getActiveLayers(state);
@@ -1489,6 +1493,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     customSelected,
     isCompareModeActive,
+    isAnimatingToEvent,
     hasFutureLayers,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
@@ -1601,6 +1606,7 @@ Timeline.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   hideTimeline: PropTypes.bool,
   isAnimationPlaying: PropTypes.bool,
+  isAnimatingToEvent: PropTypes.bool,
   isAnimationWidgetOpen: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
   isDataDownload: PropTypes.bool,
