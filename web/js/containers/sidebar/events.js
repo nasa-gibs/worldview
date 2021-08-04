@@ -16,7 +16,6 @@ import {
   deselectEvent as deselectEventActionCreator,
 } from '../../modules/natural-events/actions';
 import { collapseSidebar } from '../../modules/sidebar/actions';
-import { selectDate } from '../../modules/date/actions';
 import { getSelectedDate } from '../../modules/date/selectors';
 import { toggleCustomContent } from '../../modules/modal/actions';
 import util from '../../util/util';
@@ -138,9 +137,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(selectEventActionCreator(id, dateStr));
     if (shouldCollapse) {
       dispatch(collapseSidebar());
-    }
-    if (dateStr) {
-      dispatch(selectDate(new Date(dateStr)));
     }
   },
   deselectEvent: () => {
