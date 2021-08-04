@@ -1,5 +1,5 @@
 diff --git a/node_modules/ol-mapbox-style/dist/stylefunction.js b/node_modules/ol-mapbox-style/dist/stylefunction.js
-index 473b267..075de58 100644
+index 473b267..976a269 100644
 --- a/node_modules/ol-mapbox-style/dist/stylefunction.js
 +++ b/node_modules/ol-mapbox-style/dist/stylefunction.js
 @@ -3,6 +3,9 @@ ol-mapbox-style - Use Mapbox Style objects with OpenLayers
@@ -302,7 +302,7 @@ index 473b267..075de58 100644
 +  if (glStyle.version != 8) {
 +    throw new Error('glStyle version 8 required.');
 +  }
-+  const canvas = document.createElement('canvas');
++  const textWidthCanvas = createCanvas(1040, 1040);
 +  let spriteImage, spriteImgSize;
 +  if (spriteImageUrl) {
 +    if (typeof Image !== 'undefined') {
@@ -1148,7 +1148,7 @@ index 473b267..075de58 100644
 +          let xOffset = 0;
 +          let yOffset = 0;
 +          let coordinates = [];
-+          const textWidth = getTextWidth(wrappedLabel, font, canvas);
++          const textWidth = getTextWidth(wrappedLabel, font, textWidthCanvas);
 +          if (placement == 'point') {
 +            if (textVariableAnchor || textAnchor) {
 +              const layerExtent = olLayer.getSource().tileGrid.getExtent();
@@ -1294,9 +1294,8 @@ index 473b267..075de58 100644
 +  getValue as _getValue,
 +  functionCache as _functionCache
 +};
-\ No newline at end of file
 diff --git a/node_modules/ol-mapbox-style/src/stylefunction.js b/node_modules/ol-mapbox-style/src/stylefunction.js
-index 009d17f..075de58 100644
+index 009d17f..976a269 100644
 --- a/node_modules/ol-mapbox-style/src/stylefunction.js
 +++ b/node_modules/ol-mapbox-style/src/stylefunction.js
 @@ -4,6 +4,8 @@ Copyright 2016-present ol-mapbox-style contributors
@@ -1405,7 +1404,7 @@ index 009d17f..075de58 100644
      throw new Error('glStyle version 8 required.');
    }
 -
-+  const canvas = document.createElement('canvas');
++  const textWidthCanvas = createCanvas(1040, 1040);
    let spriteImage, spriteImgSize;
    if (spriteImageUrl) {
      if (typeof Image !== 'undefined') {
@@ -1666,7 +1665,7 @@ index 009d17f..075de58 100644
 +          let xOffset = 0;
 +          let yOffset = 0;
 +          let coordinates = [];
-+          const textWidth = getTextWidth(wrappedLabel, font, canvas);
++          const textWidth = getTextWidth(wrappedLabel, font, textWidthCanvas);
            if (placement == 'point') {
 -            let textAlign = 'center';
 -            if (textAnchor.indexOf('left') !== -1) {
