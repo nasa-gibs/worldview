@@ -6,6 +6,10 @@ export default function AboutPage() {
 
     <Scrollbar style={{ height: 'calc(var(--vh, 1vh) * 100 - 200px)' }}>
       <div className="about-page">
+        <h1>
+          Welcome to @NAME@
+        </h1>
+
         <div className="right">
           <div className="caption">
             Version @BUILD_VERSION@
@@ -14,10 +18,6 @@ export default function AboutPage() {
             )
           </div>
         </div>
-
-        <h1>
-          Welcome to @NAME@
-        </h1>
 
         <p>
           This app from NASA&apos;s
