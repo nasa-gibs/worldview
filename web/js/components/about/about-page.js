@@ -29,7 +29,7 @@ export default function AboutPage() {
           of observation - essentially showing the entire Earth as it looks &quot;right now&quot;. This supports time-critical application
           areas such as wildfire management, air quality measurements, and flood monitoring. Arctic and Antarctic views
           of many products are also available for a &quot;full globe&quot; perspective. Geostationary imagery layers are also now available.
-          These are provided in ten minute increments for the last 30 days. These full disk hemispheric views allow for almost real-time viewing of
+          These are provided in ten minute increments for the last 90 days. These full disk hemispheric views allow for almost real-time viewing of
           changes occurring around most of the world. Browsing on tablet and smartphone devices is generally supported for mobile access to the imagery.
         </p>
 
