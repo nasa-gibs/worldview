@@ -1,3 +1,7 @@
+#about_modal {
+  max-width: 692px;
+}
+
 .about-page {
   background-color: #282828;
   padding: 5px;
@@ -16,7 +20,7 @@
 .about-page div,
 .about-page li,
 .about-page p {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 22px;
 }
 
@@ -34,6 +38,10 @@
 
 .about-page p {
   margin: 1.12em 0;
+  &:first-of-type {
+    display: inline-block;
+    margin-bottom: 0;
+  }
 }
 
 .about-page hr {
@@ -64,7 +72,10 @@
 
 .about-page .right {
   float: right;
-  margin: 0 1em 1em;
+  margin: 0.4em 0.2em 0;
+  &:last-of-type {
+    margin: 1.4em 0.2em 0;
+  }
 }
 
 .about-page .caption {
@@ -101,7 +112,13 @@
 .about-page .keyboard-shortcuts-table {
   width: 100%;
   margin-top: 20px;
+  thead tr th {
+    padding-bottom: 8px;
+  }
   tr {
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #404040;
+    }
     :first-child {
       text-align: left;
     }
@@ -110,7 +127,7 @@
     }
   }
   td {
-    padding: 7px 0;
+    padding: 11px 0;
   }
   code {
     color: #f60;
