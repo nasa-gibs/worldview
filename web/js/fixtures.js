@@ -6,6 +6,7 @@ import { getInitialState as getInitialDateState } from './modules/date/reducers'
 import { defaultState as initialAnimationState } from './modules/animation/reducers';
 import { defaultAlertState } from './modules/alerts/reducer';
 import { getInitialEventsState } from './modules/natural-events/reducers';
+import util from './util/util';
 
 const fixtures = {
   red: 'ff0000ff',
@@ -209,10 +210,11 @@ fixtures.map = () => ({
 });
 
 fixtures.config = function() {
+  const now = util.now();
   return {
-    pageLoadTime: new Date(),
-    initialDate: new Date(),
-    now: new Date(),
+    pageLoadTime: now,
+    initialDate: now,
+    now,
     defaults: {
       projection: 'geographic',
       startingLayers: [

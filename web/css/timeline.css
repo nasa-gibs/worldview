@@ -438,7 +438,6 @@ button:focus {
 
 #current-interval {
   white-space: nowrap;
-  padding: 2px 6px;
 }
 
 .timeline-interval,
@@ -461,7 +460,7 @@ button:focus {
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;
-  width: 80px;
+  min-width: 90px;
   z-index: 10;
 }
 
@@ -487,7 +486,7 @@ button:focus {
 
 .zoom-btn-active,
 .interval-btn-active {
-  width: 80px;
+  width: 90px;
   color: #ccc;
   font-size: 12px;
   line-height: 14px;

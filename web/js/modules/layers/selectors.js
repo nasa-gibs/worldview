@@ -328,7 +328,7 @@ function forGroup(group, spec = {}, activeLayers, state) {
  */
 export function getFutureLayerEndDate(layer) {
   const { futureTime } = layer;
-  const max = new Date();
+  const max = util.now();
   const dateType = futureTime.slice(-1);
   const dateInterval = futureTime.slice(0, -1);
 

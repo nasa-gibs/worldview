@@ -669,35 +669,28 @@ export default (function(self) {
   };
 
   /**
-   * Gets the current time. Use this instead of the Date methods to allow
-   * debugging alternate "now" times.
+   * Gets the current time minus minutesOffset for geostationary layers.
+   * Use this instead of the Date methods to allow debugging alternate "now" times.
    *
    * @method now
    * @static
    * @return {Date} The current time or an overridden value.
    */
-  const now = function() {
-    return new Date();
+  const minutesOffset = 40 * 60000; // 40 minutes
+  self.now = function() {
+    return new Date(new Date().getTime() - minutesOffset);
   };
-
-  self.now = now;
 
   /**
-   * Gets the current day. Use this instead of the Date methods to allow
-   * debugging alternate "now" dates.
+   * Gets now minus one day, minus minutesOffset minutes for geostationary layers.
    *
-   * @method today
+   * @method yesterday
    * @static
    * @return {Date} The current time with the UTC hours, minutes, and seconds
-   * fields set to zero or an overridden value.
    */
-  self.today = function() {
-    return self.now();
-  };
-
   self.yesterday = function() {
-    const now = new Date();
-    return new Date(now.setDate(now.getDate() - 1));
+    const nowDate = self.now();
+    return new Date(nowDate.setDate(nowDate.getDate() - 1));
   };
 
   /**
