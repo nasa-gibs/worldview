@@ -1,6 +1,4 @@
-
-#### Description
-Total Cloud Fraction is the product of cloud fractional coverage and cloud infrared emissivity. Low fraction can indicate either small, highly emissive clouds or more extensive but less emissive clouds. While AIRS can sense up to two cloud decks in a column of atmosphere, this plot shows the cloud fraction of all cloud decks present.
+The Total Cloud Fraction (Night) layer is the product of cloud fractional coverage and cloud infrared emissivity. Low fraction can indicate either small, highly emissive clouds or more extensive but less emissive clouds. While AIRS can sense up to two cloud decks in a column of atmosphere, this plot shows the cloud fraction of all cloud decks present.
 
 #### Image Resolution
 32 km/pixel (AIRS Level 2 `CldFrcStd` is nominally 13.5 km/pixel, the data has been resampled into a 32 km/pixel visualization.)
@@ -18,9 +16,4 @@ Overpasses: Twice daily (day and night)<br>
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References
-Data Product: [AIRS2RET](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_7.0/summary)
-
-#### About AIRS
-AIRS, in conjunction with the Advanced Microwave Sounding Unit (AMSU), senses emitted infrared and microwave radiation from Earth to provide a three-dimensional look at Earth's weather and climate. Working in tandem, the two instruments make simultaneous observations down to Earth's surface. With more than 2,000 channels sensing different regions of the atmosphere, the system creates a global, three-dimensional map of atmospheric temperature and humidity, cloud amounts and heights, greenhouse gas concentrations and many other atmospheric phenomena. Launched into Earth orbit in 2002, the AIRS and AMSU instruments fly onboard NASA's Aqua spacecraft and are managed by NASA's Jet Propulsion Laboratory in Pasadena, California.
-
-More information about AIRS can be found at [https://airs.jpl.nasa.gov](https://airs.jpl.nasa.gov).
+Data Product: AIRS2RET_NRT [doi:10.5067/RAEHAOH4VZM5](https://doi.org/10.5067/RAEHAOH4VZM5); AIRS2RET [doi:10.5067/Aqua/AIRS/DATA202](https://doi.org/10.5067/Aqua/AIRS/DATA202)

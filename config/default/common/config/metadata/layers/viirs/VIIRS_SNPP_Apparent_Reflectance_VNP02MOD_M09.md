@@ -4,7 +4,7 @@ The Apparent Reflectance (VNP02MOD, Band M09) layer is available from the joint 
 
 Consult the [NASA VIIRS Suomi-NPP Level-2 Cirrus Reflectance Product User Guide](https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/viirs/VIIRS_Cirrus_Refl_User_Guide_Oct_2020.pdf) for additional information.
 
-References: [Dataset doi:10.5067/VIIRS/CLDCR_L2_VIIRS_SNPP.001](https://doi.org/10.5067/VIIRS/CLDCR_L2_VIIRS_SNPP.001)
+References: CLDCR_L2_VIIRS_SNPP.001 [doi:10.5067/VIIRS/CLDCR_L2_VIIRS_SNPP.001](https://doi.org/10.5067/VIIRS/CLDCR_L2_VIIRS_SNPP.001)
 
 
 

@@ -8,7 +8,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/CirrusReflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_Cirrus_Reflectance_VIS_NIR",
