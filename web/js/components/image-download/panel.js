@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   imageSizeValid,
   getDimensions,
   getDownloadUrl,
 } from '../../modules/image-download/util';
-
+import util from '../../util/util';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
+import HoverTooltip from '../util/hover-tooltip';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -146,9 +148,33 @@ export default class ImageResSelection extends React.Component {
     }
   }
 
+  getDatelineMessage() {
+    const { datelineMessage } = this.props;
+    return datelineMessage && (
+      <div
+        className="snapshot-date-alert-icon"
+      >
+        <FontAwesomeIcon
+          icon="exclamation-triangle"
+          id="snapshot-date-warning-tooltip"
+          size="2x"
+        />
+        <HoverTooltip
+          isMobile={false}
+          labelText={datelineMessage}
+          target="snapshot-date-warning-tooltip"
+          delay={{ show: 0, hide: 200 }}
+          fade={false}
+          placement="left-start"
+          innerClassName="snapshot-date-warning-tooltip-inner"
+        />
+      </div>
+    );
+  }
+
   render() {
     const {
-      getLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
+      date, getLayers, hasSubdailyLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
     } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
@@ -157,6 +183,8 @@ export default class ImageResSelection extends React.Component {
     const filetypeSelect = this._renderFileTypeSelect();
     const worldfileSelect = this._renderWorldfileSelect();
     const layerList = getLayers();
+    const displayDate = util.toISOStringDateMonthAbbrev(date, hasSubdailyLayers);
+
     return (
       <div className="wv-re-pick-wrapper wv-image">
         <div
@@ -164,6 +192,12 @@ export default class ImageResSelection extends React.Component {
           style={{ display: 'none' }}
           url={debugUrl}
         />
+        <div className="wv-image-header snapshots-date-header">
+          <div className="date-text">
+            Date:&nbsp;
+            {displayDate}
+          </div>
+        </div>
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-resolution"
@@ -185,6 +219,7 @@ export default class ImageResSelection extends React.Component {
           validLayers={layerList.length > 0}
           onClick={this.onDownload}
         />
+        {this.getDatelineMessage()}
       </div>
     );
   }
@@ -202,11 +237,13 @@ ImageResSelection.defaultProps = {
 };
 ImageResSelection.propTypes = {
   date: PropTypes.object,
+  datelineMessage: PropTypes.string,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
   fileTypes: PropTypes.object,
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
