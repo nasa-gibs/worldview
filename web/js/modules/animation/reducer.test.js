@@ -3,7 +3,7 @@ import { defaultState, animationReducer } from './reducers';
 import * as CONSTANTS from './constants';
 import util from '../../util/util';
 
-const now = new Date();
+const now = util.now();
 const then = util.dateAdd(now, 'day', -7);
 
 test('OPEN_ANIMATION action updates active state', () => {

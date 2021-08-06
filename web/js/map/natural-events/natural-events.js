@@ -112,7 +112,7 @@ class NaturalEvents extends React.Component {
        * for today, this may not help.
        */
       if (event.categories[0].title === 'Wildfires' && !isInitialLoad) {
-        const today = dateFormat(new Date());
+        const today = dateFormat(util.now());
         const yesterday = dateFormat(util.yesterday());
         if (date !== today || date !== yesterday) {
           selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1));
