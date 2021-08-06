@@ -22,7 +22,21 @@
       "vectorStyle": {
         "id": "OrbitTracks_CYGNSS_Ascending"
       },
-      "modalShouldFollowClicks": true
+      "modalShouldFollowClicks": true,
+      "breakPointLayer": {
+        "id": "OrbitTracks_CYGNSS_Ascending",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "antarctic": null,
+          "arctic": null
+        }
+      }
     }
   }
 }
