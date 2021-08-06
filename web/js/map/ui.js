@@ -54,13 +54,12 @@ import {
   getAllActiveLayers,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
+import { getNumberStepsBetween, getNextDateTime } from '../modules/date/util';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../modules/animation/constants';
 import {
   RENDERED, UPDATE_MAP_UI, UPDATE_MAP_EXTENT, UPDATE_MAP_ROTATION, FITTED_TO_LEADING_EXTENT, REFRESH_ROTATE, CLEAR_ROTATE,
 } from '../modules/map/constants';
 import { getLeadingExtent, promiseImageryForTime } from '../modules/map/util';
-import { getNextDateTime } from '../modules/date/util';
-
 import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
@@ -680,6 +679,7 @@ export default function mapui(models, config, store, ui) {
       }
     });
   }
+
   /*
    * Sets new opacity to layer
    *
@@ -893,12 +893,20 @@ export default function mapui(models, config, store, ui) {
     }
   }
 
+
   async function bufferQuickAnimate(arrowDown) {
-    const state = store.getState();
-    const { preloaded, lastPreloadDate } = state.date;
     const BUFFER_SIZE = 8;
     const preloadPromises = [];
-    const currentDate = preloaded ? lastPreloadDate : getSelectedDate(state);
+    const state = store.getState();
+    const { preloaded, lastPreloadDate } = state.date;
+    const selectedDate = getSelectedDate(state);
+    const currentBuffer = preloaded ? getNumberStepsBetween(state, selectedDate, lastPreloadDate) : 0;
+
+    if (currentBuffer >= BUFFER_SIZE) {
+      return;
+    }
+
+    const currentDate = preloaded ? lastPreloadDate : selectedDate;
     const direction = arrowDown === 'right' ? 1 : -1;
     let nextDate = getNextDateTime(state, direction, currentDate);
 
@@ -992,14 +1000,13 @@ export default function mapui(models, config, store, ui) {
   }
 
   const updateExtent = () => {
-    const view = self.selected.getView();
-    const extent = view.calculateExtent(self.selected.getSize());
+    const map = self.selected;
+    const view = map.getView();
+    const extent = view.calculateExtent(map.getSize());
     store.dispatch({ type: UPDATE_MAP_EXTENT, extent });
-    lodashThrottle(
-      () => events.trigger('map:extent'),
-      500,
-      { trailing: true },
-    )();
+    if (map.isRendered()) {
+      store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
+    }
   };
 
   /*
