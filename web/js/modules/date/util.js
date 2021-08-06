@@ -1,12 +1,12 @@
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
+import moment from 'moment';
 import util from '../../util/util';
 import { layersParse12 } from '../layers/util';
 import {
   dateRange as getDateRange, getActiveLayers,
 } from '../layers/selectors';
-import { timeScaleFromNumberKey } from './constants';
-import { getSelectedDate } from './selectors';
+import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
 
 export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
 
@@ -281,20 +281,22 @@ export const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDat
   return date;
 };
 
+export function getNumberStepsBetween(state, start, end) {
+  const { delta, unit } = getDeltaIntervalUnit(state);
+  const a = moment(start);
+  const b = moment(end);
+  const diff = a.diff(b, unit);
+  return diff / delta;
+}
+
 /**
  * Get the next date when using left/right arrows based on
  * current interval and delta
  */
 export const getNextDateTime = (state, direction, date) => {
-  const {
-    customSelected, customDelta, delta, customInterval, interval,
-  } = state.date;
+  const { delta, unit } = getDeltaIntervalUnit(state);
   const useDate = date || getSelectedDate(state);
-  const useDelta = customSelected ? customDelta : delta;
-  const changeUnit = customSelected
-    ? timeScaleFromNumberKey[customInterval]
-    : timeScaleFromNumberKey[interval];
-  return getNextTimeSelection(useDelta * direction, changeUnit, useDate);
+  return getNextTimeSelection(delta * direction, unit, useDate);
 };
 
 /**
