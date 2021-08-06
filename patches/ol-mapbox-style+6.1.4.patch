@@ -1,5 +1,5 @@
 diff --git a/node_modules/ol-mapbox-style/dist/stylefunction.js b/node_modules/ol-mapbox-style/dist/stylefunction.js
-index 473b267..976a269 100644
+index 473b267..edfa51f 100644
 --- a/node_modules/ol-mapbox-style/dist/stylefunction.js
 +++ b/node_modules/ol-mapbox-style/dist/stylefunction.js
 @@ -3,6 +3,9 @@ ol-mapbox-style - Use Mapbox Style objects with OpenLayers
@@ -27,7 +27,7 @@ index 473b267..976a269 100644
  import mb2css from 'mapbox-to-css-font';
  import { deg2rad, defaultResolutions, getZoomForResolution, wrapText, applyLetterSpacing, createCanvas } from './util';
  /**
-@@ -19,41 +28,62 @@ import { deg2rad, defaultResolutions, getZoomForResolution, wrapText, applyLette
+@@ -19,41 +28,63 @@ import { deg2rad, defaultResolutions, getZoomForResolution, wrapText, applyLette
   * @typedef {import("ol/layer/VectorTile").default} VectorTileLayer
   * @typedef {import("ol/style/Style").StyleFunction} StyleFunction
   */
@@ -95,6 +95,7 @@ index 473b267..976a269 100644
 +}
 +const getTextWidth = function (text, font, canvas) {
 +  var context = canvas.getContext('2d');
++  context.clearRect(0, 0, canvas.width, canvas.height);
 +  context.font = font;
 +  var metrics = context.measureText(text);
 +  return metrics.width;
@@ -120,7 +121,7 @@ index 473b267..976a269 100644
  /**
   * @private
   * @param {Object} layer Gl object layer.
-@@ -64,40 +94,41 @@ var renderFeatureCoordinates, renderFeature;
+@@ -64,40 +95,41 @@ var renderFeatureCoordinates, renderFeature;
   * @return {?} Value.
   */
  export function getValue(layer, layoutOrPaint, property, zoom, feature) {
@@ -192,7 +193,7 @@ index 473b267..976a269 100644
  /**
   * @private
   * @param {string} layerId Layer id.
-@@ -107,12 +138,13 @@ var filterCache = {};
+@@ -107,12 +139,13 @@ var filterCache = {};
   * @return {boolean} Filter result.
   */
  function evaluateFilter(layerId, filter, feature, zoom) {
@@ -211,7 +212,7 @@ index 473b267..976a269 100644
  /**
   * @private
   * @param {?} color Color.
-@@ -120,18 +152,20 @@ function evaluateFilter(layerId, filter, feature, zoom) {
+@@ -120,18 +153,20 @@ function evaluateFilter(layerId, filter, feature, zoom) {
   * @return {string} Color.
   */
  function colorWithOpacity(color, opacity) {
@@ -242,7 +243,7 @@ index 473b267..976a269 100644
  /**
   * @private
   * @param {string} text Text.
-@@ -139,16 +173,32 @@ var templateRegEx = /^([^]*)\{(.*)\}([^]*)$/;
+@@ -139,16 +174,32 @@ var templateRegEx = /^([^]*)\{(.*)\}([^]*)$/;
   * @return {string} Text.
   */
  function fromTemplate(text, properties) {
@@ -284,7 +285,7 @@ index 473b267..976a269 100644
  /**
   * ```js
   * import stylefunction from 'ol-mapbox-style/dist/stylefunction';
-@@ -220,462 +270,572 @@ function fromTemplate(text, properties) {
+@@ -220,462 +271,572 @@ function fromTemplate(text, properties) {
   * @return {StyleFunction} Style function for use in
   * `ol.layer.Vector` or `ol.layer.VectorTile`.
   */
@@ -1122,7 +1123,7 @@ index 473b267..976a269 100644
 +          const letterSpacing = getValue(layer, 'layout', 'text-letter-spacing', zoom, f);
 +          const wrappedLabel = type == 2 ? applyLetterSpacing(label, letterSpacing) : wrapText(label, font, maxTextWidth, letterSpacing);
 +
-+          if (!opacity) {
++          if (!opacity || !textSize) {
 +            text.setText('');
 +          } else {
 +            text.setText(wrappedLabel);
@@ -1150,7 +1151,7 @@ index 473b267..976a269 100644
 +          let coordinates = [];
 +          const textWidth = getTextWidth(wrappedLabel, font, textWidthCanvas);
 +          if (placement == 'point') {
-+            if (textVariableAnchor || textAnchor) {
++            if (textVariableAnchor) {
 +              const layerExtent = olLayer.getSource().tileGrid.getExtent();
 +              const pointPixel = olMap.getPixelFromCoordinate(feature.getFlatCoordinates());
 +              if (olExtent.containsCoordinate(layerExtent, feature.getFlatCoordinates())) {
@@ -1295,7 +1296,7 @@ index 473b267..976a269 100644
 +  functionCache as _functionCache
 +};
 diff --git a/node_modules/ol-mapbox-style/src/stylefunction.js b/node_modules/ol-mapbox-style/src/stylefunction.js
-index 009d17f..976a269 100644
+index 009d17f..bea065c 100644
 --- a/node_modules/ol-mapbox-style/src/stylefunction.js
 +++ b/node_modules/ol-mapbox-style/src/stylefunction.js
 @@ -4,6 +4,8 @@ Copyright 2016-present ol-mapbox-style contributors
@@ -1639,7 +1640,7 @@ index 009d17f..976a269 100644
            const wrappedLabel = type == 2 ? applyLetterSpacing(label, letterSpacing) : wrapText(label, font, maxTextWidth, letterSpacing);
 -          text.setText(wrappedLabel);
 +
-+          if (!opacity) {
++          if (!opacity || !textSize) {
 +            text.setText('');
 +          } else {
 +            text.setText(wrappedLabel);
@@ -1674,7 +1675,7 @@ index 009d17f..976a269 100644
 -            } else if (textAnchor.indexOf('right') !== -1) {
 -              textAlign = 'right';
 -              hOffset = -textHaloWidth;
-+            if (textVariableAnchor || textAnchor) {
++            if (textVariableAnchor) {
 +              const layerExtent = olLayer.getSource().tileGrid.getExtent();
 +              const pointPixel = olMap.getPixelFromCoordinate(feature.getFlatCoordinates());
 +              if (olExtent.containsCoordinate(layerExtent, feature.getFlatCoordinates())) {
