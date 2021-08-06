@@ -37,6 +37,7 @@ import {
   hasSubDaily,
   getActiveLayers,
 } from '../../modules/layers/selectors';
+import { getSelectedDate, getDeltaIntervalUnit } from '../../modules/date/selectors';
 import {
   selectDate as selectDateAction,
   changeTimeScale,
@@ -1323,8 +1324,6 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
-    delta,
-    interval,
     selected,
     selectedB,
     selectedZoom,
@@ -1355,16 +1354,16 @@ function mapStateToProps(state) {
     timelineEndDateLimit = getISODateFormatted(appNow);
   }
 
-  let updatedInterval = interval;
+  const selectedDate = getSelectedDate(state);
+  const { delta, unit } = getDeltaIntervalUnit(state);
+
   let updatedCustomInterval = customInterval;
   let updatedSelectedZoom = selectedZoom;
+
   // handle reset of timescale and intervals if not subdaily
   if (!hasSubdailyLayers) {
     if (selectedZoom > 3) {
       updatedSelectedZoom = 3;
-    }
-    if (interval > 3) {
-      updatedInterval = 3;
     }
     if (customInterval > 3) {
       updatedCustomInterval = 3;
@@ -1376,22 +1375,18 @@ function mapStateToProps(state) {
     screenWidth,
     hasSubdailyLayers,
   );
-  const selectedDate = isCompareA ? selected : selectedB;
-  const deltaChangeAmt = customSelected ? customDelta : delta;
-  const timeScaleChangeUnit = customSelected
-    ? timeScaleFromNumberKey[updatedCustomInterval]
-    : timeScaleFromNumberKey[updatedInterval];
+
   const timelineStartDateLimit = config.startDate;
   const leftArrowDisabled = checkLeftArrowDisabled(
     selectedDate,
-    deltaChangeAmt,
-    timeScaleChangeUnit,
+    delta,
+    unit,
     timelineStartDateLimit,
   );
   const rightArrowDisabled = checkRightArrowDisabled(
     selectedDate,
-    deltaChangeAmt,
-    timeScaleChangeUnit,
+    delta,
+    unit,
     timelineEndDateLimit,
   );
   const nowButtonDisabled = checkNowButtonDisabled(
@@ -1422,11 +1417,11 @@ function mapStateToProps(state) {
     axisWidth: dimensionsAndOffsetValues.width,
     selectedDate,
     timeScale: timeScaleFromNumberKey[updatedSelectedZoom.toString()],
-    timeScaleChangeUnit,
+    timeScaleChangeUnit: unit,
     customIntervalValue: customDelta || 1,
     customIntervalZoomLevel: updatedCustomInterval || 3,
-    deltaChangeAmt,
     nowOverride,
+    deltaChangeAmt: delta,
     parentOffset: dimensionsAndOffsetValues.parentOffset,
     timelineEndDateLimit,
     leftArrowDisabled,
