@@ -183,7 +183,7 @@ class Timeline extends React.Component {
     // appNow will not update if set in query string using 'now' parameter
     if (!nowOverride) {
       this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
-      this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 15);
+      this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 10);
     }
     this.setInitialState();
   }
@@ -222,10 +222,8 @@ class Timeline extends React.Component {
       }
     }
 
-    // if user adds a subdaily layer (and none were active) adjust the time backwards if needed
-    // and change the time scale to hourly
+    // if user adds a subdaily layer (and none were active) change the time scale to hourly
     if (hasSubdailyLayers && !prevProps.hasSubdailyLayers) {
-      this.moveSelectedDateBackwards();
       this.changeTimeScale(4);
     }
 
@@ -865,21 +863,6 @@ class Timeline extends React.Component {
   }
 
   /**
-   * If a user adds a subdaily layer and the current selected time is too recent
-   * it is likely they will see no layer content. Here we are moving the selected time
-   * backwards for them to attempt to avoid this scenario
-   */
-  moveSelectedDateBackwards() {
-    const { selectedDate } = this.props;
-    const fortyMinutes = 40 * 60000;
-    const now = Date.now();
-    const isRecent = Math.abs(now - selectedDate.getTime()) < fortyMinutes;
-    if (isRecent) {
-      this.onDateChange(now - fortyMinutes);
-    }
-  }
-
-  /**
   * @desc update dragger time state
   * @param {String} date
   * @param {Boolean} is dragger B selected to update
@@ -927,7 +910,7 @@ class Timeline extends React.Component {
     };
 
     ensureCanUpdate().then(() => {
-      updateAppNow(new Date());
+      updateAppNow(util.now());
     });
   }
 
@@ -1765,6 +1748,7 @@ const getTimelineEndDateLimit = (state) => {
   }
 
   let timelineEndDateLimit;
+  console.log(layerDateRange && layerDateRange.end > appNow);
   if (layerDateRange && layerDateRange.end > appNow) {
     const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
     const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);

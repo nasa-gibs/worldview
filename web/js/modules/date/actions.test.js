@@ -16,6 +16,7 @@ import {
 } from './constants';
 import fixtures from '../../fixtures';
 import { addLayer, getLayers } from '../layers/selectors';
+import util from '../../util/util';
 
 const config = fixtures.config();
 function getState(layers) {
@@ -50,7 +51,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 // test variables
-const mockDate = new Date();
+const mockDate = util.now();
 const customInterval = 3;
 const delta = 5;
 const interval = 3;

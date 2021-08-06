@@ -41,7 +41,8 @@ module.exports = {
     reuseables.loadAndSkipTour(c, TIME_LIMIT);
     c.waitForElementVisible(shareToolbarButton, TIME_LIMIT);
     c.click(shareToolbarButton);
-    let date = new Date();
+    const minutesOffset = 40 * 60000; // 40 minutes
+    let date = new Date(new Date().getTime() - minutesOffset);
     if (date.getUTCHours() < 3) {
       date = new Date(date.getTime() - 86400000);
     }

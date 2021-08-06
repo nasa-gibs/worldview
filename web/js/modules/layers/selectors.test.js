@@ -194,7 +194,7 @@ test('all layers are visible', () => {
   expect(layerList).toEqual(['aqua-cr', 'terra-cr', 'aqua-aod', 'terra-aod']);
 });
 
-// NOTE: Not currently using getLayers to retrive layers that are
+// NOTE: Not currently using getLayers to retrieve layers that are
 // specifically either visible or not visible
 
 // test('only visible layers', () => {
@@ -383,9 +383,9 @@ test('no date range with static', () => {
 test('get future layer end date is 5 days after mock current date', () => {
   const testLayer = { futureTime: '5D' };
   // current date floored to quarter hour
-  const currentDate = util.roundTimeQuarterHour(new Date());
-  // test date to comopare is floored to quarter hour and added 5 days using util
-  const testDate = util.dateAdd(util.roundTimeQuarterHour(new Date()), 'day', 5);
+  const currentDate = util.roundTimeQuarterHour(util.now());
+  // test date to compare is floored to quarter hour and added 5 days using util
+  const testDate = util.dateAdd(util.roundTimeQuarterHour(util.now()), 'day', 5);
   const futureEndDate = getFutureLayerEndDate(testLayer);
 
   const testDateMinutes = testDate.getUTCMinutes();

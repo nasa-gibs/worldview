@@ -9,9 +9,10 @@ import {
   SELECT_DATE,
   UPDATE_APP_NOW,
 } from './constants';
+import util from '../../util/util';
 
 // test variables
-const mockDate = new Date();
+const mockDate = util.now();
 const selectedZoom = 2;
 
 describe('dateReducer', () => {

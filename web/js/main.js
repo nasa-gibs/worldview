@@ -139,8 +139,8 @@ window.onload = () => {
       config.initialIsMobile = crs.innerWidth <= 768;
 
       config.pageLoadTime = parameters.now
-        ? util.parseDateUTC(parameters.now) || new Date()
-        : new Date();
+        ? util.parseDateUTC(parameters.now) || util.now()
+        : util.now();
 
       const pageLoadTime = new Date(config.pageLoadTime);
 
