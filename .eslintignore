@@ -11,4 +11,4 @@ web/dist/*
 web/build/*
 test/*
 web/js/edsc/*
-
+/tasks/temp
