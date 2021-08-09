@@ -29,7 +29,7 @@
 .wv-button:hover {
   border-color: #eee;
   background-color: #eee;
-  transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+  transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
   background-image: none;
   color: #404040;
   cursor: pointer;
