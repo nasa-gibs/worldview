@@ -58,7 +58,7 @@ import '../css/button.css';
 import '../css/modal.css';
 import '../css/checkbox.css';
 import '../css/map.css';
-import '../css/link.css';
+import '../css/share.css';
 import '../css/palettes.css';
 import '../css/image.css';
 import '../css/projection.css';
