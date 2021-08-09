@@ -32,7 +32,7 @@
   }
   &.search-row.selected {
     left: 0;
-    transition: background 200ms linear, border 200ms linear;
+    transition: background-color 200ms linear;
     background: #eee;
     border-left: 6px solid #d54f21;
     border-top: 1px solid #ddd;
@@ -42,18 +42,18 @@
       color: #666;
     }
     & .layers-all-header > h3 {
-      transition: all 200ms ease;
+      transition: background-color 200ms ease;
       color: #000;
       font-weight: 500;
     }
     & .layers-all-header > h4,
     .layers-all-header > h5 {
-      transition: all 200ms ease;
+      transition: background-color 200ms ease;
       color: #333;
     }
   }
   &:hover:not(.selected) {
-    transition: all 100ms linear;
+    transition: background-color 100ms linear;
     background-color: #5a5a5a;
   }
   &.search-row:hover:not(.selected) {

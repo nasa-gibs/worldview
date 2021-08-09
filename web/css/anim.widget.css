@@ -220,7 +220,6 @@ a .wv-animation-widget-icon {
   font-weight: 400;
   padding-left: 10px;
   margin-bottom: 4px;
-  transition: border 0.5s ease;
 }
 
 .gif-download-grid .grid-child.label {

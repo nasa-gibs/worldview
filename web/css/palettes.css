@@ -97,8 +97,8 @@
 .wv-palettes-panel .wv-running-label {
   visibility: hidden;
   position: absolute;
-  -webkit-transition-property: left;
-  transition-property: left;
+  -webkit-transition-property: transform;
+  transition-property: transform;
   -webkit-transition-duration: 100ms, 100ms;
   transition-duration: 100ms, 100ms;
   -webkit-transition-delay: 0s, 0s;
@@ -135,14 +135,14 @@
 
 .wv-palettes-panel .wv-running-bar::before {
   top: -1px;
-  left: -5px;
+  left: -4px;
   border-left: 5.5px solid transparent;
   border-right: 5.5px solid transparent;
   border-top: 5.5px solid #000;
 }
 
 .wv-palettes-panel .wv-running-bar::after {
-  left: -4px;
+  left: -5px;
   border-left: 4.5px solid transparent;
   border-right: 4.5px solid transparent;
   border-top: 4px solid #dedede;
@@ -162,7 +162,7 @@
   visibility: visible;
 }
 
-.active-lengend.wv-palettes-panel .wv-running .wv-running-bar {
+.active-legend.wv-palettes-panel .wv-running .wv-running-bar {
   visibility: hidden;
 }
 
