@@ -60,13 +60,29 @@ class ModalContainer extends Component {
 
   getStyle() {
     const {
+      isEmbedModeActive, screenHeight, screenWidth, isMobile,
+    } = this.props;
+    const {
       offsetLeft, offsetRight, offsetTop, width, height,
     } = this.state;
+
+    const top = (isMobile || isEmbedModeActive) && height ? screenHeight - height : offsetTop;
+    if (isEmbedModeActive) {
+      return {
+        left: 10,
+        top,
+        width: screenWidth - 10,
+        height,
+        maxHeight: height,
+        transform: 'scale(0.75)',
+        transformOrigin: 'left',
+      };
+    }
 
     return {
       left: offsetLeft,
       right: offsetRight,
-      top: offsetTop,
+      top,
       width,
       height,
       maxHeight: height,
@@ -247,9 +263,9 @@ function mapStateToProps(state) {
     bodyTemplate = state[template];
     isTemplateModal = true;
   }
-  const isMobile = browser.lessThan.medium;
+  const { screenHeight, screenWidth, lessThan } = browser;
+  const isMobile = lessThan.medium;
   const { isEmbedModeActive } = embed;
-
   return {
     isOpen,
     bodyText,
@@ -258,8 +274,8 @@ function mapStateToProps(state) {
     id,
     isEmbedModeActive,
     isMobile,
-    screenHeight: isMobile ? undefined : state.browser.screenHeight,
-    screenWidth: isMobile ? undefined : state.browser.screenWidth,
+    screenHeight,
+    screenWidth,
     bodyTemplate,
     isTemplateModal,
     customProps,
