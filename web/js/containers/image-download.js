@@ -8,6 +8,7 @@ import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import {
+  getAlertMessageIfCrossesDateline,
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
@@ -92,7 +93,7 @@ class ImageDownloadContainer extends Component {
       boundaries,
       map.ui.selected,
     );
-    const { crs, maxExtent } = proj.selected;
+    const { crs } = proj.selected;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
@@ -104,22 +105,6 @@ class ImageDownloadContainer extends Component {
       );
     const boxTopLongitude = Math.abs(geolonlat1[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat1[0]) : geolonlat1[0];
     const boxBottomLongitude = Math.abs(geolonlat2[0]) > 180 ? util.normalizeWrappedLongitude(geolonlat2[0]) : geolonlat2[0];
-
-    let datelineMessage = '';
-    if (isGeoProjection) {
-      // min longitude less than maxExtent min longitude (-180 geographic)
-      if (geolonlat1[0] < maxExtent[0]) {
-        const nextDay = util.toISOStringDateMonthAbbrev(util.dateAdd(util.clearTimeUTC(date), 'day', 1));
-        datelineMessage = `Part of the selected snapshot crossed the dateline and uses imagery from the next day ${nextDay}.`;
-      }
-
-      // max longitude greater than maxExtent max longitude (180 geographic)
-      if (geolonlat2[0] > maxExtent[2]) {
-        const prevDay = util.toISOStringDateMonthAbbrev(util.dateAdd(util.clearTimeUTC(date), 'day', -1));
-        datelineMessage = `Part of the selected snapshot crossed the dateline and uses imagery from the previous day ${prevDay}.`;
-      }
-    }
-
     return (
       <ErrorBoundary>
         <Panel
@@ -133,7 +118,7 @@ class ImageDownloadContainer extends Component {
           hasSubdailyLayers={hasSubdailyLayers}
           markerCoordinates={markerCoordinates}
           date={date}
-          datelineMessage={datelineMessage}
+          datelineMessage={getAlertMessageIfCrossesDateline(date, geolonlat1, geolonlat2, proj)}
           url={url}
           crs={crs}
           getLayers={getLayers}

@@ -7,7 +7,6 @@ import {
   getDimensions,
   getDownloadUrl,
 } from '../../modules/image-download/util';
-import util from '../../util/util';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import HoverTooltip from '../util/hover-tooltip';
@@ -148,7 +147,7 @@ export default class ImageResSelection extends React.Component {
     }
   }
 
-  getDatelineMessage() {
+  getDatelineAlertIcon() {
     const { datelineMessage } = this.props;
     return datelineMessage && (
       <div
@@ -174,7 +173,7 @@ export default class ImageResSelection extends React.Component {
 
   render() {
     const {
-      date, getLayers, hasSubdailyLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
+      getLayers, projection, lonlats, resolutions, maxImageSize, firstLabel,
     } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
@@ -183,7 +182,6 @@ export default class ImageResSelection extends React.Component {
     const filetypeSelect = this._renderFileTypeSelect();
     const worldfileSelect = this._renderWorldfileSelect();
     const layerList = getLayers();
-    const displayDate = util.toISOStringDateMonthAbbrev(date, hasSubdailyLayers);
 
     return (
       <div className="wv-re-pick-wrapper wv-image">
@@ -192,12 +190,6 @@ export default class ImageResSelection extends React.Component {
           style={{ display: 'none' }}
           url={debugUrl}
         />
-        <div className="wv-image-header snapshots-date-header">
-          <div className="date-text">
-            Date:&nbsp;
-            {displayDate}
-          </div>
-        </div>
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-resolution"
@@ -219,7 +211,7 @@ export default class ImageResSelection extends React.Component {
           validLayers={layerList.length > 0}
           onClick={this.onDownload}
         />
-        {this.getDatelineMessage()}
+        {this.getDatelineAlertIcon()}
       </div>
     );
   }
@@ -243,7 +235,6 @@ ImageResSelection.propTypes = {
   fileTypes: PropTypes.object,
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
-  hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
