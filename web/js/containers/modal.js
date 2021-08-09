@@ -305,4 +305,5 @@ ModalContainer.propTypes = {
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
   screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
 };
