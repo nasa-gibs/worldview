@@ -897,10 +897,9 @@ class Timeline extends React.Component {
             isTimelineDragging,
             isDraggerDragging,
             isAnimationDraggerDragging,
-            isTimelineLayerCoveragePanelOpen,
           } = self.state;
           const { isAnimationPlaying } = self.props;
-          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging || isTimelineLayerCoveragePanelOpen;
+          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
