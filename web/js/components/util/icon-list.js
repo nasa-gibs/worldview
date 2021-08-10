@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  * @class List
  * @extends React.Component
  */
-export default function List(props) {
+export default function IconList(props) {
   const {
     list, listClass, active, disabled, onClick, size,
   } = props;
@@ -27,7 +27,6 @@ export default function List(props) {
           ? () => onClick(key || id)
           : null;
         const onClickFn = item.onClick ? item.onClick : propsOnClick;
-
 
         return !hidden && (
           <ListGroupItem
@@ -50,10 +49,10 @@ export default function List(props) {
     </ListGroup>
   );
 }
-List.defaultProps = {
+IconList.defaultProps = {
   size: 'medium',
 };
-List.propTypes = {
+IconList.propTypes = {
   active: PropTypes.string,
   disabled: PropTypes.bool,
   list: PropTypes.array,
