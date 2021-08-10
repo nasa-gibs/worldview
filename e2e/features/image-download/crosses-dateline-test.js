@@ -5,8 +5,8 @@ const {
 
 const TIME_LIMIT = 10000;
 
-const datelineAlertIcon = '.snapshot-date-alert-icon';
-const datelineAlertIconTooltipText = '.snapshot-date-warning-tooltip-inner';
+const datelineAlert = '#snapshot-dateline-alert';
+const datelineAlertMessage = '#snapshot-dateline-alert .wv-alert-message';
 
 const withinMapURLParams = '?v=-67.80916012733559,-56.052180562072095,-30.50743102883792,-30.873513420586164&t=2021-08-08-T0';
 const crossesPrevDayURLParams = '?v=161.16767164758798,-54.46571918482002,198.46940074608565,-29.287052043334096&t=2021-08-08-T0';
@@ -23,7 +23,7 @@ module.exports = {
     openImageDownloadPanel(c);
     c.pause(500);
 
-    c.expect.element(datelineAlertIcon).to.not.be.present;
+    c.expect.element(datelineAlert).to.not.be.present;
   },
 
   'Dateline alert icon with previous day message if crosses previous day dateline': (c) => {
@@ -32,10 +32,9 @@ module.exports = {
     openImageDownloadPanel(c);
     c.pause(500);
 
-    c.expect.element(datelineAlertIcon).to.be.present;
-    c.moveToElement(datelineAlertIcon, 0, 0);
-    c.waitForElementVisible(datelineAlertIconTooltipText, TIME_LIMIT, (e) => {
-      c.assert.containsText(datelineAlertIconTooltipText, 'The selected snapshot area crosses the dateline and uses imagery from the previous day 2021 AUG 07.');
+    c.expect.element(datelineAlert).to.be.present;
+    c.waitForElementVisible(datelineAlertMessage, TIME_LIMIT, (e) => {
+      c.assert.containsText(datelineAlertMessage, 'The selected snapshot area crosses the dateline and uses imagery from the previous day 2021 AUG 07.');
     });
   },
 
@@ -45,10 +44,9 @@ module.exports = {
     openImageDownloadPanel(c);
     c.pause(500);
 
-    c.expect.element(datelineAlertIcon).to.be.present;
-    c.moveToElement(datelineAlertIcon, 0, 0);
-    c.waitForElementVisible(datelineAlertIconTooltipText, TIME_LIMIT, (e) => {
-      c.assert.containsText(datelineAlertIconTooltipText, 'The selected snapshot area crosses the dateline and uses imagery from the next day 2021 AUG 09.');
+    c.expect.element(datelineAlert).to.be.present;
+    c.waitForElementVisible(datelineAlertMessage, TIME_LIMIT, (e) => {
+      c.assert.containsText(datelineAlertMessage, 'The selected snapshot area crosses the dateline and uses imagery from the next day 2021 AUG 09.');
     });
   },
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   imageSizeValid,
   getDimensions,
@@ -9,7 +8,7 @@ import {
 } from '../../modules/image-download/util';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
-import HoverTooltip from '../util/hover-tooltip';
+import AlertUtil from '../util/alert';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
@@ -147,27 +146,15 @@ export default class ImageResSelection extends React.Component {
     }
   }
 
-  getDatelineAlertIcon() {
+  crossesDatelineAlert() {
     const { datelineMessage } = this.props;
     return datelineMessage && (
-      <div
-        className="snapshot-date-alert-icon"
-      >
-        <FontAwesomeIcon
-          icon="exclamation-triangle"
-          id="snapshot-date-warning-tooltip"
-          size="2x"
-        />
-        <HoverTooltip
-          isMobile={false}
-          labelText={datelineMessage}
-          target="snapshot-date-warning-tooltip"
-          delay={{ show: 0, hide: 200 }}
-          fade={false}
-          placement="left-start"
-          innerClassName="snapshot-date-warning-tooltip-inner"
-        />
-      </div>
+      <AlertUtil
+        id="snapshot-dateline-alert"
+        isOpen
+        title="Crosses Dateline Alert"
+        message={datelineMessage}
+      />
     );
   }
 
@@ -184,35 +171,37 @@ export default class ImageResSelection extends React.Component {
     const layerList = getLayers();
 
     return (
-      <div className="wv-re-pick-wrapper wv-image">
-        <div
-          id="wv-image-download-url"
-          style={{ display: 'none' }}
-          url={debugUrl}
-        />
-        <div className="wv-image-header">
-          <SelectionList
-            id="wv-image-resolution"
-            optionArray={resolutions}
-            value={resolution}
-            optionName="resolution"
-            onChange={this.handleChange}
+      <>
+        {this.crossesDatelineAlert()}
+        <div className="wv-re-pick-wrapper wv-image">
+          <div
+            id="wv-image-download-url"
+            style={{ display: 'none' }}
+            url={debugUrl}
           />
-          {firstLabel}
+          <div className="wv-image-header">
+            <SelectionList
+              id="wv-image-resolution"
+              optionArray={resolutions}
+              value={resolution}
+              optionName="resolution"
+              onChange={this.handleChange}
+            />
+            {firstLabel}
+          </div>
+          {filetypeSelect}
+          {worldfileSelect}
+          <ResTable
+            width={width}
+            height={height}
+            fileSize={((width * height * 24) / 8388608).toFixed(2)}
+            maxImageSize={maxImageSize}
+            validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+            validLayers={layerList.length > 0}
+            onClick={this.onDownload}
+          />
         </div>
-        {filetypeSelect}
-        {worldfileSelect}
-        <ResTable
-          width={width}
-          height={height}
-          fileSize={((width * height * 24) / 8388608).toFixed(2)}
-          maxImageSize={maxImageSize}
-          validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
-          validLayers={layerList.length > 0}
-          onClick={this.onDownload}
-        />
-        {this.getDatelineAlertIcon()}
-      </div>
+      </>
     );
   }
 }
