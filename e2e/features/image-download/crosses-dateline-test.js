@@ -17,7 +17,7 @@ module.exports = {
     client.end();
   },
 
-  'No dateline alert icon with message if not crossing dateline(s)': (c) => {
+  'No dateline alert notification with message if not crossing dateline(s)': (c) => {
     normalizeViewport(c, 1024, 768);
     c.url(c.globals.url + withinMapURLParams);
     openImageDownloadPanel(c);
@@ -26,7 +26,7 @@ module.exports = {
     c.expect.element(datelineAlert).to.not.be.present;
   },
 
-  'Dateline alert icon with previous day message if crosses previous day dateline': (c) => {
+  'Dateline alert notification with previous day message if crosses previous day dateline': (c) => {
     normalizeViewport(c, 1024, 768);
     c.url(c.globals.url + crossesPrevDayURLParams);
     openImageDownloadPanel(c);
@@ -38,7 +38,7 @@ module.exports = {
     });
   },
 
-  'Dateline alert icon with next day message if crosses next day dateline': (c) => {
+  'Dateline alert notification with next day message if crosses next day dateline': (c) => {
     normalizeViewport(c, 1024, 768);
     c.url(c.globals.url + crossesNextDayURLParams);
     openImageDownloadPanel(c);
