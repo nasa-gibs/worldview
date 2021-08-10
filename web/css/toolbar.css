@@ -103,7 +103,8 @@
 
 /* Snapshot modal */
 .toolbar-snapshot-modal {
-  right: 70px;
+  top: 85px;
+  right: 10px;
 }
 
 .toolbar-snapshot-modal .modal-body {
@@ -148,7 +149,7 @@
 }
 
 @media (min-width: 576px) {
-  .toolbar-modal {
+  .toolbar-modal:not(.toolbar-snapshot-modal) {
     top: 33px;
   }
 
