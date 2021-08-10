@@ -7,7 +7,7 @@ import {
 } from '../modules/modal/actions';
 import toggleDistractionFreeModeAction from '../modules/ui/actions';
 import AboutPage from '../components/about/about-page';
-import IconList from '../components/util/list';
+import IconList from '../components/util/icon-list';
 import onClickFeedback from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
@@ -142,7 +142,12 @@ function InfoList (props) {
     return arr;
   }
 
-  return (<IconList list={getListArray()} size="small" />);
+  return (
+    <IconList
+      list={getListArray()}
+      size={isMobile ? 'large' : 'small'}
+    />
+  );
 }
 
 function mapStateToProps(state) {
