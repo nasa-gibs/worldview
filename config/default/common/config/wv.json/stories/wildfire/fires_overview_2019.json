@@ -4,10 +4,14 @@
       "id": "fires_overview_2019",
       "type": "wildfire",
       "title": "Satellite Detections of Fire",
-      "description": "NASA's satellite sensors detect daily fires across the globe",
+      "description": "NASA's satellite sensors detect daily fires across the globe.",
       "backgroundImage": "fires_overview.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
+        {
+          "title": "Earthdata - Wildfire Data Resources",
+          "link": "https://earthdata.nasa.gov/learn/wildfires-resource-page"
+        },
         {
           "title": "Earthdata - Wildfires Data Pathfinder",
           "link": "https://earthdata.nasa.gov/learn/pathfinders/wildfire-data-pathfinder"
@@ -19,6 +23,10 @@
         {
           "title": "Earthdata - Fire Information for Resource Management System (FIRMS)",
           "link": "https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms"
+        },
+        {
+          "title": "Earthdata - Nighttime Lights",
+          "link": "https://earthdata.nasa.gov/learn/backgrounders/nighttime-lights"
         }
       ],
       "steps": [
@@ -28,7 +36,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-292.623260967654,-170.27967436138167,271.58764290609054,166.62045355224754&t=2019-07-18-T00%3A00%3A00Z&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day,VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+          "stepLink": "v=-213.01169670494906,-109.35360767134252,225.17402799156523,113.2950689222671&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day,VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&t=2021-08-08-T18%3A29%3A10Z"
         },
         {
           "description": "step002.html",
@@ -36,7 +44,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&v=-119.83301488230896,57.50175153787527,-115.42511719579534,59.63529645975027&t=2019-05-19-T00%3A00%3A00Z&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day,VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden)"
+          "stepLink": "v=-122.93699675765616,41.45962848033995,-118.82859447258208,43.54716871757484&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day,VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_DayNightBand_AtSensor_M15(hidden),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&t=2021-07-17-T18%3A43%3A39Z"
         },
         {
           "description": "step003.html",
@@ -44,7 +52,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&v=-162.52659962132807,60.79677772521973,-153.71080424830083,65.06386756896973&t=2019-07-07-T00%3A00%3A00Z&t1=2019-07-07-T00%3A00%3A00Z&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m&l1=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m&ca=false&cv=54"
+          "stepLink": "v=-98.58310233039097,49.626442444832556,-92.1928526095237,53.22843713768096&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day,VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),VIIRS_SNPP_DayNightBand_AtSensor_M15(hidden),VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=true&t=2021-07-17-T18%3A43%3A39Z"
         },
         {
           "description": "step004.html",
@@ -52,7 +60,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&v=-10.473218426558239,38.61034696165155,-6.065320740044607,40.74389188352655&t=2019-07-21-T00%3A00%3A00Z&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night,VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,VIIRS_SNPP_DayNightBand_ENCC,Reference_Features_15m(hidden),Coastlines_15m"
+          "stepLink":  "v=120.07598999826965,59.5674750216386,133.2009057325743,66.23643969562362&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day,VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day,VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Aqua_CorrectedReflectance_Bands721,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=false&cv=50&tr=fires_overview_2019&t=2021-08-08-T00%3A00%3A00Z&t1=2021-08-08-T18%3A43%3A39Z"
         },
         {
           "description": "step005.html",
@@ -60,15 +68,39 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&v=59.3267759396991,40.0431983585143,129.85313892391716,74.1799171085143&t=2019-07-21-T00%3A00%3A00Z&l=OMPS_Aerosol_Index(opacity=0.65),MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands367(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day,MODIS_Combined_Thermal_Anomalies_All(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m"
+          "stepLink":         "v=1.6388904646416993,35.094725147277835,6.294605423318947,37.719013916120254&l=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night,VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand_AtSensor_M15,VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&l1=MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night,VIIRS_SNPP_Thermal_Anomalies_375m_Day(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand_AtSensor_M15,VIIRS_SNPP_DayNightBand_At_Sensor_Radiance(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg1=true&ca=false&cv=50&t=2021-08-09-T16%3A43%3A40Z&t1=2021-08-10-T16%3A43%3A40Z"
         },
         {
           "description": "step006.html",
           "transition": {
-            "element": "animation",
-            "action": "play"
+            "element": "",
+            "action": ""
           },
-          "stepLink": "v=-62.56455354072091,-8.222687146803494,-57.639892750204524,-5.991200226100759&t=2019-07-25-T00%3A00%3A00Z&l=MODIS_Terra_Thermal_Anomalies_All(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_All(hidden),MODIS_Aqua_Thermal_Anomalies_All(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_All,Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+          "stepLink": "p=geographic&v=59.3267759396991,40.0431983585143,129.85313892391716,74.1799171085143&t=2019-07-21-T00%3A00%3A00Z&l=OMPS_Aerosol_Index(opacity=0.65),MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands367(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day,MODIS_Combined_Thermal_Anomalies_All(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m"
+        },
+        {
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=76.88593181296162,45.03048609367112,140.1825770246843,80.70893217743239&l=OMPS_Aerosol_Index_PyroCumuloNimbus(opacity=0.95,min=5,max=25,squash=true),OMPS_Aerosol_Index(hidden,opacity=0.65),MODIS_Terra_Thermal_Anomalies_Night(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Night(hidden),VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Night(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Night(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day,MODIS_Combined_Thermal_Anomalies_All(hidden),Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands367(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-08-03-T17%3A59%3A09Z"
+        },
+        {
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-131.95072542220674,35.960959628443725,-110.37510297776583,48.122499620534946&z=4&ics=true&ici=5&icd=10&as=2021-08-05-T18%3A40%3A00Z&ae=2021-08-05-T22%3A30%3A00Z&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(hidden),MODIS_Terra_Thermal_Anomalies_Day(hidden),GOES-East_ABI_GeoColor(hidden),GOES-West_ABI_GeoColor,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&al=true&av=7&ab=on&t=2021-08-05-T19%3A00%3A00Z"
+        },
+        {
+          "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-125.34043088482426,45.79481752257501,-113.38746366423595,52.53235148024745&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,MODIS_Terra_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_Thermal_Anomalies_375m_Day,VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),MODIS_Aqua_Thermal_Anomalies_Day(hidden),VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2021-07-25-T00%3A00%3A00Z"
         }
       ]
     }

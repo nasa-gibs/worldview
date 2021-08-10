@@ -1,0 +1,8 @@
+This view shows fires in Washington State and British Columbia on 25 July 2021 - [View the same area in the FIRMS Fire Map](https://firms.modaps.eosdis.nasa.gov/map/#t:adv;d:2021-07-25;l:viirs=D,country-outline,viirs_crtc;@-118.7,49.7,8z). The Global Fire Information for Resource Management System (FIRMS) provides access to the same satellite-derived fire information as Worldview in a few different ways. The global FIRMS Fire Map provides additional information such as being able to identify characteristics of individual fire points and burned area information. The fire data are also available for download in easy-to-use file formats, and FIRMS provides a fire email alert service where you can specify to receive fire email alerts for your area-of-interest. The [FIRMS US/Canada Fire Map](https://firms.modaps.eosdis.nasa.gov/usfs/map) offers additional contextual layers and enhancements, including incident locations and reports, and improved classification of fires to show time since detection to better depict active fire fronts for current large fires in the U.S. and Canada. FIRMS US/Canada also provides U.S. and Canadian administrative ownership boundaries and interagency fire management boundaries, daily fire danger forecasts, and current National Weather Service fire weather watch and red flag warning areas.
+
+Additional Information on FIRMS:
+- [Download Fire Data](https://firms.modaps.eosdis.nasa.gov/active_fire/#firms-shapefile)
+- [Fire Archive Download](https://firms.modaps.eosdis.nasa.gov/download/)
+- [Fire Email Alerts](https://firms.modaps.eosdis.nasa.gov/alerts/)
+- [Fire Map - Global](https://firms.modaps.eosdis.nasa.gov/map)
+- [Fire Map - US/Canada](https://firms.modaps.eosdis.nasa.gov/usfs/map)
