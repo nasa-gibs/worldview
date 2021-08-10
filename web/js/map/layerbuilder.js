@@ -104,7 +104,6 @@ export default function mapLayerBuilder(config, cache, store) {
     if (!layer) {
       // layer is not in the cache
       if (!date) date = options.date || getSelectedDate(state);
-      console.log(date.toISOString());
       const cacheOptions = getCacheOptions(def.period, date);
       const attributes = {
         id: def.id,
@@ -261,10 +260,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const projId = state.proj.id;
     let style = '';
     const activeGroupStr = options.group ? options.group : compare.activeString;
-    // const { extent } = state.map;
 
-    // Don't key by time if this is a static layer--it is valid for
-    // every date.
+    // Don't key by time if this is a static layer
     if (def.period) {
       date = util.toISOStringSeconds(util.roundTimeOneMinute(options.date));
     }
@@ -275,7 +272,6 @@ export default function mapLayerBuilder(config, cache, store) {
       style = getVectorStyleKeys(def.id, undefined, state);
     }
     return [layerId, projId, date, style, activeGroupStr].join(':');
-    // return [layerId, projId, date, style, activeGroupStr, extent[0]].join(':');
   };
 
   /**
