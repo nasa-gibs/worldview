@@ -93,23 +93,3 @@
 .wv-image-top {
   text-align: right;
 }
-
-.snapshots-date-header {
-  display: flex;
-  & .date-text {
-    font: 400 12px 'Arial';
-  }
-}
-
-.snapshot-date-alert-icon {
-  font-size: 10px;
-  position: absolute;
-  bottom: 8px;
-  right: 5px;
-  color: #f60;
-  cursor: pointer;
-}
-
-.snapshot-date-warning-tooltip-inner {
-  line-height: 16px;
-}
