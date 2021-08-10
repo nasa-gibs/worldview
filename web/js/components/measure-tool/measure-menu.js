@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Form } from 'reactstrap';
 
 import { onToggle } from '../../modules/modal/actions';
-import IconList from '../util/list';
+import IconList from '../util/icon-list';
 import { changeUnits } from '../../modules/measure/actions';
 import util from '../../util/util';
 
@@ -85,7 +85,7 @@ class MeasureMenu extends Component {
     const {
       isTouchDevice, unitOfMeasure, measurementsInProj, isMobile,
     } = this.props;
-    const listSize = isTouchDevice ? 'medium' : 'small';
+    const listSize = isTouchDevice ? 'large' : 'small';
     // DOWNLOAD_SHAPEFILE.hidden = !measurementsInProj || isMobile;
     DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;
     return (
