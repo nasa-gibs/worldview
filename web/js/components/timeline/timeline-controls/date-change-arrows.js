@@ -144,7 +144,7 @@ class DateChangeArrows extends PureComponent {
         >
           <HoverTooltip
             isMobile={isMobile}
-            labelText="Now"
+            labelText="Latest available date"
             placement="top"
             target="now-button-group"
           />
