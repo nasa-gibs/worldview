@@ -26,7 +26,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/LandCover",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Anthropogenic_Biomes_of_the_World_2001-2006",

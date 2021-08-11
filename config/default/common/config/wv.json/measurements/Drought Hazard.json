@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/DroughtHazard",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "NDH_Drought_Hazard_Frequency_Distribution_1980-2000",
