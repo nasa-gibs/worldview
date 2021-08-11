@@ -2,4 +2,4 @@ The MISR TOA Albedo Average layer displays the global top-of-atmosphere (TOA) al
 
 This layer is produced from the Local albedo average – 1 deg field of the MISR Level 3 Component Global Albedo Product. It is available globally over land and ocean on a monthly basis, with a spatial resolution of 1 degree latitude by 1 degree longitude. Coverage may be limited where daylight is not present (i.e., near the poles).
 
-References: MISR Level 3 Component Global Albedo product covering a month V006. [doi:10.5067/Terra/MISR/MIL3MAL_L3.006](https://doi.org/10.5067/Terra/MISR/MIL3MAL_L3.006)
+References: MIL3MAL_L3 [doi:10.5067/Terra/MISR/MIL3MAL_L3.006](https://doi.org/10.5067/Terra/MISR/MIL3MAL_L3.006)
