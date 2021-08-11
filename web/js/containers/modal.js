@@ -178,7 +178,6 @@ class ModalContainer extends Component {
             isOpen={isOpen}
             toggle={toggleFunction}
             backdrop={backdrop}
-            onExit={onClose}
             id={lowerCaseId}
             size={size}
             className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
