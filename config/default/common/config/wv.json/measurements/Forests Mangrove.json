@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/Forest_Mangrove",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Mangrove_Forest_Distribution_2000"

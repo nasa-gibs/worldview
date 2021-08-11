@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/UrbanExpansion",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Probabilities_of_Urban_Expansion_2000-2030"
