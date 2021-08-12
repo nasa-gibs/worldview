@@ -115,13 +115,14 @@ class toolbarContainer extends Component {
       toggleDialogVisible,
       hasNonDownloadableLayer,
       visibleLayersForProj,
+      proj,
     } = this.props;
     const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-    await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+    await this.getPromise(hasGraticule && proj.id === 'geographic', 'graticule', clearGraticule, 'Remove Graticule?');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await openModal(
       'TOOLBAR_SNAPSHOT',
@@ -364,7 +365,7 @@ class toolbarContainer extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events,
+    animation, browser, notifications, palettes, compare, map, measure, modal, ui, locationSearch, events, proj,
   } = state;
   const { isDistractionFreeModeActive } = ui;
   const { number, type } = notifications;
@@ -382,6 +383,7 @@ const mapStateToProps = (state) => {
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   return {
+    proj,
     faSize,
     notificationType: type,
     notificationContentNumber: number,
@@ -489,6 +491,7 @@ toolbarContainer.propTypes = {
   hasNonDownloadableLayer: PropTypes.bool,
   visibleLayersForProj: PropTypes.array,
   config: PropTypes.object,
+  proj: PropTypes.object,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,

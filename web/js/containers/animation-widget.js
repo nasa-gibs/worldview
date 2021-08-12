@@ -405,6 +405,7 @@ class AnimationWidget extends React.Component {
       refreshStateAfterGif,
       hasNonDownloadableLayer,
       visibleLayersForProj,
+      proj,
     } = this.props;
     const gifDisabled = numberOfFrames >= maxFrames;
     const elemExists = document.querySelector('#create-gif-button');
@@ -428,7 +429,7 @@ class AnimationWidget extends React.Component {
 
       await this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
       await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-      await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+      await this.getPromise(hasGraticule && proj.id === 'geographic', 'graticule', clearGraticule, 'Remove Graticule?');
       await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
       await onUpdateStartAndEndDate(startDate, endDate);
       googleTagManager.pushEvent({
@@ -655,6 +656,7 @@ function mapStateToProps(state) {
     map,
     browser,
     ui,
+    proj,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
@@ -741,6 +743,7 @@ function mapStateToProps(state) {
     looping: loop,
     hasCustomPalettes,
     map,
+    proj,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     visibleLayersForProj,
     promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
@@ -886,6 +889,7 @@ AnimationWidget.propTypes = {
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
   promiseImageryForTime: PropTypes.func,
+  proj: PropTypes.object,
   refreshStateAfterGif: PropTypes.func,
   rotation: PropTypes.number,
   screenWidth: PropTypes.number,
