@@ -20,7 +20,7 @@
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/CloudTopHeight",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Cloud_Top_Height_Day",
@@ -32,7 +32,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/CloudTopHeight",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Cloud_Top_Height_Day",
@@ -44,7 +44,7 @@
                 "Terra/MISR": {
                     "id": "terra-misr",
                     "title": "Terra/MISR",
-                    "description": "misr/CloudStereoHeight",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MISR_Cloud_Stereo_Height_Histogram_Bin_0.5km_Monthly",
@@ -54,7 +54,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/CloudTopHeight",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_Cloud_Top_Height_Day",

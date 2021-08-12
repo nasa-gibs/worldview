@@ -8,7 +8,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/Evaporation",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Evaporation_Land_Monthly",
