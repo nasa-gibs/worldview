@@ -2,6 +2,6 @@ The Soil Moisture Active Passive (SMAP) “Net Ecosystem CO2 Exchange Uncertaint
 
 The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (passive), that together make global measurements of land surface soil moisture and freeze/thaw state. It is useful for monitoring and predicting natural hazards such as floods and droughts, understanding the linkages between Earth’s water, energy and carbon cycles, and reducing uncertainties in predicting weather and climate.
 
-References: [SMAP L4 Global Daily 9 km Carbon Net Ecosystem Exchange](https://nsidc.org/data/spl4cmdl/)
-
 Data field: `nee_mean`
+
+References: SPL4CMDL [doi:https://doi.org/10.5067/9IKKQ4BL3PK8](https://doi.org/10.5067/9IKKQ4BL3PK8)

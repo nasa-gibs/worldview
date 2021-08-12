@@ -8,7 +8,7 @@
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
-                    "description": "sedac/FloodHazard",
+                    "description": "",
                     "image": "",
                     "settings": [
                       "NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
