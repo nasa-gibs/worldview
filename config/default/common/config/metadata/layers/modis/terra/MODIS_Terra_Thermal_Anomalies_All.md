@@ -4,4 +4,4 @@ The MODIS Fire and Thermal Anomalies layer shows active fire detections and ther
 
 The MODIS Fire and Thermal Anomalies product is available from the Terra (MOD14) and Aqua (MYD14) satellites as well as a combined Terra and Aqua (MCD14) satellite product. The sensor resolution is 1 km, and the temporal resolution is daily. The thermal anomalies are represented as points (approximate center of a 1 km pixel) in the Global Imagery Browse Services (GIBS)/Worldview.
 
-References: [MOD14](https://modaps.modaps.eosdis.nasa.gov/services/about/products/c6-nrt/MOD14.html); [MYD14](https://modaps.modaps.eosdis.nasa.gov/services/about/products/c6-nrt/MYD14.html); [FIRMS Near Real-Time MODIS Active Fire Data](https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms/active-fire-data); [MODIS Collection 6 Active Fire Product User’s Guide](https://cdn.earthdata.nasa.gov/conduit/upload/3865/MODIS_C6_Fire_User_Guide_A.pdf)
+References: MOD14.NRT [doi:10.5067/MODIS/MOD14.NRT.061](https://doi.org/10.5067/MODIS/MOD14.NRT.061); MOD14 [doi:10.5067/MODIS/MOD14.061](https://doi.org/10.5067/MODIS/MOD14.061)
