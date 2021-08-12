@@ -4,6 +4,6 @@ Within the image, green indicates that Sigma0 observations have acceptable quali
 
 Data field: `sigma0_qual_flag_hh`
 
-References: SPL3SMA [doi:10.5067/IGQNPB6183ZX]](https://doi.org/10.5067/IGQNPB6183ZX)
+References: SPL3SMA [doi:10.5067/IGQNPB6183ZX](https://doi.org/10.5067/IGQNPB6183ZX)
 
 

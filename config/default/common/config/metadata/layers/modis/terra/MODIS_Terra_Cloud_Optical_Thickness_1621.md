@@ -1,5 +1,5 @@
-**4 May 2021 Notice**: The MODIS instrument aboard the Terra satellite experienced a Printed Wire Assembly (PWA) failure on 5 October 2020. This has resulted in a reduction in the overall Terra daytime coverage and many of the MODIS/Terra imagery layers have a slightly jagged appearance at the poles. This issue will affect land daytime MODIS/Terra products that primarily rely on the Reflective Solar Bands (RSB) (i.e. visible bands) indefinitely. [Learn more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/displayCase.cgi?esdt=MOD&caseNum=PM_MOD_20280&caseLocation=cases_data&type=C6).
+The MODIS Cloud Optical Thickness (1.6 microns, 1621 Algorithm) layer is a measure of the amount of sunlight affected by absorption and scattering when passing through the clouds using Band 6 (1.6 μm) and Band 7 (2.1 μm). Clouds scatter and reflect most visible light.
 
----
+The MODIS Cloud Optical Thickness layers are available from both the Terra (MOD06) and Aqua (MYD06) satellites for daytime overpasses. The sensor/algorithm resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud)
+References: MOD06_L2 NRT [doi:10.5067/MODIS/MOD06_L2.NRT.061](https://doi.org/10.5067/MODIS/MOD06_L2.NRT.061); MOD06_L2 [doi:10.5067/MODIS/MOD06_L2.061](https://doi.org/10.5067/MODIS/MOD06_L2.061); [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud)
