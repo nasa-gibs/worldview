@@ -8,7 +8,7 @@
                   "Aqua and Terra/MODIS": {
                       "id": "aqua-terra-modis",
                       "title": "Aqua and Terra/MODIS",
-                      "description": "modis/LandCover",
+                      "description": "",
                       "image": "",
                       "settings": [
                           "MODIS_Combined_L3_IGBP_Land_Cover_Type_Annual"
@@ -17,7 +17,7 @@
                   "Terra/MODIS": {
                       "id": "terra-modis",
                       "title": "Terra/MODIS",
-                      "description": "modis/LandWaterMask",
+                      "description": "",
                       "image": "",
                       "settings": [
                         "MODIS_Terra_L3_Land_Water_Mask"
