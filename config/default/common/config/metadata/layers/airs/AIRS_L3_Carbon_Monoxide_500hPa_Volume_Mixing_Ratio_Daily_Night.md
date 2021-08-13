@@ -2,7 +2,6 @@ The Carbon Monoxide (L3, 500hPa, Night, Daily) layer displays carbon monoxide in
 
 #### Data Product
 Science Quality Product: `AIRS3STD` (AIRS-Only Level 3 Daily Standard Product)<br>
-Field name: `COVMRLevStd`; pressure level is at element 7<br>
 Resolution: 1 X 1 degree
 
 #### Coverage
