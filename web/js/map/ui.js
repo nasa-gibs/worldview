@@ -26,6 +26,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import * as olProj from 'ol/proj';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import Cache from 'cachai';
+import Queue from 'promise-queue';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
@@ -78,6 +79,7 @@ export default function mapui(models, config, store, ui) {
     duration: animationDuration,
   });
   const cache = new Cache(400);
+  const layerQueue = new Queue(5, Infinity);
   const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
   const self = {
     cache,
@@ -197,7 +199,7 @@ export default function mapui(models, config, store, ui) {
       case dateConstants.CHANGE_INTERVAL:
         return preloadNextTiles();
       case dateConstants.SELECT_DATE: {
-        updateDate().then(preloadNextTiles);
+        layerQueue.add(updateDate).then(preloadNextTiles);
         break;
       }
       case dateConstants.ARROW_DOWN:
@@ -702,6 +704,7 @@ export default function mapui(models, config, store, ui) {
     layer.setOpacity(action.opacity);
     updateLayerVisibilities();
   }
+
   /*
    *Initiates the adding of a layer or Graticule
    *
@@ -712,7 +715,6 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-
   function addLayer(def, date, activeLayers) {
     const state = store.getState();
     const { compare } = state;
@@ -873,11 +875,14 @@ export default function mapui(models, config, store, ui) {
         lastPreloadDate: subsequentDate,
       });
       await promiseImageryForTime(state, subsequentDate, useActiveString);
+      self.selected.getView().changed();
       return;
     }
 
     await promiseImageryForTime(state, nextDate, useActiveString);
     await promiseImageryForTime(state, prevDate, useActiveString);
+    self.selected.getView().changed();
+
     if (!date && !arrowDown) {
       preloadNextTiles(nextDate, useActiveString);
       preloadNextTiles(prevDate, useActiveString);
