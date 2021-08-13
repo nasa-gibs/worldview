@@ -30,7 +30,7 @@
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/RelativeHumidity",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MERRA2_Relative_Humidity_After_Moist_700hPa_Monthly"
