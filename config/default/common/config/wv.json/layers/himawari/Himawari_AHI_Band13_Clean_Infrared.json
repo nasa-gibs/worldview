@@ -18,7 +18,7 @@
         "night"
       ],
       "availability": {
-        "rollingWindow": 90,
+        "rollingWindow": 30,
         "historicalRanges": [
           {
             "startDate": "2020-01-03",
