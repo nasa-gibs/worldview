@@ -2,6 +2,4 @@ The ISS LIS Flash Radiance layer provides the radiance of lightning flashes meas
 
 ISS LIS supplies near real-time lightning data over data-sparse regions, such as oceans, to support operational weather forecasting and warning. ISS LIS standard science products are available at GHRC DAAC.
 
-The Lightning Imaging Sensor (LIS) was placed on the International Space Station in Feb 2017. LIS is mounted to the station as part of the U.S. Department of Defense (DoD) Space Test Program (STP)-H5 science and technology development payload. By placing LIS on the space station, which has a highly inclined orbit, a greater geographic range of measurements are obtained than previously measured by TRMM LIS.
-
-References: [GHRC: About ISS LIS Data](https://lance.nsstc.nasa.gov/iss-lis/index.html)
+References: isslis_v1_nrt [doi:10.5067/LIS/ISSLIS/DATA106](https://doi.org/10.5067/LIS/ISSLIS/DATA106); isslis_v1_fin [doi:10.5067/LIS/ISSLIS/DATA108](https://doi.org/10.5067/LIS/ISSLIS/DATA108)

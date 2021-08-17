@@ -1,1 +1,3 @@
+The Digital Derived Lightning (Level 2, Standard) layer is created from the OLS Digital Derived Lightning from DMSP F12 dataset. It consists of global lightning signatures from the Defense Meteorological Satellite Program (DMSP) Operational Linescan System (OLS) flown on DMSP 5D-2/F12 that have been analyzed from the visible channel imagery. These signatures show up as horizontal streaks on the images. The time and location of each of these streaks have been extracted and are stored by month in HDF data files. Data are available from May 1, 1995 through November 30, 1995.
 
+References: olsdig12 [doi:10.5067/LIS/OLS/DATA303](https://doi.org/10.5067/LIS/OLS/DATA303)

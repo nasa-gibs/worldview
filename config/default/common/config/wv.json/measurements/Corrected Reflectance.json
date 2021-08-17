@@ -19,7 +19,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/CorrectedReflectance",
+                    "description": "modis/terra/CorrectedReflectance",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_CorrectedReflectance_TrueColor",

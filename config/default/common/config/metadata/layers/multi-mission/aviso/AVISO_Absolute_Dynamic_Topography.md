@@ -1,3 +1,3 @@
 The Absolute Dynamic Topography (AVISO ADT) layer is based on the absolute dynamic topography data (similar to sea level but with respect to the geoid), on monthly 1 degree grids. These data were generated to help support the CMIP5 (Coupled Model Intercomparison Project Phase 5) portion of PCMDI (Program for Climate Model Diagnosis and Intercomparison). The dynamic topograhy are from sea surface height measured by several satellites, Envisat, TOPEX/Poseidon, Jason-1 and OSTM/Jason-2 and referenced to the geoid.
 
-References: [AVISO Level 4 Absolute Dynamic Topography for Climate Model Comparison](https://podaac.jpl.nasa.gov/dataset/AVISO_L4_DYN_TOPO_1DEG_1MO)
+References: AVISO_L4_DYN_TOPO_1DEG_1MO [doi:10.5067/DYNTO-1D1M1](https://doi.org/10.5067/DYNTO-1D1M1)

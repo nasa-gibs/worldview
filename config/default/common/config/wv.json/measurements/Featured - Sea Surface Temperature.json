@@ -8,7 +8,7 @@
         "Multi-mission/GHRSST": {
           "id": "multi-mission-ghrsst",
           "title": "Multi-mission/GHRSST",
-          "description": "multi-mission/ghrsst/SeaSurfaceTemperature",
+          "description": "multi-mission/ghrsst/GHRSST",
           "image": "",
           "settings": [
             "GHRSST_L4_MUR_Sea_Surface_Temperature",
@@ -18,7 +18,7 @@
         "Terra/MODIS": {
             "id": "terra-modis",
             "title": "Terra/MODIS",
-            "description": "modis/terra/SeaSurfaceTemperature",
+            "description": "",
             "image": "",
             "settings": [
               "MODIS_Terra_L2_Sea_Surface_Temp_Day",
@@ -30,11 +30,11 @@
         "Aqua/MODIS": {
             "id": "aqua-modis",
             "title": "Aqua/MODIS",
-            "description": "modis/aqua/SeaSurfaceTemperature",
+            "description": "",
             "image": "",
             "settings": [
                 "MODIS_Aqua_L2_Sea_Surface_Temp_Day",
-                "MODIS_Aqua_L2_Sea_Surface_Temp_Night",  
+                "MODIS_Aqua_L2_Sea_Surface_Temp_Night",
                 "OrbitTracks_Aqua_Ascending",
                 "OrbitTracks_Aqua_Descending"
             ]
@@ -42,7 +42,7 @@
         "Suomi NPP/VIIRS": {
             "id": "suomi-npp-viirs",
             "title": "Suomi NPP/VIIRS",
-            "description": "viirs/SeaSurfaceTemperature",
+            "description": "",
             "image": "",
             "settings": [
                 "VIIRS_SNPP_L2_Sea_Surface_Temp_Day",
