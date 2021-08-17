@@ -1,7 +1,7 @@
-#### About Total Cloud Fraction
+### About Total Cloud Fraction
 Total Cloud Fraction is the product of cloud fractional coverage and cloud infrared emissivity. Low fraction can indicate either small, highly emissive clouds or more extensive but less emissive clouds. While AIRS can sense up to two cloud decks in a column of atmosphere, this plot shows the cloud fraction of all cloud decks present.
 
-#### About AIRS
+### About AIRS
 AIRS, in conjunction with the Advanced Microwave Sounding Unit (AMSU), senses emitted infrared and microwave radiation from Earth to provide a three-dimensional look at Earth's weather and climate. Working in tandem, the two instruments make simultaneous observations down to Earth's surface. With more than 2,000 channels sensing different regions of the atmosphere, the system creates a global, three-dimensional map of atmospheric temperature and humidity, cloud amounts and heights, greenhouse gas concentrations and many other atmospheric phenomena. Launched into Earth orbit in 2002, the AIRS and AMSU instruments fly onboard NASA's Aqua spacecraft and are managed by NASA's Jet Propulsion Laboratory in Pasadena, California.
 
 More information about AIRS can be found at [https://airs.jpl.nasa.gov](https://airs.jpl.nasa.gov).

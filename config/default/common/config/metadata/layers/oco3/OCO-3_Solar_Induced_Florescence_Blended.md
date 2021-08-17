@@ -1,1 +1,1 @@
-References: [OCO3\_L2\_Lite\_SIF: OCO-3 Level 2 bias-corrected solar-induced fluorescence and other select fields from the IMAP-DOAS algorithm aggregated as daily files, Retrospective processing VEarlyR](https://disc.gsfc.nasa.gov/datasets/OCO3_L2_Lite_SIF_EarlyR/summary?keywords=OCO3_L2_Lite_SIF_EarlyR)
+The OCO-3 Solar Induced Chlorophyll Fluorescence (Blended) layer displays the fluorescence emission from land surfaces derived from in-filling of solar Fraunhofer lines at the 757 nm and 771 nm regions of the measured spectrum.
