@@ -1,11 +1,5 @@
-**4 May 2021 Notice**: The MODIS instrument aboard the Terra satellite experienced a Printed Wire Assembly (PWA) failure on 5 October 2020. This has resulted in a reduction in the overall Terra daytime coverage and many of the MODIS/Terra imagery layers have a slightly jagged appearance at the poles. This issue will affect land daytime MODIS/Terra products that primarily rely on the Reflective Solar Bands (RSB) (i.e. visible bands) indefinitely. [Learn more about the issue](https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/displayCase.cgi?esdt=MOD&caseNum=PM_MOD_20280&caseLocation=cases_data&type=C6).
-
----
-
 The MODIS Sea Ice extent layer shows the presence of sea ice. Ice forms in the sea when air and sea temperatures are consistently cold.  Some areas of the sea in the world are consistently covered in sea ice and the sea ice even builds up to form multi year ice packs, some areas only form sea ice in the winter. The presence of sea ice changes the normally dark blue ocean into solid white ice. This has an effect on the weather and Earth’s climate. Sunlight that would normally be absorbed by the dark blue ocean is now reflected back by the ice, increasing the surface albedo. Sea ice regulates the amount of heat that escapes the ocean surface to warm the atmosphere. For near real-time applications, MODIS Sea Ice layer is useful for assessing the presence of sea ice in the ocean and other large water bodies. The presence of sea ice prohibits the passage of ships through the waters and an ice breaker vessel may be required to break up the ice before a ship may pass.
 
 The MODIS Sea Ice product is available from both the Terra (MOD29) and Aqua (MYD29) satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
-
-NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.
 
 References: MOD29 [doi:10.5067/MODIS/MOD29.061](https://doi.org/10.5067/MODIS/MOD29.061); [NASA Earth Observations - Sea Ice and Snow Extent](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=SCSIE_W)

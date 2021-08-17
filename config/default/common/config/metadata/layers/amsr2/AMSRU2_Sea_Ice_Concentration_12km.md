@@ -6,4 +6,4 @@ The AMSR2 instrument is a conically scanning passive microwave radiometer. This 
 
 This product uses the JAXA AMSR2 Level-1R input TBs which are calibrated (unified) across the JAXA AMSR-E and AMSR2 Level-1R products.
 
-References: [AMSR-E/AMSR2 Unified L3 Daily 12.5 km Brightness Temperatures, Sea Ice Concentration, Motion & Snow Depth Polar Grids, Version 1](https://nsidc.org/data/AU_SI12/)
+References: AU_SI12 [doi:10.5067/RA1MIJOYPK3P](https://doi.org/10.5067/RA1MIJOYPK3P)
