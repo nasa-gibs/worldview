@@ -21,7 +21,7 @@
                     "SMAP/Radiometer": {
                         "id": "smap-radiometer",
                         "title": "SMAP/Radiometer",
-                        "description": "smap/SeaSurfaceSalinity",
+                        "description": "",
                         "image": "",
                         "settings": [
                           "SMAP_L3_Sea_Surface_Salinity_REMSS_Monthly",

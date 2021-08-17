@@ -2,4 +2,4 @@ The Sea Surface Height Anomalies (GDR Cycles) layer displays along track Sea Sur
 
 The sensor/algorithm resolution is 11.2 km along track and 5.1 km across track, imagery resolution is 2 km. The temporal resolution of the imagery is 10 days. The imagery latency is approximately 4 months.
 
-References: [doi:10.5067/ALTCY-TJA50](https://doi.org/10.5067/ALTCY-TJA50)
+References: MERGED_TP_J1_OSTM_OST_CYCLES_V50 [doi:10.5067/ALTCY-TJA50](https://doi.org/10.5067/ALTCY-TJA50)
