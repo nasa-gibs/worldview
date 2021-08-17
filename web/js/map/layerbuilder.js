@@ -49,12 +49,13 @@ export default function mapLayerBuilder(config, cache, store) {
   const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
     const layer = createLayerFunc(def, options, null, state, attributes);
+    layer.wv = attributes;
     if (!wrapLayer) {
       return layer;
     }
     const layerNext = createLayerFunc(def, options, 1, state, attributes);
     const layerPrior = createLayerFunc(def, options, -1, state, attributes);
-    layer.wv = attributes;
+
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
     return new OlLayerGroup({
