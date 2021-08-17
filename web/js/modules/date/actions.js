@@ -57,7 +57,7 @@ export function initSecondDate() {
 export function selectDate(date) {
   return (dispatch, getState) => {
     const state = getState();
-    const { lastArrowDirection } = state.date;
+    const { lastArrowDirection, preloaded } = state.date;
     const activeString = state.compare.isCompareA ? 'selected' : 'selectedB';
     const prevDate = getSelectedDate(state);
     const maxDate = getMaxActiveLayersDate(state);
@@ -65,7 +65,7 @@ export function selectDate(date) {
     const direction = selectedDate > prevDate ? 'right' : 'left';
     const directionChange = direction && lastArrowDirection !== direction;
 
-    if (directionChange || outOfStepChange(state, selectedDate)) {
+    if (preloaded && (directionChange || outOfStepChange(state, selectedDate))) {
       dispatch(clearPreload());
     }
     dispatch({
