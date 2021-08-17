@@ -1,17 +1,4 @@
-### Ozone (DOAS)
-Temporal Coverage: 1 October 2004 - Present
+### About Ozone
+Ozone (O3) plays important roles in atmospheric chemistry and radiative balance throughout the atmosphere. Chemically, it is a powerful oxidant. Radiatively, it is an important greenhouse gas, particularly at 10 to 15 km. At the Earth's surface, it is a toxic component of air pollution with significant public health and agricultural impacts. The stratospheric ozone layer from 15 to 50 km absorbs UV radiation, protecting life at the surface and, through heating by the absorbed radiation, largely determines the temperature structure of the middle atmosphere.
 
-The OMI Total Ozone Differential Optical Absorption Spectroscopy (DOAS) layer indicates the total ozone column and is measured in Dobson Units (DU). The Ozone Monitoring Instrument (OMI) Level-3 total ozone DOAS product (OMDOAO3e) product is one of two total ozone products provided by the OMI instrument and is calculated with the DOAS technique using a 5-nm spectral fitting window centered around 341 nm. The DOAS technique that has been widely used to measure trace gases from the ground. This ozone column is estimated from longer wavelengths than those used in the TOMS algorithm. In principle, DOAS is less sensitive to disturbing effects by absorbing aerosols, SO2, and calibration errors than the TOMS algorithm.
-
-The OMDOA3e product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km, and a sensor/algorithm resolution of 0.25 x 0.25 degrees.
-
-References: [OMDOAO3e README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMDOAO3e.003/doc/OMDOAO3e_OSIPS_README_V003.doc); [ATBD II](https://eospso.gsfc.nasa.gov/sites/default/files/atbd/ATBD-OMI-02.pdf); [doi: 10.5067/Aura/OMI/DATA3005](https://disc.gsfc.nasa.gov/datacollection/OMDOAO3e_V003.html); [KNMI: Ozone](http://projects.knmi.nl/omi/research/product/product_generator.php?info=page&product=Ozone&flavour=OMDOAO3&long=DOAS%20Total%20Ozone%20column)
-
-### Ozone (TOMS-Like)
-Temporal Coverage: 1 October 2004 - Present
-
-The OMI Ozone (TOMS-Like) layer indicates the total ozone column and is measured in Dobson Units (DU). The OMTO3 product is one of two total ozone products provided by the OMI instrument and is calculated using the Total Ozone Mapping Spectrometer (TOMS) Version-8 algorithm using UV radiance measurements 317.5 and 331.2 nm. The TOMS data record goes back 25 years and this layer provides continuity to that data record.
-
-The Ozone Monitoring Instrument (OMI) Level-3 total ozone product (OMTO3e) product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km, and sensor/algorithm resolution of 0.25 x 0.25 degrees.
-
-References: [OMTO3e README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMTO3e.003/doc/OMTO3e_OSIPS_README_V003.doc); [doi: 10.5067/Aura/OMI/DATA3002](https://disc.gsfc.nasa.gov/datacollection/OMTO3e_V003.html)
+Ozone is a critical player in all three of the primary objectives of MLS: to track stability of the stratospheric ozone layer, to help improve predictions of climate change and variability, and to help improve understanding of global air quality. MLS ozone measurements contribute to understanding of processes that control the expected recovery of the ozone layer as abundances of human-produced, ozone depleting substances decline in the coming decades. Ozone, particularly in the upper troposphere (10 to 15 km), is an important greenhouse gas. While MLS does not measure ozone down to the Earth's surface, MLS measurements can be used to improve the vertical resolution of other sensors on the Aura satellite, allowing mid- and lower-tropospheric ozone to be distinguished from the large amounts of ozone in the stratosphere and upper troposphere. In the upper troposphere, ozone levels provide important information about the history of air parcels, with high ozone generally indicating descent from above and low ozone ascent from below.
