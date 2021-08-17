@@ -119,8 +119,7 @@ class Timeline extends React.Component {
 
     // left/right arrows
     const throttleSettings = { leading: true, trailing: false };
-    this.throttleSelectDate = lodashThrottle(selectDate, 100, throttleSettings);
-    this.debounceDraggerDateUpdate = lodashDebounce(this.onDateChange, 200);
+    this.debounceDateUpdate = lodashDebounce(selectDate, 8);
 
     // animation dragger updates
     this.debounceOnUpdateStartDate = lodashDebounce(onUpdateStartDate, 30);
@@ -748,7 +747,7 @@ class Timeline extends React.Component {
         draggerTimeState: newDate || draggerTimeState,
       });
       if (newDate) {
-        this.debounceDraggerDateUpdate(newDate, 'selected');
+        this.onDateChange(newDate, 'selected');
       }
     } else {
       this.setState({
@@ -758,7 +757,7 @@ class Timeline extends React.Component {
         draggerTimeStateB: newDate || draggerTimeStateB,
       });
       if (newDate) {
-        this.debounceDraggerDateUpdate(newDate, 'selectedB');
+        this.onDateChange(newDate, 'selectedB');
       }
     }
   }
@@ -886,7 +885,7 @@ class Timeline extends React.Component {
         draggerTimeStateB: dateISOFormatted,
       });
     }
-    this.throttleSelectDate(dateObj, draggerSelected);
+    this.debounceDateUpdate(dateObj, draggerSelected);
   }
 
   handleSelectNowButton = () => {
