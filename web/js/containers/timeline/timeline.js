@@ -939,6 +939,50 @@ class Timeline extends React.Component {
     };
   }
 
+  renderDateChangeArrows = () => {
+    const {
+      isMobile, leftArrowDisabled, rightArrowDisabled, nowButtonDisabled,
+    } = this.props;
+    return (
+      <DateChangeArrows
+        leftArrowDown={() => this.handleArrowDateChange(-1)}
+        leftArrowDisabled={leftArrowDisabled}
+        isMobile={isMobile}
+        rightArrowDown={() => this.handleArrowDateChange(1)}
+        rightArrowDisabled={rightArrowDisabled}
+        nowButtonDisabled={nowButtonDisabled}
+        handleSelectNowButton={this.handleSelectNowButton}
+      />
+    );
+  }
+
+  renderMobile() {
+    const {
+      isMobile, timelineStartDateLimit, timelineEndDateLimit, hasSubdailyLayers, selectedDate,
+    } = this.props;
+    return (
+      <div id="timeline-header" className="timeline-header-mobile">
+        <MobileDatePicker
+          date={selectedDate}
+          startDateLimit={timelineStartDateLimit}
+          endDateLimit={timelineEndDateLimit}
+          onDateChange={this.onDateChange}
+          hasSubdailyLayers={hasSubdailyLayers}
+          isMobile={isMobile}
+        />
+        <MobileComparisonToggle />
+        <div
+          className="mobile-date-change-arrows-btn"
+          style={this.getMobileDateButtonStyle()}
+        >
+          <div id="zoom-buttons-group">
+            {this.renderDateChangeArrows()}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const {
       activeLayers,
@@ -965,10 +1009,8 @@ class Timeline extends React.Component {
       isEmbedModeActive,
       isMobile,
       isTourActive,
-      leftArrowDisabled,
-      nowButtonDisabled,
       parentOffset,
-      rightArrowDisabled,
+      selectedDate,
       timelineCustomModalOpen,
       timelineEndDateLimit,
       timelineStartDateLimit,
@@ -1006,9 +1048,6 @@ class Timeline extends React.Component {
       timelineHidden,
       transformX,
     } = this.state;
-    const selectedDate = draggerSelected === 'selected'
-      ? draggerTimeState
-      : draggerTimeStateB;
     const selectedDraggerPosition = draggerSelected === 'selected'
       ? draggerPosition
       : draggerPositionB;
@@ -1026,18 +1065,6 @@ class Timeline extends React.Component {
       display: isDistractionFreeModeActive ? 'none' : 'block',
     };
 
-    const renderDateChangeArrows = () => (
-      <DateChangeArrows
-        leftArrowDown={() => this.handleArrowDateChange(-1)}
-        leftArrowDisabled={leftArrowDisabled}
-        isMobile={isMobile}
-        rightArrowDown={() => this.handleArrowDateChange(1)}
-        rightArrowDisabled={rightArrowDisabled}
-        nowButtonDisabled={nowButtonDisabled}
-        handleSelectNowButton={this.handleSelectNowButton}
-      />
-    );
-
     return (
       <>
         <div
@@ -1049,27 +1076,7 @@ class Timeline extends React.Component {
             <ErrorBoundary>
               {isMobile || isEmbedModeActive
               /* Mobile Timeline Size */
-                ? (
-                  <div id="timeline-header" className="timeline-header-mobile">
-                    <MobileDatePicker
-                      date={selectedDate}
-                      startDateLimit={timelineStartDateLimit}
-                      endDateLimit={timelineEndDateLimit}
-                      onDateChange={this.onDateChange}
-                      hasSubdailyLayers={hasSubdailyLayers}
-                      isMobile={isMobile}
-                    />
-                    <MobileComparisonToggle />
-                    <div
-                      className="mobile-date-change-arrows-btn"
-                      style={this.getMobileDateButtonStyle()}
-                    >
-                      <div id="zoom-buttons-group">
-                        {renderDateChangeArrows()}
-                      </div>
-                    </div>
-                  </div>
-                )
+                ? this.renderMobile()
                 /* Normal Timeline Size */
                 : !isDistractionFreeModeActive && (
                   <section id="timeline" className="timeline-inner clearfix">
@@ -1100,7 +1107,7 @@ class Timeline extends React.Component {
                           timeScaleChangeUnit={timeScaleChangeUnit}
                           hasSubdailyLayers={hasSubdailyLayers}
                         />
-                        {renderDateChangeArrows()}
+                        {this.renderDateChangeArrows()}
                       </div>
                       <AnimationButton
                         clickAnimationButton={this.clickAnimationButton}
