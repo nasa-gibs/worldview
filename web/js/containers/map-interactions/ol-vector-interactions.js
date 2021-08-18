@@ -69,9 +69,9 @@ export class VectorInteractions extends React.Component {
 
   singleClick(e, map) {
     const {
-      lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
-      modalState, getDialogObject, measureIsActive, isMobile, activeLayers,
-      activateVectorAlert, proj,
+      browser, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
+      modalState, getDialogObject, measureIsActive, activeLayers,
+      activateVectorAlert, proj, isEmbedModeActive,
     } = this.props;
 
     if (measureIsActive) return;
@@ -90,7 +90,7 @@ export class VectorInteractions extends React.Component {
     }
 
     if (metaArray.length) {
-      openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, isMobile);
+      openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive);
     } else {
       const mapRes = map.getView().getResolution();
       const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
@@ -114,7 +114,7 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj, ui,
+    modal, map, measure, vectorStyles, browser, compare, proj, ui, embed,
   } = state;
   let swipeOffset;
   const activeLayers = getActiveLayers(state);
@@ -124,19 +124,22 @@ function mapStateToProps(state) {
   }
 
   return {
-    modalState: modal,
-    isShowingClick: map.isClickable,
-    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    activeLayers,
+    browser,
+    compareState: compare,
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
+    isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
+    isEmbedModeActive: embed.isEmbedModeActive,
+    isShowingClick: map.isClickable,
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
-    isMobile: browser.lessThan.medium,
-    compareState: compare,
-    swipeOffset,
+    modalState: modal,
     proj,
-    activeLayers,
+    swipeOffset,
   };
-} const mapDispatchToProps = (dispatch) => ({
+}
+
+const mapDispatchToProps = (dispatch) => ({
   selectVectorFeatures: (features) => {
     setTimeout(() => {
       dispatch(selectVectorFeaturesActionCreator(features));
@@ -152,8 +155,11 @@ function mapStateToProps(state) {
     dispatch(onClose());
   },
   activateVectorAlert: () => dispatch({ type: ACTIVATE_VECTOR_ALERT }),
-  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, isMobile) => {
+  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive) => {
+    const { screenHeight, screenWidth } = browser;
+    const isMobile = browser.lessThan.medium;
     const dialogKey = new Date().getUTCMilliseconds();
+    const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -161,15 +167,15 @@ function mapStateToProps(state) {
         desktopOnly: false,
         isDraggable: !isMobile,
         wrapClassName: 'vector-modal-wrap',
-        modalClassName: 'vector-modal light',
+        modalClassName,
         CompletelyCustomModal: vectorDialog,
         isResizable: !isMobile,
         dragHandle: '.modal-header',
         dialogKey,
         key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
-        width: isMobile ? 320 : 445,
-        height: 300,
+        width: isMobile ? screenWidth : 445,
+        height: isMobile ? screenHeight : 300,
         offsetLeft: isMobile ? 0 : offsetLeft,
         offsetTop: isMobile ? 40 : offsetTop,
         timeout: 0,
@@ -191,13 +197,14 @@ VectorInteractions.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
+  activateVectorAlert: PropTypes.func,
+  activeLayers: PropTypes.array,
+  browser: PropTypes.object,
   compareState: PropTypes.object,
-  isMobile: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   lastSelected: PropTypes.object,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,
-  activeLayers: PropTypes.array,
-  activateVectorAlert: PropTypes.func,
 };
 
 export default connect(

@@ -202,3 +202,9 @@
     }
   }
 }
+
+/* MODAL (outside of main page #app ) */
+.modal-embed .modal-content {
+  transform: scale(0.85);
+  transform-origin: left;
+}
