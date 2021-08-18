@@ -8,7 +8,7 @@
               "IMERG": {
                   "id": "imerg",
                   "title": "IMERG",
-                  "description": "multi-mission/imerg/Precipitation",
+                  "description": "",
                   "image": "",
                   "settings": [
                       "IMERG_Precipitation_Rate"
@@ -17,7 +17,7 @@
                 "GPM/GMI": {
                     "id": "gpm-gmi",
                     "title": "GPM/GMI",
-                    "description": "gpm/PrecipitationRate",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GMI_Rain_Rate_Asc",
@@ -31,7 +31,7 @@
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
                     "title": "GCOM-W1/AMSR2",
-                    "description": "amsr2/PrecipitationRate",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "AMSRU2_Surface_Precipitation_Day",
@@ -45,7 +45,7 @@
                   "TRMM": {
                       "id": "trmm",
                       "title": "TRMM",
-                      "description": "trmm/PrecipitationRate",
+                      "description": "",
                       "image": "",
                       "settings": [
                           "TRMM_Precipitation_Rate_Asc",
@@ -55,7 +55,7 @@
                   "Aqua/AMSR-E": {
                       "id": "aqua-amsr-e",
                       "title": "Aqua/AMSR-E",
-                      "description": "amsre/SurfacePrecipitationRate",
+                      "description": "",
                       "image": "",
                       "settings": [
                           "AMSRE_Surface_Precipitation_Rate_Day",
@@ -69,7 +69,7 @@
                 "DMSP-F08/SSMI": {
                     "id": "dmsp-f08-ssmi",
                     "title": "DMSP-F08/SSMI",
-                    "description": "ssmi/RainRateOverOceansDMSP-F8",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F8_Rain_Rate_Over_Oceans_Ascending",
@@ -79,7 +79,7 @@
                 "DMSP-F10/SSMI": {
                     "id": "dmsp-f10-ssmi",
                     "title": "DMSP-F10/SSMI",
-                    "description": "ssmi/RainRateOverOceansDMSP-F10",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F10_Rain_Rate_Over_Oceans_Ascending",
@@ -89,7 +89,7 @@
                 "DMSP-F11/SSMI": {
                     "id": "dmsp-f11-ssmi",
                     "title": "DMSP-F11/SSMI",
-                    "description": "ssmi/RainRateOverOceansDMSP-F11",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F11_Rain_Rate_Over_Oceans_Ascending",
@@ -99,7 +99,7 @@
                 "DMSP-F13/SSMI": {
                     "id": "dmsp-f13-ssmi",
                     "title": "DMSP-F13/SSMI",
-                    "description": "ssmi/RainRateOverOceansDMSP-F13",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F13_Rain_Rate_Over_Oceans_Ascending",
@@ -109,7 +109,7 @@
                 "DMSP-F14/SSMI": {
                     "id": "dmsp-f14-ssmi",
                     "title": "DMSP-F14/SSMI",
-                    "description": "ssmi/RainRateOverOceansDMSP-F14",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F14_Rain_Rate_Over_Oceans_Ascending",
@@ -119,7 +119,7 @@
                 "DMSP-F15/SSMI": {
                     "id": "dmsp-f15-ssmi",
                     "title": "DMSP-F15/SSMI",
-                    "description": "ssmi/RainRateOverOceansDMSP-F15",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F15_Rain_Rate_Over_Oceans_Ascending",
@@ -129,7 +129,7 @@
                 "DMSP-F16/SSMIS": {
                     "id": "dmsp-f16-ssmis",
                     "title": "DMSP-F16/SSMIS",
-                    "description": "ssmi/RainRateOverOceansDMSP-F16",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F16_Rain_Rate_Over_Oceans_Ascending",
@@ -139,7 +139,7 @@
                 "DMSP-F17/SSMIS": {
                     "id": "dmsp-f17-ssmis",
                     "title": "DMSP-F17/SSMIS",
-                    "description": "ssmi/RainRateOverOceansDMSP-F17",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SSMI_DMSP_F17_Rain_Rate_Over_Oceans_Ascending",
@@ -149,7 +149,7 @@
                 "GLDAS": {
                     "id": "gldas",
                     "title": "GLDAS",
-                    "description": "ldas/GLDASPrecipitationRate",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "GLDAS_Surface_Total_Precipitation_Rate_Monthly"
@@ -158,7 +158,7 @@
                 "NLDAS": {
                     "id": "nldas",
                     "title": "NLDAS",
-                    "description": "ldas/NLDASPrecipitationTotal",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "NLDAS_Surface_Total_Precipitation_Primary_Monthly",
@@ -168,7 +168,7 @@
                 "Merged Microwave Radiometers": {
                     "id": "merged-microwave-radiometers",
                     "title": "Merged Microwave Radiometers",
-                    "description": "multi-mission/PrecipitableWaterOverIceFreeOceans",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "RSS_Total_Precipitable_Water_Climatology_Monthly"

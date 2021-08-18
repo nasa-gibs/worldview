@@ -1,1 +1,5 @@
-References: doi: [10.5067/AMSRU/AU_OCEAN_NRT_R01](https://doi.org/10.5067/AMSRU/AU_OCEAN_NRT_R01)
+The Total Precipitable Water (Night, Near Real-Time) layer displays precipitable water totals over the ocean in millimeters (mm).
+
+The Advanced Microwave Scanning Radiometer 2 (AMSR2) instrument on the Global Change Observation Mission - Water 1 (GCOM-W1) provides global passive microwave measurements of terrestrial, oceanic, and atmospheric parameters for the investigation of global water and energy cycles. The GCOM-W1 NRT AMSR2 Unified Global Swath Surface Precipitation GSFC Profiling Algorithm is a swath product containing global rain rate and type, calculated by the GPROF 2017 V2R rainfall retrieval algorithm using resampled NRT Level-1R data provided by JAXA. This is the same algorithm that generates the corresponding standard science products in the AMSR SIPS.
+
+References: AU_Ocean_NRT_R01 [doi:10.5067/AMSRU/AU_OCEAN_NRT_R01](https://doi.org/10.5067/AMSRU/AU_OCEAN_NRT_R01)
