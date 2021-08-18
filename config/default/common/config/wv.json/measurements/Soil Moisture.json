@@ -22,7 +22,7 @@
                 "CYGNSS/DDMI": {
                     "id": "cygnss-ddmi",
                     "title": "CYGNSS/DDMI",
-                    "description": "cygnss/SoilMoisture",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "CYGNSS_L3_Soil_Moisture_SDR_Daily"
@@ -31,7 +31,7 @@
               "GCOM-W1/AMSR2": {
                   "id": "gcom-w1-amsr2",
                   "title": "GCOM-W1/AMSR2",
-                  "description": "amsr2/SoilMoisture",
+                  "description": "",
                   "image": "",
                   "settings": [
                       "AMSRU2_Soil_Moisture_NPD_Day",
@@ -49,7 +49,7 @@
                 "SMAP/Radar": {
                     "id": "smap-radar",
                     "title": "SMAP/Radar",
-                    "description": "smap/SoilMoisture_L3_Active",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SMAP_L3_Active_Soil_Moisture"
@@ -58,7 +58,7 @@
                 "SMAP/Radiometer": {
                     "id": "smap-radiometer",
                     "title": "SMAP/Radiometer",
-                    "description": "smap/SoilMoisture_L2_L3_Passive",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SMAP_L2_Passive_Enhanced_Day_Soil_Moisture_Option1",
@@ -84,7 +84,7 @@
                 "SMAP/Sentinel-1": {
                     "id": "smap-sentinel1",
                     "title": "SMAP/Sentinel-1",
-                    "description": "smap/SoilMoisture_L2_SMAPandSentinel-1",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SMAP_Sentinel-1_L2_Active_Passive_Soil_Moisture"
@@ -93,7 +93,7 @@
                 "SMAP/Radar/Radiometer": {
                     "id": "smap-radar-radiometer",
                     "title": "SMAP/Radar/Radiometer",
-                    "description": "smap/SoilMoisture_L3_ActivePassive",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SMAP_L3_Active_Passive_Soil_Moisture"
@@ -102,7 +102,7 @@
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
                     "title": "SMAP/Model Value-Added",
-                    "description": "smap/SoilMoisture_Value-Added",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
@@ -114,7 +114,7 @@
                 "SAC-D/Aquarius": {
                     "id": "sac-d-aquarius",
                     "title": "SAC-D/Aquarius",
-                    "description": "aquarius/SoilMoisture",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "Aquarius_Soil_Moisture_Daily",
@@ -124,7 +124,7 @@
                 "GLDAS": {
                     "id": "gldas",
                     "title": "GLDAS",
-                    "description": "ldas/GLDASSoilMoisture",
+                    "description": "",
                     "image": "",
                     "settings": [
 			                  "GLDAS_Underground_Soil_Moisture_Monthly"
@@ -133,18 +133,18 @@
                 "NLDAS": {
                     "id": "nldas",
                     "title": "NLDAS",
-                    "description": "ldas/NLDASSoilMoisture",
+                    "description": "",
                     "image": "",
                     "settings": [
 			                  "NLDAS_Underground_Soil_Moisture_Mosaic_Monthly",
-                        "NLDAS_Underground_Soil_Moisture_Noah_Monthly",
-                        "NLDAS_Underground_Soil_Moisture_VIC_Monthly"
+                              "NLDAS_Underground_Soil_Moisture_Noah_Monthly",
+                              "NLDAS_Underground_Soil_Moisture_VIC_Monthly"
                     ]
                 },
                 "MERRA-2": {
                     "id": "merra2",
                     "title": "MERRA-2",
-                    "description": "merra/SoilWaterRootZone",
+                    "description": "",
                     "image": "",
                     "settings": [
 			                  "MERRA2_Soil_Water_Root_Zone_Monthly"

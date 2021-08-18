@@ -1,1 +1,2 @@
+### About Snow Water Equivalent
 Snow Water Equivalent indicates the quantity of water that is contained in snowpack and is fundamental for water resources management, weather forecasting, flash flood prediction and the study of water and energy cycles.

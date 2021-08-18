@@ -1,1 +1,5 @@
+The Clear Sky Outgoing Longwave Radiation (L3, Night, Daily) layer displays the clear sky outgoing longwave radiation and is measured in Watts per square meter (W/m<sup>2</sup>). The outgoing longwave flux is the upwelling thermal radiative flux, often called the "outgoing longwave radiation" or "OLR". In accordance with common usage in geophysical disciplines, "flux" implies per unit area, called "flux density" in physics. Longwave radiation has a spectral wavelength greater than 4 µm (4000 nanometers).
 
+The Atmospheric Infrared Sounder (AIRS) is a grating spectrometer (R = 1200) aboard the second Earth Observing System (EOS) polar-orbiting platform, EOS Aqua. In combination with the Advanced Microwave Sounding Unit (AMSU) and the Humidity Sounder for Brazil (HSB), AIRS constitutes an innovative atmospheric sounding group of visible, infrared, and microwave sensors.
+
+References: AIRS3STD [doi:10.5067/Aqua/AIRS/DATA303](https://doi.org/10.5067/Aqua/AIRS/DATA303)
