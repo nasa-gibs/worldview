@@ -36,12 +36,13 @@ class ModalContainer extends Component {
     this.onResize = this.onResize.bind(this);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const {
       isCustom,
       id,
       isOpen,
       customProps,
+      orientation,
       isMobile,
     } = this.props;
     // Populate props from custom obj
@@ -52,33 +53,23 @@ class ModalContainer extends Component {
       desktopOnly,
     } = newProps;
 
+    const orientationChanged = orientation !== prevProps.orientation;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-    if (isMobile && isOpen && desktopOnly) {
+    if ((isMobile && isOpen) && (desktopOnly || orientationChanged)) {
       toggleFunction();
     }
   }
 
   getStyle() {
     const {
-      isEmbedModeActive, screenHeight, screenWidth, isMobile,
+      isMobile,
     } = this.props;
     const {
       offsetLeft, offsetRight, offsetTop, width, height,
     } = this.state;
 
-    const top = (isMobile || isEmbedModeActive) && height ? screenHeight - height : offsetTop;
-    if (isEmbedModeActive) {
-      return {
-        left: 10,
-        top,
-        width: screenWidth - 10,
-        height,
-        maxHeight: height,
-        transform: 'scale(0.75)',
-        transformOrigin: 'left',
-      };
-    }
-
+    const top = isMobile ? 0 : offsetTop;
+    const margin = isMobile ? 0 : '0.5rem';
     return {
       left: offsetLeft,
       right: offsetRight,
@@ -86,6 +77,7 @@ class ModalContainer extends Component {
       width,
       height,
       maxHeight: height,
+      margin,
     };
   }
 
@@ -263,22 +255,22 @@ function mapStateToProps(state) {
     bodyTemplate = state[template];
     isTemplateModal = true;
   }
-  const { screenHeight, screenWidth, lessThan } = browser;
+  const { screenHeight, lessThan, orientation } = browser;
   const isMobile = lessThan.medium;
   const { isEmbedModeActive } = embed;
   return {
-    isOpen,
+    bodyTemplate,
     bodyText,
+    customProps,
     headerText,
-    isCustom,
     id,
+    isCustom,
     isEmbedModeActive,
     isMobile,
-    screenHeight,
-    screenWidth,
-    bodyTemplate,
+    isOpen,
     isTemplateModal,
-    customProps,
+    orientation,
+    screenHeight,
   };
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -291,9 +283,11 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(ModalContainer);
+
 ModalContainer.defaultProps = {
   customProps: {},
 };
+
 ModalContainer.propTypes = {
   bodyTemplate: PropTypes.object,
   customProps: PropTypes.object,
@@ -304,6 +298,6 @@ ModalContainer.propTypes = {
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
+  orientation: PropTypes.string,
   screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number,
 };
