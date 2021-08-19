@@ -67,7 +67,7 @@ describe('Date timescale changes', () => {
       expect(changeTimeScale(interval)).toEqual(expectedAction);
     });
 
-  test(`updateAppNow action returns ${UPDATE_APP_NOW}as type and ${mockDate} as value`,
+  test(`updateAppNow action returns ${UPDATE_APP_NOW} as type and ${mockDate} as value`,
     () => {
       const expectedAction = {
         type: UPDATE_APP_NOW,
@@ -76,7 +76,7 @@ describe('Date timescale changes', () => {
       expect(updateAppNow(mockDate)).toEqual(expectedAction);
     });
 
-  test(`selectDate action returns ${SELECT_DATE}as type and selected as activeString and ${mockDate} as value`,
+  test(`selectDate action returns ${SELECT_DATE} as type, 'selected' as activeString, and ${mockDate} as value`,
     () => {
       const expectedFirst = {
         type: CLEAR_PRELOAD,
@@ -90,7 +90,9 @@ describe('Date timescale changes', () => {
       let layers = addLayer('terra-cr', {}, [], config.layers, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
-        date: {},
+        date: {
+          preloaded: true,
+        },
         compare: {
           isCompareA: true,
           activeString: 'active',
@@ -123,7 +125,9 @@ describe('Date timescale changes', () => {
       let layers = addLayer('terra-cr', {}, [], config.layers, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
-        date: {},
+        date: {
+          preloaded: true,
+        },
         compare: {
           isCompareA: false,
           activeString: 'activeB',
