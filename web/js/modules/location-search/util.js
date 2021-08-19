@@ -11,6 +11,7 @@ import {
 import { containsXY } from 'ol/extent';
 import { coordinatesCRSTransform } from '../projection/util';
 import safeLocalStorage from '../../util/local-storage';
+import { fly } from '../../map/util';
 
 const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
 
@@ -21,17 +22,14 @@ const { LOCATION_SEARCH_COLLAPSED } = safeLocalStorage.keys;
  * @param {Array} coordinates
  * @param {Number} zoom
  */
-export function animateCoordinates(map, config, coordinates, zoom) {
-  const { projections } = config;
-  const { selected } = map.ui;
-  const { proj } = selected;
-  const { crs } = projections[proj];
+export function animateCoordinates(map, proj, coordinates, zoom) {
+  const { crs } = proj.selected;
 
   let [x, y] = coordinates;
   if (proj !== 'geographic') {
     [x, y] = coordinatesCRSTransform(coordinates, 'EPSG:4326', crs);
   }
-  map.ui.animate.fly([x, y], zoom);
+  fly(map, proj, [x, y], zoom);
 }
 
 /**
