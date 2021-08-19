@@ -55,7 +55,7 @@
                 "Landsat/WELD": {
                     "id": "landsat-weld",
                     "title": "Landsat/WELD",
-                    "description": "landsat/Reflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                        "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly",

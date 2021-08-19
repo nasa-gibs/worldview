@@ -8,7 +8,7 @@
                 "Terra/CERES": {
                     "id": "terra-ceres",
                     "title": "Terra/CERES",
-                    "description": "ceres/Terra_TOAFlux",
+                    "description": "ceres/CERES",
                     "image": "",
                     "settings": [
                       "CERES_EBAF_TOA_CRE_Net_Flux_Monthly",
@@ -33,7 +33,7 @@
                     "Aqua and Terra/CERES": {
                         "id": "aqua-terra-ceres",
                         "title": "Aqua and Terra/CERES",
-                        "description": "ceres/Combined_TOAFlux",
+                        "description": "ceres/CERES",
                         "image": "",
                         "settings": [
                           "CERES_Combined_TOA_Longwave_Flux_All_Sky_Monthly",

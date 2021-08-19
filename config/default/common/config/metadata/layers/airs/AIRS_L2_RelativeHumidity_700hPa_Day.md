@@ -5,7 +5,7 @@ The Relative Humidity (L2, 700 hPa, Day) layer displays relative humidity of the
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.<br>
-Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product Version 6)<br>
+Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product Version 7)<br>
 Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product Version 6)<br>
 Field name: `RelHum`; pressure level at element 5<br>
 Resolution: 45 km/pixel at nadir
@@ -16,5 +16,5 @@ Overpasses: Twice daily (day and night)<br>
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References
-Data Product: [AIRS2RET_NRT](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_NRT_006/summary); AIRS2RET [doi:10.5067/Aqua/AIRS/DATA202](https://doi.org/10.5067/Aqua/AIRS/DATA202)
+Data Product: AIRS2RET_NRT [doi:10.5067/RAEHAOH4VZM5](https://doi.org/10.5067/RAEHAOH4VZM5); AIRS2RET [doi:10.5067/Aqua/AIRS/DATA202](https://doi.org/10.5067/Aqua/AIRS/DATA202)
 

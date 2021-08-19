@@ -2,7 +2,7 @@ This NLDAS Soil Moisture is one of the model assimilated fields from the North A
 
 Soil Moisture is a science variable that controls the exchange of water and heat energy between the land surface and the atmosphere through evaporation and plant transpiration. As a result, soil moisture plays an important role in the development of weather patterns and the production of precipitation. The NLDAS Soil Moisture data can be used for supporting research and applications related to global water and energy cycle, drought and flood, and climatology, land surface assimilation, etc.
 
-The NLDAS Soil Moisture data are in 1/8th-degree grid spacing and the imagery resolution is 2 km, and the temporal resolution is monthly with a latency about 4 days.
+The NLDAS Soil Moisture data are in 1/8th-degree grid spacing and the imagery resolution is 2 km, and the temporal resolution is monthly.
 
 References: NLDAS_NOAH0125_M [doi:10.5067/NOXZSD0Z6JGD](https://doi.org/10.5067/NOXZSD0Z6JGD)
 

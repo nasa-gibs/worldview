@@ -10,3 +10,5 @@ If vegetation burns, bare soil in the area will become exposed. Burn scars appea
 Water will appear black. Sediments in water appear dark blue.
 
 The sensor resolution is 30 m with an imagery resolution is 31.25 m.
+
+References: GWELDYR [doi:10.5067/MEaSUREs/GWELD/GWELDYR.031](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDYR.031)

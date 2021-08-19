@@ -1,1 +1,0 @@
-References: [LP DAAC GWELDYR Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDYR.031); [LP DAAC GWELDMO Version 3.1](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDMO.031)
