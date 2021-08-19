@@ -5,8 +5,8 @@ The Total Cloud Fraction (Night) layer is the product of cloud fractional covera
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.<br>
-Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)<br>
-Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)<br>
+Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product Version 7)<br>
+Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product Version 6)<br>
 Field name: `CldFrcStd` (sum of 2 cloud decks)<br>
 Resolution: 13.5 km/pixel at nadir
 

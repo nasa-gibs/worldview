@@ -2,7 +2,7 @@ This NLDAS Precipitation Total parameter is one of the land-surface forcing fiel
 
 The NLDAS-2 monthly Precipitation Total is a science variable that indicates the amount of the monthly total precipitation (Liquid precipitation + Frozen precipitation).  The data can be used for supporting research and applications related to global water and energy cycle, drought and flood, climate variability, land surface assimilation, etc.
 
-The NLDAS Precipitation Total data are in 1/8th-degree grid spacing and the imagery resolution is 2 km, and the temporal resolution is monthly with a latency about 4 days.
+The NLDAS Precipitation Total data are in 1/8th-degree grid spacing and the imagery resolution is 2 km, and the temporal resolution is monthly.
 
 References: NLDAS_FORB0125_M [doi:10.5067/OCLG3PX8QDFL](https://doi.org/10.5067/OCLG3PX8QDFL)
 

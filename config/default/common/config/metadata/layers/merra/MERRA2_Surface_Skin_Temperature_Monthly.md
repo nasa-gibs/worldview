@@ -2,4 +2,4 @@ The Surface Skin Temperature (Monthly) layer is an atmospheric reanalysis produc
 
 This parameter (TS) was extracted from the product M2TMNXSLV.5.12.4 (Monthly mean, Time-Averaged, Single-Level, Assimilation, Single-Level Diagnostics).
 
-References: [Modern-Era Retrospective analysis for Research and Applications, Version 2 Documentation](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/docs/)
+References: M2TMNXSLV [doi:10.5067/AP1B0BA5PD2K](https://doi.org/10.5067/AP1B0BA5PD2K)

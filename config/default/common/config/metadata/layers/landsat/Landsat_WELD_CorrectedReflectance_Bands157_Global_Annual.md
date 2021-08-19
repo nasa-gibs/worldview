@@ -10,3 +10,5 @@ Vegetation will appear greenish in this band combination. Bare soil will appear 
 Liquid water on the ground will be very dark, but small liquid water drops in clouds will appear white. Sediments in water appear dark red.
 
 The sensor resolution is 30 m with an imagery resolution is 31.25 m.
+
+References: GWELDYR [doi:10.5067/MEaSUREs/GWELD/GWELDYR.031](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDYR.031)

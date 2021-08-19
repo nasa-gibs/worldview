@@ -4,4 +4,4 @@ The AMSR2 instrument is a conically scanning passive microwave radiometer. This 
 
 The imagery resolution is 2 km and sensor resolution is 6.25 km. The temporal resolution is daily.
 
-References: [Dataset doi:10.5067/AMSRU/AU_OCEAN_NRT_R01](https://doi.org/10.5067/AMSRU/AU_OCEAN_NRT_R01)
+References: AU_OCEAN_NRT [doi:10.5067/AMSRU/AU_OCEAN_NRT_R01](https://doi.org/10.5067/AMSRU/AU_OCEAN_NRT_R01)

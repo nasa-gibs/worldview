@@ -4,4 +4,4 @@ Water cycles through the Earth’s atmosphere in three states: solid (ice), liqu
 
 The MAIAC Columnar Water Vapor product combines data from Terra and Aqua satellites. The sensor resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [doi: 10.5067/MODIS/MCD19A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)
+References: MCD19A2N NRT [doi:10.5067/MODIS/MCD19A2N.NRT.006](https://doi.org/10.5067/MODIS/MCD19A2N.NRT.006)
