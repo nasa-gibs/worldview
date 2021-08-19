@@ -2,4 +2,4 @@ The OMI Ozone (TOMS-Like) layer indicates the total ozone column and is measured
 
 The Ozone Monitoring Instrument (OMI) Level-3 total ozone product (OMTO3e) product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km, and sensor/algorithm resolution of 0.25 x 0.25 degrees.
 
-References: OMTO3e [[doi:10.5067/Aura/OMI/DATA3002](https://doi.org/10.5067/Aura/OMI/DATA3002)
+References: OMTO3e [doi:10.5067/Aura/OMI/DATA3002](https://doi.org/10.5067/Aura/OMI/DATA3002)

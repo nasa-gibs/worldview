@@ -1,5 +1,5 @@
-#### About Carbon Monoxide
+### About Carbon Monoxide
 Carbon Monoxide (CO) is a trace gas produced by methane oxidation, fossil fuel consumption (emitted from factories and cars) and biomass burning (from forest fires and agricultural burning). These measurements are useful for analyzing the distribution, transport, sources and sinks of CO in the troposphere and can be used to observe how it interacts with land and ocean biospheres. CO hinders the atmosphere’s natural ability to rid itself of harmful pollutants.
 
-#### About MOPITT
+### About MOPITT
 Measurement of Pollution in the Troposphere (MOPITT) is an instrument flying on NASA's Earth Observing System Terra satellite, measuring tropospheric carbon monoxide (CO) on the global scale. MOPITT measurements enable scientists to analyze the distribution, transport, sources and sinks of CO, a trace gas produced by methane oxidation, fossil fuel consumption and biomass burning. MOPITT has been operational since March 2000. MOPITT’s spatial resolution is 22 km at nadir and it ‘sees’ the Earth in swaths that are 640 km wide. Moreover, it can measure the concentrations of carbon monoxide in 5-km layers down a vertical column of atmosphere, to help scientists track the gas back to its sources.

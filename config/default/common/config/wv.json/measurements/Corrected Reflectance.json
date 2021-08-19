@@ -31,7 +31,7 @@
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
-                    "description": "viirs/CorrectedReflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                 	"VIIRS_SNPP_CorrectedReflectance_TrueColor",
@@ -43,7 +43,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/CorrectedReflectance",
+                    "description": "",
                     "image": "",
                     "settings": [
                 	"VIIRS_NOAA20_CorrectedReflectance_TrueColor",
