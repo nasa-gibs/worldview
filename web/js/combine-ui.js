@@ -1,6 +1,5 @@
 import util from './util/util';
 import mapui from './map/ui';
-import mapAnimate from './map/animate';
 
 const { events } = util;
 
@@ -19,7 +18,6 @@ export default function combineUi(models, config, store) {
   };
   store.subscribe(subscribeToStore);
   ui.map = mapui(models, config, store, ui);
-  ui.map.animate = mapAnimate(config, ui, store);
   ui.supportsPassive = false;
   try {
     const opts = Object.defineProperty({}, 'passive', {
