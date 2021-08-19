@@ -241,6 +241,8 @@ export default function mapui(models, config, store, ui) {
       }, 100);
     });
     events.on('redux:action-dispatched', subscribeToStore);
+    events.on('map:reload-layers', reloadLayers);
+    events.on('map:update-date', updateDate);
     updateProjection(true);
   };
 
@@ -392,7 +394,7 @@ export default function mapui(models, config, store, ui) {
       const zoom = self.selected.getView().getZoom();
       const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
       const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
-      animateCoordinates({ ui: self }, config, coordinates, maxZoom);
+      animateCoordinates(self.selected, proj, coordinates, maxZoom);
     }
 
     // handle render initial tooltip
@@ -440,7 +442,6 @@ export default function mapui(models, config, store, ui) {
     const map = self.selected;
 
     const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-
     const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
 
@@ -470,7 +471,6 @@ export default function mapui(models, config, store, ui) {
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          const map = self.selected;
           const view = map.getView();
           const extent = view.calculateExtent(map.getSize());
           store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
@@ -478,7 +478,6 @@ export default function mapui(models, config, store, ui) {
       }
       if (projId !== 'geographic') {
         callback = () => {
-          const map = self.selected;
           const view = map.getView();
           view.setRotation(rotationStart);
         };
@@ -519,6 +518,7 @@ export default function mapui(models, config, store, ui) {
       map.addControl(map.wv.scaleMetric);
     }
   }
+
   /*
    * Hide Map
    *
@@ -532,6 +532,7 @@ export default function mapui(models, config, store, ui) {
   function hideMap(map) {
     document.getElementById(`${map.getTarget()}`).style.display = 'none';
   }
+
   /*
    * Show Map
    *
@@ -545,6 +546,7 @@ export default function mapui(models, config, store, ui) {
   function showMap(map) {
     document.getElementById(`${map.getTarget()}`).style.display = 'block';
   }
+
   /*
    * Remove Layers from map
    *
@@ -565,6 +567,7 @@ export default function mapui(models, config, store, ui) {
     });
     cache.clear();
   };
+
   /*
    * get layers from models obj
    * and add each layer to the map
@@ -576,7 +579,7 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const reloadLayers = self.reloadLayers = function(map) {
+  function reloadLayers(map) {
     map = map || self.selected;
     const state = store.getState();
     const { compare } = state;
@@ -614,7 +617,7 @@ export default function mapui(models, config, store, ui) {
       }
     }
     updateLayerVisibilities();
-  };
+  }
 
   /**
    * Create a Layergroup given the date and layerGroups
@@ -897,7 +900,6 @@ export default function mapui(models, config, store, ui) {
       preloadNextTiles(selectedB, 'activeB');
     }
   }
-
 
   async function bufferQuickAnimate(arrowDown) {
     const BUFFER_SIZE = 8;
@@ -1210,5 +1212,9 @@ export default function mapui(models, config, store, ui) {
   }
 
   init();
-  return self;
+  return {
+    ...self,
+    updateDate,
+    reloadLayers,
+  };
 }
