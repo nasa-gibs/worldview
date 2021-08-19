@@ -237,7 +237,12 @@ function promiseTileLayer(layer, extent, map) {
 
     const loadTile = function ([one, two, three]) {
       const tile = tileSource.getTile(one, two, three, pixelRatio, projection);
-      tile.load();
+      try {
+        tile.load();
+      } catch (e) {
+        console.error(`Could not load tile with coords: [${one}, ${two}, ${three}] for extent [${extent}]`);
+        console.error(e);
+      }
       if (tile.state === 2) resolve();
       i += 1;
       tileSource.on('tileloadend', onLoad);
