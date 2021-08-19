@@ -911,8 +911,13 @@ class Timeline extends React.Component {
     let mobileLeft = 190;
     let mobileBottom = 10;
     if (isEmbedModeActive) {
+<<<<<<< HEAD
       mobileLeft = 145;
       mobileBottom = 10;
+=======
+      mobileLeft = 143;
+      mobileBottom = 4;
+>>>>>>> 50add4b94 (adjust date mobile date arrow embed styling)
     }
     // positioning will change depending on a combination of:
     // 1) subdaily (mobile date picker width);
@@ -927,8 +932,13 @@ class Timeline extends React.Component {
       mobileLeft = isCompareModeActive ? 112 : 10;
       mobileBottom = 65;
       if (isEmbedModeActive) {
+<<<<<<< HEAD
         mobileLeft = isCompareModeActive ? 80 : 10;
         mobileBottom = 50;
+=======
+        mobileLeft = isCompareModeActive ? 85 : 10;
+        mobileBottom = 44;
+>>>>>>> 50add4b94 (adjust date mobile date arrow embed styling)
       }
     }
 
