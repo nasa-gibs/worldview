@@ -13,5 +13,6 @@ Vegetation is very reflective in the near infrared (Band I2), and absorbent in B
 Burned areas or fire-affected areas are characterized by deposits of charcoal and ash, removal of vegetation and/or the alteration of vegetation structure. When bare soil becomes exposed, the brightness in Band I1 may increase, but that may be offset by the presence of black carbon residue; the near infrared (Band I2) will become darker, and Band M11 becomes more reflective. When assigned to red in the image, Band M11 will show burn scars as deep or bright red, depending on the type of vegetation burned, the amount of residue, or the completeness of the burn.
 
 #### Water
-Liquid water on the ground appears very dark since it absorbs in the red and the SWIR. Sediments in water appear dark blue. Ice and snow appear as bright turquoise.
-Clouds comprised of small water droplets scatter light equally in both the visible and the SWIR and will appear white. These clouds are usually lower to the ground and warmer. High and cold clouds are comprised of ice crystals and will appear turquoise.
+Liquid water on the ground appears very dark since it absorbs in the red and the SWIR. Sediments in water appear dark blue. Ice and snow appear as bright turquoise. Clouds comprised of small water droplets scatter light equally in both the visible and the SWIR and will appear white. These clouds are usually lower to the ground and warmer. High and cold clouds are comprised of ice crystals and will appear turquoise.
+
+References: VJ102IMG_NRT [doi:10.5067/VIIRS/VJ102IMG_NRT.002](https://doi.org/10.5067/VIIRS/VJ102IMG_NRT.002); VJ102MOD_NRT [doi:10.5067/VIIRS/VJ102MOD_NRT.002](https://doi.org/10.5067/VIIRS/VJ102MOD_NRT.002)
