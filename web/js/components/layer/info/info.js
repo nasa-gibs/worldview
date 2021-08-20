@@ -20,35 +20,31 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
   const [layerMetadata, setLayerMetadata] = useState();
   const [measurementMetadata, setMeasurementMetadata] = useState();
 
-  const initMetadata = async () => {
-    if (!measurementMetadata && measurementDescriptionPath) {
-      const url = `config/metadata/layers/${measurementDescriptionPath}.html`;
-      const data = await util.get(url);
-      setMeasurementMetadata(data);
-    }
-  };
-  useEffect(() => {
-    initMetadata();
-  }, [layer]);
-
-  useEffect(() => {
+  const fetchMetadata = (path, setFn) => () => {
     let controller = new AbortController();
     (async () => {
-      if (!layer.description) return;
+      if (!path) {
+        setFn('');
+        return;
+      }
       try {
         const options = { signal: controller.signal };
-        const data = await fetch(`config/metadata/layers/${layer.description}.html`, options);
+        const data = await fetch(`config/metadata/layers/${path}.html`, options);
         const metadataHtml = await data.text();
         controller = null;
-        setLayerMetadata(metadataHtml || 'No description was found for this layer.');
+        setFn(metadataHtml || 'No description was found for this layer.');
       } catch (e) {
         if (!controller.signal.aborted) {
+          // eslint-disable-next-line no-console
           console.error(e);
         }
       }
     })();
     return () => (controller ? controller.abort() : null);
-  }, [layer]);
+  };
+
+  useEffect(fetchMetadata(measurementDescriptionPath, setMeasurementMetadata), [layer]);
+  useEffect(fetchMetadata(layer.description, setLayerMetadata), [layer]);
 
   const getDateOverlapDateRanges = () => {
     const hasLayerDateRange = dateRanges && dateRanges.length > 1;
