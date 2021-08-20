@@ -215,12 +215,13 @@ function promiseTileLayer(layer, extent, map) {
     currentZ = tileGrid.getZForResolution(resolution, zDirection);
     i = 0;
 
+    const complete = function () {
+      tileSource.un('tileloadend', onLoad);
+      tileSource.un('tileloaderror', onLoad);
+      resolve();
+    };
+
     const onLoad = function onLoad (e) {
-      const complete = function () {
-        tileSource.un('tileloadend', onLoad);
-        tileSource.un('tileloaderror', onLoad);
-        resolve();
-      };
       if (e.type === 'tileloadend') {
         i -= 1;
         if (i === 0) {
@@ -240,7 +241,9 @@ function promiseTileLayer(layer, extent, map) {
       try {
         tile.load();
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(`Could not load tile with coords: [${one}, ${two}, ${three}] for extent [${extent}]`);
+        // eslint-disable-next-line no-console
         console.error(e);
       }
       if (tile.state === 2) resolve();
@@ -271,6 +274,8 @@ function promiseLayerGroup(layerGroup, map) {
     const viewPortExtent = map.getView().calculateExtent(map.getSize());
 
     const layerPromiseArray = layers.map((layer) => {
+      // TODO figure out why vector layers cause preloadinig issues
+      if (layer.isVector) return Promise.resolve();
       const layerExtent = layer.getExtent();
       const extent = calculateExtent(layerExtent, viewPortExtent);
       return promiseTileLayer(layer, extent, map);
