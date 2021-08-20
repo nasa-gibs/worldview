@@ -19,7 +19,7 @@ const getProjState = ({ proj }) => proj;
 const getCompareState = ({ compare }) => compare;
 const getLayerState = ({ layers }) => layers;
 const getConfig = ({ config }) => config;
-const getLayerId = (state, { layer }) => layer.id;
+const getLayerId = (state, { layer }) => layer && layer.id;
 
 /**
  * Is overlay grouping currently enabled?
@@ -145,27 +145,6 @@ export function hasMeasurementSource(current, config, projId) {
   });
   return hasSource;
 }
-
-/**
- * Look up the measurement description path for a given layer
- * so that metadata can be shown in the layer info modal.  Ignore
- * Orbital Track layers since they will be in multiple measurements.
- */
-export const makeGetDescription = () => createSelector(
-  [getConfig, getLayerId],
-  ({ layers, measurements }, layerId) => {
-    const { layergroup } = layers[layerId];
-    if (layergroup === 'Orbital Track') {
-      return;
-    }
-    const [setting] = Object.keys(measurements)
-      .filter((key) => !key.includes('Featured'))
-      .map((key) => measurements[key])
-      .flatMap(({ sources }) => Object.values(sources))
-      .filter(({ settings }) => settings.find((id) => id === layerId));
-    return (setting || {}).description;
-  },
-);
 
 /**
  * Look up the measurement description path for a given layer

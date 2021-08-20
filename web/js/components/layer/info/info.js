@@ -8,7 +8,7 @@ function configureTemporalDate(dateType, date, period) {
   return util.coverageDateFormatter(dateType, date, period);
 }
 
-export default function LayerInfo ({ layer, screenHeight }) {
+export default function LayerInfo ({ layer, measurementDescriptionPath }) {
   const {
     dateRanges,
     endDate,
@@ -17,7 +17,19 @@ export default function LayerInfo ({ layer, screenHeight }) {
     startDate,
   } = layer;
 
-  const [metadata, setMetadata] = useState();
+  const [layerMetadata, setLayerMetadata] = useState();
+  const [measurementMetadata, setMeasurementMetadata] = useState();
+
+  const initMetadata = async () => {
+    if (!measurementMetadata && measurementDescriptionPath) {
+      const url = `config/metadata/layers/${measurementDescriptionPath}.html`;
+      const data = await util.get(url);
+      setMeasurementMetadata(data);
+    }
+  };
+  useEffect(() => {
+    initMetadata();
+  }, [layer]);
 
   useEffect(() => {
     let controller = new AbortController();
@@ -28,7 +40,7 @@ export default function LayerInfo ({ layer, screenHeight }) {
         const data = await fetch(`config/metadata/layers/${layer.description}.html`, options);
         const metadataHtml = await data.text();
         controller = null;
-        setMetadata(metadataHtml || 'No description was found for this layer.');
+        setLayerMetadata(metadataHtml || 'No description was found for this layer.');
       } catch (e) {
         if (!controller.signal.aborted) {
           console.error(e);
@@ -67,21 +79,27 @@ export default function LayerInfo ({ layer, screenHeight }) {
                 : ''}
           </span>
           {needDateRanges
-              && <DateRanges layer={layer} screenHeight={screenHeight} />}
+              && <DateRanges layer={layer} />}
         </div>
       )
         : ''}
-      {metadata ? (
+      {layerMetadata ? (
         <div
           id="layer-metadata"
           className="layer-metadata"
-          dangerouslySetInnerHTML={{ __html: metadata }}
+          dangerouslySetInnerHTML={{ __html: layerMetadata }}
         />
-
       ) : (
         <div id="layer-metadata" className="layer-metadata">
           <p>Loading MetaData...</p>
         </div>
+      )}
+
+      {measurementMetadata && (
+        <div
+          className="source-metadata"
+          dangerouslySetInnerHTML={{ __html: measurementMetadata }}
+        />
       )}
     </div>
   );
@@ -89,5 +107,5 @@ export default function LayerInfo ({ layer, screenHeight }) {
 
 LayerInfo.propTypes = {
   layer: PropTypes.object,
-  screenHeight: PropTypes.number,
+  measurementDescriptionPath: PropTypes.string,
 };
