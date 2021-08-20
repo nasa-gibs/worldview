@@ -17,7 +17,7 @@ import {
   getPaletteLegends,
 } from '../../modules/palettes/selectors';
 import { toggleCustomContent, openCustomContent } from '../../modules/modal/actions';
-import LayerInfoModal from '../../components/layer/info/info-modal';
+import LayerInfo from '../../components/layer/info/info';
 import LayerSettings from '../../components/layer/settings/layer-settings';
 import { requestPalette } from '../../modules/palettes/actions';
 import {
@@ -258,7 +258,6 @@ function LayerRow (props) {
       ? ['far', 'eye-slash']
       : ['far', 'eye'];
 
-
   const renderLayerRow = () => (
     <>
       <a
@@ -366,7 +365,6 @@ const makeMapStateToProps = () => {
     return {
       compare,
       tracksForLayer,
-      layer,
       measurementDescriptionPath,
       isCustomPalette,
       isDistractionFreeModeActive,
@@ -383,7 +381,6 @@ const makeMapStateToProps = () => {
     };
   };
 };
-
 
 const mapDispatchToProps = (dispatch) => ({
   toggleVisibility: (id, isVisible) => {
@@ -417,7 +414,7 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  onInfoClick: (layer, title, description) => {
+  onInfoClick: (layer, title, measurementDescriptionPath) => {
     const key = `LAYER_INFO_MODAL-${layer.id}`;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_info',
@@ -426,7 +423,7 @@ const mapDispatchToProps = (dispatch) => ({
       toggleCustomContent(key, {
         headerText: title || 'Layer Description',
         backdrop: false,
-        bodyComponent: LayerInfoModal,
+        bodyComponent: LayerInfo,
         // Using clickableBehindModal: true here causes an issue where switching sidebar
         // tabs does not close this modal
         wrapClassName: 'clickable-behind-modal',
@@ -435,7 +432,7 @@ const mapDispatchToProps = (dispatch) => ({
         size: 'lg',
         bodyComponentProps: {
           layer,
-          measurementDescriptionPath: description,
+          measurementDescriptionPath,
         },
       }),
     );

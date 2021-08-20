@@ -29,7 +29,6 @@ class SearchLayerList extends React.Component {
     this.loadMoreItems = this.loadMoreItems.bind(this);
   }
 
-
   static getDerivedStateFromProps(props, state) {
     if (props.selectedLayer) {
       return { firstLoadAutoSelect: true };
@@ -63,7 +62,6 @@ class SearchLayerList extends React.Component {
     }
   }
 
-
   /**
    * Loads metadata for layer (if not previously loaded) and
    * triggers showing in layer detail area
@@ -90,21 +88,7 @@ class SearchLayerList extends React.Component {
       return;
     }
 
-    if (!layer.metadata) {
-      const errorMessage = '<p>There was an error loading layer metadata.</p>';
-      const uri = `config/metadata/layers/${layer.description}.html`;
-      fetch(uri)
-        .then((res) => (res.ok ? res.text() : errorMessage))
-        .then((body) => {
-          // Check that we have a metadata html snippet, rather than a fully
-          // formed HTML file. Also avoid executing any script or style tags.
-          const isMetadataSnippet = !body.match(/<(head|body|html|style|script)[^>]*>/i);
-          layer.metadata = isMetadataSnippet || !body.length ? body : errorMessage;
-          selectLayer(layer);
-        });
-    } else {
-      selectLayer(layer);
-    }
+    selectLayer(layer);
   }
 
   loadMoreItems(page, prevProps) {

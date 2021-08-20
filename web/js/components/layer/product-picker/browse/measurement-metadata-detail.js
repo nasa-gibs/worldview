@@ -125,7 +125,6 @@ function MeasurementMetadataDetail (props) {
     );
   }
 
-
   if (!metadataForSource && loading) {
     return (
       <div className="no-results">

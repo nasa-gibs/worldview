@@ -129,20 +129,22 @@
   margin-right: 10px;
   margin-top: 10px;
   padding: 10px;
+  .layer-date-ranges {
+    padding-left: 0;
+    .list-group-item {
+      border: 0;
+      padding: 0;
+      background: none;
+      list-style-type: disc;
+      display: list-item;
+      margin: 2px 0 6px 20px;
+      color: #bbb;
+    }
+  }
 }
 
-.layer-date-wrap .layer-date-ranges {
-  padding-left: 0;
-}
-
-.layer-date-wrap .layer-date-ranges .list-group-item {
-  border: 0;
-  padding: 0;
-  background: none;
-  list-style-type: disc;
-  display: list-item;
-  margin: 2px 0 6px 20px;
-  color: #bbb;
+.source-metadata .layer-date-wrap {
+  background: #dfdfdf;
 }
 
 .layer-date-range .layer-date-ranges-button,
@@ -165,8 +167,8 @@
 .source-metadata h3 {
   font-weight: 500;
   margin: 10px 0 5px;
-  font-size: 17px;
-  line-height: 17px;
+  font-size: 16px;
+  line-height: 16px;
   padding-top: 15px;
   border-top: 1px solid #aaa;
 }
@@ -263,7 +265,6 @@
 }
 
 .layers-all .source-metadata a,
-.layers-all .source-metadata div,
 .layers-all .source-metadata p,
 .layer-description .layer-date-wrap p,
 .layers-all .source-metadata span,
@@ -271,8 +272,6 @@
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
 .layer-date-range,
 .layer-date-wrap,
-.layer-metadata ul,
-.source-metadata ul,
 .layer-metadata a,
 .layer-metadata p {
   font-family: 'Open Sans', sans-serif;
@@ -424,7 +423,6 @@
     .source-metadata code,
     .list-group-item {
       color: #333;
-      background: transparent;
     }
     .source-metadata a {
       color: #0056b3;
