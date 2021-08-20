@@ -80,6 +80,20 @@ export default function mapLayerBuilder(config, cache, store) {
     };
   };
 
+  const getFadeOut = ({ def, date }, group, state) => new Promise((resolve) => {
+    const options = { group, date };
+    const key = self.layerKey(def, options, state);
+    const prevLayer = cache.getItem(key);
+    setTimeout(() => prevLayer.setOpacity(0.8), 40);
+    setTimeout(() => prevLayer.setOpacity(0.6), 80);
+    setTimeout(() => prevLayer.setOpacity(0.4), 120);
+    setTimeout(() => prevLayer.setOpacity(0.2), 160);
+    setTimeout(() => {
+      prevLayer.setOpacity(0);
+      resolve();
+    }, 200);
+  });
+
   /**
    * Create a new OpenLayers Layer
    *
@@ -89,17 +103,16 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers layer
    */
-  self.createLayer = function(def, options) {
+  self.createLayer = function(def, options = {}) {
     const state = store.getState();
-    options = options || {};
-    const group = options.group || null;
+    const { group, previousLayer, fade } = options;
     const { closestDate, nextDate, previousDate } = self.getRequestDates(def, options);
     let date = closestDate;
     if (date) {
       options.date = date;
     }
-    const key = self.layerKey(def, options, state);
     const proj = state.proj.selected;
+    const key = self.layerKey(def, options, state);
     let layer = cache.getItem(key);
 
     if (!layer) {
@@ -163,6 +176,10 @@ export default function mapLayerBuilder(config, cache, store) {
       layer.setVisible(false);
     }
     layer.setOpacity(def.opacity || 1.0);
+
+    if (fade && previousLayer) {
+      layer.wv.fadeOut = () => getFadeOut(previousLayer, group, state);
+    }
     return layer;
   };
 

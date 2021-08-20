@@ -775,80 +775,99 @@ export default function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  const updateDate = self.updateDate = async function() {
-    return new Promise((resolve) => {
-      const state = store.getState();
-      const { compare } = state;
-      const activeLayers = getAllActiveLayers(state);
-      let layerGroups;
-      let layerGroup;
+  async function updateDate() {
+    const state = store.getState();
+    const { compare } = state;
+    const activeLayers = getAllActiveLayers(state);
+    let layerGroups;
+    let layerGroup;
 
-      if (compare && compare.active) {
-        layerGroups = self.selected.getLayers().getArray();
-        if (layerGroups.length > 1) {
-          layerGroup = layerGroups[0].get('group') === compare.activeString
-            ? layerGroups[0]
-            : layerGroups[1].get('group') === compare.activeString
-              ? layerGroups[1]
-              : null;
-        }
+    if (compare && compare.active) {
+      layerGroups = self.selected.getLayers().getArray();
+      if (layerGroups.length > 1) {
+        layerGroup = layerGroups[0].get('group') === compare.activeString
+          ? layerGroups[0]
+          : layerGroups[1].get('group') === compare.activeString
+            ? layerGroups[1]
+            : null;
+      }
+    }
+
+    const group = compare && compare.active ? layerGroup : self.selected;
+    const layers = group.getLayers().getArray();
+    const visibleLayers = activeLayers.filter(
+      ({ id }) => layers
+        .filter((l) => l.getVisible())
+        .map(({ wv }) => wv.def.id)
+        .includes(id),
+    );
+
+    let mapLayers;
+    let index;
+    let prevLayer;
+    let updatedLayer;
+
+    const layerPromises = visibleLayers.map((def) => {
+      const layerName = def.layer || def.id;
+      let fadePromise = new Promise((resolve) => resolve());
+
+      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
+        return fadePromise;
       }
 
-      const group = compare && compare.active ? layerGroup : self.selected;
-      const layers = group.getLayers().getArray();
-      const visibleLayers = activeLayers.filter(
-        ({ id }) => layers
-          .filter((l) => l.getVisible())
-          .map(({ wv }) => wv.def.id)
-          .includes(id),
-      );
-
-      lodashEach(visibleLayers, (def) => {
-        const layerName = def.layer || def.id;
-
-        if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
-          return;
+      if (compare && compare.active) {
+        if (layers.length) {
+          index = findLayerIndex(def, layerGroup);
+          mapLayers = layerGroup.getLayers();
+          prevLayer = mapLayers.getArray()[index];
+          updatedLayer = createLayer(def, {
+            group: compare.activeString,
+            date: getSelectedDate(state),
+            previousLayer: prevLayer ? prevLayer.wv : null,
+            fade: true,
+          });
+          mapLayers.insertAt(index, updatedLayer);
+          compareMapUi.update(compare.activeString);
         }
+      } else {
+        index = findLayerIndex(def);
+        mapLayers = self.selected.getLayers();
+        prevLayer = layers[index];
+        updatedLayer = createLayer(def, {
+          previousLayer: prevLayer ? prevLayer.wv : null,
+          fade: true,
+        });
+        mapLayers.insertAt(index, updatedLayer);
+      }
 
-        if (compare && compare.active) {
-          if (layers.length) {
-            const index = findLayerIndex(def, layerGroup);
-            const layerValue = self.selected.getLayers().getArray()[index];
-            layerGroup.getLayers().setAt(
-              index,
-              createLayer(def, {
-                group: compare.activeString,
-                date: getSelectedDate(state),
-                previousLayer: layerValue ? layerValue.wv : null,
-              }),
-            );
-            compareMapUi.update(compare.activeString);
-          }
-        } else {
-          const index = findLayerIndex(def);
-          const layer = createLayer(def, { previousLayer: layers[index] ? layers[index].wv : null });
-          self.selected.getLayers().setAt(index, layer);
-        }
-
-        if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-          const { vectorStyles } = config;
-          let vectorStyleId;
-
-          vectorStyleId = def.vectorStyle.id;
-          if (getActiveLayers(state)) {
-            getActiveLayers(state).forEach((layer) => {
-              if (layer.id === layerName && layer.custom) {
-                vectorStyleId = layer.custom;
-              }
-            });
-          }
-          setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
-        }
+      fadePromise = new Promise((resolve) => {
+        updatedLayer.wv.fadeOut().then(() => {
+          mapLayers.removeAt(index + 1);
+          resolve();
+        });
       });
-      updateLayerVisibilities();
-      resolve();
+
+      if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+        const { vectorStyles } = config;
+        let vectorStyleId;
+
+        vectorStyleId = def.vectorStyle.id;
+        if (getActiveLayers(state)) {
+          getActiveLayers(state).forEach((layer) => {
+            if (layer.id === layerName && layer.custom) {
+              vectorStyleId = layer.custom;
+            }
+          });
+        }
+        setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
+      }
+      return fadePromise;
     });
-  };
+
+    await Promise.all(layerPromises);
+    updateLayerVisibilities();
+  }
+
 
   /**
    * Preload tiles for the next and previous time interval so they are visible

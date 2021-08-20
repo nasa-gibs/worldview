@@ -202,9 +202,10 @@ function promiseTileLayer(layer, extent, map) {
   let i;
   let tileGrid;
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (!extent) {
       resolve('resolve tile layer');
+      return;
     }
     // OL object describing the current map frame
     const { pixelRatio, viewState } = map.frameState_;
