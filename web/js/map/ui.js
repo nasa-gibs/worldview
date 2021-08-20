@@ -104,6 +104,7 @@ export default function mapui(models, config, store, ui) {
     switch (action.type) {
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
+        store.dispatch({ type: dateConstants.CLEAR_PRELOAD });
         return addLayer(def);
       }
       case CLEAR_MARKER:
