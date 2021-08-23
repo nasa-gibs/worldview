@@ -35,7 +35,6 @@
       "never"
     ],
     "no-storage/no-browser-storage": "off",
-    "import/extensions": "off",
     "no-multiple-empty-lines": "off",
     // Must be disabled for e2e assertions
     "no-unused-expressions": "off",
