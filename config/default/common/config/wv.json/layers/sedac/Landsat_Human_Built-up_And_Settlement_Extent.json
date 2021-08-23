@@ -7,7 +7,7 @@
       "description": "sedac/Landsat_Human_Built-up_And_Settlement_Extent",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": "Human Built-up And Settlement Extent",
+      "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_ULANDSAT_HBASE_V1",
       "inactive": true,
       "wrapX": true
