@@ -126,9 +126,12 @@ export const getAllActiveOverlaysBaselayers = createSelector(
 );
 
 export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
+  const { proj } = state;
   const layers = getActiveLayers(state, activeString);
   const baseLayers = layers.filter(({ group }) => group === 'baselayers');
-  return layers.filter((l) => isRenderable(l.id, layers, date, baseLayers, {}));
+  return layers.filter(
+    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+  );
 };
 
 export function hasMeasurementSource(current, config, projId) {

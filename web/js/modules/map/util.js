@@ -151,39 +151,32 @@ export function getLeadingExtent(loadtime) {
  * the viewport extent (boundaries).
  *
  * @method calculateExtent
- * @param  {array} extent         The map extent (boundaries)
- * @param  {array} viewportExtent The current viewport extecnt (boundaries)
+ * @param  {array} layerExtent     The layer extent
+ * @param  {array} map             The current map
  * @return {array}                An extent array. Used to calculate
  * the extent for prev, next & current day
  */
-function calculateExtent(extent, viewportExtent) {
-  const newExtent = getExtent(viewportExtent, extent);
-  if (extent[1] < -180) {
+function calculateExtent(layerExtent, map) {
+  const viewportExtent = map.getView().calculateExtent(map.getSize());
+  const visibleExtent = olExtent.getIntersection(viewportExtent, layerExtent);
+
+  if (map.proj === 'geographic') {
+    if (layerExtent[1] < -180) {
     // Previous day
-    newExtent[1] += 360;
-    newExtent[3] += 360;
-  } else if (extent[1] > 180) {
+      visibleExtent[1] += 360;
+      visibleExtent[3] += 360;
+    } else if (layerExtent[1] > 180) {
     // Next day
-    newExtent[1] -= 360;
-    newExtent[3] -= 360;
-  } else
+      visibleExtent[1] -= 360;
+      visibleExtent[3] -= 360;
+    }
+  }
+
   // eslint-disable-next-line no-restricted-globals
-  if (!isFinite(newExtent[0])) {
+  if (!isFinite(visibleExtent[0])) {
     return null;
   }
-  return newExtent;
-}
-
-/**
- * Get the intersection of two extents.
- *
- * @method getExtent
- * @param  {array} extent1 Extent 1.
- * @param  {array} extent2 Extent 2.
- * @return {array}         A new extent with intersecting points
- */
-function getExtent(extent1, extent2) {
-  return olExtent.getIntersection(extent1, extent2);
+  return visibleExtent;
 }
 
 /**
@@ -271,13 +264,12 @@ function promiseLayerGroup(layerGroup, map) {
   return new Promise((resolve, reject) => {
     // Current layer's 3 layer array (prev, current, next days)
     const layers = layerGroup.getLayersArray() || [layerGroup];
-    const viewPortExtent = map.getView().calculateExtent(map.getSize());
 
     const layerPromiseArray = layers.map((layer) => {
-      // TODO figure out why vector layers cause preloadinig issues
+      // TODO #3688 figure out why vector layers cause preloadinig issues
       if (layer.isVector) return Promise.resolve();
       const layerExtent = layer.getExtent();
-      const extent = calculateExtent(layerExtent, viewPortExtent);
+      const extent = calculateExtent(layerExtent, map);
       return promiseTileLayer(layer, extent, map);
     });
 
