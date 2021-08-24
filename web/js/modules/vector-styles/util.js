@@ -213,12 +213,19 @@ function getModalOffset(dimensionProps) {
  * @param Object*} config
  * @param {Object} compareState
  */
-function getModalContentsAtPixel(mapProps, config, compareState) {
+function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const metaArray = [];
   const selected = {};
+  let exceededLengthLimit = false;
   let isCoordinatesMarker = false;
   const { pixels, map, swipeOffset } = mapProps;
+  const featureOptions = isMobile ? { hitTolerance: 5 } : {};
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+    const lengthCheck = (arr) => arr.length >= (isMobile ? 5 : 12);
+    if (lengthCheck(metaArray)) {
+      exceededLengthLimit = true;
+      return;
+    }
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-marker') {
       isCoordinatesMarker = true;
@@ -262,8 +269,10 @@ function getModalContentsAtPixel(mapProps, config, compareState) {
       metaArray.push(obj);
       selected[layerId].push(uniqueIdentifier);
     }
-  });
-  return { selected, metaArray, isCoordinatesMarker };
+  }, featureOptions);
+  return {
+    selected, metaArray, isCoordinatesMarker, exceededLengthLimit,
+  };
 }
 /**
  * Get organized vector modal contents for clicked
@@ -287,13 +296,16 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   };
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
-  const { selected, metaArray, isCoordinatesMarker } = getModalContentsAtPixel(mapProps, config, compare);
+  const {
+    selected, metaArray, isCoordinatesMarker, exceededLengthLimit,
+  } = getModalContentsAtPixel(mapProps, config, compare, isMobile);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
     isCoordinatesMarker,
+    exceededLengthLimit,
   };
 }
 export function updateVectorSelection(selectionObj, lastSelection, layers, type, state) {

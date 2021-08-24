@@ -16,7 +16,7 @@ import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
-import { ACTIVATE_VECTOR_ALERT } from '../../modules/alerts/constants';
+import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
 
 const { events } = util;
@@ -71,7 +71,7 @@ export class VectorInteractions extends React.Component {
     const {
       browser, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, activeLayers,
-      activateVectorAlert, proj, isEmbedModeActive,
+      activateVectorZoomAlert, activateVectorExceededResultsAlert, proj, isEmbedModeActive, isMobile,
     } = this.props;
 
     if (measureIsActive) return;
@@ -83,23 +83,29 @@ export class VectorInteractions extends React.Component {
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
     const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
+    const exceededLengthLimit = clickObj.exceededLengthLimit || false;
     const dialogId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
 
     if (isCoordinatesMarker) {
       return;
     }
+    const mapRes = map.getView().getResolution();
+    const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id, isMobile);
 
     if (metaArray.length) {
-      openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive);
-    } else {
-      const mapRes = map.getView().getResolution();
-      const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id);
-
       if (hasNonClickableVectorLayerType) {
-        activateVectorAlert();
+        activateVectorZoomAlert();
+      } else {
+        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive);
+        if (exceededLengthLimit) {
+          activateVectorExceededResultsAlert();
+        }
       }
+    } else if (hasNonClickableVectorLayerType) {
+      activateVectorZoomAlert();
     }
     if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
+      if (isMobile && hasNonClickableVectorLayerType) return;
       selectVectorFeatures(selected);
     } else if (isVectorModalOpen && !Object.entries(selected).length) {
       onCloseModal();
@@ -122,10 +128,11 @@ function mapStateToProps(state) {
     const percentOffset = state.compare.value || 50;
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
-
+  const isMobile = browser.lessThan.medium;
   return {
     activeLayers,
     browser,
+    isMobile,
     compareState: compare,
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
@@ -154,12 +161,14 @@ const mapDispatchToProps = (dispatch) => ({
   onCloseModal: () => {
     dispatch(onClose());
   },
-  activateVectorAlert: () => dispatch({ type: ACTIVATE_VECTOR_ALERT }),
+  activateVectorZoomAlert: () => dispatch({ type: ACTIVATE_VECTOR_ZOOM_ALERT }),
+  activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
   openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive) => {
     const { screenHeight, screenWidth } = browser;
     const isMobile = browser.lessThan.medium;
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
+    const mobileTopOffset = 106;
     dispatch(openCustomContent(dialogId,
       {
         backdrop: false,
@@ -170,12 +179,13 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName,
         CompletelyCustomModal: vectorDialog,
         isResizable: !isMobile,
+        mobileFullScreen: true,
         dragHandle: '.modal-header',
         dialogKey,
         key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: isMobile ? screenWidth : 445,
-        height: isMobile ? screenHeight : 300,
+        height: isMobile ? screenHeight - mobileTopOffset : 300,
         offsetLeft: isMobile ? 0 : offsetLeft,
         offsetTop: isMobile ? 40 : offsetTop,
         timeout: 0,
@@ -197,11 +207,13 @@ VectorInteractions.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
-  activateVectorAlert: PropTypes.func,
+  activateVectorZoomAlert: PropTypes.func,
+  activateVectorExceededResultsAlert: PropTypes.func,
   activeLayers: PropTypes.array,
   browser: PropTypes.object,
   compareState: PropTypes.object,
   isEmbedModeActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
   proj: PropTypes.object,
   swipeOffset: PropTypes.number,

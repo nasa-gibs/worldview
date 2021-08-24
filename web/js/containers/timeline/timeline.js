@@ -1644,7 +1644,6 @@ const getTimelineEndDateLimit = (state) => {
   }
 
   let timelineEndDateLimit;
-  console.log(layerDateRange && layerDateRange.end > appNow);
   if (layerDateRange && layerDateRange.end > appNow) {
     const layerDateRangeEndRoundedQuarterHour = util.roundTimeQuarterHour(layerDateRange.end);
     const appNowRoundedQuarterHour = util.roundTimeQuarterHour(appNow);

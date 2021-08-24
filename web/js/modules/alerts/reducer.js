@@ -1,33 +1,47 @@
 import { assign as lodashAssign } from 'lodash';
-import { TOGGLE_VECTOR_ALERT, DISABLE_VECTOR_ALERT, ACTIVATE_VECTOR_ALERT } from './constants';
+import {
+  DISABLE_VECTOR_ZOOM_ALERT,
+  ACTIVATE_VECTOR_ZOOM_ALERT,
+  DISABLE_VECTOR_EXCEEDED_ALERT,
+  ACTIVATE_VECTOR_EXCEEDED_ALERT,
+} from './constants';
 import { hasVectorLayers } from '../layers/util';
 import { REMOVE_LAYER, REMOVE_GROUP } from '../layers/constants';
+import { UPDATE_MAP_EXTENT } from '../map/constants';
 
 export const defaultAlertState = {
-  isVectorAlertActive: false,
+  isVectorZoomAlertPresent: false,
+  isVectorExceededAlertPresent: false,
 };
 
 export function alertReducer(state = defaultAlertState, action) {
   switch (action.type) {
-    case TOGGLE_VECTOR_ALERT:
+    case DISABLE_VECTOR_ZOOM_ALERT:
       return lodashAssign({}, state, {
-        isVectorAlertActive: !state.isVectorAlertActive,
+        isVectorZoomAlertPresent: false,
       });
-    case DISABLE_VECTOR_ALERT:
+    case ACTIVATE_VECTOR_ZOOM_ALERT:
       return lodashAssign({}, state, {
-        isVectorAlertActive: false,
+        isVectorZoomAlertPresent: true,
       });
-    case ACTIVATE_VECTOR_ALERT:
+    case DISABLE_VECTOR_EXCEEDED_ALERT:
+    case UPDATE_MAP_EXTENT:
       return lodashAssign({}, state, {
-        isVectorAlertActive: true,
+        isVectorExceededAlertPresent: false,
+      });
+    case ACTIVATE_VECTOR_EXCEEDED_ALERT:
+      return lodashAssign({}, state, {
+        isVectorExceededAlertPresent: true,
+        isVectorZoomAlertPresent: false,
       });
     case REMOVE_LAYER:
     case REMOVE_GROUP:
-      if (!state.isVectorAlertActive) {
+      if (!state.isVectorZoomAlertPresent && !state.isVectorExceededAlertPresent) {
         return state;
       } if (!hasVectorLayers(action.layers)) {
         return lodashAssign({}, state, {
-          isVectorAlertActive: false,
+          isVectorZoomAlertPresent: false,
+          isVectorExceededAlertPresent: false,
         });
       }
       return state;

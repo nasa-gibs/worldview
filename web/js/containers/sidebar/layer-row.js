@@ -343,8 +343,9 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      palettes, config, embed, map, compare, proj, ui,
+      browser, palettes, config, embed, map, compare, proj, ui,
     } = state;
+    const isMobile = browser.lessThan.medium;
     const { isDistractionFreeModeActive } = ui;
     const hasPalette = !lodashIsEmpty(layer.palette);
     const renderedPalettes = palettes.rendered;
@@ -370,10 +371,10 @@ const makeMapStateToProps = () => {
       isDistractionFreeModeActive,
       isEmbedModeActive,
       isLoading: palettes.isLoading[paletteName],
-      isMobile: state.browser.lessThan.medium,
+      isMobile,
       isVisible,
       isVectorLayer: isVector,
-      hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id),
+      hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
       hasPalette,
       getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
       paletteLegends,
