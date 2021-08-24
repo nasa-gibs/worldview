@@ -105,7 +105,7 @@ module.exports = {
   'Switching source tabs': (c) => {
     c.click(aquaModisTab).pause(250);
     c.expect.element(aodCheckbox).to.be.present;
-    c.expect.element('h3#aboutaerosolopticaldepthaodeslint').to.be.present;
+    c.expect.element('h3#aboutaerosolopticaldepthaod').to.be.present;
     c.assert.containsText('h3#aboutaerosolopticaldepthaod', 'About Aerosol Optical Depth (AOD)');
     c.click(aodCheckbox);
   },
