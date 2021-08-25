@@ -30,7 +30,7 @@ import Queue from 'promise-queue';
 import mapDateLineBuilder from './datelinebuilder';
 import mapLayerBuilder from './layerbuilder';
 import MapRunningData from './runningdata';
-import { getActiveLayerGroup, saveRotation } from './util';
+import { getActiveLayerGroup, fly, saveRotation } from './util';
 import mapCompare from './compare/compare';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
@@ -411,6 +411,8 @@ export default function mapui(models, config, store, ui) {
   };
 
   const flyToNewExtent = function(extent, rotation) {
+    const state = store.getState();
+    const { proj } = state;
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
     const coordinates = [coordinateX, coordinateY];
@@ -418,7 +420,7 @@ export default function mapui(models, config, store, ui) {
     const zoom = self.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
-    return self.animate.fly(coordinates, zoom, rotation);
+    return fly(self.selected, proj, coordinates, zoom, rotation);
   };
 
   /*
