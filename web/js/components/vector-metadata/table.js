@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
 import VectorMetaTooltip from './tooltip';
 import util from '../../util/util';
+import { checkTemperatureUnitConversion, convertPaletteValue, getAbbrevFromTemperatureUnit } from '../../modules/global-unit/util';
 
 export default class VectorMetaTable extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -14,7 +15,7 @@ export default class VectorMetaTable extends React.Component {
   }
 
   render() {
-    const { metaArray } = this.props;
+    const { metaArray, globalTemperatureUnit } = this.props;
 
     return (
       <div>
@@ -34,31 +35,44 @@ export default class VectorMetaTable extends React.Component {
                   {metaLegend.map((properties, index) => {
                     const featureId = properties.Identifier;
                     const isIntegerToStyle = properties.Function !== 'Identify' && (properties.DataType === 'int');
-                    const value = properties.ValueMap
+                    let value = properties.ValueMap
                       ? properties.ValueMap[metaFeatures[featureId]]
                       : isIntegerToStyle ? metaFeatures[featureId].toLocaleString('en')
                         : metaFeatures[featureId];
                     const id = util.cleanId(String(`${title}-${metaIndex + index}`));
+
+                    let description = properties.Description;
+                    let unit = properties.Units;
+                    if (value && unit) {
+                      const initialUnit = unit;
+                      unit = getAbbrevFromTemperatureUnit(unit) || unit;
+                      const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(unit, globalTemperatureUnit);
+                      if (needsConversion) {
+                        value = `${convertPaletteValue(`${value}`, legendTempUnit, globalTemperatureUnit)}`;
+                        description = description.replace(initialUnit, globalTemperatureUnit);
+                        unit = '';
+                      }
+                    }
+
                     if (!value) return undefined;
                     return (
                       <tr key={`vector-row-${id}`}>
                         <td>
-
-                          {properties && properties.Description ? (
-                            <VectorMetaTooltip id={id} index={index} description={properties.Description} />
+                          {description ? (
+                            <VectorMetaTooltip id={id} index={index} description={description} />
                           ) : undefined}
                           <div className="vector-feature-name-cell">{properties.Title ? properties.Title : featureId}</div>
                         </td>
                         <td>
                           <span>{value}</span>
-                          {properties && properties.Units ? (
+                          {unit
+                          && (
                             <span>
-                              {` ${properties.Units}`}
                               {' '}
+                              {unit}
                             </span>
-                          ) : undefined}
+                          )}
                         </td>
-
                       </tr>
                     );
                   })}
@@ -73,6 +87,7 @@ export default class VectorMetaTable extends React.Component {
 }
 VectorMetaTable.propTypes = {
   id: PropTypes.number,
+  globalTemperatureUnit: PropTypes.string,
   metaArray: PropTypes.array,
   title: PropTypes.string,
 };

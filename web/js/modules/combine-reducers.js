@@ -48,6 +48,7 @@ import embedReducers from './embed/reducers';
 import uiReducers from './ui/reducers';
 import { alertReducer } from './alerts/reducer';
 import { smartHandoffReducer } from './smart-handoff/reducer';
+import { getInitialState as globalUnitGetInitialState, globalUnitReducer } from './global-unit/reducer';
 
 function lastAction(state = null, action) {
   return action;
@@ -83,6 +84,7 @@ export function getInitialState(models, config, parameters) {
     proj: getProjInitialState(config),
     layers: getLayersInitialState(config),
     events: getInitialEventsState(config),
+    globalUnit: globalUnitGetInitialState(),
     requestedEvents: eventRequestResponse(),
     requestedEventSources: eventRequestResponse(),
     palettes: getInitialPaletteState(config),
@@ -131,6 +133,7 @@ const reducers = {
   embed: embedReducers,
   ui: uiReducers,
   productPicker: productPickerReducer,
+  globalUnit: globalUnitReducer,
 };
 const appReducer = combineReducers(reducers);
 /**

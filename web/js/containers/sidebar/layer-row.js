@@ -51,6 +51,7 @@ function LayerRow (props) {
     palette,
     renderedPalette,
     requestPalette,
+    globalTemperatureUnit,
     isCustomPalette,
     isDistractionFreeModeActive,
     isEmbedModeActive,
@@ -99,6 +100,7 @@ function LayerRow (props) {
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
           colorHex={colorHex}
+          globalTemperatureUnit={globalTemperatureUnit}
           isDistractionFreeModeActive={isDistractionFreeModeActive}
           isEmbedModeActive={isEmbedModeActive}
           isMobile={isMobile}
@@ -343,10 +345,11 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      browser, palettes, config, embed, map, compare, proj, ui,
+      browser, palettes, config, embed, map, compare, proj, ui, globalUnit,
     } = state;
     const isMobile = browser.lessThan.medium;
     const { isDistractionFreeModeActive } = ui;
+    const { globalTemperatureUnit } = globalUnit;
     const hasPalette = !lodashIsEmpty(layer.palette);
     const renderedPalettes = palettes.rendered;
     const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
@@ -367,6 +370,7 @@ const makeMapStateToProps = () => {
       compare,
       tracksForLayer,
       measurementDescriptionPath,
+      globalTemperatureUnit,
       isCustomPalette,
       isDistractionFreeModeActive,
       isEmbedModeActive,
@@ -456,6 +460,7 @@ LayerRow.propTypes = {
   compare: PropTypes.object,
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
+  globalTemperatureUnit: PropTypes.string,
   hover: PropTypes.func,
   index: PropTypes.number,
   isCustomPalette: PropTypes.bool,

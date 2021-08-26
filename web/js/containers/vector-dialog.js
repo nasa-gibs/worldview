@@ -23,7 +23,7 @@ class VectorDialog extends React.Component {
 
   render() {
     const {
-      toggleWithClose, vectorMetaObject, modalHeight, dialogKey,
+      toggleWithClose, globalTemperatureUnit, vectorMetaObject, modalHeight, dialogKey,
     } = this.props;
     const { activeIndex } = this.state;
     const navArray = [];
@@ -62,7 +62,12 @@ class VectorDialog extends React.Component {
 
         <ModalBody>
           <Scrollbars style={{ maxHeight: `${modalHeight - 70}px` }}>
-            <VectorMetaTable id={dialogKey} metaArray={activeMetaArray} title={keyArray[activeIndex]} />
+            <VectorMetaTable
+              globalTemperatureUnit={globalTemperatureUnit}
+              id={dialogKey}
+              metaArray={activeMetaArray}
+              title={keyArray[activeIndex]}
+            />
           </Scrollbars>
         </ModalBody>
       </div>
@@ -70,8 +75,12 @@ class VectorDialog extends React.Component {
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  const {
+    globalUnit,
+  } = state;
+  const { globalTemperatureUnit } = globalUnit;
+  return { globalTemperatureUnit };
 }
 export default connect(
   mapStateToProps,
@@ -79,6 +88,7 @@ export default connect(
 )(VectorDialog);
 VectorDialog.propTypes = {
   dialogKey: PropTypes.number,
+  globalTemperatureUnit: PropTypes.string,
   modalHeight: PropTypes.number,
   toggleWithClose: PropTypes.func,
   vectorMetaObject: PropTypes.object,

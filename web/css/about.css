@@ -24,6 +24,13 @@
   line-height: 22px;
 }
 
+.about-page .version {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 100;
+  float: right;
+}
+
 .about-page h1 {
   font-size: 20px;
   font-weight: 600;
@@ -73,6 +80,12 @@
 .about-page .right {
   float: right;
   margin: 0.4em 0.2em 0;
+  &:first-of-type {
+    width: 100%;
+    a {
+      float: right;
+    }
+  }
   &:last-of-type {
     margin: 1.4em 0.2em 0;
   }
@@ -139,5 +152,11 @@
 @media (min-width: 769px) {
   .about-page .keyboard-shortcuts-section {
     display: block;
+  }
+}
+
+@media (min-width: 576px) {
+  .about-page .version {
+    margin-top: 0;
   }
 }
