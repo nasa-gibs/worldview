@@ -174,6 +174,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@khanisak/temperature-converter": "^1.2.0",
     "bluebird": "3.7.2",
     "bootstrap": "4.4.1",
     "cachai": "^1.0.2",
