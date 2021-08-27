@@ -71,7 +71,7 @@ export default function mapui(models, config, store, ui) {
   const animationDuration = 250;
   const dateline = mapDateLineBuilder(store);
   const compareMapUi = mapCompare(store);
-  const runningdata = new MapRunningData(models, compareMapUi, store);
+  const runningdata = new MapRunningData(compareMapUi, store);
   const doubleClickZoom = new OlInteractionDoubleClickZoom({
     duration: animationDuration,
   });
@@ -1100,12 +1100,14 @@ export default function mapui(models, config, store, ui) {
   function createMousePosSel(map, proj) {
     const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
-      const { browser, sidebar } = state;
+      const { browser, locationSearch, sidebar } = state;
+      const { isCoordinateSearchActive } = locationSearch;
       const isMobile = browser.lessThan.medium;
       if (self.mapIsbeingZoomed) return;
       if (compareMapUi && compareMapUi.dragging) return;
       if (isMobile) return;
       if (state.measure.isActive) return;
+      if (isCoordinateSearchActive) return;
 
       const pixels = map.getEventPixel(e);
       const coords = map.getCoordinateFromPixel(pixels);

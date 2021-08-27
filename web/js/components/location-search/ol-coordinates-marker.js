@@ -41,15 +41,21 @@ export class CoordinatesMarker extends Component {
   }
 
   mouseMove(event, map, crs) {
-    const pixels = map.getEventPixel(event);
-    const coord = map.getCoordinateFromPixel(pixels);
-
     const {
-      isShowingClick,
       changeCursor,
+      coordinates,
+      isCoordinateSearchActive,
+      isShowingClick,
       measureIsActive,
     } = this.props;
 
+    if (measureIsActive
+      || (!isCoordinateSearchActive && coordinates.length === 0)) {
+      return;
+    }
+
+    const pixels = map.getEventPixel(event);
+    const coord = map.getCoordinateFromPixel(pixels);
     if (!coord) {
       return;
     }
@@ -58,13 +64,16 @@ export class CoordinatesMarker extends Component {
       return;
     }
     const hasFeatures = map.hasFeatureAtPixel(pixels);
-    if (hasFeatures && !isShowingClick && !measureIsActive) {
-      const featureCheck = (feature) => feature.getId() === 'coordinates-map-marker';
-      const isActiveLayer = map.forEachFeatureAtPixel(pixels, featureCheck);
-      if (isActiveLayer) {
-        changeCursor(true);
-      }
-    } else if (!hasFeatures && isShowingClick) {
+    if (hasFeatures && !isShowingClick) {
+      const featureCheck = (feature) => {
+        if (feature.getId() === 'coordinates-map-marker') {
+          changeCursor(true);
+        }
+        return true;
+      };
+      map.forEachFeatureAtPixel(pixels, featureCheck);
+    }
+    if (!hasFeatures && isShowingClick) {
       changeCursor(false);
     }
   }
@@ -83,24 +92,23 @@ export class CoordinatesMarker extends Component {
   singleClick(e, map, crs) {
     const {
       config,
-      proj,
       isCoordinateSearchActive,
       measureIsActive,
+      proj,
       setPlaceMarker,
       toggleReverseGeocodeActive,
     } = this.props;
 
-    const pixels = e.pixel;
-    const coord = map.getCoordinateFromPixel(pixels);
-
-    const [lon, lat] = transform(coord, crs, 'EPSG:4326');
-
-    const latitude = getCoordinateFixedPrecision(lat);
-    const longitude = getCoordinateFixedPrecision(lon);
-
     if (measureIsActive) return;
+    const pixels = e.pixel;
+
     // handle reverse geocoding mouse click
     if (isCoordinateSearchActive) {
+      const coord = map.getCoordinateFromPixel(pixels);
+      const [lon, lat] = transform(coord, crs, 'EPSG:4326');
+      const latitude = getCoordinateFixedPrecision(lat);
+      const longitude = getCoordinateFixedPrecision(lon);
+
       // show alert warning and exit mode if outside current map extent
       const validNums = !lodashIsNaN(parseFloat(latitude)) && !lodashIsNaN(parseFloat(longitude));
       const withinExtent = areCoordinatesWithinExtent(proj, [longitude, latitude]);
@@ -152,13 +160,13 @@ function mapStateToProps(state) {
 
   return {
     config,
-    proj,
-    map,
     coordinates,
     isCoordinateSearchActive,
     isMobile,
     isShowingClick: map.isClickable,
+    map,
     measureIsActive: measure.isActive,
+    proj,
   };
 }
 
@@ -176,6 +184,7 @@ const mapDispatchToProps = (dispatch) => ({
 CoordinatesMarker.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
+  coordinates: PropTypes.array,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,

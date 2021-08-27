@@ -39,12 +39,16 @@ export class VectorInteractions extends React.Component {
   }
 
   mouseMove(event, map, crs) {
+    const {
+      isShowingClick, changeCursor, isCoordinateSearchActive, measureIsActive, compareState, swipeOffset, proj,
+    } = this.props;
+
+    if (measureIsActive || isCoordinateSearchActive) {
+      return;
+    }
     const pixels = map.getEventPixel(event);
     const coord = map.getCoordinateFromPixel(pixels);
 
-    const {
-      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj,
-    } = this.props;
     const [lon, lat] = transform(coord, crs, 'EPSG:4326');
     if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
       return;
@@ -53,6 +57,9 @@ export class VectorInteractions extends React.Component {
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixels, (feature, layer) => {
+        if (isActiveLayer) {
+          return true;
+        }
         const def = lodashGet(layer, 'wv.def');
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType())) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
@@ -70,11 +77,11 @@ export class VectorInteractions extends React.Component {
   singleClick(e, map) {
     const {
       browser, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
-      modalState, getDialogObject, measureIsActive, activeLayers,
+      modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
       activateVectorZoomAlert, activateVectorExceededResultsAlert, proj, isEmbedModeActive, isMobile,
     } = this.props;
 
-    if (measureIsActive) return;
+    if (measureIsActive || isCoordinateSearchActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
     const clickObj = getDialogObject(pixels, map);
@@ -120,7 +127,7 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, proj, ui, embed,
+    modal, map, measure, vectorStyles, browser, compare, locationSearch, proj, ui, embed,
   } = state;
   let swipeOffset;
   const activeLayers = getActiveLayers(state);
@@ -128,11 +135,13 @@ function mapStateToProps(state) {
     const percentOffset = state.compare.value || 50;
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
+  const { isCoordinateSearchActive } = locationSearch;
   const isMobile = browser.lessThan.medium;
   return {
     activeLayers,
     browser,
     isMobile,
+    isCoordinateSearchActive,
     compareState: compare,
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
@@ -213,6 +222,7 @@ VectorInteractions.propTypes = {
   browser: PropTypes.object,
   compareState: PropTypes.object,
   isEmbedModeActive: PropTypes.bool,
+  isCoordinateSearchActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
   proj: PropTypes.object,

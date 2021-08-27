@@ -224,7 +224,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     const lengthCheck = (arr) => arr.length >= (isMobile ? 5 : 12);
     if (lengthCheck(metaArray)) {
       exceededLengthLimit = true;
-      return;
+      return true;
     }
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-marker') {
