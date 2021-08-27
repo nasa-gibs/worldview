@@ -48,7 +48,7 @@ http = urllib3.PoolManager(
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-with open(config_file) as fp:
+with open(config_file, "r", encoding="utf-8") as fp:
     config = json.load(fp)
 
 def process_vector_data(layer):
@@ -93,7 +93,7 @@ def process_remote(entry):
     output_file = os.path.join(output_dir, entry["to"])
 
     # Write GetCapabilities responses to XML files
-    with open(output_file, "w") as fp:
+    with open(output_file, "w", encoding="utf-8") as fp:
         fp.write(contents.decode('utf-8'))
     gc = xmltodict.parse(contents)
 
@@ -121,7 +121,7 @@ def process_single_colormap(link):
         response = http.request("GET", link)
         contents = response.data
         output_file = os.path.join(colormaps_dir, os.path.basename(link))
-        with open(output_file, "w") as fp:
+        with open(output_file, "w", encoding='utf-8') as fp:
             fp.write(contents.decode('utf-8'))
     except Exception as e:
         sys.stderr.write("%s:   WARN: Unable to fetch %s: %s\n" %
@@ -151,7 +151,7 @@ def process_vectorstyles():
             contents = response.data
             if link.endswith('.json'):
                 output_file = os.path.join(vectorstyles_dir, os.path.basename(link))
-            with open(output_file, "w") as fp:
+            with open(output_file, "w", encoding="utf-8") as fp:
                 fp.write(contents.decode('utf-8'))
         except Exception as e:
             sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
@@ -171,7 +171,7 @@ def process_vectordata():
             contents = response.data
             if link.endswith('.json'):
                 output_file = os.path.join(vectordata_dir, os.path.basename(link))
-            with open(output_file, "w") as fp:
+            with open(output_file, "w", encoding="utf-8") as fp:
                 fp.write(contents.decode('utf-8'))
         except Exception as e:
             sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %

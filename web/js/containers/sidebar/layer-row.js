@@ -148,19 +148,19 @@ function LayerRow (props) {
   const renderControls = () => {
     const { title } = names;
     const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
-    const removeLayerBtnTitle = 'Remove Layer';
+    const removeLayerBtnTitle = 'Remove layer';
 
     const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
-    const layerOptionsBtnTitle = 'View Options';
+    const layerOptionsBtnTitle = 'View options';
 
     const layerInfoBtnId = `layer-info-btn-${encodedLayerId}`;
-    const layerInfoBtnTitle = 'View Description';
+    const layerInfoBtnTitle = 'View description';
 
     return (
       <>
         <a
           id={removeLayerBtnId}
-          arira-label={removeLayerBtnTitle}
+          aria-label={removeLayerBtnTitle}
           className="button wv-layers-close"
           onClick={() => onRemoveClick(layer.id)}
         >
@@ -247,10 +247,10 @@ function LayerRow (props) {
       ? `${visibilityButtonClasses} layer-hidden`
       : `${visibilityButtonClasses} layer-enabled layer-visible`;
   const visibilityTitle = !isVisible && !isDisabled
-    ? 'Show Layer'
+    ? 'Show layer'
     : isDisabled
       ? getDisabledTitle(layer)
-      : 'Hide Layer';
+      : 'Hide layer';
   const visibilityIconClass = isDisabled
     ? 'ban'
     : !isVisible

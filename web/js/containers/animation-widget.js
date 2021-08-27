@@ -21,7 +21,7 @@ import TimeScaleIntervalChange from '../components/timeline/timeline-controls/in
 import CustomIntervalSelectorWidget from '../components/timeline/custom-interval-selector/interval-selector-widget';
 import PlayQueue from '../components/animation-widget/play-queue';
 import Notify from '../components/image-download/notify';
-import promiseImageryForTime from '../modules/map/selectors';
+import { promiseImageryForTime } from '../modules/map/util';
 import GifContainer from './gif';
 import {
   selectDate,
@@ -405,6 +405,7 @@ class AnimationWidget extends React.Component {
       refreshStateAfterGif,
       hasNonDownloadableLayer,
       visibleLayersForProj,
+      proj,
     } = this.props;
     const gifDisabled = numberOfFrames >= maxFrames;
     const elemExists = document.querySelector('#create-gif-button');
@@ -428,7 +429,7 @@ class AnimationWidget extends React.Component {
 
       await this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
       await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-      await this.getPromise(hasGraticule, 'graticule', clearGraticule, 'Remove Graticule?');
+      await this.getPromise(hasGraticule && proj.id === 'geographic', 'graticule', clearGraticule, 'Remove Graticule?');
       await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
       await onUpdateStartAndEndDate(startDate, endDate);
       googleTagManager.pushEvent({
@@ -575,7 +576,6 @@ class AnimationWidget extends React.Component {
       endDate,
       onPushPause,
       isActive,
-      layers,
       hasCustomPalettes,
       isDistractionFreeModeActive,
       promiseImageryForTime,
@@ -622,7 +622,6 @@ class AnimationWidget extends React.Component {
             hasCustomPalettes={hasCustomPalettes}
             maxQueueLength={maxLength}
             queueLength={queueLength}
-            layers={layers}
             interval={interval}
             delta={delta}
             speed={speed}
@@ -655,6 +654,7 @@ function mapStateToProps(state) {
     map,
     browser,
     ui,
+    proj,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, gifActive,
@@ -735,15 +735,15 @@ function mapStateToProps(state) {
     customInterval: customInterval || 3,
     numberOfFrames,
     sliderLabel: 'Frames Per Second',
-    layers: getAllActiveLayers(state),
     speed,
     isPlaying,
     looping: loop,
     hasCustomPalettes,
     map,
+    proj,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
     visibleLayersForProj,
-    promiseImageryForTime: (date, layers) => promiseImageryForTime(date, layers, state),
+    promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isGifActive: gifActive,
     isCompareActive: compare.active,
     isEmbedModeActive,
@@ -870,7 +870,6 @@ AnimationWidget.propTypes = {
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   isRotated: PropTypes.bool,
-  layers: PropTypes.array,
   looping: PropTypes.bool,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
@@ -886,6 +885,7 @@ AnimationWidget.propTypes = {
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
   promiseImageryForTime: PropTypes.func,
+  proj: PropTypes.object,
   refreshStateAfterGif: PropTypes.func,
   rotation: PropTypes.number,
   screenWidth: PropTypes.number,

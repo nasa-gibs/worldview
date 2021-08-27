@@ -13,7 +13,7 @@ module.exports = {
   gifResults: '.gif-results-dialog-case img',
   animationWidget: '#wv-animation-widget',
   animationButtonCase: '#timeline-header .animate-button',
-  animationButton: '#animate-button',
+  animationButton: '.animate-button',
 
   // sidebar, layers
   sidebarContainer: '#productsHolder',

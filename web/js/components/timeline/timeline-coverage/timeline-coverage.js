@@ -67,6 +67,7 @@ class TimelineLayerCoveragePanel extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {
+      appNow,
       activeLayers,
       isProductPickerOpen,
       isTimelineLayerCoveragePanelOpen,
@@ -84,8 +85,8 @@ class TimelineLayerCoveragePanel extends Component {
     const layersChange = !lodashIsEqual(updatedActiveLayers, this.state.activeLayers);
     const projectionChange = prevProps.projection !== projection;
     const toggleHiddenChange = prevState.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
-
-    if (projectionChange || toggleHiddenChange || layersChange) {
+    const appNowUpdated = prevProps.appNow !== appNow;
+    if (projectionChange || toggleHiddenChange || layersChange || appNowUpdated) {
       // update coverage including layer added/removed and option changes (active/inactive)
       this.setActiveLayers(updatedActiveLayers);
       this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, updatedActiveLayers);

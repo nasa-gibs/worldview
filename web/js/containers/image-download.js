@@ -8,6 +8,7 @@ import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import {
+  getAlertMessageIfCrossesDateline,
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
 } from '../modules/image-download/util';
@@ -117,6 +118,7 @@ class ImageDownloadContainer extends Component {
           hasSubdailyLayers={hasSubdailyLayers}
           markerCoordinates={markerCoordinates}
           date={date}
+          datelineMessage={getAlertMessageIfCrossesDateline(date, geolonlat1, geolonlat2, proj)}
           url={url}
           crs={crs}
           getLayers={getLayers}
@@ -216,9 +218,6 @@ export default connect(
   mapDispatchToProps,
 )(ImageDownloadContainer);
 
-ImageDownloadContainer.defualtProps = {
-  fileType: 'image/jpeg',
-};
 ImageDownloadContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
   fileType: PropTypes.string.isRequired,

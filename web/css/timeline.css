@@ -151,19 +151,17 @@ button:focus {
 
   & .date-arrows:hover,
   & > .button-action-group:hover,
-  & #zoom-buttons-group .button-action-group:hover {
+  & .button-action-group:hover {
     background-color: #fff;
     cursor: pointer;
   }
   & > .button-action-group .button-disabled:hover,
-  & #zoom-buttons-group .button-disabled:hover {
+  & .button-disabled:hover {
     background-color: transparent;
     cursor: default;
   }
   & .button-action-group svg {
     position: absolute;
-  }
-  & #zoom-buttons-group .button-action-group svg {
     top: 50%;
     margin-top: -15px;
     left: 50%;
@@ -178,6 +176,14 @@ button:focus {
     filter: FlipH;
     -ms-filter: 'FlipH';
   }
+  & #now-button-group {
+    width: 34px;
+    height: 34px;
+    top: -2px;
+    svg {
+      left: 15px;
+    }
+  }
 
   & > .button-action-group:hover .arrow,
   & #zoom-buttons-group .button-action-group:hover .arrow {
@@ -187,25 +193,23 @@ button:focus {
   }
   & > .button-action-group.button-disabled .arrow,
   & #zoom-buttons-group .button-disabled .arrow {
-    fill: #333;
+    fill: #4d4d4d;
   }
   & > .button-action-group.button-disabled:hover .arrow,
   & #zoom-buttons-group .button-disabled:hover .arrow {
-    fill: #333;
+    fill: #4d4d4d;
   }
-
-  & #animate-button {
-    width: 100%;
-    height: 100%;
-  }
-
   & .animate-button {
     position: absolute;
-    height: 40px;
-    width: 50px;
-    top: 11px;
-    right: 24px;
-    padding-left: 3px;
+    height: 34px;
+    width: 37px;
+    top: 16px;
+    right: 4px;
+    & svg {
+      top: 5px;
+      left: 4px;
+      margin: 0;
+    }
   }
   & .animate-button:hover svg.wv-animate path {
     fill: #1a1a1a;
@@ -217,17 +221,16 @@ button:focus {
   & .animate-button.wv-disabled-button:hover {
     background-color: transparent;
   }
-  & .animate-button.wv-disabled-button:hover .wv-animate {
-    opacity: 0.5;
-    color: #fff;
-  }
-  & .animate-button.wv-disabled-button .wv-animate {
-    opacity: 0.5;
+  & .animate-button.wv-disabled-button svg.wv-animate path {
+    fill: #4d4d4d;
     pointer-events: none;
   }
 
   & .button-action-group svg path {
     fill: #fff;
+  }
+  & .button-action-group:hover svg path {
+    fill: #000;
   }
 }
 
@@ -435,7 +438,6 @@ button:focus {
 
 #current-interval {
   white-space: nowrap;
-  padding: 2px 6px;
 }
 
 .timeline-interval,
@@ -458,7 +460,7 @@ button:focus {
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;
-  width: 100px;
+  min-width: 90px;
   z-index: 10;
 }
 
@@ -484,7 +486,7 @@ button:focus {
 
 .zoom-btn-active,
 .interval-btn-active {
-  width: 100%;
+  width: 90px;
   color: #ccc;
   font-size: 12px;
   line-height: 14px;
@@ -539,22 +541,20 @@ button:focus {
   border-color: #000;
 }
 
-#timeline-hide:hover .wv-timeline-hide,
-#timeline-layer-coverage-panel-handle:hover .timeline-layer-coverage-panel-handle-chevron {
-  background-position: -206px -63px;
+#timeline-hide:hover .wv-timeline-hide {
+  background-position: -206px -68px;
 }
 
 .wv-timeline-hide {
   display: block;
-  top: 18px;
   right: -5px;
   color: #fff;
   cursor: pointer;
   user-select: none;
-  height: 30px;
+  height: 21px;
   width: 30px;
   position: absolute;
-  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
+  background: url('../images/icon-sprite.svg') -206px -8px no-repeat;
   border-radius: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -562,10 +562,12 @@ button:focus {
 }
 
 .wv-timeline-hide-double-chevron-left {
+  top: 26px;
   transform: rotate(90deg);
 }
 
 .wv-timeline-hide-double-chevron-right {
+  top: 22px;
   transform: rotate(270deg);
 }
 
@@ -602,6 +604,10 @@ button:focus {
 .timeline-layer-coverage-panel-handle-chevron-closed {
   top: -4px;
   margin-left: -14px;
+}
+
+#timeline-layer-coverage-panel-handle:hover .timeline-layer-coverage-panel-handle-chevron {
+  background-position: -206px -63px;
 }
 
 .dragger-container {
@@ -696,7 +702,7 @@ button:focus {
 }
 
 /* Mobile date change arrows */
-.mobile-date-change-arrows-btn {
+#timeline-header .mobile-date-change-arrows-btn {
   position: absolute;
   left: 120px;
   bottom: 10px;
@@ -707,8 +713,18 @@ button:focus {
   height: 44px;
   & .button-action-group {
     height: 44px;
+  }
+  & #left-arrow-group, #now-button-group {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+  & #now-button-group {
+    height: 44px;
+    width: 40px;
+    top: 0;
+    svg {
+      left: 18px;
+    }
   }
 }
 
@@ -732,4 +748,8 @@ button:focus {
 
 .datepicker-navbar-btn:hover {
   background: #fff;
+}
+
+#timeline-header .button-action-group .now-btn-1:hover svg path {
+  fill: #1a1a1a;
 }

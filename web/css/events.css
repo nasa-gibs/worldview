@@ -310,17 +310,6 @@
   width: 26px;
 }
 
-/* @media (max-width: 768px) {
-  .event-scroll-list .event-icon {
-    height: 40px;
-    width: 40px;
-  }
-  .wv-map .event-icon {
-    height: 36px;
-    width: 36px;
-  }
-} */
-
 .event-icon-dust-and-haze {
   background: url("../images/natural-events/icon-dust-and-haze.svg");
 }

@@ -190,10 +190,10 @@ class DraggerContainer extends PureComponent {
       // only need to calculate difference in time unit for varying timescales - month and year
       const diffZeroValues = options.scaleMs;
       if (!diffZeroValues) {
-        // calculate based on frontDate due to varying number of days per month and per year (leapyears)
+        // calculate based on frontDate due to varying number of days per month and per year (leap years)
         const draggerPositionRelativeToFrontDate = draggerWidth - 2 + newDraggerPosition - position - transformX;
-        const gridWidthCoef = draggerPositionRelativeToFrontDate / gridWidth;
-        const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
+        const gridWidthCoefficient = draggerPositionRelativeToFrontDate / gridWidth;
+        const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoefficient), timeScale);
 
         let daysCount;
         if (timeScale === 'year') {
@@ -201,8 +201,8 @@ class DraggerContainer extends PureComponent {
         } else if (timeScale === 'month') {
           daysCount = draggerDateAdded.daysInMonth();
         }
-        const gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
-        const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+        const gridWidthCoefficientRemainder = gridWidthCoefficient - Math.floor(gridWidthCoefficient);
+        const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefficientRemainder;
         newDraggerTime = draggerDateAdded.add(remainderMilliseconds);
       } else {
         const diffFactor = diffZeroValues / gridWidth;
@@ -214,6 +214,16 @@ class DraggerContainer extends PureComponent {
       if (isBetweenValidTimeline) {
         newDraggerTime = getISODateFormatted(newDraggerTime);
       } else {
+        const timelineEndDateLimitTime = new Date(timelineEndDateLimit).getTime();
+        // prevent over drag and set endDatePosition and time to timelineEndDateLimit
+        if (newDraggerTime > timelineEndDateLimitTime) {
+          const frontDateObj = moment.utc(frontDate);
+          const endDateLimitPositionFromFront = Math.abs(frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth);
+          const endDatePosition = endDateLimitPositionFromFront + position - draggerWidth + transformX + 2;
+
+          updateDraggerDatePosition(timelineEndDateLimit, draggerSelected, endDatePosition, null, null, true);
+          return;
+        }
         return false;
       }
 

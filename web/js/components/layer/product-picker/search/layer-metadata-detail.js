@@ -92,7 +92,7 @@ class LayerMetadataDetail extends React.Component {
     if (endDate) {
       endDateId = `${id}-endDate`;
       layerEndDate = util.parseDate(endDate);
-      if (layerEndDate <= util.today() && !inactive) {
+      if (layerEndDate <= util.now() && !inactive) {
         layerEndDate = 'Present';
       } else {
         layerEndDate = util.coverageDateFormatter('END-DATE', endDate, period);

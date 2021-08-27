@@ -7,7 +7,7 @@
       "description": "sedac/GRUMP_Urban_Extents_Grid_1995",
       "tags": "human sedac",
       "group": "overlays",
-      "layergroup": "Urban Extents",
+      "layergroup": "Socioeconomic",
       "product": "CIESIN_SEDAC_GRUMPv1_EXT",
       "inactive": true,
       "wrapX": true

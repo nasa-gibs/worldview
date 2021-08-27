@@ -161,7 +161,7 @@ export function getDefaultEventDate(event) {
   let date = new Date(preDate).toISOString().split('T')[0];
   if (event.geometry.length < 2) return date;
   const category = event.categories.title || event.categories[0].title;
-  const today = new Date().toISOString().split('T')[0];
+  const today = util.now().toISOString().split('T')[0];
   // For storms that happened today, get previous date
   if (date === today && category === 'Severe Storms') {
     [date] = new Date(event.geometry[1].date).toISOString().split('T');
@@ -171,7 +171,7 @@ export function getDefaultEventDate(event) {
 
 /**
  * Validate whether an event and all it's points/polygons fall within
- * the provded projection's maxExtent
+ * the provided projection's maxExtent
  *
  * @param {*} event
  * @param {*} proj

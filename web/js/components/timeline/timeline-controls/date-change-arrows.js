@@ -1,12 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import HoverTooltip from '../../util/hover-tooltip';
+import PreloadSpinner from '../../animation-widget/preload-spinner';
+import {
+  setArrowDown as setArrowDownAction,
+  setArrowUp as setArrowUpAction,
+} from '../../../modules/date/actions';
 
-const ANIMATION_DELAY = 200; // interval firing to trigger parent level arrow change
-const CLICK_TIMEOUT_DELAY = 500; // wait before click becomes a delay
+const ANIMATION_DELAY = 600; // interval for timestep
+const CLICK_HOLD_DELAY = 200; // wait before click is considered a hold
 
-let mouseHoldCheckTimer = null;
-let isMouseHolding = false;
+let arrowDownCheckTimer = null;
 // left/right arrow intervals
 const intervals = {
   left: 0,
@@ -14,86 +19,112 @@ const intervals = {
 };
 
 class DateChangeArrows extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.arrowDownMap = {
+      left: props.leftArrowDown,
+      right: props.rightArrowDown,
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
+
+  componentDidUpdate (prevProps) {
+    const { tilesPreloaded, arrowDown } = this.props;
+    const notAnimating = !intervals.left && !intervals.right;
+
+    if (tilesPreloaded && arrowDown && notAnimating) {
+      // set interval for holding arrow down
+      intervals[arrowDown] = setInterval(this.arrowDownMap[arrowDown], ANIMATION_DELAY);
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(intervals.left);
     clearInterval(intervals.right);
+    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('keyup', this.handleKeyUp);
   }
 
-  /**
-  * @desc repeatedly call while mouse down - decrement date
-  * @returns {void}
-  */
-  leftArrowDown = () => {
-    const { leftArrowDown } = this.props;
-    leftArrowDown();
-    mouseHoldCheckTimer = setTimeout(() => {
-      mouseHoldCheckTimer = null;
-      isMouseHolding = true;
-      // set interval for holding arrow down
-      intervals.left = setInterval(leftArrowDown, ANIMATION_DELAY);
-    }, CLICK_TIMEOUT_DELAY);
+  clickAndHold = (direction) => {
+    const { setArrowDown } = this.props;
+    setArrowDown(direction);
+    arrowDownCheckTimer = null;
   }
 
-  /**
-  * @desc repeatedly call while mouse down - decrement date
-  * @returns {void}
-  */
-  rightArrowDown = () => {
-    const { rightArrowDown } = this.props;
-    rightArrowDown();
-    mouseHoldCheckTimer = setTimeout(() => {
-      mouseHoldCheckTimer = null;
-      isMouseHolding = true;
-      // set interval for holding arrow down
-      intervals.right = setInterval(rightArrowDown, ANIMATION_DELAY);
-    }, CLICK_TIMEOUT_DELAY);
-  }
-
-  /**
-  * @desc stop animation from left arrow - clear timeout invocation
-  * @returns {void}
-  */
-  leftArrowUp = () => {
-    const { leftArrowUp } = this.props;
-    if (mouseHoldCheckTimer) {
-      clearTimeout(mouseHoldCheckTimer);
-    } else if (isMouseHolding) {
-      isMouseHolding = false;
+  handleKeyDown = (e) => {
+    const { arrowDown } = this.props;
+    const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
+    if (e.target.tagName === 'INPUT' || e.target.className === 'rc-slider-handle' || e.ctrlKey || e.metaKey) {
+      return;
     }
-    clearInterval(intervals.left);
-    leftArrowUp();
+    if (direction) {
+      e.preventDefault();
+      if (!arrowDown) this.onArrowDown(direction);
+    }
   }
 
-  /**
-  * @desc stop animation from right arrow - clear timeout invocation
-  * @returns {void}
-  */
-  rightArrowUp = () => {
-    const { rightArrowUp } = this.props;
-    if (mouseHoldCheckTimer) {
-      clearTimeout(mouseHoldCheckTimer);
-    } else if (isMouseHolding) {
-      isMouseHolding = false;
+  handleKeyUp = (e) => {
+    const direction = e.keyCode === 37 ? 'left' : e.keyCode === 39 ? 'right' : null;
+    if (direction) {
+      e.preventDefault();
+      this.onArrowUp(direction);
     }
-    clearInterval(intervals.right);
-    rightArrowUp();
+  };
+
+  onArrowDown = (direction) => {
+    this.arrowDownMap[direction]();
+    arrowDownCheckTimer = setTimeout(() => {
+      this.clickAndHold(direction);
+    }, CLICK_HOLD_DELAY);
+  }
+
+  onArrowUp = (direction) => {
+    const { setArrowUp, arrowDown } = this.props;
+    if (arrowDownCheckTimer) {
+      clearTimeout(arrowDownCheckTimer);
+    }
+    clearInterval(intervals[direction]);
+    intervals[direction] = 0;
+    if (arrowDown) setArrowUp();
   }
 
   render() {
     const {
+      handleSelectNowButton,
       isMobile,
       leftArrowDisabled,
+      nowButtonDisabled,
       rightArrowDisabled,
+      arrowDown,
+      tilesPreloaded,
     } = this.props;
+
+    const leftArrowDown = () => this.onArrowDown('left');
+    const rightArrowDown = () => this.onArrowDown('right');
+    const leftArrowUp = () => this.onArrowUp('left');
+    const rightArrowUp = () => this.onArrowUp('right');
+
     return (
       <div>
+        {arrowDown && !tilesPreloaded && (
+          <PreloadSpinner
+            title="Loading ..."
+            bodyMsg="Keep holding to animate the map!"
+          />
+        )}
+
         {/* LEFT ARROW */}
         <div
-          className={`button-action-group ${leftArrowDisabled ? 'button-disabled' : ''}`}
+          className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''}`}
           id="left-arrow-group"
-          onMouseDown={this.leftArrowDown}
-          onMouseUp={this.leftArrowUp}
-          onMouseLeave={this.leftArrowUp}
+          onMouseDown={leftArrowDown}
+          onMouseUp={leftArrowUp}
+          onMouseLeave={leftArrowUp}
+          aria-disabled={leftArrowDisabled}
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -111,11 +142,12 @@ class DateChangeArrows extends PureComponent {
 
         {/* RIGHT ARROW */}
         <div
-          className={`button-action-group ${rightArrowDisabled ? 'button-disabled' : ''}`}
+          className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''}`}
           id="right-arrow-group"
-          onMouseDown={this.rightArrowDown}
-          onMouseUp={this.rightArrowUp}
-          onMouseLeave={this.rightArrowUp}
+          onMouseDown={rightArrowDown}
+          onMouseUp={rightArrowUp}
+          onMouseLeave={rightArrowUp}
+          aria-disabled={rightArrowDisabled}
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -130,19 +162,61 @@ class DateChangeArrows extends PureComponent {
             />
           </svg>
         </div>
+
+        {/* NOW BUTTON */}
+        <div
+          className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''}`}
+          id="now-button-group"
+          onClick={handleSelectNowButton}
+          aria-disabled={nowButtonDisabled}
+        >
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="Latest available date"
+            placement="top"
+            target="now-button-group"
+          />
+          <svg height="30" width="30" viewBox="0 0 40 28">
+            <path
+              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z M 26,30 26,0 34,0 34,30 z"
+              className="arrow"
+            />
+          </svg>
+        </div>
       </div>
     );
   }
 }
 
-DateChangeArrows.propTypes = {
-  leftArrowDisabled: PropTypes.bool,
-  leftArrowDown: PropTypes.func,
-  leftArrowUp: PropTypes.func,
-  isMobile: PropTypes.bool,
-  rightArrowDisabled: PropTypes.bool,
-  rightArrowDown: PropTypes.func,
-  rightArrowUp: PropTypes.func,
+const mapStateToProps = (state) => {
+  const { date } = state;
+  return {
+    tilesPreloaded: date.preloaded,
+    arrowDown: date.arrowDown,
+  };
 };
 
-export default DateChangeArrows;
+const mapDispatchToProps = (dispatch) => ({
+  setArrowDown: (isDownDirection) => {
+    dispatch(setArrowDownAction(isDownDirection));
+  },
+  setArrowUp: () => {
+    dispatch(setArrowUpAction());
+  },
+});
+
+DateChangeArrows.propTypes = {
+  handleSelectNowButton: PropTypes.func,
+  arrowDown: PropTypes.string,
+  leftArrowDisabled: PropTypes.bool,
+  leftArrowDown: PropTypes.func,
+  isMobile: PropTypes.bool,
+  nowButtonDisabled: PropTypes.bool,
+  rightArrowDisabled: PropTypes.bool,
+  rightArrowDown: PropTypes.func,
+  setArrowDown: PropTypes.func,
+  setArrowUp: PropTypes.func,
+  tilesPreloaded: PropTypes.bool,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DateChangeArrows);

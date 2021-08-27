@@ -166,6 +166,8 @@ label[for='chk-crop-toggle'] span {
 
 @keyframes ellipsis {
   to {
+
+    /* stylelint-disable-next-line plugin/no-low-performance-animation-properties */
     width: 1.25em;
   }
 }

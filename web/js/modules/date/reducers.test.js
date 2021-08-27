@@ -9,9 +9,10 @@ import {
   SELECT_DATE,
   UPDATE_APP_NOW,
 } from './constants';
+import util from '../../util/util';
 
 // test variables
-const mockDate = new Date();
+const mockDate = util.now();
 const selectedZoom = 2;
 
 describe('dateReducer', () => {
@@ -76,8 +77,7 @@ describe('dateReducer', () => {
     },
   );
   test(
-    `${SELECT_DATE
-    }action type and ${mockDate} as value and selected `
+    `${SELECT_DATE} action type and ${mockDate} as value and selected `
       + 'as activeString should return new state',
     () => {
       expect(

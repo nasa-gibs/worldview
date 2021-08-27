@@ -14,7 +14,7 @@
         "day"
       ],
       "availability": {
-        "rollingWindow": 30,
+        "rollingWindow": 90,
         "historicalRanges": [
           {
             "startDate": "2019-09-01T10:00:00Z",

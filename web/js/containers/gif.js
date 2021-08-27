@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from 'react-loader';
 import { connect } from 'react-redux';
-import GifStream from '@entryline/gifstream';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
 import {
   Progress, Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
+import GifStream from '../modules/animation/gifstream';
 import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
 
@@ -26,6 +26,7 @@ import getImageArray from '../modules/animation/selectors';
 import { getStampProps, svgToPng } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 
+const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 const gifStream = new GifStream();
 
 class GIF extends Component {
@@ -386,11 +387,15 @@ function mapStateToProps(state) {
   const increment = customSelected
     ? `${customDelta} ${timeScaleFromNumberKey[customInterval]}`
     : `1 ${timeScaleFromNumberKey[interval]}`;
-  let url = 'http://localhost:3002/api/v1/snapshot';
+  let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
+  }
+  if ('imageDownload' in config.parameters) {
+    url = config.parameters.imageDownload;
     util.warn(`Redirecting GIF download to: ${url}`);
   }
+
   return {
     screenWidth,
     screenHeight,

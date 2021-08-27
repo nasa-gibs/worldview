@@ -30,7 +30,7 @@ To run the end-to-end tests using Firefox in a docker container, create an image
 
 ### Browserstack
 
-Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, `Internet Explorer(windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
+Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
 
 To run tests in BrowserStack from your local machine:
 
@@ -57,8 +57,7 @@ To run tests for both browsers in sequence: `npm run e2e`.
 
 ### Developing new End to End Tests
 
-* When creating new tests you will likely want to work locally with a `chrome` or `Firefox` driver to expedite the development process.
-
+* When creating new tests you will likely want to work locally with a `Chrome` or `Firefox` driver to expedite the development process.
 * If there is a specific test that you would like to run, you can change the `files` variable found in `./e2e/browserstack.conf.js` to point directly to your test.
 * If there is a specific browser that you would like to test, you can specify which in `./e2e/environments.json`
 
@@ -70,9 +69,7 @@ To run tests for both browsers in sequence: `npm run e2e`.
 | `mockFutureLayer` | String | *`VIIRS_NOAA20_CorrectedReflectance_TrueColor,5D`*| Pass layer `id` and `futureTime` to be parsed and added to that layer on page load |
 | `mockSources` | String | *`20170530`* | Use the static JSON file with sources feeds found at mock/sources\_data.json-X |
 | `mockAlerts` | string | *`alert`*, *`message`*, *`outage`*, *`no_types`*, or *`all_types`* | Use a static JSON file by passing the notification type. Local sources can be found at mock/notify_{string}.json |
-| `modalView` | string | *`categories`*, *`measurements`*, or *`layers`* | Forces the 'Add Layers' modal to display categories, measurements, or layers. By default Arctic/Antarctic shows measurements and Geographic shows categories. |
 | `now` | date | *`YYYY-MM-DDThh:mm:ssZ`* | Overrides the current date and time. This can be accessed on `config.initialDate` or `state.date.appNow`. |
 | `showError` | boolean | *`true` or `false`* | If any value is specified, an error dialog will be shown on startup. |
-| `showSubdaily` | boolean | *`true` or `false`* | If any value is specified, the hour input, minute input and "minutes" timeline zoom option will be shown. |
 | `notificationURL` | string | `https://testing.url.com` | Overrides the notification URL found in the features.json configuration file. |
 | `imageDownload` | string | `https://wvs.earthdata.nasa.gov/api/v1/snapshot` | Overrides the image download URL
