@@ -1,5 +1,4 @@
 /* eslint-disable no-multi-assign */
-import ReactDOM from 'react-dom';
 import {
   throttle as lodashThrottle,
   forOwn as lodashForOwn,
@@ -65,8 +64,6 @@ import { updateVectorSelection } from '../modules/vector-styles/util';
 import { hasVectorLayers } from '../modules/layers/util';
 import { animateCoordinates, getCoordinatesMarker } from '../modules/location-search/util';
 import { reverseGeocode } from '../modules/location-search/util-api';
-import { getCoordinatesMetadata, renderCoordinatesDialog } from '../components/location-search/ol-coordinates-marker-util';
-
 
 const { events } = util;
 
@@ -89,7 +86,6 @@ export default function mapui(models, config, store, ui) {
     selected: null, // The map for the selected projection
     selectedVectors: {},
     activeMarker: null,
-    coordinatesDialogDOMEl: null,
     runningdata,
     layerKey,
     createLayer,
@@ -110,16 +106,10 @@ export default function mapui(models, config, store, ui) {
       case CLEAR_MARKER:
         return removeCoordinatesMarker();
       case SET_MARKER: {
-        return addMarkerAndUpdateStore(null, action.isInputSearch);
+        return addMarkerAndUpdateStore(true, null, action.isInputSearch);
       }
-      case TOGGLE_DIALOG_VISIBLE: {
-        if (action.value) {
-          addCoordinatesTooltip();
-        } else {
-          removeCoordinatesTooltip();
-        }
-        return;
-      }
+      case TOGGLE_DIALOG_VISIBLE:
+        return addMarkerAndUpdateStore(false);
       case CLEAR_ROTATE: {
         self.selected.getView().animate({
           duration: 500,
@@ -262,34 +252,12 @@ export default function mapui(models, config, store, ui) {
     if (coordinates && coordinates.length > 0) {
       if (start) {
         reverseGeocode(coordinates, config).then((results) => {
-          addMarkerAndUpdateStore(results);
+          addMarkerAndUpdateStore(true, results);
         });
       } else {
-        addMarkerAndUpdateStore(reverseGeocodeResults);
+        addMarkerAndUpdateStore(true, reverseGeocodeResults);
       }
     }
-  };
-
-  /*
-   * Remove coordinates tooltip from all projections
-   *
-   * @method removeCoordinatesTooltip
-   * @static
-   *
-   * @returns {void}
-   */
-  const removeCoordinatesTooltip = () => {
-    const mapProjections = Object.keys(self.proj);
-    mapProjections.forEach((mapProjection) => {
-      const mapOverlays = self.proj[mapProjection].getOverlays().getArray();
-      const coordinatesTooltipOverlay = mapOverlays.filter((overlay) => {
-        const { id } = overlay;
-        return id && id.includes('coordinates-map-marker');
-      });
-      if (coordinatesTooltipOverlay.length > 0) {
-        self.proj[mapProjection].removeOverlay(coordinatesTooltipOverlay[0]);
-      }
-    });
   };
 
   /*
@@ -305,52 +273,6 @@ export default function mapui(models, config, store, ui) {
       self.activeMarker.setMap(null);
       self.selected.removeOverlay(self.activeMarker);
     }
-    // remove tooltip from all projections
-    removeCoordinatesTooltip();
-  };
-
-  /*
-   * Add map marker coordinate tooltip
-   *
-   * @method addCoordinatesTooltip
-   * @static
-   *
-   * @param {Object} geocodeResults
-   *
-   * @returns {void}
-   */
-  const addCoordinatesTooltip = (geocodeResults) => {
-    const state = store.getState();
-    const {
-      browser, locationSearch,
-    } = state;
-    const { coordinates, reverseGeocodeResults } = locationSearch;
-    const results = geocodeResults || reverseGeocodeResults;
-    const isMobile = browser.lessThan.medium;
-    const [longitude, latitude] = coordinates;
-    const geocodeProperties = { latitude, longitude, reverseGeocodeResults: results };
-    const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
-
-    // handle clearing coordinates using created marker
-    const clearMarker = () => {
-      store.dispatch({ type: CLEAR_MARKER });
-    };
-    // handle toggling dialog visibility to retain preference between proj changes
-    const toggleDialogVisible = (isVisible) => {
-      store.dispatch({ type: TOGGLE_DIALOG_VISIBLE, value: isVisible });
-    };
-
-    // render coordinates dialog
-    const coordinatesTooltipDOMEl = renderCoordinatesDialog(
-      self.selected,
-      config,
-      [latitude, longitude],
-      coordinatesMetadata,
-      isMobile,
-      clearMarker,
-      toggleDialogVisible,
-    );
-    self.coordinatesDialogDOMEl = coordinatesTooltipDOMEl;
   };
 
   /*
@@ -363,23 +285,28 @@ export default function mapui(models, config, store, ui) {
    * @param {Boolean} shouldFlyToCoordinates - if location search via input
    * @returns {void}
    */
-  const addMarkerAndUpdateStore = (geocodeResults, shouldFlyToCoordinates) => {
+  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates) => {
     const state = store.getState();
-    const { locationSearch, proj } = state;
+    const { locationSearch, proj, browser } = state;
     const {
-      coordinates, isCoordinatesDialogOpen, reverseGeocodeResults,
+      coordinates, reverseGeocodeResults,
     } = locationSearch;
     const results = geocodeResults || reverseGeocodeResults;
     const { sources } = config;
+    const clearMarker = () => {
+      store.dispatch({ type: CLEAR_MARKER });
+    };
 
-    // unmount coordinate dialog to prevent residual tooltips being hovered
-    if (self.coordinatesDialogDOMEl) {
-      ReactDOM.unmountComponentAtNode(self.coordinatesDialogDOMEl);
-      self.coordinatesDialogDOMEl = null;
-    }
     // clear previous marker (if present) and get new marker
     removeCoordinatesMarker();
-    const marker = getCoordinatesMarker(proj, coordinates, results, addCoordinatesTooltip);
+    const marker = getCoordinatesMarker(
+      proj,
+      coordinates,
+      results,
+      clearMarker,
+      browser.lessThan.medium,
+      showDialog,
+    );
 
     // prevent marker if outside of extent
     if (!marker) {
@@ -396,12 +323,6 @@ export default function mapui(models, config, store, ui) {
       const activeLayers = getActiveLayers(state).filter(({ projections }) => projections[proj.id]);
       const maxZoom = getMaxZoomLevelLayerCollection(activeLayers, zoom, proj.id, sources);
       animateCoordinates(self.selected, proj, coordinates, maxZoom);
-    }
-
-    // handle render initial tooltip
-    const isDialogOpen = shouldFlyToCoordinates || isCoordinatesDialogOpen;
-    if (isDialogOpen) {
-      addCoordinatesTooltip(results);
     }
 
     store.dispatch({
@@ -596,10 +517,6 @@ export default function mapui(models, config, store, ui) {
       lodashEach(defs, (def) => {
         map.addLayer(createLayer(def));
       });
-      // add active map marker back after destroying from layer/compare change
-      if (self.activeMarker) {
-        addMarkerAndUpdateStore();
-      }
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
@@ -614,10 +531,6 @@ export default function mapui(models, config, store, ui) {
         map.addLayer(getCompareLayerGroup(arr, state));
       });
       compareMapUi.create(map, compare.mode);
-      // add active map marker back in compare mode post createLayer
-      if (self.activeMarker) {
-        addMarkerAndUpdateStore();
-      }
     }
     updateLayerVisibilities();
   }

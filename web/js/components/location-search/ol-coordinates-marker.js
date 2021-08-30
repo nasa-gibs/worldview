@@ -7,9 +7,8 @@ import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import Alert from '../util/alert';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
-import { isCoordinatesDialogAvailableAtPixel } from './ol-coordinates-marker-util';
 import {
-  setPlaceMarker, toggleDialogVisible, toggleReverseGeocodeActive,
+  setPlaceMarker, toggleReverseGeocodeActive,
 } from '../../modules/location-search/actions';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
 import { reverseGeocode } from '../../modules/location-search/util-api';
@@ -115,22 +114,6 @@ export class CoordinatesMarker extends Component {
         setPlaceMarker([longitude, latitude], results);
       });
       this.setState({ showExtentAlert: false });
-    } else {
-      // handle clicking on pixel and/or map marker
-      e.stopPropagation();
-      this.getCoordinatesDialog(pixels, map);
-    }
-  }
-
-  getCoordinatesDialog = (pixels, olMap) => {
-    const {
-      isMobile,
-      toggleDialogVisible,
-    } = this.props;
-    const isMarker = isCoordinatesDialogAvailableAtPixel(pixels, olMap, isMobile);
-
-    if (isMarker) {
-      toggleDialogVisible(true);
     }
   }
 
@@ -186,9 +169,6 @@ const mapDispatchToProps = (dispatch) => ({
   setPlaceMarker: (coordinates, reverseGeocodeResults) => {
     dispatch(setPlaceMarker(coordinates, reverseGeocodeResults));
   },
-  toggleDialogVisible: (isVisible) => {
-    dispatch(toggleDialogVisible(isVisible));
-  },
   toggleReverseGeocodeActive: (isActive) => {
     dispatch(toggleReverseGeocodeActive(isActive));
   },
@@ -197,12 +177,10 @@ CoordinatesMarker.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
-  isMobile: PropTypes.bool.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
   measureIsActive: PropTypes.bool.isRequired,
   proj: PropTypes.object,
   setPlaceMarker: PropTypes.func.isRequired,
-  toggleDialogVisible: PropTypes.func.isRequired,
   toggleReverseGeocodeActive: PropTypes.func.isRequired,
 };
 export default connect(
