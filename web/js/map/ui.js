@@ -303,7 +303,7 @@ export default function mapui(models, config, store, ui) {
   const removeCoordinatesMarker = () => {
     if (self.activeMarker) {
       self.activeMarker.setMap(null);
-      self.selected.removeLayer(self.activeMarker);
+      self.selected.removeOverlay(self.activeMarker);
     }
     // remove tooltip from all projections
     removeCoordinatesTooltip();
@@ -379,7 +379,7 @@ export default function mapui(models, config, store, ui) {
     }
     // clear previous marker (if present) and get new marker
     removeCoordinatesMarker();
-    const marker = getCoordinatesMarker(proj, coordinates, results);
+    const marker = getCoordinatesMarker(proj, coordinates, results, addCoordinatesTooltip);
 
     // prevent marker if outside of extent
     if (!marker) {
@@ -387,7 +387,7 @@ export default function mapui(models, config, store, ui) {
     }
 
     self.activeMarker = marker;
-    self.selected.addLayer(marker);
+    self.selected.addOverlay(marker);
     self.selected.renderSync();
 
     if (shouldFlyToCoordinates) {
