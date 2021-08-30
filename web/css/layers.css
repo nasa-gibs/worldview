@@ -174,13 +174,20 @@
 }
 
 .layer-description .layer-title,
-.layer-modal .source-metadata h3 {
+.layer-info-modal .source-metadata h3 {
   display: block;
   font-size: 14px;
   line-height: 18px;
   margin: 16px 0 6px;
   font-family: 'Open Sans', sans-serif;
   margin-top: 4px;
+}
+
+.layer-info-modal .source-metadata {
+  p {
+    color: #ccc;
+    margin-bottom: 15px;
+  }
 }
 
 /* Layer search rows */
