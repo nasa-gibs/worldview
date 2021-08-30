@@ -154,6 +154,7 @@ export function hasMeasurementSource(current, config, projId) {
 export const makeGetDescription = () => createSelector(
   [getConfig, getLayerId],
   ({ layers, measurements }, layerId) => {
+    if (!layerId) return;
     const { layergroup } = layers[layerId];
     if (layergroup === 'Orbital Track') {
       return;
