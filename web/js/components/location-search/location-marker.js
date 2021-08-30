@@ -7,7 +7,7 @@ import { getCoordinatesMetadata } from './ol-coordinates-marker-util';
 export default function LocationMarker ({
   reverseGeocodeResults, clearMarker, coordinates, isMobile, dialogVisible = true,
 }) {
-  const [latitude, longitude] = coordinates;
+  const [longitude, latitude] = coordinates;
   const tooltipId = util.encodeId(`coordinates-map-marker_${latitude},${longitude}`);
   const geocodeProperties = { latitude, longitude, reverseGeocodeResults };
   const coordinatesMetadata = getCoordinatesMetadata(geocodeProperties);
