@@ -79,7 +79,7 @@ export class VectorInteractions extends React.Component {
       browser, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
       activateVectorZoomAlert, activateVectorExceededResultsAlert, clearVectorExceededResultsAlert,
-      proj, isEmbedModeActive, isMobile,
+      proj, isEmbedModeActive, isVectorExceededAlertPresent, isMobile,
     } = this.props;
 
     if (measureIsActive || isCoordinateSearchActive) return;
@@ -103,7 +103,7 @@ export class VectorInteractions extends React.Component {
         openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive);
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
-        } else {
+        } else if (isVectorExceededAlertPresent) {
           clearVectorExceededResultsAlert();
         }
       }
@@ -126,7 +126,7 @@ export class VectorInteractions extends React.Component {
 
 function mapStateToProps(state) {
   const {
-    modal, map, measure, vectorStyles, browser, compare, locationSearch, proj, ui, embed,
+    alerts, modal, map, measure, vectorStyles, browser, compare, locationSearch, proj, ui, embed,
   } = state;
   let swipeOffset;
   const activeLayers = getActiveLayers(state);
@@ -135,6 +135,7 @@ function mapStateToProps(state) {
     swipeOffset = browser.screenWidth * (percentOffset / 100);
   }
   const { isCoordinateSearchActive } = locationSearch;
+  const { isVectorExceededAlertPresent } = alerts;
   const isMobile = browser.lessThan.medium;
   return {
     activeLayers,
@@ -145,6 +146,7 @@ function mapStateToProps(state) {
     getDialogObject: (pixels, olMap) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset),
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
+    isVectorExceededAlertPresent,
     isShowingClick: map.isClickable,
     lastSelected: vectorStyles.selected,
     measureIsActive: measure.isActive,
@@ -223,6 +225,7 @@ VectorInteractions.propTypes = {
   browser: PropTypes.object,
   compareState: PropTypes.object,
   isEmbedModeActive: PropTypes.bool,
+  isVectorExceededAlertPresent: PropTypes.bool,
   isCoordinateSearchActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   lastSelected: PropTypes.object,
