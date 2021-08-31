@@ -210,14 +210,14 @@ function getModalOffset(dimensionProps) {
 /**
  * Get Organized data for each feature at pixel
  * @param {Object} mapProps
- * @param Object*} config
+ * @param {Object} config
  * @param {Object} compareState
+ * @param {Boolean} isMobile
  */
 function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
   const metaArray = [];
   const selected = {};
   let exceededLengthLimit = false;
-  let isCoordinatesMarker = false;
   const { pixels, map, swipeOffset } = mapProps;
   const featureOptions = isMobile ? { hitTolerance: 5 } : {};
   map.forEachFeatureAtPixel(pixels, (feature, layer) => {
@@ -226,12 +226,6 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       exceededLengthLimit = true;
       return true;
     }
-    const featureId = feature.getId();
-    if (featureId === 'coordinates-map-marker') {
-      isCoordinatesMarker = true;
-      return;
-    }
-
     const def = lodashGet(layer, 'wv.def');
     if (!def) {
       return;
@@ -271,7 +265,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     }
   }, featureOptions);
   return {
-    selected, metaArray, isCoordinatesMarker, exceededLengthLimit,
+    selected, metaArray, exceededLengthLimit,
   };
 }
 /**
@@ -297,14 +291,13 @@ export function onMapClickGetVectorFeatures(pixels, map, state, swipeOffset) {
   const mapProps = { pixels, map, swipeOffset };
   const { offsetLeft, offsetTop } = getModalOffset(modalOffsetProps);
   const {
-    selected, metaArray, isCoordinatesMarker, exceededLengthLimit,
+    selected, metaArray, exceededLengthLimit,
   } = getModalContentsAtPixel(mapProps, config, compare, isMobile);
   return {
     selected, // Object containing unique identifiers of selected features
     metaArray, // Organized metadata for modal
     offsetLeft, // Modal default offsetLeft
     offsetTop, // Modal default offsetTop
-    isCoordinatesMarker,
     exceededLengthLimit,
   };
 }

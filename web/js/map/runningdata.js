@@ -38,11 +38,7 @@ export default function MapRunningData(compareUi, store) {
    */
   self.newPoint = function(pixels, map) {
     const state = store.getState();
-    const { locationSearch, proj } = state;
-    const { isCoordinateSearchActive } = locationSearch;
-    if (isCoordinateSearchActive) {
-      return;
-    }
+    const { proj } = state;
 
     const activeLayerObj = {};
     const [lon, lat] = map.getCoordinateFromPixel(pixels);

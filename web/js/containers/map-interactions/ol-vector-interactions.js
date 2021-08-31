@@ -16,7 +16,7 @@ import { onMapClickGetVectorFeatures } from '../../modules/vector-styles/util';
 import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { selectVectorFeatures as selectVectorFeaturesActionCreator } from '../../modules/vector-styles/actions';
 import { changeCursor as changeCursorActionCreator } from '../../modules/map/actions';
-import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
+import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
 
 const { events } = util;
@@ -57,9 +57,6 @@ export class VectorInteractions extends React.Component {
     if (hasFeatures && !isShowingClick && !measureIsActive) {
       let isActiveLayer = false;
       map.forEachFeatureAtPixel(pixels, (feature, layer) => {
-        if (isActiveLayer) {
-          return true;
-        }
         const def = lodashGet(layer, 'wv.def');
         if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getType())) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
@@ -68,7 +65,10 @@ export class VectorInteractions extends React.Component {
           isActiveLayer = true;
         }
       });
-      if (isActiveLayer) changeCursor(true);
+      if (isActiveLayer) {
+        changeCursor(true);
+        return true;
+      }
     } else if (!hasFeatures && isShowingClick) {
       changeCursor(false);
     }
@@ -78,7 +78,8 @@ export class VectorInteractions extends React.Component {
     const {
       browser, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
       modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
-      activateVectorZoomAlert, activateVectorExceededResultsAlert, proj, isEmbedModeActive, isMobile,
+      activateVectorZoomAlert, activateVectorExceededResultsAlert, clearVectorExceededResultsAlert,
+      proj, isEmbedModeActive, isMobile,
     } = this.props;
 
     if (measureIsActive || isCoordinateSearchActive) return;
@@ -89,13 +90,9 @@ export class VectorInteractions extends React.Component {
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
-    const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
     const exceededLengthLimit = clickObj.exceededLengthLimit || false;
     const dialogId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
 
-    if (isCoordinatesMarker) {
-      return;
-    }
     const mapRes = map.getView().getResolution();
     const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id, isMobile);
 
@@ -106,6 +103,8 @@ export class VectorInteractions extends React.Component {
         openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive);
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
+        } else {
+          clearVectorExceededResultsAlert();
         }
       }
     } else if (hasNonClickableVectorLayerType) {
@@ -172,6 +171,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   activateVectorZoomAlert: () => dispatch({ type: ACTIVATE_VECTOR_ZOOM_ALERT }),
   activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
+  clearVectorExceededResultsAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
   openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, browser, isEmbedModeActive) => {
     const { screenHeight, screenWidth } = browser;
     const isMobile = browser.lessThan.medium;
@@ -218,6 +218,7 @@ VectorInteractions.propTypes = {
   selectVectorFeatures: PropTypes.func.isRequired,
   activateVectorZoomAlert: PropTypes.func,
   activateVectorExceededResultsAlert: PropTypes.func,
+  clearVectorExceededResultsAlert: PropTypes.func,
   activeLayers: PropTypes.array,
   browser: PropTypes.object,
   compareState: PropTypes.object,
