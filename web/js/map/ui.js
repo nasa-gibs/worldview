@@ -1090,14 +1090,11 @@ export default function mapui(models, config, store, ui) {
    *
    * @param {object} map - OpenLayers Map Object
    *
-   * @param {object} proj - Projection properties
-   *
-   *
    * @returns {void}
    *
    * @todo move this component to another Location
    */
-  function createMousePosSel(map, proj) {
+  function createMousePosSel(map) {
     const throttledOnMouseMove = lodashThrottle((e) => {
       const state = store.getState();
       const { browser, locationSearch, sidebar } = state;
