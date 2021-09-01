@@ -29,7 +29,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=-190.17099702033968,-86.52209371542455,181.43813376534368,89.5139950740695&t=2020-10-15-T16%3A46%3A06Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
+          "stepLink": "v=-190.17099702033968,-86.52209371542455,181.43813376534368,89.5139950740695&t=2020-10-15-T16%3A46%3A06Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,HLS_S30_Nadir_BRDF_Adjusted_Reflectance(hidden),HLS_L30_Nadir_BRDF_Adjusted_Reflectance(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor"
         },
         {
           "id": "002",
