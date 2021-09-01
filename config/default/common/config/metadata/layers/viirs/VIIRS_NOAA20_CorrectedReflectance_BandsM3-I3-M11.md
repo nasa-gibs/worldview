@@ -13,5 +13,7 @@ Vegetation will appear green in this band combination, as vegetation is absorben
 #### Water
 Liquid water on the ground will appear very dark since it absorbs in the red and the SWIR, but small liquid water drops in clouds scatter light equally in both the visible and the SWIR, and will therefore appear white. Sediments in water appear dark red.
 
+Note: The Corrected Reflectance and the Thermal Band I5 imagery from NOAA-20/VIIRS will occasionally show a checkered pattern, especially over the respective polar areas. This is due to overlapping and superimposition of observations from multiple orbits with widely different cloud/snow coverages. The checkered pattern may also arise from the mixture of partial day and night observations. Though all necessary steps have been taken to mitigate this effect, users may still notice this to some extent over the polar areas, depending on the season.
+
 References: VJ102IMG_NRT [doi:10.5067/VIIRS/VJ102IMG_NRT.002](https://doi.org/10.5067/VIIRS/VJ102IMG_NRT.002); VJ102MOD_NRT [doi:10.5067/VIIRS/VJ102MOD_NRT.002](https://doi.org/10.5067/VIIRS/VJ102MOD_NRT.002)
 
