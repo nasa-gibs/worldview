@@ -6,28 +6,22 @@ import {
   changeTemperatureUnit,
 } from '../../modules/global-unit/actions';
 
-class GlobalSettings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+function GlobalSettings(props) {
+  const {
+    globalTemperatureUnit,
+    changeTemperatureUnitAction,
+  } = props;
 
-  render() {
-    const {
-      globalTemperatureUnit,
-      changeTemperatureUnitAction,
-    } = this.props;
-    return (
-      <div>
-        <div className="global-setting-container">
-          <TemperatureUnitButtons
-            globalTemperatureUnit={globalTemperatureUnit}
-            changeTemperatureUnit={changeTemperatureUnitAction}
-          />
-        </div>
+  return (
+    <>
+      <div className="global-setting-container">
+        <TemperatureUnitButtons
+          globalTemperatureUnit={globalTemperatureUnit}
+          changeTemperatureUnit={changeTemperatureUnitAction}
+        />
       </div>
-    );
-  }
+    </>
+  );
 }
 
 function mapStateToProps(state) {

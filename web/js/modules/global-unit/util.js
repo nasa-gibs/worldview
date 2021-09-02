@@ -43,6 +43,28 @@ export function checkTemperatureUnitConversion(units, globalTemperatureUnit) {
 }
 
 /**
+ * Parse prefix and value or use defaults
+ *
+ * @param {String} val (ex: '≥ 32.00')
+ * @returns {Array - Strings} prefix, value
+ */
+const getPrefixAndValue = (val) => {
+  let prefix = '';
+  let value = val;
+  const valSplit = val.split(' ');
+
+  if (valSplit.length > 1) {
+    [prefix, value] = valSplit;
+    prefix = `${prefix} `;
+  }
+
+  return [
+    prefix,
+    value,
+  ];
+};
+
+/**
  * Convert palette temperature values based on units
  *
  * Examples val palette value/range arguments:
@@ -67,9 +89,9 @@ export function checkTemperatureUnitConversion(units, globalTemperatureUnit) {
  *
  * @returns {String} converted unit (ex: '39.02 – 39.29 °F')
  */
+
 export function convertPaletteValue(val, initialUnit, targetUnit) {
   const newUnitAbbrev = getAbbrevFromTemperatureUnit(targetUnit || initialUnit);
-  let prefix = '';
   let convertedValue;
   const isDash = val.includes(' – ');
   const splitCharacter = isDash
@@ -78,35 +100,19 @@ export function convertPaletteValue(val, initialUnit, targetUnit) {
 
   // Range value (ex: '186.2 – 186.9')
   if (splitCharacter) {
-    let [minRangeVal, maxRangeVal] = val.split(` ${splitCharacter} `);
+    const [minRangeVal, maxRangeVal] = val.split(` ${splitCharacter} `);
 
-    let minPrefix = '';
-    let maxPrefix = '';
-    const minRangeSplit = minRangeVal.split(' ');
-    const maxRangeSplit = maxRangeVal.split(' ');
-    if (minRangeSplit.length > 1) { // (ex: '< 180.0')
-      [minPrefix, minRangeVal] = minRangeSplit;
-      minPrefix = `${minPrefix} `;
-    }
-    if (maxRangeSplit.length > 1) {
-      [maxPrefix, maxRangeVal] = maxRangeSplit;
-      maxPrefix = `${maxPrefix} `;
-    }
+    const [minPrefix, minValue] = getPrefixAndValue(minRangeVal);
+    const [maxPrefix, maxValue] = getPrefixAndValue(maxRangeVal);
 
-    const minConvert = unitConvert(Number(minRangeVal), initialUnit, targetUnit).toFixed(2);
-    const maxConvert = unitConvert(Number(maxRangeVal), initialUnit, targetUnit).toFixed(2);
+    const minConvert = unitConvert(Number(minValue), initialUnit, targetUnit).toFixed(2);
+    const maxConvert = unitConvert(Number(maxValue), initialUnit, targetUnit).toFixed(2);
     convertedValue = `${minPrefix}${minConvert} ${splitCharacter} ${maxPrefix}${maxConvert} ${newUnitAbbrev}`;
   } else {
     // Single value (ex: '180.0', '< 180.0')
-    const valSplit = val.split(' ');
-    let singleVal = val;
-    if (valSplit.length > 1) { // (ex: '< 180.0')
-      [prefix, singleVal] = valSplit;
-      prefix = `${prefix} `;
-    }
-
-    const valConvert = unitConvert(Number(singleVal), initialUnit, targetUnit).toFixed(2);
-    convertedValue = `${prefix}${valConvert} ${newUnitAbbrev}`;
+    const [prefix, value] = getPrefixAndValue(val);
+    const valueConvert = unitConvert(Number(value), initialUnit, targetUnit).toFixed(2);
+    convertedValue = `${prefix}${valueConvert} ${newUnitAbbrev}`;
   }
   return convertedValue;
 }
