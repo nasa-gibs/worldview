@@ -5,9 +5,7 @@ import {
   TabContent, TabPane, Nav, NavItem, NavLink,
 } from 'reactstrap';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import HoverTooltip from '../../util/hover-tooltip';
 import Opacity from './opacity';
 import Palette from './palette';
 import OrbitTracks from './orbit-tracks-toggle';
@@ -16,9 +14,6 @@ import PaletteThreshold from './palette-threshold';
 import {
   palettesTranslate,
 } from '../../../modules/palettes/util';
-import {
-  getTemperatureUnitFromAbbrev,
-} from '../../../modules/global-unit/util';
 import {
   getDefaultLegend,
   getCustomPalette,
@@ -280,45 +275,6 @@ class LayerSettings extends React.Component {
     );
   }
 
-  renderTemperatureUnitAndInfo() {
-    const {
-      isMobile,
-      getPaletteLegends,
-      getPaletteLegend,
-      globalTemperatureUnit,
-      layer,
-    } = this.props;
-    const paletteLegends = getPaletteLegends(layer.id);
-    if (!paletteLegends) return '';
-    const legend = getPaletteLegend(layer.id, 0);
-    const units = legend.units || '';
-
-    const temperatureUnit = getTemperatureUnitFromAbbrev(units);
-    return temperatureUnit && (
-      <div className="settings-component">
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h2 className="wv-header">
-            {' '}
-            Temperature Unit:
-            {' '}
-            {globalTemperatureUnit
-              ? <strong>{globalTemperatureUnit}</strong>
-              : <strong>{temperatureUnit}</strong>}
-          </h2>
-          <span id="layer-settings-temperature-info" style={{ cursor: 'pointer' }} onClick={() => console.log('clicked')}>
-            <FontAwesomeIcon icon="cog" />
-            <HoverTooltip
-              isMobile={isMobile}
-              labelText="This is a setting that can be modified in the global settings panel. Click to learn more."
-              target="layer-settings-temperature-info"
-            />
-          </span>
-        </div>
-        <hr style={{ borderColor: '#666' }} />
-      </div>
-    );
-  }
-
   render() {
     let renderCustomizations;
     const {
@@ -339,7 +295,6 @@ class LayerSettings extends React.Component {
     if (!layer.id) return '';
     return (
       <>
-        {layer.palette && this.renderTemperatureUnitAndInfo()}
         <Opacity
           start={Math.ceil(layer.opacity * 100)}
           setOpacity={setOpacity}
@@ -358,12 +313,10 @@ function mapStateToProps(state, ownProps) {
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
-  const isMobile = browser.lessThan.medium;
   const { globalTemperatureUnit } = globalUnit;
   return {
     paletteOrder: config.paletteOrder,
     groupName,
-    isMobile,
     screenHeight: browser.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     globalTemperatureUnit,
@@ -437,7 +390,6 @@ LayerSettings.propTypes = {
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.object,
-  isMobile: PropTypes.bool,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
