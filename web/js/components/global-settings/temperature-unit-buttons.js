@@ -1,38 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
+import { TEMPERATURE_UNITS } from '../../modules/global-unit/constants';
 
 const TemperatureUnitButtons = ({ globalTemperatureUnit, changeTemperatureUnit }) => (
   <div className="temperature-unit-buttons settings-component">
     <h3 className="wv-header">Temperature Unit</h3>
     <ButtonGroup>
-      <Button
-        aria-label="Set Kelvin Unit"
-        outline
-        className="temperature-unit-button"
-        active={globalTemperatureUnit === 'Kelvin'}
-        onClick={() => changeTemperatureUnit('Kelvin')}
-      >
-        Kelvin
-      </Button>
-      <Button
-        aria-label="Set Celsius Unit"
-        outline
-        className="temperature-unit-button"
-        active={globalTemperatureUnit === 'Celsius'}
-        onClick={() => changeTemperatureUnit('Celsius')}
-      >
-        Celsius
-      </Button>
-      <Button
-        aria-label="Set Fahrenheit Unit"
-        outline
-        className="temperature-unit-button"
-        active={globalTemperatureUnit === 'Fahrenheit'}
-        onClick={() => changeTemperatureUnit('Fahrenheit')}
-      >
-        Fahrenheit
-      </Button>
+      {TEMPERATURE_UNITS.map((unit) => (
+        <Button
+          key={`${unit}-button`}
+          aria-label={`Set ${unit} Unit`}
+          outline
+          className="temperature-unit-button"
+          active={globalTemperatureUnit === unit}
+          onClick={() => changeTemperatureUnit(unit)}
+        >
+          {unit}
+        </Button>
+      ))}
       <Button
         aria-label="Reset to Default Unit"
         outline
@@ -40,7 +26,7 @@ const TemperatureUnitButtons = ({ globalTemperatureUnit, changeTemperatureUnit }
         active={!globalTemperatureUnit}
         onClick={() => changeTemperatureUnit('')}
       >
-        Default
+        Defaults
       </Button>
     </ButtonGroup>
   </div>
