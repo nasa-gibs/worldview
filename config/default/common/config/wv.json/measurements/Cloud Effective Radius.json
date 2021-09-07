@@ -3,7 +3,7 @@
         "Cloud Effective Radius": {
             "id": "cloud-effective-radius",
             "title":    "Cloud Effective Radius",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -37,6 +37,16 @@
                         "MODIS_Terra_Cloud_Effective_Radius_1621",
                         "MODIS_Terra_Cloud_Effective_Radius_PCL_1621",
                         "OrbitTracks_Terra_Descending"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa-20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/CloudEffectiveRadius",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Cloud_Effective_Radius",
+                        "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
                 "Suomi NPP/VIIRS": {
