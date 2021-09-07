@@ -5,7 +5,7 @@
       "title": "Cloud Top Height (Night)",
       "subtitle": "NOAA-20 / VIIRS",
       "description": "viirs/VIIRS_NOAA20_Cloud_Top_Height_Night",
-      "tags": "",
+      "tags": "jpss-1 jpss",
       "group": "overlays",
       "layergroup": "Cloud Top Height",
       "tracks": [
