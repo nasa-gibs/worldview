@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Cloud_Top_Height_Night": {
+      "id": "VIIRS_NOAA20_Cloud_Top_Height_Night",
+      "title": "Cloud Top Height (Night)",
+      "subtitle": "NOAA-20 / VIIRS",
+      "description": "viirs/VIIRS_NOAA20_Cloud_Top_Height_Night",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Cloud Top Height",
+      "tracks": [
+        "OrbitTracks_NOAA-20_Descending"
+      ],
+      "daynight": [
+        "night"
+      ]
+    }
+  }
+}
