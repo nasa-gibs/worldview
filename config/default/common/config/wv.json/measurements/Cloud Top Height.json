@@ -3,7 +3,7 @@
         "Cloud Top Height": {
             "id": "cloud-top-height",
             "title":    "Cloud Top Height",
-            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODIS, Terra/MISR, Suomi NPP/VIIRS",
+            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODIS, Terra/MISR, NOAA-20/VIIRS, Suomi NPP/VIIRS",
             "sources": {
               "Aqua/AIRS": {
                     "id": "aqua-airs",
@@ -49,6 +49,18 @@
                     "settings": [
                         "MISR_Cloud_Stereo_Height_Histogram_Bin_0.5km_Monthly",
                         "MISR_Cloud_Stereo_Height_Histogram_Bin_1.5-2.0km_Monthly"
+                    ]
+                },
+                "NOAA0-20/VIIRS": {
+                    "id": "noaa-20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "viirs/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_Cloud_Top_Height_Day",
+                        "VIIRS_NOAA20_Cloud_Top_Height_Night",
+                        "OrbitTracks_NOAA-20_Ascending",
+                        "OrbitTracks_NOAA-20_Descending"
                     ]
                 },
                 "Suomi NPP/VIIRS": {
