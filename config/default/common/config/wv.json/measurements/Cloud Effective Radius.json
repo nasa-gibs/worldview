@@ -42,7 +42,7 @@
                 "NOAA-20/VIIRS": {
                     "id": "noaa-20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/CloudEffectiveRadius",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_Cloud_Effective_Radius",

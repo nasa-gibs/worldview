@@ -54,7 +54,7 @@
                 "NOAA0-20/VIIRS": {
                     "id": "noaa-20-viirs",
                     "title": "NOAA-20/VIIRS",
-                    "description": "viirs/CloudTopHeight",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_Cloud_Top_Height_Day",
