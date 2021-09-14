@@ -262,10 +262,12 @@ export default function AboutPage() {
         </p>
 
         <ul>
-          <li>GeoColor imagery layers from GOES-East and GOES-West are provided by
-          {' '}
-            <a href="https://www.star.nesdis.noaa.gov/goes/" target="_blank" rel="noopener noreferrer">NOAA/NESDIS/STAR</a>.
+          <li>
+            GeoColor imagery layers from GOES-East and GOES-West are provided by
             {' '}
+            <a href="https://www.star.nesdis.noaa.gov/goes/" target="_blank" rel="noopener noreferrer">NOAA/NESDIS/STAR</a>
+            {' '}
+            .
           </li>
           <li>
             Geostationary imagery layers from GOES-East, GOES-West and Himawari-8 (Red Visible, Clean Infrared, and Air Mass) are provided by the
