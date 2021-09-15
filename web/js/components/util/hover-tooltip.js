@@ -31,7 +31,7 @@ const HoverTooltip = (props) => {
 
 HoverTooltip.defaultProps = {
   placement: 'bottom',
-  delay: { show: 50, hide: 300 },
+  delay: { show: 50, hide: 0 },
   fade: true,
   innerClassName: '',
 };
