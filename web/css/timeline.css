@@ -199,6 +199,10 @@ button:focus {
   & #zoom-buttons-group .button-disabled:hover .arrow {
     fill: #4d4d4d;
   }
+  & #animate-button {
+    width: 100%;
+    height: 100%;
+  }
   & .animate-button {
     position: absolute;
     height: 34px;
