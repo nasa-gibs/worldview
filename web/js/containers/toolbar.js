@@ -15,7 +15,7 @@ import toggleDistractionFreeMode from '../modules/ui/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
-import ShareLinks from './share';
+import Share from './share';
 import HoverTooltip from '../components/util/hover-tooltip';
 import ErrorBoundary from './error-boundary';
 import {
@@ -55,7 +55,7 @@ const CUSTOM_MODAL_PROPS = {
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
     clickableBehindModal: true,
     wrapClassName: 'toolbar_modal_outer',
-    bodyComponent: ShareLinks,
+    bodyComponent: Share,
   },
   TOOLBAR_INFO: {
     headerText: null,
