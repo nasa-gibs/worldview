@@ -14,7 +14,7 @@ import { INIT_SECOND_DATE, CLEAR_PRELOAD } from '../date/constants';
 const middlewares = [thunk];
 const state = fixtures.getState();
 
-test('toggleCompareOnOff dispactches two actions', () => {
+test('toggleCompareOnOff dispatches two actions', () => {
   const mockStore = configureMockStore(middlewares);
   const store = mockStore(state);
   store.dispatch(toggleCompareOnOff());
