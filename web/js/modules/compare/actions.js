@@ -1,5 +1,5 @@
 import { initSecondLayerGroup } from '../layers/actions';
-import { clearPreload } from '../date/actions';
+import { initSecondDate, clearPreload } from '../date/actions';
 import {
   CHANGE_STATE,
   TOGGLE_ON_OFF,
@@ -17,6 +17,7 @@ export function toggleCompareOnOff() {
   return (dispatch, getState) => {
     if (!getState().compare.bStatesInitiated) {
       dispatch(initSecondLayerGroup());
+      dispatch(initSecondDate());
     }
     dispatch({ type: TOGGLE_ON_OFF });
   };

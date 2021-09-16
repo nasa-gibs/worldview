@@ -9,20 +9,22 @@ import {
 } from './actions';
 import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 import fixtures from '../../fixtures';
-import { CLEAR_PRELOAD } from '../date/constants';
+import { INIT_SECOND_DATE, CLEAR_PRELOAD } from '../date/constants';
 
 const middlewares = [thunk];
 const state = fixtures.getState();
 
-test('toggleCompareOnOff dispatches one action', () => {
+test('toggleCompareOnOff dispactches two actions', () => {
   const mockStore = configureMockStore(middlewares);
   const store = mockStore(state);
   store.dispatch(toggleCompareOnOff());
   const firstResponse = store.getActions()[0];
   const secondResponse = store.getActions()[1];
+  const thirdResponse = store.getActions()[2];
 
   expect(firstResponse.type).toEqual(INIT_SECOND_LAYER_GROUP);
-  expect(secondResponse.type).toEqual(CONSTANTS.TOGGLE_ON_OFF);
+  expect(secondResponse.type).toEqual(INIT_SECOND_DATE);
+  expect(thirdResponse.type).toEqual(CONSTANTS.TOGGLE_ON_OFF);
 });
 
 test(
